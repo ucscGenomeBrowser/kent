@@ -4,8 +4,8 @@ shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
 group regulation
 
-include encode3.chromHmm.ra
-include encode3.histone.ra
-include encode3.atac.ra
+include encode3.chromHmm.ra beta,public
+include encode3.histone.ra beta,public
+include encode3.atac.ra beta,public
 
 include encodeCcreCombined.old.ra beta,public

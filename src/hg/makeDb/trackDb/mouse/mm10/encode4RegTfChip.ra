@@ -1,0 +1,3354 @@
+track encode4RegTfChip
+compositeTrack faceted
+type bed 3
+superTrack encode4Reg hide
+shortLabel TF ChIP-seq (Indiv.)
+longLabel Signal from individual transcription factor ChIP experiments from ENCODE 4
+visibility hide
+html encode4RegTfChip.html
+metaDataUrl /gbdb/mm10/encode4/regulation/encode4RegTfChip_metadata.tsv
+primaryKey accession
+maxCheckboxes 40
+noInherit on
+priority 2.2
+
+    track encode4RegTfChip_ENCFF265VZJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERC peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX BHLHE40 ENCSR000ERC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/559f88bd-29ea-4694-9cdf-3eddf3d87e0e/ENCFF265VZJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF606KGT
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERC signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX BHLHE40 ENCSR000ERC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d62da6d9-6823-4c4b-9f18-1438ce3d926f/ENCFF606KGT.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF015BOP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESH signal
+    longLabel Mus musculus strain MEL MEL BHLHE40 ENCSR000ESH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/068bb466-bf33-4773-97d6-e13d03d3200a/ENCFF015BOP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF881CCL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESH peaks
+    longLabel Mus musculus strain MEL MEL BHLHE40 ENCSR000ESH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/981b43ed-e06b-4576-9c61-6acf9818870a/ENCFF881CCL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF100ZST
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIV signal
+    longLabel Mus musculus C2C12 CEBPB ENCSR000AIV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3acdc794-fe59-4329-a136-b9b2e9dcdd96/ENCFF100ZST.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF403JTQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIV peaks
+    longLabel Mus musculus C2C12 CEBPB ENCSR000AIV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/44ecde32-3ae8-4b17-b068-d3adcdb82e9c/ENCFF403JTQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF707WLH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIB signal
+    longLabel Mus musculus myocyte originated from C2C12 CEBPB ENCSR000AIB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/48c9d4e3-9229-4a93-bba4-8f1d416d38b5/ENCFF707WLH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF926CAT
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIB peaks
+    longLabel Mus musculus myocyte originated from C2C12 CEBPB ENCSR000AIB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c3b8d76c-5033-4217-a255-b3263a1294eb/ENCFF926CAT.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF180PWQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQV peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CHD1 ENCSR000EQV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6bab9419-8700-415b-a2d8-414b9f421561/ENCFF180PWQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF948XKD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQV signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CHD1 ENCSR000EQV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fe00de6b-65bd-45e1-8817-db80601a6f13/ENCFF948XKD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF820LBJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESN peaks
+    longLabel Mus musculus strain MEL MEL CHD1 ENCSR000ESN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/72c69e8e-dae8-47fa-b749-fe1a239590d5/ENCFF820LBJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF997TPV
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESN signal
+    longLabel Mus musculus strain MEL MEL CHD1 ENCSR000ESN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/025e6c1e-53db-4bf8-865f-6306422c247b/ENCFF997TPV.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF051DHR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERF signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CHD2 ENCSR000ERF signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/186f5fbd-7bd5-4fbd-b74c-35f8bc3ed8a4/ENCFF051DHR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF193VHE
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERF peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CHD2 ENCSR000ERF peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3d18685c-59ed-4730-99ec-7ebd2ff362a8/ENCFF193VHE.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF061FIN
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR531HWD peaks
+    longLabel Mus musculus strain 129/Ola ES-E14 CHD2 ENCSR531HWD peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/eda90b29-537d-4f42-8735-5d1bc69d76a7/ENCFF061FIN.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF880KKC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR531HWD signal
+    longLabel Mus musculus strain 129/Ola ES-E14 CHD2 ENCSR531HWD signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/07305ded-0897-4333-8b38-7e8c55eb9c12/ENCFF880KKC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF016ROW
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETO peaks
+    longLabel Mus musculus strain MEL MEL CHD2 ENCSR000ETO peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ff6cd7f3-bad1-4e1a-98c9-7fa88115d4a4/ENCFF016ROW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF733CWC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETO signal
+    longLabel Mus musculus strain MEL MEL CHD2 ENCSR000ETO signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9c3449da-6b9d-45c6-8ee6-58d14b5e7467/ENCFF733CWC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF137XUJ
+    type bigWig
+    parent encode4RegTfChip on
+    shortLabel ENCSR000DIU signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000DIU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b0f5872a-819b-41d3-a527-e9a446a9311f/ENCFF137XUJ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF206SRW
+    type bigBed 5
+    parent encode4RegTfChip on
+    shortLabel ENCSR000DIU peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000DIU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/506580a9-80b8-4ed6-8ffb-69c5eb16dbfa/ENCFF206SRW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF309RMG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERM peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000ERM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/001bdb2c-5ac4-4cf4-ac1e-d55f2e110467/ENCFF309RMG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF499GIZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERM signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000ERM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/d4f636a1-2379-4678-8c75-9607eac6dda0/ENCFF499GIZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF096IYG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBL peaks
+    longLabel Mus musculus strain B6NCrl bone marrow tissue male adult (8 weeks) CTCF ENCSR000CBL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/4520413a-c482-4ce9-be99-d75dbee055fe/ENCFF096IYG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF309GTL
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBL signal
+    longLabel Mus musculus strain B6NCrl bone marrow tissue male adult (8 weeks) CTCF ENCSR000CBL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/fb6e7be8-3567-4147-8852-ad2dbc63e965/ENCFF309GTL.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF907FBA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFJ signal
+    longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult (8 weeks) CTCF ENCSR000CFJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/d7231099-b4ee-4911-9fb6-a8c2242ca4e7/ENCFF907FBA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF934CZI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFJ peaks
+    longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult (8 weeks) CTCF ENCSR000CFJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/d164b9cc-9b52-417d-8b67-10f275033ae8/ENCFF934CZI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF031WAC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDX peaks
+    longLabel Mus musculus strain B6NCrl olfactory bulb tissue male adult (8 weeks) CTCF ENCSR000CDX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/ae7c1cfd-0790-447b-be80-263cfa6f3b15/ENCFF031WAC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF087SVX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBN signal
+    longLabel Mus musculus strain B6NCrl cerebellum tissue male adult (8 weeks) CTCF ENCSR000CBN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/4a3bbf40-b397-4945-94f8-ea0600cd3a84/ENCFF087SVX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF196GIY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR985ZTV signal
+    longLabel Mus musculus strain B6NCrl midbrain tissue postnatal (0 days) CTCF ENCSR985ZTV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/6ed88601-1dbf-45ca-9236-010dddf97aae/ENCFF196GIY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF247XHY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR677HXC signal
+    longLabel Mus musculus strain B6NCrl forebrain tissue postnatal (0 days) CTCF ENCSR677HXC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/35dc114f-b366-4bb7-8b09-ff9f4e52f390/ENCFF247XHY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF326QHR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBO signal
+    longLabel Mus musculus strain B6NCrl cortical plate tissue male adult (8 weeks) CTCF ENCSR000CBO signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/6100f41f-7e78-4d8f-b423-345d905e52d7/ENCFF326QHR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF410DRE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDX signal
+    longLabel Mus musculus strain B6NCrl olfactory bulb tissue male adult (8 weeks) CTCF ENCSR000CDX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/6eb2421b-5988-4811-ba87-a6e19ec355c9/ENCFF410DRE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF494FQV
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR150RGT signal
+    longLabel Mus musculus strain B6NCrl hindbrain tissue postnatal (0 days) CTCF ENCSR150RGT signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/74f3c682-66ad-4350-ae2f-8856049dee3e/ENCFF494FQV.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF498DMS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEH signal
+    longLabel Mus musculus strain B6NCrl brain tissue embryo (14.5 days) CTCF ENCSR000CEH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/411ea303-121a-44e2-b544-72c3e923759d/ENCFF498DMS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF582ODI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR677HXC peaks
+    longLabel Mus musculus strain B6NCrl forebrain tissue postnatal (0 days) CTCF ENCSR677HXC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f169fd06-743b-4f4d-acb6-2172ad696d14/ENCFF582ODI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF651LJP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBN peaks
+    longLabel Mus musculus strain B6NCrl cerebellum tissue male adult (8 weeks) CTCF ENCSR000CBN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/6c4aaab2-52b8-40a0-a0fe-50b8d6919adc/ENCFF651LJP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF866DMM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBO peaks
+    longLabel Mus musculus strain B6NCrl cortical plate tissue male adult (8 weeks) CTCF ENCSR000CBO peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/35d6d295-4e86-4f36-875d-7886aa921d8b/ENCFF866DMM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF883DNO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR985ZTV peaks
+    longLabel Mus musculus strain B6NCrl midbrain tissue postnatal (0 days) CTCF ENCSR985ZTV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/d716d8b5-5722-4215-915d-5670759946ae/ENCFF883DNO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF950QPK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEH peaks
+    longLabel Mus musculus strain B6NCrl brain tissue embryo (14.5 days) CTCF ENCSR000CEH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/4ae56980-cf99-4edb-a952-3bd6e5237f0a/ENCFF950QPK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF968IRJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR150RGT peaks
+    longLabel Mus musculus strain B6NCrl hindbrain tissue postnatal (0 days) CTCF ENCSR150RGT peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ec61dbb1-9819-4388-adf3-44da9cfe453a/ENCFF968IRJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF074DDJ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR419OOD signal
+    longLabel Mus musculus strain Patski Patski CTCF ENCSR419OOD signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/30/49447d74-9487-4713-a09e-1d8acaae2f5b/ENCFF074DDJ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF382VSH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBW signal
+    longLabel Mus musculus strain C57BL/6J embryonic fibroblast male embryo (13.5 weeks) CTCF ENCSR000CBW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/b163b64f-7213-408d-a09c-032667caaf95/ENCFF382VSH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF571CXD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBW peaks
+    longLabel Mus musculus strain C57BL/6J embryonic fibroblast male embryo (13.5 weeks) CTCF ENCSR000CBW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/2df5d0ed-d7c2-4316-bbc0-fd3502ead171/ENCFF571CXD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF625VHK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR419OOD peaks
+    longLabel Mus musculus strain Patski Patski CTCF ENCSR419OOD peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/30/4c8f4d57-3a12-4a58-8819-473d8cc95276/ENCFF625VHK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF177LVD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIS signal
+    longLabel Mus musculus G1E CTCF ENCSR000DIS signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/ef86275f-c865-450e-9a0c-cf7dfd15648c/ENCFF177LVD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF263TYL
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR362VNF signal
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 CTCF ENCSR362VNF signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/c072c8be-84bd-49a0-9bbd-9e7c20476e39/ENCFF263TYL.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF618LXG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCB signal
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 CTCF ENCSR000CCB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2023/01/12/5309e6a7-dfb3-4e71-a262-58edbfd43cd5/ENCFF618LXG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF655ZMR
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCB peaks
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 CTCF ENCSR000CCB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2023/01/12/03e7cc0f-a90a-40b4-8b85-99dde7a6a267/ENCFF655ZMR.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF845GTG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIS peaks
+    longLabel Mus musculus G1E CTCF ENCSR000DIS peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/dccc43ef-8a2b-4738-ac40-97dac8ca1e34/ENCFF845GTG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF949CNK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR362VNF peaks
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 CTCF ENCSR362VNF peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/545ed20f-27ab-449c-abd6-99d31d670fc9/ENCFF949CNK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF055IZM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR491NUM signal
+    longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) CTCF ENCSR491NUM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8dc73fe8-26bc-4f94-9c33-2b4856c278ee/ENCFF055IZM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF150ITM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBI peaks
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) CTCF ENCSR000CBI peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/9456a357-bef2-41ee-9174-5c27b607933b/ENCFF150ITM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF272HBL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR491NUM peaks
+    longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) CTCF ENCSR491NUM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a485c24e-654f-4e90-b006-36d870dbd27c/ENCFF272HBL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF809JIR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBI signal
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) CTCF ENCSR000CBI signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/936d5420-a575-451d-a170-4d4711f4d329/ENCFF809JIR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF030YTL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR002ZAG peaks
+    longLabel Mus musculus strain B6NCrl intestine tissue postnatal (0 days) CTCF ENCSR002ZAG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/2972c6e9-42c7-4496-a2fa-77bea253a86f/ENCFF030YTL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF826BKY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR002ZAG signal
+    longLabel Mus musculus strain B6NCrl intestine tissue postnatal (0 days) CTCF ENCSR002ZAG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ff0aa1c7-d003-49d6-a442-3f148feac730/ENCFF826BKY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF195OJA
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR143WOK peaks
+    longLabel Mus musculus strain B6NCrl kidney tissue postnatal (0 days) CTCF ENCSR143WOK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/df4edd6d-5ec0-4049-b395-cda9f6a066ff/ENCFF195OJA.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF196NRY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBJ signal
+    longLabel Mus musculus strain B6NCrl kidney tissue male adult (8 weeks) CTCF ENCSR000CBJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/1b31dfb6-c355-4b9b-88a6-26116f57dcb1/ENCFF196NRY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF360LEZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBJ peaks
+    longLabel Mus musculus strain B6NCrl kidney tissue male adult (8 weeks) CTCF ENCSR000CBJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/157d210d-6018-406d-a92a-c4006c1ed44d/ENCFF360LEZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF644MRR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR143WOK signal
+    longLabel Mus musculus strain B6NCrl kidney tissue postnatal (0 days) CTCF ENCSR143WOK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/4af82ef3-aacf-48d4-9bdd-23cf5eb9166a/ENCFF644MRR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF139GWZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR041SMK peaks
+    longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) CTCF ENCSR041SMK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f7761f95-8b31-492e-adc6-bdfcfbb2dfa2/ENCFF139GWZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF233QSB
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR397RHW signal
+    longLabel Mus musculus strain B6NCrl liver tissue embryo (14.5 days) CTCF ENCSR397RHW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a8f66118-4ede-43e6-9449-ca7a67a6510f/ENCFF233QSB.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF424RGH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBU peaks
+    longLabel Mus musculus strain B6NCrl liver tissue male adult (8 weeks) CTCF ENCSR000CBU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/d1ac96f8-a9f0-458c-a3f7-0df8bb207b73/ENCFF424RGH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF715EQR
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR397RHW peaks
+    longLabel Mus musculus strain B6NCrl liver tissue embryo (14.5 days) CTCF ENCSR397RHW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/16878c55-5e86-49d7-b41a-da77c289e1e1/ENCFF715EQR.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF935ZIU
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR041SMK signal
+    longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) CTCF ENCSR041SMK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/cd9e93b9-0174-464f-8da0-5e32021aecbc/ENCFF935ZIU.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF990MGK
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBU signal
+    longLabel Mus musculus strain B6NCrl liver tissue male adult (8 weeks) CTCF ENCSR000CBU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/0bb8c04b-d302-473f-a180-e988b5d03222/ENCFF990MGK.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF173MWV
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBV signal
+    longLabel Mus musculus strain B6NCrl lung tissue male adult (8 weeks) CTCF ENCSR000CBV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/12dfbbfa-3e8d-4406-af56-346464d99573/ENCFF173MWV.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF355LDM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR677SIH signal
+    longLabel Mus musculus strain B6NCrl lung tissue embryo (14.5 days) CTCF ENCSR677SIH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/1890c9aa-697e-48d5-8423-df83fa69fc28/ENCFF355LDM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF663RDE
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR418SBY peaks
+    longLabel Mus musculus strain B6NCrl lung tissue postnatal (0 days) CTCF ENCSR418SBY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/ff43dc34-f866-45fa-9c4f-2bcc5820af1b/ENCFF663RDE.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF811CFN
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR418SBY signal
+    longLabel Mus musculus strain B6NCrl lung tissue postnatal (0 days) CTCF ENCSR418SBY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/df3b602d-d1cf-46aa-8cf2-cb3d869e5d25/ENCFF811CFN.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF839JQI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBV peaks
+    longLabel Mus musculus strain B6NCrl lung tissue male adult (8 weeks) CTCF ENCSR000CBV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/bf6ecef2-e398-45a3-be93-3307aebaefa4/ENCFF839JQI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF851EKP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR677SIH peaks
+    longLabel Mus musculus strain B6NCrl lung tissue embryo (14.5 days) CTCF ENCSR677SIH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/7d269f2f-e7b5-400d-879b-a328f167ae57/ENCFF851EKP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF173HCU
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIJ signal
+    longLabel Mus musculus C2C12 CTCF ENCSR000AIJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/fab93d89-bd54-4396-b418-d24fb1495fe6/ENCFF173HCU.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF989SUV
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIJ peaks
+    longLabel Mus musculus C2C12 CTCF ENCSR000AIJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/b71e6406-bba8-45bd-95e3-cdf8eff557df/ENCFF989SUV.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF364RRO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CED peaks
+    longLabel Mus musculus strain B6NCrl small intestine tissue male adult (8 weeks) CTCF ENCSR000CED peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/d540931e-5744-4352-9cca-a3e1b5eef4e0/ENCFF364RRO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF577EXI
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CED signal
+    longLabel Mus musculus strain B6NCrl small intestine tissue male adult (8 weeks) CTCF ENCSR000CED signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b9c1b9a4-ab50-4c28-902c-a916fccb9096/ENCFF577EXI.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF050XCY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIP peaks
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000DIP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/127985a8-7e29-4e2a-8a02-e2aac54f6135/ENCFF050XCY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF244ZJY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFH signal
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000CFH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/39e6ada5-e5a7-45c1-b9dd-a6237b72f579/ENCFF244ZJY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF250ZOH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBY peaks
+    longLabel Mus musculus strain B6NCrl spleen tissue male adult (8 weeks) CTCF ENCSR000CBY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/be1bc40d-9157-4084-9fec-f763b19e8942/ENCFF250ZOH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF265ZXD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETQ peaks
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000ETQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/a4dece65-9e1a-4157-8b16-4a508f68b5c0/ENCFF265ZXD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF461OXH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFH peaks
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000CFH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/8cfe7b5a-2857-46b7-a100-6442cb0cce87/ENCFF461OXH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF771JRH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETQ signal
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000ETQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/9d4109cd-471b-4284-b561-a3c066c8c707/ENCFF771JRH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF798PJA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIP signal
+    longLabel Mus musculus strain MEL MEL CTCF ENCSR000DIP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/313e4ed2-eeaf-49e9-a615-66f6cf154031/ENCFF798PJA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF803MIB
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBY signal
+    longLabel Mus musculus strain B6NCrl spleen tissue male adult (8 weeks) CTCF ENCSR000CBY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/8199ae6e-8806-4540-971b-3d0e3d772ea9/ENCFF803MIB.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF394DGY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR104QEN signal
+    longLabel Mus musculus strain B6NCrl stomach tissue postnatal (0 days) CTCF ENCSR104QEN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/9105492d-2992-40b7-b6dc-e143df7d233b/ENCFF394DGY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF693MTU
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR104QEN peaks
+    longLabel Mus musculus strain B6NCrl stomach tissue postnatal (0 days) CTCF ENCSR104QEN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/2a72bf98-0b5c-44fd-be7d-89585f6e7488/ENCFF693MTU.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF244FHP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEF peaks
+    longLabel Mus musculus strain B6NCrl testis tissue male adult (8 weeks) CTCF ENCSR000CEF peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/5b4c9b5c-886d-4eb2-98a7-85977bf3445e/ENCFF244FHP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF558QFH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEF signal
+    longLabel Mus musculus strain B6NCrl testis tissue male adult (8 weeks) CTCF ENCSR000CEF signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/86bd45f5-a4aa-4474-956e-0435caf761c3/ENCFF558QFH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF239UQO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDZ signal
+    longLabel Mus musculus strain B6NCrl thymus tissue male adult (8 weeks) CTCF ENCSR000CDZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/7b0b15b4-bfcd-4f82-a215-73f9fe3455f0/ENCFF239UQO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF389OZV
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDZ peaks
+    longLabel Mus musculus strain B6NCrl thymus tissue male adult (8 weeks) CTCF ENCSR000CDZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/5e96371d-f50a-4979-a3a0-47beac7c2217/ENCFF389OZV.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF446XJY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERU signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX E2F4 ENCSR000ERU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5f571a41-a3be-4da4-968f-b0d788947814/ENCFF446XJY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF448INW
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERU peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX E2F4 ENCSR000ERU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/18ad7d04-ab93-4282-a7d0-c2e9e307979a/ENCFF448INW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF445OHT
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AII signal
+    longLabel Mus musculus myocyte originated from C2C12 E2F4 ENCSR000AII signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/02e2b230-e7ff-4ade-94b0-e8fd2d7870ba/ENCFF445OHT.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF888HNP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AII peaks
+    longLabel Mus musculus myocyte originated from C2C12 E2F4 ENCSR000AII peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/19c99a16-1c2f-4fc7-a7f7-6bc3272bf82d/ENCFF888HNP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF010PZD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETY signal
+    longLabel Mus musculus strain MEL MEL E2F4 ENCSR000ETY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/35b17228-c1a6-4e24-9a34-82b955be8ee3/ENCFF010PZD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF101JLI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETY peaks
+    longLabel Mus musculus strain MEL MEL E2F4 ENCSR000ETY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0a9fad60-a0e3-45af-99c6-b20f3f1c79e8/ENCFF101JLI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF372HNX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR293WTN signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ELF1 ENCSR293WTN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2169d5bf-af16-4817-bc30-84f0cf2129bd/ENCFF372HNX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF821OFU
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR293WTN peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ELF1 ENCSR293WTN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/594cd037-5901-4e5e-a3fb-88e546efad52/ENCFF821OFU.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF201ADZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR033OWC peaks
+    longLabel Mus musculus strain MEL MEL ELF1 ENCSR033OWC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3c13072e-e32a-4b0b-a485-ad04230a0422/ENCFF201ADZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF564EAG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR033OWC signal
+    longLabel Mus musculus strain MEL MEL ELF1 ENCSR033OWC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2216e400-cb24-453c-bafd-79a1e1a2baff/ENCFF564EAG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF645KIE
+    type bigWig
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERI signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX EP300 ENCSR000ERI signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ee90a243-1bc0-4f6d-9432-85fde023b1f9/ENCFF645KIE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF751KXI
+    type bigBed 5
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERI peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX EP300 ENCSR000ERI peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/808416c3-7269-463a-ad06-61338154c809/ENCFF751KXI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF552AJY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCD signal
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 EP300 ENCSR000CCD signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/341103f4-86e0-43ac-bf96-9d87a5519c86/ENCFF552AJY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF641PEY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCD peaks
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 EP300 ENCSR000CCD peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3109c72a-4a94-46ac-b8c7-8bf7a19d7c84/ENCFF641PEY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF305EBF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR777VNA peaks
+    longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) EP300 ENCSR777VNA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f2fb45bb-4f5e-41ea-9add-1ad551918d57/ENCFF305EBF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF460PUH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCA signal
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) EP300 ENCSR000CCA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/00bc9aed-45fb-49ab-8148-585f647f6cc8/ENCFF460PUH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF543RPY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCA peaks
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) EP300 ENCSR000CCA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7f686456-6c82-4971-bcde-14343308504c/ENCFF543RPY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF573DAQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR777VNA signal
+    longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) EP300 ENCSR777VNA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9d3fc66a-7802-4364-a4f0-dc0ff9de55b7/ENCFF573DAQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF269YIA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR765RPR signal
+    longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) EP300 ENCSR765RPR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7a302c4f-873b-4cc8-9484-5b82eab5592f/ENCFF269YIA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF352UIU
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR982LJQ signal
+    longLabel Mus musculus strain B6NCrl liver tissue embryo (14.5 days) EP300 ENCSR982LJQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/6ca0ed88-7467-42cc-9211-2c5e00d17a47/ENCFF352UIU.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF474SBJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR765RPR peaks
+    longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) EP300 ENCSR765RPR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/4319ee89-864b-482b-b761-517595a3aaae/ENCFF474SBJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF689EUQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR982LJQ peaks
+    longLabel Mus musculus strain B6NCrl liver tissue embryo (14.5 days) EP300 ENCSR982LJQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/1a50315c-09e7-4521-bad4-536de1078995/ENCFF689EUQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF680SNY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR527DME peaks
+    longLabel Mus musculus strain B6NCrl lung tissue postnatal (0 days) EP300 ENCSR527DME peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f2573410-603b-4dbe-a2bd-5d1c3988095d/ENCFF680SNY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF688EWD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR527DME signal
+    longLabel Mus musculus strain B6NCrl lung tissue postnatal (0 days) EP300 ENCSR527DME signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/008582d2-d6ed-41b3-a1b6-a292f81b9448/ENCFF688EWD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF353NZE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETP signal
+    longLabel Mus musculus strain MEL MEL EP300 ENCSR000ETP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/be33d191-2e93-4fcf-8603-5a5e7c8f4534/ENCFF353NZE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF369KSQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETP peaks
+    longLabel Mus musculus strain MEL MEL EP300 ENCSR000ETP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1e054da7-c12b-43f6-9319-df70fb2b0e02/ENCFF369KSQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF855XCM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETV signal
+    longLabel Mus musculus strain MEL MEL EP300 ENCSR000ETV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a93cc3ee-8b4d-4802-b75f-37025accc0a0/ENCFF855XCM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF981FZP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETV peaks
+    longLabel Mus musculus strain MEL MEL EP300 ENCSR000ETV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0343fcab-a69e-4ce3-a984-79ffb34b48e7/ENCFF981FZP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF734TDG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR450KVW signal
+    longLabel Mus musculus strain B6NCrl stomach tissue postnatal (0 days) EP300 ENCSR450KVW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/bd36c919-0500-474f-83fd-7c9331c135cd/ENCFF734TDG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF814WVH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR450KVW peaks
+    longLabel Mus musculus strain B6NCrl stomach tissue postnatal (0 days) EP300 ENCSR450KVW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c413cebd-fcdf-449c-83d4-106c7fad6c2b/ENCFF814WVH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF592DZK
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERA signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ETS1 ENCSR000ERA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/035c5b52-29a3-4c4d-aa54-b8ba0ae852ba/ENCFF592DZK.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF967ORI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERA peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ETS1 ENCSR000ERA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/39a05ad6-9e79-4cf3-8d81-499ad4a1ef26/ENCFF967ORI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF387SUT
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETB signal
+    longLabel Mus musculus strain MEL MEL ETS1 ENCSR000ETB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6efc0bcb-d5d0-403d-9259-718a5599195d/ENCFF387SUT.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF955ORU
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETB peaks
+    longLabel Mus musculus strain MEL MEL ETS1 ENCSR000ETB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1d600f7a-6529-42a5-8f95-a2b9c04103d9/ENCFF955ORU.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF113VEB
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQS peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX GABPA ENCSR000EQS peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8374db36-c73d-48e2-9a0e-fa493da2c775/ENCFF113VEB.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF308UHQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQS signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX GABPA ENCSR000EQS signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/eb52799d-22c8-4830-b72d-7274abc2b790/ENCFF308UHQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF051IDQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESK signal
+    longLabel Mus musculus strain MEL MEL GABPA ENCSR000ESK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a454fcef-bfc4-4126-8878-374439cf05e7/ENCFF051IDQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF436KZI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESK peaks
+    longLabel Mus musculus strain MEL MEL GABPA ENCSR000ESK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ec825508-8017-4a0a-accc-5dbbe425f9be/ENCFF436KZI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF412BER
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIL peaks
+    longLabel Mus musculus erythroblast embryo (14.5 days) GATA1 ENCSR000DIL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d302b485-1bff-46eb-912c-4fabc38a2e66/ENCFF412BER.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF710YOS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIL signal
+    longLabel Mus musculus erythroblast embryo (14.5 days) GATA1 ENCSR000DIL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3036a9a2-0545-488a-8873-f849946b92ef/ENCFF710YOS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF583ISD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUG signal
+    longLabel Mus musculus strain MEL MEL GATA1 ENCSR000EUG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9d9be8ba-29ce-4cd7-b07c-fb08191f47c5/ENCFF583ISD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF749PQC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUG peaks
+    longLabel Mus musculus strain MEL MEL GATA1 ENCSR000EUG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/799e2aa4-2fa7-4a3a-b754-68c7bb80c574/ENCFF749PQC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF451ZJL
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR194GNY signal
+    longLabel Mus musculus liver tissue adult GATA4 ENCSR194GNY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c28fba90-1b5d-4dd5-9f76-e0ed643db169/ENCFF451ZJL.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF801ONU
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR194GNY peaks
+    longLabel Mus musculus liver tissue adult GATA4 ENCSR194GNY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b9fe58db-ef90-49be-8258-bee04947acb4/ENCFF801ONU.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF103KMB
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQR signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX HCFC1 ENCSR000EQR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2623499b-630d-40df-975f-1d5f15913e1a/ENCFF103KMB.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF751GTD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQR peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX HCFC1 ENCSR000EQR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/64de2866-ba67-449f-87e1-e71c5bbcf44c/ENCFF751GTD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF606SGK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERX peaks
+    longLabel Mus musculus strain 129/Ola ES-E14 HCFC1 ENCSR000ERX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/21ba2fda-938e-40e3-b1e2-6096eea99cdb/ENCFF606SGK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF707HHX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERX signal
+    longLabel Mus musculus strain 129/Ola ES-E14 HCFC1 ENCSR000ERX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1eea21cf-9642-4e67-b12f-2ea77d5cba02/ENCFF707HHX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF139RQE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESG signal
+    longLabel Mus musculus strain MEL MEL HCFC1 ENCSR000ESG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d84e4abd-72be-4b14-9f9a-7d67445a8394/ENCFF139RQE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF617OUX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESG peaks
+    longLabel Mus musculus strain MEL MEL HCFC1 ENCSR000ESG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e8f87de9-1659-4c8d-b8df-b707a06f1eb6/ENCFF617OUX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF670OBB
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR743ZJL signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX IRF4 ENCSR743ZJL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/10ad120d-5309-4623-8399-76035edd854c/ENCFF670OBB.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF923MWP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR743ZJL peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX IRF4 ENCSR743ZJL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/596373c3-0ba7-4a5f-ab58-281517fd07eb/ENCFF923MWP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF657LQO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERO signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX JUN ENCSR000ERO signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/981d90f5-97ad-4ac7-a981-30a0aa3db340/ENCFF657LQO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF787AFP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERO peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX JUN ENCSR000ERO peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b91ab6ee-85fc-49e1-8c4e-9d487ea429ce/ENCFF787AFP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF104LYR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERR signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX JUND ENCSR000ERR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3e4ebfba-e4e6-43d7-8fdf-93931d3222db/ENCFF104LYR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF540ISL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERR peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX JUND ENCSR000ERR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/17cf8018-b00d-4f7a-9c4c-d480ab401415/ENCFF540ISL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF029GXY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETZ signal
+    longLabel Mus musculus strain MEL MEL JUND ENCSR000ETZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c39ebdbd-eb13-4e76-9d58-9b203664ea23/ENCFF029GXY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF574CMB
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETZ peaks
+    longLabel Mus musculus strain MEL MEL JUND ENCSR000ETZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3e17a982-4dee-4f95-8096-4da444a16c6c/ENCFF574CMB.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF058OHT
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQU peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX KAT2A ENCSR000EQU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d168aeae-ac63-415b-9fba-76329be3d4b6/ENCFF058OHT.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF541CUR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQU signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX KAT2A ENCSR000EQU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/876d0cd8-8e77-4dad-8e35-82587d65db41/ENCFF541CUR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF286PAO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESM signal
+    longLabel Mus musculus strain MEL MEL KAT2A ENCSR000ESM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/20651082-6ad6-4694-9399-1ebd970fc551/ENCFF286PAO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF728TGP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESM peaks
+    longLabel Mus musculus strain MEL MEL KAT2A ENCSR000ESM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7bd0fb42-e5d3-4a02-9a7f-98b3f8d61f0d/ENCFF728TGP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF012UEU
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERB peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAFK ENCSR000ERB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a3a5026e-3006-4cfa-9847-3d8e50c60972/ENCFF012UEU.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF512OOQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERB signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAFK ENCSR000ERB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/aa009fb1-be8f-454a-b396-4bb430ca4054/ENCFF512OOQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF444HKO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR604XDL peaks
+    longLabel Mus musculus strain 129/Ola ES-E14 MAFK ENCSR604XDL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c5c6c67a-6b58-452d-bde6-d0b3af3217ff/ENCFF444HKO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF763GCB
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR604XDL signal
+    longLabel Mus musculus strain 129/Ola ES-E14 MAFK ENCSR604XDL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/00d06864-59c8-40f7-acea-620882b46d9d/ENCFF763GCB.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF593RKO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETK signal
+    longLabel Mus musculus strain MEL MEL MAFK ENCSR000ETK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ebbbabee-0054-4165-bfe6-01967aefbbee/ENCFF593RKO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF914OML
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETK peaks
+    longLabel Mus musculus strain MEL MEL MAFK ENCSR000ETK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/93a8f8a2-b4c4-481f-b2da-b2e252955700/ENCFF914OML.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF542WPW
+    type bigWig
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERL signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAX ENCSR000ERL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2376710a-d9d7-4e49-8bfd-d12d28b69928/ENCFF542WPW.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF598YAW
+    type bigBed 5
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERL peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAX ENCSR000ERL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5bcf8276-f582-426d-876d-d589aaaeb8a4/ENCFF598YAW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF079DWR
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIL peaks
+    longLabel Mus musculus myocyte originated from C2C12 MAX ENCSR000AIL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/86b91738-cbd6-488b-ac3b-c94ac539cfac/ENCFF079DWR.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF212ZQH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIO peaks
+    longLabel Mus musculus C2C12 MAX ENCSR000AIO peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/85af3835-0beb-47ab-849d-6952eb4e0a86/ENCFF212ZQH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF564HUG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIL signal
+    longLabel Mus musculus myocyte originated from C2C12 MAX ENCSR000AIL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/99b31263-ad4b-4ee2-9818-9ad8a640863b/ENCFF564HUG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF889TNH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIO signal
+    longLabel Mus musculus C2C12 MAX ENCSR000AIO signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8ea3c6cc-1755-4a67-9957-c10bd7bab72e/ENCFF889TNH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF009HIR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETX signal
+    longLabel Mus musculus strain MEL MEL MAX ENCSR000ETX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/65dd4e4e-d861-4c47-8cdc-1c44ad845d6b/ENCFF009HIR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF933DDY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETX peaks
+    longLabel Mus musculus strain MEL MEL MAX ENCSR000ETX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8b895c07-6a4f-4c5e-8b46-e52af1fc97f7/ENCFF933DDY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF909VNQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQT signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAZ ENCSR000EQT signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e62d0d46-9320-4a3e-8f56-49fe20c16d2c/ENCFF909VNQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF941EPC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQT peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAZ ENCSR000EQT peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/09990165-7ab1-44a6-88d0-5703ab657ba4/ENCFF941EPC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF697LZL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESL peaks
+    longLabel Mus musculus strain MEL MEL MAZ ENCSR000ESL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8e1bb799-9972-43ac-8ffa-3516be32424e/ENCFF697LZL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF778AGD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESL signal
+    longLabel Mus musculus strain MEL MEL MAZ ENCSR000ESL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fd186996-bb4d-4065-a1cd-d2517bac118f/ENCFF778AGD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF443YGR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR806JZK signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MEF2A ENCSR806JZK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8db9844c-a938-409a-bb31-3b4394bf7111/ENCFF443YGR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF760LKM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR806JZK peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MEF2A ENCSR806JZK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5057d5c8-c6b2-4300-a795-043bc9f171a7/ENCFF760LKM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF008ZUZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR867SDZ signal
+    longLabel Mus musculus strain MEL MEL MEF2A ENCSR867SDZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2e3267db-1465-475b-8547-fb123b5c75ba/ENCFF008ZUZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF077KNP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR867SDZ peaks
+    longLabel Mus musculus strain MEL MEL MEF2A ENCSR867SDZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fa0f410c-df9e-407d-acf1-eac125de81ac/ENCFF077KNP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF169VQP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERE peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MXI1 ENCSR000ERE peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2e5d916b-c4d3-485e-9625-8ccbe938cc22/ENCFF169VQP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF908ZIH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERE signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MXI1 ENCSR000ERE signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d13d9800-91be-426a-8e4a-6f03d1cdcec3/ENCFF908ZIH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF008STI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETN peaks
+    longLabel Mus musculus strain MEL MEL MXI1 ENCSR000ETN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b619b333-2496-4f64-9c4e-0ef9d053c87b/ENCFF008STI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF277PLN
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETN signal
+    longLabel Mus musculus strain MEL MEL MXI1 ENCSR000ETN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a7b722bb-6f66-499d-9c32-9a17bf506a4b/ENCFF277PLN.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF087EBB
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETR peaks
+    longLabel Mus musculus strain MEL MEL MYB ENCSR000ETR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/58c0f6c8-52a1-4c4d-8540-7c1924bea2c2/ENCFF087EBB.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF356IDM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETR signal
+    longLabel Mus musculus strain MEL MEL MYB ENCSR000ETR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/741da50b-37a9-464a-804d-4012e4da4184/ENCFF356IDM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF052BLL
+    type bigBed 5
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERN peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MYC ENCSR000ERN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f16f130c-21a3-41d3-8b27-3fa7e15ae54b/ENCFF052BLL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF416IKH
+    type bigWig
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERN signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MYC ENCSR000ERN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/56b535df-3f9c-4b45-968f-bb02693fd501/ENCFF416IKH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF298BJL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUA peaks
+    longLabel Mus musculus strain MEL MEL MYC ENCSR000EUA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/02fcb6b7-f7a0-4800-a527-7d208ef9c93d/ENCFF298BJL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF703HNU
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUA signal
+    longLabel Mus musculus strain MEL MEL MYC ENCSR000EUA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ca240bc7-5601-4ba2-b86b-4203d327979d/ENCFF703HNU.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF400CGP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIH signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/07c0c31d-81fc-46b7-9d32-c67021459476/ENCFF400CGP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF411OUR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIG signal
+    longLabel Mus musculus C2C12 MYOD1 ENCSR000AIG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2a4af8e3-a4e1-41ef-ab6a-7004a5aac251/ENCFF411OUR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF523KGN
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIR signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/94b669ba-6935-4395-bf56-a9b458513244/ENCFF523KGN.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF628LCC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIR peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f90dab1e-bf62-4849-b6a9-0942c0b2d398/ENCFF628LCC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF650BOD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIT peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIT peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e3f97f83-c2c2-4bc9-9f7b-1c8c8d4b49b3/ENCFF650BOD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF737EMF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIG peaks
+    longLabel Mus musculus C2C12 MYOD1 ENCSR000AIG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6d638663-f57e-4b3d-a477-8a106e6dd0b2/ENCFF737EMF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF824SGT
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIH peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5cd0a2f1-488b-4928-9bb5-2f395e86eb7e/ENCFF824SGT.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF900JHA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIT signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOD1 ENCSR000AIT signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/16bce316-0e64-46cd-9eb7-904baa2ac78d/ENCFF900JHA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF003ILJ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AID signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AID signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a3710a50-a74b-413e-b14b-e19984ce31e4/ENCFF003ILJ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF495BTS
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIC peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AIC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5975b4ea-edb9-4a90-83cd-6d3f68cc5c60/ENCFF495BTS.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF515MUQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AID peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AID peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5418c136-c3a0-48d5-91a5-ae22d4348a5c/ENCFF515MUQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF648RNP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIW peaks
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AIW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3e5a3324-79a3-4356-99e5-1c7dacd0ca69/ENCFF648RNP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF820TTS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIW signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AIW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e284242a-9499-4332-8cb2-c9607b8a036f/ENCFF820TTS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF997HYH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIC signal
+    longLabel Mus musculus myocyte originated from C2C12 MYOG ENCSR000AIC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2df651a2-0b99-4724-801a-ceaa1d2a3350/ENCFF997HYH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF046OGH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR779CZG signal
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 NANOG ENCSR779CZG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f1a7daa4-254d-43cf-90f3-175d9fab94c4/ENCFF046OGH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF617IDV
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR779CZG peaks
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 NANOG ENCSR779CZG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cc280c89-ec5c-45cd-af41-43f8fa4c005c/ENCFF617IDV.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF110ZJD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERD peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX NELFE ENCSR000ERD peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/95911107-87c0-4b79-ba7d-5668cf71dd13/ENCFF110ZJD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF756MTE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERD signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX NELFE ENCSR000ERD signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/525443b0-8a1f-4666-bc61-a288d1c57d19/ENCFF756MTE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF750QUO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETU signal
+    longLabel Mus musculus strain MEL MEL NELFE ENCSR000ETU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fe3bb13f-b281-40ae-94ea-c597abd98234/ENCFF750QUO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF823OGZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETU peaks
+    longLabel Mus musculus strain MEL MEL NELFE ENCSR000ETU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/32e32cfb-43df-4f70-9a49-a4c9c7ce4367/ENCFF823OGZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF014YNP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR980YXJ signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX NRF1 ENCSR980YXJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/175b9e0a-153a-42f3-996c-accee3d4d2c7/ENCFF014YNP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF037EHN
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR980YXJ peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX NRF1 ENCSR980YXJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/685794bc-ccc0-4d85-bd69-62a52ac6bc11/ENCFF037EHN.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF166UVG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR135SWH peaks
+    longLabel Mus musculus strain MEL MEL NRF1 ENCSR135SWH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f221955f-07f3-408e-ae38-59fecdf4d8d4/ENCFF166UVG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF174RCM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR135SWH signal
+    longLabel Mus musculus strain MEL MEL NRF1 ENCSR135SWH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0482499a-e3da-40a6-9bbb-695a20e8ca81/ENCFF174RCM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF426UTA
+    type bigBed 5
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERQ peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2A ENCSR000ERQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d652c495-5aa3-4430-8b04-2b1236c62c64/ENCFF426UTA.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF441BMN
+    type bigWig
+    parent encode4RegTfChip on
+    shortLabel ENCSR000ERQ signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2A ENCSR000ERQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ab9b0472-4421-49e3-b3d2-ba29c30df4e6/ENCFF441BMN.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF141MZT
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFK signal
+    longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult (8 weeks) POLR2A ENCSR000CFK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/111340d5-0453-47a5-9a79-722d928a5669/ENCFF141MZT.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF400IDV
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFK peaks
+    longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult (8 weeks) POLR2A ENCSR000CFK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/583cef6d-30ee-4e8a-821a-fd188e3364cf/ENCFF400IDV.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF470IRG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBM signal
+    longLabel Mus musculus strain B6NCrl bone marrow tissue male adult (8 weeks) POLR2A ENCSR000CBM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f5f2df4b-a20d-4c25-8674-9c9e74b79c4b/ENCFF470IRG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF803UTA
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBM peaks
+    longLabel Mus musculus strain B6NCrl bone marrow tissue male adult (8 weeks) POLR2A ENCSR000CBM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fcc8a1f2-5b51-46f1-81ee-c2d3e1f5c1d8/ENCFF803UTA.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF203KID
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBP signal
+    longLabel Mus musculus strain B6NCrl cortical plate tissue male adult (8 weeks) POLR2A ENCSR000CBP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ffa5a692-b6c5-4df6-9d9a-9743be2ae130/ENCFF203KID.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF423UBJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDY peaks
+    longLabel Mus musculus strain B6NCrl olfactory bulb tissue male adult (8 weeks) POLR2A ENCSR000CDY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/59cd2263-1893-48e2-b60c-238f37bec23f/ENCFF423UBJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF443GCJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEI peaks
+    longLabel Mus musculus strain B6NCrl brain tissue embryo (14.5 days) POLR2A ENCSR000CEI peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/837eb8eb-1046-4e4e-ad0e-770c0514ab91/ENCFF443GCJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF484OXC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBQ signal
+    longLabel Mus musculus strain B6NCrl cerebellum tissue male adult (8 weeks) POLR2A ENCSR000CBQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/15273e7b-7df9-4545-b347-d6a20ff42fe4/ENCFF484OXC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF512SQW
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CDY signal
+    longLabel Mus musculus strain B6NCrl olfactory bulb tissue male adult (8 weeks) POLR2A ENCSR000CDY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d0d70aa2-34d2-4492-9083-1912886ceb61/ENCFF512SQW.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF603ERF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBP peaks
+    longLabel Mus musculus strain B6NCrl cortical plate tissue male adult (8 weeks) POLR2A ENCSR000CBP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/096b34fc-455d-4f36-aae4-ab31c23a8fae/ENCFF603ERF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF896JBY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBQ peaks
+    longLabel Mus musculus strain B6NCrl cerebellum tissue male adult (8 weeks) POLR2A ENCSR000CBQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/581b47a6-7966-4451-956d-aaa0a0ee45ee/ENCFF896JBY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF918UNI
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEI signal
+    longLabel Mus musculus strain B6NCrl brain tissue embryo (14.5 days) POLR2A ENCSR000CEI signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d9567a24-179e-48cd-b67c-c1a88256f1e0/ENCFF918UNI.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF365MOJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBX peaks
+    longLabel Mus musculus strain C57BL/6J embryonic fibroblast male embryo (13.5 weeks) POLR2A ENCSR000CBX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e15716ab-a12d-42ee-9eeb-51deba506016/ENCFF365MOJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF890XEA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBX signal
+    longLabel Mus musculus strain C57BL/6J embryonic fibroblast male embryo (13.5 weeks) POLR2A ENCSR000CBX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/87437f98-a483-443a-bad9-9043573865aa/ENCFF890XEA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF048JTP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCC signal
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 POLR2A ENCSR000CCC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2023/01/24/6f7a47c9-b565-4719-8427-c2aac2ff82db/ENCFF048JTP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF925FTF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CCC peaks
+    longLabel Mus musculus strain Bruce4 ES-Bruce4 POLR2A ENCSR000CCC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2023/01/24/35874ca6-308b-4166-b619-4208642fa763/ENCFF925FTF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF701BZZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBS signal
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) POLR2A ENCSR000CBS signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a580ce26-ef1b-4c0a-9c02-fe79825b7448/ENCFF701BZZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF732TKA
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBS peaks
+    longLabel Mus musculus strain B6NCrl heart tissue male adult (8 weeks) POLR2A ENCSR000CBS peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c6cade13-f5c1-4e26-b363-76ab102f7575/ENCFF732TKA.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF399IXW
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBK peaks
+    longLabel Mus musculus strain B6NCrl kidney tissue male adult (8 weeks) POLR2A ENCSR000CBK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/161664f3-4bed-4eb2-b3ce-454041d25eef/ENCFF399IXW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF905XQP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBK signal
+    longLabel Mus musculus strain B6NCrl kidney tissue male adult (8 weeks) POLR2A ENCSR000CBK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ccaa9ec4-6347-4db6-8915-5f3aa279cc90/ENCFF905XQP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF014GFM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBR peaks
+    longLabel Mus musculus strain B6NCrl liver tissue male adult (8 weeks) POLR2A ENCSR000CBR peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/145f768a-82df-412f-898f-4b494086b117/ENCFF014GFM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF861YXO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBR signal
+    longLabel Mus musculus strain B6NCrl liver tissue male adult (8 weeks) POLR2A ENCSR000CBR signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/749e914e-6538-43fd-8078-8472c8bf1445/ENCFF861YXO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF025NGM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBT signal
+    longLabel Mus musculus strain B6NCrl lung tissue male adult (8 weeks) POLR2A ENCSR000CBT signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/09594810-9738-47a1-9bfc-d0706e944d6d/ENCFF025NGM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF999JGM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBT peaks
+    longLabel Mus musculus strain B6NCrl lung tissue male adult (8 weeks) POLR2A ENCSR000CBT peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/06a936d8-e55c-4779-bd98-b0ef53cde158/ENCFF999JGM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF433EHC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIX peaks
+    longLabel Mus musculus myocyte originated from C2C12 POLR2A ENCSR000AIX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7716516b-21aa-4403-bf2d-e426222ddd76/ENCFF433EHC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF794TIS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIX signal
+    longLabel Mus musculus myocyte originated from C2C12 POLR2A ENCSR000AIX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e94b8ff0-52bc-4955-8162-bb83e42fa360/ENCFF794TIS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF390PJC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEE peaks
+    longLabel Mus musculus strain B6NCrl small intestine tissue male adult (8 weeks) POLR2A ENCSR000CEE peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/623644ab-0e0e-4cf9-91a1-6da4b340f62a/ENCFF390PJC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF759VQH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEE signal
+    longLabel Mus musculus strain B6NCrl small intestine tissue male adult (8 weeks) POLR2A ENCSR000CEE signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6ba068c3-f956-464c-aa0c-d54ac85ba052/ENCFF759VQH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF077XNR
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBZ peaks
+    longLabel Mus musculus strain B6NCrl spleen tissue male adult (8 weeks) POLR2A ENCSR000CBZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/55aedac8-6e4c-4b96-90d0-47c177dc105e/ENCFF077XNR.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF197SQI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFI peaks
+    longLabel Mus musculus strain MEL MEL POLR2A ENCSR000CFI peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e6c400b9-6ec2-470f-9e23-5660de8e55c5/ENCFF197SQI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF409BXZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CBZ signal
+    longLabel Mus musculus strain B6NCrl spleen tissue male adult (8 weeks) POLR2A ENCSR000CBZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/4850761e-1258-407f-8d95-5f6a59f97171/ENCFF409BXZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF464XSA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CFI signal
+    longLabel Mus musculus strain MEL MEL POLR2A ENCSR000CFI signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/faad606a-3bee-4e76-a6f7-8f126630502a/ENCFF464XSA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF471CGM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUC peaks
+    longLabel Mus musculus strain MEL MEL POLR2A ENCSR000EUC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f481d91f-3664-422a-b1d5-1f0acbfe4e12/ENCFF471CGM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF544KQE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUC signal
+    longLabel Mus musculus strain MEL MEL POLR2A ENCSR000EUC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/21de0b41-227a-449b-bd98-92336a3349af/ENCFF544KQE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF582MZO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEG peaks
+    longLabel Mus musculus strain B6NCrl testis tissue male adult (8 weeks) POLR2A ENCSR000CEG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0527da99-6183-49ba-9a8a-c258fa01b0ed/ENCFF582MZO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF742DVA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEG signal
+    longLabel Mus musculus strain B6NCrl testis tissue male adult (8 weeks) POLR2A ENCSR000CEG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a08913b2-167d-445f-b183-fdf74c77523d/ENCFF742DVA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF124GKG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEA signal
+    longLabel Mus musculus strain B6NCrl thymus tissue male adult (8 weeks) POLR2A ENCSR000CEA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/16fc409d-8bfd-424c-be46-a1b22f72cac9/ENCFF124GKG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF947OBH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000CEA peaks
+    longLabel Mus musculus strain B6NCrl thymus tissue male adult (8 weeks) POLR2A ENCSR000CEA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e9e21ae7-d97c-4b36-8d13-abe3eae1f406/ENCFF947OBH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF353JZP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERH signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2AphosphoS2 ENCSR000ERH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/07d3e77b-96a4-4641-a78d-13d50a235a33/ENCFF353JZP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF797NQH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERH peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2AphosphoS2 ENCSR000ERH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2be3ca0e-a44c-4ce7-87f5-e73a77f35452/ENCFF797NQH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF299KXI
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIU signal
+    longLabel Mus musculus myocyte originated from C2C12 POLR2AphosphoS2 ENCSR000AIU signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cdfe9a99-ac7b-4aa2-94d2-65843fd2e2be/ENCFF299KXI.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF680AHL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIU peaks
+    longLabel Mus musculus myocyte originated from C2C12 POLR2AphosphoS2 ENCSR000AIU peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b67cf186-8a23-4dc6-8db0-04ecd96e8c33/ENCFF680AHL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF289KYC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETM signal
+    longLabel Mus musculus strain MEL MEL POLR2AphosphoS2 ENCSR000ETM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/32b6b57a-dfb5-420c-b740-38d3dc0ea675/ENCFF289KYC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF676EFG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETM peaks
+    longLabel Mus musculus strain MEL MEL POLR2AphosphoS2 ENCSR000ETM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2b097aac-4344-465d-b65e-eb8d806377d1/ENCFF676EFG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF424WKG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIG signal
+    longLabel Mus musculus G1E POLR2AphosphoS5 ENCSR000DIG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/70bf8f6f-9c27-4d9f-87af-8e63703b2cb0/ENCFF424WKG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF897HLX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIG peaks
+    longLabel Mus musculus G1E POLR2AphosphoS5 ENCSR000DIG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3fb60ee6-2b97-4ffb-92ef-f5797046b6cd/ENCFF897HLX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF095QTO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DHZ peaks
+    longLabel Mus musculus strain MEL MEL POLR2AphosphoS5 ENCSR000DHZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/09b5792c-fea3-4311-be6a-066df02e3cf2/ENCFF095QTO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF248LRG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DHZ signal
+    longLabel Mus musculus strain MEL MEL POLR2AphosphoS5 ENCSR000DHZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7d17d5ad-a993-4307-84ac-76aaff7ab555/ENCFF248LRG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF316MHO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR392DGA peaks
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 POU5F1 ENCSR392DGA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1cc8cce1-8b91-43af-8d04-7cc38efcf80c/ENCFF316MHO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF371JAR
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR392DGA signal
+    longLabel Mus musculus strain 129/Ola E14TG2a.4 POU5F1 ENCSR392DGA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/15594058-408d-4b60-9f4b-53ec42e85276/ENCFF371JAR.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF679DTX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERK signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX RAD21 ENCSR000ERK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6f1bc206-680e-4d72-8be9-3772a98d7303/ENCFF679DTX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF813EXQ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERK peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX RAD21 ENCSR000ERK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6e11c246-2cde-4c2d-96ae-0dd50aaf6f3c/ENCFF813EXQ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF083VVC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETS signal
+    longLabel Mus musculus strain MEL MEL RAD21 ENCSR000ETS signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/838a1aff-61ad-40b5-86a4-cb63d7417bfe/ENCFF083VVC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF925ZOO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETS peaks
+    longLabel Mus musculus strain MEL MEL RAD21 ENCSR000ETS peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/611576fc-5021-49f0-b601-8988a535c88d/ENCFF925ZOO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF049HTO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQZ peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX RCOR1 ENCSR000EQZ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/dac53330-55e7-42f5-ad1b-f79440d3f762/ENCFF049HTO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF953NDS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQZ signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX RCOR1 ENCSR000EQZ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2818db79-9577-49dc-9204-7ed07586d58c/ENCFF953NDS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF108BMX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESI signal
+    longLabel Mus musculus strain MEL MEL RCOR1 ENCSR000ESI signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9c8da2bc-7beb-46bd-b2fd-cfc80346634f/ENCFF108BMX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF338SDH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESI peaks
+    longLabel Mus musculus strain MEL MEL RCOR1 ENCSR000ESI peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1bd6aa49-e662-4314-af6f-df9577a03c56/ENCFF338SDH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF230MKM
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIS peaks
+    longLabel Mus musculus myocyte originated from C2C12 REST ENCSR000AIS peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/091e94f2-b93b-43c3-b12e-58cde3cee2f7/ENCFF230MKM.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF677UZA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIS signal
+    longLabel Mus musculus myocyte originated from C2C12 REST ENCSR000AIS signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/98832b9e-74d4-4dfd-8b9b-f5e9a21a2956/ENCFF677UZA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF617WUF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQY peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX SIN3A ENCSR000EQY peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b6ca8ae8-abab-4efe-a54b-5cf108d3ac52/ENCFF617WUF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF890KGI
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQY signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX SIN3A ENCSR000EQY signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/17048ee1-81c1-44ad-9dd5-327dbbd2e61e/ENCFF890KGI.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF234PMX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETC peaks
+    longLabel Mus musculus strain MEL MEL SIN3A ENCSR000ETC peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9d5c3a55-cdc1-4816-9df5-0f724f75edc2/ENCFF234PMX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF610UYD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETC signal
+    longLabel Mus musculus strain MEL MEL SIN3A ENCSR000ETC signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b9ef5abb-2792-4bf4-9ddb-4e077f59dbfd/ENCFF610UYD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF704TCY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERG peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX SMC3 ENCSR000ERG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1ac2d4fa-6b56-4742-871e-2a4ca96307b0/ENCFF704TCY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF853WTN
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERG signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX SMC3 ENCSR000ERG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0ea2041b-61e3-4939-a8df-84fda38fcd66/ENCFF853WTN.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF113BJH
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETL peaks
+    longLabel Mus musculus strain MEL MEL SMC3 ENCSR000ETL peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/61e2e361-bb49-48b9-9b15-02d55a86019d/ENCFF113BJH.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF638ITG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETL signal
+    longLabel Mus musculus strain MEL MEL SMC3 ENCSR000ETL signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cb5a44b9-946a-46e2-9d57-6748fd1a987d/ENCFF638ITG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF742TLZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIM peaks
+    longLabel Mus musculus myocyte originated from C2C12 SRF ENCSR000AIM peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6b7d715b-2eec-4019-b79e-f3c788faf1f4/ENCFF742TLZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF977NMA
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIM signal
+    longLabel Mus musculus myocyte originated from C2C12 SRF ENCSR000AIM signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3e75927c-4737-45e3-b877-1e26e6800f52/ENCFF977NMA.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF136WGC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIB peaks
+    longLabel Mus musculus erythroblast embryo (14.5 days) TAL1 ENCSR000DIB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/24ea565e-c24a-45ed-b646-75d435abdafa/ENCFF136WGC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF286KHY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIB signal
+    longLabel Mus musculus erythroblast embryo (14.5 days) TAL1 ENCSR000DIB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/88e60776-9d78-4050-b7f1-433b67dab5bb/ENCFF286KHY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF091DUI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIN peaks
+    longLabel Mus musculus G1E TAL1 ENCSR000DIN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/e7a617a9-911c-4875-808c-689df5faa3e3/ENCFF091DUI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF257PJC
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIN signal
+    longLabel Mus musculus G1E TAL1 ENCSR000DIN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/948ce419-54db-4106-a60e-6637d0b19dcb/ENCFF257PJC.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF035XNZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIA signal
+    longLabel Mus musculus strain MEL MEL TAL1 ENCSR000DIA signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/349bcf9b-84d9-4001-b9e9-eb0abd51a045/ENCFF035XNZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF294KWD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000DIA peaks
+    longLabel Mus musculus strain MEL MEL TAL1 ENCSR000DIA peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0c5f08ad-e6b9-4a7f-85e3-55d229ec15be/ENCFF294KWD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF183WGC
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERP peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX TBP ENCSR000ERP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/893a3a04-1632-4bf6-a637-b7f010d4e60e/ENCFF183WGC.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF490IAI
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERP signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX TBP ENCSR000ERP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/de06820c-aec5-48a6-bed0-16091c13275e/ENCFF490IAI.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF279GBI
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUB peaks
+    longLabel Mus musculus strain MEL MEL TBP ENCSR000EUB peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2022/03/01/55f4287b-1862-404a-9b45-870f86010dfd/ENCFF279GBI.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF388HVK
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EUB signal
+    longLabel Mus musculus strain MEL MEL TBP ENCSR000EUB signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2022/03/01/75e62600-4453-4810-aa46-265b2f32be01/ENCFF388HVK.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF203VDU
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR906QEK signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX TCF12 ENCSR906QEK signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9f25073e-b5fa-4435-8222-bd50a43e3b50/ENCFF203VDU.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF852JMG
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR906QEK peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX TCF12 ENCSR906QEK peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/54b89c83-5523-43df-ad48-c72ca31fc29b/ENCFF852JMG.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF063NIK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIN peaks
+    longLabel Mus musculus myocyte originated from C2C12 TCF12 ENCSR000AIN peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/658a3790-1e57-4860-922d-c7a6eb7f055e/ENCFF063NIK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF618TBZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIN signal
+    longLabel Mus musculus myocyte originated from C2C12 TCF12 ENCSR000AIN signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3985cead-63d8-4fe3-a8ff-0b80feb7948b/ENCFF618TBZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF287MSO
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR349JDH signal
+    longLabel Mus musculus strain MEL MEL TCF12 ENCSR349JDH signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/abe59892-a315-4e06-9ec0-3bfbd4e6d2ea/ENCFF287MSO.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF758YYW
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR349JDH peaks
+    longLabel Mus musculus strain MEL MEL TCF12 ENCSR349JDH peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cbe951a3-47b0-47a2-838f-fb437062d5da/ENCFF758YYW.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF392FIL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIP peaks
+    longLabel Mus musculus myocyte originated from C2C12 TCF3 ENCSR000AIP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5568eced-67a3-462e-baff-8ad4b85fdbb3/ENCFF392FIL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF492GOG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIP signal
+    longLabel Mus musculus myocyte originated from C2C12 TCF3 ENCSR000AIP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1dfb2703-5c54-41d7-b07e-1581a34855dc/ENCFF492GOG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF802WMJ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQX signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX UBTF ENCSR000EQX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/4b7fe45b-df98-4b74-b312-f76459af1c92/ENCFF802WMJ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF994VMS
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQX peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX UBTF ENCSR000EQX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/3c9fc00e-75ae-49e7-9eed-e8bf1b552798/ENCFF994VMS.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF300DWL
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESJ peaks
+    longLabel Mus musculus strain MEL MEL UBTF ENCSR000ESJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/319bff25-e743-4cba-9059-66bb9b9742b8/ENCFF300DWL.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF802PBE
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESJ signal
+    longLabel Mus musculus strain MEL MEL UBTF ENCSR000ESJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f7702494-168a-4c0f-b94f-fa701162e481/ENCFF802PBE.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF252KLP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR973SOG peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX USF1 ENCSR973SOG peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/6a9e10ee-cbba-431e-8899-daee71157a9a/ENCFF252KLP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF519XCZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR973SOG signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX USF1 ENCSR973SOG signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/23/942199e6-8262-4e0d-8790-c71c78db06dc/ENCFF519XCZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF538HLG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIE signal
+    longLabel Mus musculus myocyte originated from C2C12 USF1 ENCSR000AIE signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cdc292d0-b1ef-47c0-9f71-90854ffa219c/ENCFF538HLG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF704FSF
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIQ peaks
+    longLabel Mus musculus C2C12 USF1 ENCSR000AIQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f90d956c-3ceb-4e5a-9738-2818874c9963/ENCFF704FSF.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF709BFN
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIE peaks
+    longLabel Mus musculus myocyte originated from C2C12 USF1 ENCSR000AIE peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/6715e001-d54c-427b-b6bc-200af63ae322/ENCFF709BFN.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF821ALF
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000AIQ signal
+    longLabel Mus musculus C2C12 USF1 ENCSR000AIQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1455c1b3-48d8-4926-b187-a8509dcdcf2e/ENCFF821ALF.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF102XHA
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR705HGT peaks
+    longLabel Mus musculus strain MEL MEL USF1 ENCSR705HGT peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a81bb36e-4a34-4196-af4c-f9cbd1fa691c/ENCFF102XHA.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF327QFX
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR705HGT signal
+    longLabel Mus musculus strain MEL MEL USF1 ENCSR705HGT signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/a0b57475-d1a9-4121-8808-2211184726e6/ENCFF327QFX.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF106TBY
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERJ peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX USF2 ENCSR000ERJ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8274871c-ea99-4231-a98d-31621d23bd3a/ENCFF106TBY.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF496LSH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERJ signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX USF2 ENCSR000ERJ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/1b8e36fa-d35c-4304-ad70-6d6e45b39007/ENCFF496LSH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF333UCD
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETF signal
+    longLabel Mus musculus strain MEL MEL USF2 ENCSR000ETF signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f51165ce-4495-4390-8e3d-2902ae79066a/ENCFF333UCD.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF918ZSD
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ETF peaks
+    longLabel Mus musculus strain MEL MEL USF2 ENCSR000ETF peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/12eab402-cad5-469b-8fee-1cdb75c818ee/ENCFF918ZSD.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF268QMQ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQQ signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZC3H11A ENCSR000EQQ signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9f81eff3-9fe4-4a37-8c73-75d6b998b8db/ENCFF268QMQ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF857AXP
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQQ peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZC3H11A ENCSR000EQQ peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c64c42fd-c817-45d9-bdcc-f25ebf5a5f01/ENCFF857AXP.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF645KQN
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERW peaks
+    longLabel Mus musculus strain 129/Ola ES-E14 ZC3H11A ENCSR000ERW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b058be90-aea6-47c4-828c-2d03a288b009/ENCFF645KQN.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF914QLP
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERW signal
+    longLabel Mus musculus strain 129/Ola ES-E14 ZC3H11A ENCSR000ERW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/8fd5641b-0d37-4d67-a508-daede739cd71/ENCFF914QLP.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF608ZVZ
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESF signal
+    longLabel Mus musculus strain MEL MEL ZC3H11A ENCSR000ESF signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d07bcf22-e39d-4627-bd33-e5ab21851254/ENCFF608ZVZ.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF929KMZ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESF peaks
+    longLabel Mus musculus strain MEL MEL ZC3H11A ENCSR000ESF peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/35354c6d-74ad-4112-be05-6a62975b3515/ENCFF929KMZ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF144LZK
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQW peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZKSCAN1 ENCSR000EQW peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/257d8e6d-bd3f-4a67-ba1d-462202171a9d/ENCFF144LZK.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF840CPV
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQW signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZKSCAN1 ENCSR000EQW signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/dca16afa-9eb2-450a-b0b3-aa283b7b6401/ENCFF840CPV.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF429AOE
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESX peaks
+    longLabel Mus musculus strain MEL MEL ZKSCAN1 ENCSR000ESX peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/c6ad10bf-f615-4d7d-9c2e-38c44ffad63e/ENCFF429AOE.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF925HWM
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESX signal
+    longLabel Mus musculus strain MEL MEL ZKSCAN1 ENCSR000ESX signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/fdc57500-db68-46a2-aace-9d0085d27628/ENCFF925HWM.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF199QCX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQP peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZMIZ1 ENCSR000EQP peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/cb580312-3854-41b5-b06e-deb1ff080422/ENCFF199QCX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF605TOL
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQP signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZMIZ1 ENCSR000EQP signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/b76dfc24-19e3-4e71-ae23-02e13e7a952b/ENCFF605TOL.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF054IEJ
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESE peaks
+    longLabel Mus musculus strain MEL MEL ZMIZ1 ENCSR000ESE peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/59fcdecb-2a73-4251-97d3-5231c294d647/ENCFF054IEJ.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF189SMS
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESE signal
+    longLabel Mus musculus strain MEL MEL ZMIZ1 ENCSR000ESE signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/4a746a10-db1d-4b03-9a87-ba67af1127ac/ENCFF189SMS.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF633RLX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQO peaks
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZNF384 ENCSR000EQO peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5ca22a3c-3938-42bf-95fb-ebf01a60e061/ENCFF633RLX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF991WGH
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000EQO signal
+    longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX ZNF384 ENCSR000EQO signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/27ad9422-a795-42b7-8c65-b0ed95a41437/ENCFF991WGH.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF263UKG
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERV signal
+    longLabel Mus musculus strain 129/Ola ES-E14 ZNF384 ENCSR000ERV signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ea1528f7-4ad8-4f18-873f-99e62284dcab/ENCFF263UKG.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
+    track encode4RegTfChip_ENCFF815NJX
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ERV peaks
+    longLabel Mus musculus strain 129/Ola ES-E14 ZNF384 ENCSR000ERV peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/0c6d5195-ffb9-45ee-82ce-97c4ba9b0c6e/ENCFF815NJX.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF087VDO
+    type bigBed 5
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESD peaks
+    longLabel Mus musculus strain MEL MEL ZNF384 ENCSR000ESD peaks
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/18cb02b8-b8b6-46e0-b1d2-9ae3d23c66c1/ENCFF087VDO.bigBed
+    useScore 1
+    spectrum on
+    visibility squish
+
+    track encode4RegTfChip_ENCFF221COY
+    type bigWig
+    parent encode4RegTfChip off
+    shortLabel ENCSR000ESD signal
+    longLabel Mus musculus strain MEL MEL ZNF384 ENCSR000ESD signal
+    bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/71938a20-6b66-4018-82bc-801af629ef74/ENCFF221COY.bigWig
+    autoScale on
+    maxHeightPixels 100:32:8
+    visibility full
+
