@@ -196,7 +196,7 @@ html encode4Reg.html
         color 254,75,173
         parent encode4RegMarkH3k27ac
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodH3K27acAll.bw
-        priority 18
+        priority 19
 
         track encode4RegMarkH3k27acAllEmbryo
         type bigWig
@@ -205,7 +205,7 @@ html encode4Reg.html
         color 147,196,125
         parent encode4RegMarkH3k27ac off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K27acAll.bw
-        priority 19
+        priority 20
 
         track encode4RegMarkH3k27acAllSpleen
         type bigWig
@@ -214,7 +214,7 @@ html encode4Reg.html
         color 136,157,97
         parent encode4RegMarkH3k27ac off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K27acAll.bw
-        priority 20
+        priority 21
 
     track encode4RegDnase
     container multiWig
@@ -448,7 +448,7 @@ html encode4Reg.html
         color 254,75,173
         parent encode4RegDnase
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodDNaseAll.bw
-        priority 23
+        priority 24
 
         track encode4RegDnaseAllBoneMarrow
         type bigWig
@@ -457,7 +457,7 @@ html encode4Reg.html
         color 234,153,153
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowDNaseAll.bw
-        priority 24
+        priority 25
 
         track encode4RegDnaseAllBreast
         type bigWig
@@ -466,7 +466,7 @@ html encode4Reg.html
         color 85,223,226
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/breastDNaseAll.bw
-        priority 25
+        priority 26
 
         track encode4RegDnaseAllEmbryo
         type bigWig
@@ -475,7 +475,7 @@ html encode4Reg.html
         color 147,196,125
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoDNaseAll.bw
-        priority 26
+        priority 27
 
         track encode4RegDnaseAllSpinalCord
         type bigWig
@@ -484,7 +484,7 @@ html encode4Reg.html
         color 184,199,224
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spinalCordDNaseAll.bw
-        priority 27
+        priority 28
 
         track encode4RegDnaseAllSpleen
         type bigWig
@@ -493,7 +493,7 @@ html encode4Reg.html
         color 136,157,97
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenDNaseAll.bw
-        priority 28
+        priority 29
 
     track encode4RegAtac
     container multiWig
@@ -628,7 +628,7 @@ html encode4Reg.html
         color 147,196,125
         parent encode4RegAtac off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoATACAll.bw
-        priority 12
+        priority 13
 
     track encode4RegMarkH3k4me3
     container multiWig
@@ -817,7 +817,7 @@ html encode4Reg.html
         color 254,75,173
         parent encode4RegMarkH3k4me3
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodH3K4me3All.bw
-        priority 18
+        priority 19
 
         track encode4RegMarkH3k4me3AllEmbryo
         type bigWig
@@ -826,7 +826,7 @@ html encode4Reg.html
         color 147,196,125
         parent encode4RegMarkH3k4me3 off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K4me3All.bw
-        priority 19
+        priority 20
 
         track encode4RegMarkH3k4me3AllMuscle
         type bigWig
@@ -835,7 +835,7 @@ html encode4Reg.html
         color 196,193,243
         parent encode4RegMarkH3k4me3
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleH3K4me3All.bw
-        priority 20
+        priority 21
 
         track encode4RegMarkH3k4me3AllSpleen
         type bigWig
@@ -844,7 +844,7 @@ html encode4Reg.html
         color 136,157,97
         parent encode4RegMarkH3k4me3 off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K4me3All.bw
-        priority 21
+        priority 22
 
     track encode4RegMarkCtcf
     container multiWig
@@ -988,7 +988,7 @@ html encode4Reg.html
         color 254,75,173
         parent encode4RegMarkCtcf
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodCTCFAll.bw
-        priority 13
+        priority 14
 
         track encode4RegMarkCtcfAllEmbryo
         type bigWig
@@ -997,7 +997,7 @@ html encode4Reg.html
         color 147,196,125
         parent encode4RegMarkCtcf off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoCTCFAll.bw
-        priority 14
+        priority 15
 
         track encode4RegMarkCtcfAllMuscle
         type bigWig
@@ -1006,7 +1006,7 @@ html encode4Reg.html
         color 196,193,243
         parent encode4RegMarkCtcf
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleCTCFAll.bw
-        priority 15
+        priority 16
 
         track encode4RegMarkCtcfAllSpleen
         type bigWig
@@ -1015,7 +1015,7 @@ html encode4Reg.html
         color 136,157,97
         parent encode4RegMarkCtcf off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenCTCFAll.bw
-        priority 16
+        priority 17
 
     track encode4RegTxn
     container multiWig
