@@ -3302,7 +3302,7 @@ html wgEncodeReg4.html
 
     track wgEncodeReg4TfPeaks
     shortLabel TF rPeaks
-    longLabel Transcription Factor Representative Peak (rPeak) Clusters (912 factors in 1152 biosamples) from ENCODE 4
+    longLabel Transcription Factor Representative Peak (rPeak) Clusters (911 factors in 1152 biosamples) from ENCODE 4
     type bigBed 12 +
     superTrack wgEncodeReg4 hide
     itemRgb on
