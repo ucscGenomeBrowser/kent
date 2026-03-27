@@ -11473,6 +11473,26 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 
+if (liftDb) // we need to get the chr start stop in liftDb coordinates
+    {
+    char *sqlTable = tdb->table;
+    struct hash *chainHash = newHash(10);
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    
+    struct bed *bed = (struct bed *)quickLiftSql(conn, quickLiftFile, sqlTable, chrom, start, end,  NULL, NULL, (ItemLoader2)bedLoadN, 4, chainHash);
+
+    for(; bed; bed = bed->next)
+        if (sameString(bed->name, itemName))
+            break;
+    if (bed == NULL)
+        errAbort("cannot find %s", itemName);
+
+    // use the source assembly's reference coordinates below
+    chrom = bed->chrom;
+    start = bed->chromStart;
+    end = bed->chromEnd;
+    }
+
 /* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
 char *decipherChrom = chrom;
 if (startsWithNoCase("chr", decipherChrom))
