@@ -1751,6 +1751,12 @@ var hgGateway = (function() {
         var gnomadVarMatch = searchTerm.match(gnomadVarExp);
         var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch || gnomadRangeMatch || gnomadVarMatch;
         if (positionMatch !== null || goDirectlyToHgTracks) {
+            if (positionMatch !== null) {
+                // about to do a form submit with a regular position range, save this to the recents stack
+                // strip any html content first
+                let newPos = position.replace(/<[^>]*>/g, '');
+                addRecentSearch(getDb(), newPos, {id: newPos, value: newPos, label: newPos});
+            }
             // We already have a position from either selecting a suggestion or the user just typed a regular
             // old position, so go to hgTracks at that location
             // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
