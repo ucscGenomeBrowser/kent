@@ -6,6 +6,7 @@ shortLabel DNase/ATAC/Histone/CTCF (Indiv.)
 longLabel Peaks and signal from individual DNase-seq, ATAC-seq, histone ChIP-seq, or CTCF ChIP-seq experiments from ENCODE 4
 visibility hide
 html encode4RegEpigenetics.html
+colorSettingsUrl /gbdb/mm10/encode4/regulation/epi_colors.json
 metaDataUrl /gbdb/mm10/encode4/regulation/encode4RegEpigenetics_metadata.tsv
 primaryKey accession
 maxCheckboxes 40
@@ -7898,7 +7899,7 @@ priority 2.0
     shortLabel ENCSR000CEZ Peak
     longLabel Mus musculus strain C57BL/6 brown adipose tissue tissue male adult 24 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/57f917d2-6155-4682-99dc-6a6dc3418f1c/ENCFF397WFP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF476CKA
@@ -7907,7 +7908,7 @@ priority 2.0
     shortLabel ENCSR000CEZ Signal
     longLabel Mus musculus strain C57BL/6 brown adipose tissue tissue male adult 24 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/0d2dbde7-119d-420a-a748-f6f2cfe17b45/ENCFF476CKA.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -7918,7 +7919,7 @@ priority 2.0
     shortLabel ENCSR000CGJ Peak
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b7e3c21d-8417-4bc0-b166-bcfa84203832/ENCFF465WJW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF666CND
@@ -7927,7 +7928,7 @@ priority 2.0
     shortLabel ENCSR000CGJ Signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/ecf24acc-2aba-4bb0-9ebd-7a43375bf14e/ENCFF666CND.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -7938,7 +7939,7 @@ priority 2.0
     shortLabel ENCSR000CCL Peak
     longLabel Mus musculus strain C57BL/6 bone marrow tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/6d8cc9c5-f8eb-468f-a62b-c10446867a5b/ENCFF014FMA.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF454TDO
@@ -7947,7 +7948,7 @@ priority 2.0
     shortLabel ENCSR000CFD Peak
     longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/1535af59-692a-474a-8d70-90ac048fb6e5/ENCFF454TDO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF716JUE
@@ -7956,7 +7957,7 @@ priority 2.0
     shortLabel ENCSR000CCL Signal
     longLabel Mus musculus strain C57BL/6 bone marrow tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/08c02f57-cfd9-4c59-92cd-a6813c34acc0/ENCFF716JUE.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -7967,7 +7968,7 @@ priority 2.0
     shortLabel ENCSR000CFD Signal
     longLabel Mus musculus strain Bruce4 bone marrow macrophage male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/247c268a-4fd7-4f8d-a4eb-42a2aa24f624/ENCFF833TRU.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -7978,7 +7979,7 @@ priority 2.0
     shortLabel ENCSR672ZXY Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/998eb29a-a7b9-4490-bdcb-d43847314538/ENCFF010WPI.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -7989,7 +7990,7 @@ priority 2.0
     shortLabel ENCSR428OEK Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/1f93afe0-c08d-41a1-9843-98d0ac3e0114/ENCFF043PFO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF048EFM
@@ -7998,7 +7999,7 @@ priority 2.0
     shortLabel ENCSR989LUY Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/4d17723e-da77-450e-8b94-68aecb4ea3ad/ENCFF048EFM.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF049VYP
@@ -8007,7 +8008,7 @@ priority 2.0
     shortLabel ENCSR275KPI Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/13e77043-74c3-4de8-8e2e-d0d0894c780c/ENCFF049VYP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8018,7 +8019,7 @@ priority 2.0
     shortLabel ENCSR594JGI Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/ec174114-3ed3-4628-bd5e-78d818627ce0/ENCFF062DLU.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF070YWI
@@ -8027,7 +8028,7 @@ priority 2.0
     shortLabel ENCSR311YPF Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ed3c76be-51a4-4fe3-b7dc-742f52fc4e48/ENCFF070YWI.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8038,7 +8039,7 @@ priority 2.0
     shortLabel ENCSR054JHZ Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/68ff2783-0ff1-4b8d-bb07-7557e3a93a72/ENCFF081VBW.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8049,7 +8050,7 @@ priority 2.0
     shortLabel ENCSR254AHA Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ba1cf96e-f382-43c6-9fbb-bf77725293eb/ENCFF104QAC.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8060,7 +8061,7 @@ priority 2.0
     shortLabel ENCSR966AIB Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/eab6d35c-d54e-47ae-b6f6-b820b40ea61b/ENCFF116JEC.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8071,7 +8072,7 @@ priority 2.0
     shortLabel ENCSR252ONR Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/96405f9e-9639-4602-93e6-084db1dc9570/ENCFF116JFB.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF123URY
@@ -8080,7 +8081,7 @@ priority 2.0
     shortLabel ENCSR129LAP Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/dbde49f4-697c-4921-a4c9-4f84270349e9/ENCFF123URY.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF209UET
@@ -8089,7 +8090,7 @@ priority 2.0
     shortLabel ENCSR428GHF Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/6448a7d8-8a70-47b1-b71f-99006058d0c5/ENCFF209UET.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8100,7 +8101,7 @@ priority 2.0
     shortLabel ENCSR553IWV Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/1427b15b-128b-4482-8e4c-37a2e1fb638a/ENCFF223AEK.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF232DFR
@@ -8109,7 +8110,7 @@ priority 2.0
     shortLabel ENCSR000CCE Signal
     longLabel Mus musculus strain C57BL/6 olfactory bulb tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/db4b7a5d-1dd0-4f2b-a735-108b2c8d6690/ENCFF232DFR.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8120,7 +8121,7 @@ priority 2.0
     shortLabel ENCSR088UKA Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/40fa7712-55b9-4293-a453-40530c76f785/ENCFF251ZNB.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8131,7 +8132,7 @@ priority 2.0
     shortLabel ENCSR000CCE Peak
     longLabel Mus musculus strain C57BL/6 olfactory bulb tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/494f7f12-097e-4f00-ab98-463b7978b07e/ENCFF256TFP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF261HHN
@@ -8140,7 +8141,7 @@ priority 2.0
     shortLabel ENCSR672ZXY Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/59e0c930-9a02-41f2-ad37-5d10668609bc/ENCFF261HHN.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF276TDM
@@ -8149,7 +8150,7 @@ priority 2.0
     shortLabel ENCSR428OEK Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/210ff77b-ed0b-4eb7-998f-42e9d231ba3f/ENCFF276TDM.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8160,7 +8161,7 @@ priority 2.0
     shortLabel ENCSR320EEW Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/2c049ea8-4e56-4104-898a-213c9b49aa31/ENCFF279EVI.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8171,7 +8172,7 @@ priority 2.0
     shortLabel ENCSR066XFL Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a55978c1-5313-4bc8-be0b-cc52c2f3d7c0/ENCFF285GQU.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8182,7 +8183,7 @@ priority 2.0
     shortLabel ENCSR054JHZ Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/958db1fd-7f17-4d6a-8bb5-06e879ea99e2/ENCFF293ZHO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF307OAN
@@ -8191,7 +8192,7 @@ priority 2.0
     shortLabel ENCSR094TTT Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/15efb6c3-09a3-4584-a2e0-e4d7968e7000/ENCFF307OAN.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF333XRC
@@ -8200,7 +8201,7 @@ priority 2.0
     shortLabel ENCSR784TLR Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/2a38ddc5-786d-4ed0-9666-65292b7ec9e9/ENCFF333XRC.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8211,7 +8212,7 @@ priority 2.0
     shortLabel ENCSR691NQH Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/6dd8e517-8e4b-4c3b-82ab-862100ec198a/ENCFF387RNF.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8222,7 +8223,7 @@ priority 2.0
     shortLabel ENCSR989LUY Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/b8dcdbc7-6ac8-45ab-a3b8-83d756ae5e4c/ENCFF391PWA.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8233,7 +8234,7 @@ priority 2.0
     shortLabel ENCSR275KPI Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/3703b23e-5eba-4d1d-b79a-3181ddeda2b6/ENCFF399MVG.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF408WBW
@@ -8242,7 +8243,7 @@ priority 2.0
     shortLabel ENCSR825ZJV Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/c635d20e-4307-4a3d-8057-80a730c52af4/ENCFF408WBW.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8253,7 +8254,7 @@ priority 2.0
     shortLabel ENCSR311YPF Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/6336d40b-8b0e-4358-afa5-cca1c839883e/ENCFF419XQJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF422JMO
@@ -8262,7 +8263,7 @@ priority 2.0
     shortLabel ENCSR094TTT Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/c24ce23b-f42b-426f-9ea0-8017d1d03c82/ENCFF422JMO.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8273,7 +8274,7 @@ priority 2.0
     shortLabel ENCSR671NSS Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/12484f67-43b0-4b01-a25e-d61273ca4aae/ENCFF445IKJ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8284,7 +8285,7 @@ priority 2.0
     shortLabel ENCSR553IWV Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/4f4d2e1c-bd02-47b0-92be-8708bd272132/ENCFF556QIL.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8295,7 +8296,7 @@ priority 2.0
     shortLabel ENCSR000CDD Signal
     longLabel Mus musculus strain C57BL/6 cortical plate tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/1b6f2bb5-7f42-45f9-972d-774b01a18af4/ENCFF576FBS.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8306,7 +8307,7 @@ priority 2.0
     shortLabel ENCSR254AHA Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/5cc23650-fd86-4dbb-87a2-8ebb13eedf95/ENCFF629UOG.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF643PLF
@@ -8315,7 +8316,7 @@ priority 2.0
     shortLabel ENCSR825ZJV Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/170f49f5-d153-47f9-a8f9-b21fff6a6dd8/ENCFF643PLF.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF645OJK
@@ -8324,7 +8325,7 @@ priority 2.0
     shortLabel ENCSR000CDC Signal
     longLabel Mus musculus strain C57BL/6 cerebellum tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f9897a83-0967-44a7-97f9-653321ebcbe6/ENCFF645OJK.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8335,7 +8336,7 @@ priority 2.0
     shortLabel ENCSR344HHI Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/5cf9d410-245d-4be1-bcaa-f986ea2b817f/ENCFF677VEV.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8346,7 +8347,7 @@ priority 2.0
     shortLabel ENCSR332JYZ Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/0cb0d2da-7ae3-47ec-bc96-850ab4bc02d9/ENCFF683GNP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8357,7 +8358,7 @@ priority 2.0
     shortLabel ENCSR066XFL Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/cc424b26-7752-4986-b865-38124a1fb82c/ENCFF683ZXE.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF712RTV
@@ -8366,7 +8367,7 @@ priority 2.0
     shortLabel ENCSR332JYZ Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/f9782c22-7087-4d2d-89a9-104d4aedc51d/ENCFF712RTV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF744UYH
@@ -8375,7 +8376,7 @@ priority 2.0
     shortLabel ENCSR797EYS Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/74beaa1e-1a2c-4b60-9d5e-fe98b31f111b/ENCFF744UYH.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8386,7 +8387,7 @@ priority 2.0
     shortLabel ENCSR000CDC Peak
     longLabel Mus musculus strain C57BL/6 cerebellum tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/8e221f7a-b58f-4efd-8604-553c8881d7be/ENCFF753QUS.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF799DRJ
@@ -8395,7 +8396,7 @@ priority 2.0
     shortLabel ENCSR784TLR Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/b40f320c-5270-42f8-8a33-cbd24732aede/ENCFF799DRJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF831XMZ
@@ -8404,7 +8405,7 @@ priority 2.0
     shortLabel ENCSR797EYS Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/0a2f6d14-f448-45b3-aa63-b9e94675acf1/ENCFF831XMZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF854PFO
@@ -8413,7 +8414,7 @@ priority 2.0
     shortLabel ENCSR320EEW Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/01680a6c-0bbf-41ee-afe4-00aa8e3eb20b/ENCFF854PFO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF863RSD
@@ -8422,7 +8423,7 @@ priority 2.0
     shortLabel ENCSR671NSS Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/32591900-6f60-439f-8b33-096a53c98c51/ENCFF863RSD.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF869WEC
@@ -8431,7 +8432,7 @@ priority 2.0
     shortLabel ENCSR594JGI Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/8a67ea67-5784-4b54-b30b-2ab05aec5b68/ENCFF869WEC.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8442,7 +8443,7 @@ priority 2.0
     shortLabel ENCSR344HHI Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/0d28f4c0-bf97-42df-ab8c-6993b0e7977c/ENCFF873AWV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF913PLZ
@@ -8451,7 +8452,7 @@ priority 2.0
     shortLabel ENCSR428GHF Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/10410f4f-7226-4ded-9558-3d4e2c8d1517/ENCFF913PLZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF923BGD
@@ -8460,7 +8461,7 @@ priority 2.0
     shortLabel ENCSR129LAP Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/69d61538-7d98-47e5-b845-79398732fce0/ENCFF923BGD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8471,7 +8472,7 @@ priority 2.0
     shortLabel ENCSR088UKA Peak
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/1a2bd7a5-890b-458a-a37b-ba92f21961f6/ENCFF932NKN.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF941PKF
@@ -8480,7 +8481,7 @@ priority 2.0
     shortLabel ENCSR000CDD Peak
     longLabel Mus musculus strain C57BL/6 cortical plate tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/8b0f9c7a-aa08-47ed-8198-892f7d98a33a/ENCFF941PKF.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF966QFZ
@@ -8489,7 +8490,7 @@ priority 2.0
     shortLabel ENCSR966AIB Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/3c6698d2-f781-445e-8d84-815f276d4df0/ENCFF966QFZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF969XWP
@@ -8498,7 +8499,7 @@ priority 2.0
     shortLabel ENCSR691NQH Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/4444b622-5df3-4036-97a9-14f9edb34ed8/ENCFF969XWP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF998IDD
@@ -8507,7 +8508,7 @@ priority 2.0
     shortLabel ENCSR252ONR Signal
     longLabel Mus musculus strain C57BL/6 midbrain tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ab37a51e-817f-4d2f-a2ea-3658bbada59a/ENCFF998IDD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8518,7 +8519,7 @@ priority 2.0
     shortLabel ENCSR000CDI Signal
     longLabel Mus musculus strain C57BL/6 embryonic fibroblast male embryo 13.5 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/522f9f64-af62-4d1b-991a-5953b0e615c6/ENCFF525AAL.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8529,7 +8530,7 @@ priority 2.0
     shortLabel ENCSR000CDI Peak
     longLabel Mus musculus strain C57BL/6 embryonic fibroblast male embryo 13.5 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/60ce3c8e-d374-41df-9b8e-4b80498e7bfe/ENCFF907NDL.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF082QHX
@@ -8538,7 +8539,7 @@ priority 2.0
     shortLabel ENCSR420MUV Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/0e7f8171-9adf-4418-9736-58fea5a1cfc3/ENCFF082QHX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8549,7 +8550,7 @@ priority 2.0
     shortLabel ENCSR000CGQ Peak
     longLabel Mus musculus strain 129/Ola ES-E14 H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b257355d-3cfc-400b-9bd9-5a517e847559/ENCFF138TVE.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF163SBS
@@ -8558,7 +8559,7 @@ priority 2.0
     shortLabel ENCSR000CGQ Signal
     longLabel Mus musculus strain 129/Ola ES-E14 H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/e5d458af-a182-4e6e-b907-5badad24ba81/ENCFF163SBS.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8569,7 +8570,7 @@ priority 2.0
     shortLabel ENCSR151APL Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/c6a20145-1809-45f7-9499-125584fe9b31/ENCFF320ULD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8580,7 +8581,7 @@ priority 2.0
     shortLabel ENCSR151APL Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/16aafda4-f39b-4850-b414-172819ccb0fe/ENCFF381MBG.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF450ZSO
@@ -8589,7 +8590,7 @@ priority 2.0
     shortLabel ENCSR000CDE Peak
     longLabel Mus musculus strain Bruce4 ES-Bruce4 H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b77ca83e-62b3-4862-b3f1-88ab776d2d09/ENCFF450ZSO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF465JSZ
@@ -8598,7 +8599,7 @@ priority 2.0
     shortLabel ENCSR401GRX Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/62d3ccad-d4a2-40f1-bdc5-149f37b3426d/ENCFF465JSZ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8609,7 +8610,7 @@ priority 2.0
     shortLabel ENCSR000CDE Signal
     longLabel Mus musculus strain Bruce4 ES-Bruce4 H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f3beb392-4015-46f5-870d-83604efc57b2/ENCFF610BPO.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8620,7 +8621,7 @@ priority 2.0
     shortLabel ENCSR401GRX Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/b1eb98d2-af85-466e-a36d-56659db5f24d/ENCFF670JEN.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF675AVI
@@ -8629,7 +8630,7 @@ priority 2.0
     shortLabel ENCSR420MUV Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/94e43b36-7ce7-4c6d-a0e0-5f2e4ee9f889/ENCFF675AVI.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF675NRM
@@ -8638,7 +8639,7 @@ priority 2.0
     shortLabel ENCSR382DRK Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a04648a0-274f-4f99-94dc-c23e8539f65a/ENCFF675NRM.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8649,7 +8650,7 @@ priority 2.0
     shortLabel ENCSR813SCQ Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/5ac4af40-8969-474a-8350-295016fde246/ENCFF701YWS.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8660,7 +8661,7 @@ priority 2.0
     shortLabel ENCSR382DRK Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/617a869f-9b5e-4b3d-a3c5-2f4d1c1cd181/ENCFF775AVH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF935LTT
@@ -8669,7 +8670,7 @@ priority 2.0
     shortLabel ENCSR813SCQ Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/e2406bff-635e-436d-8cc8-64c75e72fce1/ENCFF935LTT.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF977HEX
@@ -8678,7 +8679,7 @@ priority 2.0
     shortLabel ENCSR481SGM Signal
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/23e0fcce-def4-45f5-bb27-461f15a62bb2/ENCFF977HEX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8689,7 +8690,7 @@ priority 2.0
     shortLabel ENCSR481SGM Peak
     longLabel Mus musculus strain C57BL/6 embryonic facial prominence tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8f190d0d-ae58-44bb-890d-7c52bfe5b20f/ENCFF999RFE.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF033UPR
@@ -8698,7 +8699,7 @@ priority 2.0
     shortLabel ENCSR531RZS Signal
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/7ce353bc-2b47-49dc-b7f5-417509392592/ENCFF033UPR.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8709,7 +8710,7 @@ priority 2.0
     shortLabel ENCSR289SWJ Peak
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/fcff5eae-5c37-473b-8adf-5099f60e69c2/ENCFF073YSF.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF096PGI
@@ -8718,7 +8719,7 @@ priority 2.0
     shortLabel ENCSR241BSK Peak
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/4d9c53de-3508-4ac8-a7bf-3ba6402c0c65/ENCFF096PGI.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF110NUX
@@ -8727,7 +8728,7 @@ priority 2.0
     shortLabel ENCSR265NBM Signal
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/3756b199-12e6-489b-bb3f-8740d4e64ba9/ENCFF110NUX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8738,7 +8739,7 @@ priority 2.0
     shortLabel ENCSR891SAW Peak
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/450d91ad-0033-4655-bb32-0a273d9b22cf/ENCFF448CCH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF453QHO
@@ -8747,7 +8748,7 @@ priority 2.0
     shortLabel ENCSR289SWJ Signal
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/5e9c7548-7b49-4522-8859-92806b03628c/ENCFF453QHO.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8758,7 +8759,7 @@ priority 2.0
     shortLabel ENCSR531RZS Peak
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/0fd1ac56-9f9c-421e-bff4-42980f34948a/ENCFF762BZC.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF879XPV
@@ -8767,7 +8768,7 @@ priority 2.0
     shortLabel ENCSR891SAW Signal
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/e10b2c63-c9d3-464d-bf56-76d719a9f6ba/ENCFF879XPV.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8778,7 +8779,7 @@ priority 2.0
     shortLabel ENCSR241BSK Signal
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/0af7de9c-1992-4369-aa3b-6fc3c6c1c344/ENCFF984KZH.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8789,7 +8790,7 @@ priority 2.0
     shortLabel ENCSR265NBM Peak
     longLabel Mus musculus strain C57BL/6 neural tube tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/b40ab0a0-c26d-43b1-936f-671e76f4d96c/ENCFF998FZC.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF093NUW
@@ -8798,7 +8799,7 @@ priority 2.0
     shortLabel ENCSR000CDF Peak
     longLabel Mus musculus strain C57BL/6 heart tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f073fa97-e129-444e-962a-7c2f2053b851/ENCFF093NUW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF104DIK
@@ -8807,7 +8808,7 @@ priority 2.0
     shortLabel ENCSR222IHX Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/5c2aa399-b2f8-4939-aab6-2fa59a198e21/ENCFF104DIK.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8818,7 +8819,7 @@ priority 2.0
     shortLabel ENCSR123MLY Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/84c46e42-bfaf-43da-9a84-bb2d01d4d1e2/ENCFF116OLV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF171CWD
@@ -8827,7 +8828,7 @@ priority 2.0
     shortLabel ENCSR000CDK Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 14.5 days ENCDO956IXV H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b9346ff8-3991-4ca8-acee-bd6c10b9554a/ENCFF171CWD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8838,7 +8839,7 @@ priority 2.0
     shortLabel ENCSR000CDF Signal
     longLabel Mus musculus strain C57BL/6 heart tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/0ec0cf7a-f9ba-43cb-8759-9a29662e28f5/ENCFF266FCV.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8849,7 +8850,7 @@ priority 2.0
     shortLabel ENCSR675HDX Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/1de2625c-72c4-46eb-afa2-6154e94031e3/ENCFF306XSO.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8860,7 +8861,7 @@ priority 2.0
     shortLabel ENCSR574VME Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8d15cd95-f46f-4cff-8b6f-096631df6b25/ENCFF325TQE.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF399ISF
@@ -8869,7 +8870,7 @@ priority 2.0
     shortLabel ENCSR360ANE Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/87d79594-6dee-4f7a-8741-5c5a35411caf/ENCFF399ISF.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF472AHZ
@@ -8878,7 +8879,7 @@ priority 2.0
     shortLabel ENCSR000CDK Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 14.5 days ENCDO956IXV H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/317727ee-d346-4d1d-82d0-3bffd9421bd4/ENCFF472AHZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF476ZEU
@@ -8887,7 +8888,7 @@ priority 2.0
     shortLabel ENCSR582SPN Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/d9adef3e-74a5-4230-9714-06d40cfc711d/ENCFF476ZEU.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8898,7 +8899,7 @@ priority 2.0
     shortLabel ENCSR222IHX Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/647fd60f-c912-4bd9-997f-17a53d3a4665/ENCFF541HWH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF615HNJ
@@ -8907,7 +8908,7 @@ priority 2.0
     shortLabel ENCSR574VME Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/f0861e9e-4a42-4849-84c6-736b7fb30cd3/ENCFF615HNJ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8918,7 +8919,7 @@ priority 2.0
     shortLabel ENCSR846PJO Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/da8c9804-56aa-4338-883c-7e6a5535d72a/ENCFF645PJW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF670HUL
@@ -8927,7 +8928,7 @@ priority 2.0
     shortLabel ENCSR699XHY Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/3b9f6d13-3280-40f4-b017-6f1cd76a30aa/ENCFF670HUL.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF746XEP
@@ -8936,7 +8937,7 @@ priority 2.0
     shortLabel ENCSR846PJO Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/5b5bdcf6-7261-463e-9b0f-43ca5a3fe19f/ENCFF746XEP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8947,7 +8948,7 @@ priority 2.0
     shortLabel ENCSR582SPN Peak
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/c1874dad-bcc2-497b-9bfa-6d86ae2fe389/ENCFF747BZB.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF778LZH
@@ -8956,7 +8957,7 @@ priority 2.0
     shortLabel ENCSR123MLY Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/16d0f75e-ca71-4bb8-baae-a4d829b6b9af/ENCFF778LZH.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8967,7 +8968,7 @@ priority 2.0
     shortLabel ENCSR360ANE Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/48976ba4-bfff-41f8-bfc1-45a1ba493030/ENCFF847IMJ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8978,7 +8979,7 @@ priority 2.0
     shortLabel ENCSR699XHY Signal
     longLabel Mus musculus strain C57BL/6 heart tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/29deea79-066b-4415-b470-c6a9956382bd/ENCFF948TNP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -8989,7 +8990,7 @@ priority 2.0
     shortLabel ENCSR675HDX Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/fd828b5b-3789-4478-b66c-9b87a85c9c1e/ENCFF997EOX.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF050RYU
@@ -8998,7 +8999,7 @@ priority 2.0
     shortLabel ENCSR642VYW Peak
     longLabel Mus musculus strain C57BL/6 intestine tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/303a56de-7137-4819-a2c7-def4122c7409/ENCFF050RYU.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF096FOZ
@@ -9007,7 +9008,7 @@ priority 2.0
     shortLabel ENCSR424END Peak
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/ec5007e1-4164-44ab-84f3-dc27354f9c10/ENCFF096FOZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF384QBP
@@ -9016,7 +9017,7 @@ priority 2.0
     shortLabel ENCSR599GVS Peak
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/6b011850-7ddc-41b9-ae74-15da6b1ea87e/ENCFF384QBP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF577CVL
@@ -9025,7 +9026,7 @@ priority 2.0
     shortLabel ENCSR639DND Signal
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/b86a2cd5-fbea-42fa-9539-cd93418192bc/ENCFF577CVL.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9036,7 +9037,7 @@ priority 2.0
     shortLabel ENCSR639DND Peak
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/118d0612-88fe-4a20-b380-e8d51087db3d/ENCFF718KOJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF876IMC
@@ -9045,7 +9046,7 @@ priority 2.0
     shortLabel ENCSR424END Signal
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/928e1ccb-3478-4e44-8e71-091c7e88b54a/ENCFF876IMC.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9056,7 +9057,7 @@ priority 2.0
     shortLabel ENCSR642VYW Signal
     longLabel Mus musculus strain C57BL/6 intestine tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/8556822b-161a-4fc9-9544-f3dd38466d06/ENCFF946PYP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9067,7 +9068,7 @@ priority 2.0
     shortLabel ENCSR599GVS Signal
     longLabel Mus musculus strain C57BL/6 intestine tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/f65233f2-cc81-4726-ba20-64868542868b/ENCFF982DOZ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9078,7 +9079,7 @@ priority 2.0
     shortLabel ENCSR057SHA Signal
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/2ce9f3f3-3878-48b1-af1a-dc322dab283b/ENCFF031XVR.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9089,7 +9090,7 @@ priority 2.0
     shortLabel ENCSR140YPL Signal
     longLabel Mus musculus strain C57BL/6 kidney tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/422daf3e-379f-40ce-af8b-ced60bf64b55/ENCFF269FYI.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9100,7 +9101,7 @@ priority 2.0
     shortLabel ENCSR711SVB Peak
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/135f58ac-2139-46ec-a03d-c51b2cfa7e37/ENCFF444RJT.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF619ZTD
@@ -9109,7 +9110,7 @@ priority 2.0
     shortLabel ENCSR140YPL Peak
     longLabel Mus musculus strain C57BL/6 kidney tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/b830bd0a-207c-4cb4-ab70-3d0dd71e3680/ENCFF619ZTD.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF646PZP
@@ -9118,7 +9119,7 @@ priority 2.0
     shortLabel ENCSR357JII Peak
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/c857ef89-6ade-426c-8c3a-9d5136c27dc8/ENCFF646PZP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF700RID
@@ -9127,7 +9128,7 @@ priority 2.0
     shortLabel ENCSR000CDG Peak
     longLabel Mus musculus strain C57BL/6 kidney tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b8641728-c2b6-4df4-8801-e6ddab4ef6e1/ENCFF700RID.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF859YPP
@@ -9136,7 +9137,7 @@ priority 2.0
     shortLabel ENCSR000CDG Signal
     longLabel Mus musculus strain C57BL/6 kidney tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/af16dbdb-d96f-4d44-8f92-52fcf60ed8eb/ENCFF859YPP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9147,7 +9148,7 @@ priority 2.0
     shortLabel ENCSR357JII Signal
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8fb2c40a-9580-4ac9-a2eb-60987ffc0ca0/ENCFF956XBM.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9158,7 +9159,7 @@ priority 2.0
     shortLabel ENCSR057SHA Peak
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/611b9374-32ec-4a89-baa5-03cf6857aeee/ENCFF986ZJJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF995CST
@@ -9167,7 +9168,7 @@ priority 2.0
     shortLabel ENCSR711SVB Signal
     longLabel Mus musculus strain C57BL/6 kidney tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/e26fff56-7b20-4409-aa92-1223908af5a2/ENCFF995CST.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9178,7 +9179,7 @@ priority 2.0
     shortLabel ENCSR737QWV Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/8d1042f5-9abe-4af5-88bf-b2538901d405/ENCFF161XJH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF219DKU
@@ -9187,7 +9188,7 @@ priority 2.0
     shortLabel ENCSR021ALF Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/252c9674-a077-4487-b50f-d69bce3eb39c/ENCFF219DKU.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9198,7 +9199,7 @@ priority 2.0
     shortLabel ENCSR988BRP Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/db5457e7-1eef-4652-aff2-9b2767de8b35/ENCFF297WAP.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9209,7 +9210,7 @@ priority 2.0
     shortLabel ENCSR905FFU Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/e5c13d3e-d8bd-4356-9e70-0c2b0e6781cc/ENCFF369RWK.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9220,7 +9221,7 @@ priority 2.0
     shortLabel ENCSR863VHE Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 10.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/987cc79d-f01d-49b7-81b7-fee2c73b7c77/ENCFF439VTW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF481YLH
@@ -9229,7 +9230,7 @@ priority 2.0
     shortLabel ENCSR897WBY Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/bcbead23-f8d2-434e-9634-904e800947b1/ENCFF481YLH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF511OAD
@@ -9238,7 +9239,7 @@ priority 2.0
     shortLabel ENCSR737QWV Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/aa2799ea-f19f-41da-8b28-15f02c43926a/ENCFF511OAD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9249,7 +9250,7 @@ priority 2.0
     shortLabel ENCSR897WBY Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/6c002d6f-64b8-4a42-9f30-19279ce25bb5/ENCFF564BIG.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9260,7 +9261,7 @@ priority 2.0
     shortLabel ENCSR905FFU Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/5bbe247e-d977-45fa-a149-69a7ad8a6aa9/ENCFF652AMZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF793ADG
@@ -9269,7 +9270,7 @@ priority 2.0
     shortLabel ENCSR988BRP Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/a5e8430e-1936-45ea-96ea-18afee2b633e/ENCFF793ADG.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF895JDY
@@ -9278,7 +9279,7 @@ priority 2.0
     shortLabel ENCSR863VHE Signal
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 10.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/99c1e924-0624-4a60-aae2-93cfb2473259/ENCFF895JDY.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9289,7 +9290,7 @@ priority 2.0
     shortLabel ENCSR021ALF Peak
     longLabel Mus musculus strain C57BL/6 limb tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/7474c5a3-a97d-4b29-8224-b1fdfe29225d/ENCFF909YPJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF134BME
@@ -9298,7 +9299,7 @@ priority 2.0
     shortLabel ENCSR616TJM Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/949fe6ee-79e0-4ffe-b2aa-76e513e84039/ENCFF134BME.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF139NCZ
@@ -9307,7 +9308,7 @@ priority 2.0
     shortLabel ENCSR136GMT Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 12.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/acd03e74-a378-4e43-9227-21fbbf5b3594/ENCFF139NCZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF166OFX
@@ -9316,7 +9317,7 @@ priority 2.0
     shortLabel ENCSR175KBJ Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 13.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/b32dde2e-b973-4b03-9394-86490c3a14f2/ENCFF166OFX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9327,7 +9328,7 @@ priority 2.0
     shortLabel ENCSR479LFP Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/bab6beda-0536-4f97-853b-15772fcfcadf/ENCFF292KXH.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9338,7 +9339,7 @@ priority 2.0
     shortLabel ENCSR075SNV Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/fd8d9200-b0ca-4b23-bb91-be2d9961b43b/ENCFF306YXY.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF337VJK
@@ -9347,7 +9348,7 @@ priority 2.0
     shortLabel ENCSR136GMT Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 12.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/862cb433-770c-467b-84a0-157e1d99560a/ENCFF337VJK.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9358,7 +9359,7 @@ priority 2.0
     shortLabel ENCSR479LFP Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/40ec17eb-ec2f-444d-8395-2daac2b62119/ENCFF348IOS.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF441MBZ
@@ -9367,7 +9368,7 @@ priority 2.0
     shortLabel ENCSR802RET Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/e725e175-dd88-487c-9f0b-73fd6d35faae/ENCFF441MBZ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9378,7 +9379,7 @@ priority 2.0
     shortLabel ENCSR616TJM Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/39821e8f-26e5-45f9-b150-3f2b88f45ebb/ENCFF544RNA.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9389,7 +9390,7 @@ priority 2.0
     shortLabel ENCSR075SNV Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/155f8584-da06-4a5c-a544-d031950ec4f7/ENCFF595IQM.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9400,7 +9401,7 @@ priority 2.0
     shortLabel ENCSR000CDH Signal
     longLabel Mus musculus strain C57BL/6 liver tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/79c96c66-ccad-45e0-8862-8dd50e29ba1b/ENCFF622QOD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9411,7 +9412,7 @@ priority 2.0
     shortLabel ENCSR000CDH Peak
     longLabel Mus musculus strain C57BL/6 liver tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/e33a19a6-e3bf-4d0c-907e-c6be11ad215a/ENCFF625DVN.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF715ZXX
@@ -9420,7 +9421,7 @@ priority 2.0
     shortLabel ENCSR058DOA Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 11.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/3194fefe-0f41-45f3-9e45-9c0da13f4cc5/ENCFF715ZXX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9431,7 +9432,7 @@ priority 2.0
     shortLabel ENCSR000CDU Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 14.5 days ENCDO956IXV H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/956069a2-9f25-4bc8-8d85-81f135818eee/ENCFF765PST.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF793MEV
@@ -9440,7 +9441,7 @@ priority 2.0
     shortLabel ENCSR175KBJ Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 13.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/e26620c3-573c-4af0-b990-b091b687794e/ENCFF793MEV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF803YBX
@@ -9449,7 +9450,7 @@ priority 2.0
     shortLabel ENCSR000CDU Signal
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 14.5 days ENCDO956IXV H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/a7e8555f-2a6c-4fb8-824e-63323bad11d9/ENCFF803YBX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9460,7 +9461,7 @@ priority 2.0
     shortLabel ENCSR802RET Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/903b16cc-1928-437a-9e34-96e22cad1164/ENCFF812MUB.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF935BMV
@@ -9469,7 +9470,7 @@ priority 2.0
     shortLabel ENCSR058DOA Peak
     longLabel Mus musculus strain C57BL/6 liver tissue embryo 11.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/1a8810c1-f72f-4f63-9402-4fb364b70af2/ENCFF935BMV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF187NTP
@@ -9478,7 +9479,7 @@ priority 2.0
     shortLabel ENCSR895BMP Peak
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/b3364f56-fa84-4969-b845-ffadbc2dd5f6/ENCFF187NTP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF258KWF
@@ -9487,7 +9488,7 @@ priority 2.0
     shortLabel ENCSR884MYD Signal
     longLabel Mus musculus strain C57BL/6 lung tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/f394e107-33a3-40d8-a827-7bb5a909c090/ENCFF258KWF.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9498,7 +9499,7 @@ priority 2.0
     shortLabel ENCSR895BMP Signal
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/48db09f2-e6ea-4f56-8321-987ba217baa3/ENCFF405LLK.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9509,7 +9510,7 @@ priority 2.0
     shortLabel ENCSR452WYC Peak
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/903688c9-cae4-48ee-a760-ec3386410505/ENCFF484IJK.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF584JYR
@@ -9518,7 +9519,7 @@ priority 2.0
     shortLabel ENCSR140UEX Signal
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/769c17d4-c741-4d31-b119-a21ae8e6e9d1/ENCFF584JYR.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9529,7 +9530,7 @@ priority 2.0
     shortLabel ENCSR140UEX Peak
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/1b0e6428-eae6-407a-bcdb-1f722c80a31e/ENCFF684QYJ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF865CCV
@@ -9538,7 +9539,7 @@ priority 2.0
     shortLabel ENCSR452WYC Signal
     longLabel Mus musculus strain C57BL/6 lung tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/fdd329fd-55bc-419b-a221-d26067890591/ENCFF865CCV.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9549,7 +9550,7 @@ priority 2.0
     shortLabel ENCSR884MYD Peak
     longLabel Mus musculus strain C57BL/6 lung tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/b4839a25-a10e-4e1e-9ddd-30d696ad6aea/ENCFF990BUV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF780RBO
@@ -9558,7 +9559,7 @@ priority 2.0
     shortLabel ENCSR000CDO Peak
     longLabel Mus musculus strain C57BL/6 placenta tissue female adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/8c111ad2-272c-4bde-b9f8-bf13402da908/ENCFF780RBO.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF975GEW
@@ -9567,7 +9568,7 @@ priority 2.0
     shortLabel ENCSR000CDO Signal
     longLabel Mus musculus strain C57BL/6 placenta tissue female adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/89495275-2010-4c18-8b41-b274f300bc79/ENCFF975GEW.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9578,7 +9579,7 @@ priority 2.0
     shortLabel ENCSR000CCQ Signal
     longLabel Mus musculus strain C57BL/6 small intestine tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/2a221241-f2fb-4dd3-81bf-a3b83780a68d/ENCFF071OSU.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9589,7 +9590,7 @@ priority 2.0
     shortLabel ENCSR000CCQ Peak
     longLabel Mus musculus strain C57BL/6 small intestine tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/5773c469-8e47-432b-808e-a6a04622ac72/ENCFF327ZTP.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF139EII
@@ -9598,7 +9599,7 @@ priority 2.0
     shortLabel ENCSR000CEV Peak
     longLabel Mus musculus strain MEL MEL H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/049cdef4-02cb-4faa-bbf4-76786933cba1/ENCFF139EII.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF556FQV
@@ -9607,7 +9608,7 @@ priority 2.0
     shortLabel ENCSR000CDJ Peak
     longLabel Mus musculus strain C57BL/6 spleen tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/7518b635-ad8c-47d7-9aed-512d022b61db/ENCFF556FQV.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF770LBL
@@ -9616,7 +9617,7 @@ priority 2.0
     shortLabel ENCSR000CEV Signal
     longLabel Mus musculus strain MEL MEL H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/da5acff5-e3d9-40d0-936f-2ffec303fcf9/ENCFF770LBL.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9627,7 +9628,7 @@ priority 2.0
     shortLabel ENCSR000CDJ Signal
     longLabel Mus musculus strain C57BL/6 spleen tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/75dfb66d-d283-49d9-a38b-dd84985f9017/ENCFF920QDX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9638,7 +9639,7 @@ priority 2.0
     shortLabel ENCSR546ANT Peak
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 16.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/851a2e44-caf0-41ca-9ad9-accc5623b722/ENCFF039ZCW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF112OYW
@@ -9647,7 +9648,7 @@ priority 2.0
     shortLabel ENCSR346FJG Peak
     longLabel Mus musculus strain C57BL/6 stomach tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/4e4f2221-c310-4b64-beb3-8b8e8000e6e3/ENCFF112OYW.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF441RCH
@@ -9656,7 +9657,7 @@ priority 2.0
     shortLabel ENCSR316CNR Peak
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 14.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/10276384-2de5-43be-98a1-9dc5e88ad54e/ENCFF441RCH.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF500YJD
@@ -9665,7 +9666,7 @@ priority 2.0
     shortLabel ENCSR346FJG Signal
     longLabel Mus musculus strain C57BL/6 stomach tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/f805f010-adb1-4133-a2f3-7b0161f70f33/ENCFF500YJD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9676,7 +9677,7 @@ priority 2.0
     shortLabel ENCSR546ANT Signal
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 16.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/b7010241-60b0-49ef-a167-2884073ec704/ENCFF696SVD.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9687,7 +9688,7 @@ priority 2.0
     shortLabel ENCSR316CNR Signal
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 14.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/70fa2fda-488e-47ad-828e-a67143f70a07/ENCFF762HBG.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9698,7 +9699,7 @@ priority 2.0
     shortLabel ENCSR929SEW Signal
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 15.5 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/dfc1fae8-24d0-4b3b-a09f-c251b12f3b94/ENCFF924LUE.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9709,7 +9710,7 @@ priority 2.0
     shortLabel ENCSR929SEW Peak
     longLabel Mus musculus strain C57BL/6 stomach tissue embryo 15.5 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/89af37f1-2a64-41c4-b833-5ece556cc1aa/ENCFF986SVC.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF405QNK
@@ -9718,7 +9719,7 @@ priority 2.0
     shortLabel ENCSR000CCU Peak
     longLabel Mus musculus strain C57BL/6 testis tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/4bb8d9a5-49eb-4c59-9e73-52271bdfcd93/ENCFF405QNK.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF881WJZ
@@ -9727,7 +9728,7 @@ priority 2.0
     shortLabel ENCSR000CCU Signal
     longLabel Mus musculus strain C57BL/6 testis tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/32778a1b-3e5c-41d5-b28c-b75958f10cde/ENCFF881WJZ.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9738,7 +9739,7 @@ priority 2.0
     shortLabel ENCSR000CCH Signal
     longLabel Mus musculus strain C57BL/6 thymus tissue male adult 8 weeks H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/f25595f1-c01d-4469-a3c4-0c4da97aa92f/ENCFF284KSX.bigWig
-    color 255,205,0
+    color 181,145,0
     autoScale on
     maxHeightPixels 100:32:8
     visibility full
@@ -9749,7 +9750,7 @@ priority 2.0
     shortLabel ENCSR000CCH Peak
     longLabel Mus musculus strain C57BL/6 thymus tissue male adult 8 weeks H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/14/dcd2a3b1-7b9f-4cf5-b84b-85bc9eae2784/ENCFF715DMZ.bigBed
-    color 255,205,0
+    color 181,145,0
     visibility squish
 
     track encode4RegEpigenetics_ENCFF409WOB
