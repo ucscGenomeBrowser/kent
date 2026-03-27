@@ -1,14 +1,15 @@
 # ENCODE Integrated Regulation Track (Chris Eisenhart, Kate)
 
 track wgEncodeReg
-superTrack on show
+superTrack on
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
 group regulation
 priority 1
 canPack On
+pennantIcon snowflake.png /goldenPath/newsarch.html#NNN "Please see the ENCODE4 Regulation track for the latest data. See news archive for details."
 
-include wgEncodeRegDnase.ra beta,public
+include wgEncodeRegDnase.ra alpha
 
 track TFrPeakClusters
 shortLabel TF rPeak Clusters

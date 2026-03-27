@@ -27274,7 +27274,7 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     doWikiTrack(item, seqName, winStart, winEnd);
 else if (sameWord(table, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
-else if (sameWord(table, GC_ON_FLY_TRACK_NAME))
+else if (sameWord(trackHubSkipHubName(table), GC_ON_FLY_TRACK_NAME))
     doGcOnFly();
 else if (sameWord(table, "refFullAli"))
     {

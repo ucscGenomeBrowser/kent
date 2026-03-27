@@ -1,0 +1,208 @@
+# ENCODE4 Integrated Regulation Track (encode4Reg) for mm10
+# Redmine #34923
+# Lou Nassar, 2026-03-26
+
+# This track converts the ENCODE Mouse Regulation hub into a native UCSC browser
+# supertrack containing organ-averaged multiWig signal tracks and individual
+# experiment composites (bigComposite/faceted format) for epigenetics, RNA-seq,
+# and TF ChIP-seq. No TF rPeaks data available for mouse.
+
+# The original hub was prepared by Mingshi Gao (Weng lab, UMass Chan Medical School).
+# It was cloned locally for processing:
+#   /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/hub.txt (27K lines)
+# Total data: ~2.7 TB
+
+# Scripts are located at:
+#   kent/src/hg/makeDb/scripts/encode4regulation/
+# Working directory:
+#   /hive/users/lrnassar/claude/RM34923/
+
+##############################################################################
+# Step 1: Clone the hub data locally
+##############################################################################
+
+mkdir -p /hive/data/outside/encode4/ccre
+cd /hive/data/outside/encode4/ccre
+hubClone -download <mouse hub URL> ENCODE_Mouse_Regulation
+
+# Total data: ~2.7 TB across ~2,644 files (1,901 bigWig + 743 bigBed)
+
+##############################################################################
+# Step 2: Create gbdb symlinks
+##############################################################################
+
+# Only organ-averaged multiWig files need gbdb symlinks.
+# Individual experiment tracks use S3 URLs directly.
+
+# The symlinks were created by parsing the hub.txt:
+cd /hive/users/lrnassar/claude/RM34923
+python3 create_mm10_symlinks.py
+
+# This creates symlinks under /gbdb/mm10/encode4/regulation/organAve/
+# pointing to /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/
+# Total: 122 symlinks (organ-averaged multiWig files only)
+
+##############################################################################
+# Step 3: Validate local files and create S3 URL mapping
+##############################################################################
+
+# Query ENCODE REST API for S3 URLs for all 2,503 ENCFF accessions.
+cd /hive/users/lrnassar/claude/RM34923
+python3 validate_mm10_urls.py
+
+# Output: encode4_mouse_url_mapping.tsv
+# Result: 2,503/2,503 have S3 URLs, 0 errors
+
+##############################################################################
+# Step 4: Generate multiWig trackDb stanzas
+##############################################################################
+
+cd /hive/users/lrnassar/claude/RM34923
+python3 generate_mm10_multiwig_ra.py > mm10_multiwig_output.ra
+
+# Generates 6 multiWig containers with ~122 organ subtracks total:
+#   encode4RegMarkH3k27ac — full visibility, 5 organs default ON
+#   encode4RegDnase       — hidden
+#   encode4RegAtac        — hidden
+#   encode4RegMarkH3k4me3 — hidden
+#   encode4RegMarkCtcf    — hidden
+#   encode4RegTxn         — hidden
+# No "All Biosamples" variants in the mouse hub (unlike hg38).
+# Output was manually assembled into encode4Reg.ra with supertrack header.
+
+##############################################################################
+# Step 5: Generate bigComposite (faceted) individual experiment tracks
+##############################################################################
+
+# The mm10 composites were generated directly from the hub in one step
+# (unlike hg38 which used a two-step traditional->faceted conversion).
+
+cd /hive/users/lrnassar/claude/RM34923
+python3 generate_mm10_bigcomposites.py
+
+# This creates .ra files and metadata TSVs:
+#   /gbdb/mm10/encode4/regulation/encode4RegEpigenetics_metadata.tsv
+#   /gbdb/mm10/encode4/regulation/encode4RegRnaSeq_metadata.tsv
+#   /gbdb/mm10/encode4/regulation/encode4RegTfChip_metadata.tsv
+#
+# Output .ra files (in kent/src/hg/makeDb/trackDb/mouse/mm10/):
+#   encode4RegEpigenetics.ra — 1,178 subtracks (589 signal + 589 peak)
+#                               Facets: Assay, Organ, Biosample Type, Data Type
+#   encode4RegRnaSeq.ra      — 1,054 subtracks (bigWig only)
+#                               Facets: Organ, Biosample Type, Strand
+#   encode4RegTfChip.ra      — 334 subtracks (167 signal + 167 peak)
+#                               Facets: TF, Organ, Biosample Type, Data Type
+#
+# Key differences from hg38:
+#   - Epigenetics and TfChip contain BOTH bigWig (signal) and bigBed (peaks)
+#     in the same bigComposite, with "Data Type" facet to distinguish them.
+#     Parent type is "bed 3" to accommodate mixed content.
+#   - RNA-seq has "Unstranded" strand value for 26 subtracks (hg38 only has +/-)
+#   - _Biosample column hidden from facets (same as hg38)
+#   - All facet values capitalized (Cell line, Adult, etc.)
+#
+# Default-ON subtracks:
+#   Epigenetics (10): CH12.LX signal + peak per assay (CTCF, DNase, H3K27ac,
+#                     H3K4me3) plus brain hindbrain P0 ATAC signal + peak
+#   RNA-seq (5): CH12.LX +/- strand, liver adult +/-, brain hippocampus +
+#   TF ChIP (10): CH12.LX signal + peak for CTCF, POLR2A, MYC, MAX, EP300
+#
+# All subtracks use S3 URLs (encode-public.s3.amazonaws.com) for bigDataUrl.
+
+##############################################################################
+# Step 6: Assemble main encode4Reg.ra
+##############################################################################
+
+# The main file kent/src/hg/makeDb/trackDb/mouse/mm10/encode4Reg.ra (~1,230 lines)
+# contains:
+#   - SuperTrack definition (priority 1.5, group=regulation)
+#   - 6 multiWig containers with organ subtracks (from Step 4)
+#   - Include directives for the 3 bigComposite files
+# No TF rPeaks track (not available for mouse).
+# No cCREs/Core Collection (already exist as separate mm10 tracks).
+
+##############################################################################
+# Step 7: Create HTML description pages
+##############################################################################
+
+# 10 HTML files were created in kent/src/hg/makeDb/trackDb/mouse/mm10/:
+#   encode4Reg.html                — SuperTrack overview
+#   encode4RegMarkH3k27ac.html     — H3K27ac layered signal
+#   encode4RegDnase.html           — DNase layered signal
+#   encode4RegAtac.html            — ATAC layered signal
+#   encode4RegMarkH3k4me3.html     — H3K4me3 layered signal
+#   encode4RegMarkCtcf.html        — CTCF layered signal
+#   encode4RegTxn.html             — Transcription layered signal
+#   encode4RegEpigenetics.html     — Individual epigenetics composite
+#   encode4RegRnaSeq.html          — Individual RNA-seq composite
+#   encode4RegTfChip.html          — Individual TF ChIP composite
+# Adapted from hg38 versions with mm10-specific counts, assembly refs, and
+# removal of TF rPeaks references.
+
+##############################################################################
+# Step 8: trackDb integration and related tracks
+##############################################################################
+
+# Added to kent/src/hg/makeDb/trackDb/mouse/mm10/trackDb.ra:
+#   include encode4Reg.ra alpha
+
+# Added reciprocal entries to relatedTracks.ra:
+#   mm10 encode4Reg encode3Reg ENCODE4 update of ENCODE3 Regulation
+#   mm10 encode3Reg encode4Reg ENCODE4 update of ENCODE3 Regulation
+#   mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
+#   mm10 cCREs encode4Reg Related ENCODE4 regulation data
+
+##############################################################################
+# Step 9: Release tags (ENCODE3 transition)
+##############################################################################
+
+# Same approach as hg38:
+# On alpha (dev): ENCODE4 visible, ENCODE3 hidden with snowflake
+# On beta/public: ENCODE3 visible as-is, ENCODE4 not visible
+#
+# Created trackDb.encode3.alpha.ra with:
+#   - superTrack on hide (hidden by default)
+#   - pennantIcon snowflake.png (deprecation notice)
+#   - Inner includes tagged with release alpha
+# The original trackDb.encode3.ra gets inner includes tagged beta,public.
+# encodeCcreCombined.old.ra stays beta,public only (in QA).
+#
+# trackDb.ra includes:
+#   include trackDb.encode3.ra beta,public
+#   include trackDb.encode3.alpha.ra alpha
+#   include encode4Reg.ra alpha
+
+##############################################################################
+# Step 10: Load trackDb
+##############################################################################
+
+cd /cluster/home/lrnassar/kent/src/hg/makeDb/trackDb
+
+# Sandbox (personal testing):
+make DBS=mm10
+
+# Dev (hgwdev):
+make alpha DBS=mm10
+
+# 9,577 track descriptions loaded
+
+##############################################################################
+# Track hierarchy summary
+##############################################################################
+
+# encode4Reg (superTrack, priority 1.5, group=regulation)
+# ├── encode4RegMarkH3k27ac (multiWig, full, 5 organs ON)
+# ├── encode4RegDnase       (multiWig, hide)
+# ├── encode4RegAtac        (multiWig, hide)
+# ├── encode4RegMarkH3k4me3 (multiWig, hide)
+# ├── encode4RegMarkCtcf    (multiWig, hide)
+# ├── encode4RegTxn         (multiWig, hide)
+# ├── encode4RegEpigenetics (bigComposite faceted, 1,178 subtracks, 10 ON)
+# ├── encode4RegRnaSeq      (bigComposite faceted, 1,054 subtracks, 5 ON)
+# └── encode4RegTfChip      (bigComposite faceted, 334 subtracks, 10 ON)
+
+# gbdb contents (/gbdb/mm10/encode4/regulation/):
+#   organAve/                        — 122 multiWig symlinks
+#   encode4RegEpigenetics_metadata.tsv
+#   encode4RegRnaSeq_metadata.tsv
+#   encode4RegTfChip_metadata.tsv

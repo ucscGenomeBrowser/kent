@@ -211,9 +211,19 @@ $(function() {
         toggleLabel.appendChild(Object.assign(
             document.createElement("span"), {className: "toggle-slider"}));
         toggleWrapper.appendChild(toggleLabel);
-        toggleWrapper.appendChild(Object.assign(
-            document.createElement("span"), {textContent: "Show only selected rows"}));
+        const toggleText = Object.assign(
+            document.createElement("span"), {id: "selected-filter-text"});
+        toggleWrapper.appendChild(toggleText);
         lengthDiv.appendChild(toggleWrapper);
+
+        function updateSelectedText() {
+            const selCount = table.rows({selected: true}).count();
+            const totalCount = table.rows().count();
+            toggleText.textContent =
+                `Show only selected rows (${selCount} of ${totalCount} selected)`;
+        }
+        updateSelectedText();
+        table.on("select deselect", updateSelectedText);
 
         // Create active-filters chip bar (hidden when empty)
         const activeFiltersDiv = document.createElement("div");
@@ -332,13 +342,13 @@ $(function() {
             // Clickable heading that toggles collapse
             const heading = Object.assign(document.createElement("strong"), {
                 textContent: toTitleCase(key),
-                className: "facet-heading collapsed",
+                className: "facet-heading",
             });
             facetDiv.appendChild(heading);
 
             // Collapsible body: holds Clear button + all checkboxes
             const facetBody = document.createElement("div");
-            facetBody.classList.add("facet-body", "collapsed");
+            facetBody.classList.add("facet-body");
 
             // Clear button — built here so it lives inside the collapsible body
             const clearBtn = document.createElement("button");

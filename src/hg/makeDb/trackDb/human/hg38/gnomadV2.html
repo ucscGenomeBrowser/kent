@@ -1,0 +1,101 @@
+<h2>Description</h2>
+<p>
+The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to
+the GRCh37/hg19 reference sequence and lifted to the GRCh38/hg38 assembly. The data originate
+from 141,456 unrelated individuals sequenced as part of various population-genetic and
+disease-specific <a target="_blank" href="https://gnomad.broadinstitute.org/about">studies</a>
+collected by the <a target="_blank"
+href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.1.1.
+Raw data from all studies have been reprocessed through a unified pipeline and jointly
+variant-called to increase consistency across projects. For more information on the processing
+pipeline and population annotations, see the following <a target="_blank"
+href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
+and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt"
+target="_blank">README</a>.</p>
+<p>
+gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the
+GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
+</p>
+
+<p>The gnomAD MPC score (Missense Deleteriousness Prediction by Constraint) is available for now only on hg19.</p>
+
+<p>
+For questions on the gnomAD data, also see the <a target="_blank"
+href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The gnomAD v2.1.1 track follows the standard display and configuration options available for
+<a href="/goldenPath/help/hgVcfTrackHelp.html">VCF tracks</a>, briefly explained below.
+</p>
+<ul>
+  <li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
+    each variant.</li>
+  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
+    displayed to the left of a vertical line with colored portions corresponding to allele counts.
+    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li>
+</ul>
+
+<h4>Filtering Options</h4>
+<p>
+Four filters are available for these tracks, the same as the underlying VCF:
+<ul>
+    <li>AC0: Allele Count 0 after filtering out low confidence genotypes (GQ &lt; 20; DP &lt; 10; and AB &lt; 0.2 for het calls))
+    <li>InbreedingCoeff: Inbreeding Coefficient &lt; -0.3
+    <li>RF: Used to exclude/include variants that failed Random Forest filtering thresholds of 0.055272738028512555, 0.20641025579497013 (probabilities of being a true positive variant) for SNPs, indels)
+    <li>Pass: Variant passes all 3 filters
+</ul>
+</p>
+
+<p>
+There are two additional filters available, one for the minimum minor allele frequency, and a configurable filter on the QUAL score.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a target="_blank"
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
+can be downloaded from our <a
+href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/vcf/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below). Variant VCFs can be found in the
+vcf/ subdirectory.</p>
+
+<p>
+The data can also be found directly from the gnomAD <a target="_blank"
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons Zero Public Domain Dedication</a> as described <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a>.
+</p>
+
+<p>
+Please note that some annotations within the provided files may have restrictions on usage. See <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a> for more information.
+</p>
+
+<h2>References</h2>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alföldi J, Wang Q, Collins RL, Laricchia KM, Ganna
+A, Birnbaum DP <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2308-7" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>

@@ -1220,12 +1220,6 @@ void gc5BaseOnTheFlyMethods(struct track *tg, struct cart *cart);
  *     so data is computed from genome sequence instead of read from a file.
  */
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart);
-/* Create an on-the-fly GC percent track computed directly from
- *     genome sequence.  Default visibility is dense; the cart
- *     override happens later in the getTrackList() visibility loop.
- */
-
 void mathWigMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[]);
 /* mathWig load and draw methods. */
