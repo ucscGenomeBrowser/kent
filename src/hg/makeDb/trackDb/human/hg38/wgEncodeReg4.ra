@@ -5,7 +5,7 @@ superTrack on show
 shortLabel ENCODE4 Regulation
 longLabel Integrated Regulation from ENCODE 4
 group regulation
-priority 1.5
+priority 0.9
 pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
 html wgEncodeReg4.html
 
