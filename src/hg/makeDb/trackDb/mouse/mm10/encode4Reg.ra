@@ -1,0 +1,1230 @@
+# ENCODE4 Integrated Regulation Track
+
+track encode4Reg
+superTrack on show
+shortLabel ENCODE4 Regulation
+longLabel Integrated Regulation from ENCODE 4
+group regulation
+priority 1.5
+pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+html encode4Reg.html
+
+    track encode4RegMarkH3k27ac
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg full
+    shortLabel H3K27ac (Layered)
+    longLabel H3K27ac signal marking active enhancers and promoters, averaged by organ/tissue
+    visibility full
+    viewLimits 0:100
+    autoScale on
+    maxHeightPixels 100:50:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.4
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegMarkH3k27ac.html
+
+        track encode4RegMarkH3k27acAdipose
+        type bigWig
+        shortLabel Adipose
+        longLabel H3K27ac level of 1 adipose experiment (tissues and primary cells only)
+        color 255,119,39
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adiposeH3K27ac.bw
+        priority 1
+
+        track encode4RegMarkH3k27acBoneMarrow
+        type bigWig
+        shortLabel Bone marrow
+        longLabel Avg. H3K27ac level of 2 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowH3K27ac.bw
+        priority 2
+
+        track encode4RegMarkH3k27acBrain
+        type bigWig
+        shortLabel Brain
+        longLabel Avg. H3K27ac level of 27 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegMarkH3k27ac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainH3K27ac.bw
+        priority 3
+
+        track encode4RegMarkH3k27acConnectiveTissue
+        type bigWig
+        shortLabel Connective tissue
+        longLabel H3K27ac level of 1 connective tissue experiment (tissues and primary cells only)
+        color 172,168,211
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/connectiveTissueH3K27ac.bw
+        priority 4
+
+        track encode4RegMarkH3k27acEmbryo
+        type bigWig
+        shortLabel Embryo
+        longLabel Avg. H3K27ac level of 6 embryo experiments (tissues and primary cells only)
+        color 147,196,125
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K27ac.bw
+        priority 5
+
+        track encode4RegMarkH3k27acEpithelium
+        type bigWig
+        shortLabel Epithelium
+        longLabel Avg. H3K27ac level of 5 epithelium experiments (tissues and primary cells only)
+        color 221,126,107
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/epitheliumH3K27ac.bw
+        priority 6
+
+        track encode4RegMarkH3k27acHeart
+        type bigWig
+        shortLabel Heart
+        longLabel Avg. H3K27ac level of 10 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartH3K27ac.bw
+        priority 7
+
+        track encode4RegMarkH3k27acIntestine
+        type bigWig
+        shortLabel Intestine
+        longLabel Avg. H3K27ac level of 4 intestine experiments (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineH3K27ac.bw
+        priority 8
+
+        track encode4RegMarkH3k27acKidney
+        type bigWig
+        shortLabel Kidney
+        longLabel Avg. H3K27ac level of 5 kidney experiments (tissues and primary cells only)
+        color 133,232,221
+        parent encode4RegMarkH3k27ac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/kidneyH3K27ac.bw
+        priority 9
+
+        track encode4RegMarkH3k27acLimb
+        type bigWig
+        shortLabel Limb
+        longLabel Avg. H3K27ac level of 6 limb experiments (tissues and primary cells only)
+        color 95,88,237
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/limbH3K27ac.bw
+        priority 10
+
+        track encode4RegMarkH3k27acLiver
+        type bigWig
+        shortLabel Liver
+        longLabel Avg. H3K27ac level of 9 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegMarkH3k27ac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverH3K27ac.bw
+        priority 11
+
+        track encode4RegMarkH3k27acLung
+        type bigWig
+        shortLabel Lung
+        longLabel Avg. H3K27ac level of 4 lung experiments (tissues and primary cells only)
+        color 188,235,65
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/lungH3K27ac.bw
+        priority 12
+
+        track encode4RegMarkH3k27acPlacenta
+        type bigWig
+        shortLabel Placenta
+        longLabel H3K27ac level of 1 placenta experiment (tissues and primary cells only)
+        color 123,203,84
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/placentaH3K27ac.bw
+        priority 13
+
+        track encode4RegMarkH3k27acSmallIntestine
+        type bigWig
+        shortLabel Small intestine
+        longLabel H3K27ac level of 1 small intestine experiment (tissues and primary cells only)
+        color 98,98,41
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/smallIntestineH3K27ac.bw
+        priority 14
+
+        track encode4RegMarkH3k27acSpleen
+        type bigWig
+        shortLabel Spleen
+        longLabel H3K27ac level of 1 spleen experiment (tissues and primary cells only)
+        color 136,157,97
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K27ac.bw
+        priority 15
+
+        track encode4RegMarkH3k27acStomach
+        type bigWig
+        shortLabel Stomach
+        longLabel Avg. H3K27ac level of 4 stomach experiments (tissues and primary cells only)
+        color 255,254,175
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/stomachH3K27ac.bw
+        priority 16
+
+        track encode4RegMarkH3k27acTestis
+        type bigWig
+        shortLabel Testis
+        longLabel H3K27ac level of 1 testis experiment (tissues and primary cells only)
+        color 195,196,196
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/testisH3K27ac.bw
+        priority 17
+
+        track encode4RegMarkH3k27acThymus
+        type bigWig
+        shortLabel Thymus
+        longLabel H3K27ac level of 1 thymus experiment (tissues and primary cells only)
+        color 142,124,195
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/thymusH3K27ac.bw
+        priority 18
+
+        track encode4RegMarkH3k27acAllBlood
+        type bigWig
+        shortLabel Blood (all biosamples)
+        longLabel H3K27ac level of 1 blood experiment (all biosamples)
+        color 254,75,173
+        parent encode4RegMarkH3k27ac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodH3K27acAll.bw
+        priority 18
+
+        track encode4RegMarkH3k27acAllEmbryo
+        type bigWig
+        shortLabel Embryo (all biosamples)
+        longLabel Avg. H3K27ac level of 8 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K27acAll.bw
+        priority 19
+
+        track encode4RegMarkH3k27acAllSpleen
+        type bigWig
+        shortLabel Spleen (all biosamples)
+        longLabel Avg. H3K27ac level of 2 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegMarkH3k27ac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K27acAll.bw
+        priority 20
+
+    track encode4RegDnase
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg hide
+    shortLabel DNase (Layered)
+    longLabel Chromatin accessibility from DNase-seq signal, averaged by organ/tissue
+    visibility hide
+    viewLimits 0:50
+    autoScale on
+    maxHeightPixels 100:50:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.1
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegDnase.html
+
+        track encode4RegDnaseAdipose
+        type bigWig
+        shortLabel Adipose
+        longLabel Avg. DNase level of 2 adipose experiments (tissues and primary cells only)
+        color 255,119,39
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adiposeDNase.bw
+        priority 1
+
+        track encode4RegDnaseAdrenalGland
+        type bigWig
+        shortLabel Adrenal gland
+        longLabel Avg. DNase level of 14 adrenal gland experiments (tissues and primary cells only)
+        color 108,213,81
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adrenalGlandDNase.bw
+        priority 2
+
+        track encode4RegDnaseBlood
+        type bigWig
+        shortLabel Blood
+        longLabel Avg. DNase level of 6 blood experiments (tissues and primary cells only)
+        color 254,75,173
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodDNase.bw
+        priority 3
+
+        track encode4RegDnaseBloodMarrow
+        type bigWig
+        shortLabel Blood marrow
+        longLabel Avg. DNase level of 5 blood marrow experiments (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodMarrowDNase.bw
+        priority 4
+
+        track encode4RegDnaseBrain
+        type bigWig
+        shortLabel Brain
+        longLabel Avg. DNase level of 78 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainDNase.bw
+        priority 5
+
+        track encode4RegDnaseConnectiveTissue
+        type bigWig
+        shortLabel Connective tissue
+        longLabel Avg. DNase level of 5 connective tissue experiments (tissues and primary cells only)
+        color 172,168,211
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/connectiveTissueDNase.bw
+        priority 6
+
+        track encode4RegDnaseEmbryo
+        type bigWig
+        shortLabel Embryo
+        longLabel Avg. DNase level of 11 embryo experiments (tissues and primary cells only)
+        color 147,196,125
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoDNase.bw
+        priority 7
+
+        track encode4RegDnaseEpithelium
+        type bigWig
+        shortLabel Epithelium
+        longLabel Avg. DNase level of 3 epithelium experiments (tissues and primary cells only)
+        color 221,126,107
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/epitheliumDNase.bw
+        priority 8
+
+        track encode4RegDnaseEye
+        type bigWig
+        shortLabel Eye
+        longLabel Avg. DNase level of 5 eye experiments (tissues and primary cells only)
+        color 213,166,189
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/eyeDNase.bw
+        priority 9
+
+        track encode4RegDnaseHeart
+        type bigWig
+        shortLabel Heart
+        longLabel Avg. DNase level of 17 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartDNase.bw
+        priority 10
+
+        track encode4RegDnaseIntestine
+        type bigWig
+        shortLabel Intestine
+        longLabel DNase level of 1 intestine experiment (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineDNase.bw
+        priority 11
+
+        track encode4RegDnaseKidney
+        type bigWig
+        shortLabel Kidney
+        longLabel Avg. DNase level of 17 kidney experiments (tissues and primary cells only)
+        color 133,232,221
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/kidneyDNase.bw
+        priority 12
+
+        track encode4RegDnaseLargeIntestine
+        type bigWig
+        shortLabel Large intestine
+        longLabel DNase level of 1 large intestine experiment (tissues and primary cells only)
+        color 86,86,36
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/largeIntestineDNase.bw
+        priority 13
+
+        track encode4RegDnaseLimb
+        type bigWig
+        shortLabel Limb
+        longLabel Avg. DNase level of 3 limb experiments (tissues and primary cells only)
+        color 95,88,237
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/limbDNase.bw
+        priority 14
+
+        track encode4RegDnaseLiver
+        type bigWig
+        shortLabel Liver
+        longLabel Avg. DNase level of 13 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverDNase.bw
+        priority 15
+
+        track encode4RegDnaseLung
+        type bigWig
+        shortLabel Lung
+        longLabel Avg. DNase level of 16 lung experiments (tissues and primary cells only)
+        color 188,235,65
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/lungDNase.bw
+        priority 16
+
+        track encode4RegDnaseMuscle
+        type bigWig
+        shortLabel Muscle
+        longLabel Avg. DNase level of 16 muscle experiments (tissues and primary cells only)
+        color 196,193,243
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleDNase.bw
+        priority 17
+
+        track encode4RegDnaseOvary
+        type bigWig
+        shortLabel Ovary
+        longLabel Avg. DNase level of 4 ovary experiments (tissues and primary cells only)
+        color 255,200,239
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/ovaryDNase.bw
+        priority 18
+
+        track encode4RegDnaseSpleen
+        type bigWig
+        shortLabel Spleen
+        longLabel Avg. DNase level of 12 spleen experiments (tissues and primary cells only)
+        color 136,157,97
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenDNase.bw
+        priority 19
+
+        track encode4RegDnaseStomach
+        type bigWig
+        shortLabel Stomach
+        longLabel DNase level of 1 stomach experiment (tissues and primary cells only)
+        color 255,254,175
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/stomachDNase.bw
+        priority 20
+
+        track encode4RegDnaseTestis
+        type bigWig
+        shortLabel Testis
+        longLabel Avg. DNase level of 2 testis experiments (tissues and primary cells only)
+        color 195,196,196
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/testisDNase.bw
+        priority 21
+
+        track encode4RegDnaseThymus
+        type bigWig
+        shortLabel Thymus
+        longLabel Avg. DNase level of 15 thymus experiments (tissues and primary cells only)
+        color 142,124,195
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/thymusDNase.bw
+        priority 22
+
+        track encode4RegDnaseUrinaryBladder
+        type bigWig
+        shortLabel Urinary bladder
+        longLabel Avg. DNase level of 10 urinary bladder experiments (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/urinaryBladderDNase.bw
+        priority 23
+
+        track encode4RegDnaseAllBlood
+        type bigWig
+        shortLabel Blood (all biosamples)
+        longLabel Avg. DNase level of 8 blood experiments (all biosamples)
+        color 254,75,173
+        parent encode4RegDnase
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodDNaseAll.bw
+        priority 23
+
+        track encode4RegDnaseAllBoneMarrow
+        type bigWig
+        shortLabel Bone marrow (all biosamples)
+        longLabel Avg. DNase level of 3 bone marrow experiments (all biosamples)
+        color 234,153,153
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowDNaseAll.bw
+        priority 24
+
+        track encode4RegDnaseAllBreast
+        type bigWig
+        shortLabel Breast (all biosamples)
+        longLabel DNase level of 1 breast experiment (all biosamples)
+        color 85,223,226
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/breastDNaseAll.bw
+        priority 25
+
+        track encode4RegDnaseAllEmbryo
+        type bigWig
+        shortLabel Embryo (all biosamples)
+        longLabel Avg. DNase level of 22 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoDNaseAll.bw
+        priority 26
+
+        track encode4RegDnaseAllSpinalCord
+        type bigWig
+        shortLabel Spinal cord (all biosamples)
+        longLabel Avg. DNase level of 2 spinal cord experiments (all biosamples)
+        color 184,199,224
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spinalCordDNaseAll.bw
+        priority 27
+
+        track encode4RegDnaseAllSpleen
+        type bigWig
+        shortLabel Spleen (all biosamples)
+        longLabel Avg. DNase level of 15 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegDnase off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenDNaseAll.bw
+        priority 28
+
+    track encode4RegAtac
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg hide
+    shortLabel ATAC (Layered)
+    longLabel Chromatin accessibility from ATAC-seq signal, averaged by organ/tissue
+    visibility hide
+    viewLimits 0:50
+    autoScale on
+    maxHeightPixels 100:50:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.2
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegAtac.html
+
+        track encode4RegAtacBlood
+        type bigWig
+        shortLabel Blood
+        longLabel Avg. ATAC level of 4 blood experiments (tissues and primary cells only)
+        color 254,75,173
+        parent encode4RegAtac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodATAC.bw
+        priority 1
+
+        track encode4RegAtacBoneMarrow
+        type bigWig
+        shortLabel Bone marrow
+        longLabel Avg. ATAC level of 7 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowATAC.bw
+        priority 2
+
+        track encode4RegAtacBrain
+        type bigWig
+        shortLabel Brain
+        longLabel Avg. ATAC level of 23 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegAtac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainATAC.bw
+        priority 3
+
+        track encode4RegAtacEmbryo
+        type bigWig
+        shortLabel Embryo
+        longLabel Avg. ATAC level of 5 embryo experiments (tissues and primary cells only)
+        color 147,196,125
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoATAC.bw
+        priority 4
+
+        track encode4RegAtacEpithelium
+        type bigWig
+        shortLabel Epithelium
+        longLabel Avg. ATAC level of 5 epithelium experiments (tissues and primary cells only)
+        color 221,126,107
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/epitheliumATAC.bw
+        priority 5
+
+        track encode4RegAtacHeart
+        type bigWig
+        shortLabel Heart
+        longLabel Avg. ATAC level of 7 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartATAC.bw
+        priority 6
+
+        track encode4RegAtacIntestine
+        type bigWig
+        shortLabel Intestine
+        longLabel Avg. ATAC level of 4 intestine experiments (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineATAC.bw
+        priority 7
+
+        track encode4RegAtacKidney
+        type bigWig
+        shortLabel Kidney
+        longLabel Avg. ATAC level of 4 kidney experiments (tissues and primary cells only)
+        color 133,232,221
+        parent encode4RegAtac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/kidneyATAC.bw
+        priority 8
+
+        track encode4RegAtacLimb
+        type bigWig
+        shortLabel Limb
+        longLabel Avg. ATAC level of 5 limb experiments (tissues and primary cells only)
+        color 95,88,237
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/limbATAC.bw
+        priority 9
+
+        track encode4RegAtacLiver
+        type bigWig
+        shortLabel Liver
+        longLabel Avg. ATAC level of 7 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegAtac
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverATAC.bw
+        priority 10
+
+        track encode4RegAtacLung
+        type bigWig
+        shortLabel Lung
+        longLabel Avg. ATAC level of 4 lung experiments (tissues and primary cells only)
+        color 188,235,65
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/lungATAC.bw
+        priority 11
+
+        track encode4RegAtacStomach
+        type bigWig
+        shortLabel Stomach
+        longLabel Avg. ATAC level of 4 stomach experiments (tissues and primary cells only)
+        color 255,254,175
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/stomachATAC.bw
+        priority 12
+
+        track encode4RegAtacAllEmbryo
+        type bigWig
+        shortLabel Embryo (all biosamples)
+        longLabel Avg. ATAC level of 7 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegAtac off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoATACAll.bw
+        priority 12
+
+    track encode4RegMarkH3k4me3
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg hide
+    shortLabel H3K4me3 (Layered)
+    longLabel H3K4me3 signal marking active and poised promoters, averaged by organ/tissue
+    visibility hide
+    viewLimits 0:100
+    autoScale on
+    maxHeightPixels 100:50:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.3
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegMarkH3k4me3.html
+
+        track encode4RegMarkH3k4me3Adipose
+        type bigWig
+        shortLabel Adipose
+        longLabel H3K4me3 level of 1 adipose experiment (tissues and primary cells only)
+        color 255,119,39
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adiposeH3K4me3.bw
+        priority 1
+
+        track encode4RegMarkH3k4me3BoneMarrow
+        type bigWig
+        shortLabel Bone marrow
+        longLabel Avg. H3K4me3 level of 4 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowH3K4me3.bw
+        priority 2
+
+        track encode4RegMarkH3k4me3Brain
+        type bigWig
+        shortLabel Brain
+        longLabel Avg. H3K4me3 level of 27 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegMarkH3k4me3
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainH3K4me3.bw
+        priority 3
+
+        track encode4RegMarkH3k4me3ConnectiveTissue
+        type bigWig
+        shortLabel Connective tissue
+        longLabel H3K4me3 level of 1 connective tissue experiment (tissues and primary cells only)
+        color 172,168,211
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/connectiveTissueH3K4me3.bw
+        priority 4
+
+        track encode4RegMarkH3k4me3Embryo
+        type bigWig
+        shortLabel Embryo
+        longLabel Avg. H3K4me3 level of 6 embryo experiments (tissues and primary cells only)
+        color 147,196,125
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K4me3.bw
+        priority 5
+
+        track encode4RegMarkH3k4me3Epithelium
+        type bigWig
+        shortLabel Epithelium
+        longLabel Avg. H3K4me3 level of 5 epithelium experiments (tissues and primary cells only)
+        color 221,126,107
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/epitheliumH3K4me3.bw
+        priority 6
+
+        track encode4RegMarkH3k4me3Heart
+        type bigWig
+        shortLabel Heart
+        longLabel Avg. H3K4me3 level of 10 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartH3K4me3.bw
+        priority 7
+
+        track encode4RegMarkH3k4me3Intestine
+        type bigWig
+        shortLabel Intestine
+        longLabel Avg. H3K4me3 level of 4 intestine experiments (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineH3K4me3.bw
+        priority 8
+
+        track encode4RegMarkH3k4me3Kidney
+        type bigWig
+        shortLabel Kidney
+        longLabel Avg. H3K4me3 level of 5 kidney experiments (tissues and primary cells only)
+        color 133,232,221
+        parent encode4RegMarkH3k4me3
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/kidneyH3K4me3.bw
+        priority 9
+
+        track encode4RegMarkH3k4me3Limb
+        type bigWig
+        shortLabel Limb
+        longLabel Avg. H3K4me3 level of 6 limb experiments (tissues and primary cells only)
+        color 95,88,237
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/limbH3K4me3.bw
+        priority 10
+
+        track encode4RegMarkH3k4me3Liver
+        type bigWig
+        shortLabel Liver
+        longLabel Avg. H3K4me3 level of 9 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegMarkH3k4me3
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverH3K4me3.bw
+        priority 11
+
+        track encode4RegMarkH3k4me3Lung
+        type bigWig
+        shortLabel Lung
+        longLabel Avg. H3K4me3 level of 5 lung experiments (tissues and primary cells only)
+        color 188,235,65
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/lungH3K4me3.bw
+        priority 12
+
+        track encode4RegMarkH3k4me3Placenta
+        type bigWig
+        shortLabel Placenta
+        longLabel H3K4me3 level of 1 placenta experiment (tissues and primary cells only)
+        color 123,203,84
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/placentaH3K4me3.bw
+        priority 13
+
+        track encode4RegMarkH3k4me3SmallIntestine
+        type bigWig
+        shortLabel Small intestine
+        longLabel H3K4me3 level of 1 small intestine experiment (tissues and primary cells only)
+        color 98,98,41
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/smallIntestineH3K4me3.bw
+        priority 14
+
+        track encode4RegMarkH3k4me3Spleen
+        type bigWig
+        shortLabel Spleen
+        longLabel H3K4me3 level of 1 spleen experiment (tissues and primary cells only)
+        color 136,157,97
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K4me3.bw
+        priority 15
+
+        track encode4RegMarkH3k4me3Stomach
+        type bigWig
+        shortLabel Stomach
+        longLabel Avg. H3K4me3 level of 4 stomach experiments (tissues and primary cells only)
+        color 255,254,175
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/stomachH3K4me3.bw
+        priority 16
+
+        track encode4RegMarkH3k4me3Testis
+        type bigWig
+        shortLabel Testis
+        longLabel H3K4me3 level of 1 testis experiment (tissues and primary cells only)
+        color 195,196,196
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/testisH3K4me3.bw
+        priority 17
+
+        track encode4RegMarkH3k4me3Thymus
+        type bigWig
+        shortLabel Thymus
+        longLabel H3K4me3 level of 1 thymus experiment (tissues and primary cells only)
+        color 142,124,195
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/thymusH3K4me3.bw
+        priority 18
+
+        track encode4RegMarkH3k4me3AllBlood
+        type bigWig
+        shortLabel Blood (all biosamples)
+        longLabel H3K4me3 level of 1 blood experiment (all biosamples)
+        color 254,75,173
+        parent encode4RegMarkH3k4me3
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodH3K4me3All.bw
+        priority 18
+
+        track encode4RegMarkH3k4me3AllEmbryo
+        type bigWig
+        shortLabel Embryo (all biosamples)
+        longLabel Avg. H3K4me3 level of 11 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoH3K4me3All.bw
+        priority 19
+
+        track encode4RegMarkH3k4me3AllMuscle
+        type bigWig
+        shortLabel Muscle (all biosamples)
+        longLabel Avg. H3K4me3 level of 2 muscle experiments (all biosamples)
+        color 196,193,243
+        parent encode4RegMarkH3k4me3
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleH3K4me3All.bw
+        priority 20
+
+        track encode4RegMarkH3k4me3AllSpleen
+        type bigWig
+        shortLabel Spleen (all biosamples)
+        longLabel Avg. H3K4me3 level of 3 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegMarkH3k4me3 off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenH3K4me3All.bw
+        priority 21
+
+    track encode4RegMarkCtcf
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg hide
+    shortLabel CTCF (Layered)
+    longLabel CTCF binding signal from ChIP-seq, averaged by organ/tissue
+    visibility hide
+    viewLimits 0:100
+    autoScale on
+    maxHeightPixels 100:50:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.5
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegMarkCtcf.html
+
+        track encode4RegMarkCtcfBoneMarrow
+        type bigWig
+        shortLabel Bone marrow
+        longLabel Avg. CTCF level of 2 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowCTCF.bw
+        priority 1
+
+        track encode4RegMarkCtcfBrain
+        type bigWig
+        shortLabel Brain
+        longLabel Avg. CTCF level of 7 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegMarkCtcf
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainCTCF.bw
+        priority 2
+
+        track encode4RegMarkCtcfConnectiveTissue
+        type bigWig
+        shortLabel Connective tissue
+        longLabel CTCF level of 1 connective tissue experiment (tissues and primary cells only)
+        color 172,168,211
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/connectiveTissueCTCF.bw
+        priority 3
+
+        track encode4RegMarkCtcfHeart
+        type bigWig
+        shortLabel Heart
+        longLabel Avg. CTCF level of 2 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartCTCF.bw
+        priority 4
+
+        track encode4RegMarkCtcfIntestine
+        type bigWig
+        shortLabel Intestine
+        longLabel CTCF level of 1 intestine experiment (tissues and primary cells only)
+        color 184,199,224
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineCTCF.bw
+        priority 5
+
+        track encode4RegMarkCtcfKidney
+        type bigWig
+        shortLabel Kidney
+        longLabel Avg. CTCF level of 2 kidney experiments (tissues and primary cells only)
+        color 133,232,221
+        parent encode4RegMarkCtcf
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/kidneyCTCF.bw
+        priority 6
+
+        track encode4RegMarkCtcfLiver
+        type bigWig
+        shortLabel Liver
+        longLabel Avg. CTCF level of 3 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegMarkCtcf
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverCTCF.bw
+        priority 7
+
+        track encode4RegMarkCtcfLung
+        type bigWig
+        shortLabel Lung
+        longLabel Avg. CTCF level of 3 lung experiments (tissues and primary cells only)
+        color 188,235,65
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/lungCTCF.bw
+        priority 8
+
+        track encode4RegMarkCtcfSmallIntestine
+        type bigWig
+        shortLabel Small intestine
+        longLabel CTCF level of 1 small intestine experiment (tissues and primary cells only)
+        color 98,98,41
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/smallIntestineCTCF.bw
+        priority 9
+
+        track encode4RegMarkCtcfSpleen
+        type bigWig
+        shortLabel Spleen
+        longLabel CTCF level of 1 spleen experiment (tissues and primary cells only)
+        color 136,157,97
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenCTCF.bw
+        priority 10
+
+        track encode4RegMarkCtcfStomach
+        type bigWig
+        shortLabel Stomach
+        longLabel CTCF level of 1 stomach experiment (tissues and primary cells only)
+        color 255,254,175
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/stomachCTCF.bw
+        priority 11
+
+        track encode4RegMarkCtcfTestis
+        type bigWig
+        shortLabel Testis
+        longLabel CTCF level of 1 testis experiment (tissues and primary cells only)
+        color 195,196,196
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/testisCTCF.bw
+        priority 12
+
+        track encode4RegMarkCtcfThymus
+        type bigWig
+        shortLabel Thymus
+        longLabel CTCF level of 1 thymus experiment (tissues and primary cells only)
+        color 142,124,195
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/thymusCTCF.bw
+        priority 13
+
+        track encode4RegMarkCtcfAllBlood
+        type bigWig
+        shortLabel Blood (all biosamples)
+        longLabel CTCF level of 1 blood experiment (all biosamples)
+        color 254,75,173
+        parent encode4RegMarkCtcf
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodCTCFAll.bw
+        priority 13
+
+        track encode4RegMarkCtcfAllEmbryo
+        type bigWig
+        shortLabel Embryo (all biosamples)
+        longLabel Avg. CTCF level of 4 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoCTCFAll.bw
+        priority 14
+
+        track encode4RegMarkCtcfAllMuscle
+        type bigWig
+        shortLabel Muscle (all biosamples)
+        longLabel CTCF level of 1 muscle experiment (all biosamples)
+        color 196,193,243
+        parent encode4RegMarkCtcf
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleCTCFAll.bw
+        priority 15
+
+        track encode4RegMarkCtcfAllSpleen
+        type bigWig
+        shortLabel Spleen (all biosamples)
+        longLabel Avg. CTCF level of 3 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegMarkCtcf off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenCTCFAll.bw
+        priority 16
+
+    track encode4RegTxn
+    container multiWig
+    noInherit on
+    type bigWig
+    superTrack encode4Reg hide
+    shortLabel Transcription (Layered)
+    longLabel Strand-specific transcription signal measured by total RNA-seq, averaged by organ/tissue
+    visibility hide
+    autoScale on
+    maxHeightPixels 100:32:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.6
+    dragAndDrop subtracks
+    allButtonPair on
+    html encode4RegTxn.html
+
+        track encode4RegTxnAdrenalGlandPlus
+        type bigWig
+        shortLabel adrenal gland +
+        longLabel Avg. + strand total RNA-seq level of 35 adrenal gland experiments (tissues and primary cells only)
+        color 108,213,81
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adrenalGlandPlus.bw
+        priority 1
+
+        track encode4RegTxnAdrenalGlandMinus
+        type bigWig
+        shortLabel adrenal gland -
+        longLabel Avg. - strand total RNA-seq level of 35 adrenal gland experiments (tissues and primary cells only)
+        color 108,213,81
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/adrenalGlandMinus.bw
+        priority 2
+        negateValues on
+
+        track encode4RegTxnBloodPlus
+        type bigWig
+        shortLabel blood +
+        longLabel Avg. + strand total RNA-seq level of 53 blood experiments (tissues and primary cells only)
+        color 254,75,173
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodPlus.bw
+        priority 3
+
+        track encode4RegTxnBloodMinus
+        type bigWig
+        shortLabel blood -
+        longLabel Avg. - strand total RNA-seq level of 53 blood experiments (tissues and primary cells only)
+        color 254,75,173
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodMinus.bw
+        priority 4
+        negateValues on
+
+        track encode4RegTxnBoneMarrowPlus
+        type bigWig
+        shortLabel bone marrow +
+        longLabel Avg. + strand total RNA-seq level of 242 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowPlus.bw
+        priority 5
+
+        track encode4RegTxnBoneMarrowMinus
+        type bigWig
+        shortLabel bone marrow -
+        longLabel Avg. - strand total RNA-seq level of 242 bone marrow experiments (tissues and primary cells only)
+        color 234,153,153
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/boneMarrowMinus.bw
+        priority 6
+        negateValues on
+
+        track encode4RegTxnBrainPlus
+        type bigWig
+        shortLabel brain +
+        longLabel Avg. + strand total RNA-seq level of 80 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainPlus.bw
+        priority 7
+
+        track encode4RegTxnBrainMinus
+        type bigWig
+        shortLabel brain -
+        longLabel Avg. - strand total RNA-seq level of 80 brain experiments (tissues and primary cells only)
+        color 255,255,31
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/brainMinus.bw
+        priority 8
+        negateValues on
+
+        track encode4RegTxnHeartPlus
+        type bigWig
+        shortLabel heart +
+        longLabel Avg. + strand total RNA-seq level of 40 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartPlus.bw
+        priority 9
+
+        track encode4RegTxnHeartMinus
+        type bigWig
+        shortLabel heart -
+        longLabel Avg. - strand total RNA-seq level of 40 heart experiments (tissues and primary cells only)
+        color 116,50,165
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/heartMinus.bw
+        priority 10
+        negateValues on
+
+        track encode4RegTxnLiverPlus
+        type bigWig
+        shortLabel liver +
+        longLabel Avg. + strand total RNA-seq level of 4 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverPlus.bw
+        priority 11
+
+        track encode4RegTxnLiverMinus
+        type bigWig
+        shortLabel liver -
+        longLabel Avg. - strand total RNA-seq level of 4 liver experiments (tissues and primary cells only)
+        color 195,215,117
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/liverMinus.bw
+        priority 12
+        negateValues on
+
+        track encode4RegTxnMusclePlus
+        type bigWig
+        shortLabel muscle +
+        longLabel Avg. + strand total RNA-seq level of 35 muscle experiments (tissues and primary cells only)
+        color 196,193,243
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/musclePlus.bw
+        priority 13
+
+        track encode4RegTxnMuscleMinus
+        type bigWig
+        shortLabel muscle -
+        longLabel Avg. - strand total RNA-seq level of 35 muscle experiments (tissues and primary cells only)
+        color 196,193,243
+        parent encode4RegTxn
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/muscleMinus.bw
+        priority 14
+        negateValues on
+
+        track encode4RegTxnAllBloodPlus
+        type bigWig
+        shortLabel blood + (all biosamples)
+        longLabel Avg. + strand total RNA-seq level of 71 blood experiments (all biosamples)
+        color 254,75,173
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodPlusAll.bw
+        priority 15
+
+        track encode4RegTxnAllBloodMinus
+        type bigWig
+        shortLabel blood - (all biosamples)
+        longLabel Avg. - strand total RNA-seq level of 71 blood experiments (all biosamples)
+        color 254,75,173
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodMinusAll.bw
+        priority 16
+        negateValues on
+
+        track encode4RegTxnAllEmbryoPlus
+        type bigWig
+        shortLabel embryo + (all biosamples)
+        longLabel Avg. + strand total RNA-seq level of 12 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoPlusAll.bw
+        priority 17
+
+        track encode4RegTxnAllEmbryoMinus
+        type bigWig
+        shortLabel embryo - (all biosamples)
+        longLabel Avg. - strand total RNA-seq level of 12 embryo experiments (all biosamples)
+        color 147,196,125
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/embryoMinusAll.bw
+        priority 18
+        negateValues on
+
+        track encode4RegTxnAllSpleenPlus
+        type bigWig
+        shortLabel spleen + (all biosamples)
+        longLabel Avg. + strand total RNA-seq level of 4 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenPlusAll.bw
+        priority 19
+
+        track encode4RegTxnAllSpleenMinus
+        type bigWig
+        shortLabel spleen - (all biosamples)
+        longLabel Avg. - strand total RNA-seq level of 4 spleen experiments (all biosamples)
+        color 136,157,97
+        parent encode4RegTxn off
+        bigDataUrl /gbdb/mm10/encode4/regulation/organAve/spleenMinusAll.bw
+        priority 20
+        negateValues on
+
+
+include encode4RegEpigenetics.ra
+include encode4RegRnaSeq.ra
+include encode4RegTfChip.ra
