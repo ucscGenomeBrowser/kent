@@ -22,10 +22,29 @@ signal strength.</p>
 
 <h2>Data Access</h2>
 <p>
-The data for this track can be accessed from the
-<a href="hgTables?db=mm10">Table Browser</a> or combined with other datasets through the
-<a href="hgIntegrator">Data Integrator</a>. The original data files are also available from the
+The ENCODE 4 Regulation data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored in bigWig (signal)
+and bigBed (peak) files that can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/mm10/encode4/regulation/"
+target="_blank">our download server</a>.
+The data may also be explored interactively using our
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.
+The original data files are also available from the
 <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>.</p>
+
+<p>
+Signal files may be locally explored using <tt>bigWigToWig</tt>, e.g.,
+<br><br>
+<tt>bigWigToWig -chrom=chr1 -start=100000 -end=100500 https://encode-public.s3.amazonaws.com/2020/11/24/559f88bd-29ea-4694-9cdf-3eddf3d87e0e/ENCFF265VZJ.bigBed stdout</tt>
+<br><br>
+Peak files may be explored using <tt>bigBedToBed</tt>, e.g.,
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://encode-public.s3.amazonaws.com/2020/11/24/559f88bd-29ea-4694-9cdf-3eddf3d87e0e/ENCFF265VZJ.bigBed stdout</tt>
+<br><br>
+Instructions for downloading these tools can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.</p>
 
 <h2>Credits</h2>
 
