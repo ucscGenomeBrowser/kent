@@ -4139,14 +4139,6 @@ void handleFileFetch(struct cart *cart)
 char *genome = NULL;
 getDbAndGenome(cart, &database, &genome, NULL);
 initGenbankTableNames(database);
-//knetUdcInstall();
-
-char *fileUrl = cartOptionalString(cart, "fileUrl");
-if (fileUrl == NULL)
-    {
-    puts("Status: 400 Bad Request");
-    errAbort("Missing required parameter: fileUrl");
-    }
 
 char *urlClone = cloneString(fileUrl);
 cgiDecode(urlClone, urlClone, strlen(urlClone));
