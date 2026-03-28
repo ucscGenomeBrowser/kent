@@ -706,7 +706,7 @@ else
     }
 if (badList)
     {
-    printf("<BR>Some of your tracks failed to lift because the type is not supported by quickLift.<BR><BR>");
+    printf("<BR>Some of your tracks failed to lift because the type is not supported by QuickLift.<BR><BR>");
     printf("<TABLE><TR><TD><B>Short label<TD><B>Type</TD></TR>");
     for(; badList; badList = badList->next)
         {
