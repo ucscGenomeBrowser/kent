@@ -4719,7 +4719,7 @@ char suffix[512];
 safef(suffix, sizeof(suffix), "label.%s", sym);
 boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, suffix, defaultOn);
 char cartVar[1024];
-safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, suffix);
+safef(cartVar, sizeof cartVar, "%s.%s", trackHubSkipHubName(tdb->track), suffix);
 cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
@@ -10098,6 +10098,9 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 /* display table update time */
 {
 if (trackHubDatabase(database))
+    return;
+/* synthetic tracks have no data file or table to check */
+if (trackDbSetting(tdb, "syntheticTrack") != NULL)
     return;
 /* have not decided what to do for a composite container */
 if (tdbIsComposite(tdb) || tdbIsSuper(tdb))

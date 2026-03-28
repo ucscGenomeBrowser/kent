@@ -7445,20 +7445,6 @@ if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
 if (userSeqString != NULL)
     slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
-if (cfgOptionBooleanDefault("gcOnTheFly", FALSE))
-    {
-    char *vis = cartUsualString(cart, GC_ON_FLY_TRACK_NAME, "hide");
-    if (cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE))
-	{
-	slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, vis));
-	}
-    else
-	{
-	if (rFindTrackWithTable("gc5Base", trackList) == NULL &&
-	    rFindTrackWithTable("gc5BaseBw", trackList) == NULL)
-	    slSafeAddHead(&trackList, gc5BaseOnTheFlyTg(cart, vis));
-	}
-    }
 
 if (restrictionEnzymesOk())
     {
@@ -7478,6 +7464,18 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
     { // If a single track was asked for and it is from a hub, then it is already in trackList
     loadTrackHubs(&trackList, &grpList);
     }
+/* gcOnFly track: if a trackDb entry exists (native or hub, possibly
+ * with a hub_#_ prefix on the table name), patch in on-the-fly
+ * computation methods so data comes from genome sequence, not a file.
+ * This must run after loadTrackHubs so assembly hub tracks are present. */
+{
+struct track *t;
+for (t = trackList; t != NULL; t = t->next)
+    {
+    if (sameString(GC_ON_FLY_TRACK_NAME, trackHubSkipHubName(t->table)))
+	gc5BaseOnTheFlyMethods(t, cart);
+    }
+}
 loadCustomTracks(&trackList);
 makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);

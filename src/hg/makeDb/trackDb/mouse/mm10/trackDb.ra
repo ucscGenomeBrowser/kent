@@ -352,9 +352,11 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 #######################3
 # regulation tracks
 
-include trackDb.encode3.ra
+include trackDb.encode3.ra beta,public
+include trackDb.encode3.alpha.ra alpha
 include encode3RenEnhancerGene.ra
 include encode.cCREs.override.ra alpha
+include encode4Reg.ra alpha
 include fantom5.ra
 
 track epdNew

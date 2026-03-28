@@ -372,42 +372,27 @@ struct preDrawElement *preDraw = pre->preDraw;
 int preDrawZero = pre->preDrawZero;
 int preDrawSize = pre->preDrawSize;
 
-struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
-if (seq == NULL)
+struct gcOnTheFlyWindow *windows = NULL;
+int windowCount = gcOnTheFlyCompute(database, chromName, seqStart, seqEnd,
+    winSize, &windows);
+if (windowCount == 0)
     return pre;
 
-int seqLen = seqEnd - seqStart;
 /* pixelsPerBase is based on the visible window, not the extended fetch range,
  * so that pixel coordinates are correct relative to the display. */
 double pixelsPerBase = (double)width / (winEnd - winStart);
 int span = winSize;
-int pos;
+int wi;
 
-/* Align to the winSize-base chromosome boundary, not the window boundary.
- * startOffset is the number of bases into the fetched sequence where
- * the first chromosome-aligned winSize-base window begins. */
-int startOffset = (span - (seqStart % span)) % span;
-
-for (pos = startOffset; pos + span <= seqLen; pos += span)
+for (wi = 0; wi < windowCount; wi++)
     {
-    int gcCount = 0, validBases = 0;
-    int i;
-    for (i = pos; i < pos + span; i++)
-        {
-        char b = seq->dna[i];
-        if (b == 'g' || b == 'c')  { gcCount++;  validBases++; }
-        else if (b != 'n')           validBases++;
-        }
-    if (validBases == 0)
-        continue;
-
-    double gcPct = 100.0 * gcCount / validBases;   /* 0 - 100 */
+    double gcPct = windows[wi].gcPct;
+    int chromPos = windows[wi].chromStart;
 
     /* Map this span to pixel coordinates relative to winStart.
      * Data outside the visible window lands in the preDraw margin slots
      * (negative or >= width), which is correct for smoothing at edges.
-     * Fill every pixel covered by this 5-base span. */
-    int chromPos = seqStart + pos;
+     * Fill every pixel covered by this span. */
     int x1 = (int)((chromPos - winStart) * pixelsPerBase);
     int x2 = (int)((chromPos + span - winStart) * pixelsPerBase);
     int xi;
@@ -425,9 +410,7 @@ for (pos = startOffset; pos + span <= seqLen; pos += span)
         }
     }
 
-dnaSeqFree(&seq);
-// if (measureTiming)
-//     measureTime("GC5 on the fly calculation");
+freeMem(windows);
 return pre;
 }
 
@@ -440,11 +423,15 @@ static void gc5BaseOnTheFlyLoadItems(struct track *tg)
 tg->items = NULL;
 tg->mapsSelf = TRUE;
 /* Extend the fetch range by wiggleSmoothingMax pixels worth of bases on
- * each side, rounded up to the nearest 5-base span. */
+ * each side, rounded up to the nearest 5-base span.  Use long long for
+ * the arithmetic to avoid 32-bit overflow near the ends of large chroms. */
 double basesPerPixel = (double)(winEnd - winStart) / insideWidth;
 int marginBases = ((int)(wiggleSmoothingMax * basesPerPixel) / 5 + 1) * 5;
-int fetchStart = max(0, winStart - marginBases);
-int fetchEnd   = min(hChromSize(database, chromName), winEnd + marginBases);
+int chromSize = hChromSize(database, chromName);
+long long fetchStartLong = (long long)winStart - marginBases;
+int fetchStart = (fetchStartLong < 0) ? 0 : (int)fetchStartLong;
+long long fetchEndLong = (long long)winEnd + marginBases;
+int fetchEnd = (fetchEndLong > chromSize) ? chromSize : (int)fetchEndLong;
 gc5BaseOnTheFlyLoadPreDraw(tg, fetchStart, fetchEnd, insideWidth);
 }
 
@@ -460,61 +447,13 @@ track->drawItems = bigWigDrawItems;
 track->loadPreDraw = bigWigLoadPreDraw;
 }
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart, char *vis)
-/* Create an on-the-fly GC percent track computed directly from
- *     from genome sequence.  vis is the visibility string from the
- *     cart (e.g. "hide", "dense", "full").
+void gc5BaseOnTheFlyMethods(struct track *tg, struct cart *cart)
+/* Install on-the-fly GC computation methods on a track that was
+ *     loaded from trackDb.  Overrides the bigWig loadItems/loadPreDraw
+ *     so data is computed from genome sequence instead of read from a file.
  */
 {
-struct track *tg = trackNew();
-struct trackDb *tdb = trackDbNew();
-char longLabel[1024];
-safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
-
-/* Fill in trackDb fields needed by wigCartOptionsNew and bigWigMethods. */
-tdb->track      = cloneString(GC_ON_FLY_TRACK_NAME);
-tdb->table      = cloneString(GC_ON_FLY_TRACK_NAME);
-tdb->type       = cloneString("bigWig 0 100");
-tdb->shortLabel = cloneString(GC_ON_FLY_TRACK_LABEL);
-tdb->longLabel  = cloneString(longLabel);
-tdb->grp        = cloneString("map");
-tdb->canPack    = 0;
-tdb->visibility = hTvFromString(vis);
-
-/* Add wig display settings to match what gc5BaseBw trackDb would have. */
-trackDbAddSetting(tdb, "autoScale",         "Off");
-trackDbAddSetting(tdb, "viewLimits",        "30:70");
-trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
-trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
-trackDbAddSetting(tdb, "gridDefault",       "OFF");
-trackDbAddSetting(tdb, "windowingFunction", "Mean");
-trackDbAddSetting(tdb, "color",             "0,0,0");
-trackDbAddSetting(tdb, "altColor",          "128,128,128");
-// trackDbAddSetting(tdb, "gcComputeOnTheFly", "on");
-// trackDbAddSetting(tdb, "gcOnTheFlyMaxBases", "500000");
-// trackDbAddSetting(tdb, "gcFallbackBigWig", "/gbdb/ce1x/bbi/gc5BaseBw/gc5Base.bw");
-trackDbAddSetting(tdb, "calcWinSize", gcOnFlyWinSize(cart));
-trackDbPolish(tdb);
-
-/* Set up bigWig display methods (drawItems, preDrawItems, etc.) */
-char *words[] = {"bigWig", "0", "100"};
-bigWigMethods(tg, tdb, 3, words);
-
-/* Override data loading with on-the-fly sequence computation. */
 tg->loadItems   = gc5BaseOnTheFlyLoadItems;
 tg->loadPreDraw = gc5BaseOnTheFlyLoadPreDraw;
-
-/* Fill in track struct fields. */
-tg->tdb              = tdb;
-tg->track            = tdb->track;
-tg->table            = tdb->table;
-tg->visibility       = tdb->visibility;
-tg->shortLabel       = tdb->shortLabel;
-tg->longLabel        = tdb->longLabel;
-tg->priority         = tdb->priority;
-tg->defaultPriority  = tg->priority;
-tg->groupName        = tdb->grp;
-tg->defaultGroupName = cloneString(tg->groupName);
-tg->hasUi            = TRUE;
-return tg;
 }
+

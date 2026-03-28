@@ -53,6 +53,10 @@
 #include "customComposite.h"
 #include "hicUi.h"
 #include "decoratorUi.h"
+#include "genark.h"
+#include "cart.h"
+#include "filePath.h"
+#include "md5.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -2301,6 +2305,26 @@ jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
 wigCfgUi(cart, tdb, tdb->track, "Graph configuration:", FALSE);
+printf("<hr><h4>Data Access</h4>\n");
+printf("<p>This track is generated <em>on-the-fly</em> by the browser as needed.\n"
+ "There is no existing data file for this track.  To obtain the data for this track\n"
+ "use the following <a href='https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads'\n"
+ " target=_blank>kent command line</a> program <b>hgGcPercent</b>:</p>\n");
+
+/* Don't free asmName, it is not allocated */
+char *asmName = hubConnectSkipHubPrefix(database);
+boolean genArk = isGenArk(asmName);
+char twoBitUrl[PATH_LEN];
+if (genArk)
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%shubs/%s/%s.2bit", hDownloadsServer(), genArkPath(asmName), asmName);
+    }
+else
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%s/goldenPath/%s/bigZips/%s.2bit", hDownloadsServer(), asmName, asmName);
+    }
+
+printf("<code>hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\<br>&nbsp;&nbsp;&nbsp;%s | gzip -c > %s.varStep.gz</code>\n", twoBitUrl, asmName);
 }
 
 void cutterUi(struct trackDb *tdb)
@@ -2875,24 +2899,32 @@ printf("</TABLE>");
 
 // Now configure the elements above with Javascript:
 
-// * Clicking a button sets the dropdown to the button's text
-jsOnEventBySelector("click", ".seg-btn-group > button", 
+// * Clicking a button sets the dropdown to the button's text and triggers change
+// so superT.selChanged() runs (handles checkbox sync, hiddenText class, auto-show/hide superTrack)
+jsOnEventBySelector("click", ".seg-btn-group > button",
         "let dropdown = $('[name=\"' + $(this).parent().data('trackname')+'\"]'); " // cannot use #id, . has special meaning
         "let buttonText=$(this).text().toLowerCase(); "
-        "dropdown.val(buttonText).removeClass('hiddenText').addClass('normalText');"
+        "dropdown.val(buttonText).trigger('change');"
     );
 // * Clicking buttons does not submit the form (default action of <button> is to submit, unless type=button)
 jsInline("$('.seg-btn-group button').attr('type', 'button');");
-// * Clicking buttons makes them pressed. Also, clicking any button shows the superTrack
+// * Clicking buttons makes them pressed
 jsInline("$('.seg-btn-group').on('click', 'button', function() {"
   "$(this).addClass('seg-active').siblings().removeClass('seg-active');"
-  "$('.superDropdown').val('show');"
   "});");
 // * Changing the dropdown updates the buttons
 jsInline("$('#superTrackTable .vizSelect').on('change', function() {"
   "$(this).next().children().removeClass('seg-active');"
   "let labelToFind = capitalizeFirstLetter($(this).val());"
   "$(this).next().find('button').filter(function() { return $(this).text().trim() === labelToFind; }).addClass('seg-active');"
+  "});");
+// * Grey out the superTrack dropdown when manually set to hide
+jsInline("$('.superDropdown').on('change', function() {"
+  "if ($(this).val() === 'hide') {"
+    "$(this).removeClass('normalText').addClass('hiddenText');"
+  "} else {"
+    "$(this).removeClass('hiddenText').addClass('normalText');"
+  "}"
   "});");
 // * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
 // are sent to hgTracks, but are not necessary as UI elements anymore
@@ -3201,6 +3233,8 @@ if (colorSettingsUrl) // only if present in trackDb.settings entry
     printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
 printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
 printf(",\"track\": \"%s\"", tdb->track);
+if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
+    printf(",\"udcTimeout\": true");
 printf(closeJSON);
 /* --- END embedded JSON data --- */
 
@@ -3487,6 +3521,9 @@ printf("<b>Track collection: "
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
 
+if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+    return;
+
 if (tdbParent->html)
     {
     // collapsed panel for Description
@@ -3734,8 +3771,7 @@ if (!ajax)
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
-    if (! (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) )
-        showSupertrackInfo(tdb);
+    showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -3886,6 +3922,17 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             }
         printf("&nbsp;</span>");
         }
+    else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+        {
+        char *downArrow = "&dArr;";
+        enum browserType browser = cgiBrowser();
+        if (browser == btIE || browser == btFF)
+            downArrow = "&darr;";
+        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+               "Description%s</A>", downArrow);
+        printf("&nbsp;</span>");
+        }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
     puts("<BR>");
@@ -4017,17 +4064,6 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
-static struct trackDb *trackDbForGcOnFly(struct cart *cart)
-/* Create a trackDb entry for the GC on the fly pseudo-track. */
-{
-char longLabel[1024];
-safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
-struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
-        GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
-tdb->canPack = 0;
-return tdb;
-}
-
 struct trackDb *trackDbForOligoMatch()
 /* Create a trackDb entry for the oligo matcher pseudo-track. */
 {
@@ -4066,9 +4102,140 @@ if (operation != NULL)
 return newTrack;
 }
 
+/* Setting names whose file contents are safe to serve via hgFetch.
+ * Only admin-configured (native track) values are checked -- never hub or custom tracks.
+ * Do NOT add bigDataUrl or bigDataIndex here -- those may be restricted (we
+ * might change this later to instead respect the tableBrowser setting in trackDb). */
+static char *fetchableSettings[] = {"metaDataUrl", "colorSettingsUrl", NULL};
+
+boolean fileUrlMatchesHub(char *fileUrl, struct hubConnectStatus *hubStatus)
+/* Ignores fetchableSettings for now, whitelisting anything that sits inside
+ * the hub.txt directory structure.  Assumes fileUrl has been canonicalized. */
+{
+char baseDir[2048];
+splitPath(hubStatus->hubUrl, baseDir, NULL, NULL);
+return startsWith(baseDir, fileUrl);
+}
+
+static boolean fileUrlMatchesTrackSetting(char *fileUrl, struct trackDb *tdb)
+/* Check if fileUrl matches any whitelisted setting in this trackDb.
+ * Assumes fileUrl has been canonicalized. */
+{
+char **p;
+for (p = fetchableSettings; *p != NULL; p++)
+    {
+    char *val = trackDbSetting(tdb, *p);
+    if (val != NULL && sameString(val, fileUrl))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void handleFileFetch(struct cart *cart)
+/* Checks if a requested file is a legal request based on an attached cart or
+ * native track.  If so, retrieves the file content via UDC and retransmits
+ * it as the page content. */
+{
+char *genome = NULL;
+getDbAndGenome(cart, &database, &genome, NULL);
+initGenbankTableNames(database);
+
+char *urlClone = cloneString(fileUrl);
+cgiDecode(urlClone, urlClone, strlen(urlClone));
+fileUrl = resolveDotDots(urlClone);
+freeMem(urlClone);
+
+boolean matchFound = FALSE;
+
+// Check if fileUrl falls under a connected hub's base directory
+struct slName *hubIds = hubConnectHubsInCart(cart);
+struct slName *thisHubId = hubIds;
+while (thisHubId != NULL)
+    {
+    struct hubConnectStatus *hubStatus = hubFromId(sqlUnsigned(thisHubId->name));
+    if (fileUrlMatchesHub(fileUrl, hubStatus))
+        {
+        matchFound = TRUE;
+        break;
+        }
+    thisHubId = thisHubId->next;
+    }
+
+// For native database tracks (not hub or custom tracks), check if fileUrl matches
+// a whitelisted trackDb setting.  Only native tracks are checked here because their
+// settings are admin-configured and trusted.  Hub and custom track settings are
+// user-controlled and could be used for SSRF attacks.
+if (!matchFound)
+    {
+    char *track = cartOptionalString(cart, "track");
+    char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
+    if (sourceDb == NULL)
+        sourceDb = database;
+    if (track != NULL && !isHubTrack(track) && !isCustomTrack(track))
+        {
+        struct trackDb *tdb = tdbForTrack(sourceDb, track, NULL);
+        if (tdb != NULL)
+            matchFound = fileUrlMatchesTrackSetting(fileUrl, tdb);
+        }
+    }
+
+if (!matchFound)
+    {
+    puts("Status: 400 Bad Request");
+    errAbort("Supplied fileUrl does not match any connected hubs or track settings.");
+    }
+
+// By now we know that fileUrl points to something valid to fetch and return to the user.
+// Now we just have to fetch the file contents and retransmit it.
+
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+
+char maxAge[1024];
+safef(maxAge, sizeof(maxAge), "max-age=%d", timeout);
+printf("Cache-Control: %s\n", maxAge);
+
+// See if we're getting a "has it changed" request.
+// If so, return a 304 if nothing changed.
+char etag[1024];
+struct udcFile *udc = udcFileOpen(fileUrl, NULL);
+time_t mtime = udcUpdateTime(udc);
+safef(etag, sizeof(etag), "\"%ld\"", mtime);
+printf("ETag: %s\n", etag);
+udcFileClose(&udc);
+
+char *ifNone = getenv("HTTP_IF_NONE_MATCH");
+if (isNotEmpty(ifNone))
+    {
+    if (sameStringN(etag, ifNone, strlen(etag)-1)) // Apache can add -gzip to etags during transmission
+        {
+        puts("Status: 304 Not Modified\n");
+        freeMem(fileUrl);
+        return;
+        }
+    }
+
+puts("Content-Type: text/plain\n");
+char *content = udcFileReadAll(fileUrl, NULL, 0, NULL);
+puts(content);
+freeMem(content);
+freeMem(fileUrl);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
+boolean isFileFetch = isNotEmpty(cartOptionalString(theCart, "fileUrl"));
+
+if (isFileFetch)
+    {
+    handleFileFetch(theCart);  // file fetch workaround for CORS issues
+    return;
+    }
+else
+    cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
+
 struct trackDb *tdbList = NULL;
 struct trackDb *tdb = NULL;
 char *track;
@@ -4141,8 +4308,6 @@ else if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
-else if (sameWord(track, GC_ON_FLY_TRACK_NAME))
-    tdb = trackDbForGcOnFly(cart);
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))
@@ -4217,7 +4382,7 @@ else
     }
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};
+char *excludeVars[] = { "submit", "Submit", "g", "fileUrl", "track", "sourceDb", NULL, "ajax", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -4226,7 +4391,7 @@ long enteredMainTime = clock1000();
 /* 0, 0, == use default 10 second for warning, 20 second for immediate exit */
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgTrackUi", delayFraction, 0, 0, "html");
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
+cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);
 return 0;
 }

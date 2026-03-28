@@ -1,0 +1,72 @@
+<h2>Description</h2>
+<p>
+<a href="https://github.com/Illumina/PromoterAI"
+target="_blank">PromoterAI</a> is a deep learning model from Illumina that predicts the
+impact of single nucleotide variants in gene promoter regions. It scores all possible
+substitutions within 500 bp of annotated transcription start sites (TSS), covering
+approximately 39.5 million genomic positions across all protein-coding genes.
+</p>
+
+<p>
+Scores range from -1 to 1. Positive scores indicate predicted disruption of promoter
+function, negative scores indicate the variant is predicted to be tolerated. The model
+was trained using primate conservation and promoter sequence features, similar in approach
+to the related PrimateAI-3D model for coding variants.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+This track is a composite with four bigWig subtracks, one for each possible alternate
+allele (A, C, G, T). When zoomed in, the exact score for each possible mutation is shown
+on mouseover. When zoomed out, the display shows an average across the visible window;
+this average is indicated by a &quot;~&quot; prefix in the mouseover.
+</p>
+
+<p>
+A fifth subtrack (&quot;PromoterAI overlaps&quot;) shows positions where overlapping
+transcripts produce different scores for the same variant. At these positions, the bigWig
+shows the score with the largest absolute value, while the overlap track shows all
+per-transcript scores. About 3.8% of positions have overlapping transcripts with
+differing scores. The track shows the list of transcripts and scores for these positions.
+Of these, for more than 60% of these positions, the difference is smaller than 0.01, 
+which is why we added a filter, active per default, that hides all annotations in this
+track where the difference is smaller than this cutoff. The filter can be switched off
+on the track configuration page.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to the data license, this track is not available for bulk download from UCSC.
+The source data can be downloaded from the
+<a href="https://github.com/Illumina/PromoterAI" target="_blank">PromoterAI
+GitHub page</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+The PromoterAI hg38 TSS-500 file was downloaded. The file
+contains pre-computed scores for all possible single nucleotide substitutions within
+500 bp of annotated TSS positions. For positions covered by multiple transcripts,
+the score with the largest absolute value was used for the bigWig tracks. Positions
+where transcripts produced different scores (4.45M of 118.6M unique variants, 3.8%)
+were additionally written to a bigBed overlap track with per-transcript detail.
+A conversion script is available from
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/promoterAiToBigWig.py"
+target="_blank">our Github</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Illumina for making PromoterAI predictions publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD,
+Fiziev PP, Kuderna LFK <em>et al</em>.
+<a href="https://doi.org/10.1126/science.abn8197" target="_blank">
+The landscape of tolerated genetic variation in humans and primates</a>.
+<em>Science</em>. 2023 Jun 2;380(6648):eabn8197.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">37262156</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10187174/" target="_blank">PMC10187174</a>
+</p>

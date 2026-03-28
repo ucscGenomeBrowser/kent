@@ -1,0 +1,77 @@
+track promoterAi
+shortLabel PromoterAI
+longLabel PromoterAI Promoter Variant Impact Scores (zoom for exact score)
+type bigWig
+parent predictionScoresSuper
+compositeTrack on
+tableBrowser off
+visibility hide
+color 80,150,50
+
+        track promoterAiA
+        shortLabel Mutation: A
+        longLabel PromoterAI: Mutation is A
+        type bigWig
+        parent promoterAi on
+        visibility dense
+        bigDataUrl /gbdb/$D/promoterAi/a.bw
+        maxHeightPixels 128:20:8
+        viewLimits -1:1
+        viewLimitsMax -1:1
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track promoterAiC
+        shortLabel Mutation: C
+        longLabel PromoterAI: Mutation is C
+        type bigWig
+        parent promoterAi on
+        visibility dense
+        bigDataUrl /gbdb/$D/promoterAi/c.bw
+        maxHeightPixels 128:20:8
+        viewLimits -1:1
+        viewLimitsMax -1:1
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track promoterAiG
+        shortLabel Mutation: G
+        longLabel PromoterAI: Mutation is G
+        type bigWig
+        parent promoterAi on
+        visibility dense
+        bigDataUrl /gbdb/$D/promoterAi/g.bw
+        maxHeightPixels 128:20:8
+        viewLimits -1:1
+        viewLimitsMax -1:1
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track promoterAiT
+        shortLabel Mutation: T
+        longLabel PromoterAI: Mutation is T
+        type bigWig
+        parent promoterAi on
+        visibility dense
+        bigDataUrl /gbdb/$D/promoterAi/t.bw
+        maxHeightPixels 128:20:8
+        viewLimits -1:1
+        viewLimitsMax -1:1
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+
+        track promoterAiOverlaps
+        shortLabel PromoterAI overlaps
+        longLabel PromoterAI: Positions with >1 score due to overlapping transcripts
+        type bigBed 9 +
+        parent promoterAi on
+        visibility dense
+        bigDataUrl /gbdb/$D/promoterAi/overlaps.bb
+        mouseOverField _mouseOver
+        itemRgb on
+        filterByRange.scoreDiff on
+        filter.scoreDiff 0.01

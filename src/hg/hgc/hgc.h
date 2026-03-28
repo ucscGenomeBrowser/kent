@@ -543,6 +543,11 @@ char *getIdInUrl(struct trackDb *tdb, char *itemName);
 /* If we have an idInUrlSql tag, look up itemName in that, else just
  * return itemName. */
 
+// trackDb setting prefix for JS visualization scripts on details pages.
+// Format: detailsScript.<plotType>.<fieldName> <jsonConfig>
+// Parsed in both bigBedClick.c (to build JSON + load JS) and hgc.c (to skip fields from table).
+#define DETAILS_SCRIPT_PREFIX "detailsScript.*"
+
 void printFieldLabel(char *entry);
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to

@@ -1214,10 +1214,10 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart, char *vis);
-/* Create an on-the-fly GC percent track computed directly from
- *     from genome sequence.  vis is the visibility string from the
- *     cart (e.g. "hide", "dense", "full").
+void gc5BaseOnTheFlyMethods(struct track *tg, struct cart *cart);
+/* Install on-the-fly GC computation methods on a track that was
+ *     loaded from trackDb.  Overrides the bigWig loadItems/loadPreDraw
+ *     so data is computed from genome sequence instead of read from a file.
  */
 
 void mathWigMethods(struct track *track, struct trackDb *tdb, 

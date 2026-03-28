@@ -1,0 +1,146 @@
+<h2>Description</h2>
+<p>
+This collection of tracks offers an integrated view of genomic annotations and experimental
+data from all phases of the
+<a href="https://www.encodeproject.org/" target="_blank">ENCODE Project</a>,
+with a focus on transcriptional regulation. It includes averaged and representative signals
+from assays that measure chromatin accessibility (DNase-seq and ATAC-seq), transcription
+factor (TF) binding (ChIP-seq for individual TFs), histone modifications (ChIP-seq for
+H3K4me3 and H3K27ac), CTCF binding, and transcription (RNA-seq).</p>
+
+<ul>
+<li>The <em>H3K27ac (Layered)</em> track highlights a histone modification associated with
+active enhancers and promoters, displayed as organ-averaged signal across 34 organs.</li>
+
+<li>The <em>DNase (Layered)</em> track highlights regions of chromatin that are hypersensitive
+to DNase I digestion, indicating open and potentially regulatory chromatin. Signal is averaged
+across biosamples from the same organ for 40 organs.</li>
+
+<li>The <em>ATAC (Layered)</em> track highlights regions of open chromatin identified by
+ATAC-seq, which uses Tn5 transposase insertion to assay accessibility. Signal is averaged
+across 24 organs.</li>
+
+<li>The <em>H3K4me3 (Layered)</em> track highlights a histone modification associated with
+active and poised promoters, displayed as organ-averaged signal across 35 organs.</li>
+
+<li>The <em>CTCF (Layered)</em> track highlights genomic regions bound by CTCF, a transcription
+factor and architectural protein involved in chromatin organization and gene regulation. Signal
+is averaged across 30 organs.</li>
+
+<li>The <em>Transcription (Layered)</em> track displays transcription levels measured by
+strand-specific total RNA-seq across a large number of biosamples, shown separately for
+the two genomic strands.</li>
+
+<li>The <em>TF rPeaks</em> track shows genomic regions bound by TFs and other DNA-associated
+factors involved in transcriptional regulation, derived from ChIP-seq experiments profiling
+911 factors across 1,152 biosamples.</li>
+
+<li>The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
+<em>RNA-seq (indiv.)</em> tracks display signals from individual experiments in specific
+biosamples.</li>
+</ul>
+
+<p>
+These tracks complement one another and collectively provide a powerful resource for
+interpreting regulatory DNA. Histone marks are broadly informative but have limited resolution
+(~200 bp) and relatively low functional specificity. DNase-seq assays offer higher resolution
+and scalability across many cell types, and they reliably indicate regulatory potential, though
+they lack detailed functional context. ATAC-seq serves a similar role to DNase-seq, with
+comparable resolution and limitations. Transcription factor ChIP-seq has high positional
+resolution and, due to the specificity of TFs, often provides more direct functional insight.
+However, because each TF must be assayed individually, the data are limited in biosample
+coverage. Despite the individual strengths and limitations of these assays, their independence
+from one another increases confidence when multiple assays suggest a regulatory function for
+the same genomic region.</p>
+
+<p>
+For additional information, click on the hyperlinks for the individual tracks above.
+Additional histone marks and transcription data are available in other ENCODE tracks. This
+integrative supertrack presents a curated selection of the most informative and broadly
+relevant datasets. Further functional annotations of individual regulatory elements are
+available at <a href="https://screen.wenglab.org/" target="_blank">SCREEN</a>.</p>
+
+<h2>Display Conventions</h2>
+<p>
+By default, the <em>DNase (Layered)</em>, <em>ATAC (Layered)</em>,
+<em>H3K4me3 (Layered)</em>, <em>H3K27ac (Layered)</em>, <em>CTCF (Layered)</em>, and
+<em>Transcription (Layered)</em> tracks use a transparent overlay to visualize signals from
+multiple organs or tissues within a single track. For each organ or tissue, signal values from
+all associated experiments are averaged. Each organ or tissue is assigned a distinct color,
+selected to be light and saturated to maintain clarity when overlaid. Initially, each layered
+track displays an overlay of five representative organs: blood, brain, kidney, liver, and
+muscle. Clicking on the track opens a details page where you can view and select organs or
+tissues.</p>
+
+<p>
+For the <em>TF rPeaks</em> track, each rPeak (representative peak) is shown as a gray box,
+with the shade of gray indicating the maximum ChIP-seq signal for the corresponding TF across
+all contributing biosamples. The HGNC gene symbol of the TF is displayed to the left of the
+box when viewed in <em>pack</em> display mode. If the rPeak overlaps a cognate TF motif from a
+previously curated collection (PMID:
+<a href="https://pubmed.ncbi.nlm.nih.gov/37104580/" target="_blank">37104580</a>), the motif
+site is highlighted in green.</p>
+
+<p>
+The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
+<em>RNA-seq (indiv.)</em> tracks are hidden by default. Clicking on any of these tracks opens
+a details page where you can select specific biosample-level experiments to display.</p>
+
+<h2>Data Access</h2>
+<p>
+The ENCODE 4 Regulation data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the track data files can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/regulation/"
+target="_blank">our download server</a> or queried using the
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.
+Individual regions or the whole genome annotation can be accessed as text using
+our utilities <tt>bigWigToWig</tt> and <tt>bigBedToBed</tt>. Instructions for
+downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The original data files are also available from the
+<a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Data were generated by the ENCODE Consortium. The data were further processed for visualization
+through a collaborative effort between the
+<a href="https://www.umassmed.edu/zlab" target="_blank">Weng lab</a> and the
+<a href="https://sites.google.com/view/moore-lab/" target="_blank">Moore lab</a>
+at UMass Chan Medical School (funded by NIH grant HG012343). Integration and visualization
+were developed by Drs. Mingshi Gao, Greg Andrews, Jill Moore, and Zhiping Weng at UMass Chan
+Medical School, who were part of the ENCODE Data Analysis Center.</p>
+
+<h2>Data Use Policy</h2>
+<p>
+<b>Users may freely download, analyze, and publish results based on any ENCODE data without
+restrictions.</b>
+Researchers using unpublished ENCODE data are encouraged to contact the data producers to
+discuss possible coordinated publications; however, this is optional.</p>
+<p>
+<b><em>Users of ENCODE datasets are requested to cite the ENCODE Consortium and ENCODE
+production laboratory(s) that generated the datasets used, as described in
+<a href="https://www.encodeproject.org/help/citing-encode/" target="_blank">Citing
+ENCODE</a>.</em></b></p>
+
+<h2>References</h2>
+<p>
+ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J,
+Kawli T, Davis CA, Dobin A <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
+Expanded encyclopaedias of DNA elements in the human and mouse genomes</a>.
+<em>Nature</em>. 2020 Jul;583(7818):699-710.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32728249" target="_blank">32728249</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7410828/" target="_blank">PMC7410828</a>
+</p>
+<p>
+Moore JE, Pratt HE, Fan K, Phalke N, Fisher J, Elhajjajy SI, Andrews G, Gao M, Shedd N,
+Fu Y <em>et al</em>.
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying Transcriptional
+Regulation</a>.
+<em>Nature</em>. 2026 January 7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
+</p>

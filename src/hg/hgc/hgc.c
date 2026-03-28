@@ -1796,6 +1796,28 @@ void printFieldLabelWithId(char *entry, char *fieldName)
 printFieldLabelInner(entry, fieldName);
 }
 
+static struct slName *detailsScriptFieldNames(struct trackDb *tdb)
+/* Return list of bigBed field names used by detailsScript.* trackDb settings.
+ * These fields are rendered by JavaScript, so their values should not be printed in the HTML table.
+ * See also bigBedClick.c which parses the same settings to build JSON and load JS modules. */
+{
+struct slName *dsSettings = trackDbLocalSettingsWildMatch(tdb, DETAILS_SCRIPT_PREFIX);
+struct slName *fieldNames = NULL;
+struct slName *setting;
+for (setting = dsSettings; setting != NULL; setting = setting->next)
+    {
+    char *dot1 = strchr(setting->name, '.');
+    if (dot1)
+        {
+        char *dot2 = strchr(dot1 + 1, '.');
+        if (dot2)
+            slNameAddHead(&fieldNames, dot2 + 1);
+        }
+    }
+slFreeList(&dsSettings);
+return fieldNames;
+}
+
 #define TDB_STATICTABLE_SETTING "extraDetailsTable"
 #define TDB_STATICTABLE_SETTING_2 "detailsStaticTable"
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
@@ -1816,6 +1838,8 @@ char *skipFieldsStr = trackDbSetting(tdb, "skipFields");
 struct slName *skipIds = NULL;
 if (skipFieldsStr)
     skipIds = slNameListFromComma(skipFieldsStr);
+
+struct slName *dsScriptFields = detailsScriptFieldNames(tdb);
 
 // make list of fields that are separated from other fields
 char *sepFieldsStr = trackDbSetting(tdb, "sepFields");
@@ -1946,7 +1970,10 @@ for (;col != NULL && count < fieldCount;col=col->next)
 
     printFieldLabelWithId(entry, fieldName);
 
-    if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
+    // detailsScript fields: print empty cell, JavaScript will fill it
+    if (dsScriptFields && slNameInList(dsScriptFields, fieldName))
+        printf("<td></td></tr>\n");
+    else if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
     else if (asTypesIsFloating(col->lowType->type))
         {
@@ -11445,6 +11472,26 @@ char *strand={"+"};
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
+
+if (liftDb) // we need to get the chr start stop in liftDb coordinates
+    {
+    char *sqlTable = tdb->table;
+    struct hash *chainHash = newHash(10);
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    
+    struct bed *bed = (struct bed *)quickLiftSql(conn, quickLiftFile, sqlTable, chrom, start, end,  NULL, NULL, (ItemLoader2)bedLoadN, 4, chainHash);
+
+    for(; bed; bed = bed->next)
+        if (sameString(bed->name, itemName))
+            break;
+    if (bed == NULL)
+        errAbort("cannot find %s", itemName);
+
+    // use the source assembly's reference coordinates below
+    chrom = bed->chrom;
+    start = bed->chromStart;
+    end = bed->chromEnd;
+    }
 
 /* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
 char *decipherChrom = chrom;
@@ -24209,22 +24256,35 @@ sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf("<B>Total bases in view:</B> %s<BR>\n", num1Buf);
 printf("<B>Window size for GC calculation:</B> %d bases<BR>\n", span);
 
-struct dnaSeq *seq = hChromSeq(database, seqName, winStart, winEnd);
-if (seq != NULL)
+/* Use whole view as one window to get overall GC percent */
+struct gcOnTheFlyWindow *windows = NULL;
+int regionSize = winEnd - winStart;
+int windowCount = gcOnTheFlyCompute(database, seqName, winStart, winEnd,
+    regionSize, &windows);
+if (windowCount > 0)
+    printf("<B>GC percent in view:</B> %.3f%%<BR>\n", windows[0].gcPct);
+freeMem(windows);
+
+printf("<hr><h4>Data Access</h4>\n");
+printf("<p>This track is generated <em>on-the-fly</em> by the browser as needed.\n"
+ "There is no existing data file for this track.  To obtain the data for this track\n"
+ "use the following <a href='https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads'\n"
+ " target=_blank>kent command line</a> program <b>hgGcPercent</b>:</p>\n");
+
+/* Don't free asmName, it is not allocated */
+char *asmName = hubConnectSkipHubPrefix(database);
+boolean genArk = isGenArk(asmName);
+char twoBitUrl[PATH_LEN];
+if (genArk)
     {
-    int gcCount = 0, validBases = 0;
-    int i;
-    for (i = 0; i < seq->size; i++)
-        {
-        char b = seq->dna[i];
-        if (b == 'g' || b == 'c') { gcCount++;  validBases++; }
-        else if (b != 'n')          validBases++;
-        }
-    if (validBases > 0)
-        printf("<B>GC percent in view:</B> %.3f%%<BR>\n",
-               100.0 * gcCount / validBases);
-    dnaSeqFree(&seq);
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%shubs/%s/%s.2bit", hDownloadsServer(), genArkPath(asmName), asmName);
     }
+else
+    {
+    safef(twoBitUrl, sizeof(twoBitUrl), "https://%s/goldenPath/%s/bigZips/%s.2bit", hDownloadsServer(), asmName, asmName);
+    }
+
+printf("<code>hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\<br>&nbsp;&nbsp;&nbsp;%s | gzip -c > %s.varStep.gz</code>\n", twoBitUrl, asmName);
 webIncludeHelpFile(GC_ON_FLY_TRACK_NAME, TRUE);
 }
 
@@ -27214,7 +27274,7 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     doWikiTrack(item, seqName, winStart, winEnd);
 else if (sameWord(table, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
-else if (sameWord(table, GC_ON_FLY_TRACK_NAME))
+else if (sameWord(trackHubSkipHubName(table), GC_ON_FLY_TRACK_NAME))
     doGcOnFly();
 else if (sameWord(table, "refFullAli"))
     {

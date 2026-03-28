@@ -35,6 +35,8 @@ def queryHgPublicSessAndAssignOutputFileAndDir(saveDir):
 def parseHgPublicSessPageAndWriteOut(hgPublicSessionOutPut, saveDir, outputFile):
     """Parse hgPublicSession curled page, extract thumbnail/url/description and write out to file"""
     sessionThumbNailsWritten = 1
+    sessionUrl = None
+    currentImageFileName = None
     for line in hgPublicSessionOutPut.text.split('\n'):
         if "trash" in line and sessionThumbNailsWritten < 4:
             sessionUrl = "https://genome.ucsc.edu/cgi-bin/"+line.split('"')[1].split("/")[2]
@@ -46,11 +48,17 @@ def parseHgPublicSessPageAndWriteOut(hgPublicSessionOutPut, saveDir, outputFile)
                 handler.write(img_data)
             os.chmod(saveDir+currentImageFileName, 0o664)
         if "Description:" in line and sessionThumbNailsWritten < 4:
+            if sessionUrl is None or currentImageFileName is None:
+                sessionUrl = None
+                currentImageFileName = None
+                continue
             sessionThumbNailsWritten+=1
             sessionDescription = line.split('</b> ')[1].split('<br>')[0]
             outputFile.write('''<a href="'''+sessionUrl+'''">\n<img src="'''+currentImageFileName+'''" title="'''
                          +sessionDescription+'''" class="sessionThumbnail" style="vertical-align: top;" width="30%"
                          height=40%"></img></a>\n''')
+            sessionUrl = None
+            currentImageFileName = None
     outputFile.close()
     os.chmod(saveDir+'thumbNailLinks.html', 0o775)
 

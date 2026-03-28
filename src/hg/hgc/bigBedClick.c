@@ -18,6 +18,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "jsonParse.h"
+#include "jsonWrite.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -366,6 +367,49 @@ slPairFreeValsAndList(&detailsUrls);
 return printCount;
 }
 
+static struct hash *detailsScriptGroupByPlotType(struct trackDb *tdb)
+/* Parse detailsScript.<plotType>.<fieldName> trackDb settings and return a hash
+ * of plotType -> slPair list (fieldName -> jsonConfig).  Returns NULL if no settings found.
+ * See also hgc.c detailsScriptFieldNames() which parses the same settings for field skipping. */
+{
+struct slName *settings = trackDbLocalSettingsWildMatch(tdb, DETAILS_SCRIPT_PREFIX);
+if (settings == NULL)
+    return NULL;
+struct hash *plotTypeHash = hashNew(0);
+struct slName *setting;
+for (setting = settings; setting != NULL; setting = setting->next)
+    {
+    // Parse "detailsScript.<plotType>.<fieldName>"
+    char *key = cloneString(setting->name);
+    char *dot1 = strchr(key, '.');
+    if (dot1 == NULL)
+        continue;
+    dot1++;
+    char *dot2 = strchr(dot1, '.');
+    if (dot2 == NULL)
+        continue;
+    *dot2 = '\0';
+    char *plotType = dot1;
+    if (!isSymbolString(plotType)) // plotTypes must be simple strings - no XSS injection from hub
+        continue;
+    char *fieldName = dot2 + 1;
+    char *jsonConfig = trackDbSetting(tdb, setting->name);
+
+    struct slPair *entry;
+    AllocVar(entry);
+    entry->name = cloneString(fieldName);
+    entry->val = cloneString(jsonConfig);
+    struct slPair *existing = hashFindVal(plotTypeHash, plotType);
+    slAddTail(&existing, entry);
+    if (hashLookup(plotTypeHash, plotType) == NULL)
+        hashAdd(plotTypeHash, plotType, entry);
+    else
+        hashReplace(plotTypeHash, plotType, existing);
+    }
+slFreeList(&settings);
+return plotTypeHash;
+}
+
 static void bigBedClick(char *fileName, struct trackDb *tdb,
                      char *item, int start, int end, int bedSize)
 /* Handle click in generic bigBed track. */
@@ -542,78 +586,72 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         motifHitSection(seq, motif);
         }
 
-    // detailsJs: load JavaScript files and export selected field data as JSON
-    char *detailsJs = trackDbSetting(tdb, "detailsJs");
-    if (detailsJs)
+    // detailsScript.*: load JS visualization scripts and export field data as JSON
+    // see also hgc.c detailsScriptFieldNames() which parses the same settings to skip fields
+    struct hash *plotTypeHash = detailsScriptGroupByPlotType(tdb);
+    if (plotTypeHash)
         {
-        // Include each comma-separated JS file
-        char *jsFiles = cloneString(detailsJs);
-        char *words[64];
-        int jsFileCount = chopCommas(jsFiles, words);
-        int ji;
-        for (ji = 0; ji < jsFileCount; ji++)
-            {
-            char *jsFile = trimSpaces(words[ji]);
-            if (isNotEmpty(jsFile))
-                jsIncludeFile(jsFile, NULL);
-            }
+        // Build the bedDetails JSON object using jsonWrite
+        struct jsonWrite *jw = jsonWriteNew();
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "track", tdb->track);
+        jsonWriteString(jw, "chrom", chrom);
+        jsonWriteNumber(jw, "start", bed->chromStart);
+        jsonWriteNumber(jw, "end", bed->chromEnd);
+        jsonWriteObjectStart(jw, "scripts");
 
-        // Build the bedDetails JSON object
-        struct dyString *ds = dyStringNew(1024);
-        dyStringPrintf(ds, "var bedDetails = {\"track\":\"%s\",\"chrom\":\"%s\","
-            "\"start\":%d,\"end\":%d",
-            tdb->track, chrom, bed->chromStart, bed->chromEnd);
-
-        // Export requested fields
-        char *detailsJsFieldsStr = trackDbSetting(tdb, "detailsJsFields");
-        if (detailsJsFieldsStr && extraFieldPairs)
+        struct hashEl *hel, *helList = hashElListHash(plotTypeHash);
+        for (hel = helList; hel != NULL; hel = hel->next)
             {
-            dyStringAppend(ds, ",\"fields\":{");
-            char *fieldsCopy = cloneString(detailsJsFieldsStr);
-            char *fieldNames[256];
-            int nFields = chopCommas(fieldsCopy, fieldNames);
-            boolean first = TRUE;
-            int fi;
-            for (fi = 0; fi < nFields; fi++)
+            struct slPair *fieldList = hel->val;
+            jsonWriteListStart(jw, hel->name);
+            struct slPair *fp;
+            for (fp = fieldList; fp != NULL; fp = fp->next)
                 {
-                char *fn = trimSpaces(fieldNames[fi]);
-                char *fv = slPairFindVal(extraFieldPairs, fn);
-                if (fv == NULL)
-                    fv = "";
-                if (!first)
-                    dyStringAppendC(ds, ',');
-                char *escaped = jsonStringEscape(fv);
-                dyStringPrintf(ds, "\"%s\":\"%s\"", fn, escaped);
-                freeMem(escaped);
-                first = FALSE;
+                jsonWriteObjectStart(jw, NULL);
+                jsonWriteString(jw, "field", fp->name);
+                // Look up field value from bigBed extra fields
+                char *fv = "";
+                if (extraFieldPairs)
+                    {
+                    char *found = slPairFindVal(extraFieldPairs, fp->name);
+                    if (found)
+                        fv = found;
+                    }
+                jsonWriteString(jw, "value", fv);
+                // Parse trackDb JSON config and merge its keys into this object
+                char *jsonConfig = fp->val;
+                if (isNotEmpty(jsonConfig))
+                    {
+                    struct jsonElement *configEl = jsonParse(jsonConfig);
+                    struct hash *configHash = jsonObjectVal(configEl, "detailsScript config");
+                    struct hashEl *cel, *celList = hashElListHash(configHash);
+                    for (cel = celList; cel != NULL; cel = cel->next)
+                        jsonWriteJsonElement(jw, cel->name, cel->val);
+                    hashElFreeList(&celList);
+                    }
+                jsonWriteObjectEnd(jw);
                 }
-            dyStringAppendC(ds, '}');
+            jsonWriteListEnd(jw);
             }
 
-        // Include detailsJsArgs if present
-        char *detailsJsArgs = trackDbSetting(tdb, "detailsJsArgs");
-        if (detailsJsArgs)
-            dyStringPrintf(ds, ",\"args\":%s", detailsJsArgs);
+        jsonWriteObjectEnd(jw);  // scripts
+        jsonWriteObjectEnd(jw);  // root
 
-        dyStringAppend(ds, "};\n");
+        // Emit as inline JavaScript
+        struct dyString *ds = dyStringNew(1024);
+        dyStringPrintf(ds, "var bedDetails = %s;\n", jw->dy->string);
 
-        // Call the default function derived from each JS filename (strip .js)
-        // e.g. barChart.js -> barChart(bedDetails)
-        for (ji = 0; ji < jsFileCount; ji++)
-            {
-            char *jsFile = trimSpaces(words[ji]);
-            if (isEmpty(jsFile))
-                continue;
-            char funcName[256];
-            safecpy(funcName, sizeof(funcName), jsFile);
-            // strip .js extension
-            char *dot = strrchr(funcName, '.');
-            if (dot)
-                *dot = '\0';
-            dyStringPrintf(ds, "$(document).ready(function() { %s(bedDetails); });\n", funcName);
-            }
+        // Dynamically import and call each plot type's module
+        for (hel = helList; hel != NULL; hel = hel->next)
+            dyStringPrintf(ds, "$(document).ready(function() {\n"
+                "  import('../js/hgc.%s.js').then(function(mod) { mod.%s(bedDetails); });\n"
+                "});\n", hel->name, hel->name);
 
         jsInline(dyStringCannibalize(&ds));
+        jsonWriteFree(&jw);
+        hashElFreeList(&helList);
+        hashFree(&plotTypeHash);
         }
     }
 if (!found)

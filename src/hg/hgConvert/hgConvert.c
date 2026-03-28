@@ -47,7 +47,7 @@ static char *database = NULL;
 
 /* Javascript to support New Assembly pulldown when New Genome changes. */
 /* Copies selected values to a hidden form */
-char *onChangeToOrg = "document.mainForm.submit();";
+char *onChangeToOrg = "document.mainForm.hglft_toDb.value = this.value; document.mainForm.submit();";
 
 static struct dbDb *matchingDb(struct dbDb *list, char *name)
 /* Find database of given name in list or die trying. */
@@ -121,6 +121,7 @@ puts("<div class='sectionLabel'>Destination</div>\n");
 
 /* Hidden fields for form submission */
 hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TOORG_VAR, toDb->organism);
+hPrintf("<input name='%s' value='%s' type='hidden'>\n", HGLFT_TODB_VAR, liftOver->toDb);
 
 /* Search bar */
 char *searchBarId = "toGenomeSearch";
@@ -136,7 +137,7 @@ hPrintf("<div class='currentSelection' id='toGenomeLabel'>%s</div>\n", selectedL
 puts("<div class='fieldRow'>\n");
 puts("<span class='fieldLabel'>Assembly:</span>\n");
 dbList = hGetLiftOverToDatabases(liftOver->fromDb);
-printAllAssemblyListHtmlParm(liftOver->toDb, dbList, HGLFT_TODB_VAR, TRUE, "change", onChangeToOrg);
+printAllAssemblyListHtmlParm(liftOver->toDb, dbList, "hglft_toDbSelect", TRUE, "change", onChangeToOrg);
 puts("</div>\n");
 
 /* QuickLift option */
@@ -260,7 +261,8 @@ webNewSection("Notes");
 cgiParagraph(
     "<B>QuickLift tracks:</B> When enabled, QuickLift displays tracks from "
     "the source assembly mapped onto the target assembly, allowing you to view "
-    "your current tracks in the context of the new genome.");
+    "your current tracks in the context of the new genome. For more information, see the "
+    "<A HREF=\"../goldenPath/help/quickLift.html\">QuickLift documentation</A>.");
 cgiParagraph(
     "If your desired target assembly is not available, you can search for it "
     "and request it on our "
@@ -325,8 +327,14 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
-if ((toDb != NULL) && !sameWordOk(toOrg, hOrganism(toDb)))
-    toDb = NULL;
+
+/* If toDb was explicitly set, find exact match in chain list */
+if (toDb != NULL)
+    {
+    for (this = chainList; this != NULL; this = this->next)
+        if (sameString(toDb, this->toDb))
+            return this;
+    }
 
 if (toOrg == NULL)
     toOrg = "Human";

@@ -912,16 +912,16 @@ def strip_quoted_content(body):
         # Outlook single-line forward format
         if re.match(r'^From:.*Sent:.*To:', line_stripped, re.IGNORECASE):
             break
-        # Outlook multi-line forward format:
+        # Outlook/Apple Mail multi-line forward format:
         # From: Name
-        # Sent: Date
+        # Sent:/Date: Date
         # To: Recipients
         if re.match(r'^From:\s*.+', line_stripped, re.IGNORECASE):
-            # Look ahead for Sent: and To: on subsequent lines
+            # Look ahead for Sent:/Date: and To: on subsequent lines
             if i + 2 < len(lines):
                 next1 = unicode_control_pattern.sub('', lines[i + 1])
                 next2 = unicode_control_pattern.sub('', lines[i + 2])
-                if re.match(r'^Sent:\s*.+', next1, re.IGNORECASE) and re.match(r'^To:\s*.+', next2, re.IGNORECASE):
+                if re.match(r'^(Sent|Date):\s*.+', next1, re.IGNORECASE) and re.match(r'^To:\s*.+', next2, re.IGNORECASE):
                     break
         # Stop at Google Groups footer
         if 'You received this message because you are subscribed to the Google Groups' in line:

@@ -243,6 +243,49 @@ else if (var)
     dyStringAppend(jwA->dy, "null");
 }
 
+void jsonWriteJsonElement(struct jsonWrite *jw, char *var, struct jsonElement *el)
+/* Write a jsonElement (parsed JSON) into jw.  Handles all types recursively. */
+{
+switch (el->type)
+    {
+    case jsonString:
+        jsonWriteString(jw, var, el->val.jeString);
+        break;
+    case jsonNumber:
+        jsonWriteNumber(jw, var, el->val.jeNumber);
+        break;
+    case jsonDouble:
+        jsonWriteDouble(jw, var, el->val.jeDouble);
+        break;
+    case jsonBoolean:
+        jsonWriteBoolean(jw, var, el->val.jeBoolean);
+        break;
+    case jsonObject:
+        {
+        jsonWriteObjectStart(jw, var);
+        struct hashEl *hel, *helList = hashElListHash(el->val.jeHash);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            jsonWriteJsonElement(jw, hel->name, hel->val);
+        hashElFreeList(&helList);
+        jsonWriteObjectEnd(jw);
+        break;
+        }
+    case jsonList:
+        {
+        jsonWriteListStart(jw, var);
+        struct slRef *ref;
+        for (ref = el->val.jeList; ref != NULL; ref = ref->next)
+            jsonWriteJsonElement(jw, NULL, ref->val);
+        jsonWriteListEnd(jw);
+        break;
+        }
+    case jsonNull:
+        jsonWriteTag(jw, var);
+        dyStringAppend(jw->dy, "null");
+        break;
+    }
+}
+
 int jsonWritePopToLevel(struct jsonWrite *jw, uint level)
 /* Close out the objects and lists that are deeper than level, so we end up at level ready to
  * add new items.  Return the level that we end up with, which may not be the same as level,

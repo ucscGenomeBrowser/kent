@@ -32,15 +32,14 @@ def truncateMotif(motif, maxLen=25):
 
 
 def parseHistogram(histStr):
-    """Parse histogram like '3x:11,4x:3809' into (sizes, counts) strings.
+    """Parse histogram like '3x:11,4x:3809' into logfmt string.
 
-    Preserves the original order so sizes and counts stay aligned.
-    Returns two comma-separated strings: sizes and counts.
+    Returns space-separated size=count pairs, e.g. '3=11 4=3809'.
+    Preserves the original order.
     """
     if not histStr:
-        return "", ""
-    sizes = []
-    counts = []
+        return ""
+    pairs = []
     for entry in histStr.split(","):
         parts = entry.split(":")
         if len(parts) == 2:
@@ -49,9 +48,8 @@ def parseHistogram(histStr):
             # Remove trailing 'x' from size (e.g. '4x' -> '4')
             if sizeStr.endswith("x"):
                 sizeStr = sizeStr[:-1]
-            sizes.append(sizeStr)
-            counts.append(countStr)
-    return ",".join(sizes), ",".join(counts)
+            pairs.append(sizeStr + "=" + countStr)
+    return " ".join(pairs)
 
 
 def main():
@@ -82,7 +80,6 @@ def main():
             purity = float(fields[col["ReferenceRepeatPurity"]])
             regionSize = int(end) - int(start)
             source = fields[col["Source"]]
-            region = fields[col["ReferenceRegion"]]
             locusId = fields[col["LocusId"]]
 
             diseaseLocus = fields[col["KnownDiseaseAssociatedLocus"]]
@@ -104,11 +101,11 @@ def main():
             # Color by motif size
             color = PERIOD_COLORS.get(motifSize, DEFAULT_COLOR)
 
-            # Allele histograms
-            tenKSizes, tenKCounts = parseHistogram(fields[col["TenK10K_AlleleHistogram"]])
+            # Allele histograms (logfmt: space-separated size=count pairs)
+            tenKHist = parseHistogram(fields[col["TenK10K_AlleleHistogram"]])
             tenKNum = fields[col["TenK10K_NumCalledAlleles"]] or "0"
 
-            hprcSizes, hprcCounts = parseHistogram(fields[col["HPRC256_AlleleHistogram"]])
+            hprcHist = parseHistogram(fields[col["HPRC256_AlleleHistogram"]])
             hprcNum = fields[col["HPRC256_NumCalledAlleles"]] or "0"
 
             aouNum = fields[col["AoU1027_NumCalledAlleles"]] or "0"
@@ -119,12 +116,12 @@ def main():
                 start, end, color,
                 locusId,
                 refMotif, canMotif,
-                str(motifSize), str(numRepeats), f"{purity:.6f}",
-                str(regionSize), source, region,
+                str(motifSize), str(numRepeats), f"{purity:.3f}",
+                str(regionSize), source,
                 diseaseLocus, diseaseMotif,
                 geneRegion, geneName,
-                tenKSizes, tenKCounts, tenKNum,
-                hprcSizes, hprcCounts, hprcNum,
+                tenKHist, tenKNum,
+                hprcHist, hprcNum,
                 aouNum,
             ]
 

@@ -1,0 +1,136 @@
+<h2>Description</h2>
+
+<p>This track displays regulatory regions in the human genome identified using ENCODE
+ChIP-seq data across all phases of the project. It highlights genomic regions bound by
+DNA-associated proteins involved in transcriptional regulation, including RNA polymerase,
+transcription factors (TFs), and chromatin remodeling proteins. Sequence-specific TFs bind
+directly to short DNA motifs via their DNA-binding domains, while other proteins associate
+indirectly through interactions with sequence-specific TFs. Chromatin immunoprecipitation
+followed by sequencing (ChIP-seq) is a high-throughput method used to map genome-wide
+protein&ndash;DNA interactions. Regions with high ChIP-seq signal&mdash;commonly referred
+to as peaks&mdash;frequently contain binding sites for the assayed protein. For each
+DNA-associated protein, ChIP-seq peaks from all ENCODE biosamples were integrated to define
+a set of representative peaks (rPeaks). This track displays these rPeaks along with detected
+DNA motif sites. For detailed information on individual factors and their motifs, please
+visit <a target="_blank" href="https://factorbook.org">Factorbook.org</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>Each rPeak is represented as a gray box, with the shade of gray corresponding to the
+maximum ChIP-seq signal observed across contributing biosamples. The HGNC gene name of the
+associated protein is displayed to the left of the box. If the rPeak overlaps a cognate TF
+motif site in the collection built previously (PMID: 37104580 DOI:
+<a target="_blank" href="https://www.science.org/doi/10.1126/science.abn7930">10.1126/science.abn7930</a>),
+the motif site is highlighted in green.</p>
+
+<p>Clicking on an rPeak provides detailed information about the biosamples where the rPeak
+was detected, including the count of biosamples with contributing ChIP-seq peaks and the
+total number of biosamples assayed for the protein. Links to relevant ENCODE ChIP-seq
+experiments and overlapping ENCODE candidate cis-regulatory elements (cCREs) are also
+provided.</p>
+
+<p>By default, rPeaks for all 911 DNA-associated proteins with ENCODE ChIP-seq data are
+displayed. Users can customize the display by selecting specific DNA-associated proteins
+in the track settings.</p>
+
+<h2>Methods</h2>
+
+<p>2,502 ENCODE ChIP-seq experiments were integrated from 911 DNA-associated proteins across
+1,152 unique biosamples to produce representative peaks (rPeaks) for each protein. The
+processing steps were as follows:</p>
+
+<ol>
+<li>ChIP-seq peaks for each protein were downloaded from the
+<a target="_blank" href="https://www.encodeproject.org">ENCODE Portal</a>, generated using the
+<a target="_blank" href="https://www.encodeproject.org/chip-seq/transcription_factor/">ENCODE
+Transcription Factor ChIP-seq Processing Pipeline</a>.</li>
+<li>Using bedtools merge, ChIP-seq peaks were clustered from the protein&rsquo;s experiments
+across all biosamples.</li>
+<li>In each cluster, the peak with the highest ChIP signal (normalized by sequencing depth)
+was selected as the rPeak.</li>
+<li>All ChIP-seq peaks overlapping this rPeak by at least one nucleotide were marked as
+represented and removed from subsequent clustering rounds.</li>
+<li>Steps 2-4 were repeated until a final list of non-overlapping rPeaks was generated,
+representing all ChIP-seq peaks for the protein.</li>
+</ol>
+
+<h2>Data Access</h2>
+<p>
+The ENCODE 4 Regulation data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored in bigBed
+files that can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/regulation/"
+target="_blank">our download server</a>.
+The data may also be explored interactively using our
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.
+The original data files are also available from the
+<a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>.</p>
+
+<p>
+These files may also be locally explored using our tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/regulation/tfRpeak/TFrPeakClusters.bb stdout</tt></p>
+
+<h2>Credits</h2>
+
+<p>This track was made possible thanks to the efforts of the ENCODE Consortium, ENCODE
+ChIP-seq production laboratories, and the ENCODE Data Coordination Center for generating
+and processing the ChIP-seq datasets. The ENCODE accession numbers for the constituent
+datasets are accessible from the peak details page. We thank the production labs for
+generating the data: Drs. Bradley Bernstein (Broad), John Stamatoyannopoulos (UW), Kevin Struhl (HMS), Kevin White (UChicago), Michael Snyder (Stanford), Peggy Farnham (USC), Richard Myers (HAIB), Sherman Weissman (Yale), Tim Reddy (Duke), Vishwanath Iyer (UTA), and Xiang-Dong Fu (UCSD).</p>
+
+<p>The data were further processed for visualization through a collaborative effort between
+the <a target="_blank" href="https://www.umassmed.edu/zlab">Weng lab</a> and the
+<a target="_blank" href="https://sites.google.com/view/moore-lab/">Moore lab</a> at UMass
+Chan Medical School (funded by NIH grant HG012343). Special thanks to Drs. Mingshi Gao,
+Greg Andrews, Jill Moore, and Zhiping Weng at UMass Chan Medical School, who were members
+of the ENCODE Data Analysis Center, for developing this track, including providing the rPeak
+and motif datasets and associated metadata and building the track.</p>
+
+<h2>References</h2>
+
+<p>
+ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J,
+Kawli T, Davis CA, Dobin A <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
+Expanded encyclopaedias of DNA elements in the human and mouse genomes</a>.
+<em>Nature</em>. 2020 Jul;583(7818):699-710.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32728249" target="_blank">32728249</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7410828/" target="_blank">PMC7410828</a>
+</p>
+
+<p>
+Moore JE, Pratt HE, Fan K, Phalke N, Fisher J, Elhajjajy SI, Andrews G, Gao M, Shedd N,
+Fu Y <em>et al</em>.
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying Transcriptional
+Regulation</a>.
+<em>Nature</em>. 2026 January 7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
+</p>
+
+<p>
+Andrews G, Fan K, Pratt HE, Phalke N, Zoonomia Consortium, Karlsson EK, Lindblad-Toh K,
+Weng Z.
+<a href="https://www.science.org/doi/10.1126/science.abn7930" target="_blank">
+Mammalian evolution of human cis-regulatory elements and transcription factor binding
+sites</a>.
+<em>Science</em>. 2023;380(6643):eabn7930.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104580" target="_blank">37104580</a>
+</p>
+
+<p>
+Pratt HE, Andrews GR, Phalke N, Huey JD, Purcaro MJ, van der Velde A, Moore JE, Weng Z.
+<a href="https://doi.org/10.1093/nar/gkab1039" target="_blank">
+Factorbook: an updated catalog of transcription factor motifs and candidate regulatory
+motif sites</a>.
+<em>Nucleic Acids Research</em>. 2022;50(D1):D141-D149.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34747468" target="_blank">34747468</a>
+</p>

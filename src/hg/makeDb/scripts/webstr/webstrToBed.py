@@ -102,16 +102,15 @@ def main():
                 numcopies,
             ]
 
-            # Allele frequency fields for each cohort
+            # Allele frequency fields for each cohort (logfmt: allele=freq pairs)
             af = afreqs.get(repeatid)
             for cohort in COHORT_ORDER:
                 if af and af[cohort]["alleles"]:
                     entry = af[cohort]
-                    fields.append(",".join(entry["alleles"]))
-                    fields.append(",".join(entry["freqs"]))
+                    pairs = [a + "=" + f for a, f in zip(entry["alleles"], entry["freqs"])]
+                    fields.append(" ".join(pairs))
                     fields.append(str(entry["n"]))
                 else:
-                    fields.append("")
                     fields.append("")
                     fields.append("0")
 

@@ -7,7 +7,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD)
 group varRep
 cartVersion 6
-html gnomadV4.1
+html gnomad
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -20,9 +20,9 @@ html gnomadV4.1
     maxWindowToDraw 200000
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     dataVersion Release 2.1.1 (March 6, 2019)
-    html gnomadV4.1
     priority 4
     visibility hide
+    html gnomadV2.html
 
         track gnomadGenomesVariantsV2
         parent gnomadVariantsV2 on
@@ -47,12 +47,12 @@ html gnomadV4.1
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
-    html gnomad4.1
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
     priority 3.3
     visibility hide
     url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
     urlLabel gnomAD:
+    html gnomadV3.html
 
     track gnomadGenomesVariantsV3_1
     parent gnomadVariants
@@ -62,7 +62,6 @@ html gnomadV4.1
     dataVersion Release 3.1 (October 29, 2020)
     type bigBed 9 +
     itemRgb on
-    html gnomadV4.1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1/variants/genomes.bb
     priority 3.2
     labelFields name,rsId
@@ -82,6 +81,7 @@ html gnomadV4.1
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    html gnomadV3.html
 
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
@@ -92,7 +92,6 @@ html gnomadV4.1
     type bigBed 9 +
     itemRgb on
     searchIndex name,_displayName,rsId
-    html gnomadV4.1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
     priority 3.1
     labelFields rsId,_displayName
@@ -117,6 +116,7 @@ html gnomadV4.1
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
+    html gnomadV3.html
 
     track gnomadVariantsV4.1
     parent gnomadVariants
@@ -209,7 +209,7 @@ viewLimitsMax -3:3
 autoScale on
 priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
-html gnomadV4.1
+html gnomadConstraint
 
 # The missense and pLI contraint tracks
 include gnomad.constraint.public.ra
