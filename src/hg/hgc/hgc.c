@@ -2061,11 +2061,7 @@ char *db = database;
 char *sqlTable = tdb->table;
 if (liftDb != NULL)
     {
-    if (isCustomTrack(trackHubSkipHubName(tdb->track)))
-        {
-        liftDb = CUSTOM_TRASH;
-        sqlTable = trackDbSetting(tdb, "dbTableName");
-        }
+    quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->track), &sqlTable, &liftDb);
     db = liftDb;
     }
 
@@ -2074,10 +2070,8 @@ if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
 
 if (liftDb)
     {
-    struct hash *chainHash = newHash(10);
-    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
-    bed = (struct bed *)quickLiftSql(conn, quickLiftFile, sqlTable, seqName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bedLoadN, bedSize, chainHash);
-    struct bed *liftedBeds = quickLiftBeds(bed, chainHash, FALSE);
+    struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
+        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
     bedPrintPos(liftedBeds, bedSize, tdb);
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
