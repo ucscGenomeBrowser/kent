@@ -106,23 +106,10 @@ if (nameHash == NULL)
 
 if (liftDb != NULL)
     {
-    char *table;
-    if (isCustomTrack(tg->table))
-        {
-        liftDb = CUSTOM_TRASH;
-        table = trackDbSetting(tg->tdb, "dbTableName");
-        }
-    else
-        table = tg->table;
-    struct hash *chainHash = newHash(8);
-    struct sqlConnection *conn = hAllocConn(liftDb);
-    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-    bed= (struct bed8Attrs *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)bed8AttrsLoad, 0, chainHash);
-
-    list = (struct bed8Attrs *)quickLiftBeds((struct bed *)bed, chainHash, FALSE);
+    list = (struct bed8Attrs *)quickLiftSqlLoadBeds(tg->tdb, tg->table, liftDb, chromName,
+        winStart, winEnd, NULL, (ItemLoader2)bed8AttrsLoad, 0, FALSE);
     for(bed=list; bed; bed = bed->next)
         hashAdd(nameHash, bed->name, bed);
-    hFreeConn(&conn);
     }
 else
     {

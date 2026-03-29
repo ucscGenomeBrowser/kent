@@ -22,6 +22,7 @@
 #include "bigChain.h"
 #include "bigLink.h"
 #include "chromAlias.h"
+#include "customTrack.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -479,6 +480,40 @@ slSort(&hrList,  hrCmp);
 hashAdd(highLightsHash, quickLiftFile, hrList);
 
 return hrList;
+}
+
+void quickLiftResolveTable(struct trackDb *tdb, char *trackTable, char **retTable, char **retLiftDb)
+/* Resolve the table name and liftDb for a quickLift track.  For custom tracks,
+ * sets *retLiftDb to CUSTOM_TRASH and *retTable to the dbTableName setting;
+ * otherwise sets *retTable to trackTable. Caller should have already set
+ * *retLiftDb to trackDbSetting(tdb, "quickLiftDb"). */
+{
+if (isCustomTrack(trackTable))
+    {
+    *retLiftDb = CUSTOM_TRASH;
+    *retTable = trackDbSetting(tdb, "dbTableName");
+    }
+else
+    *retTable = trackTable;
+}
+
+struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *liftDb,
+    char *chrom, int start, int end, char *extraWhere,
+    ItemLoader2 loader, int numFields, boolean blocked)
+/* Load items from another assembly via quickLift SQL, map them back to the reference,
+ * and return the lifted beds.  Handles custom track table resolution internally.
+ * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+{
+char *table;
+quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
+struct hash *chainHash = newHash(8);
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct bed *bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chrom, start, end,
+    NULL, extraWhere, loader, numFields, chainHash);
+struct bed *liftedBeds = quickLiftBeds(bed, chainHash, blocked);
+hFreeConn(&conn);
+return liftedBeds;
 }
 
 char *quickLiftChainTable()

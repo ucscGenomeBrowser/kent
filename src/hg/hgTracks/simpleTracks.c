@@ -6291,13 +6291,7 @@ char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
 if (liftDb != NULL)
     {
     char *table;
-    if (isCustomTrack(tg->table))
-        {
-        liftDb = CUSTOM_TRASH;
-        table = trackDbSetting(tg->tdb, "dbTableName");
-        }
-    else
-        table = tg->table;
+    quickLiftResolveTable(tg->tdb, tg->table, &table, &liftDb);
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
     char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
