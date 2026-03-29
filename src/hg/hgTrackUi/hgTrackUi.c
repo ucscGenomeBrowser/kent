@@ -4140,6 +4140,7 @@ char *genome = NULL;
 getDbAndGenome(cart, &database, &genome, NULL);
 initGenbankTableNames(database);
 
+char *fileUrl = cartOptionalString(cart, "fileUrl");
 char *urlClone = cloneString(fileUrl);
 cgiDecode(urlClone, urlClone, strlen(urlClone));
 fileUrl = resolveDotDots(urlClone);
