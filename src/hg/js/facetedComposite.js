@@ -158,10 +158,12 @@ $(function() {
             // no render function needed
         };
 
-        const columns = [checkboxColumn, ...ordinaryColumns];
         const hasDataTypes = embeddedData.dataTypes &&
                              Object.keys(embeddedData.dataTypes).length > 0;
         const itemLabel = hasDataTypes ? "samples" : "tracks";
+        const singularLabel = itemLabel.slice(0, -1);
+
+        const columns = [checkboxColumn, ...ordinaryColumns];
         const table = $("#theMetaDataTable").DataTable({
             data: metadata,
             deferRender: true,    // seems faster
@@ -175,9 +177,20 @@ $(function() {
                 bottomEnd: 'paging'
             },
             order: [[1, "asc"]],  // sort by the first data column, not checkbox
-            pageLength: 50,       // show 50 rows per page by default
+            pageLength: 25,       // show 25 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            language: { lengthMenu: `Show _MENU_ ${itemLabel}`, },
+            language: {
+                lengthMenu: `Show _MENU_ ${itemLabel}`,
+                select: {
+                    rows: {
+                        0: "",
+                        1: `1 ${singularLabel} selected`,
+                        _: `%d ${itemLabel} selected`
+                    }
+                },
+                info: `Showing _START_ to _END_ of _TOTAL_ ${itemLabel}`,
+                infoFiltered: `(filtered from _MAX_ total ${itemLabel})`,
+            },
             select: { style: "multi", selector: "td:not(:has(a))" },
             initComplete: function() {  // Check appropriate boxes
                 const api = this.api();
@@ -190,12 +203,20 @@ $(function() {
                 // Capture initial data element state
                 initialState.dataElements = new Set(embeddedData.dataElements);
             },
-            drawCallback: function() {  // Reset header "select all" checkbox
-                $("#select-all")
-                    .prop("checked", false)
-                    .prop("indeterminate", false);
+            drawCallback: function() {
+                updateSelectAllCheckbox(this.api());
             },
         });
+
+        function updateSelectAllCheckbox(api) {
+            const filteredCount = api.rows({ search: "applied" }).count();
+            const selectedCount = api.rows({ search: "applied", selected: true }).count();
+            $("#select-all")
+                .prop("checked", filteredCount > 0 && selectedCount === filteredCount)
+                .prop("indeterminate", selectedCount > 0 && selectedCount < filteredCount);
+        }
+        table.on("select deselect", () => updateSelectAllCheckbox(table));
+        updateSelectAllCheckbox(table);  // set initial state after pre-selections
 
         // Create "show only selected" toggle in the toolbar
         const lengthDiv = document.querySelector(
@@ -220,7 +241,7 @@ $(function() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
             toggleText.textContent =
-                `Show only selected rows (${selCount} of ${totalCount} selected)`;
+                `Show only selected ${itemLabel} (${selCount} of ${totalCount} selected)`;
         }
         updateSelectedText();
         table.on("select deselect", updateSelectedText);
@@ -229,8 +250,8 @@ $(function() {
         const activeFiltersDiv = document.createElement("div");
         activeFiltersDiv.id = "active-filters";
         activeFiltersDiv.style.display = "none";
-        const wrapper = document.getElementById("theMetaDataTable_wrapper");
-        wrapper.insertBefore(activeFiltersDiv, lengthDiv.nextSibling);
+        const tableEl = document.getElementById("theMetaDataTable");
+        tableEl.parentNode.insertBefore(activeFiltersDiv, tableEl);
 
         // define inputs for search functionality for each column in the table
         const row = document.querySelector("#theMetaDataTable thead").insertRow();
@@ -238,8 +259,8 @@ $(function() {
             const cell = row.insertCell();
             if (col.data === null) {
                 // left empty; toggle is now in the toolbar
-            } else if (col.data && col.data.startsWith("_")) {
-                // no search box for hidden-facet columns
+            } else if (col.data && col.data.startsWith("__")) {
+                // no search box for double-underscore columns
             } else {
                 const input = document.createElement("input");
                 input.type = "text";
@@ -252,7 +273,14 @@ $(function() {
         // behaviors for the column-based search functionality
         $("#theMetaDataTable thead input[type='text']")
             .on("keyup change", function () {
-                table.column($(this).parent().index()).search(this.value).draw();
+                const dtColIdx = $(this).parent().index();
+                const colName = colNames[dtColIdx - 1];  // offset for checkbox col
+                if (this.value) {
+                    textFilters.set(colName, this.value.toLowerCase());
+                } else {
+                    textFilters.delete(colName);
+                }
+                table.column(dtColIdx).search(this.value).draw();
             });
         $.fn.dataTable.ext.search.push(function (_, data, dataIndex) {
             const filterInput =
@@ -268,30 +296,77 @@ $(function() {
             .on("change", function () { table.draw(); });
 
         // implement the 'select all' at the top of the checkbox column
+        $("#select-all").closest("label").attr(
+            "title", `Select all filtered ${itemLabel}`);
         $("#theMetaDataTable thead").on("click", "#select-all", function () {
             const rowIsChecked = this.checked;
             if (rowIsChecked) {
-                table.rows({ page: "current" }).select();
+                table.rows({ search: "applied" }).select();
             } else {
-                table.rows({ page: "current" }).deselect();
+                table.rows({ search: "applied" }).deselect();
             }
         });
         return table;
     }  // end initTable
 
 
+    // Map of colName -> Map of unescapedValue -> spanElement, for dynamic counts
+    const countSpans = new Map();
+    // Filter state for cross-facet count computation
+    const checkboxFilters = new Map();  // colName -> Set<string> (raw values)
+    const textFilters = new Map();      // colName -> lowercase string
+
+    function updateFacetCounts(metadata) {
+        // For each facet, count values among rows that pass all OTHER filters
+        // (excluding this facet's own checkbox filter). This way, unchecked
+        // values show how many rows would be added if you checked them.
+        for (const [facetCol, valMap] of countSpans) {
+            const counts = new Map();  // lowercased value -> count
+            for (const row of metadata) {
+                let passes = true;
+                for (const [col, valueSet] of checkboxFilters) {
+                    if (col === facetCol) continue;
+                    if (!valueSet.has(row[col]?.toLowerCase())) {
+                        passes = false; break;
+                    }
+                }
+                if (passes) {
+                    for (const [col, text] of textFilters) {
+                        if (!row[col]?.toLowerCase().includes(text)) {
+                            passes = false; break;
+                        }
+                    }
+                }
+                if (passes) {
+                    const val = row[facetCol]?.toLowerCase();
+                    counts.set(val, (counts.get(val) ?? 0) + 1);
+                }
+            }
+            for (const [val, span] of valMap) {
+                span.textContent = `(${counts.get(val.toLowerCase()) ?? 0})`;
+            }
+        }
+    }
+
     function initFilters(table, allData) {
         const { metadata, colorMap, colNames } = allData;
 
         // iterate once over entire data not separately per attribute
-        const possibleValues = {};
+        // Case-insensitive: merge variants, keep first-seen casing as display form
+        const possibleValues = {};  // key -> Map<lowerVal, [displayVal, count]>
         for (const entry of metadata) {
             for (const [key, val] of Object.entries(entry)) {
-                if (possibleValues[key] === null || possibleValues[key] === undefined) {
+                if (!possibleValues[key]) {
                     possibleValues[key] = new Map();
                 }
                 const map = possibleValues[key];
-                map.set(val, (map.get(val) ?? 0) + 1);
+                const lower = val.toLowerCase();
+                const existing = map.get(lower);
+                if (existing) {
+                    existing[1]++;
+                } else {
+                    map.set(lower, [val, 1]);
+                }
             }
         }
 
@@ -308,8 +383,9 @@ $(function() {
                 return;
             }
 
-            const sortedPossibleVals = Array.from(possibleValues[key].entries());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // neg: less-than
+            // possibleValues[key] is Map<lower, [displayVal, count]>; extract [displayVal, count]
+            const sortedPossibleVals = Array.from(possibleValues[key].values());
+            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // sort by count descending
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
@@ -358,6 +434,9 @@ $(function() {
 
             // Build checkbox labels
             const cboxes = [];
+            const rawValues = [];  // parallel to cboxes: unescaped values
+            if (!countSpans.has(key)) countSpans.set(key, new Map());
+            const colSpans = countSpans.get(key);
             topToShow.forEach(([val, count]) => {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
@@ -372,9 +451,14 @@ $(function() {
                     }
                     label.appendChild(colorBox);
                 }
-                label.appendChild(document.createTextNode(`${val} (${count})`));
+                label.appendChild(document.createTextNode(`${val} `));
+                const countSpan = document.createElement("span");
+                countSpan.textContent = `(${count})`;
+                label.appendChild(countSpan);
+                colSpans.set(val, countSpan);
                 facetBody.appendChild(label);
                 cboxes.push(checkbox);
+                rawValues.push(val);
             });
 
             facetDiv.appendChild(facetBody);
@@ -394,6 +478,16 @@ $(function() {
                 cb.addEventListener("change", () => {
                     const checked = cboxes.filter(c => c.checked).map(c => c.value);
                     const query = checked.length ? "^(" + checked.join("|") + ")$" : "";
+                    // Track lowercased values for cross-facet counting
+                    const checkedRaw = new Set();
+                    cboxes.forEach((c, i) => {
+                        if (c.checked) checkedRaw.add(rawValues[i].toLowerCase());
+                    });
+                    if (checkedRaw.size) {
+                        checkboxFilters.set(key, checkedRaw);
+                    } else {
+                        checkboxFilters.delete(key);
+                    }
                     table.column(dtColIdx).search(query, true, false).draw();
                     updateActiveFilters();
                 });
@@ -402,10 +496,14 @@ $(function() {
             // --- Wire up Clear button ---
             clearBtn.addEventListener("click", () => {
                 cboxes.forEach(cb => cb.checked = false);
+                checkboxFilters.delete(key);
                 table.column(dtColIdx).search("", true, false).draw();
                 updateActiveFilters();
             });
         });  // done creating collapsible checkbox filters for each column
+
+        // Update facet counts whenever the table is redrawn (filtering, search, etc.)
+        table.on("draw", () => updateFacetCounts(metadata));
 
         return table;  // to chain calls
     }  // end initFilters
@@ -575,11 +673,11 @@ $(function() {
                 method: "GET",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
-            req.then(response => {
-                if (!response.ok) {  // a 404 will look like plain text
-                    throw new Error(`HTTP Status: ${response.status}`);
-                }
-                return response.text();
+        req.then(response => {
+            if (!response.ok) {  // a 404 will look like plain text
+                throw new Error(`HTTP Status: ${response.status}`);
+            }
+            return response.text();
             })
             .then(tsvText => {  // metadata table is a TSV file to parse
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
