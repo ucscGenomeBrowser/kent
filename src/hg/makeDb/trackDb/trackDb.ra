@@ -1653,8 +1653,8 @@ html gc5Base
 # correct visibility when a saved session is restored
 track gcOnFly
 release alpha
-shortLabel GC TDB Percent
-longLabel GC TDB Percent in 5-Base Windows
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
 group map
 visibility hide
 type bigWig 0 100
