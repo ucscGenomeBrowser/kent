@@ -425,8 +425,20 @@ static void gc5BaseOnTheFlyLoadItems(struct track *tg)
 /* Compute GC percent from genome sequence; called in the loadItems phase
  * just as bigWigLoadItems calls bigWigLoadPreDraw to fill preDrawContainer.
  * Fetch sequence that covers the preDraw smoothing margins on each side so
- * the smoothing/averaging machinery has data at the window edges. */
+ * the smoothing/averaging machinery has data at the window edges.
+ * When the display density exceeds gcOnFlyMaxDensity bases per pixel,
+ * fall back to reading a pre-computed bigWig file via bigWigLoadItems. */
 {
+char *maxDenseStr = trackDbSettingClosestToHomeOrDefault(tg->tdb, "gcOnFlyMaxDensity", "50000");
+if (maxDenseStr != NULL)
+    {
+    double basesPerPixel = (double)(winEnd - winStart) / insideWidth;
+    if (basesPerPixel > atof(maxDenseStr))
+	{
+	bigWigLoadItems(tg);
+	return;
+	}
+    }
 tg->items = NULL;
 tg->mapsSelf = TRUE;
 /* Extend the fetch range by wiggleSmoothingMax pixels worth of bases on
