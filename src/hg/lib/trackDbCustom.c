@@ -1616,6 +1616,7 @@ boolean trackSettingIsFile(char *setting)
  * settings that ends in "Url" and a few others. */
 {
 return endsWith(setting, "Url") ||
+    endsWith(setting, "File") ||
     sameString(setting, "bigDataIndex") ||
     sameString(setting, "quickLiftUrl") ||
     sameString(setting, "frames") ||

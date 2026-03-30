@@ -3,10 +3,10 @@
 
 """ guess the best assembly given a bigWig, bigBed, or VCF file """
 
-import logging, optparse, sys
-from collections import defaultdict
-from os.path import join, isfile, expanduser
+import logging, optparse, sys, re, glob
 import os, gzip, subprocess
+from collections import defaultdict
+from os.path import join, isfile, expanduser, basename
 
 # ==== functions =====
 def parseArgs():
@@ -53,8 +53,8 @@ Example run:
 
 def parseSizes(inFname, doSubset):
     " given a chrom.sizes file, return the 10 longest and 10 shortest chrom names "
-    logging.info("Reading %s",inFname)
     sizes = list()
+    logging.info("Reading %s",inFname)
     for line in open(inFname):
         if line.startswith("#"):
             continue
@@ -84,8 +84,6 @@ def writeSizes(allSizes, outFname):
     logging.info("Wrote %s", outFname)
 
 def indexGenarkSizes(allSizes, inDir):
-    import glob
-    from os.path import basename
     for dbType in ["GCA", "GCF"]:
         baseDir = join(inDir, "asmHubs", dbType)
         for (dirpath, dirnames, fnames) in os.walk(baseDir):
@@ -93,8 +91,12 @@ def indexGenarkSizes(allSizes, inDir):
                 if not fname.endswith("chrom.sizes.txt"):
                     continue
                 fullFname = join(dirpath, fname)
-                db = fname.split("/")[-1].replace(".chrom.sizes.txt", "")
                 # e.g. /GCA/000/002/305/GCA_000002305.1/GCA_000002305.1.chrom.sizes.txt 
+                if not isfile(fullFname):
+                    logging.error(fullFname+" does not exist.")
+                    continue
+
+                db = fname.split("/")[-1].replace(".chrom.sizes.txt", "")
                 sizes = parseSizes(fullFname, False)
                 size1 = sizes.pop()
                 allSizes[db] = [size1]
@@ -155,9 +157,8 @@ def readSizeIndex(inFname):
 
 def vcfSizes(inFname):
     " return list of (chrom, size) from VCF ##contig header lines "
-    import re
     sizes = list()
-    opener = gzip.open if inFname.endswith(".gz") else open
+    opener = gzip.open if inFname.endswith(".gz") or inFname.endswith(".bgz") else open
     with opener(inFname, "rt") as fh:
         for line in fh:
             if line.startswith("##contig="):
@@ -239,7 +240,13 @@ def main():
     " entry point to script "
     args, options = parseArgs()
 
-    indexFname = expanduser(options.indexFname)
+    if not options.indexFname:
+        indexFname = "/hive/data/genomes/bigGuessDb.txt.gz"
+        if not isfile(indexFname):
+            indexFname = "bigGuessDb.txt.gz"
+    else:
+        indexFname = expanduser(options.indexFname)
+
     if options.index:
         buildIndex("/hive/data/genomes", indexFname)
         exit(0)

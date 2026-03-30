@@ -225,7 +225,79 @@ for (i = 0;  i < rec->infoCount;  i++)
     }
 }
 
-static void vcfGenotypeTable(struct vcfRecord *rec, char *track, char **displayAls)
+struct sampleMeta
+/* Metadata columns for one sample, loaded from sampleMetadataFile. */
+    {
+    char **values;      /* Array of column values */
+    };
+
+static void loadSampleMetadata(struct trackDb *tdb, struct hash **retHash,
+                                char ***retColNames, int *retColCount)
+/* Load sample metadata from file specified in trackDb setting sampleMetadataFile.
+ * File format: tab-separated, first line is header starting with #sample.
+ * Returns a hash mapping sample name -> sampleMeta struct, plus column names and count. */
+{
+*retHash = NULL;
+*retColNames = NULL;
+*retColCount = 0;
+char *fileName = trackDbSetting(tdb, VCF_SAMPLE_METADATA_FILE);
+if (fileName == NULL)
+    return;
+fileName = hReplaceGbdb(fileName);
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf == NULL)
+    return;
+char *line;
+int lineSize;
+// Read header line
+if (!lineFileNext(lf, &line, &lineSize))
+    {
+    lineFileClose(&lf);
+    return;
+    }
+// Strip leading # if present
+if (line[0] == '#')
+    line++;
+// Parse header columns
+int colCount = chopByChar(line, '\t', NULL, 0);
+char **allCols;
+AllocArray(allCols, colCount);
+chopByChar(line, '\t', allCols, colCount);
+// Column 0 is sample name; metadata columns start at 1
+int metaColCount = colCount - 1;
+if (metaColCount < 1)
+    {
+    lineFileClose(&lf);
+    return;
+    }
+char **colNames;
+AllocArray(colNames, metaColCount);
+int i;
+for (i = 0; i < metaColCount; i++)
+    colNames[i] = cloneString(allCols[i+1]);
+// Read data lines
+struct hash *hash = hashNew(0);
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    char *row[colCount];
+    int fieldCount = chopByChar(line, '\t', row, colCount);
+    if (fieldCount < 2)
+        continue;
+    struct sampleMeta *sm;
+    AllocVar(sm);
+    AllocArray(sm->values, metaColCount);
+    for (i = 0; i < metaColCount && i + 1 < fieldCount; i++)
+        sm->values[i] = cloneString(row[i+1]);
+    hashAdd(hash, row[0], sm);
+    }
+lineFileClose(&lf);
+*retHash = hash;
+*retColNames = colNames;
+*retColCount = metaColCount;
+}
+
+static void vcfGenotypeTable(struct vcfRecord *rec, char *track, char **displayAls,
+                             struct trackDb *tdb)
 /* Put the table containing details about each genotype into a collapsible section. */
 {
 static struct dyString *tmp1 = NULL;
@@ -254,6 +326,11 @@ for (i = 0;  i < formatCount;  i++)
     printf("&nbsp;&nbsp;<B>%s:</B> %s<BR>\n", formatKeys[i], desc);
     formatTypes[i] = def ? def->type : vcfInfoString;
     }
+// Load sample metadata if available
+struct hash *metaHash = NULL;
+char **metaColNames = NULL;
+int metaColCount = 0;
+loadSampleMetadata(tdb, &metaHash, &metaColNames, &metaColCount);
 hTableStart();
 boolean isDiploid = sameString(vcfHaplotypeOrSample(cart), "Haplotype");
 puts("<TR><TH>Sample ID</TH><TH>Genotype</TH>");
@@ -265,6 +342,8 @@ for (i = 0;  i < formatCount;  i++)
 	continue;
     printf("<TH>%s</TH>", formatKeys[i]);
     }
+for (i = 0; i < metaColCount; i++)
+    printf("<TH>%s</TH>", metaColNames[i]);
 puts("</TR>\n");
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
@@ -301,6 +380,18 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	    }
 	printf("</TD>");
 	}
+    // Print sample metadata columns
+    if (metaHash != NULL)
+        {
+        struct sampleMeta *sm = hashFindVal(metaHash, vcff->genotypeIds[i]);
+        for (j = 0; j < metaColCount; j++)
+            {
+            if (sm != NULL && sm->values[j] != NULL)
+                printf("<TD>%s</TD>", sm->values[j]);
+            else
+                printf("<TD></TD>");
+            }
+        }
     puts("</TR>");
     }
 hTableEnd();
@@ -393,7 +484,7 @@ if (vcff->genotypeCount > 1 && diploidCount > 0)
 	}
     }
 puts("<BR>");
-vcfGenotypeTable(rec, tdb->track, displayAls);
+vcfGenotypeTable(rec, tdb->track, displayAls, tdb);
 puts("</TABLE>");
 }
 

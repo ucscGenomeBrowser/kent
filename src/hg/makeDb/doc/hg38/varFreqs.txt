@@ -215,3 +215,13 @@ tabix -p vcf finnge_R12_annotated_variants_v1.vcf.gz
 cd /hive/data/genomes/hg38/bed/varFreqs/allofus/
 bcftools concat --threads 16 -Oz -o allOfUs.locAncFreq.vcf.gz clean/allele_freq_chr{1..22}.NW.clean.conf90.oneline.vcf.gz
 tabix allOfUs.locAncFreq.vcf.gz
+
+##########
+# 2026-03-27 Claude max
+
+# Two phased SV VCF tracks moved into phasedVars superTrack from lrSv:
+# - han945SvVcf: Per-sample genotypes for 945 Han Chinese SVs
+# - lrSv1kgOntPhased: Phased SVs from 1,019 diverse humans (1KG ONT)
+# Data files remain in /hive/data/genomes/hg38/bed/lrSv/
+# Symlinks moved from /gbdb/{hg38,hs1}/lrSv/ to /gbdb/{hg38,hs1}/phasedVars/
+# Build documentation for these tracks is in lrSv.txt

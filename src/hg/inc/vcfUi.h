@@ -33,6 +33,7 @@
 #define VCF_DEFAULT_HAP_TREEANGLE VCF_HAP_TREEANGLE_TRIANGLE
 
 #define VCF_SAMPLE_COLOR_FILE "sampleColorFile"
+#define VCF_SAMPLE_METADATA_FILE "sampleMetadataFile"
 
 #define VCF_SHOW_HW_VAR "showHardyWeinberg"
 

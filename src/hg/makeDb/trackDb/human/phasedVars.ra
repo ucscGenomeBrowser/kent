@@ -53,3 +53,25 @@ pennantIcon New red ../goldenPath/newsarch.html#020926 "Released Feb. 09, 2026"
         priority 5
         html phasedVars.html
 
+        track han945SvVcf
+        parent phasedVars
+        bigDataUrl /gbdb/$D/phasedVars/han945genotypes.vcf.gz
+        shortLabel SVs from 945 Han Chinese
+        longLabel Phased Variants: Structural variants from 945 Han Chinese SVs
+        type vcfTabix
+        visibility dense
+        release alpha
+        priority 10
+
+        track lrSv1kgOntPhased
+        parent phasedVars
+        bigDataUrl /gbdb/$D/phasedVars/1kgOntPhased.vcf.gz
+        shortLabel SVs from 1000G ONT
+        longLabel Phased Variants: Structural variants from 1,019 diverse humans (1000 Genomes Vienna ONT, shapeit5)
+        type vcfTabix
+        visibility dense
+        sampleColorFile Superpopulation=/gbdb/$D/phasedVars/1kgOntPhased.superpopColors.txt
+        sampleMetadataFile /gbdb/$D/phasedVars/1kgOntPhased.sampleMeta.txt
+        release alpha
+        priority 11
+

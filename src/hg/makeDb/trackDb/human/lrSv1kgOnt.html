@@ -1,0 +1,97 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by Oxford Nanopore long-read
+sequencing of 1,019 individuals from the 1000 Genomes Project, representing 26
+populations across 5 continental regions: Africa (275 samples), East Asia (192),
+South Asia (199), Europe (189), and Americas (164). Median sequencing coverage
+was 16.9x per sample with a median N50 read length of 20.3 kb.
+</p>
+<p>
+SVs were discovered using the SAGA framework (SV Analysis by Graph Augmentation)
+and annotated with SVAN, which classifies insertions and deletions by their
+mechanism of origin. The dataset contains 161,332 annotated SVs,
+including 75,324 insertions, 66,192 deletions, and 19,816 complex rearrangements.
+The original coordinates are on the T2T-CHM13 assembly (hs1); for GRCh38 (hg38),
+coordinates were converted using liftOver (148,375 records mapped successfully).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV class:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(230,140,0);">Complex (COMPLEX)</span> - orange</li>
+</ul>
+</p>
+<p>
+Filters are available for SV class, insertion/deletion type, transposon family,
+and SV length. For insertions, the item is placed at the insertion site with a
+width of 1 bp; for deletions, the item spans the deleted region.
+</p>
+<p>
+The detail page for each item shows SVAN annotation fields including:
+<ul>
+<li><b>Insertion/Deletion Type</b>: solo (single mobile element), partnered
+(with transduction), orphan (transduction only), VNTR, PSD (processed pseudogene),
+NUMT (nuclear mitochondrial insertion), DUP (tandem duplication),
+DUP_INTERSPERSED, INV_DUP (inverted duplication), COMPLEX_DUP, or chimera</li>
+<li><b>Transposon Family</b>: Alu, L1, SVA, HERVK, or LTR5_Hs</li>
+<li><b>Percent Resolved</b>: fraction of inserted sequence resolved by assembly</li>
+<li><b>TSD Length</b>: target site duplication length</li>
+<li><b>Poly-A Length</b>: poly-A tail length</li>
+<li><b>Conformation</b>: structural conformation of the insertion
+(e.g. FOR+POLYA, Hexamer+Alu-like+VNTR+SINE-R+POLYA)</li>
+<li><b>Source Coordinates</b>: genomic location of the source element (for transductions)</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+Oxford Nanopore sequencing was performed on 1,019 samples from the 1000 Genomes
+Project. Base-calling was done with Guppy 6.2.1. SVs were discovered using
+the SAGA framework, which combines:
+<ul>
+<li>Linear-reference tools: Sniffles and DELLY (applied to both GRCh38 and CHM13)</li>
+<li>Graph-aware discovery: SVarp, which searches for SV patterns from graph-aligned
+reads and performs local long-read assembly</li>
+<li>Graph-based genotyping: Giggles, for unified genotyping across a pangenome graph</li>
+</ul>
+</p>
+<p>
+Variants were annotated with SVAN (SV Annotator v1.3), which leverages allelic
+representations and genomic annotations to classify SVs by mechanism. SVAN
+annotated 96.0% of insertions, 32.2% of deletions, and 57.1% of complex sites.
+</p>
+<p>
+The original SV coordinates are on the T2T-CHM13 assembly (hs1). For the GRCh38
+(hg38) version of this track, coordinates were converted using liftOver; 148,375
+of 161,332 records mapped successfully (~92%). The hs1 version contains all
+161,332 records at their native coordinates.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Source data is available from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/"
+   target="_blank">1000 Genomes ONT Vienna</a> data collection at IGSR.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the 1000 Genomes ONT Vienna consortium for making their structural
+variant calls and SVAN annotations publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Schloissnig S, Pani S, Ebler J, Hain C, Tsapalou V, Söylev A, Hüther P, Ashraf H, Prodanov T,
+Asparuhova M <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09290-7" target="_blank">
+Structural variation in 1,019 diverse humans based on long-read sequencing</a>.
+<em>Nature</em>. 2025 Aug;644(8076):442-452.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702182" target="_blank">40702182</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350158/" target="_blank">PMC12350158</a>
+</p>
+

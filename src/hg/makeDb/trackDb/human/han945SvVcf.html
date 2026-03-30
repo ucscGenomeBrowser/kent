@@ -1,0 +1,64 @@
+<h2>Description</h2>
+<p>
+This track shows per-sample genotypes for 111,288 structural variants (SVs)
+from 945 Han Chinese individuals, displayed as a VCF track. It is a companion
+to the <a href="hgTrackUi?g=han945Sv">Han 945 SVs</a> bigBed track, which
+shows the same variants with summary statistics and filters.
+</p>
+<p>
+The VCF format allows the genome browser to display a genotype matrix showing
+which of the 945 individuals carry each structural variant.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each variant is shown with per-sample genotypes: 0/1 indicates the sample
+carries the SV, 0/0 indicates it does not. The genotype coloring follows
+standard VCF display conventions.
+</p>
+<p>
+Samples are labeled Sample_001 through Sample_945, as the original data
+release does not include individual sample identifiers.
+</p>
+
+<h2>Methods</h2>
+<p>
+The original VCF from Gong et al. is a site-only file (no sample columns)
+produced by merging per-sample SV calls with SURVIVOR v1.0.6. SURVIVOR
+records which samples support each SV in the INFO/SUPP_VEC field &mdash;
+a binary string of length 945, where each position represents one sample
+and '1' indicates that sample's caller reported the SV.
+</p>
+<p>
+To reconstruct per-sample genotypes, the SUPP_VEC was expanded into 945
+sample columns with a GT (genotype) FORMAT field. Samples with a '1' in
+SUPP_VEC were assigned genotype 0/1 (heterozygous carrier); samples with
+'0' were assigned 0/0 (homozygous reference). This is a simplification:
+the original per-sample callers may have reported homozygous alternate (1/1)
+genotypes for some individuals, but this information is not preserved in the
+SURVIVOR merge. The conversion was performed with the script
+<code>lrSvHan945SuppVecToVcf.py</code>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The source VCF was downloaded from the OMIX repository (accession OED00945268)
+at the National Genomics Data Center (NGDC).
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Gong et al. for making their structural variant calls publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Gong J, Sun H, Wang K, Zhao Y, Huang Y, Chen Q, Qiao H, Gao Y, Zhao J, Ling Y <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-025-56661-9" target="_blank">
+Long-read sequencing of 945 Han individuals identifies structural variants associated with
+phenotypic diversity and disease susceptibility</a>.
+<em>Nat Commun</em>. 2025 Feb 10;16(1):1494.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39929826" target="_blank">39929826</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11811171/" target="_blank">PMC11811171</a>
+</p>
