@@ -4200,6 +4200,7 @@ if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
 color = colorFromCart(tg, color);
+bColor = colorFromCart(tg, bColor);
 
 struct genePred *gp = NULL;
 if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
@@ -5127,6 +5128,15 @@ static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
 /* Draw a list of linked features into a wiggle. */
 {
 struct wigCartOptions *wigCart = tg->wigCartData;
+if (wigCart == NULL)
+    {
+    int wordCount = 3;
+    char *words[3];
+    words[0] = "bedGraph";
+    wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words);
+    wigCart->windowingFunction = wiggleWindowingMean;
+    tg->wigCartData = (void *) wigCart;
+    }
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
 struct trackDb *tdb = tg->tdb;
 boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
@@ -5149,6 +5159,13 @@ else
     }
 
 tg->colorShades = shadesOfGray;
+Color cartColor = colorFromCart(tg, 0);
+if (cartColor)
+    {
+    tg->ixColor = cartColor;
+    tg->ixAltColor = cartColor;
+    }
+
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
 wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,

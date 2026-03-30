@@ -6042,11 +6042,17 @@ void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
 char varName[1024];
 safef(varName, sizeof(varName), "%s.colorOverride", name);
 
-char *colorValue = cartUsualString(cart, varName, "");
+char defaultColor[16];
+safef(defaultColor, sizeof(defaultColor), "#%02x%02x%02x", tdb->colorR, tdb->colorG, tdb->colorB);
+
+char *rawCartValue = cartOptionalString(cart, varName);
+boolean hasOverride = (rawCartValue != NULL && rawCartValue[0] != '\0');
+char *colorValue = hasOverride ? rawCartValue : defaultColor;
+boolean hasItemRgb = !trackDbSettingOff(tdb, "itemRgb");
 
 printf("&nbsp;<div id='colorPicker_%s'>", name);
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s');",
-        varName, name, name, colorValue); // id="xx" is necessary as id contains a dot
+jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s', '%s', %s, %s);",
+        varName, name, name, colorValue, defaultColor, hasItemRgb ? "true" : "false", hasOverride ? "true" : "false");
 puts("</div>\n\n");
 }
 
@@ -7894,7 +7900,6 @@ if (highlightBySet != NULL)
 
 squishyPackOption(cart, name, title, tdb);
 filterNameOption(cart, name, tdb);
-colorTrackOption(cart, name, tdb);
 wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 // N.B. scoreCfgUi maybe creates a box, so this is called after cfgEndBox

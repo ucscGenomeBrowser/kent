@@ -3449,6 +3449,9 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
+if (!tdbIsSuperTrack(tdb))
+    colorTrackOption(cart, tdb->track, tdb);
+
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
     // Composites *might* have had their top level controls just printed,

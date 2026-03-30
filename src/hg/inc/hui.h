@@ -1297,6 +1297,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
+void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb);
+/* color picker for overriding track color */
+
 void bedScoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up bed-specific score controls */
 

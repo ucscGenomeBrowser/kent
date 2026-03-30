@@ -1495,7 +1495,7 @@ function advancedSearchOnChange(controlName) {
 var hlColor = '#aac6ff';
 var prevHlColor;
 var hlColorDefault = '#aac6ff';
-function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault) {
+function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault, defaultColor = hlColorDefault, hasItemRgb = false, hasOverride = true) {
 /* Create an input with a color selection field, optionally append the resulting
  * html to parentEl, if parent is not null */
     /* Some helper function for keeping track of colors */
@@ -1578,6 +1578,7 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
             let color = $(inpSpec).spectrum("get");
             $(inpText).val(color);
             saveHlColor(color, trackName);
+            if (statusSpan) statusSpan.textContent = "";
         },
     };
     $(inpSpec).spectrum(opt);
@@ -1586,13 +1587,30 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpText).on("change", function() {
         $(inpSpec).spectrum("set", $(inpText).val());
         saveHlColor($(inpText).val(), trackName);
+        if (statusSpan) statusSpan.textContent = "";
     });
+    let statusSpan = document.createElement("span");
+    statusSpan.style = "margin-left: 10px; font-style: italic";
+    colorPickerContainer.appendChild(statusSpan);
+
+    // show initial status if itemRgb is active and no color override is set
+    if (hasItemRgb && !hasOverride) {
+        statusSpan.textContent = "items are currently being colored per item";
+    }
+
     // Restore the default on Reset link click
     $(inpResetLink).on("click", function() {
-        let hlDefault = hlColorDefault;
-        $(inpText).val(hlDefault);
-        $(inpSpec).spectrum("set", hlDefault);
-        saveHlColor(hlDefault, trackName);
+        $(inpText).val(defaultColor);
+        $(inpSpec).spectrum("set", defaultColor);
+        if (cartVar === "hlColor") {
+            saveHlColor(defaultColor, trackName);
+        } else {
+            // clear the cart variable so itemRgb and other per-item coloring is restored
+            saveHlColor("", trackName);
+            if (hasItemRgb) {
+                statusSpan.textContent = "items are currently being colored per item";
+            }
+        }
     });
     $(inpSpec).spectrum("set", $(inpText).val());
 }

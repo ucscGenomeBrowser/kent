@@ -160,6 +160,13 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
+Color cartColor = colorFromCart(tg, 0);
+if (cartColor)
+    {
+    tg->ixColor = cartColor;
+    tg->ixAltColor = cartColor;
+    }
+
 if (tg->networkErrMsg == NULL)
     {
     /* Call actual graphing routine. */

@@ -69,9 +69,10 @@ return ri->className;
 }
 
 static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 {
+Color overrideColor = colorFromCart(tg, 0);
 int baseWidth = seqEnd - seqStart;
 struct repeatItem *ri;
 int y = yOff;
@@ -118,7 +119,7 @@ if (isFull)
 	   ri = otherRepeatItem;
 	percId = 1000 - ro.milliDiv - ro.milliDel - ro.milliIns;
 	grayLevel = grayInRange(percId, 500, 1000);
-	col = shadesOfGray[grayLevel];
+	col = overrideColor ? overrideColor : shadesOfGray[grayLevel];
 	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
 	x1 = max(x1, 0);
 	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
@@ -173,7 +174,7 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-	    hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
+	    hvGfxBox(hvg, x1, yOff, w, heightPer, overrideColor ? overrideColor : MG_BLACK);
 	    }
 	}
     dyStringFree(&query);

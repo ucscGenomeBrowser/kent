@@ -688,9 +688,7 @@ maybeLoadSnake(tg);   // if we're in snake mode, change the methods
 Color colorFromCart(struct track *tg, Color color)
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 {
-char varName[1024];
-safef(varName, sizeof(varName), "%s.%s", tg->tdb->track, "colorOverride");
-char *hexColorStr = cartOptionalString(cart, varName);
+char *hexColorStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "colorOverride");
 if (hexColorStr==NULL || isEmpty(hexColorStr))
     return color;
 if (hexColorStr[0]=='#')
@@ -699,6 +697,7 @@ if (strlen(hexColorStr)!=6)
     return color;
 long rgb = strtol(hexColorStr,NULL,16); // Big and little Endians
 tg->itemColor = NULL;
+tg->itemNameColor = NULL;
 return MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 }
 
