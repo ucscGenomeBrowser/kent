@@ -146,21 +146,8 @@ else
 
     if (liftDb != NULL)
         {
-        char *table;
-        if (isCustomTrack(tg->table))
-            {
-            liftDb = CUSTOM_TRASH;
-            table = trackDbSetting(tg->tdb, "dbTableName");
-            }
-        else
-            table = tg->table;
-        struct hash *chainHash = newHash(8);
-        struct sqlConnection *conn = hAllocConn(liftDb);
-        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)loader, 0, chainHash);
-
-        list = quickLiftBeds(bed, chainHash, FALSE);
-        hFreeConn(&conn);
+        list = quickLiftSqlLoadBeds(tg->tdb, tg->table, liftDb, chromName, winStart, winEnd,
+            scoreFilterClause, (ItemLoader2)loader, 0, FALSE);
         }
     else
         {
@@ -326,20 +313,8 @@ else
         }
     else
         {
-        char *table;
-        if (isCustomTrack(tg->table))
-            {
-            liftDb = CUSTOM_TRASH;
-            table = trackDbSetting(tg->tdb, "dbTableName");
-            }
-        else
-            table = tg->table;
-        struct hash *chainHash = newHash(8);
-        struct sqlConnection *conn = hAllocConn(liftDb);
-        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoadN, 9, chainHash);
-
-        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, FALSE);
+        struct bed *liftedBeds = quickLiftSqlLoadBeds(tg->tdb, tg->table, liftDb, chromName,
+            winStart, winEnd, scoreFilterClause, (ItemLoader2)bedLoadN, 9, FALSE);
         for(bed = liftedBeds; bed; bed = bed->next)
             {
             lf = lfFromBedExtra(bed, scoreMin, scoreMax);
@@ -350,7 +325,6 @@ else
                 }
             slAddHead(&lfList, lf);
             }
-        hFreeConn(&conn);
         }
     }
 slReverse(&lfList);
@@ -411,20 +385,8 @@ else
         }
     else
         {
-        char *table;
-        if (isCustomTrack(tg->table))
-            {
-            liftDb = CUSTOM_TRASH;
-            table = trackDbSetting(tg->tdb, "dbTableName");
-            }
-        else
-            table = tg->table;
-        struct hash *chainHash = newHash(8);
-        struct sqlConnection *conn = hAllocConn(liftDb);
-        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoadN, 8, chainHash);
-
-        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
+        struct bed *liftedBeds = quickLiftSqlLoadBeds(tg->tdb, tg->table, liftDb, chromName,
+            winStart, winEnd, scoreFilterClause, (ItemLoader2)bedLoadN, 8, TRUE);
         for(bed = liftedBeds; bed; bed = bed->next)
             {
             lf = lfFromBedExtra(bed, scoreMin, scoreMax);
@@ -435,7 +397,6 @@ else
                 }
             slAddHead(&lfList, lf);
             }
-        hFreeConn(&conn);
         }
     }
 slReverse(&lfList);
@@ -648,20 +609,8 @@ else
         }
     else
         {
-        char *table;
-        if (isCustomTrack(tg->table))
-            {
-            liftDb = CUSTOM_TRASH;
-            table = trackDbSetting(tg->tdb, "dbTableName");
-            }
-        else
-            table = tg->table;
-        struct hash *chainHash = newHash(8);
-        struct sqlConnection *conn = hAllocConn(liftDb);
-        char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
-        bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, scoreFilterClause, (ItemLoader2)bedLoad12, 0, chainHash);
-
-        struct bed *liftedBeds = quickLiftBeds(bed, chainHash, TRUE);
+        struct bed *liftedBeds = quickLiftSqlLoadBeds(tg->tdb, tg->table, liftDb, chromName,
+            winStart, winEnd, scoreFilterClause, (ItemLoader2)bedLoad12, 0, TRUE);
         for(bed = liftedBeds; bed; bed = bed->next)
             {
             lf = lfFromBedExtra(bed, scoreMin, scoreMax);
@@ -672,7 +621,6 @@ else
                 }
             slAddHead(&lfList, lf);
             }
-        hFreeConn(&conn);
         }
     }
 
@@ -688,9 +636,7 @@ maybeLoadSnake(tg);   // if we're in snake mode, change the methods
 Color colorFromCart(struct track *tg, Color color)
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 {
-char varName[1024];
-safef(varName, sizeof(varName), "%s.%s", tg->tdb->track, "colorOverride");
-char *hexColorStr = cartOptionalString(cart, varName);
+char *hexColorStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "colorOverride");
 if (hexColorStr==NULL || isEmpty(hexColorStr))
     return color;
 if (hexColorStr[0]=='#')
@@ -699,6 +645,7 @@ if (strlen(hexColorStr)!=6)
     return color;
 long rgb = strtol(hexColorStr,NULL,16); // Big and little Endians
 tg->itemColor = NULL;
+tg->itemNameColor = NULL;
 return MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 }
 

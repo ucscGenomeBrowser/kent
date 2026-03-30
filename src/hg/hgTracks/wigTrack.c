@@ -2091,6 +2091,13 @@ static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle items that resolve to doing a box for each pixel. */
 {
+Color cartColor = colorFromCart(tg, 0);
+if (cartColor)
+    {
+    tg->ixColor = cartColor;
+    tg->ixAltColor = cartColor;
+    }
+
 struct preDrawContainer *pre = tg->preDrawContainer;
 if (pre != NULL)
     {

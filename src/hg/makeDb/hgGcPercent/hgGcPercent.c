@@ -92,16 +92,18 @@ char *createTable =
 
 static void wigOutLine(FILE *f, char *chrom, int start, int end, int ppt)
 {
-/*	only full winSize spans are valid	*/
-if ((end - start) < winSize)
-    return;
+int span = end - start;
 
-/*	see if we are starting on a new chrom	*/
+/*	see if we are starting on a new chrom or span has changed	*/
 if (! (previousChrom && (sameWord(previousChrom, chrom))))
     {
     freeMem(previousChrom);
     previousChrom = cloneString(chrom);
-    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, winSize-overlap);
+    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, span);
+    }
+else if (span != winSize - overlap)
+    {
+    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, span);
     }
 fprintf(f, "%d\t%g\n", start+1, ppt/10.0);
 }

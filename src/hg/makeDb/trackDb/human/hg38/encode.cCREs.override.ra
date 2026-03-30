@@ -3,7 +3,7 @@ superTrack on show
 shortLabel ENCODE cCREs
 longLabel ENCODE Registry of cCREs (candidate Cis-Regulatory Elements) 
 group regulation
-priority 1
+priority 0.8
 pennantIcon New red ../goldenPath/newsarch.html#011526 "Released Jan. 15, 2026"
 html cCREsSuper.html
 

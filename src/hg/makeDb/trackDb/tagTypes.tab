@@ -168,6 +168,7 @@ ensemblTranscriptIdUrl genePred
 ensemblGeneIdUrl genePred
 vegaTranscriptIdUrl genePred
 vegaGeneIdUrl genePred
+gcOnFlyMaxDensity bigWig
 gClass_2way_consensus_pseudogene genePred
 gClass_2way_pseudogene genePred
 gClass_Ambiguous genePred

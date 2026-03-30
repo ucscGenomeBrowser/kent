@@ -1,0 +1,10 @@
+track encode3Reg
+superTrack on hide
+shortLabel ENCODE Regulation
+longLabel Integrated Regulation from ENCODE
+group regulation
+pennantIcon snowflake.png /goldenPath/newsarch.html#NNN "Please see the ENCODE4 Regulation track for the latest data. See news archive for details."
+
+include encode3.chromHmm.ra alpha
+include encode3.histone.ra alpha
+include encode3.atac.ra alpha

@@ -1652,12 +1652,14 @@ html gc5Base
 # this trackDb entry will allow it to operate properly with
 # correct visibility when a saved session is restored
 track gcOnFly
-shortLabel GC TDB Percent
-longLabel GC TDB Percent in 5-Base Windows
+release alpha
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
 group map
 visibility hide
 type bigWig 0 100
-bigDataUrl /dev/null
+bigDataUrl /gbdb/$D/bbi/$D.gcOnFly.bw
+gcOnFlyMaxDensity 50000
 syntheticTrack on
 calcWinSize 5
 autoScale Off

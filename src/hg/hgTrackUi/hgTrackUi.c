@@ -3449,6 +3449,9 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
+if (!tdbIsSuperTrack(tdb))
+    colorTrackOption(cart, tdb->track, tdb);
+
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
     // Composites *might* have had their top level controls just printed,
@@ -3922,6 +3925,17 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             }
         printf("&nbsp;</span>");
         }
+    else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+        {
+        char *downArrow = "&dArr;";
+        enum browserType browser = cgiBrowser();
+        if (browser == btIE || browser == btFF)
+            downArrow = "&darr;";
+        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+               "Description%s</A>", downArrow);
+        printf("&nbsp;</span>");
+        }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
     puts("<BR>");
@@ -4053,29 +4067,6 @@ return trackDbForPseudoTrack(RULER_TRACK_NAME,
 	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
-static struct trackDb *trackDbForGcOnFly(struct cart *cart)
-/* Create a trackDb entry for the GC on the fly pseudo-track. */
-{
-char longLabel[1024];
-safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
-struct trackDb *tdb = trackDbForPseudoTrack(GC_ON_FLY_TRACK_NAME,
-        GC_ON_FLY_TRACK_LABEL, longLabel, tvFull, TRUE);
-tdb->canPack = 0;
-tdb->type = cloneString("bigWig 0 100");
-trackDbAddSetting(tdb, "autoScale",         "Off");
-trackDbAddSetting(tdb, "viewLimits",        "30:70");
-trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
-trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
-trackDbAddSetting(tdb, "gridDefault",       "OFF");
-trackDbAddSetting(tdb, "windowingFunction", "Mean");
-trackDbAddSetting(tdb, "color",             "0,0,0");
-trackDbAddSetting(tdb, "altColor",          "128,128,128");
-trackDbAddSetting(tdb, "calcWinSize",       gcOnFlyWinSize(cart));
-trackDbAddSetting(tdb, "syntheticTrack",    "on");
-trackDbPolish(tdb);
-return tdb;
-}
-
 struct trackDb *trackDbForOligoMatch()
 /* Create a trackDb entry for the oligo matcher pseudo-track. */
 {
@@ -4151,15 +4142,8 @@ void handleFileFetch(struct cart *cart)
 char *genome = NULL;
 getDbAndGenome(cart, &database, &genome, NULL);
 initGenbankTableNames(database);
-//knetUdcInstall();
 
 char *fileUrl = cartOptionalString(cart, "fileUrl");
-if (fileUrl == NULL)
-    {
-    puts("Status: 400 Bad Request");
-    errAbort("Missing required parameter: fileUrl");
-    }
-
 char *urlClone = cloneString(fileUrl);
 cgiDecode(urlClone, urlClone, strlen(urlClone));
 fileUrl = resolveDotDots(urlClone);
@@ -4212,6 +4196,16 @@ int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
+struct udcFile *udc = udcFileMayOpen(fileUrl, NULL);
+if (udc == NULL)
+    {
+    puts("Status: 404 Not Found");
+    puts("Content-Type: text/plain\n");
+    printf("Error: could not open %s\n", fileUrl);
+    freeMem(fileUrl);
+    return;
+    }
+
 char maxAge[1024];
 safef(maxAge, sizeof(maxAge), "max-age=%d", timeout);
 printf("Cache-Control: %s\n", maxAge);
@@ -4219,7 +4213,6 @@ printf("Cache-Control: %s\n", maxAge);
 // See if we're getting a "has it changed" request.
 // If so, return a 304 if nothing changed.
 char etag[1024];
-struct udcFile *udc = udcFileOpen(fileUrl, NULL);
 time_t mtime = udcUpdateTime(udc);
 safef(etag, sizeof(etag), "\"%ld\"", mtime);
 printf("ETag: %s\n", etag);
@@ -4328,8 +4321,6 @@ else if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
-else if (sameWord(track, GC_ON_FLY_TRACK_NAME))
-    tdb = trackDbForGcOnFly(cart);
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))

@@ -337,12 +337,12 @@ var hgSearch = (function() {
         var parentDiv = $("#searchCategories");
         $.jstree.defaults.core.themes.icons = false;
         $.jstree.defaults.core.themes.dots = true;
-        $.jstree.defaults.contextmenu.show_at_node = false;
         parentDiv.jstree({
-            'plugins' : ['contextmenu', 'checkbox'],
+            'plugins' : ['checkbox'],
             'core': {
                 'data': buildTree,
-                'check_callback': true
+                'check_callback': true,
+                'dblclick_toggle': false,
             },
             'checkbox': {
                 'tie_selection': false

@@ -1,0 +1,209 @@
+<h2>Description</h2>
+
+<h3>gnomAD v3.1.1</h3>
+<p>
+gnomAD 3 was a genomes-only release. The gnomAD v3.1.1 track is the current version of gnomAD 3
+and shows variants from 76,156 whole genomes (and no exomes), all mapped to the GRCh38/hg38
+reference sequence. 4,454 genomes were added to the number of genomes in the previous v3 release.
+For more detailed information on gnomAD v3.1, see the related <a target="_blank"
+href="https://gnomad.broadinstitute.org/blog/2020-10-gnomad-v3-1/">blog post</a>.
+A bugfix to v3.1 resulted in gnomAD v3.1.1, see
+<a target="_blank" href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/">changelog</a>.
+Do not use gnomAD v3.1 anymore, we will remove the 3.1 track soon.
+</p>
+
+<h3>gnomAD v3.1 <b>(Deprecated)</b></h3>
+<p>
+The gnomAD v3.1 track is deprecated. Please use v3.1.1 instead.
+</p>
+
+<h3>gnomAD v3</h3>
+<p>
+The gnomAD v3 track shows variants from 71,702 whole genomes (and no exomes), all mapped to the
+GRCh38/hg38 reference sequence. For more detailed
+information on gnomAD v3, see the related <a target="_blank"
+href="https://macarthurlab.org/2019/10/16/gnomad-v3-0/">blog post</a>.</p>
+
+<p>
+For questions on the gnomAD data, also see the <a target="_blank"
+href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
+<p>
+More details on the Variant type(s) can be found on the <a target="_blank"
+href="http://www.sequenceontology.org/so_wiki/index.php/Category:SO:SOFA">Sequence Ontology page</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h3>gnomAD v3.1.1</h3>
+<p>
+The gnomAD v3.1.1 track version follows the same conventions and configuration as the v3.1 track,
+except as noted below.</p>
+
+<ol>
+<li>There is a Non-cancer filter used to exclude/include variants from samples of individuals who
+were not ascertained for having cancer in a cancer study.
+<li>There are additional FILTER field filters: AS_VQSR, indel_stack (chrM only), and npg (chrM only).
+<li>Where possible, variants overlapping multiple transcripts/genes have been collapsed into one
+variant, with additional information available on the details page, which has roughly halved the
+number of items in the bigBed.
+<li>The bigBed has been split into two files, one with the information necessary for the track
+display, and one with the information necessary for the details page. For more information on
+this data format, please see the <a href="#dataAccess">Data Access</a> section below.
+<li>The VEP annotation is shown as a table instead of spread across multiple fields.
+<li>Intergenic variants have not been pre-filtered.
+</ol>
+
+<h3>gnomAD v3.1</h3>
+<p>
+By default, a maximum of 50,000 variants can be displayed at a time (before applying the filters
+described below), before the track switches to dense display mode.
+</p>
+
+<p>
+Mouse hover on an item will display many details about each variant, including the affected gene(s),
+the variant type, and annotation (missense, synonymous, etc).
+</p>
+
+<p>
+Clicking on an item will display additional details on the variant, including a population frequency
+table showing allele count in each sub-population.
+</p>
+
+<p>
+Following the conventions on the gnomAD browser, items are shaded according to their Annotation
+type:
+<table class="stdTbl">
+    <tr><td>pLoF</td><td width="50px" style="background: rgb(255,32,0)"></td></tr>
+    <tr><td>Missense</td><td width="50px" style="background: rgb(247,189,0)"></td></tr>
+    <tr><td>Synonymous</td><td style="background: rgb(4,255,0)"></td></tr>
+    <tr><td>Other</td><td style="background: rgb(95,95,95)"></td></tr>
+</table>
+</p>
+
+<h4>Label Options</h4>
+<p>
+To maintain consistency with the gnomAD website, variants are by default labeled according
+to their chromosomal start position followed by the reference and alternate alleles,
+for example &quot;chr1-1234-T-CAG&quot;. dbSNP rsID's are also available as an additional
+label, if the variant is present in dbSnp.
+</p>
+
+<h4>Filtering Options</h4>
+<p>
+Three filters are available for these tracks:
+</p>
+<ul>
+    <li>FILTER: Used to exclude/include variants that failed Random Forest
+    (RF), Inbreeding Coefficient (Inbreeding Coeff), or Allele Count (AC0) filters. The
+    PASS option is used to include/exclude variants that pass all of the RF,
+    InbreedingCoeff, and AC0 filters, as denoted in the original VCF.
+    <li>Annotation type: Used to exclude/include variants that are annotated as
+    Probability Loss of Function (pLoF), Missense, Synonymous, or Other, as
+    annotated by VEP version 85 (GENCODE v19).
+    <li>Variant Type: Used to exclude/include variants according to the type of
+    variation, as annotated by VEP v85.
+</ul>
+There is one additional configurable filter on the minimum minor allele frequency.
+
+<a name="UCSCMethods">
+<h2>UCSC Methods</h2>
+<p>
+The gnomAD v3.1.1 data is unfiltered.</p>
+
+<p>
+For the deprecated v3.1 update only, in order to cut
+down on the amount of displayed data, the following variant
+types have been filtered out, but are still viewable in the gnomAD browser:
+<ul>
+    <li>Regulatory Region Variants
+    <li>Downstream/Upstream Gene Variants
+    <li>Transcription Factor Binding Site Variants
+</ul>
+</p>
+
+<p>
+For the full steps used to create the gnomAD tracks at UCSC, please see the
+<a
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt"
+target="_blank">hg38 gnomad makedoc</a>.
+</p>
+
+<a name="dataAccess">
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a target="_blank"
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
+can be downloaded from our <a
+href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below). The
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1/variants/">v3.1</a> and
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1.1/">v3.1.1</a> variants can
+be found in a special directory as they have been transformed from the underlying VCF.</p>
+
+<p>
+For the v3.1.1 variants in particular, the underlying bigBed only contains enough information
+necessary to use the track in the browser. The extra data like VEP annotations and CADD scores are
+available in the <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1.1/">same directory</a>
+as the bigBed but in the files <em>gnomad.v3.1.1.details.tab.gz</em> and
+<em>gnomad.v3.1.1.details.tab.gz.gzi</em>. The gnomad.v3.1.1.details.tab.gz contains the gzip
+compressed extra data in JSON format, and the .gzi file is available to speed searching of
+this data. Each variant has an associated md5sum in the name field of the bigBed which can be
+used along with the _dataOffset and _dataLen fields to get the associated external data, as show
+below:
+<pre>
+# find item of interest:
+bigBedToBed genomes.bb stdout | head -4 | tail -1
+chr1    12416    12417    854246d79dc5d02dcdbd5f5438542b6e    [..omitted for brevity..]    chr1-12417-G-A    67293    902
+
+# use the final two fields, _dataOffset and _dataLen (add one to _dataLen to include a newline), to get the extra data:
+bgzip -b 67293 -s 903 gnomad.v3.1.1.details.tab.gz
+854246d79dc5d02dcdbd5f5438542b6e    {"DDX11L1": {"cons": ["non_coding_transcript_variant",  [..omitted for brevity..]
+</pre>
+
+<p>
+The data can also be found directly from the gnomAD <a target="_blank"
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons Zero Public Domain Dedication</a> as described <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a>.
+</p>
+
+<p>
+Please note that some annotations within the provided files may have restrictions on usage. See <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a> for more information.
+</p>
+
+<h2>References</h2>
+
+<p>
+Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alf&#246;ldi J, Watts NA, Vittal C,
+Gauthier LD <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06045-0" target="_blank">
+    A genomic mutational constraint map using variation in 76,156 human genomes</a>.
+<em>Nature</em>. 2024 Jan;625(7993):92-100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38057664" target="_blank">38057664</a>
+</p>
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alföldi J, Wang Q, Collins RL, Laricchia KM, Ganna
+A, Birnbaum DP <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2308-7" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>

@@ -1,96 +1,109 @@
 <h2>Description</h2>
 <p>
-The gnomAD v3 track shows variants and derived information from 71,702 whole genomes (and no exomes), all mapped to the 
-GRCh38/hg38 reference sequence. Most of the genomes from v2 are included in v3. For more detailed 
-information on gnomAD v3, see the related <a target="_blank" 
-href="https://macarthurlab.org/2019/10/16/gnomad-v3-0/">blog post</a>.</p>
-
-<p>
-The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to 
-the GRCh37/hg19 reference sequence and lifted to the GRCh38/hg38 assembly. The data originate 
-from 141,456 unrelated individuals sequenced as part of various population-genetic and 
-disease-specific <a target="_blank" href="https://gnomad.broadinstitute.org/about">studies</a> 
-collected by the <a target="_blank" 
-href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.1.1.
-Raw data from all studies have been reprocessed through a unified pipeline and jointly
-variant-called to increase consistency across projects. For more information on the processing
-pipeline and population annotations, see the following <a target="_blank"
-href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
-and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt"
-target="_blank">README</a>.</p>
-<p>
-gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the 
-GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
+The <a target="_blank" href="https://gnomad.broadinstitute.org/">Genome Aggregation Database
+(gnomAD)</a> is a resource developed by an international coalition of investigators at the Broad
+Institute and collaborating institutions, with the goal of aggregating and harmonizing exome and
+whole-genome sequencing data from large-scale sequencing projects spanning disease-specific cohorts
+and population genetics studies. Individuals affected by severe pediatric diseases and first-degree
+relatives were excluded from the studies. However, some individuals with severe disease may still
+have remained in the datasets, although probably at an equivalent or lower frequency than observed
+in the general population. For each variant, gnomAD provides allele frequencies stratified by
+genetic ancestry group, alongside quality metrics such as depth of coverage and genotype quality
+scores. The database also supplies sequencing coverage, structural variants, CNVs, and short tandem
+repeats. Additionally, gnomAD provides non-coding constraint and gene-level constraint
+metrics &mdash; including pLI scores, observed/expected (oe) ratios, and LOEUF values &mdash;
+that quantify intolerance to loss-of-function variation and are widely used to prioritize
+candidate disease genes. The most
+current release on hg38 is v4.1, but the older v3 and v2 versions are also available.
 </p>
 
-<p>On hg38 only, a subtrack "Gnomad mutational constraint" aka "Genome
-non-coding constraint of haploinsufficient variation (Gnocchi)" captures the
-depletion of variation caused by purifying natural selection.
-This is similar to negative selection on loss-of-function (LoF) for genes, but
-can be calculated for non-coding regions, too. Briefly, for any 1kbp window in
-the genome, a model based on trinucleotide sequence context, base-level
-methylation, and regional genomic features predicts expected number of mutations,
-and compares this number to the observed number of mutations using a Z-score (see Chen et al 2024 
-in the Reference section for details). The chrX scores were added as received from the authors, 
-as there are no mutations available for chrX, they are more speculative than the ones on the autosomes.</p>
-
-<p>The gnomAD MPC score (Missense Deleteriousness Prediction by Constraint) is available only on hg19.</p>
+<p>
+The available data tracks are:
+<ul>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariantsV4.1#TRACK_HTML"><strong>gnomAD
+v4.1</strong></a> &mdash; Shows single nucleotide variants (SNVs) and small insertion/deletion
+variants of 807,162 individuals, including 730,947 exomes and 76,215 genomes.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV3_1_1#TRACK_HTML"><strong>gnomAD
+v3.1.1</strong></a> &mdash; Shows variants from 76,156 whole genomes (and no exomes), all mapped
+to GRCh38/hg38.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV3_1#TRACK_HTML"><strong>Deprecated:
+gnomAD v3.1</strong></a> &mdash; Same underlying data as v3.1.1 with older annotations. Do not
+use; will be removed soon.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV3#TRACK_HTML"><strong>gnomAD
+v3</strong></a> &mdash; Shows variants from 71,702 whole genomes from the v3.0 release.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariantsV2#TRACK_HTML"><strong>gnomAD
+v2</strong></a> &mdash; Shows variants from 125,748 exomes and 15,708 whole genomes, lifted from
+GRCh37/hg19 to GRCh38/hg38.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadConstraint#TRACK_HTML"><strong>gnomAD Mut
+Constraint</strong></a> &mdash; Shows the reduced variation caused by purifying natural selection
+for 1kbp windows across the genome (based on v3.1.2).</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadPLI#TRACK_HTML"><strong>gnomAD Constraint
+Metrics</strong></a> &mdash; Contains per-gene and per-transcript metrics of pathogenicity
+(LOEUF, pLI, and Z-scores) for v2.1.1, v4, and v4.1.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad3Coverage#TRACK_HTML"><strong>gnomAD v3 Genome
+Coverage</strong></a> &mdash; Shows various read depth metrics for genome samples from
+v3.0.1.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomad4ExomeCoverage#TRACK_HTML"><strong>gnomAD v4
+Exome Coverage</strong></a> &mdash; Shows various read depth metrics for exome samples from
+v4.0.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadStructuralVariants#TRACK_HTML"><strong>gnomAD
+Structural Variants</strong></a> &mdash; Shows structural variant calls (variants &gt;=50
+nucleotides) from gnomAD v4.1.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadCopyNumberVariants#TRACK_HTML"><strong>gnomAD
+Rare CNV Variants</strong></a> &mdash; Shows rare copy number variants (&lt;1% overall site
+frequency) from gnomAD v4.1.</li>
+<li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadStr#TRACK_HTML"><strong>gnomAD
+STR</strong></a> &mdash; Shows short tandem repeat genotypes at disease-associated loci from
+gnomAD v3.1.3.</li>
+</ul>
+</p>
 
 <p>
-For questions on the gnomAD data, also see the <a target="_blank" 
+For questions on the gnomAD data, also see the <a target="_blank"
 href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
-
-<h2>Display Conventions</h2>
-<dl>
-  <dt></dt>
-  <dd><li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
-    each variant.</li>
-  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
-    displayed to the left of a vertical line with colored portions corresponding to allele counts.
-    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
-</dl>
+<p>
+More details on the Variant type(s) can be found on the <a target="_blank"
+href="http://www.sequenceontology.org/so_wiki/index.php/Category:SO:SOFA">Sequence Ontology page</a>.</p>
 
 <h2>Data Access</h2>
 
 <p>
 The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
 Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
-automated analysis, the data may be queried from our <a target="_blank" 
+automated analysis, the data may be queried from our <a target="_blank"
 href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
 can be downloaded from our <a
-href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
-to the conditions set forth by the gnomAD consortium (see below). Coverage values
-and constraint scores for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
-the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
+href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below).</p>
+
 <p>
-The data can also be found directly from the gnomAD <a target="_blank" 
+The data can also be found directly from the gnomAD <a target="_blank"
 href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to
 our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
-<p>The mutational constraints score ("Gnocchi") was updated in October 2022 from a previous,
-now deprecated, pre-publication version. The old version can be found in our 
-<a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/gnomad/">archive
-directory</a> on the download server. It can be loaded by copying the URL into
-our "Custom tracks" input box.  </p>
-
 <h2>Credits</h2>
 <p>
 Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
 Database Consortium</a> for making these data available. The data are released under the <a
-href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
-(ODbL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">Creative Commons Zero Public Domain Dedication</a> as described <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a>.
+</p>
+
+<p>
+Please note that some annotations within the provided files may have restrictions on usage. See <a href="https://gnomad.broadinstitute.org/policies" target="_blank">here</a> for more information.
 </p>
 
 <h2>References</h2>
 
 <p>
-Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alfoldi J, Wang Q, Collins RL, Laricchia KM,
-Ganna A, Birnbaum DP <em>et al</em>.
-<a target="_blank" href="https://www.biorxiv.org/content/10.1101/531210v3.full">Variation across 
-141,456 human exomes and genomes reveals the spectrum of loss-of-function intolerance across human 
-protein-coding genes</a>. doi: https://doi.org/10.1101/531210.
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alföldi J, Wang Q, Collins RL, Laricchia KM, Ganna
+A, Birnbaum DP <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2308-7" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
 </p>
 <p>
 Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
@@ -101,12 +114,19 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">275
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
 </p>
 <p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+<p>
 Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alf&#246;ldi J, Watts NA, Vittal C,
 Gauthier LD <em>et al</em>.
 <a href="https://doi.org/10.1038/s41586-023-06045-0" target="_blank">
     A genomic mutational constraint map using variation in 76,156 human genomes</a>.
 <em>Nature</em>. 2024 Jan;625(7993):92-100.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38057664" target="_blank">38057664</a><br>
-(We added the data in 2021, then later referenced the 2022 Biorxiv preprint, in which the track was not called "Gnocchi" yet)
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38057664" target="_blank">38057664</a>
 </p>
-

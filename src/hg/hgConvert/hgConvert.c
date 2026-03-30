@@ -261,7 +261,8 @@ webNewSection("Notes");
 cgiParagraph(
     "<B>QuickLift tracks:</B> When enabled, QuickLift displays tracks from "
     "the source assembly mapped onto the target assembly, allowing you to view "
-    "your current tracks in the context of the new genome.");
+    "your current tracks in the context of the new genome. For more information, see the "
+    "<A HREF=\"../goldenPath/help/quickLift.html\">QuickLift documentation</A>.");
 cgiParagraph(
     "If your desired target assembly is not available, you can search for it "
     "and request it on our "
@@ -705,7 +706,7 @@ else
     }
 if (badList)
     {
-    printf("<BR>Some of your tracks failed to lift because the type is not supported by quickLift.<BR><BR>");
+    printf("<BR>Some of your tracks failed to lift because the type is not supported by QuickLift.<BR><BR>");
     printf("<TABLE><TR><TD><B>Short label<TD><B>Type</TD></TR>");
     for(; badList; badList = badList->next)
         {

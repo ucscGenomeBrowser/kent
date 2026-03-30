@@ -160,6 +160,13 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
+Color cartColor = colorFromCart(tg, 0);
+if (cartColor)
+    {
+    tg->ixColor = cartColor;
+    tg->ixAltColor = cartColor;
+    }
+
 if (tg->networkErrMsg == NULL)
     {
     /* Call actual graphing routine. */
@@ -418,8 +425,20 @@ static void gc5BaseOnTheFlyLoadItems(struct track *tg)
 /* Compute GC percent from genome sequence; called in the loadItems phase
  * just as bigWigLoadItems calls bigWigLoadPreDraw to fill preDrawContainer.
  * Fetch sequence that covers the preDraw smoothing margins on each side so
- * the smoothing/averaging machinery has data at the window edges. */
+ * the smoothing/averaging machinery has data at the window edges.
+ * When the display density exceeds gcOnFlyMaxDensity bases per pixel,
+ * fall back to reading a pre-computed bigWig file via bigWigLoadItems. */
 {
+char *maxDenseStr = trackDbSettingClosestToHomeOrDefault(tg->tdb, "gcOnFlyMaxDensity", "50000");
+if (maxDenseStr != NULL)
+    {
+    double basesPerPixel = (double)(winEnd - winStart) / insideWidth;
+    if (basesPerPixel > atof(maxDenseStr))
+	{
+	bigWigLoadItems(tg);
+	return;
+	}
+    }
 tg->items = NULL;
 tg->mapsSelf = TRUE;
 /* Extend the fetch range by wiggleSmoothingMax pixels worth of bases on
@@ -457,61 +476,3 @@ tg->loadItems   = gc5BaseOnTheFlyLoadItems;
 tg->loadPreDraw = gc5BaseOnTheFlyLoadPreDraw;
 }
 
-struct track *gc5BaseOnTheFlyTg(struct cart *cart)
-/* Create an on-the-fly GC percent track computed directly from
- *     genome sequence.  Default visibility is dense; the cart
- *     override happens later in the getTrackList() visibility loop.
- */
-{
-struct track *tg = trackNew();
-struct trackDb *tdb = trackDbNew();
-char longLabel[1024];
-safef(longLabel, sizeof(longLabel), "GC FLY Percent in %s-Base Windows", gcOnFlyWinSize(cart));
-
-/* Fill in trackDb fields needed by wigCartOptionsNew and bigWigMethods. */
-tdb->track      = cloneString(GC_ON_FLY_TRACK_NAME);
-tdb->table      = cloneString(GC_ON_FLY_TRACK_NAME);
-tdb->type       = cloneString("bigWig 0 100");
-tdb->shortLabel = cloneString(GC_ON_FLY_TRACK_LABEL);
-tdb->longLabel  = cloneString(longLabel);
-tdb->grp        = cloneString("map");
-tdb->canPack    = 0;
-tdb->visibility = tvHide;
-
-/* Add wig display settings to match what gc5BaseBw trackDb would have. */
-trackDbAddSetting(tdb, "autoScale",         "Off");
-trackDbAddSetting(tdb, "viewLimits",        "30:70");
-trackDbAddSetting(tdb, "maxHeightPixels",   "128:36:16");
-trackDbAddSetting(tdb, "graphTypeDefault",  "Bar");
-trackDbAddSetting(tdb, "gridDefault",       "OFF");
-trackDbAddSetting(tdb, "windowingFunction", "Mean");
-trackDbAddSetting(tdb, "color",             "0,0,0");
-trackDbAddSetting(tdb, "altColor",          "128,128,128");
-// trackDbAddSetting(tdb, "gcComputeOnTheFly", "on");
-// trackDbAddSetting(tdb, "gcOnTheFlyMaxBases", "500000");
-// trackDbAddSetting(tdb, "gcFallbackBigWig", "/gbdb/ce1x/bbi/gc5BaseBw/gc5Base.bw");
-trackDbAddSetting(tdb, "calcWinSize", gcOnFlyWinSize(cart));
-trackDbPolish(tdb);
-
-/* Set up bigWig display methods (drawItems, preDrawItems, etc.) */
-char *words[] = {"bigWig", "0", "100"};
-bigWigMethods(tg, tdb, 3, words);
-
-/* Override data loading with on-the-fly sequence computation. */
-tg->loadItems   = gc5BaseOnTheFlyLoadItems;
-tg->loadPreDraw = gc5BaseOnTheFlyLoadPreDraw;
-
-/* Fill in track struct fields. */
-tg->tdb              = tdb;
-tg->track            = tdb->track;
-tg->table            = tdb->table;
-tg->visibility       = tdb->visibility;
-tg->shortLabel       = tdb->shortLabel;
-tg->longLabel        = tdb->longLabel;
-tg->priority         = tdb->priority;
-tg->defaultPriority  = tg->priority;
-tg->groupName        = tdb->grp;
-tg->defaultGroupName = cloneString(tg->groupName);
-tg->hasUi            = TRUE;
-return tg;
-}
