@@ -697,6 +697,14 @@ $(function() {
 
                     initAll(freshData);
                 });
+            })
+            .catch(err => {
+                const table = document.getElementById("theMetaDataTable");
+                if (table) {
+                    table.innerHTML =
+                        `<tr><td style="padding:20px;color:#a00;">` +
+                        `Error loading metadata: ${err.message}</td></tr>`;
+                }
             });
     }  // end loadDataAndInit
 

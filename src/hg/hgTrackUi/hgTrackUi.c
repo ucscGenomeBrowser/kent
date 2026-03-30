@@ -4193,6 +4193,16 @@ int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
+struct udcFile *udc = udcFileMayOpen(fileUrl, NULL);
+if (udc == NULL)
+    {
+    puts("Status: 404 Not Found");
+    puts("Content-Type: text/plain\n");
+    printf("Error: could not open %s\n", fileUrl);
+    freeMem(fileUrl);
+    return;
+    }
+
 char maxAge[1024];
 safef(maxAge, sizeof(maxAge), "max-age=%d", timeout);
 printf("Cache-Control: %s\n", maxAge);
@@ -4200,7 +4210,6 @@ printf("Cache-Control: %s\n", maxAge);
 // See if we're getting a "has it changed" request.
 // If so, return a 304 if nothing changed.
 char etag[1024];
-struct udcFile *udc = udcFileOpen(fileUrl, NULL);
 time_t mtime = udcUpdateTime(udc);
 safef(etag, sizeof(etag), "\"%ld\"", mtime);
 printf("ETag: %s\n", etag);
