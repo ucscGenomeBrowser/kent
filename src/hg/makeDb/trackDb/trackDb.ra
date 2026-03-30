@@ -1658,7 +1658,8 @@ longLabel GC TDB Percent in 5-Base Windows
 group map
 visibility hide
 type bigWig 0 100
-bigDataUrl /dev/null
+bigDataUrl /gbdb/$D/bbi/$D.gcOnFly.bw
+gcOnFlyMaxDensity 50000
 syntheticTrack on
 calcWinSize 5
 autoScale Off
