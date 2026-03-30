@@ -1475,7 +1475,11 @@ else
         cartRemove(cart, "db");
         }
     else if (!hDbIsActive(db))
-	errAbort("Can not find database '%s'", db);
+	errAbort("Can not find database '%s'.<br>"
+                "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s in "
+                "the list of NCBI/INSDC assemblies</a>, then click 'request' when you have found the right assembly "
+                "and enter your email address. We will then make a genome browser and get back to you within a few days",
+                db, db, db);
     }
 }
 
