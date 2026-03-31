@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName fieldCountMismatch
 
 one:	mkout
 	-${hubCheck} input/hub1.txt > output/output1.txt
@@ -72,6 +72,10 @@ selfParent: mkout
 dotInName: mkout
 	-${hubCheck} input/dotInName.txt > output/dotInName.output.txt 2>/dev/null
 	diff expected/dotInName.output.txt output/dotInName.output.txt
+
+fieldCountMismatch: mkout
+	-cd input && ${hubCheck} fieldCountMismatch.txt > ../output/fieldCountMismatch.output.txt 2>/dev/null
+	diff expected/fieldCountMismatch.output.txt output/fieldCountMismatch.output.txt
 
 mkout::
 	@mkdir -p output
