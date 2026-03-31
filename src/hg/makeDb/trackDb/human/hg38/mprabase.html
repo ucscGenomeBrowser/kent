@@ -1,0 +1,129 @@
+<h2>Description</h2>
+<p>
+Massively Parallel Reporter Assays (MPRAs) and related methods such as STARR-seq
+enable quantitative testing of thousands of candidate regulatory DNA sequences in
+parallel by linking each sequence to a reporter gene and measuring transcriptional
+output using sequencing.
+</p>
+
+<p>
+The <b>MPRA Base</b> track shows 41,275 experimentally tested cis-regulatory elements
+from the <a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
+database
+(<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao et al., 2023</a>).
+The database integrates data from multiple studies, assay platforms (lentiMPRA,
+plasmidMPRA, STARR-seq, CRE-seq, and others), and cell types while preserving
+experiment-level resolution. Only elements derived from genomic fragments that can
+be mapped to the reference genome are included; synthetic or designed oligonucleotide
+libraries without genomic coordinates are excluded.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each item represents a genomic fragment tested within a specific experiment, defined
+as a unique combination of cell line, assay type, and publication (PMID). The same
+genomic region may appear multiple times if tested in different experiments.
+</p>
+
+<p>
+Items are colored by percentile rank of the mean raw activity score within each experiment:
+</p>
+<ul>
+<li><span style="color:blue;"><b>Blue</b></span> &mdash; percentile &lt; 50</li>
+<li><span style="color:orange;"><b>Orange</b></span> &mdash; percentile 50&ndash;74</li>
+<li><span style="color:red;"><b>Red</b></span> &mdash; percentile &ge; 75</li>
+</ul>
+
+<p>
+The mouse-over shows the cell line, assay type, raw activity score, percentile rank,
+and citation for each element.
+</p>
+
+<h2>Methods</h2>
+<p>
+Within each experiment, replicate measurements for the same genomic fragment were
+aggregated by computing the mean raw activity score. The original dataset contained
+211,053 replicate-level measurements; after aggregation, the final track contains
+41,275 unique experiment-level genomic elements.
+</p>
+
+<p>
+Elements are ranked by mean raw activity score independently within each experiment,
+and a percentile rank (0&ndash;100) is computed per experiment to avoid cross-study
+distortions caused by differing assay dynamic ranges.
+</p>
+
+<h2>Experiments</h2>
+<p>
+The following table lists the experiments represented in this track.
+</p>
+
+<table class="stdTbl">
+<tr>
+  <th>PMID</th>
+  <th>Author</th>
+  <th>Year</th>
+  <th>Lab</th>
+  <th>Cell type</th>
+  <th>Assay</th>
+  <th>Elements</th>
+</tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/27831498/" target="_blank">27831498</a></td><td>Inoue et al.</td><td>2017</td><td>Shendure Lab</td><td>HepG2</td><td>lentiMPRA</td><td>2,241</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/30045748/" target="_blank">30045748</a></td><td>Klein et al.</td><td>2018</td><td>Shendure Lab</td><td>HepG2</td><td>STARR-seq</td><td>7,064</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">32483191</a></td><td>Choi et al.</td><td>2020</td><td>Brown Lab</td><td>HEK293FT</td><td>lentiMPRA</td><td>840</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">32483191</a></td><td>Choi et al.</td><td>2020</td><td>Brown Lab</td><td>UACC903</td><td>lentiMPRA</td><td>840</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32819422/" target="_blank">32819422</a></td><td>Mattioli et al.</td><td>2020</td><td>Mele Lab</td><td>HUES64</td><td>plasmidMPRA</td><td>6,954</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32819422/" target="_blank">32819422</a></td><td>Mattioli et al.</td><td>2020</td><td>Mele Lab</td><td>mESC</td><td>plasmidMPRA</td><td>6,954</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/33046894/" target="_blank">33046894</a></td><td>Klein et al.</td><td>2020</td><td>Shendure Lab</td><td>HepG2</td><td>lentiMPRA</td><td>8,116</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/33046894/" target="_blank">33046894</a></td><td>Klein et al.</td><td>2020</td><td>Shendure Lab</td><td>HepG2</td><td>plasmidMPRA</td><td>2,228</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/33046894/" target="_blank">33046894</a></td><td>Klein et al.</td><td>2020</td><td>Shendure Lab</td><td>HepG2</td><td>STARR-seq</td><td>2,230</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/36834916/" target="_blank">36834916</a></td><td>Koesterich et al.</td><td>2023</td><td>Kreimer Lab</td><td>NPC</td><td>lentiMPRA</td><td>3,807</td></tr>
+</table>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>
+and exported from there to spreadsheet or tab-sep tables.
+From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>mprabase</i>.
+</p>
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra/mprabase" target="_blank">our download server</a>.
+The file for this track is called <tt>mprabase.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra/mprabase/mprabase.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+<p>
+The original data can be downloaded from the
+<a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base web application</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Varda Singhal, Jianyu Zhao, and the
+<a href="https://pharm.ucsf.edu/ahituv" target="_blank">Ahituv Lab</a>
+at the University of California San Francisco for creating and curating MPRA Base and for creating this track.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Zhao J, Baltoumas FA, Konnaris MA, Mouratidis I, Liu Z, Sims J, Agarwal V, Pavlopoulos GA,
+Georgakopoulos-Soares I, Ahituv N.
+<a href="https://doi.org/10.1101/2023.11.19.567742" target="_blank">
+MPRAbase: A Massively Parallel Reporter Assay Database</a>.
+<em>bioRxiv</em>. 2023 Nov 22;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38045264" target="_blank">38045264</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10690217/" target="_blank">PMC10690217</a>
+</p>
+

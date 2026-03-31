@@ -12,11 +12,3 @@ wget 'https://mpravardb.rc.ufl.edu/session/27d7af46df917aed91f4cca7bee378a2/down
 # Convert to BED, liftOver hg19->hg38, merge, and create bigBed:
 python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
 # Output: mpravardb.bb (239,028 variants after liftOver, 114 unmapped)
-
-# Create gbdb symlink
-mkdir -p /gbdb/hg38/mpra
-ln -sf /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb /gbdb/hg38/mpra/mpravardb.bb
-
-# Rebuild trackDb
-cd ~/kent/src/hg/makeDb/trackDb
-make DBS=hg38
