@@ -1,0 +1,14 @@
+hub fieldCountMismatch
+shortLabel fieldCountMismatch
+longLabel fieldCountMismatch
+email braney@soe.ucsc.edu
+useOneFile on
+
+genome mm10
+
+track fieldMismatch
+type bigBed 9
+bigDataUrl test6field.bb
+shortLabel fieldMismatch
+longLabel fieldMismatch
+visibility dense

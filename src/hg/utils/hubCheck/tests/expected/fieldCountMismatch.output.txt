@@ -1,0 +1,3 @@
+Found 2 problems:
+bigBed file 'test6field.bb' has 6 fields, but track "fieldMismatch" declares 'type bigBed 9'. Either regenerate the bigBed with the correct number of fields, or change the type line to match the file's field count.
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.
