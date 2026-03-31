@@ -23,15 +23,26 @@ int lastChromId = -1;
 struct bigBedInterval *interval;
 struct slInt *labelColumns = NULL;
 
+// Generic searchItemLabel support: allows ${fieldName} patterns in hgFindSpec
+char *searchItemLabel = NULL;
+char **fieldNames = NULL;
+if (hfs)
+    searchItemLabel = hgFindSpecSetting(hfs, "searchItemLabel");
+if (searchItemLabel)
+    {
+    AllocArray(fieldNames, bbi->fieldCount);
+    struct slName *field = NULL, *fields = bbFieldNames(bbi);
+    int i = 0;
+    for (field = fields; field != NULL && i < bbi->fieldCount; field = field->next)
+        fieldNames[i++] = field->name;
+    }
+
+// MANE/HGNC description support
 struct asObject *as = NULL;
 int ncbiIdIx = -1, geneNameIx = -1;
 struct sqlConnection *conn = NULL;
 if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc")))
     {
-    // TODO: right now we are only doing this for MANE and HGNC, but if we are gonna add
-    // special descriptions to more tracks in the future then we should have some generic
-    // way of attaching a description to an hfs, whether that hfs is a mysql search or a
-    // bigBed search
     as = bigBedAsOrDefault(bbi);
     if (sameString(hfs->searchName, "mane"))
         {
@@ -43,6 +54,7 @@ if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "
     }
 
 bigBedLabelCalculateFields(cart, tdb, bbi,  &labelColumns );
+char startBuf[256], endBuf[256], *row[bbi->fieldCount];
 for (interval = intervalList; interval != NULL; interval = interval->next)
     {
     struct hgPos *hgPos;
@@ -55,9 +67,21 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chrom = cloneString(chromName);
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
-    hgPos->name = bigBedMakeLabel(tdb, labelColumns, interval, chromName);
     hgPos->browserName = cloneString(term);
     hgPos->description = cloneString(description);
+
+    if (searchItemLabel)
+        {
+        bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
+        hgPos->name = replaceFieldInPattern(searchItemLabel, bbi->fieldCount, fieldNames, row);
+        }
+    else
+        {
+        hgPos->name = bigBedMakeLabel(tdb, labelColumns, interval, chromName);
+        if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc")))
+            bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
+        }
+
     if (hfs)
         {
         char *paddingStr = hgFindSpecSetting(hfs, "padding");
@@ -72,26 +96,21 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
             if (hgPos->chromStart < 0)
                 hgPos->chromStart = 0;
             }
-        // special code here for per hfs bigBed searches
-        if (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc"))
+        // MANE/HGNC description logic
+        if (sameString(hfs->searchName, "mane"))
             {
-            char startBuf[256], endBuf[256], *row[bbi->fieldCount];
-            bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
-            if (sameString(hfs->searchName, "mane"))
+            // here the description comes from hgFixed.refLink.product, linked via mane.bb.ncbiId
+            if (ncbiIdIx > 0)
                 {
-                // here the description comes from hgFixed.refLink.product, linked via mane.bb.ncbiId
-                if (ncbiIdIx > 0)
-                    {
-                    struct dyString *query = sqlDyStringCreate("select product from %s where mrnaAcc=substring_index('%s', '.', 1)", refLinkTable, row[ncbiIdIx]);
-                    hgPos->description = sqlQuickString(conn, dyStringCannibalize(&query));
-                    }
+                struct dyString *query = sqlDyStringCreate("select product from %s where mrnaAcc=substring_index('%s', '.', 1)", refLinkTable, row[ncbiIdIx]);
+                hgPos->description = sqlQuickString(conn, dyStringCannibalize(&query));
                 }
-            else
-                {
-                // the description is the geneName field of the bigBed
-                if (geneNameIx > 0)
-                    hgPos->description = cloneString(row[geneNameIx]);
-                }
+            }
+        else if (sameString(hfs->searchName, "hgnc"))
+            {
+            // the description is the geneName field of the bigBed
+            if (geneNameIx > 0)
+                hgPos->description = cloneString(row[geneNameIx]);
             }
         }
     }

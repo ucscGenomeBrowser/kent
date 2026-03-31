@@ -10333,57 +10333,6 @@ slReverse(&list);
 return list;
 }
 
-static struct dyString *subMultiField(char *pattern, int fieldCount,
-                                 char *in[], char *out[])
-/* Substitute $in with out values in pattern */
-{
-int i;
-struct dyString *s = dyStringNew(256), *d = NULL;
-dyStringAppend(s, pattern);
-for (i=0; i<fieldCount; ++i)
-    {
-    if (out[i]==NULL)
-        continue;
-
-    // If a field is a prefix or suffix to another field, for example 'chrom' and 'chromStart'
-    // we don't want to erroneously sub out the 'chrom' in 'chromStart'. Allow the wrapping
-    // protected fields in ${} to prevent the substitution:
-    char *field = in[i];
-    int fieldLen = strlen(field);
-    char *spec = needMem(fieldLen + 2);
-    char *strictSpec = needMem(fieldLen + 4);
-    *spec = '$';
-    *strictSpec = '$';
-    strictSpec[1] = '{';
-    strcpy(spec + 1, field);
-    strcpy(strictSpec + 2, field);
-    strictSpec[fieldLen + 2] = '}';
-    strictSpec[fieldLen + 3] = '\0';
-
-    if (stringIn(strictSpec, s->string))
-        {
-        d = dyStringSub(s->string, strictSpec, out[i]);
-        s = d;
-        }
-    // the user may have both a ${} enclosed instance and a non-enclosed one!
-    d = dyStringSub(s->string, spec, out[i]);
-
-    dyStringFree(&s);
-    freeMem(spec);
-    freeMem(strictSpec);
-    s = d;
-    d = NULL;
-    }
-return s;
-}
-
-char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals)
-/* Replace $fieldName in pattern with value.  Used in trackDb mouseOver setting */
-{
-struct dyString *ds = subMultiField(pattern, fieldCount, fieldNames, fieldVals);
-return dyStringCannibalize(&ds);
-}
-
 static struct dyString *subMulti(char *orig, int subCount,
                                  char *in[], char *out[])
 /* Perform multiple substitions on orig. */

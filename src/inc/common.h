@@ -943,6 +943,11 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
  Return value needs to be freeMem'd.
 */
 
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals);
+/* Given a pattern containing $fieldName or ${fieldName} variable references, replace each
+ * variable with the corresponding value from fieldVals.  The ${} form prevents ambiguity
+ * when one field name is a prefix of another (e.g. "chrom" vs "chromStart"). */
+
 int strSwapStrs(char *string, int sz,char *oldStr, char *newStr);
 /* Swaps all occurrences of the oldStr with the newStr in string. Need not be same size
    Swaps in place but restricted by sz.  Returns count of swaps or -1 for sz failure.*/
