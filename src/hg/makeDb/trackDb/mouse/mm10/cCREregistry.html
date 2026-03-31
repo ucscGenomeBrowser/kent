@@ -18,27 +18,8 @@ track details page.</p>
 
 <h2>Display Conventions and Configurations</h2>
 <p>
-Each cCRE is displayed as a colored box by type, which reflects its putative functional assignment
-based on biochemical signatures and genomic context:</p>
-<p>
-<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
-<p>
-Mousing over the data will display the accession ID, the assigned cCRE class type, and the Max-Z scores
-for the various underlying biosignals (DNase, H3K4me3, H3K27ac, CTCF). A track filter is also available
-to selectively show items based on their cCRE class type.</p>
-
-<h2>Methods</h2>
-<p>
-Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase
-hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated
-using ChIP-seq data for histone modifications—H3K4me3 and H3K27ac, marking promoters and
-enhancers, respectively—and CTCF, marking insulators. To supplement rDHS-anchored cCRE
-definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification
-of cCREs even in regions of low chromatin accessibility. Although not used for anchoring,
-ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.</p>
-
-<p>
-Classification of cCREs was performed based on the following criteria:</p>
+Each cCRE is color-coded by its classification type, which reflects its putative functional
+assignment based on biochemical signatures and genomic context:</p>
 <ol>
 <li><strong><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></strong>
 must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
@@ -65,6 +46,25 @@ CTCF signals.</li>
 (TF)</strong></span> have low chromatin accessibility, low H3K4me3, H3K27ac,
 and CTCF signals and are bound by a transcription factor.</li>
 </ol>
+<p>
+Mousing over the data will display the accession ID, the assigned cCRE class type, and the Max-Z scores
+for the various underlying biosignals (DNase, H3K4me3, H3K27ac, CTCF). A track filter is also available
+to selectively show items based on their cCRE class type.</p>
+
+<h2>Methods</h2>
+<p>
+Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase
+hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated
+using ChIP-seq data for histone modifications—H3K4me3 and H3K27ac, marking promoters and
+enhancers, respectively—and CTCF, marking insulators. To supplement rDHS-anchored cCRE
+definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification
+of cCREs even in regions of low chromatin accessibility. Although not used for anchoring,
+ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.</p>
+
+<p>
+The following diagram illustrates the biochemical signal patterns used to classify each cCRE type:</p>
+<p>
+<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
 
 <h2>Data Access</h2>
 <p>
