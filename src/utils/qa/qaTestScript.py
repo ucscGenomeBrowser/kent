@@ -322,7 +322,9 @@ hover_and_click(driver, "myData", "customTracksMenuLink")
 driver.find_element(By.NAME, "hgct_customText").clear()
 driver.find_element(By.NAME, "hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/chrmAliasTestHg38_track")
 driver.find_element(By.NAME, "Submit").click()
+driver.set_page_load_timeout(300)
 driver.find_element(By.NAME, "submit").click()
+driver.set_page_load_timeout(120)
 # click into hgTrackUi of customTrack
 
 driver.find_element(By.XPATH, "//td[contains(@id,'td_data_ct_chrmAliasTestHg38')]/div[2]/map/area").click()

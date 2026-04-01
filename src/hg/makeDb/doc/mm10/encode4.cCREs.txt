@@ -1,0 +1,206 @@
+# ENCODE4 cCREs (candidate Cis-Regulatory Elements) for mm10
+# Redmine #37131
+# Lou Nassar, 2026-02-20
+
+# This track migrates the ENCODE4 mouse cCRE data from an external track hub
+# into native UCSC trackDb. It follows the same approach used for hg38
+# (see hg38/encode4.cCREs.txt).
+
+# The original hub was prepared by Mingshi Gao (Weng lab, UMass Chan Medical School):
+#   http://users.wenglab.org/gaomingshi/Mouse_ENCODE/hub.txt
+
+# Hub was previously cloned locally via hubClone:
+#   /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/
+
+# Total data: 91 files (1 registry bigBed + 18 core cCRE bigBeds + 72 signal bigWigs)
+# Registry contains 926,843 cCREs across mm10
+
+##############################################################################
+# Step 1: Copy and rename data files from hub clone
+##############################################################################
+
+# Source hub clone directory:
+#   /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/
+# Destination:
+#   /hive/data/outside/encode4/ccre/mouse/
+
+mkdir -p /hive/data/outside/encode4/ccre/mouse/coreCollection
+
+# Registry file (bigBed 9+5, 926,843 cCREs):
+cp /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/mm10-cCREs.annotated.bigBed \
+   /hive/data/outside/encode4/ccre/mouse/encodeCcreRegistry.bb
+
+# 18 core cCRE bigBed files (.bigBed -> .bb)
+# Each file name is 4 ENCFF accessions joined by underscores (DNase_H3K4me3_H3K27ac_CTCF):
+cp ENCODE_Mouse_Regulation/ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY.bigBed mouse/coreCollection/ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY.bb  # midbrain, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN.bigBed mouse/coreCollection/ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN.bb  # lung, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR.bigBed mouse/coreCollection/ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR.bb  # kidney, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV.bigBed mouse/coreCollection/ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV.bb  # hindbrain, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY.bigBed mouse/coreCollection/ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY.bb  # forebrain, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM.bigBed mouse/coreCollection/ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM.bb  # heart, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU.bigBed mouse/coreCollection/ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU.bb  # liver, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM.bigBed mouse/coreCollection/ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM.bb  # lung, embryo E14.5
+cp ENCODE_Mouse_Regulation/ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY.bigBed mouse/coreCollection/ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY.bb  # stomach, postnatal 0d
+cp ENCODE_Mouse_Regulation/ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK.bigBed mouse/coreCollection/ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK.bb  # liver, male adult 8w
+cp ENCODE_Mouse_Regulation/ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY.bigBed mouse/coreCollection/ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY.bb  # kidney, male adult 8w
+cp ENCODE_Mouse_Regulation/ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO.bigBed mouse/coreCollection/ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO.bb  # thymus, male adult 8w
+cp ENCODE_Mouse_Regulation/ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY.bigBed mouse/coreCollection/ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY.bb  # MEL cell line
+cp ENCODE_Mouse_Regulation/ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB.bigBed mouse/coreCollection/ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB.bb  # liver, embryo E14.5
+cp ENCODE_Mouse_Regulation/ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ.bigBed mouse/coreCollection/ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ.bb  # CH12.LX cell line
+cp ENCODE_Mouse_Regulation/ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR.bigBed mouse/coreCollection/ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR.bb  # heart, male adult 8w
+cp ENCODE_Mouse_Regulation/ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB.bigBed mouse/coreCollection/ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB.bb  # spleen, male adult 8w
+cp ENCODE_Mouse_Regulation/ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX.bigBed mouse/coreCollection/ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX.bb  # cerebellum, male adult 8w
+
+# 72 signal bigWig files (.bigWig -> .bw)
+# 4 per biosample (DNase, H3K4me3, H3K27ac, CTCF), derived by splitting the
+# accession combos above. For example, the first biosample (midbrain, postnatal 0d)
+# yields: ENCFF325FZS.bw (DNase), ENCFF396LHC.bw (H3K4me3),
+#         ENCFF010WPI.bw (H3K27ac), ENCFF196GIY.bw (CTCF)
+# All 72:
+for acc in ENCFF325FZS ENCFF396LHC ENCFF010WPI ENCFF196GIY \
+          ENCFF784TNW ENCFF990HLQ ENCFF258KWF ENCFF811CFN \
+          ENCFF374LSN ENCFF887KNZ ENCFF269FYI ENCFF644MRR \
+          ENCFF822FDB ENCFF615BKA ENCFF683GNP ENCFF494FQV \
+          ENCFF727CYI ENCFF050AHA ENCFF422JMO ENCFF247XHY \
+          ENCFF947JCM ENCFF738LHV ENCFF306XSO ENCFF055IZM \
+          ENCFF907KGU ENCFF341GEF ENCFF544RNA ENCFF935ZIU \
+          ENCFF616XIK ENCFF127UZI ENCFF865CCV ENCFF355LDM \
+          ENCFF738YPD ENCFF083LRQ ENCFF500YJD ENCFF394DGY \
+          ENCFF389BAE ENCFF244PVS ENCFF622QOD ENCFF990MGK \
+          ENCFF744DCK ENCFF673XLI ENCFF859YPP ENCFF196NRY \
+          ENCFF686CDW ENCFF200ISF ENCFF284KSX ENCFF239UQO \
+          ENCFF145VWQ ENCFF430CHA ENCFF770LBL ENCFF244ZJY \
+          ENCFF323LVW ENCFF186DCG ENCFF595IQM ENCFF233QSB \
+          ENCFF228LWM ENCFF420ORJ ENCFF666CND ENCFF499GIZ \
+          ENCFF862WQC ENCFF660WNU ENCFF266FCV ENCFF809JIR \
+          ENCFF514QGG ENCFF523GNO ENCFF920QDX ENCFF803MIB \
+          ENCFF265EIS ENCFF288SAJ ENCFF645OJK ENCFF087SVX; do
+  cp ENCODE_Mouse_Regulation/${acc}.bigWig mouse/coreCollection/${acc}.bw
+done
+
+# A reproducibility script that performs all of the above is saved at:
+#   /hive/data/outside/encode4/ccre/mouse/buildFromHub.py
+# Usage: python3 buildFromHub.py [--dry-run]
+
+##############################################################################
+# Step 2: Create /gbdb symlinks
+##############################################################################
+
+mkdir -p /gbdb/mm10/encode4/ccre/coreCollection
+
+# Registry symlink:
+ln -s /hive/data/outside/encode4/ccre/mouse/encodeCcreRegistry.bb \
+      /gbdb/mm10/encode4/ccre/encodeCcreRegistry.bb
+
+# Core collection symlinks (18 bigBed + 72 bigWig = 90 files):
+ln -s /hive/data/outside/encode4/ccre/mouse/coreCollection/* \
+      /gbdb/mm10/encode4/ccre/coreCollection/
+
+# Total: 91 symlinks (1 registry + 90 core collection)
+
+##############################################################################
+# Step 3: Create trackDb configuration
+##############################################################################
+
+# trackDb files are in kent/src/hg/makeDb/trackDb/mouse/mm10/:
+#
+# encode.cCREs.override.ra — main entry point, defines:
+#   - cCREs superTrack (parent for ENCODE3 + ENCODE4 cCRE tracks)
+#   - Override to reparent existing ENCODE3 encodeCcreCombined track under cCREs
+#   - cCREregistry track (ENCODE4 registry, bigBed 9+5, 926,843 cCREs)
+#     with filterValues for 8 cCRE classes
+#   - include encode4.ccres.ra
+#
+# encode4.ccres.ra — composite track definition (1,222 lines), defines:
+#   - coreCcres composite with 5 views (cCREs, DNase, H3K4me3, H3K27ac, CTCF)
+#   - 5 subGroups: organ (9 values), biosampleType (2), view (5),
+#     simpleBiosample (18), dataType (5)
+#   - 18 cCRE subtracks + 72 signal subtracks = 90 subtracks total
+#   - 3 biosamples on by default: forebrain postnatal 0d, heart postnatal 0d,
+#     liver male adult 8w (15 tracks)
+
+# The trackDb was modeled after the hg38 version, with adaptations for mm10:
+#   - 18 biosamples (vs 170 in hg38), no donor subGroup needed
+#   - All SCREEN URLs use assembly=mm10 (hub had GRCh38 bug, fixed)
+#   - Hub declared core cCRE bigBeds as type bigBed 9+1 but actual files are
+#     bigBed 9+5 (corrected in trackDb)
+#   - subGroup tag values cannot contain dots; replaced with underscores
+#     (CH12.LX -> CH12_LX, 14.5 -> 14_5)
+
+# Added to mm10/trackDb.ra (after existing ENCODE includes):
+#   include encode.cCREs.override.ra
+
+##############################################################################
+# Step 4: Create HTML description pages
+##############################################################################
+
+# 3 HTML files in kent/src/hg/makeDb/trackDb/mouse/mm10/:
+#
+# cCREsSuper.html — Supertrack description (ENCODE3 vs ENCODE4 context,
+#   926,843 cCREs, 18 biosamples)
+#
+# cCREregistry.html — Registry description (926,843 elements, V4 methodology
+#   with rDHS + 7,658 TF rPeak anchoring, 8 classification criteria, data
+#   access, references)
+#
+# coreCollection.html — Core collection description (18 biosamples, 4 assays,
+#   8 cCRE classes with colors, data access with mm10 example commands)
+#
+# Adapted from hg38 versions with mm10-specific counts, assembly references,
+# and corrected credits per data provider feedback.
+
+##############################################################################
+# Step 5: Load trackDb
+##############################################################################
+
+cd /cluster/home/lrnassar/kent/src/hg/makeDb/trackDb
+
+# Sandbox (personal testing):
+make DBS=mm10
+
+# Dev (hgwdev):
+make alpha DBS=mm10
+
+##############################################################################
+# Step 6: Validation
+##############################################################################
+
+# Data integrity checks:
+#   - Registry: 926,843 cCREs confirmed (all EM10E prefix)
+#   - All 18 core files: exactly 926,843 items each
+#   - Core-to-registry ID consistency: 100% (zero mismatches)
+#   - Zero overlapping elements in registry
+#   - Element sizes: 150-350 bp (mean 269, median 278)
+#   - Genome coverage: 249.5 Mb = 8.85% of mm10
+#   - All 91 files pass bigBedInfo/bigWigInfo
+
+# Known cosmetic issues from data provider (not bugs):
+#   - autoSql table names say "hg38cCRE"/"hg38core_cCRE" for mm10 data
+#   - Z-score min of -10.00 for H3K4me3/H3K27ac/CTCF is sentinel for missing data
+#   - Registry class "CA" maps to core class "CA-only"; core adds "Low-DNase"
+
+##############################################################################
+# Track hierarchy summary
+##############################################################################
+
+# cCREs (superTrack, group=regulation)
+# ├── encodeCcreCombined  (ENCODE3 registry, reparented, snowflake pennant)
+# ├── cCREregistry        (ENCODE4 registry, bigBed 9+5, 926,843 cCREs)
+# └── coreCcres           (ENCODE4 core collection composite)
+#     ├── cCREs_view      (18 bigBed 9+5 subtracks, one per biosample)
+#     ├── DNase_view      (18 bigWig subtracks)
+#     ├── H3K4me3_view    (18 bigWig subtracks)
+#     ├── H3K27ac_view    (18 bigWig subtracks)
+#     └── CTCF_view       (18 bigWig subtracks)
+
+# 18 biosamples:
+#   Cerebellum male adult 8w, CH12.LX, Forebrain postnatal 0d,
+#   Heart male adult 8w, Heart postnatal 0d, Hindbrain postnatal 0d,
+#   Kidney male adult 8w, Kidney postnatal 0d, Liver embryo E14.5,
+#   Liver male adult 8w, Liver postnatal 0d, Lung embryo E14.5,
+#   Lung postnatal 0d, MEL, Midbrain postnatal 0d,
+#   Spleen male adult 8w, Stomach postnatal 0d, Thymus male adult 8w
+
+# gbdb contents (/gbdb/mm10/encode4/ccre/):
+#   encodeCcreRegistry.bb           -- registry (926,843 cCREs)
+#   coreCollection/                 -- 18 .bb + 72 .bw = 90 files

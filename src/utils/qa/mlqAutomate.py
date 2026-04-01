@@ -258,13 +258,22 @@ def get_current_mlm():
 
 
 @retry(max_attempts=3, delay=2, exceptions=(anthropic.APIError,))
-def analyze_email_with_claude(subject, body, sender):
+def analyze_email_with_claude(subject, body, sender, group_email=None):
     """
     Use Claude to analyze an email in a single call.
     Returns dict with: is_spam, category, draft_response
     """
     client = anthropic.Anthropic(api_key=CONFIG['CLAUDE_API_KEY'])
     categories_list = ", ".join(MLQ_CATEGORIES)
+
+    # The medical info spam rule only applies to public/moderated lists.
+    # Unmoderated lists (e.g., genome-www) are only accessible to the Browser team,
+    # so personal medical information is not a privacy concern there.
+    is_unmoderated = group_email in CONFIG['UNMODERATED_LISTS']
+
+    medical_rule = ""
+    if not is_unmoderated:
+        medical_rule = "\n  - Contains sensitive personal medical information (specific names with genetic test results, medical conditions, family medical history, or personal health details) - these are privacy concerns"
 
     prompt = f"""Analyze this email for the UCSC Genome Browser support team.
 
@@ -284,8 +293,7 @@ Important:
   - Conference/journal solicitations asking for paper submissions
   - Promotions for workshops, courses, training programs, or webinars
   - Marketing or promotional emails advertising services or products
-  - Mass-sent announcements unrelated to genome browser support
-  - Contains sensitive personal medical information (specific names with genetic test results, medical conditions, family medical history, or personal health details) - these are privacy concerns
+  - Mass-sent announcements unrelated to genome browser support{medical_rule}
 - Mark as NOT SPAM if it is a genuine question about using the UCSC Genome Browser (general genetics questions without personal identifying info are OK)
 - For CATEGORY, pick the most specific match. Use "Other" if unsure.
 - For DRAFT_RESPONSE, be helpful and concise. Ask clarifying questions if needed. Point to relevant documentation when appropriate."""
@@ -1648,7 +1656,8 @@ def create_tickets_for_approved(approved_messages):
                          attachments=uploaded_attachments)
         else:
             # Analyze with Claude for category and draft response
-            analysis = analyze_email_with_claude(subject, body, sender)
+            analysis = analyze_email_with_claude(subject, body, sender,
+                                                group_email=group_email)
 
             logger.info(f"  Category: {analysis['category']}")
 
@@ -1816,7 +1825,8 @@ def process_emails():
             analysis = analyze_email_with_claude(
                 first_email['subject'],
                 first_email['body'],
-                first_email['from']
+                first_email['from'],
+                group_email=thread['group']
             )
 
             if analysis['is_spam']:

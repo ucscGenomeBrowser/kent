@@ -5,6 +5,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "dystring.h"
 #include "errAbort.h"
 #include "portable.h"
 #include "linefile.h"
@@ -1818,6 +1819,52 @@ while(NULL != ptr)
 
 strcpy(resultPtr, string);
 return result;
+}
+
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals)
+/* Given a pattern containing $fieldName or ${fieldName} variable references, replace each
+ * variable with the corresponding value from fieldVals.  The ${} form prevents ambiguity
+ * when one field name is a prefix of another (e.g. "chrom" vs "chromStart"). */
+{
+int i;
+struct dyString *result = dyStringNew(256), *sub = NULL;
+dyStringAppend(result, pattern);
+for (i = 0; i < fieldCount; ++i)
+    {
+    if (fieldVals[i] == NULL || fieldNames[i] == NULL)
+        continue;
+
+    char *field = fieldNames[i];
+    int fieldLen = strlen(field);
+    char *bareSpec = needMem(fieldLen + 2);
+    char *bracedSpec = needMem(fieldLen + 4);
+    *bareSpec = '$';
+    *bracedSpec = '$';
+    bracedSpec[1] = '{';
+    strcpy(bareSpec + 1, field);
+    strcpy(bracedSpec + 2, field);
+    bracedSpec[fieldLen + 2] = '}';
+    bracedSpec[fieldLen + 3] = '\0';
+
+    if (stringIn(bracedSpec, result->string))
+        {
+        sub = dyStringSub(result->string, bracedSpec, fieldVals[i]);
+        dyStringFree(&result);
+        result = sub;
+        sub = NULL;
+        }
+    // the user may have both a ${} enclosed instance and a non-enclosed one
+    // also note that if the value substituted above is the field name itself with
+    // a leading $, then we will substitute again
+    sub = dyStringSub(result->string, bareSpec, fieldVals[i]);
+
+    dyStringFree(&result);
+    freeMem(bareSpec);
+    freeMem(bracedSpec);
+    result = sub;
+    sub = NULL;
+    }
+return dyStringCannibalize(&result);
 }
 
 int strSwapStrs(char *string, int sz,char *oldStr, char *newStr)

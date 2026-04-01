@@ -2,8 +2,6 @@
 title: "Genome Browser Documentation"
 ---
 
-Browse all UCSC Genome Browser documentation by topic.
-
 New to the Genome Browser? Start with our [Genome Browser Basics
 tutorial](/docs/tutorials/gb101.html), a 15-minute walkthrough of the
 interface, navigation, and track display. You can also browse our
@@ -36,8 +34,8 @@ using Multi-Region View. We also offer in-person and virtual workshops,
 
 ## Understanding Genome Browser Assemblies and Annotations
 
-The Genome Browser allows for the visualization of various annotations on
-a wide variety of genome assemblies. A genome assembly is a reconstruction of
+The Genome Browser allows for the visualization of  annotations on
+a variety of genome assemblies. A genome assembly is a reconstruction of
 an organism's complete DNA sequence from shorter sequenced fragments. Different
 assemblies of the same species may exist as sequencing technology improves
 (e.g., hg19 vs. hg38 for human).

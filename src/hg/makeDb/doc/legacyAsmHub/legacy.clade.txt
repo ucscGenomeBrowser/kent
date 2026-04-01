@@ -205,6 +205,7 @@ GCA_015227805.2_bHirRus1.pri.v2	birds
 GCA_015227805.3_bHirRus1.pri.v3	birds
 GCA_016128335.1_ZJU1.0	birds
 GCA_016432865.1_AdamAnt	mammals
+GCA_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w_WZ	birds
 GCA_017916325.1_LU_Lmar_1.0	invertebrate
 GCA_017916335.1_LU_Lori_1.0	invertebrate
 GCA_017918235.1_LU_Pher_1.0	invertebrate
