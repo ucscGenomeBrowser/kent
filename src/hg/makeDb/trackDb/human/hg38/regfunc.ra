@@ -1,6 +1,6 @@
-track mpra
-shortLabel MPRAs
-longLabel Massively Parallel Reporter Assays
+track regfunc
+shortLabel Regulatory functional assays
+longLabel Regulatory functional assays - MPRAs
 group phenDis
 type bed 4
 visibility hide
@@ -10,8 +10,7 @@ superTrack on
     shortLabel MPRA Base
     longLabel MPRAs: MPRA Base Enhancer Elements
     type bigBed 9 + 9
-    #bigDataUrl final_authorPMID.mean_v2.bb
-    bigDataUrl /gbdb/hg38/mpra/mprabase/mprabase.bb
+    bigDataUrl /gbdb/hg38/regfunc/mprabase/mprabase.bb
     parent mpra
     visibility pack
     priority 1
@@ -23,7 +22,7 @@ superTrack on
     shortLabel MPRAVarDB
     longLabel MPRAs: MPRAVarDB - MPRA-tested Regulatory Variant Effects - grey is non-significant
     parent mpra on
-    bigDataUrl /gbdb/hg38/mpra/mpravardb.bb
+    bigDataUrl /gbdb/hg38/regfunc/mpravardb/mpravardb.bb
     type bigBed 9 +
     itemRgb on
     visibility dense
