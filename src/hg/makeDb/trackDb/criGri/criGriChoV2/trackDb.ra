@@ -26,4 +26,4 @@ visibility dense
 
 track ensGene override
 visibility pack
-ensemblIdUrl http://www.ensembl.org/Cricetulus_griseus_chok1gshd
+ensemblIdUrl https://www.ensembl.org/Cricetulus_griseus_chok1gshd

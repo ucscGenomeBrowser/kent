@@ -546,7 +546,7 @@ group genes
 visibility hide
 color 150,0,0
 type genePred ensEstPep
-url http://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
+url https://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
 
 track sibGene
 shortLabel SIB Genes
