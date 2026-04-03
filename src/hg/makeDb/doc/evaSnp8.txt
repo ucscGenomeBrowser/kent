@@ -19,3 +19,106 @@ for dbs in $(cat /hive/data/outside/eva8/assemblyReleaseList.txt);
 do
 ln -s /hive/data/outside/eva8/$dbs/evaSnp8.bb /gbdb/$dbs/bbi/;
 done
+
+####################################################################
+###  adding these contrib tracks to the GenArk browsers
+###   Hiram and Lou - 2026-05-03
+
+mkdir /hive/data/outside/genark/evaSnp8
+cd /hive/data/outside/genark/evaSnp8
+ln -s /hive/data/outside/eva8/contributedTracks ./contributedTracks
+
+# make a single generic trackDb.txt file:
+
+sed -e 's#^bigDataUrl #bigDataUrl contrib/evaSnp8/#;
+s#^html #html contrib/evaSnp8/#;' \
+  contributedTracks/GCF_905237075.1/trackDb.txt \
+   | sed '5a\
+group varRep
+' > evaSnp8.trackDb.txt
+
+### then run this script to make the symlinks into the GenArk build directories
+
+#!/bin/bash
+
+ls -dd contributedTracks/GC* | sed -e 's#contributedTracks/##;' | while read acc
+do
+  gcX="${acc:0:3}"
+  d0="${acc:4:3}"
+  d1="${acc:7:3}"
+  d2="${acc:10:3}"
+  P="${gcX}/${d0}/${d1}/${d2}/${acc}"
+  aB="genbankBuild"
+  if [ "${gcX}" = "GCF" ]; then
+    aB="refseqBuild"
+  fi
+  buildPath=`ls -d /hive/data/genomes/asmHubs/$aB/${P}*`
+  if [ -d "${buildPath}" ]; then
+     mkdir -p "${buildPath}/contrib/evaSnp8"
+     for F in evaSnp8.bb description.html
+     do
+       rm -f "${buildPath}/contrib/evaSnp8/${F}"
+       ln -s `pwd -P`/contributedTracks/${acc}/${F} "${buildPath}/contrib/evaSnp8"
+     done
+     rm -f "${buildPath}/contrib/evaSnp8/evaSnp8.trackDb.txt"
+     ln -s `pwd -P`/evaSnp8.trackDb.txt "${buildPath}/contrib/evaSnp8/evaSnp8.trackDb.txt"
+     printf "%s\n" "${acc}"
+  else
+     printf "ERROR: Not found:\n%s\n" "${buildPath}" 1>&2
+  fi
+done
+
+### that is in the mkLinks.sh script:
+
+  time (./mkLinks.sh) > do.log 2>&1
+
+### Then add evaSnp8 to the trackDb/betaGenArk.txt file in the source tree:
+
+cat ~/kent/src/hg/makeDb/trackDb/betaGenArk.txt
+
+# the listing in this file triggers the building of the beta.hub.txt
+# file in the genark system.  Any contrib project listed here will be included
+# contrib track name: tracks found in <buildDir>/contrib/<thisName>/
+tiberius
+VEuPathDB
+TOGAv2
+evaSnp8
+
+### and then, in each GenArk 'clade' directory that has these
+### assemblies: in the source tree: kent/src/hg/makeDb/doc
+### obtained by taking the list of accessions from the 'do.log' from
+###  the mkLinks.sh output to find which directories have these assemblies:
+
+    grep -l -F -f do.log *AsmHub/*orderList.tsv
+
+### resulting directory list:
+
+for D in plantsAsmHub birdsAsmHub fishAsmHub primatesAsmHub legacyAsmHub mammalsAsmHub invertebrateAsmHub fungiAsmHub bacteriaAsmHub
+do
+  cd "${D}"
+  time (make) > dbg 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" dbg
+  time (make verifyTestDownload) >> test.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" test.down.log
+  time (make sendDownload) >> send.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" send.down.log
+  time (make verifyDownload) >> verify.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" verify.down.log
+done
+
+### In practice, that set of four 'make' commands are run in parallel in each
+### of the 'clade' directories.  Thus, running 'time (make) > dbg' first
+### in each directory, then verifyTestDownload in each and so forth.
+###  it takes a while to run those things in the directories with the
+###  large *.orderList.tsv files
+### i.e. wc -l on each one:
+#	444 plantsAsmHub/plants.orderList.tsv
+#	543 birdsAsmHub/birds.orderList.tsv
+#	634 fishAsmHub/fish.orderList.tsv
+#	616 primatesAsmHub/primates.orderList.tsv
+#	689 legacyAsmHub/legacy.orderList.tsv
+#	836 mammalsAsmHub/mammals.orderList.tsv
+#	1941 invertebrateAsmHub/invertebrate.orderList.tsv
+#	4128 fungiAsmHub/fungi.orderList.tsv
+#	22332 bacteriaAsmHub/bacteria.orderList.tsv
+#############################################################################
