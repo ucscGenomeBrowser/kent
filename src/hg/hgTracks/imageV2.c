@@ -1864,6 +1864,11 @@ for (;item!=NULL;item=item->next)
             hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
             }
         }
+    else if (isNotEmpty(item->tooltip) && cfgOptionBooleanDefault("showMouseovers", FALSE))
+        {
+        // some items have no title string (no item name) but do have tooltips
+        hPrintf(" data-tooltip='%s'", attributeEncode(item->tooltip));
+        }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );
