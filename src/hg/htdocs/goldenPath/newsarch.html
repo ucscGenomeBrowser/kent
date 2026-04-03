@@ -60,8 +60,53 @@ href="https://github.com/ucscGenomeBrowser/kent/commits/master"
 target=_blank>GitHub page</a>. Lastly, see our <a href="credits.html" target="_blank">
 credits page</a> for acknowledgments of the data we host.</p>
 
-<!-- ============= 2025 archived news ============= -->
+<!-- ============= 2026 archived news ============= -->
+
 <a name="2026"></a>
+
+<a name="040326"></a>
+<h2>Apr. 3, 2026 &nbsp;&nbsp; New heatmap display mode for bigBed tracks</h2>
+<p>
+We are pleased to announce a new
+<a href="/goldenPath/help/heatmap.html" target="_blank"><b>heatmap</b> display
+mode</a> for the Genome Browser.</p>
+<p>
+Heatmaps replace the standard block-and-line gene
+display with a color-coded grid: each block position along the item (e.g., an exon)
+becomes a column, each row represents a sample or condition, and cells are colored
+by score using a customizable gradient. This makes it easy to spot patterns in
+multi-sample quantitative data&mdash;such as variant effects, gene expression, or
+methylation levels&mdash;directly in their genomic context.
+</p>
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/view/heatmap_example" target="_blank">
+  <img src="/images/heatmap_example.png" alt="Heatmap track showing a color-coded grid
+  of variant effect scores across genomic positions, with rows for each amino acid
+  substitution and colors ranging from blue (low) through silver to red (high)"
+  width='90%'></a>
+</div>
+<p>
+The heatmap display is already in use on our
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mavedb_maps" target="_blank">MaveDB Experiment
+Heatmaps</a> track, which presents the results of multiplexed assays of variant
+effects across gene transcripts. In the example above, each row is an amino acid
+substitution and each column is a position along the transcript, with
+<span style="color: #FF0000; font-weight: bold;">red</span> cells indicating
+higher functional scores and
+<span style="color: #0000FF; font-weight: bold;">blue</span> cells indicating lower
+scores.</p>
+<p>
+To create your own heatmap tracks, add
+<code>style heatmap</code> to a bigBed track&rsquo;s trackDb entry along with extra
+fields for row labels, color bounds, and score arrays. Our new
+<a href="/goldenPath/help/heatmap.html" target="_blank">heatmap documentation page</a>
+walks through the entire process step by step, from preparing your data to loading it
+in a track hub.
+</p>
+<p>
+For more information on bigBed and other supported data formats, see our
+<a href="/FAQ/FAQformat.html" target="_blank">data file formats FAQ</a>.
+</p>
 
 <a name="040126"></a>
 <h2>Apr. 1, 2026 &nbsp;&nbsp; Genome Defense</h2>
