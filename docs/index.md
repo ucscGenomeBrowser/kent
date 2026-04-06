@@ -34,7 +34,7 @@ using Multi-Region View. We also offer in-person and virtual workshops,
 
 ## Understanding Genome Browser Assemblies and Annotations
 
-The Genome Browser allows for the visualization of  annotations on
+The Genome Browser allows for the visualization of annotations on
 a variety of genome assemblies. A genome assembly is a reconstruction of
 an organism's complete DNA sequence from shorter sequenced fragments. Different
 assemblies of the same species may exist as sequencing technology improves

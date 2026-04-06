@@ -3989,11 +3989,7 @@ var dragReorder = {
                 // if the custom mouseover code has removed this title, check the attr
                 // for the original title
                 if (this.title.length === 0) {
-                    if (this.getAttribute('data-tooltip') !== null) {
-                        rightClick.currentMapItem.title = this.getAttribute("data-tooltip");
-                    } else {
-                        rightClick.currentMapItem.title = this.getAttribute("originalTitle");
-                    }
+                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
                 }
 
                 // Handle linked features with separate clickmaps for each exon/intron
@@ -4310,7 +4306,7 @@ function titleTagToMouseover(mapEl) {
 
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
-    document.querySelectorAll("[title]").forEach(function(a, i) {
+    document.querySelectorAll("[title],[data-tooltip]").forEach(function(a, i) {
         if (a.id !== "" && (a.id === "hotkeyHelp" || a.id.endsWith("Dialog") || a.id.endsWith("Popup"))) {
             // these divs are populated by ui-dialog, they should not have tooltips
             return;
@@ -4318,8 +4314,8 @@ function convertTitleTagsToMouseovers() {
         if (a.title !== undefined &&
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
-        else if (a.title !== undefined && a.title.length > 0) {
-            if (a.title.startsWith("Click to alter the display density")) {
+        else if ((a.title !== undefined && a.title.length > 0) || a.getAttribute("data-tooltip") !== null) {
+            if (a.title && a.title.startsWith("Click to alter the display density")) {
                 // these tooltips have a longer delay:
                 a.setAttribute("tooltipDelay", "delayed");
             }
