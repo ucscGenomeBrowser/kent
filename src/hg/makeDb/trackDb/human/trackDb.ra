@@ -1,3 +1,5 @@
+include lrSv.ra alpha
+
 include predictionScoresSuper.ra
 
 #PanelApp
