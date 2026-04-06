@@ -59,7 +59,7 @@ visibility hide
 
     track tommoJpSv
     parent lrSv
-    bigDataUrl /gbdb/hg38/lrSv/tommoJp.bb
+    bigDataUrl /gbdb/$D/lrSv/tommoJp.bb
     shortLabel ToMMo Japanese SVs
     longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
     type bigBed 9 +
@@ -82,7 +82,7 @@ visibility hide
 
     track aou1kSv
     parent lrSv
-    bigDataUrl /gbdb/hg38/lrSv/aou1k.bb
+    bigDataUrl /gbdb/$D/lrSv/aou1k.bb
     shortLabel AoU 1K SVs
     longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
     type bigBed 9 +
