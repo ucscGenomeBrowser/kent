@@ -320,16 +320,32 @@ else
 }
 
 struct trackDb *obtainTdb(struct trackHubGenome *genome, char *db)
-/* return a full trackDb fiven the hub genome pointer, or ucsc database name */
+/* return a full trackDb given the hub genome pointer, or ucsc database name */
 {
 struct trackDb *tdb = NULL;
 if (db)
     tdb = hTrackDb(db);
 else
     tdb = trackHubAddTracksGenome(genome);
-slSort(tdb, trackDbTrackCmp);
-// slSort(&tdb, trackDbCmp);
-return tdb;
+/* remove the synthetic gcOnFly track it exists only for hgTracks display */
+struct trackDb *filtered = NULL;
+struct trackDb *next;
+while (tdb)
+    {
+    next = tdb->next;
+    if (sameString(GC_ON_FLY_TRACK_NAME, trackHubSkipHubName(tdb->track)))
+	{
+	tdb->next = NULL;
+	}
+    else
+	{
+	slAddHead(&filtered, tdb);
+	}
+    tdb = next;
+    }
+slReverse(&filtered);
+slSort(filtered, trackDbTrackCmp);
+return filtered;
 }
 
 struct trackDb *findTrackDb(char *track, struct trackDb *tdb)
