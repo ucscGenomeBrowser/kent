@@ -1,0 +1,111 @@
+track lrSv
+superTrack on
+shortLabel Long-read SVs
+longLabel Structural Variants from Long-read Sequencing
+group varRep
+visibility hide
+
+    track han945Sv
+    parent lrSv
+    bigDataUrl /gbdb/$D/lrSv/han945.bb
+    shortLabel Han 945 SVs
+    longLabel Structural Variants from 945 Han Chinese (Long-read Sequencing)
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq samples=$sampleCount
+    filterValues.svType DEL,INS,DUP,INV,TRA
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 0:99743
+    filterByRange.svLen on
+    filterLabel.svLen SV Length
+    filter.sampleCount 1:945
+    filterByRange.sampleCount on
+    filterLabel.sampleCount Number of Supporting Samples
+    filter.alleleFreq 0:1
+    filterByRange.alleleFreq on
+    filterLimits.alleleFreq 0:1
+    filterLabel.alleleFreq Allele Frequency
+    skipEmptyFields on
+    urls chr2="hgTracks?position=$$"
+
+    track lrSv1kgOnt
+    parent lrSv
+    bigDataUrl /gbdb/$D/lrSv/1kgOnt.bb
+    shortLabel 1KG ONT SVs
+    longLabel Structural Variants from 1,019 Diverse Humans (1000 Genomes ONT)
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mouseOver <b>$name</b> ($svClass) len=$svLen type=$insType family=$family AC=$alleleCount AF=$alleleFreq
+    filterValues.svClass DEL,INS,COMPLEX
+    filterType.svClass multipleListOr
+    filterLabel.svClass SV Class
+    filterValues.insType COMPLEX_DUP,DUP,DUP_INTERSPERSED,INV_DUP,NUMT,PSD,VNTR,chimera,orphan,partnered,solo
+    filterType.insType multipleListOr
+    filterLabel.insType Insertion/Deletion Type
+    filterValues.family Alu,HERVK,L1,LTR5_Hs,SVA
+    filterType.family multipleListOr
+    filterLabel.family Transposon Family
+    filterByRange.svLen on
+    filterLabel.svLen SV Length
+    filterByRange.alleleFreq on
+    filterLimits.alleleFreq 0:1
+    filterLabel.alleleFreq Allele Frequency
+    filterByRange.alleleCount on
+    filterLabel.alleleCount Allele Count
+    skipEmptyFields on
+
+    track tommoJpSv
+    parent lrSv
+    bigDataUrl /gbdb/hg38/lrSv/tommoJp.bb
+    shortLabel ToMMo Japanese SVs
+    longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq AC=$alleleCount
+    filterValues.svType DEL,INS
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 51:99980
+    filterByRange.svLen on
+    filterLabel.svLen SV Length
+    filter.alleleFreq 0:1
+    filterByRange.alleleFreq on
+    filterLimits.alleleFreq 0:1
+    filterLabel.alleleFreq Allele Frequency
+    filter.alleleCount 0:444
+    filterByRange.alleleCount on
+    filterLabel.alleleCount Allele Count
+
+    track aou1kSv
+    parent lrSv
+    bigDataUrl /gbdb/hg38/lrSv/aou1k.bb
+    shortLabel AoU 1K SVs
+    longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mouseOver <b>$name</b> ($svType) len=$svLen AF_AFR=$afAfr AF_EUR=$afEur
+    filterValues.svType DEL,INS
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    #filter.svLen 50:9998
+    filterByRange.svLen on
+    filterLabel.svLen SV Length
+    #filter.afAfr 0:1
+    filterByRange.afAfr on
+    filterLimits.afAfr 0:1
+    filterLabel.afAfr AF African
+    #filter.afEur 0:1
+    filterByRange.afEur on
+    filterLimits.afEur 0:1
+    filterLabel.afEur AF European
+    #filter.afEas 0:1
+    filterByRange.afEas on
+    filterLimits.afEas 0:1
+    filterLabel.afEas AF East Asian
+    skipEmptyFields on
+

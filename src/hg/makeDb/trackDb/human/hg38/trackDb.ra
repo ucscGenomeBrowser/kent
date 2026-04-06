@@ -924,6 +924,6 @@ include psuVsUcscChains.ra alpha
 
 include LCR.ra alpha
 
-include regfunc.ra alpha
+include mpra.ra alpha
 include nmd.ra alpha
 include ancient.ra
