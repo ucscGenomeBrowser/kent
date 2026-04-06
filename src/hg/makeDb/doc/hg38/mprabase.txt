@@ -1,4 +1,0 @@
-# max Mar 30 2026
-# There was nothing to do, Varda from the Ahituv Lab provided the bigBed file at
-# https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb
-# and a hub at https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/hub.txt
