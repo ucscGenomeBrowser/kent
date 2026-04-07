@@ -1,0 +1,16 @@
+##maf version=1 scoring=none
+
+a score=0
+s GCA_000001.1.chr1  0 10 + 100 ACGTACGTAC
+s GCF_000002.1.chrX  0 10 + 100 ACGTACGTAC
+s sp2.chr1           0 10 + 100 ACGTACGTAC
+
+a score=0
+s GCA_000001.1.chr1 20 10 + 100 TGCATGCATG
+s GCF_000002.1.chrX 15 10 + 100 TGCATGCATG
+
+a score=0
+s GCA_000001.1.chr1 50 10 + 100 AAACCCGGGT
+s GCF_000002.1.chrX 25 10 + 100 AAACCCGGGT
+s sp2.chr1          30 10 + 100 AAACCCGGGT
+
