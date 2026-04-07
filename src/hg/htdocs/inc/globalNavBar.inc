@@ -102,8 +102,6 @@
     </ul>
 </li>
 
-<li class="even" id="april1"><a href="../goldenPath/extras/april_1_2026.html" ><span id="april1-link">Insert Coin</span></a></li>
-
 <li class="menuparent last" id="aboutUs"><button type="button" aria-expanded="false">About Us</button>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
