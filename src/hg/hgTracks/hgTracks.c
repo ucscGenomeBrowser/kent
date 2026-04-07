@@ -10028,10 +10028,10 @@ if (!hideControls)
 		hPrintf("<A HREF=\"%s\">", url);
 		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
 		hPrintf("</A>");
-		hDropListClassWithStyle("ruler", rulerMenu,
+		cgiMakeDropListClassWithIdStyleJavascriptAndLabel("ruler", NULL, rulerMenu,
 			sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
 			rulerMode == tvHide ? "hiddenText" : "normalText",
-			TV_DROPDOWN_STYLE);
+			TV_DROPDOWN_STYLE, NULL, RULER_TRACK_LABEL);
 		controlGridEndCell(cg);
 		freeMem(url);
 		}

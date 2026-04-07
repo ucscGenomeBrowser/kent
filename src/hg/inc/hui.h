@@ -259,6 +259,8 @@ char** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly);
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
+void hideShowDropDownWithClassExtraAndLabel(char *varName, char *id, boolean show, char *class,
+                                            struct slPair *events, char *ariaLabel);
 void hideShowDropDownWithClassAndExtra(char *varName, char *id, boolean show, char *class, struct slPair *events);
 #define hideShowDropDown(varName,show,class) \
         hideShowDropDownWithClassAndExtra(varName,NULL,show,class,NULL)
