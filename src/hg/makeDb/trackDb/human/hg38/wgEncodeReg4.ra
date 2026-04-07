@@ -69,7 +69,7 @@ html wgEncodeReg4.html
         longLabel Avg. H3K27ac level of 9 bone marrow experiments (tissues and primary cells only)
         color 184,120,120
         parent wgEncodeReg4MarkH3k27ac off
-        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowH3K27ac.bw
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowTpH3K27ac.bw
         priority 5
 
         track wgEncodeReg4MarkH3k27acBrain
@@ -485,6 +485,42 @@ html wgEncodeReg4.html
         parent wgEncodeReg4MarkH3k27ac off
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/uterusH3K27ac.bw
         priority 51
+
+        track wgEncodeReg4MarkH3k27acAllBone
+        type bigWig
+        shortLabel bone (all biosamples)
+        longLabel Avg. H3K27ac level of 3 bone experiments (all biosamples)
+        color 121,147,150
+        parent wgEncodeReg4MarkH3k27ac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneH3K27ac.bw
+        priority 53
+
+        track wgEncodeReg4MarkH3k27acAllEpithelium
+        type bigWig
+        shortLabel epithelium (all biosamples)
+        longLabel H3K27ac level of 1 epithelium experiment (all biosamples)
+        color 221,126,107
+        parent wgEncodeReg4MarkH3k27ac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/epitheliumH3K27ac.bw
+        priority 54
+
+        track wgEncodeReg4MarkH3k27acAllEye
+        type bigWig
+        shortLabel eye (all biosamples)
+        longLabel H3K27ac level of 1 eye experiment (all biosamples)
+        color 163,127,144
+        parent wgEncodeReg4MarkH3k27ac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/eyeH3K27ac.bw
+        priority 55
+
+        track wgEncodeReg4MarkH3k27acAllMouth
+        type bigWig
+        shortLabel mouth (all biosamples)
+        longLabel H3K27ac level of 1 mouth experiment (all biosamples)
+        color 130,141,158
+        parent wgEncodeReg4MarkH3k27ac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/mouthH3K27ac.bw
+        priority 56
 
     track wgEncodeReg4Dnase
     container multiWig
@@ -1386,6 +1422,24 @@ html wgEncodeReg4.html
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/prostateATAC.bw
         priority 32
 
+        track wgEncodeReg4AtacAllBoneMarrow
+        type bigWig
+        shortLabel bone marrow (all biosamples)
+        longLabel ATAC level of 1 bone marrow experiment (all biosamples)
+        color 184,120,120
+        parent wgEncodeReg4Atac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowATAC.bw
+        priority 33
+
+        track wgEncodeReg4AtacAllSkin
+        type bigWig
+        shortLabel skin (all biosamples)
+        longLabel Avg. ATAC level of 3 skin experiments (all biosamples)
+        color 127,133,209
+        parent wgEncodeReg4Atac off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/skinATAC.bw
+        priority 34
+
     track wgEncodeReg4MarkH3k4me3
     container multiWig
     noInherit on
@@ -1446,7 +1500,7 @@ html wgEncodeReg4.html
         longLabel Avg. H3K4me3 level of 13 bone marrow experiments (tissues and primary cells only)
         color 184,120,120
         parent wgEncodeReg4MarkH3k4me3 off
-        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowH3K4me3.bw
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowTpH3K4me3.bw
         priority 5
 
         track wgEncodeReg4MarkH3k4me3Brain
@@ -1890,6 +1944,33 @@ html wgEncodeReg4.html
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/uterusH3K4me3.bw
         priority 54
 
+        track wgEncodeReg4MarkH3k4me3AllBone
+        type bigWig
+        shortLabel bone (all biosamples)
+        longLabel Avg. H3K4me3 level of 4 bone experiments (all biosamples)
+        color 121,147,150
+        parent wgEncodeReg4MarkH3k4me3 off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneH3K4me3.bw
+        priority 56
+
+        track wgEncodeReg4MarkH3k4me3AllEpithelium
+        type bigWig
+        shortLabel epithelium (all biosamples)
+        longLabel H3K4me3 level of 1 epithelium experiment (all biosamples)
+        color 221,126,107
+        parent wgEncodeReg4MarkH3k4me3 off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/epitheliumH3K4me3.bw
+        priority 57
+
+        track wgEncodeReg4MarkH3k4me3AllMouth
+        type bigWig
+        shortLabel mouth (all biosamples)
+        longLabel Avg. H3K4me3 level of 2 mouth experiments (all biosamples)
+        color 130,141,158
+        parent wgEncodeReg4MarkH3k4me3 off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/mouthH3K4me3.bw
+        priority 58
+
     track wgEncodeReg4MarkCtcf
     container multiWig
     noInherit on
@@ -2312,6 +2393,60 @@ html wgEncodeReg4.html
         parent wgEncodeReg4MarkCtcf off
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/uterusCTCF.bw
         priority 45
+
+        track wgEncodeReg4MarkCtcfAllBone
+        type bigWig
+        shortLabel bone (all biosamples)
+        longLabel Avg. CTCF level of 2 bone experiments (all biosamples)
+        color 121,147,150
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneCTCF.bw
+        priority 46
+
+        track wgEncodeReg4MarkCtcfAllBoneMarrow
+        type bigWig
+        shortLabel bone marrow (all biosamples)
+        longLabel Avg. CTCF level of 4 bone marrow experiments (all biosamples)
+        color 184,120,120
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/boneMarrowCTCF.bw
+        priority 47
+
+        track wgEncodeReg4MarkCtcfAllEmbryo
+        type bigWig
+        shortLabel embryo (all biosamples)
+        longLabel Avg. CTCF level of 4 embryo experiments (all biosamples)
+        color 118,158,101
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/embryoCTCF.bw
+        priority 48
+
+        track wgEncodeReg4MarkCtcfAllEpithelium
+        type bigWig
+        shortLabel epithelium (all biosamples)
+        longLabel CTCF level of 1 epithelium experiment (all biosamples)
+        color 221,126,107
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/epitheliumCTCF.bw
+        priority 49
+
+        track wgEncodeReg4MarkCtcfAllMouth
+        type bigWig
+        shortLabel mouth (all biosamples)
+        longLabel CTCF level of 1 mouth experiment (all biosamples)
+        color 130,141,158
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/mouthCTCF.bw
+        priority 50
+
+        track wgEncodeReg4MarkCtcfAllPenis
+        type bigWig
+        shortLabel penis (all biosamples)
+        longLabel Avg. CTCF level of 2 penis experiments (all biosamples)
+        color 20,74,159
+        parent wgEncodeReg4MarkCtcf off
+        bigDataUrl /gbdb/hg38/encode4/regulation/organAve/penisCTCF.bw
+        priority 51
 
     track wgEncodeReg4Txn
     container multiWig
