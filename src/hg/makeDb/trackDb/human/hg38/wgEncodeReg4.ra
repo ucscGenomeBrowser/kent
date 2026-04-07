@@ -200,8 +200,8 @@ html wgEncodeReg4.html
 
         track wgEncodeReg4MarkH3k27acParaythroidGland
         type bigWig
-        shortLabel paraythroid gland
-        longLabel Avg. H3K27ac level of 2 paraythroid gland experiments (tissues and primary cells only)
+        shortLabel parathyroid gland
+        longLabel Avg. H3K27ac level of 2 parathyroid gland experiments (tissues and primary cells only)
         color 130,141,158
         parent wgEncodeReg4MarkH3k27ac off
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/paraythroidGlandH3K27ac.bw
@@ -1586,8 +1586,8 @@ html wgEncodeReg4.html
 
         track wgEncodeReg4MarkH3k4me3ParaythroidGland
         type bigWig
-        shortLabel paraythroid gland
-        longLabel H3K4me3 level of 1 paraythroid gland experiment (tissues and primary cells only)
+        shortLabel parathyroid gland
+        longLabel H3K4me3 level of 1 parathyroid gland experiment (tissues and primary cells only)
         color 130,141,158
         parent wgEncodeReg4MarkH3k4me3 off
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/paraythroidGlandH3K4me3.bw
@@ -2072,8 +2072,8 @@ html wgEncodeReg4.html
 
         track wgEncodeReg4MarkCtcfParaythroidGland
         type bigWig
-        shortLabel paraythroid gland
-        longLabel Avg. CTCF level of 2 paraythroid gland experiments (tissues and primary cells only)
+        shortLabel parathyroid gland
+        longLabel Avg. CTCF level of 2 parathyroid gland experiments (tissues and primary cells only)
         color 130,141,158
         parent wgEncodeReg4MarkCtcf off
         bigDataUrl /gbdb/hg38/encode4/regulation/organAve/paraythroidGlandCTCF.bw
