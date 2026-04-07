@@ -1,12 +1,12 @@
 id	comment	origAssembly	newAssembly	origChrom	origStart	origEnd	status	message	newChrom	newStart	newEnd
-test1.1	initial	hg10	hg16	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.2	initial	hg12	hg13	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.3	initial	hg12	hg15	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.4	initial	hg12	hg16	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.5	initial	hg13	hg15	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.6	initial	hg13	hg16	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
+test1.1	initial	hg10	hg16	chr1	1	1	SUCCESS		chr1	828331	828331
+test1.2	initial	hg12	hg13	chr1	1	1	SUCCESS		chr1	153750	153750
+test1.3	initial	hg12	hg15	chr1	1	1	SUCCESS		chr1	688611	688611
+test1.4	initial	hg12	hg16	chr1	1	1	SUCCESS		chr1	638611	638611
+test1.5	initial	hg13	hg15	chr1	1	1	SUCCESS		chr1	407583	407583
+test1.6	initial	hg13	hg16	chr1	1	1	SUCCESS		chr1	357583	357583
 test1.7	initial	hg15	hg16	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
-test1.8	initial	hg16	hg17	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
+test1.8	initial	hg16	hg17	chr1	1	1	SUCCESS		chr1	1	1
 test1.9	initial	mm4	mm5	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
 test2.1	full chrom	hg10	hg16	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
 test2.2	full chrom	hg12	hg13	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
