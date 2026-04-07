@@ -5545,6 +5545,23 @@ return tdbList;
 }
 
 
+static boolean parseDnaPos(char *db, char *pos, char **retChrom, int *retStart, int *retEnd)
+/* Parse a position string that may be chrom:start-end or just chrom:pos (single base). */
+{
+if (hgParseChromRange(db, pos, retChrom, retStart, retEnd))
+    return TRUE;
+/* check for single position like chrX:67774500 (colon but no dash) */
+char *colon = strchr(pos, ':');
+if (colon != NULL && strchr(colon, '-') == NULL)
+    {
+    struct dyString *dy = dyStringCreate("%s-%s", pos, colon + 1);
+    boolean result = hgParseChromRange(db, dy->string, retChrom, retStart, retEnd);
+    dyStringFree(&dy);
+    return result;
+    }
+return FALSE;
+}
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
@@ -5563,7 +5580,7 @@ struct trackDb *tdbList = loadTracks();
 cartWebStart(cart, database, "Extended DNA Case/Color");
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
-    hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
+    parseDnaPos(database, pos, &seqName, &winStart, &winEnd);
 if (winEnd - winStart > 5000000)
     {
     printf("Please zoom in to 5 million bases or less to color the DNA");
@@ -5845,7 +5862,7 @@ if (tbl[0] == 0)
     {
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRange((dbIsFound ? database : NULL), pos, &chrom, &start, &end))
+         parseDnaPos((dbIsFound ? database : NULL), pos, &chrom, &start, &end))
         {
         hgSeqRange(database, chrom, start, end, '?', "dna");
         }
@@ -5863,11 +5880,15 @@ else
 
     /* use the values from the dnaPos dialog box */
     if (!( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRange(database, pos, &chrom, &start, &end)))
+         parseDnaPos(database, pos, &chrom, &start, &end)))
 	 {
 	 /* if can't get DnaPos from dialog box, use "o" and "t" */
 	 start = cartInt(cart, "o");
 	 end = cartInt(cart, "t");
+	 }
+    else
+	 {
+	 seqName = chrom;
 	 }
 
     /* Table might be a custom track if it's not in the database,
@@ -6201,7 +6222,7 @@ Bits *iBits;    /* Italic bits. */
 Bits *bBits;    /* Bold bits. */
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
-    hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
+    parseDnaPos(database, pos, &seqName, &winStart, &winEnd);
 
 winSize = winEnd - winStart;
 uBits = bitAlloc(winSize);	/* Underline bits. */
