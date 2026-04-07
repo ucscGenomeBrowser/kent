@@ -64,14 +64,12 @@ if ( $err ) then
     set returnCode=1
 endif 
 
-# note this uses java and ant, so it will not work on beta, so run from dev instead
-#echo "disabled doLiftOverTestRobot.csh [${0}: `date`]"
-./doLiftOverTestRobot.csh
+python3 ./doLiftOverTestRobot.py
 set err = $status
 if ( $err ) then
-    echo "error running doLiftOverTestRobot.csh: $err [${0}: `date`]" 
+    echo "error running doLiftOverTestRobot.py: $err [${0}: `date`]"
     set returnCode=1
-endif 
+endif
 
 echo "Done running robots TrackCheck, LiftOverTest, hgNearTest, and hgTablesTest. [${0}: `date`] "
 ./unsymtrick.csh
