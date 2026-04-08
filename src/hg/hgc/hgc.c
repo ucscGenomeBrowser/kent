@@ -1648,12 +1648,15 @@ if (isNotEmpty(thisTbl->encodedTbl))
         errCatchFree(&errCatch);
         if (jsElem != NULL)
             {
-            dyStringPrintf(dy, "{label: \"%s\", data: %s},", thisTbl->title != NULL ? thisTbl->title : thisTbl->field, thisTbl->encodedTbl);
+            char *labelStr = thisTbl->title != NULL ?
+                    jsonStringEscape(thisTbl->title) :
+                    jsonStringEscape(thisTbl->field);
+            dyStringPrintf(dy, "{label: \"%s\", data: %s},", labelStr, thisTbl->encodedTbl);
             }
         }
     else
         {
-        printf("<tr><td>%s</td><td>", thisTbl->title);
+        printf("<tr><td>%s</td><td>", htmlEncode(thisTbl->title));
         printf("<table class='jsonTable'>\n");
         printf("<tr><td>");
         char table[4096];
@@ -1725,6 +1728,7 @@ struct slName *embeddedTblSetting2 = slNameListFromComma(trackDbSetting(tdb, TDB
 char *title = NULL, *fieldName = NULL;
 for (tmp = embeddedTblSetting; tmp != NULL; tmp = tmp->next)
     {
+    title = NULL;
     fieldName = cloneString(tmp->name);
     if (strchr(tmp->name, '|'))
         {
@@ -1741,6 +1745,7 @@ for (tmp = embeddedTblSetting; tmp != NULL; tmp = tmp->next)
     }
 for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     {
+    title = NULL;
     fieldName = cloneString(tmp->name);
     if (strchr(tmp->name, '|'))
         {
@@ -1998,15 +2003,21 @@ if (embeddedTblFields)
 
     struct embeddedTbl *thisTbl;
     struct dyString *tableLabelsDy = dyStringNew(0);
+    boolean initted = FALSE;
     for (thisTbl = embeddedTblList; thisTbl != NULL; thisTbl = thisTbl->next)
         {
         if (thisTbl->encodedTbl)
             {
-            dyStringPrintf(tableLabelsDy, "var _jsonHgcLabels = [");
+            if (!initted)
+                {
+                initted = TRUE;
+                dyStringPrintf(tableLabelsDy, "var _jsonHgcLabels = [");
+                }
             printEmbeddedTable(tdb, thisTbl, tableLabelsDy);
-            dyStringPrintf(tableLabelsDy, "];\n");
             }
         }
+    if (initted)
+        dyStringPrintf(tableLabelsDy, "];\n");
 
     jsInline(dyStringCannibalize(&tableLabelsDy));
     }
@@ -11546,13 +11557,19 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
             }
         if (isNotEmpty(row[3]))
             {
-            printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
-                hgsidString, row[3], row[3]);
+            if (liftDb)
+                printf("<b>Transcript:</b>%s\n<br>\n", row[3]);
+            else
+                printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                    hgsidString, row[3], row[3]);
             }
         if (isNotEmpty(row[4]))
             {
-            printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
-                hgsidString, row[4], row[4]);
+            if (liftDb)
+                printf("<b>Gene:</b> %s\n<br>\n", row[4]);
+            else
+                printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                    hgsidString, row[4], row[4]);
             }
         if (isNotEmpty(row[5]))
             {
