@@ -469,9 +469,15 @@ div.jwFooterCopyright {
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.recentGenomeCard:hover {
+.recentGenomeCard:hover,
+.recentGenomeCard:focus-visible {
     background-color: #f0f5fa;
     border-color: #4c759c;
+}
+
+.recentGenomeCard:focus-visible {
+    outline: 2px solid #4c759c;
+    outline-offset: -2px;
 }
 
 .recentGenomeCard.selected {

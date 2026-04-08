@@ -1853,9 +1853,16 @@ var hgGateway = (function() {
 
         // Render each item as a card (vertical layout)
         items.forEach(function(item) {
-            var $card = $('<div class="recentGenomeCard"></div>');
+            var $card = $('<div class="recentGenomeCard" tabindex="0" role="button"></div>');
             var label = item.label || item.shortLabel || item.value || item.genome || item.commonName;
             var genome = trackHubSkipHubName(item.genome || item.db || '');
+
+            // Build aria-label from label and genome
+            var ariaLabel = label;
+            if (genome && label.indexOf(genome) < 0) {
+                ariaLabel = label + ' (' + genome + ')';
+            }
+            $card.attr('aria-label', ariaLabel);
 
             $card.append('<div class="recentGenomeLabel">' + escapeHtml(label) + '</div>');
             if (genome && label.indexOf(genome) < 0) {
@@ -1874,7 +1881,7 @@ var hgGateway = (function() {
             }
             $card.append('<div class="recentGenomeCategory">' + escapeHtml(shortCategory) + '</div>');
 
-            // Store item data for click handler
+            // Store item data for click/keyboard handler
             $card.data('item', item);
             $card.on('click', function() {
                 var clickedItem = $(this).data('item');
@@ -1882,6 +1889,12 @@ var hgGateway = (function() {
                 // Highlight selected card in this panel
                 $panel.find('.recentGenomeCard').removeClass('selected');
                 $(this).addClass('selected');
+            });
+            $card.on('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    $(this).trigger('click');
+                }
             });
 
             $panel.append($card);

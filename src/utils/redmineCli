@@ -10,6 +10,9 @@ Usage:
     redmineCli comment 33571 --message "Adding a note"
     redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
     redmineCli attach 33571 screenshot.png --note "See attached"
+    redmineCli relate 10316 15336 30368       # relate tickets to each other
+    redmineCli watch 37339 lou braney         # add watchers to a ticket
+    redmineCli users                          # list user names and IDs
 """
 
 import argparse
@@ -76,13 +79,51 @@ CF_CATEGORY = 28
 CF_EMAIL = 40
 CF_MLM = 9
 
-# Name -> Redmine user ID mapping (case-insensitive lookup in resolve_user)
+
+# Name -> Redmine user ID mapping (short names and full names)
 USER_IDS = {
-    "jairo navarro": 163, "jairo": 163,
-    "lou nassar": 171, "lou": 171,
-    "gerardo perez": 179, "gerardo": 179, "gera": 179,
-    "clay fischer": 161, "clay": 161,
-    "matt speir": 150, "matt": 150,
+    "ana": 174, "ana benet": 174,
+    "angie": 34, "angie hinrichs": 34,
+    "ann": 3, "ann zweig": 3,
+    "bob": 45, "bob kuhn": 45,
+    "blee": 122, "brian lee": 122,
+    "braney": 31, "brian raney": 31,
+    "build": 197, "build meister": 197,
+    "cath": 155, "cath tyner": 155,
+    "charlie": 186, "charlie vaske": 186,
+    "chin": 25, "chin li": 25,
+    "chris": 152, "chris eisenhart": 152,
+    "christopher": 156, "christopher lee": 156,
+    "clay": 161, "clay fischer": 161,
+    "cricket": 29, "cricket sloan": 29,
+    "daniel": 172, "daniel schmelter": 172,
+    "dev": 157, "dev team": 157,
+    "donna": 4, "donna karolchik": 4,
+    "erich": 52, "erich weiler": 52,
+    "galt": 28, "galt barber": 28,
+    "gautomation": 195, "genome automation": 195,
+    "gadmin": 71, "genome browser admin": 71,
+    "gerardo": 179, "gerardo perez": 179, "gera": 179,
+    "haifang": 165, "haifang telc": 165,
+    "hiram": 24, "hiram clawson": 24,
+    "jairo": 163, "jairo navarro": 163,
+    "jason": 180, "jason fernandes": 180,
+    "jeltje": 184, "jeltje van baren": 184,
+    "jim": 44, "jim kent": 44,
+    "johannes": 190, "johannes birgmeier": 190,
+    "jonathan": 142, "jonathan casper": 142,
+    "jorge": 5, "jorge garcia": 5,
+    "kate": 33, "kate rosenbloom": 33,
+    "lou": 171, "lou nassar": 171,
+    "marc": 183, "marc perry": 183,
+    "mark": 7, "mark diekhans": 7,
+    "matt": 150, "matt speir": 150,
+    "max": 100, "max haeussler": 100,
+    "melissa": 27, "melissa cline": 27,
+    "pauline": 16, "pauline fujita": 16,
+    "qa": 99, "qa team": 99,
+    "rachel": 41, "rachel harte": 41,
+    "ward": 196, "ward en": 196,
 }
 
 ATTRIBUTION = "**From Claude:**\n\n"
@@ -119,7 +160,7 @@ def api_get(base_url, path, api_key):
 
 
 def api_post(base_url, path, api_key, data):
-    """POST JSON to Redmine. Returns parsed JSON response."""
+    """POST JSON to Redmine. Returns parsed JSON response (or None if empty)."""
     url = base_url.rstrip("/") + path
     body = json.dumps(data).encode("utf-8")
     req = urllib.request.Request(url, data=body, method="POST")
@@ -127,7 +168,8 @@ def api_post(base_url, path, api_key, data):
     req.add_header("Content-Type", "application/json")
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read())
+            raw = resp.read()
+            return json.loads(raw) if raw else None
     except urllib.error.HTTPError as e:
         resp_body = e.read().decode("utf-8", errors="replace")[:500]
         sys.exit(f"Error: HTTP {e.code} POST {url}: {resp_body}")
@@ -192,15 +234,14 @@ def redmine_textile_to_md(text):
 
 
 def resolve_user(name_or_id):
-    """Resolve a user name to a Redmine user ID. Accepts name or numeric ID."""
+    """Resolve a user name or numeric ID to a Redmine user ID."""
     if name_or_id.isdigit():
         return int(name_or_id)
     key = name_or_id.lower().strip()
     if key in USER_IDS:
         return USER_IDS[key]
-    sys.exit(f"Error: unknown user '{name_or_id}'. Known users: "
-             + ", ".join(sorted(set(f"{v} ({k})" for k, v in USER_IDS.items()
-                                    if " " in k))))
+    sys.exit(f"Error: unknown user '{name_or_id}'. "
+             "Run 'redmineCli users' to see available names and IDs.")
 
 
 def resolve_status(name_or_id):
@@ -580,6 +621,118 @@ def cmd_attach(args):
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: users
+# ---------------------------------------------------------------------------
+
+def cmd_users(args):
+    """List project members and their Redmine user IDs."""
+    users = []
+    offset = 0
+    limit = 100
+    while True:
+        data = api_get(args.base_url,
+                       f"/projects/{args.project}/memberships.json?limit={limit}&offset={offset}",
+                       args.api_key)
+        for m in data.get("memberships", []):
+            if "user" not in m:
+                continue
+            users.append((m["user"]["name"], m["user"]["id"]))
+        total = data.get("total_count", 0)
+        offset += limit
+        if offset >= total:
+            break
+
+    users.sort(key=lambda x: x[0].lower())
+
+    # Count first-name usage to detect collisions
+    first_counts = {}
+    for name, uid in users:
+        first = name.split()[0].lower()
+        first_counts[first] = first_counts.get(first, 0) + 1
+
+    out = []
+    out.append("| Short | Name | ID |")
+    out.append("|-------|------|----|")
+    for name, uid in users:
+        parts = name.split()
+        first = parts[0].lower()
+        if first_counts[first] == 1:
+            short = first
+        elif len(parts) >= 2 and parts[0].isalpha() and parts[-1].isalpha():
+            short = (parts[0][0] + parts[-1]).lower()
+        else:
+            short = first
+        out.append(f"| {short} | {name} | {uid} |")
+    print("\n".join(out))
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: relate
+# ---------------------------------------------------------------------------
+
+def cmd_relate(args):
+    """Create 'relates' relations between tickets."""
+    ticket_ids = args.ticket_ids
+    if len(ticket_ids) < 2:
+        sys.exit("Error: need at least two ticket IDs to relate")
+
+    relation_type = args.type
+    created = 0
+    skipped = 0
+
+    # Relate each pair: for N tickets, relate ticket[0] to all others,
+    # then ticket[1] to all after it, etc. Redmine relations are bidirectional
+    # so we only need to create them in one direction.
+    for i in range(len(ticket_ids)):
+        for j in range(i + 1, len(ticket_ids)):
+            data = {
+                "relation": {
+                    "issue_to_id": int(ticket_ids[j]),
+                    "relation_type": relation_type,
+                }
+            }
+            try:
+                api_post(args.base_url,
+                         f"/issues/{ticket_ids[i]}/relations.json",
+                         args.api_key, data)
+                created += 1
+                print(f"  Related #{ticket_ids[i]} <-> #{ticket_ids[j]}")
+            except SystemExit as e:
+                # Duplicate relation returns 422; treat as skip
+                if "422" in str(e):
+                    skipped += 1
+                    print(f"  Already related: #{ticket_ids[i]} <-> #{ticket_ids[j]}")
+                else:
+                    raise
+
+    print(f"Done: {created} created, {skipped} already existed")
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: watch
+# ---------------------------------------------------------------------------
+
+def cmd_watch(args):
+    """Add watchers to a ticket."""
+    ticket_id = args.ticket_id
+    for name in args.users:
+        user_id = resolve_user(name)
+        data = {"user_id": user_id}
+        try:
+            api_post(args.base_url,
+                     f"/issues/{ticket_id}/watchers.json",
+                     args.api_key, data)
+            print(f"  Added watcher {name} (user {user_id}) to #{ticket_id}")
+        except SystemExit as e:
+            if "422" in str(e):
+                print(f"  {name} is already watching #{ticket_id}")
+            else:
+                raise
+
+    print(f"Done: {make_url(args.base_url, ticket_id)}")
+
+
+# ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
 
@@ -670,6 +823,24 @@ def build_parser():
     p_attach.add_argument("--description", help="Attachment description")
     p_attach.add_argument("--note", help="Comment to add with attachment")
 
+    # users
+    p_users = sub.add_parser("users", help="List project members and their user IDs")
+    p_users.add_argument("--project", default=DEFAULT_PROJECT,
+                         help="Project identifier (default: %(default)s)")
+
+    # relate
+    p_relate = sub.add_parser("relate", help="Create relations between tickets")
+    p_relate.add_argument("ticket_ids", nargs="+", help="Two or more ticket IDs to relate")
+    p_relate.add_argument("--type", default="relates",
+                          help="Relation type: relates, duplicates, duplicated, blocks, "
+                               "blocked, precedes, follows, copied_to, copied_from "
+                               "(default: %(default)s)")
+
+    # watch
+    p_watch = sub.add_parser("watch", help="Add watchers to a ticket")
+    p_watch.add_argument("ticket_id", help="Ticket ID number")
+    p_watch.add_argument("users", nargs="+", help="User names or IDs to add as watchers")
+
     return parser
 
 
@@ -691,6 +862,9 @@ def main():
         "comment": cmd_comment,
         "update": cmd_update,
         "attach": cmd_attach,
+        "users": cmd_users,
+        "relate": cmd_relate,
+        "watch": cmd_watch,
     }
     commands[args.command](args)
 

@@ -8,6 +8,7 @@
 #include "hash.h"
 #include "portable.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "cart.h"
 #include "jksql.h"
 #include "trackDb.h"
@@ -206,25 +207,29 @@ else
 op = cartUsualString(cart, hgtaNextIntersectOp, "any");
 jsTrackingVar("op", op);
 makeOpButton("any", op);
-printf("All %s records that have any overlap with %s <BR>\n",
-       name, iName);
+printf("<label for='%s_any'>All %s records that have any overlap with %s</label> <BR>\n",
+       hgtaNextIntersectOp, name, iName);
 makeOpButton("none", op);
-printf("All %s records that have no overlap with %s <BR>\n",
-       name, iName);
+printf("<label for='%s_none'>All %s records that have no overlap with %s</label> <BR>\n",
+       hgtaNextIntersectOp, name, iName);
 
 if (!wigOptions)
     {
     makeOpButton("more", op);
-    printf("All %s records that have at least ",
-	   name);
+    printf("<label for='%s_more'>All %s records that have at least </label>",
+	   hgtaNextIntersectOp, name);
     setting = cartCgiUsualString(cart, hgtaNextMoreThreshold, "80");
-    cgiMakeTextVar(hgtaNextMoreThreshold, setting, 3);
+    htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=3 VALUE='%s|attr|'"
+        " aria-label='Minimum percent overlap'>",
+        hgtaNextMoreThreshold, hgtaNextMoreThreshold, setting);
     printf(" %% overlap with %s <BR>\n", iName);
     makeOpButton("less", op);
-    printf("All %s records that have at most ",
-	   name);
+    printf("<label for='%s_less'>All %s records that have at most </label>",
+	   hgtaNextIntersectOp, name);
     setting = cartCgiUsualString(cart, hgtaNextLessThreshold, "80");
-    cgiMakeTextVar(hgtaNextLessThreshold, setting, 3);
+    htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=3 VALUE='%s|attr|'"
+        " aria-label='Maximum percent overlap'>",
+        hgtaNextLessThreshold, hgtaNextLessThreshold, setting);
     printf(" %% overlap with %s <P>\n", iName);
     }
 else
@@ -247,11 +252,11 @@ if (!wigOptions)
 		"list of position ranges.<P>\n",
 		name);
     makeOpButton("and", op);
-    printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
-	name, iName);
+    printf("<label for='%s_and'>Base-pair-wise intersection (AND) of %s and %s</label> <BR>\n",
+	hgtaNextIntersectOp, name, iName);
     makeOpButton("or", op);
-    printf("Base-pair-wise union (OR) of %s and %s <P>\n",
-	name, iName);
+    printf("<label for='%s_or'>Base-pair-wise union (OR) of %s and %s</label> <P>\n",
+	hgtaNextIntersectOp, name, iName);
     hPrintf("Check the following boxes to complement one or both tables.  "
 	    "To complement a table means to include a base pair in the "
 	    "intersection/union if it is <I>not</I> included in the table."
@@ -259,12 +264,12 @@ if (!wigOptions)
     if (!bigWig)
 	{
 	jsMakeTrackingCheckBox(cart, hgtaNextInvertTable, "invertTable", FALSE);
-	printf("Complement %s before base-pair-wise intersection/union <BR>\n",
-	       name);
+	printf("<label for='%s'>Complement %s before base-pair-wise intersection/union</label> <BR>\n",
+	       hgtaNextInvertTable, name);
 	}
     jsMakeTrackingCheckBox(cart, hgtaNextInvertTable2, "invertTable2", FALSE);
-    printf("Complement %s before base-pair-wise intersection/union <P>\n",
-	   iName);
+    printf("<label for='%s'>Complement %s before base-pair-wise intersection/union</label> <P>\n",
+	   hgtaNextInvertTable2, iName);
     }
 else
     {

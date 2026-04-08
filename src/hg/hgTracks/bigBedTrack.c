@@ -829,12 +829,24 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         if (lf && squishFieldIdx)
             lf->squishyPackVal = atof(restField(bb, squishFieldIdx));
 
-        if (track->visibility != tvDense && lf && doWindowSizeFilter && bb->start < winStart && bb->end > winEnd)
+        if (track->visibility != tvDense && lf && doWindowSizeFilter
+            && (quickLiftFile ? lf->start : bb->start) < winStart
+            && (quickLiftFile ? lf->end : bb->end) > winEnd)
             {
             mergeCount++;
-            struct bed *bed = bedLoadN(bedRow, fieldCount);
-            struct linkedFeatures *tmp = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
-                scoreMin, scoreMax, useItemRgb);
+            struct linkedFeatures *tmp;
+            if (quickLiftFile)
+                {
+                struct bed *mergeBed = cloneBed(bedCopy);
+                tmp = bedMungToLinkedFeatures(&mergeBed, tdb, fieldCount,
+                    scoreMin, scoreMax, useItemRgb);
+                }
+            else
+                {
+                struct bed *bed = bedLoadN(bedRow, fieldCount);
+                tmp = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                    scoreMin, scoreMax, useItemRgb);
+                }
             if (spannedLf)
                 {
                 if (tmp->start < spannedLf->start)

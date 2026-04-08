@@ -8,6 +8,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "cart.h"
 #include "jksql.h"
 #include "trackDb.h"
@@ -36,10 +37,12 @@ cartSaveSession(cart);
 hPrintf("<TABLE><TR><TD ALIGN=LEFT>\n");
 hPrintf("Paste regions:");
 hPrintf("</TD><TD ALIGN=RIGHT>");
-hPrintf("Or upload file: <INPUT TYPE=FILE NAME=\"%s\">&nbsp;<BR>\n",
+hPrintf("Or upload file: <INPUT TYPE=FILE NAME=\"%s\" aria-label='Upload region definitions file'>"
+	"&nbsp;<BR>\n",
 	hgtaEnteredUserRegionFile);
 hPrintf("</TD></TR><TR><TD COLSPAN=2 ALIGN=LEFT>\n");
-cgiMakeTextArea(hgtaEnteredUserRegions, oldPasted, 10, 70);
+htmlPrintf("<TEXTAREA NAME='%s|attr|' ROWS=10 COLS=70 aria-label='Paste regions'>%s</TEXTAREA>",
+    hgtaEnteredUserRegions, (oldPasted != NULL ? oldPasted : ""));
 hPrintf("</TD></TR><TR><TD COLSPAN=2 ALIGN=LEFT>\n");
 cgiMakeButton(hgtaDoSubmitUserRegions, "Submit");
 hPrintf("&nbsp;");
