@@ -7467,13 +7467,38 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
 /* gcOnFly track: if a trackDb entry exists (native or hub, possibly
  * with a hub_#_ prefix on the table name), patch in on-the-fly
  * computation methods so data comes from genome sequence, not a file.
+ * hg.conf switches:
+ *   gcOnTheFly=on      - master switch, track is removed if off (default on)
+ *   gcOnTheFlyCoExist=on - allow gcOnFly alongside gc5Base/gc5BaseBw
+ *                          (default off: remove gcOnFly if either exists)
  * This must run after loadTrackHubs so assembly hub tracks are present. */
 {
-struct track *t;
-for (t = trackList; t != NULL; t = t->next)
+boolean gcOnTheFlyEnabled = cfgOptionBooleanDefault("gcOnTheFly", TRUE);
+boolean gcCoExist = cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE);
+struct track *t, *prev = NULL, *next;
+for (t = trackList; t != NULL; t = next)
     {
+    next = t->next;
     if (sameString(GC_ON_FLY_TRACK_NAME, trackHubSkipHubName(t->table)))
+	{
+	boolean remove = FALSE;
+	if (!gcOnTheFlyEnabled)
+	    remove = TRUE;
+	else if (!gcCoExist &&
+	    (rFindTrackWithTable("gc5Base", trackList) != NULL ||
+	     rFindTrackWithTable("gc5BaseBw", trackList) != NULL))
+	    remove = TRUE;
+	if (remove)
+	    {
+	    if (prev == NULL)
+		trackList = next;
+	    else
+		prev->next = next;
+	    continue;
+	    }
 	gc5BaseOnTheFlyMethods(t, cart);
+	}
+    prev = t;
     }
 }
 loadCustomTracks(&trackList);
@@ -10003,10 +10028,10 @@ if (!hideControls)
 		hPrintf("<A HREF=\"%s\">", url);
 		hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
 		hPrintf("</A>");
-		hDropListClassWithStyle("ruler", rulerMenu,
+		cgiMakeDropListClassWithIdStyleJavascriptAndLabel("ruler", NULL, rulerMenu,
 			sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
 			rulerMode == tvHide ? "hiddenText" : "normalText",
-			TV_DROPDOWN_STYLE);
+			TV_DROPDOWN_STYLE, NULL, RULER_TRACK_LABEL);
 		controlGridEndCell(cg);
 		freeMem(url);
 		}

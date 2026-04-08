@@ -991,16 +991,23 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 hTvDropDownClassVisOnlyAndExtraWithLabel(varName, vis, canPack, class, visOnly, events, NULL);
 }
 
-void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
-// Make hide/show dropdown for varName
+void hideShowDropDownWithClassExtraAndLabel(char *varName, char *id, boolean show, char *class,
+                                            struct slPair *events, char *ariaLabel)
+// Make hide/show dropdown for varName with optional aria-label
 {
 static char *hideShow[] =
     {
     "hide",
     "show"
     };
-cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, hideShow, ArraySize(hideShow),
-				       hideShow[show], class, TV_DROPDOWN_STYLE, events);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(varName, id, hideShow, ArraySize(hideShow),
+				       hideShow[show], class, TV_DROPDOWN_STYLE, events, ariaLabel);
+}
+
+void hideShowDropDownWithClassAndExtra(char *varName, char *id, boolean show, char *class, struct slPair *events)
+// Make hide/show dropdown for varName
+{
+hideShowDropDownWithClassExtraAndLabel(varName, id, show, class, events, NULL);
 }
 
 
@@ -9699,8 +9706,9 @@ if (show && (visibleChild == -1))
             visibleChild = 1;
         }
     }
-hideShowDropDownWithClassAndExtra(tdb->track, NULL, show, (show && visibleChild) ?
-                                  "superDropdown normalText visDD" : "superDropdown hiddenText visDD", events);
+hideShowDropDownWithClassExtraAndLabel(tdb->track, NULL, show, (show && visibleChild) ?
+                                  "superDropdown normalText visDD" : "superDropdown hiddenText visDD",
+                                  events, tdb->shortLabel);
 return TRUE;
 }
 

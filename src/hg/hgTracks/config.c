@@ -351,7 +351,9 @@ for (group = groupList; group != NULL; group = group->next)
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
-	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText trackVis" : "hiddenText trackVis");
+	hTvDropDownClassVisOnlyWithLabel("ruler", rulerMode, FALSE,
+		rulerMode ? "normalText trackVis" : "hiddenText trackVis",
+		NULL, RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD></TR>\n");

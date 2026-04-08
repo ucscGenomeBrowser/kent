@@ -1,6 +1,6 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2026-03-16                     # v496 preview
-setenv LASTREVIEWDAY 2026-02-23                     # v495 preview
+setenv REVIEWDAY 2026-04-06                     # v497 preview
+setenv LASTREVIEWDAY 2026-03-16                     # v496 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY

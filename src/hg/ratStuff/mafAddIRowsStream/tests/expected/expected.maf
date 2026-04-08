@@ -1,0 +1,31 @@
+##maf version=1 scoring=none
+a score=0.000000
+s testRef.chr1 0 10 + 100 ACGTACGTAC
+s sp1.chr1     0 10 + 100 ACGTACGTAC
+i sp1.chr1     N 0 I 5
+s sp2.chr1     0 10 + 100 ACGTACGTAC
+i sp2.chr1     N 0 I 20
+
+a score=0.000000
+s testRef.chr1 10 10 + 100 TTTTTTTTTT
+e sp2.chr1     10 20 + 100 I
+e sp1.chr1     10  5 + 100 I
+
+a score=0.000000
+s testRef.chr1 20 10 + 100 TGCATGCATG
+s sp1.chr1     15 10 + 100 TGCATGCATG
+i sp1.chr1     I 5 C 0
+e sp2.chr1     10 20 + 100 I
+
+a score=0.000000
+s testRef.chr1 30 20 + 100 TTTTTTTTTTTTTTTTTTTT
+e sp2.chr1     10 20 + 100 I
+e sp1.chr1     25  0 + 100 C
+
+a score=0.000000
+s testRef.chr1 50 10 + 100 AAACCCGGGT
+s sp1.chr1     25 10 + 100 AAACCCGGGT
+i sp1.chr1     C 0 N 0
+s sp2.chr1     30 10 + 100 AAACCCGGGT
+i sp2.chr1     I 20 N 0
+

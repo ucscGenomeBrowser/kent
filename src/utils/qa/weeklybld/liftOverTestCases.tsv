@@ -1,0 +1,90 @@
+id	comment	origAssembly	newAssembly	origChrom	origStart	origEnd	status	message	newChrom	newStart	newEnd
+test1.1	initial	hg10	hg16	chr1	1	1	SUCCESS		chr1	828331	828331
+test1.2	initial	hg12	hg13	chr1	1	1	SUCCESS		chr1	153750	153750
+test1.3	initial	hg12	hg15	chr1	1	1	SUCCESS		chr1	688611	688611
+test1.4	initial	hg12	hg16	chr1	1	1	SUCCESS		chr1	638611	638611
+test1.5	initial	hg13	hg15	chr1	1	1	SUCCESS		chr1	407583	407583
+test1.6	initial	hg13	hg16	chr1	1	1	SUCCESS		chr1	357583	357583
+test1.7	initial	hg15	hg16	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
+test1.8	initial	hg16	hg17	chr1	1	1	SUCCESS		chr1	1	1
+test1.9	initial	mm4	mm5	chr1	1	1	FAILURE	Deleted in new	NULL	0	0
+test2.1	full chrom	hg10	hg16	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.2	full chrom	hg12	hg13	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.3	full chrom	hg12	hg15	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.4	full chrom	hg12	hg16	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.5	full chrom	hg13	hg16	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.6	full chrom	hg13	hg15	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.7	full chrom	hg15	hg16	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.8	full chrom	hg16	hg17	chr1	1	250000000	FAILURE	Split in new	NULL	0	0
+test2.9	full chrom	mm4	mm5	chr1	1	199000000	FAILURE	Split in new	NULL	0	0
+test2.10	full chrom	mm5	mm6	chr11	1	121648857	SUCCESS		chr11	3000000	121798822
+test2.11	full chrom	mm5	mm6	chr1	1	195203927	FAILURE	Split in new	NULL	0	0
+test3.1	contig NT_077402	hg15	hg16	chr1	50000	217280	SUCCESS		chr1	0	167280
+test3.2	contig NT_032977	hg15	hg16	chr1	46908798	68889433	SUCCESS		chr1	46920182	68900000
+test3.3	contig NT_034471	hg13	hg16	chr1	0	535608	FAILURE	Split in new	NULL	0	0
+test3.4	contig NT_034471	hg13	hg15	chr1	0	535608	FAILURE	Split in new	NULL	0	0
+test3.5	contig NT_077988	hg16	hg17	chr1	140794983	140974431	FAILURE	Split in new	NULL	0	0
+test3.6	contig NT_022071	hg16	hg17	chr1	141024431	141135329	FAILURE	Split in new	NULL	0	0
+test3.7	contig NT_077930	hg16	hg17	chr1	141185329	141387038	FAILURE	Split in new	NULL	0	0
+test3.8	contig NT_077389	hg16	hg17	chr1	141537038	141939137	FAILURE	Split in new	NULL	0	0
+test3.8	contig NT_077931	hg16	hg17	chr1	141989137	142115614	FAILURE	Split in new	NULL	0	0
+test3.9	contig NT_039202	mm4	mm5	chr2	3000001	22704910	SUCCESS		chr2	3030571	22481376
+test3.10	contig NT_039226	mm4	mm5	chr3	3000001	15000000	FAILURE	Split in new	NULL	0	0
+test3.11	contig NT_039228	mm4	mm5	chr3	30000001	40000000	FAILURE	Split in new	NULL	0	0
+test3.12	contig NT_039239	mm4	mm5	chr3	100000001	110000000	FAILURE	Split in new	NULL	0	0
+test3.13	contig NT_039242	mm4	mm5	chr3	140000000	150000000	SUCCESS		chr3	136677621	146654350
+test3.14	contig NT_039340	mm4	mm5	chr6	3000001	30000000	SUCCESS		chr6	3000000	30010053
+test3.15	contig NT_039617	mm5	mm6	chr15	3000000	8889517	FAILURE	Split in new	NULL	0	0
+test3.16	contig NT_039618	mm5	mm6	chr15	8939517	38812503	SUCCESS		chr15	8856626	38739486
+test3.17	contig NT_039621	mm5	mm6	chr15	38862503	104138553	SUCCESS		chr15	38789486	103639402
+test4.1	gap (telomere)	hg15	hg16	chr1	1	50000	FAILURE	Deleted in new	NULL	0	0
+test4.2	gap (unbridged clone)	hg15	hg16	chr1	144819939	145219939	FAILURE	Deleted in new	NULL	0	0
+test4.3	gap (bridged clone)	hg15	hg16	chr1	22709998	22719998	FAILURE	Deleted in new	NULL	0	0
+test4.4	gap (centromere)	hg15	hg16	chr1	119894205	122894205	FAILURE	Deleted in new	NULL	0	0
+test4.5	gap (heterochromatin)	hg15	hg16	chr1	122894205	140894205	FAILURE	Deleted in new	NULL	0	0
+test4.6	gap (telomere)	mm4	mm5	chr1	1	3000000	FAILURE	Deleted in new	NULL	0	0
+test4.7	gap (fragment)	mm4	mm5	chr6	17949115	18016960	FAILURE	Deleted in new	NULL	0	0
+test4.8	gap (fragment)	mm4	mm5	chr6	71136978	71592862	FAILURE	Deleted in new	NULL	0	0
+test5.1	repeat (simple)	hg15	hg16	chr1	50001	50468	SUCCESS		chr1	1	468
+test5.2	repeat (satelite)	hg15	hg16	chr1	50469	51310	SUCCESS		chr1	469	1310
+test5.3	repeat (SINE)	hg15	hg16	chr1	91448	91743	SUCCESS		chr1	41448	41743
+test5.4	repeat (LINE)	hg15	hg16	chr1	88278	89381	SUCCESS		chr1	38278	39381
+test5.5	repeat (LTR)	hg15	hg16	chr1	1267080	1268046	SUCCESS		chr1	1296589	1297555
+test5.6	repeat (LINE)	mm4	mm5	chr1	3009500	3010500	SUCCESS		chr1	3009500	3010500
+test5.7	repeat (SINE)	mm4	mm5	chr1	3106697	3106844	SUCCESS		chr1	3097285	3097432
+test5.8	repeat (SINE)	mm5	mm6	chr1	3047342	3947510	SUCCESS		chr1	3003676	3901338
+test6.1	Refseq (NM_000014)	hg15	hg16	chr12	9120576	9168754	SUCCESS		chr12	9111576	9159754
+test6.2	Refseq (NM_000015)	hg15	hg16	chr8	18058058	18067986	SUCCESS		chr8	18259027	18268955
+test6.3	Refseq (NM_002122)	hg15	hg16	chr6_random	3908637	3914439	FAILURE	Partially deleted in new	NULL	0	0
+test6.4	Refseq (NM_178917)	mm5	mm6	chr2_random	82951	95575	FAILURE	Deleted in new	NULL	0	0
+test6.5	Refseq (NM_011283)	mm5	mm6	chr1	4353530	4369780	SUCCESS		chr1	4304520	4320770
+test7.1	smaller random	hg15	hg16	chr6_random	1	3800000	SUCCESS		chr6	28804583	32529431
+test7.2	smaller random	hg15	hg16	chr6_random	1	3900000	FAILURE	Split in new	NULL	0	0
+test7.3	smaller random	hg15	hg16	chr6_random	4000000	4200000	SUCCESS		chr6	32743865	32943511
+test7.4	smaller random	hg15	hg16	chr6_random	4290000	9200000	SUCCESS		chr6	28649262	33398434
+test7.5	smaller random	hg15	hg16	chr6_random	9200000	9220000	SUCCESS		chr6_random	1093992	1118439
+test7.6	deleted random	hg15	hg16	chrY_random	1	191000	FAILURE	Split in new	NULL	0	0
+test7.7	deleted random	hg15	hg16	chr11_random	1	2500	SUCCESS		chr11	69379248	69381748
+test8.1	1k	hg15	hg16	chr1	50001	51000	SUCCESS		chr1	1	1000
+test8.2	10k	hg15	hg16	chr1	50001	60000	SUCCESS		chr1	1	10000
+test9.1	long stable contig	hg15	hg16	chr14	18070001	105261216	SUCCESS		chr14	18070001	105261216
+test9.2	long stable region	hg16	hg17	chr14	18000000	105000000	SUCCESS		chr14	19149712	106099369
+test10.1	missing gap	hg16	hg17	chr12	17000	20000	SUCCESS		chr12	17000	20000
+test10.2	missing gap	hg16	hg17	chr12	100000000	100100000	SUCCESS		chr12	100000000	100100000
+test10.3	missing gap	hg16	hg17	chr12	120000000	120100000	SUCCESS		chr12	120050767	120150767
+test10.4	missing gap	hg16	hg17	chr12	1	133000000	SUCCESS		chr12	16000	132389811
+test11.1	longer initial short arm	hg16	hg17	chr13	16818001	16820000	SUCCESS		chr13	17918001	17920000
+test12.1	SMN1 condensed	hg16	hg17	chr5	69077488	69105554	SUCCESS		chr5	70256523	70284593
+test12.2	SMN1 condensed	hg16	hg17	chr5	70422996	70451066	SUCCESS		chr5	70256523	70284593
+test12.3	BIRC1 retained	hg16	hg17	chr5	70466538	70522752	SUCCESS		chr5	70300065	70356279
+test12.4	BIRC1 removed	hg16	hg17	chr5	69005857	69062049	FAILURE	Split in new	NULL	0	0
+test12.5	RUNX3 removed	mm5	mm6	chr4	133606935	133634105	FAILURE	Split in new	NULL	0	0
+test13.1	move chroms	hg16	hg17	chr1	140358487	140358535	SUCCESS		chr12	53498115	53498163
+test14.1	reciprocal	hg16	hg17	chr13	20000000	100000000	SUCCESS		chr13	21100000	101100000
+test14.2	reciprocal	hg17	hg16	chr13	21100000	101100000	SUCCESS		chr13	20000000	100000000
+test14.3	reciprocal	hg16	hg17	chr19	10000000	20000000	SUCCESS		chr19	10000000	20000000
+test14.4	reciprocal	hg17	hg16	chr19	10000000	20000000	SUCCESS		chr19	10000000	20000000
+test15.1	not reciprocal	hg16	hg17	chr14	18000000	20000000	SUCCESS		chr14	19149712	21079712
+test15.2	not reciprocal	hg17	hg16	chr14	19149712	21079712	SUCCESS		chr14	18070000	20000000
+test15.3	not reciprocal	hg16	hg17	chr1	140358487	140358535	SUCCESS		chr12	53498115	53498163
+test15.4	not reciprocal	hg17	hg16	chr12	53498115	53498163	SUCCESS		chr12	53498115	53498163

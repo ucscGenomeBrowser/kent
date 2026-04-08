@@ -448,11 +448,13 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
 	      	  "document.getElementById('checkboxGenomeSpace').checked=false;");
     dyStringAppend(dy, 
 	      	  "return true;");
-    cgiMakeCheckBoxWithId("sendToGalaxy", doGalaxy(), "checkboxGalaxy");
+    cgiMakeCheckBoxIdAndMore("sendToGalaxy", doGalaxy(), "checkboxGalaxy",
+        "aria-label='Send output to Galaxy'");
     jsOnEventById("click", "checkboxGalaxy", dy->string);
     hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
     nbSpaces(2);
-    cgiMakeCheckBoxWithId("sendToGreat", doGreat(), "checkboxGreat");
+    cgiMakeCheckBoxIdAndMore("sendToGreat", doGreat(), "checkboxGreat",
+        "aria-label='Send output to GREAT'");
     jsOnEventById("click", "checkboxGreat", "return onSelectGreat();");
     hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
     if (isGenomeSpaceEnabled())
@@ -799,8 +801,10 @@ if (isPositional)
 	hPrintf("&nbsp;<label for='%s_%s'>ENCODE Pilot regions</label>&nbsp;", hgtaRegionType, hgtaRegionTypeEncode);
 	}
     makeRegionButton(hgtaRegionTypeRange, regionType);
-    hPrintf("&nbsp;<label for='%s'>Position</label>&nbsp;", hgtaRange);
-    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=26 VALUE=\"%s\">\n",
+    hPrintf("&nbsp;<label for='%s_%s'>Position</label>&nbsp;",
+        hgtaRegionType, hgtaRegionTypeRange);
+    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=26 VALUE=\"%s\""
+        " aria-label='Position range'>\n",
     	hgtaRange, hgtaRange, range);
     jsOnEventById("focus", hgtaRange, 
 	jsRadioUpdate(hgtaRegionType, "regionType", "range"));
