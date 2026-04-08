@@ -194,7 +194,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF137XUJ
     type bigWig
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000DIU signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000DIU signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b0f5872a-819b-41d3-a527-e9a446a9311f/ENCFF137XUJ.bigWig
@@ -204,7 +204,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF206SRW
     type bigBed 5
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000DIU peaks
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF ENCSR000DIU peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/506580a9-80b8-4ed6-8ffb-69c5eb16dbfa/ENCFF206SRW.bigBed
@@ -304,7 +304,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF247XHY
     type bigWig
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR677HXC signal
     longLabel Mus musculus strain B6NCrl forebrain tissue postnatal (0 days) CTCF ENCSR677HXC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/35dc114f-b366-4bb7-8b09-ff9f4e52f390/ENCFF247XHY.bigWig
@@ -354,7 +354,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF582ODI
     type bigBed 5
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR677HXC peaks
     longLabel Mus musculus strain B6NCrl forebrain tissue postnatal (0 days) CTCF ENCSR677HXC peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f169fd06-743b-4f4d-acb6-2172ad696d14/ENCFF582ODI.bigBed
@@ -514,7 +514,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF055IZM
     type bigWig
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR491NUM signal
     longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) CTCF ENCSR491NUM signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8dc73fe8-26bc-4f94-9c33-2b4856c278ee/ENCFF055IZM.bigWig
@@ -534,7 +534,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF272HBL
     type bigBed 5
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR491NUM peaks
     longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) CTCF ENCSR491NUM peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a485c24e-654f-4e90-b006-36d870dbd27c/ENCFF272HBL.bigBed
@@ -614,7 +614,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF139GWZ
     type bigBed 5
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR041SMK peaks
     longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) CTCF ENCSR041SMK peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f7761f95-8b31-492e-adc6-bdfcfbb2dfa2/ENCFF139GWZ.bigBed
@@ -654,7 +654,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF935ZIU
     type bigWig
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR041SMK signal
     longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) CTCF ENCSR041SMK signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/cd9e93b9-0174-464f-8da0-5e32021aecbc/ENCFF935ZIU.bigWig
@@ -1014,7 +1014,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF645KIE
     type bigWig
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERI signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX EP300 ENCSR000ERI signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ee90a243-1bc0-4f6d-9432-85fde023b1f9/ENCFF645KIE.bigWig
@@ -1024,7 +1024,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF751KXI
     type bigBed 5
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERI peaks
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX EP300 ENCSR000ERI peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/808416c3-7269-463a-ad06-61338154c809/ENCFF751KXI.bigBed
@@ -1054,7 +1054,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF305EBF
     type bigBed 5
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR777VNA peaks
     longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) EP300 ENCSR777VNA peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f2fb45bb-4f5e-41ea-9add-1ad551918d57/ENCFF305EBF.bigBed
@@ -1084,7 +1084,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF573DAQ
     type bigWig
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR777VNA signal
     longLabel Mus musculus strain B6NCrl heart tissue postnatal (0 days) EP300 ENCSR777VNA signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/9d3fc66a-7802-4364-a4f0-dc0ff9de55b7/ENCFF573DAQ.bigWig
@@ -1094,7 +1094,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF269YIA
     type bigWig
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR765RPR signal
     longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) EP300 ENCSR765RPR signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/7a302c4f-873b-4cc8-9484-5b82eab5592f/ENCFF269YIA.bigWig
@@ -1114,7 +1114,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF474SBJ
     type bigBed 5
-    parent encode4RegTfChip off
+    parent encode4RegTfChip on
     shortLabel ENCSR765RPR peaks
     longLabel Mus musculus strain B6NCrl liver tissue postnatal (0 days) EP300 ENCSR765RPR peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/4319ee89-864b-482b-b761-517595a3aaae/ENCFF474SBJ.bigBed
@@ -1594,7 +1594,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF542WPW
     type bigWig
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERL signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAX ENCSR000ERL signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/2376710a-d9d7-4e49-8bfd-d12d28b69928/ENCFF542WPW.bigWig
@@ -1604,7 +1604,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF598YAW
     type bigBed 5
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERL peaks
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MAX ENCSR000ERL peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/5bcf8276-f582-426d-876d-d589aaaeb8a4/ENCFF598YAW.bigBed
@@ -1814,7 +1814,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF052BLL
     type bigBed 5
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERN peaks
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MYC ENCSR000ERN peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/f16f130c-21a3-41d3-8b27-3fa7e15ae54b/ENCFF052BLL.bigBed
@@ -1824,7 +1824,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF416IKH
     type bigWig
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERN signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX MYC ENCSR000ERN signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/56b535df-3f9c-4b45-968f-bb02693fd501/ENCFF416IKH.bigWig
@@ -2094,7 +2094,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF426UTA
     type bigBed 5
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERQ peaks
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2A ENCSR000ERQ peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/d652c495-5aa3-4430-8b04-2b1236c62c64/ENCFF426UTA.bigBed
@@ -2104,7 +2104,7 @@ priority 2.2
 
     track encode4RegTfChip_ENCFF441BMN
     type bigWig
-    parent encode4RegTfChip on
+    parent encode4RegTfChip off
     shortLabel ENCSR000ERQ signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX POLR2A ENCSR000ERQ signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/24/ab9b0472-4421-49e3-b3d2-ba29c30df4e6/ENCFF441BMN.bigWig

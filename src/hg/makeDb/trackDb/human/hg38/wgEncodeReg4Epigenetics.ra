@@ -1863,7 +1863,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF754EAC
     type bigWig
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR483RKN
     longLabel Homo sapiens K562 ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/24/b1a5f637-dba2-4272-b09e-86316d037135/ENCFF754EAC.bigWig
@@ -2721,7 +2721,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF003PQX
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR062SVK
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/25/ccf43f9f-f2f5-478d-8bac-1a5d42c56140/ENCFF003PQX.bigWig
@@ -3392,7 +3392,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF614WHB
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR373TDL
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/25/23a4e1bc-fceb-4426-9e01-16a64bd90a3f/ENCFF614WHB.bigWig
@@ -4327,7 +4327,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF736UDR
     type bigWig
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000BPJ
     longLabel Homo sapiens K562 CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/26/abcbe251-d16a-4fdc-8cbb-3e58f3d182f7/ENCFF736UDR.bigWig
@@ -4822,7 +4822,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF341CQE
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR967QUQ
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/12/c5d913c7-bf61-48d1-a053-1db0297e1390/ENCFF341CQE.bigWig
@@ -5834,7 +5834,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF872ERK
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR232OFD
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/8a560cb5-86e5-4e8a-8d5b-dff74b43b5c7/ENCFF872ERK.bigWig
@@ -6098,7 +6098,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF005YBS
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR911GFJ
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/01/4c51837a-3eed-478e-9b6e-5c1186aeab7d/ENCFF005YBS.bigWig
@@ -9486,7 +9486,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF414OGC
     type bigWig
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000EOT
     longLabel Homo sapiens K562 DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/18/e5e1f67e-5af2-484a-b399-23bd39f2352d/ENCFF414OGC.bigWig
@@ -15349,7 +15349,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF986YEI
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR749WVO
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/25/23e8f16a-b406-469c-8ff5-864be694b40f/ENCFF986YEI.bigWig
@@ -16471,7 +16471,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF679FKQ
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR278SKG
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/23/87602011-cf51-4de1-8187-0071119eba08/ENCFF679FKQ.bigWig
@@ -18209,7 +18209,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF020EPF
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR909HFI
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/06/7956a59d-222e-413e-9bba-db4bb07e9012/ENCFF020EPF.bigWig
@@ -23643,7 +23643,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF849TDM
     type bigWig
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000AKP
     longLabel Homo sapiens K562 H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/30/f9fe937a-d0b5-4a66-9531-84ec1edf4790/ENCFF849TDM.bigWig
@@ -24270,7 +24270,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF137KZR
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR200JVJ
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/10/051e1e71-068a-44b2-8a9f-b18442c42821/ENCFF137KZR.bigWig
@@ -25810,7 +25810,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF791CAJ
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR668EVA
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/23/29bfcfc5-1c1c-4717-b7f3-92132a5cab18/ENCFF791CAJ.bigWig
@@ -26371,7 +26371,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF764VSN
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR981UJA
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/17/ce83b550-5ce6-428e-b3d1-a584ca1679b3/ENCFF764VSN.bigWig
@@ -29902,7 +29902,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF806YEZ
     type bigWig
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000EWA
     longLabel Homo sapiens K562 H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/29/2e62e067-5b7b-49c2-b10f-b9f5c089179a/ENCFF806YEZ.bigWig
@@ -30936,7 +30936,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF345SEW
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR901EDL
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/10/398d0c70-55f5-4350-a544-d40b67ae6909/ENCFF345SEW.bigWig
@@ -32300,7 +32300,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF163VOI
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR954TSY
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/23/58345e19-c534-46ba-8132-af50dd005b49/ENCFF163VOI.bigWig
@@ -33191,7 +33191,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF917LFF
     type bigWig
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR344TLI
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/5308a223-8516-4e49-9eed-ef73fe2218ce/ENCFF917LFF.bigWig
@@ -36960,7 +36960,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF006OFA
     type bigBed 5
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR483RKN Peak
     longLabel Homo sapiens K562 ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/24/7715173c-4401-4037-8d49-eec0b68eddbc/ENCFF006OFA.bigBed
@@ -37959,7 +37959,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF616WMY
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR062SVK Peak
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/25/902ff153-0e4f-480b-a269-3a3a43e7a2b3/ENCFF616WMY.bigBed
@@ -38004,7 +38004,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF981RSM
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR373TDL Peak
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/02/25/f056f07a-b718-4509-9742-995a8fdff582/ENCFF981RSM.bigBed
@@ -42774,7 +42774,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF327DFG
     type bigBed 5
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000EOT Peak
     longLabel Homo sapiens K562 DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/18/0a02f295-c201-4022-b70d-f57e57883d92/ENCFF327DFG.bigBed
@@ -46041,7 +46041,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF383NCP
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR278SKG Peak
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/23/d2095921-991f-4398-b148-38cb840262be/ENCFF383NCP.bigBed
@@ -46212,7 +46212,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF736TJZ
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR909HFI Peak
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/06/54ae06a7-dc2c-4bef-bbb9-0553c92c74a6/ENCFF736TJZ.bigBed
@@ -49965,7 +49965,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF657EXN
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR749WVO Peak
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/25/4b62f7d9-e217-4d44-a7eb-f1dd1dd82370/ENCFF657EXN.bigBed
@@ -51378,7 +51378,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF111MGE
     type bigBed 5
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000BPJ Peak
     longLabel Homo sapiens K562 CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/26/0c9eb90f-1bc9-4b71-90f0-1c22f9d47f39/ENCFF111MGE.bigBed
@@ -52179,7 +52179,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF696NTN
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR232OFD Peak
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/e0ec296f-c130-4ebb-bf9b-d9a3cd4f60dd/ENCFF696NTN.bigBed
@@ -52197,7 +52197,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF956UTA
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR911GFJ Peak
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/01/49867e75-153b-4899-9489-41ba498b3234/ENCFF956UTA.bigBed
@@ -52962,7 +52962,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF458OBF
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR967QUQ Peak
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/12/4b56677f-4dcf-4d49-b61d-c861027d0068/ENCFF458OBF.bigBed
@@ -55518,7 +55518,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF963OMK
     type bigBed 5
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000EWA Peak
     longLabel Homo sapiens K562 H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/29/9d304783-00db-459a-a5b0-0da16febc3db/ENCFF963OMK.bigBed
@@ -57012,7 +57012,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF979OME
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR954TSY Peak
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/23/3ed39cab-4d50-4343-a706-de33f12eb4c3/ENCFF979OME.bigBed
@@ -57039,7 +57039,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF220KFL
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR344TLI Peak
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/81fd5901-43c3-4dfa-aa5d-a528c53ffd2b/ENCFF220KFL.bigBed
@@ -58308,7 +58308,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF006OHN
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR901EDL Peak
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/10/84ed86b8-ac00-4777-99e9-d8c94fc2277f/ENCFF006OHN.bigBed
@@ -60711,7 +60711,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF082RJM
     type bigBed 5
-    parent wgEncodeReg4Epigenetics on
+    parent wgEncodeReg4Epigenetics off
     shortLabel ENCSR000AKP Peak
     longLabel Homo sapiens K562 H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/30/a5c944c3-9f56-4887-a6de-9a24003148e9/ENCFF082RJM.bigBed
@@ -61926,7 +61926,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF009GNA
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR668EVA Peak
     longLabel Homo sapiens right atrium auricular region tissue female adult 51 years H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/23/60bc5fb2-cc11-4ba8-9d88-00277502b2c3/ENCFF009GNA.bigBed
@@ -61953,7 +61953,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF706UOX
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR981UJA Peak
     longLabel Homo sapiens right lobe of liver tissue female adult 53 years H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/17/a9d5dea1-f8f8-41e5-8abb-d4ef1841e33f/ENCFF706UOX.bigBed
@@ -63267,7 +63267,7 @@ priority 2.0
 
     track wgEncodeReg4Epigenetics_ENCFF404SAH
     type bigBed 5
-    parent wgEncodeReg4Epigenetics off
+    parent wgEncodeReg4Epigenetics on
     shortLabel ENCSR200JVJ Peak
     longLabel Homo sapiens with mild cognitive impairment middle frontal area 46 tissue male adult 89 years H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/10/9f2b2894-629e-439a-88bf-7a6d75ea6d17/ENCFF404SAH.bigBed
