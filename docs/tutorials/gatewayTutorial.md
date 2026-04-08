@@ -58,7 +58,7 @@ An interactive tutorial that covers the basic Browser introduction on the Gatewa
 ## Gateway page screenshot
 
 ```image
-src=/images/tutorialImages/gatewayPageAnnotated.jpg
+src=/images/tutorialImages/gatewayPageAnnotated.png
 width=90%
 ```
 

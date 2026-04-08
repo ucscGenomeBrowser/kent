@@ -729,14 +729,20 @@ void stringFilterOption(char *db, char *table, char *field, char *logOp)
 /* Print out a table row with filter constraint options for a string/char. */
 {
 char *name;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD colspan=2> %s </TD><TD>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
-                              cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s filter", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, ddOpMenu, ddOpMenuSize,
+                              cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 hPrintf("</TD><TD>match </TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVarWithJs(name, cartUsualString(cart, name, "*"),140,NULL,NULL);
+safef(ariaLabel, sizeof(ariaLabel), "%s match pattern", field);
+char *val = cartUsualString(cart, name, "*");
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' id='%s' style='width:140px'"
+    " VALUE='%s|attr|' aria-label='%s|attr|'>\n", name, name, val, ariaLabel);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s </TD></TR>\n", logOp);
@@ -794,12 +800,15 @@ void enumFilterOption(char *db, char *table, char *field, char *type,
 char *name = NULL;
 char **valMenu = NULL;
 int valMenuSize = 0;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD valign=top align='left'colspan=2> %s </TD>"
         "<TD valign=top>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
-cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
-                              cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s filter", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, ddOpMenu, ddOpMenuSize,
+                              cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 hPrintf("<TD valign=top>%s</TD><TD colspan=4 nowrap>\n", isSqlSetType(type) ? "include" : "match");
 name = filterPatternVarName(db, table, field);
 makeEnumValMenu(type, &valMenu, &valMenuSize);
@@ -825,14 +834,20 @@ static void numericFilter(char *db, char *table, char *field, char *label,char *
 /* Print out a table row with filter constraint options for a number. */
 {
 char *name;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s comparison", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, cmpOpMenu, cmpOpMenuSize,
+                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
+safef(ariaLabel, sizeof(ariaLabel), "%s value", field);
+char *val = cartUsualString(cart, name, "0");
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=20 VALUE='%s|attr|'"
+    " aria-label='%s|attr|'>", name, name, val, ariaLabel);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
@@ -843,14 +858,20 @@ static void numericFilterWithLimits(char *db, char *table, char *field, char *la
 /* Print out a filter constraint for an integer within a range. */
 {
 char *name;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s comparison", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, cmpOpMenu, cmpOpMenuSize,
+                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
+safef(ariaLabel, sizeof(ariaLabel), "%s value", field);
+char *val = cartUsualString(cart, name, "0");
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=20 VALUE='%s|attr|'"
+    " aria-label='%s|attr|'>", name, name, val, ariaLabel);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
@@ -860,14 +881,20 @@ void integerFilter(char *db, char *table, char *field, char *label,char *logOp)
 /* Print out a filter constraint for an integer within a range. */
 {
 char *name;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s</TD><TD>is</TD><TD colspan=2>\n", label);
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s comparison", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, cmpOpMenu, cmpOpMenuSize,
+                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVar(name, cartUsualString(cart, name, "0"), 20);
+safef(ariaLabel, sizeof(ariaLabel), "%s value", field);
+char *val = cartUsualString(cart, name, "0");
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=20 VALUE='%s|attr|'"
+    " aria-label='%s|attr|'>", name, name, val, ariaLabel);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s</TD></TR>\n", logOp);
@@ -878,11 +905,14 @@ void integerFilterWithLimits(char *db, char *table, char *field, char *label,
 /* Print out a filter constraint for an integer within a range. */
 {
 char *name;
+char ariaLabel[256];
 
 hPrintf("<TR VALIGN=BOTTOM align='left'><TD> %s is</TD><TD colspan=2>\n", label);
 name = filterFieldVarName(db, table, field, filterCmpVar);
-cgiMakeDropListClassWithStyle(name, cmpOpMenu, cmpOpMenuSize,
-                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px");
+safef(ariaLabel, sizeof(ariaLabel), "%s comparison", field);
+cgiMakeDropListClassWithIdStyleJavascriptAndLabel(name, NULL, cmpOpMenu, cmpOpMenuSize,
+                              cartUsualString(cart, name, cmpOpMenu[0]),"normalText","width: 76px",
+                              NULL, ariaLabel);
 puts("</TD><TD>\n");
 name = filterPatternVarName(db, table, field);
 int val = cartUsualInt(cart, name, 0);
