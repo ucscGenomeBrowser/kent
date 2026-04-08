@@ -11546,13 +11546,19 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
             }
         if (isNotEmpty(row[3]))
             {
-            printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
-                hgsidString, row[3], row[3]);
+            if (liftDb)
+                printf("<b>Transcript:</b>%s\n<br>\n", row[3]);
+            else
+                printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                    hgsidString, row[3], row[3]);
             }
         if (isNotEmpty(row[4]))
             {
-            printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
-                hgsidString, row[4], row[4]);
+            if (liftDb)
+                printf("<b>Gene:</b> %s\n<br>\n", row[4]);
+            else
+                printf("<b>Gene:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
+                    hgsidString, row[4], row[4]);
             }
         if (isNotEmpty(row[5]))
             {
