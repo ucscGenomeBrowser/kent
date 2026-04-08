@@ -428,21 +428,21 @@ function initPage() {
         drawSvgTable(document.getElementById("svgBarChart"), barChartValues);
     }
     if (typeof _jsonHgcLabels !== "undefined") {
-        var obj, o;
-        for (obj in _jsonHgcLabels) {
+        let obj;
+        for (obj of _jsonHgcLabels) {
             // build up the new table:
             var newTable = document.createElement("table");
             var newRow = newTable.insertRow();
             var newCell = newRow.insertCell();
-            var label = _jsonHgcLabels[obj].label;
-            var data = _jsonHgcLabels[obj].data;
+            var label = obj.label;
+            var data = obj.data;
             var newText = document.createTextNode(label);
             newCell.appendChild(newText);
             newCell = newRow.insertCell();
             newCell.appendChild(dataToTable(label, data));
             // find the last details table and add a new table on:
             var currTbl = $(".bedExtraTbl");
-            l = currTbl.length;
+            let l = currTbl.length;
             var last = currTbl[l-1];
             insertAfter(newTable, last);
             newTable.classList.add("bedExtraTbl");
