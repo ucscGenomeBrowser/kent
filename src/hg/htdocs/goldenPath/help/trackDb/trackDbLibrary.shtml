@@ -4447,6 +4447,51 @@ that identifies the reference sequence.
 </DIV>
 
 
+<DIV class="detailsScript"><span class="types bigBed"></span>
+<div class="format"><code>detailsScript.&lt;plotType&gt;.&lt;fieldName&gt; &lt;jsonConfig&gt;</code></div>
+    <p>
+    Adds a custom JavaScript visualization to the item details page for a bigBed track.
+    The visualization is rendered by an ES6 module loaded on demand when the details page is viewed.
+    </p>
+    <p>
+    The setting name has three dot-separated parts:
+    </p>
+    <ul>
+    <li><code>&lt;plotType&gt;</code> &mdash; determines which JavaScript module to load
+    (<code>hgc.&lt;plotType&gt;.js</code>) and which exported function to call.</li>
+    <li><code>&lt;fieldName&gt;</code> &mdash; a bigBed extra field (defined in the autoSql
+    schema) whose value is passed to the JavaScript function. The raw value is suppressed
+    from the HTML table and replaced by the visualization.</li>
+    </ul>
+    <p>
+    The <code>&lt;jsonConfig&gt;</code> value is a JSON object with configuration for the
+    visualization, such as titles and axis labels. Its keys are merged into the data object
+    passed to the JavaScript function.
+    </p>
+    <p>
+    Multiple fields can be visualized by using multiple <code>detailsScript</code> settings
+    with different field names. Fields sharing the same <code>&lt;plotType&gt;</code> are
+    grouped together and passed to a single JavaScript function call.
+    </p>
+    <p>
+    The currently available plot type is <code>histogram</code>, which draws an SVG bar chart
+    from data encoded as space-separated <code>key=value</code> pairs (logfmt format).
+    The histogram plot type accepts the following JSON config keys:
+    <code>title</code> (chart heading) and <code>xLabel</code> (x-axis label).
+    </p>
+    <P><B>Example:</B></P>
+<pre>
+detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+</pre>
+    <p>
+    In this example, the bigBed fields <code>afrHist</code> and <code>eurHist</code> contain
+    logfmt-encoded histograms such as <code>15=0.025 22=0.016 23=0.747 24=0.211</code>.
+    On the details page, each field's table row is replaced by an SVG bar chart drawn by
+    the <code>hgc.histogram.js</code> module.
+    </p>
+</DIV>
+
 <!-- - - - - - - - SNP settings - - - - - - - -->
 <DIV class="snp_intro">
 <H3>snp<em>NNN</em>: specialized subclass of BED 6 for dbSNP variants</H3>
