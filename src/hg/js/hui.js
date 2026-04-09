@@ -1601,10 +1601,10 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         preferredFormat: "hex",
         localStorageKey: "genomebrowser",
         change: function() {
-            let color = $(inpSpec).spectrum("get").toHexString();
+            let color = $(inpSpec).spectrum("get");
             $(inpText).val(color);
             saveHlColor(color, trackName);
-            if (statusSpan) statusSpan.textContent = "color override active";
+            if (statusSpan) statusSpan.textContent = "";
         },
     };
     $(inpSpec).spectrum(opt);
@@ -1613,15 +1613,15 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpText).on("change", function() {
         $(inpSpec).spectrum("set", $(inpText).val());
         saveHlColor($(inpText).val(), trackName);
-        if (statusSpan) statusSpan.textContent = "color override active";
+        if (statusSpan) statusSpan.textContent = "";
     });
     let statusSpan = document.createElement("span");
     statusSpan.style = "margin-left: 10px; font-style: italic";
     colorPickerContainer.appendChild(statusSpan);
 
-    // show initial status when a color override is active
-    if (hasOverride) {
-        statusSpan.textContent = "color override active";
+    // show initial status if itemRgb is active and no color override is set
+    if (hasItemRgb && !hasOverride) {
+        statusSpan.textContent = "items are currently being colored per item";
     }
 
     // Restore the default on Reset link click
@@ -1633,7 +1633,9 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         } else {
             // clear the cart variable so itemRgb and other per-item coloring is restored
             saveHlColor("", trackName);
-            statusSpan.textContent = "";
+            if (hasItemRgb) {
+                statusSpan.textContent = "items are currently being colored per item";
+            }
         }
     });
     $(inpSpec).spectrum("set", $(inpText).val());

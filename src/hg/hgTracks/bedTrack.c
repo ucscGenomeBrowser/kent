@@ -19,7 +19,6 @@
 #include "snake.h"
 #include "liftOver.h"
 #include "quickLift.h"
-#include "htmlColor.h"
 
 #define SEQ_DELIM '~'
 
@@ -638,16 +637,16 @@ Color colorFromCart(struct track *tg, Color color)
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 {
 char *hexColorStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "colorOverride");
-if (isEmpty(hexColorStr))
+if (hexColorStr==NULL || isEmpty(hexColorStr))
     return color;
-unsigned rgb;
-if (!htmlColorForCode(hexColorStr, &rgb))
+if (hexColorStr[0]=='#')
+    hexColorStr++;
+if (strlen(hexColorStr)!=6)
     return color;
-int r, g, b;
-htmlColorToRGB(rgb, &r, &g, &b);
+long rgb = strtol(hexColorStr,NULL,16); // Big and little Endians
 tg->itemColor = NULL;
 tg->itemNameColor = NULL;
-return MAKECOLOR_32(r, g, b);
+return MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 }
 
 void bedDrawSimpleAt(struct track *tg, void *item,
