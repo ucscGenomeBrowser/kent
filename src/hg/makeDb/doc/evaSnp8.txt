@@ -22,7 +22,7 @@ done
 
 ####################################################################
 ###  adding these contrib tracks to the GenArk browsers
-###   Hiram and Lou - 2026-05-03
+###   Hiram and Lou - 2026-04-03
 
 mkdir /hive/data/outside/genark/evaSnp8
 cd /hive/data/outside/genark/evaSnp8
@@ -93,6 +93,7 @@ evaSnp8
 
 ### resulting directory list:
 
+cd ~/kent/src/hg/makeDb/doc
 for D in plantsAsmHub birdsAsmHub fishAsmHub primatesAsmHub legacyAsmHub mammalsAsmHub invertebrateAsmHub fungiAsmHub bacteriaAsmHub
 do
   cd "${D}"
@@ -104,6 +105,7 @@ do
   egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" send.down.log
   time (make verifyDownload) >> verify.down.log 2>&1
   egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" verify.down.log
+  cd ~/kent/src/hg/makeDb/doc
 done
 
 ### In practice, that set of four 'make' commands are run in parallel in each

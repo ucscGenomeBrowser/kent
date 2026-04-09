@@ -111,7 +111,7 @@ type bed 8
 priority 65
 bedFilter on
 #itemDetailsHtmlTable myWgEncodeRegDnaseClusteredHtml
-url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+url https://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track pwmEnsRel80
 shortLabel Persikov min 80%
@@ -122,7 +122,7 @@ color 30,90,30
 type bed 8
 priority 67
 bedFilter on
-url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+url https://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track pwmEns1E6
 shortLabel Persikov P<1E-6
@@ -133,7 +133,7 @@ color 30,90,30
 type bed 8
 priority 68
 bedFilter on
-url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+url https://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track pwmEns1E5
 shortLabel Persikov P<1E-5
@@ -144,7 +144,7 @@ color 30,90,30
 type bed 8
 priority 68
 bedFilter on
-url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+url https://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track pwmEns1E4
 shortLabel Persikov P<1E-4
@@ -155,7 +155,7 @@ color 30,90,30
 type bed 8
 priority 68
 bedFilter on
-url http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
+url https://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?db=core;t=$$
 
 track zfPred
 shortLabel ZF predictions on SVA

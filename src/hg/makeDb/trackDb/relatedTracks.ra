@@ -41,8 +41,8 @@ hg38 grcIncidentDb problematic The problematic regions track lists unusual regio
 hg38 phasedVars varFreqs The variant frequencies track contains projects where variant frequencies, aka allele frequencies, are publicly available.
 hg38 varFreqs phasedVars The phased variants track contains projects that provide haplotype-phased genotypes/variants.
 
-hg38 wgEncodeReg4 wgEncodeReg ENCODE4 update of ENCODE3 Regulation
-hg38 wgEncodeReg wgEncodeReg4 ENCODE4 update of ENCODE3 Regulation
+hg38 wgEncodeReg4 wgEncodeReg Previous ENCODE3 Regulation track
+hg38 wgEncodeReg wgEncodeReg4 New ENCODE4 Regulation track
 hg38 wgEncodeReg4 cCREs Related ENCODE4 cCRE annotations
 hg38 cCREs wgEncodeReg4 Related ENCODE4 regulation data
 
@@ -83,7 +83,7 @@ mm39 knownGene knownGeneArchive View previous versions of GENCODE Genes
 mm39 knownGeneArchive knownGene View the latest GENCODE Genes version
 
 # mm10 ENCODE4 Regulation:
-mm10 encode4Reg encode3Reg ENCODE4 update of ENCODE3 Regulation
-mm10 encode3Reg encode4Reg ENCODE4 update of ENCODE3 Regulation
+mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
+mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 mm10 cCREs encode4Reg Related ENCODE4 regulation data

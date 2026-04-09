@@ -2194,7 +2194,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF400DFR
     type bigBed 5
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EGM
     longLabel Homo sapiens K562 CTCF peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/25/e7c256e1-e41c-43d5-83af-58b9db00c73c/ENCFF400DFR.bigBed
@@ -2964,7 +2964,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF458OBF
     type bigBed 5
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR967QUQ
     longLabel Homo sapiens with mild cognitive impairment; middle frontal area 46 tissue male adult (89 years) CTCF peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/12/4b56677f-4dcf-4d49-b61d-c861027d0068/ENCFF458OBF.bigBed
@@ -3644,7 +3644,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF037FCW
     type bigBed 5
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR232OFD
     longLabel Homo sapiens right atrium auricular region tissue female adult (51 years) CTCF peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2019/07/24/2a8cfbab-e921-4caf-a2e8-317beeb9d1b6/ENCFF037FCW.bigBed
@@ -4234,7 +4234,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF956UTA
     type bigBed 5
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR911GFJ
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) CTCF peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/01/49867e75-153b-4899-9489-41ba498b3234/ENCFF956UTA.bigBed
@@ -6814,7 +6814,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF696URH
     type bigBed 5
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EGY
     longLabel Homo sapiens K562 EP300 peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/25/875274ac-84ac-466f-a097-6a05e32a3b45/ENCFF696URH.bigBed
@@ -11194,7 +11194,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF110LJS
     type bigBed 5
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EFV
     longLabel Homo sapiens K562 MAX peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/25/fc58e20f-3e6f-44fc-9681-1a41cb7762fb/ENCFF110LJS.bigBed
@@ -12204,7 +12204,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF263IVY
     type bigBed 5
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000FAG
     longLabel Homo sapiens K562 MYC peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/10/f90c585c-a30d-499e-9960-2ff279dae9bd/ENCFF263IVY.bigBed
@@ -14204,7 +14204,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF836GHX
     type bigBed 5
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR031TFS
     longLabel Homo sapiens K562 POLR2A peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/29/3ea75e17-a195-422f-8d0f-ce753169c86e/ENCFF836GHX.bigBed
@@ -14484,7 +14484,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF026NCK
     type bigBed 5
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR415MOW
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) POLR2A peaks
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/04/6e1e0e64-e72a-4e78-aa5b-e32033101113/ENCFF026NCK.bigBed
@@ -26345,7 +26345,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF682MFJ
     type bigWig
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EGM signal
     longLabel Homo sapiens K562 CTCF ENCSR000EGM signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/25/694603d6-5903-45ed-b72b-8ac7d6657423/ENCFF682MFJ.bigWig
@@ -27575,7 +27575,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF755MWA
     type bigWig
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EFV signal
     longLabel Homo sapiens K562 MAX ENCSR000EFV signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/25/6836cbb1-9b09-4b70-baee-f353b20f1eea/ENCFF755MWA.bigWig
@@ -31205,7 +31205,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF005YBS
     type bigWig
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR911GFJ signal
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) CTCF ENCSR911GFJ signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/01/4c51837a-3eed-478e-9b6e-5c1186aeab7d/ENCFF005YBS.bigWig
@@ -31625,7 +31625,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF124WLE
     type bigWig
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR031TFS signal
     longLabel Homo sapiens K562 POLR2A ENCSR031TFS signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/11/29/71719dc7-fb6e-441e-b91c-4928832055c3/ENCFF124WLE.bigWig
@@ -32625,7 +32625,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF892FZN
     type bigWig
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000FAG signal
     longLabel Homo sapiens K562 MYC ENCSR000FAG signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/10/69a51619-4e2e-4579-a3c9-17795cf8ba6b/ENCFF892FZN.bigWig
@@ -37335,7 +37335,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF198BYC
     type bigWig
-    parent wgEncodeReg4TfChip on
+    parent wgEncodeReg4TfChip off
     shortLabel ENCSR000EGY signal
     longLabel Homo sapiens K562 EP300 ENCSR000EGY signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/25/48533d63-e220-4bab-b4e2-6301bba6379e/ENCFF198BYC.bigWig
@@ -41275,7 +41275,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF341CQE
     type bigWig
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR967QUQ signal
     longLabel Homo sapiens with mild cognitive impairment; middle frontal area 46 tissue male adult (89 years) CTCF ENCSR967QUQ signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/12/c5d913c7-bf61-48d1-a053-1db0297e1390/ENCFF341CQE.bigWig
@@ -45215,7 +45215,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF263FLJ
     type bigWig
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR415MOW signal
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) POLR2A ENCSR415MOW signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/12/04/71caae66-3701-49a3-a980-e360207e2ef8/ENCFF263FLJ.bigWig
@@ -45365,7 +45365,7 @@ priority 2.2
 
     track wgEncodeReg4TfChip_ENCFF872ERK
     type bigWig
-    parent wgEncodeReg4TfChip off
+    parent wgEncodeReg4TfChip on
     shortLabel ENCSR232OFD signal
     longLabel Homo sapiens right atrium auricular region tissue female adult (51 years) CTCF ENCSR232OFD signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/8a560cb5-86e5-4e8a-8d5b-dff74b43b5c7/ENCFF872ERK.bigWig

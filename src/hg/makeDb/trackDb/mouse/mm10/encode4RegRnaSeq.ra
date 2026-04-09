@@ -923,7 +923,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF077RGS
     type bigWig
-    parent encode4RegRnaSeq on
+    parent encode4RegRnaSeq off
     shortLabel ENCSR000AJV - strand
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX total RNA-seq ENCSR000AJV replicate 1 - strand signal - ENCFF077RGS
     bigDataUrl https://encode-public.s3.amazonaws.com/2016/08/10/56a48585-1051-4264-a355-e436657f0bfb/ENCFF077RGS.bigWig
@@ -1467,7 +1467,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF388GEU
     type bigWig
-    parent encode4RegRnaSeq on
+    parent encode4RegRnaSeq off
     shortLabel ENCSR000AJV + strand
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX total RNA-seq ENCSR000AJV replicate 1 + strand signal - ENCFF388GEU
     bigDataUrl https://encode-public.s3.amazonaws.com/2016/08/10/72910497-b380-42aa-8d9e-03a5f95e11db/ENCFF388GEU.bigWig
@@ -8107,7 +8107,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF006IMZ
     type bigWig
-    parent encode4RegRnaSeq on
+    parent encode4RegRnaSeq off
     shortLabel ENCSR390XPU + strand
     longLabel Mus musculus strain B6CASTF1/J layer of hippocampus tissue female adult (18-20 months) total RNA-seq ENCSR390XPU replicate 2 + strand signal - ENCFF006IMZ
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/05/24/c12f9408-3025-4184-aa91-a9491340bafb/ENCFF006IMZ.bigWig
@@ -8142,7 +8142,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF019OCB
     type bigWig
-    parent encode4RegRnaSeq off
+    parent encode4RegRnaSeq on
     shortLabel ENCSR723SZV - strand
     longLabel Mus musculus strain B6NTac;B6NCrl/Lap forebrain tissue postnatal (0 days) total RNA-seq ENCSR723SZV replicate 1 - strand signal - ENCFF019OCB
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/17/a36eec43-611f-4651-931d-56b2002466ed/ENCFF019OCB.bigWig
@@ -9148,7 +9148,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF512MHA
     type bigWig
-    parent encode4RegRnaSeq off
+    parent encode4RegRnaSeq on
     shortLabel ENCSR723SZV + strand
     longLabel Mus musculus strain B6NTac;B6NCrl/Lap forebrain tissue postnatal (0 days) total RNA-seq ENCSR723SZV replicate 1 + strand signal - ENCFF512MHA
     bigDataUrl https://encode-public.s3.amazonaws.com/2016/08/11/3f5b1f25-af9b-40d7-945e-3181b3844ef3/ENCFF512MHA.bigWig
@@ -10629,7 +10629,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF378WRP
     type bigWig
-    parent encode4RegRnaSeq off
+    parent encode4RegRnaSeq on
     shortLabel ENCSR035DLJ - strand
     longLabel Mus musculus strain B6NTac;B6NCrl/Lap heart tissue postnatal (0 days) total RNA-seq ENCSR035DLJ replicate 1 - strand signal - ENCFF378WRP
     bigDataUrl https://encode-public.s3.amazonaws.com/2016/08/11/52258a2b-1ea1-483b-83aa-476da52a53d1/ENCFF378WRP.bigWig
@@ -10745,7 +10745,7 @@ priority 2.1
 
     track encode4RegRnaSeq_ENCFF498WYP
     type bigWig
-    parent encode4RegRnaSeq off
+    parent encode4RegRnaSeq on
     shortLabel ENCSR035DLJ + strand
     longLabel Mus musculus strain B6NTac;B6NCrl/Lap heart tissue postnatal (0 days) total RNA-seq ENCSR035DLJ replicate 1 + strand signal - ENCFF498WYP
     bigDataUrl https://encode-public.s3.amazonaws.com/2016/08/11/e83485a1-0385-47c0-85f1-59a4d3baf8e9/ENCFF498WYP.bigWig
