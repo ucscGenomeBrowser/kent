@@ -24,7 +24,7 @@ exitHandler() {
     echo The UCSC Genome Browser installation script exited with an error.
     echo Please contact us at genome-mirror@soe.ucsc.edu and send us an output log 
     echo of the command prefixed with '"bash -x"', e.g.
-    echo 'bash -x browserSetup.sh install 2>&1 > install.log'
+    echo 'bash -x browserSetup.sh install > install.log 2>&1'
 }
 
 # only trap the exit, not the errors 
@@ -192,7 +192,7 @@ login.browserAddr=http://127.0.0.1
 # signature written at the bottom of hgLogin system emails
 login.mailSignature=None
 # the browser login page by default uses https. This setting can be used to 
-# used to make it work over http (not recommended)
+# make it work over http (not recommended)
 login.https=off
 
 # Credentials to access the local mysql server
@@ -466,11 +466,12 @@ fi
 
 function errorHandler ()
 {
+    local errCode=$?
     startMysql # in case we stopped it
     echo2 Error: the UCSC Genome Browser installation script failed with an error
     echo2 You can run it again with '"bash -x '$0'"' to see what failed.
     echo2 You can then send us an email with the error message.
-    exit $?
+    exit $errCode
 }
 
 # three types of data can be remote: mysql data and gbdb data 
@@ -518,9 +519,9 @@ function setMYCNF ()
         # by default and somehow the section doesn't seem to take effect since a specific [mariadb] section also exists in the mariadb-server.cnf.
         # As a result, we only modify the mariadb-server config file
     	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
-    elif [ -f /etc/mysql/mariadb.conf.d/*-server.cnf ] ; then
+    elif ls /etc/mysql/mariadb.conf.d/*-server.cnf 1>/dev/null 2>&1 ; then
 	# Ubuntu with mariadb. Must come before etc/my.cnf
-	MYCNF=/etc/mysql/mariadb.conf.d/*-server.cnf
+	MYCNF=$(ls /etc/mysql/mariadb.conf.d/*-server.cnf | head -1)
     elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
 	# Ubuntu 16, 18, 20 with mysqld
     	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
@@ -549,7 +550,7 @@ function mysqlStrictModeOff ()
 # This must happen before Mariadb is started or alternative Mariadb must be restarted after this has been done
 setMYCNF
 echo Deactivating MySQL strict mode
-sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
+sed -Ei '/^\[(mysqld|server)\]$/a sql_mode='  $MYCNF
 }
 
 function mysqlAllowOldPasswords
@@ -646,7 +647,7 @@ function setupCgiOsx ()
     waitKey
 
     export MYSQLINC=$APACHEDIR/ext/include
-    export MYSQLLIBS="/$APACHEDIR/ext/lib/libmysqlclient.a -lz -lc++"
+    export MYSQLLIBS="$APACHEDIR/ext/lib/libmysqlclient.a -lz -lc++"
     export SSLDIR=$APACHEDIR/ext/include
     export PNGLIB=$APACHEDIR/ext/lib/libpng.a 
     # careful - PNGINCL is the only option that requires the -I prefix
@@ -767,7 +768,7 @@ function installRedhat () {
     yum -y update
 
     # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
-    yum -y chkconfig install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
+    yum install -y chkconfig install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -877,7 +878,7 @@ function installOsxDevTools ()
 # make sure that the xcode command line tools are installed
 {
    # check for xcode
-   if [ -f /usr/bin/xcode-select 2> /dev/null > /dev/null ]; then
+   if [ -f /usr/bin/xcode-select ]; then
        echo2 Found XCode
    else
        echo2
@@ -1291,7 +1292,7 @@ function disableSelinux ()
 # first check if the command exists on this system
 # then check if it comes back with a non-zero error code, which means it is enabled
 if commandExists selinuxenabled; then
-    if [ selinuxenabled ]; then
+    if selinuxenabled; then
        echo2
        echo2 The Genome Browser requires that SELINUX is deactivated.
        echo2 Deactivating it now with "'setenforce 0'" and in /etc/sysconfig/selinux.
@@ -1459,7 +1460,7 @@ function setupBuildOsx ()
    sudo sed -Ei '' 's/^[[:space:]]*#(LoadModule include_module)/\1/' /etc/apache2/httpd.conf
    # activate server side includes and make them depend on the X flag
    sudo sed -Ei '' 's/Options FollowSymLinks Multiviews/Options FollowSymLinks Includes Multiviews/' /etc/apache2/httpd.conf
-   if grep -qv XBitHack /etc/apache2/httpd.conf ; then
+   if ! grep -q XBitHack /etc/apache2/httpd.conf ; then
      sudo sed -Ei '' '/Options FollowSymLinks Includes Multiviews/ a\
 XBitHack on\
 SSILegacyExprParser on
@@ -1590,7 +1591,7 @@ function installBrowser ()
 
     if [ ! -f $COMPLETEFLAG ]; then
         # test if an apache file is already present
-        if [ -f "$APACHEDIR" ]; then
+        if [ -e "$APACHEDIR" -a ! -d "$APACHEDIR" ]; then
             echo2 error: please remove the file $APACHEDIR, then restart the script with "bash $0".
             exit 100
         fi
@@ -1740,7 +1741,7 @@ function mkdirGbdb
     sudo chmod a+rwx /usr/local/gbdb
 
     # see https://apple.stackexchange.com/questions/388236/unable-to-create-folder-in-root-of-macintosh-hd
-    if [[ ! -f /etc/synthetic.conf ]] || grep -vq gbdb /etc/synthetic.conf; then
+    if [[ ! -f /etc/synthetic.conf ]] || ! grep -q gbdb /etc/synthetic.conf; then
          sudo /bin/sh -c 'echo "gbdb\tusr/local/gbdb" >> /etc/synthetic.conf'
     fi
     chmod 644  /etc/synthetic.conf
@@ -1856,9 +1857,11 @@ function downloadGenomes
     set +f
 
     # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
-    if [[ "$OS" != "OSX" ]]; then 
+    if [[ "$OS" != "OSX" ]]; then
         chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
-        chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
+        for db in $DBS; do
+            chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
+        done
     fi
     
     startMysql
@@ -1953,7 +1956,7 @@ function hideSomeTracks
 # hide the big tracks and the ones that we are not allowed to distribute
 {
     # these tables are not used for searches by default. Searches are very slow. We focus on genes.
-    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
+    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncodeGencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
 
     # these tracks are hidden by default
     hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2 omimAvSnp'
@@ -2070,7 +2073,7 @@ function updateBlatServers ()
 function cgiUpdate ()
 {
    # update the CGIs
-   $RSYNC -avzP --exclude=RNAplot --exclude=hg.conf --exclude=hg.conf.local --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ 
+   $RSYNC -avzP --exclude=RNAplot --exclude=hg.conf --exclude=hg.conf.local $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/
    # update the html docs
    echo2 Updating Apache htdocs
    $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
@@ -2098,7 +2101,7 @@ function updateBrowser {
 
    # update the mysql DBs
    stopMysql
-   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
+   DBS=`ls $MYSQLDIR/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
@@ -2143,7 +2146,7 @@ if [[ $# -eq 0 ]] ; then
    exit 0
 fi
 
-while getopts ":beut:hof" opt; do
+while getopts ":but:hof" opt; do
   case $opt in
     h)
       echo "$HELP_STR"
