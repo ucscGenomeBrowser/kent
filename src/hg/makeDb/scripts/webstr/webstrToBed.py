@@ -100,6 +100,7 @@ def main():
                 motif,
                 period,
                 numcopies,
+                repeatid,
             ]
 
             # Allele frequency fields for each cohort (logfmt: allele=freq pairs)

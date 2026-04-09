@@ -13,10 +13,11 @@ visibility hide
     bigDataUrl /gbdb/hg38/strVar/webstr.bb
     visibility dense
     superTrack strVar dense
-    url https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38
-    urlLabel WebSTR locus page
+    urls repeatId="https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38"
+    url https://webstr.ucsd.edu/locus?repeat_id=$<repeatId>&genome=hg38
+    urlLabel Link to repeat record in WebSTR
     searchIndex name
-    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Number of copies:</b> $numCopies <br> <b>Population sample counts:</b> <br> $afrN (AFR), $amrN (AMR), $easN (EAS), $eurN (EUR), $sasN (SAS)
+    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Number of copies in hg38:</b> $numCopies <br>
     detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.amrHist {"title":"AMR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.easHist {"title":"EAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
@@ -52,3 +53,28 @@ visibility hide
     #mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
     detailsScript.histogram.tenKAlleleHist {"title":"TenK10K Allele Distribution","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.hprcAlleleHist {"title":"HPRC256 Allele Distribution","xLabel":"Allele size (repeat copies)"}
+
+    track tommoStr
+    shortLabel ToMMo 61k STR
+    longLabel ToMMo 61KJPN Short Tandem Repeat Allele Counts (Expansion Hunter)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/strVar/tommoStr.bb
+    visibility dense
+    superTrack strVar dense
+    searchIndex name
+    mouseOver <b>Motif:</b> $motif ($period bp) <br> <b>Ref copies:</b> $numCopies <br> <b>Mean:</b> $mean, <b>Median:</b> $median <br> <b>Alleles called:</b> $numAlleles
+    detailsScript.histogram.alleleHist {"title":"Allele Count Distribution (61K Japanese)","xLabel":"Allele size (repeat copies)"}
+
+    track viennaVntr
+    shortLabel 1KG Vienna ONT VNTR
+    longLabel 1000 Genomes Vienna ONT VNTR Allele Statistics (VAMOS, 1,019 samples, long-read)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/strVar/viennaVntr.bb
+    visibility dense
+    superTrack strVar dense
+    searchIndex name
+    skipEmptyFields on
+    mouseOver <b>Avg motif:</b> $ruLenAvg bp <br> <b>Median repeat units:</b> $medianRus (range: $minRus-$maxRus) <br> <b>Unique alleles:</b> $numUniqueVntrs <br> <b>Haplotypes:</b> $numHaps <br> <b>Allele size:</b> $minBps-$maxBps bp (median $medianBps)
+    dataVersion v1.1
