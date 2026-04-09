@@ -235,7 +235,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF018PKE
     type bigWig
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR312LQX Signal
     longLabel Mus musculus strain C57BL/6 hindbrain tissue postnatal 0 days ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/c979c727-de2d-41e9-b5fb-9a5cd6e7e86f/ENCFF018PKE.bigWig
@@ -319,7 +319,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF178FIA
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR310MLB Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/576d4514-8c02-41d9-8f68-641470ed86af/ENCFF178FIA.bigBed
@@ -339,7 +339,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF196JTB
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR310MLB Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/fc244ab6-35f9-427c-990d-d6344546a0fa/ENCFF196JTB.bigWig
@@ -637,7 +637,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF855NTE
     type bigBed 5
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR312LQX Peak
     longLabel Mus musculus strain C57BL/6 hindbrain tissue postnatal 0 days ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/a765b4a7-4ee2-4aa4-adaf-fb74b964f484/ENCFF855NTE.bigBed
@@ -935,7 +935,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF036KVE
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR451NAE Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/7a76b3c2-37f7-4ffb-8239-60f61e1599dd/ENCFF036KVE.bigBed
@@ -1064,7 +1064,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF982LHR
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR451NAE Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/17/16d343d6-3cff-4913-b2f4-08b88b7987d9/ENCFF982LHR.bigWig
@@ -1366,7 +1366,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF399IYG
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR609OHJ Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days ATAC peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/18/18701147-dcee-4f25-817b-2efc7982c3ba/ENCFF399IYG.bigBed
@@ -1435,7 +1435,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF592SOL
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR609OHJ Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days ATAC signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/08/18/21a07f8e-6587-45b2-a30b-b6ea6a332e39/ENCFF592SOL.bigWig
@@ -1635,7 +1635,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF309RMG
     type bigBed 5
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000ERM Peak
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/001bdb2c-5ac4-4cf4-ac1e-d55f2e110467/ENCFF309RMG.bigBed
@@ -1644,7 +1644,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF499GIZ
     type bigWig
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000ERM Signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/d4f636a1-2379-4678-8c75-9607eac6dda0/ENCFF499GIZ.bigWig
@@ -1726,7 +1726,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF247XHY
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR677HXC Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/35dc114f-b366-4bb7-8b09-ff9f4e52f390/ENCFF247XHY.bigWig
@@ -1781,7 +1781,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF582ODI
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR677HXC Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f169fd06-743b-4f4d-acb6-2172ad696d14/ENCFF582ODI.bigBed
@@ -1935,7 +1935,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF055IZM
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR491NUM Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/8dc73fe8-26bc-4f94-9c33-2b4856c278ee/ENCFF055IZM.bigWig
@@ -1955,7 +1955,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF272HBL
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR491NUM Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/10/a485c24e-654f-4e90-b006-36d870dbd27c/ENCFF272HBL.bigBed
@@ -2035,7 +2035,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF139GWZ
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR041SMK Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days CTCF peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/f7761f95-8b31-492e-adc6-bdfcfbb2dfa2/ENCFF139GWZ.bigBed
@@ -2073,7 +2073,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF935ZIU
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR041SMK Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days CTCF signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/cd9e93b9-0174-464f-8da0-5e32021aecbc/ENCFF935ZIU.bigWig
@@ -2664,7 +2664,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF228LWM
     type bigWig
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CMQ Signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/15/8914605f-d62e-4942-9536-2db3286d19a5/ENCFF228LWM.bigWig
@@ -2786,7 +2786,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF732WTE
     type bigBed 5
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CMQ Peak
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/15/dd27a765-1a5f-49ee-bc47-b7abca4869a6/ENCFF732WTE.bigBed
@@ -4108,7 +4108,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF727CYI
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR791AJY Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/722224b2-1356-4771-954d-e5193faad95a/ENCFF727CYI.bigWig
@@ -4448,7 +4448,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF928NJG
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR791AJY Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/db1727b3-b60a-4058-8c11-068ea5c8cae0/ENCFF928NJG.bigBed
@@ -5462,7 +5462,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF711NXN
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR005WPU Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/20/30c0c08c-97f8-4f12-8b03-cd27bf2d83f3/ENCFF711NXN.bigBed
@@ -5544,7 +5544,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF947JCM
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR005WPU Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/20/aa45eb7b-26cd-436f-af04-e0146031a7d2/ENCFF947JCM.bigWig
@@ -6233,7 +6233,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF903UEW
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR216UMD Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days DNase peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/a3ffaaaa-e9b5-4319-b411-838e385d8a1b/ENCFF903UEW.bigBed
@@ -6242,7 +6242,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF907KGU
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR216UMD Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days DNase signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/09/24/f88c9e0d-9b06-4566-b464-46b0079851d7/ENCFF907KGU.bigWig
@@ -7915,7 +7915,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF465WJW
     type bigBed 5
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CGJ Peak
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/b7e3c21d-8417-4bc0-b166-bcfa84203832/ENCFF465WJW.bigBed
@@ -7924,7 +7924,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF666CND
     type bigWig
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CGJ Signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/ecf24acc-2aba-4bb0-9ebd-7a43375bf14e/ENCFF666CND.bigWig
@@ -8188,7 +8188,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF307OAN
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR094TTT Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/15efb6c3-09a3-4584-a2e0-e4d7968e7000/ENCFF307OAN.bigBed
@@ -8259,7 +8259,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF422JMO
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR094TTT Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/c24ce23b-f42b-426f-9ea0-8017d1d03c82/ENCFF422JMO.bigWig
@@ -8846,7 +8846,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF306XSO
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR675HDX Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/1de2625c-72c4-46eb-afa2-6154e94031e3/ENCFF306XSO.bigWig
@@ -8986,7 +8986,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF997EOX
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR675HDX Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/fd828b5b-3789-4478-b66c-9b87a85c9c1e/ENCFF997EOX.bigBed
@@ -9295,7 +9295,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF134BME
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR616TJM Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K27ac peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/949fe6ee-79e0-4ffe-b2aa-76e513e84039/ENCFF134BME.bigBed
@@ -9375,7 +9375,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF544RNA
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR616TJM Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K27ac signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/09/39821e8f-26e5-45f9-b150-3f2b88f45ebb/ENCFF544RNA.bigWig
@@ -9775,7 +9775,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF420ORJ
     type bigWig
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CGK Signal
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/2a0d950f-8be9-49fc-b27f-01ff228c6a33/ENCFF420ORJ.bigWig
@@ -9786,7 +9786,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF725WGP
     type bigBed 5
-    parent encode4RegEpigenetics on
+    parent encode4RegEpigenetics off
     shortLabel ENCSR000CGK Peak
     longLabel Mus musculus strain B10.H-2aH-4bp/Wts CH12.LX H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/13/46a72b36-52f4-4168-b235-92face599720/ENCFF725WGP.bigBed
@@ -9893,7 +9893,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF050AHA
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR258YWW Signal
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/a39d931b-78c8-4893-b599-639fab4edb03/ENCFF050AHA.bigWig
@@ -10004,7 +10004,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF283FLV
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR258YWW Peak
     longLabel Mus musculus strain C57BL/6 forebrain tissue postnatal 0 days H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/361993e9-dea0-4528-a491-d0440d7fb903/ENCFF283FLV.bigBed
@@ -10888,7 +10888,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF738LHV
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR875ZAO Signal
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/9193f99c-e198-4805-819b-1038a4223ba5/ENCFF738LHV.bigWig
@@ -10917,7 +10917,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF872BRN
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR875ZAO Peak
     longLabel Mus musculus strain C57BL/6 heart tissue postnatal 0 days H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/112b7e96-a070-4003-a0b5-f98ebc36898d/ENCFF872BRN.bigBed
@@ -11266,7 +11266,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF064DWS
     type bigBed 5
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR653AVN Peak
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K4me3 peak
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/c8bac61a-b6f9-4fa8-b5f2-c4e2f3e1a237/ENCFF064DWS.bigBed
@@ -11317,7 +11317,7 @@ priority 2.0
 
     track encode4RegEpigenetics_ENCFF341GEF
     type bigWig
-    parent encode4RegEpigenetics off
+    parent encode4RegEpigenetics on
     shortLabel ENCSR653AVN Signal
     longLabel Mus musculus strain C57BL/6 liver tissue postnatal 0 days H3K4me3 signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/12/24825f92-6dd1-44b4-aa0f-114cedcfe1ae/ENCFF341GEF.bigWig

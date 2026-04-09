@@ -833,7 +833,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF257NOL
     type bigWig
-    parent wgEncodeReg4RnaSeq on
+    parent wgEncodeReg4RnaSeq off
     shortLabel ENCSR000AEL - strand
     longLabel Homo sapiens K562 - strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/06/273f9452-0d2e-45aa-8190-000decf9f91f/ENCFF257NOL.bigWig
@@ -969,7 +969,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF335LVS
     type bigWig
-    parent wgEncodeReg4RnaSeq on
+    parent wgEncodeReg4RnaSeq off
     shortLabel ENCSR000AEL + strand
     longLabel Homo sapiens K562 + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/06/d18c484f-9768-43e6-be4c-f1578810ba79/ENCFF335LVS.bigWig
@@ -1154,7 +1154,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF470BSF
     type bigWig
-    parent wgEncodeReg4RnaSeq on
+    parent wgEncodeReg4RnaSeq off
     shortLabel ENCSR000AEC + strand
     longLabel Homo sapiens GM12878 + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/06/7c45055f-3994-4e31-bc8b-30e7b664ea3f/ENCFF470BSF.bigWig
@@ -1831,7 +1831,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF830QII
     type bigWig
-    parent wgEncodeReg4RnaSeq on
+    parent wgEncodeReg4RnaSeq off
     shortLabel ENCSR000AEC - strand
     longLabel Homo sapiens GM12878 - strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2021/04/06/ac9c6331-efbe-465b-a8ff-a57ca3b894a6/ENCFF830QII.bigWig
@@ -2867,7 +2867,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF037HVL
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR158IHB + strand
     longLabel Homo sapiens dorsolateral prefrontal cortex tissue female adult (75 years) + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2022/05/13/be5dce6c-1564-4961-b623-5ec032ea8878/ENCFF037HVL.bigWig
@@ -4277,7 +4277,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF500BHN
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR158IHB - strand
     longLabel Homo sapiens dorsolateral prefrontal cortex tissue female adult (75 years) - strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2022/05/13/1ba6bcbe-a191-4517-ab22-03e5d9a31695/ENCFF500BHN.bigWig
@@ -6756,7 +6756,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF263KEJ
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR457ENP + strand
     longLabel Homo sapiens right atrium auricular region tissue female adult (51 years) + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/07/14/9d8b51a4-4f22-46cc-81a6-c96c7ce4e778/ENCFF263KEJ.bigWig
@@ -7213,7 +7213,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF884LKT
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR457ENP - strand
     longLabel Homo sapiens right atrium auricular region tissue female adult (51 years) - strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/07/14/7829e2c4-8c22-4a7e-86e1-475abad08123/ENCFF884LKT.bigWig
@@ -8364,7 +8364,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF103EZF
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR226KML + strand
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/07/14/6e417814-5785-4f80-9456-96c3c7e21399/ENCFF103EZF.bigWig
@@ -8444,7 +8444,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF481ZPW
     type bigWig
-    parent wgEncodeReg4RnaSeq off
+    parent wgEncodeReg4RnaSeq on
     shortLabel ENCSR226KML - strand
     longLabel Homo sapiens right lobe of liver tissue female adult (53 years) - strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/07/14/55649aa6-e655-40d7-bc42-f000e2132b61/ENCFF481ZPW.bigWig
@@ -8548,7 +8548,7 @@ priority 2.1
 
     track wgEncodeReg4RnaSeq_ENCFF908VIH
     type bigWig
-    parent wgEncodeReg4RnaSeq on
+    parent wgEncodeReg4RnaSeq off
     shortLabel ENCSR245ATJ + strand
     longLabel Homo sapiens HepG2 + strand total RNA-seq signal
     bigDataUrl https://encode-public.s3.amazonaws.com/2020/10/30/ff38a371-eb0e-4bad-97a4-35ee21c050bb/ENCFF908VIH.bigWig
