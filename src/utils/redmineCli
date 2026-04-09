@@ -38,6 +38,30 @@ TRACKER_MLQ = 7
 PRIORITY_UNPRIORITIZED = 12
 STATUS_NEW = 1
 
+# Name -> Redmine tracker ID mapping (case-insensitive lookup in resolve_tracker)
+TRACKER_IDS = {
+    "bug": 21,
+    "feature": 23,
+    "track": 11,
+    "hub": 45,
+    "data sets": 46, "datasets": 46,
+    "to do": 10, "todo": 10,
+    "docs": 25,
+    "assembly": 24,
+    "process": 12,
+    "meeting": 28,
+    "cr": 26,
+    "cgi build": 33,
+    "mlq": 7,
+    "mlq off list": 15,
+    "suggestion box": 44,
+    "github": 48,
+    "information": 35, "info": 35,
+    "build patch": 36,
+    "release": 47,
+    "housekeeping": 49,
+}
+
 # Name -> Redmine status ID mapping (case-insensitive lookup in resolve_status)
 STATUS_IDS = {
     "new": 1,
@@ -256,6 +280,17 @@ def resolve_status(name_or_id):
                  k2 != k and STATUS_IDS[k2] == STATUS_IDS[k] for k2 in STATUS_IDS))))
 
 
+def resolve_tracker(name_or_id):
+    """Resolve a tracker name to a Redmine tracker ID. Accepts name or numeric ID."""
+    if str(name_or_id).isdigit():
+        return int(name_or_id)
+    key = str(name_or_id).lower().strip()
+    if key in TRACKER_IDS:
+        return TRACKER_IDS[key]
+    sys.exit(f"Error: unknown tracker '{name_or_id}'. Known trackers: "
+             + ", ".join(sorted(set(TRACKER_IDS.keys()))))
+
+
 def prepend_attribution(text):
     """Prepend 'From Claude:' attribution to text for write operations."""
     return ATTRIBUTION + text
@@ -453,7 +488,7 @@ def cmd_list(args):
             params["assigned_to_id"] = str(resolve_user(args.assigned_to))
 
     if args.tracker:
-        params["tracker_id"] = args.tracker
+        params["tracker_id"] = resolve_tracker(args.tracker)
 
     if args.search:
         params["subject"] = f"~{args.search}"
