@@ -2068,27 +2068,16 @@ boolean firstTime = TRUE;
 
 char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 
-char *db = database;
-char *sqlTable = tdb->table;
-if (liftDb != NULL)
-    {
-    quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->track), &sqlTable, &liftDb);
-    db = liftDb;
-    }
-
-if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
-    errAbort("genericBedClick track %s not found", tdb->table);
-
 if (liftDb)
     {
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
         seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
     bedPrintPos(liftedBeds, bedSize, tdb);
-
-    //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
-else 
+else
     {
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+        errAbort("genericBedClick track %s not found", tdb->table);
     if (bedSize <= 3)
         sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
     else
@@ -11498,6 +11487,9 @@ char *strand={"+"};
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
+char *refChrom  = chrom;
+int refStart  = start;
+int refEnd = end;
 
 if (liftDb) // we need to get the chr start stop in liftDb coordinates
     {
@@ -11558,7 +11550,7 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
         if (isNotEmpty(row[3]))
             {
             if (liftDb)
-                printf("<b>Transcript:</b>%s\n<br>\n", row[3]);
+                printf("<b>Transcript:</b> %s\n<br>\n", row[3]);
             else
                 printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
                     hgsidString, row[3], row[3]);
@@ -11618,7 +11610,10 @@ printf("<A HREF=\"%s%s\" target=_blank>",
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
-printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
+if (liftDb)
+    printPosOnChrom(refChrom, refStart, refEnd, strand, TRUE, itemName);
+else
+    printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 hFreeConn(&conn);
 }
