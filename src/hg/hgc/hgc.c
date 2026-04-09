@@ -2068,27 +2068,16 @@ boolean firstTime = TRUE;
 
 char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 
-char *db = database;
-char *sqlTable = tdb->table;
-if (liftDb != NULL)
-    {
-    quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->track), &sqlTable, &liftDb);
-    db = liftDb;
-    }
-
-if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
-    errAbort("genericBedClick track %s not found", tdb->table);
-
 if (liftDb)
     {
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
         seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
     bedPrintPos(liftedBeds, bedSize, tdb);
-
-    //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
-else 
+else
     {
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+        errAbort("genericBedClick track %s not found", tdb->table);
     if (bedSize <= 3)
         sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
     else
