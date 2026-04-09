@@ -89,17 +89,34 @@ function matSelectViewForSubTracks(obj,view)
 
 function exposeAll()
 {
-    // Make main display dropdown show full if currently hide
-    var visDD = normed($("select.visDD")); // limit to hidden
+    // Make main display dropdown show pack if currently hide
+    var visDD = normed($("select.visDD"));
     if (visDD) {
         if ($(visDD).prop('selectedIndex') === 0) {
-            $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
+            if ($(visDD).children('option[value="pack"]').length)
+                $(visDD).val("pack");
+            else if ($(visDD).children('option[value="dense"]').length)
+                $(visDD).val("dense");
+            else
+                $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).trigger("change");// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
 
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
         if ($(visDD).hasClass('superChild'))
             visTriggersHiddenSelect(visDD);
+    }
+}
+
+function hideAll()
+{
+    // Set main display dropdown to hide if no subtracks are checked
+    var visDD = normed($("select.visDD"));
+    if (visDD) {
+        if ($(visDD).prop('selectedIndex') !== 0) {
+            $(visDD).prop('selectedIndex', 0);
+            $(visDD).trigger("change");
+        }
     }
 }
 
@@ -201,6 +218,15 @@ function _matSetMatrixCheckBoxes(state)
     });
     if (state)
         exposeAll();  // Unhide composite vis?
+    else if ($("input.subCB:checked:visible").length === 0) {
+        // Set composite to hide directly, without triggering propagateVis
+        // (which would re-check all subCBs when checkedCount===0).
+        var visDD = normed($("select.visDD"));
+        if (visDD && $(visDD).prop('selectedIndex') !== 0) {
+            $(visDD).prop('selectedIndex', 0);
+            $(visDD).addClass('changed');
+        }
+    }
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
 

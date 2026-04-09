@@ -72,9 +72,15 @@ var subCfg = { // subtrack config module.
 
         var anyChecked = $(".subCB:checked:visible").length > 0;
 
-        // if any subtracks are now checked and the composite is on hide, set it to pack
-        if (anyChecked && compEl.val() === "hide")
-            compEl.val("pack").change();
+        // if any subtracks are now checked and the composite is on hide, set it to pack (or dense)
+        if (anyChecked && compEl.val() === "hide") {
+            if (compEl.children('option[value="pack"]').length)
+                compEl.val("pack").change();
+            else if (compEl.children('option[value="dense"]').length)
+                compEl.val("dense").change();
+            else
+                compEl.prop('selectedIndex', compEl.children('option').length - 1).change();
+        }
 
         // if no subtracks are checked, set the composite to hide
         if (!anyChecked)
