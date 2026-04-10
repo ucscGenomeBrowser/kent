@@ -6823,6 +6823,21 @@ dataTypes sig|"Raw signal" peak|Peaks
 </p>
 </div>
 
+<DIV class="defaultSortField"><span class="types faceted composite"></span>
+<div class="format"><code>defaultSortField &lt;name&gt;</code></div>
+<p>
+This optional setting chooses which field in the metadata table will be used to sort the table
+of subtracks when the page is first loaded.  The name should match the field name in the first
+line of the metadata tsv file.  If there is no match, or if this setting is absent, the first
+field in the metadata tsv file is used as the default sort field.
+</p>
+<p>Example:
+<pre>
+defaultSortField tissue
+</pre>
+</p>
+</div>
+
 <DIV class="faceted_example1"><span class="types view"></span>
 <div class="format"><B>Example of a faceted composite track containing different track types:</B></div>
     <pre>
