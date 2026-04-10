@@ -267,6 +267,7 @@ track gnomadStr
 parent gnomadVariants on
 shortLabel gnomAD STR
 longLabel Genome Aggregation Database (gnomAD) - Short Tandem Repeat Genotypes at Disease-Associated Loci
+pennantIcon New red ../goldenPath/newsarch.html#041026 "Released Apr. 10, 2026"
 dataVersion gnomAD v3.1.3 STR genotypes (March 2025)
 type bigBed 9 +
 itemRgb on
