@@ -1,0 +1,108 @@
+<h2>Description</h2>
+<p>
+This track shows allele statistics for 361,362 variable number tandem repeat (VNTR)
+loci genotyped from Oxford Nanopore long-read whole-genome sequencing of 1,019 samples
+from the
+<a href="https://github.com/marschall-lab/project-ont-1kg" target="_blank">1000 Genomes
+ONT Vienna project</a>. VNTR genotyping was performed with
+<a href="https://github.com/ChaissonLab/vamos" target="_blank">VAMOS</a>,
+a tool that determines the motif composition of VNTR alleles from long reads.
+This is version 1.1 of the dataset.
+</p>
+
+<p>
+Unlike the other STR tracks in this collection which are based on short-read sequencing
+and limited to short tandem repeats (motifs of 1-6 bp), this track is derived from
+long-read sequencing data, which can span much longer repeat regions. The VNTR loci
+in this track have average motif lengths ranging from a few base pairs to over 100 bp,
+and allele lengths up to several kilobases.
+</p>
+
+<p>
+For each locus, the track shows the average repeat unit length, the number of unique
+alleles observed, the range and median of repeat unit counts, and the range and median
+of allele lengths in base pairs. The 1000 Genomes Vienna ONT project also produced
+structural variant calls available in the
+<a href="hgTrackUi?g=lrSv">Long-Read Structural Variants</a> track.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by expected heterozygosity, computed as
+<i>het</i> = 1 &minus; &sum;<i>p<sub>i</sub></i><sup>2</sup> from allele frequencies
+across the 1,019 samples:</p>
+<ul>
+<li><span style="color: #0000B4;">Dark blue</span> &ndash; nearly monomorphic (het &lt; 0.1)</li>
+<li><span style="color: #4682E6;">Medium blue</span> &ndash; low diversity (het 0.1&ndash;0.3)</li>
+<li><span style="color: #B482C8;">Light purple</span> &ndash; moderate diversity (het 0.3&ndash;0.5)</li>
+<li><span style="color: #E66450;">Salmon</span> &ndash; high diversity (het 0.5&ndash;0.7)</li>
+<li><span style="color: #B40000;">Dark red</span> &ndash; very high diversity (het &ge; 0.7)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; no allele frequency data available</li>
+</ul>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+The data can be accessed from scripts through our
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is <i>viennaVntr</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/"
+target="_blank">our download server</a>.
+The file for this track is called <tt>viennaVntr.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/viennaVntr.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original data (multisample VCF and summary statistics) can be downloaded from
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/vamos-vntr-genotyping/"
+target="_blank">the 1000 Genomes FTP server</a>.
+The VNTR site list used for genotyping is available from
+<a href="https://zenodo.org/records/13263615" target="_blank">Zenodo</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+The 1000 Genomes Vienna ONT project sequenced 1,019 samples from the 1000 Genomes
+collection using Oxford Nanopore Technologies long-read sequencing. VNTR genotyping
+was performed using
+<a href="https://github.com/ChaissonLab/vamos" target="_blank">VAMOS</a>,
+which determines the motif composition of VNTR alleles by aligning long reads to
+a catalog of known VNTR sites.
+The analysis pipeline is available at
+<a href="https://github.com/marschall-lab/project-ont-1kg" target="_blank">GitHub</a>.
+</p>
+<p>
+At UCSC, the summary statistics file (<tt>vamos-summary.tsv</tt>) was converted
+to bigBed format using a
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/viennaVntr"
+target="_blank">custom Python script</a>.
+Loci with coordinates exceeding chromosome boundaries were excluded.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the 1000 Genomes ONT Vienna consortium and the Marschall Lab at
+Heinrich Heine University D&uuml;sseldorf for making this data publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+De Coster W, Condon DE, De Baets G, Tsui A, Saeed F, Harerimana J, Amiraghdam F, Yaari R,
+De Vos L, Mahfouz A <em>et al</em>.
+<a href="https://doi.org/10.1101/2024.12.20.629807" target="_blank">
+Sequencing and variant calling of 1019 samples from the 1000 Genomes Project using Oxford Nanopore Technology</a>.
+<em>bioRxiv</em>. 2024 Dec 23;.
+</p>

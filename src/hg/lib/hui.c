@@ -6886,8 +6886,11 @@ if (trackDbFilters)
             {
             struct asColumn *asCol = asColumnFind(as, field);
             if (asCol != NULL)
-                { // Found label so replace field
+                { // Found label so replace field; strip "|..." suffix used for detail page
                 field = asCol->comment;
+                char *pipe = strchr(field, '|');
+                if (pipe != NULL)
+                    field = cloneStringZ(field, pipe - field);
                 }
             else if (defaultFieldLocation(field) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", field);

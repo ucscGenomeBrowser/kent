@@ -31,20 +31,21 @@ the number of repeat unit copies.</p>
 
 <h2>Display Conventions</h2>
 <p>
-Items are colored by the length of the repeat motif (period):</p>
+Items are colored by expected heterozygosity, computed as
+<i>het</i> = 1 &minus; &sum;<i>p<sub>i</sub></i><sup>2</sup> from allele frequencies
+pooled across all five 1000 Genomes populations weighted by sample count:</p>
 <ul>
-<li><span style="color: #FF0000;">Red</span> &ndash; mononucleotide (period 1)</li>
-<li><span style="color: #0000FF;">Blue</span> &ndash; dinucleotide (period 2)</li>
-<li><span style="color: #008000;">Green</span> &ndash; trinucleotide (period 3)</li>
-<li><span style="color: #FFA500;">Orange</span> &ndash; tetranucleotide (period 4)</li>
-<li><span style="color: #800080;">Purple</span> &ndash; pentanucleotide (period 5)</li>
-<li><span style="color: #4682B4;">Steel blue</span> &ndash; hexanucleotide (period 6)</li>
-<li><span style="color: #808080;">Gray</span> &ndash; longer motifs (period &gt;6)</li>
+<li><span style="color: #0000B4;">Dark blue</span> &ndash; nearly monomorphic (het &lt; 0.1)</li>
+<li><span style="color: #4682E6;">Medium blue</span> &ndash; low diversity (het 0.1&ndash;0.3)</li>
+<li><span style="color: #B482C8;">Light purple</span> &ndash; moderate diversity (het 0.3&ndash;0.5)</li>
+<li><span style="color: #E66450;">Salmon</span> &ndash; high diversity (het 0.5&ndash;0.7)</li>
+<li><span style="color: #B40000;">Dark red</span> &ndash; very high diversity (het &ge; 0.7)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; no allele frequency data available</li>
 </ul>
 
 <p>
-Each item is labeled by its WebSTR repeat ID. Hovering over an item shows the repeat
-motif, number of reference copies, and motif period. Clicking an item links to the
+Each item is labeled by its repeat motif and copy count. Hovering over an item shows the repeat
+motif, number of reference copies, and heterozygosity. Clicking an item links to the
 corresponding
 <a href="https://webstr.ucsd.edu" target="_blank">WebSTR</a> locus page, which provides
 interactive allele frequency histograms and additional annotations.</p>

@@ -17,15 +17,16 @@ population allele frequency data from up to three cohorts.</p>
 
 <h2>Display Conventions</h2>
 <p>
-Items are colored by the length of the repeat motif (period):</p>
+Items are colored by expected heterozygosity, computed as
+<i>het</i> = 1 &minus; &sum;<i>p<sub>i</sub></i><sup>2</sup> from allele counts
+pooled across the TenK10K and HPRC256 cohorts:</p>
 <ul>
-<li><span style="color: #FF0000;">Red</span> &ndash; mononucleotide (1 bp)</li>
-<li><span style="color: #0000FF;">Blue</span> &ndash; dinucleotide (2 bp)</li>
-<li><span style="color: #008000;">Green</span> &ndash; trinucleotide (3 bp)</li>
-<li><span style="color: #FFA500;">Orange</span> &ndash; tetranucleotide (4 bp)</li>
-<li><span style="color: #800080;">Purple</span> &ndash; pentanucleotide (5 bp)</li>
-<li><span style="color: #4682B4;">Steel blue</span> &ndash; hexanucleotide (6 bp)</li>
-<li><span style="color: #808080;">Gray</span> &ndash; longer motifs (&gt;6 bp)</li>
+<li><span style="color: #0000B4;">Dark blue</span> &ndash; nearly monomorphic (het &lt; 0.1)</li>
+<li><span style="color: #4682E6;">Medium blue</span> &ndash; low diversity (het 0.1&ndash;0.3)</li>
+<li><span style="color: #B482C8;">Light purple</span> &ndash; moderate diversity (het 0.3&ndash;0.5)</li>
+<li><span style="color: #E66450;">Salmon</span> &ndash; high diversity (het 0.5&ndash;0.7)</li>
+<li><span style="color: #B40000;">Dark red</span> &ndash; very high diversity (het &ge; 0.7)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; no allele frequency data available</li>
 </ul>
 
 <p>

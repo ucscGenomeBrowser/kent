@@ -14,6 +14,7 @@ table webstr
     uint period;         "Length of repeat unit"
     uint numCopies;      "Number of repeat copies in reference"
     string repeatId;     "WebSTR repeat identifier"
+    float het;           "Expected heterozygosity|1 - sum(p_i^2) pooled across all 1000 Genomes populations"
     lstring afrHist;     "AFR allele frequency histogram (space-separated allele=freq pairs)"
     uint afrN;           "AFR sample count"
     lstring amrHist;     "AMR allele frequency histogram (space-separated allele=freq pairs)"

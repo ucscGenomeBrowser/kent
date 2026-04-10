@@ -25,3 +25,62 @@ ln -s /hive/data/genomes/hg38/bed/str/trexplorer/trexplorer.bb /gbdb/hg38/strVar
 
 # Clean up intermediate files
 rm trexplorer.bed trexplorer.sorted.bed
+
+#############
+# Heterozygosity coloring for all strVar subtracks
+# Thu Apr 10 2026 (Claude/max)
+
+# All four subtracks (webstr, tommoStr, trexplorer, viennaVntr) were recolored
+# from motif-period-based coloring to expected heterozygosity:
+#   het = 1 - sum(p_i^2), blue (low) -> red (high)
+#
+# Color bins:
+#   het < 0.1: dark blue (0,0,180)
+#   0.1-0.3: medium blue (70,130,230)
+#   0.3-0.5: light purple (180,130,200)
+#   0.5-0.7: salmon (230,100,80)
+#   >= 0.7: dark red (180,0,0)
+#   no data: gray (128,128,128)
+
+# webstr: het pooled across 5 1000G populations weighted by sample count
+cd /hive/data/genomes/hg38/bed/str/webstr
+python3 ~/kent/src/hg/makeDb/scripts/webstr/webstrToBed.py WebSTRDataDumpForMax \
+    > webstr.bed
+sort -k1,1 -k2,2n webstr.bed > webstr.sorted.bed
+bedToBigBed -type=bed9+ -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/webstr/webstr.as \
+    webstr.sorted.bed /hive/data/genomes/hg38/chrom.sizes webstr.bb
+rm webstr.bed webstr.sorted.bed
+
+# tommoStr: het from allele count histogram (single Japanese population)
+cd /hive/data/genomes/hg38/bed/str/tommo
+python3 ~/kent/src/hg/makeDb/scripts/tommoStr/tommoStrToBed.py \
+    expansion-hunter-61KJPN-panel-export.reheader.vcf.gz > tommoStr.bed
+sort -k1,1 -k2,2n tommoStr.bed > tommoStr.sorted.bed
+bedToBigBed -type=bed9+ -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/tommoStr/tommoStr.as \
+    tommoStr.sorted.bed /hive/data/genomes/hg38/chrom.sizes tommoStr.bb
+rm tommoStr.bed tommoStr.sorted.bed
+
+# trexplorer: het pooled across TenK10K and HPRC256 cohort histograms
+cd /hive/data/genomes/hg38/bed/str/trexplorer
+python3 ~/kent/src/hg/makeDb/scripts/trexplorer/trexplorerToBed.py \
+    TR_catalog.5599658_loci.20260123_034640.tsv.gz > trexplorer.bed
+sort -k1,1 -k2,2n trexplorer.bed > trexplorer.sorted.bed
+bedToBigBed -type=bed9+ -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/trexplorer/trexplorer.as \
+    trexplorer.sorted.bed /hive/data/genomes/hg38/chrom.sizes trexplorer.bb
+rm trexplorer.bed trexplorer.sorted.bed
+
+# viennaVntr: het extracted from multi-sample VCF genotypes (1,019 samples)
+cd /hive/data/genomes/hg38/bed/str/viennaVntr
+python3 ~/kent/src/hg/makeDb/scripts/viennaVntr/viennaVntrHet.py \
+    vamos-multisample.vcf > het.tsv
+python3 ~/kent/src/hg/makeDb/scripts/viennaVntr/viennaVntrToBed.py \
+    vamos-summary.tsv het.tsv > viennaVntr.bed
+sort -k1,1 -k2,2n viennaVntr.bed > viennaVntr.sorted.bed
+bedClip viennaVntr.sorted.bed /hive/data/genomes/hg38/chrom.sizes viennaVntr.clipped.bed
+bedToBigBed -type=bed9+ -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/viennaVntr/viennaVntr.as \
+    viennaVntr.clipped.bed /hive/data/genomes/hg38/chrom.sizes viennaVntr.bb
+rm viennaVntr.bed viennaVntr.sorted.bed viennaVntr.clipped.bed

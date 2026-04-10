@@ -22,6 +22,7 @@ table trexplorer
     string knownDiseaseMotif;  "Known disease-associated motif, if any"
     string geneRegion;         "Gene region annotation (exon, intron, promoter, intergenic)"
     string geneName;           "Gene name"
+    float het;                 "Expected heterozygosity|1 - sum(p_i^2) pooled across TenK10K and HPRC256 cohorts"
     lstring tenKAlleleHist;    "TenK10K allele histogram (space-separated size=count pairs)"
     uint tenKNumAlleles;       "TenK10K total number of called alleles"
     lstring hprcAlleleHist;    "HPRC256 allele histogram (space-separated size=count pairs)"

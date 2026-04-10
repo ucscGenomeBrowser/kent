@@ -1,0 +1,118 @@
+<h2>Description</h2>
+<p>
+This track shows allele count distributions for 174,300 short tandem repeat (STR)
+loci genotyped across 61,000 Japanese individuals by the
+<a href="https://jmorp.megabank.tohoku.ac.jp" target="_blank">Tohoku Medical Megabank
+Organization (ToMMo)</a>. STR genotyping was performed with
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">Expansion Hunter</a>,
+which estimates repeat copy numbers from short-read whole-genome sequencing data.
+</p>
+
+<p>
+For each locus, the track provides the repeat motif, the reference copy number, the
+mean and median copy number across the cohort, and a histogram of allele counts
+by repeat size. Click on any locus to see the allele count distribution as a
+bar chart.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Items are colored by expected heterozygosity, computed as
+<i>het</i> = 1 &minus; &sum;<i>p<sub>i</sub></i><sup>2</sup> from allele counts
+across the 61,000 Japanese individuals:
+</p>
+<ul>
+<li><span style="color: #0000B4;">Dark blue</span> &ndash; nearly monomorphic (het &lt; 0.1)</li>
+<li><span style="color: #4682E6;">Medium blue</span> &ndash; low diversity (het 0.1&ndash;0.3)</li>
+<li><span style="color: #B482C8;">Light purple</span> &ndash; moderate diversity (het 0.3&ndash;0.5)</li>
+<li><span style="color: #E66450;">Salmon</span> &ndash; high diversity (het 0.5&ndash;0.7)</li>
+<li><span style="color: #B40000;">Dark red</span> &ndash; very high diversity (het &ge; 0.7)</li>
+<li><span style="color: #808080;">Gray</span> &ndash; no allele frequency data available</li>
+</ul>
+
+<p>
+The allele count histogram on the detail page shows the number of alleles observed
+at each repeat copy number. The reference allele count is computed as AN minus the
+sum of all alternate allele counts.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+The data can be accessed from scripts through our
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is <i>tommoStr</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/"
+target="_blank">our download server</a>.
+The file for this track is called <tt>tommoStr.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/tommoStr.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original data can be downloaded from the
+<a href="https://jmorp.megabank.tohoku.ac.jp/downloads/tommo-61kstr-20250825"
+target="_blank">jMorp 61KJPN-STR Downloads</a> page.
+Use of the data requires agreement to the
+<a href="https://jmorp.megabank.tohoku.ac.jp/help/conditions-of-use"
+target="_blank">ToMMo conditions of use</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+Genomic DNA was obtained from peripheral blood, saliva, or cord blood samples
+from participants in the Tohoku Medical Megabank Project. Whole-genome sequencing
+was performed on multiple Illumina and MGI platforms (HiSeq 2500, NovaSeq 6000,
+DNBSeq-T7). STR genotyping was performed with
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">Expansion Hunter</a>,
+which uses paired-end reads and read pairs spanning, flanking, and fully contained
+within repeat regions to estimate repeat copy numbers.
+</p>
+<p>
+At UCSC, the Expansion Hunter VCF was converted to bigBed format using a
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/tommoStr"
+target="_blank">custom Python script</a>.
+For each STR locus, the &lt;STRn&gt; symbolic alleles in the VCF ALT field encode
+the repeat copy number, and the INFO/AC field provides the allele count for each.
+The reference allele count was computed as AN minus the sum of all alternate AC values.
+These were assembled into a histogram of copies=count pairs for display.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Tohoku Medical Megabank Organization and the participants of the
+ToMMo cohort study for making this data publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+Tanaka K, Okamura Y, Aoki Y, Saito S, Kawashima J, Hishinuma E, Tadaka S, Narita A,
+Meguro-Horike M, Horike SI <em>et al</em>.
+<a href="https://doi.org/10.1093/hmg/ddz089" target="_blank">
+jMorp updates in 2020: large enhancement of multi-omics data resources on the general
+Japanese population</a>.
+<em>Hum Mol Genet</em>. 2019 Jul 1;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31240104" target="_blank">31240104</a>
+</p>
+
+<p>
+Tadaka S, Kawashima J, Hishinuma E, Saito S, Okamura Y, Otsuki A, Kojima K, Komaki S, Aoki Y, Kanno
+T <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad978" target="_blank">
+jMorp: Japanese Multi-Omics Reference Panel update report 2023</a>.
+<em>Nucleic Acids Res</em>. 2024 Jan 5;52(D1):D622-D632.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37930845" target="_blank">37930845</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10767895/" target="_blank">PMC10767895</a>
+</p>

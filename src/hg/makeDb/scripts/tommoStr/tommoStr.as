@@ -1,0 +1,21 @@
+table tommoStr
+"ToMMo 61KJPN Short Tandem Repeat allele counts from Expansion Hunter"
+    (
+    string chrom;        "Chromosome"
+    uint chromStart;     "Start position"
+    uint chromEnd;       "End position"
+    string name;         "Repeat motif x copy count"
+    uint score;          "Score (0-1000)"
+    char[1] strand;      "Strand"
+    uint thickStart;     "Thick start (same as chromStart)"
+    uint thickEnd;       "Thick end (same as chromEnd)"
+    uint reserved;       "Item color RGB|by motif size: mono=red, di=blue, tri=green, tetra=orange, penta=purple, hexa=steelblue, >6=gray"
+    string motif;        "Repeat unit motif"
+    uint period;         "Length of repeat unit in bp"
+    uint numCopies;      "Number of repeat copies in reference"
+    float mean;          "Mean repeat count|Mean repeat copy number across all samples"
+    float median;        "Median repeat count|Median repeat copy number across all samples"
+    uint numAlleles;     "Number of alleles called|Total number of alleles (AN)"
+    float het;           "Expected heterozygosity|1 - sum(p_i^2) computed from allele counts"
+    lstring alleleHist;  "Allele count histogram|Space-separated pairs of copies=count (e.g. 3=100 4=5000 5=200)"
+    )

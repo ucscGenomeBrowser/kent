@@ -17,7 +17,11 @@ visibility hide
     url https://webstr.ucsd.edu/locus?repeat_id=$<repeatId>&genome=hg38
     urlLabel Link to repeat record in WebSTR
     searchIndex name
-    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Number of copies in hg38:</b> $numCopies <br>
+    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Copies in ref:</b> $numCopies <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
     detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.amrHist {"title":"AMR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.easHist {"title":"EAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
@@ -49,8 +53,10 @@ visibility hide
     urls locusId="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
     urlLabel TRExplorer locus page
     searchIndex name
-    mouseOver <b>Gene:</b> $geneName ($geneRegion) <br> <b>Reference Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Number of repeat copies:</b> $numRepeats repeats <br> <b>Purity:</b> $repeatPurity <br> <b>Number of called alleles:</b><br> $tenKNumAlleles (TenK10K), $hprcNumAlleles (HPRC256), $aouNumAlleles (AoU1027) <br><b>Source:</b> $source
-    #mouseOver $referenceMotif ($motifSize bp), $numRepeats repeats, purity $repeatPurity, $geneName $geneRegion, $source
+    mouseOver <b>Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Copies in ref:</b> $numRepeats <br> <b>Purity:</b> $repeatPurity <br> <b>Heterozygosity:</b> $het <br> <b>Gene:</b> $geneName ($geneRegion)
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
     detailsScript.histogram.tenKAlleleHist {"title":"TenK10K Allele Distribution","xLabel":"Allele size (repeat copies)"}
     detailsScript.histogram.hprcAlleleHist {"title":"HPRC256 Allele Distribution","xLabel":"Allele size (repeat copies)"}
 
@@ -63,7 +69,11 @@ visibility hide
     visibility dense
     superTrack strVar dense
     searchIndex name
-    mouseOver <b>Motif:</b> $motif ($period bp) <br> <b>Ref copies:</b> $numCopies <br> <b>Mean:</b> $mean, <b>Median:</b> $median <br> <b>Alleles called:</b> $numAlleles
+    mouseOver <b>Motif:</b> $motif ($period bp) <br> <b>Ref copies:</b> $numCopies <br> <b>Mean:</b> $mean, <b>Median:</b> $median <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
     detailsScript.histogram.alleleHist {"title":"Allele Count Distribution (61K Japanese)","xLabel":"Allele size (repeat copies)"}
 
     track viennaVntr
@@ -76,5 +86,9 @@ visibility hide
     superTrack strVar dense
     searchIndex name
     skipEmptyFields on
-    mouseOver <b>Avg motif:</b> $ruLenAvg bp <br> <b>Median repeat units:</b> $medianRus (range: $minRus-$maxRus) <br> <b>Unique alleles:</b> $numUniqueVntrs <br> <b>Haplotypes:</b> $numHaps <br> <b>Allele size:</b> $minBps-$maxBps bp (median $medianBps)
+    mouseOver <b>Avg motif:</b> $ruLenAvg bp <br> <b>Median repeat units:</b> $medianRus (range: $minRus-$maxRus) <br> <b>Unique alleles:</b> $numUniqueVntrs <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
     dataVersion v1.1
