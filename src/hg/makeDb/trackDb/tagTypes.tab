@@ -117,9 +117,10 @@ detailsUrls big*
 detailsTabUrls big*
 defaultGeneTracks bed bigDbSnp
 defaultLabelFields big*
+defaultLinkedTables genePred bigGenePred
 defaultMaf wigMaf
 defaultMaxWeight bed
-defaultLinkedTables genePred bigGenePred
+defaultSortField *
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *

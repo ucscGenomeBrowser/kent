@@ -149,6 +149,19 @@ $(function() {
         const singularLabel = itemLabel.slice(0, -1);
 
         const columns = [checkboxColumn, ...ordinaryColumns];
+
+        // Determine which column to sort by: use defaultSortField if it matches
+        // a metadata column (case-insensitive, ignoring leading underscores),
+        // otherwise fall back to the first data column.
+        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        if (embeddedData.defaultSortField) {
+            const target = embeddedData.defaultSortField.replace(/^_+/, "").toLowerCase();
+            const idx = colNames.findIndex(
+                c => c.replace(/^_+/, "").toLowerCase() === target);
+            if (idx >= 0)
+                defaultSortCol = idx + 1;  // +1 for the checkbox column
+        }
+
         const table = $("#theMetaDataTable").DataTable({
             data: metadata,
             deferRender: true,    // seems faster
@@ -161,7 +174,7 @@ $(function() {
                 bottomStart: 'info',
                 bottomEnd: 'paging'
             },
-            order: [[1, "asc"]],  // sort by the first data column, not checkbox
+            order: [[defaultSortCol, "asc"]],
             pageLength: 25,       // show 25 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             language: {
