@@ -12027,6 +12027,7 @@ hvGfxSetClip(hvgWhich, clipX, clipY, clipWidth, clipHeight);
 void pgSnpDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the personal genome SNPs at a given position. */
 {
+color = colorFromCart(tg, color);
 struct pgSnp *myItem = item;
 boolean cmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 char *display = "freq"; //cartVar?
