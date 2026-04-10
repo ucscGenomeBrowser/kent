@@ -11498,6 +11498,9 @@ char *strand={"+"};
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
+char *refChrom  = chrom;
+int refStart  = start;
+int refEnd = end;
 
 if (liftDb) // we need to get the chr start stop in liftDb coordinates
     {
@@ -11558,7 +11561,7 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
         if (isNotEmpty(row[3]))
             {
             if (liftDb)
-                printf("<b>Transcript:</b>%s\n<br>\n", row[3]);
+                printf("<b>Transcript:</b> %s\n<br>\n", row[3]);
             else
                 printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
                     hgsidString, row[3], row[3]);
@@ -11618,7 +11621,10 @@ printf("<A HREF=\"%s%s\" target=_blank>",
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
-printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
+if (liftDb)
+    printPosOnChrom(refChrom, refStart, refEnd, strand, TRUE, itemName);
+else
+    printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 hFreeConn(&conn);
 }
