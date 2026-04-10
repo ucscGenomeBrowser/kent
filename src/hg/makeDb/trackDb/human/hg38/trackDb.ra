@@ -931,3 +931,6 @@ include ancient.ra
 # release alpha only here - we don't want to push out mb2 without
 # Andrew's stamp of approval
 include mb2.ra alpha
+
+### initial testing of HPRC chain tracks
+hprcV2.trackDb.txt alpha
