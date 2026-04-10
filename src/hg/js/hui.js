@@ -108,18 +108,6 @@ function exposeAll()
     }
 }
 
-function hideAll()
-{
-    // Set main display dropdown to hide if no subtracks are checked
-    var visDD = normed($("select.visDD"));
-    if (visDD) {
-        if ($(visDD).prop('selectedIndex') !== 0) {
-            $(visDD).prop('selectedIndex', 0);
-            $(visDD).trigger("change");
-        }
-    }
-}
-
 function matSubCbClick(subCB)
 {
 // subCB:onclick  When a subtrack checkbox is clicked, it may result in
