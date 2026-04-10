@@ -2809,6 +2809,7 @@ for (i = 0; i < gtHapCount ; i++)
     int nameIx = stringArrayIx(gt->id, sampleOrder, track->customInt);
     struct dyString *mouseover = dyStringNew(0);
     int tickColor = getTickColor(track, rec, i, nameIx, gtHapCount, gtHapOrder, childSample, sampleOrder, colorMode, funcTerm);
+    tickColor = colorFromCart(track, tickColor);
     if (gt->isPhased || (gt->hapIxA == 1 && gt->hapIxB == 1)) // if phased or homozygous alt
         {
         int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;

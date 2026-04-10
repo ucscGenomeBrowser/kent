@@ -3449,7 +3449,13 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
-if (!tdbIsSuperTrack(tdb))
+if (!tdbIsComposite(tdb)
+    && (startsWithWord("bed", tdb->type) || startsWithWord("bigBed", tdb->type)
+    || startsWithWord("genePred", tdb->type) || startsWithWord("bigGenePred", tdb->type)
+    || startsWithWord("wig", tdb->type) || startsWithWord("bigWig", tdb->type)
+    || startsWithWord("rmsk", tdb->type) || startsWithWord("interact", tdb->type)
+    || startsWithWord("bigInteract", tdb->type) || startsWithWord("bigLolly", tdb->type)
+    || startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type)))
     colorTrackOption(cart, tdb->track, tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg

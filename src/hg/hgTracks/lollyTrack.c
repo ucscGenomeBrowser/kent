@@ -172,6 +172,7 @@ if ( tg->visibility == tvDense)  // in dense mode we just draw lines
         {
         int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
         unsigned color =  getLollyColor(hvg, pop->color);
+        color = colorFromCart(tg, color);
         hvGfxLine(hvg, sx, yOff, sx , yOff+ tl.fontHeight, color);
         }
     return;
@@ -225,6 +226,7 @@ for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
     unsigned color =  getLollyColor(hvg, pop->color);
+    color = colorFromCart(tg, color);
     hvGfxCircle(hvg, sx, yOff + (usableHeight - (pop->height )), pop->radius, color, TRUE);
     if ( tg->visibility != tvSquish)  
         hvGfxCircle(hvg, sx, yOff + (usableHeight - (pop->height )), pop->radius, MG_BLACK, FALSE);
