@@ -933,4 +933,4 @@ include ancient.ra
 include mb2.ra alpha
 
 ### initial testing of HPRC chain tracks
-hprcV2.trackDb.txt alpha
+include hprcV2.trackDb.txt alpha
