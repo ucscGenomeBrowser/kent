@@ -57,6 +57,7 @@
 #include "cart.h"
 #include "filePath.h"
 #include "md5.h"
+#include "jsonWrite.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3014,7 +3015,6 @@ return list;
 
 unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
 
-#define COMMA_IF(x) (((x)++) ? "," : "")  // ADS: pattern for JSON comma
 
 static void facetedCompositeUi(struct trackDb *tdb)
 {
@@ -3048,12 +3048,6 @@ const char pageStyle[] =
     "<style>body.cgi { background: #F0F0F0; }"
     "table.hgInside { background: #FFFFFF; }</style>";
 const char placeholderDiv[] = "<div id='metadata-placeholder'></div>\n";
-const char openJSON[] = "<script id=\"app-data\" type=\"application/json\">{";
-const char closeJSON[] = "}</script>\n";
-const char openDataTypesJSON[] = "\"dataTypes\":{";
-const char closeDataTypesJSON[] = "}";  // closing a dict
-const char openDataElementsJSON[] = "\"dataElements\":[";
-const char closeDataElementsJSON[] = "]";  // closing an array
 
 // --- Get data from 'settings' field in 'trackDb' entry ---
 // required
@@ -3099,10 +3093,11 @@ for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
     }
 
 /* --- START embedded JSON data --- */
-printf(openJSON);
-printf(openDataTypesJSON);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+
 // find selected data types
-int not_first = 0;
+jsonWriteObjectStart(jw, "dataTypes");
 struct slName *selectedDataTypes = NULL;  // non-null val will be used as flag
 if (hasDataTypes)
     {
@@ -3135,18 +3130,18 @@ if (hasDataTypes)
             slPairFreeList(&dt_vars);
             }
         char *label = htmlEncode(stripEnclosingDoubleQuotes(thisType->val));
-        printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
-                selected ? 1 : 0, label);
+        jsonWriteObjectStart(jw, thisType->name);
+        jsonWriteNumber(jw, "active", selected ? 1 : 0);
+        jsonWriteString(jw, "title", label);
+        jsonWriteObjectEnd(jw);
         freeMem(label);
         }
     }
 // else: dataTypes dict is empty - JS will detect this
-printf(closeDataTypesJSON);
-printf(",");  // add separator
+jsonWriteObjectEnd(jw);
 
 // find selected data sets
-printf(openDataElementsJSON);
-not_first = 0;
+jsonWriteListStart(jw, "dataElements");
 if (hasDataTypes)
     {
     char toMatch[token_size];
@@ -3160,8 +3155,9 @@ if (hasDataTypes)
             const char *nameEnd = strchr(nameStart, '_');
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3176,8 +3172,9 @@ if (hasDataTypes)
             const char *nameEnd = strchr(nameStart, '_');
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3198,8 +3195,9 @@ else
             const char *nameEnd = strstr(nameStart, "_sel");
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3215,25 +3213,33 @@ else
             const char *nameEnd = strstr(nameStart, "_sel");
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
     hashElFreeList(&elList);
     }
-printf(closeDataElementsJSON);
-printf(",\"mdid\": \"%s\"", metaDataId);
-printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
+jsonWriteListEnd(jw);
+
+jsonWriteString(jw, "mdid", (char *)metaDataId);
+jsonWriteString(jw, "primaryKey", (char *)primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
-    printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
+    jsonWriteString(jw, "maxCheckboxes", (char *)maxCheckboxes);
 if (colorSettingsUrl) // only if present in trackDb.settings entry
-    printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
-printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
-printf(",\"track\": \"%s\"", tdb->track);
+    jsonWriteString(jw, "colorSettingsUrl", cgiEncode((char *)colorSettingsUrl));
+jsonWriteString(jw, "metadataUrl", cgiEncode((char *)metaDataUrl));
+jsonWriteString(jw, "track", tdb->track);
+char *defaultSortField = trackDbSetting(tdb, "defaultSortField");
+if (isNotEmpty(defaultSortField))
+    jsonWriteString(jw, "defaultSortField", defaultSortField);
 if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
-    printf(",\"udcTimeout\": true");
-printf(closeJSON);
+    jsonWriteBoolean(jw, "udcTimeout", TRUE);
+
+jsonWriteObjectEnd(jw);
+printf("<script id=\"app-data\" type=\"application/json\">%s</script>\n", jw->dy->string);
+jsonWriteFree(&jw);
 /* --- END embedded JSON data --- */
 
 jsIncludeFile("dataTables-2.2.2.min.js", NULL);
