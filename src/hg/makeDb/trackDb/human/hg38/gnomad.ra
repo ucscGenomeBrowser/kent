@@ -7,6 +7,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD)
 group varRep
 cartVersion 6
+pennantIcon New red ../goldenPath/newsarch.html#041026 "New gnomAD STR track added Apr. 10, 2026"
 html gnomad
 
     track gnomadVariantsV2
