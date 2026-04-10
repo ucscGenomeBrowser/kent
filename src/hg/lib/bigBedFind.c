@@ -67,20 +67,22 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
     hgPos->chrom = cloneString(chromName);
     hgPos->chromStart = interval->start;
     hgPos->chromEnd = interval->end;
-    hgPos->browserName = cloneString(term);
     hgPos->description = cloneString(description);
 
+    int rowFieldCount = bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
     if (searchItemLabel)
         {
-        bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
         hgPos->name = replaceFieldInPattern(searchItemLabel, bbi->fieldCount, fieldNames, row);
         }
     else
         {
         hgPos->name = bigBedMakeLabel(tdb, labelColumns, interval, chromName);
-        if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc")))
-            bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
         }
+    // browserName needs to correspond to tg->mapItemName()
+    if (rowFieldCount > 3)
+        hgPos->browserName = cloneString(row[3]);
+    else
+        hgPos->browserName = cloneString(term);
 
     if (hfs)
         {
