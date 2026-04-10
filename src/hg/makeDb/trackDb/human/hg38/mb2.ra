@@ -1,3 +1,12 @@
+track dnaMethylationAlpha
+superTrack on
+shortLabel DNA Methylation (alpha)
+longLabel DNA Methylation (alpha)
+group regulation
+priority 3
+pennantIcon New red ../goldenPath/newsarch.html#031626 "Released Mar. 16, 2026"
+html ../dnaMethylation.html
+
 track mb2
 type bed 3
 metaDataUrl /gbdb/hg38/mb2/mb2_metadata.tsv
@@ -9,7 +18,7 @@ shortLabel MethBase2
 longLabel DNA methylation data from MethBase2
 noInherit on
 compositeTrack faceted
-parent dnaMethylation
+parent dnaMethylationAlpha
 html mb2
 #metaDataUrl https://hgwdev.gi.ucsc.edu/~jcasper/hubs/mb2/mb2_metadata.tsv
 #colorSettingsUrl https://hgwdev.gi.ucsc.edu/~jcasper/hubs/mb2/mb2_color.json
