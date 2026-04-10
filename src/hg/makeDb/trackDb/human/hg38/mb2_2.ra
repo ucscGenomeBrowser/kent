@@ -52517,7 +52517,7 @@ yLineOnOff on
 
 track mb2_DRX118406_hmr
 type bigBed
-parent mb2 off
+parent mb2 on
 onlyVisibility dense
 shortLabel iPSC
 longLabel iPSC DRX118406
@@ -52525,7 +52525,7 @@ bigDataUrl http://smithlab.usc.edu/methbase/data/DRP004736/DRS085881/DRX118406/D
 
 track mb2_DRX118406_levels
 type bigWig
-parent mb2 off
+parent mb2 on
 shortLabel iPSC
 longLabel iPSC DRX118406
 bigDataUrl http://smithlab.usc.edu/methbase/data/DRP004736/DRS085881/DRX118406/DRX118406.sym_counts.bw
