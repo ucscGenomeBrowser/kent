@@ -1,13 +1,14 @@
 # ENCODE4 Integrated Regulation Track (encode4Reg) for mm10
 # Redmine #34923
-# Lou Nassar, 2026-03-26 (updated 2026-03-27)
+# Lou Nassar, 2026-03-26 (updated 2026-04-10)
 
 # This track converts the ENCODE Mouse Regulation hub into a native UCSC browser
 # supertrack containing organ-averaged multiWig signal tracks and individual
 # experiment composites (bigComposite/faceted format) for epigenetics, RNA-seq,
 # and TF ChIP-seq. No TF rPeaks data available for mouse.
 
-# The original hub was prepared by Mingshi Gao (Weng lab, UMass Chan Medical School).
+# The original hub was prepared by Mingshi Gao (Weng lab, UMass Chan Medical School):
+#   http://users.wenglab.org/gaomingshi/Mouse_ENCODE/hub.txt
 # It was cloned locally for processing:
 #   /hive/data/outside/encode4/ccre/ENCODE_Mouse_Regulation/hub.txt (27K lines)
 # Total data: ~2.7 TB
@@ -23,7 +24,8 @@
 
 mkdir -p /hive/data/outside/encode4/ccre
 cd /hive/data/outside/encode4/ccre
-hubClone -download <mouse hub URL> ENCODE_Mouse_Regulation
+hubClone -download http://users.wenglab.org/gaomingshi/Mouse_ENCODE/hub.txt \
+    ENCODE_Mouse_Regulation
 
 # Total data: ~2.7 TB across ~2,644 files (1,901 bigWig + 743 bigBed)
 
@@ -45,6 +47,10 @@ python3 create_mm10_symlinks.py
 #   adipose.H3K27ac.bigWig -> adiposeH3K27ac.bw
 #   bone_marrow.plus.bigWig -> boneMarrowPlus.bw
 # The rename_symlinks.py script handles this and updates bigDataUrl in the .ra.
+
+# Note: mm10 did NOT have the tissue-only vs all-biosamples bug that affected
+# hg38. The mm10 hub already used separate file naming for both variants
+# ({organ}{Assay}.bw for tissue-only, {organ}{Assay}All.bw for all-bio).
 
 ##############################################################################
 # Step 3: Validate local files and create S3 URL mapping
@@ -72,7 +78,7 @@ python3 generate_mm10_multiwig_ra.py > mm10_multiwig_output.ra
 #   encode4RegMarkH3k4me3 — hidden (priority 1.3)
 #   encode4RegMarkCtcf    — hidden (priority 1.5)
 #   encode4RegTxn         — hidden (priority 1.6)
-# No "All Biosamples" variants in the mouse hub (unlike hg38).
+# Some assays have both tissue-only and "All Biosamples" variant subtracks.
 # Subtrack priorities are assigned sequentially (no duplicates).
 # Output was manually assembled into encode4Reg.ra with supertrack header.
 
@@ -113,11 +119,13 @@ python3 generate_mm10_bigcomposites.py
 #     RnaSeq: colored by Organ (organ_colors.json)
 #     TfChip: no facet colors (uses score-based spectrum coloring)
 #
-# Default-ON subtracks:
-#   Epigenetics (10): CH12.LX signal + peak per assay (CTCF, DNase, H3K27ac,
-#                     H3K4me3) plus brain hindbrain P0 ATAC signal + peak
-#   RNA-seq (5): CH12.LX +/- strand, liver adult +/-, brain hippocampus +
-#   TF ChIP (10): CH12.LX signal + peak for CTCF, POLR2A, MYC, MAX, EP300
+# Default-ON subtracks (tissue samples per Weng lab request):
+#   Epigenetics (30): forebrain/heart/liver postnatal 0 days C57BL/6
+#     × 5 assays × signal+peak
+#   RNA-seq (6): forebrain P0 +/-, heart P0 +/-, liver adult 2mo C57BL/6J +/-
+#     (no liver RNA at postnatal 0; liver uses adult 2 month as fallback)
+#   TF ChIP (10): forebrain CTCF P0 (2), heart CTCF+EP300 P0 (4),
+#     liver CTCF+EP300 P0 (4)
 #
 # All subtracks use S3 URLs (encode-public.s3.amazonaws.com) for bigDataUrl.
 
@@ -125,9 +133,24 @@ python3 generate_mm10_bigcomposites.py
 # Step 5b: Track color adjustments
 ##############################################################################
 
-# Several organ colors from the hub had poor contrast against a white background.
-# All colors with brightness > 160 were darkened to target brightness 140 while
-# preserving hue. This affects multiWig subtracks and bigComposite subtracks.
+# Organ colors follow the Weng lab canonical color mapping:
+#   https://wiki.wenglab.org/references/color-mappings/
+# Colors with poor contrast against white background were darkened while
+# preserving hue (canonical colors designed for dark portal background).
+# 3 organs previously using default gray were given their canonical colors:
+#   urinary bladder: 194,33,39
+#   intestine: 121,92,166
+#   blood marrow: 184,120,120
+# Color mapping wiki linked in Display Conventions of all multiWig HTML pages.
+
+##############################################################################
+# Step 5c: Biosample column cleanup (2026-04-08)
+##############################################################################
+
+# The _Biosample column in the Epigenetics metadata TSV had redundant
+# assay suffixes on peak entries (e.g., "...hematopoietic stem cell adult
+# 5-6 weeks ATAC"). This information is already in the Assay column.
+# Removed suffixes from 1,178 entries.
 
 ##############################################################################
 # Step 6: Assemble main encode4Reg.ra
@@ -147,35 +170,50 @@ python3 generate_mm10_bigcomposites.py
 
 # 10 HTML files in kent/src/hg/makeDb/trackDb/mouse/mm10/:
 #   encode4Reg.html                — SuperTrack overview
-#   encode4RegMarkH3k27ac.html     — H3K27ac layered (19 organs)
-#   encode4RegDnase.html           — DNase layered (26 organs)
-#   encode4RegAtac.html            — ATAC layered (12 organs)
-#   encode4RegMarkH3k4me3.html     — H3K4me3 layered (20 organs)
-#   encode4RegMarkCtcf.html        — CTCF layered (16 organs)
-#   encode4RegTxn.html             — Transcription layered (9 organs)
+#   encode4RegMarkH3k27ac.html     — H3K27ac layered
+#   encode4RegDnase.html           — DNase layered
+#   encode4RegAtac.html            — ATAC layered
+#   encode4RegMarkH3k4me3.html     — H3K4me3 layered
+#   encode4RegMarkCtcf.html        — CTCF layered
+#   encode4RegTxn.html             — Transcription layered
 #   encode4RegEpigenetics.html     — Individual epigenetics composite
 #   encode4RegRnaSeq.html          — Individual RNA-seq composite
 #   encode4RegTfChip.html          — Individual TF ChIP composite
 #
 # Adapted from hg38 versions with mm10-specific organ counts, assembly refs,
-# mouse-specific production lab credits, and removal of TF rPeaks references.
+# mouse-specific production lab credits (audited against upstream hub), and
+# removal of TF rPeaks references.
 # Each layered track HTML includes an organ/tissue availability table.
 # All HTMLs include Data Access sections with bigWigToWig/bigBedToBed examples.
 # Epi and TfChip HTMLs note mixed signal+peak data with Data Type facet.
-# Supertrack HTML includes cCRE cross-reference.
+# ENCODE color mapping wiki linked in Display Conventions sections.
+#
+# Production lab credits per track (verified against upstream hub 2026-04-08):
+#   DNase: Stamatoyannopoulos (UW), Hardison (PennState)
+#   ATAC: Wold (Caltech), Ren (UCSD), Hardison (PennState)
+#   H3K27ac: Ren (UCSD)
+#   H3K4me3: Wold, Ren, Snyder (Stanford), Hardison
+#   CTCF: Wold, Ren, Snyder, Myers (HAIB), Hardison
+#   RNA: Hoffmann (UCLA), Wold, Garber (UMass), Snyder, Hardison, Gingeras (CSHL)
+#   Epigenetics: Wold, Ren, Stamatoyannopoulos, Snyder, Myers, Hardison
+#   TF ChIP: Wold, Ren, Disteche (UW), Snyder, Myers, Hardison
 
 ##############################################################################
-# Step 8: trackDb integration and related tracks
+# Step 8: trackDb integration, related tracks, ENCODE3 rename
 ##############################################################################
 
 # Added to kent/src/hg/makeDb/trackDb/mouse/mm10/trackDb.ra:
 #   include encode4Reg.ra alpha
 
 # Added reciprocal entries to relatedTracks.ra:
-#   mm10 encode4Reg encode3Reg ENCODE4 update of ENCODE3 Regulation
-#   mm10 encode3Reg encode4Reg ENCODE4 update of ENCODE3 Regulation
+#   mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
+#   mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 #   mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 #   mm10 cCREs encode4Reg Related ENCODE4 regulation data
+# Note: track1's "why" text describes track2 (the link destination).
+
+# ENCODE3 renamed to "ENCODE3 Regulation" via alpha release tags:
+#   trackDb.encode3.alpha.ra: shortLabel "ENCODE3 Regulation", snowflake pennant
 
 ##############################################################################
 # Step 9: Release tags (ENCODE3 transition)
@@ -187,10 +225,10 @@ python3 generate_mm10_bigcomposites.py
 #
 # Created trackDb.encode3.alpha.ra with:
 #   - superTrack on hide (hidden by default)
+#   - shortLabel "ENCODE3 Regulation"
 #   - pennantIcon snowflake.png (deprecation notice)
 #   - Inner includes tagged with release alpha
 # The original trackDb.encode3.ra gets inner includes tagged beta,public.
-# encodeCcreCombined.old.ra stays beta,public only (in QA).
 # Key: inner include directives must also carry release tags.
 #
 # trackDb.ra includes:
@@ -219,8 +257,7 @@ make alpha DBS=mm10
 # are now served via S3 URLs. Only the organ-averaged multiWig files
 # (referenced by gbdb symlinks) and hub.txt/HTML docs were preserved.
 #
-# mm10: Deleted 2,594 files (0.7 TB freed), 135 files remaining (1.5 TB)
-# Script: cleanup_local_files.py
+# mm10: Deleted 2,594 files (0.7 TB freed)
 
 ##############################################################################
 # Track hierarchy summary
@@ -229,20 +266,20 @@ make alpha DBS=mm10
 # Regulation group priority order: cCREs (0.4) > encode4Reg (0.5) > tabulaMuris (1)
 #
 # encode4Reg (superTrack, priority 0.5, group=regulation)
-# ├── encode4RegMarkH3k27ac (multiWig, full)    priority 1.4
-# ├── encode4RegDnase       (multiWig, hide)     priority 1.1
-# ├── encode4RegAtac        (multiWig, hide)     priority 1.2
-# ├── encode4RegMarkH3k4me3 (multiWig, hide)     priority 1.3
-# ├── encode4RegMarkCtcf    (multiWig, hide)     priority 1.5
-# ├── encode4RegTxn         (multiWig, hide)     priority 1.6
-# ├── encode4RegEpigenetics (bigComposite faceted, 1,178 subtracks, 10 ON)  priority 2.0
-# ├── encode4RegRnaSeq      (bigComposite faceted, 1,054 subtracks, 5 ON)   priority 2.1
-# └── encode4RegTfChip      (bigComposite faceted, 334 subtracks, 10 ON)    priority 2.2
+# ├── encode4RegMarkH3k27ac (multiWig, full)                         priority 1.4
+# ├── encode4RegDnase       (multiWig, hide)                         priority 1.1
+# ├── encode4RegAtac        (multiWig, hide)                         priority 1.2
+# ├── encode4RegMarkH3k4me3 (multiWig, hide)                         priority 1.3
+# ├── encode4RegMarkCtcf    (multiWig, hide)                         priority 1.5
+# ├── encode4RegTxn         (multiWig, hide)                         priority 1.6
+# ├── encode4RegEpigenetics (bigComposite faceted, 1,178, 30 ON)     priority 2.0
+# ├── encode4RegRnaSeq      (bigComposite faceted, 1,054, 6 ON)      priority 2.1
+# └── encode4RegTfChip      (bigComposite faceted, 334, 10 ON)       priority 2.2
 
-# gbdb contents (/gbdb/mm10/encode4/regulation/):
-#   organAve/                        — 122 multiWig symlinks (camelCase .bw)
-#   encode4RegEpigenetics_metadata.tsv
-#   encode4RegRnaSeq_metadata.tsv
-#   encode4RegTfChip_metadata.tsv
-#   epi_colors.json                  — Assay facet colors for Epigenetics
-#   organ_colors.json                — Organ facet colors for RNA-seq
+# Disk usage (/gbdb/mm10/encode4/regulation/):
+#   organAve:          1.5 TB (122 files)
+#   metadata + JSON:   ~1 MB (5 files)
+#   Total:             1.5 TB (128 files)
+#   (1 additional file: hub.txt reference copy)
+
+# File list: /hive/users/lrnassar/claude/RM34923/gbdb_file_list.txt
