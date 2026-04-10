@@ -768,7 +768,7 @@ function installRedhat () {
     yum -y update
 
     # Fedora doesn't have or need EPEL, however, it does not include chkconfig by default
-    yum install -y chkconfig install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
+    yum install -y chkconfig ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
