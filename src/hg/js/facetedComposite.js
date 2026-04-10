@@ -6,15 +6,6 @@ $(function() {
     //     e.preventDefault(); e.returnValue = ""; });
     const DEFAULT_MAX_CHECKBOXES = 20;  // ADS: without default, can get crazy
 
-    // ADS: need "matching" versions for the plugins
-    const DATATABLES_URL = "../js/dataTables-2.2.2.min.js";
-    const DATATABLES_SELECT_URL = "../js/dataTables.select-3.0.0.min.js";
-    const CSS_URLS = [
-        "../style/dataTables-2.2.2.min.css",  // dataTables CSS
-        "../style/dataTables.select-3.0.0.min.css",  // dataTables Select CSS
-        "../style/facetedComposite.css",  // Local metadata table CSS
-    ];
-
     const isValidColorMap = obj =>  // check the whole thing and ignore if invalid
           typeof obj === "object" && obj !== null && !Array.isArray(obj) &&
           Object.values(obj).every(x =>
@@ -41,12 +32,6 @@ $(function() {
             });
         return req.then(r => r.ok ? r.json() : null).catch(() => null);
     };
-
-    const loadIfMissing = (condition, url, callback) =>  // for missing plugins
-          condition ?
-          document.head.appendChild(Object.assign(
-              document.createElement("script"), { src: url, onload: callback }))
-          : callback();
 
     const toTitleCase = str =>
           str.toLowerCase()
@@ -215,7 +200,28 @@ $(function() {
                 .prop("checked", filteredCount > 0 && selectedCount === filteredCount)
                 .prop("indeterminate", selectedCount > 0 && selectedCount < filteredCount);
         }
-        table.on("select deselect", () => updateSelectAllCheckbox(table));
+        // Find the Display Mode dropdown rendered by C code
+        const visDropdown = document.querySelector(
+            'select[name="' + embeddedData.track + '"]');
+
+        // Track preferred non-hide visibility for auto-restore
+        let preferredVis = "full";
+        if (visDropdown && visDropdown.value !== "hide") {
+            preferredVis = visDropdown.value;
+        }
+
+        // Track previous selection count for detecting 0<->nonzero transitions
+        let prevSelCount = table.rows({selected: true}).count();
+
+        // Update preferredVis when user manually changes the dropdown
+        if (visDropdown) {
+            visDropdown.addEventListener("change", function() {
+                if (this.value !== "hide") {
+                    preferredVis = this.value;
+                }
+            });
+        }
+
         updateSelectAllCheckbox(table);  // set initial state after pre-selections
 
         // Create "show only selected" toggle in the toolbar
@@ -237,6 +243,9 @@ $(function() {
         toggleWrapper.appendChild(toggleText);
         lengthDiv.appendChild(toggleWrapper);
 
+        // Disable toggle initially if no rows are selected
+        toggleCheckbox.disabled = (prevSelCount === 0);
+
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
@@ -244,7 +253,32 @@ $(function() {
                 `Show only selected ${itemLabel} (${selCount} of ${totalCount} selected)`;
         }
         updateSelectedText();
-        table.on("select deselect", updateSelectedText);
+
+        // Unified handler for selection changes
+        function onSelectionChanged() {
+            const selCount = table.rows({selected: true}).count();
+
+            // Disable toggle when nothing is selected; auto-uncheck if count hits 0
+            toggleCheckbox.disabled = (selCount === 0);
+            if (selCount === 0 && toggleCheckbox.checked) {
+                toggleCheckbox.checked = false;
+                table.draw();
+            }
+
+            // Auto-switch Display Mode on 0<->nonzero transitions
+            if (visDropdown) {
+                if (selCount === 0 && prevSelCount > 0) {
+                    visDropdown.value = "hide";
+                } else if (selCount > 0 && prevSelCount === 0) {
+                    visDropdown.value = preferredVis;
+                }
+            }
+
+            updateSelectAllCheckbox(table);
+            updateSelectedText();
+            prevSelCount = selCount;
+        }
+        table.on("select deselect", onSelectionChanged);
 
         // Create active-filters chip bar (hidden when empty)
         const activeFiltersDiv = document.createElement("div");
@@ -708,19 +742,11 @@ $(function() {
             });
     }  // end loadDataAndInit
 
-    CSS_URLS.map(href =>  // load all the CSS
-        document.head.appendChild(Object.assign(
-            document.createElement("link"), { rel: "stylesheet", href })));
-
     document.addEventListener("keydown", e => {  // block accidental submit
         if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); }
     }, true);
 
-    // ADS: only load plugins if they are not already loaded
-    loadIfMissing(!$.fn.DataTable, DATATABLES_URL, () => {
-        loadIfMissing(!$.fn.dataTable.select, DATATABLES_SELECT_URL, () => {
-            generateHTML();
-            loadDataAndInit();
-        });
-    });
+    generateHTML();
+    loadDataAndInit();
+
 });

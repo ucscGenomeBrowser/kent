@@ -3054,8 +3054,6 @@ const char openDataTypesJSON[] = "\"dataTypes\":{";
 const char closeDataTypesJSON[] = "}";  // closing a dict
 const char openDataElementsJSON[] = "\"dataElements\":[";
 const char closeDataElementsJSON[] = "]";  // closing an array
-const char metadataTableScriptElement[] =
-    "<script type='text/javascript' src='/js/facetedComposite.js'></script>\n";
 
 // --- Get data from 'settings' field in 'trackDb' entry ---
 // required
@@ -3238,7 +3236,14 @@ if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
 printf(closeJSON);
 /* --- END embedded JSON data --- */
 
-printf(metadataTableScriptElement);
+jsIncludeFile("dataTables-2.2.2.min.js", NULL);
+jsIncludeFile("dataTables.select-3.0.0.min.js", NULL);
+jsIncludeFile("facetedComposite.js", NULL);
+
+webIncludeResourceFile("dataTables-2.2.2.min.css");
+webIncludeResourceFile("dataTables.select-3.0.0.min.css");
+webIncludeResourceFile("facetedComposite.css");
+
 
 // cleanup
 slPairFreeValsAndList(&dataTypes);
