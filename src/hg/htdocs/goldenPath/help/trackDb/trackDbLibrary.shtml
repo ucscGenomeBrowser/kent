@@ -4821,6 +4821,34 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </p>
 </DIV>
 
+<DIV class="sampleMetadataFile"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>sampleMetadataFile &lt;url&gt;</code></div>
+    <P>
+    Specifies a tab-separated file that provides metadata columns for VCF samples.
+    (Meta data can always be provided in the VCF file directly, but this option
+    allows storing the metadata in an external file.) 
+    When a user clicks on a variant, the metadata columns from this file are appended
+    to the genotype details table.
+    The first line is a header that starts with <code>#sample</code>,
+    followed by tab-separated column names for the metadata fields.
+    Subsequent lines contain the sample name in the first column (matching
+    the VCF genotype column IDs), followed by the metadata values.
+    </P>
+    <P>Example metadata file:</P>
+    <pre>
+#sample	Population	Superpopulation	Region
+HG00096	GBR	EUR	Europe
+HG00099	GBR	EUR	Europe
+NA18939	JPT	EAS	East Asia</pre>
+    <P>Example trackDb entry:</P>
+    <pre>
+    track myVcf
+    type vcfTabix
+    bigDataUrl /path/to/myVcf.vcf.gz
+    sampleMetadataFile /path/to/sampleMeta.txt
+      ...</pre>
+</DIV>
+
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
