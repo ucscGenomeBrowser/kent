@@ -64,6 +64,81 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="041026"></a>
+<h2>Apr. 10, 2026 &nbsp;&nbsp; New Short Tandem Repeat (STR) tracks on hg38</h2>
+<p>
+We are pleased to announce several new Short Tandem Repeat (STR) tracks on the
+human genome assembly (GRCh38/hg38).
+</p>
+<p>
+A new <a href="/cgi-bin/hgTrackUi?db=hg38&g=strVar" target="_blank"><b>Tandem Repeat
+Variation</b></a> track collection brings together population-level tandem repeat variation
+data from multiple sources:
+</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=webstr" target="_blank"><b>WebSTR</b></a> &ndash;
+  1,710,833 STR loci from the
+  <a href="https://github.com/gymrek-lab/EnsembleTR" target="_blank">EnsembleTR</a> panel with
+  allele frequency distributions for five continental populations from the
+  <a href="https://www.internationalgenome.org/" target="_blank">1000 Genomes Project</a>
+  (3,550 individuals). The EnsembleTR panel represents consensus calls from four STR
+  genotyping methods (HipSTR, GangSTR, ExpansionHunter, and AdVNTR).
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=strchive" target="_blank"><b>STRchive</b></a> &ndash;
+  75 disease-associated tandem repeat expansion loci curated from published literature by the
+  <a href="https://strchive.org" target="_blank">STRchive</a> project. Each locus includes
+  the pathogenic repeat motif, the minimum pathogenic repeat count, the mode of inheritance, and
+  the associated disease. Items are colored by inheritance mode.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=trexplorer" target="_blank"><b>TRExplorer V2</b></a>
+  &ndash; 5,599,658 tandem repeat loci (STRs and VNTRs) from the
+  <a href="https://trexplorer.broadinstitute.org" target="_blank">TRExplorer</a> catalog at
+  the Broad Institute, compiled from 17 sources including perfect repeats in the reference,
+  polymorphic TRs from T2T assemblies, and curated disease-associated loci. Includes
+  population allele frequency histograms from TenK10K and HPRC256 cohorts.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=tommoStr" target="_blank"><b>ToMMo 61K STR</b></a>
+  &ndash; 174,300 STR loci with allele count distributions from 61,000 Japanese individuals
+  from the <a href="https://jmorp.megabank.tohoku.ac.jp" target="_blank">Tohoku Medical
+  Megabank Organization (ToMMo)</a>, genotyped with Expansion Hunter.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=viennaVntr" target="_blank"><b>1KG Vienna ONT
+  VNTR</b></a> &ndash; 361,362 VNTR loci with allele statistics from 1,019 samples of the
+  <a href="https://github.com/marschall-lab/project-ont-1kg" target="_blank">1000 Genomes
+  ONT Vienna project</a>, genotyped with VAMOS from Oxford Nanopore long-read sequencing.
+  Unlike the other tracks, which use short-read data, this track can span longer repeat regions.
+  </li>
+</ul>
+<p>
+Additionally, a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadStr" target="_blank"><b>gnomAD STR</b></a>
+track has been added under the gnomAD Variants collection. This track displays genotype data
+for 87 disease-associated STR loci from
+<a href="https://gnomad.broadinstitute.org/" target="_blank">gnomAD</a> v3.1.3, including
+loci associated with Huntington disease, fragile X syndrome, Friedreich ataxia, and various
+spinocerebellar ataxias. The data were generated using
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">ExpansionHunter v5</a>
+on 18,511 whole-genome sequenced samples across 10 populations. Each locus shows the
+distribution of repeat allele sizes, providing a reference for normal and expanded allele
+ranges.
+</p>
+<p>
+We would like to thank Melissa Gymrek (UC San Diego) and the
+<a href="https://webstr.ucsd.edu" target="_blank">WebSTR</a> team for providing the
+WebSTR data, Harriet Dashnow (University of Colorado) and the
+<a href="https://strchive.org" target="_blank">STRchive</a> team for their curated
+disease-associated loci, Ben Weisburd, Egor Dolzhenko, and the
+<a href="https://trexplorer.broadinstitute.org" target="_blank">TRExplorer</a> team at the
+Broad Institute for their tandem repeat catalog, the
+<a href="https://jmorp.megabank.tohoku.ac.jp" target="_blank">Tohoku Medical Megabank
+Organization</a> for the ToMMo STR data, the 1000 Genomes ONT Vienna consortium and the
+Marschall Lab at Heinrich Heine University D&uuml;sseldorf for the VNTR data, and the
+<a href="https://gnomad.broadinstitute.org/about" target="_blank">gnomAD production
+team</a> for making the STR genotype data available. We would also like to thank
+Max Haeussler and Jairo Navarro Gonzalez for the creation and release of these
+tracks.
+</p>
+
 <a name="040326"></a>
 <h2>Apr. 3, 2026 &nbsp;&nbsp; New heatmap display mode for bigBed tracks</h2>
 <p>

@@ -12,3 +12,4 @@ AI assistant guidelines for modifying the kent codebase.
 - Make the smallest change that achieves the goal. Do not restructure surrounding code.
 - Preserve existing patterns even when a "cleaner" design is conceivable.
 - After building, run binaries from `~/bin/x86_64/`, not bare command name (system PATH resolves to production binaries).
+- Never use inline event handlers (`onclick`, `onchange`, `oninput`) in HTML output — CSP blocks them. Use `jsInlineF()` with `addEventListener` instead, which emits JavaScript inside a nonce-tagged script block.

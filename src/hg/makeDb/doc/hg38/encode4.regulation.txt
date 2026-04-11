@@ -1,6 +1,6 @@
 # ENCODE4 Integrated Regulation Track (wgEncodeReg4) for hg38
 # Redmine #34923
-# Lou Nassar, 2026-03-12 (updated 2026-03-27)
+# Lou Nassar, 2026-03-12 (updated 2026-04-10)
 
 # This track converts the ENCODE V4 Regulation hub into a native UCSC browser
 # supertrack containing organ-averaged multiWig signal tracks, TF rPeak clusters,
@@ -10,7 +10,7 @@
 # The original hub was prepared by Mingshi Gao (Weng lab, UMass Chan Medical School):
 #   https://users.wenglab.org/gaomingshi/ENCODE_Reg/hub.txt
 # It was cloned locally for processing:
-#   /hive/data/outside/encode4/ccre/ENCODE_V4_Regulation/hub.txt (93K lines)
+#   /hive/data/outside/encode4/ccre/ENCODE_V4_Regulation/hub.txt
 
 # Scripts are located at:
 #   kent/src/hg/makeDb/scripts/encode4regulation/
@@ -28,27 +28,21 @@ hubClone -download https://users.wenglab.org/gaomingshi/ENCODE_Reg/hub.txt \
 # Total data: ~5.6 TB across ~7,000 files (bigWig + bigBed)
 
 ##############################################################################
-# Step 2: Create gbdb symlinks
+# Step 2: Create gbdb symlinks for organ-averaged multiWig files
 ##############################################################################
 
 # Only organ-averaged multiWig files and TF rPeak files need gbdb symlinks.
 # Individual experiment tracks use S3 URLs directly.
 
-# Organ-averaged multiWig signals (163 organ signals + 102 RNA strand files)
 mkdir -p /gbdb/hg38/encode4/regulation/organAve
 cd /hive/data/outside/encode4/ccre/ENCODE_V4_Regulation
-for f in $(grep -oP '^\S+\.bigWig' hub.txt | grep -v ENCFF | sort -u); do
-    [ -f "$f" ] && ln -s $(pwd)/$f /gbdb/hg38/encode4/regulation/organAve/$f
-done
-for f in *.minus.bigWig *.plus.bigWig; do
-    [ -f "$f" ] && ln -s $(pwd)/$f /gbdb/hg38/encode4/regulation/organAve/$f
-done
-# Total: 265 symlinks
 
-# Symlinks were renamed to UCSC convention (camelCase, .bw extension):
-#   ave.adipose.H3K27ac.bigWig -> adiposeH3K27ac.bw
-#   adrenal_gland.minus.bigWig -> adrenalGlandMinus.bw
-# The rename_symlinks.py script handles this and updates bigDataUrl in the .ra.
+# Symlinks were created using rename_symlinks.py which maps hub filenames
+# to UCSC convention (camelCase, .bw extension):
+#   ave.adipose.H3K27ac.bigWig -> adiposeH3K27ac.bw  (all-biosamples)
+#   tp.blood.H3K27ac.bigWig -> tpBloodH3K27ac.bw     (tissue-only)
+#   adrenal_gland.minus.bigWig -> adrenalGlandMinus.bw (RNA strand)
+#   tp.blood.plus.bigWig -> tpBloodPlus.bw            (RNA tp strand)
 
 # TF rPeak clusters (from existing ENCODEv4TFrPeaks bed)
 mkdir -p /gbdb/hg38/encode4/regulation/tfRpeak
@@ -57,10 +51,27 @@ ln -s /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks/no_trim.TF_name.rPeaks.bb \
 ln -s /hive/data/genomes/hg38/bed/ENCODEv4TFrPeaks/no_trim.TF_name.decorator.bb \
     /gbdb/hg38/encode4/regulation/tfRpeak/TFrPeakClustersDecorator.bb
 
-# Final symlink counts:
-#   organAve/  265
-#   tfRpeak/     2
-#   Total:     267
+# Symlink summary:
+#   organAve/  363 symlinks (113 tissue-only + 250 all-biosamples/RNA)
+#   tfRpeak/     2 symlinks
+#   Total:     365 symlinks + 5 metadata/JSON files + 1 nose DNase = 371 files
+
+##############################################################################
+# Step 2b: Download tissue-only (tp) organ-averaged files (2026-04-08)
+##############################################################################
+
+# The initial hub had a bug where tissue-only and all-biosamples variants pointed
+# to the same file. The Weng lab fixed this in April 2026 with proper separate
+# tp.{organ}.{Assay}.bigWig files. These were downloaded and symlinked:
+
+cd /hive/users/lrnassar/claude/RM34923
+bash download_tp_files.sh    # downloads 83 tp bigWig files (~733 GB)
+bash create_tp_symlinks.sh   # creates 83 symlinks: tp{Organ}{Assay}.bw
+
+# Also downloaded 1 new file: ave.nose.DNase.bigWig (nose organ added to hub)
+# Removed 1 orphan: lymphoidTissueDNase.bw (hub removed from all-bio group)
+# Renamed 2 old symlinks: boneMarrowTpH3K27ac.bw -> tpBoneMarrowH3K27ac.bw
+#                          boneMarrowTpH3K4me3.bw -> tpBoneMarrowH3K4me3.bw
 
 ##############################################################################
 # Step 3: Validate local files against ENCODE portal
@@ -73,10 +84,9 @@ cd /hive/users/lrnassar/claude/RM34923
 python3 kent/src/hg/makeDb/scripts/encode4regulation/validate_encode_urls.py
 
 # This produces:
-#   encode4_url_mapping.tsv  — maps 6,747 accessions to S3 URLs with md5 validation
+#   encode4_url_mapping.tsv  — maps accessions to S3 URLs with md5 validation
 #   encode4_validation.log   — detailed log of any mismatches
-# The mapping file is used by the bigComposite conversion script (Step 5).
-# All 6,747 S3 URLs verified accessible via bigWigInfo/bigBedInfo (0 failures).
+# All S3 URLs verified accessible via bigWigInfo/bigBedInfo (0 failures).
 
 ##############################################################################
 # Step 4: Generate multiWig trackDb stanzas
@@ -94,17 +104,30 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/generate_multiwig_ra.py \
 #   - TF rPeak track (bigBed 12+ with decorator, 911-factor filterValues)
 #   - Include directives for the 3 bigComposite files
 # The main file is hand-maintained:
-#   kent/src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4.ra (~3,327 lines)
+#   kent/src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4.ra (~3,461 lines)
 
 # multiWig track details:
-#   wgEncodeReg4MarkH3k27ac — full visibility, 5 organs default ON (priority 1.4)
+#   wgEncodeReg4MarkH3k27ac — full visibility (priority 1.4)
 #   wgEncodeReg4Dnase       — hidden (priority 1.1)
 #   wgEncodeReg4Atac        — hidden (priority 1.2)
 #   wgEncodeReg4MarkH3k4me3 — hidden (priority 1.3)
 #   wgEncodeReg4MarkCtcf    — hidden (priority 1.5)
 #   wgEncodeReg4Txn         — hidden (priority 1.6)
 #   wgEncodeReg4TfPeaks     — hidden (priority 1.7)
-# Each multiWig has both tissue-only and all-biosamples variants as subtracks.
+
+# Each multiWig has tissue-only subtracks first, then all-biosamples subtracks.
+# Tissue-only subtracks use tp{Organ}{Assay}.bw gbdb symlinks pointing to
+# tp.{organ}.{Assay}.bigWig files (genuine tissue/primary cell averages).
+# All-biosamples subtracks use {organ}{Assay}.bw symlinks pointing to
+# ave.{organ}.{Assay}.bigWig files (averages including cell lines).
+#
+# Subtrack counts per assay (tissue-only + all-biosamples):
+#   H3K27ac: 17 + 38 = 55
+#   DNase:   24 + 40 = 64
+#   ATAC:     8 + 26 = 34
+#   H3K4me3: 19 + 38 = 57
+#   CTCF:    15 + 36 = 51
+#   RNA:     30 + 72 = 102 (strand pairs: Plus/Minus)
 
 ##############################################################################
 # Step 5: Generate bigComposite (faceted) individual experiment tracks
@@ -132,12 +155,12 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 #   /gbdb/hg38/encode4/regulation/wgEncodeReg4TfChip_metadata.tsv
 #
 # Output .ra files (in kent/src/hg/makeDb/trackDb/human/hg38/):
-#   wgEncodeReg4Epigenetics.ra — 3,199 subtracks (priority 2.0)
-#     Facets: Assay, Organ, Biosample Type, Life Stage
-#   wgEncodeReg4RnaSeq.ra      — 1,046 subtracks (priority 2.1)
+#   wgEncodeReg4Epigenetics.ra — 6,353 subtracks (3,199 signal + 3,154 peak)
+#     Facets: Assay, Organ, Biosample Type, Life Stage, Data Type
+#   wgEncodeReg4RnaSeq.ra      — 1,046 subtracks
 #     Facets: Organ, Biosample Type, Life Stage, Strand
-#   wgEncodeReg4TfChip.ra      — 2,502 subtracks (priority 2.2)
-#     Facets: TF, Organ, Biosample Type, Life Stage
+#   wgEncodeReg4TfChip.ra      — 4,964 subtracks (2,502 peak + 2,462 signal)
+#     Facets: TF, Organ, Biosample Type, Life Stage, Data Type
 #
 # Faceted UI features:
 #   - _Biosample column hidden from facets via underscore prefix (refs #36320)
@@ -148,10 +171,16 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 #     RnaSeq: colored by Organ (organ_colors.json)
 #     TfChip: no facet colors (uses score-based spectrum coloring)
 #
-# Default-ON subtracks (5 per composite):
-#   Epigenetics: untreated K562, one per assay (DNase, ATAC, H3K4me3, H3K27ac, CTCF)
-#   RNA-seq: K562 +/- strand, GM12878 +/- strand, HepG2 + strand
-#   TF ChIP: K562 CTCF, POLR2A, MYC, MAX, EP300
+# Default-ON subtracks (tissue samples per Weng lab request):
+#   Epigenetics (28): brain/heart/liver × 5 assays × signal+peak
+#     Brain: middle frontal area 46, mild cognitive impairment, male 89y (4 assays, no ATAC)
+#     Heart: right atrium auricular region, female 51y (5 assays)
+#     Liver: right lobe, female 53y (5 assays)
+#   RNA-seq (6): brain/heart/liver × Plus+Minus strand
+#     Brain: dorsolateral prefrontal cortex, female 75y
+#     Heart: right atrium auricular region, female 51y
+#     Liver: right lobe, female 53y
+#   TF ChIP (8): brain/heart/liver tissue CTCF + liver POLR2A
 #
 # All subtracks use S3 URLs (encode-public.s3.amazonaws.com) for bigDataUrl.
 
@@ -159,11 +188,37 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 # Step 5c: Track color adjustments
 ##############################################################################
 
-# Several organ colors from the hub had poor contrast against a white background.
-# All colors with brightness > 160 (on the perceived brightness scale) were
-# darkened to a target brightness of 140 while preserving hue. This affects
-# the multiWig subtracks and the bigComposite subtracks. 22 unique colors
-# were adjusted across all .ra files.
+# Organ colors follow the Weng lab canonical color mapping:
+#   https://wiki.wenglab.org/references/color-mappings/
+# 18 colors were darkened for contrast against white browser background while
+# preserving hue (canonical colors designed for dark portal background).
+# 3 organs previously using default gray were given their canonical colors:
+#   urinary bladder: 194,33,39
+# Color mapping wiki linked in Display Conventions of all multiWig HTML pages.
+
+##############################################################################
+# Step 5d: Biosample column cleanup (2026-04-08)
+##############################################################################
+
+# The _Biosample column in the Epigenetics metadata TSV had redundant
+# assay+type suffixes on peak entries (e.g., "Homo sapiens A549 ATAC peak").
+# This information is already in the Assay and Data Type columns.
+# Removed suffixes from 3,154 entries using:
+
+cd /hive/users/lrnassar/claude/RM34923
+python3 -c "
+import re
+with open('/gbdb/hg38/encode4/regulation/wgEncodeReg4Epigenetics_metadata.tsv') as f:
+    lines = f.readlines()
+out = [lines[0]]
+for line in lines[1:]:
+    cols = line.rstrip('\n').split('\t')
+    if len(cols) >= 6:
+        cols[5] = re.sub(r' (ATAC|CTCF|DNase|H3K27ac|H3K4me3) peak$', '', cols[5])
+    out.append('\t'.join(cols) + '\n')
+with open('/gbdb/hg38/encode4/regulation/wgEncodeReg4Epigenetics_metadata.tsv', 'w') as f:
+    f.writelines(out)
+"
 
 ##############################################################################
 # Step 6: Create HTML description pages
@@ -182,23 +237,27 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 #   wgEncodeReg4RnaSeq.html          — Individual RNA-seq composite
 #   wgEncodeReg4TfChip.html          — Individual TF ChIP composite
 #
-# Each layered track HTML includes an organ/tissue availability table
-# from the original hub. All HTMLs include Data Access sections with
-# bigWigToWig/bigBedToBed examples. Production lab credits match the
-# original hub per assay type.
+# Each layered track HTML includes an organ/tissue availability table.
+# All HTMLs include Data Access sections with bigWigToWig/bigBedToBed examples.
+# Production lab credits are assay-specific, matching the upstream hub.
+# ENCODE color mapping wiki linked in Display Conventions sections.
 
 ##############################################################################
-# Step 7: Add related tracks and trackDb include
+# Step 7: Add related tracks, trackDb include, ENCODE3 rename
 ##############################################################################
 
 # Added to kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra:
 #   include wgEncodeReg4.ra alpha
 
 # Added reciprocal entries to relatedTracks.ra:
-#   hg38 wgEncodeReg4 wgEncodeReg ENCODE4 update of ENCODE3 Regulation
-#   hg38 wgEncodeReg wgEncodeReg4 ENCODE4 update of ENCODE3 Regulation
+#   hg38 wgEncodeReg4 wgEncodeReg Previous ENCODE3 Regulation track
+#   hg38 wgEncodeReg wgEncodeReg4 New ENCODE4 Regulation track
 #   hg38 wgEncodeReg4 cCREs Related ENCODE4 cCRE annotations
 #   hg38 cCREs wgEncodeReg4 Related ENCODE4 regulation data
+# Note: track1's "why" text describes track2 (the link destination).
+
+# ENCODE3 renamed to "ENCODE3 Regulation" via alpha release tags:
+#   wgEncodeReg.alpha.ra: shortLabel "ENCODE3 Regulation", snowflake pennant
 
 ##############################################################################
 # Step 8: Release tags (ENCODE3 transition)
@@ -209,6 +268,7 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 #
 # Approach: Duplicate wgEncodeReg.ra into wgEncodeReg.alpha.ra with:
 #   - superTrack on hide (hidden by default)
+#   - shortLabel "ENCODE3 Regulation"
 #   - pennantIcon snowflake.png (deprecation notice)
 #   - Inner includes tagged with release alpha
 # The original wgEncodeReg.ra gets inner includes tagged beta,public.
@@ -240,8 +300,7 @@ make alpha DBS=hg38
 # are now served via S3 URLs. Only the organ-averaged multiWig files
 # (referenced by gbdb symlinks) and hub.txt/HTML docs were preserved.
 #
-# hg38: Deleted 7,598 files (3.6 TB freed), 280 files remaining (2.8 TB)
-# Script: cleanup_local_files.py
+# hg38: Deleted 7,598 files (3.6 TB freed)
 
 ##############################################################################
 # Track hierarchy summary
@@ -250,38 +309,23 @@ make alpha DBS=hg38
 # Regulation group priority order: cCREs (0.8) > wgEncodeReg4 (0.9) > wgEncodeReg (1)
 #
 # wgEncodeReg4 (superTrack, priority 0.9, group=regulation)
-# ├── wgEncodeReg4MarkH3k27ac (multiWig, full, 5 organs ON)    priority 1.4
-# ├── wgEncodeReg4Dnase       (multiWig, hide)                  priority 1.1
-# ├── wgEncodeReg4Atac        (multiWig, hide)                  priority 1.2
-# ├── wgEncodeReg4MarkH3k4me3 (multiWig, hide)                  priority 1.3
-# ├── wgEncodeReg4MarkCtcf    (multiWig, hide)                  priority 1.5
-# ├── wgEncodeReg4Txn         (multiWig, hide)                  priority 1.6
-# ├── wgEncodeReg4TfPeaks     (bigBed 12+ with decorator, hide) priority 1.7
-# ├── wgEncodeReg4Epigenetics (bigComposite faceted, 3,199)     priority 2.0
-# ├── wgEncodeReg4RnaSeq      (bigComposite faceted, 1,046)     priority 2.1
-# └── wgEncodeReg4TfChip      (bigComposite faceted, 2,502)     priority 2.2
+# ├── wgEncodeReg4MarkH3k27ac (multiWig, full)                     priority 1.4
+# ├── wgEncodeReg4Dnase       (multiWig, hide)                     priority 1.1
+# ├── wgEncodeReg4Atac        (multiWig, hide)                     priority 1.2
+# ├── wgEncodeReg4MarkH3k4me3 (multiWig, hide)                     priority 1.3
+# ├── wgEncodeReg4MarkCtcf    (multiWig, hide)                     priority 1.5
+# ├── wgEncodeReg4Txn         (multiWig, hide)                     priority 1.6
+# ├── wgEncodeReg4TfPeaks     (bigBed 12+ with decorator, hide)    priority 1.7
+# ├── wgEncodeReg4Epigenetics (bigComposite faceted, 6,353, 28 ON) priority 2.0
+# ├── wgEncodeReg4RnaSeq      (bigComposite faceted, 1,046, 6 ON)  priority 2.1
+# └── wgEncodeReg4TfChip      (bigComposite faceted, 4,964, 8 ON)  priority 2.2
 
-# gbdb contents (/gbdb/hg38/encode4/regulation/):
-#   organAve/                          — 265 multiWig symlinks (camelCase .bw)
-#   tfRpeak/                           — 2 TF rPeak symlinks (.bb)
-#   wgEncodeReg4Epigenetics_metadata.tsv
-#   wgEncodeReg4RnaSeq_metadata.tsv
-#   wgEncodeReg4TfChip_metadata.tsv
-#   epi_colors.json                    — Assay facet colors for Epigenetics
-#   organ_colors.json                  — Organ facet colors for RNA-seq
+# Disk usage (/gbdb/hg38/encode4/regulation/):
+#   organAve tp (tissue-only):    1.8 TB (113 files)
+#   organAve ave (all-bio + RNA): 2.6 TB (250 files)
+#   tfRpeak:                      3 GB (2 files)
+#   metadata + JSON:              3 MB (5 files)
+#   nose DNase:                   680 MB (1 file)
+#   Total:                        4.4 TB (371 files)
 
-##############################################################################
-# Known upstream hub issues (reported to Weng lab)
-##############################################################################
-
-# Report at:
-#   https://hgwdev.gi.ucsc.edu/~lrnassar/temp/encode4_regulation_hub_issues.md
-#
-# 1. Duplicate bigDataUrl — tissue-only and all-biosamples variants share
-#    same file for 5 non-RNA assays (83 pairs, 166 subtracks)
-# 2. tp. prefix inconsistency — RNA correctly uses tp. prefix; other assays
-#    don't, causing issue 1
-# 3. "paraythroid" typo — should be "parathyroid"; affects 3 assays,
-#    3 filenames, 21 hub lines
-# 4. Bad track name: ATAC_ENCFF128Muscle (should be ATAC_ENCFF128OID) —
-#    handled by convert_to_bigcomposite.py fallback logic
+# File list: /hive/users/lrnassar/claude/RM34923/gbdb_file_list.txt

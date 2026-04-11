@@ -34,44 +34,12 @@ across the 1,019 samples:</p>
 <ul>
 <li><span style="color: #0000B4;">Dark blue</span> &ndash; nearly monomorphic (het &lt; 0.1)</li>
 <li><span style="color: #4682E6;">Medium blue</span> &ndash; low diversity (het 0.1&ndash;0.3)</li>
-<li><span style="color: #B482C8;">Light purple</span> &ndash; moderate diversity (het 0.3&ndash;0.5)</li>
+<li><span style="color: #B482C8;">Light purple</span> &ndash;
+  moderate diversity (het 0.3&ndash;0.5)</li>
 <li><span style="color: #E66450;">Salmon</span> &ndash; high diversity (het 0.5&ndash;0.7)</li>
 <li><span style="color: #B40000;">Dark red</span> &ndash; very high diversity (het &ge; 0.7)</li>
 <li><span style="color: #808080;">Gray</span> &ndash; no allele frequency data available</li>
 </ul>
-
-<h2>Data Access</h2>
-<p>
-The raw data can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-The data can be accessed from scripts through our
-<a href="https://api.genome.ucsc.edu">API</a>, the track name is <i>viennaVntr</i>.
-</p>
-
-<p>
-For automated download and analysis, the genome annotation is stored in a bigBed
-file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/"
-target="_blank">our download server</a>.
-The file for this track is called <tt>viennaVntr.bb</tt>.
-Individual regions or the whole genome annotation can be obtained using our tool
-<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
-precompiled binary for your system. Instructions for downloading source code and
-binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/viennaVntr.bb
--chrom=chr21 -start=0 -end=100000000 stdout</tt>
-</p>
-
-<p>
-The original data (multisample VCF and summary statistics) can be downloaded from
-<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/vamos-vntr-genotyping/"
-target="_blank">the 1000 Genomes FTP server</a>.
-The VNTR site list used for genotyping is available from
-<a href="https://zenodo.org/records/13263615" target="_blank">Zenodo</a>.
-</p>
 
 <h2>Methods</h2>
 <p>
@@ -92,6 +60,39 @@ target="_blank">custom Python script</a>.
 Loci with coordinates exceeding chromosome boundaries were excluded.
 </p>
 
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>.
+The data can be accessed from scripts through our
+<a href="https://api.genome.ucsc.edu">API</a>, the track name is <i>viennaVntr</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/"
+target="_blank">our download server</a>.
+The file for this track is called <tt>viennaVntr.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/strVar/viennaVntr.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original data (multisample VCF and summary statistics) can be downloaded from
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/vamos-vntr-genotyping/"
+target="_blank">the 1000 Genomes FTP server</a>.
+The VNTR site list used for genotyping is available from
+<a href="https://zenodo.org/records/13263615" target="_blank">Zenodo</a>.
+</p>
+
 <h2>Credits</h2>
 <p>
 Thanks to the 1000 Genomes ONT Vienna consortium and the Marschall Lab at
@@ -103,6 +104,7 @@ Heinrich Heine University D&uuml;sseldorf for making this data publicly availabl
 De Coster W, Condon DE, De Baets G, Tsui A, Saeed F, Harerimana J, Amiraghdam F, Yaari R,
 De Vos L, Mahfouz A <em>et al</em>.
 <a href="https://doi.org/10.1101/2024.12.20.629807" target="_blank">
-Sequencing and variant calling of 1019 samples from the 1000 Genomes Project using Oxford Nanopore Technology</a>.
+Sequencing and variant calling of 1019 samples from the
+1000 Genomes Project using Oxford Nanopore Technology</a>.
 <em>bioRxiv</em>. 2024 Dec 23;.
 </p>

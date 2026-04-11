@@ -6046,6 +6046,9 @@ puts("</DIV>\n\n");
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
 /* color picker for overriding track color */
 {
+if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
+    return;
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s.colorOverride", name);
 
@@ -6055,12 +6058,19 @@ safef(defaultColor, sizeof(defaultColor), "#%02x%02x%02x", tdb->colorR, tdb->col
 char *rawCartValue = cartOptionalString(cart, varName);
 boolean hasOverride = (rawCartValue != NULL && rawCartValue[0] != '\0');
 char *colorValue = hasOverride ? rawCartValue : defaultColor;
-boolean hasItemRgb = !trackDbSettingOff(tdb, "itemRgb");
 
-printf("&nbsp;<div id='colorPicker_%s'>", name);
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s', '%s', %s, %s);",
-        varName, name, name, colorValue, defaultColor, hasItemRgb ? "true" : "false", hasOverride ? "true" : "false");
-puts("</div>\n\n");
+char checkVar[1024];
+safef(checkVar, sizeof(checkVar), "%s.colorOverrideOn", name);
+boolean isOn = cartUsualBoolean(cart, checkVar, hasOverride);
+
+printf("<br><b>Override track color:</b> ");
+cgiMakeCheckBox(checkVar, isOn);
+printf(" <input type='color' name='%s' id='%s' value='%s' />\n",
+    varName, varName, colorValue);
+jsInlineF("document.getElementById('%s').addEventListener('input', function() {"
+    "document.querySelector('input[type=checkbox][name=\"%s\"]').checked=true;"
+    "});\n", varName, checkVar);
+puts("\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)
