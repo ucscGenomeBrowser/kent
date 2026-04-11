@@ -12,6 +12,7 @@ type bed 3
 metaDataUrl /gbdb/hg38/mb2/mb2_metadata.tsv
 colorSettingsUrl /gbdb/hg38/mb2/mb2_color.json
 dataTypes hmr levels reads
+defaultSortField BSrate
 maxCheckboxes 20
 primaryKey accession
 shortLabel MethBase2
@@ -20,8 +21,6 @@ noInherit on
 compositeTrack faceted
 parent dnaMethylationAlpha
 html mb2
-#metaDataUrl https://hgwdev.gi.ucsc.edu/~jcasper/hubs/mb2/mb2_metadata.tsv
-#colorSettingsUrl https://hgwdev.gi.ucsc.edu/~jcasper/hubs/mb2/mb2_color.json
 
 track mb2_SRX172462_levels
 type bigWig
