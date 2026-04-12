@@ -13,3 +13,4 @@ AI assistant guidelines for modifying the kent codebase.
 - Preserve existing patterns even when a "cleaner" design is conceivable.
 - After building, run binaries from `~/bin/x86_64/`, not bare command name (system PATH resolves to production binaries).
 - Never use inline event handlers (`onclick`, `onchange`, `oninput`) in HTML output — CSP blocks them. Use `jsInlineF()` with `addEventListener` instead, which emits JavaScript inside a nonce-tagged script block.
+- Deploy CSS and static files by running `make` in the appropriate `htdocs/` subdirectory (e.g., `cd src/hg/htdocs/style && make`). Never copy files directly to `/usr/local/apache/`.
