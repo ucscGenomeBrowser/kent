@@ -24,6 +24,18 @@ body.training {
         font-size: 80%;
 }
 
+#chromAliases {
+        display: inline;
+        margin-left: 0.5em;
+        font-size: 80%;
+        cursor: help;
+}
+
+#chromAliases a {
+        text-decoration: none;
+        color: #666;
+}
+
 a:link {
         color: #121E9A; 
         text-decoration: underline
