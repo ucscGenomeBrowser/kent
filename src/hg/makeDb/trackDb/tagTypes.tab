@@ -397,10 +397,14 @@ sGroup_African wigMaf bigMaf
 sGroup_Afr_Carib_Barabdos wigMaf
 sGroup_African_SW_USA wigMaf
 sGroup_American wigMaf bigMaf
+sGroup_Amphibians wigMaf bigMaf
 sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
+sGroup_Birds_Other wigMaf bigMaf
+sGroup_Birds_Landbirds wigMaf bigMaf
+sGroup_Birds_Waterbirds wigMaf bigMaf
 sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
@@ -424,6 +428,8 @@ sGroup_Esan_Nigeria wigMaf
 sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
+sGroup_Fishes_Other wigMaf bigMaf
+sGroup_Fishes_Ray_Finned wigMaf bigMaf
 sGroup_Gabon wigMaf
 sGroup_Gambian wigMaf
 sGroup_Glires wigMaf bigMaf
@@ -432,10 +438,14 @@ sGroup_Han_SoChina wigMaf
 sGroup_hiv wigMafProt wigMaf
 sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
+sGroup_Invertebrates wigMaf bigMaf
 sGroup_Laurasiatheria wigMaf bigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf bigMaf
+sGroup_Mammals_Euarchontoglires wigMaf bigMaf
+sGroup_Mammals_Laurasiatheria wigMaf bigMaf
+sGroup_Mammals_Other wigMaf bigMaf
 sGroup_Marburg_1987 wigMaf
 sGroup_Mende_Sierra_Leone wigMaf
 sGroup_Metatheria bigMaf
@@ -472,7 +482,7 @@ sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
 sGroup_Puerto_Rico wigMaf
 sGroup_Punjabo_Pakis wigMaf
-sGroup_Reptiles wigMaf
+sGroup_Reptiles wigMaf bigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
 sGroup_Rodents wigMaf bigMaf
