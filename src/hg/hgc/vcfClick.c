@@ -277,8 +277,22 @@ for (i = 0; i < metaColCount; i++)
     colNames[i] = cloneString(allCols[i+1]);
 // Read data lines
 struct hash *hash = hashNew(0);
+boolean warnedExtra = FALSE, warnedFewer = FALSE;
 while (lineFileNext(lf, &line, &lineSize))
     {
+    int actualFieldCount = countChars(line, '\t') + 1;
+    if (!warnedExtra && actualFieldCount > colCount)
+        {
+        warn("sampleMetadataFile %s line %d: data row has %d columns but header defines only %d",
+            fileName, lf->lineIx, actualFieldCount, colCount);
+        warnedExtra = TRUE;
+        }
+    if (!warnedFewer && actualFieldCount < colCount)
+        {
+        warn("sampleMetadataFile %s line %d: data row has only %d columns but header defines %d",
+            fileName, lf->lineIx, actualFieldCount, colCount);
+        warnedFewer = TRUE;
+        }
     char *row[colCount];
     int fieldCount = chopByChar(line, '\t', row, colCount);
     if (fieldCount < 2)

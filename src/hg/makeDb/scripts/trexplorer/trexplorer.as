@@ -9,7 +9,7 @@ table trexplorer
     char[1] strand;            "Strand"
     uint thickStart;           "Thick start (same as chromStart)"
     uint thickEnd;             "Thick end (same as chromEnd)"
-    uint reserved;             "Item color RGB by motif size"
+    uint reserved;             "Item color RGB|by heterozygosity: light gray (het=0), dark blue (<0.1), medium blue (0.1-0.3), light purple (0.3-0.5), salmon (0.5-0.7), dark red (>=0.7), medium gray (no data)"
     lstring locusId;           "Unique locus identifier"
     lstring referenceMotif;    "Full repeat motif in reference orientation"
     lstring canonicalMotif;    "Canonical form of the repeat motif"

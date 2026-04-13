@@ -8842,18 +8842,42 @@ if (cfgOptionBooleanDefault("showIgv", FALSE))
 
 }
 
-#ifdef NOTNOW
-static void printAliases(char *name)
-/* Print out the aliases for this sequence. */
+static void printAliases(char *nativeName, char *displayName)
+/* Print out the alternative names for this sequence next to the position. */
 {
-struct slName *names = chromAliasFindAliases(name);
+struct slName *aliases = chromAliasFindAliases(nativeName);
+if (aliases == NULL)
+    return;
 
-printf("<div id='aliases'><a title='");
-for(;names; names = names->next)
-    printf("%s;",names->name);
-printf("'>Aliases</a></div>");
+slSort(&aliases, slNameCmp);
+slUniqify(&aliases, slNameCmp, slNameFree);
+
+// Build comma-separated list of aliases, skipping the display name and native name
+struct dyString *dy = dyStringNew(256);
+struct slName *a;
+for (a = aliases; a != NULL; a = a->next)
+    {
+    if (isEmpty(a->name))
+        continue;
+    if (sameString(a->name, displayName) || sameString(a->name, nativeName))
+        continue;
+    if (dy->stringSize > 0)
+        dyStringAppend(dy, ", ");
+    dyStringAppend(dy, a->name);
+    }
+
+if (dy->stringSize == 0)
+    {
+    dyStringFree(&dy);
+    return;
+    }
+
+char *encoded = htmlEncode(dy->string);
+printf("<span id='chromAliases' title='Also known as: %s'>"
+       "<a>&#9432; Aliases</a></span>", encoded);
+freeMem(encoded);
+dyStringFree(&dy);
 }
-#endif
 
 
 unsigned getParaLoadTimeout()
@@ -9651,7 +9675,8 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
-        // printAliases(displayChromName);
+        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
+            printAliases(chromName, virtChromName);
 
         printPatchNote();
 

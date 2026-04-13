@@ -9,7 +9,7 @@ table viennaVntr
     char[1] strand;        "Strand"
     uint thickStart;       "Thick start (same as chromStart)"
     uint thickEnd;         "Thick end (same as chromEnd)"
-    uint reserved;         "Item color RGB|by average repeat unit length"
+    uint reserved;         "Item color RGB|by heterozygosity: light gray (het=0), dark blue (<0.1), medium blue (0.1-0.3), light purple (0.3-0.5), salmon (0.5-0.7), dark red (>=0.7), medium gray (no data)"
     uint numHaps;          "Haplotypes genotyped|Number of haplotypes where allele has been genotyped"
     float ruLenAvg;        "Avg motif length|Average length of the repeat unit in bp"
     uint numUniqueVntrs;   "Unique alleles|Number of unique VNTR alleles found at the site"

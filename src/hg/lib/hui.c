@@ -6065,11 +6065,30 @@ boolean isOn = cartUsualBoolean(cart, checkVar, hasOverride);
 
 printf("<br><b>Override track color:</b> ");
 cgiMakeCheckBox(checkVar, isOn);
-printf(" <input type='color' name='%s' id='%s' value='%s' />\n",
+printf(" <input type='text' name='%s' id='%s_text' value='%s' size='8' />",
     varName, varName, colorValue);
-jsInlineF("document.getElementById('%s').addEventListener('input', function() {"
-    "document.querySelector('input[type=checkbox][name=\"%s\"]').checked=true;"
-    "});\n", varName, checkVar);
+printf("&nbsp;<input id='%s_picker' />\n", varName);
+jsInlineF(
+    "(function() {\n"
+    "  var textEl = document.getElementById('%s_text');\n"
+    "  var pickerEl = document.getElementById('%s_picker');\n"
+    "  var checkEl = document.querySelector('input[type=checkbox][name=\"%s\"]');\n"
+    "  $(pickerEl).spectrum({\n"
+    "    color: textEl.value,\n"
+    "    showPalette: true,\n"
+    "    showSelectionPalette: true,\n"
+    "    showInitial:true,\n"
+    "    showInput: true,\n"
+    "    preferredFormat: 'hex',\n"
+    "    hideAfterPaletteSelect: true,\n"
+    "    change: function(color) { textEl.value = color.toHexString(); checkEl.checked = true; }\n"
+    "  });\n"
+    "  textEl.addEventListener('change', function() {\n"
+    "    $(pickerEl).spectrum('set', textEl.value);\n"
+    "    checkEl.checked = true;\n"
+    "  });\n"
+    "})();\n",
+    varName, varName, checkVar);
 puts("\n");
 }
 

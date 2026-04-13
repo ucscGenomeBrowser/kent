@@ -656,3 +656,20 @@ dragAndDrop on
     lfPslTable cloneEndsBadPsl
     parent cloneEndUcsc off
 
+track bacRearray32k
+parent cloneEndSuper on
+subGroups source=chori
+shortLabel BCGSC 32k rearray
+longLabel BCGSC Human BAC Rearray (32k minimal tiling set, mostly RP11 and CTD)
+type bigBed 5
+bigDataUrl /gbdb/hg38/bbi/cloneEnd/bacRearray32k.bb
+color 0,60,120
+priority 27
+visibility pack
+
+searchTable bacRearray32k
+searchType bigBed
+searchMethod prefix
+searchPriority 50
+termRegex (CTD|RP11|RP13)-([0-9A-Z])+
+

@@ -20,13 +20,16 @@ HET_BINS = [
     (0.7, "230,100,80"),    # het 0.5-0.7: salmon (high diversity)
     (999, "180,0,0"),       # het >= 0.7: dark red (very high diversity)
 ]
-NO_DATA_COLOR = "128,128,128"  # gray when no allele freq data
+NO_DATA_COLOR = "128,128,128"       # medium gray when no allele freq data
+MONOMORPHIC_COLOR = "200,200,200"   # light gray when het == 0 (fixed allele)
 
 
 def het_to_color(het):
     """Map heterozygosity value to an RGB color string."""
     if het < 0:
         return NO_DATA_COLOR
+    if het == 0:
+        return MONOMORPHIC_COLOR
     for threshold, color in HET_BINS:
         if het < threshold:
             return color

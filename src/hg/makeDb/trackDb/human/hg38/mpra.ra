@@ -1,7 +1,7 @@
 track mpra
 shortLabel MPRAs
 longLabel Massively Parallel Reporter Assays
-group phenDis
+group regulation
 type bed 4
 visibility hide
 superTrack on
