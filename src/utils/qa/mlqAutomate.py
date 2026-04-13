@@ -257,7 +257,7 @@ def get_current_mlm():
     return None
 
 
-@retry(max_attempts=3, delay=2, exceptions=(anthropic.APIError,))
+@retry(max_attempts=5, delay=5, backoff=3, exceptions=(anthropic.APIError,))
 def analyze_email_with_claude(subject, body, sender, group_email=None):
     """
     Use Claude to analyze an email in a single call.
@@ -341,7 +341,7 @@ Important:
     }
 
 
-@retry(max_attempts=3, delay=2, exceptions=(anthropic.APIError,))
+@retry(max_attempts=5, delay=5, backoff=3, exceptions=(anthropic.APIError,))
 def batch_check_spam_with_claude(messages):
     """
     Use Claude to determine spam status for multiple emails in one call.
@@ -1656,8 +1656,13 @@ def create_tickets_for_approved(approved_messages):
                          attachments=uploaded_attachments)
         else:
             # Analyze with Claude for category and draft response
-            analysis = analyze_email_with_claude(subject, body, sender,
-                                                group_email=group_email)
+            try:
+                analysis = analyze_email_with_claude(subject, body, sender,
+                                                    group_email=group_email)
+            except anthropic.APIError as e:
+                logger.error(f"Anthropic API overloaded after retries, skipping email "
+                             f"'{subject[:50]}'. Will be retried next run. Error: {e}")
+                continue
 
             logger.info(f"  Category: {analysis['category']}")
 
@@ -1696,7 +1701,12 @@ def process_moderated_lists():
 
     # Batch spam check all pending messages in one API call
     logger.info(f"Batch checking {len(all_pending)} message(s) for spam")
-    spam_results = batch_check_spam_with_claude(all_pending)
+    try:
+        spam_results = batch_check_spam_with_claude(all_pending)
+    except anthropic.APIError as e:
+        logger.error(f"Anthropic API overloaded after retries, skipping spam check this run. "
+                     f"Pending messages will be retried in the next run. Error: {e}")
+        return
 
     # Process results and collect approved messages
     approved_messages = []
@@ -1822,12 +1832,17 @@ def process_emails():
                     first_update = False
         else:
             # Analyze email with Claude (single call for spam, category, draft)
-            analysis = analyze_email_with_claude(
-                first_email['subject'],
-                first_email['body'],
-                first_email['from'],
-                group_email=thread['group']
-            )
+            try:
+                analysis = analyze_email_with_claude(
+                    first_email['subject'],
+                    first_email['body'],
+                    first_email['from'],
+                    group_email=thread['group']
+                )
+            except anthropic.APIError as e:
+                logger.error(f"Anthropic API overloaded after retries, skipping email "
+                             f"'{first_email['subject'][:50]}'. Will be retried next run. Error: {e}")
+                continue
 
             if analysis['is_spam']:
                 logger.info(f"Skipping spam: {first_email['subject'][:50]}")
