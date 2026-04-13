@@ -263,6 +263,28 @@ make alpha DBS=mm10
 # Track hierarchy summary
 ##############################################################################
 
+##############################################################################
+# Step 9: Default sort by experiment to group peak/signal pairs (2026-04-13)
+##############################################################################
+
+# The Epigenetics and TF ChIP bigComposite tracks each contain both peak and
+# signal subtracks for the same experiments. To group these pairs adjacent in
+# the configure page, added an _Experiment column to the metadata TSVs
+# containing the ENCSR experiment accession (extracted from shortLabel in the
+# .ra stanzas). The underscore prefix hides it from facet filters.
+# Added defaultSortField _Experiment to the 2 composite stanzas.
+# Also fixed pre-existing CRLF line endings in the Epigenetics and TF ChIP
+# metadata TSVs.
+#
+# Composites updated:
+#   encode4RegEpigenetics: 589 peak/signal pairs, 0 singletons
+#   encode4RegTfChip:      167 peak/signal pairs, 0 singletons
+# RNA-seq not changed (signal only, no peak/signal pairing).
+
+##############################################################################
+# Track hierarchy and disk usage summary
+##############################################################################
+
 # Regulation group priority order: cCREs (0.4) > encode4Reg (0.5) > tabulaMuris (1)
 #
 # encode4Reg (superTrack, priority 0.5, group=regulation)
