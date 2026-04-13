@@ -2549,6 +2549,26 @@ static char *queryFormatRegexForIdField =
     "^select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ "
     "from %s where ([[:alnum:]]+) (r?like|=) ['\"]?.*%s.*['\"]?$";
 regmatch_t substrs[3];
+
+// Build an id -> xrefTerm lookup so result rows can be labeled with the
+// human-readable xref term (e.g. gene symbol) instead of the raw id.
+struct hash *xrefHash = NULL;
+if (xrefList)
+    {
+    struct slPair *p;
+    for (p = xrefList; p != NULL; p = p->next)
+        {
+        if (isNotEmpty(p->name) && isNotEmpty((char *)p->val))
+            {
+            if (xrefHash == NULL)
+                xrefHash = hashNew(0);
+            // first xref term wins if multiple xrefs map to the same id
+            if (!hashLookup(xrefHash, (char *)p->val))
+                hashAdd(xrefHash, (char *)p->val, p->name);
+            }
+        }
+    }
+
 for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next )
     {
     struct dyString *query = sqlDyStringCreate(hfs->query, tPtr->name, term);
@@ -2598,9 +2618,21 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next )
         pos->chrom = cloneString(row[0]);
         pos->chromStart = atoi(row[1]);
         pos->chromEnd = atoi(row[2]);
-        safef(buf, sizeof(buf), "%s%s",
-              termPrefix ? termPrefix : "", row[3]);
-        pos->name = cloneString(buf);
+        char *xrefTerm = xrefHash ? hashFindVal(xrefHash, row[3]) : NULL;
+        if (isNotEmpty(xrefTerm))
+            {
+            truncatef(buf, sizeof(buf), "%s", xrefTerm);
+            pos->name = cloneString(buf);
+            safef(buf, sizeof(buf), "(%s%s)",
+                  termPrefix ? termPrefix : "", row[3]);
+            pos->description = cloneString(buf);
+            }
+        else
+            {
+            safef(buf, sizeof(buf), "%s%s",
+                  termPrefix ? termPrefix : "", row[3]);
+            pos->name = cloneString(buf);
+            }
         pos->browserName = cloneString(row[3]);
         if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
             {
@@ -2628,6 +2660,7 @@ if (table != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slFreeList(&tableList);
+hashFree(&xrefHash);
 if (measureTiming && table)
     table->searchTime += clock1000() - startTime;
 return(found);

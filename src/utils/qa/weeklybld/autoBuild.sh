@@ -395,7 +395,8 @@ do_final() {
     dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
         local dockerlog="$LOGDIR/v${BRANCHNN}.docker-testing.log"
-        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest create genomebrowser/server:\${stage} --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
+        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
             log "WARNING: Docker testing build had issues. See $dockerlog (non-fatal, continuing)"
         }
         log "Docker testing build complete (or skipped on error)."
@@ -405,6 +406,47 @@ do_final() {
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
+}
+
+##############################################################################
+# Generate markdown release notes from the versions page
+##############################################################################
+
+generate_release_markdown() {
+    local ver="$1"
+    local outdir="$WEEKLYBLD/markdownReleaseNotes"
+    local outfile="$outdir/v${ver}_markdown.txt"
+    local url="https://genecats.gi.ucsc.edu/builds/versions-all/v${ver}.html"
+
+    mkdir -p "$outdir"
+
+    log "Generating markdown release notes for v${ver}..."
+
+    local html
+    html=$(curl -s "$url") || {
+        log "WARNING: Could not fetch $url - skipping markdown generation"
+        return 0
+    }
+
+    if [[ -z "$html" ]]; then
+        log "WARNING: Empty response from $url - skipping markdown generation"
+        return 0
+    fi
+
+    # Extract code changes <li> items, strip HTML tags, redmine links, and author names
+    echo "$html" \
+        | sed -n '/<H2>Code changes:<\/H2>/,/<H2>/p' \
+        | grep '<li>' \
+        | sed 's|<li>||g; s|</li>||g' \
+        | sed 's|<a [^>]*>[^<]*</a>||g' \
+        | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
+        | sed 's|\. [A-Z][a-z]*$||' \
+        | sed 's|[[:space:]]*$||' \
+        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed 's|^|- |' \
+        > "$outfile"
+
+    log "Markdown release notes written to $outfile"
 }
 
 ##############################################################################
@@ -510,7 +552,8 @@ do_wrapup() {
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
         local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest create genomebrowser/server:\${stage} --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest create genomebrowser/server:latest --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
+        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
             log "WARNING: Docker release build had issues. See $dockerlog (non-fatal)"
         }
         log "Docker release build complete."
@@ -518,11 +561,17 @@ do_wrapup() {
         log "WARNING: Docker directory not found - skipping Docker release build"
     fi
 
+    # Step 8: Generate markdown release notes for GitHub
+    if ! $DRY_RUN; then
+        generate_release_markdown "$BRANCHNN"
+    fi
+
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
     log "  - Create GitHub release at https://github.com/ucscGenomeBrowser/kent/releases/new"
-    log "  - Wait 1 day for nightly rsync, then verify hgdownload"
+    log "    Release notes: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
     log "  - Send mirror announcement email to genome-mirror@soe.ucsc.edu"
 }
 

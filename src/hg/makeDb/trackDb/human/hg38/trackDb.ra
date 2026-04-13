@@ -934,3 +934,5 @@ include mb2.ra alpha
 
 ### initial testing of HPRC chain tracks
 include hprcV2.trackDb.txt alpha
+
+include vgp577way.trackDb.ra alpha
