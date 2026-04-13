@@ -440,10 +440,10 @@ generate_release_markdown() {
         | sed 's|<li>||g; s|</li>||g' \
         | sed 's|<a [^>]*>[^<]*</a>||g' \
         | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
-        | sed 's| \. [A-Z][a-z]*$||' \
+        | sed 's|\. [A-Z][a-z]*$||' \
         | sed 's|[[:space:]]*$||' \
-        | sed 's|^|<li>|; s|$|</li>|' \
-        | sed '1s|^|<ul>\n|; $s|$|\n</ul>|' \
+        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed 's|^|- |' \
         > "$outfile"
 
     log "Markdown release notes written to $outfile"
