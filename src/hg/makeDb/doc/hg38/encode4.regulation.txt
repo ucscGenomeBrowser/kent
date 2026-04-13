@@ -303,7 +303,24 @@ make alpha DBS=hg38
 # hg38: Deleted 7,598 files (3.6 TB freed)
 
 ##############################################################################
-# Track hierarchy summary
+# Step 10: Default sort by experiment to group peak/signal pairs (2026-04-13)
+##############################################################################
+
+# The Epigenetics and TF ChIP bigComposite tracks each contain both peak and
+# signal subtracks for the same experiments. To group these pairs adjacent in
+# the configure page, added an _Experiment column to the metadata TSVs
+# containing the ENCSR experiment accession (extracted from shortLabel in the
+# .ra stanzas). The underscore prefix hides it from facet filters.
+# Added defaultSortField _Experiment to the 2 composite stanzas.
+# Also fixed pre-existing CRLF line endings in the Epigenetics metadata TSV.
+#
+# Composites updated:
+#   wgEncodeReg4Epigenetics: 3,152 peak/signal pairs + 49 singletons
+#   wgEncodeReg4TfChip:      2,461 peak/signal pairs + 42 singletons
+# RNA-seq not changed (signal only, no peak/signal pairing).
+
+##############################################################################
+# Track hierarchy and disk usage summary
 ##############################################################################
 
 # Regulation group priority order: cCREs (0.8) > wgEncodeReg4 (0.9) > wgEncodeReg (1)
