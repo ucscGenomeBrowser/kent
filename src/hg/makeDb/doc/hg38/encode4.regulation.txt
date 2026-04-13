@@ -192,7 +192,7 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/convert_to_bigcomposite.py
 #   https://wiki.wenglab.org/references/color-mappings/
 # 18 colors were darkened for contrast against white browser background while
 # preserving hue (canonical colors designed for dark portal background).
-# 3 organs previously using default gray were given their canonical colors:
+# 1 organ previously using default gray was given its canonical color:
 #   urinary bladder: 194,33,39
 # Color mapping wiki linked in Display Conventions of all multiWig HTML pages.
 
