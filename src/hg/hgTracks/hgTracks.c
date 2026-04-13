@@ -8849,6 +8849,9 @@ struct slName *aliases = chromAliasFindAliases(nativeName);
 if (aliases == NULL)
     return;
 
+slSort(&aliases, slNameCmp);
+slUniqify(&aliases, slNameCmp, slNameFree);
+
 // Build comma-separated list of aliases, skipping the display name and native name
 struct dyString *dy = dyStringNew(256);
 struct slName *a;
@@ -8869,8 +8872,10 @@ if (dy->stringSize == 0)
     return;
     }
 
+char *encoded = htmlEncode(dy->string);
 printf("<span id='chromAliases' title='Also known as: %s'>"
-       "<a>&#9432; Aliases</a></span>", dy->string);
+       "<a>&#9432; Aliases</a></span>", encoded);
+freeMem(encoded);
 dyStringFree(&dy);
 }
 
