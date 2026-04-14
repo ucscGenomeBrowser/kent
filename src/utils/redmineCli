@@ -9,6 +9,8 @@ Usage:
     redmineCli create --subject "Bug report" --description "Details here"
     redmineCli comment 33571 --message "Adding a note"
     redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
+    redmineCli update 33571 --release-log-url "../cgi-bin/hgTrackUi?db=hg38&g=myTrack"
+    redmineCli update 33571 --custom-field 46="some value"
     redmineCli attach 33571 screenshot.png --note "See attached"
     redmineCli relate 10316 15336 30368       # relate tickets to each other
     redmineCli watch 37339 lou braney         # add watchers to a ticket
@@ -102,6 +104,14 @@ STATUS_IDS = {
 CF_CATEGORY = 28
 CF_EMAIL = 40
 CF_MLM = 9
+
+# Track ticket custom fields
+CF_RELEASE_LOG_TEXT = 48
+CF_RELEASE_LOG_URL = 46
+CF_RELEASED_TO_RR = 47
+CF_FILE_LIST = 43
+CF_TABLE_LIST = 44
+CF_ASSEMBLIES = 2
 
 
 # Name -> Redmine user ID mapping (short names and full names)
@@ -604,6 +614,25 @@ def cmd_update(args):
         custom_fields.append({"id": CF_CATEGORY, "value": args.category})
     if args.mlm is not None:
         custom_fields.append({"id": CF_MLM, "value": args.mlm})
+    if args.release_log_text is not None:
+        custom_fields.append({"id": CF_RELEASE_LOG_TEXT, "value": args.release_log_text})
+    if args.release_log_url is not None:
+        custom_fields.append({"id": CF_RELEASE_LOG_URL, "value": args.release_log_url})
+    if args.released_to_rr is not None:
+        custom_fields.append({"id": CF_RELEASED_TO_RR, "value": args.released_to_rr})
+    if args.file_list is not None:
+        custom_fields.append({"id": CF_FILE_LIST, "value": args.file_list})
+    if args.table_list is not None:
+        custom_fields.append({"id": CF_TABLE_LIST, "value": args.table_list})
+    if args.assemblies is not None:
+        custom_fields.append({"id": CF_ASSEMBLIES, "value": args.assemblies})
+    for cf_spec in (args.custom_field or []):
+        if "=" not in cf_spec:
+            sys.exit(f"Error: --custom-field must be ID=VALUE, got: {cf_spec}")
+        cf_id, cf_val = cf_spec.split("=", 1)
+        if not cf_id.isdigit():
+            sys.exit(f"Error: custom field ID must be numeric, got: {cf_id}")
+        custom_fields.append({"id": int(cf_id), "value": cf_val})
     if custom_fields:
         issue_data["custom_fields"] = custom_fields
 
@@ -614,7 +643,9 @@ def cmd_update(args):
     if not issue_data:
         sys.exit("Error: no fields to update. Provide at least one of: "
                  "--status, --assigned-to, --priority, --subject, "
-                 "--category, --mlm, --note")
+                 "--category, --mlm, --release-log-text, --release-log-url, "
+                 "--released-to-rr, --file-list, --table-list, --assemblies, "
+                 "--custom-field, --note")
 
     data = {"issue": issue_data}
     api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
@@ -846,6 +877,21 @@ def build_parser():
     p_update.add_argument("--subject", help="New subject")
     p_update.add_argument("--category", help="MLQ Category")
     p_update.add_argument("--mlm", help="MLM name")
+    p_update.add_argument("--release-log-text", dest="release_log_text",
+                          help="Release Log Text (custom field)")
+    p_update.add_argument("--release-log-url", dest="release_log_url",
+                          help="Release Log URL (custom field)")
+    p_update.add_argument("--released-to-rr", dest="released_to_rr",
+                          help="Released to RR (custom field, 0 or 1)")
+    p_update.add_argument("--file-list", dest="file_list",
+                          help="File List (custom field)")
+    p_update.add_argument("--table-list", dest="table_list",
+                          help="Table List (custom field)")
+    p_update.add_argument("--assemblies",
+                          help="Assemblies (custom field)")
+    p_update.add_argument("--custom-field", dest="custom_field",
+                          action="append", metavar="ID=VALUE",
+                          help="Set arbitrary custom field by ID (repeatable)")
     p_update.add_argument("--note", help="Comment to include with update")
     p_update.add_argument("--note-file", dest="note_file",
                           help="Read note from file (- for stdin)")

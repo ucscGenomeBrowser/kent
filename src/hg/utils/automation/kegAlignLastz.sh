@@ -121,6 +121,20 @@ function orgName() {
   printf "%s" "${oName}"
 }
 
+function faGzUrl() {
+  export asmName=$1
+  case $asmName in
+     GC[AF]_*)
+       gcxPath=$(gcPath $asmName)
+       id=$(asmId $asmName)
+       printf "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s.fa.gz" "${gcxPath}" "${id}" "${id}"
+       ;;
+     *)
+       printf "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.fa.gz" "${asmName}" "${asmName}"
+       ;;
+  esac
+}
+
 function orgDate() {
   export asmName=$1
   case $asmName in
@@ -312,6 +326,8 @@ export tAsmSize="$(asmSize $target)"
 export qAsmSize="$(asmSize $query)"
 export tSequenceCount="$(seqCount $target)"
 export qSequenceCount="$(seqCount $query)"
+export tFaGzUrl="$(faGzUrl $target)"
+export qFaGzUrl="$(faGzUrl $query)"
 printf "# working: %s\n" "${buildDir}" 1>&2
 printf "# target: $target - $tOrgName - $tOrgDate - $tClade - $tSequenceCount sequences\n" 1>&2
 printf "#  query: $query - $qOrgName - $qOrgDate - $qClade - $qSequenceCount sequences\n" 1>&2
@@ -366,10 +382,10 @@ if [ "$tClade" == "primate" -a "$qClade" == "primate" ]; then
 export yamlString="# ${target}.${query}.yaml
 TARGET_Sequence:
   class: File
-  path: https://hgdownload.soe.ucsc.edu/hubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.fa.gz
+  path: ${tFaGzUrl}
 QUERY_Sequence:
   class: File
-  path: https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.fa.gz
+  path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
 linear_gap_options.linear_gap: ${linearGap}
@@ -422,10 +438,10 @@ else
 export yamlString="# ${target}.${query}.yaml
 TARGET_Sequence:
   class: File
-  path: https://hgdownload.soe.ucsc.edu/hubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.fa.gz
+  path: ${tFaGzUrl}
 QUERY_Sequence:
   class: File
-  path: https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.fa.gz
+  path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
 linear_gap_options.linear_gap: ${linearGap}
@@ -479,6 +495,7 @@ printf "#!/bin/bash
 set -beEu -o pipefail
 
 export buildDir=\"${buildDir}\"
+export swapDir=\"${swapDir}\"
 export PM=\"/hive/users/hiram/galaxy/venv3.12/bin/planemo\"
 
 export targetDb=\"${tAsmId}\"
@@ -487,20 +504,104 @@ export QueryDb=\"${Query}\"
 
 cd \${buildDir}
 mkdir -p log
-export DS=\`date \"+\%F_\%T_\%s\"\`
+export DS=\`date \"+\%%F_\%%T_\%%s\"\`
 export logDir=\"\${buildDir}/log\"
 export logFile=\"\${logDir}/\${DS}.log\"
 time (\${PM} run \\
   \"~/kent/src/hg/utils/automation/kegAlign.json.gz\" \\
      \"\${targetDb}.\${queryDb}.yaml\" --profile vgp \\
         --history_name \"\${targetDb}.\${queryDb}.kegAlign\" \\
-           --test_output_json \"\${logDir}/runOutput.\${DS}.json) >> \"\${logFile}\" 2>&1
+           --test_output_json \"\${logDir}/runOutput.\${DS}.json\") >> \"\${logFile}\" 2>&1
 
-export invockId=\`jq '.tests[0].data.invocation_details.details.invocation_id' \${logDir}/runOutput\${DS}.json | tr -d '\"'\`
-printf \"invocation ID: \%s\\n\" \"\${invockId}\" 1>&2
+export invocationId=\`jq '.tests[0].data.invocation_details.details.invocation_id' \"\${logDir}/runOutput.\${DS}.json\" | tr -d '\"'\`
+printf \"invocation ID: %%s\\n\" \"\${invocationId}\" 1>&2
 mkdir -p result/\${DS}
-\${PM} invocation_download \"${invockId}\" --profile vgp \\
+\${PM} invocation_download \"\${invocationId}\" --profile vgp \\
   --output_directory result/\${DS}
+
+### install allChain into buildDir/axtChain/
+mkdir -p \${buildDir}/axtChain
+export allChainFile=\`ls result/\${DS}/allChain__*.chain\`
+gzip -c \"\${allChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz
+
+### convert target allChain to bigBed and measure featureBits
+cd \${buildDir}/axtChain
+export tSizes=\"${targetSizes}\"
+export allChain=\"\${targetDb}.\${queryDb}.all.chain.gz\"
+hgLoadChain -test -noBin -tIndex \${targetDb} allChain \"\${allChain}\"
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > allChain.tab
+awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > allChainLink.tab
+bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab allChain.tab \${tSizes} allChain.bb
+bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab allChainLink.tab \${tSizes} allChainLink.bb
+rm -f allChain.tab allChainLink.tab chain.tab link.tab
+export totalBases=\`ave -col=2 \${tSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
+export basesCovered=\`bigBedInfo allChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
+printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+cat \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+
+### install netChainSubset (over.chain) for target
+cd \${buildDir}
+export overChainFile=\`ls result/\${DS}/'netChainSubset on dataset 7 and 21__'*.chain\`
+gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
+
+### convert target over.chain to bigBed and measure featureBits
+cd \${buildDir}/axtChain
+export overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
+hgLoadChain -test -noBin -tIndex \${targetDb} overChain \"\${overChain}\"
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > overChain.tab
+awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > overChainLink.tab
+bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab overChain.tab \${tSizes} overChain.bb
+bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab overChainLink.tab \${tSizes} overChainLink.bb
+rm -f overChain.tab overChainLink.tab chain.tab link.tab
+export totalBases=\`ave -col=2 \${tSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
+export basesCovered=\`bigBedInfo overChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
+printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
+cat \${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
+
+### install allChainSwap into swapDir/axtChain/
+mkdir -p \${swapDir}/axtChain
+cd \${buildDir}
+export allChainSwapFile=\`ls result/\${DS}/allChainSwap__*.chain\`
+gzip -c \"\${allChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz
+
+### convert swap allChain to bigBed and measure featureBits
+cd \${swapDir}/axtChain
+export qSizes=\"${querySizes}\"
+export allChain=\"\${queryDb}.\${targetDb}.all.chain.gz\"
+hgLoadChain -test -noBin -tIndex \${queryDb} allChain \"\${allChain}\"
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > allChain.tab
+awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > allChainLink.tab
+bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab allChain.tab \${qSizes} allChain.bb
+bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab allChainLink.tab \${qSizes} allChainLink.bb
+rm -f allChain.tab allChainLink.tab chain.tab link.tab
+export totalBases=\`ave -col=2 \${qSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
+export basesCovered=\`bigBedInfo allChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
+export Target=\"${Target}\"
+printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+cat \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+
+### install netChainSubset (over.chain) for swap
+cd \${buildDir}
+export overChainSwapFile=\`ls result/\${DS}/'netChainSubset on dataset 8 and 35__'*.chain\`
+gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
+
+### convert swap over.chain to bigBed and measure featureBits
+cd \${swapDir}/axtChain
+export overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
+hgLoadChain -test -noBin -tIndex \${queryDb} overChain \"\${overChain}\"
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > overChain.tab
+awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > overChainLink.tab
+bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab overChain.tab \${qSizes} overChain.bb
+bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab overChainLink.tab \${qSizes} overChainLink.bb
+rm -f overChain.tab overChainLink.tab chain.tab link.tab
+export totalBases=\`ave -col=2 \${qSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
+export basesCovered=\`bigBedInfo overChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
+printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt
+cat \${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt
 
 " > ${buildDir}/run.sh
 chmod +x ${buildDir}/run.sh
