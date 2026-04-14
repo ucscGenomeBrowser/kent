@@ -21,6 +21,11 @@ def getActiveAssemblies():
     # Convert the binary string to a regular string
     # Then create a list
     myOutput = hgsqlOutput.stdout.decode('utf-8').split()
+    # Skip curated hubs
+    skipList = ['hs1', 'mpxvRivers']
+    for db in skipList:
+        if db in myOutput:
+            myOutput.remove(db)
     return myOutput
 
 def runCron(assembly):
