@@ -22,10 +22,10 @@ def bash(cmd):
     try:
         rawBashOutput = subprocess.run(cmd, check=True, shell=True,
                                        stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdoutt = rawBashOutput.stdout
+        bashStdout = rawBashOutput.stdout
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdoutt)
+    return(bashStdout)
 
 # ============================================================================
 # Configuration
@@ -79,7 +79,7 @@ RULES_SHORT = {
     'BP4_supporting': 'HCI prior for path &lt;0.11',
 }
 
-# AutoSQL definition for the BED9+4 format
+# AutoSQL definition for the BED9+5 format
 AUTOSQL = """table InSiGHTHCIPriors
 "InSiGHT VCEP HCI prior probability classifications for Lynch syndrome genes"
    (

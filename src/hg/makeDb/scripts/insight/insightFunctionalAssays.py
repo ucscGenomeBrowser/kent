@@ -107,10 +107,10 @@ def bash(cmd):
     try:
         rawBashOutput = subprocess.run(cmd, check=True, shell=True,
                                        stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdoutt = rawBashOutput.stdout
+        bashStdout = rawBashOutput.stdout
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdoutt)
+    return(bashStdout)
 
 def get_transcript_info(db, accession):
     """Query hgsql to get transcript information from ncbiRefSeq"""

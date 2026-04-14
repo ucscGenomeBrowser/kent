@@ -330,7 +330,7 @@ def liftover_coords(coords, chain_file):
 
     try:
         bash(f"liftOver {input_bed} {chain_file} {output_bed} {unmapped_bed} 2>/dev/null")
-    except:
+    except Exception:
         for f in [input_bed, output_bed, unmapped_bed]:
             if os.path.exists(f):
                 os.remove(f)
