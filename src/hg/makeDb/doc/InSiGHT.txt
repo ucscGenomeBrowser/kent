@@ -56,7 +56,7 @@ python3 ~/kent/src/hg/makeDb/scripts/insight/insightClinDomains.py
 #   MLH1: NMD <=684, CritRegion 685-753, FuncUnknown 754-756, n.a. >756
 #   MSH2: NMD <=861, CritRegion 862-891, FuncUnknown 892-934, n.a. >934
 #   MSH6: NMD <=1317, CritRegion 1318-1341, FuncUnknown 1342-1360, n.a. >1360
-#   PMS2: NMD <=798, n.a. >798
+#   PMS2: NMD <=798, FuncUnknown 799-862, n.a. >862
 # Generates bigBed 9+3 files for hg38 and hg19.
 
 cd /hive/users/lrnassar/insightHub/pvs1

@@ -53,7 +53,7 @@ THRESHOLDS = {
     'MLH1': {'BA1': 0.001, 'BS1_lower': 0.0001, 'BS1_upper': 0.001},
     'MSH2': {'BA1': 0.001, 'BS1_lower': 0.0001, 'BS1_upper': 0.001},
     'MSH6': {'BA1': 0.0022, 'BS1_lower': 0.00022, 'BS1_upper': 0.0022},
-    'PMS2': {'BA1': 0.0028, 'BS1_lower': 0.0001, 'BS1_upper': 0.001},
+    'PMS2': {'BA1': 0.0028, 'BS1_lower': 0.00028, 'BS1_upper': 0.0028},
 }
 
 # Colors (RGB)
@@ -83,7 +83,7 @@ RULES = {
     'PMS2': {
         'PM2_supporting': 'Absent/extremely rare (<1 in 50,000) in gnomADv4',
         'BA1': 'gnomADv4 Grpmax AF ≥ 0.0028 (0.28%)',
-        'BS1': 'gnomADv4 Grpmax AF ≥ 0.0001 and < 0.001 (0.01-0.1%)',
+        'BS1': 'gnomADv4 Grpmax AF ≥ 0.00028 and < 0.0028 (0.028-0.28%)',
     },
 }
 

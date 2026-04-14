@@ -73,7 +73,8 @@ PVS1_REGIONS = [
 
     # PMS2
     ('PMS2', 'NMD', 1, 798, '180,0,0', '≤ codon 798', 'PVS1'),
-    ('PMS2', 'PVS1_n.a.', 799, None, '128,128,128', '> codon 798', 'PVS1_n.a.'),
+    ('PMS2', 'FuncUnknown', 799, 862, '204,102,0', '> codon 798 ≤ codon 862', 'PVS1_Moderate'),
+    ('PMS2', 'PVS1_n.a.', 863, None, '128,128,128', '> codon 862', 'PVS1_n.a.'),
 ]
 
 # AutoSQL definition for the BED9+3 format
