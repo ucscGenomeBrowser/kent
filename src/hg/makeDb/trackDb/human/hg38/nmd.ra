@@ -1,6 +1,6 @@
 track nmd
 shortLabel NMD Escape
-longLabel NMD Escape: Regions where premature termination codons escape Nonsense-Mediated Decay (NMD)
+longLabel NMD Escape: Predicted regions where premature termination codons escape NMD
 group genes
 type bed 4
 visibility hide
@@ -19,7 +19,7 @@ superTrack on
         #priority 1
 
         track nmdEscGencode
-        shortLabel NMD escape ruleset Gencode
+        shortLabel NMD Escape Gencode
         longLabel NMD escape 50bp/100bp/intronless ruleset: Gencode transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
@@ -32,7 +32,7 @@ superTrack on
         priority 1.5
 
         track nmdEscNcbiRefSeq
-        shortLabel NMD escape ruleset NCBI RefSeq
+        shortLabel NMD Escape RefSeq
         longLabel NMD escape 50bp/100bp/intronless ruleset: NCBI RefSeq transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
@@ -46,7 +46,7 @@ superTrack on
 
         track nmdDetectiveA
         shortLabel NMDetective-A
-        longLabel NMDetective-A: Random forest prediction of NMD efficiency (Lindeboom et al. 2016)
+        longLabel NMDetective-A: Random forest prediction of NMD efficiency (Lindeboom 2016)
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveA.bw
         type bigWig
@@ -60,7 +60,7 @@ superTrack on
 
         track nmdDetectiveB
         shortLabel NMDetective-B
-        longLabel NMDetective-B: Decision tree prediction of NMD efficiency (Lindeboom et al. 2016)
+        longLabel NMDetective-B: Decision tree prediction of NMD efficiency (Lindeboom 2016)
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveB.bw
         type bigWig
@@ -74,7 +74,7 @@ superTrack on
 
         track nmdDetectiveA_ptc
         shortLabel NMDetective-A PTC
-        longLabel NMDetective-A: Random forest NMD efficiency for first out-of-frame PTC (Lindeboom et al. 2016)
+        longLabel NMDetective-A: Random forest NMD efficiency for first out-of-frame PTC
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectA-ptc.bw
         type bigWig
@@ -88,7 +88,7 @@ superTrack on
 
         track nmdDetectiveB_ptc
         shortLabel NMDetective-B PTC
-        longLabel NMDetective-B: Decision tree NMD efficiency for first out-of-frame PTC (Lindeboom et al. 2016)
+        longLabel NMDetective-B: Decision tree NMD efficiency for first out-of-frame PTC
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectB-ptc.bw
         type bigWig
