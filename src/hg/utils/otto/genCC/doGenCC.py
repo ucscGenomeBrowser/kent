@@ -307,9 +307,9 @@ def checkItemCounts(oldBb, newBb):
     newItemCount = bash('bigBedInfo '+newBb+' | grep "itemCount"')
     newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
     if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
-        msg = "Item count difference >10% for "+newBb+": old="+str(oldItemCount)+" new="+str(newItemCount)
+        msg = "Item count difference >10% for "+newBb+":\nold="+str(oldItemCount)+" new="+str(newItemCount)
         if args.force:
-            print("WARNING:\n "+msg+"\n\n (continuing due to QA approval)")
+            print("WARNING:\n"+msg+"\n(continuing due to QA approval)")
         else:
             sys.exit(msg)
     print(oldBb+" old: "+str(oldItemCount)+" new: "+str(newItemCount))
