@@ -314,6 +314,23 @@ if (trackDbSetting(track->tdb, "onlyVisibility"))
     {
     jsonObjectAdd(ele, "onlyVisibility", newJsonString(trackDbSetting(track->tdb, "onlyVisibility")));
     }
+
+// Color override support for right-click color picker
+if (cfgOptionBooleanDefault("showColorPicker", FALSE))
+    {
+    char defaultColor[16];
+    safef(defaultColor, sizeof(defaultColor), "#%02x%02x%02x",
+          track->color.r, track->color.g, track->color.b);
+    jsonObjectAdd(ele, "defaultColor", newJsonString(defaultColor));
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s.colorOverride", track->track);
+    char *overrideColor = cartOptionalString(cart, varName);
+    if (isNotEmpty(overrideColor))
+        jsonObjectAdd(ele, "colorOverride", newJsonString(overrideColor));
+    safef(varName, sizeof(varName), "%s.colorOverrideOn", track->track);
+    if (cartUsualBoolean(cart, varName, FALSE))
+        jsonObjectAdd(ele, "colorOverrideOn", newJsonBoolean(TRUE));
+    }
 }
 
 void jsonTdbSettingsUse(struct jsonElement *settings)
