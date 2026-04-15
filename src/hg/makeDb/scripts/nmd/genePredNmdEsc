@@ -147,6 +147,8 @@ def outputExonsUpTo(from3Prime, cdsExons, chrom, txStart, txEnd, name, n, ofh, r
         n = (ex1End-ex1Start)+50
 
     for start, end in cdsExons:
+        if doneNs >= n:
+            return regions
         exLen = end-start
         missBps = n-doneNs
         if doneNs+exLen > n:
@@ -204,6 +206,9 @@ def main():
                 exStart = cdsStart
             if (exStart <= cdsEnd and cdsEnd <= exEnd):
                 exEnd = cdsEnd
+            # skip degenerate cdsExons (CDS boundary lands exactly on exon boundary)
+            if exStart >= exEnd:
+                continue
             cdsExons.append( (exStart, exEnd) )
 
         def addRegions(regions, rule):
