@@ -6872,9 +6872,9 @@ defaultSortField tissue
 For some faceted composites, each subtrack is associated with a particular cell line or
 other accession that is described in more detail at another resource (e.g. ENCODE or SRA).
 This optional setting specifies a remote URL for linking out to those resources.  When
-it is set, the names in the first column of the metadata TSV file will be turned into
+it is set, the names in the primary key column of the metadata TSV file will be turned into
 hyperlinks to that resource.  If the URL includes the string '$$', that will be dynamically
-replaced with the identifier from that first column.
+replaced with the identifier from that column.
  </p>
 <p>Example:
 <pre>
