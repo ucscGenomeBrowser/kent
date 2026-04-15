@@ -293,6 +293,10 @@ def checkIfUpdateIsNeeded():
     oldMd5sum = oldMd5sum.split("  ")[0]
     if oldMd5sum != newMd5sum:
         return(True)
+    elif args.force:
+        # Previous file matches current file, but update didn't go through
+        # because of itemCounts check.
+        return(True)
     else:
         return(False)
 
