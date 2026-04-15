@@ -1365,6 +1365,7 @@ struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 Color labelColor = (track->labelColor ?
                         track->labelColor : track->ixColor);
+labelColor = colorFromCart(track, labelColor);
 labelColor = maybeDarkerLabels(track, hvg, labelColor);
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
@@ -1655,6 +1656,7 @@ if (track->limitedVis != tvHide)
         char *label = track->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
+        labelColor = colorFromCart(track, labelColor);
         if (isCenterLabelConditional(track))
             {
             struct trackDb* tdbComposite = tdbGetComposite(track->tdb);
@@ -1833,6 +1835,7 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+labelColor = colorFromCart(track, labelColor);
 labelColor = maybeDarkerLabels(track, hvg, labelColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,

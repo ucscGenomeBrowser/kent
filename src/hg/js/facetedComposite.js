@@ -740,6 +740,10 @@ $(function() {
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
                     const colNames = rows[0].split("\t");
+                    if (!primaryKey)
+                        throw new Error("trackDb setting 'primaryKey' is missing");
+                    if (!colNames.includes(primaryKey))
+                        throw new Error(`primaryKey '${primaryKey}' not found in metadata columns`);
                     const metadata = rows.slice(1).map(row => {
                         const values = row.split("\t");
                         const obj = {};
