@@ -325,7 +325,6 @@ if checkIfUpdateIsNeeded():
 
     buildFileHg38(genCCtsvFile, hg38outPutFile, gencodeHg38)
     buildFileHg19(hg38outPutFile, hg19outPutFile, gencodeHg19)
-    bash("mv /hive/data/outside/otto/genCC/newSubmission.tsv /hive/data/outside/otto/genCC/prevSubmission.tsv")
 
     bash("bedSort "+hg38outPutFile+" "+hg38outPutFile)
     bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -sort -extraIndex=gene_symbol -type=bed9+34 -tab "+hg38outPutFile+" /cluster/data/hg38/chrom.sizes "+hg38outPutFile.split(".")[0]+".bb")
@@ -337,6 +336,8 @@ if checkIfUpdateIsNeeded():
 
     checkItemCounts("/gbdb/hg38/bbi/genCC.bb", hg38outPutFile.split(".")[0]+".bb")
     checkItemCounts("/gbdb/hg19/bbi/genCC.bb", hg19outPutFile.split(".")[0]+".bb")
+
+    bash("mv /hive/data/outside/otto/genCC/newSubmission.tsv /hive/data/outside/otto/genCC/prevSubmission.tsv")
 
     bash("rm -f /gbdb/hg38/bbi/genCC.bb")
     bash("rm -f /gbdb/hg19/bbi/genCC.bb")
