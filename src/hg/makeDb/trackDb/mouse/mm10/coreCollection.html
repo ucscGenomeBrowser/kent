@@ -2,19 +2,14 @@
 <p>
 This track displays biosample-specific candidate cis-regulatory elements (cCREs)
 alongside genome-wide epigenomic signals for the ENCODE Core Collection of 18
-ENCODE biosamples that have been fully profiled using four core assays:
-DNase-seq, ChIP-seq for the histone modifications H3K4me3 and H3K27ac,
-and ChIP-seq for CTCF binding.</p>
-<ul>
-<li>DNase-seq identifies regions of <b>open chromatin</b> commonly associated with enhancers,
-promoters, and insulators.</li>
-<li>ChIP-seq for <b>H3K4me3</b> and <b>H3K27ac</b> marks active and poised promoters and enhancers.</li>
-<li><b>CTCF</b> ChIP-seq identifies chromatin loop anchors and insulator elements.</li>
-</ul>
-<p>
-Each subtrack corresponds to an individual experiment in a specific biosample.
-These data form the basis for generating biosample-specific annotations of
-cCREs, which compose the fifth subtrack for the biosample.</p>
+ENCODE biosamples. Each biosample contains five subtracks:</p>
+<ol>
+<li><b>cCREs</b> - biosample-specific cCRE classifications</li>
+<li><b>DNase</b> - DNase-seq identifies regions of open chromatin commonly associated with enhancers, promoters, and insulators</li>
+<li><b>H3K4me3</b> - ChIP-seq for H3K4me3 marks active and poised promoters and enhancers</li>
+<li><b>H3K27ac</b> - ChIP-seq for H3K27ac marks active and poised promoters and enhancers</li>
+<li><b>CTCF</b> - CTCF ChIP-seq identifies chromatin loop anchors and insulator elements</li>
+</ol>
 <p>
 Additional epigenomic datasets are available at the <a target="_blank"
 href="https://www.encodeproject.org/">ENCODE portal</a>, and further exploration
@@ -24,38 +19,41 @@ track details page.</p>
 
 <h2>Display Conventions and Configurations</h2>
 <p>
-Each biosample contains five subtracks (DNase, CTCF, H3K27ac, and H3K4me3 signals
-and biosample-specific cCREs). Click a specific biosample type and organ/tissue
-combination to view available datasets. Epigenomic subtracks can be further
+Click a specific biosample type and organ/tissue
+combination to view available datasets. Signal subtracks can be further
 filtered by the signal type.</p>
 
 <p>
-Each signal track is colored based on the type of signal.
-The cCREs subtrack displays each active cCRE in the corresponding biosample
-as a colored box by type
+Each cCRE in the biosample-specific cCREs subtrack is color-coded by its classification type:
 <ul>
-<li><b><span style="color: #ff0000;">Promoter</span></b> in <span style="color: #ff0000;">red</span>
-<li><b><span style="color: #ffa700;">Proximal enhancer</span></b> in <span style="color: #ffa700;">orange</span>
-<li><b><span style="color: #ffcd00;">Distal
-enhancer</span></b> in <span style="color: #ffcd00;">yellow</span>
-<li><b><span style="color: #ffaaaa;">CA-H3K4me3</span></b> in
-<span style="color: #ffaaaa;">pink</span>
-<li><b><span style="color: #00b0f0;">CA-CTCF</span></b>
-in <span style="color: #00b0f0;">blue</span>
-<li><b><span style="color: #be28e5;">CA-TF</span></b> in
-<span style="color: #be28e5;">dark purple</span>
-<li><b><span style="color: #06da93;">CA</span></b> in <span style="color: #06da93;">green</span>
-<li><b><span style="color: #d876ec;">TF</span></b> in
-<span style="color: #d876ec;">light purple</span>
+<li><b><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></b> in <span style="color: #ff0000;">red</span>
+must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
+<li><b><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal enhancer)</span></b> in <span style="color: #ffa700;">orange</span>
+have high chromatin accessibility and H3K27ac signals and are within 2 kb of an annotated TSS.
+If they are within 200 bp of a TSS, they must also have low H3K4me3 signal.</li>
+<li><b><span style="color: #ffcd00;">TSS-distal enhancer-like signatures (distal enhancer)</span></b> in <span style="color: #ffcd00;">yellow</span>
+have high chromatin accessibility and H3K27ac signals and are farther than 2 kb from an annotated TSS.</li>
+<li><b><span style="color: #ffaaaa;">Chromatin accessibility + H3K4me3 (CA-H3K4me3)</span></b> in <span style="color: #ffaaaa;">pink</span>
+have high chromatin accessibility and H3K4me3 signals but low H3K27ac signals and do not fall within 200 bp of a TSS.</li>
+<li><b><span style="color: #00b0f0;">Chromatin accessibility + CTCF (CA-CTCF)</span></b> in <span style="color: #00b0f0;">blue</span>
+have high chromatin accessibility and CTCF signals but low H3K4me3 and H3K27ac signals.</li>
+<li><b><span style="color: #be28e5;">Chromatin accessibility + transcription factor (CA-TF)</span></b> in <span style="color: #be28e5;">dark purple</span>
+have high chromatin accessibility, low H3K4me3, H3K27ac, and CTCF signals, and are bound by a transcription factor.</li>
+<li><b><span style="color: #06da93;">Chromatin accessibility (CA)</span></b> in <span style="color: #06da93;">green</span>
+have high chromatin accessibility and low H3K4me3, H3K27ac, and CTCF signals.</li>
+<li><b><span style="color: #d876ec;">Transcription factor (TF)</span></b> in <span style="color: #d876ec;">light purple</span>
+have low chromatin accessibility, low H3K4me3, H3K27ac, and CTCF signals and are bound by a transcription factor.</li>
+<li><b><span style="color: #808080;">Low-DNase</span></b> in <span style="color: #808080;">gray</span>,
+indicating the cCRE is inactive in this biosample.</li>
 </ul>
-cCREs with low DNase Z-scores in individual biosamples were deemed
-to be inactive and displayed as a gray box. The following graphic summarizes
-the cCRE classification criteria:</p>
+The following graphic summarizes the cCRE classification criteria:</p>
 <p>
 <img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
 <p>
-For items in the cCREs track, mousing over shows the <b>element ID</b>, along with a linkout to
-the corresponding element on SCREEN, and the <b>cCRE class</b>.</p>
+Mousing over an item displays the element ID with a linkout to SCREEN, the cCRE class,
+and the biosample-specific Z-scores for DNase, H3K4me3, H3K27ac, and CTCF. A Z-score above 1.64 is considered
+&quot;high&quot; signal, while a score of 1.64 or below is considered &quot;low&quot; signal
+for classification purposes (Moore et al., 2026).</p>
 
 <h2>Methods</h2>
 <p>
@@ -68,12 +66,15 @@ processed using the <a href="https://www.encodeproject.org/chip-seq/transcriptio
 target="_blank">ENCODE transcription factor ChIP-seq pipeline</a>.</p>
 <p>
 In addition to the cell type-agnostic classification (described in the cCRE Registry track
-in this collection), we evaluated the biochemical activity of each cCRE in individual
+in this collection), the biochemical activity of each cCRE was evaluated in individual
 biosamples using the corresponding biosample-specific DNase, H3K4me3, H3K27ac, and CTCF data.
-This allowed us to annotate active cCREs in individual biosamples, included as the cCRE
-subtrack for each biosample. cCREs with low DNase Z-scores in individual biosamples were
-deemed to be inactive and labeled with "Low Chromatin Accessibility."
+Active cCREs in each biosample are displayed in the cCRE subtrack. cCREs with low DNase
+Z-scores in a given biosample are considered inactive and labeled "Low-DNase."
 </p>
+<p>
+The Core Collection includes only the four core assays standardized across all 18 biosamples:
+DNase, H3K4me3, H3K27ac, and CTCF. ATAC-seq signal tracks for select biosamples are available
+in the <a href="../cgi-bin/hgTrackUi?db=mm10&g=encode4Reg">ENCODE4 Regulation</a> track.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -113,8 +114,7 @@ href="https://www.umassmed.edu/zlab">Weng lab</a> and the <a target="_blank"
 href="https://sites.google.com/view/moore-lab/">Moore lab</a> at UMass Chan Medical School
 (funded by NIH grant HG012343). Integration and visualization were developed by Drs. Mingshi Gao,
 Jill Moore, and Zhiping Weng at UMass Chan Medical School, who were part of the ENCODE Data
-Analysis Center. We thank Dr. Maximilian Haeussler and Jonathan Casper at the UCSC
-Genome Browser for their support in track development.</p>
+Analysis Center.</p>
 
 <h2>References</h2>
 <p>

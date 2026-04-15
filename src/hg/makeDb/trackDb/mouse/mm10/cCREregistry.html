@@ -7,7 +7,7 @@ DNase hypersensitive sites further annotated with histone modifications (H3K4me3
 or CTCF binding measured by ChIP-seq experiments. In this latest version of the Registry (V4),
 the representative DNase hypersensitive sites (rDHSs) were supplemented
 with 7,658 representative transcription factor ChIP-seq peaks (TF
-rPeaks)—peaks that represent binding sites for at least five TFs. The Registry of cCREs is
+rPeaks), which represent binding sites for at least five TFs. The Registry of cCREs is
 one of the core components of the integrative level of the ENCODE Encyclopedia of DNA Elements.</p>
 
 <p>Additional exploration of the cCREs and underlying raw ENCODE signal data can be done with the
@@ -21,36 +21,44 @@ track details page.</p>
 Each cCRE is color-coded by its classification type, which reflects its putative functional
 assignment based on biochemical signatures and genomic context:</p>
 <ol>
-<li><strong><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></strong>
+<li><b><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></b> in <span style="color: #ff0000;">red</span>
 must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
-<li><strong><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal
-enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals and are
+<li><b><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal
+enhancer)</span></b> in <span style="color: #ffa700;">orange</span>
+have high chromatin accessibility and H3K27ac signals and are
 within 2 kb of an annotated TSS. If they are within 200 bp of a TSS, they must
 also have low H3K4me3 signal.</li>
-<li><strong><span style="color: #ffcd00;">TSS-distal enhancer-like signatures
-(distal enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals
+<li><b><span style="color: #ffcd00;">TSS-distal enhancer-like signatures
+(distal enhancer)</span></b> in <span style="color: #ffcd00;">yellow</span>
+have high chromatin accessibility and H3K27ac signals
 and are farther than 2 kb from an annotated TSS.</li>
-<li><span style="color: #ffaaaa;"><strong>Chromatin accessibility +
-H3K4me3 (CA-H3K4me3)</strong></span> have high chromatin accessibility and H3K4me3
+<li><b><span style="color: #ffaaaa;">Chromatin accessibility +
+H3K4me3 (CA-H3K4me3)</span></b> in <span style="color: #ffaaaa;">pink</span>
+have high chromatin accessibility and H3K4me3
 signals but low H3K27ac signals and do not fall within 200 bp of a TSS.</li>
-<li><span style="color: #00b0f0;"><strong>Chromatin accessibility +
-CTCF (CA-CTCF)</strong></span> have high chromatin accessibility and CTCF signals
+<li><b><span style="color: #00b0f0;">Chromatin accessibility +
+CTCF (CA-CTCF)</span></b> in <span style="color: #00b0f0;">blue</span>
+have high chromatin accessibility and CTCF signals
 but low H3K4me3 and H3K27ac signals.</li>
-<li><span style="color: #be28e5;"><strong>Chromatin accessibility +
-transcription factor (CA-TF)</strong></span> have high chromatin accessibility,
+<li><b><span style="color: #be28e5;">Chromatin accessibility +
+transcription factor (CA-TF)</span></b> in <span style="color: #be28e5;">dark purple</span>
+have high chromatin accessibility,
 low H3K4me3, H3K27ac, and CTCF signals, and are bound by a transcription factor.</li>
-<li><span style="color: #06da93;"><strong>Chromatin accessibility
-(CA)</strong></span> have high chromatin accessibility and low H3K4me3, H3K27ac, and
+<li><b><span style="color: #06da93;">Chromatin accessibility
+(CA)</span></b> in <span style="color: #06da93;">green</span>
+have high chromatin accessibility and low H3K4me3, H3K27ac, and
 CTCF signals.</li>
-<li><span style="color: #d876ec;"><strong>Transcription factor
-(TF)</strong></span> have low chromatin accessibility, low H3K4me3, H3K27ac,
+<li><b><span style="color: #d876ec;">Transcription factor
+(TF)</span></b> in <span style="color: #d876ec;">light purple</span>
+have low chromatin accessibility, low H3K4me3, H3K27ac,
 and CTCF signals and are bound by a transcription factor.</li>
 </ol>
 <p>
-Mousing over the data will display the accession ID, the assigned cCRE class type, and the max-Z scores
-for the various underlying biosignals (DNase, H3K4me3, H3K27ac, CTCF). A max-Z score above 1.64 is
+Mousing over an item displays the element ID with a linkout to SCREEN, the cCRE class,
+and the max-Z scores for DNase, H3K4me3, H3K27ac, and CTCF. A max-Z score above 1.64 is
 considered &quot;high&quot; signal, while a score of 1.64 or below is considered &quot;low&quot; signal
-for classification purposes (Moore et al., 2026).
+for classification purposes (Moore et al., 2026). A score of -10.00 indicates the assay was not
+available in any surveyed biosample.
 A track filter is also available
 to selectively show items based on their cCRE class type.</p>
 
@@ -58,11 +66,15 @@ to selectively show items based on their cCRE class type.</p>
 <p>
 Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase
 hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated
-using ChIP-seq data for histone modifications—H3K4me3 and H3K27ac, marking promoters and
-enhancers, respectively—and CTCF, marking insulators. To supplement rDHS-anchored cCRE
+using ChIP-seq data for histone modifications (H3K4me3 and H3K27ac, marking promoters and
+enhancers, respectively) and CTCF, marking insulators. To supplement rDHS-anchored cCRE
 definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification
 of cCREs even in regions of low chromatin accessibility. Although not used for anchoring,
-ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.</p>
+ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.
+Because ATAC-seq was not standardized across all biosamples, the ATAC max-Z score is not included
+in the registry bigBed fields or mouseOver. Only the four core assays (DNase, H3K4me3, H3K27ac,
+and CTCF) are reported as max-Z scores. ATAC-seq signal tracks are available in the
+<a href="../cgi-bin/hgTrackUi?db=mm10&g=encode4Reg">ENCODE4 Regulation</a> track.</p>
 
 <p>
 The following diagram illustrates the biochemical signal patterns used to classify each cCRE type:</p>

@@ -1,6 +1,6 @@
 track coreCcres
 type bigBed 12
-longLabel ENCODE4 Core Collection of 18 biosamples with sample-specific cCRE annotations & epigenomic signals
+longLabel ENCODE4 Core Collection of 18 biosamples: cCREs and signals
 parent cCREs
 compositeTrack on
 html coreCollection.html
@@ -14,7 +14,7 @@ dimensions dimX=biosampleType dimY=organ
 sortOrder dataType=+ organ=+ biosampleType=+
 shortLabel ENCODE4 Core Collection
 visibility hide
-dataVersion ENCODE release 4, 2024. (ENCODE4 data includes ENCODE2, ENCODE3, and the mouse ENCODE project)
+dataVersion ENCODE release 4, 2024. (Includes ENCODE2, ENCODE3, and mouse ENCODE data)
 
 track cCREs_view
 view cCREs_view
@@ -34,7 +34,7 @@ shortLabel ENCFF325FZS_ENCFF396LHC_ENCFF010WPI_ENCFF196GIY
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN
 priority 13
@@ -47,7 +47,7 @@ shortLabel ENCFF784TNW_ENCFF990HLQ_ENCFF258KWF_ENCFF811CFN
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR
 priority 8
@@ -60,7 +60,7 @@ shortLabel ENCFF374LSN_ENCFF887KNZ_ENCFF269FYI_ENCFF644MRR
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV
 priority 6
@@ -73,7 +73,7 @@ shortLabel ENCFF822FDB_ENCFF615BKA_ENCFF683GNP_ENCFF494FQV
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY
 priority 3
@@ -86,7 +86,7 @@ shortLabel ENCFF727CYI_ENCFF050AHA_ENCFF422JMO_ENCFF247XHY
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM
 priority 5
@@ -99,7 +99,7 @@ shortLabel ENCFF947JCM_ENCFF738LHV_ENCFF306XSO_ENCFF055IZM
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU
 priority 11
@@ -112,7 +112,7 @@ shortLabel ENCFF907KGU_ENCFF341GEF_ENCFF544RNA_ENCFF935ZIU
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM
 priority 12
@@ -125,7 +125,7 @@ shortLabel ENCFF616XIK_ENCFF127UZI_ENCFF865CCV_ENCFF355LDM
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY
 priority 17
@@ -138,7 +138,7 @@ shortLabel ENCFF738YPD_ENCFF083LRQ_ENCFF500YJD_ENCFF394DGY
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK
 priority 10
@@ -151,7 +151,7 @@ shortLabel ENCFF389BAE_ENCFF244PVS_ENCFF622QOD_ENCFF990MGK
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY
 priority 7
@@ -164,7 +164,7 @@ shortLabel ENCFF744DCK_ENCFF673XLI_ENCFF859YPP_ENCFF196NRY
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO
 priority 18
@@ -177,7 +177,7 @@ shortLabel ENCFF686CDW_ENCFF200ISF_ENCFF284KSX_ENCFF239UQO
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY
 priority 14
@@ -190,7 +190,7 @@ shortLabel ENCFF145VWQ_ENCFF430CHA_ENCFF770LBL_ENCFF244ZJY
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB
 priority 9
@@ -203,7 +203,7 @@ shortLabel ENCFF323LVW_ENCFF186DCG_ENCFF595IQM_ENCFF233QSB
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ
 priority 2
@@ -216,7 +216,7 @@ shortLabel ENCFF228LWM_ENCFF420ORJ_ENCFF666CND_ENCFF499GIZ
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR
 priority 4
@@ -229,7 +229,7 @@ shortLabel ENCFF862WQC_ENCFF660WNU_ENCFF266FCV_ENCFF809JIR
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB
 priority 16
@@ -242,7 +242,7 @@ shortLabel ENCFF514QGG_ENCFF523GNO_ENCFF920QDX_ENCFF803MIB
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX
 priority 1
@@ -255,7 +255,7 @@ shortLabel ENCFF265EIS_ENCFF288SAJ_ENCFF645OJK_ENCFF087SVX
 visibility squish
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase Z-score:</b> ${DNase_Z_score}<br><b>H3K4me3 Z-score:</b> ${H3K4me3_Z_score}<br><b>H3K27ac Z-score:</b> ${H3K27ac_Z_score}<br><b>CTCF Z-score:</b> ${CTCF_Z_score}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
-urlLabel cCRE details on SCREEN
+urlLabel cCRE Core Collection details on SCREEN
 
 track DNase_view
 view DNase_view
