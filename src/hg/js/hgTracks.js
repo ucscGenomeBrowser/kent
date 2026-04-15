@@ -3279,8 +3279,6 @@ var rightClick = {
 		    };
 
                 if (rec.defaultColor) {
-                    menu.push(o);
-                    o = {};
                     o[rightClick.makeImgTag("wrench.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
