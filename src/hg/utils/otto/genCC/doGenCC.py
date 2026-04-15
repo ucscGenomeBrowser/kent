@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 #Made otto by Lou 9/14/2023
 
+import argparse
 import subprocess
 import csv
 import re
 import sys
 from datetime import datetime
+
+parser = argparse.ArgumentParser(description='Build and update GenCC track data.')
+parser.add_argument('--force', action='store_true',
+                    help='Continue even if item count difference is more than 10%%')
+args = parser.parse_args()
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -297,7 +303,11 @@ def checkItemCounts(oldBb, newBb):
     newItemCount = bash('bigBedInfo '+newBb+' | grep "itemCount"')
     newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
     if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
-        sys.exit("Item count difference >10% for "+newBb+": old="+str(oldItemCount)+" new="+str(newItemCount))
+        msg = "Item count difference >10% for "+newBb+": old="+str(oldItemCount)+" new="+str(newItemCount)
+        if args.force:
+            print("WARNING:\n "+msg+"\n\n (continuing due to QA approval)")
+        else:
+            sys.exit(msg)
     print(oldBb+" old: "+str(oldItemCount)+" new: "+str(newItemCount))
 
 if checkIfUpdateIsNeeded():
