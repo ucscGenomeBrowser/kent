@@ -12,6 +12,7 @@ Usage:
     redmineCli update 33571 --release-log-url "../cgi-bin/hgTrackUi?db=hg38&g=myTrack"
     redmineCli update 33571 --custom-field 46="some value"
     redmineCli attach 33571 screenshot.png --note "See attached"
+    redmineCli note 20460 85                   # show note-85 from ticket 20460
     redmineCli relate 10316 15336 30368       # relate tickets to each other
     redmineCli watch 37339 lou braney         # add watchers to a ticket
     redmineCli users                          # list user names and IDs
@@ -799,6 +800,50 @@ def cmd_watch(args):
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: note
+# ---------------------------------------------------------------------------
+
+def cmd_note(args):
+    """Display a specific note from a ticket."""
+    data = api_get(args.base_url,
+                   f"/issues/{args.ticket_id}.json?include=journals",
+                   args.api_key)
+    issue = data["issue"]
+    journals = issue.get("journals", [])
+
+    # Redmine API may return journals newest-first; sort by created_on
+    # to match the web UI's #note-N numbering (note-1 = oldest).
+    journals.sort(key=lambda j: j["created_on"])
+
+    note_num = args.note_number
+    if note_num < 1 or note_num > len(journals):
+        sys.exit(f"Error: note-{note_num} does not exist. "
+                 f"Ticket #{args.ticket_id} has {len(journals)} journal entries.")
+
+    j = journals[note_num - 1]
+    user = j["user"]["name"]
+    date = format_date(j["created_on"])
+    notes = j.get("notes", "")
+    details = j.get("details", [])
+
+    out = []
+    out.append(f"# #{issue['id']} note-{note_num}: {user} — {date}")
+    out.append(f"URL: {make_url(args.base_url, issue['id'])}#note-{note_num}")
+    out.append("")
+    if details:
+        detail_text = format_details(details)
+        if detail_text:
+            out.append(detail_text)
+            out.append("")
+    if notes:
+        out.append(redmine_textile_to_md(notes))
+    if not notes and not details:
+        out.append("(empty journal entry)")
+
+    print("\n".join(out))
+
+
+# ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
 
@@ -922,6 +967,11 @@ def build_parser():
     p_watch.add_argument("ticket_id", help="Ticket ID number")
     p_watch.add_argument("users", nargs="+", help="User names or IDs to add as watchers")
 
+    # note
+    p_note = sub.add_parser("note", help="Display a specific note from a ticket")
+    p_note.add_argument("ticket_id", help="Ticket ID number")
+    p_note.add_argument("note_number", type=int, help="Note number (as shown in Redmine URL #note-N)")
+
     return parser
 
 
@@ -946,6 +996,7 @@ def main():
         "users": cmd_users,
         "relate": cmd_relate,
         "watch": cmd_watch,
+        "note": cmd_note,
     }
     commands[args.command](args)
 
