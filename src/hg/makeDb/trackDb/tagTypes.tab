@@ -577,6 +577,7 @@ subGroups *
 subGroupMetaTables *
 subTrack *
 subgroups bed
+subtrackUrl *
 summary wigMaf bigMaf
 superTrack *
 symbolTable bed genePred

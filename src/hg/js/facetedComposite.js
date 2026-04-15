@@ -128,10 +128,20 @@ $(function() {
     function initTable(allData) {
         const { metadata, rowToIdx, colNames } = allData;
 
-        const ordinaryColumns = colNames.map(key => ({  // all but checkboxes
-            data: key,
-            title: toTitleCase(key.replace(/^_/, "")),
-        }));
+        const ordinaryColumns = colNames.map(key => {
+            const col = {
+                data: key,
+                title: toTitleCase(key.replace(/^_/, "")),
+            };
+            if (key === embeddedData.primaryKey && embeddedData.subtrackUrl) {
+                col.render = (data, type) => {
+                    if (type !== "display") return data;
+                    const url = embeddedData.subtrackUrl.replace("$$", encodeURIComponent(data));
+                    return `<a href="${url}" target="_blank">${data}</a>`;
+                };
+            }
+            return col;
+        });
 
         const checkboxColumn = {
             data: null,

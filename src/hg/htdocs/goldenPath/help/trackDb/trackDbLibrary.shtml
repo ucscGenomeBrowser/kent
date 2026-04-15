@@ -6866,6 +6866,23 @@ defaultSortField tissue
 </p>
 </div>
 
+<DIV class="subtrackUrl"><span class="types faceted composite"></span>
+<div class="format"><code>subtrackUrl &lt;url&gt;</code></div>
+<p>
+For some faceted composites, each subtrack is associated with a particular cell line or
+other accession that is described in more detail at another resource (e.g. ENCODE or SRA).
+This optional setting specifies a remote URL for linking out to those resources.  When
+it is set, the names in the first column of the metadata TSV file will be turned into
+hyperlinks to that resource.  If the URL includes the string '$$', that will be dynamically
+replaced with the identifier from that first column.
+ </p>
+<p>Example:
+<pre>
+subtrackUrl https://www.ncbi.nlm.nih.gov/sra/$$
+</pre>
+</p>
+</div>
+
 <DIV class="faceted_example1"><span class="types view"></span>
 <div class="format"><B>Example of a faceted composite track containing different track types:</B></div>
     <pre>
