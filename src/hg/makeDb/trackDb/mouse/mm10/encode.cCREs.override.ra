@@ -29,6 +29,6 @@ filterType.cCRE_class multipleListOr
 mouseOver <b>ID:</b> <a target="_blank" href="https://screen.wenglab.org/search?assembly=mm10&accessions=${name}">${name}</a><br><b>Class:</b> ${cCRE_class}<br><b>DNase max-Z:</b> ${DNase_maxZ}<br><b>H3K4me3 max-Z:</b> ${H3K4me3_maxZ}<br><b>H3K27ac max-Z:</b> ${H3K27ac_maxZ}<br><b>CTCF max-Z:</b> ${CTCF_maxZ}
 url https://screen.wenglab.org/search?assembly=mm10&accessions=$$
 urlLabel cCRE details on SCREEN:
-dataVersion ENCODE Registry version 4, 2024. (ENCODE4 data includes ENCODE2, ENCODE3, and the mouse ENCODE project)
+dataVersion ENCODE Registry version 4, 2024. (Includes ENCODE2, ENCODE3, and mouse ENCODE data)
 
 include encode4.ccres.ra
