@@ -278,11 +278,16 @@ sortOrder source=+
     autoScale on
     priority 26
 
-searchTable cloneEndABC10
-searchType bed
-searchMethod prefix
-searchPriority 50
-termRegex ABC10-([0-9A-Z])+
+    track bacRearray32k
+    parent cloneEndSuper on
+    subGroups source=chori
+    shortLabel BCGSC 32k rearray
+    longLabel BCGSC Human BAC Rearray (32k minimal tiling set, mostly RP11 and CTD)
+    type bigBed 5
+    bigDataUrl /gbdb/$D/bbi/cloneEnd/bacRearray32k.bb
+    color 0,60,120
+    priority 27
+    visibility pack
 
 searchTable cloneEndABC11
 searchType bed
@@ -421,3 +426,15 @@ searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
+
+searchTable bacRearray32k
+searchType bigBed
+searchMethod prefix
+searchPriority 50
+termRegex (CTD|RP11|RP13)-([0-9A-Z])+
+
+searchTable cloneEndABC10
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC10-([0-9A-Z])+
