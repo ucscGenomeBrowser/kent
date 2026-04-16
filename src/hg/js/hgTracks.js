@@ -3283,7 +3283,7 @@ var rightClick = {
 		    };
 
                 if (rec.defaultColor) {
-                    o[rightClick.makeImgTag("wrench.png")+" Change Track Color"] = {
+                    o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
                             return true; }

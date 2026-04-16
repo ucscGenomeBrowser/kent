@@ -316,7 +316,7 @@ if (trackDbSetting(track->tdb, "onlyVisibility"))
     }
 
 // Color override support for right-click color picker
-if (cfgOptionBooleanDefault("showColorPicker", FALSE))
+if (tdbSupportsColorOverride(track->tdb))
     {
     char defaultColor[16];
     safef(defaultColor, sizeof(defaultColor), "#%02x%02x%02x",
