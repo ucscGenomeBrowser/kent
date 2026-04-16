@@ -1299,6 +1299,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
+boolean tdbSupportsColorOverride(struct trackDb *tdb);
+/* Return TRUE if this track type supports the color override feature. */
+
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb);
 /* color picker for overriding track color */
 
