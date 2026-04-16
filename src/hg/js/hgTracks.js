@@ -2773,15 +2773,19 @@ var rightClick = {
                            rec.colorOverride : rec.defaultColor;
         var dialogId = "trackColorDialog";
         $("#" + dialogId).remove();
-        $("body").append(
-            "<div id='" + dialogId + "'>" +
-            "<p>Pick a new color for <b>" + rec.shortLabel + "</b>:</p>" +
-            "<input type='text' id='trackColorText' value='" + currentColor + "' size='8' />" +
+        // Build with static template + data injected via .text()/.val()/.prop() so that
+        // hub-provided shortLabel cannot inject HTML.
+        var $dlg = $("<div>").attr("id", dialogId).html(
+            "<p>Pick a new color for <b></b>:</p>" +
+            "<input type='text' id='trackColorText' size='8' />" +
             "&nbsp;<input id='trackColorPicker' />" +
-            "<br><br><label><input type='checkbox' id='trackColorOn'" +
-            (rec.colorOverrideOn ? " checked" : "") +
-            " /> Enable color override</label>" +
-            "</div>");
+            "<br><br><label><input type='checkbox' id='trackColorOn' /> " +
+            "Enable color override</label>");
+        $dlg.find("p b").text(rec.shortLabel);
+        $dlg.find("#trackColorText").val(currentColor);
+        $dlg.find("#trackColorOn").prop("checked", !!rec.colorOverrideOn);
+        $("body").append($dlg);
+        var hexColorRe = /^#[0-9a-fA-F]{6}$/;
         $("#trackColorPicker").spectrum({
             color: currentColor,
             showPalette: true,
@@ -2797,9 +2801,29 @@ var rightClick = {
             }
         });
         $("#trackColorText").on("change", function() {
-            $("#trackColorPicker").spectrum("set", $(this).val());
+            var val = $(this).val();
+            if (!hexColorRe.test(val))
+                return;
+            $("#trackColorPicker").spectrum("set", val);
             $("#trackColorOn").prop("checked", true);
         });
+        var applyColor = function() {
+            var color = $("#trackColorText").val();
+            if (!hexColorRe.test(color)) {
+                warn("Invalid color '" + color + "'. Expected hex format like #1a2b3c.");
+                return false;
+            }
+            var isOn = $("#trackColorOn").is(":checked") ? "1" : "0";
+            rec.colorOverride = color;
+            rec.colorOverrideOn = (isOn === "1");
+            cart.setVars(
+                [trackName + ".colorOverride", trackName + ".colorOverrideOn"],
+                [color, isOn], null, false);
+            imageV2.requestImgUpdate(trackName,
+                trackName + ".colorOverride=" + encodeURIComponent(color) +
+                "&" + trackName + ".colorOverrideOn=" + isOn);
+            return true;
+        };
         $("#" + dialogId).dialog({
             modal: true,
             title: "Change Track Color",
@@ -2807,30 +2831,10 @@ var rightClick = {
             resizable: false,
             minWidth: 400,
             buttons: {
-                "Apply": function() {
-                    var color = $("#trackColorText").val();
-                    var isOn = $("#trackColorOn").is(":checked") ? "1" : "0";
-                    rec.colorOverride = color;
-                    rec.colorOverrideOn = (isOn === "1");
-                    cart.setVars(
-                        [trackName + ".colorOverride", trackName + ".colorOverrideOn"],
-                        [color, isOn], null, false);
-                    imageV2.requestImgUpdate(trackName,
-                        trackName + ".colorOverride=" + encodeURIComponent(color) +
-                        "&" + trackName + ".colorOverrideOn=" + isOn);
-                },
+                "Apply": function() { applyColor(); },
                 "Ok": function() {
-                    var color = $("#trackColorText").val();
-                    var isOn = $("#trackColorOn").is(":checked") ? "1" : "0";
-                    rec.colorOverride = color;
-                    rec.colorOverrideOn = (isOn === "1");
-                    cart.setVars(
-                        [trackName + ".colorOverride", trackName + ".colorOverrideOn"],
-                        [color, isOn], null, false);
-                    imageV2.requestImgUpdate(trackName,
-                        trackName + ".colorOverride=" + encodeURIComponent(color) +
-                        "&" + trackName + ".colorOverrideOn=" + isOn);
-                    $(this).dialog("close");
+                    if (applyColor())
+                        $(this).dialog("close");
                 }
             },
             close: function() {
