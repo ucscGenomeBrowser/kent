@@ -9,7 +9,7 @@ html mouseDevTimecourse
     parent mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M4 TPM
-    longLabel Mouse development timecourse GENCODE M4 mm10 TPM
+    longLabel Mouse development timecourse GENCODE M4 TPM
     visibility pack
     barChartUnit TPM
     barChartFacets tissue,timepoint
@@ -24,7 +24,7 @@ html mouseDevTimecourse
     parent mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M4 FPKM
-    longLabel Mouse development timecourse GENCODE M4 mm10 FPKM
+    longLabel Mouse development timecourse GENCODE M4 FPKM
     visibility pack
     barChartUnit FPKM
     barChartFacets tissue,timepoint
@@ -39,7 +39,7 @@ html mouseDevTimecourse
     parent mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M21 TPM
-    longLabel Mouse development timecourse GENCODE M21 mm10 TPM
+    longLabel Mouse development timecourse GENCODE M21 TPM
     visibility pack
     barChartUnit TPM
     barChartFacets tissue,timepoint
@@ -54,7 +54,7 @@ html mouseDevTimecourse
     parent mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M21 FPKM
-    longLabel Mouse development timecourse GENCODE M21 mm10 FPKM
+    longLabel Mouse development timecourse GENCODE M21 FPKM
     visibility pack
     barChartUnit FPKM
     barChartFacets tissue,timepoint

@@ -8,28 +8,59 @@ to the mm10 reference genome using GENCODE M21 annotations and lifted
 over to the mm39 reference genome.</p>
 
 <p>
-The data were produced as part of the ENCODE project at the Wold Lab,
-Caltech. Each tissue and time point has two biological replicates.</p>
+The data were produced as part of the <a href="https://www.encodeproject.org/"
+target="_blank">ENCODE</a> project at the <a href="http://woldlab.caltech.edu/"
+target="_blank">Wold Lab</a>,
+Caltech. Each tissue and time point has two biological replicates, each displayed
+as its own bar.</p>
+
+<p>The two sub tracks are:</p>
+<ul>
+  <li><b>timecourse M21 TPM</b> &ndash; TPM values using GENCODE
+  M21 annotations, lifted over from mm10</li>
+  <li><b>timecourse M21 FPKM</b> &ndash; FPKM values using GENCODE
+  M21 annotations, lifted over from mm10</li>
+</ul>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-This is a super track that contains two sub tracks, each displayed as a
+Each sub track is displayed as a
 <a href="/goldenPath/help/barChart.html" target="_blank">bigBarChart</a>.
 Bar charts show expression levels for each sample, colored by tissue
 type. The tracks can be faceted by tissue and timepoint using the track
 configuration controls.</p>
 
-<p>The two sub tracks are:</p>
-<ul>
-  <li><b>timecourse M21 mm39 TPM</b> &ndash; TPM values using GENCODE
-  M21 annotations, lifted over from mm10</li>
-  <li><b>timecourse M21 mm39 FPKM</b> &ndash; FPKM values using GENCODE
-  M21 annotations, lifted over from mm10</li>
-</ul>
+<p>Bars are colored by tissue:</p>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Color</th><th>Tissue</th></tr>
+  <tr><td style="background-color:#0118FA;width:30px;">&nbsp;</td><td>adrenal gland</td></tr>
+  <tr><td style="background-color:#C0C0C0;width:30px;">&nbsp;</td><td>embryonic facial prominence</td></tr>
+  <tr><td style="background-color:#00FFFF;width:30px;">&nbsp;</td><td>forebrain</td></tr>
+  <tr><td style="background-color:#FF8380;width:30px;">&nbsp;</td><td>heart</td></tr>
+  <tr><td style="background-color:#8B8A1D;width:30px;">&nbsp;</td><td>hindbrain</td></tr>
+  <tr><td style="background-color:#CAC379;width:30px;">&nbsp;</td><td>intestine</td></tr>
+  <tr><td style="background-color:#00FF00;width:30px;">&nbsp;</td><td>kidney</td></tr>
+  <tr><td style="background-color:#FFFA2C;width:30px;">&nbsp;</td><td>limb</td></tr>
+  <tr><td style="background-color:#C39CFB;width:30px;">&nbsp;</td><td>liver</td></tr>
+  <tr><td style="background-color:#7762F0;width:30px;">&nbsp;</td><td>lung</td></tr>
+  <tr><td style="background-color:#717E8D;width:30px;">&nbsp;</td><td>midbrain</td></tr>
+  <tr><td style="background-color:#A71206;width:30px;">&nbsp;</td><td>neural tube</td></tr>
+  <tr><td style="background-color:#35B5E2;width:30px;">&nbsp;</td><td>skeletal muscle tissue</td></tr>
+  <tr><td style="background-color:#9834E7;width:30px;">&nbsp;</td><td>spleen</td></tr>
+  <tr><td style="background-color:#995432;width:30px;">&nbsp;</td><td>stomach</td></tr>
+  <tr><td style="background-color:#483F84;width:30px;">&nbsp;</td><td>thymus</td></tr>
+  <tr><td style="background-color:#ff0000;width:30px;">&nbsp;</td><td>urinary bladder</td></tr>
+</table>
+
+<p style="margin-top:1em;">Within each tissue, bars are grouped by developmental time point:
+e10.5, e11.5, e12.5, e13.5, e14.5, e15.5, e16.5, and P0. Not all
+tissues are available at all time points.</p>
 
 <h2>Methods</h2>
 <p>
-RNA-seq reads were processed using the ENCODE long RNA-seq pipeline. Reads
+RNA-seq reads were processed using the
+<a href="https://www.encodeproject.org/pipelines/ENCPL002LSE/"
+target="_blank">ENCODE long RNA-seq pipeline</a>. Reads
 were aligned to the mm10 genome using STAR
 (Dobin <em>et al</em>., 2013) and quantified at the gene level using
 RSEM (Li and Dewey, 2011) with the GENCODE M21 annotation set. The FPKM
@@ -40,14 +71,6 @@ then converted into the UCSC
 bigBarChart</a> format (bed, categories, and facet files). The bed file
 was converted to the mm39 genome using liftOver and then converted into
 a bigBarChart bigBed file.</p>
-
-<p>The tissues included are: adrenal gland, embryonic facial prominence,
-forebrain, heart, hindbrain, intestine, kidney, limb, liver, lung,
-midbrain, neural tube, skeletal muscle tissue, spleen, stomach, thymus,
-and urinary bladder.</p>
-
-<p>The time points are: e10.5, e11.5, e12.5, e13.5, e14.5, e15.5,
-e16.5, and P0. Not all tissues are available at all time points.</p>
 
 <h2>Data Access</h2>
 <p>
