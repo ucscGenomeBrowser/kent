@@ -291,6 +291,31 @@ def resolve_status(name_or_id):
                  k2 != k and STATUS_IDS[k2] == STATUS_IDS[k] for k2 in STATUS_IDS))))
 
 
+def resolve_version(name_or_id, project_id, base_url, api_key):
+    """Resolve a version name or numeric ID to a Redmine fixed_version_id.
+
+    Numeric input passes through. Names are matched case-insensitively against
+    the given project's versions (exact match preferred, else unique substring).
+    """
+    if str(name_or_id).isdigit():
+        return int(name_or_id)
+    key = str(name_or_id).lower().strip()
+    data = api_get(base_url, f"/projects/{project_id}/versions.json", api_key)
+    versions = data.get("versions", [])
+    for v in versions:
+        if v["name"].lower() == key:
+            return v["id"]
+    matches = [v for v in versions if key in v["name"].lower()]
+    if len(matches) == 1:
+        return matches[0]["id"]
+    if len(matches) > 1:
+        names = ", ".join(v["name"] for v in matches)
+        sys.exit(f"Error: ambiguous version '{name_or_id}': matches {names}")
+    all_names = ", ".join(v["name"] for v in versions) or "(none)"
+    sys.exit(f"Error: unknown version '{name_or_id}'. "
+             f"Available for project {project_id}: {all_names}")
+
+
 def resolve_tracker(name_or_id):
     """Resolve a tracker name to a Redmine tracker ID. Accepts name or numeric ID."""
     if str(name_or_id).isdigit():
@@ -609,6 +634,17 @@ def cmd_update(args):
         issue_data["priority_id"] = args.priority
     if args.subject is not None:
         issue_data["subject"] = strip_emoji(args.subject)
+    if args.target_version is not None:
+        if args.target_version == "":
+            issue_data["fixed_version_id"] = ""
+        elif str(args.target_version).isdigit():
+            issue_data["fixed_version_id"] = int(args.target_version)
+        else:
+            issue = api_get(args.base_url,
+                            f"/issues/{args.ticket_id}.json", args.api_key)
+            project_id = issue["issue"]["project"]["id"]
+            issue_data["fixed_version_id"] = resolve_version(
+                args.target_version, project_id, args.base_url, args.api_key)
 
     custom_fields = []
     if args.category is not None:
@@ -644,7 +680,8 @@ def cmd_update(args):
     if not issue_data:
         sys.exit("Error: no fields to update. Provide at least one of: "
                  "--status, --assigned-to, --priority, --subject, "
-                 "--category, --mlm, --release-log-text, --release-log-url, "
+                 "--target-version, --category, --mlm, "
+                 "--release-log-text, --release-log-url, "
                  "--released-to-rr, --file-list, --table-list, --assemblies, "
                  "--custom-field, --note")
 
@@ -920,6 +957,8 @@ def build_parser():
                           help="Assignee name/ID (empty string to clear)")
     p_update.add_argument("--priority", type=int, help="New priority ID")
     p_update.add_argument("--subject", help="New subject")
+    p_update.add_argument("--target-version", dest="target_version",
+                          help="Target version name or ID (empty string to clear)")
     p_update.add_argument("--category", help="MLQ Category")
     p_update.add_argument("--mlm", help="MLM name")
     p_update.add_argument("--release-log-text", dest="release_log_text",
