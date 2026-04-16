@@ -245,5 +245,10 @@ struct grp *readGroupRa(char *groupFileName);
 
 struct trackDb *trackHubAddTracksGenome(struct trackHubGenome *hubGenome);
 /* Load up stuff from data hub and return list. */
+
+boolean trackHubIsValidSeqName(char *name);
+/* Return TRUE if name is a valid sequence name: non-empty, starts with a
+ * letter or digit, and contains only [A-Za-z0-9._-]. */
+
 #endif /* TRACKHUB_H */
 

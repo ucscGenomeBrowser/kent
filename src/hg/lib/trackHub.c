@@ -70,6 +70,25 @@ static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
 
+static boolean isValidSeqNameChar(char c)
+/* Return TRUE if c is a valid character for a sequence name: [A-Za-z0-9._-]. */
+{
+return isalnum((unsigned char)c) || c == '.' || c == '_' || c == '-';
+}
+
+boolean trackHubIsValidSeqName(char *name)
+/* Return TRUE if name is a valid sequence name: non-empty, starts with a
+ * letter or digit, and contains only [A-Za-z0-9._-]. */
+{
+if (!name || !name[0]) return FALSE;
+if (!isalnum((unsigned char)name[0])) return FALSE;
+char *p;
+for (p = name; *p; p++)
+    if (!isValidSeqNameChar(*p))
+        return FALSE;
+return TRUE;
+}
+
 static void tdbListAddHubToGroup(char *hubName, struct trackDb *tdbList)
 /* Prepend hub name to  group name for every tdb. */
 {

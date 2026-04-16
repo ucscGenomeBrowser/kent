@@ -163,6 +163,42 @@ let uppyOptions = {
             id: 'genome',
             name: 'Genome',
             render: ({value, onChange}, h) => {
+                // 2bit files name a new assembly hub (editable). Other files
+                // with genomeLocked are pinned by a hub-defining sibling or
+                // the hub they were drilled into.
+                let isTwoBit = file.meta.fileType === "2bit";
+                let isLocked = !!file.meta.genomeLocked;
+                if (isTwoBit || isLocked) {
+                    let editable2bit = isTwoBit && !isLocked;
+                    let label;
+                    if (editable2bit) {
+                        label = "Genome name for your assembly hub:";
+                    } else if (isTwoBit) {
+                        label = "Genome (set by hub.txt in this batch):";
+                    } else {
+                        label = "Genome (set by the assembly hub):";
+                    }
+                    return h('div', {
+                            class: "uppy-Dashboard-FileCard-label",
+                            style: "display: inline-block; width: 78%"
+                            },
+                        label,
+                        h('input', {
+                            id: `${file.meta.name}AsmHubInput`,
+                            type: 'text',
+                            class: "uppy-u-reset uppy-c-textInput uppy-Dashboard-FileCard-input",
+                            style: "margin-left: 5px",
+                            value: file.meta.genome || "",
+                            disabled: !editable2bit,
+                            onChange: e => {
+                                let v = hubCreate.sanitizeGenomeName(e.target.value);
+                                onChange(v);
+                                file.meta.genome = v;
+                                file.meta.genomeLabel = v;
+                            }
+                        })
+                    );
+                }
                 // keep these as a variable so we can init the autocompleteCat
                 // code only after the elements have actually been rendered
                 // there are multiple rendering passes and only eventually
@@ -181,6 +217,20 @@ let uppyOptions = {
                             onChange(e.target.value);
                             file.meta.genome = e.target.value;
                             file.meta.genomeLabel = e.target.selectedOptions[0].label;
+                            // If the user picked one of their own assembly hubs,
+                            // flip hubType and align parentDir so the upload
+                            // targets that existing hub rather than creating a
+                            // new stub. If they picked a UCSC db, flip back
+                            // and reset parentDir to a fresh default so they
+                            // don't accidentally upload into an assembly hub.
+                            let hub = hubCreate.assemblyHubByGenome(e.target.value);
+                            if (hub) {
+                                file.meta.hubType = "assemblyHub";
+                                file.meta.parentDir = hub.fileName;
+                            } else {
+                                file.meta.hubType = "trackHub";
+                                file.meta.parentDir = hubCreate.uiState.hubNameDefault;
+                            }
                         }
                         },
                         hubCreate.makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
@@ -245,26 +295,28 @@ const uppy = new Uppy.Uppy({
         let thisQuota = 0;
         let filesToOverwrite = []; // collect files that will overwrite existing ones
 
-        // Check if any file is a hub.txt - if so, we need to upload it first
-        // and switch to sequential uploads to prevent race conditions
-        let hasHubTxt = Object.values(files).some(f => f.meta.fileType === "hub.txt");
-        if (hasHubTxt) {
-            // Set TUS plugin to sequential uploads (limit: 1)
-            const tusPlugin = uppy.getPlugin('Tus');
-            if (tusPlugin) {
-                tusPlugin.setOptions({ limit: 1 });
-            }
-            // Reorder files so hub.txt comes first (JS objects maintain insertion order)
-            let hubTxtFiles = {};
-            let otherFiles = {};
-            for (let [key, file] of Object.entries(files)) {
-                if (file.meta.fileType === "hub.txt") {
-                    hubTxtFiles[key] = file;
-                } else {
-                    otherFiles[key] = file;
+        // If a 2bit is in the batch, propagate its genome/hubType to siblings.
+        // Fall back to sanitized filename because setFileMeta is async from
+        // our point of view - captured meta may not be populated yet.
+        let batchTwoBit = Object.values(files).find(looksLikeTwoBit);
+        if (batchTwoBit) {
+            let asmGenome = batchTwoBit.meta.genome || hubCreate.sanitizeGenomeName(batchTwoBit.name);
+            for (let f of Object.values(files)) {
+                f.meta.genome = asmGenome;
+                f.meta.genomeLabel = asmGenome;
+                f.meta.hubType = "assemblyHub";
+                // fileType may also be stale; recompute from filename if missing
+                if (!f.meta.fileType) {
+                    f.meta.fileType = hubCreate.detectFileType(f.name);
                 }
             }
-            files = Object.assign({}, hubTxtFiles, otherFiles);
+        }
+
+        // Tag every file so pre-finish knows a user hub.txt is coming in
+        // the same batch and can skip synthesizing its own.
+        let hasHubTxt = Object.values(files).some(looksLikeHubTxt);
+        for (let f of Object.values(files)) {
+            f.meta.batchHasHubTxt = hasHubTxt ? "true" : "false";
         }
 
         for (let [key, file] of Object.entries(files)) {
@@ -293,10 +345,19 @@ const uppy = new Uppy.Uppy({
             // check if this hub already exists and the genome is different from what was
             // just selected, if so, make the user create a new hub
             if (file.meta.parentDir in hubCreate.uiState.filesHash && hubCreate.uiState.filesHash[file.meta.parentDir].genome !== file.meta.genome) {
-                genome = hubCreate.uiState.filesHash[file.meta.parentDir].genome;
-                uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${genome}". Please select the correct genome, a different hub or make a new hub.`);
-                doUpload = false;
-                continue;
+                let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
+                // If the existing hub is an assembly hub, adopt its genome
+                // automatically rather than erroring - the UI hid the picker
+                // for this case, so the mismatch is just stale metadata.
+                if (existing.hubType === "assemblyHub") {
+                    file.meta.genome = existing.genome;
+                    file.meta.genomeLabel = existing.genome;
+                    file.meta.hubType = "assemblyHub";
+                } else {
+                    uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${existing.genome}". Please select the correct genome, a different hub or make a new hub.`);
+                    doUpload = false;
+                    continue;
+                }
             }
             // check if the user is uploading a file that already exists in this hub
             if (file.meta.parentDir in hubCreate.uiState.filesHash) {
@@ -331,10 +392,85 @@ const uppy = new Uppy.Uppy({
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
             doUpload = false;
         }
-        // Return the (possibly reordered) files object to proceed, or false to cancel
         return doUpload ? files : false;
     },
 });
+
+function looksLikeTwoBit(f) {
+    return (f.name || "").toLowerCase().endsWith(".2bit");
+}
+
+function looksLikeHubTxt(f) {
+    // Accept exact "hub.txt" or any "*.hub.txt" (e.g. "araTha1.hub.txt").
+    let n = (f.name || "").toLowerCase();
+    return n === "hub.txt" || n.endsWith(".hub.txt");
+}
+
+function propagateAssemblyHubMeta(uppyInstance) {
+    // When a batch contains a 2bit (and/or an assembly-hub hub.txt), mirror the
+    // custom genome name onto every file sharing that parentDir and mark every
+    // file hubType=assemblyHub. hub.txt wins over the 2bit's default.
+    //
+    // We detect the hub-defining files by filename rather than by meta.fileType,
+    // because setFileMeta updates Uppy's state immutably - file objects captured
+    // from getFiles() earlier in this event may still carry old meta.
+    let files = uppyInstance.getFiles();
+    let twoBit = files.find(looksLikeTwoBit);
+    let hubTxt = files.find(looksLikeHubTxt);
+    if (!twoBit && !hubTxt) return;
+
+    function applyGenomeToSiblings(genome, alsoLockHubDefiners) {
+        // Set genome/hubType on every file in the batch. Non-hub-defining
+        // files (i.e. the sibling tracks) are always locked to this genome so
+        // the user can't drift them. The hub-defining files (2bit, hub.txt)
+        // are locked only when alsoLockHubDefiners is true - used by the
+        // hub.txt path to pin the 2bit's editable field too.
+        if (!genome) return;
+        // All files in this batch belong to one new hub, so they must share
+        // one parentDir. Take it from the hub-defining file - its parentDir
+        // came from getDefaultHubName(), while a track that was added first
+        // may have been pointed at an existing assembly hub.
+        let hubDefiner = hubTxt || twoBit;
+        let syncParentDir = hubDefiner && hubDefiner.meta && hubDefiner.meta.parentDir;
+        for (let f of uppyInstance.getFiles()) {
+            let isHubDefining = looksLikeTwoBit(f) || looksLikeHubTxt(f);
+            let meta = {
+                genome: genome,
+                genomeLabel: genome,
+                hubType: "assemblyHub",
+                genomeLocked: !isHubDefining || alsoLockHubDefiners,
+            };
+            if (syncParentDir) meta.parentDir = syncParentDir;
+            uppyInstance.setFileMeta(f.id, meta);
+        }
+    }
+
+    if (hubTxt) {
+        hubCreate.readFileAsText(hubTxt.data).then((text) => {
+            let parsed = hubCreate.parseHubTxt(text);
+            // hub.txt is authoritative: lock the genome field so the user
+            // can't edit it and drift the stored db away from what hub.txt
+            // says. The user can always edit the hub.txt itself if they
+            // want a different name.
+            if (parsed.isAssemblyHub && parsed.genome) {
+                applyGenomeToSiblings(parsed.genome, true);
+                uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
+            } else if (parsed.genome && twoBit) {
+                let twoBitGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
+                if (parsed.genome !== twoBitGenome) {
+                    applyGenomeToSiblings(parsed.genome, true);
+                    uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt (overrides 2bit default)`, "warning", 5000);
+                }
+            }
+        }).catch((err) => {
+            console.warn("Could not read hub.txt for genome detection:", err);
+        });
+        return;
+    }
+
+    let asmGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
+    applyGenomeToSiblings(asmGenome, false);
+}
 
 // create a custom uppy plugin to batch change the type and db fields
 class BatchChangePlugin extends Uppy.BasePlugin {
@@ -382,6 +518,19 @@ class BatchChangePlugin extends Uppy.BasePlugin {
 
     addBatchSelectsToDashboard() {
         if (!document.getElementById("batch-selector-div")) {
+            // If the batch contains a 2bit, the UCSC genome picker makes no
+            // sense - show the custom genome name read-only instead. Detect by
+            // filename rather than meta.hubType because setFileMeta updates
+            // Uppy state immutably and the meta may not be visible on file
+            // objects captured from getFiles() earlier in this event.
+            let assemblyHubGenome = null;
+            for (let f of this.uppy.getFiles()) {
+                if (looksLikeTwoBit(f)) {
+                    assemblyHubGenome = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
+                    break;
+                }
+            }
+
             let batchSelectDiv = document.createElement("div");
             batchSelectDiv.id = "batch-selector-div";
             batchSelectDiv.style.display = "grid";
@@ -402,35 +551,88 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // syntax here is rowStart / columnStart / rowEnd / columnEnd
             batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
 
-            // the batch change db select
-            let batchDbSelect = document.createElement("select");
-            this.createOptsForSelect(batchDbSelect, hubCreate.makeGenomeSelectOptions());
-            batchDbSelect.id = "batchDbSelect";
-            batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
-            batchDbSelect.style.margin = "2px";
             let batchDbLabel = document.createElement("label");
             batchDbLabel.textContent = "Genome";
-            batchDbLabel.for = "batchDbSelect";
             batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
 
-            // the search bar for db selection
-            let batchDbSearchBarLabel= document.createElement("label");
-            batchDbSearchBarLabel.textContent = "or search for your genome:";
-            batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
-            batchDbSearchBarLabel.style.margin = "auto";
+            let batchDbSelect = null;
+            let batchDbGenomeSearchBar = null;
+            let batchDbGenomeSearchButton = null;
+            let batchDbSearchBarLabel = null;
 
-            let batchDbGenomeSearchBar = document.createElement("input");
-            batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
-            batchDbGenomeSearchBar.type = "text";
-            batchDbGenomeSearchBar.id = "batchDbSearchBar";
-            batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
-            let batchDbGenomeSearchButton = document.createElement("input");
-            batchDbGenomeSearchButton.type = "button";
-            batchDbGenomeSearchButton.value = "search";
-            batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
-            batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+            if (assemblyHubGenome) {
+                // Assembly hub: show the custom genome name as a locked text
+                // field, no UCSC picker or search.
+                let locked = document.createElement("input");
+                locked.type = "text";
+                locked.id = "batchAsmHubGenome";
+                locked.value = assemblyHubGenome;
+                locked.disabled = true;
+                locked.classList.add("uppy-u-reset", "uppy-c-textInput");
+                locked.style.gridArea = "2 / 2 / 2 / 2";
+                locked.style.margin = "2px";
+                batchDbLabel.for = "batchAsmHubGenome";
 
-            // the batch change hub name
+                let note = document.createElement("div");
+                note.textContent = "(assembly hub - genome is set by the 2bit in this batch)";
+                note.style.gridArea = "2 / 3 / 2 / 5";
+                note.style.margin = "auto 0";
+                note.style.fontStyle = "italic";
+
+                batchSelectDiv.appendChild(batchSelectText);
+                batchSelectDiv.appendChild(batchDbLabel);
+                batchSelectDiv.appendChild(locked);
+                batchSelectDiv.appendChild(note);
+            } else {
+                // Track hub: the usual UCSC picker + autocomplete.
+                batchDbSelect = document.createElement("select");
+                this.createOptsForSelect(batchDbSelect, hubCreate.makeGenomeSelectOptions());
+                batchDbSelect.id = "batchDbSelect";
+                batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
+                batchDbSelect.style.margin = "2px";
+                batchDbLabel.for = "batchDbSelect";
+
+                batchDbSearchBarLabel = document.createElement("label");
+                batchDbSearchBarLabel.textContent = "or search for your genome:";
+                batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
+                batchDbSearchBarLabel.style.margin = "auto";
+
+                batchDbGenomeSearchBar = document.createElement("input");
+                batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
+                batchDbGenomeSearchBar.type = "text";
+                batchDbGenomeSearchBar.id = "batchDbSearchBar";
+                batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
+                batchDbGenomeSearchButton = document.createElement("input");
+                batchDbGenomeSearchButton.type = "button";
+                batchDbGenomeSearchButton.value = "search";
+                batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
+                batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+
+                batchDbSelect.addEventListener("change", (ev) => {
+                    let files = this.uppy.getFiles();
+                    let val = ev.target.value;
+                    let label = ev.target.selectedOptions[0].label;
+                    let hub = hubCreate.assemblyHubByGenome(val);
+                    for (let [key, file] of Object.entries(files)) {
+                        let meta = {
+                            genome: val,
+                            genomeLabel: label,
+                            hubType: hub ? "assemblyHub" : "trackHub",
+                            parentDir: hub ? hub.fileName : hubCreate.uiState.hubNameDefault,
+                        };
+                        this.uppy.setFileMeta(file.id, meta);
+                    }
+                });
+
+                batchSelectDiv.appendChild(batchSelectText);
+                batchSelectDiv.appendChild(batchDbLabel);
+                batchSelectDiv.appendChild(batchDbSelect);
+                batchSelectDiv.appendChild(batchDbSearchBarLabel);
+                batchSelectDiv.appendChild(batchDbGenomeSearchBar);
+                batchSelectDiv.appendChild(batchDbGenomeSearchButton);
+            }
+
+            // the batch change hub name (shown in both modes)
             let batchParentDirLabel = document.createElement("label");
             batchParentDirLabel.textContent = "Hub Name";
             batchParentDirLabel.for = "batchParentDir";
@@ -443,17 +645,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             batchParentDirInput.style.margin= "1px 1px auto";
             batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
 
-            // add event handlers to change metadata, use an arrow function
-            // because otherwise 'this' keyword will be the element instead of
-            // our class
-            batchDbSelect.addEventListener("change", (ev) => {
-                let files = this.uppy.getFiles();
-                let val = ev.target.value;
-                for (let [key, file] of Object.entries(files)) {
-                    this.uppy.setFileMeta(file.id, {genome: val});
-                    this.uppy.setFileMeta(file.id, {genomeLabel: ev.target.selectedOptions[0].label});
-                }
-            });
             batchParentDirInput.addEventListener("change", (ev) => {
                 let files = this.uppy.getFiles();
                 let val = ev.target.value;
@@ -462,13 +653,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 }
             });
 
-
-            batchSelectDiv.appendChild(batchSelectText);
-            batchSelectDiv.appendChild(batchDbLabel);
-            batchSelectDiv.appendChild(batchDbSelect);
-            batchSelectDiv.appendChild(batchDbSearchBarLabel);
-            batchSelectDiv.appendChild(batchDbGenomeSearchBar);
-            batchSelectDiv.appendChild(batchDbGenomeSearchButton);
             batchSelectDiv.appendChild(batchParentDirLabel);
             batchSelectDiv.appendChild(batchParentDirInput);
 
@@ -480,15 +664,16 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
             }
 
-            // everything has to exist already for autocompleteCat to initialize
-            let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
-            if (justInitted) {
-                // only do this once per batch setup
-                batchDbGenomeSearchButton.addEventListener("click", (e) => {
-                    let inp = document.getElementById(batchDbSearchBar.id).value;
-                    let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
-                    $(selector).autocompleteCat("search", inp);
-                });
+            // autocomplete only applies in the track-hub path
+            if (batchDbSelect && batchDbGenomeSearchBar && batchDbGenomeSearchButton) {
+                let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
+                if (justInitted) {
+                    batchDbGenomeSearchButton.addEventListener("click", (e) => {
+                        let inp = document.getElementById(batchDbGenomeSearchBar.id).value;
+                        let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
+                        $(selector).autocompleteCat("search", inp);
+                    });
+                }
             }
         }
     }
@@ -496,8 +681,67 @@ class BatchChangePlugin extends Uppy.BasePlugin {
     install() {
         this.uppy.on("file-added", (file) => {
             // add default meta data for genome and fileType
-            console.log("file-added");
-            this.uppy.setFileMeta(file.id, {"genome": hubCreate.defaultDb(), "fileType": hubCreate.detectFileType(file.name), "parentDir": hubCreate.getDefaultHubName()});
+            let ftype = hubCreate.detectFileType(file.name);
+            let defaultMeta = {
+                "genome": hubCreate.defaultDb(),
+                "fileType": ftype,
+                "parentDir": hubCreate.getDefaultHubName(),
+                "hubType": "trackHub",
+            };
+            if (ftype === "2bit") {
+                // This file defines an assembly hub. Default the genome to the
+                // sanitized filename stem; the user can edit it in the file card.
+                defaultMeta.genome = hubCreate.sanitizeGenomeName(file.name);
+                defaultMeta.genomeLabel = defaultMeta.genome;
+                defaultMeta.hubType = "assemblyHub";
+            }
+            this.uppy.setFileMeta(file.id, defaultMeta);
+
+            // When drilled into an assembly hub, inherit and lock its genome.
+            let drilledIntoAsmHub = false;
+            if (hubCreate.uiState.currentHub &&
+                hubCreate.uiState.currentHub === defaultMeta.parentDir) {
+                let existing = hubCreate.uiState.filesHash[defaultMeta.parentDir];
+                if (existing && existing.hubType === "assemblyHub") {
+                    this.uppy.setFileMeta(file.id, {
+                        genome: existing.genome,
+                        genomeLabel: existing.genome,
+                        hubType: "assemblyHub",
+                        genomeLocked: true,
+                    });
+                    drilledIntoAsmHub = true;
+                }
+            }
+
+            // Top-level with no drilled-in hub: if the user already has an
+            // assembly hub, default this file to target it so they don't have
+            // to re-enter the genome + hub name. The user can still switch via
+            // the dropdown. Skip this when the file itself is hub-defining
+            // (2bit or hub.txt) or when any file in the batch is - in that
+            // case the batch is creating a *new* hub, not adding to an
+            // existing one, so the defaults should not point at the old hub.
+            let fileIsHubDefining = ftype === "2bit" || ftype === "hub.txt";
+            let batchHasHubDefining = this.uppy.getFiles().some(f =>
+                looksLikeTwoBit(f) || looksLikeHubTxt(f));
+            if (!drilledIntoAsmHub && !fileIsHubDefining && !batchHasHubDefining) {
+                let firstHub = hubCreate.firstAssemblyHub();
+                if (firstHub) {
+                    this.uppy.setFileMeta(file.id, {
+                        genome: firstHub.genome,
+                        genomeLabel: firstHub.genome,
+                        parentDir: firstHub.fileName,
+                        hubType: "assemblyHub",
+                        // NOT genomeLocked - user may want a different hub/genome
+                    });
+                }
+            }
+
+            // If a 2bit is in the batch, every sibling file in the same parentDir
+            // adopts its genome and gets hubType=assemblyHub. Also handle hub.txt:
+            // parse it client-side and, if it declares an assembly hub, mirror
+            // those values onto every file (hub.txt wins).
+            propagateAssemblyHubMeta(this.uppy);
+
             if (this.uppy.getFiles().length > 1) {
                 this.addBatchSelectsToDashboard();
             } else {
@@ -590,11 +834,78 @@ var hubCreate = (function() {
         "bamIndex": [".bam.bai", ".bai"],
         "tabixIndex": [".vcf.gz.tbi", "vcf.bgz.tbi"],
         "hub.txt": ["hub.txt"],
+        "2bit": [".2bit"],
         "text": [".txt", ".text"],
     };
 
     function getDefaultHubName() {
         return uiState.currentHub.length > 0 ? uiState.currentHub : uiState.hubNameDefault;
+    }
+
+    function sanitizeGenomeName(name) {
+        // Strip .2bit, replace non-alphanumeric/_/- with _, drop hub_ prefix.
+        // Returns empty string if nothing usable is left.
+        if (!name) return "";
+        let stem = name.replace(/\.2bit$/i, "");
+        stem = stem.replace(/[^A-Za-z0-9_-]/g, "_");
+        stem = stem.replace(/^hub_/, "");
+        return stem;
+    }
+
+    function hubTxtPathForHub(hubName) {
+        // Return the fullPath of the hub.txt file inside hubName as recorded in
+        // hubSpace, falling back to "hubName/hub.txt" if there's no row yet.
+        // The user may have uploaded their own "araTha1.hub.txt" - use its
+        // actual filename rather than assuming "hub.txt".
+        let dir = uiState.filesHash[hubName];
+        if (dir && dir.children) {
+            for (let child of dir.children) {
+                if (child.fileType === "hub.txt") return child.fullPath;
+            }
+        }
+        return hubName + "/hub.txt";
+    }
+
+    function assemblyHubByGenome(genome) {
+        // Return the dir row of the user's assembly hub whose genome matches,
+        // or null. If genome is falsy, return the first assembly hub found.
+        for (let fullPath in uiState.filesHash) {
+            let fd = uiState.filesHash[fullPath];
+            if (fd.fileType !== "dir" || fd.hubType !== "assemblyHub" || !fd.genome) continue;
+            if (!genome || fd.genome === genome) return fd;
+        }
+        return null;
+    }
+
+    function firstAssemblyHub() { return assemblyHubByGenome(null); }
+    function genomeIsAssemblyHub(genome) { return !!genome && !!assemblyHubByGenome(genome); }
+
+    function parseHubTxt(text) {
+        // Very small hub.txt parser: extracts `genome` and `twoBitPath` lines.
+        // Returns {genome, twoBitPath, isAssemblyHub} (values may be null/false).
+        let ret = {genome: null, twoBitPath: null, isAssemblyHub: false};
+        if (!text) return ret;
+        let lines = text.split(/\r?\n/);
+        for (let line of lines) {
+            let trimmed = line.replace(/^\s+/, "");
+            if (trimmed.startsWith("genome ") && !ret.genome) {
+                ret.genome = trimmed.substring(7).trim();
+            } else if (trimmed.startsWith("twoBitPath ")) {
+                ret.twoBitPath = trimmed.substring(11).trim();
+                ret.isAssemblyHub = true;
+            }
+        }
+        return ret;
+    }
+
+    function readFileAsText(fileObj) {
+        // Return a Promise resolving to the file contents as text.
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsText(fileObj);
+        });
     }
 
     function detectFileType(fileName) {
@@ -642,7 +953,29 @@ var hubCreate = (function() {
         // next time around our value/label pair will be a default. this time around we
         // want it selected because it was explicitly asked for, but it may not be next time
         ret = Object.values(defaultGenomeChoices);
-        if (value && label && !(label in defaultGenomeChoices)) {
+
+        // Include the user's uploaded assembly hubs as options. One entry per
+        // assembly hub (dedupe by genome name), taken from the dir row in
+        // filesHash. This lets users picking a dropdown genome target a hub
+        // they already created.
+        let seenAsmHub = {};
+        for (let fullPath in uiState.filesHash) {
+            let fd = uiState.filesHash[fullPath];
+            if (fd.fileType === "dir" && fd.hubType === "assemblyHub" &&
+                fd.genome && !seenAsmHub[fd.genome]) {
+                seenAsmHub[fd.genome] = true;
+                ret.push({
+                    value: fd.genome,
+                    label: `${fd.genome} (your assembly hub)`,
+                });
+            }
+        }
+
+        // Cache the value/label pair so it's a default next time - but skip
+        // assembly-hub genomes, those are added by the loop above with the
+        // "(your assembly hub)" suffix and would otherwise show up twice.
+        if (value && label && !(label in defaultGenomeChoices) &&
+            !genomeIsAssemblyHub(value)) {
             defaultGenomeChoices[label] = {value: value, label: label, selected: true};
         }
         return ret;
@@ -666,15 +999,19 @@ var hubCreate = (function() {
         return ret;
     }
 
-    function viewInGenomeBrowser(fname, ftype, genome, hubName) {
+    function viewInGenomeBrowser(fname, ftype, genome, hubName, hubType) {
         // redirect to hgTracks with this track open in the hub
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
             if (ftype in extensionMap) {
                 // TODO: tusd should return this location in it's response after
                 // uploading a file and then we can look it up somehow, the cgi can
                 // write the links directly into the html directly for prev uploaded files maybe?
-                let hubUrl = uiState.userUrl + cgiEncode(hubName) + "/hub.txt";
-                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + genome + "&hubUrl=" + encodeURIComponent(hubUrl) + "&" + trackHubFixName(fname) + "=pack";
+                let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
+                // Assembly hubs use the user-defined genome name, which isn't a
+                // UCSC db - hgTracks needs 'genome=' (resolves via the hub)
+                // rather than 'db=' (looks up a native assembly).
+                let dbParam = hubType === "assemblyHub" ? "genome" : "db";
+                let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&" + dbParam + "=" + genome + "&hubUrl=" + encodeURIComponent(hubUrl) + "&" + trackHubFixName(fname) + "=pack";
                 window.location.assign(url);
                 return false;
             }
@@ -702,7 +1039,10 @@ var hubCreate = (function() {
             _.forEach(data, (d) => {
                 if (!genome) {
                     genome = d.genome;
-                    url += "&db=" + genome;
+                    // Assembly hubs use 'genome=' (hub-resolved name), native
+                    // UCSC assemblies use 'db='.
+                    let dbParam = d.hubType === "assemblyHub" ? "genome" : "db";
+                    url += "&" + dbParam + "=" + genome;
                 }
                 if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(d.fullPath));
@@ -715,12 +1055,10 @@ var hubCreate = (function() {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
-                        url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(d.parentDir));
-                        if (d.parentDir.endsWith("/")) {
-                            url += "hub.txt";
-                        } else {
-                            url += "/hub.txt";
-                        }
+                        // Resolve the actual hub.txt filename - user may have
+                        // uploaded "<prefix>.hub.txt" rather than literal hub.txt.
+                        let hubDir = d.parentDir.replace(/\/$/, "");
+                        url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(hubTxtPathForHub(hubDir)));
                     }
                     hubsAdded[d.parentDir] = true;
                     if (d.genome == genome) {
@@ -1073,14 +1411,14 @@ var hubCreate = (function() {
             return folderIcon;
         } else {
             // only offer the button if this is a track file
-            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType in extensionMap) {
+            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType !== "2bit" && rowData.fileType in extensionMap) {
                 let container = document.createElement("div");
                 let viewBtn = document.createElement("button");
                 viewBtn.textContent = "View in Genome Browser";
                 viewBtn.type = 'button';
                 viewBtn.addEventListener("click", function(e) {
                     e.stopPropagation();
-                    viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir);
+                    viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir, rowData.hubType);
                 });
                 container.appendChild(viewBtn);
                 return container;
@@ -1446,6 +1784,7 @@ var hubCreate = (function() {
             const now = new Date(Date.now());
             const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
             let newReqObj, hubTxtObj, parentDirObj;
+            let hubType = metadata.hubType || "trackHub";
             newReqObj = {
                 "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
@@ -1455,13 +1794,22 @@ var hubCreate = (function() {
                 "lastModified": dFormatted,
                 "uploadTime": nowFormatted,
                 "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
+                "hubType": hubType,
             };
             // from what I can tell, any response we would create in the pre-finish hook
             // is completely ignored for some reason, so we have to fake the other files
             // we would have created with this one file and add them to the table if they
             // weren't already there:
-            if (metadata.fileType !== "hub.txt") {
-                // if the user uploaded a hub.txt don't make a second fake object for it
+            // Only fabricate a hub.txt row when the backend actually synthesized
+            // one. Skip if the user supplied their own *.hub.txt (either already
+            // in filesHash from a prior upload, or coming in this same batch -
+            // upload-success order is arbitrary so the hub.txt row may not be
+            // in filesHash yet when a sibling's upload-success fires).
+            let dirHash = uiState.filesHash[cgiEncode(metadata.parentDir)];
+            let hubTxtExists = !!(dirHash && dirHash.children &&
+                dirHash.children.some(c => c.fileType === "hub.txt"));
+            let batchHasHubTxt = metadata.batchHasHubTxt === "true";
+            if (metadata.fileType !== "hub.txt" && !hubTxtExists && !batchHasHubTxt) {
                 hubTxtObj = {
                     "uploadTime": nowFormatted,
                     "lastModified": dFormatted,
@@ -1471,6 +1819,7 @@ var hubCreate = (function() {
                     "genome": metadata.genome,
                     "parentDir": cgiEncode(metadata.parentDir),
                     "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
+                    "hubType": hubType,
                 };
             }
             parentDirObj = {
@@ -1482,6 +1831,7 @@ var hubCreate = (function() {
                 "genome": metadata.genome,
                 "parentDir": "",
                 "fullPath": cgiEncode(metadata.parentDir),
+                "hubType": hubType,
             };
             // package the three objects together as one "hub" and display it
             let hub = [parentDirObj, newReqObj];
@@ -1556,5 +1906,11 @@ var hubCreate = (function() {
              makeGenomeSelectOptions: makeGenomeSelectOptions,
              getDefaultHubName: getDefaultHubName,
              detectFileType: detectFileType,
+             sanitizeGenomeName: sanitizeGenomeName,
+             readFileAsText: readFileAsText,
+             parseHubTxt: parseHubTxt,
+             firstAssemblyHub: firstAssemblyHub,
+             genomeIsAssemblyHub: genomeIsAssemblyHub,
+             assemblyHubByGenome: assemblyHubByGenome,
            };
 }());

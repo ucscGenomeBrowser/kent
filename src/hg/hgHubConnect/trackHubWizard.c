@@ -174,6 +174,7 @@ if (userName)
         jsonWriteString(jw, "uploadTime", file->creationTime);
         jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
         jsonWriteString(jw, "md5sum", file->md5sum);
+        jsonWriteString(jw, "hubType", file->hubType ? file->hubType : "trackHub");
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
