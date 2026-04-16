@@ -19788,3 +19788,45 @@ TMPDIR=/dev/shm
     # 815513873 bases of 2374868943 (34.339%) in intersection
 
 ##############################################################################
+# Mouse Development Timecourse bulk RNA-seq (2026-04-10 Gerardo)
+# Converting track hub from Wold Lab (Caltech) into native tracks.
+# Hub URL: http://woldlab.caltech.edu/~diane/mouse_development_bulk/mouse_development.hub.txt
+# Publication: https://www.encodeproject.org/publications/e0d01543-9965-4edb-933c-778a40575cd9/
+# 17 tissues, up to 8 timepoints (e10.5-e16.5, P0), two replicates per condition.
+# bigBarChart tracks with FPKM and TPM from RSEM, GENCODE M4 and M21 annotations.
+
+# Download data files from hub to /hive/data/outside/
+mkdir -p /hive/data/outside/woldlab/mouseDevTimecourse/mm10
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm10
+
+for f in mouse_development_TPM_M4_mm10.bb mouse_development_FPKM_M4_mm10.bb \
+    mouse_development_TPM_M21_mm10.bb mouse_development_FPKM_M21_mm10.bb \
+    mouse_development_M4.categories mouse_development_M4.facets \
+    mouse_development_M21.categories mouse_development_M21.facets; do
+    curl -o "$f" "http://woldlab.caltech.edu/~diane/mouse_development_bulk/$f"
+done
+
+# Create symlinks in /gbdb/mm10/
+mkdir -p /gbdb/mm10/mouseDevTimecourse
+cd /gbdb/mm10/mouseDevTimecourse
+for f in /hive/data/outside/woldlab/mouseDevTimecourse/mm10/*; do
+    ln -s "$f" .
+done
+
+# Add trackDb entry
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+# Created mouseDevTimecourse.ra (superTrack with 4 bigBarChart subtracks)
+# Created HTML description files:
+#   mouseDevTimecourse.html (supertrack)
+#   developmentTimecourseM4mm10TPM.html
+#   developmentTimecourseM4mm10FPKM.html
+#   developmentTimecourseM21mm10TPM.html
+#   developmentTimecourseM21mm10FPKM.html
+# Added "include mouseDevTimecourse.ra" to trackDb.ra
+
+# Load trackDb
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=mm10
+##############################################################################
+
+##############################################################################
