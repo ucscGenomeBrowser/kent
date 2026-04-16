@@ -1,0 +1,42 @@
+track mouseDevTimecourse
+superTrack on hide
+shortLabel Bulk dev RNA-seq
+longLabel Mouse developmental time course bulk RNA-seq
+group regulation
+origAssembly mm10
+pennantIcon 10.jpg ../goldenPath/help/liftOver.html "lifted from mm10"
+html mouseDevTimecourse
+
+    track developmentTimecourseM21mm39TPM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M21 TPM
+    longLabel Mouse development timecourse GENCODE M21 mm39 liftover TPM
+    visibility pack
+    barChartUnit TPM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_TPM_M21_mm39.bb
+    barChartCategoryUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_M21.categories
+    barChartStatsUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_M21.facets
+    singleCellColumnNames off
+    origAssembly mm10
+    pennantIcon 10.jpg ../goldenPath/help/liftOver.html "lifted from mm10"
+    html developmentTimecourseM21mm39TPM
+
+    track developmentTimecourseM21mm39FPKM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M21 FPKM
+    longLabel Mouse development timecourse GENCODE M21 mm39 liftover FPKM
+    visibility pack
+    barChartUnit FPKM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_FPKM_M21_mm39.bb
+    barChartCategoryUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_M21.categories
+    barChartStatsUrl /gbdb/mm39/mouseDevTimecourse/mouse_development_M21.facets
+    singleCellColumnNames off
+    origAssembly mm10
+    pennantIcon 10.jpg ../goldenPath/help/liftOver.html "lifted from mm10"
+    html developmentTimecourseM21mm39FPKM

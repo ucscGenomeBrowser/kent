@@ -1,0 +1,37 @@
+# Mouse Development Timecourse bulk RNA-seq (2026-04-10 Gerardo)
+# Converting track hub from Wold Lab (Caltech) into native tracks.
+# Hub URL: http://woldlab.caltech.edu/~diane/mouse_development_bulk/mouse_development.hub.txt
+# Publication: https://www.encodeproject.org/publications/e0d01543-9965-4edb-933c-778a40575cd9/
+# mm39 data are liftOver'd from mm10 GENCODE M21 alignments.
+# 17 tissues, up to 8 timepoints (e10.5-e16.5, P0), two replicates per condition.
+# bigBarChart tracks with FPKM and TPM from RSEM.
+
+# Download data files from hub to /hive/data/outside/
+mkdir -p /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+
+for f in mouse_development_TPM_M21_mm39.bb mouse_development_FPKM_M21_mm39.bb \
+    mouse_development_M21.categories mouse_development_M21.facets; do
+    curl -o "$f" "http://woldlab.caltech.edu/~diane/mouse_development_bulk/$f"
+done
+
+# Create symlinks in /gbdb/mm39/
+mkdir -p /gbdb/mm39/mouseDevTimecourse
+cd /gbdb/mm39/mouseDevTimecourse
+for f in /hive/data/outside/woldlab/mouseDevTimecourse/mm39/*; do
+    ln -s "$f" .
+done
+
+# Add trackDb entry
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
+# Created mouseDevTimecourse.ra (superTrack with 2 bigBarChart subtracks)
+# Created HTML description files:
+#   mouseDevTimecourse.html (supertrack)
+#   developmentTimecourseM21mm39TPM.html
+#   developmentTimecourseM21mm39FPKM.html
+# Added "include mouseDevTimecourse.ra" to trackDb.ra
+
+# Load trackDb
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=mm39
+##############################################################################
