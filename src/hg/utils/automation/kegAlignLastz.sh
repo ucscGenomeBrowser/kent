@@ -37,9 +37,9 @@ e.g.: kegAlignLastz.sh rn7 papAnu4 mammal primate\n" 1>&2
   exit 255
 fi
 
-# asmId - if assembly hub, determine GCx_012345678.9 name
+# accId - if assembly hub, determine GCx_012345678.9 name
 #         if not, return the asmName (== UCSC database name)
-function asmId() {
+function accId() {
   export asmName=$1
   export id="${asmName}"
   case $asmName in
@@ -78,7 +78,7 @@ function asmSize() {
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        size=`awk '{sum+=$2}END{print sum}' /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt`
        ;;
      *)
@@ -95,7 +95,7 @@ function seqCount() {
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        count=`wc -l /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt | cut -d' ' -f1`
        ;;
      *)
@@ -126,7 +126,7 @@ function faGzUrl() {
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        printf "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s.fa.gz" "${gcxPath}" "${id}" "${id}"
        ;;
      *)
@@ -169,25 +169,25 @@ export qClade="$4"
 
 export tGcPath=$(gcPath $target)
 export qGcPath=$(gcPath $query)
-export tAsmId=$(asmId $target)
-export qAsmId=$(asmId $query)
+export tAccId=$(accId $target)
+export qAccId=$(accId $query)
 printf "# tq: '${target}' '${query}' '${tClade}' '${qClade}'\n" 1>&2
 printf "# tq gcPath: '${tGcPath}' '${qGcPath}'\n" 1>&2
-printf "# tq asmId: '${tAsmId}' '${qAsmId}'\n" 1>&2
+printf "# tq accId: '${tAccId}' '${qAccId}'\n" 1>&2
 
 # upper case first character
-export Target="${tAsmId^}"
-export Query="${qAsmId^}"
+export Target="${tAccId^}"
+export Query="${qAccId^}"
 
 export DS=`date "+%F"`
 
 # assume UCSC db build
 export buildDir="/hive/data/genomes/${target}/bed/lastz${Query}.${DS}"
 export targetExists="/hive/data/genomes/${target}/bed"
-export symLink="/hive/data/genomes/${target}/bed/lastz.${qAsmId}"
-export swapDir="/hive/data/genomes/${query}/bed/blastz.${tAsmId}.swap"
+export symLink="/hive/data/genomes/${target}/bed/lastz.${qAccId}"
+export swapDir="/hive/data/genomes/${query}/bed/blastz.${tAccId}.swap"
 export queryExists="/hive/data/genomes/${query}/bed"
-export swapLink="/hive/data/genomes/${query}/bed/lastz.${tAsmId}"
+export swapLink="/hive/data/genomes/${query}/bed/lastz.${tAccId}"
 export targetSizes="/hive/data/genomes/${target}/chrom.sizes"
 export querySizes="/hive/data/genomes/${query}/chrom.sizes"
 export target2bit="/hive/data/genomes/${target}/${target}.2bit"
@@ -209,10 +209,10 @@ case $target in
        tFullName="-tAsmId $target"
        rBestTrackHub="-trackHub"
        buildDir="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz${Query}.${DS}"
-       symLink="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz.${qAsmId}"
+       symLink="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz.${qAccId}"
        targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData"
-       targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.chrom.sizes.txt"
-       target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.2bit"
+       targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAccId}/${tAccId}.chrom.sizes.txt"
+       target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAccId}/${tAccId}.2bit"
        tTdb="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/doTrackDb.bash"
        tRbestArgs="-target2Bit=\"${target2bit}\" \\
 -targetSizes=\"${targetSizes}\""
@@ -225,11 +225,11 @@ case $query in
      GC[AF]_*) trackHub="-trackHub -noDbNameCheck"
        qFullName="-qAsmId $query"
        rBestTrackHub="-trackHub"
-       swapDir="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/blastz.${tAsmId}.swap"
-       swapLink="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/lastz.${tAsmId}"
+       swapDir="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/blastz.${tAccId}.swap"
+       swapLink="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/lastz.${tAccId}"
        queryExists="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData"
-       querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.chrom.sizes.txt"
-       query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.2bit"
+       querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAccId}/${qAccId}.chrom.sizes.txt"
+       query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAccId}/${qAccId}.2bit"
        qTdb="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/doTrackDb.bash"
        qRbestArgs="-query2Bit=\"${query2bit}\" \\
 -querySizes=\"${querySizes}\""
@@ -379,7 +379,7 @@ esac
 
 if [ "$tClade" == "primate" -a "$qClade" == "primate" ]; then
 
-export yamlString="# ${target}.${query}.yaml
+export yamlString="# ${tAccId}.${qAccId}.yaml
 TARGET_Sequence:
   class: File
   path: ${tFaGzUrl}
@@ -487,7 +487,7 @@ if [ $primaryDone -eq 0 ]; then
 ### setup the DEF file
 printf "%s" "${defString}" > ${buildDir}/DEF
 ### and the yaml file
-printf "%s" "${yamlString}" > ${buildDir}/${tAsmId}.${qAsmId}.yaml
+printf "%s" "${yamlString}" > ${buildDir}/${tAccId}.${qAccId}.yaml
 
 ### setup the buildDir/run.sh script
 printf "#!/bin/bash
@@ -498,17 +498,17 @@ export buildDir=\"${buildDir}\"
 export swapDir=\"${swapDir}\"
 export PM=\"/hive/users/hiram/galaxy/venv3.12/bin/planemo\"
 
-export targetDb=\"${tAsmId}\"
-export queryDb=\"${qAsmId}\"
+export targetDb=\"${tAccId}\"
+export queryDb=\"${qAccId}\"
 export QueryDb=\"${Query}\"
 
 cd \${buildDir}
 mkdir -p log
-export DS=\`date \"+\%%F_\%%T_\%%s\"\`
+export DS=\`date \"+%%F_%%T_%%s\"\`
 export logDir=\"\${buildDir}/log\"
 export logFile=\"\${logDir}/\${DS}.log\"
 time (\${PM} run \\
-  \"~/kent/src/hg/utils/automation/kegAlign.json.gz\" \\
+  ~/kent/src/hg/utils/automation/kegAlign.json.ga \\
      \"\${targetDb}.\${queryDb}.yaml\" --profile vgp \\
         --history_name \"\${targetDb}.\${queryDb}.kegAlign\" \\
            --test_output_json \"\${logDir}/runOutput.\${DS}.json\") >> \"\${logFile}\" 2>&1
@@ -653,23 +653,23 @@ printf "########################################################################
 
 (grep -w real $buildDir/do.log || true) | sed -e 's/^/    # /;' | head -1 >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "    sed -e 's/^/    # /;' fb.${tAsmId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
+printf "    sed -e 's/^/    # /;' fb.${tAccId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
 printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
       ${tRbestArgs} \\
       ${qRbestArgs} \\
-        ${tAsmId} ${qAsmId}) > rbest.log 2>&1
+        ${tAccId} ${qAccId}) > rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 
 (grep -w real $buildDir/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${buildDir}/fb.${tAsmId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
+(sed -e 's/^/    # /;' ${buildDir}/fb.${tAccId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
 
 printf "\n    ### and for the swap\n" >> ${buildDir}/makeDoc.txt
 
@@ -688,9 +688,9 @@ set -beEu -o pipefail
 
 cd $swapDir
 
-export targetDb=\"${tAsmId}\"
+export targetDb=\"${tAccId}\"
 export Target=\"${Target}\"
-export queryDb=\"${qAsmId}\"
+export queryDb=\"${qAccId}\"
 
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
@@ -740,21 +740,21 @@ printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub
 
 (grep -w real ${swapDir}/swap.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "    sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
+printf "    sed -e 's/^/    # /;' fb.${qAccId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
 printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   ${qAsmId} ${tAsmId}) > rbest.log 2>&1
+   ${qAccId} ${tAccId}) > rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 (grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
+(sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
 
 printf "\n##############################################################################\n" >> ${buildDir}/makeDoc.txt
 
