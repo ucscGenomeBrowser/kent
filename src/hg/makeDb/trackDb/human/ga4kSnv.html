@@ -1,0 +1,81 @@
+<h2>Description</h2>
+<p>
+This track shows small variants (single-nucleotide variants and short
+insertion/deletion variants) identified by PacBio HiFi long-read sequencing
+of probands and their families enrolled in the Genomic Answers for Kids
+(GA4K) program at Children's Mercy Research Institute. GA4K is a longitudinal
+pediatric genomics initiative that aims to enroll 30,000 children with
+suspected rare genetic disorders, together with their parents, to build a
+large-scale resource of clinical and genomic data.
+</p>
+<p>
+The callset contains approximately 36.2 million variants genotyped across
+up to 552 samples (maximum allele number 1104 on the autosomes). Each
+variant is annotated with allele count (AC), total called alleles (AN),
+cohort allele frequency (AF), variant type (substitution, insertion or
+deletion) and the corresponding allele frequency in gnomAD v3.0 where
+available.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The track uses the standard VCF display. By default, variants are shown as
+colored marks along the genome; clicking an item opens the detail page
+with per-site INFO fields including AC, AN, AF and the gnomAD v3 allele
+frequency.
+</p>
+
+<h2>Methods</h2>
+<p>
+Samples were sequenced on PacBio Revio and Sequel II instruments with HiFi
+chemistry. Per-sample variant calls were generated with DeepVariant as gVCFs,
+then merged across the cohort with GLnexus v1.2.7 using the
+<tt>DeepVariant_unfiltered</tt> configuration. The resulting BCF was converted
+to VCF with <tt>bcftools view</tt> v1.10.
+</p>
+<p>
+To reduce false positives, the merged callset was filtered to variants
+replicated by independent evidence: (1) observed in at least one additional
+unrelated Children's Mercy individual, or (2) matching a variant observed in
+a sample from the Human Pangenome Reference Consortium (HPRC).
+</p>
+<p>
+The GA4K release is provided as 24 per-chromosome VCF files (chr1-22, chrX,
+chrY). For display on the Genome Browser, these were concatenated with
+<tt>bcftools concat</tt> into a single bgzip-compressed, tabix-indexed file.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The VCF file for this track is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/ga4k/" target="_blank">our
+download server</a> as <tt>ga4kSnv.vcf.gz</tt> (with <tt>.tbi</tt> index).
+Regions can be extracted with <tt>tabix</tt>, for example:
+<tt>tabix http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz chr21:1-100000000</tt>.
+</p>
+<p>
+The original per-chromosome VCFs and full release documentation are
+available from the Children's Mercy Research Institute GA4K data release at
+<a href="https://github.com/ChildrensMercyResearchInstitute/GA4K" target="_blank">
+github.com/ChildrensMercyResearchInstitute/GA4K</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Children's Mercy Research Institute and the Genomic Answers
+for Kids participants and their families for making this dataset publicly
+available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cohen ASA, Farrow EG, Abdelmoity AT, Alaimo JT, Amudhavalli SM, Anderson JT, Bansal L, Bartik L,
+Baybayan P, Belden B <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S1098-3600(22)00653-0" target="_blank">
+Genomic answers for children: Dynamic analyses of &gt;1000 pediatric rare disease genomes</a>.
+<em>Genet Med</em>. 2022 Jun;24(6):1336-1348.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35305867" target="_blank">35305867</a>
+</p>
+

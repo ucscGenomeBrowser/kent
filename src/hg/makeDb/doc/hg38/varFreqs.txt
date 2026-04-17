@@ -1,3 +1,17 @@
+# Genomic Answers for Kids (GA4K), Children's Mercy - 2026-04-16 Claude max
+# GA4K is a pediatric rare-disease PacBio HiFi long-read cohort (Cohen et al.
+# 2022, Genet Med, PMID 35305867). The release ships 24 per-chromosome VCFs of
+# site-only small variants (SNVs and short indels), filtered to variants
+# replicated in >=2 unrelated GA4K individuals or matched to an HPRC variant.
+# Upstream data lives under /hive/data/genomes/hg38/bed/lrSv/GA4K (co-located
+# with the matched GA4K structural-variant release; see the lrSv makedoc).
+cd /hive/data/genomes/hg38/bed/lrSv/GA4K
+bcftools concat -Oz -o ga4kSnv.vcf.gz \
+    pacbio_snv_vcf/pb_joint_merged.snv.chr{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.gz
+tabix -p vcf ga4kSnv.vcf.gz
+# Symlinks placed under /gbdb/hg38/varFreqs/ga4k/ for the ga4kSnv stanza in
+# trackDb/human/varFreqs.ra.
+
 # Mexico Biobank, Max, Nov 8 2025
 CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz /hive
 /data/genomes/hg19/bed/varFreqs/mexbb/MXBv2.vcf.gz /hive/data/genomes/hg38/p14Clean/hg38.p14.fa MXBv2.lift.hg19ToHg38.vcf && bgzip MXBv2.lift.hg19ToHg38.vcf && bcftools sort MXBv2.lift.hg19ToHg38.vcf -Oz -m 200G -T /data/tmp/ -o MXBv2.lift.hg19ToHg38.vcf.gz && tabix -p vcf MXBv2.lift.hg19ToHg38.vcf.gz
