@@ -378,6 +378,7 @@ case $tClade in
       linearGap="loose"
 esac
 
+##########  primate <-> primate  #########################################
 if [ "$tClade" == "primate" -a "$qClade" == "primate" ]; then
 
 export yamlString="# ${tAccId}.${qAccId}.yaml
@@ -389,17 +390,34 @@ QUERY_Sequence:
   path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
-linear_gap_options.linear_gap: ${linearGap}
+axtChainLinearGap:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/axtChain.medium.txt
+axtChainScoreScheme:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/primate-primate.lastz.score.txt
+#    A    C    G    T
+#   90 -330 -236 -356
+# -330  100 -318 -236
+# -236 -318  100 -330
+# -356 -236 -330   90
+#     O=600 E=150
 # lastz options
 xdropX: 910
 ydropY: 15000
 stepZ: 1
 noTransitionT: false
 strand_selectorB: both
-seeding_options.seed_selector: 12of19
+# seeding_options.seed.seed_selector: 12of19 does not get into the process
 hspthreshK: 4500
 gappedthreshL: 4500
 innerH: 2000
+scoringMatrix:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/primate-primate.lastz.score.txt
 "
 
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
@@ -445,14 +463,17 @@ QUERY_Sequence:
   path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
-linear_gap_options.linear_gap: ${linearGap}
+axtChainLinearGap:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/axtChain.loose.txt
 # lastz options
 xdropX: 910
 ydropY: 9400
 stepZ: 1
 noTransitionT: true
 strand_selectorB: both
-seeding_options.seed_selector: 12of19
+# seeding_options.seed.seed_selector: 12of19 does not get into the process
 hspthreshK: 3000
 gappedthreshL: 3000
 innerH: 2000
@@ -483,7 +504,7 @@ fi
 ### skip primary alignment if it is already done
 ###  primaryDone == 0 means NOT done yet
 if [ $primaryDone -eq 0 ]; then
-  mkdir "${buildDir}"
+  mkdir -p "${buildDir}"
 
 ### setup the DEF file
 printf "%s" "${defString}" > ${buildDir}/DEF
