@@ -9,6 +9,7 @@ html wgEncodeReg4RnaSeq.html
 colorSettingsUrl /gbdb/hg38/encode4/regulation/organ_colors.json
 metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4RnaSeq_metadata.tsv
 primaryKey accession
+subtrackUrl https://www.encodeproject.org/files/$$/
 maxCheckboxes 40
 noInherit on
 priority 2.1
