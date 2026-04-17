@@ -846,8 +846,8 @@ _EOF_
 to each target sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doChainRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
-  # raise memory limit to 12g 2025-10-29
-  my $paraRun = &HgAutomate::paraRun("12g", 1);
+  # raise memory limit to 12g 2025-10-29 - raise to 64g 2026-04-17
+  my $paraRun = &HgAutomate::paraRun("64g", 1);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
