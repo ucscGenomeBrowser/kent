@@ -11,15 +11,25 @@ export fileServer="hgwdev"
 #  a python virtual environment to run this
 export planemoCmd="/hive/users/hiram/galaxy/venv3.12/bin/planemo"
 
+# parse optional -force flag to skip genark table verification
+export forceRun=0
+if [ $# -gt 0 ] && [ "$1" = "-force" ]; then
+  forceRun=1
+  shift
+fi
+
 if [ $# != 4 ]; then
   printf "ERROR: arg count: %d != 4\n" "$#" 1>&2
 
-  printf "usage: kegAlignLastz.sh <target> <query> <tClade> <qClade>
+  printf "usage: kegAlignLastz.sh [-force] <target> <query> <tClade> <qClade>
 
 Where target/query is either a UCSC db name, or is an
    assembly hub identifier, e.g.: GCA_002844635.1_USMARCv1.0.1
 
 And [tq]Clade is one of: primate|mammal|other
+
+The -force option skips the hgcentraltest.genark table verification
+   for GenArk assembly identifiers.
 
 Will create directory to work in, for example if, UCSC db:
   /hive/data/target/bed/lastzQuery.yyyy-mm-dd/
@@ -158,6 +168,19 @@ function orgDate() {
   printf "%s" "${oDate}"
 }
 
+# verifyGenark - verify a GenArk accession exists in hgcentraltest.genark
+#   returns 0 if found, 1 if not found
+function verifyGenark() {
+  local asmAccession=$1
+  local fullName=$2
+  local count=$(hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  if [ "$count" -eq 0 ]; then
+    printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
+    return 1
+  fi
+  return 0
+}
+
 ##############################################################################
 ##############################################################################
 ### start seconds
@@ -172,6 +195,22 @@ export tGcPath=$(gcPath $target)
 export qGcPath=$(gcPath $query)
 export tAccId=$(accId $target)
 export qAccId=$(accId $query)
+
+# verify GenArk assemblies exist in hgcentraltest.genark unless -force
+if [ "$forceRun" -eq 0 ]; then
+  export genarkErrors=0
+  case $target in
+    GC[AF]_*) verifyGenark "$tAsmId" "$target" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  case $query in
+    GC[AF]_*) verifyGenark "$qAsmId" "$query" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  if [ "$genarkErrors" -gt 0 ]; then
+    printf "Use -force to skip this check\n" 1>&2
+    exit 255
+  fi
+fi
+
 printf "# tq: '${target}' '${query}' '${tClade}' '${qClade}'\n" 1>&2
 printf "# tq gcPath: '${tGcPath}' '${qGcPath}'\n" 1>&2
 printf "# tq accId: '${tAccId}' '${qAccId}'\n" 1>&2
@@ -518,6 +557,7 @@ set -beEu -o pipefail
 
 export targetDb=\"${tAccId}\"
 export queryDb=\"${qAccId}\"
+export TargetDb=\"${Target}\"
 export QueryDb=\"${Query}\"
 
 cd ${buildDir}
@@ -569,13 +609,13 @@ function chainBigBedFb() {
   local sizesFile=\$4
   local fbFile=\$5
   chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
-  bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
-  bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
+  bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
+  bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
   rm -f \${chainName}.tab \${chainName}Link.tab chain.tab link.tab
-  local totalBases=\`ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
+  local totalBases=\`ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
   local basesCovered=\`bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
-  local percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
-  printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${fbFile}
+  local percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%%.3f\", 100.0*\$1/\$2}'\`
+  printf \"%%d bases of %%d (%%s%%) in intersection\\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${fbFile}
 }
 ############################################################################
 
@@ -616,24 +656,24 @@ fi
 cd \${buildDir}/axtChain
 if [ ! -s \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" ]; then
   allChain=\"\${targetDb}.\${queryDb}.all.chain.gz\"
-  chainBigBedFb \${targetDb} allChain \${allChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+  chainBigBedFb \${targetDb} chain\${QueryDb} \${allChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
 fi
 cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
 
 ### install netChainSubset (over.chain) for target
 cd \${buildDir}
 if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz\" ]; then
-  overChainFile=\`ls result/\${DS}/'netChainSubset on dataset 7 and 21__'*.chain\`
+  overChainFile=\`ls result/\${DS}/'netChainSubset on dataset 8 and 22__'*.chain\`
   gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
 fi
 
 ### convert target over.chain to bigBed and measure featureBits
 cd \${buildDir}/axtChain
-if [ ! -s \"\${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt\" ]; then
+if [ ! -s \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" ]; then
   overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
-  chainBigBedFb \${targetDb} overChain \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
+  chainBigBedFb \${targetDb} chainLiftOver\${QueryDb} \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
 fi
-cat \"\${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt\" 1>&2
+cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
 
 ### install allChainSwap into swapDir/axtChain/
 mkdir -p \${swapDir}/axtChain
@@ -647,24 +687,24 @@ fi
 cd \${swapDir}/axtChain
 if [ ! -s \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" ]; then
   allChain=\"\${queryDb}.\${targetDb}.all.chain.gz\"
-  chainBigBedFb \${queryDb} allChain \${allChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+  chainBigBedFb \${queryDb} chain\${TargetDb} \${allChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
 fi
 cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
 
 ### install netChainSubset (over.chain) for swap
 cd \${buildDir}
 if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz\" ]; then
-  overChainSwapFile=\`ls result/\${DS}/'netChainSubset on dataset 8 and 35__'*.chain\`
+  overChainSwapFile=\`ls result/\${DS}/'netChainSubset on dataset 9 and 36__'*.chain\`
   gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
 fi
 
 ### convert swap over.chain to bigBed and measure featureBits
 cd \${swapDir}/axtChain
-if [ ! -s \"\${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt\" ]; then
+if [ ! -s \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" ]; then
   overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
-  chainBigBedFb \${queryDb} overChain \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt
+  chainBigBedFb \${queryDb} chainLiftOver\${TargetDb} \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
 fi
-cat \"\${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt\" 1>&2
+cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
 
 " > ${buildDir}/kegAlign.sh
 chmod +x ${buildDir}/kegAlign.sh
@@ -688,8 +728,8 @@ exit $?
 ### 'KegAlign on dataset 3 and 4__a32df3e9-13d0-4c5e-b765-df69c657ae89.tgz'
 ### allChainSwap__5e11f323-58fc-43f9-afbd-6cff21f0e7af.chain
 ### allChain__74038a6d-d735-4784-8b17-31a25ddbb036.chain
-###'netChainSubset on dataset 7 and 21__72cbd3a9-4136-4e72-86c9-9da0c230c5d0.chain'
-###'netChainSubset on dataset 8 and 35__9acc344f-19da-4ef9-a578-7282940badc0.chain'
+###'netChainSubset on dataset 8 and 22__72cbd3a9-4136-4e72-86c9-9da0c230c5d0.chain'
+###'netChainSubset on dataset 9 and 36__9acc344f-19da-4ef9-a578-7282940badc0.chain'
 
 # rebuild trackDb if possible here
 if [ -x "${tTdb}" ]; then
