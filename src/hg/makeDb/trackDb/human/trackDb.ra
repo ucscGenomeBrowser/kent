@@ -194,6 +194,7 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>Variant</b>: $variant<br> <b>Ensembl ID</b>: $ensId<br> <b>Title of Publication</b>: $title<br> <b>Reference</b>: $ref<br> <b>Authors</b>: $authors<br> <b>Pubmed ID</b>: $pmid
+        pennantIcon snowflake.png ../goldenPath/newsarch.html#052125 "The AVADA track is no longer updated. See VARAICO for the latest variants mined from papers."
         html varsInPubs.html
 
         track varChat
