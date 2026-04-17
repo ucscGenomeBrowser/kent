@@ -1,0 +1,115 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) from the third phase of the
+Human Genome Structural Variation Consortium (HGSVC3). The callset comes
+from 65 diverse individuals across five continental groups, each sequenced
+with PacBio HiFi (~47x), Oxford Nanopore ultra-long reads (~56x) and
+complemented with Strand-seq, optical mapping, Hi-C and Iso-Seq for
+haplotype-resolved assembly. SVs were discovered from the de novo assemblies
+with PAV v2.4.0.1 and cross-validated by ten additional orthogonal callers.
+</p>
+<p>
+The track merges the two final SV annotation tables from the HGSVC3 v1.0
+release on GRCh38: 176,232 insertions/deletions and 300 inversions, for a
+total of 176,532 SVs. Each row is a site-level variant with the list of
+carrier haplotypes and additional structural annotations.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions
+and inversions span the affected reference interval. Filters are available
+for SV type, SV length, carrier-haplotype count, distinct sample count,
+whether the site falls in a Tandem Repeat Finder region and the fraction
+of the variant overlapping segmental duplications.
+</p>
+<p>
+The detail page shows, where available:
+<ul>
+<li><b>Allele / Sample Count</b>: number of carrier haplotypes (out of the
+2*65 = 130 phased haplotypes plus unphased "un" entries) and the number of
+distinct samples carrying the variant.</li>
+<li><b>Reference / Contig Homology</b>: microhomology length (5',3') at the
+breakpoints in the reference and in the assembly contig (insertions and
+deletions only).</li>
+<li><b>Inner Inversion Region</b>: for inversions, the coordinate range of
+the inner inverted sequence, distinct from the outer breakpoint interval.</li>
+<li><b>Transposable Element</b>: when the inserted or deleted sequence was
+classified as a known TE family.</li>
+<li><b>Segmental Duplication Overlap</b>: fraction of the variant interval
+overlapping UCSC segmental duplications in the reference.</li>
+<li><b>Carrier Haplotypes</b>: full list of haplotype IDs (e.g.
+<tt>HG00096-h1</tt>, <tt>HG00096-h2</tt>, <tt>HG00514-un</tt>) carrying the
+variant.</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+HGSVC3 produced haplotype-resolved de novo assemblies for 65 samples
+spanning five continental groups. Assemblies were built from PacBio HiFi
+and Oxford Nanopore reads, phased with Strand-seq and further validated
+with Hi-C and optical mapping. Structural variants were called by aligning
+each haplotype back to the reference with PAV v2.4.0.1; calls were then
+cross-referenced with ten independent callers. The final annotation tables
+(this track's input) include merge statistics (MERGE_RO, MERGE_OFFSET,
+MERGE_SZRO, MERGE_OFFSZ, MERGE_MATCH) that describe how well each
+per-sample call matched the merged consensus site.
+</p>
+<p>
+Two tables were merged for display here:
+<tt>variants_GRCh38_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> (DEL + INS, 176,232
+records) and <tt>variants_GRCh38_sv_inv_HGSVC2024v1.0.tsv.gz</tt> (INV, 300
+records). Type-specific columns (HOM_REF/HOM_TIG/TE for insdel;
+RGN_REF_INNER for inversions) are shown as empty on the detail page when
+they do not apply.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>hgsvc3Sv</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>hgsvc3.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hgsvc3.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original annotation tables are available from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/GRCh38/annotation_table/" target="_blank">
+HGSVC3 release</a> on the IGSR FTP site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Human Genome Structural Variation Consortium (HGSVC) and all
+participating sequencing and analysis centers for making the HGSVC3
+annotation tables publicly available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Logsdon GA, Ebert P, Audano PA, Loftus M, Porubsky D, Ebler J, Yilmaz F, Hallast P, Prodanov T, Yoo
+D <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09140-6" target="_blank">
+Complex genetic variation in nearly complete human genomes</a>.
+<em>Nature</em>. 2025 Aug;644(8076):430-441.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">40702183</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350169/" target="_blank">PMC12350169</a>
+</p>
+

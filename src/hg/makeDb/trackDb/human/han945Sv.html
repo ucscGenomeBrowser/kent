@@ -1,0 +1,64 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by long-read sequencing
+of 945 Han Chinese individuals. The dataset contains 111,288 SVs merged across
+samples using SURVIVOR, including 49,518 deletions, 42,300 insertions,
+13,503 duplications, 5,595 inversions, and 372 translocations.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+<li><span style="color: rgb(140,0,200);">Translocations (TRA)</span> - purple</li>
+</ul>
+</p>
+<p>
+Filters are available for SV type, SV length, allele frequency, and number of
+supporting samples. For insertions, the item is placed at the insertion site
+with a width of 1 bp. For translocations, only the first breakpoint is shown;
+the second breakpoint chromosome and position are listed in the item details.
+</p>
+
+<h2>Methods</h2>
+<p>
+Long-read sequencing was performed on 945 Han Chinese individuals.
+Structural variants were called per sample and then merged across all samples using
+<a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">SURVIVOR</a>
+(v1.0.6). The merged VCF was converted to bigBed format for display.
+Allele frequencies and per-sample support information were extracted from the
+INFO fields of the merged VCF. The study identified two notable variants:
+an ancestral deletion in GSDMD associated with bone density and kidney injury
+risk, and a modern human-specific variant in WWP2 influencing height, body
+composition, and facial features.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw VCF data was obtained from the
+<a href="https://ngdc.cncb.ac.cn/omix/" target="_blank">OMIX</a> repository
+(accession OED00945268) at the National Genomics Data Center (NGDC),
+China National Center for Bioinformation.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Gong et al. for making their structural variant calls publicly available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Gong J, Sun H, Wang K, Zhao Y, Huang Y, Chen Q, Qiao H, Gao Y, Zhao J, Ling Y <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-025-56661-9" target="_blank">
+Long-read sequencing of 945 Han individuals identifies structural variants associated with
+phenotypic diversity and disease susceptibility</a>.
+<em>Nat Commun</em>. 2025 Feb 10;16(1):1494.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39929826" target="_blank">39929826</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11811171/" target="_blank">PMC11811171</a>
+</p>
+

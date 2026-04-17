@@ -1,0 +1,97 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by long-read
+whole-genome sequencing of 101 individuals, released together with the
+<a href="https://svatalog.research.sickkids.ca/" target="_blank">GWAS SVatalog</a>
+web tool described in Chirmade et al. 2026. GWAS SVatalog computes and
+visualizes linkage disequilibrium between these SVs and GWAS-associated
+SNPs so that investigators can assess whether a SNP association signal
+may be tagging an underlying SV.
+</p>
+<p>
+The table contains 87,183 SVs (42,435 deletions, 41,734 insertions,
+1,394 duplications, 912 inversions, 708 complex events). Each SV is
+annotated with gene overlaps, GC content, repeat context, ClinGen
+haploinsufficiency / triplosensitivity scores, gnomAD per-gene constraint
+metrics (pLI, LOEUF, missense O/E), OMIM phenotype associations, ClinVar
+variant IDs, and overlaps with DGV, Decipher and ClinGen regional
+annotations.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (del)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (ins)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (dup)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (inv)</span> - orange</li>
+<li><span style="color: rgb(140,0,200);">Complex</span> - purple</li>
+</ul>
+</p>
+<p>
+Filters are available for SV type, SV length and the number of overlapping
+genes. The detail page shows the full annotation row: gene-level constraint
+scores (per overlapping gene), ClinGen / Decipher / ClinVar region matches,
+OMIM phenotype annotations and gnomAD SV frequencies at &gt;=90% reciprocal
+overlap. Because most genomic regions carry no clinical annotation, many
+columns will be blank for an arbitrary SV.
+</p>
+
+<h2>Methods</h2>
+<p>
+SVs were called from 101 long-read whole-genome sequencing samples and
+annotated as described in Chirmade et al. 2026. The annotation table used
+here (<tt>sv_annotations.tsv</tt>) is the companion data release for GWAS
+SVatalog, available from the Zenodo record linked below. Coordinates in
+the source TSV are 1-based closed and were converted to 0-based half-open
+BED for this track.
+</p>
+<p>
+Note that the SVatalog tool's pre-computed LD analyses use a common-SV
+subset (35,732 sites); the underlying long-read callset released in this
+TSV (87,183 SVs) is larger and includes rarer variants not used for LD
+visualisation.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>chirmade101Sv</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>chirmade101.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/chirmade101.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original annotation table is available on Zenodo:
+<a href="https://zenodo.org/records/13367574" target="_blank">zenodo.org/records/13367574</a>.
+The GWAS SVatalog web tool itself is at
+<a href="https://svatalog.research.sickkids.ca/" target="_blank">svatalog.research.sickkids.ca</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Chirmade, Strug and colleagues at The Hospital for Sick Children
+and the University of Toronto for releasing this annotated long-read SV
+callset alongside the GWAS SVatalog tool.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Chirmade S, Wang Z, Mastromatteo S, Sanders E, Thiruvahindrapuram B, Nalpathamkalam T, Pellecchia G,
+Lin F, Keenan K, Patel RV <em>et al</em>.
+<a href="https://doi.org/10.1038/s41437-025-00809-2" target="_blank">
+GWAS SVatalog: a visualization tool to aid fine-mapping of GWAS loci with structural variations</a>.
+<em>Heredity (Edinb)</em>. 2026 Mar;135(3):199-210.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41203876" target="_blank">41203876</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13031531/" target="_blank">PMC13031531</a>
+</p>
+
