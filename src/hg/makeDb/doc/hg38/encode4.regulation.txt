@@ -320,6 +320,24 @@ make alpha DBS=hg38
 # RNA-seq not changed (signal only, no peak/signal pairing).
 
 ##############################################################################
+# Step 11: Link accession column to ENCODE portal (2026-04-17)
+##############################################################################
+
+# Jonathan added a new trackDb setting 'subtrackUrl' for faceted composites
+# (refs #36320, note 157). The setting takes a URL pattern where '$$' is
+# replaced with the value from the primaryKey column of the metadata TSV.
+# When set, the primary-key column on the track configuration page becomes
+# a clickable hyperlink.
+#
+# Since our primaryKey is 'accession' (an ENCFF file accession), added:
+#   subtrackUrl https://www.encodeproject.org/files/$$/
+# to all 3 hg38 bigComposites (Epigenetics, RnaSeq, TfChip).
+#
+# Also appended a sentence in the Data Access section of each composite's
+# HTML noting that clicking any accession leads to the corresponding file
+# details page on the ENCODE portal.
+
+##############################################################################
 # Track hierarchy and disk usage summary
 ##############################################################################
 
