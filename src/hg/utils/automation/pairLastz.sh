@@ -441,7 +441,7 @@ cd ${buildDir}
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
   $tFullName $qFullName -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} \\
     -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> do.log 2>&1
 
 grep -w real do.log | sed -e 's/^/    # /;'
 
@@ -451,7 +451,7 @@ sed -e 's/^/    # /;' fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
 time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
    ${qRbestArgs} \\
-   \${targetDb} \${queryDb}) > rbest.log 2>&1
+   \${targetDb} \${queryDb}) >> rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'
 
@@ -487,7 +487,7 @@ printf "########################################################################
 
     time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
       ${tFullName} ${qFullName} -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-        -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
+        -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> do.log 2>&1
     grep -w real do.log | sed -e 's/^/    # /;'
 " > ${buildDir}/makeDoc.txt
 
@@ -502,7 +502,7 @@ sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${build
 printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
       ${tRbestArgs} \\
       ${qRbestArgs} \\
-        ${tAsmId} ${qAsmId}) > rbest.log 2>&1
+        ${tAsmId} ${qAsmId}) >> rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 
@@ -535,7 +535,7 @@ export queryDb=\"${qAsmId}\"
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> swap.log 2>&1
 
 grep -w real swap.log | sed -e 's/^/    # /;'
 
@@ -544,7 +544,7 @@ sed -e 's/^/    # /;' fb.\${queryDb}.chainSyn\${Target}Link.txt
 time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   \${queryDb} \${targetDb}) > rbest.log 2>&1
+   \${queryDb} \${targetDb}) >> rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'
 
@@ -573,7 +573,7 @@ printf "\n    cd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
 printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> swap.log 2>&1
 
     grep -w real swap.log | sed -e 's/^/    # /;'
 " >> ${buildDir}/makeDoc.txt
@@ -589,7 +589,7 @@ sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${bui
 printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   ${qAsmId} ${tAsmId}) > rbest.log 2>&1
+   ${qAsmId} ${tAsmId}) >> rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 (grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
