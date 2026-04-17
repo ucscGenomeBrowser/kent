@@ -314,8 +314,14 @@ if [ -s "\$db.xenoRefGene.psl" ]; then
   export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
   printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$db.xenoRefGene.txt
   rm -f \$db.exons.bed
-  genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
+  # The genePred names have version suffixes (e.g. NM_000014.6) but
+  # geneOrgXref.txt keys are unversioned (NM_000014).  Build a versioned
+  # xref so genePredToBigGenePred can match them and populate geneName2.
+  awk -F'\\t' 'NR==FNR{key[\$1]=\$2"\\t"\$3; next} {split(\$1,a,"."); if(a[1] in key) print \$1"\\t"key[a[1]]}' \\
+    $mrnas/geneOrgXref.txt \$db.xenoRefGene.gp > \$db.versionedXref.txt
+  genePredToBigGenePred -geneNames=\$db.versionedXref.txt \$db.xenoRefGene.gp \\
      stdout | sort -k1,1 -k2,2n > \$db.bgpInput
+  rm -f \$db.versionedXref.txt
   sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
     \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
   bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
