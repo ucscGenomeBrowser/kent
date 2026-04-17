@@ -4984,7 +4984,7 @@ if (liftDb)
         liftDb = CUSTOM_TRASH;
         tdb->table = trackDbSetting(tdb, "dbTableName");
         }
-    if (!trackHubDatabase(liftDb))
+    if (!trackHubDatabase(liftDb) && !isGenArk(liftDb))
         conn = hAllocConnTrack(liftDb, tdb);
     }
 else if (!trackHubDatabase(database))
