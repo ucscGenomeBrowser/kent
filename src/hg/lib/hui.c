@@ -43,6 +43,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "genark.h"
 #include "gtexUi.h"
 #include "genbank.h"
 #include "htmlPage.h"
@@ -10216,7 +10217,7 @@ char *getTrackHtml(char *db, char *trackName)
 {
 char *html = NULL;
 
-if (trackHubDatabase(db))
+if (trackHubDatabase(db) || isGenArk(db))
     {
     // somehow get to the HTML that's not in the quickLift hub, but in the original hub
     }
