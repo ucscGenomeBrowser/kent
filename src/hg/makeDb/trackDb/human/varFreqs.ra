@@ -463,3 +463,12 @@ superTrack on
         dataVersion v3.1.2
         priority 8
 
+        track ga4kSnv
+        shortLabel GA4K 552 PacBio LR
+        longLabel Variant Frequencies: Genomic Answers for Kids (Children's Mercy) - 552 PacBio HiFi long-read WGS (pediatric rare-disease cohort)
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga4k/ga4kSnv.vcf.gz
+        visibility pack
+        priority 9
+
