@@ -294,11 +294,12 @@ def resolve_status(name_or_id):
 def resolve_version(name_or_id, project_id, base_url, api_key):
     """Resolve a version name or numeric ID to a Redmine fixed_version_id.
 
-    Numeric input passes through. Names are matched case-insensitively against
-    the given project's versions (exact match preferred, else unique substring).
+    Name lookup is tried first (case-insensitive, exact match preferred, else
+    unique substring). Only falls through to treating the input as a literal
+    ID if it is purely digits and no name matched. This matters because
+    Redmine version names are often numeric (e.g. "497") and differ from
+    their internal IDs.
     """
-    if str(name_or_id).isdigit():
-        return int(name_or_id)
     key = str(name_or_id).lower().strip()
     data = api_get(base_url, f"/projects/{project_id}/versions.json", api_key)
     versions = data.get("versions", [])
@@ -311,6 +312,8 @@ def resolve_version(name_or_id, project_id, base_url, api_key):
     if len(matches) > 1:
         names = ", ".join(v["name"] for v in matches)
         sys.exit(f"Error: ambiguous version '{name_or_id}': matches {names}")
+    if str(name_or_id).isdigit():
+        return int(name_or_id)
     all_names = ", ".join(v["name"] for v in versions) or "(none)"
     sys.exit(f"Error: unknown version '{name_or_id}'. "
              f"Available for project {project_id}: {all_names}")
@@ -637,8 +640,6 @@ def cmd_update(args):
     if args.target_version is not None:
         if args.target_version == "":
             issue_data["fixed_version_id"] = ""
-        elif str(args.target_version).isdigit():
-            issue_data["fixed_version_id"] = int(args.target_version)
         else:
             issue = api_get(args.base_url,
                             f"/issues/{args.ticket_id}.json", args.api_key)
