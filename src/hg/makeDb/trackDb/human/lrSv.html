@@ -1,0 +1,308 @@
+<h2>Description</h2>
+<p>
+This track collection contains structural variant (SV) calls derived from long-read sequencing
+studies. Structural variants are genomic rearrangements larger than ~50 bp, including
+deletions, insertions, duplications, inversions, and translocations. Long-read sequencing
+technologies can span repetitive regions and resolve complex rearrangements
+that are difficult to detect with short-read methods.
+</p>
+
+<h3>Available Datasets</h3>
+<p>
+SV length statistics (min / median / max) are computed from the <tt>svLen</tt>
+field of each track, in base pairs. Some tracks include sites with
+<tt>svLen=0</tt> (complex events where the reference and alternate alleles
+differ in sequence but not in length).
+</p>
+<table class="stdTbl">
+<tr>
+  <th>Dataset</th>
+  <th>N samples</th>
+  <th>Cohort / disease</th>
+  <th>Sequencing</th>
+  <th>SVs</th>
+  <th>Min</th>
+  <th>Median</th>
+  <th>Max</th>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=han945Sv">Han 945</a></td>
+  <td>945</td>
+  <td>Han Chinese, general population</td>
+  <td>ONT (PromethION)</td>
+  <td>111,288</td>
+  <td>0</td>
+  <td>254</td>
+  <td>99,743</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT</a></td>
+  <td>1,019</td>
+  <td>1000 Genomes, globally diverse</td>
+  <td>ONT</td>
+  <td>148,375</td>
+  <td>2</td>
+  <td>177</td>
+  <td>49,171</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=tommoJpSv">ToMMo Japanese</a></td>
+  <td>333 (111 trios)</td>
+  <td>Japanese, general population</td>
+  <td>ONT</td>
+  <td>74,201</td>
+  <td>51</td>
+  <td>162</td>
+  <td>99,980</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
+  <td>1,027</td>
+  <td>All of Us, self-identified Black/African American</td>
+  <td>PacBio HiFi</td>
+  <td>541,049</td>
+  <td>50</td>
+  <td>152</td>
+  <td>9,998</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=ga4kSv">GA4K</a></td>
+  <td>502</td>
+  <td>Children's Mercy, pediatric rare disease probands + families</td>
+  <td>PacBio HiFi</td>
+  <td>115,554</td>
+  <td>50</td>
+  <td>186</td>
+  <td>809,711</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=decodeSv">deCODE 3,622</a></td>
+  <td>3,622</td>
+  <td>Icelandic general population</td>
+  <td>ONT</td>
+  <td>133,886</td>
+  <td>0</td>
+  <td>127</td>
+  <td>861,080</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a></td>
+  <td>65</td>
+  <td>HGSVC3 diverse reference assemblies</td>
+  <td>PacBio HiFi + ONT</td>
+  <td>176,531</td>
+  <td>50</td>
+  <td>154</td>
+  <td>30,176,500</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=kwanhoSv">Kim PD Brain</a></td>
+  <td>100</td>
+  <td>Parkinson's disease, ILBD, controls (post-mortem brain)</td>
+  <td>PacBio HiFi</td>
+  <td>74,552</td>
+  <td>50</td>
+  <td>160</td>
+  <td>190,088,222</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=chirmade101Sv">SVatalog 101</a></td>
+  <td>101</td>
+  <td>Long-read WGS cohort for GWAS LD fine-mapping (SickKids)</td>
+  <td>long-read</td>
+  <td>87,183</td>
+  <td>4</td>
+  <td>160</td>
+  <td>1,321,484</td>
+</tr>
+</table>
+
+<h3>Han 945 SVs (<a href="hgTrackUi?g=han945Sv">han945Sv</a>)</h3>
+<p>
+Structural variants from 945 Han Chinese individuals. 111,288 SVs
+(deletions, insertions, duplications, inversions, translocations) merged with SURVIVOR.
+Includes allele frequencies and per-sample support.
+</p>
+
+<h3>1KG ONT SVs (<a href="hgTrackUi?g=lrSv1kgOnt">lrSv1kgOnt</a>)</h3>
+<p>
+Structural variants from 1,019 individuals across 26 populations (1000 Genomes ONT).
+161,332 SVs annotated with SVAN, classifying insertions and deletions by mechanism
+of origin (mobile elements, VNTRs, processed pseudogenes, etc.).
+Original coordinates are on T2T-CHM13 (hs1); the hg38 version was created via liftOver.
+</p>
+
+<h3>ToMMo Japanese SVs (<a href="hgTrackUi?g=tommoJpSv">tommoJpSv</a>)</h3>
+<p>
+Structural variants from 333 Japanese individuals (111 trios) from the Tohoku Medical
+Megabank (ToMMo). 74,201 SVs (deletions and insertions) with trio-based Mendelian
+error rates and allele frequencies.
+</p>
+
+<h3>AoU 1K SVs (<a href="hgTrackUi?g=aou1kSv">aou1kSv</a>)</h3>
+<p>
+Structural variants from 1,027 individuals from the All of Us (AoU) Research Program,
+sequenced with PacBio HiFi long reads. 541,049 SVs (insertions and deletions)
+with population-specific allele frequencies, gene annotations, and clinical
+trait associations.
+</p>
+
+<h3>GA4K SVs (<a href="hgTrackUi?g=ga4kSv">ga4kSv</a>)</h3>
+<p>
+Structural variants from 502 probands and family members enrolled in the
+Genomic Answers for Kids (GA4K) pediatric rare-disease program at Children's
+Mercy Research Institute, sequenced with PacBio HiFi long reads. 115,554
+replicated SVs (deletions, insertions, duplications, inversions) called with
+pbsv and merged with JASMINE. The matched GA4K small-variant callset (SNVs
+and short indels) lives alongside other population allele-frequency resources
+as <a href="hgTrackUi?g=ga4kSnv">GA4K 552 PacBio LR</a> in the Variant
+Frequencies track collection.
+</p>
+
+<h3>deCODE 3,622 SVs (<a href="hgTrackUi?g=decodeSv">decodeSv</a>)</h3>
+<p>
+High-confidence structural variants from 3,622 Icelanders (deCODE genetics),
+sequenced with Oxford Nanopore long reads. 133,886 SVs (deletions, insertions
+and combined insertion/deletion events). Site-only callset with annotated
+surrounding tandem-repeat regions.
+</p>
+
+<h3>HGSVC3 65 SVs (<a href="hgTrackUi?g=hgsvc3Sv">hgsvc3Sv</a>)</h3>
+<p>
+Structural variants from 65 diverse individuals sequenced and de novo
+assembled by the Human Genome Structural Variation Consortium phase 3
+(HGSVC3). 176,532 haplotype-resolved SVs (deletions, insertions and
+inversions) called with PAV and cross-validated with ten additional callers,
+with per-site carrier haplotype lists and structural annotations.
+</p>
+
+<h3>Kim PD Brain SVs (<a href="hgTrackUi?g=kwanhoSv">kwanhoSv</a>)</h3>
+<p>
+Structural variants from 100 post-mortem brain samples (Parkinson's disease,
+incidental Lewy body disease, and healthy controls) sequenced with PacBio
+HiFi long reads. 74,552 high-confidence SVs (deletions, insertions,
+duplications, inversions) with per-cohort allele frequencies and
+case-control carrier-rate differentials, from Kim et al. 2026.
+</p>
+
+<h3>SVatalog 101 SVs (<a href="hgTrackUi?g=chirmade101Sv">chirmade101Sv</a>)</h3>
+<p>
+Structural variants from 101 long-read whole-genome sequences released
+alongside the GWAS SVatalog tool (Chirmade et al. 2026). 87,183 SVs
+(deletions, insertions, duplications, inversions and complex events)
+annotated with gene overlaps, ClinGen / gnomAD constraint scores,
+OMIM / ClinVar / DGV / Decipher regional annotations.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Each subtrack has its own documentation page with details on how to download
+and intersect the underlying annotations.
+</p>
+
+<h2>References</h2>
+
+<p>
+Gong J, Sun H, Wang K, Zhao Y, Huang Y, Chen Q, Qiao H, Gao Y, Zhao J, Ling Y <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-025-56661-9" target="_blank">
+Long-read sequencing of 945 Han individuals identifies structural variants associated with
+phenotypic diversity and disease susceptibility</a>.
+<em>Nat Commun</em>. 2025 Feb 10;16(1):1494.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39929826" target="_blank">39929826</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11811171/" target="_blank">PMC11811171</a>
+</p>
+
+<p>
+Schloissnig S, Pani S, Ebler J, Hain C, Tsapalou V, S&#246;ylev A, H&#252;ther P, Ashraf H, Prodanov T,
+Asparuhova M <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09290-7" target="_blank">
+Structural variation in 1,019 diverse humans based on long-read sequencing</a>.
+<em>Nature</em>. 2025 Aug;644(8076):442-452.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702182" target="_blank">40702182</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350158/" target="_blank">PMC12350158</a>
+</p>
+
+
+<p>
+Otsuki A, Okamura Y, Ishida N, Tadaka S, Takayama J, Kumada K, Kawashima J, Taguchi K, Minegishi N,
+Kuriyama S <em>et al</em>.
+<a href="https://doi.org/10.1038/s42003-022-03953-1" target="_blank">
+Construction of a trio-based structural variation panel utilizing activated T lymphocytes and long-
+read sequencing technology</a>.
+<em>Commun Biol</em>. 2022 Sep 20;5(1):991.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36127505" target="_blank">36127505</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9489684/" target="_blank">PMC9489684</a>
+</p>
+
+
+
+<p>
+Garimella KV, Li Q, Wertz J, Lee SK, Cunial F, Huang Y, Mostovoy Y, Lorig-Roach R, English A, Su H
+<em>et al</em>.
+<a href="https://doi.org/10.1101/2025.10.02.25336942" target="_blank">
+Population-scale Long-read Sequencing in the All of Us Research Program</a>.
+<em>medRxiv</em>. 2025 Oct 5;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41256123" target="_blank">41256123</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12622093/" target="_blank">PMC12622093</a>
+</p>
+
+
+
+<p>
+Cohen ASA, Farrow EG, Abdelmoity AT, Alaimo JT, Amudhavalli SM, Anderson JT, Bansal L, Bartik L,
+Baybayan P, Belden B <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S1098-3600(22)00653-0" target="_blank">
+Genomic answers for children: Dynamic analyses of &gt;1000 pediatric rare disease genomes</a>.
+<em>Genet Med</em>. 2022 Jun;24(6):1336-1348.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35305867" target="_blank">35305867</a>
+</p>
+
+
+
+<p>
+Beyter D, Ingimundardottir H, Oddsson A, Eggertsson HP, Bjornsson E, Jonsson H, Atlason BA,
+Kristmundsdottir S, Mehringer S, Hardarson MT <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-021-00865-4" target="_blank">
+Long-read sequencing of 3,622 Icelanders provides insight into the role of structural variants in
+human diseases and other traits</a>.
+<em>Nat Genet</em>. 2021 Jun;53(6):779-786.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33972781" target="_blank">33972781</a>
+</p>
+
+
+
+<p>
+Logsdon GA, Ebert P, Audano PA, Loftus M, Porubsky D, Ebler J, Yilmaz F, Hallast P, Prodanov T, Yoo
+D <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09140-6" target="_blank">
+Complex genetic variation in nearly complete human genomes</a>.
+<em>Nature</em>. 2025 Aug;644(8076):430-441.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">40702183</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350169/" target="_blank">PMC12350169</a>
+</p>
+
+
+
+<p>
+Kim K, Lin Z, Simmons SK, Parker J, Kearney M, Liao Z, Haywood N, Zhang J, Cline MP, Tuncali I
+<em>et al</em>.
+<a href="https://doi.org/10.64898/2026.03.20.713192" target="_blank">
+Integrating Long-Read Structural Variant Analysis with single-nucleus RNA-seq to Elucidate Gene
+Expression Effects in Disease</a>.
+<em>bioRxiv</em>. 2026 Mar 23;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41929179" target="_blank">41929179</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13041997/" target="_blank">PMC13041997</a>
+</p>
+
+
+
+<p>
+Chirmade S, Wang Z, Mastromatteo S, Sanders E, Thiruvahindrapuram B, Nalpathamkalam T, Pellecchia G,
+Lin F, Keenan K, Patel RV <em>et al</em>.
+<a href="https://doi.org/10.1038/s41437-025-00809-2" target="_blank">
+GWAS SVatalog: a visualization tool to aid fine-mapping of GWAS loci with structural variations</a>.
+<em>Heredity (Edinb)</em>. 2026 Mar;135(3):199-210.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41203876" target="_blank">41203876</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13031531/" target="_blank">PMC13031531</a>
+</p>
+

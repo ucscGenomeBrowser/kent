@@ -1,0 +1,103 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by PacBio HiFi long-read
+sequencing of probands and their families enrolled in the Genomic Answers for
+Kids (GA4K) program at Children's Mercy Research Institute. GA4K is a
+longitudinal pediatric genomics initiative that aims to enroll 30,000 children
+with suspected rare genetic disorders, together with their parents, to build
+a large-scale resource of clinical and genomic data.
+</p>
+<p>
+The callset contains 115,554 SVs (52,564 deletions, 58,219 insertions, 4,408
+duplications, 363 inversions) from 502 sequenced samples. Variants are
+site-level (no per-sample genotypes) and each SV has been replicated, meaning
+that it was either observed in two or more unrelated GA4K individuals, or
+matched an SV from an external long-read reference set (Decode or the Human
+Pangenome Reference Consortium).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions,
+duplications and inversions span the affected interval. Filters are available
+for SV type, SV length, carrier-sample count and allele frequency. The detail
+page also shows the total number of samples genotyped at each site.
+</p>
+
+<h2>Methods</h2>
+<p>
+Samples were sequenced on PacBio Revio and Sequel II instruments with HiFi
+chemistry. Single-sample SV callsets were produced with pbsv and then merged
+across the cohort with JASMINE v1.1.4 (<tt>jasmine --output-genotypes</tt>),
+which clusters equivalent SVs across samples and writes a site-level multi-sample
+VCF.
+</p>
+<p>
+To reduce false positives, the merged VCF was filtered to retain only SVs that
+were replicated in at least two independent observations: either (1) matching a
+second SV from another unrelated Children's Mercy (CMH) individual within the
+same Jasmine cluster, or (2) matching an SV from the Decode Icelandic or Human
+Pangenome Reference Consortium (HPRC) callsets using
+<tt>svpack match</tt> with default settings.
+</p>
+<p>
+Carrier counts (SVC), total sample counts (SVN) and allele frequencies
+(SVF = SVC/SVN) were recomputed on the replicated callset.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-sep tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>ga4kSv</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file
+that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a>. The file for this track is called <tt>ga4kSv.bb</tt>.
+Individual regions or the whole annotation can be obtained using the
+<tt>bigBedToBed</tt> utility, available as a precompiled binary or from source
+as described on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities
+page</a>.
+Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/ga4kSv.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original VCF is available from the Children's Mercy Research Institute
+GA4K data release at
+<a href="https://github.com/ChildrensMercyResearchInstitute/GA4K" target="_blank">
+github.com/ChildrensMercyResearchInstitute/GA4K</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Children's Mercy Research Institute and the Genomic Answers
+for Kids participants and their families for making this dataset publicly
+available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cohen ASA, Farrow EG, Abdelmoity AT, Alaimo JT, Amudhavalli SM, Anderson JT, Bansal L, Bartik L,
+Baybayan P, Belden B <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S1098-3600(22)00653-0" target="_blank">
+Genomic answers for children: Dynamic analyses of &gt;1000 pediatric rare disease genomes</a>.
+<em>Genet Med</em>. 2022 Jun;24(6):1336-1348.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35305867" target="_blank">35305867</a>
+</p>
+

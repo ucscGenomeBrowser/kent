@@ -1,0 +1,81 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by Oxford Nanopore long-read
+sequencing of 333 Japanese individuals from the Tohoku Medical Megabank (ToMMo)
+project. The 333 individuals form 111 parent-offspring trios, enabling
+Mendelian consistency checks on the SV calls. Activated T lymphocytes were used
+as a source of high-molecular-weight DNA for nanopore sequencing at a median
+coverage of 22.2x with an N50 read length of 25.8 kb.
+</p>
+<p>
+The dataset contains 74,201 SVs (37,981 deletions and 36,220 insertions),
+merged across individuals using SURVIVOR v1.0.6. Over 95% of the SVs are
+concordant with Mendelian inheritance in the trio families.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+</ul>
+</p>
+<p>
+Filters are available for SV type, SV length, and allele frequency.
+For insertions, the item is placed at the insertion site with a width of 1 bp;
+for deletions, the item spans the deleted region.
+</p>
+<p>
+The detail page for each item shows:
+<ul>
+<li><b>Allele Frequency</b>: fraction of alleles carrying this variant
+(based on 444 alleles from 222 unrelated parents)</li>
+<li><b>Allele Count / Allele Number</b>: number of variant alleles and
+total alleles genotyped</li>
+<li><b>Mendelian Error Rate</b>: fraction of trio families showing
+inheritance errors for this variant</li>
+<li><b>Families with Errors / Families Genotyped</b>: number of families
+with Mendelian errors and total families with complete genotype calls</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+Oxford Nanopore sequencing was performed on genomic DNA extracted from activated
+T lymphocytes of 333 individuals (111 trios) from the Tohoku Medical Megabank
+(ToMMo) cohort. SV calling was performed with Sniffles on each sample, and
+calls were merged across individuals with SURVIVOR v1.0.6 using a maximum
+distance of 1 kbp. Allele frequencies were computed from 222 unrelated parents
+(excluding offspring to avoid double-counting). Mendelian error rates were
+calculated by checking transmission consistency within each trio family.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Source data is available from the
+<a href="https://jmorp.megabank.tohoku.ac.jp/datasets/tommo-jsv1-20211208-af"
+   target="_blank">jMorp data portal</a> (ToMMo Japanese Multi Omics Reference Panel).
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Tohoku Medical Megabank Organization for making their structural
+variant calls publicly available through the jMorp data portal.
+</p>
+
+<h2>References</h2>
+
+
+
+<p>
+Otsuki A, Okamura Y, Ishida N, Tadaka S, Takayama J, Kumada K, Kawashima J, Taguchi K, Minegishi N,
+Kuriyama S <em>et al</em>.
+<a href="https://doi.org/10.1038/s42003-022-03953-1" target="_blank">
+Construction of a trio-based structural variation panel utilizing activated T lymphocytes and long-
+read sequencing technology</a>.
+<em>Commun Biol</em>. 2022 Sep 20;5(1):991.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36127505" target="_blank">36127505</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9489684/" target="_blank">PMC9489684</a>
+</p>
+
