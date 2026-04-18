@@ -6061,7 +6061,8 @@ return !tdbIsComposite(tdb)
     || startsWithWord("wig", type) || startsWithWord("bigWig", type)
     || startsWithWord("rmsk", type) || startsWithWord("interact", type)
     || startsWithWord("bigInteract", type) || startsWithWord("bigLolly", type)
-    || startsWithWord("vcfTabix", type) || startsWithWord("vcf", type));
+    || startsWithWord("vcfTabix", type) || startsWithWord("vcf", type)
+    || startsWithWord("bigDbSnp", type));
 }
 
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
