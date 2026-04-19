@@ -200,10 +200,10 @@ export qAccId=$(accId $query)
 if [ "$forceRun" -eq 0 ]; then
   export genarkErrors=0
   case $target in
-    GC[AF]_*) verifyGenark "$tAsmId" "$target" || genarkErrors=$((genarkErrors+1)) ;;
+    GC[AF]_*) verifyGenark "$tAccId" "$target" || genarkErrors=$((genarkErrors+1)) ;;
   esac
   case $query in
-    GC[AF]_*) verifyGenark "$qAsmId" "$query" || genarkErrors=$((genarkErrors+1)) ;;
+    GC[AF]_*) verifyGenark "$qAccId" "$query" || genarkErrors=$((genarkErrors+1)) ;;
   esac
   if [ "$genarkErrors" -gt 0 ]; then
     printf "Use -force to skip this check\n" 1>&2
@@ -648,7 +648,7 @@ fi
 ### install allChain into buildDir/axtChain/
 mkdir -p \${buildDir}/axtChain
 if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz\" ]; then
-  allChainFile=\`ls result/\${DS}/allChain__*.chain\`
+  allChainFile=\`ls result/\${DS}/allChain__.*.chain\`
   gzip -c \"\${allChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz
 fi
 
@@ -663,23 +663,23 @@ cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
 ### install netChainSubset (over.chain) for target
 cd \${buildDir}
 if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz\" ]; then
-  overChainFile=\`ls result/\${DS}/'netChainSubset on dataset 8 and 22__'*.chain\`
+  overChainFile=\`ls result/\${DS}/liftOverChain_.*.chain\`
   gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
 fi
 
 ### convert target over.chain to bigBed and measure featureBits
 cd \${buildDir}/axtChain
-if [ ! -s \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" ]; then
+if [ ! -s \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" ]; then
   overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
-  chainBigBedFb \${targetDb} chainLiftOver\${QueryDb} \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+  chainBigBedFb \${targetDb} chainLiftOver\${QueryDb} \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt
 fi
-cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
+cat \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" 1>&2
 
 ### install allChainSwap into swapDir/axtChain/
 mkdir -p \${swapDir}/axtChain
 cd \${buildDir}
 if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz\" ]; then
-  allChainSwapFile=\`ls result/\${DS}/allChainSwap__*.chain\`
+  allChainSwapFile=\`ls result/\${DS}/allChainSwap_.*.chain\`
   gzip -c \"\${allChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz
 fi
 
@@ -694,17 +694,17 @@ cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
 ### install netChainSubset (over.chain) for swap
 cd \${buildDir}
 if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz\" ]; then
-  overChainSwapFile=\`ls result/\${DS}/'netChainSubset on dataset 9 and 36__'*.chain\`
+  overChainSwapFile=\`ls result/\${DS}/swapLiftOverChain_.*.chain\`
   gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
 fi
 
 ### convert swap over.chain to bigBed and measure featureBits
 cd \${swapDir}/axtChain
-if [ ! -s \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" ]; then
+if [ ! -s \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" ]; then
   overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
-  chainBigBedFb \${queryDb} chainLiftOver\${TargetDb} \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+  chainBigBedFb \${queryDb} chainLiftOver\${TargetDb} \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt
 fi
-cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
+cat \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" 1>&2
 
 " > ${buildDir}/kegAlign.sh
 chmod +x ${buildDir}/kegAlign.sh
