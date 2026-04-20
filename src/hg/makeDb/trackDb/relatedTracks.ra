@@ -87,3 +87,13 @@ mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
 mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 mm10 cCREs encode4Reg Related ENCODE4 regulation data
+
+# hg38 long-read SV supertrack cross-links to other SV resources:
+hg38 lrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
+hg38 gnomadStructuralVariants lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv dbVarSv NCBI dbVar structural variants (short-read and long-read, germline and clinical)
+hg38 dbVarSv lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv dgvPlus Database of Genomic Variants (DGV) structural variation catalog
+hg38 dgvPlus lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv giabSv Genome in a Bottle high-confidence SV benchmark callsets
+hg38 giabSv lrSv Long-read structural variants across multiple cohorts
