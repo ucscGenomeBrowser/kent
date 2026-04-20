@@ -1,0 +1,20 @@
+table lrSvCpc1
+"CPC+HPRC Phase 1 pangenome structural variants, collapsed by graph snarl site"
+    (
+    string chrom;        "Chromosome"
+    uint   chromStart;   "Start position"
+    uint   chromEnd;     "End position"
+    string name;         "Graph snarl ID (variant site)"
+    uint   score;        "Score, 0-1000 (scaled AF)"
+    char[1] strand;      "Strand (.)"
+    uint   thickStart;   "Thick start"
+    uint   thickEnd;     "Thick end"
+    uint   itemRgb;      "Color by SV type"
+    string svType;       "SV Type|INS, DEL, CPX or MIXED (MIXED = snarl with alts of different classes)"
+    int    svLen;        "SV Length|max |len(ALT) - len(REF)| across alt alleles"
+    int    numAlts;      "Number of alt alleles|collapsed into this snarl"
+    int    alleleCount;  "Allele Count (AC)|sum across all alt alleles at this site"
+    int    alleleNumber; "Allele Number (AN)|called alleles at this site"
+    float  alleleFreq;   "Allele Frequency (AF)|alleleCount / alleleNumber"
+    int    numSamples;   "Samples with data (NS)|number of samples with at least one called allele"
+    )

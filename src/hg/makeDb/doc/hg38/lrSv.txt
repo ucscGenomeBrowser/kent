@@ -250,3 +250,165 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvChirmade101TsvToBed.py \
 bedSort chirmade101.bed chirmade101.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvChirmade101.as \
     -tab chirmade101.sorted.bed /hive/data/genomes/hg38/chrom.sizes chirmade101.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Tenth subtrack: Gustafson et al. 2024 - 100 1000 Genomes ONT samples
+# Paper: Gustafson et al. 2024, Genome Res, PMID 39358015
+# Data: 1000g-ont S3 bucket (Jasmine-merged site-level SV VCF)
+# Note: distinct cohort from the Schloissnig "Vienna" 1KG-ONT track (lrSv1kgOnt)
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/gustafson
+cd /hive/data/genomes/hg38/bed/lrSv/gustafson
+wget https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz
+wget https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz.csi
+
+# 113,696 SVs across 100 samples (500 sample-caller columns total; each sample
+# contributes up to 5 per-caller entries via Sniffles2/cuteSV/SVIM on minimap2
+# alignments plus hapdiff on Flye and Shasta assemblies). Site-only BED from
+# INFO fields: SVTYPE, END, SVLEN, SUPP, VARCALLS, PRECISE, STRANDS. The
+# converter clips END on chrM to the chromosome length (source file has one
+# chrM DUP with END=16570 vs. chrM length 16569).
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvGustafsonVcfToBed.py \
+    20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz \
+    gustafson.bed
+bedSort gustafson.bed gustafson.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvGustafson.as \
+    -tab gustafson.sorted.bed /hive/data/genomes/hg38/chrom.sizes gustafson.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Eleventh subtrack: HGSVC2 - phase 2 of the Human Genome Structural
+# Variation Consortium, 32 haplotype-resolved genomes (5 superpopulations).
+# Paper: Ebert et al. 2021, Science, PMID 33632895
+# Data: IGSR FTP (HGSVC2 v2.0 integrated callset freeze 4)
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/hgsvc2
+cd /hive/data/genomes/hg38/bed/lrSv/hgsvc2
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/variants_freeze4_sv_insdel.tsv.gz
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/variants_freeze4_sv_inv.tsv.gz
+
+# Two annotation tables are complementary (same structure as HGSVC3): the
+# insdel table holds DEL + INS with POP_*_AF population allele frequencies
+# imputed back into the 1000 Genomes cohort; the inv table holds INV with
+# an RGN_REF_INNER column. The converter merges them into a single bigBed.
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc2TsvToBed.py \
+    variants_freeze4_sv_insdel.tsv.gz \
+    variants_freeze4_sv_inv.tsv.gz \
+    hgsvc2.bed
+bedSort hgsvc2.bed hgsvc2.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc2.as \
+    -tab hgsvc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hgsvc2.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Twelfth subtrack: 1000 Genomes 3,202-sample Illumina SHORT-READ GATK-SV
+# release. Included in the lrSv collection solely as a short-read
+# comparator; it is NOT a long-read dataset.
+# Paper: Byrska-Bishop et al. 2022, Cell, PMID 36055201
+# Data: 1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz (IGSR FTP)
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/onekg3202sr
+cd /hive/data/genomes/hg38/bed/lrSv/onekg3202sr
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz
+
+# 173,366 site-level SVs across 7 classes (DEL, INS, DUP, INV, CPX, CNV,
+# CTX) with AC/AN/AF and per-superpopulation AFs (AFR/AMR/ASN/EUR/SAN).
+# The converter extracts site-level INFO into bed9+, preserving the
+# FILTER column so users can see PASS vs LowQual / HWE / etc.
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kg3202SrVcfToBed.py \
+    1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz onekg3202sr.bed
+bedSort onekg3202sr.bed onekg3202sr.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kg3202Sr.as \
+    -tab onekg3202sr.sorted.bed /hive/data/genomes/hg38/chrom.sizes onekg3202sr.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Thirteenth subtrack: HPRC release-2 pangenome SVs (233 samples).
+# No peer-reviewed publication yet; see HPRC release page:
+#   https://humanpangenome.org/hprc-data-release-2/
+# Sample list (alignments v2.0):
+#   https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/hprc2
+cd /hive/data/genomes/hg38/bed/lrSv/hprc2
+
+# Pangenome graph (referenced in the doc html):
+wget https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.sv.gfa.gz
+# wave-decomposed VCF (what we actually convert):
+wget https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.wave.vcf.gz
+
+# The wave VCF contains ~20M atomic alleles including SNVs. The converter
+# streams the multi-allelic rows, explodes one BED row per ALT, and keeps
+# only SV-sized alleles (|LEN| >= 50 bp) plus all records carrying the
+# INV flag. 1,483,114 SVs kept (1,106,190 INS, 192,597 DEL, 178,178
+# COMPLEX, 6,149 INV).
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2VcfToBed.py \
+    hprc-v2.0-mc-grch38.wave.vcf.gz hprc2.bed
+bedSort hprc2.bed hprc2.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
+    -tab hprc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hprc2.bb
+
+##########
+# 2026-04-20 Claude max
+
+# CPC + HPRC Phase 1 pangenome SVs (105 samples).
+# Paper: Gao et al. 2023, Nature, PMID 37316654
+# Data : https://github.com/Shuhua-Group/Chinese-Pangenome-Consortium-Phase-I
+# The VCF is on T2T-CHM13v2 (hs1) contigs renamed "CHM13v2.chrN".
+# Source VCF (CPC.HPRC.Phase1.processed.SVs.normed.vcf.gz, 3.7 GB) was
+# produced with pggb + vcfwave + bcftools norm; each graph snarl appears
+# as one VCF row per alternative allele, with genotypes for 105 samples.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/cpc1
+cd /hive/data/genomes/hg38/bed/lrSv/cpc1
+
+# (VCF already placed here by the user)
+
+# Run conversion + liftOver + bigBed for both hs1 (native) and hg38 (lifted).
+# The script strips the "CHM13v2." prefix, classifies each alt by length
+# delta with a 50 bp threshold (INS, DEL, CPX, or dropped), collapses all
+# alts of one snarl ID into a single row (MIXED when types disagree),
+# and writes 16-column bed rows with AC/AN/AF and NS.
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
+# hs1 bigBed: 97,205 sites (4.7 MB)
+# hg38 lifted: 81,261 sites (4.1 MB), 15,944 unmapped
+
+# Symlinks for both assemblies
+mkdir -p /gbdb/hs1/lrSv /gbdb/hg38/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hs1.bb  /gbdb/hs1/lrSv/cpc1.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hg38.bb /gbdb/hg38/lrSv/cpc1.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Arabic Pangenome Reference (APR) SVs
+# Paper: Nassir et al. 2025, Nat Commun, PMID 40707445
+# Data : https://www.mbru.ac.ae/the-arab-pangenome-reference/
+#        (SharePoint download page under APR Nuclear/Pangenome)
+# Source: apr_review_v1_2902_chm13.vcf.gz (1.5 GB, 21M variants,
+# contigs named chrN with CHM13v2 lengths, multi-allelic rows).
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/apr
+cd /hive/data/genomes/hg38/bed/lrSv/apr
+
+# (VCF placed here by the user from the MBRU SharePoint download)
+
+# Run converter + liftOver + bigBed for both hs1 (native) and hg38 (lifted).
+# The script iterates the comma-separated ALT alleles of each row,
+# classifies each by length delta (>=50 bp -> INS, <=-50 bp -> DEL,
+# |d|<50 and max(len)>=50 -> CPX, else drop), then emits one row per
+# snarl (VCF line) with AC summed across passing alts.
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvAprBuild.sh
+
+mkdir -p /gbdb/hs1/lrSv /gbdb/hg38/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hs1.bb  /gbdb/hs1/lrSv/apr.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hg38.bb /gbdb/hg38/lrSv/apr.bb
