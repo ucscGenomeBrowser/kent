@@ -3,7 +3,7 @@
 # autoBuild.sh - Fully automated CGI build process
 #
 # Runs the appropriate build phase (preview1, preview2, final build,
-# or wrap-up) based on the schedule in buildSchedule.txt.
+# or wrap-up) based on the Google Calendar build schedule.
 #
 # Exits non-zero (and loudly) at the first sign of anything wrong.
 # Designed to be run from cron or manually with no human interaction.
@@ -22,11 +22,11 @@ set -eEu -o pipefail
 # Configuration
 ##############################################################################
 SCRIPT_NAME="$(basename "$0")"
-SCHEDULE_FILE="$WEEKLYBLD/buildSchedule.txt"
 WEEKLYBLD="/hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld"
 BUILDENV="$WEEKLYBLD/buildEnv.csh"
 LOGDIR="$WEEKLYBLD/logs"
 LOCKFILE="/tmp/autoBuild.lock"
+GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
 
@@ -135,20 +135,51 @@ read_buildenv() {
 }
 
 ##############################################################################
-# Determine which phase to run from the schedule
+# Determine which phase to run from Google Calendar
 ##############################################################################
 
 detect_phase() {
-    local ds
-    ds=$(date "+%F")
-    local entry
-    entry=$(grep "^${ds}" "$SCHEDULE_FILE" 2>/dev/null | head -1 | cut -f2) || true
+    local ds_dash
+    ds_dash=$(date "+%F")           # YYYY-MM-DD for logs
+    local ds_ical
+    ds_ical=$(date "+%Y%m%d")       # YYYYMMDD for iCal DTSTART matching
 
-    if [[ -z "$entry" ]]; then
-        die "No entry for today ($ds) in $SCHEDULE_FILE. Is the schedule up to date?"
+    # Primary source: Google Calendar iCal feed
+    local entry=""
+    log "Fetching build schedule from Google Calendar..." >&2
+    local ical_data
+    ical_data=$(curl -sS --max-time 30 "$GCAL_ICAL_URL" 2>/dev/null) || true
+
+    if [[ -n "$ical_data" ]]; then
+        # Parse iCal: find VEVENT whose DTSTART matches today, extract SUMMARY
+        entry=$(echo "$ical_data" | awk -v date="$ds_ical" '
+            /^BEGIN:VEVENT/ { in_event=1; summary=""; dtstart="" }
+            /^END:VEVENT/ {
+                if (in_event && dtstart == date && summary != "") print summary
+                in_event=0
+            }
+            in_event && /^DTSTART/ {
+                gsub(/.*:/, ""); gsub(/\r/, ""); dtstart=$0
+            }
+            in_event && /^SUMMARY/ {
+                gsub(/^SUMMARY:/, ""); gsub(/\r/, ""); summary=$0
+            }
+        ' | head -1)
+
+        if [[ -n "$entry" ]]; then
+            log "Google Calendar entry for $ds_dash: $entry" >&2
+        else
+            log "WARNING: No Google Calendar entry for today ($ds_dash)" >&2
+        fi
+    else
+        log "WARNING: Could not fetch Google Calendar iCal feed" >&2
     fi
 
-    log "Schedule entry for $ds: $entry" >&2
+    if [[ -z "$entry" ]]; then
+        die "No entry for today ($ds_dash) in Google Calendar. Is the calendar up to date?"
+    fi
+
+    log "Schedule entry for $ds_dash: $entry" >&2
 
     if echo "$entry" | grep -qi "preview 1"; then
         echo "preview1"
@@ -595,7 +626,7 @@ main() {
             --help|-h)
                 echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup]"
                 echo ""
-                echo "Runs the CGI build phase for today's date (per buildSchedule.txt),"
+                echo "Runs the CGI build phase for today's date (per Google Calendar),"
                 echo "or a forced phase if specified. Stops on any error."
                 exit 0
                 ;;
@@ -618,10 +649,6 @@ main() {
 
     if [[ "$(whoami)" != "build" ]]; then
         die "Must run as 'build' user (current user: $(whoami))"
-    fi
-
-    if [[ ! -f "$SCHEDULE_FILE" ]]; then
-        die "Schedule file not found: $SCHEDULE_FILE"
     fi
 
     if [[ ! -f "$BUILDENV" ]]; then
