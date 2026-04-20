@@ -1,0 +1,20 @@
+table lrSvApr
+"Arabic Pangenome Reference structural variants, collapsed by graph snarl site"
+    (
+    string chrom;        "Chromosome"
+    uint   chromStart;   "Start position"
+    uint   chromEnd;     "End position"
+    string name;         "Graph snarl ID (variant site)"
+    uint   score;        "Score, 0-1000 (scaled AF)"
+    char[1] strand;      "Strand (.)"
+    uint   thickStart;   "Thick start"
+    uint   thickEnd;     "Thick end"
+    uint   itemRgb;      "Color by SV type"
+    string svType;       "SV Type|INS, DEL, CPX or MIXED (MIXED = snarl with alts of different classes)"
+    int    svLen;        "SV Length|max |len(ALT) - len(REF)| across alt alleles at this snarl"
+    int    numAlts;      "Number of alt alleles|at this snarl passing the 50bp filter"
+    int    alleleCount;  "Allele Count (AC)|sum across all passing alt alleles"
+    int    alleleNumber; "Allele Number (AN)|called alleles at this site (excludes GRCh38 ref column)"
+    float  alleleFreq;   "Allele Frequency (AF)|alleleCount / alleleNumber"
+    int    numSamples;   "Samples with data (NS)"
+    )

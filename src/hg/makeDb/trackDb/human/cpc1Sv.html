@@ -1,0 +1,120 @@
+<h2>Description</h2>
+
+<p>
+This track displays structural variants (SVs) — deletions, insertions, and
+complex substitutions of at least 50 bp — identified by the Chinese
+Pangenome Consortium (CPC) from a pangenome graph built from 58 core samples
+representing 36 Chinese minority ethnic groups, jointly with 47 samples from
+Phase 1 of the Human Pangenome Reference Consortium (HPRC). After
+decomposition of the graph bubbles, each distinct graph site (snarl) is
+displayed as one variant record, with genotypes aggregated across 105
+samples.</p>
+
+<p>
+A pangenome is a graph that represents many genomes simultaneously, letting
+variants that are missing from a single linear reference be captured and
+typed directly. Because the CPC pangenome was built on the T2T-CHM13v2
+assembly, variants are shown natively on the hs1 browser and lifted to hg38
+using the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain. About 16% of the
+97,205 hs1 sites did not lift over cleanly (usually in highly repetitive
+regions added to T2T-CHM13).</p>
+
+<h2>Display conventions</h2>
+
+<p>Items are colored by SV type:</p>
+<ul>
+  <li><span style="background-color:rgb(0,0,200);color:white;padding:1px 6px">INS</span> insertion (net ALT longer by &ge;50 bp)</li>
+  <li><span style="background-color:rgb(200,0,0);color:white;padding:1px 6px">DEL</span> deletion (net REF longer by &ge;50 bp)</li>
+  <li><span style="background-color:rgb(230,140,0);color:white;padding:1px 6px">CPX</span> complex substitution (similar-length REF and ALT but at least one &ge;50 bp)</li>
+  <li><span style="background-color:rgb(120,120,120);color:white;padding:1px 6px">MIXED</span> snarl whose collapsed alt alleles belong to different classes</li>
+</ul>
+
+<p>
+Each bed item spans from the start of the REF allele to its end on the
+reference. Pure insertions (where REF is a single base) therefore appear
+as narrow single-base marks; DELs and CPX items span the affected reference
+interval.</p>
+
+<p>
+The <i>name</i> field is the graph snarl ID (two node identifiers separated
+by strand arrows, e.g. <tt>&gt;2541&gt;2547</tt>). It is stable across the
+graph but has no meaning outside the CPC pangenome graph file.</p>
+
+<h2>Collapsing of multi-allelic sites</h2>
+
+<p>
+The source VCF was decomposed with <tt>bcftools norm -m -any</tt>, so each
+graph snarl appears as one VCF row per alternative allele (a single
+bubble in the graph may have 2-20+ alt paths). For display, all alternative
+alleles sharing the same snarl ID are collapsed into one track item:</p>
+<ul>
+  <li><b>SV type</b> is the common class of all alts, or <tt>MIXED</tt> if
+      they disagree (for example one alt is a DEL and another is an INS).</li>
+  <li><b>SV length</b> is the maximum |len(ALT) − len(REF)| across alts.</li>
+  <li><b>Allele count</b> is the sum of the per-alt allele counts.</li>
+  <li><b>Number of alts</b> records how many alternative alleles were merged.</li>
+</ul>
+
+<h2>Filters</h2>
+
+<p>Available filters:</p>
+<ul>
+  <li><b>SV type</b> — any combination of INS, DEL, CPX, MIXED.</li>
+  <li><b>SV length</b> — maximum allele-length difference.</li>
+  <li><b>Allele frequency</b> and <b>allele count</b> across the combined
+      105 samples.</li>
+</ul>
+
+<h2>Methods</h2>
+
+<p>
+The CPC assemblies were produced from PacBio HiFi long-read sequencing
+(mean ~30&times; coverage) with <a href="https://github.com/chhylp123/hifiasm" target="_blank">hifiasm</a>
+in trio or Hi-C-phased mode, then combined with HPRC Phase 1 assemblies and
+built into a variation graph with <a href="https://github.com/pangenome/pggb" target="_blank">pggb/Minigraph-Cactus</a>.
+Bubbles in the graph were decomposed into variant records with
+<a href="https://github.com/vcflib/vcflib" target="_blank">vcfwave</a>,
+producing the source VCF used here. For this UCSC track, the decomposed
+VCF was parsed, filtered to variants with an allele-length delta of at
+least 50 bp, and collapsed by graph snarl ID (see the build documentation
+linked below for details).</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed from
+scripts via our <a href="https://api.genome.ucsc.edu">API</a>
+(track=<i>cpc1Sv</i>).</p>
+
+<p>For automated download, the bigBed files are at
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/cpc1.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/cpc1.bb</a> (native) and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/cpc1.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/cpc1.bb</a> (lifted).
+Use <tt>bigBedToBed</tt> to extract features: e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/cpc1.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original pangenome VCF is distributed by the Chinese Pangenome
+Consortium; see the
+<a href="https://github.com/Shuhua-Group/Chinese-Pangenome-Consortium-Phase-I" target="_blank">
+CPC Phase I repository</a>.</p>
+
+<h2>Credits</h2>
+
+<p>Thanks to the Chinese Pangenome Consortium and the HPRC Phase 1 team
+for producing and releasing the combined pangenome and its decomposed
+variant calls.</p>
+
+<h2>References</h2>
+
+
+<p>
+Gao Y, Yang X, Chen H, Tan X, Yang Z, Deng L, Wang B, Kong S, Li S, Cui Y <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06173-7" target="_blank">
+A pangenome reference of 36 Chinese populations</a>.
+<em>Nature</em>. 2023 Jul;619(7968):112-121.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37316654" target="_blank">37316654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10322713/" target="_blank">PMC10322713</a>
+</p>
+
