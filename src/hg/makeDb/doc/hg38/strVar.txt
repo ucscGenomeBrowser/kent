@@ -44,6 +44,7 @@ rm trexplorer.bed trexplorer.sorted.bed
 
 # webstr: het pooled across 5 1000G populations weighted by sample count
 cd /hive/data/genomes/hg38/bed/str/webstr
+# Received the dump file from Melissa Gymrek by email. Alas, webstr has no good download file yet.
 python3 ~/kent/src/hg/makeDb/scripts/webstr/webstrToBed.py WebSTRDataDumpForMax \
     > webstr.bed
 sort -k1,1 -k2,2n webstr.bed > webstr.sorted.bed
