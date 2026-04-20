@@ -4472,7 +4472,15 @@ var imageV2 = {
         imageV2.drawHighlights();
 
         if (imageV2.backSupport) {
-            imageV2.setInHistory(false);    // Set this new position into History stack
+            // try/catch: browser extensions that proxy history.pushState can throw
+            // "Permission denied to access property apply" under Firefox cross-origin
+            // security. Swallow it so zoom/drag still complete; only the URL-bar
+            // position update is lost.
+            try {
+                imageV2.setInHistory(false);    // Set this new position into History stack
+            } catch (e) {
+                console.warn("setInHistory failed, continuing:", e);
+            }
         } else {
             imageV2.markAsDirtyPage();
         }
@@ -5199,7 +5207,12 @@ var imageV2 = {
         // A) Forward: Full page retrieval: hgTracks is first navigated to (or chrom change)
         if (!cachedDbPos) { // Not a back-button operation
             // set the current position into history outright (will replace). No img update needed
-            imageV2.setInHistory(true);
+            // try/catch: see comment on the other setInHistory call site.
+            try {
+                imageV2.setInHistory(true);
+            } catch (e) {
+                console.warn("setInHistory failed, continuing:", e);
+            }
         } else { // B) Back-button past a full retrieval
             genomePos.set(decodeURIComponent(cachedPos));
             // B1) Dirty page: at least one non-position change 
