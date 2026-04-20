@@ -3,6 +3,9 @@
 # Two outputs: decorator bigBed (per-transcript) and collapsed bigBed (merged by coordinates)
 # Collapsed version uses gene symbols from input, colors by rule, transcript lists
 # Script accepts -f bigGenePred (gencode .bb) or -f genePredExt (ncbiRefSeq .txt.gz)
+#
+# 2026-04-20 lrnassar: Added Rule 4 (long-exon rule, Lindeboom 2016) - coding
+# exons >400 nt excluding the last coding exon. Rebuilt Gencode + RefSeq.
 
 cd /hive/data/genomes/hg38/bed/nmd/gencode/
 

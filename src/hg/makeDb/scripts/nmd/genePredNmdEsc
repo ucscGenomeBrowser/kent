@@ -11,13 +11,18 @@ RULE_COLORS = {
     1: "255,0,0",       # red - last 50bp of last coding junction
     2: "255,140,0",     # orange - intronless transcript
     3: "139,0,0",       # dark red - first 100bp of coding nucleotides
+    4: "255,215,0",     # gold - long coding exon (>400 nt)
 }
 
 RULE_DESCRIPTIONS = {
     1: "Rule 1 - last 50bp of last coding exon junction",
     2: "Rule 2 - intronless transcript",
     3: "Rule 3 - first 100bp of coding nucleotides",
+    4: "Rule 4 - PTC in long exon (>400 nt)",
 }
+
+# Lindeboom et al. 2016: reduced NMD efficiency for PTCs in exons longer than this
+LONG_EXON_THRESHOLD = 400
 
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
@@ -232,6 +237,8 @@ def main():
                 # rule 1: last 50bp of last coding junction
                 regions = outputExonsUpTo(True, cdsExons, chrom, txStart, txEnd, name, -50, decoOfh, 1)
                 addRegions(regions, 1)
+                # rule 4: coding exons >400 nt (excluding last; last is already covered by rule 1)
+                rule4Exons = cdsExons[:-1]
             else:
                 # rule 3: first 100bp of coding nucleotides
                 regions = outputExonsUpTo(True, cdsExons, chrom, txStart, txEnd, name, 100, decoOfh, 3)
@@ -239,6 +246,15 @@ def main():
                 # rule 1: last 50bp of last coding junction
                 regions = outputExonsUpTo(False, cdsExons, chrom, txStart, txEnd, name, -50, decoOfh, 1)
                 addRegions(regions, 1)
+                # rule 4: coding exons >400 nt (excluding last, which on - strand is cdsExons[0])
+                rule4Exons = cdsExons[1:]
+
+            # rule 4: Lindeboom et al. 2016 long-exon rule
+            for exStart, exEnd in rule4Exons:
+                if exEnd - exStart > LONG_EXON_THRESHOLD:
+                    bed = [chrom, str(exStart), str(exEnd), name]
+                    bedOut(bed, txStart, txEnd, decoOfh, 4)
+                    addRegions([(chrom, exStart, exEnd)], 4)
 
     decoOfh.close()
 

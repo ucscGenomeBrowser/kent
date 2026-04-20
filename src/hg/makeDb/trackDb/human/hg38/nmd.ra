@@ -5,6 +5,7 @@ group genes
 type bed 4
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         #track nmdGencode
         #shortLabel NMD escape 50bp-100bp rule: Gencode transcripts
@@ -20,10 +21,10 @@ superTrack on
 
         track nmdEscGencode
         shortLabel NMD Escape Gencode
-        longLabel NMD escape 50bp/100bp/intronless ruleset: Gencode transcripts
+        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: Gencode transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
-        visibility pack
+        visibility dense
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
@@ -33,7 +34,7 @@ superTrack on
 
         track nmdEscNcbiRefSeq
         shortLabel NMD Escape RefSeq
-        longLabel NMD escape 50bp/100bp/intronless ruleset: NCBI RefSeq transcripts
+        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: NCBI RefSeq transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
         visibility pack
@@ -50,7 +51,7 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveA.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,128,255
         autoScale off
         viewLimits -1:1
@@ -64,7 +65,7 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveB.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,128,255
         autoScale off
         viewLimits -1:1
@@ -78,7 +79,7 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectA-ptc.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,153,102
         autoScale off
         viewLimits -1:1
@@ -92,7 +93,7 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectB-ptc.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,153,102
         autoScale off
         viewLimits -1:1
