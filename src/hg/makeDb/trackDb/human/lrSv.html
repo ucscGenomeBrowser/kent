@@ -14,6 +14,10 @@ field of each track, in base pairs. Some tracks include sites with
 <tt>svLen=0</tt> (complex events where the reference and alternate alleles
 differ in sequence but not in length).
 </p>
+<p>
+All subtracks below are long-read callsets, except the last row (1KG 3202,
+Illumina short-read), which is included as a short-read comparator.
+</p>
 <table class="stdTbl">
 <tr>
   <th>Dataset</th>
@@ -26,6 +30,16 @@ differ in sequence but not in length).
   <th>Max</th>
 </tr>
 <tr>
+  <td><a href="hgTrackUi?g=colorsDbSv">CoLoRSdb</a></td>
+  <td>1,427</td>
+  <td>Consortium of Long-Read Sequencing, joint callset</td>
+  <td>PacBio HiFi</td>
+  <td>426,239</td>
+  <td>20</td>
+  <td>33</td>
+  <td>101,381</td>
+</tr>
+<tr>
   <td><a href="hgTrackUi?g=han945Sv">Han 945</a></td>
   <td>945</td>
   <td>Han Chinese, general population</td>
@@ -36,7 +50,17 @@ differ in sequence but not in length).
   <td>99,743</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT</a></td>
+  <td><a href="hgTrackUi?g=gustafsonSv">1KG ONT 100</a></td>
+  <td>100</td>
+  <td>1000 Genomes, 5 superpopulations / 19 subpopulations</td>
+  <td>ONT (R9.4.1)</td>
+  <td>113,696</td>
+  <td>0</td>
+  <td>164</td>
+  <td>98,289</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a></td>
   <td>1,019</td>
   <td>1000 Genomes, globally diverse</td>
   <td>ONT</td>
@@ -86,6 +110,26 @@ differ in sequence but not in length).
   <td>861,080</td>
 </tr>
 <tr>
+  <td><a href="hgTrackUi?g=hprc2Sv">HPRC v2</a></td>
+  <td>233</td>
+  <td>HPRC release-2 pangenome (CHM13 + diverse 1KG assemblies)</td>
+  <td>PacBio HiFi (pangenome graph)</td>
+  <td>1,483,114</td>
+  <td>50</td>
+  <td>280</td>
+  <td>97,718</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=hgsvc2Sv">HGSVC2</a></td>
+  <td>32</td>
+  <td>HGSVC2 haplotype-resolved assemblies (5 superpopulations)</td>
+  <td>PacBio CLR + HiFi + Strand-seq</td>
+  <td>111,746</td>
+  <td>50</td>
+  <td>168</td>
+  <td>57,207,414</td>
+</tr>
+<tr>
   <td><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a></td>
   <td>65</td>
   <td>HGSVC3 diverse reference assemblies</td>
@@ -115,7 +159,26 @@ differ in sequence but not in length).
   <td>160</td>
   <td>1,321,484</td>
 </tr>
+<tr>
+  <td><a href="hgTrackUi?g=onekg3202Sr">1KG 3202 (short-read)</a></td>
+  <td>3,202</td>
+  <td>1000 Genomes expanded cohort (<b>short-read comparator</b>)</td>
+  <td><b>Illumina short-read</b></td>
+  <td>173,366</td>
+  <td>1</td>
+  <td>314</td>
+  <td>154,807,729</td>
+</tr>
 </table>
+
+<h3>CoLoRSdb SVs (<a href="hgTrackUi?g=colorsDbSv">colorsDbSv</a>)</h3>
+<p>
+Structural variants from the Consortium of Long-Read Sequencing database
+(CoLoRSdb), from 1,427 PacBio HiFi long-read whole-genome sequences.
+426,239 SVs (insertions, deletions, inversions) called with pbsv and
+merged with Jasmine, with allele frequencies, genotype counts and
+Hardy-Weinberg statistics across the cohort.
+</p>
 
 <h3>Han 945 SVs (<a href="hgTrackUi?g=han945Sv">han945Sv</a>)</h3>
 <p>
@@ -124,7 +187,17 @@ Structural variants from 945 Han Chinese individuals. 111,288 SVs
 Includes allele frequencies and per-sample support.
 </p>
 
-<h3>1KG ONT SVs (<a href="hgTrackUi?g=lrSv1kgOnt">lrSv1kgOnt</a>)</h3>
+<h3>1KG ONT 100 SVs (<a href="hgTrackUi?g=gustafsonSv">gustafsonSv</a>)</h3>
+<p>
+Structural variants from Oxford Nanopore long-read sequencing of 100
+1000 Genomes samples (5 superpopulations, 19 subpopulations) released
+by the 1000 Genomes ONT Sequencing Consortium and described in
+Gustafson et al. 2024. 113,696 SVs (insertions, deletions, duplications,
+inversions) called with five callers and merged with Jasmine. This is a
+separate dataset from the Vienna 1KG-ONT release below.
+</p>
+
+<h3>1KG ONT Vienna SVs (<a href="hgTrackUi?g=lrSv1kgOnt">lrSv1kgOnt</a>)</h3>
 <p>
 Structural variants from 1,019 individuals across 26 populations (1000 Genomes ONT).
 161,332 SVs annotated with SVAN, classifying insertions and deletions by mechanism
@@ -167,6 +240,25 @@ and combined insertion/deletion events). Site-only callset with annotated
 surrounding tandem-repeat regions.
 </p>
 
+<h3>HPRC v2 SVs (<a href="hgTrackUi?g=hprc2Sv">hprc2Sv</a>)</h3>
+<p>
+Structural variants derived from the Human Pangenome Reference Consortium
+release-2 minigraph-cactus pangenome graph, built from 233 PacBio HiFi
+haplotype-resolved assemblies (CHM13 + diverse 1000 Genomes samples).
+1,483,114 SV-sized alleles (INS, DEL, COMPLEX, INV) extracted with
+<tt>vg deconstruct</tt> and decomposed with <tt>vcfwave</tt> (WFA2).
+</p>
+
+<h3>HGSVC2 32 SVs (<a href="hgTrackUi?g=hgsvc2Sv">hgsvc2Sv</a>)</h3>
+<p>
+Structural variants from 32 haplotype-resolved diploid genomes (HGSVC2
+freeze 4, Ebert et al. 2021). 111,746 SVs (deletions, insertions and
+inversions) called from phased de novo assemblies with PAV, with
+per-variant 1000 Genomes population allele frequencies (insertions and
+deletions) and rich structural/gene annotations. An earlier HGSVC release
+complementary to <a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a>.
+</p>
+
 <h3>HGSVC3 65 SVs (<a href="hgTrackUi?g=hgsvc3Sv">hgsvc3Sv</a>)</h3>
 <p>
 Structural variants from 65 diverse individuals sequenced and de novo
@@ -192,6 +284,17 @@ alongside the GWAS SVatalog tool (Chirmade et al. 2026). 87,183 SVs
 (deletions, insertions, duplications, inversions and complex events)
 annotated with gene overlaps, ClinGen / gnomAD constraint scores,
 OMIM / ClinVar / DGV / Decipher regional annotations.
+</p>
+
+<h3>1KG 3202 SVs (<a href="hgTrackUi?g=onekg3202Sr">onekg3202Sr</a>) - short-read comparator</h3>
+<p>
+<b>This is a short-read dataset, included for comparison only.</b>
+Structural variants from the expanded 1000 Genomes cohort of 3,202
+Illumina NovaSeq short-read whole genomes (Byrska-Bishop et al. 2022),
+called with the GATK-SV / svtools pipeline. 173,366 SVs (DEL, INS, DUP,
+INV, CPX, CNV, CTX) with per-superpopulation allele frequencies. Useful
+for contrasting short-read vs. long-read SV breakpoints and for spotting
+variants unique to long-read data.
 </p>
 
 <h2>Data Access</h2>
@@ -304,5 +407,43 @@ GWAS SVatalog: a visualization tool to aid fine-mapping of GWAS loci with struct
 <em>Heredity (Edinb)</em>. 2026 Mar;135(3):199-210.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41203876" target="_blank">41203876</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13031531/" target="_blank">PMC13031531</a>
+</p>
+
+
+
+<p>
+Gustafson JA, Gibson SB, Damaraju N, Zalusky MPG, Hoekzema K, Twesigomwe D, Yang L, Snead AA,
+Richmond PA, De Coster W <em>et al</em>.
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=39358015" target="_blank">
+High-coverage nanopore sequencing of samples from the 1000 Genomes Project to build a comprehensive
+catalog of human genetic variation</a>.
+<em>Genome Res</em>. 2024 Nov 20;34(11):2061-2073.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39358015" target="_blank">39358015</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11610458/" target="_blank">PMC11610458</a>
+</p>
+
+
+
+<p>
+Ebert P, Audano PA, Zhu Q, Rodriguez-Martin B, Porubsky D, Bonder MJ, Sulovari A, Ebler J, Zhou W,
+Serra Mari R <em>et al</em>.
+<a href="https:///www.science.org/doi/10.1126/science.abf7117" target="_blank">
+Haplotype-resolved diverse human genomes and integrated analysis of structural variation</a>.
+<em>Science</em>. 2021 Apr 2;372(6537).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33632895" target="_blank">33632895</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8026704/" target="_blank">PMC8026704</a>
+</p>
+
+
+
+<p>
+Byrska-Bishop M, Evani US, Zhao X, Basile AO, Abel HJ, Regier AA, Corvelo A, Clarke WE, Musunuri R,
+Nagulapalli K <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)00991-6" target="_blank">
+High-coverage whole-genome sequencing of the expanded 1000 Genomes Project cohort including 602
+trios</a>.
+<em>Cell</em>. 2022 Sep 1;185(18):3426-3440.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">36055201</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9439720/" target="_blank">PMC9439720</a>
 </p>
 

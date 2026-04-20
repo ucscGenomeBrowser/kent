@@ -40,9 +40,17 @@ composition, and facial features.
 <h2>Data Access</h2>
 <p>
 The raw VCF data was obtained from the
-<a href="https://ngdc.cncb.ac.cn/omix/" target="_blank">OMIX</a> repository
-(accession OED00945268) at the National Genomics Data Center (NGDC),
+<a href="https://ngdc.cncb.ac.cn/omix/release/OMIX005649" target="_blank">OMIX</a>
+repository (accession OED00945268) at the National Genomics Data Center (NGDC),
 China National Center for Bioinformation.
+</p>
+<p>
+The source VCF also encodes phased per-sample genotypes: the <tt>sampleList</tt>
+field on the detail page is derived from the SURVIVOR <tt>SUPP_VEC</tt> bitmask
+and is an ordered list of the 1-based indices of the 945 samples carrying
+each SV. The full per-sample phased VCF can be browsed as a separate track in
+the <a href="hgTrackUi?g=han945SvVcf">SVs from 945 Han Chinese</a> entry of
+the <a href="hgTrackUi?g=phasedVars">Phased Variants</a> track collection.
 </p>
 
 <h2>Credits</h2>
