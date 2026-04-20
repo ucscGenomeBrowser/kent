@@ -1,0 +1,37 @@
+# 2026-04-20: Abel et al 2020 CCDG structural-variant track (Claude)
+#
+# Paper:  Abel HJ et al., Nature 583:83-89 (2020), doi 10.1038/s41586-020-2371-0
+# Data :  https://github.com/hall-lab/sv_paper_042020
+#          Supplementary_File_1.zip  (B38 native callset,  14,623 samples)
+#          Supplementary_File_2.zip  (B37 callset,          8,417 samples)
+#
+# The two public callsets are non-overlapping in SVs but share 5,245 samples.
+# For the hg38 track we display B38 natively and lift B37 coordinates to
+# hg38 with the standard UCSC liftOver chain. B37 variants that do not lift
+# (626 of 280,518 primary records) are dropped.
+
+mkdir -p /hive/data/genomes/hg38/bed/abelSv
+cd /hive/data/genomes/hg38/bed/abelSv
+
+# Fetch site-frequency callsets
+wget -c https://raw.githubusercontent.com/hall-lab/sv_paper_042020/master/Supplementary_File_1.zip
+wget -c https://raw.githubusercontent.com/hall-lab/sv_paper_042020/master/Supplementary_File_2.zip
+unzip -o Supplementary_File_1.zip   # -> Build38.public.v2.{vcf,bedpe}.gz
+unzip -o Supplementary_File_2.zip   # -> Build37.public.v2.{vcf,bedpe}.gz
+
+# Convert, lift B37, merge, build bigBed.
+# The script parses each VCF, collapses detailed MEI subtypes
+# (e.g. <DEL:ME:LINE|L1|L1HS>) to SVTYPE=MEI, drops SECONDARY BND records
+# so each translocation pair appears only once, and emits one bed14+
+# line per variant with per-population AC/AN, MSQ, etc.
+bash ~/kent/src/hg/makeDb/scripts/abelSv/build.sh
+
+# Result:
+#   B38 bed      :  458,106 records
+#   B37 bed      :  280,518 records (before lift)
+#   B37 lifted   :  279,892 records (626 unmapped)
+#   abelSv.bb    :  737,998 records, 31 MB
+
+# Symlink for trackDb
+mkdir -p /gbdb/hg38/abelSv
+ln -sf /hive/data/genomes/hg38/bed/abelSv/abelSv.bb /gbdb/hg38/abelSv/abelSv.bb
