@@ -472,3 +472,13 @@ superTrack on
         visibility pack
         priority 9
 
+        track colorsDbSnv
+        shortLabel CoLoRSdb 1,027 LR SNVs/indels
+        longLabel Variant Frequencies: CoLoRSdb v1.2.0 - 1,027 long-read PacBio HiFi WGS, DeepVariant+GLnexus joint-called SNVs and small indels
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/colorsDb/colorsDbSnv.vcf.gz
+        visibility pack
+        dataVersion v1.2.0
+        priority 9.5
+
