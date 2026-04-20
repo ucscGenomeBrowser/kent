@@ -1,0 +1,37 @@
+track abelSv
+shortLabel Abel CCDG SVs
+longLabel Structural variants in 17,795 genomes from Abel et al 2020 (CCDG, NYGC, Baylor)
+group varRep
+type bigBed 9 +
+visibility hide
+itemRgb on
+bigDataUrl /gbdb/$D/abelSv/abelSv.bb
+labelFields name,svType,svLength,af
+defaultLabelFields svType
+mouseOverField svType
+skipEmptyFields on
+skipFields mateChrom,matePos
+filterValues.svType DEL|deletion,DUP|duplication,INV|inversion,MEI|mobile element insertion,BND|breakend/translocation
+filterType.svType multipleListOr
+filterValues.callset B38|Native GRCh38 callset (14623 samples),B37lift|Lifted from GRCh37 callset (8417 samples)
+filterType.callset multipleListOr
+filterValues.filter PASS|High confidence,LOW|Low confidence
+filterType.filter multipleListOr
+filterByRange.af on
+filter.af 0:1
+filterLimits.af 0:1
+filterLabel.af Allele frequency (AF)
+filterByRange.svLength on
+filter.svLength 0:250000000
+filterLimits.svLength -1:250000000
+filterLabel.svLength SV length (bp; -1 for BND)
+filterByRange.msq on
+filter.msq 0:500
+filterLimits.msq 0:500
+filterLabel.msq Mean sample quality (MSQ)
+filterByRange.ac on
+filter.ac 0:30000
+filterLimits.ac 0:30000
+filterLabel.ac Allele count (AC)
+url https://www.nature.com/articles/s41586-020-2371-0
+urlLabel Abel et al, Nature 2020:
