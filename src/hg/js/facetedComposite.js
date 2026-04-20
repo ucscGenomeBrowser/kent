@@ -128,10 +128,20 @@ $(function() {
     function initTable(allData) {
         const { metadata, rowToIdx, colNames } = allData;
 
-        const ordinaryColumns = colNames.map(key => ({  // all but checkboxes
-            data: key,
-            title: toTitleCase(key.replace(/^_/, "")),
-        }));
+        const ordinaryColumns = colNames.map(key => {
+            const col = {
+                data: key,
+                title: toTitleCase(key.replace(/^_/, "")),
+            };
+            if (key === embeddedData.primaryKey && embeddedData.subtrackUrl) {
+                col.render = (data, type) => {
+                    if (type !== "display") return data;
+                    const url = embeddedData.subtrackUrl.replace("$$", encodeURIComponent(data));
+                    return `<a href="${url}" target="_blank">${data}</a>`;
+                };
+            }
+            return col;
+        });
 
         const checkboxColumn = {
             data: null,
@@ -730,6 +740,10 @@ $(function() {
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
                     const colNames = rows[0].split("\t");
+                    if (!primaryKey)
+                        throw new Error("trackDb setting 'primaryKey' is missing");
+                    if (!colNames.includes(primaryKey))
+                        throw new Error(`primaryKey '${primaryKey}' not found in metadata columns`);
                     const metadata = rows.slice(1).map(row => {
                         const values = row.split("\t");
                         const obj = {};

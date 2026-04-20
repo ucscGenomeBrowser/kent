@@ -46,6 +46,9 @@ hg38 wgEncodeReg wgEncodeReg4 New ENCODE4 Regulation track
 hg38 wgEncodeReg4 cCREs Related ENCODE4 cCRE annotations
 hg38 cCREs wgEncodeReg4 Related ENCODE4 regulation data
 
+hg38 avada varaico The AVADA track is no longer updated. See VARAICO for the latest variants mined from papers.
+hg38 varaico avada Previous literature mining track for variants extracted from publications. No longer updated.
+
 # hg19:
 hg19 caddSuper gnomad View associated variants
 hg19 gnomad caddSuper View CADD scores for this variant and region
@@ -76,6 +79,9 @@ hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also cont
 
 hg19 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
 hg19 gnomadPLI constraintSuper Container track of various constraint scores
+
+hg19 avada varaico The AVADA track is no longer updated. See VARAICO for the latest variants mined from papers.
+hg19 varaico avada Previous literature mining track for variants extracted from publications. No longer updated.
 
 # mm39:
 

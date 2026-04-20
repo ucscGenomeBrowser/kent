@@ -8,16 +8,28 @@ export bigHub="hgwdev"
 export workHorse="hgwdev"
 export smallClusterHub="hgwdev"
 export fileServer="hgwdev"
+#  a python virtual environment to run this
+export planemoCmd="/hive/users/hiram/galaxy/venv3.12/bin/planemo"
+
+# parse optional -force flag to skip genark table verification
+export forceRun=0
+if [ $# -gt 0 ] && [ "$1" = "-force" ]; then
+  forceRun=1
+  shift
+fi
 
 if [ $# != 4 ]; then
   printf "ERROR: arg count: %d != 4\n" "$#" 1>&2
 
-  printf "usage: kegAlignLastz.sh <target> <query> <tClade> <qClade>
+  printf "usage: kegAlignLastz.sh [-force] <target> <query> <tClade> <qClade>
 
 Where target/query is either a UCSC db name, or is an
    assembly hub identifier, e.g.: GCA_002844635.1_USMARCv1.0.1
 
 And [tq]Clade is one of: primate|mammal|other
+
+The -force option skips the hgcentraltest.genark table verification
+   for GenArk assembly identifiers.
 
 Will create directory to work in, for example if, UCSC db:
   /hive/data/target/bed/lastzQuery.yyyy-mm-dd/
@@ -25,8 +37,10 @@ Will create directory to work in, for example if, UCSC db:
 Or, in the assembly hub build directory:
 /hive/data/genomes/asmHubs/allBuild/GCA/002/844/635/GCA_002844635.1_USMARCv1.0/trackData/lastzQuery.yyyy-mm-dd
 
-Will set up a DEF file there, and a run.sh script to run all steps
+Will set up a DEF file there, and a kegAlign.sh script to run all steps
   and output makeDoc text to document what happened.
+  Also sets up a lastzRun.sh script that could be used to run the UCSC
+  lastz procedure.
 
 AND MORE, it will run the swap operation into the corresponding
   blastz.target.swap directory in the query genome work space.
@@ -37,9 +51,9 @@ e.g.: kegAlignLastz.sh rn7 papAnu4 mammal primate\n" 1>&2
   exit 255
 fi
 
-# asmId - if assembly hub, determine GCx_012345678.9 name
+# accId - if assembly hub, determine GCx_012345678.9 name
 #         if not, return the asmName (== UCSC database name)
-function asmId() {
+function accId() {
   export asmName=$1
   export id="${asmName}"
   case $asmName in
@@ -78,7 +92,7 @@ function asmSize() {
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        size=`awk '{sum+=$2}END{print sum}' /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt`
        ;;
      *)
@@ -95,7 +109,7 @@ function seqCount() {
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        count=`wc -l /hive/data/genomes/asmHubs/${gcxPath}/${id}/${id}.chrom.sizes.txt | cut -d' ' -f1`
        ;;
      *)
@@ -105,6 +119,7 @@ function seqCount() {
   printf "%s" "${count}"
 }
 
+# obtain the organism name out of the assembly_report.txt file
 function orgName() {
   export asmName=$1
   case $asmName in
@@ -120,13 +135,14 @@ function orgName() {
   esac
   printf "%s" "${oName}"
 }
-
+ 
+# generate URL to the fa.gz files to pass off to galaxy
 function faGzUrl() {
   export asmName=$1
   case $asmName in
      GC[AF]_*)
        gcxPath=$(gcPath $asmName)
-       id=$(asmId $asmName)
+       id=$(accId $asmName)
        printf "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s.fa.gz" "${gcxPath}" "${id}" "${id}"
        ;;
      *)
@@ -135,6 +151,7 @@ function faGzUrl() {
   esac
 }
 
+# get the assembly date out of the assembly_report.txt file
 function orgDate() {
   export asmName=$1
   case $asmName in
@@ -151,10 +168,17 @@ function orgDate() {
   printf "%s" "${oDate}"
 }
 
-# check if this database is actually a database browser or a promoted
-# hub.  It could have a MySQL database, but it won't have a chromInfo
-function promotedHub() {
-  export db=$1
+# verifyGenark - verify a GenArk accession exists in hgcentraltest.genark
+#   returns 0 if found, 1 if not found
+function verifyGenark() {
+  local asmAccession=$1
+  local fullName=$2
+  local count=$(hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  if [ "$count" -eq 0 ]; then
+    printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
+    return 1
+  fi
+  return 0
 }
 
 ##############################################################################
@@ -169,25 +193,41 @@ export qClade="$4"
 
 export tGcPath=$(gcPath $target)
 export qGcPath=$(gcPath $query)
-export tAsmId=$(asmId $target)
-export qAsmId=$(asmId $query)
+export tAccId=$(accId $target)
+export qAccId=$(accId $query)
+
+# verify GenArk assemblies exist in hgcentraltest.genark unless -force
+if [ "$forceRun" -eq 0 ]; then
+  export genarkErrors=0
+  case $target in
+    GC[AF]_*) verifyGenark "$tAccId" "$target" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  case $query in
+    GC[AF]_*) verifyGenark "$qAccId" "$query" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  if [ "$genarkErrors" -gt 0 ]; then
+    printf "Use -force to skip this check\n" 1>&2
+    exit 255
+  fi
+fi
+
 printf "# tq: '${target}' '${query}' '${tClade}' '${qClade}'\n" 1>&2
 printf "# tq gcPath: '${tGcPath}' '${qGcPath}'\n" 1>&2
-printf "# tq asmId: '${tAsmId}' '${qAsmId}'\n" 1>&2
+printf "# tq accId: '${tAccId}' '${qAccId}'\n" 1>&2
 
 # upper case first character
-export Target="${tAsmId^}"
-export Query="${qAsmId^}"
+export Target="${tAccId^}"
+export Query="${qAccId^}"
 
 export DS=`date "+%F"`
 
 # assume UCSC db build
 export buildDir="/hive/data/genomes/${target}/bed/lastz${Query}.${DS}"
 export targetExists="/hive/data/genomes/${target}/bed"
-export symLink="/hive/data/genomes/${target}/bed/lastz.${qAsmId}"
-export swapDir="/hive/data/genomes/${query}/bed/blastz.${tAsmId}.swap"
+export symLink="/hive/data/genomes/${target}/bed/lastz.${qAccId}"
+export swapDir="/hive/data/genomes/${query}/bed/blastz.${tAccId}.swap"
 export queryExists="/hive/data/genomes/${query}/bed"
-export swapLink="/hive/data/genomes/${query}/bed/lastz.${tAsmId}"
+export swapLink="/hive/data/genomes/${query}/bed/lastz.${tAccId}"
 export targetSizes="/hive/data/genomes/${target}/chrom.sizes"
 export querySizes="/hive/data/genomes/${query}/chrom.sizes"
 export target2bit="/hive/data/genomes/${target}/${target}.2bit"
@@ -209,10 +249,10 @@ case $target in
        tFullName="-tAsmId $target"
        rBestTrackHub="-trackHub"
        buildDir="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz${Query}.${DS}"
-       symLink="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz.${qAsmId}"
+       symLink="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData/lastz.${qAccId}"
        targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData"
-       targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.chrom.sizes.txt"
-       target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.2bit"
+       targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAccId}/${tAccId}.chrom.sizes.txt"
+       target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAccId}/${tAccId}.2bit"
        tTdb="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/doTrackDb.bash"
        tRbestArgs="-target2Bit=\"${target2bit}\" \\
 -targetSizes=\"${targetSizes}\""
@@ -225,11 +265,11 @@ case $query in
      GC[AF]_*) trackHub="-trackHub -noDbNameCheck"
        qFullName="-qAsmId $query"
        rBestTrackHub="-trackHub"
-       swapDir="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/blastz.${tAsmId}.swap"
-       swapLink="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/lastz.${tAsmId}"
+       swapDir="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/blastz.${tAccId}.swap"
+       swapLink="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData/lastz.${tAccId}"
        queryExists="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData"
-       querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.chrom.sizes.txt"
-       query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.2bit"
+       querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAccId}/${qAccId}.chrom.sizes.txt"
+       query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAccId}/${qAccId}.2bit"
        qTdb="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/doTrackDb.bash"
        qRbestArgs="-query2Bit=\"${query2bit}\" \\
 -querySizes=\"${querySizes}\""
@@ -377,9 +417,10 @@ case $tClade in
       linearGap="loose"
 esac
 
+##########  primate <-> primate  #########################################
 if [ "$tClade" == "primate" -a "$qClade" == "primate" ]; then
 
-export yamlString="# ${target}.${query}.yaml
+export yamlString="# ${tAccId}.${qAccId}.yaml
 TARGET_Sequence:
   class: File
   path: ${tFaGzUrl}
@@ -388,17 +429,34 @@ QUERY_Sequence:
   path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
-linear_gap_options.linear_gap: ${linearGap}
+axtChainLinearGap:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/axtChain.medium.txt
+axtChainScoreScheme:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/primate-primate.lastz.score.txt
+#    A    C    G    T
+#   90 -330 -236 -356
+# -330  100 -318 -236
+# -236 -318  100 -330
+# -356 -236 -330   90
+#     O=600 E=150
 # lastz options
 xdropX: 910
 ydropY: 15000
 stepZ: 1
 noTransitionT: false
 strand_selectorB: both
-seeding_options.seed_selector: 12of19
+# seeding_options.seed.seed_selector: 12of19 does not get into the process
 hspthreshK: 4500
 gappedthreshL: 4500
 innerH: 2000
+scoringMatrix:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/primate-primate.lastz.score.txt
 "
 
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
@@ -444,14 +502,17 @@ QUERY_Sequence:
   path: ${qFaGzUrl}
 # axtChain options
 axtChainMinScore: ${minScore}
-linear_gap_options.linear_gap: ${linearGap}
+axtChainLinearGap:
+  class: File
+  filetype: txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/axtChain.loose.txt
 # lastz options
 xdropX: 910
 ydropY: 9400
 stepZ: 1
 noTransitionT: true
 strand_selectorB: both
-seeding_options.seed_selector: 12of19
+# seeding_options.seed.seed_selector: 12of19 does not get into the process
 hspthreshK: 3000
 gappedthreshL: 3000
 innerH: 2000
@@ -482,134 +543,182 @@ fi
 ### skip primary alignment if it is already done
 ###  primaryDone == 0 means NOT done yet
 if [ $primaryDone -eq 0 ]; then
-  mkdir "${buildDir}"
+  mkdir -p "${buildDir}"
 
 ### setup the DEF file
 printf "%s" "${defString}" > ${buildDir}/DEF
 ### and the yaml file
-printf "%s" "${yamlString}" > ${buildDir}/${tAsmId}.${qAsmId}.yaml
+printf "%s" "${yamlString}" > ${buildDir}/${tAccId}.${qAccId}.yaml
 
-### setup the buildDir/run.sh script
+### setup the buildDir/lastzRun.sh script
 printf "#!/bin/bash
 
 set -beEu -o pipefail
 
+export targetDb=\"${tAccId}\"
+export queryDb=\"${qAccId}\"
+export TargetDb=\"${Target}\"
+export QueryDb=\"${Query}\"
+
+cd ${buildDir}
+time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
+  $tFullName $qFullName -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} \\
+    -bigClusterHub=${bigHub} \\
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
+
+grep -w real do.log | sed -e 's/^/    # /;'
+
+sed -e 's/^/    # /;' fb.\${targetDb}.chain\${QueryDb}Link.txt
+sed -e 's/^/    # /;' fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
+
+time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
+   ${tRbestArgs} \\
+   ${qRbestArgs} \\
+   \${targetDb} \${queryDb}) > rbest.log 2>&1
+
+grep -w real rbest.log | sed -e 's/^/    # /;'
+
+sed -e 's/^/    #/;' fb.\${targetDb}.chainRBest.\${QueryDb}.txt
+" > ${buildDir}/lastzRun.sh
+chmod +x ${buildDir}/lastzRun.sh
+
+### setup the buildDir/kegAlign.sh script
+printf "#!/bin/bash
+
+# exit on any failure
+set -beEu -o pipefail
+
 export buildDir=\"${buildDir}\"
 export swapDir=\"${swapDir}\"
-export PM=\"/hive/users/hiram/galaxy/venv3.12/bin/planemo\"
+export PM=\"${planemoCmd}\"
 
-export targetDb=\"${tAsmId}\"
-export queryDb=\"${qAsmId}\"
+export targetDb=\"${tAccId}\"
+export queryDb=\"${qAccId}\"
 export QueryDb=\"${Query}\"
+export Target=\"${Target}\"
+export tSizes=\"${targetSizes}\"
+export qSizes=\"${querySizes}\"
+
+############################################################################
+# chainBigBedFb - convert chain to bigBed and compute featureBits
+# args: db chainName chainGz sizesFile fbFile
+function chainBigBedFb() {
+  local db=\$1
+  local chainName=\$2
+  local chainGz=\$3
+  local sizesFile=\$4
+  local fbFile=\$5
+  chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
+  bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
+  bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
+  rm -f \${chainName}.tab \${chainName}Link.tab chain.tab link.tab
+  local totalBases=\`ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
+  local basesCovered=\`bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+  local percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%%.3f\", 100.0*\$1/\$2}'\`
+  printf \"%%d bases of %%d (%%s%%) in intersection\\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${fbFile}
+}
+############################################################################
 
 cd \${buildDir}
 mkdir -p log
-export DS=\`date \"+\%%F_\%%T_\%%s\"\`
+export DS=\`date \"+%%F_%%T_%%s\"\`
+if [ -s successInvocationId.txt ]; then
+  DS=\`cut -f1 successInvocationId.txt\`
+fi
 export logDir=\"\${buildDir}/log\"
 export logFile=\"\${logDir}/\${DS}.log\"
-time (\${PM} run \\
-  \"~/kent/src/hg/utils/automation/kegAlign.json.gz\" \\
-     \"\${targetDb}.\${queryDb}.yaml\" --profile vgp \\
-        --history_name \"\${targetDb}.\${queryDb}.kegAlign\" \\
-           --test_output_json \"\${logDir}/runOutput.\${DS}.json\") >> \"\${logFile}\" 2>&1
+### only try to run this if there is no indication it was successful
+if [ ! -s \"successInvocationId.txt\" ]; then
+  time (\${PM} run \\
+    ~/kent/src/hg/utils/automation/kegAlign.json.ga \\
+       \"\${targetDb}.\${queryDb}.yaml\" --profile vgp \\
+          --history_name \"\${targetDb}.\${queryDb}.kegAlign\" \\
+             --test_output_json \"\${logDir}/runOutput.\${DS}.json\") >> \"\${logFile}\" 2>&1
 
-export invocationId=\`jq '.tests[0].data.invocation_details.details.invocation_id' \"\${logDir}/runOutput.\${DS}.json\" | tr -d '\"'\`
-printf \"invocation ID: %%s\\n\" \"\${invocationId}\" 1>&2
-mkdir -p result/\${DS}
-\${PM} invocation_download \"\${invocationId}\" --profile vgp \\
-  --output_directory result/\${DS}
+  invocationId=\`jq '.tests[0].data.invocation_details.details.invocation_id' \"\${logDir}/runOutput.\${DS}.json\" | tr -d '\"'\`
+  printf \"invocation ID: %%s\\n\" \"\${invocationId}\" 1>&2
+  mkdir -p result/\${DS}
+  \${PM} invocation_download \"\${invocationId}\" --profile vgp \\
+    --output_directory result/\${DS}
+  # record the invocation ID and associated log file name
+  printf \"%%s\\tinvocation ID: %%s\\t%%s\\n\" \"\${DS}\" \"\${invocationId}\" \"\${logDir}/runOutput.\${DS}.json\" > successInvocationId.txt
+fi
+### use that runOutput log file to get the history ID for deletion
 
 ### install allChain into buildDir/axtChain/
 mkdir -p \${buildDir}/axtChain
-export allChainFile=\`ls result/\${DS}/allChain__*.chain\`
-gzip -c \"\${allChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz
+if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz\" ]; then
+  allChainFile=\`ls result/\${DS}/allChain__.*.chain\`
+  gzip -c \"\${allChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz
+fi
 
 ### convert target allChain to bigBed and measure featureBits
 cd \${buildDir}/axtChain
-export tSizes=\"${targetSizes}\"
-export allChain=\"\${targetDb}.\${queryDb}.all.chain.gz\"
-hgLoadChain -test -noBin -tIndex \${targetDb} allChain \"\${allChain}\"
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > allChain.tab
-awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > allChainLink.tab
-bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab allChain.tab \${tSizes} allChain.bb
-bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab allChainLink.tab \${tSizes} allChainLink.bb
-rm -f allChain.tab allChainLink.tab chain.tab link.tab
-export totalBases=\`ave -col=2 \${tSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
-export basesCovered=\`bigBedInfo allChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
-export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
-printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
-cat \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+if [ ! -s \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" ]; then
+  allChain=\"\${targetDb}.\${queryDb}.all.chain.gz\"
+  chainBigBedFb \${targetDb} chain\${QueryDb} \${allChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
+fi
+cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
 
 ### install netChainSubset (over.chain) for target
 cd \${buildDir}
-export overChainFile=\`ls result/\${DS}/'netChainSubset on dataset 7 and 21__'*.chain\`
-gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
+if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz\" ]; then
+  overChainFile=\`ls result/\${DS}/liftOverChain_.*.chain\`
+  gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
+fi
 
 ### convert target over.chain to bigBed and measure featureBits
 cd \${buildDir}/axtChain
-export overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
-hgLoadChain -test -noBin -tIndex \${targetDb} overChain \"\${overChain}\"
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > overChain.tab
-awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > overChainLink.tab
-bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab overChain.tab \${tSizes} overChain.bb
-bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab overChainLink.tab \${tSizes} overChainLink.bb
-rm -f overChain.tab overChainLink.tab chain.tab link.tab
-export totalBases=\`ave -col=2 \${tSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
-export basesCovered=\`bigBedInfo overChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
-export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
-printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
-cat \${buildDir}/fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
+if [ ! -s \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" ]; then
+  overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
+  chainBigBedFb \${targetDb} chainLiftOver\${QueryDb} \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt
+fi
+cat \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" 1>&2
 
 ### install allChainSwap into swapDir/axtChain/
 mkdir -p \${swapDir}/axtChain
 cd \${buildDir}
-export allChainSwapFile=\`ls result/\${DS}/allChainSwap__*.chain\`
-gzip -c \"\${allChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz
+if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz\" ]; then
+  allChainSwapFile=\`ls result/\${DS}/allChainSwap_.*.chain\`
+  gzip -c \"\${allChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz
+fi
 
 ### convert swap allChain to bigBed and measure featureBits
 cd \${swapDir}/axtChain
-export qSizes=\"${querySizes}\"
-export allChain=\"\${queryDb}.\${targetDb}.all.chain.gz\"
-hgLoadChain -test -noBin -tIndex \${queryDb} allChain \"\${allChain}\"
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > allChain.tab
-awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > allChainLink.tab
-bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab allChain.tab \${qSizes} allChain.bb
-bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab allChainLink.tab \${qSizes} allChainLink.bb
-rm -f allChain.tab allChainLink.tab chain.tab link.tab
-export totalBases=\`ave -col=2 \${qSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
-export basesCovered=\`bigBedInfo allChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
-export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
-export Target=\"${Target}\"
-printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
-cat \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+if [ ! -s \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" ]; then
+  allChain=\"\${queryDb}.\${targetDb}.all.chain.gz\"
+  chainBigBedFb \${queryDb} chain\${TargetDb} \${allChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
+fi
+cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
 
 ### install netChainSubset (over.chain) for swap
 cd \${buildDir}
-export overChainSwapFile=\`ls result/\${DS}/'netChainSubset on dataset 8 and 35__'*.chain\`
-gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
+if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz\" ]; then
+  overChainSwapFile=\`ls result/\${DS}/swapLiftOverChain_.*.chain\`
+  gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
+fi
 
 ### convert swap over.chain to bigBed and measure featureBits
 cd \${swapDir}/axtChain
-export overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
-hgLoadChain -test -noBin -tIndex \${queryDb} overChain \"\${overChain}\"
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS=\"\\t\"} {print \\\$2, \\\$4, \\\$5, \\\$11, 1000, \\\$8, \\\$3, \\\$6, \\\$7, \\\$9, \\\$10, \\\$1}' > overChain.tab
-awk 'BEGIN {OFS=\"\\t\"} {print \\\$1, \\\$2, \\\$3, \\\$5, \\\$4}' link.tab | sort -k1,1 -k2,2n > overChainLink.tab
-bedToBigBed -type=bed6+6 -as=~/kent/src/hg/lib/bigChain.as -tab overChain.tab \${qSizes} overChain.bb
-bedToBigBed -type=bed4+1 -as=~/kent/src/hg/lib/bigLink.as -tab overChainLink.tab \${qSizes} overChainLink.bb
-rm -f overChain.tab overChainLink.tab chain.tab link.tab
-export totalBases=\`ave -col=2 \${qSizes} | grep \"^total\" | awk '{printf \"%d\", \\\$2}'\`
-export basesCovered=\`bigBedInfo overChainLink.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
-export percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%.3f\", 100.0*\\\$1/\\\$2}'\`
-printf \"%d bases of %d (%s%%%%) in intersection\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt
-cat \${swapDir}/fb.\${queryDb}.chainSyn\${Target}Link.txt
+if [ ! -s \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" ]; then
+  overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
+  chainBigBedFb \${queryDb} chainLiftOver\${TargetDb} \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt
+fi
+cat \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" 1>&2
 
-" > ${buildDir}/run.sh
-chmod +x ${buildDir}/run.sh
+" > ${buildDir}/kegAlign.sh
+chmod +x ${buildDir}/kegAlign.sh
 
-### run the primary alignment
-printf "running: time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1\n" 1>&2
+### run the primary alignment, galaxy kegAlign style
+printf "running: time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1\n" 1>&2
 
-# time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1
+# time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1
+
+### run the primary alignment, UCSC lastz style
+printf "running: time (${buildDir}/lastzRun.sh) >> ${buildDir}/lastzRun.log 2>&1\n" 1>&2
+
+# time (${buildDir}/lastzRun.sh) >> ${buildDir}/lastzRun.log 2>&1
+
 
 exit $?
 
@@ -619,8 +728,8 @@ exit $?
 ### 'KegAlign on dataset 3 and 4__a32df3e9-13d0-4c5e-b765-df69c657ae89.tgz'
 ### allChainSwap__5e11f323-58fc-43f9-afbd-6cff21f0e7af.chain
 ### allChain__74038a6d-d735-4784-8b17-31a25ddbb036.chain
-###'netChainSubset on dataset 7 and 21__72cbd3a9-4136-4e72-86c9-9da0c230c5d0.chain'
-###'netChainSubset on dataset 8 and 35__9acc344f-19da-4ef9-a578-7282940badc0.chain'
+###'netChainSubset on dataset 8 and 22__72cbd3a9-4136-4e72-86c9-9da0c230c5d0.chain'
+###'netChainSubset on dataset 9 and 36__9acc344f-19da-4ef9-a578-7282940badc0.chain'
 
 # rebuild trackDb if possible here
 if [ -x "${tTdb}" ]; then
@@ -653,23 +762,23 @@ printf "########################################################################
 
 (grep -w real $buildDir/do.log || true) | sed -e 's/^/    # /;' | head -1 >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "    sed -e 's/^/    # /;' fb.${tAsmId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
+printf "    sed -e 's/^/    # /;' fb.${tAccId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
 
 printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
       ${tRbestArgs} \\
       ${qRbestArgs} \\
-        ${tAsmId} ${qAsmId}) > rbest.log 2>&1
+        ${tAccId} ${qAccId}) > rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 
 (grep -w real $buildDir/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${tAsmId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${buildDir}/fb.${tAsmId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
+(sed -e 's/^/    # /;' ${buildDir}/fb.${tAccId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
 
 printf "\n    ### and for the swap\n" >> ${buildDir}/makeDoc.txt
 
@@ -688,9 +797,9 @@ set -beEu -o pipefail
 
 cd $swapDir
 
-export targetDb=\"${tAsmId}\"
+export targetDb=\"${tAccId}\"
 export Target=\"${Target}\"
-export queryDb=\"${qAsmId}\"
+export queryDb=\"${qAccId}\"
 
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
@@ -740,21 +849,21 @@ printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub
 
 (grep -w real ${swapDir}/swap.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
 
-printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
-printf "    sed -e 's/^/    # /;' fb.${qAsmId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
+printf "    sed -e 's/^/    # /;' fb.${qAccId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
+sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
 
 printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   ${qAsmId} ${tAsmId}) > rbest.log 2>&1
+   ${qAccId} ${tAccId}) > rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 (grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-printf "\n    sed -e 's/^/    # /;' fb.${qAsmId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
+printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
+(sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
 
 printf "\n##############################################################################\n" >> ${buildDir}/makeDoc.txt
 

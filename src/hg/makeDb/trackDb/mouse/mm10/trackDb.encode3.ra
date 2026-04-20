@@ -7,5 +7,3 @@ group regulation
 include encode3.chromHmm.ra beta,public
 include encode3.histone.ra beta,public
 include encode3.atac.ra beta,public
-
-include encodeCcreCombined.old.ra beta,public

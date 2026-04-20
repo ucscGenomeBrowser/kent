@@ -10,6 +10,7 @@ include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
 include tabulaMurisSenis.ra
 include tabulamuris.ra
+include mouseDevTimecourse.ra
 include liftOverMm39.ra
 
 # Local declaration so that local gold.html is picked up.
@@ -355,7 +356,8 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 include trackDb.encode3.ra beta,public
 include trackDb.encode3.alpha.ra alpha
 include encode3RenEnhancerGene.ra
-include encode.cCREs.override.ra alpha
+include encode.cCREs.override.ra alpha,beta
+include encodeCcreCombined.old.ra public
 include encode4Reg.ra alpha
 include fantom5.ra
 

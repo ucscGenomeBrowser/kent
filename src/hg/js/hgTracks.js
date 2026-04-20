@@ -2493,7 +2493,11 @@ var rightClick = {
         } else if (cmd === 'hgTrackUi_popup_description') {
 
             // Launches the popup but shields the ajax with a waitOnFunction
-            popUp.hgTrackUi( rightClick.selectedMenuItem.id, true );  
+            popUp.hgTrackUi( rightClick.selectedMenuItem.id, true );
+
+        } else if (cmd === 'changeTrackColor') {
+
+            rightClick.showColorPicker(id);
 
         } else if (cmd === 'hgTrackUi_follow') {
 
@@ -2760,6 +2764,85 @@ var rightClick = {
                 img + "' />";
     },
 
+    showColorPicker: function (trackName)
+    {   // Show a small dialog with a spectrum color picker for changing track color
+        var rec = hgTracks.trackDb[trackName];
+        if (!rec || !rec.defaultColor)
+            return;
+        var currentColor = (rec.colorOverrideOn && rec.colorOverride) ?
+                           rec.colorOverride : rec.defaultColor;
+        var dialogId = "trackColorDialog";
+        $("#" + dialogId).remove();
+        // Build with static template + data injected via .text()/.val()/.prop() so that
+        // hub-provided shortLabel cannot inject HTML.
+        var $dlg = $("<div>").attr("id", dialogId).html(
+            "<p>Pick a new color for <b></b>:</p>" +
+            "<input type='text' id='trackColorText' size='8' />" +
+            "&nbsp;<input id='trackColorPicker' />" +
+            "<br><br><label><input type='checkbox' id='trackColorOn' /> " +
+            "Enable color override</label>");
+        $dlg.find("p b").text(rec.shortLabel);
+        $dlg.find("#trackColorText").val(currentColor);
+        $dlg.find("#trackColorOn").prop("checked", !!rec.colorOverrideOn);
+        $("body").append($dlg);
+        var hexColorRe = /^#[0-9a-fA-F]{6}$/;
+        $("#trackColorPicker").spectrum({
+            color: currentColor,
+            showPalette: true,
+            showSelectionPalette: true,
+            showInitial: true,
+            showInput: true,
+            preferredFormat: "hex",
+            localStorageKey: "genomebrowser",
+            hideAfterPaletteSelect: true,
+            change: function(color) {
+                $("#trackColorText").val(color.toHexString());
+                $("#trackColorOn").prop("checked", true);
+            }
+        });
+        $("#trackColorText").on("change", function() {
+            var val = $(this).val();
+            if (!hexColorRe.test(val))
+                return;
+            $("#trackColorPicker").spectrum("set", val);
+            $("#trackColorOn").prop("checked", true);
+        });
+        var applyColor = function() {
+            var color = $("#trackColorText").val();
+            if (!hexColorRe.test(color)) {
+                warn("Invalid color '" + color + "'. Expected hex format like #1a2b3c.");
+                return false;
+            }
+            var isOn = $("#trackColorOn").is(":checked") ? "1" : "0";
+            rec.colorOverride = color;
+            rec.colorOverrideOn = (isOn === "1");
+            cart.setVars(
+                [trackName + ".colorOverride", trackName + ".colorOverrideOn"],
+                [color, isOn], null, false);
+            imageV2.requestImgUpdate(trackName,
+                trackName + ".colorOverride=" + encodeURIComponent(color) +
+                "&" + trackName + ".colorOverrideOn=" + isOn);
+            return true;
+        };
+        $("#" + dialogId).dialog({
+            modal: true,
+            title: "Change Track Color",
+            closeOnEscape: true,
+            resizable: false,
+            minWidth: 400,
+            buttons: {
+                "Apply": function() { applyColor(); },
+                "Ok": function() {
+                    if (applyColor())
+                        $(this).dialog("close");
+                }
+            },
+            close: function() {
+                $("#trackColorPicker").spectrum("destroy");
+                $(this).remove();
+            }
+        });
+    },
 
     // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
     mouseOverToLabel: function(title)
@@ -3198,6 +3281,14 @@ var rightClick = {
 			rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
 			return true; }
 		    };
+
+                if (rec.defaultColor) {
+                    o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
+                            return true; }
+                    };
+                }
 
                 menu.push($.contextMenu.separator);
                 menu.push(o);

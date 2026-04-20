@@ -71,12 +71,22 @@ def stringTerm(term):
     newString=str(term)[1:-1].replace("\'", "")
     return newString
 
+# Build url->email map from hubPublic (populated by a separate cron). Preferred
+# over scraping hub.txt because it still works when the hub itself is unreachable.
+hubEmails = {}
+for line in bash("/cluster/bin/x86_64/hgsql -h genome-centdb -Ne 'select hubUrl, email from hubPublic' hgcentral"):
+    parts = line.split('\t', 1)
+    if len(parts) == 2:
+        hubEmails[parts[0]] = parts[1]
+
 def getEmail(hubUrl):
-    """Gets email from hubUrl"""
+    """Gets email from hubPublic.email, falling back to scraping the live hub.txt."""
+    tableEmail = hubEmails.get(hubUrl, "").strip()
+    if tableEmail and tableEmail != "NULL":
+        return tableEmail
     email=stringTerm(bash("curl -Ls "+hubUrl+" | grep '^email' | awk '{print $2}'"))
-    empty=""
-    if email==empty:
-       email="N/A <---------- Check: https://genecats.gi.ucsc.edu/qa/test-results/publicHubContactInfo/publicHubContact.html"
+    if not email:
+       return "N/A <---------- Check: https://genecats.gi.ucsc.edu/qa/test-results/publicHubContactInfo/publicHubContact.html"
     return email
 
 count=0
@@ -126,24 +136,27 @@ The UCSC Genome Browser Group
 totalLines=bash("wc -l /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | tr ' ' '\t' | cut -f1")
 with open("/hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/draftedMessages.txt", 'a') as f:
      f.write('##########################\n')
-     # For loop that gets each hub.txt that has the error of missing description page
-     for item in checkDuplicates(descPageMis):
+     # For loop that gets each hub.txt that has the error of couldn't open (more actionable, drafted first)
+     for item in checkDuplicates(couldNotOpen):
              f.write('Send email to: '+getEmail(stringTerm(item))+'\n')
              f.write(emailIntro % item)
-             # For loop that gets hubCheck output for each hub.txt that has the error of missing description page
-             for line in (bash("cat /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
+             # For loop that gets hubCheck output for each hub.txt that has the error of couldn't open
+             for line in (bash("cat  /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
                 if '#' not in line:
                    f.write(line+'\n')
                 else: break
              f.write("\nWhen running hubCheck "+stringTerm(item)+'\n')
              f.write(endEmail)
              f.write('##########################\n')
-     # For loop that gets each hub.txt that has the error of couldn't open 
-     for item in checkDuplicates(couldNotOpen):
+     # For loop that gets each hub.txt that has the error of missing description page
+     # Skip hubs already drafted in the couldNotOpen loop above (same draft body is produced for both)
+     for item in checkDuplicates(descPageMis):
+             if item in couldNotOpen:
+                 continue
              f.write('Send email to: '+getEmail(stringTerm(item))+'\n')
              f.write(emailIntro % item)
-             # For loop that gets hubCheck output for each hub.txt that has the error of couldn't open
-             for line in (bash("cat  /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
+             # For loop that gets hubCheck output for each hub.txt that has the error of missing description page
+             for line in (bash("cat /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
                 if '#' not in line:
                    f.write(line+'\n')
                 else: break

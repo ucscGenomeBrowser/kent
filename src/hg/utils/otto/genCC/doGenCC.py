@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 #Made otto by Lou 9/14/2023
 
+import argparse
 import subprocess
 import csv
 import re
 import sys
 from datetime import datetime
+
+parser = argparse.ArgumentParser(description='Build and update GenCC track data.')
+parser.add_argument('--force', action='store_true',
+                    help='Continue even if item count difference is more than 10%%')
+args = parser.parse_args()
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -287,6 +293,10 @@ def checkIfUpdateIsNeeded():
     oldMd5sum = oldMd5sum.split("  ")[0]
     if oldMd5sum != newMd5sum:
         return(True)
+    elif args.force:
+        # Previous file matches current file, but update didn't go through
+        # because of itemCounts check.
+        return(True)
     else:
         return(False)
 
@@ -297,7 +307,12 @@ def checkItemCounts(oldBb, newBb):
     newItemCount = bash('bigBedInfo '+newBb+' | grep "itemCount"')
     newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
     if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
-        sys.exit("Item count difference >10% for "+newBb+": old="+str(oldItemCount)+" new="+str(newItemCount))
+        msg = "WARNING:\nItem count difference >10% for "+newBb+":\nold="+str(oldItemCount)+" new="+str(newItemCount)
+        print(msg)
+        if args.force:
+            print("(continuing due to QA approval)")
+        else:
+            sys.exit("Run ./doGenCC.py --force if you approve the item count change.")
     print(oldBb+" old: "+str(oldItemCount)+" new: "+str(newItemCount))
 
 if checkIfUpdateIsNeeded():
@@ -315,7 +330,6 @@ if checkIfUpdateIsNeeded():
 
     buildFileHg38(genCCtsvFile, hg38outPutFile, gencodeHg38)
     buildFileHg19(hg38outPutFile, hg19outPutFile, gencodeHg19)
-    bash("mv /hive/data/outside/otto/genCC/newSubmission.tsv /hive/data/outside/otto/genCC/prevSubmission.tsv")
 
     bash("bedSort "+hg38outPutFile+" "+hg38outPutFile)
     bash("bedToBigBed -as=/hive/data/genomes/hg38/bed/genCC/genCC.as -sort -extraIndex=gene_symbol -type=bed9+34 -tab "+hg38outPutFile+" /cluster/data/hg38/chrom.sizes "+hg38outPutFile.split(".")[0]+".bb")
@@ -327,6 +341,8 @@ if checkIfUpdateIsNeeded():
 
     checkItemCounts("/gbdb/hg38/bbi/genCC.bb", hg38outPutFile.split(".")[0]+".bb")
     checkItemCounts("/gbdb/hg19/bbi/genCC.bb", hg19outPutFile.split(".")[0]+".bb")
+
+    bash("mv /hive/data/outside/otto/genCC/newSubmission.tsv /hive/data/outside/otto/genCC/prevSubmission.tsv")
 
     bash("rm -f /gbdb/hg38/bbi/genCC.bb")
     bash("rm -f /gbdb/hg19/bbi/genCC.bb")

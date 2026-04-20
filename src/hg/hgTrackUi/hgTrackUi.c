@@ -3060,6 +3060,7 @@ boolean hasDataTypes = (dataTypes != NULL);
 // optional
 const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
 const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
+const char *subtrackUrl = trackDbSetting(tdb, "subtrackUrl");
 // --- done parsing values from trackDb.settings ---
 
 const char *metaDataId = tdb->track;
@@ -3234,6 +3235,8 @@ jsonWriteString(jw, "track", tdb->track);
 char *defaultSortField = trackDbSetting(tdb, "defaultSortField");
 if (isNotEmpty(defaultSortField))
     jsonWriteString(jw, "defaultSortField", defaultSortField);
+if (subtrackUrl)
+    jsonWriteString(jw, "subtrackUrl", (char *)subtrackUrl);
 if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
     jsonWriteBoolean(jw, "udcTimeout", TRUE);
 
@@ -3460,13 +3463,7 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
-if (!tdbIsComposite(tdb)
-    && (startsWithWord("bed", tdb->type) || startsWithWord("bigBed", tdb->type)
-    || startsWithWord("genePred", tdb->type) || startsWithWord("bigGenePred", tdb->type)
-    || startsWithWord("wig", tdb->type) || startsWithWord("bigWig", tdb->type)
-    || startsWithWord("rmsk", tdb->type) || startsWithWord("interact", tdb->type)
-    || startsWithWord("bigInteract", tdb->type) || startsWithWord("bigLolly", tdb->type)
-    || startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type)))
+if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg

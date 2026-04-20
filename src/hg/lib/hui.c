@@ -43,6 +43,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "genark.h"
 #include "gtexUi.h"
 #include "genbank.h"
 #include "htmlPage.h"
@@ -6043,11 +6044,30 @@ printInfoIcon("Enter the primary accession of the track, so RefSeq IDs for the R
 puts("</DIV>\n\n");
 }
 
+boolean tdbSupportsColorOverride(struct trackDb *tdb)
+/* Return TRUE if this track type supports the color override feature. */
+{
+if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
+    return FALSE;
+char *type = tdb->type;
+char *track = tdb->track;
+// Blacklist tracks that use custom rendering incompatible with color override
+if (startsWith("gtexGene", track) || startsWith("gtexEqtlCluster", track)
+    || startsWith("gtexEqtlTissue", track))
+    return FALSE;
+return !tdbIsComposite(tdb)
+    && (startsWithWord("bed", type) || startsWithWord("bigBed", type)
+    || startsWithWord("genePred", type) || startsWithWord("bigGenePred", type)
+    || startsWithWord("wig", type) || startsWithWord("bigWig", type)
+    || startsWithWord("rmsk", type) || startsWithWord("interact", type)
+    || startsWithWord("bigInteract", type) || startsWithWord("bigLolly", type)
+    || startsWithWord("vcfTabix", type) || startsWithWord("vcf", type)
+    || startsWithWord("bigDbSnp", type));
+}
+
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
 /* color picker for overriding track color */
 {
-if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
-    return;
 
 char varName[1024];
 safef(varName, sizeof(varName), "%s.colorOverride", name);
@@ -10198,7 +10218,7 @@ char *getTrackHtml(char *db, char *trackName)
 {
 char *html = NULL;
 
-if (trackHubDatabase(db))
+if (trackHubDatabase(db) || isGenArk(db))
     {
     // somehow get to the HTML that's not in the quickLift hub, but in the original hub
     }
