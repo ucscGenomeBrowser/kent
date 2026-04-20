@@ -87,6 +87,19 @@ check_file_fresh() {
     log "OK: $file exists and is ${age_min}m old"
 }
 
+# Register QEMU binfmt_misc handlers so `docker build --platform linux/arm64`
+# works on an amd64 host. Handlers are kernel state and are cleared on reboot,
+# so we re-register on every build. The container is idempotent and fast (~1s)
+# when handlers are already registered.
+ensure_binfmt() {
+    log "Registering QEMU binfmt handlers for cross-arch docker builds..."
+    if run docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null 2>&1; then
+        log "OK: binfmt handlers registered"
+    else
+        log "WARNING: binfmt registration failed; arm64 docker builds may fail"
+    fi
+}
+
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
 ensure_master_branch() {
     local branch
@@ -422,6 +435,7 @@ do_final() {
 
     # Docker testing image build
     log "Building testing Docker images..."
+    ensure_binfmt
     local dockerdir
     dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
@@ -580,6 +594,7 @@ do_wrapup() {
 
     # Step 7: Build release Docker images
     log "Building release Docker images..."
+    ensure_binfmt
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
         local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
