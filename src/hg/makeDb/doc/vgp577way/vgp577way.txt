@@ -1,0 +1,366 @@
+########################################################################
+### bringing in the Cactus 577-way alignments - April 2026 - Hiram
+########################################################################
+###
+### The maf files produced by Glenn come from the GI Prism system
+### Requires the Prism VPN system in operation to get into it.
+### Go to the 'emerald' machine, in the directory:
+###  /private/home/ghickey/dev/work/vgp-cactus/577way/
+### The single.maf.gz files available there as of 2026-04-12:
+
+du -ksc *.single.maf.gz | sort -n
+
+14345756        vgp-577way-v1-VertebratesAnc0.single.maf.gz
+27465651        vgp-577way-v1-catshark.single.maf.gz
+27956344        vgp-577way-v1-spotted_gar.single.maf.gz
+28298848        vgp-577way-v1-zebrafish.single.maf.gz
+34730114        vgp-577way-v1-european_eel.single.maf.gz
+44954739        vgp-577way-v1-clawed_frog.single.maf.gz
+61604003        vgp-577way-v1-VertebratesAnc2.single.maf.gz
+62915764        vgp-577way-v1-brown_anole.single.maf.gz
+65256799        vgp-577way-v1-RayFinnedFishesAnc00.single.maf.gz
+72181637        vgp-577way-v1-VertebratesAnc3.single.maf.gz
+82872197        vgp-577way-v1-AmphibiansAnc0.single.maf.gz
+105300666       vgp-577way-v1-chicken.single.maf.gz
+109506066       vgp-577way-v1-zebra_finch.single.maf.gz
+123361778       vgp-577way-v1-emu.single.maf.gz
+150354322       vgp-577way-v1-VertebratesAnc5.single.maf.gz
+160086223       vgp-577way-v1-mm39.single.maf.gz
+198519571       vgp-577way-v1-horseshoe_bat.single.maf.gz
+203025701       vgp-577way-v1-hg38.single.maf.gz
+203127845       vgp-577way-v1-hs1.single.maf.gz
+203725553       vgp-577way-v1-dog.single.maf.gz
+1979589567      total
+
+ls -og *.single.maf.gz | sed -e 's#^-rw-r--r-- 1 \+##;' | sort -n
+
+14690054096 Mar 28 11:23 vgp-577way-v1-VertebratesAnc0.single.maf.gz
+28124825995 Mar 20 10:07 vgp-577way-v1-catshark.single.maf.gz
+28627295445 Mar 22 04:32 vgp-577way-v1-spotted_gar.single.maf.gz
+28978019428 Mar 20 07:42 vgp-577way-v1-zebrafish.single.maf.gz
+35563635801 Mar 22 21:31 vgp-577way-v1-european_eel.single.maf.gz
+46033651796 Mar 22 01:44 vgp-577way-v1-clawed_frog.single.maf.gz
+63082498990 Mar 29 05:50 vgp-577way-v1-VertebratesAnc2.single.maf.gz
+64425741849 Mar 20 17:37 vgp-577way-v1-brown_anole.single.maf.gz
+66822961309 Mar 30 23:03 vgp-577way-v1-RayFinnedFishesAnc00.single.maf.gz
+73913995293 Mar 30 01:27 vgp-577way-v1-VertebratesAnc3.single.maf.gz
+84861128709 Mar 29 11:58 vgp-577way-v1-AmphibiansAnc0.single.maf.gz
+107827881545 Mar 17 19:39 vgp-577way-v1-chicken.single.maf.gz
+112134211553 Mar 22 14:58 vgp-577way-v1-zebra_finch.single.maf.gz
+126322459905 Mar 22 08:24 vgp-577way-v1-emu.single.maf.gz
+153962825587 Mar 29 07:07 vgp-577way-v1-VertebratesAnc5.single.maf.gz
+163928292101 Apr  9 16:36 vgp-577way-v1-mm39.single.maf.gz
+203284040383 Mar 23 14:15 vgp-577way-v1-horseshoe_bat.single.maf.gz
+207898317452 Mar 21 11:33 vgp-577way-v1-hg38.single.maf.gz
+208002912876 Mar 19 08:03 vgp-577way-v1-hs1.single.maf.gz
+208614966269 Mar 22 21:13 vgp-577way-v1-dog.single.maf.gz
+
+#### To verify what the reference species is, take a look at the first
+####  s line:  ('grep -v Anc -> don't care about the 'Ancestors' alignments)
+
+for F in *.single.maf.gz; do zcat $F | grep -m 1 "^s" | cut -f2 \
+  | xargs echo -n; printf "\t${F}\n"; done \
+     | sed -e 's/vgp-577way-v1-//;' | grep -v Anc
+
+GCF_037176765.1.NC_090021.1     brown_anole.single.maf.gz
+GCF_902713615.1.NC_052146.1     catshark.single.maf.gz
+GCF_016700215.2.NC_052573.1     chicken.single.maf.gz
+GCA_038501925.1.CM076672.1      clawed_frog.single.maf.gz
+GCF_011100685.1.NC_049222.1     dog.single.maf.gz
+GCF_036370855.1.NC_088098.1     emu.single.maf.gz
+GCF_013347855.1.NC_049201.1     european_eel.single.maf.gz
+GCA_000001405.15.chr1   hg38.single.maf.gz
+GCF_004115265.2.NC_046284.1     horseshoe_bat.single.maf.gz
+GCA_009914755.4.chr1    hs1.single.maf.gz
+GCA_000001635.9.chr1    mm39.single.maf.gz
+GCF_040954835.1.NC_090696.1     spotted_gar.single.maf.gz
+GCA_048771995.1.CM109788.1      zebra_finch.single.maf.gz
+GCA_944039275.1.OX063290.1      zebrafish.single.maf.gz
+
+### copy the single.maf.gz file to each GenArk hub work directory,
+for example:
+
+### on hgwdev:
+mkdir -p /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/fromGlenn
+
+### on emerald:
+rsync -a -P ./vgp-577way-v1-brown_anole.single.maf.gz \
+  hiram@hgwdev.gi.ucsc.edu:/hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/fromGlenn/
+
+########################################################################
+####################################### processing one of Glenn's maf files:
+### on hgwdev:
+cd /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
+mkdir -p split
+time (mafSplit -byTarget -useFullSequenceName /dev/null ./split/ fromGlenn/vgp-577way-v1-brown_anole.single.maf.gz) > fromGlenn/split.log 2>&1 &
+
+### and while the split is running, take a survey of the names:
+cd split
+
+time (zgrep "^s       " vgp-577way-v1-brown_anole.single.maf.gz \
+   | awk -F$'\t' '{print $2}' | sort | uniq -c \
+     | $HOME/bin/x86_64/gnusort -S100G --parallel=32 -rn > count.accession.seqName.txt) > extractNames.log
+
+### when split done:
+tail split.log
+Splitting 1 files by target sequence -- ignoring first argument /dev/null
+
+real    40m11.451s
+
+tail extractNames.log
+
+real    52m36.474s
+
+### check the names:
+sed -e 's/^ \+//;' count.accession.seqName.txt | cut -d' ' -f2 \
+  | cut -d'.' -f1-2 | sort -u > 577.species.list
+
+### three of the names need a sed translation to get to UCSC database names:
+cd /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+echo 's/GCA_000001405.15/hg38/g;
+s/GCA_000001635.9/mm39/g;
+s/GCA_009914755.4/hs1/g;' > dbName.sed
+
+sed -f dbName.sed fromGlenn/577.species.list | sort > species.list
+
+########################################################################
+### convert to UCSC names, done as a cluster run:
+
+printf '#LOOP
+dbNameOne $(path1) {check out exists+ ucscMaf/$(path1)}
+#ENDLOOP
+' > template
+
+printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export chrN="${1}"
+sed -f dbName.sed split/${chrN} > ucscMaf/${chrN}
+' > dbNameOne
+
+chmod +x dbNameOne
+
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
+mkdir -p ucscMaf
+ls -S split > maf.list
+gensub2 maf.list single template jobList
+para -ram=3g create jobList
+para push
+### when finished:
+para time > run.time
+cat run.time
+Completed: 29 of 29 jobs
+CPU time in finished jobs:       3427s      57.11m     0.95h    0.04d  0.000 y
+IO & Wait Time:                   185s       3.09m     0.05h    0.00d  0.000 y
+Average job time:                 125s       2.08m     0.03h    0.00d
+Longest finished job:             690s      11.50m     0.19h    0.01d
+Submission to last job:           701s      11.68m     0.19h    0.01d
+
+
+########################################################################
+### create iRows
+
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
+mkdir iRows
+cd iRows
+~/kent/src/hg/makeDb/doc/vgp577way/mkNbeds.sh
+~/kent/src/hg/makeDb/doc/vgp577way/linkSizes.sh
+### those scripts make up a large number of symLinks here,
+### a directory nBedDir, a 'sizes' file and the 'nBeds' file:
+
+lrwxrwxrwx 1    90 Apr  5 12:03 GCA_003287225.2.len -> /hive/data/genomes/asmHubs/GCA/003/287/225/GCA_003287225.2/GCA_003287225.2.chrom.sizes.txt
+lrwxrwxrwx 1    90 Apr  5 12:03 GCA_005190385.3.len -> /hive/data/genomes/asmHubs/GCA/005/190/385/GCA_005190385.3/GCA_005190385.3.chrom.sizes.txt
+...
+lrwxrwxrwx 1    35 Apr  5 12:03 hg38.len -> /hive/data/genomes/hg38/chrom.sizes
+lrwxrwxrwx 1    34 Apr  5 12:03 hs1.len -> /hive/data/genomes/hs1/chrom.sizes
+lrwxrwxrwx 1    35 Apr  5 12:03 mm39.len -> /hive/data/genomes/mm39/chrom.sizes
+-rw-rw-r-- 1 11506 Apr  5 12:03 sizes
+lrwxrwxrwx 1    27 Apr  5 12:04 GCA_003287225.2.bed -> nBedDir/GCA_003287225.2.bed
+lrwxrwxrwx 1    27 Apr  5 12:04 GCA_005190385.3.bed -> nBedDir/GCA_005190385.3.bed
+
+ls -S ../uscsMaf/*.maf > maf.list
+mkdir -p result
+
+# use the full path to the 2bit file for this operation:
+
+~/kent/src/hg/makeDb/doc/vgp577way/mkIRowsJL.sh \
+  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/addMask/GCF_037176765.1_rAnoSag1.mat.masked.2bit > jobList
+
+### check this ram reqirement the next time
+para -ram=32g create jobList
+para push
+### when done
+para time > run.time
+cat run.time
+Completed: 29 of 29 jobs
+CPU time in finished jobs:      10508s     175.13m     2.92h    0.12d  0.000 y
+IO & Wait Time:                   692s      11.54m     0.19h    0.01d  0.000 y
+Average job time:                 386s       6.44m     0.11h    0.00d
+Longest finished job:            3092s      51.53m     0.86h    0.04d
+Submission to last job:          3398s      56.63m     0.94h    0.04d
+
+########################################################################
+### construct bigMaf from iRows result
+mkdir /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/bigMaf
+cd /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/bigMaf
+
+ls -S ../iRows/result/*.maf | sed -e 's/.maf//;' > maf.list
+printf '#LOOP
+runOne $(path1) {check out exists+ $(file1).bigMaf.gz}
+#ENDLOOP
+' > template
+
+printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export mafIn="${1}"
+export chrN=`basename ${mafIn}`
+export target="GCF_037176765.1"
+export TMPDIR="/scratch/tmp"
+
+mafToBigMaf "${target}" "${mafIn}.maf" stdout \
+  | $HOME/bin/x86_64/gnusort -S200 --parallel=64 -k2,2n \
+    | gzip -c > ${chrN}.bigMaf.gz
+' > runOne
+
+chmod +x runOne
+
+gensub2 maf.list single template jobList
+para -ram=32g -cpu=64 create jobList
+para push
+### when finished:
+para time > run.time
+cat run.time
+
+Completed: 28 of 29 jobs
+Crashed: 1 jobs
+CPU time in finished jobs:      29730s     495.50m     8.26h    0.34d  0.001 y
+IO & Wait Time:                  1433s      23.88m     0.40h    0.02d  0.000 y
+Average job time:                1113s      18.55m     0.31h    0.01d
+Longest finished job:            7953s     132.55m     2.21h    0.09d
+Submission to last job:          7983s     133.05m     2.22h    0.09d
+
+ls -S *.bigMaf.gz | xargs cat > ../vgp577way.bigMaf.gz
+
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
+time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 \
+ -as=$HOME/kent/src/hg/lib/bigMaf.as -tab vgp577way.bigMaf.gz \
+  ../../GCF_037176765.1_rAnoSag1.mat.chrom.sizes GCF_037176765.1.vgp577way.bb) \
+    > mkBB.log 2>&1
+
+tail mkBB.log
+
+# pid=3443792: VmPeak:    824872 kB
+
+real    511m15.528s
+user    499m25.606s
+sys     19m24.233s
+
+########################################################################
+### compute coverage numbers
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+mkdir coverage
+cd coverage
+
+ls -S ../iRows/result > maf.list
+print '#LOOP
+runOne $(path1) {check out exists+ result/$(root1).txt}
+#ENDLOOP
+' > template
+
+gensub2 maf.list single template jobList
+mkdir result
+
+printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export mafIn="../iRows/result/${1}"
+export countOut="${2}"
+export db="GCF_037176765.1"
+
+time (~/kent/src/hg/makeDb/doc/vgp577way/mafCoverage.pl ${db} "${mafIn}") > "${countOut}"
+' > runOne
+
+chmod +x runOne
+### verify this ram amount next time
+para -ram=16g create jobList
+para push
+### when finished
+para time > run.time
+
+Completed: 29 of 29 jobs
+CPU time in finished jobs:     187386s    3123.11m    52.05h    2.17d  0.006 y
+IO & Wait Time:                  1052s      17.53m     0.29h    0.01d  0.000 y
+Average job time:                6498s     108.30m     1.80h    0.08d
+Longest finished job:           40641s     677.35m    11.29h    0.47d
+Submission to last job:         40643s     677.38m    11.29h    0.47d
+
+## create a summary count and order list from these measurements
+~/kent/src/hg/makeDb/doc/vgp577way/queryCounts.sh GCF_037176765.1
+
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
+########################################################################
+### create the maf summary bed file
+
+mkdir  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/summary
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/summary
+
+printf '#LOOP
+./runOne $(path1) result/$(root1).bed
+#ENDLOOP
+' > template
+
+ls -S ../iRows/result > maf.list
+gensub2 maf.list single template jobList
+
+printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export TOP="/hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way/summary"
+cd "${TOP}"
+
+mkdir -p tmp result
+
+cd tmp
+
+export mafFile="${1}"
+export result="${2}"
+
+export srcMaf="../../iRows/result/${mafFile}"
+
+export B="${mafFile%.maf}"
+
+sed -e 's/GC\([AF]\)_\([0-9]\+\)./GC\1\2v/;' "${srcMaf}" \
+   | /cluster/bin/x86_64/hgLoadMafSummary.v483 \
+      -test -verbose=2 -minSize=30000 \
+         -mergeGap=1500 -maxSize=200000 GCF037176765v1 "${B}" stdin 2> "${B}.log"
+
+sed -e 's/GC\([AF]\)\([0-9]\+\)v/GC\1_\2./g;' "${B}.tab" \
+     > ../${result}
+
+rm -f "${B}.tab"
+' > runOne
+
+chmod +x runOne
+
+para -ram=64g create jobList
+para push
+### when finished
+para time > run.time
+
+ls result/*.bed | xargs cut -f2- \
+   | $HOME/bin/x86_64/gnusort --parallel=32 -k1,1 -k2,2n > vgp577waySummary.bed
+
+bedToBigBed -type=bed3+4 -as=$HOME/kent/src/hg/lib/mafSummary.as -tab \
+    vgp577waySummary.bed ../../../GCF_037176765.1_rAnoSag1.mat.chrom.sizes \
+    ../GCF_037176765.1.vgp577waySummary.bb
+########################################################################
