@@ -1,0 +1,122 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) from the second phase of the
+Human Genome Structural Variation Consortium (HGSVC2). The callset is
+derived from 32 haplotype-resolved diploid genomes (64 phased haplotypes)
+spanning five 1000 Genomes superpopulations (African, Admixed American,
+East Asian, European, South Asian). Each genome was sequenced with
+PacBio long reads (continuous long-read and HiFi) and phased with
+Strand-seq, enabling comprehensive characterization of SVs that short-read
+approaches miss.
+</p>
+<p>
+The track merges the two SV annotation tables from the HGSVC2 v2.0
+integrated callset freeze 4: 111,330 insertions/deletions and 416
+inversions, for a total of 111,746 SVs. Each row is a site-level variant
+with per-site allele count, carrier haplotypes, population-scale allele
+frequencies (imputed from the phased callset back into 1000 Genomes,
+insertions and deletions only) and structural annotations.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions
+and inversions span the affected reference interval. Filters are available
+for SV type, SV length, carrier-haplotype count, distinct sample count,
+whether the site falls in a Tandem Repeat Finder region and the fraction
+of the variant overlapping segmental duplications.
+</p>
+<p>
+The detail page shows, where available:
+<ul>
+<li><b>Allele / Sample Count</b>: carrier-haplotype count (MERGE_AC) and
+the number of distinct samples carrying the variant.</li>
+<li><b>Population Allele Frequencies</b> (insertions and deletions only):
+overall and per-population (AFR, AMR, EAS, EUR, SAS) allele frequencies
+computed from the imputed 1000 Genomes callset.</li>
+<li><b>RefSeq Gene Overlaps</b>: bases of overlap with CDS, 5'/3' UTRs,
+introns, non-coding RNAs, and +/- 5 kb windows around each gene.</li>
+<li><b>Gene Constraint</b>: maximum gnomAD pLI and minimum LOEUF upper
+bound for genes overlapping the SV.</li>
+<li><b>Reference Context</b>: cytoband, segmental-duplication overlap,
+whether the SV falls in a Tandem Repeat Finder region.</li>
+<li><b>Carrier Haplotypes</b>: full list of sample-haplotype IDs (e.g.
+<tt>HG00096-h1</tt>, <tt>HG00514-un</tt>) carrying the variant.</li>
+<li><b>Inner Inversion Region</b> (INV only): coordinates of the inner
+inverted sequence, distinct from the outer breakpoint interval.</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+HGSVC2 generated phased haplotype-resolved de novo assemblies for 32
+diploid samples across five 1000 Genomes superpopulations. Assemblies
+were built from PacBio continuous long reads and HiFi reads and phased
+with Strand-seq. Structural variants were discovered from each haplotype
+assembly using PAV and validated with multiple orthogonal callers
+(including PBSV, Bionano, DeepVariant, PAV-LRA, and others recorded in
+per-site validation columns). The final SV set was merged to produce the
+integrated callset used here.
+</p>
+<p>
+Population-scale allele frequencies (POP_*_AF) were derived by imputing
+the HGSVC2 SVs back into the full 1000 Genomes short-read cohort. These
+fields are only available for insertions and deletions.
+</p>
+<p>
+Two tables were merged for display here:
+<tt>variants_freeze4_sv_insdel.tsv.gz</tt> (DEL + INS, 111,330 records) and
+<tt>variants_freeze4_sv_inv.tsv.gz</tt> (INV, 416 records). Type-specific
+columns (POP_*_AF for insdel, RGN_REF_INNER for inversions) are shown as
+empty on the detail page when they do not apply.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>hgsvc2Sv</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>hgsvc2.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hgsvc2.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original annotation tables and VCFs are available from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/" target="_blank">
+HGSVC2 v2.0 integrated callset</a> on the IGSR FTP site.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Human Genome Structural Variation Consortium (HGSVC) and
+the 1000 Genomes Project for releasing this dataset. Later HGSVC releases
+are also available as UCSC tracks:
+<a href="hgTrackUi?g=hgsvc3Sv">HGSVC3 65 SVs</a>.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Ebert P, Audano PA, Zhu Q, Rodriguez-Martin B, Porubsky D, Bonder MJ, Sulovari A, Ebler J, Zhou W,
+Serra Mari R <em>et al</em>.
+<a href="https:///www.science.org/doi/10.1126/science.abf7117" target="_blank">
+Haplotype-resolved diverse human genomes and integrated analysis of structural variation</a>.
+<em>Science</em>. 2021 Apr 2;372(6537).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33632895" target="_blank">33632895</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8026704/" target="_blank">PMC8026704</a>
+</p>
+

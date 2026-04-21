@@ -14,6 +14,15 @@ release on GRCh38: 176,232 insertions/deletions and 300 inversions, for a
 total of 176,532 SVs. Each row is a site-level variant with the list of
 carrier haplotypes and additional structural annotations.
 </p>
+<p>
+The same track is also available natively on the T2T-CHM13 (hs1)
+assembly: HGSVC3 independently aligned all haplotype-resolved assemblies
+to both GRCh38 and T2T-CHM13 and released a separate set of annotation
+tables per reference. The hs1 track is built directly from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/T2T-CHM13/annotation_table/" target="_blank">
+HGSVC3 T2T-CHM13 annotation tables</a> (188,224 DEL+INS and 276 INV;
+188,500 SVs total) — no liftOver is involved.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -72,6 +81,14 @@ records). Type-specific columns (HOM_REF/HOM_TIG/TE for insdel;
 RGN_REF_INNER for inversions) are shown as empty on the detail page when
 they do not apply.
 </p>
+<p>
+The hs1 (T2T-CHM13) version of this track uses the same merge pipeline on
+the HGSVC3 T2T-CHM13 tables
+(<tt>variants_T2T-CHM13_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> and
+<tt>variants_T2T-CHM13_sv_inv_HGSVC2024v1.0.tsv.gz</tt>) downloaded from
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/T2T-CHM13/annotation_table/" target="_blank">
+the HGSVC3 T2T-CHM13 release directory</a>.
+</p>
 
 <h2>Data Access</h2>
 <p>
@@ -82,10 +99,16 @@ programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
 track=<i>hgsvc3Sv</i>.
 </p>
 <p>
-The bigBed is available from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
-download server</a> as <tt>hgsvc3.bb</tt>. Example:
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hgsvc3.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+The bigBed is available from our download server for both assemblies:
+<ul>
+<li>GRCh38:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hgsvc3.bb" target="_blank">
+hg38 hgsvc3.bb</a></li>
+<li>T2T-CHM13:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/hgsvc3.bb" target="_blank">
+hs1 hgsvc3.bb</a></li>
+</ul>
+Example: <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hgsvc3.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
 </p>
 <p>
 The original annotation tables are available from the

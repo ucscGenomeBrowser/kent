@@ -1,0 +1,19 @@
+table lrSvGustafson
+"Gustafson 2024 1000 Genomes ONT long-read structural variants (100 samples)"
+    (
+    string chrom;           "Chromosome"
+    uint chromStart;        "Start position"
+    uint chromEnd;          "End position"
+    string name;            "Variant ID"
+    uint score;             "Score"
+    char[1] strand;         "Strand"
+    uint thickStart;        "Thick start (same as chromStart)"
+    uint thickEnd;          "Thick end (same as chromEnd)"
+    uint reserved;          "Item color"
+    string svType;          "SV Type|DEL, INS, DUP or INV"
+    int svLen;              "SV Length|Absolute length of the SV in base pairs"
+    uint sampleCount;       "Sample Count|Number of samples carrying this variant (SUPP)"
+    uint varCalls;          "Caller Support|Number of per-caller calls supporting this variant"
+    uint precise;           "Precise Boundaries|1 if the source caller flagged this variant PRECISE"
+    string strands;         "Strands|Strand orientation from the source caller"
+    )
