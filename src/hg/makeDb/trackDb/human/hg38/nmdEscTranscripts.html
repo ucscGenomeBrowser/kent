@@ -12,9 +12,11 @@ NMD escape regions (Nagy et al, Trends Biochem Sci 1998 and Lindeboom et al, Nat
 </p>
 
 <ol>
-  <li><b>50 bp rule</b>: The region less than 50 bp upstream of the last
-    exon-exon junction (after splicing). Non-protein-coding 3' exons are not
-    considered.</li>
+  <li><b>50 bp rule</b>: The entire last coding exon plus the last 50 bp of
+    the penultimate coding exon. A PTC here has no downstream exon-exon
+    junction (or is too close to the last one) for NMD to be triggered.
+    Non-protein-coding 3' exons are not counted when identifying the last
+    coding junction.</li>
   <li><b>Intronless transcripts</b>: Transcripts with a single exon. Since no
     EJCs are deposited on single-exon transcripts, all PTCs are predicted to
     escape NMD.</li>
@@ -22,6 +24,11 @@ NMD escape regions (Nagy et al, Trends Biochem Sci 1998 and Lindeboom et al, Nat
     PTCs in this region do not lead to NMD, a phenomenon known as start-proximal
     NMD insensitivity. One proposed mechanism, supported by experimental
     evidence, is re-initiation of translation at a downstream AUG codon.</li>
+  <li><b>Long exon rule</b>: Coding exons longer than 400 bp (excluding the last
+    coding exon, which is already covered by the 50 bp rule). Lindeboom et al.
+    2016 showed a marked drop in NMD efficiency (61% vs. 98%) for PTCs in exons
+    longer than 400 nt, likely because the large distance between the stalled
+    ribosome and the downstream EJC reduces UPF1-EJC contact.</li>
 </ol>
 
 <p>
@@ -52,12 +59,28 @@ prematurely, any remaining downstream EJCs recruit surveillance factors
 </p>
 
 <p>
-However, if the PTC is located within approximately 50 bp upstream of the last
-exon-exon junction, the ribosome is close enough to the final EJC that the
-interaction does not trigger NMD&mdash;the transcript escapes degradation.
-Conversely, PTCs located more than 50&ndash;55 bp upstream of the last
-exon-exon junction are predicted to elicit NMD.
+However, PTCs located in the last coding exon or within approximately 50 bp
+upstream of the last exon-exon junction are too close to the final EJC (or
+have no downstream EJC at all) for NMD to be triggered&mdash;the transcript
+escapes degradation. Conversely, PTCs located more than 50&ndash;55 bp
+upstream of the last exon-exon junction are predicted to elicit NMD.
 </p>
+
+<p>
+Additional escape mechanisms, supported by Lindeboom et al. 2016 and other
+studies, are captured by three further rules:
+</p>
+<ul>
+  <li><b>Intronless transcripts</b> deposit no EJCs during splicing, so any
+    PTC escapes NMD.</li>
+  <li><b>Start-proximal PTCs</b> (within the first 100 bp of coding sequence)
+    escape NMD, likely through translation re-initiation at a downstream AUG
+    codon.</li>
+  <li><b>PTCs in long coding exons</b> (&gt;400 bp) show reduced NMD
+    efficiency (61% vs. 98% for shorter exons in Lindeboom et al. 2016),
+    likely because the large distance between the stalled ribosome and the
+    downstream EJC reduces UPF1-EJC contact.</li>
+</ul>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -79,6 +102,10 @@ Items are colored by the NMD escape rule that applies:
   <li><font color="#8B0000"><b>Dark red</b></font> &ndash; Rule 3: First 100 bp
     of coding nucleotides. PTCs in this start-proximal region are insensitive
     to NMD, possibly due to translation re-initiation at a downstream AUG codon.</li>
+  <li><font color="#FFD700"><b>Gold</b></font> &ndash; Rule 4: Coding exons
+    longer than 400 bp (excluding the last coding exon). NMD efficiency is
+    reduced in these long exons because the PTC is far from the downstream
+    exon-exon junction.</li>
 </ul>
 
 <h2>Data Access</h2>
@@ -113,7 +140,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6855384/" target="_blank">PMC
 </p>
 
 <p>
-Lindeboom RG, Supek F, Lehner B.
+Lindeboom RGH, Supek F, Lehner B.
 <a href="https://doi.org/10.1038/ng.3664" target="_blank">
 The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
 <em>Nat Genet</em>. 2016 Oct;48(10):1112-8.
