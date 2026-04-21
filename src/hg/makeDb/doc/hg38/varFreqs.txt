@@ -262,3 +262,28 @@ ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.CHM13.v1.2.0.deepvaria
 # hg38 and hs1 via the human/trackDb.ra include), so no move was needed.
 # Only colorsDbSnv is expected to render on hs1 - the other varFreqs
 # subtracks have hg38-only data and will silently show nothing there.
+
+##########
+# 2026-04-20 Claude max
+#
+# Rebuilt varFreqsAll combined bigBed to include GA4K and CoLoRSdb
+# long-read PacBio subtracks that were added to varFreqs since the
+# last build (Mar 20).
+#
+# Steps (in /hive/data/genomes/hg38/bed/varFreqs/all):
+# 1. Added GA4K and CoLoRSdb rows to
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv
+#    and appended their /gbdb paths to files.txt.
+# 2. Deleted merged.vcf.gz and merged.annotated.vcf.gz to force a full
+#    merge + bcftools csq re-annotation (per-sample normalized VCFs
+#    from the previous run were kept; only the two new VCFs were
+#    normalized in Step 4).
+# 3. Ran ./mergeAndAnnotate.sh (~55 min: 5 min per-file, ~15 min merge,
+#    ~35 min csq).
+# 4. Ran ./vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 pre-extract ~90 min, Phase 2 chrom BED build ~30 min).
+# 5. bedToBigBed on 275 GB sorted BED (~2 h) to produce 37.7 GB
+#    varFreqsAll.bb with 1,165,666,478 records and 113 fields.
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.GA4KAF/AC and filterByRange.CoLoRSdbAF/AC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink was preserved.

@@ -22,3 +22,5 @@ SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF
 HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF
 GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF
 SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF
+GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF
+CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	AF
