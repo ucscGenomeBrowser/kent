@@ -224,8 +224,8 @@ def main():
                 if geneSym and not regionData[key]["geneSym"]:
                     regionData[key]["geneSym"] = geneSym
 
-        if len(cdsExons)==1:
-            # rule 2: intronless transcript
+        if rec["exonCount"] == 1:
+            # rule 2: truly intronless transcript (no splicing, no EJCs deposited)
             bed = [chrom, str(cdsStart), str(cdsEnd), name]
             bedOut(bed, txStart, txEnd, decoOfh, 2)
             addRegions([(chrom, cdsStart, cdsEnd)], 2)

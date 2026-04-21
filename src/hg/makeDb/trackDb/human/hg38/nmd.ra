@@ -7,18 +7,6 @@ visibility hide
 superTrack on
 pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
-        #track nmdGencode
-        #shortLabel NMD escape 50bp-100bp rule: Gencode transcripts
-        #longLabel NMD escape 50bp-100bp rule: Gencode transcripts
-        #parent nmd on
-        #bigDataUrl /gbdb/hg38/nmd/knownGeneNmdProt.bb
-        #visibility pack
-        #type bigBed
-        #dataVersion Gencode V49
-        #skipFields decoratedItem,style,fillColor,glyph,mouseover
-        #mouseOverField mouseover
-        #priority 1
-
         track nmdEscGencode
         shortLabel NMD Escape Gencode
         longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: Gencode transcripts
@@ -34,7 +22,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         track nmdEscNcbiRefSeq
         shortLabel NMD Escape RefSeq
-        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: NCBI RefSeq transcripts
+        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: NCBI RefSeq Curated transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
         visibility pack

@@ -6,6 +6,12 @@
 #
 # 2026-04-20 lrnassar: Added Rule 4 (long-exon rule, Lindeboom 2016) - coding
 # exons >400 nt excluding the last coding exon. Rebuilt Gencode + RefSeq.
+#
+# 2026-04-21 lrnassar: Fixed Rule 2 to test rec["exonCount"]==1 instead of
+# len(cdsExons)==1. The old test misclassified multi-exon transcripts with a
+# single CDS exon (UTR introns) as "intronless", AND silently suppressed their
+# Rule 1/3/4 assignments via the if/else short-circuit. ~3,253 RefSeq curated
+# transcripts and ~2,000 Gencode transcripts reassigned. Rebuilt both tracks.
 
 cd /hive/data/genomes/hg38/bed/nmd/gencode/
 
@@ -24,20 +30,28 @@ bedSort nmdEscRegions.bed nmdEscRegions.bed
 bedToBigBed nmdEscRegions.bed ../../../chrom.sizes nmdEscRegions.bb \
     -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
 
+# symlinks to /gbdb
+ln -sf /hive/data/genomes/hg38/bed/nmd/gencode/nmdEscRegions.bb /gbdb/hg38/nmd/nmdEscRegions.bb
+ln -sf /hive/data/genomes/hg38/bed/nmd/gencode/knownGeneNmdDeco.bb /gbdb/hg38/nmd/knownGeneNmdDeco.bb
+
 
 #######################################################################
 # NMD escape regions from NCBI RefSeq (2025-03-24 max)
+#
+# 2026-04-21 lrnassar: Switched from RefSeq all to RefSeq curated (NM_/NR_ only,
+# no XM_/XR_ predicted models) per Max's request on RM #33737. Prior RefSeq-all
+# outputs moved to refseqAll.bak/ within the same build dir.
 
 cd /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/
 
-# run the script on ncbiRefSeq genePredExt
-# Using all of RefSeq, not just refseq curated - good idea?
-# This is the file for RefSeq curated: /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeqCurated.txt.gz 
+# run the script on ncbiRefSeq curated genePredExt
+# Note: the script writes nmdNcbiRefSeqDeco.bed (per-transcript decorator format)
+# alongside the collapsed output, but we intentionally do not convert it to bigBed
+# for RefSeq. The decorator workflow currently only ships for Gencode/knownGene
+# (via knownGeneNmdDeco.bb).
 ~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f genePredExt \
-    /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeq.txt.gz \
+    /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2025-08-13/archive/hg38.ncbiRefSeqCurated.txt.gz \
     nmdNcbiRefSeqDeco.bed nmdEscNcbiRefSeq.bed
-
-# not building decorator file - needed? Useful?
 
 # build collapsed bigBed
 bedSort nmdEscNcbiRefSeq.bed nmdEscNcbiRefSeq.bed
