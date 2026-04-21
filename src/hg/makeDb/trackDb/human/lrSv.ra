@@ -55,6 +55,45 @@ visibility hide
     skipEmptyFields on
     priority 2
 
+    track abelSv
+    parent lrSv
+    bigDataUrl /gbdb/$D/abelSv/abelSv.bb
+    shortLabel CCDG 17795 SR SVs
+    longLabel Structural Variants from 17,795 Genomes - Illumina SHORT-READ CCDG callset (Abel et al. 2020) - included for comparison
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mouseOver <b>$name</b> ($svType) len=$svLength AF=$af AC=$ac/$an callset=$callset MSQ=$msq
+    skipEmptyFields on
+    skipFields mateChrom,matePos
+    filterValues.svType DEL|deletion,DUP|duplication,INV|inversion,MEI|mobile element insertion,BND|breakend/translocation
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filterValues.callset B38|Native GRCh38 callset (14623 samples),B37lift|Lifted from GRCh37 callset (8417 samples)
+    filterType.callset multipleListOr
+    filterLabel.callset Source Callset
+    filterValues.filter PASS|High confidence,LOW|Low confidence
+    filterType.filter multipleListOr
+    filterLabel.filter Filter Status
+    filterByRange.af on
+    filter.af 0:1
+    filterLimits.af 0:1
+    filterLabel.af Allele Frequency (AF)
+    filterByRange.svLength on
+    filter.svLength 0:250000000
+    filterLimits.svLength -1:250000000
+    filterLabel.svLength SV Length (bp; -1 for BND)
+    filterByRange.msq on
+    filter.msq 0:500
+    filterLimits.msq 0:500
+    filterLabel.msq Mean Sample Quality (MSQ)
+    filterByRange.ac on
+    filter.ac 0:30000
+    filterLimits.ac 0:30000
+    filterLabel.ac Allele Count (AC)
+    url https://www.nature.com/articles/s41586-020-2371-0
+    urlLabel Abel et al, Nature 2020:
+
     track onekg3202Sr
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/onekg3202sr.bb
