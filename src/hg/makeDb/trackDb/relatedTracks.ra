@@ -124,3 +124,9 @@ hg38 nmd mane MANE Select transcripts from NCBI/EBI, a curated subset of RefSeq/
 hg38 mane nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
 hg38 nmd ncbiRefSeq NCBI RefSeq transcripts, the source annotation set for the NMD Escape RefSeq subtrack
 hg38 ncbiRefSeq nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
+
+# MPRA cross-links:
+hg38 mpra wgEncodeReg4 ENCODE regulatory region annotations, many of which are tested by MPRA assays
+hg38 wgEncodeReg4 mpra Experimental MPRA measurements of regulatory activity for candidate elements
+hg38 mpra cCREs Candidate cis-regulatory elements; many overlap MPRA-tested fragments
+hg38 cCREs mpra Experimentally validated regulatory activity from MPRA assays for overlapping elements

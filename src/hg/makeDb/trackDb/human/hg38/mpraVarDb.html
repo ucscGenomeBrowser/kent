@@ -1,12 +1,18 @@
 <h2>Description</h2>
 <p>
-The <b>MPRAVarDB</b> track shows 242,818 variants from 18 MPRA studies compiled
-in the MPRAVarDB database
+The <b>MPRAVarDB</b> track shows 239,028 variants successfully mapped to hg38
+(from 242,818 total) across 18 MPRA studies compiled in the MPRAVarDB database
 (<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">Wang et al., 2024</a>).
 Each variant was experimentally tested in an MPRA experiment to evaluate whether it
 affects transcriptional regulatory activity. The database covers over 30 cell lines
 and 30 human diseases and traits, including neurodegenerative diseases, immune
 disorders, melanoma, multiple myeloma, and autoimmune diseases.
+</p>
+<p>
+<b>Note on cell lines:</b> The cell line shown for each variant is the reporter
+cell line in which the human regulatory element was assayed. Several studies
+used mouse cell lines (e.g. Neuro-2a, N2A, NIH/3T3, MIN6) as reporter systems
+for human sequences; these variants retain human (hg38) coordinates.
 </p>
 
 <h2>Display Conventions</h2>
@@ -165,6 +171,10 @@ tested variants, diseases/traits, cell lines, and a brief description of the var
   <td>2,756 variants in strong LD with 75 sentinel variants associated with RBC traits</td>
 </tr>
 </table>
+<p>
+Variant counts above are from the source publications (pre-liftOver totals).
+Of 242,818 total source variants, 239,028 lifted successfully to hg38; see Methods.
+</p>
 
 <h2>Methods</h2>
 <p>
@@ -188,7 +198,7 @@ From scripts, the data can be accessed through our
 <p>
 For automated download and analysis, the genome annotation is stored in a bigBed
 file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra/mpravardb" target="_blank">our download server</a>.
 The file for this track is called <tt>mpravardb.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
@@ -196,7 +206,7 @@ precompiled binary for your system. Instructions for downloading source code and
 binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra/mpravardb.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mpra/mpravardb/mpravardb.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 <p>
 The original annotation source data can be downloaded from the
