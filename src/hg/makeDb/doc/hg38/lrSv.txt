@@ -360,6 +360,9 @@ bedSort hprc2.bed hprc2.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
     -tab hprc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hprc2.bb
 
+# HPRC also releases a wave VCF against T2T-CHM13; the hs1 version of this
+# subtrack is built in ~/kent/src/hg/makeDb/doc/hs1/lrSv.txt.
+
 ##########
 # 2026-04-20 Claude max
 
