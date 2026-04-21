@@ -4,16 +4,18 @@ This track shows structural variants (SVs) derived from the Human Pangenome
 Reference Consortium (HPRC) release-2 pangenome graph. The graph was built
 with minigraph-cactus from PacBio HiFi haplotype-resolved assemblies of 233
 samples (including T2T-CHM13 and the diverse 1000 Genomes Project sample
-set), aligned to the GRCh38 reference path. Variants were extracted from
-the graph with <tt>vg deconstruct</tt> and decomposed into atomic alleles
-with <tt>vcfwave</tt> (WFA2-lib).
+set). HPRC releases one VCF per reference path (GRCh38 and T2T-CHM13);
+we display both natively on the corresponding UCSC assembly (hg38 and hs1).
+Variants were extracted from the graph with <tt>vg deconstruct</tt> and
+decomposed into atomic alleles with <tt>vcfwave</tt> (WFA2-lib).
 </p>
 <p>
-The track contains 1,483,114 SV-sized alleles (length &ge; 50 bp) split by
-type: 1,106,190 insertions, 192,597 deletions, 178,178 complex alleles and
-6,149 inversions. Each row carries the allele count, allele frequency,
-number of samples with data and the snarl-nesting level of the variant in
-the pangenome decomposition tree.
+The hg38 track contains 1,483,114 SV-sized alleles (length &ge; 50 bp) split
+by type: 1,106,190 insertions, 192,597 deletions, 178,178 complex alleles
+and 6,149 inversions. The hs1 track is built from the parallel T2T-CHM13
+wave VCF. Each row carries the allele count, allele frequency, number of
+samples with data and the snarl-nesting level of the variant in the
+pangenome decomposition tree.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -36,14 +38,19 @@ bubbles).
 
 <h2>Methods</h2>
 <p>
-The HPRC v2.0 minigraph-cactus pangenome was downloaded as
-<tt>hprc-v2.0-mc-grch38.sv.gfa.gz</tt> (the graph) and
-<tt>hprc-v2.0-mc-grch38.wave.vcf.gz</tt> (the corresponding
-wave-decomposed VCF) from the HPRC S3 release bucket. The VCF is the
-result of running <tt>vg deconstruct</tt> on the graph with GRCh38 as the
-reference path and then <tt>vcfwave</tt> / WFA2-lib to split complex
-multi-allelic records into atomic alleles with per-allele TYPE and LEN
-fields.
+The HPRC v2.0 minigraph-cactus pangenome was downloaded from the HPRC S3
+release bucket:
+<ul>
+<li>hg38:
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.sv.gfa.gz" target="_blank"><tt>hprc-v2.0-mc-grch38.sv.gfa.gz</tt></a> (graph) and
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.wave.vcf.gz" target="_blank"><tt>hprc-v2.0-mc-grch38.wave.vcf.gz</tt></a> (wave-decomposed VCF)</li>
+<li>hs1:
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz" target="_blank"><tt>hprc-v2.0-mc-chm13.wave.vcf.gz</tt></a></li>
+</ul>
+The VCF is the result of running <tt>vg deconstruct</tt> on the graph with
+the corresponding reference path (GRCh38 or T2T-CHM13) and then
+<tt>vcfwave</tt> / WFA2-lib to split complex multi-allelic records into
+atomic alleles with per-allele TYPE and LEN fields.
 </p>
 <p>
 For display here, the wave VCF was streamed and each ALT was emitted as
@@ -53,10 +60,12 @@ be shorter). Allele counts, frequencies, and sample counts are taken
 directly from the per-allele INFO fields.
 </p>
 <p>
-The list of assemblies underlying the pangenome is documented at
+A pointer to both the GRCh38 and CHM13 pangenome files (and the list of
+assemblies that went into the graph) is maintained by HPRC at
 <a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv"
    target="_blank">human-pangenomics/hprc_intermediate_assembly
-<tt>alignments_v2.0.csv</tt></a>.
+<tt>alignments_v2.0.csv</tt></a>, which links to both the hg38 and
+CHM13/hs1 VCFs (and the underlying graph files) used for this track.
 </p>
 
 <h2>Data Access</h2>
@@ -68,10 +77,16 @@ programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
 track=<i>hprc2Sv</i>.
 </p>
 <p>
-The bigBed is available from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
-download server</a> as <tt>hprc2.bb</tt>. Example:
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+The bigBed is available from our download server for both assemblies:
+<ul>
+<li>GRCh38:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2.bb" target="_blank">
+hg38 hprc2.bb</a></li>
+<li>T2T-CHM13:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/hprc2.bb" target="_blank">
+hs1 hprc2.bb</a></li>
+</ul>
+Example: <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
 </p>
 <p>
 The original pangenome graph and the wave-decomposed VCF are available
