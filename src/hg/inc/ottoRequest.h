@@ -6,7 +6,7 @@
 #define OTTOREQUEST_H
 
 #include "jksql.h"
-#define OTTOREQUEST_NUM_COLS 8
+#define OTTOREQUEST_NUM_COLS 10
 
 extern char *ottoRequestCommaSepFieldNames;
 
@@ -15,13 +15,15 @@ struct ottoRequest
     {
     struct ottoRequest *next;  /* Next in singly linked list. */
     unsigned id;	/* Auto-incrementing request count */
+    char *requestType;	/* type of request: liftOver or assembly */
     char *fromDb;	/* can be a database name or a GC[AF]_ GenArk accession */
     char *toDb;	/* can be a database name or a GC[AF]_ GenArk accession */
     char *email;	/* user email address */
     char *comment;	/* other comments from the input form */
     char *requestTime;	/* date time request was added */
-    unsigned char doneStatus;	/* # 1 == alignment is complete, 0 == alignment to be done */
-    char *completeTime;	/* date time for alignment completed and user notified */
+    unsigned char doneStatus;	/* 0 == pending, 1 == notified/in progress, 2 == complete */
+    char *workflowId;	/* galaxy workflow ID */
+    char *completeTime;	/* date time for process completed and user notified */
     };
 
 void ottoRequestStaticLoad(char **row, struct ottoRequest *ret);

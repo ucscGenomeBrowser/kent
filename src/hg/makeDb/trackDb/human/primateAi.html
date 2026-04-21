@@ -6,8 +6,6 @@ possible missense variants in the human genome. It was trained on 4.5 million be
 missense variants: 4.3 million common variants from 809 non-human primate individuals
 across 233 species, plus common human variants (&gt;0.1% allele frequency) from gnomAD,
 TOPMed, and UK Biobank. These represent about 6% of all possible human missense variants.
-Activate the <a href="hgTrackUi&db=hg38&g=cons447way">Zoonomia 447 way Mammal/Primate</a> alignment
-track to show these variants.
 </p>
 
 <p>
@@ -38,13 +36,14 @@ are classified as benign, 25% as pathogenic.
 
 <h2>Data Access</h2>
 <p>
-Due to the data license, this track is not available for bulk download from UCSC and the API, the Table Browser
-and the "Download track data" button do not work. However, the source data can be downloaded from the
+Due to the data license, the Table Browser, Data Integrator, and the REST API's
+<code>getData</code> endpoint are disabled for this track. The source data can be
+downloaded from the
 <a href="https://primateai3d.basespace.illumina.com/" target="_blank">PrimateAI-3D website</a>
 (requires registration). The primate variant database is available at
 <a href="https://primad.basespace.illumina.com/" target="_blank">PrimAD</a>.
-Note that our <a href="hgTrackUi&db=hg38&g=cons447way">Zoonomia 447 way</a> alignment
-track includes the primate variants.
+Our <a href="hgTrackUi?db=hg38&g=cons447way">Zoonomia 447-way Mammal/Primate</a> alignment
+track displays the primate variants used in training PrimateAI-3D.
 </p>
 
 <h2>Methods</h2>
@@ -55,7 +54,7 @@ missense variants. Positions were formatted as bigBed. The percentile score was 
 the track score field (scaled to 0-1000). No filtering was applied; all 70.7 million
 scored variants are included.
 A conversion script is available from
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/primateAiToBigBed.py"
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/primateai/primateAiToBigBed.py"
 target="_blank">our Github</a>.
 </p>
 
@@ -66,18 +65,19 @@ Thanks to Illumina, in particular Gao Hong, for making PrimateAI-3D predictions 
 
 <h2>References</h2>
 <p>
-Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD,
-Fiziev PP, Kuderna LFK <em>et al</em>.
-<a href="https://doi.org/10.1126/science.abn8197" target="_blank">
+Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD, Fiziev PP, Kuderna
+LFK <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.abn8197?url_ver=Z39.88-2003&amp;rfr_id=ori:rid:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed"
+target="_blank">
 The landscape of tolerated genetic variation in humans and primates</a>.
-<em>Science</em>. 2023 Jun 2;380(6648):eabn8197.
+<em>Science</em>. 2023 Jun 2;380(6648):eabn8153.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">37262156</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10187174/" target="_blank">PMC10187174</a>
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10713091/" target="_blank">PMC10713091</a>
 </p>
 
 <p>
-Sundaram L, Gao H, Padigepati SR, McRae JF, Li Y, Kosmicki JA, Fritzilas N, Hakenberg J,
-Dutta A, Shon J <em>et al</em>.
+Sundaram L, Gao H, Padigepati SR, McRae JF, Li Y, Kosmicki JA, Fritzilas N, Hakenberg J, Dutta A,
+Shon J <em>et al</em>.
 <a href="https://doi.org/10.1038/s41588-018-0167-z" target="_blank">
 Predicting the clinical impact of human mutation with deep neural networks</a>.
 <em>Nat Genet</em>. 2018 Aug;50(8):1161-1170.

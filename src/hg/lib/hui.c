@@ -10213,6 +10213,21 @@ if (tableName)
 hFreeConn(&conn);
 }
 
+static struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
+/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(trackHubSkipHubName(tdb->track), bareName))
+        return tdb;
+    struct trackDb *found = findTdbByBareName(tdb->subtracks, bareName);
+    if (found != NULL)
+        return found;
+    }
+return NULL;
+}
+
 char *getTrackHtml(char *db, char *trackName)
 /* Grab HTML from trackDb in native database for quickLift tracks. */
 {
@@ -10220,7 +10235,30 @@ char *html = NULL;
 
 if (trackHubDatabase(db) || isGenArk(db))
     {
-    // somehow get to the HTML that's not in the quickLift hub, but in the original hub
+    struct trackHub *hub = NULL;
+    struct trackHubGenome *hubGenome = trackHubGetGenome(db);
+    if (hubGenome != NULL)
+        hub = hubGenome->trackHub;
+    else if (isGenArk(db))
+        {
+        char *hubUrl = genarkUrl(db);
+        if (hubUrl != NULL)
+            {
+            hub = trackHubOpen(hubUrl, "");
+            if (hub != NULL)
+                hubGenome = trackHubFindGenome(hub, db);
+            }
+        }
+    if (hubGenome != NULL)
+        {
+        struct trackDb *tdbList = trackHubAddTracksGenome(hubGenome);
+        struct trackDb *tdb = findTdbByBareName(tdbList, trackHubSkipHubName(trackName));
+        if (tdb != NULL)
+            {
+            trackHubAddDescription(hubGenome->trackDbFile, tdb);
+            html = tdb->html;
+            }
+        }
     }
 else
     {

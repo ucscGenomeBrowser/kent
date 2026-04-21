@@ -1,13 +1,24 @@
 # PromoterAI, Claude max, Mar 20 2026
+# Updated Apr 21 2026 (RM #37278 QA): streaming converter, transcript strand
+# carried through, per-transcript gene aggregation, AS gains a strands field,
+# bigBed score field now stores |PromoterAI|*1000 (impact magnitude).
 
 # Source: promoterAI_tss500.tsv.gz from https://primateai3d.basespace.illumina.com/
+# (license-gated download; linked from https://github.com/Illumina/PromoterAI)
 # 262M rows, 118.6M unique variants, 39.5M unique positions, scores within 500bp of TSS
+# Input fields (1-based): chrom, pos, ref, alt, gene, gene_id, transcript_id,
+# strand (1 or -1), tss_pos, promoterAI
 
 cd /hive/data/genomes/hg38/bed/promoterai
 # download promoterAI_tss500.tsv.gz from Illumina BaseSpace (requires registration)
 
-# convert to 4 bedGraph files (one per alt allele) + overlap BED
-# picks max absolute score when transcripts overlap; overlap BED has all per-transcript scores
+# convert to 4 bedGraph files (one per alt allele) + overlap BED.
+# Streaming: reads input row-by-row assuming input is sorted by (chrom, pos),
+# so memory use is proportional to the number of transcripts at a single
+# position, not the whole file. Safe on a 4 GB node.
+# Picks max absolute score when transcripts overlap; overlap BED has all
+# per-transcript scores + strands, tagged with the consensus strand (or '.'
+# when transcripts disagree on strand, i.e. bidirectional promoters).
 python3 ~/kent/src/hg/makeDb/scripts/promoterAiToBigWig.py
 
 # sort bedGraphs and convert to bigWig
@@ -17,8 +28,8 @@ for alt in A C G T; do
     rm promoterAi_${alt}.bedGraph promoterAi_${alt}.sorted.bedGraph
 done
 
-# sort overlap BED and convert to bigBed
-sort -k1,1 -k2,2n promoterAi_overlaps.bed > promoterAi_overlaps.sorted.bed
+# sort overlap BED and convert to bigBed (bed9+6 -- see promoterAiOverlaps.as)
+sort -S 2G -k1,1 -k2,2n promoterAi_overlaps.bed > promoterAi_overlaps.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/promoterAiOverlaps.as -tab \
     promoterAi_overlaps.sorted.bed /hive/data/genomes/hg38/chrom.sizes promoterAi_overlaps.bb
 rm promoterAi_overlaps.bed promoterAi_overlaps.sorted.bed
@@ -30,3 +41,7 @@ ln -s /hive/data/genomes/hg38/bed/promoterai/promoterAi_C.bw /gbdb/hg38/promoter
 ln -s /hive/data/genomes/hg38/bed/promoterai/promoterAi_G.bw /gbdb/hg38/promoterAi/g.bw
 ln -s /hive/data/genomes/hg38/bed/promoterai/promoterAi_T.bw /gbdb/hg38/promoterAi/t.bw
 ln -s /hive/data/genomes/hg38/bed/promoterai/promoterAi_overlaps.bb /gbdb/hg38/promoterAi/overlaps.bb
+
+# Rebuild notes (Apr 21 2026): only the overlap bigBed needed regenerating
+# because the bigWig best-score logic is unchanged. The existing bigWigs were
+# left in place; only promoterAi_overlaps.bb was swapped (old kept as .bak).

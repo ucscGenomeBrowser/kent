@@ -21,7 +21,7 @@ CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \
     jquery.treetable.css jquery.treetable.theme.default.css \
     jstree-3.3.7.min.css \
-    jWest.css jWest.afterNiceMenu.css mouseOver.css \
+    jWest.css jWest.afterNiceMenu.css liftRequest.css mouseOver.css \
     theme-modern.css ui.dropdownchecklist.css nice_menu.css \
     encodeDataMatrix.css encodeDataSummary.css userAccounts.css \
     encode3.css encode3Ucsc.css bootstrap.min.css \
