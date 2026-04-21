@@ -1,0 +1,4 @@
+httpProto https
+server hgwbeta.soe.ucsc.edu
+dbSpec all
+table all
