@@ -10,8 +10,9 @@ variants, population-scale SV maps lag behind single-nucleotide variant
 resources.</p>
 
 <p>
-This track displays site-frequency data for 738,624 SVs identified in 17,795
-deeply sequenced human genomes (mean coverage &gt; 20&times;) by
+This track displays site-frequency data for 737,998 SVs identified in 17,795
+deeply sequenced human genomes (mean coverage &gt; 20&times;) by Illumina
+short-read sequencing by
 <a href="https://www.nature.com/articles/s41586-020-2371-0" target="_blank">
 Abel et al., Nature 2020</a>.
 The samples were sequenced by the four sequencing centers of the NHGRI
@@ -23,13 +24,16 @@ includes roughly 24% African, 16% Latino, 11% Finnish, 39% non-Finnish
 European, and 9% other ancestries.</p>
 
 <p>
-Two non-overlapping public callsets are displayed as a single track:</p>
+Two non-overlapping public callsets are combined into this track.
+The upstream release contains 738,624 unique primary SV records across
+the two callsets; 626 B37 records did not lift over to GRCh38, leaving
+the 737,998 shown here:</p>
 <ul>
-  <li><b>B38</b> (native GRCh38): 14,623 samples, called directly on the
-      GRCh38 assembly.</li>
-  <li><b>B37lift</b> (GRCh37, lifted): 8,417 samples originally called on
-      GRCh37, with coordinates lifted to GRCh38 using the standard UCSC
-      hg19&rarr;hg38 liftOver chain. 626 variants could not be lifted.</li>
+  <li><b>B38</b> (native GRCh38): 458,106 SVs from 14,623 samples, called
+      directly on the GRCh38 assembly.</li>
+  <li><b>B37lift</b> (GRCh37, lifted): 279,892 SVs from 8,417 samples
+      originally called on GRCh37, with coordinates lifted to GRCh38
+      using the standard UCSC hg19&rarr;hg38 liftOver chain.</li>
 </ul>
 
 <p>
