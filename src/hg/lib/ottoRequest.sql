@@ -12,7 +12,7 @@ CREATE TABLE ottoRequest (
     email varchar(255) not null,	# user email address
     comment longtext not null,	# other comments from the input form
     requestTime datetime not null,	# date time request was added
-    doneStatus tinyint unsigned not null,	# # 1 == process is complete, 0 == process to be done
+    doneStatus tinyint unsigned not null,	# 0 == pending, 1 == notified/in progress, 2 == complete
     workflowId varchar(255) not null,	# galaxy workflow ID
     completeTime datetime default null,	# date time for process completed and user notified
               #Indices
