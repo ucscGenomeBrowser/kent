@@ -660,6 +660,21 @@ def cmd_update(args):
         custom_fields.append({"id": CF_RELEASED_TO_RR, "value": args.released_to_rr})
     if args.file_list is not None:
         custom_fields.append({"id": CF_FILE_LIST, "value": args.file_list})
+    if args.file_list_add:
+        existing = api_get(args.base_url,
+                           f"/issues/{args.ticket_id}.json",
+                           args.api_key)["issue"]
+        current = ""
+        for cf in existing.get("custom_fields", []):
+            if cf["id"] == CF_FILE_LIST:
+                current = cf.get("value") or ""
+                break
+        lines = [l for l in current.splitlines() if l.strip()]
+        for path in args.file_list_add:
+            if path not in lines:
+                lines.append(path)
+        custom_fields.append({"id": CF_FILE_LIST,
+                              "value": "\r\n".join(lines)})
     if args.table_list is not None:
         custom_fields.append({"id": CF_TABLE_LIST, "value": args.table_list})
     if args.assemblies is not None:
@@ -683,8 +698,8 @@ def cmd_update(args):
                  "--status, --assigned-to, --priority, --subject, "
                  "--target-version, --category, --mlm, "
                  "--release-log-text, --release-log-url, "
-                 "--released-to-rr, --file-list, --table-list, --assemblies, "
-                 "--custom-field, --note")
+                 "--released-to-rr, --file-list, --file-list-add, "
+                 "--table-list, --assemblies, --custom-field, --note")
 
     data = {"issue": issue_data}
     api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
@@ -969,7 +984,11 @@ def build_parser():
     p_update.add_argument("--released-to-rr", dest="released_to_rr",
                           help="Released to RR (custom field, 0 or 1)")
     p_update.add_argument("--file-list", dest="file_list",
-                          help="File List (custom field)")
+                          help="File List (custom field, overwrites existing value)")
+    p_update.add_argument("--file-list-add", dest="file_list_add",
+                          action="append", metavar="PATH",
+                          help="Append PATH to the File List custom field "
+                               "(repeatable; idempotent, skips paths already present)")
     p_update.add_argument("--table-list", dest="table_list",
                           help="Table List (custom field)")
     p_update.add_argument("--assemblies",
