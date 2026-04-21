@@ -1,72 +1,88 @@
 <h2>Description</h2>
 <p>
 <a href="https://github.com/Illumina/PromoterAI"
-target="_blank">PromoterAI</a> is a deep learning model from Illumina that predicts the
-impact of single nucleotide variants in gene promoter regions. It scores all possible
-substitutions within 500 bp of annotated transcription start sites (TSS), covering
-approximately 39.5 million genomic positions across all protein-coding genes.
+target="_blank">PromoterAI</a> is a deep neural network from Illumina that predicts the
+expression-altering impact of single nucleotide variants in gene promoter regions.
+It scores all possible substitutions within 500 bp of annotated transcription start
+sites (TSS), covering approximately 39.5 million genomic positions across all
+protein-coding genes.
 </p>
 
 <p>
-Scores range from -1 to 1. Positive scores indicate predicted disruption of promoter
-function, negative scores indicate the variant is predicted to be tolerated. The model
-was trained using primate conservation and promoter sequence features, similar in approach
-to the related PrimateAI-3D model for coding variants.
+Scores range from -1 to 1. A <b>negative</b> score is a predicted <b>decrease</b> in
+expression of the target gene; a <b>positive</b> score is a predicted <b>increase</b>
+in expression. Scores near zero indicate the variant is predicted to leave expression
+unchanged. Variants at either end of the range (large |score|) are dysregulating and
+are the ones enriched among patients with rare disease in the PromoterAI paper.
 </p>
 
 <h2>Display Conventions</h2>
 <p>
 This track is a composite with four bigWig subtracks, one for each possible alternate
-allele (A, C, G, T). When zoomed in, the exact score for each possible mutation is shown
-on mouseover. When zoomed out, the display shows an average across the visible window;
-this average is indicated by a &quot;~&quot; prefix in the mouseover.
+allele (A, C, G, T). When zoomed in, the exact PromoterAI score for each possible
+mutation is shown on mouseover. At wider zooms multiple data points fall into a single
+pixel and averaging scores is not biologically meaningful, so the mouseover displays
+&quot;zoom in to see values&quot; until you zoom in far enough that individual values
+can be shown.
 </p>
 
 <p>
 A fifth subtrack (&quot;PromoterAI overlaps&quot;) shows positions where overlapping
-transcripts produce different scores for the same variant. At these positions, the bigWig
-shows the score with the largest absolute value, while the overlap track shows all
-per-transcript scores. About 3.8% of positions have overlapping transcripts with
-differing scores. The track shows the list of transcripts and scores for these positions.
-Of these, for more than 60% of these positions, the difference is smaller than 0.01, 
-which is why we added a filter, active per default, that hides all annotations in this
-track where the difference is smaller than this cutoff. The filter can be switched off
-on the track configuration page.
+transcripts produce different scores for the same variant. At these positions, the
+bigWig subtracks show the score with the largest absolute value, while the overlap
+track lists every per-transcript score. About 3.8% of variant positions have
+overlapping transcripts with differing scores; for more than 60% of these, the
+difference is smaller than 0.01. A filter, active by default, hides entries whose
+per-transcript score range is smaller than 0.01. The filter can be adjusted or turned
+off on the track configuration page.
+</p>
+
+<p>
+Across all subtracks, coloring follows the direction of the predicted effect:
+<span style="color:#c80000"><b>red</b></span> (bars above the zero line in the bigWigs,
+or filled boxes in the overlap subtrack) indicates predicted over-expression (positive
+score), and <span style="color:#0000c8"><b>blue</b></span> (bars below zero or filled
+boxes) indicates predicted under-expression (negative score).
 </p>
 
 <h2>Data Access</h2>
 <p>
-Due to the data license, this track is not available for bulk download from UCSC.
-The source data can be downloaded from the
-<a href="https://github.com/Illumina/PromoterAI" target="_blank">PromoterAI
-GitHub page</a>.
+The PromoterAI predictions are distributed by Illumina under a license that does not
+permit redistribution, so this track is not available for bulk download from UCSC and
+is excluded from the Table Browser and public API. The original prediction files can
+be obtained directly from Illumina via the license request on the
+<a href="https://github.com/Illumina/PromoterAI" target="_blank">PromoterAI GitHub
+page</a>, which links to the
+<a href="https://primateai3d.basespace.illumina.com/" target="_blank">Illumina
+BaseSpace</a> download.
 </p>
 
 <h2>Methods</h2>
 <p>
-The PromoterAI hg38 TSS-500 file was downloaded. The file
+The PromoterAI hg38 TSS-500 file was downloaded from Illumina BaseSpace. The file
 contains pre-computed scores for all possible single nucleotide substitutions within
 500 bp of annotated TSS positions. For positions covered by multiple transcripts,
 the score with the largest absolute value was used for the bigWig tracks. Positions
 where transcripts produced different scores (4.45M of 118.6M unique variants, 3.8%)
-were additionally written to a bigBed overlap track with per-transcript detail.
-A conversion script is available from
+were additionally written to a bigBed overlap track with per-transcript detail
+(transcript IDs, per-transcript scores, strand, and the maximum pairwise score
+difference). The conversion script is available from
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/promoterAiToBigWig.py"
 target="_blank">our Github</a>.
 </p>
 
 <h2>Credits</h2>
 <p>
-Thanks to Illumina for making PromoterAI predictions publicly available.
+Thanks to Kishore Jaganathan and colleagues at Illumina for making the PromoterAI
+predictions publicly available for academic and non-commercial research.
 </p>
 
 <h2>References</h2>
 <p>
-Gao H, Hamp T, Ede J, Schraiber JG, McRae J, Singer-Berk M, Yang Y, Dietrich ASD,
-Fiziev PP, Kuderna LFK <em>et al</em>.
-<a href="https://doi.org/10.1126/science.abn8197" target="_blank">
-The landscape of tolerated genetic variation in humans and primates</a>.
-<em>Science</em>. 2023 Jun 2;380(6648):eabn8197.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">37262156</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10187174/" target="_blank">PMC10187174</a>
+Jaganathan K, Ersaro N, Novakovsky G, Wang Y, James T, Schwartzentruber J, Fiziev P,
+Kassam I, Cao F, Hawe J <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.ads7373" target="_blank">
+Predicting expression-altering promoter mutations with deep learning</a>.
+<em>Science</em>. 2025 Aug 7;389(6760):eads7373.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40440429" target="_blank">40440429</a>
 </p>

@@ -1395,13 +1395,41 @@ for(; pairs; pairs = pairs->next)
             {
             char *rest = trackHubSkipHubName(cartVars->name);
             char newVarName[4096];
-            
+
             // add the new visibility/setting
             safef(newVarName, sizeof newVarName, "hub_%d_%s", localHubId, rest);
             cartSetString(cart, newVarName, cartVars->val);
 
             // remove the old visibility/setting
             cartRemove(cart, cartVars->name);
+            }
+
+        // if the current db is an assembly hub on this remapped hub,
+        // rewrite the db value and any db-keyed cart vars (e.g. "position.<db>")
+        char oldHubDbPrefix[64];
+        safef(oldHubDbPrefix, sizeof oldHubDbPrefix, "hub_%u_", sessionHubId);
+        char *db = cartOptionalString(cart, "db");
+        if (db != NULL && startsWith(oldHubDbPrefix, db))
+            {
+            char oldDb[4096];
+            char newDb[4096];
+            safef(oldDb, sizeof oldDb, "%s", db);
+            safef(newDb, sizeof newDb, "hub_%u_%s", localHubId, oldDb + strlen(oldHubDbPrefix));
+
+            // rename cart vars whose key ends with ".<oldDb>" (e.g. position.<db>)
+            char dbWildCard[4096];
+            safef(dbWildCard, sizeof dbWildCard, "*.%s", oldDb);
+            struct slPair *dbKeyedVars = cartVarsLike(cart, dbWildCard);
+            for (; dbKeyedVars; dbKeyedVars = dbKeyedVars->next)
+                {
+                int prefixLen = strlen(dbKeyedVars->name) - strlen(oldDb);
+                char newName[4096];
+                safef(newName, sizeof newName, "%.*s%s", prefixLen, dbKeyedVars->name, newDb);
+                cartSetString(cart, newName, dbKeyedVars->val);
+                cartRemove(cart, dbKeyedVars->name);
+                }
+
+            cartSetString(cart, "db", newDb);
             }
 
         // turn on this remapped hub
@@ -1432,6 +1460,9 @@ newDatabase = asmAliasFind(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 
 portHubStatus(cart);
+
+// portHubStatus may have rewritten db to point at a remapped assembly hub id
+dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
 
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart, dbSpec);
 

@@ -1,3 +1,4 @@
+/* jshint esnext: true */
 var assembly1Value = "";
 var assembly2Value = "";
 var genome1 = "";
@@ -156,44 +157,31 @@ function submitForm() {
         "comment=" + encodeURIComponent(comment);
 
     fetch(apiUrl, { method: 'GET' })
-      .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json().catch(() => null); // parse JSON if any
-//        console.log(JSON.stringify(data));
-          localStorage.setItem('liftRequestEmail', email);
-          document.getElementById("formContainer").style.display = "none";
-          document.getElementById("successMessage").style.display = "block";
-        } else {
-          // Try to extract error message from JSON or text
-          let errorMsg = "Error submitting request";
-          try {
-            const errorData = await response.json();
-            if (errorData && errorData.error) {
-              errorMsg = errorData.error;
-            } else {
-              errorMsg = response.statusText || errorMsg;
-            }
-          } catch {
-            // If JSON parse fails, try plain text
-            const text = await response.text();
+      .then((response) => {
+        return response.text().then((text) => {
+          if (response.ok) {
+            localStorage.setItem('liftRequestEmail', email);
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("successMessage").style.display = "block";
+          } else {
+            // Try to extract error message from JSON or text
+            var errorMsg = "Error submitting request";
             try {
-              const parsed = JSON.parse(text);
+              var parsed = JSON.parse(text);
               if (parsed.error) {
                 errorMsg = parsed.error;
-              } else {
-                errorMsg = text || errorMsg;
               }
-            } catch {
-              errorMsg = response.statusText || errorMsg;
+            } catch(e) {
+              errorMsg = text || response.statusText || errorMsg;
             }
+            document.getElementById("errorText").textContent = errorMsg;
+            document.getElementById("errorMessage").style.display = "block";
           }
-          document.getElementById("errorText").textContent = errorMsg;
-          document.getElementById("errorMessage").style.display = "block";
-        }
+        });
       })
       .catch((error) => {
         // Network or other fetch errors
-        const errorMsg = error.message || "Unknown error occurred";
+        var errorMsg = error.message || "Unknown error occurred";
         document.getElementById("errorText").textContent = errorMsg;
         document.getElementById("errorMessage").style.display = "block";
       });
