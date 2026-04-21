@@ -598,7 +598,12 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     tg->items = NULL;
-    tg->networkErrMsg = cloneString("Too many items in display (zoom in)");
+    char *msg = (errCatch->message != NULL && errCatch->message->string != NULL)
+                    ? errCatch->message->string : NULL;
+    if (isNotEmpty(msg))
+        tg->networkErrMsg = cloneString(msg);
+    else
+        tg->networkErrMsg = cloneString("Too many items in display (zoom in)");
     tg->drawItems = bigDrawWarning;
     tg->totalHeight = bigWarnTotalHeight;
     }

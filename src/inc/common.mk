@@ -278,7 +278,7 @@ ifneq ($(MAKECMDGOALS),clean)
     else
         MYSQLCONFIG := mysql_config
     endif
-	
+
     MYSQLINC := $(shell ${MYSQLCONFIG} --include | sed -e 's/-I//' || true)
         # $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
@@ -346,9 +346,10 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
-   L+=${OURSTUFF}/lib/libcurl.a
-   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
-
+   # FIXME: tmp for getting htslib going
+   #L+=${OURSTUFF}/lib/libcurl.a
+   #L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
+   L += -lcurl -llzma -lssl -lcrypto
    ifeq (${HOSTNAME},hgwdev)
        PNGLIB=${OURSTUFF}/lib/libpng.a
        PNGINCL=-I${OURSTUFF}/include/libpng16
