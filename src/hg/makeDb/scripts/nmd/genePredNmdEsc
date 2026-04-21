@@ -15,10 +15,10 @@ RULE_COLORS = {
 }
 
 RULE_DESCRIPTIONS = {
-    1: "Rule 1 - last 50bp of last coding exon junction",
-    2: "Rule 2 - single coding exon, no 3'UTR intron",
-    3: "Rule 3 - first 100bp of coding nucleotides",
-    4: "Rule 4 - PTC in long exon (>400 nt)",
+    1: "<b>Rule 1</b> - last 50bp of last coding exon junction",
+    2: "<b>Rule 2</b> - single coding exon, no 3'UTR intron",
+    3: "<b>Rule 3</b> - first 100bp of coding nucleotides",
+    4: "<b>Rule 4</b> - PTC in long exon (>400 nt)",
 }
 
 # Lindeboom et al. 2016: reduced NMD efficiency for PTCs in exons longer than this
