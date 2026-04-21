@@ -1,23 +1,28 @@
 <h2>Description</h2>
 
 <p>
-This track displays structural variants (SVs) — deletions, insertions, and
-complex substitutions of at least 50 bp — identified by the Chinese
-Pangenome Consortium (CPC) from a pangenome graph built from 58 core samples
-representing 36 Chinese minority ethnic groups, jointly with 47 samples from
-Phase 1 of the Human Pangenome Reference Consortium (HPRC). After
-decomposition of the graph bubbles, each distinct graph site (snarl) is
-displayed as one variant record, with genotypes aggregated across 105
-samples.</p>
+This track displays structural variants (SVs) &mdash; deletions, insertions,
+and complex substitutions of at least 50 bp &mdash; identified by the
+Chinese Pangenome Consortium (CPC) in 58 samples representing 36 Chinese
+minority ethnic groups.</p>
+
+<p>
+The upstream release combined the 58 CPC samples with 47 samples from
+Phase 1 of the Human Pangenome Reference Consortium (HPRC) into a single
+pangenome graph built on the T2T-CHM13v2 assembly with Minigraph-Cactus.
+For this track we recomputed allele counts (AC), allele numbers (AN) and
+sample counts (NS) using only the 58 CPC sample columns (those with
+<tt>HIFI032*</tt> or <tt>RY*</tt> prefixes in the source VCF) and dropped
+all snarls that no CPC sample carries (HPRC-specific SVs). To see the
+HPRC data on its own, use the HPRC SV tracks elsewhere in this collection.</p>
 
 <p>
 A pangenome is a graph that represents many genomes simultaneously, letting
 variants that are missing from a single linear reference be captured and
-typed directly. Because the CPC pangenome was built on the T2T-CHM13v2
-assembly, variants are shown natively on the hs1 browser and lifted to hg38
-using the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain. About 16% of the
-97,205 hs1 sites did not lift over cleanly (usually in highly repetitive
-regions added to T2T-CHM13).</p>
+typed directly. Variants are shown natively on the hs1 browser and lifted
+to hg38 using the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain. The track
+contains 46,092 snarl sites on hs1 and 36,030 lifted to hg38 (10,062 did
+not lift, typically in T2T-added repetitive regions).</p>
 
 <h2>Display conventions</h2>
 
@@ -45,8 +50,10 @@ graph but has no meaning outside the CPC pangenome graph file.</p>
 <p>
 The source VCF was decomposed with <tt>bcftools norm -m -any</tt>, so each
 graph snarl appears as one VCF row per alternative allele (a single
-bubble in the graph may have 2-20+ alt paths). For display, all alternative
-alleles sharing the same snarl ID are collapsed into one track item:</p>
+bubble in the graph may have 2-20+ alt paths). For this track we first
+compute the CPC-only allele count per alt, drop any alt that no CPC sample
+carries, then collapse all remaining alts sharing the same snarl ID into
+one track item:</p>
 <ul>
   <li><b>SV type</b> is the common class of all alts, or <tt>MIXED</tt> if
       they disagree (for example one alt is a DEL and another is an INS).</li>

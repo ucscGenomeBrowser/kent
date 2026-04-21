@@ -208,6 +208,9 @@ bedSort hgsvc3.bed hgsvc3.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc3.as \
     -tab hgsvc3.sorted.bed /hive/data/genomes/hg38/chrom.sizes hgsvc3.bb
 
+# The same process is applied natively to T2T-CHM13 (hs1) using the HGSVC3
+# T2T-CHM13 annotation tables. See ~/kent/src/hg/makeDb/doc/hs1/lrSv.txt.
+
 ##########
 # 2026-04-17 Claude max
 
@@ -412,3 +415,20 @@ bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvAprBuild.sh
 mkdir -p /gbdb/hs1/lrSv /gbdb/hg38/lrSv
 ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hs1.bb  /gbdb/hs1/lrSv/apr.bb
 ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hg38.bb /gbdb/hg38/lrSv/apr.bb
+
+##########
+# 2026-04-21 Claude max
+#
+# cpc1Sv rebuilt as CPC-only (58 samples). The upstream VCF contains
+# 105 samples (58 CPC + 47 HPRC Phase 1). For this version we
+# identify the 58 CPC columns by sample name prefix (HIFI032* or
+# RY*), recompute AC/AN/NS from those GT columns only, and drop
+# snarls where no CPC sample carries any alt. HPRC-specific SVs are
+# therefore excluded; the HPRC contribution is already represented
+# in the HPRC SV tracks elsewhere in this lrSv supertrack.
+#
+# Pipeline (same build script, updated Python converter):
+cd /hive/data/genomes/hg38/bed/lrSv/cpc1
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
+#   hs1 sites: 46,092 (down from 97,205 combined)
+#   hg38 lifted: 36,030 (down from 81,261); 10,062 unmapped
