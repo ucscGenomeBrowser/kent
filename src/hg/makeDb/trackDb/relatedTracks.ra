@@ -103,3 +103,18 @@ hg38 lrSv dgvPlus Database of Genomic Variants (DGV) structural variation catalo
 hg38 dgvPlus lrSv Long-read structural variants across multiple cohorts
 hg38 lrSv giabSv Genome in a Bottle high-confidence SV benchmark callsets
 hg38 giabSv lrSv Long-read structural variants across multiple cohorts
+
+# PrimateAI-3D cross-links:
+hg38 primateAi alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor
+hg38 alphaMissense primateAi PrimateAI-3D, a similar deep-learning missense pathogenicity predictor using primate variation
+hg38 primateAi revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg38 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation and 3D protein structure
+
+hg19 primateAi revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg19 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation and 3D protein structure
+
+# PromoterAI cross-links:
+hg38 promoterAi primateAi PrimateAI-3D, a companion deep-learning model from Illumina for coding (missense) variants
+hg38 primateAi promoterAi PromoterAI, a companion deep-learning model from Illumina for non-coding promoter variants
+hg38 promoterAi alphaMissense AlphaMissense, a deep-learning predictor of missense (coding) variant pathogenicity
+hg38 alphaMissense promoterAi PromoterAI, a deep-learning predictor of expression-altering variants in promoter regions
