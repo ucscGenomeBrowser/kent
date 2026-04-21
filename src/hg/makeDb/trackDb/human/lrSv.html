@@ -80,6 +80,13 @@ Illumina short-read), which is included as a short-read comparator.
   <td>99,980</td>
 </tr>
 <tr>
+  <td><a href="hgTrackUi?g=tommoJpCnv">ToMMo 48K CNV</a></td>
+  <td>48,874</td>
+  <td>Japanese, general population (<b>short-read comparator</b> for ToMMo long-read SVs)</td>
+  <td><b>Illumina short-read</b> (GATK CNV, 1 kb bins, shown as two bigWigs)</td>
+  <td colspan="4">~2M bins with CNV carriers; not comparable to per-SV counts above</td>
+</tr>
+<tr>
   <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
   <td>1,027</td>
   <td>All of Us, self-identified Black/African American</td>
@@ -194,7 +201,8 @@ Structural variants from Oxford Nanopore long-read sequencing of 100
 by the 1000 Genomes ONT Sequencing Consortium and described in
 Gustafson et al. 2024. 113,696 SVs (insertions, deletions, duplications,
 inversions) called with five callers and merged with Jasmine. This is a
-separate dataset from the Vienna 1KG-ONT release below.
+separate dataset from the Vienna 1KG-ONT release below; the 100 samples
+here do not overlap with the 1,019 samples in the Vienna release.
 </p>
 
 <h3>1KG ONT Vienna SVs (<a href="hgTrackUi?g=lrSv1kgOnt">lrSv1kgOnt</a>)</h3>
@@ -203,6 +211,8 @@ Structural variants from 1,019 individuals across 26 populations (1000 Genomes O
 161,332 SVs annotated with SVAN, classifying insertions and deletions by mechanism
 of origin (mobile elements, VNTRs, processed pseudogenes, etc.).
 Original coordinates are on T2T-CHM13 (hs1); the hg38 version was created via liftOver.
+This is a separate dataset from the 1KG ONT 100 (Gustafson et al.) track above;
+the 1,019 samples here do not overlap with the 100 samples in that release.
 </p>
 
 <h3>ToMMo Japanese SVs (<a href="hgTrackUi?g=tommoJpSv">tommoJpSv</a>)</h3>
@@ -210,6 +220,16 @@ Original coordinates are on T2T-CHM13 (hs1); the hg38 version was created via li
 Structural variants from 333 Japanese individuals (111 trios) from the Tohoku Medical
 Megabank (ToMMo). 74,201 SVs (deletions and insertions) with trio-based Mendelian
 error rates and allele frequencies.
+</p>
+
+<h3>ToMMo 48K CNV SR (<a href="hgTrackUi?g=tommoJpCnv">tommoJpCnv</a>) - short-read comparator</h3>
+<p>
+<b>Short-read CNV comparator for the ToMMo long-read SV track above.</b>
+Per-1 kb-bin copy-number carrier counts from short-read whole-genome
+sequencing of 48,874 Japanese individuals (jMorp 48KJPN-CNV Frequency
+Panel, release 20230828), called with GATK CNV germline workflows.
+Shown as a multiWig overlay: red = samples with copy-number loss
+(CN&lt;2) per bin, green = samples with gain (CN&gt;2) per bin.
 </p>
 
 <h3>AoU 1K SVs (<a href="hgTrackUi?g=aou1kSv">aou1kSv</a>)</h3>
