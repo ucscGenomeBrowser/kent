@@ -1,0 +1,20 @@
+track ncbiCloneEndsCH1073
+shortLabel NCBI CH1073 BAC
+longLabel NCBI CH1073 BAC library clone end placements, unique concordant (end-seq)
+group map
+visibility hide
+type bigBed 6 +
+bigDataUrl /gbdb/danRer11/ncbiCloneEndsCH1073/CH1073.bb
+color 60,100,160
+url https://zfin.org/search?q=$$
+urlLabel ZFIN clone search:
+filterValues.concordant TRUE,FALSE
+filterLabel.concordant End-pair concordance
+filterType.concordant multipleListOnlyOr
+filterValues.unique TRUE,FALSE
+filterLabel.unique Unique placement
+filterType.unique multipleListOnlyOr
+filterValues.oversize TRUE,FALSE
+filterLabel.oversize Oversize placement (>500kb)
+filterType.oversize multipleListOnlyOr
+skipFields score,strand,placementMethod
