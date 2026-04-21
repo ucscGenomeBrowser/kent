@@ -42,13 +42,35 @@ with Mendelian errors and total families with complete genotype calls</li>
 
 <h2>Methods</h2>
 <p>
-Oxford Nanopore sequencing was performed on genomic DNA extracted from activated
-T lymphocytes of 333 individuals (111 trios) from the Tohoku Medical Megabank
-(ToMMo) cohort. SV calling was performed with Sniffles on each sample, and
-calls were merged across individuals with SURVIVOR v1.0.6 using a maximum
-distance of 1 kbp. Allele frequencies were computed from 222 unrelated parents
-(excluding offspring to avoid double-counting). Mendelian error rates were
-calculated by checking transmission consistency within each trio family.
+Otsuki et al. 2022 extracted high-molecular-weight genomic DNA from activated
+T lymphocytes of 333 individuals (111 parent-offspring trios) from the Tohoku
+Medical Megabank (ToMMo) BirThree cohort and performed Oxford Nanopore
+whole-genome sequencing on PromethION instruments with R9.4.1 flow cells
+(SQK-LSK109 libraries, Guppy v4.2.2 high-accuracy base-calling). After QC,
+median per-sample sequencing coverage was 22.2x with a read N50 of 25.8 kb.
+Reads were aligned to GRCh38 with LRA, SVs were called per sample with
+<a href="https://github.com/tjiangHIT/cuteSV" target="_blank">CuteSV</a>
+v1.0.9 (<tt>-min_sv_length 50</tt>), and per-sample calls were merged with
+<a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">SURVIVOR</a>
+v1.0.6 (1000 bp distance, type-match, no length-match) into a nonredundant
+panel of 74,201 autosomal SVs (37,981 deletions and 36,220 insertions).
+Over 95% of the SVs were concordant with Mendelian inheritance in the 111
+trio families; allele frequencies in this track are computed from the 222
+unrelated parents to avoid double-counting.
+</p>
+<p>
+The site-only VCF <tt>tommo-JSV1-20211208-GRCh38-without-genotype-count.vcf.gz</tt>
+was downloaded from the jMorp JSV1 dataset page,
+<a href="https://jmorp.megabank.tohoku.ac.jp/datasets/tommo-jsv1-20211208-af" target="_blank">
+tommo-jsv1-20211208-af</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

@@ -111,6 +111,32 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvTommoJp.as
     -tab tommoJp.sorted.bed /hive/data/genomes/hg38/chrom.sizes tommoJp.bb
 
 ##########
+# 2026-04-21 Claude max
+
+# ToMMo 48KJPN CNV Frequency Panel - short-read CNV comparator to the
+# long-read tommoJpSv track above. 48,874 Japanese individuals,
+# short-read WGS, GATK CNV germline workflow at 1 kb bin resolution.
+# Data page: https://jmorp.megabank.tohoku.ac.jp/downloads/tommo-jcnvv1-20230828
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/tommoJpCnv
+cd /hive/data/genomes/hg38/bed/lrSv/tommoJpCnv
+wget https://jmorp.megabank.tohoku.ac.jp/datasets/tommo-jcnvv1-20230828/files/tommo-jcnvv1-20230828-GRCh38.vcf.gz
+
+# The VCF has one record per 1 kb non-N bin with per-ALT sample counts
+# (SC) for each observed CN state (CN0..CN5). The converter collapses
+# the per-CN counts into two per-bin values (samples with CN<2, samples
+# with CN>2) and writes two bedGraphs, skipping bins with no CNV
+# carrier. Displayed as a multiWig transparent overlay via trackDb
+# (loss red / gain green) so CNV carrier-count density is visible at
+# any zoom level. 2,006,905 bins kept.
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvTommoJpCnvVcfToBedGraph.py \
+    tommo-jcnvv1-20230828-GRCh38.vcf.gz tommoJpCnvLoss.bg tommoJpCnvGain.bg
+sort -k1,1 -k2,2n tommoJpCnvLoss.bg > tommoJpCnvLoss.sorted.bg
+sort -k1,1 -k2,2n tommoJpCnvGain.bg > tommoJpCnvGain.sorted.bg
+bedGraphToBigWig tommoJpCnvLoss.sorted.bg /hive/data/genomes/hg38/chrom.sizes tommoJpCnvLoss.bw
+bedGraphToBigWig tommoJpCnvGain.sorted.bg /hive/data/genomes/hg38/chrom.sizes tommoJpCnvGain.bw
+
+##########
 # 2026-03-26 Claude max
 
 # Fourth subtrack: AoU 1K - SVs from 1,027 AoU individuals (PacBio HiFi)
