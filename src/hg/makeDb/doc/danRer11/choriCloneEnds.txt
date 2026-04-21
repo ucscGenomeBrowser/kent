@@ -1,0 +1,36 @@
+# CHORI zebrafish BAC library clone end placements track, refs #35059
+# 2026-04-21 Claude max
+#
+# NCBI Clone DB publishes per-library "unique_concordant" placement GFFs
+# under https://ftp.ncbi.nih.gov/repository/clone/reports/Danio_rerio/ ,
+# computed against GRCz11 (danRer11). We expose three CHORI libraries
+# (CH73, CH211, CH1073) as a superTrack on danRer11.
+
+mkdir -p /hive/data/genomes/danRer11/bed/choriCloneEnds
+cd    /hive/data/genomes/danRer11/bed/choriCloneEnds
+
+# One-time: NCBI assembly report (col 7 RefSeq acc -> col 10 UCSC name).
+curl -sS -o GCF_000002035.6.assembly.txt \
+  'https://ftp.ncbi.nih.gov/genomes/all/GCF/000/002/035/GCF_000002035.6_GRCz11/GCF_000002035.6_GRCz11_assembly_report.txt'
+
+~/kent/src/hg/makeDb/scripts/choriCloneEnds/refSeqNames.py \
+    GCF_000002035.6.assembly.txt > refSeq.ucscName.tab
+# 1923 mappings, all names present in /hive/data/genomes/danRer11/chrom.sizes
+
+# Build each library with the same converter + autoSql. The name column
+# is indexed (-extraIndex=name) so clone names like CH1073-100A1 resolve
+# from the browser position box via "searchIndex name" in the trackDb.
+for LIB in CH1073 CH73 CH211; do
+    mkdir -p $LIB && cd $LIB
+    curl -sS -o $LIB.unique_concordant.gff \
+      https://ftp.ncbi.nih.gov/repository/clone/reports/Danio_rerio/$LIB.GCF_000002035.6.105.unique_concordant.gff
+    ~/kent/src/hg/makeDb/scripts/choriCloneEnds/makeBed.py \
+        ../refSeq.ucscName.tab /hive/data/genomes/danRer11/chrom.sizes \
+        $LIB.unique_concordant.gff > $LIB.bed 2> makeBed.log
+    sort -k1,1 -k2,2n $LIB.bed > $LIB.sorted.bed
+    bedToBigBed -extraIndex=name -type=bed6+7 \
+        -as=$HOME/kent/src/hg/makeDb/scripts/choriCloneEnds/cloneEnds.as \
+        -tab $LIB.sorted.bed /hive/data/genomes/danRer11/chrom.sizes $LIB.bb
+    cd ..
+done
+# clone_insert row counts: CH1073 210777, CH73 99141, CH211 70231.
