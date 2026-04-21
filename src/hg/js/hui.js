@@ -89,11 +89,15 @@ function matSelectViewForSubTracks(obj,view)
 
 function exposeAll()
 {
-    // Make main display dropdown show pack if currently hide
+    // Unhide composite vis. Prefers data-last-viz (stashed by hideCompositeSaveVis()
+    // when [-] or the last subtrack were unchecked), then pack, dense, else last option.
     var visDD = normed($("select.visDD"));
     if (visDD) {
         if ($(visDD).prop('selectedIndex') === 0) {
-            if ($(visDD).children('option[value="pack"]').length)
+            var saved = $(visDD).attr("data-last-viz");
+            if (saved && $(visDD).children('option[value="'+saved+'"]').length)
+                $(visDD).val(saved);
+            else if ($(visDD).children('option[value="pack"]').length)
                 $(visDD).val("pack");
             else if ($(visDD).children('option[value="dense"]').length)
                 $(visDD).val("dense");
@@ -105,6 +109,19 @@ function exposeAll()
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
         if ($(visDD).hasClass('superChild'))
             visTriggersHiddenSelect(visDD);
+    }
+}
+
+function hideCompositeSaveVis()
+{
+    // Set composite vis dropdown to hide, stashing the current value in data-last-viz
+    // so exposeAll() can restore it. We set selectedIndex directly without triggering
+    // 'change', because propagateVis re-checks all subCBs when checkedCount===0.
+    var visDD = normed($("select.visDD"));
+    if (visDD && $(visDD).prop('selectedIndex') !== 0) {
+        $(visDD).attr("data-last-viz", $(visDD).val());
+        $(visDD).prop('selectedIndex', 0);
+        $(visDD).addClass('changed');
     }
 }
 
@@ -206,15 +223,8 @@ function _matSetMatrixCheckBoxes(state)
     });
     if (state)
         exposeAll();  // Unhide composite vis?
-    else if ($("input.subCB:checked:visible").length === 0) {
-        // Set composite to hide directly, without triggering propagateVis
-        // (which would re-check all subCBs when checkedCount===0).
-        var visDD = normed($("select.visDD"));
-        if (visDD && $(visDD).prop('selectedIndex') !== 0) {
-            $(visDD).prop('selectedIndex', 0);
-            $(visDD).addClass('changed');
-        }
-    }
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
 
@@ -292,6 +302,11 @@ function matSubCBsCheck(state)
         }
     } else  // state not checked so no filtering by other matCBs needed
         subCBs.each( function (i) { matSubCBcheckOne(this,state); });
+
+    if (state)
+        exposeAll();  // Unhide composite vis?
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
 
     return true;
 }
