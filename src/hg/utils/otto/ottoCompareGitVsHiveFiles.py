@@ -19,6 +19,7 @@ import subprocess
 import getpass
 import filecmp
 import os
+from datetime import datetime
 
 def bash(cmd):
     """Input bash cmd and return stdout"""
@@ -26,13 +27,15 @@ def bash(cmd):
     return(rawOutput.stdout.split('\n')[0:-1])
 
 
-def parseGitFilesAndMd5sums(fileListWithMd5sum,fileNameDic,fileNameHiveMatches):
+def parseGitFilesAndMd5sums(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath):
     for fileMd5 in fileListWithMd5sum:
         md5sum = fileMd5.split(" ")[0]
-        fileName = fileMd5.split("  ")[1].split("/")[-1]
+        gitPath = fileMd5.split("  ")[1]
+        fileName = gitPath.split("/")[-1]
         fileNameDic[fileName] = md5sum
+        fileNameGitPath[fileName] = gitPath
         fileNameHiveMatches[fileName] = []
-    return(fileNameDic,fileNameHiveMatches)
+    return(fileNameDic, fileNameHiveMatches, fileNameGitPath)
 
 
 def searchHiveFiles(fileNameDic,fileNameHiveMatches):
@@ -45,29 +48,48 @@ def searchHiveFiles(fileNameDic,fileNameHiveMatches):
                 if os.path.isfile(fileHit):
                     if os.access(fileHit, os.R_OK):
                         fileHitMd5Sum = bash('md5sum '+fileHit)
-                        fileNameHiveMatches[fileName].append(fileHitMd5Sum[0].split("  ")[0])
+                        md5 = fileHitMd5Sum[0].split("  ")[0]
+                        fileNameHiveMatches[fileName].append((md5, fileHit))
     return(fileNameHiveMatches)
     
-def compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches):
+def compareGitMd5sumsToHiveMd5sums(fileNameDic, fileNameHiveMatches, fileNameGitPath):
     """Compare md5sums between files in git and all matching files in hive"""
+    headerPrinted = False
     for fileName in fileNameDic.keys():
-        if fileNameDic[fileName] in fileNameHiveMatches[fileName]:
+        hiveMd5s = [m for m, _ in fileNameHiveMatches[fileName]]
+        if fileNameDic[fileName] in hiveMd5s:
             continue
-            print("Found matching file: "+fileName)
-        elif fileNameHiveMatches[fileName] == []:
+        elif not fileNameHiveMatches[fileName]:
             continue
-            print("File was never found: "+fileName)
         else:
-            print("The following otto file was found, but the md5sum of the git file did not match the one running on hive: "+fileName)
-            
+            if not headerPrinted:
+                print("The following otto file(s) were found, but the md5sum of the git file did not match the one running on hive.")
+                headerPrinted = True
+            gitPath = fileNameGitPath[fileName]
+            # Use last commit time, not working-tree mtime: checkout resets mtime to checkout time.
+            gitTimeRaw = bash(f"git -C ~/kent log -1 --format=%ct -- {gitPath}")
+            gitTime = int(gitTimeRaw[0]) if gitTimeRaw else 0
+            print(f"\n======= {fileName} =======")
+            print(f"  git:  {gitPath}\n        (last commit: {datetime.fromtimestamp(gitTime)})")
+            for md5, hivePath in fileNameHiveMatches[fileName]:
+                hiveTime = int(os.path.getmtime(hivePath))
+                if gitTime > hiveTime:
+                    message = "git is newer and hive needs to be updated."
+                else:
+                    message = "hive is newer and git needs to be updated."
+                print(f"\n  hive: {hivePath}\n        (mtime: {datetime.fromtimestamp(hiveTime)})")
+                print(f"\n  {message}")
+
+
 
 def findGitFilesBuildDics():
     """Find all files in git minus exceptions and get md5sums, build dics"""
     fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -Ev 'uniprot|ncbiRefSeq|crontab|README*|clinvarSubLolly|makefile|.c$|sarscov2phylo|nextstrainNcov|knownGene|rsv/exclude.ids|mask.bed|.gitignore|R00000039_repregions.bed' | xargs md5sum")
-    fileNameDic = {}
-    fileNameHiveMatches = {}
+    fileNameDic = {}        # basename -> git md5sum
+    fileNameHiveMatches = {}  # basename -> [(hive md5sum, hive full path), ...]
+    fileNameGitPath = {}    # basename -> git full path
     fileListWithMd5sum[0].split("  ")
-    return(fileListWithMd5sum,fileNameDic,fileNameHiveMatches)
+    return(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath)
     
 def checkCrontabDifferences():
     """Looks for differences between the committed otto crontab and the one running"""
@@ -100,10 +122,10 @@ def main():
     """
     Initialized options and calls other functions.
     """
-    fileListWithMd5sum,fileNameDic,fileNameHiveMatches = findGitFilesBuildDics()
-    parseGitFilesAndMd5sums(fileListWithMd5sum,fileNameDic,fileNameHiveMatches)
-    searchHiveFiles(fileNameDic,fileNameHiveMatches)
-    compareGitMd5sumsToHiveMd5sums(fileNameDic,fileNameHiveMatches)
+    fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath = findGitFilesBuildDics()
+    parseGitFilesAndMd5sums(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath)
+    searchHiveFiles(fileNameDic, fileNameHiveMatches)
+    compareGitMd5sumsToHiveMd5sums(fileNameDic, fileNameHiveMatches, fileNameGitPath)
     checkCrontabDifferences()
 
 main()
