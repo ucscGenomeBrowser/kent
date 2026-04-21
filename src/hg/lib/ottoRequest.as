@@ -8,7 +8,7 @@ table ottoRequest
     string email;     "user email address"
     lstring comment;   "other comments from the input form"
     string requestTime; "date time request was added"
-    ubyte doneStatus;   "# 1 == process is complete, 0 == process to be done"
+    ubyte doneStatus;   "0 == pending, 1 == notified/in progress, 2 == complete"
     string workflowId;	"galaxy workflow ID"
     string completeTime; "date time for process completed and user notified"
     )
