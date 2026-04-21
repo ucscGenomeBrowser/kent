@@ -12,6 +12,20 @@
 # single CDS exon (UTR introns) as "intronless", AND silently suppressed their
 # Rule 1/3/4 assignments via the if/else short-circuit. ~3,253 RefSeq curated
 # transcripts and ~2,000 Gencode transcripts reassigned. Rebuilt both tracks.
+#
+# 2026-04-21 lrnassar: Refined Rule 2 gate to reflect the real NMD biology:
+# "single coding exon AND no 3'UTR intron" instead of "exonCount==1".
+# 5'UTR introns do not deposit EJCs downstream of the stop codon (their EJCs
+# are cleared by the scanning 40S or sit upstream of the stop codon and are
+# never encountered by the terminating ribosome), so transcripts with a single
+# coding exon and only 5'UTR introns are NMD-immune and belong in Rule 2.
+# Transcripts with a single coding exon but a 3'UTR intron remain in Rules 1/3
+# because that intron deposits a downstream EJC. Reclassified 3,113 RefSeq
+# curated transcripts (95.7% of the single-CDS-exon set with UTR introns) and
+# 10,790 Gencode V49 transcripts into Rule 2.
+# Post-fix rule counts (collapsed regions):
+#   RefSeq Curated:  R1=54,015  R2=2,942  R3=49,443  R4=6,503  (total 112,903)
+#   Gencode V49:     R1=134,464 R2=6,599  R3=85,319  R4=7,547  (total 233,929)
 
 cd /hive/data/genomes/hg38/bed/nmd/gencode/
 
