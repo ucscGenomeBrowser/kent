@@ -352,8 +352,8 @@ visibility hide
     track kwanhoSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
-    shortLabel Kim PD Brain SVs
-    longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi)
+    shortLabel Kim PD Brain SVs (preliminary)
+    longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
     type bigBed 9 +
     itemRgb on
     visibility dense
