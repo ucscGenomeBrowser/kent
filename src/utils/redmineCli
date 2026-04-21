@@ -331,7 +331,14 @@ def resolve_tracker(name_or_id):
 
 
 def prepend_attribution(text):
-    """Prepend 'From Claude:' attribution to text for write operations."""
+    """Prepend 'From Claude:' attribution to text for write operations.
+
+    Idempotent: if the text already begins with a 'From Claude:' attribution
+    line (e.g. '**From Claude:**', '***From Claude:***'), return it unchanged
+    so the header is not duplicated when Claude models include it in the body.
+    """
+    if text and re.match(r'^\s*\*+\s*From Claude:?\s*\*+', text, re.IGNORECASE):
+        return text
     return ATTRIBUTION + text
 
 
