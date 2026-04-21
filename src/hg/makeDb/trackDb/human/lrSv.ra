@@ -13,6 +13,7 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
+    dataVersion v1.2.0
     mouseOver <b>$name</b> ($svType) len=$svLen AF=$af AC=$AC (Hom:$AC_Hom Het:$AC_Het Hemi:$AC_Hemi) samples=$NS
     searchIndex name
     filterValues.svType DEL,INS,INV
@@ -409,8 +410,8 @@ visibility hide
     track cpc1Sv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/cpc1.bb
-    shortLabel CPC+HPRC 105 SVs
-    longLabel Structural Variants from CPC + HPRC Phase 1 Pangenome (105 samples, 58 Chinese + 47 HPRC)
+    shortLabel CPC 58 SVs
+    longLabel Structural Variants from Chinese Pangenome Consortium (58 samples, CPC portion of the CPC+HPRC graph; HPRC-specific SVs removed)
     type bigBed 9 +
     itemRgb on
     visibility dense

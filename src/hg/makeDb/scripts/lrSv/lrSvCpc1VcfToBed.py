@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Convert the CPC+HPRC Phase 1 pangenome VCF (on T2T-CHM13v2) to a
-bed9+7 table for the lrSv/cpc1Sv track.
+bed9+7 table for the lrSv/cpc1Sv track, RECOMPUTING AC/AN/NS using only
+the 58 CPC (Chinese Pangenome Consortium) sample columns and dropping
+snarls with no CPC carriers.
 
 The input VCF is produced by vcfwave/bcftools norm from a pangenome
 graph, so:
@@ -8,22 +10,28 @@ graph, so:
   * variant IDs are graph snarl traversals like ">2541>2547"
   * REF and ALT are always explicit sequences (no symbolic ALTs)
   * each snarl may appear as several rows, one per decomposed alt allele
+  * the 105 sample columns are 47 HPRC (HG*, NA*) + 58 CPC (HIFI032*, RY*)
 
-This script:
-  1. strips the "CHM13v2." contig prefix (hs1 chrom names)
-  2. classifies each alt allele by length delta d = len(ALT)-len(REF):
+Pipeline:
+  1. Parse the #CHROM header to identify the 58 CPC sample column indices
+     by prefix (HIFI032* or RY*).
+  2. Strip the "CHM13v2." contig prefix for hs1 chrom names.
+  3. For each VCF row, read the GT field for each CPC sample and compute
+     CPC-only AC (count of "1" alleles), AN (count of non-missing alleles),
+     and NS (CPC samples with at least one called allele).
+  4. Classify each alt allele by length delta d = len(ALT)-len(REF):
          d >= +50   -> INS
          d <= -50   -> DEL
          |d| < 50 and max(len) >= 50 -> CPX
          otherwise  -> dropped (below 50bp threshold)
-  3. groups all alt alleles that share the same graph snarl ID into one
-     output row, taking:
+  5. Drop rows where CPC AC == 0 (HPRC-specific alts).
+  6. Collapse all remaining alts sharing the same snarl ID into one output row:
          svType = that class if all alts agree, else MIXED
          svLen  = max |d| across alts
-         alleleCount = sum of per-alt AC
-         alleleNumber = AN (constant for the snarl)
+         alleleCount = sum of per-alt CPC AC
+         alleleNumber = CPC AN
          alleleFreq   = alleleCount / alleleNumber
-     The BED interval spans from POS-1 to POS-1 + len(REF).
+         numSamples   = CPC NS
 
 Usage:
     lrSvCpc1VcfToBed.py input.vcf.gz output.bed chrom.sizes
@@ -31,7 +39,6 @@ Usage:
 
 import gzip
 import sys
-from collections import defaultdict
 
 # Colors per SV type
 COLORS = {
@@ -44,17 +51,9 @@ COLORS = {
 SIZE_THRESHOLD = 50
 
 
-def parse_info(info_str):
-    d = {}
-    for token in info_str.split(";"):
-        if not token:
-            continue
-        if "=" in token:
-            k, v = token.split("=", 1)
-            d[k] = v
-        else:
-            d[token] = True
-    return d
+def is_cpc_sample(name):
+    """CPC samples are HIFI032* (Chinese, 47) and RY* (Chinese, 11)."""
+    return name.startswith("HIFI032") or name.startswith("RY")
 
 
 def classify(ref_len, alt_len):
@@ -68,14 +67,29 @@ def classify(ref_len, alt_len):
     return None, 0
 
 
+def compute_cpc_counts(gt_cols):
+    """Return (ac, an, ns) across the given CPC GT strings for a single alt."""
+    ac = 0
+    an = 0
+    ns = 0
+    for gt in gt_cols:
+        # GT may be "0|0", "1|0", ".|1", ".|.", "0/1", etc.
+        has_called = False
+        for a in gt.replace("/", "|").split("|"):
+            if a == ".":
+                continue
+            an += 1
+            has_called = True
+            if a == "1":
+                ac += 1
+        if has_called:
+            ns += 1
+    return ac, an, ns
+
+
 def emit(site, fout):
-    """site is dict: chrom, pos0, ref_len, name, types (set), svlen,
-    ac_sum, an, ns."""
     classes = site["types"]
-    if len(classes) == 1:
-        sv_type = next(iter(classes))
-    else:
-        sv_type = "MIXED"
+    sv_type = next(iter(classes)) if len(classes) == 1 else "MIXED"
     rgb = COLORS[sv_type]
     chrom = site["chrom"]
     start = site["pos0"]
@@ -107,7 +121,6 @@ def main():
     out_file = sys.argv[2]
     sizes_file = sys.argv[3]
 
-    # Load chrom sizes for validation / clipping
     chrom_sizes = {}
     with open(sizes_file) as f:
         for line in f:
@@ -116,23 +129,38 @@ def main():
 
     opener = gzip.open if in_file.endswith(".gz") else open
 
-    # Accumulator: key = (chrom, pos0, snarl_id)
-    # We stream the file and flush a site whenever we encounter a new key,
-    # because the VCF is sorted and decomposed alts of the same snarl are
-    # adjacent.
+    cpc_col_idx = None  # set when we parse #CHROM header
+
     prev_key = None
     site = None
     kept_rows = 0
     dropped_small = 0
+    dropped_no_cpc_carrier = 0
     dropped_chrom = 0
     flushed_sites = 0
 
     with opener(in_file, "rt") as fin, open(out_file, "w") as fout:
         for line in fin:
-            if line.startswith("#"):
+            if line.startswith("##"):
                 continue
-            f = line.rstrip("\n").split("\t", 8)
-            chrom_raw, pos, vid, ref, alt, qual, filt, info = f[:8]
+            if line.startswith("#CHROM"):
+                # Sample columns start at index 9.
+                cols = line.rstrip("\n").split("\t")
+                sample_names = cols[9:]
+                cpc_col_idx = [
+                    9 + i for i, n in enumerate(sample_names) if is_cpc_sample(n)
+                ]
+                print(f"CPC samples found: {len(cpc_col_idx)}", file=sys.stderr)
+                if len(cpc_col_idx) == 0:
+                    sys.exit("ERROR: no CPC sample columns (HIFI032* or RY*) detected")
+                continue
+
+            if cpc_col_idx is None:
+                sys.exit("ERROR: data line before #CHROM header")
+
+            f = line.rstrip("\n").split("\t")
+            chrom_raw, pos, vid, ref, alt = f[0], f[1], f[2], f[3], f[4]
+
             if chrom_raw.startswith("CHM13v2."):
                 chrom = chrom_raw[len("CHM13v2."):]
             else:
@@ -148,17 +176,14 @@ def main():
                 dropped_small += 1
                 continue
 
-            info_d = parse_info(info)
-            def _int(val, default=0):
-                try:
-                    return int(str(val).split(",")[0])
-                except (ValueError, TypeError):
-                    return default
-            ac = _int(info_d.get("AC", 0))
-            an = _int(info_d.get("AN", 0))
-            ns = _int(info_d.get("NS", 0))
-            pos0 = int(pos) - 1
+            # Extract CPC GTs and compute AC/AN/NS
+            gt_cols = [f[i] for i in cpc_col_idx]
+            ac, an, ns = compute_cpc_counts(gt_cols)
+            if ac == 0:
+                dropped_no_cpc_carrier += 1
+                continue
 
+            pos0 = int(pos) - 1
             key = (chrom, pos0, vid)
             if key != prev_key:
                 if site is not None:
@@ -183,7 +208,6 @@ def main():
                 site["svlen"] = mag
             site["num_alts"] += 1
             site["ac_sum"] += ac
-            # AN, NS should be the same across alts of one site; keep max just in case
             if an > site["an"]:
                 site["an"] = an
             if ns > site["ns"]:
@@ -194,10 +218,11 @@ def main():
             emit(site, fout)
             flushed_sites += 1
 
-    print(f"kept alt rows:        {kept_rows}", file=sys.stderr)
+    print(f"kept alt rows (CPC carrier):   {kept_rows}", file=sys.stderr)
+    print(f"dropped no CPC carrier:        {dropped_no_cpc_carrier}", file=sys.stderr)
     print(f"dropped <{SIZE_THRESHOLD}bp alt rows: {dropped_small}", file=sys.stderr)
-    print(f"dropped bad chrom:    {dropped_chrom}", file=sys.stderr)
-    print(f"output sites:         {flushed_sites}", file=sys.stderr)
+    print(f"dropped bad chrom:             {dropped_chrom}", file=sys.stderr)
+    print(f"output sites:                  {flushed_sites}", file=sys.stderr)
 
 
 if __name__ == "__main__":
