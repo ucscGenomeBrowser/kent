@@ -19,19 +19,37 @@ This track shows 70.7 million scored variants across all protein-coding genes.
 <h2>Display Conventions</h2>
 <p>
 Each variant is colored <span style="color:blue">blue (benign)</span> or
-<span style="color:red">red (pathogenic)</span> based on the raw score.
-The score field (0-1000) represents the percentile rank of the raw PrimateAI-3D score,
-where higher values indicate greater predicted pathogenicity.
-Mouseover shows the nucleotide change, amino acid change, raw score, percentile, and prediction.
-Items can be filtered by prediction (benign/pathogenic) and by percentile score.
+<span style="color:red">red (pathogenic)</span> based on the Illumina-provided
+<b>Prediction</b> field. Because the three possible alternate bases at a given
+position sometimes produce the same amino acid change (codon degeneracy),
+each item is labeled by default with its <b>nucleotide change</b> (e.g. <code>C&gt;T</code>)
+rather than its amino acid change. The label can be switched to the amino acid
+change via the &quot;Label fields&quot; control in the Track Settings.
 </p>
 
 <p>
-Score interpretation: raw scores range from 0 to 1, with higher values indicating greater
-predicted pathogenicity. The authors suggest a clinical threshold of 0.821 for
-distinguishing pathogenic from benign missense variants. The percentile field shows
-where a variant&apos;s score ranks relative to all other scored variants. 75% of variants
-are classified as benign, 25% as pathogenic.
+Hovering over a variant shows:
+</p>
+<ul>
+  <li><b>Var</b> &mdash; the nucleotide substitution on the + strand
+      (reference&nbsp;&gt;&nbsp;alternate)</li>
+  <li><b>AA</b> &mdash; the resulting amino acid change
+      (single-letter reference&nbsp;&gt;&nbsp;alternate)</li>
+  <li><b>Score</b> &mdash; the raw PrimateAI-3D pathogenicity score (0&ndash;1).
+      The authors suggest a clinical threshold of 0.821 for distinguishing
+      pathogenic from benign missense variants.</li>
+  <li><b>Perc</b> &mdash; the percentile rank of the raw score across all
+      scored variants (0&ndash;1). The track score field (0&ndash;1000) is this
+      value scaled by 1000.</li>
+  <li><b>Pred</b> &mdash; Illumina&apos;s binary call:
+      <span style="color:#0000c8">benign</span> or
+      <span style="color:#c80000">pathogenic</span>. In the track as
+      distributed, about 75% of variants are benign and 25% are pathogenic.</li>
+</ul>
+
+<p>
+Items can be filtered by prediction (benign/pathogenic), by raw PrimateAI-3D
+score, or by percentile.
 </p>
 
 <h2>Data Access</h2>
