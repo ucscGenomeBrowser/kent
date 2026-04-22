@@ -37,11 +37,13 @@ Hovering over a variant shows:
       (single-letter reference&nbsp;&gt;&nbsp;alternate)</li>
   <li><b>Score</b> &mdash; the raw PrimateAI-3D pathogenicity score (0&ndash;1).
       The authors suggest a clinical threshold of <b>0.821</b> for
-      distinguishing pathogenic from benign missense variants. This
-      threshold was calibrated against a subset of annotated mutations
-      in Gao et al. 2023 (Fig. 5A), chosen so that the number of
-      PrimateAI-3D pathogenic calls matched the observed excess of de
-      novo missense mutations in a clinical cohort (n&nbsp;=&nbsp;7,238).</li>
+      distinguishing pathogenic from benign missense variants. In Gao
+      et al. 2023 (Fig. 5A) this threshold was derived from the
+      Deciphering Developmental Disorders (DDD) neurodevelopmental
+      cohort: the cutoff was chosen so that the number of variants
+      scored as pathogenic (n&nbsp;=&nbsp;7,238) matched the observed
+      excess of de novo missense mutations above the trinucleotide
+      background expectation in that cohort.</li>
   <li><b>Perc</b> &mdash; the percentile rank of the raw score across all
       scored variants (0&ndash;1). The track score field (0&ndash;1000) is this
       value scaled by 1000.</li>
