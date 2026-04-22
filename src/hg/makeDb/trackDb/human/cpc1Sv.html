@@ -75,16 +75,42 @@ one track item:</p>
 <h2>Methods</h2>
 
 <p>
-The CPC assemblies were produced from PacBio HiFi long-read sequencing
-(mean ~30&times; coverage) with <a href="https://github.com/chhylp123/hifiasm" target="_blank">hifiasm</a>
-in trio or Hi-C-phased mode, then combined with HPRC Phase 1 assemblies and
-built into a variation graph with <a href="https://github.com/pangenome/pggb" target="_blank">pggb/Minigraph-Cactus</a>.
-Bubbles in the graph were decomposed into variant records with
-<a href="https://github.com/vcflib/vcflib" target="_blank">vcfwave</a>,
-producing the source VCF used here. For this UCSC track, the decomposed
-VCF was parsed, filtered to variants with an allele-length delta of at
-least 50 bp, and collapsed by graph snarl ID (see the build documentation
-linked below for details).</p>
+Gao et al. 2023 generated PacBio HiFi long reads (mean ~30.65x,
+Sequel II/IIe platforms) for 58 QC-passed samples representing 36
+minority Chinese ethnic groups, complemented with Illumina short reads
+and Oxford Nanopore ultralong reads. Haplotype-phased de novo assemblies
+were produced with
+<a href="https://github.com/chhylp123/hifiasm" target="_blank">hifiasm</a>
+v0.16.1 (116 high-quality haplotype assemblies retained after QC) and
+combined with 47 HPRC Phase 1 assemblies into a single variation graph
+built on T2T-CHM13v2 with the Minigraph-Cactus pipeline (Minigraph v0.19
+for the SV skeleton, Cactus v2.1.1 base alignment, <tt>hal2vg</tt>).
+Graph bubbles were decomposed into variant records with <tt>vcfwave</tt>
+and normalized with <tt>bcftools norm -m -any</tt>, yielding the source
+VCF (<tt>CPC.HPRC.Phase1.processed.SVs.normed.vcf.gz</tt>). The upstream
+Gao et al. release identified 78,072 SVs across the combined 105-sample
+graph. For this track we restrict to the 58 CPC samples (columns matching
+<tt>HIFI032*</tt> or <tt>RY*</tt>), recompute AC/AN/NS from those columns
+only, drop snarls with no CPC carrier (HPRC-specific sites), filter to
+alts with &ge;50 bp REF/ALT length difference, and collapse by graph snarl
+ID. The final track contains 46,092 snarl sites on hs1; the hg38 version
+is lifted with the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain (36,030
+sites, 10,062 did not lift).</p>
+
+<p>
+The source VCF is distributed by the
+<a href="https://github.com/Shuhua-Group/Chinese-Pangenome-Consortium-Phase-I" target="_blank">
+Chinese-Pangenome-Consortium-Phase-I GitHub repository</a>.</p>
+
+<p>
+The step-by-step build commands (CPC-only recount, liftOver, snarl
+collapse, bigBed build) are recorded in the UCSC makeDoc for this track
+container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
 
 <h2>Data Access</h2>
 

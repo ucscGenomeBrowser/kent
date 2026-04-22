@@ -13,7 +13,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -70,13 +74,14 @@ def main():
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            name = fields[2]
+            rowName = fields[2]
             filt = fields[6]
             info = parseInfo(fields[7])
 
-            svType = info.get("SVTYPE", ".")
+            svTypeRaw = info.get("SVTYPE", ".")
+            svType = normalizeSvType(svTypeRaw)
             end = int(info.get("END", pos))
-            svLen = abs(toInt(info.get("SVLEN", "0")))
+            srcSvLen = abs(toInt(info.get("SVLEN", "0")))
 
             chromStart = pos - 1
             chromEnd = end
@@ -89,7 +94,19 @@ def main():
             if svType == "CTX" and chr2 and chr2 != chrom:
                 chromEnd = chromStart + 1
 
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = srcSvLen
+            else:
+                insLen = 0
+
             color = SV_COLORS.get(svType, "100,100,100")
+
+            ac = toInt(info.get("AC", "0"))
+            an = toInt(info.get("AN", "0"))
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
 
             row = [
                 chrom,
@@ -103,8 +120,9 @@ def main():
                 color,
                 svType,
                 str(svLen),
-                str(toInt(info.get("AC", "0"))),
-                str(toInt(info.get("AN", "0"))),
+                str(insLen),
+                str(ac),
+                str(an),
                 f"{toFloat(info.get('AF', '0')):.6f}",
                 f"{toFloat(info.get('POPMAX_AF', '0')):.6f}",
                 f"{toFloat(info.get('AFR_AF', '0')):.6f}",

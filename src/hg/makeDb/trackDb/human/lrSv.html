@@ -15,8 +15,9 @@ field of each track, in base pairs. Some tracks include sites with
 differ in sequence but not in length).
 </p>
 <p>
-All subtracks below are long-read callsets, except the last row (1KG 3202,
-Illumina short-read), which is included as a short-read comparator.
+For short-read structural-variant comparators (CCDG 17,795, 1KG 3202,
+ToMMo 48K CNV) see the companion
+<a href="hgTrackUi?g=srSv">Short-read SVs</a> supertrack.
 </p>
 <table class="stdTbl">
 <tr>
@@ -80,13 +81,6 @@ Illumina short-read), which is included as a short-read comparator.
   <td>99,980</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=tommoJpCnv">ToMMo 48K CNV</a></td>
-  <td>48,874</td>
-  <td>Japanese, general population (<b>short-read comparator</b> for ToMMo long-read SVs)</td>
-  <td><b>Illumina short-read</b> (GATK CNV, 1 kb bins, shown as two bigWigs)</td>
-  <td colspan="4">~2M bins with CNV carriers; not comparable to per-SV counts above</td>
-</tr>
-<tr>
   <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
   <td>1,027</td>
   <td>All of Us, self-identified Black/African American</td>
@@ -147,6 +141,26 @@ Illumina short-read), which is included as a short-read comparator.
   <td>30,176,500</td>
 </tr>
 <tr>
+  <td><a href="hgTrackUi?g=aprSv">Arab APR</a></td>
+  <td>53</td>
+  <td>UAE-resident Arabs from 8 countries (Arab Pangenome Reference)</td>
+  <td>PacBio HiFi + ONT + Hi-C (pangenome graph)</td>
+  <td>72,656</td>
+  <td>1</td>
+  <td>21</td>
+  <td>99,885</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=cpc1Sv">CPC</a></td>
+  <td>58</td>
+  <td>Chinese Pangenome Consortium, 36 minority ethnic groups (HPRC-specific SVs removed)</td>
+  <td>PacBio HiFi (pangenome graph)</td>
+  <td>36,030</td>
+  <td>1</td>
+  <td>53</td>
+  <td>8,998,096</td>
+</tr>
+<tr>
   <td><a href="hgTrackUi?g=kwanhoSv">Kim PD Brain</a></td>
   <td>100</td>
   <td>Parkinson's disease, ILBD, controls (post-mortem brain)</td>
@@ -165,16 +179,6 @@ Illumina short-read), which is included as a short-read comparator.
   <td>4</td>
   <td>160</td>
   <td>1,321,484</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=onekg3202Sr">1KG 3202 (short-read)</a></td>
-  <td>3,202</td>
-  <td>1000 Genomes expanded cohort (<b>short-read comparator</b>)</td>
-  <td><b>Illumina short-read</b></td>
-  <td>173,366</td>
-  <td>1</td>
-  <td>314</td>
-  <td>154,807,729</td>
 </tr>
 </table>
 
@@ -220,16 +224,6 @@ the 1,019 samples here do not overlap with the 100 samples in that release.
 Structural variants from 333 Japanese individuals (111 trios) from the Tohoku Medical
 Megabank (ToMMo). 74,201 SVs (deletions and insertions) with trio-based Mendelian
 error rates and allele frequencies.
-</p>
-
-<h3>ToMMo 48K CNV SR (<a href="hgTrackUi?g=tommoJpCnv">tommoJpCnv</a>) - short-read comparator</h3>
-<p>
-<b>Short-read CNV comparator for the ToMMo long-read SV track above.</b>
-Per-1 kb-bin copy-number carrier counts from short-read whole-genome
-sequencing of 48,874 Japanese individuals (jMorp 48KJPN-CNV Frequency
-Panel, release 20230828), called with GATK CNV germline workflows.
-Shown as a multiWig overlay: red = samples with copy-number loss
-(CN&lt;2) per bin, green = samples with gain (CN&gt;2) per bin.
 </p>
 
 <h3>AoU 1K SVs (<a href="hgTrackUi?g=aou1kSv">aou1kSv</a>)</h3>
@@ -306,16 +300,6 @@ annotated with gene overlaps, ClinGen / gnomAD constraint scores,
 OMIM / ClinVar / DGV / Decipher regional annotations.
 </p>
 
-<h3>1KG 3202 SVs (<a href="hgTrackUi?g=onekg3202Sr">onekg3202Sr</a>) - short-read comparator</h3>
-<p>
-<b>This is a short-read dataset, included for comparison only.</b>
-Structural variants from the expanded 1000 Genomes cohort of 3,202
-Illumina NovaSeq short-read whole genomes (Byrska-Bishop et al. 2022),
-called with the GATK-SV / svtools pipeline. 173,366 SVs (DEL, INS, DUP,
-INV, CPX, CNV, CTX) with per-superpopulation allele frequencies. Useful
-for contrasting short-read vs. long-read SV breakpoints and for spotting
-variants unique to long-read data.
-</p>
 
 <h2>Data Access</h2>
 <p>

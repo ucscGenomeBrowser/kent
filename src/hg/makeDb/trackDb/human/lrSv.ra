@@ -4,27 +4,52 @@ shortLabel Long-read SVs
 longLabel Structural Variants from Long-read Sequencing
 group varRep
 visibility hide
+# Supertrack-level filters. These are rendered on the supertrack's own
+# hgTrackUi page (superTrackUi in hgTrackUi.c). Cart values stored under
+# "lrSv.filter.<field>.min/max" are inherited at read time by every
+# subtrack via cartOptionalStringClosestToHome() walking tdb->parent. A
+# subtrack-level filter always wins over the supertrack-level one.
+filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),CNV|CNV (Copy-number variant),CTX|CTX (Chromosomal translocation),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),BND|BND (Breakend / translocation),MEI|MEI (Mobile element insertion),TRA|TRA (Translocation)
+filterType.svType multipleListOr
+filterLabel.svType SV Type
+filter.svLen 0:250000000
+filterByRange.svLen on
+filterLabel.svLen SV Length (bp)
+filter.insLen 0:30176500
+filterByRange.insLen on
+filterLabel.insLen Insertion Length (bp)
+filter.AC 0:30000
+filterByRange.AC on
+filterLabel.AC Allele Count
+noScoreFilter on
 
     track colorsDbSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/colorsDb/sv.$D.bb
-    shortLabel CoLoRSdb 1,427 SVs
+    shortLabel CoLoRSdb 1427 SVs
     longLabel Structural Variants from CoLoRSdb (Consortium of Long-Read Sequencing, 1,427 Samples)
     type bigBed 9 +
     itemRgb on
     visibility dense
     dataVersion v1.2.0
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$af AC=$AC (Hom:$AC_Hom Het:$AC_Het Hemi:$AC_Hemi) samples=$NS
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$AF AC=$AC/$AN (Hom:$acHom Het:$acHet Hemi:$acHemi) samples=$NS
     searchIndex name
-    filterValues.svType DEL,INS,INV
+    filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 20:101381
+    filter.svLen 0:101381
     filterByRange.svLen on
-    filterLabel.svLen SV Length
+    filterLabel.svLen SV Length (bp)
+    filter.insLen 0:18724
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length (bp)
     filter.AC 0:2854
     filterByRange.AC on
     filterLabel.AC Alt Allele Count (AC)
+    filter.AF 0:1
+    filterByRange.AF on
+    filterLimits.AF 0:1
+    filterLabel.AF Allele Frequency (AF)
     skipEmptyFields on
     priority 1
 
@@ -36,97 +61,31 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svClass) len=$svLen type=$insType family=$family AC=$alleleCount AF=$alleleFreq
-    filterValues.svClass DEL,INS,COMPLEX
-    filterType.svClass multipleListOr
-    filterLabel.svClass SV Class
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen type=$insType family=$family AC=$AC AF=$alleleFreq
+    filterValues.svType DEL,INS,CPX
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
     filterValues.insType COMPLEX_DUP,DUP,DUP_INTERSPERSED,INV_DUP,NUMT,PSD,VNTR,chimera,orphan,partnered,solo
     filterType.insType multipleListOr
     filterLabel.insType Insertion/Deletion Type
     filterValues.family Alu,HERVK,L1,LTR5_Hs,SVA
     filterType.family multipleListOr
     filterLabel.family Transposon Family
+    filter.svLen 0:49171
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:48091
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count
+    filter.AC 0:1816
+    filterByRange.AC on
+    filterLabel.AC Allele Count
     skipEmptyFields on
+    dataVersion 1.1
     priority 2
-
-    track abelSv
-    parent lrSv
-    bigDataUrl /gbdb/$D/abelSv/abelSv.bb
-    shortLabel CCDG 17795 SR SVs
-    longLabel Structural Variants from 17,795 Genomes - Illumina SHORT-READ CCDG callset (Abel et al. 2020) - included for comparison
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLength AF=$af AC=$ac/$an callset=$callset MSQ=$msq
-    skipEmptyFields on
-    skipFields mateChrom,matePos
-    filterValues.svType DEL|deletion,DUP|duplication,INV|inversion,MEI|mobile element insertion,BND|breakend/translocation
-    filterType.svType multipleListOr
-    filterLabel.svType SV Type
-    filterValues.callset B38|Native GRCh38 callset (14623 samples),B37lift|Lifted from GRCh37 callset (8417 samples)
-    filterType.callset multipleListOr
-    filterLabel.callset Source Callset
-    filterValues.filter PASS|High confidence,LOW|Low confidence
-    filterType.filter multipleListOr
-    filterLabel.filter Filter Status
-    filterByRange.af on
-    filter.af 0:1
-    filterLimits.af 0:1
-    filterLabel.af Allele Frequency (AF)
-    filterByRange.svLength on
-    filter.svLength 0:250000000
-    filterLimits.svLength -1:250000000
-    filterLabel.svLength SV Length (bp; -1 for BND)
-    filterByRange.msq on
-    filter.msq 0:500
-    filterLimits.msq 0:500
-    filterLabel.msq Mean Sample Quality (MSQ)
-    filterByRange.ac on
-    filter.ac 0:30000
-    filterLimits.ac 0:30000
-    filterLabel.ac Allele Count (AC)
-    url https://www.nature.com/articles/s41586-020-2371-0
-    urlLabel Abel et al, Nature 2020:
-
-    track onekg3202Sr
-    parent lrSv
-    bigDataUrl /gbdb/$D/lrSv/onekg3202sr.bb
-    shortLabel 1KG 3202 SR SVs
-    longLabel 1000 Genomes 3202-sample Illumina SHORT-READ GATK-SV callset (Byrska-Bishop 2022) - included for comparison
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq AC=$alleleCount/$alleleNumber popMax=$popmaxAf
-    filterValues.svType DEL,INS,DUP,INV,CPX,CTX,CNV
-    filterType.svType multipleListOr
-    filterLabel.svType SV Type
-    filter.svLen 0:154807729
-    filterByRange.svLen on
-    filterLabel.svLen SV Length
-    filter.alleleFreq 0:1
-    filterByRange.alleleFreq on
-    filterLimits.alleleFreq 0:1
-    filterLabel.alleleFreq Allele Frequency (all)
-    filter.popmaxAf 0:1
-    filterByRange.popmaxAf on
-    filterLimits.popmaxAf 0:1
-    filterLabel.popmaxAf Population Max AF
-    filter.afAfr 0:1
-    filterByRange.afAfr on
-    filterLimits.afAfr 0:1
-    filterLabel.afAfr AF African
-    filter.afEur 0:1
-    filterByRange.afEur on
-    filterLimits.afEur 0:1
-    filterLabel.afEur AF European
-    skipEmptyFields on
 
     track gustafsonSv
     parent lrSv
@@ -136,13 +95,19 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen samples=$sampleCount
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC samples=$sampleCount
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:98289
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:25094
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:200
+    filterByRange.AC on
+    filterLabel.AC Allele Count (placeholder)
     filter.sampleCount 1:100
     filterByRange.sampleCount on
     filterLabel.sampleCount Number of Carrier Samples
@@ -152,27 +117,30 @@ visibility hide
     track aou1kSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/aou1k.bb
-    shortLabel AoU 1K SVs
+    shortLabel AoU 1027 SVs
     longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF_AFR=$afAfr AF_EUR=$afEur
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF_AFR=$afAfr AF_EUR=$afEur
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    #filter.svLen 50:9998
+    filter.svLen 0:9905
     filterByRange.svLen on
     filterLabel.svLen SV Length
-    #filter.afAfr 0:1
+    filter.insLen 0:9998
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:2054
+    filterByRange.AC on
+    filterLabel.AC Allele Count (approx)
     filterByRange.afAfr on
     filterLimits.afAfr 0:1
     filterLabel.afAfr AF African
-    #filter.afEur 0:1
     filterByRange.afEur on
     filterLimits.afEur 0:1
     filterLabel.afEur AF European
-    #filter.afEas 0:1
     filterByRange.afEas on
     filterLimits.afEas 0:1
     filterLabel.afEas AF East Asian
@@ -186,13 +154,19 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq samples=$sampleCount
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC samples=$sampleCount
     filterValues.svType DEL,INS,DUP,INV,TRA
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:99743
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:27242
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:1890
+    filterByRange.AC on
+    filterLabel.AC Allele Count (approx 2*SUPP)
     filter.sampleCount 1:945
     filterByRange.sampleCount on
     filterLabel.sampleCount Number of Supporting Samples
@@ -203,77 +177,53 @@ visibility hide
     skipEmptyFields on
     urls chr2="hgTracks?position=$$"
 
-    track tommoJpCnv
-    parent lrSv
-    container multiWig
-    aggregate transparentOverlay
-    showSubtrackColorOnUi on
-    shortLabel ToMMo 48K CNV SR
-    longLabel CNV Carrier Counts from 48,874 Japanese Individuals (ToMMo 48KJPN-CNV, short-read WGS; 1 kb bins) - included for comparison
-    type bigWig 0 48874
-    autoScale on
-    viewLimits 0:1000
-    viewLimitsMax 0:48874
-    maxHeightPixels 100:32:8
-    visibility full
-    priority 2.5
-
-        track tommoJpCnvLoss
-        parent tommoJpCnv
-        bigDataUrl /gbdb/$D/lrSv/tommoJpCnvLoss.bw
-        shortLabel ToMMo CNV Loss
-        longLabel Samples with copy-number loss (CN<2) per 1 kb bin, ToMMo 48KJPN-CNV
-        type bigWig 0 48874
-        color 200,0,0
-        altColor 200,0,0
-
-        track tommoJpCnvGain
-        parent tommoJpCnv
-        bigDataUrl /gbdb/$D/lrSv/tommoJpCnvGain.bw
-        shortLabel ToMMo CNV Gain
-        longLabel Samples with copy-number gain (CN>2) per 1 kb bin, ToMMo 48KJPN-CNV
-        type bigWig 0 48874
-        color 0,160,0
-        altColor 0,160,0
-
     track tommoJpSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/tommoJp.bb
-    shortLabel ToMMo Japanese SVs
+    shortLabel ToMMo 333 SVs
     longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq AC=$alleleCount
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 51:99980
+    filter.svLen 0:99985
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:30649
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
     filter.alleleFreq 0:1
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filter.alleleCount 0:444
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count
+    filter.AC 0:444
+    filterByRange.AC on
+    filterLabel.AC Allele Count
 
     track ga4kSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/ga4kSv.bb
-    shortLabel GA4K SVs
+    shortLabel GA4K 502 SVs
     longLabel Structural Variants from 502 Children's Mercy GA4K Probands and Families (PacBio HiFi)
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq carriers=$carrierCount/$sampleTotal
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF=$alleleFreq carriers=$carrierCount/$sampleTotal
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:809711
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:14923
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:996
+    filterByRange.AC on
+    filterLabel.AC Allele Count (approx)
     filter.alleleFreq 0:1
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
@@ -285,35 +235,47 @@ visibility hide
     track decodeSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/decodeSv.bb
-    shortLabel deCODE 3,622 SVs
+    shortLabel deCODE 3622 SVs
     longLabel High-confidence Structural Variants from 3,622 Icelanders (deCODE, Oxford Nanopore)
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC (placeholder)
     filterValues.svType DEL,INS,INSDEL
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:861080
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:22130
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:50
+    filterByRange.AC on
+    filterLabel.AC Allele Count (placeholder 50)
     skipEmptyFields on
 
     track hprc2Sv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hprc2.bb
-    shortLabel HPRC v2 SVs
+    shortLabel HPRC v2 233 SVs
     longLabel Structural Variants from the HPRC v2 Pangenome Graph (233 Samples, minigraph-cactus + vcfwave)
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF=$alleleFreq AC=$alleleCount/$alleleNumber samples=$nSamples
-    filterValues.svType INS,DEL,COMPLEX,INV
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC/$alleleNumber samples=$nSamples
+    filterValues.svType INS,DEL,CPX,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 50:97718
+    filter.svLen 0:99113
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:97718
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:463
+    filterByRange.AC on
+    filterLabel.AC Allele Count
     filter.alleleFreq 0:1
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
@@ -331,16 +293,19 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen samples=$sampleCount alleles=$alleleCount AF=$popAllAf
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC AF=$popAllAf
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:57207414
     filterByRange.svLen on
     filterLabel.svLen SV Length
-    filter.alleleCount 1:35
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count (carrier haplotypes)
+    filter.insLen 0:108546
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 1:35
+    filterByRange.AC on
+    filterLabel.AC Allele Count (carrier haplotypes)
     filter.sampleCount 1:35
     filterByRange.sampleCount on
     filterLabel.sampleCount Sample Count
@@ -361,16 +326,19 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen samples=$sampleCount alleles=$alleleCount
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:30176500
     filterByRange.svLen on
     filterLabel.svLen SV Length
-    filter.alleleCount 1:136
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count (carrier haplotypes)
+    filter.insLen 0:30176500
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 1:136
+    filterByRange.AC on
+    filterLabel.AC Allele Count (carrier haplotypes)
     filter.sampleCount 1:65
     filterByRange.sampleCount on
     filterLabel.sampleCount Sample Count
@@ -386,18 +354,24 @@ visibility hide
     track kwanhoSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
-    shortLabel Kim PD Brain SVs (preliminary)
+    shortLabel Kim PD 100 prelim
     longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AF_PD=$afPd AF_HC=$afHc diff=$differentialRate
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC AF_PD=$afPd AF_HC=$afHc diff=$differentialRate
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:200000000
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:20145
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:200
+    filterByRange.AC on
+    filterLabel.AC Allele Count (PD+HC+ILBD)
     filter.qual 0:100
     filterByRange.qual on
     filterLabel.qual Quality
@@ -427,17 +401,22 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AC=$alleleCount/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
     filterLabel.svType SV Type
+    filter.svLen 0:99885
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:584016
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:107
+    filterByRange.AC on
+    filterLabel.AC Allele Count
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count
     skipEmptyFields on
 
     track cpc1Sv
@@ -448,17 +427,22 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen AC=$alleleCount/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
     filterLabel.svType SV Type
+    filter.svLen 0:8998096
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:376583
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 0:116
+    filterByRange.AC on
+    filterLabel.AC Allele Count
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filterByRange.alleleCount on
-    filterLabel.alleleCount Allele Count
     skipEmptyFields on
 
     track chirmade101Sv
@@ -469,13 +453,16 @@ visibility hide
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) len=$svLen genes=$geneCount
-    filterValues.svType del,ins,dup,inv,complex
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen genes=$geneCount
+    filterValues.svType DEL,INS,DUP,INV,CPX
     filterType.svType multipleListOr
     filterLabel.svType SV Type
     filter.svLen 0:1321484
     filterByRange.svLen on
     filterLabel.svLen SV Length
+    filter.insLen 0:31711
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
     filter.geneCount 0:200
     filterByRange.geneCount on
     filterLabel.geneCount Gene Count

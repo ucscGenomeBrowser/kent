@@ -14,6 +14,13 @@ including 75,324 insertions, 66,192 deletions, and 19,816 complex rearrangements
 The original coordinates are on the T2T-CHM13 assembly (hs1); for GRCh38 (hg38),
 coordinates were converted using liftOver (148,375 records mapped successfully).
 </p>
+<p>
+The 1,019 samples sequenced here are distinct from those in the
+<a href="hgTrackUi?g=gustafsonSv">1KG ONT 100</a> track (Gustafson et al. 2024);
+the two releases were produced by separate consortia (Vienna and the 1000 Genomes
+ONT Sequencing Consortium, respectively) and there is no sample overlap between
+the two.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -21,11 +28,11 @@ Items are colored by SV class:
 <ul>
 <li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
 <li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
-<li><span style="color: rgb(230,140,0);">Complex (COMPLEX)</span> - orange</li>
+<li><span style="color: rgb(230,140,0);">Complex (CPX)</span> - orange</li>
 </ul>
 </p>
 <p>
-Filters are available for SV class, insertion/deletion type, transposon family,
+Filters are available for SV type, insertion/deletion type, transposon family,
 and SV length. For insertions, the item is placed at the insertion site with a
 width of 1 bp; for deletions, the item spans the deleted region.
 </p>
@@ -48,26 +55,39 @@ DUP_INTERSPERSED, INV_DUP (inverted duplication), COMPLEX_DUP, or chimera</li>
 
 <h2>Methods</h2>
 <p>
-Oxford Nanopore sequencing was performed on 1,019 samples from the 1000 Genomes
-Project. Base-calling was done with Guppy 6.2.1. SVs were discovered using
-the SAGA framework, which combines:
-<ul>
-<li>Linear-reference tools: Sniffles and DELLY (applied to both GRCh38 and CHM13)</li>
-<li>Graph-aware discovery: SVarp, which searches for SV patterns from graph-aligned
-reads and performs local long-read assembly</li>
-<li>Graph-based genotyping: Giggles, for unified genotyping across a pangenome graph</li>
-</ul>
+Schloissnig et al. 2025 generated intermediate-coverage Oxford Nanopore
+long-read sequencing of 1,019 samples from the 1000 Genomes Project on
+PromethION 48 instruments with R9.4.1 (FLO-PRO002) flow cells (SQK-LSK110
+libraries, 24-h runs with flow-cell wash and reload). SVs were discovered
+with the SAGA framework (SV Analysis by Graph Augmentation), which combines
+linear-reference callers (Sniffles and DELLY, run against both GRCh38 and
+T2T-CHM13), graph-aware discovery with SVarp (local long-read assembly of
+SV-supporting graph-aligned reads) and graph-based joint genotyping with
+Giggles across a pangenome graph. Insertions and deletions were then
+annotated with <a href="https://github.com/REPBIO-LAB/svan" target="_blank">
+SVAN</a> v1.3, which classifies SVs by mechanism of origin. The release
+contains 161,332 SVAN-annotated SVs: 75,324 insertions, 66,192 deletions
+and 19,816 complex rearrangements. The original VCF is on T2T-CHM13 contig
+coordinates; for the hg38 version of this track, SVs were lifted with
+liftOver (148,375 of 161,332 records mapped), while the hs1 version uses
+the native coordinates.
 </p>
 <p>
-Variants were annotated with SVAN (SV Annotator v1.3), which leverages allelic
-representations and genomic annotations to classify SVs by mechanism. SVAN
-annotated 96.0% of insertions, 32.2% of deletions, and 57.1% of complex sites.
+The SVAN-annotated unphased VCF (<tt>final-vcf.unphased.SVAN_1.3.vcf.gz</tt>)
+was downloaded from
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/svan-annotation/" target="_blank">
+the IGSR 1KG_ONT_VIENNA v1.1 SVAN-annotation directory</a>; allele counts
+were added from the companion shapeit5-phased-callset
+(<tt>shapeit5-phased-callset_final-vcf.phased.vcf.gz</tt>) in the same
+release tree.
 </p>
 <p>
-The original SV coordinates are on the T2T-CHM13 assembly (hs1). For the GRCh38
-(hg38) version of this track, coordinates were converted using liftOver; 148,375
-of 161,332 records mapped successfully (~92%). The hs1 version contains all
-161,332 records at their native coordinates.
+The step-by-step build commands (download, liftOver, format conversion,
+bigBed build) are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

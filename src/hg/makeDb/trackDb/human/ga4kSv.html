@@ -35,23 +35,38 @@ page also shows the total number of samples genotyped at each site.
 
 <h2>Methods</h2>
 <p>
-Samples were sequenced on PacBio Revio and Sequel II instruments with HiFi
-chemistry. Single-sample SV callsets were produced with pbsv and then merged
-across the cohort with JASMINE v1.1.4 (<tt>jasmine --output-genotypes</tt>),
-which clusters equivalent SVs across samples and writes a site-level multi-sample
-VCF.
+The Genomic Answers for Kids (GA4K) program at Children's Mercy Research
+Institute is a longitudinal pediatric rare-disease initiative described in
+Cohen et al. 2022. GA4K probands and their families are sequenced with
+PacBio HiFi long reads (Revio and Sequel II), and the 502-sample GA4K
+PacBio SV release (<tt>pb_joint_merged.sv.vcf.gz</tt>) is produced by
+running <a href="https://github.com/PacificBiosciences/pbsv" target="_blank">
+pbsv</a> per sample and merging with
+<a href="https://github.com/mkirsche/Jasmine" target="_blank">JASMINE</a>
+v1.1.4 (<tt>--output-genotypes</tt>). The merged site-level VCF is
+filtered to SVs replicated in at least two independent observations
+(either matching a second unrelated CMH individual in the same Jasmine
+cluster, or matching an SV in the deCODE Icelandic or HPRC callsets via
+<a href="https://github.com/PacificBiosciences/svpack" target="_blank">
+svpack match</a>). The released catalog contains 115,554 replicated SVs
+(52,564 deletions, 58,219 insertions, 4,408 duplications and 363
+inversions) with recomputed carrier counts (SVC), total sample counts
+(SVN) and allele frequencies (SVF = SVC/SVN).
 </p>
 <p>
-To reduce false positives, the merged VCF was filtered to retain only SVs that
-were replicated in at least two independent observations: either (1) matching a
-second SV from another unrelated Children's Mercy (CMH) individual within the
-same Jasmine cluster, or (2) matching an SV from the Decode Icelandic or Human
-Pangenome Reference Consortium (HPRC) callsets using
-<tt>svpack match</tt> with default settings.
+The source VCF was cloned from the Children's Mercy Research Institute
+GA4K GitHub repository,
+<a href="https://github.com/ChildrensMercyResearchInstitute/GA4K" target="_blank">
+github.com/ChildrensMercyResearchInstitute/GA4K</a>
+(<tt>pacbio_sv_vcf/pb_joint_merged.sv.vcf.gz</tt>).
 </p>
 <p>
-Carrier counts (SVC), total sample counts (SVN) and allele frequencies
-(SVF = SVC/SVN) were recomputed on the replicated callset.
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

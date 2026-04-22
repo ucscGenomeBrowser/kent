@@ -4013,10 +4013,13 @@ filterBy_t *filterBy;
 AllocVar(filterBy);
 filterBy->column = cloneString(field);
 filterBy->title = cloneString(field); ///  title should come from AS file, or trackDb variable
-struct asColumn *asCol = asColumnFind(as, field);
+struct asColumn *asCol = (as != NULL) ? asColumnFind(as, field) : NULL;
 if (asCol != NULL)
     filterBy->title = asCol->comment;
-else
+else if (as != NULL && getLabelSetting(cart, tdb, field) == NULL)
+    // Only error when there's an autoSql but the field is missing AND there's
+    // no filterLabel override. superTracks/noData tdbs have as==NULL and can
+    // legitimately declare filterValues on virtual fields they only aggregate.
     errAbort("Track %s: Building filter on field %s which is not in AS file.", tdb->track, field);
 char *trackDbLabel = getLabelSetting(cart, tdb, field);
 if (trackDbLabel)
@@ -4052,9 +4055,11 @@ return filterBy;
 filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackDbFilter *trackDbFilters, char *name)
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
+// Not every tdb has an autoSql: superTracks and tracks pointing at a
+// bigData file that isn't reachable at UI time both return NULL here.
+// That's fine for filterValues.* settings as long as a filterLabel.*
+// override is provided; buildFilterBy() already tolerates a NULL `as`.
 struct asObject *as = asForTdb(NULL, tdb);
-if (as == NULL)
-    errAbort("Track %s: Unable to get autoSql for %s", tdb->track, name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -5947,8 +5952,9 @@ if (boxed)
     }
 else if (title)
     printf("<p><B>%s &nbsp;</b>", title );
-else
-    printf("<p>");
+// When !boxed and title==NULL, emit nothing: the caller (e.g. supertrack
+// filter UI) already renders its own heading and doesn't want a stray
+// empty paragraph.
 return boxed;
 }
 
@@ -6917,7 +6923,11 @@ else
     trackDbFilters = tdbGetTrackNumFilters(tdb);
 if (trackDbFilters)
     {
-    puts("<BR>");
+    // The <BR> is a separator under the track's "Configuration" block title.
+    // Callers that don't emit a title (e.g. the supertrack filter UI that
+    // owns its own heading) pass title==NULL and don't want the extra break.
+    if (title != NULL)
+        puts("<BR>");
     struct trackDbFilter *filter = NULL;
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db))
@@ -10313,6 +10323,10 @@ struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table
 // a parsed autoSql object; otherwise return NULL.
 {
 struct asObject *asObj = NULL;
+// Callers occasionally invoke asForTdb with conn=NULL (e.g. superTrack filter
+// rendering that isn't tied to a data table). Nothing to look up in that case.
+if (conn == NULL)
+    return NULL;
 if (tableDescriptionsExists(conn))
     {
     char query[PATH_LEN*2];

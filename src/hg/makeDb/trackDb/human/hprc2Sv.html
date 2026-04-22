@@ -38,34 +38,41 @@ bubbles).
 
 <h2>Methods</h2>
 <p>
-The HPRC v2.0 minigraph-cactus pangenome was downloaded from the HPRC S3
-release bucket:
-<ul>
-<li>hg38:
-<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.sv.gfa.gz" target="_blank"><tt>hprc-v2.0-mc-grch38.sv.gfa.gz</tt></a> (graph) and
-<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.wave.vcf.gz" target="_blank"><tt>hprc-v2.0-mc-grch38.wave.vcf.gz</tt></a> (wave-decomposed VCF)</li>
-<li>hs1:
-<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz" target="_blank"><tt>hprc-v2.0-mc-chm13.wave.vcf.gz</tt></a></li>
-</ul>
-The VCF is the result of running <tt>vg deconstruct</tt> on the graph with
-the corresponding reference path (GRCh38 or T2T-CHM13) and then
-<tt>vcfwave</tt> / WFA2-lib to split complex multi-allelic records into
-atomic alleles with per-allele TYPE and LEN fields.
+HPRC release-2 is an open data release (not yet accompanied by a formal
+peer-reviewed publication) built from PacBio HiFi haplotype-resolved
+assemblies of 233 samples, including T2T-CHM13 and a diverse 1000 Genomes
+Project panel. The pangenome graph was built with Minigraph-Cactus against
+both GRCh38 and T2T-CHM13 reference paths; variants were extracted from
+the graph with <tt>vg deconstruct</tt> and then decomposed into atomic
+alleles with <tt>vcfwave</tt> / WFA2-lib, yielding per-allele TYPE and LEN
+fields. For this track, each ALT in the wave VCF was emitted as its own
+BED row, retaining alleles with |LEN| &ge; 50 bp or the <tt>INV</tt> flag;
+allele counts, frequencies, sample counts and snarl levels are taken
+directly from the per-allele INFO fields. On hg38 this yields 1,483,114
+SV-sized alleles (1,106,190 insertions, 192,597 deletions, 178,178 complex
+alleles and 6,149 inversions); the hs1 track is built from the parallel
+T2T-CHM13 wave VCF. Sample-list and assembly provenance for the graph are
+maintained at HPRC in
+<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv" target="_blank">
+hprc_intermediate_assembly/<tt>alignments_v2.0.csv</tt></a>.
 </p>
 <p>
-For display here, the wave VCF was streamed and each ALT was emitted as
-its own BED row. Alleles were retained if their absolute length was
-&ge; 50 bp or if the record carried the <tt>INV</tt> flag (inversions may
-be shorter). Allele counts, frequencies, and sample counts are taken
-directly from the per-allele INFO fields.
+The HPRC v2.0 Minigraph-Cactus graph and wave-decomposed VCFs were
+downloaded from the HPRC S3 release bucket:
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.wave.vcf.gz" target="_blank">
+hprc-v2.0-mc-grch38.wave.vcf.gz</a> (hg38) and
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz" target="_blank">
+hprc-v2.0-mc-chm13.wave.vcf.gz</a> (hs1).
 </p>
 <p>
-A pointer to both the GRCh38 and CHM13 pangenome files (and the list of
-assemblies that went into the graph) is maintained by HPRC at
-<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv"
-   target="_blank">human-pangenomics/hprc_intermediate_assembly
-<tt>alignments_v2.0.csv</tt></a>, which links to both the hg38 and
-CHM13/hs1 VCFs (and the underlying graph files) used for this track.
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hs1/lrSv.txt" target="_blank">
+doc/hs1/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

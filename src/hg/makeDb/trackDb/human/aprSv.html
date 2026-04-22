@@ -41,8 +41,9 @@ individually using the 50 bp threshold, and the row is emitted as a single
 bed item with:</p>
 <ul>
   <li><b>svType</b> — the common class, or <tt>MIXED</tt> if alts disagree;</li>
-  <li><b>svLen</b> — the maximum |len(ALT)-len(REF)| across alts that passed;</li>
-  <li><b>alleleCount</b> — sum of per-alt allele counts (AC) that passed;</li>
+  <li><b>svLen</b> — reference span (chromEnd - chromStart);</li>
+  <li><b>insLen</b> — maximum inserted-sequence length across passing INS alts (0 otherwise);</li>
+  <li><b>AC</b> — sum of per-alt allele counts (AC) that passed;</li>
   <li><b>numAlts</b> — number of alt alleles that passed the 50 bp filter.</li>
 </ul>
 <p>Rows whose alts are all smaller than 50 bp are not shown.</p>
@@ -50,15 +51,39 @@ bed item with:</p>
 <h2>Methods</h2>
 
 <p>
-The APR pangenome was assembled from 53 individuals sequenced with an
-average 35&times; PacBio HiFi, 54&times; ultralong ONT and 65&times; Hi-C
-coverage, producing haplotype-phased de novo assemblies with N50 > 124 Mb.
-The pangenome graph was built with Minigraph-Cactus v2.7.2 seeded on
-CHM13v2 (backbone) and GRCh38; variants were extracted and deconstructed
-from the graph. For this UCSC track, the decomposed VCF was parsed,
-filtered to alt alleles with &ge;50 bp REF/ALT length difference, and
-merged per snarl site. See the build documentation in the kent source
-tree at <tt>src/hg/makeDb/doc/hg38/lrSv.txt</tt> for details.</p>
+Nassir et al. 2025 built the Arabic Pangenome Reference (APR) from 53
+UAE-resident Arab individuals drawn from eight countries, sequenced with
+~35x PacBio HiFi on Sequel IIe/Revio (30-h movies), ~54x Oxford Nanopore
+ultralong reads on R10.4.1 PromethION flow cells (96-h runs), and ~65x
+Hi-C (Illumina NovaSeq 6000). Haplotype-phased de novo assemblies were
+produced with hifiasm v0.19.5 (primary) and Verkko v1.3.1 (for
+comparison), with a median N50 of 124 Mb. The pangenome graph was built
+with Minigraph-Cactus seeded on T2T-CHM13v2 and augmented with GRCh38,
+and SVs were extracted by graph deconstruction. The released decomposed
+VCF (<tt>apr_review_v1_2902_chm13.vcf.gz</tt>) contains ~21 million
+variants on CHM13v2 contigs; after filtering to alt alleles with &ge;50 bp
+length difference and collapsing the alts of each snarl into a single
+site, the APR SV track is obtained. Variants are shown natively on hs1
+and lifted to hg38 with the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain
+(variants not lifting cleanly are omitted from the hg38 version).</p>
+
+<p>
+The source APR VCF was downloaded from the Mohammed Bin Rashid
+University SharePoint page,
+<a href="https://www.mbru.ac.ae/the-arab-pangenome-reference/" target="_blank">
+mbru.ac.ae/the-arab-pangenome-reference</a>; the accompanying project
+source code is at
+<a href="https://github.com/muddinmbru/arab_pangenome_reference" target="_blank">
+github.com/muddinmbru/arab_pangenome_reference</a>.</p>
+
+<p>
+The step-by-step build commands (download, graph-VCF conversion, liftOver,
+bigBed build) are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
 
 <h2>Data Access</h2>
 

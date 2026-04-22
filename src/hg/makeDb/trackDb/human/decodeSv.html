@@ -39,14 +39,32 @@ deletions.
 
 <h2>Methods</h2>
 <p>
-Oxford Nanopore whole-genome sequencing was performed on 3,622 Icelandic
-participants enrolled through deCODE genetics. Reads were aligned to
-GRCh38 and structural variants were called and merged across the cohort
-following the pipeline described in Beyter et al. (2021), which combined
-multiple callers and a joint reassessment of candidate variants against
-the long reads. The high-confidence set released here corresponds to the
-filtered callset with strong read support and consistent representation
-across samples.
+Beyter et al. 2021 performed Oxford Nanopore long-read sequencing of 3,622
+Icelanders recruited through deCODE genetics and detected a median of
+22,636 SVs per individual (13,353 insertions and 9,474 deletions). Across
+the cohort they derived a set of 133,886 reliably genotyped SV alleles,
+imputed those alleles into 166,281 chip-typed Icelanders, and tested them
+for association with disease and quantitative traits (notably including a
+rare <i>PCSK9</i> deletion associated with lower LDL-cholesterol and a
+multi-allelic 57-bp VNTR in <i>ACAN</i> associated with adult height). The
+track shown here displays the 133,886 high-confidence SV sites: 55,649
+deletions, 75,050 insertions and 3,187 combined insertion/deletion events.
+The release is site-only (no per-sample genotypes or allele frequencies),
+so the track cannot be filtered by AF/AC.
+</p>
+<p>
+The VCF <tt>ont_sv_high_confidence_SVs.sorted.vcf.gz</tt> was downloaded
+from the deCODE genetics
+<a href="https://github.com/DecodeGenetics/LRS_SV_sets" target="_blank">
+LRS_SV_sets</a> GitHub repository.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>
