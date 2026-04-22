@@ -20,7 +20,7 @@ longLabel DNA methylation data from MethBase2
 noInherit on
 compositeTrack faceted
 parent dnaMethylationAlpha
-subtrackUrl https://www.ncbi.nlm.nih.gov/sra/$$
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$
 html mb2
 
 track mb2_SRX172462_levels
