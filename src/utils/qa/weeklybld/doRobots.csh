@@ -44,17 +44,7 @@ echo "disabled doSearchRobot.csh [${0}: `date`]"
 #endif
 
 
-# note TrackCheck and LiftOver robots use java and ant, so it will not work on beta, 
-#  so run them from hgwdev instead.
-
-# need to create a mini-sandbox to build these robot utilities
-#echo "disabled doJavaUtilBuild.csh [${0}: `date`]"
-./doJavaUtilBuild.csh
-set err = $status
-if ( $err ) then
-    echo "error running doJavaUtilBuild.csh: $err [${0}: `date`]" 
-    set returnCode=1
-endif 
+# TrackCheck and LiftOver are python-based; run from hgwdev.
 
 #echo "disabled doTrackCheckRobot.csh [${0}: `date`]"
 ./doTrackCheckRobot.csh
