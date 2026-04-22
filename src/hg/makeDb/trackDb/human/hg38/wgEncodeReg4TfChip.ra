@@ -8,7 +8,7 @@ visibility hide
 html wgEncodeReg4TfChip.html
 metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4TfChip_metadata.tsv
 primaryKey accession
-subtrackUrls accession=https://www.encodeproject.org/files/$$/
+subtrackUrls accession=https://www.encodeproject.org/files/$$/ Experiment=https://www.encodeproject.org/files/$$/
 defaultSortField _Experiment
 maxCheckboxes 40
 noInherit on
