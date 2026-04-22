@@ -9,8 +9,12 @@ The source TSV has thousands-separator commas inside quoted numeric fields
 """
 
 import csv
+import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -21,8 +25,24 @@ SV_COLORS = {
 
 
 def toInt(s):
+    # Kim et al. media-13.txt stores many integer fields as Python tuple
+    # repr, e.g. "(4,)" for single-sample or "(4, 2)" for multi. We take
+    # the sum across the tuple.
     if s is None or s == "":
         return 0
+    s = s.strip()
+    if s.startswith("(") and s.endswith(")"):
+        inner = s[1:-1]
+        total = 0
+        for p in inner.split(","):
+            p = p.strip()
+            if not p:
+                continue
+            try:
+                total += int(float(p))
+            except ValueError:
+                return 0
+        return total
     s = s.replace(",", "")
     try:
         return int(float(s))
@@ -87,8 +107,14 @@ def main():
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
-            svType = row["SV type"]
-            svLen = abs(toInt(row["SV length"]))
+            svTypeRaw = row["SV type"]
+            svType = normalizeSvType(svTypeRaw)
+            srcSvLen = abs(toInt(row["SV length"]))
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = srcSvLen
+            else:
+                insLen = 0
 
             color = SV_COLORS.get(svType, "100,100,100")
 
@@ -96,11 +122,19 @@ def main():
             hcStr, nHc = carrierList(row.get("HC CARRIERS", ""))
             ilbdStr, nIlbd = carrierList(row.get("ILBD CARRIERS", ""))
 
+            acPd = toInt(row.get("AC PD", "0"))
+            acHc = toInt(row.get("AC HC", "0"))
+            acIlbd = toInt(row.get("AC ILBD", "0"))
+            ac = acPd + acHc + acIlbd
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
+
             bedRow = [
                 chrom,
                 str(chromStart),
                 str(chromEnd),
-                row["ID"],
+                name,
                 "0",
                 ".",
                 str(chromStart),
@@ -108,6 +142,8 @@ def main():
                 color,
                 svType,
                 str(svLen),
+                str(insLen),
+                str(ac),
                 row.get("Size bin", ""),
                 str(toInt(row.get("qual", "0"))),
                 str(toInt(row.get("SUPP", "0"))),
@@ -119,9 +155,9 @@ def main():
                 f"{toFloat(row.get('AF PD', '0')):.6f}",
                 f"{toFloat(row.get('AF HC', '0')):.6f}",
                 f"{toFloat(row.get('AF ILBD', '0')):.6f}",
-                str(toInt(row.get("AC PD", "0"))),
-                str(toInt(row.get("AC HC", "0"))),
-                str(toInt(row.get("AC ILBD", "0"))),
+                str(acPd),
+                str(acHc),
+                str(acIlbd),
                 str(toInt(row.get("AN PD", "0"))),
                 str(toInt(row.get("AN HC", "0"))),
                 str(toInt(row.get("AN ILBD", "0"))),

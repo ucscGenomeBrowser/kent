@@ -40,18 +40,40 @@ columns will be blank for an arbitrary SV.
 
 <h2>Methods</h2>
 <p>
-SVs were called from 101 long-read whole-genome sequencing samples and
-annotated as described in Chirmade et al. 2026. The annotation table used
-here (<tt>sv_annotations.tsv</tt>) is the companion data release for GWAS
-SVatalog, available from the Zenodo record linked below. Coordinates in
-the source TSV are 1-based closed and were converted to 0-based half-open
-BED for this track.
+Chirmade et al. 2026 called SVs from 101 whole-genome sequenced individuals
+enrolled in the CF Canada-SickKids Program in Individualized Therapy
+(CFIT), a predominantly-European cohort of people with cystic fibrosis.
+Each sample was sequenced with two long-read / linked-read technologies:
+PacBio continuous long reads on Sequel I (34 samples, 50x) or Sequel II
+(67 samples, 76x), and 10X Genomics linked reads on Illumina HiSeq X at
+~30x. SVs were called per sample with pbsv v2.2.2 (pbmm2 alignments) and
+Sniffles v1.0.11 (NGMLR alignments) on the PacBio CLR data, and with Long
+Ranger, CNVnator v0.4, ERDS v1.1 and Manta v1.6.0 on the 10XG data.
+Per-platform and cross-platform calls were merged in three steps using a
+50% reciprocal overlap rule (pbsv anchored, tagged by Sniffles on PacBio;
+Manta anchored, augmented by CNVnator, ERDS and Long Ranger deletions on
+10XG; then a cross-platform merge with PacBio coordinates preferred), and
+SV records present in fewer than three participants were dropped. The
+released catalog contains 87,183 SVs (42,435 deletions, 41,734 insertions,
+1,394 duplications, 912 inversions and 708 complex events); the
+pre-computed GWAS SVatalog LD analyses use a common-SV subset of 35,732
+sites against 116,870 GWAS-Catalog SNPs.
 </p>
 <p>
-Note that the SVatalog tool's pre-computed LD analyses use a common-SV
-subset (35,732 sites); the underlying long-read callset released in this
-TSV (87,183 SVs) is larger and includes rarer variants not used for LD
-visualisation.
+The annotation TSV <tt>sv_annotations.tsv</tt> was downloaded from the
+Zenodo companion record,
+<a href="https://zenodo.org/records/13367574" target="_blank">
+zenodo.org/records/13367574</a>. Coordinates in the TSV are 1-based closed
+and were converted to 0-based half-open BED for this track.
+</p>
+<p>
+The step-by-step build commands (download, coordinate shift, format
+conversion, bigBed build) are recorded in the UCSC makeDoc for this track
+container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

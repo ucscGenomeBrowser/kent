@@ -7,7 +7,11 @@ Usage:
 
 import csv
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -50,12 +54,12 @@ def emit(outF, row, typeExtra):
     chrom = row["#CHROM"]
     pos = int(row["POS"])  # 0-based in source TSV based on sample inspection
     end = int(row["END"])
-    svType = row["SVTYPE"]
+    svType = normalizeSvType(row["SVTYPE"])
     try:
-        svLen = int(row["SVLEN"])
+        svLenSrc = int(row["SVLEN"])
     except ValueError:
-        svLen = 0
-    absSvLen = abs(svLen)
+        svLenSrc = 0
+    absSvLen = abs(svLenSrc)
 
     # Source coords are already 0-based half-open (chr1 POS=10669 END=10901
     # matches a 232-bp deletion starting at 10670 in 1-based). Use as-is.
@@ -64,7 +68,14 @@ def emit(outF, row, typeExtra):
     if chromEnd <= chromStart:
         chromEnd = chromStart + 1
 
+    svLen = chromEnd - chromStart
+    if svType in ("INS", "MEI"):
+        insLen = absSvLen
+    else:
+        insLen = 0
+
     haploCount, sampleCount = countSamples(row.get("MERGE_SAMPLES", ""))
+    ac = haploCount
 
     color = SV_COLORS.get(svType, "100,100,100")
 
@@ -74,19 +85,23 @@ def emit(outF, row, typeExtra):
     except ValueError:
         refSd = 0.0
 
+    featLen = insLen if svType in ("INS", "MEI") else svLen
+    name = svName(svType, featLen, ac)
+
     bedRow = [
         chrom,
         str(chromStart),
         str(chromEnd),
-        row["ID"],
+        name,
         "0",
         ".",
         str(chromStart),
         str(chromEnd),
         color,
         svType,
-        str(absSvLen),
-        str(haploCount),
+        str(svLen),
+        str(insLen),
+        str(ac),
         str(sampleCount),
         typeExtra.get("homRef", ""),
         typeExtra.get("homTig", ""),

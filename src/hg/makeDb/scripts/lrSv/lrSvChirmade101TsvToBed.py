@@ -13,14 +13,18 @@ Usage:
 """
 
 import csv
+import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
+
 SV_COLORS = {
-    "del":     "200,0,0",      # red
-    "ins":     "0,0,200",      # blue
-    "dup":     "0,160,0",      # green
-    "inv":     "230,140,0",    # orange
-    "complex": "140,0,200",    # purple
+    "DEL": "200,0,0",      # red
+    "INS": "0,0,200",      # blue
+    "DUP": "0,160,0",      # green
+    "INV": "230,140,0",    # orange
+    "CPX": "140,0,200",    # purple
 }
 
 
@@ -63,15 +67,28 @@ def main():
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
-            svType = row["Type"]
-            svLen = abs(toInt(row["Length"]))
+            svTypeRaw = row["Type"]  # lowercase del/ins/dup/inv/complex
+            svType = normalizeSvType(svTypeRaw)
+            srcLen = abs(toInt(row["Length"]))
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = srcLen
+            else:
+                insLen = 0
             color = SV_COLORS.get(svType, "100,100,100")
+
+            # Chirmade catalog is site-level without AC. Use -1 as placeholder
+            # so svName drops the :AC suffix.
+            ac = -1
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
 
             bedRow = [
                 chrom,
                 str(chromStart),
                 str(chromEnd),
-                row["ID"],
+                name,
                 "0",
                 ".",
                 str(chromStart),
@@ -79,6 +96,8 @@ def main():
                 color,
                 svType,
                 str(svLen),
+                str(insLen),
+                str(ac),
                 str(toInt(row.get("GC (%)", "0"))),
                 na(row.get("Cytoband", "")),
                 str(toInt(row.get("Gene Count", "0"))),
