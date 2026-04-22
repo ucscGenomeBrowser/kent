@@ -26,7 +26,7 @@ noScoreFilter on
     track colorsDbSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/colorsDb/sv.$D.bb
-    shortLabel CoLoRSdb 1,427 SVs
+    shortLabel CoLoRSdb 1427 SVs
     longLabel Structural Variants from CoLoRSdb (Consortium of Long-Read Sequencing, 1,427 Samples)
     type bigBed 9 +
     itemRgb on
@@ -198,7 +198,7 @@ noScoreFilter on
     track aou1kSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/aou1k.bb
-    shortLabel AoU 1K SVs
+    shortLabel AoU 1027 SVs
     longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
     type bigBed 9 +
     itemRgb on
@@ -294,7 +294,7 @@ noScoreFilter on
     track tommoJpSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/tommoJp.bb
-    shortLabel ToMMo Japanese SVs
+    shortLabel ToMMo 333 SVs
     longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
     type bigBed 9 +
     itemRgb on
@@ -320,7 +320,7 @@ noScoreFilter on
     track ga4kSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/ga4kSv.bb
-    shortLabel GA4K SVs
+    shortLabel GA4K 502 SVs
     longLabel Structural Variants from 502 Children's Mercy GA4K Probands and Families (PacBio HiFi)
     type bigBed 9 +
     itemRgb on
@@ -349,7 +349,7 @@ noScoreFilter on
     track decodeSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/decodeSv.bb
-    shortLabel deCODE 3,622 SVs
+    shortLabel deCODE 3622 SVs
     longLabel High-confidence Structural Variants from 3,622 Icelanders (deCODE, Oxford Nanopore)
     type bigBed 9 +
     itemRgb on
@@ -372,7 +372,7 @@ noScoreFilter on
     track hprc2Sv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hprc2.bb
-    shortLabel HPRC v2 SVs
+    shortLabel HPRC v2 233 SVs
     longLabel Structural Variants from the HPRC v2 Pangenome Graph (233 Samples, minigraph-cactus + vcfwave)
     type bigBed 9 +
     itemRgb on
@@ -468,7 +468,7 @@ noScoreFilter on
     track kwanhoSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
-    shortLabel Kim PD Brain SVs (preliminary)
+    shortLabel Kim PD 100 prelim
     longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
     type bigBed 9 +
     itemRgb on
