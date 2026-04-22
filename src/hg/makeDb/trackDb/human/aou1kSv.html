@@ -50,19 +50,38 @@ intervals</li>
 
 <h2>Methods</h2>
 <p>
-PacBio HiFi long-read sequencing was performed on 1,027 AoU participants
-self-identifying as Black or African American, at a median coverage of ~8x.
-SV calling was performed using a cohort-level pipeline, producing calls for
-insertions and deletions. Allele frequencies were computed separately for
-five ancestry groups. SVs were annotated with gene intersections from OMIM,
-disease gene panels, cancer gene lists, and ACMG actionable genes, along
-with regulatory element overlaps and segmental duplication associations.
+Garimella et al. 2025 performed PacBio HiFi long-read sequencing on 1,027
+All of Us participants self-identifying as Black or African American, to
+~8x per-sample coverage at HudsonAlpha Discovery. SVs (&ge;50 bp) were
+called per sample with an ensemble of three methods: two alignment-based
+callers, <a href="https://github.com/PacificBiosciences/pbsv" target="_blank">
+PBSV</a> v2.6.0 (with Tandem Repeat Finder context) and
+<a href="https://github.com/fritzsedlazeck/Sniffles" target="_blank">Sniffles2</a>
+v2.0.6, plus the assembly-based <a href="https://github.com/EichlerLab/pav"
+target="_blank">PAV</a> v1.2.1 (hifiasm haplotype-resolved contigs aligned
+to GRCh38 with minimap2 <tt>-x asm20</tt>). Per-caller VCFs were normalized,
+merged within and across samples and filtered into stringent and lenient
+tiers, and the callset was re-genotyped across the cohort to produce the
+final release: 541,049 autosomal SVs (444,524 insertions, 96,525 deletions)
+with per-ancestry allele frequencies (AFR, AMR, EAS, EUR, SAS) and gene,
+regulatory, eQTL, GWAS and EHR-phenotype annotations.
 </p>
 <p>
-A scalable imputation workflow was developed to impute over 750,000 SVs into
-existing short-read whole-genome sequencing datasets. SV-trait associations
-were tested in 848 AoU participants with matched electronic health records,
-identifying 291 significant associations across 226 conditions.
+This track was built from the supplementary media-2 table of the AoU
+long-read sequencing preprint
+(<a href="https://doi.org/10.1101/2025.10.02.25336942" target="_blank">
+doi:10.1101/2025.10.02.25336942</a>). Access to the underlying AoU
+long-read data requires registration through the
+<a href="https://www.researchallofus.org/" target="_blank">All of Us
+Research Hub</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

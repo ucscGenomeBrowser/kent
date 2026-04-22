@@ -26,15 +26,33 @@ the second breakpoint chromosome and position are listed in the item details.
 
 <h2>Methods</h2>
 <p>
-Long-read sequencing was performed on 945 Han Chinese individuals.
-Structural variants were called per sample and then merged across all samples using
+Gong et al. 2025 performed Oxford Nanopore long-read sequencing of 945
+Han Chinese individuals on PromethION instruments with R9.4 flow cells.
+Reads were aligned to GRCh38.p13 with NGMLR v0.2.7 using ONT-tuned
+parameters, and a joint-calling strategy was used to call SVs at moderate
+coverage: per-sample discovery with
+<a href="https://github.com/tjiangHIT/cuteSV" target="_blank">cuteSV</a>
+v1.0.13, merging of breakpoints within 500 bp across individuals with
 <a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">SURVIVOR</a>
-(v1.0.6). The merged VCF was converted to bigBed format for display.
-Allele frequencies and per-sample support information were extracted from the
-INFO fields of the merged VCF. The study identified two notable variants:
-an ancestral deletion in GSDMD associated with bone density and kidney injury
-risk, and a modern human-specific variant in WWP2 influencing height, body
-composition, and facial features.
+v1.0.6, per-sample re-genotyping of the merged set with LRcaller v1.0, and
+a final BCFtools merge. SVs in centromeric, pericentromeric and gap regions
+were filtered out, yielding 111,288 high-quality SVs: 49,518 deletions,
+42,300 insertions, 13,503 duplications, 5,595 inversions and 372
+translocations.
+</p>
+<p>
+The site-only VCF released at
+<a href="https://www.biosino.org/node/analysis/detail/OEZ007028" target="_blank">
+OMIX accession OED00945268</a> (<tt>OED00945268_Han_945samples_SV.vcf.gz</tt>)
+was converted to BED for this track.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

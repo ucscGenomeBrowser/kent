@@ -81,21 +81,37 @@ for 8 ancestry groups: AFR (African), AMR (Latino/Admixed-American), NFE
 <h2>Methods</h2>
 
 <p>
-The authors used their open-source <a href="https://github.com/hall-lab/svtools" target="_blank">
-svtools</a> pipeline to jointly call SVs across all samples. Per-sample
-calls were produced with LUMPY (v0.2.13), CNVnator (v0.3.3), and svtyper
-(v0.1.4); calls were merged across samples and refined with svtools. Low-
-and high-confidence variants were distinguished using a Mendelian-error
-cutoff on mean sample quality, calibrated against a set of 409 CEPH trios.
-Per-sample validation was performed against a PacBio long-read truth set
-derived from three HGSVC samples.</p>
+Abel et al. 2020 jointly called SVs from Illumina short-read sequencing
+(mean coverage &gt;20x) of 17,795 genomes from the NHGRI Centers for
+Common Disease Genomics program with per-sample calls from LUMPY v0.2.13,
+CNVnator v0.3.3 and svtyper v0.1.4, integrated across the cohort by the
+<a href="https://github.com/hall-lab/svtools" target="_blank">svtools</a>
+pipeline. Low- and high-confidence variants were separated by a
+Mendelian-error cutoff on mean sample quality, calibrated against 409
+CEPH trios, and per-sample calls were validated against a PacBio
+long-read truth set from three HGSVC samples. Two non-overlapping
+callsets were released: 458,106 SVs from 14,623 samples called natively
+on GRCh38 (B38) and 279,892 SVs from 8,417 samples called on GRCh37
+(B37). The site-frequency callsets span DELs, DUPs, INVs, mobile-element
+variants and breakends/translocations.</p>
 
 <p>
-For this UCSC track, VCF INFO fields were parsed and converted to BED9+
-format. Variants originally called on GRCh37 (B37 callset) were lifted
-to GRCh38 using the UCSC <tt>hg19ToHg38.over.chain.gz</tt> chain. See the
+The B38 and B37 site-frequency VCFs (plus BEDPE companion files) were
+downloaded from the authors' supplementary-data GitHub repository,
+<a href="https://github.com/hall-lab/sv_paper_042020" target="_blank">
+github.com/hall-lab/sv_paper_042020</a>. For the hg38 track, INFO fields
+were parsed into BED9+ columns; B37 records were lifted to hg38 with the
+UCSC <tt>hg19ToHg38.over.chain.gz</tt> chain (626 B37 records failed to
+lift, leaving 737,998 SVs total in the track).</p>
+
+<p>
+The step-by-step build commands (download, liftOver, format conversion,
+bigBed build) are recorded in the UCSC makeDoc for this track:
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/abelSv.txt" target="_blank">
-track build documentation</a> for full details.</p>
+doc/hg38/abelSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
 
 <h2>Data Access</h2>
 

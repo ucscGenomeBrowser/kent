@@ -27,10 +27,11 @@ Pipeline:
   5. Drop rows where CPC AC == 0 (HPRC-specific alts).
   6. Collapse all remaining alts sharing the same snarl ID into one output row:
          svType = that class if all alts agree, else MIXED
-         svLen  = max |d| across alts
-         alleleCount = sum of per-alt CPC AC
+         svLen  = reference span (chromEnd - chromStart)
+         insLen = max inserted-sequence length for INS alts (0 otherwise)
+         AC     = sum of per-alt CPC AC
          alleleNumber = CPC AN
-         alleleFreq   = alleleCount / alleleNumber
+         alleleFreq   = AC / alleleNumber
          numSamples   = CPC NS
 
 Usage:
@@ -38,7 +39,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 # Colors per SV type
 COLORS = {
@@ -90,23 +95,29 @@ def compute_cpc_counts(gt_cols):
 def emit(site, fout):
     classes = site["types"]
     sv_type = next(iter(classes)) if len(classes) == 1 else "MIXED"
-    rgb = COLORS[sv_type]
+    sv_type = normalizeSvType(sv_type)
+    rgb = COLORS.get(sv_type, "120,120,120")
     chrom = site["chrom"]
     start = site["pos0"]
     end = start + max(site["ref_len"], 1)
     af = (site["ac_sum"] / site["an"]) if site["an"] else 0.0
     score = min(1000, max(0, int(round(af * 1000))))
+    svLen = end - start
+    insLen = site["max_ins"] if sv_type == "INS" else 0
+    featLen = insLen if sv_type in ("INS", "MEI") else svLen
+    name = svName(sv_type, featLen, site["ac_sum"])
     row = [
         chrom, str(start), str(end),
-        site["name"],
+        name,
         str(score),
         ".",
         str(start), str(end),
         rgb,
         sv_type,
-        str(site["svlen"]),
-        str(site["num_alts"]),
+        str(svLen),
+        str(insLen),
         str(site["ac_sum"]),
+        str(site["num_alts"]),
         str(site["an"]),
         f"{af:.6f}",
         str(site["ns"]),
@@ -196,6 +207,7 @@ def main():
                     "name": vid,
                     "types": set(),
                     "svlen": 0,
+                    "max_ins": 0,
                     "num_alts": 0,
                     "ac_sum": 0,
                     "an": an,
@@ -206,6 +218,10 @@ def main():
             site["types"].add(sv_type)
             if mag > site["svlen"]:
                 site["svlen"] = mag
+            if sv_type == "INS":
+                d = alt_len - ref_len
+                if d > site["max_ins"]:
+                    site["max_ins"] = d
             site["num_alts"] += 1
             site["ac_sum"] += ac
             if an > site["an"]:

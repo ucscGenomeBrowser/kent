@@ -18,10 +18,11 @@ This script:
          otherwise  -> dropped
   3. emits one bed row per snarl (row) with alts merged:
          svType = agreed class or MIXED if alts differ
-         svLen  = max |d| across passing alts
-         alleleCount = sum of AC values for passing alts
+         svLen  = reference span (chromEnd - chromStart)
+         insLen = max inserted-sequence length across passing INS alts (0 otherwise)
+         AC     = sum of AC values for passing alts
          alleleNumber = AN (constant)
-         alleleFreq   = alleleCount / alleleNumber
+         alleleFreq   = AC / alleleNumber
      Rows with zero passing alts are skipped.
 
 Usage:
@@ -29,7 +30,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 COLORS = {
     "INS": "0,0,200",       # blue
@@ -115,6 +120,7 @@ def main():
 
             types = set()
             max_mag = 0
+            max_ins = 0
             ac_sum = 0
             num_pass = 0
             for i, alt_seq in enumerate(alts):
@@ -124,6 +130,10 @@ def main():
                 types.add(sv_type)
                 if mag > max_mag:
                     max_mag = mag
+                if sv_type == "INS":
+                    d = len(alt_seq) - ref_len
+                    if d > max_ins:
+                        max_ins = d
                 if i < len(ac_list):
                     ac_sum += _int(ac_list[i])
                 num_pass += 1
@@ -133,7 +143,8 @@ def main():
                 continue
 
             sv_type = next(iter(types)) if len(types) == 1 else "MIXED"
-            rgb = COLORS[sv_type]
+            sv_type = normalizeSvType(sv_type)
+            rgb = COLORS.get(sv_type, "120,120,120")
 
             pos0 = int(pos) - 1
             start = pos0
@@ -141,17 +152,27 @@ def main():
             af = (ac_sum / an) if an else 0.0
             score = min(1000, max(0, int(round(af * 1000))))
 
+            svLen = end - start
+            if sv_type == "INS":
+                insLen = max_ins
+            else:
+                insLen = 0
+
+            featLen = insLen if sv_type in ("INS", "MEI") else svLen
+            name = svName(sv_type, featLen, ac_sum)
+
             row = [
                 chrom, str(start), str(end),
-                vid,
+                name,
                 str(score),
                 ".",
                 str(start), str(end),
                 rgb,
                 sv_type,
-                str(max_mag),
-                str(num_pass),
+                str(svLen),
+                str(insLen),
                 str(ac_sum),
+                str(num_pass),
                 str(an),
                 f"{af:.6f}",
                 str(ns),

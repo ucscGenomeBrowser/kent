@@ -18,7 +18,11 @@ Paper:
 
 import csv
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -85,18 +89,26 @@ def emit(outF, row, typeExtra):
     if chromEnd <= chromStart:
         chromEnd = chromStart + 1
 
-    svType = row["SVTYPE"]
-    svLen = abs(toInt(row["SVLEN"]))
+    svType = normalizeSvType(row["SVTYPE"])
+    svLenSrc = abs(toInt(row["SVLEN"]))
+    svLen = chromEnd - chromStart
+    if svType in ("INS", "MEI"):
+        insLen = svLenSrc
+    else:
+        insLen = 0
     color = SV_COLORS.get(svType, "100,100,100")
 
-    alleleCount = toInt(row.get("MERGE_AC", "0"))
+    ac = toInt(row.get("MERGE_AC", "0"))
     sampleCount = countSamples(row.get("MERGE_SAMPLES", ""))
+
+    featLen = insLen if svType in ("INS", "MEI") else svLen
+    name = svName(svType, featLen, ac)
 
     bed = [
         chrom,
         str(chromStart),
         str(chromEnd),
-        row["ID"],
+        name,
         "0",
         ".",
         str(chromStart),
@@ -104,7 +116,8 @@ def emit(outF, row, typeExtra):
         color,
         svType,
         str(svLen),
-        str(alleleCount),
+        str(insLen),
+        str(ac),
         str(sampleCount),
         na(row.get("BAND", "")),
         f"{toFloat(row.get('REF_SD', '0')):.6f}",

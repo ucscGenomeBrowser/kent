@@ -63,31 +63,48 @@ variant.</li>
 
 <h2>Methods</h2>
 <p>
-HGSVC3 produced haplotype-resolved de novo assemblies for 65 samples
-spanning five continental groups. Assemblies were built from PacBio HiFi
-and Oxford Nanopore reads, phased with Strand-seq and further validated
-with Hi-C and optical mapping. Structural variants were called by aligning
-each haplotype back to the reference with PAV v2.4.0.1; calls were then
-cross-referenced with ten independent callers. The final annotation tables
-(this track's input) include merge statistics (MERGE_RO, MERGE_OFFSET,
-MERGE_SZRO, MERGE_OFFSZ, MERGE_MATCH) that describe how well each
-per-sample call matched the merged consensus site.
+Logsdon et al. 2025 produced fully phased hybrid de novo assemblies for 65
+diverse individuals (63 from 1kGP, NA21487 from HapMap, and HG002 from
+GIAB), using PacBio HiFi (Sequel II/Revio, 30-h movies), Oxford Nanopore
+ultra-long sequencing (R9.4.1 PromethION, 96-h runs), Bionano optical
+mapping (DLE-1 on Saphyr 2nd-gen), Strand-seq, Hi-C (Proximo) and Iso-Seq.
+Assemblies were generated with Verkko v1.4.1 (primary) and hifiasm-UL
+v0.19.6 (complementary, especially for centromeres and Yq12), phased with
+the Graphasing pipeline v0.3.1-alpha, and produced 130 haplotype
+assemblies with median N50 of 130 Mbp that close 92% of previous assembly
+gaps (39% of chromosomes at telomere-to-telomere status). SVs were called
+against GRCh38 and T2T-CHM13 with PAV v2.4.1 (plus DipCall and SVIM-asm
+from the same alignments) and cross-validated with an additional ten
+callers (PBSV, Sniffles, Delly, cuteSV, DeBreak, SVIM, DeepVariant,
+Clair3, PEPPER-Margin-DeepVariant for ONT and MELT-LRA/PALMER2 for MEIs).
+Calls were merged with SV-Pop and centromere-satellite / telomere hits
+were filtered. The final GRCh38 release contains 176,232 DEL+INS plus 300
+INV (176,532 SVs total); the T2T-CHM13 release contains 188,224 DEL+INS
+plus 276 INV (188,500 SVs total).
 </p>
 <p>
-Two tables were merged for display here:
-<tt>variants_GRCh38_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> (DEL + INS, 176,232
-records) and <tt>variants_GRCh38_sv_inv_HGSVC2024v1.0.tsv.gz</tt> (INV, 300
-records). Type-specific columns (HOM_REF/HOM_TIG/TE for insdel;
-RGN_REF_INNER for inversions) are shown as empty on the detail page when
-they do not apply.
-</p>
-<p>
-The hs1 (T2T-CHM13) version of this track uses the same merge pipeline on
-the HGSVC3 T2T-CHM13 tables
-(<tt>variants_T2T-CHM13_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> and
-<tt>variants_T2T-CHM13_sv_inv_HGSVC2024v1.0.tsv.gz</tt>) downloaded from
+For display, the two final HGSVC3 v1.0 annotation tables
+<tt>variants_GRCh38_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> and
+<tt>variants_GRCh38_sv_inv_HGSVC2024v1.0.tsv.gz</tt> were downloaded from
+the <a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/GRCh38/annotation_table/" target="_blank">
+IGSR HGSVC3 GRCh38 release directory</a> and merged into a single bigBed.
+The hs1 version uses the parallel
+<tt>variants_T2T-CHM13_sv_insdel_HGSVC2024v1.0.tsv.gz</tt> and
+<tt>variants_T2T-CHM13_sv_inv_HGSVC2024v1.0.tsv.gz</tt> tables from the
 <a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/T2T-CHM13/annotation_table/" target="_blank">
-the HGSVC3 T2T-CHM13 release directory</a>.
+HGSVC3 T2T-CHM13 release directory</a>; no liftOver is involved on hs1.
+Type-specific columns (HOM_REF/HOM_TIG/TE for insdel; RGN_REF_INNER for
+inversions) are empty on the detail page when they do not apply.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hs1/lrSv.txt" target="_blank">
+doc/hs1/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

@@ -15,14 +15,18 @@ Source:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 MIN_SV_LEN = 50
 
 SV_COLORS = {
     "INS":     "0,0,200",      # blue
     "DEL":     "200,0,0",      # red
-    "COMPLEX": "140,0,200",    # purple
+    "CPX":     "140,0,200",    # purple
     "INV":     "230,140,0",    # orange
 }
 
@@ -75,7 +79,7 @@ def main():
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            name = fields[2]
+            rowId = fields[2]
             ref = fields[3]
             alts = fields[4].split(",")
             info = parseInfo(fields[7])
@@ -104,7 +108,7 @@ def main():
                 if alt in (".", "*"):
                     continue
 
-                t = (typeList[i] or "").strip().lower()
+                t = (typeList[i] or "").strip()
                 if not t:
                     t = deriveType(ref, alt)
 
@@ -118,17 +122,17 @@ def main():
                 if svLenVal < MIN_SV_LEN and not isInv:
                     continue
 
-                # Normalize type for display.
-                svType = t.upper()
-                if svType not in ("INS", "DEL", "COMPLEX"):
-                    svType = "COMPLEX"
+                # Normalize type for display (complex -> CPX via lrSvCommon).
+                svType = normalizeSvType(t)
+                if svType not in ("INS", "DEL", "CPX"):
+                    svType = "CPX"
                 if isInv:
                     svType = "INV"
 
                 color = SV_COLORS.get(svType, "100,100,100")
 
                 chromStart = pos - 1
-                # INS: 1-bp anchor; DEL/COMPLEX/INV: span the REF interval.
+                # INS: 1-bp anchor; DEL/CPX/INV: span the REF interval.
                 if svType == "INS":
                     chromEnd = chromStart + 1
                 else:
@@ -145,28 +149,41 @@ def main():
                 except ValueError:
                     af = 0.0
 
-                # Name: VCF ID if informative, else constructed. Truncate
+                svLen = chromEnd - chromStart
+                # insLen: for INS use abs(ALT-REF) / svLenVal; for DEL/CPX/INV 0.
+                if svType == "INS":
+                    insLen = abs(len(alt) - len(ref))
+                    if insLen == 0:
+                        insLen = svLenVal
+                else:
+                    insLen = 0
+
+                # ID: VCF ID if informative, else constructed. Truncate
                 # very long snarl/ORIGIN-chain IDs to stay within bigBed's
                 # 255-char limit.
-                if name and name != ".":
-                    rowName = f"{name}.{i+1}" if n > 1 else name
+                if rowId and rowId != ".":
+                    baseId = f"{rowId}.{i+1}" if n > 1 else rowId
                 else:
-                    rowName = f"{chrom}:{pos}:{svType}:{svLenVal}"
-                if len(rowName) > 200:
-                    rowName = f"{chrom}:{pos}:{svType}:{svLenVal}"
+                    baseId = f"{chrom}:{pos}:{svType}:{svLenVal}"
+                if len(baseId) > 200:
+                    baseId = f"{chrom}:{pos}:{svType}:{svLenVal}"
+
+                featLen = insLen if svType in ("INS", "MEI") else svLen
+                name = svName(svType, featLen, ac)
 
                 row = [
                     chrom,
                     str(chromStart),
                     str(chromEnd),
-                    rowName,
+                    name,
                     "0",
                     ".",
                     str(chromStart),
                     str(chromEnd),
                     color,
                     svType,
-                    str(svLenVal),
+                    str(svLen),
+                    str(insLen),
                     str(ac),
                     str(an),
                     f"{af:.6f}",

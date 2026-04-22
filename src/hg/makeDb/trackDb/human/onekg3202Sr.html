@@ -50,23 +50,45 @@ source and the VCF FILTER status.
 
 <h2>Methods</h2>
 <p>
-The 1000 Genomes expanded cohort was sequenced on Illumina NovaSeq 6000
-at ~30x coverage with 2x150 bp reads. Structural variants were called
-with the GATK-SV cohort pipeline and merged with svtools; novel insertions
-were re-genotyped to produce the integrated callset used here
-(<tt>1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz</tt>).
-Allele frequencies were computed genome-wide and per-population
-(AFR, AMR, EAS/ASN, EUR, SAS/SAN).
+Byrska-Bishop et al. 2022 sequenced the 3,202-sample expanded 1000
+Genomes Project cohort (2,504 original unrelated samples plus 698 samples
+that complete 602 parent-child trios) on Illumina NovaSeq 6000 at ~30x
+coverage with 2x150 bp reads. SNVs and indels were called with GATK
+HaplotypeCaller. SVs were discovered and integrated from three analytic
+pipelines - <a href="https://github.com/broadinstitute/gatk-sv" target="_blank">
+GATK-SV</a>, <a href="https://github.com/hall-lab/svtools" target="_blank">
+svtools</a> and Absinthe - through a machine-learning integration model;
+novel insertions were re-genotyped to produce the freeze V3 callset with
+added allele frequencies (<tt>*.wAF.vcf.gz</tt>). The final ensemble
+callset contains 173,366 SVs across seven classes: 90,259 DELs, 49,693
+INSs, 28,242 DUPs, 920 INVs, 3,568 complex SVs (CPX), 673 multi-allelic
+CNVs and 11 inter-chromosomal translocations (CTX), with AC, AN, AF and
+per-superpopulation AFs (AFR, AMR, EAS/ASN, EUR, SAS/SAN).
 </p>
 <p>
 <b>Why a short-read track in a long-read collection?</b> Short-read SV
-callsets such as this one generally have high precision for deletions
-and duplications but miss many insertions, repeat expansions and
-variants in complex/low-mappability regions that long-read technologies
-can resolve. Displaying this callset alongside the long-read tracks in
-this collection makes it easier to spot variants that are unique to
-long-read data or that have substantially different breakpoints when
-called from short reads.
+callsets such as this one generally have high precision for deletions and
+duplications but miss many insertions, repeat expansions and variants in
+complex/low-mappability regions that long-read technologies can resolve.
+Displaying this callset alongside the long-read tracks in this collection
+makes it easier to spot variants that are unique to long-read data or
+that have substantially different breakpoints when called from short
+reads.
+</p>
+<p>
+The freeze V3 VCF
+<tt>1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz</tt> was
+downloaded from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/" target="_blank">
+IGSR 1000 Genomes Illumina SV integration folder</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

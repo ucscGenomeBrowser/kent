@@ -11,7 +11,9 @@ table lrSvDecode
     uint thickEnd;      "Thick end (same as chromEnd)"
     uint reserved;      "Item color"
     string svType;      "SV Type|DEL, INS, or INSDEL (combined insertion/deletion)"
-    int svLen;          "SV Length|Absolute length of the SV in base pairs (0 for INSDEL where REF and ALT lengths differ)"
+    int svLen;          "SV Length|Length of the variant on the reference in base pairs"
+    int insLen;         "Insertion Length|Length of inserted sequence, 0 for DEL/INV/CPX"
+    int AC;             "Allele Count|Placeholder value (50); awaiting real values from deCODE (#35059)"
     string trrBegin;    "Tandem Repeat Region Start|Start of the surrounding tandem repeat region, if any (TRRBEGIN)"
     string trrEnd;      "Tandem Repeat Region End|End of the surrounding tandem repeat region, if any (TRREND)"
     )

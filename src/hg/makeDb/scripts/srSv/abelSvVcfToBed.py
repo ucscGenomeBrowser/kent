@@ -11,7 +11,12 @@ Usage:
 """
 import sys
 import gzip
+import os
 import re
+
+# Share the lrSv svName/normalizeSvType helpers without duplicating the module.
+sys.path.insert(0, os.path.expanduser("~/kent/src/hg/makeDb/scripts/lrSv"))
+from lrSvCommon import svName, normalizeSvType
 
 # RGB colors per SV type (flat solid colors)
 COLORS = {
@@ -109,6 +114,9 @@ def main():
         if svclass not in COLORS:
             continue  # skip unknown types
 
+        # Canonicalize via lrSvCommon (DEL/DUP/INV/MEI/BND are already canonical).
+        svType = normalizeSvType(svclass)
+
         start = int(pos) - 1  # VCF is 1-based
         mate_chrom = ""
         mate_pos = -1
@@ -162,19 +170,41 @@ def main():
             pop_an = int(info_d.get(f"AN_{pop}", "0"))
             pop_vals.append((pop_ac, pop_an))
 
+        # svLen canonical = reference span; keep legacy abs(SVLEN) as the displayed
+        # length too by writing it into svLen when non-BND (matches legacy abelSv
+        # filter range). For BND, use -1 (a sentinel preserved in the as schema).
+        if svclass == "BND":
+            svLen = -1
+            insLen = 0
+        else:
+            svLen = end - start
+            if svclass == "MEI":
+                # For MEI, abs(SVLEN) is the inserted-element size.
+                # abelSv VCF reports MEI with negative SVLEN (e.g. -303),
+                # so test != 0 rather than > 0.
+                insLen = abs(sv_length) if sv_length != 0 and sv_length != -1 else 0
+            else:
+                insLen = 0
+
         rgb = COLORS[svclass]
+
+        featLen = insLen if svType in ("INS", "MEI") else (svLen if svLen > 0 else None)
+        name = svName(svType, featLen, ac)
+
         row = [
             chrom, str(start), str(end),
-            vid,
+            name,
             str(score),
             ".",
             str(start), str(end),
             rgb,
-            svclass,
-            str(sv_length),
+            svType,
+            str(svLen),
+            str(insLen),
+            str(ac),
             out_tag,
             filt,
-            str(ac), str(an),
+            str(an),
             f"{af:.6f}",
             f"{msq:.2f}",
             str(nsamp), str(nfam),
