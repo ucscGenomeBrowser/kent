@@ -3060,7 +3060,7 @@ boolean hasDataTypes = (dataTypes != NULL);
 // optional
 const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
 const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
-const char *subtrackUrl = trackDbSetting(tdb, "subtrackUrl");
+const char *subtrackUrls = trackDbSetting(tdb, "subtrackUrls");
 // --- done parsing values from trackDb.settings ---
 
 const char *metaDataId = tdb->track;
@@ -3235,8 +3235,22 @@ jsonWriteString(jw, "track", tdb->track);
 char *defaultSortField = trackDbSetting(tdb, "defaultSortField");
 if (isNotEmpty(defaultSortField))
     jsonWriteString(jw, "defaultSortField", defaultSortField);
-if (subtrackUrl)
-    jsonWriteString(jw, "subtrackUrl", (char *)subtrackUrl);
+if (isNotEmpty(subtrackUrls))
+    {
+    struct slPair *pairs = slPairListFromString((char *)subtrackUrls, TRUE);
+    if (pairs)
+        {
+        jsonWriteObjectStart(jw, "subtrackUrls");
+        for (struct slPair *p = pairs; p != NULL; p = p->next)
+            {
+            char *encoded = htmlEncode((char *)p->val);
+            jsonWriteString(jw, p->name, encoded);
+            freeMem(encoded);
+            }
+        jsonWriteObjectEnd(jw);
+        }
+    slPairFreeValsAndList(&pairs);
+    }
 if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
     jsonWriteBoolean(jw, "udcTimeout", TRUE);
 

@@ -128,16 +128,46 @@ $(function() {
     function initTable(allData) {
         const { metadata, rowToIdx, colNames } = allData;
 
+        // Match subtrackUrls trackDb keys against metadata column names
+        // ignoring leading underscores on either side, so authors can toggle
+        // facet visibility by adding/removing a '_' prefix in the metadata
+        // file without having to re-edit trackDb.
+        const stripUnderscores = s => s.replace(/^_+/, "");
+        const subtrackUrls = Object.fromEntries(
+            Object.entries(embeddedData.subtrackUrls || {})
+                  .map(([k, v]) => [stripUnderscores(k), v])
+        );
+
         const ordinaryColumns = colNames.map(key => {
             const col = {
                 data: key,
                 title: toTitleCase(key.replace(/^_/, "")),
             };
-            if (key === embeddedData.primaryKey && embeddedData.subtrackUrl) {
+            const urlTemplate = subtrackUrls[stripUnderscores(key)];
+            if (urlTemplate) {
+                // Mirrors hgc/hgc.c:printIdOrLinks(): split cell on ',', each
+                // token may be 'id|label' (id substitutes $$, label is shown).
+                // urlTemplate is html-encoded server-side (htmlEncode in
+                // hgTrackUi.c), so it's safe to interpolate into an href.
                 col.render = (data, type) => {
                     if (type !== "display") return data;
-                    const url = embeddedData.subtrackUrl.replace("$$", encodeURIComponent(data));
-                    return `<a href="${url}" target="_blank">${data}</a>`;
+                    if (data == null || data === "") return "";
+                    const parts = String(data).split(",")
+                                              .map(s => s.trim())
+                                              .filter(Boolean);
+                    return parts.map(tok => {
+                        let idForUrl = tok, label = tok, encode = true;
+                        const bar = tok.indexOf("|");
+                        if (bar >= 0) {
+                            idForUrl = tok.slice(0, bar);
+                            label    = tok.slice(bar + 1);
+                            encode   = false;
+                        }
+                        if (/^https?:/i.test(label)) encode = false;
+                        const sub = encode ? encodeURIComponent(idForUrl) : idForUrl;
+                        const href = urlTemplate.replace(/\$\$/g, sub);
+                        return `<a href="${href}" target="_blank">${label}</a>`;
+                    }).join(", ");
                 };
             }
             return col;
