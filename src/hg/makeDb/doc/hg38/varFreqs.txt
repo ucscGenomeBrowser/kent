@@ -287,3 +287,26 @@ ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.CHM13.v1.2.0.deepvaria
 # 6. Updated varFreqs.ra filterValues.sources and added
 #    filterByRange.GA4KAF/AC and filterByRange.CoLoRSdbAF/AC.
 # Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink was preserved.
+
+# 2026-04-22 Claude max
+# GWAS SVatalog small-variant (SNV/indel) allele frequencies from the 101
+# SVatalog samples, sibling of the lrSv chirmade101Sv structural-variant
+# track. Paper: Chirmade et al. 2026, Heredity, PMID 41203876.
+# SNPs were called from 10X Genomics linked short-read WGS of the 101
+# samples with GATK HaplotypeCaller v4.0.0.0 and phased with SHAPEIT v4.2.0.
+# Data: the per-chromosome allele-frequency text files were downloaded into
+# /hive/data/genomes/hg38/bed/varFreqs/svCatalog/ alongside the LD-stats
+# files (see the companion Zenodo deposit 13367574).
+cd /hive/data/genomes/hg38/bed/varFreqs/svCatalog/
+# Convert the 23 per-chrom *_allele_freq.txt files to a single sites-only
+# VCF with AF/AC/AN plus gnomAD v3.1 NFE AF and dbSNP RSID as INFO fields.
+# AC is synthesized as round(AF * 202) and AN is fixed at 202 since the
+# source release does not ship AC/AN.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/svatalogFreqToVcf.py \
+    svatalog.vcf chr{1..22}_allele_freq.txt chrX_allele_freq.txt
+bcftools sort svatalog.vcf -Oz -m 16G -T /tmp/ -o svatalog.vcf.gz
+tabix -p vcf svatalog.vcf.gz
+rm -f svatalog.vcf
+# 8,814,835 variants -> 172 MB bgzipped + 1.6 MB tabix index.
+# Symlinks placed under /gbdb/hg38/varFreqs/svatalog/ for the svatalogSnv
+# stanza in trackDb/human/varFreqs.ra.
