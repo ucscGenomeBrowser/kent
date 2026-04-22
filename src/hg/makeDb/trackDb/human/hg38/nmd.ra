@@ -9,7 +9,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         track nmdEscGencode
         shortLabel NMD Escape Gencode
-        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: Gencode transcripts
+        longLabel NMD escape predictions: Gencode transcripts
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
         visibility hide
@@ -22,7 +22,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         track nmdEscNcbiRefSeq
         shortLabel NMD Escape RefSeq
-        longLabel NMD escape 50bp/100bp/intronless/400nt ruleset: NCBI RefSeq Curated transcripts
+        longLabel NMD escape predictions: NCBI RefSeq Curated transcripts
         parent nmd on
         bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
         visibility pack
