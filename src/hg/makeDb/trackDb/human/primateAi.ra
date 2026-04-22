@@ -20,5 +20,7 @@ filter.scorePAI3D 0
 filterLimits.scorePAI3D 0:1
 filterByRange.scorePAI3D on
 filterLabel.scorePAI3D PrimateAI-3D raw score (clinical threshold 0.821)
+labelFields name,aaChange
+defaultLabelFields name
 maxWindowToDraw 2000000
 urls gene="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
