@@ -50,6 +50,7 @@ UTILS_APPLIST = \
 	hubClone \
 	hubPublicCheck \
 	mafToBigMaf \
+	mafToBigMafSummary \
 	makeTableList \
 	oligoMatch \
 	overlapSelect \
