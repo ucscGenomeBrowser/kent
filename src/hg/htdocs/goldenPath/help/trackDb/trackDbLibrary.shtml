@@ -4075,7 +4075,8 @@ that identifies the reference sequence.
     bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed,
+    file using the utility <code>hgLoadMafSummary</code> (SQL track) or
+    <code>mafToBigMafSummary</code> (bigMaf).  For bigMaf, the value is assumed to be bigBed,
     Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
