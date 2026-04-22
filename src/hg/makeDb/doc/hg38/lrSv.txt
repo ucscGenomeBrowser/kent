@@ -461,3 +461,24 @@ cd /hive/data/genomes/hg38/bed/lrSv/cpc1
 bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
 #   hs1 sites: 46,092 (down from 97,205 combined)
 #   hg38 lifted: 36,030 (down from 81,261); 10,062 unmapped
+
+##########
+# 2026-04-22 Claude max
+#
+# colorsDbSv: rebuild both hg38 and hs1 bigBeds from the upstream
+# pbsv+Jasmine VCFs now that the CoLoRSdb project redistributes them
+# directly (placed in /hive/data/genomes/hg38/bed/lrSv/colorsDb/).
+# The previous bigBed came from an older build and declared `af` as a
+# string; the new build uses a checked-in converter, stores AF as a
+# float so the numeric filter works, and adds a derived `insLen`
+# column so the shared lrSv supertrack-level filter.insLen does not
+# error for this subtrack.
+
+cd /hive/data/genomes/hg38/bed/lrSv/colorsDb
+# Upstream VCFs (same pbsv.jasmine release, one per reference path):
+#   CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz  (hg38, 426,239 SVs)
+#   CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz   (hs1,  839,714 SVs)
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvColorsDbSvBuild.sh
+# hg38: 59 MB, 192,534 DEL + 232,973 INS + 732 INV
+# hs1 : 87 MB (more variants due to T2T-added regions)
+# Existing /gbdb symlinks (sv.hg38.bb, sv.hs1.bb) are unchanged.
