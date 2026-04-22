@@ -15,10 +15,10 @@ RULE_COLORS = {
 }
 
 RULE_DESCRIPTIONS = {
-    1: "Rule 1 - last 50bp of last coding exon junction",
-    2: "Rule 2 - intronless transcript",
-    3: "Rule 3 - first 100bp of coding nucleotides",
-    4: "Rule 4 - PTC in long exon (>400 nt)",
+    1: "<b>Rule 1</b> - last 50bp of last coding exon junction",
+    2: "<b>Rule 2</b> - single coding exon, no 3'UTR intron",
+    3: "<b>Rule 3</b> - first 100bp of coding nucleotides",
+    4: "<b>Rule 4</b> - PTC in long exon (>400 nt)",
 }
 
 # Lindeboom et al. 2016: reduced NMD efficiency for PTCs in exons longer than this
@@ -224,8 +224,18 @@ def main():
                 if geneSym and not regionData[key]["geneSym"]:
                     regionData[key]["geneSym"] = geneSym
 
-        if len(cdsExons)==1:
-            # rule 2: intronless transcript
+        # rule 2 applies when no EJC can be deposited downstream of the stop codon.
+        # that requires: single CDS exon (no CDS-CDS junction) AND no 3'UTR intron.
+        # 5'UTR introns are allowed - their EJCs are upstream of the stop and either
+        # are cleared by the scanning 40S or are never encountered by the terminating
+        # ribosome, so they do not trigger NMD.
+        if strand == "+":
+            hasThreeUtrIntron = any(s > cdsEnd for s in rec["exonStarts"])
+        else:
+            hasThreeUtrIntron = any(e < cdsStart for e in rec["exonEnds"])
+
+        if len(cdsExons) == 1 and not hasThreeUtrIntron:
+            # rule 2: no EJC downstream of stop codon -> any PTC in CDS escapes NMD
             bed = [chrom, str(cdsStart), str(cdsEnd), name]
             bedOut(bed, txStart, txEnd, decoOfh, 2)
             addRegions([(chrom, cdsStart, cdsEnd)], 2)

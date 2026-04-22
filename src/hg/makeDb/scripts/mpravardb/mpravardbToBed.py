@@ -9,6 +9,7 @@ Usage:
 """
 
 import csv
+import re
 import subprocess
 import sys
 import os
@@ -20,21 +21,53 @@ LIFTOVER_CHAIN = "/gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz"
 CHROM_SIZES = "/hive/data/genomes/hg38/chrom.sizes"
 INPUT_CSV = "mpravardb.csv"
 
+# Upstream CSV contains UTF-8 curly quotes, primes, and NBSP mojibake.
+# Browser does not transcode UTF-8 in bigBed fields, so everything user-visible
+# must be plain ASCII. Transliterate or strip.
+_SANITIZE_MAP = {
+    "’": "'",  # RIGHT SINGLE QUOTATION MARK (used as apostrophe)
+    "‘": "'",  # LEFT SINGLE QUOTATION MARK
+    "“": '"',  # LEFT DOUBLE QUOTATION MARK
+    "”": '"',  # RIGHT DOUBLE QUOTATION MARK
+    "′": "'",  # PRIME (used after numerals: 3'UTR)
+    "″": '"',  # DOUBLE PRIME
+    "–": "-",  # EN DASH
+    "—": "-",  # EM DASH
+    "…": "...", # HORIZONTAL ELLIPSIS
+    " ": " ",  # NO-BREAK SPACE
+    "¬": "",   # NOT SIGN  (NBSP mojibake pair)
+    "†": "",   # DAGGER    (NBSP mojibake pair)
+}
+_SANITIZE_RE = re.compile("|".join(re.escape(k) for k in _SANITIZE_MAP))
+
+def sanitize_text(s):
+    """Return ASCII-only version of s for bigBed string fields."""
+    if s is None:
+        return ""
+    out = _SANITIZE_RE.sub(lambda m: _SANITIZE_MAP[m.group()], s)
+    # Drop any remaining non-ASCII (rare), then collapse runs of whitespace
+    out = out.encode("ascii", "ignore").decode("ascii")
+    out = re.sub(r"\s+", " ", out).strip()
+    return out
+
 def pval_to_score(pval):
-    """Convert p-value to a 0-1000 score using -log10."""
-    if pval is None or pval == "":
+    """Convert p-value to a 0-1000 score using -log10.
+    Missing / out-of-range / non-numeric → 0 (not 1000).
+    Many rows upstream encode NA as literal 0.0, which is indistinguishable from
+    a true p=0; treat all non-positive inputs as unscored."""
+    if pval is None or pval in ("", "NA"):
         return 0
     try:
         p = float(pval)
     except ValueError:
         return 0
-    if p <= 0:
-        return 1000
+    if p <= 0 or p > 1:
+        return 0
     score = int(-math.log10(p) * 100)
     return max(0, min(1000, score))
 
 def pval_to_color(pval, fdr):
-    """Color by significance: red if FDR<0.05, orange if p<0.05, black otherwise."""
+    """Color by significance: red if FDR<0.05, orange if p<0.05, grey otherwise."""
     try:
         fdr_val = float(fdr) if fdr not in (None, "", "NA") else 1.0
     except ValueError:
@@ -52,13 +85,16 @@ def pval_to_color(pval, fdr):
         return "190,190,190" # grey - not significant
 
 def safe_float(val):
-    """Convert to float, return 0.0 for NA or empty."""
+    """Convert to float, return NaN for NA / empty / non-numeric.
+    Using NaN (rather than 0.0) keeps untested variants out of filterByRange
+    sliders by default and avoids masquerading as p=0 / fdr=0 in the details
+    page.  bedToBigBed accepts the literal string "nan" in float fields."""
     if val in (None, "", "NA"):
-        return 0.0
+        return math.nan
     try:
         return float(val)
     except ValueError:
-        return 0.0
+        return math.nan
 
 def csv_to_bed(input_csv, hg19_bed, hg38_bed):
     """Parse CSV and write two BED files, one per assembly."""
@@ -73,6 +109,15 @@ def csv_to_bed(input_csv, hg19_bed, hg38_bed):
             chrom_num, pos, ref, alt, genome = row[0], row[1], row[2], row[3], row[4]
             rsid, disease, cellline = row[5], row[6], row[7]
             desc, log2fc, pvalue, fdr, study = row[8], row[9], row[10], row[11], row[12]
+
+            # Sanitize user-visible string fields (ASCII only, drop NBSP mojibake)
+            rsid = sanitize_text(rsid)
+            disease = sanitize_text(disease)
+            cellline = sanitize_text(cellline)
+            desc = sanitize_text(desc)
+            study = sanitize_text(study)
+            ref = sanitize_text(ref)
+            alt = sanitize_text(alt)
 
             chrom = "chr" + chrom_num
             try:

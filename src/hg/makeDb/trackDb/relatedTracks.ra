@@ -118,3 +118,15 @@ hg38 promoterAi primateAi PrimateAI-3D, a companion deep-learning model from Ill
 hg38 primateAi promoterAi PromoterAI, a companion deep-learning model from Illumina for non-coding promoter variants
 hg38 promoterAi alphaMissense AlphaMissense, a deep-learning predictor of missense (coding) variant pathogenicity
 hg38 alphaMissense promoterAi PromoterAI, a deep-learning predictor of expression-altering variants in promoter regions
+
+# NMD Escape cross-links:
+hg38 nmd mane MANE Select transcripts from NCBI/EBI, a curated subset of RefSeq/Ensembl transcripts used as clinical reference
+hg38 mane nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
+hg38 nmd ncbiRefSeq NCBI RefSeq transcripts, the source annotation set for the NMD Escape RefSeq subtrack
+hg38 ncbiRefSeq nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
+
+# MPRA cross-links:
+hg38 mpra wgEncodeReg4 ENCODE regulatory region annotations, many of which are tested by MPRA assays
+hg38 wgEncodeReg4 mpra Experimental MPRA measurements of regulatory activity for candidate elements
+hg38 mpra cCREs Candidate cis-regulatory elements; many overlap MPRA-tested fragments
+hg38 cCREs mpra Experimentally validated regulatory activity from MPRA assays for overlapping elements

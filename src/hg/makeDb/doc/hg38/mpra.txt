@@ -1,19 +1,97 @@
-# max Mar 30 2026
-# There was nothing to do, Varda from the Ahituv Lab provided the bigBed file at
-# https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb
-# and a hub at https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/hub.txt
+# MPRA superTrack (hg38) - Redmine #37359
+# -----------------------------------------------------------------------------
+# Two subtracks: mprabase (MPRA Base enhancer elements) and mpraVarDb (MPRA-tested
+# regulatory variants).  trackDb stanzas live in human/hg38/mpra.ra.  Description
+# pages: mpra.html, mprabase.html, mpraVarDb.html.
 
-# MPRAVarDB track
-# Mon Mar 10 2026 (claude/max)
+# =============================================================================
+# mprabase subtrack - max Mar 30 2026
+# =============================================================================
+# No local processing. The bigBed was provided directly by Varda Singhal
+# (Ahituv Lab, UCSF) via UCSC hubspace and dropped into the gbdb path.
+#
+# Source (upstream bigBed):
+#   https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb
+# Full upstream hub:
+#   https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/hub.txt
+# Upstream SQLite sits alongside the bigBed:
+#   /hive/data/genomes/hg38/bed/mpra/mprabase/mprabase_v4_9.3.db
+# That DB corresponds to MPRA Base v4.9.3 and is the source of truth for
+# reproducing the bigBed if Varda ever refreshes the upstream hub.
 
-# Download data from https://mpravardb.rc.ufl.edu/
+mkdir -p /hive/data/genomes/hg38/bed/mpra/mprabase
+cd /hive/data/genomes/hg38/bed/mpra/mprabase
+wget https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb -O mprabase.bb
+
+# gbdb symlink:
+#   /gbdb/hg38/mpra/mprabase/mprabase.bb -> /hive/data/genomes/hg38/bed/mpra/mprabase/mprabase.bb
+
+# Historical note: an earlier attempt lifted from hg19 via a custom SQLite
+# liftover table (hg38CustomLiftover.RDS, preserved in the build dir), but
+# had one feature beyond chrom size.  Replaced by the pre-built hub file
+# above, so the liftOver path is not used.
+
+# =============================================================================
+# mpraVarDB subtrack - max Mar 10 2026 (claude/max), QA rebuild Apr 21 2026 (lou)
+# =============================================================================
+# Source:
+#   https://mpravardb.rc.ufl.edu/ (UFL web server)
+# Snapshot date: Mar 10 2026 (CSV via the "download_all" endpoint).  The
+# MPRAVarDB project does not publish version numbers; track the snapshot
+# date and the session URL together as the provenance pair.
+#
+# Input CSV contains 242,818 variants from 18 MPRA studies, with coordinates
+# in either hg19 or hg38: 213,689 hg19, 29,129 hg38, 3,676 with NA coords.
+# Script liftOvers hg19 -> hg38, merges with native hg38, and emits bigBed9+13.
+
 mkdir -p /hive/data/genomes/hg38/bed/mpra/mpravardb
 cd /hive/data/genomes/hg38/bed/mpra/mpravardb
 wget 'https://mpravardb.rc.ufl.edu/session/27d7af46df917aed91f4cca7bee378a2/download/download_all?w=' -O mpravardb.csv
 
-# 242,818 variants from 18 MPRA studies, with both hg19 and hg38 coordinates.
-# 213,689 are hg19, 29,129 are hg38, 3,676 have no coordinates (NA).
-
-# Convert to BED, liftOver hg19->hg38, merge, and create bigBed:
+# Convert, liftOver, merge, and build bigBed.  Output: mpravardb.bb (239,028 rows).
 python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
-# Output: mpravardb.bb (239,028 variants after liftOver, 114 unmapped)
+
+# gbdb symlink:
+#   /gbdb/hg38/mpra/mpravardb/mpravardb.bb -> /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb
+
+# -----------------------------------------------------------------------------
+# QA rebuild Apr 21 2026 (RM #37359)
+# -----------------------------------------------------------------------------
+# mpravardbToBed.py updated to:
+#   - sanitize UTF-8 in user-visible string fields (curly quotes, primes,
+#     NBSP mojibake) before writing BED.  Prior build had ~246k non-ASCII
+#     byte occurrences across 100,961 rows (42% of track) including mangled
+#     rsIDs like "rs34425335NBSP-MOJIBAKE".
+#   - pval_to_score() now returns 0 (not 1000) for non-positive / out-of-range
+#     pvalue.  Prior build gave score=1000 to ~7,400 rows whose upstream pvalue
+#     was literal 0 (mostly NA-coded-as-0), inflating those to the top of any
+#     score-sorted view.
+#   - safe_float() now returns NaN (was 0.0) for NA / empty / non-numeric
+#     upstream values.  27,065 rows whose upstream pvalue was literal "NA"
+#     now store pvalue="nan" instead of "0.0", so untested variants no longer
+#     masquerade as p=0 in the details page and are excluded by the default
+#     filter.fdr / filter.log2FC range sliders.  bedToBigBed accepts the
+#     literal string "nan" in float fields.
+#
+# Pre-rebuild backup preserved at:
+#   /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb.preQA-backup
+#
+# Reproduce QA rebuild:
+#   cd /hive/data/genomes/hg38/bed/mpra/mpravardb
+#   python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
+
+# =============================================================================
+# Known outstanding items (see RM #37359)
+# =============================================================================
+# - mprabase reference field for Mattioli 2020 rows starts with "musculus ..."
+#   (species word merged into title upstream).  Flag to Varda for upstream fix.
+# - mprabase has 1 orphan element (Hela STARR-seq, PMID 23328393, Arnold 2013)
+#   not in the documented experiment table.  Flag to Varda.
+# - mpraVarDB preserves ~42k (chrom,start,end,name) duplicate rows (same rsID
+#   tested in multiple cells/studies).  Users disambiguate via the
+#   filterValues.cellLine / filterValues.mpraStudy filters in the trackDb.
+# - ~7,400 rows have upstream pvalue=0 and fdr=0 (not NA).  Could be genuine
+#   precision-floor significance or an upstream "not tested" encoding; the
+#   distinction is not recoverable from the CSV.  With pval_to_score returning
+#   0 for p<=0, these no longer dominate score-sorted views but their details
+#   page still reads "pvalue: 0.0".  Upstream clarification needed.

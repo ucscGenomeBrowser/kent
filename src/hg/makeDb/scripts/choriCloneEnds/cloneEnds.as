@@ -1,5 +1,5 @@
-table ncbiCloneEndsCH1073
-"NCBI CH1073 BAC library unique-concordant clone placements on danRer11"
+table choriCloneEnds
+"CHORI zebrafish BAC library unique-concordant clone placements (NCBI Clone DB)"
 (
 string  chrom;            "Reference sequence chromosome or scaffold"
 uint    chromStart;        "Start position (0-based)"
