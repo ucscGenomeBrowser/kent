@@ -2930,6 +2930,27 @@ jsInline("$('.superDropdown').on('change', function() {"
 // * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
 // are sent to hgTracks, but are not necessary as UI elements anymore
 jsInline("$('#superTrackTable .vizSelect').hide();");
+
+// --- Supertrack-level filters ---
+// If the supertrack's trackDb declares any filter.*, filterValues.*,
+// filterByRange.*, etc. settings, render the standard filter UI here.
+// The cart variables are stored under the supertrack's name
+// (e.g. "lrSv.filter.svLen.min"). Subtracks inherit these values via
+// cartOptionalStringClosestToHome() during hgTracks rendering; a cart
+// value set on a subtrack always overrides the supertrack's.
+if (bedHasFilters(superTdb))
+    {
+    puts("<h3 style='margin-top:1em'>Filters ");
+    printInfoIcon("Values set here are inherited by every subtrack in this "
+                  "container. Any filter set on an individual subtrack's "
+                  "Track Settings page overrides the value set here for that "
+                  "subtrack only.");
+    puts("</h3>");
+    // Pass title=NULL so scoreCfgUi does not emit its "<p><B>title</B>"
+    // banner. The container <h3> above is already the section label.
+    scoreCfgUi(database, cart, superTdb, superTdb->track,
+               NULL, 1000, /*boxed=*/FALSE);
+    }
 }
 
 #ifdef USE_HAL
