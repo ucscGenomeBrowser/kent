@@ -3,12 +3,28 @@
     "annotation": "Should now have axtChainScoreScheme and axtChainLinearGap input options",
     "comments": [
         {
+            "color": "none",
+            "data": {
+                "text": "Assemblies in fasta format, masked. "
+            },
+            "id": 1,
+            "position": [
+                42.09072708051447,
+                778.882939520563
+            ],
+            "size": [
+                310,
+                55
+            ],
+            "type": "markdown"
+        },
+        {
             "child_comments": [
                 1
             ],
             "child_steps": [
-                9,
-                8
+                11,
+                9
             ],
             "color": "blue",
             "data": {
@@ -17,29 +33,13 @@
             "id": 0,
             "position": [
                 17.29072708051447,
-                695.0356491033881
+                738.882939520563
             ],
             "size": [
                 414,
                 276
             ],
             "type": "frame"
-        },
-        {
-            "color": "none",
-            "data": {
-                "text": "Assemblies in fasta format, masked. "
-            },
-            "id": 1,
-            "position": [
-                42.09072708051447,
-                735.0356491033881
-            ],
-            "size": [
-                310,
-                55
-            ],
-            "type": "markdown"
         }
     ],
     "creator": [
@@ -77,8 +77,8 @@
             "name": "Input parameter",
             "outputs": [],
             "position": {
-                "left": 6.969707608149614,
-                "top": 22.086266148506436
+                "left": 16.792180016306407,
+                "top": 0.0
             },
             "tool_id": null,
             "tool_state": "{\"default\": \"both\", \"multiple\": false, \"validators\": [], \"restrictions\": [\"both\", \"minus\", \"plus\"], \"parameter_type\": \"text\", \"optional\": false}",
@@ -89,10 +89,37 @@
             "workflow_outputs": []
         },
         "1": {
-            "annotation": "--step or Z=1 default",
+            "annotation": "to supply a score matrix to the lastz operation",
             "content_id": null,
             "errors": null,
             "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "to supply a score matrix to the lastz operation",
+                    "name": "scoringMatrix"
+                }
+            ],
+            "label": "scoringMatrix",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 11.0183670147745,
+                "top": 95.33299906946252
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": true, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "98c64d32-3f93-46c0-8d65-ac602eb2b6cf",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "--step or Z=1 default",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
             "input_connections": {},
             "inputs": [
                 {
@@ -105,7 +132,7 @@
             "outputs": [],
             "position": {
                 "left": 3.529330207209202,
-                "top": 130.1734203457517
+                "top": 174.02071076292663
             },
             "tool_id": null,
             "tool_state": "{\"default\": 1, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -115,11 +142,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "2": {
+        "3": {
             "annotation": "true == --notransition false == -transition this is BLASTZ_T default 1 or 3",
             "content_id": null,
             "errors": null,
-            "id": 2,
+            "id": 3,
             "input_connections": {},
             "inputs": [
                 {
@@ -132,7 +159,7 @@
             "outputs": [],
             "position": {
                 "left": 4.413474126983308,
-                "top": 209.84303396423985
+                "top": 253.69032438141477
             },
             "tool_id": null,
             "tool_state": "{\"default\": true, \"validators\": [], \"parameter_type\": \"boolean\", \"optional\": false}",
@@ -142,11 +169,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "3": {
+        "4": {
             "annotation": "xdrop option to lastz, default 910",
             "content_id": null,
             "errors": null,
-            "id": 3,
+            "id": 4,
             "input_connections": {},
             "inputs": [
                 {
@@ -159,7 +186,7 @@
             "outputs": [],
             "position": {
                 "left": 0.17426400315015156,
-                "top": 291.022144528618
+                "top": 334.86943494579293
             },
             "tool_id": null,
             "tool_state": "{\"default\": 910, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -169,11 +196,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "4": {
+        "5": {
             "annotation": "BLASTZ_K == --hspthresh default 3000",
             "content_id": null,
             "errors": null,
-            "id": 4,
+            "id": 5,
             "input_connections": {},
             "inputs": [
                 {
@@ -186,7 +213,7 @@
             "outputs": [],
             "position": {
                 "left": 3.111621798696479,
-                "top": 373.6699645506831
+                "top": 417.51725496785804
             },
             "tool_id": null,
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -196,11 +223,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "5": {
+        "6": {
             "annotation": "default 9400",
             "content_id": null,
             "errors": null,
-            "id": 5,
+            "id": 6,
             "input_connections": {},
             "inputs": [
                 {
@@ -213,7 +240,7 @@
             "outputs": [],
             "position": {
                 "left": 2.9781360951763647,
-                "top": 455.0827362160491
+                "top": 498.93002663322403
             },
             "tool_id": null,
             "tool_state": "{\"default\": 9400, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -223,11 +250,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "6": {
+        "7": {
             "annotation": "integer for the --gappedthresh BLASTZ_L argument",
             "content_id": null,
             "errors": null,
-            "id": 6,
+            "id": 7,
             "input_connections": {},
             "inputs": [
                 {
@@ -240,7 +267,7 @@
             "outputs": [],
             "position": {
                 "left": 4.3597736220213745,
-                "top": 528.4530394194131
+                "top": 572.300329836588
             },
             "tool_id": null,
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -250,11 +277,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "7": {
+        "8": {
             "annotation": "",
             "content_id": null,
             "errors": null,
-            "id": 7,
+            "id": 8,
             "input_connections": {},
             "inputs": [
                 {
@@ -267,40 +294,13 @@
             "outputs": [],
             "position": {
                 "left": 0,
-                "top": 602.6281670301672
+                "top": 646.4754574473421
             },
             "tool_id": null,
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
             "uuid": "d67c9c1e-024f-4ec1-8f9b-3e0fb53f2122",
-            "when": null,
-            "workflow_outputs": []
-        },
-        "8": {
-            "annotation": "Assemblies in fasta format, masked. ",
-            "content_id": null,
-            "errors": null,
-            "id": 8,
-            "input_connections": {},
-            "inputs": [
-                {
-                    "description": "Assemblies in fasta format, masked. ",
-                    "name": "TARGET_Sequence"
-                }
-            ],
-            "label": "TARGET_Sequence",
-            "name": "Input dataset",
-            "outputs": [],
-            "position": {
-                "left": 61.54140818169743,
-                "top": 795.7024074792059
-            },
-            "tool_id": null,
-            "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": \"\"}",
-            "tool_version": null,
-            "type": "data_input",
-            "uuid": "85fb7a10-67cf-42df-b1d8-ba4a90c07e2e",
             "when": null,
             "workflow_outputs": []
         },
@@ -313,21 +313,21 @@
             "inputs": [
                 {
                     "description": "Assemblies in fasta format, masked. ",
-                    "name": "QUERY_Sequence"
+                    "name": "TARGET_Sequence"
                 }
             ],
-            "label": "QUERY_Sequence",
+            "label": "TARGET_Sequence",
             "name": "Input dataset",
             "outputs": [],
             "position": {
-                "left": 65.41210375986545,
-                "top": 883.5319639758811
+                "left": 61.54140818169743,
+                "top": 839.5496978963808
             },
             "tool_id": null,
-            "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": null}",
+            "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": \"\"}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "6e8cdde2-a9f4-4ee5-936d-5eee44c1e257",
+            "uuid": "85fb7a10-67cf-42df-b1d8-ba4a90c07e2e",
             "when": null,
             "workflow_outputs": []
         },
@@ -348,7 +348,7 @@
             "outputs": [],
             "position": {
                 "left": 847.1784982523703,
-                "top": 327.8676532349488
+                "top": 371.71494365212374
             },
             "tool_id": null,
             "tool_state": "{\"default\": 1000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
@@ -359,10 +359,37 @@
             "workflow_outputs": []
         },
         "11": {
-            "annotation": "To supply the -linearGap option",
+            "annotation": "Assemblies in fasta format, masked. ",
             "content_id": null,
             "errors": null,
             "id": 11,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Assemblies in fasta format, masked. ",
+                    "name": "QUERY_Sequence"
+                }
+            ],
+            "label": "QUERY_Sequence",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 65.41210375986545,
+                "top": 927.379254393056
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "6e8cdde2-a9f4-4ee5-936d-5eee44c1e257",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "12": {
+            "annotation": "To supply the -linearGap option",
+            "content_id": null,
+            "errors": null,
+            "id": 12,
             "input_connections": {},
             "inputs": [
                 {
@@ -375,7 +402,7 @@
             "outputs": [],
             "position": {
                 "left": 842.0531692565773,
-                "top": 434.8711130026786
+                "top": 478.71840341985353
             },
             "tool_id": null,
             "tool_state": "{\"optional\": false, \"tag\": null}",
@@ -385,11 +412,11 @@
             "when": null,
             "workflow_outputs": []
         },
-        "12": {
+        "13": {
             "annotation": "input a scoring matrix to axtChain.  Going to be the 4 by 4 matrix of A C G T and with O=400 and E = 30",
             "content_id": null,
             "errors": null,
-            "id": 12,
+            "id": 13,
             "input_connections": {},
             "inputs": [
                 {
@@ -402,7 +429,7 @@
             "outputs": [],
             "position": {
                 "left": 837.4832247419432,
-                "top": 536.3238812275557
+                "top": 580.1711716447306
             },
             "tool_id": null,
             "tool_state": "{\"optional\": true, \"tag\": null}",
@@ -412,14 +439,14 @@
             "when": null,
             "workflow_outputs": []
         },
-        "13": {
+        "14": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
             "errors": null,
-            "id": 13,
+            "id": 14,
             "input_connections": {
                 "infile": {
-                    "id": 8,
+                    "id": 9,
                     "output_name": "output"
                 }
             },
@@ -434,7 +461,7 @@
             ],
             "position": {
                 "left": 532.3114150162568,
-                "top": 731.8327655968853
+                "top": 775.6800560140603
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
@@ -452,14 +479,14 @@
             "when": null,
             "workflow_outputs": []
         },
-        "14": {
+        "15": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
             "errors": null,
-            "id": 14,
+            "id": 15,
             "input_connections": {
                 "infile": {
-                    "id": 9,
+                    "id": 11,
                     "output_name": "output"
                 }
             },
@@ -474,7 +501,7 @@
             ],
             "position": {
                 "left": 533.2460594202081,
-                "top": 879.2369818615593
+                "top": 923.0842722787343
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
@@ -492,34 +519,38 @@
             "when": null,
             "workflow_outputs": []
         },
-        "15": {
+        "16": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy1",
             "errors": null,
-            "id": 15,
+            "id": 16,
             "input_connections": {
                 "gapped_extension_options|gappedthresh": {
-                    "id": 6,
-                    "output_name": "output"
-                },
-                "gapped_extension_options|ydrop": {
-                    "id": 5,
-                    "output_name": "output"
-                },
-                "interpolation_options|inner": {
                     "id": 7,
                     "output_name": "output"
                 },
+                "gapped_extension_options|ydrop": {
+                    "id": 6,
+                    "output_name": "output"
+                },
+                "interpolation_options|inner": {
+                    "id": 8,
+                    "output_name": "output"
+                },
                 "query": {
-                    "id": 14,
+                    "id": 15,
                     "output_name": "outfile"
                 },
+                "scoring_options|scoring": {
+                    "id": 1,
+                    "output_name": "output"
+                },
                 "seeding_options|notransition": {
-                    "id": 2,
+                    "id": 3,
                     "output_name": "output"
                 },
                 "seeding_options|step": {
-                    "id": 1,
+                    "id": 2,
                     "output_name": "output"
                 },
                 "sequence_options|strand_selector": {
@@ -527,15 +558,15 @@
                     "output_name": "output"
                 },
                 "target": {
-                    "id": 13,
+                    "id": 14,
                     "output_name": "outfile"
                 },
                 "ungapped_extension_options|hspthresh": {
-                    "id": 4,
+                    "id": 5,
                     "output_name": "output"
                 },
                 "ungapped_extension_options|xdrop": {
-                    "id": 3,
+                    "id": 4,
                     "output_name": "output"
                 }
             },
@@ -587,7 +618,7 @@
             ],
             "position": {
                 "left": 494.57770192925574,
-                "top": 0
+                "top": 43.847290417174904
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy1",
@@ -611,14 +642,14 @@
                 }
             ]
         },
-        "16": {
+        "17": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy6",
             "errors": null,
-            "id": 16,
+            "id": 17,
             "input_connections": {
                 "input": {
-                    "id": 15,
+                    "id": 16,
                     "output_name": "kegalign_output"
                 }
             },
@@ -633,7 +664,7 @@
             ],
             "position": {
                 "left": 925.677131659099,
-                "top": 130.1787030604637
+                "top": 174.02599347763862
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput": {
@@ -665,26 +696,26 @@
                 }
             ]
         },
-        "17": {
+        "18": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_axtchain/ucsc_axtchain/482+galaxy1",
             "errors": null,
-            "id": 17,
+            "id": 18,
             "input_connections": {
                 "in_axt": {
-                    "id": 16,
+                    "id": 17,
                     "output_name": "output"
                 },
                 "in_query": {
-                    "id": 14,
+                    "id": 15,
                     "output_name": "outfile"
                 },
                 "in_target": {
-                    "id": 13,
+                    "id": 14,
                     "output_name": "outfile"
                 },
                 "linear_gap_options|lineargap_input": {
-                    "id": 11,
+                    "id": 12,
                     "output_name": "output"
                 },
                 "minScore": {
@@ -692,7 +723,7 @@
                     "output_name": "output"
                 },
                 "scoreScheme": {
-                    "id": 12,
+                    "id": 13,
                     "output_name": "output"
                 }
             },
@@ -712,7 +743,7 @@
             ],
             "position": {
                 "left": 1237.5970406420554,
-                "top": 307.1868521067106
+                "top": 351.0341425238855
             },
             "post_job_actions": {
                 "RenameDatasetActionout": {
@@ -744,14 +775,14 @@
                 }
             ]
         },
-        "18": {
+        "19": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainswap/ucsc_chainswap/482+galaxy0",
             "errors": null,
-            "id": 18,
+            "id": 19,
             "input_connections": {
                 "in_chain": {
-                    "id": 17,
+                    "id": 18,
                     "output_name": "out"
                 }
             },
@@ -766,7 +797,7 @@
             ],
             "position": {
                 "left": 1476.4911560768403,
-                "top": 628.8001019939747
+                "top": 672.6473924111497
             },
             "post_job_actions": {
                 "RenameDatasetActionout": {
@@ -805,22 +836,22 @@
                 }
             ]
         },
-        "19": {
+        "20": {
             "annotation": "",
-            "id": 19,
+            "id": 20,
             "input_connections": {
                 "QUERY_Sequence": {
-                    "id": 14,
+                    "id": 15,
                     "input_subworkflow_step_id": 2,
                     "output_name": "outfile"
                 },
                 "TARGET_Sequence": {
-                    "id": 13,
+                    "id": 14,
                     "input_subworkflow_step_id": 1,
                     "output_name": "outfile"
                 },
                 "chain": {
-                    "id": 17,
+                    "id": 18,
                     "input_subworkflow_step_id": 0,
                     "output_name": "out"
                 }
@@ -836,7 +867,7 @@
             "outputs": [],
             "position": {
                 "left": 1853.3578552955903,
-                "top": 302.7667767986622
+                "top": 346.6140672158371
             },
             "subworkflow": {
                 "a_galaxy_workflow": "true",
@@ -1580,22 +1611,22 @@
                 }
             ]
         },
-        "20": {
+        "21": {
             "annotation": "",
-            "id": 20,
+            "id": 21,
             "input_connections": {
                 "QUERY_Sequence": {
-                    "id": 13,
+                    "id": 14,
                     "input_subworkflow_step_id": 2,
                     "output_name": "outfile"
                 },
                 "TARGET_Sequence": {
-                    "id": 14,
+                    "id": 15,
                     "input_subworkflow_step_id": 1,
                     "output_name": "outfile"
                 },
                 "chain": {
-                    "id": 18,
+                    "id": 19,
                     "input_subworkflow_step_id": 0,
                     "output_name": "out"
                 }
@@ -1611,7 +1642,7 @@
             "outputs": [],
             "position": {
                 "left": 1836.1911072487153,
-                "top": 762.766715763506
+                "top": 806.6140061806809
             },
             "subworkflow": {
                 "a_galaxy_workflow": "true",
@@ -2364,6 +2395,6 @@
         "chain",
         "net"
     ],
-    "uuid": "d04dd299-ec8f-4f4c-adfe-b4121cac9c62",
+    "uuid": "125f8508-9453-48c8-8e0f-93da0be031c7",
     "version": 1
 }
