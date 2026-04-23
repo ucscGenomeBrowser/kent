@@ -1597,7 +1597,16 @@ var hubCreate = (function() {
             {
                 targets: 2,
                 render: function(data, type, row, meta) {
-                    return decodeURIComponent(data);
+                    let decodedName = decodeURIComponent(data);
+                    if (type !== "display" || row.fileType === "dir") {
+                        return decodedName;
+                    }
+                    if (typeof uiState.userUrl === "undefined" || uiState.userUrl.length === 0) {
+                        return decodedName;
+                    }
+                    let fileUrl = uiState.userUrl + cgiEncode(row.fullPath);
+                    let copyIcon = '<svg class="copyLinkIcon" title="Copy file URL to clipboard" data-url="' + fileUrl + '" style="margin-left: 6px; cursor: pointer; vertical-align:baseline; width:0.8em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg>';
+                    return '<a class="fileLink" href="' + fileUrl + '" target="_blank" rel="noopener">' + decodedName + '</a>' + copyIcon;
                 }
             },
             {
@@ -1729,6 +1738,32 @@ var hubCreate = (function() {
             });
         });
         table.on("click", function(e) {
+            let copyIcon = e.target.closest ? e.target.closest(".copyLinkIcon") : null;
+            if (copyIcon) {
+                e.stopPropagation();
+                e.preventDefault();
+                let url = copyIcon.getAttribute("data-url");
+                navigator.clipboard.writeText(url).then(function() {
+                    let feedback = document.createElement("span");
+                    feedback.textContent = "copied";
+                    feedback.style.marginLeft = "6px";
+                    feedback.style.fontSize = "0.85em";
+                    feedback.style.color = "#080";
+                    copyIcon.parentNode.replaceChild(feedback, copyIcon);
+                    setTimeout(function() {
+                        if (feedback.parentNode) {
+                            feedback.parentNode.replaceChild(copyIcon, feedback);
+                        }
+                    }, 1500);
+                }, function() {
+                    alert("Failed to copy URL: " + url);
+                });
+                return;
+            }
+            if (e.target.closest && e.target.closest(".fileLink")) {
+                e.stopPropagation();
+                return;
+            }
             if (e.target.className !== "dt-select-checkbox") {
                 e.stopPropagation();
                 // we've clicked somewhere not on the checkbox itself, we need to:
