@@ -718,7 +718,15 @@ char *tableName = cartUsualString(cart, hggType, NULL);
 if (tableName == NULL)
     tableName = "knownGene";
 struct trackDb *tdb = hTrackDbForTrack(database, tableName);
-hPrintf("%s", tdb->html);
+// QuickLift: hub trackDb has no html; pull it from the source assembly's native track.
+char *liftDbSetting = (tdb != NULL) ? trackDbSetting(tdb, "quickLiftDb") : NULL;
+if (liftDbSetting != NULL && isEmpty(tdb->html))
+    {
+    struct trackDb *srcTdb = hTrackDbForTrack(liftDbSetting, trackHubSkipHubName(tableName));
+    if (srcTdb != NULL && isNotEmpty(srcTdb->html))
+        tdb = srcTdb;
+    }
+hPrintf("%s", emptyForNull(tdb->html));
 cartWebEnd();
 }
 
