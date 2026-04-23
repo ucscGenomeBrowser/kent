@@ -10229,9 +10229,19 @@ else
         sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
         char *db = database;
         char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-        if (liftDb != NULL) 
+        // When quickLifted, the genePred table lives in the source assembly,
+        // and the click's seqName/winStart/winEnd are in destination coords;
+        // lift them back to source coords so hgSeqItemsInRange finds rows.
+        char *querySeq = seqName;
+        int queryStart = winStart, queryEnd = winEnd;
+        if (liftDb != NULL)
+            {
             db = liftDb;
-        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), seqName, winStart, winEnd, constraints);
+            quickLiftLiftPos(trackHubSkipHubName(database), liftDb,
+                             seqName, winStart, winEnd,
+                             &querySeq, &queryStart, &queryEnd);
+            }
+        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), querySeq, queryStart, queryEnd, constraints);
         }
     }
 if (itemCount == 0)
