@@ -1023,6 +1023,32 @@ var hubCreate = (function() {
         return encodeURIComponent(trackName.replaceAll(fileNameFixRegex, "_"));
     }
 
+    function viewHubInGenomeBrowser(hubName) {
+        // connect the whole hub in hgTracks, without pack'ing any specific track
+        if (typeof uiState.userUrl === "undefined" || uiState.userUrl.length === 0) {
+            return;
+        }
+        let dirRow = uiState.filesHash[hubName];
+        if (!dirRow) return;
+        let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
+        let dbParam = dirRow.hubType === "assemblyHub" ? "genome" : "db";
+        let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&" + dbParam + "=" + dirRow.genome + "&hubUrl=" + encodeURIComponent(hubUrl);
+        window.location.assign(url);
+    }
+
+    function showHubBanner(hubName) {
+        let banner = document.getElementById("hubBanner");
+        let nameSpan = document.getElementById("hubBannerName");
+        if (!banner || !nameSpan) return;
+        nameSpan.textContent = hubName;
+        banner.style.display = "";
+    }
+
+    function hideHubBanner() {
+        let banner = document.getElementById("hubBanner");
+        if (banner) banner.style.display = "none";
+    }
+
     // helper object so we don't need to use an AbortController to update
     // the data this function is using
     let selectedData = {};
@@ -1226,6 +1252,7 @@ var hubCreate = (function() {
             return !rowData.parentDir;
         });
         uiState.currentHub = "";
+        hideHubBanner();
     }
 
     function dataTableShowDir(table, dirName, dirFullPath) {
@@ -1252,6 +1279,7 @@ var hubCreate = (function() {
         });
         uiState.currentHub = dirName;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
+        showHubBanner(dirName);
     }
 
     // when we move into a new directory, we remove the row from the table
@@ -1726,6 +1754,12 @@ var hubCreate = (function() {
             });
         } else {
             table.buttons(".uploadButton").disable();
+        }
+        let hubBannerBtn = document.getElementById("hubBannerViewBtn");
+        if (hubBannerBtn) {
+            hubBannerBtn.addEventListener("click", function(e) {
+                viewHubInGenomeBrowser(uiState.currentHub);
+            });
         }
         table.on("select", function(e, dt, type, indexes) {
             indexes.forEach(function(i) {
