@@ -1,0 +1,79 @@
+track gnomadMpc
+parent gnomadVariants
+compositeTrack on
+shortLabel gnomAD MPC
+longLabel gnomAD Missense Badness, PolyPhen-2, and Constraint (MPC) v4.1.1
+type bigWig
+visibility hide
+group varRep
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+dataVersion Release v4.1.1 (2026-02-10)
+html gnomadMpc
+
+    track gnomadMpcA
+    parent gnomadMpc on
+    shortLabel MPC alt=A
+    longLabel gnomAD MPC score: alt allele is A
+    type bigWig
+    visibility dense
+    bigDataUrl /gbdb/hg38/gnomAD/mpc/a.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:3
+    viewLimitsMax 0:6
+    color 68,1,84
+
+    track gnomadMpcC
+    parent gnomadMpc on
+    shortLabel MPC alt=C
+    longLabel gnomAD MPC score: alt allele is C
+    type bigWig
+    visibility dense
+    bigDataUrl /gbdb/hg38/gnomAD/mpc/c.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:3
+    viewLimitsMax 0:6
+    color 59,82,139
+
+    track gnomadMpcG
+    parent gnomadMpc on
+    shortLabel MPC alt=G
+    longLabel gnomAD MPC score: alt allele is G
+    type bigWig
+    visibility dense
+    bigDataUrl /gbdb/hg38/gnomAD/mpc/g.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:3
+    viewLimitsMax 0:6
+    color 33,144,141
+
+    track gnomadMpcT
+    parent gnomadMpc on
+    shortLabel MPC alt=T
+    longLabel gnomAD MPC score: alt allele is T
+    type bigWig
+    visibility dense
+    bigDataUrl /gbdb/hg38/gnomAD/mpc/t.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:3
+    viewLimitsMax 0:6
+    color 253,231,36
+
+track gnomadMpcOverlaps
+parent gnomadVariants
+shortLabel gnomAD MPC overlaps
+longLabel gnomAD MPC v4.1.1 - variants scored against multiple transcripts
+type bigBed 9 +
+itemRgb on
+visibility hide
+group varRep
+bigDataUrl /gbdb/hg38/gnomAD/mpc/mpcOverlaps.bb
+dataVersion Release v4.1.1 (2026-02-10)
+labelFields name
+skipFields transcripts,mpcByTranscript
+filter.mpcMax 0:6
+filterByRange.mpcMax on
+filterLimits.mpcMax 0:6
+filterLabel.mpcMax Filter by max MPC score
+mouseOver <b>$ref&gt;$alt</b>, max MPC = $mpcMax across $nTranscripts transcripts
+html gnomadMpc
