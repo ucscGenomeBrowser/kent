@@ -5,17 +5,22 @@ Usage:
     lrSv1kgOntVcfToBed.py svan.vcf.gz output.bed chrom.sizes [phased.vcf.gz]
 
 The optional phased VCF provides AC, AN, and AF per variant (matched by ID).
-SVs without a match get alleleCount=-1, alleleNumber=-1, alleleFreq=-1.
+SVs without a match get AC=-1 (written to AC column), alleleNumber=-1, alleleFreq=-1.
+The canonical `name` column omits the :AC suffix when AC is -1.
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 # Colors by SV class (R,G,B)
 SV_COLORS = {
     "INS": "0,0,200",      # blue
     "DEL": "200,0,0",      # red
-    "COMPLEX": "230,140,0", # orange
+    "CPX": "230,140,0",    # orange
 }
 
 def parseInfo(infoStr):
@@ -30,7 +35,8 @@ def parseInfo(infoStr):
     return d
 
 def getSvClass(varId):
-    """Extract SV class (INS, DEL, COMPLEX) from the variant ID."""
+    """Extract raw SV class from the variant ID. Returns raw string;
+    will be normalized by normalizeSvType (COMPLEX -> CPX)."""
     if "-INS-" in varId:
         return "INS"
     elif "-DEL-" in varId:
@@ -96,25 +102,31 @@ def main():
             ref = fields[3]
             info = parseInfo(fields[7])
 
-            svClass = getSvClass(varId)
+            svTypeRaw = getSvClass(varId)
+            svType = normalizeSvType(svTypeRaw)
 
             # BED coordinates: 0-based half-open
             chromStart = pos - 1
             chromEnd = chromStart + len(ref)
 
-            # SV length
-            svLen = int(info.get("INS_LEN", info.get("DEL_LEN", "0")))
-
-            # Readable name: e.g. "DEL 258bp" or "INS Alu 330bp"
-            famName = info.get("FAM_N", "")
-            if famName:
-                name = f"{svClass} {famName} {svLen}bp"
-            else:
-                name = f"{svClass} {svLen}bp"
+            # Source lengths: INS_LEN for insertion size, DEL_LEN for deletion size
+            insLenSrc = int(info.get("INS_LEN", "0"))
+            delLenSrc = int(info.get("DEL_LEN", "0"))
 
             # For INS, the item spans only the anchor base; expand by 1 for visibility
-            if svClass == "INS" and chromEnd <= chromStart + 1:
+            if svType == "INS" and chromEnd <= chromStart + 1:
                 chromEnd = chromStart + 1
+
+            # svLen = span on reference
+            svLen = chromEnd - chromStart
+            # insLen = length of inserted sequence (INS only); 0 otherwise
+            if svType == "INS":
+                insLen = insLenSrc
+            elif svType == "DEL":
+                # DEL_LEN matches reference span
+                insLen = 0
+            else:
+                insLen = 0
 
             # Insertion/deletion type
             insType = info.get("ITYPE_N", info.get("DTYPE_N", ""))
@@ -172,15 +184,17 @@ def main():
             if strand not in ("+", "-"):
                 strand = "."
 
-            color = SV_COLORS.get(svClass, "100,100,100")
+            color = SV_COLORS.get(svType, "100,100,100")
 
             # Allele counts from phased VCF
             if varId in acMap:
                 ac, an, af = acMap[varId]
                 matched += 1
+                acForName = ac
             else:
                 ac, an, af = -1, -1, -1.0
                 unmatched += 1
+                acForName = None  # drop :AC suffix for SVAN-only rows
 
             # Clip to chrom sizes; skip records on unknown chroms
             if chrom not in chromSizes:
@@ -189,6 +203,9 @@ def main():
             if chromEnd > chromSizes[chrom]:
                 skipped += 1
                 continue
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, acForName)
 
             row = [
                 chrom,
@@ -200,8 +217,10 @@ def main():
                 str(chromStart),   # thickStart
                 str(chromEnd),     # thickEnd
                 color,
-                svClass,
+                svType,
                 str(svLen),
+                str(insLen),
+                str(ac),
                 insType,
                 family,
                 f"{percResolved:.2f}",
@@ -213,7 +232,6 @@ def main():
                 srcGene,
                 str(nbExons),
                 notCanonical,
-                str(ac),
                 str(an),
                 f"{af:.4f}" if af >= 0 else "-1.0000",
             ]

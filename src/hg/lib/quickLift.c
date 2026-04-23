@@ -525,3 +525,39 @@ if (quickLiftChainTable == NULL)
 	    quickLiftChainTableConfVariable, defaultQuickLiftChainTableName);
 return quickLiftChainTable;
 }
+
+boolean quickLiftLiftPos(char *sourceDb, char *destDb,
+    char *chrom, int start, int end,
+    char **retChrom, int *retStart, int *retEnd)
+/* Map a position from source (sourceDb) coords to destination (destDb) coords
+ * using the liftOver chain for sourceDb -> destDb.  This is used to remap
+ * hgFind results from quickLifted bigBed tracks (which return hits in the
+ * source assembly's coordinates) back to the destination assembly the user
+ * is viewing.  Returns TRUE on success. */
+{
+static struct hash *fileToChainHash = NULL;
+if (fileToChainHash == NULL)
+    fileToChainHash = newHash(0);
+
+char key[1024];
+safef(key, sizeof(key), "%s->%s", sourceDb, destDb);
+struct hash *chainHash = hashFindVal(fileToChainHash, key);
+if (chainHash == NULL)
+    {
+    char *chainFile = liftOverChainFile(sourceDb, destDb);
+    if (chainFile == NULL)
+        return FALSE;
+    chainHash = newHash(0);
+    // This reads every chain in the file up front.  A bigChain-format
+    // liftOver chain indexed on the source (fromDb) side would let us
+    // load just the chains overlapping the hit; worth revisiting if the
+    // upfront cost becomes an issue.
+    readLiftOverMap(chainFile, chainHash);
+    hashAdd(fileToChainHash, key, chainHash);
+    }
+
+char strand = '+';
+char *error = liftOverRemapRange(chainHash, 0.0, chrom, start, end, strand,
+                                 0.001, retChrom, retStart, retEnd, &strand);
+return (error == NULL);
+}

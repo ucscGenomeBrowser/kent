@@ -490,3 +490,12 @@ superTrack on
         dataVersion v1.2.0
         priority 9.5
 
+        track svatalogSnv
+        shortLabel SVatalog 101 WGS
+        longLabel Variant Frequencies: GWAS SVatalog SNPs from 101 Samples (Chirmade 2026, 10X Genomics linked short-reads)
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
+        visibility pack
+        priority 10
+

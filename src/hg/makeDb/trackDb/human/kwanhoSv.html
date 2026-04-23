@@ -59,17 +59,42 @@ reads per sample at the variant site.</li>
 
 <h2>Methods</h2>
 <p>
-Long-read whole-genome sequencing was performed on 100 post-mortem brain
-samples (35 PD, 31 ILBD, 34 HC) with PacBio HiFi chemistry. Per-sample SV
-calls from multiple callers were merged into a joint callset; the
-high-confidence filtered catalog released in Supplementary Table 13
-(<tt>media-13.txt</tt>) of the Kim et al. 2026 preprint is used directly
-here. Per-cohort allele frequencies, Hardy-Weinberg statistics and case /
-control carrier rates are reported in the source table; the track exposes
-the allele counts and the case-control differential as filterable fields.
-The paper also integrates single-nucleus RNA-seq from two brain regions
-of the same donors to test SV-expression associations in specific cell
-types, but that layer is not shown in this track.
+Kim et al. 2026 performed PacBio HiFi long-read whole-genome sequencing on
+100 post-mortem cerebellum samples from the Arizona Study of Aging and
+Neurodegenerative Disorders / Brain and Body Donation Program cohort
+(35 Parkinson's disease, 31 incidental Lewy body disease, 34 healthy
+controls). gDNA was isolated with either the Qiagen DNeasy or PacBio
+Nanobind PanDNA kit, sheared on a Megaruptor 3 to 10-23.5 kb, built into
+SMRTbell libraries (Prep Kit 3.0) and sequenced on PacBio Revio (25M
+SMRT cells, 2-h pre-extension, 24-h movies) to ~17x per-sample coverage.
+Reads were processed with the Broad long-read WDL pipelines (CCS v6.2.0,
+pbmm2 v1.4.0 aligned to GRCh38, SAMtools v1.13 merge/sort) and an
+ensemble of three callers was run per sample: Sniffles2 v2.0.6,
+<a href="https://github.com/PacificBiosciences/pbsv" target="_blank">
+PBSV</a> v2.9.0 (with GRCh38 tandem-repeat context) and Cue2 v2.0.0
+(deep-learning image-based long-read caller). Per-caller VCFs were
+FILTER-PASS / &ge;40 bp filtered, split by SV type with BCFtools, and
+merged by type across the 100 individuals and across the three callers
+with <a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">
+SURVIVOR</a> v1.0.7 (1 kb distance, strand-match, min 50 bp). Centromere,
+reference-gap, segmental-duplication and sex-chromosome SVs were excluded.
+The high-confidence catalog contains 74,552 SVs (34,056 insertions,
+29,545 deletions, 9,707 duplications and 1,244 inversions) released in
+Supplementary Table 13 (<tt>media-13.txt</tt>), with per-cohort AF / AC /
+AN, Hardy-Weinberg statistics and case/control carrier differentials.
+</p>
+<p>
+The supplementary table <tt>media-13.txt</tt> was downloaded from the Kim
+et al. 2026 bioRxiv preprint (<a href="https://doi.org/10.64898/2026.03.20.713192" target="_blank">
+doi:10.64898/2026.03.20.713192</a>).
+</p>
+<p>
+The step-by-step build commands (download, TSV parsing, bigBed build) are
+recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

@@ -1,0 +1,105 @@
+<h2>Description</h2>
+<p>
+This track collection contains structural variant (SV) and copy-number variant
+(CNV) callsets derived from Illumina <b>short-read</b> sequencing. Most SV
+tracks in the browser now come from long-read platforms (see the companion
+<a href="hgTrackUi?g=lrSv">Long-read SVs</a> supertrack); the short-read
+callsets here are included as comparators so users can evaluate the extra
+sensitivity of long-read calls and cross-check a variant across technologies.
+</p>
+
+<h3>Available Datasets</h3>
+<p>
+SV length statistics (min / median / max) are computed from the <tt>svLen</tt>
+field of each track, in base pairs. For the Abel CCDG callset, a large
+fraction of records are breakend (BND) translocations where <tt>svLen=-1</tt>
+is used as a sentinel, which shows up in both min and median.
+</p>
+<table class="stdTbl">
+<tr>
+  <th>Dataset</th>
+  <th>N samples</th>
+  <th>Cohort / disease</th>
+  <th>Sequencing</th>
+  <th>SVs</th>
+  <th>Min</th>
+  <th>Median</th>
+  <th>Max</th>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=abelSv">CCDG 17,795</a></td>
+  <td>17,795</td>
+  <td>NHGRI CCDG + PAGE + SGDP (B38 native + B37 lifted)</td>
+  <td>Illumina short-read (LUMPY + CNVnator + svtyper)</td>
+  <td>737,998</td>
+  <td>-1</td>
+  <td>-1</td>
+  <td>217,985,413</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=onekg3202Sr">1KG 3202</a></td>
+  <td>3,202</td>
+  <td>1000 Genomes expanded cohort</td>
+  <td>Illumina short-read (GATK-SV)</td>
+  <td>173,366</td>
+  <td>1</td>
+  <td>314</td>
+  <td>154,807,729</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=tommoJpCnv">ToMMo 48K CNV</a></td>
+  <td>48,874</td>
+  <td>Japanese, general population</td>
+  <td>Illumina short-read (GATK CNV, 1 kb bins, shown as two bigWigs)</td>
+  <td colspan="4">~2M bins with CNV carriers; not comparable to per-SV counts above</td>
+</tr>
+</table>
+
+<h3>CCDG 17,795 SVs (<a href="hgTrackUi?g=abelSv">abelSv</a>)</h3>
+<p>
+Site-frequency callset from 17,795 deeply sequenced genomes (Abel et al. 2020,
+Nature; PMID 32460305). Two non-overlapping public releases are combined in
+this track: the B38 callset (14,623 samples called natively on GRCh38) and the
+B37 callset (8,417 samples, lifted). Variants are colored by SV type
+(DEL / DUP / INV / MEI / BND) and carry per-population allele counts for eight
+ancestry groups plus a HIGH/LOW confidence filter.
+</p>
+
+<h3>1KG 3202 SVs (<a href="hgTrackUi?g=onekg3202Sr">onekg3202Sr</a>)</h3>
+<p>
+1000 Genomes 3202-sample Illumina short-read GATK-SV callset (Byrska-Bishop
+et al. 2022). 173,366 SVs across 7 classes (DEL, INS, DUP, INV, CPX, CNV,
+CTX) with AC/AN/AF and per-superpopulation AFs (AFR/AMR/ASN/EUR/SAN).
+</p>
+
+<h3>ToMMo 48K CNV SR (<a href="hgTrackUi?g=tommoJpCnv">tommoJpCnv</a>)</h3>
+<p>
+Per-1 kb-bin copy-number carrier counts from short-read whole-genome
+sequencing of 48,874 Japanese individuals (jMorp 48KJPN-CNV Frequency Panel,
+release 20230828), called with GATK CNV germline workflows. Shown as a
+multiWig overlay: red = samples with copy-number loss (CN&lt;2) per bin,
+green = samples with gain (CN&gt;2) per bin. This is a useful short-read
+point of comparison to the ToMMo 333-sample long-read SV track under the
+Long-read SVs supertrack.
+</p>
+
+<h2>Data Access</h2>
+<p>
+See the Data Access section of each subtrack's page for download links.
+Build documentation lives alongside the scripts at
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/srSv.txt" target="_blank">
+doc/hg38/srSv.txt</a>; conversion scripts and autoSql schemas are at
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/srSv" target="_blank">
+makeDb/scripts/srSv</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Each subtrack credits its respective upstream project; see the individual
+description pages.
+</p>
+
+<h2>References</h2>
+<p>
+See the individual subtrack description pages for the specific references.
+</p>

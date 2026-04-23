@@ -42,16 +42,36 @@ page also shows the number of per-caller calls supporting each site
 
 <h2>Methods</h2>
 <p>
-Long-read whole-genome sequencing was performed on 100 1000 Genomes
-samples with ONT R9.4.1 pores at a median coverage of ~37x and read N50
-of ~54 kb. Reads were aligned to GRCh38 with minimap2 and, for a subset,
-with the CARD pipeline. De novo assemblies were produced with Flye and
-with Shasta/Hapdup. Per-sample structural variant calls were generated
-with five independent methods (Sniffles2, cuteSV, SVIM on alignments;
-hapdiff on Flye and on Shasta/Hapdup assemblies) and merged across
-callers with Jasmine in two stages: first within each sample
-(intra-sample) to build per-sample consensus SVs, then across all 100
-samples to produce the shared site-level callset used here.
+Gustafson et al. 2024 performed Oxford Nanopore long-read sequencing on
+100 samples from the 1000 Genomes Project (all five superpopulations and
+19 subpopulations) using R9.4.1 flow cells, at a median per-sample
+coverage of ~37x and read N50 of ~54 kb. Per-sample SV calls were
+generated through the Napu pipeline with five independent methods: three
+alignment-based callers (Sniffles2, cuteSV and SVIM run on minimap2
+alignments to GRCh38) and two assembly-based callers (hapdiff run on Flye
+and on Shasta/Hapdup assemblies). The five per-sample VCFs were merged
+with <a href="https://github.com/mkirsche/Jasmine" target="_blank">Jasmine</a>
+in two stages (intra-sample consensus, then cross-sample merge). The
+released confident site-level callset is defined as variants supported by
+hapdiff and at least two unique alignment-based callers, yielding 113,696
+SVs (63,177 insertions, 49,704 deletions, 744 inversions, 71
+duplications). SV counts per sample and multicaller concordance were
+benchmarked against the HPRC Sniffles2 truth and the GIAB HG002 Tier1
+region with Truvari v4.1.0.
+</p>
+<p>
+The source Jasmine-merged VCF was downloaded from the 1000 Genomes ONT S3
+bucket:
+<a href="https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz" target="_blank">
+<tt>20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz</tt></a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

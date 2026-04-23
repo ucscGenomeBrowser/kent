@@ -42,20 +42,71 @@ with Mendelian errors and total families with complete genotype calls</li>
 
 <h2>Methods</h2>
 <p>
-Oxford Nanopore sequencing was performed on genomic DNA extracted from activated
-T lymphocytes of 333 individuals (111 trios) from the Tohoku Medical Megabank
-(ToMMo) cohort. SV calling was performed with Sniffles on each sample, and
-calls were merged across individuals with SURVIVOR v1.0.6 using a maximum
-distance of 1 kbp. Allele frequencies were computed from 222 unrelated parents
-(excluding offspring to avoid double-counting). Mendelian error rates were
-calculated by checking transmission consistency within each trio family.
+Otsuki et al. 2022 extracted high-molecular-weight genomic DNA from activated
+T lymphocytes of 333 individuals (111 parent-offspring trios) from the Tohoku
+Medical Megabank (ToMMo) BirThree cohort and performed Oxford Nanopore
+whole-genome sequencing on PromethION instruments with R9.4.1 flow cells
+(SQK-LSK109 libraries, Guppy v4.2.2 high-accuracy base-calling). After QC,
+median per-sample sequencing coverage was 22.2x with a read N50 of 25.8 kb.
+Reads were aligned to GRCh38 with LRA, SVs were called per sample with
+<a href="https://github.com/tjiangHIT/cuteSV" target="_blank">CuteSV</a>
+v1.0.9 (<tt>-min_sv_length 50</tt>), and per-sample calls were merged with
+<a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">SURVIVOR</a>
+v1.0.6 (1000 bp distance, type-match, no length-match) into a nonredundant
+panel of 74,201 autosomal SVs (37,981 deletions and 36,220 insertions).
+Over 95% of the SVs were concordant with Mendelian inheritance in the 111
+trio families; allele frequencies in this track are computed from the 222
+unrelated parents to avoid double-counting.
+</p>
+<p>
+The site-only VCF <tt>tommo-JSV1-20211208-GRCh38-without-genotype-count.vcf.gz</tt>
+was downloaded from the jMorp JSV1 download page,
+<a href="https://jmorp.megabank.tohoku.ac.jp/downloads/tommo-jsv1-20211208-af" target="_blank">
+tommo-jsv1-20211208-af</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>
 <p>
 Source data is available from the
-<a href="https://jmorp.megabank.tohoku.ac.jp/downloads"
-   target="_blank">jMorp downloads page</a> (ToMMo Japanese Multi Omics Reference Panel).
+<a href="https://jmorp.megabank.tohoku.ac.jp/downloads/tommo-jsv1-20211208-af"
+   target="_blank">tommo-jsv1-20211208-af download page</a> on the jMorp
+portal (ToMMo Japanese Multi Omics Reference Panel).
+</p>
+
+<h2>Conditions of Use</h2>
+<p>
+The information in the ToMMo jMorp database is provided only to persons
+who agree to jMorp's
+<a href="https://jmorp.megabank.tohoku.ac.jp/help/conditions-of-use" target="_blank">
+Conditions of Use</a>. By using these data, you are deemed to have read
+and understood those conditions and to agree to the following obligations:
+<ul>
+<li>Do not attempt to identify or contact any person who provided specimens
+used to construct the information.</li>
+<li>Request permission from dist [AT] megabank [DOT] tohoku [DOT] ac [DOT] jp
+prior to using the data for commercial purposes.</li>
+<li>Notify dist [AT] megabank [DOT] tohoku [DOT] ac [DOT] jp when providing
+re-edited data to any third party.</li>
+<li>Cite the jMorp paper in publications that report analyses based on
+these data: Tadaka S, Kawashima J, Hishinuma E, <i>et al.</i>,
+&ldquo;jMorp: Japanese Multi-Omics Reference Panel update report 2023&rdquo;,
+<i>Nucleic Acids Research</i>, 2023 Nov 1,
+<a href="https://doi.org/10.1093/nar/gkad978" target="_blank">doi:10.1093/nar/gkad978</a>;
+please also refer to the per-dataset citation notes linked from that page.</li>
+</ul>
+The copyright in the information and the database is owned by ToMMo. If a
+dataset-specific contact or Data Transfer Agreement is attached to a given
+dataset, those should be followed in preference to this generic page.
+Questions should be directed to
+tommo-jmorp [AT] grp [DOT] tohoku [DOT] ac [DOT] jp.
 </p>
 
 <h2>Credits</h2>

@@ -12,8 +12,11 @@ Paper:
 """
 
 import gzip
-import subprocess
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -49,8 +52,6 @@ def main():
 
     inPath, outPath = sys.argv[1], sys.argv[2]
 
-    # bcftools view -H strips the header so we don't have to; but gzip is fine
-    # for this file and saves the external dependency.
     with openVcf(inPath) as fIn, open(outPath, "w") as fOut:
         for line in fIn:
             if line.startswith("#"):
@@ -58,15 +59,16 @@ def main():
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            name = fields[2]
+            rowName = fields[2]
             info = parseInfo(fields[7])
 
-            svType = info.get("SVTYPE", ".")
+            svTypeRaw = info.get("SVTYPE", ".")
+            svType = normalizeSvType(svTypeRaw)
             end = int(info.get("END", pos))
             try:
-                svLen = int(float(info.get("SVLEN", "0")))
+                svLenRaw = int(float(info.get("SVLEN", "0")))
             except ValueError:
-                svLen = 0
+                svLenRaw = 0
             try:
                 supp = int(info.get("SUPP", "0"))
             except ValueError:
@@ -87,8 +89,20 @@ def main():
             if chrom == "chrM" and chromEnd > CHRM_LEN:
                 chromEnd = CHRM_LEN
 
-            absSvLen = abs(svLen)
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = abs(svLenRaw)
+            else:
+                insLen = 0
+
+            # Gustafson callset is site-level without AC; 2 * SUPP
+            # is the diploid carrier upper bound.
+            ac = supp * 2
+
             color = SV_COLORS.get(svType, "100,100,100")
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
 
             row = [
                 chrom,
@@ -101,7 +115,9 @@ def main():
                 str(chromEnd),
                 color,
                 svType,
-                str(absSvLen),
+                str(svLen),
+                str(insLen),
+                str(ac),
                 str(supp),
                 str(varCalls),
                 str(precise),

@@ -57,26 +57,39 @@ inverted sequence, distinct from the outer breakpoint interval.</li>
 
 <h2>Methods</h2>
 <p>
-HGSVC2 generated phased haplotype-resolved de novo assemblies for 32
-diploid samples across five 1000 Genomes superpopulations. Assemblies
-were built from PacBio continuous long reads and HiFi reads and phased
-with Strand-seq. Structural variants were discovered from each haplotype
-assembly using PAV and validated with multiple orthogonal callers
-(including PBSV, Bionano, DeepVariant, PAV-LRA, and others recorded in
-per-site validation columns). The final SV set was merged to produce the
-integrated callset used here.
+Ebert et al. 2021 produced phased haplotype-resolved de novo assemblies for
+32 diploid samples (64 unrelated haplotypes) across five 1000 Genomes
+superpopulations on the PacBio Sequel II platform, using continuous
+long-read sequencing (CLR, &gt;40x) and high-fidelity sequencing (HiFi,
+&gt;20x). Single-cell Strand-seq data from the same samples were used to
+phase the assemblies without parental trios, yielding N50 contigs &gt;25 Mbp
+at QV &gt; 40. SVs were discovered from the two haplotype assemblies of
+each sample with the Phased Assembly Variant (PAV) caller against GRCh38,
+and candidate SVs were orthogonally supported by at least one of seven
+other sources (read-based callers MELT, PBSV and PALMER; Bionano optical
+mapping; breakpoint k-mer analysis; PAV replication with LRA). This
+yielded the integrated nonredundant callset of 107,590 insertion/deletion
+SVs and 316 inversions. Population-scale allele frequencies (POP_*_AF) were
+obtained by graph-based re-genotyping of the HGSVC2 SVs into the
+3,202-sample 1000 Genomes short-read cohort with PanGenie (insertions and
+deletions only).
 </p>
 <p>
-Population-scale allele frequencies (POP_*_AF) were derived by imputing
-the HGSVC2 SVs back into the full 1000 Genomes short-read cohort. These
-fields are only available for insertions and deletions.
+For display, the HGSVC2 v2.0 freeze-4 annotation tables
+<tt>variants_freeze4_sv_insdel.tsv.gz</tt> (111,330 DEL+INS) and
+<tt>variants_freeze4_sv_inv.tsv.gz</tt> (416 INV) were downloaded from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/" target="_blank">
+IGSR HGSVC2 v2.0 integrated-callset directory</a> and merged into a single
+bigBed; type-specific columns (POP_*_AF for insdel, RGN_REF_INNER for
+inversions) are empty on the detail page when they do not apply.
 </p>
 <p>
-Two tables were merged for display here:
-<tt>variants_freeze4_sv_insdel.tsv.gz</tt> (DEL + INS, 111,330 records) and
-<tt>variants_freeze4_sv_inv.tsv.gz</tt> (INV, 416 records). Type-specific
-columns (POP_*_AF for insdel, RGN_REF_INNER for inversions) are shown as
-empty on the detail page when they do not apply.
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
 </p>
 
 <h2>Data Access</h2>

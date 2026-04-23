@@ -36,15 +36,24 @@ Hovering over a variant shows:
   <li><b>AA</b> &mdash; the resulting amino acid change
       (single-letter reference&nbsp;&gt;&nbsp;alternate)</li>
   <li><b>Score</b> &mdash; the raw PrimateAI-3D pathogenicity score (0&ndash;1).
-      The authors suggest a clinical threshold of 0.821 for distinguishing
-      pathogenic from benign missense variants.</li>
+      The authors suggest a clinical threshold of <b>0.821</b> for
+      distinguishing pathogenic from benign missense variants. In Gao
+      et al. 2023 (Fig. 5A) this threshold was derived from the
+      Deciphering Developmental Disorders (DDD) neurodevelopmental
+      cohort: the cutoff was chosen so that the number of variants
+      scored as pathogenic (n&nbsp;=&nbsp;7,238) matched the observed
+      excess of de novo missense mutations above the trinucleotide
+      background expectation in that cohort.</li>
   <li><b>Perc</b> &mdash; the percentile rank of the raw score across all
       scored variants (0&ndash;1). The track score field (0&ndash;1000) is this
       value scaled by 1000.</li>
   <li><b>Pred</b> &mdash; Illumina&apos;s binary call:
       <span style="color:#0000c8">benign</span> or
-      <span style="color:#c80000">pathogenic</span>. In the track as
-      distributed, about 75% of variants are benign and 25% are pathogenic.</li>
+      <span style="color:#c80000">pathogenic</span>, as provided in the
+      source file. About 75% of variants in the track are benign and 25%
+      pathogenic. Note that this call is <em>not</em> a simple application
+      of the 0.821 raw-score threshold &mdash; some variants with raw
+      scores below 0.821 are labeled pathogenic and vice versa.</li>
 </ul>
 
 <p>

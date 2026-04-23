@@ -110,6 +110,9 @@ bedSort tommoJp.bed tommoJp.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvTommoJp.as \
     -tab tommoJp.sorted.bed /hive/data/genomes/hg38/chrom.sizes tommoJp.bb
 
+# ToMMo 48K CNV short-read comparator moved to the srSv supertrack.
+# See doc/hg38/srSv.txt for that build.
+
 ##########
 # 2026-03-26 Claude max
 
@@ -307,29 +310,8 @@ bedSort hgsvc2.bed hgsvc2.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc2.as \
     -tab hgsvc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hgsvc2.bb
 
-##########
-# 2026-04-20 Claude max
-
-# Twelfth subtrack: 1000 Genomes 3,202-sample Illumina SHORT-READ GATK-SV
-# release. Included in the lrSv collection solely as a short-read
-# comparator; it is NOT a long-read dataset.
-# Paper: Byrska-Bishop et al. 2022, Cell, PMID 36055201
-# Data: 1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz (IGSR FTP)
-
-mkdir -p /hive/data/genomes/hg38/bed/lrSv/onekg3202sr
-cd /hive/data/genomes/hg38/bed/lrSv/onekg3202sr
-wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz
-
-# 173,366 site-level SVs across 7 classes (DEL, INS, DUP, INV, CPX, CNV,
-# CTX) with AC/AN/AF and per-superpopulation AFs (AFR/AMR/ASN/EUR/SAN).
-# The converter extracts site-level INFO into bed9+, preserving the
-# FILTER column so users can see PASS vs LowQual / HWE / etc.
-
-python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kg3202SrVcfToBed.py \
-    1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz onekg3202sr.bed
-bedSort onekg3202sr.bed onekg3202sr.sorted.bed
-bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kg3202Sr.as \
-    -tab onekg3202sr.sorted.bed /hive/data/genomes/hg38/chrom.sizes onekg3202sr.bb
+# 1KG 3202 short-read comparator moved to the srSv supertrack.
+# See doc/hg38/srSv.txt for that build.
 
 ##########
 # 2026-04-20 Claude max
@@ -435,3 +417,24 @@ cd /hive/data/genomes/hg38/bed/lrSv/cpc1
 bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
 #   hs1 sites: 46,092 (down from 97,205 combined)
 #   hg38 lifted: 36,030 (down from 81,261); 10,062 unmapped
+
+##########
+# 2026-04-22 Claude max
+#
+# colorsDbSv: rebuild both hg38 and hs1 bigBeds from the upstream
+# pbsv+Jasmine VCFs now that the CoLoRSdb project redistributes them
+# directly (placed in /hive/data/genomes/hg38/bed/lrSv/colorsDb/).
+# The previous bigBed came from an older build and declared `af` as a
+# string; the new build uses a checked-in converter, stores AF as a
+# float so the numeric filter works, and adds a derived `insLen`
+# column so the shared lrSv supertrack-level filter.insLen does not
+# error for this subtrack.
+
+cd /hive/data/genomes/hg38/bed/lrSv/colorsDb
+# Upstream VCFs (same pbsv.jasmine release, one per reference path):
+#   CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz  (hg38, 426,239 SVs)
+#   CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz   (hs1,  839,714 SVs)
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvColorsDbSvBuild.sh
+# hg38: 59 MB, 192,534 DEL + 232,973 INS + 732 INV
+# hs1 : 87 MB (more variants due to T2T-added regions)
+# Existing /gbdb symlinks (sv.hg38.bb, sv.hs1.bb) are unchanged.

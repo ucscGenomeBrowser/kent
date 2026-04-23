@@ -83,4 +83,11 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
 /* Load items from another assembly via quickLift SQL, map them back to the reference,
  * and return the lifted beds.  Handles custom track table resolution internally.
  * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+
+boolean quickLiftLiftPos(char *sourceDb, char *destDb,
+    char *chrom, int start, int end,
+    char **retChrom, int *retStart, int *retEnd);
+/* Map a position from source (sourceDb) coords to destination (destDb) coords
+ * using the liftOver chain for sourceDb -> destDb.  Used to remap hgFind
+ * results from quickLifted bigBed tracks back to the destination assembly. */
 #endif

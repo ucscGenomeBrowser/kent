@@ -136,7 +136,7 @@ def main():
             f"##################################################\n"
         )
         if sendMail(notifyEmail, subject, body):
-            print(f"Notified {notifyEmail} about request #{req['id']}")
+#           print(f"Notified {notifyEmail} about request #{req['id']}")
             hgsqlUpdate(dbName,
                 f"UPDATE {table} SET doneStatus = 1"
                 f" WHERE id = {req['id']}")
