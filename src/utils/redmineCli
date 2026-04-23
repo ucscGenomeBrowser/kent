@@ -584,9 +584,9 @@ def cmd_create(args):
             "project_id": args.project,
             "subject": subject,
             "description": description,
-            "tracker_id": args.tracker,
+            "tracker_id": resolve_tracker(args.tracker),
             "priority_id": args.priority,
-            "status_id": args.status,
+            "status_id": resolve_status(args.status),
         }
     }
 
@@ -953,12 +953,12 @@ def build_parser():
                           help="Read description from file (- for stdin)")
     p_create.add_argument("--project", default=DEFAULT_PROJECT,
                           help="Project (default: %(default)s)")
-    p_create.add_argument("--tracker", type=int, default=TRACKER_MLQ,
-                          help="Tracker ID (default: %(default)s)")
+    p_create.add_argument("--tracker", default=TRACKER_MLQ,
+                          help="Tracker name or ID (e.g. 'To Do' or 10; default: %(default)s)")
     p_create.add_argument("--priority", type=int, default=PRIORITY_UNPRIORITIZED,
                           help="Priority ID (default: %(default)s)")
-    p_create.add_argument("--status", type=int, default=STATUS_NEW,
-                          help="Status ID (default: %(default)s)")
+    p_create.add_argument("--status", default=STATUS_NEW,
+                          help="Status name or ID (e.g. 'New' or 1; default: %(default)s)")
     p_create.add_argument("--assigned-to", dest="assigned_to",
                           help="Assignee name or user ID")
     p_create.add_argument("--category", help="MLQ Category (custom field)")
