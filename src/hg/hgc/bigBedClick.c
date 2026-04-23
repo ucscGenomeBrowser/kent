@@ -499,7 +499,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (quickLiftFile)
         {
         if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
-            errAbort("can't port %s",fields[3]);
+            continue;
         }
     else
         {
