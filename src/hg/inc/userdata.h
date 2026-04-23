@@ -31,8 +31,9 @@ char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 
 // the various quota helper variables:
-#define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
-#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
+// 10 GiB in bytes, so the binary-unit pretty-printers display it as "10 GB".
+#define HUB_SPACE_DEFAULT_QUOTA_BYTES (10LL * 1024 * 1024 * 1024)
+#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES
 // for defining the quota in hg.conf
 #define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
 

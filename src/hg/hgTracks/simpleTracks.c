@@ -12821,7 +12821,7 @@ if (geneClasses)
    gClassesClone = cloneString(geneClasses);
    classCt = chopLine(gClassesClone, classes);
    }
-if (hTableExists(database, classTable))
+if (hTableExists(db, classTable))
     {
     sqlSafef(query, sizeof(query),
           "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);
