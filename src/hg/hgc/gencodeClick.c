@@ -4,6 +4,8 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hgc.h"
+#include "trackHub.h"
+#include "quickLift.h"
 #include "gencodeClick.h"
 #include "gencodeTracksCommon.h"
 #include "ccdsClick.h"
@@ -67,22 +69,39 @@ static char *mgiByIdUrl = "http://www.informatics.jax.org/accession/%s";
 
 static char* UNKNOWN = "unknown";
 
-static boolean isGrcHuman()
+static char *gencodeSourceDb(struct trackDb *tdb)
+/* return the assembly the gencode tables actually live in: the quickLiftDb
+ * when the track is quickLifted, otherwise the current database. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+return (liftDb != NULL) ? liftDb : database;
+}
+
+static void liftAnnoPos(struct trackDb *tdb, char *chrom, int start, int end,
+                        char **retChrom, int *retStart, int *retEnd)
+/* If the tdb is quickLifted, translate chrom:start-end from the source
+ * assembly to the destination assembly the user is viewing.  Otherwise
+ * return the input unchanged.  Falls back to input on lift failure. */
+{
+*retChrom = chrom;
+*retStart = start;
+*retEnd = end;
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+if (liftDb != NULL)
+    quickLiftLiftPos(liftDb, trackHubSkipHubName(database),
+                     chrom, start, end, retChrom, retStart, retEnd);
+}
+
+static boolean isGrcHuman(struct trackDb *tdb)
 /* is this a GRC human assembly? */
 {
-//bool result = FALSE;
-//if (startsWith("hg", database))
-//    result = TRUE;
-//else if (!startsWith("mm", database))
-//    warn("BUG: gencodeClick on wrong database: %s", database);
-//return result;
-
-if (startsWith("hg", database))
+char *db = gencodeSourceDb(tdb);
+if (startsWith("hg", db))
     return TRUE;
-else if (startsWith("mm", database))
+else if (startsWith("mm", db))
     return FALSE;
 else
-    errAbort("BUG: gencodeClick on wrong database: %s", database);
+    errAbort("BUG: gencodeClick on wrong database: %s", db);
 return FALSE;
 }
 
@@ -96,7 +115,7 @@ static boolean isGrcH37Native(struct trackDb *tdb)
 /* Is this GENCODE GRCh37 native build, which requires a different Ensembl site. */
 {
 // check for non-lifted GENCODE on GRCh37/hg19
-if (sameString(database, "hg19"))
+if (sameString(gencodeSourceDb(tdb), "hg19"))
     return stringIn("lift37", gencodeGetVersion(tdb)) == NULL;
 else
     return FALSE;
@@ -151,7 +170,7 @@ static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb
 // must check chrom due to PAR
 char where[256];
 sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
-struct genePred *transAnno = genePredReaderLoadQuery(conn, tdb->track, where);
+struct genePred *transAnno = genePredReaderLoadQuery(conn, trackHubSkipHubName(tdb->track), where);
 slSort(&transAnno, transAnnoCmp);
 return transAnno;
 }
@@ -180,7 +199,7 @@ static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struc
 // must check chrom due to PAR
 char where[256];
 sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
-struct genePred *geneAnnos = genePredReaderLoadQuery(conn, tdb->track, where);
+struct genePred *geneAnnos = genePredReaderLoadQuery(conn, trackHubSkipHubName(tdb->track), where);
 struct genePred *geneAnno;
 *geneChromStart = transAnno->txStart;
 *geneChromEnd = transAnno->txEnd;
@@ -482,11 +501,17 @@ printf("<td>%s", transAttrs->havanaTranscriptId);
 printf("<td>%s", transAttrs->havanaGeneId);
 printf("</tr>\n");
 
+char *transChrom, *geneChrom;
+int transStart, transEnd, gStart, gEnd;
+liftAnnoPos(tdb, transAnno->chrom, transAnno->txStart, transAnno->txEnd,
+            &transChrom, &transStart, &transEnd);
+liftAnnoPos(tdb, transAnno->chrom, geneChromStart, geneChromEnd,
+            &geneChrom, &gStart, &gEnd);
 printf("<tr><th>Position");
 printf("<td>");
-writePosLink(transAnno->chrom, transAnno->txStart, transAnno->txEnd);
+writePosLink(transChrom, transStart, transEnd);
 printf("<td>");
-writePosLink(transAnno->chrom, geneChromStart, geneChromEnd);
+writePosLink(geneChrom, gStart, gEnd);
 printf("</tr>\n");
 
 printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
@@ -505,7 +530,7 @@ if (haveTsl)
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
 
-if (isGrcHuman())
+if (isGrcHuman(tdb))
     writeHumanGeneLinkout(transAttrs, haveGeneSymbolSource, geneSymbolSource);
 else
     writeMouseGeneLinkout(transAttrs, haveGeneSymbolSource, geneSymbolSource);
@@ -989,7 +1014,10 @@ printf("<H2>%s</H2>\n", header);
 printf("<b>Yale id:</b> ");
 prExtIdAnchor(gencodeId, yalePseudoUrl);
 printf("<br>");
-printPos(pseudoAnno->chrom, pseudoAnno->txStart, pseudoAnno->txEnd, pseudoAnno->strand, FALSE, NULL);
+char *chrom;
+int start, end;
+liftAnnoPos(tdb, pseudoAnno->chrom, pseudoAnno->txStart, pseudoAnno->txEnd, &chrom, &start, &end);
+printPos(chrom, start, end, pseudoAnno->strand, FALSE, NULL);
 }
 
 static void doGencodeGenePolyA(struct trackDb *tdb, char *gencodeId, struct sqlConnection *conn, struct genePred *polyAAnno)
@@ -1001,21 +1029,29 @@ cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 printf("<b>Annotation id:</b> %s<br>", gencodeId);
 printf("<b>Annotation Type:</b> %s<br>",polyAAnno->name2);
-printPos(polyAAnno->chrom, polyAAnno->txStart, polyAAnno->txEnd, polyAAnno->strand, FALSE, NULL);
+char *chrom;
+int start, end;
+liftAnnoPos(tdb, polyAAnno->chrom, polyAAnno->txStart, polyAAnno->txEnd, &chrom, &start, &end);
+printPos(chrom, start, end, polyAAnno->strand, FALSE, NULL);
 }
 
 void doGencodeGene(struct trackDb *tdb, char *gencodeId)
 /* Process click on a GENCODE annotation. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+// When the track is quickLifted, all GENCODE metadata tables live in the
+// source assembly (quickLiftDb), not in the currently-displayed destination.
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *metaDb = (liftDb != NULL) ? liftDb : database;
+struct sqlConnection *conn = hAllocConn(metaDb);
 struct genePred *anno = transAnnoLoad(conn, tdb, gencodeId);
-if (startsWith("wgEncodeGencodeBasic", tdb->track)
-    || startsWith("wgEncodeGencodeComp", tdb->track)
-    || startsWith("wgEncodeGencodePseudoGene", tdb->track))
+char *track = trackHubSkipHubName(tdb->track);
+if (startsWith("wgEncodeGencodeBasic", track)
+    || startsWith("wgEncodeGencodeComp", track)
+    || startsWith("wgEncodeGencodePseudoGene", track))
     doGencodeGeneTrack(tdb, gencodeId, conn, anno);
-else if (startsWith("wgEncodeGencode2wayConsPseudo", tdb->track))
+else if (startsWith("wgEncodeGencode2wayConsPseudo", track))
     doGencodeGene2WayPseudo(tdb, gencodeId, conn, anno);
-else if (startsWith("wgEncodeGencodePolya", tdb->track))
+else if (startsWith("wgEncodeGencodePolya", track))
     doGencodeGenePolyA(tdb, gencodeId, conn, anno);
 else
     errAbort("doGencodeGene: track not handled: \"%s\"", tdb->track);
