@@ -1,0 +1,175 @@
+<h2>Description</h2>
+<p>
+Missense variants change a single amino acid in a protein and are a common
+source of variants of uncertain significance (VUS): about 90% of missense
+variants in ClinVar are VUS. The <b>MPC</b> score ("Missense deleteriousness
+Prediction by Constraint") is a machine-learning score that flags missense
+variants likely to be deleterious by combining three lines of evidence:
+(i) regional missense constraint (how depleted the surrounding sub-genic
+region is of rare missense variation in the general population), (ii) the
+biochemical severity of the specific amino-acid substitution as captured by
+PolyPhen-2, and (iii) cross-species conservation (phyloP). The model is
+trained to separate pathogenic from benign missense variation under strong
+heterozygous selection; higher scores indicate greater predicted
+deleteriousness. The authors report that MPC &ge; 2.5 is strongly
+enriched for de novo variants in individuals with severe developmental
+disorders relative to their unaffected siblings, with MPC 2&ndash;2.5 showing
+intermediate enrichment and MPC &lt; 2 little enrichment.
+</p>
+
+<p>
+This track shows MPC v4.1.1, computed by the Broad Institute gnomAD team from
+the <b>gnomAD v4.1.1</b> release of 730,947 exomes aligned to GRCh38. Scores
+are provided for every possible single-nucleotide missense variant in 17,841
+MANE Select or canonical protein-coding transcripts that passed gnomAD QC, as
+well as for an additional 1,534 transcripts that failed QC (the authors note
+that scores may be less accurate in the latter).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Two views of the same underlying data are available:
+</p>
+<ul>
+<li><b>gnomAD MPC</b> &mdash; four bigWig subtracks, one for each possible
+alternate allele (A, C, G, T). At a given genomic position, the subtrack for
+a given alternate allele shows the MPC score for the substitution from the
+reference base to that alternate base. Positions where the alternate base
+equals the reference base, or where no MPC score is available (for example,
+outside coding regions), are drawn as 0. Scores range from 0 to 6, where 6 is
+the ceiling assigned when a variant is more severe than every benign variant
+in the MPC training set (the maximum real computed value is just over 5);
+the track's default view limit is 0&ndash;3 because the vast majority of
+variants score below 3. Mouseover shows the score. When a variant is
+annotated against more than one transcript, the four bigWigs show the
+<b>maximum</b> (most deleterious) MPC across transcripts.</li>
+<li><b>gnomAD MPC overlaps</b> &mdash; a bigBed track restricted to the small
+subset of variants that are scored against more than one transcript (about
+250,000, or 0.4% of the ~70 million scored variants). Each row carries the
+full list of Ensembl transcripts scoring that variant together with their
+individual MPC scores on the details page. Single-transcript variants are
+not included in this track because the bigWig view already fully represents
+them. A range filter on <tt>mpcMax</tt> is available from the track
+configuration page. Items are colored by max MPC (gray &lt; 1,
+orange 1&ndash;3, red &ge; 3). Use this view to inspect transcripts whose
+MPC scores disagree for the same underlying variant.</li>
+</ul>
+<p>
+Across the 250,000 multi-transcript variants, per-transcript MPC scores
+typically agree within 0.5 units; only a few percent differ by more than
+0.5. The bigBed view is the authoritative source for the full
+transcript-level detail in those cases; the bigWig view collapses
+transcripts by showing the maximum MPC at each position.
+</p>
+
+<h2>Methods</h2>
+<p>
+<b>Regional missense constraint (MCR).</b> For each of 17,841 QC-passing
+MANE Select or canonical coding transcripts, the authors tallied the
+observed rare missense variants (allele count &gt; 0, allele frequency
+&lt; 0.1%, %AN &ge; 20, QC PASS) in gnomAD v4.1.1 against the expected
+count under a position- and coverage-adjusted mutational model. A recursive
+likelihood-ratio test (Poisson model, p-value threshold 0.001, minimum
+16 expected missense variants per sub-region) identifies change-points at
+which the transcript-wide observed/expected (OE) ratio deviates
+significantly; each resulting segment is a missense constraint region
+(MCR). 36% of transcripts (6,361/17,841) harbor two or more MCRs. MCR
+missense OE was calibrated against ClinVar P/LP vs. B/LB missense variants
+following ClinGen recommendations for the ACMG/AMP guidelines: OE &le; 0.36
+meets <i>moderate</i> evidence for pathogenicity, OE &le; 0.59 meets
+<i>supporting</i> evidence for pathogenicity, OE &gt; 0.97 and OE &gt; 1.23
+meet supporting and moderate evidence for benignity, respectively.
+</p>
+
+<p>
+<b>MPC score.</b> MPC is an XGBoost gradient-boosted-tree classifier that
+takes as input (1) MCR missense OE, (2) gene-level constraint, (3) a
+per-substitution amino-acid severity feature, (4) the PolyPhen-2
+pathogenicity score, and (5) phyloP conservation. Training: 20,931
+"pathogenic" variants (high-quality ClinVar P/LP in 2,987
+haploinsufficient genes with pHaplo &ge; 0.86 or in 359 non-LoF DD genes
+from Gene2Phenotype) vs. 93,638 "benign" variants (high-quality ClinVar
+B/LB or gnomAD variants with AF &gt; 0.1% in the same gene set). The model
+is applied to all 70,313,598 possible exome-wide missense variants in the
+Ensembl VEP table. For a variant <i>i</i>, MPC is
+<i>d</i><sub><i>i</i></sub> = log<sub>10</sub>(<i>M</i> / <i>m</i><sub><i>i</i></sub>),
+where <i>M</i> is the number of benign training variants and
+<i>m</i><sub><i>i</i></sub> is the number of those with a fitted
+pathogenicity probability lower than variant <i>i</i>'s; when
+<i>m</i><sub><i>i</i></sub> is 0 the score is capped at 6. Higher scores
+indicate greater predicted deleteriousness. The authors caution that MPC is
+best suited to modelling strong fitness effects (as expected given its
+training set) and that naively taking the maximum of MPC and AlphaMissense
+<i>decreases</i> case/control discrimination for de novo variants relative
+to either score alone.
+</p>
+
+<p>
+<b>At UCSC.</b> The precomputed MPC score table was downloaded from the
+gnomAD Broad public bucket at
+<tt>gs://gcp-public-data--gnomad/papers/2026-rmc/gnomad_v4.1.1_mpc.tsv.bgz</tt>,
+companion to the Hail-table release
+<tt>gnomad_v4.1.1_mpc.ht</tt> in the same directory. The input TSV contains
+one row per (locus, alleles, transcript) combination, for 70,313,598 rows
+covering 70,047,670 unique (chrom, pos, alt) variants. Two Python scripts in
+<a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadMpc">src/hg/makeDb/scripts/gnomadMpc</a>
+emit the UCSC files: <tt>gnomadMpcToWig.py</tt> writes four bigWig files
+(one per alternate base, carrying the maximum MPC across transcripts at each
+variant) and <tt>gnomadMpcToBed.py</tt> writes a BED file with one row per
+(position, alternate allele) <i>restricted to variants scored against more
+than one transcript</i>, with all per-transcript scores preserved as aligned
+comma-separated lists. Build commands are documented
+in the
+<a target="_blank"
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/gnomadMpc.txt">hg38/gnomadMpc.txt</a>
+makeDoc file.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated access,
+this track is available via our
+<a href="../goldenPath/help/api.html">API</a>. The underlying bigWig and
+bigBed files are at
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/mpc/" target="_blank">our download server</a>
+as <tt>a.bw</tt>, <tt>c.bw</tt>, <tt>g.bw</tt>, <tt>t.bw</tt>, and
+<tt>mpcOverlaps.bb</tt>. Individual positions or whole chromosomes can be extracted
+with <tt>bigWigToBedGraph</tt> / <tt>bigWigToWig</tt> (for the bigWigs) or
+<tt>bigBedToBed</tt> (for the bigBed), for example:
+</p>
+<pre>
+bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 \
+    http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/mpc/a.bw stdout
+</pre>
+<p>
+The original MPC table and the accompanying missense constraint regions can
+be downloaded from the
+<a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD downloads page</a>
+or directly from the Broad Institute's public Google Cloud bucket at
+<tt>gs://gcp-public-data--gnomad/papers/2026-rmc/</tt>. Code for
+reproducing the MPC scores and MCRs is available at the
+<a href="https://github.com/broadinstitute/regional_missense_constraint" target="_blank">broadinstitute/regional_missense_constraint</a>
+GitHub repository.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the gnomAD production team and the Samocha and MacArthur
+laboratories for generating and releasing the MPC scores.
+</p>
+
+<h2>References</h2>
+<p>
+Wang L, Chao KR, Panchal R, Liao C, Abderrazzaq H, Ye R, Schultz P,
+Compitello J, Grant RH, Kosmicki JA, Weisburd B, Phu W, Wilson MW,
+Laricchia KM, Goodrich JK, Goldstein D, Goldstein JI, Vittal C, Poterba T,
+Baxter S, Watts NA, Solomonson M, gnomAD consortium, Tiao G, Rehm HL,
+Neale BM, Talkowski ME, MacArthur DG, O'Donnell-Luria A, Karczewski KJ,
+Radivojac P, Daly MJ, Samocha KE.
+<a href="https://doi.org/10.1101/2024.04.11.588920" target="_blank">The landscape of regional missense mutational intolerance quantified from 730,947 exomes</a>.
+<em>bioRxiv</em> 2024.04.11.588920, posted April 23, 2026;
+doi: <a href="https://doi.org/10.1101/2024.04.11.588920" target="_blank">10.1101/2024.04.11.588920</a>.
+</p>
