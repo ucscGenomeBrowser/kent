@@ -245,6 +245,7 @@ filterValues.FILTER PASS,HIGH_NCR,IGH_MHC_OVERLAP,UNRESOLVED,REFERENCE_ARTIFACT
 filterValuesDefault.FILTER PASS
 filterType.FILTER multipleListAnd
 html gnomadSv.html
+mergeSpannedItems on
 
 
 track gnomadCopyNumberVariants
@@ -263,6 +264,7 @@ filterValues.svtype DEL|Deletion,DUP|Duplication
 searchIndex name
 mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Size of variant</b>: ${svlen}<br> <b>Genes impacted by variant</b>: ${genes}<br> <b>Site frequency (non-neuro control samples)</b>: ${sf}
 html gnomadCNV
+mergeSpannedItems on
 
 track gnomadStr
 parent gnomadVariants on
