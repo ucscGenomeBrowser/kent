@@ -8,7 +8,7 @@ table ottoRequest
     string email;     "user email address"
     lstring comment;   "other comments from the input form"
     string requestTime; "date time request was added"
-    ubyte doneStatus;   "0 == pending, 1 == notified/in progress, 2 == complete, 3 == problems"
+    ubyte status;   "0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete, 5 finish notification, 6 complete, 7 problems"
     string buildDir;	"build directory path for alignment workflow"
     string completeTime; "date time for process completed and user notified"
     )
