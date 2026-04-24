@@ -281,9 +281,9 @@ def resolve_user(name_or_id):
 
 def resolve_status(name_or_id):
     """Resolve a status name to a Redmine status ID. Accepts name or numeric ID."""
-    if name_or_id.isdigit():
+    if str(name_or_id).isdigit():
         return int(name_or_id)
-    key = name_or_id.lower().strip()
+    key = str(name_or_id).lower().strip()
     if key in STATUS_IDS:
         return STATUS_IDS[key]
     sys.exit(f"Error: unknown status '{name_or_id}'. Known statuses: "
