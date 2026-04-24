@@ -8,7 +8,7 @@ The submit button causes a call to the API with four arguments:
   fromGenome toGenome email comment
 The API does an INSERT operation into the hgcentral.ottoRequest table:
 "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime,
-  doneStatus, buildDir) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, '')",
+  status, buildDir) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, '')",
               ottoTable,  fromGenome, toGenome, email, comment);
 
 For example:
@@ -20,20 +20,21 @@ For example:
        email: nullmodel@gmail.com
      comment: testing the galaxy pipeline, from: star-nosed mole (GCF_000260355.1), to: platypus (Pmale09 v4 2020) (GCF_004115215.2)
  requestTime: 2026-04-23 15:20:19
-  doneStatus: 0
+      status: 0
     buildDir: 
 completeTime: NULL
 
-The 'doneStatus' field is going to keep track:
-  0 == pending, 1 == notified/in progress, 2 == complete, 3 == problems
+The 'status' field is going to keep track:
+   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
+   5 finish notification, 6 complete, 7 problems
 and will affect other operations.
 
 ############################################################################
 ###  2.
 ottoRequest.py - otto user cron job running each minute to watch the
                - ottoRequest table in hgcentral - when new entries are
-               - detected (doneStatus==0) it marks the table entry as
-               - pending (doneStatus=1) and sends
+               - detected (status==0) it marks the table entry as
+               - pending (status=1) and sends
                - out notification emails, one to the requesting user and
                - the other to UCSC via the specification in hg.conf:
   chainFileRequestEmail=chain-file-request-group@ucsc.edu
@@ -46,7 +47,7 @@ ottoRequest.py - otto user cron job running each minute to watch the
 ###  3.
 ottoRequestWatch.sh - cron script running in hiram hgwdev account to watch
                - the ottoRequest table.  When new entries show
-               - up (doneStatus=1) it will get the galaxy workflow
+               - up (status=1) it will get the galaxy workflow
                - running by using ottoRequestAlign.sh to construct the
                - kegAlignLastz.sh script arguments
 
@@ -64,6 +65,8 @@ ottoRequestAlign.sh - given an 'id' number in the ottoRequest table, this
           dbDb.name.clade.tsv - to map the UCSC database names into
                           - GenArk 'clades' to make the selection:
                           - primate - mammal - other
+                    - can set status to:
+                    - 2 == in progress
 
 ############################################################################
 ###  5.
@@ -78,3 +81,7 @@ workflowMonitor.sh - after the galaxy WF has started, this script can
                    - check the status of the job and if it is done, then
                    - then the processing of the results will take place to
                    - construct the chain files.
+                   - can set status to:
+                   - 7 == problems
+                   - 3 == galaxy finished
+                   - 4 == tracks complete
