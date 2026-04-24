@@ -10,7 +10,7 @@
 
 
 
-char *ottoRequestCommaSepFieldNames = "id,requestType,fromDb,toDb,email,comment,requestTime,doneStatus,workflowId,completeTime";
+char *ottoRequestCommaSepFieldNames = "id,requestType,fromDb,toDb,email,comment,requestTime,doneStatus,buildDir,completeTime";
 
 void ottoRequestStaticLoad(char **row, struct ottoRequest *ret)
 /* Load a row from ottoRequest table into ret.  The contents of ret will
@@ -25,7 +25,7 @@ ret->email = row[4];
 ret->comment = row[5];
 ret->requestTime = row[6];
 ret->doneStatus = sqlUnsigned(row[7]);
-ret->workflowId = row[8];
+ret->buildDir = row[8];
 ret->completeTime = row[9];
 }
 
@@ -60,7 +60,7 @@ void ottoRequestSaveToDb(struct sqlConnection *conn, struct ottoRequest *el, cha
 {
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s',%u,'%s','%s')",
-	tableName,  el->id,  el->requestType,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->doneStatus,  el->workflowId,  el->completeTime);
+	tableName,  el->id,  el->requestType,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->doneStatus,  el->buildDir,  el->completeTime);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -80,7 +80,7 @@ ret->email = cloneString(row[4]);
 ret->comment = cloneString(row[5]);
 ret->requestTime = cloneString(row[6]);
 ret->doneStatus = sqlUnsigned(row[7]);
-ret->workflowId = cloneString(row[8]);
+ret->buildDir = cloneString(row[8]);
 ret->completeTime = cloneString(row[9]);
 return ret;
 }
@@ -138,7 +138,7 @@ ret->email = sqlStringComma(&s);
 ret->comment = sqlStringComma(&s);
 ret->requestTime = sqlStringComma(&s);
 ret->doneStatus = sqlUnsignedComma(&s);
-ret->workflowId = sqlStringComma(&s);
+ret->buildDir = sqlStringComma(&s);
 ret->completeTime = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -157,7 +157,7 @@ freeMem(el->toDb);
 freeMem(el->email);
 freeMem(el->comment);
 freeMem(el->requestTime);
-freeMem(el->workflowId);
+freeMem(el->buildDir);
 freeMem(el->completeTime);
 freez(pEl);
 }
@@ -207,7 +207,7 @@ fputc(sep,f);
 fprintf(f, "%u", el->doneStatus);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->workflowId);
+fprintf(f, "%s", el->buildDir);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -281,11 +281,11 @@ fputc(':',f);
 fprintf(f, "%u", el->doneStatus);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"workflowId");
+fprintf(f,"buildDir");
 fputc('"',f);
 fputc(':',f);
 fputc('"',f);
-fprintf(f, "%s", el->workflowId);
+fprintf(f, "%s", el->buildDir);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);

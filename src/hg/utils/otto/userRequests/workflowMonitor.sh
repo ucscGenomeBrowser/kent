@@ -101,6 +101,9 @@ case "${state}" in
   "scheduled")
     # all steps dispatched -- fall through to check individual jobs
     ;;
+  "completed")
+    # all steps dispatched -- fall through to check individual jobs
+    ;;
   *)
     printf "# unexpected state '%s', will check again later\n" "${state}" 1>&2
     exit 0
@@ -130,12 +133,43 @@ if [ "${nonTerminalCount}" -gt 0 ]; then
   exit 0
 fi
 
-# warn about errored jobs but proceed to download what we can
+# check for errored jobs -- a "completed" invocation can still contain
+# individual jobs that failed
 errorCount=$(printf "%s" "${summaryJson}" | jq '.states.error // 0')
 
 if [ "${errorCount}" -gt 0 ]; then
-  printf "WARNING: %d jobs had errors in invocation %s\n" \
+  printf "ERROR: %d job(s) had errors in invocation %s\n" \
     "${errorCount}" "${invocationId}" 1>&2
+
+  # the invocation detail (stateJson) embeds steps with job_ids but not
+  # job states; query each job individually to find which step(s) failed
+  printf "%s" "${stateJson}" | jq -r '
+    .steps[] | select(.job_id != null) |
+    "\(.order_index)\t\(.workflow_step_label // "unlabeled")\t\(.job_id)"
+  ' | while IFS=$'\t' read -r stepIdx stepLabel jobId; do
+    jobState=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
+      "${galaxyUrl}/api/jobs/${jobId}" | jq -r '.state // "unknown"')
+    if [ "${jobState}" = "error" ]; then
+      printf "  FAILED step %s: %s (job %s)\n" \
+        "${stepIdx}" "${stepLabel}" "${jobId}" 1>&2
+    fi
+  done
+
+  # check sub-workflow invocations for errors
+  printf "%s" "${stateJson}" | jq -r '
+    .steps[] | select(.subworkflow_invocation_id != null) |
+    "\(.order_index)\t\(.workflow_step_label // "unlabeled")\t\(.subworkflow_invocation_id)"
+  ' | while IFS=$'\t' read -r stepIdx stepLabel subInvId; do
+    subErrors=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
+      "${galaxyUrl}/api/invocations/${subInvId}/jobs_summary" \
+      | jq '.states.error // 0')
+    if [ "${subErrors}" -gt 0 ]; then
+      printf "  FAILED step %s: %s (sub-workflow %s, %d error(s))\n" \
+        "${stepIdx}" "${stepLabel}" "${subInvId}" "${subErrors}" 1>&2
+    fi
+  done
+
+  exit 1
 fi
 
 printf "# all jobs complete, downloading results\n" 1>&2
