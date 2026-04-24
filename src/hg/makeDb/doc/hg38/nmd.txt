@@ -76,6 +76,57 @@ bedToBigBed nmdEscNcbiRefSeq.bed ../../../chrom.sizes nmdEscNcbiRefSeq.bb \
 ln -sf /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/nmdEscNcbiRefSeq.bb /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
 
 #######################################################################
+# NMD escape regions from MANE Select Plus Clinical (2026-04-24 max)
+# Same script, run on the MANE bigGenePred. MANE puts the HGNC symbol in
+# bigGenePred field 18 (Gencode uses field 17), so pass --gene-sym-field 18.
+
+mkdir -p /hive/data/genomes/hg38/bed/nmd/mane && cd /hive/data/genomes/hg38/bed/nmd/mane
+
+~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f bigGenePred --gene-sym-field 18 \
+    /gbdb/hg38/mane/mane.bb \
+    nmdManeDeco.bed nmdEscMane.bed
+
+bedSort nmdEscMane.bed nmdEscMane.bed
+bedToBigBed nmdEscMane.bed ../../../chrom.sizes nmdEscMane.bb \
+    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+
+ln -sf /hive/data/genomes/hg38/bed/nmd/mane/nmdEscMane.bb /gbdb/hg38/nmd/nmdEscMane.bb
+
+# Collapsed-region counts (current script, no Rule 1/4 algorithmic fix):
+#   MANE 1.5:        68,345
+#   Gencode V49:    233,929
+#   RefSeq Curated: 112,903
+
+# 2026-04-24 max: Fixed Rule 1 to measure 50 bp upstream of the last splice
+# junction of the transcript (including 3'UTR introns), not the last CDS-CDS
+# junction; output regions are clipped to CDS. The old logic stripped 3'UTR
+# from the exon list before computing the "last coding junction", which
+# over-painted the last CDS exon as NMD-escape whenever there was only one
+# CDS exon, even when a 3'UTR intron sat far downstream (e.g. NBDY: the
+# entire 207 bp CDS was painted Rule 1 despite the last junction being
+# 2.6 kb past the stop). Rule 4 updated in the same pass: when a 3'UTR
+# intron exists, the last CDS-containing exon has a downstream EJC and is
+# now eligible for Rule 4.
+#
+# The script supports two ways of counting the 50 bp walk-back from the
+# last junction (--rule1-mode):
+#   cds  (default) - count only CDS nucleotides, skipping 3'UTR. A
+#                    transcript like NBDY (last junction 2.6 kb past the
+#                    stop, in 3'UTR) gets 50 bp of CDS painted, matching
+#                    the literal "last 50 bp" reading of the rule label.
+#   mrna           - count mRNA nucleotides including 3'UTR, then clip
+#                    output to CDS. NBDY-like transcripts get nothing
+#                    painted because the 50 mRNA-bp window stays inside
+#                    3'UTR. Tracks the 55 bp-rule literature, where the
+#                    ribosome-EJC distance is measured in mRNA bp.
+# We ship the 'cds' mode; the 'mrna' mode is retained for comparison.
+#
+# Post-fix collapsed-region counts (--rule1-mode=cds):
+#   MANE 1.5:        67,752
+#   Gencode V49:    233,375
+#   RefSeq Curated: 112,356
+
+#######################################################################
 # Lindeboom et al. NMDetective scores (2025-03-23 max/Claude)
 # NMD efficiency predictions from Lindeboom et al. 2016, Nat Genet.
 # Four bedGraph custom track files downloaded to:

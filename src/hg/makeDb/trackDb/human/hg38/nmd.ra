@@ -7,6 +7,21 @@ visibility hide
 superTrack on
 pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
+        track nmdEscMane
+        shortLabel NMD Escape MANE
+        longLabel NMD escape predictions: MANE Select Plus Clinical transcripts
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdEscMane.bb
+        visibility hide
+        type bigBed 9 +
+        mouseOverField mouseover
+        html nmdEscTranscripts
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts Filter on transcript ID (e.g. "*ENST00000269305*")
+        dataVersion MANE 1.5
+        priority 1.4
+
         track nmdEscGencode
         shortLabel NMD Escape Gencode
         longLabel NMD escape predictions: Gencode transcripts
@@ -16,6 +31,9 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts Filter on transcript ID (e.g. "*ENST00000269305*")
         # this could use a text file one day with the version
         dataVersion Gencode V49
         priority 1.5
@@ -29,6 +47,9 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts FIlter on transcript ID (e.g. "NM_005228*")
         # this could use a text file one day with the version
         dataVersion GCF_000001405.40-RS_2025_08
         priority 1.6

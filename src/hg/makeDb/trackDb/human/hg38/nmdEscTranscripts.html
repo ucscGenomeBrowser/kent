@@ -12,14 +12,20 @@ NMD escape regions (Nagy et al, Trends Biochem Sci 1998 and Lindeboom et al, Nat
 </p>
 
 <ol>
-  <li><b>50 bp rule</b>: The entire last coding exon plus the last 50 bp of
-    the penultimate coding exon. A PTC here has no downstream exon-exon
-    junction (or is too close to the last one) for NMD to be triggered.
-    Non-protein-coding 3' exons are not counted when identifying the last
-    coding junction. Note: when the penultimate coding exon is shorter than
-    50 bp, the annotated region extends only to the upstream junction of
-    that exon and does not walk further upstream. A small number of
-    transcripts with unusually short penultimate coding exons are affected.</li>
+  <li><b>50 bp rule</b>: Coding positions within 50 bp (mRNA distance)
+    upstream of the transcript's last splice junction, plus any coding
+    sequence downstream of that junction. A PTC in this window has no
+    downstream exon-exon junction (or is too close to the last one) for
+    NMD to be triggered. The last junction is determined from all exons
+    of the transcript, including 3&#8242;UTR introns, since those introns
+    deposit EJCs that can trigger NMD. For transcripts with no 3&#8242;UTR
+    intron (the common case), this reduces to the entire last coding exon
+    plus the last 50 bp of the penultimate coding exon. For transcripts
+    with a 3&#8242;UTR intron (~4.5% of MANE transcripts), the last
+    junction sits downstream of the stop codon; the escape region is only
+    the stretch of CDS within 50 bp (mRNA distance) of that junction, so
+    if the junction is more than 50 bp past the stop codon no CDS position
+    escapes via this rule.</li>
   <li><b>No downstream EJC rule</b>: Transcripts with a single coding exon and
     no 3&#8242;UTR intron. No exon-exon junction exists downstream of the stop
     codon, so no EJC is deposited that could trigger NMD at a PTC. This
@@ -106,9 +112,10 @@ contributing transcript IDs.
 Items are colored by the NMD escape rule that applies:
 </p>
 <ul>
-  <li><font color="#FF0000"><b>Red</b></font> &ndash; Rule 1: Last 50 bp
-    of the last coding exon-exon junction. A PTC here is too close to the
-    last exon junction complex (EJC) for NMD to be triggered.</li>
+  <li><font color="#FF0000"><b>Red</b></font> &ndash; Rule 1: CDS within
+    50 bp (mRNA distance) upstream of the last splice junction (or
+    downstream of it). A PTC here is too close to the last exon junction
+    complex (EJC) for NMD to be triggered.</li>
   <li><font color="#FF8C00"><b>Orange</b></font> &ndash; Rule 2: Single coding
     exon and no 3&#8242;UTR intron. No EJC is deposited downstream of the stop
     codon, so all PTCs in the coding sequence escape NMD.</li>
