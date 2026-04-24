@@ -1023,6 +1023,32 @@ var hubCreate = (function() {
         return encodeURIComponent(trackName.replaceAll(fileNameFixRegex, "_"));
     }
 
+    function viewHubInGenomeBrowser(hubName) {
+        // connect the whole hub in hgTracks, without pack'ing any specific track
+        if (typeof uiState.userUrl === "undefined" || uiState.userUrl.length === 0) {
+            return;
+        }
+        let dirRow = uiState.filesHash[hubName];
+        if (!dirRow) return;
+        let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
+        let dbParam = dirRow.hubType === "assemblyHub" ? "genome" : "db";
+        let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&" + dbParam + "=" + dirRow.genome + "&hubUrl=" + encodeURIComponent(hubUrl);
+        window.location.assign(url);
+    }
+
+    function showHubBanner(hubName) {
+        let banner = document.getElementById("hubBanner");
+        let nameSpan = document.getElementById("hubBannerName");
+        if (!banner || !nameSpan) return;
+        nameSpan.textContent = hubName;
+        banner.style.display = "";
+    }
+
+    function hideHubBanner() {
+        let banner = document.getElementById("hubBanner");
+        if (banner) banner.style.display = "none";
+    }
+
     // helper object so we don't need to use an AbortController to update
     // the data this function is using
     let selectedData = {};
@@ -1171,7 +1197,6 @@ var hubCreate = (function() {
         if (doAddEvent) {
             newSpan.addEventListener("click", function(e) {
                 dataTableShowDir(table, dirName, dirFullPath);
-                table.draw();
                 dataTableCustomOrder(table, {"fullPath": dirFullPath});
                 table.draw();
             });
@@ -1226,6 +1251,7 @@ var hubCreate = (function() {
             return !rowData.parentDir;
         });
         uiState.currentHub = "";
+        hideHubBanner();
     }
 
     function dataTableShowDir(table, dirName, dirFullPath) {
@@ -1233,8 +1259,8 @@ var hubCreate = (function() {
         clearSearch(table);
         // deselect any selected rows like Finder et al when moving into/upto a directory
         table.rows({selected: true}).deselect();
-        table.draw();
-        // NOTE that the below does not actually render until the next table.draw() call
+        // Callers must call table.draw() after this so filter + order changes
+        // from showDir/customOrder render in a single redraw.
         table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
             // calculate the fullPath of this rows parentDir in case the dirName passed
             // to this function has the same name as a parentDir further up in the
@@ -1252,6 +1278,7 @@ var hubCreate = (function() {
         });
         uiState.currentHub = dirName;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
+        showHubBanner(dirName);
     }
 
     // when we move into a new directory, we remove the row from the table
@@ -1415,6 +1442,7 @@ var hubCreate = (function() {
                 let container = document.createElement("div");
                 let viewBtn = document.createElement("button");
                 viewBtn.textContent = "View in Genome Browser";
+                viewBtn.style.whiteSpace = "nowrap";
                 viewBtn.type = 'button';
                 viewBtn.addEventListener("click", function(e) {
                     e.stopPropagation();
@@ -1520,14 +1548,8 @@ var hubCreate = (function() {
         // will copy the actual DOM node
         parseFileListIntoHash(uiState.fileList);
         dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
-        table.draw();
         dataTableCustomOrder(table, hubDirData);
-        // Flush dataTableCustomOrder's row.remove() so DataTables internal state is clean,
-        // then defer columns.adjust() to allow browser reflow after header DOM manipulation
         table.draw();
-        setTimeout(function() {
-            table.columns.adjust();
-        }, 0);
     }
 
     function doRowSelect(evtype, table, indexes) {
@@ -1553,6 +1575,8 @@ var hubCreate = (function() {
             style: 'multi+shift', // default to a single click is all that's needed
         },
         pageLength: 25,
+        autoWidth: false,     // let the browser's default table-layout:auto size columns,
+                              // so they shrink/grow with the container on window resize
         scrollY: 600,
         scrollCollapse: true, // when less than scrollY height is needed, make the table shorter
         deferRender: true, // only draw into the DOM the nodes we need for each page
@@ -1597,7 +1621,16 @@ var hubCreate = (function() {
             {
                 targets: 2,
                 render: function(data, type, row, meta) {
-                    return decodeURIComponent(data);
+                    let decodedName = decodeURIComponent(data);
+                    if (type !== "display" || row.fileType === "dir") {
+                        return decodedName;
+                    }
+                    if (typeof uiState.userUrl === "undefined" || uiState.userUrl.length === 0) {
+                        return decodedName;
+                    }
+                    let fileUrl = uiState.userUrl + cgiEncode(row.fullPath);
+                    let copyIcon = '<svg class="copyLinkIcon" title="Copy file URL to clipboard" data-url="' + fileUrl + '" style="margin-left: 6px; cursor: pointer; vertical-align:baseline; width:0.8em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg>';
+                    return '<span style="white-space:nowrap"><a class="fileLink" href="' + fileUrl + '" target="_blank" rel="noopener">' + decodedName + '</a>' + copyIcon + '</span>';
                 }
             },
             {
@@ -1628,8 +1661,8 @@ var hubCreate = (function() {
                 }
             },
             {
-                // The upload time column
-                targets: 8,
+                targets: [7, 8],
+                className: "nowrap",
                 visible: true,
                 searchable: false,
                 orderable: true,
@@ -1707,6 +1740,14 @@ var hubCreate = (function() {
             return container;
         });
         let table = new DataTable("#filesTable", tableInitOptions);
+        // Re-sync the scrollY head/body column widths after a resize settles.
+        let resizeTimer = null;
+        window.addEventListener("resize", function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                table.columns.adjust();
+            }, 100);
+        });
         if (uiState.isLoggedIn) {
             table.buttons(".uploadButton").enable();
             document.getElementById("rootBreadcrumb").addEventListener("click", function(e) {
@@ -1717,6 +1758,12 @@ var hubCreate = (function() {
             });
         } else {
             table.buttons(".uploadButton").disable();
+        }
+        let hubBannerBtn = document.getElementById("hubBannerViewBtn");
+        if (hubBannerBtn) {
+            hubBannerBtn.addEventListener("click", function(e) {
+                viewHubInGenomeBrowser(uiState.currentHub);
+            });
         }
         table.on("select", function(e, dt, type, indexes) {
             indexes.forEach(function(i) {
@@ -1729,6 +1776,32 @@ var hubCreate = (function() {
             });
         });
         table.on("click", function(e) {
+            let copyIcon = e.target.closest ? e.target.closest(".copyLinkIcon") : null;
+            if (copyIcon) {
+                e.stopPropagation();
+                e.preventDefault();
+                let url = copyIcon.getAttribute("data-url");
+                navigator.clipboard.writeText(url).then(function() {
+                    let feedback = document.createElement("span");
+                    feedback.textContent = "copied";
+                    feedback.style.marginLeft = "6px";
+                    feedback.style.fontSize = "0.85em";
+                    feedback.style.color = "#080";
+                    copyIcon.parentNode.replaceChild(feedback, copyIcon);
+                    setTimeout(function() {
+                        if (feedback.parentNode) {
+                            feedback.parentNode.replaceChild(copyIcon, feedback);
+                        }
+                    }, 1500);
+                }, function() {
+                    alert("Failed to copy URL: " + url);
+                });
+                return;
+            }
+            if (e.target.closest && e.target.closest(".fileLink")) {
+                e.stopPropagation();
+                return;
+            }
             if (e.target.className !== "dt-select-checkbox") {
                 e.stopPropagation();
                 // we've clicked somewhere not on the checkbox itself, we need to:
@@ -1762,7 +1835,6 @@ var hubCreate = (function() {
 
         // first add the top level directories/files
         let table = showExistingFiles(uiState.fileList);
-        table.columns.adjust().draw();
 
         uppy.use(Uppy.Dashboard, uppyOptions);
 

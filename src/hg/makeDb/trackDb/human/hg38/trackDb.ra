@@ -926,7 +926,7 @@ include psuVsUcscChains.ra alpha
 include LCR.ra alpha
 
 include mpra.ra alpha
-include nmd.ra alpha
+include nmd.ra
 include ancient.ra
 
 # release alpha only here - we don't want to push out mb2 without

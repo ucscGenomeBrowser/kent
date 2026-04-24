@@ -498,7 +498,7 @@ void doGeneReviews(struct trackDb *tdb, char *itemName);
 void prGeneReviews(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews associated to this item */
 
-void prGRShortRefGene(char *itemName);
+void prGRShortRefGene(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews short label associated to this refGene item */
 
 void doLrg(struct trackDb *tdb, char *item);

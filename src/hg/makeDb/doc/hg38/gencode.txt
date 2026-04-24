@@ -1526,3 +1526,16 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     jkmake DBS=hg38 alpha
 #########################################################################
+2026-04-23: import of GENCODE V50 pre-release for GENCODE Versions (markd)
+Ensembl release 116 scheduled for mid-May. 
+
+cd ~/kent/src/hg/makeDb/outside/gencode
+./bin/gencodeBuildRelease hg38 50 pre "May 2026" 116 >& hg38.log&
+#########################################################################
+
+
+The GENCODE 50 and M39 pre-release files are now available in our FTP site: 
+
+These GENCODE releases correspond to the Ensembl release 116, which is currently scheduled for mid-May. 
+
+./bin/gencodeBuildRelease hg38 50 pre "May 2026" 116 >& hg38.log

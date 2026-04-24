@@ -1582,8 +1582,14 @@ static char *vettedTracks[] =
 static boolean isVetted(char *track)
 /* Is this a track that's been tested with quickLift?  If not we don't want to do the special name handling on the track. */
 {
-//if (startsWith("wgEncodeGencode", track))
-    //return TRUE;
+if (startsWith("wgEncodeGencode", track))
+    return TRUE;
+// NCBI RefSeq composite subtracks (ncbiRefSeqCurated/Predicted/Other/Psl/
+// Select/Hgmd/Historical, ncbiOrtho) and UCSC RefSeq (refGene) have been
+// validated through quickLift; let their native hgc handlers fire.
+if (startsWith("ncbiRefSeq", track) || startsWith("ncbiOrtho", track) ||
+    sameString("refGene", track))
+    return TRUE;
 static bool inited = FALSE;
 static struct hash *vettedHash = NULL;
 

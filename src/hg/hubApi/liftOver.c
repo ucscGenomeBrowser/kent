@@ -10,7 +10,9 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "net.h"
+/* do not need the mailViaPipe function here
 #include "mailViaPipe.h"
+*/
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -324,8 +326,11 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
     /* Even if the mailViaPipe returned a relevant return code, and I'm not
     *    sure it would, there isn't much we can do about it from here.
-    */
+    *  Do *not* need to send email from here.  The cron job watch script
+    *     in the otto user will see the table updated and take care of
+    *     the email notifications
     (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
+    */
 
     /* some kind of response here back to the request page */
     struct jsonWrite *jw = apiStartOutput();
@@ -339,7 +344,7 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
 	    {
             struct dyString *update = newDyString(0);
             sqlDyStringPrintf(update,
-		"INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, doneStatus, workflowId) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, 0)",
+		"INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, doneStatus, buildDir) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, '')",
 		ottoTable,  fromGenome, toGenome, email, comment);
             sqlUpdate(conn, dyStringCannibalize(&update));
 	    }
