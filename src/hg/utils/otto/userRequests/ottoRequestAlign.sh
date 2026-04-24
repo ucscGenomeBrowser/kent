@@ -136,6 +136,65 @@ printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
 printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
 
 ############################################################################
+# step 2b: compare N50 -- better N50 assembly becomes the alignment target
+############################################################################
+function twoBitPath() {
+  local asmName=$1
+  case ${asmName} in
+    GC[AF]_*)
+      local gcX=$(printf "%s" "${asmName}" | cut -c1-3)
+      local d0=$(printf "%s" "${asmName}" | cut -c5-7)
+      local d1=$(printf "%s" "${asmName}" | cut -c8-10)
+      local d2=$(printf "%s" "${asmName}" | cut -c11-13)
+      printf "/hive/data/genomes/asmHubs/%s/%s/%s/%s/%s/%s.2bit" \
+        "${gcX}" "${d0}" "${d1}" "${d2}" "${asmName}" "${asmName}"
+      ;;
+    *)
+      printf "/hive/data/genomes/%s/%s.2bit" "${asmName}" "${asmName}"
+      ;;
+  esac
+}
+
+function asmN50() {
+  local twoBit=$1
+  twoBitInfo "${twoBit}" stdout \
+    | n50.pl stdin 2>&1 \
+    | grep -A1 "^[0-9].*one half size" \
+    | tail -1 \
+    | awk '{print $NF}'
+}
+
+export from2bit=$(twoBitPath "${fromDb}")
+export to2bit=$(twoBitPath "${toDb}")
+
+if [ ! -s "${from2bit}" ]; then
+  printf "ERROR: 2bit file not found: %s\n" "${from2bit}" 1>&2
+  exit 255
+fi
+
+if [ ! -s "${to2bit}" ]; then
+  printf "ERROR: 2bit file not found: %s\n" "${to2bit}" 1>&2
+  exit 255
+fi
+
+export fromN50=$(asmN50 "${from2bit}")
+export toN50=$(asmN50 "${to2bit}")
+
+printf "# from N50: %s (%s)\n" "${fromN50}" "${fromDb}" 1>&2
+printf "#   to N50: %s (%s)\n" "${toN50}" "${toDb}" 1>&2
+
+if [ -n "${fromN50}" -a -n "${toN50}" ]; then
+  if [ "${toN50}" -gt "${fromN50}" ]; then
+    printf "# swapping: %s (N50=%s) becomes target over %s (N50=%s)\n" \
+      "${toId}" "${toN50}" "${fromId}" "${fromN50}" 1>&2
+    tmpId="${fromId}"; export fromId="${toId}"; export toId="${tmpId}"
+    tmpClade="${fromClade}"; export fromClade="${toClade}"; export toClade="${tmpClade}"
+  fi
+else
+  printf "WARNING: could not determine N50, keeping original target/query order\n" 1>&2
+fi
+
+############################################################################
 # step 3: map clades and build the command
 ############################################################################
 export fromCladeArg=$(cladeMap "${fromClade}")
@@ -144,3 +203,43 @@ export toCladeArg=$(cladeMap "${toClade}")
 export cmd="kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
 printf "# %s\n" "${cmd}" 1>&2
+
+############################################################################
+# step 4: compute buildDir and update ottoRequest table
+############################################################################
+
+# derive accession ID and Query label the same way kegAlignLastz.sh does
+export tAccId=$(printf "%s" "${fromId}" | cut -d'_' -f1-2)
+export qAccId=$(printf "%s" "${toId}" | cut -d'_' -f1-2)
+export Query="${qAccId^}"
+export DS=$(date "+%F")
+
+# compute buildDir -- UCSC db default, then GenArk override
+export buildDir="/hive/data/genomes/${fromId}/bed/lastz${Query}.${DS}"
+export targetExists="/hive/data/genomes/${fromId}/bed"
+
+case ${fromId} in
+  GC[AF]_*)
+    gcX=$(printf "%s" "${fromId}" | cut -c1-3)
+    d0=$(printf "%s" "${fromId}" | cut -c5-7)
+    d1=$(printf "%s" "${fromId}" | cut -c8-10)
+    d2=$(printf "%s" "${fromId}" | cut -c11-13)
+    tGcPath="${gcX}/${d0}/${d1}/${d2}"
+    buildDir="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${fromId}/trackData/lastz${Query}.${DS}"
+    targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${fromId}/trackData"
+    ;;
+esac
+
+# reuse existing build directory if one is already in progress
+working=$(ls -d ${targetExists}/lastz${Query}.* 2> /dev/null | wc -l)
+if [ "${working}" -gt 0 ]; then
+  buildDir=$(ls -d ${targetExists}/lastz${Query}.* | tail -1)
+  printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
+fi
+
+printf "# buildDir: %s\n" "${buildDir}" 1>&2
+
+# store buildDir in ottoRequest table for workflowMonitor.sh
+hgsql -N -e \
+  "UPDATE ottoRequest SET buildDir='${buildDir}' WHERE id=${requestId};" \
+  hgcentraltest

@@ -1584,6 +1584,12 @@ static boolean isVetted(char *track)
 {
 if (startsWith("wgEncodeGencode", track))
     return TRUE;
+// NCBI RefSeq composite subtracks (ncbiRefSeqCurated/Predicted/Other/Psl/
+// Select/Hgmd/Historical, ncbiOrtho) and UCSC RefSeq (refGene) have been
+// validated through quickLift; let their native hgc handlers fire.
+if (startsWith("ncbiRefSeq", track) || startsWith("ncbiOrtho", track) ||
+    sameString("refGene", track))
+    return TRUE;
 static bool inited = FALSE;
 static struct hash *vettedHash = NULL;
 
