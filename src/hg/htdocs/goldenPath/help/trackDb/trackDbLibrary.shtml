@@ -956,7 +956,7 @@
 
 <DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMethyl bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>skipFields &lt;fieldName1&gt;,&lt;fieldName2&gt; ...</code><BR>
     </div>
         
     <P>This setting can be used to suppress extra fields on the item details page.
