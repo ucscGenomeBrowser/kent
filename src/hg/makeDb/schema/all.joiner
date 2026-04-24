@@ -801,30 +801,26 @@ identifier wgEncodeGencodeClassesV3
     hg18.wgEncodeGencodePolyaV3.name unique
 
 ##
-# GENCODE macro-driven definitions (recent releases)
-# To add a new release: append the version token to the set lines below.
-# Older releases (pre-V44, pre-VM35) remain literal above because their
-# minCheck values were tuned per-release and would need individual stanzas.
-# The macro uses the loosest (V49/VM38) minCheck values, which is safe
-# because earlier releases in the set already passed tighter thresholds.
+# GENCODE macro-driven definitions
+# To add new release: append version token to set lines below.
+# Tune minCheck values to fit all releases in set.
 ##
 
-set gencodeHg38Vers V20,V21,V22,V23,V24,V25,V26,V27,V28,V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49
-set gencodeHg38GeneSymbolVers V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49
-set gencodeHg38EntrezGeneVers V22,V23,V24,V25,V26,V27,V28,V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49
-
-set gencodeHg19LiftVers V24lift37,V26lift37,V27lift37,V28lift37,V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37
-set gencodeHg19LiftGeneSymbolVers V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37
-set gencodeHg19LiftEntrezGeneVers V24lift37,V28lift37,V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37
-set gencodeHg19LiftEntrezGeneLowVers V26lift37,V27lift37
-
-set gencodeMm39Vers VM26,VM27,VM28,VM29,VM30,VM31,VM32,VM33,VM34,VM35,VM36,VM37,VM38
-
+set gencodeHg38Vers V20,V21,V22,V23,V24,V25,V26,V27,V28,V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50
+set gencodeHg38GeneSymbolVers V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50
+set gencodeHg38EntrezGeneVers V22,V23,V24,V25,V26,V27,V28,V29,V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50
 set gencodeHg38RefSeqToRefGeneLowVers V23,V24,V25,V26,V27,V28,V29
-set gencodeHg38RefSeqToRefGeneVers V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49
+set gencodeHg38RefSeqToRefGeneVers V30,V31,V32,V33,V34,V35,V36,V37,V38,V39,V40,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50
+
+set gencodeHg19LiftVers V24lift37,V26lift37,V27lift37,V28lift37,V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37,V50lift37
+set gencodeHg19LiftGeneSymbolVers V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37,V50lift37
+set gencodeHg19LiftEntrezGeneVers V24lift37,V28lift37,V29lift37,V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37,V50lift37
+set gencodeHg19LiftEntrezGeneLowVers V26lift37,V27lift37
 set gencodeHg19LiftRefSeqToRefGeneLowVers V24lift37,V26lift37,V27lift37,V28lift37,V29lift37
-set gencodeHg19LiftRefSeqToRefGeneVers V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37
-set gencodeMm39RefSeqToRefGeneVers VM26,VM27,VM28,VM29,VM30,VM31,VM32,VM33,VM34,VM35,VM36,VM37,VM38
+set gencodeHg19LiftRefSeqToRefGeneVers V30lift37,V31lift37,V32lift37,V33lift37,V34lift37,V35lift37,V36lift37,V37lift37,V38lift37,V39lift37,V40lift37,V41lift37,V42lift37,V43lift37,V44lift37,V45lift37,V46lift37,V47lift37,V48lift37,V49lift37,V50lift37
+
+set gencodeMm39Vers VM26,VM27,VM28,VM29,VM30,VM31,VM32,VM33,VM34,VM35,VM36,VM37,VM38,VM39
+set gencodeMm39RefSeqToRefGeneVers VM26,VM27,VM28,VM29,VM30,VM31,VM32,VM33,VM34,VM35,VM36,VM37,VM38,VM39
 
 ##
 # hg38

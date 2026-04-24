@@ -1,6 +1,9 @@
 ####
 # build GENCODE tracks requires CCDS and markd python junk.
-# targets:
+# 
+# This is normally run by gencodeBuildRelease
+#
+# Targets:
 #   all - do everything
 #   fetch - download gencode
 #   checkAttrs - check attribute conversion, so code can be updated to handle new biotypes
@@ -10,7 +13,14 @@
 #   cmpRelease - compare with previous release
 #   joinerCheck - run joinerCheck on gencode tabkes
 #
-# can use -j n to run multiple jobs in parallel.
+# use -j n to run multiple jobs in parallel.
+#
+# The following arguments must be passed on the commmand line:
+#   db - hg38, hg19, mm39
+#   version - 47, M38, 47lift37
+#   prevVersion - 46, ..
+#   baseVersion - 47, etc; source version for lift, otherwise same as version
+#   relType  - pre, final
 ####
 
 ##
@@ -29,45 +39,38 @@ export SHELLOPTS=pipefail
 mach = $(shell uname -m)
 
 ##
-# Release info and files from Sanger.
-# BEGIN EDIT THESE EACH RELEASE
+# validate parameters
 ##
-#preRelease = yes
-preRelease = no
-#db = hg38
-db = hg19
-#db = mm39
-ifeq (${db},mm39)
-    ver = M38
-    prevVer = M37
-else ifeq (${db},hg38)
-    ver = 49
-    prevVer = 48
-else ifeq (${db},hg19)
-    verBase = 49
-    prevVerBase = 48
-    ver = ${verBase}lift37
-else
-    $(error unimplement genome database: ${db})
+ifeq (${db},)
+    $(error Error: must specify db=)
 endif
-# END EDIT THESE EACH RELEASE
+ifeq (${version},)
+    $(error Error: must specify version=)
+endif
+ifeq (${prevVersion},)
+    $(error Error: must specify prevVersion=)
+endif
+ifeq (${baseVersion},)
+    $(error Error: must specify baseVersion=)
+endif
+ifeq (${relType},)
+    $(error Error: must specify relType=)
+endif
 
 ifeq (${db},mm39)
     grcRefAssembly = GRCm39
     gencodeOrg = Gencode_mouse
-    ftpReleaseSubdir = release_${ver}
+    ftpReleaseSubdir = release_${version}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
     gencodeOrg = Gencode_human
-    ftpReleaseSubdir = release_${ver}
+    ftpReleaseSubdir = release_${version}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    ver = ${verBase}lift37
-    prevVer = ${prevVerBase}lift37
     backmapTargetVer = 19
-    ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
+    ftpReleaseSubdir = release_${baseVersion}/GRCh37_mapping
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     isBackmap = yes
@@ -78,7 +81,7 @@ else
     $(error unimplement genome database: ${db})
 endif
 
-ifeq (${preRelease},yes)
+ifeq (${relType},pre)
     # pre-release
     baseUrl = rsync://ftp.ebi.ac.uk/pub/databases/havana/gencode_pre
 else
@@ -86,14 +89,18 @@ else
     baseUrl = rsync://ftp.ebi.ac.uk/pub/databases/gencode
 endif
 
-rel = V${ver}
+flagDir = flags
+fetchDone = ${flagDir}/fetch.done
+
+
+rel = V${version}
 releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
 dataDir = data
-relDir = ${dataDir}/release_${ver}
-annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
-polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
+relDir = ${dataDir}/release_${version}
+annotationGff = ${relDir}/gencode.v${version}.${annGffTypeName}.gff3.gz
+polyAGff = ${relDir}/gencode.v${version}.polyAs.gff3.gz
 ifneq (${isBackmap},yes)
-   transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
+   transcriptRanks = ${relDir}/gencode.v${version}.transcript_rankings.txt.gz
    transcriptRanksOpt = --transcriptRanks=${transcriptRanks}
 endif
 
@@ -114,9 +121,6 @@ encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 gencodeGp = ${dataDir}/gencode.gp
 gencodeTsv = ${dataDir}/gencode.tsv
 gencodeToUcscChain = ${dataDir}/gencodeToUcsc.chain
-
-# flag indicating fetch was done
-fetchDone = ${relDir}/done
 
 ##
 # track and table data
@@ -147,56 +151,56 @@ tablePolyA = ${tablePre}Polya${rel}
 tablePolyAGp = ${tableDir}/${tablePolyA}.gp
 
 # other metadata
-tableGeneSourceMeta = ${relDir}/gencode.v${ver}.metadata.Gene_source.gz
+tableGeneSourceMeta = ${relDir}/gencode.v${version}.metadata.Gene_source.gz
 tableGeneSource = ${tablePre}GeneSource${rel}
 tableGeneSourceTab = ${tableDir}/${tableGeneSource}.tab
 
-tableTranscriptSourceMeta = ${relDir}/gencode.v${ver}.metadata.Transcript_source.gz
+tableTranscriptSourceMeta = ${relDir}/gencode.v${version}.metadata.Transcript_source.gz
 tableTranscriptSource = ${tablePre}TranscriptSource${rel}
 tableTranscriptSourceTab = ${tableDir}/${tableTranscriptSource}.tab
 
-tableTranscriptSupportMeta = ${relDir}/gencode.v${ver}.metadata.Transcript_supporting_feature.gz
+tableTranscriptSupportMeta = ${relDir}/gencode.v${version}.metadata.Transcript_supporting_feature.gz
 tableTranscriptSupport = ${tablePre}TranscriptSupport${rel}
 tableTranscriptSupportTab = ${tableDir}/${tableTranscriptSupport}.tab
 
-tableExonSupportMeta = ${relDir}/gencode.v${ver}.metadata.Exon_supporting_feature.gz
+tableExonSupportMeta = ${relDir}/gencode.v${version}.metadata.Exon_supporting_feature.gz
 tableExonSupport = ${tablePre}ExonSupport${rel}
 tableExonSupportTab = ${tableDir}/${tableExonSupport}.tab
 
 ifeq (${gencodeOrg}, Gencode_human)
-   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.HGNC.gz
+   tableGeneSymbolMeta = ${relDir}/gencode.v${version}.metadata.HGNC.gz
 else
-   tableGeneSymbolMeta = ${relDir}/gencode.v${ver}.metadata.MGI.gz
+   tableGeneSymbolMeta = ${relDir}/gencode.v${version}.metadata.MGI.gz
 endif
 tableGeneSymbol = ${tablePre}GeneSymbol${rel}
 tableGeneSymbolTab = ${tableDir}/${tableGeneSymbol}.tab
 
-tablePdbMeta = ${relDir}/gencode.v${ver}.metadata.PDB.gz
+tablePdbMeta = ${relDir}/gencode.v${version}.metadata.PDB.gz
 tablePdb = ${tablePre}Pdb${rel}
 tablePdbTab = ${tableDir}/${tablePdb}.tab
 
-tablePubMedMeta = ${relDir}/gencode.v${ver}.metadata.Pubmed_id.gz
+tablePubMedMeta = ${relDir}/gencode.v${version}.metadata.Pubmed_id.gz
 tablePubMed = ${tablePre}PubMed${rel}
 tablePubMedTab = ${tableDir}/${tablePubMed}.tab
 
-tableRefSeqMeta = ${relDir}/gencode.v${ver}.metadata.RefSeq.gz
+tableRefSeqMeta = ${relDir}/gencode.v${version}.metadata.RefSeq.gz
 tableRefSeq = ${tablePre}RefSeq${rel}
 tableRefSeqTab = ${tableDir}/${tableRefSeq}.tab
 
-tableSwissProtMeta = ${relDir}/gencode.v${ver}.metadata.SwissProt.gz
-tableTrEMBLMeta = ${relDir}/gencode.v${ver}.metadata.TrEMBL.gz
+tableSwissProtMeta = ${relDir}/gencode.v${version}.metadata.SwissProt.gz
+tableTrEMBLMeta = ${relDir}/gencode.v${version}.metadata.TrEMBL.gz
 tableUniProt = ${tablePre}UniProt${rel}
 tableUniProtTab = ${tableDir}/${tableUniProt}.tab
 
-tablePolyAFeatureMeta = ${relDir}/gencode.v${ver}.metadata.PolyA_feature.gz
+tablePolyAFeatureMeta = ${relDir}/gencode.v${version}.metadata.PolyA_feature.gz
 tablePolyAFeature = ${tablePre}PolyAFeature${rel}
 tablePolyAFeatureTab = ${tableDir}/${tablePolyAFeature}.tab
 
-tableAnnotationRemarkMeta = ${relDir}/gencode.v${ver}.metadata.Annotation_remark.gz
+tableAnnotationRemarkMeta = ${relDir}/gencode.v${version}.metadata.Annotation_remark.gz
 tableAnnotationRemark = ${tablePre}AnnotationRemark${rel}
 tableAnnotationRemarkTab = ${tableDir}/${tableAnnotationRemark}.tab
 
-tableEntrezGeneMeta = ${relDir}/gencode.v${ver}.metadata.EntrezGene.gz
+tableEntrezGeneMeta = ${relDir}/gencode.v${version}.metadata.EntrezGene.gz
 tableEntrezGene = ${tablePre}EntrezGene${rel}
 tableEntrezGeneTab = ${tableDir}/${tableEntrezGene}.tab
 
@@ -232,7 +236,7 @@ all: fetch mkTables loadTables checkSanity cmpRelease listTables
 ##
 fetch: ${fetchDone}
 ${fetchDone}:
-	@mkdir -p $(dir $@)
+	@mkdir -p ${relDir}  $(dir $@)
 	rsync -a --include='gencode.*' --exclude='*' '${releaseUrl}/' ${relDir}
 	touch $@
 
@@ -267,14 +271,12 @@ ${tableDir}/${tablePre}%${rel}.gp: ${gencodeGp} ${gencodeTsv}
 	${gencodeMakeTracks}  $$(echo $* | tr A-Z a-z) ${gencodeGp} ${gencodeTsv} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableTagTab}: ${tableAttrsTab}
-${tableTranscriptionSupportLevelTab}: ${tableAttrsTab}
-${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
-	@mkdir -p $(dir $@)
-	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}.${tmpExt}
+${tableAttrsTab} ${tableTagTab} ${tableTranscriptionSupportLevelTab} &: ${gencodeGp} ${gencodeTsv}
+	@mkdir -p $(dir ${tableAttrsTab})
+	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} ${tableAttrsTab}.${tmpExt} ${tableTagTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}
 	mv -f ${tableTagTab}.${tmpExt} ${tableTagTab}
-	mv -f $@.${tmpExt} $@
+	mv -f ${tableAttrsTab}.${tmpExt} ${tableAttrsTab}
 
 ${tablePolyAGp}: ${polyAGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
@@ -355,7 +357,6 @@ ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	${gencodeGxfToGenePred} ${dropIdsOpts} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
 	${gencodeGxfToAttrs} ${dropIdsOpts} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
@@ -452,7 +453,7 @@ ${checkDir}/${tableComp}.pseudo.checked: ${loadedDir}/${tableComp}.genePredExt.l
 listTables: tables.lst
 
 tables.lst: loadTables
-	hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} >$@.tmp
+	hgsql -Ne 'show tables like "wgEncodeGencode%V${version}"' ${db} >$@.tmp
 	mv -f $@.tmp $@
 
 
@@ -462,21 +463,17 @@ tables.lst: loadTables
 cmpRelease: gencode-cmp.tsv
 
 gencode-cmp.tsv: loadTables
-	@echo 'table	V${prevVer}	V${ver}	delta'  >$@.tmp
+	@echo 'table	V${prevVersion}	V${version}	delta'  >$@.tmp
 	@for tab in ${allTables} ; do \
-	    prevTab=$$(echo "$$tab" | sed 's/V${ver}/V${prevVer}/g') ; \
+	    prevTab=$$(echo "$$tab" | sed 's/V${version}/V${prevVersion}/g') ; \
 	    echo "$${tab}	"$$(hgsql -Ne "select count(*) from $${prevTab}" ${db})"	"$$(hgsql -Ne "select count(*) from $${tab}" ${db}) ; \
 	done | tawk '{print $$1, $$2, $$3, $$3-$$2}' >>$@.tmp
 	mv -f $@.tmp $@
 
 joinerCheck: loadTables
 	@mkdir -p check
-	for tbl in $$(hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} | egrep -v 'wgEncodeGencode2wayConsPseudo|wgEncodeGencodePolya') ; do \
-	    echo  table=$$tbl; \
-	    runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes; \
-	    done >check/joiner.out 2>&1
+	${gencodeBinDir} gencodeJoinerCheck $db} ${version} >check/joiner.out 2>&1
 	if fgrep Error: check/joiner.out ; then false;  else true; fi
-
 
 clean:
 	rm -rf ${dataDir} ${tableDir} ${loadedDir} ${checkDir}
