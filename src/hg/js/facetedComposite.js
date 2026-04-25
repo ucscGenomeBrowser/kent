@@ -40,6 +40,15 @@ $(function() {
 
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+    // For primaryKey values that use the 'id|label' form, return just the id.
+    // The label is for display only; the cart and rowToIdx need the bare id.
+    const primaryKeyId = v => {
+        if (v == null) return v;
+        const s = String(v);
+        const bar = s.indexOf("|");
+        return bar >= 0 ? s.slice(0, bar) : s;
+    };
+
     const embeddedData = (() => {
         // get data that was embedded in the HTML here to use them as globals
         const dataTag = document.getElementById("app-data");
@@ -162,6 +171,11 @@ $(function() {
                             idForUrl = tok.slice(0, bar);
                             label    = tok.slice(bar + 1);
                             encode   = false;
+                            // Strip enclosing quotes from the metadata.tsv
+                            if (label.length >= 2 &&
+                                label.startsWith('"') && label.endsWith('"')) {
+                                label = label.slice(1, -1);
+                            }
                         }
                         if (/^https?:/i.test(label)) encode = false;
                         const sub = encode ? encodeURIComponent(idForUrl) : idForUrl;
@@ -672,7 +686,7 @@ $(function() {
 
             // Get current data element selections
             const currentDataElements = table.rows({selected: true}).data().toArray()
-                .map(obj => obj[primaryKey]);
+                .map(obj => primaryKeyId(obj[primaryKey]));
 
             // Enforce an upper bound on the number of tracks on at the same time.
             // This is imperfect when data types are present - some combinations might
@@ -780,8 +794,17 @@ $(function() {
                         colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
                         return obj;
                     });
+                    // Commas in the primaryKey column are ambiguous: a row maps
+                    // to a single subtrack, and trackDb subtrack names can't
+                    // contain commas anyway. Fail loudly so the author notices.
+                    const badPk = metadata.find(row =>
+                        row[primaryKey] != null && String(row[primaryKey]).includes(","));
+                    if (badPk)
+                        throw new Error(
+                            `primaryKey column '${primaryKey}' contains a comma in value ` +
+                            `'${badPk[primaryKey]}'; commas are not allowed in primaryKey values`);
                     const rowToIdx = Object.fromEntries(
-                        metadata.map((row, i) => [row[primaryKey], i])
+                        metadata.map((row, i) => [primaryKeyId(row[primaryKey]), i])
                     );
                     colorMap = isValidColorMap(colorMap) ? colorMap : null;
                     const freshData = { metadata, rowToIdx, colNames, colorMap };
