@@ -27,6 +27,9 @@ topLibs: topChecks | ${TOP_LIBS:%=%.topLibs}
 topChecks:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
+	@if [ ! -e htslib/.git ] ; then \
+	    set -x; git -c protocol.file.allow=always submodule update --init --recursive ; \
+	fi
 
 optLib:
 	cd optimalLeaf && ${MAKE}
