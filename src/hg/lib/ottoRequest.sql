@@ -12,12 +12,12 @@ CREATE TABLE ottoRequest (
     email varchar(255) not null,	# user email address
     comment longtext not null,	# other comments from the input form
     requestTime datetime not null,	# date time request was added
-    doneStatus tinyint unsigned not null,	# 0 == pending, 1 == notified/in progress, 2 == complete, 3 == problems
+    status tinyint unsigned not null,	# 0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete, 5 finish notification, 6 complete, 7 problems
     buildDir varchar(1024) not null,	# build directory path for alignment workflow
     completeTime datetime default null,	# date time for process completed and user notified
               #Indices
     PRIMARY KEY(id),
     INDEX(requestType),
-    INDEX(doneStatus),
+    INDEX(status),
     INDEX(requestTime)
 );

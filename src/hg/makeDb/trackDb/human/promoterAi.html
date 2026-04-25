@@ -16,6 +16,14 @@ unchanged. Variants at either end of the range (large |score|) are dysregulating
 are the ones enriched among patients with rare disease in the PromoterAI paper.
 </p>
 
+<p>
+Illumina's <a href="https://github.com/Illumina/PromoterAI" target="_blank">PromoterAI
+GitHub page</a> recommends three tiered thresholds for interpretation:
+<b>|score| &ge; 0.1</b>, <b>|score| &ge; 0.2</b>, and <b>|score| &ge; 0.5</b>.
+Higher absolute thresholds select progressively smaller, higher-confidence sets of
+predicted expression-altering variants.
+</p>
+
 <h2>Display Conventions</h2>
 <p>
 This track is a composite with four bigWig subtracks, one for each possible alternate
@@ -49,17 +57,17 @@ boxes) indicates predicted under-expression (negative score).
 <p>
 The PromoterAI predictions are distributed by Illumina under a license that does not
 permit redistribution, so this track is not available for bulk download from UCSC and
-is excluded from the Table Browser and public API. The original prediction files can
-be obtained directly from Illumina via the license request on the
+is excluded from the Table Browser and public API. The original prediction files are
+available for academic and non-commercial research use directly from Illumina:
+complete the license agreement linked from the
 <a href="https://github.com/Illumina/PromoterAI" target="_blank">PromoterAI GitHub
-page</a>, which links to the
-<a href="https://primateai3d.basespace.illumina.com/" target="_blank">Illumina
-BaseSpace</a> download.
+page</a>, and a download link is emailed after submission.
 </p>
 
 <h2>Methods</h2>
 <p>
-The PromoterAI hg38 TSS-500 file was downloaded from Illumina BaseSpace. The file
+The PromoterAI hg38 TSS-500 file was downloaded from Illumina via the PromoterAI
+license agreement. The file
 contains pre-computed scores for all possible single nucleotide substitutions within
 500 bp of annotated TSS positions. For positions covered by multiple transcripts,
 the score with the largest absolute value was used for the bigWig tracks. Positions

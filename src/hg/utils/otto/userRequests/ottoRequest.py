@@ -124,7 +124,7 @@ def main():
 
     # find pending requests
     sql = (f"SELECT id, requestType, fromDb, toDb, email, comment, "
-           f"requestTime FROM {table} WHERE doneStatus = 0")
+           f"requestTime FROM {table} WHERE status = 0")
     pending = hgsqlQuery(dbName, sql)
 
     if not pending:
@@ -148,7 +148,7 @@ def main():
         if sendMail(notifyEmail, subject, body, fromAddr=notifyEmail):
 #           print(f"Notified {notifyEmail} about request #{req['id']}")
             hgsqlUpdate(dbName,
-                f"UPDATE {table} SET doneStatus = 1"
+                f"UPDATE {table} SET status = 1"
                 f" WHERE id = {req['id']}")
         else:
             print(f"Failed to notify about request #{req['id']}",

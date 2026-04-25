@@ -11,6 +11,9 @@
 
 set -beEu -o pipefail
 
+############################################################################
+### verify arguments
+############################################################################
 if [ $# != 1 ]; then
   printf "usage: ottoRequestAlign.sh <id>\n" 1>&2
   printf "  where <id> is a row id from hgcentraltest.ottoRequest\n" 1>&2
@@ -28,27 +31,14 @@ case "${requestId}" in
 esac
 
 ############################################################################
-# step 1: look up fromDb and toDb from ottoRequest
+### function definitions
 ############################################################################
-export ottoResult=$(hgsql -N -e \
-  "select fromDb,toDb from ottoRequest where id=${requestId};" hgcentraltest)
-
-if [ -z "${ottoResult}" ]; then
-  printf "ERROR: no ottoRequest row found for id=%s\n" "${requestId}" 1>&2
-  exit 255
-fi
-
-export fromDb=$(printf "%s" "${ottoResult}" | cut -f1)
-export toDb=$(printf "%s" "${ottoResult}" | cut -f2)
-
-if [ -z "${fromDb}" -o -z "${toDb}" ]; then
-  printf "ERROR: empty fromDb or toDb for ottoRequest id=%s\n" "${requestId}" 1>&2
-  printf "  got: fromDb='%s' toDb='%s'\n" "${fromDb}" "${toDb}" 1>&2
-  exit 255
-fi
-
-printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
-  "${requestId}" "${fromDb}" "${toDb}" 1>&2
+### errors - set error status in the table
+function setErrorStatus() {
+  id="${1}"
+  hgsql -N -e \
+      "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+}
 
 ############################################################################
 # genarkLookup - query genark table for accession, asmName, clade
@@ -58,10 +48,11 @@ printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
 function genarkLookup() {
   local acc=$1
   local result=$(hgsql -N -e \
-    "select gcAccession,asmName,clade from genark where gcAccession='${acc}';" \
+    "SELECT gcAccession,asmName,clade from genark WHERE gcAccession='${acc}';" \
     hgcentraltest)
   if [ -z "${result}" ]; then
     printf "ERROR: accession '%s' not found in hgcentraltest.genark\n" "${acc}" 1>&2
+    setErrorStatus ${requestId}
     return 1
   fi
   _acc=$(printf "%s" "${result}" | cut -f1)
@@ -104,6 +95,69 @@ function cladeMap() {
 }
 
 ############################################################################
+# twoBitPath - return path to 2bit file
+############################################################################
+function twoBitPath() {
+  local asmName=$1
+  case ${asmName} in
+    GC[AF]_*)
+      local gcX=$(printf "%s" "${asmName}" | cut -c1-3)
+      local d0=$(printf "%s" "${asmName}" | cut -c5-7)
+      local d1=$(printf "%s" "${asmName}" | cut -c8-10)
+      local d2=$(printf "%s" "${asmName}" | cut -c11-13)
+      printf "/hive/data/genomes/asmHubs/%s/%s/%s/%s/%s/%s.2bit" \
+        "${gcX}" "${d0}" "${d1}" "${d2}" "${asmName}" "${asmName}"
+      ;;
+    *)
+      printf "/hive/data/genomes/%s/%s.2bit" "${asmName}" "${asmName}"
+      ;;
+  esac
+}
+############################################################################
+
+############################################################################
+# asmN50 - compute N50 from the twoBit file
+############################################################################
+function asmN50() {
+  local twoBit=$1
+  twoBitInfo "${twoBit}" stdout \
+    | n50.pl stdin 2>&1 \
+    | grep -A1 "^[0-9].*one half size" \
+    | tail -1 \
+    | awk '{print $NF}'
+}
+############################################################################
+
+############################################################################
+### main() scripting begins here
+############################################################################
+
+############################################################################
+# step 1: look up fromDb and toDb from ottoRequest
+############################################################################
+export ottoResult=$(hgsql -N -e \
+  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1;" hgcentraltest)
+
+if [ -z "${ottoResult}" ]; then
+  printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
+  hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
+  exit 255
+fi
+
+export fromDb=$(printf "%s" "${ottoResult}" | cut -f1)
+export toDb=$(printf "%s" "${ottoResult}" | cut -f2)
+
+if [ -z "${fromDb}" -o -z "${toDb}" ]; then
+  printf "ERROR: empty fromDb or toDb for ottoRequest id=%s\n" "${requestId}" 1>&2
+  printf "  got: fromDb='%s' toDb='%s'\n" "${fromDb}" "${toDb}" 1>&2
+  setErrorStatus ${requestId}
+  exit 255
+fi
+
+printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
+  "${requestId}" "${fromDb}" "${toDb}" 1>&2
+
+############################################################################
 # step 2: look up both identifiers -- GenArk accession or UCSC db name
 ############################################################################
 case "${fromDb}" in
@@ -136,44 +190,21 @@ printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
 printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
 
 ############################################################################
-# step 2b: compare N50 -- better N50 assembly becomes the alignment target
+# step 3: determine N50 for each to decide target vs. query
 ############################################################################
-function twoBitPath() {
-  local asmName=$1
-  case ${asmName} in
-    GC[AF]_*)
-      local gcX=$(printf "%s" "${asmName}" | cut -c1-3)
-      local d0=$(printf "%s" "${asmName}" | cut -c5-7)
-      local d1=$(printf "%s" "${asmName}" | cut -c8-10)
-      local d2=$(printf "%s" "${asmName}" | cut -c11-13)
-      printf "/hive/data/genomes/asmHubs/%s/%s/%s/%s/%s/%s.2bit" \
-        "${gcX}" "${d0}" "${d1}" "${d2}" "${asmName}" "${asmName}"
-      ;;
-    *)
-      printf "/hive/data/genomes/%s/%s.2bit" "${asmName}" "${asmName}"
-      ;;
-  esac
-}
-
-function asmN50() {
-  local twoBit=$1
-  twoBitInfo "${twoBit}" stdout \
-    | n50.pl stdin 2>&1 \
-    | grep -A1 "^[0-9].*one half size" \
-    | tail -1 \
-    | awk '{print $NF}'
-}
 
 export from2bit=$(twoBitPath "${fromDb}")
 export to2bit=$(twoBitPath "${toDb}")
 
 if [ ! -s "${from2bit}" ]; then
   printf "ERROR: 2bit file not found: %s\n" "${from2bit}" 1>&2
+  setErrorStatus ${requestId}
   exit 255
 fi
 
 if [ ! -s "${to2bit}" ]; then
   printf "ERROR: 2bit file not found: %s\n" "${to2bit}" 1>&2
+  setErrorStatus ${requestId}
   exit 255
 fi
 
@@ -193,16 +224,6 @@ if [ -n "${fromN50}" -a -n "${toN50}" ]; then
 else
   printf "WARNING: could not determine N50, keeping original target/query order\n" 1>&2
 fi
-
-############################################################################
-# step 3: map clades and build the command
-############################################################################
-export fromCladeArg=$(cladeMap "${fromClade}")
-export toCladeArg=$(cladeMap "${toClade}")
-
-export cmd="kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
-
-printf "# %s\n" "${cmd}" 1>&2
 
 ############################################################################
 # step 4: compute buildDir and update ottoRequest table
@@ -241,5 +262,16 @@ printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # store buildDir in ottoRequest table for workflowMonitor.sh
 hgsql -N -e \
-  "UPDATE ottoRequest SET buildDir='${buildDir}' WHERE id=${requestId};" \
+  "UPDATE ottoRequest SET buildDir='${buildDir}', status=2 WHERE id=${requestId};" \
   hgcentraltest
+
+############################################################################
+# step 5: map clades and build the kegAlignLastz.sh command
+############################################################################
+export fromCladeArg=$(cladeMap "${fromClade}")
+export toCladeArg=$(cladeMap "${toClade}")
+
+export cmd="kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
+
+printf "####### kegAlignLastz.sh script would be:\n" 1>&2
+printf "# %s\n" "${cmd}" 1>&2

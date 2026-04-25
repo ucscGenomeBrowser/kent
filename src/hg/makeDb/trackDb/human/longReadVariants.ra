@@ -11,7 +11,7 @@ visibility hide
     longLabel CoLoRSdb long-read small variants
     type vcfTabix
     visibility pack
-    bigDataUrl /gbdb/$D/colorsDb/CoLoRSdb.GRCh38.v1.2.0.deepvariant.glnexus.vcf.gz
+    bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.deepvariant.glnexus.vcf.gz
     html colorsDb.html
      
     track pbsv

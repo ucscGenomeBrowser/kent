@@ -13,8 +13,8 @@ visibility hide
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/a.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/a.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
@@ -31,8 +31,8 @@ visibility hide
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/c.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/c.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
@@ -49,8 +49,8 @@ visibility hide
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/g.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/g.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
@@ -67,8 +67,8 @@ visibility hide
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/t.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/t.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
@@ -85,7 +85,7 @@ visibility hide
         type bigBed 9 +
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/overlaps.bb
+        bigDataUrl /gbdb/$D/_promoterAi/overlaps.bb
         mouseOverField _mouseOver
         itemRgb on
         maxWindowToDraw 10000000
