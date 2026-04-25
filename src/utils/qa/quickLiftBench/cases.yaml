@@ -1,0 +1,106 @@
+# quickLiftBench cases.yaml
+#
+# Each case lists named variants (typically `native` and `lifted`) plus a list
+# of positions to time. The runner does (warmup + iterations) requests per
+# (variant, position) cell and writes per-iteration rows to results.tsv plus a
+# per-case summary with median/p90 and lifted/native ratios.
+#
+# Three comparison modes share this same schema:
+#
+#   A. Same hub, source vs dest db:
+#        native points at db = source assembly, no quickLiftUrl in trackDb
+#        lifted points at db = dest assembly, with quickLiftUrl in trackDb
+#        Both reference the same underlying bigBed.
+#
+#   B. Track pair on each assembly:
+#        native and lifted are different trackDb stanzas / hubs holding
+#        equivalent data on different assemblies.
+#
+#   C. Lift on/off, same trackDb (via side-by-side reference hub):
+#        Two stanzas in the same hub on the destination assembly, one with
+#        quickLiftUrl set and one without, both pointing at the same bigBed.
+#
+# A variant inherits unset fields from `defaults`. Override `server` per
+# variant if cross-server comparison is needed.
+
+defaults:
+  iterations: 5
+  warmup: 1
+  timeout: 60
+  servers:
+    hgwdev: https://hgwdev.gi.ucsc.edu
+    sandbox: https://hgwdev-braney.gi.ucsc.edu
+    beta: https://hgwbeta.soe.ucsc.edu
+    rr: https://genome.ucsc.edu
+
+cases:
+
+  # -------- Mode A example: same data, source vs dest db --------
+  # FILL IN: replace hubUrl and track names with a real quickLift-enabled hub.
+  - id: example_modeA_bigBed
+    description: |
+      Example Mode A: a bigBed annotation rendered natively on its source
+      assembly vs the same bigBed rendered on the destination assembly via
+      quickLift. Replace hubUrl/track with a real example before running.
+    positions:
+      - {label: sparse, value: chr1:1000000-2000000}
+      - {label: dense,  value: chr19:50000000-51000000}
+    variants:
+      native:
+        server: hgwdev
+        db: hg19
+        hubUrl: https://example.com/quickLiftExample/hub.txt
+        track: exampleTrack
+      lifted:
+        server: hgwdev
+        db: hg38
+        hubUrl: https://example.com/quickLiftExample/hub.txt
+        track: exampleTrack_quickLift
+    compare:
+      - [native, lifted]
+
+  # -------- Mode B example: track pair on each assembly --------
+  - id: example_modeB_trackPair
+    description: |
+      Example Mode B: equivalent data published as separate trackDb stanzas
+      on assembly A (native) and assembly B (quickLift'd from a different
+      source).
+    positions:
+      - {label: sparse, value: chr1:1000000-2000000}
+      - {label: dense,  value: chr19:50000000-51000000}
+    variants:
+      native:
+        server: hgwdev
+        db: hg38
+        track: gencodeV44
+      lifted:
+        server: hgwdev
+        db: hs1
+        hubUrl: https://example.com/t2tHub/hub.txt
+        track: gencodeV44_quickLift
+    compare:
+      - [native, lifted]
+
+  # -------- Mode C example: lift on/off, same data --------
+  - id: example_modeC_liftOnOff
+    description: |
+      Example Mode C: side-by-side hub with two stanzas pointing at the same
+      bigBed; one with quickLiftUrl/quickLiftDb set, one without. Use the
+      reference hub under testHub/ once it is published, or substitute your
+      own.
+    positions:
+      - {label: sparse, value: chr1:1000000-2000000}
+      - {label: dense,  value: chr19:50000000-51000000}
+    variants:
+      native:
+        server: hgwdev
+        db: hg38
+        hubUrl: https://example.com/quickLiftBench/testHub/hub.txt
+        track: bench_native
+      lifted:
+        server: hgwdev
+        db: hg38
+        hubUrl: https://example.com/quickLiftBench/testHub/hub.txt
+        track: bench_lifted
+    compare:
+      - [native, lifted]
