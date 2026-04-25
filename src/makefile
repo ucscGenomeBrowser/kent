@@ -16,7 +16,7 @@ update:
 ##
 # topLibs
 ##
-TOP_LIBS = lib parasol/lib htslib
+TOP_LIBS = lib parasol/lib submodules/htslib
 ifneq ($(wildcard jkOwnLib/*),)
   TOP_LIBS += jkOwnLib
 endif
@@ -27,9 +27,7 @@ topLibs: topChecks | ${TOP_LIBS:%=%.topLibs}
 topChecks:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
-	@if [ ! -e htslib/.git ] ; then \
-	    set -x; git -c protocol.file.allow=always submodule update --init --recursive ; \
-	fi
+	@./submoduleSetup
 
 optLib:
 	cd optimalLeaf && ${MAKE}
@@ -108,7 +106,7 @@ userApps: ${USER_APP_DIRS:%=%.userApps} ${ALMOST_USER_APP_DIRS:%=%.almostUserApp
 destBin:
 	${MKDIR} ${DESTBINDIR}
 
-CLEAN_DIRS = ${STD_DIRS} lib hg jkOwnLib htslib utils webBat isPcr
+CLEAN_DIRS = ${STD_DIRS} lib hg jkOwnLib submodules/htslib utils webBat isPcr
 
 clean: ${CLEAN_DIRS:%=%.clean}
 	find . -name \*.o -print | xargs --no-run-if-empty rm
