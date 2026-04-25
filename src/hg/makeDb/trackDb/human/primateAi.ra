@@ -3,7 +3,7 @@ shortLabel PrimateAI-3D
 longLabel PrimateAI-3D Pathogenicity Predictions for Missense Variants
 type bigBed 9 +
 parent predictionScoresSuper
-bigDataUrl /gbdb/$D/primateAi/primateAi.bb
+bigDataUrl /gbdb/$D/_primateAi/primateAi.bb
 itemRgb on
 visibility dense
 tableBrowser off
