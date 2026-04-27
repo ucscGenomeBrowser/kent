@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-quickLiftBench.py - Benchmark hgTracks render times for quickLifted tracks vs
-their non-lifted counterparts.
+quickLiftBench.py - Benchmark hgTracks render time for two saved sessions on
+the same server.
 
-Drives a YAML-configured set of benchmark cases, hits hgTracks with
-?measureTiming=1, parses per-track loadTime/drawTime out of the response, and
-writes TSV results suitable for inclusion in a quickLift performance paper.
+Each case names two (or more) variants, each variant is a saved-session
+reference of the form "user/sessionName". The runner loads the session, applies
+a position from the case, and times the hgTracks render with measureTiming=1.
 
-For each case, multiple variants (e.g. native vs lifted) are timed at multiple
-positions across multiple iterations. Output is one TSV row per (case, variant,
-position, iteration) plus a per-(case, position) summary with median/p90 and
-lifted/native ratios.
+Output is one TSV row per (case, variant, position, iteration) plus a
+per-(case, position) summary with median/p90 and pairwise ratios. The headline
+metric is `total_ms`, taken from the "Overall total time" timing span emitted
+by hgTracks. `load_ms_sum` and `draw_ms_sum` are the sums across all visible
+tracks from the printTrackTiming() table.
 """
 
 import argparse
@@ -27,31 +28,36 @@ import requests
 import yaml
 
 
-# Regex over the extracted trackTiming span text. The HTML inside looks like:
-#   track, load time, draw time, total (first window)<br />
-#   shortLabel, 12, 8, 20<br />
+# A row of the printTrackTiming() table:  shortLabel, load, draw, total
 TRACK_TIMING_ROW_RE = re.compile(
     r"^\s*([^,<>]+?)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*$"
 )
 
-# <span class='trackTiming'> ... </span> -- there can be more than one (composite
-# subtracks emit their own). We grab the first block, which contains the per-track
-# table.
+# <span class='trackTiming'> ... </span>. The opening span is never explicitly
+# closed by printTrackTiming(); the regex's non-greedy match terminates at the
+# first subsequent </span> from an unrelated span (e.g. the trailing
+# 'timing' span for "Time to write and close cart").
 TRACK_TIMING_SPAN_RE = re.compile(
     r"<span class=['\"]trackTiming['\"]>(.*?)</span>",
     re.DOTALL | re.IGNORECASE,
 )
 
-# <span class='timing'>label: NNN millis<BR></span>
+# <span class='timing'>label: NNN millis<BR></span> -- per-phase timings.
+# Also matches the "Overall total time" footer span which uses <br /> (XHTML).
 TIMING_SPAN_RE = re.compile(
-    r"<span class=['\"]timing['\"]>(.+?):\s*(\d+)\s*millis<BR></span>",
+    r"<span class=['\"]timing['\"]>(.+?):\s*(\d+)\s*millis(?:<br\s*/?>)?\s*</span>",
     re.DOTALL | re.IGNORECASE,
 )
+
+OVERALL_TIMING_LABEL = "Overall total time"
 
 
 def parse_args():
     p = argparse.ArgumentParser(
-        description="Benchmark quickLift vs native track render times.",
+        description=(
+            "Benchmark hgTracks render time for saved sessions. Each variant "
+            "is a user/sessionName reference."
+        ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     here = os.path.dirname(os.path.abspath(__file__))
@@ -68,7 +74,7 @@ def parse_args():
     p.add_argument(
         "--server-override",
         default=None,
-        help="Override every variant's `server` with this server name from defaults.servers",
+        help="Override every case's server with this server name from defaults.servers",
     )
     p.add_argument(
         "--iterations",
@@ -109,68 +115,57 @@ def load_config(path):
     return cfg
 
 
-def resolve_variant(variant, defaults, server_override):
-    """Merge defaults into a variant and resolve its server hostname."""
-    merged = {}
-    for k in ("db", "hubUrl", "track", "extraCgi"):
-        if k in defaults:
-            merged[k] = defaults[k]
-    merged.update(variant)
-    server_key = server_override or merged.get("server")
+def parse_session(s):
+    """Split 'user/sessionName' (or '/s/user/name'). Returns (user, name)."""
+    if not isinstance(s, str):
+        raise ValueError(f"variant must be a 'user/sessionName' string, got: {s!r}")
+    s = s.strip()
+    if s.startswith("/s/"):
+        s = s[3:]
+    if "/" not in s:
+        raise ValueError(f"variant must contain '/': {s!r}")
+    user, name = s.split("/", 1)
+    if not user or not name:
+        raise ValueError(f"empty user or session name in: {s!r}")
+    return user, name
+
+
+def resolve_server(case, defaults, server_override):
+    server_key = server_override or case.get("server")
     if not server_key:
-        raise ValueError(f"variant has no server: {variant}")
+        raise ValueError(f"case '{case.get('id')}' has no server")
     servers = defaults.get("servers", {})
     if server_key not in servers:
         raise ValueError(
             f"server '{server_key}' not in defaults.servers ({list(servers)})"
         )
-    merged["serverKey"] = server_key
-    merged["serverUrl"] = servers[server_key].rstrip("/")
-    return merged
+    return server_key, servers[server_key].rstrip("/")
 
 
-def build_url(variant, position):
-    """Build an hgTracks URL that isolates one named track at a given position."""
-    if "track" not in variant or "db" not in variant:
-        raise ValueError(f"variant missing track/db: {variant}")
+def build_url(server_url, user, session_name):
+    """Build an hgTracks URL that loads a saved session at its saved position.
+
+    The position is NOT overridden via URL: a native session and its
+    quickLifted counterpart sit on different assemblies, so identical
+    chr:start-end ranges would not be biologically equivalent. Whatever
+    region the session was saved at is what gets rendered.
+    """
     params = [
-        ("db", variant["db"]),
-        ("position", position),
-        ("hideTracks", "1"),
-        (variant["track"], "full"),
+        ("hgS_doOtherUser", "submit"),
+        ("hgS_otherUserName", user),
+        ("hgS_otherUserSessionName", session_name),
         ("hgt.trackImgOnly", "1"),
-        ("hgt.reset", "1"),
         ("measureTiming", "1"),
     ]
-    if variant.get("hubUrl"):
-        params.append(("hubUrl", variant["hubUrl"]))
-    extra = variant.get("extraCgi") or {}
-    for k, v in extra.items():
-        params.append((k, str(v)))
-    return f"{variant['serverUrl']}/cgi-bin/hgTracks?{urlencode(params)}"
+    return f"{server_url}/cgi-bin/hgTracks?{urlencode(params)}"
 
 
-def parse_track_timing(html, want_track):
-    """
-    Pull per-track load/draw/total ms out of the trackTiming span.
-
-    The HTML emits the track's shortLabel, not the trackDb track name we use
-    in the URL. So we try (a) exact/case-insensitive match against the label
-    first; (b) if that misses AND there's exactly one data row across all
-    spans (the expected case when hideTracks=1 isolates a single track), we
-    return that row. Otherwise we return None so the caller can log
-    `no-track-timing` and the user can fix the case.
-
-    Returns (load_ms, draw_ms, total_ms) or (None, None, None).
-    """
+def parse_track_timing_rows(html):
+    """Return a list of (shortLabel, load_ms, draw_ms, total_ms) rows."""
     if not html:
-        return None, None, None
-    spans = TRACK_TIMING_SPAN_RE.findall(html)
-    if not spans:
-        return None, None, None
-
-    rows = []  # (label, load, draw, total)
-    for span in spans:
+        return []
+    rows = []
+    for span in TRACK_TIMING_SPAN_RE.findall(html):
         text = span.replace("&nbsp;", " ")
         for raw in text.split("<br />"):
             raw = raw.strip()
@@ -184,21 +179,7 @@ def parse_track_timing(html, want_track):
                 continue
             label, load, draw, total = m.groups()
             rows.append((label.strip(), int(load), int(draw), int(total)))
-
-    if not rows:
-        return None, None, None
-
-    for label, load, draw, total in rows:
-        if label == want_track or label.lower() == want_track.lower():
-            return load, draw, total
-
-    if len(rows) == 1:
-        # Single track rendered (the hideTracks=1 case); the shortLabel didn't
-        # match the trackDb name but there's no ambiguity.
-        _, load, draw, total = rows[0]
-        return load, draw, total
-
-    return None, None, None
+    return rows
 
 
 def parse_phase_timings(html):
@@ -208,10 +189,17 @@ def parse_phase_timings(html):
     out = {}
     for m in TIMING_SPAN_RE.finditer(html):
         label = m.group(1).strip()
-        # Strip HTML tags that sometimes sneak into labels (e.g. format strings)
+        # Strip HTML tags that sneak into labels (e.g. format strings)
         label = re.sub(r"<[^>]+>", "", label).strip()
         out[label] = int(m.group(2))
     return out
+
+
+def parse_overall_total(html):
+    """Return the 'Overall total time' value from the footer timing span,
+    or None if not found."""
+    phases = parse_phase_timings(html)
+    return phases.get(OVERALL_TIMING_LABEL)
 
 
 def detect_block(html):
@@ -254,7 +242,6 @@ def p90(xs):
         return None
     if len(xs) == 1:
         return xs[0]
-    # Nearest-rank p90
     k = max(0, int(round(0.9 * (len(xs) - 1))))
     return xs[k]
 
@@ -295,16 +282,11 @@ def main():
     print(f"writing results to {out_dir}", file=sys.stderr)
 
     results_fields = [
-        "case", "variant", "server", "db", "track",
-        "position_label", "position", "iteration",
-        "http_ms", "load_ms", "draw_ms", "total_ms",
+        "case", "variant", "server", "user", "session", "iteration",
+        "http_ms", "load_ms_sum", "draw_ms_sum", "n_tracks", "total_ms",
         "status_code", "error",
     ]
-    summary_fields = [
-        "case", "position_label", "position", "metric",
-    ]
 
-    # Collect rows in memory for the summary pass.
     all_rows = []
 
     with open(results_path, "w", newline="") as rf:
@@ -315,141 +297,147 @@ def main():
             cid = case["id"]
             description = case.get("description", "")
             print(f"\n=== {cid}: {description}", file=sys.stderr)
-            positions = case.get("positions") or []
-            if not positions:
-                print(f"  skipped: no positions", file=sys.stderr)
+
+            try:
+                server_key, server_url = resolve_server(case, defaults, args.server_override)
+            except ValueError as e:
+                print(f"  {e}", file=sys.stderr)
                 continue
+
             variants = case.get("variants") or {}
             if not variants:
                 print(f"  skipped: no variants", file=sys.stderr)
                 continue
 
-            # Fresh session per case to mint a new hgsid and avoid cart pollution
-            # across cases.
+            # Fresh session per case to keep an independent hgsid lineage.
             session = requests.Session()
             session.headers.update({"User-Agent": "quickLiftBench/1.0"})
 
             for vname, vraw in variants.items():
                 try:
-                    variant = resolve_variant(vraw, defaults, args.server_override)
+                    user, session_name = parse_session(vraw)
                 except ValueError as e:
                     print(f"  variant {vname}: {e}", file=sys.stderr)
                     continue
 
-                for pos in positions:
-                    plabel = pos["label"] if isinstance(pos, dict) else "default"
-                    pvalue = pos["value"] if isinstance(pos, dict) else pos
-                    url = build_url(variant, pvalue)
+                url = build_url(server_url, user, session_name)
+                if args.verbose:
+                    print(f"  URL: {url}", file=sys.stderr)
+
+                for _ in range(warmup):
+                    run_request(session, url, timeout)
+
+                for it in range(1, iterations + 1):
+                    http_ms, code, html, err = run_request(session, url, timeout)
+                    block = detect_block(html) if not err else None
+                    if block and not err:
+                        err = block
+
+                    load_sum = draw_sum = total_ms = None
+                    n_tracks = None
+                    if html and not err:
+                        rows = parse_track_timing_rows(html)
+                        n_tracks = len(rows)
+                        if rows:
+                            load_sum = sum(r[1] for r in rows)
+                            draw_sum = sum(r[2] for r in rows)
+                        total_ms = parse_overall_total(html)
+                        if total_ms is None and not rows:
+                            err = "no-timing"
+
+                    row = {
+                        "case": cid,
+                        "variant": vname,
+                        "server": server_key,
+                        "user": user,
+                        "session": session_name,
+                        "iteration": it,
+                        "http_ms": http_ms,
+                        "load_ms_sum": load_sum if load_sum is not None else "",
+                        "draw_ms_sum": draw_sum if draw_sum is not None else "",
+                        "n_tracks": n_tracks if n_tracks is not None else "",
+                        "total_ms": total_ms if total_ms is not None else "",
+                        "status_code": code if code is not None else "",
+                        "error": err or "",
+                    }
+                    writer.writerow(row)
+                    rf.flush()
+                    all_rows.append(row)
                     if args.verbose:
-                        print(f"  URL: {url}", file=sys.stderr)
-
-                    # Warmup - discard
-                    for _ in range(warmup):
-                        run_request(session, url, timeout)
-
-                    for it in range(1, iterations + 1):
-                        http_ms, code, html, err = run_request(session, url, timeout)
-                        block = detect_block(html) if not err else None
-                        if block and not err:
-                            err = block
-                        load_ms = draw_ms = total_ms = None
-                        if html and not err:
-                            load_ms, draw_ms, total_ms = parse_track_timing(
-                                html, variant["track"]
-                            )
-                            if load_ms is None:
-                                err = "no-track-timing"
-                        row = {
-                            "case": cid,
-                            "variant": vname,
-                            "server": variant["serverKey"],
-                            "db": variant["db"],
-                            "track": variant["track"],
-                            "position_label": plabel,
-                            "position": pvalue,
-                            "iteration": it,
-                            "http_ms": http_ms,
-                            "load_ms": load_ms,
-                            "draw_ms": draw_ms,
-                            "total_ms": total_ms,
-                            "status_code": code if code is not None else "",
-                            "error": err or "",
-                        }
-                        writer.writerow(row)
-                        rf.flush()
-                        all_rows.append(row)
-                        if args.verbose:
-                            print(
-                                f"    {vname:8s} {plabel:8s} it={it} "
-                                f"http={fmt_ms(http_ms)} "
-                                f"load={fmt_ms(load_ms)} draw={fmt_ms(draw_ms)} "
-                                f"total={fmt_ms(total_ms)} {err or ''}",
-                                file=sys.stderr,
-                            )
+                        print(
+                            f"    {vname:8s} it={it} "
+                            f"http={fmt_ms(http_ms)} "
+                            f"load_sum={fmt_ms(load_sum)} draw_sum={fmt_ms(draw_sum)} "
+                            f"tracks={fmt_ms(n_tracks)} "
+                            f"total={fmt_ms(total_ms)} {err or ''}",
+                            file=sys.stderr,
+                        )
 
     write_summary(cases, all_rows, summary_path)
     print(f"\nresults: {results_path}", file=sys.stderr)
     print(f"summary: {summary_path}", file=sys.stderr)
 
 
+def _to_int(v):
+    if v == "" or v is None:
+        return None
+    return int(v)
+
+
 def write_summary(cases, rows, path):
     """
-    Per (case, position): for each variant compute median + p90 of
-    (http_ms, load_ms, draw_ms, total_ms). Then for each compare-pair, emit
-    median ratios.
+    Per (case, variant): compute median + p90 of (http_ms, load_ms_sum,
+    draw_ms_sum, total_ms). Then for each compare-pair, emit median ratios.
     """
-    by_case_pos_var = {}
+    by_case_var = {}
     for r in rows:
-        key = (r["case"], r["position_label"], r["position"])
-        by_case_pos_var.setdefault(key, {}).setdefault(r["variant"], []).append(r)
+        by_case_var.setdefault(r["case"], {}).setdefault(r["variant"], []).append(r)
 
     fields = [
-        "case", "position_label", "position", "variant",
+        "case", "variant",
         "n", "n_ok",
         "http_median", "http_p90",
-        "load_median", "load_p90",
-        "draw_median", "draw_p90",
+        "load_sum_median", "load_sum_p90",
+        "draw_sum_median", "draw_sum_p90",
         "total_median", "total_p90",
     ]
     pair_fields = [
-        "case", "position_label", "position",
+        "case",
         "left_variant", "right_variant",
         "left_total_median", "right_total_median",
-        "ratio_total", "ratio_load", "ratio_draw", "ratio_http",
+        "ratio_total", "ratio_load_sum", "ratio_draw_sum", "ratio_http",
     ]
 
-    summary_lines = []  # for stdout pretty-print
+    summary_lines = []
     with open(path, "w", newline="") as f:
         w_v = csv.DictWriter(f, fieldnames=fields, delimiter="\t")
         w_v.writeheader()
 
-        per_variant_stats = {}  # (case, plabel, pvalue, variant) -> dict of medians
+        per_variant_stats = {}
 
-        for (cid, plabel, pvalue), variants in sorted(by_case_pos_var.items()):
+        for cid, variants in sorted(by_case_var.items()):
             for vname, vrows in sorted(variants.items()):
                 ok = [r for r in vrows if not r["error"]]
-                http = [r["http_ms"] for r in ok]
-                load = [r["load_ms"] for r in ok]
-                draw = [r["draw_ms"] for r in ok]
-                total = [r["total_ms"] for r in ok]
+                http = [_to_int(r["http_ms"]) for r in ok]
+                load = [_to_int(r["load_ms_sum"]) for r in ok]
+                draw = [_to_int(r["draw_ms_sum"]) for r in ok]
+                total = [_to_int(r["total_ms"]) for r in ok]
                 stats = {
                     "case": cid,
-                    "position_label": plabel,
-                    "position": pvalue,
                     "variant": vname,
                     "n": len(vrows),
                     "n_ok": len(ok),
                     "http_median": median_or_none(http),
                     "http_p90": p90(http),
-                    "load_median": median_or_none(load),
-                    "load_p90": p90(load),
-                    "draw_median": median_or_none(draw),
-                    "draw_p90": p90(draw),
+                    "load_sum_median": median_or_none(load),
+                    "load_sum_p90": p90(load),
+                    "draw_sum_median": median_or_none(draw),
+                    "draw_sum_p90": p90(draw),
                     "total_median": median_or_none(total),
                     "total_p90": p90(total),
                 }
                 w_v.writerow({k: ("" if v is None else v) for k, v in stats.items()})
-                per_variant_stats[(cid, plabel, pvalue, vname)] = stats
+                per_variant_stats[(cid, vname)] = stats
 
         f.write("\n# Pairwise comparisons (right/left ratio of medians)\n")
         w_p = csv.DictWriter(f, fieldnames=pair_fields, delimiter="\t")
@@ -460,41 +448,34 @@ def write_summary(cases, rows, path):
             pairs = case.get("compare")
             variants = list((case.get("variants") or {}).keys())
             if not pairs:
-                # default: compare every other variant against the first
                 if len(variants) < 2:
                     continue
                 pairs = [[variants[0], v] for v in variants[1:]]
-            positions = case.get("positions") or []
-            for pos in positions:
-                plabel = pos["label"] if isinstance(pos, dict) else "default"
-                pvalue = pos["value"] if isinstance(pos, dict) else pos
-                for left, right in pairs:
-                    ls = per_variant_stats.get((cid, plabel, pvalue, left))
-                    rs = per_variant_stats.get((cid, plabel, pvalue, right))
-                    if not ls or not rs:
-                        continue
-                    row = {
-                        "case": cid,
-                        "position_label": plabel,
-                        "position": pvalue,
-                        "left_variant": left,
-                        "right_variant": right,
-                        "left_total_median": ls["total_median"] if ls["total_median"] is not None else "",
-                        "right_total_median": rs["total_median"] if rs["total_median"] is not None else "",
-                        "ratio_total": ratio(rs["total_median"], ls["total_median"]),
-                        "ratio_load": ratio(rs["load_median"], ls["load_median"]),
-                        "ratio_draw": ratio(rs["draw_median"], ls["draw_median"]),
-                        "ratio_http": ratio(rs["http_median"], ls["http_median"]),
-                    }
-                    w_p.writerow(row)
-                    summary_lines.append(
-                        f"  {cid:30s} {plabel:8s}  {left}->{right}  "
-                        f"total {ls['total_median']}->{rs['total_median']} ms  "
-                        f"ratio={row['ratio_total']}"
-                    )
+            for left, right in pairs:
+                ls = per_variant_stats.get((cid, left))
+                rs = per_variant_stats.get((cid, right))
+                if not ls or not rs:
+                    continue
+                row = {
+                    "case": cid,
+                    "left_variant": left,
+                    "right_variant": right,
+                    "left_total_median": ls["total_median"] if ls["total_median"] is not None else "",
+                    "right_total_median": rs["total_median"] if rs["total_median"] is not None else "",
+                    "ratio_total": ratio(rs["total_median"], ls["total_median"]),
+                    "ratio_load_sum": ratio(rs["load_sum_median"], ls["load_sum_median"]),
+                    "ratio_draw_sum": ratio(rs["draw_sum_median"], ls["draw_sum_median"]),
+                    "ratio_http": ratio(rs["http_median"], ls["http_median"]),
+                }
+                w_p.writerow(row)
+                summary_lines.append(
+                    f"  {cid:30s}  {left}->{right}  "
+                    f"total {ls['total_median']}->{rs['total_median']} ms  "
+                    f"ratio={row['ratio_total']}"
+                )
 
     if summary_lines:
-        print("\nPairwise summary (lifted/native ratio of total render time):",
+        print("\nPairwise summary (right/left ratio of overall total render time):",
               file=sys.stderr)
         for line in summary_lines:
             print(line, file=sys.stderr)

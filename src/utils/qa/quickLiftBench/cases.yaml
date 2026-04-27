@@ -1,30 +1,24 @@
 # quickLiftBench cases.yaml
 #
-# Each case lists named variants (typically `native` and `lifted`) plus a list
-# of positions to time. The runner does (warmup + iterations) requests per
-# (variant, position) cell and writes per-iteration rows to results.tsv plus a
-# per-case summary with median/p90 and lifted/native ratios.
+# Each case names two (or more) variants, where each variant is a saved-session
+# reference of the form `user/sessionName`. Both variants render on the same
+# server (set `server:` per case). The runner does (warmup + iterations)
+# requests per variant and writes per-iteration rows to results.tsv plus a
+# per-case summary with median/p90 and pairwise ratios.
 #
-# Three comparison modes share this same schema:
+# Each session renders at the position it was saved with -- the runner does
+# NOT override `position`. A native session and its quickLifted counterpart
+# live on different assemblies, so identical chr:start-end ranges would not
+# be biologically equivalent. To benchmark multiple regions, save additional
+# session pairs and add them as separate cases.
 #
-#   A. Same hub, source vs dest db:
-#        native points at db = source assembly, no quickLiftUrl in trackDb
-#        lifted points at db = dest assembly, with quickLiftUrl in trackDb
-#        Both reference the same underlying bigBed.
-#
-#   B. Track pair on each assembly:
-#        native and lifted are different trackDb stanzas / hubs holding
-#        equivalent data on different assemblies.
-#
-#   C. Lift on/off, same trackDb (via side-by-side reference hub):
-#        Two stanzas in the same hub on the destination assembly, one with
-#        quickLiftUrl set and one without, both pointing at the same bigBed.
-#
-# A variant inherits unset fields from `defaults`. Override `server` per
-# variant if cross-server comparison is needed.
+# The headline metric is `total_ms`, taken from the "Overall total time" timing
+# span emitted by hgTracks. `load_ms_sum` and `draw_ms_sum` are summed across
+# all visible tracks from the printTrackTiming() table; use them when you want
+# to attribute time to per-track work vs. CGI startup / cart processing.
 
 defaults:
-  iterations: 5
+  iterations: 25
   warmup: 1
   timeout: 60
   servers:
@@ -35,72 +29,35 @@ defaults:
 
 cases:
 
-  # -------- Mode A example: same data, source vs dest db --------
-  # FILL IN: replace hubUrl and track names with a real quickLift-enabled hub.
-  - id: example_modeA_bigBed
+  # -------- Smoke test: one session, no comparison --------
+  - id: smoke_session
     description: |
-      Example Mode A: a bigBed annotation rendered natively on its source
-      assembly vs the same bigBed rendered on the destination assembly via
-      quickLift. Replace hubUrl/track with a real example before running.
-    positions:
-      - {label: sparse, value: chr1:1000000-2000000}
-      - {label: dense,  value: chr19:50000000-51000000}
+      Smoke: load one saved session on hgwdev. Confirms the runner loads
+      sessions and extracts Overall total time + per-track timings from a
+      live response.
+    server: hgwdev
     variants:
-      native:
-        server: hgwdev
-        db: hg19
-        hubUrl: https://example.com/quickLiftExample/hub.txt
-        track: exampleTrack
-      lifted:
-        server: hgwdev
-        db: hg38
-        hubUrl: https://example.com/quickLiftExample/hub.txt
-        track: exampleTrack_quickLift
+      base: Braney/hg38
+
+  # -------- Bench pair 1: native vs quickLifted (hgwdev) --------
+  - id: bench1_hgwdev
+    description: |
+      First benchmark pair on hgwdev: native vs quickLifted view of an
+      equivalent track set. Each session renders at its own saved region.
+    server: hgwdev
+    variants:
+      native: Brianraney/benchQuickNative1
+      lifted: Brianraney/benchQuickList1
     compare:
       - [native, lifted]
 
-  # -------- Mode B example: track pair on each assembly --------
-  - id: example_modeB_trackPair
+  # -------- Bench pair 1: same sessions on the public RR --------
+  - id: bench1_rr
     description: |
-      Example Mode B: equivalent data published as separate trackDb stanzas
-      on assembly A (native) and assembly B (quickLift'd from a different
-      source).
-    positions:
-      - {label: sparse, value: chr1:1000000-2000000}
-      - {label: dense,  value: chr19:50000000-51000000}
+      Same session pair as bench1_hgwdev, run against genome.ucsc.edu.
+    server: rr
     variants:
-      native:
-        server: hgwdev
-        db: hg38
-        track: gencodeV44
-      lifted:
-        server: hgwdev
-        db: hs1
-        hubUrl: https://example.com/t2tHub/hub.txt
-        track: gencodeV44_quickLift
-    compare:
-      - [native, lifted]
-
-  # -------- Mode C example: lift on/off, same data --------
-  - id: example_modeC_liftOnOff
-    description: |
-      Example Mode C: side-by-side hub with two stanzas pointing at the same
-      bigBed; one with quickLiftUrl/quickLiftDb set, one without. Use the
-      reference hub under testHub/ once it is published, or substitute your
-      own.
-    positions:
-      - {label: sparse, value: chr1:1000000-2000000}
-      - {label: dense,  value: chr19:50000000-51000000}
-    variants:
-      native:
-        server: hgwdev
-        db: hg38
-        hubUrl: https://example.com/quickLiftBench/testHub/hub.txt
-        track: bench_native
-      lifted:
-        server: hgwdev
-        db: hg38
-        hubUrl: https://example.com/quickLiftBench/testHub/hub.txt
-        track: bench_lifted
+      native: Brianraney/benchQuickNative1
+      lifted: Brianraney/benchQuickList1
     compare:
       - [native, lifted]
