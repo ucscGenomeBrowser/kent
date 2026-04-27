@@ -9468,9 +9468,11 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
-    // right-click to change viz 
+    // right-click to change viz
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
+    if (measureTiming)
+        printTrackTiming();
     return;  // bail out b/c we are done
     }
 
