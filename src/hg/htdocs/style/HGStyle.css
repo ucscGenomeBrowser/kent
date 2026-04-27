@@ -982,7 +982,7 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 .readableWidth {
     /* For wrapping description text on pages that can get very wide */
-    width: 50em;
+    width: 70em;
 }
 
 .hgtaNoGenome {
