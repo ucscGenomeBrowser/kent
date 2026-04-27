@@ -136,13 +136,23 @@ function Doc(body, metadata, variables)
     add("<h1>No title defined in document, first line must be % mytitle </h1>")
   end
 
+  -- Sidebar TOC + body in Bootstrap grid
+  add('<div class="row docs-toc-row">')
+  add('<div class="col-md-2 hidden-sm hidden-xs">')
+  add('<nav class="docs-toc" id="docs-toc">')
+  add('<ul>')
   for i, h in ipairs(headers) do
-    idStr = simplifyId(h)
-    add("<h6><a href='#" .. idStr .. "'>" .. h .. "</a></h6>")
+    add("<li><a href='#" .. h.id .. "'>" .. h.text .. "</a></li>")
   end
+  add('</ul>')
+  add('</nav>')
+  add('</div>')
+  add('<div class="col-md-10">')
   -- ucsc change end
 
   add(body)
+  add('</div>') -- close col-md-9
+  add('</div>') -- close row
   if #notes > 0 then
     add('<ol class="footnotes">')
     for _,note in pairs(notes) do
@@ -293,11 +303,16 @@ function Header(lev, s, attr)
 
     idStr = simplifyId(s)
 
-    table.insert(headers, s)
+    table.insert(headers, {text = s, id = idStr})
 
-    table.insert(lines, "<a name='" .. idStr .. "'></a>")
-    table.insert(lines, "<h2>"  .. s .. "</h2>")
+    table.insert(lines, "<h2 id='" .. idStr .. "'>"  .. s .. "</h2>")
     headerOpen = true
+
+  elseif lev == 2 then
+    -- Collect lev==2 headers for TOC (markdown ## headings)
+    local idStr = attr.id or simplifyId(s)
+    table.insert(headers, {text = s, id = idStr})
+    table.insert(lines, "<h" .. lev .. " id='" .. idStr .. "'" ..  ">" .. s .. "</h" .. lev .. ">")
 
   else
     table.insert(lines, "<h" .. lev .. attributes(attr) ..  ">" .. s .. "</h" .. lev .. ">")

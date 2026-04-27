@@ -18,4 +18,38 @@ $for(include-after)$
 $include-after$
 $endfor$
 
+<script>
+// Scroll-spy: highlight the current section in the sidebar TOC
+(function() {
+    var toc = document.getElementById('docs-toc');
+    if (!toc) return;
+    var links = toc.querySelectorAll('a[href^="#"]');
+    if (!links.length) return;
+    var sections = [];
+    for (var i = 0; i < links.length; i++) {
+        var id = links[i].getAttribute('href').slice(1);
+        var el = document.getElementById(id);
+        if (el) sections.push({link: links[i], target: el});
+    }
+    if (!sections.length) return;
+
+    function onScroll() {
+        var scrollY = window.scrollY || window.pageYOffset;
+        var current = sections[0];
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].target.offsetTop <= scrollY + 80) {
+                current = sections[i];
+            }
+        }
+        for (var i = 0; i < sections.length; i++) {
+            sections[i].link.parentNode.classList.remove('active');
+        }
+        current.link.parentNode.classList.add('active');
+    }
+
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+})();
+</script>
+
 <!--#include virtual="$$ROOT/inc/gbPageEnd.html" -->

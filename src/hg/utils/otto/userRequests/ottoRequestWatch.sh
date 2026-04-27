@@ -14,7 +14,7 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 finish notification, 6 complete, 7 problems */
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
@@ -27,6 +27,154 @@ function setErrorStatus() {
 }
 ##############################################################################
 
+##############################################################################
+### sendNotification - email the requesting user that their alignment is done
+###   args: reqId subject
+###   message body is read from stdin
+###   recipient: email column of ottoRequest table for that reqId
+###   bcc: chain-file-request-group@ucsc.edu
+###   envelope sender / Return-Path / bounce: genome-www@soe.ucsc.edu
+###   returns 0 on success, non-zero on failure
+##############################################################################
+function sendNotification() {
+  local reqId="${1}"
+  local subject="${2}"
+  local msgBody="${3}"
+  local toAddr
+  toAddr="$(hgsql -N -B -e \
+    "SELECT email FROM ottoRequest WHERE id = ${reqId};" hgcentraltest)"
+  if [ -z "${toAddr}" ]; then
+    printf "ERROR: sendNotification: no email for request %s\n" "${reqId}" 1>&2
+    return 1
+  fi
+  local bcc="chain-file-request-group@ucsc.edu"
+  local bounce="genome-www@soe.ucsc.edu"
+  # -f sets the envelope sender (becomes Return-Path at delivery and the
+  #    bounce address); -t reads recipients from To:/Cc:/Bcc: headers;
+  #    -oi prevents a lone "." in body from ending the message
+  {
+    printf "From: %s\n" "${bounce}"
+    printf "To: %s\n" "${toAddr}"
+    printf "Bcc: %s\n" "${bcc}"
+    printf "Reply-To: %s\n" "${bounce}"
+    printf "Subject: %s\n" "${subject}"
+    printf "\n"
+    printf "%s\n" "${msgBody}"
+  } | /usr/sbin/sendmail -f "${bounce}" -t -oi
+}
+##############################################################################
+
+##############################################################################
+### installLinks - drop chain/quickLift symlinks and register in hgcentraltest
+###   args: tDb qDb buildDir
+###   detects GenArk (tDb starts with "GC") vs UCSC db and chooses the
+###   matching branch from doBlastzChainNet.pl loadUp().
+###   returns 0 on success, non-zero on failure.
+##############################################################################
+function installLinks() {
+  local tDb="${1}"
+  local qDb="${2}"
+  local localBuildDir="${3}"
+  local QDb="${qDb^}"
+  local over="${tDb}To${QDb}.over.chain.gz"
+  local quick="${qDb}"
+  local axtDir="${localBuildDir}/axtChain"
+  local overChain="${axtDir}/${tDb}.${qDb}.over.chain.gz"
+  local quickBb="${axtDir}/${tDb}.${qDb}.quick.bb"
+  local quickLinkBb="${axtDir}/${tDb}.${qDb}.quickLink.bb"
+
+  if [ ! -s "${overChain}" ]; then
+    printf "ERROR: installLinks: missing %s\n" "${overChain}" 1>&2
+    return 1
+  fi
+  if [ ! -s "${quickBb}" ] || [ ! -s "${quickLinkBb}" ]; then
+    printf "ERROR: installLinks: missing %s or %s\n" \
+      "${quickBb}" "${quickLinkBb}" 1>&2
+    return 1
+  fi
+
+  local liftOverDir
+  local chainPath  # absolute path to .over.chain.gz that gets registered
+  local quickPath  # absolute path to .quick.bb that gets registered
+
+  if [[ "${tDb}" == GC* ]]; then
+    # GenArk: full asmId is two dirs above buildDir
+    #   .../<asmId>/trackData/lastz<Q>.YYYY-MM-DD
+    local tAsmId
+    tAsmId="$(basename "$(dirname "$(dirname "${localBuildDir}")")")"
+    local hubBuild="/hive/data/genomes/asmHubs/allBuild/${tAsmId:0:3}/${tAsmId:4:3}/${tAsmId:7:3}/${tAsmId:10:3}/${tAsmId}"
+    liftOverDir="${hubBuild}/liftOver"
+    local genArkQuickDir="${hubBuild}/quickLift"
+    local accession
+    accession="$(echo "${tAsmId}" | cut -d'_' -f1-2)"
+    local accessionPath="${tAsmId:0:3}/${tAsmId:4:3}/${tAsmId:7:3}/${tAsmId:10:3}/${accession}"
+    local genArkQuickLinkDir="/hive/data/genomes/asmHubs/${accessionPath}/quickLift"
+    local genArkOverLinkDir="/hive/data/genomes/asmHubs/${accessionPath}/liftOver"
+    local genArkGbdbQuickDir="/gbdb/genark/${accessionPath}/quickLift"
+    local genArkGbdbOverDir="/gbdb/genark/${accessionPath}/liftOver"
+    # ../trackData/... relative form so the link is portable across mirrors
+    local genArkTrackLink="${axtDir}/${tDb}.${qDb}.quick"
+    genArkTrackLink="../trackData${genArkTrackLink##*/trackData}"
+
+    # place the .over.chain.gz where genArk infrastructure expects it
+    mkdir -p "${liftOverDir}"
+    rm -f "${liftOverDir}/${over}"
+    ln -s "${overChain}" "${liftOverDir}/${over}"
+
+    # quickLift bigBeds and the staging/gbdb chain of symlinks
+    mkdir -p "${genArkQuickDir}"
+    rm -f "${genArkQuickDir}/${quick}.bb"
+    rm -f "${genArkQuickDir}/${quick}.link.bb"
+    rm -f "${genArkQuickLinkDir}" "${genArkGbdbQuickDir}"
+    rm -f "${genArkOverLinkDir}" "${genArkGbdbOverDir}"
+    ln -s "${genArkTrackLink}.bb" "${genArkQuickDir}/${quick}.bb"
+    ln -s "${genArkTrackLink}Link.bb" "${genArkQuickDir}/${quick}.link.bb"
+    ln -s "${genArkQuickDir}" "${genArkQuickLinkDir}"
+    ln -s "${genArkQuickLinkDir}" "${genArkGbdbQuickDir}"
+    ln -s "${liftOverDir}" "${genArkOverLinkDir}"
+    ln -s "${genArkOverLinkDir}" "${genArkGbdbOverDir}"
+
+    chainPath="${genArkGbdbOverDir}/${over}"
+    quickPath="${genArkGbdbQuickDir}/${quick}.bb"
+  else
+    # UCSC native db
+    liftOverDir="/hive/data/genomes/${tDb}/bed/liftOver"
+    local gbdbLiftOverDir="/gbdb/${tDb}/liftOver"
+    local gbdbQuickLiftDir="/gbdb/${tDb}/quickLift"
+
+    mkdir -p "${liftOverDir}"
+    rm -f "${liftOverDir}/${over}"
+    ln -s "${overChain}" "${liftOverDir}/${over}"
+
+    mkdir -p "${gbdbLiftOverDir}" "${gbdbQuickLiftDir}"
+    rm -f "${gbdbLiftOverDir}/${over}"
+    rm -f "${gbdbQuickLiftDir}/${quick}.bb"
+    rm -f "${gbdbQuickLiftDir}/${quick}.link.bb"
+    ln -s "${quickBb}" "${gbdbQuickLiftDir}/${quick}.bb"
+    ln -s "${quickLinkBb}" "${gbdbQuickLiftDir}/${quick}.link.bb"
+    ln -s "${liftOverDir}/${over}" "${gbdbLiftOverDir}/${over}"
+
+    chainPath="${gbdbLiftOverDir}/${over}"
+    quickPath="${gbdbQuickLiftDir}/${quick}.bb"
+  fi
+
+  # register both rows in hgcentraltest
+  if ! hgAddLiftOverChain -minMatch=0.1 -multiple \
+      -path="${chainPath}" "${tDb}" "${qDb}"; then
+    printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
+      "${tDb}" "${qDb}" 1>&2
+    return 1
+  fi
+  if ! "${HOME}/kent/src/hg/utils/automation/addQuickLift.py" \
+      "${tDb}" "${qDb}" "${quickPath}"; then
+    printf "ERROR: installLinks: addQuickLift.py failed for %s -> %s\n" \
+      "${tDb}" "${qDb}" 1>&2
+    return 1
+  fi
+  return 0
+}
+##############################################################################
+
 ############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
 ############################################################################
@@ -36,7 +184,7 @@ while read -r reqId; do
     printf "# alignment setup complete for request %s\n" "${reqId}" 1>&2
   else
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
-    setErrorStatus $reqId
+    setErrorStatus "${reqId}"
   fi
 done < <(hgsql -N -B -e \
   "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '';" \
@@ -57,15 +205,71 @@ while IFS=$'\t' read -r reqId buildDir; do
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
       hgsql -N -e \
-        "UPDATE ottoRequest SET status = 2, completeTime = NOW() \
+        "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
          WHERE id = ${reqId};" hgcentraltest
       printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
     # else: still running, will check again next invocation
   else
     printf "# workflow error for request %s\n" "${reqId}" 1>&2
-    setErrorStatus $reqId
+    setErrorStatus "${reqId}"
   fi
 done < <(hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 2 AND buildDir != '';" hgcentraltest)
+
+############################################################################
+# phase 3: check for tracks done, send notification email, mark complete
+############################################################################
+while IFS=$'\t' read -r reqId buildDir; do
+  if [ ! -d "${buildDir}" ]; then
+    printf "# WARNING: buildDir not found for request %s: %s\n" \
+      "${reqId}" "${buildDir}" 1>&2
+    continue
+  fi
+  source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh")
+  echo $buildDir
+  echo $swapDir
+  echo targetDb $targetDb
+  echo queryDb $queryDb
+  export trackData="$(dirname "${buildDir}")"
+  export swapData="$(dirname "${swapDir}")"
+  export workDir="$(basename "${buildDir}")"
+  export swapWork="$(basename "${swapDir}")"
+  export doTdb="`dirname ${trackData}`/doTrackDb.bash"
+  export swapTdb="`dirname ${swapData}`/doTrackDb.bash"
+  if [ ! -x "${doTdb}" ]; then
+    printf "ERROR: can not find ${doTdb}\n" 1>&2
+    setErrorStatus "${reqId}"
+  fi
+  if [ ! -x "${swapTdb}" ]; then
+    printf "ERROR: can not find ${swapTdb}\n" 1>&2
+    setErrorStatus "${reqId}"
+  fi
+  rm -f "${trackData}/lastz.${queryDb}"
+  ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
+  printf "%s\n" "${doTdb}"
+  ${doTdb} 1>&2
+  rm -f "${swapData}/lastz.${targetDb}"
+  ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
+  printf "%s\n" "${swapTdb}"
+  ${swapTdb} 1>&2
+
+  # install liftOver and quickLift symlinks + register in hgcentraltest,
+  # for both directions
+  if ! installLinks "${targetDb}" "${queryDb}" "${buildDir}"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
+  if ! installLinks "${queryDb}" "${targetDb}" "${swapDir}"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
+   sendNotification "${reqId}" \
+"from UCSC: liftOverRequest complete: ${targetDb}<->${queryDb}" \
+"Your lift over request is complete.  You can access the lift.over files at:"
+  hgsql -N -e \
+      "UPDATE ottoRequest SET status=6 WHERE id=${reqId};" hgcentraltest
+done < <(hgsql -N -B -e \
+  "SELECT id, buildDir FROM ottoRequest \
+   WHERE status = 4 AND buildDir != '';" hgcentraltest)

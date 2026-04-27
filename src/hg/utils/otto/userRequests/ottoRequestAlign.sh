@@ -9,7 +9,7 @@
 # each accession in hgcentraltest.genark for asmName and clade.
 # Prints and executes the resulting kegAlignLastz.sh command.
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 ############################################################################
 ### verify arguments

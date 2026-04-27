@@ -70,7 +70,7 @@ ottoRequestAlign.sh - given an 'id' number in the ottoRequest table, this
 
 ############################################################################
 ###  5.
-ketAlignLastz.sh - script to start the galaxy workflow, typical call:
+kegAlignLastz.sh - script to start the galaxy workflow, typical call:
 
     kegAlignLastz.sh GCF_004115215.2_mOrnAna1.pri.v4 GCF_000260355.1_ConCri1.0 mammal mammal
 
@@ -79,7 +79,7 @@ ketAlignLastz.sh - script to start the galaxy workflow, typical call:
 ###  6.
 workflowMonitor.sh - after the galaxy WF has started, this script can
                    - check the status of the job and if it is done, then
-                   - then the processing of the results will take place to
+                   - the processing of the results will take place to
                    - construct the chain files.
                    - can set status to:
                    - 7 == problems
