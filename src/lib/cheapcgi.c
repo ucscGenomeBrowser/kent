@@ -246,6 +246,27 @@ static struct cgiVar *cookieList = NULL;
 // maximum length of CGI variables to dump to stderr, 0 = switch off
 static int logCgiVarMaxLen = 0;
 
+/* Default cap on total size of CGI input we'll accept, excluding
+ * uploaded files.  Used if the GB_CGI_INPUT_SIZE_LIMIT env var
+ * (typically supplied via Apache SetEnv) is unset or invalid.
+ * See initCgiInput. */
+#define CGI_INPUT_SIZE_LIMIT_DEFAULT (1024*1024)
+
+static long cgiInputSizeLimit()
+/* Return the active CGI input size cap. */
+{
+static long cached = -1;
+if (cached < 0)
+    {
+    char *s = getenv("GB_CGI_INPUT_SIZE_LIMIT");
+    char *end = NULL;
+    long v = (s != NULL) ? strtol(s, &end, 10) : 0;
+    cached = (s != NULL && end != s && *end == '\0' && v > 0)
+             ? v : CGI_INPUT_SIZE_LIMIT_DEFAULT;
+    }
+return cached;
+}
+
 /* should cheapcgi use temp files to store uploaded files */
 static boolean doUseTempFile = FALSE;
 
@@ -1160,6 +1181,12 @@ if (cgiIsOnWeb())
     }
 }
 
+static void cgiInputTooLargeAbort()
+/* Bail out on oversized CGI input with a generic error message */
+{
+htmlPushEarlyHandlers();
+errAbort("Bad input");
+}
 
 static void initCgiInput()
 /* Initialize CGI input stuff.  After this CGI vars are
@@ -1173,6 +1200,16 @@ if (inputString != NULL)
 
 _cgiFindInput(NULL);
 
+long sizeLimit = cgiInputSizeLimit();
+
+// strnlen so we don't walk the whole thing just to learn it's over the cap
+if (strnlen(inputString, sizeLimit + 1) > sizeLimit)
+    cgiInputTooLargeAbort();
+
+// A couple of raw content checks to reject the simpler bot attacks
+if (stringIn("xp_cmdshell", inputString) || stringIn("information_schema", inputString))
+    cgiInputTooLargeAbort();
+
 #ifndef GBROWSE
 /* check to see if the input is a multipart form */
 s = getenv("CONTENT_TYPE");
@@ -1183,6 +1220,26 @@ if (s != NULL && startsWith("multipart/form-data", s))
 #endif /* GBROWSE */
 
 cgiParseInputAbort(inputString, &inputHash, &inputList);
+
+/* Total-size check across all parsed variables, including multipart bodies
+ * (which are placed directly in the hash/list).  Skip entries whose value is
+ * file-upload content so custom tracks still work; cgiParseMultipart adds a
+ * sibling "<name>__filename" hash entry for every uploaded file part, so
+ * that's how we'll detect upload bytes that don't count against the cap. */
+unsigned long totalSize = 0;
+struct cgiVar *v;
+for (v = inputList; v != NULL; v = v->next)
+    {
+    char filenameKey[1024];
+    safef(filenameKey, sizeof(filenameKey), "%s__filename", v->name);
+    if (hashLookup(inputHash, filenameKey) != NULL)
+        continue;
+    totalSize += strlen(v->name);
+    if (isNotEmpty(v->val))
+        totalSize += strlen(v->val);
+    if (totalSize > sizeLimit)
+        cgiInputTooLargeAbort();
+    }
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
