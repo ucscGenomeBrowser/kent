@@ -89,6 +89,10 @@
 /* used by liftRequest */
 #define argEmail "email"
 #define argComment "comment"
+/* used by assemblyRequest */
+#define argAsmId "asmId"
+#define argName "name"
+#define argBetterName "betterName"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
@@ -111,6 +115,7 @@ extern char *argSearch[];
 extern char *argFindGenome[];
 extern char *argLiftOver[];
 extern char *argLiftRequest[];
+extern char *argAssemblyRequest[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -302,6 +307,9 @@ void apiSearch(char *words[MAX_PATH_INFO]);
 
 void apiFindGenome(char *words[MAX_PATH_INFO]);
 /* 'findGenome' function */
+
+void apiAssemblyRequest(char *words[MAX_PATH_INFO]);
+/* interface to the assemblySearch.html request form, replaces /cgi-bin/asr */
 
 /* ######################################################################### */
 /*  functions in liftover.c */

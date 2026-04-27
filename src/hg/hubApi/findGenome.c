@@ -546,3 +546,94 @@ else
 hDisconnectCentral(&conn);
 
 }
+
+void apiAssemblyRequest(char *words[MAX_PATH_INFO])
+/* interface to the assemblySearch.html request form.  Replaces the
+ *   primitive /cgi-bin/asr perl CGI script.  Inserts a row into the
+ *   ottoRequest table; the otto cron job watcher handles email.
+ */
+{
+char *extraArgs = verifyLegalArgs(argAssemblyRequest);
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /assemblyRequest '%s'", extraArgs);
+
+char *asmId      = cgiOptionalString(argAsmId);
+char *name       = cgiOptionalString(argName);
+char *email      = cgiOptionalString(argEmail);
+char *betterName = cgiOptionalString(argBetterName);
+char *comment    = cgiOptionalString(argComment);
+
+if (isEmpty(asmId) || isEmpty(name) || isEmpty(email))
+    apiErrAbort(err400, err400Msg, "must have arguments: %s, %s, %s for endpoint '/assemblyRequest'", argAsmId, argName, argEmail);
+
+/* require referer to be our own assemblySearch.html, mirroring apiLiftRequest */
+char *cookieName = hUserCookie();
+char *userId = findCookieData(cookieName);
+char *referer = getenv("HTTP_REFERER");
+char dir[PATH_LEN];
+char fname[FILENAME_LEN];
+char ext[FILEEXT_LEN];
+if (isNotEmpty(referer) && isNotEmpty(userId))
+    {
+    /* assemblySearch.html uses history.pushState to add query strings to its
+     * URL, so the referer arrives as e.g. ".../assemblySearch.html?searchBox=foo".
+     * Strip query/fragment before splitPath so the .html extension matches. */
+    char *cleanRef = cloneString(referer);
+    char *q = strchr(cleanRef, '?');
+    if (q) *q = '\0';
+    q = strchr(cleanRef, '#');
+    if (q) *q = '\0';
+    splitPath(cleanRef, dir, fname, ext);
+    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(fname, "assemblySearch") && sameWord(ext, ".html")))
+        apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/assemblyRequest'");
+    freeMem(cleanRef);
+    }
+else
+    {
+    if (! debug)
+        apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/assemblyRequest'");
+    }
+
+/* the ottoRequest table has no name/betterName columns, fold them into comment */
+struct dyString *fullComment = dyStringNew(0);
+dyStringPrintf(fullComment, "name: '%s'", name);
+if (isNotEmpty(betterName))
+    dyStringPrintf(fullComment, "; betterName: '%s'", betterName);
+if (isNotEmpty(comment))
+    dyStringPrintf(fullComment, "; comment: '%s'", comment);
+
+char nowTime[256];
+time_t seconds = clock1();
+struct tm *timeNow = localtime(&seconds);
+strftime(nowTime, sizeof nowTime, "%Y-%m-%d %H:%M:%S", timeNow);
+
+struct dyString *msg = dyStringNew(0);
+dyStringPrintf(msg, "%s\nAssembly request\nasmId: %s\nname: %s\nemail: %s\nbetterName: %s\ncomment: %s",
+    nowTime, asmId, name, email,
+    isNotEmpty(betterName) ? betterName : "",
+    isNotEmpty(comment) ? comment : "");
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "msg", dyStringContents(msg));
+apiFinishOutput(0, NULL, jw);
+
+char *ottoTable = cfgOption("ottoTable");        /* probably ottoRequest */
+if (isNotEmpty(ottoTable))
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    if (sqlTableExists(conn, ottoTable))
+        {
+        /* asmId placed in both fromDb and toDb in case toDb does not allow empty */
+        struct dyString *update = dyStringNew(0);
+        sqlDyStringPrintf(update,
+            "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) "
+            "VALUES ('assembly', '%s', '%s', '%s', '%s', now(), 0, '')",
+            ottoTable, asmId, asmId, email, dyStringContents(fullComment));
+        sqlUpdate(conn, dyStringCannibalize(&update));
+        }
+    hDisconnectCentral(&conn);
+    }
+
+dyStringFree(&fullComment);
+dyStringFree(&msg);
+}       /*    void apiAssemblyRequest(char *words[MAX_PATH_INFO])    */
