@@ -546,31 +546,25 @@ function failedRequest(url) {
 }
 
 function sendRequest(name, email, asmId, betterName, comment) {
-    var urlComponents = encodeURIComponent(name) + "&email=" + encodeURIComponent(email) + "&asmId=" + encodeURIComponent(asmId) + "&betterName=" + encodeURIComponent(betterName) + "&comment=" + encodeURIComponent(comment);
+    var url = "/cgi-bin/hubApi/assemblyRequest?" +
+        "asmId="      + encodeURIComponent(asmId)      + ";" +
+        "name="       + encodeURIComponent(name)       + ";" +
+        "email="      + encodeURIComponent(email)      + ";" +
+        "betterName=" + encodeURIComponent(betterName) + ";" +
+        "comment="    + encodeURIComponent(comment);
 
-    var url = "/cgi-bin/asr?name=" + urlComponents;
-// information about escaping characters:
-// https://stackoverflow.com/questions/10772066/escaping-special-character-in-a-url/10772079
-// encodeURI() will not encode: ~!@#$&*()=:/,;?+'
-// encodeURIComponent() will not encode: ~!*()'
-
-//    var encoded = encodeURIComponent(url);
-//    encoded = encoded.replace("'","&rsquo;");
-//    var encoded = encodeURI(cleaner);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
          if (4 === this.readyState && 200 === this.status) {
             requestSubmitButton.value = "request completed";
-         } else {
-            if (4 === this.readyState && 404 === this.status) {
-               failedRequest(url);
-            }
+         } else if (4 === this.readyState && this.status >= 400) {
+            failedRequest(url);
          }
        };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 
-}  //      sendRequest: function(name, email. asmId)
+}  //      sendRequest: function(name, email, asmId, betterName, comment)
 
 // borrowed this code from utils.js
 function copyToClipboard(ev) {
