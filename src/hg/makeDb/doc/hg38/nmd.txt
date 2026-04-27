@@ -42,7 +42,7 @@ bedToBigBed knownGeneNmdDeco.bed ../../../chrom.sizes knownGeneNmdDeco.bb \
 # build collapsed bigBed
 bedSort nmdEscRegions.bed nmdEscRegions.bed
 bedToBigBed nmdEscRegions.bed ../../../chrom.sizes nmdEscRegions.bb \
-    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+    -tab -type=bed9+3 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
 
 # symlinks to /gbdb
 ln -sf /hive/data/genomes/hg38/bed/nmd/gencode/nmdEscRegions.bb /gbdb/hg38/nmd/nmdEscRegions.bb
@@ -70,7 +70,7 @@ cd /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/
 # build collapsed bigBed
 bedSort nmdEscNcbiRefSeq.bed nmdEscNcbiRefSeq.bed
 bedToBigBed nmdEscNcbiRefSeq.bed ../../../chrom.sizes nmdEscNcbiRefSeq.bb \
-    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+    -tab -type=bed9+3 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
 
 # symlink to gbdb
 ln -sf /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/nmdEscNcbiRefSeq.bb /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
@@ -82,13 +82,21 @@ ln -sf /hive/data/genomes/hg38/bed/nmd/ncbiRefSeq/nmdEscNcbiRefSeq.bb /gbdb/hg38
 
 mkdir -p /hive/data/genomes/hg38/bed/nmd/mane && cd /hive/data/genomes/hg38/bed/nmd/mane
 
+# --ncbi-id-field 21 puts the NCBI RefSeq accession (NM_/NR_) into the
+# collapsed bigBed's ncbiIds column so the trackDb stanza can offer NM_ as
+# the default label via labelFields/defaultLabelFields.
+# --no-collapse emits one row per (transcript, region). MANE Select gives
+# one transcript per gene; MANE Plus Clinical adds a second transcript for
+# 74 genes (e.g. LMNA). Keeping rows per-transcript means each label-field
+# column holds a single value, which renders cleaner than a comma list.
 ~/kent/src/hg/makeDb/scripts/nmd/genePredNmdEsc -f bigGenePred --gene-sym-field 18 \
+    --ncbi-id-field 21 --no-collapse \
     /gbdb/hg38/mane/mane.bb \
     nmdManeDeco.bed nmdEscMane.bed
 
 bedSort nmdEscMane.bed nmdEscMane.bed
 bedToBigBed nmdEscMane.bed ../../../chrom.sizes nmdEscMane.bb \
-    -tab -type=bed9+2 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+    -tab -type=bed9+3 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
 
 ln -sf /hive/data/genomes/hg38/bed/nmd/mane/nmdEscMane.bb /gbdb/hg38/nmd/nmdEscMane.bb
 
@@ -122,7 +130,7 @@ ln -sf /hive/data/genomes/hg38/bed/nmd/mane/nmdEscMane.bb /gbdb/hg38/nmd/nmdEscM
 # We ship the 'cds' mode; the 'mrna' mode is retained for comparison.
 #
 # Post-fix collapsed-region counts (--rule1-mode=cds):
-#   MANE 1.5:        67,752
+#   MANE 1.5:        68,028  (--no-collapse: one row per transcript)
 #   Gencode V49:    233,375
 #   RefSeq Curated: 112,356
 

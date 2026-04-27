@@ -16,9 +16,15 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
+        labelFields ncbiIds,name,transcripts
+        defaultLabelFields ncbiIds
+        labelSeparator " / "
         filterText.transcripts *
         filterType.transcripts wildcard
-        filterLabel.transcripts Filter on transcript ID (e.g. "*ENST00000269305*")
+        filterLabel.transcripts Gencode accession (e.g. "*ENST00000269305*")
+        filterText.ncbiIds *
+        filterType.ncbiIds wildcard
+        filterLabel.ncbiIds RefSeq accession (e.g. "*NM_000546*")
         dataVersion MANE 1.5
         priority 1.4
 

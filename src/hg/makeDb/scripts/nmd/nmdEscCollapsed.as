@@ -12,4 +12,5 @@ table nmdEscCollapsed
     uint color;        "RGB color: red=rule 1, orange=rule 2, dark red=rule 3, gold=rule 4"
     string mouseover;  "Rule description and transcript count"
     lstring transcripts; "Comma-separated list of transcript IDs from which this region was derived"
+    lstring ncbiIds;   "Comma-separated list of NCBI RefSeq accessions (NM_/NR_); populated for MANE only"
     )
