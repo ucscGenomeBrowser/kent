@@ -200,11 +200,16 @@ function dismissLiftExists() {
     genome2 = "";
 }
 
+function onSearchError(jqXHR, textStatus, errorThrown, term) {
+    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // Assembly 1 autocomplete
     let selectEle1 = document.getElementById("genomeLabel1");
     let boundSelect1 = assembly1Select.bind(null, selectEle1);
-    initSpeciesAutoCompleteDropdown('genomeSearch1', boundSelect1, "/cgi-bin/hubApi/findGenome?browser=mustExist;q=");
+    initSpeciesAutoCompleteDropdown('genomeSearch1', boundSelect1,
+        "/cgi-bin/hubApi/findGenome?browser=mustExist;q=", null, null, onSearchError);
 
     let btn1 = document.getElementById("genomeSearchButton1");
     btn1.addEventListener("click", () => {
@@ -215,7 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Assembly 2 autocomplete
     let selectEle2 = document.getElementById("genomeLabel2");
     let boundSelect2 = assembly2Select.bind(null, selectEle2);
-    initSpeciesAutoCompleteDropdown('genomeSearch2', boundSelect2, "/cgi-bin/hubApi/findGenome?browser=mustExist;q=");
+    initSpeciesAutoCompleteDropdown('genomeSearch2', boundSelect2,
+        "/cgi-bin/hubApi/findGenome?browser=mustExist;q=", null, null, onSearchError);
 
     let btn2 = document.getElementById("genomeSearchButton2");
     btn2.addEventListener("click", () => {
