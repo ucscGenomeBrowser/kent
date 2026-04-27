@@ -166,6 +166,7 @@ install:
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}
 	cp -p --remove-destination trackCountsParse        ${SCRIPTS}
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
+	cp -p --remove-destination updateHubSpaceQuota.sh  ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.sh        ${SCRIPTS}
 	cp -p --remove-destination userLookup              ${SCRIPTS}

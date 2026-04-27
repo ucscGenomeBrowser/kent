@@ -21,7 +21,7 @@ struct ottoRequest
     char *email;	/* user email address */
     char *comment;	/* other comments from the input form */
     char *requestTime;	/* date time request was added */
-    unsigned char doneStatus;	/* 0 == pending, 1 == notified/in progress, 2 == complete, 3 == problems */
+    unsigned char status;	/* 0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete, 5 finish notification, 6 complete, 7 problems */
     char *buildDir;	/* galaxy workflow ID */
     char *completeTime;	/* date time for process completed and user notified */
     };

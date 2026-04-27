@@ -10,7 +10,7 @@
 
 
 
-char *ottoRequestCommaSepFieldNames = "id,requestType,fromDb,toDb,email,comment,requestTime,doneStatus,buildDir,completeTime";
+char *ottoRequestCommaSepFieldNames = "id,requestType,fromDb,toDb,email,comment,requestTime,status,buildDir,completeTime";
 
 void ottoRequestStaticLoad(char **row, struct ottoRequest *ret)
 /* Load a row from ottoRequest table into ret.  The contents of ret will
@@ -24,7 +24,7 @@ ret->toDb = row[3];
 ret->email = row[4];
 ret->comment = row[5];
 ret->requestTime = row[6];
-ret->doneStatus = sqlUnsigned(row[7]);
+ret->status = sqlUnsigned(row[7]);
 ret->buildDir = row[8];
 ret->completeTime = row[9];
 }
@@ -60,7 +60,7 @@ void ottoRequestSaveToDb(struct sqlConnection *conn, struct ottoRequest *el, cha
 {
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s',%u,'%s','%s')",
-	tableName,  el->id,  el->requestType,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->doneStatus,  el->buildDir,  el->completeTime);
+	tableName,  el->id,  el->requestType,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->status,  el->buildDir,  el->completeTime);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -79,7 +79,7 @@ ret->toDb = cloneString(row[3]);
 ret->email = cloneString(row[4]);
 ret->comment = cloneString(row[5]);
 ret->requestTime = cloneString(row[6]);
-ret->doneStatus = sqlUnsigned(row[7]);
+ret->status = sqlUnsigned(row[7]);
 ret->buildDir = cloneString(row[8]);
 ret->completeTime = cloneString(row[9]);
 return ret;
@@ -137,7 +137,7 @@ ret->toDb = sqlStringComma(&s);
 ret->email = sqlStringComma(&s);
 ret->comment = sqlStringComma(&s);
 ret->requestTime = sqlStringComma(&s);
-ret->doneStatus = sqlUnsignedComma(&s);
+ret->status = sqlUnsignedComma(&s);
 ret->buildDir = sqlStringComma(&s);
 ret->completeTime = sqlStringComma(&s);
 *pS = s;
@@ -204,7 +204,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->requestTime);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->doneStatus);
+fprintf(f, "%u", el->status);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->buildDir);
@@ -275,10 +275,10 @@ fprintf(f, "%s", el->requestTime);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"doneStatus");
+fprintf(f,"status");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", el->doneStatus);
+fprintf(f, "%u", el->status);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"buildDir");
