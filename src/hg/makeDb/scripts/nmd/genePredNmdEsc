@@ -38,6 +38,13 @@ def parseArgs():
     parser.add_option("--gene-sym-field", dest="geneSymField", type="int", default=17,
         help="bigGenePred 0-based field index that holds the gene symbol. "
              "Default 17 (Gencode 'geneName'). MANE puts the HGNC symbol in field 18.")
+    parser.add_option("--ncbi-id-field", dest="ncbiIdField", type="int", default=-1,
+        help="bigGenePred 0-based field index that holds the NCBI RefSeq accession "
+             "(NM_/NR_). Default -1 (not extracted). For MANE, pass 21.")
+    parser.add_option("--no-collapse", dest="noCollapse", action="store_true", default=False,
+        help="Emit one row per (transcript, region) instead of collapsing identical "
+             "coordinates across transcripts. Useful for sets like MANE where each "
+             "label-field column should be a single value.")
     parser.add_option("--rule1-mode", dest="rule1Mode", action="store", default="cds",
         choices=["cds", "mrna"],
         help="How to count the 50 bp walk-back from the last splice junction. "
@@ -63,10 +70,11 @@ def parseArgs():
 
     return args, options
 
-def openInput(fname, fmt, geneSymField=17):
+def openInput(fname, fmt, geneSymField=17, ncbiIdField=-1):
     """Open input file and yield parsed transcript dicts.
     Both formats yield dicts with keys: name, chrom, strand, txStart, txEnd,
-    cdsStart, cdsEnd, exonCount, exonStarts, exonEnds, geneSym, cdsStartStat, cdsEndStat, exonFrames
+    cdsStart, cdsEnd, exonCount, exonStarts, exonEnds, geneSym, ncbiId,
+    cdsStartStat, cdsEndStat, exonFrames
     """
     if fmt == "bigGenePred":
         # pipe through bigBedToBed
@@ -100,6 +108,7 @@ def openInput(fname, fmt, geneSymField=17):
                 "exonStarts": [int(x) for x in fields[9].strip(",").split(",") if x],
                 "exonEnds": [int(x) for x in fields[10].strip(",").split(",") if x],
                 "geneSym": fields[12] if len(fields) > 12 else "",
+                "ncbiId": "",
                 "cdsStartStat": fields[13] if len(fields) > 13 else "none",
                 "cdsEndStat": fields[14] if len(fields) > 14 else "none",
                 "exonFrames": fields[15].strip(",") if len(fields) > 15 else "",
@@ -124,6 +133,7 @@ def openInput(fname, fmt, geneSymField=17):
                 "exonStarts": [chromStart + s for s in blockStarts],
                 "exonEnds": [chromStart + s + sz for s, sz in zip(blockStarts, blockSizes)],
                 "geneSym": fields[geneSymField] if len(fields) > geneSymField else "",
+                "ncbiId": fields[ncbiIdField] if (ncbiIdField >= 0 and len(fields) > ncbiIdField) else "",
                 "cdsStartStat": fields[13] if len(fields) > 13 else "none",
                 "cdsEndStat": fields[14] if len(fields) > 14 else "none",
                 "exonFrames": fields[15].strip(",") if len(fields) > 15 else "",
@@ -281,10 +291,11 @@ def main():
     decoOfh = open(outDecoFname, "w")
 
     # collect regions for the collapsed output:
-    # key = (chrom, start, end, rule) -> {"transcripts": [...], "strand": set(), "geneSym": str}
-    regionData = defaultdict(lambda: {"transcripts": [], "strands": set(), "geneSym": ""})
+    # key = (chrom, start, end, rule) -> {"transcripts": [...], "ncbiIds": [...],
+    #                                     "strand": set(), "geneSym": str}
+    regionData = defaultdict(lambda: {"transcripts": [], "ncbiIds": [], "strands": set(), "geneSym": ""})
 
-    for rec in openInput(inFname, options.format, options.geneSymField):
+    for rec in openInput(inFname, options.format, options.geneSymField, options.ncbiIdField):
         name = rec["name"]
         chrom = rec["chrom"]
         strand = rec["strand"]
@@ -318,10 +329,17 @@ def main():
                 continue
             cdsExons.append( (exStart, exEnd) )
 
+        ncbiId = rec.get("ncbiId", "")
+
         def addRegions(regions, rule):
             for r in regions:
-                key = (r[0], r[1], r[2], rule)
+                if options.noCollapse:
+                    key = (r[0], r[1], r[2], rule, name)
+                else:
+                    key = (r[0], r[1], r[2], rule)
                 regionData[key]["transcripts"].append(name)
+                if ncbiId:
+                    regionData[key]["ncbiIds"].append(ncbiId)
                 regionData[key]["strands"].add(strand)
                 if geneSym and not regionData[key]["geneSym"]:
                     regionData[key]["geneSym"] = geneSym
@@ -378,10 +396,12 @@ def main():
 
     decoOfh.close()
 
-    # write collapsed output as bed 9 + mouseover + transcripts
+    # write collapsed output as bed 9 + mouseover + transcripts + ncbiIds
     collOfh = open(outCollapsedFname, "w")
-    for (chrom, start, end, rule), data in sorted(regionData.items()):
+    for key, data in sorted(regionData.items()):
+        chrom, start, end, rule = key[:4]
         txList = sorted(set(data["transcripts"]))
+        ncbiList = sorted(set(data["ncbiIds"]))
         geneSym = data["geneSym"]
         if not geneSym:
             geneSym = txList[0]
@@ -392,13 +412,14 @@ def main():
 
         color = RULE_COLORS[rule]
         txListStr = ",".join(txList)
+        ncbiListStr = ",".join(ncbiList)
         if len(txList) <= 3:
             mouseover = RULE_DESCRIPTIONS[rule] + " (" + ", ".join(txList) + ")"
         else:
             mouseover = RULE_DESCRIPTIONS[rule] + " (" + str(len(txList)) + " transcripts)"
 
         row = [chrom, str(start), str(end), geneSym, "0", strand,
-               str(start), str(end), color, mouseover, txListStr]
+               str(start), str(end), color, mouseover, txListStr, ncbiListStr]
         collOfh.write("\t".join(row))
         collOfh.write("\n")
 
