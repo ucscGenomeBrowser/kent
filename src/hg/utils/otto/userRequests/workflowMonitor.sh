@@ -21,8 +21,7 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 finish notification, 6 complete, 7 problems */
 
-set -beEu -o pipefail
-set -x
+set -eEu -o pipefail
 
 if [ $# != 2 ]; then
   printf "usage: workflowMonitor.sh <reqId> <buildDir>\n" 1>&2
