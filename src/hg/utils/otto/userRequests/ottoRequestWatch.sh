@@ -57,7 +57,7 @@ while IFS=$'\t' read -r reqId buildDir; do
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
       hgsql -N -e \
-        "UPDATE ottoRequest SET status = 2, completeTime = NOW() \
+        "UPDATE ottoRequest SET status = 6, completeTime = NOW() \
          WHERE id = ${reqId};" hgcentraltest
       printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
@@ -69,3 +69,37 @@ while IFS=$'\t' read -r reqId buildDir; do
 done < <(hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 2 AND buildDir != '';" hgcentraltest)
+
+############################################################################
+# phase 3: check for tracks done, send notification email, mark complete
+############################################################################
+while IFS=$'\t' read -r reqId buildDir; do
+  if [ ! -d "${buildDir}" ]; then
+    printf "# WARNING: buildDir not found for request %s: %s\n" \
+      "${reqId}" "${buildDir}" 1>&2
+    continue
+  fi
+  source <(grep -E '^export (swapDir|targetDb|queryDb)=' ${buildDir}/kegAlign.sh)
+  echo $buildDir
+  echo $swapDir
+  echo targetDb $targetDb
+  echo queryDb $queryDb
+  export trackData=`dirname ${buildDir}`
+  export swapData=`dirname ${swapDir}`
+  export workDir=`basename ${buildDir}`
+  export swapWork=`basename ${swapDir}`
+  export doTdb="`dirname ${trackData}`/doTrackDb.bash"
+  export swapTdb="`dirname ${swapData}`/doTrackDb.bash"
+  rm -f "${trackData}/lastz.${queryDb}"
+  ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
+  printf "%s\n" "${doTdb}"
+  ${doTdb} 1>&2
+  echo $?
+  rm -f "${swapData}/lastz.${targetDb}"
+  ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
+  printf "%s\n" "${swapTdb}"
+  ${swapTdb} 1>&2
+  echo $?
+done < <(hgsql -N -B -e \
+  "SELECT id, buildDir FROM ottoRequest \
+   WHERE status = 4 AND buildDir != '';" hgcentraltest)
