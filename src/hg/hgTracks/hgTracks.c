@@ -8876,7 +8876,11 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='Alternate sequence names: %s'>"
+printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+       "Alternative sequence names can be used in the position box, custom tracks, "
+       "track hubs, bigBed, bigWig, and similar files. "
+       "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
+       "for more information'>"
        "<a>&#9432;</a></span>", encoded);
 freeMem(encoded);
 dyStringFree(&dy);
