@@ -8,7 +8,7 @@ html choriCloneEnds
     track choriCloneEndsCH1073
     parent choriCloneEnds
     shortLabel CHORI CH1073
-    longLabel CHORI CH1073 (RZPD-1073/DanioKey) BAC library clone end placements, unique concordant
+    longLabel CHORI CH1073 BAC library clone end placements, unique concordant
     type bigBed 6 +
     bigDataUrl /gbdb/danRer11/choriCloneEnds/CH1073.bb
     color 60,100,160
@@ -35,7 +35,7 @@ searchPriority 20
     track choriCloneEndsCH73
     parent choriCloneEnds
     shortLabel CHORI CH73
-    longLabel CHORI CH73 (RZPD-73 / DanioKey Pilot) BAC library clone end placements, unique concordant
+    longLabel CHORI CH73 BAC library clone end placements, unique concordant
     type bigBed 6 +
     bigDataUrl /gbdb/danRer11/choriCloneEnds/CH73.bb
     color 160,60,60
