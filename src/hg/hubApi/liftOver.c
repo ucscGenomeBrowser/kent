@@ -294,22 +294,12 @@ char *comment = cgiOptionalString(argComment);
 if (isEmpty(fromGenome) || isEmpty(toGenome) || isEmpty(email) || isEmpty(comment))
     apiErrAbort(err400, err400Msg, "must have all arguments: %s, %s, %s, %s for endpoint '/liftRequest", argFromGenome, argToGenome, argEmail, argComment);
 
+/* Require a session cookie.  Robots that have not
+ *   passed the challenge will not have one. */
 char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
-char *referer = getenv("HTTP_REFERER");
-char dir[PATH_LEN];
-char name[FILENAME_LEN];
-char ext[FILEEXT_LEN];
-/* expecting request to come from something.ucsc.edu/liftRequest.html */
-if (isNotEmpty(referer) && isNotEmpty(userId))
-    {
-    splitPath(referer, dir, name, ext);
-    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html")))
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
-    } else {
-      if (! debug)
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
-    }
+if (isEmpty(userId))
+    apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
 
 char *toAddr = cfgOption("chainFileRequestEmail");
 char *fromAddr = cfgOption("apiFromEmail");

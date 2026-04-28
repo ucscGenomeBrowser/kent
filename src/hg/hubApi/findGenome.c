@@ -566,33 +566,12 @@ char *comment    = cgiOptionalString(argComment);
 if (isEmpty(asmId) || isEmpty(name) || isEmpty(email))
     apiErrAbort(err400, err400Msg, "must have arguments: %s, %s, %s for endpoint '/assemblyRequest'", argAsmId, argName, argEmail);
 
-/* require referer to be our own assemblySearch.html, mirroring apiLiftRequest */
+/* Require a session cookie.  Robots that have not
+ *   passed the challenge will not have one. */
 char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
-char *referer = getenv("HTTP_REFERER");
-char dir[PATH_LEN];
-char fname[FILENAME_LEN];
-char ext[FILEEXT_LEN];
-if (isNotEmpty(referer) && isNotEmpty(userId))
-    {
-    /* assemblySearch.html uses history.pushState to add query strings to its
-     * URL, so the referer arrives as e.g. ".../assemblySearch.html?searchBox=foo".
-     * Strip query/fragment before splitPath so the .html extension matches. */
-    char *cleanRef = cloneString(referer);
-    char *q = strchr(cleanRef, '?');
-    if (q) *q = '\0';
-    q = strchr(cleanRef, '#');
-    if (q) *q = '\0';
-    splitPath(cleanRef, dir, fname, ext);
-    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(fname, "assemblySearch") && sameWord(ext, ".html")))
-        apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/assemblyRequest'");
-    freeMem(cleanRef);
-    }
-else
-    {
-    if (! debug)
-        apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/assemblyRequest'");
-    }
+if (isEmpty(userId))
+    apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/assemblyRequest'");
 
 /* the ottoRequest table has no name/betterName columns, fold them into comment */
 struct dyString *fullComment = dyStringNew(0);
