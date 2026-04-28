@@ -8,7 +8,7 @@ interface, navigation, and track display. You can also browse our
 [glossary](/docs/genomeBrowserGlossary.html) to learn common terms used throughout
 this documentation.
 
-## Using the Genome Browser Interface and Tools
+## Using the Genome Browser interface and tools
 
 The Genome Browser offers a dynamic interface for visualizing genomic data on
 a variety of genome assemblies. In addition to visualization, there are several tools
@@ -19,10 +19,10 @@ We offer detailed step-by-step tutorials for several of our tools:
 
 | Title | Description | Link |
 | - | - | - |
-| Genome Browser Basics | Covers basics of the UCSC Genome Browser track interface | [View Tutorial](/docs/tutorials/gb101.html) |
-| Gateway Page | Learn to find genome assemblies | [View Tutorial](/docs/tutorials/gatewayTutorial.html) |
-| Table Browser | Introduces Table Browser queries | [View Tutorial](/docs/tutorials/tableBrowserTutorial.html) |
-| Custom Tracks | Upload your custom annotations | [View Tutorial](/docs/tutorials/customTrackTutorial.html) |
+| Genome Browser Basics | Learn the basics of the Genome Browser interface | [View tutorial](/docs/tutorials/gb101.html) |
+| Gateway Page | Find and switch between genome assemblies | [View tutorial](/docs/tutorials/gatewayTutorial.html) |
+| Table Browser | Query and download Genome Browser data | [View tutorial](/docs/tutorials/tableBrowserTutorial.html) |
+| Custom Tracks | Display your own annotations on the Genome Browser | [View tutorial](/docs/tutorials/customTrackTutorial.html) |
 
 Navigate to our [Tutorial index](/docs/tutorials/index.html) to see them all.
 
@@ -30,9 +30,9 @@ Navigate to our [Tutorial index](/docs/tutorials/index.html) to see them all.
 Our [training page](/training/index.html) has short how-to videos covering common
 tasks like saving sessions, using BLAT and isPCR, finding SNPs in a gene, and
 using Multi-Region View. We also offer in-person and virtual workshops,
-[contact us](/docs/contacts.html) to host one at your institution.
+[contact us](/contacts.html) to host one at your institution.
 
-## Understanding Genome Browser Assemblies and Annotations
+## Understanding Genome Browser assemblies and annotations
 
 The Genome Browser allows for the visualization of annotations on
 a variety of genome assemblies. A genome assembly is a reconstruction of
@@ -71,26 +71,26 @@ Relevant FAQs:
 - [Genome Browser Tracks](/FAQ/FAQtracks.html)
 
 
-## Visualizing Your Own Data
+## Visualizing your own data
 
 The Genome Browser allows you to visualize your own data alongside the data we host:
 
 - [Custom tracks](/cgi-bin/hgCustom)
     - See our [documentation](/goldenPath/help/customTrack.html) to learn how to load your own
-- [Track hubs](/cgi-bin/hgHubConnect?#unlistedHubs)
-    - See our [Hubs Basics](/docs/hubs/hubBasics.html) page to create your hub
-    - Checked using our [hub development tools](/cgi-bin/hgHubConnect?#hubDeveloper)
+- [Track hubs](/cgi-bin/hgHubConnect#unlistedHubs)
+    - See our [Hub Basics](/docs/hubs/hubBasics.html) page to learn how to build your own
+    - Validate your hub with our [hub development tools](/cgi-bin/hgHubConnect#hubDeveloper)
 
-For both hubs and custom tracks, we provide storage through [hub space](/cgi-bin/hgHubConnect?#hubUpload).
+For both hubs and custom tracks, we provide storage through [hub space](/cgi-bin/hgHubConnect#hubUpload).
 
-## Sharing Your Data
+## Sharing your data
 
 Once you've loaded and configured your data, you can share it with others
 through several means:
 
 - [Links](/FAQ/FAQlink.html)
 - [Sessions](/cgi-bin/hgSession)
-- [Public hubs](/cgi-bin/hgHubConnect?#publicHubs) (to contribute your own, see
+- [Public hubs](/cgi-bin/hgHubConnect#publicHubs) (to contribute your own, see
   our [guidelines](/goldenPath/help/publicHubGuidelines.html))
 - [Contributed tracks](/docs/hubs/contributedTracks.html) for GenArk assemblies
 
@@ -99,7 +99,7 @@ Relevant FAQs:
 - [Data File Formats](/FAQ/FAQformat.html) - see the formats supported by the Genome Browser
 
 
-## Downloading Data from the Genome Browser
+## Downloading data from the Genome Browser
 
 Beyond data visualization, the Genome Browser offers a wide variety of ways to access
 and work with the underlying data:

@@ -220,6 +220,7 @@ function obfuscate(s)
 end
 
 function Link(s, src, tit, attr)
+  local extra = ""
   if string.sub(src, 1, 7)=="mailto:" then
       src = "mailto:" .. obfuscate(string.sub(src, 7), 7)
       -- assume that the link label is an email address if it contains an @ character
@@ -227,12 +228,19 @@ function Link(s, src, tit, attr)
           s = obfuscate(s)
       end
   else
+      -- absolute URLs open in a new tab; rel="noopener" prevents tabnabbing
+      if string.match(src, "^https?://") then
+          extra = " target='_blank' rel='noopener'"
+      end
       src = escape(src, true)
       tit = escape(tit, true)
   end
 
+  if tit and tit ~= "" then
+      extra = extra .. " title='" .. tit .. "'"
+  end
 
-  return "<a href='" .. src .. "' title='" .. tit .. "'>" .. s .. "</a>"
+  return "<a href='" .. src .. "'" .. extra .. ">" .. s .. "</a>"
 
 end
 
@@ -370,17 +378,16 @@ function DefinitionList(items)
   return "<dl>\n" .. table.concat(buffer, "\n") .. "\n</dl>"
 end
 
--- Convert pandoc alignment to something HTML can use.
--- align is AlignLeft, AlignRight, AlignCenter, or AlignDefault.
-function html_align(align)
-  if align == 'AlignLeft' then
-    return 'left'
-  elseif align == 'AlignRight' then
-    return 'right'
+-- Convert pandoc alignment into a style attribute fragment for HTML5.
+-- align is AlignLeft, AlignRight, AlignCenter, or AlignDefault. Left is the
+-- default cell alignment, so emit nothing in that case.
+function html_align_style(align)
+  if align == 'AlignRight' then
+    return ' style="text-align: right"'
   elseif align == 'AlignCenter' then
-    return 'center'
+    return ' style="text-align: center"'
   else
-    return 'left'
+    return ''
   end
 end
 
@@ -404,14 +411,13 @@ function Table(caption, aligns, widths, headers, rows)
   end
   if widths and widths[1] ~= 0 then
     for _, w in pairs(widths) do
-      add('<col width="' .. string.format("%.0f%%", w * 100) .. '" />')
+      add('<col style="width: ' .. string.format("%.0f%%", w * 100) .. '">')
     end
   end
   local header_row = {}
   local empty_header = true
   for i, h in pairs(headers) do
-    local align = html_align(aligns[i])
-    table.insert(header_row,'<th align="' .. align .. '">' .. h .. '</th>')
+    table.insert(header_row,'<th' .. html_align_style(aligns[i]) .. '>' .. h .. '</th>')
     empty_header = empty_header and h == ""
   end
   if empty_header then
@@ -428,7 +434,7 @@ function Table(caption, aligns, widths, headers, rows)
     class = (class == "even" and "odd") or "even"
     add('<tr class="' .. class .. '">')
     for i,c in pairs(row) do
-      add('<td align="' .. html_align(aligns[i]) .. '">' .. c .. '</td>')
+      add('<td' .. html_align_style(aligns[i]) .. '>' .. c .. '</td>')
     end
     add('</tr>')
   end
