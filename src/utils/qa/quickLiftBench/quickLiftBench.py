@@ -99,6 +99,13 @@ def parse_args():
         action="store_true",
         help="Print per-iteration timings to stderr",
     )
+    p.add_argument(
+        "--phases",
+        action="store_true",
+        help="Also write phases.tsv with per-iteration phase timings parsed "
+             "from <span class='timing'> markers (chromAliasSetup, "
+             "trackDbLoad, parallel data fetch, etc.)",
+    )
     return p.parse_args()
 
 
@@ -195,13 +202,6 @@ def parse_phase_timings(html):
     return out
 
 
-def parse_overall_total(html):
-    """Return the 'Overall total time' value from the footer timing span,
-    or None if not found."""
-    phases = parse_phase_timings(html)
-    return phases.get(OVERALL_TIMING_LABEL)
-
-
 def detect_block(html):
     """Return a short error reason if the response indicates bot-block / error."""
     if html is None:
@@ -279,6 +279,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     results_path = os.path.join(out_dir, "results.tsv")
     summary_path = os.path.join(out_dir, "summary.tsv")
+    phases_path = os.path.join(out_dir, "phases.tsv") if args.phases else None
     print(f"writing results to {out_dir}", file=sys.stderr)
 
     results_fields = [
@@ -286,8 +287,13 @@ def main():
         "http_ms", "load_ms_sum", "draw_ms_sum", "n_tracks", "total_ms",
         "status_code", "error",
     ]
+    phases_fields = [
+        "case", "variant", "server", "user", "session", "iteration",
+        "phase", "ms",
+    ]
 
     all_rows = []
+    all_phase_rows = []
 
     with open(results_path, "w", newline="") as rf:
         writer = csv.DictWriter(rf, fieldnames=results_fields, delimiter="\t")
@@ -335,13 +341,15 @@ def main():
 
                     load_sum = draw_sum = total_ms = None
                     n_tracks = None
+                    phases = {}
                     if html and not err:
                         rows = parse_track_timing_rows(html)
                         n_tracks = len(rows)
                         if rows:
                             load_sum = sum(r[1] for r in rows)
                             draw_sum = sum(r[2] for r in rows)
-                        total_ms = parse_overall_total(html)
+                        phases = parse_phase_timings(html)
+                        total_ms = phases.get(OVERALL_TIMING_LABEL)
                         if total_ms is None and not rows:
                             err = "no-timing"
 
@@ -363,6 +371,19 @@ def main():
                     writer.writerow(row)
                     rf.flush()
                     all_rows.append(row)
+
+                    if args.phases:
+                        for label, ms in phases.items():
+                            all_phase_rows.append({
+                                "case": cid,
+                                "variant": vname,
+                                "server": server_key,
+                                "user": user,
+                                "session": session_name,
+                                "iteration": it,
+                                "phase": label,
+                                "ms": ms,
+                            })
                     if args.verbose:
                         print(
                             f"    {vname:8s} it={it} "
@@ -376,6 +397,10 @@ def main():
     write_summary(cases, all_rows, summary_path)
     print(f"\nresults: {results_path}", file=sys.stderr)
     print(f"summary: {summary_path}", file=sys.stderr)
+
+    if phases_path:
+        write_phases(all_phase_rows, phases_fields, phases_path)
+        print(f"phases:  {phases_path}", file=sys.stderr)
 
 
 def _to_int(v):
@@ -485,6 +510,39 @@ def ratio(num, denom):
     if num is None or denom is None or denom == 0:
         return ""
     return f"{num / denom:.2f}"
+
+
+def write_phases(rows, fields, path):
+    """Write per-iteration phase timings, then a per-(case, variant, phase)
+    median + n summary appended below."""
+    with open(path, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields, delimiter="\t")
+        w.writeheader()
+        for r in rows:
+            w.writerow(r)
+
+        if not rows:
+            return
+
+        # Per-(case, variant, phase) median for quick eyeballing.
+        groups = {}
+        for r in rows:
+            key = (r["case"], r["variant"], r["phase"])
+            groups.setdefault(key, []).append(r["ms"])
+
+        f.write("\n# Per-(case, variant, phase) median ms across iterations\n")
+        summary_fields = ["case", "variant", "phase", "n", "median_ms", "p90_ms"]
+        sw = csv.DictWriter(f, fieldnames=summary_fields, delimiter="\t")
+        sw.writeheader()
+        for (cid, vname, phase), values in sorted(groups.items()):
+            sw.writerow({
+                "case": cid,
+                "variant": vname,
+                "phase": phase,
+                "n": len(values),
+                "median_ms": median_or_none(values),
+                "p90_ms": p90(values),
+            })
 
 
 if __name__ == "__main__":
