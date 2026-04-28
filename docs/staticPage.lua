@@ -136,8 +136,9 @@ function Doc(body, metadata, variables)
     add("<h1>No title defined in document, first line must be % mytitle </h1>")
   end
 
-  -- Sidebar TOC + body in Bootstrap grid
-  add('<div class="row docs-toc-row">')
+  -- Sidebar TOC + body in Bootstrap grid. The docs-page class scopes
+  -- /docs/-only typography and table styling in gbStatic.css.
+  add('<div class="row docs-toc-row docs-page">')
   add('<div class="col-md-2 hidden-sm hidden-xs">')
   add('<nav class="docs-toc" id="docs-toc">')
   add('<ul>')
