@@ -2,124 +2,74 @@
 title: "Genome Browser Documentation"
 ---
 
-New to the Genome Browser? Start with our [Genome Browser Basics
-tutorial](/docs/tutorials/gb101.html), a 15-minute walkthrough of the
-interface, navigation, and track display. You can also browse our
-[glossary](/docs/genomeBrowserGlossary.html) to learn common terms used throughout
-this documentation.
+The Genome Browser offers a web-based interface for visualizing genomic data on
+a variety of genome assemblies. If you're new here, the tutorials below are
+the fastest way to get started.
 
-## Using the Genome Browser interface and tools
+## Tutorials
 
-The Genome Browser offers a dynamic interface for visualizing genomic data on
-a variety of genome assemblies. In addition to visualization, there are several tools
-for extracting data from the current visualization.
+| Tutorial | Description |
+| - | - |
+| [Genome Browser Basics](/docs/tutorials/gb101.html) | Learn the basics of the Genome Browser interface |
+| [Gateway Page](/docs/tutorials/gatewayTutorial.html) | Find and switch between genome assemblies |
+| [Table Browser](/docs/tutorials/tableBrowserTutorial.html) | Query and download Genome Browser data |
+| [Custom Tracks](/docs/tutorials/customTrackTutorial.html) | Display your own annotations in the Genome Browser |
 
-### Tutorials
-We offer detailed step-by-step tutorials for several of our tools:
+Prefer video? Our [training page](/training/index.html) has short how-to
+videos on common tasks like saving sessions, using BLAT and isPCR, and
+finding SNPs in a gene.
 
-| Title | Description | Link |
-| - | - | - |
-| Genome Browser Basics | Learn the basics of the Genome Browser interface | [View tutorial](/docs/tutorials/gb101.html) |
-| Gateway Page | Find and switch between genome assemblies | [View tutorial](/docs/tutorials/gatewayTutorial.html) |
-| Table Browser | Query and download Genome Browser data | [View tutorial](/docs/tutorials/tableBrowserTutorial.html) |
-| Custom Tracks | Display your own annotations on the Genome Browser | [View tutorial](/docs/tutorials/customTrackTutorial.html) |
+Looking up a term you don't recognize? Check our
+[glossary](/docs/genomeBrowserGlossary.html).
 
-Navigate to our [Tutorial index](/docs/tutorials/index.html) to see them all.
+## Visualize your own data
 
-### Video tutorials
-Our [training page](/training/index.html) has short how-to videos covering common
-tasks like saving sessions, using BLAT and isPCR, finding SNPs in a gene, and
-using Multi-Region View. We also offer in-person and virtual workshops,
-[contact us](/contacts.html) to host one at your institution.
+Display your own annotations alongside the data we host:
 
-## Understanding Genome Browser assemblies and annotations
+- [Custom tracks](/cgi-bin/hgCustom) — the simpler option for displaying
+  your own annotations. See our
+  [documentation](/goldenPath/help/customTrack.html) to learn how to load
+  your own.
+- [Track hubs](/cgi-bin/hgHubConnect#unlistedHubs) — more powerful and
+  configurable, ideal for many tracks or for sharing data publicly. Start
+  with our [Hub Basics](/docs/hubs/hubBasics.html) page, and validate your
+  hub with our [hub development tools](/cgi-bin/hgHubConnect#hubDeveloper).
 
-The Genome Browser allows for the visualization of annotations on
-a variety of genome assemblies. A genome assembly is a reconstruction of
-an organism's complete DNA sequence from shorter sequenced fragments. Different
-assemblies of the same species may exist as sequencing technology improves
-(e.g., hg19 vs. hg38 for human).
+For both hubs and custom tracks, we provide storage through
+[hub space](/cgi-bin/hgHubConnect#hubUpload).
 
-- Use our [gateway page](/cgi-bin/hgGateway) to access popular assemblies or
-  search for an assembly of interest. Learn more from our
-  [tutorial](/docs/tutorials/gatewayTutorial.html).
-- If your assembly is not available, [request it](/assemblySearch.html).
+## Share your work
 
-The Genome Browser displays annotations as horizontal "tracks" layered beneath
-the genome coordinate ruler. These tracks fall into several major categories:
+Once you've configured a view, share it with collaborators or publish it
+broadly:
 
-- Genes and Gene Predictions: curated and predicted gene models (GENCODE,
-  RefSeq, Augustus)
-- Regulation: transcription factor binding, histone marks, DNase
-  hypersensitivity (ENCODE, Roadmap Epigenomics)
-- Comparative Genomics: cross-species conservation scores, alignments (PhyloP,
-  PhastCons, chain/net)
-- Variation: SNPs, structural variants, clinical variants (dbSNP, ClinVar,
-  gnomAD)
-- Repeats: repetitive elements (RepeatMasker, Simple Repeats)
-- Mapping and Sequencing: assembly structure, gaps, chromosome bands
+- [Links](/FAQ/FAQlink.html) — share a snapshot of your current view as a URL.
+- [Sessions](/cgi-bin/hgSession) — save and share full Genome Browser
+  configurations.
+- [Public hubs](/cgi-bin/hgHubConnect#publicHubs) — to contribute your own,
+  see our [guidelines](/goldenPath/help/publicHubGuidelines.html).
+- [Contributed tracks](/docs/hubs/contributedTracks.html) — submit
+  annotations on [GenArk](https://hgdownload.gi.ucsc.edu/hubs/) assemblies.
 
-Each track has its own description page (accessible by clicking the track name)
-with details on the data source, methods, and display conventions. Human and mouse
-assemblies (e.g. hg38, hg19, mm10, or mm39) will include tracks across nearly
-all of these categories. However, most assemblies may only have a basic set of
-annotations (genes, repeats, assembly mapping).
+## Download data
 
-Relevant FAQs:
+Access our underlying data outside the browser:
 
-- [Gene Tracks](/FAQ/FAQgenes.html)
-- [Genome Browser Tracks](/FAQ/FAQtracks.html)
+- The [download server](https://hgdownload.gi.ucsc.edu/downloads.html)
+  provides the data underlying the Genome Browser, plus pairwise alignments
+  and LiftOver chain files.
+- Our [REST API](/goldenPath/help/api.html) returns data in JSON format.
+- [Command-line tools](https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads)
+  for working with bigBed, bigWig, and other formats, plus standalone
+  versions of `liftOver`, `blat`, and others.
 
+## Get help
 
-## Visualizing your own data
-
-The Genome Browser allows you to visualize your own data alongside the data we host:
-
-- [Custom tracks](/cgi-bin/hgCustom)
-    - See our [documentation](/goldenPath/help/customTrack.html) to learn how to load your own
-- [Track hubs](/cgi-bin/hgHubConnect#unlistedHubs)
-    - See our [Hub Basics](/docs/hubs/hubBasics.html) page to learn how to build your own
-    - Validate your hub with our [hub development tools](/cgi-bin/hgHubConnect#hubDeveloper)
-
-For both hubs and custom tracks, we provide storage through [hub space](/cgi-bin/hgHubConnect#hubUpload).
-
-## Sharing your data
-
-Once you've loaded and configured your data, you can share it with others
-through several means:
-
-- [Links](/FAQ/FAQlink.html)
-- [Sessions](/cgi-bin/hgSession)
-- [Public hubs](/cgi-bin/hgHubConnect#publicHubs) (to contribute your own, see
-  our [guidelines](/goldenPath/help/publicHubGuidelines.html))
-- [Contributed tracks](/docs/hubs/contributedTracks.html) for GenArk assemblies
-
-Relevant FAQs:
-
-- [Data File Formats](/FAQ/FAQformat.html) - see the formats supported by the Genome Browser
-
-
-## Downloading data from the Genome Browser
-
-Beyond data visualization, the Genome Browser offers a wide variety of ways to access
-and work with the underlying data:
-
-- The [download server](https://hgdownload.gi.ucsc.edu/downloads.html) provides
-  access to the data underlying the Genome Browser,
-  in addition to pairwise alignment and LiftOver chain files.
-- Our [REST API](/goldenPath/help/api.html) can be used to retrieve data in JSON format.
-- Our [public MySQL server](/goldenPath/help/mysql.html) allows command-line access to underlying data tables.
-- We provide [command-line tools](https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads)
-  for working with bigBed, bigWig, or other formats,
-  and command-line versions of our tools like `liftOver` or `blat`.
-
-We also provide scripts for creating your own
-[mirror](/goldenPath/help/mirror.html) of the Genome Browser software and
-databases, although it is often recommended to explore other methods of
-visualizing your custom data as mirrors can require significant effort and
-storage space to set up and maintain.
-
-Relevant FAQs:
-
-- [Data and Downloads](/FAQ/FAQdownloads.html)
-- [Mirroring or Licensing the Genome Browser](/FAQ/FAQlicense.html)
+- [Contact us](/contacts.html) — email, mailing lists, and other support
+  channels.
+- [FAQ](/FAQ/) — common questions, including
+  [data file formats](/FAQ/FAQformat.html).
+- Want a hands-on workshop at your institution?
+  [Get in touch](/contacts.html) about hosting one, in-person or virtual.
+- Found a bug or have an idea?
+  [Submit a suggestion](/cgi-bin/hgUserSuggestion).

@@ -369,6 +369,47 @@ ul.nice-menu ul li a {
     border-left-color: #4c759c;
 }
 
+/* "On this page" label above the sidebar TOC */
+.docs-page .docs-toc::before {
+    content: "On this page";
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6c757d;
+    padding: 2px 12px 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #ededed;
+}
+
+/* Tables on /docs/ pages: roomier padding, zebra striping, and a subtle hover */
+.docs-page table {
+    margin: 16px 0;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.gbsPage .docs-page th,
+.gbsPage .docs-page td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #ededed;
+}
+
+.gbsPage .docs-page th {
+    background-color: #f3f3f3;
+    border-bottom: 2px solid #cfcfcf;
+    font-weight: 600;
+}
+
+.docs-page tr.even td {
+    background-color: #fafafa;
+}
+
+.docs-page tr:hover td {
+    background-color: #eef4f9;
+}
+
 /* Bootstrap collapse component CSS (not included in our customized bootstrap.min.css) */
 .collapse {
     display: none;
