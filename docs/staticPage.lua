@@ -151,7 +151,7 @@ function Doc(body, metadata, variables)
   -- ucsc change end
 
   add(body)
-  add('</div>') -- close col-md-9
+  add('</div>') -- close col-md-10
   add('</div>') -- close row
   if #notes > 0 then
     add('<ol class="footnotes">')
