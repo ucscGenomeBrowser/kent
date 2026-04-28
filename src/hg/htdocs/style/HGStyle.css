@@ -26,8 +26,10 @@ body.training {
 
 #chromAliases {
         display: inline;
-        margin-left: 0.5em;
-        font-size: 80%;
+        margin-left: 0.1em;
+        margin-right: 0.05em;
+        font-size: 110%;
+        vertical-align: middle;
         cursor: help;
 }
 
