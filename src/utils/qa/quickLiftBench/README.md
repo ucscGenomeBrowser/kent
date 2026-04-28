@@ -35,7 +35,7 @@ recorded requests. Min / median / p90 are reported.
 ./quickLiftBench.py [--config FILE] [--cases ID,ID]
                     [--server-override NAME]
                     [--iterations N] [--warmup N]
-                    [--out DIR] [--verbose]
+                    [--out DIR] [--verbose] [--phases]
 ```
 
 Defaults: read `cases.yaml` next to the script, no server override, all
@@ -126,6 +126,12 @@ Two TSVs are written to `results/<YYYYMMDD-HHMMSS>/`:
   1. per (case, variant): n, n_ok, http/load_sum/draw_sum/total median and p90.
   2. per (case, compare-pair): left vs right total medians and the
      `right/left` ratio for each metric.
+- `phases.tsv` (only with `--phases`) — long-form rows of every
+  `<span class='timing'>label: NNN millis</span>` marker emitted by
+  hgTracks (chromAliasSetup, trackDbLoad, parallel data fetch, image
+  generation, cart write, etc.), one row per (case, variant, iteration,
+  phase). A per-(case, variant, phase) median+p90 summary is appended.
+  Useful for localizing where time is going when total medians differ.
 
 A short pairwise table is also printed to stderr at the end of a run.
 
