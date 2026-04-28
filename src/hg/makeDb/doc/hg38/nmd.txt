@@ -95,8 +95,12 @@ mkdir -p /hive/data/genomes/hg38/bed/nmd/mane && cd /hive/data/genomes/hg38/bed/
     nmdManeDeco.bed nmdEscMane.bed
 
 bedSort nmdEscMane.bed nmdEscMane.bed
+# MANE uses its own .as so the labelFields dropdown shows clean column
+# labels ("Gene Symbol" / "Gencode Accession (ENST)" / "RefSeq Accession
+# (NM_/NR_)") that wouldn't fit the Gencode/RefSeq tracks (whose
+# "transcripts" column holds different accession types).
 bedToBigBed nmdEscMane.bed ../../../chrom.sizes nmdEscMane.bb \
-    -tab -type=bed9+3 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscCollapsed.as
+    -tab -type=bed9+3 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdEscManeCollapsed.as
 
 ln -sf /hive/data/genomes/hg38/bed/nmd/mane/nmdEscMane.bb /gbdb/hg38/nmd/nmdEscMane.bb
 
