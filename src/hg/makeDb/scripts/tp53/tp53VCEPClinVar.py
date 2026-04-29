@@ -15,6 +15,7 @@ absent.
 """
 
 import argparse
+import html
 import json
 import os
 import re
@@ -88,21 +89,13 @@ def log(msg):
     print(msg, file=sys.stderr)
 
 
-def bash(cmd):
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError("Command failed: {}\n{}".format(cmd, result.stderr))
-    return result.stdout
-
-
 def escape_html(s):
     if not s:
         return ""
-    # First escape HTML special chars, then encode any remaining non-ASCII
-    # as numeric entities so UCSC hgTracks' mouseover pipeline renders
-    # cleanly (raw UTF-8 ends up as mojibake like 'â€"').
-    escaped = (str(s).replace('&', '&amp;').replace('<', '&lt;')
-                     .replace('>', '&gt;').replace('"', '&quot;'))
+    # HTML-escape, then encode non-ASCII as numeric entities so UCSC
+    # hgTracks' mouseover pipeline renders cleanly (raw UTF-8 ends up as
+    # mojibake like 'â€"').
+    escaped = html.escape(str(s))
     return "".join(
         ch if ord(ch) < 128 else "&#{};".format(ord(ch))
         for ch in escaped
@@ -236,7 +229,9 @@ def liftover_coords(coords, chain):
     out_bed = in_bed.replace('.bed', '.lifted.bed')
     un_bed = in_bed.replace('.bed', '.unmapped.bed')
     try:
-        bash("liftOver {} {} {} {} 2>/dev/null".format(in_bed, chain, out_bed, un_bed))
+        subprocess.run(
+            ["liftOver", in_bed, chain, out_bed, un_bed],
+            check=True, stderr=subprocess.DEVNULL)
     except Exception:
         pass
     lifted = {}
@@ -344,11 +339,13 @@ def build_assembly(variants, assembly, outdir):
     bed = os.path.join(outdir, "TP53VCEPCuratedVars_{}.bed".format(assembly))
     with open(bed, 'w') as f:
         f.write("\n".join(entries) + "\n")
-    bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed, "-o", bed], check=True)
     as_file = os.path.join(outdir, "TP53VCEPCuratedVars.as")
     bb = os.path.join(outdir, "TP53VCEPCuratedVars{}.bb".format(assembly.capitalize()))
-    bash("bedToBigBed -as={} -type=bed9+9 -tab {} {} {}".format(
-        as_file, bed, CHROM_SIZES[assembly], bb))
+    subprocess.run(
+        ["bedToBigBed", "-as=" + as_file, "-type=bed9+9", "-tab",
+         bed, CHROM_SIZES[assembly], bb],
+        check=True)
     log("  wrote {}".format(bb))
     return bb
 

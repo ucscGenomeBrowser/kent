@@ -144,7 +144,7 @@ def hg19_to_hg38_lift(records, outdir):
             ref = v['ref']
             f.write("chr{}\t{}\t{}\t{}\n".format(
                 v['chrom'], pos - 1, pos - 1 + len(ref), v['variant_id']))
-    lib.bash("liftOver {} {} {} {}".format(in_bed, chain, out_bed, unmapped))
+    lib.run_liftOver(in_bed, chain, out_bed, unmapped)
     lookup = {}
     with open(out_bed) as f:
         for line in f:
@@ -232,7 +232,7 @@ def build(db, outdir, src_json):
     bed = os.path.join(outdir, "TP53Flossies_{}.bed".format(db))
     with open(bed, 'w') as f:
         f.write("\n".join(lines) + "\n")
-    lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    lib.run_sort_bed(bed)
     bb = os.path.join(outdir, "TP53Flossies{}.bb".format(db.capitalize()))
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+10")
     print("  wrote {}".format(bb))

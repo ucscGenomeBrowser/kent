@@ -93,7 +93,7 @@ def build(db, outdir):
     bed = os.path.join(outdir, "TP53PVS1_{}.bed".format(db))
     with open(bed, 'w') as f:
         f.write("\n".join(bed_lines) + "\n")
-    lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    lib.run_sort_bed(bed)
 
     bb = os.path.join(outdir, "TP53PVS1{}.bb".format(db.capitalize()))
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+4")

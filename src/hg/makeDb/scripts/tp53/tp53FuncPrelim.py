@@ -191,7 +191,7 @@ def build(db, outdir, src_xlsx):
     bed = os.path.join(outdir, "TP53FuncPrelim_{}.bed".format(db))
     with open(bed, 'w') as f:
         f.write("\n".join(bed_lines) + "\n")
-    lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    lib.run_sort_bed(bed)
     bb = os.path.join(outdir, "TP53FuncPrelim{}.bb".format(db.capitalize()))
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+7")
     print("  wrote {}".format(bb))
