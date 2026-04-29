@@ -21,7 +21,7 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 finish notification, 6 complete, 7 problems */
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 if [ $# != 2 ]; then
   printf "usage: workflowMonitor.sh <reqId> <buildDir>\n" 1>&2
@@ -30,6 +30,7 @@ fi
 
 export reqId="$1"
 export buildDir="$2"
+export successCount=0
 
 ##############################################################################
 ### errors - set error status in the table
@@ -56,6 +57,7 @@ fi
 # no pending invocation?
 if [ ! -s pendingInvocationId.txt ]; then
   printf "ERROR: no pendingInvocationId.txt in %s\n" "${buildDir}" 1>&2
+  setErrorStatus ${reqId}
   exit 255
 fi
 
@@ -67,6 +69,7 @@ export logJson=$(cut -f3 pendingInvocationId.txt)
 # source variable definitions from the generated kegAlign.sh
 if [ ! -s kegAlign.sh ]; then
   printf "ERROR: no kegAlign.sh in %s\n" "${buildDir}" 1>&2
+  setErrorStatus ${reqId}
   exit 255
 fi
 source <(grep -E '^export (swapDir|PM|targetDb|queryDb|QueryDb|Target|tSizes|qSizes)=' kegAlign.sh)
@@ -78,15 +81,17 @@ printf "# buildDir: %s\n" "${buildDir}" 1>&2
 export profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
 if [ ! -s "${profileJson}" ]; then
   printf "ERROR: planemo profile not found: %s\n" "${profileJson}" 1>&2
+  setErrorStatus ${reqId}
   exit 255
 fi
 
 export galaxyUrl=$(jq -r '.galaxy_url' "${profileJson}")
 export galaxyApiKey=$(jq -r '.galaxy_user_key' "${profileJson}")
 
-if [ -z "${galaxyUrl}" -o -z "${galaxyApiKey}" ]; then
+if [ -z "${galaxyUrl}" ] || [ -z "${galaxyApiKey}" ]; then
   printf "ERROR: could not read galaxy_url or galaxy_user_key from %s\n" \
     "${profileJson}" 1>&2
+  setErrorStatus ${reqId}
   exit 255
 fi
 
@@ -106,7 +111,7 @@ case "${state}" in
   "cancelled"|"failed")
     printf "ERROR: workflow %s -- invocation %s\n" "${state}" "${invocationId}" 1>&2
     setErrorStatus ${reqId}
-    exit 1
+    exit 255
     ;;
   "new"|"ready")
     printf "# workflow still starting up, will check again later\n" 1>&2
@@ -184,7 +189,7 @@ if [ "${errorCount}" -gt 0 ]; then
     fi
   done
 
-  exit 1
+  exit 255
 fi
 
 printf "# all jobs complete, downloading results\n" 1>&2
@@ -195,8 +200,58 @@ hgsql -N -e \
 # download results via planemo
 ############################################################################
 mkdir -p "result/${DS}"
-${PM} invocation_download "${invocationId}" --profile vgp \
-  --output_directory "result/${DS}"
+### see if this has already happened
+export resultCount=0
+while read -r F; do
+  if [ -s "${F}" ]; then
+     resultCount=$((resultCount+1))
+  fi
+done < <(ls  result/${DS}/*)
+
+if [ "${resultCount}" -lt 6 ]; then
+  ${PM} invocation_download "${invocationId}" --profile vgp \
+    --output_directory "result/${DS}"
+else
+  printf "download previously completed\n" 1>&2
+fi
+### verify it worked
+resultCount=0
+while read -r F; do
+  if [ -s "${F}" ]; then
+     resultCount=$((resultCount+1))
+  fi
+done < <(ls  result/${DS}/*)
+
+if [ "${resultCount}" -lt 6 ]; then
+  printf "ERROR: planemo invocation_download failed\n" 1>&2
+  setErrorStatus ${reqId}
+  exit 255
+fi
+
+############################################################################
+# quickChain - construct the quick.bb files
+# args: target query liftOver sizes fbFile
+############################################################################
+function quickChain() {
+  local target=$1
+  local query=$2
+  local liftOver=$3
+  local sizesFile=$4
+  local fbFile=$5
+  local chainName="${target}.${query}.quick"
+  chainSwap "${liftOver}" stdout | chainToBigChain stdin \
+    ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
+  bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
+    ${target}.${query}.quick.chain.tab ${sizesFile} ${chainName}.bb
+  bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
+    ${target}.${query}.quick.link.tab ${sizesFile} ${chainName}Link.bb
+  rm -f ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
+  local totalBases=$(ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
+  local basesCovered=$(bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
+  local percentCovered=$(echo ${basesCovered} ${totalBases} | awk '{printf "%.3f", 100.0*$1/$2}')
+  printf "%d bases of %d (%s%%) in intersection\n" \
+    "${basesCovered}" "${totalBases}" "${percentCovered}" > ${fbFile}
+}
 
 ############################################################################
 # chainBigBedFb - convert chain to bigBed and compute featureBits
@@ -228,9 +283,12 @@ function chainBigBedFb() {
 ### allChain
 mkdir -p "${buildDir}/axtChain"
 if [ ! -s "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz" ]; then
-  allChainFile=$(ls result/${DS}/allChain__.*.chain)
+  allChainFile=$(ls result/${DS}/allChain__*.chain)
   gzip -c "${allChainFile}" \
     > "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz"
+fi
+if [ -s "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz" ]; then
+  successCount=$((successCount+1))
 fi
 
 ### target allChain -> bigBed + featureBits
@@ -240,14 +298,20 @@ if [ ! -s "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" ]; then
     "${targetDb}.${queryDb}.all.chain.gz" ${tSizes} \
     "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt"
 fi
+if [ -s "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
 cat "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" 1>&2
 
 ### target liftOver chain (over.chain)
 cd "${buildDir}"
 if [ ! -s "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ]; then
-  overChainFile=$(ls result/${DS}/liftOverChain_.*.chain)
+  overChainFile=$(ls result/${DS}/liftOverChain_*.chain)
   gzip -c "${overChainFile}" \
     > "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz"
+fi
+if [ -s "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ]; then
+  successCount=$((successCount+1))
 fi
 
 ### target over.chain -> bigBed + featureBits
@@ -257,7 +321,22 @@ if [ ! -s "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" ]; then
     "${targetDb}.${queryDb}.over.chain.gz" ${tSizes} \
     "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt"
 fi
+if [ -s "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
 cat "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" 1>&2
+
+### target quick.chain -> bigBed + featureBits
+if [ ! -s "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" ]; then
+  quickChain ${targetDb} ${queryDb} \
+     "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ${qSizes} \
+    "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt"
+fi
+if [ -s "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
+cat "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" 1>&2
+
 
 ############################################################################
 # install swap-side chains
@@ -267,9 +346,12 @@ cat "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" 1>&2
 mkdir -p "${swapDir}/axtChain"
 cd "${buildDir}"
 if [ ! -s "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz" ]; then
-  allChainSwapFile=$(ls result/${DS}/allChainSwap_.*.chain)
+  allChainSwapFile=$(ls result/${DS}/allChainSwap_*.chain)
   gzip -c "${allChainSwapFile}" \
     > "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz"
+fi
+if [ -s "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz" ]; then
+  successCount=$((successCount+1))
 fi
 
 ### swap allChain -> bigBed + featureBits
@@ -279,14 +361,21 @@ if [ ! -s "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" ]; then
     "${queryDb}.${targetDb}.all.chain.gz" ${qSizes} \
     "${swapDir}/fb.${queryDb}.chain${Target}Link.txt"
 fi
+if [ -s "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
+
 cat "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" 1>&2
 
 ### swap liftOver chain (over.chain)
 cd "${buildDir}"
 if [ ! -s "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ]; then
-  overChainSwapFile=$(ls result/${DS}/swapLiftOverChain_.*.chain)
+  overChainSwapFile=$(ls result/${DS}/swapLiftOverChain_*.chain)
   gzip -c "${overChainSwapFile}" \
     > "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz"
+fi
+if [ -s "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ]; then
+  successCount=$((successCount+1))
 fi
 
 ### swap over.chain -> bigBed + featureBits
@@ -296,11 +385,33 @@ if [ ! -s "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" ]; then
     "${queryDb}.${targetDb}.over.chain.gz" ${qSizes} \
     "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt"
 fi
+if [ -s  "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
 cat "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" 1>&2
+
+### swap quick.chain -> bigBed + featureBits
+if [ ! -s "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" ]; then
+  quickChain ${queryDb} ${targetDb} \
+     "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ${tSizes} \
+    "${swapDir}/fb.${queryDb}.quick${Target}Link.txt"
+fi
+if [ -s "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" ]; then
+  successCount=$((successCount+1))
+fi
+cat "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" 1>&2
 
 ############################################################################
 # mark complete
 ############################################################################
+### verify all the actual files were created
+cd "${buildDir}"
+if [ "${successCount}" != 10 ]; then
+  printf "ERROR: workflowMonitor.sh did not create 10 result files ?\n" 1>&2
+  setErrorStatus ${reqId}
+  exit 255
+fi
+
 printf "%s\tinvocation ID: %s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
   > successInvocationId.txt
 rm -f pendingInvocationId.txt

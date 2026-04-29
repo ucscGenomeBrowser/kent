@@ -22,18 +22,9 @@ Author: Generated for InSiGHT VCEP
 Date: 2025
 """
 
-import subprocess
+import html
 import os
-
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdout = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdout)
+import subprocess
 
 # ============================================================================
 # Configuration
@@ -102,7 +93,7 @@ AUTOSQL = """table InSiGHTPVS1
 def get_transcript_info(db, accession):
     """Query hgsql to get transcript information from ncbiRefSeq"""
     query = f"SELECT name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonStarts, exonEnds FROM ncbiRefSeq WHERE name='{accession}'"
-    result = bash(f'hgsql {db} -Ne "{query}"')
+    result = subprocess.check_output(["hgsql", db, "-Ne", query], text=True)
 
     if not result.strip():
         raise ValueError(f"Transcript {accession} not found in {db}.ncbiRefSeq")
@@ -244,9 +235,12 @@ def generate_bed_entries(db, transcripts_info):
                 print(f"  WARNING: Skipping invalid segment for {gene} {name}: {seg_start}-{seg_end}")
                 continue
 
-            # HTML-encode special characters for mouseOver (UCSC browser can't handle ≤ ≥)
-            rule_html = rule.replace('≤', '&le;').replace('≥', '&ge;').replace('>', '&gt;').replace('<', '&lt;')
-            mouse_over = f"<b>Name: </b>{name}</br><b>Gene: </b>{gene}</br><b>Rule: </b>{rule_html}</br><b>ACMG Code: </b>{acmg_code}"
+            # HTML-escape; UCSC mouseover doesn't render raw ≤/≥ so map to entities.
+            rule_html = html.escape(rule).replace('≤', '&le;').replace('≥', '&ge;')
+            mouse_over = (f"<b>Name: </b>{html.escape(name)}<br>"
+                          f"<b>Gene: </b>{html.escape(gene)}<br>"
+                          f"<b>Rule: </b>{rule_html}<br>"
+                          f"<b>ACMG Code: </b>{html.escape(acmg_code)}")
             bed_line = f"{chrom}\t{seg_start}\t{seg_end}\t{name}\t0\t.\t{seg_start}\t{seg_end}\t{color}\t{rule}\t{acmg_code}\t{mouse_over}"
             bed_lines.append(bed_line)
 
@@ -281,7 +275,7 @@ def create_track(db, output_dir):
 
     # Sort BED file
     print("Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed
     as_file = os.path.join(output_dir, "InSiGHTPVS1.as")
@@ -290,7 +284,10 @@ def create_track(db, output_dir):
 
     print(f"\nCreating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+3 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+3", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         print(f"  Successfully created: {bb_file}")
     except Exception as e:
         print(f"  ERROR creating bigBed: {e}")

@@ -14,8 +14,15 @@ Options:
 
 import argparse
 import os
+import re
 import subprocess
 import sys
+
+NOTIFY_FROM = 'genome-www@soe.ucsc.edu'
+BCC_BY_TYPE = {
+    'liftOver': 'chain-file-request-group@ucsc.edu',
+    'assembly': 'genark-request-group@ucsc.edu',
+}
 
 
 def parseHgConf(path):
@@ -47,8 +54,38 @@ def parseHgConf(path):
     return conf
 
 
+def unescapeMysql(s):
+    """Reverse mysql -B batch-mode escaping: \\n -> newline,
+    \\t -> tab, \\\\ -> backslash, \\0 -> NUL.  Single pass so
+    \\\\n stays a literal backslash followed by 'n'."""
+    out = []
+    i = 0
+    n = len(s)
+    while i < n:
+        if s[i] == '\\' and i + 1 < n:
+            c = s[i+1]
+            if c == 'n':
+                out.append('\n')
+            elif c == 't':
+                out.append('\t')
+            elif c == '\\':
+                out.append('\\')
+            elif c == '0':
+                out.append('\0')
+            else:
+                out.append(s[i:i+2])
+            i += 2
+        else:
+            out.append(s[i])
+            i += 1
+    return ''.join(out)
+
+
 def hgsqlQuery(db, sql):
-    """Run a SQL query via hgsql and return rows as list of dicts."""
+    """Run a SQL query via hgsql and return rows as list of dicts.
+    hgsql -B emits tabs/newlines/backslashes inside field values as
+    literal \\t / \\n / \\\\ so each row stays on one line undo that
+    on each field before returning."""
     cmd = ['hgsql', db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -57,7 +94,7 @@ def hgsqlQuery(db, sql):
     if not result.stdout.strip():
         return rows
     for line in result.stdout.strip().split('\n'):
-        fields = line.split('\t')
+        fields = [unescapeMysql(f) for f in line.split('\t')]
         rows.append({
             'id':          fields[0],
             'requestType': fields[1],
@@ -80,11 +117,47 @@ def hgsqlUpdate(db, sql):
     return True
 
 
-def sendMail(toAddr, subject, body, fromAddr=None):
+def parseAssemblyComment(comment):
+    """Assembly requests pack fields into the ottoRequest.comment column
+    via hubApi/findGenome.c:apiAssemblyRequest:
+        name: '<name>'[; betterName: '<bn>'][; comment: '<user comment>']
+    The user comment may itself contain newlines and apostrophes, so the
+    inner quote pair is matched greedily up to the trailing closing quote.
+    re.DOTALL lets '.' span newlines.
+    Return (name, betterName, userComment)."""
+    name = ''
+    betterName = ''
+    userComment = ''
+
+    m = re.match(r"name: '([^']*)'(.*)$", comment, re.DOTALL)
+    if not m:
+        return name, betterName, comment
+    name = m.group(1)
+    rest = m.group(2)
+
+    m2 = re.match(r"; betterName: '([^']*)'(.*)$", rest, re.DOTALL)
+    if m2:
+        betterName = m2.group(1)
+        rest = m2.group(2)
+
+    m3 = re.match(r"; comment: '(.*)'\s*$", rest, re.DOTALL)
+    if m3:
+        userComment = m3.group(1)
+    else:
+        userComment = rest.lstrip('; ')
+
+    return name, betterName, userComment
+
+
+def sendMail(toAddr, subject, body, fromAddr=None, bccAddr=None):
     """Send email via /usr/sbin/sendmail.
     If fromAddr is provided it is used as the envelope sender (-f)
-    and the From: header so that bounces return to that address."""
+    and the From: header so that bounces return to that address.
+    If bccAddr is provided, sendmail -t reads it from the header,
+    delivers a copy, and strips the Bcc: line before transmission."""
     headers = f"To: {toAddr}\nSubject: {subject}"
+    if bccAddr:
+        headers = f"Bcc: {bccAddr}\n{headers}"
     if fromAddr:
         headers = (f"From: {fromAddr}\n"
                    f"Reply-To: {fromAddr}\n"
@@ -118,10 +191,6 @@ def main():
 
     table = conf.get('ottoTable', 'ottoRequest')
 
-    notifyEmail = conf.get('chainFileRequestEmail')
-    if not notifyEmail:
-        sys.exit("Error: chainFileRequestEmail not defined in config")
-
     # find pending requests
     sql = (f"SELECT id, requestType, fromDb, toDb, email, comment, "
            f"requestTime FROM {table} WHERE status = 0")
@@ -131,53 +200,62 @@ def main():
         return  # nothing to do -- silent for cron
 
     for req in pending:
-        subject = f"ottoRequest #{req['id']}: {req['requestType']} pending"
-        body = (
-            f"##################################################\n"
-            f"Pending {req['requestType']} request #{req['id']}\n"
-            f"\n"
-            f"  From:    {req['fromDb']}\n"
-            f"  To:      {req['toDb']}\n"
-            f"  Email:   {req['email']}\n"
-            f"  Comment: {req['comment']}\n"
-            f"  Time:    {req['requestTime']}\n"
-            f"##################################################\n"
-            f"testing ottoRequest watch cron job\n"
-            f"##################################################\n"
-        )
-        if sendMail(notifyEmail, subject, body, fromAddr=notifyEmail):
-#           print(f"Notified {notifyEmail} about request #{req['id']}")
+        reqType = req['requestType']
+        bccAddr = BCC_BY_TYPE.get(reqType)
+        if not bccAddr:
+            print(f"Warning: unknown requestType '{reqType}' for"
+                  f" request #{req['id']}, skipping",
+                  file=sys.stderr)
+            continue
+
+        userEmail = req.get('email', '')
+        if not userEmail:
+            print(f"Warning: no user email for request #{req['id']},"
+                  f" skipping", file=sys.stderr)
+            continue
+
+        subject = (f"UCSC Genome Browser: your {reqType}"
+                   f" request has been received")
+        if reqType == 'assembly':
+            name, betterName, userComment = parseAssemblyComment(req['comment'])
+            body = (
+                f"Your assembly request has been received and is being\n"
+                f"processed.\n"
+                f"\n"
+                f"name: '{name}'\n"
+                f"email: '{userEmail}'\n"
+                f"asmId: '{req['fromDb']}'\n"
+                f"betterName: '{betterName}'\n"
+                f"comment: '{userComment.rstrip()}'\n"
+                f"date: '{req['requestTime']}'\n"
+                f"\n"
+                f"Will advise when this assembly is available in the genome browser.\n"
+                f"\n"
+                f"-- UCSC Genome Browser\n"
+            )
+        else:
+            body = (
+                f"Your alignment request has been received and is being\n"
+                f"processed.\n"
+                f"\n"
+                f"Request details:\n"
+                f"  From:      {req['fromDb']}\n"
+                f"  To:        {req['toDb']}\n"
+                f"  Comment:   {req['comment'].rstrip()}\n"
+                f"  Submitted: {req['requestTime']}\n"
+                f"\n"
+                f"Will advise when this alignment is available in the genome browser.\n"
+                f"\n"
+                f"-- UCSC Genome Browser\n"
+            )
+        if sendMail(userEmail, subject, body,
+                    fromAddr=NOTIFY_FROM, bccAddr=bccAddr):
             hgsqlUpdate(dbName,
                 f"UPDATE {table} SET status = 1"
                 f" WHERE id = {req['id']}")
         else:
-            print(f"Failed to notify about request #{req['id']}",
+            print(f"Failed to send notification for request #{req['id']}",
                   file=sys.stderr)
-
-        # send acknowledgment to the requesting user
-        userEmail = req.get('email', '')
-        if userEmail:
-            userSubject = (f"UCSC Genome Browser: your {req['requestType']}"
-                           f" request has been received")
-            userBody = (
-                f"Your request for chain/liftOver files has been received\n"
-                f"and is being processed.\n"
-                f"\n"
-                f"Request details:\n"
-                f"  Type:      {req['requestType']}\n"
-                f"  From:      {req['fromDb']}\n"
-                f"  To:        {req['toDb']}\n"
-                f"  Submitted: {req['requestTime']}\n"
-                f"\n"
-                f"You will receive another email when your files are ready.\n"
-                f"\n"
-                f"- UCSC Genome Browser\n"
-            )
-            if not sendMail(userEmail, userSubject, userBody,
-                           fromAddr=notifyEmail):
-                print(f"Warning: failed to send acknowledgment to"
-                      f" {userEmail} for request #{req['id']}",
-                      file=sys.stderr)
 
 
 if __name__ == '__main__':

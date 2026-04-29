@@ -8876,8 +8876,12 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='Also known as: %s'>"
-       "<a>&#9432; Aliases</a></span>", encoded);
+printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+       "Alternative sequence names can be used in the position box, custom tracks, "
+       "track hubs, bigBed, bigWig, and similar files. "
+       "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
+       "for more information'>"
+       "<a>&#9432;</a></span>", encoded);
 freeMem(encoded);
 dyStringFree(&dy);
 }
@@ -9468,9 +9472,11 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
-    // right-click to change viz 
+    // right-click to change viz
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
+    if (measureTiming)
+        printTrackTiming();
     return;  // bail out b/c we are done
     }
 
@@ -9651,6 +9657,9 @@ if (!hideControls)
             hPrintf(" ");
             }
 
+        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
+            printAliases(chromName, virtChromName);
+
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
 	else
@@ -9678,8 +9687,6 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
-        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
-            printAliases(chromName, virtChromName);
 
         printPatchNote();
 

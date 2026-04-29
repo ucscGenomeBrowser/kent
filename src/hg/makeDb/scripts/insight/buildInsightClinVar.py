@@ -30,6 +30,7 @@ Date: 2026
 """
 
 import argparse
+import html
 import os
 import subprocess
 import sys
@@ -108,24 +109,6 @@ AUTOSQL = """table insightClinVar
 def log(msg):
     """Print log message to stderr"""
     print(msg, file=sys.stderr)
-
-
-def bash(cmd):
-    """Run a bash command and return output"""
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError(f"Command failed: {cmd}\n{result.stderr}")
-    return result.stdout
-
-
-def escape_html(text):
-    """Escape special characters for HTML"""
-    if not text:
-        return ""
-    return (str(text).replace('&', '&amp;')
-                     .replace('<', '&lt;')
-                     .replace('>', '&gt;')
-                     .replace('"', '&quot;'))
 
 
 def fetch_url(url, max_retries=3):
@@ -329,7 +312,9 @@ def liftover_coords(coords, chain_file):
     unmapped_bed = input_bed.replace('.bed', '.unmapped.bed')
 
     try:
-        bash(f"liftOver {input_bed} {chain_file} {output_bed} {unmapped_bed} 2>/dev/null")
+        subprocess.run(
+            ["liftOver", input_bed, chain_file, output_bed, unmapped_bed],
+            check=True, stderr=subprocess.DEVNULL)
     except Exception:
         for f in [input_bed, output_bed, unmapped_bed]:
             if os.path.exists(f):
@@ -420,13 +405,13 @@ def create_bed_entries(variants, assembly):
         # Build mouseover HTML
         clinvar_url = f"https://www.ncbi.nlm.nih.gov/clinvar/variation/{v['var_id']}/"
         mouse_over = (
-            f"<b>Variant:</b> {escape_html(v['name'])}<br>"
+            f"<b>Variant:</b> {html.escape(v['name'])}<br>"
             f"<b>ClinVar ID:</b> <a href=\"{clinvar_url}\" target=\"_blank\">{v['var_id']}</a><br>"
-            f"<b>Classification:</b> {escape_html(v['classification'])}<br>"
-            f"<b>Date evaluated:</b> {escape_html(v['date_evaluated'])}"
+            f"<b>Classification:</b> {html.escape(v['classification'])}<br>"
+            f"<b>Date evaluated:</b> {html.escape(v['date_evaluated'])}"
         )
         if v['comment']:
-            mouse_over += f"<br><b>Comment:</b> {escape_html(v['comment'])}"
+            mouse_over += f"<br><b>Comment:</b> {html.escape(v['comment'])}"
 
         # Truncate name if too long
         name = v['name'] if len(v['name']) <= 200 else v['name'][:197] + "..."
@@ -487,7 +472,7 @@ def create_track(variants, assembly, output_dir):
 
     # Sort BED file
     log(f"  Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed
     as_file = os.path.join(output_dir, "insightClinVar.as")
@@ -496,7 +481,10 @@ def create_track(variants, assembly, output_dir):
 
     log(f"  Creating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+7 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+7", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         log(f"  Successfully created: {bb_file}")
     except Exception as e:
         log(f"  ERROR creating bigBed: {e}")
