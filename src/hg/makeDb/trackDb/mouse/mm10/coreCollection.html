@@ -75,7 +75,7 @@ Z-scores in a given biosample are considered inactive and labeled "Low-DNase."
 <p>
 The Core Collection includes only the four core assays standardized across all 18 biosamples:
 DNase, H3K4me3, H3K27ac, and CTCF. ATAC-seq signal tracks for select biosamples are available
-in the <a href="../cgi-bin/hgTrackUi?db=mm10&g=encode4Reg">ENCODE4 Regulation</a> track.</p>
+in the <b>ENCODE4 Regulation</b> track.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -96,10 +96,10 @@ server. Individual
 regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
 or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tools can also be used to obtain features confined to a given range, e.g.,
 <br><br>
-<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/mm10/encode4/ccre/coreCollection/ENCFF325FZS.bw stdout</tt>
+<tt>bigWigToWig -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/mm10/encode4/ccre/coreCollection/ENCFF325FZS.bw stdout</tt>
 <br><br>
 or
 <br><br>
