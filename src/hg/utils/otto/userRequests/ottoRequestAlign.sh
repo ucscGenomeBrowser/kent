@@ -271,7 +271,9 @@ hgsql -N -e \
 export fromCladeArg=$(cladeMap "${fromClade}")
 export toCladeArg=$(cladeMap "${toClade}")
 
-export cmd="kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
+export cmd="${HOME}/kent/src/hg/utils/automation/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
-printf "####### kegAlignLastz.sh script would be:\n" 1>&2
-printf "# %s\n" "${cmd}" 1>&2
+printf "# launching: %s\n" "${cmd}" 1>&2
+nohup ${cmd} > "${buildDir}/kegAlign.log" 2>&1 < /dev/null &
+printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
+exit 0
