@@ -1,3 +1,18 @@
+The 'status' field in the ottoRequest table maintains state:
+
+  0 == request has been received by API (set by API)
+  1 == request has been acknowledged by ottoRequest.py (set by ottoRequest.py)
+  2 == galaxy jobs have been started (set by ottoRequestAlign.sh)
+  3 == galaxy jobs have completed (set by workflowMonitor.sh)
+  4 == download from galaxy has taken place and track files have been created
+         (set by ottoRequestWatch.sh)
+  5 == symlinks for tracks are in place, ready to push files
+         (set by ottoRequestWatch.sh)
+  6 == push of files is complete (set by ottoRequestPush.sh)
+  7 == error condition - some error has taken place, set by any script
+  8 == final email notification has been sent, galaxy workflow
+       has been deleted, process is complete (set by ottoRequestWatch.sh)
+
 Method of operation:
 
 ############################################################################
@@ -24,24 +39,18 @@ For example:
     buildDir: 
 completeTime: NULL
 
-The 'status' field is going to keep track:
-   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
-   5 finish notification, 6 complete, 7 problems
-and will affect other operations.
-
 ############################################################################
 ###  2.
 ottoRequest.py - otto user cron job running each minute to watch the
-               - ottoRequest table in hgcentral - when new entries are
+               - ottoRequest table in hgcentral.  Watches for two types of
+               - entries: liftRequest and assembly - when new entries are
                - detected (status==0) it marks the table entry as
                - pending (status=1) and sends
                - out notification emails, one to the requesting user and
-               - the other to UCSC via the specification in hg.conf:
-  chainFileRequestEmail=chain-file-request-group@ucsc.edu
-  apiFromEmail=genome-www@soe.ucsc.edu
-               - TBD: verify bounces get back to that apiFromEmail
-               -      this email bounce operation might work much better here
-               -      on hgwdev and it isn't from the 'apache' user
+               - Bcc to either chain-file-request-group@ucsc.edu for liftRequest
+               - or Bcc genark-request-group@ucsc.edu for assembly requests.
+               - The From and Return-To addresses are genome-www@soe.ucsc.edu
+               - and I believe that will receive bounces from bad user addresses
 
 ############################################################################
 ###  3.
@@ -67,6 +76,7 @@ ottoRequestAlign.sh - given an 'id' number in the ottoRequest table, this
                           - primate - mammal - other
                     - can set status to:
                     - 2 == in progress
+                    - 7 == problems
 
 ############################################################################
 ###  5.
@@ -74,6 +84,8 @@ kegAlignLastz.sh - script to start the galaxy workflow, typical call:
 
     kegAlignLastz.sh GCF_004115215.2_mOrnAna1.pri.v4 GCF_000260355.1_ConCri1.0 mammal mammal
 
+    This script works in two directories, the target lastz work directory
+    and the query swap directory.
 
 ############################################################################
 ###  6.
@@ -84,4 +96,8 @@ workflowMonitor.sh - after the galaxy WF has started, this script can
                    - can set status to:
                    - 7 == problems
                    - 3 == galaxy finished
-                   - 4 == tracks complete
+
+############################################################################
+###  7.
+ottoRequestPush.sh - cron job watching status == 5 - will run the pushing
+   procedure for the relevant assemblies.  When complete will set status = 6
