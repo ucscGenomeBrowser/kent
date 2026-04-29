@@ -13,19 +13,10 @@ Author: Generated for InSiGHT VCEP
 Date: 2025
 """
 
-import subprocess
+import html
 import os
 import re
-
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdout = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdout)
+import subprocess
 
 # ============================================================================
 # Configuration
@@ -106,7 +97,7 @@ AUTOSQL = """table InSiGHTHCIPriors
 def get_transcript_info(db, accession):
     """Query hgsql to get transcript information from ncbiRefSeq"""
     query = f"SELECT name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonStarts, exonEnds FROM ncbiRefSeq WHERE name='{accession}'"
-    result = bash(f'hgsql {db} -Ne "{query}"')
+    result = subprocess.check_output(["hgsql", db, "-Ne", query], text=True)
 
     if not result.strip():
         raise ValueError(f"Transcript {accession} not found in {db}.ncbiRefSeq")
@@ -278,8 +269,13 @@ def process_gene(gene, gene_info, db, stats):
         rule = RULES[acmg_code]
         rule_short = RULES_SHORT[acmg_code]
 
-        # Build mouseOver (HTML)
-        mouse_over = f"<b>HGVSc:</b> {full_hgvsc}</br><b>HGVSp:</b> {hgvsp}</br><b>ACMG code:</b> {acmg_code}</br><b>MAPP/PP2 Prior:</b> {prior}</br><b>Rule:</b> {rule_short}"
+        # Build mouseOver (HTML). HGVSc strings like "c.123A>G" contain a literal
+        # ">", so every interpolation is HTML-escaped.
+        mouse_over = (f"<b>HGVSc:</b> {html.escape(full_hgvsc)}<br>"
+                      f"<b>HGVSp:</b> {html.escape(hgvsp)}<br>"
+                      f"<b>ACMG code:</b> {html.escape(acmg_code)}<br>"
+                      f"<b>MAPP/PP2 Prior:</b> {html.escape(prior)}<br>"
+                      f"<b>Rule:</b> {html.escape(rule_short)}")
 
         # Build BED line
         bed_line = f"{chrom}\t{genomic_start}\t{genomic_end}\t{full_hgvsc}\t0\t.\t{genomic_start}\t{genomic_end}\t{color}\t{hgvsp}\t{prior}\t{acmg_code}\t{rule}\t{mouse_over}"
@@ -316,7 +312,7 @@ def create_track(db):
 
     # Sort BED file
     print("Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed
     as_file = os.path.join(OUTPUT_DIR, "InSiGHTHCIPriors.as")
@@ -325,7 +321,10 @@ def create_track(db):
 
     print(f"Creating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+5 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+5", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         print(f"  Successfully created: {bb_file}")
     except Exception as e:
         print(f"  ERROR creating bigBed: {e}")

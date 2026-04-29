@@ -25,12 +25,13 @@ Author: Generated for InSiGHT VCEP
 Date: 2025
 """
 
-import subprocess
+import html
 import os
 import re
+import subprocess
 import sys
-import zipfile
 import xml.etree.ElementTree as ET
+import zipfile
 
 try:
     import openpyxl
@@ -102,20 +103,10 @@ AUTOSQL = """table insightFunctionalAssays
 # Utility functions
 # ============================================================================
 
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdout = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdout)
-
 def get_transcript_info(db, accession):
     """Query hgsql to get transcript information from ncbiRefSeq"""
     query = f"SELECT name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonStarts, exonEnds FROM ncbiRefSeq WHERE name='{accession}'"
-    result = bash(f'hgsql {db} -Ne "{query}"')
+    result = subprocess.check_output(["hgsql", db, "-Ne", query], text=True)
 
     if not result.strip():
         raise ValueError(f"Transcript {accession} not found in {db}.ncbiRefSeq")
@@ -311,9 +302,9 @@ def build_mouseover(name, protein, classification, clinvar_id, score_val, score_
     """Build HTML mouseover text for a variant"""
     paper_info = PAPERS[paper_key]
     parts = []
-    parts.append(f"<b>HGVSc/HGVSp:</b> {name}")
-    parts.append(f"<b>Protein:</b> {protein}")
-    parts.append(f"<b>Classification:</b> {classification}")
+    parts.append(f"<b>HGVSc/HGVSp:</b> {html.escape(name)}")
+    parts.append(f"<b>Protein:</b> {html.escape(protein)}")
+    parts.append(f"<b>Classification:</b> {html.escape(classification)}")
 
     if clinvar_id and clinvar_id != 'NA' and clinvar_id != '':
         parts.append(f'<b>ClinVar ID:</b> <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{clinvar_id}/" target="_blank">{clinvar_id}</a>')
@@ -323,7 +314,7 @@ def build_mouseover(name, protein, classification, clinvar_id, score_val, score_
     parts.append(f"<b>{score_label}:</b> {score_val}")
     parts.append(f'<b>Paper:</b> <a href="https://pubmed.ncbi.nlm.nih.gov/{paper_info["pmid"]}/" target="_blank">{paper_info["ref"]}</a>')
 
-    return "</br>".join(parts)
+    return "<br>".join(parts)
 
 # ============================================================================
 # BED entry builder
@@ -887,7 +878,7 @@ def create_track(db):
 
     # Sort BED file
     print("  Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed
     as_file = os.path.join(OUTPUT_DIR, "insightFunctionalAssays.as")
@@ -897,7 +888,10 @@ def create_track(db):
 
     print(f"  Creating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+7 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+7", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         print(f"    Successfully created: {bb_file}")
     except Exception as e:
         print(f"    ERROR creating bigBed: {e}")

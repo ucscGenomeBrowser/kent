@@ -13,22 +13,13 @@ Author: Generated for InSiGHT VCEP
 Date: 2025
 """
 
-import subprocess
-import os
-import struct
 import bisect
 import gzip
+import html
 import json
-
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdout = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdout)
+import os
+import struct
+import subprocess
 
 # ============================================================================
 # Configuration
@@ -185,7 +176,7 @@ class GziReader:
 def get_transcript_info(accession):
     """Query hgsql to get transcript information from hg38.ncbiRefSeq"""
     query = f"SELECT name, chrom, strand, txStart, txEnd FROM ncbiRefSeq WHERE name='{accession}'"
-    result = bash(f'hgsql hg38 -Ne "{query}"')
+    result = subprocess.check_output(["hgsql", "hg38", "-Ne", query], text=True)
 
     if not result.strip():
         raise ValueError(f"Transcript {accession} not found in hg38.ncbiRefSeq")
@@ -207,7 +198,13 @@ def extract_variants(gene, gene_info):
     end = gene_info['txEnd']
 
     output_file = os.path.join(OUTPUT_DIR, f"gnomad_{gene}_raw.bed")
-    bash(f"bigBedToBed {GNOMAD_BB} -chrom={chrom} -start={start} -end={end} {output_file}")
+    subprocess.run(
+        ["bigBedToBed", GNOMAD_BB,
+         "-chrom=" + chrom,
+         "-start=" + str(start),
+         "-end=" + str(end),
+         output_file],
+        check=True)
 
     variants = []
     with open(output_file, 'r') as f:
@@ -300,10 +297,12 @@ def process_gene(gene, transcript, tx_info, gzi_reader, stats):
         color = COLORS[acmg_code]
         rule = RULES[gene][acmg_code]
 
-        # HTML-encode special characters for mouseOver
-        rule_html = rule.replace('≥', '&ge;').replace('≤', '&le;').replace('>', '&gt;').replace('<', '&lt;')
+        # HTML-escape; UCSC mouseover doesn't render raw ≤/≥ so map to entities.
+        rule_html = html.escape(rule).replace('≥', '&ge;').replace('≤', '&le;')
 
-        mouse_over = f"<b>HGVSc:</b> {hgvsc}</br><b>ACMG code:</b> {acmg_code}</br><b>Rule:</b> {rule_html}"
+        mouse_over = (f"<b>HGVSc:</b> {html.escape(hgvsc)}<br>"
+                      f"<b>ACMG code:</b> {html.escape(acmg_code)}<br>"
+                      f"<b>Rule:</b> {rule_html}")
 
         bed_line = f"{chrom}\t{chromStart}\t{chromEnd}\t{hgvsc}\t0\t.\t{chromStart}\t{chromEnd}\t{color}\t{acmg_code}\t{rule}\t{mouse_over}"
         bed_entries.append(bed_line)
@@ -364,7 +363,7 @@ def main():
 
     # Sort BED file
     print("Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed for hg38
     bb_file = os.path.join(OUTPUT_DIR, "InSiGHTAFHg38.bb")
@@ -372,7 +371,10 @@ def main():
 
     print(f"\nCreating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+3 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+3", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         print(f"  Successfully created: {bb_file}")
     except Exception as e:
         print(f"  ERROR creating bigBed: {e}")
@@ -405,8 +407,12 @@ def main():
                 fout.write(f"{fields[0]}\t{fields[1]}\t{fields[2]}\t{fields[3]}\n")
 
         # Run liftOver on BED4
-        bash(f"liftOver {bed4_file} {chain_file} {lifted_bed4} {unmapped_file}")
-        unmapped_count = int(bash(f"wc -l < {unmapped_file}").strip()) // 2
+        subprocess.run(
+            ["liftOver", bed4_file, chain_file, lifted_bed4, unmapped_file],
+            check=True)
+        # liftOver writes 2 lines per unmapped record (a # comment then the BED row).
+        with open(unmapped_file) as fh:
+            unmapped_count = sum(1 for _ in fh) // 2
         print(f"  Lifted over, {unmapped_count} variants could not be mapped")
 
         # Rejoin lifted coordinates with extra fields
@@ -422,12 +428,15 @@ def main():
                     fout.write(f"{chrom}\t{start}\t{end}\t{name}\t" + "\t".join(extra) + "\n")
 
         # Sort hg19 BED
-        bash(f"sort -k1,1 -k2,2n {bed_file_hg19} -o {bed_file_hg19}")
+        subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file_hg19, "-o", bed_file_hg19], check=True)
 
         # Create bigBed for hg19
         chrom_sizes_hg19 = "/cluster/data/hg19/chrom.sizes"
 
-        bash(f"bedToBigBed -as={as_file} -type=bed9+3 -tab {bed_file_hg19} {chrom_sizes_hg19} {bb_file_hg19}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+3", "-tab",
+             bed_file_hg19, chrom_sizes_hg19, bb_file_hg19],
+            check=True)
         print(f"  Successfully created: {bb_file_hg19}")
 
         # Cleanup temp files
