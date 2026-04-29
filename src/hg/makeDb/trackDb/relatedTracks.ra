@@ -145,3 +145,7 @@ hg19 clinGenComp cnvDevDelay Copy Number Variation Morbidity Map of Developmenta
 hg19 cnvDevDelay clinGenComp ClinGen expert-curated dosage sensitivity and gene-disease validity assertions for genes within CNV regions
 hg19 dosageSensitivity cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions providing phenotypic context for dosage-sensitive genes
 hg19 cnvDevDelay dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022 for genes within these CNVs
+
+# danRer11 BAC clone tracks:
+danRer11 bacEndPairsLift choriCloneEnds CHORI zebrafish BAC clone end placements (CH73, CH211, CH1073) from NCBI Clone DB on GRCz11
+danRer11 choriCloneEnds bacEndPairsLift Zebrafish BAC end pairs lifted from danRer4 (older UCSC BLAT placements)
