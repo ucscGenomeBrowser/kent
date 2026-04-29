@@ -87,7 +87,7 @@ MAILTO=otto-group@ucsc.edu
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
 # InSiGHT VCEP ClinVar curated variants weekly update
-08 03 * * 2 umask 002 /hive/data/outside/otto/insight/doUpdate.sh
+08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
 
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week
