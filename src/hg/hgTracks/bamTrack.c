@@ -950,7 +950,7 @@ char *fileName = NULL;
 if (tg->parallelLoading)
     {
     /* do not use mysql during parallel-fetch load */
-    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+    fileName = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataUrl"));
     }
 else
     {
