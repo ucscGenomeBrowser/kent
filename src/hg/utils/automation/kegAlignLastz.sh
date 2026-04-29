@@ -622,89 +622,28 @@ function chainBigBedFb() {
 cd \${buildDir}
 mkdir -p log
 export DS=\`date \"+%%F_%%T_%%s\"\`
-if [ -s successInvocationId.txt ]; then
-  DS=\`cut -f1 successInvocationId.txt\`
+if [ -s pendingInvocationId.txt ]; then
+  DS=\`cut -f1 pendingInvocationId.txt\`
 fi
 export logDir=\"\${buildDir}/log\"
 export logFile=\"\${logDir}/\${DS}.log\"
-### only try to run this if there is no indication it was successful
-if [ ! -s \"successInvocationId.txt\" ]; then
-  time (\${PM} run \\
+### only try to submit if the workflow has not already been submitted
+if [ ! -s \"pendingInvocationId.txt\" ]; then
+  \${PM} run \\
     ~/kent/src/hg/utils/automation/kegAlign.json.ga \\
        \"\${targetDb}.\${queryDb}.yaml\" --profile vgp \\
           --history_name \"\${targetDb}.\${queryDb}.kegAlign\" \\
-             --test_output_json \"\${logDir}/runOutput.\${DS}.json\") >> \"\${logFile}\" 2>&1
+             --no_wait \\
+             --test_output_json \"\${logDir}/runOutput.\${DS}.json\" \\
+                >> \"\${logFile}\" 2>&1
 
-  invocationId=\`jq '.tests[0].data.invocation_details.details.invocation_id' \"\${logDir}/runOutput.\${DS}.json\" | tr -d '\"'\`
+  invocationId=\`jq -r '.tests[0].data.invocation_details.details.invocation_id' \"\${logDir}/runOutput.\${DS}.json\"\`
   printf \"invocation ID: %%s\\n\" \"\${invocationId}\" 1>&2
-  mkdir -p result/\${DS}
-  \${PM} invocation_download \"\${invocationId}\" --profile vgp \\
-    --output_directory result/\${DS}
-  # record the invocation ID and associated log file name
-  printf \"%%s\\tinvocation ID: %%s\\t%%s\\n\" \"\${DS}\" \"\${invocationId}\" \"\${logDir}/runOutput.\${DS}.json\" > successInvocationId.txt
-fi
-### use that runOutput log file to get the history ID for deletion
-
-### install allChain into buildDir/axtChain/
-mkdir -p \${buildDir}/axtChain
-if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz\" ]; then
-  allChainFile=\`ls result/\${DS}/allChain__.*.chain\`
-  gzip -c \"\${allChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.all.chain.gz
+  # record the invocation ID and associated log file for monitoring cron
+  printf \"%%s\\t%%s\\t%%s\\n\" \"\${DS}\" \"\${invocationId}\" \"\${logDir}/runOutput.\${DS}.json\" > pendingInvocationId.txt
 fi
 
-### convert target allChain to bigBed and measure featureBits
-cd \${buildDir}/axtChain
-if [ ! -s \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" ]; then
-  allChain=\"\${targetDb}.\${queryDb}.all.chain.gz\"
-  chainBigBedFb \${targetDb} chain\${QueryDb} \${allChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt
-fi
-cat \"\${buildDir}/fb.\${targetDb}.chain\${QueryDb}Link.txt\" 1>&2
-
-### install netChainSubset (over.chain) for target
-cd \${buildDir}
-if [ ! -s \"\${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz\" ]; then
-  overChainFile=\`ls result/\${DS}/liftOverChain_.*.chain\`
-  gzip -c \"\${overChainFile}\" > \${buildDir}/axtChain/\${targetDb}.\${queryDb}.over.chain.gz
-fi
-
-### convert target over.chain to bigBed and measure featureBits
-cd \${buildDir}/axtChain
-if [ ! -s \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" ]; then
-  overChain=\"\${targetDb}.\${queryDb}.over.chain.gz\"
-  chainBigBedFb \${targetDb} chainLiftOver\${QueryDb} \${overChain} \${tSizes} \${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt
-fi
-cat \"\${buildDir}/fb.\${targetDb}.chainLiftOver\${QueryDb}Link.txt\" 1>&2
-
-### install allChainSwap into swapDir/axtChain/
-mkdir -p \${swapDir}/axtChain
-cd \${buildDir}
-if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz\" ]; then
-  allChainSwapFile=\`ls result/\${DS}/allChainSwap_.*.chain\`
-  gzip -c \"\${allChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.all.chain.gz
-fi
-
-### convert swap allChain to bigBed and measure featureBits
-cd \${swapDir}/axtChain
-if [ ! -s \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" ]; then
-  allChain=\"\${queryDb}.\${targetDb}.all.chain.gz\"
-  chainBigBedFb \${queryDb} chain\${TargetDb} \${allChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt
-fi
-cat \"\${swapDir}/fb.\${queryDb}.chain\${Target}Link.txt\" 1>&2
-
-### install netChainSubset (over.chain) for swap
-cd \${buildDir}
-if [ ! -s \"\${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz\" ]; then
-  overChainSwapFile=\`ls result/\${DS}/swapLiftOverChain_.*.chain\`
-  gzip -c \"\${overChainSwapFile}\" > \${swapDir}/axtChain/\${queryDb}.\${targetDb}.over.chain.gz
-fi
-
-### convert swap over.chain to bigBed and measure featureBits
-cd \${swapDir}/axtChain
-if [ ! -s \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" ]; then
-  overChain=\"\${queryDb}.\${targetDb}.over.chain.gz\"
-  chainBigBedFb \${queryDb} chainLiftOver\${TargetDb} \${overChain} \${qSizes} \${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt
-fi
-cat \"\${swapDir}/fb.\${queryDb}.chainLiftOver\${Target}Link.txt\" 1>&2
+printf \"### workflow submitted, invocation ID in: %%s/pendingInvocationId.txt\\n\" \"\${buildDir}\" 1>&2
 
 " > ${buildDir}/kegAlign.sh
 chmod +x ${buildDir}/kegAlign.sh
@@ -712,7 +651,7 @@ chmod +x ${buildDir}/kegAlign.sh
 ### run the primary alignment, galaxy kegAlign style
 printf "running: time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1\n" 1>&2
 
-# time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1
+time (${buildDir}/kegAlign.sh) >> ${buildDir}/keg.log 2>&1
 
 ### run the primary alignment, UCSC lastz style
 printf "running: time (${buildDir}/lastzRun.sh) >> ${buildDir}/lastzRun.log 2>&1\n" 1>&2
