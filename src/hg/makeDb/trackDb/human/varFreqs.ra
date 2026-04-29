@@ -23,7 +23,7 @@ superTrack on
         filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,.|Intergenic
         filterLabel.consequence Consequence
         # Source database filter
-        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Length filters
@@ -87,6 +87,8 @@ superTrack on
         filterLabel.GA4KAF GA4K PacBio LR AF
         filterByRange.CoLoRSdbAF on
         filterLabel.CoLoRSdbAF CoLoRSdb PacBio LR AF
+        filterByRange.SVatalogAF on
+        filterLabel.SVatalogAF SVatalog 101 10XG SR AF
         # Per-database AC filters
         filterByRange.AllOfUsAC on
         filterLabel.AllOfUsAC AllOfUs AC
@@ -134,6 +136,8 @@ superTrack on
         filterLabel.GA4KAC GA4K PacBio LR AC
         filterByRange.CoLoRSdbAC on
         filterLabel.CoLoRSdbAC CoLoRSdb PacBio LR AC
+        filterByRange.SVatalogAC on
+        filterLabel.SVatalogAC SVatalog 101 10XG SR AC
         # Population-specific AF filters
         # AllOfUs populations
         filterByRange.AllOfUsAF_AFR on
@@ -498,4 +502,15 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
         visibility pack
         priority 10
+
+        track tishkoff180
+        shortLabel Indigenous Africans 180 WGS
+        longLabel Variant Frequencies: 180 WGS from 12 Indigenous African Populations (Fan/Tishkoff 2023, lifted from hg19)
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/tishkoff/tishkoff180.vcf.gz
+        visibility pack
+        dataVersion Cell 2023 (hg19 lift)
+        tableBrowser off
+        priority 7.5
 

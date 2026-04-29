@@ -310,3 +310,67 @@ rm -f svatalog.vcf
 # 8,814,835 variants -> 172 MB bgzipped + 1.6 MB tabix index.
 # Symlinks placed under /gbdb/hg38/varFreqs/svatalog/ for the svatalogSnv
 # stanza in trackDb/human/varFreqs.ra.
+
+# varFreqsAll rebuild, 2026-04-22 Claude max
+# Regenerate the All Databases Combined track to include SVatalog. Source
+# count rises from 23 to 24 databases; final bigBed is 35.3 GB with
+# 1,166,005,346 records and 115 fields (up from 113). Pipeline run in
+# /hive/data/genomes/hg38/bed/varFreqs/all/:
+# 1. Added /gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz to files.txt and
+#    the SVatalog row to ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv.
+# 2. Cleared stale merged.vcf.gz / merged.annotated.vcf.gz to force re-merge.
+# 3. Ran ./mergeAndAnnotate.sh (~60 min: pre-extract skip+svatalog, ~20 min
+#    merge, ~35 min csq).
+# 4. Ran python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 ~90 min re-extract, Phase 2 chrom BED build ~30 min,
+#    concat+sort ~45 min).
+# 5. bedToBigBed on 260 GB sorted BED (~2h 15m) -> 35.3 GB varFreqsAll.bb.
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.SVatalogAF / filterByRange.SVatalogAC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink (pointing at
+# /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb) was preserved
+# and now resolves to the new 35.3 GB build.
+
+##########
+# 2026-04-29 Claude max
+# Indigenous African 180 WGS allele frequencies (Tishkoff lab,
+# Fan et al. 2023 Cell, PMID 36868214). 180 individuals (15 per
+# population) from 12 indigenous African populations sequenced at >30x
+# on Illumina HiSeq X Ten. Sites-only SNP VCF with aggregate AC/AF/AN
+# (no per-population frequencies) was supplied directly by Matthew
+# Hansen (mhansen@upenn.edu, Tishkoff lab) via Box. Original calls on
+# hs37d5 (GRCh37) so we lift to hg38.
+cd /hive/data/genomes/hg38/bed/varFreqs/tishkoff/
+# Source: 180wgs.SNPs.sites.AF.vcf.gz (~316 MB, 33,618,897 SNPs,
+# autosomes only, bare chromosome names "1"-"22").
+# Step 1: rename bare chromosome names to chr-prefixed UCSC names.
+bcftools annotate --rename-chrs chrRename.txt -Oz \
+    -o tishkoff.hg19.chr.vcf.gz 180wgs.SNPs.sites.AF.vcf.gz
+# Step 2: lift to hg38 with CrossMap (~5 min). hg38.fa is the same
+# /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa used elsewhere.
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    tishkoff.hg19.chr.vcf.gz \
+    /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa \
+    tishkoff.hg38.unsorted.vcf
+# CrossMap reports: 33,618,897 input -> 9,066 unmapped, 33,609,831 lifted.
+# Step 3: drop variants that landed on alt/random/Un/fix contigs and
+# fix the contig= header lines (CrossMap dropped the chr prefix from
+# the contig IDs even though data lines have it).
+awk 'BEGIN{OFS="\t"} /^#/ {next} $1 ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/ {print}' \
+    tishkoff.hg38.unsorted.vcf > tishkoff.hg38.canon.body
+awk 'BEGIN{OFS="\t"} /^##contig=/ {sub(/<ID=/,"<ID=chr"); print; next} /^#/ {print}' \
+    tishkoff.hg38.unsorted.vcf > tishkoff.hg38.canon.header
+cat tishkoff.hg38.canon.header tishkoff.hg38.canon.body > tishkoff.hg38.canon.fixed.vcf
+# 33,600,472 variants survive (9,359 of the lifted variants landed on
+# alt/random/Un contigs and were dropped).
+# Step 4: sort + bgzip + tabix.
+bcftools sort tishkoff.hg38.canon.fixed.vcf -Oz -m 16G -T /data/tmp/ \
+    -o tishkoff180.vcf.gz
+tabix -p vcf tishkoff180.vcf.gz
+rm tishkoff.hg38.unsorted.vcf tishkoff.hg38.canon.* tishkoff.hg19.chr.vcf.gz
+# Final: 346 MB bgzip + 1.6 MB tabix index, 33,600,472 SNPs (autosomes
+# + a handful of chrX entries from the PAR regions). 18,425 of the
+# 33,618,897 source variants (0.055%) are not represented after lift
+# (9,066 failed liftOver, 9,359 mapped to non-canonical contigs).
+# Symlinks placed at /gbdb/hg38/varFreqs/tishkoff/ for the tishkoff180
+# stanza in trackDb/human/varFreqs.ra.
