@@ -448,9 +448,9 @@ if (bbi == NULL)
     char *fileName = NULL;
     if (track->parallelLoading) // do not use mysql during parallel fetch
 	{
-	fileName = cloneString(trackDbSetting(track->tdb, "bigDataUrl"));
+	fileName = hReplaceGbdb(trackDbSetting(track->tdb, "bigDataUrl"));
         if (fileName == NULL)
-            fileName = cloneString(trackDbSetting(track->tdb, "bigGeneDataUrl"));
+            fileName = hReplaceGbdb(trackDbSetting(track->tdb, "bigGeneDataUrl"));
 	}
     else 
 	{
