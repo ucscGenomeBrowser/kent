@@ -23,7 +23,9 @@ the <b>gnomAD v4.1.1</b> release of 730,947 exomes aligned to GRCh38. Scores
 are provided for every possible single-nucleotide missense variant in 17,841
 MANE Select or canonical protein-coding transcripts that passed gnomAD QC, as
 well as for an additional 1,534 transcripts that failed QC (the authors note
-that scores may be less accurate in the latter).
+that scores may be less accurate in the latter). Our MPC track on hg19
+is an older release of the MPC score, calculated on gnomAD v2 (125,748 exomes) rather 
+than gnomAD v4 (730,947 exomes).
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -102,24 +104,23 @@ best suited to modelling strong fitness effects (as expected given its
 training set) and that naively taking the maximum of MPC and AlphaMissense
 <i>decreases</i> case/control discrimination for de novo variants relative
 to either score alone.
+Code for
+calculating the MPC scores and MCRs is available at the
+<a href="https://github.com/broadinstitute/regional_missense_constraint" target="_blank">broadinstitute/regional_missense_constraint</a>
+GitHub repository.
 </p>
 
 <p>
 <b>At UCSC.</b> The precomputed MPC score table was downloaded from the
 gnomAD Broad public bucket at
-<tt>gs://gcp-public-data--gnomad/papers/2026-rmc/gnomad_v4.1.1_mpc.tsv.bgz</tt>,
+<a href="https://storage.googleapis.com/gcp-public-data--gnomad/papers/2026-rmc/gnomad_v4.1.1_mpc.tsv.bgz">gs://gcp-public-data--gnomad/papers/2026-rmc/gnomad_v4.1.1_mpc.tsv.bgz</a>,
 companion to the Hail-table release
 <tt>gnomad_v4.1.1_mpc.ht</tt> in the same directory. The input TSV contains
-one row per (locus, alleles, transcript) combination, for 70,313,598 rows
-covering 70,047,670 unique (chrom, pos, alt) variants. Two Python scripts in
+one row per (locus, alleles, transcript) combination, for 70M rows.
+Two Python scripts in
 <a target="_blank"
 href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadMpc">src/hg/makeDb/scripts/gnomadMpc</a>
-emit the UCSC files: <tt>gnomadMpcToWig.py</tt> writes four bigWig files
-(one per alternate base, carrying the maximum MPC across transcripts at each
-variant) and <tt>gnomadMpcToBed.py</tt> writes a BED file with one row per
-(position, alternate allele) <i>restricted to variants scored against more
-than one transcript</i>, with all per-transcript scores preserved as aligned
-comma-separated lists. Build commands are documented
+convert to bigWig/bigBed formats. Build commands are documented
 in the
 <a target="_blank"
 href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/gnomadMpc.txt">hg38/gnomadMpc.txt</a>
@@ -147,12 +148,7 @@ bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 \
 <p>
 The original MPC table and the accompanying missense constraint regions can
 be downloaded from the
-<a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD downloads page</a>
-or directly from the Broad Institute's public Google Cloud bucket at
-<tt>gs://gcp-public-data--gnomad/papers/2026-rmc/</tt>. Code for
-reproducing the MPC scores and MCRs is available at the
-<a href="https://github.com/broadinstitute/regional_missense_constraint" target="_blank">broadinstitute/regional_missense_constraint</a>
-GitHub repository.
+<a href="https://gnomad.broadinstitute.org/downloads" target="_blank">gnomAD downloads page</a>.
 </p>
 
 <h2>Credits</h2>
@@ -170,6 +166,6 @@ Baxter S, Watts NA, Solomonson M, gnomAD consortium, Tiao G, Rehm HL,
 Neale BM, Talkowski ME, MacArthur DG, O'Donnell-Luria A, Karczewski KJ,
 Radivojac P, Daly MJ, Samocha KE.
 <a href="https://doi.org/10.1101/2024.04.11.588920" target="_blank">The landscape of regional missense mutational intolerance quantified from 730,947 exomes</a>.
-<em>bioRxiv</em> 2024.04.11.588920, posted April 23, 2026;
+<em>bioRxiv</em> April 23, 2026;
 doi: <a href="https://doi.org/10.1101/2024.04.11.588920" target="_blank">10.1101/2024.04.11.588920</a>.
 </p>
