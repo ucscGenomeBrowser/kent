@@ -167,6 +167,28 @@ ATTRIBUTION = "**From Claude:**\n\n"
 # Shared helpers
 # ---------------------------------------------------------------------------
 
+_BOOL_TRUE = {"1", "true", "yes", "on"}
+_BOOL_FALSE = {"0", "false", "no", "off"}
+
+
+def _validate_bool(value, field_name):
+    """Validate a checkbox custom-field value; return canonical "0" or "1"."""
+    norm = str(value).strip().lower()
+    if norm in _BOOL_TRUE:
+        return "1"
+    if norm in _BOOL_FALSE:
+        return "0"
+    sys.exit(f"Error: {field_name}: expected one of "
+             f"0/1/true/false/yes/no/on/off, got: {value!r}")
+
+
+# CF ID -> (validator, friendly name). Used both for named flags and to gate
+# the --custom-field ID=VALUE escape hatch when ID matches a known typed field.
+FIELD_VALIDATORS = {
+    CF_RELEASED_TO_RR: (_validate_bool, "Released To RR"),
+}
+
+
 def read_api_key(conf_path="~/.hg.conf"):
     """Read redmine.apiKey from ~/.hg.conf."""
     conf_path = os.path.expanduser(conf_path)
@@ -664,7 +686,8 @@ def cmd_update(args):
     if args.release_log_url is not None:
         custom_fields.append({"id": CF_RELEASE_LOG_URL, "value": args.release_log_url})
     if args.released_to_rr is not None:
-        custom_fields.append({"id": CF_RELEASED_TO_RR, "value": args.released_to_rr})
+        val = _validate_bool(args.released_to_rr, "--released-to-rr")
+        custom_fields.append({"id": CF_RELEASED_TO_RR, "value": val})
     if args.file_list is not None:
         custom_fields.append({"id": CF_FILE_LIST, "value": args.file_list})
     if args.file_list_add:
@@ -692,7 +715,11 @@ def cmd_update(args):
         cf_id, cf_val = cf_spec.split("=", 1)
         if not cf_id.isdigit():
             sys.exit(f"Error: custom field ID must be numeric, got: {cf_id}")
-        custom_fields.append({"id": int(cf_id), "value": cf_val})
+        cf_id = int(cf_id)
+        if cf_id in FIELD_VALIDATORS:
+            validator, name = FIELD_VALIDATORS[cf_id]
+            cf_val = validator(cf_val, f"--custom-field {cf_id} ({name})")
+        custom_fields.append({"id": cf_id, "value": cf_val})
     if custom_fields:
         issue_data["custom_fields"] = custom_fields
 
@@ -989,7 +1016,7 @@ def build_parser():
     p_update.add_argument("--release-log-url", dest="release_log_url",
                           help="Release Log URL (custom field)")
     p_update.add_argument("--released-to-rr", dest="released_to_rr",
-                          help="Released to RR (custom field, 0 or 1)")
+                          help="Released to RR (checkbox: 0/1/true/false/yes/no/on/off)")
     p_update.add_argument("--file-list", dest="file_list",
                           help="File List (custom field, overwrites existing value)")
     p_update.add_argument("--file-list-add", dest="file_list_add",
