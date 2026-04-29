@@ -332,7 +332,7 @@ if (tg->bbiFile == NULL)
     /* Figure out bigWig file name. */
     if (isHubTrack(database) || tg->parallelLoading) // do not use mysql during parallel-fetch or if assembly hub
 	{
-	char *fileName = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
+	char *fileName = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataUrl"));
 	bigWigOpenCatch(tg, fileName);
 	}
     else

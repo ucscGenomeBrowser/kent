@@ -136,7 +136,7 @@ function asmN50() {
 # step 1: look up fromDb and toDb from ottoRequest
 ############################################################################
 export ottoResult=$(hgsql -N -e \
-  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1;" hgcentraltest)
+  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" hgcentraltest)
 
 if [ -z "${ottoResult}" ]; then
   printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
