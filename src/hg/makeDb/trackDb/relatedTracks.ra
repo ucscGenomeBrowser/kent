@@ -130,3 +130,18 @@ hg38 mpra wgEncodeReg4 ENCODE regulatory region annotations, many of which are t
 hg38 wgEncodeReg4 mpra Experimental MPRA measurements of regulatory activity for candidate elements
 hg38 mpra cCREs Candidate cis-regulatory elements; many overlap MPRA-tested fragments
 hg38 cCREs mpra Experimentally validated regulatory activity from MPRA assays for overlapping elements
+
+# Dosage sensitivity / CNV cross-links:
+hg38 clinGenComp dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022, complementary to ClinGen's expert-curated dosage sensitivity calls
+hg38 dosageSensitivity clinGenComp ClinGen expert-curated dosage sensitivity (haploinsufficiency and triplosensitivity) and gene-disease validity assertions
+hg38 clinGenComp cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions associated with developmental delay phenotypes
+hg38 cnvDevDelay clinGenComp ClinGen expert-curated dosage sensitivity and gene-disease validity assertions for genes within CNV regions
+hg38 dosageSensitivity cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions providing phenotypic context for dosage-sensitive genes
+hg38 cnvDevDelay dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022 for genes within these CNVs
+
+hg19 clinGenComp dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022, complementary to ClinGen's expert-curated dosage sensitivity calls
+hg19 dosageSensitivity clinGenComp ClinGen expert-curated dosage sensitivity (haploinsufficiency and triplosensitivity) and gene-disease validity assertions
+hg19 clinGenComp cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions associated with developmental delay phenotypes
+hg19 cnvDevDelay clinGenComp ClinGen expert-curated dosage sensitivity and gene-disease validity assertions for genes within CNV regions
+hg19 dosageSensitivity cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions providing phenotypic context for dosage-sensitive genes
+hg19 cnvDevDelay dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022 for genes within these CNVs
