@@ -4006,6 +4006,15 @@ if (decoratorSettings)
     decoratorUi(tdb, cart, decoratorSettings);
     }
 
+// Repeat the Submit button near the bottom of the form so that users do not
+// have to scroll back up to the top after tweaking filters on a long page.
+if (!ajax)
+    {
+    puts("<p style='margin-top:1em;'>");
+    cgiMakeButton("Submit", "Submit");
+    puts("</p>");
+    }
+
 puts("</FORM>");
 
 if (ajax)
