@@ -589,7 +589,9 @@ def loadSubmissions(summFname):
     logging.info("Loading submissions table %s into mysql, hg19 and also hg38" % summFname)
     fh = tempfile.NamedTemporaryFile(prefix="clinVarToBed", suffix=".tsv")
     tmpFname = fh.name
-    cmd= "zgrep -v '^#' %s > %s" % (summFname, tmpFname)
+    # strip trailing backslashes inside fields so MySQL's LOAD DATA escape
+    # interpretation doesn't eat the tab separator (Warning 1261, refs #37477)
+    cmd= r"zgrep -v '^#' %s | perl -pe 's/\\(?=\t|$)//g' > %s" % (summFname, tmpFname)
     assert(os.system(cmd)==0)
 
     cmd = "chmod a+r %s" % (tmpFname) # otherwise mysqld can't read the file
