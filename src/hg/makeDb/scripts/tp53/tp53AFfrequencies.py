@@ -19,6 +19,7 @@ conservative proxy and flags when the proxy may miss qualifying variants.
 
 import argparse
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -128,9 +129,13 @@ def classify_and_build_rows(tx, chrom):
     the 'name' field so the hg19 build can look up the same row after liftOver
     and rewrite the display text to reflect hg19 coords."""
     raw_bed = "/tmp/tp53_gnomad_{}.bed".format(os.getpid())
-    cmd = "bigBedToBed {} -chrom={} -start={} -end={} {}".format(
-        GNOMAD_BB, chrom, tx['txStart'], tx['txEnd'], raw_bed)
-    lib.bash(cmd)
+    subprocess.run(
+        ["bigBedToBed", GNOMAD_BB,
+         "-chrom=" + chrom,
+         "-start=" + str(tx['txStart']),
+         "-end=" + str(tx['txEnd']),
+         raw_bed],
+        check=True)
     with open(raw_bed) as f:
         rows = [line.rstrip("\n").split("\t") for line in f]
     os.remove(raw_bed)
@@ -215,7 +220,7 @@ def liftover_hg38_to_hg19(classified, outdir):
         for rec in classified:
             f.write("{}\t{}\t{}\t{}\n".format(
                 rec['chrom'], rec['hg38_start'], rec['hg38_end'], rec['hg38_name']))
-    lib.bash("liftOver {} {} {} {}".format(input_bed, chain, output_bed, unmapped))
+    lib.run_liftOver(input_bed, chain, output_bed, unmapped)
     lookup = {}
     with open(output_bed) as f:
         for line in f:
@@ -244,7 +249,7 @@ def build(db, outdir):
         lines = emit_rows(classified, 'hg38')
         with open(bed, 'w') as f:
             f.write("\n".join(lines) + "\n")
-        lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+        lib.run_sort_bed(bed)
         lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+8")
         print("  wrote {}".format(bb))
         return
@@ -257,7 +262,7 @@ def build(db, outdir):
     lines = emit_rows(classified, 'hg19', coord_lookup=lookup)
     with open(bed, 'w') as f:
         f.write("\n".join(lines) + "\n")
-    lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    lib.run_sort_bed(bed)
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+8")
     print("  wrote {}".format(bb))
     return

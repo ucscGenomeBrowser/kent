@@ -16,20 +16,16 @@ PROTEIN = "NP_000537.3"
 GENE = "TP53"
 
 
-def bash(cmd):
-    """Run cmd in bash subprocess, return stdout; raise on non-zero exit."""
-    try:
-        out = subprocess.run(
-            cmd, check=True, shell=True,
-            stdout=subprocess.PIPE, universal_newlines=True,
-            stderr=subprocess.STDOUT,
-        )
-        return out.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(
-            "command '{}' returned error (code {}): {}".format(
-                e.cmd, e.returncode, e.output)
-        )
+def run_sort_bed(bed):
+    """Sort a BED file in place by chrom, then start."""
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed, "-o", bed], check=True)
+
+
+def run_liftOver(in_bed, chain, out_bed, unmapped):
+    """Wrap liftOver."""
+    subprocess.run(
+        ["liftOver", in_bed, chain, out_bed, unmapped],
+        check=True)
 
 
 def get_transcript_info(db, accession=TRANSCRIPT):
@@ -38,7 +34,8 @@ def get_transcript_info(db, accession=TRANSCRIPT):
         "SELECT name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, "
         "exonStarts, exonEnds FROM ncbiRefSeq WHERE name='{}'"
     ).format(accession)
-    result = bash('hgsql {} -Ne "{}"'.format(db, query))
+    result = subprocess.check_output(
+        ["hgsql", db, "-Ne", query], text=True)
     if not result.strip():
         raise ValueError("Transcript {} not found in {}.ncbiRefSeq".format(accession, db))
     fields = result.strip().split('\t')
@@ -151,8 +148,10 @@ def write_autosql(path, content):
 
 def run_bedToBigBed(bed, as_file, bb, chrom_sizes, bed_type):
     """Invoke bedToBigBed with the given type (e.g., 'bed9+5')."""
-    bash("bedToBigBed -as={} -type={} -tab {} {} {}".format(
-        as_file, bed_type, bed, chrom_sizes, bb))
+    subprocess.run(
+        ["bedToBigBed", "-as=" + as_file, "-type=" + bed_type, "-tab",
+         bed, chrom_sizes, bb],
+        check=True)
 
 
 def chrom_sizes_path(db):

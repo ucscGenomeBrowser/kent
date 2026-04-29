@@ -146,7 +146,7 @@ def lift_hg19_to_hg38(records, outdir):
             ref_len = max(1, len(r['ref']))
             f.write("{}\t{}\t{}\t{}\n".format(
                 r['chrom'], r['hg19_pos'] - 1, r['hg19_pos'] - 1 + ref_len, r['ident']))
-    lib.bash("liftOver {} {} {} {}".format(in_bed, chain, out_bed, unmapped))
+    lib.run_liftOver(in_bed, chain, out_bed, unmapped)
     lookup = {}
     with open(out_bed) as f:
         for line in f:
@@ -211,7 +211,7 @@ def build(db, outdir, src_xlsx):
     bed = os.path.join(outdir, "TP53BioinformaticDel_{}.bed".format(db))
     with open(bed, 'w') as f:
         f.write("\n".join(lines) + "\n")
-    lib.bash("sort -k1,1 -k2,2n {0} -o {0}".format(bed))
+    lib.run_sort_bed(bed)
     bb = os.path.join(outdir, "TP53BioinformaticDel{}.bb".format(db.capitalize()))
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+5")
     print("  wrote {}".format(bb))

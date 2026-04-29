@@ -22,16 +22,6 @@ Date: 2025
 import subprocess
 import os
 
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdout = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdout)
-
 # ============================================================================
 # Configuration
 # ============================================================================
@@ -109,7 +99,7 @@ AUTOSQL = """table InSiGHTclinDomains
 def get_transcript_info(db, accession):
     """Query hgsql to get transcript information from ncbiRefSeq"""
     query = f"SELECT name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonStarts, exonEnds FROM ncbiRefSeq WHERE name='{accession}'"
-    result = bash(f'hgsql {db} -Ne "{query}"')
+    result = subprocess.check_output(["hgsql", db, "-Ne", query], text=True)
 
     if not result.strip():
         raise ValueError(f"Transcript {accession} not found in {db}.ncbiRefSeq")
@@ -233,7 +223,7 @@ def generate_bed_entries(db, transcripts_info):
                 continue
 
             aa_loc = f"{aa_start}-{aa_end}"
-            mouse_over = f"<b>Domain: </b>{domain}</br><b>Gene: </b>{gene}</br><b>Transcript: </b>{accession}</br><b>Amino acid loc:</b> {aa_loc}"
+            mouse_over = f"<b>Domain: </b>{domain}<br><b>Gene: </b>{gene}<br><b>Transcript: </b>{accession}<br><b>Amino acid loc:</b> {aa_loc}"
             bed_line = f"{chrom}\t{seg_start}\t{seg_end}\t{domain}\t0\t.\t{seg_start}\t{seg_end}\t230,3,131\t{gene}\t{accession}\t{aa_loc}\t{mouse_over}"
             bed_lines.append(bed_line)
 
@@ -265,7 +255,7 @@ def create_track(db, output_dir):
 
     # Sort BED file
     print("Sorting BED file...")
-    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
 
     # Create bigBed
     as_file = os.path.join(output_dir, "InSiGHTclinDomains.as")
@@ -274,7 +264,10 @@ def create_track(db, output_dir):
 
     print(f"\nCreating bigBed file: {bb_file}")
     try:
-        bash(f"bedToBigBed -as={as_file} -type=bed9+4 -tab {bed_file} {chrom_sizes} {bb_file}")
+        subprocess.run(
+            ["bedToBigBed", "-as=" + as_file, "-type=bed9+4", "-tab",
+             bed_file, chrom_sizes, bb_file],
+            check=True)
         print(f"  Successfully created: {bb_file}")
     except Exception as e:
         print(f"  ERROR creating bigBed: {e}")
