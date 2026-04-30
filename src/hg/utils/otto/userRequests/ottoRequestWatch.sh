@@ -36,24 +36,31 @@ function setErrorStatus() {
 ###   UCSC native: https://hgdownload.soe.ucsc.edu/goldenPath/<srcDb>/liftOver/<srcDb>To<DstDb>.over.chain.gz
 ###   DstDb is dstDb with the first letter upper-cased (matches the
 ###   filename convention used in installLinks()).
+###   verifies the URL with a curl HEAD before printing; returns 1 if
+###   the URL does not resolve to a 2xx response.
 ##############################################################################
 function liftOverUrl() {
   local srcDb="${1}"
   local dstDb="${2}"
   local DstDb="${dstDb^}"
   local fileName="${srcDb}To${DstDb}.over.chain.gz"
+  local url
   if [[ "${srcDb}" == GC* ]]; then
     local gcX="${srcDb:0:3}"
     local d0="${srcDb:4:3}"
     local d1="${srcDb:7:3}"
     local d2="${srcDb:10:3}"
     local accPath="${gcX}/${d0}/${d1}/${d2}/${srcDb}"
-    printf "https://hgdownload.soe.ucsc.edu/hubs/%s/liftOver/%s" \
-      "${accPath}" "${fileName}"
+    url="https://hgdownload.soe.ucsc.edu/hubs/${accPath}/liftOver/${fileName}"
   else
-    printf "https://hgdownload.soe.ucsc.edu/goldenPath/%s/liftOver/%s" \
-      "${srcDb}" "${fileName}"
+    url="https://hgdownload.soe.ucsc.edu/goldenPath/${srcDb}/liftOver/${fileName}"
   fi
+  # -s silent, -f fail on HTTP >= 400, -I HEAD, --max-time bounds hangs
+  if ! curl -sfI --max-time 30 -o /dev/null "${url}"; then
+    printf "ERROR: liftOverUrl: URL does not exist: %s\n" "${url}" 1>&2
+    return 1
+  fi
+  printf "%s" "${url}"
 }
 ##############################################################################
 
@@ -326,8 +333,14 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
     fi
   fi
 
-  fromUrl="$(liftOverUrl "${fromDb}" "${toDb}")"
-  toUrl="$(liftOverUrl "${toDb}" "${fromDb}")"
+  if ! fromUrl="$(liftOverUrl "${fromDb}" "${toDb}")"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
+  if ! toUrl="$(liftOverUrl "${toDb}" "${fromDb}")"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
   sendNotification "${reqId}" \
 "from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
 "Your lift over request is complete.  You can access the lift.over files at:
@@ -337,7 +350,7 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
 "
 
   hgsql -N -e \
-      "UPDATE ottoRequest SET status=8 WHERE id=${reqId};" hgcentraltest
+      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
 
 done < <(hgsql -N -B -e \
   "SELECT id, fromDb, toDb, buildDir FROM ottoRequest \

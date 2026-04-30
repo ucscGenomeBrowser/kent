@@ -78,8 +78,7 @@ ottoRequestWatch.sh - cron script running in hiram hgwdev account to watch
                - ottoRequestPush.py upon push completion, now it will
                - use galaxyCleanup.py to release the galaxy history and WF
                - data, it will send out confirmation finished email and sets
-               - 'status=8' to indicate completion.  TBD: expand the email
-               - message to include links to the download fles.
+               - 'status=8' to indicate completion.
 
 ############################################################################
 ###  4.
