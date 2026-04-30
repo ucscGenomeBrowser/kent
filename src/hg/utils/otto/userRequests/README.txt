@@ -3,7 +3,7 @@ The 'status' field in the ottoRequest table maintains state:
   0 == request has been received by API (set by API)
   1 == request has been acknowledged by ottoRequest.py (set by ottoRequest.py)
   2 == galaxy jobs have been started (set by ottoRequestAlign.sh)
-  3 == galaxy jobs have completed (set by workflowMonitor.sh)
+  3 == galaxy jobs have completed, download started (set by workflowMonitor.sh)
   4 == download from galaxy has taken place and track files have been created
          (set by ottoRequestWatch.sh)
   5 == symlinks for tracks are in place, ready to push files

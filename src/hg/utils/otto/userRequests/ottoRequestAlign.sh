@@ -10,6 +10,7 @@
 # Prints and executes the resulting kegAlignLastz.sh command.
 
 set -eEu -o pipefail
+set -x
 
 ############################################################################
 ### verify arguments
@@ -252,11 +253,13 @@ case ${fromId} in
 esac
 
 # reuse existing build directory if one is already in progress
-working=$(ls -d ${targetExists}/lastz${Query}.* 2> /dev/null | wc -l)
+working=$(ls -d ${targetExists}/lastz${Query}.* 2> /dev/null | wc -l || true)
 if [ "${working}" -gt 0 ]; then
   buildDir=$(ls -d ${targetExists}/lastz${Query}.* | tail -1)
   printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
 fi
+
+mkdir -p  "${buildDir}"
 
 printf "# buildDir: %s\n" "${buildDir}" 1>&2
 

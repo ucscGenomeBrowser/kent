@@ -16,6 +16,7 @@
 #      8 final notification has been sent == process is complete
 
 set -eEu -o pipefail
+set -x
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
@@ -198,6 +199,10 @@ while IFS=$'\t' read -r reqId buildDir; do
   if [ ! -d "${buildDir}" ]; then
     printf "# WARNING: buildDir not found for request %s: %s\n" \
       "${reqId}" "${buildDir}" 1>&2
+    continue
+  fi
+  # takes a while for the galaxy WF to start up, wait for this file to appear
+  if [ ! -s "${buildDir}/pendingInvocationId.txt" ]; then
     continue
   fi
   printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2

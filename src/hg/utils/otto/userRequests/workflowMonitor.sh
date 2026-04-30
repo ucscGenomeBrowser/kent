@@ -22,6 +22,7 @@
 #   5 finish notification, 6 complete, 7 problems
 
 set -eEu -o pipefail
+set -x
 
 if [ $# != 2 ]; then
   printf "usage: workflowMonitor.sh <reqId> <buildDir>\n" 1>&2
@@ -31,6 +32,7 @@ fi
 export reqId="$1"
 export buildDir="$2"
 export successCount=0
+export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
 ##############################################################################
 ### errors - set error status in the table
@@ -86,7 +88,7 @@ if [ ! -s "${profileJson}" ]; then
 fi
 
 # galaxyState.py reads the profile and prints: pending | complete | failed
-state=$(galaxyState.py "${profileJson}" "${invocationId}")
+state=$("${scriptDir}/galaxyState.py" "${profileJson}" "${invocationId}")
 case "${state}" in
   pending)  exit 0 ;;
   complete) ;;   # fall through to download
