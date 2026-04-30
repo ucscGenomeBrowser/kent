@@ -32,7 +32,11 @@ def acquireSingletonLock():
         fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         sys.exit(0)
+    # indicate PID in the lock file, merely for information, not relevant
+    fh.write("%d\n" % os.getpid())
+    fh.flush()
     return fh
+    ### FYI: can also see the locking process via: lsof ottoRequestPush.lock
 
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""

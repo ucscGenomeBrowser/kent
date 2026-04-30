@@ -30,6 +30,34 @@ function setErrorStatus() {
 ##############################################################################
 
 ##############################################################################
+### liftOverUrl - build the public download URL for an over.chain.gz file
+###   args: srcDb dstDb
+###   GenArk:      https://hgdownload.soe.ucsc.edu/hubs/<3>/<3>/<3>/<3>/<acc>/liftOver/<srcDb>To<DstDb>.over.chain.gz
+###   UCSC native: https://hgdownload.soe.ucsc.edu/goldenPath/<srcDb>/liftOver/<srcDb>To<DstDb>.over.chain.gz
+###   DstDb is dstDb with the first letter upper-cased (matches the
+###   filename convention used in installLinks()).
+##############################################################################
+function liftOverUrl() {
+  local srcDb="${1}"
+  local dstDb="${2}"
+  local DstDb="${dstDb^}"
+  local fileName="${srcDb}To${DstDb}.over.chain.gz"
+  if [[ "${srcDb}" == GC* ]]; then
+    local gcX="${srcDb:0:3}"
+    local d0="${srcDb:4:3}"
+    local d1="${srcDb:7:3}"
+    local d2="${srcDb:10:3}"
+    local accPath="${gcX}/${d0}/${d1}/${d2}/${srcDb}"
+    printf "https://hgdownload.soe.ucsc.edu/hubs/%s/liftOver/%s" \
+      "${accPath}" "${fileName}"
+  else
+    printf "https://hgdownload.soe.ucsc.edu/goldenPath/%s/liftOver/%s" \
+      "${srcDb}" "${fileName}"
+  fi
+}
+##############################################################################
+
+##############################################################################
 ### sendNotification - email the requesting user that their alignment is done
 ###   args: reqId subject
 ###   message body is read from stdin
@@ -298,9 +326,15 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
     fi
   fi
 
+  fromUrl="$(liftOverUrl "${fromDb}" "${toDb}")"
+  toUrl="$(liftOverUrl "${toDb}" "${fromDb}")"
   sendNotification "${reqId}" \
 "from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
-"Your lift over request is complete.  You can access the lift.over files at:"
+"Your lift over request is complete.  You can access the lift.over files at:
+
+  ${fromUrl}
+  ${toUrl}
+"
 
   hgsql -N -e \
       "UPDATE ottoRequest SET status=8 WHERE id=${reqId};" hgcentraltest
