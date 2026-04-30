@@ -7,14 +7,16 @@
 # acknowledged (status=1) and drives them through alignment setup
 # and workflow monitoring.
 #
-# Phase 1: status=1 with empty buildDir
+# Phase 1: new requests needing alignment setup - status=1 AND buildDir=''
 #          run ottoRequestAlign.sh to set up and launch the workflow
-# Phase 2: status=2 with buildDir set
+# Phase 2: in-progress requests needing workflow monitoring
 #          run workflowMonitor.sh to poll Galaxy and install results
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
-#   5 finish notification, 6 complete, 7 problems */
+#   5 ready to push, 6 push is done, 7 problems,
+#      8 final notification has been sent == process is complete
 
 set -eEu -o pipefail
+set -x
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
@@ -187,7 +189,7 @@ while read -r reqId; do
     setErrorStatus "${reqId}"
   fi
 done < <(hgsql -N -B -e \
-  "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '';" \
+  "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" \
   hgcentraltest)
 
 ############################################################################
@@ -197,6 +199,10 @@ while IFS=$'\t' read -r reqId buildDir; do
   if [ ! -d "${buildDir}" ]; then
     printf "# WARNING: buildDir not found for request %s: %s\n" \
       "${reqId}" "${buildDir}" 1>&2
+    continue
+  fi
+  # takes a while for the galaxy WF to start up, wait for this file to appear
+  if [ ! -s "${buildDir}/pendingInvocationId.txt" ]; then
     continue
   fi
   printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2
@@ -216,10 +222,11 @@ while IFS=$'\t' read -r reqId buildDir; do
   fi
 done < <(hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 2 AND buildDir != '';" hgcentraltest)
+   WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
 
 ############################################################################
-# phase 3: check for tracks done, send notification email, mark complete
+# phase 3: check for tracks done, setup symlinks set status=5 to indicate
+#          ready to push
 ############################################################################
 while IFS=$'\t' read -r reqId buildDir; do
   if [ ! -d "${buildDir}" ]; then
@@ -239,12 +246,14 @@ while IFS=$'\t' read -r reqId buildDir; do
   export doTdb="`dirname ${trackData}`/doTrackDb.bash"
   export swapTdb="`dirname ${swapData}`/doTrackDb.bash"
   if [ ! -x "${doTdb}" ]; then
-    printf "ERROR: can not find ${doTdb}\n" 1>&2
+    printf "ERROR: can not find %s\n" "${doTdb}" 1>&2
     setErrorStatus "${reqId}"
+    continue
   fi
   if [ ! -x "${swapTdb}" ]; then
-    printf "ERROR: can not find ${swapTdb}\n" 1>&2
+    printf "ERROR: can not find %s\n" "${swapTdb}" 1>&2
     setErrorStatus "${reqId}"
+    continue
   fi
   rm -f "${trackData}/lastz.${queryDb}"
   ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
@@ -265,11 +274,38 @@ while IFS=$'\t' read -r reqId buildDir; do
     setErrorStatus "${reqId}"
     continue
   fi
-   sendNotification "${reqId}" \
-"from UCSC: liftOverRequest complete: ${targetDb}<->${queryDb}" \
-"Your lift over request is complete.  You can access the lift.over files at:"
+
   hgsql -N -e \
-      "UPDATE ottoRequest SET status=6 WHERE id=${reqId};" hgcentraltest
+      "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" hgcentraltest
 done < <(hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 4 AND buildDir != '';" hgcentraltest)
+   WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
+
+############################################################################
+# phase 4: check for push files is complete, send final notification
+#          clean up galaxy workflow
+############################################################################
+
+while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
+  # time to clean up the galaxy history and workflow to release the space
+  if [ -s "${buildDir}/successInvocationId.txt" ]; then
+    invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
+    profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
+    if "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
+      printf "# galaxy cleanup complete for request %s\n" "${reqId}" 1>&2
+    else
+      printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
+    fi
+  fi
+
+  sendNotification "${reqId}" \
+"from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
+"Your lift over request is complete.  You can access the lift.over files at:"
+
+  hgsql -N -e \
+      "UPDATE ottoRequest SET status=8 WHERE id=${reqId};" hgcentraltest
+
+done < <(hgsql -N -B -e \
+  "SELECT id, fromDb, toDb, buildDir FROM ottoRequest \
+   WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
+

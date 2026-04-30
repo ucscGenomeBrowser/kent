@@ -19,9 +19,10 @@
 #                              swapDir, PM, targetDb, queryDb, etc.
 # status indicators:
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
-#   5 finish notification, 6 complete, 7 problems */
+#   5 finish notification, 6 complete, 7 problems
 
 set -eEu -o pipefail
+set -x
 
 if [ $# != 2 ]; then
   printf "usage: workflowMonitor.sh <reqId> <buildDir>\n" 1>&2
@@ -31,6 +32,7 @@ fi
 export reqId="$1"
 export buildDir="$2"
 export successCount=0
+export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
 ##############################################################################
 ### errors - set error status in the table
@@ -85,112 +87,18 @@ if [ ! -s "${profileJson}" ]; then
   exit 255
 fi
 
-export galaxyUrl=$(jq -r '.galaxy_url' "${profileJson}")
-export galaxyApiKey=$(jq -r '.galaxy_user_key' "${profileJson}")
-
-if [ -z "${galaxyUrl}" ] || [ -z "${galaxyApiKey}" ]; then
-  printf "ERROR: could not read galaxy_url or galaxy_user_key from %s\n" \
-    "${profileJson}" 1>&2
-  setErrorStatus ${reqId}
-  exit 255
-fi
-
-# strip trailing slash
-galaxyUrl="${galaxyUrl%/}"
-
-############################################################################
-# query invocation state from the Galaxy API
-############################################################################
-stateJson=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
-  "${galaxyUrl}/api/invocations/${invocationId}")
-
-state=$(printf "%s" "${stateJson}" | jq -r '.state // "unknown"')
-printf "# invocation state: %s\n" "${state}" 1>&2
-
+# galaxyState.py reads the profile and prints: pending | complete | failed
+state=$("${scriptDir}/galaxyState.py" "${profileJson}" "${invocationId}")
 case "${state}" in
-  "cancelled"|"failed")
-    printf "ERROR: workflow %s -- invocation %s\n" "${state}" "${invocationId}" 1>&2
-    setErrorStatus ${reqId}
-    exit 255
-    ;;
-  "new"|"ready")
-    printf "# workflow still starting up, will check again later\n" 1>&2
-    exit 0
-    ;;
-  "scheduled")
-    # all steps dispatched -- fall through to check individual jobs
-    ;;
-  "completed")
-    # all steps dispatched -- fall through to check individual jobs
-    ;;
-  *)
-    printf "# unexpected state '%s', will check again later\n" "${state}" 1>&2
-    exit 0
-    ;;
+  pending)  exit 0 ;;
+  complete) ;;   # fall through to download
+  failed)   setErrorStatus ${reqId} ; exit 255 ;;
+  *)        printf "ERROR: unexpected galaxyState.py output: %q\n" \
+              "${state}" 1>&2
+            setErrorStatus ${reqId}
+            exit 255
+            ;;
 esac
-
-# "scheduled" means all steps dispatched, but jobs may still be running.
-# use the jobs_summary endpoint to get aggregate job state counts.
-summaryJson=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
-  "${galaxyUrl}/api/invocations/${invocationId}/jobs_summary")
-
-# count jobs in non-terminal states (new, queued, running, waiting, upload,
-# setting_metadata, resubmitted).  Terminal states: ok, error, deleted,
-# skipped, paused.
-nonTerminalCount=$(printf "%s" "${summaryJson}" | jq \
-  '[.states | to_entries[] | select(.key != "ok" and .key != "error"
-      and .key != "deleted" and .key != "skipped"
-      and .key != "paused") | .value] | add // 0')
-
-if [ "${nonTerminalCount}" -gt 0 ]; then
-  activeStates=$(printf "%s" "${summaryJson}" | jq -r \
-    '[.states | to_entries[] | select(.key != "ok" and .key != "error"
-        and .key != "deleted" and .key != "skipped"
-        and .key != "paused") | "\(.value) \(.key)"] | join(", ")')
-  printf "# %d jobs still active (%s), will check again later\n" \
-    "${nonTerminalCount}" "${activeStates}" 1>&2
-  exit 0
-fi
-
-# check for errored jobs -- a "completed" invocation can still contain
-# individual jobs that failed
-errorCount=$(printf "%s" "${summaryJson}" | jq '.states.error // 0')
-
-if [ "${errorCount}" -gt 0 ]; then
-  printf "ERROR: %d job(s) had errors in invocation %s\n" \
-    "${errorCount}" "${invocationId}" 1>&2
-  setErrorStatus ${reqId}
-
-  # the invocation detail (stateJson) embeds steps with job_ids but not
-  # job states; query each job individually to find which step(s) failed
-  printf "%s" "${stateJson}" | jq -r '
-    .steps[] | select(.job_id != null) |
-    "\(.order_index)\t\(.workflow_step_label // "unlabeled")\t\(.job_id)"
-  ' | while IFS=$'\t' read -r stepIdx stepLabel jobId; do
-    jobState=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
-      "${galaxyUrl}/api/jobs/${jobId}" | jq -r '.state // "unknown"')
-    if [ "${jobState}" = "error" ]; then
-      printf "  FAILED step %s: %s (job %s)\n" \
-        "${stepIdx}" "${stepLabel}" "${jobId}" 1>&2
-    fi
-  done
-
-  # check sub-workflow invocations for errors
-  printf "%s" "${stateJson}" | jq -r '
-    .steps[] | select(.subworkflow_invocation_id != null) |
-    "\(.order_index)\t\(.workflow_step_label // "unlabeled")\t\(.subworkflow_invocation_id)"
-  ' | while IFS=$'\t' read -r stepIdx stepLabel subInvId; do
-    subErrors=$(curl -s -H "x-api-key: ${galaxyApiKey}" \
-      "${galaxyUrl}/api/invocations/${subInvId}/jobs_summary" \
-      | jq '.states.error // 0')
-    if [ "${subErrors}" -gt 0 ]; then
-      printf "  FAILED step %s: %s (sub-workflow %s, %d error(s))\n" \
-        "${stepIdx}" "${stepLabel}" "${subInvId}" "${subErrors}" 1>&2
-    fi
-  done
-
-  exit 255
-fi
 
 printf "# all jobs complete, downloading results\n" 1>&2
 hgsql -N -e \
@@ -277,147 +185,91 @@ function chainBigBedFb() {
 }
 
 ############################################################################
-# install target-side chains
+# bumpIf <file>  -- increment successCount if file exists and is non-empty
 ############################################################################
-
-### allChain
-mkdir -p "${buildDir}/axtChain"
-if [ ! -s "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz" ]; then
-  allChainFile=$(ls result/${DS}/allChain__*.chain)
-  gzip -c "${allChainFile}" \
-    > "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz"
-fi
-if [ -s "${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz" ]; then
-  successCount=$((successCount+1))
-fi
-
-### target allChain -> bigBed + featureBits
-cd "${buildDir}/axtChain"
-if [ ! -s "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" ]; then
-  chainBigBedFb ${targetDb} chain${QueryDb} \
-    "${targetDb}.${queryDb}.all.chain.gz" ${tSizes} \
-    "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt"
-fi
-if [ -s "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
-cat "${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" 1>&2
-
-### target liftOver chain (over.chain)
-cd "${buildDir}"
-if [ ! -s "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ]; then
-  overChainFile=$(ls result/${DS}/liftOverChain_*.chain)
-  gzip -c "${overChainFile}" \
-    > "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz"
-fi
-if [ -s "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ]; then
-  successCount=$((successCount+1))
-fi
-
-### target over.chain -> bigBed + featureBits
-cd "${buildDir}/axtChain"
-if [ ! -s "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" ]; then
-  chainBigBedFb ${targetDb} chainLiftOver${QueryDb} \
-    "${targetDb}.${queryDb}.over.chain.gz" ${tSizes} \
-    "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt"
-fi
-if [ -s "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
-cat "${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" 1>&2
-
-### target quick.chain -> bigBed + featureBits
-if [ ! -s "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" ]; then
-  quickChain ${targetDb} ${queryDb} \
-     "${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" ${qSizes} \
-    "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt"
-fi
-if [ -s "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
-cat "${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" 1>&2
-
+function bumpIf() {
+  if [ -s "$1" ]; then
+    successCount=$((successCount+1))
+  fi
+}
 
 ############################################################################
-# install swap-side chains
+# unzipResult <srcGlob> <dstGz>
+#   gzip a planemo result file into dstGz if not already present, then
+#   bump successCount when the destination ends up populated
 ############################################################################
+function unzipResult() {
+  local srcGlob=$1
+  local dstGz=$2
+  if [ ! -s "${dstGz}" ]; then
+    local src=$(ls ${srcGlob})
+    gzip -c "${src}" > "${dstGz}"
+  fi
+  bumpIf "${dstGz}"
+}
 
-### swap allChain
-mkdir -p "${swapDir}/axtChain"
-cd "${buildDir}"
-if [ ! -s "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz" ]; then
-  allChainSwapFile=$(ls result/${DS}/allChainSwap_*.chain)
-  gzip -c "${allChainSwapFile}" \
-    > "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz"
-fi
-if [ -s "${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz" ]; then
-  successCount=$((successCount+1))
-fi
+############################################################################
+# buildChainBb <fn> <workDir> <db> <chainName> <chainGz> <sizes> <fbFile>
+#   cd to workDir (so the .tab/.bb intermediates land beside the chain),
+#   run fn (chainBigBedFb or quickChain) if fbFile missing, then bump
+#   successCount and cat the fbFile to stderr
+############################################################################
+function buildChainBb() {
+  local fn=$1 workDir=$2
+  local db=$3 chainName=$4 chainGz=$5 sizes=$6 fbFile=$7
+  if [ ! -s "${fbFile}" ]; then
+    cd "${workDir}"
+    "${fn}" "${db}" "${chainName}" "${chainGz}" "${sizes}" "${fbFile}"
+  fi
+  bumpIf "${fbFile}"
+  cat "${fbFile}" 1>&2
+}
 
-### swap allChain -> bigBed + featureBits
-cd "${swapDir}/axtChain"
-if [ ! -s "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" ]; then
-  chainBigBedFb ${queryDb} chain${Target} \
-    "${queryDb}.${targetDb}.all.chain.gz" ${qSizes} \
-    "${swapDir}/fb.${queryDb}.chain${Target}Link.txt"
-fi
-if [ -s "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
+############################################################################
+# install all chain.gz files and their bigBed/featureBits derivatives
+############################################################################
+mkdir -p "${buildDir}/axtChain" "${swapDir}/axtChain"
 
-cat "${swapDir}/fb.${queryDb}.chain${Target}Link.txt" 1>&2
+# planemo result -> chain.gz install table
+# fields: srcGlob | dstGz
+for row in \
+  "${buildDir}/result/${DS}/allChain__*.chain|${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz" \
+  "${buildDir}/result/${DS}/liftOverChain_*.chain|${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz" \
+  "${buildDir}/result/${DS}/allChainSwap_*.chain|${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz" \
+  "${buildDir}/result/${DS}/swapLiftOverChain_*.chain|${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz"
+do
+  IFS="|" read -r srcGlob dstGz <<< "${row}"
+  unzipResult "${srcGlob}" "${dstGz}"
+done
 
-### swap liftOver chain (over.chain)
-cd "${buildDir}"
-if [ ! -s "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ]; then
-  overChainSwapFile=$(ls result/${DS}/swapLiftOverChain_*.chain)
-  gzip -c "${overChainSwapFile}" \
-    > "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz"
-fi
-if [ -s "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ]; then
-  successCount=$((successCount+1))
-fi
-
-### swap over.chain -> bigBed + featureBits
-cd "${swapDir}/axtChain"
-if [ ! -s "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" ]; then
-  chainBigBedFb ${queryDb} chainLiftOver${Target} \
-    "${queryDb}.${targetDb}.over.chain.gz" ${qSizes} \
-    "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt"
-fi
-if [ -s  "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
-cat "${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" 1>&2
-
-### swap quick.chain -> bigBed + featureBits
-if [ ! -s "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" ]; then
-  quickChain ${queryDb} ${targetDb} \
-     "${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz" ${tSizes} \
-    "${swapDir}/fb.${queryDb}.quick${Target}Link.txt"
-fi
-if [ -s "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" ]; then
-  successCount=$((successCount+1))
-fi
-cat "${swapDir}/fb.${queryDb}.quick${Target}Link.txt" 1>&2
+# chain.gz -> bigBed + featureBits build table
+# fields: fn | workDir | db | chainName | chainGz | sizes | fbFile
+for row in \
+  "chainBigBedFb|${buildDir}/axtChain|${targetDb}|chain${QueryDb}|${buildDir}/axtChain/${targetDb}.${queryDb}.all.chain.gz|${tSizes}|${buildDir}/fb.${targetDb}.chain${QueryDb}Link.txt" \
+  "chainBigBedFb|${buildDir}/axtChain|${targetDb}|chainLiftOver${QueryDb}|${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz|${tSizes}|${buildDir}/fb.${targetDb}.chainLiftOver${QueryDb}Link.txt" \
+  "quickChain|${buildDir}/axtChain|${targetDb}|${queryDb}|${buildDir}/axtChain/${targetDb}.${queryDb}.over.chain.gz|${qSizes}|${buildDir}/fb.${targetDb}.quick${QueryDb}Link.txt" \
+  "chainBigBedFb|${swapDir}/axtChain|${queryDb}|chain${Target}|${swapDir}/axtChain/${queryDb}.${targetDb}.all.chain.gz|${qSizes}|${swapDir}/fb.${queryDb}.chain${Target}Link.txt" \
+  "chainBigBedFb|${swapDir}/axtChain|${queryDb}|chainLiftOver${Target}|${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz|${qSizes}|${swapDir}/fb.${queryDb}.chainLiftOver${Target}Link.txt" \
+  "quickChain|${swapDir}/axtChain|${queryDb}|${targetDb}|${swapDir}/axtChain/${queryDb}.${targetDb}.over.chain.gz|${tSizes}|${swapDir}/fb.${queryDb}.quick${Target}Link.txt"
+do
+  IFS="|" read -r fn workDir a1 a2 a3 a4 a5 <<< "${row}"
+  buildChainBb "${fn}" "${workDir}" "${a1}" "${a2}" "${a3}" "${a4}" "${a5}"
+done
 
 ############################################################################
 # mark complete
 ############################################################################
 ### verify all the actual files were created
 cd "${buildDir}"
-if [ "${successCount}" != 10 ]; then
+if [ "${successCount}" -ne 10 ]; then
   printf "ERROR: workflowMonitor.sh did not create 10 result files ?\n" 1>&2
   setErrorStatus ${reqId}
   exit 255
 fi
 
-printf "%s\tinvocation ID: %s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
+printf "%s\t%s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
   > successInvocationId.txt
 rm -f pendingInvocationId.txt
 
 printf "### workflow monitor complete: %s %s -> %s\n" \
   "${buildDir}" "${targetDb}" "${queryDb}" 1>&2
-
-hgsql -N -e \
-      "UPDATE ottoRequest SET status = 4 WHERE id = ${reqId};" hgcentraltest

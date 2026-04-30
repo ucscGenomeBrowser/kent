@@ -348,7 +348,18 @@ else
     cacheLog("open shared memory %s", tempFileName);
     }
 ftruncate(fd, 0);
-ftruncate(fd, size);
+// Reserve real tmpfs pages now so writes through the mmap below can't SIGBUS
+// when /dev/shm is full (ftruncate alone leaves the file sparse).
+int err = posix_fallocate(fd, 0, size);
+if (err != 0)
+    {
+    fprintf(stderr, "trackDbCache: posix_fallocate of %ld bytes in %s failed (%s); skipping cache write\n",
+            size, trackDbCacheDir, strerror(err));
+    cacheLog("unable to allocate %ld bytes for trackDb cache, errno %d", size, err);
+    close(fd);
+    mustRemove(tempFileName);
+    return;
+    }
 
 size_t psize = getpagesize();
 unsigned long pageMask = psize - 1;
