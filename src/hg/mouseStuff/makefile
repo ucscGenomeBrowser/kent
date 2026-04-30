@@ -29,6 +29,7 @@ UTILS_APPLIST = \
 	chainStitchId \
 	chainSwap \
 	chainToAxt \
+	chainToMaf \
 	chainToPsl \
 	chainToPslBasic \
 	lavToAxt \
@@ -38,6 +39,7 @@ UTILS_APPLIST = \
 	mafRanges \
 	mafNoAlign \
 	mafToAxt \
+	mafToChain \
 	mafToPsl \
 	netChainSubset \
 	netClass \
