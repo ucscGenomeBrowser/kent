@@ -10,7 +10,6 @@
 # Prints and executes the resulting kegAlignLastz.sh command.
 
 set -eEu -o pipefail
-set -x
 
 ############################################################################
 ### verify arguments
@@ -22,6 +21,7 @@ if [ $# != 1 ]; then
 fi
 
 export requestId="$1"
+export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
 # validate id is a positive integer
 case "${requestId}" in
@@ -69,7 +69,6 @@ function genarkLookup() {
 ############################################################################
 function dbDbCladeLookup() {
   local dbName=$1
-  local scriptDir=$(cd "$(dirname "$0")" && pwd)
   local tsvFile="${scriptDir}/dbDb.name.clade.tsv"
   if [ ! -s "${tsvFile}" ]; then
     printf "ERROR: clade lookup file not found: %s\n" "${tsvFile}" 1>&2
@@ -274,7 +273,7 @@ hgsql -N -e \
 export fromCladeArg=$(cladeMap "${fromClade}")
 export toCladeArg=$(cladeMap "${toClade}")
 
-export cmd="${HOME}/kent/src/hg/utils/automation/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
+export cmd="${scriptDir}/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
 printf "# launching: %s\n" "${cmd}" 1>&2
 nohup ${cmd} > "${buildDir}/kegAlign.log" 2>&1 < /dev/null &
