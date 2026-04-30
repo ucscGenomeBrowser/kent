@@ -136,7 +136,7 @@ function asmN50() {
 # step 1: look up fromDb and toDb from ottoRequest
 ############################################################################
 export ottoResult=$(hgsql -N -e \
-  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1;" hgcentraltest)
+  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" hgcentraltest)
 
 if [ -z "${ottoResult}" ]; then
   printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
@@ -271,7 +271,9 @@ hgsql -N -e \
 export fromCladeArg=$(cladeMap "${fromClade}")
 export toCladeArg=$(cladeMap "${toClade}")
 
-export cmd="kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
+export cmd="${HOME}/kent/src/hg/utils/automation/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
-printf "####### kegAlignLastz.sh script would be:\n" 1>&2
-printf "# %s\n" "${cmd}" 1>&2
+printf "# launching: %s\n" "${cmd}" 1>&2
+nohup ${cmd} > "${buildDir}/kegAlign.log" 2>&1 < /dev/null &
+printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
+exit 0
