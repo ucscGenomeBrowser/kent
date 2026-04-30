@@ -181,6 +181,45 @@ longLabel NCBI dbVar Structural Variants
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
 
+    track dbVarNr
+    superTrack dbVarSv pack
+    shortLabel dbVar NR all SV ALPHA
+    longLabel dbVar Non-redundant Structural Variants (DEL+DUP+INS merged, 4.6M) - ALPHA only
+    type bigBed 9 +
+    itemRgb on
+    release alpha
+    visibility hide
+    bigDataUrl /gbdb/$D/bbi/dbVar/nr.bb
+    searchIndex name
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen $binSize, count=$variantCount subsets=$subsets study=$study
+    filterValues.svType DEL|DEL (Deletion),DUP|DUP (Duplication),INS|INS (Insertion)
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 0:248886400
+    filterByRange.svLen on
+    filterLabel.svLen SV Length on reference (bp)
+    filter.insLen 0:21714506
+    filterByRange.insLen on
+    filterLabel.insLen Insertion sequence length (bp; INS only)
+    filterValues.binSize small,medium,large
+    filterType.binSize multipleListOr
+    filterLabel.binSize Bin size (small <50bp, medium <1Mb, large >=1Mb)
+    filterValues.subsets common|in common subset,pathogenic|in pathogenic subset,somatic|in somatic subset
+    filterType.subsets multipleListOr
+    filterLabel.subsets Subset membership
+    filterValuesDefault.subsets common,pathogenic,somatic
+    filter.variantCount 1:10000
+    filterByRange.variantCount on
+    filterLabel.variantCount Merged subvariants (number of submitted SVs at this exact placement)
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    skipEmptyFields on
+
+searchTable dbVarNr
+searchMethod exact
+searchType bigBed
+termRegex ^[ne]ssv[0-9]+
+
     track dbVar_somatic
     superTrack dbVarSv
     compositeTrack on
