@@ -4,6 +4,7 @@
 # Currently it contains:
 #   - fetalXiao2019  (built earlier, not documented here)
 #   - drach          (built below)
+#   - m6aAtlas       (built below; high-confidence m6A sites from m6A-Atlas v2)
 
 ###############################################################################
 # DRACH motif sites in MANE Select transcripts (Claude, 2026-04-29)
@@ -60,3 +61,36 @@ cd /hive/data/genomes/hg38/bed/rnaMod/drach
 # Off-by-one verification (single-block + and -, multi-block + spanning a
 # splice junction) was performed against /hive/data/genomes/hg38/hg38.2bit and
 # all three sample motifs round-tripped correctly.
+
+###############################################################################
+# m6A-Atlas v2 high-confidence sites on hg38 (Claude, 2026-04-29)
+# PMID 37587690  Liang Z et al, NAR 2024;52(D1):D194-D202
+###############################################################################
+
+# m6A-Atlas v2.0 distributes a "high-confidence" base-resolution m6A site
+# list per species. We use the human (hg38) "Cell line / Technique" file,
+# which already aggregates per-site evidence across GEO studies.
+
+mkdir -p /hive/data/genomes/hg38/bed/rnaMod/m6aAtlas
+cd /hive/data/genomes/hg38/bed/rnaMod/m6aAtlas
+aria2c -x10 http://rnamd.org/m6a/download/high/hg38/hg38_CL_Tech.txt.gz
+
+# Convert to bed9+15 (1-based -> 0-based half-open, region color, score from
+# nTechniques/nCellLines, m6A-Atlas detail URL).
+python3 ~/kent/src/hg/makeDb/scripts/rnaMod/m6aAtlasToBed.py \
+    hg38_CL_Tech.txt.gz m6aAtlas.bed 2> m6aAtlas.convert.log
+
+sort -k1,1 -k2,2n m6aAtlas.bed > m6aAtlas.sorted.bed
+bedToBigBed -tab -type=bed9+15 \
+    -as=$HOME/kent/src/hg/makeDb/scripts/rnaMod/m6aAtlas.as \
+    -extraIndex=name,geneName,ensemblId \
+    m6aAtlas.sorted.bed /hive/data/genomes/hg38/chrom.sizes m6aAtlas.bb
+
+# Driver and helpers:
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/m6aAtlasToBed.py
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/m6aAtlas.as
+
+# Build summary (recorded after the run):
+#   Source rows (data lines in hg38_CL_Tech.txt.gz):  427760
+#   Output features in m6aAtlas.bb:                   427760
+#   Skipped (unknown chrom or out-of-bounds):              0
