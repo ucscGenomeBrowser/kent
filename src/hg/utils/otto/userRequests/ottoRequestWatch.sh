@@ -287,10 +287,18 @@ done < <(hgsql -N -B -e \
 ############################################################################
 
 while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
+  # time to clean up the galaxy history and workflow to release the space
+  if [ -s "${buildDir}/successInvocationId.txt" ]; then
+    invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
+    profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
+    if "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
+      printf "# galaxy cleanup complete for request %s\n" "${reqId}" 1>&2
+    else
+      printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
+    fi
+  fi
 
-   # TBD using buildDir go clean up the galaxy workflow
-
-   sendNotification "${reqId}" \
+  sendNotification "${reqId}" \
 "from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
 "Your lift over request is complete.  You can access the lift.over files at:"
 
