@@ -147,7 +147,7 @@ def renderPage(rows, info=None, error=None):
     out(f' &middot; <b>{len(rows)}</b> row(s) &middot; '
         f'<a href="">refresh</a></div>\n')
 
-    out('<table>\n<tr>')
+    out('<table class="sortable">\n<tr>')
     for c in COLS:
         out(f'<th>{c}</th>')
     out('<th>set status</th></tr>\n')
@@ -182,8 +182,9 @@ def renderPage(rows, info=None, error=None):
             out(f'<option value="{k}"{sel}>{k}</option>')
         out('</select> <button type="submit">set</button></form></td>')
         out('</tr>\n')
-    out('</table>\n</body></html>\n')
-
+    out('</table>\n')
+    out('<script src="/js/sorttable.js"></script>\n')
+    out('</body></html>\n')
 
 def main():
     checkIp()
