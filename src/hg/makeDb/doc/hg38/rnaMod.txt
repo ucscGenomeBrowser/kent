@@ -1,0 +1,62 @@
+# 2026-04-29 Claude / Max -- DRACH (m6A consensus) motif track on hg38
+
+# The "rnaMod" supertrack groups RNA-modification annotations on hg38.
+# Currently it contains:
+#   - fetalXiao2019  (built earlier, not documented here)
+#   - drach          (built below)
+
+###############################################################################
+# DRACH motif sites in MANE Select transcripts (Claude, 2026-04-29)
+###############################################################################
+
+# All DRACH 5-mers (D=A/G/T, R=A/G, A, C, H=A/C/T) are extracted from MANE
+# Select v1.5 mature transcript fasta and lifted to hg38 genome coordinates
+# via pslMap. The result is a bigBed 12+5 with empty `name` and gene/motif
+# metadata in extra columns.
+
+mkdir -p /hive/data/genomes/hg38/bed/rnaMod/drach
+cd /hive/data/genomes/hg38/bed/rnaMod/drach
+
+# the build is fully driven by one shell script; see the directory for helpers
+~/kent/src/hg/makeDb/scripts/rnaMod/makeDrach.sh
+
+# Driver and helpers:
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/makeDrach.sh
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/drachFromFasta.py
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/drachBedToBigBed.py
+#   ~/kent/src/hg/makeDb/scripts/rnaMod/drach.as
+#
+# The script:
+#   1. curl MANE.GRCh38.v1.5.ensembl_rna.fna.gz and ensembl_genomic.gtf.gz
+#      from https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.5/
+#      (the genomic GTF already uses UCSC chr* names, so no rename is needed)
+#   2. drachFromFasta.py scans every transcript for [AGT][AG]AC[ACT] and emits
+#      drach.tx.bed (transcript-coord), tx.sizes, tx2gene.tsv
+#   3. gtfToGenePred + genePredToPsl produce MANE.tx2genome.psl
+#   4. bedToPsl tx.sizes drach.tx.bed -> drach.tx.psl  (motifs in tx space)
+#   5. pslMap drach.tx.psl MANE.tx2genome.psl -> drach.genome.psl
+#   6. pslToBed drach.genome.psl -> drach.bed12.tmp  (multi-block where a motif
+#      spans an exon junction)
+#   7. drachBedToBigBed.py decorates each row with motif/gene/transcript/txPos/
+#      region (the region is computed from the genePred CDS interval) and emits
+#      bed12+5 with the `name` column blank
+#   8. sort + bedToBigBed -tab -type=bed12+5 -as=drach.as -> drach.bb
+
+# Build summary recorded after the run:
+#   MANE transcripts processed:           19437
+#   DRACH motifs found (transcript):      1381109
+#   Motifs mapped to genome (pslToBed):   1381109
+#   Final features in drach.bb:           1381109
+#   Multi-block (splice junction):           13174   (~0.95%)
+
+# Symlink into /gbdb (one-time):
+#   ln -sf /hive/data/genomes/hg38/bed/rnaMod/drach/drach.bb \
+#          /gbdb/hg38/rnaMod/drach.bb
+
+# trackDb stanza was added to ~/kent/src/hg/makeDb/trackDb/human/hg38/rnaMod.ra
+# under the existing `track rnaMod` supertrack. Filters were added for `motif`
+# and `region`, with no defaults.
+
+# Off-by-one verification (single-block + and -, multi-block + spanning a
+# splice junction) was performed against /hive/data/genomes/hg38/hg38.2bit and
+# all three sample motifs round-tripped correctly.
