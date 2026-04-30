@@ -39,17 +39,22 @@ def loadDbDbClades():
     return result
 
 
-def pendingDbs():
-    """Distinct fromDb/toDb values across status=5 liftOver requests."""
+def pendingRequests():
+    """Status=5 liftOver requests as [(id, fromDb, toDb), ...]."""
     rows = hgsql(
-        "SELECT fromDb, toDb FROM ottoRequest "
+        "SELECT id, fromDb, toDb FROM ottoRequest "
         "WHERE status = 5 AND requestType = 'liftOver';"
     )
-    dbs = set()
-    for fromDb, toDb in rows:
-        dbs.add(fromDb)
-        dbs.add(toDb)
-    return dbs
+    return [(int(r[0]), r[1], r[2]) for r in rows]
+
+
+def markComplete(reqIds):
+    """Set status=6 on the given ottoRequest ids."""
+    if not reqIds:
+        return
+    idList = ",".join(str(i) for i in sorted(reqIds))
+    hgsql("UPDATE ottoRequest SET status = 6 WHERE id IN (%s);" % idList)
+    print("# marked status=6: %s" % idList, file=sys.stderr)
 
 
 def lookupGenark(accessions):
@@ -84,16 +89,128 @@ def groupByClade(dbs, dbDbClades, genarkInfo):
     return {clade: sorted(ids) for clade, ids in grouped.items()}
 
 
+def writeCladeTsv(clade, asmIds):
+    """Filter <clade>.orderList.tsv down to lines matching any asmId and
+    write the result to tsv.otto in the same directory.  Mirrors:
+        cd ~/kent/src/hg/makeDb/doc/<clade>AsmHub
+        egrep '<id1>|<id2>|...' <clade>.orderList.tsv > tsv.otto
+    Only GenArk identifiers are used UCSC native dbs are not in the
+    AsmHub orderList files.
+
+    Returns cladeDir on success (so the caller can chain the make
+    sequence), or None if there is nothing to do for this clade.
+    """
+    genarkIds = [a for a in asmIds if gcPattern.match(a)]
+    if not genarkIds:
+        return None
+    cladeDir = os.path.expanduser(
+        "~/kent/src/hg/makeDb/doc/%sAsmHub" % clade)
+    orderList = os.path.join(cladeDir, "%s.orderList.tsv" % clade)
+    outPath = os.path.join(cladeDir, "tsv.otto")
+    if not os.path.isfile(orderList):
+        print("WARNING: missing %s" % orderList, file=sys.stderr)
+        return None
+    matched = []
+    with open(orderList) as fh:
+        for line in fh:
+            if any(asmId in line for asmId in genarkIds):
+                matched.append(line)
+    if not matched:
+        print("WARNING: no matches in %s" % orderList, file=sys.stderr)
+        return None
+    with open(outPath, "w") as fh:
+        fh.writelines(matched)
+    print("# wrote %d line(s) to %s" % (len(matched), outPath),
+          file=sys.stderr)
+    return cladeDir
+
+
+# Sequence of make commands run in the clade AsmHub directory after
+# tsv.otto is written.  Stops on the first failure.
+makeChainCommands = [
+    "time (make symLinks orderList=tsv.otto) >> dbg 2>&1",
+    "time (make mkGenomes orderList=tsv.otto) >> dbg 2>&1",
+    "time (make symLinks orderList=tsv.otto) >> dbg 2>&1",
+    "time (make verifyTestDownload orderList=tsv.otto) >> test.down.log 2>&1",
+    "time (make sendDownload orderList=tsv.otto) >> send.down.log 2>&1",
+    "time (make verifyDownload orderList=tsv.otto) >> verify.down.log 2>&1",
+]
+
+
+def runMakeChain(cladeDir):
+    """Run the post-tsv.otto make sequence in cladeDir.  Uses bash so
+    'time (...)' (a builtin on a subshell) and '>>' / '2>&1' work as
+    written.  Returns True on success, False if any step fails (the
+    chain stops at the first failure)."""
+    for cmd in makeChainCommands:
+        print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
+        result = subprocess.run(
+            cmd, shell=True, executable="/bin/bash", cwd=cladeDir,
+        )
+        if result.returncode != 0:
+            print("# ERROR: exit %d from: %s -- stopping chain"
+                  % (result.returncode, cmd), file=sys.stderr)
+            return False
+    return True
+
+
 def main():
-    dbs = pendingDbs()
-    if not dbs:
+    requests = pendingRequests()
+    if not requests:
         return
+    dbs = set()
+    for _, fromDb, toDb in requests:
+        dbs.update((fromDb, toDb))
     accessions = {db for db in dbs if gcPattern.match(db)}
-    grouped = groupByClade(dbs, loadDbDbClades(), lookupGenark(accessions))
+    dbDbClades = loadDbDbClades()
+    genarkInfo = lookupGenark(accessions)
+    grouped = groupByClade(dbs, dbDbClades, genarkInfo)
+
+    def cladeOf(db):
+        if gcPattern.match(db):
+            info = genarkInfo.get(db)
+            return info[1] if info else None
+        return dbDbClades.get(db)
+
+    succeededClades = set()
+    failedClades = set()
     for clade in sorted(grouped):
         print("%s:" % clade)
         for asmId in grouped[clade]:
             print("  %s" % asmId)
+        cladeDir = writeCladeTsv(clade, grouped[clade])
+        if cladeDir is None:
+            continue
+        if runMakeChain(cladeDir):
+            succeededClades.add(clade)
+        else:
+            failedClades.add(clade)
+
+    completedIds = []
+    failedRequests = []
+    for reqId, fromDb, toDb in requests:
+        if not (gcPattern.match(fromDb) and gcPattern.match(toDb)):
+            continue                          # mixed or UCSC, not pushed here
+        fromClade = cladeOf(fromDb)
+        toClade = cladeOf(toDb)
+        if fromClade is None or toClade is None:
+            continue                          # missing clade info; be safe
+        clades = {fromClade, toClade}
+        if clades.issubset(succeededClades):
+            completedIds.append(reqId)
+        elif clades & failedClades:
+            failedRequests.append(
+                (reqId, fromDb, toDb, sorted(clades & failedClades)))
+
+    markComplete(completedIds)
+
+    if failedRequests:
+        print("# the following request(s) stay at status=5 due to failed "
+              "clade pushes:", file=sys.stderr)
+        for reqId, fromDb, toDb, badClades in failedRequests:
+            print("#   id=%d %s -> %s (failed clade(s): %s)"
+                  % (reqId, fromDb, toDb, ", ".join(badClades)),
+                  file=sys.stderr)
 
 
 if __name__ == "__main__":

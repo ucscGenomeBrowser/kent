@@ -267,7 +267,7 @@ if [ "${successCount}" -ne 10 ]; then
   exit 255
 fi
 
-printf "%s\tinvocation ID: %s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
+printf "%s\t%s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
   > successInvocationId.txt
 rm -f pendingInvocationId.txt
 
