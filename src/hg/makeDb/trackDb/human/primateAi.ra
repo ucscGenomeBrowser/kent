@@ -3,6 +3,7 @@ shortLabel PrimateAI-3D
 longLabel PrimateAI-3D Pathogenicity Predictions for Missense Variants
 type bigBed 9 +
 parent predictionScoresSuper
+pennantIcon New red ../goldenPath/newsarch.html#050126 "Released May 1, 2026"
 bigDataUrl /gbdb/$D/_primateAi/primateAi.bb
 itemRgb on
 visibility dense
