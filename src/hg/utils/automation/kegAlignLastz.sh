@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export userName="`whoami`"
 
