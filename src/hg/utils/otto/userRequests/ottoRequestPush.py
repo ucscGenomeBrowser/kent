@@ -8,6 +8,7 @@ identifier is "<gcAccession>_<asmName>" for GenArk accessions, or the
 plain UCSC db name for native dbs.
 """
 
+import fcntl
 import os
 import re
 import subprocess
@@ -16,7 +17,22 @@ from collections import defaultdict
 
 scriptDir = os.path.dirname(os.path.abspath(__file__))
 cladeTsv = os.path.join(scriptDir, "dbDb.name.clade.tsv")
+lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
 gcPattern = re.compile(r"^GC[AF]_")
+
+
+def acquireSingletonLock():
+    """Ensure only one instance of this script runs at a time.  Holds an
+    exclusive flock on lockPath for the lifetime of the process; the
+    kernel releases it on exit (including crash / kill -9), so no stale
+    lock cleanup is needed.  Returns the open file handle, which the
+    caller must keep alive."""
+    fh = open(lockPath, "w")
+    try:
+        fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        sys.exit(0)
+    return fh
 
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
@@ -155,6 +171,7 @@ def runMakeChain(cladeDir):
 
 
 def main():
+    lockFh = acquireSingletonLock()  # noqa: F841 -- keep ref alive
     requests = pendingRequests()
     if not requests:
         return
