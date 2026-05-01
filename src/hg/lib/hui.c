@@ -10601,12 +10601,17 @@ char *version = (char *)metadataFindValue(tdb, "dataVersion");
 if (version == NULL)
     version = trackDbSetting(tdb, "dataVersion");
 
-if (version != NULL)
+if (version != NULL && startsWith("/", version))
     {
-    // dataVersion can also be the path to a local file, for otto tracks
-    if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+    // dataVersion can also be the path to a local file, for otto tracks.
+    // For quickLifted tracks the file lives on the source assembly, so
+    // substitute $D using quickLiftDb rather than the destination database.
+    char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+    char *resolveDb = liftDb ? liftDb : database;
+    if (liftDb != NULL ||
+        (!trackHubDatabase(database) && !isHubTrack(tdb->table)))
         {
-        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE, NULL);
+        char *path = replaceInUrl(version, "", NULL, resolveDb, "", 0, 0, tdb->track, FALSE, NULL);
         struct lineFile* lf = lineFileMayOpen(path, TRUE);
         if (lf)
             version = lineFileReadAll(lf);
