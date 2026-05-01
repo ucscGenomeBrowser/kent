@@ -8074,6 +8074,12 @@ void loadDecorators(struct track *track)
  */
 {
 struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+// quickLifted tracks fetch from the source assembly, so their decorator
+// bigDataUrls live under /gbdb/<sourceDb>/... -- validate against that.
+char *decoratorDb = database;
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    decoratorDb = quickLiftDb;
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
@@ -8089,7 +8095,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, decoratorDb, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);
