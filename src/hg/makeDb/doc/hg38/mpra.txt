@@ -83,10 +83,30 @@ python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
 # =============================================================================
 # Known outstanding items (see RM #37359)
 # =============================================================================
-# - mprabase reference field for Mattioli 2020 rows starts with "musculus ..."
-#   (species word merged into title upstream).  Flag to Varda for upstream fix.
-# - mprabase has 1 orphan element (Hela STARR-seq, PMID 23328393, Arnold 2013)
-#   not in the documented experiment table.  Flag to Varda.
+# - mprabase rebuild items to fold into Varda's next bigBed:
+#     * Mattioli 2020 reference field starts with "musculus ..." (species word
+#       merged into title upstream).  Varda confirmed 2026-04-23 she will fix.
+#     * AutoSQL percentile_rank description currently says "Percentile rank
+#       within cell line"; the data is actually computed per (cell_line, assay,
+#       PMID) experiment.  Fix the .as comment to "Percentile rank within
+#       experiment" so the schema page matches the description page.
+#     * Element-name disambiguation: HepG2-XX%-LM and similar auto-generated
+#       names collide across Inoue 2017 and Klein 2020 because both reused the
+#       same ENCODE-derived 171 bp library and produced the same percentile.
+#       Surface: 149 of 625 unique names are reused across multiple PMIDs;
+#       4 are exact (chrom,start,end,name) duplicates.  Encode PMID or short
+#       study tag in the name to disambiguate.
+# - mprabase chr14:69999387-69999388 (HeLa STARR-seq, PMID 23328393, Arnold 2013)
+#   was previously flagged as an orphan.  Varda confirmed (2026-04-23) it is
+#   valid: HeLa was a proof-of-concept in an otherwise Drosophila STARR-seq
+#   paper (Stark Lab).  Row added to the experiments table in mprabase.html.
+# - Klein et al. 2020 (PMID 33046894) is an MPRA-design benchmarking paper
+#   that ran the same 2,440-element library through nine different assays.
+#   The track has three Klein 2020 sub-rows (lentiMPRA, plasmidMPRA, STARR-seq);
+#   confirm with Varda which underlying sub-designs MPRA Base pulled, since
+#   the Klein 2020 authors flag HSS as the worst-correlated of the nine and
+#   recommend pGL4 / ORI / 5'/5' WT.  Description page can be sharpened once
+#   confirmed.
 # - mpraVarDB preserves ~42k (chrom,start,end,name) duplicate rows (same rsID
 #   tested in multiple cells/studies).  Users disambiguate via the
 #   filterValues.cellLine / filterValues.mpraStudy filters in the trackDb.

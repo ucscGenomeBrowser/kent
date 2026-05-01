@@ -14,7 +14,8 @@ superTrack on
     visibility pack
     priority 1
     itemRgb on
-    mouseOver $cell_line | $assay | Score: $raw_score | %tile: $percentile_rank | $citation
+    dataVersion MPRA Base v4.9.3 (Mar 2026)
+    mouseOver <b>Element</b>: $name<br><b>Cell line</b>: $cell_line<br><b>Assay</b>: $assay<br><b>Raw score</b>: $raw_score<br><b>Percentile rank</b>: $percentile_rank<br><b>Citation</b>: $citation
     urls PMID="https://www.ncbi.nlm.nih.gov/pubmed/$$"
     labelFields name,cell_line,assay,author_lab
     defaultLabelFields name
