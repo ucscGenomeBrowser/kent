@@ -46,7 +46,7 @@ def acquireSingletonLock():
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
-        ["hgsql", "-N", "-B", "-e", query, db],
+        ["/cluster/bin/x86_64/hgsql", "-N", "-B", "-e", query, db],
         check=True, capture_output=True, text=True,
     ).stdout
     return [tuple(line.split("\t")) for line in out.splitlines() if line]
@@ -79,7 +79,7 @@ def markComplete(reqIds):
         return
     idList = ",".join(str(i) for i in sorted(reqIds))
     hgsql("UPDATE ottoRequest SET status = 6 WHERE id IN (%s);" % idList)
-    print("# marked status=6: %s" % idList, file=sys.stderr)
+#   print("# marked status=6: %s" % idList, file=sys.stderr)
 
 
 def lookupGenark(accessions):
@@ -149,8 +149,8 @@ def writeCladeTsv(clade, asmIds):
         return None
     with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
         fh.writelines(matched)
-    print("# wrote %d line(s) to %s" % (len(matched), outPath),
-          file=sys.stderr)
+#   print("# wrote %d line(s) to %s" % (len(matched), outPath),
+#         file=sys.stderr)
     return cladeDir
 
 
@@ -172,7 +172,7 @@ def runMakeChain(cladeDir):
     written.  Returns True on success, False if any step fails (the
     chain stops at the first failure)."""
     for cmd in makeChainCommands:
-        print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
+#       print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
         result = subprocess.run(
             cmd, shell=True, executable="/bin/bash", cwd=cladeDir,
         )
