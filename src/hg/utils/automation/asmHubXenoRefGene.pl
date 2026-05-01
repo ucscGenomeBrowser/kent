@@ -30,7 +30,7 @@ if ( ! -s $xenoRefGeneBbi ) {
   exit 255;
 }
 
-my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
+my $totalBases = `/cluster/bin/x86_64/ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
 my $geneStats = `cat $trackDataDir/xenoRefGene/${asmId}.xenoRefGene.stats.txt | awk '{printf "%d\\n", \$2}' | xargs echo`;
 chomp $geneStats;
