@@ -33,7 +33,7 @@ sub commify($) {
 # sum of column 2:
 sub asmSize($) {
     my ($chromSizes) = @_;
-    my $asmSize=`ave -col=2 $chromSizes | grep "total" | sed -e 's/total //; s/.000000//;'`;
+    my $asmSize=`/cluster/bin/x86_64/ave -col=2 $chromSizes | grep "total" | sed -e 's/total //; s/.000000//;'`;
     chomp $asmSize;
     return $asmSize;
 }
