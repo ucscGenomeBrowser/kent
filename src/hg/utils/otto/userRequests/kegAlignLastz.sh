@@ -130,7 +130,7 @@ function orgName() {
        oName=`egrep -m 1 -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
        ;;
      *)
-       oName=`hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
+       oName=`/cluster/bin/x86_64/hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
        ;;
   esac
   printf "%s" "${oName}"
@@ -173,7 +173,7 @@ function orgDate() {
 function verifyGenark() {
   local asmAccession=$1
   local fullName=$2
-  local count=$(hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  local count=$(/cluster/bin/x86_64/hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
   if [ "$count" -eq 0 ]; then
     printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
     return 1
@@ -608,12 +608,12 @@ function chainBigBedFb() {
   local chainGz=\$3
   local sizesFile=\$4
   local fbFile=\$5
-  chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
-  bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
-  bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
+  /cluster/bin/x86_64/chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
+  /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
+  /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
   rm -f \${chainName}.tab \${chainName}Link.tab chain.tab link.tab
-  local totalBases=\`ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
-  local basesCovered=\`bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+  local totalBases=\`/cluster/bin/x86_64/ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
+  local basesCovered=\`/cluster/bin/x86_64/bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
   local percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%%.3f\", 100.0*\$1/\$2}'\`
   printf \"%%d bases of %%d (%%s%%) in intersection\\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${fbFile}
 }

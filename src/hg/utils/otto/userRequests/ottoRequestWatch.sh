@@ -47,7 +47,7 @@ printf "%d\n" "$$" >&9
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
 }
 ##############################################################################
@@ -101,7 +101,7 @@ function sendNotification() {
   local subject="${2}"
   local msgBody="${3}"
   local toAddr
-  toAddr="$(hgsql -N -B -e \
+  toAddr="$(/cluster/bin/x86_64/hgsql -N -B -e \
     "SELECT email FROM ottoRequest WHERE id = ${reqId};" hgcentraltest)"
   if [ -z "${toAddr}" ]; then
     printf "ERROR: sendNotification: no email for request %s\n" "${reqId}" 1>&2
@@ -219,7 +219,7 @@ function installLinks() {
   fi
 
   # register both rows in hgcentraltest
-  if ! hgAddLiftOverChain -minMatch=0.1 -multiple \
+  if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
       -path="${chainPath}" "${tDb}" "${qDb}"; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
@@ -246,7 +246,7 @@ while read -r reqId; do
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" \
   hgcentraltest)
 
@@ -268,7 +268,7 @@ while IFS=$'\t' read -r reqId buildDir; do
     # workflowMonitor.sh exits 0 both when still running and when complete;
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
-      hgsql -N -e \
+      /cluster/bin/x86_64/hgsql -N -e \
         "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
          WHERE id = ${reqId};" hgcentraltest
       printf "# request %s completed successfully\n" "${reqId}" 1>&2
@@ -278,7 +278,7 @@ while IFS=$'\t' read -r reqId buildDir; do
     printf "# workflow error for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
 
@@ -333,9 +333,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
 
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" hgcentraltest
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
 
@@ -372,10 +372,10 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
   ${toUrl}
 "
 
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
 
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id, fromDb, toDb, buildDir FROM ottoRequest \
    WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
 

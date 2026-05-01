@@ -37,7 +37,7 @@ esac
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
 }
 
@@ -48,7 +48,7 @@ function setErrorStatus() {
 ############################################################################
 function genarkLookup() {
   local acc=$1
-  local result=$(hgsql -N -e \
+  local result=$(/cluster/bin/x86_64/hgsql -N -e \
     "SELECT gcAccession,asmName,clade from genark WHERE gcAccession='${acc}';" \
     hgcentraltest)
   if [ -z "${result}" ]; then
@@ -120,8 +120,8 @@ function twoBitPath() {
 ############################################################################
 function asmN50() {
   local twoBit=$1
-  twoBitInfo "${twoBit}" stdout \
-    | n50.pl stdin 2>&1 \
+  /cluster/bin/x86_64/twoBitInfo "${twoBit}" stdout \
+    | /cluster/bin/scripts/n50.pl stdin 2>&1 \
     | grep -A1 "^[0-9].*one half size" \
     | tail -1 \
     | awk '{print $NF}'
@@ -135,12 +135,12 @@ function asmN50() {
 ############################################################################
 # step 1: look up fromDb and toDb from ottoRequest
 ############################################################################
-export ottoResult=$(hgsql -N -e \
+export ottoResult=$(/cluster/bin/x86_64/hgsql -N -e \
   "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" hgcentraltest)
 
 if [ -z "${ottoResult}" ]; then
   printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
-  hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
+  /cluster/bin/x86_64/hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
   exit 255
 fi
 
@@ -263,7 +263,7 @@ mkdir -p  "${buildDir}"
 printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # store buildDir in ottoRequest table for workflowMonitor.sh
-hgsql -N -e \
+/cluster/bin/x86_64/hgsql -N -e \
   "UPDATE ottoRequest SET buildDir='${buildDir}', status=2 WHERE id=${requestId};" \
   hgcentraltest
 

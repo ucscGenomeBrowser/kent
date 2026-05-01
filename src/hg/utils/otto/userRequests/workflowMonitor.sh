@@ -37,7 +37,7 @@ export scriptDir=$(cd "$(dirname "$0")" && pwd)
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
 }
 ##############################################################################
@@ -100,7 +100,7 @@ case "${state}" in
 esac
 
 printf "# all jobs complete, downloading results\n" 1>&2
-hgsql -N -e \
+/cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status = 3 WHERE id = ${reqId};" hgcentraltest
 
 ############################################################################
@@ -146,15 +146,15 @@ function quickChain() {
   local sizesFile=$4
   local fbFile=$5
   local chainName="${target}.${query}.quick"
-  chainSwap "${liftOver}" stdout | chainToBigChain stdin \
+  /cluster/bin/x86_64/chainSwap "${liftOver}" stdout | /cluster/bin/x86_64/chainToBigChain stdin \
     ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
-  bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
+  /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
     ${target}.${query}.quick.chain.tab ${sizesFile} ${chainName}.bb
-  bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
+  /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
     ${target}.${query}.quick.link.tab ${sizesFile} ${chainName}Link.bb
   rm -f ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
   local totalBases=$(ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
-  local basesCovered=$(bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
+  local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
   local percentCovered=$(echo ${basesCovered} ${totalBases} | awk '{printf "%.3f", 100.0*$1/$2}')
   printf "%d bases of %d (%s%%) in intersection\n" \
     "${basesCovered}" "${totalBases}" "${percentCovered}" > ${fbFile}
@@ -170,14 +170,14 @@ function chainBigBedFb() {
   local chainGz=$3
   local sizesFile=$4
   local fbFile=$5
-  chainToBigChain "${chainGz}" ${chainName}.tab ${chainName}Link.tab
-  bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
+  /cluster/bin/x86_64/chainToBigChain "${chainGz}" ${chainName}.tab ${chainName}Link.tab
+  /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
     ${chainName}.tab ${sizesFile} ${chainName}.bb
-  bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
+  /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
     ${chainName}Link.tab ${sizesFile} ${chainName}Link.bb
   rm -f ${chainName}.tab ${chainName}Link.tab chain.tab link.tab
   local totalBases=$(ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
-  local basesCovered=$(bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
+  local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
   local percentCovered=$(echo ${basesCovered} ${totalBases} | awk '{printf "%.3f", 100.0*$1/$2}')
   printf "%d bases of %d (%s%%) in intersection\n" \
     "${basesCovered}" "${totalBases}" "${percentCovered}" > ${fbFile}
