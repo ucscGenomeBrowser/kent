@@ -75,8 +75,8 @@ if [ ! -s kegAlign.sh ]; then
 fi
 source <(grep -E '^export (swapDir|PM|targetDb|queryDb|QueryDb|Target|tSizes|qSizes)=' kegAlign.sh)
 
-printf "# monitoring invocation: %s\n" "${invocationId}" 1>&2
-printf "# buildDir: %s\n" "${buildDir}" 1>&2
+# printf "# monitoring invocation: %s\n" "${invocationId}" 1>&2
+# printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # read Galaxy credentials from planemo profile
 export profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
@@ -153,7 +153,7 @@ function quickChain() {
   /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
     ${target}.${query}.quick.link.tab ${sizesFile} ${chainName}Link.bb
   rm -f ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
-  local totalBases=$(ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
+  local totalBases=$(/cluster/bin/x86_64/ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
   local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
   local percentCovered=$(echo ${basesCovered} ${totalBases} | awk '{printf "%.3f", 100.0*$1/$2}')
   printf "%d bases of %d (%s%%) in intersection\n" \
@@ -176,7 +176,7 @@ function chainBigBedFb() {
   /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
     ${chainName}Link.tab ${sizesFile} ${chainName}Link.bb
   rm -f ${chainName}.tab ${chainName}Link.tab chain.tab link.tab
-  local totalBases=$(ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
+  local totalBases=$(/cluster/bin/x86_64/ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
   local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
   local percentCovered=$(echo ${basesCovered} ${totalBases} | awk '{printf "%.3f", 100.0*$1/$2}')
   printf "%d bases of %d (%s%%) in intersection\n" \
