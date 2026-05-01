@@ -16,9 +16,32 @@
 #      8 final notification has been sent == process is complete
 
 set -eEu -o pipefail
-set -x
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+
+##############################################################################
+### singleton lock - only one instance at a time
+### Open lockPath on FD 9 for the lifetime of the shell, then take a
+### non-blocking exclusive lock.  Kernel releases the lock on exit
+### (normal, error, or kill -9), so no stale lock cleanup is needed.
+### Exit 0 silently if another instance holds the lock so cron doesn't
+### email on every overlapping tick.  PID is written to the file for
+### information only see the holder via:
+###   cat ottoRequestWatch.lock      (the PID)
+###   lsof ottoRequestWatch.lock     (the locking process)
+##############################################################################
+export lockPath="${scriptDir}/ottoRequestWatch.lock"
+# 9<> opens read+write without truncating, so a second instance that
+# comes along while we're running won't wipe our PID from the file
+# before its flock attempt fails.
+exec 9<>"${lockPath}"
+flock -n 9 || exit 0
+# we own the lock now safe to truncate and write our PID.  ': >file'
+# truncates via a separate FD; FD 9 keeps its position 0 from <>, so
+# the printf below starts writing at the beginning of the empty file.
+: >"${lockPath}"
+printf "%d\n" "$$" >&9
+##############################################################################
 
 ##############################################################################
 ### errors - set error status in the table

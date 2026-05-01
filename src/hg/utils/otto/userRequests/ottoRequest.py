@@ -13,6 +13,7 @@ Options:
 """
 
 import argparse
+import fcntl
 import os
 import re
 import subprocess
@@ -23,6 +24,32 @@ BCC_BY_TYPE = {
     'liftOver': 'chain-file-request-group@ucsc.edu',
     'assembly': 'genark-request-group@ucsc.edu',
 }
+
+scriptDir = os.path.dirname(os.path.abspath(__file__))
+lockPath  = os.path.join(scriptDir, "ottoRequest.lock")
+
+
+def acquireSingletonLock():
+    """Ensure only one instance of this script runs at a time.  Holds an
+    exclusive flock on lockPath for the lifetime of the process; the
+    kernel releases it on exit (including crash / kill -9), so no stale
+    lock cleanup is needed.  Returns the open file handle, which the
+    caller must keep alive."""
+    # "a+" opens read+write without truncating (and creates if missing),
+    # so a second instance that fails to lock doesn't wipe the running
+    # instance's PID from the file before exiting.
+    fh = open(lockPath, "a+")
+    try:
+        fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        sys.exit(0)
+    # we own the lock truncate and write our PID for information
+    fh.seek(0)
+    fh.truncate()
+    fh.write("%d\n" % os.getpid())
+    fh.flush()
+    return fh
+    ### FYI: can also see the locking process via: lsof ottoRequest.lock
 
 
 def parseHgConf(path):
@@ -182,6 +209,9 @@ def main():
                         default='/usr/local/apache/cgi-bin/hg.conf',
                         help='Path to hg.conf [default: %(default)s]')
     args = parser.parse_args()
+
+    # bind to a local so the FD stays open for the lifetime of main()
+    _lock = acquireSingletonLock()  # noqa: F841
 
     conf = parseHgConf(args.conf)
 

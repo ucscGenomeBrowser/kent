@@ -27,12 +27,17 @@ def acquireSingletonLock():
     kernel releases it on exit (including crash / kill -9), so no stale
     lock cleanup is needed.  Returns the open file handle, which the
     caller must keep alive."""
-    fh = open(lockPath, "w")
+    # "a+" opens read+write without truncating (and creates if missing),
+    # so a second instance that fails to lock doesn't wipe the running
+    # instance's PID from the file before exiting.
+    fh = open(lockPath, "a+")
     try:
         fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         sys.exit(0)
-    # indicate PID in the lock file, merely for information, not relevant
+    # we own the lock truncate and write our PID for information
+    fh.seek(0)
+    fh.truncate()
     fh.write("%d\n" % os.getpid())
     fh.flush()
     return fh
@@ -130,15 +135,19 @@ def writeCladeTsv(clade, asmIds):
     if not os.path.isfile(orderList):
         print("WARNING: missing %s" % orderList, file=sys.stderr)
         return None
+    # orderList.tsv files occasionally contain Latin-1 bytes (e.g. xxx in
+    # Scandinavian fish names) that aren't valid UTF-8.  surrogateescape
+    # round-trips those bytes through read+write byte-for-byte instead of
+    # raising UnicodeDecodeError.
     matched = []
-    with open(orderList) as fh:
+    with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
         for line in fh:
             if any(asmId in line for asmId in genarkIds):
                 matched.append(line)
     if not matched:
         print("WARNING: no matches in %s" % orderList, file=sys.stderr)
         return None
-    with open(outPath, "w") as fh:
+    with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
         fh.writelines(matched)
     print("# wrote %d line(s) to %s" % (len(matched), outPath),
           file=sys.stderr)

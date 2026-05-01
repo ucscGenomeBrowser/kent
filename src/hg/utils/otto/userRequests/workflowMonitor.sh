@@ -22,7 +22,6 @@
 #   5 finish notification, 6 complete, 7 problems
 
 set -eEu -o pipefail
-set -x
 
 if [ $# != 2 ]; then
   printf "usage: workflowMonitor.sh <reqId> <buildDir>\n" 1>&2

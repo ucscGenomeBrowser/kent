@@ -553,7 +553,7 @@ printf "%s" "${yamlString}" > ${buildDir}/${tAccId}.${qAccId}.yaml
 ### setup the buildDir/lastzRun.sh script
 printf "#!/bin/bash
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export targetDb=\"${tAccId}\"
 export queryDb=\"${qAccId}\"
@@ -586,7 +586,7 @@ chmod +x ${buildDir}/lastzRun.sh
 printf "#!/bin/bash
 
 # exit on any failure
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export buildDir=\"${buildDir}\"
 export swapDir=\"${swapDir}\"
@@ -652,5 +652,7 @@ chmod +x ${buildDir}/kegAlign.sh
 printf "running: time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1\n" 1>&2
 
 time (${buildDir}/kegAlign.sh) >> ${buildDir}/keg.log 2>&1
+
+fi	#	if [ $primaryDone -eq 0 ]; then
 
 exit $?
