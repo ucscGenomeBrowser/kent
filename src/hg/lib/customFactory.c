@@ -37,7 +37,7 @@
 #include "hgBam.h"
 #include "vcf.h"
 #include "vcfUi.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "regexHelper.h"
@@ -3378,21 +3378,21 @@ static struct customFactory vcfTabixFactory =
     vcfTabixLoader,
     };
 
-/*** makeItems Factory - for track where user interactively creates items. ***/
+/*** myVariants Factory - for track where user interactively creates items. ***/
 
-static boolean makeItemsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type,
+static boolean myVariantsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type,
 			     struct customTrack *track)
-/* Return TRUE if looks like we're handling a makeItems track */
+/* Return TRUE if looks like we're handling a myVariants track */
 {
-return (sameType(type, "makeItems"));
+return (sameType(type, "myVariants"));
 }
 
-struct makeItemsItem *makeItemsItemFromRow(char **row, int rowSize)
-/* Create a makeItemsItem from a row of uncertain length. */
+struct myVariants *myVariantsFromRow(char **row, int rowSize)
+/* Create a myVariants from a row of uncertain length. */
 {
 if (rowSize < 3)
-    errAbort("err: need at least %d fields in a makeItems row, got %d", 3, rowSize);
-struct makeItemsItem *item;
+    errAbort("err: need at least %d fields in a myVariants row, got %d", 3, rowSize);
+struct myVariants *item;
 AllocVar(item);
 item->chrom = cloneString(row[0]);
 item->chromStart = sqlUnsigned(row[1]);
@@ -3425,13 +3425,14 @@ else
 return item;
 }
 
-static struct customTrack *makeItemsLoader(struct customFactory *fac, struct hash *chromHash,
+static struct customTrack *myVariantsLoader(struct customFactory *fac, struct hash *chromHash,
 				     struct customPp *cpp, struct customTrack *track,
 				     boolean dbRequested)
-/* Process the makeItems track line. */
+/* Process the myVariants track line. The data will already be loaded by jsCommandDispatch
+ * so not much to do here */
 {
 char *ctDb = ctGenomeOrCurrent(track);
-struct makeItemsItem *list = NULL;
+struct myVariants *list = NULL;
 int fieldCount = 0;
 char *line;
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
@@ -3444,79 +3445,36 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
         fieldCount = wordCount;
     else if (fieldCount != wordCount)
         {
-	errAbort("error: some lines in makeItems type custom track have %d fields, others have %d",
+	errAbort("error: some lines in myVariants type custom track have %d fields, others have %d",
 		fieldCount, wordCount);
 	}
-    struct makeItemsItem *item = makeItemsItemFromRow(row, wordCount);
+    struct myVariants *item = myVariantsFromRow(row, wordCount);
     customFactoryCheckChromNameDb(ctDb, item->chrom, lf);
     slAddHead(&list, item);
     }
-track->dbTrackType = cloneString("makeItems");
-track->tdb->type = cloneString("makeItems");
-if (fieldCount != 0)
-    {
-    char buf[16];
-    safef(buf, sizeof(buf), "%d", fieldCount);
-    ctAddToSettings(track, "fieldCount", cloneString(buf));
-    }
-
-/* If necessary add track offsets. */
-int offset = track->offset;
-if (offset != 0)
-    {
-    /* Add track offsets if any */
-    struct makeItemsItem *item;
-    for (item = list; item != NULL; item = item->next)
-	{
-	item->chromStart += offset;
-	item->chromEnd += offset;
-	}
-    track->offset = 0;	/*	so DB load later won't do this again */
-    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
-    }
-
-/* Load database */
-customFactorySetupDbTrack(track);
-char *tableName = track->dbTableName;
-char *tableFormat =
-"CREATE TABLE %s (\n"
-"    bin int unsigned not null,	# Bin for range index\n"
-"    chrom varchar(255) not null,	# Reference sequence chromosome or scaffold\n"
-"    chromStart int unsigned not null,	# Start position in chromosome\n"
-"    chromEnd int unsigned not null,	# End position in chromosome\n"
-"    name varchar(255) not null,	# Name of item - up to 16 chars\n"
-"    score int unsigned not null,	# 0-1000.  Higher numbers are darker.\n"
-"    strand char(1) not null,	# + or - for strand\n"
-"    thickStart int unsigned not null,	# Start of thick part\n"
-"    thickEnd int unsigned not null,	# End position of thick part\n"
-"    itemRgb int unsigned not null,	# RGB 8 bits each as in bed\n"
-"    description longblob not null,	# Longer item description\n"
-"    id int auto_increment,\n"
-"              #Indices\n"
-"    PRIMARY KEY(id),\n"
-"    INDEX(chrom(16),bin)\n"
-")";
-struct dyString *createSql = dyStringNew(0);
-sqlDyStringPrintf(createSql, tableFormat, tableName);
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-if (sqlMaybeMakeTable(conn, tableName, createSql->string))
-    {
-    struct makeItemsItem *item;
-    for (item = list; item != NULL; item = item->next)
-	makeItemsItemSaveToDb(conn, item, tableName, 1000+strlen(item->description));
-    }
-dyStringFree(&createSql);
-hFreeConn(&conn);
+track->dbTrackType = cloneString("myVariants");
+track->tdb->type = cloneString("myVariants");
+/* tdb->shortLabel holds the name= value from the track line at this point.
+ * Use it for track/table identity, then override the display labels
+ * from the shortLabel/longLabel settings if present. */
+track->tdb->table = track->tdb->shortLabel;
+track->tdb->track = track->tdb->shortLabel;
+char *sl = trackDbSetting(track->tdb, "shortLabel");
+if (isNotEmpty(sl))
+    track->tdb->shortLabel = cloneString(sl);
+char *ll = trackDbSetting(track->tdb, "longLabel");
+if (isNotEmpty(ll))
+    track->tdb->longLabel = cloneString(ll);
 return track;
 }
 
-static struct customFactory makeItemsFactory =
-/* Factory for makeItems tracks */
+static struct customFactory myVariantsFactory =
+/* Factory for myVariants tracks */
     {
     NULL,
-    "makeItems",
-    makeItemsRecognizer,
-    makeItemsLoader,
+    "myVariants",
+    myVariantsRecognizer,
+    myVariantsLoader,
     };
 
 
@@ -3769,7 +3727,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &adjacencyFactory);
     slAddTail(&factoryList, &bamFactory);
     slAddTail(&factoryList, &vcfTabixFactory);
-    slAddTail(&factoryList, &makeItemsFactory);
+    slAddTail(&factoryList, &myVariantsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
     slAddTail(&factoryList, &barChartFactory);
     slAddTail(&factoryList, &bigBarChartFactory);

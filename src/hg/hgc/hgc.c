@@ -22959,8 +22959,8 @@ else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
-else if (sameWord(type, "makeItems"))
-    doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", trackId))
+    doMyVariantsDetails(ct, item);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)
@@ -27195,7 +27195,7 @@ if (seqName == NULL)
     }
 
 struct customTrack *ct = NULL;
-if (isCustomTrack(track))
+if (isCustomTrack(track) || startsWith("myVariants_", track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
@@ -27203,7 +27203,7 @@ if (isCustomTrack(track))
             break;
     }
 
-if ((!isCustomTrack(track) && dbIsFound)
+if ((!isCustomTrack(track) && !startsWith("myVariants_", track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
@@ -27853,7 +27853,7 @@ else if (sameWord(table, "softPromoter"))
     {
     hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     if (tdb != NULL)
         {

@@ -25,7 +25,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 #include "wikiTrack.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "samAlignment.h"
@@ -208,7 +208,7 @@ if (outList != NULL)
     hTableStart();
     for (out = outList; out != NULL; out = out->next)
 	{
-        if (doFilterDbKg) 
+        if (doFilterDbKg)
             {
             // if user selected the knownGeneV32 track...
             // - do not show the current hg38 knownGene tables
@@ -1121,11 +1121,11 @@ if (type != NULL && startsWithWord("maf", type))
     integerFilter(db, table, "chromStart", "chromStart", " AND ");
     integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
     }
-else if (type != NULL && 
-        (startsWithWord("makeItems", type) || 
-        sameWord("bedDetail", type) || 
-        sameWord("barChart", type) || 
-        sameWord("interact", type) || 
+else if (type != NULL &&
+        (startsWithWord("myVariants", type) ||
+        sameWord("bedDetail", type) ||
+        sameWord("barChart", type) ||
+        sameWord("interact", type) ||
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

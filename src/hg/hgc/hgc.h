@@ -480,7 +480,7 @@ void doVcfDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbLi
 void doBarChartDetails(struct trackDb *tdb, char *item);
 /* Details of barChart item */
 
-void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
+void doMyVariantsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
 
 void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);

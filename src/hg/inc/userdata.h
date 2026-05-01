@@ -24,9 +24,6 @@ time_t lastModified; // actually last access time but this works
 struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
-char *getUserName();
-/* Query the right system for the users name */
-
 char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 

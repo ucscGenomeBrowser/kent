@@ -24,6 +24,21 @@ var gnomadVarExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([A-Za-z]+)-([A-Za-z]+)$";
 // allow gnomad ranges, ex: 12-1234-11223344
 var gnomadRangeExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([0-9]+)$";
 
+function createInfoIcon(text) {
+    /* Create an info icon (i in circle) with tooltip text.
+     * Returns a span element containing the SVG icon.
+     * Uses addMouseover() for consistent tooltip behavior. */
+    var span = document.createElement("span");
+    span.style.marginLeft = "4px";
+    span.innerHTML = "<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>" +
+        "<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>" +
+        "<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>" +
+        "<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>" +
+        "</svg>";
+    addMouseover(span, text);
+    return span;
+}
+
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
@@ -4375,6 +4390,11 @@ function convertTitleTagsToMouseovers() {
                 hideMouseoverText(mouseoverContainer);
             }
         }
+    });
+
+    /* Make jquery-ui dialogs hide tooltips */
+    $(document).on("dialogopen", (ev) => {
+        hideMouseoverText(mouseoverContainer);
     });
 }
 

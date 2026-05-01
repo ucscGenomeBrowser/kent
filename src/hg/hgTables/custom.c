@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "customTrack.h"
 #include "hgTables.h"
-
+#include "myVariants.h"
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -495,11 +495,11 @@ if (ct == NULL)
     errAbort("Can't find custom track %s", name);
 char *type = ct->dbTrackType;
 
-if (type != NULL && (startsWithWord("makeItems", type) || 
-        sameWord("bedDetail", type) || 
-        sameWord("barChart", type) || 
-        sameWord("interact", type) || 
-        sameWord("bedMethyl", type) || 
+if (type != NULL && (startsWithWord("myVariants", type) ||
+        sameWord("bedDetail", type) ||
+        sameWord("barChart", type) ||
+        sameWord("interact", type) ||
+        sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -605,13 +605,17 @@ void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
 {
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->tdb->type;
-if (startsWithWord("makeItems", type) || 
-        sameWord("bedDetail", type) || 
+if (startsWithWord("myVariants", type) ||
+        sameWord("bedDetail", type) ||
         sameWord("barChart", type) ||
         sameWord("interact", type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type))
     {
+    if (sameWord("myVariants", type))
+        {
+        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
+        }
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields, outSep);
     hFreeConn(&conn);

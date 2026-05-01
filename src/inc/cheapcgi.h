@@ -401,6 +401,12 @@ void cgiMakeIntVarWithMax(char *varName, int initialVal, char *title, int width,
         cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,NULL)
 /* All four of these call cgiMakeIntVarInRange() and therefore require utils.js */
 
+void cgiMakeColorVar(char *varName, char *initialColor);
+/* Make a color input picker using the native color picker. initialColor is a hexval string */
+
+void cgiMakeColorVarWithLabel(char *varName, char *label, char *initialColor, boolean boldLabel);
+/* Make an input color picker labeled by label */
+
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
 void cgiMakeDoubleVarWithExtra(char *varName, double initialVal, int maxDigits, char *extra);

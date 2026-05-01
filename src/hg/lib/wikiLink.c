@@ -401,6 +401,12 @@ else
 return NULL;
 }
 
+char *getUserName()
+{
+return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+}
+
+
 char *wikiLinkUserId()
 /* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
  * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */
