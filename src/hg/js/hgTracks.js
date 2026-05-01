@@ -2072,6 +2072,91 @@ var dragSelect = {
         } else {
             $("#dragSelectPosition").html(newPosition);
         }
+        // Build the button set in two passes so that "Create Item" only
+        // appears when myVariants is enabled in hg.conf.  doMyVariants is
+        // emitted by the server only inside the gated hg.conf block, so on
+        // a server with the feature off the variable is undefined and the
+        // button is omitted entirely.
+        let dragSelectButtons = {
+            "Zoom In": function() {
+                // Zoom to selection
+                $(this).dialog("option", "revertToOriginalPos", false);
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                if (imageV2.inPlaceUpdate) {
+                    if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
+                        newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                    }
+                    var params = "db=" + getDb() + "&position=" + newPosition;
+                    if (!hgTracks.enableHighlightingDialog)
+                        params += "&enableHighlightingDialog=0";
+                    imageV2.navigateInPlace(params, null, true);
+                } else {
+                    $('body').css('cursor', 'wait');
+                    if (!hgTracks.enableHighlightingDialog)
+                        cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
+                    document.TrackHeaderForm.submit();
+                }
+                $(this).dialog("close");
+            },
+            "Single Highlight": function() {
+                // Clear old highlight and Highlight selection
+                $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.highlightThisRegion(newPosition, false, hlColor);
+                $(this).dialog("close");
+            },
+            "Add Highlight": function() {
+                // Highlight selection
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.highlightThisRegion(newPosition, true, hlColor);
+                $(this).dialog("close");
+            },
+            "Save Color": function() {
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.saveHlColor( hlColor );
+                $(this).dialog("close");
+            }
+        };
+        if (typeof doMyVariants !== 'undefined' && doMyVariants) {
+            dragSelectButtons["Create Item"] = function() {
+                let data = {};
+                let pos = parsePosition(newPosition);
+                data.chrom = pos.chrom;
+                data.start = data.thickStart = pos.start.toString();
+                data.end = data.thickEnd = pos.end.toString();
+                data.score = "0";
+                data.strand = ".";
+                data.color = $("#hlColorInput").val();
+                data.name = "";
+                data.description = "";
+                data.ref = "";
+                data.alt = "";
+                data.trackName = "myVariants";
+                $(this).dialog("close");
+                let req = encodeURIComponent(`myVariants myVariants ${JSON.stringify(data)}`);
+                jQuery('body').css('cursor', 'wait');
+                $.ajax({
+                        type: "POST",
+                        url: "../cgi-bin/hgTracks",
+                        data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants`),
+                        dataType: "html",
+                        trueSuccess: imageV2.updateImgAndMap,
+                        success: catchErrorOrDispatch,
+                        error: errorHandler,
+                        cmd: 'wholeImage',
+                        loadingId: showLoadingImage("imgTbl"),
+                        cache: false
+                    });
+            };
+        }
+        dragSelectButtons.Cancel = function() {
+            $(this).dialog("close");
+        };
         $(dragSelectDialog).dialog({
                 modal: true,
                 title: "Drag-and-select",
@@ -2080,84 +2165,7 @@ var dragSelect = {
                 autoOpen: false,
                 revertToOriginalPos: true,
                 minWidth: 650,
-                buttons: {  
-                    "Zoom In": function() {
-                        // Zoom to selection
-                        $(this).dialog("option", "revertToOriginalPos", false);
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
-                                newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
-                            }
-                            var params = "db=" + getDb() + "&position=" + newPosition;
-                            if (!hgTracks.enableHighlightingDialog)
-                                params += "&enableHighlightingDialog=0";
-                            imageV2.navigateInPlace(params, null, true);
-                        } else {
-                            $('body').css('cursor', 'wait');
-                            if (!hgTracks.enableHighlightingDialog)
-                                cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
-                            document.TrackHeaderForm.submit();
-                        }
-                        $(this).dialog("close");
-                    },
-                    "Single Highlight": function() {
-                        // Clear old highlight and Highlight selection
-                        $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, false, hlColor);
-                        $(this).dialog("close");
-                    },
-                    "Add Highlight": function() {
-                        // Highlight selection
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, true, hlColor);
-                        $(this).dialog("close");
-                    },
-                    "Save Color": function() {
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.saveHlColor( hlColor );
-                        $(this).dialog("close");
-                    },
-                    "Create Item": function() {
-                        let data = {};
-                        let pos = parsePosition(newPosition);
-                        data.chrom = pos.chrom;
-                        data.start = data.thickStart = pos.start.toString();
-                        data.end = data.thickEnd = pos.end.toString();
-                        data.score = "0";
-                        data.strand = ".";
-                        data.color = $("#hlColorInput").val();
-                        data.name = "";
-                        data.description = "";
-                        data.ref = "";
-                        data.alt = "";
-                        data.trackName = "myVariants";
-                        $(this).dialog("close");
-                        let req = encodeURIComponent(`myVariants myVariants ${JSON.stringify(data)}`);
-                        jQuery('body').css('cursor', 'wait');
-                        $.ajax({
-                                type: "POST",
-                                url: "../cgi-bin/hgTracks",
-                                data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants`),
-                                dataType: "html",
-                                trueSuccess: imageV2.updateImgAndMap,
-                                success: catchErrorOrDispatch,
-                                error: errorHandler,
-                                cmd: 'wholeImage',
-                                loadingId: showLoadingImage("imgTbl"),
-                                cache: false
-                            });
-                    },
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                    }
-                },
+                buttons: dragSelectButtons,
 
                 open: function () { // Make zoom the focus/default action
                    $(this).parents('.ui-dialog-buttonpane button:eq(0)').trigger("focus");
