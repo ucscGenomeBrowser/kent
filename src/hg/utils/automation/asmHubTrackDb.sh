@@ -898,7 +898,7 @@ fi
 ###################################################################
 # Ensembl genes
 if [ -s ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb ]; then
-export oldStyle=`bigBedInfo ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb | grep -c "fieldCount: 12"`
+export oldStyle=`/cluster/bin/x86_64/bigBedInfo ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb | grep -c "fieldCount: 12"`
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
 ln -s ../trackData/ensGene/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
