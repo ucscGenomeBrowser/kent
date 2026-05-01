@@ -6,6 +6,9 @@ requests (status=5) by clade.
 Output: dict[clade] -> sorted list of assembly identifiers, where each
 identifier is "<gcAccession>_<asmName>" for GenArk accessions, or the
 plain UCSC db name for native dbs.
+
+cron tab entry in hiram crontab:
+4,26,46 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestPush.py
 """
 
 import fcntl

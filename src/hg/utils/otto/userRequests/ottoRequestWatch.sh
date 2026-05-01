@@ -14,6 +14,8 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 ready to push, 6 push is done, 7 problems,
 #      8 final notification has been sent == process is complete
+### cron job entry:
+#9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
 
 set -eEu -o pipefail
 
@@ -349,9 +351,7 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
   if [ -s "${buildDir}/successInvocationId.txt" ]; then
     invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
     profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
-    if "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
-      printf "# galaxy cleanup complete for request %s\n" "${reqId}" 1>&2
-    else
+    if ! "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
       printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
     fi
   fi

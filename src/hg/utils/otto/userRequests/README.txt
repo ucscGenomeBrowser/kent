@@ -41,6 +41,9 @@ completeTime: NULL
 
 ############################################################################
 ###  2.
+### cron entry in the otto user:
+# 1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/ottoRequest.py
+###
 ottoRequest.py - otto user cron job running each minute to watch the
                - ottoRequest table in hgcentral.  Watches for two types of
                - entries: liftRequest and assembly - when new entries are
@@ -54,6 +57,8 @@ ottoRequest.py - otto user cron job running each minute to watch the
 
 ############################################################################
 ###  3.
+#9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
+###
 ottoRequestWatch.sh - cron script running in hiram hgwdev account to watch
                - the ottoRequest table.  When new entries show
                - up (status=1) it will get the galaxy workflow
@@ -120,6 +125,9 @@ workflowMonitor.sh - after the galaxy WF has started, this script can
 
 ############################################################################
 ###  7.
+### cron entry in hiram crontab:
+# 4,26,46 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestPush.py
+###
 ottoRequestPush.py - cron job watching for status == 5 - will run the pushing
    procedure for the relevant assemblies.  When complete will set status = 6
    TBD: Need to figure out how to push the UCSC database files out
