@@ -1802,11 +1802,12 @@ else
     for(; tdb; tdb = nextTdb)
         {
         nextTdb = tdb->next;
+        if (!isParentVisible(cart, tdb) || !isSubtrackVisible(cart, tdb))
+            continue;
         if (validateOneTdb(db, tdb, badList))
             {
             slAddHead(&validTdbs, tdb);
-            if (isSubtrackVisible(cart, tdb))
-                count++;
+            count++;
             }
         }
     }
