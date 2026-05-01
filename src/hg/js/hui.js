@@ -1646,3 +1646,148 @@ function superUiSetAllTracks(onlyVisible) {
         $(sel).trigger("change");
     }
 }
+
+// ---- myVariants share management (inline on hgTrackUi) ----
+
+function myVariantsShareApiUrl(action, params) {
+    // Build a URL for the share API
+    let url = "../cgi-bin/hgTracks?myVarShareCmd=" + action +
+        "&db=" + getDb() + "&hgsid=" + getHgsid();
+    if (params) {
+        Object.keys(params).forEach(function(key) {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== "")
+                url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+        });
+    }
+    return url;
+}
+
+function myVariantsShareLoad() {
+    let content = document.getElementById("shareListContent");
+    if (!content) return;
+    content.textContent = "Loading...";
+    fetch(myVariantsShareApiUrl("getShares", {}), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        // Build the share list with DOM APIs (textContent everywhere) so that
+        // owner-controlled fields like label/project/targetUser cannot inject
+        // markup or script.
+        while (content.firstChild) content.removeChild(content.firstChild);
+        if (data.error) {
+            content.textContent = "Error: " + data.error;
+            return;
+        }
+        if (!data.shares || data.shares.length === 0) {
+            let em = document.createElement("em");
+            em.textContent = "No active shares";
+            content.appendChild(em);
+            return;
+        }
+        let table = document.createElement("table");
+        table.style.width = "100%";
+        table.style.borderCollapse = "collapse";
+        table.style.fontSize = "0.9em";
+        let header = document.createElement("tr");
+        header.style.borderBottom = "1px solid #ccc";
+        ["Project", "Permission", "Shared With", "Label", "Created", ""].forEach(function(label) {
+            let th = document.createElement("th");
+            th.style.textAlign = "left";
+            th.textContent = label;
+            header.appendChild(th);
+        });
+        table.appendChild(header);
+        data.shares.forEach(function(s) {
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid #eee";
+            let cells = [
+                s.project === "*" ? "All" : s.project,
+                s.permission === 0 ? "View" : "Edit",
+                s.targetUser ? s.targetUser : "Anyone with link",
+                s.label ? s.label : "",
+                s.createdAt
+            ];
+            cells.forEach(function(text) {
+                let td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+            let actionTd = document.createElement("td");
+            let revokeLink = document.createElement("a");
+            revokeLink.href = "#";
+            revokeLink.className = "shareRevokeLink";
+            revokeLink.dataset.token = s.shareToken;
+            revokeLink.textContent = "Revoke";
+            revokeLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                myVariantsShareRevoke(this.dataset.token);
+            });
+            actionTd.appendChild(revokeLink);
+            tr.appendChild(actionTd);
+            table.appendChild(tr);
+        });
+        content.appendChild(table);
+    })
+    .catch(function(err) {
+        content.textContent = "Error loading shares: " + err.message;
+    });
+}
+
+function myVariantsShareCreate() {
+    let project = document.getElementById("shareProject").value;
+    let permission = document.querySelector('input[name="sharePerm"]:checked').value;
+    let targetUser = document.getElementById("shareTargetUser").value.trim();
+    let label = document.getElementById("shareLabel").value.trim();
+
+    let params = { project: project, permission: permission };
+    if (targetUser) params.targetUser = targetUser;
+    if (label) params.label = label;
+
+    fetch(myVariantsShareApiUrl("createShare", params), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error creating share: " + data.error);
+            return;
+        }
+        let shareUrl = window.location.protocol + "//" + window.location.host +
+            "/cgi-bin/hgTracks?myVarShare=" + data.token + "&db=" + getDb();
+        document.getElementById("shareUrlField").value = shareUrl;
+        document.getElementById("shareResult").style.display = "block";
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error creating share: " + err.message);
+    });
+}
+
+function myVariantsShareRevoke(token) {
+    fetch(myVariantsShareApiUrl("revokeShare", { shareToken: token }),
+          { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error revoking share: " + data.error);
+            return;
+        }
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error revoking share: " + err.message);
+    });
+}
+
+function myVariantsShareInit() {
+    // Wire up the create/copy buttons and load existing shares
+    let createBtn = document.getElementById("shareCreateBtn");
+    if (!createBtn) return;
+    createBtn.addEventListener("click", myVariantsShareCreate);
+    let copyBtn = document.getElementById("shareCopyBtn");
+    if (copyBtn) {
+        copyBtn.addEventListener("click", function() {
+            let urlField = document.getElementById("shareUrlField");
+            urlField.select();
+            navigator.clipboard.writeText(urlField.value);
+        });
+    }
+    myVariantsShareLoad();
+}

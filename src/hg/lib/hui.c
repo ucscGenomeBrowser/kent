@@ -38,7 +38,7 @@
 #include "vcf.h"
 #include "errCatch.h"
 #include "samAlignment.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "memgfx.h"
@@ -10370,8 +10370,8 @@ else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
     asObj = vcfAsObj();
-else if (startsWithWord("makeItems", tdb->type))
-    asObj = makeItemsItemAsObj();
+else if (startsWithWord("myVariants", tdb->type))
+    asObj = myVariantsAsObj();
 else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();
 else if (sameWord("pgSnp", tdb->type))
