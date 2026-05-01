@@ -287,6 +287,14 @@ if (isNotEmpty(sessionDataDir))
     cgiMakeCheckBox("subtreePersist", subtreePersist);
     puts("</p><p>");
     }
+char *ripplesEnabled = phyloPlaceOrgSetting(org, "ripplesEnabled");
+if (isNotEmpty(ripplesEnabled) && SETTING_IS_ON(ripplesEnabled))
+    {
+    printf("Search for potential recombination (limit %d input sequences): ", MAX_RIPPLES_SEARCH);
+    boolean doRipples = cartUsualBoolean(cart, "doRipples", FALSE);
+    cgiMakeCheckBox("doRipples", doRipples);
+    puts("</p><p>");
+    }
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
 char *exampleFile = phyloPlaceOrgSettingPath(org, "exampleFile");
