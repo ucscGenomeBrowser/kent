@@ -99,7 +99,7 @@ case "${state}" in
             ;;
 esac
 
-printf "# all jobs complete, downloading results\n" 1>&2
+# printf "# all jobs complete, downloading results\n" 1>&2
 /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status = 3 WHERE id = ${reqId};" hgcentraltest
 
@@ -113,7 +113,7 @@ while read -r F; do
   if [ -s "${F}" ]; then
      resultCount=$((resultCount+1))
   fi
-done < <(ls  result/${DS}/*)
+done < <(ls  result/${DS}/* 2> /dev/null)
 
 if [ "${resultCount}" -lt 6 ]; then
   ${PM} invocation_download "${invocationId}" --profile vgp \
