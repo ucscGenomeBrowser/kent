@@ -7952,8 +7952,18 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
+char *db = database;
 
-return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
+// quickLifted tracks fetch from the source assembly via the chain in
+// quickLiftUrl, so their bigDataUrl is /gbdb/<sourceDb>/... -- the source
+// db, not the current target db. customFactoryParallelLoad's bigDataUrl
+// validity check requires /gbdb/<X>/ to match its db argument, so when
+// the track declares its source via quickLiftDb, validate against that.
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    db = quickLiftDb;
+
+return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
