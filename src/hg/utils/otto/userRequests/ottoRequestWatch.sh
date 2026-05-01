@@ -263,7 +263,7 @@ while IFS=$'\t' read -r reqId buildDir; do
   if [ ! -s "${buildDir}/pendingInvocationId.txt" ]; then
     continue
   fi
-  printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2
+# printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2
   if "${scriptDir}/workflowMonitor.sh" "${reqId}" "${buildDir}"; then
     # workflowMonitor.sh exits 0 both when still running and when complete;
     # check for the success marker to distinguish
