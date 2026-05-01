@@ -244,8 +244,9 @@ export galaxyStatusFile="/data/apache/trash/ottoRequestGalaxyStatus.json"
 export profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
 gsTmp=$(mktemp "${galaxyStatusFile}.XXXXXX")
 if timeout 45 "${scriptDir}/galaxyStatus.py" "${profileJson}" > "${gsTmp}" 2>/dev/null; then
+  chmod 664 "${gsTmp}"
   mv "${gsTmp}" "${galaxyStatusFile}"
-else
+  else
   rm -f "${gsTmp}"
 #  printf "# WARNING: galaxyStatus.py failed, leaving stale snapshot\n" 1>&2
 fi

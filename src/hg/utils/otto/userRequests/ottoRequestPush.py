@@ -208,9 +208,9 @@ def main():
     succeededClades = set()
     failedClades = set()
     for clade in sorted(grouped):
-        print("%s:" % clade)
-        for asmId in grouped[clade]:
-            print("  %s" % asmId)
+#       print("%s:" % clade)
+#       for asmId in grouped[clade]:
+#           print("  %s" % asmId)
         cladeDir = writeCladeTsv(clade, grouped[clade])
         if cladeDir is None:
             continue
