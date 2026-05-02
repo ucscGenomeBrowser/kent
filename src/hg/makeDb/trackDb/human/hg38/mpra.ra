@@ -36,11 +36,13 @@ superTrack on
     visibility dense
     priority 2
     maxWindowToDraw 10000000
-    mouseOver Ref: $ref Alt: $alt Cell: $cellLine log2FC: $_mouseOverLog2FC p: $_mouseOverPvalue FDR: $_mouseOverFdr
+    dataVersion MPRAVarDB snapshot 2026-03-10
+    mouseOver <b>Variant</b>: $name<br><b>Ref/Alt</b>: $ref/$alt<br><b>Cell line</b>: $cellLine<br><b>Disease/Trait</b>: $disease<br><b>log2FC</b>: $_mouseOverLog2FC<br><b>p-value</b>: $_mouseOverPvalue<br><b>FDR</b>: $_mouseOverFdr
     skipFields _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
     labelFields name,cellLine,disease
     defaultLabelFields name
-    filterValues.cellLine GM12878,PC3,HepG2,K562,Jurkat,HEK293FT,HEK293T,SKNSH,HMEC,HNPS,HEK293s,HEL92.1.7,Neuro-2a,MIN6,NIH/3T3,N2A,SH-SY5Y,SF7996,HaCaT,HeLa,LNCaP,MOLP8,L363,Saos-2,C283T,UACC903,BLA,CE,NAC,SFC
+    urls rsid="https://www.ncbi.nlm.nih.gov/snp/$$"
+    filterValues.cellLine GM12878,PC3 cell,HepG2,K562,Jurkat,HEK293FT,HEK293T,SKNSH,HMEC,HNPS,HEK293s,HEL92.1.7,Neuro-2a,MIN6,NIH/3T3,HEK293T,,SF7996,N2A,SH-SY5Y,HaCaT,HeLa,LNCaP,SK-MEL-28,Saos-2,MOLP8,L363,C283T,UACC903,K562+GATA1,BLA,CE,NAC,SFC
     filter.fdr 0:1
     filterByRange.fdr on
     filterLimits.fdr 0:1

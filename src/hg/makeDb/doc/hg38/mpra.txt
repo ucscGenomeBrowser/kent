@@ -115,3 +115,49 @@ python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
 #   distinction is not recoverable from the CSV.  With pval_to_score returning
 #   0 for p<=0, these no longer dominate score-sorted views but their details
 #   page still reads "pvalue: 0.0".  Upstream clarification needed.
+#
+# QA review 2026-05-01 (RM #37359, Lou):
+#   Found and fixed in trackDb only (no bigBed rebuild this round):
+#   - filterValues.cellLine had four broken entries hiding ~31,983 rows
+#     (13% of track): PC3 vs PC3 cell mismatch (26,546 rows), SF7996 needed
+#     comma-escape syntax for the bundled HEK293T,,SF7996 data value
+#     (3,896 rows), missing SK-MEL-28 (1,510) and K562+GATA1 (31).  All
+#     four corrected; filter now matches all 32 distinct cellLine values
+#     in the data.
+#   - Description page references rebuilt for all 18 source studies plus
+#     the corrected primary citation (Jin et al. 2024, PMID 39325859 in
+#     Bioinformatics; the previous "Wang T, Matreyek KA, Yang X." citation
+#     was fabricated -- not the actual authors of either the preprint
+#     PMID 38617248 or the published paper).
+#   - 7 studies-table row counts corrected to match data (Tewhey, Griesemer,
+#     Abell, Mouri, McAfee, Cooper, Lu).
+#   - HTML mouseOver upgraded to bold/multi-line.
+#   - dataVersion "MPRAVarDB snapshot 2026-03-10" added to stanza.
+#   - urls rsid="https://www.ncbi.nlm.nih.gov/snp/$$" added so rsIDs are
+#     clickable linkouts.
+#   - Methods + Display Conventions paragraphs added: scoring methodology
+#     differs across studies, post-transcriptional vs transcriptional
+#     distinction (Griesemer/Schuster 3'UTR), Kircher saturation
+#     mutagenesis structure, log2FC interpretation.
+#
+#   Punted to Redmine for Max / Tao Wang (potential next-rebuild items):
+#   - 5,092 rows (Mouri, Tewhey) have pvalue > 1 (impossible; max 8.96).
+#     FDR appears valid; pvalue field looks like a t-statistic mislabeled.
+#     mouseOver/details show misleading p-values for ~2% of significant
+#     rows.
+#   - 30,921 rows display literal "nan" / "None" in mouseOver and
+#     details fields where NA-coded values were preserved verbatim.  Two
+#     sentinel conventions coexist ("None" in 53k eQTL rows, "NA" in 2k
+#     Kircher rows).
+#   - Upstream typos in 28,810 rows: "30 UTR" in 26,546 Schuster
+#     descriptions, "Familial hypercholesterol emia" in 2,176 Kircher
+#     diseases, "Alchol use disorder" in 88 Rao diseases.
+#   - 60,860 rows have description="GWAS" (no detail) -- upstream limit.
+#   - 1,069 rows have multi-allelic alt collapsed into one row (e.g.
+#     "T/A,G") with one log2FC/pvalue.
+#   - 2,088 rows preserve hg19-coord-style names (e.g. "1_1403972_CG")
+#     post-liftOver to hg38; coordinates and name no longer match.
+#   - 969 rows are colored red (FDR<0.05) but pvalue=nan -- mouseOver
+#     reads "FDR: 0.001 / p-value: nan" which looks contradictory.
+#   - 250-char truncation in mpravardbToBed.py cuts Griesemer
+#     descriptions mid-sentence; should raise/remove the cap.
