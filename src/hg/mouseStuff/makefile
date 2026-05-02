@@ -39,7 +39,6 @@ UTILS_APPLIST = \
 	mafRanges \
 	mafNoAlign \
 	mafToAxt \
-	mafToChain \
 	mafToPsl \
 	netChainSubset \
 	netClass \
