@@ -153,8 +153,10 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
         '.banner{padding:.5em;margin:.4em 0;border-radius:4px}\n'
         '.info {background:#dfd;border:1px solid #5a5}\n'
         '.error{background:#fdd;border:1px solid #a55}\n'
-        '.legend{font-size:12px;color:#555;margin:.4em 0}\n'
-        '.legend code{background:#eee;padding:0 3px}\n'
+        '.legend{font-size:15px;color:#333;margin:.4em 0}\n'
+        '.legend code{background:#eee;padding:0 3px;font-size:14px}\n'
+        '.refreshBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
+        'cursor:pointer}\n'
         '</style></head><body>\n')
 
     out(f'<h2>{DB}.{TABLE}</h2>\n')
@@ -177,8 +179,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
     out('<div class="legend">status: ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
                           for k, v in STATUS_NAMES.items()))
-    out(f' &middot; <b>{len(rows)}</b> row(s) &middot; '
-        f'<a href="">refresh</a></div>\n')
+    out(f' &middot; <b>{len(rows)}</b> row(s)'
+        '<button class="refreshBtn" type="button" '
+        'onclick="location.reload()">refresh</button></div>\n')
 
     out('<table class="sortable">\n<tr>')
     for c in COLS:
@@ -201,6 +204,11 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
                 label = STATUS_NAMES.get(stnum, '?')
                 out(f'<td><b>{html.escape(cell)}</b> '
                     f'<small>{html.escape(label)}</small></td>')
+            elif c in ('fromDb', 'toDb') and cell:
+                href = ('https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db='
+                        + urllib.parse.quote(cell, safe=''))
+                out(f'<td><a href="{html.escape(href)}" target="_blank">'
+                    f'{html.escape(cell)}</a></td>')
             else:
                 out(f'<td>{html.escape(cell)}</td>')
         # reset form
