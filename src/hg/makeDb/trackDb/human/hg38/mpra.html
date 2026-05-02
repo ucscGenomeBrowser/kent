@@ -2,22 +2,20 @@
 <p>
 Massively Parallel Reporter Assays (MPRAs) are high-throughput methods that
 measure the regulatory activity of thousands of candidate DNA sequences in
-parallel. Each fragment is cloned upstream of a reporter gene and tagged with
-a unique barcode; sequencing the resulting reporter RNA quantifies how
-strongly each fragment drives transcription. When matched reference and
-mutated versions of a sequence are tested side-by-side, the effect of a
-genetic variant on regulatory activity can be measured directly.
-</p>
-<p>
-This track collection brings together results from two MPRA databases, one for the complete sequence fragments,
-one for the impact of variants in selected fragments:
+parallel. Each fragment is cloned next to a reporter gene and tagged with a
+unique barcode; sequencing the resulting reporter RNA quantifies how strongly
+each fragment drives expression. Most assays place the candidate fragment
+upstream of the reporter to measure transcriptional activation; some place it
+in the 3' untranslated region instead, where the readout reflects post-
+transcriptional effects on mRNA stability, decay, or translation. When matched
+reference and mutated versions of a sequence are tested side-by-side, the
+effect of a genetic variant on regulatory activity can be measured directly.
 </p>
 
 <p>
-<b>Note on cell lines:</b> The cell line shown for each element or variant is the
-reporter cell line in which the human sequence was assayed. Several studies used
-mouse cell lines (e.g. Neuro-2a, N2A, NIH/3T3, MIN6, mESC) as reporter systems
-for human regulatory sequences; all items retain human (hg38) coordinates.
+This track collection brings together results from two MPRA databases, one for
+the complete sequence fragments and one for the impact of variants in selected
+fragments:
 </p>
 
 <ul>
@@ -29,11 +27,21 @@ experiments across many cell types and conditions
 </li>
 <li><b><a href="hgTrackUi?g=mpraVarDb">MPRAVarDB</a></b> &mdash;
 239,028 variants mapped to hg38 (of 242,818 total) from 18 MPRA studies, tested
-for effects on transcriptional regulatory activity across over 30 cell lines and
-30 human diseases and traits
-(<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">Wang et al., 2024</a>).
+for effects on transcriptional or post-transcriptional regulatory activity
+across over 30 cell lines and 30 human diseases and traits
+(<a href="https://pubmed.ncbi.nlm.nih.gov/39325859/" target="_blank">Jin et al., 2024</a>).
 </li>
 </ul>
+
+<p>
+<b>Note on cell lines:</b> The cell line shown for each element or variant is
+the reporter cell line in which the sequence was assayed. Most rows test human
+DNA in human cells. Several studies used mouse cell lines (Neuro-2a, N2A,
+NIH/3T3, MIN6) as reporter systems for human regulatory sequences. One MPRA
+Base study (Mattioli <em>et al.</em>, 2020) tested mouse orthologous sequences
+in mouse embryonic stem cells (mESC); those items retain hg38 coordinates,
+derived from the orthologous human position by liftOver.
+</p>
 
 <h2>Data Access</h2>
 <p>
@@ -52,15 +60,15 @@ at the University of California San Francisco for
 </p>
 
 <h2>References</h2>
-<p>
-Wang T, Matreyek KA, Yang X.
-<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">
-MPRAVarDB: an online database and web server for exploring regulatory effects of genetic variants using MPRA data</a>.
-<em>Bioinformatics</em>. 2024 Apr 15;40(4):btae201.
-PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">38617248</a>;
-PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11014600/" target="_blank">PMC11014600</a>
-</p>
 
+<p>
+Jin W, Xia Y, Nizomov J, Liu Y, Li Z, Lu Q, Chen L.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btae578" target="_blank">
+MPRAVarDB: an online database and web server for exploring regulatory effects of genetic variants</a>.
+<em>Bioinformatics</em>. 2024 Oct 1;40(10).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39325859" target="_blank">39325859</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11464417/" target="_blank">PMC11464417</a>
+</p>
 
 <p>
 Zhao J, Baltoumas FA, Konnaris MA, Mouratidis I, Liu Z, Sims J, Agarwal V, Pavlopoulos GA,
