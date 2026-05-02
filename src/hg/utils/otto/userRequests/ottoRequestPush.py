@@ -6,8 +6,12 @@ requests (status=5) by clade.
 Output: dict[clade] -> sorted list of assembly identifiers, where each
 identifier is "<gcAccession>_<asmName>" for GenArk accessions, or the
 plain UCSC db name for native dbs.
+
+cron tab entry in hiram crontab:
+4,26,46 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestPush.py
 """
 
+import fcntl
 import os
 import re
 import subprocess
@@ -16,12 +20,36 @@ from collections import defaultdict
 
 scriptDir = os.path.dirname(os.path.abspath(__file__))
 cladeTsv = os.path.join(scriptDir, "dbDb.name.clade.tsv")
+lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
 gcPattern = re.compile(r"^GC[AF]_")
+
+
+def acquireSingletonLock():
+    """Ensure only one instance of this script runs at a time.  Holds an
+    exclusive flock on lockPath for the lifetime of the process; the
+    kernel releases it on exit (including crash / kill -9), so no stale
+    lock cleanup is needed.  Returns the open file handle, which the
+    caller must keep alive."""
+    # "a+" opens read+write without truncating (and creates if missing),
+    # so a second instance that fails to lock doesn't wipe the running
+    # instance's PID from the file before exiting.
+    fh = open(lockPath, "a+")
+    try:
+        fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        sys.exit(0)
+    # we own the lock truncate and write our PID for information
+    fh.seek(0)
+    fh.truncate()
+    fh.write("%d\n" % os.getpid())
+    fh.flush()
+    return fh
+    ### FYI: can also see the locking process via: lsof ottoRequestPush.lock
 
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
-        ["hgsql", "-N", "-B", "-e", query, db],
+        ["/cluster/bin/x86_64/hgsql", "-N", "-B", "-e", query, db],
         check=True, capture_output=True, text=True,
     ).stdout
     return [tuple(line.split("\t")) for line in out.splitlines() if line]
@@ -54,7 +82,7 @@ def markComplete(reqIds):
         return
     idList = ",".join(str(i) for i in sorted(reqIds))
     hgsql("UPDATE ottoRequest SET status = 6 WHERE id IN (%s);" % idList)
-    print("# marked status=6: %s" % idList, file=sys.stderr)
+#   print("# marked status=6: %s" % idList, file=sys.stderr)
 
 
 def lookupGenark(accessions):
@@ -110,18 +138,22 @@ def writeCladeTsv(clade, asmIds):
     if not os.path.isfile(orderList):
         print("WARNING: missing %s" % orderList, file=sys.stderr)
         return None
+    # orderList.tsv files occasionally contain Latin-1 bytes (e.g. xxx in
+    # Scandinavian fish names) that aren't valid UTF-8.  surrogateescape
+    # round-trips those bytes through read+write byte-for-byte instead of
+    # raising UnicodeDecodeError.
     matched = []
-    with open(orderList) as fh:
+    with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
         for line in fh:
             if any(asmId in line for asmId in genarkIds):
                 matched.append(line)
     if not matched:
         print("WARNING: no matches in %s" % orderList, file=sys.stderr)
         return None
-    with open(outPath, "w") as fh:
+    with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
         fh.writelines(matched)
-    print("# wrote %d line(s) to %s" % (len(matched), outPath),
-          file=sys.stderr)
+#   print("# wrote %d line(s) to %s" % (len(matched), outPath),
+#         file=sys.stderr)
     return cladeDir
 
 
@@ -143,7 +175,7 @@ def runMakeChain(cladeDir):
     written.  Returns True on success, False if any step fails (the
     chain stops at the first failure)."""
     for cmd in makeChainCommands:
-        print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
+#       print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
         result = subprocess.run(
             cmd, shell=True, executable="/bin/bash", cwd=cladeDir,
         )
@@ -155,6 +187,7 @@ def runMakeChain(cladeDir):
 
 
 def main():
+    lockFh = acquireSingletonLock()  # noqa: F841 -- keep ref alive
     requests = pendingRequests()
     if not requests:
         return
@@ -175,9 +208,9 @@ def main():
     succeededClades = set()
     failedClades = set()
     for clade in sorted(grouped):
-        print("%s:" % clade)
-        for asmId in grouped[clade]:
-            print("  %s" % asmId)
+#       print("%s:" % clade)
+#       for asmId in grouped[clade]:
+#           print("  %s" % asmId)
         cladeDir = writeCladeTsv(clade, grouped[clade])
         if cladeDir is None:
             continue

@@ -14,18 +14,78 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 ready to push, 6 push is done, 7 problems,
 #      8 final notification has been sent == process is complete
+### cron job entry:
+#9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
 
 set -eEu -o pipefail
-set -x
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+
+##############################################################################
+### singleton lock - only one instance at a time
+### Open lockPath on FD 9 for the lifetime of the shell, then take a
+### non-blocking exclusive lock.  Kernel releases the lock on exit
+### (normal, error, or kill -9), so no stale lock cleanup is needed.
+### Exit 0 silently if another instance holds the lock so cron doesn't
+### email on every overlapping tick.  PID is written to the file for
+### information only see the holder via:
+###   cat ottoRequestWatch.lock      (the PID)
+###   lsof ottoRequestWatch.lock     (the locking process)
+##############################################################################
+export lockPath="${scriptDir}/ottoRequestWatch.lock"
+# 9<> opens read+write without truncating, so a second instance that
+# comes along while we're running won't wipe our PID from the file
+# before its flock attempt fails.
+exec 9<>"${lockPath}"
+flock -n 9 || exit 0
+# we own the lock now safe to truncate and write our PID.  ': >file'
+# truncates via a separate FD; FD 9 keeps its position 0 from <>, so
+# the printf below starts writing at the beginning of the empty file.
+: >"${lockPath}"
+printf "%d\n" "$$" >&9
+##############################################################################
 
 ##############################################################################
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+}
+##############################################################################
+
+##############################################################################
+### liftOverUrl - build the public download URL for an over.chain.gz file
+###   args: srcDb dstDb
+###   GenArk:      https://hgdownload.soe.ucsc.edu/hubs/<3>/<3>/<3>/<3>/<acc>/liftOver/<srcDb>To<DstDb>.over.chain.gz
+###   UCSC native: https://hgdownload.soe.ucsc.edu/goldenPath/<srcDb>/liftOver/<srcDb>To<DstDb>.over.chain.gz
+###   DstDb is dstDb with the first letter upper-cased (matches the
+###   filename convention used in installLinks()).
+###   verifies the URL with a curl HEAD before printing; returns 1 if
+###   the URL does not resolve to a 2xx response.
+##############################################################################
+function liftOverUrl() {
+  local srcDb="${1}"
+  local dstDb="${2}"
+  local DstDb="${dstDb^}"
+  local fileName="${srcDb}To${DstDb}.over.chain.gz"
+  local url
+  if [[ "${srcDb}" == GC* ]]; then
+    local gcX="${srcDb:0:3}"
+    local d0="${srcDb:4:3}"
+    local d1="${srcDb:7:3}"
+    local d2="${srcDb:10:3}"
+    local accPath="${gcX}/${d0}/${d1}/${d2}/${srcDb}"
+    url="https://hgdownload.soe.ucsc.edu/hubs/${accPath}/liftOver/${fileName}"
+  else
+    url="https://hgdownload.soe.ucsc.edu/goldenPath/${srcDb}/liftOver/${fileName}"
+  fi
+  # -s silent, -f fail on HTTP >= 400, -I HEAD, --max-time bounds hangs
+  if ! curl -sfI --max-time 30 -o /dev/null "${url}"; then
+    printf "ERROR: liftOverUrl: URL does not exist: %s\n" "${url}" 1>&2
+    return 1
+  fi
+  printf "%s" "${url}"
 }
 ##############################################################################
 
@@ -43,7 +103,7 @@ function sendNotification() {
   local subject="${2}"
   local msgBody="${3}"
   local toAddr
-  toAddr="$(hgsql -N -B -e \
+  toAddr="$(/cluster/bin/x86_64/hgsql -N -B -e \
     "SELECT email FROM ottoRequest WHERE id = ${reqId};" hgcentraltest)"
   if [ -z "${toAddr}" ]; then
     printf "ERROR: sendNotification: no email for request %s\n" "${reqId}" 1>&2
@@ -161,7 +221,7 @@ function installLinks() {
   fi
 
   # register both rows in hgcentraltest
-  if ! hgAddLiftOverChain -minMatch=0.1 -multiple \
+  if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
       -path="${chainPath}" "${tDb}" "${qDb}"; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
@@ -177,18 +237,31 @@ function installLinks() {
 }
 ##############################################################################
 
+##############################################################################
+### refresh Galaxy queue status snapshot for ottoRequestView.cgi
+##############################################################################
+export galaxyStatusFile="/data/apache/trash/ottoRequestGalaxyStatus.json"
+export profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
+gsTmp=$(mktemp "${galaxyStatusFile}.XXXXXX")
+if timeout 45 "${scriptDir}/galaxyStatus.py" "${profileJson}" > "${gsTmp}" 2>/dev/null; then
+  chmod 664 "${gsTmp}"
+  mv "${gsTmp}" "${galaxyStatusFile}"
+  else
+  rm -f "${gsTmp}"
+#  printf "# WARNING: galaxyStatus.py failed, leaving stale snapshot\n" 1>&2
+fi
+##############################################################################
+
 ############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
 ############################################################################
 while read -r reqId; do
-  printf "# starting alignment for request %s\n" "${reqId}" 1>&2
-  if "${scriptDir}/ottoRequestAlign.sh" "${reqId}"; then
-    printf "# alignment setup complete for request %s\n" "${reqId}" 1>&2
-  else
+# printf "# starting alignment for request %s\n" "${reqId}" 1>&2
+  if ! "${scriptDir}/ottoRequestAlign.sh" "${reqId}"; then
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" \
   hgcentraltest)
 
@@ -205,22 +278,22 @@ while IFS=$'\t' read -r reqId buildDir; do
   if [ ! -s "${buildDir}/pendingInvocationId.txt" ]; then
     continue
   fi
-  printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2
+# printf "# monitoring request %s: %s\n" "${reqId}" "${buildDir}" 1>&2
   if "${scriptDir}/workflowMonitor.sh" "${reqId}" "${buildDir}"; then
     # workflowMonitor.sh exits 0 both when still running and when complete;
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
-      hgsql -N -e \
+      /cluster/bin/x86_64/hgsql -N -e \
         "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
          WHERE id = ${reqId};" hgcentraltest
-      printf "# request %s completed successfully\n" "${reqId}" 1>&2
+#     printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
     # else: still running, will check again next invocation
   else
     printf "# workflow error for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
 
@@ -235,10 +308,6 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
   source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh")
-  echo $buildDir
-  echo $swapDir
-  echo targetDb $targetDb
-  echo queryDb $queryDb
   export trackData="$(dirname "${buildDir}")"
   export swapData="$(dirname "${swapDir}")"
   export workDir="$(basename "${buildDir}")"
@@ -257,12 +326,18 @@ while IFS=$'\t' read -r reqId buildDir; do
   fi
   rm -f "${trackData}/lastz.${queryDb}"
   ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
-  printf "%s\n" "${doTdb}"
-  ${doTdb} 1>&2
+  if ! ${doTdb} 1>&2; then
+     printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+     setErrorStatus "${reqId}"
+     continue
+  fi
   rm -f "${swapData}/lastz.${targetDb}"
   ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
-  printf "%s\n" "${swapTdb}"
-  ${swapTdb} 1>&2
+  if ! ${swapTdb} 1>&2; then
+     printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
+     setErrorStatus "${reqId}"
+     continue
+  fi
 
   # install liftOver and quickLift symlinks + register in hgcentraltest,
   # for both directions
@@ -275,9 +350,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
 
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" hgcentraltest
-done < <(hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
    WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
 
@@ -286,26 +361,41 @@ done < <(hgsql -N -B -e \
 #          clean up galaxy workflow
 ############################################################################
 
-while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
+while IFS=$'\t' read -r reqId fromDb toDb comment requestTime buildDir; do
   # time to clean up the galaxy history and workflow to release the space
   if [ -s "${buildDir}/successInvocationId.txt" ]; then
     invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
-    profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
-    if "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
-      printf "# galaxy cleanup complete for request %s\n" "${reqId}" 1>&2
-    else
+    if ! "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
       printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
     fi
   fi
 
+  if ! fromUrl="$(liftOverUrl "${fromDb}" "${toDb}")"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
+  if ! toUrl="$(liftOverUrl "${toDb}" "${fromDb}")"; then
+    setErrorStatus "${reqId}"
+    continue
+  fi
   sendNotification "${reqId}" \
 "from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
-"Your lift over request is complete.  You can access the lift.over files at:"
+"Your lift over request is complete:
+     From:     ${fromDb}
+       To:     ${toDb}
+  comment:     ${comment}
+submitted:     ${requestTime}
 
-  hgsql -N -e \
-      "UPDATE ottoRequest SET status=8 WHERE id=${reqId};" hgcentraltest
+The lift.over files are available at these links:
 
-done < <(hgsql -N -B -e \
-  "SELECT id, fromDb, toDb, buildDir FROM ottoRequest \
+  ${fromUrl}
+  ${toUrl}
+"
+
+  /cluster/bin/x86_64/hgsql -N -e \
+      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
+
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+  "SELECT id, fromDb, toDb, comment, requestTime, buildDir FROM ottoRequest \
    WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
 

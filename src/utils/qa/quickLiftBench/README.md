@@ -133,6 +133,39 @@ Two TSVs are written to `results/<YYYYMMDD-HHMMSS>/`:
   phase). A per-(case, variant, phase) median+p90 summary is appended.
   Useful for localizing where time is going when total medians differ.
 
+## Regression assertions: `phase_asserts`
+
+A case can declare assertions against the per-iteration phase timings, so
+the bench acts as a tripwire for regressions instead of just emitting
+numbers. When any case declares `phase_asserts`, that case's phase data is
+captured automatically (no `--phases` flag needed) and assertions run after
+all iterations complete. A failure prints to stderr and the script exits
+non-zero.
+
+```yaml
+- id: regress_my_thing
+  server: hgwdev
+  variants:
+    base: User/sessionName
+  phase_asserts:
+    - variant: base
+      phase: 'Waiting for parallel \(\d+ threads for \d+ tracks\) remote data fetch'
+      required: true        # span must appear in every iteration
+      max_median_ms: 15000  # optional median upper bound
+      min_median_ms: 1      # optional median lower bound
+```
+
+Semantics:
+
+- `phase` is a Python regex matched against each phase label (the part
+  before `:` in `<span class='timing'>label: NNN millis</span>`).
+- `required: true` (default) — assert fails if the regex matches no phase
+  in any iteration of the variant.
+- `max_median_ms` / `min_median_ms` — optional bounds on the median across
+  iterations. Per iteration, all matching phases' ms values are summed,
+  then the per-iteration sums are reduced via median.
+- A FAIL prints `[FAIL] case/variant /pattern/ reason` and `sys.exit(1)`.
+
 A short pairwise table is also printed to stderr at the end of a run.
 
 ## Dependencies

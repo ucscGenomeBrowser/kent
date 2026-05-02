@@ -34,7 +34,7 @@ my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
 chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
-my $averageGC = `bigWigInfo $gc5Bw | egrep "mean:" | sed -e 's/mean: //;'`;
+my $averageGC = `/cluster/bin/x86_64/bigWigInfo $gc5Bw | egrep "mean:" | sed -e 's/mean: //;'`;
 chomp $averageGC;
 $averageGC = sprintf("%.2f", $averageGC);
 

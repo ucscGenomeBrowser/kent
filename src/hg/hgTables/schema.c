@@ -24,7 +24,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 #include "wikiTrack.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "barChartBed.h"
@@ -636,9 +636,9 @@ else if (startsWithWord("maf", type))
     showSchemaCtMaf(table, ct);
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
-else if (startsWithWord("makeItems", type))
+else if (startsWithWord("myVariants", type))
     {
-    struct asObject *asObj = makeItemsItemAsObj();
+    struct asObject *asObj = myVariantsAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }

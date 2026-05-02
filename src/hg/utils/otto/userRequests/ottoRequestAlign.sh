@@ -10,7 +10,6 @@
 # Prints and executes the resulting kegAlignLastz.sh command.
 
 set -eEu -o pipefail
-set -x
 
 ############################################################################
 ### verify arguments
@@ -22,6 +21,7 @@ if [ $# != 1 ]; then
 fi
 
 export requestId="$1"
+export scriptDir=$(cd "$(dirname "$0")" && pwd)
 
 # validate id is a positive integer
 case "${requestId}" in
@@ -37,7 +37,7 @@ esac
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  hgsql -N -e \
+  /cluster/bin/x86_64/hgsql -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
 }
 
@@ -48,7 +48,7 @@ function setErrorStatus() {
 ############################################################################
 function genarkLookup() {
   local acc=$1
-  local result=$(hgsql -N -e \
+  local result=$(/cluster/bin/x86_64/hgsql -N -e \
     "SELECT gcAccession,asmName,clade from genark WHERE gcAccession='${acc}';" \
     hgcentraltest)
   if [ -z "${result}" ]; then
@@ -69,7 +69,6 @@ function genarkLookup() {
 ############################################################################
 function dbDbCladeLookup() {
   local dbName=$1
-  local scriptDir=$(cd "$(dirname "$0")" && pwd)
   local tsvFile="${scriptDir}/dbDb.name.clade.tsv"
   if [ ! -s "${tsvFile}" ]; then
     printf "ERROR: clade lookup file not found: %s\n" "${tsvFile}" 1>&2
@@ -121,8 +120,8 @@ function twoBitPath() {
 ############################################################################
 function asmN50() {
   local twoBit=$1
-  twoBitInfo "${twoBit}" stdout \
-    | n50.pl stdin 2>&1 \
+  /cluster/bin/x86_64/twoBitInfo "${twoBit}" stdout \
+    | /cluster/bin/scripts/n50.pl stdin 2>&1 \
     | grep -A1 "^[0-9].*one half size" \
     | tail -1 \
     | awk '{print $NF}'
@@ -136,12 +135,12 @@ function asmN50() {
 ############################################################################
 # step 1: look up fromDb and toDb from ottoRequest
 ############################################################################
-export ottoResult=$(hgsql -N -e \
+export ottoResult=$(/cluster/bin/x86_64/hgsql -N -e \
   "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" hgcentraltest)
 
 if [ -z "${ottoResult}" ]; then
   printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
-  hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
+  /cluster/bin/x86_64/hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
   exit 255
 fi
 
@@ -155,8 +154,8 @@ if [ -z "${fromDb}" -o -z "${toDb}" ]; then
   exit 255
 fi
 
-printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
-  "${requestId}" "${fromDb}" "${toDb}" 1>&2
+# printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
+#   "${requestId}" "${fromDb}" "${toDb}" 1>&2
 
 ############################################################################
 # step 2: look up both identifiers -- GenArk accession or UCSC db name
@@ -187,8 +186,8 @@ case "${toDb}" in
     ;;
 esac
 
-printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
-printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
+# printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
+# printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
 
 ############################################################################
 # step 3: determine N50 for each to decide target vs. query
@@ -212,13 +211,13 @@ fi
 export fromN50=$(asmN50 "${from2bit}")
 export toN50=$(asmN50 "${to2bit}")
 
-printf "# from N50: %s (%s)\n" "${fromN50}" "${fromDb}" 1>&2
-printf "#   to N50: %s (%s)\n" "${toN50}" "${toDb}" 1>&2
+# printf "# from N50: %s (%s)\n" "${fromN50}" "${fromDb}" 1>&2
+# printf "#   to N50: %s (%s)\n" "${toN50}" "${toDb}" 1>&2
 
 if [ -n "${fromN50}" -a -n "${toN50}" ]; then
   if [ "${toN50}" -gt "${fromN50}" ]; then
-    printf "# swapping: %s (N50=%s) becomes target over %s (N50=%s)\n" \
-      "${toId}" "${toN50}" "${fromId}" "${fromN50}" 1>&2
+#    printf "# swapping: %s (N50=%s) becomes target over %s (N50=%s)\n" \
+#      "${toId}" "${toN50}" "${fromId}" "${fromN50}" 1>&2
     tmpId="${fromId}"; export fromId="${toId}"; export toId="${tmpId}"
     tmpClade="${fromClade}"; export fromClade="${toClade}"; export toClade="${tmpClade}"
   fi
@@ -256,15 +255,15 @@ esac
 working=$(ls -d ${targetExists}/lastz${Query}.* 2> /dev/null | wc -l || true)
 if [ "${working}" -gt 0 ]; then
   buildDir=$(ls -d ${targetExists}/lastz${Query}.* | tail -1)
-  printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
+# printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
 fi
 
 mkdir -p  "${buildDir}"
 
-printf "# buildDir: %s\n" "${buildDir}" 1>&2
+# printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # store buildDir in ottoRequest table for workflowMonitor.sh
-hgsql -N -e \
+/cluster/bin/x86_64/hgsql -N -e \
   "UPDATE ottoRequest SET buildDir='${buildDir}', status=2 WHERE id=${requestId};" \
   hgcentraltest
 
@@ -274,9 +273,9 @@ hgsql -N -e \
 export fromCladeArg=$(cladeMap "${fromClade}")
 export toCladeArg=$(cladeMap "${toClade}")
 
-export cmd="${HOME}/kent/src/hg/utils/automation/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
+export cmd="${scriptDir}/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
-printf "# launching: %s\n" "${cmd}" 1>&2
+# printf "# launching: %s\n" "${cmd}" 1>&2
 nohup ${cmd} > "${buildDir}/kegAlign.log" 2>&1 < /dev/null &
-printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
+# printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
 exit 0

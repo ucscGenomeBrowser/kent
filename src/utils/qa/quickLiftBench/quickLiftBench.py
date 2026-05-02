@@ -119,7 +119,35 @@ def load_config(path):
     cfg["defaults"].setdefault("warmup", 1)
     cfg["defaults"].setdefault("timeout", 60)
     cfg["defaults"].setdefault("servers", {})
+    for case in cfg["cases"]:
+        validate_phase_asserts(case, path)
     return cfg
+
+
+def validate_phase_asserts(case, path):
+    asserts = case.get("phase_asserts")
+    if asserts is None:
+        return
+    if not isinstance(asserts, list):
+        sys.exit(f"{path}: case {case.get('id')!r}: phase_asserts must be a list")
+    variant_names = set((case.get("variants") or {}).keys())
+    for i, a in enumerate(asserts):
+        ctx = f"{path}: case {case.get('id')!r}: phase_asserts[{i}]"
+        if not isinstance(a, dict):
+            sys.exit(f"{ctx} must be a mapping")
+        if "variant" not in a or "phase" not in a:
+            sys.exit(f"{ctx} missing required key (variant, phase)")
+        if a["variant"] not in variant_names:
+            sys.exit(f"{ctx}: variant {a['variant']!r} not declared in variants")
+        try:
+            re.compile(a["phase"])
+        except re.error as e:
+            sys.exit(f"{ctx}: phase regex invalid: {e}")
+        for k in ("max_median_ms", "min_median_ms"):
+            if k in a and not isinstance(a[k], int):
+                sys.exit(f"{ctx}: {k} must be an integer")
+        if "required" in a and not isinstance(a["required"], bool):
+            sys.exit(f"{ctx}: required must be true/false")
 
 
 def parse_session(s):
@@ -372,7 +400,7 @@ def main():
                     rf.flush()
                     all_rows.append(row)
 
-                    if args.phases:
+                    if args.phases or case.get("phase_asserts"):
                         for label, ms in phases.items():
                             all_phase_rows.append({
                                 "case": cid,
@@ -401,6 +429,10 @@ def main():
     if phases_path:
         write_phases(all_phase_rows, phases_fields, phases_path)
         print(f"phases:  {phases_path}", file=sys.stderr)
+
+    failed = evaluate_phase_asserts(cases, all_rows, all_phase_rows)
+    if failed:
+        sys.exit(1)
 
 
 def _to_int(v):
@@ -543,6 +575,94 @@ def write_phases(rows, fields, path):
                 "median_ms": median_or_none(values),
                 "p90_ms": p90(values),
             })
+
+
+def evaluate_phase_asserts(cases, all_rows, all_phase_rows):
+    """Walk each case's phase_asserts (if any), report PASS/FAIL per assert.
+    Returns True iff at least one assert failed. Prints a summary table to
+    stderr."""
+    asserts_present = any(case.get("phase_asserts") for case in cases)
+    if not asserts_present:
+        return False
+
+    # iterations attempted per (case, variant) regardless of error
+    iter_counts = {}
+    for r in all_rows:
+        key = (r["case"], r["variant"])
+        iter_counts[key] = iter_counts.get(key, 0) + 1
+
+    # phase rows grouped by (case, variant, iteration) for matching
+    by_iter = {}
+    for r in all_phase_rows:
+        key = (r["case"], r["variant"], r["iteration"])
+        by_iter.setdefault(key, []).append((r["phase"], r["ms"]))
+
+    print("\nphase_asserts:", file=sys.stderr)
+    any_failed = False
+    for case in cases:
+        cid = case["id"]
+        for a in (case.get("phase_asserts") or []):
+            vname = a["variant"]
+            phase_re = re.compile(a["phase"])
+            required = a.get("required", True)
+            max_med = a.get("max_median_ms")
+            min_med = a.get("min_median_ms")
+            n_iters = iter_counts.get((cid, vname), 0)
+
+            iters_with_match = 0
+            per_iter_sums = []
+            for it in range(1, n_iters + 1):
+                matches = [
+                    ms for label, ms in by_iter.get((cid, vname, it), [])
+                    if phase_re.search(label)
+                ]
+                if matches:
+                    iters_with_match += 1
+                    per_iter_sums.append(sum(matches))
+
+            status = "PASS"
+            detail = ""
+
+            if n_iters == 0:
+                status = "FAIL"
+                detail = "no iterations ran"
+            elif required and iters_with_match < n_iters:
+                status = "FAIL"
+                detail = (
+                    f"phase missing in {n_iters - iters_with_match}/"
+                    f"{n_iters} iterations"
+                )
+            elif not per_iter_sums:
+                status = "PASS"
+                detail = "no matches (not required)"
+            else:
+                med = statistics.median(per_iter_sums)
+                if max_med is not None and med > max_med:
+                    status = "FAIL"
+                    detail = f"median {med}ms > max {max_med}ms"
+                elif min_med is not None and med < min_med:
+                    status = "FAIL"
+                    detail = f"median {med}ms < min {min_med}ms"
+                else:
+                    bounds = []
+                    if max_med is not None:
+                        bounds.append(f"max={max_med}")
+                    if min_med is not None:
+                        bounds.append(f"min={min_med}")
+                    bounds_s = (" " + ",".join(bounds)) if bounds else ""
+                    detail = (
+                        f"median {med}ms across {len(per_iter_sums)}/"
+                        f"{n_iters}{bounds_s}"
+                    )
+
+            if status == "FAIL":
+                any_failed = True
+            print(
+                f"  [{status}] {cid}/{vname}  /{a['phase']}/  {detail}",
+                file=sys.stderr,
+            )
+
+    return any_failed
 
 
 if __name__ == "__main__":

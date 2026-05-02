@@ -332,7 +332,7 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   printf "organism %s %s\n", $assemblyName, $asmDate;
   my $hugeGenome = 0;
   my $fourGb = 2**32 - 1;
-  my $asmSize=`ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+  my $asmSize=`/cluster/bin/x86_64/ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
   chomp $asmSize;
   $hugeGenome = 1 if ($asmSize > $fourGb);
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;

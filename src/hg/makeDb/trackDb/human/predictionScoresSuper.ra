@@ -4,9 +4,10 @@ longLabel Variant Deleteriousness / Variant Impact Prediction Scores
 superTrack on hide
 visibility hide
 group phenDis
+pennantIcon Updated red ../goldenPath/newsarch.html#050126 "Two new tracks added May 1, 2026: PrimateAI-3D and PromoterAI"
 
 include bayesDel.ra
 include mutscore.ra
 include mcap.ra
-include primateAi.ra alpha
-include promoterAi.ra alpha
+include primateAi.ra
+include promoterAi.ra
