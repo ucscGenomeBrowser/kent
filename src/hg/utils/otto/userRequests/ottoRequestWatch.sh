@@ -222,13 +222,13 @@ function installLinks() {
 
   # register both rows in hgcentraltest
   if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
-      -path="${chainPath}" "${tDb}" "${qDb}"; then
+      -path="${chainPath}" "${tDb}" "${qDb}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
     return 1
   fi
   if ! "${HOME}/kent/src/hg/utils/automation/addQuickLift.py" \
-      "${tDb}" "${qDb}" "${quickPath}"; then
+      "${tDb}" "${qDb}" "${quickPath}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: addQuickLift.py failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
     return 1
@@ -246,7 +246,7 @@ gsTmp=$(mktemp "${galaxyStatusFile}.XXXXXX")
 if timeout 45 "${scriptDir}/galaxyStatus.py" "${profileJson}" > "${gsTmp}" 2>/dev/null; then
   chmod 664 "${gsTmp}"
   mv "${gsTmp}" "${galaxyStatusFile}"
-  else
+else
   rm -f "${gsTmp}"
 #  printf "# WARNING: galaxyStatus.py failed, leaving stale snapshot\n" 1>&2
 fi
@@ -326,14 +326,14 @@ while IFS=$'\t' read -r reqId buildDir; do
   fi
   rm -f "${trackData}/lastz.${queryDb}"
   ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
-  if ! ${doTdb} 1>&2; then
+  if ! ${doTdb} > /dev/null 2>&1; then
      printf "ERROR: %s failed\n" "${doTdb}" 1>&2
      setErrorStatus "${reqId}"
      continue
   fi
   rm -f "${swapData}/lastz.${targetDb}"
   ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
-  if ! ${swapTdb} 1>&2; then
+  if ! ${swapTdb} > /dev/null 2>&1; then
      printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
      setErrorStatus "${reqId}"
      continue

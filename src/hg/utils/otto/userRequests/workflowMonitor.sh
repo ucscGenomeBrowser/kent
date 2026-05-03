@@ -116,8 +116,8 @@ while read -r F; do
 done < <(ls  result/${DS}/* 2> /dev/null)
 
 if [ "${resultCount}" -lt 6 ]; then
-  ${PM} invocation_download "${invocationId}" --profile vgp \
-    --output_directory "result/${DS}"
+ { time "${PM}" invocation_download "${invocationId}" --profile vgp \
+      --output_directory "result/${DS}" ; } >> galaxyDownload.log 2>&1
 else
   printf "download previously completed\n" 1>&2
 fi
@@ -149,9 +149,9 @@ function quickChain() {
   /cluster/bin/x86_64/chainSwap "${liftOver}" stdout | /cluster/bin/x86_64/chainToBigChain stdin \
     ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
   /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
-    ${target}.${query}.quick.chain.tab ${sizesFile} ${chainName}.bb
+    ${target}.${query}.quick.chain.tab ${sizesFile} ${chainName}.bb > /dev/null 2>&1
   /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
-    ${target}.${query}.quick.link.tab ${sizesFile} ${chainName}Link.bb
+    ${target}.${query}.quick.link.tab ${sizesFile} ${chainName}Link.bb > /dev/null 2>&1
   rm -f ${target}.${query}.quick.chain.tab ${target}.${query}.quick.link.tab
   local totalBases=$(/cluster/bin/x86_64/ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
   local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
@@ -172,9 +172,9 @@ function chainBigBedFb() {
   local fbFile=$5
   /cluster/bin/x86_64/chainToBigChain "${chainGz}" ${chainName}.tab ${chainName}Link.tab
   /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab \
-    ${chainName}.tab ${sizesFile} ${chainName}.bb
+    ${chainName}.tab ${sizesFile} ${chainName}.bb > /dev/null 2>&1
   /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab \
-    ${chainName}Link.tab ${sizesFile} ${chainName}Link.bb
+    ${chainName}Link.tab ${sizesFile} ${chainName}Link.bb > /dev/null 2>&1
   rm -f ${chainName}.tab ${chainName}Link.tab chain.tab link.tab
   local totalBases=$(/cluster/bin/x86_64/ave -col=2 ${sizesFile} | grep "^total" | awk '{printf "%d", $2}')
   local basesCovered=$(/cluster/bin/x86_64/bigBedInfo ${chainName}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
@@ -221,7 +221,7 @@ function buildChainBb() {
     "${fn}" "${db}" "${chainName}" "${chainGz}" "${sizes}" "${fbFile}"
   fi
   bumpIf "${fbFile}"
-  cat "${fbFile}" 1>&2
+# cat "${fbFile}" 1>&2
 }
 
 ############################################################################
@@ -270,5 +270,5 @@ printf "%s\t%s\t%s\n" "${DS}" "${invocationId}" "${logJson}" \
   > successInvocationId.txt
 rm -f pendingInvocationId.txt
 
-printf "### workflow monitor complete: %s %s -> %s\n" \
-  "${buildDir}" "${targetDb}" "${queryDb}" 1>&2
+# printf "### workflow monitor complete: %s %s -> %s\n" \
+#   "${buildDir}" "${targetDb}" "${queryDb}" 1>&2
