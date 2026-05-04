@@ -872,7 +872,7 @@ for (el = shareVars; el != NULL; el = el->next)
         continue;
         }
 
-    /* Apply field edits — no delete, no project change */
+    /* Apply field edits - no delete, no project change */
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     updateTextField(trackName, conn, tableName, "name", id);
     updateTextField(trackName, conn, tableName, "description", id);
