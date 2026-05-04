@@ -5,11 +5,17 @@ experiments, including DNase-seq and ATAC-seq for chromatin accessibility, and C
 for the histone modifications H3K4me3 and H3K27ac, as well as CTCF binding.</p>
 
 <ul>
-<li><b>DNase-seq</b> and <b>ATAC-seq</b> identify regions of open chromatin commonly
-associated with regulatory elements such as enhancers, promoters, and insulators.</li>
-<li>ChIP-seq for the histone modifications <b>H3K4me3</b> and <b>H3K27ac</b> mark active and poised promoters
-and enhancers.</li>
-<li><b>CTCF</b> ChIP-seq reveals chromatin loop anchors and insulator elements.</li>
+<li><b>DNase-seq</b> identifies regions of open chromatin via hypersensitivity to DNase I
+digestion. Open chromatin is commonly associated with active regulatory elements such as
+enhancers, promoters, and insulators.</li>
+<li><b>ATAC-seq</b> also identifies open chromatin, using Tn5 transposase insertion in
+place of DNase digestion.</li>
+<li><b>H3K4me3 ChIP-seq</b> marks a histone modification associated with active and
+poised promoters.</li>
+<li><b>H3K27ac ChIP-seq</b> marks a histone modification associated with active
+enhancers and promoters.</li>
+<li><b>CTCF ChIP-seq</b> identifies CTCF binding sites, which often occur at insulators
+and chromatin loop anchors that organize genome topology.</li>
 </ul>
 
 <p>Each subtrack represents a single experiment in a specific biosample, displayed as a
@@ -24,14 +30,20 @@ selectable via the "Data Type" facet in the track settings.</p>
 
 <p>Click a specific biosample type and organ/tissue combination to view available datasets.
 Subtracks can be further filtered by the epigenetic signal type (ATAC, DNase, CTCF,
-H3K27ac, and H3K4me3) and life stage of the biosample. Each track is colored based on
-the type of signal.</p>
+H3K27ac, and H3K4me3) and life stage of the biosample.</p>
+
+<p>Each subtrack is colored by signal type:
+<b>DNase-seq</b> is shown in <span style="color:#06DA93">green</span>,
+<b>ATAC-seq</b> in <span style="color:#02C7B9">cyan</span>,
+<b>H3K4me3</b> in <span style="color:#FF0000">red</span>,
+<b>H3K27ac</b> in <span style="color:#B59100">yellow</span>, and
+<b>CTCF</b> in <span style="color:#00B0F0">blue</span>.</p>
 
 <h2>Data Access</h2>
 <p>
 The ENCODE 4 Regulation data on the UCSC Genome Browser can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+<a href="/cgi-bin/hgTables">Table Browser</a> or the
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated download and analysis, the genome annotation is stored in bigWig (signal)
 and bigBed (peak) files that can be downloaded from
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/mm10/encode4/regulation/"
