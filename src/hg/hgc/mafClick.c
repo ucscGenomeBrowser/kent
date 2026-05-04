@@ -18,6 +18,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "chromAlias.h"
+#include "genark.h"
 
 extern boolean issueBotWarning;
 
@@ -214,7 +215,18 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    fprintf(f, "B</A> ");
 		    }
 		else
-		    fprintf(f, "  ");
+		    {
+		    char *hubUrl = genarkUrl(dbOnly);
+		    if (hubUrl != NULL)
+			{
+			dyStringPrintf(dy, "%s Browser %s:%d-%d %c %*dbps", org, chrom, s+1, e, mc->strand, sizeChars, mc->size);
+			fprintf(f, "<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+				dy->string, hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+			dyStringClear(dy);
+			}
+		    else
+			fprintf(f, "  ");
+		    }
 
                 if (hDbExists(dbOnly))
                     {
@@ -265,7 +277,18 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 			dyStringClear(dy);
 			}
 		    else
-			fprintf(f,"  ");
+			{
+			char *hubUrl = genarkUrl(dbOnly);
+			if (hubUrl != NULL)
+			    {
+			    dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned", org, chrom, s+1, e, mc->strand, e-s);
+			    fprintf(f, "<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+				    dy->string, hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+			    dyStringClear(dy);
+			    }
+			else
+			    fprintf(f,"  ");
+			}
 
                     if (hDbExists(dbOnly))
                         {
@@ -357,7 +380,16 @@ if (haveInserts)
 
 		}
 	    else
-		fprintf(f, "  ");
+		{
+		char *hubUrl = genarkUrl(dbOnly);
+		if (hubUrl != NULL)
+		    {
+		    fprintf(f, "<A TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+			    hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+		    }
+		else
+		    fprintf(f, "  ");
+		}
 
             if (hDbExists(dbOnly))
                 {
