@@ -27,6 +27,30 @@ extern boolean issueBotWarning;
  * go back to the server. */
 static char *autoSubmit = "document.gpForm.submit();";
 
+static char *splitMafSrc(char *src, char *dbOnly, int dbOnlySize, struct hash *labelHash)
+/* Split a maf component src ("db.chrom") into db (in dbOnly) and chrom
+ * (return value).  If labelHash has an entry whose key is a prefix of src
+ * ending at a dot, prefer that.  This handles multi-dot db names like assembly
+ * hub accessions ("GCF_000009085.1.NC_002163v1").
+ * Falls back to chopping at the first dot when no labelHash hit. */
+{
+safef(dbOnly, dbOnlySize, "%s", src);
+if (labelHash != NULL)
+    {
+    for (int i = strlen(dbOnly) - 1; i > 0; i--)
+        {
+        if (dbOnly[i] == '.')
+            {
+            dbOnly[i] = 0;
+            if (hashFindVal(labelHash, dbOnly) != NULL)
+                return &dbOnly[i + 1];
+            dbOnly[i] = '.';
+            }
+        }
+    }
+return chopPrefix(dbOnly);
+}
+
 static void blueCapWrite(FILE *f, char *s, int size, char *r)
 /* Write capital letters in blue. */
 {
@@ -110,8 +134,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	char *org;
 
 	memset(dbOnly, 0, sizeof(dbOnly));
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chopPrefix(dbOnly);
+	splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    len = strlen(dbOnly);
@@ -168,8 +191,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	dyStringClear(dy);
 
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	chrom = splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
         if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
             {
             if ((org = hOrganism(dbOnly)) == NULL)
@@ -308,8 +330,7 @@ if (haveInserts)
 	if (mc->strand == '-')
 	    reverseIntRange(&s, &e, mc->srcSize);
 
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	chrom = splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
 
         if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
             {
