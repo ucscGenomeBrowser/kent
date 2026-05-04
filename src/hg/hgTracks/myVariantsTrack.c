@@ -409,9 +409,14 @@ static struct linkedFeatures *loadMyVariantsItems(struct sqlConnection *conn,
  * as a linkedFeatures list. */
 {
 struct linkedFeatures *lf, *lfList = NULL;
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
-    whereExtra, &rowOffset);
+struct dyString *query = sqlDyStringCreate("select * from %s where ", tableName);
+hAddBinToQueryGeneral("bin", winStart, winEnd, query);
+sqlDyStringPrintf(query, " chrom='%s' and chromStart < %d and chromEnd > %d",
+        chromName, winEnd, winStart);
+if (isNotEmpty(whereExtra))
+    sqlDyStringPrintf(query, " and (%-s)", whereExtra);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+dyStringFree(&query);
 char **row;
 struct dyString *mouseover = dyStringNew(0);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -563,31 +568,6 @@ track->drawLeftLabels = myVariantsDrawLeftLabels;
 track->loadItems = myVariantsLoadItems;
 track->itemName = myVariantsName;
 track->nextItemButtonable = TRUE;
-}
-
-struct trackDb *myVariantsFakeTdb()
-/* Construct a trackDb record for myVariants track. */
-{
-char *userName = getUserName();
-struct trackDb *tdb = customTrackTdbDefault();
-char *tableName = myVariantsCreateTable(userName);
-if (!tableName)
-    errAbort("Error creating myVariants table for user '%s'", userName);
-tdb->track = "myVariants";
-tdb->table = cloneString(tableName);
-tdb->type = "myVariants";
-trackDbAddSetting(tdb, "mouseOverField", "description");
-return tdb;
-}
-
-struct track *myVariantsTg()
-/* Make track that will ultimately have the data from:
- * CUSTOM_TRASH.myVariants_userName table */
-{
-struct trackDb *tdb = myVariantsFakeTdb();
-struct track *tg = trackFromTrackDb(tdb);
-myVariantsMethods(tg);
-return tg;
 }
 
 static void apiSuccess(struct jsonWrite *jw)
@@ -892,7 +872,7 @@ for (el = shareVars; el != NULL; el = el->next)
         continue;
         }
 
-    /* Apply field edits — no delete, no project change */
+    /* Apply field edits - no delete, no project change */
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     updateTextField(trackName, conn, tableName, "name", id);
     updateTextField(trackName, conn, tableName, "description", id);

@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "trashDir.h"
 #include "obscure.h"
+#include "wikiLink.h"
 
 void myVariantsStaticLoad(char **row, struct myVariants *ret)
 /* Load a row from myVariants table into ret. The contents of ret will be replaced at the next call to this function. */
@@ -380,7 +381,18 @@ if (startsWith("myVariants_shared_", trackName))
     }
 if (startsWith("myVariants_", trackName))
     {
-    char *userName = trackName + strlen("myVariants_");
+    /* trackName is the SQL-identifier-encoded form "myVariants_<encoded>".
+     * Resolve via the current logged-in user (an own track is only viewable
+     * by its owner) and verify the trackName matches the encoded form for
+     * that user before returning their db.tableName. */
+    char *userName = getUserName();
+    if (isEmpty(userName))
+        return NULL;
+    char *expected = myVariantsGetTableName(userName);
+    boolean match = sameOk(expected, trackName);
+    freeMem(expected);
+    if (!match)
+        return NULL;
     return myVariantsGetDbTable(userName);
     }
 return NULL;
@@ -459,6 +471,13 @@ char *myVariantsWriteCtFile(char *userName, char *targetDb, struct cart *cart)
 if (isEmpty(targetDb))
     return NULL;
 
+/* Identifier-safe form of userName for the CT track name and trash filename.
+ * The raw userName may contain non-ASCII or characters unsafe in trackDb
+ * syntax, filesystem paths, or SQL (e.g. '@', ';', spaces, quotes). */
+char *encodedTableName = NULL;
+if (isNotEmpty(userName))
+    encodedTableName = myVariantsGetTableName(userName);
+
 /* Check if user has their own items */
 boolean hasOwnItems = FALSE;
 if (isNotEmpty(userName))
@@ -496,7 +515,7 @@ if (cart != NULL)
             freeMem(label);
             continue;
             }
-        /* Skip if the sharer is the current user — they already see their own track */
+        /* Skip if the sharer is the current user - they already see their own track */
         if (isNotEmpty(userName) && sameString(owner, userName))
             {
             freeMem(owner);
@@ -577,27 +596,29 @@ if (cart != NULL)
 if (!hasOwnItems && dyStringLen(sharedLines) == 0)
     {
     dyStringFree(&sharedLines);
+    freeMem(encodedTableName);
     return NULL;
     }
 
-/* Reusable, stable filename per user+db — always rewrite since shares are dynamic */
+/* Reusable, stable filename per user+db - always rewrite since shares are dynamic */
 struct tempName tn;
 char base[PATH_LEN];
 char *hostPort = cgiServerNamePort();
 safef(base, sizeof base, "myVariants_%s_%s_%s",
     hostPort ? hostPort : "localhost", targetDb,
-    isNotEmpty(userName) ? userName : "shared");
+    isNotEmpty(encodedTableName) ? encodedTableName : "shared");
 for (char *p = base; *p; p++) if (*p == '/') *p = '_';
 trashDirReusableFile(&tn, "ct", base, ".bed");
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
-    fprintf(f, "track name=\"myVariants_%s\" type=\"myVariants\" itemRgb=\"on\""
+    fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
         " visibility=\"pack\" shortLabel=\"My Variants\""
-        " longLabel=\"My Variants (%s)\"\n", userName, userName);
+        " longLabel=\"My Variants (%s)\"\n", encodedTableName, encodedTableName);
 if (dyStringLen(sharedLines) > 0)
     fprintf(f, "%s", dyStringContents(sharedLines));
 carefulClose(&f);
 dyStringFree(&sharedLines);
+freeMem(encodedTableName);
 return cloneString(tn.forCgi);
 }
 

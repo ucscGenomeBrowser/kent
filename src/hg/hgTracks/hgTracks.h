@@ -1255,10 +1255,6 @@ void myVariantsJsCommand(char *command, struct track *trackList, struct hash *tr
  * If it is indeed of this form then we'll create a new myVariants that references this
  * location and stick it in the named track. */
 
-struct track *myVariantsTg();
-/* Make track that will ultimately have the data from:
- * customData.myVariants_userName table */
-
 boolean myVariantsTrackEnabled();
 /* Return TRUE if the "My Variants" feature is enabled in hg.conf
  * and the current request comes from a valid user */
