@@ -668,9 +668,16 @@ else if (isVcfTable(table, &isTabix))
     }
 else if (isHicTable(table))
     hti = hicToHti(table);
-else if (isCustomTrack(table) || startsWith("myVariants_", table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table) ||
+         (strchr(table, '.') != NULL &&
+          startsWith("myVariants_", strchr(table, '.') + 1)))
     {
-    struct customTrack *ct = ctLookupName(table);
+    /* Accept the qualified myVariants storage form
+     * ("customDataNN.myVariants_<user>") as well as the bare track name;
+     * the ct list is keyed on the bare track name. */
+    char *dot = strchr(table, '.');
+    char *trackName = (dot != NULL && startsWith("myVariants_", dot + 1)) ? dot + 1 : table;
+    struct customTrack *ct = ctLookupName(trackName);
     hti = ctToHti(ct);
     }
 else if (sameWord(table, WIKI_TRACK_TABLE))

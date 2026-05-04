@@ -502,6 +502,8 @@ if (type != NULL && (startsWithWord("myVariants", type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type)))
     {
+    if (sameWord("myVariants", type) && ct->dbTableName == NULL)
+        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
     	regionList, lm, retFieldCount);

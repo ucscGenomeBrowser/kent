@@ -414,6 +414,8 @@ struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (type == NULL)
     type = ct->tdb->type;
+if (sameOk(type, "myVariants") && ct->dbTableName == NULL)
+    ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 struct asObject *asObj = asForTdb(conn, ct->tdb);
 if (asObj)
@@ -441,7 +443,7 @@ static void showTableFields(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
-if (isCustomTrack(rootTable))
+if (isCustomTrack(rootTable) || startsWith("myVariants_", rootTable))
     showTableFieldsCt(db, rootTable, withGetButton);
 else if (sameWord(rootTable, WIKI_TRACK_TABLE))
     showTableFieldsDb(wikiDbName(), rootTable, withGetButton);
