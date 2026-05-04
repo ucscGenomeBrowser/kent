@@ -1,0 +1,32 @@
+# Database configuration for lrSvAll combined long-read SV track
+# Columns:
+#   key            - short key used as field-name prefix and in `sources` list
+#   label          - human-readable label shown in filter dropdown and detail page
+#   bbPath         - path to the source bigBed file (under /gbdb/hg38/lrSv/)
+#   valueField     - autoSql field name to extract for the per-db value column.
+#                    Special values:
+#                      UNKNOWN  - emit literal "unknown" (db has no real AC)
+#                      SPLIT    - use affField/healField for two output columns
+#   valueLabel     - text shown after the dataset name on the detail page
+#                    (typically "AC", but "samples" for gustafson)
+#   affField       - SPLIT mode: expression for affected AC (supports "a+b")
+#   healField      - SPLIT mode: expression for healthy AC
+#   afField        - autoSql field name(s) to use for max-AF aggregation,
+#                    comma-separated. "" means no AF available.
+# Order here = order of per-db columns in the output bigBed.
+#key	label	bbPath	valueField	valueLabel	affField	healField	afField
+CoLoRSdb	CoLoRSdb 1,427 (PacBio)	/gbdb/hg38/lrSv/colorsDb/sv.hg38.bb	AC	AC			AF
+1000G-ONT-Vienna	1KG ONT Vienna 1,019	/gbdb/hg38/lrSv/1kgOnt.bb	AC	AC			alleleFreq
+1000G-ONT	1KG ONT 100 (Gustafson)	/gbdb/hg38/lrSv/gustafson.bb	sampleCount	samples
+AoU1K	All of Us 1,027 (PacBio)	/gbdb/hg38/lrSv/aou1k.bb	AC	AC			afAfr,afAmr,afEas,afEur,afSas
+Han945	Han Chinese 945	/gbdb/hg38/lrSv/han945.bb	AC	AC			alleleFreq
+TommoJapan	ToMMo 333 (Japanese)	/gbdb/hg38/lrSv/tommoJp.bb	AC	AC			alleleFreq
+GA4K	GA4K 502 (rare disease)	/gbdb/hg38/lrSv/ga4kSv.bb	AC	AC			alleleFreq
+deCODE	deCODE 3,622 (Icelandic)	/gbdb/hg38/lrSv/decodeSv.bb	UNKNOWN	AC
+HPRCv2	HPRC v2 233	/gbdb/hg38/lrSv/hprc2.bb	AC	AC			alleleFreq
+HGSVC2	HGSVC2 32	/gbdb/hg38/lrSv/hgsvc2.bb	AC	AC
+HGSVC3	HGSVC3 65	/gbdb/hg38/lrSv/hgsvc3.bb	AC	AC
+KimPD	Kim PD Brain 100	/gbdb/hg38/lrSv/kwanho.bb	SPLIT	AC	acPd+acIlbd	acHc	afPd,afHc,afIlbd
+ArabUAE53	Arab APR 53	/gbdb/hg38/lrSv/apr.bb	AC	AC			alleleFreq
+China58	CPC 58 (Chinese)	/gbdb/hg38/lrSv/cpc1.bb	AC	AC			alleleFreq
+Svatalog101	SVatalog 101	/gbdb/hg38/lrSv/chirmade101.bb	UNKNOWN	AC

@@ -1,0 +1,122 @@
+<h2>Description</h2>
+<p>
+N<sup>6</sup>-methyladenosine (m6A) is the most abundant internal chemical
+modification of mRNA in eukaryotes. m6A is deposited co-transcriptionally by
+the METTL3/METTL14 writer complex onto adenosines in a 5'-DRACH-3' sequence
+context (D = A/G/U, R = A/G, H = A/C/U), removed by demethylase erasers
+(FTO, ALKBH5), and recognised by reader proteins of the YTH and IGF2BP
+families. m6A regulates pre-mRNA splicing, nuclear export, mRNA decay,
+translation, and X-chromosome inactivation, and is increasingly implicated
+in development, immunity and cancer.
+</p>
+<p>
+This track shows the high-confidence base-resolution m6A sites collected by
+<b>m6A-Atlas v2.0</b> for the human genome. Each item marks a single A
+nucleotide that was independently identified by one or more base-resolution
+m6A sequencing technologies in one or more cell lines or tissues.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is a single-base annotation at the modified A. Items are colored
+by the genomic region in which the site falls:
+</p>
+<ul>
+  <li><span style="color:#1f77b4"><b>Exon</b></span> &mdash; coding exon</li>
+  <li><span style="color:#d62728"><b>3'UTR/Exon</b></span></li>
+  <li><span style="color:#008000"><b>5'UTR/Exon</b></span></li>
+  <li><span style="color:#9467bd"><b>5'UTR/3'UTR/Exon</b></span> (mixed)</li>
+  <li><span style="color:#7f7f7f"><b>Intron</b></span></li>
+  <li><span style="color:#bdbdbd"><b>Intergenic</b></span></li>
+</ul>
+<p>
+The score (0&ndash;1000, also used to shade items in pack mode) reflects the
+breadth of evidence: 150 points per supporting technique plus 30 points per
+additional supporting cell line, capped at 1000.
+</p>
+<p>
+Filters are provided for the genomic region, the supporting detection
+technique(s), the supporting cell line / tissue, the host gene biotype, and
+for the minimum number of supporting techniques and cell lines.
+</p>
+<p>
+The detail page links out to the corresponding
+<a href="http://rnamd.org/m6a/" target="_blank">m6A-Atlas</a> entry, which
+provides the per-study evidence in a richer format.
+</p>
+
+<h2>Methods</h2>
+<p>
+m6A-Atlas v2.0 aggregates base-resolution m6A sites identified by 13
+sequencing technologies (miCLIP, miCLIP2, meCLIP, m6ACE, m6A-CLIP-seq,
+PA-m6A-seq, m6A-REF-seq, MAZTER-seq, DART-seq, m6A-SAC-seq, m6A-label-seq,
+m6A-seq with improved protocol, and a single-cell adaptation), as reported
+in the original publications. Reads were processed with each technology's
+recommended pipeline, and only sites that pass technology-specific quality
+thresholds (the &quot;reliable&quot; / &quot;high&quot; tier) were retained.
+Each site is annotated with the supporting GEO study, technique, species,
+cell line and treatment, the surrounding 101&nbsp;nt sequence context, the
+host gene (Ensembl), the genomic region, and the number of overlapping
+RNA-binding-protein binding sites, microRNA targets, splice sites and SNPs
+collected by the m6A-Atlas team. See Liang <em>et al.</em> 2024 for the full
+analysis pipeline.
+</p>
+<p>
+For this track, the human (hg38) high-confidence file
+<tt>hg38_CL_Tech.txt.gz</tt> was downloaded from
+<a href="http://rnamd.org/m6a/download/high/hg38/hg38_CL_Tech.txt.gz" target="_blank">http://rnamd.org/m6a/download/high/hg38/hg38_CL_Tech.txt.gz</a>.
+The 1-based single-base coordinates were converted to BED 0-based half-open,
+the per-study evidence was kept verbatim, the cell-line and technique lists
+were comma-separated, and a link to the m6A-Atlas detail page was added.
+The conversion script and autoSql definition are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/rnaMod" target="_blank">kent/src/hg/makeDb/scripts/rnaMod</a>
+directory; the build steps are documented in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/rnaMod.txt" target="_blank">kent/src/hg/makeDb/doc/hg38/rnaMod.txt</a>.
+All 427,760 input rows from the source file were retained; no records were
+dropped during conversion.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
+there to spreadsheet or tab-separated tables. From scripts, the data can be
+accessed through our <a href="https://api.genome.ucsc.edu" target="_blank">JSON API</a>,
+track=<i>m6aAtlas</i>.</p>
+<p>
+For automated download and analysis, the genome annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/rnaMod/" target="_blank">our
+download server</a>. The file for this track is called <tt>m6aAtlas.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our
+tool <tt>bigBedToBed</tt>, which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for
+downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/rnaMod/m6aAtlas.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<p>
+The original annotation source data can be downloaded from
+<a href="http://rnamd.org/m6a/download.php" target="_blank">http://rnamd.org/m6a/download.php</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Zhanmin Liang, Kunqi Chen, Jia Meng and the m6A-Atlas team for
+making the v2.0 dataset publicly available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Liang Z, Ye H, Ma J, Wei Z, Wang Y, Zhang Y, Huang D, Song B, Meng J, Rigden DJ <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad691" target="_blank">
+m6A-Atlas v2.0: updated resources for unraveling the N6-methyladenosine (m6A) epitranscriptome among
+multiple species</a>.
+<em>Nucleic Acids Res</em>. 2024 Jan 5;52(D1):D194-D202.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37587690" target="_blank">37587690</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10768109/" target="_blank">PMC10768109</a>
+</p>
+

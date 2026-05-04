@@ -23,6 +23,8 @@ filterByRange.AC on
 filterLabel.AC Allele Count
 noScoreFilter on
 
+    include lrSvAll.ra
+
     track colorsDbSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/colorsDb/sv.$D.bb

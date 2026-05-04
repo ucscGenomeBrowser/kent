@@ -1,0 +1,21 @@
+table drach
+"DRACH (m6A consensus) motif sites in MANE Select transcripts, mapped to the genome"
+   (
+   string  chrom;       "Reference sequence chromosome"
+   uint    chromStart;  "Start position in chromosome"
+   uint    chromEnd;    "End position in chromosome"
+   string  name;        "Always empty (identifier in transcript field)"
+   uint    score;       "Always 0 (unscored)"
+   char[1] strand;      "Transcript strand"
+   uint    thickStart;  "Start of thick region (same as chromStart)"
+   uint    thickEnd;    "End of thick region (same as chromEnd)"
+   uint    reserved;    "RGB color (by motif sub-class)"
+   int     blockCount;  "Number of blocks (>1 if motif spans a splice junction)"
+   int[blockCount] blockSizes;  "Block sizes"
+   int[blockCount] chromStarts; "Block start positions relative to chromStart"
+   string  motif;       "DRACH 5-mer (DNA letters; T = U on RNA)"
+   string  gene;        "MANE Select gene symbol"
+   string  transcript;  "Versioned Ensembl transcript id"
+   uint    txPos;       "0-based start position in mature transcript"
+   string  region;      "5'UTR, CDS, or 3'UTR"
+   )
