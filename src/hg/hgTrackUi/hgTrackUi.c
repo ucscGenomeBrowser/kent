@@ -2942,11 +2942,10 @@ jsInline("$('#superTrackTable .vizSelect').hide();");
 // value set on a subtrack always overrides the supertrack's.
 if (bedHasFilters(superTdb))
     {
-    puts("<h3 style='margin-top:1em'>Filters ");
-    printInfoIcon("Values set here are inherited by every subtrack in this "
-                  "container. Any filter set on an individual subtrack's "
-                  "Track Settings page overrides the value set here for that "
-                  "subtrack only.");
+    puts("<h3 style='margin-top:1em'>Filters: ");
+    printInfoIcon("Filter values set here apply to every track in this "
+                  "container. A filter set directly on an individual track "
+                  "overrides the value here for that track only.");
     puts("</h3>");
     // Pass title=NULL so scoreCfgUi does not emit its "<p><B>title</B>"
     // banner. The container <h3> above is already the section label.
@@ -3789,12 +3788,26 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if (tdbIsContainer(tdb))
+if (tdbIsContainer(tdb) || tdbIsSuperTrack(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
     if (1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
+        {
+        if (tdbIsSuperTrack(tdb))
+            {
+            // SuperTrack children live in tdb->children (slRef list), not in
+            // the subtracks tree that cartRemoveAllForTdbAndChildren walks.
+            // Clear the supertrack's own cart vars (filters, visibility) and
+            // each child's vars by hand.
+            cartRemoveAllForTdb(cart, tdb);
+            struct slRef *childRef;
+            for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+                cartRemoveAllForTdb(cart, (struct trackDb *)childRef->val);
+            }
+        else
+            cartRemoveAllForTdbAndChildren(cart,tdb);
+        }
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
@@ -3963,7 +3976,7 @@ if (!tdbIsDownloadsOnly(tdb))
             cgiMakeOnClickButton("htui_cancel", "window.history.back();","Cancel");
             }
 
-        if (tdbIsComposite(tdb))
+        if (tdbIsComposite(tdb) || tdbIsSuperTrack(tdb))
 	    {
             printf("\n&nbsp;&nbsp;<a href='#' id='htui_reset'>Reset to defaults</a>\n");
 	    jsOnEventByIdF("click", "htui_reset",
@@ -4073,7 +4086,9 @@ if (decoratorSettings)
 
 // Repeat the Submit button near the bottom of the form so that users do not
 // have to scroll back up to the top after tweaking filters on a long page.
-if (!ajax)
+// Only superTracks need this: composites and regular tracks already render
+// their own Submit button at the bottom of their controls.
+if (!ajax && tdbIsSuperTrack(tdb))
     {
     puts("<p style='margin-top:1em;'>");
     cgiMakeButton("Submit", "Submit");
