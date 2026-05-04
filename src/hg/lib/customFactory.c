@@ -3454,6 +3454,13 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     }
 track->dbTrackType = cloneString("myVariants");
 track->tdb->type = cloneString("myVariants");
+if (isEmpty(track->tdb->html))
+    {
+    char descPath[PATH_LEN];
+    safef(descPath, sizeof descPath, "%s/inc/myVariantsDesc.html", hDocumentRoot());
+    if (fileExists(descPath))
+        readInGulp(descPath, &track->tdb->html, NULL);
+    }
 /* tdb->shortLabel holds the name= value from the track line at this point.
  * Use it for track/table identity, then override the display labels
  * from the shortLabel/longLabel settings if present. */
