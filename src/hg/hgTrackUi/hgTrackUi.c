@@ -3318,7 +3318,7 @@ printf("<option value=\"*\">All projects</option>\n");
 struct slName *projects = myVariantsGetProjects(userName);
 struct slName *p;
 for (p = projects; p != NULL; p = p->next)
-    printf("<option value=\"%s\">%s</option>\n", p->name, p->name);
+    printf("<option value=\"%s\">%s</option>\n", htmlEncode(p->name), htmlEncode(p->name));
 slFreeList(&projects);
 printf("</select></td></tr>\n");
 

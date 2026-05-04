@@ -76,11 +76,11 @@ if ((row = sqlNextRow(sr)) != NULL)
         if (canEdit)
             printf("<div style='padding:6px; margin-bottom:8px; background:#e8f5e9; "
                 "border:1px solid #a5d6a7; border-radius:4px'>"
-                "<B>Shared from %s</B></div>\n", dataOwner);
+                "<B>Shared from %s</B></div>\n", htmlEncode(dataOwner));
         else
             printf("<div style='padding:6px; margin-bottom:8px; background:#e3f2fd; "
                 "border:1px solid #90caf9; border-radius:4px'>"
-                "<B>Shared from %s (read-only)</B></div>\n", dataOwner);
+                "<B>Shared from %s (read-only)</B></div>\n", htmlEncode(dataOwner));
         }
 
     if (canEdit)
