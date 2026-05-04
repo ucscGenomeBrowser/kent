@@ -61,3 +61,28 @@ cases:
       lifted: Brianraney/benchQuickList1
     compare:
       - [native, lifted]
+
+  # -------- Regression: parallel-fetch tripwire (refs #37488, #37470) --------
+  # phase_asserts make this case fail-fast if the parallel pool stops
+  # firing for quickLift tracks (e.g. a regression in isTrackForParallelLoad
+  # or customFactoryParallelLoad). Runs against the sandbox until the fix
+  # lands on hgwdev.
+  - id: regress_quickLift_parallel
+    description: |
+      Regression tripwire: a quickLifted multi-track session must
+      spawn the parallel-fetch worker pool. Asserts the
+      "Waiting for parallel..." span is emitted in every iteration.
+    server: sandbox
+    variants:
+      base: Brianraney/benchQuickPara
+    phase_asserts:
+      # Required + min_median together: catch a regression that drops the
+      # quickLift tracks back to serial. With the fix in place the median
+      # parallel wait is several seconds; without it (only non-quickLift
+      # tracks parallelize) the wait is ~50 ms, so 500 ms cleanly separates
+      # the working and broken cases.
+      - variant: base
+        phase: 'Waiting for parallel \(\d+ threads for \d+ tracks\) remote data fetch'
+        required: true
+        min_median_ms: 500
+        max_median_ms: 15000

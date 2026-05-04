@@ -417,7 +417,107 @@ function drawSvgTable(svg, data) {
     }
 }
 
+function createTrackOverlapRow(parentEle, trackName, trackLabel, data) {
+/* Create a CSS grid row for trackLabel with the data in data, we will create
+ * enough columns to handle the number of fields in data, if there are multiple
+ * rows overlapping the item, then we will create subrows for the one track */
+    const wrapper = document.createElement("div");
+    wrapper.className = "section-row";
+
+    // Label on left
+    const title = document.createElement("div");
+    title.className = "table-section-title";
+    title.textContent = trackLabel;
+    wrapper.appendChild(title);
+
+    const scrollWrapper = document.createElement("div");
+    scrollWrapper.className = "table-scroll-wrapper";
+    wrapper.appendChild(scrollWrapper);
+
+    // Table grid on right
+    const grid = document.createElement("div");
+    grid.className = "table-grid";
+    scrollWrapper.appendChild(grid);
+
+    const headers = Object.keys(data[trackName][0]);
+    const headerLen = headers.length;
+
+    grid.style.gridTemplateColumns = `repeat(${headerLen}, minmax(120px,auto))`;
+
+    // Header row
+    headers.forEach(h => {
+        const cell = document.createElement("div");
+        cell.className = "table-cell table-header";
+        cell.textContent = h;
+        grid.appendChild(cell);
+    });
+
+    // pad header row
+    for (let i = headers.length; i < headerLen; i++) {
+        grid.appendChild(document.createElement("div")).className = "table-cell table-header";
+    }
+
+    data[trackName].forEach( (rowData) => {
+        if (Object.keys(rowData).length !== headerLen)
+            {
+            alert(`Error: api output for ${trackName} has inconsistent number of fields`);
+            return;
+            }
+
+        // data rows
+        Object.values(rowData).forEach(value => {
+            const cell = document.createElement("div");
+            cell.className = "table-cell";
+            cell.textContent = value;
+            grid.appendChild(cell);
+        });
+
+        // pad row
+        for (let i = Object.keys(rowData).length; i < headerLen; i++) {
+            grid.appendChild(document.createElement("div")).className = "table-cell";
+        }
+    });
+    parentEle.appendChild(wrapper);
+}
+
+function fetchTableData(url) {
+    // return a Promise that will ultimately become JSON
+    return fetch(url).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
 function initPage() {
+    // Convert title attributes to proper mouseovers (for info icons etc.)
+    // This is needed for both standalone hgc and AJAX-loaded popup content
+    if (typeof convertTitleTagsToMouseovers === 'function') {
+        convertTitleTagsToMouseovers();
+    }
+
+    // Set up myVariants project dropdown handler
+    var projectSelects = document.querySelectorAll('[id$="_projectSelect"]');
+    projectSelects.forEach(function(sel) {
+        sel.addEventListener('change', function() {
+            var inputId = this.id.replace('Select', '');
+            var input = document.getElementById(inputId);
+            if (!input) {
+                console.error('myVariants project: Could not find input with id:', inputId);
+                return;
+            }
+            if (this.value === '__new__') {
+                input.style.display = '';
+                input.value = '';
+                input.focus();
+            } else {
+                input.style.display = 'none';
+                input.value = this.value;
+            }
+        });
+    });
+
     if (typeof doHPRCTable !== "undefined") {
         makeHPRCTable();
     }
@@ -449,6 +549,24 @@ function initPage() {
             last.parentNode.insertBefore(document.createElement("br"), newTable);
         }
     }
+
+    if (typeof doItemOverlaps !== 'undefined' && doItemOverlaps && typeof overlapTracks !== 'undefined' && overlapTracks.length > 0) {
+        // query hubApi looking for items that have the exact same coordinates as this item
+        // only look in tracks listed in overlapTracks array
+        // when we don't overlap, write a message saying so
+        let parentDiv = document.getElementById("itemOverlaps");
+        parentDiv.style.display = "block";
+
+        const hubApiUrl = "../cgi-bin/hubApi/getData/track?genome="+getDb()+";chrom="+getURLParam("c")+";start="+getURLParam("o")+";end="+getURLParam("t")+";track=";
+        const requestUrls = overlapTracks.map(track => hubApiUrl+track);
+        const requests = requestUrls.map(req => fetchTableData(req));
+        Promise.all(requests)
+            .then(results => {
+                results.forEach(data => createTrackOverlapRow(parentDiv, data.track, data.track, data));
+            }).catch(err => console.error("Error fetching data:", err));
+
+    }
+
     document.querySelectorAll('.hideToggle').forEach(function(element) {
        element.addEventListener('click', function() {
          var targetId = this.getAttribute('dataTarget');

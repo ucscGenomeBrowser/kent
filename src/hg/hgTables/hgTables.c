@@ -42,6 +42,7 @@
 #include "genbank.h"
 #include "windowsToAscii.h"
 #include "chromAlias.h"
+#include "myVariants.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -667,7 +668,7 @@ else if (isVcfTable(table, &isTabix))
     }
 else if (isHicTable(table))
     hti = hicToHti(table);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     struct customTrack *ct = ctLookupName(table);
     hti = ctToHti(ct);
@@ -1212,7 +1213,7 @@ else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isHicTable(table))
     hicTabOut(db, table, conn, fields, f, outSep);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f, outSep);
     }
@@ -1243,23 +1244,29 @@ else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
 else if (isHicTable(table))
     fieldList = hicGetFields(table);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     struct customTrack *ct = ctLookupName(table);
     char *type = ct->dbTrackType;
     if (type != NULL)
         {
-	conn = hAllocConn(CUSTOM_TRASH);
-	if (startsWithWord("maf", type) || 
-            startsWithWord("makeItems", type) || 
-            sameWord("bedDetail", type) || 
-            sameWord("barChart", type) || 
-            sameWord("interact", type) || 
-            sameWord("bedMethyl", type) || 
-            sameWord("pgSnp", type))
-	        fieldList = sqlListFields(conn, ct->dbTableName);
-	hFreeConn(&conn);
-	}
+        conn = hAllocConn(CUSTOM_TRASH);
+        if (startsWithWord("maf", type) ||
+                startsWithWord("myVariants", type) ||
+                sameWord("bedDetail", type) ||
+                sameWord("barChart", type) ||
+                sameWord("interact", type) ||
+                sameWord("bedMethyl", type) ||
+                sameWord("pgSnp", type))
+            {
+            if (sameWord("myVariants", type))
+                {
+                ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
+                }
+            fieldList = sqlListFields(conn, ct->dbTableName);
+            }
+        hFreeConn(&conn);
+        }
     if (fieldList == NULL)
 	fieldList = getBedFields(ct->fieldCount);
     }
@@ -1406,7 +1413,7 @@ void doMetaData(struct sqlConnection *conn)
 {
 cartWriteHeaderAndCont(cart, NULL, "text/plain");
 char query[1024];
-sqlSafef(query, sizeof query, "%s", ""); 
+sqlSafef(query, sizeof query, "%s", "");
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);

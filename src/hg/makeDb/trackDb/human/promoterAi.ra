@@ -6,6 +6,7 @@ parent predictionScoresSuper
 compositeTrack on
 tableBrowser off
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#050126 "Released May 1, 2026"
 
         track promoterAiA
         shortLabel Mutation: A

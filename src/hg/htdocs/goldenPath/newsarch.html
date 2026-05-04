@@ -64,6 +64,97 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="050126"></a>
+<h2>May 1, 2026 &nbsp;&nbsp; New PrimateAI-3D and PromoterAI variant impact tracks from Illumina</h2>
+<p>
+We are pleased to announce the release of two new variant-impact prediction tracks
+from <a href="https://www.illumina.com/" target="_blank">Illumina</a>:
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank"><b>PrimateAI-3D</b></a>,
+which scores every possible coding missense variant on the human GRCh38/hg38 and
+GRCh37/hg19 assemblies, and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank"><b>PromoterAI</b></a>,
+which scores every possible non-coding single-nucleotide substitution in proximal
+promoter regions on GRCh38/hg38. Together, these deep-learning predictors extend
+pathogenicity prediction across both protein-coding and regulatory sequence.
+Both tracks are grouped under the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=predictionScoresSuper&position=default" target="_blank">Deleteriousness
+Predictions</a> container in the Phenotype and Disease Associations track group.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank">PrimateAI-3D</a>
+track displays approximately 70.7&nbsp;million scored missense variants per assembly,
+covering every possible single-base coding change across all protein-coding genes.
+PrimateAI-3D is a deep-learning model that learns variant pathogenicity from common
+variation observed across 233 non-human primate species and large human population
+databases. Each variant is colored
+<span style="color:red">red (pathogenic)</span> or
+<span style="color:blue">blue (benign)</span> based on Illumina&apos;s prediction
+call. Items are labeled by default with the nucleotide change (e.g.
+<code>C&gt;T</code>); the corresponding amino acid change is shown on hover and
+can be toggled as the on-feature label from the Track Settings.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank">PromoterAI</a>
+track provides pre-computed scores for every possible single-nucleotide substitution
+within 500&nbsp;bp of annotated transcription start sites, covering approximately
+39.5&nbsp;million genomic positions. Scores range from &minus;1 to +1, where
+<b>negative</b> values indicate predicted <b>under-expression</b> and <b>positive</b>
+values indicate predicted <b>over-expression</b> of the associated transcript; the
+magnitude reflects the predicted size of the expression change. The container track
+includes:
+</p>
+<ul>
+  <li>Four <b>per-base score</b> subtracks &ndash; one bigWig for each alternate
+  allele (<b>A</b>, <b>C</b>, <b>G</b>, <b>T</b>). Bars are colored
+  <span style="color:red">red</span> for positive scores and
+  <span style="color:blue">blue</span> for negative scores.
+  </li>
+  <li>A <b>PromoterAI Overlaps</b> bigBed subtrack summarizing positions where
+  multiple transcripts overlap. Each item lists the contributing transcripts,
+  their per-transcript scores, and their strand orientation. About 90% of overlap
+  items lie at bidirectional promoters where transcripts on opposite strands
+  share regulatory sequence.
+  </li>
+</ul>
+
+<div class="text-center">
+  <img src="../images/illuminaPrimatePromoterNewsImage.png"
+  alt="Genome Browser screenshot at the HBB locus on hg38 showing PrimateAI-3D
+  pathogenicity calls across the coding region and PromoterAI per-allele scores
+  in the 5' UTR and proximal promoter" width='80%'>
+  <p class="gbsCaption">
+  <em>PrimateAI-3D and PromoterAI at the start of <i>HBB</i> on hg38
+  (chr11:5,226,883-5,227,212). PrimateAI-3D scores every coding missense variant
+  as red (pathogenic) or blue (benign), while the four PromoterAI per-allele
+  bigWig subtracks score every possible non-coding substitution in the 5&prime;
+  UTR and proximal promoter just upstream of the <i>HBB</i> start codon.</em>
+  </p>
+</div>
+
+<p>
+See the track description pages for Illumina's recommended interpretation
+thresholds.
+</p>
+
+<p>
+Both tracks are distributed by Illumina under a license agreement and are not
+available through the Table Browser, Data Integrator, REST API, or public
+download. The full methods are described in
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">Gao
+et&nbsp;al. 2023</a> (PrimateAI-3D, <i>Science</i>) and
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40440429" target="_blank">Jaganathan
+et&nbsp;al. 2025</a> (PromoterAI, <i>Science</i>).
+</p>
+
+<p>
+We would like to thank Hong Gao, Kishore Jaganathan, and the Illumina PrimateAI-3D
+and PromoterAI teams for making these predictions available to the research
+community. We also would like to thank Max Haeussler and Lou Nassar for the
+creation and release of the UCSC Genome Browser tracks.
+</p>
+
 <a name="042226"></a>
 <h2>Apr. 22, 2026 &nbsp;&nbsp; New NMD Escape tracks on hg38</h2>
 <p>

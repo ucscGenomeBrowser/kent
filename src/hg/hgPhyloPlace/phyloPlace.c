@@ -2266,6 +2266,101 @@ for (si = sampleIds;  si != NULL;  si = si->next)
 puts("</tbody></table><p></p>");
 }
 
+static void summarizeRecombinants(struct recombinantInfo *recombinants, struct hash *descendants, struct slName *sampleIds)
+/* Show a table describing potential recombinants found by ripples search. */
+{
+puts("<p><b>Potential recombinants found: </b><br>");
+puts("<table class='seqSummary'>");
+puts("<thead><tr><th>Potential recombinant node"
+     TOOLTIP("Sequence or internal node for which potential recombination was found. "
+             "If internal node, then the uploaded sequence(s) descended from the node are listed, "
+             "and if there are additional sequences already at that node then their number is "
+             "given")
+     "</th>");
+puts("<th>Placement clade"
+     TOOLTIP("Nextstrain clade in which the potential recombinant was placed")
+     "</th>");
+puts("<th>Placement lineage"
+     TOOLTIP("Pango lineage in which the potential recombinant was placed")
+     "</th>");
+puts("<th>Parsimony score improvement"
+     TOOLTIP("The number of mutations that could be explained by recombination, "
+             "given along with the original number of mutations on the branch "
+             "to the potential recombinant node")
+     "</th>");
+puts("<th>Donor node"
+     TOOLTIP("The parent node that explains mutations before the first breakpoint range "
+             "(and, if applicable, after the second breakpoint range)")
+     "</th>");
+puts("<th>Donor descendant count"
+     TOOLTIP("The number of sequences at the tips/leaves of the branch that starts "
+             "with the donor node")
+     "</th>");
+puts("<th>Donor clade"
+     TOOLTIP("Nextstrain clade in which the donor node was placed")
+     "</th>");
+puts("<th>Donor lineage"
+     TOOLTIP("Pango lineage in which the donor node was placed")
+     "</th>");
+puts("<th>Acceptor node"
+     TOOLTIP("The parent node that explains mutations after the first breakpoint range "
+             "(and, if applicable, before the second breakpoint range)")
+     "</th>");
+puts("<th>Acceptor descendant count"
+     TOOLTIP("The number of sequences at the tips/leaves of the branch that starts "
+             "with the acceptor node")
+     "</th>");
+puts("<th>Acceptor clade"
+     TOOLTIP("Nextstrain clade in which the acceptor node was placed")
+     "</th>");
+puts("<th>Acceptor lineage"
+     TOOLTIP("Pango lineage in which the donor node was placed")
+     "</th>");
+puts("<th>Breakpoint 1 range"
+     TOOLTIP("Coordinate range, bounded by mutations explained by the donor node at lower "
+             "coordinates and by the acceptor node at higher coordinates")
+     "</th>");
+puts("<th>Breakpoint 2 range"
+     TOOLTIP("Coordinate range, bounded by mutations explained by the acceptor node at lower "
+             "coordinates and by the donor node at higher coordinates")
+     "</th></tr></thead><tbody>");
+struct recombinantInfo *ri;
+for (ri = recombinants;  ri != NULL;  ri = ri->next)
+    {
+    printf("<tr><td>%s", ri->recombNodeId);
+    if (startsWith("node_", ri->recombNodeId))
+        {
+        printf(" (");
+        struct slName *descendantList = hashFindVal(descendants, ri->recombNodeId), *desc;
+        int sampleCount = 0;
+        for (desc = descendantList;  desc != NULL;  desc = desc->next)
+            {
+            if (slNameInList(sampleIds, desc->name))
+                {
+                if (sampleCount > 0)
+                    printf(", ");
+                printf("%s", desc->name);
+                sampleCount++;
+                }
+            }
+        int others = ri->recombNumDesc - sampleCount;
+        if (others)
+            printf(" + %d", others);
+        printf(")");
+        }
+    printf("</td><td>%s</td><td>%s</td>", ri->recombClade, ri->recombLineage);
+    printf("<td>%d (from %d)</td>", ri->parsimonyImprovement, ri->originalParsimony);
+    printf("<td>%s</td><td>%d</td><td>%s</td><td>%s</td>",
+           ri->donorNodeId, ri->donorNumDesc, ri->donorClade, ri->donorLineage);
+    printf("<td>%s</td><td>%d</td><td>%s</td><td>%s</td>",
+           ri->acceptorNodeId, ri->acceptorNumDesc, ri->acceptorClade, ri->acceptorLineage);
+    printf("<td>(%d, %d)</td><td>(%d, %d)</td></tr>\n",
+           ri->bp1Min, ri->bp1Max, ri->bp2Min, ri->bp2Max);
+    }
+puts("</tbody></table>");
+puts("</p>");
+}
+
 static struct singleNucChange *sncListFromSampleMutsAndImputed(struct slName *sampleMuts,
                                                                struct baseVal *imputedBases,
                                                                struct seqWindow *gSeqWin)
@@ -3432,17 +3527,20 @@ pthread_t *metadataPthread = mayStartLoaderPthread(metadataFile, loadMetadataWor
 
 struct usherResults *results = NULL;
 char *anchorFile = phyloPlaceRefSettingPath(org, refName, "anchorSamples");
+char *ripplesEnabledSetting = phyloPlaceOrgSetting(org, "ripplesEnabled");
+boolean ripplesEnabled = (isNotEmpty(ripplesEnabledSetting) && SETTING_IS_ON(ripplesEnabledSetting));
+boolean doRipples = (ripplesEnabled && slCount(sampleIds) <= MAX_RIPPLES_SEARCH);
 if (vcfTn)
     {
     fflush(stdout);
     results = runUsher(org, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
-                       treeChoices, anchorFile, &startTime);
+                       treeChoices, anchorFile, doRipples, refGenome->size, &startTime);
     }
 else if (subtreesOnly)
     {
     char *matUtilsPath = getMatUtilsPath(TRUE);
     results = runMatUtilsExtractSubtrees(org, matUtilsPath, protobufPath, subtreeSize,
-                                         sampleIds, treeChoices, anchorFile, &startTime);
+                                         sampleIds, treeChoices, anchorFile, refGenome->size, &startTime);
     }
 
 struct sampleMetadataStore *sampleMetadata = NULL;
@@ -3535,6 +3633,9 @@ if (results && results->singleSubtreeInfo)
     struct tempName *ctTn = NULL;
     if (subtreesOnly)
         {
+        if (ripplesEnabled)
+            puts("<p><b>Did not search for potential recombinants (currently supported only "
+                 "for uploaded sequences, not names/IDs).</b></p>");
         summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, refName, subtreeSize);
         reportTiming(&startTime, "describe subtrees");
         }
@@ -3561,6 +3662,19 @@ if (results && results->singleSubtreeInfo)
         sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
         downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,
                      zipTn->forHtml);
+
+        if (results->recombinants)
+            {
+            summarizeRecombinants(results->recombinants, results->recombinantDescendants, sampleIds);
+            }
+        else if (ripplesEnabled)
+            {
+            if (doRipples)
+                puts("<p><b>No potential recombinants found.</b></p>");
+            else
+                printf("<p><b>Did not search for potential recombinants, too many input sequences "
+                       "(maximum %d for recombinant search).</b></p>\n", MAX_RIPPLES_SEARCH);
+            }
 
         int seqCount = slCount(seqInfoList);
         if (seqCount <= MAX_SEQ_DETAILS)

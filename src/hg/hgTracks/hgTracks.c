@@ -83,6 +83,7 @@
 #include "decoratorUi.h"
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
+#include "myVariants.h"
 
 //#include "bed3Sources.h"
 
@@ -105,6 +106,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
+            "myVarShare",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -197,6 +199,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 #endif /* DEBUG */
+
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -6753,11 +6756,10 @@ else if (sameString(type, "vcf"))
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
-else if (sameString(type, "makeItems"))
+else if (sameString(type, "myVariants"))
     {
     tg = trackFromTrackDb(tdb);
-    makeItemsMethods(tg);
-    tg->nextItemButtonable = TRUE;
+    myVariantsMethods(tg);
     tg->customPt = ct;
     }
 else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
@@ -6830,6 +6832,24 @@ char *getPositionFromCustomTracks()
 {
 char *pos = NULL;
 struct slName *bl = NULL;
+
+// If the user has myVariants data for this database, write a custom track
+// stub file and set the ctfile_ cart variable so customTracksParseCart picks
+// it up.  This handles fresh carts and also refreshes after edits/deletes
+// done via jsCommandDispatch.  If the backing table no longer exists (e.g.
+// the user or an admin dropped it), remove the stale cart variable so the
+// custom track system doesn't try to load a non-existent table.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    char *userName = getUserName();
+    char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+    char mvVarName[256];
+    safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+    if (isNotEmpty(ctFile))
+        cartSetString(cart, mvVarName, ctFile);
+    else
+        cartRemove(cart, mvVarName);
+    }
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
@@ -7891,8 +7911,8 @@ void jsCommandDispatch(char *command, struct track *trackList)
  * This gets executed after the track list is built, but before
  * the track->loadItems methods are called.  */
 {
-if (startsWithWord("makeItems", command))
-    makeItemsJsCommand(command, trackList, trackHash);
+if (startsWithWord("myVariants", command))
+    myVariantsJsCommand(command, trackList, trackHash);
 else
     warn("Unrecognized jsCommand %s", command);
 }
@@ -7952,8 +7972,18 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
+char *db = database;
 
-return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
+// quickLifted tracks fetch from the source assembly via the chain in
+// quickLiftUrl, so their bigDataUrl is /gbdb/<sourceDb>/... -- the source
+// db, not the current target db. customFactoryParallelLoad's bigDataUrl
+// validity check requires /gbdb/<X>/ to match its db argument, so when
+// the track declares its source via quickLiftDb, validate against that.
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    db = quickLiftDb;
+
+return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
@@ -8064,6 +8094,12 @@ void loadDecorators(struct track *track)
  */
 {
 struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+// quickLifted tracks fetch from the source assembly, so their decorator
+// bigDataUrls live under /gbdb/<sourceDb>/... -- validate against that.
+char *decoratorDb = database;
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    decoratorDb = quickLiftDb;
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
@@ -8079,7 +8115,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, decoratorDb, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);
@@ -8830,6 +8866,54 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
+// put up the My Variants dialog if the hg.conf statement is present
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the my variants track\">Make Item</button>");
+    jsInline("var doMyVariants = true;\n");
+    jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
+    // Get existing project values for dropdown
+    char *userName = getUserName();
+    if (userName)
+        {
+        struct slName *projects = myVariantsGetProjects(userName);
+        if (projects)
+            {
+            struct jsonElement *projectList = newJsonList(NULL);
+            struct slName *proj;
+            for (proj = projects; proj != NULL; proj = proj->next)
+                jsonListAdd(projectList, newJsonString(proj->name));
+            slReverse(&projectList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
+            slFreeList(&projects);
+            }
+        /* Get existing custom field names for the create dialog */
+        struct slName *customFields = myVariantsGetCustomFields(userName);
+        if (customFields)
+            {
+            struct jsonElement *cfList = newJsonList(NULL);
+            struct slName *cf;
+            for (cf = customFields; cf != NULL; cf = cf->next)
+                jsonListAdd(cfList, newJsonString(cf->name));
+            slReverse(&cfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsCustomFields", cfList);
+            slFreeList(&customFields);
+            }
+        /* Get hidden field names for the restore UI */
+        struct slName *hiddenFields = myVariantsGetHiddenFields(userName);
+        if (hiddenFields)
+            {
+            struct jsonElement *hfList = newJsonList(NULL);
+            struct slName *hf;
+            for (hf = hiddenFields; hf != NULL; hf = hf->next)
+                jsonListAdd(hfList, newJsonString(hf->name));
+            slReverse(&hfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
+            slFreeList(&hiddenFields);
+            }
+        }
+    }
+
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
@@ -9020,14 +9104,6 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
         }
 
     }
-
-char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
-if (!isEmpty(jsCommand))
-   {
-   cartRemove(cart, hgtJsCommand);
-   jsCommandDispatch(jsCommand, trackList);
-   }
-
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -10649,6 +10725,23 @@ boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
 cartRemove(cart, "findNearest");
 
 boolean positionIsVirt = FALSE;
+
+/* Process JS commands (e.g., myVariants insert) BEFORE building track list/CTs */
+char *jsEarly = cartCgiUsualString(cart, hgtJsCommand, "");
+if (!isEmpty(jsEarly))
+    {
+    cartRemove(cart, hgtJsCommand);
+    jsCommandDispatch(jsEarly, NULL);
+    }
+
+/* Accept incoming share links before CT file generation so the cart var is
+ * visible to shared track rendering in the same request. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    myVariantsProcessShareParam();
+    myVariantsProcessSharedEdits();
+    }
+
 position = getPositionFromCustomTracks();
 if (NULL == position)
     {

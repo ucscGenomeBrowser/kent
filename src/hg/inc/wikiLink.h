@@ -60,6 +60,8 @@ char *wikiLinkUserName();
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 
+char *getUserName();
+
 char *wikiLinkUserId();
 /* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
  * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */

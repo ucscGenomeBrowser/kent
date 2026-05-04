@@ -59,7 +59,7 @@ def main():
 
     inv = apiGet(f"{galaxyUrl}/api/invocations/{invocationId}", apiKey)
     state = inv.get("state", "unknown")
-    print(f"# invocation state: {state}", file=sys.stderr)
+#   print(f"# invocation state: {state}", file=sys.stderr)
 
     if state in ("cancelled", "failed"):
         print(f"ERROR: workflow {state} -- invocation {invocationId}",
@@ -67,8 +67,8 @@ def main():
         print("failed")
         return
     if state in ("new", "ready"):
-        print("# workflow still starting up, will check again later",
-              file=sys.stderr)
+#       print("# workflow still starting up, will check again later",
+#             file=sys.stderr)
         print("pending")
         return
     if state not in ("scheduled", "completed"):
@@ -87,8 +87,8 @@ def main():
 
     if sum(active.values()) > 0:
         desc = ", ".join(f"{v} {k}" for k, v in active.items())
-        print(f"# {sum(active.values())} jobs still active ({desc}), "
-              f"will check again later", file=sys.stderr)
+#       print(f"# {sum(active.values())} jobs still active ({desc}), "
+#             f"will check again later", file=sys.stderr)
         print("pending")
         return
 

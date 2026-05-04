@@ -56,7 +56,7 @@ def main():
             apiCall("DELETE",
                     f"{galaxyUrl}/api/histories/{historyId}?purge=true",
                     apiKey)
-            print(f"# purged history {historyId}", file=sys.stderr)
+#           print(f"# purged history {historyId}", file=sys.stderr)
         except urllib.error.HTTPError as e:
             sys.exit(f"ERROR: failed to purge history {historyId}: {e}")
     else:
@@ -66,7 +66,7 @@ def main():
     try:
         apiCall("DELETE",
                 f"{galaxyUrl}/api/invocations/{invocationId}", apiKey)
-        print(f"# deleted invocation {invocationId}", file=sys.stderr)
+#       print(f"# deleted invocation {invocationId}", file=sys.stderr)
     except urllib.error.HTTPError as e:
         # history is already purged, so disk is reclaimed -- the
         # invocation row remaining is cosmetic

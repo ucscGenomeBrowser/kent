@@ -30,6 +30,8 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "myVariants.h"
+#include "wikiLink.h"
 #include "dupTrack.h"
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
@@ -3294,6 +3296,62 @@ slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
 }
 
+static void myVariantsShareUi(struct trackDb *tdb)
+/* Render the inline share management section on hgTrackUi for a user's own
+ * myVariants track. Emits HTML + calls into hui.js via jsInline to wire up
+ * the create/list/revoke API calls. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    {
+    printf("<p>Please <a href=\"./hgSession\">log in</a> to manage shares.</p>\n");
+    return;
+    }
+
+printf("<h3>Share this track</h3>\n");
+printf("<div id=\"shareCreateSection\">\n");
+printf("<h4 style=\"margin-top:0\">Create share link</h4>\n");
+printf("<table style=\"border-spacing:4px\"><tbody>\n");
+
+/* Project dropdown */
+printf("<tr><td>Project:</td><td><select id=\"shareProject\">\n");
+printf("<option value=\"*\">All projects</option>\n");
+struct slName *projects = myVariantsGetProjects(userName);
+struct slName *p;
+for (p = projects; p != NULL; p = p->next)
+    printf("<option value=\"%s\">%s</option>\n", p->name, p->name);
+slFreeList(&projects);
+printf("</select></td></tr>\n");
+
+/* Permission radios */
+printf("<tr><td>Permission:</td><td>"
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked> Can view</label> "
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"1\"> Can edit</label>"
+    "</td></tr>\n");
+printf("<tr><td>Share with:</td>"
+    "<td><input type=\"text\" id=\"shareTargetUser\""
+    " placeholder=\"Username (blank = anyone with link)\" style=\"width:250px\"></td></tr>\n");
+printf("<tr><td>Label:</td>"
+    "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
+    " style=\"width:250px\"></td></tr>\n");
+printf("</tbody></table>\n");
+printf("<button type=\"button\" id=\"shareCreateBtn\">Create share link</button>\n");
+printf("<div id=\"shareResult\" style=\"display:none; margin-top:8px; padding:8px;"
+    " background:#e8f5e9; border-radius:4px\">"
+    "<span>Share URL: </span>"
+    "<input type=\"text\" id=\"shareUrlField\" readonly style=\"width:350px\">"
+    " <button type=\"button\" id=\"shareCopyBtn\">Copy</button></div>\n");
+printf("</div>\n");
+
+printf("<hr>\n");
+printf("<div id=\"shareListSection\">\n");
+printf("<h4>Active shares</h4>\n");
+printf("<div id=\"shareListContent\">Loading...</div>\n");
+printf("</div>\n");
+
+jsInline("if (typeof myVariantsShareInit === 'function') myVariantsShareInit();\n");
+}
+
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -3500,6 +3558,13 @@ else if (tdb->type != NULL)
 
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
+
+/* myVariants own track: render inline share management. Skip shared tracks
+ * (myVariants_shared_*) - you can't re-share someone else's data. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+    && startsWith("myVariants_", tdb->track)
+    && !startsWith("myVariants_shared_", tdb->track))
+    myVariantsShareUi(tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
@@ -4383,8 +4448,13 @@ else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
-else if (isCustomTrack(track))
+else if (isCustomTrack(track)
+         || (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", track)))
     {
+    /* myVariants tracks (own and shared) are built dynamically and live in
+     * the CT list rather than the SQL trackDb table, but their names don't
+     * carry the ct_ prefix, so we need to look them up alongside regular
+     * custom tracks. */
     ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
@@ -4392,6 +4462,31 @@ else if (isCustomTrack(track))
             {
             tdb = ct->tdb;
             break;
+            }
+        }
+    /* Fallback for direct hgTrackUi navigation without hgTracks: regenerate
+     * the myVariants CT file and re-parse. Normally the CT file was written
+     * during the preceding hgTracks visit, so this branch only fires for
+     * bookmarked URLs or direct links. */
+    if (tdb == NULL && startsWith("myVariants_", track))
+        {
+        char *userName = getUserName();
+        char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+        if (isNotEmpty(ctFile))
+            {
+            char mvVarName[256];
+            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            cartSetString(cart, mvVarName, ctFile);
+            freeMem(ctFile);
+            ctList = customTracksParseCart(database, cart, NULL, NULL);
+            for (ct = ctList; ct != NULL; ct = ct->next)
+                {
+                if (sameString(track, ct->tdb->track))
+                    {
+                    tdb = ct->tdb;
+                    break;
+                    }
+                }
             }
         }
     }

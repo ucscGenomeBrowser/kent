@@ -29,7 +29,7 @@ visibility hide
 type bigBed 12
 bigDataUrl /gbdb/danRer11/bacEndPairs/bacEndPairs.bb
 
-include choriCloneEnds.ra alpha
+include choriCloneEnds.ra
 
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public

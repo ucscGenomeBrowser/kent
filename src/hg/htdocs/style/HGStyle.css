@@ -1286,6 +1286,33 @@ span.gbSessionChanged {
     height: 18px;
 }
 
+.bed-form {
+display: grid;
+grid-template-columns: 1fr 2fr;
+gap: 0.5rem 1rem;
+max-width: 500px;
+margin: 2rem auto;
+font-family: sans-serif;
+}
+
+.bed-form label {
+text-align: right;
+padding-right: 0.5rem;
+}
+
+.bed-form input[type="text"],
+.bed-form input[type="number"],
+.bed-form input[type="color"] {
+width: 100%;
+padding: 0.4rem;
+}
+
+.bed-form button {
+grid-column: span 2;
+padding: 0.6rem;
+font-size: 1rem;
+}
+
 .hgTracksGearIcon {
     position: absolute !important;
     top: 4px;
@@ -1337,6 +1364,46 @@ span.gbSessionChanged {
 
 #hgta_doClearSubtrackMerge {
     color: red;
+}
+
+.section-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.table-section-title {
+  display: inline-block;
+  font-weight: bold;
+  padding: 6px 12px;
+  background: #dcdcdc;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  white-space: nowrap; /* stays on one line */
+}
+
+.table-scroll-wrapper {
+    overflow-x: auto;
+    flex: 1;
+}
+
+.table-grid {
+  display: grid;
+    grid-auto-flow: row;
+  grid-auto-columns: minmax(120px, auto);
+  gap: 4px;
+}
+
+.table-cell {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+
+.table-header {
+  background: #e6e6e6;
+  font-weight: bold;
 }
 
 .searchCell {

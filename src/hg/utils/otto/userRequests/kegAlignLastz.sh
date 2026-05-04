@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export userName="`whoami`"
 
@@ -130,7 +130,7 @@ function orgName() {
        oName=`egrep -m 1 -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
        ;;
      *)
-       oName=`hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
+       oName=`/cluster/bin/x86_64/hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
        ;;
   esac
   printf "%s" "${oName}"
@@ -173,7 +173,7 @@ function orgDate() {
 function verifyGenark() {
   local asmAccession=$1
   local fullName=$2
-  local count=$(hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  local count=$(/cluster/bin/x86_64/hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
   if [ "$count" -eq 0 ]; then
     printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
     return 1
@@ -553,7 +553,7 @@ printf "%s" "${yamlString}" > ${buildDir}/${tAccId}.${qAccId}.yaml
 ### setup the buildDir/lastzRun.sh script
 printf "#!/bin/bash
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export targetDb=\"${tAccId}\"
 export queryDb=\"${qAccId}\"
@@ -586,7 +586,7 @@ chmod +x ${buildDir}/lastzRun.sh
 printf "#!/bin/bash
 
 # exit on any failure
-set -beEu -o pipefail
+set -eEu -o pipefail
 
 export buildDir=\"${buildDir}\"
 export swapDir=\"${swapDir}\"
@@ -608,12 +608,12 @@ function chainBigBedFb() {
   local chainGz=\$3
   local sizesFile=\$4
   local fbFile=\$5
-  chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
-  bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
-  bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
+  /cluster/bin/x86_64/chainToBigChain \"\${chainGz}\" \${chainName}.tab \${chainName}Link.tab
+  /cluster/bin/x86_64/bedToBigBed -type=bed6+6 -as=\$HOME/kent/src/hg/lib/bigChain.as -tab \${chainName}.tab \${sizesFile} \${chainName}.bb
+  /cluster/bin/x86_64/bedToBigBed -type=bed4+1 -as=\$HOME/kent/src/hg/lib/bigLink.as -tab \${chainName}Link.tab \${sizesFile} \${chainName}Link.bb
   rm -f \${chainName}.tab \${chainName}Link.tab chain.tab link.tab
-  local totalBases=\`ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
-  local basesCovered=\`bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
+  local totalBases=\`/cluster/bin/x86_64/ave -col=2 \${sizesFile} | grep \"^total\" | awk '{printf \"%%d\", \$2}'\`
+  local basesCovered=\`/cluster/bin/x86_64/bigBedInfo \${chainName}Link.bb | grep \"basesCovered\" | cut -d' ' -f2 | tr -d ','\`
   local percentCovered=\`echo \${basesCovered} \${totalBases} | awk '{printf \"%%.3f\", 100.0*\$1/\$2}'\`
   printf \"%%d bases of %%d (%%s%%) in intersection\\\n\" \"\${basesCovered}\" \"\${totalBases}\" \"\${percentCovered}\" > \${fbFile}
 }
@@ -653,190 +653,6 @@ printf "running: time (${buildDir}/kegAlign.sh) >> ${buildDir}/kegAlign.log 2>&1
 
 time (${buildDir}/kegAlign.sh) >> ${buildDir}/keg.log 2>&1
 
-### run the primary alignment, UCSC lastz style
-printf "running: time (${buildDir}/lastzRun.sh) >> ${buildDir}/lastzRun.log 2>&1\n" 1>&2
-
-# time (${buildDir}/lastzRun.sh) >> ${buildDir}/lastzRun.log 2>&1
-
+fi	#	if [ $primaryDone -eq 0 ]; then
 
 exit $?
-
-### typical contents of the invocation_download:
-### ls result/2026-04-02_16:00:02_1775170802
-### 'Batched LASTZ on dataset 5__70a08f89-a77d-4333-b425-b13959e40d1b.axt'
-### 'KegAlign on dataset 3 and 4__a32df3e9-13d0-4c5e-b765-df69c657ae89.tgz'
-### allChainSwap__5e11f323-58fc-43f9-afbd-6cff21f0e7af.chain
-### allChain__74038a6d-d735-4784-8b17-31a25ddbb036.chain
-###'netChainSubset on dataset 8 and 22__72cbd3a9-4136-4e72-86c9-9da0c230c5d0.chain'
-###'netChainSubset on dataset 9 and 36__9acc344f-19da-4ef9-a578-7282940badc0.chain'
-
-# rebuild trackDb if possible here
-if [ -x "${tTdb}" ]; then
-   ${tTdb}
-else
-   printf "# do not find tTdb '%s'\n" "${tTdb}" 1>&2
-fi
-
-fi      ###     if [ $primaryDone -eq 0 ]; then
-
-exit $?
-
-#### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
-
-printf "##############################################################################
-# kegAlign LASTZ ${tOrgName} ${Target} vs. $qOrgName ${Query}
-#    (DONE - $DS - $userName)
-
-    mkdir $buildDir
-    cd $buildDir
-
-    printf '${yamlString}
-' > DEF
-
-    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
-      ${tFullName} ${qFullName} -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-        -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
-    grep -w real do.log | sed -e 's/^/    # /;'
-" > ${buildDir}/makeDoc.txt
-
-(grep -w real $buildDir/do.log || true) | sed -e 's/^/    # /;' | head -1 >> ${buildDir}/makeDoc.txt
-
-printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chain${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chain${Query}Link.txt >> ${buildDir}/makeDoc.txt
-
-printf "    sed -e 's/^/    # /;' fb.${tAccId}.chainSyn${Query}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' $buildDir/fb.${tAccId}.chainSyn${Query}Link.txt >> ${buildDir}/makeDoc.txt
-
-printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
-      ${tRbestArgs} \\
-      ${qRbestArgs} \\
-        ${tAccId} ${qAccId}) > rbest.log 2>&1
-
-    grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
-
-(grep -w real $buildDir/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-
-printf "\n    sed -e 's/^/    # /;' fb.${tAccId}.chainRBest.${Query}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${buildDir}/fb.${tAccId}.chainRBest.${Query}.txt || true) >> ${buildDir}/makeDoc.txt
-
-printf "\n    ### and for the swap\n" >> ${buildDir}/makeDoc.txt
-
-cat ${buildDir}/makeDoc.txt
-
-printf "# swap into: ${swapDir}\n" 1>&2
-
-if [ "$swapDone" -eq 0 ]; then
-mkdir ${swapDir}
-
-ln -s ${buildDir}/DEF ${swapDir}/DEF
-
-printf "#!/bin/bash
-
-set -beEu -o pipefail
-
-cd $swapDir
-
-export targetDb=\"${tAccId}\"
-export Target=\"${Target}\"
-export queryDb=\"${qAccId}\"
-
-time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
-  ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
-  -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
-
-grep -w real swap.log | sed -e 's/^/    # /;'
-
-sed -e 's/^/    # /;' fb.\${queryDb}.chain\${Target}Link.txt
-sed -e 's/^/    # /;' fb.\${queryDb}.chainSyn\${Target}Link.txt
-time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
-   ${tSwapRbestArgs} \\
-   ${qSwapRbestArgs} \\
-   \${queryDb} \${targetDb}) > rbest.log 2>&1
-
-grep -w real rbest.log | sed -e 's/^/    # /;'
-
-sed -e 's/^/    # /;' fb.\${queryDb}.chainRBest.\${Target}.txt
-" > ${swapDir}/runSwap.sh
-
-chmod +x  ${swapDir}/runSwap.sh
-
-printf "# running ${swapDir}/runSwap.sh\n" 1>&2
-
-time (${swapDir}/runSwap.sh) >> ${swapDir}/doSwap.log 2>&1
-
-# rebuild trackDb if possible here
-if [ -x "${qTdb}" ]; then
-   ${qTdb}
-else
-   printf "# do not find qTdb '%s'\n" "${qTdb}" 1>&2
-fi
-
-fi      ### if [ "$swapDone" -eq 0 ]; then
-
-### continue the make doc
-
-printf "\n    cd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
-
-printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -swap -verbose=2 \\
-  ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
-  -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
-
-    grep -w real swap.log | sed -e 's/^/    # /;'
-" >> ${buildDir}/makeDoc.txt
-
-(grep -w real ${swapDir}/swap.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-
-printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chain${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chain${Target}Link.txt >> ${buildDir}/makeDoc.txt
-
-printf "    sed -e 's/^/    # /;' fb.${qAccId}.chainSyn${Target}Link.txt\n" >> ${buildDir}/makeDoc.txt
-sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainSyn${Target}Link.txt >> ${buildDir}/makeDoc.txt
-
-printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
-   ${tSwapRbestArgs} \\
-   ${qSwapRbestArgs} \\
-   ${qAccId} ${tAccId}) > rbest.log 2>&1
-
-    grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
-(grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt
-printf "\n    sed -e 's/^/    # /;' fb.${qAccId}.chainRBest.${Target}.txt\n" >> ${buildDir}/makeDoc.txt
-(sed -e 's/^/    # /;' ${swapDir}/fb.${qAccId}.chainRBest.${Target}.txt || true) >> ${buildDir}/makeDoc.txt
-
-printf "\n##############################################################################\n" >> ${buildDir}/makeDoc.txt
-
-### show completed makeDoc.txt ####
-cat ${buildDir}/makeDoc.txt
-
-### end seconds
-export endT=`date "+%s"`
-
-export toAddress="$userName"
-export fromAddress="$userName"
-export subject="kegAlign lastz DONE $target $query"
-printf "To: $toAddress
-From: $fromAddress
-Subject: $subject
-
-##################################################################
-" > /tmp/send.txt.$$
-date >> /tmp/send.txt.$$
-printf "##################################################################\n" >> /tmp/send.txt.$$
-cat ${buildDir}/makeDoc.txt >> /tmp/send.txt.$$
-
-### show elapsed time
-printf "%s\t%s\n" "${endT}" "${startT}" | awk -F$'\t' '{
-seconds=$1-$2
-hours=int(seconds/3600)
-minutes=int((seconds-(hours*3600))/60)
-s=seconds % 60
-printf "### elapsed time: %02dh %02dm %02ds\n\n", hours, minutes, s
-}' >> /tmp/send.txt.$$
-
-date >> /tmp/send.txt.$$
-printf "##################################################################\n" >> /tmp/send.txt.$$
-
-cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
-
-rm -f /tmp/send.txt.$$

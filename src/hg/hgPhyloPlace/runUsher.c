@@ -550,6 +550,291 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
+static char *finalRecombHeaderExpected = "recomb_node_id\tdonor_node_id\tacceptor_node_id\trecombinant_num_desc\tdonor_num_desc\tacceptor_num_desc\t"
+    "breakpoint interval 1\tbreakpoint interval 2\trecombinant clade\trecombinant lineage\tdonor clade\tdonor lineage\t"
+    "acceptor clade\tacceptor lineage\trepresentative descendant\toriginal parsimony score\tparsimony score improvement";
+
+static uint parseUint(char *word, struct lineFile *lf)
+/* Parse non-negative int from word.  Use lf for error reporting if necessary. */
+{
+if (!isAllDigits(word))
+    lineFileAbort(lf, "Expected a non-negative number but got '%s'", word);
+int val = atol(word);
+if (val < 0)
+    lineFileAbort(lf, "Expected a non-negative number but got '%s'", word);
+return val;
+}
+
+#define RIPPLES_GENOME_SIZE "GENOME_SIZE"
+
+static void parseBpRange(char *word, uint genomeSize, uint *retMin, uint *retMax, struct lineFile *lf)
+/* Parse out min and max from a recombinant breakpoint range like "(253,1432)" or "(29409,GENOME_SIZE)".
+ * Use lf for error reporting if necessary. */
+{
+int min = 0, max = 0;
+char *p = word;
+if (*p++ != '(')
+    lineFileAbort(lf, "Expected breakpoint range beginning with '(' but got '%s'", word);
+if (startsWith(RIPPLES_GENOME_SIZE",", p))
+    {
+    min = genomeSize;
+    p += strlen(RIPPLES_GENOME_SIZE);
+    }
+else
+    {
+    char *start = p;
+    while (*p != '\0' && isdigit(*p))
+        p++;
+    min = atol(start);
+    }
+if (*p++ != ',')
+    lineFileAbort(lf, "Expected breakpoint range like '(1,2)' but didn't find comma, got '%s'", word);
+if (sameString(p, RIPPLES_GENOME_SIZE")"))
+    {
+    max = genomeSize;
+    p += strlen(RIPPLES_GENOME_SIZE);
+    }
+else
+    {
+    char *start = p;
+    while (*p != '\0' && isdigit(*p))
+        p++;
+    max = atol(start);
+    }
+if (differentString(p, ")"))
+    lineFileAbort(lf, "Expected breakpoint range like '(1,2)' but didn't find final ')', got '%s'", word);
+if (max < min)
+    lineFileAbort(lf, "Expected breakpoint range like '(1,2)' but got max < min: '%s'", word);
+if (min < 0 || max < 0)
+    lineFileAbort(lf, "Expected breakpoint range like '(1,2)' but got negative number: '%s'", word);
+*retMin = min;
+*retMax = max;
+}
+
+static struct recombinantInfo *parseOneRecombinant(char *line, uint genomeSize, struct lineFile *lf)
+/* Allocate and return one struct recombinantInfo with values extracted from line. Use lf for error reporting if necessary. */
+{
+struct recombinantInfo *ri = NULL;
+char *words[18];
+int wordCount = chopTabs(line, words);
+if (wordCount != 17)
+    lineFileAbort(lf, "Expected 17 tab-separated words but got %d", wordCount);
+AllocVar(ri);
+ri->recombNodeId = cloneString(words[0]);
+ri->donorNodeId = cloneString(words[1]);
+ri->acceptorNodeId = cloneString(words[2]);
+ri->recombNumDesc = parseUint(words[3], lf);
+ri->donorNumDesc = parseUint(words[4], lf);
+ri->acceptorNumDesc = parseUint(words[5], lf);
+parseBpRange(words[6], genomeSize, &(ri->bp1Min), &(ri->bp1Max), lf);
+parseBpRange(words[7], genomeSize, &(ri->bp2Min), &(ri->bp2Max), lf);
+ri->recombClade = cloneString(words[8]);
+ri->recombLineage = cloneString(words[9]);
+ri->donorClade = cloneString(words[10]);
+ri->donorLineage = cloneString(words[11]);
+ri->acceptorClade = cloneString(words[12]);
+ri->acceptorLineage = cloneString(words[13]);
+ri->representative = cloneString(words[14]);
+ri->originalParsimony = parseUint(words[15], lf);
+ri->parsimonyImprovement = parseUint(words[16], lf);
+return ri;
+}
+
+static void recombinantInfoFree(struct recombinantInfo **pRi)
+/* Free a struct recombinantInfo and strings that it points to. */
+{
+if (pRi && *pRi)
+    {
+    struct recombinantInfo *ri = *pRi;
+    freeMem(ri->recombNodeId);
+    freeMem(ri->donorNodeId);
+    freeMem(ri->acceptorNodeId);
+    freeMem(ri->recombClade);
+    freeMem(ri->recombLineage);
+    freeMem(ri->donorClade);
+    freeMem(ri->donorLineage);
+    freeMem(ri->acceptorClade);
+    freeMem(ri->acceptorLineage);
+    freeMem(ri->representative);
+    freez(pRi);
+    }
+}
+
+static int recombinantInfoCmp(const void *el1, const void *el2)
+/* For sorting by parsimonyImprovement, descending. */
+{
+struct recombinantInfo *ri1 = *(struct recombinantInfo **)el1;
+struct recombinantInfo *ri2 = *(struct recombinantInfo **)el2;
+return ri2->parsimonyImprovement - ri1->parsimonyImprovement;
+}
+
+static boolean mergeRecombinants(struct recombinantInfo **pRiOldList, struct recombinantInfo **pRiNew)
+/* If riNew has a greater parsimony improvement than riOldList then replace riOldList with riNew.
+ * If riNew has a smaller parsimony improvement than riOldList then free up riNew.
+ * If riNew has the same parsimony improvement then attempt to merge its breakpoint ranges with
+ * each member of riOldList.
+ * Return TRUE if any of those were successful, FALSE only if there were breakpoint ranges that
+ * could not be merged. */
+{
+boolean success = FALSE;
+struct recombinantInfo *riNew = *pRiNew, *riOld = *pRiOldList;
+if (riNew->parsimonyImprovement > riOld->parsimonyImprovement)
+    {
+    slFreeListWithFunc(pRiOldList, recombinantInfoFree);
+    *pRiOldList = *pRiNew;
+    *pRiNew = NULL;
+    success = TRUE;
+    }
+else if (riNew->parsimonyImprovement < riOld->parsimonyImprovement)
+    {
+    recombinantInfoFree(pRiNew);
+    success = TRUE;
+    }
+else
+    {
+    // Attempt to merge breakpoint ranges for each member of riOldList.
+    for (riOld = *pRiOldList;  riOld != NULL;  riOld = riOld->next)
+        {
+        if (riNew->bp1Min == riOld->bp1Min && riNew->bp1Max == riOld->bp1Max)
+            {
+            // Only bp2 differs; merge riNew bp2 into riOld bp2
+            riOld->bp2Min = min(riOld->bp2Min, riNew->bp2Min);
+            riOld->bp2Max = max(riOld->bp2Max, riNew->bp2Max);
+            recombinantInfoFree(pRiNew);
+            success = TRUE;
+            }
+        else if (riNew->bp2Min == riOld->bp2Min && riNew->bp2Max == riOld->bp2Max)
+            {
+            // Only bp1 differs; merge r1New bp1 into riOld bp1
+            riOld->bp1Min = min(riOld->bp1Min, riNew->bp1Min);
+            riOld->bp2Max = max(riOld->bp1Max, riNew->bp1Max);
+            recombinantInfoFree(pRiNew);
+            success = TRUE;
+            }
+        if (success)
+            break;
+        }
+    }
+return success;
+}
+
+static struct recombinantInfo *filterRecombinants(struct recombinantInfo *riList)
+/* Filter riList, which must be sorted by parsimonyImprovement, to keep at most the top 3 results
+ * for each potential recombinant node (plus any subsequent results that are tied for 3rd place
+ * with the same parsimony improvement). */
+{
+struct recombinantInfo *riListNew = NULL;
+struct hash *resultCounts = hashNew(0);
+struct hash *minScores = hashNew(0);
+struct recombinantInfo *ri, *riNext;
+for (ri = riList;  ri != NULL;  ri = riNext)
+    {
+    boolean keepThis = TRUE;
+    riNext = ri->next;
+    int count = hashIncInt(resultCounts, ri->recombNodeId);
+    if (count == 3)
+        hashAddInt(minScores, ri->recombNodeId, ri->parsimonyImprovement);
+    else if (count > 3)
+        {
+        int minScore = hashIntVal(minScores, ri->recombNodeId);
+        if (ri->parsimonyImprovement < minScore)
+            {
+            // Not tied for third place -- discard.
+            keepThis = FALSE;
+            }
+        }
+    ri->next = NULL;
+    if (keepThis)
+        slAddHead(&riListNew, ri);
+    else
+        recombinantInfoFree(&ri);
+    }
+slReverse(&riListNew);
+hashFree(&resultCounts);
+hashFree(&minScores);
+return riListNew;
+}
+
+static char *getRecombinantKey(struct recombinantInfo *ri)
+/* Make a hash key by concatenating node IDs.  Not thread safe, do not free return value. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(0);
+else
+    dyStringClear(dy);
+dyStringPrintf(dy, "%s %s %s", ri->recombNodeId, ri->donorNodeId, ri->acceptorNodeId);
+return dy->string;
+}
+
+static struct recombinantInfo *parseRecombinants(char *filename, uint genomeSize)
+/* Parse final_recombination.tsv from ripples search and merge rows where possible. */
+{
+struct recombinantInfo *recombList = NULL;
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+lineFileNext(lf, &line, NULL);
+if (isNotEmpty(line) && differentString(line, finalRecombHeaderExpected))
+    lineFileAbort(lf, "Header fields do not match expected.  Header:\n%s\nExpected:\n%s",
+                  line, finalRecombHeaderExpected);
+// Hash reported recombinants by concatenated node IDs because there tend to be many lines per
+// triplet that have all the same info except for parsimony score improvement (where we want to
+// keep only the highest improvement found per triplet) and breakpoints (where we want to merge
+// overlapping breakpoint regions).
+struct hash *mergedRecombinants = hashNew(0);
+while (lineFileNext(lf, &line, NULL))
+    {
+    struct recombinantInfo *riNew = parseOneRecombinant(line, genomeSize, lf);
+    char *key = getRecombinantKey(riNew);
+    struct hashEl *hel = hashLookup(mergedRecombinants, key);
+    if (hel)
+        {
+        if (! mergeRecombinants((struct recombinantInfo **)&(hel->val), &riNew))
+            slAddHead(&(hel->val), riNew);
+        }
+    else
+        {
+        hashAdd(mergedRecombinants, key, riNew);
+        }
+    }
+lineFileClose(&lf);
+// Add all mergedRecombinants to list, and sort by parsimony improvement (highest first)
+struct hashEl *hel, *helList = hashElListHash(mergedRecombinants);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct recombinantInfo *riList = hel->val;
+    recombList = slCat(recombList, riList);
+    }
+hashElFreeList(&helList);
+slSort(&recombList, recombinantInfoCmp);
+// Filter the list to keep only the top 3 findings for each potential recombinant
+recombList = filterRecombinants(recombList);
+return recombList;
+}
+
+static char *descendantsHeaderExpected = "#node_id\tdescendants";
+
+static struct hash *parseDescendants(char *filename)
+/* Parse descendants.tsv from ripples search into hash of node ID to slName list of leaves. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+lineFileNext(lf, &line, NULL);
+if (isNotEmpty(line) && differentString(line, descendantsHeaderExpected))
+    lineFileAbort(lf, "Header fields do not match expected.  Header:\n%s\nExpected:\n%s",
+                  line, descendantsHeaderExpected);
+char *words[3];
+int wordCount;
+while ((wordCount = lineFileChopTab(lf, words)) > 0)
+    {
+    lineFileExpectWords(lf, 2, wordCount);
+    hashAdd(hash, words[0], slNameListFromComma(words[1]));
+    }
+lineFileClose(&lf);
+return hash;
+}
+
 static char *dirPlusFile(struct dyString *dy, char *dir, char *file)
 /* Write dir/file into dy and return pointer to dy->string.  Do not free result! */
 {
@@ -571,7 +856,7 @@ static int processOutDirFiles(struct usherResults *results, char *outDir,
                               struct tempName **retSingleSubtreeTn,
                               struct variantPathNode **retSingleSubtreeMuts,
                               struct tempName *subtreeTns[], struct variantPathNode *subtreeMuts[],
-                              int maxSubtrees)
+                              int maxSubtrees, uint genomeSize)
 /* Get paths to files in outDir; parse them and move files that we'll keep up to trash/ct/,
  * leaving behind files that we will remove when done. */
 {
@@ -699,9 +984,18 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         {
         parseClades(path, results->samplePlacements);
         }
+    else if (sameString(file->name, "final_recombination.tsv"))
+        {
+        results->recombinants = parseRecombinants(path, genomeSize);
+        }
+    else if (sameString(file->name, "descendants.tsv"))
+        {
+        results->recombinantDescendants = parseDescendants(path);
+        }
     else if (sameString(file->name, "final-tree.nh") ||
              sameString(file->name, "current-tree.nh") ||
-             sameString(file->name, "placement_stats.tsv"))
+             sameString(file->name, "placement_stats.tsv") ||
+             sameString(file->name, "recombination.tsv"))
         {
         // Don't need this (or already parsed it elsewhere not here), just remove it.
         }
@@ -1161,7 +1455,7 @@ return socketFd;
 #define EOT 4
 
 static boolean sendQuery(int socketFd, char *cmd[], char *org, struct treeChoices *treeChoices,
-                         FILE *errFile, boolean addNoIgnorePrefix, char *anchorFile)
+                         FILE *errFile)
 /* Send command to socket, read response on socket, return TRUE if we get a successful response. */
 {
 boolean success = FALSE;
@@ -1169,16 +1463,8 @@ struct dyString *dyMessage = dyStringNew(0);
 int ix;
 for (ix = 0;  cmd[ix] != NULL;  ix++)
     {
-    // Don't include args from -T onward; server rejects requests with -T or --optimization_radius
-    if (sameString("-T", cmd[ix]))
-        break;
     dyStringPrintf(dyMessage, "%s\n", cmd[ix]);
     }
-if (addNoIgnorePrefix)
-    // Needed when placing uploaded sequences, but not when finding uploaded names
-    dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
-if (isNotEmpty(anchorFile))
-    dyStringPrintf(dyMessage, "--anchor-samples\n%s\n", anchorFile);
 dyStringAppendC(dyMessage, '\n');
 boolean serverError = FALSE;
 int bytesWritten = write(socketFd, dyMessage->string, dyMessage->stringSize);
@@ -1218,7 +1504,7 @@ return success;
 }
 
 static boolean runUsherServer(char *org, char *cmd[], char *stderrFile,
-                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
+                              struct treeChoices *treeChoices, int *pStartTime)
 /* Start the server if necessary, connect to it, send a query, get response and return TRUE if.
  * all goes well. If unsuccessful, write reasons to errFile and return FALSE. */
 {
@@ -1231,7 +1517,7 @@ if (serverIsConfigured(org))
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, TRUE, anchorFile);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile);
         close(serverSocket);
         if (success)
             reportTiming(pStartTime, "send query and get response (successful)");
@@ -1257,7 +1543,8 @@ return ix;
 
 struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
                               int subtreeSize, struct slName **pUserSampleIds,
-                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
+                              struct treeChoices *treeChoices, char *anchorFile,
+                              boolean ripplesEnabled, uint genomeSize, int *pStartTime)
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output.  The usher-sampled version of usher might
@@ -1270,21 +1557,39 @@ struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
                 "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-u",
-                "-T", USHER_NUM_THREADS,       // Don't pass args from -T onward to server
-                // Room for extra arguments if using usher-sampled
-                NULL, NULL, NULL, NULL, NULL, NULL,
+                // Room for extra arguments if using usher-sampled or server ripples search
+                NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                 NULL };
+int cmdBaseEnd = indexOfNull(cmd);
+// Extra options for usher-sampled-server, which we'll try first:
+int ix = cmdBaseEnd;
+cmd[ix++] = "--no-ignore-prefix";
+cmd[ix++] = USHER_DEDUP_PREFIX;
+if (isNotEmpty(anchorFile))
+    {
+    cmd[ix++] = "--anchor-samples";
+    cmd[ix++] = anchorFile;
+    }
+if (ripplesEnabled)
+    {
+    cmd[ix++] = "--run-ripples";
+    cmd[ix++] = "--ripples-ancestor-radius";
+    cmd[ix++] = RIPPLES_ANCESTOR_RADIUS;
+    }
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
 struct tempName tnServerStderr;
 trashDirFile(&tnServerStderr, "ct", "usher_server_stderr", ".txt");
 char *stderrFile = tnServerStderr.forCgi;
-if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, anchorFile, pStartTime))
+if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
     {
+    // Querying the server didn't work out; use command line, either usher or usher-sampled.
+    ix = cmdBaseEnd;
+    cmd[ix++] = "-T";
+    cmd[ix++] = USHER_NUM_THREADS;
     if (endsWith(usherPath, "-sampled"))
         {
         // Add --no-ignore-prefix
-        int ix = indexOfNull(cmd);
         cmd[ix++] = "--no-ignore-prefix";
         cmd[ix++] = USHER_DEDUP_PREFIX;
         // Add --anchor-samples if configured
@@ -1301,6 +1606,7 @@ if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, anchorFile, p
             cmd[ix++] = "0";
             }
         }
+    cmd[ix++] = NULL;
     runUsherCommand(cmd, tnStderr.forCgi, anchorFile, pStartTime);
     stderrFile = tnStderr.forCgi;
     }
@@ -1309,7 +1615,7 @@ struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
 parsePlacements(tnOutDir.forCgi, stderrFile, results->samplePlacements, pUserSampleIds);
 int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn,
-                                      &singleSubtreeMuts, subtreeTns, subtreeMuts, MAX_SUBTREES);
+                                      &singleSubtreeMuts, subtreeTns, subtreeMuts, MAX_SUBTREES, genomeSize);
 if (singleSubtreeTn)
     {
     results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
@@ -1379,7 +1685,13 @@ boolean success = FALSE;
 char *cmd[] = { "usher-sampled-server", "-i", protobufPath, "-d", tnOutDir->forCgi,
                 "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE,
                 "--existing_samples", tnSamples->forCgi, "-D",
-                NULL };
+                NULL, NULL, NULL };
+if (isNotEmpty(anchorFile))
+    {
+    int ix = indexOfNull(cmd);
+    cmd[ix++] = "--anchor-samples";
+    cmd[ix++] = anchorFile;
+    }
 struct tempName tnErrFile;
 trashDirFile(&tnErrFile, "ct", "matUtils_server_stderr", ".txt");
 if (serverIsConfigured(org))
@@ -1390,7 +1702,7 @@ if (serverIsConfigured(org))
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, FALSE, anchorFile);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile);
         close(serverSocket);
         if (success)
             reportTiming(pStartTime, "send query and get response (successful)");
@@ -1405,7 +1717,7 @@ return success;
 struct usherResults *runMatUtilsExtractSubtrees(char *org, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
                                                 struct treeChoices *treeChoices, char *anchorFile,
-                                                int *pStartTime)
+                                                uint genomeSize, int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1430,7 +1742,7 @@ addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
 int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
-                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+                                      subtreeTns, subtreeMuts, MAX_SUBTREES, genomeSize);
 results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
                                          subtreeTns, subtreeMuts, sampleIds);
 results->singleSubtreeInfo = results->subtreeInfoList;
