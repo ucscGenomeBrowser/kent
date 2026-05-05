@@ -131,7 +131,7 @@ struct recombinantInfo
     char *recombNodeId;                   // Node ID of the potential recombinant node
     char *donorNodeId;                    // Node ID of the potential parent at start of genome
     char *acceptorNodeId;                 // Node ID of the potential parent at middle/end of genome
-    uint recombNumDesc;                   // Number of descendants of recombinant ndoe
+    uint recombNumDesc;                   // Number of descendants of recombinant node
     uint donorNumDesc;                    // Number of descendants of donor node
     uint acceptorNumDesc;                 // Number of descendants of acceptor node
     uint bp1Min;                          // First breakpoint minimum coordinate
