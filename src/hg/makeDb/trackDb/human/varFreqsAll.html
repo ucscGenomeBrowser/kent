@@ -144,6 +144,26 @@ Scripts are available from
 target="_blank">Github</a>.
 </p>
 
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
+can be used; the track name is <em>varFreqsAll</em>.
+</p>
+<p>
+Because the merged callset includes data from multiple sources whose redistribution
+licenses differ, the combined bigBed is <b>not available for download</b> from our
+download server. The combined track can be reconstructed from the individual source VCFs
+using the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">conversion scripts on GitHub</a> together with the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">build documentation</a>. Where individual source data is downloadable from UCSC,
+the per-subtrack description page indicates the path on our download server.
+</p>
+
 <h2>Credits</h2>
 <p>
 This track is only possible thanks to the data from millions of volunteers around the world,
@@ -152,4 +172,27 @@ sometimes their families. Click on any of the individual tracks in the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack to see the specific
 credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track
 and to Andreas Lahner, MGZ, for feedback.
+</p>
+
+<h2>References</h2>
+<p>
+For primary citations of each source dataset, see the References section on the
+<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page. The merged-track
+build itself uses the following tools:
+</p>
+<p>
+Danecek P, McCarthy SA.
+<a href="https://doi.org/10.1093/bioinformatics/btx100" target="_blank">
+BCFtools/csq: haplotype-aware variant consequences</a>.
+<em>Bioinformatics</em>. 2017 Jul 1;33(13):2037-2039.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28205675" target="_blank">28205675</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5870570/" target="_blank">PMC5870570</a>
+</p>
+<p>
+McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.
+<a href="https://doi.org/10.1186/s13059-016-0974-4" target="_blank">
+The Ensembl Variant Effect Predictor</a>.
+<em>Genome Biol</em>. 2016 Jun 6;17(1):122.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27268795" target="_blank">27268795</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4893825/" target="_blank">PMC4893825</a>
 </p>
