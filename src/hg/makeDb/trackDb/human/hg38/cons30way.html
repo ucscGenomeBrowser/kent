@@ -383,6 +383,27 @@ all branches of the phylogeny rather than a particular subtree or lineage
 performing a likelihood ratio test at each alignment column (--method LRT),
 and scores for both conservation and acceleration were produced (--mode CONACC).
 </P>
+<h3> SSREV PhyloP Conservation </h3>
+<P>
+A second phyloP track, <em>Cons 30 Mam (SSREV)</em>, computes single-base
+conservation scores using the strand-symmetric reversible (<em>SSREV</em>)
+substitution model rather than the standard REV model. The default REV
+model is not strand-symmetric, which can bias single-base conservation
+scores depending on the strand of the underlying transcript -- most
+visible at splice sites and other strand-specific motifs (Pollard
+<em>et al</em>. 2010, supplementary section 2.4). The SSREV model
+enforces equal substitution rates between complementary base pairs, so
+a splice donor on the plus strand (<tt>GT...</tt>) and on the minus
+strand (<tt>...AC</tt>) receive equivalent conservation scores.
+</P>
+<P>
+The SSREV track uses the same alignment, tree topology, score range, and
+phyloP options (<code>--method LRT --mode CONACC --wig-scores</code>) as
+the REV phyloP track; only the substitution model differs. Use the SSREV
+track for analyses sensitive to transcript strand (splice sites, miRNA
+seed regions, antisense regulatory features); the REV track remains
+appropriate for general genome-wide conservation analysis.
+</P>
 <h3> Conserved Elements </h3>
 <P>
 The conserved elements were predicted by running phastCons with the
