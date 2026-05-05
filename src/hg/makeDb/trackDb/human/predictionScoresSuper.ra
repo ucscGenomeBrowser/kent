@@ -11,3 +11,4 @@ include mutscore.ra
 include mcap.ra
 include primateAi.ra
 include promoterAi.ra
+include clinPred.ra

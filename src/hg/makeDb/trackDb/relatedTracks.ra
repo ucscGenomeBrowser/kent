@@ -113,6 +113,25 @@ hg38 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using prim
 hg19 primateAi revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
 hg19 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation and 3D protein structure
 
+# ClinPred cross-links:
+hg38 clinPred revel REVEL, an ensemble missense pathogenicity score using a similar machine-learning approach
+hg38 revel clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg38 clinPred caddSuper CADD, a similar deleteriousness score
+hg38 caddSuper clinPred ClinPred, a missense-only pathogenicity predictor
+hg38 clinPred primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation
+hg38 primateAi clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+hg38 clinPred alphaMissense AlphaMissense, a deep-learning missense pathogenicity predictor
+hg38 alphaMissense clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+
+hg19 clinPred revel REVEL, an ensemble missense pathogenicity score using a similar machine-learning approach
+hg19 revel clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg19 clinPred caddSuper CADD, a similar deleteriousness score
+hg19 caddSuper clinPred ClinPred, a missense-only pathogenicity predictor
+hg19 clinPred primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation
+hg19 primateAi clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+hg19 clinPred alphaMissense AlphaMissense, a deep-learning missense pathogenicity predictor
+hg19 alphaMissense clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+
 # PromoterAI cross-links:
 hg38 promoterAi primateAi PrimateAI-3D, a companion deep-learning model from Illumina for coding (missense) variants
 hg38 primateAi promoterAi PromoterAI, a companion deep-learning model from Illumina for non-coding promoter variants
