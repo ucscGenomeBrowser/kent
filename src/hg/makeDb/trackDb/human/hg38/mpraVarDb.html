@@ -19,9 +19,9 @@ for human sequences; these variants retain human (hg38) coordinates.
 <b>Note on study type:</b> Not all studies measure transcriptional regulation
 in the same sense. Two of the larger contributors,
 <a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer
-et&nbsp;al., 2021</a> (72,546 variants) and
+et al., 2021</a> (72,546 variants) and
 <a href="https://pubmed.ncbi.nlm.nih.gov/37516102/" target="_blank">Schuster
-et&nbsp;al., 2023</a> (26,546 variants), test 3'UTR variants placed downstream
+et al., 2023</a> (26,546 variants), test 3'UTR variants placed downstream
 of the reporter, where the log2 fold change between alleles reflects changes
 in mRNA stability, decay, RBP or miRNA binding, or translation efficiency
 rather than transcriptional activation. The remaining studies test 5'
@@ -49,16 +49,16 @@ log2 fold change, p-value, and FDR.
 <b>Cell-type specificity:</b> MPRA results are typically cell-type-specific,
 and significance in one cell line does not imply activity in another. For
 example, <a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey
-et&nbsp;al., 2016</a> found only modest correlation (R&nbsp;&asymp;&nbsp;0.63)
+et al., 2016</a> found only modest correlation (R &asymp; 0.63)
 between LCL and HepG2 measurements of the same eQTL variants, and
 <a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee
-et&nbsp;al., 2023</a> reported that only 205 of 1,004 HEK293-positive
+et al., 2023</a> reported that only 205 of 1,004 HEK293-positive
 variants overlapped HNP-positive variants. The cell line filter can be used
 to narrow results to a relevant context.
 </p>
 
 <p>
-<b>Note on Kircher et&nbsp;al., 2019:</b>
+<b>Note on Kircher et al., 2019:</b>
 <a href="https://pubmed.ncbi.nlm.nih.gov/31395865/" target="_blank">This study</a>
 contributes 44,647 variants (~19% of the track) using a saturation mutagenesis
 design that tests nearly every possible nucleotide substitution at each
@@ -73,16 +73,16 @@ variants that may dominate visualization at those loci.
 <h3>Interpreting log2FC</h3>
 <p>
 The log2 fold change is computed as
-log<sub>2</sub>(alt&nbsp;RNA/DNA)&nbsp;&minus;&nbsp;log<sub>2</sub>(ref&nbsp;RNA/DNA).
+log<sub>2</sub>(alt RNA/DNA) &minus; log<sub>2</sub>(ref RNA/DNA).
 A positive value means the alternate allele drove more reporter activity than
 the reference allele in this assay; a negative value means the reverse. The
-linear allelic ratio is approximately 2<sup>log2FC</sup>: log2FC&nbsp;=&nbsp;0.5
-corresponds to roughly 1.41&times; allelic difference, log2FC&nbsp;=&nbsp;1.0
-to 2&times;, and log2FC&nbsp;=&nbsp;2.0 to 4&times;. As noted in the
+linear allelic ratio is approximately 2<sup>log2FC</sup>: log2FC = 0.5
+corresponds to roughly 1.41&times; allelic difference, log2FC = 1.0
+to 2&times;, and log2FC = 2.0 to 4&times;. As noted in the
 Description section, log2FC reflects transcriptional activation for
 5'-regulatory studies and steady-state mRNA abundance, decay, or translation
-efficiency for 3'UTR studies (Griesemer et&nbsp;al., 2021; Schuster
-et&nbsp;al., 2023).
+efficiency for 3'UTR studies (Griesemer et al., 2021; Schuster
+et al., 2023).
 </p>
 
 <h2>Studies</h2>
@@ -247,15 +247,15 @@ do not all use the same significance framework. Most studies apply a
 Benjamini-Hochberg FDR threshold (commonly 0.05 or 0.10), but some report only
 nominal regression p-values. For example,
 <a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey
-et&nbsp;al., 2016</a> uses BH FDR&nbsp;&lt;&nbsp;0.05 to call "emVars",
+et al., 2016</a> uses BH FDR &lt; 0.05 to call "emVars",
 <a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer
-et&nbsp;al., 2021</a> and
+et al., 2021</a> and
 <a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee
-et&nbsp;al., 2023</a> use BH FDR&nbsp;&lt;&nbsp;0.10, and
+et al., 2023</a> use BH FDR &lt; 0.10, and
 <a href="https://pubmed.ncbi.nlm.nih.gov/31395865/" target="_blank">Kircher
-et&nbsp;al., 2019</a> reports raw regression p-values rather than FDR. The
-track applies a uniform FDR&nbsp;&lt;&nbsp;0.05 / nominal
-p&nbsp;&lt;&nbsp;0.05 color cutoff for visual consistency, which is the
+et al., 2019</a> reports raw regression p-values rather than FDR. The
+track applies a uniform FDR &lt; 0.05 / nominal
+p &lt; 0.05 color cutoff for visual consistency, which is the
 more conservative of the FDR thresholds reported by the source studies. For
 any variant of interest, consult the source publication for the original
 significance call.
