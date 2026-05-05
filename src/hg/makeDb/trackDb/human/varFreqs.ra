@@ -16,7 +16,7 @@ superTrack on
         itemRgb on
         maxWindowToDraw 5000000
         priority 0.1
-        mouseOver Var: $name\nAA change: $aaChange\nVar type: $varType\nConseq: $consequence\nMax AF: $maxAF\nTotal AC: $totalAC\nSources: $sources
+        mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
         # Variant type and consequence filters
         filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
         filterLabel.varType Variant Type
