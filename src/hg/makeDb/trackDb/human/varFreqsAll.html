@@ -2,7 +2,7 @@
 <p>
 This track merges variants from all individual variant frequency databases into a single
 bigBed file with predicted protein consequences and cross-database filtering. It contains
-over 1.1 billion variants from 20 population databases worldwide. For a summary of
+over 1.1 billion variants from 25 source databases worldwide. For a summary of
 all available databases, see the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page.
 </p>
@@ -99,7 +99,7 @@ Several databases provide ancestry-specific allele frequencies:
       (from local ancestry inference)</li>
   <li><b>GenomeAsia</b>: Northeast Asian, Southeast Asian, South Asian</li>
   <li><b>gnomAD HGDP+1kG</b>: African, Amish, Latino, Ashkenazi Jewish, East Asian, Finnish,
-      Middle Eastern, European, Other, South Asian</li>
+      Middle Eastern, Non-Finnish European, Other, South Asian</li>
   <li><b>GREGoR</b>: Affected, Unaffected, Unknown (disease status, not ancestry)</li>
 </ul>
 
@@ -112,7 +112,7 @@ Several databases provide ancestry-specific allele frequencies:
 
 <h2>Methods</h2>
 <p>
-Variant frequency VCF files from 20 databases were stripped of their INFO fields
+Variant frequency VCF files from 25 databases were stripped of their INFO fields
 (to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic sites),
 and merged with <code>bcftools merge</code>. The merged VCF was then annotated with predicted
 protein consequences using <code>bcftools csq</code> with the
