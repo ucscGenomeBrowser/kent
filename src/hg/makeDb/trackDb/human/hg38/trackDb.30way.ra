@@ -68,7 +68,7 @@ sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 
         track phyloPSSREV30way
         subTrack cons30wayViewphyloP on
         subGroups view=phyloP
-        shortLabel Cons 30 Mammals
+        shortLabel Cons 30 Mam (SSREV)
         longLabel 30 mammals Basewise Conservation by PhyloP SSREV model (27 primates)
         noInherit on
         configurable on
