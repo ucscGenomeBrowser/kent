@@ -2,6 +2,9 @@ kentSrc = ../../../..
 include ${kentSrc}/inc/common.mk
 
 chainToMaf = ${DESTBINDIR}/chainToMaf
+chainToAxt = ${DESTBINDIR}/chainToAxt
+axtToMaf = ${DESTBINDIR}/axtToMaf
+twoBitInfo = ${DESTBINDIR}/twoBitInfo
 
 hg38TwoBit = /gbdb/hg38/hg38.2bit
 mm10TwoBit = /gbdb/mm10/mm10.2bit
@@ -10,7 +13,7 @@ mm10TwoBitUrl = https://hgdownload.gi.ucsc.edu/gbdb/mm10/mm10.2bit
 
 all:
 
-test: localNoPrefix localPrefix urlPrefix rescorePrefix
+test: localNoPrefix localPrefix urlPrefix rescorePrefix viaAxt
 	${MAKE} clean
 
 # basic local 2bit test, no prefixes
@@ -35,6 +38,19 @@ rescorePrefix: mkdirs
 	${chainToMaf} -score -tPrefix=hg38. -qPrefix=mm10. \
 	    input/hg38.mm10.test.chain ${hg38TwoBit} ${mm10TwoBit} output/$@.maf
 	diff -u expected/$@.maf output/$@.maf
+
+# verify chainToMaf output matches the chainToAxt | axtToMaf pipeline.
+# uses the same input chain and 2bits as localNoPrefix.
+viaAxt: mkdirs
+	${twoBitInfo} ${hg38TwoBit} output/hg38.sizes
+	${twoBitInfo} ${mm10TwoBit} output/mm10.sizes
+	${chainToAxt} input/hg38.mm10.test.chain ${hg38TwoBit} ${mm10TwoBit} \
+	    output/$@.axt
+	${axtToMaf} output/$@.axt output/hg38.sizes output/mm10.sizes \
+	    output/$@.viaPipe.maf
+	${chainToMaf} input/hg38.mm10.test.chain ${hg38TwoBit} ${mm10TwoBit} \
+	    output/$@.direct.maf
+	diff -u output/$@.viaPipe.maf output/$@.direct.maf
 
 clean::
 	rm -rf output
