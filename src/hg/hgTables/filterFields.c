@@ -25,7 +25,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 #include "wikiTrack.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "samAlignment.h"
@@ -208,7 +208,7 @@ if (outList != NULL)
     hTableStart();
     for (out = outList; out != NULL; out = out->next)
 	{
-        if (doFilterDbKg) 
+        if (doFilterDbKg)
             {
             // if user selected the knownGeneV32 track...
             // - do not show the current hg38 knownGene tables
@@ -414,6 +414,8 @@ struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (type == NULL)
     type = ct->tdb->type;
+if (sameOk(type, "myVariants") && ct->dbTableName == NULL)
+    ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 struct asObject *asObj = asForTdb(conn, ct->tdb);
 if (asObj)
@@ -441,7 +443,7 @@ static void showTableFields(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
-if (isCustomTrack(rootTable))
+if (isCustomTrack(rootTable) || startsWith("myVariants_", rootTable))
     showTableFieldsCt(db, rootTable, withGetButton);
 else if (sameWord(rootTable, WIKI_TRACK_TABLE))
     showTableFieldsDb(wikiDbName(), rootTable, withGetButton);
@@ -1121,11 +1123,11 @@ if (type != NULL && startsWithWord("maf", type))
     integerFilter(db, table, "chromStart", "chromStart", " AND ");
     integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
     }
-else if (type != NULL && 
-        (startsWithWord("makeItems", type) || 
-        sameWord("bedDetail", type) || 
-        sameWord("barChart", type) || 
-        sameWord("interact", type) || 
+else if (type != NULL &&
+        (startsWithWord("myVariants", type) ||
+        sameWord("bedDetail", type) ||
+        sameWord("barChart", type) ||
+        sameWord("interact", type) ||
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

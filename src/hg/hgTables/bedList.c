@@ -23,6 +23,7 @@
 #include "correlate.h"
 #include "bedCart.h"
 #include "trashDir.h"
+#include "myVariants.h"
 #include "wikiTrack.h"
 
 
@@ -222,9 +223,11 @@ boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
 struct sqlConnection *conn = NULL;
 char *dbTable = NULL;
 
-if (isCustomTrack(table))
+if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     struct customTrack *ct = ctLookupName(table);
+    if (startsWith("myVariants_", table) && ct->dbTableName == NULL)
+        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
     dbTable = ct->dbTableName;
     conn = hAllocConn(CUSTOM_TRASH);
     hti = hFindTableInfo(CUSTOM_TRASH, region->chrom, dbTable);
@@ -304,7 +307,7 @@ else if (isVcfTable(table, &isTabix))
 					  isTabix);
 else if (isHicTable(table))
     bedList = hicGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     bedList = wikiTrackGetFilteredBeds(table, region, lm, retFieldCount);

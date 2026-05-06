@@ -8,11 +8,29 @@ All alignments and operations on them were performed using the <A target=_blank 
 TARGET=_blank>Cactus toolkit</A>.
 </P>
 
-<P>For this track, two types of phyloP conservation score tracks are available: one
-using the normal "LRT" model and one with the "REV" model. The "REV" model is
-better when analyzing conservation of transcript-related nucleotides, e.g.
-splice sites, as it depends less on the strand of the genome sequence. See the
-phyloP publication for details or contact us.
+<P>
+This track shows four phyloP conservation score subtracks computed from the
+447-way Cactus alignment (and a primates subset of it):
+<UL>
+<LI><B>447 phyloP REV</B>: all 447 species, REV substitution model.
+<LI><B>447 phyloP SSREV</B>: all 447 species, strand-symmetric reversible
+(SSREV) substitution model.
+<LI><B>447 phyloP primates</B>: 233 primates subset, SSREV substitution
+model.
+<LI><B>447 phyloP primates LRT</B>: 233 primates subset, likelihood-ratio
+test scoring.
+</UL>
+</P>
+<P>
+The SSREV substitution model is strand-symmetric, which avoids
+strand-dependent bias in single-base conservation scores (Pollard
+<EM>et al</EM>. 2010, supplementary section 2.4) -- relevant when analyzing
+transcript-related nucleotides such as splice sites, miRNA seed regions, or
+other strand-specific sequence features. The REV model is the standard
+phyloP model and is appropriate for general genome-wide conservation
+analysis. The primates subset tracks restrict scoring to the 233 primate
+genomes included in the alignment, useful when conservation across
+non-primate mammals would dilute primate-specific signal.
 </P>
 
 <h2>Data Access</h2>
@@ -21,6 +39,7 @@ Downloads for data in this track are available from the directory:
 <ul>
 <li>
 <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/">Cactus 447-way alignments</a> (MAF format), and phylogenetic trees
+<li>
 <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP447way/">PhyloP conservation</a> (WIG format)
 </ul>
 </p>
@@ -158,6 +177,34 @@ and replaced with the 243-way primates alignment from <a href="#refs">Identifica
 constrained sequence elements across 239 primate genomes</a>, increasing the alignment by 200
 additional primate species.</li>
 </ul>
+</p>
+
+<h3>phyloP Conservation Scores</h3>
+<p>
+phyloP scores were computed from the Cactus 447-way alignment using the
+<em>phyloP</em> program from the
+<a href="http://compgen.cshl.edu/phast/" target="_blank">PHAST package</a>.
+Per-base scores were produced with options
+<code>--method LRT --mode CONACC --wig-scores</code>; positive scores
+indicate conservation under purifying selection, negative scores indicate
+acceleration relative to neutral evolution.
+</p>
+<p>
+For the all-species tracks, base-composition and substitution-rate
+parameters were estimated from 4-fold degenerate sites using
+<em>phyloFit</em> (PHAST, EM algorithm, medium precision) under either the
+REV or strand-symmetric reversible (SSREV) substitution model. Background
+base frequencies were adjusted with <code>modFreqs</code> so that
+complementary bases (A/T and C/G) appear at equal expected frequencies,
+which is required for strand-symmetric scoring.
+</p>
+<p>
+For the primates-subset tracks, the alignment was restricted to the 233
+primate species and an independent phyloFit / phyloP run was performed on
+that sub-alignment using the SSREV model. All scores were encoded into
+wiggle format and loaded as either bigWig files (REV all-species,
+primates LRT) or wig SQL tables backed by <code>.wib</code> data files
+(SSREV all-species, SSREV primates).
 </p>
 
 <h2>Phylogenic tree</h2>
@@ -629,6 +676,14 @@ species</a>.
 
 <a name="refs"></a>
 <h2>References</h2>
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.full.html" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
 <p>
 Kuderna LFK, Ulirsch JC, Rashid S, Ameen M, Sundaram L, Hickey G, Cox AJ, Gao H, Kumar A, Aguet F
 <em>et al</em>.

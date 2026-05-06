@@ -10,15 +10,23 @@ Any other REMOTE_ADDR gets a 403.
 
 import cgi
 import html
+import json
 import os
 import subprocess
 import sys
+import time
+import urllib.parse
 
 ALLOWED_IP   = '128.114.198.5'
 HGDB_CONF    = '/usr/local/apache/cgi-bin/hg.conf'
 TRASH    = '/data/apache/trash'
 DB           = 'hgcentraltest'
 TABLE        = 'ottoRequest'
+
+# Galaxy queue status panel - snapshot is refreshed by ottoRequestWatch.sh
+# (cron, every 11 minutes), CGI just reads it.
+CACHE_PATH = '/data/apache/trash/ottoRequestGalaxyStatus.json'
+CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 
 # from README.txt in this directory
 STATUS_NAMES = {
@@ -47,8 +55,7 @@ def forbidden(msg):
 def checkIp():
     remote = os.environ.get('REMOTE_ADDR', '')
     if remote != ALLOWED_IP:
-        forbidden(f"Access denied for {remote!r}; this page is restricted "
-                  f"to {ALLOWED_IP}.")
+        forbidden(f"Access denied for {remote!r}; this page is restricted.")
 
 
 def unescapeMysql(s):
@@ -76,7 +83,7 @@ def hgsqlRun(sql):
     env = dict(os.environ)
     env['HGDB_CONF'] = HGDB_CONF
     env['HOME'] = TRASH
-    cmd = ['/cluster/bin/x86_64/hgsql', DB, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', '-profile=central', DB, '-N', '-B', '-e', sql]
     r = subprocess.run(cmd, capture_output=True, text=True, env=env)
     return (r.returncode == 0, r.stdout, r.stderr)
 
@@ -109,7 +116,22 @@ def doResetStatus(form):
             f"({STATUS_NAMES[int(stat)]})"), None
 
 
-def renderPage(rows, info=None, error=None):
+def loadGalaxyStatus():
+    """Return the Galaxy queue snapshot written by ottoRequestWatch.sh
+    (which calls galaxyStatus.py from cron).  Returns the parsed dict
+    with an added 'stale' flag when the file is older than CACHE_TTL,
+    or None if the file is missing/unreadable."""
+    try:
+        mtime = os.path.getmtime(CACHE_PATH)
+        with open(CACHE_PATH) as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    data['stale'] = (time.time() - mtime) > CACHE_TTL
+    return data
+
+
+def renderPage(rows, info=None, error=None, galaxyStatus=None):
     sys.stdout.write("Content-Type: text/html; charset=utf-8\r\n\r\n")
     out = sys.stdout.write
 
@@ -131,11 +153,24 @@ def renderPage(rows, info=None, error=None):
         '.banner{padding:.5em;margin:.4em 0;border-radius:4px}\n'
         '.info {background:#dfd;border:1px solid #5a5}\n'
         '.error{background:#fdd;border:1px solid #a55}\n'
-        '.legend{font-size:12px;color:#555;margin:.4em 0}\n'
-        '.legend code{background:#eee;padding:0 3px}\n'
+        '.legend{font-size:15px;color:#333;margin:.4em 0}\n'
+        '.legend code{background:#eee;padding:0 3px;font-size:14px}\n'
+        '.refreshBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
+        'cursor:pointer}\n'
         '</style></head><body>\n')
 
     out(f'<h2>{DB}.{TABLE}</h2>\n')
+    if galaxyStatus:
+        staleNote = ' <b>[stale]</b>' if galaxyStatus.get('stale') else ''
+        out('<div class="legend">Galaxy queue: '
+            f'<b>{galaxyStatus.get("running", "?")}</b> running &middot; '
+            f'<b>{galaxyStatus.get("queued",  "?")}</b> queued &middot; '
+            f'<b>{galaxyStatus.get("new",     "?")}</b> new '
+            f'<small>(as of {html.escape(galaxyStatus.get("ts", ""))})</small>'
+            f'{staleNote}</div>\n')
+    else:
+        out('<div class="legend">Galaxy queue: '
+            '<i>status unavailable</i></div>\n')
     if info:
         out(f'<div class="banner info">{html.escape(info)}</div>\n')
     if error:
@@ -144,8 +179,9 @@ def renderPage(rows, info=None, error=None):
     out('<div class="legend">status: ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
                           for k, v in STATUS_NAMES.items()))
-    out(f' &middot; <b>{len(rows)}</b> row(s) &middot; '
-        f'<a href="">refresh</a></div>\n')
+    out(f' &middot; <b>{len(rows)}</b> row(s)'
+        '<button class="refreshBtn" type="button" '
+        'onclick="location.reload()">refresh</button></div>\n')
 
     out('<table class="sortable">\n<tr>')
     for c in COLS:
@@ -168,6 +204,11 @@ def renderPage(rows, info=None, error=None):
                 label = STATUS_NAMES.get(stnum, '?')
                 out(f'<td><b>{html.escape(cell)}</b> '
                     f'<small>{html.escape(label)}</small></td>')
+            elif c in ('fromDb', 'toDb') and cell:
+                href = ('https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db='
+                        + urllib.parse.quote(cell, safe=''))
+                out(f'<td><a href="{html.escape(href)}" target="_blank">'
+                    f'{html.escape(cell)}</a></td>')
             else:
                 out(f'<td>{html.escape(cell)}</td>')
         # reset form
@@ -189,14 +230,28 @@ def renderPage(rows, info=None, error=None):
 def main():
     checkIp()
 
-    info = error = None
+    # POST/Redirect/GET: handle the write, then 303 to a GET of the same URL
+    # so a browser reload doesn't re-submit the form and re-run the UPDATE.
     if os.environ.get('REQUEST_METHOD', 'GET') == 'POST':
         form = cgi.FieldStorage()
         action = form.getfirst('action', '')
         if action == 'resetStatus':
             info, error = doResetStatus(form)
         else:
-            error = f"unknown action: {action!r}"
+            info, error = None, f"unknown action: {action!r}"
+        params = {}
+        if info:  params['info']  = info
+        if error: params['error'] = error
+        qs = ('?' + urllib.parse.urlencode(params)) if params else ''
+        sys.stdout.write(f"Status: 303 See Other\r\n"
+                         f"Location: {os.environ.get('SCRIPT_NAME','')}{qs}"
+                         f"\r\n\r\n")
+        return
+
+    # GET: pick up banner messages left by the PRG redirect, if any
+    qs = cgi.FieldStorage()
+    info  = qs.getfirst('info')  or None
+    error = qs.getfirst('error') or None
 
     try:
         rows = fetchRows()
@@ -204,7 +259,9 @@ def main():
         rows = []
         error = (error + ' / ' if error else '') + f"fetch failed: {e}"
 
-    renderPage(rows, info=info, error=error)
+    galaxyStatus = loadGalaxyStatus()
+
+    renderPage(rows, info=info, error=error, galaxyStatus=galaxyStatus)
 
 
 if __name__ == '__main__':

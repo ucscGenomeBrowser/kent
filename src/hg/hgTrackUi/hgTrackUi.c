@@ -30,6 +30,8 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "myVariants.h"
+#include "wikiLink.h"
 #include "dupTrack.h"
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
@@ -2940,16 +2942,22 @@ jsInline("$('#superTrackTable .vizSelect').hide();");
 // value set on a subtrack always overrides the supertrack's.
 if (bedHasFilters(superTdb))
     {
-    puts("<h3 style='margin-top:1em'>Filters ");
-    printInfoIcon("Values set here are inherited by every subtrack in this "
-                  "container. Any filter set on an individual subtrack's "
-                  "Track Settings page overrides the value set here for that "
-                  "subtrack only.");
+    // scoreCfgUi (called below with title==NULL) emits a <br> and an empty <p>
+    // before the filter table; the wrapper + scoped style below hides them
+    // without touching shared code other callers rely on.
+    puts("<div class='superTrackFiltersWrap'>");
+    puts("<style>.superTrackFiltersWrap > br:first-of-type, "
+         ".superTrackFiltersWrap > p:empty { display:none; }</style>");
+    puts("<h3 style='margin-top:1em'>Filters: ");
+    printInfoIcon("Filter values set here apply to every track in this "
+                  "container. A filter set directly on an individual track "
+                  "overrides the value here for that track only.");
     puts("</h3>");
     // Pass title=NULL so scoreCfgUi does not emit its "<p><B>title</B>"
     // banner. The container <h3> above is already the section label.
     scoreCfgUi(database, cart, superTdb, superTdb->track,
                NULL, 1000, /*boxed=*/FALSE);
+    puts("</div>");
     }
 }
 
@@ -3294,6 +3302,62 @@ slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
 }
 
+static void myVariantsShareUi(struct trackDb *tdb)
+/* Render the inline share management section on hgTrackUi for a user's own
+ * myVariants track. Emits HTML + calls into hui.js via jsInline to wire up
+ * the create/list/revoke API calls. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    {
+    printf("<p>Please <a href=\"./hgSession\">log in</a> to manage shares.</p>\n");
+    return;
+    }
+
+printf("<h3>Share this track</h3>\n");
+printf("<div id=\"shareCreateSection\">\n");
+printf("<h4 style=\"margin-top:0\">Create share link</h4>\n");
+printf("<table style=\"border-spacing:4px\"><tbody>\n");
+
+/* Project dropdown */
+printf("<tr><td>Project:</td><td><select id=\"shareProject\">\n");
+printf("<option value=\"*\">All projects</option>\n");
+struct slName *projects = myVariantsGetProjects(userName);
+struct slName *p;
+for (p = projects; p != NULL; p = p->next)
+    printf("<option value=\"%s\">%s</option>\n", htmlEncode(p->name), htmlEncode(p->name));
+slFreeList(&projects);
+printf("</select></td></tr>\n");
+
+/* Permission radios */
+printf("<tr><td>Permission:</td><td>"
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked> Can view</label> "
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"1\"> Can edit</label>"
+    "</td></tr>\n");
+printf("<tr><td>Share with:</td>"
+    "<td><input type=\"text\" id=\"shareTargetUser\""
+    " placeholder=\"Username (blank = anyone with link)\" style=\"width:250px\"></td></tr>\n");
+printf("<tr><td>Label:</td>"
+    "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
+    " style=\"width:250px\"></td></tr>\n");
+printf("</tbody></table>\n");
+printf("<button type=\"button\" id=\"shareCreateBtn\">Create share link</button>\n");
+printf("<div id=\"shareResult\" style=\"display:none; margin-top:8px; padding:8px;"
+    " background:#e8f5e9; border-radius:4px\">"
+    "<span>Share URL: </span>"
+    "<input type=\"text\" id=\"shareUrlField\" readonly style=\"width:350px\">"
+    " <button type=\"button\" id=\"shareCopyBtn\">Copy</button></div>\n");
+printf("</div>\n");
+
+printf("<hr>\n");
+printf("<div id=\"shareListSection\">\n");
+printf("<h4>Active shares</h4>\n");
+printf("<div id=\"shareListContent\">Loading...</div>\n");
+printf("</div>\n");
+
+jsInline("if (typeof myVariantsShareInit === 'function') myVariantsShareInit();\n");
+}
+
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -3500,6 +3564,13 @@ else if (tdb->type != NULL)
 
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
+
+/* myVariants own track: render inline share management. Skip shared tracks
+ * (myVariants_shared_*) - you can't re-share someone else's data. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+    && startsWith("myVariants_", tdb->track)
+    && !startsWith("myVariants_shared_", tdb->track))
+    myVariantsShareUi(tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
@@ -3724,12 +3795,26 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if (tdbIsContainer(tdb))
+if (tdbIsContainer(tdb) || tdbIsSuperTrack(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
     if (1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
+        {
+        if (tdbIsSuperTrack(tdb))
+            {
+            // SuperTrack children live in tdb->children (slRef list), not in
+            // the subtracks tree that cartRemoveAllForTdbAndChildren walks.
+            // Clear the supertrack's own cart vars (filters, visibility) and
+            // each child's vars by hand.
+            cartRemoveAllForTdb(cart, tdb);
+            struct slRef *childRef;
+            for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+                cartRemoveAllForTdb(cart, (struct trackDb *)childRef->val);
+            }
+        else
+            cartRemoveAllForTdbAndChildren(cart,tdb);
+        }
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
@@ -3898,7 +3983,7 @@ if (!tdbIsDownloadsOnly(tdb))
             cgiMakeOnClickButton("htui_cancel", "window.history.back();","Cancel");
             }
 
-        if (tdbIsComposite(tdb))
+        if (tdbIsComposite(tdb) || tdbIsSuperTrack(tdb))
 	    {
             printf("\n&nbsp;&nbsp;<a href='#' id='htui_reset'>Reset to defaults</a>\n");
 	    jsOnEventByIdF("click", "htui_reset",
@@ -4008,7 +4093,9 @@ if (decoratorSettings)
 
 // Repeat the Submit button near the bottom of the form so that users do not
 // have to scroll back up to the top after tweaking filters on a long page.
-if (!ajax)
+// Only superTracks need this: composites and regular tracks already render
+// their own Submit button at the bottom of their controls.
+if (!ajax && tdbIsSuperTrack(tdb))
     {
     puts("<p style='margin-top:1em;'>");
     cgiMakeButton("Submit", "Submit");
@@ -4383,8 +4470,13 @@ else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
-else if (isCustomTrack(track))
+else if (isCustomTrack(track)
+         || (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", track)))
     {
+    /* myVariants tracks (own and shared) are built dynamically and live in
+     * the CT list rather than the SQL trackDb table, but their names don't
+     * carry the ct_ prefix, so we need to look them up alongside regular
+     * custom tracks. */
     ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
@@ -4392,6 +4484,31 @@ else if (isCustomTrack(track))
             {
             tdb = ct->tdb;
             break;
+            }
+        }
+    /* Fallback for direct hgTrackUi navigation without hgTracks: regenerate
+     * the myVariants CT file and re-parse. Normally the CT file was written
+     * during the preceding hgTracks visit, so this branch only fires for
+     * bookmarked URLs or direct links. */
+    if (tdb == NULL && startsWith("myVariants_", track))
+        {
+        char *userName = getUserName();
+        char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+        if (isNotEmpty(ctFile))
+            {
+            char mvVarName[256];
+            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            cartSetString(cart, mvVarName, ctFile);
+            freeMem(ctFile);
+            ctList = customTracksParseCart(database, cart, NULL, NULL);
+            for (ct = ctList; ct != NULL; ct = ct->next)
+                {
+                if (sameString(track, ct->tdb->track))
+                    {
+                    tdb = ct->tdb;
+                    break;
+                    }
+                }
             }
         }
     }

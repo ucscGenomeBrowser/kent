@@ -50,6 +50,7 @@ include nuMtSeq.ra
 include gnomad.pext.ra
 
 include rnaMod.ra alpha
+include m6aAtlas.ra alpha
 
 track miRnaAtlas
 compositeTrack on

@@ -38,7 +38,7 @@
 #include "vcf.h"
 #include "errCatch.h"
 #include "samAlignment.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "memgfx.h"
@@ -4016,11 +4016,20 @@ filterBy->title = cloneString(field); ///  title should come from AS file, or tr
 struct asColumn *asCol = (as != NULL) ? asColumnFind(as, field) : NULL;
 if (asCol != NULL)
     filterBy->title = asCol->comment;
-else if (as != NULL && getLabelSetting(cart, tdb, field) == NULL)
-    // Only error when there's an autoSql but the field is missing AND there's
-    // no filterLabel override. superTracks/noData tdbs have as==NULL and can
-    // legitimately declare filterValues on virtual fields they only aggregate.
-    errAbort("Track %s: Building filter on field %s which is not in AS file.", tdb->track, field);
+else if (as != NULL)
+    {
+    // We have autoSql but the field is missing — that's a typo or an
+    // outdated trackDb. Emit a visible warning so a hub maker reading the
+    // page sees a clear hint, then abort. (The as==NULL case is reserved
+    // for superTracks/noData tdbs that legitimately declare filterValues
+    // on virtual fields they only aggregate over.)
+    warn("Track %s: filter on field '%s' is not in the autoSql file. "
+         "Check the field name in your trackDb filterValues.* / "
+         "filterByRange.* settings against the .as schema.",
+         tdb->track, field);
+    errAbort("Track %s: Building filter on field %s which is not in AS file.",
+             tdb->track, field);
+    }
 char *trackDbLabel = getLabelSetting(cart, tdb, field);
 if (trackDbLabel)
     filterBy->title = trackDbLabel;
@@ -5952,9 +5961,8 @@ if (boxed)
     }
 else if (title)
     printf("<p><B>%s &nbsp;</b>", title );
-// When !boxed and title==NULL, emit nothing: the caller (e.g. supertrack
-// filter UI) already renders its own heading and doesn't want a stray
-// empty paragraph.
+else
+    printf("<p>");
 return boxed;
 }
 
@@ -6923,11 +6931,7 @@ else
     trackDbFilters = tdbGetTrackNumFilters(tdb);
 if (trackDbFilters)
     {
-    // The <BR> is a separator under the track's "Configuration" block title.
-    // Callers that don't emit a title (e.g. the supertrack filter UI that
-    // owns its own heading) pass title==NULL and don't want the extra break.
-    if (title != NULL)
-        puts("<BR>");
+    puts("<BR>");
     struct trackDbFilter *filter = NULL;
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db))
@@ -7952,19 +7956,28 @@ if (!sameString(tdb->track, "tigrGeneIndex")
 &&  !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDropLists(cart, tdb, name);
 
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-if (filterBySet != NULL)
+// For bigGenePred, scoreCfgUi() (called below) renders the filterBy/highlightBy
+// controls itself. Rendering them here too produces two <SELECT> elements with
+// the same id, and dropdownchecklist.js only binds the first; the second copy
+// stays display:none and shows no input fields. So skip the inline pass for
+// bigGenePred and let scoreCfgUi own it.
+boolean isBigGenePred = startsWith("bigGenePred", tdb->type);
+if (!isBigGenePred)
     {
-    printf("<BR>");
-    filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
-    filterBySetFree(&filterBySet);
-    }
-filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
-if (highlightBySet != NULL)
-    {
-    printf("<BR>");
-    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name, TRUE);
-    filterBySetFree(&highlightBySet);
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+    if (filterBySet != NULL)
+        {
+        printf("<BR>");
+        filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
+        filterBySetFree(&filterBySet);
+        }
+    filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
+    if (highlightBySet != NULL)
+        {
+        printf("<BR>");
+        highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name, TRUE);
+        filterBySetFree(&highlightBySet);
+        }
     }
 
 squishyPackOption(cart, name, title, tdb);
@@ -7973,7 +7986,7 @@ wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 // N.B. scoreCfgUi maybe creates a box, so this is called after cfgEndBox
 // unclear what the logic is with box creation here
-if (startsWith("bigGenePred", tdb->type))
+if (isBigGenePred)
     {
     char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
     int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
@@ -10370,8 +10383,8 @@ else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
     asObj = vcfAsObj();
-else if (startsWithWord("makeItems", tdb->type))
-    asObj = makeItemsItemAsObj();
+else if (startsWithWord("myVariants", tdb->type))
+    asObj = myVariantsAsObj();
 else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();
 else if (sameWord("pgSnp", tdb->type))

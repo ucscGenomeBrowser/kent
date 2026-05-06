@@ -705,9 +705,9 @@ else
             }
         else if (riNew->bp2Min == riOld->bp2Min && riNew->bp2Max == riOld->bp2Max)
             {
-            // Only bp1 differs; merge r1New bp1 into riOld bp1
+            // Only bp1 differs; merge riNew bp1 into riOld bp1
             riOld->bp1Min = min(riOld->bp1Min, riNew->bp1Min);
-            riOld->bp2Max = max(riOld->bp1Max, riNew->bp1Max);
+            riOld->bp1Max = max(riOld->bp1Max, riNew->bp1Max);
             recombinantInfoFree(pRiNew);
             success = TRUE;
             }

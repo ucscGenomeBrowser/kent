@@ -107,6 +107,18 @@ boolean parseAndResolvePosition(char **inpPos, char *db, struct hgPositions *inp
  * hgPos, relative start and stop, and return TRUE. Otherwise return FALSE so our regular
  * search code can deal with item name */
 
+void fixSinglePos(struct hgPositions *hgp);
+/* Fill in posCount and if proper singlePos fields of hgp
+ * by going through tables... */
+
+boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
+                            boolean measureTiming);
+/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
+ * See http://varnomen.hgvs.org/
+ * If search term is a pseudo hgvs term like GeneName AminoAcidPosition (RUNX2 Arg155) and
+ * matches more than one transcript, fill out the hgp with the potential matches so the user
+ * can choose where to go, otherwise return a singlePos */
+
 struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi,
 	char *hgAppName, struct cart *cart, boolean multiTerm, boolean measureTiming, struct searchCategory *categories);
 /* Return container of tracks and positions (if any) that match term. */

@@ -154,8 +154,8 @@ if [ -z "${fromDb}" -o -z "${toDb}" ]; then
   exit 255
 fi
 
-printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
-  "${requestId}" "${fromDb}" "${toDb}" 1>&2
+# printf "# ottoRequest id=%s: fromDb='%s' toDb='%s'\n" \
+#   "${requestId}" "${fromDb}" "${toDb}" 1>&2
 
 ############################################################################
 # step 2: look up both identifiers -- GenArk accession or UCSC db name
@@ -186,8 +186,8 @@ case "${toDb}" in
     ;;
 esac
 
-printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
-printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
+# printf "# from: %s  clade=%s\n" "${fromId}" "${fromClade}" 1>&2
+# printf "#   to: %s  clade=%s\n" "${toId}" "${toClade}" 1>&2
 
 ############################################################################
 # step 3: determine N50 for each to decide target vs. query
@@ -211,13 +211,13 @@ fi
 export fromN50=$(asmN50 "${from2bit}")
 export toN50=$(asmN50 "${to2bit}")
 
-printf "# from N50: %s (%s)\n" "${fromN50}" "${fromDb}" 1>&2
-printf "#   to N50: %s (%s)\n" "${toN50}" "${toDb}" 1>&2
+# printf "# from N50: %s (%s)\n" "${fromN50}" "${fromDb}" 1>&2
+# printf "#   to N50: %s (%s)\n" "${toN50}" "${toDb}" 1>&2
 
 if [ -n "${fromN50}" -a -n "${toN50}" ]; then
   if [ "${toN50}" -gt "${fromN50}" ]; then
-    printf "# swapping: %s (N50=%s) becomes target over %s (N50=%s)\n" \
-      "${toId}" "${toN50}" "${fromId}" "${fromN50}" 1>&2
+#    printf "# swapping: %s (N50=%s) becomes target over %s (N50=%s)\n" \
+#      "${toId}" "${toN50}" "${fromId}" "${fromN50}" 1>&2
     tmpId="${fromId}"; export fromId="${toId}"; export toId="${tmpId}"
     tmpClade="${fromClade}"; export fromClade="${toClade}"; export toClade="${tmpClade}"
   fi
@@ -255,12 +255,12 @@ esac
 working=$(ls -d ${targetExists}/lastz${Query}.* 2> /dev/null | wc -l || true)
 if [ "${working}" -gt 0 ]; then
   buildDir=$(ls -d ${targetExists}/lastz${Query}.* | tail -1)
-  printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
+# printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
 fi
 
 mkdir -p  "${buildDir}"
 
-printf "# buildDir: %s\n" "${buildDir}" 1>&2
+# printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # store buildDir in ottoRequest table for workflowMonitor.sh
 /cluster/bin/x86_64/hgsql -N -e \
@@ -275,7 +275,7 @@ export toCladeArg=$(cladeMap "${toClade}")
 
 export cmd="${scriptDir}/kegAlignLastz.sh ${fromId} ${toId} ${fromCladeArg} ${toCladeArg}"
 
-printf "# launching: %s\n" "${cmd}" 1>&2
+# printf "# launching: %s\n" "${cmd}" 1>&2
 nohup ${cmd} > "${buildDir}/kegAlign.log" 2>&1 < /dev/null &
-printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
+# printf "# launched pid %s, log=%s/kegAlign.log\n" "$!" "${buildDir}" 1>&2
 exit 0

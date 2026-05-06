@@ -374,3 +374,91 @@ rm tishkoff.hg38.unsorted.vcf tishkoff.hg38.canon.* tishkoff.hg19.chr.vcf.gz
 # (9,066 failed liftOver, 9,359 mapped to non-canonical contigs).
 # Symlinks placed at /gbdb/hg38/varFreqs/tishkoff/ for the tishkoff180
 # stanza in trackDb/human/varFreqs.ra.
+
+# varFreqsAll rebuild, 2026-04-30 Claude max
+# Regenerate the All Databases Combined track to include Tishkoff180.
+# Source count rises from 24 to 25 databases; final bigBed is 35.6 GB
+# (37.9 GB on disk before zoom indexes) with 1,169,063,801 records and
+# 117 fields (up from 115). Pipeline run in
+# /hive/data/genomes/hg38/bed/varFreqs/all/:
+# 1. Added /gbdb/hg38/varFreqs/tishkoff/tishkoff180.vcf.gz to files.txt
+#    and the Tishkoff180 row to
+#    ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv.
+# 2. Cleared stale merged.vcf.gz / merged.annotated.vcf.gz to force re-merge.
+# 3. Ran ./mergeAndAnnotate.sh: per-VCF strip+norm reused cached files for
+#    the 24 unchanged DBs; only tishkoff180 was normalized (~5 min).
+#    bcftools merge ~25 min; bcftools csq ~35 min.
+#    Output: 1,169,064,168 merged variants (up from 1,166,005,346).
+#    Tishkoff added ~3.06M sites that were not present in any other DB
+#    (most of its 33.6M SNPs were already covered by the bigger DBs).
+# 4. Ran python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 ~90 min re-extract of all 25 DBs, Phase 2 ~25 min chrom BED
+#    build, concat+sort ~45 min).
+# 5. bedToBigBed on the sorted BED -> 35.6 GB varFreqsAll.bb (1.169B
+#    records, 117 fields).
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.Tishkoff180AF / filterByRange.Tishkoff180AC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink (pointing at
+# /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb) was preserved
+# and now resolves to the new 35.6 GB build.
+
+# Performance follow-up note (Claude max, 2026-04-30):
+# An incremental add currently takes ~10 hours. The biggest wins for a
+# future incremental-add workflow are:
+#   - Phase 1 of vcfToBigBed.py re-extracts per-DB TSVs for ALL databases
+#     every run (~90 min). Skip extraction when the per-DB output dir is
+#     already present and source mtime is unchanged. Estimated saving:
+#     ~85 min when adding one DB.
+#   - bcftools merge re-merges all 25 normalized VCFs (~25 min). For a
+#     pure additive change, `bcftools merge old_merged.vcf.gz new.vcf.gz`
+#     is much cheaper than re-merging from scratch. Estimated saving:
+#     ~20 min.
+# We tested a BCSQ cache (csqWithCache.sh, prototype in this directory's
+# git history), splitting merged variants into "cached" vs "uncached" via
+# bcftools isec and only running csq on the uncached subset. It is
+# correct but NOT a win: bcftools csq runs at ~30M records/min and is
+# already well-threaded; bcftools isec / annotate over the same volume
+# is slower than just running csq again. Don't pursue. The script was
+# removed after benchmarking; see this commit's history if you want to
+# re-test on different hardware.
+
+##########
+# 2026-05-05 Claude max
+# GenomeAsia Pilot (gasp + gaspIndel) GRCh37 -> hg38 lift, refs #36642
+#
+# Lou's QA (note 2026-05-04) showed both subtracks were GRCh37 sites
+# served at /gbdb/hg38/, so positions were off by tens of kb to many
+# Mb (e.g. rs1050171 at hg19 chr7:55,249,063 instead of hg38
+# chr7:55,174,014). Three confirmations: contig lengths in the VCF
+# header are GRCh37, every contig record declares assembly=b37, and
+# the GATK reference FASTA is human_g1k_v37_decoy.fasta.
+#
+# Source files (sites-only, bare chromosome names "1"-"22", "X", "Y"):
+#   /hive/data/genomes/hg38/bed/varFreqs/ga100k/ga100k.subst.vcf.gz
+#       (66,236,516 SNVs, autosomes only)
+#   /hive/data/genomes/hg38/bed/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
+#       (4,415,156 indels, 1-22 + X/Y/MT plus GL*/hs37d5 alt contigs)
+# The indel VCF has a malformed #CHROM line (declares FORMAT but has
+# no sample columns and no FORMAT field on data lines); the lift
+# script strips it on the fly.
+#
+# Lift script: ~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh
+# Recipe is the same as tishkoff180: chr-prefix rename via
+# bcftools annotate --rename-chrs, CrossMap.py vcf with
+# hg19ToHg38.over.chain.gz, post-filter to canonical chr1-22/X/Y/M,
+# fix contig= header (CrossMap drops the chr prefix from contig IDs),
+# bcftools sort, bgzip, tabix.
+mkdir -p /hive/data/genomes/hg38/bed/varFreqs/ga100k/lift
+cd /hive/data/genomes/hg38/bed/varFreqs/ga100k/lift
+# chrRename.txt is in this directory (1 -> chr1 ... MT -> chrM).
+~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh \
+    /hive/data/genomes/hg38/bed/varFreqs/ga100k/ga100k.subst.vcf.gz \
+    ./ga100k.subst.hg38
+~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh \
+    /hive/data/genomes/hg38/bed/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz \
+    ./ga100k.indels.hg38
+# Lift accounting is logged in subst.lift.log and indel.lift.log.
+# After lift, /gbdb symlinks point at the lifted .vcf.gz / .tbi pair.
+# trackDb bigDataUrl for gaspIndel was renamed to ga100k.indels.vcf.gz
+# (the old All.indels.annot.cont_withmaf.vcf.gz file name was a
+# verbatim copy of the GenomeAsia download name).

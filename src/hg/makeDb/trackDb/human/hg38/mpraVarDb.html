@@ -2,11 +2,11 @@
 <p>
 The <b>MPRAVarDB</b> track shows 239,028 variants successfully mapped to hg38
 (from 242,818 total) across 18 MPRA studies compiled in the MPRAVarDB database
-(<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">Wang et al., 2024</a>).
+(<a href="https://pubmed.ncbi.nlm.nih.gov/39325859/" target="_blank">Jin et al., 2024</a>).
 Each variant was experimentally tested in an MPRA experiment to evaluate whether it
-affects transcriptional regulatory activity. The database covers over 30 cell lines
-and 30 human diseases and traits, including neurodegenerative diseases, immune
-disorders, melanoma, multiple myeloma, and autoimmune diseases.
+affects regulatory activity. The database covers over 30 cell lines and 30 human
+diseases and traits, including neurodegenerative diseases, immune disorders,
+melanoma, multiple myeloma, and autoimmune diseases.
 </p>
 <p>
 <b>Note on cell lines:</b> The cell line shown for each variant is the reporter
@@ -15,19 +15,74 @@ used mouse cell lines (e.g. Neuro-2a, N2A, NIH/3T3, MIN6) as reporter systems
 for human sequences; these variants retain human (hg38) coordinates.
 </p>
 
+<p>
+<b>Note on study type:</b> Not all studies measure transcriptional regulation
+in the same sense. Two of the larger contributors,
+<a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer
+et al., 2021</a> (72,546 variants) and
+<a href="https://pubmed.ncbi.nlm.nih.gov/37516102/" target="_blank">Schuster
+et al., 2023</a> (26,546 variants), test 3'UTR variants placed downstream
+of the reporter, where the log2 fold change between alleles reflects changes
+in mRNA stability, decay, RBP or miRNA binding, or translation efficiency
+rather than transcriptional activation. The remaining studies test 5'
+regulatory elements (promoters and enhancers) where log2FC reflects changes
+in transcription. Together, the 3'UTR studies account for 99,092 of the
+239,028 variants in the track (~41%).
+</p>
+
 <h2>Display Conventions</h2>
 <p>
 Items are colored by statistical significance:
 <ul>
-<li><b><span style="color: #C80000;">Dark red</span></b>: FDR &lt; 0.05 (significant after multiple testing correction) &mdash; 22,465 variants (9.3%)</li>
-<li><b><span style="color: #FFA500;">Orange</span></b>: nominal p-value &lt; 0.05 but FDR &ge; 0.05 &mdash; 17,780 variants (7.3%)</li>
-<li><b><span style="color: #BEBEBE;">Grey</span></b>: not significant (p-value &ge; 0.05) &mdash; 202,573 variants (83.4%)</li>
+<li><b><span style="color: #C80000;">Dark red</span></b>: FDR &lt; 0.05 (significant after multiple testing correction) &mdash; 22,451 variants (9.4%)</li>
+<li><b><span style="color: #FFA500;">Orange</span></b>: nominal p-value &lt; 0.05 but FDR &ge; 0.05 &mdash; 17,773 variants (7.4%)</li>
+<li><b><span style="color: #BEBEBE;">Grey</span></b>: not significant (p-value &ge; 0.05) &mdash; 198,804 variants (83.2%)</li>
 </ul>
 </p>
 <p>
 Each item shows the variant name (rsID when available, otherwise chr:pos:ref&gt;alt),
 the reference and alternate alleles, the associated disease or trait, cell line,
 log2 fold change, p-value, and FDR.
+</p>
+
+<p>
+<b>Cell-type specificity:</b> MPRA results are typically cell-type-specific,
+and significance in one cell line does not imply activity in another. For
+example, <a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey
+et al., 2016</a> found only modest correlation (R &asymp; 0.63)
+between LCL and HepG2 measurements of the same eQTL variants, and
+<a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee
+et al., 2023</a> reported that only 205 of 1,004 HEK293-positive
+variants overlapped HNP-positive variants. The cell line filter can be used
+to narrow results to a relevant context.
+</p>
+
+<p>
+<b>Note on Kircher et al., 2019:</b>
+<a href="https://pubmed.ncbi.nlm.nih.gov/31395865/" target="_blank">This study</a>
+contributes 44,647 variants (~19% of the track) using a saturation mutagenesis
+design that tests nearly every possible nucleotide substitution at each
+position of 20 disease-associated regulatory elements at single-base-pair
+resolution: 10 promoters (TERT, LDLR, HBB, HBG1, HNF4A, MSMB, PKLR, F9,
+FOXE1, GP1BB) and 10 enhancers (SORT1, ZRS, BCL11A, IRF4, IRF6, MYC tested
+with two distinct enhancers, RET, TCF7L2, and the UC88 ultraconserved
+enhancer). Regions over those elements show many densely-packed Kircher
+variants that may dominate visualization at those loci.
+</p>
+
+<h3>Interpreting log2FC</h3>
+<p>
+The log2 fold change is computed as
+log<sub>2</sub>(alt RNA/DNA) &minus; log<sub>2</sub>(ref RNA/DNA).
+A positive value means the alternate allele drove more reporter activity than
+the reference allele in this assay; a negative value means the reverse. The
+linear allelic ratio is approximately 2<sup>log2FC</sup>: log2FC = 0.5
+corresponds to roughly 1.41&times; allelic difference, log2FC = 1.0
+to 2&times;, and log2FC = 2.0 to 4&times;. As noted in the
+Description section, log2FC reflects transcriptional activation for
+5'-regulatory studies and steady-state mRNA abundance, decay, or translation
+efficiency for 3'UTR studies (Griesemer et al., 2021; Schuster
+et al., 2023).
 </p>
 
 <h2>Studies</h2>
@@ -46,7 +101,7 @@ tested variants, diseases/traits, cell lines, and a brief description of the var
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer et al., 2021</a></td>
-  <td>72,588</td>
+  <td>72,546</td>
   <td>NHGRI-EBI GWAS catalog</td>
   <td>GM12878, HEK293FT, HMEC, HepG2, K562, SKNSH</td>
   <td>3'UTR SNPs and indels in LD with GWAS catalog variants, variants under positive selection, and rare outlier expression variants from GTEx</td>
@@ -60,14 +115,14 @@ tested variants, diseases/traits, cell lines, and a brief description of the var
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/35298243/" target="_blank">Abell et al., 2022</a></td>
-  <td>29,582</td>
+  <td>29,564</td>
   <td>eQTL (no specific disease)</td>
   <td>GM12878</td>
   <td>30,893 variants in LD with independent, common, top-ranked eQTL across 744 eGenes in the CEU cohort</td>
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey et al., 2016</a></td>
-  <td>27,138</td>
+  <td>23,430</td>
   <td>eQTL (no specific disease)</td>
   <td>GM12878</td>
   <td>32,373 variants associated with eQTLs in lymphoblastoid cell lines</td>
@@ -81,21 +136,21 @@ tested variants, diseases/traits, cell lines, and a brief description of the var
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/35513721/" target="_blank">Mouri et al., 2022</a></td>
-  <td>14,551</td>
+  <td>14,549</td>
   <td>Autoimmune diseases (Crohn's, IBD, psoriasis, MS, RA, T1D, ulcerative colitis)</td>
   <td>Jurkat</td>
   <td>GWAS variants from autoimmune disease loci tested for regulatory element activity in T cells</td>
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee et al., 2023</a></td>
-  <td>10,310</td>
+  <td>10,302</td>
   <td>Schizophrenia</td>
   <td>HEK293s, HNPS</td>
   <td>5,173 fine-mapped schizophrenia GWAS variants</td>
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/35981026/" target="_blank">Cooper et al., 2022</a></td>
-  <td>5,340</td>
+  <td>5,330</td>
   <td>Alzheimer's disease, Progressive supranuclear palsy</td>
   <td>HEK293T</td>
   <td>5,706 noncoding SNVs from 25 AD and 9 PSP genome-wide significant loci</td>
@@ -137,7 +192,7 @@ tested variants, diseases/traits, cell lines, and a brief description of the var
 </tr>
 <tr>
   <td><a href="https://pubmed.ncbi.nlm.nih.gov/33712590/" target="_blank">Lu et al., 2021</a></td>
-  <td>1,038</td>
+  <td>1,036</td>
   <td>Systemic lupus erythematosus</td>
   <td>GM12878, Jurkat</td>
   <td>18,312 variants in tight LD (r2&gt;0.8) with 578 GWAS index variants at 531 loci</td>
@@ -186,6 +241,26 @@ The remaining variants were merged with the 29,129 natively hg38-mapped variants
 to produce a total of 239,028 hg38 records.
 </p>
 
+<p>
+<b>Significance thresholds across studies:</b> The source studies in MPRAVarDB
+do not all use the same significance framework. Most studies apply a
+Benjamini-Hochberg FDR threshold (commonly 0.05 or 0.10), but some report only
+nominal regression p-values. For example,
+<a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey
+et al., 2016</a> uses BH FDR &lt; 0.05 to call "emVars",
+<a href="https://pubmed.ncbi.nlm.nih.gov/34534445/" target="_blank">Griesemer
+et al., 2021</a> and
+<a href="https://pubmed.ncbi.nlm.nih.gov/37868037/" target="_blank">McAfee
+et al., 2023</a> use BH FDR &lt; 0.10, and
+<a href="https://pubmed.ncbi.nlm.nih.gov/31395865/" target="_blank">Kircher
+et al., 2019</a> reports raw regression p-values rather than FDR. The
+track applies a uniform FDR &lt; 0.05 / nominal
+p &lt; 0.05 color cutoff for visual consistency, which is the
+more conservative of the FDR thresholds reported by the source studies. For
+any variant of interest, consult the source publication for the original
+significance call.
+</p>
+
 <h2>Data Access</h2>
 <p>
 The data can be explored interactively in table format with the
@@ -220,11 +295,197 @@ maintaining the MPRAVarDB database.
 </p>
 
 <h2>References</h2>
+
 <p>
-Wang T, Matreyek KA, Yang X.
-<a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">
-MPRAVarDB: an online database and web server for exploring regulatory effects of genetic variants using MPRA data</a>.
-<em>Bioinformatics</em>. 2024 Apr 15;40(4):btae201.
-PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/38617248/" target="_blank">38617248</a>;
-PMC: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11014600/" target="_blank">PMC11014600</a>
+Abell NS, DeGorter MK, Gloudemans MJ, Greenwald E, Smith KS, He Z, Montgomery SB.
+<a href="https://www.science.org/doi/10.1126/science.abj5117" target="_blank">
+Multiple causal variants underlie genetic associations in humans</a>.
+<em>Science</em>. 2022 Mar 18;375(6586):1247-1254.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35298243" target="_blank">35298243</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9725108/" target="_blank">PMC9725108</a>
+</p>
+
+<p>
+Ajore R, Niroula A, Pertesi M, Cafaro C, Thodberg M, Went M, Bao EL, Duran-Lozano L, Lopez de
+Lapuente Portilla A, Olafsdottir T <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-021-27666-x" target="_blank">
+Functional dissection of inherited non-coding variation influencing multiple myeloma risk</a>.
+<em>Nat Commun</em>. 2022 Jan 10;13(1):151.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35013207" target="_blank">35013207</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8748989/" target="_blank">PMC8748989</a>
+</p>
+
+<p>
+Choi J, Zhang T, Vu A, Ablain J, Makowski MM, Colli LM, Xu M, Hennessey RC, Yin J, Rothschild H
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-020-16590-1" target="_blank">
+Massively parallel reporter assays of melanoma risk variants identify MX2 as a gene promoting
+melanoma</a>.
+<em>Nat Commun</em>. 2020 Jun 1;11(1):2718.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32483191" target="_blank">32483191</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7264232/" target="_blank">PMC7264232</a>
+</p>
+
+<p>
+Cooper YA, Teyssier N, Dr&#228;ger NM, Guo Q, Davis JE, Sattler SM, Yang Z, Patel A, Wu S, Kosuri S
+<em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.abi8654" target="_blank">
+Functional regulatory variants implicate distinct transcriptional networks in dementia</a>.
+<em>Science</em>. 2022 Aug 19;377(6608):eabi8654.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35981026" target="_blank">35981026</a>
+</p>
+
+<p>
+Ferraro NM, Strober BJ, Einson J, Abell NS, Aguet F, Barbeira AN, Brandt M, Bucan M, Castel SE,
+Davis JR <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.aaz5900" target="_blank">
+Transcriptomic signatures across human tissues identify functional rare genetic variation</a>.
+<em>Science</em>. 2020 Sep 11;369(6509).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32913073" target="_blank">32913073</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7646251/" target="_blank">PMC7646251</a>
+</p>
+
+<p>
+Griesemer D, Xue JR, Reilly SK, Ulirsch JC, Kukreja K, Davis JR, Kanai M, Yang DK, Butts JC, Guney
+MH <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(21)00999-5" target="_blank">
+Genome-wide functional screen of 3&#39;UTR variants uncovers causal variants for human disease and
+evolution</a>.
+<em>Cell</em>. 2021 Sep 30;184(20):5247-5260.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34534445" target="_blank">34534445</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8487971/" target="_blank">PMC8487971</a>
+</p>
+
+<p>
+Jin W, Xia Y, Nizomov J, Liu Y, Li Z, Lu Q, Chen L.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btae578" target="_blank">
+MPRAVarDB: an online database and web server for exploring regulatory effects of genetic variants</a>.
+<em>Bioinformatics</em>. 2024 Oct 1;40(10).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39325859" target="_blank">39325859</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11464417/" target="_blank">PMC11464417</a>
+</p>
+
+<p>
+Kircher M, Xiong C, Martin B, Schubach M, Inoue F, Bell RJA, Costello JF, Shendure J, Ahituv N.
+<a href="https://doi.org/10.1038/s41467-019-11526-w" target="_blank">
+Saturation mutagenesis of twenty disease-associated regulatory elements at single base-pair
+resolution</a>.
+<em>Nat Commun</em>. 2019 Aug 8;10(1):3583.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31395865" target="_blank">31395865</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6687891/" target="_blank">PMC6687891</a>
+</p>
+
+<p>
+Klein JC, Keith A, Rice SJ, Shepherd C, Agarwal V, Loughlin J, Shendure J.
+<a href="https://doi.org/10.1038/s41467-019-10439-y" target="_blank">
+Functional testing of thousands of osteoarthritis-associated variants for regulatory activity</a>.
+<em>Nat Commun</em>. 2019 Jun 4;10(1):2434.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31164647" target="_blank">31164647</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6547687/" target="_blank">PMC6547687</a>
+</p>
+
+<p>
+Long E, Yin J, Funderburk KM, Xu M, Feng J, Kane A, Zhang T, Myers T, Golden A, Thakur R <em>et
+al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(22)00497-9" target="_blank">
+Massively parallel reporter assays and variant scoring identified functional variants and target
+genes for melanoma loci and highlighted cell-type specificity</a>.
+<em>Am J Hum Genet</em>. 2022 Dec 1;109(12):2210-2229.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36423637" target="_blank">36423637</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9748337/" target="_blank">PMC9748337</a>
+</p>
+
+<p>
+Lu X, Chen X, Forney C, Donmez O, Miller D, Parameswaran S, Hong T, Huang Y, Pujato M, Cazares T
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-021-21854-5" target="_blank">
+Global discovery of lupus genetic risk variant allelic enhancer activity</a>.
+<em>Nat Commun</em>. 2021 Mar 12;12(1):1611.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33712590" target="_blank">33712590</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7955039/" target="_blank">PMC7955039</a>
+</p>
+
+<p>
+McAfee JC, Lee S, Lee J, Bell JL, Krupa O, Davis J, Insigne K, Bond ML, Zhao N, Boyle AP <em>et
+al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S2666-979X(23)00218-5" target="_blank">
+Systematic investigation of allelic regulatory activity of schizophrenia-associated common
+variants</a>.
+<em>Cell Genom</em>. 2023 Oct 11;3(10):100404.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37868037" target="_blank">37868037</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10589626/" target="_blank">PMC10589626</a>
+</p>
+
+<p>
+Mouri K, Guo MH, de Boer CG, Lissner MM, Harten IA, Newby GA, DeBerg HA, Platt WF, Gentili M, Liu DR
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-022-01056-5" target="_blank">
+Prioritization of autoimmune disease-associated genetic variants that perturb regulatory element
+activity in T cells</a>.
+<em>Nat Genet</em>. 2022 May;54(5):603-612.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35513721" target="_blank">35513721</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9793778/" target="_blank">PMC9793778</a>
+</p>
+
+<p>
+Mulvey B, Dougherty JD.
+<a href="https://doi.org/10.1038/s41398-021-01493-6" target="_blank">
+Transcriptional-regulatory convergence across functional MDD risk variants identified by massively
+parallel reporter assays</a>.
+<em>Transl Psychiatry</em>. 2021 Jul 22;11(1):403.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34294677" target="_blank">34294677</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8298436/" target="_blank">PMC8298436</a>
+</p>
+
+<p>
+Myint L, Wang R, Boukas L, Hansen KD, Goff LA, Avramopoulos D.
+<a href="https://doi.org/10.1002/ajmg.b.32761" target="_blank">
+A screen of 1,049 schizophrenia and 30 Alzheimer&#39;s-associated variants for regulatory
+potential</a>.
+<em>Am J Med Genet B Neuropsychiatr Genet</em>. 2020 Jan;183(1):61-73.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31503409" target="_blank">31503409</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7233147/" target="_blank">PMC7233147</a>
+</p>
+
+<p>
+Rao X, Thapa KS, Chen AB, Lin H, Gao H, Reiter JL, Hargreaves KA, Ipe J, Lai D, Xuei X <em>et
+al</em>.
+<a href="https://doi.org/10.1038/s41380-019-0508-z" target="_blank">
+Allele-specific expression and high-throughput reporter assay reveal functional genetic variants
+associated with alcohol use disorders</a>.
+<em>Mol Psychiatry</em>. 2021 Apr;26(4):1142-1151.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31477794" target="_blank">31477794</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7050407/" target="_blank">PMC7050407</a>
+</p>
+
+<p>
+Schuster SL, Arora S, Wladyka CL, Itagi P, Corey L, Young D, Stackhouse BL, Kollath L, Wu QV, Corey
+E <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S2211-1247(23)00851-3" target="_blank">
+Multi-level functional genomics reveals molecular and cellular oncogenicity of patient-based
+3&#39;-untranslated region mutations</a>.
+<em>Cell Rep</em>. 2023 Aug 29;42(8):112840.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37516102" target="_blank">37516102</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10540565/" target="_blank">PMC10540565</a>
+</p>
+
+<p>
+Tewhey R, Kotliar D, Park DS, Liu B, Winnicki S, Reilly SK, Andersen KG, Mikkelsen TS, Lander ES,
+Schaffner SF <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(16)30421-4" target="_blank">
+Direct Identification of Hundreds of Expression-Modulating Variants using a Multiplexed Reporter
+Assay</a>.
+<em>Cell</em>. 2016 Jun 2;165(6):1519-1529.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27259153" target="_blank">27259153</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4957403/" target="_blank">PMC4957403</a>
+</p>
+
+<p>
+Ulirsch JC, Nandakumar SK, Wang L, Giani FC, Zhang X, Rogov P, Melnikov A, McDonel P, Do R,
+Mikkelsen TS <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(16)30493-7" target="_blank">
+Systematic Functional Dissection of Common Genetic Variation Affecting Red Blood Cell Traits</a>.
+<em>Cell</em>. 2016 Jun 2;165(6):1530-1545.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27259154" target="_blank">27259154</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4893171/" target="_blank">PMC4893171</a>
 </p>

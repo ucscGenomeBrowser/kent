@@ -12,7 +12,7 @@ subtracks: substitutions and indels.
 The data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a> can be used; the
 track name is <em>gasp</em>.
 For bulk download, the VCF file can be obtained from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
@@ -33,6 +33,12 @@ joint genotyping with GenotypeGVCFs. Variant quality score recalibration (VQSR) 
 a 99% sensitivity tranche for both SNPs and indels. Sample-level QC included contamination
 checks with verifyBamID and sex concordance verification. The final callset contains
 &sim;65 million variants across 1,739 individuals from 219 populations.
+</p>
+<p>
+The upstream callset is on GRCh37. We lifted it to hg38 using
+<a href="https://crossmap.sourceforge.net/" target="_blank">CrossMap</a> and the UCSC
+<tt>hg19ToHg38</tt> chain file. After lifting, variants that landed on alt, random, fix, or
+unplaced contigs were dropped, and the result was sorted and indexed with tabix.
 </p>
 <p>
 We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.

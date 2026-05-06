@@ -27,12 +27,6 @@
 #include "trackHub.h"
 #include <limits.h>
 
-char *getUserName()
-/* Query the right system for the users name */
-{
-return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-}
-
 char *emailForUserName(char *userName)
 /* Fetch the email for this user from gbMembers hgcentral table */
 {

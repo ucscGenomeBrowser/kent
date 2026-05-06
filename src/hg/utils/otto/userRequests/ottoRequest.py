@@ -10,6 +10,10 @@ Usage:
 
 Options:
     -c, --conf    Path to hg.conf  [default: /usr/local/apache/cgi-bin/hg.conf]
+
+cron entry in the otto user:
+1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/ottoRequest.py
+
 """
 
 import argparse
@@ -113,7 +117,7 @@ def hgsqlQuery(db, sql):
     hgsql -B emits tabs/newlines/backslashes inside field values as
     literal \\t / \\n / \\\\ so each row stays on one line undo that
     on each field before returning."""
-    cmd = ['hgsql', db, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         sys.exit(f"hgsql error: {result.stderr.strip()}")
@@ -136,7 +140,7 @@ def hgsqlQuery(db, sql):
 
 def hgsqlUpdate(db, sql):
     """Run a SQL update/insert statement via hgsql."""
-    cmd = ['hgsql', db, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"hgsql update error: {result.stderr.strip()}", file=sys.stderr)

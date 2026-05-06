@@ -14,6 +14,8 @@
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 ready to push, 6 push is done, 7 problems,
 #      8 final notification has been sent == process is complete
+### cron job entry:
+#9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
 
 set -eEu -o pipefail
 
@@ -220,13 +222,13 @@ function installLinks() {
 
   # register both rows in hgcentraltest
   if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
-      -path="${chainPath}" "${tDb}" "${qDb}"; then
+      -path="${chainPath}" "${tDb}" "${qDb}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
     return 1
   fi
   if ! "${HOME}/kent/src/hg/utils/automation/addQuickLift.py" \
-      "${tDb}" "${qDb}" "${quickPath}"; then
+      "${tDb}" "${qDb}" "${quickPath}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: addQuickLift.py failed for %s -> %s\n" \
       "${tDb}" "${qDb}" 1>&2
     return 1
@@ -235,14 +237,27 @@ function installLinks() {
 }
 ##############################################################################
 
+##############################################################################
+### refresh Galaxy queue status snapshot for ottoRequestView.cgi
+##############################################################################
+export galaxyStatusFile="/data/apache/trash/ottoRequestGalaxyStatus.json"
+export profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
+gsTmp=$(mktemp "${galaxyStatusFile}.XXXXXX")
+if timeout 45 "${scriptDir}/galaxyStatus.py" "${profileJson}" > "${gsTmp}" 2>/dev/null; then
+  chmod 664 "${gsTmp}"
+  mv "${gsTmp}" "${galaxyStatusFile}"
+else
+  rm -f "${gsTmp}"
+#  printf "# WARNING: galaxyStatus.py failed, leaving stale snapshot\n" 1>&2
+fi
+##############################################################################
+
 ############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
 ############################################################################
 while read -r reqId; do
-  printf "# starting alignment for request %s\n" "${reqId}" 1>&2
-  if "${scriptDir}/ottoRequestAlign.sh" "${reqId}"; then
-    printf "# alignment setup complete for request %s\n" "${reqId}" 1>&2
-  else
+# printf "# starting alignment for request %s\n" "${reqId}" 1>&2
+  if ! "${scriptDir}/ottoRequestAlign.sh" "${reqId}"; then
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
@@ -271,7 +286,7 @@ while IFS=$'\t' read -r reqId buildDir; do
       /cluster/bin/x86_64/hgsql -N -e \
         "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
          WHERE id = ${reqId};" hgcentraltest
-      printf "# request %s completed successfully\n" "${reqId}" 1>&2
+#     printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
     # else: still running, will check again next invocation
   else
@@ -293,10 +308,6 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
   source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh")
-  echo $buildDir
-  echo $swapDir
-  echo targetDb $targetDb
-  echo queryDb $queryDb
   export trackData="$(dirname "${buildDir}")"
   export swapData="$(dirname "${swapDir}")"
   export workDir="$(basename "${buildDir}")"
@@ -315,12 +326,18 @@ while IFS=$'\t' read -r reqId buildDir; do
   fi
   rm -f "${trackData}/lastz.${queryDb}"
   ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
-  printf "%s\n" "${doTdb}"
-  ${doTdb} 1>&2
+  if ! ${doTdb} > /dev/null 2>&1; then
+     printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+     setErrorStatus "${reqId}"
+     continue
+  fi
   rm -f "${swapData}/lastz.${targetDb}"
   ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
-  printf "%s\n" "${swapTdb}"
-  ${swapTdb} 1>&2
+  if ! ${swapTdb} > /dev/null 2>&1; then
+     printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
+     setErrorStatus "${reqId}"
+     continue
+  fi
 
   # install liftOver and quickLift symlinks + register in hgcentraltest,
   # for both directions
@@ -344,14 +361,11 @@ done < <(/cluster/bin/x86_64/hgsql -N -B -e \
 #          clean up galaxy workflow
 ############################################################################
 
-while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
+while IFS=$'\t' read -r reqId fromDb toDb comment requestTime buildDir; do
   # time to clean up the galaxy history and workflow to release the space
   if [ -s "${buildDir}/successInvocationId.txt" ]; then
     invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
-    profileJson="${HOME}/.planemo/profiles/vgp/planemo_profile_options.json"
-    if "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
-      printf "# galaxy cleanup complete for request %s\n" "${reqId}" 1>&2
-    else
+    if ! "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
       printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
     fi
   fi
@@ -366,7 +380,13 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
   fi
   sendNotification "${reqId}" \
 "from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
-"Your lift over request is complete.  You can access the lift.over files at:
+"Your lift over request is complete:
+     From:     ${fromDb}
+       To:     ${toDb}
+  comment:     ${comment}
+submitted:     ${requestTime}
+
+The lift.over files are available at these links:
 
   ${fromUrl}
   ${toUrl}
@@ -376,6 +396,6 @@ while IFS=$'\t' read -r reqId fromDb toDb buildDir; do
       "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
 
 done < <(/cluster/bin/x86_64/hgsql -N -B -e \
-  "SELECT id, fromDb, toDb, buildDir FROM ottoRequest \
+  "SELECT id, fromDb, toDb, comment, requestTime, buildDir FROM ottoRequest \
    WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
 

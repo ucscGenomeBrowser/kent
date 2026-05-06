@@ -17,23 +17,23 @@ NMD escape regions (Nagy et al, Trends Biochem Sci 1998 and Lindeboom et al, Nat
     sequence downstream of that junction. A PTC in this window has no
     downstream exon-exon junction (or is too close to the last one) for
     NMD to be triggered. The last junction is determined from all exons
-    of the transcript, including 3&#8242;UTR introns, since those introns
-    deposit EJCs that can trigger NMD. For transcripts with no 3&#8242;UTR
+    of the transcript, including 3'UTR introns, since those introns
+    deposit EJCs that can trigger NMD. For transcripts with no 3'UTR
     intron (the common case), this reduces to the entire last coding exon
     plus the last 50 bp of the penultimate coding exon. For transcripts
-    with a 3&#8242;UTR intron (~4.5% of MANE transcripts), the last
+    with a 3'UTR intron (~4.5% of MANE transcripts), the last
     junction sits downstream of the stop codon; the escape region is only
     the stretch of CDS within 50 bp (mRNA distance) of that junction, so
     if the junction is more than 50 bp past the stop codon no CDS position
     escapes via this rule.</li>
   <li><b>No downstream EJC rule</b>: Transcripts with a single coding exon and
-    no 3&#8242;UTR intron. No exon-exon junction exists downstream of the stop
+    no 3'UTR intron. No exon-exon junction exists downstream of the stop
     codon, so no EJC is deposited that could trigger NMD at a PTC. This
     covers truly intronless transcripts as well as transcripts whose only
     introns are in the 5&#8242;UTR (where EJCs are cleared by the scanning 40S
     ribosomal subunit or sit upstream of the stop and are never encountered by
     the terminating ribosome). Transcripts with a single coding exon but a
-    3&#8242;UTR intron are excluded, because that intron deposits an EJC
+    3'UTR intron are excluded, because that intron deposits an EJC
     downstream of the stop codon that can trigger NMD.</li>
   <li><b>Start-proximal region</b>: The first 100 bp of coding nucleotides.
     PTCs in this region do not lead to NMD, a phenomenon known as start-proximal
@@ -93,7 +93,7 @@ studies, are captured by three further rules:
 </p>
 <ul>
   <li><b>Transcripts with no EJC downstream of the stop codon</b> (single coding
-    exon and no 3&#8242;UTR intron) cannot trigger NMD, so any PTC in the coding
+    exon and no 3'UTR intron) cannot trigger NMD, so any PTC in the coding
     sequence escapes. 5&#8242;UTR introns are tolerated because their EJCs are
     upstream of the stop.</li>
   <li><b>Start-proximal PTCs</b> (within the first 100 bp of coding sequence)
@@ -122,7 +122,7 @@ Items are colored by the NMD escape rule that applies:
     downstream of it). A PTC here is too close to the last exon junction
     complex (EJC) for NMD to be triggered.</li>
   <li><font color="#FF8C00"><b>Orange</b></font> &ndash; Rule 2: Single coding
-    exon and no 3&#8242;UTR intron. No EJC is deposited downstream of the stop
+    exon and no 3'UTR intron. No EJC is deposited downstream of the stop
     codon, so all PTCs in the coding sequence escape NMD.</li>
   <li><font color="#8B0000"><b>Dark red</b></font> &ndash; Rule 3: First 100 bp
     of coding nucleotides. PTCs in this start-proximal region are insensitive

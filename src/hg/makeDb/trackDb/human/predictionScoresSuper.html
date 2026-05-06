@@ -99,6 +99,24 @@ allele) covering 39.5 million positions, plus a bigBed track for the 3.8% of pos
 where overlapping transcripts produce different scores.
 </p>
 
+<h3>ClinPred - hg38/hg19</h3>
+<p>
+<b>Interpretation:</b> Scores range from 0 to 1, with higher values indicating greater
+predicted likelihood of pathogenicity. The authors recommend a threshold of &ge; 0.5 to
+flag variants as likely disease-relevant.
+</p>
+<p>
+<a href="hgTrackUi?g=clinPred">ClinPred</a>
+(Alirezaie et al, AJHG 2018) is a machine-learning predictor for nonsynonymous
+(missense) single-nucleotide variants. It combines existing pathogenicity scores
+with population allele frequency from gnomAD, and was trained on confidently
+annotated disease-causing and benign variants from ClinVar. The track contains
+four bigWig subtracks (one per alternate allele) with pre-computed scores for
+all possible human missense variants in the exome.
+Pathogenic variants are shown in <span style="color:#C80000">red</span>,
+benign in <span style="color:#0000C8">blue</span>.
+</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <h3>BayesDel</h3>
@@ -126,6 +144,23 @@ Details on suggested ranges for BayesDel can be found in Bergquist et al Genet M
 
 <h3>M-CAP and MutScore</h3>
 <p>There are four subtracks: one for each nucleotide.</p>
+
+<h3>ClinPred</h3>
+<p>There are four subtracks: one for each alternate nucleotide. Each shows the
+ClinPred score for variants from the reference base to that nucleotide. Reference
+and synonymous alternates are set to 0; positions with no exome coverage appear as
+gaps. The track is colored at each position by the recommended threshold
+(&ge; 0.5 = pathogenic, &lt; 0.5 = benign).</p>
+
+<h3>PrimateAI-3D</h3>
+<p>A single bigBed track containing all possible missense variants. Items are
+colored by prediction (red = pathogenic, blue = benign) and can be filtered by
+prediction or percentile score. See the per-track description page for details.</p>
+
+<h3>PromoterAI</h3>
+<p>Four bigWig subtracks (one per alternate nucleotide) covering positions within
+500&nbsp;bp of annotated transcription start sites, plus a bigBed track for
+positions where overlapping transcripts produce different scores.</p>
 
 <h2>Data Access</h2>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
@@ -168,8 +203,9 @@ href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg
 text file. MutScore was already available in bigWig format to download.</p>
 
 <h2>Credits</h2>
-<p>Thanks to the BayesDel, MutScore and M-CAP teams for providing precomputed data, and to Tiana Pereira, Christopher
-Lee, Gerardo Perez, and Anna Benet-Pages of the Genome Browser team.</p>
+<p>Thanks to the BayesDel, MutScore, M-CAP, ClinPred, PrimateAI-3D and PromoterAI teams for
+providing precomputed data, and to Tiana Pereira, Christopher Lee, Gerardo Perez, and Anna
+Benet-Pages of the Genome Browser team.</p>
 
 <h2>References</h2>
 <p>
@@ -252,5 +288,14 @@ Calibration of additional computational tools expands ClinGen recommendation opt
 classification with PP3/BP4 criteria</a>.
 <em>Genet Med</em>. 2025 Mar 10;27(6):101402.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40084623" target="_blank">40084623</a>
+</p>
+
+<p>
+Alirezaie N, Kernohan KD, Hartley T, Majewski J, Hocking TD.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(18)30271-4" target="_blank">
+ClinPred: Prediction Tool to Identify Disease-Relevant Nonsynonymous Single-Nucleotide Variants</a>.
+<em>Am J Hum Genet</em>. 2018 Oct 4;103(4):474-483.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30220433" target="_blank">30220433</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6174354/" target="_blank">PMC6174354</a>
 </p>
 

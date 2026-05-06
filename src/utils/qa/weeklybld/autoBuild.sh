@@ -39,10 +39,10 @@ log() {
 }
 
 die() {
-    log "FATAL: $*"
-    log "Build ABORTED."
+    log "FATAL: $*" >&2
+    log "Build ABORTED." >&2
     if ! $DRY_RUN; then
-        log "Sending alert email."
+        log "Sending alert email." >&2
         local subject="AUTOBUILD FAILED: $*"
         echo "$subject" | mail -s "$subject" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
@@ -194,10 +194,12 @@ detect_phase() {
 
     log "Schedule entry for $ds_dash: $entry" >&2
 
-    if echo "$entry" | grep -qi "preview 1"; then
-        echo "preview1"
-    elif echo "$entry" | grep -qi "preview 2"; then
+    # Match digit or Roman-numeral forms ("Preview 1"/"Preview I", "Preview 2"/"Preview II").
+    # Check II/2 before I/1 so "Preview II" does not fall through to preview1.
+    if echo "$entry" | grep -qiE 'preview (2|ii)\b'; then
         echo "preview2"
+    elif echo "$entry" | grep -qiE 'preview (1|i)\b'; then
+        echo "preview1"
     elif echo "$entry" | grep -qi "final build"; then
         echo "final"
     else

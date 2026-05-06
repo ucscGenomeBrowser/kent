@@ -23,32 +23,32 @@ INPUT_CSV = "mpravardb.csv"
 
 # Upstream CSV contains UTF-8 curly quotes, primes, and NBSP mojibake.
 # Browser does not transcode UTF-8 in bigBed fields, so everything user-visible
-# must be plain ASCII. Transliterate or strip.
-_SANITIZE_MAP = {
-    "’": "'",  # RIGHT SINGLE QUOTATION MARK (used as apostrophe)
-    "‘": "'",  # LEFT SINGLE QUOTATION MARK
-    "“": '"',  # LEFT DOUBLE QUOTATION MARK
-    "”": '"',  # RIGHT DOUBLE QUOTATION MARK
-    "′": "'",  # PRIME (used after numerals: 3'UTR)
-    "″": '"',  # DOUBLE PRIME
-    "–": "-",  # EN DASH
-    "—": "-",  # EM DASH
-    "…": "...", # HORIZONTAL ELLIPSIS
-    " ": " ",  # NO-BREAK SPACE
-    "¬": "",   # NOT SIGN  (NBSP mojibake pair)
-    "†": "",   # DAGGER    (NBSP mojibake pair)
-}
-_SANITIZE_RE = re.compile("|".join(re.escape(k) for k in _SANITIZE_MAP))
+# must be plain ASCII. Transliterate or strip. Keys use \u escapes rather than
+# literal characters so an editor can't silently re-encode them.
+_SANITIZE_MAP = str.maketrans({
+    "\u2019": "'",   # RIGHT SINGLE QUOTATION MARK (used as apostrophe)
+    "\u2018": "'",   # LEFT SINGLE QUOTATION MARK
+    "\u201c": '"',   # LEFT DOUBLE QUOTATION MARK
+    "\u201d": '"',   # RIGHT DOUBLE QUOTATION MARK
+    "\u2032": "'",   # PRIME (used after numerals: 3'UTR)
+    "\u2033": '"',   # DOUBLE PRIME
+    "\u2013": "-",   # EN DASH
+    "\u2014": "-",   # EM DASH
+    "\u2026": "...", # HORIZONTAL ELLIPSIS
+    "\u00a0": " ",   # NO-BREAK SPACE
+    "\u00ac": "",    # NOT SIGN  (NBSP mojibake pair)
+    "\u2020": "",    # DAGGER    (NBSP mojibake pair)
+})
+_WS_RE = re.compile(r"\s+")
 
 def sanitize_text(s):
     """Return ASCII-only version of s for bigBed string fields."""
-    if s is None:
+    if not s:
         return ""
-    out = _SANITIZE_RE.sub(lambda m: _SANITIZE_MAP[m.group()], s)
+    s = s.translate(_SANITIZE_MAP)
     # Drop any remaining non-ASCII (rare), then collapse runs of whitespace
-    out = out.encode("ascii", "ignore").decode("ascii")
-    out = re.sub(r"\s+", " ", out).strip()
-    return out
+    s = s.encode("ascii", "ignore").decode("ascii")
+    return _WS_RE.sub(" ", s).strip()
 
 def pval_to_score(pval):
     """Convert p-value to a 0-1000 score using -log10.

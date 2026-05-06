@@ -1,0 +1,70 @@
+track clinPred
+parent predictionScoresSuper
+shortLabel ClinPred
+longLabel ClinPred Pathogenicity Score for missense variants (zoom for exact score)
+type bigWig
+compositeTrack on
+visibility hide
+color 40,140,140
+altColor 40,140,140
+dataVersion Downloaded from sites.google.com/site/clinpred on May 5, 2026
+
+        track clinPredA
+        shortLabel Mutation: A
+        longLabel ClinPred: Mutation is A
+        type bigWig
+        parent clinPred on
+        visibility dense
+        bigDataUrl /gbdb/$D/clinPred/a.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        setColorWith /gbdb/$D/clinPred/a.color.bb
+
+        track clinPredC
+        shortLabel Mutation: C
+        longLabel ClinPred: Mutation is C
+        type bigWig
+        parent clinPred on
+        visibility dense
+        bigDataUrl /gbdb/$D/clinPred/c.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        setColorWith /gbdb/$D/clinPred/c.color.bb
+
+        track clinPredG
+        shortLabel Mutation: G
+        longLabel ClinPred: Mutation is G
+        type bigWig
+        parent clinPred on
+        visibility dense
+        bigDataUrl /gbdb/$D/clinPred/g.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        setColorWith /gbdb/$D/clinPred/g.color.bb
+
+        track clinPredT
+        shortLabel Mutation: T
+        longLabel ClinPred: Mutation is T
+        type bigWig
+        parent clinPred on
+        visibility dense
+        bigDataUrl /gbdb/$D/clinPred/t.bw
+        maxHeightPixels 128:20:8
+        viewLimits 0:1.0
+        viewLimitsMax 0:1.0
+        maxWindowToDraw 10000000
+        maxWindowToQuery 500000
+        mouseOverFunction noAverage
+        setColorWith /gbdb/$D/clinPred/t.color.bb

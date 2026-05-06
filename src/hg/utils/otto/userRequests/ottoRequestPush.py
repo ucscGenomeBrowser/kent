@@ -6,6 +6,9 @@ requests (status=5) by clade.
 Output: dict[clade] -> sorted list of assembly identifiers, where each
 identifier is "<gcAccession>_<asmName>" for GenArk accessions, or the
 plain UCSC db name for native dbs.
+
+cron tab entry in hiram crontab:
+4,26,46 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestPush.py
 """
 
 import fcntl
@@ -46,7 +49,7 @@ def acquireSingletonLock():
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
-        ["hgsql", "-N", "-B", "-e", query, db],
+        ["/cluster/bin/x86_64/hgsql", "-N", "-B", "-e", query, db],
         check=True, capture_output=True, text=True,
     ).stdout
     return [tuple(line.split("\t")) for line in out.splitlines() if line]
@@ -79,7 +82,7 @@ def markComplete(reqIds):
         return
     idList = ",".join(str(i) for i in sorted(reqIds))
     hgsql("UPDATE ottoRequest SET status = 6 WHERE id IN (%s);" % idList)
-    print("# marked status=6: %s" % idList, file=sys.stderr)
+#   print("# marked status=6: %s" % idList, file=sys.stderr)
 
 
 def lookupGenark(accessions):
@@ -149,8 +152,8 @@ def writeCladeTsv(clade, asmIds):
         return None
     with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
         fh.writelines(matched)
-    print("# wrote %d line(s) to %s" % (len(matched), outPath),
-          file=sys.stderr)
+#   print("# wrote %d line(s) to %s" % (len(matched), outPath),
+#         file=sys.stderr)
     return cladeDir
 
 
@@ -172,7 +175,7 @@ def runMakeChain(cladeDir):
     written.  Returns True on success, False if any step fails (the
     chain stops at the first failure)."""
     for cmd in makeChainCommands:
-        print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
+#       print("# [%s] %s" % (cladeDir, cmd), file=sys.stderr)
         result = subprocess.run(
             cmd, shell=True, executable="/bin/bash", cwd=cladeDir,
         )
@@ -205,9 +208,9 @@ def main():
     succeededClades = set()
     failedClades = set()
     for clade in sorted(grouped):
-        print("%s:" % clade)
-        for asmId in grouped[clade]:
-            print("  %s" % asmId)
+#       print("%s:" % clade)
+#       for asmId in grouped[clade]:
+#           print("  %s" % asmId)
         cladeDir = writeCladeTsv(clade, grouped[clade])
         if cladeDir is None:
             continue

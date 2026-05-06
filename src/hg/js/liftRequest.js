@@ -95,12 +95,19 @@ function checkBothAssembliesSelected() {
     }
 }
 
+function resetFormVisibility() {
+    document.getElementById("liftExists").style.display = "none";
+    document.getElementById("emailForm").style.display = "block";
+    document.getElementById("commentsForm").style.display = "block";
+    document.getElementById("submitButton").style.display = "block";
+}
+
 function assembly1Select(selectEle, item) {
     selectEle.innerHTML = item.label;
     assembly1Value = item.value || item.label;
     genome1 = item.genome;
 //  console.log("asm1:", JSON.stringify(item, null, 2));
-    document.getElementById("liftExists").style.display = "none";
+    resetFormVisibility();
     checkBothAssembliesSelected();
 }
 
@@ -109,7 +116,7 @@ function assembly2Select(selectEle, item) {
     assembly2Value = item.value || item.label;
     genome2 = item.genome;
 //  console.log("asm2:", JSON.stringify(item, null, 2));
-    document.getElementById("liftExists").style.display = "none";
+    resetFormVisibility();
     checkBothAssembliesSelected();
 }
 
@@ -188,10 +195,7 @@ function submitForm() {
 }	// end of function submitForm()
 
 function dismissLiftExists() {
-    document.getElementById("liftExists").style.display = "none";
-    document.getElementById("emailForm").style.display = "block";
-    document.getElementById("commentsForm").style.display = "block";
-    document.getElementById("submitButton").style.display = "block";
+    resetFormVisibility();
     document.getElementById("genomeSearch1").value = "";
     document.getElementById("genomeSearch2").value = "";
     assembly1Value = "";
