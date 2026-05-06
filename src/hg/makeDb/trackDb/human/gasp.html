@@ -35,6 +35,12 @@ checks with verifyBamID and sex concordance verification. The final callset cont
 &sim;65 million variants across 1,739 individuals from 219 populations.
 </p>
 <p>
+The upstream callset is on GRCh37. We lifted it to hg38 using
+<a href="https://crossmap.sourceforge.net/" target="_blank">CrossMap</a> and the UCSC
+<tt>hg19ToHg38</tt> chain file. After lifting, variants that landed on alt, random, fix, or
+unplaced contigs were dropped, and the result was sorted and indexed with tabix.
+</p>
+<p>
 We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
 For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
