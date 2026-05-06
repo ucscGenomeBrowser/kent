@@ -144,6 +144,8 @@ sum species.list
 ########################################################################
 ### convert to UCSC names, done as a cluster run:
 
+cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
+
 printf '#LOOP
 dbNameOne $(path1) {check out exists+ ucscMaf/$(path1)}
 #ENDLOOP
@@ -159,7 +161,6 @@ sed -f dbName.sed split/${chrN} > ucscMaf/${chrN}
 
 chmod +x dbNameOne
 
-cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/vgp577way
 
 mkdir -p ucscMaf
 ls -S split > maf.list
@@ -332,6 +333,11 @@ Submission to last job:         40643s     677.38m    11.29h    0.47d
 ## create a summary count and order list from these measurements
 ~/kent/src/hg/makeDb/doc/vgp577way/queryCounts.sh \
    `pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2`
+## adjust that pwd business: use hg38, hs1, mm39 instead
+
+## should be 576:
+wc -l order.list
+576 order.list
 
 ########################################################################
 ### create the maf summary bed file
@@ -376,19 +382,26 @@ rm -f "${B}.tab"
 
 chmod +x runOne
 ### find optimum ram setting here
-para -ram=16g create jobList
+para -ram=32g create jobList
 para push
 ### when finished
 para time > run.time
 
 ls result/*.bed | xargs cut -f2- \
    | $HOME/bin/x86_64/gnusort --parallel=32 -k1,1 -k2,2n > vgp577waySummary.bed
+### makes a big file:
+-rw-rw-r-- 1 4157628035 Apr 24 14:41 vgp577waySummary.bed
 
 bedToBigBed -type=bed3+4 -as=$HOME/kent/src/hg/lib/mafSummary.as -tab \
     vgp577waySummary.bed ../../../*.chrom.sizes \
     ../`pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\1_#;" | cut -d"_" -f1-2`.vgp577waySummary.bb
 
 bigBedInfo ../*.vgp577waySummary.bb
+
+### gzip the bed file:
+gzip vgp577waySummary.bed
+-rw-rw-r-- 1 679264107 Apr 24 14:41 vgp577waySummary.bed.gz
+
 
 ########################################################################
 ### construct the trackDb
@@ -402,6 +415,15 @@ cd /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSa
 -rw-rw-r-- 1        39887 Apr 11 23:08 vgp577way.trackDb.txt
 
 ## symlink this track into the contrib directory:
+### or, for hg38, hs1, mm39 - take it over to trackDb to incorporate the tracks
+### and the bb symlinks go into, for example:
+###  mkdir -p /gbdb/mm39/vgp577way
+###   ln -s `pwd`/mm39.*.bb /gbdb/mm39/vgp577way/
+### and the references in the trackDb.txt file need to change:
+###       bigDataUrl contrib/vgp577way/mm39.vgp577way.bb
+###       summary contrib/vgp577way/mm39.vgp577waySummary.bb
+###       bigDataUrl /gbdb/mm39/vgp577way/mm39.vgp577way.bb
+###       summary /gbdb/mm39/vgp577way/mm39.vgp577waySummary.bb
 
 mkdir -p ../../contrib/vgp577way/
 ln -s "../../trackData/vgp577way/vgp577way.trackDb.txt" ../../contrib/vgp577way/vgp577way.trackDb.txt
