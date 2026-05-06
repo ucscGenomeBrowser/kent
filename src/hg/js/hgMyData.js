@@ -192,6 +192,11 @@ let uppyOptions = {
                             disabled: !editable2bit,
                             onChange: e => {
                                 let v = hubCreate.sanitizeGenomeName(e.target.value);
+                                if (!v) {
+                                    // Empty input: revert rather than blank out meta.
+                                    e.target.value = file.meta.genome || "";
+                                    return;
+                                }
                                 onChange(v);
                                 file.meta.genome = v;
                                 file.meta.genomeLabel = v;
@@ -295,12 +300,29 @@ const uppy = new Uppy.Uppy({
         let thisQuota = 0;
         let filesToOverwrite = []; // collect files that will overwrite existing ones
 
+        // Only one 2bit per hub is supported. propagateAssemblyHubMeta picks
+        // the first 2bit found and overwrites every sibling's genome with it,
+        // which silently orphans the second 2bit (lands on disk and in the
+        // hubSpace table but is not referenced from hub.txt).
+        let twoBitsInBatch = Object.values(files).filter(looksLikeTwoBit);
+        if (twoBitsInBatch.length > 1) {
+            let names = twoBitsInBatch.map(f => f.name).join(", ");
+            uppy.info(`Error: only one 2bit file per hub is supported. ` +
+                      `Found: ${names}. Upload one 2bit at a time, or split ` +
+                      `them into separate hubs.`, "error", 6000);
+            return false;
+        }
+
         // If a 2bit is in the batch, propagate its genome/hubType to siblings.
-        // Fall back to sanitized filename because setFileMeta is async from
-        // our point of view - captured meta may not be populated yet.
-        let batchTwoBit = Object.values(files).find(looksLikeTwoBit);
+        let batchTwoBit = twoBitsInBatch[0];
         if (batchTwoBit) {
-            let asmGenome = batchTwoBit.meta.genome || hubCreate.sanitizeGenomeName(batchTwoBit.name);
+            let asmGenome = batchTwoBit.meta.genome;
+            if (!asmGenome) {
+                uppy.info(`Error: Genome name is required for ` +
+                          `${batchTwoBit.name}. Open the file card and enter ` +
+                          `a name for your assembly.`, "error", 5000);
+                return false;
+            }
             for (let f of Object.values(files)) {
                 f.meta.genome = asmGenome;
                 f.meta.genomeLabel = asmGenome;
@@ -395,6 +417,22 @@ const uppy = new Uppy.Uppy({
         return doUpload ? files : false;
     },
 });
+
+function extractHookErrorMessage(error, response) {
+    // Our hooks exit 0 + RejectUpload=true, so the response body is the raw
+    // errAbort message. tus-js-client still wraps error.message with
+    // "tus: unexpected response while ..., response text: <ours>, request
+    // id: n/a" when the status code is 4xx/5xx.
+    if (response && response.body) return String(response.body).trim();
+    let body = null;
+    try { body = error && error.originalResponse && error.originalResponse.getBody(); }
+    catch (e) { /* ignore */ }
+    if (body) return String(body).trim();
+    let msg = (error && error.message) || "Upload failed";
+    // Scrape the tus wrapping off if present.
+    let m = msg.match(/response text:\s*([\s\S]*?)(?:,\s*request id:|$)/);
+    return m ? m[1].trim() : msg;
+}
 
 function looksLikeTwoBit(f) {
     return (f.name || "").toLowerCase().endsWith(".2bit");
@@ -680,6 +718,28 @@ class BatchChangePlugin extends Uppy.BasePlugin {
 
     install() {
         this.uppy.on("file-added", (file) => {
+            // Only one 2bit per hub is supported. If this batch already has
+            // a 2bit, reject the new one before any meta-setting runs (which
+            // would propagate the wrong genome to it). onBeforeUpload also
+            // enforces this; the duplicate check here keeps the per-file card
+            // UI from drifting.
+            if (looksLikeTwoBit(file)) {
+                let existingTwoBits = this.uppy.getFiles().filter(
+                    f => f.id !== file.id && looksLikeTwoBit(f));
+                if (existingTwoBits.length > 0) {
+                    this.uppy.removeFile(file.id);
+                    // setState({error}) puts the message in the StatusBar at
+                    // the bottom of the dashboard where it stays until the
+                    // user clicks Upload (which clears state.error) or closes
+                    // the dashboard. Persistent, unlike uppy.info().
+                    this.uppy.setState({
+                        error: `Only one 2bit file per hub is supported. ` +
+                               `Already have "${existingTwoBits[0].name}"; ignoring ` +
+                               `"${file.name}". Split them into separate hubs.`
+                    });
+                    return;
+                }
+            }
             // add default meta data for genome and fileType
             let ftype = hubCreate.detectFileType(file.name);
             let defaultMeta = {
@@ -1106,6 +1166,28 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
+        // Block deletion of an assembly hub's defining 2bit unless the whole hub
+        // is also in this batch. Removing the 2bit alone leaves hub.txt with a
+        // twoBitPath pointing at a missing file and the surviving rows still
+        // flagged hubType=assemblyHub. The user must delete the entire hub
+        // instead, or replace the 2bit by uploading a new one with the same name.
+        let selectedValues = Object.values(data);
+        let selectedHubDirs = new Set(
+            selectedValues.filter(x => x.fileType === "dir").map(x => x.fullPath));
+        let blockedTwoBits = [];
+        for (let d of selectedValues) {
+            if (d.fileType !== "2bit") continue;
+            let hub = uiState.filesHash[d.parentDir];
+            if (!hub || hub.hubType !== "assemblyHub") continue;
+            if (!selectedHubDirs.has(d.parentDir)) blockedTwoBits.push(d);
+        }
+        if (blockedTwoBits.length > 0) {
+            let names = blockedTwoBits.map(d => d.fullPath).join("\n  ");
+            alert(`Cannot delete the following 2bit file(s) because they define ` +
+                  `an assembly hub:\n  ${names}\n\nDelete the whole hub instead, ` +
+                  `or replace the 2bit by uploading a new one with the same name.`);
+            return;
+        }
         // Only warn about hub.txt deletion if the user directly selected the hub.txt file,
         // not if it's being deleted as part of selecting a whole hub/directory
         let hasDirectlySelectedHubTxt = Object.values(directlySelected).some(d => d.fileType === "hub.txt");
@@ -1848,6 +1930,19 @@ var hubCreate = (function() {
 
         uppy.use(Uppy.Tus, tusOptions);
         uppy.use(BatchChangePlugin, {target: Uppy.Dashboard});
+        uppy.on('upload-error', (file, error, response) => {
+            // Replace tus's verbose default ("tus: unexpected response while
+            // uploading chunk, originated from request (method: PATCH, ...)")
+            // with the message our hook actually sent. Overwrite per-file
+            // state, global state.error (read by the StatusBar), and the
+            // info[] array (transient banner) - Uppy core populates all three
+            // with the wrapped message before this handler runs.
+            let cleanMsg = extractHookErrorMessage(error, response);
+            if (file) {
+                uppy.setFileState(file.id, {error: cleanMsg});
+            }
+            uppy.setState({error: cleanMsg, info: []});
+        });
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
             const d = new Date(metadata.lastModified);

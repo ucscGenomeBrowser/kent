@@ -242,6 +242,8 @@ else
         }
     if (errCatch->gotError)
         {
+        // App-level reject: exit 0 + RejectUpload=true is the tusd protocol for
+        // forwarding HTTPResponse verbatim. Non-zero gets wrapped.
         rejectUpload(response, errCatch->message->string);
         // must remove the tusd temp files so if the users tries again after a temp error
         // the upload will work
@@ -253,7 +255,7 @@ else
         // TODO: if the first mysql request in createNewTempHubForUpload() works but then
         // either of makeParentDirRows() or addHubSpaceRowForFile() fails, we need to also
         // drop any rows we may have added because the upload didn't full go through
-        exitStatus = 1;
+        exitStatus = 0;
         }
     errCatchEnd(errCatch);
     }
