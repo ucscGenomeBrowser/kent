@@ -1738,9 +1738,10 @@ return dy;
 }
 
 static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **badList)
-/* Make sure the tdb is a track type we grok. */
+/* Make sure the tdb is a track type we grok.  badList may be NULL to validate
+ * silently (no user-facing complaint about non-liftable types). */
 {
-if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) || 
+if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
     !( startsWith("bigBed", tdb->type) || \
        startsWith("bigWig", tdb->type) || \
        startsWith("bigDbSnp", tdb->type) || \
@@ -1752,7 +1753,8 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        sameString("bed", tdb->type) ||
        startsWith("bed ", tdb->type)))
     {
-    slAddHead(badList, tdb);
+    if (badList != NULL)
+        slAddHead(badList, tdb);
     return FALSE;
     }
 
@@ -1802,12 +1804,14 @@ else
     for(; tdb; tdb = nextTdb)
         {
         nextTdb = tdb->next;
-        if (!isParentVisible(cart, tdb) || !isSubtrackVisible(cart, tdb))
-            continue;
-        if (validateOneTdb(db, tdb, badList))
+        boolean visible = isParentVisible(cart, tdb) && isSubtrackVisible(cart, tdb);
+        // Lift all siblings of a visible subtrack, but only complain about
+        // non-liftable ones the user actually asked for (visible ones).
+        if (validateOneTdb(db, tdb, visible ? badList : NULL))
             {
             slAddHead(&validTdbs, tdb);
-            count++;
+            if (visible)
+                count++;
             }
         }
     }
