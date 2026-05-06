@@ -8869,7 +8869,7 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 // put up the My Variants dialog if the hg.conf statement is present
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
-    hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the my variants track\">Make Item</button>");
+    hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
     jsInline("var doMyVariants = true;\n");
     jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
     // Get existing project values for dropdown

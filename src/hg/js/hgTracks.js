@@ -649,7 +649,7 @@ var myVariants = {
         // Simple fields shown by default (matches hgc edit form style)
         const simpleFields = [
             { label: "Label", id: "name", type: "text", placeholder: "Optional item label",
-              info: "A short label for this variant, displayed in the browser." },
+              info: "A short label for this item, displayed in the browser." },
             { label: "Color", id: "color", type: "color" },
             { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
               info: "Reference allele sequence at this position." },
@@ -658,7 +658,7 @@ var myVariants = {
             { label: "Mouseover", id: "mouseover", type: "text", placeholder: "Short text shown on hover",
               info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed." },
             { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
-              info: "Longer notes or comments about this variant. Displayed on the details page." },
+              info: "Longer notes or comments about this item. Displayed on the details page." },
             { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
               info: "Group variants by project. Projects with no items are automatically removed from the list." },
         ];
@@ -940,7 +940,7 @@ var myVariants = {
             }
 
             // Add info icon
-            wrapper.appendChild(createInfoIcon("Group variants by project. Projects with no items are automatically removed from the list."));
+            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no items are automatically removed from the list."));
             container.appendChild(wrapper);
         };
 
@@ -1269,7 +1269,7 @@ var myVariants = {
                 $(this).dialog("close");
             };
             $(dialog).dialog({
-                title: "My Variants",
+                title: "My Annotations",
                 resizable: false,
                 height: "auto",
                 width: 580,
@@ -1375,7 +1375,7 @@ var myVariants = {
         .catch(error => {
             hideLoadingImage(loadingId);
             document.body.style.cursor = "";
-            warn("Error creating variant: " + error.message);
+            warn("Error creating annotation: " + error.message);
             console.error("Fetch error:", error);
         });
     },
@@ -1421,7 +1421,7 @@ var myVariants = {
             return;
         } else if (navPref === "stay") {
             // Stay here, just show message
-            warn("Variant created at " + variantChrom + ":" +
+            warn("Annotation created at " + variantChrom + ":" +
                  (variantStart+1).toLocaleString() + "-" + variantEnd.toLocaleString());
             return;
         }
@@ -1439,16 +1439,16 @@ var myVariants = {
         // Build message with position
         const msg = document.createElement("p");
         msg.style.marginBottom = "0.5em";
-        msg.innerHTML = "Variant created at <strong>" + posStr + "</strong>";
+        msg.innerHTML = "Annotation created at <strong>" + posStr + "</strong>";
         content.appendChild(msg);
 
         // Show dialog with buttons
         $(content).dialog({
-            title: "Variant Created",
+            title: "Annotation Created",
             modal: true,
             width: 450,
             buttons: {
-                "Go to Variant": function() {
+                "Go to Annotation": function() {
                     if (document.getElementById("myVariantsRememberNav").checked) {
                         localStorage.setItem("myVariants_navPref", "jump");
                     }
@@ -1470,7 +1470,7 @@ var myVariants = {
                 checkboxSpan.style.cssText = "display: inline-block; vertical-align: middle; margin-right: 1em;";
                 checkboxSpan.innerHTML = "<label><input type='checkbox' id='myVariantsRememberNav'> Remember this choice </label>";
                 checkboxSpan.appendChild(createInfoIcon(
-                    "Save your preference. Future variants outside the current view will automatically " +
+                    "Save your preference. Future annotations outside the current view will automatically " +
                     "use this choice. Reset via Configure page or cartReset."
                 ));
                 // Insert before the button set
@@ -2123,7 +2123,7 @@ var dragSelect = {
             }
         };
         if (typeof doMyVariants !== 'undefined' && doMyVariants) {
-            dragSelectButtons["Create Item"] = function() {
+            dragSelectButtons["Create Annotation"] = function() {
                 let data = {};
                 let pos = parsePosition(newPosition);
                 data.chrom = pos.chrom;

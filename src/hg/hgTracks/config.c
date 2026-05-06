@@ -783,7 +783,7 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     hPrintf("<TR><TD>");
     hPrintf("<input type='checkbox' id='resetMyVariantsNav' name='resetMyVariantsNav'>");
     hPrintf("</TD><TD>");
-    hPrintf("Reset 'My Variants' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
+    hPrintf("Reset 'My Annotations' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
     hPrintf("</TD></TR>\n");
     // Display current preference and clear localStorage on form submit if checkbox is checked
     jsInlineF(

@@ -1286,7 +1286,7 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE) && op && sameString(op, "myVa
     puts("Content-Type: text/plain\n");
     /* Keep track name stable so re-import replaces */
     char *userEnc = htmlEncode(user);
-    printf("track name=\"myVariants\" type=\"bed 9\" itemRgb=\"on\" visibility=\"pack\" shortLabel=\"My Variants\" longLabel=\"My Variants (%s)\"\n", userEnc);
+    printf("track name=\"myVariants\" type=\"bed 9\" itemRgb=\"on\" visibility=\"pack\" shortLabel=\"My Annotations\" longLabel=\"My Annotations (%s)\"\n", userEnc);
     freeMem(userEnc);
 
     struct dyString *query = dyStringNew(0);

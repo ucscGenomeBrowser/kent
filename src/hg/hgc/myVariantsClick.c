@@ -99,13 +99,13 @@ if ((row = sqlNextRow(sr)) != NULL)
         safef(varName, sizeof(varName), "%s_%s", trackName, "name");
         printf("<B>Label:</B> ");
         cgiMakeTextVar(varName, item->name, 17);
-        printInfoIcon("A short label for this variant, displayed in the browser.");
+        printInfoIcon("A short label for this annotation, displayed in the browser.");
         printf("<BR>\n");
 
         /* Put up editable description. */
         safef(varName, sizeof(varName), "%s_%s", trackName, "description");
         printf("<B>Description:</B> ");
-        printInfoIcon("Longer notes or comments about this variant. Displayed on this details page.");
+        printInfoIcon("Longer notes or comments about this annotation. Displayed on this details page.");
         printf("<BR>\n");
         cgiMakeTextArea(varName, item->description, 8, 80);
         printf("<BR>\n");
@@ -186,7 +186,7 @@ if ((row = sqlNextRow(sr)) != NULL)
                 }
             else
                 cgiMakeTextVar(varName, item->project, 40);
-            printInfoIcon("Group variants by project.");
+            printInfoIcon("Group annotations by project.");
             printf("<BR>\n");
             }
 

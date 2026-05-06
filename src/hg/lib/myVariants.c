@@ -612,8 +612,8 @@ trashDirReusableFile(&tn, "ct", base, ".bed");
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
     fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
-        " visibility=\"pack\" shortLabel=\"My Variants\""
-        " longLabel=\"My Variants (%s)\"\n", encodedTableName, encodedTableName);
+        " visibility=\"pack\" shortLabel=\"My Annotations\""
+        " longLabel=\"My Annotations (%s)\"\n", encodedTableName, encodedTableName);
 if (dyStringLen(sharedLines) > 0)
     fprintf(f, "%s", dyStringContents(sharedLines));
 carefulClose(&f);
