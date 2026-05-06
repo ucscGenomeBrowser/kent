@@ -30,3 +30,7 @@ HGDP1kG	sas	South Asian	gnomad_AC_sas	gnomad_AF_sas
 GREGoR	AFF	Affected	AC_AFFECTED	.
 GREGoR	UNA	Unaffected	AC_UNAFFECTED	.
 GREGoR	UNK	Unknown	AC_UNKNOWN	.
+# NPM Singapore (SG10K_Health) ancestry groups
+NPM	Chinese	Singapore Chinese	AC_SgChinese	AF_SgChinese
+NPM	Malay	Singapore Malay	AC_SgMalay	AF_SgMalay
+NPM	Indian	Singapore Indian	AC_SgIndian	AF_SgIndian
