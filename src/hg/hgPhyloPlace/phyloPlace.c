@@ -2314,7 +2314,7 @@ puts("<th>Acceptor clade"
      TOOLTIP("Nextstrain clade in which the acceptor node was placed")
      "</th>");
 puts("<th>Acceptor lineage"
-     TOOLTIP("Pango lineage in which the donor node was placed")
+     TOOLTIP("Pango lineage in which the acceptor node was placed")
      "</th>");
 puts("<th>Breakpoint 1 range"
      TOOLTIP("Coordinate range, bounded by mutations explained by the donor node at lower "
@@ -3528,7 +3528,8 @@ pthread_t *metadataPthread = mayStartLoaderPthread(metadataFile, loadMetadataWor
 struct usherResults *results = NULL;
 char *anchorFile = phyloPlaceRefSettingPath(org, refName, "anchorSamples");
 char *ripplesEnabledSetting = phyloPlaceOrgSetting(org, "ripplesEnabled");
-boolean ripplesEnabled = (isNotEmpty(ripplesEnabledSetting) && SETTING_IS_ON(ripplesEnabledSetting));
+boolean ripplesEnabled = (isNotEmpty(ripplesEnabledSetting) && SETTING_IS_ON(ripplesEnabledSetting) &&
+                          cartUsualBoolean(cart, "doRipples", FALSE));
 boolean doRipples = (ripplesEnabled && slCount(sampleIds) <= MAX_RIPPLES_SEARCH);
 if (vcfTn)
     {

@@ -16,7 +16,7 @@ superTrack on
         itemRgb on
         maxWindowToDraw 5000000
         priority 0.1
-        #mouseOver $aaChange $dnaChange
+        mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
         # Variant type and consequence filters
         filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
         filterLabel.varType Variant Type
@@ -383,7 +383,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
         visibility dense
-        dataVersion Pilot 2019 (GRCh37 lifted to hg38 with CrossMap)
+        dataVersion Pilot 2019 (lifted to hg38, May 2026)
 
         track gaspIndel
         shortLabel GenomeAsia 1.7k Indels
@@ -392,7 +392,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.indels.vcf.gz
         visibility dense
-        dataVersion Pilot 2019 (GRCh37 lifted to hg38 with CrossMap)
+        dataVersion Pilot 2019 (lifted to hg38, May 2026)
         html gasp
 
         track abraom
@@ -415,7 +415,7 @@ superTrack on
 
         track kova
         shortLabel Korea KOVA 5.3k mixed
-        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.5k WES
+        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.4k WES
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz

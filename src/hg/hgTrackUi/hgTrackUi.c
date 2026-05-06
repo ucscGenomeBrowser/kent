@@ -2942,6 +2942,12 @@ jsInline("$('#superTrackTable .vizSelect').hide();");
 // value set on a subtrack always overrides the supertrack's.
 if (bedHasFilters(superTdb))
     {
+    // scoreCfgUi (called below with title==NULL) emits a <br> and an empty <p>
+    // before the filter table; the wrapper + scoped style below hides them
+    // without touching shared code other callers rely on.
+    puts("<div class='superTrackFiltersWrap'>");
+    puts("<style>.superTrackFiltersWrap > br:first-of-type, "
+         ".superTrackFiltersWrap > p:empty { display:none; }</style>");
     puts("<h3 style='margin-top:1em'>Filters: ");
     printInfoIcon("Filter values set here apply to every track in this "
                   "container. A filter set directly on an individual track "
@@ -2951,6 +2957,7 @@ if (bedHasFilters(superTdb))
     // banner. The container <h3> above is already the section label.
     scoreCfgUi(database, cart, superTdb, superTdb->track,
                NULL, 1000, /*boxed=*/FALSE);
+    puts("</div>");
     }
 }
 

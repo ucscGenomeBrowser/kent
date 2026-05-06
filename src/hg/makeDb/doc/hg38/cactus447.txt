@@ -1370,7 +1370,6 @@ done
 	time wigEncode primates.wigFix phyloP447wayPrimates.wig phyloP447wayPrimates.wib
 # Converted primates.wigFix, upper limit 1.59, lower limit -20.00
 # real    9m17.113s
-XXX - running - Wed Aug 30 13:59:09 PDT 2023
 
 # -rw-rw-r--   1  2874168445 Aug 30 14:08 phyloP447wayPrimates.wib
 # -rw-rw-r--   1   320006223 Aug 30 14:08 phyloP447wayPrimates.wig
