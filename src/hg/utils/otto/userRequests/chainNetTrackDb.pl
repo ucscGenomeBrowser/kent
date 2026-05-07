@@ -74,7 +74,7 @@ my $Query = ucfirst($qAcc);
 ##############################################################################
 # look up target metadata from dbDb
 ##############################################################################
-my $tRow = `hgsql -N -e 'SELECT organism,scientificName,taxId,description FROM dbDb WHERE name="$targetDb"' hgcentraltest 2>/dev/null`;
+my $tRow = `/cluster/bin/x86_64/hgsql -N -e 'SELECT organism,scientificName,taxId,description FROM dbDb WHERE name="$targetDb"' hgcentraltest 2>/dev/null`;
 chomp $tRow;
 if (length($tRow) < 1) {
   printf STDERR "ERROR: target db '%s' not found in hgcentraltest.dbDb\n", $targetDb;
@@ -96,7 +96,7 @@ if ($qAcc =~ /^GC[AF]_/) {
   # GenArk: get commonName/scientificName/taxId/asmName from the genark
   # table; only fall back to assembly_report.txt for the assembly date,
   # which the genark table does not carry.
-  my $gRow = `hgsql -N -e 'SELECT commonName,scientificName,taxId,asmName FROM genark WHERE gcAccession="$qAcc"' hgcentraltest 2>/dev/null`;
+  my $gRow = `/cluster/bin/x86_64/hgsql -N -e 'SELECT commonName,scientificName,taxId,asmName FROM genark WHERE gcAccession="$qAcc"' hgcentraltest 2>/dev/null`;
   chomp $gRow;
   if (length($gRow) < 1) {
     printf STDERR "ERROR: GenArk accession '%s' not found in hgcentraltest.genark\n", $qAcc;
@@ -136,7 +136,7 @@ if ($qAcc =~ /^GC[AF]_/) {
   }
 } else {
   # UCSC native: dbDb has organism, sciName, taxId, description
-  my $qRow = `hgsql -N -e 'SELECT organism,scientificName,taxId,description FROM dbDb WHERE name="$qAcc"' hgcentraltest 2>/dev/null`;
+  my $qRow = `/cluster/bin/x86_64/hgsql -N -e 'SELECT organism,scientificName,taxId,description FROM dbDb WHERE name="$qAcc"' hgcentraltest 2>/dev/null`;
   chomp $qRow;
   if (length($qRow) < 1) {
     printf STDERR "ERROR: query db '%s' not found in hgcentraltest.dbDb\n", $qAcc;
