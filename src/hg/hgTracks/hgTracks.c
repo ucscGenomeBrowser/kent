@@ -8965,7 +8965,7 @@ printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><b
        "track hubs, bigBed, bigWig, and similar files. "
        "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
        "for more information'>"
-       "<a>&#9432;</a></span>", encoded);
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
 freeMem(encoded);
 dyStringFree(&dy);
 }
