@@ -649,7 +649,7 @@ var myVariants = {
         // Simple fields shown by default (matches hgc edit form style)
         const simpleFields = [
             { label: "Label", id: "name", type: "text", placeholder: "Optional item label",
-              info: "A short label for this item, displayed in the browser." },
+              info: "A short label for this annotation, displayed in the browser." },
             { label: "Color", id: "color", type: "color" },
             { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
               info: "Reference allele sequence at this position." },
@@ -658,9 +658,9 @@ var myVariants = {
             { label: "Mouseover", id: "mouseover", type: "text", placeholder: "Short text shown on hover",
               info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed." },
             { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
-              info: "Longer notes or comments about this item. Displayed on the details page." },
+              info: "Longer notes or comments about this annotation. Displayed on the details page." },
             { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
-              info: "Group variants by project. Projects with no items are automatically removed from the list." },
+              info: "Group annotations by project. Projects with no annotations are automatically removed from the list." },
         ];
 
         // Advanced fields hidden by default
@@ -940,7 +940,7 @@ var myVariants = {
             }
 
             // Add info icon
-            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no items are automatically removed from the list."));
+            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no annotations are automatically removed from the list."));
             container.appendChild(wrapper);
         };
 
