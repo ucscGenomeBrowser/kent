@@ -59,3 +59,5 @@ track ucscGenePfam override
 shortLabel Pfam in GENCODE
 longLabel Pfam Domains in GENCODE Genes
 html gencodePfam
+
+include vgp577way.trackDb.ra alpha
