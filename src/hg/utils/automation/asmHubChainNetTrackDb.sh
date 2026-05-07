@@ -127,10 +127,10 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
     linGap=""
     minScore=""
   else
-    organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
-    sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
-    taxId=`hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
-    o_date=`hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
+    organism=`/cluster/bin/x86_64/hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
+    sciName=`/cluster/bin/x86_64/hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
+    taxId=`/cluster/bin/x86_64/hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
+    o_date=`/cluster/bin/x86_64/hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
     matrix=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep matrix`
     minScore=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep MinScore`
    linGap=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep LinearGap`
