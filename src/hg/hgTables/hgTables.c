@@ -1271,6 +1271,8 @@ else if (isCustomTrack(table) || startsWith("myVariants_", table))
                 ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
                 }
             fieldList = sqlListFields(conn, ct->dbTableName);
+            if (startsWith("myVariants_shared_", table))
+                myVariantsStripHiddenFields(&fieldList);
             }
         hFreeConn(&conn);
         }

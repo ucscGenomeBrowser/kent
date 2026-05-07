@@ -430,6 +430,8 @@ if (asObj)
 	}
     if (fieldList == NULL)
         fieldList = asColNames(asObj);
+    if (startsWith("myVariants_shared_", table))
+        myVariantsStripHiddenFields(&fieldList);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     asObjectFree(&asObj);
     slNameFreeList(&fieldList);
@@ -597,6 +599,12 @@ for (var = varList; var != NULL; var = var->next)
 if (fieldList == NULL)
     errAbort("Please go back and select at least one field");
 slReverse(&fieldList);
+
+/* Drop owner-hidden columns so a recipient can't request them by name. */
+if (startsWith("myVariants_shared_", table))
+    myVariantsStripHiddenFields(&fieldList);
+if (fieldList == NULL)
+    errAbort("Please go back and select at least one field");
 
 /* Do output. */
 char sep = sameString(cartUsualString(cart, hgtaOutSep, outTab), outTab) ? '\t' : ',';
@@ -1510,9 +1518,9 @@ for (pat = *pPatList;  pat != NULL;  pat = nextPat)
 *pPatList = patListOut;
 }
 
-char *filterClause(char *db, char *table, char *chrom, char *extraClause)
-/* Get filter clause (something to put after 'where')
- * for table */
+static char *filterClauseInner(char *db, char *table, char *chrom, char *extraClause)
+/* Build the cart-driven filter WHERE clause; extraClause is appended verbatim
+ * if non-empty. Caller frees. */
 {
 struct sqlConnection *conn = NULL;
 char varPrefix[128];
@@ -1710,6 +1718,31 @@ else
 	sqlDyStringPrintf(dy, " and %-s", extraClause);
     return dyStringCannibalize(&dy);
     }
+}
+
+char *filterClause(char *db, char *table, char *chrom, char *extraClause)
+/* Get filter clause (something to put after 'where')
+ * for table */
+{
+/* For shared myVariants tracks, fold the share's project/db scope into
+ * extraClause so the recipient can only query rows the owner authorized. */
+char *myVarScope = myVariantsSharedScopeWhere(table, cart);
+char *combined = NULL;
+if (isNotEmpty(myVarScope))
+    {
+    if (isNotEmpty(extraClause))
+        {
+        struct dyString *m = sqlDyStringCreate("(%-s) and (%-s)", extraClause, myVarScope);
+        combined = dyStringCannibalize(&m);
+        }
+    else
+        combined = cloneString(myVarScope);
+    }
+freeMem(myVarScope);
+char *result = filterClauseInner(db, table, chrom,
+    combined ? combined : extraClause);
+freeMem(combined);
+return result;
 }
 
 

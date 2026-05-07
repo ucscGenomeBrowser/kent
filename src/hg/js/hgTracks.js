@@ -650,7 +650,7 @@ var myVariants = {
         const simpleFields = [
             { label: "Label", id: "name", type: "text", placeholder: "Optional item label",
               info: "A short label for this annotation, displayed in the browser." },
-            { label: "Color", id: "color", type: "color" },
+            { label: "Color", id: "color", type: "text" },
             { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
               info: "Reference allele sequence at this position." },
             { label: "Alt", id: "alt", type: "text", placeholder: "Optional alternate allele sequence",
@@ -842,7 +842,6 @@ var myVariants = {
                 input.value = ".";
             }
             if (field.id === "color") {
-                input.type = "text";
                 input.value = "#000000";
                 input.style.width = "70px";
             }
@@ -2143,7 +2142,7 @@ var dragSelect = {
                 $.ajax({
                         type: "POST",
                         url: "../cgi-bin/hgTracks",
-                        data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants`),
+                        data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants&hgsid=${getHgsid()}`),
                         dataType: "html",
                         trueSuccess: imageV2.updateImgAndMap,
                         success: catchErrorOrDispatch,
