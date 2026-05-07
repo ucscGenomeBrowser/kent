@@ -1,12 +1,6 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-ifeq (${USE_TABIX},1)
-    TABIX_TESTS=tabixTest vcfTest
-else
-    TABIX_TESTS=
-endif
-
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
@@ -15,7 +9,7 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    ${TABIX_TESTS} hacTreeTest mmHashTest testSumDoubles jsonQueryTest
+    tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -311,7 +305,8 @@ ${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
 
 # vcf:
 vcfTester=${BIN_DIR}/vcfParseTest
-vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes vcfParseOldV3
+vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes vcfParseOldV3 \
+	vcfHeader1kGNoGenotypes vcfHeader1kGWithGenotypes vcfHeaderOldV3
 
 vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2 26790859 194631353 > output/$@.out
@@ -323,6 +318,22 @@ vcfParse1kGWithGenotypes: ${vcfTester} mkdirs
 
 vcfParseOldV3:
 	${vcfTester} input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz 1 3000 50000 >& output/$@.out
+	diff expected/$@.out output/$@.out
+
+# Regression tests for the tabix header-read path (htslib >= 1.21 tbx_readrec
+# strips meta_char lines, so the VCF header must be read off the htsFile
+# directly, not via the tabix iterator).  These check version, def counts, and
+# sample IDs -- all of which silently degrade if the header parser sees nothing.
+vcfHeader1kGNoGenotypes: ${vcfTester} mkdirs
+	${vcfTester} -headerOnly input/YRI.trio.2010_06.novelsequences.sites.vcf.gz > output/$@.out
+	diff expected/$@.out output/$@.out
+
+vcfHeader1kGWithGenotypes: ${vcfTester} mkdirs
+	${vcfTester} -headerOnly input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz > output/$@.out
+	diff expected/$@.out output/$@.out
+
+vcfHeaderOldV3: ${vcfTester} mkdirs
+	${vcfTester} -headerOnly input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz > output/$@.out
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}
