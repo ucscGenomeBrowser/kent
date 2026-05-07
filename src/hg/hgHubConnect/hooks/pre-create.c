@@ -134,11 +134,7 @@ else
             char *hubName = reqParentDir ? hubNameFromPath(reqParentDir) : "";
             char *existingHubType = existingHubTypeForDir(userName, hubName);
             if (!sameOk(existingHubType, "assemblyHub"))
-                errAbort("Genome name '%s' collides with a UCSC native assembly or GenArk hub. "
-                         "hgTracks would load the UCSC assembly instead of your 2bit. "
-                         "Open the file card and pick a different name for your "
-                         "assembly (e.g. '%s_hub') in the Genome field.",
-                         reqGenome, reqGenome);
+                errAbort(HUB_GENOME_COLLISION_ERR_FMT, reqGenome, reqGenome);
             }
 
         // we've passed all the checks so we can return that we are good to upload the file

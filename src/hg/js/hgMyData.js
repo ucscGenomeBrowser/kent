@@ -167,16 +167,18 @@ let uppyOptions = {
                 // with genomeLocked are pinned by a hub-defining sibling or
                 // the hub they were drilled into.
                 let isTwoBit = file.meta.fileType === "2bit";
+                let isHubTxt = looksLikeHubTxt(file);
                 let isLocked = !!file.meta.genomeLocked;
                 if (isTwoBit || isLocked) {
                     let editable2bit = isTwoBit && !isLocked;
+                    let batchHasHubTxt = uppy.getFiles().some(looksLikeHubTxt);
                     let label;
                     if (editable2bit) {
                         label = "Genome name for your assembly hub:";
-                    } else if (isTwoBit) {
-                        label = "Genome (set by hub.txt in this batch):";
+                    } else if (isHubTxt || (isTwoBit && batchHasHubTxt)) {
+                        label = "Genome (locked by hub.txt - edit hub.txt locally and re-add to change):";
                     } else {
-                        label = "Genome (set by the assembly hub):";
+                        label = "Genome (locked by this assembly hub):";
                     }
                     return h('div', {
                             class: "uppy-Dashboard-FileCard-label",
@@ -612,7 +614,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 batchDbLabel.for = "batchAsmHubGenome";
 
                 let note = document.createElement("div");
-                note.textContent = "(assembly hub - genome is set by the 2bit in this batch)";
+                note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
                 note.style.gridArea = "2 / 3 / 2 / 5";
                 note.style.margin = "auto 0";
                 note.style.fontStyle = "italic";
@@ -728,15 +730,19 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     f => f.id !== file.id && looksLikeTwoBit(f));
                 if (existingTwoBits.length > 0) {
                     this.uppy.removeFile(file.id);
-                    // setState({error}) puts the message in the StatusBar at
-                    // the bottom of the dashboard where it stays until the
-                    // user clicks Upload (which clears state.error) or closes
-                    // the dashboard. Persistent, unlike uppy.info().
-                    this.uppy.setState({
-                        error: `Only one 2bit file per hub is supported. ` +
-                               `Already have "${existingTwoBits[0].name}"; ignoring ` +
-                               `"${file.name}". Split them into separate hubs.`
-                    });
+                    // Close the file card if it auto-opened for the first 2bit;
+                    // otherwise it covers the error banner.
+                    const dash = this.uppy.getPlugin("Dashboard");
+                    if (dash) dash.toggleFileCard(false);
+                    // Long duration so the user has time to read it; the
+                    // StatusBar (setState.error) truncates to "Upload failed"
+                    // and hides the message behind a "?" icon.
+                    this.uppy.info(
+                        `Only one 2bit file per hub is allowed. ` +
+                        `"${existingTwoBits[0].name}" was added; ` +
+                        `"${file.name}" was not. To create a separate ` +
+                        `hub for "${file.name}", upload it on its own.`,
+                        'error', 15000);
                     return;
                 }
             }
@@ -1183,7 +1189,7 @@ var hubCreate = (function() {
         }
         if (blockedTwoBits.length > 0) {
             let names = blockedTwoBits.map(d => d.fullPath).join("\n  ");
-            alert(`Cannot delete the following 2bit file(s) because they define ` +
+            alert(`Cannot delete the following 2bit file(s) because they are part of ` +
                   `an assembly hub:\n  ${names}\n\nDelete the whole hub instead, ` +
                   `or replace the 2bit by uploading a new one with the same name.`);
             return;
@@ -1942,6 +1948,16 @@ var hubCreate = (function() {
                 uppy.setFileState(file.id, {error: cleanMsg});
             }
             uppy.setState({error: cleanMsg, info: []});
+            // Long-duration banner so the user has time to read the message;
+            // the StatusBar truncates to "Upload failed" and hides the rest
+            // behind a "?" icon.
+            uppy.info(cleanMsg, 'error', 30000);
+            // Genome-name collision is fixable in place by editing the 2bit's
+            // genome field, so reopen the file card.
+            if (file && cleanMsg && cleanMsg.includes(hubGenomeCollisionErrFrag)) {
+                const dash = uppy.getPlugin("Dashboard");
+                if (dash) dash.toggleFileCard(true, file.id);
+            }
         });
         uppy.on('upload-success', (file, response) => {
             const metadata = file.meta;
