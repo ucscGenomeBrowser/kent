@@ -2123,7 +2123,7 @@ var dragSelect = {
             }
         };
         if (typeof doMyVariants !== 'undefined' && doMyVariants) {
-            dragSelectButtons["Create Annotation"] = function() {
+            dragSelectButtons["Add Annotation"] = function() {
                 let data = {};
                 let pos = parsePosition(newPosition);
                 data.chrom = pos.chrom;
