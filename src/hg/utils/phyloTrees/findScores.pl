@@ -97,19 +97,45 @@ if (length($chainFile) < 1) {
     $chainFile = `ls -rtd $searchDir/doChain 2> /dev/null | tail -1`;
 }
 
+# New galaxy/kegAlign workflow: parameters live in a *.yaml in the lastz dir
+my $yamlFile = "";
 if (length($chainFile) < 1) {
+    if ($targetDb =~ m/^GC/) {
+      $targetDir = asmHubPath($targetDb);
+      $yamlFile = `ls -rtd $targetDir/trackData/lastz.$queryDb/*.yaml 2> /dev/null | tail -1`;
+    } else {
+      $targetDir = "$hiveData/$targetDb";
+      $yamlFile = `ls -rtd $targetDir/bed/*lastz.$queryDb/*.yaml 2> /dev/null | tail -1`;
+    }
+    chomp $yamlFile;
+}
+# swapped target/query
+if (length($chainFile) < 1 && length($yamlFile) < 1) {
+    if ($queryDb =~ m/^GC/) {
+      $targetDir = asmHubPath($queryDb);
+      $yamlFile = `ls -rtd $targetDir/trackData/lastz.$targetDb/*.yaml 2> /dev/null | tail -1`;
+    } else {
+      $targetDir = "$hiveData/$queryDb";
+      $yamlFile = `ls -rtd $targetDir/bed/*lastz.$targetDb/*.yaml 2> /dev/null | tail -1`;
+    }
+    chomp $yamlFile;
+}
+
+if (length($chainFile) < 1 && length($yamlFile) < 1) {
     $targetDir = "$hiveData/$targetDb";
     $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run";
-    printf STDERR "ERROR: do not find any chain.csh in:\n\n$searchDir\n\n";
+    printf STDERR "ERROR: do not find any chain.csh or *.yaml in:\n\n$searchDir\n\n";
     $targetDir = "$hiveData/$queryDb";
     $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run";
-    printf STDERR "ERROR: do not find any chain.csh in:\n\n$searchDir\n\n";
+    printf STDERR "ERROR: do not find any chain.csh or *.yaml in:\n\n$searchDir\n\n";
     usage;
     exit 255;
 }
 
-printf STDERR "looking in file:\n  $chainFile\n";
 my %foundSome;
+
+if (length($chainFile) > 0) {
+printf STDERR "looking in file:\n  $chainFile\n";
 
 open (FH, "<$chainFile") or die "can not read $chainFile";
 while (my $line = <FH>) {
@@ -134,6 +160,33 @@ while (my $line = <FH>) {
 	}
     }
 }
+close (FH);
+} elsif (length($yamlFile) > 0) {
+printf STDERR "looking in yaml file:\n  $yamlFile\n";
+
+open (FH, "<$yamlFile") or die "can not read $yamlFile";
+my $section = "";
+while (my $line = <FH>) {
+    chomp $line;
+    next if ($line =~ m/^\s*#/);
+    if ($line =~ m/^(\S+):/) {		# top-level key, no indent
+	$section = $1;
+	if ($line =~ m/^axtChainMinScore:\s*(\S+)/) {
+	    $foundSome{'-minScore'} = $1;
+	    printf "chainMinScore %s\n", $1;
+	}
+    } elsif ($section eq "axtChainLinearGap"
+	     && $line =~ m/^\s+path:\s*(\S+)/) {
+	my $tag = $1;
+	$tag =~ s|.*/||;		# basename
+	$tag =~ s|^axtChain\.||;	# axtChain.loose.txt -> loose.txt
+	$tag =~ s|\.txt$||;		# -> loose
+	$foundSome{'-linearGap'} = $tag;
+	printf "chainLinearGap %s\n", $tag;
+    }
+}
+close (FH);
+}
 my $foundCount = 0;
 foreach my $key (keys %foundSome) {
     ++$foundCount;
@@ -148,7 +201,6 @@ if (! exists($foundSome{'-scoreScheme'}) ) {
 if (! exists($foundSome{'-linearGap'}) ) {
     printf "chainLinearGap loose\n";
 }
-close (FH);
 
 
 __END__
