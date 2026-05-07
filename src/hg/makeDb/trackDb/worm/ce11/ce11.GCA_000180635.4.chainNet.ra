@@ -1,0 +1,49 @@
+##############################################################################
+# GCA_000180635.4 - nematode P.pacificus (PS312 2020) - Pristionchus pacificus - taxId: 54126
+##############################################################################
+track chainNetGCA_000180635.4
+compositeTrack on
+shortLabel nematode P.pacificus (PS312 2020) Chain/Net
+longLabel nematode P.pacificus (PS312 2020) (Nov. 2020 GCA_000180635.4_El_Paco_v._4), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_000180635.4
+html chainNet
+
+    track chainNetGCA_000180635.4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_000180635.4
+    spectrum on
+
+        track chainGCA_000180635.4
+        parent chainNetGCA_000180635.4Viewchain
+        subGroups view=chain
+        shortLabel nematode P.pacificus (PS312 2020) Chain
+        longLabel nematode P.pacificus (PS312 2020) (Nov. 2020 GCA_000180635.4_El_Paco_v._4) Chained Alignments
+        type bigChain GCA_000180635.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_000180635.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_000180635.4Link.bb
+
+        track chainLiftOverGCA_000180635.4
+        parent chainNetGCA_000180635.4Viewchain
+        subGroups view=chain
+        shortLabel nematode P.pacificus (PS312 2020) liftOverChain
+        longLabel nematode P.pacificus (PS312 2020) (Nov. 2020 GCA_000180635.4_El_Paco_v._4) Lift Over Chained Alignments
+        type bigChain GCA_000180635.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_000180635.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_000180635.4Link.bb
+
