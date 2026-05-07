@@ -1681,12 +1681,10 @@ while ((hel = hashNext(&cookie)) != NULL)
         char buffer[1024];
 
         safef(buffer, sizeof buffer, "%s_sel", tdb->track);
-        char *cartSelected = cartOptionalString(cart, tdb->track);
+        char *cartSelected = cartOptionalString(cart, buffer);
         if (cartSelected != NULL)
             {
-            char *str = "off";
-            if (sameString(cartSelected, "1"))
-                str = "on";
+            char *str = (sameWord(cartSelected, "on") || atoi(cartSelected) > 0) ? "on" : "off";
             dyStringPrintf(dy, "parent %s %s\n", trackHubSkipHubName(tdb->parent->track), str);
             }
         else
