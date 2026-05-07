@@ -260,6 +260,7 @@ jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), d
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
+jsInlineF("\nvar hubGenomeCollisionErrFrag=\"%s\";\n", HUB_GENOME_COLLISION_ERR_FRAG);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

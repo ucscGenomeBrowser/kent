@@ -8,6 +8,16 @@
 
 #include "hubSpace.h"
 
+// 2bit genome-name collision error. Shared with the JS client so it
+// can identify this error from the message.
+#define HUB_GENOME_COLLISION_ERR_FRAG \
+    "matches an existing UCSC native assembly or GenArk hub"
+
+#define HUB_GENOME_COLLISION_ERR_FMT \
+    "Genome name '%s' " HUB_GENOME_COLLISION_ERR_FRAG ". " \
+    "The Genome Browser will load the UCSC assembly instead of your 2bit. " \
+    "Edit the Genome field and try a different name (e.g. '%s_hub')."
+
 struct userFiles
 {
 char *userName;
