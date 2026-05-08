@@ -60,7 +60,7 @@ dbs="$@"
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
     local db="$1"
-    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    local dbChk=$(/cluster/bin/x86_64/hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
         return 1
@@ -112,7 +112,7 @@ loadDbTracks() {
         topts="$topts -gbdbList=$gbdbList"
     fi
     # don't use set -x, since the autoload scripts e-mail stderr.
-    local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
+    local cmd="$HOME/bin/x86_64/hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
     echo $cmd
     eval $cmd
 
@@ -140,7 +140,7 @@ loadDbTracks() {
 	fi
     fi
     if [ -n "$grpSql" ] ; then
-        cmd="hgsql $db < $grpSql"
+        cmd="/cluster/bin/x86_64/hgsql $db < $grpSql"
         echo $cmd
         eval $cmd
     fi
