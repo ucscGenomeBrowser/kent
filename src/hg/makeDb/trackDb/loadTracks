@@ -116,11 +116,11 @@ loadDbTracks() {
     echo $cmd
     eval $cmd
 
-    cmd="tdbQuery $qopts 'select count(*) from $db' -root=`pwd`"
+    cmd="/cluster/bin/x86_64/tdbQuery $qopts 'select count(*) from $db' -root=`pwd`"
     echo $cmd
     eval $cmd
 
-    cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
+    cmd="/cluster/bin/x86_64/hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
     eval $cmd
     if [ -n "$noHtmlCheck" -a -f $dbpath/description.html ] ; then

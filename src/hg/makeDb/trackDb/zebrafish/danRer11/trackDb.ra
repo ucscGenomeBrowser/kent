@@ -34,3 +34,4 @@ include choriCloneEnds.ra
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
+include danRer11.GCA_052040795.1.chainNet.ra alpha
