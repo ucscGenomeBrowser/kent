@@ -684,6 +684,11 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     {
     hti = wikiHti();
     }
+else if (trackHubDatabase(db))
+    {
+    /* Hub assemblies have no SQL database; can't look up table via hFindTableInfo. */
+    hti = NULL;
+    }
 else
     {
     char *track;
@@ -969,8 +974,9 @@ else if (track != NULL && !tdbIsComposite(track))
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
- * use the first field. */
-if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
+ * use the first field.  Skip for hub assemblies, which have no SQL database. */
+if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos)
+    && !trackHubDatabase(db))
     {
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);

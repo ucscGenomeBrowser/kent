@@ -693,8 +693,14 @@ printStep(stepNumber++);
     // note that fullTableToTdbHash track hash is missing many tables including knownCanonical so cannot use it. 
     if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
         {
-        hti = getHti(database, curTable, conn);
-        isPositional = htiIsPositional(hti);
+        hti = maybeGetHti(database, curTable, conn);
+        if (hti != NULL)
+            isPositional = htiIsPositional(hti);
+        else if (trackHubDatabase(database))
+            /* Hub assembly: assume positional when we can't look up table info. */
+            isPositional = TRUE;
+        else
+            errAbort("Could not find table info for table %s in db %s", curTable, database);
         }
     isLongTabix = isLongTabixTable( curTable);
     isBam = isBamTable(curTable);
