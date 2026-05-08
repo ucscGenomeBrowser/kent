@@ -16,7 +16,7 @@ dbs="$@"
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
     local db="$1"
-    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    local dbChk=$(/cluster/bin/x86_64/hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
         return 1
@@ -34,11 +34,11 @@ buildDbTrix() {
     local tmpFile=`mktemp`;
     local tmpFile2=`mktemp`;
     local tmpFile3=`mktemp`;
-    makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
+    /cluster/bin/x86_64/makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
-        ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
+        /cluster/bin/x86_64/ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
         # trixContextIndex makes the $db_$trixName.offsets and $db_$trixName.offsets.ixx files:
-        trixContextIndex $tmpFile ${db}_${trixName}
+        /cluster/bin/x86_64/trixContextIndex $tmpFile ${db}_${trixName}
         chmod 664  $tmpFile2 $tmpFile3 $tmpFile ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
         rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
         rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
