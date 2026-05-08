@@ -77,11 +77,20 @@ struct grp *showGroupField(char *groupVar, char *event, char *groupScript,
 {
 struct grp *group, *groupList = fullGroupList;
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
+/* If the saved selection is a QuickLift group, fall back to a visible default
+ * since QuickLift groups are filtered from the dropdown below. */
+if (selGroup != NULL && startsWith("QuickLift", selGroup->label))
+    {
+    cartRemove(cart, groupVar);
+    selGroup = findSelectedGroup(groupList, groupVar);
+    }
 hPrintf("<label for='%s'><B>Group:</B></label>\n", groupVar);
 hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
 jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
+    if (startsWith("QuickLift", group->label))
+        continue;
     if (allTablesOk || differentString(group->name, "allTables"))
         hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", group->name,
                 (group == selGroup ? " SELECTED" : ""),

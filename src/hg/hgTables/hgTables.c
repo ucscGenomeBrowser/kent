@@ -349,6 +349,20 @@ if (isNoGenomeDisabled(db, table))
              "Please go back and choose a position range.", table);
 }
 
+void checkNoQuickLift(struct trackDb *track)
+/* Before producing output, make sure the track isn't being remapped via
+ * QuickLift -- the underlying data is in the source assembly's coordinates,
+ * so output queries against the destination assembly's region won't make
+ * sense. */
+{
+if (track != NULL && trackDbSetting(track, "quickLiftUrl") != NULL)
+    errAbort("Get output is not supported for QuickLift tracks.  "
+             "QuickLift remaps tracks from another assembly on the fly for display, "
+             "but the underlying data is in the source assembly's coordinates.  "
+             "Please go back to the genome browser and switch to the source assembly "
+             "to retrieve this track's data.");
+}
+
 static int regionCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start */
 {
@@ -1496,6 +1510,7 @@ else
 	track = cTdb;
     }
 checkNoGenomeDisabled(database, table);
+checkNoQuickLift(track);
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&
