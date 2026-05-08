@@ -630,6 +630,11 @@ int nonEmptyGroupCount = 0;
 struct grp *grp;
 for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
     {
+    // QuickLift remaps tracks from another assembly on the fly for display, but the
+    // underlying data is in the source assembly's coordinates, so output queries against
+    // the destination assembly don't make sense.  Hide QuickLift groups from the UI.
+    if (startsWith("QuickLift", grp->label))
+        continue;
     struct slRef *tdbRefList = hashFindVal(groupedTrackRefList, grp->name);
     if (writeGroupedTrack(jw, grp->name, grp->label, fieldHash, excludeTypesHash,
                           maxDepth, tdbRefList))
