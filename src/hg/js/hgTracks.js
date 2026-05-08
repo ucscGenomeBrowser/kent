@@ -3731,7 +3731,7 @@ var rightClick = {
     mouseOverToExon: function(title)
     {
         var exonNum = 0;
-        var exonRe = /(Exon) ([1-9]+) /;
+        var exonRe = /(Exon) (\d+) /;
         var matches = exonRe.exec(title);
         if (matches !== null && matches[2].length > 0)
             exonNum = matches[2];
