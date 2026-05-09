@@ -1161,10 +1161,10 @@ long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl)
 long long itemCount = 0;
 hts_idx_t *idx = NULL;
 if (isNotEmpty(tbiFileOrUrl))
-    idx = hts_idx_load2(fileOrUrl, tbiFileOrUrl);
+    idx = hts_idx_load3(fileOrUrl, tbiFileOrUrl, HTS_FMT_TBI, 0);
 else
     {
-    idx = hts_idx_load(fileOrUrl, HTS_FMT_TBI);
+    idx = hts_idx_load3(fileOrUrl, NULL, HTS_FMT_TBI, 0);
     }
 if (idx == NULL)
     warn("vcfTabixItemCount: hts_idx_load(%s) failed.", tbiFileOrUrl ? tbiFileOrUrl : fileOrUrl);

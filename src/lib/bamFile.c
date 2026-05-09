@@ -83,19 +83,17 @@ errAbort("Downloading reference from %s. "
          "Please refresh screen to check download status.", server);
 }
 
-// If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
-// without worrying about the samtools lib creating local cache files in cgi-bin:
-
 static bam_index_t *tryIndexCandidates(samfile_t *sam, char *fileOrUrl, const char *ext)
 /* Try loading index by appending ext, then by replacing the suffix with ext.
- * Passes explicit index name to sam_index_load2 so htslib does not attempt
- * to download a remote index into the (non-writable) CWD. */
+ * Uses sam_index_load3 with flags=0 so remote indexes are read through the
+ * UDC hfile scheme handler instead of htslib downloading a local copy into
+ * the (non-writable) CWD. */
 {
 char indexName[4096];
 bam_index_t *ret = NULL;
 
 safef(indexName, sizeof indexName, "%s%s", fileOrUrl, ext);
-if ((ret = sam_index_load2(sam, fileOrUrl, indexName)) != NULL)
+if ((ret = sam_index_load3(sam, fileOrUrl, indexName, 0)) != NULL)
     return ret;
 
 safef(indexName, sizeof indexName, "%s", fileOrUrl);
@@ -103,7 +101,7 @@ char *lastDot = strrchr(indexName, '.');
 if (lastDot && (lastDot - indexName) + strlen(ext) < sizeof indexName)
     {
     strcpy(lastDot, ext);
-    ret = sam_index_load2(sam, fileOrUrl, indexName);
+    ret = sam_index_load3(sam, fileOrUrl, indexName, 0);
     }
 return ret;
 }
@@ -114,7 +112,7 @@ static bam_index_t *bamOpenIndexGivenUrl(samfile_t *sam, char *fileOrUrl, char *
  * The difference to bamOpenIndex is that the URL/filename of the index file can be specified. */
 {
 if (baiFileOrUrl != NULL)
-    return sam_index_load2(sam, fileOrUrl, baiFileOrUrl);
+    return sam_index_load3(sam, fileOrUrl, baiFileOrUrl, 0);
 
 const char *ext = (sam->format.format == cram) ? ".crai" : ".bai";
 return tryIndexCandidates(sam, fileOrUrl, ext);
@@ -322,11 +320,11 @@ long long bamFileItemCount(char *fileOrUrl, char *baiFileOrUrl)
 long long itemCount = 0;
 hts_idx_t *idx = NULL;
 if (isNotEmpty(baiFileOrUrl))
-    idx = hts_idx_load2(fileOrUrl, baiFileOrUrl);
+    idx = hts_idx_load3(fileOrUrl, baiFileOrUrl, HTS_FMT_BAI, 0);
 else
     {
     int format = endsWith(fileOrUrl, ".cram") ? HTS_FMT_CRAI : HTS_FMT_BAI;
-    idx = hts_idx_load(fileOrUrl, format);
+    idx = hts_idx_load3(fileOrUrl, NULL, format, 0);
     }
 if (idx == NULL)
     warn("bamFileItemCount: hts_idx_load(%s) failed.", baiFileOrUrl ? baiFileOrUrl : fileOrUrl);
