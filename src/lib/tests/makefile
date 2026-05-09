@@ -316,7 +316,7 @@ vcfParse1kGWithGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz 2 26793737 26794385 > output/$@.out
 	diff expected/$@.out output/$@.out
 
-vcfParseOldV3:
+vcfParseOldV3: ${vcfTester} mkdirs
 	${vcfTester} input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz 1 3000 50000 >& output/$@.out
 	diff expected/$@.out output/$@.out
 
