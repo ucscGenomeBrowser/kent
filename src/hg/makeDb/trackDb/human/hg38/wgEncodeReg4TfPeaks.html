@@ -1,37 +1,42 @@
 <h2>Description</h2>
 
-<p>This track displays regulatory regions in the human genome identified using ENCODE
-ChIP-seq data across all phases of the project. It highlights genomic regions bound by
-DNA-associated proteins involved in transcriptional regulation, including RNA polymerase,
-transcription factors (TFs), and chromatin remodeling proteins. Sequence-specific TFs bind
-directly to short DNA motifs via their DNA-binding domains, while other proteins associate
-indirectly through interactions with sequence-specific TFs. Chromatin immunoprecipitation
-followed by sequencing (ChIP-seq) is a high-throughput method used to map genome-wide
-protein&ndash;DNA interactions. Regions with high ChIP-seq signal&mdash;commonly referred
-to as peaks&mdash;frequently contain binding sites for the assayed protein. For each
-DNA-associated protein, ChIP-seq peaks from all ENCODE biosamples were integrated to define
-a set of representative peaks (rPeaks). This track displays these rPeaks along with detected
-DNA motif sites. For detailed information on individual factors and their motifs, please
-visit <a target="_blank" href="https://factorbook.org">Factorbook.org</a>.</p>
+<p>This track displays representative ChIP-seq peaks (rPeaks) and detected DNA motif
+sites for regulatory regions in the human genome, identified using ENCODE ChIP-seq data
+across all phases of the project. The regions are bound by DNA-associated proteins
+involved in transcriptional regulation, including RNA polymerase, transcription factors
+(TFs), and chromatin remodeling proteins. Sequence-specific TFs bind directly to short
+DNA motifs via their DNA-binding domains, while other proteins associate indirectly
+through interactions with sequence-specific TFs. Chromatin immunoprecipitation followed
+by sequencing (ChIP-seq) is a high-throughput method used to map genome-wide protein-DNA
+interactions. Regions with high ChIP-seq signal (peaks) frequently contain binding sites
+for the assayed protein. For each DNA-associated protein, ChIP-seq peaks from all ENCODE
+biosamples were integrated to define a set of representative peaks (rPeaks).
+For detailed information on individual factors and their motifs, see
+<a target="_blank" href="https://factorbook.org">Factorbook.org</a>.</p>
 
 <h2>Display Conventions and Configuration</h2>
 
-<p>Each rPeak is represented as a gray box, with the shade of gray corresponding to the
-maximum ChIP-seq signal observed across contributing biosamples. The HGNC gene name of the
-associated protein is displayed to the left of the box. If the rPeak overlaps a cognate TF
-motif site in the collection built previously (PMID: 37104580 DOI:
-<a target="_blank" href="https://www.science.org/doi/10.1126/science.abn7930">10.1126/science.abn7930</a>),
-the motif site is highlighted in green.</p>
+<p>Each rPeak is colored in shades of gray, with darker shades indicating higher
+maximum ChIP-seq signal across contributing biosamples (stored as a score from 0 to
+1,000). If the rPeak overlaps a cognate TF motif site from the collection in Andrews
+et al., 2023, the motif site is colored green using decorators. The Decoration settings
+control the draw style (block or glyph).</p>
 
-<p>Clicking on an rPeak provides detailed information about the biosamples where the rPeak
-was detected, including the count of biosamples with contributing ChIP-seq peaks and the
-total number of biosamples assayed for the protein. Links to relevant ENCODE ChIP-seq
-experiments and overlapping ENCODE candidate cis-regulatory elements (cCREs) are also
-provided.</p>
+<p>Low-scoring peaks render in very light gray by default; the
+<b>Shade of lowest-scoring items</b> setting can darken them for easier visibility.
+<b>Note:</b> Increasing the shade reduces the visible contrast between low and
+high scoring peaks.</p>
+
+<p>Clicking on an rPeak provides detailed information about the biosamples where the
+rPeak was detected, including the count of biosamples with contributing ChIP-seq peaks,
+the total number of biosamples assayed for the protein, and a per-biosample table
+listing each contributing experiment with its ENCODE accession. The protein name links
+to <a target="_blank" href="https://factorbook.org">Factorbook</a>, and overlapping
+ENCODE candidate cis-regulatory elements (cCREs) link to
+<a target="_blank" href="https://screen.wenglab.org">SCREEN</a>.</p>
 
 <p>By default, rPeaks for all 911 DNA-associated proteins with ENCODE ChIP-seq data are
-displayed. Users can customize the display by selecting specific DNA-associated proteins
-in the track settings.</p>
+displayed. A filter is available to select specific proteins.</p>
 
 <h2>Methods</h2>
 
@@ -79,11 +84,11 @@ The tool can also be used to obtain features confined to a given range, e.g.,
 
 <h2>Credits</h2>
 
-<p>This track was made possible thanks to the efforts of the ENCODE Consortium, ENCODE
+<p>This track was made possible by the efforts of the ENCODE Consortium, ENCODE
 ChIP-seq production laboratories, and the ENCODE Data Coordination Center for generating
 and processing the ChIP-seq datasets. The ENCODE accession numbers for the constituent
-datasets are accessible from the peak details page. We thank the production labs for
-generating the data: Drs. Bradley Bernstein (Broad),
+datasets are accessible from the peak details page. The data were generated by the
+following production labs: Drs. Bradley Bernstein (Broad),
 John Stamatoyannopoulos (UW), Kevin Struhl (HMS), Kevin White (UChicago),
 Michael Snyder (Stanford), Peggy Farnham (USC), Richard Myers (HAIB),
 Sherman Weissman (Yale), Tim Reddy (Duke), Vishwanath Iyer (UTA),
@@ -98,6 +103,16 @@ of the ENCODE Data Analysis Center, for developing this track, including providi
 and motif datasets and associated metadata and building the track.</p>
 
 <h2>References</h2>
+
+<p>
+Andrews G, Fan K, Pratt HE, Phalke N, Zoonomia Consortium, Karlsson EK, Lindblad-Toh K,
+Weng Z.
+<a href="https://www.science.org/doi/10.1126/science.abn7930" target="_blank">
+Mammalian evolution of human cis-regulatory elements and transcription factor binding
+sites</a>.
+<em>Science</em>. 2023;380(6643):eabn7930.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104580" target="_blank">37104580</a>
+</p>
 
 <p>
 ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J,
@@ -118,16 +133,6 @@ Regulation</a>.
 <em>Nature</em>. 2026 January 7.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
-</p>
-
-<p>
-Andrews G, Fan K, Pratt HE, Phalke N, Zoonomia Consortium, Karlsson EK, Lindblad-Toh K,
-Weng Z.
-<a href="https://www.science.org/doi/10.1126/science.abn7930" target="_blank">
-Mammalian evolution of human cis-regulatory elements and transcription factor binding
-sites</a>.
-<em>Science</em>. 2023;380(6643):eabn7930.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104580" target="_blank">37104580</a>
 </p>
 
 <p>
