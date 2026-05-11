@@ -103,6 +103,10 @@ hg38 lrSv dgvPlus Database of Genomic Variants (DGV) structural variation catalo
 hg38 dgvPlus lrSv Long-read structural variants across multiple cohorts
 hg38 lrSv giabSv Genome in a Bottle high-confidence SV benchmark callsets
 hg38 giabSv lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hg38 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+hs1 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hs1 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
 
 # PrimateAI-3D cross-links:
 hg38 primateAi alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor
