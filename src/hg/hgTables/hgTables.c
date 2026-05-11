@@ -349,6 +349,20 @@ if (isNoGenomeDisabled(db, table))
              "Please go back and choose a position range.", table);
 }
 
+void checkNoQuickLift(struct trackDb *track)
+/* Before producing output, make sure the track isn't being remapped via
+ * QuickLift -- the underlying data is in the source assembly's coordinates,
+ * so output queries against the destination assembly's region won't make
+ * sense. */
+{
+if (track != NULL && trackDbSetting(track, "quickLiftUrl") != NULL)
+    errAbort("Get output is not supported for QuickLift tracks.  "
+             "QuickLift remaps tracks from another assembly on the fly for display, "
+             "but the underlying data is in the source assembly's coordinates.  "
+             "Please go back to the genome browser and switch to the source assembly "
+             "to retrieve this track's data.");
+}
+
 static int regionCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start */
 {
@@ -684,6 +698,11 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     {
     hti = wikiHti();
     }
+else if (trackHubDatabase(db))
+    {
+    /* Hub assemblies have no SQL database; can't look up table via hFindTableInfo. */
+    hti = NULL;
+    }
 else
     {
     char *track;
@@ -969,8 +988,9 @@ else if (track != NULL && !tdbIsComposite(track))
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
- * use the first field. */
-if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
+ * use the first field.  Skip for hub assemblies, which have no SQL database. */
+if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos)
+    && !trackHubDatabase(db))
     {
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
@@ -1271,6 +1291,8 @@ else if (isCustomTrack(table) || startsWith("myVariants_", table))
                 ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
                 }
             fieldList = sqlListFields(conn, ct->dbTableName);
+            if (startsWith("myVariants_shared_", table))
+                myVariantsStripHiddenFields(&fieldList);
             }
         hFreeConn(&conn);
         }
@@ -1488,6 +1510,7 @@ else
 	track = cTdb;
     }
 checkNoGenomeDisabled(database, table);
+checkNoQuickLift(track);
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&

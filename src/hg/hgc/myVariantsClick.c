@@ -16,6 +16,7 @@
 #include "hCommon.h"
 #include "wikiLink.h"
 #include "jsHelper.h"
+#include "web.h"
 #include "hgConfig.h"
 #include "jsonWrite.h"
 #include "htmshell.h"
@@ -27,29 +28,33 @@ jsIncludeFile("hgc.js",NULL);
 char *idString = cloneString(itemIdString);
 char *trackName = ct->tdb->track;
 
-/* Detect shared track and resolve table/permissions */
+/* Detect shared track and resolve table/permissions via hgcentral so that
+ * revoked or downgraded shares no longer return owner data. */
 boolean isShared = startsWith("myVariants_shared_", trackName);
 char *dataOwner = NULL;     /* user whose table holds the data */
+char *scopeProject = NULL;  /* live share's project, or NULL for own track */
+char *scopeDb = NULL;       /* live share's db, or NULL for own track */
 int permission = MYVAR_PERM_READONLY;
 if (isShared)
     {
-    char *token = trackName + strlen("myVariants_shared_");
-    char cartVar[256];
-    safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
-    char *cartVal = cartOptionalString(cart, cartVar);
-    if (isEmpty(cartVal))
+    struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
+    if (share == NULL)
         {
-        printf("Share information not found.\n");
+        printf("Share is no longer available.\n");
         return;
         }
-    char *project = NULL, *db = NULL;
-    if (!myVariantsParseShareCartValue(cartVal, &dataOwner, &project, &db, &permission, NULL))
+    /* Shared tracks are per-assembly; reject details requests from other dbs. */
+    if (!sameString(share->db, database))
         {
-        printf("Invalid share data.\n");
+        printf("This share is for a different assembly.\n");
+        myVariantsShareFree(&share);
         return;
         }
-    freeMem(project);
-    freeMem(db);
+    dataOwner = cloneString(share->ownerUser);
+    scopeProject = cloneString(share->project);
+    scopeDb = cloneString(share->db);
+    permission = share->permission;
+    myVariantsShareFree(&share);
     }
 else
     dataOwner = cloneString(getUserName());
@@ -58,18 +63,43 @@ else
 boolean canEdit = !isShared || (permission == MYVAR_PERM_READWRITE && getUserName() != NULL);
 
 char *tableName = myVariantsGetDbTable(dataOwner);
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-char query[512];
-sqlSafef(query, sizeof(query), "select * from %s where concat(id,' ',name)='%s'",
-    tableName, idString);
-struct sqlResult *sr = sqlGetResult(conn, query);
-
-char **row;
-if ((row = sqlNextRow(sr)) != NULL)
+/* idString is "<id> <name>": parse id, query by id, verify name matches. */
+char *idStrCopy = cloneString(idString);
+char *expectedName = strchr(idStrCopy, ' ');
+if (expectedName == NULL)
     {
-    struct myVariants *item = myVariantsLoad(row);
-    sqlFreeResult(&sr);  /* Free early so conn is available for custom field queries */
+    printf("Invalid item identifier.\n");
+    freeMem(idStrCopy);
+    return;
+    }
+*expectedName++ = '\0';
+if (!isAllDigits(idStrCopy))
+    {
+    printf("Invalid item identifier.\n");
+    freeMem(idStrCopy);
+    return;
+    }
+unsigned itemId = sqlUnsigned(idStrCopy);
 
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct dyString *query = sqlDyStringCreate(
+    "select * from %s where id=%u", tableName, itemId);
+if (isNotEmpty(scopeDb))
+    sqlDyStringPrintf(query, " and db='%s'", scopeDb);
+if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
+    sqlDyStringPrintf(query, " and project='%s'", scopeProject);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+dyStringFree(&query);
+
+char **row = sqlNextRow(sr);
+struct myVariants *item = NULL;
+if (row != NULL && sameString(row[4], expectedName))
+    item = myVariantsLoad(row);
+sqlFreeResult(&sr);
+freeMem(idStrCopy);
+
+if (item != NULL)
+    {
     /* Show shared banner */
     if (isShared)
         {
@@ -85,6 +115,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     if (canEdit)
         {
+        webIncludeResourceFile("spectrum.min.css");
+        jsIncludeFile("spectrum.min.js", NULL);
         printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgTracksName());
         cartSaveSession(cart);
 
@@ -99,19 +131,19 @@ if ((row = sqlNextRow(sr)) != NULL)
         safef(varName, sizeof(varName), "%s_%s", trackName, "name");
         printf("<B>Label:</B> ");
         cgiMakeTextVar(varName, item->name, 17);
-        printInfoIcon("A short label for this variant, displayed in the browser.");
+        printInfoIcon("A short label for this annotation, displayed in the browser.");
         printf("<BR>\n");
 
         /* Put up editable description. */
         safef(varName, sizeof(varName), "%s_%s", trackName, "description");
         printf("<B>Description:</B> ");
-        printInfoIcon("Longer notes or comments about this variant. Displayed on this details page.");
+        printInfoIcon("Longer notes or comments about this annotation. Displayed on this details page.");
         printf("<BR>\n");
         cgiMakeTextArea(varName, item->description, 8, 80);
         printf("<BR>\n");
 
         /* Non-editable chromosome. */
-        printf("<B>Chromosome:</B> %s<BR>\n", item->chrom);
+        htmlPrintf("<B>Chromosome:</B> %s<BR>\n", item->chrom);
 
         /* Editable start and end. */
         int chromSize = hChromSize(database, item->chrom);
@@ -132,7 +164,19 @@ if ((row = sqlNextRow(sr)) != NULL)
         safef(varName, sizeof(varName), "%s_%s", trackName, "itemRgb");
         char colorHex[8];
         safef(colorHex, sizeof(colorHex), "#%06X", item->itemRgb);
-        cgiMakeColorVarWithLabel(varName, "Color", colorHex, TRUE);
+        hPrintf("<label for=\"%s\"><b>Color:</b></label> ", varName);
+        hPrintf("<input type=\"text\" name=\"%s\" id=\"%s\" value=\"%s\">\n",
+            varName, varName, colorHex);
+        jsInlineF(
+            "$(function() {"
+                "$(document.getElementById('%s')).spectrum({"
+                    "preferredFormat: 'hex',"
+                    "showInput: true,"
+                    "showPalette: true,"
+                    "hideAfterPaletteSelect: true"
+                "});"
+            "});\n",
+            varName);
         printf("<br>");
 
         /* Edit ref/alt */
@@ -151,8 +195,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<B>Project:</B> ");
         if (isShared)
             {
-            printf("%s", isNotEmpty(item->project) ? item->project : "(none)");
-            printf("<BR>\n");
+            htmlPrintf("%s<BR>\n", isNotEmpty(item->project) ? item->project : "(none)");
             }
         else
             {
@@ -162,31 +205,31 @@ if ((row = sqlNextRow(sr)) != NULL)
                 {
                 char selectName[128];
                 safef(selectName, sizeof(selectName), "%s_projectSelect", trackName);
-                printf("<select id='%s'>", selectName);
-                printf("<option value=''>%s</option>", "(none)");
+                htmlPrintf("<select id='%s|attr|'>", selectName);
+                printf("<option value=''>(none)</option>");
                 struct slName *proj;
                 boolean currentFound = FALSE;
                 for (proj = projects; proj != NULL; proj = proj->next)
                     {
-                    char *selected = "";
-                    if (sameString(proj->name, item->project))
-                        {
-                        selected = " selected";
+                    boolean isCurrent = sameString(proj->name, item->project);
+                    if (isCurrent)
                         currentFound = TRUE;
-                        }
-                    printf("<option value='%s'%s>%s</option>", proj->name, selected, proj->name);
+                    htmlPrintf("<option value='%s|attr|'%s|none|>%s</option>",
+                        proj->name, isCurrent ? " selected" : "", proj->name);
                     }
                 if (!currentFound && isNotEmpty(item->project))
-                    printf("<option value='%s' selected>%s</option>", item->project, item->project);
+                    htmlPrintf("<option value='%s|attr|' selected>%s</option>",
+                        item->project, item->project);
                 printf("<option value='__new__'>Add new...</option>");
                 printf("</select> ");
-                printf("<input type='text' name='%s' id='%s' value='%s' style='display:none'"
-                    " placeholder='Enter new project'>", varName, varName, item->project);
+                htmlPrintf("<input type='text' name='%s|attr|' id='%s|attr|' value='%s|attr|'"
+                    " style='display:none' placeholder='Enter new project'>",
+                    varName, varName, item->project);
                 slFreeList(&projects);
                 }
             else
                 cgiMakeTextVar(varName, item->project, 40);
-            printInfoIcon("Group variants by project.");
+            printInfoIcon("Group annotations by project.");
             printf("<BR>\n");
             }
 
@@ -329,8 +372,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     printPosOnChrom(item->chrom, item->chromStart, item->chromEnd, NULL, TRUE, NULL);
     }
-else
-    sqlFreeResult(&sr);
 
 freeMem(dataOwner);
 hFreeConn(&conn);

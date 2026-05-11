@@ -311,6 +311,8 @@ if (startsWithWord("myVariants", type) ||
         ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
         }
     fieldList = sqlListFields(conn, ct->dbTableName);
+    if (startsWith("myVariants_shared_", track))
+        myVariantsStripHiddenFields(&fieldList);
     hFreeConn(&conn);
     }
 else

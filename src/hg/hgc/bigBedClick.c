@@ -460,9 +460,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	    continue;
 	}
 
-    found = TRUE;
-    if (firstTime)
-	printf("<BR>\n");
     int seq1Seq2Fields = 0;
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     boolean seq1Seq2 = sameOk(trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE), "seq1Seq2");
@@ -509,6 +506,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         continue;
     if (!(bed->chromStart == start && bed->chromEnd == end))
 	continue;
+
+    found = TRUE;
+    if (firstTime)
+	{
+	printf("<BR>\n");
+	firstTime = FALSE;
+	}
 
     // if there are extra fields, load them up because we may want to use them in URL:
     itemForUrl = getIdInUrl(tdb, item);

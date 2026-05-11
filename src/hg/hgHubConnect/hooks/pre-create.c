@@ -18,6 +18,8 @@
 #include "hooklib.h"
 #include "hubSpaceKeys.h"
 #include "htmshell.h"
+#include "hdb.h"
+#include "genark.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -125,6 +127,16 @@ else
             errAbort("Genome selection is NULL for file '%s' is invalid. Please choose the correct genome", reqFileName);
             }
 
+        // Block 2bit uploads whose genome name collides with a UCSC native database or GenArk hub.
+        if (sameOk(reqFileType, "2bit") && reqGenome[0] &&
+            (hDbExists(reqGenome) || isGenArk(reqGenome)))
+            {
+            char *hubName = reqParentDir ? hubNameFromPath(reqParentDir) : "";
+            char *existingHubType = existingHubTypeForDir(userName, hubName);
+            if (!sameOk(existingHubType, "assemblyHub"))
+                errAbort(HUB_GENOME_COLLISION_ERR_FMT, reqGenome, reqGenome);
+            }
+
         // we've passed all the checks so we can return that we are good to upload the file
         if (exitStatus == 0)
             {
@@ -150,8 +162,12 @@ else
         }
     if (errCatch->gotError)
         {
+        // App-level reject: tusd treats exit 0 + RejectUpload=true as a clean
+        // rejection and forwards our HTTPResponse body verbatim. Non-zero
+        // would be wrapped in "ERR_INTERNAL_SERVER_ERROR ... from hook
+        // endpoint: ..." which buries the real message.
         rejectUpload(response, errCatch->message->string);
-        exitStatus = 1;
+        exitStatus = 0;
         }
     errCatchEnd(errCatch);
     }

@@ -153,6 +153,12 @@ void checkNoGenomeDisabled(char *db, char *table);
 /* Before producing output, make sure that the URL hasn't been hacked to make a
  * genome-wide query on a noGenome table. */
 
+void checkNoQuickLift(struct trackDb *track);
+/* Before producing output, make sure the track isn't being remapped via
+ * QuickLift -- the underlying data is in the source assembly's coordinates,
+ * so output queries against the destination assembly's region won't make
+ * sense. */
+
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere);

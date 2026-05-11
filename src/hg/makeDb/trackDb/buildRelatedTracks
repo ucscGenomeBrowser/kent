@@ -32,7 +32,7 @@ for db in $*; do
         fi
         grep -w "^$db" relatedTracks.ra | cut -d' ' -f2- \
             | sed -e 's/ /\t/' -e 's/ /\t/' | sort -k1 -k2 \
-            | hgLoadSqlTab "$db" "$tbl" ~/kent/src/hg/lib/relatedTrack.sql stdin
+            | /cluster/bin/x86_64/hgLoadSqlTab "$db" "$tbl" ~/kent/src/hg/lib/relatedTrack.sql stdin
         printf "done building relatedTrack table for %s\n" "$db"
     fi
 done

@@ -4000,12 +4000,7 @@ var dragReorder = {
             rightClick.currentMapItem = rightClick.makeMapItem(id);
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
-                rightClick.currentMapItem.title = this.title;
-                // if the custom mouseover code has removed this title, check the attr
-                // for the original title
-                if (this.title.length === 0) {
-                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
-                }
+                rightClick.currentMapItem.title = this.getAttribute("data-tooltip") || this.title;
 
                 // Handle linked features with separate clickmaps for each exon/intron
                 if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {

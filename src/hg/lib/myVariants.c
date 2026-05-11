@@ -356,27 +356,63 @@ dyStringFree(&del);
 hFreeConn(&conn);
 }
 
+struct myVariantsShare *myVariantsResolveSharedTrack(char *trackName, struct cart *cart)
+/* For a "myVariants_shared_*" custom-track name, look up and revalidate the
+ * share record from hgcentral. Returns NULL if the track is not a shared
+ * track, the cart cookie is missing, the share has been revoked, or the
+ * current user is not authorized (target user mismatch). The returned share
+ * carries the validated owner/db/project/permission; callers should use these
+ * (not the cart-supplied values) for authorization or scoping decisions.
+ * Caller frees with myVariantsShareFree. */
+{
+if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+    return NULL;
+char *token = trackName + strlen("myVariants_shared_");
+char cartVar[256];
+safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
+/* The cart-cookie presence gate is belt-and-suspenders: it ensures the share
+ * was once accepted into this session before we hit hgcentral. The real
+ * authorization is the targetUser check below against the live share row. */
+if (cart == NULL || !cartVarExists(cart, cartVar))
+    return NULL;
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, "myVariantsShares"))
+    {
+    hDisconnectCentral(&conn);
+    return NULL;
+    }
+struct myVariantsShare *share = myVariantsGetShareByToken(conn, token);
+hDisconnectCentral(&conn);
+if (share == NULL)
+    return NULL;
+if (isNotEmpty(share->targetUser))
+    {
+    char *userName = getUserName();
+    if (isEmpty(userName) || !sameString(share->targetUser, userName))
+        {
+        myVariantsShareFree(&share);
+        return NULL;
+        }
+    }
+return share;
+}
+
 char *myVariantsResolveDbTableForCustomTrack(char *trackName, struct cart *cart)
 /* For a custom-track name of the form "myVariants_*", return the fully
- * qualified SQL table (db.tableName) holding the items.  Handles both
- * own tracks (resolved to current logged-in user) and shared tracks
- * (resolved via the cart-stored share record).  Returns NULL on failure. */
+ * qualified SQL table (db.tableName) holding the items.  Handles both own
+ * tracks and shared tracks. For shared tracks, revalidates the share against
+ * hgcentral; returns NULL if the share has been revoked, downgraded out of
+ * scope, or is not for the current user. */
 {
 if (isEmpty(trackName))
     return NULL;
 if (startsWith("myVariants_shared_", trackName))
     {
-    char *token = trackName + strlen("myVariants_shared_");
-    char cartVar[256];
-    safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
-    char *cartVal = (cart != NULL) ? cartOptionalString(cart, cartVar) : NULL;
-    if (isEmpty(cartVal))
+    struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
+    if (share == NULL)
         return NULL;
-    char *owner = NULL;
-    if (!myVariantsParseShareCartValue(cartVal, &owner, NULL, NULL, NULL, NULL))
-        return NULL;
-    char *dbTable = myVariantsGetDbTable(owner);
-    freeMem(owner);
+    char *dbTable = myVariantsGetDbTable(share->ownerUser);
+    myVariantsShareFree(&share);
     return dbTable;
     }
 if (startsWith("myVariants_", trackName))
@@ -396,6 +432,60 @@ if (startsWith("myVariants_", trackName))
     return myVariantsGetDbTable(userName);
     }
 return NULL;
+}
+
+char *myVariantsSharedScopeWhere(char *trackName, struct cart *cart)
+/* For a "myVariants_shared_*" custom-track, return a SQL WHERE-clause
+ * fragment that limits a query to the share's authorized project and db
+ * (e.g. "db='hg38' and project='Variants'", or "db='hg38'" alone when the
+ * share's project is "*"). Returns NULL for non-shared tracks or revoked
+ * shares. Memoized per-process: callers receive a fresh cloneString that
+ * they own. */
+{
+static struct hash *cache = NULL;
+if (cache == NULL)
+    cache = hashNew(0);
+if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+    return NULL;
+char *cached = hashFindVal(cache, trackName);
+if (cached != NULL)
+    return cached[0] ? cloneString(cached) : NULL;
+
+char *result = NULL;
+struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
+if (share != NULL && isNotEmpty(share->db))
+    {
+    struct dyString *dy = sqlDyStringCreate("db='%s'", share->db);
+    if (isNotEmpty(share->project) && !sameString(share->project, "*"))
+        sqlDyStringPrintf(dy, " and project='%s'", share->project);
+    result = dyStringCannibalize(&dy);
+    }
+myVariantsShareFree(&share);
+hashAdd(cache, trackName, cloneString(result ? result : ""));
+return result;
+}
+
+void myVariantsStripHiddenFields(struct slName **pFieldList)
+/* Remove any field whose name starts with "_hidden_" from the list in place.
+ * Handles bare names ("_hidden_foo") and dotted/qualified names
+ * ("db.table._hidden_foo") by checking the segment after the last '.'.
+ * Used by hgTables for myVariants_shared_* tables so a recipient does not
+ * see columns the owner has hidden. (Custom non-hidden columns are kept,
+ * since they are part of the data the owner intentionally shared.) */
+{
+struct slName *kept = NULL, *fld, *next;
+for (fld = *pFieldList; fld != NULL; fld = next)
+    {
+    next = fld->next;
+    char *bare = strrchr(fld->name, '.');
+    bare = bare ? bare + 1 : fld->name;
+    if (startsWith("_hidden_", bare))
+        freeMem(fld);
+    else
+        slAddHead(&kept, fld);
+    }
+slReverse(&kept);
+*pFieldList = kept;
 }
 
 char *myVariantsTableExists(char *userName)
@@ -494,79 +584,48 @@ if (isNotEmpty(userName))
     hFreeConn(&conn);
     }
 
-/* Collect shared track lines from cart */
+/* Collect shared track lines from cart. All authoritative metadata
+ * (owner/db/project/label) comes from the live share row, never from
+ * cart-parsed values. */
 struct dyString *sharedLines = dyStringNew(0);
 if (cart != NULL)
     {
     struct hashEl *shareVars = cartFindPrefix(cart, MYVAR_SHARED_CART_PREFIX);
     struct hashEl *el;
-    struct sqlConnection *centralConn = (shareVars != NULL) ? hConnectCentral() : NULL;
     for (el = shareVars; el != NULL; el = el->next)
         {
-        char *owner = NULL, *project = NULL, *db = NULL, *label = NULL;
-        int permission = 0;
-        if (!myVariantsParseShareCartValue(el->val, &owner, &project, &db, &permission, &label))
+        char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
+        char trackName[512];
+        safef(trackName, sizeof(trackName), "myVariants_shared_%s", token);
+        struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
+        if (share == NULL)
             continue;
-        if (!sameString(db, targetDb))
+        if (!sameString(share->db, targetDb))
             {
-            freeMem(owner);
-            freeMem(project);
-            freeMem(db);
-            freeMem(label);
+            myVariantsShareFree(&share);
             continue;
             }
         /* Skip if the sharer is the current user - they already see their own track */
-        if (isNotEmpty(userName) && sameString(owner, userName))
+        if (isNotEmpty(userName) && sameString(share->ownerUser, userName))
             {
-            freeMem(owner);
-            freeMem(project);
-            freeMem(db);
-            freeMem(label);
-            continue;
-            }
-        /* Re-validate the share against hgcentral each render so that revoked
-         * or user-targeted shares get filtered per the viewer's identity. */
-        char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
-        struct myVariantsShare *share = NULL;
-        if (centralConn != NULL && sqlTableExists(centralConn, "myVariantsShares"))
-            share = myVariantsGetShareByToken(centralConn, token);
-        if (share == NULL)
-            {
-            freeMem(owner);
-            freeMem(project);
-            freeMem(db);
-            freeMem(label);
-            continue;
-            }
-        boolean allowed = FALSE;
-        if (isEmpty(share->targetUser))
-            allowed = TRUE;                                 /* anyone with link */
-        else if (isNotEmpty(userName) && sameString(share->targetUser, userName))
-            allowed = TRUE;                                 /* targeted at us */
-        myVariantsShareFree(&share);
-        if (!allowed)
-            {
-            freeMem(owner);
-            freeMem(project);
-            freeMem(db);
-            freeMem(label);
+            myVariantsShareFree(&share);
             continue;
             }
         /* Verify the owner's table exists */
-        char *ownerDbTable = myVariantsGetDbTable(owner);
+        char *ownerDbTable = myVariantsGetDbTable(share->ownerUser);
         struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
         boolean tableOk = (isNotEmpty(ownerDbTable) && sqlTableExists(conn, ownerDbTable));
         hFreeConn(&conn);
         if (!tableOk)
             {
-            freeMem(owner);
-            freeMem(project);
-            freeMem(db);
-            freeMem(label);
+            myVariantsShareFree(&share);
             continue;
             }
         /* Strip double quotes from owner-controlled values to prevent injection
          * of additional trackDb settings via the CT file track line. */
+        char *owner = cloneString(share->ownerUser);
+        char *project = cloneString(share->project);
+        char *label = isNotEmpty(share->label) ? cloneString(share->label) : NULL;
         stripChar(owner, '"');
         stripChar(project, '"');
         if (label != NULL)
@@ -585,11 +644,9 @@ if (cart != NULL)
             token, shortLabel, projectLabel, owner);
         freeMem(owner);
         freeMem(project);
-        freeMem(db);
         freeMem(label);
+        myVariantsShareFree(&share);
         }
-    if (centralConn != NULL)
-        hDisconnectCentral(&centralConn);
     hashElFreeList(&shareVars);
     }
 
@@ -612,8 +669,8 @@ trashDirReusableFile(&tn, "ct", base, ".bed");
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
     fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
-        " visibility=\"pack\" shortLabel=\"My Variants\""
-        " longLabel=\"My Variants (%s)\"\n", encodedTableName, encodedTableName);
+        " visibility=\"pack\" shortLabel=\"My Annotations\""
+        " longLabel=\"My Annotations (%s)\"\n", encodedTableName, encodedTableName);
 if (dyStringLen(sharedLines) > 0)
     fprintf(f, "%s", dyStringContents(sharedLines));
 carefulClose(&f);

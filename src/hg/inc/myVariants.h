@@ -91,7 +91,35 @@ char *myVariantsCreateTable(char *userName);
 char *myVariantsResolveDbTableForCustomTrack(char *trackName, struct cart *cart);
 /* For a custom-track name of the form "myVariants_*", return the fully
  * qualified SQL table (db.tableName) holding the items.  Handles both own
- * tracks and shared tracks. Returns NULL on failure. */
+ * tracks and shared tracks. For shared tracks, revalidates the share against
+ * hgcentral; returns NULL if the share has been revoked, downgraded out of
+ * scope, or is not for the current user. */
+
+struct myVariantsShare;
+struct myVariantsShare *myVariantsResolveSharedTrack(char *trackName, struct cart *cart);
+/* For a "myVariants_shared_*" custom-track name, look up and revalidate the
+ * share record from hgcentral. Returns NULL if the track is not a shared
+ * track, the cart cookie is missing, the share has been revoked, or the
+ * current user is not authorized (target user mismatch). The returned share
+ * carries the validated owner/db/project/permission; callers should use these
+ * (not the cart-supplied values) for authorization or scoping decisions.
+ * Caller frees with myVariantsShareFree. */
+
+char *myVariantsSharedScopeWhere(char *trackName, struct cart *cart);
+/* For a "myVariants_shared_*" custom-track, return a SQL WHERE-clause
+ * fragment that limits a query to the share's authorized project and db
+ * (e.g. "db='hg38' and project='Variants'", or "db='hg38'" alone when the
+ * share's project is "*"). Returns NULL for non-shared tracks or revoked
+ * shares. Memoized per-process: callers receive a fresh cloneString that
+ * they own. */
+
+void myVariantsStripHiddenFields(struct slName **pFieldList);
+/* Remove any field whose name starts with "_hidden_" from the list in place.
+ * Handles bare names ("_hidden_foo") and dotted/qualified names
+ * ("db.table._hidden_foo") by checking the segment after the last '.'.
+ * Used by hgTables for myVariants_shared_* tables so a recipient does not
+ * see columns the owner has hidden. (Custom non-hidden columns are kept,
+ * since they are part of the data the owner intentionally shared.) */
 
 void myVariantsDeleteForDb(char *userName, char *targetDb);
 /* Delete the user's myVariants items for the given assembly.  No-op if the

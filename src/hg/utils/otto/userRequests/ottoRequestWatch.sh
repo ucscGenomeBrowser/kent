@@ -312,32 +312,67 @@ while IFS=$'\t' read -r reqId buildDir; do
   export swapData="$(dirname "${swapDir}")"
   export workDir="$(basename "${buildDir}")"
   export swapWork="$(basename "${swapDir}")"
-  export doTdb="`dirname ${trackData}`/doTrackDb.bash"
-  export swapTdb="`dirname ${swapData}`/doTrackDb.bash"
-  if [ ! -x "${doTdb}" ]; then
-    printf "ERROR: can not find %s\n" "${doTdb}" 1>&2
-    setErrorStatus "${reqId}"
-    continue
-  fi
-  if [ ! -x "${swapTdb}" ]; then
-    printf "ERROR: can not find %s\n" "${swapTdb}" 1>&2
-    setErrorStatus "${reqId}"
-    continue
-  fi
+
+  # target direction: targetDb is target, queryDb is query, work in buildDir.
+  # GenArk targets use doTrackDb.bash sitting next to the trackData dir;
+  # UCSC native targets use chainNetTrackDb.pl which probes axtChain/*.bb
+  # in the build dir and writes a stanza into the otto kent clone.
   rm -f "${trackData}/lastz.${queryDb}"
   ln -s "${workDir}" "${trackData}/lastz.${queryDb}"
-  if ! ${doTdb} > /dev/null 2>&1; then
-     printf "ERROR: %s failed\n" "${doTdb}" 1>&2
-     setErrorStatus "${reqId}"
-     continue
-  fi
+  case "${targetDb}" in
+    GC[AF]_*)
+      doTdb="$(dirname "${trackData}")/doTrackDb.bash"
+      if [ ! -x "${doTdb}" ]; then
+        printf "ERROR: can not find %s\n" "${doTdb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      if ! "${doTdb}" >> /cluster/home/hiram/kent/src/hg/utils/otto/userRequests/doTdb.log 2>&1; then
+        printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      ;;
+    *)
+      if ! ( cd "${buildDir}" \
+             && "${scriptDir}/chainNetTrackDb.pl" \
+                  "${targetDb}" "${queryDb}" ); then
+        printf "ERROR: chainNetTrackDb.pl failed for %s/%s\n" \
+          "${targetDb}" "${queryDb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      ;;
+  esac
+
+  # swap direction: queryDb is target, targetDb is query, work in swapDir
   rm -f "${swapData}/lastz.${targetDb}"
   ln -s "${swapWork}" "${swapData}/lastz.${targetDb}"
-  if ! ${swapTdb} > /dev/null 2>&1; then
-     printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
-     setErrorStatus "${reqId}"
-     continue
-  fi
+  case "${queryDb}" in
+    GC[AF]_*)
+      swapTdb="$(dirname "${swapData}")/doTrackDb.bash"
+      if [ ! -x "${swapTdb}" ]; then
+        printf "ERROR: can not find %s\n" "${swapTdb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      if ! "${swapTdb}" > /dev/null 2>&1; then
+        printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      ;;
+    *)
+      if ! ( cd "${swapDir}" \
+             && "${scriptDir}/chainNetTrackDb.pl" \
+                  "${queryDb}" "${targetDb}" ); then
+        printf "ERROR: chainNetTrackDb.pl failed for %s/%s\n" \
+          "${queryDb}" "${targetDb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      ;;
+  esac
 
   # install liftOver and quickLift symlinks + register in hgcentraltest,
   # for both directions

@@ -59,7 +59,7 @@ my $stanza = "";
 my $stanzaLine = 0;
 my $firstTrack = 1;
 
-my ($hubShortLabel, $hubLongLabel) = split(/\t/, `hgsql -N -e 'SELECT description, sourceName FROM dbDb WHERE name="${db}";' hgcentraltest`);
+my ($hubShortLabel, $hubLongLabel) = split(/\t/, `/cluster/bin/x86_64/hgsql -N -e 'SELECT description, sourceName FROM dbDb WHERE name="${db}";' hgcentraltest`);
 chomp $hubShortLabel;
 chomp $hubLongLabel;
 

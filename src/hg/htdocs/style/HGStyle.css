@@ -27,15 +27,15 @@ body.training {
 #chromAliases {
         display: inline;
         margin-left: 0.1em;
-        margin-right: 0.05em;
-        font-size: 110%;
+        margin-right: 0.1em;
+        font-size: 95%;
         vertical-align: middle;
         cursor: help;
 }
 
 #chromAliases a {
         text-decoration: none;
-        color: #666;
+        color: #aaa;
 }
 
 a:link {

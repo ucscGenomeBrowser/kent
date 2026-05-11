@@ -1,6 +1,6 @@
 track ncOrfs
 superTrack on
-shortLabel non-canonical ORFs
+shortLabel Non-canonical ORFs
 longLabel Non-canonical Open Reading Frames
 group genes
 
@@ -27,9 +27,9 @@ group genes
 
     track gencNcOrfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb
-    shortLabel Gencode non-canonical ORFs Phase I
-    longLabel ncORFs: Gencode Phase I non-canonical ORFs supported by Ribo-seq data
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.bb
+    shortLabel GENCODE Phase I ncORFs
+    longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
     type bigGenePred
     itemRgb on
     baseColorUseCds given
@@ -49,10 +49,10 @@ group genes
 
     track gencNcOrfsPrimary
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb
-    shortLabel Gencode non-canonical ORFs Phase II primary
-    longLabel ncORFs: Gencode Phase II non-canonical ORFs - primary
-    type bigGenePred
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
+    shortLabel GENCODE Ph2 ncORFs Pri
+    longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
+    type bigBed 12 +
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
@@ -69,10 +69,10 @@ group genes
 
     track gencNcOrfsComprehensive
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb
-    shortLabel Gencode non-canonical ORFs Phase II comprehensive
-    longLabel ncORFs: Gencode Phase II non-canonical ORFs - comprehensive
-    type bigGenePred
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
+    shortLabel GENCODE Ph2 ncORFs Cmp
+    longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
+    type bigBed 12 +
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons

@@ -23,6 +23,10 @@ cladeTsv = os.path.join(scriptDir, "dbDb.name.clade.tsv")
 lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
 gcPattern = re.compile(r"^GC[AF]_")
 
+# UCSC native .over.chain.gz files get rsync'd to both hgdownload hosts.
+pushUser = "qateam"
+pushHosts = ["hgdownload1.soe.ucsc.edu", "hgdownload3.gi.ucsc.edu"]
+
 
 def acquireSingletonLock():
     """Ensure only one instance of this script runs at a time.  Holds an
@@ -83,6 +87,15 @@ def markComplete(reqIds):
     idList = ",".join(str(i) for i in sorted(reqIds))
     hgsql("UPDATE ottoRequest SET status = 6 WHERE id IN (%s);" % idList)
 #   print("# marked status=6: %s" % idList, file=sys.stderr)
+
+
+def markFailed(reqIds):
+    """Set status=7 (problems) on the given ottoRequest ids."""
+    if not reqIds:
+        return
+    idList = ",".join(str(i) for i in sorted(reqIds))
+    hgsql("UPDATE ottoRequest SET status = 7 WHERE id IN (%s);" % idList)
+#   print("# marked status=7: %s" % idList, file=sys.stderr)
 
 
 def lookupGenark(accessions):
@@ -186,6 +199,47 @@ def runMakeChain(cladeDir):
     return True
 
 
+def pushUcscChain(targetDb, queryDb):
+    """rsync the .over.chain.gz to both hgdownload hosts under
+    /goldenPath/<targetDb>/liftOver/.  targetDb must be a UCSC native db
+    (the goldenPath tree only exists for native dbs); queryDb may be
+    GenArk or native.  Source filename uses dot separators (e.g.
+    ce11.GCA_000180635.4.over.chain.gz), destination filename uses
+    CamelCase (ce11ToGCA_000180635.4.over.chain.gz); rsync renames in
+    flight by giving the destination as a file path, not a directory.
+    -L dereferences the lastz.<queryDb> symlink to the dated build dir.
+    Pre-creates the destination directory with a separate ssh + mkdir
+    -p.  Returns True on success, False on any failure."""
+    QueryDb = queryDb[:1].upper() + queryDb[1:]
+    src = ("/hive/data/genomes/%s/bed/lastz.%s/axtChain/%s.%s.over.chain.gz"
+           % (targetDb, queryDb, targetDb, queryDb))
+    if not os.path.isfile(src):
+        print("# ERROR: pushUcscChain: missing source %s"
+              % src, file=sys.stderr)
+        return False
+    dstDir = "/data/apache/htdocs/goldenPath/%s/liftOver" % targetDb
+    dstFile = "%s/%sTo%s.over.chain.gz" % (dstDir, targetDb, QueryDb)
+    for host in pushHosts:
+        target = "%s@%s" % (pushUser, host)
+        result = subprocess.run(
+            ["ssh", target, "mkdir", "-p", dstDir],
+            capture_output=True, text=True,
+        )
+        if result.returncode != 0:
+            print("# ERROR: pushUcscChain: mkdir failed on %s: %s"
+                  % (host, result.stderr.strip()), file=sys.stderr)
+            return False
+        result = subprocess.run(
+            ["rsync", "-avL", src, "%s:%s" % (target, dstFile)],
+            capture_output=True, text=True,
+        )
+        if result.returncode != 0:
+            print("# ERROR: pushUcscChain: rsync to %s failed: %s"
+                  % (host, result.stderr.strip()), file=sys.stderr)
+            return False
+    return True
+
+
 def main():
     lockFh = acquireSingletonLock()  # noqa: F841 -- keep ref alive
     requests = pendingRequests()
@@ -219,30 +273,68 @@ def main():
         else:
             failedClades.add(clade)
 
+    # GenArk-target directions are pushed by the per-clade make chain
+    # above; UCSC-native-target directions are pushed by rsync to the
+    # hgdownload hosts.  A request advances to status=6 only when ALL
+    # of its directions succeed.  Clade-side failures leave the request
+    # at status=5 (existing behavior).  rsync failures move it to
+    # status=7 to alert examination.
     completedIds = []
-    failedRequests = []
+    failedIds = []
+    cladeFailures = []
+    pushFailures = []
     for reqId, fromDb, toDb in requests:
-        if not (gcPattern.match(fromDb) and gcPattern.match(toDb)):
-            continue                          # mixed or UCSC, not pushed here
-        fromClade = cladeOf(fromDb)
-        toClade = cladeOf(toDb)
-        if fromClade is None or toClade is None:
-            continue                          # missing clade info; be safe
-        clades = {fromClade, toClade}
-        if clades.issubset(succeededClades):
+        genarkFailedClades = set()
+        genarkIncomplete = False
+        for db in (fromDb, toDb):
+            if not gcPattern.match(db):
+                continue
+            clade = cladeOf(db)
+            if clade is None:
+                genarkIncomplete = True       # missing clade info; retry
+            elif clade in failedClades:
+                genarkFailedClades.add(clade)
+            elif clade not in succeededClades:
+                genarkIncomplete = True       # not yet pushed; retry
+        if genarkFailedClades:
+            cladeFailures.append(
+                (reqId, fromDb, toDb, sorted(genarkFailedClades)))
+            continue
+        if genarkIncomplete:
+            continue
+
+        pushOk = True
+        pushFailedDirs = []
+        for target, query in [(fromDb, toDb), (toDb, fromDb)]:
+            if gcPattern.match(target):
+                continue                      # GenArk side already handled
+            if not pushUcscChain(target, query):
+                pushFailedDirs.append("%s -> %s" % (target, query))
+                pushOk = False
+                break
+        if pushOk:
             completedIds.append(reqId)
-        elif clades & failedClades:
-            failedRequests.append(
-                (reqId, fromDb, toDb, sorted(clades & failedClades)))
+        else:
+            failedIds.append(reqId)
+            pushFailures.append((reqId, fromDb, toDb, pushFailedDirs))
 
     markComplete(completedIds)
+    markFailed(failedIds)
 
-    if failedRequests:
+    if cladeFailures:
         print("# the following request(s) stay at status=5 due to failed "
               "clade pushes:", file=sys.stderr)
-        for reqId, fromDb, toDb, badClades in failedRequests:
+        for reqId, fromDb, toDb, badClades in cladeFailures:
             print("#   id=%d %s -> %s (failed clade(s): %s)"
                   % (reqId, fromDb, toDb, ", ".join(badClades)),
+                  file=sys.stderr)
+
+    if pushFailures:
+        print("# the following request(s) set to status=7 due to rsync "
+              "failures:", file=sys.stderr)
+        for reqId, fromDb, toDb, dirs in pushFailures:
+            print("#   id=%d %s -> %s (failed: %s)"
+                  % (reqId, fromDb, toDb, "; ".join(dirs)),
                   file=sys.stderr)
 
 

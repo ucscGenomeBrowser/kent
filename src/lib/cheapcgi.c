@@ -2152,19 +2152,6 @@ if (max != NO_VALUE)
 cgiMakeIntVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
-void cgiMakeColorVar(char *varName, char *initialColor)
-/* Make a color input picker using the native color picker. initialColor is a hexval string */
-{
-printf("<input type=color name=\"%s\" id=\"%s\" value=\"%s\">\n", varName, varName, initialColor);
-}
-
-void cgiMakeColorVarWithLabel(char *varName, char *label, char *initialColor, boolean boldLabel)
-/* Make an input color picker labeled by label */
-{
-printf("<label for=\"%s\">%s%s:%s</label>\n", varName, boldLabel ? "<b>": "", label, boldLabel ? "</b>": "");
-cgiMakeColorVar(varName, initialColor);
-}
-
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits)
 /* Make a text control filled with initial floating-point value.  */
 {

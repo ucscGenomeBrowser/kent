@@ -3263,7 +3263,10 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (palInfo)
+// Skip the CDS FASTA alignment link for quickLifted tracks: hgPal would try
+// to open the destination's hub-virtual db, and palInfo coords are in
+// destination space while the multiZ alignment lives in source coords.
+if (palInfo && liftDb == NULL)
     {
     struct sqlConnection *conn = hAllocConn(srcDb);
     addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left,
@@ -9657,7 +9660,7 @@ if (liftDb != NULL)
         table = trackDbSetting(tdb, "dbTableName");
         }
     else
-        table = tdb->table;
+        table = trackHubSkipHubName(tdb->table);
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
 
@@ -13810,14 +13813,18 @@ if (genbankIsRefSeqCodingMRnaAcc(rnaName))
 // assembly at the lifted exon coordinates, rather than the NCBI-authored
 // sequence that lives with the source refPep/refMrna extFiles.
 // htcTranslatedPredMRna keys on the transcript name rather than the
-// protein accession, so swap the pepName for that case.
+// protein accession, so swap the pepName for that case.  For non-coding
+// transcripts (NR_*) leave pepName as the empty protAcc, otherwise gbSeq
+// would match the mrnaAcc and we'd offer a Predicted Protein link that
+// htcTranslatedPredMRna can only abort on.
 char *pepClick = "htcTranslatedProtein";
 char *pepName = rl->protAcc;
 char *mrnaClick = "htcRefMrna";
 if (liftDb != NULL)
     {
     pepClick = "htcTranslatedPredMRna";
-    pepName = rl->mrnaAcc;
+    if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+        pepName = rl->mrnaAcc;
     mrnaClick = "htcGeneMrna";
     }
 geneShowPosAndLinksPal(rl->mrnaAcc, pepName, tdb, refPepTable, pepClick,

@@ -12,10 +12,12 @@ import cgi
 import html
 import json
 import os
+import re
 import subprocess
 import sys
 import time
 import urllib.parse
+from datetime import datetime
 
 ALLOWED_IP   = '128.114.198.5'
 HGDB_CONF    = '/usr/local/apache/cgi-bin/hg.conf'
@@ -43,6 +45,14 @@ STATUS_NAMES = {
 
 COLS = ['id', 'requestType', 'fromDb', 'toDb', 'email', 'comment',
         'requestTime', 'status', 'buildDir', 'completeTime']
+
+# featureBits coverage lookup roots
+HIVE_GENOMES = '/hive/data/genomes'
+ASMHUB_ROOT  = HIVE_GENOMES + '/asmHubs'
+
+# in-process caches; one CGI invocation only, but rows reuse same accessions
+_buildDirCache = {}
+_fbPctCache    = {}
 
 
 def forbidden(msg):
@@ -116,6 +126,91 @@ def doResetStatus(form):
             f"({STATUS_NAMES[int(stat)]})"), None
 
 
+def hubBuildDir(acc):
+    """Locate the hive build directory for a fromDb/toDb value.
+    GenArk accession (GCA_/GCF_) -> asmHubs/{genbank,refseq}Build/<XXX>/<XXX>/<XXX>/<acc>_<asmName>
+    UCSC native db (e.g. hg38)   -> /hive/data/genomes/<db>
+    Returns absolute path or None."""
+    if not acc:
+        return None
+    if acc in _buildDirCache:
+        return _buildDirCache[acc]
+    result = None
+    if (acc.startswith('GCF_') or acc.startswith('GCA_')) and len(acc) >= 13:
+        src    = acc[:3]
+        sub    = 'refseqBuild' if src == 'GCF' else 'genbankBuild'
+        digits = acc[4:].split('.', 1)[0]
+        if len(digits) >= 9:
+            parent = (f'{ASMHUB_ROOT}/{sub}/{src}/'
+                      f'{digits[0:3]}/{digits[3:6]}/{digits[6:9]}')
+            try:
+                for entry in os.listdir(parent):
+                    if entry.startswith(acc + '_'):
+                        result = f'{parent}/{entry}'
+                        break
+            except OSError:
+                pass
+    else:
+        candidate = f'{HIVE_GENOMES}/{acc}'
+        if os.path.isdir(candidate):
+            result = candidate
+    _buildDirCache[acc] = result
+    return result
+
+
+def featureBitsPct(srcAcc, qryAcc):
+    """Return percentage from fb.<srcAcc>.chain<qryAcc>Link.txt (% of srcAcc
+    covered by chains to qryAcc), or '' if unavailable."""
+    if not srcAcc or not qryAcc:
+        return ''
+    key = (srcAcc, qryAcc)
+    if key in _fbPctCache:
+        return _fbPctCache[key]
+    bdir = hubBuildDir(srcAcc)
+    pct  = ''
+    if bdir:
+        # GenArk builds keep lastz under trackData/, UCSC native under bed/
+        sub = 'trackData' if '/asmHubs/' in bdir else 'bed'
+        # chain<QryAcc>Link.txt: first letter of query is capitalized
+        # (matches the ${dstDb^} convention in installLinks).  No-op for
+        # GCA_*/GCF_* accessions; converts hg38 -> Hg38 for native dbs.
+        QryAcc = qryAcc[:1].upper() + qryAcc[1:]
+        path = (f'{bdir}/{sub}/lastz.{qryAcc}/'
+                f'fb.{srcAcc}.chain{QryAcc}Link.txt')
+        try:
+            with open(path) as f:
+                txt = f.read()
+            m = re.search(r'\(([\d.]+)%\)', txt)
+            if m:
+                pct = m.group(1) + '%'
+        except OSError:
+            pass
+    _fbPctCache[key] = pct
+    return pct
+
+
+def elapsedStr(reqTime, doneTime):
+    """Human-readable elapsed time between two MySQL datetimes.
+    Empty string if either side is missing/NULL/unparseable."""
+    if not reqTime or not doneTime or reqTime == 'NULL' or doneTime == 'NULL':
+        return ''
+    try:
+        t0 = datetime.strptime(reqTime,  '%Y-%m-%d %H:%M:%S')
+        t1 = datetime.strptime(doneTime, '%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        return ''
+    secs = int((t1 - t0).total_seconds())
+    if secs < 0:
+        return ''
+    d, secs = divmod(secs, 86400)
+    h, secs = divmod(secs, 3600)
+    m, s    = divmod(secs, 60)
+    if d: return f'{d}d {h}h {m}m'
+    if h: return f'{h}h {m}m'
+    if m: return f'{m}m {s}s'
+    return f'{s}s'
+
+
 def loadGalaxyStatus():
     """Return the Galaxy queue snapshot written by ottoRequestWatch.sh
     (which calls galaxyStatus.py from cron).  Returns the parsed dict
@@ -186,7 +281,15 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
     out('<table class="sortable">\n<tr>')
     for c in COLS:
         out(f'<th>{c}</th>')
-    out('<th>set status</th></tr>\n')
+    out('<th title="% of fromDb covered by chains to toDb / '
+        '% of toDb covered by chains to fromDb">'
+        'coverage<br><small>from / to</small></th>'
+        '<th>elapsed</th><th>set status</th></tr>\n')
+
+    reqIdx  = COLS.index('requestTime')
+    doneIdx = COLS.index('completeTime')
+    fromIdx = COLS.index('fromDb')
+    toIdx   = COLS.index('toDb')
 
     for r in rows:
         rid = r[0]
@@ -209,8 +312,25 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
                         + urllib.parse.quote(cell, safe=''))
                 out(f'<td><a href="{html.escape(href)}" target="_blank">'
                     f'{html.escape(cell)}</a></td>')
+            elif c == 'email' and '@' in cell:
+                user = cell.split('@', 1)[0]
+                out(f'<td title="{html.escape(cell)}">'
+                    f'{html.escape(user)}</td>')
             else:
                 out(f'<td>{html.escape(cell)}</td>')
+        fromAcc = r[fromIdx] if fromIdx < len(r) else ''
+        toAcc   = r[toIdx]   if toIdx   < len(r) else ''
+        fwd     = featureBitsPct(fromAcc, toAcc)
+        rev     = featureBitsPct(toAcc, fromAcc)
+        if fwd or rev:
+            out(f'<td>{html.escape(fwd or "-")} / '
+                f'{html.escape(rev or "-")}</td>')
+        else:
+            out('<td></td>')
+
+        elapsed = elapsedStr(r[reqIdx]  if reqIdx  < len(r) else '',
+                             r[doneIdx] if doneIdx < len(r) else '')
+        out(f'<td>{html.escape(elapsed)}</td>')
         # reset form
         out('<td><form method="post" '
             'onsubmit="return confirm(\'Reset status of id=' +

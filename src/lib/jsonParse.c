@@ -170,10 +170,13 @@ for(i = 0;; i++)
     char c = str[*posPtr + i];
     if(!c)
         {
-        char cpy[i+1];
-        strncpy(str, cpy, i);
-        cpy[i] = '\0';
-        errAbort("Premature end of string (missing trailing double-quote); string position '%d', string: '%s'", *posPtr, cpy);
+        int maxSnip = 80;
+        int snipLen = min(i, maxSnip);
+        char *snipStart = str + *posPtr + (i - snipLen);
+        char *ellipsis = (i > maxSnip) ? "..." : "";
+        errAbort("Premature end of string (missing trailing double-quote); "
+                 "string position '%d', string: '%s%.*s'",
+                 *posPtr, ellipsis, snipLen, snipStart);
         }
     else if(escapeMode)
         {

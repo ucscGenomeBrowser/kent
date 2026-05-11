@@ -69,6 +69,13 @@ char *userName = getUserName();
 if (userName == NULL)
     return;
 
+/* This command runs mysql commands so require the hgsids match to prevent CSRF. */
+char *suppliedHgsid = cgiOptionalString("hgsid");
+char *expectedHgsid = cartSessionId(cart);
+if (isEmpty(suppliedHgsid) || isEmpty(expectedHgsid)
+    || !sameString(suppliedHgsid, expectedHgsid))
+    errAbort("session token missing or invalid");
+
 /* Parse out command into local variables. */
 char *words[3];
 char *dupeCommand = cloneString(command);	/* For parsing. */
@@ -292,8 +299,10 @@ return tl.fontHeight+2;
 }
 
 static void updateTextField(char *trackName, struct sqlConnection *conn,
-	char *tableName, char *fieldName, int id)
-/* Update text valued field with new val. */
+	char *tableName, char *fieldName, int id, char *scopeProject, char *scopeDb)
+/* Update text valued field with new val. If scopeProject/scopeDb are non-NULL,
+ * include them in the WHERE clause so a recipient cannot edit rows outside
+ * the share's authorized project/db. scopeProject of "*" means all projects. */
 {
 char varName[128];
 safef(varName, sizeof(varName), "%s_%s", trackName, fieldName);
@@ -305,16 +314,24 @@ if (endsWith(varName, "itemRgb"))
     unsigned color;
     if (htmlColorForCode(newVal, &color))
         {
-        char sql[256];
-        sqlSafef(sql, sizeof(sql), "update %s set %s='%d' where id=%d",
-            tableName, fieldName, color, id);
-        sqlUpdate(conn, sql);
+        struct dyString *sql = sqlDyStringCreate(
+            "update %s set %s='%d' where id=%d", tableName, fieldName, color, id);
+        if (isNotEmpty(scopeDb))
+            sqlDyStringPrintf(sql, " and db='%s'", scopeDb);
+        if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
+            sqlDyStringPrintf(sql, " and project='%s'", scopeProject);
+        sqlUpdate(conn, sql->string);
+        dyStringFree(&sql);
         cartRemove(cart, varName);
         }
     return;
     }
 struct dyString *sql = sqlDyStringCreate("update %s set %s='%s' where id=%d",
     tableName, fieldName, newVal, id);
+if (isNotEmpty(scopeDb))
+    sqlDyStringPrintf(sql, " and db='%s'", scopeDb);
+if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
+    sqlDyStringPrintf(sql, " and project='%s'", scopeProject);
 sqlUpdate(conn, sql->string);
 dyStringFree(&sql);
 cartRemove(cart, varName);
@@ -365,23 +382,23 @@ if (idString != NULL)
         return;
         }
 
-    /* Handle edits. */
-    updateTextField(trackName, conn, tableName, "name", id);
-    updateTextField(trackName, conn, tableName, "description", id);
-    updateTextField(trackName, conn, tableName, "itemRgb", id);
-    updateTextField(trackName, conn, tableName, "chromStart", id);
-    updateTextField(trackName, conn, tableName, "chromEnd", id);
-    updateTextField(trackName, conn, tableName, "ref", id);
-    updateTextField(trackName, conn, tableName, "alt", id);
-    updateTextField(trackName, conn, tableName, "project", id);
-    updateTextField(trackName, conn, tableName, "mouseover", id);
+    /* Handle edits. Owner edits their own table, no project/db scope filter. */
+    updateTextField(trackName, conn, tableName, "name", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "description", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "itemRgb", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "chromStart", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "chromEnd", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "ref", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "alt", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "project", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "mouseover", id, NULL, NULL);
     /* Update any custom fields */
         {
         char *editUserName = getUserName();
         struct slName *customCols = myVariantsGetCustomFields(editUserName);
         struct slName *col;
         for (col = customCols; col != NULL; col = col->next)
-            updateTextField(trackName, conn, tableName, col->name, id);
+            updateTextField(trackName, conn, tableName, col->name, id, NULL, NULL);
         slFreeList(&customCols);
         }
     /* Trigger CT refresh after edits */
@@ -464,35 +481,31 @@ boolean isShared = startsWith("myVariants_shared_", track->track);
 
 if (isShared)
     {
-    /* Extract the token and look up the share info from the cart */
-    char *token = track->track + strlen("myVariants_shared_");
-    char cartVar[256];
-    safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
-    char *cartVal = cartOptionalString(cart, cartVar);
-    if (isEmpty(cartVal))
+    /* Resolve via hgcentral so revoked/downgraded shares stop returning data. */
+    struct myVariantsShare *share = myVariantsResolveSharedTrack(track->track, cart);
+    if (share == NULL)
         return;
-    char *owner = NULL, *project = NULL, *db = NULL;
-    int permission = 0;
-    if (!myVariantsParseShareCartValue(cartVal, &owner, &project, &db, &permission, NULL))
+    /* Shared tracks are per-assembly; only load when the browser's current
+     * db matches the share's db. */
+    if (!sameString(share->db, database))
+        {
+        myVariantsShareFree(&share);
         return;
-    char *tableName = myVariantsGetDbTable(owner);
+        }
+    char *tableName = myVariantsGetDbTable(share->ownerUser);
     if (isEmpty(tableName))
         {
-        freeMem(owner);
-        freeMem(project);
-        freeMem(db);
+        myVariantsShareFree(&share);
         return;
         }
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    struct dyString *whereClause = sqlDyStringCreate("db='%s'", database);
-    if (!sameString(project, "*"))
-        sqlDyStringPrintf(whereClause, " and project='%s'", project);
+    struct dyString *whereClause = sqlDyStringCreate("db='%s'", share->db);
+    if (!sameString(share->project, "*"))
+        sqlDyStringPrintf(whereClause, " and project='%s'", share->project);
     lfList = loadMyVariantsItems(conn, tableName, track->tdb,
         dyStringCannibalize(&whereClause));
     hFreeConn(&conn);
-    freeMem(owner);
-    freeMem(project);
-    freeMem(db);
+    myVariantsShareFree(&share);
     }
 else
     {
@@ -677,6 +690,15 @@ if (sameString(action, "createShare"))
         if (!found)
             apiError(400, "project does not exist for current user");
         }
+    if (isNotEmpty(targetUser))
+        {
+        char gbq[512];
+        sqlSafef(gbq, sizeof(gbq),
+            "select count(*) from gbMembers where userName='%s'", targetUser);
+        if (sqlQuickNum(conn, gbq) == 0)
+            apiError(400, "targetUser not found - check the spelling, or omit"
+                " targetUser to make an 'anyone with link' share");
+        }
     struct myVariantsShare *share = myVariantsCreateShare(conn, userName,
         project, db, permission, targetUser, label);
     struct jsonWrite *jw = jsonWriteNew();
@@ -825,19 +847,8 @@ for (el = shareVars; el != NULL; el = el->next)
     if (idString == NULL)
         continue;
 
-    /* Re-validate the share against hgcentral on every edit. The cart-cached
-     * permission is not authoritative: the owner may have revoked the share
-     * or downgraded it from read-write to read-only since the recipient's
-     * cart was last set, and we don't want stale cart contents to grant
-     * writes that the live share record no longer permits. */
-    struct sqlConnection *centralConn = hConnectCentral();
-    if (!sqlTableExists(centralConn, "myVariantsShares"))
-        {
-        hDisconnectCentral(&centralConn);
-        continue;
-        }
-    struct myVariantsShare *liveShare = myVariantsGetShareByToken(centralConn, token);
-    hDisconnectCentral(&centralConn);
+    /* Revalidate via hgcentral so revoked/downgraded shares can't write. */
+    struct myVariantsShare *liveShare = myVariantsResolveSharedTrack(trackName, cart);
     if (liveShare == NULL)
         continue;
     if (liveShare->permission != MYVAR_PERM_READWRITE)
@@ -845,18 +856,10 @@ for (el = shareVars; el != NULL; el = el->next)
         myVariantsShareFree(&liveShare);
         continue;
         }
-    if (isNotEmpty(liveShare->targetUser) && !sameString(liveShare->targetUser, userName))
-        {
-        myVariantsShareFree(&liveShare);
-        continue;
-        }
-    char *owner = cloneString(liveShare->ownerUser);
-    myVariantsShareFree(&liveShare);
-
-    char *tableName = myVariantsGetDbTable(owner);
+    char *tableName = myVariantsGetDbTable(liveShare->ownerUser);
     if (isEmpty(tableName))
         {
-        freeMem(owner);
+        myVariantsShareFree(&liveShare);
         continue;
         }
 
@@ -868,27 +871,30 @@ for (el = shareVars; el != NULL; el = el->next)
     if (cartVarExists(cart, varName))
         {
         cartRemove(cart, varName);
-        freeMem(owner);
+        myVariantsShareFree(&liveShare);
         continue;
         }
 
-    /* Apply field edits - no delete, no project change */
+    /* Apply field edits, scoped to the share's project/db so a recipient
+     * cannot edit rows in projects/assemblies they were not granted. */
+    char *sp = liveShare->project;
+    char *sd = liveShare->db;
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    updateTextField(trackName, conn, tableName, "name", id);
-    updateTextField(trackName, conn, tableName, "description", id);
-    updateTextField(trackName, conn, tableName, "itemRgb", id);
-    updateTextField(trackName, conn, tableName, "chromStart", id);
-    updateTextField(trackName, conn, tableName, "chromEnd", id);
-    updateTextField(trackName, conn, tableName, "ref", id);
-    updateTextField(trackName, conn, tableName, "alt", id);
-    updateTextField(trackName, conn, tableName, "mouseover", id);
-    struct slName *customCols = myVariantsGetCustomFields(owner);
+    updateTextField(trackName, conn, tableName, "name", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "description", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "itemRgb", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "chromStart", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "chromEnd", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "ref", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "alt", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "mouseover", id, sp, sd);
+    struct slName *customCols = myVariantsGetCustomFields(liveShare->ownerUser);
     struct slName *col;
     for (col = customCols; col != NULL; col = col->next)
-        updateTextField(trackName, conn, tableName, col->name, id);
+        updateTextField(trackName, conn, tableName, col->name, id, sp, sd);
     slFreeList(&customCols);
     hFreeConn(&conn);
-    freeMem(owner);
+    myVariantsShareFree(&liveShare);
     }
 hashElFreeList(&shareVars);
 }
