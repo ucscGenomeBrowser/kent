@@ -8,39 +8,35 @@
 <h1>Faceted Composite Tracks</h1>
 
 <h2>Overview</h2>
-<p>Composite tracks are a standard way to collect a large number of related tracks within
+<p>Composite tracks are a standard way to collect a number of related tracks within
 the browser and interact with them in a unified interface.  For example, our Conservation tracks
 are often organized as composites as are each of our "All GENCODE" tracks (see
 <a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">here</a>).
-The standard user interface for these composite tracks presents a plain list of all of the
-subtracks where each one can be configured individually.  More structure can be added to that
-interface by adding "Views" to the composite, which group subtracks together and provide a
-track selection matrix.  That system works for intermediate numbers of tracks (around 20-40),
-but the matrix approach fails when the number of subtracks scales into the thousands.
-Faceted composites provide an alternate user interface for composite tracks that is designed for
-these situations.</p>
-<p>In a faceted composite, the list of subtracks is presented as a plain list with a list of
-facets and text filters that can be used to narrow down the view to tracks of interest.  This
-is particularly useful for data sets that include information on a wide variety of cell types,
-for example, where only a few of them may be of interest for any particular user.  Because the
+The standard user interface works for intermediate numbers of subtracks (around 20-200),
+but becomes unusable when that scales up into the thousands.  Faceted composites provide
+an alternate user interface for composite tracks that is designed fork these situations.
+</p><p>
+The faceted composite display is particularly useful for data sets where each subtrack has
+many potential values to be filtered on (e.g. cell type, protocol, date, experiment scores, etc.),
+and where only a few of them may be of interest for any particular user.  Because the
 focus is on simply helping users identify which subtracks are relevant to them, the subtrack
 configuration options are reduced to "is this subtrack displayed or not".  Users can then
-alter the display of individual subtracks using the right-click Configure meny from the main
+alter the display of individual subtracks using the right-click Configure menu from the main
 hgTracks browser display.</p>
-<p>
+<p></p>
 
 <div class="text-center">
-  <img alt="Heatmap track showing a color-coded grid of expression values across genomic positions" src="/images/heatmap_example.png" style="width:80%;max-width:1083px">
+  <img alt="Heatmap track showing a color-coded grid of expression values across genomic positions" src="/images/facet_example.png" style="width:80%;max-width:1083px">
 </div>
 
 <h2>Contents</h2>
 
-<h6><a href="#quickStart">Quick Start</a>
-<h6><a href="#facetedSettings">TrackDb Settings for Building a Faceted Composite</a></h6>
+<h6><a href="#quickStart">Quick Start - For those familiar with composite tracks</a></h6>
+<h6><a href="#facetedSettings">Slow Start - TrackDb Settings for Building a Faceted Composite</a></h6>
 <h6><a href="#troubleshooting">Troubleshooting</a></h6>
 
 <a id="quickStart"></a>
-<h2>Quick Start</h2>
+<h2>Quick Start - For those familiar with composite tracks</h2>
 <p>
 The TL;DR version of this is that a faceted composite is like any other composite,
 but don't add views or subgroups.  All tracks in a mix of types live under the same
@@ -69,7 +65,7 @@ Brief example:<br>
   parent myComposite
   type bigBed
   bigDataUrl https://url/to/ex2.bb
-  shortLabel ex1 peaks
+  shortLabel ex2 peaks
   longLabel ex2 Blood data peaks
 </pre>
 <b>metadata.tsv</b><br>
@@ -81,21 +77,80 @@ ex2	2026-01-03	erythrocyte	Helsing
 </p>
 
 <a id="facetedSettings"></a>
-<h2>TrackDb Settings for Building a Faceted Composite</h2>
+<h2>Long Start - TrackDb Settings for Building a Faceted Composite</h2>
 <p>
-Our <a href="trackDb/trackDbHub.html#faceted_composite">trackDb documentation</a>
-includes details about settings relevant to faceted composites, but some of them
-deserve a bit more exposition.
+This section walks through building a faceted composite from the
+ground up, starting with the bare minimum structure and adding features
+piece by piece.  By the end, you should have all of the trackDb settings
+needed to assemble a fully faceted composite track for your own data.
+</p>
+<p>
+Like any composite track, a faceted composite is built from two kinds of
+trackDb entries: a single <b>parent</b> stanza that declares the composite
+as a whole, and a collection of <b>child</b> stanzas (also called subtracks)
+that each carry the underlying data.  The parent is what users see in the
+track list on the browser gateway; opening it brings up the faceted
+interface that lets users choose which children to display.
+</p>
+<p>
+<b>The parent track</b><br>
+At its simplest, a faceted composite parent looks like this:
+<pre>
+  track myComposite
+  compositeTrack faceted
+  shortLabel Blood tests
+  longLabel Blood tests across cell types
+</pre>
+The line <code>compositeTrack faceted</code> is what tells the browser to use
+the faceted user interface rather than the traditional composite matrix.
+The <code>shortLabel</code> and <code>longLabel</code> are the names shown
+in the track list and on the configuration page.
+</p>
+<p>
+<b>The child tracks</b><br>
+Each child stanza names its parent with a <code>parent</code> line and
+points at its own data file.  A minimal pair of children for the example
+above might be:
+<pre>
+  track myComposite_ex1
+  parent myComposite
+  type bigBed
+  bigDataUrl https://url/to/ex1.bb
+  shortLabel ex1 peaks
+  longLabel ex1 Blood data peaks
+
+  track myComposite_ex2
+  parent myComposite
+  type bigBed
+  bigDataUrl https://url/to/ex2.bb
+  shortLabel ex2 peaks
+  longLabel ex2 Blood data peaks
+</pre>
+Two things worth noting.  First, unlike a traditional composite, a faceted
+composite happily mixes data types - the children don't all need to be
+bigBed, or all bigWig.  Second, each child track name follows the convention
+<code>&lt;parent_name&gt;_&lt;identifier&gt;</code>, where the identifier
+will line up with a row in the metadata file introduced below.  That naming
+convention is how the browser ties each subtrack to its metadata, so the
+match must be exact, capitalization included.
+</p>
+<p>
+With just the settings above, the composite will load and display, but it
+won't yet have any facets or filters.  The remaining sections below cover
+the trackDb settings that turn this plain composite into a fully faceted
+one.  Our <a href="trackDb/trackDbHub.html#faceted_composite">trackDb
+documentation</a> gives the full reference for each setting; what follows
+is some additional exposition.
 </p>
 <p>
 <b>view</b> and <b>subGroups</b><br>
 These settings are not used in faceted composites.  Instead, the UI for a faceted
 composite is governed by the <code>dataTypes</code> and <code>metaDataUrl</code>
 settings.  Most composite track needs can be addressed without using the
-<code>dataTypes</code> setting at all, so we're going to ignore it to start with.
-We'll first consider the case where the <code>dataTypes</code> setting
-is not in use, and then a case where it might be helpful and what changes are
-required.
+<code>dataTypes</code> setting at all, so we are going to ignore it to start with.
+After considering an example where the <code>dataTypes</code> setting
+is not in use, we will then discuss where it might be helpful and what associated
+changes are required.
 </p><p>
 In most situations, the desired user interface for a faceted composite track
 presents a table where each row is a separate subtrack from the composite.  The
@@ -113,10 +168,10 @@ in the <code>metaDataUrl</code> setting of the track.<br>
 Example:<br>
 <pre>
 accession	tissue	protocol	treatment	_date	__count
-SRR11111	blood	ATAC-seq	control	2026-01-01	12
-SRR11112	blood	ATAC-seq	IFNg6h	2026-01-01	31
-SRR11113	spleen	ATAC-seq	control	2024-08-21	8
-SRR11114	spleen	ATAC-seq	IFNg6h	2026-08-22	17
+SRR11111	blood	Omni-ATAC-seq	control	2026-01-01	12
+SRR11112	blood	Omni-ATAC-seq	IFNg6h	2026-01-01	31
+SRR11113	spleen	Omni-ATAC-seq	control	2024-08-21	8
+SRR11114	spleen	Omni-ATAC-seq	IFNg6h	2026-08-22	17
 </pre>
 <p>
 This data would be pasted into a file called something like "myTrackMetadata.tsv",
@@ -130,7 +185,7 @@ about two field names in this example file.  The "date" field begins with one
 underscore, and the "count" field begins with two underscores.  These prefixes
 modify the facet interface for the track.  By default, each field apart from
 the primaryKey field will have an associated facet created for it on the page,
-and a searchbox will be provided in the table.  When a field name begins with
+and a search box will be provided in the table.  When a field name begins with
 one underscore, however, no facet will be created (a search box will still
 be provided in the table header).  When a field name begins with two underscores,
 there will be no facet for it and no search box in the table header.
@@ -150,14 +205,14 @@ selected data types will be turned on for every selected sample in the table,
 so the interface is a bit less flexible than the plain one-row-per-track table.
 In this alternate setup, however, the one-row-per-sample arrangement can save
 significant space both in the configuration UI and in the metadata TSV file.<br>
-<em>A very important note here</em>: the rules for subtrack names changes when
+<em>A very important note here</em>: the rules for subtrack names change when
 the <code>dataTypes</code> setting is active.  Without dataTypes, subtrack names
 are expected to match &lt;parent track name&gt;_&lt;primary key&gt;.  An example
 of that can be seen in the quick start near the top of the page.  When
 dataTypes are used, however, then subtrack names are expected to match
 &lt;parent track name&gt;_&lt;primary key&gt;_&lt;dataType&gt;.  For example,
 if the data types "signal" and "peaks" are in use for that same quick start
-example, then the track look like this:<br>
+example, then the set of tracks looks like this:<br>
 <pre>
   track myComposite
   compositeTrack faceted
@@ -188,7 +243,7 @@ example, then the track look like this:<br>
   shortLabel ex2 signal
   longLabel ex2 Blood data signal
 
-  track myComposite_ex2
+  track myComposite_ex2_peaks
   parent myComposite
   type bigBed
   bigDataUrl https://url/to/ex2.bb
@@ -220,10 +275,10 @@ which fields are to be used to generate links out and what the format of those U
 Bringing back this example metadata file:<br>
 <pre>
 accession	tissue	protocol	treatment	_date	__count
-SRR11111	blood	ATAC-seq	control	2026-01-01	12
-SRR11112	blood	ATAC-seq	IFNg6h	2026-01-01	31
-SRR11113	spleen	ATAC-seq	control	2024-08-21	8
-SRR11114	spleen	ATAC-seq	IFNg6h	2026-08-22	17
+SRR11111	blood	Omni-ATAC-seq	control	2026-01-01	12
+SRR11112	blood	Omni-ATAC-seq	IFNg6h	2026-01-01	31
+SRR11113	spleen	Omni-ATAC-seq	control	2024-08-21	8
+SRR11114	spleen	Omni-ATAC-seq	IFNg6h	2026-08-22	17
 </pre>
 </p><p>
 It might be helpful to provide links out from the accession column to SRA, and the protocol
@@ -234,8 +289,24 @@ subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ protocol=https://www.
 </pre>
 </p><p>
 For each of these URLs, $$ will be replaced with the relevant value from that field (whether one
-of the SRR strings for the accession field, or "ATAC-seq" for the protocol field).
+of the SRR strings for the accession field, or "Omni-ATAC-seq" for the protocol field).
 </p><p>
+Similar to the dataTypes discussion, there is also a final note here about situations where
+you want to use one value in the URL while having another value displayed in the column.  And
+just as in that case, the solution is to use <code>&lt;value&gt;|"&lt;label&gt;"</code> in that
+field in the metadata TSV file.  The above example wouldn't quite work right because the actual
+URL for the protocol is "https://www.protocols.io/view/omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d".
+Clearly, however, we don't want to use "omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d"
+in the display for people reading through the table.  By setting up the rows like this instead,
+we maintain a clean display while providing links to the right protocol:
+<pre>
+accession	tissue	protocol	treatment	_date	__count
+SRR11111	blood	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	control	2026-01-01	12
+SRR11112	blood	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	IFNg6h	2026-01-01	31
+SRR11113	spleen	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	control	2024-08-21	8
+SRR11114	spleen	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	IFNg6h	2026-08-22	17
+</pre>
+</p<p>
 
 <a id="troubleshooting"></a>
 <h2>Troubleshooting</h2>
