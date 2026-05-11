@@ -35,3 +35,4 @@ include choriCloneEnds.ra
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
 include danRer11.GCA_052040795.1.chainNet.ra alpha
+include danRer11.ce11.chainNet.ra alpha
