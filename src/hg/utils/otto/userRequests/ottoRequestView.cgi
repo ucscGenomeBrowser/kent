@@ -53,6 +53,7 @@ ASMHUB_ROOT  = HIVE_GENOMES + '/asmHubs'
 # in-process caches; one CGI invocation only, but rows reuse same accessions
 _buildDirCache = {}
 _fbPctCache    = {}
+_genarkAsmName = {}    # populated up-front by loadGenarkNames()
 
 
 def forbidden(msg):
@@ -126,9 +127,31 @@ def doResetStatus(form):
             f"({STATUS_NAMES[int(stat)]})"), None
 
 
+def loadGenarkNames(accessions):
+    """Populate _genarkAsmName: {gcAccession: asmName} for the given
+    accessions in one bulk hgsql call against the genark table.  Lets
+    hubBuildDir() construct paths directly instead of NFS-listdir'ing
+    /hive/data/genomes/asmHubs/.../<XXX>/<XXX>/<XXX>/ to discover the
+    asmName suffix on each accession."""
+    if not accessions:
+        return
+    quoted = ",".join("'%s'" % a for a in sorted(accessions))
+    sql = (f"SELECT gcAccession, asmName FROM genark "
+           f"WHERE gcAccession IN ({quoted});")
+    ok, out, _err = hgsqlRun(sql)
+    if not ok or not out.strip():
+        return
+    for line in out.rstrip('\n').split('\n'):
+        parts = line.split('\t')
+        if len(parts) >= 2:
+            _genarkAsmName[parts[0]] = parts[1]
+
+
 def hubBuildDir(acc):
     """Locate the hive build directory for a fromDb/toDb value.
     GenArk accession (GCA_/GCF_) -> asmHubs/{genbank,refseq}Build/<XXX>/<XXX>/<XXX>/<acc>_<asmName>
+        asmName comes from _genarkAsmName, populated up-front by
+        loadGenarkNames() from the genark table.
     UCSC native db (e.g. hg38)   -> /hive/data/genomes/<db>
     Returns absolute path or None."""
     if not acc:
@@ -137,19 +160,15 @@ def hubBuildDir(acc):
         return _buildDirCache[acc]
     result = None
     if (acc.startswith('GCF_') or acc.startswith('GCA_')) and len(acc) >= 13:
-        src    = acc[:3]
-        sub    = 'refseqBuild' if src == 'GCF' else 'genbankBuild'
-        digits = acc[4:].split('.', 1)[0]
-        if len(digits) >= 9:
-            parent = (f'{ASMHUB_ROOT}/{sub}/{src}/'
-                      f'{digits[0:3]}/{digits[3:6]}/{digits[6:9]}')
-            try:
-                for entry in os.listdir(parent):
-                    if entry.startswith(acc + '_'):
-                        result = f'{parent}/{entry}'
-                        break
-            except OSError:
-                pass
+        asmName = _genarkAsmName.get(acc)
+        if asmName:
+            src    = acc[:3]
+            sub    = 'refseqBuild' if src == 'GCF' else 'genbankBuild'
+            digits = acc[4:].split('.', 1)[0]
+            if len(digits) >= 9:
+                result = (f'{ASMHUB_ROOT}/{sub}/{src}/'
+                          f'{digits[0:3]}/{digits[3:6]}/{digits[6:9]}/'
+                          f'{acc}_{asmName}')
     else:
         candidate = f'{HIVE_GENOMES}/{acc}'
         if os.path.isdir(candidate):
@@ -378,6 +397,18 @@ def main():
     except RuntimeError as e:
         rows = []
         error = (error + ' / ' if error else '') + f"fetch failed: {e}"
+
+    # one bulk lookup of GenArk asmNames so hubBuildDir() avoids NFS readdir
+    fromIdx = COLS.index('fromDb')
+    toIdx   = COLS.index('toDb')
+    gcAccs = set()
+    for r in rows:
+        for idx in (fromIdx, toIdx):
+            if idx < len(r):
+                v = r[idx]
+                if v.startswith('GCA_') or v.startswith('GCF_'):
+                    gcAccs.add(v)
+    loadGenarkNames(gcAccs)
 
     galaxyStatus = loadGalaxyStatus()
 

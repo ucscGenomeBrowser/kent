@@ -253,6 +253,51 @@ fi
 ##############################################################################
 
 ############################################################################
+# phase 0: pre-flight existing-work detection.  If the alignment has
+#          already been built in-house (legacy lastz/chain/net or an
+#          earlier kegAlign run), the only step left is the hgdownload
+#          push.  Signals (all must hold):
+#            /hive/data/genomes/${fromDb}/bed/lastz.${toDb}  symlink exists
+#            /hive/data/genomes/${toDb}/bed/lastz.${fromDb}  symlink exists
+#            hgcentraltest.liftOverChain   has both directions
+#            hgcentraltest.quickLiftChain  has both directions
+#          When all four hold, fill in buildDir with the resolved
+#          fromDb-side build dir and bump status=5 so
+#          ottoRequestPush.py picks it up.  Anything that doesn't match
+#          stays at status=1 and falls through to phase 1.
+############################################################################
+while IFS=$'\t' read -r reqId fromDb toDb; do
+  fromSym="/hive/data/genomes/${fromDb}/bed/lastz.${toDb}"
+  toSym="/hive/data/genomes/${toDb}/bed/lastz.${fromDb}"
+  if [ ! -L "${fromSym}" ] || [ ! -L "${toSym}" ]; then
+    continue
+  fi
+  fromBuild="$(readlink -f "${fromSym}")"
+  toBuild="$(readlink -f "${toSym}")"
+  if [ ! -d "${fromBuild}" ] || [ ! -d "${toBuild}" ]; then
+    continue
+  fi
+  loCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+    "SELECT COUNT(*) FROM liftOverChain WHERE \
+       (fromDb='${fromDb}' AND toDb='${toDb}') OR \
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
+  qlCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+    "SELECT COUNT(*) FROM quickLiftChain WHERE \
+       (fromDb='${fromDb}' AND toDb='${toDb}') OR \
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
+  if [ "${loCount}" -lt 2 ] || [ "${qlCount}" -lt 2 ]; then
+    continue
+  fi
+  printf "# request %s: prior work detected at %s, jumping to push\n" \
+    "${reqId}" "${fromBuild}" 1>&2
+  /cluster/bin/x86_64/hgsql -N -e \
+    "UPDATE ottoRequest SET status=5, buildDir='${fromBuild}' \
+     WHERE id=${reqId};" hgcentraltest
+done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+  "SELECT id, fromDb, toDb FROM ottoRequest \
+   WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" hgcentraltest)
+
+############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
 ############################################################################
 while read -r reqId; do
