@@ -252,6 +252,18 @@ else
 fi
 ##############################################################################
 
+##############################################################################
+### refresh featureBits coverage snapshot for ottoRequestView.cgi
+###   append-only; script reads its current snapshot and only measures
+###   pairs not already recorded, so per-tick cost is ~zero in steady
+###   state.  Has its own singleton lock, writes its own snapshot file
+###   atomically, exits 0 silently when nothing to do.
+##############################################################################
+if ! timeout 45 "${scriptDir}/featureBitsSnapshot.py" 2>/dev/null; then
+  : # non-zero exit ignored: leave stale snapshot, next tick will retry
+fi
+##############################################################################
+
 ############################################################################
 # phase 0: pre-flight existing-work detection.  If the alignment has
 #          already been built in-house (legacy lastz/chain/net or an

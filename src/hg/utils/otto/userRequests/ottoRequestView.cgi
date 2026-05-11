@@ -30,6 +30,12 @@ TABLE        = 'ottoRequest'
 CACHE_PATH = '/data/apache/trash/ottoRequestGalaxyStatus.json'
 CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 
+# featureBits coverage snapshot - append-only file maintained by
+# featureBitsSnapshot.py (cron, via ottoRequestWatch.sh).  fb.*.txt
+# values are immutable once an alignment completes so no TTL is needed;
+# featureBitsPct() falls back to an NFS read on a snapshot miss.
+FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
+
 # from README.txt in this directory
 STATUS_NAMES = {
     0: 'received by API',
@@ -54,6 +60,7 @@ ASMHUB_ROOT  = HIVE_GENOMES + '/asmHubs'
 _buildDirCache = {}
 _fbPctCache    = {}
 _genarkAsmName = {}    # populated up-front by loadGenarkNames()
+_fbSnapshot    = {}    # populated up-front by loadFeatureBitsSnapshot()
 
 
 def forbidden(msg):
@@ -177,14 +184,37 @@ def hubBuildDir(acc):
     return result
 
 
+def loadFeatureBitsSnapshot():
+    """Populate _fbSnapshot from the JSON file written by
+    featureBitsSnapshot.py via cron.  Silent no-op if the file is
+    missing or malformed - featureBitsPct() falls back to an NFS read
+    on a snapshot miss, so the page still renders correctly."""
+    try:
+        with open(FB_SNAPSHOT_PATH) as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return
+    _fbSnapshot.update(data.get('pct') or {})
+
+
 def featureBitsPct(srcAcc, qryAcc):
     """Return percentage from fb.<srcAcc>.chain<qryAcc>Link.txt (% of srcAcc
-    covered by chains to qryAcc), or '' if unavailable."""
+    covered by chains to qryAcc), or '' if unavailable.
+
+    Two-tier lookup: the precomputed cron snapshot first (pure dict
+    lookup, no I/O); on miss falls back to the NFS file read so
+    freshly-completed rows still show a value before the next cron
+    tick promotes them."""
     if not srcAcc or not qryAcc:
         return ''
     key = (srcAcc, qryAcc)
     if key in _fbPctCache:
         return _fbPctCache[key]
+    snapKey = f'{srcAcc}\t{qryAcc}'
+    if snapKey in _fbSnapshot:
+        pct = _fbSnapshot[snapKey]
+        _fbPctCache[key] = pct
+        return pct
     bdir = hubBuildDir(srcAcc)
     pct  = ''
     if bdir:
@@ -409,6 +439,7 @@ def main():
                 if v.startswith('GCA_') or v.startswith('GCF_'):
                     gcAccs.add(v)
     loadGenarkNames(gcAccs)
+    loadFeatureBitsSnapshot()
 
     galaxyStatus = loadGalaxyStatus()
 
