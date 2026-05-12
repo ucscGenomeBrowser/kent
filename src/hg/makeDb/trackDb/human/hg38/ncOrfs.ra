@@ -21,7 +21,7 @@ group genes
     longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
     type bigGenePred
     itemRgb on
-    mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    mouseOver transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
     html gencNcOrfs
     visibility pack
 
@@ -30,7 +30,7 @@ group genes
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
     shortLabel GENCODE Ph2 ncORFs Pri
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
-    type bigBed 12 +
+    type bigBed 12
     itemRgb on
     #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
     html gencNcOrfs
@@ -41,7 +41,7 @@ group genes
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
     shortLabel GENCODE Ph2 ncORFs Cmp
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
-    type bigBed 12 +
+    type bigBed 12
     itemRgb on
     #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
     html gencNcOrfs
