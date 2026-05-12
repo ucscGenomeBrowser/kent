@@ -62,6 +62,51 @@ cases:
     compare:
       - [native, lifted]
 
+  # -------- Mode B: native on source assembly vs lifted to a different one --------
+  # Same hub, but the native variant views the source bigBed/bigWig on its
+  # own assembly (hg38) while the lifted variant views the same data quickLifted
+  # to a different assembly (hs1). Different db per variant. Positions chosen
+  # so the two windows cover approximately the same biological region.
+  - id: mode_b_bb
+    description: |
+      Mode B bigBed: hg38-native render (modeB_bb_native) vs the same
+      hg38-coord bigBed quickLifted to hs1 (modeC_bb_lifted). Measures
+      the cost of remap + cross-assembly rendering relative to a clean
+      native render.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hg38.txt
+        db: hg38
+        position: chr22:15000000-50000000
+        tracks: {modeB_bb_native: pack, modeB_bw_native: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: pack, modeC_bw_native: hide, modeC_bw_lifted: hide}
+    compare:
+      - [native, lifted]
+
+  - id: mode_b_bw
+    description: |
+      Mode B bigWig: hg38-native render (modeB_bw_native) vs the same
+      hg38-coord bigWig quickLifted to hs1 (modeC_bw_lifted).
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hg38.txt
+        db: hg38
+        position: chr22:15000000-50000000
+        tracks: {modeB_bb_native: hide, modeB_bw_native: full}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: full}
+    compare:
+      - [native, lifted]
+
   # -------- Mode C: lift on/off, same hub on hs1 (refs #37445) --------
   # Reference hub at utils/qa/quickLiftBench/testHub/ (built by buildTestHub.sh).
   # Both stanzas render the same conceptual features at the same hs1 coords;
@@ -76,12 +121,12 @@ cases:
     server: hgwdev
     variants:
       native:
-        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
         db: hs1
         position: chr22:15000000-50000000
         tracks: {modeC_bb_native: pack, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: hide}
       lifted:
-        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
         db: hs1
         position: chr22:15000000-50000000
         tracks: {modeC_bb_native: hide, modeC_bb_lifted: pack, modeC_bw_native: hide, modeC_bw_lifted: hide}
@@ -96,12 +141,12 @@ cases:
     server: hgwdev
     variants:
       native:
-        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
         db: hs1
         position: chr22:15000000-50000000
         tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: full, modeC_bw_lifted: hide}
       lifted:
-        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
         db: hs1
         position: chr22:15000000-50000000
         tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: full}

@@ -1,13 +1,16 @@
 #!/bin/bash
-# buildTestHub.sh - regenerate the Mode C reference hub data.
+# buildTestHub.sh - regenerate the Mode B + Mode C reference hub data.
 #
-# Builds a self-contained hs1 hub with two pairs of stanzas:
-#   * modeC_bb_native / modeC_bb_lifted -- bigBed12, N features in chr22.
-#   * modeC_bw_native / modeC_bw_lifted -- bigWig, one signal value per BW_STEP
-#     bp across the same chr22 region.
-# Each pair shares the same underlying data; the lifted variant points at an
-# hg38-coord file plus quickLiftUrl. Drops everything (bb/bw + chain pair +
-# hub.txt) into $1 (default ~/public_html/quickLiftBench/testHub).
+# Builds a self-contained two-genome hub:
+#   * hs1 genome (Mode C: lift on/off, same hub + position):
+#     - modeC_bb_native / modeC_bb_lifted -- bigBed12, N features.
+#     - modeC_bw_native / modeC_bw_lifted -- bigWig at BW_STEP bp resolution.
+#   * hg38 genome (Mode B: native rendering of the same source data):
+#     - modeB_bb_native -- the hg38-coord bigBed rendered natively.
+#     - modeB_bw_native -- the hg38-coord bigWig rendered natively.
+# Mode B's "lifted" variant is just modeC_bb_lifted / modeC_bw_lifted on hs1.
+# Drops bb/bw files + chain pair + hub.txt into $1
+# (default ~/public_html/quickLiftBench/testHub).
 #
 # Refs Redmine #37445.
 
@@ -96,11 +99,14 @@ bedGraphToBigWig modeC_hs1.bedGraph  "$HS1_CHROM_SIZES"  modeC_hs1.bw
 cp "$QUICK_CHAIN_SRC"      hg38ToHs1.quick.bb
 cp "$QUICK_CHAIN_LINK_SRC" hg38ToHs1.quick.link.bb
 
-# hub.txt (useOneFile -- single self-contained file)
-cat > hub.txt <<EOF
-hub quickLiftBench_modeC
-shortLabel quickLiftBench Mode C
-longLabel quickLiftBench Mode C: native vs quickLifted view of the same synthetic data
+# Two single-genome useOneFile hubs (hub_hs1.txt, hub_hg38.txt). We can't
+# put both genomes in one useOneFile because trackHubGenomeReadRa() breaks
+# out of the genome-parsing loop at the first `track` line (trackHub.c:679),
+# so a 2nd `genome` block after any track stanza is silently dropped.
+cat > hub_hs1.txt <<EOF
+hub quickLiftBench_hs1
+shortLabel quickLiftBench (hs1)
+longLabel quickLiftBench: hs1 stanzas for Mode C and the lifted side of Mode B
 useOneFile on
 email braney@ucsc.edu
 descriptionUrl https://redmine.gi.ucsc.edu/issues/37445
@@ -144,10 +150,40 @@ type bigWig
 bigDataUrl modeC_hg38.bw
 quickLiftUrl hg38ToHs1.quick.bb
 quickLiftDb hg38
+viewLimits 0:200
+visibility full
+color 0,128,0
+priority 4
+EOF
+
+cat > hub_hg38.txt <<EOF
+hub quickLiftBench_hg38
+shortLabel quickLiftBench (hg38)
+longLabel quickLiftBench: hg38-native stanzas for the native side of Mode B
+useOneFile on
+email braney@ucsc.edu
+descriptionUrl https://redmine.gi.ucsc.edu/issues/37445
+
+genome hg38
+
+track modeB_bb_native
+shortLabel modeB bb native
+longLabel Mode B bigBed native: features rendered natively on hg38 (source assembly)
+type bigBed 12
+bigDataUrl modeC_hg38.bb
+visibility pack
+color 0,128,0
+priority 1
+
+track modeB_bw_native
+shortLabel modeB bw native
+longLabel Mode B bigWig native: signal rendered natively on hg38 (source assembly)
+type bigWig
+bigDataUrl modeC_hg38.bw
 visibility full
 color 0,128,0
 viewLimits 0:200
-priority 4
+priority 2
 EOF
 
 echo "hub built at $DEST"
