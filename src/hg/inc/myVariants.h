@@ -38,7 +38,12 @@ struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query
 /* Load all myVariants from table that satisfy the query given. Dispose of this with myVariantsFreeList(). */
 
 void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char *tableName, int updateSize);
-/* Save myVariants as a row to the table specified by tableName. */
+/* Save myVariants as a row to the table specified by tableName.
+ * Uses explicit column names so custom fields in el->customFields are included.
+ * If el->name is NULL or empty, fills it in post-INSERT as "Variant N" using
+ * the row's auto-increment id; sqlLastAutoId wraps MariaDB's mysql_insert_id,
+ * which is per-connection and unaffected by concurrent INSERTs on other
+ * connections. */
 
 struct myVariants *myVariantsLoad(char **row);
 /* Load a myVariants from row fetched with select * from myVariants from database. Dispose of this with myVariantsFree(). */
