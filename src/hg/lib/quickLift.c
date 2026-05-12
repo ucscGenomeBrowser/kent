@@ -82,6 +82,12 @@ for(chain = chainList; chain; chain = chain->next)
     bbList = slCat(thisInterval, bbList);
     }
 
+// We are done with the chains we used to bound the data query;
+// release them before loading the wider set for the lift map below.
+// Without this, every quickLifted track leaked the cBlocks of every
+// chain overlapping the window.
+chainFreeList(&chainList);
+
 // now we need to grab the links outside of our viewport so we can map long items
 // probably we could reuse the chains from above but for the moment this is easier
 // For the moment we use the same padding on both sides so we don't have to worry about strand
@@ -90,9 +96,11 @@ if (maxGapBefore > maxGapAfter)
 else
     maxGapBefore = maxGapAfter;
 
-// sometimes the edges are way too large.  Needs research
-//if (maxGapBefore > 1000000)
-    //maxGapBefore = maxGapAfter = 1000000;
+// Cap the padding so a single oversized item doesn't drag in chains
+// (and their dense cBlock lists) covering many megabases.
+#define QUICKLIFT_MAX_GAP_PAD 1000000
+if (maxGapBefore > QUICKLIFT_MAX_GAP_PAD)
+    maxGapBefore = maxGapAfter = QUICKLIFT_MAX_GAP_PAD;
 
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
