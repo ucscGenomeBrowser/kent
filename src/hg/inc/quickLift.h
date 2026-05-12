@@ -90,4 +90,8 @@ boolean quickLiftLiftPos(char *sourceDb, char *destDb,
 /* Map a position from source (sourceDb) coords to destination (destDb) coords
  * using the liftOver chain for sourceDb -> destDb.  Used to remap hgFind
  * results from quickLifted bigBed tracks back to the destination assembly. */
+
+boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackName);
+/* Remove a track stanza from the quickLift hub file for sourceDb.  Returns
+ * TRUE if a stanza matching trackName was found and removed. */
 #endif

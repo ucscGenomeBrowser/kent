@@ -134,8 +134,36 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 jsonWriteListEnd(jw);
 jsonWriteNumber(jw, "totalLiftOvers", totalRows);
-jsonWriteNumber(jw, "itemsReturned", slCount(chainList));
+int chainListCount = slCount(chainList);
+jsonWriteNumber(jw, "itemsReturned", chainListCount);
 liftOverChainFreeList(&chainList);
+
+/* if no chain rows for this pair, check ottoRequest for any existing
+ * row (any status) so the user is told their pair has already been
+ * submitted instead of being allowed to create a duplicate row */
+if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    char *ottoTable = cfgOption("ottoTable");
+    if (isNotEmpty(ottoTable) && sqlTableExists(conn, ottoTable))
+        {
+        struct dyString *pq = newDyString(0);
+        sqlDyStringPrintf(pq,
+            "SELECT id, status, requestTime FROM %s "
+            "WHERE requestType='liftOver' AND "
+            "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s')) "
+            "ORDER BY requestTime DESC LIMIT 1",
+            ottoTable, fromDb, toDb, toDb, fromDb);
+        char **row;
+        struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&pq));
+        if ((row = sqlNextRow(sr)) != NULL)
+            {
+            jsonWriteBoolean(jw, "pending", TRUE);
+            jsonWriteNumber(jw, "pendingStatus", sqlSigned(row[1]));
+            jsonWriteString(jw, "pendingRequestTime", row[2]);
+            }
+        sqlFreeResult(&sr);
+        }
+    }
 
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
@@ -308,6 +336,35 @@ char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
 if (isEmpty(userId))
     apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+
+/* duplicate-row guard: any existing row in ottoRequest for this pair
+ * (either direction, any status) blocks resubmission.  The form's JS
+ * already shows a "pending" panel for this case via the listExisting
+ * endpoint; this is the backstop for clients that bypass the form. */
+{
+char *dupOttoTable = cfgOption("ottoTable");
+if (isNotEmpty(dupOttoTable))
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    if (sqlTableExists(conn, dupOttoTable))
+        {
+        struct dyString *dq = newDyString(0);
+        sqlDyStringPrintf(dq,
+            "SELECT COUNT(*) FROM %s WHERE requestType='liftOver' AND "
+            "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))",
+            dupOttoTable, fromGenome, toGenome, toGenome, fromGenome);
+        int dupCount = sqlQuickNum(conn, dyStringCannibalize(&dq));
+        hDisconnectCentral(&conn);
+        if (dupCount > 0)
+            apiErrAbort(err409, err409Msg,
+                "A request for %s <-> %s has already been submitted "
+                "and is on record.  Duplicates are not accepted.",
+                fromGenome, toGenome);
+        }
+    else
+        hDisconnectCentral(&conn);
+    }
+}
 
 /* per-email daily rate limit, per requestType, calendar-day server time */
 char *limitStr = cfgOption("liftDailyLimit");

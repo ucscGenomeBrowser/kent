@@ -22,4 +22,4 @@ CREATE TABLE myVariants (
     INDEX(chrom(16),bin),
     INDEX(db),
     INDEX(project)
-); 
+) ENGINE=InnoDB;

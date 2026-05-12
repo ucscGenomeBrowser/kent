@@ -1241,7 +1241,7 @@ var myVariants = {
     },
 
     init: function () {
-        // show a jquery-ui dialog when a user clicks on the 'make item' button
+        // show a jquery-ui dialog when a user clicks on the 'Add Annotation' button
         let dialog = document.getElementById('myVariantsDialog');
         if (!dialog) {
             dialog = document.createElement("div");
@@ -2163,7 +2163,7 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 650,
+                minWidth: 750,
                 buttons: dragSelectButtons,
 
                 open: function () { // Make zoom the focus/default action
@@ -4924,6 +4924,29 @@ function onTrackDelIconClick (ev) {
     divEl.closest("td").remove();
 }
 
+function onQuickLiftDelIconClick (ev) {
+    /* Remove this track's stanza from the quickLift hub in trash, and
+     * remove all rows referencing it from the page (it can appear both in
+     * its hub group and in the Visible Tracks group). */
+    var divEl = ev.target.closest("div");
+    var trackName = divEl.getAttribute("data-track");
+    var sourceDb = divEl.getAttribute("data-sourcedb");
+    var hgsid = getHgsid();
+    var url = 'hgTrackUi?hgsid=' + hgsid +
+              '&hgTrackUi_op=quickLiftRemove' +
+              '&g=' + encodeURIComponent(trackName) +
+              '&qlSourceDb=' + encodeURIComponent(sourceDb);
+    var xhttp = new XMLHttpRequest();
+    // synchronous: the hub file is a shared text file, parallel rewrites would race
+    xhttp.open("GET", url, false);
+    xhttp.send();
+    var selector = 'div.quickLiftDelIcon[data-track="' + trackName + '"]';
+    document.querySelectorAll(selector).forEach(function(d) {
+        var td = d.closest("td");
+        if (td) td.remove();
+    });
+}
+
 
   //////////////////////////////////
  //// popup (aka modal dialog) ////
@@ -6896,6 +6919,9 @@ $(document).ready(function()
 
     // custom tracks get little trash icons
     $("div.trackDeleteIcon").on("click", onTrackDelIconClick );
+
+    // quickLift tracks get a little 'x' icon
+    $("div.quickLiftDelIcon").on("click", onQuickLiftDelIconClick );
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
