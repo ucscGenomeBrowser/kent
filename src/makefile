@@ -20,8 +20,8 @@ TOP_LIBS = lib parasol/lib submodules/htslib
 ifneq ($(wildcard jkOwnLib/*),)
   TOP_LIBS += jkOwnLib
 endif
-topLibs: topChecks | ${TOP_LIBS:%=%.topLibs}
-%.topLibs:
+topLibs: ${TOP_LIBS:%=%.topLibs}
+%.topLibs: topChecks
 	${MAKE} -C $*
 
 topChecks:
