@@ -57,6 +57,7 @@
 #include "trashDir.h"
 #include "hgConfig.h"
 #include "cartTrackDb.h"
+#include "quickLift.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -1560,6 +1561,129 @@ if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
 return hubName;
 }
 
+struct quickLiftStanza
+/* One track stanza parsed out of a quickLift hub file. */
+    {
+    struct quickLiftStanza *next;
+    char *name;                /* bare track name */
+    char *parent;              /* bare parent track name, or NULL */
+    struct dyString *text;     /* full stanza text including final newline */
+    };
+
+static char *firstWordClone(char *s)
+/* Return a clone of the first whitespace-delimited word of s, or NULL. */
+{
+s = skipLeadingSpaces(s);
+if (isEmpty(s))
+    return NULL;
+char *sp = skipToSpaces(s);
+int len = (sp != NULL) ? (sp - s) : (int)strlen(s);
+return cloneStringZ(s, len);
+}
+
+boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackName)
+/* Remove a track stanza from the quickLift hub file for sourceDb, along with
+ * any descendant stanzas (transitively) whose parent is being removed.
+ * Returns TRUE if at least one stanza was removed. */
+{
+char buffer[4096];
+safef(buffer, sizeof buffer, "%s-%s", quickLiftCartName, sourceDb);
+char *filename = cartOptionalString(cart, buffer);
+if (filename == NULL)
+    return FALSE;
+
+struct lineFile *lf = lineFileMayOpen(filename, TRUE);
+if (lf == NULL)
+    return FALSE;
+
+char *bareName = trackHubSkipHubName(trackName);
+struct dyString *header = dyStringNew(0);
+struct quickLiftStanza *stanzaList = NULL;
+struct quickLiftStanza *cur = NULL;
+char *line;
+int lineSize;
+
+/* Pass 1: read the file into a header + list of stanzas, recording each
+ * stanza's name and (if any) parent. */
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    char *trim = skipLeadingSpaces(line);
+    if (startsWithWord("track", trim))
+        {
+        AllocVar(cur);
+        cur->text = dyStringNew(0);
+        cur->name = firstWordClone(trim + 5);
+        slAddHead(&stanzaList, cur);
+        }
+    else if (cur != NULL && startsWithWord("parent", trim))
+        {
+        if (cur->parent == NULL)
+            cur->parent = firstWordClone(trim + 6);
+        }
+
+    struct dyString *target = (cur != NULL) ? cur->text : header;
+    dyStringAppend(target, line);
+    dyStringAppendC(target, '\n');
+    }
+slReverse(&stanzaList);
+lineFileClose(&lf);
+
+/* Build a removal set: start with the named track, then iterate adding any
+ * stanza whose parent is already in the set, until the set is stable. */
+struct hash *removeSet = hashNew(0);
+hashStore(removeSet, bareName);
+boolean changed = TRUE;
+while (changed)
+    {
+    changed = FALSE;
+    struct quickLiftStanza *s;
+    for (s = stanzaList; s != NULL; s = s->next)
+        {
+        if (s->name == NULL || s->parent == NULL)
+            continue;
+        if (hashLookup(removeSet, s->name) != NULL)
+            continue;
+        if (hashLookup(removeSet, s->parent) != NULL)
+            {
+            hashStore(removeSet, s->name);
+            changed = TRUE;
+            }
+        }
+    }
+
+boolean removedAny = FALSE;
+struct dyString *out = dyStringNew(0);
+struct quickLiftStanza *s;
+for (s = stanzaList; s != NULL; s = s->next)
+    {
+    if (s->name != NULL && hashLookup(removeSet, s->name) != NULL)
+        removedAny = TRUE;
+    else
+        dyStringAppend(out, s->text->string);
+    }
+
+if (removedAny)
+    {
+    FILE *f = mustOpen(filename, "w");
+    chmod(filename, 0666);
+    fputs(header->string, f);
+    fputs(out->string, f);
+    fclose(f);
+    }
+
+dyStringFree(&header);
+dyStringFree(&out);
+hashFree(&removeSet);
+for (s = stanzaList; s != NULL; s = s->next)
+    {
+    dyStringFree(&s->text);
+    freeMem(s->name);
+    freeMem(s->parent);
+    }
+slFreeList(&stanzaList);
+return removedAny;
+}
+
 static char *vettedTracks[] =
 /* tracks that have been tested with quickLift */
 {
@@ -1855,16 +1979,33 @@ if (cartVis != NULL)
 return (tdb->visibility != tvHide);
 }
 
-static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList)
-/* walk tree looking for visible tracks to output to hub. */
+static boolean isFromQuickLiftHub(struct trackDb *tdb)
+/* True if this tdb came from a quickLift hub (already a lifted shadow track).
+ * Such tracks must not be lifted again. */
 {
-unsigned priority = 1;
+return trackDbSetting(tdb, "quickLiftUrl") != NULL ||
+       trackDbSetting(tdb, "quickLifted") != NULL;
+}
+
+static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList, struct hash *existingTracks, unsigned startPriority)
+/* walk tree looking for visible tracks to output to hub.  Skip tracks that already
+ * came from a quickLift hub, and skip tracks whose name is already present in
+ * the existing hub file. */
+{
+unsigned priority = startPriority;
 struct hash *haveSuper = newHash(0);
 struct trackDb *tdbNext = NULL;
 
 for(; tdb; tdb = tdbNext)
     {
     tdbNext = tdb->next;
+
+    if (isFromQuickLiftHub(tdb))
+        continue;
+
+    if (existingTracks != NULL &&
+        hashLookup(existingTracks, trackHubSkipHubName(tdb->track)) != NULL)
+        continue;
 
     boolean isVisible =  FALSE;
 
@@ -1876,9 +2017,13 @@ for(; tdb; tdb = tdbNext)
             {
             //if (checkCartVisibility(cart, tdb->parent))
                 {
-                tdb->parent->visibility = hTvFromString("tvShow");
-                outTrack(f, cart, tdb->parent, priority++);
-
+                char *bareParent = trackHubSkipHubName(tdb->parent->track);
+                if (existingTracks == NULL ||
+                    hashLookup(existingTracks, bareParent) == NULL)
+                    {
+                    tdb->parent->visibility = hTvFromString("tvShow");
+                    outTrack(f, cart, tdb->parent, priority++);
+                    }
                 hashStore(haveSuper, tdb->parent->track);
                 }
             }
@@ -1903,6 +2048,42 @@ for(; tdb; tdb = tdbNext)
     }
 }
 
+static void readExistingHubTracks(char *filename, struct hash *trackNames, unsigned *retMaxPriority)
+/* Scan an existing quickLift hub file and populate trackNames with the set of
+ * track names already present.  Also returns the highest priority value seen
+ * (0 if the file has no track stanzas yet) so new tracks can be appended after
+ * existing ones. */
+{
+unsigned maxPriority = 0;
+struct lineFile *lf = lineFileMayOpen(filename, TRUE);
+if (lf != NULL)
+    {
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+        if (startsWithWord("track", line))
+            {
+            char *name = skipLeadingSpaces(line + 5);
+            if (isNotEmpty(name))
+                hashStoreName(trackNames, cloneString(firstWordInLine(name)));
+            }
+        else if (startsWithWord("priority", line))
+            {
+            char *val = skipLeadingSpaces(line + 8);
+            if (isNotEmpty(val))
+                {
+                unsigned p = sqlUnsigned(firstWordInLine(val));
+                if (p > maxPriority)
+                    maxPriority = p;
+                }
+            }
+        }
+    lineFileClose(&lf);
+    }
+if (retMaxPriority != NULL)
+    *retMaxPriority = maxPriority;
+}
+
 static int cmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
 {
@@ -1923,7 +2104,10 @@ else
 }
 
 char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList)
-/* Build a track hub using trackDb and the cart. */
+/* Build a track hub using trackDb and the cart.  If a hub file already exists
+ * for db (i.e. earlier quickLift work in the same session), append new track
+ * stanzas to it instead of overwriting, and skip tracks that are already in
+ * the file. */
 {
 struct  trackDb *tdbList, *tdb;
 struct grp *grpList;
@@ -1943,11 +2127,17 @@ slSort(&tdbList, cmpPriority);
 
 char *filename = getHubName(cart, db);
 
-FILE *f = mustOpen(filename, "w");
-chmod(filename, 0666);
-outHubHeader(f, trackHubSkipHubName(db));
+struct hash *existingTracks = newHash(8);
+unsigned maxPriority = 0;
+readExistingHubTracks(filename, existingTracks, &maxPriority);
+boolean hubExists = (hashNumEntries(existingTracks) > 0);
 
-walkTree(f, db, cart, tdbList, visDy, badList);
+FILE *f = mustOpen(filename, hubExists ? "a" : "w");
+chmod(filename, 0666);
+if (!hubExists)
+    outHubHeader(f, trackHubSkipHubName(db));
+
+walkTree(f, db, cart, tdbList, visDy, badList, existingTracks, maxPriority + 1);
 fclose(f);
 
 return cloneString(filename);

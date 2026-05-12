@@ -108,6 +108,13 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
         cursor: pointer;
 }
 
+.quickLiftDelIcon {
+        margin-right: 4px;
+        display: inline;
+        cursor: pointer;
+        color: #aa3333;
+}
+
 .controlButtons {
     margin-bottom: 6px;
 }

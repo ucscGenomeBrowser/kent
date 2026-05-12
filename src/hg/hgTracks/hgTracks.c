@@ -8753,11 +8753,36 @@ static void printTrackDelIcon(struct track *track)
 
 }
 
+static void printQuickLiftDelIcon(struct track *track, char *sourceDb)
+/* little 'x' icon next to a track in a quickLift group; clicking it removes
+ * the track from the quickLift hub. */
+{
+    hPrintf("<div title='Remove this track from the QuickLift group' "
+            "data-track='%s' data-sourcedb='%s' class='quickLiftDelIcon'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 384 512'>"
+            "<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License "
+            "- https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->"
+            "<path d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 "
+            "86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4"
+            "c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 "
+            "32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/></svg></div>",
+            track->track, sourceDb);
+}
+
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
 if (sameOk(track->groupName, "user"))
     printTrackDelIcon(track);
+
+char *quickLiftSourceDb = (track->tdb != NULL) ?
+        trackDbSetting(track->tdb, "quickLiftDb") : NULL;
+/* skip the synthetic "Alignment Differences" track -- it's added at runtime
+ * by hubConnect, not from the hub file, so removing it from the file is a
+ * no-op and it would reappear on the next page load. */
+if (quickLiftSourceDb != NULL &&
+    (track->tdb->type == NULL || !startsWith("bigQuickLiftChain", track->tdb->type)))
+    printQuickLiftDelIcon(track, quickLiftSourceDb);
 
 if (track->hasUi)
     {
