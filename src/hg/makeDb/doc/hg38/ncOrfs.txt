@@ -1,0 +1,267 @@
+# ncOrfs - non-canonical ORFs supertrack build notes
+
+##############################################################################
+# nuORFdb v1.2 (2026-03-19 max)
+
+# nuORFdb is a database of non-canonical ORFs from the Bhatt lab (Broad Institute)
+# Downloaded from: https://www.broadinstitute.org/files/shared/compbio1/nuORFdb_v1.2/
+
+mkdir -p /hive/data/genomes/hg38/bed/ncorfs/nuorfdb
+cd /hive/data/genomes/hg38/bed/ncorfs/nuorfdb
+
+# Source files:
+#   nuORFdb_v1.2.bed               - BED12, 229,251 ORFs (CR/LF line endings)
+#   nuORFdb_v1.2_annotations.xlsx  - 17-column annotations (ORF types, gene info)
+#   PA_nuORFdb_v1.2_protein.fasta  - 229,251 protein sequences
+#   DA_nuORFdb_v1.2_dna.fasta      - DNA sequences (not used)
+
+# Convert BED12 + XLSX + protein FASTA to bigGenePred+ format (bed12+11)
+# Extended fields: predictorType, plotType, proteinSequence
+# Script: ~/kent/src/hg/makeDb/scripts/nuorfdb/nuorfdbToBigGenePred.py
+# AutoSQL: ~/kent/src/hg/makeDb/scripts/nuorfdb/nuorfdb.as
+
+python3 ~/kent/src/hg/makeDb/scripts/nuorfdb/nuorfdbToBigGenePred.py \
+  nuORFdb_v1.2.bed \
+  nuORFdb_v1.2_annotations.xlsx \
+  PA_nuORFdb_v1.2_protein.fasta \
+  nuorfdb.bgpInput
+
+# Fix chromosome names: chrGL000008.2 -> chr4_GL000008v2_random, etc.
+# Also chrMT -> chrM. 176 records affected.
+# Clamp 64 records with score=2147483647 to 0.
+
+# Build bigBed
+bedToBigBed -type=bed12+11 -tab \
+  -as=~/kent/src/hg/makeDb/scripts/nuorfdb/nuorfdb.as \
+  nuorfdb.bgpInput /hive/data/genomes/hg38/chrom.sizes nuorfdb.bb
+
+# Verify
+bigBedInfo nuorfdb.bb
+# itemCount: 229,251
+# fieldCount: 23
+# chromCount: 29
+
+# Symlink
+mkdir -p /gbdb/hg38/ncOrfs/nuorfdb
+ln -s /hive/data/genomes/hg38/bed/ncorfs/nuorfdb/nuorfdb.bb /gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.bb
+
+# trackDb entry added to ~/kent/src/hg/makeDb/trackDb/human/hg38/ncOrfs.ra
+##############################################################################
+
+##############################################################################
+# OpenProt v2.2 (2026-03-20 max)
+
+# OpenProt is a database of all possible protein-coding ORFs in eukaryotic genomes.
+# It includes reference proteins (RefProts), alternative proteins (AltProts), and
+# novel isoforms. Created by Xavier Roucou lab, Université de Sherbrooke.
+# Website: https://www.openprot.org
+
+mkdir -p /hive/data/genomes/hg38/bed/ncorfs/openprot
+cd /hive/data/genomes/hg38/bed/ncorfs/openprot
+
+# Download source files
+wget "https://api.openprot.org/api/2.0/HS/downloads/human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.tsv.zip" -O openprot.tsv.zip
+wget "https://api.openprot.org/api/2.0/HS/downloads/human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.bed.zip" -O openprot.bed.zip
+unzip openprot.tsv.zip
+unzip openprot.bed.zip
+
+# Source files:
+#   human-openprot-2_2-...-uniprot2022_06_01.bed  - BED12, 2,846,289 rows (many duplicates)
+#   human-openprot-2_2-...-uniprot2022_06_01.tsv  - 22-column annotations, 2,946,950 rows
+#   Annotation: GRCh38.p13, Ensembl release 106, UniProt 2022_06_01
+
+# Convert BED12 + TSV annotations to bigGenePred+ format (bed12+14)
+# Deduplicates BED rows (same protein, same coords via different transcripts)
+# Extended fields: localization, msScore, teScore, kozak, domains, frame
+# Script: ~/kent/src/hg/makeDb/scripts/openprot/openprotToBigGenePred.py
+# AutoSQL: ~/kent/src/hg/makeDb/scripts/openprot/openprot.as
+
+# Full set (all ORFs, no filters): 921,170 unique entries
+python3 ~/kent/src/hg/makeDb/scripts/openprot/openprotToBigGenePred.py \
+  human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.bed \
+  human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.tsv \
+  openprot.bgpInput
+
+bedToBigBed -type=bed12+14 -tab \
+  -as=~/kent/src/hg/makeDb/scripts/openprot/openprot.as \
+  openprot.bgpInput /hive/data/genomes/hg38/chrom.sizes openprot.bb
+
+# Filtered set (MS score >= 2, matching OpenProt's curated download threshold): 377,916 entries
+python3 ~/kent/src/hg/makeDb/scripts/openprot/openprotToBigGenePred.py \
+  --minMs 2 \
+  human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.bed \
+  human-openprot-2_2-refprots+altprots+isoforms-uniprot2022_06_01.tsv \
+  openprot.ms2.bgpInput
+
+bedToBigBed -type=bed12+14 -tab \
+  -as=~/kent/src/hg/makeDb/scripts/openprot/openprot.as \
+  openprot.ms2.bgpInput /hive/data/genomes/hg38/chrom.sizes openprot.ms2.bb
+
+# Verify
+bigBedInfo openprot.bb
+# itemCount: 921,170
+# fieldCount: 26
+
+bigBedInfo openprot.ms2.bb
+# itemCount: 377,916
+
+# Symlinks
+mkdir -p /gbdb/hg38/ncOrfs/openprot
+ln -s /hive/data/genomes/hg38/bed/ncorfs/openprot/openprot.bb /gbdb/hg38/ncOrfs/openprot/openprot.bb
+ln -s /hive/data/genomes/hg38/bed/ncorfs/openprot/openprot.ms2.bb /gbdb/hg38/ncOrfs/openprot/openprot.ms2.bb
+
+# trackDb entries added to ~/kent/src/hg/makeDb/trackDb/human/hg38/ncOrfs.ra
+# Two subtracks: openprot (all) and openprotMs (MS>=1, hidden by default)
+##############################################################################
+# UTRannotator uORFs track
+# 2026-03-07 max
+
+# Download source data from UTRannotator GitHub
+mkdir -p /hive/data/genomes/hg38/bed/ncorfs/utrannot
+cd /hive/data/genomes/hg38/bed/ncorfs/utrannot
+wget https://raw.githubusercontent.com/ImperialCardioGenetics/UTRannotator/refs/heads/master/uORF_5UTR_GRCh38_PUBLIC.txt
+
+# Convert to BED9+ format
+# The script swaps start/end for reverse-strand uORFs and assigns colors by type:
+#   blue (0,100,200) for 5'UTR uORFs, orange (200,100,0) for 5'UTR+3'UTR uORFs
+scriptDir=~/kent/src/hg/makeDb/scripts/utrAnnotUorfs
+python3 $scriptDir/utrAnnotUorfsToBed.py
+# 44,435 uORFs written, 4 entries with invalid coordinates skipped
+
+# Sort and convert to bigBed
+bedSort utrAnnotUorfs.bed utrAnnotUorfs.bed
+bedToBigBed -type=bed9+ -tab -as=$scriptDir/utrAnnotUorfs.as utrAnnotUorfs.bed /hive/data/genomes/hg38/chrom.sizes utrAnnotUorfs.bb
+
+# Create symlink in /gbdb
+mkdir -p /gbdb/hg38/ncOrfs
+ln -sf /hive/data/genomes/hg38/bed/ncorfs/utrannot/utrAnnotUorfs.bb /gbdb/hg38/ncOrfs/utrAnnotUorfs.bb
+
+# Load trackDb
+# Added "include ncOrfs.ra alpha" to ~/kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra
+# ncOrfs.ra defines a superTrack "Non-coding ORFs" with subtrack utrAnnotUorfs
+cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg38
+
+# Reference:
+# Zhang X, Wakeling M, Ware J, Whiffin N.
+# UTRannotator: a versatile tool for annotating 5'UTR variants with functional impact predictions.
+# Bioinformatics. 2021 Apr 15;37(8):1171-1173. DOI: 10.1093/bioinformatics/btaa783
+# PMID: 33165520
+
+##############################################################################
+# Kozak coloring + bigGenePred conversion for all ncORF subtracks
+# 2026-04-29 Claude max
+
+# Goal: color every ncORF feature by Kozak translational efficiency (TE) and
+# enable codon display in hgTracks. Three new annotation fields are added to
+# each output bigBed:
+#   startCodon     - first 3 bp of ORF read from genome (ATG / CTG / GTG / ...)
+#   kozakStrength  - Strong / Moderate / Weak (Kozak rule on -3 and +4), or
+#                    "non-ATG" for non-ATG starts, "None" for no context
+#   kozakTE        - Noderer 2014 translational efficiency divided by 100;
+#                    -1 if non-ATG or context unavailable
+#
+# The color scheme is set in colorByKozak.py (COLOR_BINS / GREY / PURPLE):
+#   kozakTE  < 0.5         -> Blue   (0,0,255)
+#   kozakTE >= 0.5, < 0.6  -> Teal   (0,128,128)
+#   kozakTE >= 0.6, < 0.7  -> Green  (0,128,0)
+#   kozakTE >= 0.7, < 0.8  -> Orange (255,165,0)
+#   kozakTE >= 0.8         -> Red    (255,0,0)
+#   non-ATG start codon    -> Purple (160,80,160)
+#   no/short context       -> Grey   (128,128,128)
+#
+# All output files are bigGenePred so codon shading is enabled (thickStart
+# and thickEnd span the whole ORF, since ncORFs are entirely coding).
+#
+# Kozak strength is derived in Python following the R logic in
+#   ~/software/VuTR/pipeline/src/process_mane/smorfs.R
+# - 11-base TIS context (Kozak -6..+5) is fetched from hg38.2bit via py2bit
+# - context is looked up in the Noderer 2014 TE table (raw scores 12-150,
+#   normalised /100 in the script so the user's 0.5/0.6/0.7/0.8 thresholds
+#   apply directly)
+# - categorical Strong/Moderate/Weak comes from positions -3 (A or G) and
+#   +4 (G), unchanged from the original R rule
+
+# The Noderer 2014 TE table (SD3 supplement of PMID 25170020) is now
+# behind PMC's proof-of-work; a clean copy is cached at:
+#   ~/kent/src/hg/makeDb/scripts/ncOrfs/translational_efficiency.txt
+# Original raw download (when reachable):
+#   curl https://pmc.ncbi.nlm.nih.gov/articles/PMC4299517/bin/msb0010-0748-SD3.txt \
+#       | sed 1d | tr [:upper:] [:lower:] | sed "1d;s/u/t/g"
+
+# Driver scripts
+scriptDir=~/kent/src/hg/makeDb/scripts/ncOrfs
+# colorByKozak.py - reads bigBed (any supported flavor), writes bigGenePred BED
+#                   with Kozak color + 3 new fields appended
+# run_kozak.sh    - wrapper: bigBedToBed | colorByKozak | bedToBigBed
+# *.as            - one autoSql per track (gencNcOrf, gencNcOrfPhase2,
+#                   utrAnnotUorfs, metamorf, nuorfdb, openprot)
+# --inFmt values  - bigGenePred / gencNcOrfBed12 / utrAnnotUorfsBed9 / metamorf
+
+# Build one .kozak.bb per source (see input format below):
+cd /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf
+$scriptDir/run_kozak.sh bigGenePred       Ribo-seq_ORFs.bb               $scriptDir/gencNcOrf.as       Ribo-seq_ORFs.kozak.bb
+$scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.primary.bb       $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.primary.kozak.bb
+$scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.comprehensive.bb $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.comprehensive.kozak.bb
+
+# utrAnnotUorfs needs an extra step: the source is bed9+1 (no exon blocks),
+# so introns are copied from any matching feature in the other ncORF tracks
+# (matched by exact chrom/start/end/strand). The matching donor's blockCount/
+# blockSizes/chromStarts replace the original single block, and the donor
+# database name(s) are recorded in a new intronsSource field. Of 44,435
+# uORFs, 6,508 received introns (mostly from metamorf); 37,927 stayed
+# single-block (intronsSource=none).
+cd /hive/data/genomes/hg38/bed/ncorfs/utrannot
+bigBedToBed utrAnnotUorfs.bb utrAnnotUorfs.bed9.bed
+python3 $scriptDir/addIntrons.py \
+    --in utrAnnotUorfs.bed9.bed \
+    --out utrAnnotUorfs.withIntrons.bed \
+    --report utrAnnotUorfs.withIntrons.report.tsv \
+    --source gencNcOrfs:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb \
+    --source gencNcOrfsPrimary:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb \
+    --source gencNcOrfsComprehensive:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb \
+    --source nuorfdb:/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.kozak.bb \
+    --source metamorf:/gbdb/hg38/ncOrfs/metamorf/MetamORF.kozak.bb \
+    --source openprot:/gbdb/hg38/ncOrfs/openprot/openprot.kozak.bb
+python3 $scriptDir/colorByKozak.py \
+    --in utrAnnotUorfs.withIntrons.bed \
+    --teTable $scriptDir/translational_efficiency.txt \
+    --inFmt utrAnnotUorfsBed12 \
+    --report utrAnnotUorfs.kozak.report.tsv \
+    --out utrAnnotUorfs.kozak.bed
+sort -k1,1 -k2,2n utrAnnotUorfs.kozak.bed > utrAnnotUorfs.kozak.sorted.bed
+bedToBigBed -type=bed12+12 -as=$scriptDir/utrAnnotUorfs.as -tab \
+    utrAnnotUorfs.kozak.sorted.bed /hive/data/genomes/hg38/chrom.sizes \
+    utrAnnotUorfs.kozak.bb
+rm utrAnnotUorfs.bed9.bed utrAnnotUorfs.kozak.bed utrAnnotUorfs.kozak.sorted.bed \
+   utrAnnotUorfs.withIntrons.bed
+
+cd /hive/data/genomes/hg38/bed/ncorfs/nuorfdb
+$scriptDir/run_kozak.sh bigGenePred nuorfdb.bb $scriptDir/nuorfdb.as nuorfdb.kozak.bb
+
+cd /hive/data/genomes/hg38/bed/ncorfs/metamorf
+$scriptDir/run_kozak.sh metamorf MetamORF.bb $scriptDir/metamorf.as MetamORF.kozak.bb
+
+cd /hive/data/genomes/hg38/bed/ncorfs/openprot
+$scriptDir/run_kozak.sh bigGenePred openprot.bb     $scriptDir/openprot.as openprot.kozak.bb
+$scriptDir/run_kozak.sh bigGenePred openprot.ms2.bb $scriptDir/openprot.as openprot.ms2.kozak.bb
+
+# Per-track report TSVs are written next to each output .bb. Reported counts
+# of ATG vs non-ATG, TE hits/misses, and color bins are in *.kozak.report.tsv.
+
+# Symlinks (all *.kozak.bb files added under /gbdb/hg38/ncOrfs/, mirroring
+# the original .bb layout). trackDb stanzas in ncOrfs.ra now declare:
+#   bigDataUrl ...kozak.bb   type bigGenePred   itemRgb on
+#   baseColorUseCds given   baseColorDefault genomicCodons
+#   mouseOver  <HTML using $startCodon, $kozakStrength, $kozakTE, ...>
+#   filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+#   filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+#   filterByRange.kozakTE on   filter.kozakTE 0:1.5   filterLimits.kozakTE 0:1.5
+# OpenProt's pre-existing binary "kozak" field is renamed to "kozakMotif" in
+# openprot.as so that $kozakStrength substitution in the mouseOver is not
+# greedily eaten by $kozak.
+
+# Reference:
+# Noderer WL, Flockhart RJ, Bhaduri A, Diaz de Arce AJ, Zhang J, Khavari PA,
+# Wang CL. Quantitative analysis of mammalian translation initiation sites by
+# FACS-seq. Mol Syst Biol. 2014 Aug 28;10(8):748. DOI: 10.15252/msb.20145136
+# PMID: 25170020

@@ -10,6 +10,7 @@
 #include "jsHelper.h"
 #include "trackDb.h"
 #include "hgTrackUi.h"
+#include "quickLift.h"
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
@@ -3637,7 +3638,7 @@ if (!tdb->parent)
 // show super-track info
 struct trackDb *tdbParent = tdb->parent;
 
-printf("<b>Track collection: "
+printf("<b>Back to parent track: "
            "<img height=12 src='../images/ab_up.gif'>"
             "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
@@ -4007,6 +4008,14 @@ if (!tdbIsDownloadsOnly(tdb))
 		    chromosome, cgiEncode(tdb->track));
 		}
 
+	    }
+	/* Offer to remove tracks coming from a quickLift hub. */
+	char *quickLiftSourceDb = trackDbSetting(tdb, "quickLiftDb");
+	if (quickLiftSourceDb != NULL)
+	    {
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=quickLiftRemove&qlSourceDb=%s' >Remove from QuickLift</a>\n",
+		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		chromosome, cgiEncode(tdb->track), cgiEncode(quickLiftSourceDb));
 	    }
 	}
 
@@ -4393,8 +4402,26 @@ if (isFileFetch)
     handleFileFetch(theCart);  // file fetch workaround for CORS issues
     return;
     }
-else
-    cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
+
+char *earlyOp = cartOptionalString(theCart, "hgTrackUi_op");
+if (earlyOp != NULL && sameString(earlyOp, "quickLiftRemove"))
+    {
+    char *opTrack = cloneString(cartOptionalString(theCart, "g"));
+    char *opSourceDb = cloneString(cartOptionalString(theCart, "qlSourceDb"));
+    char *opDb = cloneString(cartUsualString(theCart, "db", ""));
+    cartRemove(theCart, "hgTrackUi_op");
+    cartRemove(theCart, "qlSourceDb");
+    if (opTrack != NULL && opSourceDb != NULL)
+        {
+        quickLiftHubRemoveTrack(theCart, opSourceDb, opTrack);
+        cartSetString(theCart, opTrack, "hide");
+        }
+    printf("Location: %s?db=%s&%s\r\n\r\n",
+           hgTracksName(), opDb, cartSidUrlString(theCart));
+    return;
+    }
+
+cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
 
 struct trackDb *tdbList = NULL;
 struct trackDb *tdb = NULL;

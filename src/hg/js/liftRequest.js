@@ -47,7 +47,7 @@ function checkAssemblyCompatibility(asm1, asm2) {
       .then(response => response.json())
       .then(response => {
 //      console.log(JSON.stringify(response, null, 2));
-        if (response.itemsReturned === 1) {
+        if (response.itemsReturned >= 1) {
           const liftPath1 = liftOverPath(asm1, asm2);
           const liftPath2 = liftOverPath(asm2, asm1);
           const browser1 = "/cgi-bin/hgTracks?db=" + asm1;
@@ -97,9 +97,19 @@ function checkBothAssembliesSelected() {
 
 function resetFormVisibility() {
     document.getElementById("liftExists").style.display = "none";
+    document.getElementById("errorMessage").style.display = "none";
     document.getElementById("emailForm").style.display = "block";
     document.getElementById("commentsForm").style.display = "block";
     document.getElementById("submitButton").style.display = "block";
+}
+
+function showError(heading, errorMsg) {
+    document.getElementById("errorHeading").textContent = heading;
+    document.getElementById("errorText").textContent = errorMsg;
+    document.getElementById("errorMessage").style.display = "block";
+    document.getElementById("emailForm").style.display = "none";
+    document.getElementById("commentsForm").style.display = "none";
+    document.getElementById("submitButton").style.display = "none";
 }
 
 function assembly1Select(selectEle, item) {
@@ -137,6 +147,8 @@ function submitForm() {
 
     // Hide any previous error message
     document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("errorHeading").textContent = "Error";
+    document.getElementById("errorText").textContent = "";
 
     if (!assembly1Value) {
         alert("Please select Assembly 1");
@@ -173,6 +185,7 @@ function submitForm() {
           } else {
             // Try to extract error message from JSON or text
             var errorMsg = "Error submitting request";
+            var heading = "Error";
             try {
               var parsed = JSON.parse(text);
               if (parsed.error) {
@@ -181,16 +194,20 @@ function submitForm() {
             } catch(e) {
               errorMsg = text || response.statusText || errorMsg;
             }
-            document.getElementById("errorText").textContent = errorMsg;
-            document.getElementById("errorMessage").style.display = "block";
+            if (response.status === 429) {
+              heading = "Daily limit reached";
+              errorMsg = "Thank you for your interest. " + errorMsg +
+                  " If you have an urgent need, please contact us at" +
+                  " genome-www@soe.ucsc.edu.";
+            }
+            showError(heading, errorMsg);
           }
         });
       })
       .catch((error) => {
         // Network or other fetch errors
         var errorMsg = error.message || "Unknown error occurred";
-        document.getElementById("errorText").textContent = errorMsg;
-        document.getElementById("errorMessage").style.display = "block";
+        showError("Error", errorMsg);
       });
 }	// end of function submitForm()
 
@@ -239,4 +256,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("dismissLiftExists").addEventListener("click", dismissLiftExists);
+    document.getElementById("dismissError").addEventListener("click", resetFormVisibility);
 });

@@ -1,0 +1,49 @@
+##############################################################################
+# ce11 - C. elegans - Caenorhabditis elegans - taxId: 6239
+##############################################################################
+track chainNetCe11
+compositeTrack on
+shortLabel C. elegans Chain/Net
+longLabel C. elegans (Feb. 2013 (WBcel235/ce11) ce11), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb ce11
+html chainNet
+
+    track chainNetCe11Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetCe11
+    spectrum on
+
+        track chainCe11
+        parent chainNetCe11Viewchain
+        subGroups view=chain
+        shortLabel C. elegans Chain
+        longLabel C. elegans (Feb. 2013 (WBcel235/ce11) ce11) Chained Alignments
+        type bigChain ce11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainCe11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainCe11Link.bb
+
+        track chainLiftOverCe11
+        parent chainNetCe11Viewchain
+        subGroups view=chain
+        shortLabel C. elegans liftOverChain
+        longLabel C. elegans (Feb. 2013 (WBcel235/ce11) ce11) Lift Over Chained Alignments
+        type bigChain ce11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverCe11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverCe11Link.bb
+

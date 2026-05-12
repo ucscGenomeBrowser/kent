@@ -48,6 +48,12 @@
         </div>
     </div>
 
+    <div id="errorMessage" class="form-group">
+        <button id="dismissError" style="float: right; cursor: pointer;">&times;</button>
+        <h3 id="errorHeading">Error</h3>
+        <p id="errorText"></p>
+    </div>
+
     <div id="emailForm" class="form-group">
         <label for="emailInput">Email Address</label>
         <div class="description">You will receive a notification at this address when the alignment is complete.</div>
@@ -103,11 +109,6 @@ target=_blank>Assembly Request Page</a>, then come back here when the
 <div id="successMessage">
     <h2>Your request has been submitted, you will receive an email when the alignment is complete.</h2>
     <a href="<!--#echo var='ROOT' -->/cgi-bin/hgGateway">Back to the genome browser gateway page</a>
-</div>
-
-<div id="errorMessage">
-    <h3>Error</h3>
-    <p id="errorText"></p>
 </div>
 
 <hr />

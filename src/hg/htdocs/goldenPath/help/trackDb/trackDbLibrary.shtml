@@ -1912,10 +1912,10 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filterLabel"><span class="types bed bigBed"></span>
 <div class="format"><code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
-    <P>When a user clicks on a track item in the Browser image,	
+    <P>When a user clicks on a track item in the Browser image,
     the item detail page is shown. This setting specifies an
     alternate label for the filter on that page. Without this
-    setting, the label will be the description of the field as 
+    setting, the label will be the description of the field as
     specified by the autoSql (.as) file. Some of the parameters modified by
     this are:</P>
     <P><ul><li><code>filter.&lt;fieldName&gt;</code></li>
@@ -1925,9 +1925,42 @@ There are no extra options that can appear on the type hic line.
     <pre>
     filterValues.strand +,-
     filterLabel.strand Strand (Orientation)</pre>
-    <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
+    <P>In this example, we have a standard &quot;strand&quot; BED field with the default
     description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
     the label to just "Strand (Orientation)".</P>
+</DIV>
+
+<DIV class="filterPriority"><span class="types bed bigBed"></span>
+<div class="format"><code>filterPriority.&lt;fieldName&gt; &lt;number&gt;</code></div>
+    <P>Controls the display order of filter controls on the track configuration
+    page. Filters are shown in ascending order of <code>filterPriority</code>
+    value (lowest first), so a filter with priority 1 appears above one with
+    priority 2. Filters that do not specify a priority sort after all filters
+    that do.</P>
+    <P>The setting applies to any filter declared on the same field, regardless
+    of which filter style is used &mdash; <code>filter.&lt;fieldName&gt;</code>,
+    <code>filterText.&lt;fieldName&gt;</code>, or
+    <code>filterValues.&lt;fieldName&gt;</code> all share a single
+    <code>filterPriority.&lt;fieldName&gt;</code> entry. The companion setting
+    <code>highlightPriority.&lt;fieldName&gt;</code> controls the order of
+    <code>highlight*.&lt;fieldName&gt;</code> controls the same way.</P>
+    <P>Numbers may be integers or decimals; only the relative ordering matters,
+    so values like <code>1 2 3</code> and <code>10 20 30</code> produce the same
+    layout. Filters of different types (numeric, text, values) are still
+    rendered in their own sections of the page; <code>filterPriority</code>
+    orders the filters within each section.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...
+    filterValues.annot pLoF,missense,synonymous,other
+    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
+    filterPriority.variation_type 1
+    filterPriority.annot 2
+    filterPriority.FILTER 3</pre>
+    <P>In this example, the variation type filter is shown first, the
+    annotation filter second, and the FILTER tags filter last, regardless of
+    the order in which the <code>filterValues.*</code> lines appear in the
+    stanza or how the field names sort alphabetically.</P>
 </DIV>
 
 <DIV class="highlight"><span class="types bed bigBed"></span>

@@ -462,3 +462,54 @@ cd /hive/data/genomes/hg38/bed/varFreqs/ga100k/lift
 # trackDb bigDataUrl for gaspIndel was renamed to ga100k.indels.vcf.gz
 # (the old All.indels.annot.cont_withmaf.vcf.gz file name was a
 # verbatim copy of the GenomeAsia download name).
+
+##########
+# 2026-05-06 Claude max
+# varFreqsAll rebuild: 5 vcfToBigBed.py fixes + add NPM (Singapore SG10K_Health),
+# refs #36642 notes 49, 51, 53, 55.
+
+# 1. Moved scripts from /hive/.../all/ into kent so the build is reproducible
+#    from a fresh checkout (Lou's note 49):
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py   (driver)
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh (merge+csq)
+#    Original /hive/.../all/ paths are now symlinks into kent.
+
+# 2. vcfToBigBed.py fixes in this round:
+#    - normalize_consequence(): bcftools csq emits "&"-joined compounds
+#      (e.g. "stop_gained&frameshift") which exact-match-failed the old
+#      8-bucket consequence filter and orphaned ~8.5 M records. The
+#      normalizer rewrites "&" to "," so a single record can match multiple
+#      filter buckets, and appends ",others" to any token list with no named
+#      filter present so nothing is orphaned.  trackdb gains 4 new buckets
+#      (3_prime_utr, 5_prime_utr, non_coding, others) and switches to
+#      filterType.consequence multipleListOr.
+#    - Source-attribution bug: the old check only inspected the unified
+#      AC/AF slot, so AllOfUs (which ships only per-population fields)
+#      attributed to ZERO of its 67.5 M variants — ~43 M phantom rows in
+#      the previous bigBed had an empty "sources" column. The fix scans
+#      per-population slots before declaring "no data".
+#    - parse_bcsq() now returns "" instead of "." for aaChange/dnaChange on
+#      non-coding variants, so the mouseOver/detail page renders a clean
+#      blank line instead of a stray dot.
+#    - maxAF format: "{:.6g}" -> "{:.6f}" so very small AFs print as
+#      "0.000003" instead of "3.31347e-06".
+#    - autoSql `table varFreqs` -> `table varFreqsAll` (matches the bigBed
+#      filename; required for hgIntegrator to wire up correctly).
+
+# 3. NPM Singapore (SG10K_Health) added to databases.tsv + files.txt +
+#    populations.tsv (SgChinese / SgMalay / SgIndian ancestry groups) +
+#    trackDb filter UI.  The individual `npm` subtrack still has
+#    tableBrowser off (license), but its data is folded into varFreqsAll
+#    same as for finngen / kova / mgrb / swefreq / tishkoff180 (precedent).
+
+cd /hive/data/genomes/hg38/bed/varFreqs/all/
+# Force re-merge + re-csq (existing per-VCF normalize cache is reused).
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+    merged.annotated.vcf.gz.tbi
+rm -rf extracted beds varFreqsAll.bed
+./mergeAndAnnotate.sh
+python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+# Build is in-place: /gbdb/hg38/varFreqs/varFreqsAll.bb stays symlinked
+# at /hive/.../all/varFreqsAll.bb, which is overwritten at the end of
+# the bedToBigBed step.
+

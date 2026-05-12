@@ -2,7 +2,7 @@
 <p>
 This track merges variants from all individual variant frequency databases into a single
 bigBed file with predicted protein consequences and cross-database filtering. It contains
-over 1.1 billion variants from 25 source databases worldwide. For a summary of
+over 1.1 billion variants from 26 source databases worldwide. For a summary of
 all available databases, see the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page.
 </p>
@@ -63,7 +63,24 @@ title or use the &quot;Configure&quot; button to access filters:
 <ul>
   <li><b>Variant Type</b>: Filter by SNV, Insertion, Deletion, or MNV.</li>
   <li><b>Consequence</b>: Filter by predicted consequence (Missense, Synonymous, Stop Gained,
-      Frameshift, Splice Donor, Splice Acceptor, Intron, Intergenic).</li>
+      Frameshift, Splice Donor, Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding,
+      Intergenic, Other). The filter uses OR logic across the comma-separated consequence
+      tokens on each variant: a variant tagged
+      <code>stop_gained,frameshift</code> is selected by either the &quot;Stop Gained&quot;
+      or the &quot;Frameshift&quot; filter. The &quot;Other&quot; bucket catches the less
+      common <a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a>
+      consequence terms emitted by <code>bcftools csq</code> that don't fit the named
+      buckets above &mdash; for example
+      <code>splice_region</code> (variant near a splice site but outside the canonical
+      donor/acceptor),
+      <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the start codon
+      or replaces the stop codon with a coding amino acid),
+      <code>stop_retained</code> (variant changes the stop codon but keeps it a stop),
+      <code>inframe_insertion</code> / <code>inframe_deletion</code> (in-frame indel
+      adding or removing whole codons), and
+      <code>coding_sequence</code> (CDS variant where the precise impact is undetermined).
+      Including &quot;Other&quot; in the filter selection guarantees that no records are
+      hidden by the consequence filter.</li>
 </ul>
 
 <p><b>How to find protein-truncating variants:</b> Set the Consequence filter to include
@@ -112,7 +129,7 @@ Several databases provide ancestry-specific allele frequencies:
 
 <h2>Methods</h2>
 <p>
-Variant frequency VCF files from 25 databases were stripped of their INFO fields
+Variant frequency VCF files from 26 databases were stripped of their INFO fields
 (to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic sites),
 and merged with <code>bcftools merge</code>. The merged VCF was then annotated with predicted
 protein consequences using <code>bcftools csq</code> with the

@@ -19,21 +19,29 @@ For short-read structural-variant comparators (CCDG 17,795, 1KG 3202,
 ToMMo 48K CNV) see the companion
 <a href="hgTrackUi?g=srSv">Short-read SVs</a> supertrack.
 </p>
+<p>
+Polymorphic <b>Mobile Element Insertions</b> (Alu, L1, SVA, HERVK,
+snRNA) called from HGSVC3 long-read assemblies are released as a
+separate track collection &mdash; see the
+<a href="hgTrackUi?g=mei">Mobile Insertions</a> tracks. Those MEIs are
+the insertions identified in the 65 HGSVC3 samples relative to the
+reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
+</p>
 <table class="stdTbl">
 <tr>
   <th>Dataset</th>
   <th>N samples</th>
   <th>Cohort / disease</th>
   <th>Disease cases</th>
-  <th>Sequencing</th>
-  <th>SVs</th>
+  <th>Coverage</th>
+  <th>SV count</th>
   <th>Min</th>
   <th>Median</th>
   <th>Max</th>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=lrSvAll"><b>All merged</b></a></td>
-  <td>—</td>
+  <td>&mdash;</td>
   <td>All long-read SV datasets merged on identical position+type+length, with per-database AC</td>
   <td>mixed</td>
   <td>mixed (PacBio HiFi, ONT)</td>
@@ -47,7 +55,7 @@ ToMMo 48K CNV) see the companion
   <td>1,427</td>
   <td>Consortium of Long-Read Sequencing, joint callset</td>
   <td>No</td>
-  <td>PacBio HiFi</td>
+  <td>mixed (HiFi)</td>
   <td>426,239</td>
   <td>20</td>
   <td>33</td>
@@ -58,7 +66,7 @@ ToMMo 48K CNV) see the companion
   <td>945</td>
   <td>Han Chinese, general population</td>
   <td>No</td>
-  <td>ONT (PromethION)</td>
+  <td>~17x ONT</td>
   <td>111,288</td>
   <td>0</td>
   <td>254</td>
@@ -67,9 +75,9 @@ ToMMo 48K CNV) see the companion
 <tr>
   <td><a href="hgTrackUi?g=gustafsonSv">1KG ONT 100</a></td>
   <td>100</td>
-  <td>1000 Genomes, 5 superpopulations / 19 subpop., high 37x seq. coverage</td>
+  <td>1000 Genomes, 5 superpopulations / 19 subpopulations</td>
   <td>No</td>
-  <td>ONT (R9.4.1)</td>
+  <td>~37x ONT (R9.4.1)</td>
   <td>113,696</td>
   <td>0</td>
   <td>164</td>
@@ -78,9 +86,9 @@ ToMMo 48K CNV) see the companion
 <tr>
   <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a></td>
   <td>1,019</td>
-  <td>1000 Genomes, diverse, normal 17x seq. coverage</td>
+  <td>1000 Genomes, diverse</td>
   <td>No</td>
-  <td>ONT</td>
+  <td>~17x ONT</td>
   <td>148,375</td>
   <td>2</td>
   <td>177</td>
@@ -91,7 +99,7 @@ ToMMo 48K CNV) see the companion
   <td>333 (111 trios)</td>
   <td>Japanese, general population</td>
   <td>No</td>
-  <td>ONT</td>
+  <td>~22x ONT</td>
   <td>74,201</td>
   <td>51</td>
   <td>162</td>
@@ -100,9 +108,9 @@ ToMMo 48K CNV) see the companion
 <tr>
   <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
   <td>1,027</td>
-  <td>All of Us, self-identified Black/African American, 8x cov.; biobank includes a variety of conditions (diabetes, hearing loss, etc.)</td>
+  <td>All of Us, self-identified Black/African American; biobank includes a variety of conditions (diabetes, hearing loss, etc.)</td>
   <td>Yes (mixed)</td>
-  <td>PacBio HiFi</td>
+  <td>~8x HiFi</td>
   <td>541,049</td>
   <td>50</td>
   <td>152</td>
@@ -113,7 +121,7 @@ ToMMo 48K CNV) see the companion
   <td>502</td>
   <td>Children's Mercy, pediatric rare disease probands + families</td>
   <td>Yes (probands)</td>
-  <td>PacBio HiFi</td>
+  <td>~27x HiFi</td>
   <td>115,554</td>
   <td>50</td>
   <td>186</td>
@@ -124,7 +132,7 @@ ToMMo 48K CNV) see the companion
   <td>3,622</td>
   <td>Icelandic general population</td>
   <td>No</td>
-  <td>ONT</td>
+  <td>~17x ONT</td>
   <td>133,886</td>
   <td>0</td>
   <td>127</td>
@@ -135,7 +143,7 @@ ToMMo 48K CNV) see the companion
   <td>233</td>
   <td>HPRC release-2 pangenome (CHM13 + diverse 1KG assemblies)</td>
   <td>No</td>
-  <td>PacBio HiFi (pangenome graph)</td>
+  <td>~60x HiFi + ~30x ONT (pangenome graph)</td>
   <td>1,483,114</td>
   <td>50</td>
   <td>280</td>
@@ -146,7 +154,7 @@ ToMMo 48K CNV) see the companion
   <td>32</td>
   <td>HGSVC2 haplotype-resolved assemblies (5 superpopulations)</td>
   <td>No</td>
-  <td>PacBio CLR + HiFi + Strand-seq</td>
+  <td>&gt;40x PacBio CLR + &gt;20x HiFi (+ Strand-seq)</td>
   <td>111,746</td>
   <td>50</td>
   <td>168</td>
@@ -157,7 +165,7 @@ ToMMo 48K CNV) see the companion
   <td>65</td>
   <td>HGSVC3 diverse reference assemblies</td>
   <td>No</td>
-  <td>PacBio HiFi + ONT</td>
+  <td>~47x HiFi + ~56x ONT</td>
   <td>176,531</td>
   <td>50</td>
   <td>154</td>
@@ -168,7 +176,7 @@ ToMMo 48K CNV) see the companion
   <td>53</td>
   <td>UAE-resident Arabs from 8 countries (UAE Pangenome Reference)</td>
   <td>No</td>
-  <td>PacBio HiFi + ONT + Hi-C (pangenome graph)</td>
+  <td>~35x HiFi + ~54x ONT (+ Hi-C, pangenome graph)</td>
   <td>72,656</td>
   <td>1</td>
   <td>21</td>
@@ -179,7 +187,7 @@ ToMMo 48K CNV) see the companion
   <td>58</td>
   <td>Chinese Pangenome Consortium, 36 minority ethnic groups (HPRC-specific SVs removed)</td>
   <td>No</td>
-  <td>PacBio HiFi (pangenome graph)</td>
+  <td>~30x HiFi (pangenome graph)</td>
   <td>36,030</td>
   <td>1</td>
   <td>53</td>
@@ -190,7 +198,7 @@ ToMMo 48K CNV) see the companion
   <td>100</td>
   <td>Parkinson's disease, ILBD, controls (post-mortem brain)</td>
   <td>Yes (PD + ILBD)</td>
-  <td>PacBio HiFi</td>
+  <td>~17x HiFi</td>
   <td>74,552</td>
   <td>50</td>
   <td>160</td>
@@ -201,7 +209,7 @@ ToMMo 48K CNV) see the companion
   <td>101</td>
   <td>Cystic fibrosis (CF) patients from the CF Canada-Sick Kids Program in Individual CF Therapy (CFIT). Long-read WGS used for GWAS LD fine-mapping</td>
   <td>Yes (all CF)</td>
-  <td>long-read</td>
+  <td>~50x PacBio CLR (34, Sequel I) + ~76x HiFi (67, Sequel II)</td>
   <td>87,183</td>
   <td>4</td>
   <td>160</td>

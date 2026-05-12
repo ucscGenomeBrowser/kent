@@ -297,7 +297,7 @@ if ($qAsmName ne "") {
 }
 my $longInner = (length($qDate) > 0) ? "$qDate $longTail" : $longTail;
 
-printf STDERR "### writing to $outFile\n";
+# printf STDERR "### writing to $outFile\n";
 
 open(my $fh, '>', $outFile)
   or die "ERROR: cannot write '$outFile': $!\n";
@@ -444,7 +444,7 @@ if ($hasNet || $hasSynNet || $hasRBestNet) {
 
 close($fh);
 
-printf STDERR "wrote %s\n", $outFile;
+# printf STDERR "wrote %s\n", $outFile;
 
 ##############################################################################
 # ensure trackDb.ra in the same dir has an 'include <basename> alpha' line
@@ -452,14 +452,14 @@ printf STDERR "wrote %s\n", $outFile;
 ##############################################################################
 my $trackDbRa  = "$outDir/trackDb.ra";
 my $baseName   = "$targetDb.$qAcc.chainNet.ra";
-my $includeLn  = "include $baseName alpha";
+my $includeLn  = "# include $baseName alpha";
 
 my $alreadyIncluded = 0;
 if (-e $trackDbRa) {
   open(my $rh, '<', $trackDbRa)
     or die "ERROR: cannot read '$trackDbRa': $!\n";
   while (my $line = <$rh>) {
-    if ($line =~ /^\s*include\s+\Q$baseName\E(\s|$)/) {
+    if ($line =~ /^#\s*include\s+\Q$baseName\E(\s|$)/) {
       $alreadyIncluded = 1;
       last;
     }
@@ -472,7 +472,7 @@ if (!$alreadyIncluded) {
     or die "ERROR: cannot append to '$trackDbRa': $!\n";
   printf $ah "%s\n", $includeLn;
   close($ah);
-  printf STDERR "appended '%s' to %s\n", $includeLn, $trackDbRa;
+# printf STDERR "appended '%s' to %s\n", $includeLn, $trackDbRa;
 }
 
 ##############################################################################
@@ -482,6 +482,12 @@ if (!$alreadyIncluded) {
 my $newRel = $outFile;     $newRel =~ s,^\Q$kentTree/\E,,;
 my $tdbRel = $trackDbRa;   $tdbRel =~ s,^\Q$kentTree/\E,,;
 
+### update this source tree to catch up to the outside world
+if (system('git', '-C', $kentTree, 'pull') != 0) {
+  printf STDERR "ERROR: 'git pull' failed in %s\n", $kentTree;
+  exit 255;
+}
+
 if (system('git', '-C', $kentTree, 'add', '--', $newRel, $tdbRel) != 0) {
   printf STDERR "ERROR: 'git add' failed in %s\n", $kentTree;
   exit 255;
@@ -490,7 +496,7 @@ if (system('git', '-C', $kentTree, 'add', '--', $newRel, $tdbRel) != 0) {
 my $gitChanged = 1;
 # nothing to commit if neither file actually changed (idempotent re-runs)
 if (system('git', '-C', $kentTree, 'diff', '--cached', '--quiet') == 0) {
-  printf STDERR "no changes to source tree\n";
+# printf STDERR "no changes to source tree\n";
   $gitChanged = 0;
 }
 
@@ -501,21 +507,29 @@ if ($gitChanged) {
     printf STDERR "ERROR: 'git commit' failed in %s\n", $kentTree;
     exit 255;
   }
-  printf STDERR "committed: %s\n", $msg;
+# printf STDERR "committed: %s\n", $msg;
+
+  # push so the tree doesn't accumulate local commits that block future
+  # 'git pull' / fast-forward updates from master.
+  if (system('git', '-C', $kentTree, 'push') != 0) {
+    printf STDERR "ERROR: 'git push' failed in %s\n", $kentTree;
+    exit 255;
+  }
+# printf STDERR "pushed to remote\n";
 }
 
 ##############################################################################
 # build/install trackDb for the target database (default release + alpha)
 # so the new tracks show up in the genome browser.
 ##############################################################################
-my $tdbDir = "$kentTree/src/hg/makeDb/trackDb";
-for my $args ( ["DBS=$targetDb"], ["DBS=$targetDb", "alpha"] ) {
-  printf STDERR "make -c %s %s\n", $tdbDir, $args->[0];
-  if (system('make', '-C', $tdbDir, @$args) != 0) {
-    printf STDERR "ERROR: 'make -C %s %s' failed\n",
-      $tdbDir, join(' ', @$args);
-    exit 255;
-  }
-}
+# my $tdbDir = "$kentTree/src/hg/makeDb/trackDb";
+# for my $args ( ["DBS=$targetDb"], ["DBS=$targetDb", "alpha"] ) {
+# # printf STDERR "make -c %s %s\n", $tdbDir, $args->[0];
+#   if (system('make', '-C', $tdbDir, @$args) != 0) {
+#     printf STDERR "ERROR: 'make -C %s %s' failed\n",
+#       $tdbDir, join(' ', @$args);
+#     exit 255;
+#   }
+# }
 
 exit 0;

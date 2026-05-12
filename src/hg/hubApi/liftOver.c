@@ -83,11 +83,19 @@ sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
 long long totalRows = sqlQuickLongLong(conn, dyStringContents(query));
 dyStringClear(query);
 
-if (isNotEmpty(fromDb) || isNotEmpty(toDb))
+if (isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    /* match a chain recorded in either direction */
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE "
+        "(LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s')) "
+        "OR (LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s'))",
+        tableName, fromDb, toDb, toDb, fromDb);
+    }
+else if (isNotEmpty(fromDb) || isNotEmpty(toDb))
     {
     sqlDyStringPrintf(query, "SELECT * FROM %s WHERE ", tableName);
     if (isNotEmpty(fromDb))
-        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') %s ", fromDb, isNotEmpty(toDb) ? "AND" : "");
+        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') ", fromDb);
     if (isNotEmpty(toDb))
         sqlDyStringPrintf(query, "LOWER(toDb) = LOWER('%s') ", toDb);
     }
@@ -300,6 +308,36 @@ char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
 if (isEmpty(userId))
     apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+
+/* per-email daily rate limit, per requestType, calendar-day server time */
+char *limitStr = cfgOption("liftDailyLimit");
+int dailyLimit = isNotEmpty(limitStr) ? atoi(limitStr) : 0;
+if (dailyLimit > 0)
+    {
+    char *limitOttoTable = cfgOption("ottoTable");
+    if (isNotEmpty(limitOttoTable))
+        {
+        struct sqlConnection *conn = hConnectCentral();
+        if (sqlTableExists(conn, limitOttoTable))
+            {
+            struct dyString *q = newDyString(0);
+            sqlDyStringPrintf(q,
+                "SELECT COUNT(*) FROM %s "
+                "WHERE requestType='liftOver' AND email='%s' "
+                "AND DATE(requestTime) = CURDATE()",
+                limitOttoTable, email);
+            int todayCount = sqlQuickNum(conn, dyStringCannibalize(&q));
+            hDisconnectCentral(&conn);
+            if (todayCount >= dailyLimit)
+                apiErrAbort(err429, err429Msg,
+                    "Daily limit reached: %d liftOver requests per day. "
+                    " Please try again tomorrow.",
+                    dailyLimit);
+            }
+        else
+            hDisconnectCentral(&conn);
+        }
+    }
 
 char *toAddr = cfgOption("chainFileRequestEmail");
 char *fromAddr = cfgOption("apiFromEmail");

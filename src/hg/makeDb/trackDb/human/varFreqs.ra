@@ -20,10 +20,11 @@ superTrack on
         # Variant type and consequence filters
         filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
         filterLabel.varType Variant Type
-        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,.|Intergenic
+        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,3_prime_utr|3' UTR,5_prime_utr|5' UTR,non_coding|Non-coding,.|Intergenic,others|Other
+        filterType.consequence multipleListOr
         filterLabel.consequence Consequence
         # Source database filter
-        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,NPM|NPM Singapore
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Length filters
@@ -91,6 +92,8 @@ superTrack on
         filterLabel.SVatalogAF SVatalog 101 10XG SR AF
         filterByRange.Tishkoff180AF on
         filterLabel.Tishkoff180AF Tishkoff 180 African WGS AF
+        filterByRange.NPMAF on
+        filterLabel.NPMAF NPM Singapore AF
         # Per-database AC filters
         filterByRange.AllOfUsAC on
         filterLabel.AllOfUsAC AllOfUs AC
@@ -142,6 +145,8 @@ superTrack on
         filterLabel.SVatalogAC SVatalog 101 10XG SR AC
         filterByRange.Tishkoff180AC on
         filterLabel.Tishkoff180AC Tishkoff 180 African WGS AC
+        filterByRange.NPMAC on
+        filterLabel.NPMAC NPM Singapore AC
         # Population-specific AF filters
         # AllOfUs local-ancestry populations
         # NB: these are local-ancestry-stratified frequencies (per-position, per-haplotype-class),
@@ -255,6 +260,19 @@ superTrack on
         filterLabel.GREGoRAC_UNA GREGoR Unaffected AC
         filterByRange.GREGoRAC_UNK on
         filterLabel.GREGoRAC_UNK GREGoR Unknown AC
+        # NPM Singapore ancestry groups
+        filterByRange.NPMAF_Chinese on
+        filterLabel.NPMAF_Chinese NPM Singapore Chinese AF
+        filterByRange.NPMAF_Malay on
+        filterLabel.NPMAF_Malay NPM Singapore Malay AF
+        filterByRange.NPMAF_Indian on
+        filterLabel.NPMAF_Indian NPM Singapore Indian AF
+        filterByRange.NPMAC_Chinese on
+        filterLabel.NPMAC_Chinese NPM Singapore Chinese AC
+        filterByRange.NPMAC_Malay on
+        filterLabel.NPMAC_Malay NPM Singapore Malay AC
+        filterByRange.NPMAC_Indian on
+        filterLabel.NPMAC_Indian NPM Singapore Indian AC
         skipEmptyFields on
        
         track allofus

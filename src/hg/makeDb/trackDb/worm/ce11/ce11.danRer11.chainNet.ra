@@ -1,0 +1,49 @@
+##############################################################################
+# danRer11 - Zebrafish - Danio rerio - taxId: 7955
+##############################################################################
+track chainNetDanRer11
+compositeTrack on
+shortLabel Zebrafish Chain/Net
+longLabel Zebrafish (May 2017 (GRCz11/danRer11) danRer11), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb danRer11
+html chainNet
+
+    track chainNetDanRer11Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDanRer11
+    spectrum on
+
+        track chainDanRer11
+        parent chainNetDanRer11Viewchain
+        subGroups view=chain
+        shortLabel Zebrafish Chain
+        longLabel Zebrafish (May 2017 (GRCz11/danRer11) danRer11) Chained Alignments
+        type bigChain danRer11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainDanRer11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainDanRer11Link.bb
+
+        track chainLiftOverDanRer11
+        parent chainNetDanRer11Viewchain
+        subGroups view=chain
+        shortLabel Zebrafish liftOverChain
+        longLabel Zebrafish (May 2017 (GRCz11/danRer11) danRer11) Lift Over Chained Alignments
+        type bigChain danRer11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverDanRer11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverDanRer11Link.bb
+

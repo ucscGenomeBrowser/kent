@@ -6,74 +6,144 @@ group genes
 
     track utrAnnotUorfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/utrAnnotUorfs.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/utrAnnotUorfs.kozak.bb
     shortLabel UTRannotator uORFs
     longLabel ncORFs: Upstream Open Reading Frames (uORFs) from UTRannotator
-    type bigBed 9 +
+    type bigGenePred
     itemRgb on
-    mouseOverField uorfType
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Introns from</b>: $intronsSource
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
+    filterValues.uorfType 5'UTR uORF,5'UTR uORF extending into 3'UTR
+    filterType.uorfType multipleListOr
+    filterValues.intronsSource gencNcOrfs,gencNcOrfsComprehensive,gencNcOrfsPrimary,metamorf,nuorfdb,openprot,none
+    filterType.intronsSource multipleListOr
     visibility pack
 
     track gencNcOrfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb
     shortLabel GENCODE Phase I ncORFs
     longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
     type bigGenePred
     itemRgb on
-    mouseOver transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Replicated</b>: $replicated<br> <b>Studies</b>: $ref_studies
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
+    filterValues.replicated yes,no
+    filterType.replicated multipleListOr
     html gencNcOrfs
     visibility pack
 
     track gencNcOrfsPrimary
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb
     shortLabel GENCODE Ph2 ncORFs Pri
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
-    type bigBed 12
+    type bigGenePred
     itemRgb on
-    #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     html gencNcOrfs
     visibility pack
 
     track gencNcOrfsComprehensive
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb
     shortLabel GENCODE Ph2 ncORFs Cmp
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
-    type bigBed 12
+    type bigGenePred
     itemRgb on
-    #mouseOverField transcripts ${all_transcript_ids}, genes ${all_gene_ids}, replicated ${replicated}, studies ${ref_studies}
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     html gencNcOrfs
     visibility pack
 
     track metamorf
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/metamorf/MetamORF.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/metamorf/MetamORF.kozak.bb
     shortLabel MetamORF
     longLabel ncORFs: MetamORF - meta-database of non-canonical ORFs
-    type bigBed 12 +
+    type bigGenePred
     itemRgb on
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> ($type)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Transcripts</b>: $transcripts<br> <b>Cell types</b>: $cell_types
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     visibility pack
 
     track nuorfdb
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.kozak.bb
     shortLabel nuORFdb
     longLabel ncORFs: nuORFdb - non-canonical ORFs from nuORFdb v1.2
     type bigGenePred
     itemRgb on
-    mouseOverField plotType
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Predictor</b>: $predictorType<br> <b>Plot type</b>: $plotType
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     visibility pack
 
     track openprot
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.kozak.bb
     shortLabel OpenProt
     longLabel ncORFs: OpenProt - alternative and reference proteins v2.2
     type bigGenePred
     itemRgb on
-    mouseOverField localization
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($type, $localization)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>MS score</b>: $msScore <b>TE score</b>: $teScore <b>Domains</b>: $domains
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
@@ -81,12 +151,21 @@ group genes
 
     track openprotMs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.ms2.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/openprot/openprot.ms2.kozak.bb
     shortLabel OpenProt (MS>=2)
     longLabel ncORFs: OpenProt - proteins with at least 2 MS peptides v2.2
     type bigGenePred
     itemRgb on
-    mouseOverField localization
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($type, $localization)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>MS score</b>: $msScore <b>TE score</b>: $teScore <b>Domains</b>: $domains
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    filterType.startCodon multipleListOr
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterType.kozakStrength multipleListOr
+    filterByRange.kozakTE on
+    filter.kozakTE 0:1.5
+    filterLimits.kozakTE 0:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
