@@ -65,3 +65,37 @@ bedToBigBed -tab \
     meiHgsvc3.sorted.bed \
     /hive/data/genomes/hs1/chrom.sizes \
     meiHgsvc3.bb
+
+############################################################
+# DeepMEI 1000G callset (hg38 only)
+# Source: Xu et al. 2023, bioRxiv (10.1101/2023.03.07.531451)
+# https://github.com/xuxif/DeepMEI/tree/main/DeepMEI/1000g_high_callset
+
+# DeepMEI is a CNN MEI caller; the authors released a high-confidence
+# callset for the 3,202 high-coverage 1000 Genomes samples (NYGC).
+# The VCF uses symbolic ALTs (<INS:ME:ALU>, <INS:ME:LINE1>, <INS:ME:SVA>)
+# and does not report inserted sequence or insertion length, so the
+# resulting bigBed schema is a subset of the HGSVC3 one.
+
+mkdir -p /hive/data/genomes/hg38/bed/mei/deepmei
+cd /hive/data/genomes/hg38/bed/mei/deepmei
+
+wget https://github.com/xuxif/DeepMEI/raw/refs/heads/main/DeepMEI/1000g_high_callset/merge_1000g.latested.vcf.gz
+
+# Convert VCF (91617 MEIs, 3202 samples) to bed9+7.
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kgVcfToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kgVcfToBed.py \
+    merge_1000g.latested.vcf.gz \
+    /hive/data/genomes/hg38/chrom.sizes \
+    deepmei.bed
+# -> Read 91617 records, wrote 91617, skipped 0 + 0 + 0
+# Class distribution: Alu 68282, L1 16891, SVA 6444.
+
+sort -k1,1 -k2,2n deepmei.bed > deepmei.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kg.as \
+    -type=bed9+7 \
+    deepmei.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    deepmei1kg.bb
