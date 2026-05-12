@@ -14,6 +14,11 @@
 #include "hgFindSpec.h"
 #endif
 
+/* matchesHgvs() widens its returned position by this many bases on each
+ * side so the visual context around the variant is visible after the
+ * browser jumps to it. */
+#define HGVS_FIND_PADDING 5
+
 
 struct hgPositions
 /* A bunch of positions in genome. */

@@ -137,8 +137,13 @@ if (hgvsJson)
                 {
                 // fill out an item AND redirect to that location somehow?
                 item->chrom = hgp->singlePos->chrom;
-                item->chromStart = item->thickStart = hgp->singlePos->chromStart;
-                item->chromEnd = item->thickEnd = hgp->singlePos->chromEnd;
+                // matchesHgvs widens the position by HGVS_FIND_PADDING on each
+                // side for visual context; the saved variant should be the exact
+                // mapped span.
+                item->chromStart = item->thickStart =
+                    hgp->singlePos->chromStart + HGVS_FIND_PADDING;
+                item->chromEnd = item->thickEnd =
+                    hgp->singlePos->chromEnd - HGVS_FIND_PADDING;
                 item->strand[0] = '.';
                 item->score = 0;
                 item->bin = binFromRange(item->chromStart, item->chromEnd);

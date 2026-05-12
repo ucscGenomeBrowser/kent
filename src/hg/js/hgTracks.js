@@ -2163,7 +2163,7 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 650,
+                minWidth: 750,
                 buttons: dragSelectButtons,
 
                 open: function () { // Make zoom the focus/default action

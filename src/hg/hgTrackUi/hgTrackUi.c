@@ -4312,11 +4312,14 @@ struct slName *hubIds = hubConnectHubsInCart(cart);
 struct slName *thisHubId = hubIds;
 while (thisHubId != NULL)
     {
-    struct hubConnectStatus *hubStatus = hubFromId(sqlUnsigned(thisHubId->name));
-    if (fileUrlMatchesHub(fileUrl, hubStatus))
+    struct hubConnectStatus *hubStatus = hubFromIdNoAbort(sqlUnsigned(thisHubId->name));
+    if (hubStatus != NULL)
         {
-        matchFound = TRUE;
-        break;
+        if (isEmpty(hubStatus->errorMessage) && fileUrlMatchesHub(fileUrl, hubStatus))
+            {
+            matchFound = TRUE;
+            break;
+            }
         }
     thisHubId = thisHubId->next;
     }

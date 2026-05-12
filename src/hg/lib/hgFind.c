@@ -3649,7 +3649,7 @@ if (hgvsList)
     AllocVar(table);
     table->description = "HGVS";
     table->searchTime = -1;
-    int padding = 5;
+    int padding = HGVS_FIND_PADDING;
     int mapErrCnt = 0;
     struct dyString *dyWarn = dyStringNew(0);
     struct hgvsHelper *helper = NULL;

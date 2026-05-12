@@ -4,6 +4,37 @@ var assembly2Value = "";
 var genome1 = "";
 var genome2 = "";
 
+// matches the ottoRequest README.txt and ottoRequestView.cgi STATUS_NAMES
+var STATUS_LABELS = {
+    0: "received by API",
+    1: "acknowledged, email sent",
+    2: "galaxy job started",
+    3: "galaxy done, download started",
+    4: "downloaded, track files made",
+    5: "symlinks ready, awaiting push",
+    6: "push complete",
+    7: "ERROR",
+    8: "COMPLETE (final email sent)"
+};
+
+function pendingMessageFor(status, requestTime) {
+    var label = STATUS_LABELS[status] || ("status " + status);
+    if (status === 7) {
+        return "A previous request for these assemblies (submitted on " +
+            requestTime + ") encountered an error. " +
+            "Please contact genome-www@soe.ucsc.edu for help.";
+    }
+    if (status === 8) {
+        return "A request for these assemblies (submitted on " +
+            requestTime + ") has already completed. " +
+            "If the chain files are not yet available, please contact" +
+            " genome-www@soe.ucsc.edu.";
+    }
+    return "A request for these assemblies was submitted on " +
+        requestTime + " and is currently in progress (" + label + ")." +
+        " You will receive an email when it completes.";
+}
+
 /* check if a file exists at the specified URL */
 function fileExists(url, callback) {
   fetch(url, { method: 'HEAD' })
@@ -82,6 +113,8 @@ function checkAssemblyCompatibility(asm1, asm2) {
               document.getElementById("submitButton").style.display = "none";
             }
           });
+        } else if (response.pending) {
+          showPending(response.pendingStatus, response.pendingRequestTime);
         }
       })
       .catch(error => {
@@ -97,6 +130,7 @@ function checkBothAssembliesSelected() {
 
 function resetFormVisibility() {
     document.getElementById("liftExists").style.display = "none";
+    document.getElementById("pendingRequest").style.display = "none";
     document.getElementById("errorMessage").style.display = "none";
     document.getElementById("emailForm").style.display = "block";
     document.getElementById("commentsForm").style.display = "block";
@@ -107,6 +141,15 @@ function showError(heading, errorMsg) {
     document.getElementById("errorHeading").textContent = heading;
     document.getElementById("errorText").textContent = errorMsg;
     document.getElementById("errorMessage").style.display = "block";
+    document.getElementById("emailForm").style.display = "none";
+    document.getElementById("commentsForm").style.display = "none";
+    document.getElementById("submitButton").style.display = "none";
+}
+
+function showPending(status, requestTime) {
+    document.getElementById("pendingMessage").textContent =
+        pendingMessageFor(status, requestTime);
+    document.getElementById("pendingRequest").style.display = "block";
     document.getElementById("emailForm").style.display = "none";
     document.getElementById("commentsForm").style.display = "none";
     document.getElementById("submitButton").style.display = "none";
@@ -199,6 +242,11 @@ function submitForm() {
               errorMsg = "Thank you for your interest. " + errorMsg +
                   " If you have an urgent need, please contact us at" +
                   " genome-www@soe.ucsc.edu.";
+            } else if (response.status === 409) {
+              heading = "Already submitted";
+              errorMsg = errorMsg +
+                  " If you have not seen the completion email, please" +
+                  " contact us at genome-www@soe.ucsc.edu.";
             }
             showError(heading, errorMsg);
           }
@@ -256,5 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("dismissLiftExists").addEventListener("click", dismissLiftExists);
+    document.getElementById("dismissPending").addEventListener("click", resetFormVisibility);
     document.getElementById("dismissError").addEventListener("click", resetFormVisibility);
 });
