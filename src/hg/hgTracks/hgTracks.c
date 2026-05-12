@@ -8892,7 +8892,8 @@ hPrintf(" ");
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put up the My Variants dialog if the hg.conf statement is present
-if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+// and the visitor is logged in (anonymous users can't write to the table).
+if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
     {
     hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
     jsInline("var doMyVariants = true;\n");

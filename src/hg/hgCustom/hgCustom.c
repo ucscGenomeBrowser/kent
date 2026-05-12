@@ -569,7 +569,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Name  field */
     char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     if ((ctDataUrl(ct) && ctHtmlUrl(ct)) ||
-            sameString(ct->tdb->type, "chromGraph"))
+            sameString(ct->tdb->type, "chromGraph") ||
+            sameString(ct->tdb->type, "myVariants"))
         printf("<TR><TD>%s</A></TD>", shortLabel);
     else
 	{
