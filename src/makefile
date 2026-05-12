@@ -24,6 +24,7 @@ topLibs: ${TOP_LIBS:%=%.topLibs}
 %.topLibs: topChecks
 	${MAKE} -C $*
 
+.PHONY: topChecks
 topChecks:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
