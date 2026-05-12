@@ -547,7 +547,7 @@ else
             "    INDEX(chrom(16),bin),\n"
             "    INDEX(db),\n"
             "    INDEX(project)\n"
-            ");", db, tableName);
+            ") ENGINE=InnoDB;", db, tableName);
     sqlUpdate(conn, dyStringCannibalize(&createTable));
     return myVariantsGetDbTable(userName);
     }

@@ -19,4 +19,4 @@ CREATE TABLE myVariantsShares (
     UNIQUE KEY(shareToken),
     KEY(ownerUser),
     KEY(targetUser)
-);
+) ENGINE=InnoDB;
