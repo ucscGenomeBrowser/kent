@@ -62,17 +62,62 @@ cases:
     compare:
       - [native, lifted]
 
+  # -------- Mode C: lift on/off, same hub on hs1 (refs #37445) --------
+  # Reference hub at utils/qa/quickLiftBench/testHub/ (built by buildTestHub.sh).
+  # Both stanzas render the same conceptual features at the same hs1 coords;
+  # the only difference is whether the lifted variant goes through the
+  # quickLift chain-remap path. This isolates pure quickLift overhead from
+  # track-content differences -- the cleanest measurement for the paper.
+  - id: mode_c_hs1_bb
+    description: |
+      Mode C bigBed: same hub, same position on hs1; native (hs1-coord
+      bigBed) vs lifted (hg38-coord bigBed + quickLiftUrl chain). Isolates
+      the chain-remap overhead from track-content differences.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: pack, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: pack, modeC_bw_native: hide, modeC_bw_lifted: hide}
+    compare:
+      - [native, lifted]
+
+  - id: mode_c_hs1_bw
+    description: |
+      Mode C bigWig: same hub + position; native (hs1-coord bigWig) vs
+      lifted (hg38-coord bigWig + quickLiftUrl chain). Same isolation as
+      mode_c_hs1_bb but for the bigWig track type.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: full, modeC_bw_lifted: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: full}
+    compare:
+      - [native, lifted]
+
   # -------- Regression: parallel-fetch tripwire (refs #37488, #37470) --------
   # phase_asserts make this case fail-fast if the parallel pool stops
   # firing for quickLift tracks (e.g. a regression in isTrackForParallelLoad
-  # or customFactoryParallelLoad). Runs against the sandbox until the fix
-  # lands on hgwdev.
+  # or customFactoryParallelLoad).
   - id: regress_quickLift_parallel
     description: |
       Regression tripwire: a quickLifted multi-track session must
       spawn the parallel-fetch worker pool. Asserts the
       "Waiting for parallel..." span is emitted in every iteration.
-    server: sandbox
+    server: hgwdev
     variants:
       base: Brianraney/benchQuickPara
     phase_asserts:
