@@ -4025,7 +4025,8 @@ if (!tdbIsDownloadsOnly(tdb))
         cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
-        if (differentString(tdb->type, "chromGraph"))
+        if (differentString(tdb->type, "chromGraph") &&
+            differentString(tdb->type, "myVariants"))
             {
             char buf[256];
             if (ajax)

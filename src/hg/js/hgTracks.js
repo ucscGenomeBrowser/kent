@@ -1445,7 +1445,7 @@ var myVariants = {
         $(content).dialog({
             title: "Annotation Created",
             modal: true,
-            width: 450,
+            width: 600,
             buttons: {
                 "Go to Annotation": function() {
                     if (document.getElementById("myVariantsRememberNav").checked) {

@@ -578,10 +578,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct myVariants *item = myVariantsLoad(row);
     struct bed *bed;
     AllocVar(bed);
+    /* bed->name is the item identifier passed to hgc, which parses "id name"
+     * to look up the row by primary key.  myVariantsName() strips the "id "
+     * prefix for the displayed label. */
+    char buf[64];
+    safef(buf, sizeof(buf), "%u %s", item->id, item->name);
     bed->chrom = item->chrom;
     bed->chromStart = item->chromStart;
     bed->chromEnd = item->chromEnd;
-    bed->name = cloneString(item->name);
+    bed->name = cloneString(buf);
     bed->score = item->score;
     bed->strand[0] = item->strand[0];
     bed->thickStart = item->thickStart;
@@ -662,10 +667,16 @@ track->items = lfList;
 }
 
 char *myVariantsName(struct track *track, void *item)
-/* Return name of one of an item to display on left side. */
+/* Return the display label, stripping the "id " prefix that lf->name carries
+ * for hgc's lookup. */
 {
 struct linkedFeatures *lf = item;
 char *name = lf->name;
+if (name == NULL)
+    return name;
+char *space = strchr(name, ' ');
+if (space != NULL)
+    return space + 1;
 return name;
 }
 
