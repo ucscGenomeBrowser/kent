@@ -290,6 +290,26 @@ in that uncommon case the computed Kozak value may be inaccurate.
 </p>
 
 <p>
+The Kozak strength annotation and color coding are added by the script
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/ncOrfs/colorByKozak.py"
+target="_blank"><tt>colorByKozak.py</tt></a>
+in the kent source tree
+(<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/ncOrfs"
+target="_blank">src/hg/makeDb/scripts/ncOrfs/</a>),
+along with the per-track autoSql files, the cached Noderer 2014 TE table, and a
+helper script (<tt>addIntrons.py</tt>) that recovers exon/intron structure for the
+UTRannotator uORFs. The Kozak strength logic is a Python port of the corresponding
+R routines in the
+<a href="https://github.com/Computational-Rare-Disease-Genomics-WHG/VuTR"
+target="_blank">VuTR pipeline</a>
+(Whiffin lab / Computational Rare-Disease Genomics, WHG Oxford); credit and thanks to
+the VuTR authors for the original implementation. Full build steps are recorded in
+the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/ncOrfs.txt"
+target="_blank">makedoc</a>.
+</p>
+
+<p>
 References for the Kozak / TE methodology:
 </p>
 <ul>
