@@ -21,6 +21,14 @@ SEED="${SEED:-42}"
 REGION_START="${REGION_START:-15000000}"
 REGION_END="${REGION_END:-50000000}"
 BW_STEP="${BW_STEP:-1000}"
+# Per-feature span in bp. Stride is max(span/N, FEATURE_W), so shrinking
+# FEATURE_W lets the bench fit more features in the same region without
+# forcing pack-stacking from overlaps. Adjacent features are placed
+# back-to-back (no gap) when N saturates the region. The BED12 block model
+# scales proportionally with FEATURE_W (three blocks at 10%/40%/10% of width
+# with 30% and 90% block-start offsets), preserving the same exon/intron
+# shape across all sizes.
+FEATURE_W="${FEATURE_W:-5000}"
 DEST="${1:-$HOME/public_html/quickLiftBench/testHub}"
 
 HG38_CHROM_SIZES=/hive/data/genomes/hg38/chrom.sizes
@@ -35,26 +43,49 @@ QUICK_CHAIN_LINK_SRC=/hive/data/genomes/hs1/bed/lastz.hg38/axtChain/hs1.hg38.qui
 mkdir -p "$DEST"
 cd "$DEST"
 
-python3 - "$N" "$SEED" "$REGION_START" "$REGION_END" > modeC_hg38.bed <<'PY'
+python3 - "$N" "$SEED" "$REGION_START" "$REGION_END" "$FEATURE_W" > modeC_hg38.bed <<'PY'
 import random, sys
-N, seed, start_region, end_region = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+N, seed, start_region, end_region, W = (int(sys.argv[i]) for i in range(1, 6))
+if W < 50:
+    sys.exit(f"FEATURE_W must be >= 50bp (got {W})")
 random.seed(seed)
 chrom = "chr22"
 span = end_region - start_region
-# Lay features at regular stride so they don't overlap (~5kb each).
-stride = max(span // N, 6000)
+# Lay features at regular stride. Stride must clear the feature width itself
+# to keep features non-overlapping; at high N adjacent features are placed
+# back-to-back (stride == W) with no gap.
+stride = max(span // N, W)
+# Block model: three blocks at 10% / 40% / 10% of width, starting at
+# offsets 0, 30%, and 90% of width. Matches the original 500/2000/500 +
+# 0/1500/4500 pattern when W=5000. Bound each block at >=1bp so very small
+# FEATURE_W (e.g. 50) still produces a valid BED12.
+def w_at(frac):
+    return max(1, int(round(W * frac)))
+b1, b2, b3 = w_at(0.1), w_at(0.4), w_at(0.1)
+s1, s2, s3 = 0, w_at(0.3), w_at(0.9)
+thick_lo = w_at(0.2)
+thick_hi = W - w_at(0.2)
+emitted = 0
 for i in range(N):
     s = start_region + i * stride
-    e = s + 5000
+    e = s + W
     if e > end_region:
         break
     strand = "+" if i % 2 == 0 else "-"
-    thickStart, thickEnd = s + 1000, e - 1000
+    thickStart, thickEnd = s + thick_lo, s + thick_hi
     print("\t".join(map(str, [
         chrom, s, e, f"feat_{i:05d}", 0, strand,
         thickStart, thickEnd, "100,100,200",
-        3, "500,2000,500,", "0,1500,4500,"
+        3, f"{b1},{b2},{b3},", f"{s1},{s2},{s3},",
     ])))
+    emitted += 1
+if emitted < N:
+    print(
+        f"WARNING: requested N={N} but only {emitted} features fit "
+        f"in {span}bp at stride={stride}bp (FEATURE_W={W}). "
+        f"Pass a smaller FEATURE_W or larger REGION span.",
+        file=sys.stderr,
+    )
 PY
 
 liftOver -bedPlus=12 modeC_hg38.bed "$HG38_TO_HS1_CHAIN" modeC_hs1.bed unmapped_hs1.bed
