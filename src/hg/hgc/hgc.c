@@ -3707,7 +3707,8 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-if (!isCustomTrack(tdb->track))
+if (!isCustomTrack(tdb->track) &&
+    !(tdb->type && sameString(tdb->type, "myVariants")))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);

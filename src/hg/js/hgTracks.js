@@ -1241,7 +1241,7 @@ var myVariants = {
     },
 
     init: function () {
-        // show a jquery-ui dialog when a user clicks on the 'make item' button
+        // show a jquery-ui dialog when a user clicks on the 'Add Annotation' button
         let dialog = document.getElementById('myVariantsDialog');
         if (!dialog) {
             dialog = document.createElement("div");

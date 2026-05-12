@@ -7,52 +7,115 @@
 #include "portable.h"
 #include "bamFile.h"
 #include "htmshell.h"
-#include "cram/cram_samtools.h"
-#include "cram/sam_header.h"
-#include "cram/cram_structs.h"
 #include "htslib/cram.h"
 #include "udc.h"
 #include "psl.h"
 
-// If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
-// without worrying about the samtools lib creating local cache files in cgi-bin:
+#include <limits.h>
 
-static bam_index_t *bamOpenIndexGivenUrl(samfile_t *sam, char *fileOrUrl, char *baiFileOrUrl)
-/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
- * otherwise return NULL. baiFileOrUrl can be NULL. 
- * The difference to bamOpenIndex is that the URL/filename of the bai file can be specified. */
+void cramCheckRefs(samfile_t *fh, char *refUrl, char *cacheDir)
+/* Check if all CRAM reference sequences are locally available.  If any are
+ * missing, create pending-download request files and errAbort with a message
+ * telling the user to refresh.  Uses the new cram_check_required_refs() API
+ * to pre-check before reading rather than discovering failures mid-decode. */
 {
-if (sam->format.format == cram) 
+if (fh->format.format != cram || cacheDir == NULL)
+    return;
+
+/* Set REF_CACHE so htslib's ref resolution finds our cache dir */
+setenv("REF_CACHE", cacheDir, 1);
+
+cram_fd *cfd = fh->fp.cram;
+cram_ref_check_t *chk = cram_check_required_refs(cfd, NULL, cacheDir);
+if (chk == NULL || chk->n_missing == 0)
     {
-    if (baiFileOrUrl)
-       return sam_index_load2(sam, fileOrUrl, baiFileOrUrl);
-    else
-       return sam_index_load(sam, fileOrUrl);
+    cram_ref_check_free(chk);
+    return;
     }
 
-// assume that index is a .bai file 
+/* Use first missing ref for the error message (matches old behavior) */
+char *md5String = chk->refs[0].md5;
+
+char errorFile[4096];
+char pendingFile[4096];
+safef(errorFile, sizeof errorFile, "%s/error/%s", cacheDir, md5String);
+
+FILE *downFile;
+if ((downFile = fopen(errorFile, "r")) != NULL)
+    {
+    char errorBuf[4096];
+    mustGetLine(downFile, errorBuf, sizeof errorBuf);
+    fclose(downFile);
+    cram_ref_check_free(chk);
+    errAbort("cannot find reference %s.  Error: %s", md5String, errorBuf);
+    }
+
+/* Create pending download requests for all missing refs */
+safef(pendingFile, sizeof pendingFile, "%s/pending/", cacheDir);
+makeDirsOnPath(pendingFile);
+
+for (int i = 0; i < chk->n_missing; i++)
+    {
+    char *md5 = chk->refs[i].md5;
+    safef(pendingFile, sizeof pendingFile, "%s/pending/%s", cacheDir, md5);
+    downFile = fopen(pendingFile, "w");
+    if (downFile == NULL)
+        {
+        cram_ref_check_free(chk);
+        errAbort("cannot find reference %s.  Cannot create file %s.", md5, pendingFile);
+        }
+    if (refUrl != NULL)
+        fprintf(downFile, refUrl, md5);
+    else
+        fprintf(downFile, "http://www.ebi.ac.uk:80/ena/cram/md5/%s", md5);
+    fprintf(downFile, "\n");
+    fclose(downFile);
+    }
+
+char server[4096];
+if (refUrl != NULL)
+    safef(server, sizeof server, refUrl, md5String);
+else
+    safef(server, sizeof server, "http://www.ebi.ac.uk:80/ena/cram/md5/%s", md5String);
+
+cram_ref_check_free(chk);
+errAbort("Downloading reference from %s. "
+         "Please refresh screen to check download status.", server);
+}
+
+static bam_index_t *tryIndexCandidates(samfile_t *sam, char *fileOrUrl, const char *ext)
+/* Try loading index by appending ext, then by replacing the suffix with ext.
+ * Uses sam_index_load3 with flags=0 so remote indexes are read through the
+ * UDC hfile scheme handler instead of htslib downloading a local copy into
+ * the (non-writable) CWD. */
+{
 char indexName[4096];
 bam_index_t *ret = NULL;
-if (baiFileOrUrl==NULL)
-    {
-    // first try tacking .bai on the end of the bam file name
-    safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
-    if ((ret =  sam_index_load2(sam, fileOrUrl, indexName)) == NULL)
-        {
-        // since the open didn't work, try replacing suffix (if any) with .bai
-        safef(indexName, sizeof indexName - sizeof(".bai"), "%s", fileOrUrl);
-        char *lastDot = strrchr(indexName, '.');
-        if (lastDot)
-            {
-            strcpy(lastDot, ".bai");
-            ret = sam_index_load2(sam, fileOrUrl, indexName);
-            }
-        }
-    }
-else
-    ret = sam_index_load2(sam, fileOrUrl, baiFileOrUrl);
 
+safef(indexName, sizeof indexName, "%s%s", fileOrUrl, ext);
+if ((ret = sam_index_load3(sam, fileOrUrl, indexName, 0)) != NULL)
+    return ret;
+
+safef(indexName, sizeof indexName, "%s", fileOrUrl);
+char *lastDot = strrchr(indexName, '.');
+if (lastDot && (lastDot - indexName) + strlen(ext) < sizeof indexName)
+    {
+    strcpy(lastDot, ext);
+    ret = sam_index_load3(sam, fileOrUrl, indexName, 0);
+    }
 return ret;
+}
+
+static bam_index_t *bamOpenIndexGivenUrl(samfile_t *sam, char *fileOrUrl, char *baiFileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai/.crai file, parse and return the index;
+ * otherwise return NULL. baiFileOrUrl can be NULL.
+ * The difference to bamOpenIndex is that the URL/filename of the index file can be specified. */
+{
+if (baiFileOrUrl != NULL)
+    return sam_index_load3(sam, fileOrUrl, baiFileOrUrl, 0);
+
+const char *ext = (sam->format.format == cram) ? ".crai" : ".bai";
+return tryIndexCandidates(sam, fileOrUrl, ext);
 }
 
 
@@ -67,8 +130,8 @@ if (pIdx != NULL && *pIdx != NULL)
 }
 
 static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
-/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
- * otherwise return NULL. baiFileOrUrl can be NULL. */
+/* If fileOrUrl has a valid accompanying .bai/.crai file, parse and return the index;
+ * otherwise return NULL. */
 {
 return bamOpenIndexGivenUrl(sam, fileOrUrl, NULL);
 }
@@ -161,7 +224,10 @@ void bamFileAndIndexMustExist(char *fileOrUrl, char *baiFileOrUrl)
 samfile_t *bamF = bamOpen(fileOrUrl, NULL);
 bam_index_t *idx = bamOpenIndexGivenUrl(bamF, fileOrUrl, baiFileOrUrl);
 if (idx == NULL)
-    errAbort("failed to read index file (.bai) corresponding to %s", fileOrUrl);
+    {
+    const char *ext = (bamF->format.format == cram) ? ".crai" : ".bai";
+    errAbort("failed to read index file (%s) corresponding to %s", ext, fileOrUrl);
+    }
 bamCloseIdx(&idx);
 bamClose(&bamF);
 }
@@ -196,52 +262,14 @@ if (iter == NULL && header->n_targets == 1 && startsWith("NC_045512v2", position
 if (iter == NULL)
     return;
 int result;
-while ((result = sam_itr_next(samfile, iter, b)) >= 0) 
+while ((result = sam_itr_next(samfile, iter, b)) >= 0)
     callbackFunc(b, callbackData, header);
-
-// if we're reading a CRAM file and the MD5 string has been set
-// we know there was an error finding the reference and we need
-// to request that it be loaded.
-if (samfile->format.format == cram) 
-    {
-    char *md5String =  cram_get_Md5(samfile);
-    if (!isEmpty(md5String))
-        {
-        char server[4096];
-        char pendingFile[4096];
-        char errorFile[4096];
-
-        char *refPath = cram_get_ref_url(samfile);
-        char *cacheDir = cram_get_cache_dir(samfile);
-
-        sprintf(server, refPath, md5String);
-        sprintf(pendingFile, "%s/pending/",cacheDir);
-        sprintf(errorFile, "%s/error/%s",cacheDir,md5String);
-        makeDirsOnPath(pendingFile);
-        sprintf(pendingFile, "%s/pending/%s",cacheDir,md5String);
-        FILE *downFile;
-        if ((downFile = fopen(errorFile, "r")) != NULL)
-            {
-            char errorBuf[4096];
-            mustGetLine(downFile, errorBuf, sizeof errorBuf);
-            errAbort("cannot find reference %s.  Error: %s\n", md5String,errorBuf);
-            }
-        else
-            {
-            if ((downFile = fopen(pendingFile, "w")) == NULL)
-                errAbort("cannot find reference %s.  Cannot create file %s.",md5String, pendingFile);  
-            fprintf(downFile,  "%s\n", server);
-            fclose(downFile);
-            errAbort("Cannot find reference %s.  Downloading from %s. Please refresh screen to check download status.",md5String, server);
-            }
-        }
-    }
 }
 
 void bamAndIndexFetchPlus(char *fileOrUrl, char *baiFileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 		 samfile_t **pSamFile, char *refUrl, char *cacheDir)
-/* Open the .bam file with the .bai index specified by baiFileOrUrl.
- * baiFileOrUrl can be NULL and defaults to <fileOrUrl>.bai.
+/* Open the BAM/CRAM file with the index specified by baiFileOrUrl.
+ * baiFileOrUrl can be NULL and defaults to <fileOrUrl>.bai (BAM) or <fileOrUrl>.crai (CRAM).
  * Fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
@@ -250,15 +278,16 @@ void bamAndIndexFetchPlus(char *fileOrUrl, char *baiFileOrUrl, char *position, b
 {
 char *bamFileName = NULL;
 samfile_t *fh = bamOpen(fileOrUrl, &bamFileName);
-if (fh->format.format == cram) 
+if (fh->format.format == cram)
     {
     if (cacheDir == NULL)
         errAbort("CRAM cache dir hg.conf variable (cramRef) must exist for CRAM support");
-    cram_set_cache_url(fh, cacheDir, refUrl);  
+    setenv("REF_CACHE", cacheDir, 1);
     }
 bam_hdr_t *header = sam_hdr_read(fh);
 if (pSamFile != NULL)
     *pSamFile = fh;
+cramCheckRefs(fh, refUrl, cacheDir);
 bam_index_t *idx = bamOpenIndexGivenUrl(fh, bamFileName, baiFileOrUrl);
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
@@ -273,25 +302,17 @@ bamClose(&fh);
 static int bamGetTargetCount(char *fileOrUrl)
 /* Return the number of target sequences in a bam or cram file. */
 {
-int tCount = 0;
 htsFile *htsF = hts_open(fileOrUrl, "r");
-if (htsF->format.format == crai)
-    {
-    SAM_hdr *cramHdr = cram_fd_get_header(htsF->fp.cram);
-    tCount = cramHdr->nref;
-    }
-else
-    {
-    bam_hdr_t *bamHdr = bam_hdr_read(htsF->fp.bgzf);
-    tCount = bamHdr->n_targets;
-    }
+bam_hdr_t *header = sam_hdr_read(htsF);
+int tCount = sam_hdr_nref(header);
+bam_hdr_destroy(header);
 hts_close(htsF);
 return tCount;
 }
 
 long long bamFileItemCount(char *fileOrUrl, char *baiFileOrUrl)
 /* Return the total number of mapped items across all sequences in fileOrUrl, using index file.
- * If baiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.bai.
+ * If baiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.bai (BAM) or fileOrUrl.crai (CRAM).
  * NOTE: not all bam index files include mapped item counts, so this may return 0 even for large
  * bam.  As of May 2019, our copy of hts_idx_get_stat does not support cram indexes
  * (perhaps they never include counts?), so this always returns 0 for cram. */
@@ -299,11 +320,11 @@ long long bamFileItemCount(char *fileOrUrl, char *baiFileOrUrl)
 long long itemCount = 0;
 hts_idx_t *idx = NULL;
 if (isNotEmpty(baiFileOrUrl))
-    idx = hts_idx_load2(fileOrUrl, baiFileOrUrl);
+    idx = hts_idx_load3(fileOrUrl, baiFileOrUrl, HTS_FMT_BAI, 0);
 else
     {
     int format = endsWith(fileOrUrl, ".cram") ? HTS_FMT_CRAI : HTS_FMT_BAI;
-    idx = hts_idx_load(fileOrUrl, format);
+    idx = hts_idx_load3(fileOrUrl, NULL, format, 0);
     }
 if (idx == NULL)
     warn("bamFileItemCount: hts_idx_load(%s) failed.", baiFileOrUrl ? baiFileOrUrl : fileOrUrl);

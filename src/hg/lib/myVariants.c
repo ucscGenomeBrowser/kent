@@ -53,7 +53,11 @@ return list;
 
 void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char *tableName, int updateSize)
 /* Save myVariants as a row to the table specified by tableName.
- * Uses explicit column names so custom fields in el->customFields are included. */
+ * Uses explicit column names so custom fields in el->customFields are included.
+ * If el->name is NULL or empty, fills it in post-INSERT as "Variant N" using
+ * the row's auto-increment id; sqlLastAutoId wraps MariaDB's mysql_insert_id,
+ * which is per-connection and unaffected by concurrent INSERTs on other
+ * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,description,db,ref,alt,project,mouseover", tableName);
@@ -63,8 +67,9 @@ struct slPair *cf;
 for (cf = el->customFields; cf != NULL; cf = cf->next)
     sqlDyStringPrintf(update, ",%s", cf->name);
 
+char *insertName = isEmpty(el->name) ? "" : el->name;
 sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s','%s','%s','%s','%s','%s'",
-    el->bin, el->chrom, el->chromStart, el->chromEnd, el->name, el->score, el->strand,
+    el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
     el->thickStart, el->thickEnd, el->itemRgb, el->description, el->db, el->ref, el->alt,
     el->project, el->mouseover);
 
@@ -75,6 +80,20 @@ for (cf = el->customFields; cf != NULL; cf = cf->next)
 sqlDyStringPrintf(update, ")");
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
+
+if (isEmpty(el->name))
+    {
+    unsigned int newId = sqlLastAutoId(conn);
+    struct dyString *nameUpdate = sqlDyStringCreate(
+        "update %s set name = 'Variant %u' where id = %u",
+        tableName, newId, newId);
+    sqlUpdate(conn, dyStringCannibalize(&nameUpdate));
+    el->id = newId;
+    freez(&el->name);
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy, "Variant %u", newId);
+    el->name = dyStringCannibalize(&dy);
+    }
 }
 
 struct myVariants *myVariantsLoad(char **row)

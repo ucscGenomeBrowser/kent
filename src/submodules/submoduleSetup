@@ -1,0 +1,19 @@
+#!/bin/bash
+set -beEu -o pipefail
+
+# Do required submodule setup to support building the browser
+# If need, do the submodule init, also check from having remains of
+# old htslib copy to deal with switch from old version.
+
+if [ -e htslib ] ; then
+    echo "*********************************************************************" >&2
+    echo "Note: an outdated kent/src/htslib/ exists in the working tree." >&2
+    echo "      It is no longer used and can be removed."   >&2
+    echo "*********************************************************************" >&2
+fi
+
+if [ !  -e submodules/htslib/.git -o ! -e submodules/htslib/htscodecs/.git ] ; then
+    echo "Note: initializing git submodules" >&2
+    (set -x; git -c protocol.file.allow=always submodule update --init --recursive)
+fi
+

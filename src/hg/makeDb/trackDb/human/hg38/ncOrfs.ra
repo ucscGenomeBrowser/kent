@@ -21,7 +21,7 @@ group genes
     filterByRange.kozakTE on
     filter.kozakTE 0:1.5
     filterLimits.kozakTE 0:1.5
-    filterValues.uorfType 5'UTR uORF,5'UTR uORF extending into 3'UTR
+    filterValues.uorfType 5'UTR uORF|5'UTR-only uORF,5'UTR+3'UTR uORF|Spans into 3'UTR
     filterType.uorfType multipleListOr
     filterValues.intronsSource gencNcOrfs,gencNcOrfsComprehensive,gencNcOrfsPrimary,metamorf,nuorfdb,openprot,none
     filterType.intronsSource multipleListOr
@@ -125,6 +125,10 @@ group genes
     filterByRange.kozakTE on
     filter.kozakTE 0:1.5
     filterLimits.kozakTE 0:1.5
+    filterValues.plotType lncRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
+    filterType.plotType multipleListOr
+    filterValues.type Out-of-Frame,5' uORF,3' dORF,lincRNA,5' Overlap uORF,ncRNA Retained Intron,3' Overlap dORF,ncRNA Processed Transcript,Pseudogene,Antisense,TUCP,Nonsense Mediated Decay,TEC,Sense Overlapping,snoRNA
+    filterType.type multipleListOr
     visibility pack
 
     track openprot
@@ -147,6 +151,8 @@ group genes
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
+    filterValues.kozakMotif +|Kozak motif present,-|No Kozak motif
+    filterType.kozakMotif multipleListOr
     visibility pack
 
     track openprotMs
@@ -169,5 +175,7 @@ group genes
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
+    filterValues.kozakMotif +|Kozak motif present,-|No Kozak motif
+    filterType.kozakMotif multipleListOr
     html openprot
     visibility hide

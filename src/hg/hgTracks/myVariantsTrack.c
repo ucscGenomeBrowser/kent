@@ -21,6 +21,7 @@
 #include "htmlColor.h"
 #include "wikiLink.h"
 #include "hgFind.h"
+#include "hgHgvs.h"
 #include "jsonWrite.h"
 
 static char *reservedFieldNames[] = {
@@ -28,6 +29,121 @@ static char *reservedFieldNames[] = {
     "thickStart", "thickEnd", "itemRgb", "description", "db", "ref", "alt",
     "project", "mouseover", "id", NULL
 };
+
+static char *truncateSeq(char *seq, int maxLen)
+/* Return seq cloned and truncated to maxLen with "..." appended if longer.
+ * NULL or empty input returns NULL. */
+{
+if (isEmpty(seq))
+    return NULL;
+if (strlen(seq) <= (size_t)maxLen)
+    return cloneString(seq);
+struct dyString *dy = dyStringNew(maxLen + 4);
+dyStringAppendN(dy, seq, maxLen);
+dyStringAppend(dy, "...");
+return dyStringCannibalize(&dy);
+}
+
+static char *changeTypePrefix(enum hgvsChangeType t)
+/* Map a non-substitution HGVS change type to its short label. */
+{
+switch (t)
+    {
+    case hgvsctDel: return "Del";
+    case hgvsctDup: return "Dup";
+    case hgvsctIns: return "Ins";
+    case hgvsctInv: return "Inv";
+    case hgvsctCon: return "Con";
+    default: return NULL;
+    }
+}
+
+static char *synthesizeItemName(char *ref, char *alt,
+                                enum hgvsChangeType changeType, char *changeSeq)
+/* Build a default name for a new myVariants item from its ref/alt or HGVS
+ * change.  Returns a cloned string, or NULL when the row's auto-increment
+ * id is needed (the SQL layer fills in "Variant N" after the INSERT). */
+{
+boolean haveRef = !isEmpty(ref);
+boolean haveAlt = !isEmpty(alt);
+struct dyString *dy = dyStringNew(0);
+if (haveRef && haveAlt)
+    dyStringPrintf(dy, "%s>%s", ref, alt);
+else if (haveRef)
+    dyStringPrintf(dy, "Ref: %s", ref);
+else if (haveAlt)
+    dyStringPrintf(dy, "Alt: %s", alt);
+else
+    {
+    char *prefix = changeTypePrefix(changeType);
+    if (prefix != NULL && !isEmpty(changeSeq))
+        {
+        char *trunc = truncateSeq(changeSeq, 10);
+        dyStringPrintf(dy, "%s: %s", prefix, trunc);
+        freeMem(trunc);
+        }
+    }
+if (dyStringIsEmpty(dy))
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+return dyStringCannibalize(&dy);
+}
+
+static void extractHgvsChange(char *hgvsTerm,
+                              char **retRef, char **retAlt,
+                              enum hgvsChangeType *retType, char **retSeq)
+/* Parse an HGVS term and pull either ref/alt (substitution) or the change
+ * type plus its asserted sequence (del/dup/ins/inv/con).  Each out parameter
+ * is set to a freshly cloned string or to NULL/hgvsctUndefined when the
+ * piece is unavailable. */
+{
+*retRef = NULL;
+*retAlt = NULL;
+*retType = hgvsctUndefined;
+*retSeq = NULL;
+if (isEmpty(hgvsTerm))
+    return;
+struct hgvsVariant *hgvs = hgvsParseTerm(hgvsTerm);
+if (hgvs == NULL || isEmpty(hgvs->changes))
+    return;
+struct dyString *dyError = dyStringNew(0);
+struct hgvsChange *change = hgvsParseNucleotideChange(hgvs->changes, hgvs->type, dyError);
+dyStringFree(&dyError);
+if (change == NULL)
+    return;
+if (change->type == hgvsctSubst &&
+    change->value.refAlt.altType == hgvsstSimple)
+    {
+    if (!isEmpty(change->value.refAlt.refSequence))
+        *retRef = cloneString(change->value.refAlt.refSequence);
+    char *altSeq = change->value.refAlt.altValue.seq;
+    if (!isEmpty(altSeq))
+        *retAlt = cloneString(altSeq);
+    }
+else
+    {
+    *retType = change->type;
+    switch (change->type)
+        {
+        case hgvsctDel:
+        case hgvsctDup:
+        case hgvsctInv:
+            if (!isEmpty(change->value.refAlt.refSequence))
+                *retSeq = cloneString(change->value.refAlt.refSequence);
+            break;
+        case hgvsctIns:
+        case hgvsctCon:
+            if (change->value.refAlt.altType == hgvsstSimple &&
+                !isEmpty(change->value.refAlt.altValue.seq))
+                *retSeq = cloneString(change->value.refAlt.altValue.seq);
+            break;
+        default:
+            break;
+        }
+    }
+}
 
 static boolean isValidFieldName(char *name)
 /* Validate that name matches [a-zA-Z_][a-zA-Z0-9_]*, is not a reserved column name,
@@ -67,7 +183,10 @@ if (!cfgOptionBooleanDefault("doMyVariants", FALSE))
     return;
 char *userName = getUserName();
 if (userName == NULL)
+    {
+    warn("You must be logged in to add an annotation.");
     return;
+    }
 
 /* This command runs mysql commands so require the hgsids match to prevent CSRF. */
 char *suppliedHgsid = cgiOptionalString("hgsid");
@@ -147,9 +266,15 @@ if (hgvsJson)
                 item->strand[0] = '.';
                 item->score = 0;
                 item->bin = binFromRange(item->chromStart, item->chromEnd);
-                item->name = hgp->singlePos->name;
-                item->ref = cloneString("");
-                item->alt = cloneString("");
+                char *hgvsRef = NULL, *hgvsAlt = NULL, *changeSeq = NULL;
+                enum hgvsChangeType changeType = hgvsctUndefined;
+                extractHgvsChange(hgvs, &hgvsRef, &hgvsAlt, &changeType, &changeSeq);
+                item->ref = hgvsRef ? hgvsRef : cloneString("");
+                item->alt = hgvsAlt ? hgvsAlt : cloneString("");
+                item->name = synthesizeItemName(item->ref, item->alt, changeType, changeSeq);
+                if (item->name == NULL)
+                    item->name = cloneString("");
+                freeMem(changeSeq);
                 item->db = database;
                 item->description = cloneString(hgp->singlePos->description);
                 item->project = cloneString("");
@@ -170,9 +295,9 @@ if (hgvsJson)
                 item->strand[0] = '.';
                 item->score = 0;
                 item->bin = binFromRange(item->chromStart, item->chromEnd);
-                item->name = cloneString(pos->name ? pos->name : hgvs);
                 item->ref = cloneString("");
                 item->alt = cloneString("");
+                item->name = cloneString("");
                 item->db = database;
                 item->description = cloneString(pos->description ? pos->description : "");
                 item->project = cloneString("");
@@ -216,7 +341,14 @@ else
     item->chromEnd = chromEnd;
     item->thickStart = thickStart;
     item->thickEnd = thickEnd;
-    item->name = cloneString(name);
+    if (isEmpty(name))
+        {
+        item->name = synthesizeItemName(ref, alt, hgvsctUndefined, NULL);
+        if (item->name == NULL)
+            item->name = cloneString("");
+        }
+    else
+        item->name = cloneString(name);
     item->score = score;
     item->strand[0] = strand[0];
     item->itemRgb = color;
@@ -446,12 +578,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct myVariants *item = myVariantsLoad(row);
     struct bed *bed;
     AllocVar(bed);
-    char buf[64];
-    safef(buf, sizeof(buf), "%u %s", item->id, item->name);
     bed->chrom = item->chrom;
     bed->chromStart = item->chromStart;
     bed->chromEnd = item->chromEnd;
-    bed->name = cloneString(buf);
+    bed->name = cloneString(item->name);
     bed->score = item->score;
     bed->strand[0] = item->strand[0];
     bed->thickStart = item->thickStart;
@@ -463,7 +593,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         lf->mouseOver = cloneString(item->mouseover);
     else
         {
-        dyStringPrintf(mouseover, "%s", buf);
+        dyStringPrintf(mouseover, "%s", item->name);
         if (item->ref != NULL && isNotEmpty(item->ref))
             dyStringPrintf(mouseover, "<br>Ref: %s", item->ref);
         if (item->alt != NULL && isNotEmpty(item->alt))
