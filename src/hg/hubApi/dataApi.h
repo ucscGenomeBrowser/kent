@@ -53,6 +53,8 @@
 #define err403Msg	"Forbidden"
 #define err404	404
 #define err404Msg	"Not Found"
+#define err409	409
+#define err409Msg	"Conflict"
 #define err415	415
 #define err415Msg	"Unsupported track type"
 #define err429	429
