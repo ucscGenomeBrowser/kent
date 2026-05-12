@@ -27,7 +27,7 @@ topLibs: topChecks | ${TOP_LIBS:%=%.topLibs}
 topChecks:
 	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
-	@./submoduleSetup
+	@./submodules/submoduleSetup
 
 optLib:
 	cd optimalLeaf && ${MAKE}
