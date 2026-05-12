@@ -21,17 +21,28 @@ development. Other types include <b>downstream ORFs (dORFs)</b> in 3' UTRs,
 <b>out-of-frame ORFs</b> that overlap known coding sequences in an alternative reading frame,
 and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
 </p>
+<p>This track collection imports various databases and annotates all ORFs with their Kozak strength, 
+and colors the features by Kozak strength.</p>
 
 <p>Click any the track names below to show their configuration/documentation page:</p>
 
 <table cellpadding="2" cellspacing="0" border="1" style="border-collapse: collapse;">
   <thead>
     <tr>
-      <th>Track</th>
-      <th>Description</th>
-      <th>Items</th>
-      <th>Genome Coverage</th>
-      <th>Exon Coverage</th>
+      <th rowspan="2">Track</th>
+      <th rowspan="2">Description</th>
+      <th rowspan="2">Items</th>
+      <th rowspan="2">Genome<br>Coverage</th>
+      <th rowspan="2">Exon<br>Coverage</th>
+      <th colspan="2">Start codon</th>
+      <th colspan="3">Kozak strength (ATG only)</th>
+    </tr>
+    <tr>
+      <th>ATG</th>
+      <th>non-ATG</th>
+      <th>Strong</th>
+      <th>Moderate</th>
+      <th>Weak</th>
     </tr>
   </thead>
   <tbody>
@@ -41,6 +52,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">44,435</td>
       <td style="text-align: right;">1.15%</td>
       <td style="text-align: right;">1.15%</td>
+      <td style="text-align: right;">6,236</td>
+      <td style="text-align: right;">38,199</td>
+      <td style="text-align: right;">1,307</td>
+      <td style="text-align: right;">3,054</td>
+      <td style="text-align: right;">1,875</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs</a></td>
@@ -48,6 +64,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">7,264</td>
       <td style="text-align: right;">1.02%</td>
       <td style="text-align: right;">0.03%</td>
+      <td style="text-align: right;">7,263</td>
+      <td style="text-align: right;">1</td>
+      <td style="text-align: right;">1,571</td>
+      <td style="text-align: right;">3,705</td>
+      <td style="text-align: right;">1,987</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary">GENCODE ncORFs primary</a></td>
@@ -55,6 +76,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">10,127</td>
       <td style="text-align: right;">0.45%</td>
       <td style="text-align: right;">0.02%</td>
+      <td style="text-align: right;">6,183</td>
+      <td style="text-align: right;">3,944</td>
+      <td style="text-align: right;">1,746</td>
+      <td style="text-align: right;">3,300</td>
+      <td style="text-align: right;">1,137</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive">GENCODE ncORFs comprehensive</a></td>
@@ -62,6 +88,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">28,359</td>
       <td style="text-align: right;">2.24%</td>
       <td style="text-align: right;">0.06%</td>
+      <td style="text-align: right;">13,776</td>
+      <td style="text-align: right;">14,583</td>
+      <td style="text-align: right;">3,133</td>
+      <td style="text-align: right;">7,168</td>
+      <td style="text-align: right;">3,475</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=nuorfdb">nuORFdb</a></td>
@@ -69,6 +100,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">229,251</td>
       <td style="text-align: right;">22.14%</td>
       <td style="text-align: right;">0.83%</td>
+      <td style="text-align: right;">51,080</td>
+      <td style="text-align: right;">178,171</td>
+      <td style="text-align: right;">10,905</td>
+      <td style="text-align: right;">25,539</td>
+      <td style="text-align: right;">14,636</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=metamorf">MetamORF</a></td>
@@ -76,6 +112,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">664,558</td>
       <td style="text-align: right;">33.53%</td>
       <td style="text-align: right;">1.19%</td>
+      <td style="text-align: right;">147,490</td>
+      <td style="text-align: right;">517,068</td>
+      <td style="text-align: right;">33,481</td>
+      <td style="text-align: right;">74,267</td>
+      <td style="text-align: right;">39,742</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=openprot">OpenProt</a></td>
@@ -83,6 +124,11 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">921,170</td>
       <td style="text-align: right;">49.85%</td>
       <td style="text-align: right;">3.36%</td>
+      <td style="text-align: right;">906,941</td>
+      <td style="text-align: right;">14,229</td>
+      <td style="text-align: right;">202,199</td>
+      <td style="text-align: right;">446,288</td>
+      <td style="text-align: right;">258,455</td>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=openprotMs">OpenProt (MS>=2)</a></td>
@@ -90,51 +136,173 @@ and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
       <td style="text-align: right;">377,916</td>
       <td style="text-align: right;">40.29%</td>
       <td style="text-align: right;">1.85%</td>
+      <td style="text-align: right;">367,257</td>
+      <td style="text-align: right;">10,659</td>
+      <td style="text-align: right;">106,148</td>
+      <td style="text-align: right;">181,817</td>
+      <td style="text-align: right;">79,292</td>
     </tr>
   </tbody>
 </table>
 
+<h3>GENCODE ncORFs (Phase I and Phase II)</h3>
+<p>
+The three <b>GENCODE ncORF</b> tracks display non-canonical translated open reading frames
+identified from ribosome profiling (Ribo-seq) data and mapped to the GENCODE annotation by
+the <a href="https://www.gencodegenes.org/" target="_blank">GENCODE</a> / TransCODE
+consortium.
+</p>
+<ul>
+  <li><b>Phase I</b> &ndash; a consolidated catalog of ATG-initiated ncORFs of at least 16
+      codons, called from Ribo-seq data across seven publications and mapped to GENCODE v35.
+      Sense-overlapping ORFs were merged, leaving a unique set; over 3,000 are found in
+      more than one publication and so are flagged as replicated. This was the basis of
+      the original ncORF reference release for Ensembl/GENCODE, HGNC, UniProtKB, and
+      PeptideAtlas.</li>
+  <li><b>Phase II Comprehensive</b> &ndash; the expanded catalog (GENCODE v45). Additional
+      published Ribo-seq datasets were incorporated and the size and start-codon
+      restrictions from Phase I were lifted, so this set includes shorter and non-AUG
+      ORFs.</li>
+  <li><b>Phase II Primary</b> &ndash; a high-confidence subset of Phase II filtered for
+      translations with especially robust Ribo-seq signatures, comparable to canonical
+      protein-coding genes.</li>
+</ul>
+<p>
+See the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs Phase I subtrack page</a>
+or the Phase II
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary">primary</a> /
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive">comprehensive</a>
+pages for download URLs, methods, and references.
+</p>
+
 <h3>UTRannotator uORFs</h3>
 <p>
+Created by the Whiffin lab,
 <a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
-is a VEP plugin for annotating 5' UTR variants with respect to upstream open reading frames (uORFs).
-As part of the project, the authors compiled a curated reference set of 44,435 uORFs in
-human 5' UTRs from the data in
-<a href="http://www.sorfs.org" target="_blank">sorfs.org</a>, which contains ORFs supported by Ribo-Seq.
+is a VEP plugin for annotating 5' UTR variants with respect to upstream open reading frames
+(uORFs). As part of the project, the authors compiled a curated reference set of uORFs in
+human 5' UTRs from
+<a href="http://www.sorfs.org" target="_blank">sorfs.org</a>, which contains ORFs supported
+by Ribo-Seq.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs">UTRannotator uORFs subtrack page</a>
-for more details.
+for more details. Data from sorfs.org is also part of the Metamorf track (see below).
+This track is useful if you have a prediction from the VEP plugin and want to see the context.
+</p>
+<p>
+The UTRannotator source data is distributed as single-span features with no exon/intron
+structure, so the uORFs would appear as continuous blocks even across introns of their host
+transcripts. To recover the splicing structure we match each UTRannotator feature against
+the other ncORF tracks listed above by exact <i>(chromosome, start, end, strand)</i>; when a
+match is found, the block structure (and therefore the introns) of the matched feature is
+copied in, and the contributing database(s) are recorded in the new <b>intronsSource</b>
+field. Of the 44,435 uORFs, <b>6,508 (14.6%)</b> received introns from at least one donor
+track (most often MetamORF, with smaller contributions from nuORFdb, OpenProt, and the
+three GENCODE tracks); the remaining <b>37,927</b> stayed single-block (<tt>intronsSource =
+none</tt>). The <b>intronsSource</b> filter can be used to keep only entries whose introns
+came from a particular database.
 </p>
 
 <h3>nuORFdb</h3>
 <p>
 <a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a> (novel
-unannotated ORF database) is a database of 229,251 non-canonical open reading frames
-with evidence of translation from ribosome profiling (Ribo-seq), created by the
-Bhatt lab at the Broad Institute. ORF types include uORFs, dORFs,
-out-of-frame ORFs, pseudogene ORFs, lincRNA ORFs, and others.
+unannotated ORF database) is a Broad Institute database of non-canonical open reading frames
+with evidence of translation from ribosome profiling (Ribo-seq). ORF types include uORFs,
+dORFs, out-of-frame ORFs, pseudogene ORFs, lincRNA ORFs, and others.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=nuorfdb">nuORFdb subtrack page</a> for more details.
+The nuORFdb database is a very consistent dataset, from a well-known paper.
 </p>
 
 <h3>MetamORF</h3>
 <p>
 <a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF</a> is a repository of
-664,558 unique small ORFs (sORFs) in the human genome, consolidated from seven primary data
-sources and 46 individual ribosome profiling datasets. It integrates data from bioinformatic
-predictions, ribosome profiling experiments, and mass spectrometry studies, normalizing
-heterogeneous data into a unified format.
+small ORFs (sORFs) in the human genome, consolidated from several primary data sources and
+many individual ribosome profiling datasets. It integrates bioinformatic predictions,
+ribosome profiling experiments, and mass spectrometry studies into a unified format.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=metamorf">MetamORF subtrack page</a> for more details.
+Metamorf has many predictions, and not all may be relevant, but gives an example of
+a database with as many models as possible, and is the only complete archive of sorfs.org 
+that we are aware of.
 </p>
 
 <h3>OpenProt</h3>
 <p>
-<a href="https://www.openprot.org" target="_blank">OpenProt</a> is a database that provides
-a comprehensive annotation of all possible protein-coding ORFs in eukaryotic genomes,
-including 921,170 unique ORFs in human (603,586 AltProts, 246,578 RefProts, 71,006 Isoforms).
-AltProts are predicted from alternative reading frames in UTRs, frameshifted CDS overlaps,
-and non-coding RNAs. Each ORF is annotated with mass spectrometry and ribosome profiling evidence.
-A pre-filtered version with only MS-supported entries (377,916 with &ge;2 unique peptides) is also available.
+<a href="https://www.openprot.org" target="_blank">OpenProt</a> is a comprehensive annotation
+of all possible protein-coding ORFs in eukaryotic genomes. It distinguishes RefProts (the
+known canonical proteins), Isoforms (alternative products of canonical genes), and AltProts
+(predicted from alternative reading frames in UTRs, frameshifted CDS overlaps, and
+non-coding RNAs). Each ORF is annotated with mass spectrometry and ribosome profiling
+evidence; a pre-filtered Mass-Spec-supported subset (&ge;2 unique peptides) is also available.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=openprot">OpenProt subtrack page</a> for more details.
+OpenProt is widely known and has by far the most predictions, even more than Metamorf, which is
+why a subset exists with only the more reliable ORFs with Mass-Spec data.
 </p>
+
+<h2>Kozak strength annotation</h2>
+<p>
+Every ORF in every subtrack carries three additional annotation fields derived from the
+genomic sequence around its start codon:
+</p>
+<ul>
+  <li><b>startCodon</b> &ndash; first three bases of the ORF on the transcript strand
+      (ATG / CTG / GTG / TTG / ACG / other).</li>
+  <li><b>kozakStrength</b> &ndash; categorical Kozak label
+      (<i>Strong</i> if both position &minus;3 is A/G and position +4 is G;
+       <i>Moderate</i> if only one of those holds;
+       <i>Weak</i> if neither;
+       <i>non-ATG</i> for non-AUG starts where the Kozak rule does not apply;
+       <i>None</i> if the context could not be retrieved).</li>
+  <li><b>kozakTE</b> &ndash; numeric Kozak translational efficiency (TE), looked up from the
+      11-base TIS context in the Noderer 2014 FACS-seq TE table and divided by 100.
+      <code>-1</code> for non-ATG starts and rows with no lookup.</li>
+</ul>
+
+<p>
+Features are colored by <b>kozakTE</b>:
+</p>
+<table cellpadding="2" cellspacing="0" border="1" style="border-collapse: collapse;">
+  <thead>
+    <tr><th>kozakTE</th><th>Color</th><th>Swatch</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>&ge; 0.8</td><td>Red</td><td style="background:rgb(255,0,0);width:40px;">&nbsp;</td></tr>
+    <tr><td>0.7 &ndash; 0.8</td><td>Orange</td><td style="background:rgb(255,165,0);width:40px;">&nbsp;</td></tr>
+    <tr><td>0.6 &ndash; 0.7</td><td>Green</td><td style="background:rgb(0,128,0);width:40px;">&nbsp;</td></tr>
+    <tr><td>0.5 &ndash; 0.6</td><td>Teal</td><td style="background:rgb(0,128,128);width:40px;">&nbsp;</td></tr>
+    <tr><td>&lt; 0.5</td><td>Blue</td><td style="background:rgb(0,0,255);width:40px;">&nbsp;</td></tr>
+    <tr><td>non-ATG start</td><td>Purple</td><td style="background:rgb(160,80,160);width:40px;">&nbsp;</td></tr>
+    <tr><td>no context</td><td>Grey</td><td style="background:rgb(128,128,128);width:40px;">&nbsp;</td></tr>
+  </tbody>
+</table>
+
+<p>
+Per-subtrack counts of ATG vs. non-ATG starts and the Strong / Moderate / Weak breakdown
+are shown in the table at the top of this page. The high non-ATG fraction in UTRannotator,
+MetamORF, and nuORFdb is inherent to those catalogs &mdash; they explicitly include
+non-canonical CTG/GTG/TTG starts. GENCODE Phase I restricted itself to ATG-only starts.
+</p>
+
+<p>
+The 11-base Kozak context is fetched directly from the genome at the position of the start
+codon. For multi-exon ORFs with an intron immediately upstream of the start codon, the
+upstream bases of the context are genomic rather than the host transcript's true 5' UTR;
+in that uncommon case the computed Kozak value may be inaccurate.
+</p>
+
+<p>
+References for the Kozak / TE methodology:
+</p>
+<ul>
+  <li>Kozak M. <em>An analysis of 5'-noncoding sequences from 699 vertebrate messenger
+      RNAs.</em> Nucleic Acids Res. 1987;15(20):8125-48.
+      PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/3313277"
+      target="_blank">3313277</a>.</li>
+  <li>Noderer WL, Flockhart RJ, Bhaduri A, Diaz de Arce AJ, Zhang J, Khavari PA, Wang CL.
+      <em>Quantitative analysis of mammalian translation initiation sites by FACS-seq.</em>
+      Mol Syst Biol. 2014 Aug 28;10(8):748.
+      PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25170020"
+      target="_blank">25170020</a>.</li>
+</ul>
 
 <h2>Data Access</h2>
 <p>
@@ -145,11 +313,29 @@ track pages for more details.
 </p>
 
 <p>
-For automated download and analysis, the genome annotations are stored as bigBed files that
-can be downloaded from
+For automated download and analysis, each subtrack is stored as a bigBed file that can be
+downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/" target="_blank">our download server</a>.
-Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
-which can be compiled from the source code or downloaded as a precompiled
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g. for the GENCODE
+Phase I ncORF subtrack:
 </p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<p>
+File names for all eight subtracks (under
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/" target="_blank">/gbdb/hg38/ncOrfs/</a>):
+</p>
+<ul>
+  <li><tt>utrAnnotUorfs.kozak.bb</tt> &ndash; UTRannotator uORFs</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.kozak.bb</tt> &ndash; GENCODE Phase I ncORFs</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb</tt> &ndash; GENCODE Phase II primary</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb</tt> &ndash; GENCODE Phase II comprehensive</li>
+  <li><tt>nuorfdb/nuorfdb.kozak.bb</tt> &ndash; nuORFdb</li>
+  <li><tt>metamorf/MetamORF.kozak.bb</tt> &ndash; MetamORF</li>
+  <li><tt>openprot/openprot.kozak.bb</tt> &ndash; OpenProt</li>
+  <li><tt>openprot/openprot.ms2.kozak.bb</tt> &ndash; OpenProt MS&ge;2</li>
+</ul>

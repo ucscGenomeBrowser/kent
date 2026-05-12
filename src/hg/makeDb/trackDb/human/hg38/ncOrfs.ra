@@ -13,7 +13,7 @@ group genes
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
+    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Introns from</b>: $intronsSource
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
@@ -23,11 +23,13 @@ group genes
     filterLimits.kozakTE 0:1.5
     filterValues.uorfType 5'UTR uORF,5'UTR uORF extending into 3'UTR
     filterType.uorfType multipleListOr
+    filterValues.intronsSource gencNcOrfs,gencNcOrfsComprehensive,gencNcOrfsPrimary,metamorf,nuorfdb,openprot,none
+    filterType.intronsSource multipleListOr
     visibility pack
 
     track gencNcOrfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb
     shortLabel GENCODE Phase I ncORFs
     longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
     type bigGenePred
@@ -49,10 +51,10 @@ group genes
 
     track gencNcOrfsPrimary
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb
     shortLabel GENCODE Ph2 ncORFs Pri
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
-    type bigBed 12 +
+    type bigGenePred
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
@@ -69,10 +71,10 @@ group genes
 
     track gencNcOrfsComprehensive
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb
     shortLabel GENCODE Ph2 ncORFs Cmp
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
-    type bigBed 12 +
+    type bigGenePred
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
