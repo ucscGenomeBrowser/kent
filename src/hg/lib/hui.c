@@ -4073,8 +4073,10 @@ filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
     {
+    // slAddTail (not slAddHead) keeps the priority-sorted order from tdbGetTrackFilters
+    // since filterBySetCfgUi displays the list head-to-tail.
     if ((filter = buildFilterBy(tdb, cart, as, fieldFilter, name)) != NULL)
-        slAddHead(&filterByList, filter);
+        slAddTail(&filterByList, filter);
     }
 return filterByList;
 }
@@ -6797,11 +6799,49 @@ if (setting)
 return FALSE;
 }
 
+static boolean isHighlightFilterPrefix(char *lowName)
+// Distinguish highlight filter passes from filter passes so we look up the right priority var.
+{
+return startsWith("highlight", lowName);
+}
+
+static double lookupFilterPriority(struct trackDb *tdb, char *fieldName, boolean isHighlight)
+// Find a filterPriority.<field> / <field>FilterPriority setting (or highlight equivalent) in tdb.
+// Returns TRACKDB_FILTER_DEFAULT_PRIORITY when no setting is found.
+{
+char setting[1024];
+char *priorityLow = isHighlight ? HIGHLIGHT_PRIORITY_NAME_LOW : FILTER_PRIORITY_NAME_LOW;
+char *priorityCap = isHighlight ? HIGHLIGHT_PRIORITY_NAME_CAP : FILTER_PRIORITY_NAME_CAP;
+safef(setting, sizeof setting, "%s.%s", priorityLow, fieldName);
+char *val = trackDbSetting(tdb, setting);
+if (val == NULL)
+    {
+    safef(setting, sizeof setting, "%s%s", fieldName, priorityCap);
+    val = trackDbSetting(tdb, setting);
+    }
+if (val == NULL)
+    return TRACKDB_FILTER_DEFAULT_PRIORITY;
+return atof(val);
+}
+
+static int trackDbFilterPriCmp(const void *va, const void *vb)
+// Sort trackDbFilters by priority ascending; tiebreak by name for determinism.
+{
+const struct trackDbFilter *a = *((struct trackDbFilter **)va);
+const struct trackDbFilter *b = *((struct trackDbFilter **)vb);
+if (a->priority < b->priority)
+    return -1;
+if (a->priority > b->priority)
+    return 1;
+return strcmp(a->name, b->name);
+}
+
 struct trackDbFilter *tdbGetTrackFilters( struct trackDb *tdb, char * lowWild, char * lowName, char * capWild, char * capName)
 // figure out which of the ways to specify trackDb filter variables we're using
 // and return the setting
 {
 struct trackDbFilter *trackDbFilterList = NULL;
+boolean isHighlight = isHighlightFilterPrefix(lowName);
 struct slName *filterSettings = trackDbSettingsWildMatch(tdb, lowWild);
 
 if (filterSettings)
@@ -6815,6 +6855,7 @@ if (filterSettings)
         tdbFilter->name = cloneString(filter->name);
         tdbFilter->setting = trackDbSetting(tdb, filter->name);
         tdbFilter->fieldName = extractFieldNameNew(filter->name, lowName);
+        tdbFilter->priority = lookupFilterPriority(tdb, tdbFilter->fieldName, isHighlight);
         setAsNewFilterType(tdb, tdbFilter->name, tdbFilter->fieldName);
         }
     }
@@ -6833,6 +6874,7 @@ if (filterSettings)
             tdbFilter->name = cloneString(filter->name);
             tdbFilter->setting = trackDbSetting(tdb, filter->name);
             tdbFilter->fieldName = extractFieldNameOld(filter->name, capName);
+            tdbFilter->priority = lookupFilterPriority(tdb, tdbFilter->fieldName, isHighlight);
             char *name;
             if ((name = isNewFilterType(tdb, tdbFilter->fieldName) ) != NULL)
                 errAbort("error specifying a field's filters in both old (%s) and new format (%s).", tdbFilter->name, name);
@@ -6840,6 +6882,7 @@ if (filterSettings)
         }
     }
 
+slSort(&trackDbFilterList, trackDbFilterPriCmp);
 return trackDbFilterList;
 }
 
