@@ -92,6 +92,11 @@ void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *c
  * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
  * the benefit of the callback function, with the open samFile.  */
 
+void cramCheckRefs(samfile_t *fh, char *refUrl, char *cacheDir);
+/* Check if all CRAM reference sequences are locally available.  If any are
+ * missing, create pending-download request files and errAbort with a message
+ * telling the user to refresh.  No-op if fh is not CRAM or cacheDir is NULL. */
+
 void bamClose(samfile_t **pSamFile);
 /* Close down a samefile_t */
 
