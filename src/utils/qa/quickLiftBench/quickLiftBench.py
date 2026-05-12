@@ -150,19 +150,44 @@ def validate_phase_asserts(case, path):
             sys.exit(f"{ctx}: required must be true/false")
 
 
-def parse_session(s):
-    """Split 'user/sessionName' (or '/s/user/name'). Returns (user, name)."""
-    if not isinstance(s, str):
-        raise ValueError(f"variant must be a 'user/sessionName' string, got: {s!r}")
-    s = s.strip()
-    if s.startswith("/s/"):
-        s = s[3:]
-    if "/" not in s:
-        raise ValueError(f"variant must contain '/': {s!r}")
-    user, name = s.split("/", 1)
-    if not user or not name:
-        raise ValueError(f"empty user or session name in: {s!r}")
-    return user, name
+def parse_variant(v):
+    """Return a dict describing one variant.
+
+    Two forms supported:
+    - string: "user/sessionName" or "/s/user/name" -- saved-session reference.
+      Returns {"kind": "session", "user": ..., "session": ...}.
+    - mapping: {hubUrl, db, position, tracks: {trackName: vis, ...}} -- direct
+      URL for cases where both variants share an assembly and only differ in
+      track visibility (typically Mode C: same hub, lift on/off).
+      Returns {"kind": "hub", "hubUrl": ..., "db": ..., "position": ...,
+               "tracks": {...}}.
+    """
+    if isinstance(v, str):
+        s = v.strip()
+        if s.startswith("/s/"):
+            s = s[3:]
+        if "/" not in s:
+            raise ValueError(f"variant string must contain '/': {v!r}")
+        user, name = s.split("/", 1)
+        if not user or not name:
+            raise ValueError(f"empty user or session name in: {v!r}")
+        return {"kind": "session", "user": user, "session": name}
+    if isinstance(v, dict):
+        missing = [k for k in ("hubUrl", "db", "position", "tracks") if k not in v]
+        if missing:
+            raise ValueError(
+                f"hub variant missing keys {missing}; got {sorted(v)}"
+            )
+        if not isinstance(v["tracks"], dict) or not v["tracks"]:
+            raise ValueError("hub variant 'tracks' must be a non-empty mapping")
+        return {
+            "kind": "hub",
+            "hubUrl": v["hubUrl"],
+            "db": v["db"],
+            "position": v["position"],
+            "tracks": dict(v["tracks"]),
+        }
+    raise ValueError(f"variant must be a string or mapping, got: {type(v).__name__}")
 
 
 def resolve_server(case, defaults, server_override):
@@ -177,18 +202,35 @@ def resolve_server(case, defaults, server_override):
     return server_key, servers[server_key].rstrip("/")
 
 
-def build_url(server_url, user, session_name):
-    """Build an hgTracks URL that loads a saved session at its saved position.
+def build_url(server_url, variant):
+    """Build an hgTracks URL for one variant.
 
-    The position is NOT overridden via URL: a native session and its
-    quickLifted counterpart sit on different assemblies, so identical
-    chr:start-end ranges would not be biologically equivalent. Whatever
-    region the session was saved at is what gets rendered.
+    Saved-session variants (kind="session"): URL loads the named session at
+    its saved position. The position is NOT overridden -- a native session
+    and its quickLifted counterpart often sit on different assemblies, so
+    identical chr:start-end ranges would not be biologically equivalent.
+
+    Hub variants (kind="hub"): URL attaches the hub at the named db and
+    position, with hideTracks=1 so only the explicitly named tracks render.
     """
-    params = [
-        ("hgS_doOtherUser", "submit"),
-        ("hgS_otherUserName", user),
-        ("hgS_otherUserSessionName", session_name),
+    if variant["kind"] == "session":
+        params = [
+            ("hgS_doOtherUser", "submit"),
+            ("hgS_otherUserName", variant["user"]),
+            ("hgS_otherUserSessionName", variant["session"]),
+        ]
+    elif variant["kind"] == "hub":
+        params = [
+            ("db", variant["db"]),
+            ("hubUrl", variant["hubUrl"]),
+            ("position", variant["position"]),
+            ("hideTracks", "1"),
+        ]
+        for track, vis in variant["tracks"].items():
+            params.append((track, vis))
+    else:
+        raise ValueError(f"unknown variant kind: {variant['kind']!r}")
+    params += [
         ("hgt.trackImgOnly", "1"),
         ("measureTiming", "1"),
     ]
@@ -349,12 +391,16 @@ def main():
 
             for vname, vraw in variants.items():
                 try:
-                    user, session_name = parse_session(vraw)
+                    variant = parse_variant(vraw)
                 except ValueError as e:
                     print(f"  variant {vname}: {e}", file=sys.stderr)
                     continue
 
-                url = build_url(server_url, user, session_name)
+                url = build_url(server_url, variant)
+                # For the TSV's user/session columns, fill from the saved-session
+                # variant if present; for hub variants leave them blank.
+                user = variant.get("user", "")
+                session_name = variant.get("session", "")
                 if args.verbose:
                     print(f"  URL: {url}", file=sys.stderr)
 

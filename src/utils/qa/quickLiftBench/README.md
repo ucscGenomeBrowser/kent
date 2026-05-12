@@ -80,9 +80,35 @@ cases:
       - [native, lifted]
 ```
 
-Each variant value is a saved-session reference of the form
-`user/sessionName` (the same form as the `/s/<user>/<name>` short-link URL).
-Both `User/Name` and the prefix `/s/User/Name` are accepted.
+Each variant value is one of:
+
+- **Saved-session reference** (string `user/sessionName`, or the equivalent
+  `/s/<user>/<name>` short-link form). The session's saved position and
+  cart are used. Best for Mode A and Mode B cases where the native and
+  lifted variants sit on different assemblies and "the same position" is
+  not biologically meaningful.
+
+- **Hub variant** (mapping with `hubUrl`, `db`, `position`, `tracks`).
+  Attaches a hub at an explicit db and position, then turns each track
+  on/off according to `tracks`. Used for Mode C where both variants live
+  on the same assembly and differ only in track visibility. Example:
+
+  ```yaml
+  variants:
+    native:
+      hubUrl: https://example.org/myHub/hub.txt
+      db: hs1
+      position: chr22:15000000-50000000
+      tracks: {modeC_native: pack, modeC_lifted: hide}
+    lifted:
+      hubUrl: https://example.org/myHub/hub.txt
+      db: hs1
+      position: chr22:15000000-50000000
+      tracks: {modeC_native: hide, modeC_lifted: pack}
+  ```
+
+  The runner sends `hideTracks=1` plus the per-track vis settings so only
+  the explicitly named tracks render.
 
 The URL the runner sends per iteration is:
 
@@ -108,13 +134,26 @@ Notes on URL choices:
 
 ## Adding a case
 
+**Saved-session variants** (cross-assembly Mode A / Mode B):
+
 1. Save two sessions on the target server that differ only in the dimension
    you want to measure (typically: native vs. quickLifted versions of the
    same set of tracks). Each session should be saved at the position you
    want it benchmarked at.
-2. Add a stanza to `cases.yaml` following the schema above.
-3. Smoke-test with `--cases <new_id> --iterations 1 --warmup 0 -v` to verify
-   sessions load and timings parse out.
+2. Add a stanza to `cases.yaml` using string variants of the form
+   `user/sessionName`.
+
+**Hub variants** (Mode C, same assembly + same position):
+
+1. Build (or pick) a hub where two trackDb stanzas reference the same
+   conceptual data, one with `quickLiftUrl` and one without. The included
+   `testHub/buildTestHub.sh` is a working example: it generates 5000
+   synthetic BED12 features on hg38, lifts them to hs1, copies the
+   hg38→hs1 quickLift chain in alongside, and writes a 2-stanza hub.txt.
+2. Add a stanza to `cases.yaml` using mapping variants (see schema above).
+
+Either way, smoke-test with `--cases <new_id> --iterations 1 --warmup 0 -v`
+to verify the URL works and timings parse out.
 
 ## Output
 
