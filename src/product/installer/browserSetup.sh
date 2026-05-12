@@ -1948,8 +1948,8 @@ function startMysql
 function mysqlCheck
 # check all mysql tables. Rarely, some of them are in an unclosed state on the download server, this command will close them
 {
-    echo2 Checking all mysql tables after the download to make sure that they are closed
-    mysqlcheck --all-databases --auto-repair --quick --fast --silent
+    echo2 Checking all mariadb tables after the download to make sure that they are closed
+    mariadb-check --all-databases --auto-repair --quick --fast --silent
 }
 
 function hideSomeTracks
