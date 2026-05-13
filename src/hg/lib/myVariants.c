@@ -573,9 +573,120 @@ else
 } 
 
 
+static void readLabelsFromCtFile(char *path, char *trackName,
+                                 char **retShort, char **retLong)
+/* Parse the matching track line in an existing ctfile and pull shortLabel
+ * and longLabel via hashVarLine.  Leaves *ret as NULL when not found or
+ * path is missing. */
+{
+*retShort = NULL;
+*retLong = NULL;
+if (isEmpty(path) || isEmpty(trackName) || !fileExists(path))
+    return;
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *line = NULL;
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (!startsWith("track ", line))
+        continue;
+    struct hash *settings = hashVarLine(line + strlen("track "), lf->lineIx);
+    char *name = hashFindVal(settings, "name");
+    if (name != NULL && sameString(name, trackName))
+        {
+        char *s = hashFindVal(settings, "shortLabel");
+        char *l = hashFindVal(settings, "longLabel");
+        if (s != NULL)
+            *retShort = cloneString(s);
+        if (l != NULL)
+            *retLong = cloneString(l);
+        hashFree(&settings);
+        break;
+        }
+    hashFree(&settings);
+    }
+lineFileClose(&lf);
+}
+
+static char *sanitizeLabel(char *raw, int maxLen)
+/* Strip both quote characters, newlines and carriage returns, then cap to
+ * maxLen characters.  Returns NULL for NULL/empty input or when sanitizing
+ * leaves nothing behind.  Matches the precedent in hgCustom.c for
+ * user-supplied CT labels written into the trackline. */
+{
+if (isEmpty(raw))
+    return NULL;
+char *s = cloneString(raw);
+stripChar(s, '"');
+stripChar(s, '\'');
+stripChar(s, '\\');
+stripChar(s, '\n');
+stripChar(s, '\r');
+if ((int)strlen(s) > maxLen)
+    s[maxLen] = '\0';
+if (isEmpty(s))
+    {
+    freeMem(s);
+    return NULL;
+    }
+return s;
+}
+
+static void myVariantsCtFilePath(struct tempName *tn,
+                                 char *encodedTableName, char *targetDb)
+/* Build the per-user-per-db ctfile path.  Prefers
+ * cfgOption("myVariantsDataDir") so the file lives outside trash and the
+ * trashCleaner doesn't expire it; falls back to trashDirReusableFile when
+ * the dir isn't configured. */
+{
+char *persistentDir = cfgOption("myVariantsDataDir");
+if (isNotEmpty(persistentDir))
+    {
+    /* Group files per user so one user's tracks live together:
+     * ${persistentDir}/<encodedTableName>/<db>.bed. */
+    char *subdir = isNotEmpty(encodedTableName) ? encodedTableName : "shared";
+    char *sep = endsWith(persistentDir, "/") ? "" : "/";
+    char path[PATH_LEN];
+    safef(path, sizeof path, "%s%s%s/%s.bed", persistentDir, sep, subdir, targetDb);
+    char dirPart[PATH_LEN];
+    splitPath(path, dirPart, NULL, NULL);
+    makeDirsOnPath(dirPart);
+    safef(tn->forCgi, sizeof tn->forCgi, "%s", path);
+    safef(tn->forHtml, sizeof tn->forHtml, "%s", path);
+    }
+else
+    {
+    char base[PATH_LEN];
+    char *hostPort = cgiServerNamePort();
+    safef(base, sizeof base, "myVariants_%s_%s_%s",
+        hostPort ? hostPort : "localhost", targetDb,
+        isNotEmpty(encodedTableName) ? encodedTableName : "shared");
+    for (char *p = base; *p; p++) if (*p == '/') *p = '_';
+    trashDirReusableFile(tn, "ct", base, ".bed");
+    }
+}
+
+void myVariantsUnlinkCtFile(char *userName, char *targetDb)
+/* Delete the on-disk ctfile for this user+assembly if it exists.  Uses the
+ * same path resolution as myVariantsWriteCtFile so it targets either the
+ * persistent dir (myVariantsDataDir) or the trash fallback. */
+{
+if (isEmpty(userName) || isEmpty(targetDb))
+    return;
+char *encodedTableName = myVariantsGetTableName(userName);
+if (isEmpty(encodedTableName))
+    return;
+struct tempName tn;
+myVariantsCtFilePath(&tn, encodedTableName, targetDb);
+if (fileExists(tn.forCgi))
+    unlink(tn.forCgi);
+freeMem(encodedTableName);
+}
+
 char *myVariantsWriteCtFile(char *userName, char *targetDb, struct cart *cart)
-/* Write a Custom Track file to trash for user's myVariants in targetDb and any shared
- * tracks found in cart. Return filename or NULL if nothing to write. */
+/* Write a Custom Track file for user's myVariants in targetDb and any shared
+ * tracks found in cart. Return filename or NULL if nothing to write.
+ * If cfgOption("myVariantsDataDir") is set the file is placed there so the
+ * trashCleaner doesn't expire it; otherwise it goes in trash/ct as before. */
 {
 if (isEmpty(targetDb))
     return NULL;
@@ -659,7 +770,7 @@ if (cart != NULL)
             "track name=\"myVariants_shared_%s\" type=\"myVariants\" itemRgb=\"on\""
             " visibility=\"pack\""
             " shortLabel=\"%s\""
-            " longLabel=\"Shared variants: %s (from %s)\"\n",
+            " longLabel=\"Shared annotations: %s (from %s)\"\n",
             token, shortLabel, projectLabel, owner);
         freeMem(owner);
         freeMem(project);
@@ -671,6 +782,16 @@ if (cart != NULL)
 
 if (!hasOwnItems && dyStringLen(sharedLines) == 0)
     {
+    /* Nothing to write: remove any stale on-disk file so it doesn't leak
+     * when the user empties their table.  Under the old trash-only path
+     * the trashCleaner would have done this for us. */
+    if (isNotEmpty(encodedTableName))
+        {
+        struct tempName stale;
+        myVariantsCtFilePath(&stale, encodedTableName, targetDb);
+        if (fileExists(stale.forCgi))
+            unlink(stale.forCgi);
+        }
     dyStringFree(&sharedLines);
     freeMem(encodedTableName);
     return NULL;
@@ -678,24 +799,97 @@ if (!hasOwnItems && dyStringLen(sharedLines) == 0)
 
 /* Reusable, stable filename per user+db - always rewrite since shares are dynamic */
 struct tempName tn;
-char base[PATH_LEN];
-char *hostPort = cgiServerNamePort();
-safef(base, sizeof base, "myVariants_%s_%s_%s",
-    hostPort ? hostPort : "localhost", targetDb,
-    isNotEmpty(encodedTableName) ? encodedTableName : "shared");
-for (char *p = base; *p; p++) if (*p == '/') *p = '_';
-trashDirReusableFile(&tn, "ct", base, ".bed");
+myVariantsCtFilePath(&tn, encodedTableName, targetDb);
+
+/* Resolve display labels for the user's own track: cart vars set by the
+ * rename UI win, then the existing on-disk file (so a rename survives a
+ * cart reset), then the default. */
+char *shortLabel = NULL, *longLabel = NULL;
+if (hasOwnItems)
+    {
+    if (cart != NULL)
+        {
+        char cartVar[256];
+        safef(cartVar, sizeof cartVar, "%s.%s.shortLabel",
+            encodedTableName, targetDb);
+        shortLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 80);
+        safef(cartVar, sizeof cartVar, "%s.%s.longLabel",
+            encodedTableName, targetDb);
+        longLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 200);
+        }
+    if (shortLabel == NULL || longLabel == NULL)
+        {
+        char *diskShort = NULL, *diskLong = NULL;
+        readLabelsFromCtFile(tn.forCgi, encodedTableName, &diskShort, &diskLong);
+        if (shortLabel == NULL)
+            shortLabel = sanitizeLabel(diskShort, 80);
+        if (longLabel == NULL)
+            longLabel = sanitizeLabel(diskLong, 200);
+        freeMem(diskShort);
+        freeMem(diskLong);
+        }
+    if (shortLabel == NULL)
+        shortLabel = cloneString("My Annotations");
+    if (longLabel == NULL)
+        longLabel = cloneString("My Annotations");
+    }
+
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
     fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
-        " visibility=\"pack\" shortLabel=\"My Annotations\""
-        " longLabel=\"My Annotations (%s)\"\n", encodedTableName, encodedTableName);
+        " visibility=\"pack\" shortLabel=\"%s\""
+        " longLabel=\"%s\"\n", encodedTableName, shortLabel, longLabel);
 if (dyStringLen(sharedLines) > 0)
     fprintf(f, "%s", dyStringContents(sharedLines));
 carefulClose(&f);
 dyStringFree(&sharedLines);
 freeMem(encodedTableName);
+freeMem(shortLabel);
+freeMem(longLabel);
 return cloneString(tn.forCgi);
+}
+
+boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
+                                  char *database)
+/* If ct is a myVariants own track: delete the user's rows for the current
+ * assembly, unlink the persistent ctfile, drop the per-db renamed labels
+ * and the visibility var.  If ct is a myVariants shared track: drop the
+ * share-acceptance cart var and the visibility var.  Returns TRUE when ct
+ * was a myVariants track and this function fully handled the cart cleanup
+ * (caller must skip its own per-track cart cleanup so other-assembly
+ * labels are preserved); FALSE otherwise. */
+{
+if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
+    return FALSE;
+char *trackName = ct->tdb->track;
+if (startsWith("myVariants_shared_", trackName))
+    {
+    char *token = trackName + strlen("myVariants_shared_");
+    char shareCartVar[256];
+    safef(shareCartVar, sizeof shareCartVar,
+        MYVAR_SHARED_CART_PREFIX "%s", token);
+    cartRemove(cart, shareCartVar);
+    cartRemove(cart, trackName);
+    return TRUE;
+    }
+if (startsWith("myVariants_", trackName))
+    {
+    char *userName = wikiLinkUserName();
+    if (isNotEmpty(userName))
+        {
+        myVariantsDeleteForDb(userName, database);
+        myVariantsUnlinkCtFile(userName, database);
+        }
+    /* Drop the per-db renamed labels so a freshly created track on this
+     * assembly starts at "My Annotations" again.  Labels for other
+     * assemblies stay because they belong to different displayed tracks. */
+    char labelPrefix[256];
+    safef(labelPrefix, sizeof labelPrefix, "%s.%s.", trackName, database);
+    cartRemovePrefix(cart, labelPrefix);
+    cartRemove(cart, trackName);
+    return TRUE;
+    }
+return FALSE;
 }
 
 struct slName *myVariantsGetProjects(char *userName)

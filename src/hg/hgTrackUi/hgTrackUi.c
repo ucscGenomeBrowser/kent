@@ -4038,6 +4038,25 @@ if (!tdbIsDownloadsOnly(tdb))
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
             cgiMakeOnClickButton("htui_updtCustTrk", buf, "Update custom track");
             }
+        if (sameString(tdb->type, "myVariants") &&
+            !startsWith("myVariants_shared_", tdb->track))
+            {
+            /* Labels are per (track, db) so the same myVariants table can
+             * carry a different name on each assembly. */
+            char shortVar[256], longVar[256];
+            safef(shortVar, sizeof shortVar, "%s.%s.shortLabel",
+                tdb->track, database);
+            safef(longVar, sizeof longVar, "%s.%s.longLabel",
+                tdb->track, database);
+            char *curShort = cartUsualString(cart, shortVar, "");
+            char *curLong = cartUsualString(cart, longVar, "");
+            puts("<div style='margin-top:0.5em'><b>Rename track:</b> ");
+            puts("Short Label ");
+            cgiMakeTextVar(shortVar, curShort, 18);
+            puts(" Long Label ");
+            cgiMakeTextVar(longVar, curLong, 50);
+            puts(" <span style='color:#888'>(blank = default)</span></div>");
+            }
         }
     }
 

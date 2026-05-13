@@ -5,6 +5,7 @@
 #include "asParse.h"
 #include "common.h"
 #include "cart.h"
+#include "customTrack.h"
 #define MYVARIANTS_NUM_COLS 17 /* number of default columns before any user-added custom columns */
 
 struct myVariants
@@ -129,6 +130,21 @@ void myVariantsStripHiddenFields(struct slName **pFieldList);
 void myVariantsDeleteForDb(char *userName, char *targetDb);
 /* Delete the user's myVariants items for the given assembly.  No-op if the
  * table doesn't exist. */
+
+void myVariantsUnlinkCtFile(char *userName, char *targetDb);
+/* Delete the on-disk ctfile for this user+assembly if it exists.  Uses the
+ * same path resolution as myVariantsWriteCtFile so it targets either the
+ * persistent dir (myVariantsDataDir) or the trash fallback. */
+
+boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
+                                  char *database);
+/* If ct is a myVariants own track: delete the user's rows for the current
+ * assembly, unlink the persistent ctfile, drop the per-db renamed labels
+ * and the visibility var.  If ct is a myVariants shared track: drop the
+ * share-acceptance cart var and the visibility var.  Returns TRUE when ct
+ * was a myVariants track and this function fully handled the cart cleanup
+ * (caller must skip its own per-track cart cleanup so other-assembly
+ * labels are preserved); FALSE otherwise. */
 
 char *myVariantsWriteCtFile(char *userName, char *targetDb, struct cart *cart);
 /* Write a CT file to trash for user's myVariants in targetDb and any shared tracks

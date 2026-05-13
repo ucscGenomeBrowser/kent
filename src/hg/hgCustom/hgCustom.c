@@ -1082,26 +1082,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
     if (!cartUsualBoolean(cart, var, FALSE))
         continue;
-    /* myVariants tracks are backed by a per-user SQL table, not the CT file,
-     * so just dropping them from ctList isn't enough -- the next page load
-     * regenerates the CT entry from the database.  Delete the underlying
-     * data (own track) or revoke the accepted share (shared track) so the
-     * removal sticks. */
-    char *trackName = ct->tdb->track;
-    if (startsWith("myVariants_shared_", trackName))
-        {
-        char *token = trackName + strlen("myVariants_shared_");
-        char shareCartVar[256];
-        safef(shareCartVar, sizeof shareCartVar,
-            MYVAR_SHARED_CART_PREFIX "%s", token);
-        cartRemove(cart, shareCartVar);
-        }
-    else if (startsWith("myVariants_", trackName))
-        {
-        char *userName = wikiLinkUserName();
-        if (isNotEmpty(userName))
-            myVariantsDeleteForDb(userName, database);
-        }
+    /* myVariants tracks are backed by a per-user SQL table, not the CT
+     * file, so dropping them from ctList alone isn't enough -- the next
+     * page load regenerates the CT entry from the database.  Delegate
+     * the type-specific cleanup. */
+    myVariantsHandleCtRemoval(ct, cart, database);
     slRemoveEl(&ctList, ct);
     }
 }
