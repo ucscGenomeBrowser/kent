@@ -1,8 +1,9 @@
 track mouseDevTimecourse
-superTrack on hide
-shortLabel Bulk dev RNA-seq
-longLabel Mouse developmental time course bulk RNA-seq
+superTrack on show
+shortLabel ENCODE Expression
+longLabel ENCODE developmental time course bulk RNA-seq gene expression
 group regulation
+priority 0.6
 html mouseDevTimecourse
 
     track developmentTimecourseM4mm10TPM
@@ -10,7 +11,7 @@ html mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M4 TPM
     longLabel Mouse development timecourse GENCODE M4 TPM
-    visibility pack
+    visibility hide
     barChartUnit TPM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
@@ -25,7 +26,7 @@ html mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M4 FPKM
     longLabel Mouse development timecourse GENCODE M4 FPKM
-    visibility pack
+    visibility hide
     barChartUnit FPKM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
@@ -55,7 +56,7 @@ html mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M21 FPKM
     longLabel Mouse development timecourse GENCODE M21 FPKM
-    visibility pack
+    visibility hide
     barChartUnit FPKM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
