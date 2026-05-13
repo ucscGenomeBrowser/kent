@@ -94,7 +94,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Intestine
         longLabel Avg. H3K27ac level of 4 intestine experiments (tissues and primary cells only)
-        color 130,141,158
+        color 121,92,166
         parent encode4RegMarkH3k27ac off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineH3K27ac.bw
         priority 8
@@ -265,7 +265,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Blood marrow
         longLabel Avg. DNase level of 5 blood marrow experiments (tissues and primary cells only)
-        color 130,141,158
+        color 184,120,120
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/bloodMarrowDNase.bw
         priority 4
@@ -328,7 +328,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Intestine
         longLabel DNase level of 1 intestine experiment (tissues and primary cells only)
-        color 130,141,158
+        color 121,92,166
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineDNase.bw
         priority 11
@@ -436,7 +436,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Urinary bladder
         longLabel Avg. DNase level of 10 urinary bladder experiments (tissues and primary cells only)
-        color 130,141,158
+        color 194,33,39
         parent encode4RegDnase off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/urinaryBladderDNase.bw
         priority 23
@@ -571,7 +571,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Intestine
         longLabel Avg. ATAC level of 4 intestine experiments (tissues and primary cells only)
-        color 130,141,158
+        color 121,92,166
         parent encode4RegAtac off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineATAC.bw
         priority 7
@@ -715,7 +715,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Intestine
         longLabel Avg. H3K4me3 level of 4 intestine experiments (tissues and primary cells only)
-        color 130,141,158
+        color 121,92,166
         parent encode4RegMarkH3k4me3 off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineH3K4me3.bw
         priority 8
@@ -904,7 +904,7 @@ html encode4Reg.html
         type bigWig
         shortLabel Intestine
         longLabel CTCF level of 1 intestine experiment (tissues and primary cells only)
-        color 130,141,158
+        color 121,92,166
         parent encode4RegMarkCtcf off
         bigDataUrl /gbdb/mm10/encode4/regulation/organAve/intestineCTCF.bw
         priority 5

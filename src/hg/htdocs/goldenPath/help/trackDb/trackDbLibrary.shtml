@@ -956,7 +956,7 @@
 
 <DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMethyl bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>skipFields &lt;fieldName1&gt;,&lt;fieldName2&gt; ...</code><BR>
     </div>
         
     <P>This setting can be used to suppress extra fields on the item details page.
@@ -1912,10 +1912,10 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filterLabel"><span class="types bed bigBed"></span>
 <div class="format"><code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
-    <P>When a user clicks on a track item in the Browser image,	
+    <P>When a user clicks on a track item in the Browser image,
     the item detail page is shown. This setting specifies an
     alternate label for the filter on that page. Without this
-    setting, the label will be the description of the field as 
+    setting, the label will be the description of the field as
     specified by the autoSql (.as) file. Some of the parameters modified by
     this are:</P>
     <P><ul><li><code>filter.&lt;fieldName&gt;</code></li>
@@ -1925,9 +1925,42 @@ There are no extra options that can appear on the type hic line.
     <pre>
     filterValues.strand +,-
     filterLabel.strand Strand (Orientation)</pre>
-    <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
+    <P>In this example, we have a standard &quot;strand&quot; BED field with the default
     description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
     the label to just "Strand (Orientation)".</P>
+</DIV>
+
+<DIV class="filterPriority"><span class="types bed bigBed"></span>
+<div class="format"><code>filterPriority.&lt;fieldName&gt; &lt;number&gt;</code></div>
+    <P>Controls the display order of filter controls on the track configuration
+    page. Filters are shown in ascending order of <code>filterPriority</code>
+    value (lowest first), so a filter with priority 1 appears above one with
+    priority 2. Filters that do not specify a priority sort after all filters
+    that do.</P>
+    <P>The setting applies to any filter declared on the same field, regardless
+    of which filter style is used &mdash; <code>filter.&lt;fieldName&gt;</code>,
+    <code>filterText.&lt;fieldName&gt;</code>, or
+    <code>filterValues.&lt;fieldName&gt;</code> all share a single
+    <code>filterPriority.&lt;fieldName&gt;</code> entry. The companion setting
+    <code>highlightPriority.&lt;fieldName&gt;</code> controls the order of
+    <code>highlight*.&lt;fieldName&gt;</code> controls the same way.</P>
+    <P>Numbers may be integers or decimals; only the relative ordering matters,
+    so values like <code>1 2 3</code> and <code>10 20 30</code> produce the same
+    layout. Filters of different types (numeric, text, values) are still
+    rendered in their own sections of the page; <code>filterPriority</code>
+    orders the filters within each section.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...
+    filterValues.annot pLoF,missense,synonymous,other
+    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
+    filterPriority.variation_type 1
+    filterPriority.annot 2
+    filterPriority.FILTER 3</pre>
+    <P>In this example, the variation type filter is shown first, the
+    annotation filter second, and the FILTER tags filter last, regardless of
+    the order in which the <code>filterValues.*</code> lines appear in the
+    stanza or how the field names sort alphabetically.</P>
 </DIV>
 
 <DIV class="highlight"><span class="types bed bigBed"></span>
@@ -4075,7 +4108,8 @@ that identifies the reference sequence.
     bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed,
+    file using the utility <code>hgLoadMafSummary</code> (SQL track) or
+    <code>mafToBigMafSummary</code> (bigMaf).  For bigMaf, the value is assumed to be bigBed,
     Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
@@ -4819,6 +4853,34 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
     </p>
+</DIV>
+
+<DIV class="sampleMetadataFile"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>sampleMetadataFile &lt;url&gt;</code></div>
+    <P>
+    Specifies a tab-separated file that provides metadata columns for VCF samples.
+    (Meta data can always be provided in the VCF file directly, but this option
+    allows storing the metadata in an external file.) 
+    When a user clicks on a variant, the metadata columns from this file are appended
+    to the genotype details table.
+    The first line is a header that starts with <code>#sample</code>,
+    followed by tab-separated column names for the metadata fields.
+    Subsequent lines contain the sample name in the first column (matching
+    the VCF genotype column IDs), followed by the metadata values.
+    </P>
+    <P>Example metadata file:</P>
+    <pre>
+#sample	Population	Superpopulation	Region
+HG00096	GBR	EUR	Europe
+HG00099	GBR	EUR	Europe
+NA18939	JPT	EAS	East Asia</pre>
+    <P>Example trackDb entry:</P>
+    <pre>
+    track myVcf
+    type vcfTabix
+    bigDataUrl /path/to/myVcf.vcf.gz
+    sampleMetadataFile /path/to/sampleMeta.txt
+      ...</pre>
 </DIV>
 
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
@@ -6819,6 +6881,38 @@ track UI.  Titles can incorporate spaces if they are enclosed in quotes.</p>
 <p>Example:
 <pre>
 dataTypes sig|"Raw signal" peak|Peaks
+</pre>
+</p>
+</div>
+
+<DIV class="defaultSortField"><span class="types faceted composite"></span>
+<div class="format"><code>defaultSortField &lt;name&gt;</code></div>
+<p>
+This optional setting chooses which field in the metadata table will be used to sort the table
+of subtracks when the page is first loaded.  The name should match the field name in the first
+line of the metadata tsv file.  If there is no match, or if this setting is absent, the first
+field in the metadata tsv file is used as the default sort field.
+</p>
+<p>Example:
+<pre>
+defaultSortField tissue
+</pre>
+</p>
+</div>
+
+<DIV class="subtrackUrls"><span class="types faceted composite"></span>
+<div class="format"><code>subtrackUrls &lt;field1&gt;=&lt;url1&gt; &lt;field2&gt;=&lt;url2&gt; ...</code></div>
+<p>
+For some faceted composites, each subtrack is associated with a particular cell line or
+other accession that is described in more detail at another resource (e.g. ENCODE or SRA).
+This optional setting specifies remote URLs for linking out to those resources.  When
+it is set, the names in the columns from the metadata TSV file whose field names match
+this setting will be turned into hyperlinks to the corresponding resources.  If a URL
+includes the string '$$', it will be dynamically replaced with the identifier from that column.
+ </p>
+<p>Example:
+<pre>
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ project=https://www.ncbi.nlm.nih.gov/bioproject/$$
 </pre>
 </p>
 </div>

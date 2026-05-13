@@ -1,0 +1,67 @@
+track mouseDevTimecourse
+superTrack on show
+shortLabel ENCODE Expression
+longLabel ENCODE developmental time course bulk RNA-seq gene expression
+group regulation
+priority 0.6
+html mouseDevTimecourse
+
+    track developmentTimecourseM4mm10TPM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M4 TPM
+    longLabel Mouse development timecourse GENCODE M4 TPM
+    visibility hide
+    barChartUnit TPM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_TPM_M4_mm10.bb
+    barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.categories
+    barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.facets
+    singleCellColumnNames off
+    html developmentTimecourseM4mm10TPM
+
+    track developmentTimecourseM4mm10FPKM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M4 FPKM
+    longLabel Mouse development timecourse GENCODE M4 FPKM
+    visibility hide
+    barChartUnit FPKM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_FPKM_M4_mm10.bb
+    barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.categories
+    barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.facets
+    singleCellColumnNames off
+    html developmentTimecourseM4mm10FPKM
+
+    track developmentTimecourseM21mm10TPM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M21 TPM
+    longLabel Mouse development timecourse GENCODE M21 TPM
+    visibility pack
+    barChartUnit TPM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_TPM_M21_mm10.bb
+    barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.categories
+    barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.facets
+    singleCellColumnNames off
+    html developmentTimecourseM21mm10TPM
+
+    track developmentTimecourseM21mm10FPKM
+    parent mouseDevTimecourse
+    type bigBarChart
+    shortLabel timecourse M21 FPKM
+    longLabel Mouse development timecourse GENCODE M21 FPKM
+    visibility hide
+    barChartUnit FPKM
+    barChartFacets tissue,timepoint
+    barChartStretchToItem on
+    bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_FPKM_M21_mm10.bb
+    barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.categories
+    barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.facets
+    singleCellColumnNames off
+    html developmentTimecourseM21mm10FPKM

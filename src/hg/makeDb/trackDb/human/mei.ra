@@ -1,0 +1,66 @@
+track mei
+superTrack on
+shortLabel Mobile Insertions
+longLabel Mobile Element Insertions (Polymorphic)
+group varRep
+visibility hide
+
+    track meiHgsvc3
+    parent mei
+    bigDataUrl /gbdb/$D/mei/hgsvc3.bb
+    shortLabel HGSVC3 65 MEIs
+    longLabel Mobile Element Insertions in 65 HGSVC3 Long-Read Assembled Samples
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    mouseOver <b>${teClass}</b> insertion (${svLen} bp)<br>Carriers: ${carrierCount}/${sampleCount} samples<br>Allele frequency: ${altAlleleFreq}<br>Callers: ${callerCount}/2 (PALMER ${palmer}, L1ME-AID ${l1meAid})
+    filterValues.teClass Alu,L1,SVA,HERVK,snRNA
+    filterType.teClass multipleListOr
+    filterLabel.teClass Mobile Element Class
+    filter.svLen 0:9478
+    filterByRange.svLen on
+    filterLabel.svLen Insertion Length (bp)
+    filter.altAlleleFreq 0:1
+    filterByRange.altAlleleFreq on
+    filterLimits.altAlleleFreq 0:1
+    filterLabel.altAlleleFreq Allele Frequency
+    filter.carrierCount 0:65
+    filterByRange.carrierCount on
+    filterLabel.carrierCount Carrier Sample Count
+    filterValues.callerCount 1,2
+    filterType.callerCount multipleListOr
+    filterLabel.callerCount Caller Count (1=single, 2=both)
+    filterValues.l1meAid Yes,No
+    filterType.l1meAid multipleListOr
+    filterLabel.l1meAid L1ME-AID Validated
+    filterValues.palmer Yes,No
+    filterType.palmer multipleListOr
+    filterLabel.palmer PALMER Validated
+    filterValues.refTrf True,False
+    filterType.refTrf multipleListOr
+    filterLabel.refTrf In Tandem Repeat
+    filter.refSegDup 0:1
+    filterByRange.refSegDup on
+    filterLimits.refSegDup 0:1
+    filterLabel.refSegDup Segmental Duplication Overlap
+    skipEmptyFields on
+
+    track meiDeepmei1kg
+    parent mei
+    bigDataUrl /gbdb/$D/mei/deepmei1kg.bb
+    shortLabel DeepMEI 1000G MEIs
+    longLabel Mobile Element Insertions in 3,202 1000 Genomes Samples (DeepMEI)
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    mouseOver <b>${teClass}</b> insertion<br>Carriers: ${carrierCount}/${sampleCount} samples<br>Allele frequency: ${altAlleleFreq}
+    filterValues.teClass Alu,L1,SVA
+    filterType.teClass multipleListOr
+    filterLabel.teClass Mobile Element Class
+    filter.altAlleleFreq 0:1
+    filterByRange.altAlleleFreq on
+    filterLimits.altAlleleFreq 0:1
+    filterLabel.altAlleleFreq Allele Frequency
+    filter.carrierCount 0:3202
+    filterByRange.carrierCount on
+    filterLabel.carrierCount Carrier Sample Count

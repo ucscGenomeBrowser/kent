@@ -28,6 +28,7 @@ git clone --depth=1 --branch=${branch} \
 cd kent-temp
 
 git checkout ${branch}
+git -c protocol.file.allow=always submodule update --init --recursive
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --prefix=kent/ ${branch} \
@@ -276,7 +277,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --prefix=kent/ ${branch} \
 src/parasol \
 src/tabFile \
-src/htslib \
+src/submodules/htslib \
 src/optimalLeaf \
 src/hg/pslToChain \
 src/hg/makeDb/outside \

@@ -8,6 +8,16 @@
 
 #include "hubSpace.h"
 
+// 2bit genome-name collision error. Shared with the JS client so it
+// can identify this error from the message.
+#define HUB_GENOME_COLLISION_ERR_FRAG \
+    "matches an existing UCSC native assembly or GenArk hub"
+
+#define HUB_GENOME_COLLISION_ERR_FMT \
+    "Genome name '%s' " HUB_GENOME_COLLISION_ERR_FRAG ". " \
+    "The Genome Browser will load the UCSC assembly instead of your 2bit. " \
+    "Edit the Genome field and try a different name (e.g. '%s_hub')."
+
 struct userFiles
 {
 char *userName;
@@ -24,15 +34,13 @@ time_t lastModified; // actually last access time but this works
 struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
-char *getUserName();
-/* Query the right system for the users name */
-
 char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 
 // the various quota helper variables:
-#define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
-#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
+// 10 GiB in bytes, so the binary-unit pretty-printers display it as "10 GB".
+#define HUB_SPACE_DEFAULT_QUOTA_BYTES (10LL * 1024 * 1024 * 1024)
+#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES
 // for defining the quota in hg.conf
 #define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
 
@@ -70,19 +78,46 @@ char *hubNameFromPath(char *path);
 /* Return the last directory component of path. Assume that a '.' char in the last component
  * means that component is a filename and go back further */
 
-char *writeHubText(char *path, char *userName, char *db);
-/* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
- * the file name of the created hub, which can be freed. */
+char *writeHubText(char *path, char *userName, char *db, char *twoBitFileName);
+/* Create a hub.txt file, optionally creating the directory holding it.
+ * If twoBitFileName is non-NULL, write an assembly hub stanza referencing it
+ * (with stub organism / scientificName / description / defaultPos derived from
+ * the 2bit). For convenience, return the file name of the created hub, which
+ * can be freed. */
 
 void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir, char *parentDir);
 /* Creates a hub.txt for this upload, and updates the hubSpace table for the
  * hub.txt and any parentDirs we need to create. */
 
+boolean userHasOwnNamedHubTxtInDir(char *userName, char *parentDir);
+/* Return TRUE if user uploaded a *.hub.txt NOT literally named 'hub.txt' in parentDir.
+ * Used to decide whether the backend can modify hub.txt (synthesize / append / upgrade)
+ * or should leave it alone because the user has their own authoritative config. */
+
+char *existingHubTypeForDir(char *userName, char *hubName);
+/* Return the hubType of this user's hub dir row, or NULL if no such row exists. */
+
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir, char *encodedParentDir);
+/* Race-proofing: when a 2bit arrives into a hub that already has a synthesized
+ * hub.txt, upgrade that hub.txt to include the assembly stanza and mark every
+ * hubSpace row for this hub as hubType='assemblyHub'. No-op unless rowForFile
+ * is a 2bit, or the synthesized hub.txt does not exist. */
+
+boolean literalHubTxtExistsOnDisk(char *parentDir, char *userDataDir);
+/* Return TRUE if path/hub.txt exists as a real file in this user's parentDir. */
+
+int lockHubDir(char *hubDir);
+/* Acquire an exclusive flock on hubDir/.hub.lock; returns a file descriptor.
+ * Hold while mutating hub.txt to serialize parallel pre-finish processes. */
+
+void unlockHubDir(int fd);
+/* Release an exclusive hub lock acquired by lockHubDir. */
+
 void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */
 
-void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir);
-/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
+void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir, char *hubType);
+/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the
  * final subdirectory component of parentDirStr */
 
 void removeFileForUser(char *fname, char *userName);

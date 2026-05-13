@@ -1128,6 +1128,13 @@ void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING
 if (startsWith("GC", db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
+
+    if (genome == NULL)
+        genome = trackHubGetGenomeUndecorated(db);
+
+    if (genome == NULL)
+        errAbort("cannot find %s in loaded track hubs", db);
+
     if (genome->twoBitPath)
         safef(retNibName, HDB_MAX_PATH_STRING, "%s", genome->twoBitPath);
     return;

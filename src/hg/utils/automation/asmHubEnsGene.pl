@@ -54,7 +54,7 @@ my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
 chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
-my $geneCount = `bigBedInfo $ensGeneBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Gene count/; s/ basesCovered/; Bases covered/;'`;
+my $geneCount = `/cluster/bin/x86_64/bigBedInfo $ensGeneBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Gene count/; s/ basesCovered/; Bases covered/;'`;
 chomp $geneCount;
 if (length($fbBases)) {
   $geneCount .= sprintf(" (%s bases in exons only)", commify($fbBases));

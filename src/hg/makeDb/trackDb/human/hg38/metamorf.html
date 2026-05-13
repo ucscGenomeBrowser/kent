@@ -96,8 +96,18 @@ NMD (nonsense-mediated decay), or readthrough transcripts.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are displayed in BED 12 format showing the exon/intron structure of each sORF.
+Items are displayed in bigGenePred format. Each item is labeled with its MetamORF ORF
+ID. Color reflects Kozak translational efficiency &mdash; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
+color legend.
 </p>
+
+<p>
+<b>Mouseover</b> shows the ORF ID, ORF annotation, start codon, Kozak strength and TE,
+host transcripts, and the cell types where the ORF was reported.
+</p>
+
+<p>Available filters: start codon, Kozak strength, Kozak TE.</p>
 
 <h2>Data Access</h2>
 
@@ -120,7 +130,7 @@ binary for your system. Instructions for downloading source code and binaries ca
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
 </p>
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/metamorf/MetamORF.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/metamorf/MetamORF.kozak.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 
 <p>
 The original data and additional downloads are available from the
@@ -149,65 +159,44 @@ available.
 <h2>References</h2>
 
 <p>
-Erhard F, Halenius A, Zimmermann C, L'Hernault A, Kowalewski DJ, Keim T, Dold K,
-Jahn G, Stevanovi&#263; S, Dolken L.
-<a href="https://www.nature.com/articles/nmeth.4631" target="_blank">
+Erhard F, Halenius A, Zimmermann C, L'Hernault A, Kowalewski DJ, Weekes MP, Stevanovic S,
+Zimmer R, D&#246;lken L.
+<a href="https://doi.org/10.1038/nmeth.4631" target="_blank">
 Improved Ribo-seq enables identification of cryptic translation events</a>.
 <em>Nat Methods</em>. 2018 May;15(5):363-366.
-DOI: <a href="https://doi.org/10.1038/nmeth.4631"
-target="_blank">10.1038/nmeth.4631</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29656998"
-target="_blank">29656998</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29529017" target="_blank">29529017</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6152898/" target="_blank">PMC6152898</a>
 </p>
 
 <p>
 Johnstone TG, Bazzini AA, Giraldez AJ.
-<a href="http://emboj.embopress.org/content/35/7/706.long" target="_blank">
+<a href="https://doi.org/10.15252/embj.201592759" target="_blank">
 Upstream ORFs are prevalent translational repressors in vertebrates</a>.
 <em>EMBO J</em>. 2016 Apr 1;35(7):706-23.
-DOI: <a href="https://doi.org/10.15252/embj.201592759"
-target="_blank">10.15252/embj.201592759</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26896445"
-target="_blank">26896445</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26896445" target="_blank">26896445</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4818764/" target="_blank">PMC4818764</a>
 </p>
 
 <p>
-Laumont CM, Daouda T, Laverdure JP, Bonneil E, Caron-Lizotte O, Hardy MP,
-Granados DP, Durette C, Steger M, Thibault P <em>et al</em>.
-<a href="https://www.nature.com/articles/ncomms10238" target="_blank">
-Global proteogenomic analysis of human MHC class I-associated peptides derived
-from non-canonical reading frames</a>.
-<em>Nat Commun</em>. 2016 Jan 6;7:10238.
-DOI: <a href="https://doi.org/10.1038/ncomms10238"
-target="_blank">10.1038/ncomms10238</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26728094"
-target="_blank">26728094</a>
+Laumont CM, Daouda T, Laverdure JP, Bonneil &#201;, Caron-Lizotte O, Hardy MP, Granados DP, Durette C,
+Lemieux S, Thibault P <em>et al</em>.
+<a href="https://doi.org/10.1038/ncomms10238" target="_blank">
+Global proteogenomic analysis of human MHC class I-associated peptides derived from non-canonical
+reading frames</a>.
+<em>Nat Commun</em>. 2016 Jan 5;7:10238.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26728094" target="_blank">26728094</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4728431/" target="_blank">PMC4728431</a>
 </p>
 
 <p>
-Mackowiak SD, Zauber H, Bber C, Drechsel D, Tsez H, Baez-Sequeira M,
-Daitkait&#279; L, Donber D, Denber D, Rajewsky N <em>et al</em>.
+Mackowiak SD, Zauber H, Bielow C, Thiel D, Kutz K, Calviello L, Mastrobuoni G, Rajewsky N, Kempa S,
+Selbach M <em>et al</em>.
 <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0742-x"
 target="_blank">
 Extensive identification and analysis of conserved small ORFs in animals</a>.
-<em>Genome Biol</em>. 2015 Aug 28;16:179.
-DOI: <a href="https://doi.org/10.1186/s13059-015-0742-x"
-target="_blank">10.1186/s13059-015-0742-x</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26364619"
-target="_blank">26364619</a>
-</p>
-
-<p>
-Samandi S, Roy AV, Delcourt V, Bhatt P, Bhatt R, Bhatt S, Bhatt V, Bhatt M,
-Bhatt A, Bhatt L <em>et al</em>.
-<a href="https://elifesciences.org/articles/27860" target="_blank">
-Deep transcriptome annotation enables the discovery and functional characterization
-of cryptic small proteins</a>.
-<em>eLife</em>. 2017 Nov 28;6:e27860.
-DOI: <a href="https://doi.org/10.7554/eLife.27860"
-target="_blank">10.7554/eLife.27860</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29083303"
-target="_blank">29083303</a>
+<em>Genome Biol</em>. 2015 Sep 14;16:179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26364619" target="_blank">26364619</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4568590/" target="_blank">PMC4568590</a>
 </p>
 
 <p>
@@ -215,8 +204,17 @@ Olexiouk V, Van Criekinge W, Menschaert G.
 <a href="https://academic.oup.com/nar/article/46/D1/D497/4621340" target="_blank">
 An update on sORFs.org: a repository of small ORFs identified by ribosome profiling</a>.
 <em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D497-D502.
-DOI: <a href="https://doi.org/10.1093/nar/gkx1130"
-target="_blank">10.1093/nar/gkx1130</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140531"
-target="_blank">29140531</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140531" target="_blank">29140531</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753181/" target="_blank">PMC5753181</a>
+</p>
+
+<p>
+Samandi S, Roy AV, Delcourt V, Lucier JF, Gagnon J, Beaudoin MC, Vanderperre B, Breton MA, Motard J,
+Jacques JF <em>et al</em>.
+<a href="https://doi.org/10.7554/eLife.27860" target="_blank">
+Deep transcriptome annotation enables the discovery and functional characterization of cryptic small
+proteins</a>.
+<em>Elife</em>. 2017 Oct 30;6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29083303" target="_blank">29083303</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5703645/" target="_blank">PMC5703645</a>
 </p>

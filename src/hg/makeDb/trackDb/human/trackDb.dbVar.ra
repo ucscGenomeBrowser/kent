@@ -2,12 +2,11 @@ track dbVarSv
 superTrack on
 group varRep
 html dbVarCurated
-shortLabel dbVar Common Struct Var
-longLabel NCBI Curated Common Structural Variants from dbVar
+shortLabel dbVar Struct Var
+longLabel NCBI dbVar Structural Variants
 
     track dbVar_common
-    superTrack  dbVarSv pack
-    group varRep
+    superTrack dbVarSv pack
     compositeTrack on
     visibility pack
     itemRgb on
@@ -17,10 +16,13 @@ longLabel NCBI Curated Common Structural Variants from dbVar
     longLabel NCBI dbVar Curated Common Structural Variants
     mouseOverField label
     searchIndex name
+    hideEmptySubtracks on
     filterLabel.type Variant Type
-    filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
+    filterValues.type alu deletion,alu insertion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,insertion,line1 deletion,line1 insertion,mobile element deletion,mobile element insertion,sva deletion,sva insertion
     filterLabel.length Variant Size
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+    filterLabel.freq_range Frequency Range
+    filterValues.freq_range Under 0.02,0.02 to 0.05,0.05 to 0.1,0.1 to 0.2,0.2 to 0.5,Over 0.5
 
         track dbVar_common_gnomad
         parent dbVar_common on
@@ -30,6 +32,7 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 1
 
         track dbVar_common_1000g
         parent dbVar_common on
@@ -39,6 +42,7 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 2
 
         track dbVar_common_decipher
         parent dbVar_common on
@@ -48,24 +52,37 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 3
 
-        track dbVar_common_african
-        parent dbVar_common on
-        shortLabel dbVar Curated African SVs
-        longLabel NCBI dbVar Curated Common SVs: African
-        bigDataUrl /gbdb/$D/bbi/dbVar/common_african.bb
+        track dbVar_common_lee
+        parent dbVar_common off
+        shortLabel dbVar Curated Lee SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from Lee
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_lee.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 4
 
-        track dbVar_common_european
-        parent dbVar_common on
-        shortLabel dbVar Curated European SVs
-        longLabel NCBI dbVar Curated Common SVs: European
-        bigDataUrl /gbdb/$D/bbi/dbVar/common_european.bb
+        track dbVar_common_abel
+        parent dbVar_common off
+        shortLabel dbVar Curated Abel SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from Abel
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_abel.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 5
+
+        track dbVar_common_byrska_bishop
+        parent dbVar_common off
+        shortLabel dbVar Curated Byrska-Bishop SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from Byrska-Bishop
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_byrska_bishop.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 6
 
         track dbVar_common_global
         parent dbVar_common on
@@ -75,6 +92,67 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+        priority 10
+
+        track dbVar_common_african
+        parent dbVar_common on
+        shortLabel dbVar Curated African SVs
+        longLabel NCBI dbVar Curated Common SVs: African
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_african.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 11
+
+        track dbVar_common_american
+        parent dbVar_common off
+        shortLabel dbVar Curated American SVs
+        longLabel NCBI dbVar Curated Common SVs: American
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_american.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 12
+
+        track dbVar_common_east_asian
+        parent dbVar_common off
+        shortLabel dbVar Curated East Asian SVs
+        longLabel NCBI dbVar Curated Common SVs: East Asian
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_east_asian.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 13
+
+        track dbVar_common_european
+        parent dbVar_common on
+        shortLabel dbVar Curated European SVs
+        longLabel NCBI dbVar Curated Common SVs: European
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_european.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 14
+
+        track dbVar_common_south_asian
+        parent dbVar_common off
+        shortLabel dbVar Curated South Asian SVs
+        longLabel NCBI dbVar Curated Common SVs: South Asian
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_south_asian.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 15
+
+        track dbVar_common_other
+        parent dbVar_common off
+        shortLabel dbVar Curated Other Pop SVs
+        longLabel NCBI dbVar Curated Common SVs: Other
+        bigDataUrl /gbdb/$D/bbi/dbVar/common_other.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        priority 16
 
     track dbVar_conflict
     superTrack dbVarSv pack
@@ -90,50 +168,215 @@ longLabel NCBI Curated Common Structural Variants from dbVar
     filterLabel.overlap Variant Overlap
     filterValues.overlap 10 to 25,25 to 50,50 to 75,75 to 90,90 to 100
     filterLabel.type Variant Type
-    filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
-    filterLabel.length Variant Length
+    filterValues.type copy number gain,copy number loss,copy number variation,deletion,duplication
+    filterLabel.length Variant Size
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
 
         track dbVar_conflict_pathogenic
         parent dbVar_conflict on
         shortLabel dbVar Curated Conflict SVs
-        longLabel NCBI dbVar Curated Common SVs: Conflicts with Pathogenic
+        longLabel NCBI dbVar Common SVs in Conflict with Pathogenic Variants
         bigDataUrl /gbdb/$D/bbi/dbVar/conflict_pathogenic.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
 
-searchTable dbVar_common_gnomad
+    track dbVarNr
+    superTrack dbVarSv pack
+    shortLabel dbVar NR all SV ALPHA
+    longLabel dbVar Non-redundant Structural Variants (DEL+DUP+INS merged, 4.6M) - ALPHA only
+    type bigBed 9 +
+    itemRgb on
+    release alpha
+    visibility hide
+    bigDataUrl /gbdb/$D/bbi/dbVar/nr.bb
+    searchIndex name
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen $binSize, count=$variantCount subsets=$subsets study=$study
+    filterValues.svType DEL|DEL (Deletion),DUP|DUP (Duplication),INS|INS (Insertion)
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 0:248886400
+    filterByRange.svLen on
+    filterLabel.svLen SV Length on reference (bp)
+    filter.insLen 0:21714506
+    filterByRange.insLen on
+    filterLabel.insLen Insertion sequence length (bp; INS only)
+    filterValues.binSize small,medium,large
+    filterType.binSize multipleListOr
+    filterLabel.binSize Bin size (small <50bp, medium <1Mb, large >=1Mb)
+    filterValues.subsets common|in common subset,pathogenic|in pathogenic subset,somatic|in somatic subset
+    filterType.subsets multipleListOr
+    filterLabel.subsets Subset membership
+    filterValuesDefault.subsets common,pathogenic,somatic
+    filter.variantCount 1:10000
+    filterByRange.variantCount on
+    filterLabel.variantCount Merged subvariants (number of submitted SVs at this exact placement)
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    skipEmptyFields on
+
+searchTable dbVarNr
 searchMethod exact
 searchType bigBed
 termRegex ^[ne]ssv[0-9]+
+
+    track dbVar_somatic
+    superTrack dbVarSv
+    compositeTrack on
+    visibility hide
+    itemRgb on
+    type bigBed 9 + .
+    html dbVarSomatic
+    shortLabel dbVar Somatic SV
+    longLabel NCBI dbVar Somatic Structural Variants
+    mouseOverField label
+    searchIndex name
+    filterLabel.type Variant Type
+    filterValues.type complex substitution,copy number gain,copy number loss,copy-neutral loss of heterozygosity,deletion,duplication,insertion,inversion,mobile element insertion,tandem duplication
+    filterLabel.length Variant Size
+    filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+    filterLabel.method Discovery Method
+    filterValues.method Curated,Multiple,SNP array,Sequencing
+    filterLabel.overlap Pathogenic Reciprocal Overlap
+    filterValues.overlap none,10 to 25,25 to 50,50 to 75,75 to 90,90 to 100
+
+        track dbVar_somatic_sv
+        parent dbVar_somatic off
+        shortLabel dbVar Somatic SVs
+        visibility pack
+        longLabel NCBI dbVar Somatic Structural Variants
+        bigDataUrl /gbdb/$D/bbi/dbVar/somatic_sv.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        mergeSpannedItems on
+
+    track dbVar_other
+    superTrack dbVarSv
+    compositeTrack on
+    visibility hide
+    itemRgb on
+    type bigBed 9 + .
+    html dbVarOther
+    shortLabel dbVar Other SV
+    longLabel NCBI dbVar Other Structural Variants
+    mouseOverField label
+    searchIndex name
+    hideEmptySubtracks on
+    filterLabel.type Variant Type
+    filterValues.type alu deletion,alu insertion,complex substitution,copy-neutral loss of heterozygosity,copy number gain,copy number loss,copy number variation,deletion,delins,duplication,herv deletion,herv insertion,insertion,inversion,line1 deletion,line1 insertion,mobile element deletion,mobile element insertion,novel sequence insertion,sequence alteration,sva deletion,sva insertion,tandem duplication
+    filterLabel.length Variant Size
+    filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+    filterLabel.method Discovery Method
+    filterValues.method Curated,Merging,Multiple,Oligo aCGH,Optical mapping,SNP array,Sequencing,other
+    filterLabel.overlap Pathogenic Reciprocal Overlap
+    filterValues.overlap none,10 to 25,25 to 50,50 to 75,75 to 90,90 to 100
+    filterLabel.population Population Code
+    filterValues.population AFR,AMR,EAS,EUR,OTH,SAS,mixed,multiple,none,unknown
+
+        track dbVar_other_healthy
+        parent dbVar_other on
+        visibility pack
+        shortLabel dbVar Healthy SVs
+        longLabel NCBI dbVar SVs with no reported phenotype
+        bigDataUrl /gbdb/$D/bbi/dbVar/normal_healthy.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        mergeSpannedItems on
+
+        track dbVar_other_phenotype
+        parent dbVar_other on
+        visibility pack
+        shortLabel dbVar Phenotype SVs
+        longLabel NCBI dbVar SVs with Phenotype (excluding clinical and somatic)
+        bigDataUrl /gbdb/$D/bbi/dbVar/normal_phenotype.bb
+        type bigBed 9 + .
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+        urlLabel NCBI Variant Page:
+        mergeSpannedItems on
+
+searchTable dbVar_common_gnomad
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
 
 searchTable dbVar_common_1000g
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
 
 searchTable dbVar_common_decipher
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
 
-searchTable dbVar_common_european
+searchTable dbVar_common_lee
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
 
-searchTable dbVar_common_african
+searchTable dbVar_common_abel
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_byrska_bishop
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
 
 searchTable dbVar_common_global
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_african
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_american
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_east_asian
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_european
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_south_asian
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_common_other
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
 
 searchTable dbVar_conflict_pathogenic
 searchMethod exact
 searchType bigBed
-termRegex ^[ne]ssv[0-9]+
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_somatic_sv
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_other_healthy
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+
+
+searchTable dbVar_other_phenotype
+searchMethod exact
+searchType bigBed
+termRegex ^[den]ssv[0-9]+

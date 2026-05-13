@@ -26,6 +26,7 @@
 #define FILTER_VALUES_DEFAULT_NAME_LOW    "filterValuesDefault"
 #define FILTER_TYPE_NAME_LOW      "filterType"
 #define FILTER_LABEL_NAME_LOW     "filterLabel"
+#define FILTER_PRIORITY_NAME_LOW  "filterPriority"
 #define FILTER_NUMBER_WILDCARD_LOW    FILTER_NUMBER_NAME_LOW ".*"
 #define FILTER_TEXT_WILDCARD_LOW      FILTER_TEXT_NAME_LOW ".*"
 #define FILTER_VALUES_WILDCARD_LOW    FILTER_VALUES_NAME_LOW ".*"
@@ -38,6 +39,7 @@
 #define FILTER_VALUES_DEFAULT_NAME_CAP    "FilterValuesDefault"
 #define FILTER_TYPE_NAME_CAP      "FilterType"
 #define FILTER_LABEL_NAME_CAP     "FilterLabel"
+#define FILTER_PRIORITY_NAME_CAP  "FilterPriority"
 #define FILTER_NUMBER_WILDCARD_CAP    "*" FILTER_NUMBER_NAME_CAP
 #define FILTER_TEXT_WILDCARD_CAP      "*" FILTER_TEXT_NAME_CAP
 #define FILTER_VALUES_WILDCARD_CAP    "*" FILTER_VALUES_NAME_CAP
@@ -65,6 +67,7 @@
 #define HIGHLIGHT_VALUES_DEFAULT_NAME_LOW    "highlightValuesDefault"
 #define HIGHLIGHT_TYPE_NAME_LOW      "highlightType"
 #define HIGHLIGHT_LABEL_NAME_LOW     "highlightLabel"
+#define HIGHLIGHT_PRIORITY_NAME_LOW  "highlightPriority"
 #define HIGHLIGHT_NUMBER_WILDCARD_LOW    HIGHLIGHT_NUMBER_NAME_LOW ".*"
 #define HIGHLIGHT_TEXT_WILDCARD_LOW      HIGHLIGHT_TEXT_NAME_LOW ".*"
 #define HIGHLIGHT_VALUES_WILDCARD_LOW    HIGHLIGHT_VALUES_NAME_LOW ".*"
@@ -77,6 +80,7 @@
 #define HIGHLIGHT_VALUES_DEFAULT_NAME_CAP    "HighlightValuesDefault"
 #define HIGHLIGHT_TYPE_NAME_CAP      "HighlightType"
 #define HIGHLIGHT_LABEL_NAME_CAP     "HighlightLabel"
+#define HIGHLIGHT_PRIORITY_NAME_CAP  "HighlightPriority"
 #define HIGHLIGHT_NUMBER_WILDCARD_CAP    "*" HIGHLIGHT_NUMBER_NAME_CAP
 #define HIGHLIGHT_TEXT_WILDCARD_CAP      "*" HIGHLIGHT_TEXT_NAME_CAP
 #define HIGHLIGHT_VALUES_WILDCARD_CAP    "*" HIGHLIGHT_VALUES_NAME_CAP
@@ -107,7 +111,10 @@ struct trackDbFilter *next;
 char *name;        /* the actual trackDb variable */
 char *fieldName;   /* the field it applies to */
 char *setting;     /* the setting of the trackDb variable */
+double priority;   /* display order; lower shows first (default TRACKDB_FILTER_DEFAULT_PRIORITY) */
 };
+
+#define TRACKDB_FILTER_DEFAULT_PRIORITY 1000.0
 
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, boolean isHighlight);

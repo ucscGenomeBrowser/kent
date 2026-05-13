@@ -82,6 +82,12 @@ for(chain = chainList; chain; chain = chain->next)
     bbList = slCat(thisInterval, bbList);
     }
 
+// We are done with the chains we used to bound the data query;
+// release them before loading the wider set for the lift map below.
+// Without this, every quickLifted track leaked the cBlocks of every
+// chain overlapping the window.
+chainFreeList(&chainList);
+
 // now we need to grab the links outside of our viewport so we can map long items
 // probably we could reuse the chains from above but for the moment this is easier
 // For the moment we use the same padding on both sides so we don't have to worry about strand
@@ -90,9 +96,11 @@ if (maxGapBefore > maxGapAfter)
 else
     maxGapBefore = maxGapAfter;
 
-// sometimes the edges are way too large.  Needs research
-//if (maxGapBefore > 1000000)
-    //maxGapBefore = maxGapAfter = 1000000;
+// Cap the padding so a single oversized item doesn't drag in chains
+// (and their dense cBlock lists) covering many megabases.
+#define QUICKLIFT_MAX_GAP_PAD 1000000
+if (maxGapBefore > QUICKLIFT_MAX_GAP_PAD)
+    maxGapBefore = maxGapAfter = QUICKLIFT_MAX_GAP_PAD;
 
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
@@ -524,4 +532,40 @@ if (quickLiftChainTable == NULL)
     quickLiftChainTable = cfgOptionEnvDefault("QUICKLIFTCHAINNAME",
 	    quickLiftChainTableConfVariable, defaultQuickLiftChainTableName);
 return quickLiftChainTable;
+}
+
+boolean quickLiftLiftPos(char *sourceDb, char *destDb,
+    char *chrom, int start, int end,
+    char **retChrom, int *retStart, int *retEnd)
+/* Map a position from source (sourceDb) coords to destination (destDb) coords
+ * using the liftOver chain for sourceDb -> destDb.  This is used to remap
+ * hgFind results from quickLifted bigBed tracks (which return hits in the
+ * source assembly's coordinates) back to the destination assembly the user
+ * is viewing.  Returns TRUE on success. */
+{
+static struct hash *fileToChainHash = NULL;
+if (fileToChainHash == NULL)
+    fileToChainHash = newHash(0);
+
+char key[1024];
+safef(key, sizeof(key), "%s->%s", sourceDb, destDb);
+struct hash *chainHash = hashFindVal(fileToChainHash, key);
+if (chainHash == NULL)
+    {
+    char *chainFile = liftOverChainFile(sourceDb, destDb);
+    if (chainFile == NULL)
+        return FALSE;
+    chainHash = newHash(0);
+    // This reads every chain in the file up front.  A bigChain-format
+    // liftOver chain indexed on the source (fromDb) side would let us
+    // load just the chains overlapping the hit; worth revisiting if the
+    // upfront cost becomes an issue.
+    readLiftOverMap(chainFile, chainHash);
+    hashAdd(fileToChainHash, key, chainHash);
+    }
+
+char strand = '+';
+char *error = liftOverRemapRange(chainHash, 0.0, chrom, start, end, strand,
+                                 0.001, retChrom, retStart, retEnd, &strand);
+return (error == NULL);
 }

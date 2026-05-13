@@ -12,18 +12,19 @@ superTrack on
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/varFreqsAll.bb
-        visibility dense
+        visibility pack
         itemRgb on
         maxWindowToDraw 5000000
         priority 0.1
-        #mouseOver $aaChange $dnaChange
+        mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
         # Variant type and consequence filters
         filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
         filterLabel.varType Variant Type
-        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,.|Intergenic
+        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,3_prime_utr|3' UTR,5_prime_utr|5' UTR,non_coding|Non-coding,.|Intergenic,others|Other
+        filterType.consequence multipleListOr
         filterLabel.consequence Consequence
         # Source database filter
-        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,NPM|NPM Singapore
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Length filters
@@ -78,11 +79,21 @@ superTrack on
         filterByRange.SGDPAF on
         filterLabel.SGDPAF SGDP AF
         filterByRange.HGDP1kGAF on
-        filterLabel.HGDP1kGAF gnomAD HGDP+1kG AF
+        filterLabel.HGDP1kGAF gnomAD HGDP+1kG AF (4k cohort)
         filterByRange.GREGoRAF on
         filterLabel.GREGoRAF GREGoR AF
         filterByRange.SCHEMAAF on
         filterLabel.SCHEMAAF SCHEMA AF
+        filterByRange.GA4KAF on
+        filterLabel.GA4KAF GA4K PacBio LR AF
+        filterByRange.CoLoRSdbAF on
+        filterLabel.CoLoRSdbAF CoLoRSdb PacBio LR AF
+        filterByRange.SVatalogAF on
+        filterLabel.SVatalogAF SVatalog 101 10XG SR AF
+        filterByRange.Tishkoff180AF on
+        filterLabel.Tishkoff180AF Tishkoff 180 African WGS AF
+        filterByRange.NPMAF on
+        filterLabel.NPMAF NPM Singapore AF
         # Per-database AC filters
         filterByRange.AllOfUsAC on
         filterLabel.AllOfUsAC AllOfUs AC
@@ -121,91 +132,121 @@ superTrack on
         filterByRange.SGDPAC on
         filterLabel.SGDPAC SGDP AC
         filterByRange.HGDP1kGAC on
-        filterLabel.HGDP1kGAC gnomAD HGDP+1kG AC
+        filterLabel.HGDP1kGAC gnomAD HGDP+1kG AC (4k cohort)
         filterByRange.GREGoRAC on
         filterLabel.GREGoRAC GREGoR AC
         filterByRange.SCHEMAAC on
         filterLabel.SCHEMAAC SCHEMA AC
+        filterByRange.GA4KAC on
+        filterLabel.GA4KAC GA4K PacBio LR AC
+        filterByRange.CoLoRSdbAC on
+        filterLabel.CoLoRSdbAC CoLoRSdb PacBio LR AC
+        filterByRange.SVatalogAC on
+        filterLabel.SVatalogAC SVatalog 101 10XG SR AC
+        filterByRange.Tishkoff180AC on
+        filterLabel.Tishkoff180AC Tishkoff 180 African WGS AC
+        filterByRange.NPMAC on
+        filterLabel.NPMAC NPM Singapore AC
         # Population-specific AF filters
-        # AllOfUs populations
+        # AllOfUs local-ancestry populations
+        # NB: these are local-ancestry-stratified frequencies (per-position, per-haplotype-class),
+        # NOT the AllOfUs paper's global Rye ancestry categories. See varFreqs.html for details.
         filterByRange.AllOfUsAF_AFR on
-        filterLabel.AllOfUsAF_AFR AllOfUs African AF
+        filterLabel.AllOfUsAF_AFR AllOfUs African AF (local ancestry)
         filterByRange.AllOfUsAF_AMR on
-        filterLabel.AllOfUsAF_AMR AllOfUs Indigenous American AF
+        filterLabel.AllOfUsAF_AMR AllOfUs Indigenous American AF (local ancestry)
         filterByRange.AllOfUsAF_EAS on
-        filterLabel.AllOfUsAF_EAS AllOfUs East Asian AF
+        filterLabel.AllOfUsAF_EAS AllOfUs East Asian AF (local ancestry)
         filterByRange.AllOfUsAF_EUR on
-        filterLabel.AllOfUsAF_EUR AllOfUs European AF
+        filterLabel.AllOfUsAF_EUR AllOfUs European AF (local ancestry)
         filterByRange.AllOfUsAF_OCE on
-        filterLabel.AllOfUsAF_OCE AllOfUs Oceanian AF
+        filterLabel.AllOfUsAF_OCE AllOfUs Oceanian AF (local ancestry)
         filterByRange.AllOfUsAF_SAS on
-        filterLabel.AllOfUsAF_SAS AllOfUs South Asian AF
+        filterLabel.AllOfUsAF_SAS AllOfUs South Asian AF (local ancestry)
         filterByRange.AllOfUsAC_AFR on
-        filterLabel.AllOfUsAC_AFR AllOfUs African AC
+        filterLabel.AllOfUsAC_AFR AllOfUs African AC (local ancestry)
         filterByRange.AllOfUsAC_AMR on
-        filterLabel.AllOfUsAC_AMR AllOfUs Indigenous American AC
+        filterLabel.AllOfUsAC_AMR AllOfUs Indigenous American AC (local ancestry)
         filterByRange.AllOfUsAC_EAS on
-        filterLabel.AllOfUsAC_EAS AllOfUs East Asian AC
+        filterLabel.AllOfUsAC_EAS AllOfUs East Asian AC (local ancestry)
         filterByRange.AllOfUsAC_EUR on
-        filterLabel.AllOfUsAC_EUR AllOfUs European AC
+        filterLabel.AllOfUsAC_EUR AllOfUs European AC (local ancestry)
         filterByRange.AllOfUsAC_OCE on
-        filterLabel.AllOfUsAC_OCE AllOfUs Oceanian AC
+        filterLabel.AllOfUsAC_OCE AllOfUs Oceanian AC (local ancestry)
         filterByRange.AllOfUsAC_SAS on
-        filterLabel.AllOfUsAC_SAS AllOfUs South Asian AC
-        # GenomeAsia SNVs populations
+        filterLabel.AllOfUsAC_SAS AllOfUs South Asian AC (local ancestry)
+        # GenomeAsia SNVs populations (7 groups in source VCF)
         filterByRange.GenomeAsiaAF_NEA on
         filterLabel.GenomeAsiaAF_NEA GenomeAsia SNVs Northeast Asian AF
         filterByRange.GenomeAsiaAF_SEA on
         filterLabel.GenomeAsiaAF_SEA GenomeAsia SNVs Southeast Asian AF
         filterByRange.GenomeAsiaAF_SAS on
         filterLabel.GenomeAsiaAF_SAS GenomeAsia SNVs South Asian AF
+        filterByRange.GenomeAsiaAF_OCE on
+        filterLabel.GenomeAsiaAF_OCE GenomeAsia SNVs Oceanian AF
+        filterByRange.GenomeAsiaAF_AMR on
+        filterLabel.GenomeAsiaAF_AMR GenomeAsia SNVs American AF
+        filterByRange.GenomeAsiaAF_AFR on
+        filterLabel.GenomeAsiaAF_AFR GenomeAsia SNVs African AF
+        filterByRange.GenomeAsiaAF_WER on
+        filterLabel.GenomeAsiaAF_WER GenomeAsia SNVs Western European Ref AF
         filterByRange.GenomeAsiaAC_NEA on
         filterLabel.GenomeAsiaAC_NEA GenomeAsia SNVs Northeast Asian AC
         filterByRange.GenomeAsiaAC_SEA on
         filterLabel.GenomeAsiaAC_SEA GenomeAsia SNVs Southeast Asian AC
         filterByRange.GenomeAsiaAC_SAS on
         filterLabel.GenomeAsiaAC_SAS GenomeAsia SNVs South Asian AC
-        # gnomAD HGDP+1kG populations
+        filterByRange.GenomeAsiaAC_OCE on
+        filterLabel.GenomeAsiaAC_OCE GenomeAsia SNVs Oceanian AC
+        filterByRange.GenomeAsiaAC_AMR on
+        filterLabel.GenomeAsiaAC_AMR GenomeAsia SNVs American AC
+        filterByRange.GenomeAsiaAC_AFR on
+        filterLabel.GenomeAsiaAC_AFR GenomeAsia SNVs African AC
+        filterByRange.GenomeAsiaAC_WER on
+        filterLabel.GenomeAsiaAC_WER GenomeAsia SNVs Western European Ref AC
+        # gnomAD HGDP+1kG: per-population AF/AC values are from the FULL gnomAD v3.1.2
+        # release (~76k genomes), not the 4,094-genome HGDP+1kG cohort. Only the
+        # cohort-level HGDP1kGAF / HGDP1kGAC fields above reflect the 4k-cohort.
         filterByRange.HGDP1kGAF_afr on
-        filterLabel.HGDP1kGAF_afr gnomAD HGDP+1kG African AF
+        filterLabel.HGDP1kGAF_afr gnomAD v3.1.2 African AF (full release)
         filterByRange.HGDP1kGAF_ami on
-        filterLabel.HGDP1kGAF_ami gnomAD HGDP+1kG Amish AF
+        filterLabel.HGDP1kGAF_ami gnomAD v3.1.2 Amish AF (full release)
         filterByRange.HGDP1kGAF_amr on
-        filterLabel.HGDP1kGAF_amr gnomAD HGDP+1kG Latino AF
+        filterLabel.HGDP1kGAF_amr gnomAD v3.1.2 Latino AF (full release)
         filterByRange.HGDP1kGAF_asj on
-        filterLabel.HGDP1kGAF_asj gnomAD HGDP+1kG Ashkenazi Jewish AF
+        filterLabel.HGDP1kGAF_asj gnomAD v3.1.2 Ashkenazi Jewish AF (full release)
         filterByRange.HGDP1kGAF_eas on
-        filterLabel.HGDP1kGAF_eas gnomAD HGDP+1kG East Asian AF
+        filterLabel.HGDP1kGAF_eas gnomAD v3.1.2 East Asian AF (full release)
         filterByRange.HGDP1kGAF_fin on
-        filterLabel.HGDP1kGAF_fin gnomAD HGDP+1kG Finnish AF
+        filterLabel.HGDP1kGAF_fin gnomAD v3.1.2 Finnish AF (full release)
         filterByRange.HGDP1kGAF_mid on
-        filterLabel.HGDP1kGAF_mid gnomAD HGDP+1kG Middle Eastern AF
+        filterLabel.HGDP1kGAF_mid gnomAD v3.1.2 Middle Eastern AF (full release)
         filterByRange.HGDP1kGAF_nfe on
-        filterLabel.HGDP1kGAF_nfe gnomAD HGDP+1kG European AF
+        filterLabel.HGDP1kGAF_nfe gnomAD v3.1.2 Non-Finnish European AF (full release)
         filterByRange.HGDP1kGAF_oth on
-        filterLabel.HGDP1kGAF_oth gnomAD HGDP+1kG Other AF
+        filterLabel.HGDP1kGAF_oth gnomAD v3.1.2 Other AF (full release)
         filterByRange.HGDP1kGAF_sas on
-        filterLabel.HGDP1kGAF_sas gnomAD HGDP+1kG South Asian AF
+        filterLabel.HGDP1kGAF_sas gnomAD v3.1.2 South Asian AF (full release)
         filterByRange.HGDP1kGAC_afr on
-        filterLabel.HGDP1kGAC_afr gnomAD HGDP+1kG African AC
+        filterLabel.HGDP1kGAC_afr gnomAD v3.1.2 African AC (full release)
         filterByRange.HGDP1kGAC_ami on
-        filterLabel.HGDP1kGAC_ami gnomAD HGDP+1kG Amish AC
+        filterLabel.HGDP1kGAC_ami gnomAD v3.1.2 Amish AC (full release)
         filterByRange.HGDP1kGAC_amr on
-        filterLabel.HGDP1kGAC_amr gnomAD HGDP+1kG Latino AC
+        filterLabel.HGDP1kGAC_amr gnomAD v3.1.2 Latino AC (full release)
         filterByRange.HGDP1kGAC_asj on
-        filterLabel.HGDP1kGAC_asj gnomAD HGDP+1kG Ashkenazi Jewish AC
+        filterLabel.HGDP1kGAC_asj gnomAD v3.1.2 Ashkenazi Jewish AC (full release)
         filterByRange.HGDP1kGAC_eas on
-        filterLabel.HGDP1kGAC_eas gnomAD HGDP+1kG East Asian AC
+        filterLabel.HGDP1kGAC_eas gnomAD v3.1.2 East Asian AC (full release)
         filterByRange.HGDP1kGAC_fin on
-        filterLabel.HGDP1kGAC_fin gnomAD HGDP+1kG Finnish AC
+        filterLabel.HGDP1kGAC_fin gnomAD v3.1.2 Finnish AC (full release)
         filterByRange.HGDP1kGAC_mid on
-        filterLabel.HGDP1kGAC_mid gnomAD HGDP+1kG Middle Eastern AC
+        filterLabel.HGDP1kGAC_mid gnomAD v3.1.2 Middle Eastern AC (full release)
         filterByRange.HGDP1kGAC_nfe on
-        filterLabel.HGDP1kGAC_nfe gnomAD HGDP+1kG European AC
+        filterLabel.HGDP1kGAC_nfe gnomAD v3.1.2 Non-Finnish European AC (full release)
         filterByRange.HGDP1kGAC_oth on
-        filterLabel.HGDP1kGAC_oth gnomAD HGDP+1kG Other AC
+        filterLabel.HGDP1kGAC_oth gnomAD v3.1.2 Other AC (full release)
         filterByRange.HGDP1kGAC_sas on
-        filterLabel.HGDP1kGAC_sas gnomAD HGDP+1kG South Asian AC
+        filterLabel.HGDP1kGAC_sas gnomAD v3.1.2 South Asian AC (full release)
         # GREGoR populations
         filterByRange.GREGoRAF_AFF on
         filterLabel.GREGoRAF_AFF GREGoR Affected AF
@@ -219,23 +260,36 @@ superTrack on
         filterLabel.GREGoRAC_UNA GREGoR Unaffected AC
         filterByRange.GREGoRAC_UNK on
         filterLabel.GREGoRAC_UNK GREGoR Unknown AC
+        # NPM Singapore ancestry groups
+        filterByRange.NPMAF_Chinese on
+        filterLabel.NPMAF_Chinese NPM Singapore Chinese AF
+        filterByRange.NPMAF_Malay on
+        filterLabel.NPMAF_Malay NPM Singapore Malay AF
+        filterByRange.NPMAF_Indian on
+        filterLabel.NPMAF_Indian NPM Singapore Indian AF
+        filterByRange.NPMAC_Chinese on
+        filterLabel.NPMAC_Chinese NPM Singapore Chinese AC
+        filterByRange.NPMAC_Malay on
+        filterLabel.NPMAC_Malay NPM Singapore Malay AC
+        filterByRange.NPMAC_Indian on
+        filterLabel.NPMAC_Indian NPM Singapore Indian AC
         skipEmptyFields on
        
         track allofus
         shortLabel AllOfUs v7 245k WGS
-        longLabel Variant Frequencies: AllOfUs - v7 245k WGS, only with allele count >= 20
+        longLabel Variant Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
         dataVersion V7
-        visibility pack
+        visibility hide
         priority 0.5
 
         #track me
         #shortLabel Regeneron Million Exomes 983k WES
         #longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
         #parent varFreqs on
-        #bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
+        #bigDataUrl /gbdb/$D/varFreqs/me/me.freq.vcf.gz
         #visibility pack
         #type vcfTabix
         #hapClusterEnabled true
@@ -244,33 +298,33 @@ superTrack on
         #priority 1
 
         track topmed
-        shortLabel NHLBI TOPMED 10 151k WGS
-        longLabel Variant Frequencies: NHLBI TOPMED - 151k WGS
+        shortLabel NHLBI TOPMed 10 151k WGS
+        longLabel Variant Frequencies: NHLBI TOPMed - 151k WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
-        visibility pack
+        visibility hide
         priority 2
 
         track sfariSparkExomes
-        shortLabel SFARI Spark 140k WES
+        shortLabel SFARI SPARK 140k WES
         longLabel Variant Frequencies: SFARI SPARK - 140k WES
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
         dataVersion iWES v3 2024_08
-        visibility pack
+        visibility hide
         priority 2.5
 
         track sfariSparkWgs
-        shortLabel SFARI Spark 12k WGS
+        shortLabel SFARI SPARK 12k WGS
         longLabel Variant Frequencies: SFARI SPARK - 12,519 WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
         dataVersion iWGS v1.1
-        visibility pack
+        visibility hide
         priority 2.5
         html sfariSparkExomes
 
@@ -286,22 +340,22 @@ superTrack on
         #priority 3
 
         track tommo60kjpn
-        shortLabel Japan ToMMO 61k WGS
-        longLabel Variant Frequencies: Japan 61k - ToMMO SNV+Indels
+        shortLabel Japan ToMMo 61k WGS
+        longLabel Variant Frequencies: Japan 61k - ToMMo SNV+Indels
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion 2025-06-16
         priority 5
 
         track alfaVcf
-        shortLabel NCBI ALFA 408k WGS/WES/array
+        shortLabel NCBI ALFA 408k mixed
         longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion R4
         priority 4.1
         url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
@@ -309,9 +363,9 @@ superTrack on
 
         track finngen
         parent varFreqs on
-        visibility pack
+        visibility hide
         type vcfTabix
-        shortLabel Finland FinnGen 500k imputed
+        shortLabel FinnGen R12 500k imputed
         longLabel Variant Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
         priority 4.5
         bigDataUrl /gbdb/$D/varFreqs/finngen/finnge_R12_annotated_variants_v1.vcf.gz
@@ -320,7 +374,7 @@ superTrack on
 
         track swefreq
         parent varFreqs on
-        visibility pack
+        visibility hide
         type vcfTabix
         shortLabel Sweden SweGen 1k WGS
         longLabel Variant Frequencies: Sweden SweGen - 1k WGS
@@ -336,25 +390,27 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
         dataVersion Phase 3
-        visibility pack
+        visibility hide
         # no downloads as per Matt Hobbs email Jan 28 2026
         tableBrowser off
 
         track gasp
-        shortLabel GenomeAsia Pilot Subs 1.7k WGS
+        shortLabel GenomeAsia 1.7k SNVs
         longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
-        visibility pack
+        visibility hide
+        dataVersion Pilot 2019 (lifted to hg38, May 2026)
 
         track gaspIndel
-        shortLabel GenomeAsia Pilot Indels 1.7k WGS
+        shortLabel GenomeAsia 1.7k Indels
         longLabel Variant Frequencies: GenomeAsia Pilot - Indels
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
-        visibility pack
+        bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.indels.vcf.gz
+        visibility hide
+        dataVersion Pilot 2019 (lifted to hg38, May 2026)
         html gasp
 
         track abraom
@@ -363,7 +419,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion SABE-WGS-1171 Sep 2020
 
         track indigenomes
@@ -372,15 +428,16 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
-        visibility pack
+        visibility hide
+        dataVersion IndiGen pilot (Jain 2021)
 
         track kova
-        shortLabel Korea KOVA 1.9k WGS+3.5k WES
-        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.5k WES
+        shortLabel Korea KOVA 5.3k mixed
+        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.4k WES
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
-        visibility pack
+        visibility hide
         tableBrowser off
         dataVersion V7
 
@@ -390,7 +447,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/npm/SG10K_Health_r5.3.2.sites.vcf.bgz
-        visibility pack
+        visibility hide
         tableBrowser off
         dataVersion r5.3.2
 
@@ -400,24 +457,25 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hrc/hrc.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion r1.1
 
         track saudi
-        shortLabel Saudi Genome Project 302 WGS
+        shortLabel Saudi Genome 302 WGS
         longLabel Variant Frequencies: Saudi Genome Project - 302 WGS samples
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
-        visibility pack
+        visibility hide
+        dataVersion SHGP (figshare 51297884, 2025)
 
         track schema
-        shortLabel SCHEMA Schizophrenia 121k WES
+        shortLabel SCHEMA 121k WES Sz
         longLabel Variant Frequencies: SCHEMA Schizophrenia Exome Meta-Analysis - WES 24k cases, 97k controls
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion 2022
         priority 4.9
         url https://schema.broadinstitute.org/
@@ -429,7 +487,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mxb/mxb.freq.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion Nov 2025 (hg38 lift)
         priority 6
 
@@ -439,7 +497,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sgdpFreq/sgdp.freq.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion 2016-12-07 (hg38 lift)
         priority 7
 
@@ -449,7 +507,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/gregor/gregor.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion R04 (Oct 2025)
         priority 8
 
@@ -459,7 +517,48 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz
-        visibility pack
+        visibility hide
         dataVersion v3.1.2
         priority 8
+
+        track ga4kSnv
+        shortLabel GA4K 552 PacBio LR
+        longLabel Variant Frequencies: GA4K Children's Mercy - 552 PacBio HiFi WGS, pediatric RD
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ga4k/ga4kSnv.vcf.gz
+        visibility hide
+        dataVersion Cohen 2022 release
+        priority 9
+
+        track colorsDbSnv
+        shortLabel CoLoRSdb 1k LR SNV/Ind
+        longLabel Variant Frequencies: CoLoRSdb v1.2.0 - 1,027 PacBio HiFi WGS, SNV/indel callset
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/colorsDb/colorsDbSnv.vcf.gz
+        visibility hide
+        dataVersion v1.2.0
+        priority 9.5
+
+        track svatalogSnv
+        shortLabel SVatalog 101 WGS
+        longLabel Variant Frequencies: GWAS SVatalog - 101 samples, 10X Genomics linked-read SNPs
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
+        visibility hide
+        dataVersion Chirmade 2025 release
+        priority 10
+
+        track tishkoff180
+        shortLabel 12 Afr Pops 180 WGS
+        longLabel Variant Frequencies: 180 WGS from 12 Indigenous African Populations (Fan 2023)
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/tishkoff/tishkoff180.vcf.gz
+        visibility hide
+        dataVersion Cell 2023 (hg19 lift)
+        tableBrowser off
+        priority 7.5
 

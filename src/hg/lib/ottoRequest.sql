@@ -6,15 +6,18 @@
 #recording requests coming from from functions such as liftRequest
 CREATE TABLE ottoRequest (
     id int unsigned not null auto_increment,	# Auto-incrementing request count
+    requestType varchar(255) not null,	# type of request: liftOver or assembly
     fromDb varchar(255) not null,	# can be a database name or a GC[AF]_ GenArk accession
     toDb varchar(255) not null,	# can be a database name or a GC[AF]_ GenArk accession
     email varchar(255) not null,	# user email address
     comment longtext not null,	# other comments from the input form
     requestTime datetime not null,	# date time request was added
-    doneStatus tinyint unsigned not null,	# # 1 == alignment is complete, 0 == alignment to be done
-    completeTime datetime default null,	# date time for alignment completed and user notified
+    status tinyint unsigned not null,	# 0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete, 5 finish notification, 6 complete, 7 problems
+    buildDir varchar(1024) not null,	# build directory path for alignment workflow
+    completeTime datetime default null,	# date time for process completed and user notified
               #Indices
     PRIMARY KEY(id),
-    INDEX(doneStatus),
+    INDEX(requestType),
+    INDEX(status),
     INDEX(requestTime)
 );

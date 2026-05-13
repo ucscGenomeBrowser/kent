@@ -45,7 +45,7 @@ my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
    substr($partNames[1],6,3), $ncbiAsmId);
 
 $asmType = "genbank" if ($partNames[0] =~ m/GCA/);
-my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
+my $totalBases = `/cluster/bin/x86_64/ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
 my $geneStats = `cat $trackDataDir/ncbiGene/${asmId}.ncbiGene.stats.txt | awk '{printf "%d\\n", \$2}' | xargs echo`;
 chomp $geneStats;

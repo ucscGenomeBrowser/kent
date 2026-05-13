@@ -1,8 +1,7 @@
 track mpra
 shortLabel MPRAs
 longLabel Massively Parallel Reporter Assays
-group phenDis
-type bed 4
+group regulation
 visibility hide
 superTrack on
 
@@ -11,22 +10,44 @@ superTrack on
     longLabel MPRAs: MPRA Base Enhancer Elements
     type bigBed 9 + 9
     bigDataUrl /gbdb/hg38/mpra/mprabase/mprabase.bb
-    parent mpra
+    parent mpra on
     visibility pack
     priority 1
     itemRgb on
-    mouseOver "$cell_line | $assay | Score: $raw_score | %tile: $percentile_rank | $citation"
+    dataVersion MPRA Base v4.9.3 (Mar 2026)
+    mouseOver <b>Element</b>: $name<br><b>Cell line</b>: $cell_line<br><b>Assay</b>: $assay<br><b>Raw score</b>: $raw_score<br><b>Percentile rank</b>: $percentile_rank<br><b>Citation</b>: $citation
     urls PMID="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+    labelFields name,cell_line,assay,author_lab
+    defaultLabelFields name
+    filterValues.cell_line HepG2,HUES64,mESC,NPC,HEK293FT,UACC903,Hela
+    filterValues.assay lentiMPRA (LM),plasmidMPRA (PM),STARR-seq (ST)
+    filter.percentile_rank 0:100
+    filterByRange.percentile_rank on
+    filterLimits.percentile_rank 0:100
+    filterLabel.percentile_rank Filter by activity percentile rank (within experiment)
 
     track mpraVarDb
     shortLabel MPRAVarDB
-    longLabel MPRAs: MPRAVarDB - MPRA-tested Regulatory Variant Effects - grey is non-significant
+    longLabel MPRAs: MPRAVarDB - MPRA-tested Regulatory Variant Effects
     parent mpra on
-    bigDataUrl /gbdb/hg38/mpra/mpravardb.bb
-    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/mpra/mpravardb/mpravardb.bb
+    type bigBed 9 + 13
     itemRgb on
     visibility dense
-    mouseOverField _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
-    mouseOver Ref: $ref Alt: $alt Cell: $cellLine log2FC: $_mouseOverLog2FC p: $_mouseOverPvalue FDR: $_mouseOverFdr
-    skipFields _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
     priority 2
+    maxWindowToDraw 10000000
+    dataVersion MPRAVarDB snapshot 2026-03-10
+    mouseOver <b>Variant</b>: $name<br><b>Ref/Alt</b>: $ref/$alt<br><b>Cell line</b>: $cellLine<br><b>Disease/Trait</b>: $disease<br><b>log2FC</b>: $_mouseOverLog2FC<br><b>p-value</b>: $_mouseOverPvalue<br><b>FDR</b>: $_mouseOverFdr
+    skipFields _mouseOverLog2FC,_mouseOverPvalue,_mouseOverFdr
+    labelFields name,cellLine,disease
+    defaultLabelFields name
+    urls rsid="https://www.ncbi.nlm.nih.gov/snp/$$"
+    filterValues.cellLine GM12878,PC3 cell,HepG2,K562,Jurkat,HEK293FT,HEK293T,SKNSH,HMEC,HNPS,HEK293s,HEL92.1.7,Neuro-2a,MIN6,NIH/3T3,HEK293T,,SF7996,N2A,SH-SY5Y,HaCaT,HeLa,LNCaP,SK-MEL-28,Saos-2,MOLP8,L363,C283T,UACC903,K562+GATA1,BLA,CE,NAC,SFC
+    filter.fdr 0:1
+    filterByRange.fdr on
+    filterLimits.fdr 0:1
+    filterLabel.fdr Filter by false discovery rate
+    filter.log2FC -5:5
+    filterByRange.log2FC on
+    filterLimits.log2FC -5:5
+    filterLabel.log2FC Filter by log2 fold change (alt vs ref)

@@ -1,0 +1,3 @@
+[submodule "src/submodules/htslib"]
+	path = src/submodules/htslib
+	url = ../htslib.git

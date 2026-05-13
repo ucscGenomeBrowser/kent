@@ -64,6 +64,220 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="050126"></a>
+<h2>May 1, 2026 &nbsp;&nbsp; New PrimateAI-3D and PromoterAI variant impact tracks from Illumina</h2>
+<p>
+We are pleased to announce the release of two new variant-impact prediction tracks
+from <a href="https://www.illumina.com/" target="_blank">Illumina</a>:
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank"><b>PrimateAI-3D</b></a>,
+which scores every possible coding missense variant on the human GRCh38/hg38 and
+GRCh37/hg19 assemblies, and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank"><b>PromoterAI</b></a>,
+which scores every possible non-coding single-nucleotide substitution in proximal
+promoter regions on GRCh38/hg38. Together, these deep-learning predictors extend
+pathogenicity prediction across both protein-coding and regulatory sequence.
+Both tracks are grouped under the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=predictionScoresSuper&position=default" target="_blank">Deleteriousness
+Predictions</a> container in the Phenotype and Disease Associations track group.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank">PrimateAI-3D</a>
+track displays approximately 70.7&nbsp;million scored missense variants per assembly,
+covering every possible single-base coding change across all protein-coding genes.
+PrimateAI-3D is a deep-learning model that learns variant pathogenicity from common
+variation observed across 233 non-human primate species and large human population
+databases. Each variant is colored
+<span style="color:red">red (pathogenic)</span> or
+<span style="color:blue">blue (benign)</span> based on Illumina&apos;s prediction
+call. Items are labeled by default with the nucleotide change (e.g.
+<code>C&gt;T</code>); the corresponding amino acid change is shown on hover and
+can be toggled as the on-feature label from the Track Settings.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank">PromoterAI</a>
+track provides pre-computed scores for every possible single-nucleotide substitution
+within 500&nbsp;bp of annotated transcription start sites, covering approximately
+39.5&nbsp;million genomic positions. Scores range from &minus;1 to +1, where
+<b>negative</b> values indicate predicted <b>under-expression</b> and <b>positive</b>
+values indicate predicted <b>over-expression</b> of the associated transcript; the
+magnitude reflects the predicted size of the expression change. The container track
+includes:
+</p>
+<ul>
+  <li>Four <b>per-base score</b> subtracks &ndash; one bigWig for each alternate
+  allele (<b>A</b>, <b>C</b>, <b>G</b>, <b>T</b>). Bars are colored
+  <span style="color:red">red</span> for positive scores and
+  <span style="color:blue">blue</span> for negative scores.
+  </li>
+  <li>A <b>PromoterAI Overlaps</b> bigBed subtrack summarizing positions where
+  multiple transcripts overlap. Each item lists the contributing transcripts,
+  their per-transcript scores, and their strand orientation. About 90% of overlap
+  items lie at bidirectional promoters where transcripts on opposite strands
+  share regulatory sequence.
+  </li>
+</ul>
+
+<div class="text-center">
+  <img src="../images/illuminaPrimatePromoterNewsImage.png"
+  alt="Genome Browser screenshot at the HBB locus on hg38 showing PrimateAI-3D
+  pathogenicity calls across the coding region and PromoterAI per-allele scores
+  in the 5' UTR and proximal promoter" width='80%'>
+  <p class="gbsCaption">
+  <em>PrimateAI-3D and PromoterAI at the start of <i>HBB</i> on hg38
+  (chr11:5,226,883-5,227,212). PrimateAI-3D scores every coding missense variant
+  as red (pathogenic) or blue (benign), while the four PromoterAI per-allele
+  bigWig subtracks score every possible non-coding substitution in the 5&prime;
+  UTR and proximal promoter just upstream of the <i>HBB</i> start codon.</em>
+  </p>
+</div>
+
+<p>
+See the track description pages for Illumina's recommended interpretation
+thresholds.
+</p>
+
+<p>
+Both tracks are distributed by Illumina under a license agreement and are not
+available through the Table Browser, Data Integrator, REST API, or public
+download. The full methods are described in
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">Gao
+et&nbsp;al. 2023</a> (PrimateAI-3D, <i>Science</i>) and
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40440429" target="_blank">Jaganathan
+et&nbsp;al. 2025</a> (PromoterAI, <i>Science</i>).
+</p>
+
+<p>
+We would like to thank Hong Gao, Kishore Jaganathan, and the Illumina PrimateAI-3D
+and PromoterAI teams for making these predictions available to the research
+community. We also would like to thank Max Haeussler and Lou Nassar for the
+creation and release of the UCSC Genome Browser tracks.
+</p>
+
+<a name="042226"></a>
+<h2>Apr. 22, 2026 &nbsp;&nbsp; New NMD Escape tracks on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=nmd" target="_blank"><b>NMD Escape</b></a>
+track on the human genome assembly (GRCh38/hg38). This track collection displays
+regions where premature termination codons (PTCs) are predicted to escape
+nonsense-mediated mRNA decay (NMD), a cellular quality control mechanism that normally
+degrades transcripts with premature stop codons. Identifying NMD escape regions is
+important for interpreting the clinical significance of truncating variants under the
+ACMG/AMP PVS1 criterion.
+</p>
+<p>
+The container track includes:
+</p>
+<ul>
+  <li><b>NMD escape ruleset</b> tracks for
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscMane" target="_blank">MANE Select Plus Clinical</a>,
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscGencode" target="_blank">GENCODE V49</a>, and
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscNcbiRefSeq" target="_blank">NCBI RefSeq</a>
+  transcripts, applying four rules derived from Nagy &amp; Maquat 1998 and Lindeboom
+  et al. 2016:
+    <ul>
+      <li><b>50 bp rule</b> &ndash; the entire last coding exon and the last
+      50 bp of the penultimate coding exon. PTCs here have no downstream
+      exon-exon junction, or are too close to it, for NMD to be triggered.</li>
+      <li><b>No-downstream-EJC rule</b> &ndash; transcripts with a single coding
+      exon and no 3'UTR intron. No EJC is deposited downstream of the stop
+      codon, so any PTC in the coding sequence escapes NMD.</li>
+      <li><b>Start-proximal 100 bp rule</b> &ndash; the first 100 bp of
+      coding nucleotides. PTCs here escape NMD, likely through translation
+      re-initiation at a downstream AUG codon.</li>
+      <li><b>Long-exon rule</b> &ndash; coding exons longer than 400 bp
+      (excluding the last coding exon). NMD efficiency drops in very long exons
+      because the PTC is far from the downstream exon-exon junction.</li>
+    </ul>
+  </li>
+  <li><b>NMDetective</b> machine-learning prediction tracks from
+  <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>,
+  providing continuous NMD efficiency scores for every possible PTC position.</li>
+</ul>
+<p>
+We would like to thank Guido Neidhardt and Andreas Lahner for suggesting this track
+and providing feedback throughout its development, and the Decipher
+Genome Browser team for inspiring this type of visualization. We also would like to thank Max 
+Haeussler and Lou Nassar for the creation and release of the UCSC Genome Browser tracks. 
+</p>
+
+<a name="041026"></a>
+<h2>Apr. 10, 2026 &nbsp;&nbsp; New Short Tandem Repeat (STR) tracks on hg38</h2>
+<p>
+We are pleased to announce several new Short Tandem Repeat (STR) tracks on the
+human genome assembly (GRCh38/hg38).
+</p>
+<p>
+A new <a href="/cgi-bin/hgTrackUi?db=hg38&g=strVar" target="_blank"><b>Tandem Repeat
+Variation</b></a> track collection brings together population-level tandem repeat variation
+data from multiple sources:
+</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=webstr" target="_blank"><b>WebSTR</b></a> &ndash;
+  1,710,833 STR loci from the
+  <a href="https://github.com/gymrek-lab/EnsembleTR" target="_blank">EnsembleTR</a> panel with
+  allele frequency distributions for five continental populations from the
+  <a href="https://www.internationalgenome.org/" target="_blank">1000 Genomes Project</a>
+  (3,550 individuals). The EnsembleTR panel represents consensus calls from four STR
+  genotyping methods (HipSTR, GangSTR, ExpansionHunter, and AdVNTR).
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=strchive" target="_blank"><b>STRchive</b></a> &ndash;
+  75 disease-associated tandem repeat expansion loci curated from published literature by the
+  <a href="https://strchive.org" target="_blank">STRchive</a> project. Each locus includes
+  the pathogenic repeat motif, the minimum pathogenic repeat count, the mode of inheritance, and
+  the associated disease. Items are colored by inheritance mode.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=trexplorer" target="_blank"><b>TRExplorer V2</b></a>
+  &ndash; 5,599,658 tandem repeat loci (STRs and VNTRs) from the
+  <a href="https://trexplorer.broadinstitute.org" target="_blank">TRExplorer</a> catalog at
+  the Broad Institute, compiled from 17 sources including perfect repeats in the reference,
+  polymorphic TRs from T2T assemblies, and curated disease-associated loci. Includes
+  population allele frequency histograms from TenK10K and HPRC256 cohorts.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=tommoStr" target="_blank"><b>ToMMo 61K STR</b></a>
+  &ndash; 174,300 STR loci with allele count distributions from 61,000 Japanese individuals
+  from the <a href="https://jmorp.megabank.tohoku.ac.jp" target="_blank">Tohoku Medical
+  Megabank Organization (ToMMo)</a>, genotyped with Expansion Hunter.
+  </li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=viennaVntr" target="_blank"><b>1KG Vienna ONT
+  VNTR</b></a> &ndash; 361,362 VNTR loci with allele statistics from 1,019 samples of the
+  <a href="https://github.com/marschall-lab/project-ont-1kg" target="_blank">1000 Genomes
+  ONT Vienna project</a>, genotyped with VAMOS from Oxford Nanopore long-read sequencing.
+  Unlike the other tracks, which use short-read data, this track can span longer repeat regions.
+  </li>
+</ul>
+<p>
+Additionally, a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadStr" target="_blank"><b>gnomAD STR</b></a>
+track has been added under the gnomAD Variants collection. This track displays genotype data
+for 87 disease-associated STR loci from
+<a href="https://gnomad.broadinstitute.org/" target="_blank">gnomAD</a> v3.1.3, including
+loci associated with Huntington disease, fragile X syndrome, Friedreich ataxia, and various
+spinocerebellar ataxias. The data were generated using
+<a href="https://github.com/Illumina/ExpansionHunter" target="_blank">ExpansionHunter v5</a>
+on 18,511 whole-genome sequenced samples across 10 populations. Each locus shows the
+distribution of repeat allele sizes, providing a reference for normal and expanded allele
+ranges.
+</p>
+<p>
+We would like to thank Melissa Gymrek (UC San Diego) and the
+<a href="https://webstr.ucsd.edu" target="_blank">WebSTR</a> team for providing the
+WebSTR data, Harriet Dashnow (University of Colorado) and the
+<a href="https://strchive.org" target="_blank">STRchive</a> team for their curated
+disease-associated loci, Ben Weisburd, Egor Dolzhenko, and the
+<a href="https://trexplorer.broadinstitute.org" target="_blank">TRExplorer</a> team at the
+Broad Institute for their tandem repeat catalog, the
+<a href="https://jmorp.megabank.tohoku.ac.jp" target="_blank">Tohoku Medical Megabank
+Organization</a> for the ToMMo STR data, the 1000 Genomes ONT Vienna consortium and the
+Marschall Lab at Heinrich Heine University D&uuml;sseldorf for the VNTR data, and the
+<a href="https://gnomad.broadinstitute.org/about" target="_blank">gnomAD production
+team</a> for making the STR genotype data available. We would also like to thank
+Max Haeussler and Jairo Navarro Gonzalez for the creation and release of these
+tracks.
+</p>
+
 <a name="040326"></a>
 <h2>Apr. 3, 2026 &nbsp;&nbsp; New heatmap display mode for bigBed tracks</h2>
 <p>

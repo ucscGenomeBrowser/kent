@@ -673,6 +673,7 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
     #define MG_LIGHT_MAGENTA    0xffffbbff
     #define MG_LIGHT_GRAY       0xff909090
     color = interactItemColor(tg, inter, hvg, scoreMin, scoreMax);
+    color = colorFromCart(tg, color);
     if (vis == tvDense && otherChrom && color == MG_BLACK)
         // use highlight color for other chrom items in dense mode
         color = MG_LIGHT_MAGENTA;

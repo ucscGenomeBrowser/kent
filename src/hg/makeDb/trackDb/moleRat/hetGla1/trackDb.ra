@@ -8,4 +8,4 @@ html gap
 
 track ensGene override
 visibility pack
-ensemblIdUrl http://www.ensembl.org/Heterocephalus_glaber_male
+ensemblIdUrl https://www.ensembl.org/Heterocephalus_glaber_male

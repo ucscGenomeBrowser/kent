@@ -11,6 +11,7 @@
 #include "bigBedLabel.h"
 #include "bigBedFind.h"
 #include "genbank.h"
+#include "quickLift.h"
 
 static struct hgPos *bigBedIntervalListToHgPositions(struct cart *cart, struct trackDb *tdb,
                         struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList,
@@ -22,6 +23,12 @@ char chromName[bbi->chromBpt->keySize+1];
 int lastChromId = -1;
 struct bigBedInterval *interval;
 struct slInt *labelColumns = NULL;
+
+// If this track is being quickLifted, the bigBed returns hits in the source
+// assembly's coordinates; we need to remap them to the destination assembly.
+char *quickLiftDb = trackDbSetting(tdb, "quickLiftDb");
+boolean quickLifted = (trackDbSetting(tdb, "quickLiftUrl") != NULL) && isNotEmpty(quickLiftDb);
+char *destDb = trackHubSkipHubName(db);
 
 // Generic searchItemLabel support: allows ${fieldName} patterns in hgFindSpec
 char *searchItemLabel = NULL;
@@ -57,30 +64,43 @@ bigBedLabelCalculateFields(cart, tdb, bbi,  &labelColumns );
 char startBuf[256], endBuf[256], *row[bbi->fieldCount];
 for (interval = intervalList; interval != NULL; interval = interval->next)
     {
+    bbiCachedChromLookup(bbi, interval->chromId, lastChromId, chromName, sizeof(chromName));
+    lastChromId = interval->chromId;
+
+    char *posChrom = chromName;
+    int posStart = interval->start;
+    int posEnd = interval->end;
+    if (quickLifted)
+        {
+        // Remap source-assembly coords to destination-assembly coords; skip if unmappable.
+        if (!quickLiftLiftPos(quickLiftDb, destDb, chromName, interval->start, interval->end,
+                              &posChrom, &posStart, &posEnd))
+            continue;
+        }
+
     struct hgPos *hgPos;
     AllocVar(hgPos);
     slAddHead(&posList, hgPos);
 
-    bbiCachedChromLookup(bbi, interval->chromId, lastChromId, chromName, sizeof(chromName));
-    lastChromId = interval->chromId;
-
-    hgPos->chrom = cloneString(chromName);
-    hgPos->chromStart = interval->start;
-    hgPos->chromEnd = interval->end;
-    hgPos->browserName = cloneString(term);
+    hgPos->chrom = cloneString(posChrom);
+    hgPos->chromStart = posStart;
+    hgPos->chromEnd = posEnd;
     hgPos->description = cloneString(description);
 
+    int rowFieldCount = bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
     if (searchItemLabel)
         {
-        bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
         hgPos->name = replaceFieldInPattern(searchItemLabel, bbi->fieldCount, fieldNames, row);
         }
     else
         {
         hgPos->name = bigBedMakeLabel(tdb, labelColumns, interval, chromName);
-        if (hfs && (sameString(hfs->searchName, "mane") || sameString(hfs->searchName, "hgnc")))
-            bigBedIntervalToRow(interval, chromName, startBuf, endBuf, row, bbi->fieldCount);
         }
+    // browserName needs to correspond to tg->mapItemName()
+    if (rowFieldCount > 3)
+        hgPos->browserName = cloneString(row[3]);
+    else
+        hgPos->browserName = cloneString(term);
 
     if (hfs)
         {

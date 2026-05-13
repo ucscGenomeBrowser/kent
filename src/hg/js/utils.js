@@ -24,6 +24,21 @@ var gnomadVarExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([A-Za-z]+)-([A-Za-z]+)$";
 // allow gnomad ranges, ex: 12-1234-11223344
 var gnomadRangeExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([0-9]+)$";
 
+function createInfoIcon(text) {
+    /* Create an info icon (i in circle) with tooltip text.
+     * Returns a span element containing the SVG icon.
+     * Uses addMouseover() for consistent tooltip behavior. */
+    var span = document.createElement("span");
+    span.style.marginLeft = "4px";
+    span.innerHTML = "<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>" +
+        "<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>" +
+        "<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>" +
+        "<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/>" +
+        "</svg>";
+    addMouseover(span, text);
+    return span;
+}
+
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
@@ -3026,7 +3041,7 @@ var findTracks = {
             if ($('#advancedTab').length === 1 && $('#filesTab').length === 1) {
                 $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
             }
-            var cgiVars = "hgsid=" + getHgsid() + "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
+            var cgiVars = "hgsid=" + getHgsid() + "&db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
             if (document.URL.search('hgFileSearch') !== -1)
                 cgiVars += "&fileSearch=1";
             else
@@ -3985,29 +4000,7 @@ var dragReorder = {
             rightClick.currentMapItem = rightClick.makeMapItem(id);
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
-                rightClick.currentMapItem.title = this.title;
-                // if the custom mouseover code has removed this title, check the attr
-                // for the original title
-                if (this.title.length === 0) {
-                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
-                }
-
-                // Handle linked features with separate clickmaps for each exon/intron
-                if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
-                    // if the title is Exon ... or Intron ...
-                    // then search for the sibling with the same href
-                    // that has the real title item label
-                    var elem = this.parentNode.firstChild;
-                    while (elem) {
-                        if ((elem.href === this.href)
-                            && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
-                            rightClick.currentMapItem.title = elem.title;
-                            break;
-                        }
-                        elem = elem.nextSibling;
-                    }
-                }
-
+                rightClick.currentMapItem.title = this.getAttribute("data-tooltip") || this.title;
             }
         }
     },
@@ -4375,6 +4368,11 @@ function convertTitleTagsToMouseovers() {
                 hideMouseoverText(mouseoverContainer);
             }
         }
+    });
+
+    /* Make jquery-ui dialogs hide tooltips */
+    $(document).on("dialogopen", (ev) => {
+        hideMouseoverText(mouseoverContainer);
     });
 }
 

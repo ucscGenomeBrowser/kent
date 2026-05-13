@@ -1,0 +1,101 @@
+# 2026-05-09 Claude (max) - Mobile Element Insertions track collection (mei)
+# Source: HGSVC3 (Logsdon et al. 2025, Nature, PMID 40702183)
+# https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Mobile_Elements/1.0/
+# README: https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Mobile_Elements/1.0/README.20241211.MEI.txt
+
+# This track collection holds polymorphic Mobile Element Insertions (MEIs).
+# The first subtrack, meiHgsvc3, is the HGSVC3 MEI callset: mobile element
+# insertions identified in 65 long-read assembled samples relative to the
+# reference assembly. Two parallel callsets are released, one against
+# GRCh38 and one against T2T-CHM13, and we build a bigBed for each.
+# Each item is drawn as a 1-bp anchor block at the insertion attachment
+# site; per-sample genotypes are summarised into alt-allele count, allele
+# number, alt-allele frequency, and a list of carrier samples.
+
+############################################################
+# GRCh38 / hg38
+
+mkdir -p /hive/data/genomes/hg38/bed/mei
+cd /hive/data/genomes/hg38/bed/mei
+
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Mobile_Elements/1.0/MEI_Callset_GRCh38.ALL.20241211.csv.gz
+
+# Convert CSV (VCF-like, 65 sample genotype columns + Caller_Count,
+# TE_Designation, L1ME-AID, PALMER, L1ME-AID_INFO, PALMER_INFO,
+# PAVMergedCalls) to bed9+15. The script tallies per-record alt-allele
+# counts and carrier sample lists, and colors items by mobile element
+# class.
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiHgsvc3CsvToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiHgsvc3CsvToBed.py \
+    MEI_Callset_GRCh38.ALL.20241211.csv.gz \
+    /hive/data/genomes/hg38/chrom.sizes \
+    meiHgsvc3.bed
+# -> Read 12642 records, wrote 12642, skipped 0 + 0
+# Class distribution: Alu 10270, L1 1604, SVA 764, HERVK 3, snRNA 1.
+
+sort -k1,1 -k2,2n meiHgsvc3.bed > meiHgsvc3.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiHgsvc3.as \
+    -type=bed9+16 \
+    meiHgsvc3.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    meiHgsvc3.bb
+
+############################################################
+# T2T-CHM13 / hs1
+
+mkdir -p /hive/data/genomes/hs1/bed/mei
+cd /hive/data/genomes/hs1/bed/mei
+
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Mobile_Elements/1.0/MEI_Callset_T2T-CHM13.ALL.20241211.csv.gz
+
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiHgsvc3CsvToBed.py \
+    MEI_Callset_T2T-CHM13.ALL.20241211.csv.gz \
+    /hive/data/genomes/hs1/chrom.sizes \
+    meiHgsvc3.bed
+# -> Read 12919 records, wrote 12919, skipped 0 + 0
+# Class distribution: Alu 10458, L1 1664, SVA 791, HERVK 5, snRNA 1.
+
+sort -k1,1 -k2,2n meiHgsvc3.bed > meiHgsvc3.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiHgsvc3.as \
+    -type=bed9+16 \
+    meiHgsvc3.sorted.bed \
+    /hive/data/genomes/hs1/chrom.sizes \
+    meiHgsvc3.bb
+
+############################################################
+# DeepMEI 1000G callset (hg38 only)
+# Source: Xu et al. 2023, bioRxiv (10.1101/2023.03.07.531451)
+# https://github.com/xuxif/DeepMEI/tree/main/DeepMEI/1000g_high_callset
+
+# DeepMEI is a CNN MEI caller; the authors released a high-confidence
+# callset for the 3,202 high-coverage 1000 Genomes samples (NYGC).
+# The VCF uses symbolic ALTs (<INS:ME:ALU>, <INS:ME:LINE1>, <INS:ME:SVA>)
+# and does not report inserted sequence or insertion length, so the
+# resulting bigBed schema is a subset of the HGSVC3 one.
+
+mkdir -p /hive/data/genomes/hg38/bed/mei/deepmei
+cd /hive/data/genomes/hg38/bed/mei/deepmei
+
+wget https://github.com/xuxif/DeepMEI/raw/refs/heads/main/DeepMEI/1000g_high_callset/merge_1000g.latested.vcf.gz
+
+# Convert VCF (91617 MEIs, 3202 samples) to bed9+7.
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kgVcfToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kgVcfToBed.py \
+    merge_1000g.latested.vcf.gz \
+    /hive/data/genomes/hg38/chrom.sizes \
+    deepmei.bed
+# -> Read 91617 records, wrote 91617, skipped 0 + 0 + 0
+# Class distribution: Alu 68282, L1 16891, SVA 6444.
+
+sort -k1,1 -k2,2n deepmei.bed > deepmei.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiDeepmei1kg.as \
+    -type=bed9+7 \
+    deepmei.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    deepmei1kg.bb

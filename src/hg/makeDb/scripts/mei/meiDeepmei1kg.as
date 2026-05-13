@@ -1,0 +1,20 @@
+table meiDeepmei1kg
+"Mobile Element Insertions in 3,202 samples (DeepMEI/1000G high-coverage callset, GRCh38)"
+(
+string  chrom;             "Reference chromosome or scaffold"
+uint    chromStart;        "0-based start position (anchor base)"
+uint    chromEnd;          "Half-open end position (anchor base + 1)"
+string  name;              "Item label (INS, MEI class, carrier sample count)"
+uint    score;             "Score (alt-allele frequency * 1000)"
+char[1] strand;            "Strand (always .)"
+uint    thickStart;        "Start of thick drawing region"
+uint    thickEnd;          "End of thick drawing region"
+uint    itemRgb;           "RGB color, by mobile-element class"
+string  teClass;           "TE class|Family of mobile element (Alu, L1, SVA)"
+int     altAlleleCount;    "Carrier haplotypes|Haplotypes carrying the insertion"
+int     alleleNumber;      "Genotyped haplotypes|Total haplotypes successfully genotyped"
+float   altAlleleFreq;     "Allele frequency|Fraction of genotyped haplotypes carrying the insertion"
+int     carrierCount;      "Carrier samples|Samples with at least one insertion allele"
+int     sampleCount;       "Genotyped samples|Samples with at least one called haplotype"
+lstring carrierSamples;    "Carrier sample list|Comma-separated list of samples with at least one insertion allele"
+)

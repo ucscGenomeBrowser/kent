@@ -1,0 +1,149 @@
+<h2>Description</h2>
+<p>
+Bacterial artificial chromosomes (BACs) are large inserts of genomic DNA
+(typically 150&ndash;300&nbsp;kb) carried in bacteria. Sequencing a single
+short read from each end of a BAC and mapping those end sequences to a
+reference genome yields the approximate start and stop of the full BAC
+insert. These BAC end placements are useful for confirming the order,
+orientation, and span of the reference assembly, for identifying large
+structural variants that disrupt concordant pair placement, and for
+locating a BAC containing a gene of interest for downstream laboratory
+work. The individual clones in all three libraries shown here can be
+ordered from BACPAC Resources (CHORI/BACPAC) for use at the bench;
+see the per-library links below.
+</p>
+<p>
+This track container shows three CHORI (Children's Hospital Oakland
+Research Institute) zebrafish BAC libraries:
+<ul>
+<li><b>CH1073</b> &ndash; 210,777 unique-concordant placements
+(<a href="https://bacpacresources.org/library.php?id=320"
+target="_blank">BACPAC library page</a>).</li>
+<li><b>CH73</b> &ndash; 99,141 placements
+(<a href="https://bacpacresources.org/library.php?id=281"
+target="_blank">BACPAC library page</a>).</li>
+<li><b>CH211</b> &ndash; 70,231 placements
+(<a href="https://bacpacresources.org/library.php?id=35"
+target="_blank">BACPAC library page</a>).</li>
+</ul>
+All three libraries were end-sequenced and placed on the GRCz11
+(danRer11) assembly by the NCBI Clone DB group; only
+<i>unique&nbsp;concordant</i> placements are shown, i.e. clones whose
+two end reads place uniquely and at the expected orientation and
+approximate distance. Each row represents one clone insert inferred
+from a pair of mapped ends; one clone may have several placements if
+its ends also map to an alt haplotype scaffold.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is drawn as a single block spanning the inferred BAC insert
+(start of the upstream end to end of the downstream end). Clicking an
+item opens a details page showing the clone name, NCBI placement ID,
+insert size, concordance and uniqueness flags, assembly unit
+(<i>Primary&nbsp;Assembly</i>, <i>ALT_DRER_TU_1</i>, etc.), and an
+<i>oversize</i> flag set for placements larger than 500&nbsp;kb
+&mdash; far longer than a typical BAC &mdash; so users can filter out
+likely-spurious mappings.
+</p>
+<p>
+The clone name links out to a <a href="https://zfin.org/search"
+target="_blank">ZFIN</a> search for cross-reference information on the
+clone. Clone names (e.g. <tt>CH1073-100A1</tt>, <tt>CH73-1A1</tt>,
+<tt>CH211-1A1</tt>) are indexed and can be entered directly in the
+Genome Browser position/search box to jump to a clone.
+</p>
+<p>
+Three categorical filters are available in each subtrack:
+<ul>
+  <li><b>End-pair concordance</b> &ndash; <tt>TRUE</tt>/<tt>FALSE</tt></li>
+  <li><b>Unique placement</b> &ndash; <tt>TRUE</tt>/<tt>FALSE</tt></li>
+  <li><b>Oversize placement (&gt;500kb)</b> &ndash; <tt>TRUE</tt>/<tt>FALSE</tt></li>
+</ul>
+By default no filter is applied.
+</p>
+
+<h2>Methods</h2>
+<p>
+The source data were produced by the NCBI Clone DB group from end
+sequences of the three CHORI libraries. NCBI maps each end sequence to
+the reference assembly and categorizes the pair as concordant (expected
+orientation and insert size) or discordant, and as uniquely placed or
+multiply placed. The full set of per-library placement reports for
+zebrafish is available from the NCBI FTP server at
+<a href="https://ftp.ncbi.nih.gov/repository/clone/reports/Danio_rerio/"
+target="_blank">ftp.ncbi.nih.gov/repository/clone/reports/Danio_rerio/</a>.
+</p>
+<p>
+To build the UCSC tracks, the three
+<tt>*.GCF_000002035.6.105.unique_concordant.gff</tt> files were
+downloaded and converted to BED. RefSeq contig accessions in the GFFs
+(e.g. <tt>NC_007114.7</tt>, <tt>NW_018394540.1</tt>) were mapped to
+UCSC-style chromosome names (e.g. <tt>chr3</tt>,
+<tt>chr1_KZ114997v1_alt</tt>) using the NCBI GRCz11 assembly report.
+An <i>oversize</i> flag was set on any insert longer than 500&nbsp;kb;
+these records are retained so researchers can inspect them but are
+easy to exclude via the track filter. The resulting BEDs were converted
+to bigBed with <tt>bedToBigBed</tt> using a <tt>name</tt> search index
+so clone names can be looked up from the browser position box.
+</p>
+<p>
+The step-by-step track build commands (downloads, RefSeq-to-UCSC
+mapping, BED conversion, bigBed build) are recorded in the UCSC
+makeDoc for this track:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/danRer11/choriCloneEnds.txt"
+target="_blank">src/hg/makeDb/doc/danRer11/choriCloneEnds.txt</a>.
+The GFF-to-BED converter, the RefSeq-to-UCSC mapping script, and the
+autoSql schema live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/choriCloneEnds"
+target="_blank">src/hg/makeDb/scripts/choriCloneEnds/</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported
+from there to spreadsheet or tab-sep tables. From scripts, the data
+can be accessed through our <a href="https://api.genome.ucsc.edu"
+target="_blank">API</a>, with
+<tt>track=choriCloneEndsCH1073</tt>,
+<tt>track=choriCloneEndsCH73</tt>, or
+<tt>track=choriCloneEndsCH211</tt>.
+</p>
+<p>
+For automated download and analysis, each library's annotation is
+stored in a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/danRer11/choriCloneEnds/"
+target="_blank">our download server</a>: <tt>CH1073.bb</tt>,
+<tt>CH73.bb</tt>, <tt>CH211.bb</tt>. Individual regions or the whole
+genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">here</a>. The tool can also be used to obtain features
+within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/danRer11/choriCloneEnds/CH1073.bb -chrom=chr1 -start=0 -end=10000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Clone placements produced by the NCBI Clone DB group. The CHORI
+zebrafish BAC libraries (CH73, CH211, CH1073) were constructed by
+<a href="https://bacpacresources.org/" target="_blank">Pieter de Jong</a>
+and colleagues at BACPAC Resources (CHORI/BACPAC).  For background on
+de Jong's role in building these clone libraries, see this
+<a href="https://undark.org/2024/07/09/informed-consent-human-genome-project/"
+target="_blank">Undark profile</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Schneider VA, Chen HC, Clausen C, Meric PA, Zhou Z, Bouk N, Husain N, Maglott DR, Church DM.
+<a href="https://academic.oup.com/nar/article/41/D1/D1070/1065498" target="_blank">
+Clone DB: an integrated NCBI resource for clone-associated data</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D1070-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193260" target="_blank">23193260</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531087/" target="_blank">PMC3531087</a>
+</p>

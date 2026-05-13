@@ -1,17 +1,17 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2026-04-06                     # v497 preview
-setenv LASTREVIEWDAY 2026-03-16                     # v496 preview
+setenv REVIEWDAY 2026-04-27                     # v498 preview
+setenv LASTREVIEWDAY 2026-04-06                     # v497 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY  2026-03-23               # v496 preview2
-setenv LASTREVIEW2DAY  2026-03-02               # v495 preview2
+setenv REVIEW2DAY  2026-05-04               # v498 preview2
+setenv LASTREVIEW2DAY  2026-04-13               # v497 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 496                    # increment for new build
-setenv TODAY 2026-03-30                     # v496 final
-setenv LASTWEEK 2026-03-09                     # v495 final
+setenv BRANCHNN 498                    # increment for new build
+setenv TODAY 2026-05-11                     # v498 final
+setenv LASTWEEK 2026-04-20                     # v497 final
 
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 
@@ -21,14 +21,7 @@ setenv REPLYTO clmfisch@ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.gi.ucsc.edu:/data/git/kent.git
 
-# see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME
 # must get static MYSQL libraries, not the dynamic ones from the auto configuration
 setenv MYSQLINC /usr/include/mysql
 setenv MYSQLLIBS /usr/lib64/mysql/libmysqlclient.a
-setenv JAVABUILD /scratch/javaBuild
-#setenv JAVA_HOME /usr/java/default
-setenv JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.261-2.6.22.2.el7_8.x86_64/
-setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar
-# java and ant wont run on hgwdev now without setting max memory
-setenv _JAVA_OPTIONS "-Xmx1024m"

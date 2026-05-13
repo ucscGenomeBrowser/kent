@@ -7,10 +7,14 @@ AllOfUs	EAS	East Asian	AC_EAS	AF_EAS
 AllOfUs	EUR	European	AC_EUR	AF_EUR
 AllOfUs	OCE	Oceanian	AC_OCE	AF_OCE
 AllOfUs	SAS	South Asian	AC_SAS	AF_SAS
-# GenomeAsia populations
+# GenomeAsia populations (7 groups in source VCF)
 GenomeAsia	NEA	Northeast Asian	AC_NEA	AF_NEA
 GenomeAsia	SEA	Southeast Asian	AC_SEA	AF_SEA
 GenomeAsia	SAS	South Asian	AC_SAS	AF_SAS
+GenomeAsia	OCE	Oceanian	AC_OCE	AF_OCE
+GenomeAsia	AMR	American	AC_AMR	AF_AMR
+GenomeAsia	AFR	African	AC_AFR	AF_AFR
+GenomeAsia	WER	Western European Ref	AC_WER	AF_WER
 # gnomAD HGDP+1kG continental groups
 HGDP1kG	afr	African	gnomad_AC_afr	gnomad_AF_afr
 HGDP1kG	ami	Amish	gnomad_AC_ami	gnomad_AF_ami
@@ -19,10 +23,14 @@ HGDP1kG	asj	Ashkenazi Jewish	gnomad_AC_asj	gnomad_AF_asj
 HGDP1kG	eas	East Asian	gnomad_AC_eas	gnomad_AF_eas
 HGDP1kG	fin	Finnish	gnomad_AC_fin	gnomad_AF_fin
 HGDP1kG	mid	Middle Eastern	gnomad_AC_mid	gnomad_AF_mid
-HGDP1kG	nfe	European	gnomad_AC_nfe	gnomad_AF_nfe
+HGDP1kG	nfe	Non-Finnish European	gnomad_AC_nfe	gnomad_AF_nfe
 HGDP1kG	oth	Other	gnomad_AC_oth	gnomad_AF_oth
 HGDP1kG	sas	South Asian	gnomad_AC_sas	gnomad_AF_sas
 # GREGoR affected/unaffected breakdown
 GREGoR	AFF	Affected	AC_AFFECTED	.
 GREGoR	UNA	Unaffected	AC_UNAFFECTED	.
 GREGoR	UNK	Unknown	AC_UNKNOWN	.
+# NPM Singapore (SG10K_Health) ancestry groups
+NPM	Chinese	Singapore Chinese	AC_SgChinese	AF_SgChinese
+NPM	Malay	Singapore Malay	AC_SgMalay	AF_SgMalay
+NPM	Indian	Singapore Indian	AC_SgIndian	AF_SgIndian

@@ -1,0 +1,95 @@
+<h2>Description</h2>
+<p>
+This track shows small-variant (single-nucleotide variant and short-indel)
+allele frequencies from 101 samples released as part of the
+<a href="https://svatalog.research.sickkids.ca/" target="_blank">GWAS
+SVatalog</a> tool (Chirmade et al. 2026). The same 101-sample cohort
+underlies the structural-variant sibling track
+<a href="hgTrackUi?g=chirmade101Sv">SVatalog 101 SVs</a> in the Long-read
+SV collection; this track provides the companion small-variant allele
+frequencies that SVatalog uses to compute linkage disequilibrium between
+SNPs and SVs.
+</p>
+<p>
+The callset contains approximately 8.8 million sites across the autosomes
+and chromosome X. Each site reports the alternate allele frequency in the
+101 samples, the gnomAD v3.1 non-Finnish European allele frequency (when
+annotated in the source release), and a dbSNP rsID when one was available.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The track uses the standard VCF display. Variants appear as colored marks
+along the genome; clicking an item opens the detail page with per-site
+INFO fields: AF, AC, AN, the gnomAD v3.1 NFE allele frequency
+(<tt>GNOMAD_NFE_AF</tt>) and the dbSNP rsID (<tt>RSID</tt>).
+</p>
+<p>
+Note on AC/AN: the source allele-frequency release only ships AF. For this
+track AC and AN are synthesized by assuming the full 2x101 = 202-allele
+denominator (AN=202, AC=round(AF x 202)); these are therefore
+approximations at sites where some samples had missing genotypes.
+</p>
+
+<h2>Methods</h2>
+<p>
+Small variants were called from 10X Genomics linked-read (paired-end
+short-read) whole-genome sequencing of the 101 SVatalog samples with
+<a href="https://gatk.broadinstitute.org/" target="_blank">GATK
+HaplotypeCaller v4.0.0.0</a> using default parameters. Calls were phased
+across the cohort with
+<a href="https://odelaneau.github.io/shapeit4/" target="_blank">SHAPEIT
+v4.2.0</a>, and per-site alternate allele frequencies were computed on
+the resulting joint callset. Structural variants, released as a separate
+lrSv subtrack, were called from long-read data and merged with these
+SNPs for the LD analyses reported by GWAS SVatalog.
+</p>
+<p>
+For display here, the per-chromosome allele-frequency text files
+(<tt>chr{1..22,X}_allele_freq.txt</tt>) were converted to a single
+sites-only VCF with approximate AC/AN fields and bgzipped / tabix
+indexed. The step-by-step build commands are recorded in the UCSC
+makeDoc
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">
+doc/hg38/varFreqs.txt</a>; the converter script lives in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">
+makeDb/scripts/varFreqs</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The VCF file for this track is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/svatalog/" target="_blank">our
+download server</a> as <tt>svatalog.vcf.gz</tt> (with <tt>.tbi</tt> index).
+Regions can be extracted with <tt>tabix</tt>:
+<tt>tabix http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz chr21:1-100000000</tt>.
+</p>
+<p>
+The original per-chromosome allele-frequency tables and the accompanying
+LD statistics used by the SVatalog tool are available from the
+companion Zenodo deposit:
+<a href="https://zenodo.org/records/13367574" target="_blank">zenodo.org/records/13367574</a>.
+The SVatalog web tool itself is at
+<a href="https://svatalog.research.sickkids.ca/" target="_blank">svatalog.research.sickkids.ca</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Chirmade, Strug and colleagues at The Hospital for Sick
+Children and the University of Toronto for releasing this annotated
+SNP frequency callset alongside the GWAS SVatalog tool.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Chirmade S, Wang Z, Mastromatteo S, Sanders E, Thiruvahindrapuram B, Nalpathamkalam T, Pellecchia G,
+Lin F, Keenan K, Patel RV <em>et al</em>.
+<a href="https://doi.org/10.1038/s41437-025-00809-2" target="_blank">
+GWAS SVatalog: a visualization tool to aid fine-mapping of GWAS loci with structural variations</a>.
+<em>Heredity (Edinb)</em>. 2026 Mar;135(3):199-210.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41203876" target="_blank">41203876</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13031531/" target="_blank">PMC13031531</a>
+</p>
+

@@ -12,16 +12,38 @@ NMD escape regions (Nagy et al, Trends Biochem Sci 1998 and Lindeboom et al, Nat
 </p>
 
 <ol>
-  <li><b>50 bp rule</b>: The region less than 50 bp upstream of the last
-    exon-exon junction (after splicing). Non-protein-coding 3' exons are not
-    considered.</li>
-  <li><b>Intronless transcripts</b>: Transcripts with a single exon. Since no
-    EJCs are deposited on single-exon transcripts, all PTCs are predicted to
-    escape NMD.</li>
+  <li><b>50 bp rule</b>: Coding positions within 50 bp (mRNA distance)
+    upstream of the transcript's last splice junction, plus any coding
+    sequence downstream of that junction. A PTC in this window has no
+    downstream exon-exon junction (or is too close to the last one) for
+    NMD to be triggered. The last junction is determined from all exons
+    of the transcript, including 3'UTR introns, since those introns
+    deposit EJCs that can trigger NMD. For transcripts with no 3'UTR
+    intron (the common case), this reduces to the entire last coding exon
+    plus the last 50 bp of the penultimate coding exon. For transcripts
+    with a 3'UTR intron (~4.5% of MANE transcripts), the last
+    junction sits downstream of the stop codon; the escape region is only
+    the stretch of CDS within 50 bp (mRNA distance) of that junction, so
+    if the junction is more than 50 bp past the stop codon no CDS position
+    escapes via this rule.</li>
+  <li><b>No downstream EJC rule</b>: Transcripts with a single coding exon and
+    no 3'UTR intron. No exon-exon junction exists downstream of the stop
+    codon, so no EJC is deposited that could trigger NMD at a PTC. This
+    covers truly intronless transcripts as well as transcripts whose only
+    introns are in the 5&#8242;UTR (where EJCs are cleared by the scanning 40S
+    ribosomal subunit or sit upstream of the stop and are never encountered by
+    the terminating ribosome). Transcripts with a single coding exon but a
+    3'UTR intron are excluded, because that intron deposits an EJC
+    downstream of the stop codon that can trigger NMD.</li>
   <li><b>Start-proximal region</b>: The first 100 bp of coding nucleotides.
     PTCs in this region do not lead to NMD, a phenomenon known as start-proximal
     NMD insensitivity. One proposed mechanism, supported by experimental
     evidence, is re-initiation of translation at a downstream AUG codon.</li>
+  <li><b>Long exon rule</b>: Coding exons longer than 400 bp (excluding the last
+    coding exon, which is already covered by the 50 bp rule). Lindeboom et al.
+    2016 showed a marked drop in NMD efficiency (61% vs. 98%) for PTCs in exons
+    longer than 400 nt, likely because the large distance between the stalled
+    ribosome and the downstream EJC reduces UPF1-EJC contact.</li>
 </ol>
 
 <p>
@@ -32,13 +54,19 @@ transcript IDs stored as a comma-separated list.
 </p>
 
 <p>
-Two versions of this track are available, based on different transcript annotation sets:
+Three versions of this track are available, based on different transcript annotation sets:
 </p>
 <ul>
+  <li><b><a href="hgTrackUi?g=nmdEscMane">NMD escape MANE</a></b>:
+    Derived from the MANE Select plus MANE Plus Clinical transcript set, a
+    jointly curated NCBI/EBI annotation that defines a single high-confidence
+    transcript per protein-coding gene (Select), supplemented by additional
+    transcripts of clinical importance (Plus Clinical).</li>
   <li><b><a href="hgTrackUi?g=nmdEscGencode">NMD escape Gencode</a></b>:
     Derived from GENCODE V49 transcript annotations.</li>
   <li><b><a href="hgTrackUi?g=nmdEscNcbiRefSeq">NMD escape NCBI RefSeq</a></b>:
-    Derived from NCBI RefSeq transcript annotations.</li>
+    Derived from NCBI RefSeq Curated transcript annotations (NM_ and NR_
+    accessions; predicted XM_/XR_ models are excluded).</li>
 </ul>
 
 <h2>Background</h2>
@@ -52,12 +80,30 @@ prematurely, any remaining downstream EJCs recruit surveillance factors
 </p>
 
 <p>
-However, if the PTC is located within approximately 50 bp upstream of the last
-exon-exon junction, the ribosome is close enough to the final EJC that the
-interaction does not trigger NMD&mdash;the transcript escapes degradation.
-Conversely, PTCs located more than 50&ndash;55 bp upstream of the last
-exon-exon junction are predicted to elicit NMD.
+However, PTCs located in the last coding exon or within approximately 50 bp
+upstream of the last exon-exon junction are too close to the final EJC (or
+have no downstream EJC at all) for NMD to be triggered&mdash;the transcript
+escapes degradation. Conversely, PTCs located more than 50&ndash;55 bp
+upstream of the last exon-exon junction are predicted to elicit NMD.
 </p>
+
+<p>
+Additional escape mechanisms, supported by Lindeboom et al. 2016 and other
+studies, are captured by three further rules:
+</p>
+<ul>
+  <li><b>Transcripts with no EJC downstream of the stop codon</b> (single coding
+    exon and no 3'UTR intron) cannot trigger NMD, so any PTC in the coding
+    sequence escapes. 5&#8242;UTR introns are tolerated because their EJCs are
+    upstream of the stop.</li>
+  <li><b>Start-proximal PTCs</b> (within the first 100 bp of coding sequence)
+    escape NMD, likely through translation re-initiation at a downstream AUG
+    codon.</li>
+  <li><b>PTCs in long coding exons</b> (&gt;400 bp) show reduced NMD
+    efficiency (61% vs. 98% for shorter exons in Lindeboom et al. 2016),
+    likely because the large distance between the stalled ribosome and the
+    downstream EJC reduces UPF1-EJC contact.</li>
+</ul>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -71,15 +117,41 @@ contributing transcript IDs.
 Items are colored by the NMD escape rule that applies:
 </p>
 <ul>
-  <li><font color="#FF0000"><b>Red</b></font> &ndash; Rule 1: Last 50 bp
-    of the last coding exon-exon junction. A PTC here is too close to the
-    last exon junction complex (EJC) for NMD to be triggered.</li>
-  <li><font color="#FF8C00"><b>Orange</b></font> &ndash; Rule 2: Intronless
-    (single-exon) transcript. No EJCs are deposited, so all PTCs escape NMD.</li>
+  <li><font color="#FF0000"><b>Red</b></font> &ndash; Rule 1: CDS within
+    50 bp (mRNA distance) upstream of the last splice junction (or
+    downstream of it). A PTC here is too close to the last exon junction
+    complex (EJC) for NMD to be triggered.</li>
+  <li><font color="#FF8C00"><b>Orange</b></font> &ndash; Rule 2: Single coding
+    exon and no 3'UTR intron. No EJC is deposited downstream of the stop
+    codon, so all PTCs in the coding sequence escape NMD.</li>
   <li><font color="#8B0000"><b>Dark red</b></font> &ndash; Rule 3: First 100 bp
     of coding nucleotides. PTCs in this start-proximal region are insensitive
     to NMD, possibly due to translation re-initiation at a downstream AUG codon.</li>
+  <li><font color="#FFD700"><b>Gold</b></font> &ndash; Rule 4: Coding exons
+    longer than 400 bp (excluding the last coding exon). NMD efficiency is
+    reduced in these long exons because the PTC is far from the downstream
+    exon-exon junction.</li>
 </ul>
+
+<h2>Data Access</h2>
+<p>
+The data underlying this track can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Guido Neidhardt for suggesting this track at HUGO VEPTC 2025 and Andreas Lahner
+for feedback. Thanks to the Decipher Genome Browser team for introducing the idea of a
+track.
+</p>
 
 <h2>References</h2>
 
@@ -93,7 +165,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6855384/" target="_blank">PMC
 </p>
 
 <p>
-Lindeboom RG, Supek F, Lehner B.
+Lindeboom RGH, Supek F, Lehner B.
 <a href="https://doi.org/10.1038/ng.3664" target="_blank">
 The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
 <em>Nat Genet</em>. 2016 Oct;48(10):1112-8.

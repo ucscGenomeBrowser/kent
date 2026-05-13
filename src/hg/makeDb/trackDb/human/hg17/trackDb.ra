@@ -1885,7 +1885,7 @@ group genes
     longLabel Ensembl Novel SEGs 
     color 150,0,0 
     type genePred ensPep 
-    url http://www.ensembl.org/perl/transview?transcript=$$ 
+    url https://www.ensembl.org/perl/transview?transcript=$$ 
     priority 5 
  
     track sgpGeneSeg 

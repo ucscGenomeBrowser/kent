@@ -1,0 +1,116 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) from Oxford Nanopore long-read
+whole-genome sequencing of 100 individuals in the 1000 Genomes Project,
+as released by the 1000 Genomes Project ONT Sequencing Consortium and
+described in Gustafson et al. 2024. The cohort spans all five 1000
+Genomes superpopulations and 19 subpopulations. Samples were sequenced
+with ONT R9.4.1 pores at ~37x coverage with median read N50 of ~54 kb.
+</p>
+<p>
+The track contains 113,696 SVs (63,177 insertions, 49,704 deletions,
+744 inversions, 71 duplications). Each variant was called by up to five
+independent methods (three alignment-based: Sniffles2, cuteSV, SVIM;
+and assembly-based hapdiff on Flye or Shasta/Hapdup assemblies) and then
+merged across callers and samples with Jasmine to produce a
+cross-sample consensus catalog.
+</p>
+<p>
+This 100-sample Gustafson cohort is distinct from the Vienna
+1000-Genomes-ONT release (<a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT SVs</a>),
+which uses different samples, pore chemistry and callers; the two
+releases share neither samples nor calls.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions,
+duplications and inversions span the affected reference interval. Filters
+are available for SV type, SV length and carrier-sample count. The detail
+page also shows the number of per-caller calls supporting each site
+(VARCALLS) and whether the source caller marked the breakpoints as precise.
+</p>
+
+<h2>Methods</h2>
+<p>
+Gustafson et al. 2024 performed Oxford Nanopore long-read sequencing on
+100 samples from the 1000 Genomes Project (all five superpopulations and
+19 subpopulations) using R9.4.1 flow cells, at a median per-sample
+coverage of ~37x and read N50 of ~54 kb. Per-sample SV calls were
+generated through the Napu pipeline with five independent methods: three
+alignment-based callers (Sniffles2, cuteSV and SVIM run on minimap2
+alignments to GRCh38) and two assembly-based callers (hapdiff run on Flye
+and on Shasta/Hapdup assemblies). The five per-sample VCFs were merged
+with <a href="https://github.com/mkirsche/Jasmine" target="_blank">Jasmine</a>
+in two stages (intra-sample consensus, then cross-sample merge). The
+released confident site-level callset is defined as variants supported by
+hapdiff and at least two unique alignment-based callers, yielding 113,696
+SVs (63,177 insertions, 49,704 deletions, 744 inversions, 71
+duplications). SV counts per sample and multicaller concordance were
+benchmarked against the HPRC Sniffles2 truth and the GIAB HG002 Tier1
+region with Truvari v4.1.0.
+</p>
+<p>
+The source Jasmine-merged VCF was downloaded from the 1000 Genomes ONT S3
+bucket:
+<a href="https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz" target="_blank">
+<tt>20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz</tt></a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>gustafsonSv</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>gustafson.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/gustafson.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original VCF is available from the 1000 Genomes ONT S3 bucket:
+<a href="https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz" target="_blank">
+20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Gustafson and colleagues and the 1000 Genomes Project ONT
+Sequencing Consortium for releasing this dataset.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Gustafson JA, Gibson SB, Damaraju N, Zalusky MPG, Hoekzema K, Twesigomwe D, Yang L, Snead AA,
+Richmond PA, De Coster W <em>et al</em>.
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=39358015" target="_blank">
+High-coverage nanopore sequencing of samples from the 1000 Genomes Project to build a comprehensive
+catalog of human genetic variation</a>.
+<em>Genome Res</em>. 2024 Nov 20;34(11):2061-2073.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39358015" target="_blank">39358015</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11610458/" target="_blank">PMC11610458</a>
+</p>
+

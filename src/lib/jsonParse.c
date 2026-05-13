@@ -169,7 +169,15 @@ for(i = 0;; i++)
     {
     char c = str[*posPtr + i];
     if(!c)
-        errAbort("Premature end of string (missing trailing double-quote); string position '%d'", *posPtr);
+        {
+        int maxSnip = 80;
+        int snipLen = min(i, maxSnip);
+        char *snipStart = str + *posPtr + (i - snipLen);
+        char *ellipsis = (i > maxSnip) ? "..." : "";
+        errAbort("Premature end of string (missing trailing double-quote); "
+                 "string position '%d', string: '%s%.*s'",
+                 *posPtr, ellipsis, snipLen, snipStart);
+        }
     else if(escapeMode)
         {
         // We support escape sequences listed in http://www.json.org,

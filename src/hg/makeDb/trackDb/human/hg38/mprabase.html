@@ -8,15 +8,49 @@ output using sequencing.
 
 <p>
 The <b>MPRA Base</b> track shows 41,275 experimentally tested cis-regulatory elements
-from the <a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
+curated from the <a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
 database
-(<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao et al., 2023</a>).
+(<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao et al., 2023</a>),
+drawn from MPRA, STARR-seq, and related reporter assay experiments.
 The database integrates data from multiple studies, assay platforms (lentiMPRA,
 plasmidMPRA, STARR-seq, CRE-seq, and others), and cell types while preserving
 experiment-level resolution. Only elements derived from genomic fragments that can
 be mapped to the reference genome are included; synthetic or designed oligonucleotide
 libraries without genomic coordinates are excluded.
 </p>
+<p>
+The track is a curated union of study-specific libraries rather than a uniform
+genome-wide enhancer catalog: each contributing study targeted a distinct set of
+candidate regions, including HepG2 liver-enhancer panels, melanoma GWAS variants,
+human/mouse pluripotent TSSs, and ASD-associated promoter variants. Each item
+represents one experimental measurement, not a full enhancer; longer regulatory
+elements may be represented by multiple adjacent tiles. Item width corresponds
+to the assayed DNA fragment for tile-based studies (most items, 144&ndash;200 bp;
+some Klein <em>et al.</em>, 2020 elements 354&ndash;678 bp) but collapses to a
+single base for variant-centered studies that mark the SNP location rather than
+the surrounding tested window (Choi <em>et al.</em>, 2020; Arnold <em>et al.</em>,
+2013).
+</p>
+<p>
+<b>Note on cell lines:</b> The cell line shown for each element is the reporter
+cell line in which the genomic fragment was assayed. Most rows test human DNA in
+human cells; the exception is Mattioli et al., 2020, where mESC rows assay the
+mouse orthologous sequence in mouse cells, with hg38 coordinates derived from the
+human ortholog by liftOver.
+</p>
+<p>
+The biological context of each cell line is summarized below:
+</p>
+<table class="stdTbl">
+<tr><th>Cell line</th><th>Biological context</th></tr>
+<tr><td>HepG2</td><td>Hepatocellular carcinoma; liver enhancer studies</td></tr>
+<tr><td>HUES64</td><td>Human embryonic stem cells; pluripotent</td></tr>
+<tr><td>mESC</td><td>Mouse embryonic stem cells; pluripotent</td></tr>
+<tr><td>NPC</td><td>H1-derived neural progenitor cells; developing brain</td></tr>
+<tr><td>HEK293FT</td><td>Embryonic kidney; high-transfection-efficiency reference</td></tr>
+<tr><td>UACC903</td><td>Melanoma cell line</td></tr>
+<tr><td>HeLa</td><td>Cervical adenocarcinoma; STARR-seq proof-of-concept</td></tr>
+</table>
 
 <h2>Display Conventions</h2>
 <p>
@@ -39,6 +73,27 @@ The mouse-over shows the cell line, assay type, raw activity score, percentile r
 and citation for each element.
 </p>
 
+<h3>Interpreting the raw score</h3>
+<p>
+For most studies in this track, the raw score is the log<sub>2</sub> ratio of reporter
+RNA to input DNA from the source experiment. A score of 0 means the fragment produced
+RNA in proportion to the input plasmid copies (no measurable activity above baseline),
+positive scores indicate the fragment drove the reporter above baseline (enhancer-like
+activity in the assay), and negative scores indicate sub-baseline output (treated as
+inactive, not as validated transcriptional repression). Linear fold change relative to
+baseline is approximately 2<sup>raw_score</sup> &mdash; for example, a raw score of 0.18
+corresponds to roughly 1.13&times; baseline output, 1.0 to 2&times;, and 2.0 to 4&times;.
+</p>
+<p>
+Two studies use a different scale: Mattioli <em>et al.</em>, 2020 and Koesterich
+<em>et al.</em>, 2023 report the MPRAnalyze induced-transcription rate
+(&alpha;), which is a positive-only quantity not directly convertible to a fold
+change. As noted in the Methods section, scoring methodology and the threshold
+used to call an element "active" differ between studies, so the percentile rank
+reflects within-experiment ranking only and does not by itself indicate the
+absolute strength of an element.
+</p>
+
 <h2>Methods</h2>
 <p>
 Within each experiment, replicate measurements for the same genomic fragment were
@@ -51,6 +106,21 @@ aggregated by computing the mean raw activity score. The original dataset contai
 Elements are ranked by mean raw activity score independently within each experiment,
 and a percentile rank (0&ndash;100) is computed per experiment to avoid cross-study
 distortions caused by differing assay dynamic ranges.
+</p>
+
+<p>
+Scoring methodology and the threshold used to call an element &quot;active&quot;
+differ between studies, so percentile-rank comparisons across experiments are
+approximate. Lower scores indicate that the fragment did not measurably activate
+transcription in the assay, rather than that it actively represses transcription.
+For any element of interest, users should consult the source publication for the
+original significance and effect-size calls.
+</p>
+
+<p>
+Original genomic coordinates from the source studies (mostly hg19, with some
+mm9 and mm10) were lifted to hg38 by the MPRA Base pipeline using the UCSC
+liftOver tool.
 </p>
 
 <h2>Experiments</h2>
@@ -68,6 +138,7 @@ The following table lists the experiments represented in this track.
   <th>Assay</th>
   <th>Elements</th>
 </tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/23328393/" target="_blank">23328393</a></td><td>Arnold et al.</td><td>2013</td><td>Stark Lab</td><td>HeLa</td><td>STARR-seq</td><td>1</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/27831498/" target="_blank">27831498</a></td><td>Inoue et al.</td><td>2017</td><td>Shendure Lab</td><td>HepG2</td><td>lentiMPRA</td><td>2,241</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/30045748/" target="_blank">30045748</a></td><td>Klein et al.</td><td>2018</td><td>Shendure Lab</td><td>HepG2</td><td>STARR-seq</td><td>7,064</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">32483191</a></td><td>Choi et al.</td><td>2020</td><td>Brown Lab</td><td>HEK293FT</td><td>lentiMPRA</td><td>840</td></tr>
@@ -116,6 +187,74 @@ at the University of California San Francisco for creating and curating MPRA Bas
 
 <h2>References</h2>
 
+<p>
+Arnold CD, Gerlach D, Stelzer C, Bory&#324; &#321;M, Rath M, Stark A.
+<a href="https://www.science.org/doi/10.1126/science.1232542" target="_blank">
+Genome-wide quantitative enhancer activity maps identified by STARR-seq</a>.
+<em>Science</em>. 2013 Mar 1;339(6123):1074-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23328393" target="_blank">23328393</a>
+</p>
+
+<p>
+Choi J, Zhang T, Vu A, Ablain J, Makowski MM, Colli LM, Xu M, Hennessey RC, Yin J, Rothschild H
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-020-16590-1" target="_blank">
+Massively parallel reporter assays of melanoma risk variants identify MX2 as a gene promoting
+melanoma</a>.
+<em>Nat Commun</em>. 2020 Jun 1;11(1):2718.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32483191" target="_blank">32483191</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7264232/" target="_blank">PMC7264232</a>
+</p>
+
+<p>
+Inoue F, Kircher M, Martin B, Cooper GM, Witten DM, McManus MT, Ahituv N, Shendure J.
+<a href="http://genome.cshlp.org/cgi/pmidlookup?view=long&amp;pmid=27831498" target="_blank">
+A systematic comparison reveals substantial differences in chromosomal versus episomal encoding of
+enhancer activity</a>.
+<em>Genome Res</em>. 2017 Jan;27(1):38-52.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27831498" target="_blank">27831498</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5204343/" target="_blank">PMC5204343</a>
+</p>
+
+<p>
+Klein JC, Keith A, Agarwal V, Durham T, Shendure J.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1473-6"
+target="_blank">
+Functional characterization of enhancer evolution in the primate lineage</a>.
+<em>Genome Biol</em>. 2018 Jul 25;19(1):99.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30045748" target="_blank">30045748</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6060477/" target="_blank">PMC6060477</a>
+</p>
+
+<p>
+Klein JC, Agarwal V, Inoue F, Keith A, Martin B, Kircher M, Ahituv N, Shendure J.
+<a href="https://doi.org/10.1038/s41592-020-0965-y" target="_blank">
+A systematic evaluation of the design and context dependencies of massively parallel reporter
+assays</a>.
+<em>Nat Methods</em>. 2020 Nov;17(11):1083-1091.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33046894" target="_blank">33046894</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7727316/" target="_blank">PMC7727316</a>
+</p>
+
+<p>
+Koesterich J, An JY, Inoue F, Sohota A, Ahituv N, Sanders SJ, Kreimer A.
+<a href="https://www.mdpi.com/resolver?pii=ijms24043509" target="_blank">
+Characterization of De Novo Promoter Variants in Autism Spectrum Disorder with Massively Parallel
+Reporter Assays</a>.
+<em>Int J Mol Sci</em>. 2023 Feb 9;24(4).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36834916" target="_blank">36834916</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9959321/" target="_blank">PMC9959321</a>
+</p>
+
+<p>
+Mattioli K, Oliveros W, Gerhardinger C, Andergassen D, Maass PG, Rinn JL, Mel&#233; M.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02110-3"
+target="_blank">
+Cis and trans effects differentially contribute to the evolution of promoters and enhancers</a>.
+<em>Genome Biol</em>. 2020 Aug 20;21(1):210.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32819422" target="_blank">32819422</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7439725/" target="_blank">PMC7439725</a>
+</p>
 
 <p>
 Zhao J, Baltoumas FA, Konnaris MA, Mouratidis I, Liu Z, Sims J, Agarwal V, Pavlopoulos GA,

@@ -1,0 +1,128 @@
+<h2>Description</h2>
+
+<p>
+This track displays structural variants (SVs) — deletions, insertions, and
+complex substitutions of at least 50 bp — from the Arabic Pangenome
+Reference (APR), a pangenome graph built from 53 UAE-resident Arab
+individuals drawn from eight countries (UAE, Saudi Arabia, Oman, Jordan,
+Egypt, Morocco, Syria, Yemen). Each bubble in the graph that contains an
+SV-sized alternative allele is shown as a single variant site, with allele
+counts aggregated across the 53 samples (the GRCh38 reference haplotype,
+present as an extra sample column in the source VCF, is excluded from the
+aggregation).</p>
+
+<p>
+The APR pangenome was built on the T2T-CHM13v2 reference. Variants are
+shown natively on the <b>hs1</b> browser and lifted to <b>hg38</b> using
+the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain; variants that do not lift
+cleanly (often in T2T-added euchromatic sequence) are omitted from the
+hg38 version of the track.</p>
+
+<h2>Display conventions</h2>
+
+<p>Items are colored by SV type:</p>
+<ul>
+  <li><span style="background-color:rgb(0,0,200);color:white;padding:1px 6px">INS</span> insertion (net ALT longer by &ge;50 bp)</li>
+  <li><span style="background-color:rgb(200,0,0);color:white;padding:1px 6px">DEL</span> deletion (net REF longer by &ge;50 bp)</li>
+  <li><span style="background-color:rgb(230,140,0);color:white;padding:1px 6px">CPX</span> complex substitution (similar-length REF and ALT but at least one &ge;50 bp)</li>
+  <li><span style="background-color:rgb(120,120,120);color:white;padding:1px 6px">MIXED</span> snarl whose alt alleles belong to different classes</li>
+</ul>
+
+<p>Each item spans from the start of REF to its end on the reference.
+The name field is the graph snarl ID (e.g. <tt>&lt;951452&lt;1012008</tt>),
+which identifies the variant site in the APR pangenome graph.</p>
+
+<h2>Per-site alt-allele aggregation</h2>
+
+<p>
+The source VCF is multi-allelic: a single graph snarl appears as one row
+with a comma-separated ALT list. For this track, each ALT is classified
+individually using the 50 bp threshold, and the row is emitted as a single
+bed item with:</p>
+<ul>
+  <li><b>svType</b> — the common class, or <tt>MIXED</tt> if alts disagree;</li>
+  <li><b>svLen</b> — reference span (chromEnd - chromStart);</li>
+  <li><b>insLen</b> — maximum inserted-sequence length across passing INS alts (0 otherwise);</li>
+  <li><b>AC</b> — sum of per-alt allele counts (AC) that passed;</li>
+  <li><b>numAlts</b> — number of alt alleles that passed the 50 bp filter.</li>
+</ul>
+<p>Rows whose alts are all smaller than 50 bp are not shown.</p>
+
+<h2>Methods</h2>
+
+<p>
+Nassir et al. 2025 built the Arabic Pangenome Reference (APR) from 53
+UAE-resident Arab individuals drawn from eight countries, sequenced with
+~35x PacBio HiFi on Sequel IIe/Revio (30-h movies), ~54x Oxford Nanopore
+ultralong reads on R10.4.1 PromethION flow cells (96-h runs), and ~65x
+Hi-C (Illumina NovaSeq 6000). Haplotype-phased de novo assemblies were
+produced with hifiasm v0.19.5 (primary) and Verkko v1.3.1 (for
+comparison), with a median N50 of 124 Mb. The pangenome graph was built
+with Minigraph-Cactus seeded on T2T-CHM13v2 and augmented with GRCh38,
+and SVs were extracted by graph deconstruction. The released decomposed
+VCF (<tt>apr_review_v1_2902_chm13.vcf.gz</tt>) contains ~21 million
+variants on CHM13v2 contigs; after filtering to alt alleles with &ge;50 bp
+length difference and collapsing the alts of each snarl into a single
+site, the APR SV track is obtained. Variants are shown natively on hs1
+and lifted to hg38 with the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain
+(variants not lifting cleanly are omitted from the hg38 version).</p>
+
+<p>
+The source APR VCF was downloaded from the Mohammed Bin Rashid
+University SharePoint page,
+<a href="https://www.mbru.ac.ae/the-arab-pangenome-reference/" target="_blank">
+mbru.ac.ae/the-arab-pangenome-reference</a>; the accompanying project
+source code is at
+<a href="https://github.com/muddinmbru/arab_pangenome_reference" target="_blank">
+github.com/muddinmbru/arab_pangenome_reference</a>.</p>
+
+<p>
+The step-by-step build commands (download, graph-VCF conversion, liftOver,
+bigBed build) are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed from
+scripts via our <a href="https://api.genome.ucsc.edu">API</a>
+(track=<i>aprSv</i>).</p>
+
+<p>For automated download, the bigBed files are at
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/apr.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/apr.bb</a> (native) and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/apr.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/apr.bb</a> (lifted).</p>
+
+<p>
+The original APR pangenome VCF and assemblies can be downloaded from
+<a href="https://www.mbru.ac.ae/the-arab-pangenome-reference/" target="_blank">
+https://www.mbru.ac.ae/the-arab-pangenome-reference/</a>,
+and the project source code is at
+<a href="https://github.com/muddinmbru/arab_pangenome_reference" target="_blank">
+https://github.com/muddinmbru/arab_pangenome_reference</a>.</p>
+
+<h2>Credits</h2>
+
+<p>Thanks to the Arabic Pangenome Reference team at Mohammed Bin Rashid
+University (Dubai), led by Mohammed Uddin, for producing and releasing
+the pangenome and its variant calls.</p>
+
+<h2>References</h2>
+
+
+<p>
+Nassir N, Almarri MA, Kumail M, Mohamed N, Balan B, Hanif S, AlObathani M, Jamalalail B, Elsokary H,
+Kondaramage D <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-025-61645-w" target="_blank">
+A draft UAE-based Arab pangenome reference</a>.
+<em>Nat Commun</em>. 2025 Jul 24;16(1):6747.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40707445" target="_blank">40707445</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12290100/" target="_blank">PMC12290100</a>
+</p>
+

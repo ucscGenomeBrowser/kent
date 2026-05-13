@@ -1,0 +1,74 @@
+<h2>Description</h2>
+
+<p>
+This track shows allele frequencies for single-nucleotide variants (SNVs)
+and small indels joint-called across 1,027 population-consented human
+samples sequenced with PacBio HiFi long reads by the <b>Consortium of Long
+Read Sequencing (CoLoRSdb)</b>. Sites were joint-genotyped with
+<a href="https://github.com/google/deepvariant" target="_blank">DeepVariant</a>
+and merged across samples with
+<a href="https://github.com/dnanexus-rnd/GLnexus" target="_blank">GLnexus</a>.</p>
+
+<p>
+Two versions of the callset are displayed, chosen automatically according
+to the browser's reference assembly:</p>
+<ul>
+  <li>On <b>hg38</b>, the GRCh38 release is shown.</li>
+  <li>On <b>hs1</b> (T2T-CHM13v2), the CHM13 release is shown (calls are
+      made natively against T2T-CHM13v2, not lifted).</li>
+</ul>
+
+<p>
+Only population-level allele frequencies (AF), allele counts (AC), and
+total allele numbers (AN) are displayed; per-sample genotypes are not
+included in the released VCF. Multi-allelic sites have been decomposed so
+that each alternate allele has its own VCF row.</p>
+
+<h2>Display Conventions</h2>
+
+<p>
+The track is drawn in the standard UCSC VCF representation. Mouseover
+shows the variant, reference/alternate alleles, AC, AN and AF. When zoomed
+in, alleles are drawn with base-specific coloring. Homozygous ALT positions
+are marked with one letter, heterozygotes with two letters.</p>
+
+<h2>Methods</h2>
+
+<p>
+Long-read sequencing of 1,027 individuals was performed at multiple
+CoLoRSdb member sites. Per-sample variant calls were produced with
+DeepVariant and joint-genotyped with GLnexus to create a cohort-wide
+population VCF. Sites passing CoLoRSdb's standard quality filters were
+included.</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed from
+scripts via our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>
+(track=<i>colorsDbSnv</i>).</p>
+
+<p>The VCF files are available on our download server:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz" target="_blank">
+GRCh38 VCF</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/varFreqs/colorsDb/colorsDbSnv.vcf.gz" target="_blank">
+CHM13 VCF</a>.
+They are hard symlinks to the upstream CoLoRSdb releases, which are
+distributed from
+<a href="https://colorsdb.org" target="_blank">colorsdb.org</a> and the
+<a href="https://github.com/ColoRSdb" target="_blank">CoLoRSdb GitHub</a>
+repositories.</p>
+
+<h2>Credits</h2>
+
+<p>Thanks to the Consortium of Long Read Sequencing (CoLoRSdb) members
+and PacBio for producing and releasing these joint-called long-read
+variant frequencies.</p>
+
+<h2>References</h2>
+
+<p>See the main <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a>
+container track for the general context and a comparison table across
+all included frequency databases.</p>

@@ -1,0 +1,22 @@
+table lrSvTommoJp
+"ToMMo Japanese long-read structural variants"
+    (
+    string chrom;           "Chromosome"
+    uint chromStart;        "Start position"
+    uint chromEnd;          "End position"
+    string name;            "Variant Name"
+    uint score;             "Score (quality)"
+    char[1] strand;         "Strand"
+    uint thickStart;        "Thick start (same as chromStart)"
+    uint thickEnd;          "Thick end (same as chromEnd)"
+    uint reserved;          "Item color"
+    string svType;          "SV Type|DEL or INS"
+    int svLen;              "SV Length|Length of the structural variant on the reference in base pairs"
+    int insLen;             "Insertion Length|Length of inserted sequence, 0 for DEL/INV/CPX"
+    int AC;                 "Allele Count|Number of alleles carrying this variant"
+    float alleleFreq;       "Allele Frequency|Fraction of alleles carrying this variant (AF field)"
+    uint alleleNumber;      "Allele Number|Total number of alleles genotyped"
+    float errFamilyRatio;   "Mendelian Error Rate|Fraction of families showing Mendelian inheritance errors"
+    uint errFamilyNum;      "Families with Errors|Number of families with Mendelian errors"
+    uint familyNum;         "Families Genotyped|Number of families without missing calls"
+    )

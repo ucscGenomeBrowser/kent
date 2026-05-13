@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 def runHgsql(sql):
-    cmd = ["hgsql", "hgcentraltest", "-N", "-e", sql]
+    cmd = ["/cluster/bin/x86_64/hgsql", "hgcentraltest", "-N", "-e", sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         sys.stderr.write(result.stderr)

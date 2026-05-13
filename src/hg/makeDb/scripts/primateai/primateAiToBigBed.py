@@ -9,12 +9,11 @@ import gzip
 import sys
 import os
 
-INFILE = "PrimateAI-3D.hg38.txt.gz"
-OUTFILE = "primateAi.bed"
-
 def main():
-    inPath = INFILE
-    outPath = OUTFILE
+    if len(sys.argv) != 3:
+        sys.stderr.write("usage: primateAiToBigBed.py <input.txt.gz> <output.bed>\n")
+        sys.exit(1)
+    inPath, outPath = sys.argv[1], sys.argv[2]
 
     print(f"Reading {inPath}...", file=sys.stderr)
     count = 0
@@ -31,20 +30,32 @@ def main():
             altAa = fields[7]
             scorePai = float(fields[8])
             percentile = float(fields[9])
-            refSeq = fields[10]
-            prediction = fields[11]
+            # hg19 source has some rows missing the refseq column (11 fields instead of 12)
+            if len(fields) >= 12:
+                refSeq = fields[10]
+                prediction = fields[11]
+            else:
+                refSeq = ""
+                prediction = fields[10]
 
             chromStart = pos - 1  # convert to 0-based
             chromEnd = pos
-            name = f"{refAa}>{altAa}"
+            name = f"{ref}>{alt}"
+            aaChange = f"{refAa}>{altAa}"
             score = int(round(percentile * 1000))
             rgb = "200,0,0" if prediction == "pathogenic" else "0,0,200"
+            color = "#c80000" if prediction == "pathogenic" else "#0000c8"
 
-            mouseOver = f"{ref}>{alt} {name} score={scorePai:.3f} pct={percentile:.3f} ({prediction})"
+            mouseOver = (f"<b>Var</b>: {ref}>{alt}<br>"
+                         f"<b>AA</b>: {aaChange}<br>"
+                         f"<b>Score</b>: {scorePai:.3f}<br>"
+                         f"<b>Perc</b>: {percentile:.3f}<br>"
+                         f"<b>Pred</b>: <span style=\"color:{color}\">{prediction}</span>")
 
             out.write(f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t"
-                       f"+\t{chromStart}\t{chromEnd}\t{rgb}\t"
-                       f"{ref}\t{alt}\t{gene}\t{refSeq}\t{scorePai:.3f}\t{percentile:.3f}\t"
+                       f".\t{chromStart}\t{chromEnd}\t{rgb}\t"
+                       f"{aaChange}\t{ref}\t{alt}\t{gene}\t{refSeq}\t"
+                       f"{scorePai:.3f}\t{percentile:.3f}\t"
                        f"{prediction}\t{mouseOver}\n")
             count += 1
             if count % 10000000 == 0:

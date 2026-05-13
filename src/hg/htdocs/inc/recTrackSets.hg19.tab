@@ -14,3 +14,4 @@ Non-coding SNVs	View	Non%20coding%20SNVs	Investigate functional aspects of non-c
 Determine Exon Relevance	View	Exon_Relevance_hg19	Examine if variants are present in an exon required for the function of the expressed gene product
 Problematic Regions	View	Problematic%20Regions	Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns
 ENIGMA BRCA1/BRCA2 VCEP	View	BRCA1_BRCA2_ENIGMA_hg19	Assess potential disease contribution of variants on BRCA1 and BRCA2 according to the ENIGMA VCEP guidelines
+InSiGHT Lynch Syndrome VCEP	View	insightVcepHg19	Assess potential disease contribution of variants on MLH1, MSH2, MSH6, and PMS2 according to the InSiGHT VCEP guidelines

@@ -104,6 +104,14 @@ else
         fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
         fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
         db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
+        // Blocks newline injection into the synthesized hub.txt.
+        if (db && db[0])
+            {
+            char *p;
+            for (p = db; *p; p++)
+                if (!(isalnum((unsigned char)*p) || *p == '_' || *p == '-'))
+                    errAbort("Invalid genome name '%s': only letters, digits, '_' and '-' are allowed", db);
+            }
         reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
         if (reqLm)
             lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
@@ -180,14 +188,52 @@ else
                 }
             row->md5sum = md5HexForFile(row->location);
             row->parentDir = encodedParentDir ? encodedParentDir : "";
-            if (!isHubToolsUpload && !(sameString(fileType, "hub.txt")))
+            // Derive hubType server-side; never trust the client's hubType.
+            // A 2bit always promotes its hub to assembly. Otherwise inherit
+            // the existing hub's type, defaulting to trackHub.
+            char *parentDirForCheck = encodedParentDir ? hubNameFromPath(encodedParentDir) : "";
+            if (sameOk(fileType, "2bit"))
+                row->hubType = "assemblyHub";
+            else
                 {
-                createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
-                fprintf(stderr, "added hub.txt and hubSpace row for hub for file: '%s'\n", fileName);
-                fflush(stderr);
+                char *existingType = existingHubTypeForDir(userName, parentDirForCheck);
+                row->hubType = existingType ? existingType : "trackHub";
                 }
+            char *batchHasHubTxtStr = jsonQueryString(req, "", "Event.Upload.MetaData.batchHasHubTxt", NULL);
+            boolean batchHasHubTxt = sameOk(batchHasHubTxtStr, "true");
+            boolean userOwnNamedHubTxt = userHasOwnNamedHubTxtInDir(userName, parentDirForCheck);
+            boolean userAuth = batchHasHubTxt || userOwnNamedHubTxt;
+            boolean isHubTxt = sameOk(fileType, "hub.txt");
+            boolean isTwoBit = sameOk(fileType, "2bit");
+
+            // Serialize hub.txt read-modify-write across parallel pre-finish
+            // processes for the same hub. flock is held for the entire
+            // decision + action so writeHubText's fileExists check and the
+            // upgrade's read-rewrite are atomic with respect to siblings.
+            // Without a parentDir there is no hub to protect.
+            int hubLockFd = encodedParentDir ? lockHubDir(dataDir) : -1;
+            if (!isHubToolsUpload && !isHubTxt)
+                {
+                if (!userAuth)
+                    {
+                    if (isTwoBit)
+                        {
+                        if (!literalHubTxtExistsOnDisk(parentDirForCheck, userDataDir))
+                            createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
+                        upgradeExistingHubToAssembly(row, userDataDir, encodedParentDir);
+                        }
+                    else
+                        createNewTempHubForUpload(reqId, row, userDataDir, encodedParentDir);
+                    }
+                else if (isTwoBit)
+                    {
+                    // user's hub.txt is authoritative; just flip rows to assemblyHub.
+                    upgradeExistingHubToAssembly(row, userDataDir, encodedParentDir);
+                    }
+                }
+            unlockHubDir(hubLockFd);
             // first make the parentDir rows
-            makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir);
+            makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir, row->hubType);
             row->parentDir = encodedParentDir ? hubNameFromPath(encodedParentDir) : "";
             addHubSpaceRowForFile(row);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
@@ -196,6 +242,8 @@ else
         }
     if (errCatch->gotError)
         {
+        // App-level reject: exit 0 + RejectUpload=true is the tusd protocol for
+        // forwarding HTTPResponse verbatim. Non-zero gets wrapped.
         rejectUpload(response, errCatch->message->string);
         // must remove the tusd temp files so if the users tries again after a temp error
         // the upload will work
@@ -207,7 +255,7 @@ else
         // TODO: if the first mysql request in createNewTempHubForUpload() works but then
         // either of makeParentDirRows() or addHubSpaceRowForFile() fails, we need to also
         // drop any rows we may have added because the upload didn't full go through
-        exitStatus = 1;
+        exitStatus = 0;
         }
     errCatchEnd(errCatch);
     }

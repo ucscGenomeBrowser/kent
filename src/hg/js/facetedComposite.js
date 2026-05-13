@@ -6,15 +6,6 @@ $(function() {
     //     e.preventDefault(); e.returnValue = ""; });
     const DEFAULT_MAX_CHECKBOXES = 20;  // ADS: without default, can get crazy
 
-    // ADS: need "matching" versions for the plugins
-    const DATATABLES_URL = "../js/dataTables-2.2.2.min.js";
-    const DATATABLES_SELECT_URL = "../js/dataTables.select-3.0.0.min.js";
-    const CSS_URLS = [
-        "../style/dataTables-2.2.2.min.css",  // dataTables CSS
-        "../style/dataTables.select-3.0.0.min.css",  // dataTables Select CSS
-        "../style/facetedComposite.css",  // Local metadata table CSS
-    ];
-
     const isValidColorMap = obj =>  // check the whole thing and ignore if invalid
           typeof obj === "object" && obj !== null && !Array.isArray(obj) &&
           Object.values(obj).every(x =>
@@ -42,18 +33,21 @@ $(function() {
         return req.then(r => r.ok ? r.json() : null).catch(() => null);
     };
 
-    const loadIfMissing = (condition, url, callback) =>  // for missing plugins
-          condition ?
-          document.head.appendChild(Object.assign(
-              document.createElement("script"), { src: url, onload: callback }))
-          : callback();
-
     const toTitleCase = str =>
           str.toLowerCase()
           .split(/[_\s-]+/)  // Split on underscore, space, or hyphen
           .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // For primaryKey values that use the 'id|label' form, return just the id.
+    // The label is for display only; the cart and rowToIdx need the bare id.
+    const primaryKeyId = v => {
+        if (v == null) return v;
+        const s = String(v);
+        const bar = s.indexOf("|");
+        return bar >= 0 ? s.slice(0, bar) : s;
+    };
 
     const embeddedData = (() => {
         // get data that was embedded in the HTML here to use them as globals
@@ -143,10 +137,55 @@ $(function() {
     function initTable(allData) {
         const { metadata, rowToIdx, colNames } = allData;
 
-        const ordinaryColumns = colNames.map(key => ({  // all but checkboxes
-            data: key,
-            title: toTitleCase(key.replace(/^_/, "")),
-        }));
+        // Match subtrackUrls trackDb keys against metadata column names
+        // ignoring leading underscores on either side, so authors can toggle
+        // facet visibility by adding/removing a '_' prefix in the metadata
+        // file without having to re-edit trackDb.
+        const stripUnderscores = s => s.replace(/^_+/, "");
+        const subtrackUrls = Object.fromEntries(
+            Object.entries(embeddedData.subtrackUrls || {})
+                  .map(([k, v]) => [stripUnderscores(k), v])
+        );
+
+        const ordinaryColumns = colNames.map(key => {
+            const col = {
+                data: key,
+                title: toTitleCase(key.replace(/^_/, "")),
+            };
+            const urlTemplate = subtrackUrls[stripUnderscores(key)];
+            if (urlTemplate) {
+                // Mirrors hgc/hgc.c:printIdOrLinks(): split cell on ',', each
+                // token may be 'id|label' (id substitutes $$, label is shown).
+                // urlTemplate is html-encoded server-side (htmlEncode in
+                // hgTrackUi.c), so it's safe to interpolate into an href.
+                col.render = (data, type) => {
+                    if (type !== "display") return data;
+                    if (data == null || data === "") return "";
+                    const parts = String(data).split(",")
+                                              .map(s => s.trim())
+                                              .filter(Boolean);
+                    return parts.map(tok => {
+                        let idForUrl = tok, label = tok, encode = true;
+                        const bar = tok.indexOf("|");
+                        if (bar >= 0) {
+                            idForUrl = tok.slice(0, bar);
+                            label    = tok.slice(bar + 1);
+                            encode   = false;
+                            // Strip enclosing quotes from the metadata.tsv
+                            if (label.length >= 2 &&
+                                label.startsWith('"') && label.endsWith('"')) {
+                                label = label.slice(1, -1);
+                            }
+                        }
+                        if (/^https?:/i.test(label)) encode = false;
+                        const sub = encode ? encodeURIComponent(idForUrl) : idForUrl;
+                        const href = urlTemplate.replace(/\$\$/g, sub);
+                        return `<a href="${href}" target="_blank">${label}</a>`;
+                    }).join(", ");
+                };
+            }
+            return col;
+        });
 
         const checkboxColumn = {
             data: null,
@@ -164,6 +203,19 @@ $(function() {
         const singularLabel = itemLabel.slice(0, -1);
 
         const columns = [checkboxColumn, ...ordinaryColumns];
+
+        // Determine which column to sort by: use defaultSortField if it matches
+        // a metadata column (case-insensitive, ignoring leading underscores),
+        // otherwise fall back to the first data column.
+        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        if (embeddedData.defaultSortField) {
+            const target = embeddedData.defaultSortField.replace(/^_+/, "").toLowerCase();
+            const idx = colNames.findIndex(
+                c => c.replace(/^_+/, "").toLowerCase() === target);
+            if (idx >= 0)
+                defaultSortCol = idx + 1;  // +1 for the checkbox column
+        }
+
         const table = $("#theMetaDataTable").DataTable({
             data: metadata,
             deferRender: true,    // seems faster
@@ -176,7 +228,7 @@ $(function() {
                 bottomStart: 'info',
                 bottomEnd: 'paging'
             },
-            order: [[1, "asc"]],  // sort by the first data column, not checkbox
+            order: [[defaultSortCol, "asc"]],
             pageLength: 25,       // show 25 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             language: {
@@ -215,7 +267,28 @@ $(function() {
                 .prop("checked", filteredCount > 0 && selectedCount === filteredCount)
                 .prop("indeterminate", selectedCount > 0 && selectedCount < filteredCount);
         }
-        table.on("select deselect", () => updateSelectAllCheckbox(table));
+        // Find the Display Mode dropdown rendered by C code
+        const visDropdown = document.querySelector(
+            'select[name="' + embeddedData.track + '"]');
+
+        // Track preferred non-hide visibility for auto-restore
+        let preferredVis = "full";
+        if (visDropdown && visDropdown.value !== "hide") {
+            preferredVis = visDropdown.value;
+        }
+
+        // Track previous selection count for detecting 0<->nonzero transitions
+        let prevSelCount = table.rows({selected: true}).count();
+
+        // Update preferredVis when user manually changes the dropdown
+        if (visDropdown) {
+            visDropdown.addEventListener("change", function() {
+                if (this.value !== "hide") {
+                    preferredVis = this.value;
+                }
+            });
+        }
+
         updateSelectAllCheckbox(table);  // set initial state after pre-selections
 
         // Create "show only selected" toggle in the toolbar
@@ -237,6 +310,9 @@ $(function() {
         toggleWrapper.appendChild(toggleText);
         lengthDiv.appendChild(toggleWrapper);
 
+        // Disable toggle initially if no rows are selected
+        toggleCheckbox.disabled = (prevSelCount === 0);
+
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
@@ -244,7 +320,32 @@ $(function() {
                 `Show only selected ${itemLabel} (${selCount} of ${totalCount} selected)`;
         }
         updateSelectedText();
-        table.on("select deselect", updateSelectedText);
+
+        // Unified handler for selection changes
+        function onSelectionChanged() {
+            const selCount = table.rows({selected: true}).count();
+
+            // Disable toggle when nothing is selected; auto-uncheck if count hits 0
+            toggleCheckbox.disabled = (selCount === 0);
+            if (selCount === 0 && toggleCheckbox.checked) {
+                toggleCheckbox.checked = false;
+                table.draw();
+            }
+
+            // Auto-switch Display Mode on 0<->nonzero transitions
+            if (visDropdown) {
+                if (selCount === 0 && prevSelCount > 0) {
+                    visDropdown.value = "hide";
+                } else if (selCount > 0 && prevSelCount === 0) {
+                    visDropdown.value = preferredVis;
+                }
+            }
+
+            updateSelectAllCheckbox(table);
+            updateSelectedText();
+            prevSelCount = selCount;
+        }
+        table.on("select deselect", onSelectionChanged);
 
         // Create active-filters chip bar (hidden when empty)
         const activeFiltersDiv = document.createElement("div");
@@ -585,7 +686,7 @@ $(function() {
 
             // Get current data element selections
             const currentDataElements = table.rows({selected: true}).data().toArray()
-                .map(obj => obj[primaryKey]);
+                .map(obj => primaryKeyId(obj[primaryKey]));
 
             // Enforce an upper bound on the number of tracks on at the same time.
             // This is imperfect when data types are present - some combinations might
@@ -683,14 +784,27 @@ $(function() {
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
                     const colNames = rows[0].split("\t");
+                    if (!primaryKey)
+                        throw new Error("trackDb setting 'primaryKey' is missing");
+                    if (!colNames.includes(primaryKey))
+                        throw new Error(`primaryKey '${primaryKey}' not found in metadata columns`);
                     const metadata = rows.slice(1).map(row => {
                         const values = row.split("\t");
                         const obj = {};
                         colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
                         return obj;
                     });
+                    // Commas in the primaryKey column are ambiguous: a row maps
+                    // to a single subtrack, and trackDb subtrack names can't
+                    // contain commas anyway. Fail loudly so the author notices.
+                    const badPk = metadata.find(row =>
+                        row[primaryKey] != null && String(row[primaryKey]).includes(","));
+                    if (badPk)
+                        throw new Error(
+                            `primaryKey column '${primaryKey}' contains a comma in value ` +
+                            `'${badPk[primaryKey]}'; commas are not allowed in primaryKey values`);
                     const rowToIdx = Object.fromEntries(
-                        metadata.map((row, i) => [row[primaryKey], i])
+                        metadata.map((row, i) => [primaryKeyId(row[primaryKey]), i])
                     );
                     colorMap = isValidColorMap(colorMap) ? colorMap : null;
                     const freshData = { metadata, rowToIdx, colNames, colorMap };
@@ -708,19 +822,11 @@ $(function() {
             });
     }  // end loadDataAndInit
 
-    CSS_URLS.map(href =>  // load all the CSS
-        document.head.appendChild(Object.assign(
-            document.createElement("link"), { rel: "stylesheet", href })));
-
     document.addEventListener("keydown", e => {  // block accidental submit
         if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); }
     }, true);
 
-    // ADS: only load plugins if they are not already loaded
-    loadIfMissing(!$.fn.DataTable, DATATABLES_URL, () => {
-        loadIfMissing(!$.fn.dataTable.select, DATATABLES_SELECT_URL, () => {
-            generateHTML();
-            loadDataAndInit();
-        });
-    });
+    generateHTML();
+    loadDataAndInit();
+
 });

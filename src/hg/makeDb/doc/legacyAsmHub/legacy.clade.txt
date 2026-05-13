@@ -410,6 +410,7 @@ GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_047511675.1_mMarFla1.hap1	mammals
 GCA_048164855.1_mCanLup2.hap1	mammals
 GCA_900006655.3_Susie3	primates
+GCA_900093555.1_PvP01	invertebrate
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
 GCA_900634415.1_fCotGob3.1	fish

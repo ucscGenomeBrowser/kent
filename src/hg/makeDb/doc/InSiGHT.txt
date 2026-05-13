@@ -1,0 +1,156 @@
+#RM#36582
+
+# InSiGHT VCEP Track Hub
+# International Society for Gastrointestinal Hereditary Tumours (InSiGHT)
+# Variant Curation Expert Panel (VCEP)
+# Lynch syndrome mismatch repair genes: MLH1, MSH2, MSH6, PMS2
+# CSpec v2.0.0
+# Assemblies: hg38 and hg19
+
+# Working directory for all track data
+mkdir -p /hive/users/lrnassar/insightHub
+
+# Build scripts are located here:
+~/kent/src/hg/makeDb/scripts/insight/
+
+# Quick link for github:
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/insight
+
+# Hub structure:
+#   /hive/users/lrnassar/insightHub/
+#     hub.txt, genomes.txt
+#     hg38/trackDb.txt, hg19/trackDb.txt
+#     insight.html (shared description page)
+#     clinDomains/   - Clinical Domains track data
+#     pvs1/          - PVS1 Regions track data
+#     afFrequencies/ - Allele Frequencies track data
+#     hciPriors/     - HCI Priors track data
+#     functionalAssays/ - Functional Assays track data
+#     lovdVars/      - InSiGHT Curated Variants track data
+
+# Canonical transcripts used across all tracks:
+#   MLH1: NM_000249.4 (chr3, + strand)
+#   MSH2: NM_000251.3 (chr2, + strand)
+#   MSH6: NM_000179.3 (chr2, + strand)
+#   PMS2: NM_000535.7 (chr7, - strand)
+
+##############################################################################
+# Track 1: Clinical Domains (PM1)
+##############################################################################
+
+# Clinically relevant protein domains for the 4 MMR genes.
+# Domain definitions are hardcoded in the script from the InSiGHT VCEP specs.
+# Generates bigBed 9+4 files for hg38 and hg19.
+
+cd /hive/users/lrnassar/insightHub/clinDomains
+python3 ~/kent/src/hg/makeDb/scripts/insight/insightClinDomains.py
+
+# Output: InSiGHTclinDomainsHg38.bb, InSiGHTclinDomainsHg19.bb
+
+##############################################################################
+# Track 2: PVS1 Regions
+##############################################################################
+
+# PVS1 decision tree regions based on NMD predictions and critical functional
+# regions. Gene-specific codon boundaries from the InSiGHT VCEP specs:
+#   MLH1: NMD <=684, CritRegion 685-753, FuncUnknown 754-756, n.a. >756
+#   MSH2: NMD <=861, CritRegion 862-891, FuncUnknown 892-934, n.a. >934
+#   MSH6: NMD <=1317, CritRegion 1318-1341, FuncUnknown 1342-1360, n.a. >1360
+#   PMS2: NMD <=798, FuncUnknown 799-862, n.a. >862
+# Generates bigBed 9+3 files for hg38 and hg19.
+
+cd /hive/users/lrnassar/insightHub/pvs1
+python3 ~/kent/src/hg/makeDb/scripts/insight/insightPVS1.py
+
+# Output: InSiGHTPVS1Hg38.bb, InSiGHTPVS1Hg19.bb
+
+##############################################################################
+# Track 3: Allele Frequencies (BA1/BS1/PM2)
+##############################################################################
+
+# ACMG allele frequency classifications from gnomAD v4.1 exomes.
+# Gene-specific thresholds from the InSiGHT VCEP specs.
+# Requires access to gnomAD v4.1 bigBed files in /gbdb/hg38/gnomAD/v4.1/exomes/
+# Generates bigBed 9+3 files for hg38 and hg19 (hg19 via liftOver).
+
+cd /hive/users/lrnassar/insightHub/afFrequencies
+python3 ~/kent/src/hg/makeDb/scripts/insight/insightAFfrequencies.py
+
+# Output: InSiGHTAFHg38.bb, InSiGHTAFHg19.bb
+
+##############################################################################
+# Track 4: HCI Priors (PP3/BP4)
+##############################################################################
+
+# HCI prior probability predictions for missense variants.
+# Source data: LOVD database exports (tab-delimited files downloaded manually
+# from the LOVD shared database for each gene's priors table).
+# Requires LOVD priors files in the hciPriors/ directory:
+#   LOVD_MLH1_priors_*.txt
+#   LOVD_MSH2_priors_*.txt
+#   LOVD_MSH6_priors_*.txt
+#   LOVD_PMS2_priors_*.txt
+# Thresholds: PP3_moderate >0.81, PP3_supporting 0.68-0.81, BP4_supporting <0.11
+# Generates bigBed 9+5 files for hg38 and hg19.
+
+cd /hive/users/lrnassar/insightHub/hciPriors
+python3 ~/kent/src/hg/makeDb/scripts/insight/insightHCIPriors.py
+
+# Output: InSiGHTHCIPriorsHg38.bb, InSiGHTHCIPriorsHg19.bb
+
+##############################################################################
+# Track 5: Functional Assays (PS3/BS3)
+##############################################################################
+
+# Functional assay evidence from 4 publications:
+#   Drost et al. 2018 (PMID:30504929) - 74 MLH1/MSH2 variants, CIMRA assay
+#   Drost et al. 2020 (PMID:31965077) - 87 MSH6 variants, CIMRA assay
+#   Jia et al. 2021 (PMID:33357406)  - 16,749 MSH2 variants, deep mutational scan
+#   Rath et al. 2022 (PMID:36054288) - 26 MLH1 variants, cell-based assay
+#
+# Requires supplementary data files in the functionalAssays/ directory:
+#   drost2020_supplement.docx (Drost 2020 S1/S3/S5 tables)
+#   mmc2.xlsx (Jia 2021 TableS4/S5)
+#   (Drost 2018 and Rath 2022 data are hardcoded from their supplements)
+#
+# Also requires openpyxl: pip install openpyxl
+# Generates bigBed 9+7 files for hg38 and hg19.
+
+cd /hive/users/lrnassar/insightHub/functionalAssays
+python3 ~/kent/src/hg/makeDb/scripts/insight/insightFunctionalAssays.py
+
+# Output: insightFunctionalAssaysHg38.bb, insightFunctionalAssaysHg19.bb
+
+##############################################################################
+# Track 6: InSiGHT Curated Variants (from ClinVar)
+##############################################################################
+
+# InSiGHT VCEP expert panel classifications fetched from ClinVar API.
+# Queries ClinVar for variants submitted by InSiGHT on MLH1, MSH2, MSH6, PMS2.
+# No local data files needed -- fetches directly from NCBI E-utilities.
+# This is the track that should be periodically rebuilt (ClinVar updates monthly).
+# Generates bigBed 9+7 files for hg38 and hg19.
+
+cd /hive/users/lrnassar/insightHub/lovdVars
+python3 ~/kent/src/hg/makeDb/scripts/insight/buildInsightClinVar.py
+
+# Output: insightClinVarHg38.bb, insightClinVarHg19.bb
+
+##############################################################################
+# Hub deployment
+##############################################################################
+
+# The hub is served from:
+#   https://hgwdev-lrnassar.gi.ucsc.edu/~lrnassar/track_hubs/insightHub/hub.txt
+#
+# The public_html symlink points to the working directory:
+#   /cluster/home/lrnassar/public_html/track_hubs/insightHub -> /hive/users/lrnassar/insightHub
+#
+# To rebuild all tracks from scratch:
+cd /hive/users/lrnassar/insightHub
+cd clinDomains && python3 ~/kent/src/hg/makeDb/scripts/insight/insightClinDomains.py && cd ..
+cd pvs1 && python3 ~/kent/src/hg/makeDb/scripts/insight/insightPVS1.py && cd ..
+cd afFrequencies && python3 ~/kent/src/hg/makeDb/scripts/insight/insightAFfrequencies.py && cd ..
+cd hciPriors && python3 ~/kent/src/hg/makeDb/scripts/insight/insightHCIPriors.py && cd ..
+cd functionalAssays && python3 ~/kent/src/hg/makeDb/scripts/insight/insightFunctionalAssays.py && cd ..
+cd lovdVars && python3 ~/kent/src/hg/makeDb/scripts/insight/buildInsightClinVar.py && cd ..

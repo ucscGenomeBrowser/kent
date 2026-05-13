@@ -42,6 +42,7 @@
 #include "genbank.h"
 #include "windowsToAscii.h"
 #include "chromAlias.h"
+#include "myVariants.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -346,6 +347,20 @@ void checkNoGenomeDisabled(char *db, char *table)
 if (isNoGenomeDisabled(db, table))
     errAbort("Can't do genome-wide query on %s.  "
              "Please go back and choose a position range.", table);
+}
+
+void checkNoQuickLift(struct trackDb *track)
+/* Before producing output, make sure the track isn't being remapped via
+ * QuickLift -- the underlying data is in the source assembly's coordinates,
+ * so output queries against the destination assembly's region won't make
+ * sense. */
+{
+if (track != NULL && trackDbSetting(track, "quickLiftUrl") != NULL)
+    errAbort("Get output is not supported for QuickLift tracks.  "
+             "QuickLift remaps tracks from another assembly on the fly for display, "
+             "but the underlying data is in the source assembly's coordinates.  "
+             "Please go back to the genome browser and switch to the source assembly "
+             "to retrieve this track's data.");
 }
 
 static int regionCmp(const void *va, const void *vb)
@@ -667,14 +682,26 @@ else if (isVcfTable(table, &isTabix))
     }
 else if (isHicTable(table))
     hti = hicToHti(table);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table) ||
+         (strchr(table, '.') != NULL &&
+          startsWith("myVariants_", strchr(table, '.') + 1)))
     {
-    struct customTrack *ct = ctLookupName(table);
+    /* Accept the qualified myVariants storage form
+     * ("customDataNN.myVariants_<user>") as well as the bare track name;
+     * the ct list is keyed on the bare track name. */
+    char *dot = strchr(table, '.');
+    char *trackName = (dot != NULL && startsWith("myVariants_", dot + 1)) ? dot + 1 : table;
+    struct customTrack *ct = ctLookupName(trackName);
     hti = ctToHti(ct);
     }
 else if (sameWord(table, WIKI_TRACK_TABLE))
     {
     hti = wikiHti();
+    }
+else if (trackHubDatabase(db))
+    {
+    /* Hub assemblies have no SQL database; can't look up table via hFindTableInfo. */
+    hti = NULL;
     }
 else
     {
@@ -961,8 +988,9 @@ else if (track != NULL && !tdbIsComposite(track))
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
- * use the first field. */
-if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
+ * use the first field.  Skip for hub assemblies, which have no SQL database. */
+if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos)
+    && !trackHubDatabase(db))
     {
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
@@ -1212,7 +1240,7 @@ else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isHicTable(table))
     hicTabOut(db, table, conn, fields, f, outSep);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f, outSep);
     }
@@ -1243,23 +1271,31 @@ else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
 else if (isHicTable(table))
     fieldList = hicGetFields(table);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     struct customTrack *ct = ctLookupName(table);
     char *type = ct->dbTrackType;
     if (type != NULL)
         {
-	conn = hAllocConn(CUSTOM_TRASH);
-	if (startsWithWord("maf", type) || 
-            startsWithWord("makeItems", type) || 
-            sameWord("bedDetail", type) || 
-            sameWord("barChart", type) || 
-            sameWord("interact", type) || 
-            sameWord("bedMethyl", type) || 
-            sameWord("pgSnp", type))
-	        fieldList = sqlListFields(conn, ct->dbTableName);
-	hFreeConn(&conn);
-	}
+        conn = hAllocConn(CUSTOM_TRASH);
+        if (startsWithWord("maf", type) ||
+                startsWithWord("myVariants", type) ||
+                sameWord("bedDetail", type) ||
+                sameWord("barChart", type) ||
+                sameWord("interact", type) ||
+                sameWord("bedMethyl", type) ||
+                sameWord("pgSnp", type))
+            {
+            if (sameWord("myVariants", type))
+                {
+                ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
+                }
+            fieldList = sqlListFields(conn, ct->dbTableName);
+            if (startsWith("myVariants_shared_", table))
+                myVariantsStripHiddenFields(&fieldList);
+            }
+        hFreeConn(&conn);
+        }
     if (fieldList == NULL)
 	fieldList = getBedFields(ct->fieldCount);
     }
@@ -1406,7 +1442,7 @@ void doMetaData(struct sqlConnection *conn)
 {
 cartWriteHeaderAndCont(cart, NULL, "text/plain");
 char query[1024];
-sqlSafef(query, sizeof query, "%s", ""); 
+sqlSafef(query, sizeof query, "%s", "");
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);
@@ -1474,6 +1510,7 @@ else
 	track = cTdb;
     }
 checkNoGenomeDisabled(database, table);
+checkNoQuickLift(track);
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&

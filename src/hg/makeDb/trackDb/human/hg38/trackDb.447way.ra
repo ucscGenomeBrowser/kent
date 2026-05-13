@@ -81,8 +81,8 @@ html cactus447way
         track phyloP447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
-        shortLabel 447 phyloP SSREF
-        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP phyloFit SSREV model
+        shortLabel 447 phyloP SSREV
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP SSREV model
         configurable on
         noInherit on
         type wig -20 8.123
@@ -100,7 +100,7 @@ html cactus447way
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
         shortLabel 447 phyloP primates
-        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP phyloFit SSREV model, primates subset
+        longLabel 447 mammals / 233 primates Basewise Conservation by PhyloP SSREV, primates subset
         configurable on
         noInherit on
         type wig -20 1.587

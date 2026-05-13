@@ -155,6 +155,13 @@ table.dataTable tbody tr:hover {
 .toggle-switch input:checked + .toggle-slider::before {
     transform: translateX(12px);
 }
+.toggle-switch input:disabled + .toggle-slider {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+#selected-filter:has(input:disabled) #selected-filter-text {
+    opacity: 0.4;
+}
 
 /* Active filter chips bar */
 #active-filters {

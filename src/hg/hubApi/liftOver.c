@@ -10,7 +10,9 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "net.h"
+/* do not need the mailViaPipe function here
 #include "mailViaPipe.h"
+*/
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -81,11 +83,19 @@ sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
 long long totalRows = sqlQuickLongLong(conn, dyStringContents(query));
 dyStringClear(query);
 
-if (isNotEmpty(fromDb) || isNotEmpty(toDb))
+if (isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    /* match a chain recorded in either direction */
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE "
+        "(LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s')) "
+        "OR (LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s'))",
+        tableName, fromDb, toDb, toDb, fromDb);
+    }
+else if (isNotEmpty(fromDb) || isNotEmpty(toDb))
     {
     sqlDyStringPrintf(query, "SELECT * FROM %s WHERE ", tableName);
     if (isNotEmpty(fromDb))
-        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') %s ", fromDb, isNotEmpty(toDb) ? "AND" : "");
+        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') ", fromDb);
     if (isNotEmpty(toDb))
         sqlDyStringPrintf(query, "LOWER(toDb) = LOWER('%s') ", toDb);
     }
@@ -124,8 +134,36 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 jsonWriteListEnd(jw);
 jsonWriteNumber(jw, "totalLiftOvers", totalRows);
-jsonWriteNumber(jw, "itemsReturned", slCount(chainList));
+int chainListCount = slCount(chainList);
+jsonWriteNumber(jw, "itemsReturned", chainListCount);
 liftOverChainFreeList(&chainList);
+
+/* if no chain rows for this pair, check ottoRequest for any existing
+ * row (any status) so the user is told their pair has already been
+ * submitted instead of being allowed to create a duplicate row */
+if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    char *ottoTable = cfgOption("ottoTable");
+    if (isNotEmpty(ottoTable) && sqlTableExists(conn, ottoTable))
+        {
+        struct dyString *pq = newDyString(0);
+        sqlDyStringPrintf(pq,
+            "SELECT id, status, requestTime FROM %s "
+            "WHERE requestType='liftOver' AND "
+            "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s')) "
+            "ORDER BY requestTime DESC LIMIT 1",
+            ottoTable, fromDb, toDb, toDb, fromDb);
+        char **row;
+        struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&pq));
+        if ((row = sqlNextRow(sr)) != NULL)
+            {
+            jsonWriteBoolean(jw, "pending", TRUE);
+            jsonWriteNumber(jw, "pendingStatus", sqlSigned(row[1]));
+            jsonWriteString(jw, "pendingRequestTime", row[2]);
+            }
+        sqlFreeResult(&sr);
+        }
+    }
 
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
@@ -292,21 +330,70 @@ char *comment = cgiOptionalString(argComment);
 if (isEmpty(fromGenome) || isEmpty(toGenome) || isEmpty(email) || isEmpty(comment))
     apiErrAbort(err400, err400Msg, "must have all arguments: %s, %s, %s, %s for endpoint '/liftRequest", argFromGenome, argToGenome, argEmail, argComment);
 
+/* Require a session cookie.  Robots that have not
+ *   passed the challenge will not have one. */
 char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
-char *referer = getenv("HTTP_REFERER");
-char dir[PATH_LEN];
-char name[FILENAME_LEN];
-char ext[FILEEXT_LEN];
-/* expecting request to come from something.ucsc.edu/liftRequest.html */
-if (isNotEmpty(referer) && isNotEmpty(userId))
+if (isEmpty(userId))
+    apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+
+/* duplicate-row guard: any existing row in ottoRequest for this pair
+ * (either direction, any status) blocks resubmission.  The form's JS
+ * already shows a "pending" panel for this case via the listExisting
+ * endpoint; this is the backstop for clients that bypass the form. */
+{
+char *dupOttoTable = cfgOption("ottoTable");
+if (isNotEmpty(dupOttoTable))
     {
-    splitPath(referer, dir, name, ext);
-    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html")))
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
-    } else {
-      if (! debug)
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+    struct sqlConnection *conn = hConnectCentral();
+    if (sqlTableExists(conn, dupOttoTable))
+        {
+        struct dyString *dq = newDyString(0);
+        sqlDyStringPrintf(dq,
+            "SELECT COUNT(*) FROM %s WHERE requestType='liftOver' AND "
+            "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))",
+            dupOttoTable, fromGenome, toGenome, toGenome, fromGenome);
+        int dupCount = sqlQuickNum(conn, dyStringCannibalize(&dq));
+        hDisconnectCentral(&conn);
+        if (dupCount > 0)
+            apiErrAbort(err409, err409Msg,
+                "A request for %s <-> %s has already been submitted "
+                "and is on record.  Duplicates are not accepted.",
+                fromGenome, toGenome);
+        }
+    else
+        hDisconnectCentral(&conn);
+    }
+}
+
+/* per-email daily rate limit, per requestType, calendar-day server time */
+char *limitStr = cfgOption("liftDailyLimit");
+int dailyLimit = isNotEmpty(limitStr) ? atoi(limitStr) : 0;
+if (dailyLimit > 0)
+    {
+    char *limitOttoTable = cfgOption("ottoTable");
+    if (isNotEmpty(limitOttoTable))
+        {
+        struct sqlConnection *conn = hConnectCentral();
+        if (sqlTableExists(conn, limitOttoTable))
+            {
+            struct dyString *q = newDyString(0);
+            sqlDyStringPrintf(q,
+                "SELECT COUNT(*) FROM %s "
+                "WHERE requestType='liftOver' AND email='%s' "
+                "AND DATE(requestTime) = CURDATE()",
+                limitOttoTable, email);
+            int todayCount = sqlQuickNum(conn, dyStringCannibalize(&q));
+            hDisconnectCentral(&conn);
+            if (todayCount >= dailyLimit)
+                apiErrAbort(err429, err429Msg,
+                    "Daily limit reached: %d liftOver requests per day. "
+                    " Please try again tomorrow.",
+                    dailyLimit);
+            }
+        else
+            hDisconnectCentral(&conn);
+        }
     }
 
 char *toAddr = cfgOption("chainFileRequestEmail");
@@ -324,8 +411,11 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
     /* Even if the mailViaPipe returned a relevant return code, and I'm not
     *    sure it would, there isn't much we can do about it from here.
-    */
+    *  Do *not* need to send email from here.  The cron job watch script
+    *     in the otto user will see the table updated and take care of
+    *     the email notifications
     (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
+    */
 
     /* some kind of response here back to the request page */
     struct jsonWrite *jw = apiStartOutput();
@@ -339,7 +429,7 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
 	    {
             struct dyString *update = newDyString(0);
             sqlDyStringPrintf(update,
-		"INSERT INTO %s (fromDb, toDb, email, comment, requestTime, doneStatus) VALUES ( '%s','%s','%s','%s',now(), 0)",
+		"INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, '')",
 		ottoTable,  fromGenome, toGenome, email, comment);
             sqlUpdate(conn, dyStringCannibalize(&update));
 	    }

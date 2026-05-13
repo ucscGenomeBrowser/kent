@@ -1245,15 +1245,36 @@ void chromGraphMethodsCt(struct track *tg);
 void factorSourceMethods(struct track *track);
 /* Set up special methods for factorSource type tracks. */
 
-void makeItemsMethods(struct track *track);
-/* Set up special methods for makeItems type tracks. */
+void myVariantsMethods(struct track *track);
+/* Set up special methods for myVariants type tracks. */
 
-void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash);
+void myVariantsJsCommand(char *command, struct track *trackList, struct hash *trackHash);
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
- * the first word of the command is "makeItems."  We expect it to be of format:
- *    makeItems <trackName> <chrom> <chromStart> <chromEnd>
- * If it is indeed of this form then we'll create a new makeItemsItem that references this
+ * the first word of the command is "myVariants."  We expect it to be of format:
+ *    myVariants <trackName> <chrom> <chromStart> <chromEnd>
+ * If it is indeed of this form then we'll create a new myVariants that references this
  * location and stick it in the named track. */
+
+boolean myVariantsTrackEnabled();
+/* Return TRUE if the "My Variants" feature is enabled in hg.conf
+ * and the current request comes from a valid user */
+
+void myVariantsShareApiHandler(char *action);
+/* Handle share API requests. Outputs JSON to stdout and calls exit(0).
+ * Called from main() before cartHtmlShell. */
+
+void notify(char *msg, char *msgId);
+/* print a message into a hidden DIV tag, and call Javascript to move the DIV
+ * under the tableHeaderForm element and un-hide it. */
+
+void myVariantsProcessShareParam();
+/* Check for myVarShare CGI param, validate the share token, and store
+ * the share reference in the cart. Must be called before track loading. */
+
+void myVariantsProcessSharedEdits();
+/* Process pending edits for shared tracks before any track loading.
+ * This ensures edits are committed to the database before both the
+ * owner's track and the shared track query for items. */
 
 void wigMafPMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

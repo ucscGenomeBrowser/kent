@@ -1,0 +1,20 @@
+# BCGSC Human BAC Re-Array "32k set" track, refs #35059 (Claude)
+Mon Apr 13 2026 (Claude, max)
+
+# Source: pre-lifted hg38 BED5 custom track provided by Pieter de Jong / BACPAC
+# Genomics at CHORI.  Clone placements were originally liftover'd from hg18 by
+# BACPAC.
+
+mkdir -p /hive/data/genomes/hg38/bed/bacRearray32k
+cd /hive/data/genomes/hg38/bed/bacRearray32k
+
+# Download the pre-lifted custom track file
+curl -s -o humanbacs.hg38.track \
+    https://bacpacresources.org/download/humanbacHg18To38/humanbacs.hg38.track
+
+# Strip the "browser" and "track" header lines, sort, convert to bigBed 5.
+grep -v '^browser\|^track' humanbacs.hg38.track \
+    | sort -k1,1 -k2,2n > bacRearray32k.sorted.bed
+
+bedToBigBed -type=bed5 bacRearray32k.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes bacRearray32k.bb

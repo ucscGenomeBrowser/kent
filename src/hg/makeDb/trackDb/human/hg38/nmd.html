@@ -8,7 +8,8 @@ predicted to escape NMD, meaning the truncated mRNA may be translated into a
 protein with unpredictable functional consequences.
 The <b>NMD Escape</b> container includes several tracks that display putative regions where
 PTC variants are assumed to escape the NMD mechanism. These are typically located
-close to the first or last splice junction site or in transcripts without any junction.
+close to the first or last splice junction, within unusually long coding exons,
+or in transcripts without any junction.
 </p>
 
 <h2>Subtracks</h2>
@@ -16,17 +17,24 @@ close to the first or last splice junction site or in transcripts without any ju
 <h3>NMD escape regions</h3>
 <p>
 Rule-based predictions of NMD escape regions, computed from transcript
-annotations. Two transcript sets are provided:
+annotations. Three transcript sets are provided:
 </p>
 <ul>
+  <li><b><a href="hgTrackUi?g=nmdEscMane">NMD escape MANE</a></b>:
+    NMD escape regions derived from the MANE Select plus MANE Plus Clinical
+    transcript set, a jointly curated NCBI/EBI annotation that defines a
+    single high-confidence transcript per protein-coding gene (Select),
+    supplemented by additional transcripts of clinical importance
+    (Plus Clinical).</li>
   <li><b><a href="hgTrackUi?g=nmdEscGencode">NMD escape Gencode</a></b>:
     NMD escape regions derived from GENCODE V49 transcripts.</li>
   <li><b><a href="hgTrackUi?g=nmdEscNcbiRefSeq">NMD escape NCBI RefSeq</a></b>:
-    NMD escape regions derived from NCBI RefSeq transcripts.</li>
+    NMD escape regions derived from NCBI RefSeq Curated transcripts
+    (NM_ and NR_ accessions only).</li>
 </ul>
 <p>
-Click either of the links to the track details here or above to show the three rules 
-that were used (50bp, intronless, 100bp).
+Click either of the links to the track details here or above to show the four rules
+that were used (50 bp, intronless, 100 bp, long exon &gt;400 nt).
 </p>
 
 <h3>NMDetective scores</h3>
@@ -55,46 +63,64 @@ The ACMG guidelines say under PVS1:
 </p>
 <p>
 <i>
-(ii) One must also be cautious when interpreting truncating variants downstream of the most 3′ truncating variant established as pathogenic in the literature. This is especially true if the predicted stop codon occurs in the last exon or in the last 50 base pairs of the penultimate exon, such that nonsense-mediated decay would not be predicted, and there is a higher likelihood of an expressed protein.
+(ii) One must also be cautious when interpreting truncating variants downstream of the most 3&#8242; truncating variant established as pathogenic in the literature. This is especially true if the predicted stop codon occurs in the last exon or in the last 50 base pairs of the penultimate exon, such that nonsense-mediated decay would not be predicted, and there is a higher likelihood of an expressed protein.
 </i>
 </p>
 
+<h2>Data Access</h2>
+<p>
+The data underlying these tracks can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.
+</p>
+
 <h2>Credits</h2>
-Thanks to Guido Neidhardt for suggesting this track at HUGO VEPTC 2025 and Andreas Lahner for feedback.
-Thanks to the Decipher Genome Browser team for introducing the idea of a track.
-Thanks to Rik Lindeboom for providing custom tracks.
+<p>
+Thanks to Guido Neidhardt for suggesting this track at HUGO VEPTC 2025 and Andreas Lahner
+for feedback. Thanks to the Decipher Genome Browser team for introducing the idea of a
+track. Thanks to Rik Lindeboom for providing custom tracks.
+</p>
 
 <h2>References</h2>
 <p>
-Nagy E, Maquat LE.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/9601030" target="_blank">
-A rule for termination-codon position within intron-containing genes: when nonsense
-affects RNA abundance</a>.
-<em>Trends Biochem Sci</em>. 1998 Jun;23(6):198-9.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9601030" target="_blank">9601030</a>
+Kurosaki T, Popp MW, Maquat LE.
+<a href="https://doi.org/10.1038/s41580-019-0126-2" target="_blank">
+Quality and quantity control of gene expression by nonsense-mediated mRNA decay</a>.
+<em>Nat Rev Mol Cell Biol</em>. 2019 Jul;20(7):406-420.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30992545" target="_blank">30992545</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6855384/" target="_blank">PMC6855384</a>
 </p>
 
 <p>
 Lindeboom RGH, Supek F, Lehner B.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">
+<a href="https://doi.org/10.1038/ng.3664" target="_blank">
 The rules and impact of nonsense-mediated mRNA decay in human cancers</a>.
-<em>Nat Genet</em>. 2016 Oct;48(10):1112-1118.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">27618451</a>
+<em>Nat Genet</em>. 2016 Oct;48(10):1112-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">27618451</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5045715/" target="_blank">PMC5045715</a>
 </p>
 
 <p>
-Lindeboom RGH, Supek F, Lehner B.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">
+Lindeboom RGH, Vermeulen M, Lehner B, Supek F.
+<a href="https://doi.org/10.1038/s41588-019-0517-5" target="_blank">
 The impact of nonsense-mediated mRNA decay on genetic disease, gene editing and cancer
 immunotherapy</a>.
 <em>Nat Genet</em>. 2019 Nov;51(11):1645-1651.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">31659324</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">31659324</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6858879/" target="_blank">PMC6858879</a>
 </p>
 
 <p>
-Kurosaki T, Popp MW, Maquat LE.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/30765700" target="_blank">
-Quality and quantity control of gene expression by nonsense-mediated mRNA decay</a>.
-<em>Nat Rev Mol Cell Biol</em>. 2019 Jul;20(7):406-420.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30765700" target="_blank">30765700</a>
+Nagy E, Maquat LE.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0968-0004(98)01208-0" target="_blank">
+A rule for termination-codon position within intron-containing genes: when nonsense
+affects RNA abundance</a>.
+<em>Trends Biochem Sci</em>. 1998 Jun;23(6):198-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9644970" target="_blank">9644970</a>
 </p>

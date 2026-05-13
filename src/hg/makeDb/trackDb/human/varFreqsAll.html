@@ -2,7 +2,7 @@
 <p>
 This track merges variants from all individual variant frequency databases into a single
 bigBed file with predicted protein consequences and cross-database filtering. It contains
-over 1.1 billion variants from 20 population databases worldwide. For a summary of
+over 1.1 billion variants from 26 source databases worldwide. For a summary of
 all available databases, see the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page.
 </p>
@@ -63,7 +63,24 @@ title or use the &quot;Configure&quot; button to access filters:
 <ul>
   <li><b>Variant Type</b>: Filter by SNV, Insertion, Deletion, or MNV.</li>
   <li><b>Consequence</b>: Filter by predicted consequence (Missense, Synonymous, Stop Gained,
-      Frameshift, Splice Donor, Splice Acceptor, Intron, Intergenic).</li>
+      Frameshift, Splice Donor, Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding,
+      Intergenic, Other). The filter uses OR logic across the comma-separated consequence
+      tokens on each variant: a variant tagged
+      <code>stop_gained,frameshift</code> is selected by either the &quot;Stop Gained&quot;
+      or the &quot;Frameshift&quot; filter. The &quot;Other&quot; bucket catches the less
+      common <a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a>
+      consequence terms emitted by <code>bcftools csq</code> that don't fit the named
+      buckets above &mdash; for example
+      <code>splice_region</code> (variant near a splice site but outside the canonical
+      donor/acceptor),
+      <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the start codon
+      or replaces the stop codon with a coding amino acid),
+      <code>stop_retained</code> (variant changes the stop codon but keeps it a stop),
+      <code>inframe_insertion</code> / <code>inframe_deletion</code> (in-frame indel
+      adding or removing whole codons), and
+      <code>coding_sequence</code> (CDS variant where the precise impact is undetermined).
+      Including &quot;Other&quot; in the filter selection guarantees that no records are
+      hidden by the consequence filter.</li>
 </ul>
 
 <p><b>How to find protein-truncating variants:</b> Set the Consequence filter to include
@@ -99,7 +116,7 @@ Several databases provide ancestry-specific allele frequencies:
       (from local ancestry inference)</li>
   <li><b>GenomeAsia</b>: Northeast Asian, Southeast Asian, South Asian</li>
   <li><b>gnomAD HGDP+1kG</b>: African, Amish, Latino, Ashkenazi Jewish, East Asian, Finnish,
-      Middle Eastern, European, Other, South Asian</li>
+      Middle Eastern, Non-Finnish European, Other, South Asian</li>
   <li><b>GREGoR</b>: Affected, Unaffected, Unknown (disease status, not ancestry)</li>
 </ul>
 
@@ -112,7 +129,7 @@ Several databases provide ancestry-specific allele frequencies:
 
 <h2>Methods</h2>
 <p>
-Variant frequency VCF files from 20 databases were stripped of their INFO fields
+Variant frequency VCF files from 26 databases were stripped of their INFO fields
 (to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic sites),
 and merged with <code>bcftools merge</code>. The merged VCF was then annotated with predicted
 protein consequences using <code>bcftools csq</code> with the
@@ -144,6 +161,26 @@ Scripts are available from
 target="_blank">Github</a>.
 </p>
 
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
+can be used; the track name is <em>varFreqsAll</em>.
+</p>
+<p>
+Because the merged callset includes data from multiple sources whose redistribution
+licenses differ, the combined bigBed is <b>not available for download</b> from our
+download server. The combined track can be reconstructed from the individual source VCFs
+using the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">conversion scripts on GitHub</a> together with the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">build documentation</a>. Where individual source data is downloadable from UCSC,
+the per-subtrack description page indicates the path on our download server.
+</p>
+
 <h2>Credits</h2>
 <p>
 This track is only possible thanks to the data from millions of volunteers around the world,
@@ -152,4 +189,27 @@ sometimes their families. Click on any of the individual tracks in the
 <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack to see the specific
 credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track
 and to Andreas Lahner, MGZ, for feedback.
+</p>
+
+<h2>References</h2>
+<p>
+For primary citations of each source dataset, see the References section on the
+<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page. The merged-track
+build itself uses the following tools:
+</p>
+<p>
+Danecek P, McCarthy SA.
+<a href="https://doi.org/10.1093/bioinformatics/btx100" target="_blank">
+BCFtools/csq: haplotype-aware variant consequences</a>.
+<em>Bioinformatics</em>. 2017 Jul 1;33(13):2037-2039.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28205675" target="_blank">28205675</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5870570/" target="_blank">PMC5870570</a>
+</p>
+<p>
+McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.
+<a href="https://doi.org/10.1186/s13059-016-0974-4" target="_blank">
+The Ensembl Variant Effect Predictor</a>.
+<em>Genome Biol</em>. 2016 Jun 6;17(1):122.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27268795" target="_blank">27268795</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4893825/" target="_blank">PMC4893825</a>
 </p>

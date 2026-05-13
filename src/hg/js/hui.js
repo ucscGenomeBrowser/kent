@@ -89,17 +89,39 @@ function matSelectViewForSubTracks(obj,view)
 
 function exposeAll()
 {
-    // Make main display dropdown show full if currently hide
-    var visDD = normed($("select.visDD")); // limit to hidden
+    // Unhide composite vis. Prefers data-last-viz (stashed by hideCompositeSaveVis()
+    // when [-] or the last subtrack were unchecked), then pack, dense, else last option.
+    var visDD = normed($("select.visDD"));
     if (visDD) {
         if ($(visDD).prop('selectedIndex') === 0) {
-            $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
+            var saved = $(visDD).attr("data-last-viz");
+            if (saved && $(visDD).children('option[value="'+saved+'"]').length)
+                $(visDD).val(saved);
+            else if ($(visDD).children('option[value="pack"]').length)
+                $(visDD).val("pack");
+            else if ($(visDD).children('option[value="dense"]').length)
+                $(visDD).val("dense");
+            else
+                $(visDD).prop('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).trigger("change");// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
 
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
         if ($(visDD).hasClass('superChild'))
             visTriggersHiddenSelect(visDD);
+    }
+}
+
+function hideCompositeSaveVis()
+{
+    // Set composite vis dropdown to hide, stashing the current value in data-last-viz
+    // so exposeAll() can restore it. We set selectedIndex directly without triggering
+    // 'change', because propagateVis re-checks all subCBs when checkedCount===0.
+    var visDD = normed($("select.visDD"));
+    if (visDD && $(visDD).prop('selectedIndex') !== 0) {
+        $(visDD).attr("data-last-viz", $(visDD).val());
+        $(visDD).prop('selectedIndex', 0);
+        $(visDD).addClass('changed');
     }
 }
 
@@ -201,6 +223,8 @@ function _matSetMatrixCheckBoxes(state)
     });
     if (state)
         exposeAll();  // Unhide composite vis?
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
 
@@ -278,6 +302,11 @@ function matSubCBsCheck(state)
         }
     } else  // state not checked so no filtering by other matCBs needed
         subCBs.each( function (i) { matSubCBcheckOne(this,state); });
+
+    if (state)
+        exposeAll();  // Unhide composite vis?
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
 
     return true;
 }
@@ -1495,7 +1524,7 @@ function advancedSearchOnChange(controlName) {
 var hlColor = '#aac6ff';
 var prevHlColor;
 var hlColorDefault = '#aac6ff';
-function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault, defaultColor = hlColorDefault, hasItemRgb = false, hasOverride = true) {
+function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault) {
 /* Create an input with a color selection field, optionally append the resulting
  * html to parentEl, if parent is not null */
     /* Some helper function for keeping track of colors */
@@ -1578,7 +1607,6 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
             let color = $(inpSpec).spectrum("get");
             $(inpText).val(color);
             saveHlColor(color, trackName);
-            if (statusSpan) statusSpan.textContent = "";
         },
     };
     $(inpSpec).spectrum(opt);
@@ -1587,30 +1615,14 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpText).on("change", function() {
         $(inpSpec).spectrum("set", $(inpText).val());
         saveHlColor($(inpText).val(), trackName);
-        if (statusSpan) statusSpan.textContent = "";
     });
-    let statusSpan = document.createElement("span");
-    statusSpan.style = "margin-left: 10px; font-style: italic";
-    colorPickerContainer.appendChild(statusSpan);
-
-    // show initial status if itemRgb is active and no color override is set
-    if (hasItemRgb && !hasOverride) {
-        statusSpan.textContent = "items are currently being colored per item";
-    }
 
     // Restore the default on Reset link click
     $(inpResetLink).on("click", function() {
-        $(inpText).val(defaultColor);
-        $(inpSpec).spectrum("set", defaultColor);
-        if (cartVar === "hlColor") {
-            saveHlColor(defaultColor, trackName);
-        } else {
-            // clear the cart variable so itemRgb and other per-item coloring is restored
-            saveHlColor("", trackName);
-            if (hasItemRgb) {
-                statusSpan.textContent = "items are currently being colored per item";
-            }
-        }
+        let hlDefault = hlColorDefault;
+        $(inpText).val(hlDefault);
+        $(inpSpec).spectrum("set", hlDefault);
+        saveHlColor(hlDefault, trackName);
     });
     $(inpSpec).spectrum("set", $(inpText).val());
 }
@@ -1633,4 +1645,149 @@ function superUiSetAllTracks(onlyVisible) {
             sel.value = 'dense';
         $(sel).trigger("change");
     }
+}
+
+// ---- myVariants share management (inline on hgTrackUi) ----
+
+function myVariantsShareApiUrl(action, params) {
+    // Build a URL for the share API
+    let url = "../cgi-bin/hgTracks?myVarShareCmd=" + action +
+        "&db=" + getDb() + "&hgsid=" + getHgsid();
+    if (params) {
+        Object.keys(params).forEach(function(key) {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== "")
+                url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+        });
+    }
+    return url;
+}
+
+function myVariantsShareLoad() {
+    let content = document.getElementById("shareListContent");
+    if (!content) return;
+    content.textContent = "Loading...";
+    fetch(myVariantsShareApiUrl("getShares", {}), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        // Build the share list with DOM APIs (textContent everywhere) so that
+        // owner-controlled fields like label/project/targetUser cannot inject
+        // markup or script.
+        while (content.firstChild) content.removeChild(content.firstChild);
+        if (data.error) {
+            content.textContent = "Error: " + data.error;
+            return;
+        }
+        if (!data.shares || data.shares.length === 0) {
+            let em = document.createElement("em");
+            em.textContent = "No active shares";
+            content.appendChild(em);
+            return;
+        }
+        let table = document.createElement("table");
+        table.style.width = "100%";
+        table.style.borderCollapse = "collapse";
+        table.style.fontSize = "0.9em";
+        let header = document.createElement("tr");
+        header.style.borderBottom = "1px solid #ccc";
+        ["Project", "Permission", "Shared With", "Label", "Created", ""].forEach(function(label) {
+            let th = document.createElement("th");
+            th.style.textAlign = "left";
+            th.textContent = label;
+            header.appendChild(th);
+        });
+        table.appendChild(header);
+        data.shares.forEach(function(s) {
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid #eee";
+            let cells = [
+                s.project === "*" ? "All" : s.project,
+                s.permission === 0 ? "View" : "Edit",
+                s.targetUser ? s.targetUser : "Anyone with link",
+                s.label ? s.label : "",
+                s.createdAt
+            ];
+            cells.forEach(function(text) {
+                let td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+            let actionTd = document.createElement("td");
+            let revokeLink = document.createElement("a");
+            revokeLink.href = "#";
+            revokeLink.className = "shareRevokeLink";
+            revokeLink.dataset.token = s.shareToken;
+            revokeLink.textContent = "Revoke";
+            revokeLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                myVariantsShareRevoke(this.dataset.token);
+            });
+            actionTd.appendChild(revokeLink);
+            tr.appendChild(actionTd);
+            table.appendChild(tr);
+        });
+        content.appendChild(table);
+    })
+    .catch(function(err) {
+        content.textContent = "Error loading shares: " + err.message;
+    });
+}
+
+function myVariantsShareCreate() {
+    let project = document.getElementById("shareProject").value;
+    let permission = document.querySelector('input[name="sharePerm"]:checked').value;
+    let targetUser = document.getElementById("shareTargetUser").value.trim();
+    let label = document.getElementById("shareLabel").value.trim();
+
+    let params = { project: project, permission: permission };
+    if (targetUser) params.targetUser = targetUser;
+    if (label) params.label = label;
+
+    fetch(myVariantsShareApiUrl("createShare", params), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error creating share: " + data.error);
+            return;
+        }
+        let shareUrl = window.location.protocol + "//" + window.location.host +
+            "/cgi-bin/hgTracks?myVarShare=" + data.token + "&db=" + getDb();
+        document.getElementById("shareUrlField").value = shareUrl;
+        document.getElementById("shareResult").style.display = "block";
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error creating share: " + err.message);
+    });
+}
+
+function myVariantsShareRevoke(token) {
+    fetch(myVariantsShareApiUrl("revokeShare", { shareToken: token }),
+          { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error revoking share: " + data.error);
+            return;
+        }
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error revoking share: " + err.message);
+    });
+}
+
+function myVariantsShareInit() {
+    // Wire up the create/copy buttons and load existing shares
+    let createBtn = document.getElementById("shareCreateBtn");
+    if (!createBtn) return;
+    createBtn.addEventListener("click", myVariantsShareCreate);
+    let copyBtn = document.getElementById("shareCopyBtn");
+    if (copyBtn) {
+        copyBtn.addEventListener("click", function() {
+            let urlField = document.getElementById("shareUrlField");
+            urlField.select();
+            navigator.clipboard.writeText(urlField.value);
+        });
+    }
+    myVariantsShareLoad();
 }

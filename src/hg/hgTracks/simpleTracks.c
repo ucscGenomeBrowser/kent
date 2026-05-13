@@ -3085,8 +3085,8 @@ for (ref = exonList; TRUE; )
                                     if (codonHgvsIx >= 0)
                                         dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %c<br><b>Exon: </b>%s %d of %d<br>%s",
-                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %c&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
+                                                strandChar, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
@@ -3110,8 +3110,8 @@ for (ref = exonList; TRUE; )
 
 
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
-                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d<br>%s",
-                        existingText, posNote, strandChar, exonOrIntron, exonIntronText, 
+                            "<b>Strand:</b> %c&nbsp;&nbsp;&nbsp;&nbsp;<b>Length:</b> %dbp<br><b>%s:</b> %s %d of %d<br>%s",
+                        existingText, posNote, strandChar, e - s, exonOrIntron, exonIntronText,
                         exonIntronNumber, numExonIntrons, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
@@ -12027,6 +12027,7 @@ hvGfxSetClip(hvgWhich, clipX, clipY, clipWidth, clipHeight);
 void pgSnpDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the personal genome SNPs at a given position. */
 {
+color = colorFromCart(tg, color);
 struct pgSnp *myItem = item;
 boolean cmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 char *display = "freq"; //cartVar?
@@ -12820,7 +12821,7 @@ if (geneClasses)
    gClassesClone = cloneString(geneClasses);
    classCt = chopLine(gClassesClone, classes);
    }
-if (hTableExists(database, classTable))
+if (hTableExists(db, classTable))
     {
     sqlSafef(query, sizeof(query),
           "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);

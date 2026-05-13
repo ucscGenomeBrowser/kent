@@ -3,7 +3,8 @@ shortLabel PrimateAI-3D
 longLabel PrimateAI-3D Pathogenicity Predictions for Missense Variants
 type bigBed 9 +
 parent predictionScoresSuper
-bigDataUrl /gbdb/$D/primateAi/primateAi.bb
+pennantIcon New red ../goldenPath/newsarch.html#050126 "Released May 1, 2026"
+bigDataUrl /gbdb/$D/_primateAi/primateAi.bb
 itemRgb on
 visibility dense
 tableBrowser off
@@ -12,4 +13,15 @@ scoreFilterLimits 0:1000
 mouseOverField _mouseOver
 filterValues.prediction benign|Benign,pathogenic|Pathogenic
 filterLabel.prediction Prediction
-urls gene="hgTrackUi?g=knownGene&hgt_tSearch=$S" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+filter.percentile 0
+filterLimits.percentile 0:1
+filterByRange.percentile on
+filterLabel.percentile Percentile score
+filter.scorePAI3D 0
+filterLimits.scorePAI3D 0:1
+filterByRange.scorePAI3D on
+filterLabel.scorePAI3D PrimateAI-3D raw score (clinical threshold 0.821)
+labelFields name,aaChange
+defaultLabelFields name
+maxWindowToDraw 2000000
+urls gene="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"

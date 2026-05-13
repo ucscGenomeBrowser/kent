@@ -1,0 +1,178 @@
+# quickLiftBench cases.yaml
+#
+# Each case names two (or more) variants, where each variant is a saved-session
+# reference of the form `user/sessionName`. Both variants render on the same
+# server (set `server:` per case). The runner does (warmup + iterations)
+# requests per variant and writes per-iteration rows to results.tsv plus a
+# per-case summary with median/p90 and pairwise ratios.
+#
+# Each session renders at the position it was saved with -- the runner does
+# NOT override `position`. A native session and its quickLifted counterpart
+# live on different assemblies, so identical chr:start-end ranges would not
+# be biologically equivalent. To benchmark multiple regions, save additional
+# session pairs and add them as separate cases.
+#
+# The headline metric is `total_ms`, taken from the "Overall total time" timing
+# span emitted by hgTracks. `load_ms_sum` and `draw_ms_sum` are summed across
+# all visible tracks from the printTrackTiming() table; use them when you want
+# to attribute time to per-track work vs. CGI startup / cart processing.
+
+defaults:
+  iterations: 25
+  warmup: 1
+  timeout: 60
+  servers:
+    hgwdev: https://hgwdev.gi.ucsc.edu
+    sandbox: https://hgwdev-braney.gi.ucsc.edu
+    beta: https://hgwbeta.soe.ucsc.edu
+    rr: https://genome.ucsc.edu
+
+cases:
+
+  # -------- Smoke test: one session, no comparison --------
+  - id: smoke_session
+    description: |
+      Smoke: load one saved session on hgwdev. Confirms the runner loads
+      sessions and extracts Overall total time + per-track timings from a
+      live response.
+    server: hgwdev
+    variants:
+      base: Braney/hg38
+
+  # -------- Bench pair 1: native vs quickLifted (hgwdev) --------
+  - id: bench1_hgwdev
+    description: |
+      First benchmark pair on hgwdev: native vs quickLifted view of an
+      equivalent track set. Each session renders at its own saved region.
+    server: hgwdev
+    variants:
+      native: Brianraney/benchQuickNative1
+      lifted: Brianraney/benchQuickList1
+    compare:
+      - [native, lifted]
+
+  # -------- Bench pair 1: same sessions on the public RR --------
+  - id: bench1_rr
+    description: |
+      Same session pair as bench1_hgwdev, run against genome.ucsc.edu.
+    server: rr
+    variants:
+      native: Brianraney/benchQuickNative1
+      lifted: Brianraney/benchQuickList1
+    compare:
+      - [native, lifted]
+
+  # -------- Mode B: native on source assembly vs lifted to a different one --------
+  # Same hub, but the native variant views the source bigBed/bigWig on its
+  # own assembly (hg38) while the lifted variant views the same data quickLifted
+  # to a different assembly (hs1). Different db per variant. Positions chosen
+  # so the two windows cover approximately the same biological region.
+  - id: mode_b_bb
+    description: |
+      Mode B bigBed: hg38-native render (modeB_bb_native) vs the same
+      hg38-coord bigBed quickLifted to hs1 (modeC_bb_lifted). Measures
+      the cost of remap + cross-assembly rendering relative to a clean
+      native render.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hg38.txt
+        db: hg38
+        position: chr22:15000000-50000000
+        tracks: {modeB_bb_native: pack, modeB_bw_native: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: pack, modeC_bw_native: hide, modeC_bw_lifted: hide}
+    compare:
+      - [native, lifted]
+
+  - id: mode_b_bw
+    description: |
+      Mode B bigWig: hg38-native render (modeB_bw_native) vs the same
+      hg38-coord bigWig quickLifted to hs1 (modeC_bw_lifted).
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hg38.txt
+        db: hg38
+        position: chr22:15000000-50000000
+        tracks: {modeB_bb_native: hide, modeB_bw_native: full}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: full}
+    compare:
+      - [native, lifted]
+
+  # -------- Mode C: lift on/off, same hub on hs1 (refs #37445) --------
+  # Reference hub at utils/qa/quickLiftBench/testHub/ (built by buildTestHub.sh).
+  # Both stanzas render the same conceptual features at the same hs1 coords;
+  # the only difference is whether the lifted variant goes through the
+  # quickLift chain-remap path. This isolates pure quickLift overhead from
+  # track-content differences -- the cleanest measurement for the paper.
+  - id: mode_c_hs1_bb
+    description: |
+      Mode C bigBed: same hub, same position on hs1; native (hs1-coord
+      bigBed) vs lifted (hg38-coord bigBed + quickLiftUrl chain). Isolates
+      the chain-remap overhead from track-content differences.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: pack, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: pack, modeC_bw_native: hide, modeC_bw_lifted: hide}
+    compare:
+      - [native, lifted]
+
+  - id: mode_c_hs1_bw
+    description: |
+      Mode C bigWig: same hub + position; native (hs1-coord bigWig) vs
+      lifted (hg38-coord bigWig + quickLiftUrl chain). Same isolation as
+      mode_c_hs1_bb but for the bigWig track type.
+    server: hgwdev
+    variants:
+      native:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: full, modeC_bw_lifted: hide}
+      lifted:
+        hubUrl: https://hgwdev.gi.ucsc.edu/~braney/quickLiftBench/testHub/hub_hs1.txt
+        db: hs1
+        position: chr22:15000000-50000000
+        tracks: {modeC_bb_native: hide, modeC_bb_lifted: hide, modeC_bw_native: hide, modeC_bw_lifted: full}
+    compare:
+      - [native, lifted]
+
+  # -------- Regression: parallel-fetch tripwire (refs #37488, #37470) --------
+  # phase_asserts make this case fail-fast if the parallel pool stops
+  # firing for quickLift tracks (e.g. a regression in isTrackForParallelLoad
+  # or customFactoryParallelLoad).
+  - id: regress_quickLift_parallel
+    description: |
+      Regression tripwire: a quickLifted multi-track session must
+      spawn the parallel-fetch worker pool. Asserts the
+      "Waiting for parallel..." span is emitted in every iteration.
+    server: hgwdev
+    variants:
+      base: Brianraney/benchQuickPara
+    phase_asserts:
+      # Required + min_median together: catch a regression that drops the
+      # quickLift tracks back to serial. With the fix in place the median
+      # parallel wait is several seconds; without it (only non-quickLift
+      # tracks parallelize) the wait is ~50 ms, so 500 ms cleanly separates
+      # the working and broken cases.
+      - variant: base
+        phase: 'Waiting for parallel \(\d+ threads for \d+ tracks\) remote data fetch'
+        required: true
+        min_median_ms: 500
+        max_median_ms: 15000

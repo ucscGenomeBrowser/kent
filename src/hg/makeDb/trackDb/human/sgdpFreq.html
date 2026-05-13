@@ -23,7 +23,7 @@ The hg38 data was lifted from hg19.
 The data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a> can be used; the
 track name is <em>sgdpFreq</em>.
 For bulk download, the VCF file can be obtained from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
@@ -39,14 +39,17 @@ target="_blank">https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_va
 High-coverage whole-genome sequencing of 300 individuals (279 publicly available) from 142
 diverse populations was performed on Illumina instruments using PCR-free library preparation at
 an average depth of 43x. Reads were aligned to the hs37d5 reference (GRCh37 with decoy
-sequences) using BWA-MEM 0.7.12. SNP and indel genotyping was performed using GATK
-HaplotypeCaller with joint genotyping across all samples. An independent indel callset was
-generated using FermiKit for improved sensitivity at complex variants. The final dataset
-contains 34.4 million SNPs and 2.1 million short indels.
+sequences) using BWA-MEM 0.7.12. SNP genotyping was performed using GATK
+HaplotypeCaller with joint genotyping across all samples. (The Mallick 2016 release also
+includes an independent indel callset generated with FermiKit; indels are not carried in
+this track.)
 </p>
 <p>
-The VCFs were merged with bcftools and lifted to hg38 with CrossMap. At UCSC, genotypes were
-stripped to produce a sites-only frequency VCF retaining the existing AC, AF, and AN INFO fields.
+The per-sample VCFs were merged with bcftools and lifted to hg38 with CrossMap. At UCSC,
+genotypes were stripped to produce a sites-only frequency VCF retaining the AC, AF, and AN
+INFO fields. The deployed file contains 44,756,737 SNV records (601,775 of which represent
+multiallelic sites split into separate biallelic records). Indels from the source callset
+are not included.
 We provide documentation that indicates how all source files were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
 Python scripts are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>

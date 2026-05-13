@@ -40,6 +40,7 @@
 #include "botDelay.h"
 #include "curlWrap.h"
 #include "hubSpaceKeys.h"
+#include "myVariantsShare.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -681,16 +682,16 @@ if (row != NULL)
     {
     boolean shared = atoi(row[0]);
     if (shared ||
-	(userName && sameString(sessionOwner, userName)))
-	{
-	char *sessionVar = cartSessionVarName();
-	char *hgsid = cartSessionId(cart);
-    char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
-    sessionTableString = cloneString(sessionTableString);
-    char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
-    pubSessionsTableString = cloneString(pubSessionsTableString);
-	struct sqlConnection *conn2 = hConnectCentral();
-	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
+            (userName && sameString(sessionOwner, userName)))
+        {
+        char *sessionVar = cartSessionVarName();
+        char *hgsid = cartSessionId(cart);
+        char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+        sessionTableString = cloneString(sessionTableString);
+        char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+        pubSessionsTableString = cloneString(pubSessionsTableString);
+        struct sqlConnection *conn2 = hConnectCentral();
+        sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
         if (!merge)
             {
             cartRemoveLike(cart, "*");
@@ -698,20 +699,30 @@ if (row != NULL)
             }
         else
             cartParseOverHashExt(cart, row[1], TRUE);
-	cartSetString(cart, sessionVar, hgsid);
-	if (sessionTableString != NULL)
-	    cartSetString(cart, hgSessionTableState, sessionTableString);
-	if (pubSessionsTableString != NULL)
-	    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
-	if (oldVars)
-	    hashEmpty(oldVars);
-	/* Overload settings explicitly passed in via CGI (except for the
-	 * command that sent us here): */
-	loadCgiOverHash(cart, oldVars);
-	if (isNotEmpty(actionVar))
-	    cartRemove(cart, actionVar);
-	hDisconnectCentral(&conn2);
-	}
+        cartSetString(cart, sessionVar, hgsid);
+        if (sessionTableString != NULL)
+            cartSetString(cart, hgSessionTableState, sessionTableString);
+        if (pubSessionsTableString != NULL)
+            cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+        if (oldVars)
+            hashEmpty(oldVars);
+        /* Overload settings explicitly passed in via CGI (except for the
+         * command that sent us here): */
+        loadCgiOverHash(cart, oldVars);
+        if (isNotEmpty(actionVar))
+            cartRemove(cart, actionVar);
+        hDisconnectCentral(&conn2);
+
+        /* When loading another user's session, strip accepted-share cart vars
+         * so we don't carry shares from the session owner into the current user's
+         * cart. Shares are per-user; they should be re-accepted via share link. */
+        char *userName = wikiLinkUserName();
+        if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+            && (userName == NULL || !sameString(sessionOwner, userName)))
+            {
+            cartRemoveLike(cart, MYVAR_SHARED_CART_PREFIX "*");
+            }
+        }
     else
 	errAbort("Sharing has not been enabled for user %s's session %s.",
 		 sessionOwner, sessionName);
@@ -1476,9 +1487,9 @@ else
         }
     else if (!hDbIsActive(db))
 	errAbort("Can not find database '%s'.<br>"
-                "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s in "
-                "the list of NCBI/INSDC assemblies</a>, then click 'request' when you have found the right assembly "
-                "and enter your email address. We will then make a genome browser and get back to you within a few days",
+                "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
+                "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
+                "and enter your email address. We will then make a genome browser and get back to you within a few days.",
                 db, db, db);
     }
 }

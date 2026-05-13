@@ -98,13 +98,13 @@ _EOF_
 
 
 if ( -s $maskedBbi ) {
-  my $maskedCount = `bigBedInfo $maskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
+  my $maskedCount = `/cluster/bin/x86_64/bigBedInfo $maskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
   chomp $maskedCount;
   printf "<li>masked sequence: %s</li>\n", $maskedCount;
 }
 
 if ( -s $unmaskedBbi ) {
-  my $unmaskedCount = `bigBedInfo $unmaskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
+  my $unmaskedCount = `/cluster/bin/x86_64/bigBedInfo $unmaskedBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/item count/; s/basesCovered/bases covered/;'`;
   chomp $unmaskedCount;
   printf "<li>unmasked sequence: %s</li>\n", $unmaskedCount;
 }

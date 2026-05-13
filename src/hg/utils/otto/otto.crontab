@@ -40,7 +40,7 @@ PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=otto-group@ucsc.edu
 
 #md5sum checker script - makes sure otto scripts in hive match git tree
-0 7 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
+0 1 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
 
 # PanelApp
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
@@ -86,6 +86,9 @@ MAILTO=otto-group@ucsc.edu
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
+# InSiGHT VCEP ClinVar curated variants weekly update
+08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
+
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
@@ -109,6 +112,10 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
+
+# liftOver request watch - sends email to configured address in hg.conf
+#   e.g.: chainFileRequestEmail=... - running every 7 minutes
+1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/ottoRequest.py
 
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity

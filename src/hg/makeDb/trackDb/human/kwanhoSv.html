@@ -1,0 +1,140 @@
+<h2>Description</h2>
+
+<p style="background-color:#fff3cd; border-left:4px solid #856404; padding:10px 14px; margin-bottom:18px;">
+<b>Preliminary data.</b> This callset is a pre-publication release that will be
+updated before the final publication. Before using these data for analysis or
+in a paper, please contact the authors at the Aligning Science Across
+Parkinson's (ASAP) consortium / the Kim lab to check for the latest version
+and for guidance on appropriate use.
+</p>
+
+<p>
+This track shows structural variants (SVs) identified by PacBio HiFi long-read
+whole-genome sequencing of 100 post-mortem human brain samples, split across
+three diagnostic groups: Parkinson's disease (PD), incidental Lewy body
+disease (ILBD) and healthy controls (HC). The high-confidence catalog
+contains 74,552 SVs: 34,056 insertions, 29,545 deletions, 9,707 duplications
+and 1,244 inversions.
+</p>
+<p>
+The dataset accompanies Kim et al. (2026), which combines the long-read SV
+catalog with single-nucleus RNA-seq from the same donors to identify SVs
+associated with cell-type-specific gene expression, including variants
+near genes nominated as causal targets of PD GWAS loci.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions,
+duplications and inversions span the affected reference interval. Filters are
+available for SV type, SV length, variant quality and allele frequencies in
+each of the three cohorts (PD, HC, ILBD), as well as the case-minus-control
+carrier-rate differential.
+</p>
+<p>
+The detail page shows, for each variant:
+<ul>
+<li><b>Cohort support vector</b>: three-bit flag (PD/ILBD/HC) indicating
+which cohorts include at least one carrier.</li>
+<li><b>Carrier rates</b>: fraction of cases (PD+ILBD) and controls (HC)
+carrying the variant, and the case-minus-control differential.</li>
+<li><b>Per-cohort AF / AC / AN</b>: alternate allele frequency, alternate
+allele count, and total called alleles in PD, HC and ILBD samples.</li>
+<li><b>Carrier lists</b>: sample IDs carrying the variant in each cohort.</li>
+<li><b>Nearby SNP context</b>: number of SNPs nearby and the number in
+linkage disequilibrium with the SV (from the paper's LD analyses).</li>
+<li><b>Read support</b>: average mapping quality and average supporting
+reads per sample at the variant site.</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+Kim et al. 2026 performed PacBio HiFi long-read whole-genome sequencing on
+100 post-mortem cerebellum samples from the Arizona Study of Aging and
+Neurodegenerative Disorders / Brain and Body Donation Program cohort
+(35 Parkinson's disease, 31 incidental Lewy body disease, 34 healthy
+controls). gDNA was isolated with either the Qiagen DNeasy or PacBio
+Nanobind PanDNA kit, sheared on a Megaruptor 3 to 10-23.5 kb, built into
+SMRTbell libraries (Prep Kit 3.0) and sequenced on PacBio Revio (25M
+SMRT cells, 2-h pre-extension, 24-h movies) to ~17x per-sample coverage.
+Reads were processed with the Broad long-read WDL pipelines (CCS v6.2.0,
+pbmm2 v1.4.0 aligned to GRCh38, SAMtools v1.13 merge/sort) and an
+ensemble of three callers was run per sample: Sniffles2 v2.0.6,
+<a href="https://github.com/PacificBiosciences/pbsv" target="_blank">
+PBSV</a> v2.9.0 (with GRCh38 tandem-repeat context) and Cue2 v2.0.0
+(deep-learning image-based long-read caller). Per-caller VCFs were
+FILTER-PASS / &ge;40 bp filtered, split by SV type with BCFtools, and
+merged by type across the 100 individuals and across the three callers
+with <a href="https://github.com/fritzsedlazeck/SURVIVOR" target="_blank">
+SURVIVOR</a> v1.0.7 (1 kb distance, strand-match, min 50 bp). Centromere,
+reference-gap, segmental-duplication and sex-chromosome SVs were excluded.
+The high-confidence catalog contains 74,552 SVs (34,056 insertions,
+29,545 deletions, 9,707 duplications and 1,244 inversions) released in
+Supplementary Table 13 (<tt>media-13.txt</tt>), with per-cohort AF / AC /
+AN, Hardy-Weinberg statistics and case/control carrier differentials.
+</p>
+<p>
+The supplementary table <tt>media-13.txt</tt> was downloaded from the Kim
+et al. 2026 bioRxiv preprint (<a href="https://doi.org/10.64898/2026.03.20.713192" target="_blank">
+doi:10.64898/2026.03.20.713192</a>).
+</p>
+<p>
+The step-by-step build commands (download, TSV parsing, bigBed build) are
+recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>kwanhoSv</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>kwanho.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/kwanho.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The full supplementary data for the paper (including <tt>media-13.txt</tt>)
+is available from the Kim et al. 2026 preprint.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Kim, Levin and colleagues at the Aligning Science Across
+Parkinson's (ASAP) Collaborative Research Network, the Broad Institute,
+Yale School of Medicine, Banner Sun Health Research Institute and their
+collaborators for releasing this dataset.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Kim K, Lin Z, Simmons SK, Parker J, Kearney M, Liao Z, Haywood N, Zhang J, Cline MP, Tuncali I
+<em>et al</em>.
+<a href="https://doi.org/10.64898/2026.03.20.713192" target="_blank">
+Integrating Long-Read Structural Variant Analysis with single-nucleus RNA-seq to Elucidate Gene
+Expression Effects in Disease</a>.
+<em>bioRxiv</em>. 2026 Mar 23;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41929179" target="_blank">41929179</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13041997/" target="_blank">PMC13041997</a>
+</p>
+

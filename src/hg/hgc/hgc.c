@@ -2964,10 +2964,12 @@ switch (cdsStatus)
 void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
-char *rootTable = tdb->table;
 char query[512];
 char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 char *db = (liftDb == NULL) ? database : liftDb;
+// tdb->table carries the hub_NNN_ prefix for quickLifted tracks; the
+// actual SQL table lives in the source assembly under the bare name.
+char *rootTable = (liftDb == NULL) ? tdb->table : trackHubSkipHubName(tdb->table);
 struct sqlConnection *conn = hAllocConn(db);
 struct genePred *gpList = NULL, *gp = NULL;
 char table[HDB_MAX_TABLE_STRING];
@@ -2979,7 +2981,25 @@ char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 if (!hFindSplitTable(db, seqName, rootTable, table, sizeof table, NULL))
     errAbort("showGenePos track %s not found", rootTable);
 sqlSafef(query, sizeof(query), "name = \"%s\"", name);
-gpList = genePredReaderLoadQuery(conn, table, query);
+if (liftDb != NULL)
+    {
+    // Fetch via quickLiftSql so we get both the items and the set of
+    // swapped chains that map them back to the destination assembly, then
+    // lift the genePreds with calcLiftOverGenePreds.  seqName/winStart/
+    // winEnd are destination coords; quickLiftSql picks up the chains
+    // that overlap that window on the destination side.
+    char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+    struct hash *chainHash = newHash(8);
+    char extraWhere[512];
+    sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", name);
+    extern struct genePred *genePredExtLoad15(char **row);
+    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, rootTable,
+        seqName, winStart, winEnd, NULL, extraWhere,
+        (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
+    }
+else
+    gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
@@ -3148,6 +3168,11 @@ void geneShowPosAndLinksPal(char *geneName, char *pepName, struct trackDb *tdb,
  * it's the old table name, but will check gbSeq first. */
 {
 char *geneTable = tdb->table;
+// For quickLifted tracks, SQL tables (gbSeq, yalePseudoAssoc, …) live in
+// the source assembly; use that for table existence / hGenBank checks so
+// we don't hit "Unknown database hub_NNN_<db>".
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
 boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
@@ -3156,9 +3181,9 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
     {
     char *yaleTable = trackDbSetting(tdb, "yalePseudoAssoc");
 
-    if ((yaleTable != NULL) && (hTableExists(database, yaleTable)))
+    if ((yaleTable != NULL) && (hTableExists(srcDb, yaleTable)))
         {
-        struct sqlConnection *conn = hAllocConn(database);
+        struct sqlConnection *conn = hAllocConn(srcDb);
         char query[512];
         sqlSafef(query, sizeof(query),
             "select * from %s where transcript = '%s'", yaleTable, geneName);
@@ -3181,7 +3206,7 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
+if ((pepTable != NULL) && hGenBankHaveSeq(srcDb, pepName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
@@ -3238,9 +3263,12 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (palInfo)
+// Skip the CDS FASTA alignment link for quickLifted tracks: hgPal would try
+// to open the destination's hub-virtual db, and palInfo coords are in
+// destination space while the multiZ alignment lives in source coords.
+if (palInfo && liftDb == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConn(srcDb);
     addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left,
         palInfo->right, palInfo->rnaName);
     hFreeConn(&conn);
@@ -3679,7 +3707,8 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-if (!isCustomTrack(tdb->track))
+if (!isCustomTrack(tdb->track) &&
+    !(tdb->type && sameString(tdb->type, "myVariants")))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
@@ -4984,7 +5013,7 @@ if (liftDb)
         liftDb = CUSTOM_TRASH;
         tdb->table = trackDbSetting(tdb, "dbTableName");
         }
-    if (!trackHubDatabase(liftDb))
+    if (!trackHubDatabase(liftDb) && !isGenArk(liftDb))
         conn = hAllocConnTrack(liftDb, tdb);
     }
 else if (!trackHubDatabase(database))
@@ -6620,10 +6649,12 @@ if (row != NULL)
     }
 }
 
-void printGeneCards(char *geneName)
-/* Print out a link to GeneCards (Human only). */
+void printGeneCards(char *db, char *geneName)
+/* Print out a link to GeneCards (Human only).
+ * Caller passes the assembly db so quickLifted callers can pass the source
+ * (quickLiftDb) rather than the destination hub_NNN_<db>. */
 {
-if (startsWith("hg", database) && isNotEmpty(geneName))
+if (startsWith("hg", db) && isNotEmpty(geneName))
     {
     printf("<B>GeneCards:</B> "
 	   "<A HREF = \"http://www.genecards.org/cgi-bin/cardsearch.pl?"
@@ -7008,7 +7039,11 @@ struct psl *psl, *pslList = NULL;
 boolean hasBin;
 char splitTable[HDB_MAX_TABLE_STRING];
 char query[1024];
-if (!hFindSplitTable(database, seqName, table, splitTable, sizeof splitTable, &hasBin))
+// Use the conn's db rather than the global `database`; for quickLifted
+// tracks the conn is on the source assembly while `database` is the
+// destination (possibly hub_NNN_<db>).
+char *connDb = sqlGetDatabase(conn);
+if (!hFindSplitTable(connDb, seqName, table, splitTable, sizeof splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
 if (isNotEmpty(tName))
     sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'",
@@ -9626,7 +9661,7 @@ if (liftDb != NULL)
         table = trackDbSetting(tdb, "dbTableName");
         }
     else
-        table = tdb->table;
+        table = trackHubSkipHubName(tdb->table);
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
 
@@ -10229,9 +10264,19 @@ else
         sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
         char *db = database;
         char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-        if (liftDb != NULL) 
+        // When quickLifted, the genePred table lives in the source assembly,
+        // and the click's seqName/winStart/winEnd are in destination coords;
+        // lift them back to source coords so hgSeqItemsInRange finds rows.
+        char *querySeq = seqName;
+        int queryStart = winStart, queryEnd = winEnd;
+        if (liftDb != NULL)
+            {
             db = liftDb;
-        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), seqName, winStart, winEnd, constraints);
+            quickLiftLiftPos(trackHubSkipHubName(database), liftDb,
+                             seqName, winStart, winEnd,
+                             &querySeq, &queryStart, &queryEnd);
+            }
+        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), querySeq, queryStart, queryEnd, constraints);
         }
     }
 if (itemCount == 0)
@@ -11498,6 +11543,9 @@ char *strand={"+"};
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
+char *refChrom  = chrom;
+int refStart  = start;
+int refEnd = end;
 
 if (liftDb) // we need to get the chr start stop in liftDb coordinates
     {
@@ -11558,7 +11606,7 @@ if (sqlFieldIndex(conn, "decipherSnvsRaw", "phenotypes") >= 0)
         if (isNotEmpty(row[3]))
             {
             if (liftDb)
-                printf("<b>Transcript:</b>%s\n<br>\n", row[3]);
+                printf("<b>Transcript:</b> %s\n<br>\n", row[3]);
             else
                 printf("<b>Transcript:</b> <a href='../cgi-bin/hgTracks?%s&position=%s'>%s</a>\n<br>\n",
                     hgsidString, row[3], row[3]);
@@ -11618,7 +11666,10 @@ printf("<A HREF=\"%s%s\" target=_blank>",
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
-printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
+if (liftDb)
+    printPosOnChrom(refChrom, refStart, refEnd, strand, TRUE, itemName);
+else
+    printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 hFreeConn(&conn);
 }
@@ -12189,7 +12240,7 @@ if (url != NULL && url[0] != 0)
             {
             while ((row = sqlNextRow(sr)) != NULL)
                 {
-                prGRShortRefGene(row[0]);
+                prGRShortRefGene(conn, row[0]);
                 }
             }
         sqlFreeResult(&sr);
@@ -13047,7 +13098,9 @@ if (!sqlTableExists(conn, gbCdnaInfoTable))
     return 0;
     }
 
-if (hHasField(database, gbCdnaInfoTable, "version"))
+// Use the conn's db so we don't abort when called from quickLifted paths
+// where `database` is the destination (possibly hub_NNN_<db>).
+if (hHasField(sqlGetDatabase(conn), gbCdnaInfoTable, "version"))
     {
     char query[128];
     sqlSafef(query, sizeof(query),
@@ -13086,13 +13139,18 @@ void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
 struct sqlResult *sr;
 char **row;
 char query[256];
+// For quickLifted tracks the conn is on the source assembly, while the
+// `database` global is the destination (possibly hub_NNN_<db>, which is
+// not a real MySQL db).  Use the conn's db for hTableExists/startsWith
+// checks so we don't abort on "Unknown database".
+char *srcDb = sqlGetDatabase(conn);
 int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
 char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 if (isXeno)
     {
-    if (startsWith("panTro", database))
+    if (startsWith("panTro", srcDb))
         printf("<H2>Other RefSeq Gene %s</H2>\n", rl->name);
     else
         printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
@@ -13173,7 +13231,7 @@ if (rl->locusLinkId != 0)
     }
 if (!startsWith("Worm", organism))
     {
-    if (startsWith("dm", database))
+    if (startsWith("dm", srcDb))
 	{
         /* PubMed never seems to have BDGP gene IDs... so if that's all
          * that's given for a name/product, ignore name / truncate product. */
@@ -13199,9 +13257,9 @@ if (!startsWith("Worm", organism))
 	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     printf("\n");
-    printGeneCards(rl->name);
+    printGeneCards(srcDb, rl->name);
     }
-if (hTableExists(database, "jaxOrtholog"))
+if (hTableExists(srcDb, "jaxOrtholog"))
     {
     struct jaxOrtholog jo;
     char * sqlRlName = rl->name;
@@ -13222,7 +13280,7 @@ if (hTableExists(database, "jaxOrtholog"))
 	}
     sqlFreeResult(&sr);
     }
-if (startsWith("hg", database))
+if (startsWith("hg", srcDb))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
@@ -13230,7 +13288,7 @@ if (startsWith("hg", database))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-prGRShortRefGene(rl->name);
+prGRShortRefGene(conn, rl->name);
 
 }
 
@@ -13410,7 +13468,7 @@ char **row;
 char query[256];
 char *sqlRnaName = rnaName;
 char *summary = NULL;
-boolean isXeno = sameString(tdb->table, "xenoRefGene");
+boolean isXeno = sameString(trackHubSkipHubName(tdb->table), "xenoRefGene");
 struct refLink *rl;
 
 /* Make sure to escape single quotes for DB parseability */
@@ -13465,7 +13523,12 @@ return rl;
 void doNcbiRefSeq(struct trackDb *tdb, char *itemName)
 /* Process click on a NCBI RefSeq gene. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+// When the track is quickLifted, ncbiRefSeqLink and related tables live in
+// the source assembly, not in the destination the user is viewing.
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
+char *bareTrack = trackHubSkipHubName(tdb->track);
+struct sqlConnection *conn = hAllocConn(srcDb);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -13570,7 +13633,7 @@ if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
 	    {
 	    if (!dbToLabel)
 	        errAbort("can not find trackDb dbPrefixLabels to correspond with dbPrefixUrls\n");
-	    char *databasePrefix = cloneString(database);
+	    char *databasePrefix = cloneString(srcDb);
 	    while (strlen(databasePrefix) && isdigit(lastChar(databasePrefix)))
 	        trimLastChar(databasePrefix);
 	    struct hashEl *hel = hashLookup(dbToUrl, databasePrefix);
@@ -13581,8 +13644,8 @@ if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
 		    errAbort("missing trackDb dbPrefixLabels for database prefix: '%s'\n", databasePrefix);
 		char *url = (char *)hel->val;
 		char *labelStr = (char *)label->val;
-		char *idUrl = replaceInUrl(url, nrl->externalId, cart, database,
-		    nrl->externalId, winStart, winEnd, tdb->track, TRUE, NULL);
+		char *idUrl = replaceInUrl(url, nrl->externalId, cart, srcDb,
+		    nrl->externalId, winStart, winEnd, bareTrack, TRUE, NULL);
 		printf("<b>%s:</b> ", labelStr);
 		printf("<a href='%s' target='_blank'>%s</a><br>\n",
 		    idUrl, nrl->externalId);
@@ -13601,8 +13664,8 @@ if (differentWord(nrl->locusLinkId, ""))
 
 if (differentWord(nrl->name,""))
     {
-    printGeneCards(nrl->name);
-    if (startsWith("hg", database))
+    printGeneCards(srcDb, nrl->name);
+    if (startsWith("hg", srcDb))
         {
         printf("<b>AceView:</b> ");
         printf("<a href = 'https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s' target=_blank>",
@@ -13618,36 +13681,41 @@ if (differentWord("", nrl->description))
     }
 
 static boolean hasSequence = TRUE;
-struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
-// if the itemName isn't found, it might be found as the nrl->mrnaAcc
-if (! pslList)
-    pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
-if (pslList)
+// Alignments live in the source assembly's coordinates and the table's
+// htcCdnaAli links wouldn't line up with the destination window; skip
+// the block entirely for quickLifted tracks.
+if (liftDb == NULL)
     {
-    char query[256];
-    /* verify itemName has RNA sequence to work with */
-    sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
-    char * result= sqlQuickString(conn, query);
-    if (isEmpty(result))
+    struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
+    // if the itemName isn't found, it might be found as the nrl->mrnaAcc
+    if (! pslList)
+        pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
+    if (pslList)
         {
-        printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
-        hasSequence = FALSE;
+        char query[256];
+        /* verify itemName has RNA sequence to work with */
+        sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
+        char * result= sqlQuickString(conn, query);
+        if (isEmpty(result))
+            {
+            printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
+            hasSequence = FALSE;
+            }
+        else
+            {
+            printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
+            int start = cartInt(cart, "o");
+            printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+            }
         }
     else
         {
-        printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
-        int start = cartInt(cart, "o");
-        printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+        printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
         }
-    }
-else
-    {
-    printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
+    htmlHorizontalLine();
     }
 
-htmlHorizontalLine();
-
-if (! ( sameString(tdb->track, "ncbiRefSeqPsl") || sameString(tdb->track, "ncbiRefSeqOther" ) ) )
+if (! ( sameString(bareTrack, "ncbiRefSeqPsl") || sameString(bareTrack, "ncbiRefSeqOther" ) ) )
     showGenePos(itemName, tdb);
 
 printf("<h3>Links to sequence:</h3>\n");
@@ -13655,14 +13723,25 @@ printf("<ul>\n");
 if (differentWord("", nrl->protAcc))
     {
     puts("<li>\n");
-    hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
+    // For quickLifted tracks, translate from destination-genome CDS so
+    // any destination-specific substitutions are reflected.  On the
+    // source assembly, keep the NCBI-authored protein from refPep/gbSeq.
+    if (liftDb != NULL)
+        hgcAnchorSomewhere("htcTranslatedPredMRna", itemName, "ncbiRefSeqPepTable", seqName);
+    else
+        hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
     printf("Predicted Protein</a> \n");
     puts("</li>\n");
     }
 if (hasSequence)
     {
     puts("<li>\n");
-    hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
+    // Same split: destination-derived mRNA when quickLifted, NCBI-authored
+    // seqNcbiRefSeq otherwise.
+    if (liftDb != NULL)
+        hgcAnchorSomewhere("htcGeneMrna", itemName, "ncbiRefSeqPsl", seqName);
+    else
+        hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
     printf("%s</a> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
     puts("</li>\n");
@@ -13681,13 +13760,19 @@ hFreeConn(&conn);
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+// When the track is quickLifted, refLink/refSeqAli/xenoRefSeqAli live in
+// the source assembly.  Connect there and compare against the bare track
+// name (tdb->track and tdb->table have a hub_NNN_ prefix otherwise).
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
+char *bareTrack = trackHubSkipHubName(tdb->track);
+struct sqlConnection *conn = hAllocConn(srcDb);
 int start = cartInt(cart, "o");
 int left = cartInt(cart, "l");
 int right = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 
-boolean isXeno = sameString(tdb->table, "xenoRefGene");
+boolean isXeno = sameString(bareTrack, "xenoRefGene");
 if (isXeno)
     cartWebStart(cart, database, "Non-%s RefSeq Gene", organism);
 else
@@ -13695,18 +13780,23 @@ else
 struct refLink *rl = printRefSeqInfo( conn, tdb, rnaName, NULL);
 
 /* print alignments that track was based on */
-char *aliTbl = (sameString(tdb->table, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
-if (hTableExists(database, aliTbl))
+// Alignments live in the source assembly's coordinates and the table's
+// htcCdnaAli links wouldn't line up with the destination window; skip
+// the block entirely for quickLifted tracks.
+char *aliTbl = (sameString(bareTrack, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
+if (liftDb == NULL)
     {
-    struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
-    printf("<H3>mRNA/Genomic Alignments</H3>");
-    printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+    if (hTableExists(srcDb, aliTbl))
+        {
+        struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+        printf("<H3>mRNA/Genomic Alignments</H3>");
+        printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+        }
+    else
+        warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed "
+                "on this server", srcDb);
+    htmlHorizontalLine();
     }
-else
-    warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed " 
-            "on this server", database);
-
-htmlHorizontalLine();
 
 struct palInfo *palInfo = NULL;
 
@@ -13719,8 +13809,27 @@ if (genbankIsRefSeqCodingMRnaAcc(rnaName))
     palInfo->rnaName = rnaName;
     }
 
-geneShowPosAndLinksPal(rl->mrnaAcc, rl->protAcc, tdb, refPepTable, "htcTranslatedProtein",
-		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+// For quickLifted tracks, route the Predicted Protein/mRNA links to the
+// genome-derived handlers so the sequences reflect the destination
+// assembly at the lifted exon coordinates, rather than the NCBI-authored
+// sequence that lives with the source refPep/refMrna extFiles.
+// htcTranslatedPredMRna keys on the transcript name rather than the
+// protein accession, so swap the pepName for that case.  For non-coding
+// transcripts (NR_*) leave pepName as the empty protAcc, otherwise gbSeq
+// would match the mrnaAcc and we'd offer a Predicted Protein link that
+// htcTranslatedPredMRna can only abort on.
+char *pepClick = "htcTranslatedProtein";
+char *pepName = rl->protAcc;
+char *mrnaClick = "htcRefMrna";
+if (liftDb != NULL)
+    {
+    pepClick = "htcTranslatedPredMRna";
+    if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+        pepName = rl->mrnaAcc;
+    mrnaClick = "htcGeneMrna";
+    }
+geneShowPosAndLinksPal(rl->mrnaAcc, pepName, tdb, refPepTable, pepClick,
+		    mrnaClick, "htcGeneInGenome", "mRNA Sequence",palInfo);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -22858,8 +22967,8 @@ else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
-else if (sameWord(type, "makeItems"))
-    doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", trackId))
+    doMyVariantsDetails(ct, item);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)
@@ -27094,7 +27203,7 @@ if (seqName == NULL)
     }
 
 struct customTrack *ct = NULL;
-if (isCustomTrack(track))
+if (isCustomTrack(track) || startsWith("myVariants_", track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
@@ -27102,7 +27211,7 @@ if (isCustomTrack(track))
             break;
     }
 
-if ((!isCustomTrack(track) && dbIsFound)
+if ((!isCustomTrack(track) && !startsWith("myVariants_", track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
@@ -27196,6 +27305,10 @@ boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item)
 char* handler = trackDbSetting(tdb, "trackHandler");
 
 char *table = (tdb ? tdb->table : track);
+// Quick-lifted tracks come in with hub_NNN_ prefixed names; strip the prefix
+// so the unprefixed comparisons below match and the native handler fires.
+if (tdb && trackDbSetting(tdb, "quickLifted"))
+    table = trackHubSkipHubName(table);
 if (sameWord(table, "getDna"))
     {
     htmlDoNotTranslate();
@@ -27748,7 +27861,7 @@ else if (sameWord(table, "softPromoter"))
     {
     hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || startsWith("myVariants_", table))
     {
     if (tdb != NULL)
         {

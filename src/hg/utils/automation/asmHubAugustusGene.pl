@@ -40,7 +40,7 @@ chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 
-my $geneCount = `bigBedInfo $augustusBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Gene count/; s/ basesCovered/; Bases covered/;'`;
+my $geneCount = `/cluster/bin/x86_64/bigBedInfo $augustusBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Gene count/; s/ basesCovered/; Bases covered/;'`;
 chomp $geneCount;
 
 print <<_EOF_

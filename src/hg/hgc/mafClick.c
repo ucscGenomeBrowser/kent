@@ -18,6 +18,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "chromAlias.h"
+#include "genark.h"
 
 extern boolean issueBotWarning;
 
@@ -26,6 +27,30 @@ extern boolean issueBotWarning;
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
 static char *autoSubmit = "document.gpForm.submit();";
+
+static char *splitMafSrc(char *src, char *dbOnly, int dbOnlySize, struct hash *labelHash)
+/* Split a maf component src ("db.chrom") into db (in dbOnly) and chrom
+ * (return value).  If labelHash has an entry whose key is a prefix of src
+ * ending at a dot, prefer that.  This handles multi-dot db names like assembly
+ * hub accessions ("GCF_000009085.1.NC_002163v1").
+ * Falls back to chopping at the first dot when no labelHash hit. */
+{
+safef(dbOnly, dbOnlySize, "%s", src);
+if (labelHash != NULL)
+    {
+    for (int i = strlen(dbOnly) - 1; i > 0; i--)
+        {
+        if (dbOnly[i] == '.')
+            {
+            dbOnly[i] = 0;
+            if (hashFindVal(labelHash, dbOnly) != NULL)
+                return &dbOnly[i + 1];
+            dbOnly[i] = '.';
+            }
+        }
+    }
+return chopPrefix(dbOnly);
+}
 
 static void blueCapWrite(FILE *f, char *s, int size, char *r)
 /* Write capital letters in blue. */
@@ -110,8 +135,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	char *org;
 
 	memset(dbOnly, 0, sizeof(dbOnly));
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chopPrefix(dbOnly);
+	splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    len = strlen(dbOnly);
@@ -168,8 +192,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	dyStringClear(dy);
 
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	chrom = splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
         if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
             {
             if ((org = hOrganism(dbOnly)) == NULL)
@@ -192,7 +215,18 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    fprintf(f, "B</A> ");
 		    }
 		else
-		    fprintf(f, "  ");
+		    {
+		    char *hubUrl = genarkUrl(dbOnly);
+		    if (hubUrl != NULL)
+			{
+			dyStringPrintf(dy, "%s Browser %s:%d-%d %c %*dbps", org, chrom, s+1, e, mc->strand, sizeChars, mc->size);
+			fprintf(f, "<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+				dy->string, hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+			dyStringClear(dy);
+			}
+		    else
+			fprintf(f, "  ");
+		    }
 
                 if (hDbExists(dbOnly))
                     {
@@ -243,7 +277,18 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 			dyStringClear(dy);
 			}
 		    else
-			fprintf(f,"  ");
+			{
+			char *hubUrl = genarkUrl(dbOnly);
+			if (hubUrl != NULL)
+			    {
+			    dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned", org, chrom, s+1, e, mc->strand, e-s);
+			    fprintf(f, "<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+				    dy->string, hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+			    dyStringClear(dy);
+			    }
+			else
+			    fprintf(f,"  ");
+			}
 
                     if (hDbExists(dbOnly))
                         {
@@ -308,8 +353,7 @@ if (haveInserts)
 	if (mc->strand == '-')
 	    reverseIntRange(&s, &e, mc->srcSize);
 
-	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	chrom = splitMafSrc(mc->src, dbOnly, sizeof(dbOnly), labelHash);
 
         if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
             {
@@ -336,7 +380,16 @@ if (haveInserts)
 
 		}
 	    else
-		fprintf(f, "  ");
+		{
+		char *hubUrl = genarkUrl(dbOnly);
+		if (hubUrl != NULL)
+		    {
+		    fprintf(f, "<A TARGET=\"_blank\" HREF=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">B</A> ",
+			    hgTracksName(), dbOnly, cgiEncode(hubUrl), cgiEncode(chrom), s+1, e);
+		    }
+		else
+		    fprintf(f, "  ");
+		}
 
             if (hDbExists(dbOnly))
                 {

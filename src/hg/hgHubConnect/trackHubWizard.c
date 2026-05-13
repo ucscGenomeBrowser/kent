@@ -174,6 +174,7 @@ if (userName)
         jsonWriteString(jw, "uploadTime", file->creationTime);
         jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
         jsonWriteString(jw, "md5sum", file->md5sum);
+        jsonWriteString(jw, "hubType", file->hubType ? file->hubType : "trackHub");
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
@@ -259,6 +260,7 @@ jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), d
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
+jsInlineF("\nvar hubGenomeCollisionErrFrag=\"%s\";\n", HUB_GENOME_COLLISION_ERR_FRAG);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

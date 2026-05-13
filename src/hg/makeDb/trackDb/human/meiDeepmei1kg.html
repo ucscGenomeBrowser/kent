@@ -1,0 +1,141 @@
+<h2>Description</h2>
+<p>
+This track shows <b>mobile element insertions (MEIs)</b> called by
+<a href="https://github.com/xuxif/DeepMEI" target="_blank">DeepMEI</a>
+on the 3,202 high-coverage 1000 Genomes Project samples (NYGC
+re-sequencing) aligned to GRCh38. At each site, at least one of the
+3,202 samples carries a non-reference insertion of an Alu, L1 (LINE-1)
+or SVA mobile element. DeepMEI is a convolutional neural-network
+caller that scans short-read alignments for the read-pair, split-read
+and clipping signatures of a new insertion and classifies each
+candidate site as Alu, L1 or SVA.
+</p>
+
+<table class="stdTbl">
+<tr><th>Class</th><th>MEIs</th></tr>
+<tr><td>Alu</td><td>68,282</td></tr>
+<tr><td>L1</td><td>16,891</td></tr>
+<tr><td>SVA</td><td>6,444</td></tr>
+<tr><th>Total</th><th>91,617</th></tr>
+</table>
+
+<p>
+For each MEI, the track lists the element class, the alt-allele count,
+allele number and allele frequency across the 3,202 samples, the number
+of carrier samples, and the list of carrier sample IDs.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+An insertion has zero length on the reference: it attaches between
+two adjacent reference bases without replacing any of them. Following
+the VCF convention used by DeepMEI and by the other long-read SV
+and MEI tracks, each MEI is drawn as a <b>1-bp block sitting on the
+anchor base</b> &mdash; the reference base immediately to the left of
+the insertion attachment point. The inserted mobile element itself is
+not present in the reference and is therefore not drawn; the source
+VCF uses a symbolic ALT (e.g. <tt>&lt;INS:ME:ALU&gt;</tt>) and does not
+report the inserted sequence or its exact length, so neither is shown
+on this track. The item label is <tt>INS-class-carrierCount</tt>.
+</p>
+<p>
+Items are colored by element class:
+</p>
+<ul>
+  <li><span style="display:inline-block;background-color:#0072B2;width:18px;height:12px;vertical-align:middle;"></span> <b>Alu</b> &mdash; SINE (Short INterspersed Element)</li>
+  <li><span style="display:inline-block;background-color:#D55E00;width:18px;height:12px;vertical-align:middle;"></span> <b>L1</b> &mdash; LINE-1 (Long INterspersed Element-1)</li>
+  <li><span style="display:inline-block;background-color:#009E73;width:18px;height:12px;vertical-align:middle;"></span> <b>SVA</b> (SINE-VNTR-Alu) &mdash; composite retrotransposon</li>
+</ul>
+<p>
+The score column encodes the alt-allele frequency on a 0-1000 scale.
+Filters allow restricting to specific element classes, allele frequency
+and carrier counts.
+</p>
+
+<h2>Methods</h2>
+<p>
+DeepMEI is a deep convolutional neural network that detects
+non-reference mobile element insertions from short-read whole-genome
+sequencing. For every candidate site supported by an anomalous
+read-pair, split-read or soft-clip signature, the surrounding alignment
+pile-up is encoded as an image and passed through a CNN that classifies
+the site as Alu, L1, SVA or background. The model was trained on
+labelled MEIs from the 1000 Genomes phase 3 callset and orthogonal
+long-read truth sets. For this track, DeepMEI was run on the
+high-coverage (~30&times;) Illumina re-sequencing of all 3,202
+1000 Genomes Project samples produced by the New York Genome Center
+(NYGC), giving 6,404 haplotypes per site. See Xu et al. 2023 (bioRxiv)
+for full methodological details.
+</p>
+
+<p>
+The original VCF was downloaded from the DeepMEI GitHub repository
+(file <tt>merge_1000g.latested.vcf.gz</tt> in
+<a href="https://github.com/xuxif/DeepMEI/tree/main/DeepMEI/1000g_high_callset"
+target="_blank">DeepMEI/1000g_high_callset/</a>) and converted to
+bigBed following the steps described in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
+target="_blank">makeDoc file</a>. Conversion uses scripts in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
+target="_blank">src/hg/makeDb/scripts/mei</a>: VCF-style positions
+(1-based POS, anchor base) are converted to half-open BED coordinates
+(<tt>chromStart = POS - 1</tt>, <tt>chromEnd = chromStart + 1</tt>),
+per-sample genotypes are tallied across the 3,202 samples, and items
+are colored by mobile element class.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
+there to spreadsheet or tab-separated tables. From scripts, the data can
+be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>meiDeepmei1kg</i>.
+</p>
+<p>
+For automated download and analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">
+our download server</a>.  The file for this track is called
+<tt>deepmei1kg.bb</tt> in <tt>/gbdb/hg38/mei/</tt>. Individual regions
+or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for
+downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/deepmei1kg.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original annotation source data can be downloaded from the
+<a href="https://github.com/xuxif/DeepMEI/tree/main/DeepMEI/1000g_high_callset"
+target="_blank">DeepMEI GitHub repository</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Xiaofei Xu, Fengxiao Bu and colleagues for developing
+DeepMEI and releasing the 1000 Genomes MEI callset, and to the New
+York Genome Center for producing the underlying high-coverage
+1000 Genomes re-sequencing data.
+</p>
+
+<h2>References</h2>
+<p>
+Xu X, Huang Y, Wang X, Cheng J, Yuan H, Bu F.
+<a href="https://doi.org/10.1101/2023.03.07.531451" target="_blank">
+Identification of mobile element insertion from whole genome sequencing
+data using deep neural network model</a>.
+<em>bioRxiv</em>. 2023 March 8. doi:10.1101/2023.03.07.531451.
+</p>
+<p>
+Byrska-Bishop M, Evani US, Zhao X, Basile AO, Abel HJ, Regier AA, Corvelo A, Clarke WE, Musunuri R,
+Nagulapalli K <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)00991-6" target="_blank">
+High-coverage whole-genome sequencing of the expanded 1000 Genomes Project cohort including 602
+trios</a>.
+<em>Cell</em>. 2022 Sep 1;185(18):3426-3440.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">36055201</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9439720/" target="_blank">PMC9439720</a>
+</p>

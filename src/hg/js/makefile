@@ -12,7 +12,8 @@ UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
     hgHubConnect.js hgTracks.js hgc.js hgMyData.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \
-	cdwSummaryJs.js spectrum.min.js hgSearch.js lorax.js
+	cdwSummaryJs.js spectrum.min.js hgSearch.js lorax.js liftRequest.js \
+	myVariantsBlocks.js
 
 # ES6 module files loaded via dynamic import() on hgc details pages
 MODULE_FILES=hgc.histogram.js

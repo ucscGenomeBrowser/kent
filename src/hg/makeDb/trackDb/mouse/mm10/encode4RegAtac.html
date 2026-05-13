@@ -12,60 +12,52 @@ datasets are available at the
 <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>.</p>
 
 <p>
-This track displays ATAC signals averaged across biosamples from the same organ or tissue.
-Two versions of each subtrack are available:</p>
+For each organ, this track provides up to two subtracks averaging ATAC signal:</p>
 <ul>
-<li><b>Tissues and Primary Cells Only</b>: Restricts to ATAC-seq data from tissues and
-primary cells, focusing on chromatin accessibility in biosamples that more closely reflect
-in vivo cell states and developmental contexts.</li>
-<li><b>All Biosamples</b>: Includes ATAC-seq data from all biosample types -- tissues,
-primary cells, cell lines, in vitro differentiated cells, and organoids -- providing a
-comprehensive view of chromatin accessibility across diverse biological systems.</li>
+<li><b>Tissue and Primary Cell</b> averages only the tissue and primary cell experiments.</li>
+<li><b>All Biosamples</b> averages every experiment for that organ, including the
+tissue/primary cell ones plus any from cell lines, in vitro differentiated cells, or
+organoids.</li>
 </ul>
 
 <p>
-In both versions, ATAC-seq signal is averaged across biosamples within the same organ/tissue
-category and displayed using a transparent overlay. For organs or tissues with only tissue or
-primary cell experiments, a single subtrack is shown because the two versions would be identical.
-For organs or tissues with only experiments from cell lines, in vitro differentiated cells, or
-organoids, a single all-biosample subtrack is shown. For organs or tissues that include both
-types, both versions are provided.</p>
+Whether one or two subtracks appear for an organ depends on which kinds of biosamples have
+been assayed:</p>
+<ul>
+<li><b>Tissue/primary cell only.</b> There are no cell line, in vitro differentiated cell,
+or organoid experiments to include, so the two averages would be computed from the same
+data and produce identical numbers. Only the <em>Tissue and Primary Cell</em> subtrack
+is shown.</li>
+<li><b>Cell line, in vitro differentiated cell, or organoid experiments only.</b>
+There are no tissue or primary cell experiments to average, so only the <em>All Biosamples</em>
+subtrack is shown. In this case it represents those experiments.</li>
+<li><b>Both kinds of biosamples available.</b> The two averages give different numbers
+because one covers only the tissue and primary cell experiments while the other includes everything together.
+Both subtracks are shown.</li>
+</ul>
 
 <h2>Available Organs and Tissues</h2>
-<p>For organs or tissues with only tissue or primary cell experiments, a single subtrack
-is shown. For organs or tissues with only experiments from cell lines, in vitro
-differentiated cells, or organoids, a single all-biosample subtrack is shown. For organs
-or tissues that include both types, both versions are provided.</p>
 <table border="1" cellspacing="0" cellpadding="4">
   <tr>
     <th>Organ/Tissue</th>
     <th style="text-align:center">Tissue and Primary Cell Subtrack</th>
     <th style="text-align:center">All Biosamples Subtrack</th>
   </tr>
-  <tr><td>blood</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>bone marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>brain</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>embryo</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
-  <tr><td>epithelium</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>heart</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>kidney</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>limb</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>liver</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>lung</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
-  <tr><td>stomach</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(254,75,173)">blood</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(184,120,120)">bone marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(155,155,18)">brain</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(118,158,101)">embryo</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td style="background-color:rgb(221,126,107)">epithelium</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(116,50,165)">heart</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(121,92,166)">intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(92,161,153)">kidney</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(95,88,237)">limb</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(137,152,82)">liver</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(130,163,45)">lung</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td style="background-color:rgb(145,144,99)">stomach</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
 </table>
 
-<h2>Display Conventions and Configuration</h2>
-<p>
-This track uses a transparent overlay to visualize data from multiple organs or tissues within
-the same vertical space. For each organ or tissue, signals from all associated experiments were
-averaged to generate the displayed track. Each organ or tissue is assigned a distinct
-color,
-selected to be light and saturated to maintain clarity when overlaid. Initially, each layered
-track displays an overlay of five representative organs: blood, brain, kidney, liver, and
-muscle. Clicking on the track opens a details page where you can view and select organs or
-tissues.</p>
+<!--#insert file="../../encode4RegLayeredDisplay.shared.html"-->
 
 <h2>Data Access</h2>
 <p>

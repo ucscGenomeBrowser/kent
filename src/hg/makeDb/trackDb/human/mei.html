@@ -1,0 +1,78 @@
+<h2>Description</h2>
+<p>
+This track collection shows <b>Mobile Element Insertions (MEIs)</b> in the
+human genome. Mobile elements are stretches of DNA that have copied themselves
+into new genomic locations during evolution, and a few families remain
+active enough to keep producing new insertions in the human population
+today. The three element classes responsible for almost all MEIs in
+humans are <b>Alu</b> (~300 bp SINE retrotransposons), <b>L1/LINE-1</b>
+(typically 6 kb autonomous retrotransposons) and <b>SVA</b> (composite
+elements of ~700-3000 bp). Polymorphic MEIs - sites where some individuals
+carry the inserted element while others do not - are an important source
+of structural variation, can disrupt or alter gene expression, and have
+been implicated in a number of human diseases.
+</p>
+
+<p>
+Tracks in this collection report MEI calls assembled from long-read
+genome sequencing. Items are colored by element class.
+</p>
+
+<h3>Available subtracks</h3>
+<ul>
+  <li><a href="hgTrackUi?g=meiHgsvc3">HGSVC3 65 MEIs</a> -
+      mobile element insertions identified in 65 diverse long-read
+      assembled samples relative to the reference assembly
+      (HGSVC3, Logsdon et al. 2025, <em>Nature</em>). Available on
+      both GRCh38/hg38 (12,642 MEIs) and T2T-CHM13/hs1 (12,919 MEIs).</li>
+  <li><a href="hgTrackUi?g=meiDeepmei1kg">DeepMEI 1000G MEIs</a> -
+      91,617 mobile element insertions called by the DeepMEI
+      convolutional neural network on the 3,202 high-coverage 1000
+      Genomes samples (Xu et al. 2023, bioRxiv). hg38 only.</li>
+</ul>
+
+<p>
+Related: <a href="hgTrackUi?g=lrSv">Long-read Structural Variants</a>
+contains the parent SV callsets from which several of these MEI tracks
+are derived. <a href="hgTrackUi?g=rmsk">RepeatMasker</a> shows
+all annotated mobile elements in the reference genome (regardless of
+whether they are polymorphic).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each MEI is shown as a 1-bp anchor block at the position where the
+insertion attaches to the reference. Items are colored by element class:
+</p>
+<ul>
+  <li><span style="display:inline-block;background-color:#0072B2;width:18px;height:12px;vertical-align:middle;"></span> <b>Alu</b> &mdash; SINE (Short INterspersed Element)</li>
+  <li><span style="display:inline-block;background-color:#D55E00;width:18px;height:12px;vertical-align:middle;"></span> <b>L1</b> &mdash; LINE-1 (Long INterspersed Element-1)</li>
+  <li><span style="display:inline-block;background-color:#009E73;width:18px;height:12px;vertical-align:middle;"></span> <b>SVA</b> (SINE-VNTR-Alu) &mdash; composite retrotransposon</li>
+  <li><span style="display:inline-block;background-color:#CC79A7;width:18px;height:12px;vertical-align:middle;"></span> <b>HERVK</b> (Human Endogenous Retrovirus K) &mdash; endogenous retrovirus</li>
+  <li><span style="display:inline-block;background-color:#000000;width:18px;height:12px;vertical-align:middle;"></span> <b>snRNA</b> &mdash; small nuclear RNA</li>
+</ul>
+
+<p>
+Filters available on the subtrack configuration page allow restricting
+the displayed items by element class, insertion length, allele frequency,
+number of carrier samples, the number of MEI callers that supported the
+call, validation by L1ME-AID or PALMER, and overlap with reference
+segmental duplications and tandem repeats.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Each subtrack has its own description page with details on file location,
+the autoSql schema, citation and download instructions.
+</p>
+
+<h2>References</h2>
+<p>
+Logsdon GA, Ebert P, Audano PA, Loftus M, Porubsky D, Ebler J, Yilmaz F, Hallast P, Prodanov T, Yoo
+D <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09140-6" target="_blank">
+Complex genetic variation in nearly complete human genomes</a>.
+<em>Nature</em>. 2025 Aug;644(8076):430-441.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">40702183</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350169/" target="_blank">PMC12350169</a>
+</p>

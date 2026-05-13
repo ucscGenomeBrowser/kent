@@ -1,7 +1,7 @@
 track encode3Reg
 superTrack on hide
-shortLabel ENCODE Regulation
-longLabel Integrated Regulation from ENCODE
+shortLabel ENCODE3 Regulation
+longLabel Integrated Regulation from ENCODE3
 group regulation
 pennantIcon snowflake.png /goldenPath/newsarch.html#NNN "Please see the ENCODE4 Regulation track for the latest data. See news archive for details."
 

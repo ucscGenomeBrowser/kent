@@ -1,0 +1,112 @@
+<h2>Description</h2>
+<p>
+This track shows high-confidence structural variants (SVs) identified by
+Oxford Nanopore long-read sequencing of 3,622 Icelanders recruited through
+the deCODE genetics population cohort. The release contains 133,886 SVs
+(55,649 deletions, 75,050 insertions and 3,187 combined insertion/deletion
+events). Variants are site-level (no per-sample genotypes) and have been
+filtered to a high-confidence subset validated in the accompanying
+population-scale analysis.
+</p>
+<p>
+Note that this release does not include allele counts or allele frequencies:
+each row represents a site that was called with high confidence in the
+cohort, but the number of carrier samples is not provided, so the track
+cannot be filtered by AF/AC.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(140,0,200);">Combined insertion/deletion (INSDEL)</span> - purple</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site with a width of 1 bp; deletions
+span the deleted interval; INSDEL events span the affected reference region
+and have SVLEN=0 because the reference and alternate alleles differ in both
+sequence and length. Filters are available for SV type and SV length.
+</p>
+<p>
+Where a variant falls inside an annotated tandem-repeat region, the detail
+page also shows the coordinates of that region (TRRBEGIN / TRREND from the
+source VCF), which can be useful context for repeat-mediated insertions and
+deletions.
+</p>
+
+<h2>Methods</h2>
+<p>
+Beyter et al. 2021 performed Oxford Nanopore long-read sequencing of 3,622
+Icelanders recruited through deCODE genetics and detected a median of
+22,636 SVs per individual (13,353 insertions and 9,474 deletions). Across
+the cohort they derived a set of 133,886 reliably genotyped SV alleles,
+imputed those alleles into 166,281 chip-typed Icelanders, and tested them
+for association with disease and quantitative traits (notably including a
+rare <i>PCSK9</i> deletion associated with lower LDL-cholesterol and a
+multi-allelic 57-bp VNTR in <i>ACAN</i> associated with adult height). The
+track shown here displays the 133,886 high-confidence SV sites: 55,649
+deletions, 75,050 insertions and 3,187 combined insertion/deletion events.
+The release is site-only (no per-sample genotypes or allele frequencies),
+so the track cannot be filtered by AF/AC.
+</p>
+<p>
+The VCF <tt>ont_sv_high_confidence_SVs.sorted.vcf.gz</tt> was downloaded
+from the deCODE genetics
+<a href="https://github.com/DecodeGenetics/LRS_SV_sets" target="_blank">
+LRS_SV_sets</a> GitHub repository.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-sep tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>decodeSv</i>.
+</p>
+<p>
+The annotation is stored as a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>decodeSv.bb</tt>. Individual regions or the whole
+annotation can be obtained with the <tt>bigBedToBed</tt> utility, available
+from our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities
+page</a>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/decodeSv.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original VCF is available from the deCODE genetics
+<a href="https://github.com/DecodeGenetics/LRS_SV_sets" target="_blank">LRS_SV_sets</a>
+GitHub repository.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the deCODE genetics team and the Icelandic study participants for
+making this dataset publicly available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Beyter D, Ingimundardottir H, Oddsson A, Eggertsson HP, Bjornsson E, Jonsson H, Atlason BA,
+Kristmundsdottir S, Mehringer S, Hardarson MT <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-021-00865-4" target="_blank">
+Long-read sequencing of 3,622 Icelanders provides insight into the role of structural variants in
+human diseases and other traits</a>.
+<em>Nat Genet</em>. 2021 Jun;53(6):779-786.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33972781" target="_blank">33972781</a>
+</p>
+

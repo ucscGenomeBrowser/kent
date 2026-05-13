@@ -64,21 +64,18 @@ var subCfg = { // subtrack config module.
 
     // Called only on real user clicks (bound via native addEventListener, not jQuery,
     // so jQuery .trigger('change') calls during init do not reach this).
-    // Handles both subCB and matCB clicks.
+    // Handles both subCB and matCB clicks. Delegates to hui.js helpers so the
+    // same data-last-viz save/restore behavior applies as for the [+]/[-] buttons.
     onUserCbChange: function () {
         var compEl = $("[name='"+subCfg.compositeName+"']");
         if (compEl.length === 0)
             return;
 
         var anyChecked = $(".subCB:checked:visible").length > 0;
-
-        // if any subtracks are now checked and the composite is on hide, set it to pack
         if (anyChecked && compEl.val() === "hide")
-            compEl.val("pack").change();
-
-        // if no subtracks are checked, set the composite to hide
-        if (!anyChecked)
-            compEl.val("hide");
+            exposeAll();
+        else if (!anyChecked)
+            hideCompositeSaveVis();
     },
 
     clearChange: function (obj)

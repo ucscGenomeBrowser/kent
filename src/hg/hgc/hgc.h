@@ -480,8 +480,8 @@ void doVcfDetailsExt(struct trackDb *tdb, char *item, struct featureBits **pFbLi
 void doBarChartDetails(struct trackDb *tdb, char *item);
 /* Details of barChart item */
 
-void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
-/* Show details of a makeItems item. */
+void doMyVariantsDetails(struct customTrack *ct, char *itemIdString);
+/* Show details of a myVariants item. */
 
 void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);
 /* generate the detail page for a custom track of bedDetail type */
@@ -498,7 +498,7 @@ void doGeneReviews(struct trackDb *tdb, char *itemName);
 void prGeneReviews(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews associated to this item */
 
-void prGRShortRefGene(char *itemName);
+void prGRShortRefGene(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews short label associated to this refGene item */
 
 void doLrg(struct trackDb *tdb, char *item);

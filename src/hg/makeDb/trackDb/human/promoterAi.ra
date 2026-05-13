@@ -6,7 +6,7 @@ parent predictionScoresSuper
 compositeTrack on
 tableBrowser off
 visibility hide
-color 80,150,50
+pennantIcon New red ../goldenPath/newsarch.html#050126 "Released May 1, 2026"
 
         track promoterAiA
         shortLabel Mutation: A
@@ -14,13 +14,17 @@ color 80,150,50
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/a.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/a.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        alwaysZero on
+        autoScale off
+        color 200,0,0
+        altColor 0,0,200
 
         track promoterAiC
         shortLabel Mutation: C
@@ -28,13 +32,17 @@ color 80,150,50
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/c.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/c.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        alwaysZero on
+        autoScale off
+        color 200,0,0
+        altColor 0,0,200
 
         track promoterAiG
         shortLabel Mutation: G
@@ -42,13 +50,17 @@ color 80,150,50
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/g.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/g.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        alwaysZero on
+        autoScale off
+        color 200,0,0
+        altColor 0,0,200
 
         track promoterAiT
         shortLabel Mutation: T
@@ -56,13 +68,17 @@ color 80,150,50
         type bigWig
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/t.bw
-        maxHeightPixels 128:20:8
+        bigDataUrl /gbdb/$D/_promoterAi/t.bw
+        maxHeightPixels 128:40:8
         viewLimits -1:1
         viewLimitsMax -1:1
         maxWindowToDraw 10000000
         maxWindowToQuery 500000
         mouseOverFunction noAverage
+        alwaysZero on
+        autoScale off
+        color 200,0,0
+        altColor 0,0,200
 
         track promoterAiOverlaps
         shortLabel PromoterAI overlaps
@@ -70,8 +86,15 @@ color 80,150,50
         type bigBed 9 +
         parent promoterAi on
         visibility dense
-        bigDataUrl /gbdb/$D/promoterAi/overlaps.bb
+        bigDataUrl /gbdb/$D/_promoterAi/overlaps.bb
         mouseOverField _mouseOver
         itemRgb on
+        maxWindowToDraw 10000000
+        maxItems 50000
         filterByRange.scoreDiff on
         filter.scoreDiff 0.01
+        filterLimits.scoreDiff 0:2
+        filterLabel.scoreDiff Minimum score difference across transcripts
+        scoreFilter 0
+        scoreFilterLimits 0:1000
+        scoreLabel Absolute PromoterAI score * 1000

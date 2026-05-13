@@ -348,7 +348,18 @@ else
     cacheLog("open shared memory %s", tempFileName);
     }
 ftruncate(fd, 0);
-ftruncate(fd, size);
+// Reserve real tmpfs pages now so writes through the mmap below can't SIGBUS
+// when /dev/shm is full (ftruncate alone leaves the file sparse).
+int err = posix_fallocate(fd, 0, size);
+if (err != 0)
+    {
+    fprintf(stderr, "trackDbCache: posix_fallocate of %ld bytes in %s failed (%s); skipping cache write\n",
+            size, trackDbCacheDir, strerror(err));
+    cacheLog("unable to allocate %ld bytes for trackDb cache, errno %d", size, err);
+    close(fd);
+    mustRemove(tempFileName);
+    return;
+    }
 
 size_t psize = getpagesize();
 unsigned long pageMask = psize - 1;
@@ -454,7 +465,16 @@ static boolean doCache = FALSE;
 
 if (!checkedCache)
     {
-    trackDbCacheDir = cfgOptionDefault("cacheTrackDbDir", "/dev/shm/trackDbCache");
+    /* The CACHE_TRACK_DB_DIR environment variable overrides the cacheTrackDbDir
+     * hg.conf setting so a benchmark harness can flip caching on/off per run.
+     * When set (even to the empty string) the env value wins: empty disables
+     * the cache. */
+    char *envDir = getenv("CACHE_TRACK_DB_DIR");
+    if (envDir != NULL)
+        trackDbCacheDir = envDir;
+    else
+        trackDbCacheDir = cfgOptionDefault("cacheTrackDbDir", "/dev/shm/trackDbCache");
+
     if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);

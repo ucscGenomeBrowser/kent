@@ -1,0 +1,44 @@
+##############################################################################
+# HPRCv2 chains on hg38
+##############################################################################
+track hprcV2chain
+compositeTrack on
+shortLabel HPRCv2 chain
+longLabel HPRCv2 Lift Over Chain tracks on GRCh38/hg38
+subGroup1 view Views chain=Chain
+dragAndDrop subTracks
+visibility hide
+group hprc
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+html hprcV2.html
+
+    track chainNetHg38Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent hprcV2chain
+    spectrum on
+
+        track chainLiftOverGCA_018466835.2
+        parent chainNetHg38Viewchain
+        subGroups view=chain
+        shortLabel GCA_018466835.2 loChain
+        longLabel HPRCv2 Lift Over Chain from GCA_018466835.2 to GRCh38/hg38
+        type bigChain GCA_018466835.2
+        bigDataUrl /gbdb/hg38/hprcV2/chainLiftOverGCA_018466835.2.bb
+        linkDataUrl /gbdb/hg38/hprcV2/chainLiftOverGCA_018466835.2Link.bb
+        priority 1
+
+        track chainLiftOverGCA_018466845.2
+        parent chainNetHg38Viewchain
+        subGroups view=chain
+        shortLabel GCA_018466845.2 loChain
+        longLabel HPRCv2 Lift Over Chain from GCA_018466845.2 to GRCh38/hg38
+        type bigChain GCA_018466845.2
+        bigDataUrl /gbdb/hg38/hprcV2/chainLiftOverGCA_018466845.2.bb
+        linkDataUrl /gbdb/hg38/hprcV2/chainLiftOverGCA_018466845.2Link.bb
+        priority 2

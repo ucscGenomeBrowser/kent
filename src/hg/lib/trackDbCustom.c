@@ -233,7 +233,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("makeItems", s) ||
+		   sameString("myVariants", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||

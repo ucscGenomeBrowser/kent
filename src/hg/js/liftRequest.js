@@ -1,7 +1,39 @@
+/* jshint esnext: true */
 var assembly1Value = "";
 var assembly2Value = "";
 var genome1 = "";
 var genome2 = "";
+
+// matches the ottoRequest README.txt and ottoRequestView.cgi STATUS_NAMES
+var STATUS_LABELS = {
+    0: "received by API",
+    1: "acknowledged, email sent",
+    2: "galaxy job started",
+    3: "galaxy done, download started",
+    4: "downloaded, track files made",
+    5: "symlinks ready, awaiting push",
+    6: "push complete",
+    7: "ERROR",
+    8: "COMPLETE (final email sent)"
+};
+
+function pendingMessageFor(status, requestTime) {
+    var label = STATUS_LABELS[status] || ("status " + status);
+    if (status === 7) {
+        return "A previous request for these assemblies (submitted on " +
+            requestTime + ") encountered an error. " +
+            "Please contact genome-www@soe.ucsc.edu for help.";
+    }
+    if (status === 8) {
+        return "A request for these assemblies (submitted on " +
+            requestTime + ") has already completed. " +
+            "If the chain files are not yet available, please contact" +
+            " genome-www@soe.ucsc.edu.";
+    }
+    return "A request for these assemblies was submitted on " +
+        requestTime + " and is currently in progress (" + label + ")." +
+        " You will receive an email when it completes.";
+}
 
 /* check if a file exists at the specified URL */
 function fileExists(url, callback) {
@@ -46,7 +78,7 @@ function checkAssemblyCompatibility(asm1, asm2) {
       .then(response => response.json())
       .then(response => {
 //      console.log(JSON.stringify(response, null, 2));
-        if (response.itemsReturned === 1) {
+        if (response.itemsReturned >= 1) {
           const liftPath1 = liftOverPath(asm1, asm2);
           const liftPath2 = liftOverPath(asm2, asm1);
           const browser1 = "/cgi-bin/hgTracks?db=" + asm1;
@@ -81,6 +113,8 @@ function checkAssemblyCompatibility(asm1, asm2) {
               document.getElementById("submitButton").style.display = "none";
             }
           });
+        } else if (response.pending) {
+          showPending(response.pendingStatus, response.pendingRequestTime);
         }
       })
       .catch(error => {
@@ -94,12 +128,39 @@ function checkBothAssembliesSelected() {
     }
 }
 
+function resetFormVisibility() {
+    document.getElementById("liftExists").style.display = "none";
+    document.getElementById("pendingRequest").style.display = "none";
+    document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("emailForm").style.display = "block";
+    document.getElementById("commentsForm").style.display = "block";
+    document.getElementById("submitButton").style.display = "block";
+}
+
+function showError(heading, errorMsg) {
+    document.getElementById("errorHeading").textContent = heading;
+    document.getElementById("errorText").textContent = errorMsg;
+    document.getElementById("errorMessage").style.display = "block";
+    document.getElementById("emailForm").style.display = "none";
+    document.getElementById("commentsForm").style.display = "none";
+    document.getElementById("submitButton").style.display = "none";
+}
+
+function showPending(status, requestTime) {
+    document.getElementById("pendingMessage").textContent =
+        pendingMessageFor(status, requestTime);
+    document.getElementById("pendingRequest").style.display = "block";
+    document.getElementById("emailForm").style.display = "none";
+    document.getElementById("commentsForm").style.display = "none";
+    document.getElementById("submitButton").style.display = "none";
+}
+
 function assembly1Select(selectEle, item) {
     selectEle.innerHTML = item.label;
     assembly1Value = item.value || item.label;
     genome1 = item.genome;
 //  console.log("asm1:", JSON.stringify(item, null, 2));
-    document.getElementById("liftExists").style.display = "none";
+    resetFormVisibility();
     checkBothAssembliesSelected();
 }
 
@@ -108,7 +169,7 @@ function assembly2Select(selectEle, item) {
     assembly2Value = item.value || item.label;
     genome2 = item.genome;
 //  console.log("asm2:", JSON.stringify(item, null, 2));
-    document.getElementById("liftExists").style.display = "none";
+    resetFormVisibility();
     checkBothAssembliesSelected();
 }
 
@@ -129,6 +190,8 @@ function submitForm() {
 
     // Hide any previous error message
     document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("errorHeading").textContent = "Error";
+    document.getElementById("errorText").textContent = "";
 
     if (!assembly1Value) {
         alert("Please select Assembly 1");
@@ -156,54 +219,48 @@ function submitForm() {
         "comment=" + encodeURIComponent(comment);
 
     fetch(apiUrl, { method: 'GET' })
-      .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json().catch(() => null); // parse JSON if any
-//        console.log(JSON.stringify(data));
-          localStorage.setItem('liftRequestEmail', email);
-          document.getElementById("formContainer").style.display = "none";
-          document.getElementById("successMessage").style.display = "block";
-        } else {
-          // Try to extract error message from JSON or text
-          let errorMsg = "Error submitting request";
-          try {
-            const errorData = await response.json();
-            if (errorData && errorData.error) {
-              errorMsg = errorData.error;
-            } else {
-              errorMsg = response.statusText || errorMsg;
-            }
-          } catch {
-            // If JSON parse fails, try plain text
-            const text = await response.text();
+      .then((response) => {
+        return response.text().then((text) => {
+          if (response.ok) {
+            localStorage.setItem('liftRequestEmail', email);
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("successMessage").style.display = "block";
+          } else {
+            // Try to extract error message from JSON or text
+            var errorMsg = "Error submitting request";
+            var heading = "Error";
             try {
-              const parsed = JSON.parse(text);
+              var parsed = JSON.parse(text);
               if (parsed.error) {
                 errorMsg = parsed.error;
-              } else {
-                errorMsg = text || errorMsg;
               }
-            } catch {
-              errorMsg = response.statusText || errorMsg;
+            } catch(e) {
+              errorMsg = text || response.statusText || errorMsg;
             }
+            if (response.status === 429) {
+              heading = "Daily limit reached";
+              errorMsg = "Thank you for your interest. " + errorMsg +
+                  " If you have an urgent need, please contact us at" +
+                  " genome-www@soe.ucsc.edu.";
+            } else if (response.status === 409) {
+              heading = "Already submitted";
+              errorMsg = errorMsg +
+                  " If you have not seen the completion email, please" +
+                  " contact us at genome-www@soe.ucsc.edu.";
+            }
+            showError(heading, errorMsg);
           }
-          document.getElementById("errorText").textContent = errorMsg;
-          document.getElementById("errorMessage").style.display = "block";
-        }
+        });
       })
       .catch((error) => {
         // Network or other fetch errors
-        const errorMsg = error.message || "Unknown error occurred";
-        document.getElementById("errorText").textContent = errorMsg;
-        document.getElementById("errorMessage").style.display = "block";
+        var errorMsg = error.message || "Unknown error occurred";
+        showError("Error", errorMsg);
       });
 }	// end of function submitForm()
 
 function dismissLiftExists() {
-    document.getElementById("liftExists").style.display = "none";
-    document.getElementById("emailForm").style.display = "block";
-    document.getElementById("commentsForm").style.display = "block";
-    document.getElementById("submitButton").style.display = "block";
+    resetFormVisibility();
     document.getElementById("genomeSearch1").value = "";
     document.getElementById("genomeSearch2").value = "";
     assembly1Value = "";
@@ -212,11 +269,16 @@ function dismissLiftExists() {
     genome2 = "";
 }
 
+function onSearchError(jqXHR, textStatus, errorThrown, term) {
+    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // Assembly 1 autocomplete
     let selectEle1 = document.getElementById("genomeLabel1");
     let boundSelect1 = assembly1Select.bind(null, selectEle1);
-    initSpeciesAutoCompleteDropdown('genomeSearch1', boundSelect1, "/cgi-bin/hubApi/findGenome?browser=mustExist;q=");
+    initSpeciesAutoCompleteDropdown('genomeSearch1', boundSelect1,
+        "/cgi-bin/hubApi/findGenome?browser=mustExist;q=", null, null, onSearchError);
 
     let btn1 = document.getElementById("genomeSearchButton1");
     btn1.addEventListener("click", () => {
@@ -227,7 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Assembly 2 autocomplete
     let selectEle2 = document.getElementById("genomeLabel2");
     let boundSelect2 = assembly2Select.bind(null, selectEle2);
-    initSpeciesAutoCompleteDropdown('genomeSearch2', boundSelect2, "/cgi-bin/hubApi/findGenome?browser=mustExist;q=");
+    initSpeciesAutoCompleteDropdown('genomeSearch2', boundSelect2,
+        "/cgi-bin/hubApi/findGenome?browser=mustExist;q=", null, null, onSearchError);
 
     let btn2 = document.getElementById("genomeSearchButton2");
     btn2.addEventListener("click", () => {
@@ -241,4 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("dismissLiftExists").addEventListener("click", dismissLiftExists);
+    document.getElementById("dismissPending").addEventListener("click", resetFormVisibility);
+    document.getElementById("dismissError").addEventListener("click", resetFormVisibility);
 });

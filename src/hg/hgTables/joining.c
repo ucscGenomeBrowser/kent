@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "trackHub.h"
 #include "hubConnect.h"
-
+#include "myVariants.h"
 
 
 struct joinedRow
@@ -298,15 +298,21 @@ char *track = dtfList->table;
 struct customTrack *ct = ctLookupName(track);
 char *type = ct->dbTrackType;
 struct slName *fieldList = NULL;
-if (startsWithWord("makeItems", type) || 
-        sameWord("bedDetail", type) || 
-        sameWord("barChart", type) || 
-        sameWord("interact", type) || 
-        sameWord("bedMethyl", type) || 
+if (startsWithWord("myVariants", type) ||
+        sameWord("bedDetail", type) ||
+        sameWord("barChart", type) ||
+        sameWord("interact", type) ||
+        sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    if (sameWord("myVariants", type))
+        {
+        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
+        }
     fieldList = sqlListFields(conn, ct->dbTableName);
+    if (startsWith("myVariants_shared_", track))
+        myVariantsStripHiddenFields(&fieldList);
     hFreeConn(&conn);
     }
 else
@@ -1095,7 +1101,7 @@ if (! doJoin)
         makeVcfOrderedCommaFieldList(dtfList, dy);
     else if (isHicTable(dtfList->table))
         makeHicOrderedCommaFieldList(dtfList, dy);
-    else if (isCustomTrack(dtfList->table))
+    else if (isCustomTrack(dtfList->table) || startsWith("myVariants_", dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);

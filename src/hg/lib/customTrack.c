@@ -15,6 +15,7 @@
 #include "sqlList.h"
 #include "jksql.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "ctgPos.h"
 #include "psl.h"
 #include "gff.h"
@@ -967,13 +968,23 @@ if (customTracksExist(cart, &ctFileName))
                     {
                     /* remove a track if requested, e.g. by hgTrackUi */
                     removedCt = TRUE;
+                    /* myVariants tracks need type-specific cleanup so the
+                     * SQL-backed entry doesn't reappear next page load.
+                     * When the helper handled the cart cleanup itself we
+                     * skip the wide cartRemovePrefix below so other-
+                     * assembly per-db labels survive. */
+                    boolean handledByMyVariants =
+                        myVariantsHandleCtRemoval(ct, cart, genomeDb);
                     slRemoveEl(&ctList, ct);
-                    /* remove visibility variable */
-                    cartRemove(cart, selectedTable);
-                    /* remove configuration variables */
-                    char buf[128];
-                    safef(buf, sizeof buf, "%s.", selectedTable);
-                    cartRemovePrefix(cart, buf);
+                    if (!handledByMyVariants)
+                        {
+                        /* remove visibility variable */
+                        cartRemove(cart, selectedTable);
+                        /* remove configuration variables */
+                        char buf[128];
+                        safef(buf, sizeof buf, "%s.", selectedTable);
+                        cartRemovePrefix(cart, buf);
+                        }
                     cartRemove(cart, CT_DO_REMOVE_VAR);
                     }
                 else

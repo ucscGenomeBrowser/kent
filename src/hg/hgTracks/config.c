@@ -777,6 +777,35 @@ if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
     hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
     }
 
+// My Variants navigation preference reset - stored in localStorage
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    hPrintf("<TR><TD>");
+    hPrintf("<input type='checkbox' id='resetMyVariantsNav' name='resetMyVariantsNav'>");
+    hPrintf("</TD><TD>");
+    hPrintf("Reset 'My Annotations' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
+    hPrintf("</TD></TR>\n");
+    // Display current preference and clear localStorage on form submit if checkbox is checked
+    jsInlineF(
+        "document.addEventListener('DOMContentLoaded', function() {"
+        "    var prefSpan = document.getElementById('myVariantsNavPrefDisplay');"
+        "    if (prefSpan) {"
+        "        var pref = localStorage.getItem('myVariants_navPref');"
+        "        prefSpan.textContent = pref ? pref : 'not set';"
+        "    }"
+        "    var form = document.forms['TrackForm'] || document.forms['TrackHeaderForm'];"
+        "    if (form) {"
+        "        form.addEventListener('submit', function() {"
+        "            var cb = document.getElementById('resetMyVariantsNav');"
+        "            if (cb && cb.checked) {"
+        "                localStorage.removeItem('myVariants_navPref');"
+        "            }"
+        "        });"
+        "    }"
+        "});"
+    );
+    }
+
 hTableEnd();
 
 

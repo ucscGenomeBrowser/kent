@@ -20,14 +20,22 @@ All ORFs have a minimum length of 8 amino acids.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are displayed in bigGenePred format, showing gene-structure-like visualization
-with thick and thin regions representing the predicted ORF and flanking transcript structure.
+Items are displayed in bigGenePred format. Each item is labeled with the nuORFdb ORF
+identifier, which encodes the source Ensembl transcript and ORF number (e.g.
+<tt>ENST00000488147.1_1_1</tt>). Color reflects Kozak translational efficiency &mdash;
+see the <a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for
+the color legend.
 </p>
 
 <p>
-<b>Mouseover</b> on items shows the simplified ORF category (<tt>plotType</tt>).
-Items are labeled with the nuORFdb ORF identifier, which encodes the source Ensembl transcript
-and ORF number (e.g. <tt>ENST00000488147.1_1_1</tt>).
+<b>Mouseover</b> shows the ORF ID in its host gene, gene biotype, start codon, Kozak
+strength and TE, predictor type, and the simplified <tt>plotType</tt> category.
+</p>
+
+<p>
+Available filters: start codon, Kozak strength, Kozak TE, ORF category
+(<tt>plotType</tt> &mdash; 8 broad classes; or <tt>type</tt> &mdash; 15 finer
+categories).
 </p>
 
 <p>
@@ -73,7 +81,7 @@ binary for your system. Instructions for downloading source code and binaries ca
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
 </p>
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.kozak.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 
 <p>
 The original data files can be downloaded from the

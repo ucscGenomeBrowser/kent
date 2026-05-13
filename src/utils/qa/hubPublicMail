@@ -3,7 +3,7 @@
 import logging, sys, optparse, os, requests, sys, urllib3, atexit, urllib
 from os.path import isfile
 from email.mime.text import MIMEText
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, run
 
 # makes sure that only one instance of the program runs at the same time
 lockFname = None
@@ -73,13 +73,45 @@ def getHubUrls(centralName):
     lines = os.popen(cmd).read().splitlines() # please do not suggest using subprocess in code review. Thx.
     return lines
 
+def getHubPublicEmails(centralName):
+    " return dict url -> parsed email from the hubPublic.email column "
+    logging.debug("Getting hubPublic emails from db %s" % centralName)
+    if centralName == 'hgcentral':
+        cmd = "hgsql -h genome-centdb %s -Nse 'select hubUrl, email from hubPublic'" % centralName
+    else:
+        cmd = "hgsql %s -Nse 'select hubUrl, email from hubPublic'" % centralName
+    emails = {}
+    for line in os.popen(cmd).read().splitlines():
+        parts = line.split("\t", 1)
+        if len(parts) != 2:
+            continue
+        url, raw = parts
+        raw = raw.strip()
+        if not raw or raw == "NULL":
+            continue
+        # parseEmail was written for live hub.txt values and can raise on weird
+        # table-stored shapes (e.g. <a HREF=mailto:...> without quotes). Skip
+        # those rows; the live-scrape path or the stored status-tab value
+        # will still cover them downstream. logged at debug level so the hourly
+        # cron email doesn't get spammed with the same known row every run.
+        try:
+            emails[url] = parseEmail(raw)
+        except Exception as e:
+            logging.debug("Could not parse hubPublic.email for %s: %r (%s)" % (url, raw, e))
+    return emails
+
 def parseEmail(s):
     " return only email address given email value of hub.txt. handles these weird cases "
     # jferna10@ucsc.edu or max@soe.ucsc.edu
     # yzz2 at psu.edu
     # <a HREF="mailto:dunham@ebi.ac.uk"TARGET=_BLANK>Ian Dunham</a>
     if "<" in s:
-        return s.split('"')[1]
+        # s.split('"')[1] yields "mailto:dunham@ebi.ac.uk" from the quoted <a> form;
+        # strip the mailto: prefix so sendmail gets a real address, not a URI.
+        val = s.split('"')[1]
+        if val.startswith("mailto:"):
+            val = val[len("mailto:"):]
+        return val
     if " at " in s:
         return s.replace(" at ", "@")
     if " or " in s:
@@ -97,8 +129,14 @@ def downloadUrls(urls, emails):
         reqFailed = False
         if url.startswith("http"):
             try:
-                f = requests.get(url, verify=False, timeout=5)
-                text = f.text
+                # shelling out to curl matches hubPublicAutoUpdate's approach and
+                # gets past Cloudflare bot-blocks that reject python-requests even
+                # with a browser-like User-Agent (TLS fingerprint differs).
+                # --fail makes curl exit non-zero on 4xx/5xx so errors land in failedUrls.
+                r = run(["curl", "--user-agent", "genome.ucsc.edu/net.c",
+                         "-skL", "--fail", "--connect-timeout", "10", "--max-time", "15", url],
+                        check=True, stdout=PIPE, universal_newlines=True, timeout=20)
+                text = r.stdout
             except KeyboardInterrupt: # handle ctrl-c for debugging
                 sys.exit(1)
             except:
@@ -165,22 +203,25 @@ def readStatus(fname):
         hubs[hubUrl] = (email, int(failCount))
     return hubs
 
-def mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails):
-    """ given a list hubPublic URLs, a list of failed URLs and a dict with url-> email,
-    return a dict with URL -> (email, failedCount) """
+def mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails, hubPublicEmails):
+    """ given a list hubPublic URLs, a list of failed URLs, a dict url->email read
+    from the live hub.txt and a dict url->hubPublic.email, return a dict with
+    URL -> (email, failedCount) """
     urlInfo = {}
     for url in urls:
         oldInfo = oldUrlInfo.get(url)
         if oldInfo is None:
-            oldEmail = urlEmails.get(url)
+            # new hub: prefer the email read from the live hub.txt, fall back to
+            # hubPublic.email so newly-added hubs that are already unreachable still
+            # get tracked and eventually mailed
+            oldEmail = urlEmails.get(url) or hubPublicEmails.get(url)
             if oldEmail is None:
-                print("URL %s is broken and there is no email in the status file. Skipping it." % url)
+                print("URL %s is broken and there is no email in the status file or hubPublic table. Skipping it." % url)
                 continue
             oldInfo = [oldEmail, 0]
 
-        email = urlEmails.get(url) # prefer most current email address
-        if email is None:
-            email = oldInfo[0]
+        # prefer most current email address: live hub.txt > hubPublic.email > stored
+        email = urlEmails.get(url) or hubPublicEmails.get(url) or oldInfo[0]
 
         failCount = oldInfo[1]
 
@@ -237,6 +278,7 @@ def hubPublicMail(centralName, statusFname):
     createLockFile(statusFname)
 
     urls = getHubUrls(centralName)
+    hubPublicEmails = getHubPublicEmails(centralName)
 
     oldUrlInfo = readStatus(statusFname)
 
@@ -247,7 +289,7 @@ def hubPublicMail(centralName, statusFname):
             "%d broken hubs, which is more than the 10 allowed. Something is weird. Please check the network setup." % len(failedUrls))
         sys.exit(1)
 
-    newUrlInfo = mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails)
+    newUrlInfo = mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails, hubPublicEmails)
     newUrlInfo = sendEmails(newUrlInfo)
 
     writeStatus(newUrlInfo, statusFname)

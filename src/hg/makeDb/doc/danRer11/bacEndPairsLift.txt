@@ -1,0 +1,39 @@
+# BAC End Pairs track lifted from danRer4, refs #35059
+# 2026-04-14 Claude max
+
+mkdir -p /hive/data/genomes/danRer11/bed/bacEndPairs
+cd /hive/data/genomes/danRer11/bed/bacEndPairs
+
+# Export bacEndPairs from danRer4 (linked-features format: bed6 + pslTable, lfCount, lfStarts, lfSizes, lfNames)
+hgsql danRer4 -N -e "select chrom, chromStart, chromEnd, name, score, strand, lfCount, lfStarts, lfSizes from bacEndPairs" > danRer4.bacEndPairs.raw.tsv
+wc -l danRer4.bacEndPairs.raw.tsv
+# 154632
+
+# Convert linked-features to BED12 (two blocks = two BAC ends)
+python3 toBed12.py < danRer4.bacEndPairs.raw.tsv > danRer4.bacEndPairs.bed12
+# toBed12.py is at ~/kent/src/hg/makeDb/scripts/bacEndPairsLift/toBed12.py
+
+# LiftOver BED12 to danRer11
+# Using BED12 rather than BED6 because liftOver lifts each block independently,
+# which works better for BAC end pairs (~700bp blocks) than lifting the full
+# 25-350kb span. BED12 gave 134,131 mapped vs 128,119 for BED6.
+liftOver danRer4.bacEndPairs.bed12 \
+    /gbdb/danRer4/liftOver/danRer4ToDanRer11.over.chain.gz \
+    danRer11.bacEndPairs.bed12 unmapped.bed -minMatch=0.1
+wc -l danRer11.bacEndPairs.bed12 unmapped.bed
+# 134131 danRer11.bacEndPairs.bed12  (87% mapped)
+#  41002 unmapped.bed
+# Unmapped items are mostly "Boundary problem: need 2, got 1" (one BAC end lifts, the other doesn't)
+
+# Convert to bigBed
+sort -k1,1 -k2,2n danRer11.bacEndPairs.bed12 > danRer11.bacEndPairs.sorted.bed12
+bedToBigBed -type=bed12 danRer11.bacEndPairs.sorted.bed12 \
+    /hive/data/genomes/danRer11/chrom.sizes danRer11.bacEndPairsLift.bb
+
+mkdir -p /gbdb/danRer11/bacEndPairs
+ln -sf /hive/data/genomes/danRer11/bed/bacEndPairs/danRer11.bacEndPairsLift.bb \
+    /gbdb/danRer11/bacEndPairs/bacEndPairs.bb
+
+# Note: track is named bacEndPairsLift, not bacEndPairs, because the original
+# name triggers hardcoded linked-features display code in hgTracks that
+# conflicts with bigBed display.

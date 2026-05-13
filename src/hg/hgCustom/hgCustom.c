@@ -25,6 +25,9 @@
 #include "trackHub.h"
 #include "botDelay.h"
 #include "chromAlias.h"
+#include "myVariants.h"
+#include "myVariantsShare.h"
+#include "wikiLink.h"
 #include "hgConfig.h"
 
 static long loadTime = 0;
@@ -566,7 +569,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Name  field */
     char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     if ((ctDataUrl(ct) && ctHtmlUrl(ct)) ||
-            sameString(ct->tdb->type, "chromGraph"))
+            sameString(ct->tdb->type, "chromGraph") ||
+            sameString(ct->tdb->type, "myVariants"))
         printf("<TR><TD>%s</A></TD>", shortLabel);
     else
 	{
@@ -1076,8 +1080,14 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char var[256];
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
-    if (cartUsualBoolean(cart, var, FALSE))
-	slRemoveEl(&ctList, ct);
+    if (!cartUsualBoolean(cart, var, FALSE))
+        continue;
+    /* myVariants tracks are backed by a per-user SQL table, not the CT
+     * file, so dropping them from ctList alone isn't enough -- the next
+     * page load regenerates the CT entry from the database.  Delegate
+     * the type-specific cleanup. */
+    myVariantsHandleCtRemoval(ct, cart, database);
+    slRemoveEl(&ctList, ct);
     }
 }
 
@@ -1209,6 +1219,80 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
 chromAliasSetup(database);
+
+/* Ensure myVariants CT is registered in this cart if user has items for current db */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    char *user = wikiLinkUserName();
+    if (isNotEmpty(user))
+        {
+        char *dbTable = myVariantsTableExists(user);
+        if (isNotEmpty(dbTable))
+            {
+            struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+            char query[512];
+            sqlSafef(query, sizeof query, "select count(*) from %s where db='%s'", dbTable, database);
+            int ctCount = sqlQuickNum(conn, query);
+            if (ctCount > 0)
+                {
+                /* Prefer writing a concrete CT file to trash to ensure CT is recognized immediately */
+                char *ctFile = myVariantsWriteCtFile(user, database, cart);
+                if (isNotEmpty(ctFile))
+                    {
+                    char varName[256];
+                    safef(varName, sizeof varName, CT_FILE_VAR_PREFIX "%s", database);
+                    cartSetString(cart, varName, ctFile);
+                    freeMem(ctFile);
+                    }
+                }
+            hFreeConn(&conn);
+            }
+        }
+    }
+
+/* Special endpoint: stream a custom track generated from the user's myVariants table */
+char *op = cgiOptionalString("op");
+if (cfgOptionBooleanDefault("doMyVariants", FALSE) && op && sameString(op, "myVariantsCt"))
+    {
+    char *user = wikiLinkUserName();
+    if (isEmpty(user))
+        errAbort("myVariantsCt: must be logged in");
+
+    // Build fully-qualified table name and verify existence
+    char *dbTable = myVariantsGetDbTable(user);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    if (!sqlTableExists(conn, dbTable))
+        {
+        hFreeConn(&conn);
+        errAbort("myVariantsCt: table does not exist for current user");
+        }
+
+    // Emit CT text: a track line and BED9 rows filtered by current database
+    // Plain text response, no HTML
+    puts("Content-Type: text/plain\n");
+    /* Keep track name stable so re-import replaces */
+    char *userEnc = htmlEncode(user);
+    printf("track name=\"myVariants\" type=\"bed 9\" itemRgb=\"on\" visibility=\"pack\" shortLabel=\"My Annotations\" longLabel=\"My Annotations (%s)\"\n", userEnc);
+    freeMem(userEnc);
+
+    struct dyString *query = dyStringNew(0);
+    sqlDyStringPrintf(query,
+            "select chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd, itemRgb "
+            "from %s where db='%s'",
+            dbTable, database);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        /* BED9: chrom start end name score strand thickStart thickEnd itemRgb */
+        printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+        row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    /* Done with special op */
+    return;
+    }
 
 customFactoryEnableExtraChecking(TRUE);
 

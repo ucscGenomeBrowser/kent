@@ -2275,8 +2275,6 @@ done
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP30way.bw) > bigWig.log 2>&1
-XXX - working - Tue Oct 26 12:43:42 PDT 2021
-
 
     egrep "real|VmPeak" bigWig.log
     # pid=78042: VmPeak:    33938800 kB

@@ -28,7 +28,7 @@ ifneq (,$(findstring -,$(MACHTYPE)))
 endif
 
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
-HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I$(kentSrc)/htslib
+HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I$(kentSrc)/submodules/htslib
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
@@ -278,7 +278,7 @@ ifneq ($(MAKECMDGOALS),clean)
     else
         MYSQLCONFIG := mysql_config
     endif
-	
+
     MYSQLINC := $(shell ${MYSQLCONFIG} --include | sed -e 's/-I//' || true)
         # $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
@@ -346,9 +346,7 @@ ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
-   L+=${OURSTUFF}/lib/libcurl.a
-   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
-
+   L += -lcurl -llzma -lssl -lcrypto
    ifeq (${HOSTNAME},hgwdev)
        PNGLIB=${OURSTUFF}/lib/libpng.a
        PNGINCL=-I${OURSTUFF}/include/libpng16
@@ -385,7 +383,7 @@ else
 endif
 
 #global external libraries
-L += $(kentSrc)/htslib/libhts.a
+L += $(kentSrc)/submodules/htslib/libhts.a
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 

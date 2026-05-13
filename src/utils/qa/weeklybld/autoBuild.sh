@@ -3,7 +3,7 @@
 # autoBuild.sh - Fully automated CGI build process
 #
 # Runs the appropriate build phase (preview1, preview2, final build,
-# or wrap-up) based on the schedule in buildSchedule.txt.
+# or wrap-up) based on the Google Calendar build schedule.
 #
 # Exits non-zero (and loudly) at the first sign of anything wrong.
 # Designed to be run from cron or manually with no human interaction.
@@ -22,11 +22,11 @@ set -eEu -o pipefail
 # Configuration
 ##############################################################################
 SCRIPT_NAME="$(basename "$0")"
-SCHEDULE_FILE="$WEEKLYBLD/buildSchedule.txt"
 WEEKLYBLD="/hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld"
 BUILDENV="$WEEKLYBLD/buildEnv.csh"
 LOGDIR="$WEEKLYBLD/logs"
 LOCKFILE="/tmp/autoBuild.lock"
+GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
 
@@ -39,10 +39,10 @@ log() {
 }
 
 die() {
-    log "FATAL: $*"
-    log "Build ABORTED."
+    log "FATAL: $*" >&2
+    log "Build ABORTED." >&2
     if ! $DRY_RUN; then
-        log "Sending alert email."
+        log "Sending alert email." >&2
         local subject="AUTOBUILD FAILED: $*"
         echo "$subject" | mail -s "$subject" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
@@ -85,6 +85,19 @@ check_file_fresh() {
         die "File $file is $age_min minutes old (expected < $max_age_min min)"
     fi
     log "OK: $file exists and is ${age_min}m old"
+}
+
+# Register QEMU binfmt_misc handlers so `docker build --platform linux/arm64`
+# works on an amd64 host. Handlers are kernel state and are cleared on reboot,
+# so we re-register on every build. The container is idempotent and fast (~1s)
+# when handlers are already registered.
+ensure_binfmt() {
+    log "Registering QEMU binfmt handlers for cross-arch docker builds..."
+    if run docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null 2>&1; then
+        log "OK: binfmt handlers registered"
+    else
+        log "WARNING: binfmt registration failed; arm64 docker builds may fail"
+    fi
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -135,25 +148,58 @@ read_buildenv() {
 }
 
 ##############################################################################
-# Determine which phase to run from the schedule
+# Determine which phase to run from Google Calendar
 ##############################################################################
 
 detect_phase() {
-    local ds
-    ds=$(date "+%F")
-    local entry
-    entry=$(grep "^${ds}" "$SCHEDULE_FILE" 2>/dev/null | head -1 | cut -f2) || true
+    local ds_dash
+    ds_dash=$(date "+%F")           # YYYY-MM-DD for logs
+    local ds_ical
+    ds_ical=$(date "+%Y%m%d")       # YYYYMMDD for iCal DTSTART matching
 
-    if [[ -z "$entry" ]]; then
-        die "No entry for today ($ds) in $SCHEDULE_FILE. Is the schedule up to date?"
+    # Primary source: Google Calendar iCal feed
+    local entry=""
+    log "Fetching build schedule from Google Calendar..." >&2
+    local ical_data
+    ical_data=$(curl -sS --max-time 30 "$GCAL_ICAL_URL" 2>/dev/null) || true
+
+    if [[ -n "$ical_data" ]]; then
+        # Parse iCal: find VEVENT whose DTSTART matches today, extract SUMMARY
+        entry=$(echo "$ical_data" | awk -v date="$ds_ical" '
+            /^BEGIN:VEVENT/ { in_event=1; summary=""; dtstart="" }
+            /^END:VEVENT/ {
+                if (in_event && dtstart == date && summary != "") print summary
+                in_event=0
+            }
+            in_event && /^DTSTART/ {
+                gsub(/.*:/, ""); gsub(/\r/, ""); dtstart=$0
+            }
+            in_event && /^SUMMARY/ {
+                gsub(/^SUMMARY:/, ""); gsub(/\r/, ""); summary=$0
+            }
+        ' | head -1)
+
+        if [[ -n "$entry" ]]; then
+            log "Google Calendar entry for $ds_dash: $entry" >&2
+        else
+            log "WARNING: No Google Calendar entry for today ($ds_dash)" >&2
+        fi
+    else
+        log "WARNING: Could not fetch Google Calendar iCal feed" >&2
     fi
 
-    log "Schedule entry for $ds: $entry" >&2
+    if [[ -z "$entry" ]]; then
+        die "No entry for today ($ds_dash) in Google Calendar. Is the calendar up to date?"
+    fi
 
-    if echo "$entry" | grep -qi "preview 1"; then
-        echo "preview1"
-    elif echo "$entry" | grep -qi "preview 2"; then
+    log "Schedule entry for $ds_dash: $entry" >&2
+
+    # Match digit or Roman-numeral forms ("Preview 1"/"Preview I", "Preview 2"/"Preview II").
+    # Check II/2 before I/1 so "Preview II" does not fall through to preview1.
+    if echo "$entry" | grep -qiE 'preview (2|ii)\b'; then
         echo "preview2"
+    elif echo "$entry" | grep -qiE 'preview (1|i)\b'; then
+        echo "preview1"
     elif echo "$entry" | grep -qi "final build"; then
         echo "final"
     else
@@ -391,11 +437,13 @@ do_final() {
 
     # Docker testing image build
     log "Building testing Docker images..."
+    ensure_binfmt
     local dockerdir
     dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
         local dockerlog="$LOGDIR/v${BRANCHNN}.docker-testing.log"
-        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest create genomebrowser/server:\${stage} --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
+        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
             log "WARNING: Docker testing build had issues. See $dockerlog (non-fatal, continuing)"
         }
         log "Docker testing build complete (or skipped on error)."
@@ -405,6 +453,47 @@ do_final() {
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
+}
+
+##############################################################################
+# Generate markdown release notes from the versions page
+##############################################################################
+
+generate_release_markdown() {
+    local ver="$1"
+    local outdir="$WEEKLYBLD/markdownReleaseNotes"
+    local outfile="$outdir/v${ver}_markdown.txt"
+    local url="https://genecats.gi.ucsc.edu/builds/versions-all/v${ver}.html"
+
+    mkdir -p "$outdir"
+
+    log "Generating markdown release notes for v${ver}..."
+
+    local html
+    html=$(curl -s "$url") || {
+        log "WARNING: Could not fetch $url - skipping markdown generation"
+        return 0
+    }
+
+    if [[ -z "$html" ]]; then
+        log "WARNING: Empty response from $url - skipping markdown generation"
+        return 0
+    fi
+
+    # Extract code changes <li> items, strip HTML tags, redmine links, and author names
+    echo "$html" \
+        | sed -n '/<H2>Code changes:<\/H2>/,/<H2>/p' \
+        | grep '<li>' \
+        | sed 's|<li>||g; s|</li>||g' \
+        | sed 's|<a [^>]*>[^<]*</a>||g' \
+        | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
+        | sed 's|\. [A-Z][a-z]*$||' \
+        | sed 's|[[:space:]]*$||' \
+        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed 's|^|- |' \
+        > "$outfile"
+
+    log "Markdown release notes written to $outfile"
 }
 
 ##############################################################################
@@ -507,10 +596,12 @@ do_wrapup() {
 
     # Step 7: Build release Docker images
     log "Building release Docker images..."
+    ensure_binfmt
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
         local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest create genomebrowser/server:\${stage} --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest create genomebrowser/server:latest --amend genomebrowser/server:\${stage}-amd64 --amend genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
+        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
             log "WARNING: Docker release build had issues. See $dockerlog (non-fatal)"
         }
         log "Docker release build complete."
@@ -518,11 +609,17 @@ do_wrapup() {
         log "WARNING: Docker directory not found - skipping Docker release build"
     fi
 
+    # Step 8: Generate markdown release notes for GitHub
+    if ! $DRY_RUN; then
+        generate_release_markdown "$BRANCHNN"
+    fi
+
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
     log "  - Create GitHub release at https://github.com/ucscGenomeBrowser/kent/releases/new"
-    log "  - Wait 1 day for nightly rsync, then verify hgdownload"
+    log "    Release notes: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
     log "  - Send mirror announcement email to genome-mirror@soe.ucsc.edu"
 }
 
@@ -546,7 +643,7 @@ main() {
             --help|-h)
                 echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup]"
                 echo ""
-                echo "Runs the CGI build phase for today's date (per buildSchedule.txt),"
+                echo "Runs the CGI build phase for today's date (per Google Calendar),"
                 echo "or a forced phase if specified. Stops on any error."
                 exit 0
                 ;;
@@ -569,10 +666,6 @@ main() {
 
     if [[ "$(whoami)" != "build" ]]; then
         die "Must run as 'build' user (current user: $(whoami))"
-    fi
-
-    if [[ ! -f "$SCHEDULE_FILE" ]]; then
-        die "Schedule file not found: $SCHEDULE_FILE"
     fi
 
     if [[ ! -f "$BUILDENV" ]]; then

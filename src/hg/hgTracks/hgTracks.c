@@ -83,6 +83,7 @@
 #include "decoratorUi.h"
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
+#include "myVariants.h"
 
 //#include "bed3Sources.h"
 
@@ -105,6 +106,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
+            "myVarShare",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -197,6 +199,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 #endif /* DEBUG */
+
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -1365,6 +1368,7 @@ struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 Color labelColor = (track->labelColor ?
                         track->labelColor : track->ixColor);
+labelColor = colorFromCart(track, labelColor);
 labelColor = maybeDarkerLabels(track, hvg, labelColor);
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
@@ -1655,6 +1659,7 @@ if (track->limitedVis != tvHide)
         char *label = track->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
+        labelColor = colorFromCart(track, labelColor);
         if (isCenterLabelConditional(track))
             {
             struct trackDb* tdbComposite = tdbGetComposite(track->tdb);
@@ -1833,6 +1838,7 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+labelColor = colorFromCart(track, labelColor);
 labelColor = maybeDarkerLabels(track, hvg, labelColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
@@ -6750,11 +6756,10 @@ else if (sameString(type, "vcf"))
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
-else if (sameString(type, "makeItems"))
+else if (sameString(type, "myVariants"))
     {
     tg = trackFromTrackDb(tdb);
-    makeItemsMethods(tg);
-    tg->nextItemButtonable = TRUE;
+    myVariantsMethods(tg);
     tg->customPt = ct;
     }
 else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
@@ -6827,6 +6832,24 @@ char *getPositionFromCustomTracks()
 {
 char *pos = NULL;
 struct slName *bl = NULL;
+
+// If the user has myVariants data for this database, write a custom track
+// stub file and set the ctfile_ cart variable so customTracksParseCart picks
+// it up.  This handles fresh carts and also refreshes after edits/deletes
+// done via jsCommandDispatch.  If the backing table no longer exists (e.g.
+// the user or an admin dropped it), remove the stale cart variable so the
+// custom track system doesn't try to load a non-existent table.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    char *userName = getUserName();
+    char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+    char mvVarName[256];
+    safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+    if (isNotEmpty(ctFile))
+        cartSetString(cart, mvVarName, ctFile);
+    else
+        cartRemove(cart, mvVarName);
+    }
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
@@ -7888,8 +7911,8 @@ void jsCommandDispatch(char *command, struct track *trackList)
  * This gets executed after the track list is built, but before
  * the track->loadItems methods are called.  */
 {
-if (startsWithWord("makeItems", command))
-    makeItemsJsCommand(command, trackList, trackHash);
+if (startsWithWord("myVariants", command))
+    myVariantsJsCommand(command, trackList, trackHash);
 else
     warn("Unrecognized jsCommand %s", command);
 }
@@ -7949,8 +7972,18 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
+char *db = database;
 
-return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
+// quickLifted tracks fetch from the source assembly via the chain in
+// quickLiftUrl, so their bigDataUrl is /gbdb/<sourceDb>/... -- the source
+// db, not the current target db. customFactoryParallelLoad's bigDataUrl
+// validity check requires /gbdb/<X>/ to match its db argument, so when
+// the track declares its source via quickLiftDb, validate against that.
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    db = quickLiftDb;
+
+return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
@@ -8061,6 +8094,12 @@ void loadDecorators(struct track *track)
  */
 {
 struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+// quickLifted tracks fetch from the source assembly, so their decorator
+// bigDataUrls live under /gbdb/<sourceDb>/... -- validate against that.
+char *decoratorDb = database;
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    decoratorDb = quickLiftDb;
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
@@ -8076,7 +8115,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, decoratorDb, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);
@@ -8714,11 +8753,36 @@ static void printTrackDelIcon(struct track *track)
 
 }
 
+static void printQuickLiftDelIcon(struct track *track, char *sourceDb)
+/* little 'x' icon next to a track in a quickLift group; clicking it removes
+ * the track from the quickLift hub. */
+{
+    hPrintf("<div title='Remove this track from the QuickLift group' "
+            "data-track='%s' data-sourcedb='%s' class='quickLiftDelIcon'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 384 512'>"
+            "<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License "
+            "- https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->"
+            "<path d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 "
+            "86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4"
+            "c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 "
+            "32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/></svg></div>",
+            track->track, sourceDb);
+}
+
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
 if (sameOk(track->groupName, "user"))
     printTrackDelIcon(track);
+
+char *quickLiftSourceDb = (track->tdb != NULL) ?
+        trackDbSetting(track->tdb, "quickLiftDb") : NULL;
+/* skip the synthetic "Alignment Differences" track -- it's added at runtime
+ * by hubConnect, not from the hub file, so removing it from the file is a
+ * no-op and it would reappear on the next page load. */
+if (quickLiftSourceDb != NULL &&
+    (track->tdb->type == NULL || !startsWith("bigQuickLiftChain", track->tdb->type)))
+    printQuickLiftDelIcon(track, quickLiftSourceDb);
 
 if (track->hasUi)
     {
@@ -8827,6 +8891,55 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
+// put up the My Variants dialog if the hg.conf statement is present
+// and the visitor is logged in (anonymous users can't write to the table).
+if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
+    {
+    hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
+    jsInline("var doMyVariants = true;\n");
+    jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
+    // Get existing project values for dropdown
+    char *userName = getUserName();
+    if (userName)
+        {
+        struct slName *projects = myVariantsGetProjects(userName);
+        if (projects)
+            {
+            struct jsonElement *projectList = newJsonList(NULL);
+            struct slName *proj;
+            for (proj = projects; proj != NULL; proj = proj->next)
+                jsonListAdd(projectList, newJsonString(proj->name));
+            slReverse(&projectList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
+            slFreeList(&projects);
+            }
+        /* Get existing custom field names for the create dialog */
+        struct slName *customFields = myVariantsGetCustomFields(userName);
+        if (customFields)
+            {
+            struct jsonElement *cfList = newJsonList(NULL);
+            struct slName *cf;
+            for (cf = customFields; cf != NULL; cf = cf->next)
+                jsonListAdd(cfList, newJsonString(cf->name));
+            slReverse(&cfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsCustomFields", cfList);
+            slFreeList(&customFields);
+            }
+        /* Get hidden field names for the restore UI */
+        struct slName *hiddenFields = myVariantsGetHiddenFields(userName);
+        if (hiddenFields)
+            {
+            struct jsonElement *hfList = newJsonList(NULL);
+            struct slName *hf;
+            for (hf = hiddenFields; hf != NULL; hf = hf->next)
+                jsonListAdd(hfList, newJsonString(hf->name));
+            slReverse(&hfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
+            slFreeList(&hiddenFields);
+            }
+        }
+    }
+
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
@@ -8842,18 +8955,46 @@ if (cfgOptionBooleanDefault("showIgv", FALSE))
 
 }
 
-#ifdef NOTNOW
-static void printAliases(char *name)
-/* Print out the aliases for this sequence. */
+static void printAliases(char *nativeName, char *displayName)
+/* Print out the alternative names for this sequence next to the position. */
 {
-struct slName *names = chromAliasFindAliases(name);
+struct slName *aliases = chromAliasFindAliases(nativeName);
+if (aliases == NULL)
+    return;
 
-printf("<div id='aliases'><a title='");
-for(;names; names = names->next)
-    printf("%s;",names->name);
-printf("'>Aliases</a></div>");
+slSort(&aliases, slNameCmp);
+slUniqify(&aliases, slNameCmp, slNameFree);
+
+// Build comma-separated list of aliases, skipping the display name and native name
+struct dyString *dy = dyStringNew(256);
+struct slName *a;
+for (a = aliases; a != NULL; a = a->next)
+    {
+    if (isEmpty(a->name))
+        continue;
+    if (sameString(a->name, displayName) || sameString(a->name, nativeName))
+        continue;
+    if (dy->stringSize > 0)
+        dyStringAppend(dy, ", ");
+    dyStringAppend(dy, a->name);
+    }
+
+if (dy->stringSize == 0)
+    {
+    dyStringFree(&dy);
+    return;
+    }
+
+char *encoded = htmlEncode(dy->string);
+printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+       "Alternative sequence names can be used in the position box, custom tracks, "
+       "track hubs, bigBed, bigWig, and similar files. "
+       "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
+       "for more information'>"
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
+freeMem(encoded);
+dyStringFree(&dy);
 }
-#endif
 
 
 unsigned getParaLoadTimeout()
@@ -8989,14 +9130,6 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
         }
 
     }
-
-char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
-if (!isEmpty(jsCommand))
-   {
-   cartRemove(cart, hgtJsCommand);
-   jsCommandDispatch(jsCommand, trackList);
-   }
-
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -9441,9 +9574,11 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
-    // right-click to change viz 
+    // right-click to change viz
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
+    if (measureTiming)
+        printTrackTiming();
     return;  // bail out b/c we are done
     }
 
@@ -9624,6 +9759,9 @@ if (!hideControls)
             hPrintf(" ");
             }
 
+        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
+            printAliases(chromName, virtChromName);
+
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
 	else
@@ -9651,7 +9789,6 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
-        // printAliases(displayChromName);
 
         printPatchNote();
 
@@ -10614,6 +10751,23 @@ boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
 cartRemove(cart, "findNearest");
 
 boolean positionIsVirt = FALSE;
+
+/* Process JS commands (e.g., myVariants insert) BEFORE building track list/CTs */
+char *jsEarly = cartCgiUsualString(cart, hgtJsCommand, "");
+if (!isEmpty(jsEarly))
+    {
+    cartRemove(cart, hgtJsCommand);
+    jsCommandDispatch(jsEarly, NULL);
+    }
+
+/* Accept incoming share links before CT file generation so the cart var is
+ * visible to shared track rendering in the same request. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    myVariantsProcessShareParam();
+    myVariantsProcessSharedEdits();
+    }
+
 position = getPositionFromCustomTracks();
 if (NULL == position)
     {
@@ -11894,6 +12048,7 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+    jsIncludeFile("myVariantsBlocks.js", NULL);
 
     // remove the hg.conf option once this feature is released
     if (cfgOptionBooleanDefault("showIgv", FALSE))

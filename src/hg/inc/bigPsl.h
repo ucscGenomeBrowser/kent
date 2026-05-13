@@ -32,14 +32,14 @@ struct bigPsl
     int blockCount;	/* Number of blocks */
     int *blockSizes;	/* Comma separated list of block sizes */
     int *chromStarts;	/* Start positions relative to chromStart */
-    unsigned oChromStart;	/* Start position in other chromosome */
-    unsigned oChromEnd;	/* End position in other chromosome */
-    char oStrand[2];	/* + or -, - implies doing a reverse complement on the psl on output */
-    unsigned oChromSize;	/* Size of other chromosome. */
-    int *oChromStarts;	/* Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand */
-    char *oSequence;	/* Sequence on other chrom (or edit list, or empty) */
+    unsigned oChromStart;	/* Start position in other sequence (PSL qStart) */
+    unsigned oChromEnd;	/* End position in other sequence (PSL qEnd) */
+    char oStrand[2];	/* + or -, - means that psl was reversed into BED-compatible coordinates */
+    unsigned oChromSize;	/* Size of other sequence (PSL qSize) */
+    int *oChromStarts;	/* Start positions in other sequence; relative to oChromStart or oChromStart+oChromSize depending on strand (PSL qStarts) */
+    char *oSequence;	/* Sequence on other side of alignment (or edit list, or empty) */
     char *oCDS;	/* CDS in NCBI format */
-    unsigned chromSize;	/* Size of target chromosome */
+    unsigned chromSize;	/* Size of reference sequence (PSL tSize) */
     unsigned match;	/* Number of bases matched. */
     unsigned misMatch;	/*  Number of bases that don't match  */
     unsigned repMatch;	/*  Number of bases that match but are part of repeats  */

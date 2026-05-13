@@ -1,0 +1,126 @@
+<h2>Description</h2>
+
+<p>
+This track collection shows
+<a href="https://sites.google.com/site/clinpred/" target="_blank">ClinPred</a>
+scores, a machine-learning predictor of pathogenicity for nonsynonymous (missense)
+single-nucleotide variants. ClinPred combines existing pathogenicity scores with
+population allele frequency from gnomAD, and was trained on confidently annotated
+disease-causing and benign variants from ClinVar. Pre-computed scores are
+provided for all possible human missense variants in the exome.
+</p>
+
+<p>
+Scores range from 0 to 1, with higher values indicating greater predicted
+likelihood that a variant is disease-relevant. The authors recommend a score of
+&ge; 0.5 as evidence of pathogenicity. As with any pathogenicity prediction
+score, ClinPred is intended as supporting evidence rather than a stand-alone
+classifier.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+There are four subtracks in this collection, one for each possible alternate
+nucleotide. At every exome position covered by ClinPred, three of the four
+subtracks show a score (one per non-reference base) and the fourth, corresponding
+to the reference base, is set to 0. Synonymous alternates &mdash; those that do
+not change the encoded amino acid &mdash; are also set to 0, since ClinPred only
+scores missense variants. Positions with no exome coverage are shown as gaps.
+</p>
+
+<p>
+When using this track, zoom in until you can see every basepair at the top of
+the display. Otherwise, several nucleotides fall under each pixel and no score
+will be shown on the mouseover tooltip.
+</p>
+
+<p><b>Track colors</b></p>
+
+<p>
+Each subtrack is colored by score using the threshold recommended by the
+ClinPred authors:
+</p>
+
+<table style="text-align: left;">
+  <thead>
+    <tr>
+      <th>Range</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&ge; 0.5</td>
+      <td style="color: rgb(255,0,0);">Likely pathogenic</td>
+    </tr>
+    <tr>
+      <td>&lt; 0.5</td>
+      <td style="color: rgb(80,166,230);">Likely benign</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Data Access</h2>
+
+<p>
+ClinPred scores are available at the
+<a href="https://sites.google.com/site/clinpred/" target="_blank">ClinPred
+website</a>, which provides pre-computed scores for all possible human missense
+variants.
+</p>
+
+<p>
+The ClinPred data on the UCSC Genome Browser can be explored interactively with
+the <a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated download
+and analysis, the data are stored in bigWig files and can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/" target="_blank">our
+download server</a>. The files are named <tt>a.bw, c.bw, g.bw, t.bw</tt>.
+Individual regions can be obtained using <tt>bigWigToBedGraph</tt>, which can
+be compiled from source or downloaded as a precompiled binary; instructions
+are <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+For example:
+<br>&nbsp;<br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/a.bw stdout</tt>
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Data were downloaded from the
+<a href="https://sites.google.com/site/clinpred/" target="_blank">ClinPred
+website</a> on May 5, 2026, and converted into four per-alternate-base bigWig
+files using a custom script. As with all other tracks, a full log of the
+commands used for the conversion is available in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/" target="_blank">source repository</a>, for
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt" target="_blank">hg19</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/clinPred.txt" target="_blank">hg38</a>.
+</p>
+
+<h2>Data Use</h2>
+
+<p>
+ClinPred scores are freely available for non-commercial applications. For
+commercial use, please see the licensing information on the
+<a href="https://sites.google.com/site/clinpred/" target="_blank">ClinPred
+website</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the ClinPred authors for making the pre-computed scores available
+through their website.
+</p>
+
+<h2>References</h2>
+
+<p>
+Alirezaie N, Kernohan KD, Hartley T, Majewski J, Hocking TD.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(18)30271-4" target="_blank">
+ClinPred: Prediction Tool to Identify Disease-Relevant Nonsynonymous Single-Nucleotide Variants</a>.
+<em>Am J Hum Genet</em>. 2018 Oct 4;103(4):474-483.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30220433" target="_blank">30220433</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6174354/" target="_blank">PMC6174354</a>
+</p>

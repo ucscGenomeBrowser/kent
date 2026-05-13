@@ -38,11 +38,12 @@
 #include "vcf.h"
 #include "errCatch.h"
 #include "samAlignment.h"
-#include "makeItemsItem.h"
+#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "genark.h"
 #include "gtexUi.h"
 #include "genbank.h"
 #include "htmlPage.h"
@@ -4012,11 +4013,23 @@ filterBy_t *filterBy;
 AllocVar(filterBy);
 filterBy->column = cloneString(field);
 filterBy->title = cloneString(field); ///  title should come from AS file, or trackDb variable
-struct asColumn *asCol = asColumnFind(as, field);
+struct asColumn *asCol = (as != NULL) ? asColumnFind(as, field) : NULL;
 if (asCol != NULL)
     filterBy->title = asCol->comment;
-else
-    errAbort("Track %s: Building filter on field %s which is not in AS file.", tdb->track, field);
+else if (as != NULL)
+    {
+    // We have autoSql but the field is missing — that's a typo or an
+    // outdated trackDb. Emit a visible warning so a hub maker reading the
+    // page sees a clear hint, then abort. (The as==NULL case is reserved
+    // for superTracks/noData tdbs that legitimately declare filterValues
+    // on virtual fields they only aggregate over.)
+    warn("Track %s: filter on field '%s' is not in the autoSql file. "
+         "Check the field name in your trackDb filterValues.* / "
+         "filterByRange.* settings against the .as schema.",
+         tdb->track, field);
+    errAbort("Track %s: Building filter on field %s which is not in AS file.",
+             tdb->track, field);
+    }
 char *trackDbLabel = getLabelSetting(cart, tdb, field);
 if (trackDbLabel)
     filterBy->title = trackDbLabel;
@@ -4051,15 +4064,19 @@ return filterBy;
 filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackDbFilter *trackDbFilters, char *name)
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
+// Not every tdb has an autoSql: superTracks and tracks pointing at a
+// bigData file that isn't reachable at UI time both return NULL here.
+// That's fine for filterValues.* settings as long as a filterLabel.*
+// override is provided; buildFilterBy() already tolerates a NULL `as`.
 struct asObject *as = asForTdb(NULL, tdb);
-if (as == NULL)
-    errAbort("Track %s: Unable to get autoSql for %s", tdb->track, name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
     {
+    // slAddTail (not slAddHead) keeps the priority-sorted order from tdbGetTrackFilters
+    // since filterBySetCfgUi displays the list head-to-tail.
     if ((filter = buildFilterBy(tdb, cart, as, fieldFilter, name)) != NULL)
-        slAddHead(&filterByList, filter);
+        slAddTail(&filterByList, filter);
     }
 return filterByList;
 }
@@ -6043,9 +6060,31 @@ printInfoIcon("Enter the primary accession of the track, so RefSeq IDs for the R
 puts("</DIV>\n\n");
 }
 
+boolean tdbSupportsColorOverride(struct trackDb *tdb)
+/* Return TRUE if this track type supports the color override feature. */
+{
+if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
+    return FALSE;
+char *type = tdb->type;
+char *track = tdb->track;
+// Blacklist tracks that use custom rendering incompatible with color override
+if (startsWith("gtexGene", track) || startsWith("gtexEqtlCluster", track)
+    || startsWith("gtexEqtlTissue", track))
+    return FALSE;
+return !tdbIsComposite(tdb)
+    && (startsWithWord("bed", type) || startsWithWord("bigBed", type)
+    || startsWithWord("genePred", type) || startsWithWord("bigGenePred", type)
+    || startsWithWord("wig", type) || startsWithWord("bigWig", type)
+    || startsWithWord("rmsk", type) || startsWithWord("interact", type)
+    || startsWithWord("bigInteract", type) || startsWithWord("bigLolly", type)
+    || startsWithWord("vcfTabix", type) || startsWithWord("vcf", type)
+    || startsWithWord("bigDbSnp", type));
+}
+
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
 /* color picker for overriding track color */
 {
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s.colorOverride", name);
 
@@ -6055,12 +6094,38 @@ safef(defaultColor, sizeof(defaultColor), "#%02x%02x%02x", tdb->colorR, tdb->col
 char *rawCartValue = cartOptionalString(cart, varName);
 boolean hasOverride = (rawCartValue != NULL && rawCartValue[0] != '\0');
 char *colorValue = hasOverride ? rawCartValue : defaultColor;
-boolean hasItemRgb = !trackDbSettingOff(tdb, "itemRgb");
 
-printf("&nbsp;<div id='colorPicker_%s'>", name);
-jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker_%s'), '%s', '<b>Change track color: </b>&nbsp;', '%s', '%s', %s, %s);",
-        varName, name, name, colorValue, defaultColor, hasItemRgb ? "true" : "false", hasOverride ? "true" : "false");
-puts("</div>\n\n");
+char checkVar[1024];
+safef(checkVar, sizeof(checkVar), "%s.colorOverrideOn", name);
+boolean isOn = cartUsualBoolean(cart, checkVar, hasOverride);
+
+printf("<br><b>Override track color:</b> ");
+cgiMakeCheckBox(checkVar, isOn);
+printf(" <input type='text' name='%s' id='%s_text' value='%s' size='8' />",
+    varName, varName, colorValue);
+printf("&nbsp;<input id='%s_picker' />\n", varName);
+jsInlineF(
+    "(function() {\n"
+    "  var textEl = document.getElementById('%s_text');\n"
+    "  var pickerEl = document.getElementById('%s_picker');\n"
+    "  var checkEl = document.querySelector('input[type=checkbox][name=\"%s\"]');\n"
+    "  $(pickerEl).spectrum({\n"
+    "    color: textEl.value,\n"
+    "    showPalette: true,\n"
+    "    showSelectionPalette: true,\n"
+    "    showInitial:true,\n"
+    "    showInput: true,\n"
+    "    preferredFormat: 'hex',\n"
+    "    hideAfterPaletteSelect: true,\n"
+    "    change: function(color) { textEl.value = color.toHexString(); checkEl.checked = true; }\n"
+    "  });\n"
+    "  textEl.addEventListener('change', function() {\n"
+    "    $(pickerEl).spectrum('set', textEl.value);\n"
+    "    checkEl.checked = true;\n"
+    "  });\n"
+    "})();\n",
+    varName, varName, checkVar);
+puts("\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)
@@ -6734,11 +6799,49 @@ if (setting)
 return FALSE;
 }
 
+static boolean isHighlightFilterPrefix(char *lowName)
+// Distinguish highlight filter passes from filter passes so we look up the right priority var.
+{
+return startsWith("highlight", lowName);
+}
+
+static double lookupFilterPriority(struct trackDb *tdb, char *fieldName, boolean isHighlight)
+// Find a filterPriority.<field> / <field>FilterPriority setting (or highlight equivalent) in tdb.
+// Returns TRACKDB_FILTER_DEFAULT_PRIORITY when no setting is found.
+{
+char setting[1024];
+char *priorityLow = isHighlight ? HIGHLIGHT_PRIORITY_NAME_LOW : FILTER_PRIORITY_NAME_LOW;
+char *priorityCap = isHighlight ? HIGHLIGHT_PRIORITY_NAME_CAP : FILTER_PRIORITY_NAME_CAP;
+safef(setting, sizeof setting, "%s.%s", priorityLow, fieldName);
+char *val = trackDbSetting(tdb, setting);
+if (val == NULL)
+    {
+    safef(setting, sizeof setting, "%s%s", fieldName, priorityCap);
+    val = trackDbSetting(tdb, setting);
+    }
+if (val == NULL)
+    return TRACKDB_FILTER_DEFAULT_PRIORITY;
+return atof(val);
+}
+
+static int trackDbFilterPriCmp(const void *va, const void *vb)
+// Sort trackDbFilters by priority ascending; tiebreak by name for determinism.
+{
+const struct trackDbFilter *a = *((struct trackDbFilter **)va);
+const struct trackDbFilter *b = *((struct trackDbFilter **)vb);
+if (a->priority < b->priority)
+    return -1;
+if (a->priority > b->priority)
+    return 1;
+return strcmp(a->name, b->name);
+}
+
 struct trackDbFilter *tdbGetTrackFilters( struct trackDb *tdb, char * lowWild, char * lowName, char * capWild, char * capName)
 // figure out which of the ways to specify trackDb filter variables we're using
 // and return the setting
 {
 struct trackDbFilter *trackDbFilterList = NULL;
+boolean isHighlight = isHighlightFilterPrefix(lowName);
 struct slName *filterSettings = trackDbSettingsWildMatch(tdb, lowWild);
 
 if (filterSettings)
@@ -6752,6 +6855,7 @@ if (filterSettings)
         tdbFilter->name = cloneString(filter->name);
         tdbFilter->setting = trackDbSetting(tdb, filter->name);
         tdbFilter->fieldName = extractFieldNameNew(filter->name, lowName);
+        tdbFilter->priority = lookupFilterPriority(tdb, tdbFilter->fieldName, isHighlight);
         setAsNewFilterType(tdb, tdbFilter->name, tdbFilter->fieldName);
         }
     }
@@ -6770,6 +6874,7 @@ if (filterSettings)
             tdbFilter->name = cloneString(filter->name);
             tdbFilter->setting = trackDbSetting(tdb, filter->name);
             tdbFilter->fieldName = extractFieldNameOld(filter->name, capName);
+            tdbFilter->priority = lookupFilterPriority(tdb, tdbFilter->fieldName, isHighlight);
             char *name;
             if ((name = isNewFilterType(tdb, tdbFilter->fieldName) ) != NULL)
                 errAbort("error specifying a field's filters in both old (%s) and new format (%s).", tdbFilter->name, name);
@@ -6777,6 +6882,7 @@ if (filterSettings)
         }
     }
 
+slSort(&trackDbFilterList, trackDbFilterPriCmp);
 return trackDbFilterList;
 }
 
@@ -6886,8 +6992,11 @@ if (trackDbFilters)
             {
             struct asColumn *asCol = asColumnFind(as, field);
             if (asCol != NULL)
-                { // Found label so replace field
+                { // Found label so replace field; strip "|..." suffix used for detail page
                 field = asCol->comment;
+                char *pipe = strchr(field, '|');
+                if (pipe != NULL)
+                    field = cloneStringZ(field, pipe - field);
                 }
             else if (defaultFieldLocation(field) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", field);
@@ -7890,19 +7999,28 @@ if (!sameString(tdb->track, "tigrGeneIndex")
 &&  !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDropLists(cart, tdb, name);
 
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-if (filterBySet != NULL)
+// For bigGenePred, scoreCfgUi() (called below) renders the filterBy/highlightBy
+// controls itself. Rendering them here too produces two <SELECT> elements with
+// the same id, and dropdownchecklist.js only binds the first; the second copy
+// stays display:none and shows no input fields. So skip the inline pass for
+// bigGenePred and let scoreCfgUi own it.
+boolean isBigGenePred = startsWith("bigGenePred", tdb->type);
+if (!isBigGenePred)
     {
-    printf("<BR>");
-    filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
-    filterBySetFree(&filterBySet);
-    }
-filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
-if (highlightBySet != NULL)
-    {
-    printf("<BR>");
-    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name, TRUE);
-    filterBySetFree(&highlightBySet);
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+    if (filterBySet != NULL)
+        {
+        printf("<BR>");
+        filterBySetCfgUi(cart,tdb,filterBySet,FALSE, name);
+        filterBySetFree(&filterBySet);
+        }
+    filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
+    if (highlightBySet != NULL)
+        {
+        printf("<BR>");
+        highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name, TRUE);
+        filterBySetFree(&highlightBySet);
+        }
     }
 
 squishyPackOption(cart, name, title, tdb);
@@ -7911,7 +8029,7 @@ wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 // N.B. scoreCfgUi maybe creates a box, so this is called after cfgEndBox
 // unclear what the logic is with box creation here
-if (startsWith("bigGenePred", tdb->type))
+if (isBigGenePred)
     {
     char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
     int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
@@ -10161,14 +10279,52 @@ if (tableName)
 hFreeConn(&conn);
 }
 
+static struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
+/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(trackHubSkipHubName(tdb->track), bareName))
+        return tdb;
+    struct trackDb *found = findTdbByBareName(tdb->subtracks, bareName);
+    if (found != NULL)
+        return found;
+    }
+return NULL;
+}
+
 char *getTrackHtml(char *db, char *trackName)
 /* Grab HTML from trackDb in native database for quickLift tracks. */
 {
 char *html = NULL;
 
-if (trackHubDatabase(db))
+if (trackHubDatabase(db) || isGenArk(db))
     {
-    // somehow get to the HTML that's not in the quickLift hub, but in the original hub
+    struct trackHub *hub = NULL;
+    struct trackHubGenome *hubGenome = trackHubGetGenome(db);
+    if (hubGenome != NULL)
+        hub = hubGenome->trackHub;
+    else if (isGenArk(db))
+        {
+        char *hubUrl = genarkUrl(db);
+        if (hubUrl != NULL)
+            {
+            hub = trackHubOpen(hubUrl, "");
+            if (hub != NULL)
+                hubGenome = trackHubFindGenome(hub, db);
+            }
+        }
+    if (hubGenome != NULL)
+        {
+        struct trackDb *tdbList = trackHubAddTracksGenome(hubGenome);
+        struct trackDb *tdb = findTdbByBareName(tdbList, trackHubSkipHubName(trackName));
+        if (tdb != NULL)
+            {
+            trackHubAddDescription(hubGenome->trackDbFile, tdb);
+            html = tdb->html;
+            }
+        }
     }
 else
     {
@@ -10223,6 +10379,10 @@ struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table
 // a parsed autoSql object; otherwise return NULL.
 {
 struct asObject *asObj = NULL;
+// Callers occasionally invoke asForTdb with conn=NULL (e.g. superTrack filter
+// rendering that isn't tied to a data table). Nothing to look up in that case.
+if (conn == NULL)
+    return NULL;
 if (tableDescriptionsExists(conn))
     {
     char query[PATH_LEN*2];
@@ -10266,8 +10426,8 @@ else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
     asObj = vcfAsObj();
-else if (startsWithWord("makeItems", tdb->type))
-    asObj = makeItemsItemAsObj();
+else if (startsWithWord("myVariants", tdb->type))
+    asObj = myVariantsAsObj();
 else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();
 else if (sameWord("pgSnp", tdb->type))
@@ -10497,12 +10657,17 @@ char *version = (char *)metadataFindValue(tdb, "dataVersion");
 if (version == NULL)
     version = trackDbSetting(tdb, "dataVersion");
 
-if (version != NULL)
+if (version != NULL && startsWith("/", version))
     {
-    // dataVersion can also be the path to a local file, for otto tracks
-    if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+    // dataVersion can also be the path to a local file, for otto tracks.
+    // For quickLifted tracks the file lives on the source assembly, so
+    // substitute $D using quickLiftDb rather than the destination database.
+    char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+    char *resolveDb = liftDb ? liftDb : database;
+    if (liftDb != NULL ||
+        (!trackHubDatabase(database) && !isHubTrack(tdb->table)))
         {
-        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE, NULL);
+        char *path = replaceInUrl(version, "", NULL, resolveDb, "", 0, 0, tdb->track, FALSE, NULL);
         struct lineFile* lf = lineFileMayOpen(path, TRUE);
         if (lf)
             version = lineFileReadAll(lf);

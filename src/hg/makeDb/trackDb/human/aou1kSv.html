@@ -1,0 +1,114 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) identified by PacBio HiFi long-read
+sequencing of 1,027 individuals from the All of Us (AoU) Research Program.
+Participants self-identified as Black or African American and were sequenced
+to ~8x coverage. The dataset contains 541,049 SVs (444,524 insertions and
+96,525 deletions) on autosomes.
+</p>
+<p>
+SVs are annotated with population-specific allele frequencies across five
+ancestry groups (African, Admixed American, East Asian, European, South Asian),
+gene intersections from curated disease gene lists (OMIM, ACMG, cancer genes),
+regulatory element overlaps, and associations with eQTLs, GWAS loci, and
+clinical phenotypes from the AoU electronic health records.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+</ul>
+</p>
+<p>
+Filters are available for SV type, SV length, and population-specific allele
+frequencies. For insertions, the item is placed at the insertion site with a
+width of 1 bp; for deletions, the item spans the deleted region.
+</p>
+<p>
+The detail page shows the following annotations when available:
+<ul>
+<li><b>Population Allele Frequencies</b>: separate frequencies for AFR, AMR,
+EAS, EUR, and SAS ancestry groups</li>
+<li><b>Fst</b>: fixation index between African and non-African populations</li>
+<li><b>Gene Intersections</b>: overlapping OMIM, disease, cancer, and ACMG
+genes with constraint scores (pLI and LOEUF)</li>
+<li><b>Regulatory Elements</b>: intersected regulatory elements (e.g. enhancer,
+promoter)</li>
+<li><b>Other LR Datasets</b>: whether the SV was also detected in HPRC, HGSVC,
+or 1KG-ONT long-read datasets</li>
+<li><b>eQTLs</b>: expression QTL associations with q-values</li>
+<li><b>GWAS Associations</b>: overlapping GWAS loci with trait, gene, rsID,
+and LD information</li>
+<li><b>SV-Trait Associations</b>: associations with clinical phenotypes from
+AoU electronic health records, including odds ratios and confidence
+intervals</li>
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+Garimella et al. 2025 performed PacBio HiFi long-read sequencing on 1,027
+All of Us participants self-identifying as Black or African American, to
+~8x per-sample coverage at HudsonAlpha Discovery. SVs (&ge;50 bp) were
+called per sample with an ensemble of three methods: two alignment-based
+callers, <a href="https://github.com/PacificBiosciences/pbsv" target="_blank">
+PBSV</a> v2.6.0 (with Tandem Repeat Finder context) and
+<a href="https://github.com/fritzsedlazeck/Sniffles" target="_blank">Sniffles2</a>
+v2.0.6, plus the assembly-based <a href="https://github.com/EichlerLab/pav"
+target="_blank">PAV</a> v1.2.1 (hifiasm haplotype-resolved contigs aligned
+to GRCh38 with minimap2 <tt>-x asm20</tt>). Per-caller VCFs were normalized,
+merged within and across samples and filtered into stringent and lenient
+tiers, and the callset was re-genotyped across the cohort to produce the
+final release: 541,049 autosomal SVs (444,524 insertions, 96,525 deletions)
+with per-ancestry allele frequencies (AFR, AMR, EAS, EUR, SAS) and gene,
+regulatory, eQTL, GWAS and EHR-phenotype annotations.
+</p>
+<p>
+This track was built from the supplementary media-2 table of the AoU
+long-read sequencing preprint
+(<a href="https://doi.org/10.1101/2025.10.02.25336942" target="_blank">
+doi:10.1101/2025.10.02.25336942</a>). Access to the underlying AoU
+long-read data requires registration through the
+<a href="https://www.researchallofus.org/" target="_blank">All of Us
+Research Hub</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+This track was built from supplementary data (media-2) of the AoU long-read
+sequencing preprint. Access to the full AoU dataset requires registration
+through the <a href="https://www.researchallofus.org/" target="_blank">All of
+Us Research Hub</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Garimella et al. and the All of Us Research Program for making their
+structural variant annotations publicly available.
+</p>
+
+<h2>References</h2>
+
+
+
+<p>
+Garimella KV, Li Q, Wertz J, Lee SK, Cunial F, Huang Y, Mostovoy Y, Lorig-Roach R, English A, Su H
+<em>et al</em>.
+<a href="https://doi.org/10.1101/2025.10.02.25336942" target="_blank">
+Population-scale Long-read Sequencing in the All of Us Research Program</a>.
+<em>medRxiv</em>. 2025 Oct 5;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41256123" target="_blank">41256123</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12622093/" target="_blank">PMC12622093</a>
+</p>
+

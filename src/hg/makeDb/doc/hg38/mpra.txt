@@ -1,19 +1,181 @@
-# max Mar 30 2026
-# There was nothing to do, Varda from the Ahituv Lab provided the bigBed file at
-# https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb
-# and a hub at https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/hub.txt
+# MPRA superTrack (hg38) - Redmine #37359
+# -----------------------------------------------------------------------------
+# Two subtracks: mprabase (MPRA Base enhancer elements) and mpraVarDb (MPRA-tested
+# regulatory variants).  trackDb stanzas live in human/hg38/mpra.ra.  Description
+# pages: mpra.html, mprabase.html, mpraVarDb.html.
 
-# MPRAVarDB track
-# Mon Mar 10 2026 (claude/max)
+# =============================================================================
+# mprabase subtrack - max Mar 30 2026
+# =============================================================================
+# No local processing. The bigBed was provided directly by Varda Singhal
+# (Ahituv Lab, UCSF) via UCSC hubspace and dropped into the gbdb path.
+#
+# Source (upstream bigBed):
+#   https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb
+# Full upstream hub:
+#   https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/hub.txt
+# Upstream SQLite sits alongside the bigBed:
+#   /hive/data/genomes/hg38/bed/mpra/mprabase/mprabase_v4_9.3.db
+# That DB corresponds to MPRA Base v4.9.3 and is the source of truth for
+# reproducing the bigBed if Varda ever refreshes the upstream hub.
 
-# Download data from https://mpravardb.rc.ufl.edu/
+mkdir -p /hive/data/genomes/hg38/bed/mpra/mprabase
+cd /hive/data/genomes/hg38/bed/mpra/mprabase
+wget https://genome.ucsc.edu/hubspace/72/Varda006/Varda_Final_Hub/final_authorPMID.mean_v2.bb -O mprabase.bb
+
+# gbdb symlink:
+#   /gbdb/hg38/mpra/mprabase/mprabase.bb -> /hive/data/genomes/hg38/bed/mpra/mprabase/mprabase.bb
+
+# Historical note: an earlier attempt lifted from hg19 via a custom SQLite
+# liftover table (hg38CustomLiftover.RDS, preserved in the build dir), but
+# had one feature beyond chrom size.  Replaced by the pre-built hub file
+# above, so the liftOver path is not used.
+
+# =============================================================================
+# mpraVarDB subtrack - max Mar 10 2026 (claude/max), QA rebuild Apr 21 2026 (lou)
+# =============================================================================
+# Source:
+#   https://mpravardb.rc.ufl.edu/ (UFL web server)
+# Snapshot date: Mar 10 2026 (CSV via the "download_all" endpoint).  The
+# MPRAVarDB project does not publish version numbers; track the snapshot
+# date and the session URL together as the provenance pair.
+#
+# Input CSV contains 242,818 variants from 18 MPRA studies, with coordinates
+# in either hg19 or hg38: 213,689 hg19, 29,129 hg38, 3,676 with NA coords.
+# Script liftOvers hg19 -> hg38, merges with native hg38, and emits bigBed9+13.
+
 mkdir -p /hive/data/genomes/hg38/bed/mpra/mpravardb
 cd /hive/data/genomes/hg38/bed/mpra/mpravardb
 wget 'https://mpravardb.rc.ufl.edu/session/27d7af46df917aed91f4cca7bee378a2/download/download_all?w=' -O mpravardb.csv
 
-# 242,818 variants from 18 MPRA studies, with both hg19 and hg38 coordinates.
-# 213,689 are hg19, 29,129 are hg38, 3,676 have no coordinates (NA).
-
-# Convert to BED, liftOver hg19->hg38, merge, and create bigBed:
+# Convert, liftOver, merge, and build bigBed.  Output: mpravardb.bb (239,028 rows).
 python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
-# Output: mpravardb.bb (239,028 variants after liftOver, 114 unmapped)
+
+# gbdb symlink:
+#   /gbdb/hg38/mpra/mpravardb/mpravardb.bb -> /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb
+
+# -----------------------------------------------------------------------------
+# QA rebuild Apr 21 2026 (RM #37359)
+# -----------------------------------------------------------------------------
+# mpravardbToBed.py updated to:
+#   - sanitize UTF-8 in user-visible string fields (curly quotes, primes,
+#     NBSP mojibake) before writing BED.  Prior build had ~246k non-ASCII
+#     byte occurrences across 100,961 rows (42% of track) including mangled
+#     rsIDs like "rs34425335NBSP-MOJIBAKE".
+#   - pval_to_score() now returns 0 (not 1000) for non-positive / out-of-range
+#     pvalue.  Prior build gave score=1000 to ~7,400 rows whose upstream pvalue
+#     was literal 0 (mostly NA-coded-as-0), inflating those to the top of any
+#     score-sorted view.
+#   - safe_float() now returns NaN (was 0.0) for NA / empty / non-numeric
+#     upstream values.  27,065 rows whose upstream pvalue was literal "NA"
+#     now store pvalue="nan" instead of "0.0", so untested variants no longer
+#     masquerade as p=0 in the details page and are excluded by the default
+#     filter.fdr / filter.log2FC range sliders.  bedToBigBed accepts the
+#     literal string "nan" in float fields.
+#
+# Pre-rebuild backup preserved at:
+#   /hive/data/genomes/hg38/bed/mpra/mpravardb/mpravardb.bb.preQA-backup
+#
+# Reproduce QA rebuild:
+#   cd /hive/data/genomes/hg38/bed/mpra/mpravardb
+#   python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
+
+# =============================================================================
+# Known outstanding items (see RM #37359)
+# =============================================================================
+# - mprabase rebuild items to fold into Varda's next bigBed:
+#     * Mattioli 2020 reference field starts with "musculus ..." (species word
+#       merged into title upstream).  Varda confirmed 2026-04-23 she will fix.
+#     * AutoSQL percentile_rank description currently says "Percentile rank
+#       within cell line"; the data is actually computed per (cell_line, assay,
+#       PMID) experiment.  Fix the .as comment to "Percentile rank within
+#       experiment" so the schema page matches the description page.
+#     * Element-name disambiguation: HepG2-XX%-LM and similar auto-generated
+#       names collide across Inoue 2017 and Klein 2020 because both reused the
+#       same ENCODE-derived 171 bp library and produced the same percentile.
+#       Surface: 149 of 625 unique names are reused across multiple PMIDs;
+#       4 are exact (chrom,start,end,name) duplicates.  Encode PMID or short
+#       study tag in the name to disambiguate.
+# - mprabase chr14:69999387-69999388 (HeLa STARR-seq, PMID 23328393, Arnold 2013)
+#   was previously flagged as an orphan.  Varda confirmed (2026-04-23) it is
+#   valid: HeLa was a proof-of-concept in an otherwise Drosophila STARR-seq
+#   paper (Stark Lab).  Row added to the experiments table in mprabase.html.
+# - Klein et al. 2020 (PMID 33046894) is an MPRA-design benchmarking paper
+#   that ran the same 2,440-element library through nine different assays.
+#   The track has three Klein 2020 sub-rows (lentiMPRA, plasmidMPRA, STARR-seq);
+#   confirm with Varda which underlying sub-designs MPRA Base pulled, since
+#   the Klein 2020 authors flag HSS as the worst-correlated of the nine and
+#   recommend pGL4 / ORI / 5'/5' WT.  Description page can be sharpened once
+#   confirmed.
+# - mpraVarDB preserves ~42k (chrom,start,end,name) duplicate rows (same rsID
+#   tested in multiple cells/studies).  Users disambiguate via the
+#   filterValues.cellLine / filterValues.mpraStudy filters in the trackDb.
+# - ~7,400 rows have upstream pvalue=0 and fdr=0 (not NA).  Could be genuine
+#   precision-floor significance or an upstream "not tested" encoding; the
+#   distinction is not recoverable from the CSV.  With pval_to_score returning
+#   0 for p<=0, these no longer dominate score-sorted views but their details
+#   page still reads "pvalue: 0.0".  Upstream clarification needed.
+#
+# QA review 2026-05-01 (RM #37359, Lou):
+#   Found and fixed in trackDb only (no bigBed rebuild this round):
+#   - filterValues.cellLine had four broken entries hiding ~31,983 rows
+#     (13% of track): PC3 vs PC3 cell mismatch (26,546 rows), SF7996 needed
+#     comma-escape syntax for the bundled HEK293T,,SF7996 data value
+#     (3,896 rows), missing SK-MEL-28 (1,510) and K562+GATA1 (31).  All
+#     four corrected; filter now matches all 32 distinct cellLine values
+#     in the data.
+#   - Description page references rebuilt for all 18 source studies plus
+#     the corrected primary citation (Jin et al. 2024, PMID 39325859 in
+#     Bioinformatics; the previous "Wang T, Matreyek KA, Yang X." citation
+#     was fabricated -- not the actual authors of either the preprint
+#     PMID 38617248 or the published paper).
+#   - 7 studies-table row counts corrected to match data (Tewhey, Griesemer,
+#     Abell, Mouri, McAfee, Cooper, Lu).
+#   - HTML mouseOver upgraded to bold/multi-line.
+#   - dataVersion "MPRAVarDB snapshot 2026-03-10" added to stanza.
+#   - urls rsid="https://www.ncbi.nlm.nih.gov/snp/$$" added so rsIDs are
+#     clickable linkouts.
+#   - Methods + Display Conventions paragraphs added: scoring methodology
+#     differs across studies, post-transcriptional vs transcriptional
+#     distinction (Griesemer/Schuster 3'UTR), Kircher saturation
+#     mutagenesis structure, log2FC interpretation.
+#
+#   Punted to Redmine for Max / Tao Wang (status as of 2026-05-14):
+#   - 5,092 rows (Mouri, Tewhey) have pvalue > 1 (impossible; max 8.96).
+#     FDR appears valid; pvalue field looks like a t-statistic mislabeled.
+#     Upstream curators acknowledged; fix is weeks out.  We added a
+#     "Note (pending upstream fix)" paragraph to mpraVarDb.html bracketed
+#     by an HTML comment "TEMP: remove once Tao Wang fixes..."  --
+#     remove that paragraph when the next CSV snapshot lands.
+#   - 60,860 rows have description="GWAS" (no detail) -- upstream limit.
+#   - 1,069 rows have multi-allelic alt collapsed into one row (e.g.
+#     "T/A,G") with one log2FC/pvalue.  Upstream-collapsed; per-allele
+#     values not recoverable from the CSV.
+#   - 969 rows are colored red (FDR<0.05) but pvalue=nan -- mouseOver
+#     reads "FDR: 0.001 / p-value: NA" (NA now, formerly "nan").
+#     Defensible; FDR can be reported without per-test p.
+#
+# QA-2 build-script rebuild 2026-05-14 (RM #37359, Lou):
+#   Items handled in mpravardbToBed.py + mpravardb.as, single rebuild:
+#   - sanitize_text now maps "None"/"NA"/"N/A"/"null"/"NULL"/"nan" to
+#     empty string after the existing UTF-8 sanitization.  Removed
+#     55,108 stale sentinels (53,144 disease="None" eQTL rows +
+#     1,964 disease="NA" Kircher rows + 44 ref/alt=NA Myint rows).
+#   - sanitize_text applies a literal-replacement table for three
+#     upstream typos: "30 UTR" -> "3'UTR" (26,546 Schuster description
+#     rows), "Familial hypercholesterol emia" -> "Familial
+#     hypercholesterolemia" (2,176 Kircher disease rows), "Alchol use
+#     disorder" -> "Alcohol use disorder" (88 Rao disease rows).
+#   - New fmt_mo() renders NaN floats as "NA" in the mouseOver helper
+#     fields rather than literal "nan"; 30,921 rows fixed.
+#   - Name + rsid handling tightened: a value is treated as an rsID
+#     only if it starts with "rs".  2,088 hg19-coord-style names like
+#     "1_1403972_CG" are now reformatted to "chr<X>:<hg38pos>:<ref>><alt>"
+#     and the rsid field is set to "" so the dbSNP linkout does not
+#     fire on a bogus value.
+#   - Removed the 250-char truncation that was cutting Griesemer
+#     descriptions mid-sentence; mpravardb.as switched the description
+#     and mpraStudy fields from "string" to "lstring" to allow full
+#     upstream text.
+#   - Pre-rebuild backup: mpravardb.bb.pre-2026-05-14-backup
+#   - itemCount preserved: 239,028.

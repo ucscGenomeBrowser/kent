@@ -13,8 +13,8 @@ group genes
 dragAndDrop subTracks
 priority 34.193
 visibility hide
-ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
-ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
+ensemblTranscriptIdUrl https://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
+ensemblGeneIdUrl https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
 vegaTranscriptIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s
 vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
 yalePseudoUrl http://tables.pseudogene.org/%s

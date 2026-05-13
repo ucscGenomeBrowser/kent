@@ -1,0 +1,26 @@
+track m6aAtlas
+shortLabel m6A-Atlas v2 sites
+longLabel m6A-Atlas v2.0: high-confidence m6A sites with cell-line and technique support (Liang 2024)
+parent rnaMod show
+visibility dense
+type bigBed 9 +
+itemRgb on
+bigDataUrl /gbdb/hg38/rnaMod/m6aAtlas.bb
+searchIndex name,geneName,ensemblId
+labelFields name,geneName
+defaultLabelFields geneName
+mouseOver $geneName ($region); $nTechniques tech / $nCellLines cell lines: $techniques
+urls name="http://rnamd.org/m6a/detail.php?species=hg38&atlas_id=$$" ensemblId="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
+skipFields detailUrl
+filterValues.region 5'UTR/Exon,Exon,3'UTR/Exon,5'UTR/3'UTR/Exon,Intron,Intergenic
+filterType.region multipleListOr
+filterValues.techniques DART-seq,MAZTER-seq,PA-m6A-seq,m6A-CLIP-seq,m6A-REF-seq,m6A-SAC-seq,m6A-label-seq,m6A-seq with improved protocol,m6ACE,meCLIP,miCLIP,miCLIP2
+filterType.techniques multipleListOnlyOr
+filterValues.cellLines A549,brain,CD8T,CM2005.1,CRMM1,ESC,HCT116,HEK293,HEK293E,HEK293T,HeLa,HepG2,HSPC,kidney,liver,LNCaP,MCF7,MDAMB231,MOLM13,OCM1,OCM1a,OM431,PIG1,RWPE
+filterType.cellLines multipleListOnlyOr
+filterValues.geneBiotype protein_coding,lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,polymorphic_pseudogene,processed_pseudogene,rRNA,rRNA_pseudogene,snRNA,snoRNA,TEC,TR_C_gene,TR_V_gene,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+filterType.geneBiotype multipleListOr
+filterByRange.nTechniques on
+filter.nTechniques 1:9
+filterByRange.nCellLines on
+filter.nCellLines 1:20

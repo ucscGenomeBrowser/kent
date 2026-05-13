@@ -54,7 +54,7 @@ if ( $status ) then
 endif
 
 foreach dir (`cat $pathfile`)
-  echo "checking $dir"
+  echo "checking $dir" > /dev/null
   checkStaticLinks.csh $dir $excludeList
 end
 

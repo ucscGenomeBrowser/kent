@@ -1,0 +1,51 @@
+# 2026-04-21 Claude max
+
+# Long-read SVs on hs1 (T2T-CHM13). HGSVC3 released a parallel set of SV
+# annotation tables native to T2T-CHM13, which we convert with the same
+# pipeline as the hg38 HGSVC3 subtrack. The full process (converter,
+# autoSql, bigBed build, trackDb setup, summary table, references) is
+# documented in ~/kent/src/hg/makeDb/doc/hg38/lrSv.txt; this file only
+# lists the hs1-specific shell steps.
+
+mkdir -p /hive/data/genomes/hs1/bed/lrSv/hgsvc3
+cd /hive/data/genomes/hs1/bed/lrSv/hgsvc3
+
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/T2T-CHM13/annotation_table/variants_T2T-CHM13_sv_insdel_HGSVC2024v1.0.tsv.gz
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC3/release/Variant_Calls/1.0/T2T-CHM13/annotation_table/variants_T2T-CHM13_sv_inv_HGSVC2024v1.0.tsv.gz
+
+# 188,224 DEL+INS + 276 INV = 188,500 SVs, natively on T2T-CHM13. The
+# converter is the same one used for the hg38 track (shared .as + .py).
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc3TsvToBed.py \
+    variants_T2T-CHM13_sv_insdel_HGSVC2024v1.0.tsv.gz \
+    variants_T2T-CHM13_sv_inv_HGSVC2024v1.0.tsv.gz \
+    hgsvc3.bed
+bedSort hgsvc3.bed hgsvc3.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc3.as \
+    -tab hgsvc3.sorted.bed /hive/data/genomes/hs1/chrom.sizes hgsvc3.bb
+
+# Symlink under /gbdb/hs1/lrSv with the same filename as the hg38 track,
+# so the trackDb bigDataUrl (/gbdb/$D/lrSv/hgsvc3.bb) resolves on both
+# assemblies.
+mkdir -p /gbdb/hs1/lrSv
+ln -sf /hive/data/genomes/hs1/bed/lrSv/hgsvc3/hgsvc3.bb /gbdb/hs1/lrSv/hgsvc3.bb
+
+##########
+# 2026-04-21 Claude max
+
+# HPRC release-2 pangenome SVs on T2T-CHM13. HPRC releases one VCF per
+# reference path; we already have the GRCh38 version as the hprc2Sv
+# subtrack. The hs1 track is built from the parallel T2T-CHM13 wave VCF
+# with the same converter.
+
+mkdir -p /hive/data/genomes/hs1/bed/lrSv/hprc2
+cd /hive/data/genomes/hs1/bed/lrSv/hprc2
+
+aria2c -x10 https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2VcfToBed.py \
+    hprc-v2.0-mc-chm13.wave.vcf.gz hprc2.bed
+bedSort hprc2.bed hprc2.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
+    -tab hprc2.sorted.bed /hive/data/genomes/hs1/chrom.sizes hprc2.bb
+
+ln -sf /hive/data/genomes/hs1/bed/lrSv/hprc2/hprc2.bb /gbdb/hs1/lrSv/hprc2.bb

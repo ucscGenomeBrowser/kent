@@ -160,6 +160,18 @@ mark.active-result {
     box-shadow: 0 0 3px rgba(255, 107, 53, 0.6);
 }
 
+/* Offset anchor scroll targets so they don't land under the sticky #searchDiv */
+html {
+    scroll-padding-top: 70px;
+}
+
+@media (max-width: 768px) {
+    /* searchDiv stacks vertically below this breakpoint and gets taller */
+    html {
+        scroll-padding-top: 160px;
+    }
+}
+
 #searchDiv {
     position: -webkit-sticky; /* Safari */
     position: sticky;

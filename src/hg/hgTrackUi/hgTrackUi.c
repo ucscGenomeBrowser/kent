@@ -10,6 +10,7 @@
 #include "jsHelper.h"
 #include "trackDb.h"
 #include "hgTrackUi.h"
+#include "quickLift.h"
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
@@ -30,6 +31,8 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "myVariants.h"
+#include "wikiLink.h"
 #include "dupTrack.h"
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
@@ -57,6 +60,7 @@
 #include "cart.h"
 #include "filePath.h"
 #include "md5.h"
+#include "jsonWrite.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -2929,6 +2933,33 @@ jsInline("$('.superDropdown').on('change', function() {"
 // * Hide all subtrack dropdowns from the user. They are used so the CGI arguments
 // are sent to hgTracks, but are not necessary as UI elements anymore
 jsInline("$('#superTrackTable .vizSelect').hide();");
+
+// --- Supertrack-level filters ---
+// If the supertrack's trackDb declares any filter.*, filterValues.*,
+// filterByRange.*, etc. settings, render the standard filter UI here.
+// The cart variables are stored under the supertrack's name
+// (e.g. "lrSv.filter.svLen.min"). Subtracks inherit these values via
+// cartOptionalStringClosestToHome() during hgTracks rendering; a cart
+// value set on a subtrack always overrides the supertrack's.
+if (bedHasFilters(superTdb))
+    {
+    // scoreCfgUi (called below with title==NULL) emits a <br> and an empty <p>
+    // before the filter table; the wrapper + scoped style below hides them
+    // without touching shared code other callers rely on.
+    puts("<div class='superTrackFiltersWrap'>");
+    puts("<style>.superTrackFiltersWrap > br:first-of-type, "
+         ".superTrackFiltersWrap > p:empty { display:none; }</style>");
+    puts("<h3 style='margin-top:1em'>Filters: ");
+    printInfoIcon("Filter values set here apply to every track in this "
+                  "container. A filter set directly on an individual track "
+                  "overrides the value here for that track only.");
+    puts("</h3>");
+    // Pass title=NULL so scoreCfgUi does not emit its "<p><B>title</B>"
+    // banner. The container <h3> above is already the section label.
+    scoreCfgUi(database, cart, superTdb, superTdb->track,
+               NULL, 1000, /*boxed=*/FALSE);
+    puts("</div>");
+    }
 }
 
 #ifdef USE_HAL
@@ -3014,7 +3045,6 @@ return list;
 
 unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
 
-#define COMMA_IF(x) (((x)++) ? "," : "")  // ADS: pattern for JSON comma
 
 static void facetedCompositeUi(struct trackDb *tdb)
 {
@@ -3048,14 +3078,6 @@ const char pageStyle[] =
     "<style>body.cgi { background: #F0F0F0; }"
     "table.hgInside { background: #FFFFFF; }</style>";
 const char placeholderDiv[] = "<div id='metadata-placeholder'></div>\n";
-const char openJSON[] = "<script id=\"app-data\" type=\"application/json\">{";
-const char closeJSON[] = "}</script>\n";
-const char openDataTypesJSON[] = "\"dataTypes\":{";
-const char closeDataTypesJSON[] = "}";  // closing a dict
-const char openDataElementsJSON[] = "\"dataElements\":[";
-const char closeDataElementsJSON[] = "]";  // closing an array
-const char metadataTableScriptElement[] =
-    "<script type='text/javascript' src='/js/facetedComposite.js'></script>\n";
 
 // --- Get data from 'settings' field in 'trackDb' entry ---
 // required
@@ -3068,6 +3090,7 @@ boolean hasDataTypes = (dataTypes != NULL);
 // optional
 const char *colorSettingsUrl = (const char *)hashFindVal(tdb->settingsHash, "colorSettingsUrl");
 const char *maxCheckboxes = (const char *)hashFindVal(tdb->settingsHash, "maxCheckboxes");
+const char *subtrackUrls = trackDbSetting(tdb, "subtrackUrls");
 // --- done parsing values from trackDb.settings ---
 
 const char *metaDataId = tdb->track;
@@ -3101,10 +3124,11 @@ for (struct trackDb *st = tdb->subtracks; st != NULL; st = st->next)
     }
 
 /* --- START embedded JSON data --- */
-printf(openJSON);
-printf(openDataTypesJSON);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+
 // find selected data types
-int not_first = 0;
+jsonWriteObjectStart(jw, "dataTypes");
 struct slName *selectedDataTypes = NULL;  // non-null val will be used as flag
 if (hasDataTypes)
     {
@@ -3137,18 +3161,18 @@ if (hasDataTypes)
             slPairFreeList(&dt_vars);
             }
         char *label = htmlEncode(stripEnclosingDoubleQuotes(thisType->val));
-        printf("%s\"%s\": {\"active\":%d, \"title\":\"%s\"}", COMMA_IF(not_first), thisType->name,
-                selected ? 1 : 0, label);
+        jsonWriteObjectStart(jw, thisType->name);
+        jsonWriteNumber(jw, "active", selected ? 1 : 0);
+        jsonWriteString(jw, "title", label);
+        jsonWriteObjectEnd(jw);
         freeMem(label);
         }
     }
 // else: dataTypes dict is empty - JS will detect this
-printf(closeDataTypesJSON);
-printf(",");  // add separator
+jsonWriteObjectEnd(jw);
 
 // find selected data sets
-printf(openDataElementsJSON);
-not_first = 0;
+jsonWriteListStart(jw, "dataElements");
 if (hasDataTypes)
     {
     char toMatch[token_size];
@@ -3162,8 +3186,9 @@ if (hasDataTypes)
             const char *nameEnd = strchr(nameStart, '_');
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3178,8 +3203,9 @@ if (hasDataTypes)
             const char *nameEnd = strchr(nameStart, '_');
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3200,8 +3226,9 @@ else
             const char *nameEnd = strstr(nameStart, "_sel");
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
@@ -3217,32 +3244,119 @@ else
             const char *nameEnd = strstr(nameStart, "_sel");
             if (nameEnd && nameEnd > nameStart)
                 {
-                const int nameLen = nameEnd - nameStart;
-                printf("%s\"%.*s\"", COMMA_IF(not_first), nameLen, nameStart);
+                char *name = cloneStringZ(nameStart, nameEnd - nameStart);
+                jsonWriteString(jw, NULL, name);
+                freeMem(name);
                 }
             }
         }
     hashElFreeList(&elList);
     }
-printf(closeDataElementsJSON);
-printf(",\"mdid\": \"%s\"", metaDataId);
-printf(",\"primaryKey\": \"%s\"", primaryKey);  // must exist
+jsonWriteListEnd(jw);
+
+jsonWriteString(jw, "mdid", (char *)metaDataId);
+jsonWriteString(jw, "primaryKey", (char *)primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
-    printf(",\"maxCheckboxes\": \"%s\"", maxCheckboxes);
+    jsonWriteString(jw, "maxCheckboxes", (char *)maxCheckboxes);
 if (colorSettingsUrl) // only if present in trackDb.settings entry
-    printf(",\"colorSettingsUrl\": \"%s\"", cgiEncode((char*) colorSettingsUrl));
-printf(",\"metadataUrl\": \"%s\"", cgiEncode((char*) metaDataUrl));
-printf(",\"track\": \"%s\"", tdb->track);
+    jsonWriteString(jw, "colorSettingsUrl", cgiEncode((char *)colorSettingsUrl));
+jsonWriteString(jw, "metadataUrl", cgiEncode((char *)metaDataUrl));
+jsonWriteString(jw, "track", tdb->track);
+char *defaultSortField = trackDbSetting(tdb, "defaultSortField");
+if (isNotEmpty(defaultSortField))
+    jsonWriteString(jw, "defaultSortField", defaultSortField);
+if (isNotEmpty(subtrackUrls))
+    {
+    struct slPair *pairs = slPairListFromString((char *)subtrackUrls, TRUE);
+    if (pairs)
+        {
+        jsonWriteObjectStart(jw, "subtrackUrls");
+        for (struct slPair *p = pairs; p != NULL; p = p->next)
+            {
+            char *encoded = htmlEncode((char *)p->val);
+            jsonWriteString(jw, p->name, encoded);
+            freeMem(encoded);
+            }
+        jsonWriteObjectEnd(jw);
+        }
+    slPairFreeValsAndList(&pairs);
+    }
 if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
-    printf(",\"udcTimeout\": true");
-printf(closeJSON);
+    jsonWriteBoolean(jw, "udcTimeout", TRUE);
+
+jsonWriteObjectEnd(jw);
+printf("<script id=\"app-data\" type=\"application/json\">%s</script>\n", jw->dy->string);
+jsonWriteFree(&jw);
 /* --- END embedded JSON data --- */
 
-printf(metadataTableScriptElement);
+jsIncludeFile("dataTables-2.2.2.min.js", NULL);
+jsIncludeFile("dataTables.select-3.0.0.min.js", NULL);
+jsIncludeFile("facetedComposite.js", NULL);
+
+webIncludeResourceFile("dataTables-2.2.2.min.css");
+webIncludeResourceFile("dataTables.select-3.0.0.min.css");
+webIncludeResourceFile("facetedComposite.css");
+
 
 // cleanup
 slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
+}
+
+static void myVariantsShareUi(struct trackDb *tdb)
+/* Render the inline share management section on hgTrackUi for a user's own
+ * myVariants track. Emits HTML + calls into hui.js via jsInline to wire up
+ * the create/list/revoke API calls. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    {
+    printf("<p>Please <a href=\"./hgSession\">log in</a> to manage shares.</p>\n");
+    return;
+    }
+
+printf("<h3>Share this track</h3>\n");
+printf("<div id=\"shareCreateSection\">\n");
+printf("<h4 style=\"margin-top:0\">Create share link</h4>\n");
+printf("<table style=\"border-spacing:4px\"><tbody>\n");
+
+/* Project dropdown */
+printf("<tr><td>Project:</td><td><select id=\"shareProject\">\n");
+printf("<option value=\"*\">All projects</option>\n");
+struct slName *projects = myVariantsGetProjects(userName);
+struct slName *p;
+for (p = projects; p != NULL; p = p->next)
+    printf("<option value=\"%s\">%s</option>\n", htmlEncode(p->name), htmlEncode(p->name));
+slFreeList(&projects);
+printf("</select></td></tr>\n");
+
+/* Permission radios */
+printf("<tr><td>Permission:</td><td>"
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked> Can view</label> "
+    "<label><input type=\"radio\" name=\"sharePerm\" value=\"1\"> Can edit</label>"
+    "</td></tr>\n");
+printf("<tr><td>Share with:</td>"
+    "<td><input type=\"text\" id=\"shareTargetUser\""
+    " placeholder=\"Username (blank = anyone with link)\" style=\"width:250px\"></td></tr>\n");
+printf("<tr><td>Label:</td>"
+    "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
+    " style=\"width:250px\"></td></tr>\n");
+printf("</tbody></table>\n");
+printf("<button type=\"button\" id=\"shareCreateBtn\">Create share link</button>\n");
+printf("<div id=\"shareResult\" style=\"display:none; margin-top:8px; padding:8px;"
+    " background:#e8f5e9; border-radius:4px\">"
+    "<span>Share URL: </span>"
+    "<input type=\"text\" id=\"shareUrlField\" readonly style=\"width:350px\">"
+    " <button type=\"button\" id=\"shareCopyBtn\">Copy</button></div>\n");
+printf("</div>\n");
+
+printf("<hr>\n");
+printf("<div id=\"shareListSection\">\n");
+printf("<h4>Active shares</h4>\n");
+printf("<div id=\"shareListContent\">Loading...</div>\n");
+printf("</div>\n");
+
+jsInline("if (typeof myVariantsShareInit === 'function') myVariantsShareInit();\n");
 }
 
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
@@ -3449,8 +3563,15 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
-if (!tdbIsSuperTrack(tdb))
+if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
+
+/* myVariants own track: render inline share management. Skip shared tracks
+ * (myVariants_shared_*) - you can't re-share someone else's data. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+    && startsWith("myVariants_", tdb->track)
+    && !startsWith("myVariants_shared_", tdb->track))
+    myVariantsShareUi(tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
@@ -3517,7 +3638,7 @@ if (!tdb->parent)
 // show super-track info
 struct trackDb *tdbParent = tdb->parent;
 
-printf("<b>Track collection: "
+printf("<b>Back to parent track: "
            "<img height=12 src='../images/ab_up.gif'>"
             "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
@@ -3675,12 +3796,26 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if (tdbIsContainer(tdb))
+if (tdbIsContainer(tdb) || tdbIsSuperTrack(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
     if (1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
+        {
+        if (tdbIsSuperTrack(tdb))
+            {
+            // SuperTrack children live in tdb->children (slRef list), not in
+            // the subtracks tree that cartRemoveAllForTdbAndChildren walks.
+            // Clear the supertrack's own cart vars (filters, visibility) and
+            // each child's vars by hand.
+            cartRemoveAllForTdb(cart, tdb);
+            struct slRef *childRef;
+            for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+                cartRemoveAllForTdb(cart, (struct trackDb *)childRef->val);
+            }
+        else
+            cartRemoveAllForTdbAndChildren(cart,tdb);
+        }
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
@@ -3849,7 +3984,7 @@ if (!tdbIsDownloadsOnly(tdb))
             cgiMakeOnClickButton("htui_cancel", "window.history.back();","Cancel");
             }
 
-        if (tdbIsComposite(tdb))
+        if (tdbIsComposite(tdb) || tdbIsSuperTrack(tdb))
 	    {
             printf("\n&nbsp;&nbsp;<a href='#' id='htui_reset'>Reset to defaults</a>\n");
 	    jsOnEventByIdF("click", "htui_reset",
@@ -3874,6 +4009,14 @@ if (!tdbIsDownloadsOnly(tdb))
 		}
 
 	    }
+	/* Offer to remove tracks coming from a quickLift hub. */
+	char *quickLiftSourceDb = trackDbSetting(tdb, "quickLiftDb");
+	if (quickLiftSourceDb != NULL)
+	    {
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=quickLiftRemove&qlSourceDb=%s' >Remove from QuickLift</a>\n",
+		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		chromosome, cgiEncode(tdb->track), cgiEncode(quickLiftSourceDb));
+	    }
 	}
 
     if (ct)
@@ -3882,7 +4025,8 @@ if (!tdbIsDownloadsOnly(tdb))
         cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
-        if (differentString(tdb->type, "chromGraph"))
+        if (differentString(tdb->type, "chromGraph") &&
+            differentString(tdb->type, "myVariants"))
             {
             char buf[256];
             if (ajax)
@@ -3893,6 +4037,25 @@ if (!tdbIsDownloadsOnly(tdb))
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
             cgiMakeOnClickButton("htui_updtCustTrk", buf, "Update custom track");
+            }
+        if (sameString(tdb->type, "myVariants") &&
+            !startsWith("myVariants_shared_", tdb->track))
+            {
+            /* Labels are per (track, db) so the same myVariants table can
+             * carry a different name on each assembly. */
+            char shortVar[256], longVar[256];
+            safef(shortVar, sizeof shortVar, "%s.%s.shortLabel",
+                tdb->track, database);
+            safef(longVar, sizeof longVar, "%s.%s.longLabel",
+                tdb->track, database);
+            char *curShort = cartUsualString(cart, shortVar, "");
+            char *curLong = cartUsualString(cart, longVar, "");
+            puts("<div style='margin-top:0.5em'><b>Rename track:</b> ");
+            puts("Short Label ");
+            cgiMakeTextVar(shortVar, curShort, 18);
+            puts(" Long Label ");
+            cgiMakeTextVar(longVar, curLong, 50);
+            puts(" <span style='color:#888'>(blank = default)</span></div>");
             }
         }
     }
@@ -3957,6 +4120,17 @@ if (decoratorSettings)
     decoratorUi(tdb, cart, decoratorSettings);
     }
 
+// Repeat the Submit button near the bottom of the form so that users do not
+// have to scroll back up to the top after tweaking filters on a long page.
+// Only superTracks need this: composites and regular tracks already render
+// their own Submit button at the bottom of their controls.
+if (!ajax && tdbIsSuperTrack(tdb))
+    {
+    puts("<p style='margin-top:1em;'>");
+    cgiMakeButton("Submit", "Submit");
+    puts("</p>");
+    }
+
 puts("</FORM>");
 
 if (ajax)
@@ -4019,7 +4193,9 @@ if (tdb->html != NULL && tdb->html[0] != 0)
         // add anchor to Credits section of ENCODE HTML page so lab contacts are easily found (on top menu)
         html = replaceChars(tdb->html, "2>Credits", "2></H2><A NAME='TRACK_CREDITS'></A>\n<H2>Credits</H2>");
         }
+    puts("<div class='readableWidth'>");
     puts(html);
+    puts("</div>");
 
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
@@ -4156,11 +4332,14 @@ struct slName *hubIds = hubConnectHubsInCart(cart);
 struct slName *thisHubId = hubIds;
 while (thisHubId != NULL)
     {
-    struct hubConnectStatus *hubStatus = hubFromId(sqlUnsigned(thisHubId->name));
-    if (fileUrlMatchesHub(fileUrl, hubStatus))
+    struct hubConnectStatus *hubStatus = hubFromIdNoAbort(sqlUnsigned(thisHubId->name));
+    if (hubStatus != NULL)
         {
-        matchFound = TRUE;
-        break;
+        if (isEmpty(hubStatus->errorMessage) && fileUrlMatchesHub(fileUrl, hubStatus))
+            {
+            matchFound = TRUE;
+            break;
+            }
         }
     thisHubId = thisHubId->next;
     }
@@ -4246,8 +4425,26 @@ if (isFileFetch)
     handleFileFetch(theCart);  // file fetch workaround for CORS issues
     return;
     }
-else
-    cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
+
+char *earlyOp = cartOptionalString(theCart, "hgTrackUi_op");
+if (earlyOp != NULL && sameString(earlyOp, "quickLiftRemove"))
+    {
+    char *opTrack = cloneString(cartOptionalString(theCart, "g"));
+    char *opSourceDb = cloneString(cartOptionalString(theCart, "qlSourceDb"));
+    char *opDb = cloneString(cartUsualString(theCart, "db", ""));
+    cartRemove(theCart, "hgTrackUi_op");
+    cartRemove(theCart, "qlSourceDb");
+    if (opTrack != NULL && opSourceDb != NULL)
+        {
+        quickLiftHubRemoveTrack(theCart, opSourceDb, opTrack);
+        cartSetString(theCart, opTrack, "hide");
+        }
+    printf("Location: %s?db=%s&%s\r\n\r\n",
+           hgTracksName(), opDb, cartSidUrlString(theCart));
+    return;
+    }
+
+cartWriteHeaderAndCont(theCart, NULL, NULL); // "normal" hgTrackUi
 
 struct trackDb *tdbList = NULL;
 struct trackDb *tdb = NULL;
@@ -4323,8 +4520,13 @@ else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
-else if (isCustomTrack(track))
+else if (isCustomTrack(track)
+         || (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", track)))
     {
+    /* myVariants tracks (own and shared) are built dynamically and live in
+     * the CT list rather than the SQL trackDb table, but their names don't
+     * carry the ct_ prefix, so we need to look them up alongside regular
+     * custom tracks. */
     ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
@@ -4332,6 +4534,31 @@ else if (isCustomTrack(track))
             {
             tdb = ct->tdb;
             break;
+            }
+        }
+    /* Fallback for direct hgTrackUi navigation without hgTracks: regenerate
+     * the myVariants CT file and re-parse. Normally the CT file was written
+     * during the preceding hgTracks visit, so this branch only fires for
+     * bookmarked URLs or direct links. */
+    if (tdb == NULL && startsWith("myVariants_", track))
+        {
+        char *userName = getUserName();
+        char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+        if (isNotEmpty(ctFile))
+            {
+            char mvVarName[256];
+            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            cartSetString(cart, mvVarName, ctFile);
+            freeMem(ctFile);
+            ctList = customTracksParseCart(database, cart, NULL, NULL);
+            for (ct = ctList; ct != NULL; ct = ct->next)
+                {
+                if (sameString(track, ct->tdb->track))
+                    {
+                    tdb = ct->tdb;
+                    break;
+                    }
+                }
             }
         }
     }

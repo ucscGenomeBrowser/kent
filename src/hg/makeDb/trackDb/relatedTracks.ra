@@ -41,10 +41,13 @@ hg38 grcIncidentDb problematic The problematic regions track lists unusual regio
 hg38 phasedVars varFreqs The variant frequencies track contains projects where variant frequencies, aka allele frequencies, are publicly available.
 hg38 varFreqs phasedVars The phased variants track contains projects that provide haplotype-phased genotypes/variants.
 
-hg38 wgEncodeReg4 wgEncodeReg ENCODE4 update of ENCODE3 Regulation
-hg38 wgEncodeReg wgEncodeReg4 ENCODE4 update of ENCODE3 Regulation
+hg38 wgEncodeReg4 wgEncodeReg Previous ENCODE3 Regulation track
+hg38 wgEncodeReg wgEncodeReg4 New ENCODE4 Regulation track
 hg38 wgEncodeReg4 cCREs Related ENCODE4 cCRE annotations
 hg38 cCREs wgEncodeReg4 Related ENCODE4 regulation data
+
+hg38 avada varaico The AVADA track is no longer updated. See VARAICO for the latest variants mined from papers.
+hg38 varaico avada Previous literature mining track for variants extracted from publications. No longer updated.
 
 # hg19:
 hg19 caddSuper gnomad View associated variants
@@ -77,13 +80,95 @@ hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also cont
 hg19 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
 hg19 gnomadPLI constraintSuper Container track of various constraint scores
 
+hg19 avada varaico The AVADA track is no longer updated. See VARAICO for the latest variants mined from papers.
+hg19 varaico avada Previous literature mining track for variants extracted from publications. No longer updated.
+
 # mm39:
 
 mm39 knownGene knownGeneArchive View previous versions of GENCODE Genes
 mm39 knownGeneArchive knownGene View the latest GENCODE Genes version
 
 # mm10 ENCODE4 Regulation:
-mm10 encode4Reg encode3Reg ENCODE4 update of ENCODE3 Regulation
-mm10 encode3Reg encode4Reg ENCODE4 update of ENCODE3 Regulation
+mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
+mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 mm10 cCREs encode4Reg Related ENCODE4 regulation data
+
+# hg38 long-read SV supertrack cross-links to other SV resources:
+hg38 lrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
+hg38 gnomadStructuralVariants lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv dbVarSv NCBI dbVar structural variants (short-read and long-read, germline and clinical)
+hg38 dbVarSv lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv dgvPlus Database of Genomic Variants (DGV) structural variation catalog
+hg38 dgvPlus lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv giabSv Genome in a Bottle high-confidence SV benchmark callsets
+hg38 giabSv lrSv Long-read structural variants across multiple cohorts
+hg38 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hg38 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+hs1 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hs1 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+
+# PrimateAI-3D cross-links:
+hg38 primateAi alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor
+hg38 alphaMissense primateAi PrimateAI-3D, a similar deep-learning missense pathogenicity predictor using primate variation
+hg38 primateAi revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg38 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation and 3D protein structure
+
+hg19 primateAi revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg19 revel primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation and 3D protein structure
+
+# ClinPred cross-links:
+hg38 clinPred revel REVEL, an ensemble missense pathogenicity score using a similar machine-learning approach
+hg38 revel clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg38 clinPred caddSuper CADD, a similar deleteriousness score
+hg38 caddSuper clinPred ClinPred, a missense-only pathogenicity predictor
+hg38 clinPred primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation
+hg38 primateAi clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+hg38 clinPred alphaMissense AlphaMissense, a deep-learning missense pathogenicity predictor
+hg38 alphaMissense clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+
+hg19 clinPred revel REVEL, an ensemble missense pathogenicity score using a similar machine-learning approach
+hg19 revel clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg19 clinPred caddSuper CADD, a similar deleteriousness score
+hg19 caddSuper clinPred ClinPred, a missense-only pathogenicity predictor
+hg19 clinPred primateAi PrimateAI-3D, a missense pathogenicity predictor using primate variation
+hg19 primateAi clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+hg19 clinPred alphaMissense AlphaMissense, a deep-learning missense pathogenicity predictor
+hg19 alphaMissense clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
+
+# PromoterAI cross-links:
+hg38 promoterAi primateAi PrimateAI-3D, a companion deep-learning model from Illumina for coding (missense) variants
+hg38 primateAi promoterAi PromoterAI, a companion deep-learning model from Illumina for non-coding promoter variants
+hg38 promoterAi alphaMissense AlphaMissense, a deep-learning predictor of missense (coding) variant pathogenicity
+hg38 alphaMissense promoterAi PromoterAI, a deep-learning predictor of expression-altering variants in promoter regions
+
+# NMD Escape cross-links:
+hg38 nmd mane MANE Select transcripts from NCBI/EBI, a curated subset of RefSeq/Ensembl transcripts used as clinical reference
+hg38 mane nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
+hg38 nmd ncbiRefSeq NCBI RefSeq transcripts, the source annotation set for the NMD Escape RefSeq subtrack
+hg38 ncbiRefSeq nmd NMD Escape: predicted regions where premature termination codons escape nonsense-mediated decay
+
+# MPRA cross-links:
+hg38 mpra wgEncodeReg4 ENCODE regulatory region annotations, many of which are tested by MPRA assays
+hg38 wgEncodeReg4 mpra Experimental MPRA measurements of regulatory activity for candidate elements
+hg38 mpra cCREs Candidate cis-regulatory elements; many overlap MPRA-tested fragments
+hg38 cCREs mpra Experimentally validated regulatory activity from MPRA assays for overlapping elements
+
+# Dosage sensitivity / CNV cross-links:
+hg38 clinGenComp dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022, complementary to ClinGen's expert-curated dosage sensitivity calls
+hg38 dosageSensitivity clinGenComp ClinGen expert-curated dosage sensitivity (haploinsufficiency and triplosensitivity) and gene-disease validity assertions
+hg38 clinGenComp cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions associated with developmental delay phenotypes
+hg38 cnvDevDelay clinGenComp ClinGen expert-curated dosage sensitivity and gene-disease validity assertions for genes within CNV regions
+hg38 dosageSensitivity cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions providing phenotypic context for dosage-sensitive genes
+hg38 cnvDevDelay dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022 for genes within these CNVs
+
+hg19 clinGenComp dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022, complementary to ClinGen's expert-curated dosage sensitivity calls
+hg19 dosageSensitivity clinGenComp ClinGen expert-curated dosage sensitivity (haploinsufficiency and triplosensitivity) and gene-disease validity assertions
+hg19 clinGenComp cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions associated with developmental delay phenotypes
+hg19 cnvDevDelay clinGenComp ClinGen expert-curated dosage sensitivity and gene-disease validity assertions for genes within CNV regions
+hg19 dosageSensitivity cnvDevDelay Copy Number Variation Morbidity Map of Developmental Delay: case/control CNV regions providing phenotypic context for dosage-sensitive genes
+hg19 cnvDevDelay dosageSensitivity Predicted gene-level haploinsufficiency (pHaplo) and triplosensitivity (pTriplo) scores from Collins et al. 2022 for genes within these CNVs
+
+# danRer11 BAC clone tracks:
+danRer11 bacEndPairsLift choriCloneEnds CHORI zebrafish BAC clone end placements (CH73, CH211, CH1073) from NCBI Clone DB on GRCz11
+danRer11 choriCloneEnds bacEndPairsLift Zebrafish BAC end pairs lifted from danRer4 (older UCSC BLAT placements)

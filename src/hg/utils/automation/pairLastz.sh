@@ -9,15 +9,25 @@ export workHorse="hgwdev"
 export smallClusterHub="hgwdev"
 export fileServer="hgwdev"
 
+# parse optional -force flag to skip genark table verification
+export forceRun=0
+if [ $# -gt 0 ] && [ "$1" = "-force" ]; then
+  forceRun=1
+  shift
+fi
+
 if [ $# != 4 ]; then
   printf "ERROR: arg count: %d != 4\n" "$#" 1>&2
 
-  printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
+  printf "usage: pairLastz.sh [-force] <target> <query> <tClade> <qClade>
 
 Where target/query is either a UCSC db name, or is an
    assembly hub identifier, e.g.: GCA_002844635.1_USMARCv1.0.1
 
 And [tq]Clade is one of: primate|mammal|other
+
+The -force option skips the hgcentraltest.genark table verification
+   for GenArk assembly identifiers.
 
 Will create directory to work in, for example if, UCSC db:
   /hive/data/target/bed/lastzQuery.yyyy-mm-dd/
@@ -143,6 +153,19 @@ function promotedHub() {
   export db=$1
 }
 
+# verifyGenark - verify a GenArk accession exists in hgcentraltest.genark
+#   returns 0 if found, 1 if not found
+function verifyGenark() {
+  local asmAccession=$1
+  local fullName=$2
+  local count=$(hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  if [ "$count" -eq 0 ]; then
+    printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
+    return 1
+  fi
+  return 0
+}
+
 ##############################################################################
 ##############################################################################
 ### start seconds
@@ -157,6 +180,22 @@ export tGcPath=$(gcPath $target)
 export qGcPath=$(gcPath $query)
 export tAsmId=$(asmId $target)
 export qAsmId=$(asmId $query)
+
+# verify GenArk assemblies exist in hgcentraltest.genark unless -force
+if [ "$forceRun" -eq 0 ]; then
+  export genarkErrors=0
+  case $target in
+    GC[AF]_*) verifyGenark "$tAsmId" "$target" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  case $query in
+    GC[AF]_*) verifyGenark "$qAsmId" "$query" || genarkErrors=$((genarkErrors+1)) ;;
+  esac
+  if [ "$genarkErrors" -gt 0 ]; then
+    printf "Use -force to skip this check\n" 1>&2
+    exit 255
+  fi
+fi
+
 printf "# tq: '${target}' '${query}' '${tClade}' '${qClade}'\n" 1>&2
 printf "# tq gcPath: '${tGcPath}' '${qGcPath}'\n" 1>&2
 printf "# tq asmId: '${tAsmId}' '${qAsmId}'\n" 1>&2
@@ -441,7 +480,7 @@ cd ${buildDir}
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
   $tFullName $qFullName -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} \\
     -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> do.log 2>&1
 
 grep -w real do.log | sed -e 's/^/    # /;'
 
@@ -451,7 +490,7 @@ sed -e 's/^/    # /;' fb.\${targetDb}.chainSyn\${QueryDb}Link.txt
 time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tRbestArgs} \\
    ${qRbestArgs} \\
-   \${targetDb} \${queryDb}) > rbest.log 2>&1
+   \${targetDb} \${queryDb}) >> rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'
 
@@ -487,7 +526,7 @@ printf "########################################################################
 
     time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -verbose=2 \`pwd\`/DEF -syntenicNet \\
       ${tFullName} ${qFullName} -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-        -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > do.log 2>&1
+        -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> do.log 2>&1
     grep -w real do.log | sed -e 's/^/    # /;'
 " > ${buildDir}/makeDoc.txt
 
@@ -502,7 +541,7 @@ sed -e 's/^/    # /;' $buildDir/fb.${tAsmId}.chainSyn${Query}Link.txt >> ${build
 printf "\n    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
       ${tRbestArgs} \\
       ${qRbestArgs} \\
-        ${tAsmId} ${qAsmId}) > rbest.log 2>&1
+        ${tAsmId} ${qAsmId}) >> rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 
@@ -535,7 +574,7 @@ export queryDb=\"${qAsmId}\"
 time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub}  -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> swap.log 2>&1
 
 grep -w real swap.log | sed -e 's/^/    # /;'
 
@@ -544,7 +583,7 @@ sed -e 's/^/    # /;' fb.\${queryDb}.chainSyn\${Target}Link.txt
 time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   \${queryDb} \${targetDb}) > rbest.log 2>&1
+   \${queryDb} \${targetDb}) >> rbest.log 2>&1
 
 grep -w real rbest.log | sed -e 's/^/    # /;'
 
@@ -573,7 +612,7 @@ printf "\n    cd ${swapDir}\n" >> ${buildDir}/makeDoc.txt
 printf "\n   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl ${trackHub} -swap -verbose=2 \\
   ${tFullName} ${qFullName} ${buildDir}/DEF -swapDir=\`pwd\` \\
   -syntenicNet -workhorse=${workHorse} -smallClusterHub=${smallClusterHub} -fileServer=${fileServer} -bigClusterHub=${bigHub} \\
-    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) > swap.log 2>&1
+    -chainMinScore=${minScore} -chainLinearGap=${linearGap}) >> swap.log 2>&1
 
     grep -w real swap.log | sed -e 's/^/    # /;'
 " >> ${buildDir}/makeDoc.txt
@@ -589,7 +628,7 @@ sed -e 's/^/    # /;' ${swapDir}/fb.${qAsmId}.chainSyn${Target}Link.txt >> ${bui
 printf "\    time (~/kent/src/hg/utils/automation/doRecipBest.pl ${rBestTrackHub} -load -workhorse=${workHorse} -buildDir=\`pwd\` \\
    ${tSwapRbestArgs} \\
    ${qSwapRbestArgs} \\
-   ${qAsmId} ${tAsmId}) > rbest.log 2>&1
+   ${qAsmId} ${tAsmId}) >> rbest.log 2>&1
 
     grep -w real rbest.log | sed -e 's/^/    # /;'\n" >> ${buildDir}/makeDoc.txt
 (grep -w real ${swapDir}/rbest.log || true) | sed -e 's/^/    # /;' >> ${buildDir}/makeDoc.txt

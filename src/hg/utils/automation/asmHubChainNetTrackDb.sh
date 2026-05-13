@@ -127,31 +127,15 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
     linGap=""
     minScore=""
   else
-    organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
-    sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
-    taxId=`hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
-    o_date=`hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
-    matrix=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep matrix`
-  fi
-
-  otherPrefix=`echo $otherDb | cut -c1-2`
-  if [ "${otherPrefix}" = "GC" ]; then
-    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
-    organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
-    taxId=`grep -i 'taxid:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    o_date=`grep -i 'date:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
-    matrix=""
-    linGap=""
-    minScore=""
-  else
-    organism=`hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
-    sciName=`hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
-    taxId=`hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
-    o_date=`hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
+    organism=`/cluster/bin/x86_64/hgsql -N -e "select organism from dbDb where name=\"$otherDb\"" hgcentraltest`
+    sciName=`/cluster/bin/x86_64/hgsql -N -e "select scientificName from dbDb where name=\"$otherDb\"" hgcentraltest`
+    taxId=`/cluster/bin/x86_64/hgsql -N -e "select taxId from dbDb where name=\"$otherDb\"" hgcentraltest`
+    o_date=`/cluster/bin/x86_64/hgsql -N -e "select description from dbDb where name=\"$otherDb\"" hgcentraltest`
     matrix=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep matrix`
     minScore=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep MinScore`
    linGap=`~/kent/src/hg/utils/phyloTrees/findScores.pl $otherDb $targetDb 2>&1 | grep LinearGap`
   fi
+
   printf "##############################################################################
 # $otherDb - $organism - $sciName - taxId: $taxId
 ##############################################################################
@@ -254,13 +238,22 @@ printf "        track chainLiftOver$OtherDb
 
 fi
 
+if [ -s "$buildDir/bbi/${asmId}.$otherDb.net.bb" ] \
+  || [ -s "$buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb" ] \
+  || [ -s "$buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb" ] \
+  || [ -s "$buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb" ]; then
+
 printf "    track mafNet${OtherDb}Viewnet
     shortLabel Net
     view net
     visibility full
     parent chainNet$OtherDb
 
-        track net$OtherDb
+"
+
+if [ -s "$buildDir/bbi/${asmId}.$otherDb.net.bb" ]; then
+
+printf "        track net$OtherDb
         parent mafNet${OtherDb}Viewnet
         subGroups view=net
         shortLabel $organism net
@@ -272,6 +265,8 @@ printf "    track mafNet${OtherDb}Viewnet
         priority %d
 
 " $((chainNetPriority++))
+
+fi
 
 if [ -s "$buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb" ]; then
 
@@ -323,5 +318,7 @@ printf "        track liftOverNet$OtherDb
 " $((chainNetPriority++))
 
 fi
+
+fi	# any of the net files exists
 
 done
