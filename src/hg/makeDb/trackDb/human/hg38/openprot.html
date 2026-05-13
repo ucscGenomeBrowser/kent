@@ -41,19 +41,27 @@ AltORFs are further classified by their localization relative to the annotated C
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are displayed in bigGenePred format. <b>Mouseover</b> shows the ORF localization.
-Items are labeled with the protein accession number: IDs starting with <tt>IP_</tt> are
-predicted AltProts, <tt>II_</tt> are novel isoforms, and other IDs (e.g. <tt>NP_</tt>,
-<tt>ENSP</tt>) are RefProts from existing annotations.
+Items are displayed in bigGenePred format. Items are labeled with the protein accession
+number: IDs starting with <tt>IP_</tt> are predicted AltProts, <tt>II_</tt> are novel
+isoforms, and other IDs (e.g. <tt>NP_</tt>, <tt>ENSP</tt>) are RefProts from existing
+annotations. Color reflects Kozak translational efficiency &mdash; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
+color legend.
 </p>
 
 <p>
-The track includes several <b>filter</b> options:
+<b>Mouseover</b> shows the protein accession in its host gene, protein type and ORF
+localization, start codon, Kozak strength and TE, MS score, TE score, and InterPro
+domain count.
 </p>
+
+<p>The track includes the following <b>filter</b> options:</p>
 <ul>
-  <li><b>Protein type</b> &ndash; filter by AltProt, RefProt, or Isoform</li>
-  <li><b>Localization</b> &ndash; filter by 5'UTR, 3'UTR, CDS, or ncRNA</li>
-  <li><b>MS score</b> &ndash; filter by minimum number of unique mass spectrometry peptides</li>
+  <li><b>Start codon</b>, <b>Kozak strength</b>, <b>Kozak TE</b> &ndash; common Kozak filters</li>
+  <li><b>Protein type</b> &ndash; AltProt, RefProt, or Isoform</li>
+  <li><b>Localization</b> &ndash; 5'UTR, 3'UTR, CDS, ncRNA, multiple</li>
+  <li><b>MS score</b> &ndash; minimum unique MS peptides (range)</li>
+  <li><b>Kozak motif</b> &ndash; OpenProt's own +/&minus; annotation</li>
 </ul>
 
 <h2>Data Access</h2>

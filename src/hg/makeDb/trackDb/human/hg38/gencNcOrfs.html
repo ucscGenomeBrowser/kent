@@ -40,9 +40,21 @@ Two subsets are provided for the Phase II data:
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The Phase I track is displayed in bigGenePred format. <b>Mouseover</b> shows associated
-transcript IDs, gene IDs, replication status, and source studies. The Phase II tracks are
-displayed in BED 12 format.
+All three GENCODE ncORF tracks are displayed in bigGenePred format. Items are labeled
+with their ORF identifier. Color reflects Kozak translational efficiency &mdash; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
+color legend.
+</p>
+
+<p>
+<b>Mouseover</b> content varies by phase. Phase I shows the ORF identifier in its host
+gene, gene type, start codon, Kozak strength and TE, replicated status, and source
+PMIDs. The two Phase II tracks show the same fields except replicated/PMIDs.
+</p>
+
+<p>
+Common filters on all three tracks: start codon, Kozak strength, Kozak TE. Phase I adds
+a <b>Replicated</b> filter (cross-publication evidence).
 </p>
 
 <h2>Data Access</h2>

@@ -155,6 +155,84 @@ Notes on URL choices:
 Either way, smoke-test with `--cases <new_id> --iterations 1 --warmup 0 -v`
 to verify the URL works and timings parse out.
 
+## Density sweep (`nSweep.py`)
+
+`nSweep.py` rebuilds `testHub/` at a sequence of (N, BW_STEP) sizes and runs
+the bench at each one, tagging every row with `N` and `bw_step`. The merged
+`sweep.tsv` is the raw data behind the paper's "quickLift overhead vs.
+density" curve.
+
+```
+./nSweep.py [--n-values 500,1000,5000,10000,20000]
+            [--bw-step-values 1000]
+            [--cases mode_b_bb,mode_b_bw,mode_c_hs1_bb,mode_c_hs1_bw]
+            [--iterations 10] [--warmup 1]
+            [--region-start 15000000] [--region-end 50000000]
+            [--feature-w AUTO]
+            [--hub-dest-base ~/public_html/quickLiftBench/sweep]
+            [--out DIR] [--clean-builds] [--skip-existing] [--dry-run]
+```
+
+Per (N, BW_STEP) point the script:
+
+1. Auto-picks `FEATURE_W` so N features fit in the region without overlap
+   (clamped to [50, 5000]; override with `--feature-w`). Runs
+   `testHub/buildTestHub.sh` with `N`, `BW_STEP`, `FEATURE_W`, and the
+   region bounds into `<hub-dest-base>/N{N}_S{S}_W{W}/`.
+2. Loads `cases.yaml`, filters to `--cases`, rewrites each hub variant's
+   `hubUrl` from `.../testHub/...` to `.../sweep/N{N}_S{S}_W{W}/...`, and
+   drops the rewritten config into the output dir.
+3. Invokes `quickLiftBench.py` with that config; per-point outputs land in
+   `<out>/N{N}_S{S}_W{W}/`.
+4. Appends `results.tsv` to a single `sweep.tsv` with `N` and `bw_step`
+   prepended to each row.
+
+After all points run, `sweep_summary.tsv` has two sections:
+
+- Per (N, bw_step, case, variant): n_ok, total/load/draw median + p90.
+- Per (N, bw_step, case): native vs. lifted total medians and the
+  `lifted/native` ratio — the headline curve.
+
+`--skip-existing` reuses hub dirs that already contain `hub_hs1.txt`, which
+is handy when iterating on bench config without rebuilding identical hubs.
+
+## Position sweep (`posSweep.py`)
+
+`posSweep.py` keeps the hub fixed and varies the *viewed window*, so each
+row measures quickLift overhead at a specific in-window feature density.
+At the default testHub (N=5000 features uniformly distributed across
+chr22:15M-50M at 7kb stride), the built-in canonical positions exercise:
+
+| name | position | in-window features at N=5000 |
+| --- | --- | --- |
+| `sparse` | chr22:1M-2M | 0 (1Mb outside feature region) |
+| `narrow_dense` | chr22:25M-25.1M | ~14 (100kb inside region) |
+| `medium` | chr22:20M-25M | ~714 (5Mb inside region) |
+| `wide` | chr22:15M-50M | ~5000 (full 35Mb region) |
+
+```
+./posSweep.py [--positions name1:chr:start-end,name2:chr:start-end,...]
+              [--cases mode_b_bb,mode_b_bw,mode_c_hs1_bb,mode_c_hs1_bw]
+              [--config cases.yaml]
+              [--iterations 10] [--warmup 1]
+              [--out DIR] [--dry-run]
+```
+
+Per position the script:
+
+1. Loads `cases.yaml`, filters to `--cases`, and rewrites every hub
+   variant's `position` field with the swept position. Saved-session
+   variants are left as-is (the saved session's position can't be
+   overridden) and a warning is printed.
+2. Invokes `quickLiftBench.py`; per-point outputs land in
+   `<out>/<position_name>/`.
+3. Appends `results.tsv` to a single `sweep.tsv` with `position_name` and
+   `position` prepended.
+
+`sweep_summary.tsv` mirrors the N sweep's two-section format: per
+(position_name, case, variant) medians/p90, then per (position_name, case)
+`lifted/native` ratio.
+
 ## Output
 
 Two TSVs are written to `results/<YYYYMMDD-HHMMSS>/`:

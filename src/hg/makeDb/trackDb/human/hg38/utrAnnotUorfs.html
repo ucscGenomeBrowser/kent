@@ -44,17 +44,21 @@ is what is displayed in this track. The uORFs are classified into three types:
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are colored by uORF type:
+Items are displayed in bigGenePred format. Each item is labeled with the gene symbol of
+the host transcript. Color reflects Kozak translational efficiency &mdash; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
+color legend.
 </p>
-<ul>
-  <li><b><font color="#0064C8">Blue</font></b> &ndash; uORFs contained entirely within the 5' UTR</li>
-  <li><b><font color="#C86400">Orange</font></b> &ndash; overlapping uORFs that start in the 5' UTR
-      and extend into the CDS region</li>
-</ul>
 
 <p>
-<b>Mouseover</b> on items shows the uORF type. Each item is labeled with the gene symbol
-of the associated transcript.
+<b>Mouseover</b> shows the gene symbol, uORF type, start codon, Kozak strength and
+translational efficiency, and the source track(s) from which the intron/exon structure
+was recovered.
+</p>
+
+<p>
+The track offers the following filters: start codon, Kozak strength, Kozak TE (range),
+uORF type (5'UTR-only vs spans into 3'UTR), and Introns source.
 </p>
 
 <h2>Data Access</h2>
@@ -100,25 +104,22 @@ Cardiovascular Genetics group for making this data publicly available.
 <h2>References</h2>
 
 <p>
-Zhang X, Wakeling M, Ware J, Whiffin N.
-<a href="https://academic.oup.com/bioinformatics/article/37/8/1171/5905476" target="_blank">
-Annotating high-impact 5'untranslated region variants with the UTRannotator</a>.
-<em>Bioinformatics</em>. 2021 Apr 15;37(8):1171-1173.
-DOI: <a href="https://doi.org/10.1093/bioinformatics/btaa783"
-target="_blank">10.1093/bioinformatics/btaa783</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33165520"
-target="_blank">33165520</a>
+Whiffin N, Karczewski KJ, Zhang X, Chothani S, Smith MJ, Evans DG, Roberts AM, Quaife NM, Schafer S,
+Rackham O <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-019-10717-9" target="_blank">
+Characterising the loss-of-function impact of 5' untranslated region variants in 15,708
+individuals</a>.
+<em>Nat Commun</em>. 2020 May 27;11(1):2523.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461616" target="_blank">32461616</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7253449/" target="_blank">PMC7253449</a>
 </p>
 
 <p>
-Whiffin N, Karczewski KJ, Zhang X, Chothani S, Smith MJ, Evans DG, Roberts AM,
-Quaife NM, Schafer S, Rber L <em>et al</em>.
-<a href="https://www.nature.com/articles/s41467-020-16103-8" target="_blank">
-Characterising the loss-of-function impact of 5' untranslated region variants in
-15,708 individuals</a>.
-<em>Nat Commun</em>. 2020 May 22;11(1):2523.
-DOI: <a href="https://doi.org/10.1038/s41467-020-16103-8"
-target="_blank">10.1038/s41467-020-16103-8</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32444597"
-target="_blank">32444597</a>
+Zhang X, Wakeling M, Ware J, Whiffin N.
+<a href="https://academic.oup.com/bioinformatics/article/37/8/1171/5905476"
+target="_blank">
+Annotating high-impact 5'untranslated region variants with the UTRannotator</a>.
+<em>Bioinformatics</em>. 2021 May 23;37(8):1171-1173.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32926138" target="_blank">32926138</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8150139/" target="_blank">PMC8150139</a>
 </p>

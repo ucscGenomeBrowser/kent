@@ -1,0 +1,11 @@
+file: input/YRI.low_coverage.2010_07_excerpt.genotypes.vcf.gz
+version: 4.0
+infoDefs: 6
+filterDefs: 0
+gtFormatDefs: 3
+genotypeCount: 59
+genotypeId[0]: NA18486
+genotypeId[1]: NA18489
+genotypeId[2]: NA18498
+genotypeId[3]: NA18499
+genotypeId[4]: NA18501
