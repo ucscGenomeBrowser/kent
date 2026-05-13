@@ -513,3 +513,50 @@ python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
 # at /hive/.../all/varFreqsAll.bb, which is overwritten at the end of
 # the bedToBigBed step.
 
+##########
+# 2026-05-12 Claude max
+# UK Biobank Neale Lab Round 2 variant manifest, refs #36642 (varFreqs).
+#
+# Source: variants.tsv.bgz (~916 MB, 13,791,467 rows), the Neale Lab
+# Round 2 UKB GWAS variant table with imputation INFO score, post-QC
+# allele counts and minor-allele frequencies from 361,194 imputed UK
+# Biobank samples restricted to white British ancestry. The TSV ships
+# bare chromosome names ("1".."22","X") in GRCh37 coordinates, so we
+# convert to a sites-only VCF, then lift to hg38.
+cd /hive/data/genomes/hg38/bed/varFreqs/ukbb
+# Step 1: TSV -> VCF (hg19, chr-prefixed). Drops AC=0 rows (variants
+# present in the imputation panel but not observed in the cohort), sets
+# AN = 2 * n_called, and carries the imputation INFO score, HWE p-value,
+# hom-ref / het / hom-alt sample counts, and the VEP consequence /
+# Neale Lab consequence_category as INFO fields.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/ukbbToVcf.py
+# total=13,791,467 written=13,751,808 skipped_AC0=39,659
+# Step 2: lift to hg38 with CrossMap.
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    ukbb.hg19.vcf \
+    /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa \
+    ukbb.hg38.unsorted.vcf
+# Total entries: 13,751,808, Failed to map: 6,889 -> 13,744,919 lifted.
+# Step 3: filter to canonical chromosomes (chr1-22/X/Y/M) in both the
+# data lines and the contig header (CrossMap emits every hg38 contig).
+awk '
+    /^##contig=/ {
+      if (match($0, /ID=([^,>]+)/, m) && m[1] ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/) print
+      next
+    }
+    /^#/ {print}
+' ukbb.hg38.unsorted.vcf > header.vcf
+awk -F'\t' 'BEGIN{OFS="\t"} !/^#/ && $1 ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/ {print}' \
+    ukbb.hg38.unsorted.vcf > body.vcf
+cat header.vcf body.vcf > ukbb.hg38.canon.vcf
+# 13,743,085 variants survive (1,834 of the lifted variants landed on
+# alt/random/Un/fix contigs and were dropped).
+# Step 4: sort, bgzip, tabix.
+bcftools sort ukbb.hg38.canon.vcf -Oz -m 16G -T /data/tmp/ -o ukbb.vcf.gz
+tabix -p vcf ukbb.vcf.gz
+rm -f ukbb.hg19.vcf ukbb.hg38.unsorted.vcf ukbb.hg38.unsorted.vcf.unmap \
+    ukbb.hg38.canon.vcf header.vcf body.vcf
+# Final: 551 MB bgzip + 1.7 MB tabix index, 13,743,085 variants.
+# 48,382 of the 13,791,467 source rows (0.35%) are not represented in
+# hg38: 39,659 had AC=0 (panel-only), 6,889 failed CrossMap, 1,834
+# lifted to non-canonical contigs.

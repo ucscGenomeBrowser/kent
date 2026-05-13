@@ -372,6 +372,16 @@ superTrack on
         dataVersion R12
         tableBrowser off
 
+        track ukbb
+        parent varFreqs on
+        visibility dense
+        type vcfTabix
+        shortLabel UK Biobank 361k imputed
+        longLabel Variant Frequencies: UK Biobank - 361k White British, Neale Lab Round 2 imputed
+        priority 4.6
+        bigDataUrl /gbdb/$D/varFreqs/ukbb/ukbb.vcf.gz
+        dataVersion Neale Lab Round 2 (Aug 2018, hg19 lift)
+
         track swefreq
         parent varFreqs on
         visibility dense
