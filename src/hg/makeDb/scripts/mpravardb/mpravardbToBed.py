@@ -41,14 +41,43 @@ _SANITIZE_MAP = str.maketrans({
 })
 _WS_RE = re.compile(r"\s+")
 
+# Literal typos in the upstream MPRAVarDB CSV that are visible in user-facing
+# fields (description, disease).  Repaired here on every build until upstream
+# curators fix them.  Counts at first observation 2026-05-01:
+#   - "30 UTR" : 26,546 Schuster 2023 description rows (should be "3'UTR")
+#   - "Familial hypercholesterol emia" : 2,176 Kircher 2019 disease rows
+#   - "Alchol use disorder" : 88 Rao 2021 disease rows
+_TYPO_FIXES = {
+    "30 UTR": "3'UTR",
+    "Familial hypercholesterol emia": "Familial hypercholesterolemia",
+    "Alchol use disorder": "Alcohol use disorder",
+}
+_TYPO_FIX_RE = re.compile("|".join(re.escape(k) for k in _TYPO_FIXES))
+
+# Sentinel strings that upstream uses to mean "no value".  Standardize to ""
+# so mouseOver and details don't carry "None" / "NA" / "nan" tokens.
+_NA_SENTINELS = {"None", "NA", "N/A", "null", "NULL", "nan"}
+
 def sanitize_text(s):
-    """Return ASCII-only version of s for bigBed string fields."""
+    """Return ASCII-only, sentinel-normalized version of s for bigBed string fields."""
     if not s:
         return ""
     s = s.translate(_SANITIZE_MAP)
+    s = _TYPO_FIX_RE.sub(lambda m: _TYPO_FIXES[m.group()], s)
     # Drop any remaining non-ASCII (rare), then collapse runs of whitespace
     s = s.encode("ascii", "ignore").decode("ascii")
-    return _WS_RE.sub(" ", s).strip()
+    s = _WS_RE.sub(" ", s).strip()
+    if s in _NA_SENTINELS:
+        return ""
+    return s
+
+def fmt_mo(val):
+    """Format a float for mouseOver helper fields.  Renders NaN as 'NA'
+    (rather than literal 'nan') so the mouseOver reads 'p-value: NA' on
+    untested variants."""
+    if math.isnan(val):
+        return "NA"
+    return f"{val:.3g}"
 
 def pval_to_score(pval):
     """Convert p-value to a 0-1000 score using -log10.
@@ -126,40 +155,35 @@ def csv_to_bed(input_csv, hg19_bed, hg38_bed):
                 continue
             end = start + max(1, len(ref))  # span the reference allele
 
-            # Build name
-            if rsid and rsid != "NA":
+            # Treat rsid as authoritative only if it actually looks like one.
+            # Upstream preserves hg19-coord-style strings (e.g. "1_1403972_CG")
+            # in the rsid column for ~2,088 rows; those would otherwise leak
+            # into name + rsid field + dbSNP linkout.
+            if rsid.startswith("rs"):
                 name = rsid
+                rsid_field = rsid
             else:
                 name = f"{chrom}:{pos}:{ref}>{alt}"
+                rsid_field = ""
 
             score = pval_to_score(pvalue)
             color = pval_to_color(pvalue, fdr)
 
-            # Truncate long string fields to stay within bigBed limits
-            if len(desc) > 250:
-                desc = desc[:247] + "..."
-            if len(study) > 250:
-                study = study[:247] + "..."
-
-            # Short values for mouseOver (3 significant digits)
             log2fc_val = safe_float(log2fc)
             pvalue_val = safe_float(pvalue)
             fdr_val = safe_float(fdr)
-            mo_log2fc = f"{log2fc_val:.3g}"
-            mo_pvalue = f"{pvalue_val:.3g}"
-            mo_fdr = f"{fdr_val:.3g}"
 
             fields = [
                 chrom, str(start), str(end), name, str(score), ".",
                 str(start), str(end), color,
                 ref, alt,
-                rsid if rsid and rsid != "NA" else ".",
+                rsid_field,
                 disease, cellline, desc,
                 str(log2fc_val),
                 str(pvalue_val),
                 str(fdr_val),
                 study,
-                mo_log2fc, mo_pvalue, mo_fdr,
+                fmt_mo(log2fc_val), fmt_mo(pvalue_val), fmt_mo(fdr_val),
             ]
             line = "\t".join(fields) + "\n"
 
