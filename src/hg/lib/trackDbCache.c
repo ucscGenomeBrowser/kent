@@ -465,7 +465,16 @@ static boolean doCache = FALSE;
 
 if (!checkedCache)
     {
-    trackDbCacheDir = cfgOptionDefault("cacheTrackDbDir", "/dev/shm/trackDbCache");
+    /* The CACHE_TRACK_DB_DIR environment variable overrides the cacheTrackDbDir
+     * hg.conf setting so a benchmark harness can flip caching on/off per run.
+     * When set (even to the empty string) the env value wins: empty disables
+     * the cache. */
+    char *envDir = getenv("CACHE_TRACK_DB_DIR");
+    if (envDir != NULL)
+        trackDbCacheDir = envDir;
+    else
+        trackDbCacheDir = cfgOptionDefault("cacheTrackDbDir", "/dev/shm/trackDbCache");
+
     if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);
