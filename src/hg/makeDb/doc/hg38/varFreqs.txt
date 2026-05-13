@@ -560,3 +560,45 @@ rm -f ukbb.hg19.vcf ukbb.hg38.unsorted.vcf ukbb.hg38.unsorted.vcf.unmap \
 # 48,382 of the 13,791,467 source rows (0.35%) are not represented in
 # hg38: 39,659 had AC=0 (panel-only), 6,889 failed CrossMap, 1,834
 # lifted to non-canonical contigs.
+
+##########
+# 2026-05-13 Claude max
+# Westlake BioBank for Chinese (WBBC) WGS allele frequencies, refs #36642.
+#
+# 4,480 WGS samples sequenced to ~13.9x at Westlake University. The pilot
+# project has been folded into the larger China Precision BioBank (CPBB);
+# the variant file we host is unchanged from the WBBC Phase I v20210103
+# release. Paper: Cong et al. 2022 Nat Commun, PMID 35618720.
+#
+# Source: 22 per-chromosome sites-only VCFs already on GRCh38 with
+# chr-prefixed chromosomes (autosomes only - no chrX/Y in the download).
+# INFO fields ship cohort AC/AF/AN/NS plus per-region AC/AN for the four
+# Han Chinese geographic subgroups (North, Central, South, Lingnan) plus
+# per-genotype RR|RA|AA counts, total DP and the GATK VQSLOD score.
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina/download
+for i in $(seq 1 22); do wget -nv https://wbbc.westlake.edu.cn/data/WBBC.chr$i.GRCh38.vcf.gz; done
+# bcftools concat needs tabix indices when the per-chrom VCFs lack
+# ##contig header lines (they do here).
+parallel -j 8 tabix -p vcf {} ::: WBBC.chr{1..22}.GRCh38.vcf.gz
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina
+bcftools concat --threads 8 -Oz -o wbbc.allChrom.vcf.gz \
+    download/WBBC.chr{1..22}.GRCh38.vcf.gz
+# Stream re-header + filter AC=0. The Python helper inserts proper
+# ##contig (with lengths) and ##INFO lines, drops the dangling
+# SHAPEIT FORMAT line, and skips any row whose INFO starts AC=0;.
+zcat wbbc.allChrom.vcf.gz \
+    | python3 ~/kent/src/hg/makeDb/scripts/varFreqs/wbbcFix.py \
+    | bgzip -@ 8 -c > wbbc.vcf.gz
+tabix -p vcf wbbc.vcf.gz
+rm -f wbbc.allChrom.vcf.gz
+# Final: 2.2 GB bgzip + 2.2 MB tabix index, 78,594,274 variants.
+# 1,495,967 rows (~1.86%) with AC=0 were dropped.
+# Symlinks placed under /gbdb/hg38/varFreqs/wbbc/ for the wbbc stanza
+# in trackDb/human/varFreqs.ra.
+#
+# databases.tsv and populations.tsv now list WBBC + the four Han
+# regional groups, so the next varFreqsAll rebuild will pick the cohort
+# up. The trackDb filter UI (filterByRange.WBBCAF etc.) was deliberately
+# NOT added yet - those will be added together with the next rebuild
+# of varFreqsAll, otherwise the filters would appear in the UI before
+# the underlying bigBed has the columns.

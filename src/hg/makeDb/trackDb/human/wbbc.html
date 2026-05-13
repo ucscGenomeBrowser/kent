@@ -1,0 +1,104 @@
+<h2>Description</h2>
+<p>
+This track shows allele frequencies for 78.6 million variants from
+4,480 whole-genome-sequenced Chinese individuals released by the
+<a href="https://cpbb.cn/" target="_blank">Westlake BioBank for Chinese
+(WBBC)</a> pilot project. The WBBC is a population study of around 35,000
+Chinese volunteers spanning 31 provinces; about 15,000 of them have
+been deeply phenotyped and a subset have been whole-genome sequenced.
+The frequencies are also broken down into four Han Chinese regional
+groups (North, Central, South, Lingnan) defined by recruitment province
+in the WBBC paper.
+</p>
+
+<p>
+The pilot project has been folded into the larger
+<a href="https://cpbb.cn/" target="_blank">China Precision BioBank
+(CPBB)</a> initiative, which is collecting up to 100,000 samples
+nationwide. The variant frequencies on this track are from the original
+WBBC Phase I release (v20210103) and are unchanged by the rebranding.
+</p>
+
+<h2>Display</h2>
+<p>
+The track uses the standard UCSC VCF display. Hovering a variant shows
+the cohort allele frequency, the four regional frequencies, sequencing
+depth, GATK VQSR log-odds score, and the per-genotype hom-ref / het /
+hom-alt sample counts as reported by WBBC.
+</p>
+
+<h2>Methods</h2>
+<p>
+The WBBC pilot whole-genome-sequenced 4,535 individuals at a mean depth
+of around 13.9x on Illumina HiSeq X10 platforms, after dropping samples
+that failed standard QC. Reads were aligned to GRCh38 with BWA-MEM,
+variants were jointly called with GATK 4.0 HaplotypeCaller, and the
+callset was hard-filtered with VQSR. The 4,480 unrelated samples
+released for download were stratified into four Han Chinese regional
+groups (North, Central, South and Lingnan, which together cover roughly
+the 27 administrative divisions reached by the pilot). Allele counts
+and frequencies are reported overall and per region. See Cong <em>et al.</em>
+2022 (in References below) for full sample-selection and pipeline
+details.
+</p>
+<p>
+The per-chromosome WGS sites VCFs (chr1-22) were downloaded from
+<a href="https://wbbc.westlake.edu.cn/" target="_blank">https://wbbc.westlake.edu.cn/</a>
+(URL pattern: <tt>WBBC.chr&lt;N&gt;.GRCh38.vcf.gz</tt>). We concatenated
+the 22 files with <tt>bcftools concat</tt>, re-headered the result to
+add the standard hg38 contig lines and proper INFO definitions, then
+dropped variants with cohort allele count zero (multi-allelic splits
+that are not observed in the WBBC samples; ~1.9% of rows), and sorted,
+bgzipped and tabix-indexed the result. No coordinate liftover was
+needed: the upstream files are already on GRCh38 with chr-prefixed
+chromosomes. The pipeline is recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
+file</a> of the track.
+</p>
+
+<h2>Caveats</h2>
+<p>
+Only autosomes (chr1-22) are present; chrX/Y/M are not in the WBBC
+download. Variants reported as AC=0 in the WBBC release (about 1.9 %
+of rows, mostly multi-allelic split sites that no WBBC individual
+carries) have been removed from this track.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The variant frequencies can be explored interactively using the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and exported to
+spreadsheet or tab-separated tables. From scripts, the data can be
+accessed via our <a href="https://api.genome.ucsc.edu" target="_blank">REST
+API</a> with <tt>track=wbbc</tt>.
+</p>
+<p>
+The VCF file is also available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/wbbc/" target="_blank">our
+download server</a> as <tt>wbbc.vcf.gz</tt>. Individual regions can be
+extracted with <tt>tabix</tt>, for example
+<tt>tabix http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz chr21:1-100000000</tt>.
+The original per-chromosome WBBC release is distributed at
+<a href="https://wbbc.westlake.edu.cn/" target="_blank">https://wbbc.westlake.edu.cn/</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the WBBC participants and to the Westlake University team
+(Pei-Kuan Cong, Hou-Feng Zheng and colleagues) for making the pilot
+sites-only VCFs publicly available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cong PK, Bai WY, Li JC, Yang MY, Khederzadeh S, Gai SR, Li N, Liu YH, Yu SH, Zhao WW <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-022-30526-x" target="_blank">
+Genomic analyses of 10,376 individuals in the Westlake BioBank for Chinese (WBBC) pilot project</a>.
+<em>Nat Commun</em>. 2022 May 26;13(1):2939.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35618720" target="_blank">35618720</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9135724/" target="_blank">PMC9135724</a>
+</p>
+

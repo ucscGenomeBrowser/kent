@@ -349,6 +349,16 @@ superTrack on
         dataVersion 2025-06-16
         priority 5
 
+        track wbbc
+        shortLabel China WBBC 4.5k WGS
+        longLabel Variant Frequencies: Westlake BioBank for Chinese - 4,480 WGS, 4 regional Han groups
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/wbbc/wbbc.vcf.gz
+        visibility dense
+        dataVersion Phase I v20210103
+        priority 5.5
+
         track alfaVcf
         shortLabel NCBI ALFA 408k mixed
         longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants

@@ -27,3 +27,4 @@ GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF
 CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	AF
 SVatalog	SVatalog 101 10XG SR	/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz	AC	AF
 Tishkoff180	Tishkoff 180 African WGS	/gbdb/hg38/varFreqs/tishkoff/tishkoff180.vcf.gz	AC	AF
+WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF
