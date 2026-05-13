@@ -1,0 +1,96 @@
+<h2>Description</h2>
+
+<p>
+Mucins are large secreted or membrane-tethered glycoproteins that coat
+the epithelial surfaces of the airway, gut, and reproductive tract and
+form the protective mucus layer. Each mucin transcript is typically
+made up of one long VNTR exon, which encodes the heavily glycosylated
+tandem-repeat domain, flanked by many shorter, non-repetitive exons
+that encode the cysteine-rich and other functional domains of the
+protein. This track shows the non-VNTR (non-repetitive) exons of each
+mucin transcript on the T2T-CHM13 (hs1) primary assembly.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is a single exon, drawn in blue
+(<span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span>),
+labeled with the gene symbol and the exon number from the source table
+(e.g. <i>MUC1_exon7</i>). The transcript accession and gene symbol are
+shown in the details page. The companion track
+<a href="hgTrackUi?g=mucinsVntr">Mucin VNTR exons</a> shows the
+tandem-repeat exons of the same transcripts.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Mucin gene structures with their corresponding VNTR and non-VNTR exons
+were catalogued in a long-read sequencing study of the human mucin
+gene family. The annotations on the T2T-CHM13 primary assembly were
+curated manually from the gene models used in the supplementary tables
+of that work; for each transcript, exons were labeled as VNTR or
+non-VNTR based on whether they encode the tandem-repeat PTS domain.
+</p>
+
+<p>
+The starting file <tt>supp2_exons.txt</tt> was downloaded from the
+publication's supplementary material and converted to bigGenePred by
+the script described in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hs1/mucins.txt"
+target="_blank">makeDoc</a>, which uses the converter in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mucins"
+target="_blank">src/hg/makeDb/scripts/mucins</a>. Each exon row in the
+source becomes a single-block bigGenePred entry; coordinates in the
+source file are 0-based half-open and were passed through unchanged.
+This subtrack contains the 335 exons labeled as <tt>non_VNTR_exon</tt>
+across 14 mucin transcripts.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
+there to spreadsheet or tab-sep tables. From scripts, the data can be
+accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>mucinsNonVntr</i>.
+</p>
+
+<p>
+For automated download and analysis, the annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/locusSpec/mucins/"
+target="_blank">our download server</a>. The file for this track is
+called <tt>mucinsNonVntr.bb</tt>. Individual regions or the whole
+annotation can be obtained using the tool <tt>bigBedToBed</tt>, which
+can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hs1/locusSpec/mucins/mucinsNonVntr.bb -chrom=chr1 -start=154000000 -end=154500000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the Eichler lab and the authors of the source publication
+for making the curated mucin annotation available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Plender EG, Prodanov T, Hsieh P, Nizamis E, Harvey WT, Sulovari A, Munson KM, Kaufman EJ,
+O&#x27;Neal WK, Valdmanis PN <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(24)00213-1" target="_blank">
+Structural and genetic diversity in the secreted mucins MUC5AC and MUC5B</a>.
+<em>Am J Hum Genet</em>. 2024 Aug 8;111(8):1700-1716.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38991590" target="_blank">38991590</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11344006/" target="_blank">PMC11344006</a>
+</p>
+
