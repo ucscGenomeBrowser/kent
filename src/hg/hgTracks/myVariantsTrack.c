@@ -26,8 +26,9 @@
 
 static char *reservedFieldNames[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
-    "thickStart", "thickEnd", "itemRgb", "description", "db", "ref", "alt",
-    "project", "mouseover", "id", NULL
+    "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
+    "chromStarts", "description", "db", "ref", "alt", "project",
+    "mouseover", "id", NULL
 };
 
 static char *truncateSeq(char *seq, int maxLen)
@@ -171,6 +172,72 @@ for (j = 0; reservedFieldNames[j] != NULL; j++)
         return FALSE;
     }
 return TRUE;
+}
+
+static boolean hasTabOrNewline(char *s)
+/* TRUE if s contains \t, \n, or \r. */
+{
+return s != NULL && (strchr(s, '\t') != NULL ||
+                     strchr(s, '\n') != NULL ||
+                     strchr(s, '\r') != NULL);
+}
+
+static void validateItemBlocks(struct myVariants *item)
+/* Format item as a 12-column BED row and run it through loadAndValidateBed
+ * (isCt=TRUE) for the canonical block checks.  lineFileAbort fires errAbort
+ * on failure, the same error path used elsewhere in this file. */
+{
+/* Reject embedded tab/newline in chrom and name: lineFileNext would
+ * truncate the row and chopByChar would leave trailing row[] slots
+ * uninitialized for loadAndValidateBed to dereference. */
+if (hasTabOrNewline(item->chrom))
+    errAbort("chrom contains illegal whitespace");
+if (hasTabOrNewline(item->name))
+    errAbort("name contains illegal whitespace");
+
+struct dyString *dy = dyStringNew(256);
+int i;
+dyStringPrintf(dy, "%s\t%u\t%u\t%s\t%u\t%s\t%u\t%u\t%u\t%u\t",
+    item->chrom, item->chromStart, item->chromEnd,
+    isEmpty(item->name) ? "x" : item->name,
+    item->score, item->strand, item->thickStart, item->thickEnd,
+    item->itemRgb, item->blockCount);
+for (i = 0; i < item->blockCount; i++)
+    dyStringPrintf(dy, "%d,", item->blockSizes[i]);
+dyStringAppendC(dy, '\t');
+for (i = 0; i < item->blockCount; i++)
+    dyStringPrintf(dy, "%d,", item->chromStarts[i]);
+
+/* lineFileOnString takes the buffer by pointer, but lineFileClose does
+ * not free it (the fd<0 branch skips the free).  Hold the pointer
+ * separately and free it after lineFileClose. */
+char *buf = dyStringCannibalize(&dy);
+struct lineFile *lf = lineFileOnString("myVariantsBlocks", TRUE, buf);
+char *row[12];
+char *line = NULL;
+lineFileNext(lf, &line, NULL);
+int got = chopByChar(line, '\t', row, ArraySize(row));
+if (got != 12)
+    errAbort("validateItemBlocks: chopped %d fields, expected 12", got);
+struct bed tmp;
+ZeroVar(&tmp);
+loadAndValidateBed(row, 12, 12, lf, &tmp, NULL, TRUE);
+lineFileClose(&lf);
+freeMem(buf);
+freeMem(tmp.blockSizes);
+freeMem(tmp.chromStarts);
+}
+
+static void ensureItemBlocks(struct myVariants *item)
+/* If item has no blocks, synthesize a single full-span block. */
+{
+if (item->blockCount > 0)
+    return;
+item->blockCount = 1;
+AllocArray(item->blockSizes, 1);
+AllocArray(item->chromStarts, 1);
+item->blockSizes[0] = item->chromEnd - item->chromStart;
+item->chromStarts[0] = 0;
 }
 
 void myVariantsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
@@ -363,6 +430,44 @@ else
 if (!item)
     return;
 
+/* Parse blocks from JSON if present. Empty / missing means single full-span
+ * block; ensureItemBlocks synthesizes that below. */
+struct jsonElement *blockSizesJson = jsonFindNamedField(json, "jsonData", "blockSizes");
+struct jsonElement *chromStartsJson = jsonFindNamedField(json, "jsonData", "chromStarts");
+if (blockSizesJson && blockSizesJson->type == jsonList &&
+    chromStartsJson && chromStartsJson->type == jsonList)
+    {
+    int sizeN = slCount(blockSizesJson->val.jeList);
+    int startN = slCount(chromStartsJson->val.jeList);
+    if (sizeN != startN)
+        errAbort("blockSizes and chromStarts lengths differ (%d vs %d)", sizeN, startN);
+    if (sizeN > 0)
+        {
+        item->blockCount = sizeN;
+        AllocArray(item->blockSizes, sizeN);
+        AllocArray(item->chromStarts, sizeN);
+        struct slRef *el;
+        int i = 0;
+        for (el = blockSizesJson->val.jeList; el != NULL; el = el->next, i++)
+            {
+            struct jsonElement *child = (struct jsonElement *)el->val;
+            if (child->type != jsonNumber)
+                errAbort("blockSizes[%d] is not a number", i);
+            item->blockSizes[i] = child->val.jeNumber;
+            }
+        i = 0;
+        for (el = chromStartsJson->val.jeList; el != NULL; el = el->next, i++)
+            {
+            struct jsonElement *child = (struct jsonElement *)el->val;
+            if (child->type != jsonNumber)
+                errAbort("chromStarts[%d] is not a number", i);
+            item->chromStarts[i] = child->val.jeNumber;
+            }
+        }
+    }
+ensureItemBlocks(item);
+validateItemBlocks(item);
+
 /* Parse custom fields from JSON payload and ALTER TABLE as needed */
 char *tableName = myVariantsCreateTable(userName);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -474,6 +579,97 @@ dyStringFree(&sql);
 cartRemove(cart, varName);
 }
 
+static void updateBlocksFields(char *trackName, struct sqlConnection *conn,
+        char *tableName, int id, char *scopeProject, char *scopeDb)
+/* Pull <trackName>_blockCount, _blockSizes, _chromStarts from the cart,
+ * validate jointly against the row's current chromStart/chromEnd via
+ * loadAndValidateBed, and UPDATE all three columns in one statement.
+ * No-op if any of the three cart vars are missing. */
+{
+char vC[128], vS[128], vT[128];
+safef(vC, sizeof vC, "%s_blockCount", trackName);
+safef(vS, sizeof vS, "%s_blockSizes", trackName);
+safef(vT, sizeof vT, "%s_chromStarts", trackName);
+char *cartCount = cartOptionalString(cart, vC);
+char *cartSizes = cartOptionalString(cart, vS);
+char *cartStarts = cartOptionalString(cart, vT);
+if (cartCount == NULL || cartSizes == NULL || cartStarts == NULL)
+    return;
+/* Clone the cart strings before removing the cart vars: if validation
+ * errAborts below, the cart vars must not survive to corrupt the next
+ * edit on a different row. */
+char *blockCountStr = cloneString(cartCount);
+char *blockSizesStr = cloneString(cartSizes);
+char *chromStartsStr = cloneString(cartStarts);
+cartRemove(cart, vC);
+cartRemove(cart, vS);
+cartRemove(cart, vT);
+
+struct dyString *q = sqlDyStringCreate(
+    "select chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb"
+    " from %s where id=%d", tableName, id);
+if (isNotEmpty(scopeDb))
+    sqlDyStringPrintf(q, " and db='%s'", scopeDb);
+if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
+    sqlDyStringPrintf(q, " and project='%s'", scopeProject);
+struct sqlResult *sr = sqlGetResult(conn, q->string);
+dyStringFree(&q);
+char **row = sqlNextRow(sr);
+if (row == NULL)
+    {
+    sqlFreeResult(&sr);
+    freeMem(blockCountStr);
+    freeMem(blockSizesStr);
+    freeMem(chromStartsStr);
+    return;
+    }
+struct myVariants item;
+ZeroVar(&item);
+item.chrom = cloneString(row[0]);
+item.chromStart = sqlUnsigned(row[1]);
+item.chromEnd = sqlUnsigned(row[2]);
+item.name = cloneString(row[3]);
+item.score = sqlUnsigned(row[4]);
+safecpy(item.strand, sizeof(item.strand), row[5]);
+item.thickStart = sqlUnsigned(row[6]);
+item.thickEnd = sqlUnsigned(row[7]);
+item.itemRgb = sqlUnsigned(row[8]);
+sqlFreeResult(&sr);
+
+item.blockCount = sqlUnsigned(blockCountStr);
+char *sizesDup = cloneString(blockSizesStr);
+char *startsDup = cloneString(chromStartsStr);
+int n;
+sqlSignedDynamicArray(sizesDup, &item.blockSizes, &n);
+if (n != item.blockCount)
+    errAbort("blockSizes count %d != blockCount %u", n, item.blockCount);
+sqlSignedDynamicArray(startsDup, &item.chromStarts, &n);
+if (n != item.blockCount)
+    errAbort("chromStarts count %d != blockCount %u", n, item.blockCount);
+freeMem(sizesDup);
+freeMem(startsDup);
+
+validateItemBlocks(&item);
+
+struct dyString *upd = sqlDyStringCreate(
+    "update %s set blockCount=%u,blockSizes='%s',chromStarts='%s' where id=%d",
+    tableName, item.blockCount, blockSizesStr, chromStartsStr, id);
+if (isNotEmpty(scopeDb))
+    sqlDyStringPrintf(upd, " and db='%s'", scopeDb);
+if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
+    sqlDyStringPrintf(upd, " and project='%s'", scopeProject);
+sqlUpdate(conn, upd->string);
+dyStringFree(&upd);
+
+freeMem(item.chrom);
+freeMem(item.name);
+freeMem(item.blockSizes);
+freeMem(item.chromStarts);
+freeMem(blockCountStr);
+freeMem(blockSizesStr);
+freeMem(chromStartsStr);
+}
+
 static void myVariantsEditOrDelete(char *trackName, struct sqlConnection *conn, char *tableName)
 /* Troll through cart variables looking for things that indicate user edited item
  * or deleted it in hgc,  and carry out edits. See hgc/myVariantsClick.c. */
@@ -525,6 +721,7 @@ if (idString != NULL)
     updateTextField(trackName, conn, tableName, "itemRgb", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromStart", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromEnd", id, NULL, NULL);
+    updateBlocksFields(trackName, conn, tableName, id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "ref", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "alt", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "project", id, NULL, NULL);
@@ -592,7 +789,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->thickStart = item->thickStart;
     bed->thickEnd = item->thickEnd;
     bed->itemRgb = item->itemRgb;
-    lf = bedMungToLinkedFeatures(&bed, tdb, 9, 0, 1000, TRUE);
+    bed->blockCount = item->blockCount;
+    if (item->blockCount > 0)
+        {
+        bed->blockSizes = cloneMem(item->blockSizes,
+                                   item->blockCount * sizeof(int));
+        bed->chromStarts = cloneMem(item->chromStarts,
+                                    item->blockCount * sizeof(int));
+        }
+    lf = bedMungToLinkedFeatures(&bed, tdb, 12, 0, 1000, TRUE);
     dyStringClear(mouseover);
     if (item->mouseover && isNotEmpty(item->mouseover))
         lf->mouseOver = cloneString(item->mouseover);
@@ -1031,6 +1236,7 @@ for (el = shareVars; el != NULL; el = el->next)
     updateTextField(trackName, conn, tableName, "itemRgb", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromStart", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromEnd", id, sp, sd);
+    updateBlocksFields(trackName, conn, tableName, id, sp, sd);
     updateTextField(trackName, conn, tableName, "ref", id, sp, sd);
     updateTextField(trackName, conn, tableName, "alt", id, sp, sd);
     updateTextField(trackName, conn, tableName, "mouseover", id, sp, sd);

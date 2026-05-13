@@ -12048,6 +12048,7 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+    jsIncludeFile("myVariantsBlocks.js", NULL);
 
     // remove the hg.conf option once this feature is released
     if (cfgOptionBooleanDefault("showIgv", FALSE))

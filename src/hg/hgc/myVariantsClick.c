@@ -151,14 +151,66 @@ if (item != NULL)
         safef(chromSizeString, sizeof(chromSizeString), "%d", chromSize);
         printf("<B>Start:</B> ");
         safef(varName, sizeof(varName), "%s_%s", trackName, "chromStart");
-        cgiMakeIntVarInRange(varName, item->chromStart+1, NULL, 80, "1", chromSizeString);
-        printInfoIcon("1-based start position on the chromosome.");
+        cgiMakeIntVarInRange(varName, item->chromStart, NULL, 80, "0", chromSizeString);
+        printInfoIcon("0-based start position on the chromosome.");
         printf("<BR>\n");
         printf("<B>End:</B> ");
         safef(varName, sizeof(varName), "%s_%s", trackName, "chromEnd");
         cgiMakeIntVarInRange(varName, item->chromEnd, NULL, 80, "1", chromSizeString);
-        printInfoIcon("1-based end position on the chromosome (inclusive).");
+        printInfoIcon("0-based half-open end position on the chromosome.");
         printf("<BR>\n");
+
+        /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
+         * updateBlocksFields in hgTracks reads them on submit. */
+        char vBC[128], vBS[128], vBT[128], vCS[128], vCE[128];
+        safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
+        safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
+        safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
+        safef(vCS, sizeof(vCS), "%s_chromStart", trackName);
+        safef(vCE, sizeof(vCE), "%s_chromEnd", trackName);
+        struct dyString *sizesCsv = dyStringNew(64);
+        struct dyString *startsCsv = dyStringNew(64);
+        int bi;
+        for (bi = 0; bi < item->blockCount; bi++)
+            {
+            if (bi > 0)
+                {
+                dyStringAppendC(sizesCsv, ',');
+                dyStringAppendC(startsCsv, ',');
+                }
+            dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
+            dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
+            }
+        char countStr[32];
+        safef(countStr, sizeof(countStr), "%u", item->blockCount);
+        printf("<B>Blocks:</B> ");
+        printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
+        printf("<BR>\n");
+        cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
+        cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
+        cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
+        printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
+        jsIncludeFile("myVariantsBlocks.js", NULL);
+        jsInlineF(
+            "$(function(){\n"
+            "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
+            "  var sizesEl = document.getElementById('%s');\n"
+            "  var startsEl = document.getElementById('%s');\n"
+            "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
+            "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
+            "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
+            "    initialSizes: sizes,\n"
+            "    initialStarts: starts,\n"
+            "    getStart: function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+            "    getEnd:   function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+            "    hiddenCountInput:  document.getElementById('%s'),\n"
+            "    hiddenSizesInput:  sizesEl,\n"
+            "    hiddenStartsInput: startsEl\n"
+            "  });\n"
+            "});\n",
+            vBS, vBT, vCS, vCE, vBC);
+        dyStringFree(&sizesCsv);
+        dyStringFree(&startsCsv);
 
         /* Edit the color */
         safef(varName, sizeof(varName), "%s_%s", trackName, "itemRgb");
@@ -297,8 +349,22 @@ if (item != NULL)
         htmlPrintf("<B>Label:</B> %s<BR>\n", item->name);
         htmlPrintf("<B>Description:</B><BR>\n%s<BR>\n", item->description);
         htmlPrintf("<B>Chromosome:</B> %s<BR>\n", item->chrom);
-        printf("<B>Start:</B> %d<BR>\n", item->chromStart + 1);
+        printf("<B>Start:</B> %d<BR>\n", item->chromStart);
         printf("<B>End:</B> %d<BR>\n", item->chromEnd);
+        if (item->blockCount > 1)
+            {
+            printf("<B>Blocks:</B> ");
+            int roBi;
+            for (roBi = 0; roBi < item->blockCount; roBi++)
+                {
+                if (roBi > 0)
+                    printf(", ");
+                int relStart = item->chromStarts[roBi];
+                int relEnd = relStart + item->blockSizes[roBi];
+                printf("%d-%d (%dbp)", relStart, relEnd, item->blockSizes[roBi]);
+                }
+            printf("<BR>\n");
+            }
         char colorHex[8];
         safef(colorHex, sizeof(colorHex), "#%06X", item->itemRgb);
         printf("<B>Color:</B> <span style='background:%s; padding:2px 12px'>&nbsp;</span> %s<BR>\n",

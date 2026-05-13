@@ -6,7 +6,7 @@
 #include "common.h"
 #include "cart.h"
 #include "customTrack.h"
-#define MYVARIANTS_NUM_COLS 17 /* number of default columns before any user-added custom columns */
+#define MYVARIANTS_NUM_COLS 20 /* number of default columns before any user-added custom columns */
 
 struct myVariants
 /* An item in a myVariants type track. */
@@ -22,6 +22,9 @@ struct myVariants
     unsigned thickStart;    /* Start of thick part */
     unsigned thickEnd;      /* End position of thick part */
     unsigned itemRgb;   /* RGB 8 bits each as in bed */
+    unsigned blockCount;    /* Number of blocks */
+    int *blockSizes;        /* Comma separated list of block sizes */
+    int *chromStarts;       /* Start positions relative to chromStart */
     char *description;  /* Longer item description */
     char *db;           /* database name of this annotation */
     char *ref;          /* reference allele */

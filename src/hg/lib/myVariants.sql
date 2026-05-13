@@ -10,6 +10,9 @@ CREATE TABLE myVariants (
     thickStart int unsigned not null,    # Start of thick part
     thickEnd int unsigned not null,      # End position of thick part
     itemRgb int unsigned not null,   # RGB 8 bits each as in bed
+    blockCount int unsigned not null,    # Number of blocks
+    blockSizes longblob not null,        # Comma separated list of block sizes
+    chromStarts longblob not null,       # Start positions relative to chromStart
     description longblob not null,   # Longer item description
     db varchar(255) not null,        # database name of this annotation
     ref varchar(255) not null,       # reference allele
