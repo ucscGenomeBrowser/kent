@@ -513,12 +513,12 @@ if (extraFieldsJson && extraFieldsJson->type == jsonList)
 /* Add item to database. */
 myVariantsSaveToDb(conn, item, tableName, 0);
 
-/* Trigger CT import by writing a concrete CT file to trash and pointing ctfile_<db> to it */
+/* Refresh the on-disk myVariants ctfile and point mvCtfile_<db> at it. */
 char *ctFile = myVariantsWriteCtFile(userName, database, cart);
 if (isNotEmpty(ctFile))
     {
     char varName[256];
-    safef(varName, sizeof varName, CT_FILE_VAR_PREFIX "%s", database);
+    safef(varName, sizeof varName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
     cartSetString(cart, varName, ctFile);
     freeMem(ctFile);
     }
@@ -699,7 +699,7 @@ if (idString != NULL)
         cartRemove(cart, varName);	// Especially only want to do deletes once!
         sqlSafef(sql, sizeof(sql), "delete from %s where id=%d", tableName, id);
         sqlUpdate(conn, sql);
-        /* Trigger CT refresh */
+        /* Refresh the on-disk myVariants ctfile after a delete. */
         char *userName = getUserName();
         if (userName)
             {
@@ -707,7 +707,7 @@ if (idString != NULL)
             if (isNotEmpty(ctFile))
                 {
                 char ctVar[256];
-                safef(ctVar, sizeof ctVar, CT_FILE_VAR_PREFIX "%s", database);
+                safef(ctVar, sizeof ctVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
                 cartSetString(cart, ctVar, ctFile);
                 freeMem(ctFile);
                 }
@@ -735,7 +735,7 @@ if (idString != NULL)
             updateTextField(trackName, conn, tableName, col->name, id, NULL, NULL);
         slFreeList(&customCols);
         }
-    /* Trigger CT refresh after edits */
+    /* Refresh the on-disk myVariants ctfile after edits. */
     {
         char *userName = getUserName();
         if (userName)
@@ -744,7 +744,7 @@ if (idString != NULL)
             if (isNotEmpty(ctFile))
                 {
                 char ctVar[256];
-                safef(ctVar, sizeof ctVar, CT_FILE_VAR_PREFIX "%s", database);
+                safef(ctVar, sizeof ctVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
                 cartSetString(cart, ctVar, ctFile);
                 freeMem(ctFile);
                 }

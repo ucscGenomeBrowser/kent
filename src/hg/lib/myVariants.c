@@ -941,34 +941,41 @@ boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
 if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
     return FALSE;
 char *trackName = ct->tdb->track;
+if (!startsWith("myVariants_", trackName))
+    return FALSE;
+
+/* Cleanup common to any myVariants removal: drop the track's visibility var
+ * and invalidate the on-disk ctfile pointer so the next entry-point visit
+ * regenerates from current SQL/share state. */
+cartRemove(cart, trackName);
+char mvVar[256];
+safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
+cartRemove(cart, mvVar);
+
 if (startsWith("myVariants_shared_", trackName))
     {
+    /* Drop the share-acceptance var so the share isn't re-imported. */
     char *token = trackName + strlen("myVariants_shared_");
     char shareCartVar[256];
     safef(shareCartVar, sizeof shareCartVar,
         MYVAR_SHARED_CART_PREFIX "%s", token);
     cartRemove(cart, shareCartVar);
-    cartRemove(cart, trackName);
     return TRUE;
     }
-if (startsWith("myVariants_", trackName))
+
+/* Own track: delete the user's SQL rows for this assembly, unlink the
+ * persisted ctfile, and drop any renamed-label cart vars so a freshly
+ * created track on this assembly starts at "My Annotations" again. */
+char *userName = wikiLinkUserName();
+if (isNotEmpty(userName))
     {
-    char *userName = wikiLinkUserName();
-    if (isNotEmpty(userName))
-        {
-        myVariantsDeleteForDb(userName, database);
-        myVariantsUnlinkCtFile(userName, database);
-        }
-    /* Drop the per-db renamed labels so a freshly created track on this
-     * assembly starts at "My Annotations" again.  Labels for other
-     * assemblies stay because they belong to different displayed tracks. */
-    char labelPrefix[256];
-    safef(labelPrefix, sizeof labelPrefix, "%s.%s.", trackName, database);
-    cartRemovePrefix(cart, labelPrefix);
-    cartRemove(cart, trackName);
-    return TRUE;
+    myVariantsDeleteForDb(userName, database);
+    myVariantsUnlinkCtFile(userName, database);
     }
-return FALSE;
+char labelPrefix[256];
+safef(labelPrefix, sizeof labelPrefix, "%s.%s.", trackName, database);
+cartRemovePrefix(cart, labelPrefix);
+return TRUE;
 }
 
 struct slName *myVariantsGetProjects(char *userName)

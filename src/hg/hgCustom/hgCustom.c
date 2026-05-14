@@ -1220,7 +1220,9 @@ initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
 chromAliasSetup(database);
 
-/* Ensure myVariants CT is registered in this cart if user has items for current db */
+/* Ensure myVariants CT is registered in this cart if user has items for current db.
+ * Uses a dedicated cart variable (mvCtfile_<db>) so regular custom tracks at
+ * ctfile_<db> are untouched. */
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     char *user = wikiLinkUserName();
@@ -1235,12 +1237,11 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE))
             int ctCount = sqlQuickNum(conn, query);
             if (ctCount > 0)
                 {
-                /* Prefer writing a concrete CT file to trash to ensure CT is recognized immediately */
                 char *ctFile = myVariantsWriteCtFile(user, database, cart);
                 if (isNotEmpty(ctFile))
                     {
                     char varName[256];
-                    safef(varName, sizeof varName, CT_FILE_VAR_PREFIX "%s", database);
+                    safef(varName, sizeof varName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
                     cartSetString(cart, varName, ctFile);
                     freeMem(ctFile);
                     }

@@ -8,6 +8,11 @@
 #include "customTrack.h"
 #define MYVARIANTS_NUM_COLS 20 /* number of default columns before any user-added custom columns */
 
+/* Cart var prefix that points at the on-disk myVariants ctfile for a given assembly.
+ * Kept separate from CT_FILE_VAR_PREFIX so myVariants and regular custom tracks
+ * coexist without clobbering each other. */
+#define MYVARIANTS_FILE_VAR_PREFIX "mvCtfile_"
+
 struct myVariants
 /* An item in a myVariants type track. */
     {
