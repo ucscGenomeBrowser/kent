@@ -3,9 +3,14 @@ ottoLib.py - shared helpers for the otto userRequests scripts.
 
 Provides clade lookup (via hgsql -> genark and the dbDb.name.clade.tsv
 checked in next to this file), the filter that writes tsv.otto into the
-matching cladeAsmHub source directory, and the make-command sequence
-that (re)builds a GenArk assembly hub.  Also wraps the per-asm
-doTrackDb.bash invocation used by ottoRequestWatch.sh.
+matching cladeAsmHub source directory inside the otto kent working tree,
+the 'git pull' helper that brings that tree up to date, and the make-
+command sequence that (re)builds a GenArk assembly hub.  Also wraps the
+per-asm doTrackDb.bash invocation used by ottoRequestWatch.sh.
+
+The otto kent working tree is resolved the same way chainNetTrackDb.pl
+resolves it:
+    $OTTO_KENT_TREE  (default /hive/data/outside/genark/ottoKent/kent)
 
 Used by:
   ottoRequestPush2.py     (lib-using rewrite of ottoRequestPush.py)
@@ -23,6 +28,11 @@ from collections import defaultdict
 libDir = os.path.dirname(os.path.abspath(__file__))
 cladeTsv = os.path.join(libDir, "dbDb.name.clade.tsv")
 gcPattern = re.compile(r"^GC[AF]_")
+
+# Otto's kent working tree: where cladeAsmHub directories live and where
+# the make chain runs.  Matches chainNetTrackDb.pl's $kentTree resolution.
+kentTree = os.environ.get(
+    "OTTO_KENT_TREE", "/hive/data/outside/genark/ottoKent/kent")
 
 
 def acquireSingletonLock(lockPath, exitOnLocked=True):
@@ -52,6 +62,35 @@ def acquireSingletonLock(lockPath, exitOnLocked=True):
     fh.flush()
     return fh
     ### FYI: can also see the locking process via: lsof <lockPath>
+
+
+def gitPullKentTree():
+    """Run 'git -C <kentTree> pull' so make commands run against an
+    up-to-date checkout (mirrors the first thing chainNetTrackDb.pl
+    does after sanity-checking $kentTree).  Returns True on success,
+    False otherwise (with the error printed to stderr).  Untracked
+    files such as the regenerated tsv.otto are tolerated; conflicting
+    local edits will cause 'git pull' to fail, which is what we want
+    -- we don't want to silently run makes against a dirty tree.
+    The "Already up to date." case is suppressed to keep cron output
+    quiet; any other pull output is surfaced to stderr."""
+    if not os.path.isdir(os.path.join(kentTree, ".git")):
+        print("ERROR: not a git working tree: %s" % kentTree,
+              file=sys.stderr)
+        return False
+    result = subprocess.run(
+        ["git", "-C", kentTree, "pull"],
+        capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        print("ERROR: 'git pull' failed in %s:\n%s%s"
+              % (kentTree, result.stdout, result.stderr),
+              file=sys.stderr)
+        return False
+    out = result.stdout.strip()
+    if out and out != "Already up to date.":
+        print("# git pull in %s:\n%s" % (kentTree, out), file=sys.stderr)
+    return True
 
 
 def hgsql(query, db="hgcentraltest"):
@@ -123,8 +162,8 @@ def writeCladeTsv(clade, asmIds):
     genarkIds = [a for a in asmIds if gcPattern.match(a)]
     if not genarkIds:
         return None
-    cladeDir = os.path.expanduser(
-        "~/kent/src/hg/makeDb/doc/%sAsmHub" % clade)
+    cladeDir = os.path.join(
+        kentTree, "src/hg/makeDb/doc/%sAsmHub" % clade)
     orderList = os.path.join(cladeDir, "%s.orderList.tsv" % clade)
     outPath = os.path.join(cladeDir, "tsv.otto")
     if not os.path.isfile(orderList):

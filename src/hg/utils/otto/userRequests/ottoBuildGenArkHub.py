@@ -108,6 +108,10 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # bring the otto kent tree up to date before any cladeAsmHub make
+    if not ottoLib.gitPullKentTree():
+        sys.exit(1)
+
     # doTrackDb runs first: it refreshes per-asm trackDb stanzas that the
     # downstream make chain then bakes into the hub files.  An asm whose
     # doTrackDb fails is dropped from this build pass (the make chain
