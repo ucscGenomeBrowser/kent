@@ -3110,9 +3110,9 @@ for (ref = exonList; TRUE; )
 
 
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
-                            "<b>Strand:</b> %c&nbsp;&nbsp;&nbsp;&nbsp;<b>Length:</b> %dbp<br><b>%s:</b> %s %d of %d<br>%s",
-                        existingText, posNote, strandChar, e - s, exonOrIntron, exonIntronText,
-                        exonIntronNumber, numExonIntrons, phaseText);
+                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>Length:</b> %d bp<br>%s",
+                        existingText, posNote, strandChar, exonOrIntron, exonIntronText,
+                        exonIntronNumber, numExonIntrons, e - s, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
