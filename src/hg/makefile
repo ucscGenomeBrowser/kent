@@ -19,9 +19,11 @@ endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl utils/hubCheck
 
-ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
-    ENCODE_FILES = encode3/encodeDataWarehouse
-endif
+# encode3/encodeDataWarehouse disabled: htslib sam_write1 now warn_unused_result,
+# breaking -Werror in edwBamFilter/edwBamRemoveChrom/edwBamStats.
+#ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
+#    ENCODE_FILES = encode3/encodeDataWarehouse
+#endif
 
 # these should not be included in UTILS_APPLIST or parallel test runs will fail
 TEST_DIRS = lib
@@ -42,11 +44,12 @@ BAD_DIRS = \
 	wikiPlot
 
 # can not build this on Mac OSX - has functions not supported
-UNAME_S := $(shell uname -s) 
+UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
   buildRefresh=
 else
-  buildRefresh=encode3
+  # encode3 disabled: see ENCODE_FILES note above.
+  buildRefresh=
 endif
 
 # in the kent-core version of the tree, there is no encode3 directory

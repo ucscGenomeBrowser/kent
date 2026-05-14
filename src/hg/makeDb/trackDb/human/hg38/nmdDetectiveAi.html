@@ -1,0 +1,141 @@
+<h2>Description</h2>
+<p>
+The <b>NMDetective-AI</b> tracks display deep-learning predictions of
+nonsense-mediated mRNA decay (NMD) efficiency for every possible stop-gain
+single-nucleotide variant in MANE Select transcripts. The model was trained on
+~14,000 somatic premature termination codons (PTCs) measured by allele-specific
+expression in large human cohorts (TCGA) and was tested on ~1,800 held-out
+germline PTCs (TCGA germline and GTEx) (Veiner <em>et al.</em>).
+</p>
+
+<p>
+Predictions are continuous: higher values indicate that a PTC at that codon is
+predicted to trigger NMD (the mRNA is degraded); lower values indicate that the
+PTC is predicted to evade NMD (the truncated mRNA may be translated into an
+aberrant protein). The output is normalized against canonical controls so that
+<b>+0.5</b> corresponds to full NMD efficiency at a PTC and <b>&minus;0.5</b>
+corresponds to no NMD efficiency (a last-exon PTC). The scale is not strictly
+bounded: due to measurement and prediction noise, observed values fall in
+roughly &minus;1.1 to +1.5, with the bulk of items inside the nominal
+&minus;0.5 to +0.5 interval.
+</p>
+
+<h3>Subtracks</h3>
+<table class="descTbl">
+<tr><th>Track</th><th>Description</th></tr>
+<tr><td><b>NMDetective-AI</b></td>
+    <td>Signal track (bigWig) showing the position-averaged prediction across
+    all stop-gain SNVs at each codon. Useful for browsing efficiency along a
+    transcript at a glance.</td></tr>
+<tr><td><b>NMDetective-AI variants</b></td>
+    <td>Per-stop-gain track (bigBed) with one item per (transcript, codon,
+    mutant codon) combination. Each item is colored by its prediction and
+    carries the reference and mutant codon, amino-acid position, transcript
+    accession, and a pre-rendered mouseover summary.</td></tr>
+</table>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The <b>NMDetective-AI</b> signal track is drawn with a default y-axis range of
+&minus;1.1 to +1.5. Positions with positive values (predicted NMD-triggering)
+are shown above the baseline; positions with negative values (predicted NMD
+escape) are shown below.
+</p>
+
+<p>
+The <b>NMDetective-AI variants</b> track colors each item along a continuous
+diverging Okabe-Ito palette running from blue (most NMD-evading) through grey
+(near zero) to vermillion (most NMD-triggering). The mouseover verdict groups
+items into three categories using the binarization thresholds derived in the
+Veiner <em>et al.</em> Methods (Gaussian mixture model fit to gnomAD
+predictions):
+</p>
+<ul>
+  <li><font color="#0072B2"><b>NMD-evading</b></font> &ndash; prediction
+    &le; &minus;0.17.</li>
+  <li><font color="#888888"><b>Intermediate / uncertain</b></font> &ndash;
+    &minus;0.17 &lt; prediction &lt; +0.43.</li>
+  <li><font color="#D55E00"><b>NMD-triggering</b></font> &ndash; prediction
+    &ge; +0.43.</li>
+</ul>
+<p>
+Mouseover for each variant shows the codon change, the prediction value with
+its NMD verdict, and the MANE Select transcript accession. Click an item to
+see the full set of fields on the details page.
+</p>
+
+<h2>Methods</h2>
+<p>
+NMDetective-AI is a fine-tuned version of the Orthrus mRNA foundation model
+(Mamba architecture, ~10M parameters), trained on full-length transcript
+sequences encoded as a six-track representation (four nucleotide channels,
+one CDS-start channel, one splice-site channel). The model integrates
+allele-specific PTC expression from large-scale genomic data with mRNA
+language-model embeddings and high-throughput deep mutational scanning, and
+predicts NMD efficiency for every possible stop-gain mutation in every codon
+of a MANE Select transcript.
+</p>
+
+<p>
+The training set comprised 14,337 somatic PTCs from TCGA, with chromosomes 1
+and 20 held out as a validation set. The held-out test set comprised 1,065
+germline PTCs from TCGA and 763 germline PTCs from GTEx. The authors report
+that the model's accuracy on the somatic validation set approaches the
+empirical reproducibility ceiling of the underlying allele-specific
+expression measurements.
+</p>
+
+<p>
+The publicly released predictions cover MANE Select transcripts at Gencode
+v46. Predictions for transcripts outside the MANE Select set are not yet
+available; broader coverage is planned by the authors after peer review.
+</p>
+
+<p>
+Source files were obtained from the
+<a href="https://github.com/Vejni/NMDetectiveAI" target="_blank">Vejni/NMDetectiveAI</a>
+GitHub repository (supplementary files
+<tt>NMDetectiveAI_MANE.bw.gz</tt> and <tt>NMDetectiveAI_MANE.bed.gz</tt>) and
+processed at UCSC: the bigWig is used as supplied; the BED was recolored with
+the diverging Okabe-Ito palette described above, rescored into the
+0&ndash;1000 BED range, and augmented with a pre-rendered mouseover column
+before conversion to bigBed.
+</p>
+
+<p>
+<b>Note:</b> the manuscript is currently a bioRxiv preprint and has not yet
+completed peer review. Predictions may be refreshed when the final version
+of the data is released.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data underlying these tracks can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Marcell Veiner and Fran Supek for sharing the NMDetective-AI
+predictions ahead of publication, and to the wider Veiner <em>et al.</em>
+author group for developing the model.
+</p>
+
+<h2>References</h2>
+<p>
+Veiner M, Toledano I, Palou-M&aacute;rquez G, Lehner B, Supek F.
+<a href="https://doi.org/10.64898/2026.03.24.714003" target="_blank">
+Quantitative prediction of nonsense-mediated mRNA decay across human genes by
+genomic language model and large-scale mutational scanning</a>.
+<em>bioRxiv</em>. 2026 Mar 26.
+doi: <a href="https://doi.org/10.64898/2026.03.24.714003" target="_blank">10.64898/2026.03.24.714003</a>.
+Supplementary prediction files at
+<a href="https://github.com/Vejni/NMDetectiveAI" target="_blank">github.com/Vejni/NMDetectiveAI</a>.
+</p>

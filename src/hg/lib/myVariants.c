@@ -15,6 +15,7 @@
 void myVariantsStaticLoad(char **row, struct myVariants *ret)
 /* Load a row from myVariants table into ret. The contents of ret will be replaced at the next call to this function. */
 {
+int sizeOne;
 ret->bin = sqlUnsigned(row[0]);
 ret->chrom = row[1];
 ret->chromStart = sqlUnsigned(row[2]);
@@ -25,13 +26,18 @@ safecpy(ret->strand, sizeof(ret->strand), row[6]);
 ret->thickStart = sqlUnsigned(row[7]);
 ret->thickEnd = sqlUnsigned(row[8]);
 ret->itemRgb = sqlUnsigned(row[9]);
-ret->description = row[10];
-ret->db = row[11];
-ret->ref = row[12];
-ret->alt = row[13];
-ret->project = row[14];
-ret->mouseover = row[15];
-ret->id = sqlUnsigned(row[16]);
+ret->blockCount = sqlUnsigned(row[10]);
+sqlSignedDynamicArray(row[11], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[12], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+ret->description = row[13];
+ret->db = row[14];
+ret->ref = row[15];
+ret->alt = row[16];
+ret->project = row[17];
+ret->mouseover = row[18];
+ret->id = sqlUnsigned(row[19]);
 }
 
 struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query)
@@ -51,6 +57,16 @@ sqlFreeResult(&sr);
 return list;
 }
 
+static char *commaIntList(int *arr, int n)
+/* Build a "n1,n2,...,nN," string from an int array.  Caller frees. */
+{
+struct dyString *dy = dyStringNew(n * 8);
+int i;
+for (i = 0; i < n; i++)
+    dyStringPrintf(dy, "%d,", arr[i]);
+return dyStringCannibalize(&dy);
+}
+
 void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char *tableName, int updateSize)
 /* Save myVariants as a row to the table specified by tableName.
  * Uses explicit column names so custom fields in el->customFields are included.
@@ -60,7 +76,7 @@ void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char 
  * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,description,db,ref,alt,project,mouseover", tableName);
+sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover", tableName);
 
 /* Append custom field column names */
 struct slPair *cf;
@@ -68,10 +84,14 @@ for (cf = el->customFields; cf != NULL; cf = cf->next)
     sqlDyStringPrintf(update, ",%s", cf->name);
 
 char *insertName = isEmpty(el->name) ? "" : el->name;
-sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,'%s','%s','%s','%s','%s','%s'",
+char *blockSizesStr = commaIntList(el->blockSizes, el->blockCount);
+char *chromStartsStr = commaIntList(el->chromStarts, el->blockCount);
+sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s'",
     el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
-    el->thickStart, el->thickEnd, el->itemRgb, el->description, el->db, el->ref, el->alt,
-    el->project, el->mouseover);
+    el->thickStart, el->thickEnd, el->itemRgb, el->blockCount, blockSizesStr, chromStartsStr,
+    el->description, el->db, el->ref, el->alt, el->project, el->mouseover);
+freeMem(blockSizesStr);
+freeMem(chromStartsStr);
 
 /* Append custom field values */
 for (cf = el->customFields; cf != NULL; cf = cf->next)
@@ -101,6 +121,7 @@ struct myVariants *myVariantsLoad(char **row)
 {
 struct myVariants *ret;
 AllocVar(ret);
+int sizeOne;
 ret->bin = sqlUnsigned(row[0]);
 ret->chrom = cloneString(row[1]);
 ret->chromStart = sqlUnsigned(row[2]);
@@ -111,13 +132,18 @@ safecpy(ret->strand, sizeof(ret->strand), row[6]);
 ret->thickStart = sqlUnsigned(row[7]);
 ret->thickEnd = sqlUnsigned(row[8]);
 ret->itemRgb = sqlUnsigned(row[9]);
-ret->description = cloneString(row[10]);
-ret->db = cloneString(row[11]);
-ret->ref = cloneString(row[12]);
-ret->alt = cloneString(row[13]);
-ret->project = cloneString(row[14]);
-ret->mouseover = cloneString(row[15]);
-ret->id = sqlUnsigned(row[16]);
+ret->blockCount = sqlUnsigned(row[10]);
+sqlSignedDynamicArray(row[11], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[12], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+ret->description = cloneString(row[13]);
+ret->db = cloneString(row[14]);
+ret->ref = cloneString(row[15]);
+ret->alt = cloneString(row[16]);
+ret->project = cloneString(row[17]);
+ret->mouseover = cloneString(row[18]);
+ret->id = sqlUnsigned(row[19]);
 return ret;
 }
 
@@ -126,7 +152,7 @@ struct myVariants *myVariantsLoadAll(char *fileName)
 {
 struct myVariants *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[MYVARIANTS_NUM_COLS];
 while (lineFileRow(lf, row))
     {
     el = myVariantsLoad(row);
@@ -142,7 +168,7 @@ struct myVariants *myVariantsLoadAllByChar(char *fileName, char chopper)
 {
 struct myVariants *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[MYVARIANTS_NUM_COLS];
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = myVariantsLoad(row);
@@ -169,6 +195,27 @@ sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->thickStart = sqlUnsignedComma(&s);
 ret->thickEnd = sqlUnsignedComma(&s);
 ret->itemRgb = sqlUnsignedComma(&s);
+ret->blockCount = sqlUnsignedComma(&s);
+    {
+    int i;
+    s = sqlEatChar(s, '{');
+    if (ret->blockCount > 0)
+        AllocArray(ret->blockSizes, ret->blockCount);
+    for (i=0; i<ret->blockCount; ++i)
+        ret->blockSizes[i] = sqlSignedComma(&s);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+    {
+    int i;
+    s = sqlEatChar(s, '{');
+    if (ret->blockCount > 0)
+        AllocArray(ret->chromStarts, ret->blockCount);
+    for (i=0; i<ret->blockCount; ++i)
+        ret->chromStarts[i] = sqlSignedComma(&s);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
 ret->description = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->ref = sqlStringComma(&s);
@@ -187,6 +234,8 @@ struct myVariants *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
 freeMem(el->description);
 freeMem(el->db);
 freeMem(el->ref);
@@ -238,6 +287,30 @@ fprintf(f, "%u", el->thickEnd);
 fputc(sep,f);
 fprintf(f, "%u", el->itemRgb);
 fputc(sep,f);
+fprintf(f, "%u", el->blockCount);
+fputc(sep,f);
+    {
+    int i;
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->blockCount; ++i)
+        {
+        fprintf(f, "%d", el->blockSizes[i]);
+        fputc(',', f);
+        }
+    if (sep == ',') fputc('}',f);
+    }
+fputc(sep,f);
+    {
+    int i;
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->blockCount; ++i)
+        {
+        fprintf(f, "%d", el->chromStarts[i]);
+        fputc(',', f);
+        }
+    if (sep == ',') fputc('}',f);
+    }
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);
 if (sep == ',') fputc('"',f);
@@ -280,6 +353,9 @@ static char *myVariantsAutoSqlString =
 "    uint   thickStart;\"Start of thick part\"\n"
 "    uint   thickEnd;  \"End position of thick part\"\n"
 "    uint itemRgb;     \"RGB 8 bits each as in bed\"\n"
+"    uint blockCount;  \"Number of blocks\"\n"
+"    int[blockCount] blockSizes; \"Comma separated list of block sizes\"\n"
+"    int[blockCount] chromStarts; \"Start positions relative to chromStart\"\n"
 "    lstring description; \"Longer item description\"\n"
 "    string db;        \"database name of this annotation\"\n"
 "    string ref;       \"reference allele\"\n"
@@ -555,6 +631,9 @@ else
             "    thickStart int unsigned not null,\n"
             "    thickEnd int unsigned not null,\n"
             "    itemRgb int unsigned not null,\n"
+            "    blockCount int unsigned not null,\n"
+            "    blockSizes longblob not null,\n"
+            "    chromStarts longblob not null,\n"
             "    description longblob not null,\n"
             "    db varchar(255) not null,\n"
             "    ref varchar(255) not null,\n"
@@ -573,9 +652,120 @@ else
 } 
 
 
+static void readLabelsFromCtFile(char *path, char *trackName,
+                                 char **retShort, char **retLong)
+/* Parse the matching track line in an existing ctfile and pull shortLabel
+ * and longLabel via hashVarLine.  Leaves *ret as NULL when not found or
+ * path is missing. */
+{
+*retShort = NULL;
+*retLong = NULL;
+if (isEmpty(path) || isEmpty(trackName) || !fileExists(path))
+    return;
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *line = NULL;
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (!startsWith("track ", line))
+        continue;
+    struct hash *settings = hashVarLine(line + strlen("track "), lf->lineIx);
+    char *name = hashFindVal(settings, "name");
+    if (name != NULL && sameString(name, trackName))
+        {
+        char *s = hashFindVal(settings, "shortLabel");
+        char *l = hashFindVal(settings, "longLabel");
+        if (s != NULL)
+            *retShort = cloneString(s);
+        if (l != NULL)
+            *retLong = cloneString(l);
+        hashFree(&settings);
+        break;
+        }
+    hashFree(&settings);
+    }
+lineFileClose(&lf);
+}
+
+static char *sanitizeLabel(char *raw, int maxLen)
+/* Strip both quote characters, newlines and carriage returns, then cap to
+ * maxLen characters.  Returns NULL for NULL/empty input or when sanitizing
+ * leaves nothing behind.  Matches the precedent in hgCustom.c for
+ * user-supplied CT labels written into the trackline. */
+{
+if (isEmpty(raw))
+    return NULL;
+char *s = cloneString(raw);
+stripChar(s, '"');
+stripChar(s, '\'');
+stripChar(s, '\\');
+stripChar(s, '\n');
+stripChar(s, '\r');
+if ((int)strlen(s) > maxLen)
+    s[maxLen] = '\0';
+if (isEmpty(s))
+    {
+    freeMem(s);
+    return NULL;
+    }
+return s;
+}
+
+static void myVariantsCtFilePath(struct tempName *tn,
+                                 char *encodedTableName, char *targetDb)
+/* Build the per-user-per-db ctfile path.  Prefers
+ * cfgOption("myVariantsDataDir") so the file lives outside trash and the
+ * trashCleaner doesn't expire it; falls back to trashDirReusableFile when
+ * the dir isn't configured. */
+{
+char *persistentDir = cfgOption("myVariantsDataDir");
+if (isNotEmpty(persistentDir))
+    {
+    /* Group files per user so one user's tracks live together:
+     * ${persistentDir}/<encodedTableName>/<db>.bed. */
+    char *subdir = isNotEmpty(encodedTableName) ? encodedTableName : "shared";
+    char *sep = endsWith(persistentDir, "/") ? "" : "/";
+    char path[PATH_LEN];
+    safef(path, sizeof path, "%s%s%s/%s.bed", persistentDir, sep, subdir, targetDb);
+    char dirPart[PATH_LEN];
+    splitPath(path, dirPart, NULL, NULL);
+    makeDirsOnPath(dirPart);
+    safef(tn->forCgi, sizeof tn->forCgi, "%s", path);
+    safef(tn->forHtml, sizeof tn->forHtml, "%s", path);
+    }
+else
+    {
+    char base[PATH_LEN];
+    char *hostPort = cgiServerNamePort();
+    safef(base, sizeof base, "myVariants_%s_%s_%s",
+        hostPort ? hostPort : "localhost", targetDb,
+        isNotEmpty(encodedTableName) ? encodedTableName : "shared");
+    for (char *p = base; *p; p++) if (*p == '/') *p = '_';
+    trashDirReusableFile(tn, "ct", base, ".bed");
+    }
+}
+
+void myVariantsUnlinkCtFile(char *userName, char *targetDb)
+/* Delete the on-disk ctfile for this user+assembly if it exists.  Uses the
+ * same path resolution as myVariantsWriteCtFile so it targets either the
+ * persistent dir (myVariantsDataDir) or the trash fallback. */
+{
+if (isEmpty(userName) || isEmpty(targetDb))
+    return;
+char *encodedTableName = myVariantsGetTableName(userName);
+if (isEmpty(encodedTableName))
+    return;
+struct tempName tn;
+myVariantsCtFilePath(&tn, encodedTableName, targetDb);
+if (fileExists(tn.forCgi))
+    unlink(tn.forCgi);
+freeMem(encodedTableName);
+}
+
 char *myVariantsWriteCtFile(char *userName, char *targetDb, struct cart *cart)
-/* Write a Custom Track file to trash for user's myVariants in targetDb and any shared
- * tracks found in cart. Return filename or NULL if nothing to write. */
+/* Write a Custom Track file for user's myVariants in targetDb and any shared
+ * tracks found in cart. Return filename or NULL if nothing to write.
+ * If cfgOption("myVariantsDataDir") is set the file is placed there so the
+ * trashCleaner doesn't expire it; otherwise it goes in trash/ct as before. */
 {
 if (isEmpty(targetDb))
     return NULL;
@@ -659,7 +849,7 @@ if (cart != NULL)
             "track name=\"myVariants_shared_%s\" type=\"myVariants\" itemRgb=\"on\""
             " visibility=\"pack\""
             " shortLabel=\"%s\""
-            " longLabel=\"Shared variants: %s (from %s)\"\n",
+            " longLabel=\"Shared annotations: %s (from %s)\"\n",
             token, shortLabel, projectLabel, owner);
         freeMem(owner);
         freeMem(project);
@@ -671,6 +861,16 @@ if (cart != NULL)
 
 if (!hasOwnItems && dyStringLen(sharedLines) == 0)
     {
+    /* Nothing to write: remove any stale on-disk file so it doesn't leak
+     * when the user empties their table.  Under the old trash-only path
+     * the trashCleaner would have done this for us. */
+    if (isNotEmpty(encodedTableName))
+        {
+        struct tempName stale;
+        myVariantsCtFilePath(&stale, encodedTableName, targetDb);
+        if (fileExists(stale.forCgi))
+            unlink(stale.forCgi);
+        }
     dyStringFree(&sharedLines);
     freeMem(encodedTableName);
     return NULL;
@@ -678,24 +878,97 @@ if (!hasOwnItems && dyStringLen(sharedLines) == 0)
 
 /* Reusable, stable filename per user+db - always rewrite since shares are dynamic */
 struct tempName tn;
-char base[PATH_LEN];
-char *hostPort = cgiServerNamePort();
-safef(base, sizeof base, "myVariants_%s_%s_%s",
-    hostPort ? hostPort : "localhost", targetDb,
-    isNotEmpty(encodedTableName) ? encodedTableName : "shared");
-for (char *p = base; *p; p++) if (*p == '/') *p = '_';
-trashDirReusableFile(&tn, "ct", base, ".bed");
+myVariantsCtFilePath(&tn, encodedTableName, targetDb);
+
+/* Resolve display labels for the user's own track: cart vars set by the
+ * rename UI win, then the existing on-disk file (so a rename survives a
+ * cart reset), then the default. */
+char *shortLabel = NULL, *longLabel = NULL;
+if (hasOwnItems)
+    {
+    if (cart != NULL)
+        {
+        char cartVar[256];
+        safef(cartVar, sizeof cartVar, "%s.%s.shortLabel",
+            encodedTableName, targetDb);
+        shortLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 80);
+        safef(cartVar, sizeof cartVar, "%s.%s.longLabel",
+            encodedTableName, targetDb);
+        longLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 200);
+        }
+    if (shortLabel == NULL || longLabel == NULL)
+        {
+        char *diskShort = NULL, *diskLong = NULL;
+        readLabelsFromCtFile(tn.forCgi, encodedTableName, &diskShort, &diskLong);
+        if (shortLabel == NULL)
+            shortLabel = sanitizeLabel(diskShort, 80);
+        if (longLabel == NULL)
+            longLabel = sanitizeLabel(diskLong, 200);
+        freeMem(diskShort);
+        freeMem(diskLong);
+        }
+    if (shortLabel == NULL)
+        shortLabel = cloneString("My Annotations");
+    if (longLabel == NULL)
+        longLabel = cloneString("My Annotations");
+    }
+
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
     fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
-        " visibility=\"pack\" shortLabel=\"My Annotations\""
-        " longLabel=\"My Annotations (%s)\"\n", encodedTableName, encodedTableName);
+        " visibility=\"pack\" shortLabel=\"%s\""
+        " longLabel=\"%s\"\n", encodedTableName, shortLabel, longLabel);
 if (dyStringLen(sharedLines) > 0)
     fprintf(f, "%s", dyStringContents(sharedLines));
 carefulClose(&f);
 dyStringFree(&sharedLines);
 freeMem(encodedTableName);
+freeMem(shortLabel);
+freeMem(longLabel);
 return cloneString(tn.forCgi);
+}
+
+boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
+                                  char *database)
+/* If ct is a myVariants own track: delete the user's rows for the current
+ * assembly, unlink the persistent ctfile, drop the per-db renamed labels
+ * and the visibility var.  If ct is a myVariants shared track: drop the
+ * share-acceptance cart var and the visibility var.  Returns TRUE when ct
+ * was a myVariants track and this function fully handled the cart cleanup
+ * (caller must skip its own per-track cart cleanup so other-assembly
+ * labels are preserved); FALSE otherwise. */
+{
+if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
+    return FALSE;
+char *trackName = ct->tdb->track;
+if (startsWith("myVariants_shared_", trackName))
+    {
+    char *token = trackName + strlen("myVariants_shared_");
+    char shareCartVar[256];
+    safef(shareCartVar, sizeof shareCartVar,
+        MYVAR_SHARED_CART_PREFIX "%s", token);
+    cartRemove(cart, shareCartVar);
+    cartRemove(cart, trackName);
+    return TRUE;
+    }
+if (startsWith("myVariants_", trackName))
+    {
+    char *userName = wikiLinkUserName();
+    if (isNotEmpty(userName))
+        {
+        myVariantsDeleteForDb(userName, database);
+        myVariantsUnlinkCtFile(userName, database);
+        }
+    /* Drop the per-db renamed labels so a freshly created track on this
+     * assembly starts at "My Annotations" again.  Labels for other
+     * assemblies stay because they belong to different displayed tracks. */
+    char labelPrefix[256];
+    safef(labelPrefix, sizeof labelPrefix, "%s.%s.", trackName, database);
+    cartRemovePrefix(cart, labelPrefix);
+    cartRemove(cart, trackName);
+    return TRUE;
+    }
+return FALSE;
 }
 
 struct slName *myVariantsGetProjects(char *userName)
@@ -725,8 +998,9 @@ return projects;
  * against column reordering or future schema changes. */
 static const char *builtInColumns[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
-    "thickStart", "thickEnd", "itemRgb", "description", "db", "ref", "alt",
-    "project", "mouseover", "id",
+    "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
+    "chromStarts", "description", "db", "ref", "alt", "project",
+    "mouseover", "id",
 };
 
 static boolean isBuiltInColumn(char *name)

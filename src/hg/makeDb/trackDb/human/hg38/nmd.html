@@ -41,10 +41,9 @@ that were used (50 bp, intronless, 100 bp, long exon &gt;400 nt).
 <p>
 Machine-learning predictions of NMD efficiency from
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom
-et al. 2016</a>. Two models (A = random forest, B = decision tree)
-predict whether a PTC at each position will trigger NMD or allow escape.
-Positive scores indicate predicted NMD triggering; negative scores indicate
-predicted escape.
+et al. 2016</a> (A and B models) and from Veiner <em>et al.</em>
+(NMDetective-AI, pre-print). Positive scores indicate predicted NMD
+triggering; negative scores indicate predicted escape.
 </p>
 <ul>
   <li><b><a href="hgTrackUi?g=nmdDetectiveA">NMDetective-A</a></b>:
@@ -55,6 +54,12 @@ predicted escape.
     Random forest model for the first out-of-frame PTC from frameshifting indels.</li>
   <li><b><a href="hgTrackUi?g=nmdDetectiveB_ptc">NMDetective-B PTC</a></b>:
     Decision tree model for the first out-of-frame PTC from frameshifting indels.</li>
+  <li><b><a href="hgTrackUi?g=nmdDetectiveAi">NMDetective-AI</a></b> and
+    <b><a href="hgTrackUi?g=nmdDetectiveAiBed">NMDetective-AI variants</a></b>:
+    Deep-learning model from Veiner <em>et al.</em>, MANE Select transcripts
+    only (Gencode v46). The signal track shows the position-averaged
+    prediction; the variants track shows one item per stop-gain mutation per
+    codon.</li>
 </ul>
 
 <h2>Background</h2>

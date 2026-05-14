@@ -261,6 +261,21 @@ any variant of interest, consult the source publication for the original
 significance call.
 </p>
 
+<!-- TEMP: remove once Tao Wang fixes the upstream pvalue column for Mouri+Tewhey rows -->
+<p>
+<b>Note (pending upstream fix):</b> The MPRAVarDB curation occasionally
+stores a test statistic in the pvalue field rather than a true p-value
+for two of the contributing studies
+(<a href="https://pubmed.ncbi.nlm.nih.gov/35513721/" target="_blank">Mouri
+et al., 2022</a> and
+<a href="https://pubmed.ncbi.nlm.nih.gov/27259153/" target="_blank">Tewhey
+et al., 2016</a>). About 5,092 variants (~2%) show a pvalue value greater
+than 1, which is not possible for a probability. The FDR field is
+unaffected and remains the authoritative significance call for these
+rows. The upstream curators have acknowledged the issue and will
+correct it in the next data snapshot.
+</p>
+
 <h2>Data Access</h2>
 <p>
 The data can be explored interactively in table format with the
