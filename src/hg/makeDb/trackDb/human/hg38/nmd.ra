@@ -60,6 +60,32 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         dataVersion GCF_000001405.40-RS_2025_08
         priority 1.6
 
+        track nmdDetectiveAi
+        shortLabel NMDetective-AI
+        longLabel NMDetective-AI: Deep-learning NMD efficiency prediction per position (Veiner et al., MANE Select only)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bw
+        type bigWig
+        visibility hide
+        color 128,0,128
+        autoScale off
+        viewLimits -1.1:1.5
+        maxHeightPixels 128:32:8
+        html nmdDetectiveAi
+        priority 1.7
+
+        track nmdDetectiveAiBed
+        shortLabel NMDetective-AI variants
+        longLabel NMDetective-AI: Per-stop-gain predictions for every codon (Veiner et al., MANE Select only)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bb
+        type bigBed 9 +
+        itemRgb on
+        visibility hide
+        mouseOverField mouseOver
+        html nmdDetectiveAi
+        priority 1.8
+
         track nmdDetectiveA
         shortLabel NMDetective-A
         longLabel NMDetective-A: Random forest prediction of NMD efficiency (Lindeboom 2016)

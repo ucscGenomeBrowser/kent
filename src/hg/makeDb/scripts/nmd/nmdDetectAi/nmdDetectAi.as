@@ -1,0 +1,20 @@
+table nmdDetectAi
+"NMDetective-AI: predicted NMD efficiency for each possible stop-gain SNV in MANE transcripts"
+    (
+    string chrom;       "Chromosome"
+    uint   chromStart;  "Start position"
+    uint   chromEnd;    "End position"
+    string name;        "Name (gene:refCodon-aaPos-mutCodon)"
+    uint   score;       "BED score, prediction mapped to 0-1000"
+    char[1] strand;     "+ or -"
+    uint   thickStart;  "Start of thick drawing"
+    uint   thickEnd;    "End of thick drawing"
+    uint   itemRgb;     "Color (R,G,B), set from prediction"
+    float  prediction;  "NMDetective-AI prediction|Higher = more NMD-triggering, lower = more NMD-evading"
+    string geneName;    "Gene symbol (MANE Select)"
+    string transcriptId; "Gencode transcript ID (MANE Select)"
+    uint   aaPosition;  "Amino acid position|1-based codon index in the protein"
+    string refCodon;    "Reference codon"
+    string mutCodon;    "Mutant stop codon (TAA, TAG, or TGA)"
+    string mouseOver;   "Mouseover text"
+    )
