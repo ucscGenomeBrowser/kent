@@ -662,3 +662,36 @@ mv tishkoff180.new.vcf.gz.tbi tishkoff180.vcf.gz.tbi
 rm header.new.txt
 # /gbdb/hg38/varFreqs/tishkoff/ symlinks unchanged. The .bak originals
 # can be removed once the change has been verified on hgwdev.
+
+##########
+# 2026-05-15 Claude max
+# Hide all non-downloadable varFreqs subdirs from hgdownload by prefixing
+# the gbdb subdirectory with "_". hgdownload rsync excludes underscore-
+# prefixed directories, so this is the standard way to keep a track
+# usable in the browser (vcfTabix random access via /gbdb still works)
+# while preventing bulk download. Applies to every track that has
+# `tableBrowser off` in trackDb/human/varFreqs.ra, plus the combined
+# varFreqsAll bigBed (mixed licenses, never downloadable).
+cd /gbdb/hg38/varFreqs
+mv allofus  _allofus
+mv topmed   _topmed
+mv sfari    _sfari
+mv finngen  _finngen
+mv swefreq  _swefreq
+mv mgrb     _mgrb
+mv kova     _kova
+mv npm      _npm
+mv mxb      _mxb
+mv tishkoff _tishkoff
+mkdir _all && mv varFreqsAll.bb _all/varFreqsAll.bb
+# Symlink targets under /hive/data/genomes/... unchanged; only the gbdb
+# directory names change. Updated bigDataUrl paths for the matching 12
+# stanzas in trackDb/human/varFreqs.ra (allofus, topmed, sfariSparkExomes,
+# sfariSparkWgs, finngen, swefreq, mgrb, kova, npm, mxbFreq, tishkoff180,
+# varFreqsAll).
+# Also fixed Data Access wording in description pages that still claimed
+# Table Browser / download server availability: topmed.html, allofus.html,
+# sfariSparkExomes.html (shared by sfariSparkWgs), mxbFreq.html. The
+# standard restricted-track disclaimer (already in finngen.html, kova.html,
+# mgrb.html, npm.html, swefreq.html, tishkoff180.html, varFreqsAll.html)
+# is now uniform across all 11 restricted tracks plus the combined track.

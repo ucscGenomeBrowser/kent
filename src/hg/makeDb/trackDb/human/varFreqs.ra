@@ -11,7 +11,7 @@ superTrack on
         longLabel Variant Frequencies: All Databases Combined with Consequence Annotations
         type bigBed 9 +
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/varFreqsAll.bb
+        bigDataUrl /gbdb/$D/varFreqs/_all/varFreqsAll.bb
         visibility pack
         itemRgb on
         maxWindowToDraw 5000000
@@ -280,7 +280,7 @@ superTrack on
         longLabel Variant Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz
         dataVersion V7
         visibility dense
         tableBrowser off
@@ -303,7 +303,7 @@ superTrack on
         longLabel Variant Frequencies: NHLBI TOPMed - 151k WGS
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_topmed/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility dense
         tableBrowser off
@@ -314,7 +314,7 @@ superTrack on
         longLabel Variant Frequencies: SFARI SPARK - 140k WES
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
         dataVersion iWES v3 2024_08
         visibility dense
         tableBrowser off
@@ -325,7 +325,7 @@ superTrack on
         longLabel Variant Frequencies: SFARI SPARK - 12,519 WGS
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
         dataVersion iWGS v1.1
         visibility dense
         priority 2.5
@@ -368,10 +368,11 @@ superTrack on
         longLabel Variant Frequencies: Taiwan Precision Medicine Initiative - Axiom TPM1 chip, Han Chinese
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/tpmi/tpmi.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_tpmi/tpmi.vcf.gz
         visibility dense
         dataVersion Axiom TPM1 2022-06
         priority 5.6
+        tableBrowser off
 
         track alfaVcf
         shortLabel NCBI ALFA 408k mixed
@@ -392,7 +393,7 @@ superTrack on
         shortLabel FinnGen R12 500k imputed
         longLabel Variant Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
         priority 4.5
-        bigDataUrl /gbdb/$D/varFreqs/finngen/finnge_R12_annotated_variants_v1.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_finngen/finnge_R12_annotated_variants_v1.vcf.gz
         dataVersion R12
         tableBrowser off
 
@@ -413,7 +414,7 @@ superTrack on
         shortLabel Sweden SweGen 1k WGS
         longLabel Variant Frequencies: Sweden SweGen - 1k WGS
         priority 4.7
-        bigDataUrl /gbdb/$D/varFreqs/swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
         dataVersion 20251201
         tableBrowser off
 
@@ -422,7 +423,7 @@ superTrack on
         longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
         dataVersion Phase 3
         visibility dense
         # no downloads as per Matt Hobbs email Jan 28 2026
@@ -470,7 +471,7 @@ superTrack on
         longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.4k WES
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_kova/kova.v7.vcf.gz
         visibility dense
         tableBrowser off
         dataVersion V7
@@ -480,7 +481,7 @@ superTrack on
         longLabel Variant Frequencies: NPM Singapore - 9,770 WGS samples
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/npm/SG10K_Health_r5.3.2.sites.vcf.bgz
+        bigDataUrl /gbdb/$D/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz
         visibility dense
         tableBrowser off
         dataVersion r5.3.2
@@ -520,7 +521,7 @@ superTrack on
         longLabel Variant Frequencies: Mexico Biobank - 6,011 individuals, genotyping array
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/mxb/mxb.freq.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_mxb/mxb.freq.vcf.gz
         visibility dense
         dataVersion Nov 2025 (hg38 lift)
         tableBrowser off
@@ -591,7 +592,7 @@ superTrack on
         longLabel Variant Frequencies: 180 WGS from 12 Indigenous African Populations (Fan 2023)
         type vcfTabix
         parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/tishkoff/tishkoff180.vcf.gz
+        bigDataUrl /gbdb/$D/varFreqs/_tishkoff/tishkoff180.vcf.gz
         visibility dense
         dataVersion Cell 2023 (hg19 lift)
         tableBrowser off
