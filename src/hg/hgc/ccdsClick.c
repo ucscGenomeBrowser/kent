@@ -15,6 +15,8 @@
 #include "ensFace.h"
 #include "mgcClick.h"
 #include "htmshell.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 static struct ccdsInfo *getCcdsInfoForSrcDb(struct sqlConnection *conn, char *acc)
 /* Get a ccdsInfo object for a RefSeq, ensembl, or vega gene, if it
@@ -32,16 +34,27 @@ void printCcdsExtUrl(char *ccdsId)
 printf("https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s", ccdsId);
 }
 
-static void printCcdsUrlForSrcDb(struct sqlConnection *conn, struct ccdsInfo *ccdsInfo)
+static void printCcdsUrlForSrcDb(struct trackDb *tdb, struct ccdsInfo *ccdsInfo)
 /* Print out CCDS hgc URL for a refseq, ensembl, or vega gene, if it
  * exists.  */
 {
+// When the gene track is quickLifted, the CCDS tables live with the
+// source assembly, so route the click to liftDb and lift the window
+// coords back to source space.
+char *liftDb = (tdb != NULL) ? trackDbSetting(tdb, "quickLiftDb") : NULL;
+char *urlDb = (liftDb != NULL) ? liftDb : database;
+char *urlChrom = seqName;
+int urlStart = winStart, urlEnd = winEnd;
+if (liftDb != NULL)
+    quickLiftLiftPos(trackHubSkipHubName(database), liftDb,
+                     seqName, winStart, winEnd,
+                     &urlChrom, &urlStart, &urlEnd);
 printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
-       cartSidUrlString(cart), ccdsInfo->ccds, seqName, 
-       winStart, winStart, winEnd, database);
+       cartSidUrlString(cart), ccdsInfo->ccds, urlChrom,
+       urlStart, urlStart, urlEnd, urlDb);
 }
 
-void printCcdsForSrcDb(struct sqlConnection *conn, char *acc)
+void printCcdsForSrcDb(struct sqlConnection *conn, struct trackDb *tdb, char *acc)
 /* Print out CCDS hgc link for a refseq, ensembl, or vega gene, if it
  * exists.  */
 {
@@ -49,7 +62,7 @@ struct ccdsInfo *ccdsInfo = getCcdsInfoForSrcDb(conn, acc);;
 if (ccdsInfo != NULL)
     {
     printf("<B>CCDS:</B> <A href=\"");
-    printCcdsUrlForSrcDb(conn, ccdsInfo);
+    printCcdsUrlForSrcDb(tdb, ccdsInfo);
     printf("\">%s</A><BR>", ccdsInfo->ccds);
     }
 }
