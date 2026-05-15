@@ -12234,15 +12234,21 @@ if (url != NULL && url[0] != 0)
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from %s l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
         refLinkTable, itemName, chrom, chromStart, chromEnd);
+        /* Slurp names first; prGRShortRefGene runs its own queries on conn,
+         * which would error with "Commands out of sync" mid-iteration. */
+        struct slName *geneNames = NULL;
         sr = sqlMustGetResult(conn, query);
         if (sr != NULL)
             {
             while ((row = sqlNextRow(sr)) != NULL)
-                {
-                prGRShortRefGene(conn, row[0]);
-                }
+                slNameAddHead(&geneNames, row[0]);
             }
         sqlFreeResult(&sr);
+        slReverse(&geneNames);
+        struct slName *gn;
+        for (gn = geneNames; gn != NULL; gn = gn->next)
+            prGRShortRefGene(conn, gn->name);
+        slFreeList(&geneNames);
         }
 
     showOmimDisorderTable(conn, url, itemName);
