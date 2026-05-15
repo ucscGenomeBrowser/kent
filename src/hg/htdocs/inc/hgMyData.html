@@ -40,6 +40,16 @@
           <a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile
           trackDb setting</a>, and as a result, each hub is limited to a single genome assembly.</p>
           <p>
+          Hub Space also accepts the standard multi-file hub layout: a hub.txt
+          that references a separate <code>genomesFile</code> (typically
+          genomes.txt), with one <code>trackDb</code> file per genome. Include
+          hub.txt, genomes.txt, every referenced trackDb, and any 2bit files
+          in the same upload, and Hub Space will derive each file's assembly
+          from the hub definition. For more complex multi-file hubs, the
+          <a href="https://hgdownload.soe.ucsc.edu/admin/exe/">hubtools</a>
+          command-line uploader remains the recommended path.
+          </p>
+          <p>
           <i>Editing the generated hub.txt file is not yet supported.</i>
           To customize the hub configuration or data display, replace the generated
           hub.txt file with your own version after uploading the data files.
