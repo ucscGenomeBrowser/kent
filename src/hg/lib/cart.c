@@ -3014,6 +3014,17 @@ void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars
 {
 if (position != NULL && oldVars != NULL)
     {
+    /* If db changed (e.g. QuickLift hop or hgGateway switch), the old position is from
+     * a different assembly and would fail to resolve here; clear any stale lastPosition
+     * instead of carrying it over. */
+    struct hashEl *oldDb = hashLookup(oldVars, "db");
+    char *newDb = cartOptionalString(cart, "db");
+    if (oldDb != NULL && newDb != NULL && !IS_CART_VAR_EMPTY(oldDb->val) &&
+        differentString(newDb, oldDb->val))
+        {
+        cartRemove(cart, "lastPosition");
+        return;
+        }
     struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
     if (oldPos != NULL && differentString(position, oldPos->val))
         cartSetString(cart, "lastPosition", oldPos->val);
