@@ -153,3 +153,45 @@ ln -sf /hive/data/genomes/hg38/bed/nmd/mane/nmdEscMane.bb /gbdb/hg38/nmd/nmdEscM
 # Convert bedGraph custom tracks to bigWig and symlink from /gbdb:
 cd /hive/data/genomes/hg38/bed/nmd/lindeboom/
 bash ~/kent/src/hg/makeDb/scripts/nmd/lindeboomToBigWig.sh
+
+#######################################################################
+# NMDetective-AI per-stop-gain predictions (2026-05-13 max)
+# Deep-learning NMD efficiency predictions for every possible stop-gain SNV
+# in MANE Select transcripts (Gencode v46). From Veiner et al., NMDetective-AI
+# manuscript (pre-print as of 2026-05). Source files from the Vejni/NMDetectiveAI
+# GitHub repo:
+#   https://github.com/Vejni/NMDetectiveAI/blob/main/manuscript/supplementary/files/
+# Two files supplied by Marcell Veiner:
+#   NMDetectiveAI_MANE.bw.gz  - bigWig, position-averaged predictions
+#   NMDetectiveAI_MANE.bed.gz - BED, one row per stop-gain mutation per transcript
+
+mkdir -p /hive/data/genomes/hg38/bed/nmd/nmdDetectAi && cd /hive/data/genomes/hg38/bed/nmd/nmdDetectAi
+
+# Download from the supplementary files dir of the GitHub repo
+# (filenames as-is; gunzip in place)
+gunzip -k NMDetectiveAI_MANE.bed.gz NMDetectiveAI_MANE.bw.gz
+
+# Recolor/rescore the BED via a small Python helper. The raw file has
+# itemRgb=0,0,0 and score=int(prediction*1000); we replace these with a
+# diverging Okabe-Ito ramp (blue = NMD-evading, vermillion = NMD-triggering,
+# grey near zero) and a 0-1000 score linear in the [-1.2, 1.5] prediction
+# range. The helper also appends a pre-rendered mouseover HTML column whose
+# verdict bins use the binarization thresholds from the Veiner et al. Methods
+# section (3-component GMM on gnomAD predictions): pred <= -0.17 = evading,
+# -0.17 < pred < +0.43 = intermediate, pred >= +0.43 = triggering.
+python3 ~/kent/src/hg/makeDb/scripts/nmd/nmdDetectAi/makeBigBed.py \
+    NMDetectiveAI_MANE.bed nmdDetectAi.bed
+
+bedSort nmdDetectAi.bed nmdDetectAi.sorted.bed
+bedToBigBed nmdDetectAi.sorted.bed ../../../chrom.sizes nmdDetectAi.bb \
+    -tab -type=bed9+7 -as=${HOME}/kent/src/hg/makeDb/scripts/nmd/nmdDetectAi/nmdDetectAi.as
+
+# bigWig used as-is from the upstream file
+ln -sf /hive/data/genomes/hg38/bed/nmd/nmdDetectAi/NMDetectiveAI_MANE.bw \
+    /gbdb/hg38/nmd/nmdDetectAi.bw
+ln -sf /hive/data/genomes/hg38/bed/nmd/nmdDetectAi/nmdDetectAi.bb \
+    /gbdb/hg38/nmd/nmdDetectAi.bb
+
+# Counts (2026-05-13 build):
+#   bigBed: 4,099,055 stop-gain items at 3 bp (codon) resolution
+#   bigWig: prediction range -1.104 .. 1.487 (different scale from NMDetective-A/B)

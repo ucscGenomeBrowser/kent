@@ -4547,7 +4547,7 @@ else if (isCustomTrack(track)
         if (isNotEmpty(ctFile))
             {
             char mvVarName[256];
-            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
             cartSetString(cart, mvVarName, ctFile);
             freeMem(ctFile);
             ctList = customTracksParseCart(database, cart, NULL, NULL);
