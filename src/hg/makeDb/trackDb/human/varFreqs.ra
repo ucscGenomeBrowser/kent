@@ -283,6 +283,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
         dataVersion V7
         visibility dense
+        tableBrowser off
         priority 0.5
 
         #track me
@@ -305,6 +306,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
         visibility dense
+        tableBrowser off
         priority 2
 
         track sfariSparkExomes
@@ -315,6 +317,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
         dataVersion iWES v3 2024_08
         visibility dense
+        tableBrowser off
         priority 2.5
 
         track sfariSparkWgs
@@ -327,6 +330,7 @@ superTrack on
         visibility dense
         priority 2.5
         html sfariSparkExomes
+        tableBrowser off
 
         #track mcps
         #shortLabel Mexico City Prospective Study 10k WGS+141k WES
@@ -359,6 +363,16 @@ superTrack on
         dataVersion Phase I v20210103
         priority 5.5
 
+        track tpmi
+        shortLabel Taiwan TPMI Axiom array
+        longLabel Variant Frequencies: Taiwan Precision Medicine Initiative - Axiom TPM1 chip, Han Chinese
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/tpmi/tpmi.vcf.gz
+        visibility dense
+        dataVersion Axiom TPM1 2022-06
+        priority 5.6
+
         track alfaVcf
         shortLabel NCBI ALFA 408k mixed
         longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants
@@ -387,10 +401,10 @@ superTrack on
         visibility dense
         type vcfTabix
         shortLabel UK Biobank 361k imputed
-        longLabel Variant Frequencies: UK Biobank - 361k White British, Neale Lab Round 2 imputed
+        longLabel Variant Frequencies: UK Biobank Genotypes - 361k White British, Neale Lab Round 2 imputed
         priority 4.6
         bigDataUrl /gbdb/$D/varFreqs/ukbb/ukbb.vcf.gz
-        dataVersion Neale Lab Round 2 (Aug 2018, hg19 lift)
+        dataVersion Neale Lab R2 08-2018
 
         track swefreq
         parent varFreqs on
@@ -509,6 +523,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/mxb/mxb.freq.vcf.gz
         visibility dense
         dataVersion Nov 2025 (hg38 lift)
+        tableBrowser off
         priority 6
 
         track sgdpFreq
@@ -538,7 +553,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz
         visibility dense
-        dataVersion v3.1.2
+        dataVersion gnomAD v3.1.2
         priority 8
 
         track ga4kSnv

@@ -1,0 +1,94 @@
+<h2>Description</h2>
+<p>
+This track shows the L1-HS (human-specific LINE-1) retrotransposon copies that are
+already present in the human reference genome, as catalogued by
+<a href="http://eul1db.unice.fr" target="_blank">euL1db</a>. Unlike the companion
+<a href="hgTrackUi?g=meiEul1db">euL1db Insertions</a> track, which shows polymorphic
+insertions not present (or variably present) in the reference, the items here are
+the L1-HS copies that the reference genome already contains. Together, the two
+tracks provide a comprehensive view of L1-HS positions in the genome &mdash; both
+the &quot;fixed&quot; reference set and the variants segregating in the human
+population.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is a single reference L1-HS element. The name shows the L1HS sub-group.
+Items are coloured by sub-group:
+</p>
+<p>
+<span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span>
+<b>L1HS-Ta</b> &mdash; youngest, currently active L1-HS subset<br>
+<span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>L1HS-PreTa</b> &mdash; older L1-HS subset, ancestral to Ta<br>
+<span style="display:inline-block; background-color:#999999; width:18px; height:12px; vertical-align:middle;"></span>
+<b>L1HS-undef</b> &mdash; sub-group not assigned in euL1db
+</p>
+<p>
+The detail page for each element shows the element length, its integrity
+(full-length, 5&prime;-truncated, 3&prime;-truncated, internal_fragment), and its
+position on the L1HS consensus sequence. Filters are provided for sub-group and
+integrity.
+</p>
+
+<h2>Methods</h2>
+<p>
+The reference L1-HS catalogue was assembled by the euL1db curators by aligning
+the L1HS consensus sequence to the hg19 reference genome and classifying each
+match into one of the L1HS sub-groups. See Mir et al. 2015 for further details.
+</p>
+<p>
+Track files were generated from the euL1db v1.00 ReferenceL1HS.txt table (data
+dump downloaded March 2018) using the script
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/mei/meiEul1dbRefToBed.py"
+   target="_blank">meiEul1dbRefToBed.py</a>. The hg19 BED was lifted to hg38 with
+<tt>liftOver</tt>; of 1,544 hg19 elements, 1,540 lifted successfully. For
+details see
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19/mei.txt"
+   target="_blank">hg19/mei.txt</a> and the scripts directory
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
+   target="_blank">src/hg/makeDb/scripts/mei</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-separated tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>,
+track=<i>meiEul1dbRef</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">our download
+server</a>. The file for this track is called <tt>eul1dbRef.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>.
+</p>
+<p>
+The original annotation source data can be downloaded from
+<a href="http://eul1db.unice.fr" target="_blank">eul1db.unice.fr</a> via the
+Download tab.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Ga&euml;l Cristofari and colleagues at IRCAN (Nice, France) for
+making the euL1db data freely available. Track built at UCSC by the Genome
+Browser group.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Mir AA, Philippe C, Cristofari G.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gku1043" target="_blank">
+euL1db: the European database of L1HS retrotransposon insertions in humans</a>.
+<em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D43-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">25352549</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383891/" target="_blank">PMC4383891</a>
+</p>
+

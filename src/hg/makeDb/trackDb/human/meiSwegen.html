@@ -1,0 +1,169 @@
+<h2>Description</h2>
+<p>
+This track shows <b>mobile element insertions (MEIs)</b> identified by
+<a href="https://melt.igs.umaryland.edu/" target="_blank">MELT</a>
+on the <a href="https://swefreq.nbis.se/dataset/SweGen" target="_blank">SweGen</a>
+cohort of 1,000 Swedish whole-genome samples (Ameur et al. 2017). Each
+site is an insertion of an Alu, L1 (LINE-1), SVA or HERV-K mobile
+element relative to the reference. The SweGen short-variant frequency
+data for the same cohort is shown in the
+<a href="hgTrackUi?g=swegen">SweGen variant frequencies</a> subtrack of
+the Variant Frequencies collection.
+</p>
+
+<table class="stdTbl">
+<tr><th>Class</th><th>MEIs</th></tr>
+<tr><td>Alu</td><td>14,467</td></tr>
+<tr><td>L1</td><td>2,429</td></tr>
+<tr><td>SVA</td><td>1,131</td></tr>
+<tr><td>HERVK</td><td>73</td></tr>
+<tr><th>Total (GRCh37)</th><th>18,100</th></tr>
+<tr><th>Total (after liftOver to hg38)</th><th>18,090</th></tr>
+</table>
+
+<p>
+For each MEI, the track reports the mobile element class, the
+insertion length, the MELT subfamily call (e.g. AluYa5, L1Ta), the
+target-site duplication sequence, the MELT ASSESS quality score,
+nearby gene context if the insertion lies in or close to a gene, the
+allele count (MELT_AN; despite the name this is the number of allele
+observations, not the allele number), the alt-allele frequency, and
+the MELT FILTER status.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+An insertion has zero length on the reference: it attaches between
+two adjacent reference bases without replacing any of them. Following
+the convention used by MELT and by the other MEI tracks in this
+collection, each MEI is drawn as a <b>1-bp block sitting on the anchor
+base</b> &mdash; the reference base immediately to the left of the
+insertion attachment point. The inserted mobile element itself is not
+present in the reference and is therefore not drawn. The item label is
+<tt>class-altAlleleCount</tt>.
+</p>
+
+<p>
+Items are colored by element class:
+</p>
+<ul>
+  <li><span style="display:inline-block;background-color:#0072B2;width:18px;height:12px;vertical-align:middle;"></span> <b>Alu</b> &mdash; SINE (Short INterspersed Element)</li>
+  <li><span style="display:inline-block;background-color:#D55E00;width:18px;height:12px;vertical-align:middle;"></span> <b>L1</b> &mdash; LINE-1 (Long INterspersed Element-1)</li>
+  <li><span style="display:inline-block;background-color:#009E73;width:18px;height:12px;vertical-align:middle;"></span> <b>SVA</b> (SINE-VNTR-Alu) &mdash; composite retrotransposon</li>
+  <li><span style="display:inline-block;background-color:#CC79A7;width:18px;height:12px;vertical-align:middle;"></span> <b>HERVK</b> (Human Endogenous Retrovirus K) &mdash; endogenous retrovirus</li>
+</ul>
+
+<p>
+The score column encodes the alt-allele frequency on a 0-1000 scale.
+Filters allow restricting items by element class, insertion length,
+allele frequency, MELT ASSESS quality score (0-5) and the MELT FILTER
+status. The track keeps both PASS and non-PASS sites; non-PASS sites
+carry one of the MELT site-level filter codes:
+</p>
+<ul>
+  <li><tt>s25</tt> &mdash; more than 25% of samples have no data at the site</li>
+  <li><tt>rSD</tt> &mdash; ratio of left-side to right-side discordant pairs is more than two standard deviations from the mean</li>
+  <li><tt>hDP</tt> &mdash; more discordant pairs at the site are also split-read than expected</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+The SweGen project sequenced 1,000 Swedish individuals on Illumina
+HiSeq X with 150 bp paired-end reads (Covaris E220 fragmentation, ~350
+bp insert), and aligned the reads to the GRCh37 reference with
+BWA-MEM v0.7.12. Mobile element insertions were called by
+<a href="https://melt.igs.umaryland.edu/" target="_blank">MELT</a>
+v2.0.2 (Gardner et al. 2017) in MELT-Split mode using the default
+ALU, HERVK, LINE1 and SVA mobile-element zip packages, on all 1,000
+samples. Per-site allele counts and frequencies (MELT_AN and MELT_AF
+in INFO) were computed across the cohort; the VCF does not contain
+per-sample genotype columns. The analysis used the Perl SMELT
+pipeline (<a href="https://github.com/J35P312/SMELT"
+target="_blank">github.com/J35P312/SMELT</a>) on the UPPMAX Bianca
+cluster in early 2018, by Diana Ekman, Jesper Eisfeldt and Daniel
+Nilsson.
+</p>
+
+<p>
+The site-level VCF
+<tt>MELT_SWEGEN.20180314.ALU_HERVK_LINE1_SVA.vcf</tt> was obtained
+from the SweGen download portal
+(<a href="https://swefreq.nbis.se/dataset/SweGen/download"
+target="_blank">swefreq.nbis.se/dataset/SweGen/download</a>, access
+requires a brief approval). The VCF uses GRCh37 contigs without a
+"chr" prefix; the conversion adds the prefix, drops the VCF
+header, maps SVTYPE codes (<tt>ALU</tt>, <tt>LINE1</tt>, <tt>SVA</tt>,
+<tt>HERVK</tt>) to the element class names used here, copies INFO
+fields through to the BED, and writes a bed9+9 file with 1-bp anchor
+intervals. The hg19 BED was then lifted to hg38 with UCSC
+<tt>liftOver</tt> (<tt>-tab -bedPlus=9</tt>), which mapped 18,090 of
+18,100 records; 10 records fell into hg38-deleted regions and were
+dropped. The lifted BED was sorted and converted to bigBed using the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/mei/meiSwegen.as"
+target="_blank">meiSwegen.as</a> schema. Conversion and lift steps are
+documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
+target="_blank">makeDoc file</a>; the scripts live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
+target="_blank">src/hg/makeDb/scripts/mei</a>.
+</p>
+
+<h3>Why the original GRCh37 MELT VCF rather than the GRCh38 SVDB files</h3>
+<p>
+The SweGen download portal also distributes a hg38 variant set
+(<tt>SweGen38_{ALU,L1,SVA,HERV}.vcf</tt>) for the same 1,001 samples,
+produced with SVDB after re-running on GRCh38. We chose to lift the
+original GRCh37 MELT VCF instead because the hg38 SVDB files
+contain 138,853 records (about 7.7&times; the MELT site count), and
+roughly 60% of those records are singletons (<tt>OCC=1</tt>) without
+any quality filter. They also drop most of the per-site annotation:
+no MELT subfamily call (e.g. AluYa5, L1Ta), no insertion length
+(<tt>SVLEN=0</tt> everywhere), no target-site duplication, no MELT
+ASSESS quality score, no gene context and no FILTER stratification
+(every site is marked <tt>PASS</tt>). The GRCh37 MELT VCF, lifted to
+hg38, gives a much more informative and quality-filtered set, at the
+cost of 10 records that fell into hg38-deleted regions.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to SweGen license restrictions, the underlying VCF and the bigBed
+derived from it cannot be redistributed from the UCSC Genome Browser.
+The Table Browser and download server are disabled for this track. To
+obtain the source data, follow the request procedure at the
+<a href="https://swefreq.nbis.se/dataset/SweGen" target="_blank">SweGen
+download portal</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Adam Ameur, Diana Ekman, Jesper Eisfeldt, Daniel Nilsson
+and the SweGen consortium for generating and releasing the MELT MEI
+callset, and to SciLifeLab for producing the underlying SweGen WGS
+data.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kähäri AK, Lundin P, Che H
+<em>et al</em>.
+<a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
+SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
+population</a>.
+<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+</p>
+
+<p>
+Gardner EJ, Lam VK, Harris DN, Chuang NT, Scott EC, Pittard WS, Mills RE, 1000 Genomes Project
+Consortium, Devine SE.
+<a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=28855259" target="_blank">
+The Mobile Element Locator Tool (MELT): population-scale mobile element discovery and biology</a>.
+<em>Genome Res</em>. 2017 Nov;27(11):1916-1929.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28855259" target="_blank">28855259</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5668948/" target="_blank">PMC5668948</a>
+</p>
+
