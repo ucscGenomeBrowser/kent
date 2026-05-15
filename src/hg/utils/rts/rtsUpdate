@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 HOME = pathlib.Path.home()
 RTS_DIR = HOME / "kent/src/hg/utils/rts"
 INC_DIR = HOME / "kent/src/hg/htdocs/inc"
-LOGFILE = RTS_DIR / "rtsUpdate.log"
+LOGFILE = HOME / ".rtsUpdate.log"
 VERBOTEN = RTS_DIR / "verboten.lst"
 
 TARGET_USER = "View"
