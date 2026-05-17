@@ -695,3 +695,43 @@ mkdir _all && mv varFreqsAll.bb _all/varFreqsAll.bb
 # standard restricted-track disclaimer (already in finngen.html, kova.html,
 # mgrb.html, npm.html, swefreq.html, tishkoff180.html, varFreqsAll.html)
 # is now uniform across all 11 restricted tracks plus the combined track.
+
+##########
+# 2026-05-15 Claude max
+# Hide tpmi from bulk download (same _-prefix pattern as the other
+# license-restricted varFreqs subdirs).
+cd /gbdb/hg38/varFreqs
+mv tpmi _tpmi
+# Updated trackDb/human/varFreqs.ra tpmi stanza: bigDataUrl now points to
+# _tpmi/, and `tableBrowser off` was added. tpmi.html Data Access section
+# rewritten to the standard restricted-track disclaimer.
+# Registered tpmi in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   TPMI    TPMI Taiwan    /gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz    AC    AF
+
+##########
+# 2026-05-17 Claude max
+# ChinaMAP phase 1 - 10,588 deep-WGS Chinese individuals (Cao et al. 2020,
+# Cell Res, PMID 32355288). 136.75 M SNPs + 10.70 M short indels on chr1-22.
+# License: data may not be redistributed (see ChinaMAP Limitations on Use,
+# http://chinamapwgs.mbiobank.com/download/), so the subdirectory under
+# /gbdb is _-prefixed (hides from hgdownload) and the trackDb stanza has
+# `tableBrowser off`.
+cd /hive/data/genomes/hg38/bed/varFreqs/chinamap
+# mbiobank_ChinaMAP.phase1.vcf.gz (~2.0 GB) was already in this directory at
+# the start, fetched manually from http://chinamapwgs.mbiobank.com/download/
+# (one-time link, registration required). The file is already on GRCh38 with
+# chr-prefixed chromosome names, autosomes only, sorted, and ships AC/AF/AN
+# plus matched 1KGP_* INFO fields. No conversion/lift/normalisation needed -
+# just index.
+ln -s mbiobank_ChinaMAP.phase1.vcf.gz chinamap.vcf.gz
+tabix -p vcf chinamap.vcf.gz
+# Final: 147,448,941 variants (matches the 136.75 M SNPs + 10.70 M indels
+# reported in Cao et al.). 2.0 GB bgzip + 2.1 MB tabix index.
+# Registered ChinaMAP in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   ChinaMAP    China ChinaMAP    /gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz    AC    AF
+# The varFreqs.ra filter UI fragment (filterByRange.ChinaMAPAF/AC, sources
+# filterValues) is deliberately NOT added yet; it will be added together
+# with the next rebuild of varFreqsAll (WBBC/TPMI precedent), otherwise
+# the filters would appear in the UI before the columns exist in the bb.

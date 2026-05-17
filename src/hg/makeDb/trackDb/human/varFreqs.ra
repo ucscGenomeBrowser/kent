@@ -363,6 +363,17 @@ superTrack on
         dataVersion Phase I v20210103
         priority 5.5
 
+        track chinamap
+        shortLabel China ChinaMAP 10.5k WGS
+        longLabel Variant Frequencies: ChinaMAP phase 1 - 10,588 WGS at ~40x, Chinese natural population
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/_chinamap/chinamap.vcf.gz
+        visibility dense
+        dataVersion Phase 1 (v2020-03.beta)
+        priority 5.55
+        tableBrowser off
+
         track tpmi
         shortLabel Taiwan TPMI Axiom array
         longLabel Variant Frequencies: Taiwan Precision Medicine Initiative - Axiom TPM1 chip, Han Chinese
