@@ -735,3 +735,40 @@ tabix -p vcf chinamap.vcf.gz
 # filterValues) is deliberately NOT added yet; it will be added together
 # with the next rebuild of varFreqsAll (WBBC/TPMI precedent), otherwise
 # the filters would appear in the UI before the columns exist in the bb.
+
+##########
+# 2026-05-17 Claude max
+# GenomeIndia: 9,768 WGS, 83 endogamous Indian populations
+# (Bhattacharyya et al. 2025 Nat Genet, PMID 40200122,
+# DOI 10.1038/s41588-025-02153-x).
+#
+# Source: 22 per-chromosome TSV files (autosomes only, no header) with
+# CHROM/POS/ID/REF/ALT/AF columns, distributed by the Indian Biological
+# Data Centre as 9768GI_SummaryStats.tar.gz. The release ships only the
+# alternate allele frequency: no AC, no AN, no per-population breakdown.
+# 129,938,889 high-confidence biallelic variants total.
+cd /hive/data/genomes/hg38/bed/varFreqs/genomeindia
+# Download (already done; raw TSVs live under
+# /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats/ from the original
+# wget by Max).
+# Convert TSV -> sorted, bgzipped, tabix-indexed VCF. Script synthesizes
+# AN = 2 * 9768 = 19536 and AC = round(AF*AN). See script header for the
+# caveat re: NS_GT >= 98% upstream filter.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py \
+    /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats \
+    genomeindia.vcf.gz
+# Output: 129,938,889 variants, 0 skipped; matches the paper exactly.
+# Final size: 791 MB bgzip + 1.9 MB tabix index.
+# Symlinks placed at /gbdb/hg38/varFreqs/_genomeindia/{genomeindia.vcf.gz,
+# .tbi} for the genomeindia stanza in trackDb/human/varFreqs.ra.
+#
+# Combined-track wiring (filter UI fragment is added now, in the same
+# style as the GenomeAsia rebuild precedent, because GenomeIndia/AC and
+# /AF will be present in the next varFreqsAll rebuild):
+#   1. Added GenomeIndia row to
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv
+#      (key=GenomeIndia, ac_field=AC, af_field=AF, no populations).
+#   2. Added GenomeIndia|GenomeIndia 9.7k WGS to filterValues.sources
+#      and filterByRange.GenomeIndiaAF/AC stanzas in varFreqs.ra.
+# A full varFreqsAll rebuild has NOT been re-run yet; do that after QA
+# clears the standalone subtrack.

@@ -32,3 +32,4 @@ Tishkoff180	Tishkoff 180 African WGS	/gbdb/hg38/varFreqs/_tishkoff/tishkoff180.v
 WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF
 TPMI	TPMI Taiwan	/gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz	AC	AF
 ChinaMAP	China ChinaMAP	/gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz	AC	AF
+GenomeIndia	GenomeIndia 9.7k WGS	/gbdb/hg38/varFreqs/_genomeindia/genomeindia.vcf.gz	AC	AF

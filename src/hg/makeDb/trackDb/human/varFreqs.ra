@@ -24,7 +24,7 @@ superTrack on
         filterType.consequence multipleListOr
         filterLabel.consequence Consequence
         # Source database filter
-        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,NPM|NPM Singapore
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,KOVA|KOVA Korea,ToMMo|ToMMo Japan,IndiGen|IndiGenomes India,GenomeIndia|GenomeIndia 9.7k WGS,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,NPM|NPM Singapore
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Length filters
@@ -94,6 +94,8 @@ superTrack on
         filterLabel.Tishkoff180AF Tishkoff 180 African WGS AF
         filterByRange.NPMAF on
         filterLabel.NPMAF NPM Singapore AF
+        filterByRange.GenomeIndiaAF on
+        filterLabel.GenomeIndiaAF GenomeIndia 9.7k WGS AF
         # Per-database AC filters
         filterByRange.AllOfUsAC on
         filterLabel.AllOfUsAC AllOfUs AC
@@ -147,6 +149,8 @@ superTrack on
         filterLabel.Tishkoff180AC Tishkoff 180 African WGS AC
         filterByRange.NPMAC on
         filterLabel.NPMAC NPM Singapore AC
+        filterByRange.GenomeIndiaAC on
+        filterLabel.GenomeIndiaAC GenomeIndia 9.7k WGS AC
         # Population-specific AF filters
         # AllOfUs local-ancestry populations
         # NB: these are local-ancestry-stratified frequencies (per-position, per-haplotype-class),
@@ -476,6 +480,16 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
         visibility dense
         dataVersion IndiGen pilot (Jain 2021)
+
+        track genomeindia
+        shortLabel India GenomeIndia 9.7k WGS
+        longLabel Variant Frequencies: GenomeIndia - 9,768 WGS, 83 populations (Bhattacharyya 2025)
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/_genomeindia/genomeindia.vcf.gz
+        visibility dense
+        dataVersion 9768GI_SummaryStats (Apr 2025)
+        priority 4.8
 
         track kova
         shortLabel Korea KOVA 5.3k mixed
