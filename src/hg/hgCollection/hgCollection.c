@@ -1005,7 +1005,7 @@ static void doMiddle(struct cart *cart)
 char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 
 if (userName == NULL)
-    errAbort("You must be logged in to edit collections. Visit our <A HREF=\"hgLogin?hgLogin.do.displayLoginPage=1\">login page.</A?");
+    errAbort("You must be logged in to edit collections. Visit our <A HREF=\"hgLogin?hgLogin.do.displayLoginPage=1\">login page.</A>");
 
 char *db;
 char *genome;

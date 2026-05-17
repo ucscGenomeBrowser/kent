@@ -2121,6 +2121,12 @@ void genePredReverseFrames(struct genePred *gp)
 if (gp->exonCount == 1)
     return;
 
+// genePredLoad (12-column knownGene-style rows) does not populate
+// exonFrames; callers that lift such a genePred can still trigger a
+// strand flip and reach here.  Nothing to reverse in that case.
+if (gp->exonFrames == NULL)
+    return;
+
 int *reorderFrames;
 AllocArray(reorderFrames, gp->exonCount);
 

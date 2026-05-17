@@ -323,3 +323,25 @@ make alpha DBS=mm10
 #   (1 additional file: hub.txt reference copy)
 
 # File list: /hive/users/lrnassar/claude/RM34923/gbdb_file_list.txt
+
+##############################################################################
+# Internal QA follow-ups (Gerardo's note 141, 2026-05-14)
+##############################################################################
+
+# mm10 was already clean on the two assembly-specific issues raised in note
+# 141 (H3K27ac color was uniform 181,145,0; Organ-column casing in all three
+# metadata TSVs had no duplicates). The cross-assembly cleanup that did
+# touch mm10:
+
+# Fix C — Strip "Mus musculus " prefix from bigComposite longLabels.
+# All 2,566 mm10 bigComposite subtrack longLabels (1,178 Epi + 334 TfChip +
+# 1,054 RnaSeq) started with the species name. Stripped in commit 47519c28b9a
+# alongside the hg38 equivalent. See hg38/encode4.regulation.txt for full
+# context.
+
+cd ~/kent
+for f in src/hg/makeDb/trackDb/mouse/mm10/encode4RegEpigenetics.ra \
+         src/hg/makeDb/trackDb/mouse/mm10/encode4RegTfChip.ra \
+         src/hg/makeDb/trackDb/mouse/mm10/encode4RegRnaSeq.ra; do
+    sed -i 's/^\(\s*longLabel\) Mus musculus /\1 /' "$f"
+done

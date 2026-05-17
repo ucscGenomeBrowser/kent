@@ -2166,6 +2166,12 @@ bits64 udcTell(struct udcFile *file)
 return file->offset;
 }
 
+bits64 udcFileOpenSize(struct udcFile *file)
+/* Return size of open file. */
+{
+return file->size;
+}
+
 static long bitRealDataSize(char *fileName)
 /* Return number of real bytes indicated by bitmaps */
 {

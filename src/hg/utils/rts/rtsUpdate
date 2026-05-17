@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 HOME = pathlib.Path.home()
 RTS_DIR = HOME / "kent/src/hg/utils/rts"
 INC_DIR = HOME / "kent/src/hg/htdocs/inc"
-LOGFILE = RTS_DIR / "rtsUpdate.log"
+LOGFILE = HOME / ".rtsUpdate.log"
 VERBOTEN = RTS_DIR / "verboten.lst"
 
 TARGET_USER = "View"
@@ -41,7 +41,7 @@ SAFE_NAME = re.compile(r"^[A-Za-z0-9_%.\-]+$")
 
 
 def log(msg):
-    ts = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     line = f"{ts} {getpass.getuser()} {msg}\n"
     LOGFILE.parent.mkdir(parents=True, exist_ok=True)
     with open(LOGFILE, "a") as f:
@@ -60,8 +60,10 @@ def confirm(prompt):
         except EOFError:
             return False
         if ans == "yes":
+            print()
             return True
         if ans == "no":
+            print()
             return False
         print("  please type 'yes' or 'no'")
 
@@ -365,7 +367,7 @@ def cmd_push(args):
     if not dest_exists and not args.allow_create:
         die(f"View/{target} does not exist on {dest}; pass --allow-create to INSERT")
 
-    ts = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     bdir = pathlib.Path(tempfile.gettempdir()) / f"rtsUpdate-{ts}" / dest
     bdir.mkdir(parents=True, exist_ok=True)
     bfile = bdir / f"{target}.tsv"
@@ -506,6 +508,12 @@ def build_parser():
 
 
 def main():
+    # Line-buffer stdout so prints interleave correctly with subprocess output
+    # (git diff, hgsql) that writes directly via the OS.
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+    except AttributeError:
+        pass
     args = build_parser().parse_args()
     if args.cmd == "fetch":
         return cmd_fetch(args)

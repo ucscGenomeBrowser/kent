@@ -8,13 +8,18 @@
 <h1>Faceted Composite Tracks</h1>
 
 <h2>Overview</h2>
-<p>Composite tracks are a standard way to collect a number of related tracks within
-the browser and interact with them in a unified interface.  For example, our Conservation tracks
-are often organized as composites as are each of our "All GENCODE" tracks (see
-<a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">here</a>).
-The standard user interface works for intermediate numbers of subtracks (around 20-200),
-but becomes unusable when that scales up into the thousands.  Faceted composites provide
-an alternate user interface for composite tracks that is designed fork these situations.
+<p>The UCSC Genome Browser includes a large and ever-expanding collection of
+data tracks, particularly on its core assemblies. To make this collection
+easier to navigate, we provide several types of container tracks — tracks whose
+purpose is to hold other tracks, similar to how a folder holds files. Composite
+tracks are one such container, allowing related tracks to be grouped and
+managed through a unified interface.  For example, our Conservation tracks are
+often organized as composites as are each of our "All GENCODE" tracks (see <a
+href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">here</a>).
+But while the standard user interface for a composite works well for intermediate
+numbers of subtracks (around 20-200), it becomes much more difficult to use when
+that number scales up into the thousands.  Faceted composites use an alternate
+interface for composite tracks that is designed for these situations.
 </p><p>
 The faceted composite display is particularly useful for data sets where each subtrack has
 many potential values to be filtered on (e.g. cell type, protocol, date, experiment scores, etc.),
@@ -23,10 +28,9 @@ focus is on simply helping users identify which subtracks are relevant to them, 
 configuration options are reduced to "is this subtrack displayed or not".  Users can then
 alter the display of individual subtracks using the right-click Configure menu from the main
 hgTracks browser display.</p>
-<p></p>
 
 <div class="text-center">
-  <img alt="Heatmap track showing a color-coded grid of expression values across genomic positions" src="/images/facet_example.png" style="width:80%;max-width:1083px">
+  <img alt="Example of an interface for a faceted composite, showing facets on the left, and a table listing subtracks on the right.  The table has been filtered for subtracks where the tissue type is blood, plasma, or brain." src="/images/facet_example.png" style="width:80%;max-width:1083px">
 </div>
 
 <h2>Contents</h2>
@@ -39,10 +43,10 @@ hgTracks browser display.</p>
 <h2>Quick Start - For those familiar with composite tracks</h2>
 <p>
 The TL;DR version of this is that a faceted composite is like any other composite,
-but don't add views or subgroups.  All tracks in a mix of types live under the same
-composite parent.  The metadata file (which must be web-accessible) describes the
-facet data for the tracks.  The composite's trackDb settings must include a "primaryKey"
-setting that names one of the fields in the metadata file.  Child tracks must have
+but cannot include views or subgroups.  All subtracks in a mix of types live under the same
+parent: the composite track itself.  The metadata file (which must be web-accessible)
+describes the facet data for the tracks.  The composite's trackDb settings must include a
+"primaryKey" setting that names one of the fields in the metadata file.  Child tracks must have
 names that match "&lt;parent_name&gt;_&lt;primaryKey&gt;".<br>
 Brief example:<br>
 <b>TrackDb entries</b><br>
@@ -77,7 +81,7 @@ ex2	2026-01-03	erythrocyte	Helsing
 </p>
 
 <a id="facetedSettings"></a>
-<h2>Long Start - TrackDb Settings for Building a Faceted Composite</h2>
+<h2>Slow Start - TrackDb Settings for Building a Faceted Composite</h2>
 <p>
 This section walks through building a faceted composite from the
 ground up, starting with the bare minimum structure and adding features
@@ -306,7 +310,7 @@ SRR11112	blood	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-
 SRR11113	spleen	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	control	2024-08-21	8
 SRR11114	spleen	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC-seq"	IFNg6h	2026-08-22	17
 </pre>
-</p<p>
+</p><p>
 
 <a id="troubleshooting"></a>
 <h2>Troubleshooting</h2>

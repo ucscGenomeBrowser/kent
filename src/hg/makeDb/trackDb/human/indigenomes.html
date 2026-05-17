@@ -2,8 +2,15 @@
 <p>
 <a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes</a> provides
 whole genome sequencing data of 1,029 healthy Indian individuals under the pilot phase of the
-&quot;IndiGen&quot; program. Only the allele frequency is available from this project. The website
-also provides SV call and Alu insertion VCFs.
+&quot;IndiGen&quot; program. The IndiGenomes website also provides SV call and Alu insertion VCFs.
+</p>
+<p>
+The deployed VCF shown in this track is the public release subset distributed by the
+IndiGenomes project (18,016,257 records). The full Jain 2021 callset reports 55.8 million
+variants from the 1,029-genome cohort; the public release is a curated subset of those
+sites. The deployed VCF is sites-only and carries a per-variant <em>VRT</em> (variant type)
+INFO field. Per-variant allele counts and allele frequencies are not distributed with the
+public release and therefore are not shown in this track.
 </p>
 
 <h2>Data Access</h2>
@@ -31,12 +38,14 @@ Illumina NovaSeq 6000 platform with 150&times;2 bp paired-end reads targeting &g
 mean coverage. Alignment to the GRCh38 reference genome, post-processing, and
 default quality-filtered variant calling were performed end-to-end on the Illumina DRAGEN
 v3.4 Bio-IT platform, which uses field-programmable gate array (FPGA) logic for
-high-throughput processing. This yielded a compendium of 55,898,122 single allelic
+high-throughput processing. The full Jain 2021 callset comprises 55,898,122 single-allelic
 genetic variants (SNVs and indels), of which 32.23% were unique to the Indian samples
 and absent from global reference databases. Variants were annotated using ANNOVAR with
 RefGene, and allele frequencies were cross-referenced against gnomAD v3, 1000 Genomes,
-ExAC, ESP6500, and the Greater Middle East Variome Project. The dataset is accessible via
-the <a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes database</a>
+ExAC, ESP6500, and the Greater Middle East Variome Project. The
+<a href="https://clingen.igib.res.in/indigen/" target="_blank">IndiGenomes database</a>
+distributes a public-release subset of these variants (18,016,257 records); that subset is
+the file used in this track.
 (Jain, Bhoyar, Scaria, Sivasubbu &amp; the IndiGen Consortium,
 <a href="https://doi.org/10.1093/nar/gkaa923" target="_blank"><em>Nucleic Acids Research</em> 2021</a>).
 </p>

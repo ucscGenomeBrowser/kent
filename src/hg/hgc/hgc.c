@@ -10260,23 +10260,36 @@ else
         }
     else
         {
-        char constraints[256];
-        sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
-        char *db = database;
         char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-        // When quickLifted, the genePred table lives in the source assembly,
-        // and the click's seqName/winStart/winEnd are in destination coords;
-        // lift them back to source coords so hgSeqItemsInRange finds rows.
-        char *querySeq = seqName;
-        int queryStart = winStart, queryEnd = winEnd;
         if (liftDb != NULL)
             {
-            db = liftDb;
-            quickLiftLiftPos(trackHubSkipHubName(database), liftDb,
-                             seqName, winStart, winEnd,
-                             &querySeq, &queryStart, &queryEnd);
+            // Load the genePred from the source assembly and lift it to
+            // destination coords, so hgSeqBed reads sequence from the
+            // destination assembly at the lifted exon coordinates.
+            struct genePred *gpList = getGenePredForPosition(table, geneName);
+            struct bed *bedList = NULL;
+            struct genePred *gp;
+            for (gp = gpList; gp != NULL; gp = gp->next)
+                slAddHead(&bedList, bedFromGenePred(gp));
+            slReverse(&bedList);
+            char rootName[HDB_MAX_TABLE_STRING];
+            char parsedChrom[HDB_MAX_CHROM_STRING];
+            char *bareTable = trackHubSkipHubName(table);
+            hParseTableName(liftDb, bareTable, rootName, parsedChrom);
+            struct hTableInfo *hti = hFindTableInfo(liftDb, NULL, rootName);
+            if (hti == NULL)
+                webAbort("Error", "Could not find table info for table %s (%s)",
+                         rootName, table);
+            itemCount = hgSeqBed(database, hti, bedList);
+            bedFreeList(&bedList);
+            genePredFreeList(&gpList);
             }
-        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), querySeq, queryStart, queryEnd, constraints);
+        else
+            {
+            char constraints[256];
+            sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
+            itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+            }
         }
     }
 if (itemCount == 0)
@@ -10836,7 +10849,7 @@ if (sameWord(tdb->table, "ensGeneNonCoding"))
 else
     {
     /* print CCDS if this is not a non-coding gene */
-    printCcdsForSrcDb(conn, item);
+    printCcdsForSrcDb(conn, tdb, item);
     printf("<BR>\n");
     }
 
@@ -12235,15 +12248,21 @@ if (url != NULL && url[0] != 0)
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from %s l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
         refLinkTable, itemName, chrom, chromStart, chromEnd);
+        /* Slurp names first; prGRShortRefGene runs its own queries on conn,
+         * which would error with "Commands out of sync" mid-iteration. */
+        struct slName *geneNames = NULL;
         sr = sqlMustGetResult(conn, query);
         if (sr != NULL)
             {
             while ((row = sqlNextRow(sr)) != NULL)
-                {
-                prGRShortRefGene(conn, row[0]);
-                }
+                slNameAddHead(&geneNames, row[0]);
             }
         sqlFreeResult(&sr);
+        slReverse(&geneNames);
+        struct slName *gn;
+        for (gn = geneNames; gn != NULL; gn = gn->next)
+            prGRShortRefGene(conn, gn->name);
+        slFreeList(&geneNames);
         }
 
     showOmimDisorderTable(conn, url, itemName);
@@ -13132,7 +13151,7 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
-void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prRefGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
 {
@@ -13185,7 +13204,7 @@ if (desc != NULL)
 if (isXeno)
     prRefGeneXenoInfo(conn, rl);
 else
-    printCcdsForSrcDb(conn, rl->mrnaAcc);
+    printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13292,7 +13311,7 @@ prGRShortRefGene(conn, rl->name);
 
 }
 
-void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prKnownGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl)
 /* print basic details information and links for a Known Gene */
 {
@@ -13322,7 +13341,7 @@ if (desc != NULL)
     printf("<BR>\n");
     }
 
-printCcdsForSrcDb(conn, rl->mrnaAcc);
+printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13410,7 +13429,7 @@ else
 
 cartWebStart(cart, database, "Known Gene");
 printf("<table border=0>\n<tr>\n");
-prKnownGeneInfo(conn, rnaName, sqlRnaName, rl);
+prKnownGeneInfo(conn, tdb, rnaName, sqlRnaName, rl);
 
 printf("</tr>\n</table>\n");
 
@@ -13501,7 +13520,7 @@ else
 
 /* print the first section with info  */
 printf("<table border=0>\n<tr>\n");
-prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
+prRefGeneInfo(conn, tdb, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
 printf("</tr>\n</table>\n");

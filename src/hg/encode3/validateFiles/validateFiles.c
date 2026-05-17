@@ -1540,7 +1540,7 @@ else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos,
             strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
-    reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n"
+    reportWarn("align: ciglen %d cigar %s qlen %d pos %"PRIhts_pos" length %d strand %c\n"
 	, bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
     ++(*errs);
     }

@@ -96,8 +96,18 @@ NMD (nonsense-mediated decay), or readthrough transcripts.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are displayed in BED 12 format showing the exon/intron structure of each sORF.
+Items are displayed in bigGenePred format. Each item is labeled with its MetamORF ORF
+ID. Color reflects Kozak translational efficiency &mdash; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
+color legend.
 </p>
+
+<p>
+<b>Mouseover</b> shows the ORF ID, ORF annotation, start codon, Kozak strength and TE,
+host transcripts, and the cell types where the ORF was reported.
+</p>
+
+<p>Available filters: start codon, Kozak strength, Kozak TE.</p>
 
 <h2>Data Access</h2>
 
@@ -149,7 +159,7 @@ available.
 <h2>References</h2>
 
 <p>
-Erhard F, Halenius A, Zimmermann C, L&#x27;Hernault A, Kowalewski DJ, Weekes MP, Stevanovic S,
+Erhard F, Halenius A, Zimmermann C, L'Hernault A, Kowalewski DJ, Weekes MP, Stevanovic S,
 Zimmer R, D&#246;lken L.
 <a href="https://doi.org/10.1038/nmeth.4631" target="_blank">
 Improved Ribo-seq enables identification of cryptic translation events</a>.
