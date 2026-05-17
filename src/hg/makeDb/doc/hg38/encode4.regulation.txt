@@ -364,3 +364,57 @@ make alpha DBS=hg38
 #   Total:                        4.4 TB (371 files)
 
 # File list: /hive/users/lrnassar/claude/RM34923/gbdb_file_list.txt
+
+##############################################################################
+# Internal QA follow-ups (Gerardo's note 141, 2026-05-14)
+##############################################################################
+
+# Three cleanups applied after Gerardo's review of the wgEncodeReg4Epigenetics
+# composite. Each can be re-derived by the scripts under
+# /hive/users/lrnassar/claude/RM34923/qa_fixes/.
+
+# Fix A — H3K27ac peak color
+# The hg38 Epigenetics composite's H3K27ac Peak subtracks were colored
+# 255,205,0 (bright #FFCD00) while Signal subtracks used 181,145,0 (mustard
+# #B59100 from /gbdb/hg38/encode4/regulation/epi_colors.json). mm10 was
+# already consistent on 181,145,0. All 554 peak stanzas in
+# wgEncodeReg4Epigenetics.ra were retargeted to 181,145,0 (commit 47519c28b9a).
+
+cd ~/kent
+sed -i 's/^\(    color\) 255,205,0$/\1 181,145,0/' \
+    src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4Epigenetics.ra
+
+# Fix B — Organ-column case duplicates and "Paraythroid" typo (hg38 only)
+# Two hg38 metadata TSVs had duplicate-cased Organ values that the faceted
+# bigComposite UI rendered as separate facet buttons (e.g. "Adrenal Gland"
+# vs "Adrenal gland"). Same files also carried the upstream "Paraythroid"
+# typo. Canonicalized to "Title-then-lowercase-second-word" form and fixed
+# Paraythroid -> Parathyroid:
+#   wgEncodeReg4Epigenetics_metadata.tsv  413 rows touched
+#   wgEncodeReg4TfChip_metadata.tsv       120 rows touched
+# RNA-seq TSV and all three mm10 TSVs were clean.
+# The Paraythroid typo also exists in .ra track names and the underlying
+# gbdb bigWig filenames (paraythroidGlandH3K27ac.bw, etc.); those are
+# deferred since renaming touches saved-session URLs.
+
+python3 /hive/users/lrnassar/claude/RM34923/qa_fixes/normalize_metadata_organs.py
+
+# Fix C — Strip "Homo sapiens " prefix from bigComposite longLabels
+# Every subtrack longLabel started with the species name, redundant on a
+# specific assembly and crowding biosample descriptions off the label.
+# 100% of subtracks in the six composite .ra files affected (14,929 total):
+#   hg38 Epigenetics 6,353; hg38 TfChip 4,964; hg38 RnaSeq 1,046
+#   mm10 Epigenetics 1,178; mm10 TfChip 334;   mm10 RnaSeq 1,054
+# Same commit as Fix A (47519c28b9a).
+
+cd ~/kent
+for f in src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4Epigenetics.ra \
+         src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4TfChip.ra \
+         src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4RnaSeq.ra; do
+    sed -i 's/^\(\s*longLabel\) Homo sapiens /\1 /' "$f"
+done
+for f in src/hg/makeDb/trackDb/mouse/mm10/encode4RegEpigenetics.ra \
+         src/hg/makeDb/trackDb/mouse/mm10/encode4RegTfChip.ra \
+         src/hg/makeDb/trackDb/mouse/mm10/encode4RegRnaSeq.ra; do
+    sed -i 's/^\(\s*longLabel\) Mus musculus /\1 /' "$f"
+done

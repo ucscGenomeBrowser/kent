@@ -1082,26 +1082,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
     if (!cartUsualBoolean(cart, var, FALSE))
         continue;
-    /* myVariants tracks are backed by a per-user SQL table, not the CT file,
-     * so just dropping them from ctList isn't enough -- the next page load
-     * regenerates the CT entry from the database.  Delete the underlying
-     * data (own track) or revoke the accepted share (shared track) so the
-     * removal sticks. */
-    char *trackName = ct->tdb->track;
-    if (startsWith("myVariants_shared_", trackName))
-        {
-        char *token = trackName + strlen("myVariants_shared_");
-        char shareCartVar[256];
-        safef(shareCartVar, sizeof shareCartVar,
-            MYVAR_SHARED_CART_PREFIX "%s", token);
-        cartRemove(cart, shareCartVar);
-        }
-    else if (startsWith("myVariants_", trackName))
-        {
-        char *userName = wikiLinkUserName();
-        if (isNotEmpty(userName))
-            myVariantsDeleteForDb(userName, database);
-        }
+    /* myVariants tracks are backed by a per-user SQL table, not the CT
+     * file, so dropping them from ctList alone isn't enough -- the next
+     * page load regenerates the CT entry from the database.  Delegate
+     * the type-specific cleanup. */
+    myVariantsHandleCtRemoval(ct, cart, database);
     slRemoveEl(&ctList, ct);
     }
 }
@@ -1235,7 +1220,9 @@ initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
 chromAliasSetup(database);
 
-/* Ensure myVariants CT is registered in this cart if user has items for current db */
+/* Ensure myVariants CT is registered in this cart if user has items for current db.
+ * Uses a dedicated cart variable (mvCtfile_<db>) so regular custom tracks at
+ * ctfile_<db> are untouched. */
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     char *user = wikiLinkUserName();
@@ -1250,12 +1237,11 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE))
             int ctCount = sqlQuickNum(conn, query);
             if (ctCount > 0)
                 {
-                /* Prefer writing a concrete CT file to trash to ensure CT is recognized immediately */
                 char *ctFile = myVariantsWriteCtFile(user, database, cart);
                 if (isNotEmpty(ctFile))
                     {
                     char varName[256];
-                    safef(varName, sizeof varName, CT_FILE_VAR_PREFIX "%s", database);
+                    safef(varName, sizeof varName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
                     cartSetString(cart, varName, ctFile);
                     freeMem(ctFile);
                     }

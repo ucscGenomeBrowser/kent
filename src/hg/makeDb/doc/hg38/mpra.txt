@@ -140,24 +140,54 @@ python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
 #     distinction (Griesemer/Schuster 3'UTR), Kircher saturation
 #     mutagenesis structure, log2FC interpretation.
 #
-#   Punted to Redmine for Max / Tao Wang (potential next-rebuild items):
+#   Punted to Redmine for Max / Tao Wang (status as of 2026-05-14):
 #   - 5,092 rows (Mouri, Tewhey) have pvalue > 1 (impossible; max 8.96).
 #     FDR appears valid; pvalue field looks like a t-statistic mislabeled.
-#     mouseOver/details show misleading p-values for ~2% of significant
-#     rows.
-#   - 30,921 rows display literal "nan" / "None" in mouseOver and
-#     details fields where NA-coded values were preserved verbatim.  Two
-#     sentinel conventions coexist ("None" in 53k eQTL rows, "NA" in 2k
-#     Kircher rows).
-#   - Upstream typos in 28,810 rows: "30 UTR" in 26,546 Schuster
-#     descriptions, "Familial hypercholesterol emia" in 2,176 Kircher
-#     diseases, "Alchol use disorder" in 88 Rao diseases.
+#     Upstream curators acknowledged; fix is weeks out.  We added a
+#     "Note (pending upstream fix)" paragraph to mpraVarDb.html bracketed
+#     by an HTML comment "TEMP: remove once Tao Wang fixes..."  --
+#     remove that paragraph when the next CSV snapshot lands.
 #   - 60,860 rows have description="GWAS" (no detail) -- upstream limit.
 #   - 1,069 rows have multi-allelic alt collapsed into one row (e.g.
-#     "T/A,G") with one log2FC/pvalue.
-#   - 2,088 rows preserve hg19-coord-style names (e.g. "1_1403972_CG")
-#     post-liftOver to hg38; coordinates and name no longer match.
+#     "T/A,G") with one log2FC/pvalue.  Upstream-collapsed; per-allele
+#     values not recoverable from the CSV.
 #   - 969 rows are colored red (FDR<0.05) but pvalue=nan -- mouseOver
-#     reads "FDR: 0.001 / p-value: nan" which looks contradictory.
-#   - 250-char truncation in mpravardbToBed.py cuts Griesemer
-#     descriptions mid-sentence; should raise/remove the cap.
+#     reads "FDR: 0.001 / p-value: NA" (NA now, formerly "nan").
+#     Defensible; FDR can be reported without per-test p.
+#   - hg19-coordinate position in the chr:pos:ref>alt name field of
+#     ~73k non-rs rows.  Affects only rows that came from the CSV's
+#     hg19 portion (210k of 239k rows) and lack an rsID.  csv_to_bed
+#     builds the name from the raw CSV pos before liftOver runs, so
+#     the row's chromStart/chromEnd are correctly hg38 but the name
+#     still carries the original hg19 pos (e.g. row at chr19:11089230
+#     has name "chr19:11199907:A>T").  Display is unaffected (browser
+#     uses chromStart); only matters if a user copies the name field
+#     expecting hg38 coordinates.  Pre-existing issue, not introduced
+#     by the 2026-05-14 rebuild; surfaced during sandbox validation.
+#     Fix would require post-processing the lifted BED to rewrite the
+#     pos inside each name -- one-line awk in main() after Step 2.
+#
+# QA-2 build-script rebuild 2026-05-14 (RM #37359, Lou):
+#   Items handled in mpravardbToBed.py + mpravardb.as, single rebuild:
+#   - sanitize_text now maps "None"/"NA"/"N/A"/"null"/"NULL"/"nan" to
+#     empty string after the existing UTF-8 sanitization.  Removed
+#     55,108 stale sentinels (53,144 disease="None" eQTL rows +
+#     1,964 disease="NA" Kircher rows + 44 ref/alt=NA Myint rows).
+#   - sanitize_text applies a literal-replacement table for three
+#     upstream typos: "30 UTR" -> "3'UTR" (26,546 Schuster description
+#     rows), "Familial hypercholesterol emia" -> "Familial
+#     hypercholesterolemia" (2,176 Kircher disease rows), "Alchol use
+#     disorder" -> "Alcohol use disorder" (88 Rao disease rows).
+#   - New fmt_mo() renders NaN floats as "NA" in the mouseOver helper
+#     fields rather than literal "nan"; 30,921 rows fixed.
+#   - Name + rsid handling tightened: a value is treated as an rsID
+#     only if it starts with "rs".  2,088 hg19-coord-style names like
+#     "1_1403972_CG" are now reformatted to "chr<X>:<hg38pos>:<ref>><alt>"
+#     and the rsid field is set to "" so the dbSNP linkout does not
+#     fire on a bogus value.
+#   - Removed the 250-char truncation that was cutting Griesemer
+#     descriptions mid-sentence; mpravardb.as switched the description
+#     and mpraStudy fields from "string" to "lstring" to allow full
+#     upstream text.
+#   - Pre-rebuild backup: mpravardb.bb.pre-2026-05-14-backup
+#   - itemCount preserved: 239,028.

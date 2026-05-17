@@ -6833,18 +6833,16 @@ char *getPositionFromCustomTracks()
 char *pos = NULL;
 struct slName *bl = NULL;
 
-// If the user has myVariants data for this database, write a custom track
-// stub file and set the ctfile_ cart variable so customTracksParseCart picks
-// it up.  This handles fresh carts and also refreshes after edits/deletes
-// done via jsCommandDispatch.  If the backing table no longer exists (e.g.
-// the user or an admin dropped it), remove the stale cart variable so the
-// custom track system doesn't try to load a non-existent table.
+// If the user has myVariants data for this database, refresh the on-disk
+// ctfile and point the mvCtfile_<db> cart variable at it.  customTracksParseCart
+// reads that variable independently of ctfile_<db>, so regular custom tracks
+// are unaffected.
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     char *userName = getUserName();
     char *ctFile = myVariantsWriteCtFile(userName, database, cart);
     char mvVarName[256];
-    safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+    safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
     if (isNotEmpty(ctFile))
         cartSetString(cart, mvVarName, ctFile);
     else
@@ -12048,6 +12046,7 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+    jsIncludeFile("myVariantsBlocks.js", NULL);
 
     // remove the hg.conf option once this feature is released
     if (cfgOptionBooleanDefault("showIgv", FALSE))

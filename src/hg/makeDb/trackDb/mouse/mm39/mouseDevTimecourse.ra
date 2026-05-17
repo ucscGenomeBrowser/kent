@@ -1,10 +1,11 @@
 track mouseDevTimecourse
-superTrack on hide
-shortLabel Bulk dev RNA-seq
-longLabel Mouse developmental time course bulk RNA-seq
+superTrack on show
+shortLabel ENCODE Expression
+longLabel ENCODE developmental time course bulk RNA-seq gene expression
 group regulation
 origAssembly mm10
 pennantIcon 10.jpg ../goldenPath/help/liftOver.html "lifted from mm10"
+priority 0.6
 html mouseDevTimecourse
 
     track developmentTimecourseM21mm39TPM
@@ -29,7 +30,7 @@ html mouseDevTimecourse
     type bigBarChart
     shortLabel timecourse M21 FPKM
     longLabel Mouse development timecourse GENCODE M21 liftover FPKM
-    visibility pack
+    visibility hide
     barChartUnit FPKM
     barChartFacets tissue,timepoint
     barChartStretchToItem on

@@ -34,4 +34,58 @@ cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
 # Load trackDb
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=mm39
+
+# 2026-05-13 (Gerardo): Reorder tissue rows in .facets files per author
+# request. Redmine #36998 note-43. Peng (lead author) asked
+# for the tissues to be displayed in his biological order instead of the
+# alphabetical order from the hub. The reorder is made to the files in
+# /hive/data/outside/woldlab/mouseDevTimecourse/mm39/ only; the hub at
+# woldlab.caltech.edu still has the alphabetical order, so re-running the
+# curl above will overwrite the reorder and require re-running the snippet
+# below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+
+python3 <<'EOF'
+TISSUE_ORDER = [
+    "thymus",
+    "spleen",
+    "liver",
+    "heart",
+    "skeletal muscle tissue",
+    "urinary bladder",
+    "adrenal gland",
+    "kidney",
+    "lung",
+    "stomach",
+    "intestine",
+    "limb",
+    "embryonic facial prominence",
+    "forebrain",
+    "midbrain",
+    "hindbrain",
+    "neural tube",
+]
+FILES = ["mouse_development_M21.facets"]
+
+for path in FILES:
+    with open(path) as f:
+        lines = f.readlines()
+    header = lines[0]
+    data = []
+    for ln in lines[1:]:
+        if ln.strip():
+            data.append(ln)
+    groups = {}
+    for ln in data:
+        cols = ln.rstrip("\n").split("\t")
+        groups.setdefault(cols[2], []).append(ln)
+    out = [header]
+    for tissue in TISSUE_ORDER:
+        for ln in groups[tissue]:
+            out.append(ln)
+    with open(path, "w") as f:
+        f.writelines(out)
+    print("reordered: " + path + "  (" + str(len(data)) + " rows)")
+EOF
 ##############################################################################

@@ -4025,7 +4025,8 @@ if (!tdbIsDownloadsOnly(tdb))
         cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
-        if (differentString(tdb->type, "chromGraph"))
+        if (differentString(tdb->type, "chromGraph") &&
+            differentString(tdb->type, "myVariants"))
             {
             char buf[256];
             if (ajax)
@@ -4036,6 +4037,25 @@ if (!tdbIsDownloadsOnly(tdb))
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
             cgiMakeOnClickButton("htui_updtCustTrk", buf, "Update custom track");
+            }
+        if (sameString(tdb->type, "myVariants") &&
+            !startsWith("myVariants_shared_", tdb->track))
+            {
+            /* Labels are per (track, db) so the same myVariants table can
+             * carry a different name on each assembly. */
+            char shortVar[256], longVar[256];
+            safef(shortVar, sizeof shortVar, "%s.%s.shortLabel",
+                tdb->track, database);
+            safef(longVar, sizeof longVar, "%s.%s.longLabel",
+                tdb->track, database);
+            char *curShort = cartUsualString(cart, shortVar, "");
+            char *curLong = cartUsualString(cart, longVar, "");
+            puts("<div style='margin-top:0.5em'><b>Rename track:</b> ");
+            puts("Short Label ");
+            cgiMakeTextVar(shortVar, curShort, 18);
+            puts(" Long Label ");
+            cgiMakeTextVar(longVar, curLong, 50);
+            puts(" <span style='color:#888'>(blank = default)</span></div>");
             }
         }
     }
@@ -4527,7 +4547,7 @@ else if (isCustomTrack(track)
         if (isNotEmpty(ctFile))
             {
             char mvVarName[256];
-            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
             cartSetString(cart, mvVarName, ctFile);
             freeMem(ctFile);
             ctList = customTracksParseCart(database, cart, NULL, NULL);

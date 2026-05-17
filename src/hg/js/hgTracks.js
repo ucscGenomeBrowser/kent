@@ -978,6 +978,37 @@ var myVariants = {
             createField(field, advancedDiv);
         });
 
+        // Blocks (BED12) section. Empty rows means a single full-span block.
+        let blocksSection = document.createElement("div");
+        blocksSection.id = "blocksSection";
+        blocksSection.style.cssText = "margin-top:12px; padding-top:10px; border-top:1px solid #ddd;";
+        let blocksLabel = document.createElement("div");
+        blocksLabel.style.cssText = "font-weight:bold; margin-bottom:8px; font-size:13px;";
+        blocksLabel.textContent = "Blocks (optional)";
+        blocksSection.appendChild(blocksLabel);
+        let blocksHint = document.createElement("div");
+        blocksHint.style.cssText = "font-size:12px; color:#666; margin-bottom:6px;";
+        blocksHint.textContent = "Offsets are relative to Start. First offset must be 0; " +
+                                 "last block must reach End. Leave empty for a single full-span block.";
+        blocksSection.appendChild(blocksHint);
+        let blocksContainer = document.createElement("div");
+        blocksContainer.id = "blocksContainer";
+        blocksSection.appendChild(blocksContainer);
+        // Hidden inputs that the widget keeps in sync. createItem reads them.
+        let hCount = document.createElement("input");
+        hCount.type = "hidden";
+        hCount.id = "blockCount";
+        let hSizes = document.createElement("input");
+        hSizes.type = "hidden";
+        hSizes.id = "blockSizes";
+        let hStarts = document.createElement("input");
+        hStarts.type = "hidden";
+        hStarts.id = "chromStarts";
+        blocksSection.appendChild(hCount);
+        blocksSection.appendChild(hSizes);
+        blocksSection.appendChild(hStarts);
+        advancedDiv.appendChild(blocksSection);
+
         // Custom fields section inside advanced fields
         let customFieldsSection = document.createElement("div");
         customFieldsSection.id = "customFieldsSection";
@@ -1237,6 +1268,25 @@ var myVariants = {
             });
         }
 
+        // Mount the block editor; reads Start/End from the chrom range fields.
+        // Pass the container element directly: at this point the form is in
+        // the dialog div but the dialog hasn't been appended to body yet, so
+        // getElementById would still miss "blocksContainer".
+        // Stash the widget handle on the form so createItem can call validate().
+        if (typeof myVariantsBlocks !== "undefined") {
+            form.blocksWidget = myVariantsBlocks.mount(blocksContainer, {
+                getStart: function () {
+                    return parseInt(document.getElementById("start").value, 10);
+                },
+                getEnd: function () {
+                    return parseInt(document.getElementById("end").value, 10);
+                },
+                hiddenCountInput: hCount,
+                hiddenSizesInput: hSizes,
+                hiddenStartsInput: hStarts
+            });
+        }
+
         return form;
     },
 
@@ -1275,7 +1325,14 @@ var myVariants = {
                 modal: true,
                 closeOnEscape: true,
                 autoOpen: false,
-                buttons: dialogButtons
+                buttons: dialogButtons,
+                close: function() {
+                    // Reset block rows so the next open starts clean.
+                    let form = document.getElementById("myVariants-form");
+                    if (form && form.blocksWidget) {
+                        form.blocksWidget.clear();
+                    }
+                }
             });
         } else {
             // got here after async image update, need to update the bed form coordinates
@@ -1301,6 +1358,11 @@ var myVariants = {
         document.addEventListener('click', (e) => {
             let dialogEl = document.getElementById("myVariantsDialog");
             if (!dialogEl) return;
+            // If the click handler that ran first removed its own target from
+            // the document (eg a row remove button, or a Grammarly/extension
+            // DOM swap on the description field), e.target is now detached
+            // and `.contains(e.target)` would falsely report "outside". Skip.
+            if (!document.contains(e.target)) return;
             let dialogContainer = dialogEl.parentElement;
             // Check if click target is inside the dialog (handles native dropdowns that render outside bounds)
             if (dialogContainer && !dialogContainer.contains(e.target)) {
@@ -1312,6 +1374,17 @@ var myVariants = {
     createItem: function(form) {
         // sends a post to hgTracks that adds a new item to the users custom track
         // and updates the image to include this track if it wasn't already there
+        // Strict block check now (server will re-check authoritatively).
+        // noBlocks means the user added a row but left every size empty;
+        // treat as no blocks so the server synthesizes a single full-span block.
+        let blockResult = {ok: true, noBlocks: true};
+        if (form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
+            blockResult = form.blocksWidget.validate();
+            if (!blockResult.ok) {
+                alert("Block error: " + blockResult.msg);
+                return;
+            }
+        }
         const data = {};
         if (form.elements.hgvsInput.value) {
             data.hgvsInput = form.elements.hgvsInput.value;
@@ -1344,6 +1417,20 @@ var myVariants = {
                 if (customFields.length > 0) {
                     data.extraFields = customFields;
                 }
+            }
+            // Convert hidden block fields from CSV strings to arrays of ints.
+            // Omit when blockCount is 0, or when the widget reported noBlocks
+            // (rows added but all sizes left empty); server then synthesizes
+            // a single full-span block.
+            let bc = parseInt(data.blockCount, 10);
+            if (!bc || blockResult.noBlocks) {
+                delete data.blockCount;
+                delete data.blockSizes;
+                delete data.chromStarts;
+            } else {
+                data.blockCount = bc;
+                data.blockSizes = data.blockSizes.split(",").map(Number);
+                data.chromStarts = data.chromStarts.split(",").map(Number);
             }
         }
 
@@ -1445,7 +1532,7 @@ var myVariants = {
         $(content).dialog({
             title: "Annotation Created",
             modal: true,
-            width: 450,
+            width: 600,
             buttons: {
                 "Go to Annotation": function() {
                     if (document.getElementById("myVariantsRememberNav").checked) {

@@ -282,7 +282,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/allofus/allOfUs.locAncFreq.vcf.gz
         dataVersion V7
-        visibility dense
+        visibility hide
         priority 0.5
 
         #track me
@@ -304,7 +304,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/topmed/topmed10.vcf.gz
         dataVersion Freeze 10
-        visibility dense
+        visibility hide
         priority 2
 
         track sfariSparkExomes
@@ -314,7 +314,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
         dataVersion iWES v3 2024_08
-        visibility dense
+        visibility hide
         priority 2.5
 
         track sfariSparkWgs
@@ -324,7 +324,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
         dataVersion iWGS v1.1
-        visibility dense
+        visibility hide
         priority 2.5
         html sfariSparkExomes
 
@@ -345,7 +345,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion 2025-06-16
         priority 5
 
@@ -355,7 +355,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion R4
         priority 4.1
         url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
@@ -363,7 +363,7 @@ superTrack on
 
         track finngen
         parent varFreqs on
-        visibility dense
+        visibility hide
         type vcfTabix
         shortLabel FinnGen R12 500k imputed
         longLabel Variant Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
@@ -374,7 +374,7 @@ superTrack on
 
         track swefreq
         parent varFreqs on
-        visibility dense
+        visibility hide
         type vcfTabix
         shortLabel Sweden SweGen 1k WGS
         longLabel Variant Frequencies: Sweden SweGen - 1k WGS
@@ -390,7 +390,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
         dataVersion Phase 3
-        visibility dense
+        visibility hide
         # no downloads as per Matt Hobbs email Jan 28 2026
         tableBrowser off
 
@@ -400,7 +400,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Pilot 2019 (lifted to hg38, May 2026)
 
         track gaspIndel
@@ -409,7 +409,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.indels.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Pilot 2019 (lifted to hg38, May 2026)
         html gasp
 
@@ -419,7 +419,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion SABE-WGS-1171 Sep 2020
 
         track indigenomes
@@ -428,7 +428,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion IndiGen pilot (Jain 2021)
 
         track kova
@@ -437,7 +437,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/kova/kova.v7.vcf.gz
-        visibility dense
+        visibility hide
         tableBrowser off
         dataVersion V7
 
@@ -447,7 +447,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/npm/SG10K_Health_r5.3.2.sites.vcf.bgz
-        visibility dense
+        visibility hide
         tableBrowser off
         dataVersion r5.3.2
 
@@ -457,7 +457,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hrc/hrc.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion r1.1
 
         track saudi
@@ -466,7 +466,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion SHGP (figshare 51297884, 2025)
 
         track schema
@@ -475,7 +475,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion 2022
         priority 4.9
         url https://schema.broadinstitute.org/
@@ -487,7 +487,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/mxb/mxb.freq.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Nov 2025 (hg38 lift)
         priority 6
 
@@ -497,7 +497,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sgdpFreq/sgdp.freq.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion 2016-12-07 (hg38 lift)
         priority 7
 
@@ -507,7 +507,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/gregor/gregor.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion R04 (Oct 2025)
         priority 8
 
@@ -517,7 +517,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion v3.1.2
         priority 8
 
@@ -527,7 +527,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga4k/ga4kSnv.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Cohen 2022 release
         priority 9
 
@@ -537,7 +537,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/colorsDb/colorsDbSnv.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion v1.2.0
         priority 9.5
 
@@ -547,7 +547,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Chirmade 2025 release
         priority 10
 
@@ -557,7 +557,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/tishkoff/tishkoff180.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Cell 2023 (hg19 lift)
         tableBrowser off
         priority 7.5
