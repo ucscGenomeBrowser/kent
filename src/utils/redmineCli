@@ -641,10 +641,14 @@ def cmd_comment(args):
         sys.exit("Error: --message or --message-file is required")
 
     message = strip_emoji(prepend_attribution(message))
-    data = {"issue": {"notes": message}}
+    issue = {"notes": message}
+    if args.private:
+        issue["private_notes"] = True
+    data = {"issue": issue}
 
     api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
-    print(f"Commented on #{args.ticket_id}: {make_url(args.base_url, args.ticket_id)}")
+    label = "private comment" if args.private else "Commented"
+    print(f"{label} on #{args.ticket_id}: {make_url(args.base_url, args.ticket_id)}")
 
 
 # ---------------------------------------------------------------------------
@@ -726,6 +730,10 @@ def cmd_update(args):
     note = read_text_input(args.note, args.note_file)
     if note:
         issue_data["notes"] = strip_emoji(prepend_attribution(note))
+        if args.private:
+            issue_data["private_notes"] = True
+    elif args.private:
+        sys.exit("Error: --private requires --note or --note-file")
 
     if not issue_data:
         sys.exit("Error: no fields to update. Provide at least one of: "
@@ -767,6 +775,10 @@ def cmd_attach(args):
 
     if args.note:
         issue_data["notes"] = strip_emoji(prepend_attribution(args.note))
+        if args.private:
+            issue_data["private_notes"] = True
+    elif args.private:
+        sys.exit("Error: --private requires --note")
 
     data = {"issue": issue_data}
     api_put(args.base_url, f"/issues/{args.ticket_id}.json", args.api_key, data)
@@ -998,6 +1010,9 @@ def build_parser():
     p_comment.add_argument("--message", help="Comment text")
     p_comment.add_argument("--message-file", dest="message_file",
                            help="Read comment from file (- for stdin)")
+    p_comment.add_argument("--private", action="store_true",
+                           help="Mark this comment as a private note "
+                                "(only visible to project members with permission)")
 
     # update
     p_update = sub.add_parser("update", help="Update ticket fields")
@@ -1033,6 +1048,9 @@ def build_parser():
     p_update.add_argument("--note", help="Comment to include with update")
     p_update.add_argument("--note-file", dest="note_file",
                           help="Read note from file (- for stdin)")
+    p_update.add_argument("--private", action="store_true",
+                          help="Mark the accompanying note as a private note "
+                               "(requires --note or --note-file)")
 
     # attach
     p_attach = sub.add_parser("attach", help="Upload an attachment")
@@ -1041,6 +1059,9 @@ def build_parser():
     p_attach.add_argument("--filename", help="Override filename")
     p_attach.add_argument("--description", help="Attachment description")
     p_attach.add_argument("--note", help="Comment to add with attachment")
+    p_attach.add_argument("--private", action="store_true",
+                          help="Mark the accompanying note as a private note "
+                               "(requires --note)")
 
     # users
     p_users = sub.add_parser("users", help="List project members and their user IDs")
