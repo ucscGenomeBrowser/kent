@@ -25,3 +25,5 @@ include LCR.ra alpha
 include vgp577way.trackDb.ra alpha
 
 include ../mucins.ra alpha
+
+include varFreqs.ra alpha,beta
