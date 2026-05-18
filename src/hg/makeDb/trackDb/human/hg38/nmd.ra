@@ -62,7 +62,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         track nmdDetectiveAi
         shortLabel NMDetective-AI
-        longLabel NMDetective-AI: Deep-learning NMD efficiency prediction per position (Veiner et al., MANE Select only)
+        longLabel NMDetective-AI: Deep-learning NMD efficiency prediction per position (MANE Select only)
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bw
         type bigWig
@@ -70,13 +70,13 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         color 128,0,128
         autoScale off
         viewLimits -1.1:1.5
-        maxHeightPixels 128:32:8
+        maxHeightPixels 128:120:8
         html nmdDetectiveAi
         priority 1.7
 
         track nmdDetectiveAiBed
         shortLabel NMDetective-AI variants
-        longLabel NMDetective-AI: Per-stop-gain predictions for every codon (Veiner et al., MANE Select only)
+        longLabel NMDetective-AI: Per-stop-gain predictions for every codon (MANE Select only)
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bb
         type bigBed 9 +
