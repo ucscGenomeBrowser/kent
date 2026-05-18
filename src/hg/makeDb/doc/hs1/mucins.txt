@@ -1,0 +1,36 @@
+# 2026-05-12 Claude (mhaeussl)
+# Locus-specific mucin gene VNTR and non-VNTR exons on T2T-CHM13 (hs1).
+# Source: Plender et al. 2024 (PMID 38991590), supplementary table 2,
+# placed locally as supp2_exons.txt in the working directory.
+
+cd /hive/data/genomes/hs1/locusSpec/mucins
+
+# supp2_exons.txt is the original tab-separated input. Columns:
+#   gene  transcript  exon  chr  start  stop  size  strand  VNTR_status
+# Coordinates are 0-based half-open. The file has CRLF line endings.
+
+# Convert to two bigGenePred-formatted bed files (VNTR vs non-VNTR), then
+# sort and build bigBed. The script is in
+# ~/kent/src/hg/makeDb/scripts/mucins/mucinsToBigGenePred.py and skips
+# rows whose end exceeds the chromosome length, with a warning.
+
+python3 ~/kent/src/hg/makeDb/scripts/mucins/mucinsToBigGenePred.py \
+    supp2_exons.txt \
+    --out-vntr mucinsVntr.unsorted.bgp \
+    --out-non-vntr mucinsNonVntr.unsorted.bgp \
+    --chrom-sizes /hive/data/genomes/hs1/chrom.sizes
+
+sort -k1,1 -k2,2n mucinsVntr.unsorted.bgp    > mucinsVntr.bgp
+sort -k1,1 -k2,2n mucinsNonVntr.unsorted.bgp > mucinsNonVntr.bgp
+rm mucinsVntr.unsorted.bgp mucinsNonVntr.unsorted.bgp
+
+bedToBigBed -type=bed12+8 -tab \
+    -as=$HOME/kent/src/hg/lib/bigGenePred.as \
+    mucinsVntr.bgp /hive/data/genomes/hs1/chrom.sizes mucinsVntr.bb
+bedToBigBed -type=bed12+8 -tab \
+    -as=$HOME/kent/src/hg/lib/bigGenePred.as \
+    mucinsNonVntr.bgp /hive/data/genomes/hs1/chrom.sizes mucinsNonVntr.bb
+
+# Resulting feature counts: 12 VNTR exons (one per mucin transcript that
+# has a VNTR exon; MUC16 and MUC7 do not) and 335 non-VNTR exons across
+# 14 mucin transcripts. Total 347 input rows = 347 output features.

@@ -34,3 +34,8 @@ GREGoR	UNK	Unknown	AC_UNKNOWN	.
 NPM	Chinese	Singapore Chinese	AC_SgChinese	AF_SgChinese
 NPM	Malay	Singapore Malay	AC_SgMalay	AF_SgMalay
 NPM	Indian	Singapore Indian	AC_SgIndian	AF_SgIndian
+# WBBC Westlake BioBank for Chinese regional Han groups (AC not present, will be synthesized from AF*AN at build time)
+WBBC	North	North Han	.	North_AF
+WBBC	Central	Central Han	.	Central_AF
+WBBC	South	South Han	.	South_AF
+WBBC	Lingnan	Lingnan Han	.	Lingnan_AF

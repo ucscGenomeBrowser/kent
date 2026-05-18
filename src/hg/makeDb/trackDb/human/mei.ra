@@ -64,3 +64,107 @@ visibility hide
     filter.carrierCount 0:3202
     filterByRange.carrierCount on
     filterLabel.carrierCount Carrier Sample Count
+
+    track meiHmeid
+    parent mei
+    bigDataUrl /gbdb/$D/mei/hmeid.bb
+    shortLabel HMEID 5675 MEIs
+    longLabel Mobile Element Insertions in 5,675 NyuWa + 1000 Genomes Samples (HMEID v1.1)
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    mouseOver <b>${teClass}</b> insertion (${svLen} bp)<br>Carrier haplotypes: ${altAlleleCount}/${alleleNumber}<br>Allele frequency: ${altAlleleFreq}<br>NyuWa AF: ${nyuwaAF}, 1KGP AF: ${kgpAF}<br>MELT ASSESS: ${assess}/5
+    filterValues.teClass Alu,L1,SVA,HERVK
+    filterType.teClass multipleListOr
+    filterLabel.teClass Mobile Element Class
+    filter.svLen -1:8757
+    filterByRange.svLen on
+    filterLabel.svLen Insertion Length (bp, -1 if unknown)
+    filter.altAlleleFreq 0:1
+    filterByRange.altAlleleFreq on
+    filterLimits.altAlleleFreq 0:1
+    filterLabel.altAlleleFreq Allele Frequency (all)
+    filter.nyuwaAF 0:1
+    filterByRange.nyuwaAF on
+    filterLimits.nyuwaAF 0:1
+    filterLabel.nyuwaAF NyuWa Allele Frequency
+    filter.kgpAF 0:1
+    filterByRange.kgpAF on
+    filterLimits.kgpAF 0:1
+    filterLabel.kgpAF 1KGP Allele Frequency
+    filterValues.assess 3,4,5
+    filterType.assess multipleListOr
+    filterLabel.assess MELT ASSESS Score
+
+    track meiEul1db
+    parent mei
+    bigDataUrl /gbdb/$D/mei/eul1db.bb
+    shortLabel euL1db Insertions
+    longLabel euL1db: 8,988 curated L1-HS Insertion Polymorphisms (Mir 2015, lifted from hg19)
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    mouseOver <b>${name}</b><br>Lineage: ${lineage}<br>Sub-group: ${subGroups}<br>Integrity: ${integrity}<br>Pseudo-AF: ${pseudoAlleleFreq}<br>SRIPs: ${sripCount} from ${sampleCount} samples in ${studyCount} studies<br>Gene: ${gene}
+    filter.pseudoAlleleFreq 0:1
+    filterByRange.pseudoAlleleFreq on
+    filterLimits.pseudoAlleleFreq 0:1
+    filterLabel.pseudoAlleleFreq Pseudo-allele frequency
+    filter.sripCount 0:1000
+    filterByRange.sripCount on
+    filterLabel.sripCount SRIP count (sample observations)
+    filter.studyCount 0:30
+    filterByRange.studyCount on
+    filterLabel.studyCount Study count
+    filterValues.lineage germline,somatic,germline\,somatic,unknown
+    filterType.lineage multipleListOr
+    filterLabel.lineage Lineage
+    filterValues.pcrValidated yes,no
+    filterType.pcrValidated multipleListOr
+    filterLabel.pcrValidated PCR validated
+    filterValues.inReferenceL1HS yes,no
+    filterType.inReferenceL1HS multipleListOr
+    filterLabel.inReferenceL1HS In reference L1HS
+    skipEmptyFields on
+
+    track meiEul1dbRef
+    parent mei
+    bigDataUrl /gbdb/$D/mei/eul1dbRef.bb
+    shortLabel euL1db Ref L1HS
+    longLabel euL1db: 1,540 L1-HS Copies Present in the Reference Genome (lifted from hg19)
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+    mouseOver <b>${subGroup}</b><br>Integrity: ${integrity}<br>L1HS consensus: ${refStart}-${refStop}<br>Length: ${elementLen} bp
+    filterValues.subGroup L1HS-Ta,L1HS-PreTa,L1HS-undef
+    filterType.subGroup multipleListOr
+    filterLabel.subGroup L1HS sub-group
+    filterValues.integrity full-length,5prime-truncated,3prime-truncated,internal_fragment
+    filterType.integrity multipleListOr
+    filterLabel.integrity Integrity
+
+    track meiSwegen
+    parent mei
+    bigDataUrl /gbdb/$D/mei/swegen.bb
+    shortLabel SweGen 1000 MEIs
+    longLabel Mobile Element Insertions in 1,000 SweGen Swedish Samples (MELT, lifted from GRCh37)
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    tableBrowser off
+    mouseOver <b>${teClass}</b> insertion (${svLen} bp, ${meiSubfamily})<br>Allele count: ${altAlleleCount} of ~2000<br>Allele frequency: ${altAlleleFreq}<br>MELT ASSESS: ${assess}/5<br>FILTER: ${filterStatus}
+    filterValues.teClass Alu,L1,SVA,HERVK
+    filterType.teClass multipleListOr
+    filterLabel.teClass Mobile Element Class
+    filter.svLen -1:8757
+    filterByRange.svLen on
+    filterLabel.svLen Insertion Length (bp, -1 if unknown)
+    filter.altAlleleFreq 0:1
+    filterByRange.altAlleleFreq on
+    filterLimits.altAlleleFreq 0:1
+    filterLabel.altAlleleFreq Allele Frequency
+    filterValues.assess 0,1,2,3,4,5
+    filterType.assess multipleListOr
+    filterLabel.assess MELT ASSESS Score
+    filterValues.filterStatus PASS,hDP,rSD,s25
+    filterType.filterStatus multipleListOr
+    filterLabel.filterStatus MELT FILTER Status

@@ -513,3 +513,262 @@ python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
 # at /hive/.../all/varFreqsAll.bb, which is overwritten at the end of
 # the bedToBigBed step.
 
+##########
+# 2026-05-12 Claude max
+# UK Biobank Neale Lab Round 2 variant manifest, refs #36642 (varFreqs).
+#
+# Source: variants.tsv.bgz (~916 MB, 13,791,467 rows), the Neale Lab
+# Round 2 UKB GWAS variant table with imputation INFO score, post-QC
+# allele counts and minor-allele frequencies from 361,194 imputed UK
+# Biobank samples restricted to white British ancestry. The TSV ships
+# bare chromosome names ("1".."22","X") in GRCh37 coordinates, so we
+# convert to a sites-only VCF, then lift to hg38.
+cd /hive/data/genomes/hg38/bed/varFreqs/ukbb
+# Step 1: TSV -> VCF (hg19, chr-prefixed). Drops AC=0 rows (variants
+# present in the imputation panel but not observed in the cohort), sets
+# AN = 2 * n_called, and carries the imputation INFO score, HWE p-value,
+# hom-ref / het / hom-alt sample counts, and the VEP consequence /
+# Neale Lab consequence_category as INFO fields.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/ukbbToVcf.py
+# total=13,791,467 written=13,751,808 skipped_AC0=39,659
+# Step 2: lift to hg38 with CrossMap.
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    ukbb.hg19.vcf \
+    /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa \
+    ukbb.hg38.unsorted.vcf
+# Total entries: 13,751,808, Failed to map: 6,889 -> 13,744,919 lifted.
+# Step 3: filter to canonical chromosomes (chr1-22/X/Y/M) in both the
+# data lines and the contig header (CrossMap emits every hg38 contig).
+awk '
+    /^##contig=/ {
+      if (match($0, /ID=([^,>]+)/, m) && m[1] ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/) print
+      next
+    }
+    /^#/ {print}
+' ukbb.hg38.unsorted.vcf > header.vcf
+awk -F'\t' 'BEGIN{OFS="\t"} !/^#/ && $1 ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/ {print}' \
+    ukbb.hg38.unsorted.vcf > body.vcf
+cat header.vcf body.vcf > ukbb.hg38.canon.vcf
+# 13,743,085 variants survive (1,834 of the lifted variants landed on
+# alt/random/Un/fix contigs and were dropped).
+# Step 4: sort, bgzip, tabix.
+bcftools sort ukbb.hg38.canon.vcf -Oz -m 16G -T /data/tmp/ -o ukbb.vcf.gz
+tabix -p vcf ukbb.vcf.gz
+rm -f ukbb.hg19.vcf ukbb.hg38.unsorted.vcf ukbb.hg38.unsorted.vcf.unmap \
+    ukbb.hg38.canon.vcf header.vcf body.vcf
+# Final: 551 MB bgzip + 1.7 MB tabix index, 13,743,085 variants.
+# 48,382 of the 13,791,467 source rows (0.35%) are not represented in
+# hg38: 39,659 had AC=0 (panel-only), 6,889 failed CrossMap, 1,834
+# lifted to non-canonical contigs.
+
+##########
+# 2026-05-13 Claude max
+# Westlake BioBank for Chinese (WBBC) WGS allele frequencies, refs #36642.
+#
+# 4,480 WGS samples sequenced to ~13.9x at Westlake University. The pilot
+# project has been folded into the larger China Precision BioBank (CPBB);
+# the variant file we host is unchanged from the WBBC Phase I v20210103
+# release. Paper: Cong et al. 2022 Nat Commun, PMID 35618720.
+#
+# Source: 22 per-chromosome sites-only VCFs already on GRCh38 with
+# chr-prefixed chromosomes (autosomes only - no chrX/Y in the download).
+# INFO fields ship cohort AC/AF/AN/NS plus per-region AC/AN for the four
+# Han Chinese geographic subgroups (North, Central, South, Lingnan) plus
+# per-genotype RR|RA|AA counts, total DP and the GATK VQSLOD score.
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina/download
+for i in $(seq 1 22); do wget -nv https://wbbc.westlake.edu.cn/data/WBBC.chr$i.GRCh38.vcf.gz; done
+# bcftools concat needs tabix indices when the per-chrom VCFs lack
+# ##contig header lines (they do here).
+parallel -j 8 tabix -p vcf {} ::: WBBC.chr{1..22}.GRCh38.vcf.gz
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina
+bcftools concat --threads 8 -Oz -o wbbc.allChrom.vcf.gz \
+    download/WBBC.chr{1..22}.GRCh38.vcf.gz
+# Stream re-header + filter AC=0. The Python helper inserts proper
+# ##contig (with lengths) and ##INFO lines, drops the dangling
+# SHAPEIT FORMAT line, and skips any row whose INFO starts AC=0;.
+zcat wbbc.allChrom.vcf.gz \
+    | python3 ~/kent/src/hg/makeDb/scripts/varFreqs/wbbcFix.py \
+    | bgzip -@ 8 -c > wbbc.vcf.gz
+tabix -p vcf wbbc.vcf.gz
+rm -f wbbc.allChrom.vcf.gz
+# Final: 2.2 GB bgzip + 2.2 MB tabix index, 78,594,274 variants.
+# 1,495,967 rows (~1.86%) with AC=0 were dropped.
+# Symlinks placed under /gbdb/hg38/varFreqs/wbbc/ for the wbbc stanza
+# in trackDb/human/varFreqs.ra.
+#
+# databases.tsv and populations.tsv now list WBBC + the four Han
+# regional groups, so the next varFreqsAll rebuild will pick the cohort
+# up. The trackDb filter UI (filterByRange.WBBCAF etc.) was deliberately
+# NOT added yet - those will be added together with the next rebuild
+# of varFreqsAll, otherwise the filters would appear in the UI before
+# the underlying bigBed has the columns.
+
+# Taiwan Precision Medicine Initiative (TPMI) - 2026-05-15 Claude max
+# TPMI is a Han-Chinese cohort of 565,390 participants (Yang et al. 2025,
+# Nature, PMID 41092961). Genotyping was done with two custom Axiom SNP
+# arrays (TPMv1 on 165,596 individuals; TPMv2 on 321,360 individuals).
+# Thermo Fisher publishes a chip annotation CSV for each array; the TPM1
+# annotation embeds the TPMI cohort allele frequency in a column named
+# "Allele Frequency". The TPM2 annotation does not (it only carries the
+# Affymetrix-bundled CEU/CHB/JPT/YRI HapMap freqs), so this track is
+# TPM1-only. The annotation CSVs declare hg38 coordinates, so no lift.
+cd /hive/data/genomes/hg38/bed/varFreqs/tpmi
+# TPM1_Array_Annotation.csv (~926 MB) and TPM2_Array_Annotation.csv
+# (~1.0 GB) were already in this directory at the start. Only the TPM1
+# file is used.
+# CSV -> VCF: filters out rows with no AF / blacklist / alt-or-random
+# chrom, anchors indels (Affymetrix uses "-" for the empty allele) by
+# fetching the anchor base from hg38.2bit via twoBitToFa, and derives
+# AC = round(AF * 100000). AN=100000 is the implied precision of the
+# AF values (every reported AF rounds to an exact integer at 1/100000;
+# AF=0 is also kept, AC=0). The true TPMv1 cohort AN is ~330,000 for
+# autosomes, so AC values are proportional to but smaller than the
+# real counts; documented in the VCF header and tpmi.html caveat.
+python3 ~/kent/src/hg/makeDb/scripts/tpmi/tpmiToVcf.py \
+    TPM1_Array_Annotation.csv /hive/data/genomes/hg38/hg38.2bit tpmi.vcf
+bcftools sort -Oz -o tpmi.vcf.gz tpmi.vcf
+tabix -f -p vcf tpmi.vcf.gz
+rm -f tpmi.vcf
+# 752,921 source rows -> 672,843 VCF records. Skipped: 80,034 with no
+# reported AF (includes the entire chrY content); 36 on alt/random
+# contigs; 8 with no defined REF. Blacklist rows (~61k) all have no AF
+# so they are filtered by the no-AF rule. Distribution: 623,203 SNVs,
+# 34,954 deletions, 13,537 insertions, 1,149 MNVs.
+# Symlinks placed under /gbdb/hg38/varFreqs/tpmi/ for the tpmi stanza
+# in trackDb/human/varFreqs.ra (priority 5.6, next to wbbc/tommo).
+
+##########
+# 2026-05-15 Claude max
+# Strip three unused FILTER definitions from the tishkoff180 VCF header.
+# Matt Hansen (mhansen@upenn.edu, 2026-04-29 email): the source header
+# declared LowQual, VQSRTrancheSNP99.90to100.00, and
+# VQSRTrancheSNP99.90to100.00+ but he had already removed the
+# corresponding INFO values and only kept PASS variants. The hgTracks
+# VCF code auto-generates filter checkboxes from ##FILTER lines, so
+# these spurious entries showed up on hgTrackUi. Confirmed every record
+# has FILTER=PASS, then rewrote only the header (body untouched) with
+# bcftools reheader and re-indexed.
+cd /hive/data/genomes/hg38/bed/varFreqs/tishkoff/
+bcftools view -h tishkoff180.vcf.gz \
+    | grep -vE '^##FILTER=<ID=(LowQual|VQSRTrancheSNP99\.90to100\.00\+?),' \
+    > header.new.txt
+bcftools reheader -h header.new.txt -o tishkoff180.new.vcf.gz tishkoff180.vcf.gz
+tabix -p vcf tishkoff180.new.vcf.gz
+# Sanity check: same 33,600,472 records, only PASS remains.
+mv tishkoff180.vcf.gz     tishkoff180.vcf.gz.bak
+mv tishkoff180.vcf.gz.tbi tishkoff180.vcf.gz.tbi.bak
+mv tishkoff180.new.vcf.gz     tishkoff180.vcf.gz
+mv tishkoff180.new.vcf.gz.tbi tishkoff180.vcf.gz.tbi
+rm header.new.txt
+# /gbdb/hg38/varFreqs/tishkoff/ symlinks unchanged. The .bak originals
+# can be removed once the change has been verified on hgwdev.
+
+##########
+# 2026-05-15 Claude max
+# Hide all non-downloadable varFreqs subdirs from hgdownload by prefixing
+# the gbdb subdirectory with "_". hgdownload rsync excludes underscore-
+# prefixed directories, so this is the standard way to keep a track
+# usable in the browser (vcfTabix random access via /gbdb still works)
+# while preventing bulk download. Applies to every track that has
+# `tableBrowser off` in trackDb/human/varFreqs.ra, plus the combined
+# varFreqsAll bigBed (mixed licenses, never downloadable).
+cd /gbdb/hg38/varFreqs
+mv allofus  _allofus
+mv topmed   _topmed
+mv sfari    _sfari
+mv finngen  _finngen
+mv swefreq  _swefreq
+mv mgrb     _mgrb
+mv kova     _kova
+mv npm      _npm
+mv mxb      _mxb
+mv tishkoff _tishkoff
+mkdir _all && mv varFreqsAll.bb _all/varFreqsAll.bb
+# Symlink targets under /hive/data/genomes/... unchanged; only the gbdb
+# directory names change. Updated bigDataUrl paths for the matching 12
+# stanzas in trackDb/human/varFreqs.ra (allofus, topmed, sfariSparkExomes,
+# sfariSparkWgs, finngen, swefreq, mgrb, kova, npm, mxbFreq, tishkoff180,
+# varFreqsAll).
+# Also fixed Data Access wording in description pages that still claimed
+# Table Browser / download server availability: topmed.html, allofus.html,
+# sfariSparkExomes.html (shared by sfariSparkWgs), mxbFreq.html. The
+# standard restricted-track disclaimer (already in finngen.html, kova.html,
+# mgrb.html, npm.html, swefreq.html, tishkoff180.html, varFreqsAll.html)
+# is now uniform across all 11 restricted tracks plus the combined track.
+
+##########
+# 2026-05-15 Claude max
+# Hide tpmi from bulk download (same _-prefix pattern as the other
+# license-restricted varFreqs subdirs).
+cd /gbdb/hg38/varFreqs
+mv tpmi _tpmi
+# Updated trackDb/human/varFreqs.ra tpmi stanza: bigDataUrl now points to
+# _tpmi/, and `tableBrowser off` was added. tpmi.html Data Access section
+# rewritten to the standard restricted-track disclaimer.
+# Registered tpmi in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   TPMI    TPMI Taiwan    /gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz    AC    AF
+
+##########
+# 2026-05-17 Claude max
+# ChinaMAP phase 1 - 10,588 deep-WGS Chinese individuals (Cao et al. 2020,
+# Cell Res, PMID 32355288). 136.75 M SNPs + 10.70 M short indels on chr1-22.
+# License: data may not be redistributed (see ChinaMAP Limitations on Use,
+# http://chinamapwgs.mbiobank.com/download/), so the subdirectory under
+# /gbdb is _-prefixed (hides from hgdownload) and the trackDb stanza has
+# `tableBrowser off`.
+cd /hive/data/genomes/hg38/bed/varFreqs/chinamap
+# mbiobank_ChinaMAP.phase1.vcf.gz (~2.0 GB) was already in this directory at
+# the start, fetched manually from http://chinamapwgs.mbiobank.com/download/
+# (one-time link, registration required). The file is already on GRCh38 with
+# chr-prefixed chromosome names, autosomes only, sorted, and ships AC/AF/AN
+# plus matched 1KGP_* INFO fields. No conversion/lift/normalisation needed -
+# just index.
+ln -s mbiobank_ChinaMAP.phase1.vcf.gz chinamap.vcf.gz
+tabix -p vcf chinamap.vcf.gz
+# Final: 147,448,941 variants (matches the 136.75 M SNPs + 10.70 M indels
+# reported in Cao et al.). 2.0 GB bgzip + 2.1 MB tabix index.
+# Registered ChinaMAP in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   ChinaMAP    China ChinaMAP    /gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz    AC    AF
+# The varFreqs.ra filter UI fragment (filterByRange.ChinaMAPAF/AC, sources
+# filterValues) is deliberately NOT added yet; it will be added together
+# with the next rebuild of varFreqsAll (WBBC/TPMI precedent), otherwise
+# the filters would appear in the UI before the columns exist in the bb.
+
+##########
+# 2026-05-17 Claude max
+# GenomeIndia: 9,768 WGS, 83 endogamous Indian populations
+# (Bhattacharyya et al. 2025 Nat Genet, PMID 40200122,
+# DOI 10.1038/s41588-025-02153-x).
+#
+# Source: 22 per-chromosome TSV files (autosomes only, no header) with
+# CHROM/POS/ID/REF/ALT/AF columns, distributed by the Indian Biological
+# Data Centre as 9768GI_SummaryStats.tar.gz. The release ships only the
+# alternate allele frequency: no AC, no AN, no per-population breakdown.
+# 129,938,889 high-confidence biallelic variants total.
+cd /hive/data/genomes/hg38/bed/varFreqs/genomeindia
+# Download (already done; raw TSVs live under
+# /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats/ from the original
+# wget by Max).
+# Convert TSV -> sorted, bgzipped, tabix-indexed VCF. Script synthesizes
+# AN = 2 * 9768 = 19536 and AC = round(AF*AN). See script header for the
+# caveat re: NS_GT >= 98% upstream filter.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py \
+    /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats \
+    genomeindia.vcf.gz
+# Output: 129,938,889 variants, 0 skipped; matches the paper exactly.
+# Final size: 791 MB bgzip + 1.9 MB tabix index.
+# Symlinks placed at /gbdb/hg38/varFreqs/_genomeindia/{genomeindia.vcf.gz,
+# .tbi} for the genomeindia stanza in trackDb/human/varFreqs.ra.
+#
+# Combined-track wiring (filter UI fragment is added now, in the same
+# style as the GenomeAsia rebuild precedent, because GenomeIndia/AC and
+# /AF will be present in the next varFreqsAll rebuild):
+#   1. Added GenomeIndia row to
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv
+#      (key=GenomeIndia, ac_field=AC, af_field=AF, no populations).
+#   2. Added GenomeIndia|GenomeIndia 9.7k WGS to filterValues.sources
+#      and filterByRange.GenomeIndiaAF/AC stanzas in varFreqs.ra.
+# A full varFreqsAll rebuild has NOT been re-run yet; do that after QA
+# clears the standalone subtrack.
