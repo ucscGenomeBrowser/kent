@@ -16,6 +16,7 @@
 #include "jsonWrite.h"
 #include "regexHelper.h"
 #include "hubSpaceKeys.h"
+#include "cartDb.h"
 
 #define defaultDelayFrac 1.0   /* standard penalty for most CGIs */
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
@@ -125,6 +126,71 @@ if (centralCookie)
 return user;
 }
 
+boolean isValidHguid(char *cookieUserId)
+/* Check if a particular hguid is valid, i.e. well-formatted, has matching id and secure string,
+ * and isn't corrupted. */
+{
+if (isEmpty(cookieUserId))
+    return FALSE;
+boolean isValid = FALSE;
+struct sqlConnection *conn = hConnectCentralNoCache();
+struct cartDb *cdb = cartDbLoadFromId(conn, userDbTable(), cookieUserId);
+if (cdb)
+    {
+    isValid = TRUE;
+    cartDbFree(&cdb);
+    }
+sqlDisconnect(&conn);
+return isValid;
+}
+
+static void recordHguidIpAndMaybeForceCaptcha()
+/* When hguidIpTracking is enabled in hg.conf, upsert this request's
+ * (hguid, REMOTE_ADDR) into the hgcentral tracking table.  If a single
+ * hguid has been seen from more than hguidIpTracking.maxIps distinct IPs
+ * within the last hguidIpTracking.windowSeconds, set the "captcha" CGI
+ * var so forceUserIdOrCaptcha() in cart.c forces the user through the
+ * Cloudflare captcha (the bypass at cart.c:1618 honors this override). */
+{
+if (!cfgOptionBooleanDefault("hguidIpTracking.enabled", FALSE))
+    return;
+
+char *cookieUserId = getCookieUser();
+char *clientIp = getenv("REMOTE_ADDR");
+if (isEmpty(cookieUserId) || isEmpty(clientIp))
+    return;
+
+if (!isValidHguid(cookieUserId))
+    return;
+
+unsigned int userIdNum = cartDbParseId(cookieUserId, NULL);
+
+int maxIps = atoi(cfgOptionDefault("hguidIpTracking.maxIps", "10"));
+int windowSeconds = atoi(cfgOptionDefault("hguidIpTracking.windowSeconds", "600"));
+char *table = cfgOptionDefault("hguidIpTracking.table", "hguidIpAccess");
+
+struct sqlConnection *conn = hConnectCentralNoCache();
+char query[512];
+
+sqlSafef(query, sizeof(query),
+    "INSERT INTO %s (userId, ip, lastSeen) VALUES (%u, '%s', NOW()) "
+    "ON DUPLICATE KEY UPDATE lastSeen=NOW()",
+    table, userIdNum, clientIp);
+sqlUpdate(conn, query);
+
+sqlSafef(query, sizeof(query),
+    "SELECT COUNT(DISTINCT ip) FROM %s WHERE userId=%u "
+    "AND lastSeen > NOW() - INTERVAL %d SECOND",
+    table, userIdNum, windowSeconds);
+int distinctIps = sqlQuickNum(conn, query);
+
+sqlDisconnect(&conn);
+
+if (distinctIps > maxIps)
+    {
+    cgiVarSet("captcha", "1");
+    }
+}
 
 boolean isValidHgsidForEarlyBotCheck(char *raw_hgsid)
 /* We want to use the hgsid from the CGI parameters, but sometimes requests come in with bogus strings that
@@ -138,7 +204,6 @@ if (regexMatch(hgsid, "^[0-9][0-9]*_[a-zA-Z0-9]{28}$"))
     return TRUE;
 return FALSE;
 }
-
 
 char *getBotCheckString(char *ip, double fraction)
 /* compose "user.ip fraction" string for bot check */
@@ -168,7 +233,8 @@ if (useNew)
                 hUserAbort("Invalid apiKey provided on URL. Make sure that the apiKey is valid. Or contact us.");
             }
         else
-            if (cookieUserId)
+            {
+            if (isValidHguid(cookieUserId))
                 safef(botCheckString, 256, "uid%s %f", cookieUserId, fraction);
             else
                 {
@@ -186,6 +252,7 @@ if (useNew)
                     safef(botCheckString, 256, "%s %f", ip, fraction);
                     }
                 }
+            }
     }
 else
     // our old system - only relevant on mirrors: bottleneck on cookie or IP address
@@ -349,6 +416,8 @@ boolean issueWarning = FALSE;
 
 if (botException())	/* don't do this if caller is on the exception list */
     return issueWarning;
+
+recordHguidIpAndMaybeForceCaptcha();
 
 if (delayFrac < 0.000001) /* passed in zero, use default */
     delayFrac = defaultDelayFrac;

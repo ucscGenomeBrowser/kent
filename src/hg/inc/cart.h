@@ -703,5 +703,8 @@ char *cartNamedSessionDbTable();
 
 char *cartOrCfgOption(struct cart *cart, char *name);
 /* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
+
+struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, char *secureId);
+/* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
 #endif /* CART_H */
 
