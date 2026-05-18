@@ -99,3 +99,176 @@ bedToBigBed -tab \
     deepmei.sorted.bed \
     /hive/data/genomes/hg38/chrom.sizes \
     deepmei1kg.bb
+
+############################################################
+# 2026-05-12 Claude (max) - HMEID v1.1 (hg38 only)
+# Source: Niu et al. 2022, Nucleic Acids Research, PMID 35212372
+# http://bigdata.ibp.ac.cn/HMEID/
+
+# HMEID is a site-level catalogue of 36,699 non-reference MEIs called
+# by MELT v2.1.5 on Illumina short-read WGS of 5,675 individuals:
+# 2,998 NyuWa (Chinese, ~26.2x) + 2,677 1000 Genomes (~7.4x), aligned
+# to GRCh38. The VCF carries per-cohort (NyuWa, 1KGP) and per-1KGP-
+# super-population (AFR, AMR, EAS, EUR, SAS) AC/AN/AF in INFO; there
+# are no per-sample genotype columns. SVTYPE is one of ALU/LINE1/SVA/
+# HERVK, plus the MELT TSD and ASSESS fields.
+
+mkdir -p /hive/data/genomes/hg38/bed/mei/hmei
+cd /hive/data/genomes/hg38/bed/mei/hmei
+
+wget http://bigdata.ibp.ac.cn/HMEID/static/download/MEI.GRCh38.HMEIDv1.1.vcf.gz
+wget http://bigdata.ibp.ac.cn/HMEID/static/download/sample_info.HMEIDv1.1.txt.gz
+
+# Convert site-level VCF (36699 MEIs) to bed9+27.
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiHmeidVcfToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiHmeidVcfToBed.py \
+    MEI.GRCh38.HMEIDv1.1.vcf.gz \
+    /hive/data/genomes/hg38/chrom.sizes \
+    meiHmeid.bed
+# -> Read 36699 records, wrote 36699, skipped 0 + 0 + 0
+# Class distribution: Alu 26553, HERVK 126, L1 7353, SVA 2667.
+
+sort -k1,1 -k2,2n meiHmeid.bed > meiHmeid.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiHmeid.as \
+    -type=bed9+27 \
+    meiHmeid.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    meiHmeid.bb
+
+############################################################
+# 2026-05-13 Claude (max) - SweGen MELT MEI callset (hg38, lifted from hg19)
+# Source: Ameur et al. 2017, Eur J Hum Genet, PMID 28832569 (SweGen cohort)
+#         Gardner et al. 2017, Genome Res, PMID 28855259 (MELT tool)
+# https://swefreq.nbis.se/dataset/SweGen
+
+# Site-level MELT v2.0.2 MEI callset on 1,000 Swedish WGS samples
+# (SweGen, Illumina HiSeq X, 150 bp PE, BWA-MEM v0.7.12 to GRCh37).
+# The VCF has no per-sample columns; INFO carries MELT_AN (allele
+# count, despite the name) and MELT_AF (allele frequency) plus the
+# usual MELT fields SVTYPE/SVLEN/TSD/ASSESS/MEIINFO/INTERNAL.
+# Coordinates are GRCh37 with contig names like '1' (no chr prefix);
+# we add chr in Python and then liftOver hg19 -> hg38.
+
+mkdir -p /hive/data/genomes/hg38/bed/mei/swegen
+cd /hive/data/genomes/hg38/bed/mei/swegen
+# Source VCF must be requested from https://swefreq.nbis.se/dataset/SweGen/download
+# (Swegen_MELT_16032018.zip); place MELT_SWEGEN.20180314.ALU_HERVK_LINE1_SVA.vcf
+# under Swegen_MELT_16032018/.
+
+# Parse the VCF to a bed9+9 file with GRCh37 coords (adds chr prefix).
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiSwegenVcfToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiSwegenVcfToBed.py \
+    Swegen_MELT_16032018/MELT_SWEGEN.20180314.ALU_HERVK_LINE1_SVA.vcf \
+    meiSwegen.hg19.bed
+# -> Read 18100 records, wrote 18100, skipped 0 (unknown SVTYPE)
+# Class distribution: Alu 14467, HERVK 73, L1 2429, SVA 1131.
+
+# Lift to hg38 (-tab -bedPlus=9 to keep extra fields intact).
+liftOver -tab -bedPlus=9 \
+    meiSwegen.hg19.bed \
+    /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    meiSwegen.hg38.bed \
+    meiSwegen.unmapped
+# -> 18090 mapped, 10 unmapped (all "Deleted in new").
+
+sort -k1,1 -k2,2n meiSwegen.hg38.bed > meiSwegen.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiSwegen.as \
+    -type=bed9+9 \
+    meiSwegen.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    meiSwegen.bb
+
+############################################################
+# 2026-05-13 Claude (max) - euL1db (hg19 + hg38 by liftOver)
+# Source: Mir et al. 2015, Nucleic Acids Research, PMID 25352549
+# http://eul1db.unice.fr/  (Download tab -> eul1db.zip)
+
+# euL1db is a curated database of L1-HS retrotransposon insertion
+# polymorphisms catalogued from 32 published studies (~140k sample-level
+# SRIPs aggregating into ~9k non-redundant MRIPs). The original
+# coordinates are hg19. We build the bigBed on hg19 from the MRIP table
+# joined with SRIP/Sample/Individual/Study/Methods, then liftOver to
+# hg38. A second small bigBed for the reference-genome L1HS catalogue
+# (ReferenceL1HS.txt) is built and lifted the same way.
+
+# Source files (released as eul1db.zip, version 1.00, 2014-10-14):
+#   Family.txt Individuals.txt MRIP.txt Methods.txt ReferenceL1HS.txt
+#   SRIP.txt Samples.txt Study.txt
+# We keep the source under hg38/bed/mei/eul1db (where it was first placed)
+# and the hg19 build outputs under hg19/bed/mei/eul1db.
+
+mkdir -p /hive/data/genomes/hg19/bed/mei/eul1db
+cd /hive/data/genomes/hg19/bed/mei/eul1db
+
+# 1) Build hg19 MRIP bigBed (8,991 MRIPs in the source; chr23/chr24 in
+# Helman2014 rows are renamed to chrX/chrY in the script).
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiEul1dbToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiEul1dbToBed.py \
+    --src /hive/data/genomes/hg38/bed/mei/eul1db \
+    --chrom-sizes /hive/data/genomes/hg19/chrom.sizes \
+    -o eul1db.hg19.bed
+# -> SRIPs read: 142,495; MRIPs read: 8,991; MRIPs written: 8,991
+# -> chr23/24 renamed to chrX/chrY: 85; no chrom or range skips.
+
+sort -k1,1 -k2,2n eul1db.hg19.bed > eul1db.hg19.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiEul1db.as \
+    -type=bed9+19 \
+    eul1db.hg19.sorted.bed \
+    /hive/data/genomes/hg19/chrom.sizes \
+    eul1db.hg19.bb
+
+# 2) Build hg19 reference-L1HS bigBed (1,544 elements).
+# Source: ~/kent/src/hg/makeDb/scripts/mei/meiEul1dbRefToBed.py
+python3 ~/kent/src/hg/makeDb/scripts/mei/meiEul1dbRefToBed.py \
+    --src /hive/data/genomes/hg38/bed/mei/eul1db \
+    --chrom-sizes /hive/data/genomes/hg19/chrom.sizes \
+    -o eul1dbRef.hg19.bed
+# -> Reference L1HS read: 1,544; written: 1,544 (all chroms in hg19).
+
+sort -k1,1 -k2,2n eul1dbRef.hg19.bed > eul1dbRef.hg19.sorted.bed
+
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiEul1dbRef.as \
+    -type=bed9+6 \
+    eul1dbRef.hg19.sorted.bed \
+    /hive/data/genomes/hg19/chrom.sizes \
+    eul1dbRef.hg19.bb
+
+# 3) liftOver to hg38 (-tab -bedPlus=9 to preserve extra fields).
+liftOver -tab -bedPlus=9 \
+    eul1db.hg19.sorted.bed \
+    /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    eul1db.hg38.bed eul1db.hg38.unmapped
+# -> 8,988 mapped, 3 unmapped (1 "Deleted in new", 1 "Partially deleted",
+#    1 "Deleted in new" on chr13/chrX). 99.97% mapped.
+
+liftOver -tab -bedPlus=9 \
+    eul1dbRef.hg19.sorted.bed \
+    /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    eul1dbRef.hg38.bed eul1dbRef.hg38.unmapped
+# -> 1,540 mapped, 4 unmapped (2 "Split in new", 2 "Partially deleted").
+
+# 4) Build hg38 bigBeds (written to hg38/bed/mei/eul1db/ next to source).
+sort -k1,1 -k2,2n eul1db.hg38.bed \
+    > /hive/data/genomes/hg38/bed/mei/eul1db/eul1db.hg38.sorted.bed
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiEul1db.as \
+    -type=bed9+19 \
+    /hive/data/genomes/hg38/bed/mei/eul1db/eul1db.hg38.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    /hive/data/genomes/hg38/bed/mei/eul1db/eul1db.hg38.bb
+
+sort -k1,1 -k2,2n eul1dbRef.hg38.bed \
+    > /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.sorted.bed
+bedToBigBed -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiEul1dbRef.as \
+    -type=bed9+6 \
+    /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.bb

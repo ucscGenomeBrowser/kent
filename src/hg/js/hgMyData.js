@@ -1,4 +1,4 @@
-/* jshint esnext: true */
+/* jshint esversion: 8 */
 var debugCartJson = true;
 
 function prettyFileSize(num) {
@@ -123,7 +123,19 @@ function revokeApiKeys() {
 
 const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names
 const fileNameFixRegex = /[^0-9a-zA-Z_]+/g; // '.' get replaced to underbars in trackHub.c. Also any files uploaded from hubtools that may have weird chars need to be escaped
-const parentDirRegex = /[0-9a-zA-Z._]+/g; // allowed characters in hub names
+const parentDirSegmentRegex = /^[0-9a-zA-Z._]+$/; // allowed characters in each hub-path segment
+
+function isValidParentDir(parentDir) {
+    // Slash-separated path of segments matching parentDirSegmentRegex; no '..'.
+    if (!parentDir) return false;
+    if (parentDir.startsWith("/") || parentDir.endsWith("/")) return false;
+    let segments = parentDir.split("/");
+    for (let seg of segments) {
+        if (!seg || seg === "." || seg === "..") return false;
+        if (!parentDirSegmentRegex.test(seg)) return false;
+    }
+    return true;
+}
 
 function getTusdEndpoint() {
     // this variable is set by hgHubConnect and comes from hg.conf value
@@ -302,12 +314,24 @@ const uppy = new Uppy.Uppy({
         let thisQuota = 0;
         let filesToOverwrite = []; // collect files that will overwrite existing ones
 
-        // Only one 2bit per hub is supported. propagateAssemblyHubMeta picks
-        // the first 2bit found and overwrites every sibling's genome with it,
-        // which silently orphans the second 2bit (lands on disk and in the
-        // hubSpace table but is not referenced from hub.txt).
+        // Split hubs (genomesFile= with multiple genomes) can carry multiple 2bits.
+        let cachedDescriptor = hubCreate.getLastHubBatchDescriptor();
+        let isSplitHub = (cachedDescriptor && cachedDescriptor.isSplit) ||
+                         Object.values(files).some(
+                             f => f.meta && f.meta.batchSplitHub === "true");
+
+        let hubTxtInBatch = Object.values(files).some(looksLikeHubTxt);
+        if (cachedDescriptor && cachedDescriptor.errors.length &&
+            (isSplitHub || hubTxtInBatch)) {
+            for (let e of cachedDescriptor.errors) {
+                uppy.info(e, "error", 8000);
+            }
+            return false;
+        }
+
+        // Single-file hubs synthesize one hub.txt for one genome.
         let twoBitsInBatch = Object.values(files).filter(looksLikeTwoBit);
-        if (twoBitsInBatch.length > 1) {
+        if (!isSplitHub && twoBitsInBatch.length > 1) {
             let names = twoBitsInBatch.map(f => f.name).join(", ");
             uppy.info(`Error: only one 2bit file per hub is supported. ` +
                       `Found: ${names}. Upload one 2bit at a time, or split ` +
@@ -317,7 +341,7 @@ const uppy = new Uppy.Uppy({
 
         // If a 2bit is in the batch, propagate its genome/hubType to siblings.
         let batchTwoBit = twoBitsInBatch[0];
-        if (batchTwoBit) {
+        if (batchTwoBit && !isSplitHub) {
             let asmGenome = batchTwoBit.meta.genome;
             if (!asmGenome) {
                 uppy.info(`Error: Genome name is required for ` +
@@ -345,18 +369,18 @@ const uppy = new Uppy.Uppy({
 
         for (let [key, file] of Object.entries(files)) {
             let fileNameMatch = file.meta.name.match(fileNameRegex);
-            let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
             if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
                 uppy.info(`Error: File name has special characters, please rename file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
-            if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                uppy.info(`Error: Hub name has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
+            if (!isValidParentDir(file.meta.parentDir)) {
+                uppy.info(`Error: Hub path has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to a path of alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 doUpload = false;
                 continue;
             }
-            if (!file.meta.genome) {
+            // Hub-level files in a split-hub batch intentionally carry empty genome.
+            if (!file.meta.genome && file.meta.batchSplitHub !== "true") {
                 uppy.info(`Error: No genome selected for file ${file.meta.name}!`, 'error', 5000);
                 doUpload = false;
                 continue;
@@ -436,6 +460,16 @@ function extractHookErrorMessage(error, response) {
     return m ? m[1].trim() : msg;
 }
 
+function parentDirFromRelativePath(file) {
+    // Return the directory portion of an Uppy folder-drop file's relative path, or null.
+    let rel = (file.data && file.data.webkitRelativePath) ||
+              file.relativePath || "";
+    if (!rel || !rel.includes("/")) return null;
+    let segments = rel.split("/");
+    segments.pop(); // drop the filename
+    return segments.join("/");
+}
+
 function looksLikeTwoBit(f) {
     return (f.name || "").toLowerCase().endsWith(".2bit");
 }
@@ -444,6 +478,49 @@ function looksLikeHubTxt(f) {
     // Accept exact "hub.txt" or any "*.hub.txt" (e.g. "araTha1.hub.txt").
     let n = (f.name || "").toLowerCase();
     return n === "hub.txt" || n.endsWith(".hub.txt");
+}
+
+let hubBatchParsesInFlight = 0;
+function setUploadButtonEnabled(enabled) {
+    // Pauses uploads while parseHubBatch is running so pre-finish sees stamped meta.
+    let btn = document.querySelector(".uppy-StatusBar-actionBtn--upload");
+    if (!btn) return;
+    btn.disabled = !enabled;
+    btn.style.opacity = enabled ? "" : "0.5";
+    btn.style.cursor = enabled ? "" : "wait";
+    btn.title = enabled ? "" : "Parsing hub definition...";
+}
+
+function applySplitHubDescriptor(uppyInstance, descriptor) {
+    // Stamp per-file genome from the descriptor and flag the batch as split.
+    let hubFile = descriptor.hubFile;
+    let hubParentDir = hubFile && hubFile.meta && hubFile.meta.parentDir;
+    // Nested layouts (per-genome subdirs) carry their own parentDir already.
+    let isNestedLayout = uppyInstance.getFiles().some(
+        f => f.meta && f.meta.parentDir && f.meta.parentDir.includes("/"));
+    for (let f of uppyInstance.getFiles()) {
+        let assignedGenome = descriptor.fileGenome.get(f.id);
+        let meta = {
+            batchSplitHub: "true",
+            hubType: descriptor.isAssemblyHub ? "assemblyHub" : "trackHub",
+        };
+        if (hubParentDir && !isNestedLayout) meta.parentDir = hubParentDir;
+        if (assignedGenome) {
+            meta.genome = assignedGenome;
+            meta.genomeLabel = assignedGenome;
+            meta.genomeLocked = true;
+        } else if (descriptor.fileGenome.has(f.id)) {
+            // Hub-level files (hub.txt, genomes.txt): empty db.
+            meta.genome = "";
+            meta.genomeLabel = "";
+            meta.genomeLocked = true;
+        }
+        uppyInstance.setFileMeta(f.id, meta);
+    }
+    let names = descriptor.genomes.map(g => g.name).join(", ");
+    if (names) {
+        uppyInstance.info(`Split hub detected. Genomes: ${names}`, "info", 4000);
+    }
 }
 
 function propagateAssemblyHubMeta(uppyInstance) {
@@ -457,7 +534,10 @@ function propagateAssemblyHubMeta(uppyInstance) {
     let files = uppyInstance.getFiles();
     let twoBit = files.find(looksLikeTwoBit);
     let hubTxt = files.find(looksLikeHubTxt);
-    if (!twoBit && !hubTxt) return;
+    if (!twoBit && !hubTxt) {
+        hubCreate.clearLastHubBatchDescriptor();
+        return;
+    }
 
     function applyGenomeToSiblings(genome, alsoLockHubDefiners) {
         // Set genome/hubType on every file in the batch. Non-hub-defining
@@ -472,6 +552,9 @@ function propagateAssemblyHubMeta(uppyInstance) {
         // may have been pointed at an existing assembly hub.
         let hubDefiner = hubTxt || twoBit;
         let syncParentDir = hubDefiner && hubDefiner.meta && hubDefiner.meta.parentDir;
+        // Folder drops carry their own multi-segment parentDir; don't overwrite.
+        let isNestedLayout = uppyInstance.getFiles().some(
+            f => f.meta && f.meta.parentDir && f.meta.parentDir.includes("/"));
         for (let f of uppyInstance.getFiles()) {
             let isHubDefining = looksLikeTwoBit(f) || looksLikeHubTxt(f);
             let meta = {
@@ -480,18 +563,30 @@ function propagateAssemblyHubMeta(uppyInstance) {
                 hubType: "assemblyHub",
                 genomeLocked: !isHubDefining || alsoLockHubDefiners,
             };
-            if (syncParentDir) meta.parentDir = syncParentDir;
+            if (syncParentDir && !isNestedLayout) meta.parentDir = syncParentDir;
             uppyInstance.setFileMeta(f.id, meta);
         }
     }
 
     if (hubTxt) {
-        hubCreate.readFileAsText(hubTxt.data).then((text) => {
-            let parsed = hubCreate.parseHubTxt(text);
-            // hub.txt is authoritative: lock the genome field so the user
-            // can't edit it and drift the stored db away from what hub.txt
-            // says. The user can always edit the hub.txt itself if they
-            // want a different name.
+        hubBatchParsesInFlight++;
+        setUploadButtonEnabled(false);
+        hubCreate.parseHubBatch(uppyInstance.getFiles()).then((descriptor) => {
+            // Skip stale parses; only the latest-completed one applies.
+            if (descriptor !== hubCreate.getLastHubBatchDescriptor()) return;
+            for (let e of descriptor.errors) {
+                uppyInstance.info(e, "error", 8000);
+            }
+            for (let w of descriptor.warnings) {
+                uppyInstance.info(w, "warning", 6000);
+            }
+            if (descriptor.isSplit) {
+                applySplitHubDescriptor(uppyInstance, descriptor);
+                return;
+            }
+            // Single-file hub: hub.txt is authoritative for the one genome
+            // it declares. Lock all siblings to that genome.
+            let parsed = descriptor.hubMeta || {};
             if (parsed.isAssemblyHub && parsed.genome) {
                 applyGenomeToSiblings(parsed.genome, true);
                 uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
@@ -504,6 +599,9 @@ function propagateAssemblyHubMeta(uppyInstance) {
             }
         }).catch((err) => {
             console.warn("Could not read hub.txt for genome detection:", err);
+        }).finally(() => {
+            hubBatchParsesInFlight--;
+            if (hubBatchParsesInFlight === 0) setUploadButtonEnabled(true);
         });
         return;
     }
@@ -562,13 +660,21 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // sense - show the custom genome name read-only instead. Detect by
             // filename rather than meta.hubType because setFileMeta updates
             // Uppy state immutably and the meta may not be visible on file
-            // objects captured from getFiles() earlier in this event.
-            let assemblyHubGenome = null;
+            // objects captured from getFiles() earlier in this event. A split
+            // assembly hub can declare more than one 2bit (one per genome);
+            // join all of them.
+            let assemblyHubGenomes = [];
             for (let f of this.uppy.getFiles()) {
                 if (looksLikeTwoBit(f)) {
-                    assemblyHubGenome = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
-                    break;
+                    let g = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
+                    if (g && !assemblyHubGenomes.includes(g)) {
+                        assemblyHubGenomes.push(g);
+                    }
                 }
+            }
+            let assemblyHubGenome = null;
+            if (assemblyHubGenomes.length) {
+                assemblyHubGenome = assemblyHubGenomes.join(", ");
             }
 
             let batchSelectDiv = document.createElement("div");
@@ -614,7 +720,11 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 batchDbLabel.for = "batchAsmHubGenome";
 
                 let note = document.createElement("div");
-                note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
+                if (assemblyHubGenomes.length > 1) {
+                    note.textContent = "(assembly hub - genome per file is set by genomes.txt; this list shows all genomes in the hub)";
+                } else {
+                    note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
+                }
                 note.style.gridArea = "2 / 3 / 2 / 5";
                 note.style.margin = "auto 0";
                 note.style.fontStyle = "italic";
@@ -653,12 +763,24 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     let val = ev.target.value;
                     let label = ev.target.selectedOptions[0].label;
                     let hub = hubCreate.assemblyHubByGenome(val);
+                    let newRoot = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
                     for (let [key, file] of Object.entries(files)) {
+                        // Keep the file's subdirectory under whatever root the
+                        // batch genome change implies; only the root segment
+                        // moves.
+                        let oldParent = (file.meta && file.meta.parentDir) || "";
+                        let segments = oldParent.split("/");
+                        let newParent;
+                        if (segments.length > 1) {
+                            newParent = newRoot + "/" + segments.slice(1).join("/");
+                        } else {
+                            newParent = newRoot;
+                        }
                         let meta = {
                             genome: val,
                             genomeLabel: label,
                             hubType: hub ? "assemblyHub" : "trackHub",
-                            parentDir: hub ? hub.fileName : hubCreate.uiState.hubNameDefault,
+                            parentDir: newParent,
                         };
                         this.uppy.setFileMeta(file.id, meta);
                     }
@@ -687,9 +809,19 @@ class BatchChangePlugin extends Uppy.BasePlugin {
 
             batchParentDirInput.addEventListener("change", (ev) => {
                 let files = this.uppy.getFiles();
-                let val = ev.target.value;
+                let newRoot = ev.target.value;
                 for (let [key, file] of Object.entries(files)) {
-                    this.uppy.setFileMeta(file.id, {parentDir: val});
+                    // Swap only the root segment; preserve any per-genome
+                    // subdirectory the user supplied via a folder drop.
+                    let oldParent = (file.meta && file.meta.parentDir) || "";
+                    let segments = oldParent.split("/");
+                    let newParent;
+                    if (segments.length > 1) {
+                        newParent = newRoot + "/" + segments.slice(1).join("/");
+                    } else {
+                        newParent = newRoot;
+                    }
+                    this.uppy.setFileMeta(file.id, {parentDir: newParent});
                 }
             });
 
@@ -720,14 +852,17 @@ class BatchChangePlugin extends Uppy.BasePlugin {
 
     install() {
         this.uppy.on("file-added", (file) => {
-            // Only one 2bit per hub is supported. If this batch already has
-            // a 2bit, reject the new one before any meta-setting runs (which
-            // would propagate the wrong genome to it). onBeforeUpload also
-            // enforces this; the duplicate check here keeps the per-file card
-            // UI from drifting.
-            if (looksLikeTwoBit(file)) {
+            // Reject a duplicate 2bit only when there's no hub.txt in the batch:
+            // a folder drop or a manual pick of hub.txt + multi-genome
+            // genomes.txt + several 2bits is legitimate; we can't know that
+            // synchronously here, so defer to the pre-finish hook (which has
+            // the parseHubBatch result).
+            let droppedFromFolder = !!parentDirFromRelativePath(file);
+            let batchHasHubTxt = this.uppy.getFiles().some(looksLikeHubTxt);
+            if (looksLikeTwoBit(file) && !droppedFromFolder && !batchHasHubTxt) {
                 let existingTwoBits = this.uppy.getFiles().filter(
-                    f => f.id !== file.id && looksLikeTwoBit(f));
+                    f => f.id !== file.id && looksLikeTwoBit(f) &&
+                         !parentDirFromRelativePath(f));
                 if (existingTwoBits.length > 0) {
                     this.uppy.removeFile(file.id);
                     // Close the file card if it auto-opened for the first 2bit;
@@ -746,12 +881,14 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     return;
                 }
             }
-            // add default meta data for genome and fileType
+            // Default meta; folder drops preserve their subdirectory.
             let ftype = hubCreate.detectFileType(file.name);
+            let dropPath = parentDirFromRelativePath(file);
+            let defaultParentDir = dropPath || hubCreate.getDefaultHubName();
             let defaultMeta = {
                 "genome": hubCreate.defaultDb(),
                 "fileType": ftype,
-                "parentDir": hubCreate.getDefaultHubName(),
+                "parentDir": defaultParentDir,
                 "hubType": "trackHub",
             };
             if (ftype === "2bit") {
@@ -789,7 +926,10 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             let fileIsHubDefining = ftype === "2bit" || ftype === "hub.txt";
             let batchHasHubDefining = this.uppy.getFiles().some(f =>
                 looksLikeTwoBit(f) || looksLikeHubTxt(f));
-            if (!drilledIntoAsmHub && !fileIsHubDefining && !batchHasHubDefining) {
+            // dropPath means the user dragged a folder; in that case parentDir
+            // already encodes the user's intended hub root, and redirecting to
+            // an existing assembly hub would discard the folder layout.
+            if (!drilledIntoAsmHub && !fileIsHubDefining && !batchHasHubDefining && !dropPath) {
                 let firstHub = hubCreate.firstAssemblyHub();
                 if (firstHub) {
                     this.uppy.setFileMeta(file.id, {
@@ -820,6 +960,22 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // remove the batch change selects if now <2 files present
             if (this.uppy.getFiles().length < 2) {
                 this.removeBatchSelectsFromDashboard();
+            }
+            // If a hub-definition file leaves the batch, the cached split-hub
+            // descriptor is no longer valid. Clear the cache and the per-file
+            // stamps so pre-finish re-evaluates from scratch.
+            if (looksLikeHubTxt(file) ||
+                (file.meta && file.meta.fileName === "genomes.txt")) {
+                hubCreate.clearLastHubBatchDescriptor();
+                for (let f of this.uppy.getFiles()) {
+                    if (f.meta && f.meta.batchSplitHub === "true") {
+                        this.uppy.setFileMeta(f.id, {
+                            batchSplitHub: undefined,
+                            genomeLocked: false,
+                        });
+                    }
+                }
+                propagateAssemblyHubMeta(this.uppy);
             }
         });
 
@@ -853,13 +1009,11 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // and jump back into the editor from here
             if (file) {
                 let fileNameMatch = file.meta.name.match(fileNameRegex);
-                let parentDirMatch = file.meta.parentDir.match(parentDirRegex);
-                const dash = uppy.getPlugin("Dashboard");
                 if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
                     uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
-                if (!parentDirMatch || parentDirMatch[0] !== file.meta.parentDir) {
-                    uppy.info(`Error: Hub name has special characters, please rename hub: '${file.meta.parentDir}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
+                if (!isValidParentDir(file.meta.parentDir)) {
+                    uppy.info(`Error: Hub path '${file.meta.parentDir}' must be alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 }
             }
         });
@@ -946,23 +1100,258 @@ var hubCreate = (function() {
     function firstAssemblyHub() { return assemblyHubByGenome(null); }
     function genomeIsAssemblyHub(genome) { return !!genome && !!assemblyHubByGenome(genome); }
 
+    function parseRaSettings(text) {
+        // Parse stanza-style .ra text. Blank lines separate stanzas; #-comments are skipped.
+        let stanzas = [];
+        let current = null;
+        if (!text) return stanzas;
+        for (let raw of text.split(/\r?\n/)) {
+            let line = raw.replace(/^\s+/, "");
+            if (line === "") {
+                if (current) { stanzas.push(current); current = null; }
+                continue;
+            }
+            if (line.startsWith("#")) continue;
+            let sp = line.indexOf(" ");
+            let tab = line.indexOf("\t");
+            let split = (sp === -1) ? tab : (tab === -1 ? sp : Math.min(sp, tab));
+            if (split === -1) continue;
+            let key = line.substring(0, split);
+            let value = line.substring(split + 1).trim();
+            if (!current) current = {};
+            if (!(key in current)) current[key] = value;
+        }
+        if (current) stanzas.push(current);
+        return stanzas;
+    }
+
     function parseHubTxt(text) {
-        // Very small hub.txt parser: extracts `genome` and `twoBitPath` lines.
-        // Returns {genome, twoBitPath, isAssemblyHub} (values may be null/false).
-        let ret = {genome: null, twoBitPath: null, isAssemblyHub: false};
+        // Returns {genome, twoBitPath, isAssemblyHub, genomesFile, useOneFile}.
+        let ret = {genome: null, twoBitPath: null, isAssemblyHub: false,
+                   genomesFile: null, useOneFile: false};
         if (!text) return ret;
-        let lines = text.split(/\r?\n/);
-        for (let line of lines) {
-            let trimmed = line.replace(/^\s+/, "");
-            if (trimmed.startsWith("genome ") && !ret.genome) {
-                ret.genome = trimmed.substring(7).trim();
-            } else if (trimmed.startsWith("twoBitPath ")) {
-                ret.twoBitPath = trimmed.substring(11).trim();
-                ret.isAssemblyHub = true;
+        let stanzas = parseRaSettings(text);
+        let hub = stanzas[0] || {};
+        if (hub.genome) ret.genome = hub.genome;
+        if (hub.twoBitPath) {
+            ret.twoBitPath = hub.twoBitPath;
+            ret.isAssemblyHub = true;
+        }
+        if (hub.genomesFile) ret.genomesFile = hub.genomesFile;
+        if (hub.useOneFile && hub.useOneFile.toLowerCase() === "on") {
+            ret.useOneFile = true;
+        }
+        // useOneFile hubs put `genome` in later stanzas.
+        if (!ret.genome) {
+            for (let s of stanzas) {
+                if (s.genome) { ret.genome = s.genome; break; }
+            }
+        }
+        if (!ret.twoBitPath) {
+            for (let s of stanzas) {
+                if (s.twoBitPath) {
+                    ret.twoBitPath = s.twoBitPath;
+                    ret.isAssemblyHub = true;
+                    break;
+                }
             }
         }
         return ret;
     }
+
+    function basename(p) {
+        if (!p) return "";
+        let i = Math.max(p.lastIndexOf("/"), p.lastIndexOf("\\"));
+        return i === -1 ? p : p.substring(i + 1);
+    }
+
+    function findFileInBatch(files, refPath) {
+        // Match a hub.txt/genomes.txt path against the batch, by relativePath or basename.
+        let target = refPath.replace(/^\.\//, "");
+        let targetBase = basename(target);
+        let exactPathMatch = null;
+        let baseMatch = null;
+        for (let f of files) {
+            let rel = (f.meta && f.meta.relativePath) ||
+                      (f.data && f.data.webkitRelativePath) ||
+                      f.relativePath || "";
+            if (rel && (rel === target || rel.endsWith("/" + target))) {
+                exactPathMatch = f;
+                break;
+            }
+            if ((f.meta && f.meta.name === targetBase) || f.name === targetBase) {
+                if (!baseMatch) baseMatch = f;
+            }
+        }
+        return exactPathMatch || baseMatch || null;
+    }
+
+    function parseTrackDbForDataFiles(text) {
+        // Return all bigDataUrl-style references in a trackDb.txt.
+        let refs = [];
+        if (!text) return refs;
+        for (let raw of text.split(/\r?\n/)) {
+            let line = raw.replace(/^\s+/, "");
+            for (let key of ["bigDataUrl", "bigDataIndex", "bamIndex",
+                             "indexUrl", "searchTrix"]) {
+                if (line.startsWith(key + " ") || line.startsWith(key + "\t")) {
+                    refs.push(line.substring(key.length).trim());
+                    break;
+                }
+            }
+        }
+        return refs;
+    }
+
+    let parseBatchSeq = 0;
+    let latestCompletedParseSeq = 0;
+    async function parseHubBatch(files) {
+        // Walk the upload batch and build a hub descriptor:
+        //   {
+        //     isSplit:        bool,     // hub.txt uses genomesFile=
+        //     isAssemblyHub:  bool,
+        //     hubFile:        file,     // hub.txt file in batch (or null)
+        //     genomesFile:    file,     // genomes.txt file in batch (split only)
+        //     genomes: [
+        //       { name, twoBitFile, trackDbFile, dataFiles: [file, ...] }
+        //     ],
+        //     fileGenome:     Map<fileId, genomeName>,   // hub.txt/genomes.txt absent
+        //     errors:         [string, ...],
+        //     parseSeq:       number,   // monotonic id of this parse
+        //   }
+        // Single-file layouts (useOneFile / no genomesFile) return isSplit=false.
+        let mySeq = ++parseBatchSeq;
+        let descriptor = {
+            isSplit: false,
+            isAssemblyHub: false,
+            hubFile: null,
+            hubMeta: null,
+            genomesFile: null,
+            genomes: [],
+            fileGenome: new Map(),
+            errors: [],       // upload-blocking: missing referenced files
+            warnings: [],     // surfaced but don't block: orphans, parse hiccups
+            parseSeq: mySeq,
+        };
+        function cacheAndReturn() {
+            if (mySeq > latestCompletedParseSeq) {
+                latestCompletedParseSeq = mySeq;
+                lastHubBatchDescriptor = descriptor;
+            }
+            return descriptor;
+        }
+        let hubTxt = files.find(looksLikeHubTxt);
+        if (!hubTxt) return cacheAndReturn();
+        descriptor.hubFile = hubTxt;
+
+        let hubText;
+        try {
+            hubText = await readFileAsText(hubTxt.data);
+        } catch (e) {
+            descriptor.errors.push("Could not read hub.txt: " + e);
+            return cacheAndReturn();
+        }
+
+        let hubParsed = parseHubTxt(hubText);
+        descriptor.hubMeta = hubParsed;
+        descriptor.isAssemblyHub = hubParsed.isAssemblyHub;
+        if (!hubParsed.genomesFile || hubParsed.useOneFile) {
+            // Not a split hub - existing single-file flow handles it.
+            return cacheAndReturn();
+        }
+
+        let genomesFile = findFileInBatch(files, hubParsed.genomesFile);
+        if (!genomesFile) {
+            descriptor.errors.push(
+                `hub.txt references genomesFile=${hubParsed.genomesFile}, but ` +
+                `that file is not in the upload batch. Add it and try again.`);
+            return cacheAndReturn();
+        }
+        descriptor.genomesFile = genomesFile;
+
+        let genomesText;
+        try {
+            genomesText = await readFileAsText(genomesFile.data);
+        } catch (e) {
+            descriptor.errors.push("Could not read genomes.txt: " + e);
+            return cacheAndReturn();
+        }
+        descriptor.isSplit = true;
+
+        let genomeStanzas = parseRaSettings(genomesText);
+        for (let stanza of genomeStanzas) {
+            if (!stanza.genome) continue;
+            let entry = { name: stanza.genome, twoBitFile: null,
+                          trackDbFile: null, dataFiles: [] };
+            if (stanza.trackDb) {
+                entry.trackDbFile = findFileInBatch(files, stanza.trackDb);
+                if (!entry.trackDbFile) {
+                    descriptor.errors.push(
+                        `genomes.txt references trackDb=${stanza.trackDb} for ` +
+                        `genome ${stanza.genome}, but that file is not in the ` +
+                        `upload batch.`);
+                }
+            }
+            if (stanza.twoBitPath) {
+                entry.twoBitFile = findFileInBatch(files, stanza.twoBitPath);
+                if (!entry.twoBitFile) {
+                    descriptor.errors.push(
+                        `genomes.txt references twoBitPath=${stanza.twoBitPath} ` +
+                        `for genome ${stanza.genome}, but that file is not in ` +
+                        `the upload batch.`);
+                }
+                descriptor.isAssemblyHub = true;
+            }
+            descriptor.genomes.push(entry);
+        }
+
+        for (let g of descriptor.genomes) {
+            if (!g.trackDbFile) continue;
+            let trackDbText;
+            try {
+                trackDbText = await readFileAsText(g.trackDbFile.data);
+            } catch (e) {
+                descriptor.errors.push(
+                    `Could not read trackDb for ${g.name}: ${e}`);
+                continue;
+            }
+            let refs = parseTrackDbForDataFiles(trackDbText);
+            for (let ref of refs) {
+                let dataFile = findFileInBatch(files, ref);
+                if (dataFile) {
+                    g.dataFiles.push(dataFile);
+                    descriptor.fileGenome.set(dataFile.id, g.name);
+                }
+                // bigDataUrl targets are allowed to be missing - data files
+                // can arrive in later batches.
+            }
+            descriptor.fileGenome.set(g.trackDbFile.id, g.name);
+            if (g.twoBitFile) {
+                descriptor.fileGenome.set(g.twoBitFile.id, g.name);
+            }
+        }
+
+        // Mark hub.txt and genomes.txt as hub-level (null genome).
+        descriptor.fileGenome.set(hubTxt.id, null);
+        descriptor.fileGenome.set(genomesFile.id, null);
+
+        // Flag orphans as warnings: the upload still works (the file lands
+        // on disk and in hubSpace) but trackDb won't reference it until the
+        // user adds a track stanza.
+        for (let f of files) {
+            if (descriptor.fileGenome.has(f.id)) continue;
+            descriptor.warnings.push(
+                `File ${f.name} is in the batch but is not referenced by any ` +
+                `trackDb in the hub definition. It will be uploaded as an ` +
+                `orphan; add a track stanza if you want it to display.`);
+        }
+
+        return cacheAndReturn();
+    }
+
+    let lastHubBatchDescriptor = null;
+    function getLastHubBatchDescriptor() { return lastHubBatchDescriptor; }
+    function clearLastHubBatchDescriptor() { lastHubBatchDescriptor = null; }
 
     function readFileAsText(fileObj) {
         // Return a Promise resolving to the file contents as text.
@@ -1065,6 +1454,37 @@ var hubCreate = (function() {
         return ret;
     }
 
+    function findHubGenome(hubName) {
+        // Walk the hub subtree for the first non-empty genome. Split-hub
+        // root dirs and hub-level files carry "" and need this fallback.
+        let dir = uiState.filesHash[hubName];
+        if (!dir) return null;
+        if (dir.genome) return dir.genome;
+        if (!dir.children) return null;
+        for (let c of dir.children) {
+            if (c.genome) return c.genome;
+            if (c.fileType === "dir") {
+                let nested = findHubGenome(c.fullPath);
+                if (nested) return nested;
+            }
+        }
+        return null;
+    }
+
+    function isAssemblyHub(hubName) {
+        // Hub-root dir's hubType can be "trackHub" if a hub-level file
+        // uploaded first; walk the subtree for any assemblyHub or 2bit child.
+        let dir = uiState.filesHash[hubName];
+        if (!dir) return false;
+        if (dir.hubType === "assemblyHub") return true;
+        if (!dir.children) return false;
+        for (let c of dir.children) {
+            if (c.hubType === "assemblyHub" || c.fileType === "2bit") return true;
+            if (c.fileType === "dir" && isAssemblyHub(c.fullPath)) return true;
+        }
+        return false;
+    }
+
     function viewInGenomeBrowser(fname, ftype, genome, hubName, hubType) {
         // redirect to hgTracks with this track open in the hub
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
@@ -1097,8 +1517,9 @@ var hubCreate = (function() {
         let dirRow = uiState.filesHash[hubName];
         if (!dirRow) return;
         let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
-        let dbParam = dirRow.hubType === "assemblyHub" ? "genome" : "db";
-        let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&" + dbParam + "=" + dirRow.genome + "&hubUrl=" + encodeURIComponent(hubUrl);
+        let dbParam = isAssemblyHub(hubName) ? "genome" : "db";
+        let genome = dirRow.genome || findHubGenome(hubName) || "";
+        let url = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&" + dbParam + "=" + genome + "&hubUrl=" + encodeURIComponent(hubUrl);
         window.location.assign(url);
     }
 
@@ -1130,11 +1551,18 @@ var hubCreate = (function() {
             let hubsAdded = {};
             _.forEach(data, (d) => {
                 if (!genome) {
+                    // Hub-level rows carry empty db; fall back via the subtree.
                     genome = d.genome;
-                    // Assembly hubs use 'genome=' (hub-resolved name), native
-                    // UCSC assemblies use 'db='.
-                    let dbParam = d.hubType === "assemblyHub" ? "genome" : "db";
-                    url += "&" + dbParam + "=" + genome;
+                    let hubRoot = (d.fileType === "dir") ? d.fullPath : d.parentDir;
+                    if (!genome && hubRoot) {
+                        genome = findHubGenome(hubRoot);
+                    }
+                    if (genome) {
+                        let isAsm = (d.hubType === "assemblyHub") ||
+                                    (hubRoot && isAssemblyHub(hubRoot));
+                        let dbParam = isAsm ? "genome" : "db";
+                        url += "&" + dbParam + "=" + genome;
+                    }
                 }
                 if (d.fileType === "hub.txt") {
                     url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(d.fullPath));
@@ -1421,9 +1849,13 @@ var hubCreate = (function() {
             $(btn).button({icon: "ui-icon-triangle-1-w"});
             btn.addEventListener("click", (e) => {
                 let parentDir = dirData.parentDir;
-                let parentDirPath = dirData.fullPath.slice(0,-dirData.fullPath.length);
+                // Walk one level up by stripping the leaf segment.
+                let pathParts = dirData.fullPath.split("/");
+                let parentDirPath = pathParts.slice(0, -1).join("/");
                 if (parentDirPath.length) {
+                    // Mirror the click-down path: filter, then move header row.
                     dataTableShowDir(table, parentDir, parentDirPath);
+                    dataTableCustomOrder(table, {fullPath: parentDirPath});
                 } else {
                     dataTableShowTopLevel(table);
                     dataTableCustomOrder(table);
@@ -1966,14 +2398,17 @@ var hubCreate = (function() {
             const dFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
             const now = new Date(Date.now());
             const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-            let newReqObj, hubTxtObj, parentDirObj;
+            let newReqObj, hubTxtObj;
             let hubType = metadata.hubType || "trackHub";
+            // Multi-segment parentDir (split-hub uploads) needs per-segment rows.
+            let parentSegments = metadata.parentDir.split("/");
+            let parentLeaf = parentSegments[parentSegments.length - 1];
             newReqObj = {
                 "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
                 "fileType": metadata.fileType,
                 "genome": metadata.genome,
-                "parentDir": cgiEncode(metadata.parentDir),
+                "parentDir": cgiEncode(parentLeaf),
                 "lastModified": dFormatted,
                 "uploadTime": nowFormatted,
                 "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
@@ -2000,24 +2435,39 @@ var hubCreate = (function() {
                     "fileSize": 0,
                     "fileType": "hub.txt",
                     "genome": metadata.genome,
-                    "parentDir": cgiEncode(metadata.parentDir),
+                    "parentDir": cgiEncode(parentLeaf),
                     "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
                     "hubType": hubType,
                 };
             }
-            parentDirObj = {
-                "uploadTime": nowFormatted,
-                "lastModified": dFormatted,
-                "fileName": cgiEncode(metadata.parentDir),
-                "fileSize": 0,
-                "fileType": "dir",
-                "genome": metadata.genome,
-                "parentDir": "",
-                "fullPath": cgiEncode(metadata.parentDir),
-                "hubType": hubType,
-            };
-            // package the three objects together as one "hub" and display it
-            let hub = [parentDirObj, newReqObj];
+            // One dir row per path segment; leaf-only db, matching makeParentDirRows().
+            // For split hubs the hub-root dir stays empty regardless of layout.
+            let isSplitHub = metadata.batchSplitHub === "true";
+            let dirRows = [];
+            for (let i = 0; i < parentSegments.length; i++) {
+                let dirFullPath = parentSegments.slice(0, i + 1)
+                                                .map(cgiEncode).join("/");
+                let dirParent = i > 0 ? cgiEncode(parentSegments[i - 1]) : "";
+                let isLeaf = (i === parentSegments.length - 1);
+                let dirDb;
+                if (isSplitHub) {
+                    dirDb = (isLeaf && parentSegments.length > 1) ? metadata.genome : "";
+                } else {
+                    dirDb = isLeaf ? metadata.genome : "";
+                }
+                dirRows.push({
+                    "uploadTime": nowFormatted,
+                    "lastModified": dFormatted,
+                    "fileName": cgiEncode(parentSegments[i]),
+                    "fileSize": 0,
+                    "fileType": "dir",
+                    "genome": dirDb,
+                    "parentDir": dirParent,
+                    "fullPath": dirFullPath,
+                    "hubType": hubType,
+                });
+            }
+            let hub = dirRows.concat([newReqObj]);
             if (hubTxtObj) {
                 hub.push(hubTxtObj);
             }
@@ -2092,6 +2542,9 @@ var hubCreate = (function() {
              sanitizeGenomeName: sanitizeGenomeName,
              readFileAsText: readFileAsText,
              parseHubTxt: parseHubTxt,
+             parseHubBatch: parseHubBatch,
+             getLastHubBatchDescriptor: getLastHubBatchDescriptor,
+             clearLastHubBatchDescriptor: clearLastHubBatchDescriptor,
              firstAssemblyHub: firstAssemblyHub,
              genomeIsAssemblyHub: genomeIsAssemblyHub,
              assemblyHubByGenome: assemblyHubByGenome,

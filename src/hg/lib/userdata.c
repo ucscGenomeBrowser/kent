@@ -348,7 +348,8 @@ for (i = 0; i < foundSlashes; i++)
     row->fileType = "dir";
     row->creationTime = NULL;
     row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
-    row->db = db;
+    // Leaf-only db; ancestors sit above per-genome subdirs.
+    row->db = (i == foundSlashes - 1) ? db : "";
     row->location = cloneString(dyStringContents(currLocation));
     row->md5sum = "";
     row->parentDir = i > 0 ? components[i-1] : "";
@@ -750,39 +751,47 @@ hDisconnectCentral(&conn);
 }
 
 void removeFileForUser(char *fname, char *userName)
-/* Remove a file for this user if it exists */
+/* Remove a file (or recursively, a directory) for this user if it exists */
 {
 // The file to remove must be prefixed by the hg.conf userDataDir
 char canonicalPath[PATH_MAX];
-realpath(fname, canonicalPath);
+if (realpath(fname, canonicalPath) == NULL)
+    return;
 if (!startsWith(getDataDir(userName), canonicalPath))
     return;
-if (fileExists(canonicalPath))
-    {
-    // If removing a hub directory, clean up the per-hub flock file so
-    // rmdir doesn't fail with ENOTEMPTY. The .hub.lock file is a backend
-    // artifact, never recorded as a hubSpace row.
-    if (isDirectory(canonicalPath))
-        {
-        struct dyString *lockPath = dyStringCreate("%s%s.hub.lock",
-            canonicalPath, endsWith(canonicalPath, "/") ? "" : "/");
-        if (fileExists(dyStringContents(lockPath)))
-            unlink(dyStringContents(lockPath));
-        dyStringFree(&lockPath);
-        }
-    // delete the actual file
-    mustRemove(canonicalPath);
+if (!fileExists(canonicalPath))
+    return;
 
-    // delete the table row, which probably has the location based
-    // on the other filesystem
-    if (checkHubSpaceLocationExists(userName, canonicalPath))
-        deleteHubSpaceRow(canonicalPath, userName);
-    else
-        {
-        char *unswapped = unswapDataDir(userName, canonicalPath);
-        if (checkHubSpaceLocationExists(userName, unswapped))
-            deleteHubSpaceRow(unswapped, userName);
-        }
+if (isDirectory(canonicalPath))
+    {
+    // Clean up the per-hub flock file (a backend artifact, not in hubSpace).
+    struct dyString *lockPath = dyStringCreate("%s%s.hub.lock",
+        canonicalPath, endsWith(canonicalPath, "/") ? "" : "/");
+    if (fileExists(dyStringContents(lockPath)))
+        mustRemove(dyStringContents(lockPath));
+    dyStringFree(&lockPath);
+
+    // Recurse into children so rmdir succeeds; listDirX("*") skips
+    // dotfiles, and .hub.lock was already removed above.
+    struct fileInfo *entries = listDirX(canonicalPath, "*", TRUE);
+    struct fileInfo *e;
+    for (e = entries; e != NULL; e = e->next)
+        removeFileForUser(e->name, userName);
+    slFreeList(&entries);
+    }
+
+// delete the file (or now-empty directory)
+mustRemove(canonicalPath);
+
+// delete the table row, which probably has the location based
+// on the other filesystem
+if (checkHubSpaceLocationExists(userName, canonicalPath))
+    deleteHubSpaceRow(canonicalPath, userName);
+else
+    {
+    char *unswapped = unswapDataDir(userName, canonicalPath);
+    if (checkHubSpaceLocationExists(userName, unswapped))
+        deleteHubSpaceRow(unswapped, userName);
     }
 // TODO: we should also modify the hub.txt associated with this file
 }

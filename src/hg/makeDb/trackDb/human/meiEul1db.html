@@ -1,0 +1,122 @@
+<h2>Description</h2>
+<p>
+Long Interspersed Nuclear Element-1 (LINE-1, L1) is the only retrotransposon family
+in modern humans that still autonomously generates new copies by an RNA-mediated
+copy-and-paste mechanism. The L1-HS subfamily (HS for &quot;human-specific&quot;) is
+responsible for ongoing retrotransposition activity and contributes to inter-individual
+genetic diversity: on average, two human genomes differ at hundreds of sites with
+respect to L1 insertion presence or absence. New L1-HS insertions are a recognised
+source of germline mutation and somatic mosaicism, and have been observed in many
+cancers and brain tissues.
+</p>
+<p>
+This track shows the curated set of L1-HS insertion polymorphisms catalogued in
+<a href="http://eul1db.unice.fr" target="_blank">euL1db</a>, the European database
+of L1HS retrotransposon insertions in humans (Mir et al. 2015). Each feature is
+a Meta Retrotransposon Insertion Polymorphism (MRIP) &mdash; a non-redundant
+genomic site obtained by merging close Sample Retrotransposon Insertion Polymorphisms
+(SRIPs) reported across 32 published studies covering more than 900 samples.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is a single MRIP. The score is the euL1db pseudo-allele frequency
+(field <i>pseudoAlleleFreq</i>) scaled to 0&ndash;1000. Items are coloured by the
+lineage of contributing SRIPs:
+</p>
+<p>
+<span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span>
+<b>germline</b> &mdash; all contributing SRIPs are germline insertions<br>
+<span style="display:inline-block; background-color:#D55E00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>somatic</b> &mdash; all contributing SRIPs are somatic insertions<br>
+<span style="display:inline-block; background-color:#CC79A7; width:18px; height:12px; vertical-align:middle;"></span>
+<b>mixed</b> &mdash; both germline and somatic SRIPs at this site<br>
+<span style="display:inline-block; background-color:#999999; width:18px; height:12px; vertical-align:middle;"></span>
+<b>unknown</b> &mdash; lineage not reported
+</p>
+<p>
+Clicking an item opens a detail page that lists the studies and PubMed IDs
+reporting the insertion, the detection methods used, the tissues, clinical
+conditions and populations represented, and a table of the contributing samples
+(truncated to 200 rows for very large aggregations &mdash; see
+<a href="http://eul1db.unice.fr" target="_blank">euL1db</a> for the full sample
+breakdown). Filters are available for pseudo-allele frequency, SRIP and study
+counts, lineage, PCR validation, and whether the MRIP is annotated as already
+present in the reference genome.
+</p>
+
+<h2>Methods</h2>
+<p>
+euL1db integrates published L1-HS insertion calls from a wide range of
+detection assays. Most studies used enrichment-based protocols
+(RC-seq, L1-seq, Ewing PCR, TIP-seq), high-throughput whole-genome
+sequencing analysed with TranspoSeq, MELT or similar pipelines, or
+fosmid-based long-read approaches. For each accepted study the original
+authors&#39; sample-level calls (SRIPs) were curated and re-mapped to hg19
+where needed. SRIPs that are within 200&nbsp;bp of each other on the same strand
+and are germline are merged into a single non-redundant MRIP. Somatic events
+are not merged, reflecting the unique nature of independent retrotransposition
+events. See Mir et al. 2015 for full curation details.
+</p>
+<p>
+Track files were generated from the euL1db v1.00 release (data dump downloaded
+March 2018, last updated 14 October 2014) using the script
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/mei/meiEul1dbToBed.py"
+   target="_blank">meiEul1dbToBed.py</a>, which joins the MRIP, SRIP, Sample,
+Individual, Study and Methods tables and emits a BED9+ file. For details of
+the build process see the makeDoc text file
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19/mei.txt"
+   target="_blank">hg19/mei.txt</a>, and the scripts directory
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
+   target="_blank">src/hg/makeDb/scripts/mei</a>.
+The Helman2014 study used numeric chromosome names (23 = X, 24 = Y); these
+were renamed in the build script. The hg19 BED was lifted to hg38 with
+<tt>liftOver</tt> using the standard <tt>hg19ToHg38.over.chain.gz</tt> chain.
+Of 8,991 hg19 MRIPs, 8,988 lifted successfully; the 3 unlifted MRIPs are
+listed in the build directory.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-separated tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>,
+track=<i>meiEul1db</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">our download
+server</a>. The file for this track is called <tt>eul1db.bb</tt>. Individual regions
+or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
+which can be compiled from the source code or downloaded as a precompiled binary
+for your system. Instructions for downloading source code and binaries can be
+found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/eul1db.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+<p>
+The original annotation source data can be downloaded from
+<a href="http://eul1db.unice.fr" target="_blank">eul1db.unice.fr</a> via the
+Download tab.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Ga&euml;l Cristofari and colleagues at IRCAN (Nice, France) for
+making the euL1db data freely available, and to the original study authors
+whose data are aggregated. Track built at UCSC by the Genome Browser group.
+</p>
+
+<h2>References</h2>
+<p>
+Mir AA, Philippe C, Cristofari G.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gku1043" target="_blank">
+euL1db: the European database of L1HS retrotransposon insertions in humans</a>.
+<em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D43-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">25352549</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383891/" target="_blank">PMC4383891</a>
+</p>
+

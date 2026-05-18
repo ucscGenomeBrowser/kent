@@ -1,0 +1,151 @@
+<h2>Description</h2>
+<p>
+This track shows <b>mobile element insertions (MEIs)</b> from the
+<a href="http://bigdata.ibp.ac.cn/HMEID/" target="_blank">HMEID</a>
+database (v1.1), a catalogue of 36,699 non-reference MEIs called from
+short-read whole-genome sequencing of 5,675 individuals. The cohort
+combines 2,998 Chinese samples from the NyuWa dataset (~26.2&times;
+coverage) with 2,677 samples from the 1000 Genomes Project (~7.4&times;
+coverage), and the calls are reported against GRCh38. Each site is an
+insertion of an Alu, L1 (LINE-1), SVA or HERV-K mobile element relative
+to the reference.
+</p>
+
+<table class="stdTbl">
+<tr><th>Class</th><th>MEIs</th></tr>
+<tr><td>Alu</td><td>26,553</td></tr>
+<tr><td>L1</td><td>7,353</td></tr>
+<tr><td>SVA</td><td>2,667</td></tr>
+<tr><td>HERVK</td><td>126</td></tr>
+<tr><th>Total</th><th>36,699</th></tr>
+</table>
+
+<p>
+For each MEI, the track reports the mobile element class, the insertion
+length, the target-site duplication sequence, the MELT ASSESS quality
+score, and allele counts / numbers / frequencies for the full cohort,
+for NyuWa, for 1KGP, and for each of the five 1KGP super-populations
+(AFR, AMR, EAS, EUR, SAS).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+An insertion has zero length on the reference: it attaches between
+two adjacent reference bases without replacing any of them. Following
+the VCF convention used by HMEID and by the other MEI tracks in this
+collection, each MEI is drawn as a <b>1-bp block sitting on the anchor
+base</b> &mdash; the reference base immediately to the left of the
+insertion attachment point. The inserted mobile element itself is not
+present in the reference and is therefore not drawn. The item label is
+<tt>class-altAlleleCount</tt>.
+</p>
+
+<p>
+Items are colored by element class:
+</p>
+<ul>
+  <li><span style="display:inline-block;background-color:#0072B2;width:18px;height:12px;vertical-align:middle;"></span> <b>Alu</b> &mdash; SINE (Short INterspersed Element)</li>
+  <li><span style="display:inline-block;background-color:#D55E00;width:18px;height:12px;vertical-align:middle;"></span> <b>L1</b> &mdash; LINE-1 (Long INterspersed Element-1)</li>
+  <li><span style="display:inline-block;background-color:#009E73;width:18px;height:12px;vertical-align:middle;"></span> <b>SVA</b> (SINE-VNTR-Alu) &mdash; composite retrotransposon</li>
+  <li><span style="display:inline-block;background-color:#CC79A7;width:18px;height:12px;vertical-align:middle;"></span> <b>HERVK</b> (Human Endogenous Retrovirus K) &mdash; endogenous retrovirus</li>
+</ul>
+
+<p>
+The score column encodes the cohort-wide alt-allele frequency on a
+0-1000 scale. Filters allow restricting the displayed items by element
+class, insertion length, allele frequency in the full cohort, allele
+frequency within the NyuWa and 1KGP cohorts separately, and by the
+MELT ASSESS quality score. The ASSESS score ranges from 0 to 5; HMEID
+sites are pre-filtered to ASSESS &ge; 3, meaning at least one-side
+TSD evidence, with 5 representing the highest quality (TSD decided
+from split reads).
+</p>
+
+<h2>Methods</h2>
+<p>
+HMEID was built by Niu et al. (2022) from Illumina short-read whole-genome
+sequencing of two cohorts: 2,999 individuals from the NyuWa dataset
+(diabetes and control samples collected across China, median depth
+~26.2&times; on GRCh38) and 2,691 samples from the 1000 Genomes Project
+(~7.4&times; coverage, GRCh38-aligned CRAMs from EBI). Non-reference
+MEIs were detected with MELT v2.1.5 in SPLIT mode with default
+parameters; BAM coverage was estimated with goleft v0.1.8 covstats.
+After the MELT MakeVCF step, sites were filtered to those that (i) lie
+outside low-complexity regions, (ii) are genotyped in &gt;25% of
+individuals, (iii) have more than 2 split reads, (iv) carry a MELT
+ASSESS score &gt;3 (i.e. ASSESS &ge; 4 in the unfiltered output, but
+HMEID retains ASSESS 3 sites that otherwise pass) and (v) are marked
+PASS in the FILTER column. Alu and L1 subfamilies were assigned by
+MELT's CALU and LINEU modules. 2,998 of 2,999 NyuWa samples and 2,677
+of 2,691 1KGP samples passed processing, yielding the final callset of
+36,699 MEIs in 5,675 genomes. Allele frequencies were computed per
+cohort and per 1KGP super-population with BCFtools v1.3.1. See
+Niu et al. 2022 for full methodological details.
+</p>
+
+<p>
+The site-level VCF was downloaded from the
+<a href="http://bigdata.ibp.ac.cn/HMEID/download/" target="_blank">HMEID
+download page</a> (file
+<tt>MEI.GRCh38.HMEIDv1.1.vcf.gz</tt>) and converted to bigBed following
+the steps in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
+target="_blank">makeDoc file</a>. Conversion uses scripts in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
+target="_blank">src/hg/makeDb/scripts/mei</a>: VCF-style positions
+(1-based POS, anchor base) are converted to half-open BED coordinates
+(<tt>chromStart = POS - 1</tt>, <tt>chromEnd = chromStart + 1</tt>),
+MELT SVTYPE codes (<tt>ALU</tt>, <tt>LINE1</tt>, <tt>SVA</tt>,
+<tt>HERVK</tt>) are mapped to the element class names used here, and
+INFO fields are copied through to per-cohort and per-super-population
+allele count / number / frequency columns. All 36,699 input records
+produced one BED row each; no records were dropped.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
+there to spreadsheet or tab-separated tables. From scripts, the data can
+be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>meiHmeid</i>.
+</p>
+<p>
+For automated download and analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">
+our download server</a>. The file for this track is called
+<tt>hmeid.bb</tt> in <tt>/gbdb/hg38/mei/</tt>. Individual regions or the
+whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for
+downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/hmeid.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original annotation source data can be downloaded from the
+<a href="http://bigdata.ibp.ac.cn/HMEID/download/" target="_blank">HMEID
+download page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Yiwei Niu, Shunmin He and colleagues at the Institute of
+Biophysics, Chinese Academy of Sciences for building HMEID and
+releasing the callset, and to the NyuWa project and the 1000 Genomes
+Project for producing the underlying whole-genome sequencing data.
+</p>
+
+<h2>References</h2>
+<p>
+Niu Y, Teng X, Zhou H, Shi Y, Li Y, Tang Y, Zhang P, Luo H, Kang Q, Xu T <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkac128" target="_blank">
+Characterizing mobile element insertions in 5675 genomes</a>.
+<em>Nucleic Acids Res</em>. 2022 Mar 21;50(5):2493-2508.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35212372" target="_blank">35212372</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8934628/" target="_blank">PMC8934628</a>
+</p>
+

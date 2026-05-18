@@ -1623,10 +1623,26 @@ if (userId && userIdFound && !cgiOptionalString("captcha"))
 // and remove it from the cart
 char *token = cgiOptionalString("token");
 if (token)
-{ 
+{
     if (isValidToken(token))
         {
         cartRemove(cart, "token");
+        // Drop any IP-tracking rows for this hguid so a legitimate user
+        // who roams networks isn't repeatedly captcha-gated.
+        if (cfgOptionBooleanDefault("hguidIpTracking.enabled", FALSE) && isNotEmpty(userId))
+            {
+            unsigned int userIdNum = cartDbParseId(userId, NULL);
+            if (userIdNum != 0)
+                {
+                struct sqlConnection *conn = hConnectCentralNoCache();
+                char *table = cfgOptionDefault("hguidIpTracking.table", "hguidIpAccess");
+                char query[256];
+                sqlSafef(query, sizeof(query),
+                         "DELETE FROM %s WHERE userId=%u", table, userIdNum);
+                sqlUpdate(conn, query);
+                sqlDisconnect(&conn);
+                }
+            }
         return;
         }
     else

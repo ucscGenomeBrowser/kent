@@ -1,0 +1,107 @@
+<h2>Description</h2>
+<p>
+The <a href="https://ibdc.dbtindia.gov.in/genomeindia/" target="_blank">GenomeIndia
+project</a> is a national initiative coordinating academic and medical institutions
+across India to characterize the genetic diversity of the Indian subcontinent. The
+release used by this track comprises whole-genome sequencing of 9,768 healthy adults
+sampled from 83 anthropologically defined endogamous populations spanning India&#39;s
+ethnolinguistic and biogeographic spectrum (Indo-European, Dravidian, Austroasiatic,
+and Tibeto-Burman language families, plus a continentally admixed outgroup). After
+joint genotyping and quality filtering, 129,938,889 high-confidence biallelic
+variants (~121M SNVs and ~8M indels) were reported, of which roughly one third are
+absent from gnomAD, 1000 Genomes, and GenomeAsia. This track shows the alternate
+allele frequency in that 9,768-sample autosomal call set.
+</p>
+<p>
+Because Indian populations are profoundly underrepresented in global variant
+databases, many globally rare alleles reach much higher frequencies in specific
+endogamous groups. The release ships only the cohort-wide alternate allele
+frequency (no per-population breakdown), so this track shows the overall
+GenomeIndia AF; AC is derived from AF (see Methods).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Variants are shown as a VCF dense track. Each row reports the genomic position,
+ref/alt alleles, the GenomeIndia alternate allele frequency, and a synthesized
+allele count. The track only includes autosomal variants (chr1&ndash;chr22); chrX,
+chrY, and chrM are not in the current release.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
+can be used; the track name is <em>genomeindia</em>.
+For bulk download, the VCF file can be obtained from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/_genomeindia/"
+target="_blank">our download server</a>.
+</p>
+<p>
+The original per-chromosome TSV summary statistics can be downloaded directly from
+the GenomeIndia Data Centre at <a
+href="https://ibdc.dbtindia.gov.in/genomeindia/" target="_blank">ibdc.dbtindia.gov.in</a>
+(the <tt>9768GI_SummaryStats.tar.gz</tt> bundle). Use of the data is subject to
+the GenomeIndia data-access policy listed on that page.
+</p>
+
+<h2>Methods</h2>
+<p>
+PCR-free whole-genome sequencing libraries were prepared from blood-derived DNA and
+sequenced on Illumina NovaSeq 6000 to a per-sample average depth of at least 23&times;.
+Reads were processed with the Illumina DRAGEN v4.0.3 germline pipeline against
+GRCh38, producing per-sample gVCFs that were then joint-genotyped with the Illumina
+gVCF genotyper. Site-level filters retained only PASS variants with
+QUAL&nbsp;&ge;&nbsp;30, posterior genotype probability &ge;&nbsp;99.9%, GQ&nbsp;&gt;&nbsp;20
+at every site (GQ&nbsp;&gt;&nbsp;40 for singletons and doubletons), heterozygous allele
+balance &ge;&nbsp;0.2, call rate &ge;&nbsp;98%, and Hardy&ndash;Weinberg equilibrium
+p&nbsp;&gt;&nbsp;1&times;10<sup>-11</sup>; sites with an inbreeding coefficient of 1
+were also excluded as technical artefacts. Variants were annotated for protein
+impact with Ensembl VEP v113 plus LOFTEE; details are in the published methods
+(Bhattacharyya et al. 2025, see References).
+</p>
+<p>
+The release was downloaded from
+<a href="https://ibdc.dbtindia.gov.in/genomeindia/downloadfile?path=9768GI_SummaryStats.tar.gz"
+target="_blank">ibdc.dbtindia.gov.in</a> as <tt>9768GI_SummaryStats.tar.gz</tt>, which
+contains 22 per-chromosome TSV files of CHROM, POS, ID, REF, ALT, AF (no header).
+The TSV files were converted to a single sorted, bgzipped, tabix-indexed VCF by the
+script <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py"
+target="_blank">genomeindiaToVcf.py</a>. The release ships only AF; AC and AN are
+synthesized as AN&nbsp;=&nbsp;2&nbsp;&times;&nbsp;9768&nbsp;=&nbsp;19536 and
+AC&nbsp;=&nbsp;round(AF&nbsp;&times;&nbsp;AN). Because variants were retained only
+when called in &ge;98% of samples, AN slightly overstates the true called allele
+count for some sites (worst case ~2%); the AC field should therefore be read as a
+close approximation rather than the exact observed count. The exact processing
+steps are documented in the <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+We thank the GenomeIndia consortium for making the 9,768-sample summary statistics
+publicly available. The track was built at UCSC by Max Haeussler.
+</p>
+
+<h2>References</h2>
+<p>
+Bhattacharyya C, Subramanian K, Uppili B, Biswas NK, Ramdas S, Tallapaka KB, Arvind P, Rupanagudi
+KV, Maitra A, Nagabandi T <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-025-02153-x" target="_blank">
+Mapping genetic diversity with the GenomeIndia project</a>.
+<em>Nat Genet</em>. 2025 Apr;57(4):767-773.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40200122" target="_blank">40200122</a>
+</p>
+
+<p>
+Subramanian K, Bhattacharyya C, Machha P, Mukherjee A, Tripathi D, Chakraborty S, Majumdar SS,
+Sengupta S, Singh P, More V <em>et al</em>; GenomeIndia Consortium.
+<a href="https://doi.org/10.64898/2026.03.20.26348801" target="_blank">
+An Atlas of Indian Genetic Diversity</a>.
+<em>medRxiv</em>. 2026 Mar 20;2026.03.20.26348801 (preprint).
+</p>
+
