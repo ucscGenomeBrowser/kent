@@ -12269,6 +12269,7 @@ if (url != NULL && url[0] != 0)
     }
 
 printf("</div>"); // #omimText
+hFreeConn(&conn);
 }
 
 static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
