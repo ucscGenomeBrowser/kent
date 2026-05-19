@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """
-Color ncORF bigBed/bigGenePred features by Kozak translational efficiency.
+Color ncORF bigBed/bigGenePred features by Kozak consensus strength.
 
 Reads a bigBed of ncORFs (either bigGenePred 12+14 or BED12) on stdin or
 from --in, fetches the 11-base Kozak context (positions -6..+5 relative to
 the A of the start codon) from the genome 2bit, looks up the Noderer 2014
 translational efficiency, and writes a bigGenePred BED with:
   - thickStart = chromStart, thickEnd = chromEnd  (full ORF as CDS)
-  - itemRgb    = color from TE bin (Blue/Teal/Green/Orange/Red, grey if unknown)
-  - three appended fields: startCodon, kozakStrength, kozakTE
+  - itemRgb    = color from Kozak strength category
+                 (Strong / Moderate / Weak / non-ATG / None)
+  - four appended fields:
+      startCodon
+      kozakStrength
+      kozakTE
+      _teRgb   -- alternate RGB string from the TE bin (Blue/Teal/Green/
+                  Orange/Red), kept for future second-color use. The
+                  underscore prefix hides it from the hgc detail page.
 
 Usage:
     bigBedToBed in.bb stdout | python3 colorByKozak.py [opts] > out.bed
@@ -59,24 +66,40 @@ def get_kozak_consensus_strength(ctx7):
 
 
 # ---- Color mapping ----
-COLOR_BINS = (
-    (0.5, "0,0,255"),       # Blue
-    (0.6, "0,128,128"),     # Teal
-    (0.7, "0,128,0"),       # Green
-    (0.8, "255,165,0"),     # Orange
+# Primary itemRgb: by Kozak strength category.
+STRENGTH_COLORS = {
+    "Strong":   "245,166,35",   # #F5A623 golden yellow
+    "Moderate": "91,155,213",   # #5B9BD5 steel blue
+    "Weak":     "169,169,169",  # #A9A9A9 medium gray
+    "non-ATG":  "0,0,0",        # #000000 black
+    "None":     "211,211,211",  # #D3D3D3 light gray (no genomic context)
+}
+
+
+def strength_to_rgb(strength):
+    return STRENGTH_COLORS.get(strength, STRENGTH_COLORS["None"])
+
+
+# Secondary (_teRgb): by Noderer 2014 TE bin. Kept for future use; the
+# underscore-prefixed field is automatically hidden on the hgc detail page.
+TE_COLOR_BINS = (
+    (0.5, "0,0,255"),           # Blue
+    (0.6, "0,128,128"),         # Teal
+    (0.7, "0,128,0"),           # Green
+    (0.8, "255,165,0"),         # Orange
     (float("inf"), "255,0,0"),  # Red
 )
-GREY = "128,128,128"        # context unavailable / off-edge
-PURPLE = "160,80,160"       # non-ATG start (Kozak rule does not apply)
+TE_GREY = "128,128,128"         # no TE lookup / no context
+TE_PURPLE = "160,80,160"        # non-ATG (Kozak rule does not apply)
 
 
 def te_to_rgb(te):
     if te is None:
-        return GREY
-    for thresh, rgb in COLOR_BINS:
+        return TE_GREY
+    for thresh, rgb in TE_COLOR_BINS:
         if te < thresh:
             return rgb
-    return COLOR_BINS[-1][1]
+    return TE_COLOR_BINS[-1][1]
 
 
 # ---- Reverse complement ----
@@ -323,13 +346,11 @@ def process(args):
         "ctx_unknown": 0,
         "te_miss": 0,
         "te_hit": 0,
-        "color_blue": 0,
-        "color_teal": 0,
-        "color_green": 0,
-        "color_orange": 0,
-        "color_red": 0,
-        "color_purple": 0,
-        "color_grey": 0,
+        "color_strong": 0,
+        "color_moderate": 0,
+        "color_weak": 0,
+        "color_non_atg": 0,
+        "color_none": 0,
         "strand_unknown": 0,
     }
     by_strength = {"Strong": 0, "Moderate": 0, "Weak": 0, "non-ATG": 0, "None": 0}
@@ -377,49 +398,49 @@ def process(args):
             strength = get_kozak_consensus_strength(ctx7)
         by_strength[strength] = by_strength.get(strength, 0) + 1
 
-        # Numeric TE: only meaningful for ATG; non-ATG and missing -> -1.
+        # Numeric TE is still reported as a separate field, but the primary
+        # itemRgb comes from the Kozak strength category, not the TE bin.
+        # The TE bin color is also kept as the secondary _teRgb field.
         if sc_label == "ATG" and ctx11:
             te = te_table.get(ctx11.lower())
             if te is None:
                 counters["te_miss"] += 1
                 te_str = "-1"
-                rgb = GREY
+                te_rgb = TE_GREY
             else:
                 counters["te_hit"] += 1
                 te_str = f"{te:.4f}"
-                rgb = te_to_rgb(te)
+                te_rgb = te_to_rgb(te)
         elif sc_label != "ATG" and ctx11:
-            # Non-ATG ORF with a valid context: show distinct purple color.
             te_str = "-1"
-            rgb = PURPLE
+            te_rgb = TE_PURPLE
         else:
-            # No context (chromosome edge, etc.) -> grey
             te_str = "-1"
-            rgb = GREY
+            te_rgb = TE_GREY
 
-        # Color counters
-        if rgb == GREY:
-            counters["color_grey"] += 1
-        elif rgb == PURPLE:
-            counters["color_purple"] += 1
-        elif rgb == "0,0,255":
-            counters["color_blue"] += 1
-        elif rgb == "0,128,128":
-            counters["color_teal"] += 1
-        elif rgb == "0,128,0":
-            counters["color_green"] += 1
-        elif rgb == "255,165,0":
-            counters["color_orange"] += 1
-        elif rgb == "255,0,0":
-            counters["color_red"] += 1
+        rgb = strength_to_rgb(strength)
+
+        # Color counters (one per kozakStrength category)
+        if strength == "Strong":
+            counters["color_strong"] += 1
+        elif strength == "Moderate":
+            counters["color_moderate"] += 1
+        elif strength == "Weak":
+            counters["color_weak"] += 1
+        elif strength == "non-ATG":
+            counters["color_non_atg"] += 1
+        else:
+            counters["color_none"] += 1
 
         # Force thickStart/thickEnd to span the entire ORF (full CDS)
         bed12[6] = str(chrom_start)
         bed12[7] = str(chrom_end)
         bed12[8] = rgb
 
-        # Output: bed12 + 8 bigGenePred extras + format-specific extras + 3 Kozak fields
-        out_fields = bed12 + bgp + list(source_extras) + [sc_label, strength, te_str]
+        # Output: bed12 + 8 bigGenePred extras + format-specific extras + 4 Kozak fields
+        # (startCodon, kozakStrength, kozakTE, _teRgb).
+        out_fields = (bed12 + bgp + list(source_extras)
+                      + [sc_label, strength, te_str, te_rgb])
         out_fh.write("\t".join(out_fields) + "\n")
 
     if in_fh is not sys.stdin:
@@ -447,13 +468,11 @@ def process(args):
                      f"te_hit={counters['te_hit']} te_miss={counters['te_miss']} "
                      f"ctx_unknown={counters['ctx_unknown']}\n")
     sys.stderr.write(f"[colorByKozak] colors: "
-                     f"red={counters['color_red']} "
-                     f"orange={counters['color_orange']} "
-                     f"green={counters['color_green']} "
-                     f"teal={counters['color_teal']} "
-                     f"blue={counters['color_blue']} "
-                     f"purple={counters['color_purple']} "
-                     f"grey={counters['color_grey']}\n")
+                     f"strong={counters['color_strong']} "
+                     f"moderate={counters['color_moderate']} "
+                     f"weak={counters['color_weak']} "
+                     f"non_atg={counters['color_non_atg']} "
+                     f"none={counters['color_none']}\n")
 
 
 def main():

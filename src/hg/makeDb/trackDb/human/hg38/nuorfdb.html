@@ -22,9 +22,15 @@ All ORFs have a minimum length of 8 amino acids.
 <p>
 Items are displayed in bigGenePred format. Each item is labeled with the nuORFdb ORF
 identifier, which encodes the source Ensembl transcript and ORF number (e.g.
-<tt>ENST00000488147.1_1_1</tt>). Color reflects Kozak translational efficiency &mdash;
-see the <a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for
-the color legend.
+<tt>ENST00000488147.1_1_1</tt>). Color reflects the categorical
+<b>Kozak consensus strength</b>:
+</p>
+<p>
+<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b> &ndash; A/G at position &minus;3 and G at position +4<br>
+<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b> &ndash; only one of those positions matches<br>
+<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b> &ndash; neither position matches<br>
+<span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b> &ndash; near-cognate start codon; the Kozak rule does not apply<br>
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> &ndash; chromosome edge or context unavailable
 </p>
 
 <p>

@@ -9,7 +9,7 @@ table openprotKozak
    char[1] strand;     "+ or - for strand"
    uint thickStart;    "Start of where display should be thick (start codon)"
    uint thickEnd;      "End of where display should be thick (stop codon)"
-   uint reserved;      "RGB value (use R,G,B string in input file). Color reflects Kozak translational efficiency."
+   uint reserved;      "RGB value (use R,G,B string in input file). Color reflects Kozak consensus strength."
    int blockCount;     "Number of blocks"
    int[blockCount] blockSizes; "Comma separated list of block sizes"
    int[blockCount] chromStarts; "Start positions relative to chromStart"
@@ -30,4 +30,5 @@ table openprotKozak
    string startCodon;          "Start codon (ATG, CTG, GTG, TTG, ACG, other) read from genome"
    string kozakStrength;       "Kozak consensus strength|Strong/Moderate/Weak per Kozak rule on -3 and +4"
    float  kozakTE;             "Kozak translational efficiency|Noderer 2014 TE (-1 if non-ATG or context unavailable)"
+   string _teRgb;              "Alternate RGB color from Kozak TE bin (reserved for future second-color use)"
    )

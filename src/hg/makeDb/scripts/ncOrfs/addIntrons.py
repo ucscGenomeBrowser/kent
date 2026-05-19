@@ -1,17 +1,32 @@
 #!/usr/bin/env python3
 """
-Add exon/intron block structure to utrAnnotUorfs (bed9+1) by looking up matches
-in the other ncORF bigBed tracks by (chrom, start, end, strand).
+Inject exon/intron block structure into utrAnnotUorfs (bed9+1) using a
+same-strand host transcript as the donor.
 
-The utrAnnotUorfs source is a bed9+1 with single-span features — no introns.
-For each feature, we search the other ncORF bigBeds for a feature with
-identical (chrom, start, end, strand). If exactly one or more match, we copy
-the block structure from the multi-block candidate with the most blocks, and
-record all source databases that produced matches in the new intronsSource
-field. If no match is found, the output is a single block and intronsSource
-is set to "none".
+Primary donor pool is MANE Select / MANE Plus Clinical (--mane). An
+optional fallback pool (--fallback, e.g. a full GENCODE bigBed) is consulted
+only when every MANE candidate is rejected, so MANE keeps priority whenever
+it works.
 
-Output is bed12 + uorfType + intronsSource (14 fields).
+For each uORF (chrom, chromStart, chromEnd, strand) the donor's coordinates
+need only overlap the uORF range, not contain it. The host transcript's
+exons are clipped to the uORF range; any host intron inside the overlap is
+preserved as an intron of the output bed12. A uORF that extends past either
+end of the host transcript keeps the host introns inside the overlap and
+gets a single bridging block for the orphan portion. A uORF endpoint that
+falls inside a host intron disqualifies that candidate (we will not invent
+exon structure for intronic bases). If every MANE candidate is disqualified
+the fallback pool is tried next; if every fallback candidate is also
+disqualified the uORF stays single-block.
+
+When multiple candidates qualify within the chosen pool, pick the one whose
+exons split the uORF range into the most blocks; ties broken by transcript
+name for determinism.
+
+Output is bed12 + uorfType + intronsSource (14 fields). intronsSource holds
+the chosen donor transcript ID (e.g. ENST00000342878.3), or 'none' if no
+host was found in either pool or the chosen host had no introns inside the
+uORF range.
 """
 
 import argparse
@@ -20,31 +35,129 @@ import sys
 from collections import defaultdict
 
 
-def read_other_bb(bb_path, source_name):
-    """Yield (key, (blockCount, blockSizes, chromStarts, source_name)) for every
-    multi-block feature in a bigBed."""
+def load_donors(bb_path, tag):
+    """Return dict {(chrom, strand): [(tx_start, tx_end, name, blocks)]}
+    sorted by tx_start within each group. Works for any bigBed/bigGenePred
+    whose first 12 fields are a standard bed12."""
     p = subprocess.Popen(["bigBedToBed", bb_path, "stdout"],
                          stdout=subprocess.PIPE, text=True)
+    by_key = defaultdict(list)
     n = 0
-    n_multi = 0
     for line in p.stdout:
         fields = line.rstrip("\n").split("\t")
         if len(fields) < 12:
             continue
-        n += 1
-        chrom, start, end = fields[0], int(fields[1]), int(fields[2])
+        chrom = fields[0]
+        tx_start = int(fields[1])
+        tx_end = int(fields[2])
+        name = fields[3]
         strand = fields[5]
-        block_count = int(fields[9])
-        block_sizes = fields[10]
-        chrom_starts = fields[11]
-        if block_count <= 1:
-            continue
-        n_multi += 1
-        key = (chrom, start, end, strand)
-        yield key, (block_count, block_sizes, chrom_starts, source_name)
+        sizes = [int(x) for x in fields[10].rstrip(",").split(",") if x]
+        starts = [int(x) for x in fields[11].rstrip(",").split(",") if x]
+        blocks = [(tx_start + s, tx_start + s + sz)
+                  for s, sz in zip(starts, sizes)]
+        by_key[(chrom, strand)].append((tx_start, tx_end, name, blocks))
+        n += 1
     p.wait()
-    sys.stderr.write(f"[addIntrons]   {source_name}: {n} features, "
-                     f"{n_multi} multi-block\n")
+    for k in by_key:
+        by_key[k].sort(key=lambda t: (t[0], t[1], t[2]))
+    sys.stderr.write(f"[addIntrons] loaded {n} {tag} transcripts from {bb_path}\n")
+    return by_key
+
+
+def find_overlapping(by_key, chrom, strand, u_s, u_e):
+    """Return list of (tx_start, tx_end, name, blocks) where the transcript
+    range overlaps [u_s, u_e] on the given strand."""
+    out = []
+    for entry in by_key.get((chrom, strand), []):
+        tx_s, tx_e, _, _ = entry
+        if tx_s >= u_e:
+            break  # sorted by start; further entries start at/after u_e
+        if tx_e > u_s:
+            out.append(entry)
+    return out
+
+
+def project(tx_s, tx_e, blocks, u_s, u_e):
+    """Project a uORF onto a MANE transcript's exon blocks.
+
+    Returns (out_blocks, reason). out_blocks is a list of (cs, ce) pairs
+    spanning [u_s, u_e], or None if the projection is rejected. reason is
+    one of: 'ok', 'no_overlap_exons', 'start_in_intron', 'end_in_intron'.
+
+    If the uORF extends past tx_s or tx_e the orphan portion is filled in
+    with a single bridging block at that end; that block is merged into the
+    neighbouring clipped MANE exon when they are contiguous, so a uORF
+    that runs past MANE's last exon simply gets a longer terminal block.
+    """
+    proj = []
+    for (bs, be) in blocks:
+        if be <= u_s or bs >= u_e:
+            continue
+        cs = max(bs, u_s)
+        ce = min(be, u_e)
+        if ce > cs:
+            proj.append((cs, ce))
+
+    if not proj:
+        return None, "no_overlap_exons"
+
+    # Handle the uORF start. If the first clipped block starts after u_s
+    # there is either (a) an "orphan" stretch before MANE (u_s < tx_s) which
+    # we fill with a bridging block, or (b) u_s sits inside a MANE intron
+    # which we cannot bridge without faking exonic bases — reject.
+    first_cs = proj[0][0]
+    if first_cs > u_s:
+        if u_s < tx_s:
+            proj.insert(0, (u_s, first_cs))
+        else:
+            return None, "start_in_intron"
+
+    # Symmetric handling for the uORF end.
+    last_ce = proj[-1][1]
+    if last_ce < u_e:
+        if u_e > tx_e:
+            proj.append((last_ce, u_e))
+        else:
+            return None, "end_in_intron"
+
+    # Merge any contiguous blocks created by the bridging steps so the
+    # output has no zero-length introns.
+    merged = [proj[0]]
+    for (cs, ce) in proj[1:]:
+        if cs == merged[-1][1]:
+            merged[-1] = (merged[-1][0], ce)
+        else:
+            merged.append((cs, ce))
+    return merged, "ok"
+
+
+def best_projection(candidates, u_s, u_e):
+    """Project a uORF against a list of candidate donor transcripts.
+
+    Returns (best_blocks, best_name, saw_endpoint_in_intron).
+    best_blocks is None if no candidate yielded a valid projection.
+    """
+    best_blocks = None
+    best_name = ""
+    saw_endpoint_in_intron = False
+    for (tx_s, tx_e, tx_name, tx_blocks) in candidates:
+        proj, reason = project(tx_s, tx_e, tx_blocks, u_s, u_e)
+        if proj is None:
+            if reason in ("start_in_intron", "end_in_intron"):
+                saw_endpoint_in_intron = True
+            continue
+        if best_blocks is None:
+            best_blocks = proj
+            best_name = tx_name
+            continue
+        # Prefer more output blocks (= more host introns inside the uORF
+        # range). Tie-break by transcript name for determinism.
+        if (len(proj) > len(best_blocks)
+                or (len(proj) == len(best_blocks) and tx_name < best_name)):
+            best_blocks = proj
+            best_name = tx_name
+    return best_blocks, best_name, saw_endpoint_in_intron
 
 
 def main():
@@ -54,37 +167,35 @@ def main():
                     help="input utrAnnotUorfs BED (bed9+1)")
     ap.add_argument("--out", dest="outBed", required=True,
                     help="output BED12 + uorfType + intronsSource")
-    ap.add_argument("--source", action="append", required=True,
-                    help="NAME:PATH to another ncORF bigBed (repeatable)")
-    ap.add_argument("--report",
-                    help="optional path to write a summary TSV")
+    ap.add_argument("--mane", required=True,
+                    help="MANE bigBed (e.g. /gbdb/hg38/mane/mane.bb)")
+    ap.add_argument("--fallback",
+                    help="optional fallback bigBed (e.g. a full GENCODE bb) "
+                         "consulted only when every MANE candidate is "
+                         "rejected")
+    ap.add_argument("--report", help="optional path to write a summary TSV")
     args = ap.parse_args()
 
-    # Load all donors
-    lookup = defaultdict(list)
-    for spec in args.source:
-        if ":" not in spec:
-            sys.exit(f"--source must be NAME:PATH, got {spec!r}")
-        name, path = spec.split(":", 1)
-        sys.stderr.write(f"[addIntrons] loading {name} from {path}\n")
-        for key, val in read_other_bb(path, name):
-            lookup[key].append(val)
+    mane_by_key = load_donors(args.mane, "MANE")
+    fb_by_key = load_donors(args.fallback, "fallback") if args.fallback else {}
 
-    sys.stderr.write(f"[addIntrons] {len(lookup)} unique coord keys with "
-                     f"multi-block donors\n")
+    n_mane_introns = 0        # picked a MANE donor, projection has >=2 blocks
+    n_mane_noIntron = 0       # picked a MANE donor, projection has 1 block
+    n_fb_introns = 0          # MANE rejected, fallback gave >=2 blocks
+    n_fb_noIntron = 0         # MANE rejected, fallback gave 1 block
+    n_endpoint_in_intron = 0  # both pools rejected with an endpoint reason
+    n_unmatched = 0           # no candidate in either pool overlaps the uORF
+    by_tx_mane = defaultdict(int)
+    by_tx_fb = defaultdict(int)
 
-    # Process utrAnnotUorfs
-    matched = 0
-    unmatched = 0
-    by_source = defaultdict(int)
     with open(args.inBed) as fh, open(args.outBed, "w") as out:
         for line in fh:
             fields = line.rstrip("\n").split("\t")
             if len(fields) < 10:
                 continue
             chrom = fields[0]
-            start = int(fields[1])
-            end = int(fields[2])
+            u_s = int(fields[1])
+            u_e = int(fields[2])
             name = fields[3]
             score = fields[4]
             strand = fields[5]
@@ -93,40 +204,87 @@ def main():
             item_rgb = fields[8]
             uorf_type = fields[9]
 
-            key = (chrom, start, end, strand)
-            hits = lookup.get(key)
-            if hits:
-                # Pick the donor with the most blocks; tie-break by source name
-                # for determinism
-                best = max(hits, key=lambda v: (v[0], v[3]))
-                block_count, block_sizes, chrom_starts, _ = best
-                sources = ",".join(sorted({h[3] for h in hits}))
-                matched += 1
-                by_source[sources] += 1
+            mane_cands = find_overlapping(mane_by_key, chrom, strand, u_s, u_e)
+            best_proj, best_name, mane_endpoint = best_projection(
+                mane_cands, u_s, u_e)
+            used_pool = "mane"
+            fb_endpoint = False
+
+            if best_proj is None and fb_by_key:
+                fb_cands = find_overlapping(fb_by_key, chrom, strand, u_s, u_e)
+                best_proj, best_name, fb_endpoint = best_projection(
+                    fb_cands, u_s, u_e)
+                used_pool = "fallback"
             else:
-                size = end - start
+                fb_cands = None  # not consulted
+
+            if best_proj is None:
+                size = u_e - u_s
                 block_count = 1
                 block_sizes = f"{size},"
                 chrom_starts = "0,"
                 sources = "none"
-                unmatched += 1
+                if not mane_cands and not fb_by_key:
+                    n_unmatched += 1
+                elif not mane_cands and fb_by_key and not fb_cands:
+                    n_unmatched += 1
+                elif mane_endpoint or fb_endpoint:
+                    n_endpoint_in_intron += 1
+                else:
+                    # candidates existed but all collapsed to nothing
+                    n_unmatched += 1
+            elif len(best_proj) <= 1:
+                size = u_e - u_s
+                block_count = 1
+                block_sizes = f"{size},"
+                chrom_starts = "0,"
+                sources = "none"
+                if used_pool == "mane":
+                    n_mane_noIntron += 1
+                else:
+                    n_fb_noIntron += 1
+            else:
+                block_count = len(best_proj)
+                block_sizes = ",".join(str(ce - cs) for (cs, ce) in best_proj) + ","
+                chrom_starts = ",".join(str(cs - u_s) for (cs, ce) in best_proj) + ","
+                sources = best_name
+                if used_pool == "mane":
+                    n_mane_introns += 1
+                    by_tx_mane[best_name] += 1
+                else:
+                    n_fb_introns += 1
+                    by_tx_fb[best_name] += 1
 
-            bed12 = [chrom, str(start), str(end), name, score, strand,
+            bed12 = [chrom, str(u_s), str(u_e), name, score, strand,
                      thick_start, thick_end, item_rgb,
                      str(block_count), block_sizes, chrom_starts]
             out.write("\t".join(bed12 + [uorf_type, sources]) + "\n")
 
-    sys.stderr.write(f"[addIntrons] matched={matched} unmatched={unmatched}\n")
-    for src, cnt in sorted(by_source.items(), key=lambda x: -x[1]):
-        sys.stderr.write(f"[addIntrons]   {src}: {cnt}\n")
+    sys.stderr.write(
+        f"[addIntrons] mane_introns={n_mane_introns} "
+        f"mane_noIntron={n_mane_noIntron} "
+        f"fallback_introns={n_fb_introns} "
+        f"fallback_noIntron={n_fb_noIntron} "
+        f"endpoint_in_intron={n_endpoint_in_intron} "
+        f"unmatched={n_unmatched}\n")
+    sys.stderr.write(
+        f"[addIntrons] distinct donors used: "
+        f"mane={len(by_tx_mane)} fallback={len(by_tx_fb)}\n")
 
     if args.report:
         with open(args.report, "w") as r:
-            r.write(f"matched\t{matched}\n")
-            r.write(f"unmatched\t{unmatched}\n")
-            r.write(f"unique_donor_keys\t{len(lookup)}\n")
-            for src, cnt in sorted(by_source.items(), key=lambda x: -x[1]):
-                r.write(f"source_{src}\t{cnt}\n")
+            r.write(f"mane_introns\t{n_mane_introns}\n")
+            r.write(f"mane_noIntron\t{n_mane_noIntron}\n")
+            r.write(f"fallback_introns\t{n_fb_introns}\n")
+            r.write(f"fallback_noIntron\t{n_fb_noIntron}\n")
+            r.write(f"endpoint_in_intron\t{n_endpoint_in_intron}\n")
+            r.write(f"unmatched\t{n_unmatched}\n")
+            r.write(f"distinct_mane_donors\t{len(by_tx_mane)}\n")
+            r.write(f"distinct_fallback_donors\t{len(by_tx_fb)}\n")
+            for tx, cnt in sorted(by_tx_mane.items(), key=lambda x: -x[1]):
+                r.write(f"mane_donor_{tx}\t{cnt}\n")
+            for tx, cnt in sorted(by_tx_fb.items(), key=lambda x: -x[1]):
+                r.write(f"fallback_donor_{tx}\t{cnt}\n")
 
 
 if __name__ == "__main__":

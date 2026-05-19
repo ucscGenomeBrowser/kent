@@ -151,23 +151,28 @@ cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg38
 # Kozak coloring + bigGenePred conversion for all ncORF subtracks
 # 2026-04-29 Claude max
 
-# Goal: color every ncORF feature by Kozak translational efficiency (TE) and
-# enable codon display in hgTracks. Three new annotation fields are added to
-# each output bigBed:
+# Goal: color every ncORF feature by Kozak consensus strength (categorical)
+# and enable codon display in hgTracks. Four new annotation fields are
+# appended to each output bigBed:
 #   startCodon     - first 3 bp of ORF read from genome (ATG / CTG / GTG / ...)
 #   kozakStrength  - Strong / Moderate / Weak (Kozak rule on -3 and +4), or
 #                    "non-ATG" for non-ATG starts, "None" for no context
 #   kozakTE        - Noderer 2014 translational efficiency divided by 100;
 #                    -1 if non-ATG or context unavailable
+#   _teRgb         - alternate RGB string from the TE bin
+#                    (Blue/Teal/Green/Orange/Red, purple for non-ATG, grey
+#                    for missing). The underscore prefix hides it on the
+#                    hgc detail page; kept for future second-color use.
 #
-# The color scheme is set in colorByKozak.py (COLOR_BINS / GREY / PURPLE):
-#   kozakTE  < 0.5         -> Blue   (0,0,255)
-#   kozakTE >= 0.5, < 0.6  -> Teal   (0,128,128)
-#   kozakTE >= 0.6, < 0.7  -> Green  (0,128,0)
-#   kozakTE >= 0.7, < 0.8  -> Orange (255,165,0)
-#   kozakTE >= 0.8         -> Red    (255,0,0)
-#   non-ATG start codon    -> Purple (160,80,160)
-#   no/short context       -> Grey   (128,128,128)
+# The color scheme is set in colorByKozak.py (STRENGTH_COLORS) and is keyed on
+# the categorical kozakStrength label, not the numeric TE score:
+#   Strong   -> golden yellow (245,166,35)   #F5A623
+#   Moderate -> steel blue    ( 91,155,213)  #5B9BD5
+#   Weak     -> medium gray   (169,169,169)  #A9A9A9
+#   non-ATG  -> black         (  0,  0,  0)  #000000
+#   None     -> light gray    (211,211,211)  #D3D3D3   (no genomic context)
+# The kozakTE field is still written for filtering, but is no longer the
+# basis for the color.
 #
 # All output files are bigGenePred so codon shading is enabled (thickStart
 # and thickEnd span the whole ORF, since ncORFs are entirely coding).
@@ -204,24 +209,31 @@ $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.primary.bb       $script
 $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.comprehensive.bb $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.comprehensive.kozak.bb
 
 # utrAnnotUorfs needs an extra step: the source is bed9+1 (no exon blocks),
-# so introns are copied from any matching feature in the other ncORF tracks
-# (matched by exact chrom/start/end/strand). The matching donor's blockCount/
-# blockSizes/chromStarts replace the original single block, and the donor
-# database name(s) are recorded in a new intronsSource field. Of 44,435
-# uORFs, 6,508 received introns (mostly from metamorf); 37,927 stayed
-# single-block (intronsSource=none).
+# so introns are grafted from a host MANE Select / MANE Plus Clinical
+# transcript. addIntrons.py finds, for each uORF, a same-strand MANE
+# transcript whose own coordinates overlap (not necessarily contain) the
+# uORF range, then clips the host transcript's exons to the uORF range so
+# any MANE intron inside the uORF becomes an intron of the bed12 record.
+# A uORF that extends past either end of MANE keeps the MANE introns inside
+# the overlap and gets a single bridging block for the orphan portion. A
+# uORF endpoint that falls inside a MANE intron disqualifies that
+# candidate; if all candidates are disqualified the uORF stays
+# single-block. The chosen MANE transcript ID is recorded in the
+# intronsSource field; uORFs without a MANE host on the same strand, or
+# whose host has no introns inside the uORF range, get intronsSource=none.
 cd /hive/data/genomes/hg38/bed/ncorfs/utrannot
 bigBedToBed utrAnnotUorfs.bb utrAnnotUorfs.bed9.bed
+# addIntrons tries MANE first (preferred donor); if all MANE candidates
+# are rejected for a given uORF it falls back to the full GENCODE
+# comprehensive set. GENCODE covers the cases where the published
+# UTRannotator coords came from an alternative transcript whose UTR exon
+# boundaries differ from MANE's.
 python3 $scriptDir/addIntrons.py \
     --in utrAnnotUorfs.bed9.bed \
     --out utrAnnotUorfs.withIntrons.bed \
     --report utrAnnotUorfs.withIntrons.report.tsv \
-    --source gencNcOrfs:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb \
-    --source gencNcOrfsPrimary:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb \
-    --source gencNcOrfsComprehensive:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb \
-    --source nuorfdb:/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.kozak.bb \
-    --source metamorf:/gbdb/hg38/ncOrfs/metamorf/MetamORF.kozak.bb \
-    --source openprot:/gbdb/hg38/ncOrfs/openprot/openprot.kozak.bb
+    --mane /gbdb/hg38/mane/mane.bb \
+    --fallback /gbdb/hg38/gencode/gencodeV49.bb
 python3 $scriptDir/colorByKozak.py \
     --in utrAnnotUorfs.withIntrons.bed \
     --teTable $scriptDir/translational_efficiency.txt \
@@ -229,7 +241,11 @@ python3 $scriptDir/colorByKozak.py \
     --report utrAnnotUorfs.kozak.report.tsv \
     --out utrAnnotUorfs.kozak.bed
 sort -k1,1 -k2,2n utrAnnotUorfs.kozak.bed > utrAnnotUorfs.kozak.sorted.bed
-bedToBigBed -type=bed12+12 -as=$scriptDir/utrAnnotUorfs.as -tab \
+# The .as has 14 extras (8 bigGenePred + uorfType + intronsSource +
+# startCodon + kozakStrength + kozakTE + _teRgb) so the bigBed type is
+# bed12+14. The _teRgb field is a hidden alternate-color string (underscore
+# prefix => skipped by the hgc detail page).
+bedToBigBed -type=bed12+14 -as=$scriptDir/utrAnnotUorfs.as -tab \
     utrAnnotUorfs.kozak.sorted.bed /hive/data/genomes/hg38/chrom.sizes \
     utrAnnotUorfs.kozak.bb
 rm utrAnnotUorfs.bed9.bed utrAnnotUorfs.kozak.bed utrAnnotUorfs.kozak.sorted.bed \
