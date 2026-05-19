@@ -2577,7 +2577,7 @@ this.each(function(){
                         chr.right = parseInt(loc[2]);
                 }
 
-                let title = this.getAttribute("originalTitle") || this.getAttribute("title");
+                let title = this.getAttribute("data-tooltip") || this.getAttribute("title");
                 var range = title.substr(title.lastIndexOf(':')+1);
                 var pos = range.split('-');
                 if (pos.length === 2) {
