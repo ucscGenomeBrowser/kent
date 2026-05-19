@@ -10426,7 +10426,7 @@ else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
     asObj = vcfAsObj();
-else if (startsWithWord("myVariants", tdb->type))
+else if (isMyVariantsType(tdb->type))
     asObj = myVariantsAsObj();
 else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();

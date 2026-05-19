@@ -554,7 +554,7 @@ struct dyString *ds = dyStringNew(0);
 for (track = trackList; track != NULL; track = track->next)
     {
     /* myVariants tracks live in mvCtfile_<db>; skip so they aren't duplicated here. */
-    if (track->tdb && track->tdb->type && startsWithWord("myVariants", track->tdb->type))
+    if (track->tdb && isMyVariantsType(track->tdb->type))
         continue;
     /* may be coming in here from the table browser.  It has wiggle
      *	ascii data waiting to be encoded into .wib and .wig
@@ -608,7 +608,7 @@ boolean hadRegular = isNotEmpty(cartOptionalString(cart, ctFileVar));
 int persistCount = 0;
 struct customTrack *ct;
 for (ct = ctList; ct != NULL; ct = ct->next)
-    if (!(ct->tdb && ct->tdb->type && startsWithWord("myVariants", ct->tdb->type)))
+    if (!(ct->tdb && isMyVariantsType(ct->tdb->type)))
         persistCount++;
 if (persistCount > 0)
     {

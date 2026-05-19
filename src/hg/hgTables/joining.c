@@ -298,7 +298,7 @@ char *track = dtfList->table;
 struct customTrack *ct = ctLookupName(track);
 char *type = ct->dbTrackType;
 struct slName *fieldList = NULL;
-if (startsWithWord("myVariants", type) ||
+if (isMyVariantsType(type) ||
         sameWord("bedDetail", type) ||
         sameWord("barChart", type) ||
         sameWord("interact", type) ||
@@ -306,12 +306,12 @@ if (startsWithWord("myVariants", type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    if (sameWord("myVariants", type))
+    if (isMyVariantsType(type))
         {
         ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
         }
     fieldList = sqlListFields(conn, ct->dbTableName);
-    if (startsWith("myVariants_shared_", track))
+    if (isMyVariantsSharedTrack(track))
         myVariantsStripHiddenFields(&fieldList);
     hFreeConn(&conn);
     }
@@ -1101,7 +1101,7 @@ if (! doJoin)
         makeVcfOrderedCommaFieldList(dtfList, dy);
     else if (isHicTable(dtfList->table))
         makeHicOrderedCommaFieldList(dtfList, dy);
-    else if (isCustomTrack(dtfList->table) || startsWith("myVariants_", dtfList->table))
+    else if (isCustomTrack(dtfList->table) || isMyVariantsTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);

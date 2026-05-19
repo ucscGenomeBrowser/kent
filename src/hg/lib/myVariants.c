@@ -12,6 +12,24 @@
 #include "obscure.h"
 #include "wikiLink.h"
 
+boolean isMyVariantsType(char *type)
+/* TRUE if type names the myVariants custom-track type. NULL-safe. */
+{
+return sameOk(type, MYVARIANTS_TYPE);
+}
+
+boolean isMyVariantsTrack(char *trackName)
+/* TRUE if trackName is a myVariants custom track (own or shared). NULL-safe. */
+{
+return trackName != NULL && startsWith(MYVARIANTS_TRACK_PREFIX, trackName);
+}
+
+boolean isMyVariantsSharedTrack(char *trackName)
+/* TRUE if trackName is a myVariants shared custom track. NULL-safe. */
+{
+return trackName != NULL && startsWith(MYVARIANTS_SHARED_TRACK_PREFIX, trackName);
+}
+
 void myVariantsStaticLoad(char **row, struct myVariants *ret)
 /* Load a row from myVariants table into ret. The contents of ret will be replaced at the next call to this function. */
 {
@@ -415,7 +433,7 @@ char *myVariantsGetTableName(char *userName)
 if (!userName)
     return NULL;
 char *encoded = encodeUserNameForIdentifier(userName);
-struct dyString *tableName = dyStringCreate("myVariants_%s", encoded);
+struct dyString *tableName = dyStringCreate(MYVARIANTS_TRACK_PREFIX "%s", encoded);
 freeMem(encoded);
 return dyStringCannibalize(&tableName);
 }
@@ -460,9 +478,9 @@ struct myVariantsShare *myVariantsResolveSharedTrack(char *trackName, struct car
  * (not the cart-supplied values) for authorization or scoping decisions.
  * Caller frees with myVariantsShareFree. */
 {
-if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
     return NULL;
-char *token = trackName + strlen("myVariants_shared_");
+char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
 char cartVar[256];
 safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
 /* The cart-cookie presence gate is belt-and-suspenders: it ensures the share
@@ -501,7 +519,7 @@ char *myVariantsResolveDbTableForCustomTrack(char *trackName, struct cart *cart)
 {
 if (isEmpty(trackName))
     return NULL;
-if (startsWith("myVariants_shared_", trackName))
+if (isMyVariantsSharedTrack(trackName))
     {
     struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
     if (share == NULL)
@@ -510,7 +528,7 @@ if (startsWith("myVariants_shared_", trackName))
     myVariantsShareFree(&share);
     return dbTable;
     }
-if (startsWith("myVariants_", trackName))
+if (isMyVariantsTrack(trackName))
     {
     /* trackName is the SQL-identifier-encoded form "myVariants_<encoded>".
      * Resolve via the current logged-in user (an own track is only viewable
@@ -540,7 +558,7 @@ char *myVariantsSharedScopeWhere(char *trackName, struct cart *cart)
 static struct hash *cache = NULL;
 if (cache == NULL)
     cache = hashNew(0);
-if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
     return NULL;
 char *cached = hashFindVal(cache, trackName);
 if (cached != NULL)
@@ -736,7 +754,7 @@ else
     {
     char base[PATH_LEN];
     char *hostPort = cgiServerNamePort();
-    safef(base, sizeof base, "myVariants_%s_%s_%s",
+    safef(base, sizeof base, MYVARIANTS_TRACK_PREFIX "%s_%s_%s",
         hostPort ? hostPort : "localhost", targetDb,
         isNotEmpty(encodedTableName) ? encodedTableName : "shared");
     for (char *p = base; *p; p++) if (*p == '/') *p = '_';
@@ -805,7 +823,7 @@ if (cart != NULL)
         {
         char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
         char trackName[512];
-        safef(trackName, sizeof(trackName), "myVariants_shared_%s", token);
+        safef(trackName, sizeof(trackName), MYVARIANTS_SHARED_TRACK_PREFIX "%s", token);
         struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
         if (share == NULL)
             continue;
@@ -846,7 +864,8 @@ if (cart != NULL)
         else
             safef(shortLabel, sizeof(shortLabel), "%s's %s", owner, projectLabel);
         dyStringPrintf(sharedLines,
-            "track name=\"myVariants_shared_%s\" type=\"myVariants\" itemRgb=\"on\""
+            "track name=\"" MYVARIANTS_SHARED_TRACK_PREFIX "%s\""
+            " type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
             " visibility=\"pack\""
             " shortLabel=\"%s\""
             " longLabel=\"Shared annotations: %s (from %s)\"\n",
@@ -915,7 +934,7 @@ if (hasOwnItems)
 
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
-    fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
+    fprintf(f, "track name=\"%s\" type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
         " visibility=\"pack\" shortLabel=\"%s\""
         " longLabel=\"%s\"\n", encodedTableName, shortLabel, longLabel);
 if (dyStringLen(sharedLines) > 0)
@@ -941,7 +960,7 @@ boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
 if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
     return FALSE;
 char *trackName = ct->tdb->track;
-if (!startsWith("myVariants_", trackName))
+if (!isMyVariantsTrack(trackName))
     return FALSE;
 
 /* Cleanup common to any myVariants removal: drop the track's visibility var
@@ -952,10 +971,10 @@ char mvVar[256];
 safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
 cartRemove(cart, mvVar);
 
-if (startsWith("myVariants_shared_", trackName))
+if (isMyVariantsSharedTrack(trackName))
     {
     /* Drop the share-acceptance var so the share isn't re-imported. */
-    char *token = trackName + strlen("myVariants_shared_");
+    char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
     char shareCartVar[256];
     safef(shareCartVar, sizeof shareCartVar,
         MYVAR_SHARED_CART_PREFIX "%s", token);

@@ -13,6 +13,20 @@
  * coexist without clobbering each other. */
 #define MYVARIANTS_FILE_VAR_PREFIX "mvCtfile_"
 
+/* Track-name and type identifiers for myVariants custom tracks. */
+#define MYVARIANTS_TYPE "myVariants"
+#define MYVARIANTS_TRACK_PREFIX "myVariants_"
+#define MYVARIANTS_SHARED_TRACK_PREFIX "myVariants_shared_"
+
+boolean isMyVariantsType(char *type);
+/* TRUE if type names the myVariants custom-track type. NULL-safe. */
+
+boolean isMyVariantsTrack(char *trackName);
+/* TRUE if trackName is a myVariants custom track (own or shared). NULL-safe. */
+
+boolean isMyVariantsSharedTrack(char *trackName);
+/* TRUE if trackName is a myVariants shared custom track. NULL-safe. */
+
 struct myVariants
 /* An item in a myVariants type track. */
     {

@@ -822,7 +822,7 @@ void myVariantsLoadItems(struct track *track)
  * where you drag to create an item. */
 {
 struct linkedFeatures *lfList = NULL;
-boolean isShared = startsWith("myVariants_shared_", track->track);
+boolean isShared = isMyVariantsSharedTrack(track->track);
 
 if (isShared)
     {
@@ -1189,7 +1189,7 @@ for (el = shareVars; el != NULL; el = el->next)
     {
     char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
     char trackName[512];
-    safef(trackName, sizeof(trackName), "myVariants_shared_%s", token);
+    safef(trackName, sizeof(trackName), MYVARIANTS_SHARED_TRACK_PREFIX "%s", token);
 
     /* Check if there's a pending edit for this shared track */
     char varName[256];

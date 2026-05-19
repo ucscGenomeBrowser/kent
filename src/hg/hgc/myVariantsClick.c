@@ -30,7 +30,7 @@ char *trackName = ct->tdb->track;
 
 /* Detect shared track and resolve table/permissions via hgcentral so that
  * revoked or downgraded shares no longer return owner data. */
-boolean isShared = startsWith("myVariants_shared_", trackName);
+boolean isShared = isMyVariantsSharedTrack(trackName);
 char *dataOwner = NULL;     /* user whose table holds the data */
 char *scopeProject = NULL;  /* live share's project, or NULL for own track */
 char *scopeDb = NULL;       /* live share's db, or NULL for own track */
@@ -91,10 +91,14 @@ if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 dyStringFree(&query);
 
-char **row = sqlNextRow(sr);
 struct myVariants *item = NULL;
-if (row != NULL && sameString(row[4], expectedName))
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    {
     item = myVariantsLoad(row);
+    if (!sameOk(item->name, expectedName))
+        myVariantsFree(&item);
+    }
 sqlFreeResult(&sr);
 freeMem(idStrCopy);
 

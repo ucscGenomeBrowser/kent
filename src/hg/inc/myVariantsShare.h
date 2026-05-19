@@ -116,11 +116,5 @@ char *myVariantsShareCartValue(struct myVariantsShare *share);
 /* Build JSON cart value string from a share record.
  * Caller must freeMem the result. */
 
-boolean myVariantsParseShareCartValue(char *val, char **retOwner,
-    char **retProject, char **retDb, int *retPermission, char **retLabel);
-/* Parse a JSON cart value string back into components. Returns FALSE on bad format.
- * retOwner, retProject, retDb, retLabel are cloneString'd; caller must free.
- * Any ret* param may be NULL; pass NULL to skip. */
-
 #endif /* MYVARIANTSSHARE_H */
 
