@@ -492,7 +492,9 @@ def generate_trackdb_fragment(output_path, databases):
                 "missense|Missense,synonymous|Synonymous,"
                 "stop_gained|Stop Gained,frameshift|Frameshift,"
                 "splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,"
-                "intron|Intron,.|Intergenic\n")
+                "intron|Intron,3_prime_utr|3' UTR,5_prime_utr|5' UTR,"
+                "non_coding|Non-coding,.|Intergenic,others|Other\n")
+        f.write("        filterType.consequence multipleListOr\n")
         f.write("        filterLabel.consequence Consequence\n")
 
         # Length filters
@@ -541,6 +543,8 @@ def generate_trackdb_fragment(output_path, databases):
                 f.write(f"        filterByRange.{db_key}AC_{pop['key']} on\n")
                 f.write(f"        filterLabel.{db_key}AC_{pop['key']} "
                         f"{db_info['name']} {pop['name']} AC\n")
+
+        f.write("        skipEmptyFields on\n")
 
     print(f"Wrote trackDb fragment: {output_path}", file=sys.stderr)
 
@@ -609,15 +613,15 @@ def main():
         sys.exit(1)
 
     # Step 4: Concatenate and sort
+    # Stream sort output straight to disk instead of capture_output=True, which
+    # would buffer the full sorted chrom (~24 GB for chr1) in Python's RAM.
     print(f"\n=== Concatenating {len(chrom_beds)} chromosome files ===",
           file=sys.stderr)
     bed_path = os.path.join(args.work_dir, f"{args.output_prefix}.bed")
-    with open(bed_path, "w") as out:
+    with open(bed_path, "wb") as out:
         for chrom_bed in chrom_beds:
-            result = subprocess.run(
-                ["sort", "-k2,2n", chrom_bed],
-                capture_output=True, text=True)
-            out.write(result.stdout)
+            subprocess.run(["sort", "-k2,2n", chrom_bed],
+                           stdout=out, check=True)
 
     # Step 5: bedToBigBed
     print(f"\n=== Running bedToBigBed ===", file=sys.stderr)

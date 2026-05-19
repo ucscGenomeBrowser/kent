@@ -772,3 +772,69 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py \
 #      and filterByRange.GenomeIndiaAF/AC stanzas in varFreqs.ra.
 # A full varFreqsAll rebuild has NOT been re-run yet; do that after QA
 # clears the standalone subtrack.
+
+##########
+# 2026-05-17 -> 2026-05-18 Claude max
+# varFreqsAll combined-track rebuild incorporating the four new subtracks
+# registered earlier in May: WBBC (~78.6M), TPMI (~672k), ChinaMAP
+# (~147M), GenomeIndia (~130M). Also drops IndiGen (no AC/AF in source)
+# from the merged output - the standalone indigenomes subtrack is
+# unchanged but no longer contributes a column to varFreqsAll.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# files.txt regenerated from databases.tsv to point at the new
+# _-prefixed /gbdb paths (allofus, sfari, npm, kova, finngen, swefreq,
+# topmed, mgrb, mxb, tishkoff, tpmi, chinamap, genomeindia) and to add
+# wbbc/tpmi/chinamap/genomeindia.
+# Forced merge+csq re-run; existing per-VCF normalize cache reused for
+# the 25 unchanged databases. Removed stale IndiGenomes_Variants.norm
+# cache so it would not sneak into the find-based merge input list.
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+    merged.annotated.vcf.gz.tbi normalized_files.txt
+rm -f normalized/IndiGenomes_Variants.norm.vcf.gz*
+./mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --output-prefix varFreqsAll --threads 8
+# Final varFreqsAll.bb: 46 GB, 1,335,789,391 items, 147 fields, 25
+# chromosomes. Symlinked through /gbdb/hg38/varFreqs/_all/varFreqsAll.bb
+# (unchanged - the script writes the bb in place; symlink already
+# points at it).
+#
+# mergeAndAnnotate.sh fix: bcftools 1.22 (newer than the previous
+# build) is stricter than older versions about chromosome-naming
+# mismatches between the merged VCF (chr1..) and the Ensembl GFF3
+# (1..). Added --unify-chr-names chr,-,chr to the bcftools csq
+# invocation; also added --force so it tolerates the 5 alt contigs
+# (chr15_KI270850v1_alt etc.) that SCHEMA contributes to the merged
+# VCF but that the GFF3 does not annotate - earlier bcftools just
+# emitted them without csq calls; 1.22 aborts.
+#
+# trackDb fragment updated in human/varFreqs.ra: WBBC, TPMI, ChinaMAP,
+# GenomeIndia rows added to filterValues.sources and as per-database
+# filterByRange.<DB>AF/AC pairs; IndiGen pair removed (matches the new
+# bb columns). WBBC 4-region populations (North/Central/South/Lingnan)
+# added at the end of the per-population block. Auto-generated raw
+# fragment lives at /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.trackDb.ra
+# for reference; the manual filterType.consequence multipleListOr line
+# and the expanded consequence buckets (3_prime_utr, 5_prime_utr,
+# non_coding, others) are NOT in the auto-fragment - they have to be
+# kept on top of it.
+
+##########
+# 2026-05-19 Claude max
+# Post-rebuild cleanups to scripts/varFreqs (no track change, just safer
+# next rebuild):
+#  - mergeAndAnnotate.sh now reads VCF paths directly from databases.tsv
+#    in both Step 4 (per-VCF strip+norm) and Step 5 (merge list). The old
+#    files.txt is no longer consulted; that file and databases.tsv used to
+#    drift, and Step 5's `find normalized/` would silently re-merge stale
+#    entries (e.g. IndiGenomes_Variants.norm.vcf.gz after IndiGen was
+#    dropped from databases.tsv).
+#  - vcfToBigBed.py concat step now streams `sort -k2,2n chr.bed >> out`
+#    via subprocess stdout= rather than capture_output=True. The old form
+#    buffered the entire sorted chrom (~24 GB for chr1) in Python RAM;
+#    fine on hgwdev's 4 TB box, OOMable elsewhere.
+#  - vcfToBigBed.py generate_trackdb_fragment() now emits the three
+#    customizations that previously had to be added on top of the
+#    auto-fragment by hand: filterType.consequence multipleListOr, the
+#    expanded consequence buckets (3_prime_utr, 5_prime_utr, non_coding,
+#    others), and skipEmptyFields on. The fragment is now paste-and-go.
