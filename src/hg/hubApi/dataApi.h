@@ -91,6 +91,7 @@
 /* used by liftRequest */
 #define argEmail "email"
 #define argComment "comment"
+#define argReturnTo "returnTo"
 /* used by assemblyRequest */
 #define argAsmId "asmId"
 #define argName "name"
