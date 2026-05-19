@@ -191,3 +191,31 @@ python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
 #     upstream text.
 #   - Pre-rebuild backup: mpravardb.bb.pre-2026-05-14-backup
 #   - itemCount preserved: 239,028.
+
+# =============================================================================
+# Snapshot refresh 2026-05-19 (Claude/max, RM #37359)
+# =============================================================================
+# Upstream MPRAVarDB published a refreshed CSV.  Schema unchanged; script
+# gained one post-liftOver step (fix_lifted_names) to rewrite the chr:pos
+# prefix inside non-rs name fields with the hg38 coordinates -- closes the
+# pre-existing "hg19 pos in name" issue from the prior makedoc entry.
+# 47,160 names were rewritten in this build.
+#
+# cd /hive/data/genomes/hg38/bed/mpra/mpravardb
+# wget 'https://mpravardb.rc.ufl.edu/session/4f77d030fa67160876b986a798875c6f/download/download_all?w=' -O mpravardb.csv
+# python3 ~/kent/src/hg/makeDb/scripts/mpravardb/mpravardbToBed.py
+#
+# Upstream changes vs. 2026-03-10 snapshot:
+#   - The 5,092 Mouri/Tewhey rows that previously stored a t-statistic in the
+#     pvalue field (pvalue > 1, max 8.96) are fixed: 0 rows with pvalue > 1
+#     remain.  Tao Wang's upstream correction has landed.  Accordingly the
+#     "Note (pending upstream fix)" paragraph was removed from mpraVarDb.html.
+#   - 47,156 rows that previously carried a placeholder fdr=1.0 now correctly
+#     report fdr=NaN (rendered "NA" via fmt_mo).  Net: rows with fdr=1.0
+#     dropped from 47,156 to 0; rows with fdr=NaN rose from 0 to 48,243.
+#   - Rows with pvalue=0 dropped from 7,398 to 7,151 (247 fewer literal-zero
+#     pvalues).
+# Pre-refresh backup: mpravardb.bb.pre-2026-05-19-backup
+# Input CSV rows: 242,818 (unchanged).  Lifted hg19->hg38: 209,899 of 210,013;
+# 114 unmapped.  Final itemCount: 239,028 (unchanged).  ~54,380 rows (~22%)
+# changed at least one column value vs. the prior bigBed.
