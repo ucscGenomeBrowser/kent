@@ -10,6 +10,8 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "net.h"
+#include "wikiLink.h"
+#include "userdata.h"
 /* do not need the mailViaPipe function here
 #include "mailViaPipe.h"
 */
@@ -169,6 +171,78 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static void loginStatus()
+/* output current user login status as JSON */
+{
+char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+struct jsonWrite *jw = apiStartOutput();
+
+if (userName != NULL)
+    {
+    // Get both email and realName from gbMembers table
+    struct sqlConnection *sc = hConnectCentral();
+    struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
+    struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
+    char **row = sqlNextRow(sr);
+
+    char *email = NULL;
+    char *realName = NULL;
+    if (row != NULL)
+        {
+        email = cloneString(row[0] ? row[0] : "");
+        realName = cloneString(row[1] ? row[1] : "");
+        }
+    sqlFreeResult(&sr);
+    hDisconnectCentral(&sc);
+
+    // Build logout URL with returnto parameter
+    char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *logoutUrl = dyStringNew(0);
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+        dyStringPrintf(logoutUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s", encodedReturnUrl);
+        freeMem(encodedReturnUrl);
+        }
+    else
+        {
+        dyStringPrintf(logoutUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLogout=1");
+        }
+
+    jsonWriteString(jw, "userName", userName);
+    jsonWriteString(jw, "email", email ? email : "");
+    jsonWriteString(jw, "realName", realName ? realName : "");
+    jsonWriteString(jw, "logoutUrl", dyStringCannibalize(&logoutUrl));
+
+    if (email)
+        freeMem(email);
+    if (realName)
+        freeMem(realName);
+    }
+else
+    {
+    jsonWriteString(jw, "userName", NULL);
+    // Use returnTo parameter passed by calling JavaScript
+    char *returnTo = cgiOptionalString("returnTo");
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+        struct dyString *loginUrl = dyStringNew(0);
+        dyStringPrintf(loginUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s", encodedReturnUrl);
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
+        freeMem(encodedReturnUrl);
+        }
+    else
+        {
+        // No returnTo provided, just give basic login URL
+        jsonWriteString(jw, "loginUrl", "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1");
+        }
+    jsonWriteString(jw, "signupUrl", "/cgi-bin/hgLogin?hgLogin.do.displaySignupPage=1");
+    }
+
+apiFinishOutput(0, NULL, jw);
+}
+
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static char *skipWord(char *fw)
 /* skips over current word to start of next.
@@ -262,6 +336,11 @@ if (extraArgs)
 if (sameWordOk("listExisting", words[1]))
     {
     listExisting();
+    return;
+    }
+else if (sameWordOk("loginStatus", words[1]))
+    {
+    loginStatus();
     return;
     }
 
