@@ -41,3 +41,6 @@ int hgBotDelayCurrWarnMs();
 
 boolean botException();
 /* check if the remote ip address is on the exceptions list */
+
+boolean botExceptionUserAgent();
+/* Return TRUE if HTTP_USER_AGENT matches a noCaptchaAgent. pattern in hg.conf. */
