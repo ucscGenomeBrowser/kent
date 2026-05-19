@@ -1548,28 +1548,10 @@ void printCaptcha()
     exit(0);
 }
 
-static boolean isUserAgentException() 
+static boolean isUserAgentException()
 /* return true if HTTP user-agent is in list of exceptions in hg.conf */
 {
-char *agent = cgiUserAgent();
-if (!agent)
-    return FALSE;
-
-struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
-if (!excStrs)
-    return FALSE;
-
-struct excReStr;
-for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
-    {
-    if (regexMatch(agent, sl->name))
-        {
-        fprintf(stderr, "CAPTCHAPASS %s matches %s\n", agent, sl->name);
-        return TRUE;
-        }
-    }
-
-return FALSE;
+return botExceptionUserAgent();
 }
 
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)

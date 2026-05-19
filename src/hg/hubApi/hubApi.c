@@ -4,6 +4,7 @@
 #include "jsHelper.h"
 #include "srcVersion.h"
 #include "asmAlias.h"
+#include "hubSpaceKeys.h"
 /* can not include bamFile.h with the liftOver business, there
  * is a conflict in a definition of the enum 'bed'
  */
@@ -62,6 +63,7 @@ char *argFindGenome[] = {argQ, argMaxItemsOutput, argJsonOutputArrays, argStatsO
 char *argLiftOver[] = {argFromGenome, argToGenome, argChrom, argStart, argEnd, argFilter, argMaxItemsOutput, NULL};
 char *argLiftRequest[] = {argFromGenome, argToGenome, argEmail, argComment, NULL};
 char *argAssemblyRequest[] = {argAsmId, argName, argEmail, argBetterName, argComment, NULL};
+char *argBlat[] = {argGenome, argHubUrl, argUserSeq, argFormat, argMaxItemsOutput, argJsonOutputArrays, argApiKey, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -1003,6 +1005,7 @@ hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
 hashAdd(apiFunctionHash, "liftOver", &apiLiftOver);
 hashAdd(apiFunctionHash, "liftRequest", &apiLiftRequest);
 hashAdd(apiFunctionHash, "assemblyRequest", &apiAssemblyRequest);
+hashAdd(apiFunctionHash, "blat", &apiBlat);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
@@ -1642,6 +1645,21 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 verboseTimeInit();
+/* Pre-validate apiKey before the global bot-check.  Without this,
+ * hgBotDelayTimeFrac->getBotCheckString in hg/lib/botDelay.c would
+ * hUserAbort() on an invalid key, which apache renders as a 500 because
+ * it emits plain HTML rather than the JSON the API contract promises. */
+char *earlyApiKey = cgiOptionalString(argApiKey);
+if (isNotEmpty(earlyApiKey))
+    {
+    struct sqlConnection *centralConn = hConnectCentralNoCache();
+    char *userName = hubSpaceUserNameForApiKey(centralConn, earlyApiKey);
+    sqlDisconnect(&centralConn);
+    if (isEmpty(userName))
+        apiErrAbort(err403, err403Msg,
+            "invalid '%s' provided. Make sure the apiKey is valid, or contact us.",
+            argApiKey);
+    }
 /* similar delay system as in DAS server */
 botDelay = hgBotDelayTimeFrac(delayFraction);
 if (botDelay > 0)

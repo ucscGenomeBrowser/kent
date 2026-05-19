@@ -294,6 +294,29 @@ if (exceptIps)
 return FALSE;
 }
 
+boolean botExceptionUserAgent()
+/* Return TRUE if the HTTP_USER_AGENT matches a noCaptchaAgent. pattern in hg.conf.
+ * Mirrors cart.c's isUserAgentException(); kept here so non-cart callers
+ * (e.g. hubApi/blat.c) can reach it without pulling in the full cart library. */
+{
+char *agent = cgiUserAgent();
+if (!agent)
+    return FALSE;
+struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
+if (!excStrs)
+    return FALSE;
+struct slName *sl;
+for (sl = excStrs; sl != NULL; sl = sl->next)
+    {
+    if (regexMatch(agent, sl->name))
+        {
+        fprintf(stderr, "CAPTCHAPASS %s matches %s\n", agent, sl->name);
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+
 int hgBotDelayTime()
 {
 return hgBotDelayTimeFrac(defaultDelayFrac);

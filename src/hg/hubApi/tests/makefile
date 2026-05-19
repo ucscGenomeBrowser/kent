@@ -29,7 +29,9 @@ beta::
 	SERVERNAME="https://apibeta.soe.ucsc.edu" make test
 
 all:: test0 listFunctions getFunctions listSchema getSequence wigData \
-	search supportedTypes errorTests notSupported bugReports
+	search blat supportedTypes errorTests notSupported bugReports
+
+blat: blat01
 
 listFunctions: list01 list02 list04 list05 list06 list07 list08 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 \
@@ -1148,6 +1150,32 @@ wig24: setOutput
 search01: setOutput
 	@ printf "### $@ '${SERVERNAME}/search?search=brca;genome=hg38'\n"
 	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 30) || ($$1 > 50)) {printf "test %s failed, count %d not in range 30-40\n", t, $$1; exit 255;}}'
+
+##############################################################################
+### blat - test /blat endpoint
+##############################################################################
+
+# /blat smoke test.  Always verifies the apiKey gate (no secret required);
+# if APIKEY is exported, additionally runs a live alignment of the
+# demo sequence against hg38 and checks for a 'blat' array in the response.
+blat01: setOutput
+	@printf "### $@ '${SERVERNAME}/blat/dna?genome=hg38;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG'\n"
+	@curl -L -sG "${SERVERNAME}/blat/dna" \
+		--data-urlencode "genome=hg38" \
+		--data-urlencode "userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG" \
+		2>/dev/null | grep -q apiKey \
+		|| { echo "test $@ failed: missing-apiKey request did not return apiKey error"; exit 255; }
+	@if [ -n "$$APIKEY" ]; then \
+		curl -L -sG "${SERVERNAME}/blat/dna" \
+			--data-urlencode "apiKey=$$APIKEY" \
+			--data-urlencode "genome=hg38" \
+			--data-urlencode "userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG" \
+			2>/dev/null | python -mjson.tool | grep -q '"blat"' \
+			|| { echo "test $@ failed: live BLAT response has no blat[] field"; exit 255; }; \
+		echo "### $@: apiKey gate OK; live BLAT OK"; \
+	else \
+		echo "### $@: apiKey gate OK (export APIKEY=<key> to also test live BLAT)"; \
+	fi
 
 ##############################################################################
 ### chrAlias - test chrom alias
