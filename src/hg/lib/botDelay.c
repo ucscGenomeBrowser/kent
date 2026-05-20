@@ -134,12 +134,22 @@ if (isEmpty(cookieUserId))
     return FALSE;
 boolean isValid = FALSE;
 struct sqlConnection *conn = hConnectCentralNoCache();
-struct cartDb *cdb = cartDbLoadFromId(conn, userDbTable(), cookieUserId);
-if (cdb)
+char query[2048];
+if (cartDbHasSessionKey(conn, userDbTable()))
     {
-    isValid = TRUE;
-    cartDbFree(&cdb);
+    char *sessionKey = NULL;
+    unsigned id = cartDbParseId(cookieUserId, &sessionKey);
+    if (sessionKey == NULL)
+        return FALSE;
+    sqlSafef(query, sizeof(query), "select id from %s where id = %u and sessionKey = '%s'",
+            userDbTable(), id, sessionKey);
     }
+else
+    {
+    sqlSafef(query, sizeof(query), "select id from %s where id = %u", userDbTable(), sqlUnsigned(cookieUserId));
+    }
+if (sqlExists(conn, query))
+    isValid = TRUE;
 sqlDisconnect(&conn);
 return isValid;
 }
