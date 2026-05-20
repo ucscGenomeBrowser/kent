@@ -458,6 +458,16 @@ superTrack on
         dataVersion 20251201
         tableBrowser off
 
+        track gonl
+        parent varFreqs on
+        visibility hide
+        type vcfTabix
+        shortLabel Netherlands GoNL 498 WGS
+        longLabel Variant Frequencies: Genome of the Netherlands - 250 Dutch trios
+        priority 4.75
+        bigDataUrl /gbdb/$D/varFreqs/gonl/gonl.vcf.gz
+        dataVersion GRCh38 1.0
+
         track mgrb
         shortLabel Australia MGRB 4k WGS
         longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS

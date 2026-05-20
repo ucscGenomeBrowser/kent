@@ -838,3 +838,39 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
 #    auto-fragment by hand: filterType.consequence multipleListOr, the
 #    expanded consequence buckets (3_prime_utr, 5_prime_utr, non_coding,
 #    others), and skipEmptyFields on. The fragment is now paste-and-go.
+
+##########
+# 2026-05-20 Claude max
+# Genome of the Netherlands (GoNL), GRCh38 re-analysis (v1.0).
+# Site-only VCF with INFO AC/AF/AN for the 498 unrelated parents
+# (250 fathers + 248 mothers, 2 mothers failed QC). Original paper
+# Genome of the Netherlands Consortium, Nat Genet 2014, PMID 24974849;
+# the GRCh38 re-analysis pipeline is described in the README that ships
+# with the download.
+cd /hive/data/genomes/hg38/bed/varFreqs/gonl/
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/README.txt
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/multisample.parents_only.info_only.vcf.gz
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/multisample.parents_only.info_only.vcf.gz.tbi
+# Source already uses UCSC chr-prefixed names, so no chromosome renaming
+# needed. Drop the GRCh38 decoy contigs (chrUn_JTFH01*, chrUn_KN707* etc.)
+# and chrEBV that ship with the analysis-set FASTA but are not part of the
+# UCSC hg38 assembly.
+cut -f1 /hive/data/genomes/hg38/chrom.sizes | sort > hg38.chroms.txt
+zcat multisample.parents_only.info_only.vcf.gz | grep -v '^#' | cut -f1 \
+    | sort -u > gonl.chroms.txt
+comm -12 gonl.chroms.txt hg38.chroms.txt > keep.chroms.txt
+( bcftools view -h multisample.parents_only.info_only.vcf.gz; \
+  bcftools view -H multisample.parents_only.info_only.vcf.gz \
+    | awk -F'\t' 'BEGIN{while((getline k < "keep.chroms.txt") > 0) ok[k]=1} ok[$1]' \
+) | bgzip -@ 8 -c > gonl.preNorm.vcf.gz
+tabix -p vcf gonl.preNorm.vcf.gz
+# 31,114,481 input records -> 30,904,161 kept (0.68% dropped, all on
+# decoy / EBV contigs not present in hg38). Max AN = 996, matching 498
+# diploid parents.
+# Split multiallelic sites and left-align indels against the hg38 reference.
+ln -sf /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa hg38.fa
+ln -sf /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa.fai hg38.fa.fai
+bcftools norm -f hg38.fa -m-any --threads 8 gonl.preNorm.vcf.gz -Oz -o gonl.vcf.gz
+tabix -p vcf gonl.vcf.gz
+# norm stats: 30,904,161 -> 36,363,474 records (2,629,361 multiallelic
+# sites split, 3,559,402 indels left-realigned, 0 dup/mismatch).
