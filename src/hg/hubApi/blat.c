@@ -1,7 +1,6 @@
 /* blat - /blat endpoint: run a BLAT against an assembly's gfServer and
  * return PSL hits as JSON (or PSL text).  This is the API-callable twin
- * of hgBlat?output=json; hgBlat itself remains unchanged for backwards
- * compatibility.
+ * of hgBlat?output=json; hgBlat's CGI interface and behavior remain unchanged.
  *
  * NOTE: Much of the alignment logic here (server lookup, sequence filtering,
  * gfAlign* calls, temp-file round-trip) is derived from hgBlat.c.  If you
@@ -134,7 +133,7 @@ static void writePslOutput(struct psl *pslList, struct blatType *bt)
 /* PSL text output path (output=psl). */
 {
 hPrintDisable();
-puts("Content-Type: text/plain\n");
+puts("Content-Type:text/plain\n");
 pslxWriteHead(stdout, bt->qType, bt->tType);
 struct psl *psl;
 int n = 0;
@@ -149,7 +148,7 @@ static void writeLegacyJsonOutput(struct psl *pslList, char *db)
  * Triggered by format=hgblat or jsonOutputArrays=1. */
 {
 hPrintDisable();
-puts("Content-Type: text/plain\n");
+puts("Content-Type:text/plain\n");
 pslWriteAllJson(pslList, stdout, db, TRUE);
 }
 
@@ -359,57 +358,77 @@ if (st == NULL)
  * Mirrors hgBlat's strategy so we benefit from the same gfOutputPsl path. */
 struct tempName pslTn;
 trashDirFile(&pslTn, "apiBlat", "apiBlat", ".pslx");
-FILE *f = mustOpen(pslTn.forCgi, "w");
-struct gfOutput *gvo = gfOutputPsl(0, bt.qIsProt, FALSE, f, FALSE, TRUE);
-pslxWriteHead(f, bt.qType, bt.tType);
 
-struct gfConnection *conn = gfConnect(st->host, st->port,
-    trackHubDatabaseToGenome(st->db), st->genomeDataDir);
-struct hash *tFileCache = gfFileCacheNew();
-int minMatch = 0;  /* let gfServer decide; matches hgBlat allResults path */
-
-struct dnaSeq *seq;
-int singleMax = bt.isTx ? 10000 : 75000;
-int totalMax  = singleMax * 2.5;
-int total = 0;
-int seqCount = 0;
 int maxSeqCount = 25;
-for (seq = seqList; seq != NULL; seq = seq->next)
+char *optionMaxSeqCount = cfgOptionDefault("hgBlat.maxSequenceCount", NULL);
+if (isNotEmpty(optionMaxSeqCount))
+    maxSeqCount = atoi(optionMaxSeqCount);
+
+FILE *f = NULL;
+struct errCatch *ec = errCatchNew();
+if (errCatchStart(ec))
     {
-    if (++seqCount > maxSeqCount)
-        break;
-    if (seq->size <= 0 || seq->size > singleMax)
-        continue;
-    total += seq->size;
-    if (total > totalMax)
-        break;
-    if (bt.isTx)
+    f = mustOpen(pslTn.forCgi, "w");
+    struct gfOutput *gvo = gfOutputPsl(0, bt.qIsProt, FALSE, f, FALSE, TRUE);
+    pslxWriteHead(f, bt.qType, bt.tType);
+
+    struct gfConnection *conn = gfConnect(st->host, st->port,
+        trackHubDatabaseToGenome(st->db), st->genomeDataDir);
+    struct hash *tFileCache = gfFileCacheNew();
+    int minMatch = 0;  /* let gfServer decide; matches hgBlat allResults path */
+
+    struct dnaSeq *seq;
+    int singleMax = bt.isTx ? 10000 : 75000;
+    int totalMax  = singleMax * 2.5;
+    int total = 0;
+    int seqCount = 0;
+    for (seq = seqList; seq != NULL; seq = seq->next)
         {
-        if (bt.isTxTx)
+        if (++seqCount > maxSeqCount)
+            break;
+        if (seq->size <= 0 || seq->size > singleMax)
+            continue;
+        total += seq->size;
+        if (total > totalMax)
+            break;
+        if (bt.isTx)
             {
-            gfAlignTransTrans(conn, st->nibDir, seq, FALSE, 5, tFileCache, gvo,
-                !bt.txTxBoth);
-            if (bt.txTxBoth)
+            if (bt.isTxTx)
                 {
-                reverseComplement(seq->dna, seq->size);
-                gfAlignTransTrans(conn, st->nibDir, seq, TRUE, 5, tFileCache, gvo,
-                    FALSE);
+                gfAlignTransTrans(conn, st->nibDir, seq, FALSE, 5, tFileCache, gvo,
+                    !bt.txTxBoth);
+                if (bt.txTxBoth)
+                    {
+                    reverseComplement(seq->dna, seq->size);
+                    gfAlignTransTrans(conn, st->nibDir, seq, TRUE, 5, tFileCache, gvo,
+                        FALSE);
+                    }
                 }
+            else
+                gfAlignTrans(conn, st->nibDir, seq, 5, tFileCache, gvo);
             }
         else
-            gfAlignTrans(conn, st->nibDir, seq, 5, tFileCache, gvo);
+            {
+            gfAlignStrand(conn, st->nibDir, seq, FALSE, minMatch, tFileCache, gvo);
+            reverseComplement(seq->dna, seq->size);
+            gfAlignStrand(conn, st->nibDir, seq, TRUE, minMatch, tFileCache, gvo);
+            }
+        gfOutputQuery(gvo, f);
         }
-    else
-        {
-        gfAlignStrand(conn, st->nibDir, seq, FALSE, minMatch, tFileCache, gvo);
-        reverseComplement(seq->dna, seq->size);
-        gfAlignStrand(conn, st->nibDir, seq, TRUE, minMatch, tFileCache, gvo);
-        }
-    gfOutputQuery(gvo, f);
+    carefulClose(&f);
+    f = NULL;
+    gfFileCacheFree(&tFileCache);
+    gfDisconnect(&conn);
     }
-carefulClose(&f);
-gfFileCacheFree(&tFileCache);
-gfDisconnect(&conn);
+errCatchEnd(ec);
+if (ec->gotError)
+    {
+    if (f != NULL)
+        carefulClose(&f);
+    remove(pslTn.forCgi);
+    apiErrAbort(err500, err500Msg, "BLAT server error: %s", ec->message->string);
+    }
+errCatchFree(&ec);
 
 struct lineFile *lf = pslFileOpen(pslTn.forCgi);
 struct psl *pslList = NULL, *psl;
