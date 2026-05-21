@@ -874,3 +874,6 @@ bcftools norm -f hg38.fa -m-any --threads 8 gonl.preNorm.vcf.gz -Oz -o gonl.vcf.
 tabix -p vcf gonl.vcf.gz
 # norm stats: 30,904,161 -> 36,363,474 records (2,629,361 multiallelic
 # sites split, 3,559,402 indels left-realigned, 0 dup/mismatch).
+# GoNL added to databases.tsv as well, so the next mergeAndAnnotate.sh
+# run will pick it up into varFreqsAll.bb. The current /gbdb _all
+# bigBed predates GoNL.
