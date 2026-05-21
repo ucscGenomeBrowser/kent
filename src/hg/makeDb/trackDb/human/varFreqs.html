@@ -2,17 +2,17 @@
 <p>
 This supertrack collects variant allele frequencies from population-scale sequencing and
 genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
-The data was not reprocessed in a harmonized way but the variant VCFs were collected from the projects.
-The goal is to provide a single place to compare how common
+The data was not reprocessed in a harmonized way; the variant VCFs were collected from the projects as-is.
+The goal is a single place to compare how common
 a variant is across different populations, ancestries, and cohorts, for
 projects that cannot be recomputed by gnomAD soon. The main
-<a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one single summary track, 
+<a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one summary track,
 with filters, summed population frequencies and recalculated protein-effect annotations.
-In addition, there is one subtrack per project with the original VCF data and all the annotations that the project provides.
-The different projects use different pipelines and sequencing technologies, click any of the projects 
+There is also one subtrack per project with the original VCF data and all the annotations that the project provides.
+The different projects use different pipelines and sequencing technologies. Click any of the projects
 above or below for a summary of their sample selection, sequencing assay and software pipeline.
-Many projects do not allow us to distribute the data but we document how the
-data can be requested and provide all converters.</p>
+Many projects do not allow us to distribute the data, but we document how to request it
+and provide all converters.</p>
 
 <p>
 Data from projects that provide haplotype-phased genotypes can also be found
@@ -32,11 +32,11 @@ bigBed file with consequence annotations, totaling 1.17 billion variants from ~1
 The track supports filtering by variant type
 (SNV, insertion, deletion, MNV), predicted consequence (missense, synonymous, stop gained,
 frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
-and per-database), and allele count (total or per-database). This track is either useful in dense mode
-for getting a quick overview of variant density across all projects, or with filters to find
-variants present in specific databases or within certain frequency ranges. Note that with the &quot;clone track&quot;
-feature you can clone this track and have multiple versions, each with different filters activated.
-You can also use our &quot;Density mode&quot; checkbox on the track configuration page to show a plot with the
+and per-database), and allele count (total or per-database). The track is useful in dense mode
+to get a quick overview of variant density across all projects, or with filters to find
+variants present in specific databases or within certain frequency ranges. With the &quot;clone track&quot;
+feature you can clone this track and keep multiple versions, each with different filters activated.
+The &quot;Density mode&quot; checkbox on the track configuration page shows a plot of the
 density of variants passing a filter, one per track clone.
 </p>
 
@@ -350,8 +350,8 @@ local-ancestry reference panels and so include Oceanian, which is not one of the
 paper's six global Rye categories (those are AFR, AMR, EAS, EUR, Middle Eastern, SAS).
 For an admixed individual, the local-ancestry AF at a position can therefore differ
 substantially from the AF among self-reported members of the same ancestry group.
-The pipeline that produced this VCF was developed by the Ioannidis lab (Phoenix, UCSC)
-and applied to the AllOfUs v7 release; only variants with cohort allele count &ge; 20
+The Ioannidis lab (Phoenix, UCSC) developed the pipeline that produced this VCF
+and applied it to the AllOfUs v7 release; only variants with cohort allele count &ge; 20
 were retained.
 </p>
 
@@ -359,8 +359,8 @@ were retained.
 <p>
 This subtrack derives from the gnomAD v3.1.2 release, which embeds the
 4,094-genome jointly-called HGDP+1kG cohort (Koenig et al. 2024) inside the larger
-gnomAD aggregation. To save space, only INFO fields useful for clinical and
-population-genetic interpretation were retained. Two distinct allele-frequency
+gnomAD aggregation. To save space, we kept only INFO fields useful for clinical and
+population-genetic interpretation. Two allele-frequency
 sets are exposed:
 </p>
 <ul>
@@ -373,16 +373,16 @@ sets are exposed:
 </ul>
 <p>
 The trackUI labels and bigBed field descriptions reflect this distinction. Per-population
-HGDP+1kG-cohort frequencies are not exposed because the cohort is too small to give
-stable per-population estimates for many populations.
+HGDP+1kG-cohort frequencies are not exposed because the cohort is too small for
+stable per-population estimates in many populations.
 </p>
 
 <h2>Display Conventions</h2>
 
 <p>Most tracks only show the variant and allele frequencies on mouseover or clicks.
 When zoomed in, tracks display alleles with base-specific coloring. Homozygote
-data are shown as one letter, while heterozygotes will be displayed with both
-letters. All VCF files are normalized, with one single allele per annotation (no multi-allele
+data are shown as one letter; heterozygotes are shown with both
+letters. All VCF files are normalized, with one allele per annotation (no multi-allele
 lines).
 </p>
 
@@ -414,7 +414,7 @@ Editing those two files and rerunning <code>mergeAndAnnotate.sh</code> followed 
 
 <h2>Credits</h2>
 
-<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click on any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track and to Andreas Lahner, MGZ, for feedback.</p>
+<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track and to Andreas Lahner, MGZ, for feedback.</p>
 
 <h2>References</h2>
 

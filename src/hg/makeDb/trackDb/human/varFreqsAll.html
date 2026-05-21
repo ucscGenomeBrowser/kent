@@ -70,16 +70,16 @@ title or use the &quot;Configure&quot; button to access filters:
       or the &quot;Frameshift&quot; filter. The &quot;Other&quot; bucket catches the less
       common <a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a>
       consequence terms emitted by <code>bcftools csq</code> that don't fit the named
-      buckets above &mdash; for example
+      buckets above. Examples include
       <code>splice_region</code> (variant near a splice site but outside the canonical
       donor/acceptor),
       <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the start codon
       or replaces the stop codon with a coding amino acid),
       <code>stop_retained</code> (variant changes the stop codon but keeps it a stop),
       <code>inframe_insertion</code> / <code>inframe_deletion</code> (in-frame indel
-      adding or removing whole codons), and
+      that adds or removes whole codons), and
       <code>coding_sequence</code> (CDS variant where the precise impact is undetermined).
-      Including &quot;Other&quot; in the filter selection guarantees that no records are
+      If you include &quot;Other&quot; in the filter selection, no records will be
       hidden by the consequence filter.</li>
 </ul>
 
@@ -148,14 +148,13 @@ is stored in two TSV files
 target="_blank">databases.tsv</a> and
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs/populations.tsv"
 target="_blank">populations.tsv</a>)
-to make future updates easy.
+so that future updates only require editing these files.
 </p>
 
 <p>
-We provide documentation that indicates how all source files of the varFreqs track were
-converted in the
+The track's
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
-target="_blank">makeDoc file</a> of the track.
+target="_blank">makeDoc file</a> documents how each source VCF was converted.
 Scripts are available from
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
 target="_blank">Github</a>.

@@ -18,7 +18,7 @@ UK Biobank GWAS</a>).
 The Neale Lab pipeline restricts to white British ancestry to limit
 population-stratification confounding in the GWAS. As a consequence the
 frequencies in this track are not representative of the multi-ancestry UK
-Biobank cohort - they describe a single population subset. The
+Biobank cohort. They describe a single population subset. The
 <a href="hgTrackUi?g=hgdp1kFreq">gnomAD HGDP+1kG</a>,
 <a href="hgTrackUi?g=tommo60kjpn">ToMMo Japan</a>,
 <a href="hgTrackUi?g=allofus">AllOfUs</a> and other tracks in this
@@ -38,14 +38,14 @@ the Neale Lab.
 UK Biobank participants were genotyped on the UK Biobank Axiom and UK
 BiLEVE Axiom arrays. The Wellcome Trust Centre for Human Genetics imputed
 the array data against a combined reference panel of the Haplotype
-Reference Consortium, UK10K and 1000 Genomes Phase 3, producing
+Reference Consortium, UK10K and 1000 Genomes Phase 3. This produced
 approximately 90 million imputed SNPs. The Neale Lab Round 2 (imputed-v3)
 analysis started from the 487,409 individuals with phased and imputed
 genotype data, filtered to 361,194 unrelated samples of white British
 ancestry, and retained variants with imputation INFO score above 0.8,
 minor allele frequency above 0.001 (or 1e-6 for coding variants) and
-HWE p-value above 1e-10, yielding 13.7 million SNPs and short indels on
-chromosomes 1-22 and X. Variant consequences are from Ensembl VEP. See
+HWE p-value above 1e-10. The final set has 13.7 million SNPs and short
+indels on chromosomes 1-22 and X. Variant consequences are from Ensembl VEP. See
 the Neale Lab
 <a href="https://www.nealelab.is/blog/2017/9/11/details-and-considerations-of-the-uk-biobank-gwas" target="_blank">data
 processing blog post</a> and the
@@ -67,7 +67,7 @@ hg19ToHg38.over.chain. 39,659 rows with allele count zero (variants
 present only in the imputation panel) were dropped, 6,889 failed
 liftOver and 1,834 mapped to alt/random/fix contigs, leaving 13,743,085
 variants in the final file. AN was set to twice the
-<tt>n_called</tt> field, following the Neale Lab convention.
+<tt>n_called</tt> field, per the Neale Lab convention.
 The full pipeline is documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
 file</a> of the track, and the conversion script is available from
@@ -77,7 +77,7 @@ GitHub repository</a>.
 
 <h2>Data Access</h2>
 <p>
-The variant frequencies can be explored interactively using the
+The variant frequencies can be explored with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and exported to
 spreadsheet or tab-separated tables. From scripts, data can be accessed

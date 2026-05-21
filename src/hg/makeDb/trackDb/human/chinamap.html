@@ -17,10 +17,10 @@ and SAS) as INFO fields, which are kept verbatim in the VCF.
 
 <h2>Display</h2>
 <p>
-The track uses the standard UCSC VCF display. Hovering a variant
-shows the cohort allele frequency and count, the total number of
-called alleles, and the 1KGP frequencies that the ChinaMAP release
-ships alongside each site.
+The track uses the standard UCSC VCF display. When you hover over a
+variant, the popup shows the cohort allele frequency and count, the
+total number of called alleles, and the 1KGP frequencies that the
+ChinaMAP release ships alongside each site.
 </p>
 
 <h2>Methods</h2>
@@ -40,8 +40,8 @@ check; 10,588 WGS samples passed. Germline variants were called
 per-sample as GVCFs with GATK HaplotypeCaller v4.0.4.0, combined
 with GATK CombineGVCFs and joint-called with GATK GenotypeGVCFs
 (v4.0.4.0), ignoring low-complexity regions. Variants were filtered
-with GATK VariantFiltration, restricted to length &le; 10 bp and a
-maximum of 10 alt alleles, multi-allelic sites were split, and the
+with GATK VariantFiltration and restricted to length &le; 10 bp and a
+maximum of 10 alt alleles. Multi-allelic sites were split, and the
 final callset was annotated with SnpEff v4.3. See Cao <em>et al.</em>
 2020 (in References below) for the full pipeline.
 </p>
@@ -50,11 +50,11 @@ The bgzipped sites-only VCF
 (<tt>mbiobank_ChinaMAP.phase1.vcf.gz</tt>) was downloaded from the
 ChinaMAP / mBiobank distribution site
 (<a href="http://chinamapwgs.mbiobank.com/download/" target="_blank">http://chinamapwgs.mbiobank.com/download/</a>),
-renamed locally to <tt>chinamap.vcf.gz</tt> and tabix-indexed. No
-coordinate liftover or reformatting was needed: the upstream file is
-already on GRCh38 with chr-prefixed chromosome names, autosomes only,
-and ships standard <tt>AC</tt>, <tt>AF</tt> and <tt>AN</tt> INFO
-fields. The pipeline is recorded in the
+renamed locally to <tt>chinamap.vcf.gz</tt> and tabix-indexed. We did
+not need to lift over coordinates or reformat the file: the upstream
+file is already on GRCh38 with chr-prefixed chromosome names,
+autosomes only, and ships standard <tt>AC</tt>, <tt>AF</tt> and
+<tt>AN</tt> INFO fields. The pipeline is recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
 file</a> of the track.
 </p>
@@ -87,8 +87,8 @@ and download the original VCF directly from them.
 <p>
 Thanks to the ChinaMAP participants and to the National Clinical
 Research Center for Metabolic Diseases (Shanghai Jiao Tong
-University School of Medicine, Ruijin Hospital) and BGI Genomics for
-producing and releasing the ChinaMAP phase 1 sites VCF.
+University School of Medicine, Ruijin Hospital) and BGI Genomics, who
+produced and released the ChinaMAP phase 1 sites VCF.
 </p>
 
 <h2>References</h2>

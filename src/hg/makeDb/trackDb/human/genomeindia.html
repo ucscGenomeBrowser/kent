@@ -1,11 +1,11 @@
 <h2>Description</h2>
 <p>
 The <a href="https://ibdc.dbtindia.gov.in/genomeindia/" target="_blank">GenomeIndia
-project</a> is a national initiative coordinating academic and medical institutions
+project</a> is a national initiative that coordinates academic and medical institutions
 across India to characterize the genetic diversity of the Indian subcontinent. The
-release used by this track comprises whole-genome sequencing of 9,768 healthy adults
-sampled from 83 anthropologically defined endogamous populations spanning India&#39;s
-ethnolinguistic and biogeographic spectrum (Indo-European, Dravidian, Austroasiatic,
+release used by this track is whole-genome sequencing of 9,768 healthy adults
+sampled from 83 anthropologically defined endogamous populations across India&#39;s
+ethnolinguistic and biogeographic range (Indo-European, Dravidian, Austroasiatic,
 and Tibeto-Burman language families, plus a continentally admixed outgroup). After
 joint genotyping and quality filtering, 129,938,889 high-confidence biallelic
 variants (~121M SNVs and ~8M indels) were reported, of which roughly one third are
@@ -13,8 +13,8 @@ absent from gnomAD, 1000 Genomes, and GenomeAsia. This track shows the alternate
 allele frequency in that 9,768-sample autosomal call set.
 </p>
 <p>
-Because Indian populations are profoundly underrepresented in global variant
-databases, many globally rare alleles reach much higher frequencies in specific
+Indian populations are underrepresented in global variant
+databases, so many globally rare alleles are at much higher frequencies in specific
 endogamous groups. The release ships only the cohort-wide alternate allele
 frequency (no per-population breakdown), so this track shows the overall
 GenomeIndia AF; AC is derived from AF (see Methods).
@@ -52,7 +52,7 @@ the GenomeIndia data-access policy listed on that page.
 PCR-free whole-genome sequencing libraries were prepared from blood-derived DNA and
 sequenced on Illumina NovaSeq 6000 to a per-sample average depth of at least 23&times;.
 Reads were processed with the Illumina DRAGEN v4.0.3 germline pipeline against
-GRCh38, producing per-sample gVCFs that were then joint-genotyped with the Illumina
+GRCh38. The resulting per-sample gVCFs were then joint-genotyped with the Illumina
 gVCF genotyper. Site-level filters retained only PASS variants with
 QUAL&nbsp;&ge;&nbsp;30, posterior genotype probability &ge;&nbsp;99.9%, GQ&nbsp;&gt;&nbsp;20
 at every site (GQ&nbsp;&gt;&nbsp;40 for singletons and doubletons), heterozygous allele
@@ -72,10 +72,10 @@ script <a
 href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py"
 target="_blank">genomeindiaToVcf.py</a>. The release ships only AF; AC and AN are
 synthesized as AN&nbsp;=&nbsp;2&nbsp;&times;&nbsp;9768&nbsp;=&nbsp;19536 and
-AC&nbsp;=&nbsp;round(AF&nbsp;&times;&nbsp;AN). Because variants were retained only
-when called in &ge;98% of samples, AN slightly overstates the true called allele
-count for some sites (worst case ~2%); the AC field should therefore be read as a
-close approximation rather than the exact observed count. The exact processing
+AC&nbsp;=&nbsp;round(AF&nbsp;&times;&nbsp;AN). Variants were kept only
+when called in &ge;98% of samples, so AN slightly overstates the true called allele
+count for some sites (worst case ~2%); the AC field is a
+close approximation, not the exact observed count. The processing
 steps are documented in the <a
 href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
 target="_blank">makeDoc file</a>.

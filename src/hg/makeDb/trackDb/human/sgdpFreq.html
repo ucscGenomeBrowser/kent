@@ -4,9 +4,9 @@ The <a href="https://www.simonsfoundation.org/simons-genome-diversity-project/"
 target="_blank">Simons Genome Diversity Project (SGDP)</a>, funded by the Simons Foundation,
 sequenced high-coverage genomes from 300 individuals (279 in this track) representing 142 diverse
 and often indigenous populations worldwide. Its goal was to capture the full range of human
-genetic diversity to better understand population history, migration, and adaptation. It samples
-populations in a way that represents as much anthropological, linguistic and cultural diversity
-as possible, and thus includes many deeply divergent human populations that are not well
+genetic diversity to better understand population history, migration, and adaptation. The
+sampling was designed to cover as much anthropological, linguistic and cultural diversity
+as possible, so it includes many deeply divergent human populations that are not well
 represented in other datasets.
 </p>
 
@@ -46,11 +46,11 @@ this track.)
 </p>
 <p>
 The per-sample VCFs were merged with bcftools and lifted to hg38 with CrossMap. At UCSC,
-genotypes were stripped to produce a sites-only frequency VCF retaining the AC, AF, and AN
+genotypes were stripped to produce a sites-only frequency VCF that keeps the AC, AF, and AN
 INFO fields. The deployed file contains 44,756,737 SNV records (601,775 of which represent
 multiallelic sites split into separate biallelic records). Indels from the source callset
 are not included.
-We provide documentation that indicates how all source files were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+The conversion steps for all source files are documented in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
 Python scripts are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 

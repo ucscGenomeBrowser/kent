@@ -19,20 +19,19 @@ target="_blank">Chorus Browser</a> website, which requires an
 
 <h2>Methods</h2>
 <p>
-Whole Genome Sequencing (WGS) data processing followed GATK4 best practices. GATK4 germline variant
-analysis workflow written in WDL was adapted to use Nextflow and deployed at the National
-Supercomputing Centre, Singapore (NSCC). WGS reads were aligned against GRCh38 using the BWA-MEM
+Whole Genome Sequencing (WGS) data processing followed GATK4 best practices. The GATK4 germline
+variant analysis workflow written in WDL was adapted to Nextflow and deployed at the National
+Supercomputing Centre, Singapore (NSCC). WGS reads were aligned against GRCh38 with the BWA-MEM
 algorithm and used as input to GATK HaplotypeCaller to produce single sample gVCFs. The gVCF files
 were joint-called then loaded in Hail. Low-quality WGS libraries and low-quality variants were
-removed. QC-ed variants were functionally annotated using Ensembl Variant Effect Predictor (VEP)
-(version 95). Functional annotations for variants impacting protein-coding regions were also
-complemented with information on the potential alteration to their cognate protein&apos;s 3D structure
-and drug binding ability.
+removed. QC-ed variants were functionally annotated with Ensembl Variant Effect Predictor (VEP)
+(version 95). For variants that affect protein-coding regions, the annotations also include
+information on potential changes to the cognate protein&apos;s 3D structure and drug binding ability.
 </p>
 <p>
 Our data access request was approved by the NPM data access committee. It can be contacted at <A HREF="mailto:&#99;&#111;&#110;t&#97;&#99;&#116;&#95;n&#112;c&#111;&#64;&#97;&#45;&#115;&#116;&#97;r.&#101;&#100;&#117;.&#115;&#103;">&#99;&#111;&#110;t&#97;&#99;&#116;&#95;n&#112;c&#111;&#64;&#97;&#45;&#115;&#116;&#97;r.&#101;&#100;&#117;.&#115;&#103;</A><!-- above address is contact_npco at a-star.edu.sg -->.
 We downloaded the data from the NPM Chorus browser download section.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track documents how all source files of the varFreqs track were converted.
 For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 

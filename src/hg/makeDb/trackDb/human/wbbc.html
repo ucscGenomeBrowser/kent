@@ -3,9 +3,9 @@
 This track shows allele frequencies for 78.6 million variants from
 4,480 whole-genome-sequenced Chinese individuals released by the
 <a href="https://cpbb.cn/" target="_blank">Westlake BioBank for Chinese
-(WBBC)</a> pilot project. The WBBC is a population study of around 35,000
-Chinese volunteers spanning 31 provinces; about 15,000 of them have
-been deeply phenotyped and a subset have been whole-genome sequenced.
+(WBBC)</a> pilot project. The WBBC is a population study of about 35,000
+Chinese volunteers across 31 provinces; about 15,000 have been deeply
+phenotyped and a subset have been whole-genome sequenced.
 The frequencies are also broken down into four Han Chinese regional
 groups (North, Central, South, Lingnan) defined by recruitment province
 in the WBBC paper.
@@ -30,16 +30,15 @@ hom-alt sample counts as reported by WBBC.
 <h2>Methods</h2>
 <p>
 The WBBC pilot whole-genome-sequenced 4,535 individuals at a mean depth
-of around 13.9x on Illumina HiSeq X10 platforms, after dropping samples
-that failed standard QC. Reads were aligned to GRCh38 with BWA-MEM,
-variants were jointly called with GATK 4.0 HaplotypeCaller, and the
-callset was hard-filtered with VQSR. The 4,480 unrelated samples
-released for download were stratified into four Han Chinese regional
-groups (North, Central, South and Lingnan, which together cover roughly
-the 27 administrative divisions reached by the pilot). Allele counts
-and frequencies are reported overall and per region. See Cong <em>et al.</em>
-2022 (in References below) for full sample-selection and pipeline
-details.
+of 13.9x on Illumina HiSeq X10 platforms, after dropping samples that
+failed standard QC. Reads were aligned to GRCh38 with BWA-MEM, variants
+were jointly called with GATK 4.0 HaplotypeCaller, and the callset was
+hard-filtered with VQSR. The 4,480 unrelated samples released for download
+were stratified into four Han Chinese regional groups (North, Central,
+South and Lingnan, which together cover 27 of the administrative divisions
+the pilot reached). Allele counts and frequencies are reported overall
+and per region. See Cong <em>et al.</em> 2022 (in References below) for
+full sample-selection and pipeline details.
 </p>
 <p>
 The per-chromosome WGS sites VCFs (chr1-22) were downloaded from
@@ -48,8 +47,8 @@ The per-chromosome WGS sites VCFs (chr1-22) were downloaded from
 the 22 files with <tt>bcftools concat</tt>, re-headered the result to
 add the standard hg38 contig lines and proper INFO definitions, then
 dropped variants with cohort allele count zero (multi-allelic splits
-that are not observed in the WBBC samples; ~1.9% of rows), and sorted,
-bgzipped and tabix-indexed the result. No coordinate liftover was
+that no WBBC sample carries; ~1.9% of rows), and sorted, bgzipped and
+tabix-indexed the result. No coordinate liftover was
 needed: the upstream files are already on GRCh38 with chr-prefixed
 chromosomes. The pipeline is recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
