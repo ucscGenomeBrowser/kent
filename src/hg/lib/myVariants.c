@@ -12,6 +12,35 @@
 #include "obscure.h"
 #include "wikiLink.h"
 
+char *myVariantsItemTypes[] = { "transcript", "snv", "cnv" };
+int myVariantsNumItemTypes = ArraySize(myVariantsItemTypes);
+
+char *myVariantsCnvTypes[] = {
+    "deletion", "duplication", "insertion", "inversion",
+    "translocation", "complex", "breakend"
+};
+int myVariantsNumCnvTypes = ArraySize(myVariantsCnvTypes);
+
+char *myVariantsCanonicalItemType(char *s)
+/* Return the matching canonical entry from myVariantsItemTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
+{
+if (isEmpty(s))
+    return NULL;
+int ix = stringArrayIx(s, myVariantsItemTypes, myVariantsNumItemTypes);
+return ix < 0 ? NULL : myVariantsItemTypes[ix];
+}
+
+char *myVariantsCanonicalCnvType(char *s)
+/* Return the matching canonical entry from myVariantsCnvTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
+{
+if (isEmpty(s))
+    return NULL;
+int ix = stringArrayIx(s, myVariantsCnvTypes, myVariantsNumCnvTypes);
+return ix < 0 ? NULL : myVariantsCnvTypes[ix];
+}
+
 boolean isMyVariantsType(char *type)
 /* TRUE if type names the myVariants custom-track type. NULL-safe. */
 {
@@ -55,7 +84,9 @@ ret->ref = row[15];
 ret->alt = row[16];
 ret->project = row[17];
 ret->mouseover = row[18];
-ret->id = sqlUnsigned(row[19]);
+ret->itemType = row[19];
+ret->cnvType = row[20];
+ret->id = sqlUnsigned(row[21]);
 }
 
 struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query)
@@ -94,7 +125,7 @@ void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char 
  * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover", tableName);
+sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover,itemType,cnvType", tableName);
 
 /* Append custom field column names */
 struct slPair *cf;
@@ -104,10 +135,12 @@ for (cf = el->customFields; cf != NULL; cf = cf->next)
 char *insertName = isEmpty(el->name) ? "" : el->name;
 char *blockSizesStr = commaIntList(el->blockSizes, el->blockCount);
 char *chromStartsStr = commaIntList(el->chromStarts, el->blockCount);
-sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s'",
+sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'",
     el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
     el->thickStart, el->thickEnd, el->itemRgb, el->blockCount, blockSizesStr, chromStartsStr,
-    el->description, el->db, el->ref, el->alt, el->project, el->mouseover);
+    el->description, el->db, el->ref, el->alt, el->project, el->mouseover,
+    isEmpty(el->itemType) ? "snv" : el->itemType,
+    isEmpty(el->cnvType) ? "" : el->cnvType);
 freeMem(blockSizesStr);
 freeMem(chromStartsStr);
 
@@ -161,7 +194,9 @@ ret->ref = cloneString(row[15]);
 ret->alt = cloneString(row[16]);
 ret->project = cloneString(row[17]);
 ret->mouseover = cloneString(row[18]);
-ret->id = sqlUnsigned(row[19]);
+ret->itemType = cloneString(row[19]);
+ret->cnvType = cloneString(row[20]);
+ret->id = sqlUnsigned(row[21]);
 return ret;
 }
 
@@ -240,6 +275,8 @@ ret->ref = sqlStringComma(&s);
 ret->alt = sqlStringComma(&s);
 ret->project = sqlStringComma(&s);
 ret->mouseover = sqlStringComma(&s);
+ret->itemType = sqlStringComma(&s);
+ret->cnvType = sqlStringComma(&s);
 ret->id = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -260,6 +297,8 @@ freeMem(el->ref);
 freeMem(el->alt);
 freeMem(el->project);
 freeMem(el->mouseover);
+freeMem(el->itemType);
+freeMem(el->cnvType);
 slPairFreeValsAndList(&el->customFields);
 freez(pEl);
 }
@@ -351,6 +390,14 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mouseover);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->itemType ? el->itemType : "");
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->cnvType ? el->cnvType : "");
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->id);
@@ -658,6 +705,8 @@ else
             "    alt varchar(255) not null,\n"
             "    project varchar(255) not null,\n"
             "    mouseover varchar(255) not null,\n"
+            "    itemType varchar(16) not null default 'snv',\n"
+            "    cnvType varchar(32) not null default '',\n"
             "    id int auto_increment,\n"
             "    PRIMARY KEY(id),\n"
             "    INDEX(chrom(16),bin),\n"
@@ -1026,7 +1075,7 @@ static const char *builtInColumns[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt", "project",
-    "mouseover", "id",
+    "mouseover", "itemType", "cnvType", "id",
 };
 
 static boolean isBuiltInColumn(char *name)
