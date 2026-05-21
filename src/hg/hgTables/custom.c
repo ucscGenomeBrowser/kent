@@ -495,14 +495,14 @@ if (ct == NULL)
     errAbort("Can't find custom track %s", name);
 char *type = ct->dbTrackType;
 
-if (type != NULL && (startsWithWord("myVariants", type) ||
+if (type != NULL && (isMyVariantsType(type) ||
         sameWord("bedDetail", type) ||
         sameWord("barChart", type) ||
         sameWord("interact", type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type)))
     {
-    if (sameWord("myVariants", type) && ct->dbTableName == NULL)
+    if (isMyVariantsType(type) && ct->dbTableName == NULL)
         ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
@@ -607,14 +607,14 @@ void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
 {
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->tdb->type;
-if (startsWithWord("myVariants", type) ||
+if (isMyVariantsType(type) ||
         sameWord("bedDetail", type) ||
         sameWord("barChart", type) ||
         sameWord("interact", type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type))
     {
-    if (sameWord("myVariants", type))
+    if (isMyVariantsType(type))
         {
         ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
         }

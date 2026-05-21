@@ -4225,7 +4225,6 @@ function addMouseover(ele1, text = null, ele2 = null) {
         ele1.setAttribute("mouseoverText", text);
         // Remove title attribute to prevent default browser tooltip
         if (ele1.title || ele1.dataset.tooltip) {
-            ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         }
         // Remove previous listeners if any

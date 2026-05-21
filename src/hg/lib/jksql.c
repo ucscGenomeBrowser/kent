@@ -1072,7 +1072,6 @@ if (sqlOpenConnections)
         conn->isFree = FALSE;
 	sqlDisconnect(&conn);
 	}
-    freeDlList(&sqlOpenConnections);
     }
 }
 

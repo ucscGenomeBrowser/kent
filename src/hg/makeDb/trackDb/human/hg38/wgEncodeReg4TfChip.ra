@@ -10,7 +10,7 @@ metaDataUrl /gbdb/hg38/encode4/regulation/wgEncodeReg4TfChip_metadata.tsv
 primaryKey accession
 subtrackUrls accession=https://www.encodeproject.org/files/$$/ Experiment=https://www.encodeproject.org/experiments/$$/
 defaultSortField _Experiment
-maxCheckboxes 40
+maxCheckboxes 50
 noInherit on
 priority 2.2
 

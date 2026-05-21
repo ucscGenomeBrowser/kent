@@ -636,7 +636,7 @@ else if (startsWithWord("maf", type))
     showSchemaCtMaf(table, ct);
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
-else if (startsWithWord("myVariants", type))
+else if (isMyVariantsType(type))
     {
     struct asObject *asObj = myVariantsAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);

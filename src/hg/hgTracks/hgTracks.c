@@ -6756,7 +6756,7 @@ else if (sameString(type, "vcf"))
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
-else if (sameString(type, "myVariants"))
+else if (isMyVariantsType(type))
     {
     tg = trackFromTrackDb(tdb);
     myVariantsMethods(tg);

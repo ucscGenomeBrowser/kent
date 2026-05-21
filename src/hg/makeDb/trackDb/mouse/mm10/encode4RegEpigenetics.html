@@ -5,17 +5,17 @@ experiments, including DNase-seq and ATAC-seq for chromatin accessibility, and C
 for the histone modifications H3K4me3 and H3K27ac, as well as CTCF binding.</p>
 
 <ul>
-<li><b>DNase-seq</b> identifies regions of open chromatin via hypersensitivity to DNase I
-digestion. Open chromatin is commonly associated with active regulatory elements such as
-enhancers, promoters, and insulators.</li>
-<li><b>ATAC-seq</b> identifies open chromatin, using Tn5 transposase insertion in
-place of DNase digestion.</li>
-<li><b>H3K4me3 ChIP-seq</b> marks a histone modification associated with active and
-poised promoters.</li>
-<li><b>H3K27ac ChIP-seq</b> marks a histone modification associated with active
-enhancers and promoters.</li>
-<li><b>CTCF ChIP-seq</b> identifies CTCF binding sites, which often occur at insulators
-and chromatin loop anchors that organize genome topology.</li>
+<li><b>DNase-seq</b> identifies regions of open chromatin commonly associated with
+enhancers, promoters, and insulators (shown in
+<span style="color:#06DA93">green</span>)</li>
+<li><b>ATAC-seq</b> identifies open chromatin via Tn5 transposase insertion (shown in
+<span style="color:#02C7B9">cyan</span>)</li>
+<li><b>H3K4me3 ChIP-seq</b> marks active and poised promoters (shown in
+<span style="color:#FF0000">red</span>)</li>
+<li><b>H3K27ac ChIP-seq</b> marks active enhancers and promoters (shown in
+<span style="color:#B59100">yellow</span>)</li>
+<li><b>CTCF ChIP-seq</b> identifies binding sites at insulators and chromatin loop
+anchors (shown in <span style="color:#00B0F0">blue</span>)</li>
 </ul>
 
 <p>Each experiment is shown as one or two subtracks:</p>
@@ -33,12 +33,45 @@ corresponding layered summary tracks. Additional datasets are available at the
 Subtracks can be further filtered by Assay (ATAC, DNase, CTCF, H3K27ac, and H3K4me3),
 Organ, Biosample Type, and Data Type (Signal or Peak).</p>
 
-<p>Each subtrack is colored by Assay:
-<b>DNase-seq</b> is shown in <span style="color:#06DA93">green</span>,
-<b>ATAC-seq</b> in <span style="color:#02C7B9">cyan</span>,
-<b>H3K4me3</b> in <span style="color:#FF0000">red</span>,
-<b>H3K27ac</b> in <span style="color:#B59100">yellow</span>, and
-<b>CTCF</b> in <span style="color:#00B0F0">blue</span>.</p>
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ/Tissue</th>
+    <th style="text-align:center">DNase</th>
+    <th style="text-align:center">ATAC</th>
+    <th style="text-align:center">H3K4me3</th>
+    <th style="text-align:center">H3K27ac</th>
+    <th style="text-align:center">CTCF</th>
+  </tr>
+  <tr><td>adipose</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>adrenal gland</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>blood</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>blood marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>bone marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>brain</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>breast</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>connective tissue</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>embryo</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>epithelium</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>eye</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>heart</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>kidney</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>large intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>limb</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>liver</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>lung</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>muscle</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>ovary</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>placenta</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>small intestine</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>spinal cord</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>spleen</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>stomach</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>testis</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>thymus</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>urinary bladder</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+</table>
 
 <h2>Data Access</h2>
 <p>

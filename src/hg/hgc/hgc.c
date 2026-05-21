@@ -106,6 +106,7 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "sage.h"
@@ -3707,8 +3708,7 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-if (!isCustomTrack(tdb->track) &&
-    !(tdb->type && sameString(tdb->type, "myVariants")))
+if (!isCustomTrack(tdb->track) && !isMyVariantsType(tdb->type))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
@@ -22987,7 +22987,7 @@ else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
-else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", trackId))
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(trackId))
     doMyVariantsDetails(ct, item);
 else if (ct->wiggle)
     {
@@ -27223,7 +27223,7 @@ if (seqName == NULL)
     }
 
 struct customTrack *ct = NULL;
-if (isCustomTrack(track) || startsWith("myVariants_", track))
+if (isCustomTrack(track) || isMyVariantsTrack(track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
@@ -27231,7 +27231,7 @@ if (isCustomTrack(track) || startsWith("myVariants_", track))
             break;
     }
 
-if ((!isCustomTrack(track) && !startsWith("myVariants_", track) && dbIsFound)
+if ((!isCustomTrack(track) && !isMyVariantsTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
@@ -27881,7 +27881,7 @@ else if (sameWord(table, "softPromoter"))
     {
     hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(table) || startsWith("myVariants_", table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     if (tdb != NULL)
         {

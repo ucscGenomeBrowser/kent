@@ -233,22 +233,26 @@ let uppyOptions = {
                         id: `${file.meta.name}DbSelect`,
                         style: "margin-left: 5px",
                         onChange: e => {
-                            onChange(e.target.value);
-                            file.meta.genome = e.target.value;
-                            file.meta.genomeLabel = e.target.selectedOptions[0].label;
-                            // If the user picked one of their own assembly hubs,
-                            // flip hubType and align parentDir so the upload
-                            // targets that existing hub rather than creating a
-                            // new stub. If they picked a UCSC db, flip back
-                            // and reset parentDir to a fresh default so they
-                            // don't accidentally upload into an assembly hub.
-                            let hub = hubCreate.assemblyHubByGenome(e.target.value);
-                            if (hub) {
-                                file.meta.hubType = "assemblyHub";
-                                file.meta.parentDir = hub.fileName;
-                            } else {
-                                file.meta.hubType = "trackHub";
-                                file.meta.parentDir = hubCreate.uiState.hubNameDefault;
+                            let val = e.target.value;
+                            let label = e.target.selectedOptions[0].label;
+                            let hub = hubCreate.assemblyHubByGenome(val);
+                            let newParentDir = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
+                            // Uppy's file card keeps controlled-input
+                            // state per field and commits it to meta on
+                            // Upload, overwriting setFileMeta. Route
+                            // genome through the field-level onChange and
+                            // force the Hub Name input value to match.
+                            onChange(val);
+                            uppy.setFileMeta(file.id, {
+                                genomeLabel: label,
+                                hubType: hub ? "assemblyHub" : "trackHub",
+                                parentDir: newParentDir,
+                            });
+                            let pd = document.getElementById("uppy-Dashboard-FileCard-input-parentDir");
+                            if (pd) {
+                                pd.value = newParentDir;
+                                pd.dispatchEvent(new Event("input", {bubbles: true}));
+                                pd.dispatchEvent(new Event("change", {bubbles: true}));
                             }
                         }
                         },
@@ -901,7 +905,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             this.uppy.setFileMeta(file.id, defaultMeta);
 
             // When drilled into an assembly hub, inherit and lock its genome.
-            let drilledIntoAsmHub = false;
             if (hubCreate.uiState.currentHub &&
                 hubCreate.uiState.currentHub === defaultMeta.parentDir) {
                 let existing = hubCreate.uiState.filesHash[defaultMeta.parentDir];
@@ -911,33 +914,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                         genomeLabel: existing.genome,
                         hubType: "assemblyHub",
                         genomeLocked: true,
-                    });
-                    drilledIntoAsmHub = true;
-                }
-            }
-
-            // Top-level with no drilled-in hub: if the user already has an
-            // assembly hub, default this file to target it so they don't have
-            // to re-enter the genome + hub name. The user can still switch via
-            // the dropdown. Skip this when the file itself is hub-defining
-            // (2bit or hub.txt) or when any file in the batch is - in that
-            // case the batch is creating a *new* hub, not adding to an
-            // existing one, so the defaults should not point at the old hub.
-            let fileIsHubDefining = ftype === "2bit" || ftype === "hub.txt";
-            let batchHasHubDefining = this.uppy.getFiles().some(f =>
-                looksLikeTwoBit(f) || looksLikeHubTxt(f));
-            // dropPath means the user dragged a folder; in that case parentDir
-            // already encodes the user's intended hub root, and redirecting to
-            // an existing assembly hub would discard the folder layout.
-            if (!drilledIntoAsmHub && !fileIsHubDefining && !batchHasHubDefining && !dropPath) {
-                let firstHub = hubCreate.firstAssemblyHub();
-                if (firstHub) {
-                    this.uppy.setFileMeta(file.id, {
-                        genome: firstHub.genome,
-                        genomeLabel: firstHub.genome,
-                        parentDir: firstHub.fileName,
-                        hubType: "assemblyHub",
-                        // NOT genomeLocked - user may want a different hub/genome
                     });
                 }
             }

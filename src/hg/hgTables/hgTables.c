@@ -682,15 +682,15 @@ else if (isVcfTable(table, &isTabix))
     }
 else if (isHicTable(table))
     hti = hicToHti(table);
-else if (isCustomTrack(table) || startsWith("myVariants_", table) ||
+else if (isCustomTrack(table) || isMyVariantsTrack(table) ||
          (strchr(table, '.') != NULL &&
-          startsWith("myVariants_", strchr(table, '.') + 1)))
+          isMyVariantsTrack(strchr(table, '.') + 1)))
     {
     /* Accept the qualified myVariants storage form
      * ("customDataNN.myVariants_<user>") as well as the bare track name;
      * the ct list is keyed on the bare track name. */
     char *dot = strchr(table, '.');
-    char *trackName = (dot != NULL && startsWith("myVariants_", dot + 1)) ? dot + 1 : table;
+    char *trackName = (dot != NULL && isMyVariantsTrack(dot + 1)) ? dot + 1 : table;
     struct customTrack *ct = ctLookupName(trackName);
     hti = ctToHti(ct);
     }
@@ -1240,7 +1240,7 @@ else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isHicTable(table))
     hicTabOut(db, table, conn, fields, f, outSep);
-else if (isCustomTrack(table) || startsWith("myVariants_", table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f, outSep);
     }
@@ -1271,7 +1271,7 @@ else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
 else if (isHicTable(table))
     fieldList = hicGetFields(table);
-else if (isCustomTrack(table) || startsWith("myVariants_", table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
     char *type = ct->dbTrackType;
@@ -1279,19 +1279,19 @@ else if (isCustomTrack(table) || startsWith("myVariants_", table))
         {
         conn = hAllocConn(CUSTOM_TRASH);
         if (startsWithWord("maf", type) ||
-                startsWithWord("myVariants", type) ||
+                isMyVariantsType(type) ||
                 sameWord("bedDetail", type) ||
                 sameWord("barChart", type) ||
                 sameWord("interact", type) ||
                 sameWord("bedMethyl", type) ||
                 sameWord("pgSnp", type))
             {
-            if (sameWord("myVariants", type))
+            if (isMyVariantsType(type))
                 {
                 ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
                 }
             fieldList = sqlListFields(conn, ct->dbTableName);
-            if (startsWith("myVariants_shared_", table))
+            if (isMyVariantsSharedTrack(table))
                 myVariantsStripHiddenFields(&fieldList);
             }
         hFreeConn(&conn);

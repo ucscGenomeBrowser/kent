@@ -1109,12 +1109,15 @@ void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
 {
-va_list(args);
+va_list args;
 va_start(args, format);
-hPrintf(" TITLE=\"");
-hvPrintf(format, args);
-hPutc('"');
+struct dyString *dy = dyStringNew(0);
+dyStringVaPrintf(dy, format, args);
 va_end(args);
+char *encoded = attributeEncode(dy->string);
+hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encoded);
+freeMem(encoded);
+dyStringFree(&dy);
 }
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,

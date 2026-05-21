@@ -26,8 +26,8 @@ html vgp577way
         viewUi on
         itemFirstCharCase noChange
         group compGeno
-        bigDataUrl /gbdb/hg38/vgp577way/hg38.vgp577way.bb
-        summary /gbdb/hg38/vgp577way/hg38.vgp577waySummary.bb
+        bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/hg38/hg38.vgp577way.bb
+        summary https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/hg38/hg38.vgp577waySummary.bb
         irows on
         color 0, 10, 100
         altColor 0,90,10
@@ -63,7 +63,7 @@ html vgp577way
         configurable on
         noInherit on
         type bigWig -20.00 20.00
-        bigDataUrl /gbdb/hg38/vgp577way/hg38.vgp577wayPhyloP.bw
+        bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/hg38/hg38.vgp577wayPhyloP.bw
         maxHeightPixels 100:50:11
         viewLimits -10.0:10.0
         autoScale off

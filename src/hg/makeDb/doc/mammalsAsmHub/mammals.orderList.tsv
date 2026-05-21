@@ -362,7 +362,6 @@ GCA_902685475.1_mSciCar1.1_alternate_haplotype	gray squirrel (alternate hap 2019
 GCA_902686445.2_mSciCar1.2	gray squirrel (primary hap 2020)
 GCA_905319855.2_mCanLor1.2	gray wolf (2021)
 GCA_905319845.1_mCanLor1.1_alternate_haplotype	gray wolf (alternate hap 2021)
-GCA_038363145.1_mArtInt1.hap1	intermediate fruit-eating bat (hap1 2024)
 GCA_038363095.4_mArtLit1.hap1	great fruit-eating bat (hap1 2025)
 GCA_038363175.2_mArtLit1.hap2	great fruit-eating bat (mArtLit1hap2 2024)
 GCA_038363095.2_mArtLit.hap1	great fruit-eating bat (v2 hap1 2024)
@@ -434,6 +433,7 @@ GCA_030015415.1_ASM3001541v1	Indian short-nosed fruit bat (CYSPWHU 2023)
 GCA_004027635.1_CroInd_v1_BIUU	Indochinese shrew (US011 2019 Broad)
 GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
 GCA_041735815.1_T2T-goat2.0	Inner Mongolia cashmere goat (2024)
+GCA_038363145.1_mArtInt1.hap1	intermediate fruit-eating bat (hap1 2024)
 GCA_043727925.1_ASM4372792v1	intermediate horseshoe bat (China 20211001_DDa alternate hap 2024)
 GCA_043728065.1_ASM4372806v1	intermediate horseshoe bat (China 20211001_DDa primary hap 2024)
 GCA_031876335.1_mHipLar1.pri	intermediate roundleaf bat (primary hap 2023)
@@ -587,6 +587,9 @@ GCA_041222355.1_F344_StmMcwi	Norway rat (F344/Stm 2024)
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCF_000002265.2_Rn_Celera	Norway rat celera
+GCA_045688005.1_Dahl_SR_JrHsd	Norway rat Dahl SR JrHsd (RGD_1582184 2024)
+GCA_045687965.1_Lyon_Hypertensive	Norway rat Lyon Hypertensive(RGD_10755352 2024)
+GCA_045687995.1_Lyon_Normot_Rat_Genome	Norway rat Lyon Normot (RGD_10755354 2024)
 GCF_000001895.5_Rnor_6.0	Norway rat Rnor6.0
 GCA_023515785.1_UTH_Rnor_SHR_Utx	Norway rat SHR/Utx RGD_8142385 2022
 GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0	Norway rat SHRSP/BppUtx 2022
