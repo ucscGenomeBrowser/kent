@@ -27,7 +27,7 @@ gcPattern = re.compile(r"^GC[AF]_")
 pushUser = "qateam"
 pushHosts = ["hgdownload1.soe.ucsc.edu", "hgdownload3.gi.ucsc.edu"]
 
-
+############################################################################
 def acquireSingletonLock():
     """Ensure only one instance of this script runs at a time.  Holds an
     exclusive flock on lockPath for the lifetime of the process; the
@@ -50,6 +50,7 @@ def acquireSingletonLock():
     return fh
     ### FYI: can also see the locking process via: lsof ottoRequestPush.lock
 
+############################################################################
 def hgsql(query, db="hgcentraltest"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
@@ -59,6 +60,7 @@ def hgsql(query, db="hgcentraltest"):
     return [tuple(line.split("\t")) for line in out.splitlines() if line]
 
 
+############################################################################
 def loadDbDbClades():
     """Read dbDb.name.clade.tsv -> {dbName: clade}."""
     result = {}
@@ -71,6 +73,7 @@ def loadDbDbClades():
     return result
 
 
+############################################################################
 def pendingRequests():
     """Status=5 liftOver requests as [(id, fromDb, toDb), ...]."""
     rows = hgsql(
@@ -80,6 +83,7 @@ def pendingRequests():
     return [(int(r[0]), r[1], r[2]) for r in rows]
 
 
+############################################################################
 def markComplete(reqIds):
     """Set status=6 on the given ottoRequest ids."""
     if not reqIds:
@@ -89,15 +93,16 @@ def markComplete(reqIds):
 #   print("# marked status=6: %s" % idList, file=sys.stderr)
 
 
+############################################################################
 def markFailed(reqIds):
     """Set status=7 (problems) on the given ottoRequest ids."""
     if not reqIds:
         return
     idList = ",".join(str(i) for i in sorted(reqIds))
     hgsql("UPDATE ottoRequest SET status = 7 WHERE id IN (%s);" % idList)
-#   print("# marked status=7: %s" % idList, file=sys.stderr)
+    print("# ottoRequestPush.py marked status=7 for failing list: %s" % idList, file=sys.stderr)
 
-
+############################################################################
 def lookupGenark(accessions):
     """Bulk-lookup GenArk accessions -> {acc: (asmName, clade)}."""
     if not accessions:
@@ -110,6 +115,7 @@ def lookupGenark(accessions):
     return {acc: (asmName, clade) for acc, asmName, clade in rows}
 
 
+############################################################################
 def groupByClade(dbs, dbDbClades, genarkInfo):
     """Build {clade: [assemblyId, ...]}."""
     grouped = defaultdict(set)
@@ -130,6 +136,7 @@ def groupByClade(dbs, dbDbClades, genarkInfo):
     return {clade: sorted(ids) for clade, ids in grouped.items()}
 
 
+############################################################################
 def writeCladeTsv(clade, asmIds):
     """Filter <clade>.orderList.tsv down to lines matching any asmId and
     write the result to tsv.otto in the same directory.  Mirrors:
@@ -182,6 +189,7 @@ makeChainCommands = [
 ]
 
 
+############################################################################
 def runMakeChain(cladeDir):
     """Run the post-tsv.otto make sequence in cladeDir.  Uses bash so
     'time (...)' (a builtin on a subshell) and '>>' / '2>&1' work as
@@ -199,6 +207,7 @@ def runMakeChain(cladeDir):
     return True
 
 
+############################################################################
 def pushUcscChain(targetDb, queryDb):
     """rsync the .over.chain.gz to both hgdownload hosts under
     /goldenPath/<targetDb>/liftOver/.  targetDb must be a UCSC native db
@@ -240,6 +249,7 @@ def pushUcscChain(targetDb, queryDb):
     return True
 
 
+############################################################################
 def main():
     lockFh = acquireSingletonLock()  # noqa: F841 -- keep ref alive
     requests = pendingRequests()
