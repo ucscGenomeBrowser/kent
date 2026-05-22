@@ -6,7 +6,7 @@
 #include "common.h"
 #include "cart.h"
 #include "customTrack.h"
-#define MYVARIANTS_NUM_COLS 20 /* number of default columns before any user-added custom columns */
+#define MYVARIANTS_NUM_COLS 22 /* number of default columns before any user-added custom columns */
 
 /* Cart var prefix that points at the on-disk myVariants ctfile for a given assembly.
  * Kept separate from CT_FILE_VAR_PREFIX so myVariants and regular custom tracks
@@ -50,6 +50,8 @@ struct myVariants
     char *alt;          /* alternate allele */
     char *project;      /* project name for grouping variants */
     char *mouseover;    /* short mouseover text for hover display */
+    char *itemType;     /* transcript, snv, or cnv */
+    char *cnvType;      /* gnomAD CNV term; empty for snv/transcript */
     unsigned id;        /* Unique ID for item */
     struct slPair *customFields; /* user-defined custom field name/value pairs */
     };
@@ -97,6 +99,19 @@ void myVariantsOutput(struct myVariants *el, FILE *f, char sep, char lastSep);
 
 struct asObject *myVariantsAsObj();
 /* Return asObject describing fields of myVariants */
+
+extern char *myVariantsItemTypes[];
+extern int myVariantsNumItemTypes;
+extern char *myVariantsCnvTypes[];
+extern int myVariantsNumCnvTypes;
+
+char *myVariantsCanonicalItemType(char *s);
+/* Return the matching canonical entry from myVariantsItemTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
+
+char *myVariantsCanonicalCnvType(char *s);
+/* Return the matching canonical entry from myVariantsCnvTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
 
 char *myVariantsGetDatabaseForUser(char *userName);
 /* Hash the userName and map it to 1..31 inclusive for deciding what

@@ -28,7 +28,7 @@ static char *reservedFieldNames[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt", "project",
-    "mouseover", "id", NULL
+    "mouseover", "itemType", "cnvType", "id", NULL
 };
 
 static char *truncateSeq(char *seq, int maxLen)
@@ -346,6 +346,8 @@ if (hgvsJson)
                 item->description = cloneString(hgp->singlePos->description);
                 item->project = cloneString("");
                 item->mouseover = cloneString("");
+                item->itemType = cloneString("snv");
+                item->cnvType = cloneString("");
                 }
             }
         else
@@ -369,6 +371,8 @@ if (hgvsJson)
                 item->description = cloneString(pos->description ? pos->description : "");
                 item->project = cloneString("");
                 item->mouseover = cloneString("");
+                item->itemType = cloneString("snv");
+                item->cnvType = cloneString("");
                 }
             else if (hgpFind != NULL && hgpFind->posCount > 1)
                 {
@@ -399,6 +403,17 @@ else
     char *alt = jsonOptionalStringField(json, "alt", "");
     char *project = jsonOptionalStringField(json, "project", "");
     char *mouseover = jsonOptionalStringField(json, "mouseover", "");
+    char *itemType = myVariantsCanonicalItemType(
+        jsonOptionalStringField(json, "itemType", "snv"));
+    if (itemType == NULL)
+        errAbort("invalid itemType");
+    char *cnvType = "";
+    if (sameString(itemType, "cnv"))
+        {
+        cnvType = myVariantsCanonicalCnvType(jsonOptionalStringField(json, "cnvType", ""));
+        if (cnvType == NULL)
+            errAbort("invalid cnvType");
+        }
     unsigned color;
     htmlColorForCode(colorCode, &color);
 
@@ -406,8 +421,18 @@ else
     item->chrom = cloneString(chrom);
     item->chromStart = chromStart;
     item->chromEnd = chromEnd;
-    item->thickStart = thickStart;
-    item->thickEnd = thickEnd;
+    /* SNV/CNV items don't carry a thick range or BED12 blocks; force defaults
+     * so a stale value from a view toggle in the client can't leak through. */
+    if (sameString(itemType, "snv") || sameString(itemType, "cnv"))
+        {
+        item->thickStart = chromStart;
+        item->thickEnd = chromEnd;
+        }
+    else
+        {
+        item->thickStart = thickStart;
+        item->thickEnd = thickEnd;
+        }
     if (isEmpty(name))
         {
         item->name = synthesizeItemName(ref, alt, hgvsctUndefined, NULL);
@@ -420,11 +445,27 @@ else
     item->strand[0] = strand[0];
     item->itemRgb = color;
     item->description = cloneString(description);
-    item->ref = cloneString(ref);
-    item->alt = cloneString(alt);
+    if (sameString(itemType, "transcript"))
+        {
+        item->ref = cloneString("");
+        item->alt = cloneString("");
+        }
+    else if (sameString(itemType, "cnv"))
+        {
+        /* CNV stores the inserted/duplicated sequence in alt; ref is unused. */
+        item->ref = cloneString("");
+        item->alt = cloneString(alt);
+        }
+    else
+        {
+        item->ref = cloneString(ref);
+        item->alt = cloneString(alt);
+        }
     item->db = database;
     item->project = cloneString(project);
     item->mouseover = cloneString(mouseover);
+    item->itemType = cloneString(itemType);
+    item->cnvType = cloneString(cnvType);
     }
 
 if (!item)
@@ -567,6 +608,12 @@ if (endsWith(varName, "itemRgb"))
         cartRemove(cart, varName);
         }
     return;
+    }
+if (sameString(fieldName, "cnvType"))
+    {
+    if (isNotEmpty(newVal) && myVariantsCanonicalCnvType(newVal) == NULL)
+        errAbort("invalid cnvType");
+    newVal = isEmpty(newVal) ? "" : myVariantsCanonicalCnvType(newVal);
     }
 struct dyString *sql = sqlDyStringCreate("update %s set %s='%s' where id=%d",
     tableName, fieldName, newVal, id);
@@ -721,11 +768,14 @@ if (idString != NULL)
     updateTextField(trackName, conn, tableName, "itemRgb", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromStart", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromEnd", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "thickStart", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "thickEnd", id, NULL, NULL);
     updateBlocksFields(trackName, conn, tableName, id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "ref", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "alt", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "project", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "mouseover", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "cnvType", id, NULL, NULL);
     /* Update any custom fields */
         {
         char *editUserName = getUserName();
@@ -1236,10 +1286,13 @@ for (el = shareVars; el != NULL; el = el->next)
     updateTextField(trackName, conn, tableName, "itemRgb", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromStart", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromEnd", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "thickStart", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "thickEnd", id, sp, sd);
     updateBlocksFields(trackName, conn, tableName, id, sp, sd);
     updateTextField(trackName, conn, tableName, "ref", id, sp, sd);
     updateTextField(trackName, conn, tableName, "alt", id, sp, sd);
     updateTextField(trackName, conn, tableName, "mouseover", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "cnvType", id, sp, sd);
     struct slName *customCols = myVariantsGetCustomFields(liveShare->ownerUser);
     struct slName *col;
     for (col = customCols; col != NULL; col = col->next)

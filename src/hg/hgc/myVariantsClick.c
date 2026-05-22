@@ -119,6 +119,8 @@ if (item != NULL)
 
     if (canEdit)
         {
+        boolean isTranscript = sameOk(item->itemType, "transcript");
+        boolean isCnv = sameOk(item->itemType, "cnv");
         webIncludeResourceFile("spectrum.min.css");
         jsIncludeFile("spectrum.min.js", NULL);
         printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgTracksName());
@@ -164,57 +166,72 @@ if (item != NULL)
         printInfoIcon("0-based half-open end position on the chromosome.");
         printf("<BR>\n");
 
-        /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
-         * updateBlocksFields in hgTracks reads them on submit. */
-        char vBC[128], vBS[128], vBT[128], vCS[128], vCE[128];
-        safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
-        safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
-        safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
-        safef(vCS, sizeof(vCS), "%s_chromStart", trackName);
-        safef(vCE, sizeof(vCE), "%s_chromEnd", trackName);
-        struct dyString *sizesCsv = dyStringNew(64);
-        struct dyString *startsCsv = dyStringNew(64);
-        int bi;
-        for (bi = 0; bi < item->blockCount; bi++)
+        if (isTranscript)
             {
-            if (bi > 0)
+            /* Editable CDS Start / CDS End (stored as thickStart/thickEnd). */
+            printf("<B>CDS Start:</B> ");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "thickStart");
+            cgiMakeIntVarInRange(varName, item->thickStart, NULL, 80, "0", chromSizeString);
+            printInfoIcon("Start of the coding region.");
+            printf("<BR>\n");
+            printf("<B>CDS End:</B> ");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "thickEnd");
+            cgiMakeIntVarInRange(varName, item->thickEnd, NULL, 80, "0", chromSizeString);
+            printInfoIcon("End of the coding region.");
+            printf("<BR>\n");
+
+            /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
+             * updateBlocksFields in hgTracks reads them on submit. */
+            char vBC[128], vBS[128], vBT[128], vCS[128], vCE[128];
+            safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
+            safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
+            safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
+            safef(vCS, sizeof(vCS), "%s_chromStart", trackName);
+            safef(vCE, sizeof(vCE), "%s_chromEnd", trackName);
+            struct dyString *sizesCsv = dyStringNew(64);
+            struct dyString *startsCsv = dyStringNew(64);
+            int bi;
+            for (bi = 0; bi < item->blockCount; bi++)
                 {
-                dyStringAppendC(sizesCsv, ',');
-                dyStringAppendC(startsCsv, ',');
+                if (bi > 0)
+                    {
+                    dyStringAppendC(sizesCsv, ',');
+                    dyStringAppendC(startsCsv, ',');
+                    }
+                dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
+                dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
                 }
-            dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
-            dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
+            char countStr[32];
+            safef(countStr, sizeof(countStr), "%u", item->blockCount);
+            printf("<B>Blocks:</B> ");
+            printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
+            printf("<BR>\n");
+            cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
+            cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
+            cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
+            printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
+            jsIncludeFile("myVariantsBlocks.js", NULL);
+            jsInlineF(
+                "$(function(){\n"
+                "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
+                "  var sizesEl = document.getElementById('%s');\n"
+                "  var startsEl = document.getElementById('%s');\n"
+                "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
+                "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
+                "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
+                "    initialSizes: sizes,\n"
+                "    initialStarts: starts,\n"
+                "    getStart: function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+                "    getEnd:   function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+                "    hiddenCountInput:  document.getElementById('%s'),\n"
+                "    hiddenSizesInput:  sizesEl,\n"
+                "    hiddenStartsInput: startsEl\n"
+                "  });\n"
+                "});\n",
+                vBS, vBT, vCS, vCE, vBC);
+            dyStringFree(&sizesCsv);
+            dyStringFree(&startsCsv);
             }
-        char countStr[32];
-        safef(countStr, sizeof(countStr), "%u", item->blockCount);
-        printf("<B>Blocks:</B> ");
-        printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
-        printf("<BR>\n");
-        cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
-        cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
-        cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
-        printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
-        jsIncludeFile("myVariantsBlocks.js", NULL);
-        jsInlineF(
-            "$(function(){\n"
-            "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
-            "  var sizesEl = document.getElementById('%s');\n"
-            "  var startsEl = document.getElementById('%s');\n"
-            "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
-            "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
-            "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
-            "    initialSizes: sizes,\n"
-            "    initialStarts: starts,\n"
-            "    getStart: function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
-            "    getEnd:   function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
-            "    hiddenCountInput:  document.getElementById('%s'),\n"
-            "    hiddenSizesInput:  sizesEl,\n"
-            "    hiddenStartsInput: startsEl\n"
-            "  });\n"
-            "});\n",
-            vBS, vBT, vCS, vCE, vBC);
-        dyStringFree(&sizesCsv);
-        dyStringFree(&startsCsv);
 
         /* Edit the color */
         safef(varName, sizeof(varName), "%s_%s", trackName, "itemRgb");
@@ -235,17 +252,42 @@ if (item != NULL)
             varName);
         printf("<br>");
 
-        /* Edit ref/alt */
-        safef(varName, sizeof(varName), "%s_%s", trackName, "ref");
-        printf("<B>Ref:</B> ");
-        cgiMakeTextVar(varName, item->ref, 17);
-        printInfoIcon("Reference allele sequence at this position.");
-        printf("<BR>\n");
-        safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
-        printf("<B>Alt:</B> ");
-        cgiMakeTextVar(varName, item->alt, 17);
-        printInfoIcon("Alternate (variant) allele sequence.");
-        printf("<BR>\n");
+        /* Edit ref/alt. Transcript has no alleles; CNV stores a sequence in alt. */
+        if (isCnv)
+            {
+            safef(varName, sizeof(varName), "%s_%s", trackName, "cnvType");
+            printf("<B>CNV type:</B> ");
+            htmlPrintf("<select name='%s|attr|' id='%s|attr|'>", varName, varName);
+            int ci;
+            for (ci = 0; ci < myVariantsNumCnvTypes; ci++)
+                {
+                boolean sel = sameOk(item->cnvType, myVariantsCnvTypes[ci]);
+                htmlPrintf("<option value='%s|attr|'%s|none|>%s</option>",
+                    myVariantsCnvTypes[ci], sel ? " selected" : "",
+                    myVariantsCnvTypes[ci]);
+                }
+            printf("</select>");
+            printInfoIcon("CNV vocabulary follows gnomAD");
+            printf("<BR>\n");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
+            printf("<B>Sequence:</B> ");
+            cgiMakeTextVar(varName, item->alt, 40);
+            printInfoIcon("Inserted or duplicated sequence at this position.");
+            printf("<BR>\n");
+            }
+        else if (!isTranscript)
+            {
+            safef(varName, sizeof(varName), "%s_%s", trackName, "ref");
+            printf("<B>Ref:</B> ");
+            cgiMakeTextVar(varName, item->ref, 17);
+            printInfoIcon("Reference allele sequence at this position.");
+            printf("<BR>\n");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
+            printf("<B>Alt:</B> ");
+            cgiMakeTextVar(varName, item->alt, 17);
+            printInfoIcon("Alternate (variant) allele sequence.");
+            printf("<BR>\n");
+            }
 
         /* Project: locked for shared tracks, editable for own track */
         printf("<B>Project:</B> ");
@@ -373,10 +415,13 @@ if (item != NULL)
         safef(colorHex, sizeof(colorHex), "#%06X", item->itemRgb);
         printf("<B>Color:</B> <span style='background:%s; padding:2px 12px'>&nbsp;</span> %s<BR>\n",
             colorHex, colorHex);
+        boolean roIsCnv = sameOk(item->itemType, "cnv");
+        if (roIsCnv && isNotEmpty(item->cnvType))
+            htmlPrintf("<B>CNV type:</B> %s<BR>\n", item->cnvType);
         if (isNotEmpty(item->ref))
             htmlPrintf("<B>Ref:</B> %s<BR>\n", item->ref);
         if (isNotEmpty(item->alt))
-            htmlPrintf("<B>Alt:</B> %s<BR>\n", item->alt);
+            htmlPrintf("<B>%s:</B> %s<BR>\n", roIsCnv ? "Sequence" : "Alt", item->alt);
         if (isNotEmpty(item->project))
             htmlPrintf("<B>Project:</B> %s<BR>\n", item->project);
         if (isNotEmpty(item->mouseover))

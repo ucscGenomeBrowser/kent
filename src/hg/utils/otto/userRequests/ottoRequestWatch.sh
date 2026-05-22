@@ -384,11 +384,14 @@ while IFS=$'\t' read -r reqId buildDir; do
         setErrorStatus "${reqId}"
         continue
       fi
-      if ! "${doTdb}" >> /cluster/home/hiram/kent/src/hg/utils/otto/userRequests/doTdb.log 2>&1; then
+      if ! "${doTdb}" >> /dev/shm/doTdb.$$.log 2>&1; then
         printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+        cat /dev/shm/doTdb.$$.log 1>&2
+        rm -f /dev/shm/doTdb.$$.log
         setErrorStatus "${reqId}"
         continue
       fi
+      rm -f /dev/shm/doTdb.$$.log
       ;;
     *)
       if ! ( cd "${buildDir}" \
@@ -413,11 +416,14 @@ while IFS=$'\t' read -r reqId buildDir; do
         setErrorStatus "${reqId}"
         continue
       fi
-      if ! "${swapTdb}" > /dev/null 2>&1; then
+      if ! "${swapTdb}" >> /dev/shm/swapTdb.$$.log 2>&1; then
         printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
+        cat /dev/shm/swapTdb.$$.log 1>&2
+        rm -f /dev/shm/swapTdb.$$.log
         setErrorStatus "${reqId}"
         continue
       fi
+      rm -f /dev/shm/swapTdb.$$.log
       ;;
     *)
       if ! ( cd "${swapDir}" \
