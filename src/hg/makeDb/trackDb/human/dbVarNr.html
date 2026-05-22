@@ -1,0 +1,175 @@
+<h2>Description</h2>
+
+<p>
+This track shows the full <b>non-redundant (NR) structural variant catalog</b>
+curated by <a href="https://www.ncbi.nlm.nih.gov/dbvar/" target="_blank">NCBI
+dbVar</a>: deletions, duplications, and insertions aggregated across more than
+150 studies (e.g. 1000 Genomes Phase 3, Simons Genome Diversity Project,
+ClinGen, ClinVar) into a single consolidated set per variant type. In the
+source release, each type (DEL, DUP, INS) is distributed separately; for this
+track all three are merged into one bigBed so they can be filtered and
+browsed together. As of the current build there are ~4.6 million records
+(2.3M deletions, 0.6M duplications, 1.7M insertions).</p>
+
+<p>
+Each record represents a <i>unique genomic placement</i>. When multiple
+submitted structural variants (ssv/nsv) have the same coordinates on the
+reference, dbVar collapses them into one NR record and the record's
+<i>variantCount</i> field counts how many were merged. Only exact
+coordinate matches are collapsed; partial overlaps keep separate rows.</p>
+
+<h3>What merges into each type</h3>
+
+<ul>
+  <li><b>Deletions</b>: alu_deletion, copy_number_loss, deletion,
+      herv_deletion, line1_deletion, sva_deletion (and a small number of
+      copy_number_variation entries annotated as loss).</li>
+  <li><b>Duplications</b>: copy_number_gain, copy_number_variation,
+      duplication, tandem_duplication.</li>
+  <li><b>Insertions</b>: alu_insertion, insertion, line1_insertion,
+      mobile_element_insertion, novel_sequence_insertion, sva_insertion.</li>
+</ul>
+
+<h3>Subsets</h3>
+
+<p>
+dbVar ships three overlapping, clinically-oriented subsets of each NR
+catalog, and each record here is tagged with its memberships via the
+<i>subsets</i> field:</p>
+<ul>
+  <li><b>common</b>: variant has population-frequency evidence in at
+      least one submitting study (i.e. it is observed in healthy
+      individuals at appreciable frequency).</li>
+  <li><b>pathogenic</b>: variant is backed by at least one ClinVar
+      submission asserting it to be disease-causing.</li>
+  <li><b>somatic</b>: variant is of somatic (typically tumor) origin,
+      not germline.</li>
+</ul>
+<p>
+Most NR records are neither common nor curated as pathogenic/somatic;
+their <i>subsets</i> field is empty. A record can belong to multiple
+subsets simultaneously (e.g. both <i>common</i> and <i>pathogenic</i>)
+when different studies contribute different calls at the same
+placement.</p>
+
+<h3>Length fields and bin sizes</h3>
+
+<p>Each record carries two numeric length fields:</p>
+<ul>
+  <li><b>svLen</b> &ndash; reference-span length in base pairs
+      (<tt>chromEnd - chromStart</tt>). For DEL/DUP this is the
+      deleted or duplicated region size; for INS it is typically 1 bp
+      (the breakpoint anchor).</li>
+  <li><b>insLen</b> &ndash; for INS only, the length of the inserted
+      sequence (dbVar's <tt>max_insertion_length</tt>; equal to
+      <tt>min_insertion_length</tt> when only one variant is merged).
+      Always 0 for DEL/DUP.</li>
+</ul>
+
+<p>
+On top of <i>svLen</i>, dbVar also pre-bins each record into one of
+three reference-span buckets stored in the <i>binSize</i> column:</p>
+<ul>
+  <li><b>small</b>: &lt; 50 bp</li>
+  <li><b>medium</b>: 50 bp to &lt; 1 Mb</li>
+  <li><b>large</b>: &ge; 1 Mb</li>
+</ul>
+<p>
+Use the numeric <i>svLen</i> filter for arbitrary length cutoffs and
+the categorical <i>binSize</i> filter for the standard buckets. The
+bed <i>score</i> is derived from <i>binSize</i>
+(small = 100, medium = 500, large = 1000) so dense-mode shading
+emphasises larger events.</p>
+
+<h2>Display conventions</h2>
+
+<p>Items are colored by SV type:</p>
+<ul>
+  <li><span style="background-color:rgb(220,50,32);color:white;padding:1px 6px">DEL</span> deletion</li>
+  <li><span style="background-color:rgb(0,120,200);color:white;padding:1px 6px">DUP</span> duplication</li>
+  <li><span style="background-color:rgb(0,160,0);color:white;padding:1px 6px">INS</span> insertion (drawn at the reference insertion site)</li>
+</ul>
+
+<p>The item label is the first dbVar variant ID for the record (an
+<tt>nssv*</tt>, <tt>nsv*</tt>, or <tt>essv*</tt> accession). When a
+placement merges multiple IDs, the full list is stored in the
+<i>variants</i> field on the details page and linked to the dbVar
+variant page. Similarly, when an NR record aggregates calls from
+multiple studies/methods/platforms, those columns are
+semicolon-separated lists.</p>
+
+<h2>Filters</h2>
+
+<p>The track configuration page exposes these filters:</p>
+<ul>
+  <li><b>SV Type</b> &ndash; multi-select among DEL / DUP / INS. Hides
+      variants of unchecked types.</li>
+  <li><b>SV Length on reference</b> (<i>svLen</i>) &ndash; numeric
+      range filter on <tt>chromEnd - chromStart</tt> in bp. For INS the
+      reference span is 1 bp; use <i>insLen</i> for the actual
+      inserted-sequence length.</li>
+  <li><b>Insertion sequence length</b> (<i>insLen</i>) &ndash; numeric
+      range, INS only.</li>
+  <li><b>Bin size</b> &ndash; multi-select among small / medium / large
+      as defined above. Useful for hiding sub-50bp indels or
+      restricting to mega-base events.</li>
+  <li><b>Subset membership</b> &ndash; multi-select among common,
+      pathogenic, somatic. By default all three are selected, which
+      preserves every record (including records with empty subsets);
+      unchecking one still shows untagged records but hides variants
+      that carry <i>only</i> the unchecked flag. To see only the
+      pathogenic subset, uncheck the other two <b>and</b> also filter
+      out the majority untagged records by a per-record filter such as
+      <i>variantCount</i>.</li>
+  <li><b>Merged subvariants</b> (<i>variantCount</i>) &ndash; numeric
+      range filter on the number of submitted SVs that share this
+      exact placement. <tt>variantCount = 1</tt> means the NR record
+      has a single submitter match (the most common case); higher
+      values indicate the placement has been reported many times across
+      studies. Increase the minimum to focus on well-replicated calls.</li>
+</ul>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>dbVarNr</i>.</p>
+
+<p>The bigBed is available from our download server at
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/dbVar/nr.bb" target="_blank">
+hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/dbVar/nr.bb</a>. The upstream source
+TSV / BED / BEDPE files (released monthly) are available from the
+<a href="https://github.com/ncbi/dbvar/tree/master/Structural_Variant_Sets/Nonredundant_Structural_Variants" target="_blank">
+NCBI dbVar GitHub repository</a> and the
+<a href="https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/sv_datasets/nonredundant/" target="_blank">
+dbVar FTP site</a>.</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the NCBI dbVar team for curating, merging, and releasing
+the non-redundant structural-variant datasets on a monthly cadence.</p>
+
+<h2>References</h2>
+
+<p>
+Lappalainen I, Lopez J, Skipper L, Hefferon T, Spalding JD, Garner J,
+Chen C, Maguire M, Corbett M, Zhou G, Paschall J, Ananiev V, Flicek P,
+Church DM.
+<a href="https://doi.org/10.1093/nar/gks1213" target="_blank">
+dbVar and DGVa: public archives for genomic structural variation</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D936-D941.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193291" target="_blank">23193291</a></p>
+
+<p>NCBI dbVar: <i>Human Non-Redundant Reference Datasets to Help
+Interpret Structural Variants</i>. NCBI Insights, 27 Sep 2018.
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2018/09/27/dbvar-human-nonredundant-reference-datasets-interpret-structural-variants/" target="_blank">
+ncbiinsights.ncbi.nlm.nih.gov</a>.</p>
+
+<p>Phan L, Jin Y, Zhang H, Qiang W, Shekhtman E, Shao D, <em>et al</em>.
+<i>ALFA: Allele Frequency Aggregator</i>. In:
+<a href="https://www.ncbi.nlm.nih.gov/books/NBK269031/" target="_blank">
+NCBI Handbook</a>.</p>

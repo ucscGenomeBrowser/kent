@@ -1,0 +1,106 @@
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) called across the 231 HPRC v2
+haplotype-resolved assemblies and merged with
+<a href="https://github.com/mkirsche/Jasmine" target="_blank">Jasmine</a>
+into a single non-redundant callset per assembly path. Each sample was
+processed through 14 SV callers spanning read-mapping, assembly-based and
+graph-based approaches; per-sample VCFs were then merged across samples
+with Jasmine using both positional and sequence-identity criteria.
+</p>
+<p>
+The hg38 track contains 335,494 merged SVs (insertions and deletions
+&ge; 30&nbsp;bp). The hs1 track is built the same way from the T2T-CHM13
+calls.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="display:inline-block; background-color:#0000C8; width:18px; height:12px; vertical-align:middle;"></span> <b>Insertion (INS)</b></li>
+<li><span style="display:inline-block; background-color:#C80000; width:18px; height:12px; vertical-align:middle;"></span> <b>Deletion (DEL)</b></li>
+</ul>
+</p>
+<p>
+Coordinates follow these conventions:
+<ul>
+<li><b>Insertions</b> are drawn as a 1&nbsp;bp anchor: <i>chromStart</i> is
+the reference base immediately before the inserted sequence (POS&minus;1
+in 0-based BED), and <i>chromEnd</i> = <i>chromStart</i>&nbsp;+&nbsp;1.
+The inserted-sequence length is reported in the <i>Insertion Length
+(insLen)</i> field; the on-screen feature width does not depend on it.</li>
+<li><b>Deletions</b> span the deleted reference interval. <i>chromStart</i>
+= POS&minus;1, <i>chromEnd</i> = <i>chromStart</i>&nbsp;+&nbsp;|SVLEN|, so
+the feature width on the browser equals the deletion length.</li>
+</ul>
+The bigBed stores type, length and merge metadata; the explicit
+inserted/deleted sequences are not carried over from the Jasmine-merged
+VCF.
+</p>
+<p>
+Filters are available for SV type, SV length, carrier sample count, carrier
+frequency, the number of supporting callers and the specific callers
+(e.g. require both PAV and dipcall). The <i>Carrier Sample Count</i> filter
+operates on the SUPP field from Jasmine: the number of input samples in
+which the SV was called. The <i>Allele Number (AN)</i> field is fixed at 231
+(the merged sample count); the carrier frequency is SUPP/231. Because
+Jasmine collapses input genotypes, per-haplotype AC/AF are not preserved.
+</p>
+
+<h2>Methods</h2>
+<p>
+Per-sample SV calls were produced on the 231 HPRC v2 haplotype-resolved
+assemblies using 14 SV callers: DELLY, DeBreak, DeepVariant, PAV, SVDSS,
+SVIM, SVIM-asm, Sniffles2, cuteSV, cuteSV-asm, dipcall, longcallD, pbsv and
+sawfish. The per-sample, multi-caller calls were harmonized into three
+per-sample VCFs (one per pipeline: dipcall, PAV, longcallD); the
+<tt>SOURCES</tt> field on each record records which pipelines contributed,
+and <tt>CALLERS</tt> records the underlying callers in agreement. For this
+track the harmonized per-sample VCFs were split per chromosome and
+filtered to SV-sized records (|alt&nbsp;&minus;&nbsp;ref|&nbsp;&ge;&nbsp;30&nbsp;bp),
+keeping the explicit REF/ALT sequences. The per-chromosome files were
+merged across samples with Jasmine's default sequence-aware mode using
+<tt>--ignore_merged_inputs --normalize_type</tt>, so insertions at the
+same position are collapsed both by location/length and by sequence
+similarity (Jaccard k-mer comparison).
+</p>
+<p>
+The per-chromosome VCFs are concatenated into one merged VCF per assembly,
+then converted to bigBed. Build commands are recorded in the UCSC makeDoc
+for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schema live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a> (files starting with <tt>lrSvHprc2Jasmine</tt>).
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>hprc2JasmineSv</i>.
+</p>
+<p>
+The bigBed is available from our download server for both assemblies:
+<ul>
+<li>GRCh38:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2Jasmine.bb" target="_blank">
+hg38 hprc2Jasmine.bb</a></li>
+<li>T2T-CHM13:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/hprc2Jasmine.bb" target="_blank">
+hs1 hprc2Jasmine.bb</a></li>
+</ul>
+Example: <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2Jasmine.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Wen-Wei Liao, who ran all variant callers on the HPRC v2
+assemblies, and to the Ira Hall lab for the multi-caller HPRC v2 SV
+callsets used as input here. This data set is not yet described in a
+formal peer-reviewed publication; this track will be updated when the
+manuscript becomes available.
+</p>

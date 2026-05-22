@@ -1,8 +1,8 @@
 <h2>Description</h2>
 
 <p>
-This track displays structural variants (SVs) — deletions, insertions, and
-complex substitutions of at least 50 bp — from the Arabic Pangenome
+This track displays structural variants (SVs), at least 50 bp long
+(deletions, insertions, and complex substitutions), from the Arabic Pangenome
 Reference (APR), a pangenome graph built from 53 UAE-resident Arab
 individuals drawn from eight countries (UAE, Saudi Arabia, Oman, Jordan,
 Egypt, Morocco, Syria, Yemen). Each bubble in the graph that contains an
@@ -18,7 +18,7 @@ the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain; variants that do not lift
 cleanly (often in T2T-added euchromatic sequence) are omitted from the
 hg38 version of the track.</p>
 
-<h2>Display conventions</h2>
+<h2>Display Conventions and Configuration</h2>
 
 <p>Items are colored by SV type:</p>
 <ul>
@@ -32,7 +32,7 @@ hg38 version of the track.</p>
 The name field is the graph snarl ID (e.g. <tt>&lt;951452&lt;1012008</tt>),
 which identifies the variant site in the APR pangenome graph.</p>
 
-<h2>Per-site alt-allele aggregation</h2>
+<h2>Per-site Alt-allele Aggregation</h2>
 
 <p>
 The source VCF is multi-allelic: a single graph snarl appears as one row
@@ -40,11 +40,11 @@ with a comma-separated ALT list. For this track, each ALT is classified
 individually using the 50 bp threshold, and the row is emitted as a single
 bed item with:</p>
 <ul>
-  <li><b>svType</b> — the common class, or <tt>MIXED</tt> if alts disagree;</li>
-  <li><b>svLen</b> — reference span (chromEnd - chromStart);</li>
-  <li><b>insLen</b> — maximum inserted-sequence length across passing INS alts (0 otherwise);</li>
-  <li><b>AC</b> — sum of per-alt allele counts (AC) that passed;</li>
-  <li><b>numAlts</b> — number of alt alleles that passed the 50 bp filter.</li>
+  <li><b>svType</b>: the common class, or <tt>MIXED</tt> if alts disagree;</li>
+  <li><b>svLen</b>: reference span (chromEnd - chromStart);</li>
+  <li><b>insLen</b>: maximum inserted-sequence length across passing INS alts (0 otherwise);</li>
+  <li><b>AC</b>: sum of per-alt allele counts (AC) that passed;</li>
+  <li><b>numAlts</b>: number of alt alleles that passed the 50 bp filter.</li>
 </ul>
 <p>Rows whose alts are all smaller than 50 bp are not shown.</p>
 
