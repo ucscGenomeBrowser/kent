@@ -326,6 +326,7 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
     out(f' &middot; <b>{len(rows)}</b> row(s)'
         '<button class="refreshBtn" type="button" '
         'onclick="location.reload()">refresh</button></div>\n')
+    out(f'<div class="legend">cron times: 9,20,31,42,53 for ottoRequestWatch.sh, and 4,26,46 for ottoRequestPush</div>\n')
 
     out('<table class="sortable">\n<tr>')
     for c in COLS:
