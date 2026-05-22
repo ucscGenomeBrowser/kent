@@ -123,7 +123,7 @@ group genes
     filterByRange.kozakTE on
     filter.kozakTE 0:1.5
     filterLimits.kozakTE 0:1.5
-    filterValues.plotType lncRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
+    filterValues.plotType lincRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
     filterType.plotType multipleListOr
     filterValues.type Out-of-Frame,5' uORF,3' dORF,lincRNA,5' Overlap uORF,ncRNA Retained Intron,3' Overlap dORF,ncRNA Processed Transcript,Pseudogene,Antisense,TUCP,Nonsense Mediated Decay,TEC,Sense Overlapping,snoRNA
     filterType.type multipleListOr
