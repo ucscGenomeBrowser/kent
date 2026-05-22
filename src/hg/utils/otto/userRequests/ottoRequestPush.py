@@ -18,6 +18,9 @@ import subprocess
 import sys
 from collections import defaultdict
 
+# Set umask 002 (group-writable) for this process and all subprocesses
+os.umask(0o002)
+
 scriptDir = os.path.dirname(os.path.abspath(__file__))
 cladeTsv = os.path.join(scriptDir, "dbDb.name.clade.tsv")
 lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
