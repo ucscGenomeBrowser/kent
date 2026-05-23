@@ -26,8 +26,10 @@ debugMode = False
 doVerbose = False
 
 # allowed file types by hubtools up
-# copied from the javascript file hgHubConnect.js
+# mirrors extensionMap in hg/js/hgMyData.js
+# hub.txt comes before text so hub.txt and *.hub.txt don't fall through to text
 fileTypeExtensions = {
+    "hub.txt": [ "hub.txt" ],
     "bigBed": [ ".bb", ".bigbed" ],
     "bam": [ ".bam" ],
     "vcf": [ ".vcf" ],
@@ -42,8 +44,14 @@ fileTypeExtensions = {
     "bigPsl": [ ".bigpsl" ],
     "bigChain": [ ".bigchain" ],
     "bamIndex": [ ".bam.bai", ".bai" ],
-    "tabixIndex": [ ".vcf.gz.tbi", "vcf.bgz.tbi" ]
+    "tabixIndex": [ ".vcf.gz.tbi", "vcf.bgz.tbi" ],
+    "2bit": [ ".2bit" ],
+    "text": [ ".txt", ".text" ],
 }
+
+# JS regex for a single hub-name segment, used to validate the <hubName> CLI arg
+# matches parentDirSegmentRegex in hg/js/hgMyData.js
+hubNameSegmentRegex = re.compile(r"^[0-9a-zA-Z._]+$")
 
 asHead = """table bed
 "Browser extensible data (<=12 fields) "
@@ -798,22 +806,50 @@ def installModule(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 def cacheLoad(fname):
-    " load file cache from json file "
+    " load file cache from json file, keyed as { hubName: { relPath: {mtime, size} } } "
     if not isfile(fname):
         logging.debug("No upload cache present")
         return {}
 
     logging.debug("Loading "+fname)
-    return json.load(open(fname))
+    with open(fname) as fh:
+        data = json.load(fh)
+    # Old cache shape was { localPath: {mtime, size} }; detect and discard.
+    # Cache is purely local state, so no migration code.
+    for v in data.values():
+        if not isinstance(v, dict) or "mtime" in v:
+            logging.info("upload cache %s is in the old flat shape, discarding" % fname)
+            return {}
+        break
+    return data
 
 def cacheWrite(uploadCache, fname):
     logging.debug("Writing "+fname)
-    json.dump(uploadCache, open(fname, "w"), indent=4)
+    with open(fname, "w") as fh:
+        json.dump(uploadCache, fh, indent=4)
+
+def validateHubName(hubName):
+    " errAbort if hubName isn't a single segment matching the JS parentDirSegmentRegex "
+    # Trailing dots (e.g. "hub.") are allowed for parity with the JS regex.
+    if not hubName:
+        errAbort("hub name is empty")
+    if "/" in hubName or hubName in (".", "..") or hubName.startswith("."):
+        errAbort("hub name '%s' must be a single path segment, no '/' and no leading '.'" % hubName)
+    if not hubNameSegmentRegex.match(hubName):
+        errAbort("hub name '%s' has invalid characters; allowed: letters, digits, '.', '_'" % hubName)
 
 def getFileType(fbase):
     " return the file type defined in the hubspace system, given a base file name "
+    # hub.txt and <hubname>.hub.txt are both fileType=hub.txt; the server uses
+    # the literal filename (not fileType) to tell them apart
+    if fbase == "hub.txt" or fbase.endswith(".hub.txt"):
+        logging.debug("file type for %s is hub.txt" % fbase)
+        return "hub.txt"
+
     ret = "NA"
     for fileType, fileExts in fileTypeExtensions.items():
+        if fileType == "hub.txt":
+            continue
         for fileExt in fileExts:
             if fbase.endswith(fileExt):
                 ret = fileType
@@ -826,6 +862,8 @@ def getFileType(fbase):
 
 def uploadFiles(tdbDir, hubName):
     "upload files to hubspace. Server name and token can come from ~/.hubtools.conf "
+    validateHubName(hubName)
+
     try:
         from tusclient import client
     except ModuleNotFoundError:
@@ -850,9 +888,13 @@ def uploadFiles(tdbDir, hubName):
 
     cacheFname = join(tdbDir, ".hubtools.files.json")
     uploadCache = cacheLoad(cacheFname)
+    hubCache = uploadCache.setdefault(hubName, {})
 
     logging.debug("trackDb directory is %s" % tdbDir)
-    for rootDir, _, files in os.walk(tdbDir):
+    for rootDir, dirs, files in os.walk(tdbDir):
+        # don't descend into dot-dirs (.git, .cache, ...); their contents
+        # would otherwise upload with a parentDir segment the server rejects
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
         for fbase in files:
             if fbase.startswith("."):
                 continue
@@ -860,9 +902,15 @@ def uploadFiles(tdbDir, hubName):
             logging.debug("localPath: %s" % localPath)
             localMtime = os.stat(localPath).st_mtime
 
-            # skip files that have not changed their mtime since last upload
-            if localPath in uploadCache:
-                cacheMtime = uploadCache[localPath]["mtime"]
+            fileAbsPath = abspath(localPath)
+            # POSIX-style relative path inside the hub, with hubName as the root
+            remoteRelPath = relpath(fileAbsPath, tdbDir).replace(os.sep, "/")
+            subDir = dirname(remoteRelPath)
+            parentDir = hubName + "/" + subDir if subDir else hubName
+
+            # skip files that have not changed their mtime since last upload to this hub
+            if remoteRelPath in hubCache:
+                cacheMtime = hubCache[remoteRelPath]["mtime"]
                 if localMtime == cacheMtime:
                     logging.info("%s: file mtime unchanged, not uploading again" % localPath)
                     continue
@@ -870,20 +918,15 @@ def uploadFiles(tdbDir, hubName):
                     logging.debug("file %s: mtime is %f, cache mtime is %f, need to re-upload" %
                             (localPath, localMtime, cacheMtime))
             else:
-                logging.debug("file %s not in upload cache" % localPath)
+                logging.debug("file %s not in upload cache for hub %s" % (localPath, hubName))
 
             fileType = getFileType(fbase)
 
-            fileAbsPath = abspath(localPath)
-            remoteRelPath = relpath(fileAbsPath, tdbDir)
-            remoteDir = dirname(remoteRelPath)
-
             meta = {
                     "apiKey" : apiKey,
-                    "parentDir" : remoteDir,
-                    "genome":"NA",
+                    "parentDir" : parentDir,
+                    "genome" : "",
                     "fileName" : fbase,
-                    "hubName" : hubName,
                     "hubtools" : "true",
                     "fileType": fileType,
                     "lastModified" : str(int(localMtime)*1000),
@@ -893,14 +936,13 @@ def uploadFiles(tdbDir, hubName):
             uploader = my_client.uploader(localPath, metadata=meta)
             uploader.upload()
 
-            # note that this file was uploaded
-            cache = {}
-            mtime = os.stat(localPath).st_mtime
-            cache["mtime"] = mtime
-            cache["size"] = os.stat(localPath).st_size
-            uploadCache[localPath] = cache
-
-    cacheWrite(uploadCache, cacheFname)
+            # record this file as uploaded and persist the cache after each
+            # upload so an interrupted run doesn't re-upload finished files
+            hubCache[remoteRelPath] = {
+                    "mtime": os.stat(localPath).st_mtime,
+                    "size": os.stat(localPath).st_size,
+            }
+            cacheWrite(uploadCache, cacheFname)
 
 def iterRaStanzas(fname):
     " parse an ra-style (trackDb) file and yield dictionaries "

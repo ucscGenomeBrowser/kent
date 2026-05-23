@@ -752,6 +752,21 @@ if (!mouseOverIdx)
         int i =  0;
         for (field = fields; field != NULL; field = field->next)
             fieldNames[i++] = field->name;
+
+        // Under quickLift, $chrom/${chromStart}/${chromEnd} substitutions resolve
+        // against the source assembly's row, so the tooltip will disagree with
+        // the position bar.  Append a note so the discrepancy isn't surprising.
+        if (quickLiftFile && strstr(mouseOverPattern, "$chrom"))
+            {
+            char *sourceDb = trackDbSetting(track->tdb, "quickLiftDb");
+            struct dyString *dy = dyStringNew(0);
+            dyStringAppend(dy, mouseOverPattern);
+            if (sourceDb)
+                dyStringPrintf(dy, "<br><i>(coordinates from source assembly %s)</i>", sourceDb);
+            else
+                dyStringAppend(dy, "<br><i>(coordinates from source assembly)</i>");
+            mouseOverPattern = dyStringCannibalize(&dy);
+            }
         }
     }
 
