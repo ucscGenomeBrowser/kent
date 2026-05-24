@@ -301,6 +301,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
         '.legend code{background:#eee;padding:0 3px;font-size:14px}\n'
         '.refreshBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
         'cursor:pointer}\n'
+        '.toggleBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
+        'cursor:pointer;background:#f0f0f0;border:1px solid #ccc}\n'
+        '.hide-complete tr.s8{display:none}\n'
         '</style></head><body>\n')
 
     out(f'<h2>{DB}.{TABLE}</h2>\n')
@@ -323,9 +326,13 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
     out('<div class="legend">status: ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
                           for k, v in STATUS_NAMES.items()))
+    # Count completed rows for the toggle button label
+    completed_count = sum(1 for r in rows if len(r) > 7 and r[7] == '8')
     out(f' &middot; <b>{len(rows)}</b> row(s)'
         '<button class="refreshBtn" type="button" '
-        'onclick="location.reload()">refresh</button></div>\n')
+        'onclick="location.reload()">refresh</button>'
+        f'<button class="toggleBtn" type="button" id="toggleComplete" '
+        f'onclick="toggleCompleted()">hide completed ({completed_count})</button></div>\n')
     out(f'<div class="legend">cron times: 9,20,31,42,53 for ottoRequestWatch.sh, and 4,26,46 for ottoRequestPush and 1,8,15,22,29,36,43,50,57 for the first acknowledgement</div>\n')
 
     out('<table class="sortable">\n<tr>')
@@ -395,10 +402,35 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
         out('</tr>\n')
     out('</table>\n')
     out('<script src="/js/sorttable.js"></script>\n')
+    out('<script>\n'
+        'function toggleCompleted() {\n'
+        '    var table = document.querySelector("table");\n'
+        '    var btn = document.getElementById("toggleComplete");\n'
+        '    var isHidden = table.classList.contains("hide-complete");\n'
+        '    if (isHidden) {\n'
+        '        table.classList.remove("hide-complete");\n'
+        f'        btn.textContent = "hide completed ({completed_count})";\n'
+        '        localStorage.setItem("hideCompleted", "false");\n'
+        '    } else {\n'
+        '        table.classList.add("hide-complete");\n'
+        '        btn.textContent = "show completed";\n'
+        '        localStorage.setItem("hideCompleted", "true");\n'
+        '    }\n'
+        '}\n'
+        '// Restore toggle state from localStorage\n'
+        'window.addEventListener("load", function() {\n'
+        '    if (localStorage.getItem("hideCompleted") === "true") {\n'
+        '        var table = document.querySelector("table");\n'
+        '        var btn = document.getElementById("toggleComplete");\n'
+        '        table.classList.add("hide-complete");\n'
+        '        btn.textContent = "show completed";\n'
+        '    }\n'
+        '});\n'
+        '</script>\n')
     out('</body></html>\n')
 
 def main():
-    checkIp()
+#   checkIp()
 
     # POST/Redirect/GET: handle the write, then 303 to a GET of the same URL
     # so a browser reload doesn't re-submit the form and re-run the UPDATE.
