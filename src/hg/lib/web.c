@@ -661,8 +661,8 @@ void printCladeListHtml(char *genome, char *event, char *javascript)
 /* Make an HTML select input listing the clades. */
 {
 char **row = NULL;
-char *clades[128];
-char *labels[128];
+char *clades[4096];
+char *labels[4096];
 char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
@@ -826,8 +826,8 @@ void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
  */
 {
 
-char *assemblyList[128];
-char *values[128];
+char *assemblyList[4096];
+char *values[4096];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
 char *genome = hGenome(db);
@@ -1602,7 +1602,7 @@ char *menuBar(struct cart *cart, char *db)
 //  with a View menu defined in hgTracks/menu.c
 {
 char *docRoot = hDocumentRoot();
-char *menuStr, buf[4096], uiVars[128];
+char *menuStr, buf[4096], uiVars[4096];
 FILE *fd;
 char *navBarFile = "inc/globalNavBar.inc";
 struct stat statBuf;
