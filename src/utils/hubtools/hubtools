@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging, sys, optparse, os, json, subprocess, shutil, string, glob, tempfile, re
-import shlex, urllib, time, tarfile, hashlib
+import shlex, urllib, urllib.parse, time, tarfile, hashlib, gzip, csv, io
 
 from pathlib import Path
 from collections import defaultdict, OrderedDict
@@ -12,7 +12,7 @@ import concurrent.futures
 requestsLoaded = True
 try:
     import requests # if this fails, install the library with 'python -m pip install requests --user'
-except:
+except ImportError:
     # most code now can work around the absence of the requests library
     requestsLoaded = False
 
@@ -169,7 +169,7 @@ def errAbort(msg):
     " print and abort) "
     logging.error(msg)
     if debugMode:
-        raise # show stacktrace
+        raise Exception(msg)
     else:
         sys.exit(1)
 
@@ -691,7 +691,7 @@ def httpReqOld(url, asBytes=False, asJson=False, params=None, method="get", max_
         if method.lower() == "get" and query_string:
             path += "?" + query_string
     else:
-        path = url
+        path = parsed_url.path or "/"
     
     # Set headers and body
     headers = {}
@@ -747,6 +747,7 @@ def httpReq(url, asBytes=False, asJson=False, params=None):
     logging.debug("HTTP GET %s" % url)
     try:
         resp = requests.get(url, params=params, allow_redirects=True)
+        resp.raise_for_status()
     except requests.RequestException as e:
         errAbort(f"Error fetching the URL: {e}")
 
@@ -1129,7 +1130,7 @@ def fetchChromSizes(db, outputFileName):
     # Open the output gzip file for writing
     with gzip.open(outputFileName, 'wt') as outFile:
         # Open the response content as a gzip file in text mode
-        with gzip.GzipFile(fileobj=chromSizesData, mode='r') as inFile:
+        with gzip.GzipFile(fileobj=io.BytesIO(chromSizesData), mode='r') as inFile:
             # Read the content using csv reader to handle tab-separated values
             reader = csv.reader(inFile, delimiter='\t')
             writer = csv.writer(outFile, delimiter='\t', lineterminator='\n')
@@ -1148,10 +1149,11 @@ def getLocalDataPath(fname):
     return fname
 
 def getAsFname(fileType):
-    " download an .as file into the local dadta directory "
+    " download an .as file into the local data directory "
     fname = getLocalDataPath(fileType+".as")
     urls = {
-            "bigNarrowPeak" : "https://genome.ucsc.edu/goldenpath/help/examples/bigNarrowPeak.as"
+            "bigNarrowPeak" : "https://genome.ucsc.edu/goldenpath/help/examples/bigNarrowPeak.as",
+            "bigBroadPeak"  : "https://genome.ucsc.edu/goldenpath/help/examples/bigBroadPeak.as",
             }
     if not isfile(fname):
         url = urls[fileType]
@@ -1166,7 +1168,6 @@ def getChromSizesFname(db):
 
     fname = getLocalDataPath("%s.sizes" % db)
     if not isfile(fname):
-        makedirs(dataDir)
         fetchChromSizes(db, fname)
     return fname
 
@@ -1178,7 +1179,7 @@ def convTsv(db, tsvFname, outBedFname, outAsFname, outBbFname):
     unsortedBedFh = tempfile.NamedTemporaryFile(suffix=".bed", dir=dirname(outBedFname), mode="wt")
     fieldNames = None
 
-    isOneBased = True # useful in the future maybe, name=0,start=1z,...
+    isOneBased = True # useful in the future maybe, name=0,start=1,...
     bedFieldsDesc = None # in the future, the user may want to input a string like name=0,start=1, but switch this off for now
 
     for line in open(tsvFname):
@@ -1373,7 +1374,8 @@ def downloadUrl(url, local_file_name):
         os.rename(tmpFname, local_file_name)
 
     except requests.exceptions.HTTPError as e:
-        logging.info(f"Unable to download %s: HTTP error {e}")
+        logging.error(f"Unable to download %s: HTTP error {e}")
+        raise
 
     except requests.exceptions.RequestException as e:
         logging.error(f"An error occurred while downloading the URL: {e}")
@@ -1382,18 +1384,17 @@ def downloadUrl(url, local_file_name):
 def downloadUrlsParallel(url_filename_list, max_threads=12):
     """ given a list of [url, localFname], download the files with 12 parallel threads """
     logging.info("Downloading %s files with %d parallel threads" % (len(url_filename_list), max_threads))
-    executor = concurrent.futures.ThreadPoolExecutor(max_threads)
     func = downloadUrl
     if not requestsLoaded:
         func = downloadUrlOld
-    futures = [executor.submit(func, url, local_filename) for url, local_filename in url_filename_list]
-
-    # wait for all futures to complete (this will handle exceptions)
-    for future in concurrent.futures.as_completed(futures):
-        try:
-            future.result()  # Block until this particular future is done
-        except Exception as e:
-            logging.error(f"Error in thread: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_threads) as executor:
+        futures = [executor.submit(func, url, local_filename) for url, local_filename in url_filename_list]
+        # wait for all futures to complete (this will handle exceptions)
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()  # Block until this particular future is done
+            except Exception as e:
+                logging.error(f"Error in thread: {e}")
 
 def makeLegalTrackName(s):
     " remove characters that are not allowed for track names "
@@ -1460,8 +1461,8 @@ def convertTextToBin(db, textFname, tdb, outDir):
         asFname = getAsFname("bigBroadPeak")
         tmpFh = makeTempFile(dir=outDir, suffix=".bed")
         broadPeakToBed(textFname, tmpFh)
-        bedToBigBed(tmpFh.name, db, outFname, asFname=asFname, bedType="bed6+4")
-        tdb["type"] = "bigNarrowPeak"
+        bedToBigBed(tmpFh.name, db, outFname, asFname=asFname, bedType="bed6+3")
+        tdb["type"] = "bigBed 6+3"
         tdb["spectrum"] = "on"
 
     else:
@@ -1648,7 +1649,7 @@ def ctUrlToTdb(ctUrl):
                 tdb["shortLabel"] = val
 
         if "dbTableName" in tdb or "bigDataUrl" not in tdb:
-            logging.warn("Cannot import custom tracks without bigDataUrls, skipping %s" % tdb["track"])
+            logging.warning("Cannot import custom tracks without bigDataUrls, skipping %s" % tdb["track"])
         else:
             tdbs.append(tdb)
 
@@ -1727,7 +1728,10 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
 
     logging.info("Extracting %s to %s" % (tgzFname, downDir))
     with tarfile.open(tgzFname, 'r:gz') as tar:
-        tar.extractall(path=downDir)
+        try:
+            tar.extractall(path=downDir, filter='data')
+        except TypeError:
+            tar.extractall(path=downDir)
 
     convArchDir(inDir, downDir, outDir, doDownload)
 
@@ -1748,8 +1752,17 @@ def stanzaKey(stanza):
 
     errAbort("Got hub.txt file with a stanza that has neither a 'track', nor a 'hub', nor a 'genome' key: %s" % repr(stanza))
 
-def stanzaNew(pairs):
+def stanzaNew(pairs, indent=0):
     " given key,val pairs, make a new stanza "
+    newTdb = OrderedDict()
+    for key, val in pairs:
+        newTdb[key] = ([], indent, val)
+    return newTdb
+
+def stanzaAddVal(tdb, tag, val):
+    " add or update a key/val in a stanza, inheriting indent from existing entries "
+    indent = next(iter(tdb.values()))[1] if tdb else 0
+    tdb[tag] = ([], indent, val)
 
 def stanzaMatchesRe(tdb, tags, pat):
     " try to match pat (a compiled regex) against values of all tags listed in 'tags'. Never match the special stanzas .hub and .genome . "
@@ -1851,7 +1864,7 @@ def tdbCommentsParse(fname):
                 indent = len(line) - len(nonWhite)
                 key, val = nonWhite.split(" ", 1) # preserve trailing whitespace
                 if key in stanza:
-                    logging.warn(f"TrackDb .ra format error: duplicated key {key} in stanza {stanza}")
+                    logging.warning(f"TrackDb .ra format error: duplicated key {key} in stanza {stanza}")
                 stanza[key] = (comments, indent, val)
                 comments = []
 
@@ -1891,7 +1904,7 @@ def tdbCommentsAppendOneList(tdbs, pairs, indent=0):
     " add a single list of pairs as a new track stanza to the end of the data structure from tdbCommentsParse "
     newTdb = OrderedDict()
     trackName = None
-    for key, val in tdb:
+    for key, val in pairs:
         newTdb[key] = ([], indent, val)
         if key=="track":
             trackName = val
@@ -1909,7 +1922,7 @@ def tdbCommentsEdit(tdbs, indent=None, newTags=None, delTags=None):
     return newTdbs
 
 def tdbCommentsAppendAll(tdbs1, tdbs2):
-    " apend the second tdbCommentsParse data structure to the first "
+    " append the second tdbCommentsParse data structure to the first "
     for key, val in tdbs2.items():
         tdbs1[key] = val
     return tdbs1

@@ -8,35 +8,39 @@ from assays that measure chromatin accessibility (DNase-seq and ATAC-seq), trans
 factor (TF) binding (ChIP-seq for individual TFs), histone modifications (ChIP-seq for
 H3K4me3 and H3K27ac), CTCF binding, and transcription (RNA-seq).</p>
 
+<p>Tracks labeled <b><em>(Layered)</em></b> show organ-averaged signals as a transparent
+overlay of multiple organs within a single track. Tracks labeled <b><em>(Indiv.)</em></b>
+show signals from individual experiments in specific biosamples.</p>
+
 <ul>
-<li>The <em>H3K27ac (Layered)</em> track highlights a histone modification associated with
+<li>The <b><em>H3K27ac (Layered)</em></b> track highlights a histone modification associated with
 active enhancers and promoters, displayed as organ-averaged signal across 34 organs.</li>
 
-<li>The <em>DNase (Layered)</em> track highlights regions of chromatin that are hypersensitive
+<li>The <b><em>DNase (Layered)</em></b> track highlights regions of chromatin that are hypersensitive
 to DNase I digestion, indicating open and potentially regulatory chromatin. Signal is averaged
 across biosamples from the same organ for 40 organs.</li>
 
-<li>The <em>ATAC (Layered)</em> track highlights regions of open chromatin identified by
+<li>The <b><em>ATAC (Layered)</em></b> track highlights regions of open chromatin identified by
 ATAC-seq, which uses Tn5 transposase insertion to assay accessibility. Signal is averaged
 across 24 organs.</li>
 
-<li>The <em>H3K4me3 (Layered)</em> track highlights a histone modification associated with
+<li>The <b><em>H3K4me3 (Layered)</em></b> track highlights a histone modification associated with
 active and poised promoters, displayed as organ-averaged signal across 35 organs.</li>
 
-<li>The <em>CTCF (Layered)</em> track highlights genomic regions bound by CTCF, a transcription
+<li>The <b><em>CTCF (Layered)</em></b> track highlights genomic regions bound by CTCF, a transcription
 factor and architectural protein involved in chromatin organization and gene regulation. Signal
 is averaged across 30 organs.</li>
 
-<li>The <em>Transcription (Layered)</em> track displays transcription levels measured by
+<li>The <b><em>Transcription (Layered)</em></b> track displays transcription levels measured by
 strand-specific total RNA-seq across a large number of biosamples, shown separately for
 the two genomic strands.</li>
 
-<li>The <em>TF rPeaks</em> track shows genomic regions bound by TFs and other DNA-associated
+<li>The <b><em>TF rPeaks</em></b> track shows genomic regions bound by TFs and other DNA-associated
 factors involved in transcriptional regulation, derived from ChIP-seq experiments profiling
 911 factors across 1,152 biosamples.</li>
 
-<li>The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
-<em>RNA-seq (indiv.)</em> tracks display signals from individual experiments in specific
+<li>The <b><em>TF ChIP-seq (Indiv.)</em></b>, <b><em>DNase/ATAC/Histone/CTCF (Indiv.)</em></b>, and
+<b><em>RNA-seq (Indiv.)</em></b> tracks display signals from individual experiments in specific
 biosamples.</li>
 </ul>
 
@@ -62,9 +66,9 @@ available at <a href="https://screen.wenglab.org/" target="_blank">SCREEN</a>.</
 
 <h2>Display Conventions</h2>
 <p>
-By default, the <em>DNase (Layered)</em>, <em>ATAC (Layered)</em>,
-<em>H3K4me3 (Layered)</em>, <em>H3K27ac (Layered)</em>, <em>CTCF (Layered)</em>, and
-<em>Transcription (Layered)</em> tracks use a transparent overlay to visualize signals from
+By default, the <b><em>DNase (Layered)</em></b>, <b><em>ATAC (Layered)</em></b>,
+<b><em>H3K4me3 (Layered)</em></b>, <b><em>H3K27ac (Layered)</em></b>, <b><em>CTCF (Layered)</em></b>, and
+<b><em>Transcription (Layered)</em></b> tracks use a transparent overlay to visualize signals from
 multiple organs or tissues within a single track. For each organ or tissue, signal values from
 all associated experiments are averaged. Each organ or tissue is assigned a distinct color,
 selected to be light and saturated to maintain clarity when overlaid. Initially, each layered
@@ -73,17 +77,16 @@ muscle. Clicking on the track opens a details page where you can view and select
 tissues.</p>
 
 <p>
-For the <em>TF rPeaks</em> track, each rPeak (representative peak) is shown as a gray box,
-with the shade of gray indicating the maximum ChIP-seq signal for the corresponding TF across
-all contributing biosamples. The HGNC gene symbol of the TF is displayed to the left of the
-box when viewed in <em>pack</em> display mode. If the rPeak overlaps a cognate TF motif from a
-previously curated collection (PMID:
-<a href="https://pubmed.ncbi.nlm.nih.gov/37104580/" target="_blank">37104580</a>), the motif
-site is highlighted in green.</p>
+For the <b><em>TF rPeaks</em></b> track, each rPeak (representative peak) is colored in
+grayscale by the maximum ChIP-seq signal for the corresponding TF across all contributing
+biosamples (darker = higher signal, score 0 to 1,000). The HGNC gene symbol of the TF is
+displayed to the left when viewed in <em>pack</em> display mode. If the rPeak overlaps a
+cognate TF motif from a previously curated collection (Andrews et al., 2023), the motif
+site is colored <span style="color:#36DD81; font-weight:bold;">green</span> using decorators.</p>
 
 <p>
-The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
-<em>RNA-seq (indiv.)</em> tracks are hidden by default. Clicking on any of these tracks opens
+The <b><em>TF ChIP-seq (Indiv.)</em></b>, <b><em>DNase/ATAC/Histone/CTCF (Indiv.)</em></b>, and
+<b><em>RNA-seq (Indiv.)</em></b> tracks are hidden by default. Clicking on any of these tracks opens
 a details page where you can select specific biosample-level experiments to display.</p>
 
 <h2>Data Access</h2>
@@ -126,6 +129,15 @@ ENCODE</a>.</em></b></p>
 
 <h2>References</h2>
 <p>
+Andrews G, Fan K, Pratt HE, Phalke N, Zoonomia Consortium, Karlsson EK, Lindblad-Toh K,
+Weng Z.
+<a href="https://www.science.org/doi/10.1126/science.abn7930" target="_blank">
+Mammalian evolution of human cis-regulatory elements and transcription factor binding
+sites</a>.
+<em>Science</em>. 2023;380(6643):eabn7930.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104580" target="_blank">37104580</a>
+</p>
+<p>
 ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, Adrian J,
 Kawli T, Davis CA, Dobin A <em>et al</em>.
 <a href="https://doi.org/10.1038/s41586-020-2493-4" target="_blank">
@@ -143,13 +155,4 @@ Regulation</a>.
 <em>Nature</em>. 2026 January 7.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>
-</p>
-<p>
-Andrews G, Fan K, Pratt HE, Phalke N, Zoonomia Consortium, Karlsson EK, Lindblad-Toh K,
-Weng Z.
-<a href="https://www.science.org/doi/10.1126/science.abn7930" target="_blank">
-Mammalian evolution of human cis-regulatory elements and transcription factor binding
-sites</a>.
-<em>Science</em>. 2023;380(6643):eabn7930.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37104580" target="_blank">37104580</a>
 </p>

@@ -21,7 +21,7 @@ HGDP+1000 Genomes and Mexico Biobank can also be found in the &quot;Phased Varia
 Their VCF versions below show only the isolate frequency per variant.
 </p>
 
-<p>Please contact us (<A HREF="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</A><!-- above address is genome at soe.ucsc.edu -->), if you know a project that we should add. So far,
+<p>Please contact us (<A HREF="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</A><!-- above address is genome at soe.ucsc.edu -->) if you know of a project that we should add. So far,
 Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected) and Taiwan Biobank (pending).
 </p>
 
@@ -340,7 +340,7 @@ density of variants passing a filter, one per track clone.
 
 <h3>AllOfUs &mdash; local-ancestry-stratified frequencies</h3>
 <p>
-The AllOfUs subtrack ships <b>local-ancestry-stratified</b> allele frequencies, not the
+The AllOfUs subtrack provides <b>local-ancestry-stratified</b> allele frequencies, not the
 global ancestry categories used in the All of Us Research Program 2024 Nature paper
 (see References). Each variant's per-ancestry AF/AC counts only the haplotypes whose
 inferred local ancestry at that exact genomic position belongs to the named group
@@ -372,7 +372,8 @@ sets are exposed:
       The corresponding allele numbers are typically tens of thousands per population.</li>
 </ul>
 <p>
-The trackUI labels and bigBed field descriptions reflect this distinction. Per-population
+The filter labels on the track configuration page, and the field descriptions in the
+combined-track bigBed, reflect this distinction. Per-population
 HGDP+1kG-cohort frequencies are not exposed because the cohort is too small for
 stable per-population estimates in many populations.
 </p>
@@ -388,7 +389,7 @@ lines).
 
 <h2>Methods</h2>
 <p>
-Each subtrack ships the upstream project's VCF largely as-released; per-subtrack pipelines
+Each subtrack includes the upstream project's VCF largely as-released; per-subtrack pipelines
 (coordinate liftover, format conversion, header normalization) are documented on each
 subtrack's own description page and recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">build documentation</a>.

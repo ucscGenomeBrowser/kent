@@ -58,7 +58,9 @@ def load_donors(bb_path, tag):
                   for s, sz in zip(starts, sizes)]
         by_key[(chrom, strand)].append((tx_start, tx_end, name, blocks))
         n += 1
-    p.wait()
+    rc = p.wait()
+    if rc != 0:
+        sys.exit(f"[addIntrons] bigBedToBed failed (exit {rc}) for {bb_path}")
     for k in by_key:
         by_key[k].sort(key=lambda t: (t[0], t[1], t[2]))
     sys.stderr.write(f"[addIntrons] loaded {n} {tag} transcripts from {bb_path}\n")

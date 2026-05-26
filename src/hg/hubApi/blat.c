@@ -309,7 +309,15 @@ if (isEmpty(apiKey) && !botException() && !botExceptionUserAgent())
  * so heavy users throttle themselves instead of starving everyone. */
 char *blatDelayStr = cfgOptionDefault("hubApi.blatDelayFraction", NULL);
 double blatDelayFraction = blatDelayStr ? atof(blatDelayStr) : blatDelayFractionDefault;
-int extraDelay = hgBotDelayTimeFrac(blatDelayFraction);
+int extraDelay = 0;
+struct errCatch *bnErrCatch = errCatchNew();
+if (errCatchStart(bnErrCatch))
+    extraDelay = hgBotDelayTimeFrac(blatDelayFraction);
+errCatchEnd(bnErrCatch);
+if (bnErrCatch->gotError)
+    apiErrAbort(err500, err500Msg, "bottleneck server unavailable: %s",
+        bnErrCatch->message->string);
+errCatchFree(&bnErrCatch);
 if (extraDelay > 0)
     sleep1000(extraDelay);
 

@@ -22,7 +22,7 @@ table utrAnnotUorfsKozak
    string geneName2;   "Alternative/human readable gene name"
    string geneType;    "Gene type"
    string uorfType;    "Type of uORF: 5'UTR only or 5'UTR extending into 3'UTR"
-   string intronsSource; "MANE transcript that supplied the intron/exon structure|Set to the MANE Select / Plus Clinical transcript ID whose exons overlap the uORF; 'none' if no MANE host was found or the host had no introns inside the uORF range"
+   string intronsSource; "Transcript that supplied the intron/exon structure|Set to the MANE Select / Plus Clinical transcript ID whose exons overlap the uORF, or a GENCODE fallback transcript ID if no MANE host was found; 'none' if no overlapping host with introns inside the uORF range was found"
    string startCodon;   "Start codon (ATG, CTG, GTG, TTG, ACG, other) read from genome|First 3 bp of ORF on transcript strand"
    string kozakStrength; "Kozak consensus strength|Strong/Moderate/Weak per Kozak rule on -3 and +4"
    float  kozakTE;       "Kozak translational efficiency|Noderer 2014 TE for the 11-base TIS context (-1 if non-ATG or context unavailable)"

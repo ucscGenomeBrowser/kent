@@ -19975,4 +19975,40 @@ for facets, cats in [
     print("updated .categories: " + cats)
 EOF
 
+# 2026-05-26 (Gerardo): Reorder the bars shown on the Genome Browser image so
+# they follow the biological tissue order Peng requested (matching the .facets
+# row order set on 2026-05-13). Redmine #36998 note-46, #37001 note-29,
+# #37619 note-4.
+#
+# The bar order shown on the Genome Browser image is set by the column order
+# of expScores inside the .bb file at build time, so the .bb files have to be
+# rebuilt with the per-tissue expScores values reordered in every row, and a
+# matching .categories file in the same new order. The barChartReorder.py
+# script handles this: it reorders the expScores values in every bed row
+# dumped from the input .bb, writes a matching .categories file, and rebuilds
+# the .bb with bedToBigBed. Run `barChartReorder.py --help` for argument
+# descriptions.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm10
+
+SCRIPT=~/kent/src/hg/makeDb/scripts/barChartReorder/barChartReorder.py
+
+# Reorder all four mm10 .bb files (TPM/FPKM x M4/M21) using the matching
+# .facets per GENCODE version. Two unique .categories files (M4 and M21);
+# each gets rewritten on its first run and overwritten with identical content
+# on its second.
+for v in M4 M21; do
+    for variant in TPM FPKM; do
+        "$SCRIPT" \
+            --bb            mouse_development_${variant}_${v}_mm10.bb \
+            --categories    mouse_development_${v}.categories \
+            --facets        mouse_development_${v}.facets \
+            --chromSizes    /hive/data/genomes/mm10/chrom.sizes \
+            --outBb         mouse_development_${variant}_${v}_mm10.bb.new \
+            --outCategories mouse_development_${v}.categories.new
+        mv mouse_development_${variant}_${v}_mm10.bb.new mouse_development_${variant}_${v}_mm10.bb
+        mv mouse_development_${v}.categories.new        mouse_development_${v}.categories
+    done
+done
+
 ##############################################################################
