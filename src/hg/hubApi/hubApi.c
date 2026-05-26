@@ -1661,7 +1661,14 @@ if (isNotEmpty(earlyApiKey))
             argApiKey);
     }
 /* similar delay system as in DAS server */
-botDelay = hgBotDelayTimeFrac(delayFraction);
+struct errCatch *bnErrCatch = errCatchNew();
+if (errCatchStart(bnErrCatch))
+    botDelay = hgBotDelayTimeFrac(delayFraction);
+errCatchEnd(bnErrCatch);
+if (bnErrCatch->gotError)
+    apiErrAbort(err500, err500Msg, "bottleneck server unavailable: %s",
+        bnErrCatch->message->string);
+errCatchFree(&bnErrCatch);
 if (botDelay > 0)
     {
     if (botDelay > 2000)

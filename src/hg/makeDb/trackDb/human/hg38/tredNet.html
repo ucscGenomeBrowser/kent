@@ -1,0 +1,75 @@
+<h2>Description</h2>
+
+<p>
+Enhancers and silencers are non-coding DNA sequences that regulate the activity of nearby genes.
+Enhancers increase gene expression by recruiting transcriptional activators, while silencers
+reduce expression by recruiting repressors. Both types of elements are typically cell-type
+specific and play central roles in establishing the gene expression programs that define
+different tissues and developmental states. Genetic variants within these elements can
+disrupt normal gene regulation and contribute to human disease.
+</p>
+
+<p>
+This track collection displays candidate enhancers and silencers predicted by TREDNet, a
+two-phase deep learning model trained on chromatin accessibility (DNase-seq) and histone
+modification (H3K27ac and H3K27me3 ChIP-seq) data from 97 ENCODE biosamples spanning a
+wide range of cell types, cell lines, and tissues. Each region is colored by the type of
+sample in which it is predominantly active.
+</p>
+
+<p>
+See the individual subtrack pages for details on the enhancer and silencer predictions:
+</p>
+
+<ul>
+  <li><a href="hgTrackUi?g=tredNetEnhancer">TREDNet Candidate Enhancers</a></li>
+  <li><a href="hgTrackUi?g=tredNetSilencer">TREDNet Candidate Silencers</a></li>
+</ul>
+
+<h2>Display conventions</h2>
+
+<p>
+Each item represents a merged genomic window where one or more of the 97 biosamples
+were predicted to harbor a candidate regulatory element. Items are colored by the dominant
+sample category contributing to that region:
+</p>
+
+<p>
+<span style="display:inline-block; background-color:#009E73; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Tissue</b> &ndash; region active predominantly in primary tissue samples (Uberon ontology)<br>
+<span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Cell type</b> &ndash; region active predominantly in primary cell type samples (Cell Ontology)<br>
+<span style="display:inline-block; background-color:#D55E00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Cell line</b> &ndash; region active predominantly in cell line samples (EFO ontology)<br>
+<span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Mixed</b> &ndash; region active across multiple sample categories without a dominant type
+</p>
+
+<p>
+Mousing over a region shows the names of all contributing samples (up to 10), or a count
+summary when more than 10 samples share the region. The full comma-separated sample list is
+always available in the item detail view.
+</p>
+
+<h2>Data access</h2>
+
+<p>
+Data for this track collection can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+See the individual subtrack pages for download instructions and links to the source data.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Huang D, Ovcharenko I.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-024-03328-1"
+target="_blank">
+The contribution of silencer variants to human diseases</a>.
+<em>Genome Biol</em>. 2024 Jul 8;25(1):184.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38978133" target="_blank">38978133</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11232194/" target="_blank">PMC11232194</a>
+</p>
+

@@ -25,22 +25,11 @@
 int botDelayWarnMs  = 0;       /* global so the previously used value can be retrieved */
 
 void abortAndExplainConnectFail()
-/* Write out a short 500 response explaining that the connection to the
- * bottleneck server couldn't be established. Then exit. */
+/* Signal that the bottleneck server is unreachable.  Raises errAbort so that
+ * callers with an errCatch (e.g. hubApi JSON endpoints) can intercept and
+ * return a structured error instead of raw HTML. */
 {
-puts("Content-Type:text/html");
-printf("Status: 500 Interal Server Error\n");
-puts("\n");	/* blank line between header and body */
-
-puts("<!DOCTYPE HTML 4.01 Transitional>\n");
-puts("<html lang='en'>");
-puts("<head>");
-puts("<meta charset=\"utf-8\">");
-printf("<title>Status 500: Internal Server Error</title></head>\n");
-printf("<body><h1>Status 500: Internal Server Error</h1><p>\n");
-printf("Failed to connect to bottleneck server\n</p>");
-puts("</body></html>");
-exit(0);
+errAbort("Failed to connect to bottleneck server");
 }
 
 int botDelayTime(char *host, int port, char *botCheckString)
