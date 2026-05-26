@@ -135,7 +135,10 @@ python3 ~/kent/src/hg/makeDb/scripts/insight/insightFunctionalAssays.py
 cd /hive/users/lrnassar/insightHub/lovdVars
 python3 ~/kent/src/hg/makeDb/scripts/insight/buildInsightClinVar.py
 
-# Output: insightClinVarHg38.bb, insightClinVarHg19.bb
+# Output:
+#   insightClinVarHg38.bb, insightClinVarHg19.bb (curated variants track)
+#   pms2clParalogVarsHg38.bb, pms2clParalogVarsHg19.bb (PMS2CL paralog
+#     projection track -- built in the same script run, see Track 8 below)
 
 ##############################################################################
 # Track 7: PMS2 Pseudogene Caution Regions
@@ -154,6 +157,23 @@ cd /hive/users/lrnassar/insightHub/pms2Caution
 python3 ~/kent/src/hg/makeDb/scripts/insight/insightPMS2Caution.py
 
 # Output: InSiGHTPMS2CautionHg38.bb, InSiGHTPMS2CautionHg19.bb
+
+##############################################################################
+# Track 8: PMS2CL Paralog Variants
+##############################################################################
+
+# PMS2 curated variants from Track 6 projected onto PMS2CL coordinates, to help
+# analysts recognize when a PMS2CL call may correspond to a known PMS2 variant.
+# Uses the cDNA alignment between NM_000535.7 and NR_002217.1 with offset:
+#   PMS2 c. = PMS2CL n. + 1060 (most of the homologous region)
+#   PMS2 c. = PMS2CL n. + 903  (exon 9)
+#   PMS2 c. = PMS2CL n. + 1059 (exon 11 before the 1-bp indel)
+# Built as part of the buildInsightClinVar.py run (Track 6).
+# Generates bigBed 9+5 files for hg38 and hg19. ~36 projected variants.
+
+# (No separate command -- comes out of the Track 6 build above.)
+
+# Output: pms2clParalogVarsHg38.bb, pms2clParalogVarsHg19.bb (in lovdVars/)
 
 ##############################################################################
 # Hub deployment
