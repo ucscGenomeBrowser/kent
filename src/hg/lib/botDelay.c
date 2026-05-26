@@ -140,7 +140,10 @@ if (cartDbHasSessionKey(conn, userDbTable()))
     char *sessionKey = NULL;
     unsigned id = cartDbParseId(cookieUserId, &sessionKey);
     if (sessionKey == NULL)
+        {
+        sqlDisconnect(&conn);
         return FALSE;
+        }
     sqlSafef(query, sizeof(query), "select id from %s where id = %u and sessionKey = '%s'",
             userDbTable(), id, sessionKey);
     }

@@ -156,31 +156,64 @@ def writeCladeTsv(clade, asmIds):
     Only GenArk identifiers are used; UCSC native dbs are not in the
     AsmHub orderList files.
 
+    If no matches are found in the expected clade directory, falls back
+    to checking legacyAsmHub/legacy.orderList.tsv and works there instead.
+
     Returns cladeDir on success (so the caller can chain the make
     sequence), or None if there is nothing to do for this clade.
     """
     genarkIds = [a for a in asmIds if gcPattern.match(a)]
     if not genarkIds:
         return None
+
+    # First try the expected clade directory
     cladeDir = os.path.join(
         kentTree, "src/hg/makeDb/doc/%sAsmHub" % clade)
     orderList = os.path.join(cladeDir, "%s.orderList.tsv" % clade)
     outPath = os.path.join(cladeDir, "tsv.otto")
-    if not os.path.isfile(orderList):
-        print("WARNING: missing %s" % orderList, file=sys.stderr)
-        return None
+
     # orderList.tsv files occasionally contain Latin-1 bytes (e.g. in
     # Scandinavian fish names) that aren't valid UTF-8.  surrogateescape
     # round-trips those bytes through read+write byte-for-byte instead of
     # raising UnicodeDecodeError.
     matched = []
-    with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
-        for line in fh:
-            if any(asmId in line for asmId in genarkIds):
-                matched.append(line)
+
+    if os.path.isfile(orderList):
+        with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
+            for line in fh:
+                if any(asmId in line for asmId in genarkIds):
+                    matched.append(line)
+
+    # If no matches found in expected clade, try legacy directory
     if not matched:
-        print("WARNING: no matches in %s" % orderList, file=sys.stderr)
+        legacyDir = os.path.join(
+            kentTree, "src/hg/makeDb/doc/legacyAsmHub")
+        legacyOrderList = os.path.join(legacyDir, "legacy.orderList.tsv")
+        legacyOutPath = os.path.join(legacyDir, "tsv.otto")
+
+        if os.path.isfile(legacyOrderList):
+            with open(legacyOrderList, encoding="utf-8", errors="surrogateescape") as fh:
+                for line in fh:
+                    if any(asmId in line for asmId in genarkIds):
+                        matched.append(line)
+
+            if matched:
+                # Found matches in legacy - work there instead
+                with open(legacyOutPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
+                    fh.writelines(matched)
+                return legacyDir
+
+        # No matches found anywhere
+        if not os.path.isfile(orderList):
+            print("WARNING: missing %s" % orderList, file=sys.stderr)
+        if not os.path.isfile(legacyOrderList):
+            print("WARNING: missing %s" % legacyOrderList, file=sys.stderr)
+        if os.path.isfile(orderList) or os.path.isfile(legacyOrderList):
+            print("WARNING: no matches for %s in %s or legacy.orderList.tsv" %
+                  (genarkIds, clade), file=sys.stderr)
         return None
+
+    # Found matches in expected clade directory
     with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
         fh.writelines(matched)
     return cladeDir
