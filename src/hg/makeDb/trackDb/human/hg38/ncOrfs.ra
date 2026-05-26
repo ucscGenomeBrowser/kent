@@ -13,7 +13,7 @@ group genes
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>MANE host</b>: $intronsSource
+    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Host transcript</b>: $intronsSource
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
