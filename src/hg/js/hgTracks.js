@@ -1418,7 +1418,14 @@ var myVariants = {
             if (!userIsLoggedIn) {
                 let msg = document.createElement("div");
                 msg.id = "logInMessage";
-                msg.innerHTML = "Please <a href=\"./hgSession\">log in</a> to use this feature.";
+                let href = (typeof myVariantsLoginUrl !== "undefined" && myVariantsLoginUrl)
+                           ? myVariantsLoginUrl : "./hgSession";
+                let link = document.createElement("a");
+                link.href = href;
+                link.textContent = "log in";
+                msg.appendChild(document.createTextNode("Please "));
+                msg.appendChild(link);
+                msg.appendChild(document.createTextNode(" to use this feature."));
                 dialog.appendChild(msg);
             } else {
                 let form = this.createBedForm(dialog);

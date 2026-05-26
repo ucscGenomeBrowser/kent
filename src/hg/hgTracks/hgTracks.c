@@ -8889,9 +8889,9 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
-// put up the My Variants dialog if the hg.conf statement is present
-// and the visitor is logged in (anonymous users can't write to the table).
-if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
+// put up the My Variants dialog if the hg.conf statement is present.
+// Anonymous visitors see the button too; the JS dialog tells them to log in.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
     jsInline("var doMyVariants = true;\n");
@@ -8935,6 +8935,15 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
             jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
             slFreeList(&hiddenFields);
             }
+        }
+    else if (loginSystemEnabled() || wikiLinkEnabled())
+        {
+        // Hand the JS dialog a login URL that returns to this hgTracks page.
+        char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
+        char *loginUrl = wikiLinkUserLoginUrlReturning(cartSessionId(cart), retUrl);
+        jsInlineF("var myVariantsLoginUrl = \"%s\";\n", loginUrl);
+        freez(&retUrl);
+        freez(&loginUrl);
         }
     }
 
