@@ -16,15 +16,44 @@ For detailed information on individual factors and their motifs, see
 
 <h2>Display Conventions and Configuration</h2>
 
-<p>Each rPeak is colored in shades of gray, with darker shades indicating higher
-maximum ChIP-seq signal across contributing biosamples (stored as a score from 0 to
-1,000). If the rPeak overlaps a cognate TF motif site from the collection in Andrews
-et al., 2023, the motif site is colored green using decorators.</p>
+<p>Each rPeak is colored in grayscale by maximum ChIP-seq signal across contributing
+biosamples (darker = higher signal, score 0 to 1,000):</p>
+<table>
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid #6678B1;">Color</th>
+    <th style="border-bottom: 2px solid #6678B1;">Score</th>
+  </tr>
+  </thead>
+  <tr>
+    <th bgcolor="#000000"></th>
+    <th align="left">1000 (highest signal)</th>
+  </tr>
+  <tr>
+    <th bgcolor="#393939"></th>
+    <th align="left">750</th>
+  </tr>
+  <tr>
+    <th bgcolor="#717171"></th>
+    <th align="left">500</th>
+  </tr>
+  <tr>
+    <th bgcolor="#AAAAAA"></th>
+    <th align="left">250</th>
+  </tr>
+  <tr>
+    <th bgcolor="#E3E3E3"></th>
+    <th align="left">1 (lowest signal)</th>
+  </tr>
+</table>
 
-<p>Low-scoring peaks render in very light gray by default; the
+<p>Low-scoring peaks appear in very light gray by default; the
 <b>Shade of lowest-scoring items</b> setting can darken them for easier visibility.
 <b>Note:</b> Increasing the shade reduces the visible contrast between low and
 high scoring peaks.</p>
+
+<p>If the rPeak overlaps a cognate TF motif site from the collection in Andrews
+et al., 2023, the motif site is colored <span style="color:#36DD81; font-weight:bold;">green</span> using decorators.</p>
 
 <p>Clicking on an rPeak provides detailed information about the biosamples where the
 rPeak was detected, including the count of biosamples with contributing ChIP-seq peaks,
