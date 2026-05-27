@@ -154,8 +154,8 @@ printf "        type bigMaf\n";
 printf "        viewUi on\n";
 printf "        itemFirstCharCase noChange\n";
 printf "        group compGeno\n";
-printf "        bigDataUrl contrib/vgp577way/%s.vgp577way.bb\n", $refAcc;
-printf "        summary contrib/vgp577way/%s.vgp577waySummary.bb\n", $refAcc;
+printf "        bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/%s/%s.vgp577way.bb\n", $refAcc, $refAcc;
+printf "        summary https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/%s/%s.vgp577waySummary.bb\n", $refAcc, $refAcc;
 printf "        irows on\n";
 printf "        color 0, 10, 100\n";
 printf "        altColor 0,90,10\n";
@@ -194,9 +194,10 @@ foreach my $acc (@orderAcc) {
 }
 printf "\n";
 
-if ( -s "../../contrib/vgp577way/${refAcc}.vgp577wayPhyloP.bw" ) {
+my $bwFile = "/hive/data/genomes/asmHubs/VGP/vgp577way/bbi/${refAcc}/${refAcc}.vgp577wayPhyloP.bw";
+if ( -s "${bwFile}" ) {
 
-my $bwInfo = `bigWigInfo ../../contrib/vgp577way/${refAcc}.vgp577wayPhyloP.bw | egrep "min:|max:" | awk '{printf "%.2f\\n", \$NF}'| xargs echo | tr ' ' ':'`;
+my $bwInfo = `bigWigInfo ${bwFile} | egrep "min:|max:" | awk '{printf "%.2f\\n", \$NF}'| xargs echo | tr ' ' ':'`;
 chomp $bwInfo;
 my ($bwMin, $bwMax) = split(':', $bwInfo);
 my $viewLimitMin = $bwMin / 2.0;
@@ -223,7 +224,7 @@ printf "
         configurable on
         noInherit on
         type bigWig %s
-        bigDataUrl contrib/vgp577way/%s.vgp577wayPhyloP.bw
+        bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/%s/%s.vgp577wayPhyloP.bw
         maxHeightPixels 100:50:11
         viewLimits %.1f:%.1f
         autoScale off
@@ -233,6 +234,6 @@ printf "
         altColor 140,60,60
         priority 1
         logo on
-", $totalSpecies, $bigWigInfo, $refAcc, $viewLimitMin, $viewLimitMax;
+", $totalSpecies, $bigWigInfo, $refAcc, $refAcc, $viewLimitMin, $viewLimitMax;
 
 }
