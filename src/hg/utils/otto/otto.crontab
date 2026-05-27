@@ -115,7 +115,7 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 
 # liftOver request watch - sends email to configured address in hg.conf
 #   e.g.: chainFileRequestEmail=... - running every 7 minutes
-1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/ottoRequest.py
+1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/devAndRR.sh
 
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity
