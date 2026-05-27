@@ -33,10 +33,8 @@ $(function() {
         return req.then(r => r.ok ? r.json() : null).catch(() => null);
     };
 
-    const toTitleCase = str =>
-          str.toLowerCase()
-          .split(/[_\s-]+/)  // Split on underscore, space, or hyphen
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    const toTitleStyle = str =>
+            str.replace(/_+/g, " ");
 
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -150,7 +148,7 @@ $(function() {
         const ordinaryColumns = colNames.map(key => {
             const col = {
                 data: key,
-                title: toTitleCase(key.replace(/^_/, "")),
+                title: toTitleStyle(key.replace(/^_+/, "")),
             };
             const urlTemplate = subtrackUrls[stripUnderscores(key)];
             if (urlTemplate) {
@@ -518,7 +516,7 @@ $(function() {
 
             // Clickable heading that toggles collapse
             const heading = Object.assign(document.createElement("strong"), {
-                textContent: toTitleCase(key),
+                textContent: toTitleStyle(key),
                 className: "facet-heading",
             });
             facetDiv.appendChild(heading);
