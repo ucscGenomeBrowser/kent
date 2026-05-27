@@ -1,10 +1,10 @@
 <h2>Description</h2>
 
 <p>
-This track shows <b>44,435 upstream open reading frames (uORFs)</b> in 5' UTRs of human genes,
+This track shows <b>44k upstream open reading frames (uORFs)</b> in 5' UTRs of human genes,
 curated from ribosome profiling data by the
 <a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
-project.
+project, annotated by UCSC with the Kozak strengh and transcriptional efficiency.
 </p>
 
 <p>
@@ -19,27 +19,14 @@ protein expression and contribute to disease.
 UTRannotator is a plugin for the
 <a href="https://www.ensembl.org/info/docs/tools/vep/index.html" target="_blank">Ensembl
 Variant Effect Predictor (VEP)</a> that annotates 5' UTR variants with respect to uORFs.
-It detects five types of uORF-perturbing events:
-</p>
-<ul>
-  <li><b>uAUG_gained</b> &ndash; variant creates a new upstream start codon</li>
-  <li><b>uAUG_lost</b> &ndash; variant removes an existing upstream start codon</li>
-  <li><b>uSTOP_lost</b> &ndash; variant removes the stop codon of an existing uORF</li>
-  <li><b>uSTOP_gained</b> &ndash; variant creates a new stop codon within an existing uORF</li>
-  <li><b>uFrameShift</b> &ndash; variant causes a frameshift in an existing uORF</li>
-</ul>
-
-<p>
-As part of the project, the authors compiled a curated reference set of translated small ORFs
-in human 5' UTRs, derived from ribosome profiling data in the
+It detects five types of uORF-perturbing events (AUG gained/lost, stop lost/gained, frameshift).
+This plugin needs a database of uORFs to annotated, so the authors compiled a
+curated reference set of translated small ORFs in human 5' UTRs, derived from
+ribosome profiling data in the
 <a href="http://www.sorfs.org" target="_blank">sorfs.org</a> database. This reference set
-is what is displayed in this track. The uORFs are classified into three types:
+is what is displayed in this track. Almost all of these ORFs are annotated as 5' uORFs, only 
+a tiny fraction, 270 of them, are annotated as 5'UTR+3'UTR uORF, when transcripts overlap.
 </p>
-<ul>
-  <li><b>uORF</b> &ndash; contained entirely within the 5' UTR (has a stop codon before the CDS)</li>
-  <li><b>inframe_oORF</b> &ndash; overlapping ORF that is in-frame with the downstream CDS</li>
-  <li><b>OutOfFrame_oORF</b> &ndash; overlapping ORF that is out-of-frame with the downstream CDS</li>
-</ul>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -109,7 +96,7 @@ The uORF reference data was downloaded from the
 <a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator
 GitHub repository</a> (file <tt>uORF_5UTR_GRCh38_PUBLIC.txt</tt>) and converted to bigBed format
 at UCSC. Coordinates for reverse-strand uORFs were swapped to genomic orientation. Four entries
-with invalid coordinates were excluded.
+with invalid coordinates were excluded. Host transcripts were annotated as described above. 
 </p>
 
 <h2>Credits</h2>
