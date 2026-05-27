@@ -12,9 +12,6 @@
 #include "net.h"
 #include "wikiLink.h"
 #include "userdata.h"
-/* do not need the mailViaPipe function here
-#include "mailViaPipe.h"
-*/
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -176,6 +173,8 @@ static void loginStatus()
 {
 char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 struct jsonWrite *jw = apiStartOutput();
+char hgLoginLink[2048];
+safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLoginHostCgiBinUrl());
 
 if (userName != NULL)
     {
@@ -198,15 +197,13 @@ if (userName != NULL)
     // Build logout URL with returnto parameter
     char *returnTo = cgiOptionalString("returnTo");
     struct dyString *logoutUrl = dyStringNew(0);
+    dyStringPrintf(logoutUrl, "%s?hgLogin.do.displayLogout=1", hgLoginLink);
     if (isNotEmpty(returnTo))
         {
         char *encodedReturnUrl = cgiEncodeFull(returnTo);
-        dyStringPrintf(logoutUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s", encodedReturnUrl);
+
+        dyStringPrintf(logoutUrl, "&returnto=%s", encodedReturnUrl);
         freeMem(encodedReturnUrl);
-        }
-    else
-        {
-        dyStringPrintf(logoutUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLogout=1");
         }
 
     jsonWriteString(jw, "userName", userName);
@@ -224,20 +221,23 @@ else
     jsonWriteString(jw, "userName", NULL);
     // Use returnTo parameter passed by calling JavaScript
     char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *loginUrl = dyStringNew(0);
+    dyStringPrintf(loginUrl, "%s?hgLogin.do.displayLoginPage=1", hgLoginLink);
+    struct dyString *signUpUrl = dyStringNew(0);
+    dyStringPrintf(signUpUrl, "%s?hgLogin.do.displaySignupPage=1", hgLoginLink);
     if (isNotEmpty(returnTo))
         {
         char *encodedReturnUrl = cgiEncodeFull(returnTo);
-        struct dyString *loginUrl = dyStringNew(0);
-        dyStringPrintf(loginUrl, "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s", encodedReturnUrl);
+        dyStringPrintf(loginUrl, "&returnto=%s", encodedReturnUrl);
         jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
         freeMem(encodedReturnUrl);
         }
     else
         {
         // No returnTo provided, just give basic login URL
-        jsonWriteString(jw, "loginUrl", "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1");
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
         }
-    jsonWriteString(jw, "signupUrl", "/cgi-bin/hgLogin?hgLogin.do.displaySignupPage=1");
+    jsonWriteString(jw, "signupUrl", dyStringCannibalize(&signUpUrl));
     }
 
 apiFinishOutput(0, NULL, jw);
@@ -488,13 +488,6 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
     dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
-    /* Even if the mailViaPipe returned a relevant return code, and I'm not
-    *    sure it would, there isn't much we can do about it from here.
-    *  Do *not* need to send email from here.  The cron job watch script
-    *     in the otto user will see the table updated and take care of
-    *     the email notifications
-    (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
-    */
 
     /* some kind of response here back to the request page */
     struct jsonWrite *jw = apiStartOutput();
