@@ -3638,7 +3638,7 @@ if (!tdb->parent)
 // show super-track info
 struct trackDb *tdbParent = tdb->parent;
 
-printf("<b>Back to parent track: "
+printf("<b>Configure track container: "
            "<img height=12 src='../images/ab_up.gif'>"
             "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
