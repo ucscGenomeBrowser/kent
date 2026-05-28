@@ -5639,3 +5639,6 @@ html dnaMethylation.html
 
 include methylationAtlas.ra
 include methylationAtlasSignals.ra
+
+include locusSpec.ra alpha
+include umdTp53.ra alpha

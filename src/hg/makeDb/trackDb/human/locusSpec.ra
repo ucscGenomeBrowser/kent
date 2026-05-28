@@ -1,0 +1,6 @@
+track locusSpec
+superTrack on
+shortLabel Locus-Specific
+longLabel Locus-Specific Annotations
+group genes
+visibility hide
