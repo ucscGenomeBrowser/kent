@@ -291,6 +291,12 @@ void textLineOut(char *lineOut);
 void textFinishOutput();
 /* all done with text output, print it all out */
 
+struct sqlConnection *hConnectOtto();
+/* Connect to otto database using otto profile, fallback to central */
+
+void hDisconnectOtto(struct sqlConnection **pConn);
+/* Disconnect otto connection */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

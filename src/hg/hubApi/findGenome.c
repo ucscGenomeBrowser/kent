@@ -599,7 +599,7 @@ apiFinishOutput(0, NULL, jw);
 char *ottoTable = cfgOption("ottoTable");        /* probably ottoRequest */
 if (isNotEmpty(ottoTable))
     {
-    struct sqlConnection *conn = hConnectCentral();
+    struct sqlConnection *conn = hConnectOtto();
     if (sqlTableExists(conn, ottoTable))
         {
         /* asmId placed in both fromDb and toDb in case toDb does not allow empty */
@@ -610,7 +610,7 @@ if (isNotEmpty(ottoTable))
             ottoTable, asmId, asmId, email, dyStringContents(fullComment));
         sqlUpdate(conn, dyStringCannibalize(&update));
         }
-    hDisconnectCentral(&conn);
+    hDisconnectOtto(&conn);
     }
 
 dyStringFree(&fullComment);
