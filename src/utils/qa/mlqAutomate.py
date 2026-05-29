@@ -94,6 +94,11 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PST = pytz.timezone('America/Los_Angeles')
 DRY_RUN = False
 
+# Placeholder for emails whose subject is empty or consists entirely of
+# reply/list-tag tokens that normalize away. Gives them a stable, matchable
+# subject instead of a bare '~' Redmine filter (HTTP 422).
+NO_SUBJECT = '<No Subject>'
+
 # Setup logging
 LOG_FILE = os.environ.get('MLQ_LOG_FILE', os.path.join(SCRIPT_DIR, 'mlq_automate.log'))
 logging.basicConfig(
@@ -1220,6 +1225,11 @@ def find_existing_ticket(subject, thread_emails):
     replies where the original sender appears in To/CC fields.
     """
     normalized = normalize_subject(subject)
+    # Empty normalization (e.g. a subject of just "Re:" or "[genome]") would send
+    # Redmine a bare 'subject=~' filter and 422. Fall back to the placeholder so
+    # these still search and match consistently with how the ticket was created.
+    if not normalized:
+        normalized = NO_SUBJECT
 
     url = f"{CONFIG['REDMINE_URL']}/issues.json"
     params = {
@@ -1243,8 +1253,10 @@ def find_existing_ticket(subject, thread_emails):
 
         # Staff replies to mailing list threads don't need email match —
         # subject match is sufficient since staff wouldn't start a new
-        # unrelated thread with the same subject
-        if has_staff_participant:
+        # unrelated thread with the same subject. The placeholder subject is
+        # shared by all no-subject threads, so it's excluded from this shortcut:
+        # require an email match to avoid merging unrelated conversations.
+        if has_staff_participant and normalized != NO_SUBJECT:
             return issue['id']
 
         # For external senders, require email match to avoid false positives
@@ -1380,6 +1392,12 @@ def create_ticket(subject, body, sender_emails, mlm_name, category='Other', atta
     Includes retry logic for transient server errors (5xx) and network issues.
     Sends email notification to QA team if all retries fail.
     """
+    # Subjects that normalize to nothing (empty, or only reply/list tags) get a
+    # stable placeholder so the stored ticket can be found by find_existing_ticket
+    # on later runs (its subject search would otherwise never match).
+    if not normalize_subject(subject):
+        subject = NO_SUBJECT
+
     if DRY_RUN:
         att_info = f" with {len(attachments)} attachment(s)" if attachments else ""
         logger.info(f"  [DRY RUN] Would create ticket: {subject[:50]}{att_info}")
