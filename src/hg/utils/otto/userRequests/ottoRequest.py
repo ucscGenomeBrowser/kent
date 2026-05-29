@@ -286,7 +286,7 @@ def main():
                 f"\n"
                 f"-- UCSC Genome Browser\n"
             )
-        bitParts = ["h", "cla", "wson", "@", "uc", "sc.", "ed", "u"]
+        bitParts = ["gb", "aut", "o", "@", "uc", "sc.", "ed", "u"]
         if sendMail(userEmail, subject, body,
            fromAddr=NOTIFY_FROM, bccAddr=bccAddr, bounceAddr="".join(bitParts)):
                hgsqlUpdate(ottoDb, f"UPDATE {ottoTable} SET status = 1"
