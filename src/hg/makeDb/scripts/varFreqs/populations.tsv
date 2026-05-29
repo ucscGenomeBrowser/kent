@@ -7,6 +7,14 @@ AllOfUs	EAS	East Asian	AC_EAS	AF_EAS
 AllOfUs	EUR	European	AC_EUR	AF_EUR
 AllOfUs	OCE	Oceanian	AC_OCE	AF_OCE
 AllOfUs	SAS	South Asian	AC_SAS	AF_SAS
+# SFARI SPARK autism phenotype split (asd column of individuals_registration)
+SPARK	AUT	ASD proband	AC_AUT	AF_AUT
+SPARK	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT
+SFARI_WGS	AUT	ASD proband	AC_AUT	AF_AUT
+SFARI_WGS	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT
+# SCHEMA schizophrenia case/control split (summed across analysis groups)
+SCHEMA	CASE	Schizophrenia case	AC_CASE	AF_CASE
+SCHEMA	CTRL	Control	AC_CTRL	AF_CTRL
 # GenomeAsia populations (7 groups in source VCF)
 GenomeAsia	NEA	Northeast Asian	AC_NEA	AF_NEA
 GenomeAsia	SEA	Southeast Asian	AC_SEA	AF_SEA

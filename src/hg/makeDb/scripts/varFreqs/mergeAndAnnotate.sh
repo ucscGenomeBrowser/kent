@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eu
 # Note: not using pipefail due to bcftools pipeline exit codes
+#
+# bcftools csq's --unify-chr-names was added in 1.22; conda installs 1.14 by
+# default. Pin the 1.22 build at the front of PATH so every bcftools call in
+# this script (including the parallel-spawned ones) finds the right binary.
+export PATH=/cluster/software/src/bcftools-1.22:$PATH
 
 # Merge multiple VCF files and annotate with protein consequences
 # Uses bcftools for merging and consequence annotation
@@ -22,11 +27,19 @@ GFF3="$WORKDIR/Homo_sapiens.GRCh38.115.chr.gff3.gz"
 THREADS=8
 PARALLEL_JOBS=8
 
-# Parse --region flag
+# Parse flags
+#   --region chrM        process a single region (quick test)
+#   --databases <tsv>    DB config (default databases.tsv); subsets reuse the
+#                        shared normalized/ cache built by the full run
+#   --tag <name>         suffix for merged/annotated outputs so disease/array
+#                        builds (e.g. --tag .disease) don't clobber the all run
 REGION=""
+TAG=""
 while [[ $# -gt 0 ]]; do
     case $1 in
         --region) REGION="$2"; shift 2 ;;
+        --databases) DBTSV="$2"; shift 2 ;;
+        --tag) TAG="$2"; shift 2 ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
 done
@@ -43,9 +56,9 @@ else
     VIEW_REGION="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM"
 fi
 
-# Output files
-MERGED="$WORKDIR/merged${SUFFIX}.vcf.gz"
-ANNOTATED="$WORKDIR/merged${SUFFIX}.annotated.vcf.gz"
+# Output files (TAG keeps disease/array merges separate from the all build)
+MERGED="$WORKDIR/merged${TAG}${SUFFIX}.vcf.gz"
+ANNOTATED="$WORKDIR/merged${TAG}${SUFFIX}.annotated.vcf.gz"
 
 echo "=== VCF Merge and Annotate Pipeline ==="
 echo "Working directory: $WORKDIR"
@@ -197,7 +210,7 @@ echo "Step 5: Merging all VCFs..."
 # IndiGenomes_Variants.norm.vcf.gz after IndiGen was dropped from the
 # config). Basename rule mirrors process_one_vcf: strip .vcf.gz only
 # (.vcf.bgz like SG10K_Health is left intact, matching the cache layout).
-NORM_LIST="$WORKDIR/normalized_files${SUFFIX}.txt"
+NORM_LIST="$WORKDIR/normalized_files${TAG}${SUFFIX}.txt"
 awk -F'\t' '!/^#/ && NF >= 3 && $3 != "" {print $3}' "$DBTSV" | \
 while read -r vcf; do
     bn=$(basename "$vcf" .vcf.gz)

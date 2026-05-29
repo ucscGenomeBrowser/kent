@@ -877,3 +877,106 @@ tabix -p vcf gonl.vcf.gz
 # GoNL added to databases.tsv as well, so the next mergeAndAnnotate.sh
 # run will pick it up into varFreqsAll.bb. The current /gbdb _all
 # bigBed predates GoNL.
+
+##########
+# 2026-05-28 Claude max
+# varFreqs reorg: split SFARI SPARK into ASD/non-ASD counts, add SCHEMA
+# case/control counts, drop genotyping-array cohorts (TPMI + MexBB) from the
+# WGS/WES varFreqsAll track, and add two new combined tracks:
+#   varFreqsDisease  (SPARK, SFARI WGS, TOPMed, SCHEMA, GREGoR, GA4K)
+#   varFreqsArray    (TPMI, MexBB, UKBB)
+# refs #36642
+
+# --- 1. Phenotype-stratified SPARK counts -----------------------------------
+# sparkMergeVcfAddCounts.sh now takes an optional 3rd arg: the SPARK
+# individuals_registration TSV. With it, bcftools +fill-tags is given a
+# sample-group file (col1=sample_sp_id, col2=AUT|NON_AUT) so the output
+# sites VCF carries AC_AUT/AN_AUT/AF_AUT and AC_NON_AUT/AN_NON_AUT/AF_NON_AUT
+# in addition to the overall AC/AN/AF. The same registration file (col 8
+# "asd": TRUE/FALSE) covers both WES (142,357 samples) and WGS (12,519
+# samples); samples with a blank asd value are not assigned to either group.
+REG=/hive/data/genomes/hg38/bed/varFreqs/sparkExomes/SPARKDataRelease_2025-12-15/individuals_registration-2025-12-15.tsv
+
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh \
+    vcf/SPARK.iWES_v3.2024_08.deepvariant 8 "$REG"
+bcftools norm -m- SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz \
+    -Oz -o SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+tabix -p vcf SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+# 13,299,149 variants out, identical position list to the pre-pheno build.
+
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh \
+    vcf/wgs_12519_genome.deepvariant 8 "$REG"
+bcftools norm -m- wgs_12519_genome.deepvariant.sites.vcf.gz \
+    -Oz -o wgs_12519_genome.deepvariant.norm.vcf.gz
+tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
+# 177,384,905 variants out. WGS coverage by phenotype: 3,565 AUT + 8,784
+# NON_AUT + 170 unassigned of 12,519 samples.
+
+# --- 2. SCHEMA case/control counts ------------------------------------------
+# schema_addAcAnAf.py now also emits AC_CASE/AN_CASE/AF_CASE and
+# AC_CTRL/AN_CTRL/AF_CTRL by summing the per-cohort ac_case/an_case and
+# ac_ctrl/an_ctrl arrays. The script is idempotent (it strips and re-adds
+# the fields it manages) so it can be re-run on the already-lifted
+# hg38_sorted file without re-running CrossMap.
+cd /hive/data/genomes/hg38/bed/varFreqs/schema
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/schema_addAcAnAf.py \
+    SCHEMA_variant_results_hg38_sorted.vcf.gz \
+    SCHEMA_variant_results_hg38_sorted.withCC.vcf
+bgzip -f SCHEMA_variant_results_hg38_sorted.withCC.vcf
+tabix -f -p vcf SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz
+mv SCHEMA_variant_results_hg38_sorted.vcf.gz     SCHEMA_variant_results_hg38_sorted.vcf.gz.preCC.bak
+mv SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi.preCC.bak
+mv SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz     SCHEMA_variant_results_hg38_sorted.vcf.gz
+mv SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz.tbi SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi
+# 8,864,488 variants, AC_CASE+AC_CTRL = AC, sums verified.
+
+# --- 3. Three combined-track builds -----------------------------------------
+# mergeAndAnnotate.sh and vcfToBigBed.py now accept --databases /
+# --databases-file flags, so the same code drives three builds from three
+# config TSVs: databases.tsv, databases_disease.tsv, databases_array.tsv.
+# The normalized/ cache under all/normalized is shared across builds
+# (positions are identical regardless of which combined track they feed).
+# mergeAndAnnotate.sh pins /cluster/software/src/bcftools-1.22/ in front of
+# PATH because bcftools csq's --unify-chr-names was added in 1.22; the conda
+# default (1.14) silently fails the annotate step otherwise.
+
+# Reorg removed TPMI and MexBB from databases.tsv (moved to
+# databases_array.tsv) and added UKBB to databases_array.tsv. Both
+# databases_disease.tsv and databases_array.tsv reuse populations.tsv:
+# load_config only attaches a population row to a database that is in the
+# active config, so the same populations file works for all three builds.
+
+# varFreqsAll (28 cohorts, all WGS/WES; ~1.34 billion variants, 48 GB):
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.annotated.vcf.gz \
+    --output-prefix varFreqsAll \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb \
+        /gbdb/hg38/varFreqs/_all/varFreqsAll.bb
+
+# varFreqsDisease (6 cohorts; ~932 M variants, 23 GB):
+SCR=~/kent/src/hg/makeDb/scripts/varFreqs
+bash $SCR/mergeAndAnnotate.sh --databases $SCR/databases_disease.tsv --tag .disease
+python3 $SCR/vcfToBigBed.py \
+    --databases-file $SCR/databases_disease.tsv \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.disease.annotated.vcf.gz \
+    --output-prefix varFreqsDisease \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/disease
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/disease/varFreqsDisease.bb \
+        /gbdb/hg38/varFreqs/_disease/varFreqsDisease.bb
+
+# varFreqsArray (TPMI + MexBB + UKBB; ~14.7 M variants, 750 MB):
+bash $SCR/mergeAndAnnotate.sh --databases $SCR/databases_array.tsv --tag .array
+python3 $SCR/vcfToBigBed.py \
+    --databases-file $SCR/databases_array.tsv \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.array.annotated.vcf.gz \
+    --output-prefix varFreqsArray \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/array
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/array/varFreqsArray.bb \
+        /gbdb/hg38/varFreqs/_array/varFreqsArray.bb

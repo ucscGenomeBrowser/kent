@@ -18,7 +18,7 @@ superTrack on
         priority 0.1
         mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
         # Source database filter
-        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,MexBB|Mexico Biobank,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,TPMI|TPMI Taiwan,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR
+        filterValues.sources AllOfUs|AllOfUs,SPARK|SPARK WES,SFARI_WGS|SFARI WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR
         filterType.sources multipleListOr
         filterLabel.sources Source Database
         # Variant type and consequence filters
@@ -72,8 +72,6 @@ superTrack on
         filterLabel.MGRBAF MGRB Australia AF
         filterByRange.HRCAF on
         filterLabel.HRCAF HRC AF
-        filterByRange.MexBBAF on
-        filterLabel.MexBBAF Mexico Biobank AF
         filterByRange.SGDPAF on
         filterLabel.SGDPAF SGDP AF
         filterByRange.HGDP1kGAF on
@@ -94,8 +92,6 @@ superTrack on
         filterLabel.NPMAF NPM Singapore AF
         filterByRange.WBBCAF on
         filterLabel.WBBCAF WBBC China AF
-        filterByRange.TPMIAF on
-        filterLabel.TPMIAF TPMI Taiwan AF
         filterByRange.ChinaMAPAF on
         filterLabel.ChinaMAPAF China ChinaMAP AF
         filterByRange.GenomeIndiaAF on
@@ -133,8 +129,6 @@ superTrack on
         filterLabel.MGRBAC MGRB Australia AC
         filterByRange.HRCAC on
         filterLabel.HRCAC HRC AC
-        filterByRange.MexBBAC on
-        filterLabel.MexBBAC Mexico Biobank AC
         filterByRange.SGDPAC on
         filterLabel.SGDPAC SGDP AC
         filterByRange.HGDP1kGAC on
@@ -155,8 +149,6 @@ superTrack on
         filterLabel.NPMAC NPM Singapore AC
         filterByRange.WBBCAC on
         filterLabel.WBBCAC WBBC China AC
-        filterByRange.TPMIAC on
-        filterLabel.TPMIAC TPMI Taiwan AC
         filterByRange.ChinaMAPAC on
         filterLabel.ChinaMAPAC China ChinaMAP AC
         filterByRange.GenomeIndiaAC on
@@ -306,8 +298,177 @@ superTrack on
         filterLabel.WBBCAC_South WBBC South Han AC
         filterByRange.WBBCAC_Lingnan on
         filterLabel.WBBCAC_Lingnan WBBC Lingnan Han AC
+        # SFARI SPARK WES autism phenotype split (asd column of individuals_registration)
+        filterByRange.SPARKAF_AUT on
+        filterLabel.SPARKAF_AUT SPARK WES ASD proband AF
+        filterByRange.SPARKAF_NON_AUT on
+        filterLabel.SPARKAF_NON_AUT SPARK WES Non-ASD family AF
+        filterByRange.SPARKAC_AUT on
+        filterLabel.SPARKAC_AUT SPARK WES ASD proband AC
+        filterByRange.SPARKAC_NON_AUT on
+        filterLabel.SPARKAC_NON_AUT SPARK WES Non-ASD family AC
+        # SFARI SPARK WGS autism phenotype split
+        filterByRange.SFARI_WGSAF_AUT on
+        filterLabel.SFARI_WGSAF_AUT SFARI WGS ASD proband AF
+        filterByRange.SFARI_WGSAF_NON_AUT on
+        filterLabel.SFARI_WGSAF_NON_AUT SFARI WGS Non-ASD family AF
+        filterByRange.SFARI_WGSAC_AUT on
+        filterLabel.SFARI_WGSAC_AUT SFARI WGS ASD proband AC
+        filterByRange.SFARI_WGSAC_NON_AUT on
+        filterLabel.SFARI_WGSAC_NON_AUT SFARI WGS Non-ASD family AC
+        # SCHEMA schizophrenia case/control (summed across analysis groups)
+        filterByRange.SCHEMAAF_CASE on
+        filterLabel.SCHEMAAF_CASE SCHEMA Schizophrenia case AF
+        filterByRange.SCHEMAAF_CTRL on
+        filterLabel.SCHEMAAF_CTRL SCHEMA Control AF
+        filterByRange.SCHEMAAC_CASE on
+        filterLabel.SCHEMAAC_CASE SCHEMA Schizophrenia case AC
+        filterByRange.SCHEMAAC_CTRL on
+        filterLabel.SCHEMAAC_CTRL SCHEMA Control AC
         skipEmptyFields on
-       
+
+        track varFreqsDisease
+        shortLabel Disease-related Databases Combined
+        longLabel Variant Frequencies: Disease-related cohorts combined (autism, schizophrenia, rare disease, NHLBI heart/lung/blood)
+        type bigBed 9 +
+        parent varFreqs off
+        bigDataUrl /gbdb/$D/varFreqs/_disease/varFreqsDisease.bb
+        visibility hide
+        itemRgb on
+        maxWindowToDraw 5000000
+        priority 0.15
+        mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
+        filterValues.sources SPARK|SPARK WES,SFARI_WGS|SFARI WGS,TOPMed|TOPMed,SCHEMA|SCHEMA,GREGoR|GREGoR,GA4K|GA4K PacBio LR
+        filterType.sources multipleListOr
+        filterLabel.sources Source Database
+        filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
+        filterLabel.varType Variant Type
+        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,3_prime_utr|3' UTR,5_prime_utr|5' UTR,non_coding|Non-coding,.|Intergenic,others|Other
+        filterType.consequence multipleListOr
+        filterLabel.consequence Consequence
+        filterByRange.refLen on
+        filterLabel.refLen Reference Length
+        filterByRange.altLen on
+        filterLabel.altLen Alternate Length
+        filterByRange.varLen on
+        filterLabel.varLen Length Change
+        filterByRange.maxAF on
+        filterLabel.maxAF Max Allele Frequency
+        filterLimits.maxAF 0:1
+        filterByRange.totalAC on
+        filterLabel.totalAC Total Allele Count (all databases)
+        # Per-database AF filters
+        filterByRange.SPARKAF on
+        filterLabel.SPARKAF SPARK WES AF
+        filterByRange.SFARI_WGSAF on
+        filterLabel.SFARI_WGSAF SFARI WGS AF
+        filterByRange.TOPMedAF on
+        filterLabel.TOPMedAF TOPMed AF
+        filterByRange.SCHEMAAF on
+        filterLabel.SCHEMAAF SCHEMA AF
+        filterByRange.GREGoRAF on
+        filterLabel.GREGoRAF GREGoR AF
+        filterByRange.GA4KAF on
+        filterLabel.GA4KAF GA4K PacBio LR AF
+        # Per-database AC filters
+        filterByRange.SPARKAC on
+        filterLabel.SPARKAC SPARK WES AC
+        filterByRange.SFARI_WGSAC on
+        filterLabel.SFARI_WGSAC SFARI WGS AC
+        filterByRange.TOPMedAC on
+        filterLabel.TOPMedAC TOPMed AC
+        filterByRange.SCHEMAAC on
+        filterLabel.SCHEMAAC SCHEMA AC
+        filterByRange.GREGoRAC on
+        filterLabel.GREGoRAC GREGoR AC
+        filterByRange.GA4KAC on
+        filterLabel.GA4KAC GA4K PacBio LR AC
+        # SPARK WES autism phenotype split
+        filterByRange.SPARKAF_AUT on
+        filterLabel.SPARKAF_AUT SPARK WES ASD proband AF
+        filterByRange.SPARKAF_NON_AUT on
+        filterLabel.SPARKAF_NON_AUT SPARK WES Non-ASD family AF
+        filterByRange.SPARKAC_AUT on
+        filterLabel.SPARKAC_AUT SPARK WES ASD proband AC
+        filterByRange.SPARKAC_NON_AUT on
+        filterLabel.SPARKAC_NON_AUT SPARK WES Non-ASD family AC
+        # SFARI WGS autism phenotype split
+        filterByRange.SFARI_WGSAF_AUT on
+        filterLabel.SFARI_WGSAF_AUT SFARI WGS ASD proband AF
+        filterByRange.SFARI_WGSAF_NON_AUT on
+        filterLabel.SFARI_WGSAF_NON_AUT SFARI WGS Non-ASD family AF
+        filterByRange.SFARI_WGSAC_AUT on
+        filterLabel.SFARI_WGSAC_AUT SFARI WGS ASD proband AC
+        filterByRange.SFARI_WGSAC_NON_AUT on
+        filterLabel.SFARI_WGSAC_NON_AUT SFARI WGS Non-ASD family AC
+        # SCHEMA schizophrenia case/control
+        filterByRange.SCHEMAAF_CASE on
+        filterLabel.SCHEMAAF_CASE SCHEMA Schizophrenia case AF
+        filterByRange.SCHEMAAF_CTRL on
+        filterLabel.SCHEMAAF_CTRL SCHEMA Control AF
+        filterByRange.SCHEMAAC_CASE on
+        filterLabel.SCHEMAAC_CASE SCHEMA Schizophrenia case AC
+        filterByRange.SCHEMAAC_CTRL on
+        filterLabel.SCHEMAAC_CTRL SCHEMA Control AC
+        # GREGoR affected/unaffected/unknown
+        filterByRange.GREGoRAF_AFF on
+        filterLabel.GREGoRAF_AFF GREGoR Affected AF
+        filterByRange.GREGoRAF_UNA on
+        filterLabel.GREGoRAF_UNA GREGoR Unaffected AF
+        filterByRange.GREGoRAF_UNK on
+        filterLabel.GREGoRAF_UNK GREGoR Unknown AF
+        filterByRange.GREGoRAC_AFF on
+        filterLabel.GREGoRAC_AFF GREGoR Affected AC
+        filterByRange.GREGoRAC_UNA on
+        filterLabel.GREGoRAC_UNA GREGoR Unaffected AC
+        filterByRange.GREGoRAC_UNK on
+        filterLabel.GREGoRAC_UNK GREGoR Unknown AC
+        skipEmptyFields on
+
+        track varFreqsArray
+        shortLabel Genotyping Array Databases Combined
+        longLabel Variant Frequencies: Genotyping-array cohorts combined (TPMI, Mexico Biobank, UK Biobank imputed)
+        type bigBed 9 +
+        parent varFreqs off
+        bigDataUrl /gbdb/$D/varFreqs/_array/varFreqsArray.bb
+        visibility hide
+        itemRgb on
+        maxWindowToDraw 5000000
+        priority 0.2
+        mouseOver <b>Var:</b> $name<br><b>AA change:</b> $aaChange<br><b>Var type:</b> $varType<br><b>Conseq:</b> $consequence<br><b>Max AF:</b> $maxAF<br><b>Total AC:</b> $totalAC<br><b>Sources:</b> $sources
+        filterValues.sources TPMI|TPMI Taiwan,MexBB|Mexico Biobank,UKBB|UK Biobank imputed
+        filterType.sources multipleListOr
+        filterLabel.sources Source Database
+        filterValues.varType SNV|SNV,INS|Insertion,DEL|Deletion,MNV|MNV
+        filterLabel.varType Variant Type
+        filterValues.consequence missense|Missense,synonymous|Synonymous,stop_gained|Stop Gained,frameshift|Frameshift,splice_donor|Splice Donor,splice_acceptor|Splice Acceptor,intron|Intron,3_prime_utr|3' UTR,5_prime_utr|5' UTR,non_coding|Non-coding,.|Intergenic,others|Other
+        filterType.consequence multipleListOr
+        filterLabel.consequence Consequence
+        filterByRange.refLen on
+        filterLabel.refLen Reference Length
+        filterByRange.altLen on
+        filterLabel.altLen Alternate Length
+        filterByRange.varLen on
+        filterLabel.varLen Length Change
+        filterByRange.maxAF on
+        filterLabel.maxAF Max Allele Frequency
+        filterLimits.maxAF 0:1
+        filterByRange.totalAC on
+        filterLabel.totalAC Total Allele Count (all databases)
+        filterByRange.TPMIAF on
+        filterLabel.TPMIAF TPMI Taiwan AF
+        filterByRange.MexBBAF on
+        filterLabel.MexBBAF Mexico Biobank AF
+        filterByRange.UKBBAF on
+        filterLabel.UKBBAF UK Biobank imputed AF
+        filterByRange.TPMIAC on
+        filterLabel.TPMIAC TPMI Taiwan AC
+        filterByRange.MexBBAC on
+        filterLabel.MexBBAC Mexico Biobank AC
+        filterByRange.UKBBAC on
+        filterLabel.UKBBAC UK Biobank imputed AC
+        skipEmptyFields on
+
         track allofus
         shortLabel AllOfUs v7 245k WGS
         longLabel Variant Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
