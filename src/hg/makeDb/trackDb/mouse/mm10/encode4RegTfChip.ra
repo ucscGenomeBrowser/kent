@@ -24,6 +24,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF606KGT
     type bigWig
@@ -56,6 +58,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF100ZST
     type bigWig
@@ -77,6 +81,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF707WLH
     type bigWig
@@ -98,6 +104,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF180PWQ
     type bigBed 5
@@ -108,6 +116,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF948XKD
     type bigWig
@@ -129,6 +139,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF997TPV
     type bigWig
@@ -161,6 +173,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF061FIN
     type bigBed 5
@@ -171,6 +185,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF880KKC
     type bigWig
@@ -192,6 +208,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF733CWC
     type bigWig
@@ -224,6 +242,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF309RMG
     type bigBed 5
@@ -234,6 +254,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF499GIZ
     type bigWig
@@ -255,6 +277,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF309GTL
     type bigWig
@@ -287,6 +311,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF031WAC
     type bigBed 5
@@ -297,6 +323,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF087SVX
     type bigWig
@@ -384,6 +412,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF651LJP
     type bigBed 5
@@ -394,6 +424,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF866DMM
     type bigBed 5
@@ -404,6 +436,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF883DNO
     type bigBed 5
@@ -414,6 +448,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF950QPK
     type bigBed 5
@@ -424,6 +460,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF968IRJ
     type bigBed 5
@@ -434,6 +472,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF074DDJ
     type bigWig
@@ -466,6 +506,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF625VHK
     type bigBed 5
@@ -476,6 +518,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF177LVD
     type bigWig
@@ -519,6 +563,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF845GTG
     type bigBed 5
@@ -529,6 +575,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF949CNK
     type bigBed 5
@@ -539,6 +587,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF055IZM
     type bigWig
@@ -560,6 +610,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF272HBL
     type bigBed 5
@@ -570,6 +622,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF809JIR
     type bigWig
@@ -591,6 +645,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF826BKY
     type bigWig
@@ -612,6 +668,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF196NRY
     type bigWig
@@ -633,6 +691,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF644MRR
     type bigWig
@@ -654,6 +714,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF233QSB
     type bigWig
@@ -675,6 +737,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF715EQR
     type bigBed 5
@@ -685,6 +749,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF935ZIU
     type bigWig
@@ -739,6 +805,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF811CFN
     type bigWig
@@ -760,6 +828,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF851EKP
     type bigBed 5
@@ -770,6 +840,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF173HCU
     type bigWig
@@ -791,6 +863,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF364RRO
     type bigBed 5
@@ -801,6 +875,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF577EXI
     type bigWig
@@ -822,6 +898,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF244ZJY
     type bigWig
@@ -843,6 +921,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF265ZXD
     type bigBed 5
@@ -853,6 +933,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF461OXH
     type bigBed 5
@@ -863,6 +945,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF771JRH
     type bigWig
@@ -917,6 +1001,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF244FHP
     type bigBed 5
@@ -927,6 +1013,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF558QFH
     type bigWig
@@ -959,6 +1047,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF446XJY
     type bigWig
@@ -980,6 +1070,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF445OHT
     type bigWig
@@ -1001,6 +1093,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF010PZD
     type bigWig
@@ -1022,6 +1116,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF372HNX
     type bigWig
@@ -1043,6 +1139,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF201ADZ
     type bigBed 5
@@ -1053,6 +1151,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF564EAG
     type bigWig
@@ -1085,6 +1185,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF552AJY
     type bigWig
@@ -1106,6 +1208,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF305EBF
     type bigBed 5
@@ -1116,6 +1220,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF460PUH
     type bigWig
@@ -1137,6 +1243,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF573DAQ
     type bigWig
@@ -1180,6 +1288,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF689EUQ
     type bigBed 5
@@ -1190,6 +1300,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF680SNY
     type bigBed 5
@@ -1200,6 +1312,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF688EWD
     type bigWig
@@ -1232,6 +1346,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF855XCM
     type bigWig
@@ -1253,6 +1369,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF734TDG
     type bigWig
@@ -1274,6 +1392,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF592DZK
     type bigWig
@@ -1295,6 +1415,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF387SUT
     type bigWig
@@ -1316,6 +1438,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF113VEB
     type bigBed 5
@@ -1326,6 +1450,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF308UHQ
     type bigWig
@@ -1358,6 +1484,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF412BER
     type bigBed 5
@@ -1368,6 +1496,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF710YOS
     type bigWig
@@ -1400,6 +1530,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF451ZJL
     type bigWig
@@ -1421,6 +1553,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF103KMB
     type bigWig
@@ -1442,6 +1576,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF606SGK
     type bigBed 5
@@ -1452,6 +1588,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF707HHX
     type bigWig
@@ -1484,6 +1622,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF670OBB
     type bigWig
@@ -1505,6 +1645,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF657LQO
     type bigWig
@@ -1526,6 +1668,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF104LYR
     type bigWig
@@ -1547,6 +1691,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF029GXY
     type bigWig
@@ -1568,6 +1714,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF058OHT
     type bigBed 5
@@ -1578,6 +1726,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF541CUR
     type bigWig
@@ -1610,6 +1760,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF012UEU
     type bigBed 5
@@ -1620,6 +1772,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF512OOQ
     type bigWig
@@ -1641,6 +1795,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF763GCB
     type bigWig
@@ -1673,6 +1829,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF542WPW
     type bigWig
@@ -1694,6 +1852,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF079DWR
     type bigBed 5
@@ -1704,6 +1864,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF212ZQH
     type bigBed 5
@@ -1714,6 +1876,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF564HUG
     type bigWig
@@ -1757,6 +1921,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF909VNQ
     type bigWig
@@ -1778,6 +1944,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF697LZL
     type bigBed 5
@@ -1788,6 +1956,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF778AGD
     type bigWig
@@ -1820,6 +1990,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF008ZUZ
     type bigWig
@@ -1841,6 +2013,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF169VQP
     type bigBed 5
@@ -1851,6 +2025,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF908ZIH
     type bigWig
@@ -1872,6 +2048,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF277PLN
     type bigWig
@@ -1893,6 +2071,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF356IDM
     type bigWig
@@ -1914,6 +2094,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF416IKH
     type bigWig
@@ -1935,6 +2117,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF703HNU
     type bigWig
@@ -1989,6 +2173,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF650BOD
     type bigBed 5
@@ -1999,6 +2185,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF737EMF
     type bigBed 5
@@ -2009,6 +2197,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF824SGT
     type bigBed 5
@@ -2019,6 +2209,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF900JHA
     type bigWig
@@ -2051,6 +2243,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF515MUQ
     type bigBed 5
@@ -2061,6 +2255,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF648RNP
     type bigBed 5
@@ -2071,6 +2267,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF820TTS
     type bigWig
@@ -2114,6 +2312,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF110ZJD
     type bigBed 5
@@ -2124,6 +2324,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF756MTE
     type bigWig
@@ -2156,6 +2358,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF014YNP
     type bigWig
@@ -2177,6 +2381,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF166UVG
     type bigBed 5
@@ -2187,6 +2393,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF174RCM
     type bigWig
@@ -2208,6 +2416,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF441BMN
     type bigWig
@@ -2240,6 +2450,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF470IRG
     type bigWig
@@ -2261,6 +2473,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF203KID
     type bigWig
@@ -2282,6 +2496,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF443GCJ
     type bigBed 5
@@ -2292,6 +2508,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF484OXC
     type bigWig
@@ -2324,6 +2542,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF896JBY
     type bigBed 5
@@ -2334,6 +2554,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF918UNI
     type bigWig
@@ -2355,6 +2577,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF890XEA
     type bigWig
@@ -2387,6 +2611,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF701BZZ
     type bigWig
@@ -2408,6 +2634,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF399IXW
     type bigBed 5
@@ -2418,6 +2646,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF905XQP
     type bigWig
@@ -2439,6 +2669,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF861YXO
     type bigWig
@@ -2471,6 +2703,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF433EHC
     type bigBed 5
@@ -2481,6 +2715,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF794TIS
     type bigWig
@@ -2502,6 +2738,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF759VQH
     type bigWig
@@ -2523,6 +2761,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF197SQI
     type bigBed 5
@@ -2533,6 +2773,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF409BXZ
     type bigWig
@@ -2565,6 +2807,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF544KQE
     type bigWig
@@ -2586,6 +2830,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF742DVA
     type bigWig
@@ -2618,6 +2864,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF353JZP
     type bigWig
@@ -2639,6 +2887,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF299KXI
     type bigWig
@@ -2660,6 +2910,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF289KYC
     type bigWig
@@ -2681,6 +2933,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF424WKG
     type bigWig
@@ -2702,6 +2956,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF095QTO
     type bigBed 5
@@ -2712,6 +2968,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF248LRG
     type bigWig
@@ -2733,6 +2991,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF371JAR
     type bigWig
@@ -2765,6 +3025,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF083VVC
     type bigWig
@@ -2786,6 +3048,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF049HTO
     type bigBed 5
@@ -2796,6 +3060,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF953NDS
     type bigWig
@@ -2828,6 +3094,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF230MKM
     type bigBed 5
@@ -2838,6 +3106,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF677UZA
     type bigWig
@@ -2859,6 +3129,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF890KGI
     type bigWig
@@ -2880,6 +3152,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF610UYD
     type bigWig
@@ -2901,6 +3175,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF853WTN
     type bigWig
@@ -2922,6 +3198,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF638ITG
     type bigWig
@@ -2943,6 +3221,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF977NMA
     type bigWig
@@ -2964,6 +3244,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF286KHY
     type bigWig
@@ -2985,6 +3267,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF257PJC
     type bigWig
@@ -3017,6 +3301,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF183WGC
     type bigBed 5
@@ -3027,6 +3313,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF490IAI
     type bigWig
@@ -3048,6 +3336,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF388HVK
     type bigWig
@@ -3080,6 +3370,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF063NIK
     type bigBed 5
@@ -3090,6 +3382,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF618TBZ
     type bigWig
@@ -3122,6 +3416,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF392FIL
     type bigBed 5
@@ -3132,6 +3428,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF492GOG
     type bigWig
@@ -3164,6 +3462,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF300DWL
     type bigBed 5
@@ -3174,6 +3474,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF802PBE
     type bigWig
@@ -3195,6 +3497,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF519XCZ
     type bigWig
@@ -3227,6 +3531,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF709BFN
     type bigBed 5
@@ -3237,6 +3543,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF821ALF
     type bigWig
@@ -3258,6 +3566,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF327QFX
     type bigWig
@@ -3279,6 +3589,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF496LSH
     type bigWig
@@ -3311,6 +3623,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF268QMQ
     type bigWig
@@ -3332,6 +3646,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF645KQN
     type bigBed 5
@@ -3342,6 +3658,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF914QLP
     type bigWig
@@ -3374,6 +3692,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF144LZK
     type bigBed 5
@@ -3384,6 +3704,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF840CPV
     type bigWig
@@ -3405,6 +3727,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF925HWM
     type bigWig
@@ -3426,6 +3750,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF605TOL
     type bigWig
@@ -3447,6 +3773,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF189SMS
     type bigWig
@@ -3468,6 +3796,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF991WGH
     type bigWig
@@ -3500,6 +3830,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF087VDO
     type bigBed 5
@@ -3510,6 +3842,8 @@ priority 2.2
     useScore 1
     spectrum on
     visibility squish
+    labelFields none
+    mouseOver <b>Signal</b>: $signalValue<br><b>qValue (-log10)</b>: $qValue
 
     track encode4RegTfChip_ENCFF221COY
     type bigWig
