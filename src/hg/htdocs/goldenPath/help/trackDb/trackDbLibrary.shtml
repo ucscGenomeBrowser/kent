@@ -1932,23 +1932,24 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filterPriority"><span class="types bed bigBed"></span>
 <div class="format"><code>filterPriority.&lt;fieldName&gt; &lt;number&gt;</code></div>
-    <P>Controls the display order of filter controls on the track configuration
-    page. Filters are shown in ascending order of <code>filterPriority</code>
+    <P>Sets the display order of filters on the track configuration page.
+    Filters are shown in ascending order of <code>filterPriority</code>
     value (lowest first), so a filter with priority 1 appears above one with
     priority 2. Filters that do not specify a priority sort after all filters
-    that do.</P>
-    <P>The setting applies to any filter declared on the same field, regardless
-    of which filter style is used &mdash; <code>filter.&lt;fieldName&gt;</code>,
-    <code>filterText.&lt;fieldName&gt;</code>, or
+    that do, sorted alphabetically by field name.</P>
+    <P>The setting applies to any filter declared on <code>&lt;fieldName&gt;</code>,
+    regardless of which filter style is used. <code>filter.&lt;fieldName&gt;</code>,
+    <code>filterText.&lt;fieldName&gt;</code>, and
     <code>filterValues.&lt;fieldName&gt;</code> all share a single
     <code>filterPriority.&lt;fieldName&gt;</code> entry. The companion setting
-    <code>highlightPriority.&lt;fieldName&gt;</code> controls the order of
-    <code>highlight*.&lt;fieldName&gt;</code> controls the same way.</P>
+    <code>highlightPriority.&lt;fieldName&gt;</code> does the same for
+    <code>highlight*.&lt;fieldName&gt;</code>.</P>
     <P>Numbers may be integers or decimals; only the relative ordering matters,
     so values like <code>1 2 3</code> and <code>10 20 30</code> produce the same
-    layout. Filters of different types (numeric, text, values) are still
-    rendered in their own sections of the page; <code>filterPriority</code>
-    orders the filters within each section.</P>
+    layout, as do decimal values such as <code>0.5 1 1.5</code>. Filters of
+    different types appear in fixed sections in this order: numeric range
+    filters first, then text filters, then values (categorical) filters.
+    <code>filterPriority</code> orders the filters within each section.</P>
     <P><B>Example:</B></P>
     <pre>
     filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...
@@ -1960,7 +1961,7 @@ There are no extra options that can appear on the type hic line.
     <P>In this example, the variation type filter is shown first, the
     annotation filter second, and the FILTER tags filter last, regardless of
     the order in which the <code>filterValues.*</code> lines appear in the
-    stanza or how the field names sort alphabetically.</P>
+    stanza or the alphabetical order of field names.</P>
 </DIV>
 
 <DIV class="highlight"><span class="types bed bigBed"></span>
@@ -2094,6 +2095,39 @@ There are no extra options that can appear on the type hic line.
     In this example, we are using the <code>highlightColor <hex_color></code> to set the default
     highlight color. With this setting, all highlight stripes will use the color red,
     <code>#ff0000</code>.</p>
+</DIV>
+
+<DIV class="highlightPriority"><span class="types bed bigBed"></span>
+<div class="format"><code>highlightPriority.&lt;fieldName&gt; &lt;number&gt;</code></div>
+    <P>Sets the display order of highlights on the track configuration page.
+    Highlights are shown in ascending order of <code>highlightPriority</code> value
+    (lowest first), so a highlight with priority 1 appears above one with
+    priority 2. Highlights that do not specify a priority sort after all
+    highlights that do, sorted alphabetically by field name.</P>
+    <P>The setting applies to any highlight declared on <code>&lt;fieldName&gt;</code>,
+    regardless of which highlight style is used. <code>highlight.&lt;fieldName&gt;</code>,
+    <code>highlightText.&lt;fieldName&gt;</code>, and
+    <code>highlightValues.&lt;fieldName&gt;</code> all share a single
+    <code>highlightPriority.&lt;fieldName&gt;</code> entry.</P>
+    <P>Numbers may be integers or decimals; only the relative ordering matters,
+    so values like <code>1 2 3</code> and <code>10 20 30</code> produce the
+    same layout, as do decimal values such as <code>0.5 1 1.5</code>.
+    Highlights of different types appear in fixed sections in this order:
+    numeric range highlights first, then text highlights, then values
+    (categorical) highlights. <code>highlightPriority</code> orders the
+    highlights within each section.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    highlightValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...
+    highlightValues.annot pLoF,missense,synonymous,other
+    highlightValues.FILTER PASS,InbreedingCoeff,RF,AC0
+    highlightPriority.variation_type 1
+    highlightPriority.annot 2
+    highlightPriority.FILTER 3</pre>
+    <P>In this example, the variation type highlight is shown first, the
+    annotation highlight second, and the FILTER tags highlight last,
+    regardless of the order in which the <code>highlightValues.*</code>
+    lines appear in the stanza or the alphabetical order of field names.</P>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
