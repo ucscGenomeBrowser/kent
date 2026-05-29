@@ -392,7 +392,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/wbbc/wbbc.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Phase I v20210103
         priority 5.5
 
@@ -402,7 +402,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_chinamap/chinamap.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Phase 1 (v2020-03.beta)
         priority 5.55
         tableBrowser off
@@ -413,7 +413,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_tpmi/tpmi.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion Axiom TPM1 2022-06
         priority 5.6
         tableBrowser off
@@ -443,7 +443,7 @@ superTrack on
 
         track ukbb
         parent varFreqs on
-        visibility dense
+        visibility hide
         type vcfTabix
         shortLabel UK Biobank 361k imputed
         longLabel Variant Frequencies: UK Biobank Genotypes - 361k White British, Neale Lab Round 2 imputed
@@ -526,7 +526,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_genomeindia/genomeindia.vcf.gz
-        visibility dense
+        visibility hide
         dataVersion 9768GI_SummaryStats (Apr 2025)
         priority 4.8
 
