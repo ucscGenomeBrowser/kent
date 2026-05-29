@@ -1,13 +1,5 @@
-track mouseDevTimecourse
-superTrack on show
-shortLabel ENCODE Expression
-longLabel ENCODE developmental time course bulk RNA-seq gene expression
-group regulation
-priority 0.6
-html mouseDevTimecourse
-
     track developmentTimecourseM4mm10TPM
-    parent mouseDevTimecourse
+    parent encode3Reg
     type bigBarChart
     shortLabel timecourse M4 TPM
     longLabel ENCODE mouse development time course GENCODE M4 TPM
@@ -22,7 +14,7 @@ html mouseDevTimecourse
     html developmentTimecourseM4mm10TPM
 
     track developmentTimecourseM4mm10FPKM
-    parent mouseDevTimecourse
+    parent encode3Reg
     type bigBarChart
     shortLabel timecourse M4 FPKM
     longLabel ENCODE mouse development time course GENCODE M4 FPKM
@@ -37,7 +29,7 @@ html mouseDevTimecourse
     html developmentTimecourseM4mm10FPKM
 
     track developmentTimecourseM21mm10TPM
-    parent mouseDevTimecourse
+    parent encode3Reg
     type bigBarChart
     shortLabel timecourse M21 TPM
     longLabel ENCODE mouse development time course GENCODE M21 TPM
@@ -52,7 +44,7 @@ html mouseDevTimecourse
     html developmentTimecourseM21mm10TPM
 
     track developmentTimecourseM21mm10FPKM
-    parent mouseDevTimecourse
+    parent encode3Reg
     type bigBarChart
     shortLabel timecourse M21 FPKM
     longLabel ENCODE mouse development time course GENCODE M21 FPKM
