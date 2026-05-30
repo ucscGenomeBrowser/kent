@@ -435,20 +435,24 @@ do_final() {
         log "doRobots.csh started in background (PID $robot_pid). Log: $robotlog"
     fi
 
-    # Docker testing image build
-    log "Building testing Docker images..."
-    ensure_binfmt
+    # Build the beta image locally on hgwdev; do NOT push to Docker Hub.
+    # kent-beta runs from this image and is torn down again on do_wrapup.
+    # refs #37655 (replaces the former genomebrowser/server:testing push)
+    log "Building local beta Docker image kent:beta (for v${BRANCHNN})..."
     local dockerdir
     dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-testing.log"
-        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
-            log "WARNING: Docker testing build had issues. See $dockerlog (non-fatal, continuing)"
+        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-beta.log"
+        # amd64 only: the container only runs on hgwdev (amd64) and is never
+        # pushed, so no arm64 build, no manifest, no binfmt.
+        run_tcsh "cd $dockerdir && docker build --no-cache --platform linux/amd64 -t kent:beta ." >& "$dockerlog" || {
+            log "WARNING: kent:beta build had issues. See $dockerlog (non-fatal, continuing)"
         }
-        log "Docker testing build complete (or skipped on error)."
+        log "Refreshing local kent-beta container..."
+        run "$WEEKLYBLD/refresh-instance.sh" beta || \
+            log "WARNING: kent-beta refresh failed; container may be stale"
     else
-        log "WARNING: Docker directory not found at $dockerdir - skipping Docker build"
+        log "WARNING: Docker directory not found at $dockerdir - skipping beta build"
     fi
 
     log "Final Build complete. Robots running in background."
@@ -608,6 +612,15 @@ do_wrapup() {
     else
         log "WARNING: Docker directory not found - skipping Docker release build"
     fi
+
+    # Refresh kent-rel against the just-pushed release image, then tear down
+    # the beta container/image now that v${BRANCHNN} has shipped. refs #37655
+    log "Refreshing local kent-rel container..."
+    run "$WEEKLYBLD/refresh-instance.sh" rel || \
+        log "WARNING: kent-rel refresh failed; container may be stale"
+    log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
+    run "$WEEKLYBLD/remove-instance.sh" beta || \
+        log "WARNING: kent-beta teardown failed; check container/image manually"
 
     # Step 8: Generate markdown release notes for GitHub
     if ! $DRY_RUN; then

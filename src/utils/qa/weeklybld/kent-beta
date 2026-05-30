@@ -1,0 +1,4 @@
+#!/bin/bash
+# kent-beta - open a login shell inside the kent-beta docker browser container.
+# refs #37655
+exec docker exec -it kent-beta bash -l
