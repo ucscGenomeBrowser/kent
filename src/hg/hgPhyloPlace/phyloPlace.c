@@ -2266,9 +2266,95 @@ for (si = sampleIds;  si != NULL;  si = si->next)
 puts("</tbody></table><p></p>");
 }
 
-static void summarizeRecombinants(struct recombinantInfo *recombinants, struct hash *descendants, struct slName *sampleIds)
+static void makeNiceNodeName(struct dyString *dyRNodeId, struct recombinantInfo *ri, struct hash *descendants, struct slName *sampleIds)
+/* A "node_NNNN" name is not very informative, but for the recombinant node, we know that at least one of its descendants should be
+ * one of the user's uploaded samples.  Add uploaded sample name(s) and number of other descendants, to give an idea of how large of
+ * a branch is this potential recombinant. */
+{
+dyStringClear(dyRNodeId);
+dyStringPrintf(dyRNodeId, "%s", ri->recombNodeId);
+if (startsWith("node_", ri->recombNodeId))
+    {
+    dyStringPrintf(dyRNodeId, " (");
+    struct slName *descendantList = hashFindVal(descendants, ri->recombNodeId), *desc;
+    int sampleCount = 0;
+    for (desc = descendantList;  desc != NULL;  desc = desc->next)
+        {
+        if (slNameInList(sampleIds, desc->name))
+            {
+            if (sampleCount > 0)
+                dyStringPrintf(dyRNodeId, ", ");
+            dyStringPrintf(dyRNodeId, "%s", desc->name);
+            sampleCount++;
+            }
+        }
+    int others = ri->recombNumDesc - sampleCount;
+    if (others)
+        dyStringPrintf(dyRNodeId, " + %d", others);
+    dyStringPrintf(dyRNodeId, ")");
+    }
+}
+
+static const char *nextstrainColors10[10] = {
+    // Lifted from the colors nextstrain uses for SARS-CoV-2 genes.  Not an exact match because they use the same color
+    // for S and M, and they have ORF9b and we don't, so I shuffled those a bit.
+    "rgb(230, 112, 48)",
+    "rgb(217, 173, 61)",
+    "rgb(229, 150, 55)",
+    "rgb(96, 170, 158)",
+    "rgb(223, 67, 39)",
+    "rgb(170, 189, 82)",
+    "rgb(96, 170, 158)",
+    "rgb(196, 185, 69)",
+    "rgb(117, 182, 129)",
+    "rgb(80, 151, 186)",
+};
+
+static void inlineRecombinantData(struct recombinantInfo *recombinants, struct hash *descendants, struct slName *sampleIds,
+                                  int genomeSize, struct geneInfo *geneInfoList)
+/* Write out inline javascript with data used to draw recombinant graph in popup when button is clicked. */
+{
+struct dyString *dy = dyStringNew(4096 * slCount(recombinants));
+dyStringPrintf(dy, "var recombinantData = { genomeSize: %d,\n  genes: [\n    ", genomeSize);
+int gIx;
+struct geneInfo *gi;
+for (gi = geneInfoList, gIx = 0;  gi != NULL;  gi = gi->next, gIx++)
+    {
+    if (gi != geneInfoList)
+        dyStringAppend(dy, ",\n    ");
+    dyStringPrintf(dy, "{ name: '%s', start: %d, end: %d, color: '%s' }",
+                   gi->psl->qName, gi->psl->tStart, gi->psl->tEnd,
+                   nextstrainColors10[gIx % ArraySize(nextstrainColors10)]);
+    }
+dyStringAppend(dy, "  ],\n  recombinants: [    \n");
+struct dyString *dyRNodeId = dyStringNew(0);
+struct recombinantInfo *ri;
+for (ri = recombinants;  ri != NULL;  ri = ri->next)
+    {
+    if (ri != recombinants)
+        dyStringAppend(dy, ",\n    ");
+    makeNiceNodeName(dyRNodeId, ri, descendants, sampleIds);
+    dyStringPrintf(dy, "{ recombMuts: '%s', donorMuts: '%s', acceptorMuts: '%s', "
+                   "bp1: '(%d,%d)', bp2: '(%d,%d)', "
+                   "rNode: '%s', dNode: '%s', aNode: '%s', "
+                   "rLin: '%s', dLin: '%s', aLin: '%s', "
+                   "improvement: %d }",
+                   ri->recombMutations, ri->donorMutations, ri->acceptorMutations,
+                   ri->bp1Min, ri->bp1Max, ri->bp2Min, ri->bp2Max,
+                   dyRNodeId->string, ri->donorNodeId, ri->acceptorNodeId,
+                   ri->recombLineage, ri->donorLineage, ri->acceptorLineage,
+                   ri->parsimonyImprovement);
+    }
+dyStringAppend(dy, "\n  ] };");
+jsInline(dy->string);
+}
+
+static void summarizeRecombinants(struct recombinantInfo *recombinants, struct hash *descendants, struct slName *sampleIds,
+                                  int genomeSize, struct geneInfo *geneInfoList, struct cart *cart)
 /* Show a table describing potential recombinants found by ripples search. */
 {
+inlineRecombinantData(recombinants, descendants, sampleIds, genomeSize, geneInfoList);
+puts("<div id='recombinantDialog' style='display: none'></div>");
 puts("<p><b>Potential recombinants found: </b><br>");
 puts("<table class='seqSummary'>");
 puts("<thead><tr><th>Potential recombinant node"
@@ -2323,39 +2409,49 @@ puts("<th>Breakpoint 1 range"
 puts("<th>Breakpoint 2 range"
      TOOLTIP("Coordinate range, bounded by mutations explained by the acceptor node at lower "
              "coordinates and by the donor node at higher coordinates")
-     "</th></tr></thead><tbody>");
-struct recombinantInfo *ri;
-for (ri = recombinants;  ri != NULL;  ri = ri->next)
+     "</th>");
+if (isNotEmpty(recombinants->recombMutations))
     {
-    printf("<tr><td>%s", ri->recombNodeId);
-    if (startsWith("node_", ri->recombNodeId))
-        {
-        printf(" (");
-        struct slName *descendantList = hashFindVal(descendants, ri->recombNodeId), *desc;
-        int sampleCount = 0;
-        for (desc = descendantList;  desc != NULL;  desc = desc->next)
-            {
-            if (slNameInList(sampleIds, desc->name))
-                {
-                if (sampleCount > 0)
-                    printf(", ");
-                printf("%s", desc->name);
-                sampleCount++;
-                }
-            }
-        int others = ri->recombNumDesc - sampleCount;
-        if (others)
-            printf(" + %d", others);
-        printf(")");
-        }
-    printf("</td><td>%s</td><td>%s</td>", ri->recombClade, ri->recombLineage);
+    puts("<th>Show mutations"
+         TOOLTIP("Click the button to show a diagram of mutations matching the donor and/or acceptor")
+         "</th>");
+    }
+puts("</tr></thead><tbody>");
+if (isNotEmpty(recombinants->recombMutations))
+    {
+    // The user may change this using a checkbox in a dialog; keep a hidden input on the main page to be updated
+    // by the dialog JS when the user clicks on the dialog checkbox, to keep the state in case they close and reopen
+    // the dialog.
+    boolean informativeOnly = cartUsualBoolean(cart, "hgpp_informativeOnly", FALSE);
+    cgiMakeHiddenVarWithIdExtra("hidden_showInformative", "hidden_showInformative", informativeOnly ? "1" : "0", NULL);
+    }
+struct dyString *dyRNodeId = dyStringNew(0);
+struct dyString *dyJs = dyStringNew(0);
+int rNum;
+struct recombinantInfo *ri;
+for (ri = recombinants, rNum = 0;  ri != NULL;  ri = ri->next, rNum++)
+    {
+    makeNiceNodeName(dyRNodeId, ri, descendants, sampleIds);
+    printf("<tr><td>%s</td><td>%s</td><td>%s</td>", dyRNodeId->string, ri->recombClade, ri->recombLineage);
     printf("<td>%d (from %d)</td>", ri->parsimonyImprovement, ri->originalParsimony);
     printf("<td>%s</td><td>%d</td><td>%s</td><td>%s</td>",
            ri->donorNodeId, ri->donorNumDesc, ri->donorClade, ri->donorLineage);
     printf("<td>%s</td><td>%d</td><td>%s</td><td>%s</td>",
            ri->acceptorNodeId, ri->acceptorNumDesc, ri->acceptorClade, ri->acceptorLineage);
-    printf("<td>(%d, %d)</td><td>(%d, %d)</td></tr>\n",
+    printf("<td>(%d, %d)</td><td>(%d, %d)</td>",
            ri->bp1Min, ri->bp1Max, ri->bp2Min, ri->bp2Max);
+    if (isNotEmpty(ri->recombMutations))
+        {
+        puts("<td>");
+        dyStringClear(dyJs);
+        dyStringPrintf(dyJs, "hgPhyloPlace.onClickRecombinant(recombinantData, %d, "
+                       "$('#hidden_showInformative').val() == 1); return 0;", rNum);
+        char name[256];
+        safef(name, sizeof name, "showMutations_%d", rNum);
+        cgiMakeOnClickButton(name, dyJs->string, "Show mutations");
+        puts("</td>");
+        }
+    puts("</tr>\n");
     }
 puts("</tbody></table>");
 puts("</p>");
@@ -3666,7 +3762,8 @@ if (results && results->singleSubtreeInfo)
 
         if (results->recombinants)
             {
-            summarizeRecombinants(results->recombinants, results->recombinantDescendants, sampleIds);
+            summarizeRecombinants(results->recombinants, results->recombinantDescendants, sampleIds,
+                                  refGenome->size, geneInfoList, cart);
             }
         else if (ripplesEnabled)
             {

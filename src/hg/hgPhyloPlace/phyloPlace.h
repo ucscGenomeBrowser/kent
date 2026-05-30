@@ -147,6 +147,9 @@ struct recombinantInfo
     char *representative;                 // Representative descendant of recombinant node
     uint originalParsimony;               // Parsimony score of recombinant node in tree
     uint parsimonyImprovement;            // Reduction in parsimony score given parents/breakpoints
+    char *recombMutations;                // Comma-separated list of mutations found in recombinant
+    char *donorMutations;                 // Comma-separated list of mutations found in donor
+    char *acceptorMutations;              // Comma-separated list of mutations found in acceptor
 };
 
 struct usherResults
@@ -315,5 +318,8 @@ boolean phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *de
  * If list of seq names/ids, then attempt to find their full names in the protobuf, run matUtils
  * to make subtrees, show subtree results.
  * Return TRUE if we were able to get at least some results for the user's input. */
+
+void debugRecombinantDisplay(struct cart *cart);
+/* Add recombinantData and buttons to page for quick-turnaround debugging of Javascript. */
 
 #endif //_PHYLO_PLACE_H_
