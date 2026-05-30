@@ -363,7 +363,7 @@ var recombinantGraph = (function () {
     function addBaseArray(svg, x, y, combinedMuts) {
         // Add base value at each position for acceptor, recombinant, donor and reference
         for (let column of combinedMuts) {
-            const isInformative = (column.aAl !== column.dAl && (column.rAl === column.aAl || column.rAl == column.dAl));
+            const isInformative = (column.aAl !== column.dAl && (column.rAl === column.aAl || column.rAl === column.dAl));
             let yBase = y;
             let isRef = (column.aAl === column.ref);
             addBase(svg, column.aAl, x, yBase, isRef, isInformative && !isRef);
@@ -444,7 +444,6 @@ var recombinantGraph = (function () {
         const genomeSizeString = commafy(genomeSize);
         const maxLabelWidth = estimateTextWidth(genomeSizeString);
         const maxBins = Math.floor(width / (maxLabelWidth * 1.5));
-        const powerOf10 = Math.ceil(Math.log10(genomeSize));
         const tickTextY = y + 3 * cfg.topPad;
         for (let binSize of [100, 200, 500, 1000, 200, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000]) {
             let binCount = Math.ceil(genomeSize / binSize);
@@ -529,7 +528,7 @@ var recombinantGraph = (function () {
 
         // Genome coordinate scale ticks and labels
         y += cfg.genomeGraphHeight;
-        addGenomeScale(svg, x, y, baseAreaWidth, genomeSize, genomeScale, genes);
+        addGenomeScale(svg, x, y, baseAreaWidth, genomeSize, genomeScale);
 
         // Gene graph with embedded labels
         y += cfg.genomeScaleHeight;
@@ -641,7 +640,7 @@ var popUpRecombinant = (function () {
         // Save image button
         let $saveImgBtn = $('#saveSvg');
         $saveImgBtn.on('click', function() {
-            saveSvg(svg, "recombinant.svg");
+            saveSvg($div.children("svg")[0], "recombinant.svg");
         });
 
         var uiDialogButtons = {
