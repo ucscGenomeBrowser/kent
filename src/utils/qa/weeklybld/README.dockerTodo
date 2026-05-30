@@ -1,0 +1,128 @@
+# Docker QA browser instances on hgwdev (refs #37655)
+
+This file is the maintainer's handoff for the three-Docker-browsers-on-hgwdev
+project. The user-facing doc for QA lives at
+`~build/dockerStuff/qa-docker-doc.wiki` (mirrored at
+https://hgwdev.gi.ucsc.edu/~braney/qa-docker-doc.txt). The full design doc is
+at https://hgwdev.gi.ucsc.edu/~braney/three-docker-plan.html.
+
+## What this is
+
+Three side-by-side Docker browser instances run on hgwdev so anyone can
+reproduce a user-reported bug against the exact code version that user is on,
+without touching production hgwdev. The three:
+
+- `kent-tip`  -> image `kent:tip`, port 127.0.0.1:8081, current master + alpha CGIs, rebuilt nightly
+- `kent-beta` -> image `kent:beta`, port 127.0.0.1:8082, current beta CGIs, exists only between `autoBuild.sh do_final` and the next `do_wrapup`
+- `kent-rel`  -> image `genomebrowser/server:latest`, port 127.0.0.1:8083, the released image, refreshed at `do_wrapup`
+
+The lifecycle scripts in this directory implement the build/start/refresh/remove
+cycle: `buildTipImage.sh`, `run-instance.sh`, `refresh-instance.sh`,
+`remove-instance.sh`, `overlay-cgi.sh`, `start-all.sh`, `stop-all.sh`, the
+shell-in helpers `kent-tip` / `kent-beta` / `kent-rel`, and the off-host
+`tunnel-tip.sh` / `tunnel-beta.sh` / `tunnel-rel.sh`. `autoBuild.sh` was
+modified to invoke the lifecycle scripts at `do_final` (build kent:beta +
+refresh kent-beta) and `do_wrapup` (refresh kent-rel + tear down kent-beta).
+
+## Hard design rules - do not violate
+
+These were decided up front and the entire design depends on them:
+
+1. **No hgwdev filesystem is bind-mounted into any container.** The image is
+   self-contained (MariaDB + Apache + CGIs baked in at build time by
+   browserSetup.sh). The only `-v` flags are Docker *named volumes*
+   (`kent-<name>-mysql`, `kent-<name>-gbdb`) - Docker-managed, not host paths.
+   They seed from the image's baked content on first run and persist across
+   refresh.
+
+2. **tip and beta must reflect real hgwdev code, not the public release.** The
+   Dockerfile's `browserSetup.sh` rsyncs the released CGIs for every build, so
+   without an overlay all three containers would be identical. After start,
+   `overlay-cgi.sh` tar-streams the matching hgwdev CGIs *and* `htdocs/js` into
+   the running container (a copy, not a mount). Only **top-level CGI
+   executables** are copied - data subdirectories like `otto/`, `crom_dir/`,
+   `hgPhyloPlaceData/` are deliberately excluded so private config stays out
+   of the container. The container's own `hg.conf` is left untouched so it
+   talks to its own MariaDB.
+
+3. **`rel` gets no overlay.** It is the released image, full stop. Refresh
+   pulls latest from Docker Hub at `do_wrapup`.
+
+## Status
+
+What's done:
+- All lifecycle scripts committed (braney `cd9c0c51f94`).
+- Tunnel scripts committed (`5a620cb81f8`).
+- `autoBuild.sh` wired to call the lifecycle at `do_final` and `do_wrapup`.
+- `kent-tip` validated end-to-end: image built, container up, CGI overlay md5s
+  match hgwdev alpha, hg.conf preserved, named volumes survive refresh.
+- `kent-rel` validated: pulled, started, hgGateway 200.
+- Nightly cron line installed in build's crontab:
+  `30 02 * * * $HOME/kent/src/utils/qa/weeklybld/buildTipImage.sh >> $HOME/dockerStuff/logs/tip-cron.log 2>&1`
+
+- `kent-beta` lifecycle validated out-of-cycle (2026-05-30): manual `docker
+  build` of `kent:beta`, `refresh-instance.sh beta` brought up the container,
+  CGI/JS overlay md5s matched `cgi-bin-beta` and `htdocs-beta/js`, hg.conf
+  preserved, then `remove-instance.sh beta` cleanly removed container + image
+  + named volumes.
+
+What's not yet exercised live:
+- The autoBuild.sh wrapper blocks themselves (`do_final` at lines 440-456,
+  `do_wrapup` at lines 617-623). The underlying lifecycle scripts they call
+  are all validated; only the wrapper plumbing - `run_tcsh`/`run`/`log`
+  invocations and the v_branch dockerdir lookup - has yet to run for real.
+- `buildTipImage.sh`'s rollback-to-`kent:tip-previous` branch (only fires on
+  build failure; first build had no previous to roll back to).
+
+## TODO
+
+1. **Apache reverse-proxy vhosts** for
+   `hgwdev-dock-{tip,beta,rel}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083}`.
+   This touches production hgwdev Apache and DNS, so likely a sysadmin ticket.
+   Until then, the `tunnel-*.sh` scripts cover off-host access; on-host
+   testing (including Claude/Playwright running on hgwdev) hits 127.0.0.1
+   directly.
+
+2. **gbdb seeding** is manual and per-instance, on demand. Each container's
+   `/gbdb` starts empty; bigBed/bigWig tracks render blank until seeded. The
+   recipe (run inside the container so data lands on the named volume):
+   ```
+   docker exec kent-<name> rsync -av --partial \
+     rsync://hgdownload.soe.ucsc.edu/gbdb/<assembly>/ /gbdb/<assembly>/
+   ```
+   No plan yet for what's pre-seeded vs on-demand. Probably leave on-demand
+   until use patterns emerge.
+
+3. **First live `do_final` / `do_wrapup` cycle.** The autoBuild.sh wrapper
+   blocks (lines 440-456 in `do_final`, lines 617-623 in `do_wrapup`)
+   haven't run for real yet. Their callees are all validated; only the
+   wrapper plumbing wires has yet to run. Watch the next release's logs to
+   confirm it threads correctly.
+
+## Operational notes
+
+- `buildTipImage.sh` logs to `~build/dockerStuff/logs/buildTipImage.log` (one
+  file, overwritten each build). The cron wrapper additionally appends to
+  `~build/dockerStuff/logs/tip-cron.log` for any line-level stderr.
+- After an hgwdev reboot, Docker's bridge networking sometimes breaks
+  (symptom: apt-get DNS failures during image builds). Fix:
+  `sudo systemctl restart docker`. The arm64 path additionally needs binfmt
+  re-registration if you ever extend `buildTipImage.sh` to multi-arch; this
+  tree currently builds amd64 only and never pushes, so neither concern is
+  active in the nightly cron.
+- The pre-existing `buildDocker.csh` that used to push the
+  `genomebrowser/server:testing` multi-arch manifest was deleted - the
+  `:testing` tag had no consumers and `do_final` no longer needs it.
+- Backup of pre-change crontab from when the nightly was installed:
+  `/tmp/crontab.bak.3761695` (not durable across reboot).
+
+## Don'ts
+
+- Don't add a hgwdev bind-mount to any of the lifecycle scripts. If
+  containers need access to hgwdev data, the answer is "seed it onto the
+  named volume" (see TODO #2), not "-v /hive/...:/...".
+- Don't expand the CGI overlay to copy data subdirectories. Top-level
+  executables only - private config in `otto/` etc. must not enter the
+  container.
+- Don't push `kent:tip` or `kent:beta` to Docker Hub. They are local-only,
+  amd64-only, and meant to be ephemeral.
