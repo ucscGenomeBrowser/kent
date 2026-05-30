@@ -4,6 +4,7 @@ longLabel Massively Parallel Reporter Assays
 group regulation
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#060226 "Released Jun. 2, 2026"
 
     track mprabase
     shortLabel MPRA Base

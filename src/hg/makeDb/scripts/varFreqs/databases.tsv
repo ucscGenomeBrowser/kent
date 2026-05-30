@@ -20,7 +20,8 @@ ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF
 ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB
 MGRB	MGRB Australia	/gbdb/hg38/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz	AC	.
 HRC	HRC	/gbdb/hg38/varFreqs/hrc/hrc.vcf.gz	AC	AF
-MexBB	Mexico Biobank	/gbdb/hg38/varFreqs/_mxb/mxb.freq.vcf.gz	AC	AF
+# MexBB and TPMI moved to the array-based track (databases_array.tsv): both are
+# genotyping-array cohorts and are kept out of the WGS/WES varFreqsAll track.
 SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF
 HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF
 GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF
@@ -30,7 +31,6 @@ CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	A
 SVatalog	SVatalog 101 10XG SR	/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz	AC	AF
 Tishkoff180	Tishkoff 180 African WGS	/gbdb/hg38/varFreqs/_tishkoff/tishkoff180.vcf.gz	AC	AF
 WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF
-TPMI	TPMI Taiwan	/gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz	AC	AF
 ChinaMAP	China ChinaMAP	/gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz	AC	AF
 GenomeIndia	GenomeIndia 9.7k WGS	/gbdb/hg38/varFreqs/_genomeindia/genomeindia.vcf.gz	AC	AF
 GoNL	GoNL Netherlands ~13x SR	/gbdb/hg38/varFreqs/gonl/gonl.vcf.gz	AC	AF

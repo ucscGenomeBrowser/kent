@@ -127,11 +127,16 @@ def get_vartype(ref, alt):
 # Configuration Loading
 # ============================================================================
 
-def load_config(scripts_dir):
-    """Load databases.tsv and populations.tsv."""
+def load_config(scripts_dir, db_file="databases.tsv",
+                pop_file="populations.tsv"):
+    """Load the database and population config TSVs.
+
+    db_file/pop_file may be bare names (resolved against scripts_dir) or
+    absolute paths, so disease/array variants can use their own configs."""
     databases = OrderedDict()
 
-    db_path = os.path.join(scripts_dir, "databases.tsv")
+    db_path = db_file if os.path.isabs(db_file) \
+        else os.path.join(scripts_dir, db_file)
     with open(db_path) as f:
         for line in f:
             line = line.strip()
@@ -150,7 +155,8 @@ def load_config(scripts_dir):
                 "pops": [],
             }
 
-    pop_path = os.path.join(scripts_dir, "populations.tsv")
+    pop_path = pop_file if os.path.isabs(pop_file) \
+        else os.path.join(scripts_dir, pop_file)
     with open(pop_path) as f:
         for line in f:
             line = line.strip()
@@ -418,10 +424,10 @@ def process_chromosome(args):
 # AutoSql Generation
 # ============================================================================
 
-def generate_autosql(output_path, databases):
+def generate_autosql(output_path, databases, table_name="varFreqsAll"):
     """Generate autoSql file from database config."""
     with open(output_path, "w") as f:
-        f.write('table varFreqsAll\n')
+        f.write(f'table {table_name}\n')
         f.write('"Variant frequencies across population databases"\n')
         f.write('(\n')
         # BED9
@@ -468,11 +474,11 @@ def generate_autosql(output_path, databases):
     print(f"Wrote autoSql: {output_path}", file=sys.stderr)
 
 
-def generate_trackdb_fragment(output_path, databases):
-    """Generate trackDb .ra fragment for the varFreqsAll track filters."""
+def generate_trackdb_fragment(output_path, databases, track_name="varFreqsAll"):
+    """Generate trackDb .ra fragment for the combined track filters."""
     with open(output_path, "w") as f:
-        f.write("# Auto-generated trackDb fragment for varFreqsAll filters\n")
-        f.write("# Paste this into the varFreqsAll track stanza in varFreqs.ra\n\n")
+        f.write(f"# Auto-generated trackDb fragment for {track_name} filters\n")
+        f.write(f"# Paste this into the {track_name} track stanza in varFreqs.ra\n\n")
 
         # Source database filter
         src_parts = []
@@ -565,10 +571,15 @@ def main():
     parser.add_argument("--region", default=None,
                         help="Region to process, e.g. chrM or chr22")
     parser.add_argument("--scripts-dir", default=SCRIPTS_DIR)
+    parser.add_argument("--databases-file", default="databases.tsv",
+                        help="DB config TSV (name under scripts-dir or abs path)")
+    parser.add_argument("--populations-file", default="populations.tsv",
+                        help="Population config TSV (name under scripts-dir or abs path)")
     parser.add_argument("--keep-temp", action="store_true")
     args = parser.parse_args()
 
-    databases = load_config(args.scripts_dir)
+    databases = load_config(args.scripts_dir, args.databases_file,
+                            args.populations_file)
     print(f"Loaded {len(databases)} databases:", file=sys.stderr)
     for key, info in databases.items():
         pops = ", ".join(p["key"] for p in info["pops"])
@@ -589,10 +600,12 @@ def main():
     os.makedirs(extract_dir, exist_ok=True)
     os.makedirs(bed_dir, exist_ok=True)
 
-    # Step 1: AutoSql and trackDb fragment
-    generate_autosql(as_path, databases)
+    # Step 1: AutoSql and trackDb fragment. The autoSql table name matches the
+    # output prefix so each combined track (varFreqsAll/Disease/Array) gets a
+    # distinct table definition.
+    generate_autosql(as_path, databases, table_name=args.output_prefix)
     ra_path = os.path.join(args.work_dir, f"{args.output_prefix}.trackDb.ra")
-    generate_trackdb_fragment(ra_path, databases)
+    generate_trackdb_fragment(ra_path, databases, track_name=args.output_prefix)
 
     # Step 2: Phase 1 — pre-extract
     pre_extract_all(databases, args.region, extract_dir, args.threads)

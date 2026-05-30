@@ -1,0 +1,7 @@
+# Database configuration for the varFreqsArray combined track.
+# Genotyping-array based cohorts (direct array calls and/or array+imputation),
+# kept separate from the WGS/WES varFreqsAll track. Same column format:
+# key	name	vcf	ac_field	af_field
+TPMI	TPMI Taiwan	/gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz	AC	AF
+MexBB	Mexico Biobank	/gbdb/hg38/varFreqs/_mxb/mxb.freq.vcf.gz	AC	AF
+UKBB	UK Biobank imputed	/gbdb/hg38/varFreqs/ukbb/ukbb.vcf.gz	AC	AF

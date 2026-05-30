@@ -112,7 +112,7 @@ loadDbTracks() {
         topts="$topts -gbdbList=$gbdbList"
     fi
     # don't use set -x, since the autoload scripts e-mail stderr.
-    local cmd="$HOME/bin/x86_64/hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
+    local cmd="/cluster/bin/x86_64/hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
     echo $cmd
     eval $cmd
 
