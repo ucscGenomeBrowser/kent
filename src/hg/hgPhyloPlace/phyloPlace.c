@@ -2424,6 +2424,11 @@ if (isNotEmpty(recombinants->recombMutations))
     // the dialog.
     boolean informativeOnly = cartUsualBoolean(cart, "hgpp_informativeOnly", FALSE);
     cgiMakeHiddenVarWithIdExtra("hidden_showInformative", "hidden_showInformative", informativeOnly ? "1" : "0", NULL);
+    // Likewise, the user may change fontSize using a select in the dialog.
+    int fontSize = cartUsualInt(cart, "hgpp_recombFontSize", 10);
+    char fontSizeString[64];
+    safef(fontSizeString, sizeof fontSizeString, "%d", fontSize);
+    cgiMakeHiddenVarWithIdExtra("hidden_fontSize", "hidden_fontSize", fontSizeString, NULL);
     }
 struct dyString *dyRNodeId = dyStringNew(0);
 struct dyString *dyJs = dyStringNew(0);
@@ -2445,7 +2450,7 @@ for (ri = recombinants, rNum = 0;  ri != NULL;  ri = ri->next, rNum++)
         puts("<td>");
         dyStringClear(dyJs);
         dyStringPrintf(dyJs, "hgPhyloPlace.onClickRecombinant(recombinantData, %d, "
-                       "$('#hidden_showInformative').val() == 1); return 0;", rNum);
+                       "$('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", rNum);
         char name[256];
         safef(name, sizeof name, "showMutations_%d", rNum);
         cgiMakeOnClickButton(name, dyJs->string, "Show mutations");
