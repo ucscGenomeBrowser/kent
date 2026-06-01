@@ -482,10 +482,10 @@ var recombinantGraph = (function () {
         }
     }
 
-    function draw(recombAttrs, genomeSize, genes, showInformativeOnly) {
+    function draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize=10) {
         // Return an SVG diagram showing the mutations in acceptor, recombinant and donor to visualize the evidence for
         // recombination.
-        configLayout(10);
+        configLayout(fontSize);
         let combinedMuts = makeCombinedMuts(recombAttrs.recombMuts, recombAttrs.donorMuts, recombAttrs.acceptorMuts);
         if (showInformativeOnly) {
             combinedMuts = filterMuts(combinedMuts);
@@ -583,22 +583,36 @@ var popUpRecombinant = (function () {
         document.body.removeChild(downloadLink);
     }
 
-    function display(recombinantData, recombinantIndex, showInformativeOnly) {
+    function display(recombinantData, recombinantIndex, showInformativeOnly, fontSize) {
         // Searching for some semblance of size suitability
         var popMaxHeight = (window.innerHeight * 0.85); // make 15% of the bottom of the screen still visible
         var popMaxWidth  =  (window.innerWidth * 0.9);  // take up 90% of the window
         var recombAttrs = recombinantData.recombinants[recombinantIndex];
         var genomeSize = recombinantData.genomeSize;
         var genes = recombinantData.genes;
+        fontSize = parseInt(fontSize, 10);
 
         $('#recombinantDialog').html("<div id='popContents' style='font-size:1.1em;'></div>");
         var $div = $('#popContents');
         $div.html("<p><button id='prevRecomb'>previous</button>&nbsp;&nbsp;" +
                   "<input type='checkbox' id='hgpp_informativeOnly'>&nbsp;Show only informative mutations&nbsp;&nbsp;" +
                   "<button id='saveSvg'>save image</button>&nbsp;&nbsp;" +
+                  "Font size: <select name='Font size' id='hgpp_recombFontSize'>" +
+                  "  <option value='6'>6</option>" +
+                  "  <option value='7'>7</option>" +
+                  "  <option value='8'>8</option>" +
+                  "  <option value='9'>9</option>" +
+                  "  <option value='10'>10</option>" +
+                  "  <option value='11'>11</option>" +
+                  "  <option value='12'>12</option>" +
+                  "  <option value='13'>13</option>" +
+                  "  <option value='14'>14</option>" +
+                  "  <option value='15'>15</option>" +
+                  "  <option value='16'>16</option>" +
+                  "</select>&nbsp;&nbsp;" +
                   "<button id='nextRecomb'>next</button></p>\n");
 
-        var svg = recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly);
+        var svg = recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize);
         $div.append(svg);
 
         // Clicking on the checkbox toggles showInformativeOnly behavior
@@ -610,7 +624,7 @@ var popUpRecombinant = (function () {
             setCartVar('hgpp_informativeOnly', showInformativeOnly ? '1' : '0', null, true);
             $('#hidden_showInformative').val(showInformativeOnly ? '1' : '0');
             $div.children("svg").remove();
-            $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly));
+            $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize));
         });
         // Disable prev/next button if at beginning/end
         let $prevBtn = $('#prevRecomb');
@@ -624,7 +638,7 @@ var popUpRecombinant = (function () {
                 $nextBtn.prop('disabled', recombinantIndex >= recombinantData.recombinants.length - 1);
                 recombAttrs = recombinantData.recombinants[recombinantIndex];
                 $div.children("svg").remove();
-                $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly));
+                $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize));
             }
         });
         $nextBtn.on('click', function() {
@@ -634,13 +648,23 @@ var popUpRecombinant = (function () {
                 $nextBtn.prop('disabled', recombinantIndex >= recombinantData.recombinants.length - 1);
                 recombAttrs = recombinantData.recombinants[recombinantIndex];
                 $div.children("svg").remove();
-                $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly));
+                $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize));
             }
         });
         // Save image button
         let $saveImgBtn = $('#saveSvg');
         $saveImgBtn.on('click', function() {
             saveSvg($div.children("svg")[0], "recombinant.svg");
+        });
+        // Font size
+        let $select = $('#hgpp_recombFontSize');
+        $select.val(String(fontSize));
+        $select.on('change', function() {
+            fontSize = parseInt($select.val(), 10);
+            setCartVar('hgpp_recombFontSize', fontSize, null, true);
+            $('#hidden_fontSize').val(fontSize);
+            $div.children("svg").remove();
+            $div.append(recombinantGraph.draw(recombAttrs, genomeSize, genes, showInformativeOnly, fontSize));
         });
 
         var uiDialogButtons = {
@@ -685,10 +709,10 @@ var popUpRecombinant = (function () {
 var hgPhyloPlace = (function() {
     "use strict";
 
-    function onClickRecombinant(recombinantData, recombinantIndex, showInformativeOnly) {
+    function onClickRecombinant(recombinantData, recombinantIndex, showInformativeOnly, fontSize) {
         // When user clicks on "Show mutations" button for a potential recombinant, make a pop-up with a diagram showing
         // mutations in the recombinant and its parents, highlighting where they agree.
-        popUpRecombinant.display(recombinantData, recombinantIndex, showInformativeOnly);
+        popUpRecombinant.display(recombinantData, recombinantIndex, showInformativeOnly, fontSize);
     }
 
     return { onClickRecombinant: onClickRecombinant };

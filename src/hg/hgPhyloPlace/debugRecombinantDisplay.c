@@ -84,10 +84,12 @@ boolean informativeOnly = cartUsualBoolean(cart, "hgpp_informativeOnly", FALSE);
 // The user may change this using a checkbox in a dialog; keep a hidden input on the main page to stay
 // up to date with what happens in the dialog.
 cgiMakeHiddenVarWithIdExtra("hidden_showInformative", "hidden_showInformative", informativeOnly ? "1" : "0", NULL);
-cgiMakeOnClickButton("showMutations_0", "hgPhyloPlace.onClickRecombinant(recombinantData, 0, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 0");
-cgiMakeOnClickButton("showMutations_10", "hgPhyloPlace.onClickRecombinant(recombinantData, 10, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 10");
-cgiMakeOnClickButton("showMutations_20", "hgPhyloPlace.onClickRecombinant(recombinantData, 20, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 20");
-cgiMakeOnClickButton("showMutations_30", "hgPhyloPlace.onClickRecombinant(recombinantData, 30, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 30");
-cgiMakeOnClickButton("showMutations_40", "hgPhyloPlace.onClickRecombinant(recombinantData, 40, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 40");
-cgiMakeOnClickButton("showMutations_50", "hgPhyloPlace.onClickRecombinant(recombinantData, 50, $('#hidden_showInformative').val() == 1); return 0;", "Show mutations 50");
+char *fontSize = cartUsualString(cart, "hgpp_recombFontSize", "10");
+cgiMakeHiddenVarWithIdExtra("hidden_fontSize", "hidden_fontSize", fontSize, NULL);
+cgiMakeOnClickButton("showMutations_0", "hgPhyloPlace.onClickRecombinant(recombinantData, 0, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 0");
+cgiMakeOnClickButton("showMutations_10", "hgPhyloPlace.onClickRecombinant(recombinantData, 10, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 10");
+cgiMakeOnClickButton("showMutations_20", "hgPhyloPlace.onClickRecombinant(recombinantData, 20, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 20");
+cgiMakeOnClickButton("showMutations_30", "hgPhyloPlace.onClickRecombinant(recombinantData, 30, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 30");
+cgiMakeOnClickButton("showMutations_40", "hgPhyloPlace.onClickRecombinant(recombinantData, 40, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 40");
+cgiMakeOnClickButton("showMutations_50", "hgPhyloPlace.onClickRecombinant(recombinantData, 50, $('#hidden_showInformative').val() == 1, $('#hidden_fontSize').val()); return 0;", "Show mutations 50");
 }
