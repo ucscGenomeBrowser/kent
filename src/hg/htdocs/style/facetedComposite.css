@@ -41,6 +41,11 @@
     box-sizing: border-box;
     box-shadow: 0 0 0 1px #ddd;
 }
+/* Light blue background for the table header (column titles + search row) */
+#theMetaDataTable thead th,
+#theMetaDataTable thead td {
+    background-color: lightblue;
+}
 #theMetaDataTable td:nth-child(n+2),
 #theMetaDataTable th:nth-child(n+2) {
     vertical-align: top;
@@ -106,61 +111,51 @@ table.dataTable tbody tr:hover {
     display: none;
 }
 
-/* "Show only selected" toggle in the toolbar */
+/* "All / Selected" segmented tabs in the toolbar */
 #selected-filter {
     display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
-    margin-left: 1.5em;
+    align-items: stretch;
+    order: -1;       /* sit at the left edge, ahead of the page-length dropdown */
+}
+/* Top toolbar: both the page-length dropdown and the "show only selected"
+   toggle live inside .dt-length (the toggle is appended there in
+   facetedComposite.js). Stretch the cell full width and push the two
+   children apart: toggle on the left (via order: -1 above), dropdown right. */
+#theMetaDataTable_wrapper .dt-layout-start:has(.dt-length) {
+    flex: 1 1 auto;
 }
 .dt-length {
-    display: inline-flex !important;
+    display: flex !important;
+    width: 100%;
     align-items: center;
+    justify-content: space-between;
 }
 
-/* Toggle switch for "show only selected" filter */
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 28px;
-    height: 16px;
-}
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-.toggle-slider {
-    position: absolute;
-    inset: 0;
-    background-color: #ccc;
-    border-radius: 16px;
+/* Tab-like blocks for the "All / Selected" selection filter */
+.filter-tab {
+    border: 1px solid #aaa;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 0.3em 0.9em;
+    font-size: 0.9em;
     cursor: pointer;
-    transition: background-color 0.2s;
+    user-select: none;
+    transition: background-color 0.15s;
 }
-.toggle-slider::before {
-    content: "";
-    position: absolute;
-    height: 12px;
-    width: 12px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.2s;
+.filter-tab:first-of-type {
+    border-radius: 4px 0 0 4px;
+    border-right: none;   /* avoid a doubled border between the two tabs */
 }
-.toggle-switch input:checked + .toggle-slider {
-    background-color: #4a90d9;
+.filter-tab:last-of-type {
+    border-radius: 0 4px 4px 0;
 }
-.toggle-switch input:checked + .toggle-slider::before {
-    transform: translateX(12px);
+.filter-tab:hover {
+    background-color: #e3e3e3;
 }
-.toggle-switch input:disabled + .toggle-slider {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-#selected-filter:has(input:disabled) #selected-filter-text {
-    opacity: 0.4;
+.filter-tab.active {
+    background-color: lightblue;   /* matches the table header band */
+    color: #000;
+    font-weight: bold;
 }
 
 /* Active filter chips bar */

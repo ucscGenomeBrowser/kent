@@ -289,44 +289,60 @@ $(function() {
 
         updateSelectAllCheckbox(table);  // set initial state after pre-selections
 
-        // Create "show only selected" toggle in the toolbar
+        // Create "All / Selected" segmented tabs in the toolbar. These are a
+        // re-skin of a simple on/off selection filter: a hidden checkbox holds
+        // the filter state so the search-filter plug-in and selection handlers
+        // below can stay unchanged; the tabs just drive that checkbox.
         const lengthDiv = document.querySelector(
             "#theMetaDataTable_wrapper .dt-length");
         const toggleWrapper = document.createElement("div");
         toggleWrapper.id = "selected-filter";
-        const toggleLabel = document.createElement("label");
-        toggleLabel.classList.add("toggle-switch");
         const toggleCheckbox = document.createElement("input");
         toggleCheckbox.type = "checkbox";
         toggleCheckbox.dataset.selectFilter = "true";
-        toggleLabel.appendChild(toggleCheckbox);
-        toggleLabel.appendChild(Object.assign(
-            document.createElement("span"), {className: "toggle-slider"}));
-        toggleWrapper.appendChild(toggleLabel);
-        const toggleText = Object.assign(
-            document.createElement("span"), {id: "selected-filter-text"});
-        toggleWrapper.appendChild(toggleText);
+        toggleCheckbox.style.display = "none";
+        toggleWrapper.appendChild(toggleCheckbox);
+        const allTab = Object.assign(document.createElement("button"),
+            {type: "button", className: "filter-tab"});
+        const selectedTab = Object.assign(document.createElement("button"),
+            {type: "button", className: "filter-tab"});
+        toggleWrapper.appendChild(allTab);
+        toggleWrapper.appendChild(selectedTab);
         lengthDiv.appendChild(toggleWrapper);
 
-        // Disable toggle initially if no rows are selected
-        toggleCheckbox.disabled = (prevSelCount === 0);
-
+        // Refresh the tab labels and the active-tab highlight. Counts are grand
+        // totals (default search:'none'), independent of the facet/search
+        // filters, so "Selected" never misleadingly reads 0 when tracks are
+        // selected but currently hidden by a facet. How many rows are actually
+        // visible is reported by DataTables' bottom info line.
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
-            toggleText.textContent =
-                `Show only selected ${itemLabel} (${selCount} of ${totalCount} selected)`;
+            allTab.textContent = `All (${totalCount})`;
+            selectedTab.textContent = `Selected (${selCount})`;
+            const showSelected = toggleCheckbox.checked;
+            allTab.classList.toggle("active", !showSelected);
+            selectedTab.classList.toggle("active", showSelected);
         }
         updateSelectedText();
+
+        // Clicking a tab switches the selection filter and redraws. "Selected"
+        // is always clickable; with nothing selected it just shows an empty list.
+        function setFilterMode(showSelected) {
+            toggleCheckbox.checked = showSelected;
+            table.draw();
+            updateSelectedText();
+        }
+        allTab.addEventListener("click", () => setFilterMode(false));
+        selectedTab.addEventListener("click", () => setFilterMode(true));
 
         // Unified handler for selection changes
         function onSelectionChanged() {
             const selCount = table.rows({selected: true}).count();
 
-            // Disable toggle when nothing is selected; auto-uncheck if count hits 0
-            toggleCheckbox.disabled = (selCount === 0);
-            if (selCount === 0 && toggleCheckbox.checked) {
-                toggleCheckbox.checked = false;
+            // Keep the "Selected" view in sync as rows are (de)selected; no need
+            // to redraw while showing all rows.
+            if (toggleCheckbox.checked) {
                 table.draw();
             }
 
@@ -391,8 +407,6 @@ $(function() {
             const row = table.row(dataIndex);
             return row.select && row.selected();
         });
-        $("#selected-filter input[data-select-filter]")
-            .on("change", function () { table.draw(); });
 
         // implement the 'select all' at the top of the checkbox column
         $("#select-all").closest("label").attr(
