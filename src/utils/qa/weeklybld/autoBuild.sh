@@ -148,6 +148,63 @@ read_buildenv() {
 }
 
 ##############################################################################
+# Checkpoint / resume framework
+#
+# Each phase is a sequence of named steps. Completed steps are appended to a
+# per-phase, per-version state file under $LOGDIR. On restart, completed steps
+# are skipped and the phase resumes at the first incomplete step, so a re-run
+# after a mid-build failure runs the non-idempotent steps (version bump,
+# CGI-version commit, branch tag, team emails) exactly once. As a second safety
+# net, the buildEnv bump self-detects an already-applied bump by date, so it can
+# never double-increment even if the state file is lost.
+#
+# The state file is NOT removed on success: it doubles as a per-build record,
+# and re-running a fully-completed phase is then a harmless all-steps-skipped
+# no-op rather than a dangerous fresh start.
+##############################################################################
+
+STATE_FILE=""
+
+state_init() {
+    # $1 = phase name, $2 = version (NN) this phase produces
+    mkdir -p "$LOGDIR"
+    STATE_FILE="$LOGDIR/.autobuild.state.v${2}.${1}"
+    if [[ -f "$STATE_FILE" ]]; then
+        local done_steps
+        done_steps=$(tr '\n' ' ' < "$STATE_FILE")
+        log "Resuming phase '$1' for v$2 (state file: $STATE_FILE)"
+        log "Already-completed steps: ${done_steps:-(none)}"
+    else
+        $DRY_RUN || : > "$STATE_FILE"
+        log "Starting phase '$1' for v$2 (state file: $STATE_FILE)"
+    fi
+}
+
+step_is_done() { grep -qxF "$1" "$STATE_FILE" 2>/dev/null; }
+
+# step <id> <function> [args...]
+# Run the step once. If already recorded as done, skip it. On success, record
+# it; on failure, die (the state file keeps every step completed before this
+# one, so re-running resumes here). NOTE: because the step body runs in an `if`
+# condition, `set -e` does not abort inside it -- each step function below is
+# written so its RETURN VALUE reflects success (critical command last, or
+# `|| return 1`, or an explicit die on a checked failure).
+step() {
+    local id="$1"; shift
+    if step_is_done "$id"; then
+        log "SKIP (already done): $id"
+        return 0
+    fi
+    log ">>> STEP START: $id"
+    if "$@"; then
+        $DRY_RUN || echo "$id" >> "$STATE_FILE"
+        log "<<< STEP DONE:  $id"
+    else
+        die "step '$id' failed. Fix the problem and re-run autoBuild.sh to resume from this step."
+    fi
+}
+
+##############################################################################
 # Determine which phase to run from Google Calendar
 ##############################################################################
 
@@ -211,63 +268,63 @@ detect_phase() {
 # Phase: Preview 1 (Day 1)
 ##############################################################################
 
-do_preview1() {
-    log "========== PHASE: PREVIEW 1 =========="
+# --- Preview 1 steps (decomposed from doNewReview.csh for resumability) ---
+
+preview1_buildenv_bump() {
     read_buildenv
-
+    if [[ "$REVIEWDAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (REVIEWDAY=$REVIEWDAY) - skipping bump"
+        return 0
+    fi
     local NEXTNN=$((BRANCHNN + 1))
-    # The new REVIEWDAY is today, the old REVIEWDAY becomes LASTREVIEWDAY
-    local new_REVIEWDAY
-    new_REVIEWDAY=$(date "+%F")
+    local new_REVIEWDAY; new_REVIEWDAY=$(date "+%F")
     local new_LASTREVIEWDAY="$REVIEWDAY"
-
     log "Updating buildEnv.csh: LASTREVIEWDAY=$new_LASTREVIEWDAY -> REVIEWDAY=$new_REVIEWDAY (v${NEXTNN} preview)"
-
-    # Validate: new dates must be sane
     if [[ "$new_REVIEWDAY" < "$new_LASTREVIEWDAY" ]]; then
         die "Date sanity check failed: new REVIEWDAY ($new_REVIEWDAY) < new LASTREVIEWDAY ($new_LASTREVIEWDAY)"
     fi
-
     if ! $DRY_RUN; then
-        # Edit buildEnv.csh - update LASTREVIEWDAY and REVIEWDAY
         sed -i \
             -e "s|^setenv LASTREVIEWDAY .*|setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}                     # v${BRANCHNN} preview|" \
             -e "s|^setenv REVIEWDAY .*|setenv REVIEWDAY ${new_REVIEWDAY}                     # v${NEXTNN} preview|" \
             "$BUILDENV"
+        grep -q "setenv REVIEWDAY ${new_REVIEWDAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for REVIEWDAY"
+        grep -q "setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for LASTREVIEWDAY"
     fi
-    log "buildEnv.csh updated"
+    run_tcsh "source $BUILDENV && env | egrep VIEWDAY" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview1 (automated)' buildEnv.csh && git push" || return 1
+    read_buildenv
+    return 0
+}
 
-    # Verify the edit
-    if ! grep -q "setenv REVIEWDAY ${new_REVIEWDAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for REVIEWDAY"
+preview1_tag_preview() {
+    run_tcsh "./tagPreview.csh real >& $LOGDIR/v$((BRANCHNN + 1)).tagPreview.log"
+}
+
+preview1_git_reports() {
+    run_tcsh "./buildGitReports.csh review real >& $LOGDIR/v$((BRANCHNN + 1)).gitReports.review.log"
+}
+
+preview1_email_pairings() {
+    local NEXTNN=$((BRANCHNN + 1))
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 2, v${NEXTNN} preview)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
     fi
-    if ! grep -q "setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for LASTREVIEWDAY"
-    fi
+    echo "Ready for pairings, day 2, Git reports completed for v${NEXTNN} preview http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
 
-    # Re-source and verify
-    run_tcsh "source $BUILDENV && env | egrep VIEWDAY"
+do_preview1() {
+    log "========== PHASE: PREVIEW 1 =========="
+    read_buildenv
+    # Preview produces v(BRANCHNN+1); BRANCHNN is unchanged by a preview bump.
+    state_init preview1 "$((BRANCHNN + 1))"
 
-    # Commit
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview1 (automated)' buildEnv.csh && git push"
-
-    # Run doNewReview.csh (dry-run first, then real)
-    log "Running doNewReview.csh dry-run check..."
-    run_tcsh "./doNewReview.csh"
-
-    log "Running doNewReview.csh for real..."
-    local logfile="$LOGDIR/v${NEXTNN}.doNewRev.log"
-    run_tcsh "./doNewReview.csh real >& $logfile"
-    local rc=$?
-
-    if [[ $rc -ne 0 ]]; then
-        die "doNewReview.csh failed with exit code $rc. See $logfile"
-    fi
-
-    # Sanity check the log for errors
-    if grep -qi "failed\|error" "$logfile" 2>/dev/null | grep -vi "0 errors" | head -5 | grep -q .; then
-        log "WARNING: Possible errors in $logfile - review manually"
-    fi
+    step buildenv-bump   preview1_buildenv_bump
+    step tag-preview     preview1_tag_preview
+    step git-reports     preview1_git_reports
+    step email-pairings  preview1_email_pairings
 
     log "Preview 1 complete."
 }
@@ -276,59 +333,68 @@ do_preview1() {
 # Phase: Preview 2 (Day 8)
 ##############################################################################
 
-do_preview2() {
-    log "========== PHASE: PREVIEW 2 =========="
+# --- Preview 2 steps (decomposed from doNewReview2.csh for resumability) ---
+
+preview2_buildenv_bump() {
     read_buildenv
-
+    if [[ "$REVIEW2DAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (REVIEW2DAY=$REVIEW2DAY) - skipping bump"
+        return 0
+    fi
     local NEXTNN=$((BRANCHNN + 1))
-    local new_REVIEW2DAY
-    new_REVIEW2DAY=$(date "+%F")
+    local new_REVIEW2DAY; new_REVIEW2DAY=$(date "+%F")
     local new_LASTREVIEW2DAY="$REVIEW2DAY"
-
     log "Updating buildEnv.csh: LASTREVIEW2DAY=$new_LASTREVIEW2DAY -> REVIEW2DAY=$new_REVIEW2DAY (v${NEXTNN} preview2)"
-
     if [[ "$new_REVIEW2DAY" < "$new_LASTREVIEW2DAY" ]]; then
         die "Date sanity check failed: new REVIEW2DAY ($new_REVIEW2DAY) < new LASTREVIEW2DAY ($new_LASTREVIEW2DAY)"
     fi
-
     if ! $DRY_RUN; then
         sed -i \
             -e "s|^setenv LASTREVIEW2DAY .*|setenv LASTREVIEW2DAY  ${new_LASTREVIEW2DAY}               # v${BRANCHNN} preview2|" \
             -e "s|^setenv REVIEW2DAY .*|setenv REVIEW2DAY  ${new_REVIEW2DAY}               # v${NEXTNN} preview2|" \
             "$BUILDENV"
+        grep -q "setenv REVIEW2DAY  ${new_REVIEW2DAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for REVIEW2DAY"
     fi
-    log "buildEnv.csh updated"
+    run_tcsh "source $BUILDENV && env | grep 2DAY" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview2 (automated)' buildEnv.csh && git push" || return 1
+    read_buildenv
+    return 0
+}
 
-    if ! grep -q "setenv REVIEW2DAY  ${new_REVIEW2DAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for REVIEW2DAY"
+preview2_tag_preview2() {
+    run_tcsh "./tagPreview2.csh real >& $LOGDIR/v$((BRANCHNN + 1)).tagPreview2.log"
+}
+
+preview2_git_reports() {
+    run_tcsh "./buildGitReports.csh review2 real >& $LOGDIR/v$((BRANCHNN + 1)).gitReports.review2.log"
+}
+
+preview2_email_pairings() {
+    local NEXTNN=$((BRANCHNN + 1))
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 9, v${NEXTNN} preview2)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
     fi
+    echo "Ready for pairings, day 9, Git reports completed for v${NEXTNN} preview2 http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 9, v${NEXTNN} preview2)." "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
 
-    run_tcsh "source $BUILDENV && env | grep 2DAY"
-
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview2 (automated)' buildEnv.csh && git push"
-
-    # Run doNewReview2.csh
-    log "Running doNewReview2.csh dry-run check..."
-    run_tcsh "./doNewReview2.csh"
-
-    log "Running doNewReview2.csh for real..."
-    local logfile="$LOGDIR/v${NEXTNN}.doNewRev2.log"
-    run_tcsh "./doNewReview2.csh real >& $logfile"
-    local rc=$?
-
-    if [[ $rc -ne 0 ]]; then
-        die "doNewReview2.csh failed with exit code $rc. See $logfile"
-    fi
-
-    # Run the preview2 tables test robot
+preview2_tables_robot() {
+    local NEXTNN=$((BRANCHNN + 1))
     log "Running preview2TablesTestRobot.csh (takes ~1h40m)..."
-    local tableslog="$LOGDIR/v${NEXTNN}.preview2.hgTables.log"
-    run_tcsh "time ./preview2TablesTestRobot.csh >& $tableslog"
-    local rc2=$?
+    run_tcsh "time ./preview2TablesTestRobot.csh >& $LOGDIR/v${NEXTNN}.preview2.hgTables.log"
+}
 
-    if [[ $rc2 -ne 0 ]]; then
-        die "preview2TablesTestRobot.csh failed with exit code $rc2. See $tableslog"
-    fi
+do_preview2() {
+    log "========== PHASE: PREVIEW 2 =========="
+    read_buildenv
+    state_init preview2 "$((BRANCHNN + 1))"
+
+    step buildenv-bump   preview2_buildenv_bump
+    step tag-preview2    preview2_tag_preview2
+    step git-reports     preview2_git_reports
+    step email-pairings  preview2_email_pairings
+    step tables-robot    preview2_tables_robot
 
     log "Preview 2 complete."
 }
@@ -337,123 +403,183 @@ do_preview2() {
 # Phase: Final Build (Day 15)
 ##############################################################################
 
-do_final() {
-    log "========== PHASE: FINAL BUILD =========="
-    read_buildenv
+# --- Final build steps (decomposed from doNewBranch.csh + the robots/docker
+#     tail of the original do_final, so a mid-build failure resumes here) ---
 
-    # Check SSH logins first
+final_checklogins() {
     log "Checking SSH logins to remote hosts..."
-    run bash "$WEEKLYBLD/checkLogins.sh" 2>&1 | tee /tmp/autoBuild_checkLogins.log
-    if grep -qi "failed" /tmp/autoBuild_checkLogins.log; then
+    run bash "$WEEKLYBLD/checkLogins.sh" 2>&1 | tee /tmp/autoBuild_checkLogins.log || true
+    if grep -qi "failed" /tmp/autoBuild_checkLogins.log 2>/dev/null; then
         die "SSH login check failed. Fix SSH keys before proceeding. See /tmp/autoBuild_checkLogins.log"
     fi
     log "OK: All SSH logins successful"
+}
 
-    # Compute new values
+final_buildenv_bump() {
+    read_buildenv
+    if [[ "$TODAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (BRANCHNN=$BRANCHNN, TODAY=$TODAY) - skipping bump"
+        return 0
+    fi
     local new_BRANCHNN=$((BRANCHNN + 1))
-    local new_TODAY
-    new_TODAY=$(date "+%F")
+    local new_TODAY; new_TODAY=$(date "+%F")
     local new_LASTWEEK="$TODAY"
-
     log "Updating buildEnv.csh: BRANCHNN=$BRANCHNN -> $new_BRANCHNN, LASTWEEK=$new_LASTWEEK, TODAY=$new_TODAY"
-
-    # Sanity checks
     if [[ "$new_TODAY" < "$new_LASTWEEK" ]]; then
         die "Date sanity check failed: new TODAY ($new_TODAY) < new LASTWEEK ($new_LASTWEEK)"
     fi
     if [[ $new_BRANCHNN -le $BRANCHNN ]]; then
         die "BRANCHNN sanity check failed: $new_BRANCHNN <= $BRANCHNN"
     fi
-
     if ! $DRY_RUN; then
         sed -i \
             -e "s|^setenv BRANCHNN .*|setenv BRANCHNN ${new_BRANCHNN}                    # increment for new build|" \
             -e "s|^setenv TODAY .*|setenv TODAY ${new_TODAY}                     # v${new_BRANCHNN} final|" \
             -e "s|^setenv LASTWEEK .*|setenv LASTWEEK ${new_LASTWEEK}                     # v${BRANCHNN} final|" \
             "$BUILDENV"
-    fi
-    log "buildEnv.csh updated"
-
-    # Verify edits
-    if ! $DRY_RUN; then
         grep -q "setenv BRANCHNN ${new_BRANCHNN}" "$BUILDENV" || die "BRANCHNN edit verification failed"
         grep -q "setenv TODAY ${new_TODAY}" "$BUILDENV" || die "TODAY edit verification failed"
         grep -q "setenv LASTWEEK ${new_LASTWEEK}" "$BUILDENV" || die "LASTWEEK edit verification failed"
     fi
-
-    run_tcsh "source $BUILDENV && env | egrep 'DAY|NN|WEEK'"
-
-    # Commit
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${new_BRANCHNN} final build (automated)' buildEnv.csh && git push"
-
-    # Now BRANCHNN has changed - re-read
+    run_tcsh "source $BUILDENV && env | egrep 'DAY|NN|WEEK'" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${new_BRANCHNN} final build (automated)' buildEnv.csh && git push" || return 1
     read_buildenv
-    log "After re-read: BRANCHNN=$BRANCHNN"
+    log "After bump: BRANCHNN=$BRANCHNN"
+    return 0
+}
 
-    # Run doNewBranch.csh dry-run
-    log "Running doNewBranch.csh dry-run check..."
-    run_tcsh "./doNewBranch.csh"
+# updateCgiVersion.csh / tagNewBranch.csh are NOT idempotent on their own (a
+# re-run would hit "nothing to commit" / "tag exists"), so the checkpoint must
+# ensure each runs exactly once -- which it does.
+final_cgi_version() {
+    run_tcsh "./updateCgiVersion.csh real >& $LOGDIR/v${BRANCHNN}.updateCgiVersion.log"
+}
 
-    # Run for real (~1 hour)
-    log "Running doNewBranch.csh for real (takes ~1 hour)..."
-    local logfile="$LOGDIR/v${BRANCHNN}.doNewBranch.log"
-    run_tcsh "./doNewBranch.csh real >& $logfile"
-    local rc=$?
+final_tag_branch() {
+    run_tcsh "./tagNewBranch.csh real >& $LOGDIR/v${BRANCHNN}.tagNewBranch.log"
+}
 
-    if [[ $rc -ne 0 ]]; then
-        die "doNewBranch.csh failed with exit code $rc. See $logfile"
+final_git_reports() {
+    if ! $DRY_RUN && [[ -e "$WEEKLYBLD/GitReports.ok" ]]; then
+        rm -f "$WEEKLYBLD/GitReports.ok"
     fi
-
-    # Verify success artifacts
-    if ! $DRY_RUN; then
-        if [[ ! -f "$WEEKLYBLD/GitReports.ok" ]]; then
-            log "WARNING: GitReports.ok not found - git reports may have had issues"
-        else
-            log "OK: GitReports.ok exists"
-        fi
-
-        # Check CGI timestamps in beta
-        log "Checking CGI timestamps in cgi-bin-beta..."
-        local newest_cgi
-        newest_cgi=$(ls -lt /usr/local/apache/cgi-bin-beta/ 2>/dev/null | head -5) || true
-        log "Newest CGIs in beta:\n$newest_cgi"
-
-        # Verify the CGIs were built today
-        local today_date
-        today_date=$(date "+%b %e" | sed 's/  / /')  # e.g. "Mar 17"
-        if ! echo "$newest_cgi" | grep -q "$(date '+%b')" 2>/dev/null; then
-            log "WARNING: CGIs in cgi-bin-beta may not have been updated today. Check manually."
-        fi
+    run_tcsh "./buildGitReports.csh branch real >& doNewGit.log" || return 1
+    if ! $DRY_RUN && [[ ! -e "$WEEKLYBLD/GitReports.ok" ]]; then
+        die "git-reports completed but GitReports.ok not found. See doNewGit.log"
     fi
+    return 0
+}
 
-    # Run robots in background (takes 6+ hours, wiki says don't wait)
-    log "Starting doRobots.csh (runs for 6+ hours in background)..."
+final_cobranch() {
+    run_tcsh "./coBranch.csh"
+}
+
+final_build_utils() {
+    run_tcsh "./buildUtils.csh"
+}
+
+final_build_beta() {
+    run_tcsh "./buildBeta.csh"
+}
+
+final_deploy_beta() {
+    if $DRY_RUN; then
+        log "(dry-run) would rsync cgi-bin-beta + htdocs-beta to qateam@hgwbeta"
+        return 0
+    fi
+    rsync -rLptgoD -P --exclude=hg.conf --exclude=hg.conf.private \
+        /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+        /usr/local/apache/htdocs-beta/ qateam@hgwbeta:/data/apache/htdocs/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+        /usr/local/apache/htdocs-beta/js/ qateam@hgwbeta:/data/apache/htdocs/js/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+        /usr/local/apache/htdocs-beta/style/ qateam@hgwbeta:/data/apache/htdocs/style/
+}
+
+final_email_build_complete() {
+    if $DRY_RUN; then
+        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL galt kent browser-qa"
+        return 0
+    fi
+    echo "v${BRANCHNN} built successfully on beta (day 16)." \
+        | mail -s "v${BRANCHNN} Build complete on beta (day 16)." \
+        "$BUILDMEISTEREMAIL" galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+}
+
+final_email_pairings() {
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 16, v${BRANCHNN} review)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
+    fi
+    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." \
+        "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
+
+# Emails every v(BRANCHNN) committer a request for their code summaries. Kept a
+# separate checkpoint so a resume never re-spams the whole committer list.
+final_committer_emails() {
+    local LASTNN=$((BRANCHNN - 1))
+    run_tcsh "./sendLogEmail.pl $LASTNN $BRANCHNN"
+}
+
+final_robots() {
+    if $DRY_RUN; then
+        log "(dry-run) would launch doRobots.csh in background (6+ hours)"
+        return 0
+    fi
     local robotlog="$LOGDIR/v${BRANCHNN}.robots.log"
-    if ! $DRY_RUN; then
-        nohup /bin/tcsh -c "source $BUILDENV && cd $WEEKLYBLD && ./doRobots.csh >& $robotlog" &
-        local robot_pid=$!
-        log "doRobots.csh started in background (PID $robot_pid). Log: $robotlog"
-    fi
+    nohup /bin/tcsh -c "source $BUILDENV && cd $WEEKLYBLD && ./doRobots.csh >& $robotlog" >/dev/null 2>&1 &
+    log "doRobots.csh launched in background (PID $!). Log: $robotlog"
+    return 0
+}
 
-    # Build the beta image locally on hgwdev; do NOT push to Docker Hub.
-    # kent-beta runs from this image and is torn down again on do_wrapup.
-    # refs #37655 (replaces the former genomebrowser/server:testing push)
-    log "Building local beta Docker image kent:beta (for v${BRANCHNN})..."
-    local dockerdir
-    dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-beta.log"
-        # amd64 only: the container only runs on hgwdev (amd64) and is never
-        # pushed, so no arm64 build, no manifest, no binfmt.
-        run_tcsh "cd $dockerdir && docker build --no-cache --platform linux/amd64 -t kent:beta ." >& "$dockerlog" || {
-            log "WARNING: kent:beta build had issues. See $dockerlog (non-fatal, continuing)"
-        }
-        log "Refreshing local kent-beta container..."
-        run "$WEEKLYBLD/refresh-instance.sh" beta || \
-            log "WARNING: kent-beta refresh failed; container may be stale"
-    else
-        log "WARNING: Docker directory not found at $dockerdir - skipping beta build"
+# Build the beta image locally on hgwdev; do NOT push to Docker Hub. kent-beta
+# runs from this image and is torn down again on do_wrapup. refs #37655.
+# amd64 only: the container only runs on hgwdev (amd64) and is never pushed, so
+# no arm64 build, no manifest, no binfmt. Now fatal-on-failure (was a warning):
+# the checkpoint model makes a retry just a re-run that resumes at this step.
+final_docker_beta() {
+    local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
+    if [[ ! -d "$dockerdir" ]]; then
+        die "Docker directory not found at $dockerdir"
     fi
+    run_tcsh "cd $dockerdir && docker build --no-cache --platform linux/amd64 -t kent:beta . >& $LOGDIR/v${BRANCHNN}.docker-beta.log"
+}
+
+final_refresh_beta() {
+    run "$WEEKLYBLD/refresh-instance.sh" beta
+}
+
+do_final() {
+    log "========== PHASE: FINAL BUILD =========="
+    read_buildenv
+    # If TODAY already == today, the bump ran on a prior (failed) attempt and
+    # BRANCHNN is already the new version; otherwise this run will bump to +1.
+    local FINAL_VER
+    if [[ "$TODAY" == "$(date +%F)" ]]; then
+        FINAL_VER=$BRANCHNN
+    else
+        FINAL_VER=$((BRANCHNN + 1))
+    fi
+    state_init final "$FINAL_VER"
+
+    step checklogins          final_checklogins
+    step buildenv-bump        final_buildenv_bump
+    step cgi-version          final_cgi_version
+    step tag-branch           final_tag_branch
+    step git-reports          final_git_reports
+    step cobranch             final_cobranch
+    step build-utils          final_build_utils
+    step build-beta           final_build_beta
+    step deploy-beta          final_deploy_beta
+    step email-build-complete final_email_build_complete
+    step email-pairings       final_email_pairings
+    step committer-emails     final_committer_emails
+    step robots               final_robots
+    step docker-beta          final_docker_beta
+    step refresh-beta         final_refresh_beta
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
