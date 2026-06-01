@@ -1,20 +1,33 @@
 <h2>Description</h2>
 <p>
-This track merges variants from all individual variant frequency databases into a single
-bigBed file with predicted protein consequences and cross-database filtering. It contains
-over 1.1 billion variants from 26 source databases worldwide. For a summary of
-all available databases, see the
-<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page.
+This track merges variants from 28 sequencing-based variant frequency databases into a
+single bigBed file with predicted protein consequences and cross-database filtering. It
+contains 1.34 billion variants from WGS, WES, and long-read sequencing cohorts worldwide.
+For a summary of all available databases, see the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page.
 </p>
+
+<p>
+Two companion combined tracks split out the cohorts that don't belong in a general
+sequencing-based summary:
+</p>
+<ul>
+  <li><a href="hgTrackUi?g=varFreqsDisease">Disease-related Databases Combined</a> &mdash;
+      932 M variants from six disease-focused cohorts (SPARK, SFARI WGS, TOPMed, SCHEMA,
+      GREGoR, GA4K), with phenotype-stratified AC/AF where the source provides it.</li>
+  <li><a href="hgTrackUi?g=varFreqsArray">Genotyping Array Databases Combined</a> &mdash;
+      14.7 M variants from three array cohorts (TPMI Taiwan, Mexico Biobank, UK Biobank
+      imputed). Kept separate because chip data has different per-variant confidence
+      than sequencing.</li>
+</ul>
 
 <p>
 Each variant is annotated with its predicted consequence on protein-coding genes
 (using <a href="https://samtools.github.io/bcftools/howtos/csq-calling.html"
 target="_blank">bcftools csq</a> with
 <a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
-gene models), and colored by severity.
-Allele counts and frequencies are shown for each source database and, where available,
-broken down by ancestry or population group.
+gene models), and colored by severity. Allele counts and frequencies are shown for each
+source database and, where available, broken down by ancestry, population, or phenotype.
 </p>
 
 <h2>Display Conventions</h2>
@@ -107,18 +120,32 @@ This filter uses OR logic: selecting multiple databases shows variants found in
 <em>any</em> of the selected databases.
 </p>
 
-<h3>Population-Specific Filters</h3>
+<h3>Population- and Phenotype-Specific Filters</h3>
 <p>
 Several databases provide ancestry-specific allele frequencies:
 </p>
 <ul>
-  <li><b>AllOfUs</b>: African, Indigenous American, East Asian, European, Oceanian, South Asian
-      (from local ancestry inference)</li>
-  <li><b>GenomeAsia</b>: Northeast Asian, Southeast Asian, South Asian</li>
+  <li><b>AllOfUs</b>: African, Indigenous American, East Asian, European, Oceanian, South
+      Asian (from local ancestry inference)</li>
+  <li><b>GenomeAsia</b>: Northeast Asian, Southeast Asian, South Asian, Oceanian, American,
+      African, Western European Reference</li>
   <li><b>gnomAD HGDP+1kG</b>: African, Amish, Latino, Ashkenazi Jewish, East Asian, Finnish,
       Middle Eastern, Non-Finnish European, Other, South Asian</li>
-  <li><b>GREGoR</b>: Affected, Unaffected, Unknown (disease status, not ancestry)</li>
+  <li><b>NPM Singapore</b>: Chinese, Malay, Indian</li>
+  <li><b>WBBC</b>: North Han, Central Han, South Han, Lingnan Han</li>
 </ul>
+<p>
+Three sources also expose phenotype-stratified counts:
+</p>
+<ul>
+  <li><b>SPARK WES</b> and <b>SFARI WGS</b>: ASD proband AC/AF versus non-ASD family
+      member AC/AF.</li>
+  <li><b>GREGoR</b>: Affected, Unaffected, and Unknown disease-status AC/AF.</li>
+</ul>
+<p>
+The disease-related <a href="hgTrackUi?g=varFreqsDisease">Disease-related Databases Combined</a>
+track exposes additional phenotype splits for SCHEMA (Schizophrenia case vs control).
+</p>
 
 <h3>Length Filters</h3>
 <ul>
@@ -129,12 +156,15 @@ Several databases provide ancestry-specific allele frequencies:
 
 <h2>Methods</h2>
 <p>
-Variant frequency VCF files from 26 databases were stripped of their INFO fields
-(to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic sites),
-and merged with <code>bcftools merge</code>. The merged VCF was then annotated with predicted
-protein consequences using <code>bcftools csq</code> with the
+Variant frequency VCF files from 28 sequencing-based databases were stripped of their INFO
+fields (to reduce size), normalized with <code>bcftools norm</code> (splitting multi-allelic
+sites), and merged with <code>bcftools merge</code>. The merged VCF was then annotated with
+predicted protein consequences using <code>bcftools csq</code> with the
 <a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
-GRCh38 release 115 gene annotation (GFF3).
+GRCh38 release 115 gene annotation (GFF3). The same pipeline, run on different subsets of
+source VCFs, produces the
+<a href="hgTrackUi?g=varFreqsDisease">Disease-related Databases Combined</a> and
+<a href="hgTrackUi?g=varFreqsArray">Genotyping Array Databases Combined</a> tracks.
 </p>
 
 <p>
@@ -185,7 +215,7 @@ the per-subtrack description page indicates the path on our download server.
 This track is only possible thanks to the data from millions of volunteers around the world,
 who donated blood, signed consent forms and provided health information about themselves and
 sometimes their families. Click on any of the individual tracks in the
-<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack to see the specific
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack to see the specific
 credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track
 and to Andreas Lahner, MGZ, for feedback.
 </p>
@@ -193,7 +223,7 @@ and to Andreas Lahner, MGZ, for feedback.
 <h2>References</h2>
 <p>
 For primary citations of each source dataset, see the References section on the
-<a href="hgTrackUi?g=varFreqs">Variant Frequencies</a> supertrack page. The merged-track
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page. The merged-track
 build itself uses the following tools:
 </p>
 <p>
