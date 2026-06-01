@@ -10,6 +10,8 @@ export smallClusterHub="hgwdev"
 export fileServer="hgwdev"
 #  a python virtual environment to run this
 export planemoCmd="/hive/users/hiram/galaxy/venv3.12/bin/planemo"
+export centDb="hgcentral"
+export hgSql="hgsql -hgenome-centdb"
 
 # parse optional -force flag to skip genark table verification
 export forceRun=0
@@ -28,7 +30,7 @@ Where target/query is either a UCSC db name, or is an
 
 And [tq]Clade is one of: primate|mammal|other
 
-The -force option skips the hgcentraltest.genark table verification
+The -force option skips the ${centDb}.genark table verification
    for GenArk assembly identifiers.
 
 Will create directory to work in, for example if, UCSC db:
@@ -130,7 +132,7 @@ function orgName() {
        oName=`egrep -m 1 -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
        ;;
      *)
-       oName=`/cluster/bin/x86_64/hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
+       oName=`/cluster/bin/x86_64/${hgSql} -N -e "select organism from dbDb where name=\"${asmName}\";" "${centDb}"`
        ;;
   esac
   printf "%s" "${oName}"
@@ -168,12 +170,12 @@ function orgDate() {
   printf "%s" "${oDate}"
 }
 
-# verifyGenark - verify a GenArk accession exists in hgcentraltest.genark
+# verifyGenark - verify a GenArk accession exists in ${centDb}.genark
 #   returns 0 if found, 1 if not found
 function verifyGenark() {
   local asmAccession=$1
   local fullName=$2
-  local count=$(/cluster/bin/x86_64/hgsql -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" hgcentraltest)
+  local count=$(/cluster/bin/x86_64/${hgSql} -N -e "SELECT COUNT(*) FROM genark WHERE gcAccession='${asmAccession}';" "${centDb}")
   if [ "$count" -eq 0 ]; then
     printf "ERROR: assembly '%s' not found in GenArk\n" "$fullName" 1>&2
     return 1
@@ -196,7 +198,7 @@ export qGcPath=$(gcPath $query)
 export tAccId=$(accId $target)
 export qAccId=$(accId $query)
 
-# verify GenArk assemblies exist in hgcentraltest.genark unless -force
+# verify GenArk assemblies exist in ${centDb}.genark unless -force
 if [ "$forceRun" -eq 0 ]; then
   export genarkErrors=0
   case $target in

@@ -21,6 +21,8 @@ set -eEu -o pipefail
 umask 002
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+export centDb="hgcentral"
+export hgSql="hgsql -hgenome-centdb"
 
 ##############################################################################
 ### singleton lock - only one instance at a time
@@ -50,8 +52,8 @@ printf "%d\n" "$$" >&9
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=7 WHERE id=${id};" "${centDb}"
 }
 ##############################################################################
 
@@ -143,8 +145,8 @@ function sendNotification() {
   local subject="${2}"
   local msgBody="${3}"
   local toAddr
-  toAddr="$(/cluster/bin/x86_64/hgsql -N -B -e \
-    "SELECT email FROM ottoRequest WHERE id = ${reqId};" hgcentraltest)"
+  toAddr="$(/cluster/bin/x86_64/${hgSql} -N -B -e \
+    "SELECT email FROM ottoRequest WHERE id = ${reqId};" ${centDb})"
   if [ -z "${toAddr}" ]; then
     printf "ERROR: sendNotification: no email for request %s\n" "${reqId}" 1>&2
     return 1
@@ -175,7 +177,7 @@ function sendNotification() {
 ##############################################################################
 
 ##############################################################################
-### installLinks - drop chain/quickLift symlinks and register in hgcentraltest
+### installLinks - drop chain/quickLift symlinks and register in ${centDb}
 ###   args: tDb qDb buildDir
 ###   detects GenArk (tDb starts with "GC") vs UCSC db and chooses the
 ###   matching branch from doBlastzChainNet.pl loadUp().
@@ -268,7 +270,7 @@ function installLinks() {
     quickPath="${gbdbQuickLiftDir}/${quick}.bb"
   fi
 
-  # register both rows in hgcentraltest
+  # register both rows in ${centDb}
   if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
       -path="${chainPath}" "${tDb}" "${qDb}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
@@ -319,8 +321,8 @@ fi
 #          push.  Signals (all must hold):
 #            /hive/data/genomes/${fromDb}/bed/lastz.${toDb}  symlink exists
 #            /hive/data/genomes/${toDb}/bed/lastz.${fromDb}  symlink exists
-#            hgcentraltest.liftOverChain   has both directions
-#            hgcentraltest.quickLiftChain  has both directions
+#            ${centDb}.liftOverChain   has both directions
+#            ${centDb}.quickLiftChain  has both directions
 #          When all four hold, fill in buildDir with the resolved
 #          fromDb-side build dir and bump status=5 so
 #          ottoRequestPush.py picks it up.  Anything that doesn't match
@@ -337,25 +339,25 @@ while IFS=$'\t' read -r reqId fromDb toDb; do
   if [ ! -d "${fromBuild}" ] || [ ! -d "${toBuild}" ]; then
     continue
   fi
-  loCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+  loCount=$(/cluster/bin/x86_64/${hgSql} -N -B -e \
     "SELECT COUNT(*) FROM liftOverChain WHERE \
        (fromDb='${fromDb}' AND toDb='${toDb}') OR \
-       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
-  qlCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" ${centDb})
+  qlCount=$(/cluster/bin/x86_64/${hgSql} -N -B -e \
     "SELECT COUNT(*) FROM quickLiftChain WHERE \
        (fromDb='${fromDb}' AND toDb='${toDb}') OR \
-       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" ${centDb})
   if [ "${loCount}" -lt 2 ] || [ "${qlCount}" -lt 2 ]; then
     continue
   fi
   printf "# request %s: prior work detected at %s, jumping to push\n" \
     "${reqId}" "${fromBuild}" 1>&2
-  /cluster/bin/x86_64/hgsql -N -e \
+  /cluster/bin/x86_64/${hgSql} -N -e \
     "UPDATE ottoRequest SET status=5, buildDir='${fromBuild}' \
-     WHERE id=${reqId};" hgcentraltest
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+     WHERE id=${reqId};" ${centDb}
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb, toDb FROM ottoRequest \
-   WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
@@ -366,9 +368,9 @@ while read -r reqId; do
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" \
-  hgcentraltest)
+  ${centDb})
 
 ############################################################################
 # phase 2: in-progress requests needing workflow monitoring
@@ -388,9 +390,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     # workflowMonitor.sh exits 0 both when still running and when complete;
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
-      /cluster/bin/x86_64/hgsql -N -e \
+      /cluster/bin/x86_64/${hgSql} -N -e \
         "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
-         WHERE id = ${reqId};" hgcentraltest
+         WHERE id = ${reqId};" ${centDb}
 #     printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
     # else: still running, will check again next invocation
@@ -398,9 +400,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     printf "# workflow error for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 3: check for tracks done, setup symlinks set status=5 to indicate
@@ -485,7 +487,7 @@ while IFS=$'\t' read -r reqId buildDir; do
       ;;
   esac
 
-  # install liftOver and quickLift symlinks + register in hgcentraltest,
+  # install liftOver and quickLift symlinks + register in ${centDb},
   # for both directions
   if ! installLinks "${targetDb}" "${queryDb}" "${buildDir}"; then
     setErrorStatus "${reqId}"
@@ -496,11 +498,11 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
 
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" hgcentraltest
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" ${centDb}
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 4: check for push files is complete, send final notification
@@ -572,10 +574,10 @@ The lift.over files are available at these links:
   ${toUrl}
 "
 
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" ${centDb}
 
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb, toDb, comment, requestTime, buildDir FROM ottoRequest \
-   WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 6 AND requestType = 'liftOver';" ${centDb})
 
