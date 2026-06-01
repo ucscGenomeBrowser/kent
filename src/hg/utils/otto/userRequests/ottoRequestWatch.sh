@@ -150,15 +150,23 @@ function sendNotification() {
     return 1
   fi
   local bcc="chain-file-request-group@ucsc.edu"
-  local bounce="genome-www@soe.ucsc.edu"
+  local from="genome-www@soe.ucsc.edu"
+  local bounce="gb"
+  bounce+="aut"
+  bounce+="o"
+  bounce+="@"
+  bounce+="uc"
+  bounce+="sc."
+  bounce+="ed"
+  bounce+="u"
   # -f sets the envelope sender (becomes Return-Path at delivery and the
   #    bounce address); -t reads recipients from To:/Cc:/Bcc: headers;
   #    -oi prevents a lone "." in body from ending the message
   {
-    printf "From: %s\n" "${bounce}"
+    printf "From: %s\n" "${from}"
     printf "To: %s\n" "${toAddr}"
     printf "Bcc: %s\n" "${bcc}"
-    printf "Reply-To: %s\n" "${bounce}"
+    printf "Reply-To: %s\n" "${from}"
     printf "Subject: %s\n" "${subject}"
     printf "\n"
     printf "%s\n" "${msgBody}"
