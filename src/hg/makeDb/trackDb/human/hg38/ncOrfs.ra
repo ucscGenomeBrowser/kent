@@ -19,8 +19,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterValues.uorfType 5'UTR uORF|5'UTR-only uORF,5'UTR+3'UTR uORF|Spans into 3'UTR
     filterType.uorfType multipleListOr
     visibility pack
@@ -62,8 +62,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     html gencNcOrfs
     visibility pack
 
@@ -82,9 +82,23 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     html gencNcOrfs
+    visibility pack
+
+    track fiveUltraUorfs
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/fiveUltraUorfs/fiveUltraUorfs.bb
+    shortLabel 5ULTRA uORFs
+    longLabel ncORFs: uORFs in MANE Select transcripts from 5ULTRA
+    type bigBed 12 +
+    itemRgb on
+    mouseOver <b>$gene</b> $uorfType<br> <b>Rank in gene</b>: $rank<br> <b>Kozak</b>: $kozak<br> <b>Intron structure from</b>: $intronsSource
+    filterValues.uorfType Non-Overlapping|Non-Overlapping (5' UTR only),Overlapping|Overlapping (overlaps main CDS),N-terminal_extension|N-terminal extension (in-frame)
+    filterType.uorfType multipleListOr
+    filterValues.kozak Strong,Moderate,Weak
+    filterType.kozak multipleListOr
     visibility pack
 
     track metamorf
@@ -102,8 +116,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     visibility pack
 
     track nuorfdb
@@ -121,8 +135,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterValues.plotType lincRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
     filterType.plotType multipleListOr
     filterValues.type Out-of-Frame,5' uORF,3' dORF,lincRNA,5' Overlap uORF,ncRNA Retained Intron,3' Overlap dORF,ncRNA Processed Transcript,Pseudogene,Antisense,TUCP,Nonsense Mediated Decay,TEC,Sense Overlapping,snoRNA
@@ -144,8 +158,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
@@ -168,8 +182,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple

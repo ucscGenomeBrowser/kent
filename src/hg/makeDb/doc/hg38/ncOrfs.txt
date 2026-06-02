@@ -1,6 +1,68 @@
 # ncOrfs - non-canonical ORFs supertrack build notes
 
 ##############################################################################
+# 5ULTRA uORFs - MANE Select uORFs (2026-06-01 Claude)
+
+# 22,567 ATG-initiated uORFs in MANE Select transcripts compiled by
+# Chaldebas et al. (Am J Hum Genet 2026, PMID 41881026) as part of the
+# 5ULTRA variant annotation pipeline. Three types: Non-Overlapping,
+# Overlapping, N-terminal extension.
+#
+# Data source: https://github.com/mchaldebas/5ULTRA
+# The BED file was retrieved by installing the 5ULTRA package and running
+# 5ULTRA-download-data, then copying:
+#   cp ~/.5ULTRA/data/uORFs.MANE.hg38.bed \
+#      /hive/data/genomes/hg38/bed/ncorfs/5ultra/
+
+mkdir -p /hive/data/genomes/hg38/bed/ncorfs/5ultra
+cd /hive/data/genomes/hg38/bed/ncorfs/5ultra
+
+# Remap colors to Okabe-Ito palette and add uorfType field (bed9+1)
+python3 ~/kent/src/hg/makeDb/scripts/ncOrfs/maneUorfsToBed.py \
+  < uORFs.MANE.hg38.bed \
+  > uORFs.MANE.bed9plus1
+
+# Add exon/intron structure from MANE transcripts (bed12+2)
+python3 ~/kent/src/hg/makeDb/scripts/ncOrfs/addIntrons.py \
+  --in  uORFs.MANE.bed9plus1 \
+  --out uORFs.MANE.bed12plus2 \
+  --mane /gbdb/hg38/mane/mane.bb \
+  --fallback /gbdb/hg38/gencode/gencodeV49.bb \
+  --report addIntrons.report.tsv
+
+# Results: mane_introns=3861 mane_noIntron=18652
+#          fallback_introns=9 fallback_noIntron=45
+#          endpoint_in_intron=0 unmatched=0
+
+# Add gene (from GENE_N short name), rank position (N), and kozak (from score)
+# Name is now GENE_N (e.g. PERM1_2); kozak derived from score: 1000=Strong, 700=Moderate, 300=Weak
+awk -F'\t' 'BEGIN{OFS="\t"} {
+    idx=0; for(i=1;i<=length($4);i++) if(substr($4,i,1)=="_") idx=i;
+    gene = (idx>0) ? substr($4,1,idx-1) : $4;
+    pos  = (idx>0) ? substr($4,idx+1)   : "1";
+    sc   = $5+0;
+    kz   = (sc==1000)?"Strong":(sc==700)?"Moderate":(sc==300)?"Weak":"";
+    print $0, gene, pos, kz;
+}' uORFs.MANE.bed12plus2 > uORFs.MANE.bed12plus5
+
+# Sort and build bigBed
+sort -k1,1 -k2,2n uORFs.MANE.bed12plus5 > uORFs.MANE.sorted.bed
+bedToBigBed \
+  -type=bed12+5 \
+  -tab \
+  -as=~/kent/src/hg/makeDb/scripts/ncOrfs/fiveUltraUorfs.as \
+  uORFs.MANE.sorted.bed \
+  /hive/data/genomes/hg38/chrom.sizes \
+  fiveUltraUorfs.bb
+
+# Verify: itemCount should be 22,567, fieldCount 17
+bigBedInfo fiveUltraUorfs.bb
+
+mkdir -p /gbdb/hg38/ncOrfs/fiveUltraUorfs
+ln -s /hive/data/genomes/hg38/bed/ncorfs/5ultra/fiveUltraUorfs.bb \
+      /gbdb/hg38/ncOrfs/fiveUltraUorfs/fiveUltraUorfs.bb
+
+##############################################################################
 # nuORFdb v1.2 (2026-03-19 max)
 
 # nuORFdb is a database of non-canonical ORFs from the Bhatt lab (Broad Institute)

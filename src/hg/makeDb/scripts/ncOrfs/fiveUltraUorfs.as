@@ -1,0 +1,21 @@
+table fiveUltraUorfs
+"uORFs in MANE Select transcripts from 5ULTRA (Chaldebas et al. 2026)"
+   (
+   string chrom;          "Reference sequence chromosome or scaffold"
+   uint   chromStart;     "Start position in chromosome"
+   uint   chromEnd;       "End position in chromosome"
+   string name;           "Feature name (GENE_N, where N is the uORF rank within the gene)"
+   uint   score;          "Score: 1000=Strong, 700=Adequate, 300=Weak Kozak"
+   char[1] strand;        "+ or - for strand"
+   uint   thickStart;     "Start of thick display region"
+   uint   thickEnd;       "End of thick display region"
+   uint   reserved;       "RGB color (by uORF type)"
+   int    blockCount;     "Number of exon blocks"
+   int[blockCount] blockSizes;   "Block sizes"
+   int[blockCount] chromStarts;  "Block start positions relative to chromStart"
+   string uorfType;       "uORF type|Non-Overlapping = entirely within 5' UTR; Overlapping = overlaps the main CDS start; N-terminal extension = in-frame with main CDS, extends protein N-terminus"
+   string intronsSource;  "Transcript supplying exon/intron structure|MANE Select or GENCODE comprehensive transcript ID whose exons define the block structure; 'none' if no overlapping host was found"
+   string gene;           "Gene symbol"
+   string rank;           "uORF rank and total count within gene|Format: RANK_TOTAL (e.g. 2_5 = 2nd of 5)"
+   string kozak;          "Kozak context strength|Strong, Moderate, or Weak; empty if no ATG start codon"
+   )
