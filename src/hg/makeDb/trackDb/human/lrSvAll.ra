@@ -5,7 +5,7 @@
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/lrSvAll.bb
     shortLabel All LR SVs merged
-    longLabel All long-read SVs merged across the lrSv subtracks (exact-position match), with per-database AC
+    longLabel All long-read SVs merged across subtracks by exact position, with per-database AC
     type bigBed 9 +
     itemRgb on
     visibility pack

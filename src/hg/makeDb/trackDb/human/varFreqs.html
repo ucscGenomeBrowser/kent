@@ -2,17 +2,16 @@
 <p>
 This supertrack collects variant allele frequencies from population-scale sequencing and
 genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
-The data was not reprocessed in a harmonized way; the variant VCFs were collected from the projects as-is.
-The goal is a single place to compare how common
-a variant is across different populations, ancestries, and cohorts, for
-projects that cannot be recomputed by gnomAD soon. The main
-<a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one summary track,
-with filters, summed population frequencies and recalculated protein-effect annotations.
-There is also one subtrack per project with the original VCF data and all the annotations that the project provides.
-The different projects use different pipelines and sequencing technologies. Click any of the projects
-above or below for a summary of their sample selection, sequencing assay and software pipeline.
-Many projects do not allow us to distribute the data, but we document how to request it
-and provide all converters.</p>
+The data was not reprocessed in a harmonized way; the variant VCFs were collected from the
+projects as-is. The goal is a single place to compare how common a variant is across
+different populations, ancestries, and cohorts, for projects that cannot be recomputed by
+gnomAD soon. Three combined tracks aggregate the source data along different lines, and
+there is also one subtrack per project with the original VCF data and all the annotations
+that the project provides. The different projects use different pipelines and sequencing
+technologies. Click any of the projects above or below for a summary of their sample
+selection, sequencing assay and software pipeline. Many projects do not allow us to
+distribute the data, but we document how to request it and provide all converters.
+</p>
 
 <p>
 Data from projects that provide haplotype-phased genotypes can also be found
@@ -25,20 +24,26 @@ Their VCF versions below show only the isolate frequency per variant.
 Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected) and Taiwan Biobank (pending).
 </p>
 
-<h2>Combined Track (All Databases)</h2>
+<h2>Combined Tracks</h2>
 <p>
-The &quot;All Databases Combined&quot; track merges variants from all individual databases into a single
-bigBed file with consequence annotations, totaling 1.17 billion variants from ~1.7 million individuals.
-The track supports filtering by variant type
-(SNV, insertion, deletion, MNV), predicted consequence (missense, synonymous, stop gained,
-frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
-and per-database), and allele count (total or per-database). The track is useful in dense mode
-to get a quick overview of variant density across all projects, or with filters to find
-variants present in specific databases or within certain frequency ranges. With the &quot;clone track&quot;
-feature you can clone this track and keep multiple versions, each with different filters activated.
-The &quot;Density mode&quot; checkbox on the track configuration page shows a plot of the
-density of variants passing a filter, one per track clone.
+Three combined tracks merge variants from the individual subtracks into single bigBed files
+with predicted protein consequences and cross-database filtering. All three use the same
+filter conventions (variant type, consequence, source database, allele frequency, allele
+count, and per-database AF/AC).
 </p>
+<ul>
+  <li><a href="hgTrackUi?g=varFreqsAll"><b>All Databases Combined</b></a> &mdash; 1.34
+      billion variants from 28 sequencing-based cohorts (WGS, WES, long-read). The default
+      summary view of the supertrack. Excludes the genotyping-array cohorts.</li>
+  <li><a href="hgTrackUi?g=varFreqsDisease"><b>Disease-related Databases Combined</b></a>
+      &mdash; 932 million variants from six disease-focused cohorts (SPARK, SFARI WGS,
+      TOPMed, SCHEMA, GREGoR, GA4K), with phenotype-stratified AC/AF where the source
+      provides it.</li>
+  <li><a href="hgTrackUi?g=varFreqsArray"><b>Genotyping Array Databases Combined</b></a>
+      &mdash; 14.7 million variants from three array cohorts (TPMI Taiwan, Mexico Biobank,
+      UK Biobank imputed). Kept separate because chip data has different per-variant
+      confidence than sequencing.</li>
+</ul>
 
 <h3>Available Datasets</h3>
 
@@ -53,12 +58,30 @@ density of variants passing a filter, one per track clone.
   <th>Downloadable from UCSC</th>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsAll">All Databases combined</a></td>
-  <td>All below</td>
-  <td>1.7mil</td>
-  <td>WGS/WES/imputed</td>
-  <td></td>
-  <td></td>
+  <td><a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a></td>
+  <td>Sequencing-based, all below</td>
+  <td>~1.7mil</td>
+  <td>WGS/WES/long-read</td>
+  <td>1.34B variants</td>
+  <td>Phenotype splits for SPARK, SFARI WGS, GREGoR</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=varFreqsDisease">Disease-related Databases Combined</a></td>
+  <td>SPARK, SFARI WGS, TOPMed, SCHEMA, GREGoR, GA4K</td>
+  <td>~300k</td>
+  <td>WGS/WES/long-read</td>
+  <td>932M variants</td>
+  <td>SPARK ASD/Non-ASD, SFARI WGS ASD/Non-ASD, SCHEMA case/control, GREGoR aff/unaff/unknown</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=varFreqsArray">Genotyping Array Databases Combined</a></td>
+  <td>TPMI, MexBB, UKBB</td>
+  <td>~530k</td>
+  <td>Array / imputed</td>
+  <td>14.7M variants</td>
+  <td>&mdash;</td>
   <td>No</td>
 </tr>
 <tr>
@@ -133,6 +156,15 @@ density of variants passing a filter, one per track clone.
   <td>Cross-section of Swedish population</td>
   <td>&mdash;</td>
   <td>No</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=gonl">GoNL</a></td>
+  <td>Netherlands</td>
+  <td>498</td>
+  <td>WGS (~13x)</td>
+  <td>250 unrelated Dutch trios (parents only)</td>
+  <td>&mdash;</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=schema">SCHEMA</a></td>

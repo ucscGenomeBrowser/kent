@@ -8,7 +8,7 @@ superTrack on
 
         track varFreqsAll
         shortLabel All Databases Combined
-        longLabel Variant Frequencies: All Databases Combined with Consequence Annotations
+        longLabel SNV Frequencies: All Databases Combined with Consequence Annotations
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_all/varFreqsAll.bb
@@ -329,7 +329,7 @@ superTrack on
 
         track varFreqsDisease
         shortLabel Disease-related Databases Combined
-        longLabel Variant Frequencies: Disease-related cohorts combined (autism, schizophrenia, rare disease, NHLBI heart/lung/blood)
+        longLabel SNV Frequencies: Disease-related cohorts combined (autism, schizophrenia, rare disease, NHLBI heart/lung/blood)
         type bigBed 9 +
         parent varFreqs off
         bigDataUrl /gbdb/$D/varFreqs/_disease/varFreqsDisease.bb
@@ -427,7 +427,7 @@ superTrack on
 
         track varFreqsArray
         shortLabel Genotyping Array Databases Combined
-        longLabel Variant Frequencies: Genotyping-array cohorts combined (TPMI, Mexico Biobank, UK Biobank imputed)
+        longLabel SNV Frequencies: Genotyping-array cohorts combined (TPMI, Mexico Biobank, UK Biobank imputed)
         type bigBed 9 +
         parent varFreqs off
         bigDataUrl /gbdb/$D/varFreqs/_array/varFreqsArray.bb
@@ -471,7 +471,7 @@ superTrack on
 
         track allofus
         shortLabel AllOfUs v7 245k WGS
-        longLabel Variant Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
+        longLabel SNV Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz
@@ -482,7 +482,7 @@ superTrack on
 
         #track me
         #shortLabel Regeneron Million Exomes 983k WES
-        #longLabel Variant Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
+        #longLabel SNV Frequencies: Regeneron One Million Exomes (ME) Project - 983k WGS
         #parent varFreqs on
         #bigDataUrl /gbdb/$D/varFreqs/me/me.freq.vcf.gz
         #visibility pack
@@ -494,7 +494,7 @@ superTrack on
 
         track topmed
         shortLabel NHLBI TOPMed 10 151k WGS
-        longLabel Variant Frequencies: NHLBI TOPMed - 151k WGS
+        longLabel SNV Frequencies: NHLBI TOPMed - 151k WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_topmed/topmed10.vcf.gz
@@ -505,7 +505,7 @@ superTrack on
 
         track sfariSparkExomes
         shortLabel SFARI SPARK 140k WES
-        longLabel Variant Frequencies: SFARI SPARK - 140k WES
+        longLabel SNV Frequencies: SFARI SPARK - 140k WES
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
@@ -516,7 +516,7 @@ superTrack on
 
         track sfariSparkWgs
         shortLabel SFARI SPARK 12k WGS
-        longLabel Variant Frequencies: SFARI SPARK - 12,519 WGS
+        longLabel SNV Frequencies: SFARI SPARK - 12,519 WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
@@ -528,7 +528,7 @@ superTrack on
 
         #track mcps
         #shortLabel Mexico City Prospective Study 10k WGS+141k WES
-        #longLabel Variant Frequencies: Mexico City Prospective Study (MCPS)
+        #longLabel SNV Frequencies: Mexico City Prospective Study (MCPS)
         #tableBrowser off
         #parent varFreqs on
         #bigDataUrl /gbdb/$D/varFreqs/mcps/mcps.freq.vcf.gz
@@ -539,7 +539,7 @@ superTrack on
 
         track tommo60kjpn
         shortLabel Japan ToMMo 61k WGS
-        longLabel Variant Frequencies: Japan 61k - ToMMo SNV+Indels
+        longLabel SNV Frequencies: Japan 61k - ToMMo SNV+Indels
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
@@ -549,7 +549,7 @@ superTrack on
 
         track wbbc
         shortLabel China WBBC 4.5k WGS
-        longLabel Variant Frequencies: Westlake BioBank for Chinese - 4,480 WGS, 4 regional Han groups
+        longLabel SNV Frequencies: Westlake BioBank for Chinese - 4,480 WGS, 4 regional Han groups
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/wbbc/wbbc.vcf.gz
@@ -559,7 +559,7 @@ superTrack on
 
         track chinamap
         shortLabel China ChinaMAP 10.5k WGS
-        longLabel Variant Frequencies: ChinaMAP phase 1 - 10,588 WGS at ~40x, Chinese natural population
+        longLabel SNV Frequencies: ChinaMAP phase 1 - 10,588 WGS at ~40x, Chinese natural population
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_chinamap/chinamap.vcf.gz
@@ -570,7 +570,7 @@ superTrack on
 
         track tpmi
         shortLabel Taiwan TPMI Axiom array
-        longLabel Variant Frequencies: Taiwan Precision Medicine Initiative - Axiom TPM1 chip, Han Chinese
+        longLabel SNV Frequencies: Taiwan Precision Medicine Initiative - Axiom TPM1 chip, Han Chinese
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_tpmi/tpmi.vcf.gz
@@ -581,7 +581,7 @@ superTrack on
 
         track alfaVcf
         shortLabel NCBI ALFA 408k mixed
-        longLabel Variant Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants
+        longLabel SNV Frequencies: NCBI ALFA (dbGaP data) - 408k mixed WGS/WES/array, 163M variants
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA.vcf.gz
@@ -596,7 +596,7 @@ superTrack on
         visibility hide
         type vcfTabix
         shortLabel FinnGen R12 500k imputed
-        longLabel Variant Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
+        longLabel SNV Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
         priority 4.5
         bigDataUrl /gbdb/$D/varFreqs/_finngen/finnge_R12_annotated_variants_v1.vcf.gz
         dataVersion R12
@@ -607,7 +607,7 @@ superTrack on
         visibility hide
         type vcfTabix
         shortLabel UK Biobank 361k imputed
-        longLabel Variant Frequencies: UK Biobank Genotypes - 361k White British, Neale Lab Round 2 imputed
+        longLabel SNV Frequencies: UK Biobank Genotypes - 361k White British, Neale Lab Round 2 imputed
         priority 4.6
         bigDataUrl /gbdb/$D/varFreqs/ukbb/ukbb.vcf.gz
         dataVersion Neale Lab R2 08-2018
@@ -617,7 +617,7 @@ superTrack on
         visibility hide
         type vcfTabix
         shortLabel Sweden SweGen 1k WGS
-        longLabel Variant Frequencies: Sweden SweGen - 1k WGS
+        longLabel SNV Frequencies: Sweden SweGen - 1k WGS
         priority 4.7
         bigDataUrl /gbdb/$D/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
         dataVersion 20251201
@@ -628,14 +628,14 @@ superTrack on
         visibility hide
         type vcfTabix
         shortLabel Netherlands GoNL 498 WGS
-        longLabel Variant Frequencies: Genome of the Netherlands - 250 Dutch trios
+        longLabel SNV Frequencies: Genome of the Netherlands - 250 Dutch trios
         priority 4.75
         bigDataUrl /gbdb/$D/varFreqs/gonl/gonl.vcf.gz
         dataVersion GRCh38 1.0
 
         track mgrb
         shortLabel Australia MGRB 4k WGS
-        longLabel Variant Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
+        longLabel SNV Frequencies: Australia Medical Genome Reference Bank - 4,011 WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
@@ -646,7 +646,7 @@ superTrack on
 
         track gasp
         shortLabel GenomeAsia 1.7k SNVs
-        longLabel Variant Frequencies: GenomeAsia Pilot - Substitutions
+        longLabel SNV Frequencies: GenomeAsia Pilot - Substitutions
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
@@ -655,7 +655,7 @@ superTrack on
 
         track gaspIndel
         shortLabel GenomeAsia 1.7k Indels
-        longLabel Variant Frequencies: GenomeAsia Pilot - Indels
+        longLabel SNV Frequencies: GenomeAsia Pilot - Indels
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.indels.vcf.gz
@@ -665,7 +665,7 @@ superTrack on
 
         track abraom
         shortLabel Brazil ABraOM 1k WGS
-        longLabel Variant Frequencies: ABraOM Brazil - 1,171 unrelated individuals
+        longLabel SNV Frequencies: ABraOM Brazil - 1,171 unrelated individuals
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
@@ -674,7 +674,7 @@ superTrack on
 
         track indigenomes
         shortLabel India IndiGenomes 1k WGS
-        longLabel Variant Frequencies: IndiGenomes India - 1,029 samples
+        longLabel SNV Frequencies: IndiGenomes India - 1,029 samples
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
@@ -683,7 +683,7 @@ superTrack on
 
         track genomeindia
         shortLabel India GenomeIndia 9.7k WGS
-        longLabel Variant Frequencies: GenomeIndia - 9,768 WGS, 83 populations (Bhattacharyya 2025)
+        longLabel SNV Frequencies: GenomeIndia - 9,768 WGS, 83 populations (Bhattacharyya 2025)
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_genomeindia/genomeindia.vcf.gz
@@ -693,7 +693,7 @@ superTrack on
 
         track kova
         shortLabel Korea KOVA 5.3k mixed
-        longLabel Variant Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.4k WES
+        longLabel SNV Frequencies: KOVA Korea - 5305 samples, 1.9k WGS+3.4k WES
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_kova/kova.v7.vcf.gz
@@ -703,7 +703,7 @@ superTrack on
 
         track npm
         shortLabel Singapore NPM 9.7k WGS
-        longLabel Variant Frequencies: NPM Singapore - 9,770 WGS samples
+        longLabel SNV Frequencies: NPM Singapore - 9,770 WGS samples
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz
@@ -713,7 +713,7 @@ superTrack on
 
         track hrc
         shortLabel HRC 30k WGS
-        longLabel Variant Frequencies: Haplotype Reference Consortium - 30k WGS (excl. 1000 Genomes)
+        longLabel SNV Frequencies: Haplotype Reference Consortium - 30k WGS (excl. 1000 Genomes)
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hrc/hrc.vcf.gz
@@ -722,7 +722,7 @@ superTrack on
 
         track saudi
         shortLabel Saudi Genome 302 WGS
-        longLabel Variant Frequencies: Saudi Genome Project - 302 WGS samples
+        longLabel SNV Frequencies: Saudi Genome Project - 302 WGS samples
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
@@ -731,7 +731,7 @@ superTrack on
 
         track schema
         shortLabel SCHEMA 121k WES Sz
-        longLabel Variant Frequencies: SCHEMA Schizophrenia Exome Meta-Analysis - WES 24k cases, 97k controls
+        longLabel SNV Frequencies: SCHEMA Schizophrenia Exome Meta-Analysis - WES 24k cases, 97k controls
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz
@@ -743,7 +743,7 @@ superTrack on
 
         track mxbFreq
         shortLabel Mexico Biobank 6k Array
-        longLabel Variant Frequencies: Mexico Biobank - 6,011 individuals, genotyping array
+        longLabel SNV Frequencies: Mexico Biobank - 6,011 individuals, genotyping array
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_mxb/mxb.freq.vcf.gz
@@ -754,7 +754,7 @@ superTrack on
 
         track sgdpFreq
         shortLabel SGDP 279 WGS
-        longLabel Variant Frequencies: Simons Genome Diversity Project - 279 WGS, 142 populations
+        longLabel SNV Frequencies: Simons Genome Diversity Project - 279 WGS, 142 populations
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/sgdpFreq/sgdp.freq.vcf.gz
@@ -764,7 +764,7 @@ superTrack on
 
         track gregor
         shortLabel GREGoR R4 3.6k WGS
-        longLabel Variant Frequencies: GREGoR Consortium - Release 4, 3,624 WGS samples, rare disease families
+        longLabel SNV Frequencies: GREGoR Consortium - Release 4, 3,624 WGS samples, rare disease families
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/gregor/gregor.vcf.gz
@@ -774,7 +774,7 @@ superTrack on
 
         track hgdp1kFreq
         shortLabel gnomAD HGDP+1kG 4k WGS
-        longLabel Variant Frequencies: gnomAD HGDP + 1000 Genomes - 4,094 WGS, 80 populations
+        longLabel SNV Frequencies: gnomAD HGDP + 1000 Genomes - 4,094 WGS, 80 populations
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz
@@ -784,7 +784,7 @@ superTrack on
 
         track ga4kSnv
         shortLabel GA4K 552 PacBio LR
-        longLabel Variant Frequencies: GA4K Children's Mercy - 552 PacBio HiFi WGS, pediatric RD
+        longLabel SNV Frequencies: GA4K Children's Mercy - 552 PacBio HiFi WGS, pediatric RD
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga4k/ga4kSnv.vcf.gz
@@ -794,7 +794,7 @@ superTrack on
 
         track colorsDbSnv
         shortLabel CoLoRSdb 1k LR SNV/Ind
-        longLabel Variant Frequencies: CoLoRSdb v1.2.0 - 1,027 PacBio HiFi WGS, SNV/indel callset
+        longLabel SNV Frequencies: CoLoRSdb v1.2.0 - 1,027 PacBio HiFi WGS, SNV/indel callset
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/colorsDb/colorsDbSnv.vcf.gz
@@ -804,7 +804,7 @@ superTrack on
 
         track svatalogSnv
         shortLabel SVatalog 101 WGS
-        longLabel Variant Frequencies: GWAS SVatalog - 101 samples, 10X Genomics linked-read SNPs
+        longLabel SNV Frequencies: GWAS SVatalog - 101 samples, 10X Genomics linked-read SNPs
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
@@ -814,7 +814,7 @@ superTrack on
 
         track tishkoff180
         shortLabel 12 Afr Pops 180 WGS
-        longLabel Variant Frequencies: 180 WGS from 12 Indigenous African Populations (Fan 2023)
+        longLabel SNV Frequencies: 180 WGS from 12 Indigenous African Populations (Fan 2023)
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_tishkoff/tishkoff180.vcf.gz

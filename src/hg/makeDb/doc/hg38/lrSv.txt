@@ -378,7 +378,7 @@ ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hg38.bb /gbdb/hg38/lrSv/cpc1.b
 ##########
 # 2026-04-20 Claude max
 
-# Arabic Pangenome Reference (APR) SVs
+# Arab Pangenome Reference (APR) SVs
 # Paper: Nassir et al. 2025, Nat Commun, PMID 40707445
 # Data : https://www.mbru.ac.ae/the-arab-pangenome-reference/
 #        (SharePoint download page under APR Nuclear/Pangenome)

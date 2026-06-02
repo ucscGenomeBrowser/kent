@@ -499,8 +499,8 @@ def write_trackdb_stanza(out_path, dbs):
         f.write("    parent lrSv\n")
         f.write("    bigDataUrl /gbdb/$D/lrSv/lrSvAll.bb\n")
         f.write("    shortLabel All LR SVs merged\n")
-        f.write("    longLabel All long-read SVs merged across the lrSv subtracks "
-                "(exact-position match), with per-database AC\n")
+        f.write("    longLabel All long-read SVs merged across subtracks "
+                "by exact position, with per-database AC\n")
         f.write("    type bigBed 9 +\n")
         f.write("    itemRgb on\n")
         f.write("    visibility pack\n")
