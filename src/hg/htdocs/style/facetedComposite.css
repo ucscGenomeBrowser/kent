@@ -36,6 +36,21 @@
     min-width: 0;
     box-sizing: border-box;
 }
+/*  Horizontal-scroll box around metadata tables: a too-wide table scrolls
+    internally in this instead of spilling off-screen. The toolbar (Show N, paging)
+    sits outside this box, so it stays visible at the wrapper's width.
+
+    The genome browser page wraps this content in an old-school
+    <table width="100%"> that sizes to its content. The "width: 0; min-width: 100%"
+    pair stops the metadata table from reporting the (very large) content width,
+    the outer table sticks to the page width, the metadata table's min-width:100% makes
+    it expand to fill that, and then then metadata's overflow results in a scroll bar.
+*/
+.table-xscroll {
+    width: 0;
+    min-width: 100%;
+    overflow-x: auto;
+}
 #theMetaDataTable {
     width: 100% !important;
     box-sizing: border-box;
