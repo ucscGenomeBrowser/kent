@@ -824,11 +824,8 @@ struct sqlConnection *hConnectOtto()
 /* Connect to otto database using otto profile, fallback to central */
 {
 char *ottoDb = cfgOption2("otto", "db");
-if (isEmpty(ottoDb))
-    {
-    // No otto profile defined, use central
+if (isEmpty(ottoDb)) // No otto profile defined, use central
     return hConnectCentral();
-    }
 
 struct sqlConnection *conn = sqlConnectProfile("otto", ottoDb);
 if (conn == NULL)

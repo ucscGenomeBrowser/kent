@@ -209,7 +209,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/ga4kSv.bb
     shortLabel GA4K 502 SVs
-    longLabel Structural Variants from 502 Children's Mercy GA4K Probands and Families (PacBio HiFi)
+    longLabel Structural Variants from 502 Children's Mercy GA4K Probands (PacBio HiFi)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -261,7 +261,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hprc2.bb
     shortLabel HPRC v2 233 SVs
-    longLabel Structural Variants from the HPRC v2 Pangenome Graph (233 Samples, minigraph-cactus + vcfwave)
+    longLabel Structural Variants from the HPRC v2 Pangenome Graph (233 samples, minigraph-cactus)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -327,7 +327,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hgsvc2.bb
     shortLabel HGSVC2 32 SVs
-    longLabel Structural Variants from 32 Haplotype-Resolved Genomes (HGSVC2 freeze 4, Ebert et al. 2021)
+    longLabel Structural Variants from 32 Haplotype-Resolved Genomes (HGSVC2 freeze 4, Ebert 2021)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -435,7 +435,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/apr.bb
     shortLabel Arab APR 53 SVs
-    longLabel Structural Variants from Arabic Pangenome Reference (53 UAE-resident Arab samples)
+    longLabel Structural Variants from the Arab Pangenome Reference (53 UAE-resident Arab samples)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -461,7 +461,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/cpc1.bb
     shortLabel CPC 58 SVs
-    longLabel Structural Variants from Chinese Pangenome Consortium (58 samples, CPC portion of the CPC+HPRC graph; HPRC-specific SVs removed)
+    longLabel Structural Variants from the Chinese Pangenome Consortium (58 samples, CPC-only)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -487,7 +487,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/chirmade101.bb
     shortLabel SVatalog 101 SVs
-    longLabel Structural Variants from 101 Long-read Whole-Genome Sequences (GWAS SVatalog, Chirmade et al. 2026)
+    longLabel Structural Variants from 101 Long-read WGS (GWAS SVatalog, Chirmade 2026)
     type bigBed 9 +
     itemRgb on
     visibility dense

@@ -93,10 +93,10 @@ def gitPullKentTree():
     return True
 
 
-def hgsql(query, db="hgcentraltest"):
+def hgsql(query, db="hgcentral"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
-        ["/cluster/bin/x86_64/hgsql", "-N", "-B", "-e", query, db],
+        ["/cluster/bin/x86_64/hgsql", '-h', 'genome-centdb', "-N", "-B", "-e", query, db],
         check=True, capture_output=True, text=True,
     ).stdout
     return [tuple(line.split("\t")) for line in out.splitlines() if line]

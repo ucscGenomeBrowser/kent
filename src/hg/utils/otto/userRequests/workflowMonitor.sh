@@ -32,13 +32,15 @@ export reqId="$1"
 export buildDir="$2"
 export successCount=0
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+export centDb="hgcentral"
+export hgSql="hgsql -hgenome-centdb"
 
 ##############################################################################
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=7 WHERE id=${id};" "${centDb}"
 }
 ##############################################################################
 
@@ -100,8 +102,8 @@ case "${state}" in
 esac
 
 # printf "# all jobs complete, downloading results\n" 1>&2
-/cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status = 3 WHERE id = ${reqId};" hgcentraltest
+/cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status = 3 WHERE id = ${reqId};" "${centDb}"
 
 ############################################################################
 # download results via planemo

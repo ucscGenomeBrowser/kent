@@ -1039,11 +1039,13 @@ var hubCreate = (function() {
     }
 
     function sanitizeGenomeName(name) {
-        // Strip .2bit, replace non-alphanumeric/_/- with _, drop hub_ prefix.
+        // Strip .2bit, replace non-alphanumeric/_/-/. with _, drop hub_ prefix.
         // Returns empty string if nothing usable is left.
+        // The allowed character class [A-Za-z0-9._-] must match the
+        // server-side check in src/hg/hgHubConnect/hooks/pre-finish.c.
         if (!name) return "";
         let stem = name.replace(/\.2bit$/i, "");
-        stem = stem.replace(/[^A-Za-z0-9_-]/g, "_");
+        stem = stem.replace(/[^A-Za-z0-9._-]/g, "_");
         stem = stem.replace(/^hub_/, "");
         return stem;
     }

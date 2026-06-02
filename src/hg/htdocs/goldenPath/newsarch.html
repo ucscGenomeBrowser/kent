@@ -64,6 +64,102 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="060226"></a>
+<h2>Jun. 2, 2026 &nbsp;&nbsp; New Massively Parallel Reporter Assay (MPRA) tracks on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mpra" target="_blank"><b>MPRAs</b></a>
+container track on the human genome assembly (GRCh38/hg38), gathering
+results from massively parallel reporter assays (MPRAs). MPRAs are
+high-throughput methods that measure the regulatory activity of
+thousands of candidate DNA sequences in parallel by linking each
+fragment to a barcoded reporter gene and quantifying the resulting
+reporter RNA.
+</p>
+
+<p>
+The container brings together two complementary data
+sources: <b>tested enhancer elements</b> and <b>allele-resolved variant
+effects</b>. MPRA Base captures element-level activity, identifying
+which candidate DNA fragments function as regulatory elements in a
+given cell line. MPRAVarDB captures variant-level allelic effects,
+quantifying how individual SNPs change reporter activity between
+reference and alternate alleles, useful for
+fine-mapping GWAS signals and prioritizing causal regulatory variants.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=mprabase" target="_blank"><b>MPRA
+Base</b></a> subtrack displays 40,938 experimentally tested cis-regulatory
+elements curated from the
+<a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
+database (<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao
+et&nbsp;al., 2023</a>), drawn from 10 MPRA, STARR-seq, and related reporter
+experiments across six cell lines (HepG2, HUES64, mESC, NPC, HEK293FT,
+and UACC903). Each item is colored by within-experiment percentile rank:
+<span style="color:red">red</span> for the top quartile,
+<span style="color:orange">orange</span> for the 50&ndash;74th percentile, and
+<span style="color:blue">blue</span> for the bottom half. The track also
+exposes the assayed oligo sequence and a variant-allele-type field
+(<tt>reference</tt> / <tt>alternate</tt> / <tt>NA</tt>) so users can
+distinguish standard enhancer-element tests from allelic comparisons.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=mpraVarDb" target="_blank"><b>MPRAVarDB</b></a>
+subtrack displays 239,028 variants tested for allelic regulatory effects
+across 18 MPRA studies, more than 30 cell lines, and more than 30 human
+diseases or traits (curated by
+<a href="https://mpravardb.rc.ufl.edu/" target="_blank">MPRAVarDB</a>;
+<a href="https://pubmed.ncbi.nlm.nih.gov/39325859/" target="_blank">Jin
+et&nbsp;al., 2024</a>). Variants come from GWAS fine-mapping for
+neurodegenerative, autoimmune, oncologic, and other disease loci,
+eQTL fine-mapping in lymphoblastoid cells, saturation mutagenesis of
+20 disease-associated regulatory elements, and several focused screens.
+Items are colored by statistical significance:
+<span style="color:#C80000;">dark red</span> for variants with FDR &lt; 0.05,
+<span style="color:#FFA500;">orange</span> for nominal p &lt; 0.05 but
+FDR &ge; 0.05, and <span style="color:#BEBEBE;">grey</span> for the rest.
+</p>
+
+<div class="text-center">
+  <img src="../images/mpraNewsImage.png"
+  alt="Genome Browser screenshot at the TERT promoter on hg38 showing MPRA Base
+  reporter elements for melanoma risk variants tested in HEK293FT and UACC903
+  cells, and MPRAVarDB high-confidence variants from saturation mutagenesis of
+  the TERT promoter"
+  width='90%'>
+  <p class="gbsCaption">
+  <em>MPRA Base elements and MPRAVarDB variants at the TERT promoter
+  (chr5, GRCh38/hg38). MPRA Base (top) shows reporter activity for
+  melanoma risk variants tested in HEK293FT and UACC903 cells
+  (Choi et&nbsp;al., 2020). MPRAVarDB (bottom) highlights
+  high-confidence allelic effects from saturation mutagenesis of the
+  TERT promoter (Kircher et&nbsp;al., 2019).</em>
+  </p>
+</div>
+
+<p>
+See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mprabase" target="_blank">MPRA Base</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mpraVarDb" target="_blank">MPRAVarDB</a>
+track description pages for the full list of contributing studies,
+per-study scoring methodology, and notes on how to interpret raw scores
+and log2 fold change across studies that use different statistical
+frameworks.
+</p>
+
+<p>
+We would like to thank Varda Singhal, Jianyu Zhao, and the
+<a href="https://pharm.ucsf.edu/ahituv" target="_blank">Ahituv Lab</a>
+at UCSF for creating and curating the MPRA Base database, and Weijia Jin
+and the
+<a href="https://mpravardb.rc.ufl.edu/" target="_blank">MPRAVarDB team</a>
+at the University of Florida for the variant-effect resource. We also
+would like to thank Max Haeussler and Lou Nassar for the creation and
+release of the UCSC Genome Browser tracks.
+</p>
+
 <a name="050126"></a>
 <h2>May 1, 2026 &nbsp;&nbsp; New PrimateAI-3D and PromoterAI variant impact tracks from Illumina</h2>
 <p>

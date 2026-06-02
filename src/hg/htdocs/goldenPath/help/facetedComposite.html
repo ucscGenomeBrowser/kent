@@ -10,20 +10,20 @@
 <h2>Overview</h2>
 <p>The UCSC Genome Browser includes a large and ever-expanding collection of
 data tracks, particularly on its core assemblies. To make this collection
-easier to navigate, we provide several types of container tracks — tracks whose
+easier to navigate, we provide several types of container tracks - tracks whose
 purpose is to hold other tracks, similar to how a folder holds files. Composite
 tracks are one such container, allowing related tracks to be grouped and
 managed through a unified interface.  For example, our Conservation tracks are
-often organized as composites as are each of our "All GENCODE" tracks (see <a
-href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">here</a>).
+often organized as composites as are each of our "All GENCODE" tracks (e.g., <a
+href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeV50">this one</a>).
 But while the standard user interface for a composite works well for intermediate
 numbers of subtracks (around 20-200), it becomes much more difficult to use when
 that number scales up into the thousands.  Faceted composites use an alternate
 interface for composite tracks that is designed for these situations.
 </p><p>
 The faceted composite display is particularly useful for data sets where each subtrack has
-many potential values to be filtered on (e.g. cell type, protocol, date, experiment scores, etc.),
-and where only a few of them may be of interest for any particular user.  Because the
+many potential values to be filtered on (e.g., cell type, protocol, date, experiment scores),
+and where only a few of them may be of interest to any particular user.  Because the
 focus is on simply helping users identify which subtracks are relevant to them, the subtrack
 configuration options are reduced to "is this subtrack displayed or not".  Users can then
 alter the display of individual subtracks using the right-click Configure menu from the main
@@ -42,12 +42,12 @@ hgTracks browser display.</p>
 <a id="quickStart"></a>
 <h2>Quick Start - For those familiar with composite tracks</h2>
 <p>
-The TL;DR version of this is that a faceted composite is like any other composite,
-but cannot include views or subgroups.  All subtracks in a mix of types live under the same
-parent: the composite track itself.  The metadata file (which must be web-accessible)
-describes the facet data for the tracks.  The composite's trackDb settings must include a
-"primaryKey" setting that names one of the fields in the metadata file.  Child tracks must have
-names that match "&lt;parent_name&gt;_&lt;primaryKey&gt;".<br>
+The short version of this is that a faceted composite is like any other composite,
+but cannot include views or subgroups.  All subtracks, which may be a mix of data types,
+live under the same parent: the composite track itself.  A mandatory metadata file (which must be
+web-accessible) describes the facet data for the tracks.  The composite's trackDb settings
+must include a "primaryKey" setting that names one of the fields in the metadata file.  Child
+tracks must then have names that match "&lt;parent_name&gt;_&lt;primaryKey value&gt;".<br>
 Brief example:<br>
 <b>TrackDb entries</b><br>
 <pre>
@@ -72,6 +72,7 @@ Brief example:<br>
   shortLabel ex2 peaks
   longLabel ex2 Blood data peaks
 </pre>
+</p><p>
 <b>metadata.tsv</b><br>
 <pre>
 name	collection_date	cell_type	lab
@@ -90,7 +91,7 @@ needed to assemble a fully faceted composite track for your own data.
 </p>
 <p>
 Like any composite track, a faceted composite is built from two kinds of
-trackDb entries: a single <b>parent</b> stanza that declares the composite
+trackDb stanzas: a single <b>parent</b> stanza that declares the composite
 as a whole, and a collection of <b>child</b> stanzas (also called subtracks)
 that each carry the underlying data.  The parent is what users see in the
 track list on the browser gateway; opening it brings up the faceted
@@ -105,6 +106,7 @@ At its simplest, a faceted composite parent looks like this:
   shortLabel Blood tests
   longLabel Blood tests across cell types
 </pre>
+</p><p>
 The line <code>compositeTrack faceted</code> is what tells the browser to use
 the faceted user interface rather than the traditional composite matrix.
 The <code>shortLabel</code> and <code>longLabel</code> are the names shown
@@ -130,13 +132,16 @@ above might be:
   shortLabel ex2 peaks
   longLabel ex2 Blood data peaks
 </pre>
+</p><p>
 Two things worth noting.  First, unlike a traditional composite, a faceted
 composite happily mixes data types - the children don't all need to be
 bigBed, or all bigWig.  Second, each child track name follows the convention
 <code>&lt;parent_name&gt;_&lt;identifier&gt;</code>, where the identifier
-will line up with a row in the metadata file introduced below.  That naming
+matches the first field from a row in the metadata file introduced below.  That naming
 convention is how the browser ties each subtrack to its metadata, so the
-match must be exact, capitalization included.
+match must be exact, capitalization included.  For example, the track
+"myComposite_ex2" in the example above would be paired with an entry in the
+metadata file for the "ex2" identifier.
 </p>
 <p>
 With just the settings above, the composite will load and display, but it
@@ -165,21 +170,21 @@ are provided to help narrow down the list interactively, as the list of subtrack
 is often too long to easily scroll all the way through.
 </p><p>
 <b>metaDataUrl</b><br>
-In order to set up the facets, however, the track needs to include a description
+In order to set up the facets, the track needs to include a description
 of which facets exist and what the associated values for each track are.  This
 data comes from a separate web-accessible TSV (tab-separated value) file named
-in the <code>metaDataUrl</code> setting of the track.<br>
-Example:<br>
+in the <code>metaDataUrl</code> setting of the track.  Here is a new
+example with more metadata than the previous one:<br>
 <pre>
 accession	tissue	protocol	treatment	_date	__count
 SRR11111	blood	Omni-ATAC-seq	control	2026-01-01	12
 SRR11112	blood	Omni-ATAC-seq	IFNg6h	2026-01-01	31
-SRR11113	spleen	Omni-ATAC-seq	control	2024-08-21	8
+SRR11113	spleen	Omni-ATAC-seq	control	2026-08-21	8
 SRR11114	spleen	Omni-ATAC-seq	IFNg6h	2026-08-22	17
 </pre>
 <p>
-This data would be pasted into a file called something like "myTrackMetadata.tsv",
-and it would be added to your faceted composite by adding</p>
+These lines would be saved into a file called something like "myTrackMetadata.tsv"
+that would then be attached to your faceted composite by adding</p>
 <pre>
 metaDataUrl https://url/to/myTrackMetadata.tsv
 </pre>
@@ -194,80 +199,171 @@ one underscore, however, no facet will be created (a search box will still
 be provided in the table header).  When a field name begins with two underscores,
 there will be no facet for it and no search box in the table header.
 </p><p>
+<b>primaryKey</b><br>
+The <code>primaryKey</code> setting is required and works together with the metadataUrl
+setting.  The metadataUrl setting describes where to find the metadata file; the
+primaryKey setting dictates which field in that file will be used to identify the
+subtracks.  The column named as the primaryKey column does not have to be the first,
+but it is often convenient to organize the metadata file that way.
+The values in that column are expected to be unique - no two rows should
+share the same value.  The above metadataUrl setting would be combined with a setting
+reading
+<pre>
+primaryKey accession
+</pre>
+</p><p>
+to indicate that subtrack names are pulled from values in the "accession" column,
+and that subtracks would be named &lt;parent_name&gt;_SRR11111,
+&lt;parent_name&gt;_SRR11112, &lt;parent_name&gt;_SRR11113, and so on.  The corresponding
+trackDb stanzas for the parent and child tracks would then look something like this:
+<pre>
+  track SRRComposite
+  compositeTrack faceted
+  metaDataUrl https://url/to/myTrackMetadata.tsv
+  primaryKey accession
+  shortLabel Omni-ATAC-seq
+  longLabel Omni-ATAC-seq Results
+
+  track SRRComposite_SRR11111
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11111_data.bb
+  shortLabel SRR11111 peaks
+  longLabel SRR11111 blood control peaks
+
+  track SRRComposite_SRR11112
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11112_data.bb
+  shortLabel SRR11112 peaks
+  longLabel SRR11112 blood IFNg6h peaks
+
+  track SRRComposite_SRR11113
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11113_data.bb
+  shortLabel SRR11113 peaks
+  longLabel SRR11113 spleen control peaks
+
+  track SRRComposite_SRR11114
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11114_data.bb
+  shortLabel SRR11114 peaks
+  longLabel SRR11114 spleen IFNg6h peaks
+</pre>
+</p><p>
 <b>dataTypes</b><br>
 In the above examples, the assumption is that there is one track for each accession.
 In some situations, however, there may be multiple tracks associated with each
 accession in a formulaic way.  For example, each accession could have a raw counts
 bigWig track, a scaled counts bigWig track, and a peak calls bigBed track.
+One way to address this is to create synthetic accessions, like SRR11111_counts,
+SRR11111_scaled, and SRR_11111_peaks, and treat them all as completely independent.
+This works, but fails to capture the relationship between the three tracks.
 Instead of having three entries in the table that all share the same metadata
 (one for each track), you can use the <code>dataTypes</code> setting to describe
 which data types (raw counts, scaled counts, and peaks) are available for each
-sample accession.<br>
+sample accession.  The dataTypes setting is used once on the parent track, and
+comes with the expectation that the same set of data types will be available for
+every accession.
+<br>
 When this setting is used, an additional selector is placed near the top of the
 page to permit users to identify which data types they want to display.  The
 selected data types will be turned on for every selected sample in the table,
 so the interface is a bit less flexible than the plain one-row-per-track table.
 In this alternate setup, however, the one-row-per-sample arrangement can save
 significant space both in the configuration UI and in the metadata TSV file.<br>
-<em>A very important note here</em>: the rules for subtrack names change when
+<em>An important note</em>: the rules for subtrack names change when
 the <code>dataTypes</code> setting is active.  Without dataTypes, subtrack names
-are expected to match &lt;parent track name&gt;_&lt;primary key&gt;.  An example
+are expected to match &lt;parent track name&gt;_&lt;primary key value&gt;.  An example
 of that can be seen in the quick start near the top of the page.  When
 dataTypes are used, however, then subtrack names are expected to match
-&lt;parent track name&gt;_&lt;primary key&gt;_&lt;dataType&gt;.  For example,
-if the data types "signal" and "peaks" are in use for that same quick start
-example, then the set of tracks looks like this:<br>
+&lt;parent track name&gt;_&lt;primary key value&gt;_&lt;data type&gt;.  For example,
+if the data types "signal" and "peaks" are in use for the composite presented
+above instead of just peaks, then the set of tracks might look like this:<br>
 <pre>
-  track myComposite
+  track SRRComposite
   compositeTrack faceted
-  metaDataUrl https://url/to/metadata.tsv
-  primaryKey name
-  shortLabel Blood tests
-  longLabel Blood tests
+  metaDataUrl https://url/to/myTrackMetadata.tsv
+  primaryKey accession
+  shortLabel Omni-ATAC-seq
+  longLabel Omni-ATAC-seq Results
   dataTypes signal peaks
 
-  track myComposite_ex1_signal
-  parent myComposite
-  type bigWig
-  bigDataUrl https://url/to/ex1.bw
-  shortLabel ex1 signal
-  longLabel ex1 Blood data signal
-
-  track myComposite_ex1_peaks
-  parent myComposite
+  track SRRComposite_SRR11111_peaks
+  parent SRRComposite
   type bigBed
-  bigDataUrl https://url/to/ex1.bb
-  shortLabel ex1 peaks
-  longLabel ex1 Blood data peaks
+  bigDataUrl https://url/to/SRR11111_data.bb
+  shortLabel SRR11111 peaks
+  longLabel SRR11111 blood control peaks
 
-  track myComposite_ex2_signal
-  parent myComposite
-  type bigWig
-  bigDataUrl https://url/to/ex2.bw
-  shortLabel ex2 signal
-  longLabel ex2 Blood data signal
+  track SRRComposite_SRR11111_signal
+  parent SRRComposite
+  type bigWig 0 100
+  bigDataUrl https://url/to/SRR11111_data.bw
+  shortLabel SRR11111 signal
+  longLabel SRR11111 blood control signal
 
-  track myComposite_ex2_peaks
-  parent myComposite
+  track SRRComposite_SRR11112_peaks
+  parent SRRComposite
   type bigBed
-  bigDataUrl https://url/to/ex2.bb
-  shortLabel ex2 peaks
-  longLabel ex2 Blood data peaks
+  bigDataUrl https://url/to/SRR11112_data.bb
+  shortLabel SRR11112 peaks
+  longLabel SRR11112 blood IFNg6h peaks
+
+  track SRRComposite_SRR11112_signal
+  parent SRRComposite
+  type bigWig 0 100
+  bigDataUrl https://url/to/SRR11112_data.bw
+  shortLabel SRR11112 signal
+  longLabel SRR11112 blood IFNg6h signal
+
+  track SRRComposite_SRR11113_peaks
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11113_data.bb
+  shortLabel SRR11113 peaks
+  longLabel SRR11113 spleen control peaks
+
+  track SRRComposite_SRR11113_signal
+  parent SRRComposite
+  type bigWig 0 100
+  bigDataUrl https://url/to/SRR11113_data.bw
+  shortLabel SRR11113 signal
+  longLabel SRR11113 spleen control signal
+
+  track SRRComposite_SRR11114_peaks
+  parent SRRComposite
+  type bigBed
+  bigDataUrl https://url/to/SRR11114_data.bb
+  shortLabel SRR11114 peaks
+  longLabel SRR11114 spleen IFNg6h peaks
+
+  track SRRComposite_SRR11114_signal
+  parent SRRComposite
+  type bigWig 0 100
+  bigDataUrl https://url/to/SRR11114_data.bw
+  shortLabel SRR11114 signal
+  longLabel SRR11114 spleen IFNg6h signal
 </pre>
 </p><p>
 <b>metadata.tsv</b><br>
 <pre>
-name	collection_date	cell_type	lab
-ex1	2026-01-01	erythrocyte	Richter
-ex2	2026-01-03	erythrocyte	Helsing
+accession	tissue	protocol	treatment	_date	__count
+SRR11111	blood	Omni-ATAC-seq	control	2026-01-01	12
+SRR11112	blood	Omni-ATAC-seq	IFNg6h	2026-01-01	31
+SRR11113	spleen	Omni-ATAC-seq	control	2026-08-21	8
+SRR11114	spleen	Omni-ATAC-seq	IFNg6h	2026-08-22	17
 </pre>
 </p><p>
 One other note: sometimes you may wish to have more descriptive text than just "peaks"
 or "signal" for the selector, but the better labels aren't compatible with being used
 as part of a track name (maybe because they include spaces).  This can be handled
 by specifying each data type as <code>&lt;name&gt;|"&lt;label&gt;"</code>.  The "name"
-value will be used to generate track names, while the label will be used for display.<br>
-Example:<br>
+value will be used to generate track names, while the label will be used for display.
+If the signal and peaks tracks represent methylated regions, then the following dataTypes
+setting might be appropriate:<br>
 <pre>
   dataTypes signal|"Methylation signal (scaled)" peaks|"Highly methylated regions"
 </pre>
@@ -287,7 +383,7 @@ SRR11114	spleen	Omni-ATAC-seq	IFNg6h	2026-08-22	17
 </p><p>
 It might be helpful to provide links out from the accession column to SRA, and the protocol
 column to a description page of the protocol.  This could be achieved by adding the following
-subtrackUrls setting to the composite's trackDb block:
+subtrackUrls setting to the composite's trackDb stanza:
 <pre>
 subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ protocol=https://www.protocols.io/view/$$
 </pre>
@@ -316,10 +412,17 @@ SRR11114	spleen	omni-atac-seq-improved-atac-seq-protocol-14egn94jyl5d|"Omni-ATAC
 <h2>Troubleshooting</h2>
 <p>
 The most likely place to encounter problems when building a faceted composite is a mismatch
-between the metadata TSV file and the subtrack names in the trackDb block.  Check carefully
+between the metadata TSV file and the subtrack names in the trackDb stanza.  Check carefully
 to ensure that the values in the primaryKey column match the names of the subtracks,
 including capitalization.  The hubCheck tool has not yet been updated to automate these
 checks, but that work is in progress.
+</p><p>
+Other important considerations:
+<ul>
+<li>Ensure the capitalization of the various trackDb settings is correct (metaDataUrl,
+primaryKey, dataTypes, subtrackUrls, compositeTrack faceted).</li>
+<li>The metadata file should be a tsb (tab-separated) - watch out for tabs that were converted
+to spaces by copy-pasting text.</li>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

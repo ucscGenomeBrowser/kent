@@ -138,9 +138,9 @@ def hgsqlQuery(host, db, sql):
     return rows
 
 
-def hgsqlUpdate(db, sql):
+def hgsqlUpdate(host, db, sql):
     """Run a SQL update/insert statement via hgsql."""
-    cmd = ['/cluster/bin/x86_64/hgsql', db, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', '-h', host, db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"hgsql update error: {result.stderr.strip()}", file=sys.stderr)
@@ -289,7 +289,7 @@ def main():
         bitParts = ["gb", "aut", "o", "@", "uc", "sc.", "ed", "u"]
         if sendMail(userEmail, subject, body,
            fromAddr=NOTIFY_FROM, bccAddr=bccAddr, bounceAddr="".join(bitParts)):
-               hgsqlUpdate(ottoDb, f"UPDATE {ottoTable} SET status = 1"
+               hgsqlUpdate(dbHost, ottoDb, f"UPDATE {ottoTable} SET status = 1"
                    f" WHERE id = {req['id']}")
         else:
             print(f"Failed to send notification for request #{req['id']}",
