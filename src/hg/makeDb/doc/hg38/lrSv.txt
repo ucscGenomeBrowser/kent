@@ -480,3 +480,42 @@ bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2JasmineBuild.sh
 # SV-sized records the NPE no longer fires, so the current pipeline runs
 # Jasmine with its normal sequence-aware merging. The symbolic-pipeline
 # scripts and output/ tree are retained for comparison.
+
+##########
+# 2026-06-01 Claude max
+#
+# lrSv1kLin: 1000 Genomes linear long-read SVs from 1,218 individuals.
+# Two native VCFs (GRCh38 and CHM13/T2T-CHM13v2) provided by user from
+# dropbox (rclone copy mhaeussldropbox:1KG_LR_SVs/).
+# SVs merged with Truvari v5.2.0; population-level allele frequencies
+# (EUR, AMR, EAS, AFR, SAS) annotated with bcftools fill-tags.
+# Only DEL and INS variant types are present.
+# GRCh38: 587,779 SVs (196,369 DEL, 391,410 INS)
+# CHM13:  614,522 SVs
+# NOTE: data was received from the Eichler lab via email and has not been
+# published. Do NOT release this track and do NOT add it to lrSvAll until
+# a preprint or paper is available. HTML page is a placeholder.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/1k-lin
+cd /hive/data/genomes/hg38/bed/lrSv/1k-lin
+
+# Input VCFs in /hive/data/genomes/hg38/bed/lrSv/1k-lin/input/:
+#   GRCh38_INSDEL_1218.vcf.gz  (hg38 native, 587,779 SVs)
+#   CHM13_INSDEL_1218.vcf.gz   (hs1/CHM13 native, 614,522 SVs)
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/GRCh38_INSDEL_1218.vcf.gz lin1218.hg38.bed
+bedSort lin1218.hg38.bed lin1218.hg38.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hg38.sorted.bed /hive/data/genomes/hg38/chrom.sizes lin1218.hg38.bb
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/CHM13_INSDEL_1218.vcf.gz lin1218.hs1.bed
+bedSort lin1218.hs1.bed lin1218.hs1.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hs1.sorted.bed /hive/data/genomes/hs1/chrom.sizes lin1218.hs1.bb
+
+# Symlinks for both assemblies
+mkdir -p /gbdb/hg38/lrSv /gbdb/hs1/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hg38.bb /gbdb/hg38/lrSv/lin1218.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hs1.bb /gbdb/hs1/lrSv/lin1218.bb
