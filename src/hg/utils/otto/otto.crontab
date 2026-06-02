@@ -86,6 +86,9 @@ MAILTO=otto-group@ucsc.edu
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
+#RefSeq Historical update notifier (RM #35766) - silent unless NCBI has a new release
+40 8 * * 3 /hive/data/outside/otto/refSeqHistorical/checkRefSeqHistoricalUpdate.sh
+
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
 
