@@ -68,9 +68,9 @@ def get_kozak_consensus_strength(ctx7):
 # ---- Color mapping ----
 # Primary itemRgb: by Kozak strength category.
 STRENGTH_COLORS = {
-    "Strong":   "245,166,35",   # #F5A623 golden yellow
-    "Moderate": "91,155,213",   # #5B9BD5 steel blue
-    "Weak":     "169,169,169",  # #A9A9A9 medium gray
+    "Strong":   "220,162,55",   # #DCA237 golden amber
+    "Moderate": "120,175,226",  # #78AFE2 steel blue
+    "Weak":     "149,149,149",  # #959595 medium gray
     "non-ATG":  "0,0,0",        # #000000 black
     "None":     "211,211,211",  # #D3D3D3 light gray (no genomic context)
 }

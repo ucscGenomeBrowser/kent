@@ -343,3 +343,62 @@ $scriptDir/run_kozak.sh bigGenePred openprot.ms2.bb $scriptDir/openprot.as openp
 # Wang CL. Quantitative analysis of mammalian translation initiation sites by
 # FACS-seq. Mol Syst Biol. 2014 Aug 28;10(8):748. DOI: 10.15252/msb.20145136
 # PMID: 25170020
+
+##############################################################################
+# GENCODE Phase I ncORFs: peptide evidence from TransCODE/PeptideAtlas
+# 2026-06-02 Claude max
+#
+# Deutsch et al. (Nature 2026, PMID 42092140) queried the 7,264 Phase I ORFs
+# against two PeptideAtlas builds: HLA immunopeptidomics (>100 HLA-typed donors,
+# HLA-I and HLA-II peptidomes) and whole-cell tryptic proteomics. The study
+# introduced the "peptidein" concept for translation products detectable by MS
+# but not yet annotatable as proteins.
+#
+# Five supplementary tables were downloaded from the Nature paper at
+# https://doi.org/10.1038/s41586-026-10459-x and saved to:
+#   /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf/peptideSupport/
+#   41586_2026_10459_MOESM4_ESM_Table_S2.tsv  (non-HLA peptides, per peptide)
+#   41586_2026_10459_MOESM5_ESM_Table_S3.tsv  (non-HLA ORF-level summary)
+#   41586_2026_10459_MOESM8_ESM_Table_S6.tsv  (HLA peptides, per peptide)
+#   41586_2026_10459_MOESM9_ESM_Table_S7.tsv  (HLA ORF-level summary)
+#   41586_2026_10459_MOESM12_ESM_Sheet1.tsv   (peptidein set, Table S12)
+
+cd /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf
+
+# Join all five tables onto the Phase I kozak bigBed by the short ORF identifier.
+# Adds 14 extra fields; ORFs without evidence get default empty values.
+# Uses ~/miniconda3/bin/python (needs py2bit) - the script reads field 9 (Kozak
+# colors) directly from the source bigBed so no color recomputation is needed.
+python3 peptideSupport/addPeptideEvidence.py \
+    2>peptideSupport/addPeptides.log > Ribo-seq_ORFs.kozak.peptides.bed
+
+# Counts: 2,150 ORFs with evidence, 5,114 without
+# Non-HLA peptides with 'exclude' != "" (Maps2Core / TooShort) are skipped: 331
+
+bedSort Ribo-seq_ORFs.kozak.peptides.bed Ribo-seq_ORFs.kozak.peptides.sorted.bed
+bedToBigBed -as=Ribo-seq_ORFs.kozak.peptides.as -type=bed12+ -tab \
+    Ribo-seq_ORFs.kozak.peptides.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    Ribo-seq_ORFs.kozak.peptides.bb
+rm Ribo-seq_ORFs.kozak.peptides.sorted.bed
+
+# Verify: itemCount=7264, fieldCount=44
+bigBedInfo Ribo-seq_ORFs.kozak.peptides.bb
+
+# AutoSql and join script are in:
+#   ~/kent/src/hg/makeDb/scripts/ncOrfs/addPeptideEvidence.py
+#   ~/kent/src/hg/makeDb/scripts/ncOrfs/gencNcOrf.as (shared with kozak step)
+#   Ribo-seq_ORFs.kozak.peptides.as (in data dir, matches 44-field schema)
+
+# To recolor Kozak strength (updates all three kozak bigBeds and then the
+# peptides bigBed). Requires ~/miniconda3/bin/python for py2bit:
+export PATH=~/miniconda3/bin:$PATH
+scriptDir=~/kent/src/hg/makeDb/scripts/ncOrfs
+bash $scriptDir/run_kozak.sh bigGenePred       Ribo-seq_ORFs.bb               $scriptDir/gencNcOrf.as       Ribo-seq_ORFs.kozak.bb
+bash $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.primary.bb       $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.primary.kozak.bb
+bash $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.comprehensive.bb $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.comprehensive.kozak.bb
+# Then rebuild the peptides bigBed as shown above.
+
+# Reference:
+# Deutsch EW et al. Expanding the human proteome with microproteins and peptideins.
+# Nature. 2026 May 6. DOI: 10.1038/s41586-026-10459-x. PMID: 42092140

@@ -27,30 +27,41 @@ group genes
 
     track gencNcOrfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb
     shortLabel GENCODE Phase I ncORFs
-    longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
+    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq and peptide evidence
     type bigGenePred
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Replicated</b>: $replicated<br> <b>Studies</b>: $ref_studies
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
     filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filterLimits.kozakTE -1:1.5
     filterValues.replicated yes,no
     filterType.replicated multipleListOr
+    filterValues.isPeptidein yes,no
+    filterType.isPeptidein multipleListOr
+    filterValues.hlaClass I,II,Both
+    filterType.hlaClass multipleListOr
+    filterValues.hlaFinalTier Tier 1B,Tier 2B,Tier 1A - Numerous nonHLA peptides,Tier 2A - One nonHLA peptide,Tier 3,Tier 4,Novel CDS isoform
+    filterType.hlaFinalTier multipleListOr
+    filterValues.hlaHppCategory HPP+,1PepCandidate,Insufficient
+    filterType.hlaHppCategory multipleListOr
+    filterValues.riboseqQuality Excellent,Sufficient,Insufficient,Sufficient in Gaertner et al
+    filterType.riboseqQuality multipleListOr
+    colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
     html gencNcOrfs
     visibility pack
 
     track gencNcOrfsPrimary
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb
-    shortLabel GENCODE Ph2 ncORFs Pri
+    shortLabel GENCODE Phase II ncORFs Prim
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
     type bigGenePred
     itemRgb on
@@ -70,7 +81,7 @@ group genes
     track gencNcOrfsComprehensive
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb
-    shortLabel GENCODE Ph2 ncORFs Cmp
+    shortLabel GENCODE Phase II ncORFs Compr
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
     type bigGenePred
     itemRgb on
