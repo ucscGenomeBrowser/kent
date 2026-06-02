@@ -219,7 +219,10 @@ $(function() {
             deferRender: true,    // seems faster
             columns: columns,
             columnDefs: [ { targets:0, render: DataTable.render.select() } ],
-            responsive: true,
+            // 'responsive' (collapsing overflow columns) is intentionally off:
+            // a wide table instead gets an internal horizontal scrollbar via
+            // the .table-xscroll wrapper added at the end of initTable.
+            responsive: false,
             layout: {
                 topStart: 'pageLength',
                 topEnd: null,        // omit global search
@@ -419,6 +422,18 @@ $(function() {
                 table.rows({ search: "applied" }).deselect();
             }
         });
+
+        // Wrap the table in a horizontally-scrolling box. When the metadata has
+        // many fields the table is wider than the viewport; this gives it its
+        // own internal X scrollbar instead of letting it spill off the right
+        // edge of the screen (which also dragged the "Show N" / paging controls
+        // off-screen). The toolbar rows stay outside this box, so they remain
+        // visible at the wrapper's width regardless of how wide the table gets.
+        const scrollBox = document.createElement("div");
+        scrollBox.className = "table-xscroll";
+        tableEl.parentNode.insertBefore(scrollBox, tableEl);
+        scrollBox.appendChild(tableEl);
+
         return table;
     }  // end initTable
 
