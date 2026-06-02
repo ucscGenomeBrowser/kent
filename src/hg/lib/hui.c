@@ -7435,6 +7435,83 @@ else
     }
 }
 
+static char *colorFieldLabel(struct slPair *p)
+/* Derive a display label for one colorFields entry.
+ * Uses the explicit ="label" if provided, otherwise strips a leading "colorBy"
+ * prefix and replaces underscores with spaces. */
+{
+if (isNotEmpty((char *)p->val))
+    return (char *)p->val;
+char *lbl = p->name;
+if (startsWith("colorBy", lbl))
+    lbl += strlen("colorBy");
+char *derived = cloneString(lbl);
+subChar(derived, '_', ' ');
+return derived;
+}
+
+void colorFieldsCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix)
+/* If trackDb declares colorFields, render a "Color by:" dropdown to choose among color schemes.
+ *
+ * colorFields is a space-separated list of fieldName[="Human Label"] pairs:
+ *   colorFields default="Evidence type" colorByHlaClass="HLA class" colorByKozak="Kozak strength"
+ *
+ * The special name "default" (with optional label) represents the standard itemRgb field
+ * (col 9).  When no default= entry is present, "Default" is added implicitly as the first
+ * option.  Any other name must be an extra bigBed field containing a pre-computed R,G,B string.
+ *
+ * Cart variable: <prefix>.colorField — empty string means use field 9.  */
+{
+if (tdbIsComposite(tdb))
+    return;
+char *setting = trackDbSettingClosestToHome(tdb, "colorFields");
+if (setting == NULL)
+    return;
+
+struct slPair *pairs = slPairListFromString(setting, TRUE);
+if (pairs == NULL)
+    return;
+
+/* Cart variable; empty string = use field 9. */
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.colorField", prefix);
+char *current = cartUsualString(cart, cartVar, "");
+
+/* Two-pass build of label/value arrays.
+ * Pass 1: check whether the user supplied an explicit default= entry.
+ * Pass 2: populate the arrays, putting the "use field 9" option first. */
+char *defaultLabel = "Default";
+struct slPair *p;
+int nAlternatives = 0;
+for (p = pairs; p != NULL; p = p->next)
+    {
+    if (sameString(p->name, "default"))
+        defaultLabel = colorFieldLabel(p);
+    else
+        nAlternatives++;
+    }
+
+int nOptions = 1 + nAlternatives;  /* slot 0 = field-9 default + one per alternative */
+char **labels = needMem(nOptions * sizeof(char *));
+char **values = needMem(nOptions * sizeof(char *));
+labels[0] = defaultLabel;
+values[0] = "";
+
+int i = 1;
+for (p = pairs; p != NULL; p = p->next)
+    {
+    if (sameString(p->name, "default"))
+        continue;
+    values[i] = p->name;
+    labels[i] = colorFieldLabel(p);
+    i++;
+    }
+
+printf("<B>Color by:</B>&nbsp;");
+cgiMakeDropListFull(cartVar, labels, values, nOptions, current, NULL, NULL);
+printf("<BR>\n");
+}
+
 void mergeSpanCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix)
 /* If this track offers a merge spanned items option, put up the cfg for it, which
  * is just a checkbox with a small explanation. Comparing tdb->track to prefix
@@ -7930,9 +8007,10 @@ char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
 int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
 scoreCfgUi(db, cart,tdb,name,title,maxScore,boxed);
 
-if(startsWith("bigBed", tdb->type))
+if(tdbIsBigBed(tdb))
     {
     labelCfgUi(db, cart, tdb, name);
+    colorFieldsCfgUi(db, cart, tdb, name);
     mergeSpanCfgUi(cart, tdb, name);
     wigOption(cart, name, title, tdb);
     }
@@ -7947,6 +8025,7 @@ char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 labelCfgUi(db, cart, tdb, name);
+colorFieldsCfgUi(db, cart, tdb, name);
 boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 
 if (sameString(name, "acembly"))

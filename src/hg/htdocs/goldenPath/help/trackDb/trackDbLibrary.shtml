@@ -2151,6 +2151,45 @@ There are no extra options that can appear on the type hic line.
     <pre>   itemRgb on</pre>
 </DIV>
 
+<DIV class="colorFields"><span class="types bigBed bigGenePred"></span>
+    <div class="format">
+        <code>colorFields default="&lt;label&gt;" &lt;fieldName1&gt;="&lt;label1&gt;" &lt;fieldName2&gt;="&lt;label2&gt;" ...</code>
+    </div>
+    <P>
+    Enables a <b>Color by:</b> dropdown in the track controls that lets the user switch
+    among multiple pre-computed color schemes without leaving the track display.
+    </P>
+    <P>
+    Each entry is a <code>fieldName="Human Label"</code> pair.  The field name must be an
+    extra bigBed field (defined in the track's <code>.as</code> file) that contains a
+    pre-computed <code>R,G,B</code> color string — the same format as the standard
+    <A onclick="jumpTo(this)" href="#itemRgb">itemRgb</A> field.  The label in double
+    quotes is shown in the dropdown; if omitted, a label is derived automatically by
+    stripping a leading <code>colorBy</code> prefix and replacing underscores with spaces.
+    </P>
+    <P>
+    The special name <code>default</code> (with an optional label) represents the track's
+    existing <code>itemRgb</code> field (column 9) and is placed first in the dropdown.
+    When no <code>default=</code> entry is given, an unlabeled &quot;Default&quot; option
+    is added automatically.
+    </P>
+    <P>
+    Item coloring must be active for <code>colorFields</code> to work. It is active by
+    default on bigBed tracks with more than 9 fields; it is suppressed only if the track has
+    an explicit <code>color</code> setting or <code>itemRgb off</code>. The currently
+    selected scheme is stored in the cart variable <code>&lt;trackName&gt;.colorField</code>.
+    When a non-default scheme is active, the track long label gains a
+    <em>(Coloring by: &lt;label&gt;)</em> suffix.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>
+    colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
+    </pre>
+    <P>This creates a three-option dropdown. <code>colorByEvidence</code> and
+    <code>colorByHlaClass</code> must be extra fields in the bigBed whose values are
+    <code>R,G,B</code> strings.</P>
+</DIV>
+
 <DIV class="maxItems"><span class="types bed bigBed broadPeak psl"></span>
 <div class="format"><code>maxItems &lt;integer&gt;</code></div>
     <P>Maximum number of items to display individually in full or pack or squish mode.  When the maximum is

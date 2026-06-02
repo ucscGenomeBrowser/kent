@@ -561,6 +561,7 @@ speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
 spectrum *
+colorFields bigBed bigGenePred
 squishyPackField  bigBed bigGenePred
 squishyPackPoint bigBed bigGenePred
 squishyPackLabel bigBed bigGenePred

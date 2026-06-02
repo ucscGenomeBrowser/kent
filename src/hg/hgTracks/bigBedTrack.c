@@ -722,6 +722,31 @@ else
 char *squishField = cartOrTdbString(cart, track->tdb, "squishyPackField", NULL);
 int squishFieldIdx = bbExtraFieldIndex(bbi, squishField);
 
+/* colorFields: optional alternative color scheme stored in a named extra field. */
+int colorFieldIdx = 0;
+char *colorFieldsSetting = trackDbSettingClosestToHome(tdb, "colorFields");
+if (useItemRgb && colorFieldsSetting)
+    {
+    char *colorFieldName = cartOptionalStringClosestToHome(cart, tdb, FALSE, "colorField");
+    if (!isEmpty(colorFieldName))
+        {
+        colorFieldIdx = bbExtraFieldIndex(bbi, colorFieldName);
+        /* Append "(Coloring by: <label>)" to the track's longLabel.
+         * Look up the human-readable label from the colorFields key=value list. */
+        char *label = colorFieldName;
+        struct slPair *pairs = slPairListFromString(colorFieldsSetting, TRUE);
+        if (pairs)
+            {
+            struct slPair *p = slPairFind(pairs, colorFieldName);
+            if (p && isNotEmpty((char *)p->val))
+                label = (char *)p->val;
+            }
+        char suffix[256];
+        safef(suffix, sizeof suffix, " (Coloring by: %s)", label);
+        track->longLabel = catTwoStrings(track->longLabel, suffix);
+        }
+    }
+
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
     {
@@ -843,6 +868,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         if (lf && squishFieldIdx)
             lf->squishyPackVal = atof(restField(bb, squishFieldIdx));
+
+        if (lf && colorFieldIdx)
+            lf->filterColor = itemRgbColumn(restField(bb, colorFieldIdx));
 
         if (track->visibility != tvDense && lf && doWindowSizeFilter
             && (quickLiftFile ? lf->start : bb->start) < winStart
