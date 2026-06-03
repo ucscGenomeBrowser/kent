@@ -1023,12 +1023,65 @@ jsonWriteString(jw, "createdAt", share->createdAt);
 jsonWriteObjectEnd(jw);
 }
 
+static char *cleanShareTargets(struct sqlConnection *conn, char *raw)
+/* Parse a comma-separated recipient string into a normalized comma-no-space
+ * list: trim each name, drop empties, de-dup, and verify each exists in
+ * gbMembers. Calls apiError(400,...) (does not return) on an unknown name or
+ * an overlong list. Returns a string the caller must freeMem, or NULL for an
+ * empty list (anyone with link). */
+{
+if (isEmpty(raw))
+    return NULL;
+struct slName *names = slNameListFromComma(raw);
+struct slName *name;
+struct slName *cleanList = NULL;
+for (name = names; name != NULL; name = name->next)
+    {
+    trimSpaces(name->name);
+    if (isNotEmpty(name->name))
+        slNameStore(&cleanList, name->name);
+    }
+slNameFreeList(&names);
+if (cleanList == NULL)
+    return NULL;
+slReverse(&cleanList);  /* slNameStore prepends; restore input order */
+
+struct dyString *dy = dyStringNew(256);
+struct slName *c;
+for (c = cleanList; c != NULL; c = c->next)
+    {
+    char gbq[512];
+    sqlSafef(gbq, sizeof(gbq),
+        "select count(*) from gbMembers where userName = BINARY '%s'", c->name);
+    if (sqlQuickNum(conn, gbq) == 0)
+        {
+        char msg[512];
+        safef(msg, sizeof(msg),
+            "user '%s' not found (the username is case-sensitive) - check the"
+            " spelling, or leave the field blank to make an 'anyone with link' share",
+            c->name);
+        apiError(400, msg);
+        }
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, ',');
+    dyStringAppend(dy, c->name);
+    }
+slNameFreeList(&cleanList);
+if (dy->stringSize > 500)
+    {
+    dyStringFree(&dy);
+    apiError(400, "too many recipients - the username list is too long");
+    }
+return dyStringCannibalize(&dy);
+}
+
 static boolean isStateChangingShareAction(char *action)
 /* Returns TRUE for actions that modify the share table.  Those require an
  * hgsid match to defend against CSRF; read-only actions don't, because the
  * response only goes to the originating cookie-bearing browser. */
 {
-return sameString(action, "createShare") || sameString(action, "revokeShare");
+return sameString(action, "createShare") || sameString(action, "revokeShare")
+    || sameString(action, "setSharePermission") || sameString(action, "setShareTargets");
 }
 
 void myVariantsShareApiHandler(char *action)
@@ -1074,12 +1127,11 @@ if (sameString(action, "createShare"))
         apiError(400, "permission must be 0 or 1");
     char *targetUser = cgiOptionalString("targetUser");
     char *label = cgiOptionalString("label");
-    /* Reject overlong fields before MySQL would (varchar(255)).  Use 200 to
-     * leave room for any prefixing/quoting we add downstream. */
-    if (strlen(project) > 200
-        || (targetUser && strlen(targetUser) > 200)
-        || (label && strlen(label) > 200))
-        apiError(400, "project, targetUser, and label must each be <= 200 chars");
+    /* Reject overlong fields before MySQL would.  Use 200 to leave room for any
+     * prefixing/quoting we add downstream; the recipient list is checked in
+     * cleanShareTargets against the wider targetUser column. */
+    if (strlen(project) > 200 || (label && strlen(label) > 200))
+        apiError(400, "project and label must each be <= 200 chars");
     /* Project must be "*" (all) or one of the owner's existing project values.
      * Prevents creating misleading share URLs that filter on a non-existent
      * project name. */
@@ -1091,17 +1143,10 @@ if (sameString(action, "createShare"))
         if (!found)
             apiError(400, "project does not exist for current user");
         }
-    if (isNotEmpty(targetUser))
-        {
-        char gbq[512];
-        sqlSafef(gbq, sizeof(gbq),
-            "select count(*) from gbMembers where userName='%s'", targetUser);
-        if (sqlQuickNum(conn, gbq) == 0)
-            apiError(400, "targetUser not found - check the spelling, or omit"
-                " targetUser to make an 'anyone with link' share");
-        }
+    char *cleanTargets = cleanShareTargets(conn, targetUser);
     struct myVariantsShare *share = myVariantsCreateShare(conn, userName,
-        project, db, permission, targetUser, label);
+        project, db, permission, cleanTargets, label);
+    freeMem(cleanTargets);
     struct jsonWrite *jw = jsonWriteNew();
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "status", "ok");
@@ -1159,6 +1204,41 @@ else if (sameString(action, "revokeShare"))
     jsonWriteObjectEnd(jw);
     apiSuccess(jw);
     }
+else if (sameString(action, "setSharePermission"))
+    {
+    char *token = cgiOptionalString("shareToken");
+    if (token == NULL)
+        apiError(400, "missing required parameter: shareToken");
+    int permission = cgiOptionalInt("permission", MYVAR_PERM_READONLY);
+    if (permission != MYVAR_PERM_READONLY && permission != MYVAR_PERM_READWRITE)
+        apiError(400, "permission must be 0 or 1");
+    boolean updated = myVariantsSetSharePermission(conn, token, userName, permission);
+    hDisconnectCentral(&conn);
+    if (!updated)
+        apiError(404, "share not found");
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "status", "ok");
+    jsonWriteObjectEnd(jw);
+    apiSuccess(jw);
+    }
+else if (sameString(action, "setShareTargets"))
+    {
+    char *token = cgiOptionalString("shareToken");
+    if (token == NULL)
+        apiError(400, "missing required parameter: shareToken");
+    char *cleanTargets = cleanShareTargets(conn, cgiOptionalString("targetUser"));
+    boolean updated = myVariantsSetShareTargets(conn, token, userName, cleanTargets);
+    freeMem(cleanTargets);
+    hDisconnectCentral(&conn);
+    if (!updated)
+        apiError(404, "share not found");
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "status", "ok");
+    jsonWriteObjectEnd(jw);
+    apiSuccess(jw);
+    }
 else
     {
     hDisconnectCentral(&conn);
@@ -1197,8 +1277,8 @@ if (share == NULL)
     return;
     }
 
-/* Targeted shares require the matching logged-in user. Shares with no targetUser
- * ("anyone with link") are accessible to anon users too. */
+/* Targeted shares require a logged-in user in the share's recipient list.
+ * Shares with no targetUser ("anyone with link") are accessible to anon users too. */
 if (isNotEmpty(share->targetUser))
     {
     if (userName == NULL)
@@ -1207,7 +1287,7 @@ if (isNotEmpty(share->targetUser))
         myVariantsShareFree(&share);
         return;
         }
-    if (!sameString(share->targetUser, userName))
+    if (!myVariantsShareAllowsUser(share, userName))
         {
         notify("A shared track in this view wasn't shared with your account. You can keep browsing; the track just won't appear.", "myVarShareWrongUser");
         myVariantsShareFree(&share);

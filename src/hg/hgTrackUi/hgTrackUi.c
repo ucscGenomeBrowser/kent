@@ -3337,7 +3337,8 @@ printf("<tr><td>Permission:</td><td>"
     "</td></tr>\n");
 printf("<tr><td>Share with:</td>"
     "<td><input type=\"text\" id=\"shareTargetUser\""
-    " placeholder=\"Username (blank = anyone with link)\" style=\"width:250px\"></td></tr>\n");
+    " placeholder=\"Username(s), comma-separated (blank = anyone with link)\""
+    " style=\"width:250px\"></td></tr>\n");
 printf("<tr><td>Label:</td>"
     "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
     " style=\"width:250px\"></td></tr>\n");

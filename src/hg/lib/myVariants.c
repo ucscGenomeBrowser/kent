@@ -545,14 +545,10 @@ struct myVariantsShare *share = myVariantsGetShareByToken(conn, token);
 hDisconnectCentral(&conn);
 if (share == NULL)
     return NULL;
-if (isNotEmpty(share->targetUser))
+if (!myVariantsShareAllowsUser(share, getUserName()))
     {
-    char *userName = getUserName();
-    if (isEmpty(userName) || !sameString(share->targetUser, userName))
-        {
-        myVariantsShareFree(&share);
-        return NULL;
-        }
+    myVariantsShareFree(&share);
+    return NULL;
     }
 return share;
 }

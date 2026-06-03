@@ -7,7 +7,7 @@ table myVariantsShares
     string project;       "Project name, or * for all"
     string db;            "Assembly (hg38, mm39, etc.)"
     ubyte permission;     "0=read-only, 1=read-write"
-    string targetUser;    "Specific user, or NULL for anyone with link"
+    string targetUser;    "Comma-separated usernames, or NULL for anyone with link"
     string label;         "Optional human-readable label"
     string createdAt;     "Timestamp of creation"
     )
