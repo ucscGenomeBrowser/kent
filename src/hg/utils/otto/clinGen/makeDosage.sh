@@ -102,6 +102,9 @@ then
         # release rather than our otto run date.
         dosageDate=$(sed -n 2p ClinGen_region_curation_list_${grc}.tsv | tr -d '#\r')
         printf 'ClinGen Dosage Sensitivity Map, %s\n' "$dosageDate" > ${WORKDIR}/release/${db}/clinGenDosageVersion.txt
+        # Container-level (clinGenComp superTrack) "last updated" date, shared by all
+        # feeds; last writer on a run wins so it reflects the most recent change.
+        printf 'Last updated %s\n' "$today" > ${WORKDIR}/release/${db}/clinGenVersion.txt
     done
     cd ../..
 fi

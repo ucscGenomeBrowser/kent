@@ -4,6 +4,7 @@ group varRep
 html dbVarCurated
 shortLabel dbVar Struct Var
 longLabel NCBI dbVar Structural Variants
+dataVersion /gbdb/$D/bbi/dbVar/version.txt
 
     track dbVar_common
     superTrack dbVarSv pack
