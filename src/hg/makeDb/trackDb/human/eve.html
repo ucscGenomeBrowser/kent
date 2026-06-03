@@ -48,7 +48,8 @@ browser orientation.
 <h2>Methods</h2>
 <p>
 EVE trains a Bayesian variational autoencoder (VAE) separately for each of 3,219
-disease-associated human proteins. For each protein, a multiple sequence alignment is
+disease-associated human proteins; of these, 2,951 have missense VCF scores in the
+public bulk download (the remainder have sequence alignments but no released scores). For each protein, a multiple sequence alignment is
 retrieved by searching roughly 250 million protein sequences from UniRef, and the VAE
 learns the distribution of amino acid sequences across species, capturing both
 per-position conservation and co-evolutionary dependencies between positions. An
@@ -88,7 +89,7 @@ absent from the standard hg38 assembly. The remaining 2,949 proteins covering ap
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
 spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu">API</a>, track=<i>eve</i>.</p>
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>eve</i>.</p>
 <p>For automated download and analysis, the genome annotation is stored in a bigBed file
 that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve" target="_blank">our download
@@ -96,7 +97,7 @@ server</a>. The file for this track is called <tt>eve.bb</tt>. Individual region
 whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
 compiled from the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
 <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve/eve.bb -chrom=chr17
 -start=43000000 -end=43200000 stdout</tt></p>
