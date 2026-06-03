@@ -7385,6 +7385,29 @@ $(document).ready(function()
             e.stopPropagation();
             myVariants.showDialog();
         });
+        // Add a "My Annotations" link to the My Data menu that opens the same
+        // dialog as the Add Annotation button below the image.
+        let myDataList = document.querySelector("#myData > ul");
+        if (myDataList) {
+            newListEl = document.createElement("li");
+            newLink = document.createElement("a");
+            newLink.setAttribute("id", "myAnnotationsMenuLink");
+            newLink.setAttribute("title", "Add an item to the My Annotations track");
+            newLink.textContent = "My Annotations";
+            newLink.href = "#";
+            newListEl.appendChild(newLink);
+            // Place it right after Custom Tracks; fall back to the top of the menu.
+            let customTracksItem = document.getElementById("customTracksMenuLink");
+            if (customTracksItem && customTracksItem.parentNode.parentNode === myDataList)
+                myDataList.insertBefore(newListEl, customTracksItem.parentNode.nextSibling);
+            else
+                myDataList.insertBefore(newListEl, myDataList.firstElementChild);
+            newLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                myVariants.showDialog();
+            });
+        }
     }
 
     if (typeof showMouseovers !== 'undefined' && showMouseovers) {
