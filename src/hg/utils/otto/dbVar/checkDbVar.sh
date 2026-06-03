@@ -131,6 +131,9 @@ if [[ ! -e lastUpdate || tempUpdate -nt lastUpdate ]]; then
         rm -rf release/${db}.prev
         [ -d release/${db} ] && mv release/${db} release/${db}.prev
         mv release/${db}.new release/${db}
+        # dbVar is a superTrack, whose container page does not show "Data last
+        # updated"; this dataVersion file gives it a freshness date instead.
+        printf 'Last updated %s\n' "$today" > release/${db}/version.txt
     done
 
     # Detect new .bb files that NCBI has added to the hub since the last

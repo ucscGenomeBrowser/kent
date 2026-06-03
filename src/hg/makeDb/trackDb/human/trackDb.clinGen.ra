@@ -7,6 +7,7 @@ group phenDis
 itemRgb on
 compositeTrack on
 noParentConfig on
+dataVersion /gbdb/$D/bbi/clinGen/clinGenVersion.txt
 html clinGen
 
     track clinGenHaplo
