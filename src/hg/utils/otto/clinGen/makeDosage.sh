@@ -95,6 +95,13 @@ then
         bedToBigBed -type=bed9+17 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
         cp ../output/${db}.clinGenHaplo.bb ${WORKDIR}/release/${db}/clinGenHaplo.bb
         cp ../output/${db}.clinGenTriplo.bb ${WORKDIR}/release/${db}/clinGenTriplo.bb
+
+        # ClinGen stamps the curation list with its own "results as of" date (line 2,
+        # e.g. "#28 Apr,2026"). Expose it via dataVersion (shared by the Haplo and Triplo
+        # subtracks) so users can tie the browser data to a specific ClinGen dosage
+        # release rather than our otto run date.
+        dosageDate=$(sed -n 2p ClinGen_region_curation_list_${grc}.tsv | tr -d '#\r')
+        printf 'ClinGen Dosage Sensitivity Map, %s\n' "$dosageDate" > ${WORKDIR}/release/${db}/clinGenDosageVersion.txt
     done
     cd ../..
 else

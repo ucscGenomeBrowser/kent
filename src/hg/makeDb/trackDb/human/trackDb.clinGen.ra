@@ -18,6 +18,7 @@ html clinGen
     visibility pack
     type bigBed 9 +
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenHaplo.bb
+    dataVersion /gbdb/$D/bbi/clinGen/clinGenDosageVersion.txt
     mouseOver <b>Gene/ISCA ID</b>: $name<br> <b>Haploinsufficiency score</b>: $haploScore<br> <b>Dosage Sensitivity Evidence</b>: $haploDescription
     filterValues.haploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.haploScore Dosage Sensitivity Score
@@ -31,6 +32,7 @@ html clinGen
     visibility pack
     type bigBed 9 +
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenTriplo.bb
+    dataVersion /gbdb/$D/bbi/clinGen/clinGenDosageVersion.txt
     mouseOver <b>Gene/ISCA ID</b>: $name<br> <b>Triplosensitivity score</b>: $triploScore<br> <b>Dosage Sensitivity Evidence</b>: $triploDescription
     filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.triploScore Dosage Sensitivity Score
