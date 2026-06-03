@@ -5579,6 +5579,7 @@ include covidTracks.ra
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
+dataVersion /gbdb/$D/bbi/orphanet/version.txt
 shortLabel Orphanet
 longLabel Orphadata: Aggregated Data From Orphanet
 group phenDis
