@@ -5,7 +5,7 @@ table fiveUltraUorfs
    uint   chromStart;     "Start position in chromosome"
    uint   chromEnd;       "End position in chromosome"
    string name;           "Feature name (GENE_N, where N is the uORF rank within the gene)"
-   uint   score;          "Score: 1000=Strong, 700=Adequate, 300=Weak Kozak"
+   uint   score;          "Score: 1000=Strong, 700=Moderate, 300=Weak Kozak"
    char[1] strand;        "+ or - for strand"
    uint   thickStart;     "Start of thick display region"
    uint   thickEnd;       "End of thick display region"

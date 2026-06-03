@@ -21,9 +21,12 @@
 #include "fuzzyFind.h"
 #include "botDelay.h"
 
-/* Default BLAT bottleneck fraction -- 10x the hubApi-wide default of 0.03.
+/* Default BLAT bottleneck fraction -- 100x the hubApi-wide default of 0.03.
+ * QA-tested at 0.3 (~2.4s extra over a 40-request burst) was too gentle to
+ * deter a single-key hammer; 3.0 lands a meaningful ~24s penalty for the
+ * same burst without breaking legitimate IGV-style polling.
  * Overridable in hg.conf with hubApi.blatDelayFraction=<value>. */
-#define blatDelayFractionDefault 0.3
+#define blatDelayFractionDefault 3.0
 
 /* Server lookup is provided by findBlatServer() in hg/lib/blatServers.c,
  * which is also used by hgBlat.c. */
@@ -277,7 +280,6 @@ for (psl = pslList; psl != NULL && count < maxItemsOutput; psl = psl->next, ++co
     }
 jsonWriteListEnd(jw);
 itemsReturned = count;
-jsonWriteNumber(jw, "itemsReturned", (long long)count);
 apiFinishOutput(0, NULL, jw);
 }
 
@@ -378,6 +380,12 @@ if (errCatchStart(ec))
     {
     f = mustOpen(pslTn.forCgi, "w");
     struct gfOutput *gvo = gfOutputPsl(0, bt.qIsProt, FALSE, f, FALSE, TRUE);
+    /* For translated/protein queries the target strand needs to go into the
+     * PSL strand column too -- otherwise pslLoad sees only the query strand
+     * and downstream consumers compute the wrong coords on minus-strand hits.
+     * hgBlat sets this for the same reason (hgBlat.c near gfAlignTrans*). */
+    if (bt.isTx)
+        gvo->reportTargetStrand = TRUE;
     pslxWriteHead(f, bt.qType, bt.tType);
 
     struct gfConnection *conn = gfConnect(st->host, st->port,
