@@ -58,64 +58,47 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
-char *freeTypeFontNames[] = {
-"AvantGarde-Book",
-"AvantGarde-Demi",
-"AvantGarde-BookOblique",
-"AvantGarde-DemiOblique",
-"Helvetica",
-"Helvetica-Bold",
-"Helvetica-Oblique",
-"Helvetica-BoldOblique",
-"Helvetica-Narrow",
-"Helvetica-Narrow-Bold",
-"Helvetica-Narrow-Oblique",
-"Helvetica-Narrow-BoldOblique",
-"Times-Roman",
-"Times-Bold",
-"Times-Italic",
-"Times-BoldItalic",
-"Courier",
-"Courier-Bold",
-"Courier-Oblique",
-"Courier-BoldOblique",
-"ZapfChancery-MediumItalic",
-"Atkinson",
-"Atkinson-Bold",
-"Atkinson-Oblique",
-"Atkinson-BoldOblique",
-"Lexend",
-"Lexend-Bold",
-};
+struct freeTypeFont
+/* A font offered to the FreeType text engine.  The name and its file live on
+ * one row so the two can never drift out of sync (this used to be two parallel
+ * arrays indexed by position, which silently rendered the wrong font when they
+ * disagreed). */
+    {
+    char *name;	/* Label shown in the configure-page dropdown.  A normal-weight
+		 * font is just the face ("Lexend"); a variant is "Face-Style"
+		 * ("Lexend-Bold").  The dropdown splits this on the first '-'. */
+    char *file;	/* Font file (.pfb Type-1 or .ttf TrueType) found under
+		 * freeTypeDir (hg.conf freeTypeDir, default ../htdocs/urw-fonts). */
+    };
 
-char *freeTypeFontFiles[] = {
-"a010013l.pfb",
-"a010015l.pfb",
-"a010033l.pfb",
-"a010035l.pfb",
-"n019003l.pfb",
-"n019004l.pfb",
-"n019023l.pfb",
-"n019024l.pfb",
-"n019043l.pfb",
-"n019044l.pfb",
-"n019063l.pfb",
-"n019064l.pfb",
-"n021003l.pfb",
-"n021004l.pfb",
-"n021023l.pfb",
-"n021024l.pfb",
-"n022003l.pfb",
-"n022004l.pfb",
-"n022023l.pfb",
-"n022024l.pfb",
-"z003034l.pfb",
-"AtkinsonHyperlegible-Regular.ttf",
-"AtkinsonHyperlegible-Bold.ttf",
-"AtkinsonHyperlegible-Italic.ttf",
-"AtkinsonHyperlegible-BoldItalic.ttf",
-"Lexend-Regular.ttf",
-"Lexend-Bold.ttf",
+struct freeTypeFont freeTypeFonts[] = {
+{"AvantGarde-Book",			"a010013l.pfb"},
+{"AvantGarde-Demi",			"a010015l.pfb"},
+{"AvantGarde-BookOblique",		"a010033l.pfb"},
+{"AvantGarde-DemiOblique",		"a010035l.pfb"},
+{"Helvetica",				"n019003l.pfb"},
+{"Helvetica-Bold",			"n019004l.pfb"},
+{"Helvetica-Oblique",			"n019023l.pfb"},
+{"Helvetica-BoldOblique",		"n019024l.pfb"},
+{"Helvetica-Narrow",			"n019043l.pfb"},
+{"Helvetica-Narrow-Bold",		"n019044l.pfb"},
+{"Helvetica-Narrow-Oblique",		"n019063l.pfb"},
+{"Helvetica-Narrow-BoldOblique",	"n019064l.pfb"},
+{"Times-Roman",				"n021003l.pfb"},
+{"Times-Bold",				"n021004l.pfb"},
+{"Times-Italic",			"n021023l.pfb"},
+{"Times-BoldItalic",			"n021024l.pfb"},
+{"Courier",				"n022003l.pfb"},
+{"Courier-Bold",			"n022004l.pfb"},
+{"Courier-Oblique",			"n022023l.pfb"},
+{"Courier-BoldOblique",			"n022024l.pfb"},
+{"ZapfChancery-MediumItalic",		"z003034l.pfb"},
+{"Atkinson",				"AtkinsonHyperlegible-Regular.ttf"},
+{"Atkinson-Bold",			"AtkinsonHyperlegible-Bold.ttf"},
+{"Atkinson-Oblique",			"AtkinsonHyperlegible-Italic.ttf"},
+{"Atkinson-BoldOblique",		"AtkinsonHyperlegible-BoldItalic.ttf"},
+{"Lexend",				"Lexend-Regular.ttf"},
+{"Lexend-Bold",				"Lexend-Bold.ttf"},
 };
 
 char *emptyStyles[] = {
@@ -146,11 +129,13 @@ char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
 char buffer[4096];
 
 int ii;
-for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
-    if (sameString(freeTypeFontNames[ii], tl.textFont))
+for(ii=0; ii < ArraySize(freeTypeFonts); ii++)
+    if (sameString(freeTypeFonts[ii].name, tl.textFont))
         break;
-char *fontFile = freeTypeFontFiles[ii];
-char *fontName = freeTypeFontNames[ii];
+if (ii == ArraySize(freeTypeFonts))
+    return;   // not a font we know about; leave the bitmap engine in place
+char *fontFile = freeTypeFonts[ii].file;
+char *fontName = freeTypeFonts[ii].name;
 safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
 hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
 }
@@ -166,7 +151,7 @@ if (currentStyle)
 else
     currentStyle = "Normal";
 
-char *faceNames[sizeof(freeTypeFontNames)];
+char *faceNames[ArraySize(freeTypeFonts) + 1];  // +1 for the "Bitmap" entry below
 int ii;
 int numFonts = 0;
 struct dyString *dy = dyStringNew(1024);
@@ -178,9 +163,9 @@ char *lastName = NULL;
 faceNames[numFonts++] = "Bitmap";
 dyStringPrintf(dy, "  fontStyles['Bitmap'] = ['Normal'];");
 
-for (ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+for (ii=0; ii < ArraySize(freeTypeFonts); ii++)
     {
-    char *fontName = cloneString(freeTypeFontNames[ii]);
+    char *fontName = cloneString(freeTypeFonts[ii].name);
     char *style = strchr(fontName, '-');
 
     if (style)
