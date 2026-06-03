@@ -104,6 +104,4 @@ then
         printf 'ClinGen Dosage Sensitivity Map, %s\n' "$dosageDate" > ${WORKDIR}/release/${db}/clinGenDosageVersion.txt
     done
     cd ../..
-else
-    echo "No ClinGen CNV update"
 fi

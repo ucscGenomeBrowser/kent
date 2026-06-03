@@ -11,6 +11,13 @@ umask 002
 WORKDIR=$1
 export WORKDIR
 
+# Emit an error line on any failure so the wrapper's "mail -E" sends an alert. The
+# wget -q is silent and set -e (from the #!/bin/sh -e shebang) would otherwise abort
+# with no output, which mail -E suppresses entirely. set -E (errtrace) makes the ERR
+# trap fire for failures inside functions too. No-update runs stay silent.
+set -E
+trap 'echo "ERROR: GeneReviews build failed (exit $?)"' ERR
+
 function installGeneReviewTables() {
 for i in `cat ../geneReviews.tables`
     do

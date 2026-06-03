@@ -43,6 +43,4 @@ if [ "${count}" -gt 1 ]; then
     cp hg38ClinGenBigBed.bb ${WORKDIR}/release/hg38/clinGenGeneDisease.bb
     cd ..
     echo "ClinGen Gene-Disease update done: `date`"
-else
-    echo "No update"
 fi
