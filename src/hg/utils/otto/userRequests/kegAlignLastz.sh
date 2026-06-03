@@ -458,7 +458,16 @@ innerH: 2000
 scoringMatrix:
   class: File
   filetype: txt
-  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/primate-primate.lastz.score.txt
+  path: https://genome-test.gi.ucsc.edu/~hiram/galaxy/kegAlign/kegAlign.primatePrimate.lastz.score.txt
+#
+# gap_open_penalty   = 600
+# gap_extend_penalty = 150
+#
+#    A    C    G    T
+# A   90 -330 -236 -356
+# C -330  100 -318 -236
+# G -236 -318  100 -330
+# T -356 -236 -330   90
 "
 
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}

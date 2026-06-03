@@ -19,6 +19,8 @@ to invoke ottoRequestPush.py.
 import os
 import subprocess
 import sys
+import tempfile
+import atexit
 
 import ottoLib
 
@@ -102,102 +104,160 @@ def pushUcscChain(targetDb, queryDb):
 
 
 def main():
-    lockFh = ottoLib.acquireSingletonLock(lockPath)  # noqa: F841
-    requests = pendingRequests()
-    if not requests:
-        return
-    dbs = set()
-    for _, fromDb, toDb in requests:
-        dbs.update((fromDb, toDb))
-    accessions = {db for db in dbs if ottoLib.gcPattern.match(db)}
-    dbDbClades = ottoLib.loadDbDbClades()
-    genarkInfo = ottoLib.lookupGenark(accessions)
-    grouped = ottoLib.groupByClade(dbs, dbDbClades, genarkInfo)
+    # Set up temporary log file for capturing all output
+    pid = os.getpid()
+    logFile = f"/dev/shm/ottoPush.{pid}.txt"
 
-    # bring the otto kent tree up to date before any cladeAsmHub make
-    if not ottoLib.gitPullKentTree():
+    # Save original stdout/stderr for potential error reporting
+    originalStderr = sys.stderr
+
+    # Ensure cleanup happens even if script is killed
+    def cleanup():
+        if os.path.exists(logFile):
+            os.remove(logFile)
+
+    atexit.register(cleanup)
+
+    try:
+        # Redirect stdout and stderr to the log file
+        with open(logFile, 'w') as log:
+            sys.stdout = log
+            sys.stderr = log
+
+            lockFh = ottoLib.acquireSingletonLock(lockPath)  # noqa: F841
+            requests = pendingRequests()
+            if not requests:
+                return
+            dbs = set()
+            for _, fromDb, toDb in requests:
+                dbs.update((fromDb, toDb))
+            accessions = {db for db in dbs if ottoLib.gcPattern.match(db)}
+            dbDbClades = ottoLib.loadDbDbClades()
+            genarkInfo = ottoLib.lookupGenark(accessions)
+            grouped = ottoLib.groupByClade(dbs, dbDbClades, genarkInfo)
+
+            # bring the otto kent tree up to date before any cladeAsmHub make
+            if not ottoLib.gitPullKentTree():
+                sys.exit(1)
+
+            def cladeOf(db):
+                if ottoLib.gcPattern.match(db):
+                    info = genarkInfo.get(db)
+                    return info[1] if info else None
+                return dbDbClades.get(db)
+
+            succeededClades = set()
+            failedClades = set()
+            for clade in sorted(grouped):
+                cladeDir = ottoLib.writeCladeTsv(clade, grouped[clade])
+                if cladeDir is None:
+                    continue
+                if ottoLib.runGenArkMake(cladeDir):
+                    succeededClades.add(clade)
+                else:
+                    failedClades.add(clade)
+
+            # GenArk-target directions are pushed by the per-clade make chain
+            # above; UCSC-native-target directions are pushed by rsync to the
+            # hgdownload hosts.  A request advances to status=6 only when ALL
+            # of its directions succeed.  Clade-side failures leave the request
+            # at status=5 (existing behavior).  rsync failures move it to
+            # status=7 to alert examination.
+            completedIds = []
+            failedIds = []
+            cladeFailures = []
+            pushFailures = []
+            for reqId, fromDb, toDb in requests:
+                genarkFailedClades = set()
+                genarkIncomplete = False
+                for db in (fromDb, toDb):
+                    if not ottoLib.gcPattern.match(db):
+                        continue
+                    clade = cladeOf(db)
+                    if clade is None:
+                        genarkIncomplete = True       # missing clade info; retry
+                    elif clade in failedClades:
+                        genarkFailedClades.add(clade)
+                    elif clade not in succeededClades:
+                        genarkIncomplete = True       # not yet pushed; retry
+                if genarkFailedClades:
+                    cladeFailures.append(
+                        (reqId, fromDb, toDb, sorted(genarkFailedClades)))
+                    continue
+                if genarkIncomplete:
+                    continue
+
+                pushOk = True
+                pushFailedDirs = []
+                for target, query in [(fromDb, toDb), (toDb, fromDb)]:
+                    if ottoLib.gcPattern.match(target):
+                        continue                      # GenArk side already handled
+                    if not pushUcscChain(target, query):
+                        pushFailedDirs.append("%s -> %s" % (target, query))
+                        pushOk = False
+                        break
+                if pushOk:
+                    completedIds.append(reqId)
+                else:
+                    failedIds.append(reqId)
+                    pushFailures.append((reqId, fromDb, toDb, pushFailedDirs))
+
+            markComplete(completedIds)
+            markFailed(failedIds)
+
+            if cladeFailures:
+                print("# the following request(s) stay at status=5 due to failed "
+                      "clade pushes:")
+                for reqId, fromDb, toDb, badClades in cladeFailures:
+                    print("#   id=%d %s -> %s (failed clade(s): %s)"
+                          % (reqId, fromDb, toDb, ", ".join(badClades)))
+
+            if pushFailures:
+                print("# the following request(s) set to status=7 due to rsync "
+                      "failures:")
+                for reqId, fromDb, toDb, dirs in pushFailures:
+                    print("#   id=%d %s -> %s (failed: %s)"
+                          % (reqId, fromDb, toDb, "; ".join(dirs)))
+
+            # Restore stdout/stderr before potential exit
+            sys.stdout = sys.__stdout__
+            sys.stderr = sys.__stderr__
+
+    except Exception as e:
+        # Restore stdout/stderr first
+        sys.stdout = sys.__stdout__
+        sys.stderr = originalStderr
+
+        # Print the captured log to stderr for cron visibility
+        if os.path.exists(logFile):
+            with open(logFile, 'r') as log:
+                for line in log:
+                    print(line, end='', file=originalStderr)
+
+        # Print the exception that caused the failure
+        print(f"# FATAL ERROR: {e}", file=originalStderr)
         sys.exit(1)
 
-    def cladeOf(db):
-        if ottoLib.gcPattern.match(db):
-            info = genarkInfo.get(db)
-            return info[1] if info else None
-        return dbDbClades.get(db)
+    except SystemExit as e:
+        # Handle sys.exit() calls - restore streams first
+        sys.stdout = sys.__stdout__
+        sys.stderr = originalStderr
 
-    succeededClades = set()
-    failedClades = set()
-    for clade in sorted(grouped):
-        cladeDir = ottoLib.writeCladeTsv(clade, grouped[clade])
-        if cladeDir is None:
-            continue
-        if ottoLib.runGenArkMake(cladeDir):
-            succeededClades.add(clade)
-        else:
-            failedClades.add(clade)
+        # If exit code is non-zero, print the log for debugging
+        if e.code != 0:
+            if os.path.exists(logFile):
+                with open(logFile, 'r') as log:
+                    for line in log:
+                        print(line, end='', file=originalStderr)
 
-    # GenArk-target directions are pushed by the per-clade make chain
-    # above; UCSC-native-target directions are pushed by rsync to the
-    # hgdownload hosts.  A request advances to status=6 only when ALL
-    # of its directions succeed.  Clade-side failures leave the request
-    # at status=5 (existing behavior).  rsync failures move it to
-    # status=7 to alert examination.
-    completedIds = []
-    failedIds = []
-    cladeFailures = []
-    pushFailures = []
-    for reqId, fromDb, toDb in requests:
-        genarkFailedClades = set()
-        genarkIncomplete = False
-        for db in (fromDb, toDb):
-            if not ottoLib.gcPattern.match(db):
-                continue
-            clade = cladeOf(db)
-            if clade is None:
-                genarkIncomplete = True       # missing clade info; retry
-            elif clade in failedClades:
-                genarkFailedClades.add(clade)
-            elif clade not in succeededClades:
-                genarkIncomplete = True       # not yet pushed; retry
-        if genarkFailedClades:
-            cladeFailures.append(
-                (reqId, fromDb, toDb, sorted(genarkFailedClades)))
-            continue
-        if genarkIncomplete:
-            continue
+        # Re-raise the SystemExit
+        raise
 
-        pushOk = True
-        pushFailedDirs = []
-        for target, query in [(fromDb, toDb), (toDb, fromDb)]:
-            if ottoLib.gcPattern.match(target):
-                continue                      # GenArk side already handled
-            if not pushUcscChain(target, query):
-                pushFailedDirs.append("%s -> %s" % (target, query))
-                pushOk = False
-                break
-        if pushOk:
-            completedIds.append(reqId)
-        else:
-            failedIds.append(reqId)
-            pushFailures.append((reqId, fromDb, toDb, pushFailedDirs))
-
-    markComplete(completedIds)
-    markFailed(failedIds)
-
-    if cladeFailures:
-        print("# the following request(s) stay at status=5 due to failed "
-              "clade pushes:", file=sys.stderr)
-        for reqId, fromDb, toDb, badClades in cladeFailures:
-            print("#   id=%d %s -> %s (failed clade(s): %s)"
-                  % (reqId, fromDb, toDb, ", ".join(badClades)),
-                  file=sys.stderr)
-
-    if pushFailures:
-        print("# the following request(s) set to status=7 due to rsync "
-              "failures:", file=sys.stderr)
-        for reqId, fromDb, toDb, dirs in pushFailures:
-            print("#   id=%d %s -> %s (failed: %s)"
-                  % (reqId, fromDb, toDb, "; ".join(dirs)),
-                  file=sys.stderr)
+    finally:
+        # Always restore streams and cleanup
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+        cleanup()
 
 
 if __name__ == "__main__":
