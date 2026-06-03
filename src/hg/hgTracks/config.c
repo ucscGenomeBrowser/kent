@@ -58,6 +58,42 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
+/* HOW TO ADD A NEW FONT
+ *
+ * The browser draws track text with either the old bitmap engine or, when
+ * freeType is on (hg.conf "freeType=on", the default in a FreeType build), the
+ * FreeType engine.  The fonts the FreeType engine offers are the freeTypeFonts[]
+ * table below.  To add one:
+ *
+ *   1. Put the font file where the engine can find it.  At run time the file is
+ *      looked up under freeTypeDir, which defaults to "../htdocs/urw-fonts".
+ *      That path is relative to the CGI's working directory, so it resolves to
+ *      the *shared* htdocs/urw-fonts even from a per-user sandbox -- you do not
+ *      need a urw-fonts directory under your own htdocs-USER.  (You can point
+ *      somewhere else with "freeTypeDir" in hg.conf.)  Both Type-1 (.pfb) and
+ *      TrueType (.ttf) files work.
+ *
+ *   2. Add a row to freeTypeFonts[] giving the name and the file.  The name is
+ *      what shows up in the configure-page Font dropdown.  The configure page
+ *      splits the name on the first '-' into a face and a style: the part before
+ *      the '-' is the face shown in the Font menu, the part after is an entry in
+ *      the Style menu.  So a plain weight is just the face name ("Lexend") and a
+ *      variant is "Face-Style" ("Lexend-Bold").  Group a face's variants on
+ *      consecutive rows so the Style menu lists them together.
+ *
+ * Gotchas:
+ *
+ *   - Avoid variable fonts (e.g. InterVariable.ttf).  FreeType is opened on face
+ *     index 0 with no named instance selected, so a variable font renders only
+ *     its default master -- usually not the weight you expected, which looks like
+ *     "the option appeared but a different font was drawn".  Use a static,
+ *     single-weight file instead (e.g. Inter-Regular.ttf).
+ *
+ *   - The name in the dropdown must match the name in this table exactly,
+ *     including the face/style split above.  A selected name that matches no row
+ *     falls back to the bitmap engine (see maybeNewFonts).
+ */
+
 struct freeTypeFont
 /* A font offered to the FreeType text engine.  The name and its file live on
  * one row so the two can never drift out of sync (this used to be two parallel
