@@ -3,7 +3,7 @@ compositeTrack faceted
 type bed 3
 superTrack encode4Reg hide
 shortLabel DNase/ATAC/Histone/CTCF (Indiv.)
-longLabel Peaks and signal from individual DNase-seq, ATAC-seq, histone ChIP-seq, or CTCF ChIP-seq experiments from ENCODE 4
+longLabel Peaks and signal from individual DNase, ATAC, histone, and CTCF experiments from ENCODE 4
 visibility hide
 html encode4RegEpigenetics.html
 colorSettingsUrl /gbdb/mm10/encode4/regulation/epi_colors.json

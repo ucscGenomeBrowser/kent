@@ -109,7 +109,7 @@ python3 generate_mm10_bigcomposites.py
 #   - Epigenetics and TfChip contain BOTH bigWig (signal) and bigBed (peaks)
 #     in the same bigComposite, with "Data Type" facet to distinguish them.
 #     Parent type is "bed 3" to accommodate mixed content.
-#   - RNA-seq has "Unstranded" strand value for 26 subtracks (hg38 only has +/-)
+#   - RNA-seq has "Unstranded" strand value for 8 subtracks (hg38 only has +/-)
 #   - _Biosample column hidden from facets (same as hg38)
 #   - All facet values capitalized (Cell line, Adult, etc.)
 #

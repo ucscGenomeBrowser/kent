@@ -101,7 +101,7 @@ python3 kent/src/hg/makeDb/scripts/encode4regulation/generate_multiwig_ra.py \
 
 # The output was manually integrated into wgEncodeReg4.ra along with:
 #   - SuperTrack definition (priority 0.9, group=regulation)
-#   - TF rPeak track (bigBed 12+ with decorator, 911-factor filterValues)
+#   - TF rPeak track (bigBed 12+ with decorator, 912-factor filterValues)
 #   - Include directives for the 3 bigComposite files
 # The main file is hand-maintained:
 #   kent/src/hg/makeDb/trackDb/human/hg38/wgEncodeReg4.ra (~3,461 lines)

@@ -3,7 +3,7 @@ compositeTrack faceted
 type bed 3
 superTrack encode4Reg hide
 shortLabel TF ChIP-seq (Indiv.)
-longLabel Signal from individual transcription factor ChIP experiments from ENCODE 4
+longLabel Peaks and signal from individual transcription factor ChIP experiments from ENCODE 4
 visibility hide
 html encode4RegTfChip.html
 colorSettingsUrl /gbdb/mm10/encode4/regulation/organ_colors.json
