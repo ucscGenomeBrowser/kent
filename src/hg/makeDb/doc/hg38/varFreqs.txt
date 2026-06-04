@@ -970,6 +970,68 @@ python3 $SCR/vcfToBigBed.py \
 ln -sfn /hive/data/genomes/hg38/bed/varFreqs/disease/varFreqsDisease.bb \
         /gbdb/hg38/varFreqs/_disease/varFreqsDisease.bb
 
+##########
+# 2026-06-02 -> 2026-06-03 Claude max
+# Replaced the single varFreqsAll combined track (and the older varFreqsDisease
+# track) with TWO matched comparison tracks so the affected-vs-background
+# difference can be seen visually (e.g. autism-gene pLoF in cases vs the general
+# population). refs #36642
+#   varFreqsAffected   - variants seen in the affected/case arm of the disease
+#                        cohorts
+#   varFreqsBackground - "all other variants": population reference cohorts +
+#                        the unaffected/control/unknown arms of disease cohorts
+# A variant present in both groups appears in both tracks (overlap is intended).
+# Genotyping-array cohorts are in neither (they stay in varFreqsArray).
+#
+# Cohort classification (databases.tsv columns is_disease, disease_role):
+#   - TOPMed is a population cohort (is_disease=0): an NHLBI population/biobank
+#     reference, not an affected-disease case cohort, no affected/unaffected
+#     label. It feeds the background.
+#   - Disease-study cohorts (is_disease=1): SPARK, SFARI_WGS, SCHEMA, GREGoR
+#     (per-arm phenotype split) and GA4K (disease_role=affected: rare-disease
+#     cohort with no split, counted as affected; caveat - GA4K enrolls trios so
+#     a minority of carriers are unaffected parents).
+#   - populations.tsv has a 6th column "phenotype" (affected|unaffected|unknown)
+#     tagging the AUT/NON_AUT, CASE/CTRL, AFF/UNA/UNK arms. affected arms feed
+#     the affected track; unaffected/unknown arms feed the background track.
+#
+# Both tracks share one autoSql schema. Summary fields after dnaChange:
+#   affectedAF/AC      (string)  max AF / summed AC in affected/case arms
+#   affectedCohorts    (string)  disease cohorts contributing affected carriers
+#   backgroundAF/AC    (string)  max AF / summed AC in population + unaffected
+#   backgroundSources  (string)  cohorts contributing to the background
+#   inAffected         (uint)    1 if seen in an affected/case arm, else 0
+# followed by the per-database and per-population AC/AF columns. Each track
+# carries BOTH summaries (so the Affected track can be filtered to variants rare
+# in the background). Row inclusion: affected track = affectedAF/AC present;
+# background track = backgroundAF/AC present. score = that track's AF * 1000.
+# vcfToBigBed.py derives the length-filter ranges (filter.refLen/altLen/varLen)
+# from the observed data and emits them in the auto trackDb fragment.
+#
+# vcfToBigBed.py --split-affected emits the two tracks in one pass (shared
+# Phase 1 extract). Without the flag it writes a single track (used by the
+# array build).
+#
+# Naming: SPARK WGS display name -> "SFARI SPARK WGS" and SPARK WES -> "SFARI
+# SPARK WES" to match the standalone sfariSparkWgs/sfariSparkExomes subtracks
+# (internal key SFARI_WGS kept). mouseOver fields are wrapped in ${} to avoid
+# the trackDb subMultiField prefix-substitution bug (hui.old.c).
+#
+# Rebuild uses existing merged.annotated.vcf.gz (no re-merge needed).
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Produces varFreqsAffected.bb and varFreqsBackground.bb. Symlinked under
+# /gbdb/hg38/varFreqs/_affected/ and /gbdb/hg38/varFreqs/_background/. The
+# varFreqsAffected and varFreqsBackground filter blocks in
+# trackDb/human/varFreqs.ra come from the paste-and-go auto fragment
+# varFreqs.trackDb.ra produced by this run (both stanzas use the same fragment;
+# only the mouseOver differs).
+
 # varFreqsArray (TPMI + MexBB + UKBB; ~14.7 M variants, 750 MB):
 bash $SCR/mergeAndAnnotate.sh --databases $SCR/databases_array.tsv --tag .array
 python3 $SCR/vcfToBigBed.py \

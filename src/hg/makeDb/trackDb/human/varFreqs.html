@@ -1,11 +1,11 @@
 <h2>Description</h2>
 <p>
-This supertrack collects variant allele frequencies from population-scale sequencing and
-genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
+This track collection gathers variant allele frequencies from population-scale sequencing
+and genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
 The data was not reprocessed in a harmonized way; the variant VCFs were collected from the
 projects as-is. The goal is a single place to compare how common a variant is across
 different populations, ancestries, and cohorts, for projects that cannot be recomputed by
-gnomAD soon. Three combined tracks aggregate the source data along different lines, and
+gnomAD soon. Two combined tracks aggregate the source data along different lines, and
 there is also one subtrack per project with the original VCF data and all the annotations
 that the project provides. The different projects use different pipelines and sequencing
 technologies. Click any of the projects above or below for a summary of their sample
@@ -32,13 +32,17 @@ filter conventions (variant type, consequence, source database, allele frequency
 count, and per-database AF/AC).
 </p>
 <ul>
-  <li><a href="hgTrackUi?g=varFreqsAll"><b>All Databases Combined</b></a> &mdash; 1.34
-      billion variants from 28 sequencing-based cohorts (WGS, WES, long-read). The default
-      summary view of the supertrack. Excludes the genotyping-array cohorts.</li>
-  <li><a href="hgTrackUi?g=varFreqsDisease"><b>Disease-related Databases Combined</b></a>
-      &mdash; 932 million variants from six disease-focused cohorts (SPARK, SFARI WGS,
-      TOPMed, SCHEMA, GREGoR, GA4K), with phenotype-stratified AC/AF where the source
-      provides it.</li>
+  <li><a href="hgTrackUi?g=varFreqsAffected"><b>Affected/Case Individuals</b></a> &mdash;
+      variants seen in the affected or case arm of five disease-study cohorts (SFARI SPARK
+      WES and WGS autism probands, SCHEMA schizophrenia cases, GREGoR affected, GA4K
+      rare-disease). Each variant also carries its frequency in the background, so
+      case-enriched variants can be isolated.</li>
+  <li><a href="hgTrackUi?g=varFreqsBackground"><b>Population + Unaffected</b></a> &mdash;
+      the matched background: variants seen in the population reference cohorts (gnomAD
+      HGDP+1kG, TOPMed, ALFA, HRC and the national WGS projects) and in the
+      unaffected/control arms of the disease cohorts. Showing this together with the
+      Affected track lets you compare case versus background frequency across a gene. Both
+      tracks exclude the genotyping-array cohorts.</li>
   <li><a href="hgTrackUi?g=varFreqsArray"><b>Genotyping Array Databases Combined</b></a>
       &mdash; 14.7 million variants from three array cohorts (TPMI Taiwan, Mexico Biobank,
       UK Biobank imputed). Kept separate because chip data has different per-variant
@@ -58,21 +62,21 @@ count, and per-database AF/AC).
   <th>Downloadable from UCSC</th>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a></td>
-  <td>Sequencing-based, all below</td>
-  <td>~1.7mil</td>
+  <td><a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a></td>
+  <td>Sequencing-based disease cohorts</td>
+  <td>&mdash;</td>
   <td>WGS/WES/long-read</td>
-  <td>1.34B variants</td>
-  <td>Phenotype splits for SPARK, SFARI WGS, GREGoR</td>
+  <td>Affected/case arms of SFARI SPARK WES/WGS, SCHEMA, GREGoR, GA4K</td>
+  <td>Affected/case AF and AC; background AF for contrast</td>
   <td>No</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsDisease">Disease-related Databases Combined</a></td>
-  <td>SPARK, SFARI WGS, TOPMed, SCHEMA, GREGoR, GA4K</td>
-  <td>~300k</td>
+  <td><a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a></td>
+  <td>Sequencing-based, population + unaffected</td>
+  <td>~1.7mil</td>
   <td>WGS/WES/long-read</td>
-  <td>932M variants</td>
-  <td>SPARK ASD/Non-ASD, SFARI WGS ASD/Non-ASD, SCHEMA case/control, GREGoR aff/unaff/unknown</td>
+  <td>Population cohorts + unaffected/control arms</td>
+  <td>Background AF and AC; per-cohort and ancestry breakdowns</td>
   <td>No</td>
 </tr>
 <tr>
@@ -447,7 +451,7 @@ Editing those two files and rerunning <code>mergeAndAnnotate.sh</code> followed 
 
 <h2>Credits</h2>
 
-<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track and to Andreas Lahner, MGZ, for feedback.</p>
+<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the inspiration for this track and to Andreas Lahner, MGZ, for feedback.</p>
 
 <h2>References</h2>
 

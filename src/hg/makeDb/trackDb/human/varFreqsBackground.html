@@ -1,0 +1,121 @@
+<h2>Description</h2>
+<p>
+This track shows small variants (SNVs and short indels) seen in <b>population reference
+cohorts and in unaffected or control individuals</b> of disease-study cohorts, annotated
+with their predicted protein consequence and colored by severity. It is the background half
+of a matched pair: the companion
+<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track shows the same
+kind of variants seen in affected or case individuals. Displaying the two together lets you
+see how common a variant is in the general/unaffected population compared with affected
+individuals. For the full list of contributing projects, see the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page.
+</p>
+<p>
+The background combines two kinds of data: the population/biobank reference cohorts (such as
+gnomAD HGDP+1kG, TOPMed, ALFA, HRC and the many national WGS projects), and the
+unaffected/control or unknown-phenotype arms of the disease-study cohorts (non-ASD family
+members in SFARI SPARK WES/WGS, SCHEMA controls, and GREGoR unaffected/unknown
+participants). Genotyping-array cohorts are not included. A variant that also appears in
+affected individuals is shown in both this track and the
+<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track.
+</p>
+
+<h2>Display Conventions</h2>
+<h3>Color by Consequence</h3>
+<p>Variants are colored by their most severe predicted consequence:</p>
+<table class="stdTbl">
+<tr><th>Color</th><th>Consequence class</th><th>Examples</th></tr>
+<tr><th style="background-color:#FF0000;width:2em">&nbsp;</th>
+    <td>Protein-truncating / loss-of-function</td>
+    <td>stop_gained, frameshift, splice_donor, splice_acceptor, stop_lost, start_lost</td></tr>
+<tr><th style="background-color:#1F77B4;width:2em">&nbsp;</th>
+    <td>Missense / in-frame</td>
+    <td>missense, inframe_insertion, inframe_deletion, protein_altering</td></tr>
+<tr><th style="background-color:#008000;width:2em">&nbsp;</th>
+    <td>Synonymous</td>
+    <td>synonymous, stop_retained</td></tr>
+<tr><th style="background-color:#808080;width:2em">&nbsp;</th>
+    <td>Non-coding / intergenic</td>
+    <td>intron, non_coding, intergenic, UTR</td></tr>
+</table>
+<p>
+The score (used for shading) is the background allele frequency (the maximum across the
+population cohorts and unaffected/control arms) times 1000.
+</p>
+
+<h2>Filters</h2>
+<ul>
+  <li><b>Variant Type</b> and <b>Consequence</b>: restrict to SNV/insertion/deletion/MNV
+      and to predicted consequence classes (the Consequence filter uses OR logic over the
+      comma-separated tokens on each variant).</li>
+  <li><b>Background AF</b> and <b>Background AC</b>: the maximum allele frequency and summed
+      allele count across the population cohorts and unaffected/control arms.</li>
+  <li><b>Affected/case AF</b> and <b>Affected/case AC</b>: the same variant's frequency in
+      affected individuals, for context.</li>
+  <li><b>Background source</b>: restrict to variants seen in specific cohorts.</li>
+  <li><b>Per-database AF/AC</b> and ancestry-specific allele frequencies (AllOfUs, GenomeAsia,
+      gnomAD HGDP+1kG, NPM Singapore, WBBC) let you filter to a single cohort or ancestry
+      group.</li>
+  <li><b>Reference/Alternate Length</b> and <b>Length Change</b>: filter by allele length.</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Variant-frequency VCFs from the contributing cohorts were stripped of unneeded INFO fields,
+normalized with <code>bcftools norm</code> (splitting multi-allelic sites), and merged with
+<code>bcftools merge</code>. The merged callset was annotated with predicted protein
+consequences using <a href="https://samtools.github.io/bcftools/howtos/csq-calling.html"
+target="_blank">bcftools csq</a> against the
+<a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
+GRCh38 release 115 gene models.
+</p>
+<p>
+A custom Python script (<code>vcfToBigBed.py</code>) then read the per-cohort allele
+frequencies and, for each variant, summed/maximized the counts across the population cohorts
+and unaffected/control subgroups to produce this track, and across the affected arms to
+produce the companion
+<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track. A variant seen
+in both groups appears in both tracks. The build is documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc</a>, and the scripts are on
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">GitHub</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Because the merged callset combines cohorts whose redistribution licenses differ, this
+track is <b>not available for download</b> and is not in the Table Browser. It can be
+reconstructed from the individual source VCFs using the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">conversion scripts</a> and the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">build documentation</a>. The per-project subtracks on the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page document how to obtain
+each source dataset.
+</p>
+
+<h2>Credits</h2>
+<p>
+This track is only possible thanks to the data from millions of volunteers around the world
+who contributed to the population reference projects and to the unaffected/control arms of
+the disease cohorts. Click the individual project subtracks on the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page for the specific credits
+and citations of each cohort. Thanks to Alex Ioannidis, UCSC, for the inspiration for this
+track and to Andreas Lahner, MGZ, for feedback.
+</p>
+
+<h2>References</h2>
+<p>
+For the primary citation of each source cohort, see the References section on the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page. The merged-track build
+uses the following tools:
+</p>
+<p>
+Danecek P, McCarthy SA.
+<a href="https://doi.org/10.1093/bioinformatics/btx100" target="_blank">
+BCFtools/csq: haplotype-aware variant consequences</a>.
+<em>Bioinformatics</em>. 2017 Jul 1;33(13):2037-2039.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28205675" target="_blank">28205675</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5870570/" target="_blank">PMC5870570</a>
+</p>
