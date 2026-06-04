@@ -8,8 +8,8 @@ visibility hide
 html encode4RegTfChip.html
 colorSettingsUrl /gbdb/mm10/encode4/regulation/organ_colors.json
 metaDataUrl /gbdb/mm10/encode4/regulation/encode4RegTfChip_metadata.tsv
-primaryKey accession
-subtrackUrls accession=https://www.encodeproject.org/files/$$/ Experiment=https://www.encodeproject.org/experiments/$$/
+primaryKey Accession
+subtrackUrls Accession=https://www.encodeproject.org/files/$$/ Experiment=https://www.encodeproject.org/experiments/$$/
 defaultSortField _Experiment
 maxCheckboxes 50
 noInherit on
