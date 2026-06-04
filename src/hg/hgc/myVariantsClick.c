@@ -20,6 +20,112 @@
 #include "hgConfig.h"
 #include "jsonWrite.h"
 #include "htmshell.h"
+#include "hgHgvs.h"
+#include "variantProjector.h"
+#include "genePred.h"
+#include "genbank.h"
+#include "bigBed.h"
+#include "chromAlias.h"
+
+static struct genePred *getGeneTrackOverlaps(struct trackDb *geneTdb, char *db, char *chrom,
+                                             int start, int end)
+/* Return transcripts in geneTdb overlapping chrom:start-end, from a bigGenePred file
+ * or a genePred SQL table. */
+{
+struct genePred *gpList = NULL;
+if (sameString(geneTdb->type, "bigGenePred"))
+    {
+    char *fileName = hReplaceGbdb(trackDbSetting(geneTdb, "bigDataUrl"));
+    if (isEmpty(fileName))
+        return NULL;
+    struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+    for (bb = bbList;  bb != NULL;  bb = bb->next)
+        {
+        struct genePred *gp = (struct genePred *)genePredFromBigGenePred(chrom, bb);
+        if (gp != NULL)
+            slAddHead(&gpList, gp);
+        }
+    lmCleanup(&lm);
+    bigBedFileClose(&bbi);
+    freeMem(fileName);
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    int rowOffset = 0;
+    struct sqlResult *sr = hRangeQuery(conn, geneTdb->table, chrom, start, end, NULL, &rowOffset);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        slAddHead(&gpList, genePredLoad(row + rowOffset));
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+slReverse(&gpList);
+return gpList;
+}
+
+static void printMyVariantsHgvs(struct myVariants *item)
+/* For SNV items, show the genomic HGVS g. term and a c./n. term for each overlapping
+ * transcript in the assembly's default (MANE-first) gene track. */
+{
+if (!sameOk(item->itemType, "snv"))
+    return;
+char *db = item->db;
+struct seqWindow *gSeqWin = chromSeqWindowNew(db, NULL, 0, 0);
+struct bed3 variantBed;
+ZeroVar(&variantBed);
+variantBed.chrom = item->chrom;
+variantBed.chromStart = item->chromStart;
+variantBed.chromEnd = item->chromEnd;
+char *chromAcc = hRefSeqAccForChrom(db, item->chrom);
+/* vpGenomicToTranscript requires an IUPAC alt (or "*"/"<DEL>") and aborts otherwise, and
+ * rewrites "<DEL>" in place; work on a copy, normalize "<DEL>", and skip transcript terms
+ * for any alt it can't project. */
+char *alt = cloneString(item->alt);
+boolean altProjectable = (isAllNt(alt, strlen(alt)) ||
+                          sameString(alt, "*") || sameString(alt, "<DEL>"));
+if (sameString(alt, "<DEL>"))
+    alt[0] = '\0';
+char *hgvsG = hgvsGFromVariant(gSeqWin, &variantBed, alt, chromAcc, FALSE);
+
+struct trackDb *geneTdb = altProjectable ? hgvsDefaultGeneTrack(db) : NULL;
+if (geneTdb != NULL)
+    htmlPrintf("<B>HGVS</B> (relative to %s):<BR>\n", geneTdb->shortLabel);
+else
+    printf("<B>HGVS:</B><BR>\n");
+if (isNotEmpty(hgvsG))
+    htmlPrintf("&nbsp;&nbsp;%s<BR>\n", hgvsG);
+
+if (geneTdb == NULL)
+    return;
+
+struct genePred *gp, *gpList = getGeneTrackOverlaps(geneTdb, db, item->chrom,
+                                                    item->chromStart, item->chromEnd);
+for (gp = gpList;  gp != NULL;  gp = gp->next)
+    {
+    char *seq = txSeqFromGp(db, gp);
+    struct dnaSeq *txSeq = newDnaSeq(seq, strlen(seq), gp->name);
+    struct genbankCds cds;
+    genePredToCds(gp, &cds);
+    struct psl *psl = genePredToPsl(gp, hChromSize(db, gp->chrom), txSeq->size);
+    vpExpandIndelGaps(psl, gSeqWin, txSeq);
+    struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed, alt, psl, txSeq);
+    char *hgvsTx = NULL;
+    if (cds.end > cds.start)
+        hgvsTx = hgvsCFromVpTx(vpTx, gSeqWin, psl, &cds, txSeq, FALSE);
+    else
+        hgvsTx = hgvsNFromVpTx(vpTx, gSeqWin, psl, txSeq, FALSE);
+    if (isNotEmpty(hgvsTx))
+        {
+        if (isNotEmpty(gp->name2))
+            htmlPrintf("&nbsp;&nbsp;%s (%s):%s<BR>\n", gp->name, gp->name2, hgvsTx);
+        else
+            htmlPrintf("&nbsp;&nbsp;%s:%s<BR>\n", gp->name, hgvsTx);
+        }
+    }
+}
 
 void doMyVariantsDetails(struct customTrack *ct, char *itemIdString)
 /* Show details of a myVariants item. */
@@ -463,6 +569,8 @@ if (item != NULL)
         }
 
     printf("<B>id:</B> %d<BR>\n", item->id);
+
+    printMyVariantsHgvs(item);
 
     /* Overlaps section: only emit if hg.conf names overlap tracks for this assembly.
      * Format: myVariantsOverlapTracks.<db> = track1,track2,...  */
