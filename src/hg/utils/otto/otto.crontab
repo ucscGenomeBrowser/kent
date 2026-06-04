@@ -77,9 +77,6 @@ MAILTO=otto-group@ucsc.edu
 #LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
-#Mastermind
-05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
-
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
