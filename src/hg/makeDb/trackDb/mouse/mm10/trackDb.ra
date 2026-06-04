@@ -359,7 +359,7 @@ include encode3.chromHmm.ra
 include encode3.atac.ra
 include encode3RenEnhancerGene.ra
 include encode.cCREs.override.ra
-include encode4Reg.ra alpha
+include encode4Reg.ra alpha,beta
 include fantom5.ra
 
 track epdNew
