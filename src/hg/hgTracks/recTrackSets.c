@@ -38,18 +38,17 @@ struct recTrackSet
     };
 
 #define REC_TRACK_SETS_FILE  "recTrackSets"
-#define REC_TRACK_SETS_DIR  "inc"
 #define REC_TRACK_SETS_EXT  "tab"
 #define REC_TRACK_SETS_DATA_DIR  "data/recTrackSets"
 
 char *recTrackSetsFile()
 /* Generate path to file specifying menu of recommended track sets.
- *      eg, DOCUMENT_ROOT/inc/recTrackSets.hg19.tab */
+ *      eg, DOCUMENT_ROOT/data/recTrackSets/recTrackSets.hg19.tab */
 {
 char *root = hDocumentRoot();
 char buf[200];
 safef(buf, sizeof buf, "%s/%s/%s.%s.%s", 
-        root, REC_TRACK_SETS_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
+        root, REC_TRACK_SETS_DATA_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
 return cloneString(buf);
 }
 
