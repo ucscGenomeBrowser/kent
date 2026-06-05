@@ -20,7 +20,7 @@ HGDP+1000 Genomes and Mexico Biobank can also be found in the &quot;Phased Varia
 Their VCF versions below show only the isolate frequency per variant.
 </p>
 
-<p>Please contact us (<A HREF="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</A><!-- above address is genome at soe.ucsc.edu -->) if you know of a project that we should add. So far,
+<p>Please contact us (<a href="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</a><!-- above address is genome at soe.ucsc.edu -->) if you know of a project that we should add. So far,
 Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected) and Taiwan Biobank (pending).
 </p>
 
@@ -48,6 +48,26 @@ count, and per-database AF/AC).
       UK Biobank imputed). Kept separate because chip data has different per-variant
       confidence than sequencing.</li>
 </ul>
+
+<h3>Consequence filter &mdash; the &quot;Other&quot; bucket</h3>
+<p>
+All three combined tracks share the same Consequence filter (Missense, Synonymous, Stop
+Gained, Frameshift, Splice Donor, Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding,
+Intergenic, Other). The filter uses OR logic across the comma-separated consequence tokens
+on each variant: a variant tagged <code>stop_gained,frameshift</code> is selected by either
+the &quot;Stop Gained&quot; or the &quot;Frameshift&quot; filter. The &quot;Other&quot;
+bucket catches the less common
+<a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a> consequence
+terms emitted by <code>bcftools csq</code> that don't fit the named buckets above. Examples
+include <code>splice_region</code> (variant near a splice site but outside the canonical
+donor/acceptor), <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the
+start codon or replaces the stop codon with a coding amino acid),
+<code>stop_retained</code> (variant changes the stop codon but keeps it a stop),
+<code>inframe_insertion</code> / <code>inframe_deletion</code> (in-frame indel that adds or
+removes whole codons), and <code>coding_sequence</code> (CDS variant where the precise
+impact is undetermined). If you include &quot;Other&quot; in the filter selection, no
+records will be hidden by the consequence filter.
+</p>
 
 <h3>Available Datasets</h3>
 
@@ -468,6 +488,17 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10937371/" target="_blank">PM
 </p>
 
 <p>
+Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kahari AK, Lundin P, Che H
+<em>et al</em>.
+<a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
+SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
+population</a>.
+<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+</p>
+
+<p>
 Bhattacharyya C, Subramanian K, Uppili B, Biswas NK, Ramdas S, Tallapaka KB, Arvind P, Rupanagudi
 KV, Maitra A, Nagabandi T <em>et al</em>.
 <a href="https://doi.org/10.1038/s41588-025-02153-x" target="_blank">
@@ -477,14 +508,22 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40200122" target="_blank">402
 </p>
 
 <p>
-Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kahari AK, Lundin P, Che H
-<em>et al</em>.
-<a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
-SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
-population</a>.
-<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+Bycroft C, Freeman C, Petkova D, Band G, Elliott LT, Sharp K, Motyer A, Vukcevic D, Delaneau O,
+O&#x27;Connell J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-018-0579-z" target="_blank">
+The UK Biobank resource with deep phenotyping and genomic data</a>.
+<em>Nature</em>. 2018 Oct;562(7726):203-209.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30305743" target="_blank">30305743</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6786975/" target="_blank">PMC6786975</a>
+</p>
+
+<p>
+Cao Y, Li L, Xu M, Feng Z, Sun X, Lu J, Xu Y, Du P, Wang T, Hu R <em>et al</em>.
+<a href="https://doi.org/10.1038/s41422-020-0322-9" target="_blank">
+The ChinaMAP analytics of deep whole genome sequences in 10,588 individuals</a>.
+<em>Cell Res</em>. 2020 Sep;30(9):717-731.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32355288" target="_blank">32355288</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7609296/" target="_blank">PMC7609296</a>
 </p>
 
 <p>
@@ -507,6 +546,15 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35305867" target="_blank">353
 </p>
 
 <p>
+Cong PK, Bai WY, Li JC, Yang MY, Khederzadeh S, Gai SR, Li N, Liu YH, Yu SH, Zhao WW <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-022-30526-x" target="_blank">
+Genomic analyses of 10,376 individuals in the Westlake BioBank for Chinese (WBBC) pilot project</a>.
+<em>Nat Commun</em>. 2022 May 26;13(1):2939.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35618720" target="_blank">35618720</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9135724/" target="_blank">PMC9135724</a>
+</p>
+
+<p>
 Fan S, Spence JP, Feng Y, Hansen MEB, Terhorst J, Beltrame MH, Ranciaro A, Hirbo J, Beggs W, Thomas
 N <em>et al</em>.
 <a href="https://doi.org/10.1016/j.cell.2023.01.042" target="_blank">
@@ -525,6 +573,15 @@ SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
 <em>Neuron</em>. 2018 Feb 7;97(3):488-493.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29420931" target="_blank">29420931</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7444276/" target="_blank">PMC7444276</a>
+</p>
+
+<p>
+Genome of the Netherlands Consortium.
+<a href="https://doi.org/10.1038/ng.3021" target="_blank">
+Whole-genome sequence variation, population structure and demographic history of the Dutch
+population</a>.
+<em>Nat Genet</em>. 2014 Aug;46(8):818-25.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24974849" target="_blank">24974849</a>
 </p>
 
 <p>
@@ -609,6 +666,15 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5161557/" target="_blank">PMC
 </p>
 
 <p>
+Malomane DK, Williams MP, Huber CD, Mangul S, Abedalthagafi M, Chiang CWK.
+<a href="https://doi.org/10.1101/2025.01.10.632500" target="_blank">
+Patterns of population structure and genetic variation within the Saudi Arabian population</a>.
+<em>bioRxiv</em>. 2025 Jan 13;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39868174" target="_blank">39868174</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11761371/" target="_blank">PMC11761371</a>
+</p>
+
+<p>
 McCarthy S, Das S, Kretzschmar W, Delaneau O, Wood AR, Teumer A, Kang HM, Fuchsberger C, Danecek P,
 Sharp K <em>et al</em>.
 <a href="https://doi.org/10.1038/ng.3643" target="_blank">
@@ -629,6 +695,16 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8897431/" target="_blank">PMC
 </p>
 
 <p>
+Singh T, Poterba T, Curtis D, Akil H, Al Eissa M, Barchas JD, Bass N, Bigdeli TB, Breen G,
+Bromet EJ <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank">
+Rare coding variants in ten genes confer substantial risk for schizophrenia</a>.
+<em>Nature</em>. 2022 Apr;604(7906):509-516.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35396579" target="_blank">35396579</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9805802/" target="_blank">PMC9805802</a>
+</p>
+
+<p>
 Sohail M, Palma-Mart&iacute;nez MJ, Chong AY, Quinto-Cort&eacute;s CD, Barberena-Jonas C,
 Medina-Mu&ntilde;oz SG, Ragsdale A, Delgado-S&aacute;nchez G, Cruz-Hervert LP, Ferreyra-Reyes L
 <em>et al</em>.
@@ -637,16 +713,6 @@ Mexican Biobank advances population and medical genomics of diverse ancestries</
 <em>Nature</em>. 2023 Oct;622(7984):775-783.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37821706" target="_blank">37821706</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10600006/" target="_blank">PMC10600006</a>
-</p>
-
-<p>
-Singh T, Poterba T, Curtis D, Akil H, Al Eissa M, Barchas JD, Bass N, Bigdeli TB, Breen G,
-Bromet EJ <em>et al</em>.
-<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank">
-Rare coding variants in ten genes confer substantial risk for schizophrenia</a>.
-<em>Nature</em>. 2022 Apr;604(7906):509-516.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35396579" target="_blank">35396579</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9805802/" target="_blank">PMC9805802</a>
 </p>
 
 <p>
@@ -684,4 +750,13 @@ Wu D, Dou J, Chai X, Bellis C, Wilm A, Shih CC, Soon WWJ, Bertin N, Lin CB, Khor
 Large-scale whole-genome sequencing of three diverse Asian populations in Singapore</a>.
 <em>Cell</em>. 2019 Oct 17;179(3):736-749.e15.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31626772" target="_blank">31626772</a>
+</p>
+
+<p>
+Yang HC, Kwok PY, Li LH, Liu YM, Jong YJ, Lee KY, Wang DW, Tsai MF, Yang JH, Chen CH <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09680-x" target="_blank">
+The Taiwan Precision Medicine Initiative provides a cohort for large-scale studies</a>.
+<em>Nature</em>. 2025 Dec;648(8092):117-127.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41092961" target="_blank">41092961</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12675286/" target="_blank">PMC12675286</a>
 </p>

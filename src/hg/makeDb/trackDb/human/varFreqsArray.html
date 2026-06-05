@@ -8,8 +8,9 @@ variants from the Taiwan Precision Medicine Initiative (TPMI Axiom TPM1 chip,
 </p>
 
 <p>
-The array track is kept separate from the
-<a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a> WGS/WES summary so that
+The array track is kept separate from the sequencing-based combined tracks
+(<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a>) so that
 sequencing-based and array-based frequencies can be inspected independently. For a summary
 of all available variant frequency databases, see the
 <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page.
@@ -21,26 +22,18 @@ of all available variant frequency databases, see the
 <p>Variants are colored by their most severe predicted consequence:</p>
 <table class="stdTbl">
 <tr><th>Color</th><th>Consequence class</th><th>Examples</th></tr>
-<tr>
-  <td style="background-color: rgb(255,0,0); color: white; text-align: center;"><b>Red</b></td>
-  <td>Protein-truncating / Loss-of-function</td>
-  <td>stop_gained, frameshift, splice_donor, splice_acceptor, stop_lost, start_lost</td>
-</tr>
-<tr>
-  <td style="background-color: rgb(31,119,180); color: white; text-align: center;"><b>Blue</b></td>
-  <td>Missense / In-frame</td>
-  <td>missense, inframe_insertion, inframe_deletion, protein_altering</td>
-</tr>
-<tr>
-  <td style="background-color: rgb(0,128,0); color: white; text-align: center;"><b>Green</b></td>
-  <td>Synonymous</td>
-  <td>synonymous, stop_retained</td>
-</tr>
-<tr>
-  <td style="background-color: rgb(128,128,128); color: white; text-align: center;"><b>Grey</b></td>
-  <td>Non-coding / Intergenic</td>
-  <td>intron, non_coding, intergenic, UTR</td>
-</tr>
+<tr><th style="background-color:#FF0000;width:2em">&nbsp;</th>
+    <td>Protein-truncating / loss-of-function</td>
+    <td>stop_gained, frameshift, splice_donor, splice_acceptor, stop_lost, start_lost</td></tr>
+<tr><th style="background-color:#1F77B4;width:2em">&nbsp;</th>
+    <td>Missense / in-frame</td>
+    <td>missense, inframe_insertion, inframe_deletion, protein_altering</td></tr>
+<tr><th style="background-color:#008000;width:2em">&nbsp;</th>
+    <td>Synonymous</td>
+    <td>synonymous, stop_retained</td></tr>
+<tr><th style="background-color:#808080;width:2em">&nbsp;</th>
+    <td>Non-coding / intergenic</td>
+    <td>intron, non_coding, intergenic, UTR</td></tr>
 </table>
 
 <h3>Amino Acid Change Notation</h3>
@@ -65,8 +58,9 @@ whole-genome or whole-exome sequencing. Two limitations to keep in mind:
       its own validation) in the source VCF; high-AF claims with low concordance are
       common. MexBB ships only AN/AF/AC with no FILTER column and no per-site QC at all.
       For both arrays, high-AF rare-disease candidates should be cross-checked against the
-      sequencing-based <a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a> track
-      before drawing conclusions.</li>
+      sequencing-based
+      <a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a> track before
+      drawing conclusions.</li>
 </ul>
 
 <h2>Filters</h2>
@@ -81,8 +75,8 @@ This track supports filtering via the track settings page. Click the track title
   <li><b>Consequence</b>: Missense, Synonymous, Stop Gained, Frameshift, Splice Donor,
       Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding, Intergenic, or Other. The filter
       uses OR logic across the comma-separated consequence tokens on each variant. See the
-      <a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a> description page for a
-      complete description of the &quot;Other&quot; bucket.</li>
+      <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page for a complete
+      description of the &quot;Other&quot; bucket.</li>
 </ul>
 
 <h3>Frequency and Count Filters</h3>
@@ -110,8 +104,9 @@ databases. It uses OR logic.
 
 <h2>Methods</h2>
 <p>
-The same merge-and-annotate pipeline used for the
-<a href="hgTrackUi?g=varFreqsAll">All Databases Combined</a> track was run on the
+The same merge-and-annotate pipeline used for the sequencing-based combined tracks
+(<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a>) was run on the
 array-cohort subset of source VCFs. Each VCF was stripped of its INFO fields, normalized
 with <code>bcftools norm</code> (splitting multi-allelic sites), and merged with
 <code>bcftools merge</code>. The merged VCF was then annotated with predicted protein
