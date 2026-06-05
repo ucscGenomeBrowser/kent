@@ -2422,7 +2422,7 @@ if (isNotEmpty(recombinants->recombMutations))
     // The user may change this using a checkbox in a dialog; keep a hidden input on the main page to be updated
     // by the dialog JS when the user clicks on the dialog checkbox, to keep the state in case they close and reopen
     // the dialog.
-    boolean informativeOnly = cartUsualBoolean(cart, "hgpp_informativeOnly", FALSE);
+    boolean informativeOnly = cartUsualBoolean(cart, "hgpp_informativeOnly", TRUE);
     cgiMakeHiddenVarWithIdExtra("hidden_showInformative", "hidden_showInformative", informativeOnly ? "1" : "0", NULL);
     // Likewise, the user may change fontSize using a select in the dialog.
     int fontSize = cartUsualInt(cart, "hgpp_recombFontSize", 10);
