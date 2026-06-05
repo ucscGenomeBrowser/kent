@@ -4,8 +4,9 @@
 #
 # Copy the matching hgwdev CGIs over the public-release CGIs the image shipped
 # with, so kent-tip reflects master (hgwdev's alpha cgi-bin) and kent-beta
-# reflects the branch beta (cgi-bin-beta). Also copies the matching JS so the
-# browser's JavaScript stays in sync with the CGI C code.
+# reflects the branch beta (cgi-bin-beta). Also copies the matching JS and CSS
+# (htdocs/style) so the browser's JavaScript and stylesheets stay in sync with
+# the CGI C code.
 #
 # Only the top-level CGI executables are copied, not the assorted data and
 # dev-only subdirectories (otto/, crom_dir/, hgPhyloPlaceData/, ...). Those
@@ -29,8 +30,8 @@ usage() {
 [[ $# -eq 1 ]] || usage
 name="$1"
 case "$name" in
-    tip)  cgiSrc=/usr/local/apache/cgi-bin;      jsSrc=/usr/local/apache/htdocs/js ;;
-    beta) cgiSrc=/usr/local/apache/cgi-bin-beta; jsSrc=/usr/local/apache/htdocs-beta/js ;;
+    tip)  cgiSrc=/usr/local/apache/cgi-bin;      jsSrc=/usr/local/apache/htdocs/js;      styleSrc=/usr/local/apache/htdocs/style ;;
+    beta) cgiSrc=/usr/local/apache/cgi-bin-beta; jsSrc=/usr/local/apache/htdocs-beta/js; styleSrc=/usr/local/apache/htdocs-beta/style ;;
     *)    usage ;;
 esac
 container="kent-$name"
@@ -45,3 +46,7 @@ container="kent-$name"
 # JS: keep the browser's JavaScript matched to the CGI version just copied.
 ( cd "$jsSrc" && tar --ignore-failed-read --create --file=- . ) \
     | docker exec -i "$container" tar -C /usr/local/apache/htdocs/js -xf -
+
+# CSS: keep the browser's stylesheets matched to the CGI version just copied.
+( cd "$styleSrc" && tar --ignore-failed-read --create --file=- . ) \
+    | docker exec -i "$container" tar -C /usr/local/apache/htdocs/style -xf -
