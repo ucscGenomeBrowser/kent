@@ -93,6 +93,10 @@ mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
 mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 mm10 cCREs encode4Reg Related ENCODE4 regulation data
+mm10 mouseDevTimecourse encode3Reg Related ENCODE3 Regulation tracks
+mm10 encode3Reg mouseDevTimecourse Related ENCODE Expression track
+mm10 mouseDevTimecourse encode4Reg Related ENCODE4 Regulation tracks
+mm10 encode4Reg mouseDevTimecourse Related ENCODE Expression track
 
 # hg38 long-read SV supertrack cross-links to other SV resources:
 hg38 lrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
