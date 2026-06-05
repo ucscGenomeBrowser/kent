@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-# rtsUpdate -- propagate Recommended Track Set sessions from a curator
-# session into the View user across hgwdev -> hgwbeta -> genome-centdb.
+# rtsUpdate -- fetch a curator's Recommended Track Set session from hgcentral
+# and write the scrubbed key=value contents into htdocs/data/recTrackSets/,
+# where Chris's file-based loader reads it.  No DB writes.
 # Refs #32768, #34907.
 
 import argparse
@@ -10,28 +11,22 @@ import pathlib
 import re
 import subprocess
 import sys
-import tempfile
-import time
 from urllib.parse import urlparse
 
 HOME = pathlib.Path.home()
 RTS_DIR = HOME / "kent/src/hg/utils/rts"
+DATA_DIR = HOME / "kent/src/hg/htdocs/data/recTrackSets"
 INC_DIR = HOME / "kent/src/hg/htdocs/inc"
 LOGFILE = HOME / ".rtsUpdate.log"
 VERBOTEN = RTS_DIR / "verboten.lst"
 
 TARGET_USER = "View"
 
+# Source host => (hgsql -h target, db).  Default source is rr (canonical curator save location).
 HOSTS = {
+    "rr":   ("genome-centdb", "hgcentral"),
     "dev":  ("hgwdev",        "hgcentraltest"),
     "beta": ("hgwbeta",       "hgcentralbeta"),
-    "rr":   ("genome-centdb", "hgcentral"),
-}
-
-VALIDATE_URL = {
-    "dev":  "https://hgwdev.gi.ucsc.edu",
-    "beta": "https://hgwbeta.soe.ucsc.edu",
-    "rr":   "https://genome.ucsc.edu",
 }
 
 # Session and userName must match this. Excludes anything that could be SQL- or
@@ -73,7 +68,7 @@ def validate_name(name, label):
         die(f"unsafe {label}: {name!r} (must match {SAFE_NAME.pattern})")
 
 
-# ---------- hgsql shim ----------
+# ---------- hgsql shim (read-only) ----------
 
 def hgsql_read(host_key, sql):
     """Run a SELECT.  Returns list[list[str]].  Caller is responsible for
@@ -89,26 +84,6 @@ def hgsql_read(host_key, sql):
     if not out:
         return []
     return [row.split("\t") for row in out.split("\n")]
-
-
-def hgsql_write(host_key, sql):
-    """Pipe SQL via stdin.  Caller is responsible for safety (binary blobs go
-    through hex_blob; identifiers through validate_name)."""
-    host, db = HOSTS[host_key]
-    cmd = ["hgsql", "-h", host, db]
-    p = subprocess.run(cmd, input=sql, capture_output=True, text=True)
-    if p.returncode != 0:
-        die(f"hgsql write {host_key} failed: {p.stderr.strip()}\n--- sql ---\n"
-            f"{sql[:500]}{'...' if len(sql) > 500 else ''}")
-    return p.stdout
-
-
-def hex_blob(s):
-    """MySQL hex literal for a string -- binary-safe substitute for a quoted value."""
-    h = s.encode("utf-8").hex()
-    if not h:
-        return "''"
-    return f"_binary 0x{h}"
 
 
 # ---------- RTS domain ----------
@@ -134,6 +109,10 @@ def scrub(pairs, verboten):
     out = []
     for p in pairs:
         key = p.split("=", 1)[0]
+        # Drop pairs with empty or whitespace-tainted keys (corruption / stray
+        # data from manual session edits — e.g. an `& hgsid=...` artifact).
+        if not key or any(c.isspace() for c in key):
+            continue
         if any(rx.match(key) for rx in verboten):
             continue
         out.append(p)
@@ -141,7 +120,8 @@ def scrub(pairs, verboten):
 
 
 def find_db_for_session(session):
-    """Return the assembly db for a session by scanning recTrackSets.<db>.tab."""
+    """Return the assembly db for a session by scanning recTrackSets.<db>.tab.
+    Reads from htdocs/inc/ (the authoritative manifest location)."""
     for tab in sorted(INC_DIR.glob("recTrackSets.*.tab")):
         m = re.match(r"recTrackSets\.([A-Za-z0-9]+)\.tab$", tab.name)
         if not m:
@@ -156,39 +136,18 @@ def find_db_for_session(session):
     return None
 
 
-def find_db_in_tree(session):
-    """Fallback: scan rts/<db>/<session> for an existing dump file."""
-    for d in sorted(RTS_DIR.iterdir()):
-        if d.is_dir() and (d / session).exists():
-            if SAFE_NAME.match(d.name):
-                return d.name
-    return None
-
-
-def db_from_pairs(pairs):
-    for p in pairs:
-        if p.startswith("db="):
-            return p[3:]
-    return None
-
-
 def kent_path(db, session):
-    return RTS_DIR / db / session
+    return DATA_DIR / db / session
 
 
 def write_kent_file(db, session, pairs):
+    """Write pairs (one per line) to the kent tree atomically via temp+rename."""
     path = kent_path(db, session)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(pairs) + "\n")
+    tmp = path.parent / (path.name + ".tmp")
+    tmp.write_text("\n".join(pairs) + "\n")
+    tmp.replace(path)
     return path
-
-
-def read_kent_file(db, session):
-    path = kent_path(db, session)
-    if not path.exists():
-        die(f"kent tree file missing: {path} -- run `rtsUpdate fetch` first")
-    pairs = [ln.rstrip() for ln in path.read_text().splitlines() if ln.strip()]
-    return pairs
 
 
 def fetch_session_row(host_key, user, session):
@@ -235,31 +194,7 @@ def show_git_diff_for(path):
                    check=False)
 
 
-def apply_session_write(host_key, session, contents, dry_run):
-    """Insert or update View/<session> on host_key.  Returns SQL that was run
-    (or would be run, if dry_run)."""
-    validate_name(session, "sessionName")
-    _, _, exists = fetch_session_row(host_key, TARGET_USER, session)
-    if exists:
-        sql = (f"UPDATE namedSessionDb "
-               f"SET contents = {hex_blob(contents)}, lastUse = NOW() "
-               f"WHERE userName='{TARGET_USER}' AND sessionName='{session}';\n")
-        op = "UPDATE"
-    else:
-        sql = (f"INSERT INTO namedSessionDb "
-               f"(userName, sessionName, contents, shared, firstUse, lastUse, useCount, settings) "
-               f"VALUES ('{TARGET_USER}', '{session}', {hex_blob(contents)}, "
-               f"1, NOW(), NOW(), 0, '');\n")
-        op = "INSERT"
-    if dry_run:
-        print(f"  [dry-run] would {op} on {host_key}")
-        return sql
-    hgsql_write(host_key, sql)
-    print(f"  {op} applied on {host_key}")
-    return sql
-
-
-# ---------- subcommands ----------
+# ---------- subcommand ----------
 
 def cmd_fetch(args):
     verboten = load_verboten()
@@ -280,6 +215,14 @@ def cmd_fetch(args):
     validate_name(src_session, "src sessionName")
     validate_name(target, "target sessionName")
 
+    # .tab validation: must be listed in recTrackSets.<db>.tab.  This determines
+    # which assembly the file lands under and rejects typos / missing manifest rows.
+    db = find_db_for_session(target)
+    if db is None:
+        die(f"target session {target!r} not found in any recTrackSets.<db>.tab\n"
+            f"  Add a row to ~/kent/src/hg/htdocs/inc/recTrackSets.<db>.tab first, then re-run.")
+    print(f"assembly resolved from recTrackSets.{db}.tab: {db}")
+
     src_host = args.src_host
     src_h, src_db = HOSTS[src_host]
     print(f"Fetching {src_user}/{src_session} from {src_host} ({src_h}:{src_db})...")
@@ -294,169 +237,49 @@ def cmd_fetch(args):
     dropped = len(pairs) - len(scrubbed)
     print(f"  scrubbed: dropped {dropped} verboten/duplicate vars, kept {len(scrubbed)}")
 
-    db = find_db_for_session(target)
-    if db is None:
-        if not args.allow_new:
-            die(f"target session {target!r} not found in any recTrackSets.<db>.tab\n"
-                f"  Add a row to recTrackSets.<db>.tab first, OR re-run with --allow-new.")
-        db = db_from_pairs(scrubbed)
-        if not db:
-            die("--allow-new given but cannot determine assembly: no db= cart var in source")
-        validate_name(db, "db (from cart contents)")
-        print(f"  --allow-new: assembly determined from cart contents: {db}")
-    else:
-        print(f"  assembly resolved from recTrackSets.{db}.tab: {db}")
+    target_path = kent_path(db, target)
+    existing_pairs = []
+    if target_path.exists():
+        existing_pairs = [ln.rstrip() for ln in target_path.read_text().splitlines() if ln.strip()]
+
+    if not args.commit:
+        print(f"\n--dry-run-- (no --commit flag); would write to {target_path}")
+        print(f"  ({len(existing_pairs)} -> {len(scrubbed)} cart vars after scrub)")
+        show_pair_diff("existing", existing_pairs, "new", scrubbed, args.verbose)
+        return 0
 
     path = write_kent_file(db, target, scrubbed)
     print(f"  wrote {path}")
     show_git_diff_for(path)
 
-    print(f"\nReading current dev row (View/{target} on hgcentraltest)...")
-    dev_contents, _, dev_exists = fetch_session_row("dev", TARGET_USER, target)
-    if dev_exists:
-        dev_pairs = sorted(set(split_pairs(dev_contents)))
-        print(f"  dev currently: {len(dev_pairs)} cart vars")
-        print("\n--- diff: dev vs new (kent tree) ---")
-        show_pair_diff("dev", dev_pairs, "tree", scrubbed, args.verbose)
-    else:
-        print(f"  (no existing row on dev -- INSERT will create it)")
+    if existing_pairs:
+        print("\n--- diff: previous file vs new ---")
+        show_pair_diff("prev", existing_pairs, "new", scrubbed, args.verbose)
 
-    if not args.commit:
-        print("\n--dry-run-- (no --commit flag); nothing written to dev. Re-run with --commit to apply.")
-        return 0
-
-    if not confirm(f"\nApply this update to dev (View/{target} on hgcentraltest)?"):
-        print("Aborted.")
+    if not confirm(f"\nKeep this update (yes), or revert (no)?"):
+        # Restore previous content if it existed; otherwise remove the new file
+        if existing_pairs:
+            tmp = path.parent / (path.name + ".tmp")
+            tmp.write_text("\n".join(existing_pairs) + "\n")
+            tmp.replace(path)
+            print(f"  reverted {path}")
+        else:
+            path.unlink()
+            print(f"  removed {path}")
         return 1
 
-    new_contents = join_pairs(scrubbed)
-    apply_session_write("dev", target, new_contents, dry_run=False)
-
-    log(f"fetch src={src_host}:{src_user}/{src_session} target={target} db={db} dev=updated")
+    log(f"fetch src={src_host}:{src_user}/{src_session} target={target} db={db} -> {path}")
 
     print()
-    print("Dev updated. Validate at:")
-    print(f"  https://hgwdev-{getpass.getuser()}.gi.ucsc.edu/cgi-bin/hgTracks?"
-          f"hgS_doOtherUser=submit&hgS_otherUserName=View&hgS_otherUserSessionName={target}")
-    print(f"  https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?"
-          f"hgS_doOtherUser=submit&hgS_otherUserName=View&hgS_otherUserSessionName={target}")
+    print(f"File written. To test in your sandbox:")
+    print(f"  cd ~/kent/src/hg/htdocs/data && make user")
+    print(f"  Then click the RTS in the dialog at https://hgwdev-{getpass.getuser()}.gi.ucsc.edu/cgi-bin/hgTracks?db={db}")
     print()
-    print(f"Next:  rtsUpdate push --target-session {target} --to beta --commit")
-    return 0
-
-
-def cmd_push(args):
-    target = args.target_session
-    dest = args.to
-    validate_name(target, "target sessionName")
-    if dest not in ("beta", "rr"):
-        die(f"--to must be 'beta' or 'rr' (got {dest!r})")
-
-    db = find_db_for_session(target) or find_db_in_tree(target)
-    if db is None:
-        die(f"cannot find {target!r} in recTrackSets.<db>.tab nor in rts/<db>/")
-
-    pairs = read_kent_file(db, target)
-    if not pairs:
-        die(f"kent tree file is empty: {kent_path(db, target)}")
-    new_contents = join_pairs(pairs)
-
-    dest_h, dest_db = HOSTS[dest]
-    print(f"\nReading current row from {dest} ({dest_h}:{dest_db})...")
-    dest_contents, dest_settings, dest_exists = fetch_session_row(dest, TARGET_USER, target)
-    if not dest_exists and not args.allow_create:
-        die(f"View/{target} does not exist on {dest}; pass --allow-create to INSERT")
-
-    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    bdir = pathlib.Path(tempfile.gettempdir()) / f"rtsUpdate-{ts}" / dest
-    bdir.mkdir(parents=True, exist_ok=True)
-    bfile = bdir / f"{target}.tsv"
-    if dest_exists:
-        bfile.write_text(f"{TARGET_USER}\t{target}\t{dest_contents}\t{dest_settings}\n")
-        print(f"  pre-write backup: {bfile}")
-    else:
-        print(f"  no existing row on {dest} -- nothing to back up")
-
-    dest_pairs = sorted(set(split_pairs(dest_contents))) if dest_exists else []
-    print(f"\n--- diff: kent tree ({db}/{target}) vs {dest} ---")
-    show_pair_diff(dest, dest_pairs, "tree", pairs, args.verbose)
-
-    if dest == "rr":
-        if not args.i_confirm_rr:
-            die("RR push requires --i-confirm-rr in addition to interactive yes")
-        print()
-        print("!" * 64)
-        print(" PRODUCTION DATABASE: genome-centdb / hgcentral")
-        print(f" This change will be visible at https://genome.ucsc.edu/s/View/{target}")
-        print(" within seconds.  Pausing 5 seconds before prompt.")
-        print("!" * 64)
-        time.sleep(5)
-
-    if not args.commit:
-        print(f"\n--dry-run-- (no --commit flag); nothing written to {dest}.")
-        return 0
-
-    if not confirm(f"\nApply this update to {dest} (View/{target})?"):
-        print("Aborted.")
-        return 1
-
-    print("  drift check: re-reading dest row...")
-    drift_contents, _, drift_exists = fetch_session_row(dest, TARGET_USER, target)
-    if drift_exists != dest_exists or drift_contents != dest_contents:
-        die(f"DRIFT: {dest} row changed since diff was shown. "
-            f"Aborting; backup at {bfile if dest_exists else '(none)'}.\n"
-            f"Re-run the command to see the new diff.")
-
-    apply_session_write(dest, target, new_contents, dry_run=False)
-    log(f"push target={target} dest={dest} backup={bfile if dest_exists else 'none'}")
-
-    print()
-    if dest == "beta":
-        print(f"Beta updated. Validate at:")
-        print(f"  https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?"
-              f"hgS_doOtherUser=submit&hgS_otherUserName=View&hgS_otherUserSessionName={target}")
-        print()
-        print(f"Next:  rtsUpdate push --target-session {target} --to rr --i-confirm-rr --commit")
-    else:
-        print(f"RR updated. Validate at:")
-        print(f"  https://genome.ucsc.edu/s/View/{target}")
-        print()
-        print("Reminders:")
-        print("  1. Commit and push your kent tree changes:")
-        print(f"       cd ~/kent/src/hg/utils/rts && git add {db}/{target}")
-        print(f"       (also any recTrackSets.<db>.tab updates)")
-        print(f"       git commit -m 'Updating RTS {target}. refs #32768'")
-        print("       git push")
-        print("  2. Coordinate with cluster-admin to mirror the View user")
-        print("     contents to euro/asia (out of scope for this script).")
-    return 0
-
-
-def cmd_diff(args):
-    target = args.target_session
-    validate_name(target, "target sessionName")
-    db = find_db_for_session(target) or find_db_in_tree(target)
-    if db is None:
-        die(f"cannot find {target!r} in recTrackSets.<db>.tab nor in rts/<db>/")
-    print(f"target: View/{target}  (db={db})")
-
-    tree_path = kent_path(db, target)
-    if tree_path.exists():
-        tree_pairs = read_kent_file(db, target)
-        print(f"\n[tree] {tree_path}: {len(tree_pairs)} vars")
-    else:
-        tree_pairs = []
-        print(f"\n[tree] {tree_path}: (missing)")
-
-    for host_key in ("dev", "beta", "rr"):
-        host, db_name = HOSTS[host_key]
-        c, _, exists = fetch_session_row(host_key, TARGET_USER, target)
-        host_pairs = sorted(set(split_pairs(c))) if exists else []
-        if not exists:
-            print(f"\n[{host_key}] {host}:{db_name} (row missing)")
-            continue
-        print(f"\n[{host_key}] {host}:{db_name}: {len(host_pairs)} vars")
-        show_pair_diff("tree", tree_pairs, host_key, host_pairs, args.verbose)
+    print("Once validated, commit and push:")
+    print(f"  cd ~/kent")
+    print(f"  git add src/hg/htdocs/data/recTrackSets/{db}/{target}")
+    print(f"  git commit -m 'Updating RTS {target}. refs #32768'")
+    print(f"  git push")
     return 0
 
 
@@ -465,12 +288,13 @@ def cmd_diff(args):
 def build_parser():
     p = argparse.ArgumentParser(
         prog="rtsUpdate",
-        description="Update Recommended Track Set sessions (userName='View') across "
-                    "hgwdev -> hgwbeta -> genome-centdb.  Refs #32768, #34907.")
+        description="Fetch a curator's Recommended Track Set from hgcentral, scrub it, "
+                    "and write the result to htdocs/data/recTrackSets/<db>/<session>.  "
+                    "Refs #32768, #34907.")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     pf = sub.add_parser("fetch",
-                        help="fetch source session, scrub, write kent tree, update dev")
+                        help="fetch source session, scrub, write the htdocs file")
     pf.add_argument("--src-url",
                     help="full URL like https://genome.ucsc.edu/s/<user>/<session>")
     pf.add_argument("--src-user",
@@ -480,30 +304,12 @@ def build_parser():
     pf.add_argument("--src-host", choices=("rr", "dev", "beta"), default="rr",
                     help="where to read the source from (default: rr)")
     pf.add_argument("--target-session", required=True,
-                    help="target sessionName under userName='View'")
+                    help="target sessionName under userName='View'; must already "
+                         "appear in recTrackSets.<db>.tab")
     pf.add_argument("--commit", action="store_true",
-                    help="actually write to dev (default: dry-run)")
-    pf.add_argument("--allow-new", action="store_true",
-                    help="allow target session not yet in recTrackSets.<db>.tab")
+                    help="actually write the file (default: dry-run)")
     pf.add_argument("--verbose", "-v", action="store_true",
                     help="show every var in diffs")
-
-    pp = sub.add_parser("push", help="push kent tree contents to beta or rr")
-    pp.add_argument("--target-session", required=True)
-    pp.add_argument("--to", required=True, choices=("beta", "rr"))
-    pp.add_argument("--commit", action="store_true",
-                    help="actually write (default: dry-run)")
-    pp.add_argument("--allow-create", action="store_true",
-                    help="INSERT row if missing on dest")
-    pp.add_argument("--i-confirm-rr", action="store_true",
-                    help="required in addition to interactive yes for --to rr")
-    pp.add_argument("--verbose", "-v", action="store_true")
-
-    pd = sub.add_parser("diff",
-                        help="read-only: compare kent tree vs dev/beta/rr")
-    pd.add_argument("--target-session", required=True)
-    pd.add_argument("--verbose", "-v", action="store_true")
-
     return p
 
 
@@ -517,10 +323,6 @@ def main():
     args = build_parser().parse_args()
     if args.cmd == "fetch":
         return cmd_fetch(args)
-    if args.cmd == "push":
-        return cmd_push(args)
-    if args.cmd == "diff":
-        return cmd_diff(args)
     return 0
 
 

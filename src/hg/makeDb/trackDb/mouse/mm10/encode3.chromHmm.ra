@@ -1,27 +1,6 @@
 # ChromHMM from Ren lab, based on ENCODE 3 data
 
 track encode3RenChromHmm
-release alpha
-parent encode3Reg
-compositeTrack on
-type bigBed 9
-longLabel Chromatin state of embryonic tissue (12 tissues, 8 ages) from ENCODE 3 (UCSD/Ren)
-shortLabel Chromatin State
-itemRgb on
-dimensions dimX=tissue dimY=age
-subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrain neural=neural facial=facial limb=limb heart=heart kidney=kidney lung=lung liver=liver stomach=stomach intestine=intestine
-subGroup2 age Age E10=E10.5 E11=E11.5 E12=E12.5 E13=E13.5 E14=E14.5 E15=E15.5 E16=E16.5 P0=P0
-sortOrder tissue=+ age=+
-dragAndDrop subTracks
-group regulation
-labelOnFeature noDense
-bedPackDense on
-centerLabelsPack off
-exonNumbers off
-visibility hide
-
-track encode3RenChromHmm
-release beta,public
 parent encode3Reg
 compositeTrack on
 type bigBed 9

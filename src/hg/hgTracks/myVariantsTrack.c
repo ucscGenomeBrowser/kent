@@ -551,6 +551,16 @@ if (extraFieldsJson && extraFieldsJson->type == jsonList)
     slReverse(&item->customFields);
     }
 
+/* Store the assembly's native sequence name so items match the chromName the
+ * display query uses (GenArk hubs key on the accession, e.g. NC_044602.1, not the
+ * chr1 display alias). */
+if (isNotEmpty(item->chrom))
+    {
+    char *nativeChrom = hgOfficialChromName(item->db, item->chrom);
+    if (isNotEmpty(nativeChrom))
+        item->chrom = nativeChrom;
+    }
+
 /* Add item to database. */
 myVariantsSaveToDb(conn, item, tableName, 0);
 

@@ -355,8 +355,6 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 include trackDb.encode3.ra beta,public
 include trackDb.encode3.alpha.ra alpha
-include encode3.chromHmm.ra
-include encode3.atac.ra
 include encode3RenEnhancerGene.ra
 include encode.cCREs.override.ra
 include encode4Reg.ra alpha,beta
