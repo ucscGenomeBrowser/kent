@@ -1901,6 +1901,11 @@ boolean hasRecTrackSet(struct cart *cart);
 void printRecTrackSets();
 /* Create dialog with list of recommended track sets */
 
+boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName);
+/* If a contents file exists in htdocs for this recommended track set, merge its
+ * settings into the current cart and return TRUE.  Return FALSE if no file, so the
+ * caller can fall back to loading the session from hgcentral. */
+
 Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */

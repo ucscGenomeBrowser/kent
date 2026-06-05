@@ -171,15 +171,25 @@ hDisconnectOtto(&conn);
 static void loginStatus()
 /* output current user login status as JSON */
 {
-char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+/* wikiLinkUserName() handles all cookie validation internally */
+char *userName = wikiLinkUserName();
 struct jsonWrite *jw = apiStartOutput();
 char hgLoginLink[2048];
-safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLoginHostCgiBinUrl());
+boolean privateHost = hIsPrivateHost();
+/* can not use hgcentral hglogin from hgwdev/genome-test */
+if (privateHost)
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLocalHostCgiBinUrl());
+else
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLoginHostCgiBinUrl());
 
 if (userName != NULL)
     {
     // Get both email and realName from gbMembers table
-    struct sqlConnection *sc = hConnectOtto();
+    struct sqlConnection *sc = NULL;
+    if (privateHost)
+	sc = hConnectCentral();
+    else
+	sc = hConnectOtto();
     struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
     struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
     char **row = sqlNextRow(sr);
@@ -192,7 +202,10 @@ if (userName != NULL)
         realName = cloneString(row[1] ? row[1] : "");
         }
     sqlFreeResult(&sr);
-    hDisconnectOtto(&sc);
+    if (privateHost)
+	hDisconnectCentral(&sc);
+    else
+	hDisconnectOtto(&sc);
 
     // Build logout URL with returnto parameter
     char *returnTo = cgiOptionalString("returnTo");

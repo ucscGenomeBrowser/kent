@@ -7543,23 +7543,35 @@ if (rtsLoad)  // load a recommended track set using the merge method
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
 
-    // now we have to restart to load the session since that happens at cart initialization
-    
-    char newUrl[4096];
-    safef(newUrl, sizeof newUrl,
-        "./hgTracks?"
-        hgsOtherUserSessionName "=%s"
-        "&" hgsOtherUserName "=%s"
-        "&" hgsMergeCart "=on"
-        "&" hgsDoOtherUser "=submit"
-	"&hgsid=%s"
-        , otherUserSessionName, otherUserName,cartSessionId(cart));
+    if (loadRecTrackSetFromFile(cart, rtsLoad))
+        {
+        // Settings from the htdocs file are now overlaid on the cart.  The visibility
+        // loop below and the draw path read them, so no redirect is needed.  Record
+        // which set is loaded so hasRecTrackSet() and change detection still work, and
+        // drop the one-shot action variable so it does not persist in the cart.
+        cartSetString(cart, hgsOtherUserSessionName, rtsLoad);
+        cartRemove(cart, "rtsLoad");
+        }
+    else
+        {
+        // No htdocs file for this set: fall back to loading the session from hgcentral.
+        // That happens at cart initialization, so we have to restart to load it.
+        char newUrl[4096];
+        safef(newUrl, sizeof newUrl,
+            "./hgTracks?"
+            hgsOtherUserSessionName "=%s"
+            "&" hgsOtherUserName "=%s"
+            "&" hgsMergeCart "=on"
+            "&" hgsDoOtherUser "=submit"
+            "&hgsid=%s"
+            , otherUserSessionName, otherUserName,cartSessionId(cart));
 
-    cartCheckout(&cart);   // make sure cart records all our changes above
+        cartCheckout(&cart);   // make sure cart records all our changes above
 
-    // output the redirect and exit
-    printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
-    exit(0);
+        // output the redirect and exit
+        printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
+        exit(0);
+        }
     }
 
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;

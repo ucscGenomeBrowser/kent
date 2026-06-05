@@ -1242,7 +1242,7 @@ else
 return coordsOK;
 }
 
-static char *txSeqFromGp(char *db, struct genePred *gp)
+char *txSeqFromGp(char *db, struct genePred *gp)
 /* Return transcribed-from-genome sequence for gp */
 {
 int seqLen = 0;
@@ -3292,4 +3292,20 @@ else
 if (addParens)
     dyStringAppendC(dy, ')');
 return dyStringCannibalize(&dy);
+}
+
+struct trackDb *hgvsDefaultGeneTrack(char *db)
+/* Return trackDb for the assembly's preferred gene-model track (MANE first), or NULL
+ * if none is present.  Caller checks tdb->type for genePred vs bigGenePred. */
+{
+static char *geneTrackPrefs[] =
+    { "mane", "ncbiRefSeqSelect", "ncbiRefSeqCurated", "refGene", "ensGene", "knownGene" };
+int i;
+for (i = 0;  i < ArraySize(geneTrackPrefs);  i++)
+    {
+    struct trackDb *tdb = hTrackDbForTrack(db, geneTrackPrefs[i]);
+    if (tdb != NULL)
+        return tdb;
+    }
+return NULL;
 }

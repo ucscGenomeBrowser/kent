@@ -280,13 +280,15 @@ return myVariantsShareLoadByQuery(conn, query);
 }
 
 struct myVariantsShare *myVariantsGetSharesForUser(struct sqlConnection *conn,
-    char *targetUser, char *db)
-/* Get all shares targeted at this user for the given assembly. */
+    char *userName, char *db)
+/* Get all shares targeted at this user for the given assembly. The targetUser
+ * column holds a normalized comma-separated list, so match with FIND_IN_SET.
+ * BINARY forces a case-sensitive match, matching myVariantsShareAllowsUser. */
 {
 char query[512];
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM myVariantsShares WHERE targetUser='%s' AND db='%s'"
-    " ORDER BY createdAt DESC", targetUser, db);
+    "SELECT * FROM myVariantsShares WHERE FIND_IN_SET(BINARY '%s', targetUser) AND db='%s'"
+    " ORDER BY createdAt DESC", userName, db);
 return myVariantsShareLoadByQuery(conn, query);
 }
 
@@ -307,6 +309,80 @@ sqlSafef(query, sizeof(query),
     shareToken, ownerUser);
 sqlUpdate(conn, query);
 return TRUE;
+}
+
+static boolean shareOwnedBy(struct sqlConnection *conn, char *shareToken, char *ownerUser)
+/* Return TRUE if a share with this token exists and is owned by ownerUser. */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT count(*) FROM myVariantsShares WHERE shareToken='%s' AND ownerUser='%s'",
+    shareToken, ownerUser);
+return sqlQuickNum(conn, query) != 0;
+}
+
+boolean myVariantsSetSharePermission(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, int permission)
+/* Update a share's permission (0=read-only, 1=read-write). ownerUser must
+ * match the share's owner. Returns TRUE if a row was updated, FALSE if not
+ * found or not owner. */
+{
+if (permission != MYVAR_PERM_READONLY && permission != MYVAR_PERM_READWRITE)
+    return FALSE;
+if (!shareOwnedBy(conn, shareToken, ownerUser))
+    return FALSE;
+char query[512];
+sqlSafef(query, sizeof(query),
+    "UPDATE myVariantsShares SET permission=%d WHERE shareToken='%s' AND ownerUser='%s'",
+    permission, shareToken, ownerUser);
+sqlUpdate(conn, query);
+return TRUE;
+}
+
+boolean myVariantsSetShareTargets(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, char *targetUser)
+/* Update a share's targetUser list (NULL for anyone with link). ownerUser
+ * must match the share's owner. Returns TRUE if a row was updated, FALSE if
+ * not found or not owner. */
+{
+if (!shareOwnedBy(conn, shareToken, ownerUser))
+    return FALSE;
+struct dyString *dy = sqlDyStringCreate("UPDATE myVariantsShares SET targetUser=");
+if (isNotEmpty(targetUser))
+    sqlDyStringPrintf(dy, "'%s'", targetUser);
+else
+    sqlDyStringPrintf(dy, "NULL");
+sqlDyStringPrintf(dy, " WHERE shareToken='%s' AND ownerUser='%s'", shareToken, ownerUser);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+return TRUE;
+}
+
+boolean myVariantsShareAllowsUser(struct myVariantsShare *share, char *userName)
+/* Return TRUE if userName may access share. TRUE when targetUser is empty
+ * (anyone with link); otherwise TRUE only if userName is non-empty and
+ * appears in the comma-separated targetUser list. NULL-safe. */
+{
+if (share == NULL)
+    return FALSE;
+if (isEmpty(share->targetUser))
+    return TRUE;
+if (isEmpty(userName))
+    return FALSE;
+boolean allowed = FALSE;
+struct slName *names = slNameListFromComma(share->targetUser);
+struct slName *name;
+for (name = names; name != NULL; name = name->next)
+    {
+    trimSpaces(name->name);
+    if (sameString(name->name, userName))
+        {
+        allowed = TRUE;
+        break;
+        }
+    }
+slNameFreeList(&names);
+return allowed;
 }
 
 char *myVariantsShareCartValue(struct myVariantsShare *share)

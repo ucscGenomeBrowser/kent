@@ -109,6 +109,23 @@ boolean myVariantsRevokeShare(struct sqlConnection *conn,
 /* Delete a share record. ownerUser must match the share's owner.
  * Returns TRUE if a row was deleted, FALSE if not found or not owner. */
 
+boolean myVariantsSetSharePermission(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, int permission);
+/* Update a share's permission (0=read-only, 1=read-write). ownerUser must
+ * match the share's owner. Returns TRUE if a row was updated, FALSE if not
+ * found or not owner. */
+
+boolean myVariantsSetShareTargets(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, char *targetUser);
+/* Update a share's targetUser list (NULL for anyone with link). ownerUser
+ * must match the share's owner. Returns TRUE if a row was updated, FALSE if
+ * not found or not owner. */
+
+boolean myVariantsShareAllowsUser(struct myVariantsShare *share, char *userName);
+/* Return TRUE if userName may access share. TRUE when targetUser is empty
+ * (anyone with link); otherwise TRUE only if userName is non-empty and
+ * appears in the comma-separated targetUser list. NULL-safe. */
+
 #define MYVAR_SHARE_CGI_VAR "myVarShare"
 #define MYVAR_SHARED_CART_PREFIX "myVarShared_"
 

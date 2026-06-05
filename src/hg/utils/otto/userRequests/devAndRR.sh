@@ -8,9 +8,10 @@
 
 cd /hive/data/outside/otto/liftRequest
 
+#### do NOT need to check the one on hgwdev, this would duplicate things
 # without arguments, will use /usr/local/apache/cgi-bin/hg.conf
 #   to use hgcentraltest ottoRequest table for hgwdev
-/hive/data/outside/otto/liftRequest/ottoRequest.py
+### /hive/data/outside/otto/liftRequest/ottoRequest.py
 
 # with this .conf file it will use hgcentral ottoRequest table
 export HGDB_CONF=/hive/data/outside/otto/liftRequest/.hg.central.conf

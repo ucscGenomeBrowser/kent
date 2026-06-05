@@ -622,7 +622,11 @@ hFreeConn(&conn);
 static void showSchemaCt(char *db, char *table)
 /* Show schema on custom track. */
 {
-struct customTrack *ct = ctLookupName(table);
+/* Accept the qualified myVariants storage form ("customDataNN.myVariants_<user>")
+ * as well as the bare track name; the ct list is keyed on the bare track name. */
+char *dot = strchr(table, '.');
+char *trackName = (dot != NULL && isMyVariantsTrack(dot + 1)) ? dot + 1 : table;
+struct customTrack *ct = ctLookupName(trackName);
 char *type = ct->tdb->type;
 if (startsWithWord("wig", type) || startsWithWord("bigWig", type))
     showSchemaCtWiggle(table, ct);
@@ -638,8 +642,12 @@ else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (isMyVariantsType(type))
     {
+    if (ct->dbTableName == NULL)
+        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
+    if (ct->dbTableName == NULL)
+        errAbort("Cannot access myVariants track %s; the share may have been revoked.", trackName);
     struct asObject *asObj = myVariantsAsObj();
-    showSchemaWithAsObj(db, table, ct, asObj);
+    showSchemaWithAsObj(db, trackName, ct, asObj);
     asObjectFree(&asObj);
     }
 else if (sameWord("bedDetail", type))
@@ -718,7 +726,8 @@ else if (isVcfTable(table, &isTabix))
     showSchemaVcf(table, tdb, isTabix);
 else if (isHicTable(table))
     showSchemaHic(table, tdb);
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table) ||
+         (strchr(table, '.') != NULL && isMyVariantsTrack(strchr(table, '.') + 1)))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);

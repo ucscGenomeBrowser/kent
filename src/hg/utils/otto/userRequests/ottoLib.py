@@ -177,46 +177,69 @@ def writeCladeTsv(clade, asmIds):
     # round-trips those bytes through read+write byte-for-byte instead of
     # raising UnicodeDecodeError.
     matched = []
+    foundIds = set()
 
     if os.path.isfile(orderList):
         with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
             for line in fh:
-                if any(asmId in line for asmId in genarkIds):
-                    matched.append(line)
+                for asmId in genarkIds:
+                    if asmId in line:
+                        matched.append(line)
+                        foundIds.add(asmId)
+                        break  # Don't match the same line multiple times
 
-    # If no matches found in expected clade, try legacy directory
-    if not matched:
+    # Look for IDs not found in main clade file
+    notMatched = [asmId for asmId in genarkIds if asmId not in foundIds]
+    if notMatched:
         legacyDir = os.path.join(
             kentTree, "src/hg/makeDb/doc/legacyAsmHub")
         legacyOrderList = os.path.join(legacyDir, "legacy.orderList.tsv")
         legacyOutPath = os.path.join(legacyDir, "tsv.otto")
 
+        legacyMatched = []
         if os.path.isfile(legacyOrderList):
             with open(legacyOrderList, encoding="utf-8", errors="surrogateescape") as fh:
                 for line in fh:
-                    if any(asmId in line for asmId in genarkIds):
-                        matched.append(line)
+                    for asmId in notMatched:
+                        if asmId in line:
+                            legacyMatched.append(line)
+                            foundIds.add(asmId)
+                            break  # Don't match the same line multiple times
 
-            if matched:
-                # Found matches in legacy - work there instead
+            if legacyMatched:
+                # Write matches to legacy directory
                 with open(legacyOutPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
-                    fh.writelines(matched)
-                return legacyDir
+                    fh.writelines(legacyMatched)
 
-        # No matches found anywhere
+                # If we have matches from both main and legacy, handle legacy completely here
+                if matched:
+                    if not runGenArkMake(legacyDir):
+                        print(f"# WARNING: make commands failed in legacy directory", file=sys.stderr)
+                    # Main directory will be handled by normal return path below
+                    # This allows both directories to be processed independently
+                else:
+                    # Found matches only in legacy
+                    return legacyDir
+
+    # Check for any IDs that still weren't found anywhere
+    stillNotFound = [asmId for asmId in genarkIds if asmId not in foundIds]
+    if stillNotFound:
         if not os.path.isfile(orderList):
             print("WARNING: missing %s" % orderList, file=sys.stderr)
+        legacyOrderList = os.path.join(kentTree, "src/hg/makeDb/doc/legacyAsmHub/legacy.orderList.tsv")
         if not os.path.isfile(legacyOrderList):
             print("WARNING: missing %s" % legacyOrderList, file=sys.stderr)
-        if os.path.isfile(orderList) or os.path.isfile(legacyOrderList):
-            print("WARNING: no matches for %s in %s or legacy.orderList.tsv" %
-                  (genarkIds, clade), file=sys.stderr)
-        return None
+        print("WARNING: no matches for %s in %s or legacy.orderList.tsv" %
+              (stillNotFound, clade), file=sys.stderr)
 
-    # Found matches in expected clade directory
-    with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
-        fh.writelines(matched)
-    return cladeDir
+    # If we have matches from main clade, write them and return main directory
+    if matched:
+        with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
+            fh.writelines(matched)
+        return cladeDir
+
+    # No matches found anywhere
+    return None
 
 
 # Sequence of make commands run in the clade AsmHub directory after

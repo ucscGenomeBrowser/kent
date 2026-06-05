@@ -825,7 +825,7 @@ struct sqlConnection *hConnectOtto()
 {
 char *ottoDb = cfgOption2("otto", "db");
 if (isEmpty(ottoDb)) // No otto profile defined, use central
-    return hConnectCentral();
+    return hConnectCentralNoCache();
 
 struct sqlConnection *conn = sqlConnectProfile("otto", ottoDb);
 if (conn == NULL)

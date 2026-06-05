@@ -77,9 +77,6 @@ MAILTO=otto-group@ucsc.edu
 #LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
-#Mastermind
-05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
-
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
@@ -108,6 +105,9 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 
 #vista
 0 9 1 * * /hive/data/outside/otto/vista/vistaOtto.sh
+
+# CIViC update. Releases are typically on the 1st of the month
+12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh
 
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
@@ -166,7 +166,3 @@ MAILTO=mhaeussl@ucsc.edu
 MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
 28 08 * * * /bin/zsh -c 'cd /hive/data/outside/otto/pubtatorDbSnp && ./doUpdate.sh'
-
-MAILTO=cvaske@ucsc.edu
-# CIViC update. Releases are typically on the 1st of the month
-12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh
