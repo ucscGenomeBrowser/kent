@@ -5,7 +5,7 @@ and genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/a
 The data was not reprocessed in a harmonized way; the variant VCFs were collected from the
 projects as-is. The goal is a single place to compare how common a variant is across
 different populations, ancestries, and cohorts, for projects that cannot be recomputed by
-gnomAD soon. Two combined tracks aggregate the source data along different lines, and
+gnomAD soon. Three combined tracks aggregate the source data along different lines, and
 there is also one subtrack per project with the original VCF data and all the annotations
 that the project provides. The different projects use different pipelines and sequencing
 technologies. Click any of the projects above or below for a summary of their sample
@@ -64,7 +64,7 @@ count, and per-database AF/AC).
 <tr>
   <td><a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a></td>
   <td>Sequencing-based disease cohorts</td>
-  <td>&mdash;</td>
+  <td>~130k</td>
   <td>WGS/WES/long-read</td>
   <td>Affected/case arms of SFARI SPARK WES/WGS, SCHEMA, GREGoR, GA4K</td>
   <td>Affected/case AF and AC; background AF for contrast</td>
@@ -73,7 +73,7 @@ count, and per-database AF/AC).
 <tr>
   <td><a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a></td>
   <td>Sequencing-based, population + unaffected</td>
-  <td>~1.7mil</td>
+  <td>~1.5mil</td>
   <td>WGS/WES/long-read</td>
   <td>Population cohorts + unaffected/control arms</td>
   <td>Background AF and AC; per-cohort and ancestry breakdowns</td>
@@ -434,15 +434,18 @@ The conversion scripts (<em>e.g.</em> <code>finngen_to_vcf.py</code>, <code>kova
 in the <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">scripts directory</a>.
 </p>
 <p>
-The combined &quot;All Databases&quot; subtrack is built by a separate pipeline:
+The combined Affected and Background tracks are built by a separate pipeline:
 each per-subtrack VCF is normalized (<code>bcftools norm</code>), all sites are merged into a single
-multi-sample callset, consequence annotations are recomputed against Ensembl with <code>bcftools csq</code>,
-and the result is converted to bigBed via <code>vcfToBigBed.py</code> + <code>bedToBigBed</code>.
-The mapping from upstream INFO fields to bigBed columns is driven by two configuration files in the
-scripts directory: <code>databases.tsv</code> (one row per source dataset) and
-<code>populations.tsv</code> (per-population AC/AF columns within each source).
-Editing those two files and rerunning <code>mergeAndAnnotate.sh</code> followed by
-<code>vcfToBigBed.py</code> rebuilds the combined track.
+callset, consequence annotations are recomputed against Ensembl with <code>bcftools csq</code>,
+and the merged callset is split by phenotype into the two bigBed files via
+<code>vcfToBigBed.py</code> + <code>bedToBigBed</code>. The mapping from upstream INFO fields to
+bigBed columns is driven by two configuration files in the scripts directory:
+<code>databases.tsv</code> (one row per source dataset, flagging which cohorts study a disease)
+and <code>populations.tsv</code> (per-population AC/AF columns within each source, including the
+affected and unaffected arm of each disease cohort). Editing those two files and rerunning
+<code>mergeAndAnnotate.sh</code> followed by <code>vcfToBigBed.py --split-affected</code> rebuilds
+the two tracks. The Genotyping Array Databases Combined track is built the same way from the
+array cohorts only.
 </p>
 
 <h2>Data Access</h2>
