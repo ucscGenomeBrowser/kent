@@ -1,6 +1,113 @@
+# Cart variables to strip from a curator's session before writing the
+# Recommended Track Set file under htdocs/data/recTrackSets/.  Chris's loader
+# applies whatever is in the file verbatim to the user's cart (no filtering at
+# load time), so the scrub burden is entirely here.
+#
+# Sections:
+#   1. Original (pre-file-loader) scrub patterns
+#   2. View-locking (coords + position variants)
+#   3. Session-load UI state
+#   4. Curator-local custom-track references
+#   5. User display preferences
+#   6. Form fields that pre-fill UI on other pages
+#   7. hgTracks excludeVars[] sweep (defense-in-depth for transient form state)
+
+# === 1. Original verboten patterns ===
 ^pix
 ^textSize
 ^textFont
 ^hgt.labelWidth
 ^position
 ^highlight
+
+# === 2. View-locking: coords + position variants ===
+^c$
+^l$
+^r$
+^t$
+^o$
+^position\.
+^lastPosition$
+^oldPosition$
+^virtMode
+^lastVirtMode
+
+# === 3. Session-load UI state ===
+^hgS_
+^hgPS_DataTableState$
+^rtsLoad$
+^redirect$
+^topSubmit$
+^goButton$
+^hgsid$
+^_$
+
+# === 4. Curator-local custom-track references (would dangle for other users) ===
+^ctfile_
+
+# === 5. User display preferences ===
+^textStyle$
+^leftLabels$
+^centerLabels$
+^guidelines$
+^ideogram$
+^ruler$
+^enableHighlightingDialog$
+^trackControlsOnMain$
+^nextExonArrows$
+^nextItemArrows$
+^exonNumbers$
+^dinkL$
+^dinkR$
+^jsh_pageVertPos$
+^hgt\.baseShow
+^hgt\.baseTitle
+
+# === 6. Form fields that pre-fill UI on other pages ===
+^hgFind\.matches
+^hubSearchTerms$
+^hubDbFilter$
+^hubSearchButton$
+
+# === 7. hgTracks excludeVars[] sweep ===
+^submit$
+^Submit$
+^dirty$
+^hgt\.reset$
+^hgt\.in[1-3]$
+^hgt\.inBase$
+^hgt\.out[1-4]$
+^hgt\.left[1-3]$
+^hgt\.right[1-3]$
+^hgt\.dink(LL|LR|RL|RR)$
+^hgt\.tui$
+^hgt\.hideAll$
+^hgt\.visAllFromCt$
+^hgt\.psOutput$
+^hideControls$
+^hgt\.toggleRevCmplDisp$
+^hgt\.collapseGroups$
+^hgt\.expandGroups$
+^hgt\.suggest$
+^hgt\.suggestTrack$
+^hgt\.positionInput$
+^hgt\.jump$
+^hgt\.refresh$
+^hgt\.setWidth$
+^hgt\.trackImgOnly$
+^hgt\.ideogramToo$
+^hgt\.trackNameFilter$
+^hgt\.imageV1$
+^hgt_tSearch$
+^hgt_tsPage$
+^hgt_tsAddRow$
+^hgt_tsDelRow$
+^hgt\.contentType$
+^hgt\.internal$
+^dumpTracks$
+^ctTest$
+^sortExp$
+^sortSim$
+^hideTracks$
+^ignoreCookie$
+^myVarShare$
