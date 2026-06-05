@@ -15,7 +15,7 @@ superTrack on
         visibility pack
         itemRgb on
         maxWindowToDraw 5000000
-        priority 0.1
+        priority 0.11
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Affected AF:</b> ${affectedAF}<br><b>Affected AC:</b> ${affectedAC}<br><b>Affected cohorts:</b> ${affectedCohorts}<br><b>Background AF:</b> ${backgroundAF}
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
@@ -350,7 +350,7 @@ superTrack on
         visibility pack
         itemRgb on
         maxWindowToDraw 5000000
-        priority 0.11
+        priority 0.1
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Background AF:</b> ${backgroundAF}<br><b>Background AC:</b> ${backgroundAC}<br><b>Sources:</b> ${backgroundSources}<br><b>Affected AF:</b> ${affectedAF}
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
