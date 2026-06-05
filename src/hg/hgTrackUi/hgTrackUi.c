@@ -4080,8 +4080,11 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             downArrow = "&darr;";
         printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtrack list section of "
                "page'>Subtracks%s</A>", downArrow);
-        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-               "Description%s</A>", downArrow);
+        if (isNotEmpty(tdb->html))
+            {
+            printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+                   "Description%s</A>", downArrow);
+            }
         if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
@@ -4095,10 +4098,13 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         enum browserType browser = cgiBrowser();
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
-        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-               "Description%s</A>", downArrow);
-        printf("&nbsp;</span>");
+        if (isNotEmpty(tdb->html))
+            {
+            printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+            printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+                   "Description%s</A>", downArrow);
+            printf("&nbsp;</span>");
+            }
         }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
