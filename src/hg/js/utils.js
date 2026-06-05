@@ -24,6 +24,11 @@ var gnomadVarExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([A-Za-z]+)-([A-Za-z]+)$";
 // allow gnomad ranges, ex: 12-1234-11223344
 var gnomadRangeExp = "^(([0-9]+)|(X|Y|M|MT))-([0-9]+)-([0-9]+)$";
 
+// gene symbol + exon number: "TP53 exon 5", "BRCA1 exon 10"
+var geneExonExp = /^[\s]*([A-Za-z][A-Za-z0-9._-]*)[\s]+exon[\s]+([0-9]+)[\s]*$/i;
+// compact exon notation: "TP53:e.5", "NM_000546:e.5+2", "BRCA2:e.10-3"
+var geneExonCoordExp = /^[\s]*([A-Za-z0-9._-]+):e\.([0-9]+)([+-][0-9]+)?[\s]*$/i;
+
 function createInfoIcon(text) {
     /* Create an info icon (i in circle) with tooltip text.
      * Returns a span element containing the SVG icon.

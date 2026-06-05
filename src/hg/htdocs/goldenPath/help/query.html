@@ -38,6 +38,9 @@ Valid position queries can include:</p>
   <li>
   gnomAD variant IDs</li>
   <li>
+  Exon positions: <code>SYMBOL exon N</code> or <code>SYMBOL:e.N[+/-offset]</code>
+  (e.g. <code>TP53 exon 5</code>, <code>BRCA2:e.10</code>, <code>NM_000546:e.5+2</code>)</li>
+  <li>
   HGVS and accession searches on outdated RefSeq accession versions is available on hg38</li>
 </ul> 
 <p> 
@@ -62,15 +65,23 @@ page and find links to further resources. Also, developers of track hubs can cre
 <a href="trix.html" target="_blank"><code>searchTrix</code></a> setting.</p>
 
 <p>
-To quickly jump to a codon or exon of a gene transcript:</p> 
-<ol> 
-  <li>
-  Use one of the searches below to jump to a gene, to show all transcripts of a gene or range of interest
-  <li>
-  Right-click any transcript, select "Choose exon" or "Zoom to codon" and enter the exon
-  or codon position of interest
-</ol>
-</p>
+To jump directly to a specific exon, type the gene symbol or transcript ID followed by the
+exon number in one of two formats:</p>
+<ul>
+  <li><code>SYMBOL exon N</code> &mdash; e.g. <code>TP53 exon 5</code> or <code>NM_000546 exon 5</code></li>
+  <li><code>SYMBOL:e.N</code> &mdash; compact notation from the
+  <a href="https://fusions.cancervariants.org/en/latest/" target="_blank">VICC Gene Fusion Specification</a>,
+  e.g. <code>TP53:e.5</code> or <code>NM_000546:e.5</code>. Optionally add an intronic offset:
+  <code>SYMBOL:e.N+offset</code> navigates <em>offset</em> bases past the 3&rsquo; end of the exon
+  (into the downstream intron), and <code>SYMBOL:e.N-offset</code> navigates <em>offset</em> bases
+  before the 5&rsquo; start (into the upstream intron). Useful for splice site inspection:
+  <code>BRCA2:e.10+2</code> lands 2&nbsp;bp into the intron after exon&nbsp;10.</li>
+</ul>
+<p>
+Exon numbering is 1-based and follows transcript order (exon&nbsp;1 is the 5&prime; exon).
+Genes are looked up in order: MANE, GENCODE/UCSC (knownGene),
+all RefSeq, then historical RefSeq. To jump to a codon instead, right-click
+any transcript in the browser and select &ldquo;Zoom to codon&rdquo;.</p>
 
 <h2>Sample queries</h2> 
 <p> 
@@ -149,6 +160,16 @@ different types of queries that can be performed.
   <tr>
     <td>NR_026861.1:1-1000</td>
     <td>Works with any other type of accession from this page: Displays the first 1000bp of NR_026861.1</td></tr> 
+  <tr>
+    <td nowrap>TP53 exon 5<br>NM_000546 exon 5</td>
+    <td>Jumps to exon 5 of TP53 using the verbose notation.
+    A transcript ID (NM_, NR_, XM_, XR_, ENST) may be used in place of the gene symbol.</td></tr>
+  <tr>
+    <td nowrap>TP53:e.5<br>NM_000546.6:e.5<br>BRCA2:e.10+2<br>BRCA2:e.10-3</td>
+    <td>Compact exon notation from the
+    <a href="https://fusions.cancervariants.org/en/latest/" target="_blank">VICC Gene Fusion Specification</a>.
+    Jumps to exon 5 of TP53, or to 2&nbsp;bp past the end / 3&nbsp;bp before the start of BRCA2 exon&nbsp;10
+    (useful for splice site inspection). The <code>+N</code>/<code>-N</code> offset is optional.</td></tr>
   <tr id="HGVS">
     <td nowrap>NM_000310.4(PPT1):c.271_287del17insTT<br> NM_007262.5(PARK7):c.-24+75_-24+92dup<br>
     NM_006172.4(NPPA):c.456_*1delAA<br> MYH11:c.503-14_503-12del<br> 

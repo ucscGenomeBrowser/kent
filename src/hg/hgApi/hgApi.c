@@ -43,6 +43,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "bigBed.h"
 #include "trackHub.h"
 #include "cart.h"
+#include "hgFind.h"
 
 struct hash *oldVars = NULL;
 
@@ -241,6 +242,36 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
             dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
         }
     hFreeConn(&conn);
+    }
+else if (sameString(cmd, "geneExonToPos"))
+    {
+    /* Resolve "<symbol> exon <N>" or "<symbol>:e.<N>[+/-offset]" to a genomic position.
+     * Parameters: symbol, num, offset (optional).  Returns {"pos": "chrom:start-end"}
+     * or {"error": "..."}.  Reuses the hgFind exon search so all geneTracks tables apply. */
+    char *symbol = cgiString("symbol");
+    int num       = cgiInt("num");
+    int offset    = cgiOptionalInt("offset", 0);
+    char term[256];
+    if (offset != 0)
+        safef(term, sizeof term, "%s:e.%d%+d", symbol, num, offset);
+    else
+        safef(term, sizeof term, "%s exon %d", symbol, num);
+    /* Suppress any warn() calls (e.g. "gene has N exons") so they don't corrupt JSON. */
+    pushSilentWarnHandler();
+    struct hgPositions *hgp = hgPositionsFind(database, term, "", "hgApi", cart, FALSE, FALSE, NULL);
+    popWarnHandler();
+    if (hgp && hgp->singlePos)
+        {
+        int s = hgp->singlePos->chromStart;
+        int e = hgp->singlePos->chromEnd;
+        if (s > e) { int tmp = s; s = e; e = tmp; }
+        char pos[256];
+        safef(pos, sizeof pos, "%s:%d-%d", hgp->singlePos->chrom, s + 1, e);
+        dyStringPrintf(output, "{\"pos\": \"%s\"}", pos);
+        }
+    else
+        dyStringPrintf(output, "{\"error\": \"Exon %d of %s not found\"}", num, symbol);
+    freez(&hgp);
     }
 else
     {

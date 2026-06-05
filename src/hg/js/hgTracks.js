@@ -5511,7 +5511,28 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                if (item.type === "geneExon") {
+                                    // Complete "GENE exon N" — resolve via hgApi and navigate
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "../cgi-bin/hgApi",
+                                        data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                                              'cmd': 'geneExonToPos', 'symbol': item.symbol,
+                                              'num': item.num, 'offset': item.offset || 0 }),
+                                        trueSuccess: rightClick.handleZoomCodon,
+                                        success: catchErrorOrDispatch,
+                                        error: function() {
+                                            window.location.assign("../cgi-bin/hgSearch?search=" +
+                                                encodeURIComponent(item.value.trim()) + "&hgsid=" + getHgsid());
+                                        },
+                                        cache: false
+                                    });
+                                    return;
+                                } else if (item.type === "geneExonHint") {
+                                    // Partial — input is now "GENE exon "; keep focus so user types the number
+                                    $('#positionInput').focus();
+                                    return;
+                                } else if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
                                         item.id.startsWith("hgc")) {
                                     if (item.geneSymbol) {
                                         selectedGene = item.geneSymbol;
@@ -6277,6 +6298,31 @@ var imageV2 = {
             }
 
             // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            // "BRCA1 exon 5" or "BRCA1:e.5+2" — resolve via hgApi and navigate in place
+            var exonMatch = newPos.match(geneExonExp) || newPos.match(geneExonCoordExp);
+            if (exonMatch) {
+                var symbol, num, offset = 0;
+                var m = newPos.match(geneExonExp);
+                if (m) {
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                } else {
+                    m = newPos.match(geneExonCoordExp);
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                    if (m[3]) offset = parseInt(m[3], 10);
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgApi",
+                    data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                          'cmd': 'geneExonToPos', 'symbol': symbol, 'num': num, 'offset': offset }),
+                    trueSuccess: rightClick.handleZoomCodon,
+                    success: catchErrorOrDispatch,
+                    error: function() { window.location.assign("../cgi-bin/hgSearch?search=" + term + "&hgsid=" + getHgsid()); },
+                    cache: false
+                });
+                return false;
+            }
+
             var canonMatch = newPos.match(canonicalRangeExp);
             var gbrowserMatch = newPos.match(gbrowserRangeExp);
             var lengthMatch = newPos.match(lengthRangeExp);
