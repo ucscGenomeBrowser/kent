@@ -109,6 +109,10 @@ def scrub(pairs, verboten):
     out = []
     for p in pairs:
         key = p.split("=", 1)[0]
+        # Drop pairs with empty or whitespace-tainted keys (corruption / stray
+        # data from manual session edits — e.g. an `& hgsid=...` artifact).
+        if not key or any(c.isspace() for c in key):
+            continue
         if any(rx.match(key) for rx in verboten):
             continue
         out.append(p)

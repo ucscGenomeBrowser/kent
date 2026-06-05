@@ -111,3 +111,37 @@
 ^hideTracks$
 ^ignoreCookie$
 ^myVarShare$
+
+# === 8. Phase C1 discovery additions ===
+
+# Debris / artifacts
+^European$
+^source$
+^sessionTable_length$
+
+# Reverse-complement toggle (per-db family, e.g. complement_hg19)
+^complement_
+
+# State leaked from curator browsing other CGIs
+^hgg_
+^hglft_
+^hgta_
+^hgHub_do_search$
+^hgTracksConfigPage$
+
+# Additional hgTracks UI state
+^hgt_$
+^hgt_configGroupTarget$
+^hgt_doJsCommand$
+^hgt_mdbVal[12]$
+^hgt_mdbVar[12]$
+^rulerBaseZoom$
+
+# Position-search box (gateway-style search input)
+^search$
+
+# Track Search dialog state (the ts* family)
+^ts(CurTab|Descr|Group|IncludePublicHubs|Name|Simple|Type)$
+
+# Single-letter transient hgc track selector
+^g$
