@@ -10358,21 +10358,6 @@ if (tableName)
 hFreeConn(&conn);
 }
 
-static struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
-/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
-{
-struct trackDb *tdb;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    if (sameString(trackHubSkipHubName(tdb->track), bareName))
-        return tdb;
-    struct trackDb *found = findTdbByBareName(tdb->subtracks, bareName);
-    if (found != NULL)
-        return found;
-    }
-return NULL;
-}
-
 char *getTrackHtml(char *db, char *trackName)
 /* Grab HTML from trackDb in native database for quickLift tracks. */
 {
