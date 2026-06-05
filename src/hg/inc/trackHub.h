@@ -196,6 +196,9 @@ char *trackHubGetHubName(char *name);
 char *trackHubSkipHubName(char *name);
 /* Skip the hub_#_ prefix in a hub name. */
 
+struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName);
+/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
+
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
 

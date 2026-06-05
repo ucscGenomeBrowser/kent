@@ -1268,6 +1268,21 @@ if ((name == NULL) || !startsWith("hub_", name))
 return strchr(&name[4], '_') + 1;
 }
 
+struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
+/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(trackHubSkipHubName(tdb->track), bareName))
+        return tdb;
+    struct trackDb *found = findTdbByBareName(tdb->subtracks, bareName);
+    if (found != NULL)
+        return found;
+    }
+return NULL;
+}
+
 void trackHubAddGroupName(char *hubName, struct trackDb *tdbList)
 /* Add group tag that references the hubs symbolic name. */
 {
