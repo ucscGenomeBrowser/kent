@@ -16,7 +16,6 @@ from urllib.parse import urlparse
 HOME = pathlib.Path.home()
 RTS_DIR = HOME / "kent/src/hg/utils/rts"
 DATA_DIR = HOME / "kent/src/hg/htdocs/data/recTrackSets"
-INC_DIR = HOME / "kent/src/hg/htdocs/inc"
 LOGFILE = HOME / ".rtsUpdate.log"
 VERBOTEN = RTS_DIR / "verboten.lst"
 
@@ -121,8 +120,9 @@ def scrub(pairs, verboten):
 
 def find_db_for_session(session):
     """Return the assembly db for a session by scanning recTrackSets.<db>.tab.
-    Reads from htdocs/inc/ (the authoritative manifest location)."""
-    for tab in sorted(INC_DIR.glob("recTrackSets.*.tab")):
+    Reads from htdocs/data/recTrackSets/ (the authoritative manifest location
+    since 3b6659d987c)."""
+    for tab in sorted(DATA_DIR.glob("recTrackSets.*.tab")):
         m = re.match(r"recTrackSets\.([A-Za-z0-9]+)\.tab$", tab.name)
         if not m:
             continue
@@ -220,7 +220,8 @@ def cmd_fetch(args):
     db = find_db_for_session(target)
     if db is None:
         die(f"target session {target!r} not found in any recTrackSets.<db>.tab\n"
-            f"  Add a row to ~/kent/src/hg/htdocs/inc/recTrackSets.<db>.tab first, then re-run.")
+            f"  Add a row to ~/kent/src/hg/htdocs/data/recTrackSets/recTrackSets.<db>.tab "
+            f"first, then re-run.")
     print(f"assembly resolved from recTrackSets.{db}.tab: {db}")
 
     src_host = args.src_host
