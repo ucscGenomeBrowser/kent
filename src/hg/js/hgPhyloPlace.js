@@ -18,6 +18,7 @@ var recombinantGraph = (function () {
     // Parameters/configuration: most will be dynamically computed from font size
     var cfg = { matchesAcceptor: '#40C0E0',
                 matchesDonor: '#E86030',
+                matchesNeither: '#505050',
                 uninformative: '#D0D0D0'
               };
 
@@ -216,12 +217,12 @@ var recombinantGraph = (function () {
     }
 
     function filterMuts(combinedMuts) {
-        // Filter combinedMuts to keep only those that are informative to whether the base comes from acceptor or donor.
+        // Filter combinedMuts to keep only those that are informative to whether the base comes from acceptor or donor (or neither).
         let filteredMuts = [];
         for (let column of combinedMuts) {
             let matchesAcceptor = column.aAl === column.rAl;
             let matchesDonor = column.dAl === column.rAl;
-            if (matchesAcceptor !== matchesDonor) {
+            if (! (matchesAcceptor && matchesDonor)) {
                 filteredMuts.push(column);
             }
         }
@@ -272,7 +273,7 @@ var recombinantGraph = (function () {
         addText(svg, recombAttrs.bp2, x, y, { 'font-size': cfg.titleFontSize });
     }
 
-    function addLeftLabels(svg, x, xRight, y, recombAttrs) {
+    function addLeftLabels(svg, x, xRight, y, recombAttrs, showInformativeOnly) {
         // Base value / node rows
         y += cfg.posLabelAreaHeight + cfg.baseWidth - cfg.interbaseWidth;
         addText(svg, 'Acceptor (' + recombAttrs.aLin + ')', xRight, y,
@@ -285,7 +286,7 @@ var recombinantGraph = (function () {
         y += cfg.basePitch;
         addText(svg, 'Reference', xRight, y, { 'font-weight': 'bold', 'text-anchor': 'end' });
         // Connector legend
-        y += cfg.basePitch * 3;
+        y += cfg.basePitch * 2.5;
         const legendTextX = x + cfg.basePitch;
         let legendTextY = y + cfg.baseWidth - cfg.baseTextPad;
         addRectFill(svg, x, y, cfg.baseWidth, cfg.baseWidth, cfg.matchesAcceptor);
@@ -296,10 +297,15 @@ var recombinantGraph = (function () {
         addText(svg, 'Recombinant matches donor', legendTextX, legendTextY, { 'fill': cfg.matchesDonor });
         y += cfg.basePitch;
         legendTextY = y + cfg.baseWidth - cfg.baseTextPad;
+        addRectFill(svg, x, y, cfg.baseWidth, cfg.baseWidth, cfg.matchesNeither);
+        addText(svg, 'Recombinant matches neither', legendTextX, legendTextY, { 'fill': cfg.matchesNeither });
+        y += cfg.basePitch;
+        legendTextY = y + cfg.baseWidth - cfg.baseTextPad;
         addRectFill(svg, x, y, cfg.baseWidth, cfg.baseWidth, cfg.uninformative);
-        addText(svg, 'Not informative', legendTextX, legendTextY, { 'fill': cfg.uninformative });
+        addText(svg, 'Not informative' + (showInformativeOnly ? ' (not shown)' : ''), legendTextX, legendTextY,
+                { 'fill': cfg.uninformative });
         // Genome & gene graph
-        y += cfg.connectorAreaHeight - cfg.basePitch * 4 + cfg.interbaseWidth;
+        y += cfg.connectorAreaHeight - cfg.basePitch * 4.5 + cfg.interbaseWidth;
         addText(svg, 'Genomic Coordinate', xRight, y, { 'font-weight': 'bold', 'text-anchor': 'end' });
         y += cfg.genomeGraphHeight + cfg.topPad * 5;
         addText(svg, 'Gene Annotations', xRight, y, { 'font-weight': 'bold', 'text-anchor': 'end' });
@@ -319,8 +325,11 @@ var recombinantGraph = (function () {
         let color = cfg.uninformative;
         let matchesAcceptor = column.aAl === column.rAl;
         let matchesDonor = column.dAl === column.rAl;
+        let matchesNeither = !matchesAcceptor && !matchesDonor;
         if (matchesAcceptor !== matchesDonor) {
             color = matchesAcceptor ? cfg.matchesAcceptor : cfg.matchesDonor;
+        } else if (matchesNeither) {
+            color = cfg.matchesNeither;
         }
         return color;
     }
@@ -506,7 +515,7 @@ var recombinantGraph = (function () {
         let x = cfg.rightPad;
         let xRight = cfg.leftLabelAreaWidth - cfg.rightPad;
         let y = cfg.titleAreaHeight;
-        addLeftLabels(svg, x, xRight, y, recombAttrs);
+        addLeftLabels(svg, x, xRight, y, recombAttrs, showInformativeOnly);
 
         // Base position labels
         x = cfg.leftLabelAreaWidth;
