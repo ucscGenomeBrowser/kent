@@ -237,23 +237,27 @@ let uppyOptions = {
                             let label = e.target.selectedOptions[0].label;
                             let hub = hubCreate.assemblyHubByGenome(val);
                             let newParentDir = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
-                            // Uppy's file card keeps controlled-input
-                            // state per field and commits it to meta on
-                            // Upload, overwriting setFileMeta. Route
-                            // genome through the field-level onChange and
-                            // force the Hub Name input value to match.
+                            // we call onChange here, which will do an onChange with a potentially
+                            // stale metadata if the user has also edited parentDir. later we will
+                            // fix that up and use the genome name as the recommended parentDir
+                            // or a pre-existing hub if one exists
                             onChange(val);
-                            uppy.setFileMeta(file.id, {
-                                genomeLabel: label,
-                                hubType: hub ? "assemblyHub" : "trackHub",
-                                parentDir: newParentDir,
-                            });
-                            let pd = document.getElementById("uppy-Dashboard-FileCard-input-parentDir");
-                            if (pd) {
-                                pd.value = newParentDir;
-                                pd.dispatchEvent(new Event("input", {bubbles: true}));
-                                pd.dispatchEvent(new Event("change", {bubbles: true}));
-                            }
+                            file.meta.genome = val;
+                            file.meta.genomeLabel = label;
+                            file.meta.hubType = hub ? "assemblyHub" : "trackHub";
+                            file.meta.parentDir = newParentDir;
+                            // Sync the Hub Name field in a later tick. In this
+                            // tick its onChange would spread the same stale
+                            // state as the genome onChange above and revert
+                            // genome; deferring lets genome flush first.
+                            setTimeout(function() {
+                                let pd = document.getElementById("uppy-Dashboard-FileCard-input-parentDir");
+                                if (pd) {
+                                    pd.value = newParentDir;
+                                    pd.dispatchEvent(new Event("input", {bubbles: true}));
+                                    pd.dispatchEvent(new Event("change", {bubbles: true}));
+                                }
+                            }, 0);
                         }
                         },
                         hubCreate.makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
@@ -1383,8 +1387,13 @@ var hubCreate = (function() {
         cartChoice.selected = value && label ? false: true;
         defaultGenomeChoices[cartChoice.label] = cartChoice;
 
-        // next time around our value/label pair will be a default. this time around we
-        // want it selected because it was explicitly asked for, but it may not be next time
+        // Add an explicitly chosen genome (e.g. from the search box) before
+        // building the list so it is selectable on this render, not the next.
+        // Skip assembly-hub genomes, which the loop below adds with a suffix.
+        if (value && label && !(label in defaultGenomeChoices) &&
+            !genomeIsAssemblyHub(value)) {
+            defaultGenomeChoices[label] = {value: value, label: label};
+        }
         ret = Object.values(defaultGenomeChoices);
 
         // Include the user's uploaded assembly hubs as options. One entry per
@@ -1404,13 +1413,6 @@ var hubCreate = (function() {
             }
         }
 
-        // Cache the value/label pair so it's a default next time - but skip
-        // assembly-hub genomes, those are added by the loop above with the
-        // "(your assembly hub)" suffix and would otherwise show up twice.
-        if (value && label && !(label in defaultGenomeChoices) &&
-            !genomeIsAssemblyHub(value)) {
-            defaultGenomeChoices[label] = {value: value, label: label, selected: true};
-        }
         return ret;
     }
 
