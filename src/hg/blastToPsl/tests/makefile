@@ -19,13 +19,21 @@ test: testBlastToPsl testBlastXmlToPsl
 testBlastToPsl:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
 	longDbNameTest multiLineDescTest tblastxTest tblastnTest \
-	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest
+	blastpPsiTest psiNoHitsTest psiBadFormatTest blastpPsiWrapTest \
+	protMrnaTsvTest
 
 protMrnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
+
+# -tsv writes scores with a TSV header (no leading #)
+protMrnaTsvTest: mkdirs
+	${blastToPsl} -tsv -scores=output/$@.tsv input/kgProtMRna1.blast output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.tsv output/$@.tsv
 
 protDnaTest: mkdirs
 	${blastToPsl} -scores=output/$@.bscores input/kgProtDna1.blast output/$@.psl
@@ -143,13 +151,20 @@ psiBadFormatTest: mkdirs
 ###
 # blastXmlToPsl
 ###
-testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test misclassedPsiBlastTest
+testBlastXmlToPsl: mrna1Test mrna1TsvTest prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test misclassedPsiBlastTest
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
+
+# -tsv writes scores with a TSV header (no leading #)
+mrna1TsvTest: mkdirs
+	${blastXmlToPsl} -tsv -scores=output/$@.tsv input/mrna1.blastn.xml output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.tsv output/$@.tsv
 
 prot1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/prot1.tblastn.xml output/$@.psl

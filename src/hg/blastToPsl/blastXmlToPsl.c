@@ -21,6 +21,7 @@ errAbort(
   "options:\n"
   "  -scores=file - Write score information to this file.  Format is:\n"
   "       strands qName qStart qEnd tName tStart tEnd bitscore eVal qDef tDef\n"
+  "  -tsv - Write score information with a TSV header.\n"
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
@@ -51,6 +52,7 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"scores", OPTION_STRING},
+    {"tsv", OPTION_BOOLEAN},
     {"eVal", OPTION_DOUBLE},
     {"pslx", OPTION_BOOLEAN},
     {"convertToNucCoords", OPTION_BOOLEAN},
@@ -266,7 +268,7 @@ for (itersRec = outputRec->ncbiBlastBlastOutputIterations; itersRec != NULL; ite
     }
 }
 
-static void blastXmlToPsl(char *blastXmlFile, char *pslFile, char *scoreFile)
+static void blastXmlToPsl(char *blastXmlFile, char *pslFile, char *scoreFile, boolean tsv)
 /* blastXmlToPsl - convert blast XML output to PSLs. */
 {
 struct xap *xap = xapNew(ncbiBlastStartHandler, ncbiBlastEndHandler, blastXmlFile);
@@ -274,7 +276,7 @@ xapParseFile(xap, blastXmlFile);
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
-    scoreFh = pslBuildScoresOpen(scoreFile, TRUE);
+    scoreFh = pslBuildScoresOpen(scoreFile, TRUE, tsv);
 
 if (xap->topObject == NULL)
     errAbort("empty BLAST XML file: %s", blastXmlFile);
@@ -324,7 +326,7 @@ else if (sameString(tNameSrcStr, "Hit_accession"))
 else
     errAbort("invalid value for -tName, expect on of: \"Hit_id\",  \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
 
-blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL));
+blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL), optionExists("tsv"));
 if (errCount > 0)
     errAbort("%d invalid PSLs created", errCount);
 return 0;
