@@ -40,6 +40,10 @@
 #include "udc.h"
 #include "hubConnect.h"
 #include "bigBedFind.h"
+#include "bigBed.h"
+#include "bbiFile.h"
+#include "bigGenePred.h"
+#include "bPlusTree.h"
 #include "genbank.h"
 #include "chromAlias.h"
 #include "cart.h"
@@ -3580,9 +3584,282 @@ if (!multiTerm)
 return foundIt;
 }
 
+static int positionFromGenePred(struct genePred *gp, char *trackName, char *chrom,
+    int exonNum, int offset, struct hgPositions *hgp,
+    char **retFallbackChrom, int *retFallbackStart, int *retFallbackEnd, int *retExonCount)
+/* Navigate to exon exonNum (1-based) of gp with optional intronic offset.
+ * Uses the existing exonToPos() for the core strand-aware lookup.
+ * Returns 1=success (hgp filled), -1=gene found but exon out of range. */
+{
+int chromStart, chromEnd;
+if (!exonToPos(gp, exonNum, &chromStart, &chromEnd))
+    {
+    *retFallbackChrom = chrom;
+    *retFallbackStart = gp->txStart;
+    *retFallbackEnd   = gp->txEnd;
+    *retExonCount     = gp->exonCount;
+    return -1;
+    }
+
+char posDesc[256];
+if (offset == 0)
+    {
+    safef(posDesc, sizeof posDesc, "%s exon %d", gp->name, exonNum);
+    }
+else if (offset > 0)
+    {
+    /* Past the 3' end of the exon in transcript direction. */
+    int base = (gp->strand[0] == '-') ? chromStart - offset : chromEnd + offset - 1;
+    chromStart = base;
+    chromEnd   = base + 1;
+    safef(posDesc, sizeof posDesc, "%s exon %d+%d", gp->name, exonNum, offset);
+    }
+else
+    {
+    /* Before the 5' start of the exon in transcript direction. */
+    int absOffset = -offset;
+    int base = (gp->strand[0] == '-') ? chromEnd + absOffset - 1 : chromStart - absOffset;
+    chromStart = base;
+    chromEnd   = base + 1;
+    safef(posDesc, sizeof posDesc, "%s exon %d%d", gp->name, exonNum, offset);
+    }
+singlePos(hgp, trackName, posDesc, trackName, gp->name, gp->name,
+          chrom, chromStart, chromEnd);
+return 1;
+}
+
+static int findGeneExonInBigGenePred(char *db, char *trackName,
+    char *symbol, boolean isTxId, int exonNum, int offset,
+    struct hgPositions *hgp,
+    char **retFallbackChrom, int *retFallbackStart, int *retFallbackEnd, int *retExonCount)
+/* Look up gene symbol or transcript ID in a bigGenePred track and navigate to exon exonNum.
+ * Mirrors the bigGenePred branch of hgApi's exonToPos handler.
+ * Returns 1=success, 0=track/gene not found, -1=gene found but exon out of range. */
+{
+struct trackDb *tdb = tdbFindOrCreate(db, NULL, trackName);
+if (tdb == NULL || !startsWith("big", tdb->type))
+    return 0;
+
+struct sqlConnection *conn = hAllocConn(db);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+hFreeConn(&conn);
+if (isEmpty(fileName))
+    return 0;
+
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+if (bbi == NULL)
+    return 0;
+
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bbList = NULL;
+int retCode = 0;
+
+if (isTxId)
+    {
+    /* Transcript ID: look up directly in the name index (same as hgApi exonToPos). */
+    int fieldIx = 0;
+    struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    if (bpt != NULL)
+        {
+        bbList = bigBedNameQuery(bbi, bpt, fieldIx, symbol, lm);
+        bptFileDetach(&bpt);
+        }
+    }
+else
+    {
+    /* Gene symbol: requires a geneName2 extra index on the bigBed file.
+     * If the track has no such index, return 0 (not found) so the caller
+     * falls through to the SQL genePred tables in the geneTracks list. */
+    struct slName *extraIdxList = bigBedListExtraIndexes(bbi);
+    boolean hasGeneName2 = slNameInList(extraIdxList, "geneName2");
+    slFreeList(&extraIdxList);
+    if (hasGeneName2)
+        {
+        int fieldIx = 0;
+        struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "geneName2", &fieldIx);
+        if (bpt != NULL)
+            {
+            bbList = bigBedNameQuery(bbi, bpt, fieldIx, symbol, lm);
+            bptFileDetach(&bpt);
+            }
+        }
+    }
+
+if (bbList != NULL)
+    {
+    char chromBuf[256];
+    bbiCachedChromLookup(bbi, bbList->chromId, -1, chromBuf, sizeof chromBuf);
+    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), bbList);
+    retCode = positionFromGenePred(gp, trackName, cloneString(chromBuf), exonNum, offset,
+                                   hgp, retFallbackChrom, retFallbackStart,
+                                   retFallbackEnd, retExonCount);
+    genePredFree(&gp);
+    }
+
+bigBedFileClose(&bbi);
+lmCleanup(&lm);
+return retCode;
+}
+
+static int findGeneExonInTable(char *db, struct sqlConnection *conn,
+    char *table, char *symbol, boolean isTxId, int exonNum, int offset,
+    struct hgPositions *hgp,
+    char **retFallbackChrom, int *retFallbackStart, int *retFallbackEnd, int *retExonCount)
+/* Look up gene symbol or transcript ID in a genePred table and navigate to exon exonNum
+ * (1-based, transcript order) with optional intronic offset (bases past end or before start).
+ * Returns 1=success (hgp filled), 0=gene not found, -1=gene found but exon num out of range. */
+{
+if (!sqlTableExists(conn, table))
+    return 0;
+
+struct genePred *gp = NULL;
+
+if (sameString(table, "knownGene") && !isTxId)
+    {
+    /* Gene symbol on knownGene requires a JOIN with kgXref; handle separately. */
+    if (!sqlTableExists(conn, "kgXref"))
+        return 0;
+    struct dyString *dy = sqlDyStringCreate(
+        "select kg.name, kg.chrom, kg.strand, kg.txStart, kg.txEnd, "
+        "kg.cdsStart, kg.cdsEnd, kg.exonCount, kg.exonStarts, kg.exonEnds "
+        "from %s.knownGene kg join %s.kgXref kx on kg.name = kx.kgID "
+        "where kx.geneSymbol = '%s' limit 1",
+        db, db, symbol);
+    struct sqlResult *sr = sqlGetResult(conn, dy->string);
+    dyStringFree(&dy);
+    char **row = sqlNextRow(sr);
+    if (row != NULL)
+        gp = genePredLoad(row);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    char where[512];
+    sqlSafef(where, sizeof where, "%s = '%s'", isTxId ? "name" : "name2", symbol);
+    gp = genePredReaderLoadQuery(conn, table, where);
+    }
+
+if (gp == NULL)
+    return 0;
+
+int retCode = positionFromGenePred(gp, table, cloneString(gp->chrom), exonNum, offset,
+                                   hgp, retFallbackChrom, retFallbackStart,
+                                   retFallbackEnd, retExonCount);
+genePredFreeList(&gp);
+return retCode;
+}
+
+static boolean findGeneExon(char *db, char *term, struct hgPositions *hgp)
+/* If term matches "<symbol> exon <N>" or "<symbol>:e.<N>[+/-offset]", look up the exon
+ * in the genePred tables listed in hg.conf "geneTracks" (comma-separated, tried in order).
+ * <symbol> may be a gene symbol or a transcript ID (NM_/NR_/XM_/XR_/ENST prefix).
+ * Returns TRUE and fills hgp on the first match; warns and shows the full gene if the
+ * exon number is out of range. */
+{
+regmatch_t substrs[4];
+char symbol[128], exonStr[16], offsetStr[16];
+int offset = 0;
+boolean matched = FALSE;
+
+if (regexMatchSubstrNoCase(term,
+        "^[[:space:]]*([A-Za-z][A-Za-z0-9._-]*)[[:space:]]+exon[[:space:]]+([0-9]+)[[:space:]]*$",
+        substrs, ArraySize(substrs)))
+    {
+    regexSubstringCopy(term, substrs[1], symbol,  sizeof symbol);
+    regexSubstringCopy(term, substrs[2], exonStr, sizeof exonStr);
+    offsetStr[0] = '\0';
+    matched = TRUE;
+    }
+else if (regexMatchSubstrNoCase(term,
+        "^[[:space:]]*([A-Za-z0-9._-]+):e\\.([0-9]+)([+-][0-9]+)?[[:space:]]*$",
+        substrs, ArraySize(substrs)))
+    {
+    regexSubstringCopy(term, substrs[1], symbol,  sizeof symbol);
+    regexSubstringCopy(term, substrs[2], exonStr, sizeof exonStr);
+    regexSubstringCopy(term, substrs[3], offsetStr, sizeof offsetStr);
+    matched = TRUE;
+    }
+
+if (!matched)
+    return FALSE;
+
+int exonNum = atoi(exonStr);
+if (exonNum < 1)
+    return FALSE;
+if (isNotEmpty(offsetStr))
+    offset = atoi(offsetStr);
+
+/* Transcript IDs carry a recognised prefix; everything else is treated as a gene symbol. */
+boolean isTxId = regexMatch(symbol, "^(NM_|NR_|XM_|XR_|ENST)[0-9]");
+
+char *tableList = cfgOption("geneTracks");
+if (tableList == NULL)
+    tableList = "ncbiRefSeqSelect,knownGene,ncbiRefSeq,ncbiRefSeqHistorical";
+tableList = cloneString(tableList);
+
+#define MAX_GENE_TABLES 32
+char *tables[MAX_GENE_TABLES];
+int tableCount = chopCommas(tableList, tables);
+
+struct sqlConnection *conn = hAllocConn(db);
+boolean found = FALSE;
+boolean anyGeneFound = FALSE;
+char *fallbackChrom = NULL;
+int fallbackStart = 0, fallbackEnd = 0, fallbackExonCount = 0;
+char *fallbackTable = NULL;
+
+int i;
+for (i = 0; i < tableCount && !found; i++)
+    {
+    char *table = trimSpaces(tables[i]);
+    if (isEmpty(table))
+        continue;
+    char *thisChrom = NULL;
+    int thisStart = 0, thisEnd = 0, thisExonCount = 0;
+    int result;
+    if (sqlTableExists(conn, table))
+        result = findGeneExonInTable(db, conn, table, symbol, isTxId, exonNum, offset,
+                                     hgp, &thisChrom, &thisStart, &thisEnd, &thisExonCount);
+    else
+        result = findGeneExonInBigGenePred(db, table, symbol, isTxId, exonNum, offset,
+                                           hgp, &thisChrom, &thisStart, &thisEnd, &thisExonCount);
+    if (result == 1)
+        found = TRUE;
+    else if (result == -1)
+        {
+        if (!anyGeneFound)
+            {
+            fallbackChrom = thisChrom;
+            fallbackStart = thisStart;
+            fallbackEnd   = thisEnd;
+            fallbackExonCount = thisExonCount;
+            fallbackTable = table;
+            anyGeneFound  = TRUE;
+            }
+        else
+            freeMem(thisChrom);
+        }
+    }
+hFreeConn(&conn);
+freeMem(tableList);
+
+if (!found && anyGeneFound)
+    {
+    warn("%s does not have an exon %d (it has %d exon%s). Showing the full gene region.",
+         symbol, exonNum, fallbackExonCount, fallbackExonCount == 1 ? "" : "s");
+    char posDesc[256];
+    safef(posDesc, sizeof posDesc, "%s (no exon %d)", symbol, exonNum);
+    singlePos(hgp, fallbackTable, posDesc, fallbackTable, symbol, symbol,
+              fallbackChrom, fallbackStart, fallbackEnd);
+    found = TRUE;
+    }
+
+return found;
+}
+
 static boolean singleSearch(char *db, char *term, int limitResults, struct cart *cart,
                             struct hgPositions *hgp, boolean measureTiming)
-/* If a search type is specified in the CGI line (not cart), perform that search. 
+/* If a search type is specified in the CGI line (not cart), perform that search.
  * If the search is successful, fill in hgp as a single-pos result and return TRUE. */
 {
 char *search = cgiOptionalString("singleSearch");
@@ -3948,6 +4225,12 @@ hgp->database = db;
 if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
+
+if (findGeneExon(db, term, hgp))
+    {
+    fixSinglePos(hgp);
+    return hgp;
+    }
 
 if (singleSearch(db, term, limitResults, cart, hgp, measureTiming))
     return hgp;

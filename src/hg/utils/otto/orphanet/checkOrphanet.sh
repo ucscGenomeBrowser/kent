@@ -57,5 +57,12 @@ echo $oldHg38Count $newHg38Count | awk '{diff=(($2-$1)/$1); if (diff > 0.1 || di
 bedToBigBed -tab -as=$WORKDIR/orphadata.as -type=bed9+20 sortedOrphadata.hg19.bed /hive/data/genomes/hg19/chrom.sizes orphadata.hg19.bb
 bedToBigBed -tab -as=$WORKDIR/orphadata.as -type=bed9+20 sortedOrphadata.hg38.bed /hive/data/genomes/hg38/chrom.sizes orphadata.hg38.bb
 
+# Grab Orphanet's own release version from the XML header for the trackDb dataVersion
+# file. Match the JDBOR line specifically; a bare version= would hit the line 1 XML
+# declaration version="1.0".
+ver=$(grep -m1 'JDBOR' en_product6.xml | grep -o 'version="[^"]*"' | sed 's/version="//; s/"$//')
+
 cp orphadata.hg19.bb $WORKDIR/release/hg19/orphadata.bb
+printf 'Orphadata version %s\n' "$ver" > $WORKDIR/release/hg19/version.txt
 cp orphadata.hg38.bb $WORKDIR/release/hg38/orphadata.bb
+printf 'Orphadata version %s\n' "$ver" > $WORKDIR/release/hg38/version.txt

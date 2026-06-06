@@ -16,6 +16,8 @@
 #include "hgFind.h"
 #include "obscure.h"
 #include "net.h"
+#include "cheapcgi.h"
+#include "cart.h"
 
 
 /* Recommended track sets are Special 'curated' sessions, created by browser team, e.g. for clinical users
@@ -36,17 +38,17 @@ struct recTrackSet
     };
 
 #define REC_TRACK_SETS_FILE  "recTrackSets"
-#define REC_TRACK_SETS_DIR  "inc"
 #define REC_TRACK_SETS_EXT  "tab"
+#define REC_TRACK_SETS_DATA_DIR  "data/recTrackSets"
 
 char *recTrackSetsFile()
 /* Generate path to file specifying menu of recommended track sets.
- *      eg, DOCUMENT_ROOT/inc/recTrackSets.hg19.tab */
+ *      eg, DOCUMENT_ROOT/data/recTrackSets/recTrackSets.hg19.tab */
 {
 char *root = hDocumentRoot();
 char buf[200];
 safef(buf, sizeof buf, "%s/%s/%s.%s.%s", 
-        root, REC_TRACK_SETS_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
+        root, REC_TRACK_SETS_DATA_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
 return cloneString(buf);
 }
 
@@ -94,6 +96,54 @@ int recTrackSetsForDb()
 /* Return number of recommended track sets for this database */
 {
 return slCount(loadRecTrackSets());
+}
+
+static char *recTrackSetContentsFile(char *sessionName)
+/* Generate path to the htdocs file holding cart settings for one recommended track set,
+ *      eg DOCUMENT_ROOT/data/recTrackSets/hg38/Non_Coding_SNVs_hg38.  The file name is
+ *      the cgi-encoded session name, matching the sessionName column of the .tab file. */
+{
+char *encName = cgiEncodeFull(sessionName);
+char buf[1024];
+safef(buf, sizeof buf, "%s/%s/%s/%s",
+        hDocumentRoot(), REC_TRACK_SETS_DATA_DIR, database, encName);
+freeMem(encName);
+return cloneString(buf);
+}
+
+boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName)
+/* If a contents file exists in htdocs for this recommended track set, merge its
+ * settings into the current cart and return TRUE.  Return FALSE if no file, so the
+ * caller can fall back to loading the session from hgcentral. */
+{
+char *file = recTrackSetContentsFile(sessionName);
+if (!fileExists(file))
+    {
+    freeMem(file);
+    return FALSE;
+    }
+struct lineFile *lf = lineFileOpen(file, TRUE);
+struct dyString *dy = dyStringNew(0);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    line = skipLeadingSpaces(line);
+    if (isEmpty(line) || line[0] == '#')
+        continue;
+    if (strchr(line, '=') == NULL)
+        errAbort("Malformed recommended track set file %s, line %d has no '=': %s",
+                file, lf->lineIx, line);
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, '&');
+    dyStringAppend(dy, line);
+    }
+lineFileClose(&lf);
+// Same merge as a named session: existing cart values win except for hidden tracks,
+// so the set's visible tracks apply on top of the caller's hide-all.
+cartParseOverHashExt(cart, dy->string, TRUE);
+dyStringFree(&dy);
+freeMem(file);
+return TRUE;
 }
 
 boolean hasRecTrackSet(struct cart *cart)

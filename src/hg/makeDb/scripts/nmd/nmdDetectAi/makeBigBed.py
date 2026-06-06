@@ -77,8 +77,11 @@ def main(in_path: str, out_path: str) -> None:
                 f"NMDetective-AI prediction: {pred:.3f} ({verdict})<br>"
                 f"Transcript: {tx}"
             )
+            # Upstream name is "<gene>:<refCodon><aa><mutCodon>"; drop the gene
+            # prefix so the label shows just the codon change (e.g. AAG2TAG).
+            short_name = name.split(":", 1)[1] if ":" in name else name
             out.write("\t".join([
-                chrom, start, end, name, str(score), strand,
+                chrom, start, end, short_name, str(score), strand,
                 tstart, tend, rgb,
                 f"{pred:.4f}", gene, tx, aa, refc, mutc, mouse,
             ]) + "\n")

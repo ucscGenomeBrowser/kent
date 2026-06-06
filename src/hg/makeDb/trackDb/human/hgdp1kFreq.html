@@ -38,16 +38,16 @@ The gnomAD project reprocessed 4,094 whole genomes from the 1000 Genomes Project
 Genome Diversity Project (HGDP) through a unified pipeline. Sequencing was performed on Illumina
 platforms at a mean coverage of 32&ndash;34x. Reads were aligned to GRCh38 (hs38DH reference with
 decoy and HLA sequences) using BWA-MEM 0.7.15. Variant calling followed GATK best practices:
-per-sample calling with GATK 3.5 HaplotypeCaller followed by joint genotyping with GATK4 using
-the Hail VCF combiner for scalable merging. Allele-specific variant quality score recalibration
-(AS-VQSR) was applied for both SNPs and indels. Sample QC included contamination estimation
-(verifyBamID), sex concordance, relatedness filtering (PC-Relate), and population assignment
-using PCA against gnomAD reference panels. Per-population allele frequencies were computed for
-80 fine-grained populations as well as broad continental groupings.
+per-sample calls with GATK 3.5 HaplotypeCaller, then joint genotyping with GATK4 through
+the Hail VCF combiner, which scales the merge step. Allele-specific variant quality score recalibration
+(AS-VQSR) was applied for both SNPs and indels. Sample QC included contamination estimates
+(verifyBamID), sex concordance, relatedness filters (PC-Relate), and population assignment
+with PCA against gnomAD reference panels. Per-population allele frequencies were computed for
+80 fine-grained populations and for broad continental groups.
 </p>
 <p>
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> documents how all source files of the varFreqs track were converted.
+For some tracks, python scripts were also needed and are available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>

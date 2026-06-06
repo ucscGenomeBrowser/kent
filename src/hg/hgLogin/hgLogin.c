@@ -395,7 +395,7 @@ void sendActMailOut(char *email, char *subject, char *msg)
 {
 int result;
 
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 
 if (result == -1)
     {
@@ -466,7 +466,7 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -530,9 +530,9 @@ void sendPwdMailOut(char *email, char *recovEmail, char *subject, char *msg, cha
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
 
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 if ((result != -1) && !isEmpty(recovEmail))
-    result = mailViaPipe(recovEmail, subject, msg, returnAddr);
+    result = mailViaPipeBounce(recovEmail, subject, msg, returnAddr);
 
 if (result == -1)
     {

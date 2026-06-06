@@ -233,23 +233,31 @@ let uppyOptions = {
                         id: `${file.meta.name}DbSelect`,
                         style: "margin-left: 5px",
                         onChange: e => {
-                            onChange(e.target.value);
-                            file.meta.genome = e.target.value;
-                            file.meta.genomeLabel = e.target.selectedOptions[0].label;
-                            // If the user picked one of their own assembly hubs,
-                            // flip hubType and align parentDir so the upload
-                            // targets that existing hub rather than creating a
-                            // new stub. If they picked a UCSC db, flip back
-                            // and reset parentDir to a fresh default so they
-                            // don't accidentally upload into an assembly hub.
-                            let hub = hubCreate.assemblyHubByGenome(e.target.value);
-                            if (hub) {
-                                file.meta.hubType = "assemblyHub";
-                                file.meta.parentDir = hub.fileName;
-                            } else {
-                                file.meta.hubType = "trackHub";
-                                file.meta.parentDir = hubCreate.uiState.hubNameDefault;
-                            }
+                            let val = e.target.value;
+                            let label = e.target.selectedOptions[0].label;
+                            let hub = hubCreate.assemblyHubByGenome(val);
+                            let newParentDir = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
+                            // we call onChange here, which will do an onChange with a potentially
+                            // stale metadata if the user has also edited parentDir. later we will
+                            // fix that up and use the genome name as the recommended parentDir
+                            // or a pre-existing hub if one exists
+                            onChange(val);
+                            file.meta.genome = val;
+                            file.meta.genomeLabel = label;
+                            file.meta.hubType = hub ? "assemblyHub" : "trackHub";
+                            file.meta.parentDir = newParentDir;
+                            // Sync the Hub Name field in a later tick. In this
+                            // tick its onChange would spread the same stale
+                            // state as the genome onChange above and revert
+                            // genome; deferring lets genome flush first.
+                            setTimeout(function() {
+                                let pd = document.getElementById("uppy-Dashboard-FileCard-input-parentDir");
+                                if (pd) {
+                                    pd.value = newParentDir;
+                                    pd.dispatchEvent(new Event("input", {bubbles: true}));
+                                    pd.dispatchEvent(new Event("change", {bubbles: true}));
+                                }
+                            }, 0);
                         }
                         },
                         hubCreate.makeGenomeSelectOptions(file.meta.genome, file.meta.genomeLabel).map( (genomeObj) => {
@@ -901,7 +909,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             this.uppy.setFileMeta(file.id, defaultMeta);
 
             // When drilled into an assembly hub, inherit and lock its genome.
-            let drilledIntoAsmHub = false;
             if (hubCreate.uiState.currentHub &&
                 hubCreate.uiState.currentHub === defaultMeta.parentDir) {
                 let existing = hubCreate.uiState.filesHash[defaultMeta.parentDir];
@@ -911,33 +918,6 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                         genomeLabel: existing.genome,
                         hubType: "assemblyHub",
                         genomeLocked: true,
-                    });
-                    drilledIntoAsmHub = true;
-                }
-            }
-
-            // Top-level with no drilled-in hub: if the user already has an
-            // assembly hub, default this file to target it so they don't have
-            // to re-enter the genome + hub name. The user can still switch via
-            // the dropdown. Skip this when the file itself is hub-defining
-            // (2bit or hub.txt) or when any file in the batch is - in that
-            // case the batch is creating a *new* hub, not adding to an
-            // existing one, so the defaults should not point at the old hub.
-            let fileIsHubDefining = ftype === "2bit" || ftype === "hub.txt";
-            let batchHasHubDefining = this.uppy.getFiles().some(f =>
-                looksLikeTwoBit(f) || looksLikeHubTxt(f));
-            // dropPath means the user dragged a folder; in that case parentDir
-            // already encodes the user's intended hub root, and redirecting to
-            // an existing assembly hub would discard the folder layout.
-            if (!drilledIntoAsmHub && !fileIsHubDefining && !batchHasHubDefining && !dropPath) {
-                let firstHub = hubCreate.firstAssemblyHub();
-                if (firstHub) {
-                    this.uppy.setFileMeta(file.id, {
-                        genome: firstHub.genome,
-                        genomeLabel: firstHub.genome,
-                        parentDir: firstHub.fileName,
-                        hubType: "assemblyHub",
-                        // NOT genomeLocked - user may want a different hub/genome
                     });
                 }
             }
@@ -1063,11 +1043,13 @@ var hubCreate = (function() {
     }
 
     function sanitizeGenomeName(name) {
-        // Strip .2bit, replace non-alphanumeric/_/- with _, drop hub_ prefix.
+        // Strip .2bit, replace non-alphanumeric/_/-/. with _, drop hub_ prefix.
         // Returns empty string if nothing usable is left.
+        // The allowed character class [A-Za-z0-9._-] must match the
+        // server-side check in src/hg/hgHubConnect/hooks/pre-finish.c.
         if (!name) return "";
         let stem = name.replace(/\.2bit$/i, "");
-        stem = stem.replace(/[^A-Za-z0-9_-]/g, "_");
+        stem = stem.replace(/[^A-Za-z0-9._-]/g, "_");
         stem = stem.replace(/^hub_/, "");
         return stem;
     }
@@ -1405,8 +1387,13 @@ var hubCreate = (function() {
         cartChoice.selected = value && label ? false: true;
         defaultGenomeChoices[cartChoice.label] = cartChoice;
 
-        // next time around our value/label pair will be a default. this time around we
-        // want it selected because it was explicitly asked for, but it may not be next time
+        // Add an explicitly chosen genome (e.g. from the search box) before
+        // building the list so it is selectable on this render, not the next.
+        // Skip assembly-hub genomes, which the loop below adds with a suffix.
+        if (value && label && !(label in defaultGenomeChoices) &&
+            !genomeIsAssemblyHub(value)) {
+            defaultGenomeChoices[label] = {value: value, label: label};
+        }
         ret = Object.values(defaultGenomeChoices);
 
         // Include the user's uploaded assembly hubs as options. One entry per
@@ -1426,13 +1413,6 @@ var hubCreate = (function() {
             }
         }
 
-        // Cache the value/label pair so it's a default next time - but skip
-        // assembly-hub genomes, those are added by the loop above with the
-        // "(your assembly hub)" suffix and would otherwise show up twice.
-        if (value && label && !(label in defaultGenomeChoices) &&
-            !genomeIsAssemblyHub(value)) {
-            defaultGenomeChoices[label] = {value: value, label: label, selected: true};
-        }
         return ret;
     }
 

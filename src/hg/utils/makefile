@@ -82,6 +82,7 @@ APP_SCRIPTS = ${SCRIPT_FILES}
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
+	rts \
 	blatServersCheck \
 	buildReleaseLog \
 	checkUrlsInTable \

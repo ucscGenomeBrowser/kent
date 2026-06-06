@@ -2,8 +2,8 @@
 <p>
 The <a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html" target="_blank">Australian
 Medical Genome Reference Bank (MGRB)</a> collected whole-genome sequencing data of 4,011 healthy
-elderly individuals who lived &ge;70 years, to make sure that the dataset is depleted of damaging
-genetic variants. Age and sex summary graphs are available from
+elderly individuals who lived &ge;70 years, so the dataset is depleted of damaging genetic
+variants. Age and sex summary graphs are available from
 <a href="https://sgc.garvan.org.au/initiatives/mgrb/index.html" target="_blank">the MGRB website</a>.
 </p>
 
@@ -21,15 +21,15 @@ VCF access can be requested via a form from
 <h2>Methods</h2>
 <p>
 The 4,011 MGRB samples underwent whole-genome sequencing on Illumina HiSeq X instruments at KCCG
-under ISO 15189 accreditation, using paired-end TruSeq DNA Nano libraries sequenced one lane per
-sample. Alignment of sequence reads to the hg38 reference genome assembly was with bwa 0.7.15-r1140.
-Variants were called following the Genome Analysis Toolkit (GATK) best practices procedure using
-GATK 4.1.4.0. A sites-only VCF with only passing variants (FILTER=PASS) was made with bcftools 1.20.
+under ISO 15189 accreditation, with paired-end TruSeq DNA Nano libraries sequenced one lane per
+sample. Sequence reads were aligned to the hg38 reference genome assembly with bwa 0.7.15-r1140.
+Variants were called with GATK 4.1.4.0 following the Genome Analysis Toolkit (GATK) best practices
+procedure. A sites-only VCF with only passing variants (FILTER=PASS) was made with bcftools 1.20.
 </p>
 <p>
-We received VCF files from <A HREF="mailto:&#109;.&#104;&#111;b&#98;s&#64;&#103;&#97;r&#118;a&#110;.&#111;&#114;&#103;.&#97;&#117;">&#109;.&#104;&#111;b&#98;s&#64;&#103;&#97;r&#118;a&#110;.&#111;&#114;&#103;.&#97;&#117;</A><!-- above address is m.hobbs at garvan.org.au --> via a transfer link and imported these VCFs.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+We received VCF files from <A HREF="mailto:&#109;.&#104;&#111;b&#98;s&#64;&#103;&#97;r&#118;a&#110;.&#111;&#114;&#103;.&#97;&#117;">&#109;.&#104;&#111;b&#98;s&#64;&#103;&#97;r&#118;a&#110;.&#111;&#114;&#103;.&#97;&#117;</A><!-- above address is m.hobbs at garvan.org.au --> via a transfer link and imported them.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track documents how all source files of the varFreqs track were converted.
+For some tracks, python scripts were needed; these are available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>References</h2>

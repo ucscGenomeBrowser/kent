@@ -357,7 +357,7 @@ include trackDb.encode3.ra beta,public
 include trackDb.encode3.alpha.ra alpha
 include encode3RenEnhancerGene.ra
 include encode.cCREs.override.ra
-include encode4Reg.ra alpha
+include encode4Reg.ra alpha,beta
 include fantom5.ra
 
 track epdNew

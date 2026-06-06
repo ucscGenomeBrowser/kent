@@ -41,6 +41,12 @@ close ($fh);
 
 # read order.list: ordered list of accessions with coverage measures
 my @orderData;   # array of hashrefs with keys: coverage, acc, tsvKey
+# first one is the reference species:
+push (@orderData, {
+  coverage => 0,
+  acc => $refAcc,
+  tsvKey => defined($aliasToTsv{$refAcc}) ? $aliasToTsv{$refAcc} : $refAcc
+});
 
 open ($fh, "<", $orderFile) or die "can not read $orderFile";
 while (my $line = <$fh>) {
@@ -165,7 +171,7 @@ foreach my $cl (@cladeOrder) {
   print "<li><b>$displayName</b>: $count species\n";
 }
 
-print <<'__EOF__';
+print <<__EOF__;
 </UL>
 </P>
 
@@ -174,18 +180,16 @@ This broad phylogenetic sampling enables comparative genomics studies across
 the vertebrate tree of life, supporting research in evolution, conservation,
 and functional genomics.
 </P>
-__EOF__
 
-# <h2>Data Access</h2>
-# <p>
-# Downloads for data in this track are available from the directory:
-# <ul>
-# <li>
-# <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/vgp577way/">VGP 577-way alignments</a> (MAF format)
-# </ul>
-# </p>
+<h2>Data Access</h2>
+<p>
+Downloads for data in this track are available from the directories:
+<ul>
+<li><a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/maf/${refAcc}/">gzipped MAF files for the 577-way alignments</a></li>
+<li><a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/${refAcc}/">the bigBed data files for the track display</a></li>
+</ul>
+</p>
 
-print <<'__EOF__';
 <h2>Display Conventions and Configuration</h2>
 <p>
 Pairwise alignments of each species to the reference genome are
@@ -276,21 +280,28 @@ from the Vertebrate Genomes Project, with additional assemblies from NCBI RefSeq
 and GenBank that meet quality standards for whole-genome alignment.
 </p>
 
-<h2>Sequences</h2>
+<h2>Sequences (click on header labels to sort by that column)</h2>
+<h3>Default order is by similarity to the reference</h3>
 <p>
 <blockquote>
-<table border=1 class='stdTbl'>
-<tr><th>count</th>
+<style>
+tr:nth-child(5n) {
+  background-color: #ffffcc;
+}
+</style>
+<table border=1 class="stdTbl sortable">
+<thead style="position:sticky; top:0; background-color: lightblue;"><tr><th>count</th>
+    <th>accession<br>(link&nbsp;to&nbsp;browser)</th>
     <th>common<br>name</th>
-    <th>clade</th>
-    <th>scientific&nbsp;name<br>(link&nbsp;to&nbsp;browser&nbsp;when&nbsp;existing)</th>
-</tr>
+    <th>scientific&nbsp;name</th>
+    <th>VGP grouping</th>
+</tr></thead><tbody>
 __EOF__
 
 # print species table
 my $rowCount = 1;
 foreach my $item (@orderData) {
-  my $pos = sprintf("%03d", $rowCount++);
+  my $count = sprintf("%03d", $rowCount++);
   my $acc = $item->{acc};
   my $tsvKey = $item->{tsvKey};
   my $coverage = formatNumber($item->{coverage});
@@ -303,14 +314,11 @@ foreach my $item (@orderData) {
   $commonName =~ s/\/.*$//;
 
   # create scientific name with link if available
+  my $accDisplay = $acc;
   my $sciNameDisplay = $sciName;
   my $dbLink = getDbLink($acc);
   if (defined($dbLink)) {
-    $sciNameDisplay = $sciName . "<br><a href='$dbLink' target=_blank>$acc</a>";
-  } elsif ($acc =~ /^GC[AF]_/) {
-    $sciNameDisplay = $sciName . "<br><a href='/h/$acc' target=_blank>$acc</a>";
-  } else {
-    $sciNameDisplay = $sciName . "<br>$acc";
+    $accDisplay = "<a href='$dbLink' target=_blank>$acc</a>";
   }
 
   # make reference species special
@@ -318,11 +326,11 @@ foreach my $item (@orderData) {
     $sciNameDisplay .= "<br><b>reference species</b>";
   }
 
-  print "<tr><td>$pos</td><th>$commonName</th><td>$cladeDisplay</td><td>$sciNameDisplay</td></tr>\n";
+  printf "<tr><td>%s</td><td>%s</td><th>%s</th><td>%s</td><td>%s</td></tr>\n", $count, $accDisplay, $commonName, $sciNameDisplay, $cladeDisplay;
 }
 
 print <<'__EOF__';
-</table><br>
+</tbody></table><br>
 <b>Table 1.</b> <em>Genome assemblies included in the VGP 577-way alignment.</em>
 </blockquote></p>
 

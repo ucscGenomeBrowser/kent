@@ -7,7 +7,7 @@ output using sequencing.
 </p>
 
 <p>
-The <b>MPRA Base</b> track shows 41,275 experimentally tested cis-regulatory elements
+The <b>MPRA Base</b> track shows 40,938 experimentally tested cis-regulatory elements
 curated from the <a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
 database
 (<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao et al., 2023</a>),
@@ -28,8 +28,7 @@ elements may be represented by multiple adjacent tiles. Item width corresponds
 to the assayed DNA fragment for tile-based studies (most items, 144&ndash;200 bp;
 some Klein <em>et al.</em>, 2020 elements 354&ndash;678 bp) but collapses to a
 single base for variant-centered studies that mark the SNP location rather than
-the surrounding tested window (Choi <em>et al.</em>, 2020; Arnold <em>et al.</em>,
-2013).
+the surrounding tested window (Choi <em>et al.</em>, 2020).
 </p>
 <p>
 <b>Note on cell lines:</b> The cell line shown for each element is the reporter
@@ -49,7 +48,6 @@ The biological context of each cell line is summarized below:
 <tr><td>NPC</td><td>H1-derived neural progenitor cells; developing brain</td></tr>
 <tr><td>HEK293FT</td><td>Embryonic kidney; high-transfection-efficiency reference</td></tr>
 <tr><td>UACC903</td><td>Melanoma cell line</td></tr>
-<tr><td>HeLa</td><td>Cervical adenocarcinoma; STARR-seq proof-of-concept</td></tr>
 </table>
 
 <h2>Display Conventions</h2>
@@ -71,6 +69,14 @@ Items are colored by percentile rank of the mean raw activity score within each 
 <p>
 The mouse-over shows the cell line, assay type, raw activity score, percentile rank,
 and citation for each element.
+</p>
+
+<p>
+The details page additionally shows the <b>variant allele type</b> for each
+row (<tt>reference</tt> or <tt>alternate</tt> for a row that is part of a
+variant comparison, <tt>NA</tt> for a standard enhancer element that is not a
+variant test) and the <b>tested oligo sequence</b> &mdash; the exact DNA
+fragment assayed in the MPRA experiment.
 </p>
 
 <h3>Interpreting the raw score</h3>
@@ -97,9 +103,8 @@ absolute strength of an element.
 <h2>Methods</h2>
 <p>
 Within each experiment, replicate measurements for the same genomic fragment were
-aggregated by computing the mean raw activity score. The original dataset contained
-211,053 replicate-level measurements; after aggregation, the final track contains
-41,275 unique experiment-level genomic elements.
+aggregated by computing the mean raw activity score, yielding 40,938 unique
+experiment-level genomic elements.
 </p>
 
 <p>
@@ -138,9 +143,8 @@ The following table lists the experiments represented in this track.
   <th>Assay</th>
   <th>Elements</th>
 </tr>
-<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/23328393/" target="_blank">23328393</a></td><td>Arnold et al.</td><td>2013</td><td>Stark Lab</td><td>HeLa</td><td>STARR-seq</td><td>1</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/27831498/" target="_blank">27831498</a></td><td>Inoue et al.</td><td>2017</td><td>Shendure Lab</td><td>HepG2</td><td>lentiMPRA</td><td>2,241</td></tr>
-<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/30045748/" target="_blank">30045748</a></td><td>Klein et al.</td><td>2018</td><td>Shendure Lab</td><td>HepG2</td><td>STARR-seq</td><td>7,064</td></tr>
+<tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/30045748/" target="_blank">30045748</a></td><td>Klein et al.</td><td>2018</td><td>Shendure Lab</td><td>HepG2</td><td>STARR-seq</td><td>6,728</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">32483191</a></td><td>Choi et al.</td><td>2020</td><td>Brown Lab</td><td>HEK293FT</td><td>lentiMPRA</td><td>840</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32483191/" target="_blank">32483191</a></td><td>Choi et al.</td><td>2020</td><td>Brown Lab</td><td>UACC903</td><td>lentiMPRA</td><td>840</td></tr>
 <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/32819422/" target="_blank">32819422</a></td><td>Mattioli et al.</td><td>2020</td><td>Mele Lab</td><td>HUES64</td><td>plasmidMPRA</td><td>6,954</td></tr>
@@ -186,14 +190,6 @@ at the University of California San Francisco for creating and curating MPRA Bas
 </p>
 
 <h2>References</h2>
-
-<p>
-Arnold CD, Gerlach D, Stelzer C, Bory&#324; &#321;M, Rath M, Stark A.
-<a href="https://www.science.org/doi/10.1126/science.1232542" target="_blank">
-Genome-wide quantitative enhancer activity maps identified by STARR-seq</a>.
-<em>Science</em>. 2013 Mar 1;339(6123):1074-7.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23328393" target="_blank">23328393</a>
-</p>
 
 <p>
 Choi J, Zhang T, Vu A, Ablain J, Makowski MM, Colli LM, Xu M, Hennessey RC, Yin J, Rothschild H

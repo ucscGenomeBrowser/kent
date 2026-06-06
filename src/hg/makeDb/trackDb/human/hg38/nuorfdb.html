@@ -4,9 +4,8 @@
 This track displays <b>229,251 non-canonical open reading frames (ORFs)</b> from
 <a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a> v1.2
 (novel unannotated ORF database), a database of ORFs with evidence of translation detected by
-ribosome profiling (Ribo-seq). nuORFdb was developed by the Bhatt lab at the Broad Institute
-of MIT and Harvard as a resource for identifying non-canonical peptides in immunopeptidomic
-mass spectrometry datasets.
+ribosome profiling (Ribo-seq). nuORFdb was developed at the Broad Institute of MIT and Harvard as a resource for
+identifying non-canonical peptides in immunopeptidomic mass spectrometry datasets.
 </p>
 
 <p>
@@ -22,9 +21,15 @@ All ORFs have a minimum length of 8 amino acids.
 <p>
 Items are displayed in bigGenePred format. Each item is labeled with the nuORFdb ORF
 identifier, which encodes the source Ensembl transcript and ORF number (e.g.
-<tt>ENST00000488147.1_1_1</tt>). Color reflects Kozak translational efficiency &mdash;
-see the <a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for
-the color legend.
+<tt>ENST00000488147.1_1_1</tt>). Color reflects the categorical
+<b>Kozak consensus strength</b>:
+</p>
+<p>
+<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b> &ndash; A/G at position &minus;3 and G at position +4<br>
+<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b> &ndash; only one of those positions matches<br>
+<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b> &ndash; neither position matches<br>
+<span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b> &ndash; near-cognate start codon; the Kozak rule does not apply<br>
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> &ndash; chromosome edge or context unavailable
 </p>
 
 <p>
@@ -34,12 +39,12 @@ strength and TE, predictor type, and the simplified <tt>plotType</tt> category.
 
 <p>
 Available filters: start codon, Kozak strength, Kozak TE, ORF category
-(<tt>plotType</tt> &mdash; 8 broad classes; or <tt>type</tt> &mdash; 15 finer
+(<tt>plotType</tt>: 8 broad classes; or <tt>type</tt>: 25 finer
 categories).
 </p>
 
 <p>
-The track includes the following ORF categories (by <tt>mergeType</tt>):
+The track includes the following ORF categories (by <tt>type</tt>):
 </p>
 <ul>
   <li><b>Out-of-Frame</b> &ndash; ORFs overlapping a CDS but in a different reading frame (57,713)</li>
@@ -108,21 +113,21 @@ A small number of entries (176 out of 229,251) used non-standard chromosome name
 <h2>Credits</h2>
 
 <p>
-Thanks to Tatyana Ouspenskaia, Toph Law, Karl Clauser, and Steven Bhatt at the Broad Institute
+Thanks to Tamara Ouspenskaia, Travis Law, Karl Clauser, and colleagues at the Broad Institute
 of MIT and Harvard for creating nuORFdb and making the data publicly available.
 Thanks to Eric Malekos, UCSC, for suggesting this database.
 </p>
 
 <h2>References</h2>
-
 <p>
-Ouspenskaia T, Law T, Clauser KR, Klaeger S, Sarkizova S, Aguet F, Li B, Christian E,
-Knisbacher BA, Le PM <em>et al</em>.
-<a href="https://www.nature.com/articles/s41587-021-01072-6" target="_blank">
+Ouspenskaia T, Law T, Clauser KR, Klaeger S, Sarkizova S, Aguet F, Li B, Christian E, Knisbacher BA,
+Le PM <em>et al</em>.
+<a href="https://www.nature.com/articles/s41587-021-01021-3" target="_blank">
 Unannotated proteins expand the MHC-I-restricted immunopeptidome in cancer</a>.
 <em>Nat Biotechnol</em>. 2022 Feb;40(2):209-217.
-DOI: <a href="https://doi.org/10.1038/s41587-021-01072-6"
-target="_blank">10.1038/s41587-021-01072-6</a>.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34663921"
-target="_blank">34663921</a>
+DOI: <a href="https://doi.org/10.1038/s41587-021-01021-3"
+target="_blank">10.1038/s41587-021-01021-3</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/34663921" target="_blank">34663921</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10198624/" target="_blank">PMC10198624</a>
 </p>
+

@@ -48,9 +48,9 @@ $togaDir =~ s#.*/trackData/##;
 
 my $bbFile = basename($TOGABbi);
 
-my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
+my $totalBases = `/cluster/bin/x86_64/ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
-my $itemsBases = `bigBedInfo $TOGABbi | egrep "itemCount|basesCovered" | awk '{print \$NF}' | sed -e 's/,//g;' | xargs echo`;
+my $itemsBases = `/cluster/bin/x86_64/bigBedInfo $TOGABbi | egrep "itemCount|basesCovered" | awk '{print \$NF}' | sed -e 's/,//g;' | xargs echo`;
 my ($itemCount, $basesCovered) = split('\s+', $itemsBases);
 
 my $percentCoverage = sprintf("%.2f", 100.0 * $basesCovered / $totalBases);

@@ -54,8 +54,11 @@ then
         done
     done
     cp -p --remove-destination decipherCnv.bb ../release/hg38/decipherCnv.bb
+    # decipherContainer is a superTrack whose container page shows no "Data last
+    # updated"; this dataVersion file gives it a date. hg38 only (hg19 is frozen).
+    printf 'Last updated %s\n' "$today" > ../release/hg38/version.txt
 
-    echo "DECIPHER Installed `date`" 
+    echo "DECIPHER Installed `date`"
 
     cd ${WORKDIR}
     # Update our md5sum record

@@ -378,7 +378,7 @@ ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hg38.bb /gbdb/hg38/lrSv/cpc1.b
 ##########
 # 2026-04-20 Claude max
 
-# Arabic Pangenome Reference (APR) SVs
+# Arab Pangenome Reference (APR) SVs
 # Paper: Nassir et al. 2025, Nat Commun, PMID 40707445
 # Data : https://www.mbru.ac.ae/the-arab-pangenome-reference/
 #        (SharePoint download page under APR Nuclear/Pangenome)
@@ -438,3 +438,84 @@ bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvColorsDbSvBuild.sh
 # hg38: 59 MB, 192,534 DEL + 232,973 INS + 732 INV
 # hs1 : 87 MB (more variants due to T2T-added regions)
 # Existing /gbdb symlinks (sv.hg38.bb, sv.hs1.bb) are unchanged.
+
+##########
+# 2026-05-21 Claude max
+#
+# hprc2JasmineSv: SV callsets from 231 HPRC v2 haplotype-resolved
+# assemblies. The Hall lab (Wen-Wei Liao) ran 14 SV callers per sample:
+# DELLY, DeBreak, DeepVariant, PAV, SVDSS, SVIM, SVIM-asm, Sniffles2,
+# cuteSV, cuteSV-asm, dipcall, longcallD, pbsv, sawfish.
+# The per-sample multi-caller output was harmonized into three per-sample
+# VCFs (dipcall, PAV, longcallD pipelines). One file per sample per
+# assembly path (GRCh38_no_alt, CHM13v2) was placed into
+# /hive/data/genomes/hg38/bed/lrSv/hprc2jasmine/input/ via download_inputs.sh
+# (S3 URLs from merged_callsets.index.csv). No publication yet.
+#
+# Build steps:
+#   1. Split each per-sample VCF by chromosome and filter to SV-sized
+#      records (|alt-ref| >= 30 bp), keeping the REF/ALT sequences
+#      intact. Route by assembly tag in the filename into
+#      split2-hg38/<chr>/<sample>.vcf and split2-hs1/<chr>/<sample>.vcf.
+#      Filtering at this stage drops ~135x of records (SNVs + small
+#      indels) which is what makes the next step tractable.
+#   2. Jasmine-merge across samples per chromosome with default
+#      sequence-aware options: --ignore_merged_inputs --normalize_type.
+#      Outputs go to output2/<asm>/merged.<chr>.vcf, then bcftools
+#      concat + sort produce output2/<asm>/merged_all.vcf.gz.
+#   3. Convert merged VCFs to BED9+ with the multi-caller fields
+#      preserved (SUPP -> nSamples and AC, NCALLERS, CALLERS, SOURCES,
+#      MR), bedSort + bedToBigBed.
+cd /hive/data/genomes/hg38/bed/lrSv/hprc2jasmine
+bash splitVcfsFilterSv.sh
+bash processJasmineSvSeq.sh hg38
+bash processJasmineSvSeq.sh hs1
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2JasmineBuild.sh
+# hg38: 335,494 SVs merged (full 22 autosomes; chrX/chrY absent from inputs)
+# hs1:  (built same way from CHM13v2 per-sample calls)
+#
+# Note: an earlier symbolic-ALT pipeline (splitVcfs.sh + symbolizeVcfs.sh
+# + processJasmine.sh, output/) was used as a workaround for a Jasmine
+# NPE in sequence comparison. Once the inputs are pre-filtered to
+# SV-sized records the NPE no longer fires, so the current pipeline runs
+# Jasmine with its normal sequence-aware merging. The symbolic-pipeline
+# scripts and output/ tree are retained for comparison.
+
+##########
+# 2026-06-01 Claude max
+#
+# lrSv1kLin: 1000 Genomes linear long-read SVs from 1,218 individuals.
+# Two native VCFs (GRCh38 and CHM13/T2T-CHM13v2) provided by user from
+# dropbox (rclone copy mhaeussldropbox:1KG_LR_SVs/).
+# SVs merged with Truvari v5.2.0; population-level allele frequencies
+# (EUR, AMR, EAS, AFR, SAS) annotated with bcftools fill-tags.
+# Only DEL and INS variant types are present.
+# GRCh38: 587,779 SVs (196,369 DEL, 391,410 INS)
+# CHM13:  614,522 SVs
+# NOTE: data was received from the Eichler lab via email and has not been
+# published. Do NOT release this track and do NOT add it to lrSvAll until
+# a preprint or paper is available. HTML page is a placeholder.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/1k-lin
+cd /hive/data/genomes/hg38/bed/lrSv/1k-lin
+
+# Input VCFs in /hive/data/genomes/hg38/bed/lrSv/1k-lin/input/:
+#   GRCh38_INSDEL_1218.vcf.gz  (hg38 native, 587,779 SVs)
+#   CHM13_INSDEL_1218.vcf.gz   (hs1/CHM13 native, 614,522 SVs)
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/GRCh38_INSDEL_1218.vcf.gz lin1218.hg38.bed
+bedSort lin1218.hg38.bed lin1218.hg38.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hg38.sorted.bed /hive/data/genomes/hg38/chrom.sizes lin1218.hg38.bb
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/CHM13_INSDEL_1218.vcf.gz lin1218.hs1.bed
+bedSort lin1218.hs1.bed lin1218.hs1.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hs1.sorted.bed /hive/data/genomes/hs1/chrom.sizes lin1218.hs1.bb
+
+# Symlinks for both assemblies
+mkdir -p /gbdb/hg38/lrSv /gbdb/hs1/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hg38.bb /gbdb/hg38/lrSv/lin1218.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hs1.bb /gbdb/hs1/lrSv/lin1218.bb

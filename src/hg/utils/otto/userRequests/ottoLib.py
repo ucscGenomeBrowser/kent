@@ -93,10 +93,10 @@ def gitPullKentTree():
     return True
 
 
-def hgsql(query, db="hgcentraltest"):
+def hgsql(query, db="hgcentral"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
     out = subprocess.run(
-        ["/cluster/bin/x86_64/hgsql", "-N", "-B", "-e", query, db],
+        ["/cluster/bin/x86_64/hgsql", '-h', 'genome-centdb', "-N", "-B", "-e", query, db],
         check=True, capture_output=True, text=True,
     ).stdout
     return [tuple(line.split("\t")) for line in out.splitlines() if line]
@@ -156,34 +156,90 @@ def writeCladeTsv(clade, asmIds):
     Only GenArk identifiers are used; UCSC native dbs are not in the
     AsmHub orderList files.
 
+    If no matches are found in the expected clade directory, falls back
+    to checking legacyAsmHub/legacy.orderList.tsv and works there instead.
+
     Returns cladeDir on success (so the caller can chain the make
     sequence), or None if there is nothing to do for this clade.
     """
     genarkIds = [a for a in asmIds if gcPattern.match(a)]
     if not genarkIds:
         return None
+
+    # First try the expected clade directory
     cladeDir = os.path.join(
         kentTree, "src/hg/makeDb/doc/%sAsmHub" % clade)
     orderList = os.path.join(cladeDir, "%s.orderList.tsv" % clade)
     outPath = os.path.join(cladeDir, "tsv.otto")
-    if not os.path.isfile(orderList):
-        print("WARNING: missing %s" % orderList, file=sys.stderr)
-        return None
+
     # orderList.tsv files occasionally contain Latin-1 bytes (e.g. in
     # Scandinavian fish names) that aren't valid UTF-8.  surrogateescape
     # round-trips those bytes through read+write byte-for-byte instead of
     # raising UnicodeDecodeError.
     matched = []
-    with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
-        for line in fh:
-            if any(asmId in line for asmId in genarkIds):
-                matched.append(line)
-    if not matched:
-        print("WARNING: no matches in %s" % orderList, file=sys.stderr)
-        return None
-    with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
-        fh.writelines(matched)
-    return cladeDir
+    foundIds = set()
+
+    if os.path.isfile(orderList):
+        with open(orderList, encoding="utf-8", errors="surrogateescape") as fh:
+            for line in fh:
+                for asmId in genarkIds:
+                    if asmId in line:
+                        matched.append(line)
+                        foundIds.add(asmId)
+                        break  # Don't match the same line multiple times
+
+    # Look for IDs not found in main clade file
+    notMatched = [asmId for asmId in genarkIds if asmId not in foundIds]
+    if notMatched:
+        legacyDir = os.path.join(
+            kentTree, "src/hg/makeDb/doc/legacyAsmHub")
+        legacyOrderList = os.path.join(legacyDir, "legacy.orderList.tsv")
+        legacyOutPath = os.path.join(legacyDir, "tsv.otto")
+
+        legacyMatched = []
+        if os.path.isfile(legacyOrderList):
+            with open(legacyOrderList, encoding="utf-8", errors="surrogateescape") as fh:
+                for line in fh:
+                    for asmId in notMatched:
+                        if asmId in line:
+                            legacyMatched.append(line)
+                            foundIds.add(asmId)
+                            break  # Don't match the same line multiple times
+
+            if legacyMatched:
+                # Write matches to legacy directory
+                with open(legacyOutPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
+                    fh.writelines(legacyMatched)
+
+                # If we have matches from both main and legacy, handle legacy completely here
+                if matched:
+                    if not runGenArkMake(legacyDir):
+                        print(f"# WARNING: make commands failed in legacy directory", file=sys.stderr)
+                    # Main directory will be handled by normal return path below
+                    # This allows both directories to be processed independently
+                else:
+                    # Found matches only in legacy
+                    return legacyDir
+
+    # Check for any IDs that still weren't found anywhere
+    stillNotFound = [asmId for asmId in genarkIds if asmId not in foundIds]
+    if stillNotFound:
+        if not os.path.isfile(orderList):
+            print("WARNING: missing %s" % orderList, file=sys.stderr)
+        legacyOrderList = os.path.join(kentTree, "src/hg/makeDb/doc/legacyAsmHub/legacy.orderList.tsv")
+        if not os.path.isfile(legacyOrderList):
+            print("WARNING: missing %s" % legacyOrderList, file=sys.stderr)
+        print("WARNING: no matches for %s in %s or legacy.orderList.tsv" %
+              (stillNotFound, clade), file=sys.stderr)
+
+    # If we have matches from main clade, write them and return main directory
+    if matched:
+        with open(outPath, "w", encoding="utf-8", errors="surrogateescape") as fh:
+            fh.writelines(matched)
+        return cladeDir
+
+    # No matches found anywhere
+    return None
 
 
 # Sequence of make commands run in the clade AsmHub directory after

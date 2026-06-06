@@ -20,5 +20,7 @@ table myVariants
     string alt;        "alternate allele"
     string project;    "project name for grouping variants"
     string mouseover;  "short mouseover text for hover display"
+    string itemType;   "transcript, snv, or cnv"
+    string cnvType;    "gnomAD CNV term; empty for snv/transcript"
     uint id;           "Unique ID for item"
     ) 

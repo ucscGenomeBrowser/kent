@@ -13,6 +13,24 @@ The same frequencies shown here are also available publicly on the
 See (SPARK et al, Neuron 2018) for details.
 </p>
 
+<h3>Phenotype-stratified counts</h3>
+<p>
+In addition to the overall allele count (AC), allele number (AN), and allele
+frequency (AF), each variant record carries counts split by autism status
+(the <tt>asd</tt> column of the SPARK individual registration file):
+</p>
+<ul>
+  <li><tt>AC_AUT</tt>, <tt>AN_AUT</tt>, <tt>AF_AUT</tt> &mdash; individuals
+      coded as autistic (<tt>asd=TRUE</tt>).</li>
+  <li><tt>AC_NON_AUT</tt>, <tt>AN_NON_AUT</tt>, <tt>AF_NON_AUT</tt> &mdash;
+      individuals coded as non-autistic (<tt>asd=FALSE</tt>); these are
+      mostly parents and unaffected siblings of the probands.</li>
+</ul>
+<p>
+A small minority of samples have a blank <tt>asd</tt> value and so contribute
+only to the overall AC/AN/AF, not to either group total.
+</p>
+
 <h2>Data Access</h2>
 <p>
 Due to license restrictions, the data for this track cannot be downloaded from the UCSC
@@ -36,7 +54,11 @@ target="_blank">SPARK Welcome Packet</a>.
 number 14584.1. WES and WGS data were downloaded from
 <a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
 pVCFs were downloaded, anonymized with a script using bcftools and its &quot;fill-tags&quot; plugin and
-normalized. There was no minimum allele frequency cutoff.</p>
+normalized. There was no minimum allele frequency cutoff.
+The ASD-status sample-group file derived from the SPARK <tt>individuals_registration</tt>
+TSV was passed to fill-tags via its <tt>-S</tt> option, which adds the per-group
+<tt>AC_AUT</tt>/<tt>AN_AUT</tt>/<tt>AF_AUT</tt> and <tt>AC_NON_AUT</tt>/<tt>AN_NON_AUT</tt>/<tt>AF_NON_AUT</tt>
+tags alongside the overall AC/AN/AF.</p>
 
 <p>The methods are documented as follows by SFARI:</p>
 <ul>
@@ -105,7 +127,7 @@ normalized. There was no minimum allele frequency cutoff.</p>
     </li>
 </ul>
 <p>
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> documents how all source files of the varFreqs track were converted.
 For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 

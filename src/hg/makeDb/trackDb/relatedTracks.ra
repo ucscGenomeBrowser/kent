@@ -93,6 +93,10 @@ mm10 encode4Reg encode3Reg Previous ENCODE3 Regulation track
 mm10 encode3Reg encode4Reg New ENCODE4 Regulation track
 mm10 encode4Reg cCREs Related ENCODE4 cCRE annotations
 mm10 cCREs encode4Reg Related ENCODE4 regulation data
+mm10 mouseDevTimecourse encode3Reg Related ENCODE3 Regulation tracks
+mm10 encode3Reg mouseDevTimecourse Related ENCODE Expression track
+mm10 mouseDevTimecourse encode4Reg Related ENCODE4 Regulation tracks
+mm10 encode4Reg mouseDevTimecourse Related ENCODE Expression track
 
 # hg38 long-read SV supertrack cross-links to other SV resources:
 hg38 lrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
@@ -107,6 +111,16 @@ hg38 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA)
 hg38 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
 hs1 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
 hs1 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+
+# EVE cross-links:
+hg38 eve alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor
+hg38 alphaMissense eve EVE, a missense pathogenicity predictor trained on evolutionary sequence variation
+hg38 eve primateAi PrimateAI-3D, a similar deep-learning missense pathogenicity predictor using primate variation
+hg38 primateAi eve EVE, a missense pathogenicity predictor trained on evolutionary sequence variation
+hg38 eve revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg38 revel eve EVE, a missense pathogenicity predictor trained on evolutionary sequence variation
+hg38 eve clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg38 clinPred eve EVE, a missense pathogenicity predictor trained on evolutionary sequence variation
 
 # PrimateAI-3D cross-links:
 hg38 primateAi alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor

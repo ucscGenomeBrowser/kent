@@ -1,18 +1,17 @@
 <h2>Description</h2>
 <p>
-This supertrack collects variant allele frequencies from population-scale sequencing and
-genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
-The data was not reprocessed in a harmonized way but the variant VCFs were collected from the projects.
-The goal is to provide a single place to compare how common
-a variant is across different populations, ancestries, and cohorts, for
-projects that cannot be recomputed by gnomAD soon. The main
-<a href="hgTrackUi?g=varFreqsAll">combined track</a> merges all databases into one single summary track, 
-with filters, summed population frequencies and recalculated protein-effect annotations.
-In addition, there is one subtrack per project with the original VCF data and all the annotations that the project provides.
-The different projects use different pipelines and sequencing technologies, click any of the projects 
-above or below for a summary of their sample selection, sequencing assay and software pipeline.
-Many projects do not allow us to distribute the data but we document how the
-data can be requested and provide all converters.</p>
+This track collection gathers variant allele frequencies from population-scale sequencing
+and genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
+The data was not reprocessed in a harmonized way; the variant VCFs were collected from the
+projects as-is. The goal is a single place to compare how common a variant is across
+different populations, ancestries, and cohorts, for projects that cannot be recomputed by
+gnomAD soon. Three combined tracks aggregate the source data along different lines, and
+there is also one subtrack per project with the original VCF data and all the annotations
+that the project provides. The different projects use different pipelines and sequencing
+technologies. Click any of the projects above or below for a summary of their sample
+selection, sequencing assay and software pipeline. Many projects do not allow us to
+distribute the data, but we document how to request it and provide all converters.
+</p>
 
 <p>
 Data from projects that provide haplotype-phased genotypes can also be found
@@ -21,23 +20,53 @@ HGDP+1000 Genomes and Mexico Biobank can also be found in the &quot;Phased Varia
 Their VCF versions below show only the isolate frequency per variant.
 </p>
 
-<p>Please contact us (<A HREF="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</A><!-- above address is genome at soe.ucsc.edu -->), if you know a project that we should add. So far,
+<p>Please contact us (<a href="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</a><!-- above address is genome at soe.ucsc.edu -->) if you know of a project that we should add. So far,
 Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected) and Taiwan Biobank (pending).
 </p>
 
-<h2>Combined Track (All Databases)</h2>
+<h2>Combined Tracks</h2>
 <p>
-The &quot;All Databases Combined&quot; track merges variants from all individual databases into a single
-bigBed file with consequence annotations, totaling 1.17 billion variants from ~1.7 million individuals.
-The track supports filtering by variant type
-(SNV, insertion, deletion, MNV), predicted consequence (missense, synonymous, stop gained,
-frameshift, splice, intron, intergenic), source database, allele frequency (overall maximum
-and per-database), and allele count (total or per-database). This track is either useful in dense mode
-for getting a quick overview of variant density across all projects, or with filters to find
-variants present in specific databases or within certain frequency ranges. Note that with the &quot;clone track&quot;
-feature you can clone this track and have multiple versions, each with different filters activated.
-You can also use our &quot;Density mode&quot; checkbox on the track configuration page to show a plot with the
-density of variants passing a filter, one per track clone.
+Three combined tracks merge variants from the individual subtracks into single bigBed files
+with predicted protein consequences and cross-database filtering. All three use the same
+filter conventions (variant type, consequence, source database, allele frequency, allele
+count, and per-database AF/AC).
+</p>
+<ul>
+  <li><a href="hgTrackUi?g=varFreqsAffected"><b>Affected/Case Individuals</b></a> &mdash;
+      variants seen in the affected or case arm of five disease-study cohorts (SFARI SPARK
+      WES and WGS autism probands, SCHEMA schizophrenia cases, GREGoR affected, GA4K
+      rare-disease). Each variant also carries its frequency in the background, so
+      case-enriched variants can be isolated.</li>
+  <li><a href="hgTrackUi?g=varFreqsBackground"><b>Population + Unaffected</b></a> &mdash;
+      the matched background: variants seen in the population reference cohorts (gnomAD
+      HGDP+1kG, TOPMed, ALFA, HRC and the national WGS projects) and in the
+      unaffected/control arms of the disease cohorts. Showing this together with the
+      Affected track lets you compare case versus background frequency across a gene. Both
+      tracks exclude the genotyping-array cohorts.</li>
+  <li><a href="hgTrackUi?g=varFreqsArray"><b>Genotyping Array Databases Combined</b></a>
+      &mdash; 14.7 million variants from three array cohorts (TPMI Taiwan, Mexico Biobank,
+      UK Biobank imputed). Kept separate because chip data has different per-variant
+      confidence than sequencing.</li>
+</ul>
+
+<h3>Consequence filter &mdash; the &quot;Other&quot; bucket</h3>
+<p>
+All three combined tracks share the same Consequence filter (Missense, Synonymous, Stop
+Gained, Frameshift, Splice Donor, Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding,
+Intergenic, Other). The filter uses OR logic across the comma-separated consequence tokens
+on each variant: a variant tagged <code>stop_gained,frameshift</code> is selected by either
+the &quot;Stop Gained&quot; or the &quot;Frameshift&quot; filter. The &quot;Other&quot;
+bucket catches the less common
+<a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a> consequence
+terms emitted by <code>bcftools csq</code> that don't fit the named buckets above. Examples
+include <code>splice_region</code> (variant near a splice site but outside the canonical
+donor/acceptor), <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the
+start codon or replaces the stop codon with a coding amino acid),
+<code>stop_retained</code> (variant changes the stop codon but keeps it a stop),
+<code>inframe_insertion</code> / <code>inframe_deletion</code> (in-frame indel that adds or
+removes whole codons), and <code>coding_sequence</code> (CDS variant where the precise
+impact is undetermined). If you include &quot;Other&quot; in the filter selection, no
+records will be hidden by the consequence filter.
 </p>
 
 <h3>Available Datasets</h3>
@@ -53,12 +82,30 @@ density of variants passing a filter, one per track clone.
   <th>Downloadable from UCSC</th>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsAll">All Databases combined</a></td>
-  <td>All below</td>
-  <td>1.7mil</td>
-  <td>WGS/WES/imputed</td>
-  <td></td>
-  <td></td>
+  <td><a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a></td>
+  <td>Sequencing-based disease cohorts</td>
+  <td>~130k</td>
+  <td>WGS/WES/long-read</td>
+  <td>Affected/case arms of SFARI SPARK WES/WGS, SCHEMA, GREGoR, GA4K</td>
+  <td>Affected/case AF and AC; background AF for contrast</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a></td>
+  <td>Sequencing-based, population + unaffected</td>
+  <td>~1.5mil</td>
+  <td>WGS/WES/long-read</td>
+  <td>Population cohorts + unaffected/control arms</td>
+  <td>Background AF and AC; per-cohort and ancestry breakdowns</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=varFreqsArray">Genotyping Array Databases Combined</a></td>
+  <td>TPMI, MexBB, UKBB</td>
+  <td>~530k</td>
+  <td>Array / imputed</td>
+  <td>14.7M variants</td>
+  <td>&mdash;</td>
   <td>No</td>
 </tr>
 <tr>
@@ -135,11 +182,20 @@ density of variants passing a filter, one per track clone.
   <td>No</td>
 </tr>
 <tr>
+  <td><a href="hgTrackUi?g=gonl">GoNL</a></td>
+  <td>Netherlands</td>
+  <td>498</td>
+  <td>WGS (~13x)</td>
+  <td>250 unrelated Dutch trios (parents only)</td>
+  <td>&mdash;</td>
+  <td>Yes</td>
+</tr>
+<tr>
   <td><a href="hgTrackUi?g=schema">SCHEMA</a></td>
   <td>Multi-national</td>
   <td>121k</td>
   <td>WES</td>
-  <td>Schizophrenia: 24k cases, 97k controls</td>
+  <td>Schizophrenia: 24k cases, 97k controls (Singh 2022 primary); VCF aggregates up to ~73k/~182k</td>
   <td>&mdash;</td>
   <td>Yes</td>
 </tr>
@@ -340,7 +396,7 @@ density of variants passing a filter, one per track clone.
 
 <h3>AllOfUs &mdash; local-ancestry-stratified frequencies</h3>
 <p>
-The AllOfUs subtrack ships <b>local-ancestry-stratified</b> allele frequencies, not the
+The AllOfUs subtrack provides <b>local-ancestry-stratified</b> allele frequencies, not the
 global ancestry categories used in the All of Us Research Program 2024 Nature paper
 (see References). Each variant's per-ancestry AF/AC counts only the haplotypes whose
 inferred local ancestry at that exact genomic position belongs to the named group
@@ -350,8 +406,8 @@ local-ancestry reference panels and so include Oceanian, which is not one of the
 paper's six global Rye categories (those are AFR, AMR, EAS, EUR, Middle Eastern, SAS).
 For an admixed individual, the local-ancestry AF at a position can therefore differ
 substantially from the AF among self-reported members of the same ancestry group.
-The pipeline that produced this VCF was developed by the Ioannidis lab (Phoenix, UCSC)
-and applied to the AllOfUs v7 release; only variants with cohort allele count &ge; 20
+The Ioannidis lab (Phoenix, UCSC) developed the pipeline that produced this VCF
+and applied it to the AllOfUs v7 release; only variants with cohort allele count &ge; 20
 were retained.
 </p>
 
@@ -359,8 +415,8 @@ were retained.
 <p>
 This subtrack derives from the gnomAD v3.1.2 release, which embeds the
 4,094-genome jointly-called HGDP+1kG cohort (Koenig et al. 2024) inside the larger
-gnomAD aggregation. To save space, only INFO fields useful for clinical and
-population-genetic interpretation were retained. Two distinct allele-frequency
+gnomAD aggregation. To save space, we kept only INFO fields useful for clinical and
+population-genetic interpretation. Two allele-frequency
 sets are exposed:
 </p>
 <ul>
@@ -372,23 +428,24 @@ sets are exposed:
       The corresponding allele numbers are typically tens of thousands per population.</li>
 </ul>
 <p>
-The trackUI labels and bigBed field descriptions reflect this distinction. Per-population
-HGDP+1kG-cohort frequencies are not exposed because the cohort is too small to give
-stable per-population estimates for many populations.
+The filter labels on the track configuration page, and the field descriptions in the
+combined-track bigBed, reflect this distinction. Per-population
+HGDP+1kG-cohort frequencies are not exposed because the cohort is too small for
+stable per-population estimates in many populations.
 </p>
 
 <h2>Display Conventions</h2>
 
 <p>Most tracks only show the variant and allele frequencies on mouseover or clicks.
 When zoomed in, tracks display alleles with base-specific coloring. Homozygote
-data are shown as one letter, while heterozygotes will be displayed with both
-letters. All VCF files are normalized, with one single allele per annotation (no multi-allele
+data are shown as one letter; heterozygotes are shown with both
+letters. All VCF files are normalized, with one allele per annotation (no multi-allele
 lines).
 </p>
 
 <h2>Methods</h2>
 <p>
-Each subtrack ships the upstream project's VCF largely as-released; per-subtrack pipelines
+Each subtrack includes the upstream project's VCF largely as-released; per-subtrack pipelines
 (coordinate liftover, format conversion, header normalization) are documented on each
 subtrack's own description page and recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">build documentation</a>.
@@ -397,15 +454,18 @@ The conversion scripts (<em>e.g.</em> <code>finngen_to_vcf.py</code>, <code>kova
 in the <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">scripts directory</a>.
 </p>
 <p>
-The combined &quot;All Databases&quot; subtrack is built by a separate pipeline:
+The combined Affected and Background tracks are built by a separate pipeline:
 each per-subtrack VCF is normalized (<code>bcftools norm</code>), all sites are merged into a single
-multi-sample callset, consequence annotations are recomputed against Ensembl with <code>bcftools csq</code>,
-and the result is converted to bigBed via <code>vcfToBigBed.py</code> + <code>bedToBigBed</code>.
-The mapping from upstream INFO fields to bigBed columns is driven by two configuration files in the
-scripts directory: <code>databases.tsv</code> (one row per source dataset) and
-<code>populations.tsv</code> (per-population AC/AF columns within each source).
-Editing those two files and rerunning <code>mergeAndAnnotate.sh</code> followed by
-<code>vcfToBigBed.py</code> rebuilds the combined track.
+callset, consequence annotations are recomputed against Ensembl with <code>bcftools csq</code>,
+and the merged callset is split by phenotype into the two bigBed files via
+<code>vcfToBigBed.py</code> + <code>bedToBigBed</code>. The mapping from upstream INFO fields to
+bigBed columns is driven by two configuration files in the scripts directory:
+<code>databases.tsv</code> (one row per source dataset, flagging which cohorts study a disease)
+and <code>populations.tsv</code> (per-population AC/AF columns within each source, including the
+affected and unaffected arm of each disease cohort). Editing those two files and rerunning
+<code>mergeAndAnnotate.sh</code> followed by <code>vcfToBigBed.py --split-affected</code> rebuilds
+the two tracks. The Genotyping Array Databases Combined track is built the same way from the
+array cohorts only.
 </p>
 
 <h2>Data Access</h2>
@@ -414,7 +474,7 @@ Editing those two files and rerunning <code>mergeAndAnnotate.sh</code> followed 
 
 <h2>Credits</h2>
 
-<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click on any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the motivation for this track and to Andreas Lahner, MGZ, for feedback.</p>
+<p>This track is only possible thanks to the data from millions of volunteers around the world, who donated blood, signed consent forms and provided health information about themselves and sometimes their families. Click any of the tracks in the list above to see the specific credits for each project. Thanks to Alex Ioannidis, UCSC, for the inspiration for this track and to Andreas Lahner, MGZ, for feedback.</p>
 
 <h2>References</h2>
 
@@ -428,6 +488,17 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10937371/" target="_blank">PM
 </p>
 
 <p>
+Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kahari AK, Lundin P, Che H
+<em>et al</em>.
+<a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
+SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
+population</a>.
+<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+</p>
+
+<p>
 Bhattacharyya C, Subramanian K, Uppili B, Biswas NK, Ramdas S, Tallapaka KB, Arvind P, Rupanagudi
 KV, Maitra A, Nagabandi T <em>et al</em>.
 <a href="https://doi.org/10.1038/s41588-025-02153-x" target="_blank">
@@ -437,14 +508,22 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40200122" target="_blank">402
 </p>
 
 <p>
-Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kahari AK, Lundin P, Che H
-<em>et al</em>.
-<a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
-SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
-population</a>.
-<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+Bycroft C, Freeman C, Petkova D, Band G, Elliott LT, Sharp K, Motyer A, Vukcevic D, Delaneau O,
+O&#x27;Connell J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-018-0579-z" target="_blank">
+The UK Biobank resource with deep phenotyping and genomic data</a>.
+<em>Nature</em>. 2018 Oct;562(7726):203-209.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30305743" target="_blank">30305743</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6786975/" target="_blank">PMC6786975</a>
+</p>
+
+<p>
+Cao Y, Li L, Xu M, Feng Z, Sun X, Lu J, Xu Y, Du P, Wang T, Hu R <em>et al</em>.
+<a href="https://doi.org/10.1038/s41422-020-0322-9" target="_blank">
+The ChinaMAP analytics of deep whole genome sequences in 10,588 individuals</a>.
+<em>Cell Res</em>. 2020 Sep;30(9):717-731.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32355288" target="_blank">32355288</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7609296/" target="_blank">PMC7609296</a>
 </p>
 
 <p>
@@ -467,6 +546,15 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35305867" target="_blank">353
 </p>
 
 <p>
+Cong PK, Bai WY, Li JC, Yang MY, Khederzadeh S, Gai SR, Li N, Liu YH, Yu SH, Zhao WW <em>et al</em>.
+<a href="https://doi.org/10.1038/s41467-022-30526-x" target="_blank">
+Genomic analyses of 10,376 individuals in the Westlake BioBank for Chinese (WBBC) pilot project</a>.
+<em>Nat Commun</em>. 2022 May 26;13(1):2939.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35618720" target="_blank">35618720</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9135724/" target="_blank">PMC9135724</a>
+</p>
+
+<p>
 Fan S, Spence JP, Feng Y, Hansen MEB, Terhorst J, Beltrame MH, Ranciaro A, Hirbo J, Beggs W, Thomas
 N <em>et al</em>.
 <a href="https://doi.org/10.1016/j.cell.2023.01.042" target="_blank">
@@ -485,6 +573,15 @@ SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
 <em>Neuron</em>. 2018 Feb 7;97(3):488-493.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29420931" target="_blank">29420931</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7444276/" target="_blank">PMC7444276</a>
+</p>
+
+<p>
+Genome of the Netherlands Consortium.
+<a href="https://doi.org/10.1038/ng.3021" target="_blank">
+Whole-genome sequence variation, population structure and demographic history of the Dutch
+population</a>.
+<em>Nat Genet</em>. 2014 Aug;46(8):818-25.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24974849" target="_blank">24974849</a>
 </p>
 
 <p>
@@ -569,6 +666,15 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5161557/" target="_blank">PMC
 </p>
 
 <p>
+Malomane DK, Williams MP, Huber CD, Mangul S, Abedalthagafi M, Chiang CWK.
+<a href="https://doi.org/10.1101/2025.01.10.632500" target="_blank">
+Patterns of population structure and genetic variation within the Saudi Arabian population</a>.
+<em>bioRxiv</em>. 2025 Jan 13;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39868174" target="_blank">39868174</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11761371/" target="_blank">PMC11761371</a>
+</p>
+
+<p>
 McCarthy S, Das S, Kretzschmar W, Delaneau O, Wood AR, Teumer A, Kang HM, Fuchsberger C, Danecek P,
 Sharp K <em>et al</em>.
 <a href="https://doi.org/10.1038/ng.3643" target="_blank">
@@ -589,6 +695,16 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8897431/" target="_blank">PMC
 </p>
 
 <p>
+Singh T, Poterba T, Curtis D, Akil H, Al Eissa M, Barchas JD, Bass N, Bigdeli TB, Breen G,
+Bromet EJ <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank">
+Rare coding variants in ten genes confer substantial risk for schizophrenia</a>.
+<em>Nature</em>. 2022 Apr;604(7906):509-516.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35396579" target="_blank">35396579</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9805802/" target="_blank">PMC9805802</a>
+</p>
+
+<p>
 Sohail M, Palma-Mart&iacute;nez MJ, Chong AY, Quinto-Cort&eacute;s CD, Barberena-Jonas C,
 Medina-Mu&ntilde;oz SG, Ragsdale A, Delgado-S&aacute;nchez G, Cruz-Hervert LP, Ferreyra-Reyes L
 <em>et al</em>.
@@ -597,16 +713,6 @@ Mexican Biobank advances population and medical genomics of diverse ancestries</
 <em>Nature</em>. 2023 Oct;622(7984):775-783.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37821706" target="_blank">37821706</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10600006/" target="_blank">PMC10600006</a>
-</p>
-
-<p>
-Singh T, Poterba T, Curtis D, Akil H, Al Eissa M, Barchas JD, Bass N, Bigdeli TB, Breen G,
-Bromet EJ <em>et al</em>.
-<a href="https://doi.org/10.1038/s41586-022-04556-w" target="_blank">
-Rare coding variants in ten genes confer substantial risk for schizophrenia</a>.
-<em>Nature</em>. 2022 Apr;604(7906):509-516.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35396579" target="_blank">35396579</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9805802/" target="_blank">PMC9805802</a>
 </p>
 
 <p>
@@ -644,4 +750,13 @@ Wu D, Dou J, Chai X, Bellis C, Wilm A, Shih CC, Soon WWJ, Bertin N, Lin CB, Khor
 Large-scale whole-genome sequencing of three diverse Asian populations in Singapore</a>.
 <em>Cell</em>. 2019 Oct 17;179(3):736-749.e15.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31626772" target="_blank">31626772</a>
+</p>
+
+<p>
+Yang HC, Kwok PY, Li LH, Liu YM, Jong YJ, Lee KY, Wang DW, Tsai MF, Yang JH, Chen CH <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09680-x" target="_blank">
+The Taiwan Precision Medicine Initiative provides a cohort for large-scale studies</a>.
+<em>Nature</em>. 2025 Dec;648(8092):117-127.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41092961" target="_blank">41092961</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12675286/" target="_blank">PMC12675286</a>
 </p>

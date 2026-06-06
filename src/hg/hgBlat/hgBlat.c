@@ -1,4 +1,9 @@
-/* hgBlat - CGI-script to manage fast human genome sequence searching. */
+/* hgBlat - CGI-script to manage fast human genome sequence searching.
+ *
+ * NOTE: The hubApi /blat endpoint (src/hg/hubApi/blat.c) derives its
+ * alignment logic (server lookup, sequence filtering, gfAlign* calls,
+ * temp-file round-trip) from this file.  If you fix a bug or change
+ * behaviour here, check whether hubApi/blat.c needs the same fix. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -322,107 +327,35 @@ char *outputList[] = {"hyperlink", "psl", "psl no header", "JSON"};
 
 int minMatchShown = 0;
 
-static struct serverTable *databaseServerTable(char *db, boolean isTrans)
-/* Load blat table for a database */
+struct serverTable *findServer(char *db, boolean isTrans)
+/* Return server for given database.  Db can either be database name or
+ * description.  Server lookup delegated to findBlatServer() in hg/lib/blatServers.c. */
 {
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-struct sqlResult *sr;
-char **row;
-char dbActualName[32];
-
-/* If necessary convert database description to name. */
-sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
-if (!sqlExists(conn, query))
-    {
-    sqlSafef(query, sizeof(query), "select name from dbDb where description = '%s'", db);
-    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
-        db = dbActualName;
-    }
-
-struct serverTable *st;
-AllocVar(st);
-
-/* Do a little join to get data to fit into the serverTable and grab
- * dbDb.nibPath too.  Check for newer dynamic flag and allow with or without
- * it.
- * For debugging, one set the variable blatServersTbl to some db.table to
- * pick up settings from somewhere other than dbDb.blatServers.
- */
-char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
-boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
-sqlSafef(query, sizeof(query), "select dbDb.name, dbDb.description, blatServers.isTrans,"
-         "blatServers.host, blatServers.port, dbDb.nibPath, %s "
-         "from dbDb, %s blatServers where blatServers.isTrans = %d and "
-         "dbDb.name = '%s' and dbDb.name = blatServers.db", 
-         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl, isTrans, db);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    {
+struct blatServerParams *p = findBlatServer(db, isTrans);
+if (p == NULL)
     errAbort("Can't find a server for %s database %s.  Click "
 	     "<A HREF=\"/cgi-bin/hgBlat?%s&command=start&db=%s\">here</A> "
 	     "to reset to default database.",
 	     (isTrans ? "translated" : "DNA"), db,
 	     cartSidUrlString(cart), hDefaultDb());
-    }
-st->db = cloneString(row[0]);
-st->genome = cloneString(row[1]);
-st->isTrans = atoi(row[2]);
-st->host = cloneString(row[3]);
-st->port = cloneString(row[4]);
-st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
-if (atoi(row[6]))
-    {
-    st->isDynamic = TRUE;
-    st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
-    ++nonHubDynamicBlatServerCount;
-    }
-
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-return st;
-}
-
-static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
-/* Load blat table for a hub */
-{
-char *host, *port;
-char *genomeDataDir;
-
-if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
-    return NULL;
-
 struct serverTable *st;
 AllocVar(st);
-
-st->db = cloneString(db);
-st->genome = cloneString(hGenome(db));
-st->isTrans = isTrans;
-st->host = host; 
-st->port = port;
-struct trackHubGenome *genome = trackHubGetGenome(db);
-st->nibDir = cloneString(genome->twoBitPath);
-char *ptr = strrchr(st->nibDir, '/');
-// we only want the directory name
-if (ptr != NULL)
-    *ptr = 0;
-if (genomeDataDir != NULL)
+st->db          = p->db;
+st->genome      = p->genome;
+st->isTrans     = p->isTrans;
+st->host        = p->host;
+st->port        = p->port;
+st->nibDir      = p->nibDir;
+st->isDynamic   = p->isDynamic;
+st->genomeDataDir = p->genomeDataDir;
+if (p->isDynamic)
     {
-    st->isDynamic = TRUE;
-    st->genomeDataDir = cloneString(genomeDataDir);
-    ++hubDynamicBlatServerCount;
+    if (trackHubDatabase(db))
+        ++hubDynamicBlatServerCount;
+    else
+        ++nonHubDynamicBlatServerCount;
     }
 return st;
-}
-
-struct serverTable *findServer(char *db, boolean isTrans)
-/* Return server for given database.  Db can either be
- * database name or description. */
-{
-if (trackHubDatabase(db))
-    return trackHubServerTable(db, isTrans);
-else
-    return databaseServerTable(db, isTrans);
 }
 
 void findClosestServer(char **pDb, char **pOrg)
@@ -431,7 +364,7 @@ void findClosestServer(char **pDb, char **pOrg)
 {
 char *db = *pDb, *org = *pOrg;
 
-if (trackHubDatabase(db) && (trackHubServerTable(db, FALSE) != NULL))
+if (trackHubDatabase(db) && (findBlatServer(db, FALSE) != NULL))
     {
     *pDb = db;
     *pOrg = hGenome(db);

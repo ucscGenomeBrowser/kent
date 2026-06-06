@@ -112,12 +112,12 @@ def unescapeMysql(s):
     return ''.join(out)
 
 
-def hgsqlQuery(db, sql):
+def hgsqlQuery(host, db, sql):
     """Run a SQL query via hgsql and return rows as list of dicts.
     hgsql -B emits tabs/newlines/backslashes inside field values as
     literal \\t / \\n / \\\\ so each row stays on one line undo that
     on each field before returning."""
-    cmd = ['/cluster/bin/x86_64/hgsql', db, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', '-h', host, db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         sys.exit(f"hgsql error: {result.stderr.strip()}")
@@ -138,9 +138,9 @@ def hgsqlQuery(db, sql):
     return rows
 
 
-def hgsqlUpdate(db, sql):
+def hgsqlUpdate(host, db, sql):
     """Run a SQL update/insert statement via hgsql."""
-    cmd = ['/cluster/bin/x86_64/hgsql', db, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql', '-h', host, db, '-N', '-B', '-e', sql]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"hgsql update error: {result.stderr.strip()}", file=sys.stderr)
@@ -180,7 +180,7 @@ def parseAssemblyComment(comment):
     return name, betterName, userComment
 
 
-def sendMail(toAddr, subject, body, fromAddr=None, bccAddr=None):
+def sendMail(toAddr, subject, body, fromAddr=None, bccAddr=None, bounceAddr=None):
     """Send email via /usr/sbin/sendmail.
     If fromAddr is provided it is used as the envelope sender (-f)
     and the From: header so that bounces return to that address.
@@ -196,8 +196,8 @@ def sendMail(toAddr, subject, body, fromAddr=None, bccAddr=None):
                    f"{headers}")
     message = f"{headers}\n\n{body}\n"
     cmd = ['/usr/sbin/sendmail', '-t']
-    if fromAddr:
-        cmd += ['-f', fromAddr]
+    if bounceAddr:
+        cmd += ['-f', bounceAddr]
     result = subprocess.run(cmd, input=message, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"Warning: sendmail failed: {result.stderr.strip()}",
@@ -219,16 +219,20 @@ def main():
 
     conf = parseHgConf(args.conf)
 
-    dbName = conf.get('central.db')
-    if not dbName:
-        sys.exit("Error: central.db not defined in config")
+    dbHost = conf.get('db.host')
+    if not dbHost:
+        sys.exit("Error: db.host not defined in config")
+    dbUser = conf.get('db.user')
+    if not dbUser:
+        sys.exit("Error: db.user not defined in config")
 
-    table = conf.get('ottoTable', 'ottoRequest')
+    ottoDb = conf.get('ottoDb', 'hgcentraltest')
+    ottoTable = conf.get('ottoTable', 'ottoRequest')
 
     # find pending requests
     sql = (f"SELECT id, requestType, fromDb, toDb, email, comment, "
-           f"requestTime FROM {table} WHERE status = 0")
-    pending = hgsqlQuery(dbName, sql)
+           f"requestTime FROM {ottoTable} WHERE status = 0")
+    pending = hgsqlQuery(dbHost, ottoDb, sql)
 
     if not pending:
         return  # nothing to do -- silent for cron
@@ -282,11 +286,11 @@ def main():
                 f"\n"
                 f"-- UCSC Genome Browser\n"
             )
+        bitParts = ["gb", "aut", "o", "@", "uc", "sc.", "ed", "u"]
         if sendMail(userEmail, subject, body,
-                    fromAddr=NOTIFY_FROM, bccAddr=bccAddr):
-            hgsqlUpdate(dbName,
-                f"UPDATE {table} SET status = 1"
-                f" WHERE id = {req['id']}")
+           fromAddr=NOTIFY_FROM, bccAddr=bccAddr, bounceAddr="".join(bitParts)):
+               hgsqlUpdate(dbHost, ottoDb, f"UPDATE {ottoTable} SET status = 1"
+                   f" WHERE id = {req['id']}")
         else:
             print(f"Failed to send notification for request #{req['id']}",
                   file=sys.stderr)

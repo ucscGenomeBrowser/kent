@@ -6,3 +6,5 @@ VEuPathDB
 TOGAv2
 evaSnp8
 vgp577way
+HPRCv2
+lowelab

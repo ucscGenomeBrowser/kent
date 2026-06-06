@@ -205,6 +205,30 @@ def run(cmd):
         print(f"ERROR: command failed with exit code {result.returncode}", file=sys.stderr)
         sys.exit(1)
 
+# Non-rs names are built in csv_to_bed() as "chr<X>:<pos>:<ref>><alt>"
+# from the raw CSV pos, which for hg19 rows is the hg19 position. liftOver
+# updates the BED coordinates but leaves the name string alone, so the name
+# carries a stale hg19 pos. Rewrite the chrom:pos prefix from the row's
+# (already hg38-coordinate) col 1 + col 2 so the name agrees with the row's
+# coordinates.
+_NAME_PREFIX_RE = re.compile(r"^chr[^:]+:\d+:")
+
+def fix_lifted_names(lifted_bed):
+    fixed = 0
+    tmp = lifted_bed + ".tmp"
+    with open(lifted_bed) as fin, open(tmp, "w") as fout:
+        for line in fin:
+            cols = line.rstrip("\n").split("\t")
+            chrom, start, name = cols[0], int(cols[1]), cols[3]
+            if _NAME_PREFIX_RE.match(name):
+                new_name = _NAME_PREFIX_RE.sub(f"{chrom}:{start+1}:", name)
+                if new_name != name:
+                    cols[3] = new_name
+                    fixed += 1
+            fout.write("\t".join(cols) + "\n")
+    os.replace(tmp, lifted_bed)
+    print(f"  Rewrote hg19 -> hg38 pos in {fixed} non-rs name fields")
+
 def main():
     hg19_bed = "mpravardb.hg19.bed"
     hg38_bed = "mpravardb.hg38.bed"
@@ -223,6 +247,9 @@ def main():
     unmapped = sum(1 for line in open(unmapped_bed) if not line.startswith("#"))
     lifted = sum(1 for _ in open(lifted_bed))
     print(f"  Lifted: {lifted}, Unmapped: {unmapped}")
+
+    # Rewrite chr:pos inside non-rs name fields with the lifted hg38 pos.
+    fix_lifted_names(lifted_bed)
 
     print("\nStep 3: Merging hg38 native + lifted hg19...")
     run(f"cat {hg38_bed} {lifted_bed} > {merged_bed}.tmp")

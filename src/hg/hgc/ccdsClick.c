@@ -52,6 +52,11 @@ if (liftDb != NULL)
 printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
        cartSidUrlString(cart), ccdsInfo->ccds, urlChrom,
        urlStart, urlStart, urlEnd, urlDb);
+// Mark the click as coming from a quickLifted track so the CCDS page can
+// explain that the CCDS data shown is from the source assembly, not the
+// destination assembly the user is browsing.
+if (liftDb != NULL)
+    printf("&quickLiftCcds=%s", trackHubSkipHubName(database));
 }
 
 void printCcdsForSrcDb(struct sqlConnection *conn, struct trackDb *tdb, char *acc)
@@ -432,6 +437,18 @@ ccdsInfoMRnaSort(&ensCcds);
 cartWebStart(cart, database, "CCDS Gene");
 
 printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
+
+// When the user clicked through from a quickLifted gene track, the CCDS
+// data lives only on the source assembly (database here), not on the
+// destination assembly they were browsing.  Say so, so the assembly shown
+// isn't mistaken for a bug.
+char *quickLiftDestDb = cgiOptionalString("quickLiftCcds");
+if (quickLiftDestDb != NULL)
+    printf("<P><B>Note:</B> Consensus CDS (CCDS) annotations are available "
+           "only on %s. You followed this link from a QuickLift track on %s, "
+           "which has no CCDS data of its own, so the gene model and "
+           "coordinates shown below are from %s.</P>\n",
+           database, quickLiftDestDb, database);
 
 writeBasicInfoHtml(conn, ccdsId, rsCcds, vegaCcds, ensCcds);
 writeLinksHtml(conn, ccdsId, rsCcds, vegaCcds, ensCcds);

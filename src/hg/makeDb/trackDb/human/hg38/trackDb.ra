@@ -1,4 +1,4 @@
-include ncOrfs.ra alpha
+include ncOrfs.ra
 
 include strVar.ra
 
@@ -681,7 +681,7 @@ include trackDb.gencode.ra
 
 include wgEncodeReg.ra beta,public
 include wgEncodeReg.alpha.ra alpha
-include wgEncodeReg4.ra alpha
+include wgEncodeReg4.ra alpha,beta
 
 include encode3.ra
 include encode.cCREs.override.ra
@@ -938,3 +938,5 @@ include mb2.ra alpha
 include hprcV2.trackDb.txt alpha
 
 include vgp577way.trackDb.ra alpha
+
+include crPred.ra alpha

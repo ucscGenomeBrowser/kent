@@ -52,6 +52,4 @@ then
         fi
     done
     cd ..
-else
-    echo "No ClinGen CNV update"
 fi

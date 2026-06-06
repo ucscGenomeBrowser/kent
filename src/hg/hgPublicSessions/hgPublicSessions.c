@@ -19,6 +19,7 @@
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
 #include "jsHelper.h"
+#include "jsonParse.h"
 #include "verbose.h"
 
 struct galleryEntry
@@ -164,7 +165,7 @@ jsInlineF(
 
 // the user may have cleared the previous search via cgi option, or tried a new search:
 if (searchStrExists)
-    jsInlineF("     $('#sessionTable').DataTable().search(\"%s\").draw();\n", searchStr);
+    jsInlineF("     $('#sessionTable').DataTable().search(\"%s\").draw();\n", jsonStringEscape(searchStr));
 
 /* Recover previous sorting choice from the cart settings, if available */
 jsInlineF(
@@ -249,9 +250,9 @@ while (thisSession != NULL)
         }
     char *safeDescription = htmlEncode(descriptionString);
     printf ("\t\t<td><b>Description:</b> %s<br>\n", safeDescription);
-    printf ("\t\t<b>Author:</b> %s<br>\n", thisSession->userName);
-    printf ("\t\t<b>Session Name:</b> %s<br>\n", thisSession->sessionName);
-    printf ("\t\t<b>Genome Assembly:</b> %s<br>\n", thisSession->db);
+    printf ("\t\t<b>Author:</b> %s<br>\n", htmlEncode(thisSession->userName));
+    printf ("\t\t<b>Session Name:</b> %s<br>\n", htmlEncode(thisSession->sessionName));
+    printf ("\t\t<b>Genome Assembly:</b> %s<br>\n", htmlEncode(thisSession->db));
     printf ("\t\t<b>Creation Date:</b> %s<br>\n", thisSession->firstUse);
     printf ("\t\t<b>Views:</b> %ld\n", thisSession->useCount);
     printf ("\t\t</td>\n");

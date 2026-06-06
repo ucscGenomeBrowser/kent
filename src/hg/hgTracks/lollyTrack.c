@@ -344,7 +344,7 @@ else
     bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
-struct lolly *popList = NULL, *pop;
+struct lolly *popList = NULL, *pop = NULL;
 
 unsigned lollyField = getField(tg->tdb, "lollyField", as, 5);  // we use the score field by default
 int lollySizeField = getField(tg->tdb, "lollySizeField", as, -1);  // no size field by default
@@ -405,6 +405,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             pop->start = bed->chromStart;
             pop->end = bed->chromEnd;
             }
+        else 
+            continue;
         }
     else
         {

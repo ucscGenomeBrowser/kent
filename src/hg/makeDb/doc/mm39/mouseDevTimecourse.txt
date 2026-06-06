@@ -88,4 +88,96 @@ for path in FILES:
         f.writelines(out)
     print("reordered: " + path + "  (" + str(len(data)) + " rows)")
 EOF
+
+# 2026-05-21 (Gerardo): Update colors in .facets and .categories files per
+# author request via the Cell Browser team (Brittney Wick). Redmine #37001
+# note-23. Peng asked that the bar colors match the per-sample colors used in
+# the Cell Browser. Brittney provided a tab-separated file with the colors at
+# /hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv (78 rows,
+# one color per (tissue, timepoint) pair, encoded as gradients within each
+# tissue from light at the earliest time point to dark at P0). The update is
+# made to the files in /hive/data/outside/woldlab/mouseDevTimecourse/mm39/
+# only; the hub at woldlab.caltech.edu still has the old per-tissue colors,
+# so re-running the curl above will overwrite the colors and require re-running
+# the snippet below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+
+python3 <<'EOF'
+TISSUE_MAP = {
+    "adrenal": "adrenal gland",
+    "bladder": "urinary bladder",
+    "face": "embryonic facial prominence",
+    "forebrain": "forebrain",
+    "heart": "heart",
+    "hindbrain": "hindbrain",
+    "intestine": "intestine",
+    "kidney": "kidney",
+    "limbs": "limb",
+    "liver": "liver",
+    "lung": "lung",
+    "midbrain": "midbrain",
+    "muscle": "skeletal muscle tissue",
+    "neuraltube": "neural tube",
+    "spleen": "spleen",
+    "stomach": "stomach",
+    "thymus": "thymus",
+}
+
+# Build (tissue, timepoint) -> color from Brittney's TSV
+tsv = {}
+with open("/hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv") as f:
+    f.readline()
+    for line in f:
+        line = line.rstrip("\n")
+        if not line:
+            continue
+        sample, color = line.split("\t")
+        tissue_part, _, tp = sample.rpartition("_")
+        our_tissue = TISSUE_MAP[tissue_part]
+        our_tp = "P0" if tp == "p0" else tp
+        tsv[(our_tissue, our_tp)] = color
+
+# Update .facets files (column 5 is the color)
+for facets in ["mouse_development_M21.facets"]:
+    with open(facets) as f:
+        lines = f.readlines()
+    out = [lines[0]]
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[4] = tsv[(cols[2], cols[3])]
+        out.append("\t".join(cols) + "\n")
+    with open(facets, "w") as f:
+        f.writelines(out)
+    print("updated .facets: " + facets)
+
+# Update .categories files (column 2 is the color). Look up each label's
+# color in the matching .facets file (column 5).
+for facets, cats in [("mouse_development_M21.facets",
+                      "mouse_development_M21.categories")]:
+    label_color = {}
+    with open(facets) as f:
+        f.readline()
+        for line in f:
+            if not line.strip():
+                continue
+            cols = line.rstrip("\n").split("\t")
+            label_color[cols[0]] = cols[4]
+    with open(cats) as f:
+        lines = f.readlines()
+    out = []
+    for line in lines:
+        if not line.strip():
+            out.append(line)
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[1] = label_color[cols[0]]
+        out.append("\t".join(cols) + "\n")
+    with open(cats, "w") as f:
+        f.writelines(out)
+    print("updated .categories: " + cats)
+EOF
+
 ##############################################################################

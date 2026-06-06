@@ -10,12 +10,60 @@
 var hgTracks = hgTracks || {};
 
 var suggestBox = {
+    buildExonSuggestions: function(key) {
+        // Return any local exon-navigation suggestion items for the current input, or [].
+        // Complete queries ("GENE exon N", "GENE:e.N") return a "geneExon" item; the caller
+        // should skip the server request in that case.
+        // Partial queries ("GENE ex", "GENE exon ") return a "geneExonHint" item.
+        var m = key.match(geneExonExp);
+        if (m) {
+            return [{
+                type: "geneExon", value: key.trim(), id: "geneExon",
+                label: "&#9654; Jump to exon " + parseInt(m[2]) + " of <b>" + m[1] + "</b>",
+                symbol: m[1], num: parseInt(m[2]), offset: 0
+            }];
+        }
+        m = key.match(geneExonCoordExp);
+        if (m) {
+            var offset = m[3] ? parseInt(m[3]) : 0;
+            var lbl = "&#9654; Jump to <b>" + m[1] + "</b>:e." + parseInt(m[2]);
+            if (offset) lbl += (offset > 0 ? "+" : "") + offset;
+            return [{
+                type: "geneExon", value: key.trim(), id: "geneExon",
+                label: lbl, symbol: m[1], num: parseInt(m[2]), offset: offset
+            }];
+        }
+        // Partial: symbol followed by "ex", "exon", or "exon " with no number yet
+        m = key.match(/^[\s]*([A-Za-z][A-Za-z0-9._-]*)[\s]+ex(?:on)?[\s]*$/i);
+        if (m) {
+            return [{
+                type: "geneExonHint", value: m[1] + " exon ", id: "geneExonHint",
+                label: "&#9654; <b>" + m[1] + "</b> exon <i>N</i> &mdash; type exon number to jump",
+                symbol: m[1]
+            }];
+        }
+        return [];
+    },
+
     ajaxGet: function ajaxGet(db) {
         // Returns autocomplete source function
         // db is the relevant assembly (e.g. "hg18")
         var cache = {}; // cache is is used as a hash to cache responses from the server.
         return function(request, callback) {
             var key = request.term;
+
+            // Complete exon query — show our suggestion directly, skip server
+            var exonItems = suggestBox.buildExonSuggestions(key);
+            if (exonItems.length > 0 && exonItems[0].type === "geneExon") {
+                callback(exonItems);
+                return;
+            }
+
+            // Wrap callback to prepend any partial hint
+            var wrapCallback = function(serverItems) {
+                callback(exonItems.concat(serverItems || []));
+            };
+
             if (key.length < 2) {
                 // show the most recent searches
                 let searchStack = window.localStorage.getItem("searchStack");
@@ -59,7 +107,7 @@ var suggestBox = {
                             // with tons of error messages (#8816).
                         },
                         key: key,
-                        cont: callback
+                        cont: wrapCallback
                     });
                 } else {
                     // probably an hgvs term?
@@ -79,11 +127,11 @@ var suggestBox = {
                             // with tons of error messages (#8816).
                         },
                         key: key,
-                        cont: callback
+                        cont: wrapCallback
                     });
                 }
             } else {
-                callback(JSON.parse(cache[key]));
+                wrapCallback(JSON.parse(cache[key]));
             }
             // warn(request.term);
         };
@@ -173,6 +221,11 @@ var suggestBox = {
                 },
                 select: function(event, ui) {
                     lastSelected = ui.item.value;
+                    if (ui.item.type === "geneExonHint") {
+                        // Input is already set to "GENE exon " — just call back, skip bookkeeping
+                        selectCallback(ui.item);
+                        return;
+                    }
                     suggestBox.updateFindMatches(ui.item.internalId);
                     let key = typeof(ui.item.geneSymbol) !== 'undefined' ? ui.item.geneSymbol : ui.item.value;
                     addRecentSearch(db, key, ui.item);

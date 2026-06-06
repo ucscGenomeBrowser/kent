@@ -3384,7 +3384,7 @@ static boolean myVariantsRecognizer(struct customFactory *fac,	struct customPp *
 			     struct customTrack *track)
 /* Return TRUE if looks like we're handling a myVariants track */
 {
-return (sameType(type, "myVariants"));
+return isMyVariantsType(type);
 }
 
 struct myVariants *myVariantsFromRow(char **row, int rowSize)
@@ -3452,8 +3452,8 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     customFactoryCheckChromNameDb(ctDb, item->chrom, lf);
     slAddHead(&list, item);
     }
-track->dbTrackType = cloneString("myVariants");
-track->tdb->type = cloneString("myVariants");
+track->dbTrackType = cloneString(MYVARIANTS_TYPE);
+track->tdb->type = cloneString(MYVARIANTS_TYPE);
 if (isEmpty(track->tdb->html))
     {
     char descPath[PATH_LEN];
@@ -3479,7 +3479,7 @@ static struct customFactory myVariantsFactory =
 /* Factory for myVariants tracks */
     {
     NULL,
-    "myVariants",
+    MYVARIANTS_TYPE,
     myVariantsRecognizer,
     myVariantsLoader,
     };

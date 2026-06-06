@@ -1,35 +1,42 @@
 # Database configuration for varFreqsAll combined track
-# key	name	vcf	ac_field	af_field
+# key	name	vcf	ac_field	af_field	is_disease	disease_role
 # Use "." for fields that don't exist in the VCF
-AllOfUs	AllOfUs	/gbdb/hg38/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz	.	.
-SPARK	SPARK WES	/gbdb/hg38/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz	AC	AF
-SFARI_WGS	SFARI WGS	/gbdb/hg38/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF
-GenomeAsia	GenomeAsia SNVs	/gbdb/hg38/varFreqs/ga100k/ga100k.subst.vcf.gz	AC	AF
-GenomeAsiaIndel	GenomeAsia Indels	/gbdb/hg38/varFreqs/ga100k/ga100k.indels.vcf.gz	AC	AF
-NPM	NPM Singapore	/gbdb/hg38/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz	AC	AF
-KOVA	KOVA Korea	/gbdb/hg38/varFreqs/_kova/kova.v7.vcf.gz	AC	AF
-ToMMo	ToMMo Japan	/gbdb/hg38/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz	AC	AF
+# is_disease=1: cohort assembled to study a disease (autism, schizophrenia, rare disease).
+# disease_role: for a disease cohort with NO affected/unaffected population split, what is
+#   the whole cohort? "affected" (e.g. GA4K rare-disease probands) feeds the affected
+#   summary; blank means use the per-population phenotype tags in populations.tsv instead.
+# TOPMed is is_disease=0: it is an NHLBI population/biobank reference (used like gnomAD),
+#   not an affected-disease case cohort, and ships no affected/unaffected label.
+AllOfUs	AllOfUs	/gbdb/hg38/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz	.	.	0
+SPARK	SFARI SPARK WES	/gbdb/hg38/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz	AC	AF	1
+SFARI_WGS	SFARI SPARK WGS	/gbdb/hg38/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF	1
+GenomeAsia	GenomeAsia SNVs	/gbdb/hg38/varFreqs/ga100k/ga100k.subst.vcf.gz	AC	AF	0
+GenomeAsiaIndel	GenomeAsia Indels	/gbdb/hg38/varFreqs/ga100k/ga100k.indels.vcf.gz	AC	AF	0
+NPM	NPM Singapore	/gbdb/hg38/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz	AC	AF	0
+KOVA	KOVA Korea	/gbdb/hg38/varFreqs/_kova/kova.v7.vcf.gz	AC	AF	0
+ToMMo	ToMMo Japan	/gbdb/hg38/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz	AC	AF	0
 # IndiGen dropped: the IGIB IndiGenomes release ships only a VRT variation-type
 # bit per record (no AC, AF, or AN in INFO), so it cannot contribute counts to
 # the combined track. Re-add only if a future release exposes allele counts.
-FinnGen	FinnGen Finland	/gbdb/hg38/varFreqs/_finngen/finnge_R12_annotated_variants_v1.vcf.gz	AC	AF
-Saudi	Saudi	/gbdb/hg38/varFreqs/saudi/saudi.vcf.gz	AC	AF
-SweGen	SweGen Sweden	/gbdb/hg38/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz	AC	AF
-TOPMed	TOPMed	/gbdb/hg38/varFreqs/_topmed/topmed10.vcf.gz	AC	AF
-ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF
-ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB
-MGRB	MGRB Australia	/gbdb/hg38/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz	AC	.
-HRC	HRC	/gbdb/hg38/varFreqs/hrc/hrc.vcf.gz	AC	AF
-MexBB	Mexico Biobank	/gbdb/hg38/varFreqs/_mxb/mxb.freq.vcf.gz	AC	AF
-SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF
-HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF
-GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF
-SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF
-GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF
-CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	AF
-SVatalog	SVatalog 101 10XG SR	/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz	AC	AF
-Tishkoff180	Tishkoff 180 African WGS	/gbdb/hg38/varFreqs/_tishkoff/tishkoff180.vcf.gz	AC	AF
-WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF
-TPMI	TPMI Taiwan	/gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz	AC	AF
-ChinaMAP	China ChinaMAP	/gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz	AC	AF
-GenomeIndia	GenomeIndia 9.7k WGS	/gbdb/hg38/varFreqs/_genomeindia/genomeindia.vcf.gz	AC	AF
+FinnGen	FinnGen Finland	/gbdb/hg38/varFreqs/_finngen/finnge_R12_annotated_variants_v1.vcf.gz	AC	AF	0
+Saudi	Saudi	/gbdb/hg38/varFreqs/saudi/saudi.vcf.gz	AC	AF	0
+SweGen	SweGen Sweden	/gbdb/hg38/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz	AC	AF	0
+TOPMed	TOPMed	/gbdb/hg38/varFreqs/_topmed/topmed10.vcf.gz	AC	AF	0
+ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF	0
+ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB	0
+MGRB	MGRB Australia	/gbdb/hg38/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz	AC	.	0
+HRC	HRC	/gbdb/hg38/varFreqs/hrc/hrc.vcf.gz	AC	AF	0
+# MexBB and TPMI moved to the array-based track (databases_array.tsv): both are
+# genotyping-array cohorts and are kept out of the WGS/WES varFreqsAll track.
+SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF	0
+HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF	0
+GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF	1
+SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF	1
+GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF	1	affected
+CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	AF	0
+SVatalog	SVatalog 101 10XG SR	/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz	AC	AF	0
+Tishkoff180	Tishkoff 180 African WGS	/gbdb/hg38/varFreqs/_tishkoff/tishkoff180.vcf.gz	AC	AF	0
+WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF	0
+ChinaMAP	China ChinaMAP	/gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz	AC	AF	0
+GenomeIndia	GenomeIndia 9.7k WGS	/gbdb/hg38/varFreqs/_genomeindia/genomeindia.vcf.gz	AC	AF	0
+GoNL	GoNL Netherlands ~13x SR	/gbdb/hg38/varFreqs/gonl/gonl.vcf.gz	AC	AF	0

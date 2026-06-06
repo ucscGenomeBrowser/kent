@@ -646,39 +646,52 @@ var genomePos = {
 /////////////////////////////////////
 var myVariants = {
     createBedForm: function(dialogEle) {
-        // Simple fields shown by default (matches hgc edit form style)
-        const simpleFields = [
+        // Shared top fields (visible in all manual modes)
+        const commonTopFields = [
             { label: "Label", id: "name", type: "text", placeholder: "Optional item label",
-              info: "A short label for this annotation, displayed in the browser." },
+              info: "A short label for this annotation, displayed in the browser" },
             { label: "Color", id: "color", type: "text" },
-            { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
-              info: "Reference allele sequence at this position." },
-            { label: "Alt", id: "alt", type: "text", placeholder: "Optional alternate allele sequence",
-              info: "Alternate (variant) allele sequence." },
-            { label: "Mouseover", id: "mouseover", type: "text", placeholder: "Short text shown on hover",
-              info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed." },
-            { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
-              info: "Longer notes or comments about this annotation. Displayed on the details page." },
-            { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
-              info: "Group annotations by project. Projects with no annotations are automatically removed from the list." },
         ];
-
-        // Advanced fields hidden by default
-        const advancedFields = [
+        // SNV-only field (between commonTop and alt/sequence)
+        const snvOnlyFields = [
+            { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
+              info: "Reference allele sequence at this position" },
+        ];
+        // Alt/Sequence field: shown for SNV (label="Alt") and CNV (label="Sequence")
+        const altField = { label: "Alt", id: "alt", type: "text",
+            placeholder: "Optional alternate allele sequence",
+            info: "Alternate (variant) allele sequence" };
+        // Position fields: shown always for Transcript; collapsible for SNV/CNV
+        const positionFields = [
             { label: "Chromosome", id: "chrom", type: "text" },
             { label: "Start", id: "start", type: "number",
-              info: "1-based start position on the chromosome." },
+              info: "1-based start position on the chromosome" },
             { label: "End", id: "end", type: "number",
-              info: "1-based end position on the chromosome (inclusive)." },
+              info: "1-based end position on the chromosome (inclusive)" },
             { label: "Score", id: "score", type: "number",
-              info: "Score from 0-1000. Higher scores display darker." },
+              info: "Score from 0-1000. Higher scores display darker" },
             { label: "Strand", id: "strand", type: "text",
-              info: "Strand: + for forward, - for reverse, . for unknown." },
-            { label: "Thick Start", id: "thickStart", type: "number",
-              info: "Start of thickly drawn region (for display purposes)." },
-            { label: "Thick End", id: "thickEnd", type: "number",
-              info: "End of thickly drawn region (for display purposes)." },
+              info: "Strand: + for forward, - for reverse, . for unknown" },
         ];
+        // Transcript-only CDS fields (displayed as CDS Start/End; stored as thickStart/thickEnd)
+        const cdsFields = [
+            { label: "CDS Start", id: "thickStart", type: "number",
+              info: "Start of the coding region" },
+            { label: "CDS End", id: "thickEnd", type: "number",
+              info: "End of the coding region" },
+        ];
+        // Shared bottom fields
+        const commonBottomFields = [
+            { label: "Mouseover", id: "mouseover", type: "text", placeholder: "Short text shown on hover",
+              info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed" },
+            { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
+              info: "Longer notes or comments about this annotation. Displayed on the details page" },
+            { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
+              info: "Group annotations by project. Projects with no annotations are automatically removed from the list" },
+        ];
+        // CNV vocabulary, mirrored on the server in myVariantsTrack.c:validCnvTypes
+        const cnvTypeOptions = ["deletion", "duplication", "insertion", "inversion",
+                                "translocation", "complex", "breakend"];
 
         const form = document.createElement("form");
         form.className = "myVariants-form";
@@ -703,31 +716,20 @@ var myVariants = {
         quickInpLabel.style.marginRight = "8px";
         quickInpLabel.for = "hgvsInput";
 
-        // Helper to resize dialog based on current mode
         let resizeDialog = function() {
             var dialog = $("#myVariantsDialog");
             var hgvsVisible = document.getElementById("hgvsInputDiv").style.display !== "none";
-            var advancedVisible = document.getElementById("advancedFieldsDiv") &&
-                                  document.getElementById("advancedFieldsDiv").style.display !== "none";
-
             if (hgvsVisible) {
-                // Quick input mode - compact
                 dialog.dialog("option", "width", 580);
                 dialog.dialog("option", "height", "auto");
-            } else if (advancedVisible) {
-                // Manual mode with advanced fields - larger
-                dialog.dialog("option", "width", Math.min(700, window.innerWidth * 0.8));
-                dialog.dialog("option", "height", Math.min(600, window.innerHeight * 0.8));
+                dialog.dialog("option", "position", { my: "center", at: "center", of: window });
             } else {
-                // Manual mode without advanced fields - medium
-                dialog.dialog("option", "width", Math.min(650, window.innerWidth * 0.8));
-                dialog.dialog("option", "height", "auto");
+                dialog.dialog("option", "width", Math.min(1000, window.innerWidth * 0.9));
+                dialog.dialog("option", "height", Math.min(800, window.innerHeight * 0.9));
+                dialog.dialog("option", "position", { my: "top+30", at: "top", of: window });
             }
-            // Re-center the dialog after resize
-            dialog.dialog("option", "position", { my: "center", at: "center", of: window });
         };
 
-        // Helper to format and update the position summary shown in manual mode
         let updatePositionSummary = function() {
             let summaryText = document.getElementById("positionSummaryText");
             if (!summaryText) return;
@@ -739,19 +741,89 @@ var myVariants = {
                 let endVal = parseInt(end.value);
                 let startFmt = isNaN(startVal) ? start.value : startVal.toLocaleString();
                 let endFmt = isNaN(endVal) ? end.value : endVal.toLocaleString();
-                summaryText.innerHTML = "<b>Position:</b> " + chrom.value +
-                    ":" + startFmt + "-" + endFmt + " <span style='color:#888'>(from current view)</span>";
+                summaryText.textContent = chrom.value + ":" + startFmt + "-" + endFmt;
             }
+        };
+
+        // Switch the form into one of four modes and remember the choice so the
+        // next dialog open restarts in the same place.
+        let applyMode = function(mode) {
+            const isHgvs = mode === "hgvs";
+            const isTranscript = mode === "transcript";
+            const isSnv = mode === "snv";
+            const isCnv = mode === "cnv";
+
+            document.getElementById("hgvsInputDiv").style.display = isHgvs ? "" : "none";
+            document.getElementById("manualInputDiv").style.display = isHgvs ? "none" : "";
+            document.getElementById("hgvsManualToggle").textContent =
+                isHgvs ? "Or edit item fields manually" : "Back to quick input mode";
+
+            if (!isHgvs) {
+                document.getElementById("typeTranscript").checked = isTranscript;
+                document.getElementById("typeSnv").checked = isSnv;
+                document.getElementById("typeCnv").checked = isCnv;
+            }
+
+            document.getElementById("refWrapper").style.display = isSnv ? "" : "none";
+            document.getElementById("altWrapper").style.display = (isSnv || isCnv) ? "" : "none";
+            document.getElementById("altLabel").textContent = isCnv ? "Sequence" : "Alt";
+            document.getElementById("cnvTypeWrapper").style.display = isCnv ? "" : "none";
+
+            if (isTranscript) {
+                advancedDiv.style.display = "none";
+                cdsBlocksDiv.style.display = "none";
+                posWraps.forEach(function(w) { w.style.display = ""; });
+                cdsWraps.forEach(function(w) { w.style.display = ""; });
+                blocksSection.style.display = "";
+                const order = [
+                    typeRadioBar, posSummary,
+                    posWraps[0], posWraps[1], posWraps[2],
+                    nameWrap,
+                    posWraps[3], posWraps[4],
+                    cdsWraps[0], cdsWraps[1],
+                    colorWrap,
+                    mouseoverWrap, descriptionWrap, projectWrap,
+                    blocksSection,
+                    advancedDiv, cdsBlocksDiv,
+                    refWrapper, cnvTypeWrapper, altWrapper,
+                    customFieldsSection
+                ];
+                order.forEach(function(el) { manualInpDiv.appendChild(el); });
+            } else {
+                // Pack wrappers back into their collapsible containers.
+                posWraps.forEach(function(w) { advancedDiv.appendChild(w); });
+                cdsWraps.forEach(function(w) { cdsBlocksDiv.appendChild(w); });
+                cdsBlocksDiv.appendChild(blocksSection);
+                advancedDiv.style.display = "none";
+                cdsBlocksDiv.style.display = "none";
+                const order = [
+                    typeRadioBar, posSummary,
+                    advancedDiv,
+                    nameWrap, colorWrap,
+                    refWrapper, cnvTypeWrapper, altWrapper,
+                    cdsBlocksDiv,
+                    mouseoverWrap, descriptionWrap, projectWrap,
+                    customFieldsSection
+                ];
+                order.forEach(function(el) { manualInpDiv.appendChild(el); });
+            }
+            document.getElementById("positionSummaryDiv").style.display = isTranscript ? "none" : "";
+            if (posEditLink) posEditLink.textContent = "[edit]";
+
+            try { localStorage.setItem("myVariantsLastMode", mode); } catch (e) { /* private mode */ }
+            resizeDialog();
+        };
+
+        let currentType = function() {
+            if (document.getElementById("typeTranscript").checked) return "transcript";
+            if (document.getElementById("typeCnv").checked) return "cnv";
+            return "snv";
         };
 
         let toggleForm = function(event) {
             event.preventDefault();
-            let hgvsInputStyle = document.getElementById("hgvsInputDiv").style.display;
-            let manualInputStyle = document.getElementById("manualInputDiv").style.display;
-            document.getElementById("hgvsInputDiv").style.display = hgvsInputStyle === "none" ? "" : "none";
-            document.getElementById("manualInputDiv").style.display = manualInputStyle === "none" ? "" : "none";
-            document.getElementById("hgvsManualToggle").textContent = hgvsInputStyle === "none" ? "Or edit item fields manually" : "Back to quick input mode";
-            resizeDialog();
+            const inHgvs = document.getElementById("hgvsInputDiv").style.display !== "none";
+            applyMode(inHgvs ? currentType() : "hgvs");
         };
         let toggleContainer = document.createElement("p");
         let toggle = document.createElement("a");
@@ -770,13 +842,19 @@ var myVariants = {
         manualInpDiv.id = "manualInputDiv";
         manualInpDiv.style.display = "none";
 
-        // Position summary line at top of manual form
         let posSummary = document.createElement("div");
         posSummary.id = "positionSummaryDiv";
         posSummary.style.cssText = "margin-bottom:12px; padding:6px 10px; background:#f0f4f8; border:1px solid #d0d7de; border-radius:4px; font-size:13px;";
+        let posSummaryLabel = document.createElement("b");
+        posSummaryLabel.textContent = "Position: ";
+        posSummary.appendChild(posSummaryLabel);
         let posSummaryText = document.createElement("span");
         posSummaryText.id = "positionSummaryText";
         posSummary.appendChild(posSummaryText);
+        let posSummarySuffix = document.createElement("span");
+        posSummarySuffix.style.color = "#888";
+        posSummarySuffix.textContent = " (from current view)";
+        posSummary.appendChild(posSummarySuffix);
         let posEditLink = document.createElement("a");
         posEditLink.href = "#";
         posEditLink.textContent = "[edit]";
@@ -784,17 +862,18 @@ var myVariants = {
         posEditLink.addEventListener("click", function(event) {
             event.preventDefault();
             let advDiv = document.getElementById("advancedFieldsDiv");
-            let advToggle = document.getElementById("advancedFieldsToggle");
-            if (advDiv && advDiv.style.display === "none") {
+            if (!advDiv) return;
+            if (advDiv.style.display === "none") {
                 advDiv.style.display = "";
-                if (advToggle) advToggle.textContent = "Hide Advanced Fields \u25B2";
-                resizeDialog();
-            }
-            // Scroll to and focus the chrom field
-            let chromField = document.getElementById("chrom");
-            if (chromField) {
-                chromField.scrollIntoView({behavior: "smooth", block: "nearest"});
-                chromField.focus();
+                posEditLink.textContent = "[hide]";
+                let chromField = document.getElementById("chrom");
+                if (chromField) {
+                    chromField.scrollIntoView({behavior: "smooth", block: "nearest"});
+                    chromField.focus();
+                }
+            } else {
+                advDiv.style.display = "none";
+                posEditLink.textContent = "[edit]";
             }
         });
         posSummary.appendChild(posEditLink);
@@ -939,46 +1018,100 @@ var myVariants = {
             }
 
             // Add info icon
-            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no annotations are automatically removed from the list."));
+            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no annotations are automatically removed from the list"));
             container.appendChild(wrapper);
         };
 
-        // Create simple fields
-        let colorInput = null;
-        simpleFields.forEach(field => {
-            // Handle project field specially
-            if (field.id === "project") {
-                createProjectField(manualInpDiv);
-            } else {
-                let input = createField(field, manualInpDiv);
-                if (field.id === "color") {
-                    colorInput = input;
-                }
-            }
+        // Type radio bar: Transcript | Variant -> Short | CNV. Inserted at the very
+        // top of manualInpDiv (before the existing position summary).
+        let typeRadioBar = document.createElement("div");
+        typeRadioBar.id = "typeRadioBar";
+        typeRadioBar.style.cssText = "margin-bottom:12px; padding:8px 10px; background:#f7f7f7; border:1px solid #ddd; border-radius:4px;";
+        typeRadioBar.innerHTML =
+            "<div style='font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;'>Annotation type</div>" +
+            "<div>" +
+                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeTranscript' value='transcript'> Transcript</label>" +
+                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeSnv' value='snv' checked> Short variant (snv)</label>" +
+                "<label><input type='radio' name='myVariantsType' id='typeCnv' value='cnv'> Copy number variant (cnv)</label>" +
+            "</div>";
+        manualInpDiv.insertBefore(typeRadioBar, manualInpDiv.firstChild);
+
+        let onTypeRadioChange = function() {
+            applyMode(currentType());
+        };
+        // The form is not yet in the document, so query the local subtree.
+        typeRadioBar.querySelectorAll("input[type=radio]").forEach(function(r) {
+            r.addEventListener("change", onTypeRadioChange);
         });
 
-        // Toggle for advanced fields
-        let advancedToggleContainer = document.createElement("p");
-        let advancedToggle = document.createElement("a");
-        advancedToggle.href = "#";
-        advancedToggle.id = "advancedFieldsToggle";
-        advancedToggle.textContent = "Show Advanced Fields ▼";
-        advancedToggleContainer.appendChild(advancedToggle);
-        manualInpDiv.appendChild(advancedToggleContainer);
+        let colorInput = null;
+        let nameWrap, colorWrap;
+        commonTopFields.forEach(function(field) {
+            let input = createField(field, manualInpDiv);
+            if (field.id === "color") { colorInput = input; colorWrap = input.parentNode; }
+            else if (field.id === "name") { nameWrap = input.parentNode; }
+        });
 
-        // Advanced fields div (hidden by default)
+        // SNV-only ref input
+        let refWrapper = document.createElement("div");
+        refWrapper.id = "refWrapper";
+        createField(snvOnlyFields[0], refWrapper);
+        manualInpDiv.appendChild(refWrapper);
+
+        // CNV-only type select
+        let cnvTypeWrapper = document.createElement("div");
+        cnvTypeWrapper.id = "cnvTypeWrapper";
+        cnvTypeWrapper.style.marginBottom = "8px";
+        let cnvTypeLabel = document.createElement("label");
+        cnvTypeLabel.htmlFor = "cnvType";
+        cnvTypeLabel.textContent = "CNV type";
+        cnvTypeLabel.style.cssText = "display:inline-block; min-width:140px;";
+        let cnvTypeSelect = document.createElement("select");
+        cnvTypeSelect.id = "cnvType";
+        cnvTypeOptions.forEach(function(t) {
+            let opt = document.createElement("option");
+            opt.value = t;
+            opt.textContent = t;
+            cnvTypeSelect.appendChild(opt);
+        });
+        cnvTypeWrapper.appendChild(cnvTypeLabel);
+        cnvTypeWrapper.appendChild(cnvTypeSelect);
+        cnvTypeWrapper.appendChild(createInfoIcon("CNV vocabulary follows gnomAD"));
+        manualInpDiv.appendChild(cnvTypeWrapper);
+
+        // Alt / Sequence input (shared between SNV and CNV; label switches in applyMode)
+        let altWrapper = document.createElement("div");
+        altWrapper.id = "altWrapper";
+        altWrapper.style.marginBottom = "8px";
+        let altLabel = document.createElement("label");
+        altLabel.htmlFor = "alt";
+        altLabel.id = "altLabel";
+        altLabel.textContent = "Alt";
+        altLabel.style.cssText = "display:inline-block; min-width:140px;";
+        let altInput = document.createElement("input");
+        altInput.type = "text";
+        altInput.id = "alt";
+        altInput.placeholder = altField.placeholder;
+        altWrapper.appendChild(altLabel);
+        altWrapper.appendChild(altInput);
+        altWrapper.appendChild(createInfoIcon(altField.info));
+        manualInpDiv.appendChild(altWrapper);
+
         let advancedDiv = document.createElement("div");
         advancedDiv.id = "advancedFieldsDiv";
         advancedDiv.style.display = "none";
-        advancedDiv.style.marginLeft = "20px";
-        advancedDiv.style.borderLeft = "2px solid #ccc";
-        advancedDiv.style.paddingLeft = "10px";
+        let posWraps = positionFields.map(function(field) {
+            return createField(field, advancedDiv).parentNode;
+        });
+        manualInpDiv.appendChild(advancedDiv);
 
-        advancedFields.forEach(field => {
-            createField(field, advancedDiv);
+        let cdsBlocksDiv = document.createElement("div");
+        cdsBlocksDiv.id = "cdsBlocksDiv";
+        cdsBlocksDiv.style.display = "none";
+        let cdsWraps = cdsFields.map(function(field) {
+            return createField(field, cdsBlocksDiv).parentNode;
         });
 
-        // Blocks (BED12) section. Empty rows means a single full-span block.
         let blocksSection = document.createElement("div");
         blocksSection.id = "blocksSection";
         blocksSection.style.cssText = "margin-top:12px; padding-top:10px; border-top:1px solid #ddd;";
@@ -994,22 +1127,27 @@ var myVariants = {
         let blocksContainer = document.createElement("div");
         blocksContainer.id = "blocksContainer";
         blocksSection.appendChild(blocksContainer);
-        // Hidden inputs that the widget keeps in sync. createItem reads them.
-        let hCount = document.createElement("input");
-        hCount.type = "hidden";
-        hCount.id = "blockCount";
-        let hSizes = document.createElement("input");
-        hSizes.type = "hidden";
-        hSizes.id = "blockSizes";
-        let hStarts = document.createElement("input");
-        hStarts.type = "hidden";
-        hStarts.id = "chromStarts";
+        let hCount = document.createElement("input"); hCount.type = "hidden"; hCount.id = "blockCount";
+        let hSizes = document.createElement("input"); hSizes.type = "hidden"; hSizes.id = "blockSizes";
+        let hStarts = document.createElement("input"); hStarts.type = "hidden"; hStarts.id = "chromStarts";
         blocksSection.appendChild(hCount);
         blocksSection.appendChild(hSizes);
         blocksSection.appendChild(hStarts);
-        advancedDiv.appendChild(blocksSection);
+        cdsBlocksDiv.appendChild(blocksSection);
+        manualInpDiv.appendChild(cdsBlocksDiv);
 
-        // Custom fields section inside advanced fields
+        let mouseoverWrap, descriptionWrap, projectWrap;
+        commonBottomFields.forEach(function(field) {
+            if (field.id === "project") {
+                createProjectField(manualInpDiv);
+                projectWrap = manualInpDiv.lastElementChild;
+            } else {
+                let input = createField(field, manualInpDiv);
+                if (field.id === "mouseover") mouseoverWrap = input.parentNode;
+                else if (field.id === "description") descriptionWrap = input.parentNode;
+            }
+        });
+
         let customFieldsSection = document.createElement("div");
         customFieldsSection.id = "customFieldsSection";
         customFieldsSection.style.cssText = "margin-top:12px; padding-top:10px; border-top:1px solid #ddd;";
@@ -1023,10 +1161,10 @@ var myVariants = {
         customFieldsList.id = "customFieldsList";
         customFieldsSection.appendChild(customFieldsList);
 
-        // Reserved field names that cannot be used as custom field names
         let reservedNames = ["bin", "chrom", "chromStart", "chromEnd", "name", "score",
-            "strand", "thickStart", "thickEnd", "itemRgb", "description", "db", "ref",
-            "alt", "project", "mouseover", "id"];
+            "strand", "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
+            "chromStarts", "description", "db", "ref", "alt", "project", "mouseover",
+            "itemType", "cnvType", "id"];
 
         let validateFieldName = function(nameInput) {
             let name = nameInput.value.trim();
@@ -1114,7 +1252,6 @@ var myVariants = {
                     fetch(hideUrl, { method: "POST", credentials: "same-origin" })
                     .then(function() {
                         row.remove();
-                        resizeDialog();
                     })
                     .catch(function(err) {
                         alert("Error hiding field: " + err.message);
@@ -1130,14 +1267,11 @@ var myVariants = {
                 removeBtn.style.cssText = "border:none; background:none; color:#c00; font-size:18px; cursor:pointer; padding:0 4px; line-height:1;";
                 removeBtn.addEventListener("click", function() {
                     row.remove();
-                    resizeDialog();
                 });
                 row.appendChild(removeBtn);
             }
 
             customFieldsList.appendChild(row);
-            if (document.getElementById("myVariantsDialog"))
-                resizeDialog();
             if (!existingName)
                 nameInput.focus();
         };
@@ -1198,19 +1332,13 @@ var myVariants = {
             customFieldsSection.appendChild(hiddenSection);
         }
 
-        advancedDiv.appendChild(customFieldsSection);
+        manualInpDiv.appendChild(customFieldsSection);
 
-        manualInpDiv.appendChild(advancedDiv);
-
-        // Keep the position summary in sync when advanced fields change
+        // Keep the position summary in sync when position fields change
         ["chrom", "start", "end"].forEach(function(id) {
             let el = advancedDiv.querySelector("#" + id);
-            if (el) {
-                el.addEventListener("input", updatePositionSummary);
-            }
+            if (el) el.addEventListener("input", updatePositionSummary);
         });
-        // Initialize the position summary text using direct references
-        // (the form is not yet in the document, so getElementById won't work)
         let chromEl = advancedDiv.querySelector("#chrom");
         let startEl = advancedDiv.querySelector("#start");
         let endEl = advancedDiv.querySelector("#end");
@@ -1219,23 +1347,8 @@ var myVariants = {
             let endVal = parseInt(endEl.value);
             let startFmt = isNaN(startVal) ? startEl.value : startVal.toLocaleString();
             let endFmt = isNaN(endVal) ? endEl.value : endVal.toLocaleString();
-            posSummaryText.innerHTML = "<b>Position:</b> " + chromEl.value +
-                ":" + startFmt + "-" + endFmt + " <span style='color:#888'>(from current view)</span>";
+            posSummaryText.textContent = chromEl.value + ":" + startFmt + "-" + endFmt;
         }
-
-        // Toggle handler for advanced fields
-        advancedToggle.addEventListener("click", function(event) {
-            event.preventDefault();
-            let advDiv = document.getElementById("advancedFieldsDiv");
-            if (advDiv.style.display === "none") {
-                advDiv.style.display = "";
-                advancedToggle.textContent = "Hide Advanced Fields ▲";
-            } else {
-                advDiv.style.display = "none";
-                advancedToggle.textContent = "Show Advanced Fields ▼";
-            }
-            resizeDialog();
-        });
 
         form.appendChild(manualInpDiv);
 
@@ -1287,6 +1400,8 @@ var myVariants = {
             });
         }
 
+        // Stash applyMode on the form so init() can restore last-used mode.
+        form.applyMode = applyMode;
         return form;
     },
 
@@ -1303,7 +1418,14 @@ var myVariants = {
             if (!userIsLoggedIn) {
                 let msg = document.createElement("div");
                 msg.id = "logInMessage";
-                msg.innerHTML = "Please <a href=\"./hgSession\">log in</a> to use this feature.";
+                let href = (typeof myVariantsLoginUrl !== "undefined" && myVariantsLoginUrl)
+                           ? myVariantsLoginUrl : "./hgSession";
+                let link = document.createElement("a");
+                link.href = href;
+                link.textContent = "log in";
+                msg.appendChild(document.createTextNode("Please "));
+                msg.appendChild(link);
+                msg.appendChild(document.createTextNode(" to use this feature."));
                 dialog.appendChild(msg);
             } else {
                 let form = this.createBedForm(dialog);
@@ -1326,6 +1448,16 @@ var myVariants = {
                 closeOnEscape: true,
                 autoOpen: false,
                 buttons: dialogButtons,
+                open: function() {
+                    // Restore the last input mode the user picked (or default to HGVS).
+                    let form = document.getElementById("myVariants-form");
+                    if (form && form.applyMode) {
+                        let saved;
+                        try { saved = localStorage.getItem("myVariantsLastMode"); } catch (e) { saved = null; }
+                        const validModes = ["hgvs", "transcript", "snv", "cnv"];
+                        form.applyMode(validModes.indexOf(saved) >= 0 ? saved : "hgvs");
+                    }
+                },
                 close: function() {
                     // Reset block rows so the next open starts clean.
                     let form = document.getElementById("myVariants-form");
@@ -1335,22 +1467,24 @@ var myVariants = {
                 }
             });
         } else {
-            // got here after async image update, need to update the bed form coordinates
+            // Reopening after an async image update; refresh the position fields.
+            // The dialog's open callback re-applies the last-used mode.
             let form = document.getElementById("myVariants-form");
             let start = form.elements.start;
             let end = form.elements.end;
             let thickStart = form.elements.thickStart;
             let thickEnd = form.elements.thickEnd;
-            start.value = thickStart.value = hgTracks.winStart;
-            end.value = thickEnd.value = hgTracks.winEnd;
-            // Update the position summary to reflect new coordinates
+            if (start) start.value = hgTracks.winStart;
+            if (end) end.value = hgTracks.winEnd;
+            if (thickStart) thickStart.value = hgTracks.winStart;
+            if (thickEnd) thickEnd.value = hgTracks.winEnd;
             let summaryText = document.getElementById("positionSummaryText");
             if (summaryText) {
                 let chromEl = document.getElementById("chrom");
                 let startFmt = parseInt(hgTracks.winStart).toLocaleString();
                 let endFmt = parseInt(hgTracks.winEnd).toLocaleString();
-                summaryText.innerHTML = "<b>Position:</b> " + (chromEl ? chromEl.value : hgTracks.chromName) +
-                    ":" + startFmt + "-" + endFmt + " <span style='color:#888'>(from current view)</span>";
+                summaryText.textContent =
+                    (chromEl ? chromEl.value : hgTracks.chromName) + ":" + startFmt + "-" + endFmt;
             }
         }
 
@@ -1374,11 +1508,11 @@ var myVariants = {
     createItem: function(form) {
         // sends a post to hgTracks that adds a new item to the users custom track
         // and updates the image to include this track if it wasn't already there
-        // Strict block check now (server will re-check authoritatively).
-        // noBlocks means the user added a row but left every size empty;
-        // treat as no blocks so the server synthesizes a single full-span block.
+        // Block validation only matters for the transcript path; SNV/CNV don't carry blocks.
         let blockResult = {ok: true, noBlocks: true};
-        if (form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
+        const isTranscript = !!(document.getElementById("typeTranscript") &&
+                                document.getElementById("typeTranscript").checked);
+        if (isTranscript && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
             blockResult = form.blocksWidget.validate();
             if (!blockResult.ok) {
                 alert("Block error: " + blockResult.msg);
@@ -1389,8 +1523,11 @@ var myVariants = {
         if (form.elements.hgvsInput.value) {
             data.hgvsInput = form.elements.hgvsInput.value;
         } else {
+            const itemType = isTranscript ? "transcript"
+                : (document.getElementById("typeCnv").checked ? "cnv" : "snv");
             Array.from(form.elements).forEach( (ele) => {
                 if (ele.name === "myVariantsHgvsInput" || ele.name === "hgt_doJsCommand" ||
+                        ele.name === "myVariantsType" ||
                         (ele.tagName !== "INPUT" && ele.tagName !== "TEXTAREA")) {return;}
                 const key = ele.id;
                 let value = ele.value;
@@ -1403,6 +1540,10 @@ var myVariants = {
                 }
                 data[key] = value;
             });
+            data.itemType = itemType;
+            data.cnvType = (itemType === "cnv") ? document.getElementById("cnvType").value : "";
+            if (itemType === "cnv") data.ref = "";
+            else if (itemType === "transcript") { data.ref = ""; data.alt = ""; }
             // Collect custom fields from the dynamic rows
             let customRows = document.querySelectorAll("#customFieldsList .customFieldRow");
             if (customRows.length > 0) {
@@ -1419,11 +1560,11 @@ var myVariants = {
                 }
             }
             // Convert hidden block fields from CSV strings to arrays of ints.
-            // Omit when blockCount is 0, or when the widget reported noBlocks
-            // (rows added but all sizes left empty); server then synthesizes
-            // a single full-span block.
+            // Drop blocks entirely for SNV/CNV; server synthesizes a single full-span
+            // block. For transcript with noBlocks (rows added but every size empty),
+            // also drop and let the server synthesize.
             let bc = parseInt(data.blockCount, 10);
-            if (!bc || blockResult.noBlocks) {
+            if (!isTranscript || !bc || blockResult.noBlocks) {
                 delete data.blockCount;
                 delete data.blockSizes;
                 delete data.chromStarts;
@@ -2577,7 +2718,7 @@ this.each(function(){
                         chr.right = parseInt(loc[2]);
                 }
 
-                let title = this.getAttribute("originalTitle") || this.getAttribute("title");
+                let title = this.getAttribute("data-tooltip") || this.getAttribute("title");
                 var range = title.substr(title.lastIndexOf(':')+1);
                 var pos = range.split('-');
                 if (pos.length === 2) {
@@ -5370,7 +5511,28 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                if (item.type === "geneExon") {
+                                    // Complete "GENE exon N" — resolve via hgApi and navigate
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "../cgi-bin/hgApi",
+                                        data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                                              'cmd': 'geneExonToPos', 'symbol': item.symbol,
+                                              'num': item.num, 'offset': item.offset || 0 }),
+                                        trueSuccess: rightClick.handleZoomCodon,
+                                        success: catchErrorOrDispatch,
+                                        error: function() {
+                                            window.location.assign("../cgi-bin/hgSearch?search=" +
+                                                encodeURIComponent(item.value.trim()) + "&hgsid=" + getHgsid());
+                                        },
+                                        cache: false
+                                    });
+                                    return;
+                                } else if (item.type === "geneExonHint") {
+                                    // Partial — input is now "GENE exon "; keep focus so user types the number
+                                    $('#positionInput').focus();
+                                    return;
+                                } else if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
                                         item.id.startsWith("hgc")) {
                                     if (item.geneSymbol) {
                                         selectedGene = item.geneSymbol;
@@ -6136,6 +6298,31 @@ var imageV2 = {
             }
 
             // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            // "BRCA1 exon 5" or "BRCA1:e.5+2" — resolve via hgApi and navigate in place
+            var exonMatch = newPos.match(geneExonExp) || newPos.match(geneExonCoordExp);
+            if (exonMatch) {
+                var symbol, num, offset = 0;
+                var m = newPos.match(geneExonExp);
+                if (m) {
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                } else {
+                    m = newPos.match(geneExonCoordExp);
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                    if (m[3]) offset = parseInt(m[3], 10);
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgApi",
+                    data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                          'cmd': 'geneExonToPos', 'symbol': symbol, 'num': num, 'offset': offset }),
+                    trueSuccess: rightClick.handleZoomCodon,
+                    success: catchErrorOrDispatch,
+                    error: function() { window.location.assign("../cgi-bin/hgSearch?search=" + term + "&hgsid=" + getHgsid()); },
+                    cache: false
+                });
+                return false;
+            }
+
             var canonMatch = newPos.match(canonicalRangeExp);
             var gbrowserMatch = newPos.match(gbrowserRangeExp);
             var lengthMatch = newPos.match(lengthRangeExp);
@@ -7244,6 +7431,29 @@ $(document).ready(function()
             e.stopPropagation();
             myVariants.showDialog();
         });
+        // Add a "My Annotations" link to the My Data menu that opens the same
+        // dialog as the Add Annotation button below the image.
+        let myDataList = document.querySelector("#myData > ul");
+        if (myDataList) {
+            newListEl = document.createElement("li");
+            newLink = document.createElement("a");
+            newLink.setAttribute("id", "myAnnotationsMenuLink");
+            newLink.setAttribute("title", "Add an item to the My Annotations track");
+            newLink.textContent = "My Annotations";
+            newLink.href = "#";
+            newListEl.appendChild(newLink);
+            // Place it right after Custom Tracks; fall back to the top of the menu.
+            let customTracksItem = document.getElementById("customTracksMenuLink");
+            if (customTracksItem && customTracksItem.parentNode.parentNode === myDataList)
+                myDataList.insertBefore(newListEl, customTracksItem.parentNode.nextSibling);
+            else
+                myDataList.insertBefore(newListEl, myDataList.firstElementChild);
+            newLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                myVariants.showDialog();
+            });
+        }
     }
 
     if (typeof showMouseovers !== 'undefined' && showMouseovers) {

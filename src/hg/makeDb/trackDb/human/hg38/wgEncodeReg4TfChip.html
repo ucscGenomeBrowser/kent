@@ -1,23 +1,123 @@
 <h2>Description</h2>
 
-<p>This track displays genome-wide binding profiles of DNA-associated proteins from 2,502
-individual ENCODE ChIP-seq experiments. These proteins include transcription factors (TFs),
+<p>This track displays genome-wide binding profiles of DNA-associated proteins from 2,503
+individual ENCODE ChIP-seq experiments, which form the experimental basis for the TF rPeaks
+track. These proteins include transcription factors (TFs),
 RNA polymerase, and chromatin-associated proteins involved in transcriptional regulation.
 Sequence-specific TFs bind directly to DNA motifs via DNA-binding domains, while others
 interact indirectly through protein-protein interactions. ChIP-seq (chromatin
 immunoprecipitation followed by sequencing) enables genome-wide mapping of protein-DNA
-interactions. Each subtrack represents an individual ChIP-seq experiment, showing signal
-peaks that often correspond to protein binding sites in specific biosamples. These datasets
-form the experimental basis for the TF rPeaks track. Additional ChIP-seq datasets can be
-explored through the
+interactions. Each ChIP-seq experiment is shown as two subtracks:</p>
+
+<ul>
+<li><b>Signal</b> - a bigWig track of the experiment's signal</li>
+<li><b>Peak</b> - a bigBed track of the experiment's peaks, colored in grayscale by ChIP-seq signal (darker = higher signal, score 0 to 1,000):
+<table style="margin-left: 30px;">
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid #6678B1;">Color</th>
+    <th style="border-bottom: 2px solid #6678B1;">Score</th>
+  </tr>
+  </thead>
+  <tr>
+    <th bgcolor="#000000"></th>
+    <th align="left">1000 (highest signal)</th>
+  </tr>
+  <tr>
+    <th bgcolor="#393939"></th>
+    <th align="left">750</th>
+  </tr>
+  <tr>
+    <th bgcolor="#717171"></th>
+    <th align="left">500</th>
+  </tr>
+  <tr>
+    <th bgcolor="#AAAAAA"></th>
+    <th align="left">250</th>
+  </tr>
+  <tr>
+    <th bgcolor="#E3E3E3"></th>
+    <th align="left">1 (lowest signal)</th>
+  </tr>
+</table>
+</li>
+</ul>
+
+<p>Peaks often correspond to protein binding sites in specific biosamples. Additional
+ChIP-seq datasets can be explored through the
 <a target="_blank" href="https://www.encodeproject.org/">ENCODE portal</a>.</p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>Click a specific protein target and organ/tissue combination to view available datasets.
-Subtracks can be further filtered by the type and life stage of the biosample. Each peak
-is displayed as a bigBed item, shaded in grayscale with intensity reflecting the ChIP-seq
-signal strength.</p>
+Subtracks can be further filtered by TF, Organ, Biosample Type, Life Stage, and Data
+Type (Signal or Peak).</p>
+
+<p>Signal subtracks are colored by the organ or tissue of origin, as shown below.
+Peak subtracks use the grayscale shading by ChIP-seq signal described above and are
+not colored by organ.</p>
+<table cellspacing="0" cellpadding="4" style="margin-top: 0.5em; border-collapse: collapse;">
+  <tr>
+    <td style="background-color:rgb(255,119,39); padding:4px 12px; border:1px solid #666;">adipose</td>
+    <td style="background-color:rgb(90,179,68); padding:4px 12px; border:1px solid #666;">adrenal gland</td>
+    <td style="background-color:rgb(254,75,173); padding:4px 12px; border:1px solid #666;">blood</td>
+    <td style="background-color:rgb(255,37,41); padding:4px 12px; border:1px solid #666;">blood vessel</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(121,147,150); padding:4px 12px; border:1px solid #666;">bone</td>
+    <td style="background-color:rgb(2,199,185); padding:4px 12px; border:1px solid #666;">bone marrow</td>
+    <td style="background-color:rgb(155,155,18); padding:4px 12px; border:1px solid #666;">brain</td>
+    <td style="background-color:rgb(65,171,173); padding:4px 12px; border:1px solid #666;">breast</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(138,135,169); padding:4px 12px; border:1px solid #666;">connective tissue</td>
+    <td style="background-color:rgb(118,158,101); padding:4px 12px; border:1px solid #666;">embryo</td>
+    <td style="background-color:rgb(221,126,107); padding:4px 12px; border:1px solid #666;">epithelium</td>
+    <td style="background-color:rgb(159,131,100); padding:4px 12px; border:1px solid #666;">esophagus</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(163,127,144); padding:4px 12px; border:1px solid #666;">eye</td>
+    <td style="background-color:rgb(116,50,165); padding:4px 12px; border:1px solid #666;">heart</td>
+    <td style="background-color:rgb(92,161,153); padding:4px 12px; border:1px solid #666;">kidney</td>
+    <td style="background-color:rgb(86,86,36); padding:4px 12px; border:1px solid #666;">large intestine</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(137,152,82); padding:4px 12px; border:1px solid #666;">liver</td>
+    <td style="background-color:rgb(130,163,45); padding:4px 12px; border:1px solid #666;">lung</td>
+    <td style="background-color:rgb(6,218,147); padding:4px 12px; border:1px solid #666;">lymphoid tissue</td>
+    <td style="background-color:rgb(130,141,158); padding:4px 12px; border:1px solid #666;">mouth</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(137,135,170); padding:4px 12px; border:1px solid #666;">muscle</td>
+    <td style="background-color:rgb(160,156,0); padding:4px 12px; border:1px solid #666;">nerve</td>
+    <td style="background-color:rgb(161,126,151); padding:4px 12px; border:1px solid #666;">ovary</td>
+    <td style="background-color:rgb(175,100,41); padding:4px 12px; border:1px solid #666;">pancreas</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(0,176,240); padding:4px 12px; border:1px solid #666;">parathyroid gland</td>
+    <td style="background-color:rgb(20,74,159); padding:4px 12px; border:1px solid #666;">penis</td>
+    <td style="background-color:rgb(104,171,71); padding:4px 12px; border:1px solid #666;">placenta</td>
+    <td style="background-color:rgb(140,140,140); padding:4px 12px; border:1px solid #666;">prostate</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(127,133,209); padding:4px 12px; border:1px solid #666;">skin</td>
+    <td style="background-color:rgb(98,98,41); padding:4px 12px; border:1px solid #666;">small intestine</td>
+    <td style="background-color:rgb(130,141,158); padding:4px 12px; border:1px solid #666;">spinal cord</td>
+    <td style="background-color:rgb(136,157,97); padding:4px 12px; border:1px solid #666;">spleen</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(145,144,99); padding:4px 12px; border:1px solid #666;">stomach</td>
+    <td style="background-color:rgb(139,140,140); padding:4px 12px; border:1px solid #666;">testis</td>
+    <td style="background-color:rgb(27,119,58); padding:4px 12px; border:1px solid #666;">thyroid</td>
+    <td style="background-color:rgb(186,111,165); padding:4px 12px; border:1px solid #666;">uterus</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(255,101,174); padding:4px 12px; border:1px solid #666;">vagina</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 <h2>Data Access</h2>
 <p>
@@ -46,8 +146,8 @@ The tool can also be used to obtain features confined to a given range, e.g.,
 
 <h2>Credits</h2>
 
-<p>Data were generated by the ENCODE Consortium. We thank the production labs for generating
-the data: Drs. Bradley Bernstein (Broad), John Stamatoyannopoulos (UW),
+<p>Data were generated by the ENCODE Consortium through the following production labs:
+Drs. Bradley Bernstein (Broad), John Stamatoyannopoulos (UW),
 Kevin Struhl (HMS), Kevin White (UChicago), Michael Snyder (Stanford),
 Peggy Farnham (USC), Richard Myers (HAIB), Sherman Weissman (Yale),
 Tim Reddy (Duke), Vishwanath Iyer (UTA), and Xiang-Dong Fu (UCSD).</p>

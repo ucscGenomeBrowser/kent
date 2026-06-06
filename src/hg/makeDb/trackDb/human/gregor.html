@@ -3,18 +3,18 @@
 The <a href="https://gregorconsortium.org/" target="_blank">GREGoR Consortium</a>
 (Genomics Research to Elucidate the Genetics of Rare diseases) is a
 National Human Genome Research Institute (NHGRI)-funded research consortium
-focused on discovering the genetic basis of currently unexplained rare diseases.
-GREGoR brings together multiple research centers and a data coordinating center
-to apply advanced genomic technologies to rare disease cohorts.
+that works to identify the genetic basis of currently unexplained rare diseases.
+GREGoR is a collaboration between multiple research centers and a data coordinating center
+that apply genomic technologies to rare disease cohorts.
 </p>
 
 <p>
 This track shows allele frequencies from the GREGoR Release 4 (R04, October 2025)
 joint variant callset of a subset of the 10,683 participants across
-4,366 families. The joint callset includes only the 8,161 short-read whole-genome sequencing (WGS) 
-samples, or rather a subset of these, as the GREGoR site does not specify how many samples exactly are part
-of the joint callset. The callset does not include any of the 2,629 whole-exome sequencing (WES) samples. 
-GREGoR also provides some long-read WGS, RNA-seq, and ATAC-seq, but these were also not used for the joint callset.
+4,366 families. The joint callset includes only the 8,161 short-read whole-genome sequencing (WGS)
+samples, or a subset of these. The GREGoR site does not specify how many samples exactly are part
+of the joint callset. The callset does not include any of the 2,629 whole-exome sequencing (WES) samples.
+GREGoR also provides some long-read WGS, RNA-seq, and ATAC-seq, but these were not used for the joint callset either.
 The VCF shown here contains variant calls with VEP consequence annotations.
 The INFO fields include allele count (AC), allele frequency (AF), allele number (AN),
 and counts broken down by affected status (AC_AFFECTED, AC_UNAFFECTED, AC_UNKNOWN).
@@ -44,20 +44,20 @@ the <a href="https://gregorconsortium.org/data" target="_blank">GREGoR data page
 </p>
 
 <h2>Methods</h2>
-<p>The sample processing methods of the GREGoR project depend on the sequencing center, see the Methods document below for details. 
-As for data processing, the GREGoR R04 joint callset for short-read whole genome sequencing (srWGS) was generated
+<p>The sample processing methods of the GREGoR project depend on the sequencing center, see the Methods document below for details.
+The GREGoR R04 joint callset for short-read whole genome sequencing (srWGS) was generated
 by the GREGoR Data Coordinating Center (DCC) through a two-stage harmonization and joint
 genotyping pipeline. Raw srWGS data from GREGoR Consortium Research Centers were uniformly
-reprocessed using the Whole Genome Germline Single Sample WARP pipeline in DRAGEN-GATK
-mode (v3.1.6), comprising alignment to the GRCh38 reference genome
-(GCA_000001405.15_GRCh38_no_alt_analysis_set) with the DRAGMAP aligner, duplicate marking
-with Picard v2.26.10, and single-sample variant calling with GATK HaplotypeCaller using the
-DragSTR model with hard filtering, producing per-sample gVCFs. Joint variant calling across all
-harmonized samples was subsequently performed using the Genomic Variant Store (GVS), a
+reprocessed with the Whole Genome Germline Single Sample WARP pipeline in DRAGEN-GATK
+mode (v3.1.6). This pipeline aligns reads to the GRCh38 reference genome
+(GCA_000001405.15_GRCh38_no_alt_analysis_set) with the DRAGMAP aligner, marks duplicates
+with Picard v2.26.10, and performs single-sample variant calling with GATK HaplotypeCaller using the
+DragSTR model with hard filtering. The output is per-sample gVCFs. Joint variant calling across all
+harmonized samples was then performed with the Genomic Variant Store (GVS), a
 scalable cloud-native joint genotyping pipeline developed for large cohort analysis in which
 variants are ingested into a query-optimized store and rendered to a multi-sample variant file
 format. The resulting joint callset was functionally annotated with Ensembl Variant Effect Predictor (VEP) v112.
-Full methods, including per-site library preparation and bioinformatics pipelines for independently
+Full methods, with per-site library preparation and bioinformatics pipelines for independently
 processed samples, are available in the
 <a href="https://gregorconsortium.org/sites/default/files/2025/GREGoR%20R04%20Methods.pdf"
    target="_blank">GREGoR R04 Methods document</a>.

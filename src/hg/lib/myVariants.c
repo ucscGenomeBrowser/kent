@@ -12,6 +12,53 @@
 #include "obscure.h"
 #include "wikiLink.h"
 
+char *myVariantsItemTypes[] = { "transcript", "snv", "cnv" };
+int myVariantsNumItemTypes = ArraySize(myVariantsItemTypes);
+
+char *myVariantsCnvTypes[] = {
+    "deletion", "duplication", "insertion", "inversion",
+    "translocation", "complex", "breakend"
+};
+int myVariantsNumCnvTypes = ArraySize(myVariantsCnvTypes);
+
+char *myVariantsCanonicalItemType(char *s)
+/* Return the matching canonical entry from myVariantsItemTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
+{
+if (isEmpty(s))
+    return NULL;
+int ix = stringArrayIx(s, myVariantsItemTypes, myVariantsNumItemTypes);
+return ix < 0 ? NULL : myVariantsItemTypes[ix];
+}
+
+char *myVariantsCanonicalCnvType(char *s)
+/* Return the matching canonical entry from myVariantsCnvTypes (case-insensitive),
+ * or NULL if s is empty or not in the allow-list. */
+{
+if (isEmpty(s))
+    return NULL;
+int ix = stringArrayIx(s, myVariantsCnvTypes, myVariantsNumCnvTypes);
+return ix < 0 ? NULL : myVariantsCnvTypes[ix];
+}
+
+boolean isMyVariantsType(char *type)
+/* TRUE if type names the myVariants custom-track type. NULL-safe. */
+{
+return sameOk(type, MYVARIANTS_TYPE);
+}
+
+boolean isMyVariantsTrack(char *trackName)
+/* TRUE if trackName is a myVariants custom track (own or shared). NULL-safe. */
+{
+return trackName != NULL && startsWith(MYVARIANTS_TRACK_PREFIX, trackName);
+}
+
+boolean isMyVariantsSharedTrack(char *trackName)
+/* TRUE if trackName is a myVariants shared custom track. NULL-safe. */
+{
+return trackName != NULL && startsWith(MYVARIANTS_SHARED_TRACK_PREFIX, trackName);
+}
+
 void myVariantsStaticLoad(char **row, struct myVariants *ret)
 /* Load a row from myVariants table into ret. The contents of ret will be replaced at the next call to this function. */
 {
@@ -37,7 +84,9 @@ ret->ref = row[15];
 ret->alt = row[16];
 ret->project = row[17];
 ret->mouseover = row[18];
-ret->id = sqlUnsigned(row[19]);
+ret->itemType = row[19];
+ret->cnvType = row[20];
+ret->id = sqlUnsigned(row[21]);
 }
 
 struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query)
@@ -76,7 +125,7 @@ void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char 
  * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover", tableName);
+sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover,itemType,cnvType", tableName);
 
 /* Append custom field column names */
 struct slPair *cf;
@@ -86,10 +135,12 @@ for (cf = el->customFields; cf != NULL; cf = cf->next)
 char *insertName = isEmpty(el->name) ? "" : el->name;
 char *blockSizesStr = commaIntList(el->blockSizes, el->blockCount);
 char *chromStartsStr = commaIntList(el->chromStarts, el->blockCount);
-sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s'",
+sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'",
     el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
     el->thickStart, el->thickEnd, el->itemRgb, el->blockCount, blockSizesStr, chromStartsStr,
-    el->description, el->db, el->ref, el->alt, el->project, el->mouseover);
+    el->description, el->db, el->ref, el->alt, el->project, el->mouseover,
+    isEmpty(el->itemType) ? "snv" : el->itemType,
+    isEmpty(el->cnvType) ? "" : el->cnvType);
 freeMem(blockSizesStr);
 freeMem(chromStartsStr);
 
@@ -143,7 +194,9 @@ ret->ref = cloneString(row[15]);
 ret->alt = cloneString(row[16]);
 ret->project = cloneString(row[17]);
 ret->mouseover = cloneString(row[18]);
-ret->id = sqlUnsigned(row[19]);
+ret->itemType = cloneString(row[19]);
+ret->cnvType = cloneString(row[20]);
+ret->id = sqlUnsigned(row[21]);
 return ret;
 }
 
@@ -222,6 +275,8 @@ ret->ref = sqlStringComma(&s);
 ret->alt = sqlStringComma(&s);
 ret->project = sqlStringComma(&s);
 ret->mouseover = sqlStringComma(&s);
+ret->itemType = sqlStringComma(&s);
+ret->cnvType = sqlStringComma(&s);
 ret->id = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -242,6 +297,8 @@ freeMem(el->ref);
 freeMem(el->alt);
 freeMem(el->project);
 freeMem(el->mouseover);
+freeMem(el->itemType);
+freeMem(el->cnvType);
 slPairFreeValsAndList(&el->customFields);
 freez(pEl);
 }
@@ -335,6 +392,14 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mouseover);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->itemType ? el->itemType : "");
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->cnvType ? el->cnvType : "");
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 fprintf(f, "%u", el->id);
 fputc(lastSep,f);
 }
@@ -415,7 +480,7 @@ char *myVariantsGetTableName(char *userName)
 if (!userName)
     return NULL;
 char *encoded = encodeUserNameForIdentifier(userName);
-struct dyString *tableName = dyStringCreate("myVariants_%s", encoded);
+struct dyString *tableName = dyStringCreate(MYVARIANTS_TRACK_PREFIX "%s", encoded);
 freeMem(encoded);
 return dyStringCannibalize(&tableName);
 }
@@ -460,9 +525,9 @@ struct myVariantsShare *myVariantsResolveSharedTrack(char *trackName, struct car
  * (not the cart-supplied values) for authorization or scoping decisions.
  * Caller frees with myVariantsShareFree. */
 {
-if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
     return NULL;
-char *token = trackName + strlen("myVariants_shared_");
+char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
 char cartVar[256];
 safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
 /* The cart-cookie presence gate is belt-and-suspenders: it ensures the share
@@ -480,14 +545,10 @@ struct myVariantsShare *share = myVariantsGetShareByToken(conn, token);
 hDisconnectCentral(&conn);
 if (share == NULL)
     return NULL;
-if (isNotEmpty(share->targetUser))
+if (!myVariantsShareAllowsUser(share, getUserName()))
     {
-    char *userName = getUserName();
-    if (isEmpty(userName) || !sameString(share->targetUser, userName))
-        {
-        myVariantsShareFree(&share);
-        return NULL;
-        }
+    myVariantsShareFree(&share);
+    return NULL;
     }
 return share;
 }
@@ -501,7 +562,7 @@ char *myVariantsResolveDbTableForCustomTrack(char *trackName, struct cart *cart)
 {
 if (isEmpty(trackName))
     return NULL;
-if (startsWith("myVariants_shared_", trackName))
+if (isMyVariantsSharedTrack(trackName))
     {
     struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
     if (share == NULL)
@@ -510,7 +571,7 @@ if (startsWith("myVariants_shared_", trackName))
     myVariantsShareFree(&share);
     return dbTable;
     }
-if (startsWith("myVariants_", trackName))
+if (isMyVariantsTrack(trackName))
     {
     /* trackName is the SQL-identifier-encoded form "myVariants_<encoded>".
      * Resolve via the current logged-in user (an own track is only viewable
@@ -540,7 +601,7 @@ char *myVariantsSharedScopeWhere(char *trackName, struct cart *cart)
 static struct hash *cache = NULL;
 if (cache == NULL)
     cache = hashNew(0);
-if (isEmpty(trackName) || !startsWith("myVariants_shared_", trackName))
+if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
     return NULL;
 char *cached = hashFindVal(cache, trackName);
 if (cached != NULL)
@@ -640,6 +701,8 @@ else
             "    alt varchar(255) not null,\n"
             "    project varchar(255) not null,\n"
             "    mouseover varchar(255) not null,\n"
+            "    itemType varchar(16) not null default 'snv',\n"
+            "    cnvType varchar(32) not null default '',\n"
             "    id int auto_increment,\n"
             "    PRIMARY KEY(id),\n"
             "    INDEX(chrom(16),bin),\n"
@@ -736,7 +799,7 @@ else
     {
     char base[PATH_LEN];
     char *hostPort = cgiServerNamePort();
-    safef(base, sizeof base, "myVariants_%s_%s_%s",
+    safef(base, sizeof base, MYVARIANTS_TRACK_PREFIX "%s_%s_%s",
         hostPort ? hostPort : "localhost", targetDb,
         isNotEmpty(encodedTableName) ? encodedTableName : "shared");
     for (char *p = base; *p; p++) if (*p == '/') *p = '_';
@@ -805,7 +868,7 @@ if (cart != NULL)
         {
         char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
         char trackName[512];
-        safef(trackName, sizeof(trackName), "myVariants_shared_%s", token);
+        safef(trackName, sizeof(trackName), MYVARIANTS_SHARED_TRACK_PREFIX "%s", token);
         struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
         if (share == NULL)
             continue;
@@ -846,7 +909,8 @@ if (cart != NULL)
         else
             safef(shortLabel, sizeof(shortLabel), "%s's %s", owner, projectLabel);
         dyStringPrintf(sharedLines,
-            "track name=\"myVariants_shared_%s\" type=\"myVariants\" itemRgb=\"on\""
+            "track name=\"" MYVARIANTS_SHARED_TRACK_PREFIX "%s\""
+            " type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
             " visibility=\"pack\""
             " shortLabel=\"%s\""
             " longLabel=\"Shared annotations: %s (from %s)\"\n",
@@ -915,7 +979,7 @@ if (hasOwnItems)
 
 FILE *f = mustOpen(tn.forCgi, "w");
 if (hasOwnItems)
-    fprintf(f, "track name=\"%s\" type=\"myVariants\" itemRgb=\"on\""
+    fprintf(f, "track name=\"%s\" type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
         " visibility=\"pack\" shortLabel=\"%s\""
         " longLabel=\"%s\"\n", encodedTableName, shortLabel, longLabel);
 if (dyStringLen(sharedLines) > 0)
@@ -941,7 +1005,7 @@ boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
 if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
     return FALSE;
 char *trackName = ct->tdb->track;
-if (!startsWith("myVariants_", trackName))
+if (!isMyVariantsTrack(trackName))
     return FALSE;
 
 /* Cleanup common to any myVariants removal: drop the track's visibility var
@@ -952,10 +1016,10 @@ char mvVar[256];
 safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
 cartRemove(cart, mvVar);
 
-if (startsWith("myVariants_shared_", trackName))
+if (isMyVariantsSharedTrack(trackName))
     {
     /* Drop the share-acceptance var so the share isn't re-imported. */
-    char *token = trackName + strlen("myVariants_shared_");
+    char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
     char shareCartVar[256];
     safef(shareCartVar, sizeof shareCartVar,
         MYVAR_SHARED_CART_PREFIX "%s", token);
@@ -1007,7 +1071,7 @@ static const char *builtInColumns[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt", "project",
-    "mouseover", "id",
+    "mouseover", "itemType", "cnvType", "id",
 };
 
 static boolean isBuiltInColumn(char *name)

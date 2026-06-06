@@ -28,7 +28,7 @@ static char *reservedFieldNames[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt", "project",
-    "mouseover", "id", NULL
+    "mouseover", "itemType", "cnvType", "id", NULL
 };
 
 static char *truncateSeq(char *seq, int maxLen)
@@ -346,6 +346,8 @@ if (hgvsJson)
                 item->description = cloneString(hgp->singlePos->description);
                 item->project = cloneString("");
                 item->mouseover = cloneString("");
+                item->itemType = cloneString("snv");
+                item->cnvType = cloneString("");
                 }
             }
         else
@@ -369,6 +371,8 @@ if (hgvsJson)
                 item->description = cloneString(pos->description ? pos->description : "");
                 item->project = cloneString("");
                 item->mouseover = cloneString("");
+                item->itemType = cloneString("snv");
+                item->cnvType = cloneString("");
                 }
             else if (hgpFind != NULL && hgpFind->posCount > 1)
                 {
@@ -399,6 +403,17 @@ else
     char *alt = jsonOptionalStringField(json, "alt", "");
     char *project = jsonOptionalStringField(json, "project", "");
     char *mouseover = jsonOptionalStringField(json, "mouseover", "");
+    char *itemType = myVariantsCanonicalItemType(
+        jsonOptionalStringField(json, "itemType", "snv"));
+    if (itemType == NULL)
+        errAbort("invalid itemType");
+    char *cnvType = "";
+    if (sameString(itemType, "cnv"))
+        {
+        cnvType = myVariantsCanonicalCnvType(jsonOptionalStringField(json, "cnvType", ""));
+        if (cnvType == NULL)
+            errAbort("invalid cnvType");
+        }
     unsigned color;
     htmlColorForCode(colorCode, &color);
 
@@ -406,8 +421,18 @@ else
     item->chrom = cloneString(chrom);
     item->chromStart = chromStart;
     item->chromEnd = chromEnd;
-    item->thickStart = thickStart;
-    item->thickEnd = thickEnd;
+    /* SNV/CNV items don't carry a thick range or BED12 blocks; force defaults
+     * so a stale value from a view toggle in the client can't leak through. */
+    if (sameString(itemType, "snv") || sameString(itemType, "cnv"))
+        {
+        item->thickStart = chromStart;
+        item->thickEnd = chromEnd;
+        }
+    else
+        {
+        item->thickStart = thickStart;
+        item->thickEnd = thickEnd;
+        }
     if (isEmpty(name))
         {
         item->name = synthesizeItemName(ref, alt, hgvsctUndefined, NULL);
@@ -420,11 +445,27 @@ else
     item->strand[0] = strand[0];
     item->itemRgb = color;
     item->description = cloneString(description);
-    item->ref = cloneString(ref);
-    item->alt = cloneString(alt);
+    if (sameString(itemType, "transcript"))
+        {
+        item->ref = cloneString("");
+        item->alt = cloneString("");
+        }
+    else if (sameString(itemType, "cnv"))
+        {
+        /* CNV stores the inserted/duplicated sequence in alt; ref is unused. */
+        item->ref = cloneString("");
+        item->alt = cloneString(alt);
+        }
+    else
+        {
+        item->ref = cloneString(ref);
+        item->alt = cloneString(alt);
+        }
     item->db = database;
     item->project = cloneString(project);
     item->mouseover = cloneString(mouseover);
+    item->itemType = cloneString(itemType);
+    item->cnvType = cloneString(cnvType);
     }
 
 if (!item)
@@ -510,6 +551,16 @@ if (extraFieldsJson && extraFieldsJson->type == jsonList)
     slReverse(&item->customFields);
     }
 
+/* Store the assembly's native sequence name so items match the chromName the
+ * display query uses (GenArk hubs key on the accession, e.g. NC_044602.1, not the
+ * chr1 display alias). */
+if (isNotEmpty(item->chrom))
+    {
+    char *nativeChrom = hgOfficialChromName(item->db, item->chrom);
+    if (isNotEmpty(nativeChrom))
+        item->chrom = nativeChrom;
+    }
+
 /* Add item to database. */
 myVariantsSaveToDb(conn, item, tableName, 0);
 
@@ -567,6 +618,12 @@ if (endsWith(varName, "itemRgb"))
         cartRemove(cart, varName);
         }
     return;
+    }
+if (sameString(fieldName, "cnvType"))
+    {
+    if (isNotEmpty(newVal) && myVariantsCanonicalCnvType(newVal) == NULL)
+        errAbort("invalid cnvType");
+    newVal = isEmpty(newVal) ? "" : myVariantsCanonicalCnvType(newVal);
     }
 struct dyString *sql = sqlDyStringCreate("update %s set %s='%s' where id=%d",
     tableName, fieldName, newVal, id);
@@ -721,11 +778,14 @@ if (idString != NULL)
     updateTextField(trackName, conn, tableName, "itemRgb", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromStart", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "chromEnd", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "thickStart", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "thickEnd", id, NULL, NULL);
     updateBlocksFields(trackName, conn, tableName, id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "ref", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "alt", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "project", id, NULL, NULL);
     updateTextField(trackName, conn, tableName, "mouseover", id, NULL, NULL);
+    updateTextField(trackName, conn, tableName, "cnvType", id, NULL, NULL);
     /* Update any custom fields */
         {
         char *editUserName = getUserName();
@@ -822,7 +882,7 @@ void myVariantsLoadItems(struct track *track)
  * where you drag to create an item. */
 {
 struct linkedFeatures *lfList = NULL;
-boolean isShared = startsWith("myVariants_shared_", track->track);
+boolean isShared = isMyVariantsSharedTrack(track->track);
 
 if (isShared)
     {
@@ -973,12 +1033,65 @@ jsonWriteString(jw, "createdAt", share->createdAt);
 jsonWriteObjectEnd(jw);
 }
 
+static char *cleanShareTargets(struct sqlConnection *conn, char *raw)
+/* Parse a comma-separated recipient string into a normalized comma-no-space
+ * list: trim each name, drop empties, de-dup, and verify each exists in
+ * gbMembers. Calls apiError(400,...) (does not return) on an unknown name or
+ * an overlong list. Returns a string the caller must freeMem, or NULL for an
+ * empty list (anyone with link). */
+{
+if (isEmpty(raw))
+    return NULL;
+struct slName *names = slNameListFromComma(raw);
+struct slName *name;
+struct slName *cleanList = NULL;
+for (name = names; name != NULL; name = name->next)
+    {
+    trimSpaces(name->name);
+    if (isNotEmpty(name->name))
+        slNameStore(&cleanList, name->name);
+    }
+slNameFreeList(&names);
+if (cleanList == NULL)
+    return NULL;
+slReverse(&cleanList);  /* slNameStore prepends; restore input order */
+
+struct dyString *dy = dyStringNew(256);
+struct slName *c;
+for (c = cleanList; c != NULL; c = c->next)
+    {
+    char gbq[512];
+    sqlSafef(gbq, sizeof(gbq),
+        "select count(*) from gbMembers where userName = BINARY '%s'", c->name);
+    if (sqlQuickNum(conn, gbq) == 0)
+        {
+        char msg[512];
+        safef(msg, sizeof(msg),
+            "user '%s' not found (the username is case-sensitive) - check the"
+            " spelling, or leave the field blank to make an 'anyone with link' share",
+            c->name);
+        apiError(400, msg);
+        }
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, ',');
+    dyStringAppend(dy, c->name);
+    }
+slNameFreeList(&cleanList);
+if (dy->stringSize > 500)
+    {
+    dyStringFree(&dy);
+    apiError(400, "too many recipients - the username list is too long");
+    }
+return dyStringCannibalize(&dy);
+}
+
 static boolean isStateChangingShareAction(char *action)
 /* Returns TRUE for actions that modify the share table.  Those require an
  * hgsid match to defend against CSRF; read-only actions don't, because the
  * response only goes to the originating cookie-bearing browser. */
 {
-return sameString(action, "createShare") || sameString(action, "revokeShare");
+return sameString(action, "createShare") || sameString(action, "revokeShare")
+    || sameString(action, "setSharePermission") || sameString(action, "setShareTargets");
 }
 
 void myVariantsShareApiHandler(char *action)
@@ -1024,12 +1137,11 @@ if (sameString(action, "createShare"))
         apiError(400, "permission must be 0 or 1");
     char *targetUser = cgiOptionalString("targetUser");
     char *label = cgiOptionalString("label");
-    /* Reject overlong fields before MySQL would (varchar(255)).  Use 200 to
-     * leave room for any prefixing/quoting we add downstream. */
-    if (strlen(project) > 200
-        || (targetUser && strlen(targetUser) > 200)
-        || (label && strlen(label) > 200))
-        apiError(400, "project, targetUser, and label must each be <= 200 chars");
+    /* Reject overlong fields before MySQL would.  Use 200 to leave room for any
+     * prefixing/quoting we add downstream; the recipient list is checked in
+     * cleanShareTargets against the wider targetUser column. */
+    if (strlen(project) > 200 || (label && strlen(label) > 200))
+        apiError(400, "project and label must each be <= 200 chars");
     /* Project must be "*" (all) or one of the owner's existing project values.
      * Prevents creating misleading share URLs that filter on a non-existent
      * project name. */
@@ -1041,17 +1153,10 @@ if (sameString(action, "createShare"))
         if (!found)
             apiError(400, "project does not exist for current user");
         }
-    if (isNotEmpty(targetUser))
-        {
-        char gbq[512];
-        sqlSafef(gbq, sizeof(gbq),
-            "select count(*) from gbMembers where userName='%s'", targetUser);
-        if (sqlQuickNum(conn, gbq) == 0)
-            apiError(400, "targetUser not found - check the spelling, or omit"
-                " targetUser to make an 'anyone with link' share");
-        }
+    char *cleanTargets = cleanShareTargets(conn, targetUser);
     struct myVariantsShare *share = myVariantsCreateShare(conn, userName,
-        project, db, permission, targetUser, label);
+        project, db, permission, cleanTargets, label);
+    freeMem(cleanTargets);
     struct jsonWrite *jw = jsonWriteNew();
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "status", "ok");
@@ -1109,6 +1214,41 @@ else if (sameString(action, "revokeShare"))
     jsonWriteObjectEnd(jw);
     apiSuccess(jw);
     }
+else if (sameString(action, "setSharePermission"))
+    {
+    char *token = cgiOptionalString("shareToken");
+    if (token == NULL)
+        apiError(400, "missing required parameter: shareToken");
+    int permission = cgiOptionalInt("permission", MYVAR_PERM_READONLY);
+    if (permission != MYVAR_PERM_READONLY && permission != MYVAR_PERM_READWRITE)
+        apiError(400, "permission must be 0 or 1");
+    boolean updated = myVariantsSetSharePermission(conn, token, userName, permission);
+    hDisconnectCentral(&conn);
+    if (!updated)
+        apiError(404, "share not found");
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "status", "ok");
+    jsonWriteObjectEnd(jw);
+    apiSuccess(jw);
+    }
+else if (sameString(action, "setShareTargets"))
+    {
+    char *token = cgiOptionalString("shareToken");
+    if (token == NULL)
+        apiError(400, "missing required parameter: shareToken");
+    char *cleanTargets = cleanShareTargets(conn, cgiOptionalString("targetUser"));
+    boolean updated = myVariantsSetShareTargets(conn, token, userName, cleanTargets);
+    freeMem(cleanTargets);
+    hDisconnectCentral(&conn);
+    if (!updated)
+        apiError(404, "share not found");
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "status", "ok");
+    jsonWriteObjectEnd(jw);
+    apiSuccess(jw);
+    }
 else
     {
     hDisconnectCentral(&conn);
@@ -1147,8 +1287,8 @@ if (share == NULL)
     return;
     }
 
-/* Targeted shares require the matching logged-in user. Shares with no targetUser
- * ("anyone with link") are accessible to anon users too. */
+/* Targeted shares require a logged-in user in the share's recipient list.
+ * Shares with no targetUser ("anyone with link") are accessible to anon users too. */
 if (isNotEmpty(share->targetUser))
     {
     if (userName == NULL)
@@ -1157,7 +1297,7 @@ if (isNotEmpty(share->targetUser))
         myVariantsShareFree(&share);
         return;
         }
-    if (!sameString(share->targetUser, userName))
+    if (!myVariantsShareAllowsUser(share, userName))
         {
         notify("A shared track in this view wasn't shared with your account. You can keep browsing; the track just won't appear.", "myVarShareWrongUser");
         myVariantsShareFree(&share);
@@ -1189,7 +1329,7 @@ for (el = shareVars; el != NULL; el = el->next)
     {
     char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
     char trackName[512];
-    safef(trackName, sizeof(trackName), "myVariants_shared_%s", token);
+    safef(trackName, sizeof(trackName), MYVARIANTS_SHARED_TRACK_PREFIX "%s", token);
 
     /* Check if there's a pending edit for this shared track */
     char varName[256];
@@ -1236,10 +1376,13 @@ for (el = shareVars; el != NULL; el = el->next)
     updateTextField(trackName, conn, tableName, "itemRgb", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromStart", id, sp, sd);
     updateTextField(trackName, conn, tableName, "chromEnd", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "thickStart", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "thickEnd", id, sp, sd);
     updateBlocksFields(trackName, conn, tableName, id, sp, sd);
     updateTextField(trackName, conn, tableName, "ref", id, sp, sd);
     updateTextField(trackName, conn, tableName, "alt", id, sp, sd);
     updateTextField(trackName, conn, tableName, "mouseover", id, sp, sd);
+    updateTextField(trackName, conn, tableName, "cnvType", id, sp, sd);
     struct slName *customCols = myVariantsGetCustomFields(liveShare->ownerUser);
     struct slName *col;
     for (col = customCols; col != NULL; col = col->next)

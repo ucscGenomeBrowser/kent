@@ -570,7 +570,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     if ((ctDataUrl(ct) && ctHtmlUrl(ct)) ||
             sameString(ct->tdb->type, "chromGraph") ||
-            sameString(ct->tdb->type, "myVariants"))
+            isMyVariantsType(ct->tdb->type))
         printf("<TR><TD>%s</A></TD>", shortLabel);
     else
 	{

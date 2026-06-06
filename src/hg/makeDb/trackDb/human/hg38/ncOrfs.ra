@@ -13,46 +13,55 @@ group genes
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Introns from</b>: $intronsSource
+    mouseOver <b>$name</b> uORF ($uorfType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Host transcript</b>: $intronsSource
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterValues.uorfType 5'UTR uORF|5'UTR-only uORF,5'UTR+3'UTR uORF|Spans into 3'UTR
     filterType.uorfType multipleListOr
-    filterValues.intronsSource gencNcOrfs,gencNcOrfsComprehensive,gencNcOrfsPrimary,metamorf,nuorfdb,openprot,none
-    filterType.intronsSource multipleListOr
     visibility pack
 
     track gencNcOrfs
     parent ncOrfs
-    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb
+    bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb
     shortLabel GENCODE Phase I ncORFs
-    longLabel ncORFs: GENCODE Phase I non-canonical ORFs supported by Ribo-seq data
+    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq and peptide evidence
     type bigGenePred
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)<br> <b>Replicated</b>: $replicated<br> <b>Studies</b>: $ref_studies
+    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
     filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filterLimits.kozakTE -1:1.5
     filterValues.replicated yes,no
     filterType.replicated multipleListOr
+    filterValues.isPeptidein yes,no
+    filterType.isPeptidein multipleListOr
+    filterValues.hlaClass I,II,Both
+    filterType.hlaClass multipleListOr
+    filterValues.hlaFinalTier Tier 1B,Tier 2B,Tier 1A - Numerous nonHLA peptides,Tier 2A - One nonHLA peptide,Tier 3,Tier 4,Novel CDS isoform
+    filterType.hlaFinalTier multipleListOr
+    filterValues.hlaHppCategory HPP+,1PepCandidate,Insufficient
+    filterType.hlaHppCategory multipleListOr
+    filterValues.riboseqQuality Excellent,Sufficient,Insufficient,Sufficient in Gaertner et al
+    filterType.riboseqQuality multipleListOr
+    colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
     html gencNcOrfs
     visibility pack
 
     track gencNcOrfsPrimary
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb
-    shortLabel GENCODE Ph2 ncORFs Pri
+    shortLabel GENCODE Phase II ncORFs Prim
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - primary
     type bigGenePred
     itemRgb on
@@ -64,15 +73,15 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     html gencNcOrfs
     visibility pack
 
     track gencNcOrfsComprehensive
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb
-    shortLabel GENCODE Ph2 ncORFs Cmp
+    shortLabel GENCODE Phase II ncORFs Compr
     longLabel ncORFs: GENCODE Phase II non-canonical ORFs - comprehensive
     type bigGenePred
     itemRgb on
@@ -84,9 +93,23 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     html gencNcOrfs
+    visibility pack
+
+    track fiveUltraUorfs
+    parent ncOrfs
+    bigDataUrl /gbdb/hg38/ncOrfs/fiveUltraUorfs/fiveUltraUorfs.bb
+    shortLabel 5ULTRA uORFs
+    longLabel ncORFs: uORFs in MANE Select transcripts from 5ULTRA
+    type bigBed 12 +
+    itemRgb on
+    mouseOver <b>$gene</b> $uorfType<br> <b>Rank in gene</b>: $rank<br> <b>Kozak</b>: $kozak<br> <b>Intron structure from</b>: $intronsSource
+    filterValues.uorfType Non-Overlapping|Non-Overlapping (5' UTR only),Overlapping|Overlapping (overlaps main CDS),N-terminal_extension|N-terminal extension (in-frame)
+    filterType.uorfType multipleListOr
+    filterValues.kozak Strong,Moderate,Weak
+    filterType.kozak multipleListOr
     visibility pack
 
     track metamorf
@@ -104,8 +127,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     visibility pack
 
     track nuorfdb
@@ -123,9 +146,9 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
-    filterValues.plotType lncRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
+    filterValues.plotType lincRNA,Out-of-Frame,5' uORF,3' dORF,5' Overlap uORF,3' Overlap dORF,Pseudogene,Other
     filterType.plotType multipleListOr
     filterValues.type Out-of-Frame,5' uORF,3' dORF,lincRNA,5' Overlap uORF,ncRNA Retained Intron,3' Overlap dORF,ncRNA Processed Transcript,Pseudogene,Antisense,TUCP,Nonsense Mediated Decay,TEC,Sense Overlapping,snoRNA
     filterType.type multipleListOr
@@ -146,8 +169,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple
@@ -170,8 +193,8 @@ group genes
     filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
-    filterLimits.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
+    filterLimits.kozakTE -1:1.5
     filterByRange.msScore on
     filterValues.type AltProt|AltProt,RefProt|RefProt,Isoform|Isoform
     filterValues.localization 5'UTR|5'UTR,3'UTR|3'UTR,CDS|CDS,ncRNA|ncRNA,multiple|multiple

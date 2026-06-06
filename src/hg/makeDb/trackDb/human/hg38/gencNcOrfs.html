@@ -40,22 +40,143 @@ Two subsets are provided for the Phase II data:
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-All three GENCODE ncORF tracks are displayed in bigGenePred format. Items are labeled
-with their ORF identifier. Color reflects Kozak translational efficiency &mdash; see the
-<a href="../cgi-bin/hgTrackUi?db=hg38&g=ncOrfs">ncORFs supertrack page</a> for the
-color legend.
+All three GENCODE ncORF tracks are displayed in bigGenePred format and labeled with their
+ORF identifier. The default color scheme and available filter controls differ by track.
+</p>
+
+<h3>Phase I &mdash; Kozak strength colors (default)</h3>
+
+<p>
+The <b>Phase I</b> track colors items by <b>Kozak consensus strength</b> by default.
+Two alternative color schemes can be selected from the track controls page
+(<b>Color by</b> dropdown): <em>Evidence type</em> and <em>HLA class</em> (see below).
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th style="background-color:#DCA237;width:1.5em">&nbsp;</th>
+    <td><b>Golden amber</b> &mdash; Strong Kozak context. Both position &minus;3 (A/G) and
+        position +4 (G) match the consensus.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#78AFE2;width:1.5em">&nbsp;</th>
+    <td><b>Steel blue</b> &mdash; Moderate Kozak context. One of the two positions matches.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#959595;width:1.5em">&nbsp;</th>
+    <td><b>Gray</b> &mdash; Weak Kozak context. Neither position matches.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#000000;width:1.5em">&nbsp;</th>
+    <td><b>Black</b> &mdash; Non-ATG start codon (Kozak rule does not apply) or context
+        unavailable.</td>
+  </tr>
+</table>
+
+<h3>Phase I &mdash; Evidence type colors (alternative)</h3>
+
+<p>
+Select <b>Color by: Evidence type</b> to highlight peptide evidence from
+Deutsch et al. (see References). ORFs with no mass spectrometry evidence are gray.
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th style="background-color:#E6A817;width:1.5em">&nbsp;</th>
+    <td><b>Gold</b> &mdash; TransCODE <b>peptidein</b> (628 ORFs). Confirmed as
+        confidently translated by PeptideAtlas; candidate for peptidein annotation in
+        reference databases.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#468CB4;width:1.5em">&nbsp;</th>
+    <td><b>Steel blue</b> &mdash; HLA immunopeptidomics evidence only (1,373 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#4CAF50;width:1.5em">&nbsp;</th>
+    <td><b>Forest green</b> &mdash; Non-HLA (whole-cell tryptic) evidence only (66 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#E66400;width:1.5em">&nbsp;</th>
+    <td><b>Orange</b> &mdash; Both HLA and non-HLA evidence (35 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#808080;width:1.5em">&nbsp;</th>
+    <td><b>Gray</b> &mdash; No peptide evidence (5,114 ORFs) or in the peptidein set
+        based on binding predictions only with no direct MS sequences (48 ORFs).</td>
+  </tr>
+</table>
+
+<h3>Phase I &mdash; HLA class colors (alternative)</h3>
+
+<p>
+Select <b>Color by: HLA class</b> to color items by the HLA class in which peptides were
+detected:
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th style="background-color:#468CB4;width:1.5em">&nbsp;</th>
+    <td><b>Steel blue</b> &mdash; Class I only (1,632 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#C83C3C;width:1.5em">&nbsp;</th>
+    <td><b>Crimson</b> &mdash; Class II only (10 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#E66400;width:1.5em">&nbsp;</th>
+    <td><b>Orange</b> &mdash; Both class I and class II (143 ORFs).</td>
+  </tr>
+  <tr>
+    <th style="background-color:#808080;width:1.5em">&nbsp;</th>
+    <td><b>Gray</b> &mdash; No HLA data (5,479 ORFs).</td>
+  </tr>
+</table>
+
+<h3>Phase I &mdash; Filters</h3>
+
+<p>
+The Phase I track can be filtered by: start codon, Kozak strength, Kozak TE, replicated
+status, and &mdash; using the peptide evidence fields &mdash; peptidein status
+(<b>isPeptidein</b>), HLA class (<b>hlaClass</b>), HLA evidence tier
+(<b>hlaFinalTier</b>), HPP guideline category (<b>hlaHppCategory</b>), and Ribo-seq
+quality (<b>riboseqQuality</b>).
 </p>
 
 <p>
-<b>Mouseover</b> content varies by phase. Phase I shows the ORF identifier in its host
-gene, gene type, start codon, Kozak strength and TE, replicated status, and source
-PMIDs. The two Phase II tracks show the same fields except replicated/PMIDs.
+<b>Mouseover</b> for Phase I shows ORF name, host gene, Kozak strength and TE,
+replicated status, peptidein flag, HLA evidence tier, and HLA peptide count.
 </p>
 
+<h3>Phase II &mdash; colors and filters</h3>
+
 <p>
-Common filters on all three tracks: start codon, Kozak strength, Kozak TE. Phase I adds
-a <b>Replicated</b> filter (cross-publication evidence).
+The Phase II Primary and Comprehensive tracks color items by Kozak strength using the
+same scheme as Phase I. Peptide evidence fields are not included in the Phase II tracks.
+Common filters: start codon, Kozak strength, Kozak TE.
 </p>
+
+<h3>Peptide evidence fields (Phase I only)</h3>
+
+<p>
+Each Phase I item carries the following peptide evidence fields from Deutsch <em>et al.</em>
+(2026), accessible via the details page and Table Browser:
+</p>
+
+<table class="stdTbl">
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td>isPeptidein</td><td>yes/no: ORF is in the PeptideAtlas peptidein set (Table S12)</td></tr>
+  <tr><td>hlaClass</td><td>HLA class(es) detected: I, II, or Both</td></tr>
+  <tr><td>hlaFinalTier</td><td>HLA evidence tier (Tier 1B = numerous peptides; Tier 2B = one peptide)</td></tr>
+  <tr><td>hlaHppCategory</td><td>HPP guideline category (HPP+, 1PepCandidate, Insufficient)</td></tr>
+  <tr><td>hlaNPeptides</td><td>Number of distinct HLA peptide sequences detected</td></tr>
+  <tr><td>riboseqQuality</td><td>Manual quality of Ribo-seq evidence (Excellent/Sufficient/Insufficient)</td></tr>
+  <tr><td>hlaIPeptides</td><td>HLA class I peptide sequences (comma-separated)</td></tr>
+  <tr><td>hlaIIPeptides</td><td>HLA class II peptide sequences (comma-separated)</td></tr>
+  <tr><td>nonHlaFinalTier</td><td>Non-HLA (tryptic proteomics) evidence tier</td></tr>
+  <tr><td>nonHlaHppCategory</td><td>Non-HLA HPP guideline category</td></tr>
+  <tr><td>nonHlaNPeptides</td><td>Number of distinct non-HLA peptide sequences</td></tr>
+  <tr><td>nonHlaPeptides</td><td>Non-HLA tryptic peptide sequences (comma-separated)</td></tr>
+</table>
 
 <h2>Data Access</h2>
 
@@ -81,18 +202,77 @@ binary for your system. Instructions for downloading source code and binaries ca
 
 <h2>Methods</h2>
 
+<h3>Phase I Ribo-seq catalog</h3>
+
 <p>
-<b>Phase I:</b> Ribo-seq ORFs were consolidated from seven publications and mapped to
-GENCODE v35. Translations shorter than 16 codons or initiating from near-cognate (non-ATG)
-start codons were excluded. Redundant sense-overlapping ORFs were merged, yielding 7,264
-unique ncORFs.
+Mudge et al. (2022, see References) consolidated translation evidence from seven published
+ribosome profiling datasets that used harringtonine or lactimidomycin treatment to enrich
+for translation initiation sites. Ribo-seq reads were mapped to the GENCODE v35 annotation
+on GRCh38. Only ATG-initiated ORFs of at least 16 codons were retained, and redundant
+sense-overlapping ORFs were merged by taking the longest representative, yielding 7,264
+ncORFs across five biotype classes: upstream ORFs (uORFs), downstream ORFs (dORFs),
+intronic ORFs (intORFs), pseudogenic translations (PT), and lncRNA-embedded ORFs.
+The catalog was developed as part of a reference-database coordination effort involving
+Ensembl/GENCODE, HGNC, UniProtKB, and PeptideAtlas.
+</p>
+
+<h3>Phase II Ribo-seq catalog</h3>
+
+<p>
+Chothani et al. (2025, see References) expanded the catalog by incorporating additional
+Ribo-seq datasets across more cell types and tissues and mapping to GENCODE v45. The
+ATG-start codon and 16-codon length restrictions were lifted to capture near-cognate
+initiations and micropeptides. A data-driven scoring framework using ribosome occupancy
+uniformity and P-site in-frame fraction identified a Primary subset of 10,127 ncORFs with
+translation signatures comparable to canonical coding genes; the Comprehensive set contains
+all 28,359 mapped ORFs.
+</p>
+
+<h3>Kozak strength and translational efficiency</h3>
+
+<p>
+Each ORF was annotated with its Kozak consensus strength by fetching the 11-base genomic
+context around the start codon from hg38.2bit and classifying positions &minus;3 and +4
+relative to the A of the start codon: both matching (A/G at &minus;3 and G at +4) =
+Strong; one matching = Moderate; neither = Weak; non-ATG start = non-ATG. A numeric
+translational efficiency (TE) score was also assigned by looking up the 11-base context in
+the Noderer 2014 TE table (Mol Syst Biol 10:748, PMID&nbsp;25170020).
+</p>
+
+<h3>Peptide evidence and peptideins</h3>
+
+<p>
+Deutsch et al. (2026, see References) queried the 7,264 Phase I ORFs against two independent
+PeptideAtlas mass spectrometry repositories. The HLA immunopeptidomics build was constructed
+from HLA-I and HLA-II peptidomes across more than 100 HLA-typed donors spanning multiple
+tissue types and cancer cell lines; peptides were enriched by affinity purification and
+identified by tandem mass spectrometry. The whole-cell tryptic proteomics build used
+conventional shotgun proteomics from a broad range of cell lines and tissues. Spectra
+were manually reviewed and classified according to the Prensner et al. tier system (Tier 1B =
+numerous HPP-quality HLA peptides; Tier 2B = a single qualifying HLA peptide; Tier 1A/2A =
+additional non-HLA evidence). The study introduced the term <em>peptidein</em> for a
+translation product detectable by mass spectrometry but not yet annotatable as a protein due
+to absent functional evidence. Of the 7,264 Phase I ORFs, 628 passed PeptideAtlas curation
+as peptideins (Table S12); a further 1,522 have HLA or tryptic peptide evidence below the
+peptidein threshold.
 </p>
 
 <p>
-<b>Phase II:</b> The TransCODE consortium expanded the catalog by incorporating additional
-published Ribo-seq datasets and mapping to GENCODE v45. The size and start-codon restrictions
-from Phase I were lifted. A data-driven framework was used to identify a Primary subset of
-ncORFs with translation signatures comparable to canonical protein-coding genes.
+The supplementary data tables (Tables S2, S3, S6, S7, and S12) from Deutsch et al. were
+downloaded from the paper's supplementary materials at
+<a href="https://doi.org/10.1038/s41586-026-10459-x" target="_blank">
+https://doi.org/10.1038/s41586-026-10459-x</a>.
+Each table was joined to the Phase I bigGenePred by the short ORF identifier (e.g.,
+<code>c14riboseqorf80</code>) using the script
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/ncOrfs"
+target="_blank">addPeptideEvidence.py</a>.
+The script appended 14 new fields to all 7,264 Phase I items; the 5,114 ORFs without peptide
+evidence receive default empty values so they remain visible in the track and filterable on
+<code>isPeptidein</code> and related fields. Non-HLA peptides that map to known proteins or
+are too short to be informative were excluded (Tables S2, <code>exclude</code> column).
+The complete build procedure is documented in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/ncOrfs.txt"
+target="_blank">ncOrfs.txt</a>.
 </p>
 
 <h2>Credits</h2>
@@ -103,6 +283,15 @@ GENCODE / TransCODE consortium for creating and maintaining these annotations.
 </p>
 
 <h2>References</h2>
+
+<p>
+Deutsch EW, Kok LW, Mudge JM, Valls CF, Jungreis I, Ruiz-Orera J, Sun Z, Kusebauch U, Fierro-Monti
+I, Abelin JG <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-026-10459-x" target="_blank">
+Expanding the human proteome with microproteins and peptideins</a>.
+<em>Nature</em>. 2026 May 6;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42092140" target="_blank">42092140</a>
+</p>
 
 <p>
 Chothani S, Ruiz-Orera J, Tierney JAS, Clauwaert J, Deutsch EW, Alba MM, Aspden JL, Baranov PV,

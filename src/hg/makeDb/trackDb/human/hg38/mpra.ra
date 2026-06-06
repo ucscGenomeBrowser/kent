@@ -4,23 +4,25 @@ longLabel Massively Parallel Reporter Assays
 group regulation
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#060226 "Released Jun. 2, 2026"
 
     track mprabase
     shortLabel MPRA Base
     longLabel MPRAs: MPRA Base Enhancer Elements
-    type bigBed 9 + 9
+    type bigBed 9 + 11
     bigDataUrl /gbdb/hg38/mpra/mprabase/mprabase.bb
     parent mpra on
     visibility pack
     priority 1
     itemRgb on
-    dataVersion MPRA Base v4.9.3 (Mar 2026)
+    dataVersion MPRA Base 2026-05-27 refresh
     mouseOver <b>Element</b>: $name<br><b>Cell line</b>: $cell_line<br><b>Assay</b>: $assay<br><b>Raw score</b>: $raw_score<br><b>Percentile rank</b>: $percentile_rank<br><b>Citation</b>: $citation
     urls PMID="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-    labelFields name,cell_line,assay,author_lab
+    labelFields name,variant_type,cell_line,assay,author_lab
     defaultLabelFields name
-    filterValues.cell_line HepG2,HUES64,mESC,NPC,HEK293FT,UACC903,Hela
+    filterValues.cell_line HepG2,HUES64,mESC,NPC,HEK293FT,UACC903
     filterValues.assay lentiMPRA (LM),plasmidMPRA (PM),STARR-seq (ST)
+    filterValues.variant_type alternate,NA,reference
     filter.percentile_rank 0:100
     filterByRange.percentile_rank on
     filterLimits.percentile_rank 0:100

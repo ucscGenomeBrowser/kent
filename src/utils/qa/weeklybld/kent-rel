@@ -1,0 +1,4 @@
+#!/bin/bash
+# kent-rel - open a login shell inside the kent-rel docker browser container.
+# refs #37655
+exec docker exec -it kent-rel bash -l

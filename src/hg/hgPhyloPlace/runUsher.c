@@ -550,9 +550,13 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-static char *finalRecombHeaderExpected = "recomb_node_id\tdonor_node_id\tacceptor_node_id\trecombinant_num_desc\tdonor_num_desc\tacceptor_num_desc\t"
+static char *finalRecombHeaderExpectedOld = "recomb_node_id\tdonor_node_id\tacceptor_node_id\trecombinant_num_desc\tdonor_num_desc\tacceptor_num_desc\t"
     "breakpoint interval 1\tbreakpoint interval 2\trecombinant clade\trecombinant lineage\tdonor clade\tdonor lineage\t"
     "acceptor clade\tacceptor lineage\trepresentative descendant\toriginal parsimony score\tparsimony score improvement";
+static char *finalRecombHeaderExpected = "recomb_node_id\tdonor_node_id\tacceptor_node_id\trecombinant_num_desc\tdonor_num_desc\tacceptor_num_desc\t"
+    "breakpoint interval 1\tbreakpoint interval 2\trecombinant clade\trecombinant lineage\tdonor clade\tdonor lineage\t"
+    "acceptor clade\tacceptor lineage\trepresentative descendant\toriginal parsimony score\tparsimony score improvement\t"
+    "recombinant mutations\tdonor mutations\tacceptor mutations";
 
 static uint parseUint(char *word, struct lineFile *lf)
 /* Parse non-negative int from word.  Use lf for error reporting if necessary. */
@@ -615,10 +619,10 @@ static struct recombinantInfo *parseOneRecombinant(char *line, uint genomeSize, 
 /* Allocate and return one struct recombinantInfo with values extracted from line. Use lf for error reporting if necessary. */
 {
 struct recombinantInfo *ri = NULL;
-char *words[18];
+char *words[21];
 int wordCount = chopTabs(line, words);
-if (wordCount != 17)
-    lineFileAbort(lf, "Expected 17 tab-separated words but got %d", wordCount);
+if (wordCount != 17 && wordCount != 20)
+    lineFileAbort(lf, "Expected 17 or 20 tab-separated words but got %d", wordCount);
 AllocVar(ri);
 ri->recombNodeId = cloneString(words[0]);
 ri->donorNodeId = cloneString(words[1]);
@@ -637,6 +641,12 @@ ri->acceptorLineage = cloneString(words[13]);
 ri->representative = cloneString(words[14]);
 ri->originalParsimony = parseUint(words[15], lf);
 ri->parsimonyImprovement = parseUint(words[16], lf);
+if (wordCount > 17)
+    {
+    ri->recombMutations = cloneString(words[17]);
+    ri->donorMutations = cloneString(words[18]);
+    ri->acceptorMutations = cloneString(words[19]);
+    }
 return ri;
 }
 
@@ -660,12 +670,23 @@ if (pRi && *pRi)
     }
 }
 
-static int recombinantInfoCmp(const void *el1, const void *el2)
+static int recombinantInfoCmpImp(const void *el1, const void *el2)
 /* For sorting by parsimonyImprovement, descending. */
 {
 struct recombinantInfo *ri1 = *(struct recombinantInfo **)el1;
 struct recombinantInfo *ri2 = *(struct recombinantInfo **)el2;
 return ri2->parsimonyImprovement - ri1->parsimonyImprovement;
+}
+
+static int recombinantInfoCmpRecombImp(const void *el1, const void *el2)
+/* For sorting by recombNodeId, ascending, and parsimonyImprovement, descending. */
+{
+struct recombinantInfo *ri1 = *(struct recombinantInfo **)el1;
+struct recombinantInfo *ri2 = *(struct recombinantInfo **)el2;
+int diff = strcmp(ri1->recombNodeId, ri2->recombNodeId);
+if (diff == 0)
+    diff = ri2->parsimonyImprovement - ri1->parsimonyImprovement;
+return diff;
 }
 
 static boolean mergeRecombinants(struct recombinantInfo **pRiOldList, struct recombinantInfo **pRiNew)
@@ -774,7 +795,7 @@ struct recombinantInfo *recombList = NULL;
 struct lineFile *lf = lineFileOpen(filename, TRUE);
 char *line;
 lineFileNext(lf, &line, NULL);
-if (isNotEmpty(line) && differentString(line, finalRecombHeaderExpected))
+if (isNotEmpty(line) && differentString(line, finalRecombHeaderExpected) && differentString(line, finalRecombHeaderExpectedOld))
     lineFileAbort(lf, "Header fields do not match expected.  Header:\n%s\nExpected:\n%s",
                   line, finalRecombHeaderExpected);
 // Hash reported recombinants by concatenated node IDs because there tend to be many lines per
@@ -806,9 +827,11 @@ for (hel = helList; hel != NULL; hel = hel->next)
     recombList = slCat(recombList, riList);
     }
 hashElFreeList(&helList);
-slSort(&recombList, recombinantInfoCmp);
+slSort(&recombList, recombinantInfoCmpImp);
 // Filter the list to keep only the top 3 findings for each potential recombinant
 recombList = filterRecombinants(recombList);
+// Finally, sort the list by recombNodeId (and then improvement) because it's confusing to alternate between those.
+slSort(&recombList, recombinantInfoCmpRecombImp);
 return recombList;
 }
 

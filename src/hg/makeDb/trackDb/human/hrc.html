@@ -9,8 +9,8 @@ low coverage (average 7x), with 40 million variant sites (minimum allele count o
 <p>
 The contributing studies include the 1000 Genomes Project, UK10K, and many other cohorts.
 Since 1000 Genomes data is already available as a separate track, this track shows only
-the frequencies from the non-1000 Genomes samples (~30,000 individuals), resulting in
-38.3 million variants after lifting from GRCh37 to GRCh38.
+the frequencies from the non-1000 Genomes samples (~30,000 individuals). After the lift
+from GRCh37 to GRCh38, 38.3 million variants remain.
 </p>
 
 <h2>Data Access</h2>
@@ -40,8 +40,8 @@ Only frequencies from the non-1000 Genomes samples (~30,000 of the 32,488 total)
 since 1000 Genomes data is available separately. Of 40.4M input variants, 8,052 were unmapped
 by liftOver and 2.1M were present only in 1000 Genomes samples and were dropped, leaving
 38.3M variants.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The conversion steps for all source files of the varFreqs track are documented in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+Some tracks required python scripts, which are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>

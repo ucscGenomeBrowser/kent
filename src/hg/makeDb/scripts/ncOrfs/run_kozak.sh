@@ -31,9 +31,9 @@ bigBedToBed "$INBB" stdout \
   | sort -k1,1 -k2,2n \
   > "$BED"
 
-# Field count = 12 + extra fields; we pass through input extras and append 3
-# (startCodon, kozakStrength, kozakTE). For the gencNcOrf bigGenePred input
-# (12+14 extras) the output is 12+17.
+# Field count = 12 + extra fields; we pass through input extras and append
+# 4 (startCodon, kozakStrength, kozakTE, _teRgb). For the gencNcOrf
+# bigGenePred input (12+14 extras) the output is 12+18.
 NF=$(awk -F'\t' '{print NF; exit}' "$BED")
 EXTRA=$((NF - 12))
 

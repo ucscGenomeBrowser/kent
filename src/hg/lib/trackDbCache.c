@@ -350,7 +350,14 @@ else
 ftruncate(fd, 0);
 // Reserve real tmpfs pages now so writes through the mmap below can't SIGBUS
 // when /dev/shm is full (ftruncate alone leaves the file sparse).
-int err = posix_fallocate(fd, 0, size);
+#ifdef __APPLE__
+    #include <fcntl.h>
+    fstore_t store = {F_ALLOCATECONTIG, F_PEOFPOSMODE, 0, size, 0};
+    fcntl(fd, F_PREALLOCATE, &store);
+    int err = ftruncate(fd, size);
+#else
+    int err = posix_fallocate(fd, 0, size);
+#endif
 if (err != 0)
     {
     fprintf(stderr, "trackDbCache: posix_fallocate of %ld bytes in %s failed (%s); skipping cache write\n",

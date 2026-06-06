@@ -65,6 +65,13 @@ void cartParseOverHash(struct cart *cart, char *contents);
  * support multi-select form inputs (same var name can have multiple
  * values which will be in separate hashEl's). */
 
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge);
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
+
 struct cart *cartNew(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -703,5 +710,8 @@ char *cartNamedSessionDbTable();
 
 char *cartOrCfgOption(struct cart *cart, char *name);
 /* Return the option with the given name. First check cart then hg.conf.  Return NULL if * it doesn't exist. */
+
+struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, char *secureId);
+/* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
 #endif /* CART_H */
 

@@ -30,8 +30,8 @@ Date: 2026
 """
 
 import argparse
-import html
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -102,6 +102,44 @@ AUTOSQL = """table insightClinVar
    )
 """
 
+# AutoSQL for the PMS2CL paralog projection track
+PMS2CL_AUTOSQL = """table pms2clParalogVars
+"InSiGHT VCEP curated PMS2 variants projected onto PMS2CL coordinates"
+   (
+   string chrom;           "Reference sequence chromosome or scaffold"
+   uint   chromStart;      "Start position in chromosome"
+   uint   chromEnd;        "End position in chromosome"
+   string name;            "Projected PMS2CL HGVS notation"
+   uint   score;           "Not used, set to 0"
+   char[1] strand;         "Not used, set to ."
+   uint   thickStart;      "Same as chromStart"
+   uint   thickEnd;        "Same as chromEnd"
+   uint   reserved;        "RGB color value"
+   string pms2Variant;     "Equivalent PMS2 variant (HGVS)"
+   string classification;  "PMS2 ClinVar classification"
+   string dateEvaluated;   "Date PMS2 variant was classified"
+   string pms2Region;      "PMS2 genomic region for copy-paste"
+   lstring _mouseOver;     "HTML mouseover text"
+   )
+"""
+
+# PMS2 -> PMS2CL projection: PMS2 c. range to (offset, exon label)
+# n = c - offset; based on van der Klift 2010 alignment and empirical verification
+# Exons 1-8 and 10 of PMS2 have no PMS2CL equivalent (skipped)
+PMS2_TO_PMS2CL_OFFSETS = [
+    # (c_min, c_max, offset, label)
+    (904,  988,  903,  'exon 9'),
+    (1145, 1863, 1059, 'exon 11 (5\' of indel)'),
+    (1864, 2006, 1060, 'exon 11 (3\' of indel)'),
+    (2007, 2174, 1060, 'exon 12'),
+    (2175, 2275, 1060, 'exon 13'),
+    (2276, 2445, 1060, 'exon 14'),
+    (2446, 2798, 1060, 'exon 15 (partial)'),
+]
+
+PMS2CL_TX = "NR_002217.1"
+PMS2_TX = "NM_000535.7"
+
 # ============================================================================
 # Utility Functions
 # ============================================================================
@@ -109,6 +147,24 @@ AUTOSQL = """table insightClinVar
 def log(msg):
     """Print log message to stderr"""
     print(msg, file=sys.stderr)
+
+
+def bash(cmd):
+    """Run a bash command and return output"""
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"Command failed: {cmd}\n{result.stderr}")
+    return result.stdout
+
+
+def escape_html(text):
+    """Escape special characters for HTML"""
+    if not text:
+        return ""
+    return (str(text).replace('&', '&amp;')
+                     .replace('<', '&lt;')
+                     .replace('>', '&gt;')
+                     .replace('"', '&quot;'))
 
 
 def fetch_url(url, max_retries=3):
@@ -312,9 +368,7 @@ def liftover_coords(coords, chain_file):
     unmapped_bed = input_bed.replace('.bed', '.unmapped.bed')
 
     try:
-        subprocess.run(
-            ["liftOver", input_bed, chain_file, output_bed, unmapped_bed],
-            check=True, stderr=subprocess.DEVNULL)
+        bash(f"liftOver {input_bed} {chain_file} {output_bed} {unmapped_bed} 2>/dev/null")
     except Exception:
         for f in [input_bed, output_bed, unmapped_bed]:
             if os.path.exists(f):
@@ -405,13 +459,13 @@ def create_bed_entries(variants, assembly):
         # Build mouseover HTML
         clinvar_url = f"https://www.ncbi.nlm.nih.gov/clinvar/variation/{v['var_id']}/"
         mouse_over = (
-            f"<b>Variant:</b> {html.escape(v['name'])}<br>"
+            f"<b>Variant:</b> {escape_html(v['name'])}<br>"
             f"<b>ClinVar ID:</b> <a href=\"{clinvar_url}\" target=\"_blank\">{v['var_id']}</a><br>"
-            f"<b>Classification:</b> {html.escape(v['classification'])}<br>"
-            f"<b>Date evaluated:</b> {html.escape(v['date_evaluated'])}"
+            f"<b>Classification:</b> {escape_html(v['classification'])}<br>"
+            f"<b>Date evaluated:</b> {escape_html(v['date_evaluated'])}"
         )
         if v['comment']:
-            mouse_over += f"<br><b>Comment:</b> {html.escape(v['comment'])}"
+            mouse_over += f"<br><b>Comment:</b> {escape_html(v['comment'])}"
 
         # Truncate name if too long
         name = v['name'] if len(v['name']) <= 200 else v['name'][:197] + "..."
@@ -450,6 +504,223 @@ def create_bed_entries(variants, assembly):
     return entries, stats, unmapped
 
 
+# ============================================================================
+# PMS2CL Paralog Projection
+# ============================================================================
+
+def get_pms2cl_exons(assembly):
+    """Query hgsql for PMS2CL (NR_002217.1) exon coordinates.
+    Returns (chrom, [(start, end), ...]) for the 6 exons in transcript order
+    (plus strand, so genomic order)."""
+    result = bash(f'hgsql {assembly} -Ne \'select chrom, exonStarts, exonEnds from ncbiRefSeq where name="{PMS2CL_TX}"\'')
+    fields = result.strip().split('\t')
+    chrom = fields[0]
+    starts = [int(x) for x in fields[1].rstrip(',').split(',')]
+    ends = [int(x) for x in fields[2].rstrip(',').split(',')]
+    return chrom, list(zip(starts, ends))
+
+
+def project_c_to_n(c_pos):
+    """Project a PMS2 c. position to PMS2CL n. position.
+    Returns n. position or None if c. position has no PMS2CL equivalent."""
+    for c_min, c_max, offset, _ in PMS2_TO_PMS2CL_OFFSETS:
+        if c_min <= c_pos <= c_max:
+            return c_pos - offset
+    return None
+
+
+def pms2cl_n_to_genomic(n_pos, pms2cl_exons):
+    """Convert PMS2CL n. position (1-based cDNA) to 0-based genomic position.
+    pms2cl_exons is list of (BED start, BED end) tuples for the 6 exons in
+    transcript order (plus strand)."""
+    cum = 0
+    for ex_start, ex_end in pms2cl_exons:
+        ex_len = ex_end - ex_start
+        if cum < n_pos <= cum + ex_len:
+            # n.pos is in this exon
+            # Offset within exon (0-based): n_pos - cum - 1
+            return ex_start + (n_pos - cum - 1)
+        cum += ex_len
+    return None
+
+
+def parse_pms2_hgvs(name):
+    """Parse a PMS2 c. HGVS variant name.
+    Returns dict with c_start, c_end, suffix (e.g. 'A>G', 'del', 'dup', 'delAGAA')
+    or None if unparseable or not a coding variant."""
+    # Extract the c. portion. Names look like:
+    #   NM_000535.7(PMS2):c.2243_2246del
+    #   NM_000535.7(PMS2):c.137G>T
+    m = re.search(r'c\.([^\s]+)', name)
+    if not m:
+        return None
+    cpart = m.group(1)
+
+    # Skip intronic (c.NNN+M or c.NNN-M) and UTR (c.-N or c.*N) variants
+    # Pattern allows trailing nucleotide chars but not + - * in position
+    if re.search(r'[+\-*]', cpart):
+        return None
+
+    # Try range: NNN_MMM<suffix>
+    m = re.match(r'^(\d+)_(\d+)(.*)$', cpart)
+    if m:
+        return {
+            'c_start': int(m.group(1)),
+            'c_end':   int(m.group(2)),
+            'suffix':  m.group(3),
+            'is_range': True,
+        }
+
+    # Single position: NNN<suffix>
+    m = re.match(r'^(\d+)(.*)$', cpart)
+    if m:
+        pos = int(m.group(1))
+        return {
+            'c_start': pos,
+            'c_end':   pos,
+            'suffix':  m.group(2),
+            'is_range': False,
+        }
+
+    return None
+
+
+def project_variant_to_pms2cl(variant, pms2cl_chrom, pms2cl_exons):
+    """Project a PMS2 variant to PMS2CL coordinates.
+    Returns dict with bed fields or None if not projectable."""
+    if variant['gene'] != 'PMS2':
+        return None
+
+    parsed = parse_pms2_hgvs(variant['name'])
+    if parsed is None:
+        return None
+
+    # Project both endpoints
+    n_start = project_c_to_n(parsed['c_start'])
+    n_end = project_c_to_n(parsed['c_end'])
+    if n_start is None or n_end is None:
+        return None  # outside PMS2CL coverage
+
+    # Compute PMS2CL genomic positions (0-based BED)
+    g_start = pms2cl_n_to_genomic(n_start, pms2cl_exons)
+    g_end = pms2cl_n_to_genomic(n_end, pms2cl_exons)
+    if g_start is None or g_end is None:
+        return None
+
+    # BED end is exclusive; for plus-strand PMS2CL, n_end > n_start means g_end > g_start
+    bed_start = min(g_start, g_end)
+    bed_end = max(g_start, g_end) + 1
+
+    # Construct PMS2CL n. HGVS name
+    if parsed['is_range']:
+        n_name = f"{PMS2CL_TX}:n.{n_start}_{n_end}{parsed['suffix']}"
+    else:
+        n_name = f"{PMS2CL_TX}:n.{n_start}{parsed['suffix']}"
+
+    return {
+        'chrom':       pms2cl_chrom,
+        'bed_start':   bed_start,
+        'bed_end':     bed_end,
+        'pms2cl_name': n_name,
+        'pms2_name':   variant['name'],
+        'classification': variant['classification'],
+        'date':        variant['date_evaluated'],
+    }
+
+
+def create_pms2cl_paralog_track(variants, assembly, output_dir):
+    """Build a bigBed track at PMS2CL coordinates with PMS2 ClinVar variants
+    projected onto the pseudogene. Returns the bigBed file path."""
+    log(f"\nProjecting PMS2 variants onto PMS2CL ({assembly})...")
+
+    pms2cl_chrom, pms2cl_exons = get_pms2cl_exons(assembly)
+
+    entries = []
+    skipped_no_parse = 0
+    skipped_outside_coverage = 0
+    skipped_non_pms2 = 0
+
+    # Pick which assembly coords to copy-paste in mouseover
+    chr_key = f'{assembly}_chr'
+    start_key = f'{assembly}_start'
+    end_key = f'{assembly}_end'
+
+    for v in variants:
+        if v['gene'] != 'PMS2':
+            skipped_non_pms2 += 1
+            continue
+        proj = project_variant_to_pms2cl(v, pms2cl_chrom, pms2cl_exons)
+        if proj is None:
+            if parse_pms2_hgvs(v['name']) is None:
+                skipped_no_parse += 1
+            else:
+                skipped_outside_coverage += 1
+            continue
+
+        # Use PMS2 classification color (matches main track)
+        color = COLORS.get(proj['classification'], DEFAULT_COLOR)
+
+        # PMS2 region for copy-paste
+        pms2_chrom = v.get(chr_key, '') or ''
+        pms2_start = v.get(start_key, '') or ''
+        pms2_end = v.get(end_key, '') or ''
+        if pms2_chrom and pms2_start and pms2_end:
+            pms2_region = f"{pms2_chrom}:{pms2_start}-{pms2_end}"
+        else:
+            pms2_region = "(unmapped)"
+
+        # Mouseover
+        mouse_over = (
+            f"<b>PMS2CL position:</b> {escape_html(proj['pms2cl_name'])}<br>"
+            f"<b>Equivalent PMS2 variant:</b> {escape_html(proj['pms2_name'])}<br>"
+            f"<b>PMS2 classification:</b> {escape_html(proj['classification'])}<br>"
+            f"<b>Date evaluated:</b> {escape_html(proj['date'])}<br>"
+            f"<b>PMS2 region (copy-paste):</b> {escape_html(pms2_region)}<br>"
+            f"<b>Note:</b> A variant called here by short-read NGS may actually be "
+            f"the equivalent PMS2 variant due to paralog misalignment."
+        )
+
+        bed_line = "\t".join([
+            proj['chrom'],
+            str(proj['bed_start']),
+            str(proj['bed_end']),
+            proj['pms2cl_name'],
+            "0",
+            ".",
+            str(proj['bed_start']),
+            str(proj['bed_end']),
+            color,
+            proj['pms2_name'],
+            proj['classification'],
+            proj['date'],
+            pms2_region,
+            mouse_over,
+        ])
+        entries.append(bed_line)
+
+    log(f"  Projected: {len(entries)} variants")
+    log(f"  Skipped (HGVS not parseable / intronic): {skipped_no_parse}")
+    log(f"  Skipped (PMS2 exons 1-8, 10, or beyond PMS2CL coverage): {skipped_outside_coverage}")
+
+    if not entries:
+        return None
+
+    bed_file = os.path.join(output_dir, f"pms2clParalogVars_{assembly}.bed")
+    with open(bed_file, 'w') as f:
+        f.write('\n'.join(entries) + '\n')
+    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
+
+    as_file = os.path.join(output_dir, "pms2clParalogVars.as")
+    with open(as_file, 'w') as f:
+        f.write(PMS2CL_AUTOSQL)
+
+    bb_file = os.path.join(output_dir, f"pms2clParalogVars{assembly.capitalize()}.bb")
+    chrom_sizes = CHROM_SIZES[assembly]
+    bash(f"bedToBigBed -as={as_file} -type=bed9+5 -tab {bed_file} {chrom_sizes} {bb_file}")
+    log(f"  Created: {bb_file}")
+    return bb_file
+
+
 def create_track(variants, assembly, output_dir):
     """Create BED and bigBed files for a given assembly"""
     log(f"\nProcessing {assembly}...")
@@ -472,7 +743,7 @@ def create_track(variants, assembly, output_dir):
 
     # Sort BED file
     log(f"  Sorting BED file...")
-    subprocess.run(["sort", "-k1,1", "-k2,2n", bed_file, "-o", bed_file], check=True)
+    bash(f"sort -k1,1 -k2,2n {bed_file} -o {bed_file}")
 
     # Create bigBed
     as_file = os.path.join(output_dir, "insightClinVar.as")
@@ -481,10 +752,7 @@ def create_track(variants, assembly, output_dir):
 
     log(f"  Creating bigBed file: {bb_file}")
     try:
-        subprocess.run(
-            ["bedToBigBed", "-as=" + as_file, "-type=bed9+7", "-tab",
-             bed_file, chrom_sizes, bb_file],
-            check=True)
+        bash(f"bedToBigBed -as={as_file} -type=bed9+7 -tab {bed_file} {chrom_sizes} {bb_file}")
         log(f"  Successfully created: {bb_file}")
     except Exception as e:
         log(f"  ERROR creating bigBed: {e}")
@@ -539,6 +807,17 @@ def main():
             output_files[assembly] = {'bed': bed_file, 'bb': bb_file}
         except Exception as e:
             log(f"ERROR processing {assembly}: {e}")
+            import traceback
+            traceback.print_exc()
+
+    # Step 5: Build PMS2CL paralog projection track
+    for assembly in ['hg38', 'hg19']:
+        try:
+            paralog_bb = create_pms2cl_paralog_track(variants, assembly, output_dir)
+            if assembly in output_files:
+                output_files[assembly]['paralog_bb'] = paralog_bb
+        except Exception as e:
+            log(f"ERROR projecting PMS2CL paralog ({assembly}): {e}")
             import traceback
             traceback.print_exc()
 

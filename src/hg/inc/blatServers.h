@@ -64,5 +64,26 @@ void blatServersOutput(struct blatServers *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct blatServerParams
+/* Parameters needed to connect to a gfServer and run alignments.
+ * Returned by findBlatServer(); shared by hgBlat and hubApi/blat. */
+    {
+    char *db;           /* Assembly database name. */
+    char *genome;       /* Human-readable genome name. */
+    char *host;         /* gfServer hostname. */
+    char *port;         /* gfServer port (string). */
+    char *nibDir;       /* Directory of .2bit / .nib sequence files. */
+    char *genomeDataDir;/* Dynamic-server root-relative directory, or NULL. */
+    boolean isTrans;    /* TRUE for translated (protein/rnax/dnax) queries. */
+    boolean isDynamic;  /* TRUE if served by a dynamic gfServer. */
+    };
+
+struct blatServerParams *findBlatServer(char *db, boolean isTrans);
+/* Return gfServer connection parameters for the given assembly, or NULL if
+ * none is configured.  Handles both hub and non-hub assemblies.
+ * The description-to-name fallback from hgBlat is included: if db is not
+ * found as a name in dbDb it is tried as a description.
+ * Caller should NOT free the returned struct. */
+
 #endif /* BLATSERVERS_H */
 

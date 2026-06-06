@@ -1548,28 +1548,10 @@ void printCaptcha()
     exit(0);
 }
 
-static boolean isUserAgentException() 
+static boolean isUserAgentException()
 /* return true if HTTP user-agent is in list of exceptions in hg.conf */
 {
-char *agent = cgiUserAgent();
-if (!agent)
-    return FALSE;
-
-struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
-if (!excStrs)
-    return FALSE;
-
-struct excReStr;
-for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
-    {
-    if (regexMatch(agent, sl->name))
-        {
-        fprintf(stderr, "CAPTCHAPASS %s matches %s\n", agent, sl->name);
-        return TRUE;
-        }
-    }
-
-return FALSE;
+return botExceptionUserAgent();
 }
 
 void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
@@ -1623,10 +1605,26 @@ if (userId && userIdFound && !cgiOptionalString("captcha"))
 // and remove it from the cart
 char *token = cgiOptionalString("token");
 if (token)
-{ 
+{
     if (isValidToken(token))
         {
         cartRemove(cart, "token");
+        // Drop any IP-tracking rows for this hguid so a legitimate user
+        // who roams networks isn't repeatedly captcha-gated.
+        if (cfgOptionBooleanDefault("hguidIpTracking.enabled", FALSE) && isNotEmpty(userId))
+            {
+            unsigned int userIdNum = cartDbParseId(userId, NULL);
+            if (userIdNum != 0)
+                {
+                struct sqlConnection *conn = hConnectCentralNoCache();
+                char *table = cfgOptionDefault("hguidIpTracking.table", "hguidIpAccess");
+                char query[256];
+                sqlSafef(query, sizeof(query),
+                         "DELETE FROM %s WHERE userId=%u", table, userIdNum);
+                sqlUpdate(conn, query);
+                sqlDisconnect(&conn);
+                }
+            }
         return;
         }
     else

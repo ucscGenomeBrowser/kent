@@ -186,7 +186,7 @@ if len(driver.window_handles) > 1:
     print("A second window has opened.")
     driver.quit()
     sys.exit()
-driver.find_element(By.XPATH, "//*/text()[normalize-space(.)='Cancel']/parent::*").click()
+driver.find_element(By.XPATH, "//span[text()='Drag-and-select']/../..//button[text()='Cancel']").click()
 time.sleep(3)
 
 # Tests multi-region for hg38

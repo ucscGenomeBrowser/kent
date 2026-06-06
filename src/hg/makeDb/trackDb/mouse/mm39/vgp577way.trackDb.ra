@@ -26,8 +26,8 @@ html vgp577way
         viewUi on
         itemFirstCharCase noChange
         group compGeno
-        bigDataUrl /gbdb/mm39/vgp577way/mm39.vgp577way.bb
-        summary /gbdb/mm39/vgp577way/mm39.vgp577waySummary.bb
+        bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/mm39/mm39.vgp577way.bb
+        summary https://hgdownload.soe.ucsc.edu/hubs/VGP/vgp577way/bbi/mm39/vgp577way/mm39.vgp577waySummary.bb
         irows on
         color 0, 10, 100
         altColor 0,90,10
