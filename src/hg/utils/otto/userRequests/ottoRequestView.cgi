@@ -55,13 +55,12 @@ asmStatus = {
     1: 'acknowledged, email sent',
     2: 'assembly build started',
     3: 'assembly build done',
-    4: 'downloaded, track files made',
-    5: 'symlinks ready, awaiting push',
-    6: 'push complete',
+    4: 'assembly available on hgwdev',
+    5: 'assembly available on hgwbeta',
+    6: 'assembly available on hgw2 - done',
     7: 'ERROR',
     8: 'COMPLETE (final email sent)',
 }
-
 
 COLS = ['id', 'requestType', 'fromDb', 'toDb', 'email', 'comment',
         'requestTime', 'status', 'buildDir', 'completeTime']
@@ -113,6 +112,11 @@ def unescapeMysql(s):
         else:
             out.append(s[i]); i += 1
     return ''.join(out)
+
+
+def getStatusDict(requestType):
+    """Return appropriate status dictionary based on request type."""
+    return asmStatus if requestType == 'assembly' else liftStatus
 
 
 def hgsqlRun(sql):
@@ -355,8 +359,13 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
         out(f'<div class="banner error">{html.escape(error)}</div>\n')
 
     out('<div class="legend">status: ')
+    # Show both status types
+    out('<strong>liftOver:</strong> ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
                           for k, v in liftStatus.items()))
+    out('<br><strong>assembly:</strong> ')
+    out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
+                          for k, v in asmStatus.items()))
     # Count rows by type for toggle button labels
     completed_count = sum(1 for r in rows if len(r) > 7 and r[7] == '8')
     assembly_count = sum(1 for r in rows if len(r) > 1 and r[1] == 'assembly')
@@ -414,7 +423,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
             if c == 'comment':
                 out(f'<td class="comment">{html.escape(cell)}</td>')
             elif c == 'status':
-                label = liftStatus.get(stnum, '?')
+                reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+                statusDict = getStatusDict(reqType)
+                label = statusDict.get(stnum, '?')
                 out(f'<td><b>{html.escape(cell)}</b> '
                     f'<small>{html.escape(label)}</small></td>')
             elif c in ('fromDb', 'toDb') and cell:
@@ -448,7 +459,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
             '<input type="hidden" name="action" value="resetStatus">'
             f'<input type="hidden" name="id" value="{html.escape(rid)}">'
             '<select name="status">')
-        for k in sorted(liftStatus):
+        reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+        statusDict = getStatusDict(reqType)
+        for k in sorted(statusDict):
             sel = ' selected' if k == stnum else ''
             out(f'<option value="{k}"{sel}>{k}</option>')
         out('</select> <button type="submit">set</button></form></td>')
