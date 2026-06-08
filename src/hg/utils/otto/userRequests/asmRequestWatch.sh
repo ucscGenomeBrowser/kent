@@ -85,7 +85,6 @@ function sendNotification() {
   bounce+="sc."
   bounce+="ed"
   bounce+="u"
-  printf "# DBG sending\n" 1>&2
   # -f sets the envelope sender (becomes Return-Path at delivery and the
   #    bounce address); -t reads recipients from To:/Cc:/Bcc: headers;
   #    -oi prevents a lone "." in body from ending the message
@@ -99,6 +98,51 @@ function sendNotification() {
     printf "%s\n" "${msgBody}"
   } | /usr/sbin/sendmail -f "${bounce}" -t -oi
 }	# function sendNotification()
+
+##############################################################################
+### accessionToPath - given an accession - expand to path name
+##############################################################################
+function accessionToPath() {
+  local acc="${1}"
+  local gcX="${acc:0:3}"
+  local d0="${acc:4:3}"
+  local d1="${acc:7:3}"
+  local d2="${acc:10:3}"
+  local pathName="${gcX}/${d0}/${d1}/${d2}"
+  printf "%s" "${pathName}"
+}	# function accessionToPath()
+
+############################################################################
+# phase 1: watch for new requests, detect when assembly build has started
+############################################################################
+while IFS=$'\t' read -r reqId fromDb; do
+  accPath=$(accessionToPath "${fromDb}")
+  # if the trackData/ directory is present, the build is running
+  shopt -s nullglob  # make globs expand to nothing if no matches
+  trackDataDirs=(/hive/data/genomes/asmHubs/allBuild/${accPath}/${fromDb}_*/trackData)
+  shopt -u nullglob  # restore default behavior
+  # Check the results
+  case ${#trackDataDirs[@]} in
+    0)	# no directory seen yet, nothing happening
+      ;;
+    1)  # single directory seen - build has started - set the buildDir
+      buildDir=$(dirname "$(realpath "${trackDataDirs[0]}")")
+      /cluster/bin/x86_64/${hgSql} -N -e \
+        "UPDATE ottoRequest SET status=2, buildDir='${buildDir}' \
+         WHERE id=${reqId};" ${centDb}
+      ;;
+    *)
+      scriptName=$(basename "$0")
+      printf "ERROR: %s: Multiple trackData directories found for %s:\n" "${scriptName}" "${accPath}" 1>&2
+      printf "  %s\n" "${trackDataDirs[@]}" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+  esac
+
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+  "SELECT id, fromDb FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'assembly';" \
+  ${centDb})
+
 
 ############################################################################
 # check for phase 6: the assembly is complete and available on the RR
