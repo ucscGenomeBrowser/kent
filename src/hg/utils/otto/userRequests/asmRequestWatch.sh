@@ -143,6 +143,34 @@ done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'assembly';" \
   ${centDb})
 
+############################################################################
+# phase 2: watch for a build to have completed
+############################################################################
+while IFS=$'\t' read -r reqId fromDb; do
+  accPath=$(accessionToPath "${fromDb}")
+  # if the trackDb.txt file is present, the build is finished
+  shopt -s nullglob  # make globs expand to nothing if no matches
+  trackDbFile=(/hive/data/genomes/asmHubs/allBuild/${accPath}/${fromDb}_*/${fromDb}_*.trackDb.txt)
+  shopt -u nullglob  # restore default behavior
+  # Check the results
+  case ${#trackDbFile[@]} in
+    0)	# no trackDb.txt file seen yet, not done
+      ;;
+    1)  # single file seen - build is complete
+      /cluster/bin/x86_64/${hgSql} -N -e \
+        "UPDATE ottoRequest SET status=3 WHERE id=${reqId};" ${centDb}
+      ;;
+    *)
+      scriptName=$(basename "$0")
+      printf "ERROR: %s: Multiple trackDb.txt files found for %s:\n" "${scriptName}" "${accPath}" 1>&2
+      printf "  %s\n" "${trackDbFile[@]}" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+  esac
+
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+  "SELECT id, fromDb FROM ottoRequest WHERE status = 2 AND requestType = 'assembly';" \
+  ${centDb})
 
 ############################################################################
 # check for phase 6: the assembly is complete and available on the RR
