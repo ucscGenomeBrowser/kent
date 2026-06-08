@@ -112,6 +112,21 @@ function accessionToPath() {
   printf "%s" "${pathName}"
 }	# function accessionToPath()
 
+##############################################################################
+### checkRemoteFile - via ssh command, check file exists on remote host
+##############################################################################
+function checkRemoteFile() {
+  local host="$1"
+  local filepath="$2"
+
+  if ssh -o ConnectTimeout=10 -o BatchMode=yes \
+             "$host" "test -f '$filepath'" </dev/null 2>/dev/null; then
+    return 0  # file exists
+  else
+    return 1  # file missing or SSH failed
+  fi
+}	# function checkRemoteFile()
+
 ############################################################################
 # phase 1: watch for new requests, detect when assembly build has started
 ############################################################################
@@ -170,6 +185,101 @@ while IFS=$'\t' read -r reqId fromDb; do
 
 done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb FROM ottoRequest WHERE status = 2 AND requestType = 'assembly';" \
+  ${centDb})
+
+############################################################################
+# phase 3: watch for the files to appear on hgwdev
+############################################################################
+while IFS=$'\t' read -r reqId fromDb; do
+  accPath=$(accessionToPath "${fromDb}")
+  # if the hub.txt file is present, the build is available on hgwdev
+  shopt -s nullglob  # make globs expand to nothing if no matches
+  hubTxt=(/gbdb/genark/${accPath}/${fromDb}/hub.txt)
+  shopt -u nullglob  # restore default behavior
+  # Check the results
+  case ${#hubTxt[@]} in
+    0)	# no hub.txt file seen yet, not done
+      ;;
+    1)  # single file seen - build is available on hgwdev
+      /cluster/bin/x86_64/${hgSql} -N -e \
+        "UPDATE ottoRequest SET status=4 WHERE id=${reqId};" ${centDb}
+      ;;
+    *)
+      scriptName=$(basename "$0")
+      printf "ERROR: %s: Multiple hub.txt files found for %s:\n" "${scriptName}" "${accPath}" 1>&2
+      printf "  %s\n" "${hubTxt[@]}" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+  esac
+
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+  "SELECT id, fromDb FROM ottoRequest WHERE status = 3 AND requestType = 'assembly';" \
+  ${centDb})
+
+############################################################################
+# phase 4: watch for the files to appear on hgwbeta
+############################################################################
+while IFS=$'\t' read -r reqId fromDb; do
+  accPath=$(accessionToPath "${fromDb}")
+  # if the hub.txt file is present, the build is available on hgwdev
+  shopt -s nullglob  # make globs expand to nothing if no matches
+  hubTxt=(/gbdb/genark/${accPath}/${fromDb}/hub.txt)
+  shopt -u nullglob  # restore default behavior
+  # Check the results
+  case ${#hubTxt[@]} in
+    0)	# no hub.txt file seen, not supposed to happen in this state
+      printf "ERROR: %s status 4 /gbdb/genark/${accPath}/${fromDb}/hub.txt file is missing\n" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+    1)  # single file seen - build is available on hgwdev
+      if checkRemoteFile "qateam@hgwbeta" "${hubTxt[0]}"; then
+        /cluster/bin/x86_64/${hgSql} -N -e \
+          "UPDATE ottoRequest SET status=5 WHERE id=${reqId};" ${centDb}
+      fi
+      ;;
+    *)
+      scriptName=$(basename "$0")
+      printf "ERROR: %s: Multiple hub.txt files found for %s:\n" "${scriptName}" "${accPath}" 1>&2
+      printf "  %s\n" "${hubTxt[@]}" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+  esac
+
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+  "SELECT id, fromDb FROM ottoRequest WHERE status = 4 AND requestType = 'assembly';" \
+  ${centDb})
+
+############################################################################
+# phase 5: watch for the files to appear on hgw2
+############################################################################
+while IFS=$'\t' read -r reqId fromDb; do
+  accPath=$(accessionToPath "${fromDb}")
+  # if the hub.txt file is present, the build is available on hgwdev
+  shopt -s nullglob  # make globs expand to nothing if no matches
+  hubTxt=(/gbdb/genark/${accPath}/${fromDb}/hub.txt)
+  shopt -u nullglob  # restore default behavior
+  # Check the results
+  case ${#hubTxt[@]} in
+    0)	# no hub.txt file seen, not supposed to happen in this state
+      printf "ERROR: %s status 5 /gbdb/genark/${accPath}/${fromDb}/hub.txt file is missing\n" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+    1)  # single file seen - build is available on hgwdev
+      if checkRemoteFile "qateam@hgw2" "${hubTxt[0]}"; then
+        /cluster/bin/x86_64/${hgSql} -N -e \
+          "UPDATE ottoRequest SET status=6 WHERE id=${reqId};" ${centDb}
+      fi
+      ;;
+    *)
+      scriptName=$(basename "$0")
+      printf "ERROR: %s: Multiple hub.txt files found for %s:\n" "${scriptName}" "${accPath}" 1>&2
+      printf "  %s\n" "${hubTxt[@]}" 1>&2
+      setErrorStatus "${reqId}"
+      ;;
+  esac
+
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+  "SELECT id, fromDb FROM ottoRequest WHERE status = 5 AND requestType = 'assembly';" \
   ${centDb})
 
 ############################################################################
