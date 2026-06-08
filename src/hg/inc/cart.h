@@ -99,10 +99,10 @@ char *cartSessionVarName();
 char *cartSessionId(struct cart *cart);
 /* Return session id. */
 
-unsigned cartSessionRawId(struct cart *cart);
+unsigned long cartSessionRawId(struct cart *cart);
 /* Return raw session id without security key. */
 
-unsigned cartUserRawId(struct cart *cart);
+unsigned long cartUserRawId(struct cart *cart);
 /* Return raw user id without security key. */
 
 char *cartSidUrlString(struct cart *cart);
