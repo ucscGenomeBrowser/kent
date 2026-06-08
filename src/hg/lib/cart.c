@@ -115,13 +115,13 @@ if (conn != NULL)
     /* Since the content string is chopped, query for the actual length. */
     struct dyString *query = dyStringNew(1024);
     sqlDyStringPrintf(query, "select length(contents) from %s"
-	  " where id = %d", userDbTable(), u->id);
+	  " where id = %lu", userDbTable(), u->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", u->sessionKey);
     uLen = sqlQuickNum(conn, query->string);
     dyStringClear(query);
     sqlDyStringPrintf(query, "select length(contents) from %s"
-	  " where id = %d", sessionDbTable(),s->id);
+	  " where id = %lu", sessionDbTable(),s->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", s->sessionKey);
     sLen = sqlQuickNum(conn, query->string);
@@ -139,7 +139,7 @@ if (textSize == NULL)
 if (trackControls == NULL)
     trackControls = "-";
 fprintf(stderr, "cartTrace: %22s: "
-	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
+	"u.i=%lu u.l=%d u.c=%d s.i=%lu s.l=%d s.c=%d "
 	"p=%s f=%s t=%s pid=%ld %s\n",
 	when,
 	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
@@ -147,12 +147,12 @@ fprintf(stderr, "cartTrace: %22s: "
 char userIdKey[256];
 cartDbSecureId(userIdKey, sizeof userIdKey, u);
 if (cart->userId && !sameString(userIdKey, cart->userId))
-    fprintf(stderr, "cartTrace: bad userId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad userId %s --> %lu_%s!  pid=%ld\n",
 	    cart->userId, u->id, u->sessionKey, (long)getpid());
 char sessionIdKey[256];
 cartDbSecureId(sessionIdKey, sizeof sessionIdKey, s);
 if (cart->sessionId && !sameString(sessionIdKey, cart->sessionId))
-    fprintf(stderr, "cartTrace: bad sessionId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad sessionId %s --> %lu_%s!  pid=%ld\n",
 	    cart->sessionId, s->id, s->sessionKey, (long)getpid());
 }
 
@@ -285,8 +285,8 @@ else
     struct cartDb *cdb = NULL;
     struct dyString *where = dyStringNew(256);
     char *sessionKey = NULL;	    
-    unsigned int id = cartDbParseId(secureId, &sessionKey);
-    sqlDyStringPrintf(where, "id = %u", id);
+    unsigned long id = cartDbParseId(secureId, &sessionKey);
+    sqlDyStringPrintf(where, "id = %lu", id);
     if (cartDbUseSessionKey())
 	{
 	if (!sessionKey)
@@ -300,7 +300,7 @@ else
        /* Can't use warn here -- it interrupts the HTML header, causing an
 	* err500 (and nothing useful in error_log) instead of a warning. */
        fprintf(stderr,
-	       "%s id=%u looks corrupted -- starting over with new %s id.\n",
+	       "%s id=%lu looks corrupted -- starting over with new %s id.\n",
 	       table, id, table);
        cdb = NULL;
        }
@@ -350,14 +350,14 @@ if (!cdb)
     sqlDyStringPrintf(query, ")");
     sqlUpdate(conn, query->string);
     dyStringFree(&query);
-    unsigned int id = sqlLastAutoId(conn);
+    unsigned long id = sqlLastAutoId64(conn);
     char newSecureId[256];
     if (cartDbUseSessionKey() && !sameString(sessionKey,""))
-	safef(newSecureId, sizeof newSecureId, "%u_%s", id, sessionKey);
+	safef(newSecureId, sizeof newSecureId, "%lu_%s", id, sessionKey);
     else
-	safef(newSecureId, sizeof newSecureId, "%u", id);
+	safef(newSecureId, sizeof newSecureId, "%lu", id);
     if ((cdb = cartDbLoadFromId(conn,table,newSecureId)) == NULL)
-        errAbort("Couldn't get cartDb for id=%u right after loading.  "
+        errAbort("Couldn't get cartDb for id=%lu right after loading.  "
 		 "MySQL problem??", id);
     if (!sameString(sessionKey,""))
 	freeMem(sessionKey);
@@ -1805,7 +1805,7 @@ struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-sqlDyStringPrintf(dy, " where id=%u", cdb->id);
+sqlDyStringPrintf(dy, " where id=%lu", cdb->id);
 if (cartDbUseSessionKey())
   sqlDyStringPrintf(dy, " and sessionKey='%s'", cdb->sessionKey);
 sqlUpdate(conn, dy->string);
@@ -1898,7 +1898,7 @@ cartDbSecureId(buf, sizeof buf, cart->sessionInfo);
 return buf;
 }
 
-unsigned cartSessionRawId(struct cart *cart)
+unsigned long cartSessionRawId(struct cart *cart)
 /* Return raw session id without security key. */
 {
 return cart->sessionInfo->id;
@@ -1920,7 +1920,7 @@ cartDbSecureId(buf, sizeof buf, cart->userInfo);
 return buf;
 }
 
-unsigned cartUserRawId(struct cart *cart)
+unsigned long cartUserRawId(struct cart *cart)
 /* Return raw user id without security key. */
 {
 return cart->userInfo->id;
@@ -2556,9 +2556,9 @@ if (!secureId)
     return;
 struct dyString *query = dyStringNew(256);
 char *sessionKey = NULL;	    
-unsigned int id = cartDbParseId(secureId, &sessionKey);
+unsigned long id = cartDbParseId(secureId, &sessionKey);
 char *defaultCartContents = getDefaultCart(conn);
-sqlDyStringPrintf(query, "update %s set contents='%s' where id=%u", table, defaultCartContents, id);
+sqlDyStringPrintf(query, "update %s set contents='%s' where id=%lu", table, defaultCartContents, id);
 if (cartDbUseSessionKey())
     {
     if (!sessionKey)

@@ -5,7 +5,7 @@
 
 #A simple id/contents pair for persistent storing of cart variables
 CREATE TABLE userDb (
-    id integer unsigned not null auto_increment,	# Cart ID
+    id bigint unsigned not null auto_increment,	# Cart ID
     contents longblob not null,	# Contents - encoded variables
     reserved tinyint not null,	# True if a user (rather than session) cart
     firstUse DATETIME not null,	# First time this was used
@@ -17,7 +17,7 @@ CREATE TABLE userDb (
 );
 
 CREATE TABLE sessionDb (
-    id integer unsigned not null auto_increment,	# Cart ID
+    id bigint unsigned not null auto_increment,	# Cart ID
     contents longblob not null,	# Contents - encoded variables
     reserved tinyint not null,	# True if a user (rather than session) cart
     firstUse DATETIME not null,	# First time this was used

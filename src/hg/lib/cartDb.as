@@ -1,7 +1,7 @@
 table cartDb
 "A simple id/contents pair for persistent storing of cart variables"
     (
-    uint id;	"Cart ID"
+    bigint id;	"Cart ID"
     lstring contents; "Contents - encoded variables"
     int reserved;     "Reserved field, currently always zero"
     string firstUse; "First time this was used"

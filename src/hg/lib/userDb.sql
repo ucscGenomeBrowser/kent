@@ -5,7 +5,7 @@
 
 #User Database
 CREATE TABLE userDb (
-    id int(10) unsigned not null auto_increment,	# auto-increment item ID
+    id bigint(20) unsigned not null auto_increment,	# auto-increment item ID
     contents longblob not null,	# encoded variables */
     reserved tinyint(4) not null,	# currently always zero
     firstUse datetime not null,	# first time this was used

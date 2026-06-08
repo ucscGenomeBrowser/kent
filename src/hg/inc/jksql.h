@@ -444,8 +444,11 @@ int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);
 struct slName *sqlFieldNames(struct sqlConnection *conn, char *table);
 /* Returns field names from a table. */
 
-unsigned int sqlLastAutoId(struct sqlConnection *conn);
+unsigned long sqlLastAutoId64(struct sqlConnection *conn);
 /* Return last automatically incremented id inserted into database. */
+
+unsigned int sqlLastAutoId(struct sqlConnection *conn);
+/* Return last automatically incremented id inserted into database (not 64-bit). */
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
