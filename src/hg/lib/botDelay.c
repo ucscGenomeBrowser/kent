@@ -127,18 +127,18 @@ char query[2048];
 if (cartDbHasSessionKey(conn, userDbTable()))
     {
     char *sessionKey = NULL;
-    unsigned id = cartDbParseId(cookieUserId, &sessionKey);
+    unsigned long id = cartDbParseId(cookieUserId, &sessionKey);
     if (sessionKey == NULL)
         {
         sqlDisconnect(&conn);
         return FALSE;
         }
-    sqlSafef(query, sizeof(query), "select id from %s where id = %u and sessionKey = '%s'",
+    sqlSafef(query, sizeof(query), "select id from %s where id = %lu and sessionKey = '%s'",
             userDbTable(), id, sessionKey);
     }
 else
     {
-    sqlSafef(query, sizeof(query), "select id from %s where id = %u", userDbTable(), sqlUnsigned(cookieUserId));
+    sqlSafef(query, sizeof(query), "select id from %s where id = %lu", userDbTable(), sqlUnsignedLong(cookieUserId));
     }
 if (sqlExists(conn, query))
     isValid = TRUE;
@@ -165,7 +165,7 @@ if (isEmpty(cookieUserId) || isEmpty(clientIp))
 if (!isValidHguid(cookieUserId))
     return;
 
-unsigned int userIdNum = cartDbParseId(cookieUserId, NULL);
+unsigned long userIdNum = cartDbParseId(cookieUserId, NULL);
 
 int maxIps = atoi(cfgOptionDefault("hguidIpTracking.maxIps", "10"));
 int windowSeconds = atoi(cfgOptionDefault("hguidIpTracking.windowSeconds", "600"));
@@ -175,13 +175,13 @@ struct sqlConnection *conn = hConnectCentralNoCache();
 char query[512];
 
 sqlSafef(query, sizeof(query),
-    "INSERT INTO %s (userId, ip, lastSeen) VALUES (%u, '%s', NOW()) "
+    "INSERT INTO %s (userId, ip, lastSeen) VALUES (%lu, '%s', NOW()) "
     "ON DUPLICATE KEY UPDATE lastSeen=NOW()",
     table, userIdNum, clientIp);
 sqlUpdate(conn, query);
 
 sqlSafef(query, sizeof(query),
-    "SELECT COUNT(DISTINCT ip) FROM %s WHERE userId=%u "
+    "SELECT COUNT(DISTINCT ip) FROM %s WHERE userId=%lu "
     "AND lastSeen > NOW() - INTERVAL %d SECOND",
     table, userIdNum, windowSeconds);
 int distinctIps = sqlQuickNum(conn, query);

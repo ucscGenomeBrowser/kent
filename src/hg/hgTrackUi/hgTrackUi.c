@@ -3043,7 +3043,7 @@ freeMem(tdbDataTypes);
 return list;
 }
 
-unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
+unsigned long cartDbParseId(char *, char **);  // ADS: avoid extra include
 
 
 static void facetedCompositeUi(struct trackDb *tdb)

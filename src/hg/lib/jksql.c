@@ -2637,11 +2637,22 @@ slReverse(&list);
 return list;
 }
 
-unsigned int sqlLastAutoId(struct sqlConnection *conn)
+unsigned long sqlLastAutoId64(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
 {
 assert(!conn->isFree);
-unsigned id;
+unsigned long id;
+monitorEnter();
+id = mysql_insert_id(conn->conn);
+monitorLeave();
+return id;
+}
+
+unsigned int sqlLastAutoId(struct sqlConnection *conn)
+/* Return last automatically incremented id inserted into database (not 64-bit). */
+{
+assert(!conn->isFree);
+unsigned int id;
 monitorEnter();
 id = mysql_insert_id(conn->conn);
 monitorLeave();

@@ -730,7 +730,7 @@ cartSaveSession(cart);
 
 
 sqlSafef(query, sizeof(query), "SELECT firstUse, contents from %s "
-    "WHERE id=%u",
+    "WHERE id=%lu",
     "sessionDb", cartSessionRawId(cart));
 
 sr = sqlGetResult(conn, query);
@@ -928,7 +928,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST "
 cartSaveSession(cart);
 
 sqlSafef(query, sizeof(query), "SELECT contents from %s "
-    "WHERE id=%u",
+    "WHERE id=%lu",
     "sessionDb", cartSessionRawId(cart));
 
 sr = sqlGetResult(conn, query);
@@ -1123,10 +1123,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
  
 if (foundCount == 0)
-    errAbort("No session found for hgsid=%u", cartSessionRawId(cart));
+    errAbort("No session found for hgsid=%lu", cartSessionRawId(cart));
 
 if (ctCount == 0)
-    errAbort("No custom tracks found for hgsid=%u", cartSessionRawId(cart));
+    errAbort("No custom tracks found for hgsid=%lu", cartSessionRawId(cart));
 
 char archiveName[1024];
 safef(archiveName, sizeof archiveName, "savedSessionCtRaw.tar.gz");
