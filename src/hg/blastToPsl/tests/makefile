@@ -151,7 +151,7 @@ psiBadFormatTest: mkdirs
 ###
 # blastXmlToPsl
 ###
-testBlastXmlToPsl: mrna1Test mrna1TsvTest prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test misclassedPsiBlastTest
+testBlastXmlToPsl: mrna1Test mrna1TsvTest prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test hitIdIdTest misclassedPsiBlastTest
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
@@ -195,6 +195,12 @@ qtName1Test: mkdirs
 
 qtName2Test: mkdirs
 	${blastXmlToPsl} -qName=query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+# -tName=Hit_id_id pulls accession out of an id like 'gb|CM102538.1|'
+hitIdIdTest: mkdirs
+	${blastXmlToPsl} -tName=Hit_id_id input/blastn-ncbi-seqs.xml output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
