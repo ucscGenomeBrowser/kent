@@ -496,6 +496,16 @@ struct slUnsigned
 struct slUnsigned *slUnsignedNew(unsigned x);
 /* Return a new slUnsigned. */
 
+struct slUnsignedLong
+/* List of unsigned long */
+    {
+    struct slUnsignedLong *next;  /* Next in list */
+    unsigned long val;	      /* Unsigned long value */
+    };
+
+struct slUnsignedLong *slUnsignedLongNew(unsigned long x);
+/* Return a new slUnsigned. */
+
 /******* slDouble - a double on a list *******/
 
 struct slDouble
