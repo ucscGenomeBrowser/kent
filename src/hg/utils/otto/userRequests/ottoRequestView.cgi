@@ -19,7 +19,6 @@ import time
 import urllib.parse
 from datetime import datetime
 
-ALLOWED_IP   = '128.114.198.5'
 TRASH        = '/data/apache/trash'
 TABLE        = 'ottoRequest'
 
@@ -39,8 +38,7 @@ CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 # featureBitsPct() falls back to an NFS read on a snapshot miss.
 FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
 
-# from README.txt in this directory
-STATUS_NAMES = {
+liftStatus = {
     0: 'received by API',
     1: 'acknowledged, email sent',
     2: 'galaxy job started',
@@ -48,6 +46,18 @@ STATUS_NAMES = {
     4: 'downloaded, track files made',
     5: 'symlinks ready, awaiting push',
     6: 'push complete',
+    7: 'ERROR',
+    8: 'COMPLETE (final email sent)',
+}
+
+asmStatus = {
+    0: 'received by API',
+    1: 'acknowledged, email sent',
+    2: 'assembly build started',
+    3: 'assembly build done',
+    4: 'assembly available on hgwdev',
+    5: 'assembly available on hgwbeta',
+    6: 'assembly available on hgw2 - done',
     7: 'ERROR',
     8: 'COMPLETE (final email sent)',
 }
@@ -71,12 +81,6 @@ def forbidden(msg):
     sys.stdout.write("Content-Type: text/plain; charset=utf-8\r\n\r\n")
     sys.stdout.write(msg + "\n")
     sys.exit(0)
-
-
-def checkIp():
-    remote = os.environ.get('REMOTE_ADDR', '')
-    if remote != ALLOWED_IP:
-        forbidden(f"Access denied for {remote!r}; this page is restricted.")
 
 
 def setDbConfig(use_otto=False):
@@ -108,6 +112,11 @@ def unescapeMysql(s):
         else:
             out.append(s[i]); i += 1
     return ''.join(out)
+
+
+def getStatusDict(requestType):
+    """Return appropriate status dictionary based on request type."""
+    return asmStatus if requestType == 'assembly' else liftStatus
 
 
 def hgsqlRun(sql):
@@ -142,7 +151,7 @@ def doResetStatus(form):
     stat = form.getfirst('status', '')
     if not rid.isdigit():
         return None, f"bad id: {rid!r}"
-    if not stat.isdigit() or int(stat) not in STATUS_NAMES:
+    if not stat.isdigit() or int(stat) not in liftStatus:
         return None, f"bad status: {stat!r}"
     sql = (f"UPDATE {TABLE} SET status = {int(stat)} "
            f"WHERE id = {int(rid)}")
@@ -150,7 +159,7 @@ def doResetStatus(form):
     if not ok:
         return None, err.strip() or 'hgsql update failed'
     return (f"id={rid} status set to {stat} "
-            f"({STATUS_NAMES[int(stat)]})"), None
+            f"({liftStatus[int(stat)]})"), None
 
 
 def loadGenarkNames(accessions):
@@ -350,8 +359,13 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
         out(f'<div class="banner error">{html.escape(error)}</div>\n')
 
     out('<div class="legend">status: ')
+    # Show both status types
+    out('<strong>liftOver:</strong> ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
-                          for k, v in STATUS_NAMES.items()))
+                          for k, v in liftStatus.items()))
+    out('<br><strong>assembly:</strong> ')
+    out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
+                          for k, v in asmStatus.items()))
     # Count rows by type for toggle button labels
     completed_count = sum(1 for r in rows if len(r) > 7 and r[7] == '8')
     assembly_count = sum(1 for r in rows if len(r) > 1 and r[1] == 'assembly')
@@ -409,7 +423,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
             if c == 'comment':
                 out(f'<td class="comment">{html.escape(cell)}</td>')
             elif c == 'status':
-                label = STATUS_NAMES.get(stnum, '?')
+                reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+                statusDict = getStatusDict(reqType)
+                label = statusDict.get(stnum, '?')
                 out(f'<td><b>{html.escape(cell)}</b> '
                     f'<small>{html.escape(label)}</small></td>')
             elif c in ('fromDb', 'toDb') and cell:
@@ -443,7 +459,9 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
             '<input type="hidden" name="action" value="resetStatus">'
             f'<input type="hidden" name="id" value="{html.escape(rid)}">'
             '<select name="status">')
-        for k in sorted(STATUS_NAMES):
+        reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+        statusDict = getStatusDict(reqType)
+        for k in sorted(statusDict):
             sel = ' selected' if k == stnum else ''
             out(f'<option value="{k}"{sel}>{k}</option>')
         out('</select> <button type="submit">set</button></form></td>')
@@ -516,7 +534,6 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
     out('</body></html>\n')
 
 def main():
-#   checkIp()
 
     # Create FieldStorage once - it consumes stdin and can't be read twice
     form = cgi.FieldStorage()

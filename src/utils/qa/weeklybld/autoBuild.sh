@@ -165,6 +165,11 @@ read_buildenv() {
 
 STATE_FILE=""
 
+# Version (NN) the current phase produces. preview1/preview2 produce BRANCHNN+1
+# (BRANCHNN is not bumped until the final build), final/wrapup produce BRANCHNN.
+# Each do_* sets this so the success email reports the right version.
+PHASE_VER=""
+
 state_init() {
     # $1 = phase name, $2 = version (NN) this phase produces
     mkdir -p "$LOGDIR"
@@ -319,7 +324,8 @@ do_preview1() {
     log "========== PHASE: PREVIEW 1 =========="
     read_buildenv
     # Preview produces v(BRANCHNN+1); BRANCHNN is unchanged by a preview bump.
-    state_init preview1 "$((BRANCHNN + 1))"
+    PHASE_VER=$((BRANCHNN + 1))
+    state_init preview1 "$PHASE_VER"
 
     step buildenv-bump   preview1_buildenv_bump
     step tag-preview     preview1_tag_preview
@@ -388,7 +394,8 @@ preview2_tables_robot() {
 do_preview2() {
     log "========== PHASE: PREVIEW 2 =========="
     read_buildenv
-    state_init preview2 "$((BRANCHNN + 1))"
+    PHASE_VER=$((BRANCHNN + 1))
+    state_init preview2 "$PHASE_VER"
 
     step buildenv-bump   preview2_buildenv_bump
     step tag-preview2    preview2_tag_preview2
@@ -563,6 +570,7 @@ do_final() {
     else
         FINAL_VER=$((BRANCHNN + 1))
     fi
+    PHASE_VER=$FINAL_VER
     state_init final "$FINAL_VER"
 
     step checklogins          final_checklogins
@@ -633,6 +641,7 @@ generate_release_markdown() {
 do_wrapup() {
     log "========== PHASE: WRAP-UP =========="
     read_buildenv
+    PHASE_VER=$BRANCHNN
 
     log "Running wrap-up for v${BRANCHNN}"
 
@@ -851,10 +860,12 @@ main() {
     log "BUILD PHASE '$phase' COMPLETED SUCCESSFULLY"
     log "============================================"
 
-    # Send success notification
+    # Send success notification. Use PHASE_VER (the version this phase produces),
+    # not BRANCHNN, since preview1/preview2 run before BRANCHNN is bumped.
+    local ver="${PHASE_VER:-$BRANCHNN}"
     if ! $DRY_RUN; then
-        echo "autoBuild.sh completed phase '$phase' for v${BRANCHNN} successfully at $(date)" \
-            | mail -s "AUTOBUILD OK: $phase v${BRANCHNN}" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
+        echo "autoBuild.sh completed phase '$phase' for v${ver} successfully at $(date)" \
+            | mail -s "AUTOBUILD OK: $phase v${ver}" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
 }
 

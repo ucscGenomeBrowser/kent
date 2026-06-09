@@ -40,9 +40,11 @@ errAbort(
   "  -tName=src - define element used to obtain the tName.  The following\n"
   "   values are support:\n"
   "     o Hit_id - use contents of the <Hit-id> element.\n"
+  "     o Hit_id_id - with an id like 'gb|CM102538.1|' pull out `CM102538.1'\n"
   "     o Hit_def0 - use the first white-space separated word of the\n"
   "       <Hit_def> element.\n"
   "     o Hit_accession - contents of the <Hit_accession> element.\n"
+  "        WARNING: this drops the version.\n"
   "   Default is Hit-def0.\n"
   "  -forcePsiBlast - treat as output of PSI-BLAST. blast-2.2.16 and maybe\n"
   "   others indentify psiblast as blastp."
@@ -69,6 +71,7 @@ enum qNameSrc {
 
 enum tNameSrc {
     tNameSrcHitId,
+    tNameSrcHitIdId,
     tNameSrcHitDef0,
     tNameSrcHitAccession
 };
@@ -177,6 +180,18 @@ switch (tNameSrc)
     case tNameSrcHitId:
         dyStringAppend(buf, hitRec->ncbiBlastHitId->text);
         break;
+    case tNameSrcHitIdId:
+        {
+        char *id = cloneString(hitRec->ncbiBlastHitId->text);
+        char *words[4];
+        int n = chopByChar(id, '|', words, ArraySize(words));
+        if (n >= 2)
+            dyStringAppend(buf, words[1]);
+        else
+            dyStringAppend(buf, hitRec->ncbiBlastHitId->text);
+        freeMem(id);
+        break;
+        }
     case tNameSrcHitDef0:
         appendFirstWord(buf, hitRec->ncbiBlastHitDef->text);
         break;        
@@ -319,12 +334,14 @@ else
 char *tNameSrcStr = optionVal("tName", "Hit_def0");
 if (sameString(tNameSrcStr, "Hit_id"))
     tNameSrc = tNameSrcHitId;
+else if (sameString(tNameSrcStr, "Hit_id_id"))
+    tNameSrc = tNameSrcHitIdId;
 else if (sameString(tNameSrcStr, "Hit_def0"))
     tNameSrc = tNameSrcHitDef0;
 else if (sameString(tNameSrcStr, "Hit_accession"))
     tNameSrc = tNameSrcHitAccession;
 else
-    errAbort("invalid value for -tName, expect on of: \"Hit_id\",  \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
+    errAbort("invalid value for -tName, expect on of: \"Hit_id\", \"Hit_id_id\", \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
 
 blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL), optionExists("tsv"));
 if (errCount > 0)
