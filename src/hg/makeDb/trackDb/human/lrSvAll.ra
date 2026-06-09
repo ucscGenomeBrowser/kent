@@ -11,7 +11,7 @@
     visibility pack
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen sources=$sources AF=$minAF-$maxAF AC=$AC
     searchIndex name
-    filterValues.sources CoLoRSdb|CoLoRSdb 1427 (PacBio),1000G-ONT-Vienna|1KG ONT Vienna 1019,1000G-ONT|1KG ONT 100 (Gustafson),AoU1K|All of Us 1027 (PacBio),Han945|Han Chinese 945,TommoJapan|ToMMo 333 (Japanese),GA4K|GA4K 502 (rare disease),deCODE|deCODE 3622 (Icelandic),HPRCv2|HPRC v2 233,HGSVC2|HGSVC2 32,HGSVC3|HGSVC3 65,KimPD|Kim PD Brain 100,ArabUAE53|Arab APR 53,China58|CPC 58 (Chinese),Svatalog101|SVatalog 101
+    filterValues.sources CoLoRSdb|CoLoRSdb 1427 (PacBio),1000G-ONT-Vienna|1KG ONT Vienna 1019,1000G-ONT|1KG ONT 100 (Gustafson),AoU1K|All of Us 1027 (PacBio),Han945|Han Chinese 945,TommoJapan|ToMMo 333 (Japanese),GA4K|GA4K 502 (rare disease),deCODE|deCODE 3622 (Icelandic),HPRCv2.1|HPRC v2.1 233,HGSVC2|HGSVC2 32,HGSVC3|HGSVC3 65,KimPD|Kim PD Brain 100,ArabUAE53|Arab APR 53,China58|CPC 58 (Chinese),Svatalog101|SVatalog 101
     filterType.sources multipleListOr
     filterLabel.sources Source Database
     filterValues.svType DEL,INS,DUP,INV,CPX,MIXED,INSDEL,CNV,BND,TRA,MEI
