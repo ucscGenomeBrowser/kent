@@ -31,21 +31,51 @@ ln -sf /hive/data/genomes/hs1/bed/lrSv/hgsvc3/hgsvc3.bb /gbdb/hs1/lrSv/hgsvc3.bb
 
 ##########
 # 2026-04-21 Claude max
+#
+# OUTDATED, DO NOT RUN. The HPRC v2.0 wave track (hprc2Sv) was removed from
+# trackDb on 2026-06-08 when the hg38 track moved to the v2.1 file
+# (hprc2v21Sv, doc/hg38/lrSv.txt). The CHM13 v2.1 build is the next section
+# below; this v2.0 recipe is kept, commented out, in case HPRC releases
+# wave-decomposed VCFs again (the v2.0 converter handles their TYPE/LEN/INV
+# fields, which the v2.1 raw deconstruct files do not have).
+#
+# # HPRC release-2 pangenome SVs on T2T-CHM13. HPRC releases one VCF per
+# # reference path; we already have the GRCh38 version as the hprc2Sv
+# # subtrack. The hs1 track is built from the parallel T2T-CHM13 wave VCF
+# # with the same converter.
+#
+# mkdir -p /hive/data/genomes/hs1/bed/lrSv/hprc2
+# cd /hive/data/genomes/hs1/bed/lrSv/hprc2
+#
+# aria2c -x10 https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz
+#
+# python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2VcfToBed.py \
+#     hprc-v2.0-mc-chm13.wave.vcf.gz hprc2.bed
+# bedSort hprc2.bed hprc2.sorted.bed
+# bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
+#     -tab hprc2.sorted.bed /hive/data/genomes/hs1/chrom.sizes hprc2.bb
+#
+# ln -sf /hive/data/genomes/hs1/bed/lrSv/hprc2/hprc2.bb /gbdb/hs1/lrSv/hprc2.bb
 
-# HPRC release-2 pangenome SVs on T2T-CHM13. HPRC releases one VCF per
-# reference path; we already have the GRCh38 version as the hprc2Sv
-# subtrack. The hs1 track is built from the parallel T2T-CHM13 wave VCF
-# with the same converter.
+##########
+# 2026-06-09 Claude max
 
-mkdir -p /hive/data/genomes/hs1/bed/lrSv/hprc2
-cd /hive/data/genomes/hs1/bed/lrSv/hprc2
+# hprc2v21Sv on T2T-CHM13: the CHM13 path of the HPRC v2.1 minigraph-cactus
+# graph (233 samples). Same raw vg deconstruct file type as the hg38 v2.1
+# build (no per-allele TYPE/LEN, graph traversals and nested snarls present),
+# converted with the same parsimony-trimming converter. CHM13 contig names
+# (chr1..chrY) already match the hs1 assembly, so no renaming is needed.
 
-aria2c -x10 https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-chm13.wave.vcf.gz
+mkdir -p /hive/data/genomes/hs1/bed/lrSv/hprc2v21
+cd /hive/data/genomes/hs1/bed/lrSv/hprc2v21
 
-python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2VcfToBed.py \
-    hprc-v2.0-mc-chm13.wave.vcf.gz hprc2.bed
-bedSort hprc2.bed hprc2.sorted.bed
-bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
-    -tab hprc2.sorted.bed /hive/data/genomes/hs1/chrom.sizes hprc2.bb
+# VCF provided by Glenn Hickey (HPRC graph team):
+wget https://public.gi.ucsc.edu/~ghickey/debug/hprc-v2.1-mc-chm13.gref95.ro.vcf.gz
 
-ln -sf /hive/data/genomes/hs1/bed/lrSv/hprc2/hprc2.bb /gbdb/hs1/lrSv/hprc2.bb
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2RoVcfToBed.py \
+    hprc-v2.1-mc-chm13.gref95.ro.vcf.gz hprc2v21.bed
+# kept 608435 SV-sized alleles: 363310 INS, 245125 DEL, 0 CPX
+# (75809 at nested snarl levels LV>0)
+bedSort hprc2v21.bed hprc2v21.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2Ro.as \
+    -tab hprc2v21.sorted.bed /hive/data/genomes/hs1/chrom.sizes hprc2v21.bb
