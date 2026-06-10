@@ -504,7 +504,7 @@ struct slUnsignedLong
     };
 
 struct slUnsignedLong *slUnsignedLongNew(unsigned long x);
-/* Return a new slUnsigned. */
+/* Return a new slUnsignedLong. */
 
 /******* slDouble - a double on a list *******/
 

@@ -494,7 +494,7 @@ return NULL;
 }
 
 struct slUnsigned *slUnsignedNew(unsigned x)
-/* Return a new int. */
+/* Return a new unsigned int. */
 {
 struct slUnsigned *a;
 AllocVar(a);
@@ -503,7 +503,7 @@ return a;
 }
 
 struct slUnsignedLong *slUnsignedLongNew(unsigned long x)
-/* Return a new int. */
+/* Return a new unsigned long. */
 {
 struct slUnsignedLong *a;
 AllocVar(a);
