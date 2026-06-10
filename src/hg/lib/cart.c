@@ -1560,7 +1560,7 @@ void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, 
 {
 static boolean captchaCheckDone = FALSE;
 
-// No need to do this again. Can happen if cartNew() is called somewhere else in a CGI
+// No need to do this again in a CGI run. Can happen if cartNew() is called somewhere else in a CGI a second time
 if (captchaCheckDone)
     return;
 
@@ -1690,7 +1690,8 @@ boolean fromCli = cgiWasSpoofed(); // QA runs our CGIs from the command line and
 
 forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
 
-// we rely on the cookie being validated, so if we reset a cookie, do this after the captcha
+// we rely on the cookie being validated later, so if user requested to reset the cookie settings
+// load the settings after the captcha has been checked
 if ( cgiOptionalString("ignoreCookie") != NULL )
     cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
 
