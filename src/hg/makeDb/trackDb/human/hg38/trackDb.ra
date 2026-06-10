@@ -1,7 +1,5 @@
 include ncOrfs.ra
 
-include masterMindGame.ra alpha
-
 include strVar.ra
 
 include barCharts.ra
