@@ -1684,11 +1684,12 @@ cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 
-cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
-
 boolean fromCli = cgiWasSpoofed(); // QA runs our CGIs from the command line and we debug from there
 
 forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
+// Load sessionDb info *after* forceUserIdOrCaptcha.  loadDb will create a new record if it doesn't
+// find a matching one, and we don't need bot traffic filling our sessionDb table with junk.
+cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 // we rely on the cookie being validated later, so if user requested to reset the cookie settings
 // load the settings after the captcha has been checked

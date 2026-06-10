@@ -13,7 +13,15 @@ if [ -e htslib ] ; then
 fi
 
 if [ !  -e submodules/htslib/.git -o ! -e submodules/htslib/htscodecs/.git ] ; then
-    echo "Note: initializing git submodules" >&2
-    (set -x; git -c protocol.file.allow=always submodule update --init --recursive)
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
+        echo "Note: initializing git submodules" >&2
+        (set -x; git -c protocol.file.allow=always submodule update --init --recursive)
+    elif [ ! -e submodules/htslib/hts.c -o ! -e submodules/htslib/htscodecs/htscodecs/htscodecs.c ] ; then
+        # not a git working tree (e.g. a source release); submodule sources must
+        # already be present since they can not be checked out without git.
+        echo "Error: submodule sources under submodules/htslib are missing and this" >&2
+        echo "       is not a git working tree, so they can not be initialized." >&2
+        exit 1
+    fi
 fi
 

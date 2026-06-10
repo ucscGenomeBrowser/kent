@@ -1,0 +1,17 @@
+track masterMindGame
+shortLabel Mastermind Game
+longLabel A solved game of Mastermind drawn as a lollipop chart
+type bigLolly
+bigDataUrl /gbdb/$D/masterMindGame/masterMindGame.bb
+group phenDis
+visibility pack
+itemRgb on
+lollyField 5
+lollySizeField 10
+lollyMaxSize 16
+lollyNoStems on
+yAxisNumLabels off
+maxHeightPixels 128:760:760
+viewLimits 0:9
+configurable off
+mouseOverField _mouseOver

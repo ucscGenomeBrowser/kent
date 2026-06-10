@@ -1470,14 +1470,16 @@ var myVariants = {
             // Reopening after an async image update; refresh the position fields.
             // The dialog's open callback re-applies the last-used mode.
             let form = document.getElementById("myVariants-form");
-            let start = form.elements.start;
-            let end = form.elements.end;
-            let thickStart = form.elements.thickStart;
-            let thickEnd = form.elements.thickEnd;
-            if (start) start.value = hgTracks.winStart;
-            if (end) end.value = hgTracks.winEnd;
-            if (thickStart) thickStart.value = hgTracks.winStart;
-            if (thickEnd) thickEnd.value = hgTracks.winEnd;
+            if (form) {
+                let start = form.elements.start;
+                let end = form.elements.end;
+                let thickStart = form.elements.thickStart;
+                let thickEnd = form.elements.thickEnd;
+                if (start) start.value = hgTracks.winStart;
+                if (end) end.value = hgTracks.winEnd;
+                if (thickStart) thickStart.value = hgTracks.winStart;
+                if (thickEnd) thickEnd.value = hgTracks.winEnd;
+            }
             let summaryText = document.getElementById("positionSummaryText");
             if (summaryText) {
                 let chromEl = document.getElementById("chrom");
