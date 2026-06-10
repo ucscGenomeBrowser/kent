@@ -257,22 +257,22 @@ noScoreFilter on
     filterLabel.AC Allele Count (placeholder 50)
     skipEmptyFields on
 
-    track hprc2Sv
+    track hprc2v21Sv
     parent lrSv
-    bigDataUrl /gbdb/$D/lrSv/hprc2.bb
-    shortLabel HPRC v2 233 SVs
-    longLabel Structural Variants from the HPRC v2 Pangenome Graph (233 samples, minigraph-cactus)
+    bigDataUrl /gbdb/$D/lrSv/hprc2v21.bb
+    shortLabel HPRC v2.1 233 SVs
+    longLabel Structural Variants from the HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus, raw deconstruct)
     type bigBed 9 +
     itemRgb on
     visibility dense
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC/$alleleNumber samples=$nSamples
-    filterValues.svType INS,DEL,CPX,INV
+    filterValues.svType INS,DEL
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:99113
+    filter.svLen 0:99835
     filterByRange.svLen on
     filterLabel.svLen SV Length
-    filter.insLen 0:97718
+    filter.insLen 0:1064897
     filterByRange.insLen on
     filterLabel.insLen Insertion Length
     filter.AC 0:463
@@ -282,7 +282,7 @@ noScoreFilter on
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filter.snarlLevel 0:10
+    filter.snarlLevel 0:7
     filterByRange.snarlLevel on
     filterLabel.snarlLevel Snarl Level
     skipEmptyFields on

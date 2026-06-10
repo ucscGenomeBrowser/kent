@@ -1,0 +1,21 @@
+table lrSvHprc2Ro
+"HPRC release-2.1 minigraph-cactus pangenome structural variants (233 samples)"
+    (
+    string chrom;           "Chromosome"
+    uint chromStart;        "Start position"
+    uint chromEnd;          "End position"
+    string name;            "Variant ID"
+    uint score;             "Score"
+    char[1] strand;         "Strand"
+    uint thickStart;        "Thick start (same as chromStart)"
+    uint thickEnd;          "Thick end (same as chromEnd)"
+    uint reserved;          "Item color"
+    string svType;          "SV Type|INS or DEL, classified from the net REF/ALT length change"
+    int svLen;              "SV Length|Length of the variant on the reference in base pairs"
+    int insLen;             "Insertion Length|Length of inserted sequence, 0 for DEL"
+    int AC;                 "Allele Count (AC)"
+    uint alleleNumber;      "Allele Number (AN)"
+    float alleleFreq;       "Allele Frequency (AF)"
+    uint nSamples;          "Samples with Data (NS)"
+    uint snarlLevel;        "Snarl Level|Nesting level in the pangenome snarl decomposition tree (0 = top level)"
+    )
