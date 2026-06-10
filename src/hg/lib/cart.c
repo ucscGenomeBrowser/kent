@@ -1554,7 +1554,7 @@ static boolean isUserAgentException()
 return botExceptionUserAgent();
 }
 
-void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
+void forceUserIdOrCaptcha(char *userId, boolean userIdFound, boolean fromCommandLine)
 /* print captcha if user did not sent a valid hguid cookie or a valid
  * cloudflare token. Allow certain IPs and user-agents. */
 {
@@ -1608,7 +1608,7 @@ if (token)
 {
     if (isValidToken(token))
         {
-        cartRemove(cart, "token");
+        cgiVarExclude("token");
         // Drop any IP-tracking rows for this hguid so a legitimate user
         // who roams networks isn't repeatedly captcha-gated.
         if (cfgOptionBooleanDefault("hguidIpTracking.enabled", FALSE) && isNotEmpty(userId))
@@ -1682,18 +1682,24 @@ cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
 
 boolean fromCli = cgiWasSpoofed(); // QA runs our CGIs from the command line and we debug from there
 
-forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
-// Load sessionDb info *after* forceUserIdOrCaptcha.  loadDb will create a new record if it doesn't
-// find a matching one, and we don't need bot traffic filling our sessionDb table with junk.
-cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
+boolean isValidHguid(char *cookieUserId); // external import from botDelay.c
+userIdFound = isValidHguid(userId);
+
+forceUserIdOrCaptcha(userId, userIdFound, fromCli);
+
+// Load userDb and sessionDb info *after* forceUserIdOrCaptcha.  loadDb will create a new record
+// if it doesn't find a matching one, and we don't need bot traffic filling our tables with junk
 
 // we rely on the cookie being validated, so if we reset a cookie, do this after the captcha
 if ( cgiOptionalString("ignoreCookie") != NULL )
     cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
+else
+    cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+
+cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -1786,6 +1792,7 @@ if (exclude != NULL)
     while ((ex = *exclude++))
 	cartExclude(cart, ex);
     }
+cartRemove(cart, "token"); // cleaning up captcha token if it slipped into the cart
 
 cartDefaultDisconnector(&conn);
 
