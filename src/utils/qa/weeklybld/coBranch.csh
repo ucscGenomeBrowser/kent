@@ -28,9 +28,16 @@ cd kent
 git checkout --track=direct -b $branch origin/$branch
 set err = $status
 if ( $err ) then
- echo "error running git clone and checkout of kent in $BUILDDIR/$branch : $err [${0}: `date`]" 
+ echo "error running git clone and checkout of kent in $BUILDDIR/$branch : $err [${0}: `date`]"
  exit 1
-endif 
+endif
+# check out submodules (e.g. src/submodules/htslib) for the branch
+git submodule update --init --recursive
+set err = $status
+if ( $err ) then
+ echo "error updating submodules of kent in $BUILDDIR/$branch : $err [${0}: `date`]"
+ exit 1
+endif
 cd ..
 
 
