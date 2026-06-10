@@ -4589,6 +4589,8 @@ if (tdb == NULL)
 if (isDup)
     {
     struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    if (dup == NULL)
+        errAbort("Can't find duplicate track %s", dupWholeName);
     tdb = dupTdbFrom(tdb, dup);
     }
 
