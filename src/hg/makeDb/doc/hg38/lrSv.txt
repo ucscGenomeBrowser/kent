@@ -557,3 +557,33 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.
 mkdir -p /gbdb/hg38/lrSv /gbdb/hs1/lrSv
 ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hg38.bb /gbdb/hg38/lrSv/lin1218.bb
 ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hs1.bb /gbdb/hs1/lrSv/lin1218.bb
+
+##########
+# 2026-06-10 Claude max
+
+# lrSvAll: the combined track that merges every released lrSv subtrack into
+# one bigBed. Variants from the different studies are merged on an exact key
+# (chrom, start, end, svType, svLen, insLen); each merged row records which
+# source databases contained it and their per-database allele counts.
+#
+# The set of source datasets, their bigBed paths and which fields to pull for
+# AC and allele frequency are listed in the config file
+# ~/kent/src/hg/makeDb/scripts/lrSv/databases.tsv (one row per dataset, in the
+# column order they appear in the output). To add or swap a dataset, edit that
+# file and re-run the merge; nothing in the script is hardcoded per dataset.
+# The HPRC row points to the v2.1 graph SVs (hprc2v21.bb). The HPRC Jasmine
+# callset is deliberately left out of the merge. Datasets that are not yet
+# published (e.g. lrSv1kLin) are also kept out until a paper is available.
+#
+# The merge script reads each source bigBed once in parallel (phase 1, writes
+# per-chromosome TSVs), then merges per chromosome (phase 2). It writes the
+# output bigBed to /hive/data/genomes/hg38/bed/lrSv/all/lrSvAll.bb and also
+# auto-generates the autoSql and the trackDb stanza
+# (~/kent/src/hg/makeDb/trackDb/human/lrSvAll.ra, pulled in via
+# "include lrSvAll.ra" from lrSv.ra). Do not hand-edit lrSvAll.ra; re-run the
+# script and commit its output.
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 2,819,049 input variants -> 2,359,011 merged (16.3% dedup)
+# Re-run after rebuilding any source subtrack, or after editing databases.tsv.
+# Quick single-chromosome test: lrSvMergeAll.py --region chr22
