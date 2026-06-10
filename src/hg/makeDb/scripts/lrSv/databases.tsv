@@ -23,7 +23,7 @@ Han945	Han Chinese 945	/gbdb/hg38/lrSv/han945.bb	AC	AC			alleleFreq
 TommoJapan	ToMMo 333 (Japanese)	/gbdb/hg38/lrSv/tommoJp.bb	AC	AC			alleleFreq
 GA4K	GA4K 502 (rare disease)	/gbdb/hg38/lrSv/ga4kSv.bb	AC	AC			alleleFreq
 deCODE	deCODE 3,622 (Icelandic)	/gbdb/hg38/lrSv/decodeSv.bb	UNKNOWN	AC
-HPRCv2	HPRC v2 233	/gbdb/hg38/lrSv/hprc2.bb	AC	AC			alleleFreq
+HPRCv2.1	HPRC v2.1 233	/gbdb/hg38/lrSv/hprc2v21.bb	AC	AC			alleleFreq
 HGSVC2	HGSVC2 32	/gbdb/hg38/lrSv/hgsvc2.bb	AC	AC
 HGSVC3	HGSVC3 65	/gbdb/hg38/lrSv/hgsvc3.bb	AC	AC
 KimPD	Kim PD Brain 100	/gbdb/hg38/lrSv/kwanho.bb	SPLIT	AC	acPd+acIlbd	acHc	afPd,afHc,afIlbd
