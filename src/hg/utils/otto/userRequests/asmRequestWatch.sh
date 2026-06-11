@@ -296,7 +296,7 @@ while IFS=$'\t' read -r reqId fromDb comment requestTime; do
   hubTxt="https://genome.ucsc.edu/cgi-bin/hgTracks?genome=${fromDb}&hubUrl=${gbDbPath}"
 
   sendNotification "${reqId}" \
-"from UCSC: assembly request complete: ${fromDb}" \
+"from UCSC: ${fromDb} assembly request complete" \
 "from UCSC: Your assembly request is complete:
  assembly:     ${fromDb}
   comment:     ${comment}

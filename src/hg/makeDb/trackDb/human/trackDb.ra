@@ -167,6 +167,7 @@ pennantIcon Updated red
         track mastermind
         shortLabel Mastermind Variants
         longLabel Genomenon Mastermind Variants extracted from full text publications
+        release alpha
         visibility dense
         type bigBed 9 +
         urls url=$$
