@@ -340,6 +340,12 @@ ifeq (${BZ2LIB},)
    endif
 endif
 
+# htslib (libhts.a) must come before its dependency libs (-lcurl -llzma, and
+# -lz -lbz2 below) on the link line. With the linker default --as-needed (e.g.
+# Debian/Ubuntu), a dependency listed before libhts.a gets dropped, producing
+# undefined lzma_*/curl_* references when libhts.a is linked. refs #37741
+L += $(kentSrc)/submodules/htslib/libhts.a
+
 # on hgwdev, use the static libraries
 ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include
@@ -383,7 +389,6 @@ else
 endif
 
 #global external libraries
-L += $(kentSrc)/submodules/htslib/libhts.a
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 
