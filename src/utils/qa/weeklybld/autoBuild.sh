@@ -32,6 +32,19 @@
 #   the beta branch source, so it gets the patch immediately; amd64 built too early
 #   bakes in stale, unpatched binaries. wait_for_hgdownload_cgis() below polls for it.
 #
+#   COMMON.MK CHERRY-PICK GOTCHA: cherryPickCommits.csh does a `git pull` in the
+#   64-bit build sandbox ($BUILDDIR/v${NN}_branch/kent) after pushing the cherry-pick.
+#   configureSandbox.csh (run at branch creation) PREPENDS USE_BAM=1 / KNETFILE_HOOKS=1
+#   to that sandbox's src/inc/common.mk as a permanent uncommitted working-tree change.
+#   So if the cherry-picked commit touches inc/common.mk, the pull aborts ("local
+#   changes would be overwritten") and the script prints "error updating 64-bit sandbox"
+#   -- but the cherry-pick + push to origin/v${NN}_branch ALREADY SUCCEEDED; only the
+#   sandbox refresh failed. Fix in the sandbox:
+#       git stash push src/inc/common.mk && git pull --ff-only && git stash pop
+#   (the flag lines and the incoming change are in different parts of the file, so the
+#   pop is clean). This sandbox is not used by doZip or the docker build, so this is
+#   hygiene, not a blocker.
+#
 set -eEu -o pipefail
 
 ##############################################################################
@@ -118,6 +131,20 @@ check_file_fresh() {
 # works on an amd64 host. Handlers are kernel state and are cleared on reboot,
 # so we re-register on every build. The container is idempotent and fast (~1s)
 # when handlers are already registered.
+#
+# POST-REBOOT DOCKER FRAGILITY (two separate failure modes; both surface only in
+# the docker-testing / docker-release steps after an hgwdev reboot):
+#   1. binfmt handlers cleared -> arm64 build dies at the first RUN with
+#      "exec /bin/sh: exec format error". ensure_binfmt() below fixes this.
+#   2. docker bridge networking broken -> containers on docker0 (172.17.0.0/16)
+#      can't reach DNS or the outside, so `apt-get update` inside the build fails
+#      with "Temporary failure resolving 'archive.ubuntu.com'" and then
+#      "E: Unable to locate package wget/rsync". The reboot leaves docker's
+#      iptables MASQUERADE/FORWARD rules uninstalled. Diagnose (no sudo):
+#          docker run --rm alpine sh -c "nc -zv 10.1.1.10 53; nc -zv 8.8.8.8 443"
+#      If both time out but the host pings 10.1.1.10 fine, it's the bridge.
+#      Fix (needs sudo): `sudo systemctl restart docker` reinstalls the rules.
+#      Then re-run the failed docker step.
 ensure_binfmt() {
     log "Registering QEMU binfmt handlers for cross-arch docker builds..."
     if run docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null 2>&1; then
@@ -560,6 +587,12 @@ final_cobranch() {
     run_tcsh "./coBranch.csh"
 }
 
+# If this dies with a missing htslib header (e.g.
+# "../../inc/bamFile.h: htslib/sam.h: No such file or directory"), it is a
+# transient parallel-make (-j) race -- htslib hadn't finished building when a
+# dependent target needed its header. It is NOT a real environment/header
+# problem: do not investigate htslib setup or compare sandboxes. Just re-run
+# autoBuild.sh; the checkpoint resumes here and the make succeeds.
 final_build_utils() {
     run_tcsh "./buildUtils.csh"
 }
@@ -717,139 +750,176 @@ generate_release_markdown() {
 # Phase: Wrap-up (Day 23, after push to RR)
 ##############################################################################
 
-do_wrapup() {
-    log "========== PHASE: WRAP-UP =========="
-    read_buildenv
-    PHASE_VER=$BRANCHNN
+# --- Wrap-up steps (decomposed for resumability) ---
+#
+# do_wrapup was historically a straight-line sequence with NO checkpointing. If
+# it died partway through, re-running `autoBuild.sh wrapup` re-did every earlier
+# step: it re-pushed hgcentral, rebuilt userApps, re-tagged beta, and -- worst --
+# created a DUPLICATE release tag (v${NN}_branch.2). The fix was to finish the
+# remaining steps by hand. These steps now run under the same checkpoint
+# framework as preview1/preview2/final: the non-idempotent steps (hgcentral push,
+# tagBeta, tag-release) run exactly once, and a re-run resumes at the first
+# incomplete step instead of redoing committed work.
 
-    log "Running wrap-up for v${BRANCHNN}"
-
-    # Step 1: Build hgcentral SQL
+wrapup_hgcentral_sql() {
     log "Building hgcentral SQL (dry run first)..."
     local hgclog="$LOGDIR/v${BRANCHNN}.buildHgCentralSql.log"
     run_tcsh "./buildHgCentralSql.csh >& $hgclog"
     log "hgcentral dry-run complete. Checking for differences..."
-
     if grep -q "No differences" "$hgclog" 2>/dev/null; then
         log "No hgcentral differences - skipping real hgcentral push."
     else
         log "hgcentral differences found. Running for real..."
-        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog"
-        local rc=$?
-        if [[ $rc -ne 0 ]]; then
-            die "buildHgCentralSql.csh real failed (rc=$rc). See $hgclog"
-        fi
+        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog" || \
+            die "buildHgCentralSql.csh real failed. See $hgclog"
         log "hgcentral SQL built and pushed."
     fi
+    return 0
+}
 
-    # Step 2: Build userApps (takes ~50 minutes)
+# Build userApps (takes ~50 minutes)
+wrapup_userapps_utils() {
     log "Building userApps via doHgDownloadUtils.csh (takes ~50 min)..."
     local utilslog="$LOGDIR/v${BRANCHNN}.doHgDownloadUtils.log"
-    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doHgDownloadUtils.csh failed (rc=$rc). See $utilslog"
-    fi
+    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog" || \
+        die "doHgDownloadUtils.csh failed. See $utilslog"
     log "userApps build complete."
+    return 0
+}
 
-    # Step 3: Tag beta
+wrapup_tag_beta() {
     log "Tagging beta (dry run first)..."
     local taglog="$LOGDIR/v${BRANCHNN}.tagBeta.log"
     run_tcsh "./tagBeta.csh >& $taglog"
-
     log "Tagging beta for real..."
-    run_tcsh "./tagBeta.csh real >>& $taglog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "tagBeta.csh real failed (rc=$rc). See $taglog"
-    fi
+    run_tcsh "./tagBeta.csh real >>& $taglog" || \
+        die "tagBeta.csh real failed. See $taglog"
     log "Beta tagged."
+    return 0
+}
 
-    # Step 4: Tag the official release
+# Tag the official release. NOT idempotent on its own (a re-run would create a
+# duplicate v${NN}_branch.<next> tag), so the checkpoint must ensure it runs
+# exactly once -- which it now does.
+wrapup_tag_release() {
     log "Tagging official release..."
-    if ! $DRY_RUN; then
-        cd "$WEEKLYBLD"
-        git fetch
-
-        # Find next available subversion tag
-        local existing_tags
-        existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
-        local next_sub=1
-        if [[ -n "$existing_tags" ]]; then
-            local last_sub
-            last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
-            if [[ -n "$last_sub" ]]; then
-                next_sub=$((last_sub + 1))
-            fi
-        fi
-        log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
-        run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}"
-        run git fetch
+    if $DRY_RUN; then
+        log "(dry-run) would create the next v${BRANCHNN}_branch.N release tag"
+        return 0
     fi
+    cd "$WEEKLYBLD"
+    git fetch
 
-    # Step 5: Zip source code (takes ~4 min)
+    # Find next available subversion tag
+    local existing_tags
+    existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
+    local next_sub=1
+    if [[ -n "$existing_tags" ]]; then
+        local last_sub
+        last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
+        if [[ -n "$last_sub" ]]; then
+            next_sub=$((last_sub + 1))
+        fi
+    fi
+    log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
+    run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}" || \
+        die "Failed to push release tag v${BRANCHNN}_branch.${next_sub}"
+    run git fetch
+    return 0
+}
+
+# Zip source code (takes ~4 min)
+wrapup_zip() {
     log "Zipping source code..."
     local ziplog="$LOGDIR/v${BRANCHNN}.doZip.log"
-    run_tcsh "time ./doZip.csh >& $ziplog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doZip.csh failed (rc=$rc). See $ziplog"
-    fi
+    run_tcsh "time ./doZip.csh >& $ziplog" || \
+        die "doZip.csh failed. See $ziplog"
     log "Source zip complete."
+    return 0
+}
 
-    # Step 6: Wait 10 minutes for rsync, then package userApps source
+# Wait 10 minutes for rsync, then package userApps source
+wrapup_userapps_src() {
     log "Waiting 10 minutes before userApps.sh (as specified in wiki)..."
     if ! $DRY_RUN; then
         sleep 600
     fi
-
     log "Running userApps.sh..."
     local uaLog="$LOGDIR/v${BRANCHNN}.userApps.log"
-    run_tcsh "time ./userApps.sh >& $uaLog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "userApps.sh failed (rc=$rc). See $uaLog"
-    fi
+    run_tcsh "time ./userApps.sh >& $uaLog" || \
+        die "userApps.sh failed. See $uaLog"
     log "userApps.sh complete."
+    return 0
+}
 
-    # Step 7: Build release Docker images
-    # The amd64 image installs PREBUILT CGIs that browserSetup.sh -b rsyncs from the
-    # RR/production cgi-bin module on hgdownload (hgdownload.soe.ucsc.edu::cgi-bin);
-    # only arm64 compiles from the beta branch source. Those prebuilt CGIs are put on
-    # hgdownload by the external RR/production push (qateam), NOT by these scripts, so
-    # we must not build amd64 until that push has propagated or it ships stale,
-    # unpatched binaries. Block until hgdownload carries a build at least as new as
-    # ours. (The csh one-liner below must run via run_tcsh: `setenv` is csh-only, so
-    # running it from bash leaves $stage empty and the image refs become
-    # "genomebrowser/server:" while still exiting 0 on the last statement.)
+# Build release Docker images.
+# The amd64 image installs PREBUILT CGIs that browserSetup.sh -b rsyncs from the
+# RR/production cgi-bin module on hgdownload (hgdownload.soe.ucsc.edu::cgi-bin);
+# only arm64 compiles from the beta branch source. Those prebuilt CGIs are put on
+# hgdownload by the external RR/production push (qateam), NOT by these scripts, so
+# we must not build amd64 until that push has propagated or it ships stale,
+# unpatched binaries. Block until hgdownload carries a build at least as new as
+# ours. (The csh one-liner below must run via run_tcsh: `setenv` is csh-only, so
+# running it from bash leaves $stage empty and the image refs become
+# "genomebrowser/server:" while still exiting 0 on the last statement.)
+# Fatal on failure (was a non-fatal warning): now that wrap-up is checkpointed, a
+# retry just resumes at this step, and the build is idempotent (--no-cache rebuild
+# + re-push + manifest recreate). If it fails on apt-get DNS errors or an arm64
+# "exec format error", see the post-reboot docker fragility note at ensure_binfmt.
+wrapup_docker_release() {
     wait_for_hgdownload_cgis
     log "Building release Docker images..."
     ensure_binfmt
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
-            log "WARNING: Docker release build had issues. See $dockerlog (non-fatal)"
-        }
-        log "Docker release build complete."
-    else
-        log "WARNING: Docker directory not found - skipping Docker release build"
+    if [[ ! -d "$dockerdir" ]]; then
+        die "Docker directory not found at $dockerdir - cannot build release images"
     fi
+    local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
+    # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+    run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || \
+        die "Docker release build failed. See $dockerlog"
+    log "Docker release build complete."
+    return 0
+}
 
-    # Refresh kent-rel against the just-pushed release image, then tear down
-    # the beta container/image now that v${BRANCHNN} has shipped. refs #37655
+# Refresh kent-rel against the just-pushed release image, then tear down the beta
+# container/image now that v${BRANCHNN} has shipped. refs #37655. Container
+# hygiene only, so a failure here warns but does not abort the phase.
+wrapup_refresh_containers() {
     log "Refreshing local kent-rel container..."
     run "$WEEKLYBLD/refresh-instance.sh" rel || \
         log "WARNING: kent-rel refresh failed; container may be stale"
     log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
     run "$WEEKLYBLD/remove-instance.sh" beta || \
         log "WARNING: kent-beta teardown failed; check container/image manually"
+    return 0
+}
 
-    # Step 8: Generate markdown release notes for GitHub
+# Generate markdown release notes for GitHub
+wrapup_release_markdown() {
     if ! $DRY_RUN; then
         generate_release_markdown "$BRANCHNN"
     fi
+    return 0
+}
+
+do_wrapup() {
+    log "========== PHASE: WRAP-UP =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+
+    log "Running wrap-up for v${BRANCHNN}"
+    state_init wrapup "$PHASE_VER"
+
+    step hgcentral-sql    wrapup_hgcentral_sql
+    step userapps-utils   wrapup_userapps_utils
+    step tag-beta         wrapup_tag_beta
+    step tag-release      wrapup_tag_release
+    step zip              wrapup_zip
+    step userapps-src     wrapup_userapps_src
+    step docker-release   wrapup_docker_release
+    step refresh-containers wrapup_refresh_containers
+    step release-markdown wrapup_release_markdown
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
