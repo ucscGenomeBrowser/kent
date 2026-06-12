@@ -320,7 +320,7 @@ do
 	    *out++ = c;
 	else
 	    {
-	    strncpy(out, newString, size);
+	    memcpy(out, newString, size);
 	    out += size;
 	    }
 	}

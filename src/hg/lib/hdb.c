@@ -2304,7 +2304,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		strncpy(bedItem->strand, "+", 2);
 	    }
 	else
-	    strncpy(bedItem->strand, row[4], 2);
+	    safecpy(bedItem->strand, sizeof(bedItem->strand), row[4]);
     else
 	strcpy(bedItem->strand, ".");
     if (canDoUTR)

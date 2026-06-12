@@ -282,7 +282,8 @@ if (fh->format.format == cram)
     {
     if (cacheDir == NULL)
         errAbort("CRAM cache dir hg.conf variable (cramRef) must exist for CRAM support");
-    setenv("REF_CACHE", cacheDir, 1);
+    else
+        setenv("REF_CACHE", cacheDir, 1);
     }
 bam_hdr_t *header = sam_hdr_read(fh);
 if (pSamFile != NULL)

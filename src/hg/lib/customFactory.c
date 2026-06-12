@@ -656,7 +656,7 @@ if (wordCount > 4)
      bed->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     strncpy(bed->strand, row[5], sizeof(bed->strand));
+     safecpy(bed->strand, sizeof(bed->strand), row[5]);
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
 	  lineFileAbort(lf, "Expecting + or - in strand");
      }
@@ -1981,7 +1981,7 @@ static char *niceGeneName(char *name)
 static char buf[128];
 char *e;
 
-strncpy(buf, name, sizeof(buf));
+safecpy(buf, sizeof(buf), name);
 if ((e = strchr(buf, ';')) != NULL)
     *e = 0;
 eraseWhiteSpace(buf);

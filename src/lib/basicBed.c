@@ -1069,7 +1069,7 @@ char dupe[64];
 int wordCount;
 char *row[4];
 
-strncpy(dupe, itemRgb, sizeof(dupe));
+safecpy(dupe, sizeof(dupe), itemRgb);
 wordCount = chopString(dupe, ",", row, ArraySize(row));
 
 if ((wordCount == 3) && (isdigit(row[0][0]) &&

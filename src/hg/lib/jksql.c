@@ -420,7 +420,7 @@ if (sp == NULL)
     {
     if (profileName == NULL)
         errAbort("can't find mysql connection info for database '%s' in hg.conf or ~/.hg.conf, should have a default profile named 'db', so values for at least db.host, "
-                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", database);
+                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", naForNull(database));
     else if (sameWord(profileName, "backupcentral"))
         errAbort("can't find profile '%s.*' in hg.conf. This error most likely indicates that the "
             "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"

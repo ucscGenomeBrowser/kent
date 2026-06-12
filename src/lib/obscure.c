@@ -637,43 +637,21 @@ return charSepToSlNames(commaSep, ',');
 void sprintLongWithCommas(char *s, long long l)
 /* Print out a long number with commas a thousands, millions, etc. */
 {
-long long trillions, billions, millions, thousands;
+// Compute each comma-group as a value in [0,999] via modulo so the compiler can
+// see the %03lld arguments are bounded (keeps -Wformat-overflow happy at -O3).
+long long ones = l % 1000;
+long long thousands = (l/1000) % 1000;
+long long millions = (l/1000000) % 1000;
+long long billions = (l/1000000000) % 1000;
+long long trillions = l/1000000000000LL;
 if (l >= 1000000000000LL)
-    {
-    trillions = l/1000000000000LL;
-    l -= trillions * 1000000000000LL;
-    billions = l/1000000000;
-    l -= billions * 1000000000;
-    millions = l/1000000;
-    l -= millions * 1000000;
-    thousands = l/1000;
-    l -= thousands * 1000;
-    sprintf(s, "%lld,%03lld,%03lld,%03lld,%03lld", trillions, billions, millions, thousands, l);
-    }
+    sprintf(s, "%lld,%03lld,%03lld,%03lld,%03lld", trillions, billions, millions, thousands, ones);
 else if (l >= 1000000000)
-    {
-    billions = l/1000000000;
-    l -= billions * 1000000000;
-    millions = l/1000000;
-    l -= millions * 1000000;
-    thousands = l/1000;
-    l -= thousands * 1000;
-    sprintf(s, "%lld,%03lld,%03lld,%03lld", billions, millions, thousands, l);
-    }
+    sprintf(s, "%lld,%03lld,%03lld,%03lld", billions, millions, thousands, ones);
 else if (l >= 1000000)
-    {
-    millions = l/1000000;
-    l -= millions * (long long)1000000;
-    thousands = l/1000;
-    l -= thousands * 1000;
-    sprintf(s, "%lld,%03lld,%03lld", millions, thousands, l);
-    }
+    sprintf(s, "%lld,%03lld,%03lld", millions, thousands, ones);
 else if (l >= 1000)
-    {
-    thousands = l/1000;
-    l -= thousands * 1000;
-    sprintf(s, "%lld,%03lld", thousands, l);
-    }
+    sprintf(s, "%lld,%03lld", thousands, ones);
 else
     sprintf(s, "%lld", l);
 }
