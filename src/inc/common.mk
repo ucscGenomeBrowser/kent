@@ -15,7 +15,7 @@ L += ${LDFLAGS}
 
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
-    COPT=-O3
+    COPT=-O -g
 endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)
