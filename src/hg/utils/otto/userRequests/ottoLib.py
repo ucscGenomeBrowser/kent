@@ -78,20 +78,33 @@ def gitPullKentTree():
         print("ERROR: not a git working tree: %s" % kentTree,
               file=sys.stderr)
         return False
+    # Fetch updates from origin
     result = subprocess.run(
-        ["git", "-C", kentTree, "pull"],
-        capture_output=True, text=True,
+        ["git", "-C", kentTree, "fetch", "--prune", "origin"],
+        capture_output=True,
+        text=True,
     )
     if result.returncode != 0:
-        print("ERROR: 'git pull' failed in %s:\n%s%s"
-              % (kentTree, result.stdout, result.stderr),
-              file=sys.stderr)
+        print("ERROR: 'git fetch' failed in %s:\n%s%s"
+            % (kentTree, result.stdout, result.stderr),
+            file=sys.stderr)
         return False
+    # Hard reset working tree to match origin/master
+    result = subprocess.run(
+        ["git", "-C", kentTree, "reset", "--hard", "origin/master"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print("ERROR: 'git reset --hard' failed in %s:\n%s%s"
+            % (kentTree, result.stdout, result.stderr),
+            file=sys.stderr)
+        return False
+
     out = result.stdout.strip()
     if out and out != "Already up to date.":
         print("# git pull in %s:\n%s" % (kentTree, out), file=sys.stderr)
     return True
-
 
 def hgsql(query, db="hgcentral"):
     """Run hgsql -N -B and return rows as list of tuples (tab-split)."""
