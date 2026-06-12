@@ -1,10 +1,13 @@
 # Database configuration for varFreqsAll combined track
-# key	name	vcf	ac_field	af_field	is_disease	disease_role
+# key	name	vcf	ac_field	af_field	is_disease	disease_role	default_an
 # Use "." for fields that don't exist in the VCF
 # is_disease=1: cohort assembled to study a disease (autism, schizophrenia, rare disease).
 # disease_role: for a disease cohort with NO affected/unaffected population split, what is
 #   the whole cohort? "affected" (e.g. GA4K rare-disease probands) feeds the affected
 #   summary; blank means use the per-population phenotype tags in populations.tsv instead.
+# default_an: fallback cohort allele number used when AC is empty but AF is present (or
+#   vice versa). Lets AF-only cohorts contribute to the pooled affectedAF/backgroundAF
+#   denominator. Leave blank if the cohort always ships both AC and AF.
 # TOPMed is is_disease=0: it is an NHLBI population/biobank reference (used like gnomAD),
 #   not an affected-disease case cohort, and ships no affected/unaffected label.
 AllOfUs	AllOfUs	/gbdb/hg38/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz	.	.	0
@@ -22,8 +25,8 @@ FinnGen	FinnGen Finland	/gbdb/hg38/varFreqs/_finngen/finnge_R12_annotated_varian
 Saudi	Saudi	/gbdb/hg38/varFreqs/saudi/saudi.vcf.gz	AC	AF	0
 SweGen	SweGen Sweden	/gbdb/hg38/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz	AC	AF	0
 TOPMed	TOPMed	/gbdb/hg38/varFreqs/_topmed/topmed10.vcf.gz	AC	AF	0
-ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF	0
-ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB	0
+ABraOM	ABraOM Brazil	/gbdb/hg38/varFreqs/abraom/abraom.vcf.gz	.	AF	0		2342
+ALFA	ALFA	/gbdb/hg38/varFreqs/alfa/ALFA.vcf.gz	.	AF_GLB	0		816000
 MGRB	MGRB Australia	/gbdb/hg38/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz	AC	.	0
 HRC	HRC	/gbdb/hg38/varFreqs/hrc/hrc.vcf.gz	AC	AF	0
 # MexBB and TPMI moved to the array-based track (databases_array.tsv): both are

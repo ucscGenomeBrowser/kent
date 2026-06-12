@@ -1479,9 +1479,9 @@ function setupBuildLinux ()
    waitKey
    if [[ "$DIST" == "debian" ]]; then
       debianInitApt
-      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev pkg-config libcurl4-openssl-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev liblzma-dev pkg-config libcurl4-openssl-dev
    elif [[ "$DIST" == "redhat" ]]; then
-      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel libcurl-devel
+      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel libcurl-devel xz-devel
    else 
       echo Error: Cannot identify linux distribution
       exit 100

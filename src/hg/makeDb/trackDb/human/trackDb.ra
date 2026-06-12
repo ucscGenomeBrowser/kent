@@ -162,10 +162,12 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
+pennantIcon Updated red
 
         track mastermind
         shortLabel Mastermind Variants
         longLabel Genomenon Mastermind Variants extracted from full text publications
+        release alpha
         visibility dense
         type bigBed 9 +
         urls url=$$
@@ -239,6 +241,7 @@ type bed 3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaico.bb
+        pennantIcon Updated red
         noScoreFilter on
         exonNumbers off
         # itemRgb on
@@ -254,6 +257,7 @@ type bed 3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaicoSuppl.bb
+        pennantIcon Updated red
         noScoreFilter on
         exonNumbers off
         # itemRgb on
@@ -262,39 +266,6 @@ type bed 3
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
         html varaico.html
-
-        track varaicoTest
-        shortLabel Varaico Variants Test
-        longLabel Varaico Variants Test extracted from full text publications, titles, and abstracts
-        visibility pack
-        type bigBed 9 +
-        bigDataUrl /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/$D/normalized_variants.$D.bb
-        noScoreFilter on
-        exonNumbers off
-        # itemRgb on
-        dataVersion release 3 (20260527)
-        parent varsInPubs pack
-        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
-        html varaico.html
-        release alpha
-
-        track varaicoSupplTest
-        shortLabel Varaico Variants Test (suppl)
-        longLabel Varaico Variants Test extracted from Supplementary Data
-        visibility pack
-        type bigBed 9 +
-        bigDataUrl /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/$D/normalized_variants_supplements.$D.bb
-        noScoreFilter on
-        exonNumbers off
-        # itemRgb on
-        dataVersion release 3 (20260527)
-        parent varsInPubs pack
-        urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
-        mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
-        html varaico.html
-        release alpha
-
 
 track caseControl
 compositeTrack on

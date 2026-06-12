@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# asmRequestWatch.sh - what for assembly requests in the ottoRequest table
+# asmRequestWatch.sh - watch for assembly requests in the ottoRequest table
 #
 # Initial function is just to watch the status, and when it
 #   reaches status 6 'push complete' (which currently is set manually)
@@ -49,7 +49,7 @@ printf "%d\n" "$$" >&9
 ##############################################################################
 ### errors - set error status in the table
 function setErrorStatus() {
-  id="${1}"
+  local id="${1}"
   /cluster/bin/x86_64/${hgSql} -N -e \
       "UPDATE ottoRequest SET status=7 WHERE id=${id};" "${centDb}"
 }
@@ -57,8 +57,7 @@ function setErrorStatus() {
 
 ##############################################################################
 ### sendNotification - email the requesting user that their assembly request is done
-###   args: reqId subject
-###   message body is read from stdin
+###   args: reqId subject msgBody
 ###   recipient: email column of ottoRequest table for that reqId
 ###   bcc: genark-request-group@ucsc.edu
 ###   envelope sender / Return-Path / bounce: genome-www@soe.ucsc.edu
@@ -289,15 +288,15 @@ done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
 ############################################################################
 while IFS=$'\t' read -r reqId fromDb comment requestTime; do
 
-  export gcX="${fromDb:0:3}"
-  export d0="${fromDb:4:3}"
-  export d1="${fromDb:7:3}"
-  export d2="${fromDb:10:3}"
-  export gbDbPath="/gbdb/genark/${gcX}/${d0}/${d1}/${d2}/${fromDb}/hub.txt"
-  export hubTxt="https://genome.ucsc.edu/cgi-bin/hgTracks?genome=${fromDb}&hubUrl=${gbDbPath}"
+  gcX="${fromDb:0:3}"
+  d0="${fromDb:4:3}"
+  d1="${fromDb:7:3}"
+  d2="${fromDb:10:3}"
+  gbDbPath="/gbdb/genark/${gcX}/${d0}/${d1}/${d2}/${fromDb}/hub.txt"
+  hubTxt="https://genome.ucsc.edu/cgi-bin/hgTracks?genome=${fromDb}&hubUrl=${gbDbPath}"
 
   sendNotification "${reqId}" \
-"from UCSC: assembly request complete: ${fromDb}" \
+"from UCSC: ${fromDb} assembly request complete" \
 "from UCSC: Your assembly request is complete:
  assembly:     ${fromDb}
   comment:     ${comment}

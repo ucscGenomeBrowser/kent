@@ -4,8 +4,6 @@
 Read-only display of every row in the table, plus a per-row 'reset
 status' control that is the only write path exposed.
 
-Access is restricted to a single IP (UCSC VPN, 128.114.198.5).
-Any other REMOTE_ADDR gets a 403.
 """
 
 import cgi
@@ -38,6 +36,8 @@ CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 # featureBitsPct() falls back to an NFS read on a snapshot miss.
 FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
 
+# keep this liftStatus and asmStatus lists at the same length so that
+#   the verification check in doResetStatus() will function on just liftStatus
 liftStatus = {
     0: 'received by API',
     1: 'acknowledged, email sent',
@@ -146,6 +146,8 @@ def fetchRows():
     return rows
 
 
+# the verification of 'stat' here against liftStatus works for both
+# the liftStatus and asmStatus lists because they are kept at the same length
 def doResetStatus(form):
     rid  = form.getfirst('id', '')
     stat = form.getfirst('status', '')

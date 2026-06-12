@@ -16,6 +16,35 @@
 #   autoBuild.sh wrapup
 #   autoBuild.sh --dry-run [phase]   # show what would happen
 #
+# BUILD PATCHES (not a phase here yet - done manually via the weeklybld scripts):
+#   A build patch cherry-picks approved commit(s) onto v${NN}_branch after the
+#   weekly build, then: tagBeta.csh real -> tag v${NN}_branch.<next> -> update the
+#   Redmine ticket BEFORE any long artifact build.
+#   If the patch lands AFTER the release has gone out to the RR, the already-public
+#   artifacts must be regenerated too: rebuild the source zip (doZip.csh) and the
+#   docker release images (the docker build/push/manifest steps below). A pre-RR
+#   patch skips those. WAIT for the patched CGIs to reach hgdownload before the
+#   docker release build: the amd64 image rsyncs prebuilt CGIs from the RR/production
+#   cgi-bin module on hgdownload (browserSetup.sh -b is batch mode, not "beta"; the
+#   actual source is hgdownload.soe.ucsc.edu::cgi-bin). That module is populated by
+#   the external RR/production push (qateam), NOT by these weeklybld scripts, so it
+#   only reflects the patch once that push has propagated. Only arm64 compiles from
+#   the beta branch source, so it gets the patch immediately; amd64 built too early
+#   bakes in stale, unpatched binaries. wait_for_hgdownload_cgis() below polls for it.
+#
+#   COMMON.MK CHERRY-PICK GOTCHA: cherryPickCommits.csh does a `git pull` in the
+#   64-bit build sandbox ($BUILDDIR/v${NN}_branch/kent) after pushing the cherry-pick.
+#   configureSandbox.csh (run at branch creation) PREPENDS USE_BAM=1 / KNETFILE_HOOKS=1
+#   to that sandbox's src/inc/common.mk as a permanent uncommitted working-tree change.
+#   So if the cherry-picked commit touches inc/common.mk, the pull aborts ("local
+#   changes would be overwritten") and the script prints "error updating 64-bit sandbox"
+#   -- but the cherry-pick + push to origin/v${NN}_branch ALREADY SUCCEEDED; only the
+#   sandbox refresh failed. Fix in the sandbox:
+#       git stash push src/inc/common.mk && git pull --ff-only && git stash pop
+#   (the flag lines and the incoming change are in different parts of the file, so the
+#   pop is clean). This sandbox is not used by doZip or the docker build, so this is
+#   hygiene, not a blocker.
+#
 set -eEu -o pipefail
 
 ##############################################################################
@@ -29,6 +58,17 @@ LOCKFILE="/tmp/autoBuild.lock"
 GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
+
+# wait_for_hgdownload_cgis() tunables (overridable from the environment):
+#   the rsync module + probe CGI we watch, how often we poll, and how long we wait
+#   before giving up. 3600s x 24 = poll hourly for up to ~24h.
+HGDOWNLOAD_CGI_RSYNC="${HGDOWNLOAD_CGI_RSYNC:-hgdownload.soe.ucsc.edu::cgi-bin}"
+HGDOWNLOAD_CGI_PROBE="${HGDOWNLOAD_CGI_PROBE:-hgTracks}"
+HGDOWNLOAD_POLL_INTERVAL="${HGDOWNLOAD_POLL_INTERVAL:-3600}"
+HGDOWNLOAD_POLL_MAX="${HGDOWNLOAD_POLL_MAX:-24}"
+# Local freshly-built reference CGI; its mtime is the "not older than" bar the
+# hgdownload copy must clear (i.e. hgdownload must carry a build at least this new).
+HGDOWNLOAD_REF_CGI="${HGDOWNLOAD_REF_CGI:-/usr/local/apache/cgi-bin/hgTracks}"
 
 ##############################################################################
 # Helpers
@@ -91,6 +131,20 @@ check_file_fresh() {
 # works on an amd64 host. Handlers are kernel state and are cleared on reboot,
 # so we re-register on every build. The container is idempotent and fast (~1s)
 # when handlers are already registered.
+#
+# POST-REBOOT DOCKER FRAGILITY (two separate failure modes; both surface only in
+# the docker-testing / docker-release steps after an hgwdev reboot):
+#   1. binfmt handlers cleared -> arm64 build dies at the first RUN with
+#      "exec /bin/sh: exec format error". ensure_binfmt() below fixes this.
+#   2. docker bridge networking broken -> containers on docker0 (172.17.0.0/16)
+#      can't reach DNS or the outside, so `apt-get update` inside the build fails
+#      with "Temporary failure resolving 'archive.ubuntu.com'" and then
+#      "E: Unable to locate package wget/rsync". The reboot leaves docker's
+#      iptables MASQUERADE/FORWARD rules uninstalled. Diagnose (no sudo):
+#          docker run --rm alpine sh -c "nc -zv 10.1.1.10 53; nc -zv 8.8.8.8 443"
+#      If both time out but the host pings 10.1.1.10 fine, it's the bridge.
+#      Fix (needs sudo): `sudo systemctl restart docker` reinstalls the rules.
+#      Then re-run the failed docker step.
 ensure_binfmt() {
     log "Registering QEMU binfmt handlers for cross-arch docker builds..."
     if run docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null 2>&1; then
@@ -98,6 +152,58 @@ ensure_binfmt() {
     else
         log "WARNING: binfmt registration failed; arm64 docker builds may fail"
     fi
+}
+
+# Echo the epoch mtime of the probe CGI on hgdownload (via rsync --list-only), or
+# empty on failure. rsync --list-only prints e.g. "-rwxr-xr-x 12345 2026/06/11 09:00:00 hgTracks".
+hgdownload_cgi_mtime() {
+    local line
+    line=$(rsync --list-only --no-motd "${HGDOWNLOAD_CGI_RSYNC}/${HGDOWNLOAD_CGI_PROBE}" 2>/dev/null) || return 0
+    # fields 3 (YYYY/MM/DD) and 4 (HH:MM:SS) -> epoch
+    local d t
+    d=$(echo "$line" | awk '{print $3}')
+    t=$(echo "$line" | awk '{print $4}')
+    [[ -n "$d" && -n "$t" ]] || return 0
+    date -d "${d//\//-} $t" +%s 2>/dev/null || true
+}
+
+# Block until the patched CGIs have propagated to the RR/production cgi-bin module
+# on hgdownload (the source the amd64 docker image rsyncs from). The bar is the
+# mtime of the locally-built reference CGI (HGDOWNLOAD_REF_CGI): we wait until the
+# hgdownload copy is at least that new, meaning hgdownload now carries a build no
+# older than the one we just produced. Polls hourly (HGDOWNLOAD_POLL_INTERVAL) for
+# up to HGDOWNLOAD_POLL_MAX tries, then dies loudly so a human can check the RR push.
+# If hgdownload is already current (push preceded us) it returns immediately, so this
+# is safe to call unconditionally before the docker release build.
+wait_for_hgdownload_cgis() {
+    local ref_mtime
+    if [[ -f "$HGDOWNLOAD_REF_CGI" ]]; then
+        ref_mtime=$(stat -c %Y "$HGDOWNLOAD_REF_CGI")
+    else
+        log "WARNING: reference CGI $HGDOWNLOAD_REF_CGI not found; using current time as the bar."
+        ref_mtime=$(date +%s)
+    fi
+    log "Waiting for hgdownload CGIs to reach the patched build (bar: $(date -d @"$ref_mtime" '+%Y-%m-%d %H:%M:%S'), probe: ${HGDOWNLOAD_CGI_RSYNC}/${HGDOWNLOAD_CGI_PROBE})."
+    if $DRY_RUN; then
+        log "[dry-run] would poll every $((HGDOWNLOAD_POLL_INTERVAL/60)) min (up to $HGDOWNLOAD_POLL_MAX tries) until hgdownload mtime >= bar."
+        return 0
+    fi
+    local attempt=0 remote
+    while true; do
+        attempt=$((attempt + 1))
+        remote=$(hgdownload_cgi_mtime)
+        if [[ -n "$remote" && "$remote" -ge "$ref_mtime" ]]; then
+            log "hgdownload CGIs are current ($(date -d @"$remote" '+%Y-%m-%d %H:%M:%S') >= bar) after $attempt poll(s). Proceeding with docker release build."
+            return 0
+        fi
+        if (( attempt >= HGDOWNLOAD_POLL_MAX )); then
+            die "Gave up after $attempt polls (~$((attempt*HGDOWNLOAD_POLL_INTERVAL/3600))h): ${HGDOWNLOAD_CGI_PROBE} on hgdownload is still older than the patched build. Has the RR/production push run?"
+        fi
+        local shown="${remote:-unreadable}"
+        [[ -n "$remote" ]] && shown="$(date -d @"$remote" '+%Y-%m-%d %H:%M:%S')"
+        log "Poll $attempt/$HGDOWNLOAD_POLL_MAX: hgdownload ${HGDOWNLOAD_CGI_PROBE} mtime $shown < bar; sleeping $((HGDOWNLOAD_POLL_INTERVAL/60)) min."
+        sleep "$HGDOWNLOAD_POLL_INTERVAL"
+    done
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -481,6 +587,12 @@ final_cobranch() {
     run_tcsh "./coBranch.csh"
 }
 
+# If this dies with a missing htslib header (e.g.
+# "../../inc/bamFile.h: htslib/sam.h: No such file or directory"), it is a
+# transient parallel-make (-j) race -- htslib hadn't finished building when a
+# dependent target needed its header. It is NOT a real environment/header
+# problem: do not investigate htslib setup or compare sandboxes. Just re-run
+# autoBuild.sh; the checkpoint resumes here and the make succeeds.
 final_build_utils() {
     run_tcsh "./buildUtils.csh"
 }
@@ -638,129 +750,176 @@ generate_release_markdown() {
 # Phase: Wrap-up (Day 23, after push to RR)
 ##############################################################################
 
-do_wrapup() {
-    log "========== PHASE: WRAP-UP =========="
-    read_buildenv
-    PHASE_VER=$BRANCHNN
+# --- Wrap-up steps (decomposed for resumability) ---
+#
+# do_wrapup was historically a straight-line sequence with NO checkpointing. If
+# it died partway through, re-running `autoBuild.sh wrapup` re-did every earlier
+# step: it re-pushed hgcentral, rebuilt userApps, re-tagged beta, and -- worst --
+# created a DUPLICATE release tag (v${NN}_branch.2). The fix was to finish the
+# remaining steps by hand. These steps now run under the same checkpoint
+# framework as preview1/preview2/final: the non-idempotent steps (hgcentral push,
+# tagBeta, tag-release) run exactly once, and a re-run resumes at the first
+# incomplete step instead of redoing committed work.
 
-    log "Running wrap-up for v${BRANCHNN}"
-
-    # Step 1: Build hgcentral SQL
+wrapup_hgcentral_sql() {
     log "Building hgcentral SQL (dry run first)..."
     local hgclog="$LOGDIR/v${BRANCHNN}.buildHgCentralSql.log"
     run_tcsh "./buildHgCentralSql.csh >& $hgclog"
     log "hgcentral dry-run complete. Checking for differences..."
-
     if grep -q "No differences" "$hgclog" 2>/dev/null; then
         log "No hgcentral differences - skipping real hgcentral push."
     else
         log "hgcentral differences found. Running for real..."
-        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog"
-        local rc=$?
-        if [[ $rc -ne 0 ]]; then
-            die "buildHgCentralSql.csh real failed (rc=$rc). See $hgclog"
-        fi
+        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog" || \
+            die "buildHgCentralSql.csh real failed. See $hgclog"
         log "hgcentral SQL built and pushed."
     fi
+    return 0
+}
 
-    # Step 2: Build userApps (takes ~50 minutes)
+# Build userApps (takes ~50 minutes)
+wrapup_userapps_utils() {
     log "Building userApps via doHgDownloadUtils.csh (takes ~50 min)..."
     local utilslog="$LOGDIR/v${BRANCHNN}.doHgDownloadUtils.log"
-    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doHgDownloadUtils.csh failed (rc=$rc). See $utilslog"
-    fi
+    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog" || \
+        die "doHgDownloadUtils.csh failed. See $utilslog"
     log "userApps build complete."
+    return 0
+}
 
-    # Step 3: Tag beta
+wrapup_tag_beta() {
     log "Tagging beta (dry run first)..."
     local taglog="$LOGDIR/v${BRANCHNN}.tagBeta.log"
     run_tcsh "./tagBeta.csh >& $taglog"
-
     log "Tagging beta for real..."
-    run_tcsh "./tagBeta.csh real >>& $taglog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "tagBeta.csh real failed (rc=$rc). See $taglog"
-    fi
+    run_tcsh "./tagBeta.csh real >>& $taglog" || \
+        die "tagBeta.csh real failed. See $taglog"
     log "Beta tagged."
+    return 0
+}
 
-    # Step 4: Tag the official release
+# Tag the official release. NOT idempotent on its own (a re-run would create a
+# duplicate v${NN}_branch.<next> tag), so the checkpoint must ensure it runs
+# exactly once -- which it now does.
+wrapup_tag_release() {
     log "Tagging official release..."
-    if ! $DRY_RUN; then
-        cd "$WEEKLYBLD"
-        git fetch
-
-        # Find next available subversion tag
-        local existing_tags
-        existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
-        local next_sub=1
-        if [[ -n "$existing_tags" ]]; then
-            local last_sub
-            last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
-            if [[ -n "$last_sub" ]]; then
-                next_sub=$((last_sub + 1))
-            fi
-        fi
-        log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
-        run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}"
-        run git fetch
+    if $DRY_RUN; then
+        log "(dry-run) would create the next v${BRANCHNN}_branch.N release tag"
+        return 0
     fi
+    cd "$WEEKLYBLD"
+    git fetch
 
-    # Step 5: Zip source code (takes ~4 min)
+    # Find next available subversion tag
+    local existing_tags
+    existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
+    local next_sub=1
+    if [[ -n "$existing_tags" ]]; then
+        local last_sub
+        last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
+        if [[ -n "$last_sub" ]]; then
+            next_sub=$((last_sub + 1))
+        fi
+    fi
+    log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
+    run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}" || \
+        die "Failed to push release tag v${BRANCHNN}_branch.${next_sub}"
+    run git fetch
+    return 0
+}
+
+# Zip source code (takes ~4 min)
+wrapup_zip() {
     log "Zipping source code..."
     local ziplog="$LOGDIR/v${BRANCHNN}.doZip.log"
-    run_tcsh "time ./doZip.csh >& $ziplog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doZip.csh failed (rc=$rc). See $ziplog"
-    fi
+    run_tcsh "time ./doZip.csh >& $ziplog" || \
+        die "doZip.csh failed. See $ziplog"
     log "Source zip complete."
+    return 0
+}
 
-    # Step 6: Wait 10 minutes for rsync, then package userApps source
+# Wait 10 minutes for rsync, then package userApps source
+wrapup_userapps_src() {
     log "Waiting 10 minutes before userApps.sh (as specified in wiki)..."
     if ! $DRY_RUN; then
         sleep 600
     fi
-
     log "Running userApps.sh..."
     local uaLog="$LOGDIR/v${BRANCHNN}.userApps.log"
-    run_tcsh "time ./userApps.sh >& $uaLog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "userApps.sh failed (rc=$rc). See $uaLog"
-    fi
+    run_tcsh "time ./userApps.sh >& $uaLog" || \
+        die "userApps.sh failed. See $uaLog"
     log "userApps.sh complete."
+    return 0
+}
 
-    # Step 7: Build release Docker images
+# Build release Docker images.
+# The amd64 image installs PREBUILT CGIs that browserSetup.sh -b rsyncs from the
+# RR/production cgi-bin module on hgdownload (hgdownload.soe.ucsc.edu::cgi-bin);
+# only arm64 compiles from the beta branch source. Those prebuilt CGIs are put on
+# hgdownload by the external RR/production push (qateam), NOT by these scripts, so
+# we must not build amd64 until that push has propagated or it ships stale,
+# unpatched binaries. Block until hgdownload carries a build at least as new as
+# ours. (The csh one-liner below must run via run_tcsh: `setenv` is csh-only, so
+# running it from bash leaves $stage empty and the image refs become
+# "genomebrowser/server:" while still exiting 0 on the last statement.)
+# Fatal on failure (was a non-fatal warning): now that wrap-up is checkpointed, a
+# retry just resumes at this step, and the build is idempotent (--no-cache rebuild
+# + re-push + manifest recreate). If it fails on apt-get DNS errors or an arm64
+# "exec format error", see the post-reboot docker fragility note at ensure_binfmt.
+wrapup_docker_release() {
+    wait_for_hgdownload_cgis
     log "Building release Docker images..."
     ensure_binfmt
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
-            log "WARNING: Docker release build had issues. See $dockerlog (non-fatal)"
-        }
-        log "Docker release build complete."
-    else
-        log "WARNING: Docker directory not found - skipping Docker release build"
+    if [[ ! -d "$dockerdir" ]]; then
+        die "Docker directory not found at $dockerdir - cannot build release images"
     fi
+    local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
+    # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
+    run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || \
+        die "Docker release build failed. See $dockerlog"
+    log "Docker release build complete."
+    return 0
+}
 
-    # Refresh kent-rel against the just-pushed release image, then tear down
-    # the beta container/image now that v${BRANCHNN} has shipped. refs #37655
+# Refresh kent-rel against the just-pushed release image, then tear down the beta
+# container/image now that v${BRANCHNN} has shipped. refs #37655. Container
+# hygiene only, so a failure here warns but does not abort the phase.
+wrapup_refresh_containers() {
     log "Refreshing local kent-rel container..."
     run "$WEEKLYBLD/refresh-instance.sh" rel || \
         log "WARNING: kent-rel refresh failed; container may be stale"
     log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
     run "$WEEKLYBLD/remove-instance.sh" beta || \
         log "WARNING: kent-beta teardown failed; check container/image manually"
+    return 0
+}
 
-    # Step 8: Generate markdown release notes for GitHub
+# Generate markdown release notes for GitHub
+wrapup_release_markdown() {
     if ! $DRY_RUN; then
         generate_release_markdown "$BRANCHNN"
     fi
+    return 0
+}
+
+do_wrapup() {
+    log "========== PHASE: WRAP-UP =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+
+    log "Running wrap-up for v${BRANCHNN}"
+    state_init wrapup "$PHASE_VER"
+
+    step hgcentral-sql    wrapup_hgcentral_sql
+    step userapps-utils   wrapup_userapps_utils
+    step tag-beta         wrapup_tag_beta
+    step tag-release      wrapup_tag_release
+    step zip              wrapup_zip
+    step userapps-src     wrapup_userapps_src
+    step docker-release   wrapup_docker_release
+    step refresh-containers wrapup_refresh_containers
+    step release-markdown wrapup_release_markdown
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"

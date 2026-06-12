@@ -1,12 +1,12 @@
 # ENCODE4 Integrated Regulation Track
 
 track wgEncodeReg4
-superTrack on show
+superTrack on hide
 shortLabel ENCODE4 Regulation
 longLabel Integrated Regulation from ENCODE 4
 group regulation
 priority 0.9
-pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+pennantIcon New red
 html wgEncodeReg4.html
 
     track wgEncodeReg4MarkH3k27ac
