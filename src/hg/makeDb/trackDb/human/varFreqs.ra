@@ -16,7 +16,7 @@ superTrack on
         itemRgb on
         maxWindowToDraw 5000000
         priority 0.11
-        mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Affected AF:</b> ${affectedAF}<br><b>Affected AC:</b> ${affectedAC}<br><b>Affected cohorts:</b> ${affectedCohorts}<br><b>Background AF:</b> ${backgroundAF}
+        mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Affected AF:</b> ${affectedAF}<br><b>Affected AC/AN:</b> ${affectedAC} / ${affectedAN}<br><b>Affected cohorts:</b> ${affectedCohorts}<br><b>Background AF:</b> ${backgroundAF}
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
@@ -44,16 +44,20 @@ superTrack on
         filterLimits.varLen -28036:6293
         # Affected/case frequency summary
         filterByRange.affectedAF on
-        filterLabel.affectedAF Affected/case AF
+        filterLabel.affectedAF Affected/case AF (pooled)
         filterLimits.affectedAF 0:1
         filterByRange.affectedAC on
         filterLabel.affectedAC Affected/case AC
+        filterByRange.affectedAN on
+        filterLabel.affectedAN Affected/case AN (pool denominator)
         # Background (population + unaffected) frequency summary
         filterByRange.backgroundAF on
-        filterLabel.backgroundAF Background AF (population + unaffected)
+        filterLabel.backgroundAF Background AF (pooled)
         filterLimits.backgroundAF 0:1
         filterByRange.backgroundAC on
         filterLabel.backgroundAC Background AC (population + unaffected)
+        filterByRange.backgroundAN on
+        filterLabel.backgroundAN Background AN (pool denominator)
         # Affected/case membership flag
         filterByRange.inAffected on
         filterLabel.inAffected Seen in an affected/case arm (1=yes, 0=no)
@@ -351,7 +355,7 @@ superTrack on
         itemRgb on
         maxWindowToDraw 5000000
         priority 0.1
-        mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Background AF:</b> ${backgroundAF}<br><b>Background AC:</b> ${backgroundAC}<br><b>Sources:</b> ${backgroundSources}<br><b>Affected AF:</b> ${affectedAF}
+        mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Background AF:</b> ${backgroundAF}<br><b>Background AC/AN:</b> ${backgroundAC} / ${backgroundAN}<br><b>Sources:</b> ${backgroundSources}<br><b>Affected AF:</b> ${affectedAF}
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
@@ -379,16 +383,20 @@ superTrack on
         filterLimits.varLen -28036:6293
         # Affected/case frequency summary
         filterByRange.affectedAF on
-        filterLabel.affectedAF Affected/case AF
+        filterLabel.affectedAF Affected/case AF (pooled)
         filterLimits.affectedAF 0:1
         filterByRange.affectedAC on
         filterLabel.affectedAC Affected/case AC
+        filterByRange.affectedAN on
+        filterLabel.affectedAN Affected/case AN (pool denominator)
         # Background (population + unaffected) frequency summary
         filterByRange.backgroundAF on
-        filterLabel.backgroundAF Background AF (population + unaffected)
+        filterLabel.backgroundAF Background AF (pooled)
         filterLimits.backgroundAF 0:1
         filterByRange.backgroundAC on
         filterLabel.backgroundAC Background AC (population + unaffected)
+        filterByRange.backgroundAN on
+        filterLabel.backgroundAN Background AN (pool denominator)
         # Affected/case membership flag
         filterByRange.inAffected on
         filterLabel.inAffected Seen in an affected/case arm (1=yes, 0=no)

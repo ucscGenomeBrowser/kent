@@ -39,8 +39,24 @@ affected individuals is shown in both this track and the
     <td>intron, non_coding, intergenic, UTR</td></tr>
 </table>
 <p>
-The score (used for shading) is the background allele frequency (the maximum across the
-population cohorts and unaffected/control arms) times 1000.
+The score (used for shading) is the pooled background allele frequency times 1000.
+</p>
+
+<h3>Pooled allele frequency</h3>
+<p>
+<b>Background AF</b> is the pooled rate across contributing population cohorts and
+unaffected/control arms: <code>backgroundAF = sum(AC) / sum(AN)</code>, where
+<b>backgroundAC</b> sums the allele counts and <b>backgroundAN</b> sums the allele
+numbers across each cohort/arm that ships both AC and AF (the per-arm AN is derived as
+<code>round(AC / AF)</code>). Two cohorts that publish only AF (ABraOM, ALFA) contribute
+via a configured <code>default_an</code> in the build configuration. Cohorts that publish
+only AC with no <code>default_an</code> set (currently MGRB and the GREGoR unaffected and
+unknown arms), and cohorts that contribute only through per-population AC/AF (currently
+AllOfUs), are listed in <b>backgroundSources</b> but do not contribute to the pool
+numerator or denominator; their data remain visible in the per-database and per-population
+AC/AF columns. The pooled rate is preferred over a max-across-cohorts statistic so a small
+cohort with a high local AF (for example AllOfUs Oceanian) cannot dominate the displayed
+frequency.
 </p>
 
 <h2>Filters</h2>
@@ -48,9 +64,11 @@ population cohorts and unaffected/control arms) times 1000.
   <li><b>Variant Type</b> and <b>Consequence</b>: restrict to SNV/insertion/deletion/MNV
       and to predicted consequence classes (the Consequence filter uses OR logic over the
       comma-separated tokens on each variant).</li>
-  <li><b>Background AF</b> and <b>Background AC</b>: the maximum allele frequency and summed
-      allele count across the population cohorts and unaffected/control arms.</li>
-  <li><b>Affected/case AF</b> and <b>Affected/case AC</b>: the same variant's frequency in
+  <li><b>Background AF</b>, <b>AC</b>, <b>AN</b>: the pooled allele frequency
+      (sum AC / sum AN), summed allele count, and summed allele number across the
+      contributing population cohorts and unaffected/control arms. See &quot;Pooled
+      allele frequency&quot; above.</li>
+  <li><b>Affected/case AF</b>, <b>AC</b>, <b>AN</b>: the same triple computed across
       affected individuals, for context.</li>
   <li><b>Background source</b>: restrict to variants seen in specific cohorts.</li>
   <li><b>Per-database AF/AC</b> and ancestry-specific allele frequencies (AllOfUs, GenomeAsia,

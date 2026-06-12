@@ -151,11 +151,19 @@ def load_config(scripts_dir, db_file="databases.tsv",
                 parts[0], parts[1], parts[2], parts[3], parts[4])
             is_disease = int(parts[5]) if len(parts) > 5 else 0
             disease_role = parts[6].strip() if len(parts) > 6 else ""
+            default_an = 0
+            if len(parts) > 7 and parts[7].strip():
+                try:
+                    default_an = int(parts[7].strip())
+                except ValueError:
+                    print(f"WARNING: bad default_an for {key}: {parts[7]}",
+                          file=sys.stderr)
             databases[key] = {
                 "name": name, "vcf": vcf,
                 "ac_field": ac_field, "af_field": af_field,
                 "is_disease": is_disease,
                 "disease_role": disease_role,
+                "default_an": default_an,
                 "pops": [],
             }
 
@@ -288,6 +296,31 @@ def load_extracted(db_key, chrom, extract_dir):
     return data
 
 
+def _pool_arm(ac_val, af_val, default_an):
+    """Compute pooled (AC, AN) contribution for one cohort arm.
+
+    Used by the affected and background pooled-AF calculations. Returns
+    (0, 0) when we can't determine AN, so the pool denominator never
+    includes a cohort's carriers without also including its allele number
+    -- the resulting pooled AF stays well-defined and bounded.
+
+    Strategies, in order:
+      1. Both AC and AF present with AF > 0: AN = round(AC / AF) (typical case).
+      2. AF present but AC empty: synthesize AC = round(AF * default_an)
+         and use default_an as AN (e.g. ALFA, ABraOM, which ship only AF).
+      3. AC present but AF empty/0: use default_an as AN (e.g. MGRB if it
+         had a configured default_an).
+      4. None of the above: return (0, 0), arm does not contribute.
+    """
+    if ac_val is not None and af_val is not None and af_val > 0:
+        return ac_val, max(1, round(ac_val / af_val))
+    if af_val is not None and default_an > 0:
+        return max(0, round(af_val * default_an)), default_an
+    if ac_val is not None and default_an > 0:
+        return ac_val, default_an
+    return 0, 0
+
+
 def process_chromosome(args):
     """Phase 2: Build the affected and background BEDs for one chromosome from
     the annotated VCF + pre-extracted per-cohort data.
@@ -363,17 +396,20 @@ def process_chromosome(args):
             name = f"{ref_d}>{alt_d}"
             var_type = get_vartype(ref, alt)
 
-            # Affected/case summary (affected arms + role=affected whole cohorts)
-            affected_af = 0.0
+            # Pooled affected/case summary: sum AC, sum AN, AF = AC/AN.
+            # Switched from max-across-cohorts (which was dominated by tiny
+            # cohorts like GA4K when they reported high local AF) to a
+            # population-weighted ratio so the AF matches the AC scale.
             affected_ac = 0
+            affected_an = 0
             affected_cohorts = []
             # Background summary = population cohorts + unaffected/control/unknown
-            # arms of disease cohorts ("all other variants").
-            background_af = 0.0
+            # arms of disease cohorts ("all other variants"), same pooling.
             background_ac = 0
+            background_an = 0
             background_sources = []
-            db_ac_af = []    # per-database AC, AF
-            pop_ac_af = []   # per-population AC, AF (written AFTER all db fields)
+            db_ac_af = []    # per-database AC, AF (raw, for output columns)
+            pop_ac_af = []   # per-population AC, AF (raw, for output columns)
 
             for db_key, db_info in databases.items():
                 values = freq_data.get(db_key, {}).get(key, [])
@@ -385,6 +421,7 @@ def process_chromosome(args):
 
                 is_disease_db = db_info.get("is_disease", 0)
                 disease_role = db_info.get("disease_role", "")
+                default_an = db_info.get("default_an", 0)
 
                 af_val = None
                 if af:
@@ -399,36 +436,32 @@ def process_chromosome(args):
                     except ValueError:
                         ac_val = None
 
-                # Track this cohort's contribution to each group so the
-                # affectedCohorts / backgroundSources lists are accurate.
+                ac_add, an_add = _pool_arm(ac_val, af_val, default_an)
+                cohort_observes = (ac_val is not None) or (af_val is not None)
+
+                # Track this cohort's appearance in each group's source list.
+                # A cohort that observes the variant but lacks a usable AN
+                # (e.g. MGRB ships AC only, GREGoR per-arm ships AC only) is
+                # still listed but contributes 0 to the pool. Future work:
+                # add default_an entries for these cohorts/arms.
                 hits_affected = False
                 hits_background = False
 
                 if is_disease_db:
-                    # Unified AC/AF slot: only meaningful when the whole cohort
-                    # has a known role (e.g. GA4K = affected). Otherwise the
-                    # per-arm populations below carry the phenotype signal.
                     if disease_role == "affected":
-                        if af_val is not None:
-                            affected_af = max(affected_af, af_val)
-                            hits_affected = True
-                        if ac_val is not None:
-                            affected_ac += ac_val
+                        affected_ac += ac_add
+                        affected_an += an_add
+                        if cohort_observes:
                             hits_affected = True
                     elif disease_role == "unaffected":
-                        if af_val is not None:
-                            background_af = max(background_af, af_val)
-                            hits_background = True
-                        if ac_val is not None:
-                            background_ac += ac_val
+                        background_ac += ac_add
+                        background_an += an_add
+                        if cohort_observes:
                             hits_background = True
                 else:
-                    # Population cohort feeds the background summary.
-                    if af_val is not None:
-                        background_af = max(background_af, af_val)
-                        hits_background = True
-                    if ac_val is not None:
-                        background_ac += ac_val
+                    background_ac += ac_add
+                    background_an += an_add
+                    if cohort_observes:
                         hits_background = True
 
                 db_ac_af.extend([ac, af])
@@ -453,36 +486,45 @@ def process_chromosome(args):
                             pop_ac_val = int(pop_ac)
                         except ValueError:
                             pop_ac_val = None
+                    # Per-arm default_an would let GREGoR per-arm rows pool
+                    # cleanly; for now they fall through with default 0.
+                    pop_default_an = pop.get("default_an", 0)
+                    pop_ac_add, pop_an_add = _pool_arm(
+                        pop_ac_val, pop_af_val, pop_default_an)
+                    pop_observes = (pop_ac_val is not None) or \
+                                   (pop_af_val is not None)
 
                     pheno = pop.get("phenotype", "")
                     if is_disease_db and pheno == "affected":
-                        if pop_af_val is not None:
-                            affected_af = max(affected_af, pop_af_val)
-                            hits_affected = True
-                        if pop_ac_val is not None:
-                            affected_ac += pop_ac_val
+                        affected_ac += pop_ac_add
+                        affected_an += pop_an_add
+                        if pop_observes:
                             hits_affected = True
                     elif is_disease_db and pheno in ("unaffected", "unknown"):
                         # Unaffected relatives, controls, and unknown-phenotype
-                        # individuals are all "not clearly affected".
-                        if pop_af_val is not None:
-                            background_af = max(background_af, pop_af_val)
-                            hits_background = True
-                        if pop_ac_val is not None:
-                            background_ac += pop_ac_val
+                        # individuals all feed the background.
+                        background_ac += pop_ac_add
+                        background_an += pop_an_add
+                        if pop_observes:
                             hits_background = True
                     elif not is_disease_db:
-                        # Ancestry population of a population cohort.
-                        if pop_af_val is not None:
-                            background_af = max(background_af, pop_af_val)
-                            hits_background = True
-                        if pop_ac_val is not None:
+                        # Ancestry breakdown of a population cohort. The
+                        # unified row above already pooled the cohort if it
+                        # had AC+AF, so we deliberately don't double-count
+                        # the per-pop AC/AN here. Per-pop AC and AF still
+                        # write to their own bigBed columns above.
+                        if pop_observes:
                             hits_background = True
 
                 if hits_affected:
                     affected_cohorts.append(db_key)
                 if hits_background:
                     background_sources.append(db_key)
+
+            # Compute pooled allele frequencies.
+            affected_af = (affected_ac / affected_an) if affected_an > 0 else 0.0
+            background_af = (background_ac / background_an) \
+                if background_an > 0 else 0.0
 
             in_affected = 1 if (affected_ac > 0 or affected_af > 0) else 0
 
@@ -509,9 +551,11 @@ def process_chromosome(args):
                 gene, transcript, aa_change, dna_change,
                 f"{affected_af:.6f}" if affected_af > 0 else "",
                 str(affected_ac) if affected_ac > 0 else "",
+                str(affected_an) if affected_an > 0 else "",
                 ",".join(affected_cohorts),
                 f"{background_af:.6f}" if background_af > 0 else "",
                 str(background_ac) if background_ac > 0 else "",
+                str(background_an) if background_an > 0 else "",
                 ",".join(background_sources),
                 str(in_affected),
             ]
@@ -586,12 +630,16 @@ def generate_autosql(output_path, databases, table_name="varFreqsAll"):
         f.write('    string transcript;   "Transcript"\n')
         f.write('    lstring aaChange;    "AA change"\n')
         f.write('    lstring dnaChange;   "DNA change"\n')
-        # Frequency summaries (shared by the affected and background tracks)
-        f.write('    string affectedAF;      "Max allele frequency in affected/case individuals"\n')
+        # Frequency summaries (shared by the affected and background tracks).
+        # AF is pooled across contributing arms (sum AC / sum AN), not the
+        # max across arms, so the AF matches the AC and AN scale.
+        f.write('    string affectedAF;      "Pooled allele frequency in affected/case individuals (sum AC / sum AN)"\n')
         f.write('    string affectedAC;      "Summed allele count in affected/case individuals"\n')
+        f.write('    string affectedAN;      "Summed allele number in affected/case individuals (pool denominator)"\n')
         f.write('    string affectedCohorts; "Disease cohorts contributing affected/case carriers"\n')
-        f.write('    string backgroundAF;    "Max allele frequency in population cohorts + unaffected/control individuals"\n')
+        f.write('    string backgroundAF;    "Pooled allele frequency in population cohorts + unaffected/control individuals (sum AC / sum AN)"\n')
         f.write('    string backgroundAC;    "Summed allele count in population cohorts + unaffected/control individuals"\n')
+        f.write('    string backgroundAN;    "Summed allele number in population cohorts + unaffected/control individuals (pool denominator)"\n')
         f.write('    string backgroundSources; "Cohorts contributing to the background (population + unaffected)"\n')
         f.write('    uint inAffected;        "1 if seen in an affected/case arm, else 0"\n')
         # Per-database AC/AF
@@ -681,16 +729,20 @@ def generate_trackdb_fragment(output_path, databases, track_name="varFreqsAll",
         # background). String range filters mirror the per-database AF/AC fields.
         f.write("        # Affected/case frequency summary\n")
         f.write("        filterByRange.affectedAF on\n")
-        f.write("        filterLabel.affectedAF Affected/case AF\n")
+        f.write("        filterLabel.affectedAF Affected/case AF (pooled)\n")
         f.write("        filterLimits.affectedAF 0:1\n")
         f.write("        filterByRange.affectedAC on\n")
         f.write("        filterLabel.affectedAC Affected/case AC\n")
+        f.write("        filterByRange.affectedAN on\n")
+        f.write("        filterLabel.affectedAN Affected/case AN (pool denominator)\n")
         f.write("        # Background (population + unaffected) frequency summary\n")
         f.write("        filterByRange.backgroundAF on\n")
-        f.write("        filterLabel.backgroundAF Background AF (population + unaffected)\n")
+        f.write("        filterLabel.backgroundAF Background AF (pooled)\n")
         f.write("        filterLimits.backgroundAF 0:1\n")
         f.write("        filterByRange.backgroundAC on\n")
         f.write("        filterLabel.backgroundAC Background AC (population + unaffected)\n")
+        f.write("        filterByRange.backgroundAN on\n")
+        f.write("        filterLabel.backgroundAN Background AN (pool denominator)\n")
         f.write("        # Affected/case membership flag\n")
         f.write("        filterByRange.inAffected on\n")
         f.write("        filterLabel.inAffected Seen in an affected/case arm (1=yes, 0=no)\n")
