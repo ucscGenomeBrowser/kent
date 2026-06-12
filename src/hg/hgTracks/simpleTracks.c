@@ -6316,10 +6316,7 @@ if (liftDb != NULL)
     struct sqlConnection *conn = hAllocConn(liftDb);
     char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 
-// using this loader on genePred tables with less than 15 fields may be a problem.
-extern struct genePred *genePredExtLoad15(char **row);
-
-    struct genePred *gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table, chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
 
     calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
