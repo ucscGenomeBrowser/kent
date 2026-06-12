@@ -7,7 +7,7 @@ visibility hide
 superTrack on
 
         track varFreqsAffected
-        shortLabel Affected/Case Individuals
+        shortLabel Disease cohorts
         longLabel SNV Frequencies: variants in ~130,000 affected or case individuals (autism, schizophrenia, rare disease cohorts)
         type bigBed 9 +
         parent varFreqs on
@@ -342,7 +342,7 @@ superTrack on
         skipEmptyFields on
 
         track varFreqsBackground
-        shortLabel Population + Unaffected
+        shortLabel Population reference
         longLabel SNV Frequencies: variants in ~1.5 million individuals from population cohorts and unaffected or control arms
         type bigBed 9 +
         parent varFreqs on
