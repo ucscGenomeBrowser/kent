@@ -739,10 +739,12 @@ return cleanList;
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-char *fromPos = cartString(theCart, "position");
-
 cart = theCart;
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+// Bots sometimes hit hgConvert with a db but no position in the cart; fall
+// back to the assembly's default position rather than aborting.
+char *fromPos = cartUsualString(cart, "position", hDefaultPos(database));
 
 // Try to deal with virt chrom position used by hgTracks.
 if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))

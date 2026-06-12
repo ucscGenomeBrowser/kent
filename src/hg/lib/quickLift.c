@@ -19,6 +19,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
+#include "genePredReader.h"
 #include "bigChain.h"
 #include "bigLink.h"
 #include "chromAlias.h"
@@ -193,9 +194,9 @@ if (geneId)
 return ret;
 }
 
-struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
-// retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.  
-// Save the chains we used to map the item back to the current reference.
+static struct chain *quickLiftLoadChains(char *quickLiftFile, char *chrom, int start, int end)
+/* Load the chains from quickLiftFile that overlap a padded window around the
+ * destination range. */
 {
 // need to add some padding to these coordinates
 int padStart = start - 100000;
@@ -203,7 +204,43 @@ if (padStart < 0)
     padStart = 0;
 
 char *linkFileName = bigChainGetLinkFile(quickLiftFile);
-struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+}
+
+static void quickLiftChainQueryRange(struct chain *chain, int *retQStart, int *retQEnd)
+/* Return the query-side ("other" species) coordinate range spanned by the
+ * aligned blocks of chain, corrected for query strand.  chain->blockList must
+ * not be NULL. */
+{
+struct cBlock *cb = chain->blockList;
+int qStart = cb->qStart;
+int qEnd = cb->qEnd;
+
+for(; cb; cb = cb->next)
+    {
+    if (cb->qStart < qStart)
+        qStart = cb->qStart;
+    if (cb->qEnd > qEnd)
+        qEnd = cb->qEnd;
+    }
+
+// correct for strand
+if (chain->qStrand == '-')
+    {
+    int saveStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveStart;
+    }
+
+*retQStart = qStart;
+*retQEnd = qEnd;
+}
+
+struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
+// retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.
+// Save the chains we used to map the item back to the current reference.
+{
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
 
 struct slList *item, *itemList = NULL;
 int rowOffset = 0;
@@ -212,33 +249,13 @@ char **row = NULL;
 
 for(chain = chainList; chain; chain = chain->next)
     {
-    struct cBlock *cb;
-    cb = chain->blockList; 
-
-    if (cb == NULL)
+    if (chain->blockList == NULL)
         continue;
 
-    int qStart = cb->qStart;
-    int qEnd = cb->qEnd;
+    int qStart, qEnd;
+    quickLiftChainQueryRange(chain, &qStart, &qEnd);
 
-    // get the range for the links on the "other" species
-    for(; cb; cb = cb->next)
-        {
-        if (cb->qStart < qStart)
-            qStart = cb->qStart;
-        if (cb->qEnd > qEnd)
-            qEnd = cb->qEnd;
-        }
-
-    // correct for strand
-    if (chain->qStrand == '-')
-        {
-        int saveStart = qStart;
-        qStart = chain->qSize - qEnd;
-        qEnd = chain->qSize - saveStart;
-        }
-
-    // now grab the items 
+    // now grab the items
     if (query == NULL)
         sr = hRangeQuery(conn, table, chain->qName,
                          qStart, qEnd, extraWhere, &rowOffset);
@@ -257,6 +274,39 @@ for(chain = chainList; chain; chain = chain->next)
     }
 
 return itemList;
+}
+
+struct genePred *quickLiftGenePreds(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end, char *extraWhere, struct hash *chainHash)
+// Like quickLiftSql, but load genePreds with a genePredReader so the actual set
+// of (extended) genePred columns in the table is honored.  A fixed 15-column
+// loader misreads classic knownGene-style tables, whose trailing proteinID and
+// alignID columns are not extended genePred fields.
+{
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
+
+struct genePred *gpList = NULL;
+
+for(chain = chainList; chain; chain = chain->next)
+    {
+    if (chain->blockList == NULL)
+        continue;
+
+    int qStart, qEnd;
+    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+
+    struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chain->qName,
+                                                          qStart, qEnd, extraWhere);
+    struct genePred *gp;
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        slAddHead(&gpList, gp);
+    genePredReaderFree(&gpr);
+
+    // now squirrel the swapped chains we used to use to map the retrieved items back to us
+    chainSwap(chain);
+    liftOverAddChainHash(chainHash, chain);
+    }
+
+return gpList;
 }
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked)

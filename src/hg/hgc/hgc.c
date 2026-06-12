@@ -2993,10 +2993,8 @@ if (liftDb != NULL)
     struct hash *chainHash = newHash(8);
     char extraWhere[512];
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", name);
-    extern struct genePred *genePredExtLoad15(char **row);
-    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, rootTable,
-        seqName, winStart, winEnd, NULL, extraWhere,
-        (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, rootTable,
+        seqName, winStart, winEnd, extraWhere, chainHash);
     calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
     }
 else
@@ -9665,12 +9663,9 @@ if (liftDb != NULL)
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
 
-// using this loader on genePred tables with less than 15 fields may be a problem.
-extern struct genePred *genePredExtLoad15(char **row);
-
     char extraWhere[4096];
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", geneName);
-    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, seqName, winStart, winEnd,  NULL, extraWhere, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, table, seqName, winStart, winEnd, extraWhere, chainHash);
     hFreeConn(&conn);
 
     calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
