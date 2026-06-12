@@ -1673,7 +1673,6 @@ struct cart *cartNew(char *userId, char *sessionId,
 genericCgiSetup();
 
 struct cart *cart;
-struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
 boolean userIdFound = FALSE, sessionIdFound = FALSE;
 
@@ -1695,6 +1694,7 @@ forceUserIdOrCaptcha(userId, userIdFound, fromCli);
 
 // we rely on the cookie being validated later, so if user requested to reset the cookie settings
 // load the settings after the captcha has been checked
+struct sqlConnection *conn = cartDefaultConnector();
 if ( cgiOptionalString("ignoreCookie") != NULL )
     cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
 else
