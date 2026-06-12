@@ -982,15 +982,15 @@ if (doLoad)
     makeM0(m0C3, 0.25, 0.25, 0.25, 0.25, unlikely);
     makeM0End2(m0End2, unlikely);
     makeM2End3(m2End3, unlikely);
-    sprintf(fileName, "%s%s", dir, "ceLongIntron3.fa");
+    safef(fileName, sizeof(fileName), "%s%s", dir, "ceLongIntron3.fa");
     makeThreeMarkovs(NULL, m1Intron, m2Intron, fileName);
-    sprintf(fileName, "%s%s", dir, "cecoding.fa");
+    safef(fileName, sizeof(fileName), "%s%s", dir, "cecoding.fa");
     makeFrameModels(m2C1, m2C2, m2C3, fileName, unlikely);
-    sprintf(fileName, "%s%s", dir, "ceig.fa");
-    makeThreeMarkovs(NULL, NULL, m2Ig, fileName);   
-    sprintf(fileName, "%s%s", dir, "ceig.fa");
+    safef(fileName, sizeof(fileName), "%s%s", dir, "ceig.fa");
+    makeThreeMarkovs(NULL, NULL, m2Ig, fileName);
+    safef(fileName, sizeof(fileName), "%s%s", dir, "ceig.fa");
     makeThreeMarkovs(NULL, NULL, m2Space, fileName);
-    sprintf(fileName, "%s%s", dir, "cepromoCons.fa");
+    safef(fileName, sizeof(fileName), "%s%s", dir, "cepromoCons.fa");
     makeThreeMarkovs(NULL, NULL, m2Promo, fileName);
     }
 

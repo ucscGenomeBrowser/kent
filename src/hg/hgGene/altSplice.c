@@ -91,8 +91,8 @@ int pixHeight = 0;
 struct hvGfx *hvg;
 int lineHeight = 0;
 double scale = 0;
-Color shadesOfGray[9];
-int maxShade = ArraySize(shadesOfGray)-1;
+Color shadesOfGray[10];
+int maxShade = ArraySize(shadesOfGray)-2;	// makeGrayShades also writes shadesOfGray[maxShade+1]
 
 scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;

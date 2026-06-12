@@ -70,7 +70,7 @@ bed->chromStart = bed->thickStart =  chromStart = psl->tStart;
 bed->chromEnd = bed->thickEnd = psl->tEnd;
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
-strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+safecpy(bed->strand, sizeof(bed->strand), psl->strand);
 bed->blockCount = blockCount = psl->blockCount;
 bed->blockSizes = (int *)cloneMem(psl->blockSizes,(sizeof(int)*psl->blockCount));
 bed->chromStarts = chromStarts = (int *)cloneMem(psl->tStarts, (sizeof(int)*psl->blockCount));

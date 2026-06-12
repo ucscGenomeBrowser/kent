@@ -179,7 +179,7 @@ for (i=0; i<numStages; ++i)
        {
        wordCount = chopLine(line, words);
        assert(wordCount == 7);
-       strncpy(cloneName, words[1], sizeof(cloneName));
+       safecpy(cloneName, sizeof(cloneName), words[1]);
        chopSuffix(cloneName);
        if ((clone = hashFindVal(cloneHash, cloneName)) == NULL)
             {

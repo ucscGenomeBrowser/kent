@@ -37,7 +37,7 @@ char *bedIdS(char *name, char *chrom, char *chromStart)
 /* Return unique identifier for bed treating number as string. */
 {
 static char buf[128];
-sprintf(buf, "%s.%s.%s", name, chrom, chromStart);
+safef(buf, sizeof(buf), "%s.%s.%s", name, chrom, chromStart);
 return buf;
 }
 
@@ -57,7 +57,7 @@ char *words[8];
 int i;
 char *e;
 
-strncpy(buf, pslName, sizeof(buf));
+safecpy(buf, sizeof(buf), pslName);
 for (i=0; i<3; ++i)
     {
     e = strrchr(buf, '.');

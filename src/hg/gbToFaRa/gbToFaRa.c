@@ -1391,7 +1391,7 @@ while (readGbInfo(lf))
                         hel = hashAdd(estAuthorHash, author, ae);
                         ae->name = hel->name;
                         ae->count = 1;
-                        strncpy(ae->accession, accession, sizeof(ae->accession));                        
+                        safecpy(ae->accession, sizeof(ae->accession), accession);
                         slAddHead(&estAuthorList, ae);
                         }
                     else

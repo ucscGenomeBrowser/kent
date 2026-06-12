@@ -292,7 +292,7 @@ if (nullModel == nmCoding)
     {
     char codFileName[512];
     struct codonBias *cb;
-    snprintf(codFileName, sizeof(codFileName), "%s%s", amemeDir(), "ce.cod");
+    safef(codFileName, sizeof(codFileName), "%s%s", amemeDir(), "ce.cod");
     cb = codonLoadBias(codFileName);
     for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
         {
@@ -2485,7 +2485,7 @@ void makePremadeBgPathName(char *fileName, char *retPathName, int retPathSize)
 /* Make path name for background file out of just file name. */
 {
 char *dir = amemeDir();
-sprintf(retPathName, "%s%s", dir, fileName);
+safef(retPathName, retPathSize, "%s%s", dir, fileName);
 }
 
 static double randScale;    /* Scales rand() result to 0.0 to 1.0 */

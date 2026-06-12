@@ -70,7 +70,7 @@ if (wordCount < 6 || !sameString(words[1], "@"))
 m->score = atof(words[0]);
 m->pos = atof(words[2]);
 m->posSd = atof(words[4]);
-strncpy(m->consensus, words[5], sizeof(m->consensus));
+safecpy(m->consensus, sizeof(m->consensus), words[5]);
 
 /* Get next lines with columns. */
 for (i=0; i<4; ++i)

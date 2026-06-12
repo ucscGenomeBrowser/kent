@@ -814,6 +814,12 @@ printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE, smp->name);
 }
 
 
+// Many callers pass a track-specific struct cast to (struct bed *), relying on
+// its bed-compatible leading fields (only the first bedSize fields are read).
+// At -O3 GCC's -Warray-bounds flags those casts because the real object is
+// smaller than struct bed; the accesses are safe by the bed-layout convention.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb)
 /* Print first bedSize fields of a bed type structure in
  * standard format. */
@@ -841,6 +847,7 @@ if (bedSize >= 6)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 
 }
+#pragma GCC diagnostic pop
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -13908,7 +13915,7 @@ static char gi[64];
 if (!startsWith("gi|", ncbiFaHead))
     return NULL;
 ncbiFaHead += 3;
-strncpy(gi, ncbiFaHead, sizeof(gi));
+safecpy(gi, sizeof(gi), ncbiFaHead);
 s = strchr(gi, '|');
 if (s != NULL)
     *s = 0;
@@ -15853,13 +15860,13 @@ if (gp == NULL)
 
 /* extract nib directory from nibfile */
 if (strrchr(nibFile,'/') != NULL)
-    strncpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
+    memcpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",nibFile);
 tNibDir[strlen(nibFile)-strlen(strrchr(nibFile,'/'))] = '\0';
 
 if (strrchr(qNibFile,'/') != NULL)
-    strncpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
+    memcpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",qNibFile);
 qNibDir[strlen(qNibFile)-strlen(strrchr(qNibFile,'/'))] = '\0';
@@ -25079,7 +25086,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
-printf("<B>Item:</B> %s <BR>\n", itemName);
+printf("<B>Item:</B> %s <BR>\n", naForNull(itemName));
 printf("<B>Outside Link:</B> ");
 printf("<A HREF=");
 printSwissProtVariationUrl(stdout, itemName);
