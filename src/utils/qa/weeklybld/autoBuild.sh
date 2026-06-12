@@ -22,15 +22,16 @@
 #   Redmine ticket BEFORE any long artifact build.
 #   If the patch lands AFTER the release has gone out to the RR, the already-public
 #   artifacts must be regenerated too: rebuild the source zip (doZip.csh) and the
-#   docker release images (the docker build/push/manifest steps below). A pre-RR
-#   patch skips those. WAIT for the patched CGIs to reach hgdownload before the
-#   docker release build: the amd64 image rsyncs prebuilt CGIs from the RR/production
-#   cgi-bin module on hgdownload (browserSetup.sh -b is batch mode, not "beta"; the
-#   actual source is hgdownload.soe.ucsc.edu::cgi-bin). That module is populated by
-#   the external RR/production push (qateam), NOT by these weeklybld scripts, so it
-#   only reflects the patch once that push has propagated. Only arm64 compiles from
-#   the beta branch source, so it gets the patch immediately; amd64 built too early
-#   bakes in stale, unpatched binaries. wait_for_hgdownload_cgis() below polls for it.
+#   docker release images (buildReleaseDocker.sh, called from Step 7 below). A pre-RR
+#   patch skips those.
+#   The docker release build does NOT depend on the RR push: buildReleaseDocker.sh
+#   seeds the amd64 image's CGIs straight from the local hgwdev beta build
+#   (/usr/local/apache/cgi-bin-beta) as an overlay -- the same seed overlay-cgi.sh
+#   uses for the kent-beta QA container -- so the image carries the just-built beta
+#   code immediately, without waiting for that code to propagate to
+#   hgdownload.soe.ucsc.edu::cgi-bin via the external RR/production push. arm64
+#   compiles the beta branch from source, so it is patched too. (Earlier versions
+#   waited on hgdownload; see commit cc9fa7b4ea1 if you ever need that gate back.)
 #
 #   COMMON.MK CHERRY-PICK GOTCHA: cherryPickCommits.csh does a `git pull` in the
 #   64-bit build sandbox ($BUILDDIR/v${NN}_branch/kent) after pushing the cherry-pick.
@@ -58,17 +59,6 @@ LOCKFILE="/tmp/autoBuild.lock"
 GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
-
-# wait_for_hgdownload_cgis() tunables (overridable from the environment):
-#   the rsync module + probe CGI we watch, how often we poll, and how long we wait
-#   before giving up. 3600s x 24 = poll hourly for up to ~24h.
-HGDOWNLOAD_CGI_RSYNC="${HGDOWNLOAD_CGI_RSYNC:-hgdownload.soe.ucsc.edu::cgi-bin}"
-HGDOWNLOAD_CGI_PROBE="${HGDOWNLOAD_CGI_PROBE:-hgTracks}"
-HGDOWNLOAD_POLL_INTERVAL="${HGDOWNLOAD_POLL_INTERVAL:-3600}"
-HGDOWNLOAD_POLL_MAX="${HGDOWNLOAD_POLL_MAX:-24}"
-# Local freshly-built reference CGI; its mtime is the "not older than" bar the
-# hgdownload copy must clear (i.e. hgdownload must carry a build at least this new).
-HGDOWNLOAD_REF_CGI="${HGDOWNLOAD_REF_CGI:-/usr/local/apache/cgi-bin/hgTracks}"
 
 ##############################################################################
 # Helpers
@@ -152,58 +142,6 @@ ensure_binfmt() {
     else
         log "WARNING: binfmt registration failed; arm64 docker builds may fail"
     fi
-}
-
-# Echo the epoch mtime of the probe CGI on hgdownload (via rsync --list-only), or
-# empty on failure. rsync --list-only prints e.g. "-rwxr-xr-x 12345 2026/06/11 09:00:00 hgTracks".
-hgdownload_cgi_mtime() {
-    local line
-    line=$(rsync --list-only --no-motd "${HGDOWNLOAD_CGI_RSYNC}/${HGDOWNLOAD_CGI_PROBE}" 2>/dev/null) || return 0
-    # fields 3 (YYYY/MM/DD) and 4 (HH:MM:SS) -> epoch
-    local d t
-    d=$(echo "$line" | awk '{print $3}')
-    t=$(echo "$line" | awk '{print $4}')
-    [[ -n "$d" && -n "$t" ]] || return 0
-    date -d "${d//\//-} $t" +%s 2>/dev/null || true
-}
-
-# Block until the patched CGIs have propagated to the RR/production cgi-bin module
-# on hgdownload (the source the amd64 docker image rsyncs from). The bar is the
-# mtime of the locally-built reference CGI (HGDOWNLOAD_REF_CGI): we wait until the
-# hgdownload copy is at least that new, meaning hgdownload now carries a build no
-# older than the one we just produced. Polls hourly (HGDOWNLOAD_POLL_INTERVAL) for
-# up to HGDOWNLOAD_POLL_MAX tries, then dies loudly so a human can check the RR push.
-# If hgdownload is already current (push preceded us) it returns immediately, so this
-# is safe to call unconditionally before the docker release build.
-wait_for_hgdownload_cgis() {
-    local ref_mtime
-    if [[ -f "$HGDOWNLOAD_REF_CGI" ]]; then
-        ref_mtime=$(stat -c %Y "$HGDOWNLOAD_REF_CGI")
-    else
-        log "WARNING: reference CGI $HGDOWNLOAD_REF_CGI not found; using current time as the bar."
-        ref_mtime=$(date +%s)
-    fi
-    log "Waiting for hgdownload CGIs to reach the patched build (bar: $(date -d @"$ref_mtime" '+%Y-%m-%d %H:%M:%S'), probe: ${HGDOWNLOAD_CGI_RSYNC}/${HGDOWNLOAD_CGI_PROBE})."
-    if $DRY_RUN; then
-        log "[dry-run] would poll every $((HGDOWNLOAD_POLL_INTERVAL/60)) min (up to $HGDOWNLOAD_POLL_MAX tries) until hgdownload mtime >= bar."
-        return 0
-    fi
-    local attempt=0 remote
-    while true; do
-        attempt=$((attempt + 1))
-        remote=$(hgdownload_cgi_mtime)
-        if [[ -n "$remote" && "$remote" -ge "$ref_mtime" ]]; then
-            log "hgdownload CGIs are current ($(date -d @"$remote" '+%Y-%m-%d %H:%M:%S') >= bar) after $attempt poll(s). Proceeding with docker release build."
-            return 0
-        fi
-        if (( attempt >= HGDOWNLOAD_POLL_MAX )); then
-            die "Gave up after $attempt polls (~$((attempt*HGDOWNLOAD_POLL_INTERVAL/3600))h): ${HGDOWNLOAD_CGI_PROBE} on hgdownload is still older than the patched build. Has the RR/production push run?"
-        fi
-        local shown="${remote:-unreadable}"
-        [[ -n "$remote" ]] && shown="$(date -d @"$remote" '+%Y-%m-%d %H:%M:%S')"
-        log "Poll $attempt/$HGDOWNLOAD_POLL_MAX: hgdownload ${HGDOWNLOAD_CGI_PROBE} mtime $shown < bar; sleeping $((HGDOWNLOAD_POLL_INTERVAL/60)) min."
-        sleep "$HGDOWNLOAD_POLL_INTERVAL"
-    done
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -852,31 +790,22 @@ wrapup_userapps_src() {
     return 0
 }
 
-# Build release Docker images.
-# The amd64 image installs PREBUILT CGIs that browserSetup.sh -b rsyncs from the
-# RR/production cgi-bin module on hgdownload (hgdownload.soe.ucsc.edu::cgi-bin);
-# only arm64 compiles from the beta branch source. Those prebuilt CGIs are put on
-# hgdownload by the external RR/production push (qateam), NOT by these scripts, so
-# we must not build amd64 until that push has propagated or it ships stale,
-# unpatched binaries. Block until hgdownload carries a build at least as new as
-# ours. (The csh one-liner below must run via run_tcsh: `setenv` is csh-only, so
-# running it from bash leaves $stage empty and the image refs become
-# "genomebrowser/server:" while still exiting 0 on the last statement.)
-# Fatal on failure (was a non-fatal warning): now that wrap-up is checkpointed, a
-# retry just resumes at this step, and the build is idempotent (--no-cache rebuild
-# + re-push + manifest recreate). If it fails on apt-get DNS errors or an arm64
-# "exec format error", see the post-reboot docker fragility note at ensure_binfmt.
+# Build release Docker images via buildReleaseDocker.sh.
+# amd64 = base image (browserSetup public CGIs) + a local beta-CGI overlay from
+# /usr/local/apache/cgi-bin-beta, so the image carries the just-built beta code
+# WITHOUT waiting for the RR/production push to propagate to hgdownload -- the same
+# seed overlay-cgi.sh uses for the kent-beta QA container. arm64 compiles the beta
+# branch from source. See the BUILD PATCHES note in the header. buildReleaseDocker.sh
+# verifies the overlay landed (in-image hgTracks == cgi-bin-beta) before pushing.
+# Fatal on failure: wrap-up is checkpointed, so a retry resumes at this step, and
+# buildReleaseDocker.sh is idempotent (--no-cache rebuild + re-push + manifest
+# recreate). On apt-get DNS errors or an arm64 "exec format error", see the
+# post-reboot docker fragility note at ensure_binfmt.
 wrapup_docker_release() {
-    wait_for_hgdownload_cgis
-    log "Building release Docker images..."
+    log "Building release Docker images (amd64 beta-overlay + arm64 beta-source)..."
     ensure_binfmt
-    local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ ! -d "$dockerdir" ]]; then
-        die "Docker directory not found at $dockerdir - cannot build release images"
-    fi
     local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-    # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-    run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || \
+    run "$WEEKLYBLD/buildReleaseDocker.sh" "v${BRANCHNN}" >& "$dockerlog" || \
         die "Docker release build failed. See $dockerlog"
     log "Docker release build complete."
     return 0
