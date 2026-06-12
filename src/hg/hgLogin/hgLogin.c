@@ -30,6 +30,7 @@
 #include "mailViaPipe.h"
 #include "dystring.h"
 #include "autoUpgrade.h"
+#include "hCommon.h"
 
 #define EMAILSEP ";"
 
@@ -344,6 +345,7 @@ else if (cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
         safecpy(returnTo, sizeof(returnTo), returnURL);
     else
         {
+        hDumpStackDisallow();
         errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
                 "with the returnto argument from the URL (or just the full URL) so we can "
                 "fix this.");
