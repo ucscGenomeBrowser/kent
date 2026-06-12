@@ -12,6 +12,7 @@ superTrack on
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_affected/varFreqsAffected.bb
+        tableBrowser off
         visibility pack
         itemRgb on
         maxWindowToDraw 5000000
@@ -351,6 +352,7 @@ superTrack on
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_background/varFreqsBackground.bb
+        tableBrowser off
         visibility pack
         itemRgb on
         maxWindowToDraw 5000000
@@ -690,6 +692,7 @@ superTrack on
         type bigBed 9 +
         parent varFreqs off
         bigDataUrl /gbdb/$D/varFreqs/_array/varFreqsArray.bb
+        tableBrowser off
         visibility hide
         itemRgb on
         maxWindowToDraw 5000000
@@ -946,6 +949,7 @@ superTrack on
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_genomeindia/genomeindia.vcf.gz
+        tableBrowser off
         visibility hide
         dataVersion 9768GI_SummaryStats (Apr 2025)
         priority 4.8
