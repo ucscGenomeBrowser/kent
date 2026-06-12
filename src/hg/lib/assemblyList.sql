@@ -21,5 +21,10 @@ CREATE TABLE assemblyList (
     haplotypes varchar(511),	# related haplotype assembly when available, comma separated list for polyploid
               #Indices
     FULLTEXT gIdx (name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes),
-    PRIMARY KEY(name)
+    PRIMARY KEY(name),
+    INDEX idxBrowserExists (browserExists),
+    INDEX idxRefSeqCategory (refSeqCategory),
+    INDEX idxVersionStatus (versionStatus),
+    INDEX idxAssemblyLevel (assemblyLevel),
+    INDEX idxFilters (browserExists, refSeqCategory, versionStatus, assemblyLevel)
 );
