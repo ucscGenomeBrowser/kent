@@ -2,6 +2,12 @@
 CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
+# Several long-standing idioms in the tree alias memory through incompatible
+# types (e.g. the dlList sentinel trick in lib/dlist.c, which overlays
+# struct dlNode on struct dlList).  -fstrict-aliasing (on at -O2 and above, but
+# not at -O1) miscompiles these, silently corrupting results.  Disable it so the
+# higher -O levels are safe.  refs #37761
+CFLAGS += -fno-strict-aliasing
 
 # This is required to get the cgiLoader.mk compile target to work.  for some
 # reason, make's %.o: %.c overrides the rule below, cause the compiles to fail
