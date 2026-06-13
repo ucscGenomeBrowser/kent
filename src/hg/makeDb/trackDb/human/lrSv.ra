@@ -35,7 +35,6 @@ noScoreFilter on
     visibility dense
     dataVersion v1.2.0
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$AF AC=$AC/$AN (Hom:$acHom Het:$acHet Hemi:$acHemi) samples=$NS
-    searchIndex name
     filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -393,47 +392,53 @@ noScoreFilter on
     filterLabel.refSd Segmental Duplication Overlap
     skipEmptyFields on
 
-    track kwanhoSv
-    parent lrSv
-    bigDataUrl /gbdb/$D/lrSv/kwanho.bb
-    shortLabel Kim PD 100 prelim
-    longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC AF_PD=$afPd AF_HC=$afHc diff=$differentialRate
-    filterValues.svType DEL,INS,DUP,INV
-    filterType.svType multipleListOr
-    filterLabel.svType SV Type
-    filter.svLen 0:200000000
-    filterByRange.svLen on
-    filterLabel.svLen SV Length
-    filter.insLen 0:20145
-    filterByRange.insLen on
-    filterLabel.insLen Insertion Length
-    filter.AC 0:200
-    filterByRange.AC on
-    filterLabel.AC Allele Count (PD+HC+ILBD)
-    filter.qual 0:100
-    filterByRange.qual on
-    filterLabel.qual Quality
-    filter.afPd 0:1
-    filterByRange.afPd on
-    filterLimits.afPd 0:1
-    filterLabel.afPd Allele Frequency (PD)
-    filter.afHc 0:1
-    filterByRange.afHc on
-    filterLimits.afHc 0:1
-    filterLabel.afHc Allele Frequency (HC)
-    filter.afIlbd 0:1
-    filterByRange.afIlbd on
-    filterLimits.afIlbd 0:1
-    filterLabel.afIlbd Allele Frequency (ILBD)
-    filter.differentialRate -1:1
-    filterByRange.differentialRate on
-    filterLimits.differentialRate -1:1
-    filterLabel.differentialRate Case-Control Differential (case - control)
-    skipEmptyFields on
+    # kwanhoSv commented out: the Kim PD brain callset is preliminary and
+    # unpublished (the description page says do not release until publication),
+    # and carries breakend artifacts up to ~190 Mb. Held off dev/alpha until a
+    # paper is out. bigBed, .as, converter and makeDoc are retained. The
+    # pending lrSvAll rebuild will also drop KimPD from databases.tsv so it
+    # leaves the merged track. refs #36258
+    #track kwanhoSv
+    #parent lrSv
+    #bigDataUrl /gbdb/$D/lrSv/kwanho.bb
+    #shortLabel Kim PD 100 prelim
+    #longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
+    #type bigBed 9 +
+    #itemRgb on
+    #visibility dense
+    #mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC AF_PD=$afPd AF_HC=$afHc diff=$differentialRate
+    #filterValues.svType DEL,INS,DUP,INV
+    #filterType.svType multipleListOr
+    #filterLabel.svType SV Type
+    #filter.svLen 0:200000000
+    #filterByRange.svLen on
+    #filterLabel.svLen SV Length
+    #filter.insLen 0:20145
+    #filterByRange.insLen on
+    #filterLabel.insLen Insertion Length
+    #filter.AC 0:200
+    #filterByRange.AC on
+    #filterLabel.AC Allele Count (PD+HC+ILBD)
+    #filter.qual 0:100
+    #filterByRange.qual on
+    #filterLabel.qual Quality
+    #filter.afPd 0:1
+    #filterByRange.afPd on
+    #filterLimits.afPd 0:1
+    #filterLabel.afPd Allele Frequency (PD)
+    #filter.afHc 0:1
+    #filterByRange.afHc on
+    #filterLimits.afHc 0:1
+    #filterLabel.afHc Allele Frequency (HC)
+    #filter.afIlbd 0:1
+    #filterByRange.afIlbd on
+    #filterLimits.afIlbd 0:1
+    #filterLabel.afIlbd Allele Frequency (ILBD)
+    #filter.differentialRate -1:1
+    #filterByRange.differentialRate on
+    #filterLimits.differentialRate -1:1
+    #filterLabel.differentialRate Case-Control Differential (case - control)
+    #skipEmptyFields on
 
     track aprSv
     parent lrSv
@@ -521,7 +526,6 @@ noScoreFilter on
     itemRgb on
     visibility dense
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$AN AF=$AF AF_AFR=$afAfr AF_EUR=$afEur samples=$NS
-    searchIndex name
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
