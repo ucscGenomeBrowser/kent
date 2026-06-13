@@ -5,6 +5,7 @@ group varRep
 type bed 12
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
 
         track varFreqsAffected
         shortLabel Disease cohorts
