@@ -208,6 +208,7 @@ html gnomad
     html gnomadV4.1
     priority 0.5
     visibility squish
+    release alpha
 
         track gnomadExomesVariantsV4_1_1
         parent gnomadVariantsV4.1.1 on
@@ -239,6 +240,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1.1/exomes/gnomad.v4.1.1.exomes.details.tab.gz
+        release alpha
 
         track gnomadGenomesVariantsV4_1_1
         parent gnomadVariantsV4.1.1 on
@@ -270,6 +272,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1.1/genomes/gnomad.v4.1.1.genomes.details.tab.gz
+        release alpha
 
 track gnomadConstraint
 parent gnomadVariants on
