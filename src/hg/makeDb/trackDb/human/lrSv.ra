@@ -35,7 +35,6 @@ noScoreFilter on
     visibility dense
     dataVersion v1.2.0
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$AF AC=$AC/$AN (Hom:$acHom Het:$acHet Hemi:$acHemi) samples=$NS
-    searchIndex name
     filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -242,7 +241,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC (placeholder)
+    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen
     filterValues.svType DEL,INS,INSDEL
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -252,9 +251,6 @@ noScoreFilter on
     filter.insLen 0:22130
     filterByRange.insLen on
     filterLabel.insLen Insertion Length
-    filter.AC 0:50
-    filterByRange.AC on
-    filterLabel.AC Allele Count (placeholder 50)
     skipEmptyFields on
 
     track hprc2v21Sv
@@ -389,6 +385,10 @@ noScoreFilter on
     filterLabel.refSd Segmental Duplication Overlap
     skipEmptyFields on
 
+    # NOT FOR RELEASE: preliminary and unpublished (Kim et al. 2026 not out yet),
+    # and the callset has breakend artifacts up to 190 Mb (e.g. a single "INV"
+    # spanning all of chr4). Held on dev/alpha and kept out of the lrSvAll merge
+    # (removed from databases.tsv) until the data is published and cleaned.
     track kwanhoSv
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
@@ -517,7 +517,6 @@ noScoreFilter on
     itemRgb on
     visibility dense
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$AN AF=$AF AF_AFR=$afAfr AF_EUR=$afEur samples=$NS
-    searchIndex name
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type

@@ -34,14 +34,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-COLORS = {
-    "INS": "0,0,200",       # blue
-    "DEL": "200,0,0",       # red
-    "CPX": "230,140,0",     # orange
-    "MIXED": "120,120,120", # grey
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 SIZE_THRESHOLD = 50
 
@@ -144,7 +137,7 @@ def main():
 
             sv_type = next(iter(types)) if len(types) == 1 else "MIXED"
             sv_type = normalizeSvType(sv_type)
-            rgb = COLORS.get(sv_type, "120,120,120")
+            rgb = svColor(sv_type)
 
             pos0 = int(pos) - 1
             start = pos0

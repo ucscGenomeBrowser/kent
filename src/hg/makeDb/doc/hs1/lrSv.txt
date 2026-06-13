@@ -79,3 +79,15 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2RoVcfToBed.py \
 bedSort hprc2v21.bed hprc2v21.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2Ro.as \
     -tab hprc2v21.sorted.bed /hive/data/genomes/hs1/chrom.sizes hprc2v21.bb
+
+##########
+# 2026-06-13 Claude max
+#
+# QA fixes (refs #36258), hs1 side. See doc/hg38/lrSv.txt for the full writeup.
+# The converters now drop byte-identical duplicate rows, so re-running the
+# hs1 builds above gives the new counts:
+#   hprc2v21 hs1  608,435 -> 541,176  (67,259 duplicates dropped)
+# colorsDb hs1 and 1kgOnt hs1 were rebuilt from source for the shared color
+# palette (CPX purple, colorsDb DEL 200,0,0); apr hs1 and cpc1 hs1 only needed
+# the CPX color remapped, so their served bigBeds were recolored in place the
+# same way as the hg38 files (see doc/hg38/lrSv.txt). There is no hs1 lrSvAll.

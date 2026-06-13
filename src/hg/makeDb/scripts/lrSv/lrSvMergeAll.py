@@ -22,21 +22,10 @@ from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
 
 SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
-ALL_CHROMOSOMES = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
+sys.path.insert(0, SCRIPTS_DIR)
+from lrSvCommon import svColor
 
-SVTYPE_COLOR = {
-    "DEL":     "200,0,0",
-    "INS":     "0,0,200",
-    "DUP":     "0,150,0",
-    "INV":     "200,100,0",
-    "CPX":     "150,0,150",
-    "MIXED":   "150,0,150",
-    "INSDEL":  "100,100,150",
-    "BND":     "100,100,100",
-    "TRA":     "100,100,100",
-    "MEI":     "0,100,200",
-    "CNV":     "0,150,150",
-}
+ALL_CHROMOSOMES = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
 
 # ---------------------------------------------------------------------------
 # Config + autoSql parsing
@@ -303,7 +292,12 @@ def merge_chrom(args):
     chrom, dbs, extract_dir, out_dir = args
     # variant_key (start, end, svType, svLen, insLen) -> {db_key: (value, af, insLen)}
     variants = defaultdict(dict)
+    # (key, db_key) -> set of (value, af) already incorporated, so we only sum
+    # AC across genuinely distinct records and never across byte-identical
+    # duplicate rows (which would inflate the per-database and total AC).
+    seen_combo = defaultdict(set)
     n_in = 0
+    n_dup = 0
 
     db_by_key = {db["key"]: db for db in dbs}
 
@@ -328,11 +322,17 @@ def merge_chrom(args):
                 except ValueError:
                     continue
                 n_in += 1
+                combo = (value, af)
                 if db["key"] in variants[key]:
+                    if combo in seen_combo[(key, db["key"])]:
+                        # identical record already counted for this db; skip
+                        n_dup += 1
+                        continue
                     variants[key][db["key"]] = _combine(
                         db, variants[key][db["key"]], (value, af, insLen))
                 else:
                     variants[key][db["key"]] = (value, af, insLen)
+                seen_combo[(key, db["key"])].add(combo)
 
     out_path = os.path.join(out_dir, f"{chrom}.bed")
     n_out = 0
@@ -397,7 +397,7 @@ def merge_chrom(args):
 
             short = svType[:6]
             name = f"{short}-{svLen}:{source_count}"
-            color = SVTYPE_COLOR.get(svType, "128,128,128")
+            color = svColor(svType)
 
             fields = [
                 chrom, str(start), str(end), name, str(score), ".",
@@ -429,7 +429,8 @@ def merge_chrom(args):
             n_out += 1
 
     print(f"  {chrom}: {n_in:,} input rows -> {n_out:,} unique variants "
-          f"({n_in - n_out:,} merged)", file=sys.stderr)
+          f"({n_in - n_out:,} merged; {n_dup:,} identical dup rows skipped)",
+          file=sys.stderr)
     return out_path, n_out
 
 
@@ -506,7 +507,6 @@ def write_trackdb_stanza(out_path, dbs):
         f.write("    visibility pack\n")
         f.write("    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen "
                 "sources=$sources AF=$minAF-$maxAF AC=$AC\n")
-        f.write("    searchIndex name\n")
         # Source filter
         f.write("    filterValues.sources " + ",".join(src_parts) + "\n")
         f.write("    filterType.sources multipleListOr\n")

@@ -17,15 +17,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-SV_COLORS = {
-    "DEL": "200,0,0",      # red
-    "INS": "0,0,200",      # blue
-    "DUP": "0,160,0",      # green
-    "INV": "230,140,0",    # orange
-    "CPX": "140,0,200",    # purple
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 
 def na(val):
@@ -54,9 +46,13 @@ def main():
 
     inPath, outPath = sys.argv[1], sys.argv[2]
 
+    seen = set()
+    nIn = 0
+    nDup = 0
     with open(inPath, newline="") as fIn, open(outPath, "w") as fOut:
         reader = csv.DictReader(fIn, delimiter="\t")
         for row in reader:
+            nIn += 1
             chrom = row["Chromosome"]
             if not chrom.startswith("chr"):
                 chrom = "chr" + chrom
@@ -75,7 +71,7 @@ def main():
                 insLen = srcLen
             else:
                 insLen = 0
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             # Chirmade catalog is site-level without AC. Use -1 as placeholder
             # so svName drops the :AC suffix.
@@ -130,7 +126,15 @@ def main():
                 na(row.get("DGV % Overlap", "")),
                 na(row.get("DGV 50% RO", "")),
             ]
-            fOut.write("\t".join(bedRow) + "\n")
+            line_out = "\t".join(bedRow)
+            if line_out in seen:
+                nDup += 1
+                continue
+            seen.add(line_out)
+            fOut.write(line_out + "\n")
+
+    print(f"Chirmade101: {nIn:,} input records, {nDup:,} duplicate rows dropped, "
+          f"{nIn - nDup:,} written", file=sys.stderr)
 
 
 if __name__ == "__main__":

@@ -587,3 +587,55 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # 2,819,049 input variants -> 2,359,011 merged (16.3% dedup)
 # Re-run after rebuilding any source subtrack, or after editing databases.tsv.
 # Quick single-chromosome test: lrSvMergeAll.py --region chr22
+
+##########
+# 2026-06-13 Claude max
+#
+# QA fixes from Lou's review (refs #36258). All fixes live in the checked-in
+# converters, so re-running the build commands shown above for each subtrack
+# reproduces the new files; only the counts changed.
+#
+# Duplicate-row removal (the converters now drop byte-identical output rows
+# that the upstream files list more than once):
+#   decodeSv     133,886 -> 119,453  (14,433 duplicates)
+#   aou1k        541,049 -> 540,155  (894)
+#   gustafson    113,696 -> 113,159  (537)
+#   chirmade101   87,183 ->  87,068  (115)
+#   hprc2v21 hg38 596,063 -> 549,649  (46,414)
+#   hprc2v21 hs1  608,435 -> 541,176  (67,259; built in doc/hs1/lrSv.txt)
+#
+# decodeSv: the AC column is now left empty instead of carrying a fake
+#   placeholder of 50 (deCODE publishes no allele count for this site-only
+#   callset); the name and mouseOver no longer show it. AC is declared as a
+#   string in lrSvDecode.as so it can be blank.
+#
+# aou1k: non-ASCII characters in the gene/trait text fields are now written as
+#   numeric HTML entities (e.g. ö -> &#246;) so detail pages render correctly.
+#
+# Colors: every converter now takes its per-SV-type itemRgb from one shared
+#   palette, svColor() in lrSvCommon.py. CPX is purple everywhere (it was
+#   orange in 1kgOnt/apr/cpc1, colliding with INV's orange); colorsDb DEL now
+#   matches the others (200,0,0); TRA and INSDEL get their own colors so they
+#   stay distinct from CPX in the merged track. colorsDb, 1kgOnt and han945
+#   were rebuilt from source. apr and cpc1 only needed the CPX color remapped,
+#   so rather than reprocess their multi-GB pangenome VCFs the served bigBeds
+#   were recolored in place, e.g.:
+#     bigBedToBed apr.hg38.bb stdout \
+#       | awk 'BEGIN{FS=OFS="\t"} $10=="CPX"{$9="140,0,200"} {print}' > tmp.bed
+#     bedSort tmp.bed tmp.sorted.bed
+#     bedToBigBed -type=bed9+ -as=lrSvApr.as -tab tmp.sorted.bed \
+#       /hive/data/genomes/hg38/chrom.sizes apr.hg38.bb
+#   (cpc1 has no CPX rows, so it was unaffected.)
+#
+# searchIndex was removed from colorsDbSv, lrSv1kLin and lrSvAll: the bigBeds
+#   were built without -extraIndex=name, so by-name search never worked.
+#
+# KimPD (kwanhoSv) was removed from databases.tsv so it no longer flows into
+#   the lrSvAll merge (it is preliminary, unpublished and has breakend
+#   artifacts up to 190 Mb). The subtrack stays on dev/alpha until published.
+#
+# Re-run the merge after the source rebuilds. It now also skips byte-identical
+# duplicate source rows instead of summing their allele counts, which had
+# inflated the per-database and total AC columns.
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 2,682,104 input variants -> 2,317,508 merged (13.6% dedup), 14 databases

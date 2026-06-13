@@ -3,6 +3,10 @@
 
 Usage:
     lrSvDecodeVcfToBed.py input.vcf.gz output.bed
+
+The source VCF has no allele count, so the AC column is left empty (it used to
+carry a fake placeholder of 50). The source also lists some variants more than
+once (byte-identical records); those duplicate rows are collapsed here.
 """
 
 import gzip
@@ -10,13 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-SV_COLORS = {
-    "DEL": "200,0,0",       # red
-    "INS": "0,0,200",       # blue
-    "INSDEL": "140,0,200",  # purple (combined INS/DEL)
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 
 def parseInfo(infoStr):
@@ -38,15 +36,18 @@ def main():
     inFile, outFile = sys.argv[1], sys.argv[2]
     opener = gzip.open if inFile.endswith(".gz") else open
 
+    seen = set()
+    nIn = 0
+    nDup = 0
     with opener(inFile, "rt") as fIn, open(outFile, "w") as fOut:
         for line in fIn:
             if line.startswith("#"):
                 continue
+            nIn += 1
 
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            rowName = fields[2]
             info = parseInfo(fields[7])
 
             svTypeRaw = info.get("SVTYPE", ".")
@@ -72,13 +73,11 @@ def main():
             else:
                 insLen = 0  # DEL/INSDEL
 
-            # placeholder; awaiting real values from deCODE (#35059 ...)
-            ac = 50
-
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             featLen = insLen if svType in ("INS", "MEI") else svLen
-            name = svName(svType, featLen, ac)
+            # deCODE publishes no allele count, so omit AC from the name.
+            name = svName(svType, featLen)
 
             row = [
                 chrom,
@@ -93,11 +92,19 @@ def main():
                 svType,
                 str(svLen),
                 str(insLen),
-                str(ac),
+                "",          # AC: deCODE has none (was a fake placeholder of 50)
                 trrBegin,
                 trrEnd,
             ]
-            fOut.write("\t".join(row) + "\n")
+            line_out = "\t".join(row)
+            if line_out in seen:
+                nDup += 1
+                continue
+            seen.add(line_out)
+            fOut.write(line_out + "\n")
+
+    print(f"deCODE: {nIn:,} input records, {nDup:,} duplicate rows dropped, "
+          f"{nIn - nDup:,} written", file=sys.stderr)
 
 
 if __name__ == "__main__":

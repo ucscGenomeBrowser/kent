@@ -32,15 +32,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName
+from lrSvCommon import svName, svColor
 
 MIN_SV_LEN = 50
-
-SV_COLORS = {
-    "INS": "0,0,200",      # blue
-    "DEL": "200,0,0",      # red
-    "CPX": "140,0,200",    # purple
-}
 
 
 def parseInfo(infoStr):
@@ -104,6 +98,8 @@ def main():
 
     counts = {"INS": 0, "DEL": 0, "CPX": 0}
     nested = 0
+    seen = set()
+    nDup = 0
 
     with opener(inPath, "rt") as fIn, open(outPath, "w") as fOut:
         for line in fIn:
@@ -144,7 +140,7 @@ def main():
                     continue
 
                 svType, prefixLen, refSpan = classify(ref, alt)
-                color = SV_COLORS.get(svType, "100,100,100")
+                color = svColor(svType)
 
                 # chromStart shifts past the shared prefix to the first
                 # changed base; INS gets a 1-bp anchor, DEL/CPX span the
@@ -182,10 +178,6 @@ def main():
                 featLen = insLen if svType == "INS" else svLen
                 name = svName(svType, featLen, ac)
 
-                counts[svType] += 1
-                if snarlLevel > 0:
-                    nested += 1
-
                 row = [
                     chrom,
                     str(chromStart),
@@ -205,12 +197,24 @@ def main():
                     str(nSamples),
                     str(snarlLevel),
                 ]
-                fOut.write("\t".join(row) + "\n")
+                # The raw vg deconstruct output decomposes some snarls into
+                # byte-identical SV rows; collapse them.
+                line_out = "\t".join(row)
+                if line_out in seen:
+                    nDup += 1
+                    continue
+                seen.add(line_out)
+
+                counts[svType] += 1
+                if snarlLevel > 0:
+                    nested += 1
+                fOut.write(line_out + "\n")
 
     total = sum(counts.values())
     print(f"kept {total} SV-sized alleles: "
           f"{counts['INS']} INS, {counts['DEL']} DEL, {counts['CPX']} CPX "
-          f"({nested} at nested snarl levels LV>0)", file=sys.stderr)
+          f"({nested} at nested snarl levels LV>0); "
+          f"{nDup} duplicate rows dropped", file=sys.stderr)
 
 
 if __name__ == "__main__":
