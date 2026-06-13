@@ -9,8 +9,8 @@ variants from the Taiwan Precision Medicine Initiative (TPMI Axiom TPM1 chip,
 
 <p>
 The array track is kept separate from the sequencing-based combined tracks
-(<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> and
-<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a>) so that
+(<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a>) so that
 sequencing-based and array-based frequencies can be inspected independently. For a summary
 of all available variant frequency databases, see the
 <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page.
@@ -59,7 +59,7 @@ whole-genome or whole-exome sequencing. Two limitations to keep in mind:
       common. MexBB ships only AN/AF/AC with no FILTER column and no per-site QC at all.
       For both arrays, high-AF rare-disease candidates should be cross-checked against the
       sequencing-based
-      <a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a> track before
+      <a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track before
       drawing conclusions.</li>
 </ul>
 
@@ -105,8 +105,8 @@ databases. It uses OR logic.
 <h2>Methods</h2>
 <p>
 The same merge-and-annotate pipeline used for the sequencing-based combined tracks
-(<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> and
-<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a>) was run on the
+(<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a>) was run on the
 array-cohort subset of source VCFs. Each VCF was stripped of its INFO fields, normalized
 with <code>bcftools norm</code> (splitting multi-allelic sites), and merged with
 <code>bcftools merge</code>. The merged VCF was then annotated with predicted protein

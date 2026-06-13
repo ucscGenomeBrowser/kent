@@ -32,22 +32,30 @@ filter conventions (variant type, consequence, source database, allele frequency
 count, and per-database AF/AC).
 </p>
 <ul>
-  <li><a href="hgTrackUi?g=varFreqsAffected"><b>Affected/Case Individuals</b></a> &mdash;
+  <li><a href="hgTrackUi?g=varFreqsBackground"><b>Population reference</b></a> &mdash; the
+      default summary view: variants seen in the population reference cohorts (gnomAD
+      HGDP+1kG, TOPMed, ALFA, HRC and the national WGS projects) and in the
+      unaffected/control arms of the disease cohorts. Excludes the genotyping-array
+      cohorts.</li>
+  <li><a href="hgTrackUi?g=varFreqsAffected"><b>Disease cohorts</b></a> &mdash;
       variants seen in the affected or case arm of five disease-study cohorts (SFARI SPARK
       WES and WGS autism probands, SCHEMA schizophrenia cases, GREGoR affected, GA4K
-      rare-disease). Each variant also carries its frequency in the background, so
-      case-enriched variants can be isolated.</li>
-  <li><a href="hgTrackUi?g=varFreqsBackground"><b>Population + Unaffected</b></a> &mdash;
-      the matched background: variants seen in the population reference cohorts (gnomAD
-      HGDP+1kG, TOPMed, ALFA, HRC and the national WGS projects) and in the
-      unaffected/control arms of the disease cohorts. Showing this together with the
-      Affected track lets you compare case versus background frequency across a gene. Both
-      tracks exclude the genotyping-array cohorts.</li>
+      rare-disease). Each variant also carries its background frequency, so case-enriched
+      variants can be isolated by filtering Background AF.</li>
   <li><a href="hgTrackUi?g=varFreqsArray"><b>Genotyping Array Databases Combined</b></a>
       &mdash; 14.7 million variants from three array cohorts (TPMI Taiwan, Mexico Biobank,
       UK Biobank imputed). Kept separate because chip data has different per-variant
       confidence than sequencing.</li>
 </ul>
+
+<p>
+On the Disease and Population reference tracks, <b>Affected AF</b> and <b>Background AF</b>
+are pooled across contributing cohort arms (sum of allele counts divided by sum of allele
+numbers), not the maximum across arms, so the displayed frequency matches the carrier-count
+scale and a small cohort with a high local frequency does not dominate the value. See the
+&quot;Pooled allele frequency&quot; section on each combined track's description page for
+which cohorts contribute to the pool numerator and denominator.
+</p>
 
 <h3>Consequence filter &mdash; the &quot;Other&quot; bucket</h3>
 <p>
@@ -82,7 +90,7 @@ records will be hidden by the consequence filter.
   <th>Downloadable from UCSC</th>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a></td>
+  <td><a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a></td>
   <td>Sequencing-based disease cohorts</td>
   <td>~130k</td>
   <td>WGS/WES/long-read</td>
@@ -91,7 +99,7 @@ records will be hidden by the consequence filter.
   <td>No</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a></td>
+  <td><a href="hgTrackUi?g=varFreqsBackground">Population reference</a></td>
   <td>Sequencing-based, population + unaffected</td>
   <td>~1.5mil</td>
   <td>WGS/WES/long-read</td>
@@ -116,7 +124,7 @@ records will be hidden by the consequence filter.
   <td>General population, diverse</td>
   <td>African, Indigenous American, East Asian, European, Oceanian, South Asian
       (<b>local ancestry</b>; see Notes below)</td>
-  <td>Yes</td>
+  <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=topmed">TOPMED Freeze 10</a></td>
@@ -342,7 +350,7 @@ records will be hidden by the consequence filter.
   <td>WGS</td>
   <td>Rare disease families (10.7k participants, 4.4k families)</td>
   <td>&mdash;</td>
-  <td>No</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=hgdp1kFreq">gnomAD HGDP+1kG</a></td>
@@ -454,18 +462,24 @@ The conversion scripts (<em>e.g.</em> <code>finngen_to_vcf.py</code>, <code>kova
 in the <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">scripts directory</a>.
 </p>
 <p>
-The combined Affected and Background tracks are built by a separate pipeline:
-each per-subtrack VCF is normalized (<code>bcftools norm</code>), all sites are merged into a single
-callset, consequence annotations are recomputed against Ensembl with <code>bcftools csq</code>,
-and the merged callset is split by phenotype into the two bigBed files via
-<code>vcfToBigBed.py</code> + <code>bedToBigBed</code>. The mapping from upstream INFO fields to
-bigBed columns is driven by two configuration files in the scripts directory:
-<code>databases.tsv</code> (one row per source dataset, flagging which cohorts study a disease)
-and <code>populations.tsv</code> (per-population AC/AF columns within each source, including the
-affected and unaffected arm of each disease cohort). Editing those two files and rerunning
-<code>mergeAndAnnotate.sh</code> followed by <code>vcfToBigBed.py --split-affected</code> rebuilds
-the two tracks. The Genotyping Array Databases Combined track is built the same way from the
-array cohorts only.
+The combined Disease cohorts and Population reference tracks are built by a separate
+pipeline: each per-subtrack VCF is normalized (<code>bcftools norm</code>), all sites are
+merged into a single callset, consequence annotations are recomputed against Ensembl with
+<code>bcftools csq</code>, and the merged callset is split by phenotype into the two bigBed
+files via <code>vcfToBigBed.py</code> + <code>bedToBigBed</code>. Within each combined
+track, the <b>Affected AF</b> and <b>Background AF</b> columns are
+<i>pooled</i> across contributing cohort arms (sum of allele counts divided by sum of
+allele numbers, with the per-arm AN derived from each cohort's AC and AF), so the displayed
+frequency matches the carrier-count scale and a small cohort with a high local AF cannot
+dominate the value. The mapping from upstream INFO fields to bigBed columns is driven by
+two configuration files in the scripts directory: <code>databases.tsv</code> (one row per
+source dataset, flagging which cohorts study a disease, and optionally a
+<code>default_an</code> for cohorts that publish only AF) and <code>populations.tsv</code>
+(per-population AC/AF columns within each source, including the affected and unaffected arm
+of each disease cohort). Editing those two files and rerunning
+<code>mergeAndAnnotate.sh</code> followed by <code>vcfToBigBed.py --split-affected</code>
+rebuilds the two tracks. The Genotyping Array Databases Combined track is built the same
+way from the array cohorts only.
 </p>
 
 <h2>Data Access</h2>

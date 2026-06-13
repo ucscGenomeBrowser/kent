@@ -4,7 +4,7 @@ This track shows small variants (SNVs and short indels) that were observed in
 <b>affected or case individuals</b> of disease-study cohorts, annotated with their
 predicted protein consequence and colored by severity. It is one half of a matched pair:
 the companion
-<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a> track shows the same
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track shows the same
 kind of variants seen in population reference cohorts and in unaffected relatives or
 controls. Displaying the two together lets you compare, for example, how often a
 loss-of-function variant in a gene of interest is seen in affected individuals versus the
@@ -67,7 +67,7 @@ Splice Acceptor (these appear red), then add an upper limit on the
 <b>Background AF</b> filter. Each variant here carries both its affected frequency and its
 background frequency, so this isolates variants seen in cases with little or no presence in
 the population/unaffected set. Comparing visually against the
-<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a> track shows the same
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track shows the same
 contrast across a whole gene.
 </p>
 
@@ -98,11 +98,11 @@ GRCh38 release 115 gene models.
 </p>
 <p>
 A custom Python script (<code>vcfToBigBed.py</code>) then read the per-cohort allele
-frequencies and, for each variant, summed/maximized the counts across the affected arms
-(case/proband subgroups, plus GA4K whole-cohort) to produce this track, and across the
-population cohorts and unaffected/control subgroups to produce the companion
-<a href="hgTrackUi?g=varFreqsBackground">Population + Unaffected</a> track. A variant seen in
-both groups appears in both tracks. The build is documented in the
+counts and frequencies and, for each variant, pooled the allele counts and allele numbers
+across the affected arms (case/proband subgroups, plus GA4K whole-cohort) to produce this
+track, and across the population cohorts and unaffected/control subgroups to produce the
+companion <a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track. A variant
+seen in both groups appears in both tracks. The build is documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
 target="_blank">makeDoc</a>, and the scripts are on
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"

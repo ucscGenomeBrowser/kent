@@ -1042,3 +1042,48 @@ python3 $SCR/vcfToBigBed.py \
     --work-dir /hive/data/genomes/hg38/bed/varFreqs/array
 ln -sfn /hive/data/genomes/hg38/bed/varFreqs/array/varFreqsArray.bb \
         /gbdb/hg38/varFreqs/_array/varFreqsArray.bb
+
+##########
+# 2026-06-12 Lou (Claude)
+# Switched the varFreqsAffected and varFreqsBackground combined tracks to a
+# pooled-AF formulation: affectedAF = sum(AC)/sum(AN) across the contributing
+# affected arms (and backgroundAF the same for the background arms), replacing
+# the prior max-across-cohorts AF. The change fixes a known artifact where a
+# small per-population subgroup with AC=AN=1 (e.g. AllOfUs Oceanian at the
+# APOE ε4 site) drove backgroundAF to 1.0 even though the genuine pooled rate
+# is ~0.12.
+#
+# vcfToBigBed.py now infers per-arm AN as round(AC/AF) when both are reported.
+# databases.tsv grew an 8th column "default_an": for cohorts that publish only
+# AF (ABraOM, ALFA), set this to the diploid cohort size so AC can be
+# synthesized (AC = round(AF * default_an)) and default_an feeds the pool
+# denominator. ABraOM=2342, ALFA=816000. Cohorts that publish only AC with no
+# default_an (MGRB, GREGoR per-arm AC_AFFECTED/UNAFFECTED/UNKNOWN, AllOfUs
+# per-population) appear in affectedCohorts/backgroundSources but contribute
+# 0 to the pool, preserving the invariant that pooled AF cannot exceed 1.
+#
+# Two new bigBed columns: affectedAN and backgroundAN (pool denominators).
+# mouseOver was updated to show "Affected AC/AN: 33238 / 213150" so the ratio
+# is visible. The combined-track filter UI exposes affectedAN and backgroundAN
+# as numeric range filters. AS schema field count: 161 -> 163.
+#
+# Rebuild used the existing merged.annotated.vcf.gz (no re-merge needed);
+# Phase 1 re-extracted per-cohort AC/AF, Phase 2 wrote the new BEDs, then
+# concat + bedToBigBed. Total wall-clock ~8 hours.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# Back up first (the script overwrites):
+cp varFreqsAffected.bb   varFreqsAffected.bb.preAfPool.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preAfPool.bak
+# Build:
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Spot-check (APOE rs429358, chr19:44908683-44908684 T>C):
+#   pre  : affectedAC=33238 affectedAF=0.181730 (max, GA4K-dominated)
+#                            backgroundAF=1.000000 (max, AllOfUs_OCE artifact)
+#   post : affectedAC=32782 affectedAN=213150 affectedAF=0.153798
+#                            backgroundAC=341065 backgroundAN=2751112
+#                            backgroundAF=0.123974

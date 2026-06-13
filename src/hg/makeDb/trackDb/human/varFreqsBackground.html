@@ -4,7 +4,7 @@ This track shows small variants (SNVs and short indels) seen in <b>population re
 cohorts and in unaffected or control individuals</b> of disease-study cohorts, annotated
 with their predicted protein consequence and colored by severity. It is the background half
 of a matched pair: the companion
-<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track shows the same
+<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> track shows the same
 kind of variants seen in affected or case individuals. Displaying the two together lets you
 see how common a variant is in the general/unaffected population compared with affected
 individuals. For the full list of contributing projects, see the
@@ -17,7 +17,7 @@ unaffected/control or unknown-phenotype arms of the disease-study cohorts (non-A
 members in SFARI SPARK WES/WGS, SCHEMA controls, and GREGoR unaffected/unknown
 participants). Genotyping-array cohorts are not included. A variant that also appears in
 affected individuals is shown in both this track and the
-<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track.
+<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> track.
 </p>
 
 <h2>Display Conventions</h2>
@@ -89,10 +89,10 @@ GRCh38 release 115 gene models.
 </p>
 <p>
 A custom Python script (<code>vcfToBigBed.py</code>) then read the per-cohort allele
-frequencies and, for each variant, summed/maximized the counts across the population cohorts
-and unaffected/control subgroups to produce this track, and across the affected arms to
-produce the companion
-<a href="hgTrackUi?g=varFreqsAffected">Affected/Case Individuals</a> track. A variant seen
+counts and frequencies and, for each variant, pooled the allele counts and allele numbers
+across the population cohorts and unaffected/control subgroups to produce this track, and
+across the affected arms to produce the companion
+<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> track. A variant seen
 in both groups appears in both tracks. The build is documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
 target="_blank">makeDoc</a>, and the scripts are on
