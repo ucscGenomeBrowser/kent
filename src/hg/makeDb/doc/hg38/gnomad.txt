@@ -749,3 +749,44 @@ for f in /hive/data/genomes/hg38/bed/gnomad/coverage/v4-exome/gnomad.coverage.*.
 # Add track to trackDb (gnomadCoverage.ra) and rebuild
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=hg38
+
+##############################################################################
+# gnomAD v4.1.1 Update to bigBed - June 5, 2026 - Claude (chmalee)
+##############################################################################
+# v4.1.1 is a minor release. The per-chromosome sites VCFs were mirrored from
+# the public bucket with the download script (run once per dataset):
+#   src/hg/makeDb/scripts/gnomadV4.1.1/downloadGnomadV4.1.1.sh exomes
+#   src/hg/makeDb/scripts/gnomadV4.1.1/downloadGnomadV4.1.1.sh genomes
+# Data landed in /hive/data/outside/gnomAD.4.1.1/{exomes,genomes}/.
+
+# Confirmed v4.1.1 is field-compatible with v4.1 before reusing the v4.1
+# recipe: every INFO field in the v4.1 build lists is present in v4.1.1, and
+# the VEP Format string is identical for both datasets:
+#   for f in $(cat v4.1.1.vcfToBed.exomes.fieldList); do \
+#       bcftools view -h .../gnomad.exomes.v4.1.1.sites.chr1.vcf.bgz \
+#       | grep -Eo "^##INFO=<ID=[^,]+" | cut -d= -f3 | grep -qx "$f" \
+#       || echo "MISSING: $f"; done
+# (no output for either dataset). Because the layout matches v4.1, the build
+# reuses the v4.1 vcfToBed field lists and the gnomadVcfBedToBigBed parser keys
+# -v v4.1_exomes / -v v4.1_genomes unchanged.
+
+# Note: the in-tree src/hg/makeDb/gnomad/gnomadVcfBedToBigBed was stale (only
+# supported up to v3.1.1); the v4.1 parsing work had only ever lived on the
+# build host. The working version is now committed to the tree.
+
+# The whole VCF-to-bigBed pipeline (vcfToBed, gnomadVcfBedToBigBed, bgzip of the
+# details file, bedJoinTabOffset, bedToBigBed, and the /gbdb symlinks) is driven
+# by one resumable script, run once per dataset (long job, run in screen):
+#   src/hg/makeDb/scripts/gnomadV4.1.1/buildGnomadV4.1.1BigBed.sh exomes
+#   src/hg/makeDb/scripts/gnomadV4.1.1/buildGnomadV4.1.1BigBed.sh genomes
+# Workdir /hive/data/inside/gnomAD/v4/v4.1.1, progress in build.{exomes,genomes}.log.
+# Scripts, field lists and autosql:
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadV4.1.1
+
+# trackDb: the bigBed composite gnomadVariantsV4.1.1 (children
+# gnomadExomesVariantsV4_1_1, gnomadGenomesVariantsV4_1_1) was added to
+# human/hg38/gnomad.ra alongside v4.1, cloned from the v4.1 stanza. The
+# experimental vcfTabix track in gnomadV4.1.1.ra (alpha only) was renamed to
+# gnomadVariantsV4_1_1Vcf so the bigBed track could take the canonical name; its
+# per-chrom lookup tables are built by loadGnomadV4.1.1ChromTables.sh.
+
