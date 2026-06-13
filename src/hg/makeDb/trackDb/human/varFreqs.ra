@@ -740,7 +740,7 @@ superTrack on
         dataVersion V7
         visibility hide
         tableBrowser off
-        priority 0.5
+        priority 2
 
         #track me
         #shortLabel Regeneron Million Exomes 983k WES
@@ -763,7 +763,7 @@ superTrack on
         dataVersion Freeze 10
         tableBrowser off
         visibility hide
-        priority 2
+        priority 22
 
         track sfariSparkExomes
         shortLabel SFARI SPARK 140k WES
@@ -774,7 +774,7 @@ superTrack on
         dataVersion iWES v3 2024_08
         tableBrowser off
         visibility hide
-        priority 2.5
+        priority 26
 
         track sfariSparkWgs
         shortLabel SFARI SPARK 12k WGS
@@ -784,7 +784,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
         dataVersion iWGS v1.1
         visibility hide
-        priority 2.5
+        priority 25
         html sfariSparkExomes
         tableBrowser off
 
@@ -807,7 +807,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/tommo61kjpn/tommo-61kjpn-20250616-GRCh38-snvindel-af-autosome.vcf.gz
         visibility hide
         dataVersion 2025-06-16
-        priority 5
+        priority 17
 
         track wbbc
         shortLabel China WBBC 4.5k WGS
@@ -817,7 +817,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/wbbc/wbbc.vcf.gz
         visibility hide
         dataVersion Phase I v20210103
-        priority 5.5
+        priority 6
 
         track chinamap
         shortLabel China ChinaMAP 10.5k WGS
@@ -827,7 +827,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/_chinamap/chinamap.vcf.gz
         visibility hide
         dataVersion Phase 1 (v2020-03.beta)
-        priority 5.55
+        priority 5
         tableBrowser off
 
         track tpmi
@@ -838,7 +838,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/_tpmi/tpmi.vcf.gz
         visibility hide
         dataVersion Axiom TPM1 2022-06
-        priority 5.6
+        priority 31
         tableBrowser off
 
         track alfaVcf
@@ -849,7 +849,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/alfa/ALFA.vcf.gz
         visibility hide
         dataVersion R4
-        priority 4.1
+        priority 20
         url https://www.ncbi.nlm.nih.gov/snp/$$#frequency_tab
         urlLabel NCBI Variation Page
 
@@ -859,7 +859,7 @@ superTrack on
         type vcfTabix
         shortLabel FinnGen R12 500k imputed
         longLabel SNV Frequencies: Finland FinnGen - 500k samples, arrays, imputation used 8.5k WGS
-        priority 4.5
+        priority 8
         bigDataUrl /gbdb/$D/varFreqs/_finngen/finnge_R12_annotated_variants_v1.vcf.gz
         dataVersion R12
         tableBrowser off
@@ -870,7 +870,7 @@ superTrack on
         type vcfTabix
         shortLabel UK Biobank 361k imputed
         longLabel SNV Frequencies: UK Biobank Genotypes - 361k White British, Neale Lab Round 2 imputed
-        priority 4.6
+        priority 32
         bigDataUrl /gbdb/$D/varFreqs/ukbb/ukbb.vcf.gz
         dataVersion Neale Lab R2 08-2018
 
@@ -880,7 +880,7 @@ superTrack on
         type vcfTabix
         shortLabel Sweden SweGen 1k WGS
         longLabel SNV Frequencies: Sweden SweGen - 1k WGS
-        priority 4.7
+        priority 30
         bigDataUrl /gbdb/$D/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
         dataVersion 20251201
         tableBrowser off
@@ -891,7 +891,7 @@ superTrack on
         type vcfTabix
         shortLabel Netherlands GoNL 498 WGS
         longLabel SNV Frequencies: Genome of the Netherlands - 250 Dutch trios
-        priority 4.75
+        priority 21
         bigDataUrl /gbdb/$D/varFreqs/gonl/gonl.vcf.gz
         dataVersion GRCh38 1.0
 
@@ -903,6 +903,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/_mgrb/MGRB.phase3.GRCh38.norm.vcf.gz
         dataVersion Phase 3
         visibility hide
+        priority 3
         # no downloads as per Matt Hobbs email Jan 28 2026
         tableBrowser off
 
@@ -913,6 +914,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.subst.vcf.gz
         visibility hide
+        priority 11
         dataVersion Pilot 2019 (lifted to hg38, May 2026)
 
         track gaspIndel
@@ -922,6 +924,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/ga100k/ga100k.indels.vcf.gz
         visibility hide
+        priority 10
         dataVersion Pilot 2019 (lifted to hg38, May 2026)
         html gasp
 
@@ -932,6 +935,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/abraom/abraom.vcf.gz
         visibility hide
+        priority 4
         dataVersion SABE-WGS-1171 Sep 2020
 
         track indigenomes
@@ -941,6 +945,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/indigenomes/IndiGenomes_Variants.vcf.gz
         visibility hide
+        priority 16
         dataVersion IndiGen pilot (Jain 2021)
 
         track genomeindia
@@ -952,7 +957,7 @@ superTrack on
         tableBrowser off
         visibility hide
         dataVersion 9768GI_SummaryStats (Apr 2025)
-        priority 4.8
+        priority 15
 
         track kova
         shortLabel Korea KOVA 5.3k mixed
@@ -961,6 +966,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_kova/kova.v7.vcf.gz
         visibility hide
+        priority 18
         tableBrowser off
         dataVersion V7
 
@@ -971,6 +977,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz
         visibility hide
+        priority 28
         tableBrowser off
         dataVersion r5.3.2
 
@@ -981,6 +988,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/hrc/hrc.vcf.gz
         visibility hide
+        priority 14
         dataVersion r1.1
 
         track saudi
@@ -990,6 +998,7 @@ superTrack on
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/saudi/saudi.vcf.gz
         visibility hide
+        priority 23
         dataVersion SHGP (figshare 51297884, 2025)
 
         track schema
@@ -1000,7 +1009,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz
         visibility hide
         dataVersion 2022
-        priority 4.9
+        priority 24
         url https://schema.broadinstitute.org/
         urlLabel SCHEMA Browser
 
@@ -1013,7 +1022,7 @@ superTrack on
         visibility hide
         dataVersion Nov 2025 (hg38 lift)
         tableBrowser off
-        priority 6
+        priority 19
 
         track sgdpFreq
         shortLabel SGDP 279 WGS
@@ -1023,7 +1032,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/sgdpFreq/sgdp.freq.vcf.gz
         visibility hide
         dataVersion 2016-12-07 (hg38 lift)
-        priority 7
+        priority 27
 
         track gregor
         shortLabel GREGoR R4 3.6k WGS
@@ -1033,7 +1042,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/gregor/gregor.vcf.gz
         visibility hide
         dataVersion R04 (Oct 2025)
-        priority 8
+        priority 13
 
         track hgdp1kFreq
         shortLabel gnomAD HGDP+1kG 4k WGS
@@ -1043,7 +1052,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz
         visibility hide
         dataVersion v3.1.2
-        priority 8
+        priority 12
 
         track ga4kSnv
         shortLabel GA4K 552 PacBio LR
@@ -1063,7 +1072,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/colorsDb/colorsDbSnv.vcf.gz
         visibility hide
         dataVersion v1.2.0
-        priority 9.5
+        priority 7
 
         track svatalogSnv
         shortLabel SVatalog 101 WGS
@@ -1073,7 +1082,7 @@ superTrack on
         bigDataUrl /gbdb/$D/varFreqs/svatalog/svatalog.vcf.gz
         visibility hide
         dataVersion Chirmade 2025 release
-        priority 10
+        priority 29
 
         track tishkoff180
         shortLabel 12 Afr Pops 180 WGS
@@ -1084,5 +1093,5 @@ superTrack on
         visibility hide
         dataVersion Cell 2023 (hg19 lift)
         tableBrowser off
-        priority 7.5
+        priority 1
 
