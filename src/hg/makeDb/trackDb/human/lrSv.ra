@@ -289,7 +289,6 @@ noScoreFilter on
 
     track hprc2JasmineSv
     parent lrSv
-    release alpha
     bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
     shortLabel HPRC2 Jasmine 231 SVs
     longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
@@ -511,7 +510,6 @@ noScoreFilter on
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
     parent lrSv
-    release alpha
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
     shortLabel 1KG Linear 1218 SVs
     longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read)
