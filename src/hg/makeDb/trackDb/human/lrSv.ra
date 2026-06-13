@@ -287,41 +287,45 @@ noScoreFilter on
     filterLabel.snarlLevel Snarl Level
     skipEmptyFields on
 
-    track hprc2JasmineSv
-    parent lrSv
-    bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
-    shortLabel HPRC2 Jasmine 231 SVs
-    longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$nSamples/$alleleNumber AF=$alleleFreq callers=$nCallers ($callers)
-    filterValues.svType DEL,INS
-    filterType.svType multipleListOr
-    filterLabel.svType SV Type
-    filter.svLen 0:30176500
-    filterByRange.svLen on
-    filterLabel.svLen SV Length
-    filter.insLen 0:30176500
-    filterByRange.insLen on
-    filterLabel.insLen Insertion Length
-    filter.AC 0:231
-    filterByRange.AC on
-    filterLabel.AC Carrier Sample Count
-    filter.alleleFreq 0:1
-    filterByRange.alleleFreq on
-    filterLimits.alleleFreq 0:1
-    filterLabel.alleleFreq Carrier Frequency
-    filter.nCallers 1:14
-    filterByRange.nCallers on
-    filterLabel.nCallers Number of Supporting Callers
-    filterValues.callers DELLY,DeBreak,DeepVariant,PAV,SVDSS,SVIM,SVIM-asm,Sniffles2,cuteSV,cuteSV-asm,dipcall,longcallD,pbsv,sawfish
-    filterType.callers multipleListAnd
-    filterLabel.callers Supporting Callers
-    filterValues.sources PAV,dipcall,longcallD
-    filterType.sources multipleListAnd
-    filterLabel.sources Source Pipeline
-    skipEmptyFields on
+    # hprc2JasmineSv commented out: the Jasmine-merged HPRC v2 multi-caller
+    # set is a test/comparison callset (the Hall lab is not happy with it) and
+    # is not for release. bigBed, .as, converter and makeDoc are retained.
+    # refs #36258
+    #track hprc2JasmineSv
+    #parent lrSv
+    #bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
+    #shortLabel HPRC2 Jasmine 231 SVs
+    #longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
+    #type bigBed 9 +
+    #itemRgb on
+    #visibility dense
+    #mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$nSamples/$alleleNumber AF=$alleleFreq callers=$nCallers ($callers)
+    #filterValues.svType DEL,INS
+    #filterType.svType multipleListOr
+    #filterLabel.svType SV Type
+    #filter.svLen 0:30176500
+    #filterByRange.svLen on
+    #filterLabel.svLen SV Length
+    #filter.insLen 0:30176500
+    #filterByRange.insLen on
+    #filterLabel.insLen Insertion Length
+    #filter.AC 0:231
+    #filterByRange.AC on
+    #filterLabel.AC Carrier Sample Count
+    #filter.alleleFreq 0:1
+    #filterByRange.alleleFreq on
+    #filterLimits.alleleFreq 0:1
+    #filterLabel.alleleFreq Carrier Frequency
+    #filter.nCallers 1:14
+    #filterByRange.nCallers on
+    #filterLabel.nCallers Number of Supporting Callers
+    #filterValues.callers DELLY,DeBreak,DeepVariant,PAV,SVDSS,SVIM,SVIM-asm,Sniffles2,cuteSV,cuteSV-asm,dipcall,longcallD,pbsv,sawfish
+    #filterType.callers multipleListAnd
+    #filterLabel.callers Supporting Callers
+    #filterValues.sources PAV,dipcall,longcallD
+    #filterType.sources multipleListAnd
+    #filterLabel.sources Source Pipeline
+    #skipEmptyFields on
 
     track hgsvc2Sv
     parent lrSv
