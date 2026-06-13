@@ -2,27 +2,30 @@
 <p>
 This track collection gathers variant allele frequencies from population-scale sequencing
 and genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
-The data was not reprocessed in a harmonized way; the variant VCFs were collected from the
+Unlike gnomAD, the data was not reprocessed in a harmonized way; the variant VCFs were collected from the
 projects as-is. The goal is a single place to compare how common a variant is across
-different populations, ancestries, and cohorts, for projects that cannot be recomputed by
-gnomAD soon. Three combined tracks aggregate the source data along different lines, and
+different populations, ancestries, and cohorts, for projects that gnomAD is unlikely to
+reprocess soon. Three combined tracks aggregate the source data along different lines, and
 there is also one subtrack per project with the original VCF data and all the annotations
 that the project provides. The different projects use different pipelines and sequencing
 technologies. Click any of the projects above or below for a summary of their sample
 selection, sequencing assay and software pipeline. Many projects do not allow us to
-distribute the data, but we document how to request it and provide all converters.
+distribute the data, but we document how to request it and provide all converters, see Data Download below.
 </p>
 
 <p>
-Data from projects that provide haplotype-phased genotypes can also be found
-elsewhere: 1000 Genomes is also a separate track, and the phased genotypes HGDP, SGDP,
-HGDP+1000 Genomes and Mexico Biobank can also be found in the &quot;Phased Variants&quot; track.
-Their VCF versions below show only the isolate frequency per variant.
+The browser has other tracks with variant frequencies. We have of course the data 
+from <a href="hgTrackUi?g=gnomadVariants">gnomAD</a> in separate tracks. Two projects that
+provide haplotype-phased genotypes can also be found in their own tracks:
+<a href="hgTrackUi?g=tgpArchive">1000 Genomes</a> is a separate track, and the phased
+genotypes HGDP, SGDP, HGDP+1000 Genomes and Mexico Biobank are in the
+<a href="hgTrackUi?g=phasedVars">Phased Variants</a> track. Their VCF versions below show
+only the allele frequency per variant, not the phased genotypes.
 </p>
 
 <p>Please contact us (<a href="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</a><!-- above address is genome at soe.ucsc.edu -->) if you know of a project that we should add. So far,
-Regeneron&apos;s Million Exomes and Mexico City Studies (request rejected) and Taiwan Biobank (pending).
-</p>
+we have requested data from Regeneron&apos;s Million Exomes and the Mexico City studies (both requests rejected);
+Taiwan Biobank and the full UK Biobank WGS data requests are pending.</p>
 
 <h2>Combined Tracks</h2>
 <p>
@@ -66,7 +69,7 @@ on each variant: a variant tagged <code>stop_gained,frameshift</code> is selecte
 the &quot;Stop Gained&quot; or the &quot;Frameshift&quot; filter. The &quot;Other&quot;
 bucket catches the less common
 <a href="http://www.sequenceontology.org/" target="_blank">Sequence Ontology</a> consequence
-terms emitted by <code>bcftools csq</code> that don't fit the named buckets above. Examples
+ that don't fit the named buckets above. Examples
 include <code>splice_region</code> (variant near a splice site but outside the canonical
 donor/acceptor), <code>start_lost</code> / <code>stop_lost</code> (variant disrupts the
 start codon or replaces the stop codon with a coding amino acid),
@@ -79,7 +82,23 @@ records will be hidden by the consequence filter.
 
 <h3>Available Datasets</h3>
 
-<table class="stdTbl">
+<style>
+/* varFreqs dataset table: the three combined tracks and the per-project datasets
+   are logically two tables. Give the column headers a strong background so they
+   stand out, and a light group-heading bar to separate the two sections. */
+#varFreqsTbl th {
+  background-color: #00457c;
+  color: #ffffff;
+}
+#varFreqsTbl tr.varFreqsGroup td {
+  background-color: #d9e4f8;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+</style>
+
+<table class="stdTbl" id="varFreqsTbl">
+<tr class="varFreqsGroup"><td colspan="7">Combined tracks</td></tr>
 <tr>
   <th>Database</th>
   <th>Region</th>
@@ -115,6 +134,16 @@ records will be hidden by the consequence filter.
   <td>14.7M variants</td>
   <td>&mdash;</td>
   <td>No</td>
+</tr>
+<tr class="varFreqsGroup"><td colspan="7">Individual project datasets</td></tr>
+<tr>
+  <th>Database</th>
+  <th>Region</th>
+  <th>N</th>
+  <th>Data Type</th>
+  <th>Cohort</th>
+  <th>Sub-populations</th>
+  <th>Downloadable from UCSC</th>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=allofus">AllOfUs v7</a></td>
@@ -400,48 +429,6 @@ records will be hidden by the consequence filter.
 </tr>
 </table>
 
-<h2>Notes on Specific Sub-tracks</h2>
-
-<h3>AllOfUs &mdash; local-ancestry-stratified frequencies</h3>
-<p>
-The AllOfUs subtrack provides <b>local-ancestry-stratified</b> allele frequencies, not the
-global ancestry categories used in the All of Us Research Program 2024 Nature paper
-(see References). Each variant's per-ancestry AF/AC counts only the haplotypes whose
-inferred local ancestry at that exact genomic position belongs to the named group
-(strict-both-haps mode). The six ancestry classes
-(African, Indigenous American, East Asian, European, Oceanian, South Asian) match HGDP-derived
-local-ancestry reference panels and so include Oceanian, which is not one of the
-paper's six global Rye categories (those are AFR, AMR, EAS, EUR, Middle Eastern, SAS).
-For an admixed individual, the local-ancestry AF at a position can therefore differ
-substantially from the AF among self-reported members of the same ancestry group.
-The Ioannidis lab (Phoenix, UCSC) developed the pipeline that produced this VCF
-and applied it to the AllOfUs v7 release; only variants with cohort allele count &ge; 20
-were retained.
-</p>
-
-<h3>gnomAD HGDP+1kG &mdash; cohort vs full-release frequencies</h3>
-<p>
-This subtrack derives from the gnomAD v3.1.2 release, which embeds the
-4,094-genome jointly-called HGDP+1kG cohort (Koenig et al. 2024) inside the larger
-gnomAD aggregation. To save space, we kept only INFO fields useful for clinical and
-population-genetic interpretation. Two allele-frequency
-sets are exposed:
-</p>
-<ul>
-  <li>The <b>cohort-level</b> AC/AF/AN fields (no prefix) are computed across the
-      ~3,400 unrelated HGDP+1kG individuals (allele number &asymp; 6,800).</li>
-  <li>The <b>per-population</b> filter fields (gnomAD v3.1.2 African AF, gnomAD v3.1.2
-      Latino AF, etc.) are values from the <b>full gnomAD v3.1.2 release</b>
-      (~76,000 genomes), not just the 4,094-genome HGDP+1kG cohort.
-      The corresponding allele numbers are typically tens of thousands per population.</li>
-</ul>
-<p>
-The filter labels on the track configuration page, and the field descriptions in the
-combined-track bigBed, reflect this distinction. Per-population
-HGDP+1kG-cohort frequencies are not exposed because the cohort is too small for
-stable per-population estimates in many populations.
-</p>
-
 <h2>Display Conventions</h2>
 
 <p>Most tracks only show the variant and allele frequencies on mouseover or clicks.
@@ -453,38 +440,41 @@ lines).
 
 <h2>Methods</h2>
 <p>
-Each subtrack includes the upstream project's VCF largely as-released; per-subtrack pipelines
-(coordinate liftover, format conversion, header normalization) are documented on each
+Each subtrack includes the upstream project's VCF largely as-released,
+sometimes converted from other file formats; per-subtrack pipelines (coordinate
+liftover, format conversion, header normalization) are documented on each
 subtrack's own description page and recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">build documentation</a>.
-The conversion scripts (<em>e.g.</em> <code>finngen_to_vcf.py</code>, <code>kovaToVcf.py</code>,
-<code>schema_addAcAnAf.py</code>, <code>svatalogFreqToVcf.py</code>) live alongside the makedoc
+The conversion scripts 
+live alongside the makedoc
 in the <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">scripts directory</a>.
 </p>
 <p>
 The combined Disease cohorts and Population reference tracks are built by a separate
 pipeline: each per-subtrack VCF is normalized (<code>bcftools norm</code>), all sites are
 merged into a single callset, consequence annotations are recomputed against Ensembl with
-<code>bcftools csq</code>, and the merged callset is split by phenotype into the two bigBed
-files via <code>vcfToBigBed.py</code> + <code>bedToBigBed</code>. Within each combined
+<code>bcftools csq</code>, and the merged callset is split by phenotype. Within each combined
 track, the <b>Affected AF</b> and <b>Background AF</b> columns are
 <i>pooled</i> across contributing cohort arms (sum of allele counts divided by sum of
 allele numbers, with the per-arm AN derived from each cohort's AC and AF), so the displayed
-frequency matches the carrier-count scale and a small cohort with a high local AF cannot
-dominate the value. The mapping from upstream INFO fields to bigBed columns is driven by
-two configuration files in the scripts directory: <code>databases.tsv</code> (one row per
-source dataset, flagging which cohorts study a disease, and optionally a
-<code>default_an</code> for cohorts that publish only AF) and <code>populations.tsv</code>
-(per-population AC/AF columns within each source, including the affected and unaffected arm
-of each disease cohort). Editing those two files and rerunning
-<code>mergeAndAnnotate.sh</code> followed by <code>vcfToBigBed.py --split-affected</code>
-rebuilds the two tracks. The Genotyping Array Databases Combined track is built the same
+frequency matches the carrier-count.
+The Genotyping Array Databases Combined track is built the same
 way from the array cohorts only.
 </p>
 
 <h2>Data Access</h2>
-<p>All the data is publicly available. The table above indicates if we are allowed to distribute it in VCF format. Most of the databases do not allow us to redistribute the data files directly from our website, but it can always be downloaded from the original websites in some form. Click the database link in the table above and see the &quot;Data Access&quot; section of the respective track for a description of where to download the data. When the data is freely available from our website, the Data Access section will also indicate the VCF file location on our download server. Because it contains some licensed data, the combined track is not available for download, but can be recreated using the conversion scripts in our <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub repository</a> and the accompanying <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">documentation file</a>.
-</p>
+<p>Many of these databases have restrictions on redistribution and download.
+The table above indicates if we are allowed to distribute it in VCF format.
+Click the database link in the table above and see the &quot;Data Access&quot;
+section of the respective track for a description of where to download the
+data. When the data is freely available from our website, the Data Access
+section will also indicate the VCF file location on our download server.
+Because it contains some licensed data, the combined track is not available for
+download, but can be recreated using the conversion scripts in our <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">GitHub repository</a> and the accompanying <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">documentation file</a>.  </p>
 
 <h2>Credits</h2>
 
