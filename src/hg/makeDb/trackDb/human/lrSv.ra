@@ -261,7 +261,7 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hprc2v21.bb
     shortLabel HPRC v2.1 233 SVs
-    longLabel Structural Variants from the HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus, raw deconstruct)
+    longLabel Structural Variants from HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -289,9 +289,10 @@ noScoreFilter on
 
     track hprc2JasmineSv
     parent lrSv
+    release alpha
     bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
     shortLabel HPRC2 Jasmine 231 SVs
-    longLabel Structural Variants from 231 HPRC v2 Assemblies (14 SV Callers, Jasmine-merged; Hall Lab / Liao)
+    longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -510,9 +511,10 @@ noScoreFilter on
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
     parent lrSv
+    release alpha
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
     shortLabel 1KG Linear 1218 SVs
-    longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read Sequencing)
+    longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read)
     type bigBed 9 +
     itemRgb on
     visibility dense
