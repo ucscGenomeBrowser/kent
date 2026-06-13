@@ -506,7 +506,6 @@ def write_trackdb_stanza(out_path, dbs):
         f.write("    visibility pack\n")
         f.write("    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen "
                 "sources=$sources AF=$minAF-$maxAF AC=$AC\n")
-        f.write("    searchIndex name\n")
         # Source filter
         f.write("    filterValues.sources " + ",".join(src_parts) + "\n")
         f.write("    filterType.sources multipleListOr\n")
