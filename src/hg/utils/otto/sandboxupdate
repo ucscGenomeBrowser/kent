@@ -4,11 +4,10 @@
 
 #	Set environment
 umask 002
-MACHTYPE=`uname -m`
-PATH=/usr/local/bin:/bin:/usr/bin:/cluster/bin/${MACHTYPE}:${HOME}/bin/${MACHTPE}:/cluster/bin:/cluster/bin/scripts:${HOME}/bin:${HOME}/bin/scripts/
-export MACHTYPE PATH
+export MACHTYPE=`uname -m`
+export PATH=/usr/local/bin:/bin:/usr/bin:/cluster/bin/${MACHTYPE}:${HOME}/bin/${MACHTYPE}:/cluster/bin:/cluster/bin/scripts:${HOME}/bin:${HOME}/bin/scripts/
 if [ -z "${USER}" ]; then
-	USER=${otto}
+	USER="otto"
 	export USER
 fi
 
@@ -19,8 +18,10 @@ fi
 cd $HOME/kent
 git pull > $HOME/git.pull.output 2>&1
 if [ $? -ne 0 ]; then
-	echo "git pull failed, see $HOME/git.pull.output" | \
-		mail -s 'Git pull error on kent tree' ${otto}
+    echo "git pull failed, see $HOME/git.pull.output" | \
+        mail -s 'Git pull error on kent tree' "gbauto@ucsc.edu"
+    printf "git pull failed, see $HOME/git.pull.output\n" 1>&2
+    exit 255
 fi
 
 #	Build the CGIs
