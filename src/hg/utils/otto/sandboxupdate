@@ -1,16 +1,14 @@
 #!/bin/bash
 
-#	Script to rebuild the otto user's sandbox - this is a mirror copy of
-#          master, this is not a development standbox.
-#	from the source tree file: kent/src/hg/utils/otto/sandboxupdate
+#	Script to rebuild the current user's sandbox
 
-#	Set environment 
+#	Set environment
 umask 002
 MACHTYPE=`uname -m`
 PATH=/usr/local/bin:/bin:/usr/bin:/cluster/bin/${MACHTYPE}:${HOME}/bin/${MACHTPE}:/cluster/bin:/cluster/bin/scripts:${HOME}/bin:${HOME}/bin/scripts/
 export MACHTYPE PATH
 if [ -z "${USER}" ]; then
-	USER="otto"
+	USER=${otto}
 	export USER
 fi
 
@@ -19,10 +17,25 @@ fi
 
 #	Update the source tree
 cd $HOME/kent
-git fetch --prune --verbose origin > $HOME/git.fetch.output 2>&1
-git log HEAD..origin/master --oneline >> $HOME/git.fetch.output 2>&1
-git reset --hard origin/master >> $HOME/git.fetch.output 2>&1
+git pull > $HOME/git.pull.output 2>&1
 if [ $? -ne 0 ]; then
-	echo "git fetch failed, see $HOME/git.fetch.output" | \
-		mail -s 'Git fetch error on kent tree' "gbauto@ucsc.edu"
+	echo "git pull failed, see $HOME/git.pull.output" | \
+		mail -s 'Git pull error on kent tree' ${otto}
 fi
+
+#	Build the CGIs
+#cd ~/kent/src
+#make -j 40 cgi > ~/daily.out 2>&1
+#	If there are any errors, they will come via separate email from cron
+#egrep -y "erro|warn" ~/daily.out | grep -v "\-Werror" | \
+#	grep -v "gbWarn.o" | grep -v "disabling jobserver mode"
+#make tags-all >/dev/null 2>&1
+
+#	Update htdocs
+#cd ~/kent/src/hg/htdocs
+#make user >/dev/null 2>&1
+
+#	Update trackDb
+#	Errors with context will be reported by cron
+#cd ~/kent/src/hg/makeDb/trackDb/
+#make update |& grep -i -B20 error
