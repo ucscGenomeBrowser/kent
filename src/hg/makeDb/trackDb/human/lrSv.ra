@@ -32,7 +32,7 @@ noScoreFilter on
     longLabel Structural Variants from CoLoRSdb (Consortium of Long-Read Sequencing, 1,427 Samples)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     dataVersion v1.2.0
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$AF AC=$AC/$AN (Hom:$acHom Het:$acHet Hemi:$acHemi) samples=$NS
     filterValues.svType DEL,INS,INV,DUP
@@ -61,7 +61,7 @@ noScoreFilter on
     longLabel Structural Variants from 1,019 Diverse Humans (Vienna ONT, Schloissnig et al. 2025)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen type=$insType family=$family AC=$AC AF=$alleleFreq
     filterValues.svType DEL,INS,CPX
     filterType.svType multipleListOr
@@ -95,7 +95,7 @@ noScoreFilter on
     longLabel Structural Variants from 100 1000 Genomes ONT Samples (Gustafson et al. 2024)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC samples=$sampleCount
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
@@ -122,7 +122,7 @@ noScoreFilter on
     longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF_AFR=$afAfr AF_EUR=$afEur
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
@@ -154,7 +154,7 @@ noScoreFilter on
     longLabel Structural Variants from 945 Han Chinese (Long-read Sequencing)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC samples=$sampleCount
     filterValues.svType DEL,INS,DUP,INV,TRA
     filterType.svType multipleListOr
@@ -185,7 +185,7 @@ noScoreFilter on
     longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
@@ -211,7 +211,7 @@ noScoreFilter on
     longLabel Structural Variants from 502 Children's Mercy GA4K Probands (PacBio HiFi)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF=$alleleFreq carriers=$carrierCount/$sampleTotal
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
@@ -240,7 +240,7 @@ noScoreFilter on
     longLabel High-confidence Structural Variants from 3,622 Icelanders (deCODE, Oxford Nanopore)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen
     filterValues.svType DEL,INS,INSDEL
     filterType.svType multipleListOr
@@ -257,10 +257,10 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/hprc2v21.bb
     shortLabel HPRC v2.1 233 SVs
-    longLabel Structural Variants from the HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus, raw deconstruct)
+    longLabel Structural Variants from HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC/$alleleNumber samples=$nSamples
     filterValues.svType INS,DEL
     filterType.svType multipleListOr
@@ -283,41 +283,45 @@ noScoreFilter on
     filterLabel.snarlLevel Snarl Level
     skipEmptyFields on
 
-    track hprc2JasmineSv
-    parent lrSv
-    bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
-    shortLabel HPRC2 Jasmine 231 SVs
-    longLabel Structural Variants from 231 HPRC v2 Assemblies (14 SV Callers, Jasmine-merged; Hall Lab / Liao)
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$nSamples/$alleleNumber AF=$alleleFreq callers=$nCallers ($callers)
-    filterValues.svType DEL,INS
-    filterType.svType multipleListOr
-    filterLabel.svType SV Type
-    filter.svLen 0:30176500
-    filterByRange.svLen on
-    filterLabel.svLen SV Length
-    filter.insLen 0:30176500
-    filterByRange.insLen on
-    filterLabel.insLen Insertion Length
-    filter.AC 0:231
-    filterByRange.AC on
-    filterLabel.AC Carrier Sample Count
-    filter.alleleFreq 0:1
-    filterByRange.alleleFreq on
-    filterLimits.alleleFreq 0:1
-    filterLabel.alleleFreq Carrier Frequency
-    filter.nCallers 1:14
-    filterByRange.nCallers on
-    filterLabel.nCallers Number of Supporting Callers
-    filterValues.callers DELLY,DeBreak,DeepVariant,PAV,SVDSS,SVIM,SVIM-asm,Sniffles2,cuteSV,cuteSV-asm,dipcall,longcallD,pbsv,sawfish
-    filterType.callers multipleListAnd
-    filterLabel.callers Supporting Callers
-    filterValues.sources PAV,dipcall,longcallD
-    filterType.sources multipleListAnd
-    filterLabel.sources Source Pipeline
-    skipEmptyFields on
+    # hprc2JasmineSv commented out: the Jasmine-merged HPRC v2 multi-caller
+    # set is a test/comparison callset (the Hall lab is not happy with it) and
+    # is not for release. bigBed, .as, converter and makeDoc are retained.
+    # refs #36258
+    #track hprc2JasmineSv
+    #parent lrSv
+    #bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
+    #shortLabel HPRC2 Jasmine 231 SVs
+    #longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
+    #type bigBed 9 +
+    #itemRgb on
+    #visibility dense
+    #mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$nSamples/$alleleNumber AF=$alleleFreq callers=$nCallers ($callers)
+    #filterValues.svType DEL,INS
+    #filterType.svType multipleListOr
+    #filterLabel.svType SV Type
+    #filter.svLen 0:30176500
+    #filterByRange.svLen on
+    #filterLabel.svLen SV Length
+    #filter.insLen 0:30176500
+    #filterByRange.insLen on
+    #filterLabel.insLen Insertion Length
+    #filter.AC 0:231
+    #filterByRange.AC on
+    #filterLabel.AC Carrier Sample Count
+    #filter.alleleFreq 0:1
+    #filterByRange.alleleFreq on
+    #filterLimits.alleleFreq 0:1
+    #filterLabel.alleleFreq Carrier Frequency
+    #filter.nCallers 1:14
+    #filterByRange.nCallers on
+    #filterLabel.nCallers Number of Supporting Callers
+    #filterValues.callers DELLY,DeBreak,DeepVariant,PAV,SVDSS,SVIM,SVIM-asm,Sniffles2,cuteSV,cuteSV-asm,dipcall,longcallD,pbsv,sawfish
+    #filterType.callers multipleListAnd
+    #filterLabel.callers Supporting Callers
+    #filterValues.sources PAV,dipcall,longcallD
+    #filterType.sources multipleListAnd
+    #filterLabel.sources Source Pipeline
+    #skipEmptyFields on
 
     track hgsvc2Sv
     parent lrSv
@@ -326,7 +330,7 @@ noScoreFilter on
     longLabel Structural Variants from 32 Haplotype-Resolved Genomes (HGSVC2 freeze 4, Ebert 2021)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC AF=$popAllAf
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
@@ -359,7 +363,7 @@ noScoreFilter on
     longLabel Structural Variants from 65 Diverse Samples (HGSVC3 ONT+HIFI)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
@@ -438,7 +442,7 @@ noScoreFilter on
     longLabel Structural Variants from the Arab Pangenome Reference (53 UAE-resident Arab samples)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
@@ -464,7 +468,7 @@ noScoreFilter on
     longLabel Structural Variants from the Chinese Pangenome Consortium (58 samples, CPC-only)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
@@ -490,7 +494,7 @@ noScoreFilter on
     longLabel Structural Variants from 101 Long-read WGS (GWAS SVatalog, Chirmade 2026)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen genes=$geneCount
     filterValues.svType DEL,INS,DUP,INV,CPX
     filterType.svType multipleListOr
@@ -512,10 +516,10 @@ noScoreFilter on
     parent lrSv
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
     shortLabel 1KG Linear 1218 SVs
-    longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read Sequencing)
+    longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read)
     type bigBed 9 +
     itemRgb on
-    visibility dense
+    visibility hide
     mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$AN AF=$AF AF_AFR=$afAfr AF_EUR=$afEur samples=$NS
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
