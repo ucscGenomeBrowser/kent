@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#	Script to keep the otto user's sandbox up to date with master.
+#       This is not a development standbox, just a read only copy.
+#       This script will erase any temporary edits in this copy.
+#
+#	from the source tree file: kent/src/hg/utils/otto/readOnlyKentMirror
+#       Daily sandbox update cron entry:
+#       41 00 * * 1-7 /cluster/home/otto/bin/readOnlyKentMirror
+
+#	Set environment 
+umask 002
+MACHTYPE=`uname -m`
+PATH=/usr/local/bin:/bin:/usr/bin:/cluster/bin/${MACHTYPE}:${HOME}/bin/${MACHTPE}:/cluster/bin:/cluster/bin/scripts:${HOME}/bin:${HOME}/bin/scripts/
+export MACHTYPE PATH
+if [ -z "${USER}" ]; then
+	USER="otto"
+	export USER
+fi
+
+#	Clean up the source tree
+#cd $HOME/kent/src && make clean > /dev/null 2> /dev/null && rm -f tags
+
+#	Update the source tree
+cd $HOME/kent
+git fetch --prune --verbose origin > $HOME/git.fetch.output 2>&1
+git log HEAD..origin/master --oneline >> $HOME/git.fetch.output 2>&1
+git reset --hard origin/master >> $HOME/git.fetch.output 2>&1
+if [ $? -ne 0 ]; then
+	echo "git fetch failed, see $HOME/git.fetch.output" | \
+		mail -s 'Git fetch error on kent tree' "gbauto@ucsc.edu"
+fi
