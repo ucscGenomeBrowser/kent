@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#	Script to keep the otto user's sandbox up to date with master.
+#       This is not a development sandbox, just a read only copy.
+#       This script will erase any temporary edits in this copy.
+#
+#	from the source tree file: kent/src/hg/utils/otto/readOnlyKentMirror
+#       Daily sandbox update cron entry:
+#       41 00 * * 1-7 /cluster/home/otto/bin/readOnlyKentMirror
+
+#	Set environment 
+umask 002
+export MACHTYPE=`uname -m`
+export PATH=/usr/local/bin:/bin:/usr/bin:/cluster/bin/${MACHTYPE}:${HOME}/bin/${MACHTYPE}:/cluster/bin:/cluster/bin/scripts:${HOME}/bin:${HOME}/bin/scripts/
+if [ -z "${USER}" ]; then
+	USER="otto"
+	export USER
+fi
+
+#	Update the source tree
+cd $HOME/kent
+git fetch --prune --verbose origin > $HOME/git.fetch.output 2>&1
+if [ $? -ne 0 ]; then
+    echo "git fetch failed, see $HOME/git.fetch.output" | \
+        mail -s 'Git fetch error on kent tree' "gbauto@ucsc.edu"
+    printf "git fetch failed, see $HOME/git.fetch.output\n" 1>&2
+    exit 255
+fi
+git log HEAD..origin/master --oneline >> $HOME/git.fetch.output 2>&1
+git reset --hard origin/master >> $HOME/git.fetch.output 2>&1
+if [ $? -ne 0 ]; then
+    echo "git reset failed, see $HOME/git.fetch.output" | \
+        mail -s 'Git reset error on kent tree' "gbauto@ucsc.edu"
+    printf "git reset failed, see $HOME/git.fetch.output\n" 1>&2
+    exit 255
+fi

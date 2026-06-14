@@ -36,7 +36,7 @@ CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 # featureBitsPct() falls back to an NFS read on a snapshot miss.
 FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
 
-# keep this liftStatus and asmStatus lists at the same length so that
+# keep these liftStatus and asmStatus lists at the same length so that
 #   the verification check in doResetStatus() will function on just liftStatus
 liftStatus = {
     0: 'received by API',
