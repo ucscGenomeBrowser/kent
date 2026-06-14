@@ -11,9 +11,9 @@ per reference path, so the events are measured against GRCh38 on hg38 and
 against T2T-CHM13 on hs1, and each assembly shows its own native callset.
 </p>
 <p>
-On hg38 there are about 596,000 such alleles (roughly 448,000 insertions and
-148,000 deletions). On hs1 there are about 608,000 (roughly 363,000
-insertions and 245,000 deletions). The two sets are not lifted between
+On hg38 there are about 550,000 such alleles (roughly 422,000 insertions and
+128,000 deletions). On hs1 there are about 541,000 (roughly 348,000
+insertions and 193,000 deletions). The two sets are not lifted between
 assemblies; the counts differ because an insertion against one reference can
 be a deletion against the other.
 </p>
@@ -61,8 +61,9 @@ each end. An allele was kept when the net length change was at least 50 bp,
 and labeled an insertion when the alternate is longer or a deletion when it
 is shorter. At this size no balanced, equal-length substitutions came up,
 and the files carry no inversion calls, so the track has only insertions and
-deletions. On hg38, 596,063 alleles were kept (43,580 at nested snarl
-levels); on hs1, 608,435 (75,809 nested). Because these files are not broken
+deletions. On hg38, 549,649 alleles were kept (40,678 at nested snarl
+levels); on hs1, 541,176 (70,200 nested), after removing byte-identical
+duplicate records. Because these files are not broken
 down into atomic indels, one bubble can appear as a single large allele
 rather than several small ones, so the counts are not comparable to a
 wave-decomposed callset. Allele counts, frequencies and sample counts come

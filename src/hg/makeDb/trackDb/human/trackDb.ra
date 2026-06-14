@@ -5630,7 +5630,7 @@ include exonprimers.ra alpha
 include longReadVariants.ra
 
 include g2p.ra
-include varFreqs.ra alpha,beta
+include varFreqs.ra
 include phasedVars.ra
 
 track dnaMethylation
