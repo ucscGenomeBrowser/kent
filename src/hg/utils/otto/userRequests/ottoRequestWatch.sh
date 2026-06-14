@@ -513,9 +513,9 @@ while IFS=$'\t' read -r reqId fromDb toDb comment requestTime buildDir; do
   # time to clean up the galaxy history and workflow to release the space
   if [ -s "${buildDir}/successInvocationId.txt" ]; then
     invocationId=$(cut -f2 "${buildDir}/successInvocationId.txt")
-#    if ! "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
+    if ! "${scriptDir}/galaxyCleanup.py" "${profileJson}" "${invocationId}"; then
       printf "# WARNING: galaxy cleanup failed for request %s\n" "${reqId}" 1>&2
-#    fi
+    fi
   fi
 
   if ! fromUrl="$(liftOverUrl "${fromDb}" "${toDb}")"; then
