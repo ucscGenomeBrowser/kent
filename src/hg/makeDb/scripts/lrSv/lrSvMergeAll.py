@@ -505,8 +505,9 @@ def write_trackdb_stanza(out_path, dbs):
         f.write("    type bigBed 9 +\n")
         f.write("    itemRgb on\n")
         f.write("    visibility pack\n")
-        f.write("    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen "
-                "sources=$sources AF=$minAF-$maxAF AC=$AC\n")
+        f.write("    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen"
+                "<br><b>Ins len</b>: $insLen<br><b>Sources</b>: $sources"
+                "<br><b>AF range</b>: $minAF-$maxAF<br><b>AC</b>: $AC\n")
         # Source filter
         f.write("    filterValues.sources " + ",".join(src_parts) + "\n")
         f.write("    filterType.sources multipleListOr\n")
