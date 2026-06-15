@@ -11,7 +11,7 @@ frequencies that SVatalog uses to compute linkage disequilibrium between
 SNPs and SVs.
 </p>
 <p>
-The callset contains approximately 8.8 million sites across the autosomes
+The callset contains about 8.8 million sites across the autosomes
 and chromosome X. Each site reports the alternate allele frequency in the
 101 samples, the gnomAD v3.1 non-Finnish European allele frequency (when
 annotated in the source release), and a dbSNP rsID when one was available.
@@ -26,9 +26,9 @@ INFO fields: AF, AC, AN, the gnomAD v3.1 NFE allele frequency
 </p>
 <p>
 Note on AC/AN: the source allele-frequency release only ships AF. For this
-track AC and AN are synthesized by assuming the full 2x101 = 202-allele
-denominator (AN=202, AC=round(AF x 202)); these are therefore
-approximations at sites where some samples had missing genotypes.
+track we synthesize AC and AN by assuming the full 2x101 = 202-allele
+denominator (AN=202, AC=round(AF x 202)), so the values are approximate
+at sites where some samples had missing genotypes.
 </p>
 
 <h2>Methods</h2>

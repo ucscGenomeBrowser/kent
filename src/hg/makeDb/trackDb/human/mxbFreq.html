@@ -3,10 +3,10 @@
 The <a href="https://www.mxbiobank.org/" target="_blank">Mexico Biobank (MXB)</a> project
 genotyped 6,011 individuals sampled across all 32 states of Mexico during the 2000 National
 Health Survey (ENSA 2000) conducted by the National Institute of Public Health (INSP).
-Genotyping was performed with the Illumina Multi-Ethnic Global Array (MEGA, ~1.8M SNPs),
+Genotyping used the Illumina Multi-Ethnic Global Array (MEGA, ~1.8M SNPs), which is
 optimized for admixed populations and enriched for ancestry-informative and medically relevant
-variants. Only autosomal, biallelic SNPs passing quality control are included. Samples were
-selected from 898 recruitment sites, with prioritization of indigenous language speakers.
+variants. Only autosomal, biallelic SNPs that passed quality control are included. Samples
+came from 898 recruitment sites, and indigenous language speakers were prioritized.
 </p>
 
 <p>
@@ -20,7 +20,11 @@ The hg38 data was lifted from hg19 by UCSC (see below).
 
 <h2>Data Access</h2>
 <p>
-We are not allowed to redistribute the VCF file.
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
 Allele frequencies by geographical state and ancestry are available via
 the <a href="https://morenolab.shinyapps.io/mexvar/" target="_blank">MexVar platform</a>.
 Raw genotype data are available under controlled access at the
@@ -39,8 +43,8 @@ a sites-only frequency VCF.
 </p>
 
 <p>
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> documents how the source files of the varFreqs track were converted.
+For some tracks, python scripts were needed and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>

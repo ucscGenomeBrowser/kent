@@ -1012,6 +1012,13 @@ def main():
     flipFiles('Australia')
     updateGbdbSymlinks('Australia')
 
+    # panelApp is a compositeTrack whose container page shows no "Data last updated";
+    # write a dataVersion file (the build/run date) so the container shows a freshness date.
+    dateStr = date.today().strftime("%Y-%m-%d")
+    for db in ["hg19", "hg38"]:
+        with open("current/%s/version.txt" % db, "w") as vf:
+            vf.write("Last updated %s\n" % dateStr)
+
     print("PanelApp otto update: OK")
 
 main()

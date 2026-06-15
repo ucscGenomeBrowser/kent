@@ -14,14 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-# Colors by SV class (R,G,B)
-SV_COLORS = {
-    "INS": "0,0,200",      # blue
-    "DEL": "200,0,0",      # red
-    "CPX": "230,140,0",    # orange
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 def parseInfo(infoStr):
     """Parse INFO field into a dict."""
@@ -184,7 +177,7 @@ def main():
             if strand not in ("+", "-"):
                 strand = "."
 
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             # Allele counts from phased VCF
             if varId in acMap:

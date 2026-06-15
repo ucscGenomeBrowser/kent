@@ -4,6 +4,7 @@
 #include "jsHelper.h"
 #include "srcVersion.h"
 #include "asmAlias.h"
+#include "hubSpaceKeys.h"
 /* can not include bamFile.h with the liftOver business, there
  * is a conflict in a definition of the enum 'bed'
  */
@@ -59,9 +60,10 @@ char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, 
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argRevComp, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 char *argFindGenome[] = {argQ, argMaxItemsOutput, argJsonOutputArrays, argStatsOnly, argBrowser, argYear, argCategory, argStatus, argLevel, argLiftable, NULL};
-char *argLiftOver[] = {argFromGenome, argToGenome, argChrom, argStart, argEnd, argFilter, argMaxItemsOutput, NULL};
+char *argLiftOver[] = {argFromGenome, argToGenome, argChrom, argStart, argEnd, argFilter, argMaxItemsOutput, argReturnTo, NULL};
 char *argLiftRequest[] = {argFromGenome, argToGenome, argEmail, argComment, NULL};
 char *argAssemblyRequest[] = {argAsmId, argName, argEmail, argBetterName, argComment, NULL};
+char *argBlat[] = {argGenome, argHubUrl, argUserSeq, argFormat, argMaxItemsOutput, argJsonOutputArrays, argApiKey, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -1003,6 +1005,7 @@ hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
 hashAdd(apiFunctionHash, "liftOver", &apiLiftOver);
 hashAdd(apiFunctionHash, "liftRequest", &apiLiftRequest);
 hashAdd(apiFunctionHash, "assemblyRequest", &apiAssemblyRequest);
+hashAdd(apiFunctionHash, "blat", &apiBlat);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
@@ -1642,8 +1645,30 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 verboseTimeInit();
+/* Pre-validate apiKey before the global bot-check.  Without this,
+ * hgBotDelayTimeFrac->getBotCheckString in hg/lib/botDelay.c would
+ * hUserAbort() on an invalid key, which apache renders as a 500 because
+ * it emits plain HTML rather than the JSON the API contract promises. */
+char *earlyApiKey = cgiOptionalString(argApiKey);
+if (isNotEmpty(earlyApiKey))
+    {
+    struct sqlConnection *centralConn = hConnectCentralNoCache();
+    char *userName = hubSpaceUserNameForApiKey(centralConn, earlyApiKey);
+    sqlDisconnect(&centralConn);
+    if (isEmpty(userName))
+        apiErrAbort(err403, err403Msg,
+            "invalid '%s' provided. Make sure the apiKey is valid, or contact us.",
+            argApiKey);
+    }
 /* similar delay system as in DAS server */
-botDelay = hgBotDelayTimeFrac(delayFraction);
+struct errCatch *bnErrCatch = errCatchNew();
+if (errCatchStart(bnErrCatch))
+    botDelay = hgBotDelayTimeFrac(delayFraction);
+errCatchEnd(bnErrCatch);
+if (bnErrCatch->gotError)
+    apiErrAbort(err500, err500Msg, "bottleneck server unavailable: %s",
+        bnErrCatch->message->string);
+errCatchFree(&bnErrCatch);
 if (botDelay > 0)
     {
     if (botDelay > 2000)

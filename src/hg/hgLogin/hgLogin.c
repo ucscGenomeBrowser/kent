@@ -30,6 +30,7 @@
 #include "mailViaPipe.h"
 #include "dystring.h"
 #include "autoUpgrade.h"
+#include "hCommon.h"
 
 #define EMAILSEP ";"
 
@@ -344,6 +345,7 @@ else if (cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
         safecpy(returnTo, sizeof(returnTo), returnURL);
     else
         {
+        hDumpStackDisallow();
         errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
                 "with the returnto argument from the URL (or just the full URL) so we can "
                 "fix this.");
@@ -395,7 +397,7 @@ void sendActMailOut(char *email, char *subject, char *msg)
 {
 int result;
 
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 
 if (result == -1)
     {
@@ -466,7 +468,7 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 if (result == -1)
     {
     hPrintf( 
@@ -530,9 +532,9 @@ void sendPwdMailOut(char *email, char *recovEmail, char *subject, char *msg, cha
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
 
-result = mailViaPipe(email, subject, msg, returnAddr);
+result = mailViaPipeBounce(email, subject, msg, returnAddr);
 if ((result != -1) && !isEmpty(recovEmail))
-    result = mailViaPipe(recovEmail, subject, msg, returnAddr);
+    result = mailViaPipeBounce(recovEmail, subject, msg, returnAddr);
 
 if (result == -1)
     {

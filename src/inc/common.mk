@@ -2,6 +2,12 @@
 CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
+# Several long-standing idioms in the tree alias memory through incompatible
+# types (e.g. the dlList sentinel trick in lib/dlist.c, which overlays
+# struct dlNode on struct dlList).  -fstrict-aliasing (on at -O2 and above, but
+# not at -O1) miscompiles these, silently corrupting results.  Disable it so the
+# higher -O levels are safe.  refs #37761
+CFLAGS += -fno-strict-aliasing
 
 # This is required to get the cgiLoader.mk compile target to work.  for some
 # reason, make's %.o: %.c overrides the rule below, cause the compiles to fail
@@ -15,7 +21,7 @@ L += ${LDFLAGS}
 
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
-    COPT=-O -g
+    COPT=-O3
 endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)
@@ -340,6 +346,12 @@ ifeq (${BZ2LIB},)
    endif
 endif
 
+# htslib (libhts.a) must come before its dependency libs (-lcurl -llzma, and
+# -lz -lbz2 below) on the link line. With the linker default --as-needed (e.g.
+# Debian/Ubuntu), a dependency listed before libhts.a gets dropped, producing
+# undefined lzma_*/curl_* references when libhts.a is linked. refs #37741
+L += $(kentSrc)/submodules/htslib/libhts.a
+
 # on hgwdev, use the static libraries
 ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include
@@ -365,7 +377,7 @@ ifeq (${IS_HGWDEV},yes)
    endif
 
 else
-   L+=-lcurl
+   L+=-lcurl -llzma
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.so ${PREFIX}/lib/libcrypto.so
    else
@@ -383,7 +395,6 @@ else
 endif
 
 #global external libraries
-L += $(kentSrc)/submodules/htslib/libhts.a
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 

@@ -10,9 +10,8 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "net.h"
-/* do not need the mailViaPipe function here
-#include "mailViaPipe.h"
-*/
+#include "wikiLink.h"
+#include "userdata.h"
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -76,7 +75,7 @@ char *filter = cgiOptionalString(argFilter);
 char *fromDb = cgiOptionalString(argFromGenome);
 char *toDb = cgiOptionalString(argToGenome);
 
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hConnectOtto();
 char *tableName = cloneString(liftOverChainTable());
 struct dyString *query = newDyString(0);
 sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
@@ -166,7 +165,95 @@ if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
     }
 
 apiFinishOutput(0, NULL, jw);
-hDisconnectCentral(&conn);
+hDisconnectOtto(&conn);
+}
+
+static void loginStatus()
+/* output current user login status as JSON */
+{
+/* wikiLinkUserName() handles all cookie validation internally */
+char *userName = wikiLinkUserName();
+struct jsonWrite *jw = apiStartOutput();
+char hgLoginLink[2048];
+boolean privateHost = hIsPrivateHost();
+/* can not use hgcentral hglogin from hgwdev/genome-test */
+if (privateHost)
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLocalHostCgiBinUrl());
+else
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLoginHostCgiBinUrl());
+
+if (userName != NULL)
+    {
+    // Get both email and realName from gbMembers table
+    struct sqlConnection *sc = NULL;
+    if (privateHost)
+	sc = hConnectCentral();
+    else
+	sc = hConnectOtto();
+    struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
+    struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
+    char **row = sqlNextRow(sr);
+
+    char *email = NULL;
+    char *realName = NULL;
+    if (row != NULL)
+        {
+        email = cloneString(row[0] ? row[0] : "");
+        realName = cloneString(row[1] ? row[1] : "");
+        }
+    sqlFreeResult(&sr);
+    if (privateHost)
+	hDisconnectCentral(&sc);
+    else
+	hDisconnectOtto(&sc);
+
+    // Build logout URL with returnto parameter
+    char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *logoutUrl = dyStringNew(0);
+    dyStringPrintf(logoutUrl, "%s?hgLogin.do.displayLogout=1", hgLoginLink);
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+
+        dyStringPrintf(logoutUrl, "&returnto=%s", encodedReturnUrl);
+        freeMem(encodedReturnUrl);
+        }
+
+    jsonWriteString(jw, "userName", userName);
+    jsonWriteString(jw, "email", email ? email : "");
+    jsonWriteString(jw, "realName", realName ? realName : "");
+    jsonWriteString(jw, "logoutUrl", dyStringCannibalize(&logoutUrl));
+
+    if (email)
+        freeMem(email);
+    if (realName)
+        freeMem(realName);
+    }
+else
+    {
+    jsonWriteString(jw, "userName", NULL);
+    // Use returnTo parameter passed by calling JavaScript
+    char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *loginUrl = dyStringNew(0);
+    dyStringPrintf(loginUrl, "%s?hgLogin.do.displayLoginPage=1", hgLoginLink);
+    struct dyString *signUpUrl = dyStringNew(0);
+    dyStringPrintf(signUpUrl, "%s?hgLogin.do.displaySignupPage=1", hgLoginLink);
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+        dyStringPrintf(loginUrl, "&returnto=%s", encodedReturnUrl);
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
+        freeMem(encodedReturnUrl);
+        }
+    else
+        {
+        // No returnTo provided, just give basic login URL
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
+        }
+    jsonWriteString(jw, "signupUrl", dyStringCannibalize(&signUpUrl));
+    }
+
+apiFinishOutput(0, NULL, jw);
 }
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
@@ -264,6 +351,11 @@ if (sameWordOk("listExisting", words[1]))
     listExisting();
     return;
     }
+else if (sameWordOk("loginStatus", words[1]))
+    {
+    loginStatus();
+    return;
+    }
 
 char *fromGenome = cgiOptionalString(argFromGenome);
 char *toGenome = cgiOptionalString(argToGenome);
@@ -337,6 +429,27 @@ char *userId = findCookieData(cookieName);
 if (isEmpty(userId))
     apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
 
+/* verify (again) that the requested assemblies actually exist */
+struct dbDb *fromDb = hDbDb(fromGenome);
+if (fromDb == NULL)
+    {
+    fromDb = genarkLiftOverDb(fromGenome);
+    }
+struct dbDb *toDb = hDbDb(toGenome);
+if (toDb == NULL)
+    {
+    toDb = genarkLiftOverDb(toGenome);
+    }
+if ( (fromDb == NULL) || (fromDb == NULL) )
+    {
+    if ( (fromDb == NULL) && (toDb == NULL) )
+	    apiErrAbort(err400, err400Msg, "can not find either 'fromGenome=%s' or 'toGenome=%s' for endpoint '/liftOver", fromGenome, toGenome);
+        else
+	    apiErrAbort(err400, err400Msg, "can not find 'fromoGenome=%s' for endpoint '/liftOver", fromGenome);
+    if (toDb == NULL)
+        apiErrAbort(err400, err400Msg, "can not find 'toGenome=%s' for endpoint '/liftOver", toGenome);
+    }
+
 /* duplicate-row guard: any existing row in ottoRequest for this pair
  * (either direction, any status) blocks resubmission.  The form's JS
  * already shows a "pending" panel for this case via the listExisting
@@ -345,7 +458,7 @@ if (isEmpty(userId))
 char *dupOttoTable = cfgOption("ottoTable");
 if (isNotEmpty(dupOttoTable))
     {
-    struct sqlConnection *conn = hConnectCentral();
+    struct sqlConnection *conn = hConnectOtto();
     if (sqlTableExists(conn, dupOttoTable))
         {
         struct dyString *dq = newDyString(0);
@@ -354,7 +467,7 @@ if (isNotEmpty(dupOttoTable))
             "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))",
             dupOttoTable, fromGenome, toGenome, toGenome, fromGenome);
         int dupCount = sqlQuickNum(conn, dyStringCannibalize(&dq));
-        hDisconnectCentral(&conn);
+        hDisconnectOtto(&conn);
         if (dupCount > 0)
             apiErrAbort(err409, err409Msg,
                 "A request for %s <-> %s has already been submitted "
@@ -362,7 +475,7 @@ if (isNotEmpty(dupOttoTable))
                 fromGenome, toGenome);
         }
     else
-        hDisconnectCentral(&conn);
+        hDisconnectOtto(&conn);
     }
 }
 
@@ -374,7 +487,7 @@ if (dailyLimit > 0)
     char *limitOttoTable = cfgOption("ottoTable");
     if (isNotEmpty(limitOttoTable))
         {
-        struct sqlConnection *conn = hConnectCentral();
+        struct sqlConnection *conn = hConnectOtto();
         if (sqlTableExists(conn, limitOttoTable))
             {
             struct dyString *q = newDyString(0);
@@ -384,7 +497,7 @@ if (dailyLimit > 0)
                 "AND DATE(requestTime) = CURDATE()",
                 limitOttoTable, email);
             int todayCount = sqlQuickNum(conn, dyStringCannibalize(&q));
-            hDisconnectCentral(&conn);
+            hDisconnectOtto(&conn);
             if (todayCount >= dailyLimit)
                 apiErrAbort(err429, err429Msg,
                     "Daily limit reached: %d liftOver requests per day. "
@@ -392,7 +505,7 @@ if (dailyLimit > 0)
                     dailyLimit);
             }
         else
-            hDisconnectCentral(&conn);
+            hDisconnectOtto(&conn);
         }
     }
 
@@ -409,13 +522,6 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
     dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
-    /* Even if the mailViaPipe returned a relevant return code, and I'm not
-    *    sure it would, there isn't much we can do about it from here.
-    *  Do *not* need to send email from here.  The cron job watch script
-    *     in the otto user will see the table updated and take care of
-    *     the email notifications
-    (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
-    */
 
     /* some kind of response here back to the request page */
     struct jsonWrite *jw = apiStartOutput();
@@ -424,16 +530,31 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     char *ottoTable = cfgOption("ottoTable");	/* probably ottoRequest */
     if (isNotEmpty(ottoTable))
         {
-        struct sqlConnection *conn = hConnectCentral();
+        struct sqlConnection *conn = hConnectOtto();
         if (sqlTableExists(conn, ottoTable))
 	    {
+            /* Atomic insert with duplicate check - prevents race condition */
             struct dyString *update = newDyString(0);
             sqlDyStringPrintf(update,
-		"INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) VALUES ( 'liftOver', '%s','%s','%s','%s',now(), 0, '')",
-		ottoTable,  fromGenome, toGenome, email, comment);
-            sqlUpdate(conn, dyStringCannibalize(&update));
+                "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) "
+                "SELECT 'liftOver', '%s', '%s', '%s', '%s', now(), 0, '' "
+                "WHERE NOT EXISTS ("
+                "  SELECT 1 FROM %s WHERE requestType='liftOver' AND "
+                "  ((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))"
+                ")",
+                ottoTable, fromGenome, toGenome, email, comment,
+                ottoTable, fromGenome, toGenome, toGenome, fromGenome);
+            int rowsAffected = sqlUpdateRows(conn, dyStringCannibalize(&update), NULL);
+            if (rowsAffected == 0)
+                {
+                hDisconnectOtto(&conn);
+                apiErrAbort(err409, err409Msg,
+                    "A request for %s <-> %s has already been submitted "
+                    "and is on record.  Duplicates are not accepted.",
+                    fromGenome, toGenome);
+                }
 	    }
-        hDisconnectCentral(&conn);
+        hDisconnectOtto(&conn);
         }
     }
 }	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/

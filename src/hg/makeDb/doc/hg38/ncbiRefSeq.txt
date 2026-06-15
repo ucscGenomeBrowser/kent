@@ -476,3 +476,76 @@ cut -f1 refSeqHistorical.gp | sort -u > name.list
 join -t$'\t' name.list refLink.tab > ncbiRefSeqLinkOld.tab
 # loading the cross reference data
 hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql ncbiRefSeqLinkOld.tab
+
+#############################################################################
+# Update RefSeq Historical to RS_2024_08 (DONE - Lou - 2026-06-02)
+#############################################################################
+# NCBI published a newer historical release, GCF_000001405.40-RS_2024_08
+# (2024-10-22), superseding the RS_2023_03 build above. One-off refresh of the
+# same six tables (names unchanged, no trackDb change). Full script kept at
+# /hive/data/outside/refSeqHistorical/RS_2024_08/build.RS_2024_08.sh
+mkdir /hive/data/outside/refSeqHistorical/RS_2024_08
+cd /hive/data/outside/refSeqHistorical/RS_2024_08
+REL=GCF_000001405.40-RS_2024_08
+BASE=https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38
+
+# get the four source files
+wget "$BASE/current/${REL}_genomic.gff.gz"
+wget "$BASE/current/${REL}_knownrefseq_alns.bam"
+wget "$BASE/current/${REL}_knownrefseq_alns.bam.bai"
+wget "$BASE/${REL}_historical/${REL}_knownrefseq_rna.gbff.gz"
+
+cp /hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chromAlias.txt chromAlias.txt
+
+# sequences from the BAM.
+# No samtools 1.x was available on the host (PATH samtools is 0.1.18), so the
+# `samtools fasta` step was reproduced with `samtools view` piped to an awk that
+# reverse-complements reverse-strand (0x10) reads (bamToFa.awk in the build dir),
+# leaving each transcript in native 5'->3' orientation. Verified byte-identical
+# to the RS_2023_03 2bit for 60 shared accessions.
+samtools view ${REL}_knownrefseq_alns.bam | gawk -f bamToFa.awk > refSeqHistorical.fa
+faToTwoBit -ignoreDups refSeqHistorical.fa refSeqHistorical.2bit
+bamToPsl -nohead -chromAlias=chromAlias.txt ${REL}_knownrefseq_alns.bam out.psl
+
+~/kent/src/hg/utils/automation/gbffToCds.pl ${REL}_knownrefseq_rna.gbff.gz | sort > refSeqHistorical.cds
+
+zcat ${REL}_genomic.gff.gz \
+    | gff3ToGenePred -maxParseErrors=-1 -maxConvertErrors=-1 -warnAndContinue \
+        -attrsOut=attrs.out -unprocessedRootsOut=unprocessedRoots.out \
+        -refseqHacks stdin out.gp 2>err
+
+hgsql -Ne "select distinct(name) from ncbiRefSeq" hg38 | sort > ncbiRefSeq.currentIds
+chromToUcsc -k 2  -a chromAlias.txt -i out.gp  | sort > out.ucscChrom.gp
+chromToUcsc -k 14 -a chromAlias.txt -i out.psl | sort > out.ucscChrom.psl
+cut -f10 out.ucscChrom.psl | sort -u | comm -23 - ncbiRefSeq.currentIds > old.ids
+grep -Fwf old.ids out.ucscChrom.gp  > refSeqHistorical.gp
+grep -Fwf old.ids out.ucscChrom.psl > refSeqHistorical.psl
+twoBitToFa -seqList=old.ids refSeqHistorical.2bit refSeqHistorical.deDuped.fa
+
+# ensure only coding transcripts have a cds.
+# Use LC_ALL=C so sort and join agree on collation -- the locale-default join
+# used in the RS_2023_03 build above silently dropped some coding rows.
+awk -F'\t' '$6 != $7 {print $1;}' refSeqHistorical.gp | LC_ALL=C sort -u > coding.cds.names
+LC_ALL=C sort -u refSeqHistorical.cds > refSeqHistorical.cds.sortedC
+LC_ALL=C join -t$'\t' coding.cds.names refSeqHistorical.cds.sortedC > refSeqHistorical.cds.coding
+
+# load display/search tables
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqHistorical refSeqHistorical.gp
+hgLoadPsl hg38 -table=ncbiRefSeqPslHistorical refSeqHistorical.psl
+hgLoadSqlTab hg38 ncbiRefSeqCdsHistorical ~/kent/src/hg/lib/cdsSpec.sql refSeqHistorical.cds.coding
+
+# seq/ext tables + gbdb symlink
+ln -sf `pwd`/refSeqHistorical.deDuped.fa /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+hgLoadSeq -drop -seqTbl=seqNcbiRefSeqHistorical -extFileTbl=extNcbiRefSeqHistorical hg38 /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+
+# link metadata table for the hgvs xref search
+zcat ${REL}_knownrefseq_rna.gbff.gz | (grep ' :: ' || true) \
+  | perl -wpe 's/\s+::.*//; s/^\s+//;' | sort -u > pragmaLabels.txt
+/hive/data/outside/genbank/bin/x86_64/gbProcess /dev/null raFile.txt ${REL}_knownrefseq_rna.gbff.gz 2>gbProcess.err
+cat pragmaLabels.txt | tr -s '[:blank:]' | cut -d':' -f1 | sort -u | cut -d' ' -f2- > pragmaLabels.cleaned.txt
+~/kent/src/hg/utils/automation/gff3ToRefLink.pl \
+    raFile.txt ${REL}_genomic.gff.gz pragmaLabels.cleaned.txt continueOnParentErrors \
+    2> refLink.stderr | LC_ALL=C sort > refLink.tab
+cut -f1 refSeqHistorical.gp | LC_ALL=C sort -u > name.list
+LC_ALL=C join -t$'\t' name.list refLink.tab > ncbiRefSeqLinkOld.tab
+hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql ncbiRefSeqLinkOld.tab

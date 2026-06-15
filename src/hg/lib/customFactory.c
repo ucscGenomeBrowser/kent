@@ -656,7 +656,7 @@ if (wordCount > 4)
      bed->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     strncpy(bed->strand, row[5], sizeof(bed->strand));
+     safecpy(bed->strand, sizeof(bed->strand), row[5]);
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
 	  lineFileAbort(lf, "Expecting + or - in strand");
      }
@@ -1981,7 +1981,7 @@ static char *niceGeneName(char *name)
 static char buf[128];
 char *e;
 
-strncpy(buf, name, sizeof(buf));
+safecpy(buf, sizeof(buf), name);
 if ((e = strchr(buf, ';')) != NULL)
     *e = 0;
 eraseWhiteSpace(buf);
@@ -3384,7 +3384,7 @@ static boolean myVariantsRecognizer(struct customFactory *fac,	struct customPp *
 			     struct customTrack *track)
 /* Return TRUE if looks like we're handling a myVariants track */
 {
-return (sameType(type, "myVariants"));
+return isMyVariantsType(type);
 }
 
 struct myVariants *myVariantsFromRow(char **row, int rowSize)
@@ -3452,8 +3452,8 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     customFactoryCheckChromNameDb(ctDb, item->chrom, lf);
     slAddHead(&list, item);
     }
-track->dbTrackType = cloneString("myVariants");
-track->tdb->type = cloneString("myVariants");
+track->dbTrackType = cloneString(MYVARIANTS_TYPE);
+track->tdb->type = cloneString(MYVARIANTS_TYPE);
 if (isEmpty(track->tdb->html))
     {
     char descPath[PATH_LEN];
@@ -3479,7 +3479,7 @@ static struct customFactory myVariantsFactory =
 /* Factory for myVariants tracks */
     {
     NULL,
-    "myVariants",
+    MYVARIANTS_TYPE,
     myVariantsRecognizer,
     myVariantsLoader,
     };

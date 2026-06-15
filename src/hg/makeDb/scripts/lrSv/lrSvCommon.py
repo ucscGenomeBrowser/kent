@@ -55,6 +55,32 @@ TYPE_ALIASES = {
 NO_LEN_TYPES = {"CTX", "BND"}
 
 
+# Canonical SV-type -> itemRgb color. Every lrSv subtrack converter (and the
+# lrSvAll merge) MUST use this single map so a given SV type has one color
+# across the whole supertrack. The scheme is the long-standing flat-color set
+# (red/blue/green/orange/purple); the rule that is easy to get wrong is that
+# CPX is purple (NOT orange) so it never collides with INV's orange, and
+# INSDEL/TRA/BND get their own colors so they stay distinct from CPX in the
+# merged track. Pass a raw or canonical type to svColor().
+SV_COLORS = {
+    "DEL":    "200,0,0",      # red
+    "INS":    "0,0,200",      # blue
+    "DUP":    "0,160,0",      # green
+    "INV":    "230,140,0",    # orange
+    "CPX":    "140,0,200",    # purple
+    "MIXED":  "120,120,120",  # grey
+    "INSDEL": "100,100,150",  # slate (deCODE combined ins/del)
+    "MEI":    "0,160,160",    # teal
+    "CNV":    "200,0,160",    # magenta
+    "TRA":    "90,90,90",     # dark grey (translocation)
+    "BND":    "90,90,90",     # dark grey (breakend)
+    "CTX":    "90,90,90",     # dark grey (chromosomal translocation)
+}
+
+# Fallback for any type not in SV_COLORS.
+DEFAULT_SV_COLOR = "100,100,100"
+
+
 def normalizeSvType(raw: Optional[str]) -> str:
     """Return the canonical upper-case svType string for a raw VCF/TSV value."""
     if raw is None:
@@ -64,6 +90,15 @@ def normalizeSvType(raw: Optional[str]) -> str:
         return "UNK"
     upper = s.upper()
     return TYPE_ALIASES.get(upper, upper)
+
+
+def svColor(svType: Optional[str]) -> str:
+    """Return the canonical itemRgb color string for an SV type.
+
+    Normalizes the type first, so aliases (e.g. COMPLEX -> CPX) get the
+    right color. Unknown types fall back to DEFAULT_SV_COLOR.
+    """
+    return SV_COLORS.get(normalizeSvType(svType), DEFAULT_SV_COLOR)
 
 
 def shortLen(lenBp: Optional[int]) -> str:

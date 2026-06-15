@@ -112,6 +112,10 @@ if (orgCount > 1)
     char *js = jsOnChangeEnd(&dy);
     puts("<p>Choose your pathogen: ");
     cgiMakeDropListFull(selectVar, labels, values, orgCount, *pOrg, "change", js);
+    puts("<br>");
+    puts("<em>Can't find the pathogen you're looking for?  Try placing your sequences with "
+         "<a href='https://taxonium.org/' target=_blank>Taxonium</a>! (backed by "
+         "<a href='https://github.com/AngieHinrichs/viral_usher' target=_blank>viral_usher</a>)</em>");
     puts("</p>");
     }
 else
@@ -204,6 +208,12 @@ puts("<style>\n"
 "}\n"
 "button.fullwidth {\n "
 "    width: 100%;\n"
+"}\n"
+"div.ui-dialog div.ui-dialog-buttonpane {\n"
+"    background: #FFFFFF;\n"
+"}\n"
+"div.ui-dialog {\n"
+"    background: #FFFFFF;\n"
 "}\n"
 "</style>\n"
      );
@@ -452,6 +462,14 @@ webStartGbNoBanner(cart, org, "UShER: Upload");
 jsInit();
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
+boolean debugRecombs = FALSE;
+if (debugRecombs)
+    {
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("hgPhyloPlace.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    }
+
 newPageStartStuff();
 
 // Hidden form for reloading page when hpp_org select is changed
@@ -465,6 +483,10 @@ puts("<div class='row'>"
      "  </div>\n"
      "</div>\n"
      "<div class='row'>\n");
+
+if (debugRecombs)
+    debugRecombinantDisplay(cart);
+
 if (hgPhyloPlaceEnabled())
     {
     inputForm(org);
@@ -498,6 +520,9 @@ else
 webStartGbNoBanner(cart, db, "UShER: Results");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("hgPhyloPlace.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
 newPageStartStuff();
 
 if (issueBotWarning)

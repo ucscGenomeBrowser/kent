@@ -27,19 +27,18 @@ that each alternate allele has its own VCF row.</p>
 <h2>Display Conventions</h2>
 
 <p>
-The track is drawn in the standard UCSC VCF representation. Mouseover
-shows the variant, reference/alternate alleles, AC, AN and AF. When zoomed
-in, alleles are drawn with base-specific coloring. Homozygous ALT positions
+The track uses the standard UCSC VCF representation. Mouseover
+shows the variant, reference/alternate alleles, AC, AN and AF. At higher
+zoom levels, alleles use base-specific colors. Homozygous ALT positions
 are marked with one letter, heterozygotes with two letters.</p>
 
 <h2>Methods</h2>
 
 <p>
-Long-read sequencing of 1,027 individuals was performed at multiple
-CoLoRSdb member sites. Per-sample variant calls were produced with
-DeepVariant and joint-genotyped with GLnexus to create a cohort-wide
-population VCF. Sites passing CoLoRSdb's standard quality filters were
-included.</p>
+CoLoRSdb member sites sequenced 1,027 individuals with PacBio HiFi
+long reads. Per-sample variant calls came from DeepVariant. GLnexus
+then joint-genotyped them into a cohort-wide population VCF. Only
+sites that passed CoLoRSdb's standard quality filters are included.</p>
 
 <h2>Data Access</h2>
 
@@ -64,11 +63,11 @@ repositories.</p>
 <h2>Credits</h2>
 
 <p>Thanks to the Consortium of Long Read Sequencing (CoLoRSdb) members
-and PacBio for producing and releasing these joint-called long-read
+and PacBio, who produced and released these joint-called long-read
 variant frequencies.</p>
 
 <h2>References</h2>
 
-<p>See the main <a href="hgTrackUi?g=varFreqs">Variant Frequencies</a>
+<p>See the main <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a>
 container track for the general context and a comparison table across
 all included frequency databases.</p>

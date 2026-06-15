@@ -3043,7 +3043,7 @@ freeMem(tdbDataTypes);
 return list;
 }
 
-unsigned int cartDbParseId(char *, char **);  // ADS: avoid extra include
+unsigned long cartDbParseId(char *, char **);  // ADS: avoid extra include
 
 
 static void facetedCompositeUi(struct trackDb *tdb)
@@ -3337,7 +3337,8 @@ printf("<tr><td>Permission:</td><td>"
     "</td></tr>\n");
 printf("<tr><td>Share with:</td>"
     "<td><input type=\"text\" id=\"shareTargetUser\""
-    " placeholder=\"Username (blank = anyone with link)\" style=\"width:250px\"></td></tr>\n");
+    " placeholder=\"Username(s), comma-separated (blank = anyone with link)\""
+    " style=\"width:250px\"></td></tr>\n");
 printf("<tr><td>Label:</td>"
     "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
     " style=\"width:250px\"></td></tr>\n");
@@ -3569,8 +3570,8 @@ if (tdbSupportsColorOverride(tdb))
 /* myVariants own track: render inline share management. Skip shared tracks
  * (myVariants_shared_*) - you can't re-share someone else's data. */
 if (cfgOptionBooleanDefault("doMyVariants", FALSE)
-    && startsWith("myVariants_", tdb->track)
-    && !startsWith("myVariants_shared_", tdb->track))
+    && isMyVariantsTrack(tdb->track)
+    && !isMyVariantsSharedTrack(tdb->track))
     myVariantsShareUi(tdb);
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3638,7 +3639,7 @@ if (!tdb->parent)
 // show super-track info
 struct trackDb *tdbParent = tdb->parent;
 
-printf("<b>Back to parent track: "
+printf("<b>Configure track container: "
            "<img height=12 src='../images/ab_up.gif'>"
             "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
@@ -4026,7 +4027,7 @@ if (!tdbIsDownloadsOnly(tdb))
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
         if (differentString(tdb->type, "chromGraph") &&
-            differentString(tdb->type, "myVariants"))
+            !isMyVariantsType(tdb->type))
             {
             char buf[256];
             if (ajax)
@@ -4038,8 +4039,8 @@ if (!tdbIsDownloadsOnly(tdb))
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
             cgiMakeOnClickButton("htui_updtCustTrk", buf, "Update custom track");
             }
-        if (sameString(tdb->type, "myVariants") &&
-            !startsWith("myVariants_shared_", tdb->track))
+        if (isMyVariantsType(tdb->type) &&
+            !isMyVariantsSharedTrack(tdb->track))
             {
             /* Labels are per (track, db) so the same myVariants table can
              * carry a different name on each assembly. */
@@ -4079,8 +4080,11 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
             downArrow = "&darr;";
         printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtrack list section of "
                "page'>Subtracks%s</A>", downArrow);
-        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-               "Description%s</A>", downArrow);
+        if (isNotEmpty(tdb->html))
+            {
+            printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+                   "Description%s</A>", downArrow);
+            }
         if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
@@ -4094,10 +4098,13 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         enum browserType browser = cgiBrowser();
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
-        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-        printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-               "Description%s</A>", downArrow);
-        printf("&nbsp;</span>");
+        if (isNotEmpty(tdb->html))
+            {
+            printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
+            printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+                   "Description%s</A>", downArrow);
+            printf("&nbsp;</span>");
+            }
         }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
@@ -4521,7 +4528,7 @@ else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track)
-         || (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", track)))
+         || (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(track)))
     {
     /* myVariants tracks (own and shared) are built dynamically and live in
      * the CT list rather than the SQL trackDb table, but their names don't
@@ -4540,14 +4547,14 @@ else if (isCustomTrack(track)
      * the myVariants CT file and re-parse. Normally the CT file was written
      * during the preceding hgTracks visit, so this branch only fires for
      * bookmarked URLs or direct links. */
-    if (tdb == NULL && startsWith("myVariants_", track))
+    if (tdb == NULL && isMyVariantsTrack(track))
         {
         char *userName = getUserName();
         char *ctFile = myVariantsWriteCtFile(userName, database, cart);
         if (isNotEmpty(ctFile))
             {
             char mvVarName[256];
-            safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+            safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
             cartSetString(cart, mvVarName, ctFile);
             freeMem(ctFile);
             ctList = customTracksParseCart(database, cart, NULL, NULL);
@@ -4582,6 +4589,8 @@ if (tdb == NULL)
 if (isDup)
     {
     struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    if (dup == NULL)
+        errAbort("Can't find duplicate track %s", dupWholeName);
     tdb = dupTdbFrom(tdb, dup);
     }
 

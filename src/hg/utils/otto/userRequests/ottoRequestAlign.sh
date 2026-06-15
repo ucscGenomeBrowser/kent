@@ -5,18 +5,20 @@
 #
 # usage: ottoRequestAlign.sh <id>
 #
-# Queries hgcentraltest.ottoRequest for fromDb/toDb, then looks up
-# each accession in hgcentraltest.genark for asmName and clade.
+# Queries ${centDb}.ottoRequest for fromDb/toDb, then looks up
+# each accession in ${centDb}.genark for asmName and clade.
 # Prints and executes the resulting kegAlignLastz.sh command.
 
 set -eEu -o pipefail
+export centDb="hgcentral"
+export hgSql="hgsql -hgenome-centdb"
 
 ############################################################################
 ### verify arguments
 ############################################################################
 if [ $# != 1 ]; then
   printf "usage: ottoRequestAlign.sh <id>\n" 1>&2
-  printf "  where <id> is a row id from hgcentraltest.ottoRequest\n" 1>&2
+  printf "  where <id> is a row id from ${centDb}.ottoRequest\n" 1>&2
   exit 255
 fi
 
@@ -37,8 +39,8 @@ esac
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=7 WHERE id=${id};" "${centDb}"
 }
 
 ############################################################################
@@ -48,11 +50,11 @@ function setErrorStatus() {
 ############################################################################
 function genarkLookup() {
   local acc=$1
-  local result=$(/cluster/bin/x86_64/hgsql -N -e \
+  local result=$(/cluster/bin/x86_64/${hgSql} -N -e \
     "SELECT gcAccession,asmName,clade from genark WHERE gcAccession='${acc}';" \
-    hgcentraltest)
+    ${centDb})
   if [ -z "${result}" ]; then
-    printf "ERROR: accession '%s' not found in hgcentraltest.genark\n" "${acc}" 1>&2
+    printf "ERROR: accession '%s' not found in ${centDb}.genark\n" "${acc}" 1>&2
     setErrorStatus ${requestId}
     return 1
   fi
@@ -135,12 +137,12 @@ function asmN50() {
 ############################################################################
 # step 1: look up fromDb and toDb from ottoRequest
 ############################################################################
-export ottoResult=$(/cluster/bin/x86_64/hgsql -N -e \
-  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" hgcentraltest)
+export ottoResult=$(/cluster/bin/x86_64/${hgSql} -N -e \
+  "SELECT fromDb,toDb from ottoRequest WHERE id=${requestId} AND status = 1 AND requestType = 'liftOver';" ${centDb})
 
 if [ -z "${ottoResult}" ]; then
   printf "ERROR: no ottoRequest row found for id=%s AND status = 1\n" "${requestId}" 1>&2
-  /cluster/bin/x86_64/hgsql -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" hgcentraltest 1>&2
+  /cluster/bin/x86_64/${hgSql} -e "SELECT fromDb,toDb,status from ottoRequest WHERE id=${requestId};" "${centDb}" 1>&2
   exit 255
 fi
 
@@ -263,9 +265,9 @@ mkdir -p  "${buildDir}"
 # printf "# buildDir: %s\n" "${buildDir}" 1>&2
 
 # store buildDir in ottoRequest table for workflowMonitor.sh
-/cluster/bin/x86_64/hgsql -N -e \
+/cluster/bin/x86_64/${hgSql} -N -e \
   "UPDATE ottoRequest SET buildDir='${buildDir}', status=2 WHERE id=${requestId};" \
-  hgcentraltest
+  "${centDb}"
 
 ############################################################################
 # step 5: map clades and build the kegAlignLastz.sh command

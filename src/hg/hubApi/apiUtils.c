@@ -819,3 +819,22 @@ void textFinishOutput()
 puts("Content-Type:text/plain\n");
 printf("%s", dyStringCannibalize(&textOutput));
 }
+
+struct sqlConnection *hConnectOtto()
+/* Connect to otto database using otto profile, fallback to central */
+{
+char *ottoDb = cfgOption2("otto", "db");
+if (isEmpty(ottoDb)) // No otto profile defined, use central
+    return hConnectCentralNoCache();
+
+struct sqlConnection *conn = sqlConnectProfile("otto", ottoDb);
+if (conn == NULL)
+    errAbort("Cannot connect to otto database '%s' using otto profile", ottoDb);
+return conn;
+}
+
+void hDisconnectOtto(struct sqlConnection **pConn)
+/* Disconnect otto connection */
+{
+sqlDisconnect(pConn);
+}

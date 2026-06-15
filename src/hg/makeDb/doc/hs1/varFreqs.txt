@@ -1,0 +1,22 @@
+# 2026-05-18 Claude max
+
+# SweGen 1000 Swedish WGS, recomputed against T2T-CHM13.
+# File received from SweFreq/SciLifeLab via the public SweGen download form at
+#   https://swefreq.nbis.se/dataset/SweGen
+# Used as-is, no further processing.
+
+cd /hive/data/genomes/hs1/bed/varFreqs/swegen
+# SweGen_T2T-CHM13_RefSeq_20251201.vcf.gz was placed here; tabix .tbi was
+# copied from the parallel hg38 directory where the same file had been
+# downloaded earlier (identical md5).
+
+# Symlink into /gbdb under the same dir name (_swefreq) and filename used by
+# the shared hg38 swefreq trackDb stanza so the parent's bigDataUrl
+# (/gbdb/$D/varFreqs/_swefreq/swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz)
+# resolves correctly on hs1 with no override needed.
+mkdir -p /gbdb/hs1/varFreqs/_swefreq
+cd /gbdb/hs1/varFreqs/_swefreq
+ln -s /hive/data/genomes/hs1/bed/varFreqs/swegen/SweGen_T2T-CHM13_RefSeq_20251201.vcf.gz \
+      swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz
+ln -s /hive/data/genomes/hs1/bed/varFreqs/swegen/SweGen_T2T-CHM13_RefSeq_20251201.vcf.gz.tbi \
+      swegen_frequencies_fixploidy_GRCh38_20190204.vcf.gz.tbi

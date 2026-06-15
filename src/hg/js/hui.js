@@ -1699,18 +1699,56 @@ function myVariantsShareLoad() {
         data.shares.forEach(function(s) {
             let tr = document.createElement("tr");
             tr.style.borderBottom = "1px solid #eee";
-            let cells = [
-                s.project === "*" ? "All" : s.project,
-                s.permission === 0 ? "View" : "Edit",
-                s.targetUser ? s.targetUser : "Anyone with link",
-                s.label ? s.label : "",
-                s.createdAt
-            ];
-            cells.forEach(function(text) {
+
+            // Project (plain text)
+            let projTd = document.createElement("td");
+            projTd.textContent = s.project === "*" ? "All" : s.project;
+            tr.appendChild(projTd);
+
+            // Permission: a View/Edit dropdown that applies immediately on change
+            let permTd = document.createElement("td");
+            let permSel = document.createElement("select");
+            permSel.dataset.token = s.shareToken;
+            [["0", "View"], ["1", "Edit"]].forEach(function(opt) {
+                let o = document.createElement("option");
+                o.value = opt[0];
+                o.textContent = opt[1];
+                permSel.appendChild(o);
+            });
+            permSel.value = String(s.permission);
+            permSel.addEventListener("change", function() {
+                myVariantsShareSetPermission(this.dataset.token, this.value);
+            });
+            permTd.appendChild(permSel);
+            tr.appendChild(permTd);
+
+            // Shared With: editable comma-separated username list + Save link
+            let usersTd = document.createElement("td");
+            let usersInput = document.createElement("input");
+            usersInput.type = "text";
+            usersInput.style.width = "180px";
+            usersInput.value = s.targetUser ? s.targetUser : "";
+            usersInput.placeholder = "blank = anyone with link";
+            usersInput.dataset.token = s.shareToken;
+            let saveLink = document.createElement("a");
+            saveLink.href = "#";
+            saveLink.textContent = "Save";
+            saveLink.style.marginLeft = "4px";
+            saveLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                myVariantsShareSetTargets(usersInput.dataset.token, usersInput.value);
+            });
+            usersTd.appendChild(usersInput);
+            usersTd.appendChild(saveLink);
+            tr.appendChild(usersTd);
+
+            // Label, Created (plain text)
+            [s.label ? s.label : "", s.createdAt].forEach(function(text) {
                 let td = document.createElement("td");
                 td.textContent = text;
                 tr.appendChild(td);
             });
+
             let actionTd = document.createElement("td");
             let revokeLink = document.createElement("a");
             revokeLink.href = "#";
@@ -1732,10 +1770,33 @@ function myVariantsShareLoad() {
     });
 }
 
+function myVariantsShareNormalizeTargets(raw) {
+    // Split a comma-separated username list, trim, drop empties, de-dup.
+    // Returns {value: "a,b", error: null} or {value: null, error: "..."}.
+    // Server remains the authoritative validator (membership, length).
+    let seen = {};
+    let names = [];
+    let bad = null;
+    raw.split(",").forEach(function(tok) {
+        let name = tok.trim();
+        if (name === "") return;
+        if (/\s/.test(name)) bad = name;
+        if (!seen[name]) { seen[name] = true; names.push(name); }
+    });
+    if (bad !== null)
+        return { value: null, error: "username '" + bad + "' contains a space" };
+    return { value: names.join(","), error: null };
+}
+
 function myVariantsShareCreate() {
     let project = document.getElementById("shareProject").value;
     let permission = document.querySelector('input[name="sharePerm"]:checked').value;
-    let targetUser = document.getElementById("shareTargetUser").value.trim();
+    let norm = myVariantsShareNormalizeTargets(document.getElementById("shareTargetUser").value);
+    if (norm.error) {
+        warn("Error creating share: " + norm.error);
+        return;
+    }
+    let targetUser = norm.value;
     let label = document.getElementById("shareLabel").value.trim();
 
     let params = { project: project, permission: permission };
@@ -1773,6 +1834,51 @@ function myVariantsShareRevoke(token) {
     })
     .catch(function(err) {
         warn("Error revoking share: " + err.message);
+    });
+}
+
+function myVariantsShareSetPermission(token, permission) {
+    fetch(myVariantsShareApiUrl("setSharePermission", { shareToken: token, permission: permission }),
+          { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error)
+            warn("Error updating permission: " + data.error);
+        // Reload either way so the controls reflect the true server state.
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error updating permission: " + err.message);
+        myVariantsShareLoad();
+    });
+}
+
+function myVariantsShareSetTargets(token, rawTargetUser) {
+    let norm = myVariantsShareNormalizeTargets(rawTargetUser);
+    if (norm.error) {
+        warn("Error updating recipients: " + norm.error);
+        return;
+    }
+    if (!norm.value &&
+        !confirm("Leaving the recipient list blank lets anyone with the link read this " +
+                 "track (and edit it if the link permission is set to Edit). Continue?")) {
+        myVariantsShareLoad();
+        return;
+    }
+    // Pass the normalized list explicitly; "" means "anyone with link", which
+    // myVariantsShareApiUrl would otherwise drop, so build params directly.
+    let params = { shareToken: token };
+    if (norm.value) params.targetUser = norm.value;
+    fetch(myVariantsShareApiUrl("setShareTargets", params), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error)
+            warn("Error updating recipients: " + data.error);
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error updating recipients: " + err.message);
+        myVariantsShareLoad();
     });
 }
 

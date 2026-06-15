@@ -46,9 +46,21 @@
 </tr>
 
 <tr>
+    <td>2026-06-02</td>
+    <td>bigBed, bigGenePred</td>
+    <td><a href="trackDbHub.html#colorFields">colorFields</a></td>
+    <td>New <code>colorFields</code> setting adds a <b>Color by:</b> dropdown to the
+    track controls page, letting users switch among multiple pre-computed color schemes
+    stored as extra bigBed fields containing <code>R,G,B</code> strings.
+    The special name <code>default="label"</code> renames the standard itemRgb option.
+    When a non-default scheme is selected, a <em>(Coloring by: label)</em> suffix
+    appears in the track long label.</td>
+</tr>
+
+<tr>
     <td>2026-05-08</td>
     <td>bed, bigBed</td>
-    <td><a href="trackDbHub.html#filterPriority">filterPriority</a></td>
+    <td><a href="trackDbHub.html#filterPriority">filterPriority</a> / <a href="trackDbHub.html#highlightPriority">highlightPriority</a></td>
     <td>New <code>filterPriority.&lt;fieldName&gt;</code> setting controls the
     display order of filter controls on the track configuration page. A
     companion <code>highlightPriority.&lt;fieldName&gt;</code> setting orders

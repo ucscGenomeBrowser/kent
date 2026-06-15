@@ -184,7 +184,97 @@ function validateEmail(checkEmail) {
     return true;
 }
 
+function checkLoginStatus() {
+    // Check user login status and update UI accordingly
+    const returnTo = encodeURIComponent(window.location.href);
+    fetch(`/cgi-bin/hubApi/liftOver/loginStatus?returnTo=${returnTo}`)
+        .then(response => response.json())
+        .then(data => {
+            updateUIForLoginStatus(data);
+        })
+        .catch(error => {
+            console.log('Login status check failed:', error);
+            // Assume not logged in on error
+            updateUIForLoginStatus({userName: null});
+        });
+}
+
+function updateUIForLoginStatus(loginData) {
+    const emailInput = document.getElementById('emailInput');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Create or update login banner
+    let loginBanner = document.getElementById('loginBanner');
+    if (!loginBanner) {
+        loginBanner = document.createElement('div');
+        loginBanner.id = 'loginBanner';
+        loginBanner.style.cssText = 'background-color: #f0f8ff; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd;';
+
+        // Insert after the h1 title
+        const formContainer = document.getElementById('formContainer');
+        const title = formContainer.querySelector('h1');
+        title.parentNode.insertBefore(loginBanner, title.nextSibling);
+    }
+
+    if (loginData.userName) {
+        // User is logged in
+        var displayName = loginData.realName || loginData.userName;
+        loginBanner.innerHTML = '<p>Welcome, <strong>' + displayName + '</strong> | ' +
+            '<a href="' + loginData.logoutUrl + '">Sign out</a></p>';
+
+        // Prefill and lock email field
+        emailInput.value = loginData.email || '';
+        emailInput.readOnly = true;
+        emailInput.style.backgroundColor = '#f5f5f5';
+        emailInput.style.cursor = 'not-allowed';
+
+        // Update email form description
+        const emailForm = document.getElementById('emailForm');
+        const description = emailForm.querySelector('.description');
+        if (description) {
+            description.textContent = 'Notifications will be sent to your registered account email address.';
+        }
+
+        // Enable submit button
+        submitBtn.disabled = false;
+        submitBtn.value = 'Submit Request';
+        submitBtn.style.backgroundColor = '';
+        submitBtn.style.cursor = '';
+    } else {
+        // User is not logged in
+        loginBanner.innerHTML = '<p>To submit requests, please ' +
+            '<a href="' + loginData.loginUrl + '">sign in</a> or ' +
+            '<a href="' + loginData.signupUrl + '">create an account</a></p>';
+
+        // Disable and gray out email field
+        emailInput.value = '';
+        emailInput.placeholder = 'Sign in required';
+        emailInput.disabled = true;
+        emailInput.style.backgroundColor = '#f0f0f0';
+
+        // Update email form description
+        const emailForm = document.getElementById('emailForm');
+        const description = emailForm.querySelector('.description');
+        if (description) {
+            description.textContent = 'You must sign in to submit alignment requests.';
+        }
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.value = 'Sign in Required';
+        submitBtn.style.backgroundColor = '#ddd';
+        submitBtn.style.cursor = 'not-allowed';
+    }
+}
+
 function submitForm() {
+    // Check if submit button is disabled (user not logged in)
+    var submitBtn = document.getElementById("submitBtn");
+    if (submitBtn.disabled) {
+        alert("Please sign in to submit alignment requests");
+        return;
+    }
+
     var email = document.getElementById("emailInput").value;
     var comments = document.getElementById("commentsInput").value;
 
@@ -297,13 +387,17 @@ document.addEventListener("DOMContentLoaded", () => {
         let val = document.getElementById("genomeSearch2").value;
         $("[id='genomeSearch2']").autocompleteCat("search", val);
     });
-    // restore saved email if it exists
+    // restore saved email if it exists (only for anonymous users)
+    // Note: logged-in users get their email from the login system
     var savedEmail = localStorage.getItem('liftRequestEmail');
     if (savedEmail) {
+        // Will be overridden by checkLoginStatus() if user is logged in
         document.getElementById("emailInput").value = savedEmail;
     }
 
     document.getElementById("dismissLiftExists").addEventListener("click", dismissLiftExists);
     document.getElementById("dismissPending").addEventListener("click", resetFormVisibility);
     document.getElementById("dismissError").addEventListener("click", resetFormVisibility);
+
+    checkLoginStatus();
 });

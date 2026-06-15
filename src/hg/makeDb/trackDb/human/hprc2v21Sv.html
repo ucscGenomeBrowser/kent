@@ -1,0 +1,109 @@
+<h2>Description</h2>
+<p>
+A pangenome graph holds many human genomes at once. Sequence that the
+genomes share collapses onto common paths, and the places where they
+differ show up as bubbles in the graph. This track shows the structural
+variants found in version 2.1 of the Human Pangenome Reference Consortium
+(HPRC) minigraph-cactus graph, which was built from haplotype-resolved
+PacBio HiFi assemblies of 233 samples. Only larger events are shown here:
+insertions and deletions of at least 50 bp. HPRC produces one variant file
+per reference path, so the events are measured against GRCh38 on hg38 and
+against T2T-CHM13 on hs1, and each assembly shows its own native callset.
+</p>
+<p>
+On hg38 there are about 550,000 such alleles (roughly 422,000 insertions and
+128,000 deletions). On hs1 there are about 541,000 (roughly 348,000
+insertions and 193,000 deletions). The two sets are not lifted between
+assemblies; the counts differ because an insertion against one reference can
+be a deletion against the other.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#0000C8;width:2em">&nbsp;</th>
+      <td>Insertion (INS)</td></tr>
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Deletion (DEL)</td></tr>
+</table>
+<p>
+An insertion is drawn as a 1 bp anchor at the point where the extra
+sequence goes in. A deletion spans the stretch of reference that is
+missing. Each variant keeps its allele count, allele frequency, the
+number of samples with data, and the level it sits at in the graph's
+snarl tree. A snarl level of 0 is a top-level bubble; higher numbers are
+bubbles nested inside a parent bubble. All of these can be used as
+filters.
+</p>
+
+<h2>Methods</h2>
+<p>
+HPRC release 2 does not yet have a peer-reviewed paper. The graph was
+built with minigraph-cactus from haplotype-resolved PacBio HiFi assemblies
+of 233 samples, including T2T-CHM13 and the diverse 1000 Genomes Project
+panel, using GRCh38 as the reference path. Variants were called from the
+graph with <tt>vg deconstruct</tt>. HPRC keeps the sample list and assembly
+provenance in
+<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv" target="_blank">
+alignments_v2.0.csv</a>.
+</p>
+<p>
+We started from the per-reference files provided by the HPRC graph team,
+<tt>hprc-v2.1-mc-grch38.gref95.ro.vcf.gz</tt> for hg38 and
+<tt>hprc-v2.1-mc-chm13.gref95.ro.vcf.gz</tt> for hs1. These are the raw
+<tt>vg deconstruct</tt> output: each graph bubble is one multi-allelic
+record with its graph traversals attached, and there are no per-allele type
+or length fields. To turn a file into a track, we compared every alternate
+allele to the reference allele after trimming the sequence they share at
+each end. An allele was kept when the net length change was at least 50 bp,
+and labeled an insertion when the alternate is longer or a deletion when it
+is shorter. At this size no balanced, equal-length substitutions came up,
+and the files carry no inversion calls, so the track has only insertions and
+deletions. On hg38, 549,649 alleles were kept (40,678 at nested snarl
+levels); on hs1, 541,176 (70,200 nested), after removing byte-identical
+duplicate records. Because these files are not broken
+down into atomic indels, one bubble can appear as a single large allele
+rather than several small ones, so the counts are not comparable to a
+wave-decomposed callset. Allele counts, frequencies and sample counts come
+straight from the VCF.
+</p>
+<p>
+The conversion script and autoSql schema are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a> and the build steps are in the makeDoc at
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a>, and read programmatically
+through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>hprc2v21Sv</i>. For automated download and analysis the variants
+are in a bigBed file on our download server, one per assembly:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2v21.bb" target="_blank">
+hg38</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/hprc2v21.bb" target="_blank">
+hs1</a>. You can pull out one region or the whole set with
+<tt>bigBedToBed</tt>, for example
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/hprc2v21.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Human Pangenome Reference Consortium for building and
+releasing the release-2 minigraph-cactus pangenome, and to Glenn Hickey
+for the v2.1 deconstructed VCF.
+</p>
+
+<h2>References</h2>
+<p>
+HPRC release 2 is not yet described in a peer-reviewed publication. The
+release announcement has background and data-access details:
+<a href="https://humanpangenome.org/hprc-data-release-2/" target="_blank">
+HPRC data release 2</a>.
+</p>

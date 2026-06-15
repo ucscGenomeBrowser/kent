@@ -10,16 +10,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType, insLenFor
-
-# Colors by SV type (R,G,B)
-SV_COLORS = {
-    "DEL": "200,0,0",      # red
-    "INS": "0,0,200",      # blue
-    "DUP": "0,160,0",      # green
-    "INV": "230,140,0",    # orange
-    "TRA": "140,0,200",    # purple
-}
+from lrSvCommon import svName, normalizeSvType, insLenFor, svColor
 
 def parseInfo(infoStr):
     """Parse INFO field into a dict."""
@@ -88,7 +79,7 @@ def main():
             # Strand from first character of STRANDS field
             strand = strands[0] if strands and strands[0] in "+-" else "."
 
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             # sampleList from SUPP_VEC
             sampleList = suppVecToList(suppVec)

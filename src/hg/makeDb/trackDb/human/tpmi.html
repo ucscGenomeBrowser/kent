@@ -1,0 +1,135 @@
+<h2>Description</h2>
+<p>
+This track shows allele frequencies for 672,843 variants from the
+<a href="https://tpmi.ibms.sinica.edu.tw/" target="_blank">Taiwan
+Precision Medicine Initiative (TPMI)</a>, a large cohort of people of
+Han Chinese ancestry recruited in Taiwan. The frequencies come from the
+publicly released annotation of the Axiom TPM1 SNP array, the
+population-optimized chip that TPMI used to genotype 165,596 of its
+participants. Variants are positioned on hg38 (GRCh38). About 80% of
+the sites are biallelic SNVs; the remainder are short insertions or
+deletions and a small number of multi-nucleotide variants.
+</p>
+
+<p>
+TPMI is one of the largest non-European cohorts in genetic research,
+with 565,390 enrolled participants as of the v37 data freeze. Han
+Chinese people are nearly 20% of the world's population but are
+under-represented in genetic studies. A cohort of this size is useful
+for population-specific allele frequency reference, GWAS replication,
+and clinical variant interpretation in East Asian populations.
+</p>
+
+<h2>Display</h2>
+<p>
+The track uses the standard UCSC VCF display. Hovering a variant shows
+the cohort allele frequency (<tt>AF</tt>), the derived allele count
+(<tt>AC</tt>), the assumed total allele number (<tt>AN</tt>), the TPMI
+NGS concordance score from the chip annotation, and the Affymetrix
+probe set ID.
+</p>
+
+<h2>Methods</h2>
+<p>
+TPMI participants were recruited from 16 partner medical centres (33
+affiliated hospitals) across Taiwan, who together serve about 40% of the
+Taiwanese population. Each participant donated a blood sample and
+consented to access of their electronic medical records. Genomic DNA
+was extracted with the QIAsymphony DSP DNA Mini Kit and genotyped on
+two custom Axiom arrays (TPMv1 and TPMv2; Thermo Fisher Scientific)
+designed to optimally tag Han Chinese variation. Genotype calling was
+done with Applied Biosystems Array Power Tools using the Best Practices
+Workflow at the National Center for Genome Medicine, Academia Sinica.
+After QC, the TPMv1 array had been used on 165,596 participants and
+TPMv2 on 321,360 (486,956 with both genotype and EMR). The cohort has
+broad coverage of Han Chinese subgroups as well as Indigenous Taiwanese
+populations. See the TPMI Nature paper (in References) for sample
+recruitment, calling, imputation and quality control details.
+</p>
+<p>
+The source data for this track is the Axiom TPM1 chip annotation file
+<tt>TPM1_Array_Annotation.csv</tt> distributed by Thermo Fisher
+Scientific (create date 2022-06-01), which embeds the TPMI cohort allele
+frequency in a column named <tt>Allele Frequency</tt> alongside the
+probe-design metadata. The chip annotation declares hg38 coordinates,
+so no liftover was needed. We converted the CSV to VCF with the script
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/tpmi/tpmiToVcf.py" target="_blank">tpmiToVcf.py</a>:
+rows on alt or random contigs were dropped, rows flagged as TPMI
+blacklist or with no reported allele frequency were dropped, and indels
+encoded with <tt>-</tt> for the empty allele were rewritten in
+VCF-compatible form by prepending an anchor base read from the hg38
+reference with <tt>twoBitToFa</tt>. The resulting VCF was sorted and
+indexed with <tt>bcftools sort</tt> and <tt>tabix</tt>. The full
+recipe is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
+file</a>.
+</p>
+<p>
+The source publishes only allele frequencies, not allele counts. To
+make the track usable in count-based aggregate views, we derived
+<tt>AC = round(AF * AN)</tt> with <tt>AN = 100,000</tt>. This AN value
+was chosen because every reported AF in the file is an exact integer
+multiple of 1/100,000, so the source data was rounded to that
+precision. The TPMv1 chip was used on 165,596 participants (~330,000
+chromosomes for autosomes), so the true AN may be roughly three times
+larger; the AC values published here are therefore proportional to the
+true counts but not equal to them. The assumption is documented in the
+VCF header.
+</p>
+
+<h2>Caveats</h2>
+<p>
+Of 752,921 rows in the source CSV, 672,843 were emitted to the VCF.
+The skipped rows are: 80,034 rows with no reported allele frequency
+(the chip carries probe annotations for some sites that the TPMI cohort
+did not type or quality-filter, including the entire chrY content of
+the chip); 36 rows on alt or random contigs; 8 rows with no defined
+reference allele in the source. About 61,000 rows are also flagged as
+TPMI blacklist; none of those have a published allele frequency, so
+they are filtered out by the no-AF rule.
+</p>
+<p>
+The TPM2 chip annotation (~755,000 SNPs) is not represented in this
+track because its public annotation does not embed a TPMI cohort allele
+frequency column. It only carries the 1000 Genomes / HapMap CEU/CHB/JPT/YRI
+frequencies that ship with all Affymetrix Axiom chips, which are already
+available through dbSNP. About 234,255 SNPs are shared between TPM1 and
+TPM2, so the TPM1-only track still covers most of the cohort-typed
+content.
+</p>
+<p>
+The TPMI authors note that allele frequencies on the TPMv1 chip are
+reliable for variants with MAF above about 0.1%; rarer sites are
+reported but should be interpreted cautiously because SNP arrays have
+higher genotyping error at low MAF.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
+</p>
+<p>
+The original Axiom TPM1 chip annotation CSV is distributed by Thermo Fisher Scientific;
+search their support site for "Axiom TPM1 Annotation" to download the matching version
+(we used the 2022-06-01 release).
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the TPMI participants and to the Academia Sinica and Thermo
+Fisher Scientific teams that designed and curated the Axiom TPMv1 SNP
+array and published the chip annotation file.
+</p>
+
+<h2>References</h2>
+<p>
+Yang HC, Kwok PY, Li LH, Liu YM, Jong YJ, Lee KY, Wang DW, Tsai MF, Yang JH, Chen CH <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-025-09680-x" target="_blank">
+The Taiwan Precision Medicine Initiative provides a cohort for large-scale studies</a>.
+<em>Nature</em>. 2025 Dec;648(8092):117-127.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41092961" target="_blank">41092961</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12675286/" target="_blank">PMC12675286</a>
+</p>
+

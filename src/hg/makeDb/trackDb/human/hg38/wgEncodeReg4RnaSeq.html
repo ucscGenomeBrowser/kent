@@ -1,10 +1,10 @@
 <h2>Description</h2>
 
-<p>This track displays genome-wide, strand-specific transcription levels from 1,046
-individual ENCODE total RNA-seq experiments. The data capture both coding and non-coding
-RNAs profiled across all phases of the ENCODE project. The signal shown is derived from
-the reads per million (RPM) of uniquely mapped reads on each genomic strand. The data
-are processed following the
+<p>This track displays genome-wide, strand-specific transcription levels from 523
+individual ENCODE total RNA-seq experiments. The data capture both coding and non-coding RNAs
+profiled across all phases of the ENCODE project. The signal shown is derived from the
+reads per million (RPM) of uniquely mapped reads on each genomic strand. The data are
+processed following the
 <a target="_blank" href="https://www.encodeproject.org/data-standards/encode4-bulk-rna/">ENCODE
 bulk RNA-seq pipeline</a>.</p>
 
@@ -16,10 +16,73 @@ Additional datasets measuring transcription levels are available at the
 
 <h2>Display Conventions and Configuration</h2>
 
-<p>Subtracks are organized by strand (plus and minus strand views). Click a specific
-biosample type and organ/tissue combination to view available datasets. Subtracks can be
-further filtered by life stage of the biosample. Each track is colored based on the
-organ/tissue of origin.</p>
+<p>Click a specific biosample type and organ/tissue combination to view available datasets.
+Subtracks can be further filtered by Organ, Biosample Type, Life Stage, and Strand (plus
+or minus). Each track is colored based on the organ/tissue of origin.</p>
+
+<p>Plus Strand and Minus Strand subtracks are colored by the organ or tissue of origin, as shown below.</p>
+<table cellspacing="0" cellpadding="4" style="margin-top: 0.5em; border-collapse: collapse;">
+  <tr>
+    <td style="background-color:rgb(255,119,39); padding:4px 12px; border:1px solid #666;">adipose</td>
+    <td style="background-color:rgb(90,179,68); padding:4px 12px; border:1px solid #666;">adrenal gland</td>
+    <td style="background-color:rgb(254,75,173); padding:4px 12px; border:1px solid #666;">blood</td>
+    <td style="background-color:rgb(255,37,41); padding:4px 12px; border:1px solid #666;">blood vessel</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(121,147,150); padding:4px 12px; border:1px solid #666;">bone</td>
+    <td style="background-color:rgb(155,155,18); padding:4px 12px; border:1px solid #666;">brain</td>
+    <td style="background-color:rgb(65,171,173); padding:4px 12px; border:1px solid #666;">breast</td>
+    <td style="background-color:rgb(138,135,169); padding:4px 12px; border:1px solid #666;">connective tissue</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(118,158,101); padding:4px 12px; border:1px solid #666;">embryo</td>
+    <td style="background-color:rgb(221,126,107); padding:4px 12px; border:1px solid #666;">epithelium</td>
+    <td style="background-color:rgb(159,131,100); padding:4px 12px; border:1px solid #666;">esophagus</td>
+    <td style="background-color:rgb(163,127,144); padding:4px 12px; border:1px solid #666;">eye</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(103,78,167); padding:4px 12px; border:1px solid #666;">gallbladder</td>
+    <td style="background-color:rgb(116,50,165); padding:4px 12px; border:1px solid #666;">heart</td>
+    <td style="background-color:rgb(92,161,153); padding:4px 12px; border:1px solid #666;">kidney</td>
+    <td style="background-color:rgb(86,86,36); padding:4px 12px; border:1px solid #666;">large intestine</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(137,152,82); padding:4px 12px; border:1px solid #666;">liver</td>
+    <td style="background-color:rgb(130,163,45); padding:4px 12px; border:1px solid #666;">lung</td>
+    <td style="background-color:rgb(130,141,158); padding:4px 12px; border:1px solid #666;">mouth</td>
+    <td style="background-color:rgb(137,135,170); padding:4px 12px; border:1px solid #666;">muscle</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(160,156,0); padding:4px 12px; border:1px solid #666;">nerve</td>
+    <td style="background-color:rgb(181,131,79); padding:4px 12px; border:1px solid #666;">nose</td>
+    <td style="background-color:rgb(161,126,151); padding:4px 12px; border:1px solid #666;">ovary</td>
+    <td style="background-color:rgb(175,100,41); padding:4px 12px; border:1px solid #666;">pancreas</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(20,74,159); padding:4px 12px; border:1px solid #666;">penis</td>
+    <td style="background-color:rgb(104,171,71); padding:4px 12px; border:1px solid #666;">placenta</td>
+    <td style="background-color:rgb(140,140,140); padding:4px 12px; border:1px solid #666;">prostate</td>
+    <td style="background-color:rgb(127,133,209); padding:4px 12px; border:1px solid #666;">skin</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(98,98,41); padding:4px 12px; border:1px solid #666;">small intestine</td>
+    <td style="background-color:rgb(130,141,158); padding:4px 12px; border:1px solid #666;">spinal cord</td>
+    <td style="background-color:rgb(136,157,97); padding:4px 12px; border:1px solid #666;">spleen</td>
+    <td style="background-color:rgb(145,144,99); padding:4px 12px; border:1px solid #666;">stomach</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(139,140,140); padding:4px 12px; border:1px solid #666;">testis</td>
+    <td style="background-color:rgb(27,119,58); padding:4px 12px; border:1px solid #666;">thyroid</td>
+    <td style="background-color:rgb(194,123,160); padding:4px 12px; border:1px solid #666;">trachea</td>
+    <td style="background-color:rgb(194,33,39); padding:4px 12px; border:1px solid #666;">urinary bladder</td>
+  </tr>
+  <tr>
+    <td style="background-color:rgb(186,111,165); padding:4px 12px; border:1px solid #666;">uterus</td>
+    <td style="background-color:rgb(255,101,174); padding:4px 12px; border:1px solid #666;">vagina</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 <h2>Data Access</h2>
 <p>
@@ -48,8 +111,8 @@ The tool can also be used to obtain data confined to a given range, e.g.,
 
 <h2>Credits</h2>
 
-<p>Data were generated by the ENCODE Consortium. We thank the production labs for generating
-the data: Drs. Barbara Wold (Caltech) and Thomas Gingeras (CSHL).</p>
+<p>Data were generated by the ENCODE Consortium through the following production labs:
+Drs. Barbara Wold (Caltech) and Thomas Gingeras (CSHL).</p>
 
 <p>The data were further processed for visualization through a collaborative effort between
 the <a target="_blank" href="https://www.umassmed.edu/zlab">Weng lab</a> and the

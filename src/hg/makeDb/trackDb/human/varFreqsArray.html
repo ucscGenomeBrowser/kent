@@ -1,0 +1,176 @@
+<h2>Description</h2>
+<p>
+This track merges variants from three genotyping-array cohorts into a single bigBed file
+with predicted protein consequences and cross-database filtering. It contains 14.7 million
+variants from the Taiwan Precision Medicine Initiative (TPMI Axiom TPM1 chip,
+~1 million Han Chinese), the Mexico Biobank (MexBB, 6,011 individuals), and UK Biobank
+(361k unrelated white British, imputed from the Neale Lab Round 2 release).
+</p>
+
+<p>
+The array track is kept separate from the sequencing-based combined tracks
+(<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a>) so that
+sequencing-based and array-based frequencies can be inspected independently. For a summary
+of all available variant frequency databases, see the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page.
+</p>
+
+<h2>Display Conventions</h2>
+
+<h3>Color by Consequence</h3>
+<p>Variants are colored by their most severe predicted consequence:</p>
+<table class="stdTbl">
+<tr><th>Color</th><th>Consequence class</th><th>Examples</th></tr>
+<tr><th style="background-color:#FF0000;width:2em">&nbsp;</th>
+    <td>Protein-truncating / loss-of-function</td>
+    <td>stop_gained, frameshift, splice_donor, splice_acceptor, stop_lost, start_lost</td></tr>
+<tr><th style="background-color:#1F77B4;width:2em">&nbsp;</th>
+    <td>Missense / in-frame</td>
+    <td>missense, inframe_insertion, inframe_deletion, protein_altering</td></tr>
+<tr><th style="background-color:#008000;width:2em">&nbsp;</th>
+    <td>Synonymous</td>
+    <td>synonymous, stop_retained</td></tr>
+<tr><th style="background-color:#808080;width:2em">&nbsp;</th>
+    <td>Non-coding / intergenic</td>
+    <td>intron, non_coding, intergenic, UTR</td></tr>
+</table>
+
+<h3>Amino Acid Change Notation</h3>
+<p>
+The &quot;AA change&quot; field uses bcftools csq notation: <b>23I&gt;23V</b> means position
+23 changed from Isoleucine (I) to Valine (V) (missense). <b>23I</b> alone (no arrow)
+means position 23 is Isoleucine and unchanged (synonymous). A &quot;*&quot; indicates a
+stop codon (e.g. 45R&gt;45* is a stop_gained).
+</p>
+
+<h2>Caveats</h2>
+<p>
+Allele frequencies from genotyping arrays are not directly comparable to those from
+whole-genome or whole-exome sequencing. Two limitations to keep in mind:
+</p>
+<ul>
+  <li><b>Probe coverage is sparse and curated.</b> Array variants are only those the
+      manufacturer designed probes for. Absence from this track does <em>not</em> mean a
+      variant is absent in that population, only that it was not on the chip.</li>
+  <li><b>Per-variant call confidence varies and is sometimes unreported.</b> TPMI publishes
+      a per-probe <code>NGS_concordance</code> value (chip-vs-sequencing concordance from
+      its own validation) in the source VCF; high-AF claims with low concordance are
+      common. MexBB ships only AN/AF/AC with no FILTER column and no per-site QC at all.
+      For both arrays, high-AF rare-disease candidates should be cross-checked against the
+      sequencing-based
+      <a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track before
+      drawing conclusions.</li>
+</ul>
+
+<h2>Filters</h2>
+<p>
+This track supports filtering via the track settings page. Click the track title or use the
+&quot;Configure&quot; button to access filters.
+</p>
+
+<h3>Variant Type and Consequence</h3>
+<ul>
+  <li><b>Variant Type</b>: SNV, Insertion, Deletion, or MNV.</li>
+  <li><b>Consequence</b>: Missense, Synonymous, Stop Gained, Frameshift, Splice Donor,
+      Splice Acceptor, Intron, 3' UTR, 5' UTR, Non-coding, Intergenic, or Other. The filter
+      uses OR logic across the comma-separated consequence tokens on each variant. See the
+      <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page for a complete
+      description of the &quot;Other&quot; bucket.</li>
+</ul>
+
+<h3>Frequency and Count Filters</h3>
+<ul>
+  <li><b>Max Allele Frequency</b>: Filter by the maximum AF observed across the three
+      array sources.</li>
+  <li><b>Total Allele Count</b>: Filter by the sum of allele counts across all three
+      databases.</li>
+  <li><b>Per-database AF and AC</b>: Filter by allele frequency or count in any specific
+      source (TPMI Taiwan, Mexico Biobank, UK Biobank imputed).</li>
+</ul>
+
+<h3>Source Database</h3>
+<p>
+The <b>Source Database</b> filter restricts the display to variants present in specific
+databases. It uses OR logic.
+</p>
+
+<h3>Length Filters</h3>
+<ul>
+  <li><b>Reference/Alternate Length</b>: Filter by the length of the reference or alternate allele.</li>
+  <li><b>Length Change</b>: Filter by the size difference between alternate and reference
+      (positive = insertion, negative = deletion, zero = SNV or MNV).</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+The same merge-and-annotate pipeline used for the sequencing-based combined tracks
+(<a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a> and
+<a href="hgTrackUi?g=varFreqsBackground">Population reference</a>) was run on the
+array-cohort subset of source VCFs. Each VCF was stripped of its INFO fields, normalized
+with <code>bcftools norm</code> (splitting multi-allelic sites), and merged with
+<code>bcftools merge</code>. The merged VCF was then annotated with predicted protein
+consequences using <code>bcftools csq</code> with the
+<a href="https://www.ensembl.org/info/data/ftp/index.html" target="_blank">Ensembl</a>
+GRCh38 release 115 gene annotation (GFF3).
+</p>
+
+<p>
+The track's
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a> documents how each source VCF was converted. Scripts are
+available from
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">Github</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For programmatic access, our
+<a href="https://api.genome.ucsc.edu" target="_blank">REST API</a> can be used; the track
+name is <em>varFreqsArray</em>.
+</p>
+<p>
+Because the merged callset includes data from multiple sources whose redistribution
+licenses differ, the combined bigBed is <b>not available for download</b> from our download
+server. The combined track can be reconstructed from the individual source VCFs using the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">conversion scripts on GitHub</a> together with the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">build documentation</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This track is only possible thanks to the participants in TPMI, the Mexico Biobank, and UK
+Biobank, who donated samples and provided health information. Click on the individual
+TPMI, MexBB, or UK Biobank subtracks in the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack for full project credits.
+Thanks to Alex Ioannidis, UCSC, for the motivation for this track family and to Andreas
+Lahner, MGZ, for feedback.
+</p>
+
+<h2>References</h2>
+<p>
+For primary citations of each source dataset, see the References section on the
+<a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> supertrack page. The merged-track
+build itself uses the following tools:
+</p>
+<p>
+Danecek P, McCarthy SA.
+<a href="https://doi.org/10.1093/bioinformatics/btx100" target="_blank">
+BCFtools/csq: haplotype-aware variant consequences</a>.
+<em>Bioinformatics</em>. 2017 Jul 1;33(13):2037-2039.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28205675" target="_blank">28205675</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5870570/" target="_blank">PMC5870570</a>
+</p>
+<p>
+McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F.
+<a href="https://doi.org/10.1186/s13059-016-0974-4" target="_blank">
+The Ensembl Variant Effect Predictor</a>.
+<em>Genome Biol</em>. 2016 Jun 6;17(1):122.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27268795" target="_blank">27268795</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4893825/" target="_blank">PMC4893825</a>
+</p>

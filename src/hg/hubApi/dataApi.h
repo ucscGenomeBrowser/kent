@@ -91,6 +91,7 @@
 /* used by liftRequest */
 #define argEmail "email"
 #define argComment "comment"
+#define argReturnTo "returnTo"
 /* used by assemblyRequest */
 #define argAsmId "asmId"
 #define argName "name"
@@ -99,6 +100,9 @@
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
 #define argFileType "fileType"
+/* used by /blat */
+#define argUserSeq "userSeq"
+#define argApiKey "apiKey"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -118,6 +122,7 @@ extern char *argFindGenome[];
 extern char *argLiftOver[];
 extern char *argLiftRequest[];
 extern char *argAssemblyRequest[];
+extern char *argBlat[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -286,6 +291,12 @@ void textLineOut(char *lineOut);
 void textFinishOutput();
 /* all done with text output, print it all out */
 
+struct sqlConnection *hConnectOtto();
+/* Connect to otto database using otto profile, fallback to central */
+
+void hDisconnectOtto(struct sqlConnection **pConn);
+/* Disconnect otto connection */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
@@ -321,5 +332,12 @@ void apiLiftOver(char *words[MAX_PATH_INFO]);
 
 void apiLiftRequest(char *words[MAX_PATH_INFO]);
 /* interface to the liftOver request page to send email */
+
+/* ######################################################################### */
+/*  functions in blat.c */
+
+void apiBlat(char *words[MAX_PATH_INFO]);
+/* '/blat' endpoint: run a BLAT alignment of userSeq against the requested
+ * assembly's gfServer and return PSL hits as JSON. */
 
 #endif	/*	 DATAAPH_H	*/

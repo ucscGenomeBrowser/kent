@@ -162,10 +162,12 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
+pennantIcon Updated red
 
         track mastermind
         shortLabel Mastermind Variants
         longLabel Genomenon Mastermind Variants extracted from full text publications
+        release alpha
         visibility dense
         type bigBed 9 +
         urls url=$$
@@ -239,10 +241,11 @@ type bed 3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaico.bb
+        pennantIcon Updated red
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 2 (20251110)
+        dataVersion release 3 (20260527)
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
@@ -254,10 +257,11 @@ type bed 3
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaicoSuppl.bb
+        pennantIcon Updated red
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 2 (20251110)
+        dataVersion release 3 (20260527)
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
@@ -5546,6 +5550,7 @@ include covidTracks.ra
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
+dataVersion /gbdb/$D/bbi/orphanet/version.txt
 shortLabel Orphanet
 longLabel Orphadata: Aggregated Data From Orphanet
 group phenDis
@@ -5625,7 +5630,7 @@ include exonprimers.ra alpha
 include longReadVariants.ra
 
 include g2p.ra
-include varFreqs.ra alpha,beta
+include varFreqs.ra
 include phasedVars.ra
 
 track dnaMethylation
@@ -5639,3 +5644,6 @@ html dnaMethylation.html
 
 include methylationAtlas.ra
 include methylationAtlasSignals.ra
+
+include locusSpec.ra alpha
+include umdTp53.ra alpha

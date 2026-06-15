@@ -6756,7 +6756,7 @@ else if (sameString(type, "vcf"))
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
-else if (sameString(type, "myVariants"))
+else if (isMyVariantsType(type))
     {
     tg = trackFromTrackDb(tdb);
     myVariantsMethods(tg);
@@ -6833,18 +6833,16 @@ char *getPositionFromCustomTracks()
 char *pos = NULL;
 struct slName *bl = NULL;
 
-// If the user has myVariants data for this database, write a custom track
-// stub file and set the ctfile_ cart variable so customTracksParseCart picks
-// it up.  This handles fresh carts and also refreshes after edits/deletes
-// done via jsCommandDispatch.  If the backing table no longer exists (e.g.
-// the user or an admin dropped it), remove the stale cart variable so the
-// custom track system doesn't try to load a non-existent table.
+// If the user has myVariants data for this database, refresh the on-disk
+// ctfile and point the mvCtfile_<db> cart variable at it.  customTracksParseCart
+// reads that variable independently of ctfile_<db>, so regular custom tracks
+// are unaffected.
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     char *userName = getUserName();
     char *ctFile = myVariantsWriteCtFile(userName, database, cart);
     char mvVarName[256];
-    safef(mvVarName, sizeof mvVarName, CT_FILE_VAR_PREFIX "%s", database);
+    safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
     if (isNotEmpty(ctFile))
         cartSetString(cart, mvVarName, ctFile);
     else
@@ -7545,23 +7543,35 @@ if (rtsLoad)  // load a recommended track set using the merge method
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
 
-    // now we have to restart to load the session since that happens at cart initialization
-    
-    char newUrl[4096];
-    safef(newUrl, sizeof newUrl,
-        "./hgTracks?"
-        hgsOtherUserSessionName "=%s"
-        "&" hgsOtherUserName "=%s"
-        "&" hgsMergeCart "=on"
-        "&" hgsDoOtherUser "=submit"
-	"&hgsid=%s"
-        , otherUserSessionName, otherUserName,cartSessionId(cart));
+    if (loadRecTrackSetFromFile(cart, rtsLoad))
+        {
+        // Settings from the htdocs file are now overlaid on the cart.  The visibility
+        // loop below and the draw path read them, so no redirect is needed.  Record
+        // which set is loaded so hasRecTrackSet() and change detection still work, and
+        // drop the one-shot action variable so it does not persist in the cart.
+        cartSetString(cart, hgsOtherUserSessionName, rtsLoad);
+        cartRemove(cart, "rtsLoad");
+        }
+    else
+        {
+        // No htdocs file for this set: fall back to loading the session from hgcentral.
+        // That happens at cart initialization, so we have to restart to load it.
+        char newUrl[4096];
+        safef(newUrl, sizeof newUrl,
+            "./hgTracks?"
+            hgsOtherUserSessionName "=%s"
+            "&" hgsOtherUserName "=%s"
+            "&" hgsMergeCart "=on"
+            "&" hgsDoOtherUser "=submit"
+            "&hgsid=%s"
+            , otherUserSessionName, otherUserName,cartSessionId(cart));
 
-    cartCheckout(&cart);   // make sure cart records all our changes above
+        cartCheckout(&cart);   // make sure cart records all our changes above
 
-    // output the redirect and exit
-    printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
-    exit(0);
+        // output the redirect and exit
+        printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
+        exit(0);
+        }
     }
 
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
@@ -8745,28 +8755,41 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "Multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
-static void printTrackDelIcon(struct track *track)
-/* little track icon after track name. Github uses SVG elements for all icons, apparently that is faster */
-/* we probably should have a library with all the icons, at least for the <svg> part */
+static void printTrashIcon(char *title, char *cssClass, char *dataAttrs)
+/* Print a trash-can icon as a clickable <div>.  title is the hover text,
+ * cssClass selects the click behavior/styling, and dataAttrs holds any
+ * preformatted data-* attributes that the click handler reads.
+ * Github uses SVG elements for all icons, apparently that is faster.
+ * We probably should have a library with all the icons, at least for the <svg> part. */
 {
-    hPrintf("<div title='Delete this custom track' data-track='%s' class='trackDeleteIcon'><svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>", track->track);
+hPrintf("<div title='%s' %s class='%s'>"
+        "<svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'>"
+        "<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License "
+        "- https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->"
+        "<path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 "
+        "0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 "
+        "35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 "
+        "16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 "
+        "16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 "
+        "16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>",
+        title, dataAttrs, cssClass);
+}
 
+static void printTrackDelIcon(struct track *track)
+/* Trash-can icon after a custom track's name; clicking it deletes the track. */
+{
+char dataAttrs[512];
+safef(dataAttrs, sizeof dataAttrs, "data-track='%s'", track->track);
+printTrashIcon("Delete this custom track", "trackDeleteIcon", dataAttrs);
 }
 
 static void printQuickLiftDelIcon(struct track *track, char *sourceDb)
-/* little 'x' icon next to a track in a quickLift group; clicking it removes
+/* Trash-can icon next to a track in a quickLift group; clicking it removes
  * the track from the quickLift hub. */
 {
-    hPrintf("<div title='Remove this track from the QuickLift group' "
-            "data-track='%s' data-sourcedb='%s' class='quickLiftDelIcon'>"
-            "<svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 384 512'>"
-            "<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License "
-            "- https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->"
-            "<path d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 "
-            "86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4"
-            "c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 "
-            "32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/></svg></div>",
-            track->track, sourceDb);
+char dataAttrs[1024];
+safef(dataAttrs, sizeof dataAttrs, "data-track='%s' data-sourcedb='%s'", track->track, sourceDb);
+printTrashIcon("Remove this track from the QuickLift group", "quickLiftDelIcon", dataAttrs);
 }
 
 static void printTrackLink(struct track *track)
@@ -8891,9 +8914,9 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
-// put up the My Variants dialog if the hg.conf statement is present
-// and the visitor is logged in (anonymous users can't write to the table).
-if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
+// put up the My Variants dialog if the hg.conf statement is present.
+// Anonymous visitors see the button too; the JS dialog tells them to log in.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
     jsInline("var doMyVariants = true;\n");
@@ -8937,6 +8960,15 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE) && getUserName() != NULL)
             jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
             slFreeList(&hiddenFields);
             }
+        }
+    else if (loginSystemEnabled() || wikiLinkEnabled())
+        {
+        // Hand the JS dialog a login URL that returns to this hgTracks page.
+        char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
+        char *loginUrl = wikiLinkUserLoginUrlReturning(cartSessionId(cart), retUrl);
+        jsInlineF("var myVariantsLoginUrl = \"%s\";\n", loginUrl);
+        freez(&retUrl);
+        freez(&loginUrl);
         }
     }
 

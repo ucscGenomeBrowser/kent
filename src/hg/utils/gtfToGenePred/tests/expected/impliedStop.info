@@ -1,4 +1,4 @@
-#transId	geneId	source	chrom	start	end	strand	proteinId	geneName	transcriptName	geneType	transcriptType
+transId	geneId	source	chrom	start	end	strand	proteinId	geneName	transcriptName	geneType	transcriptType
 CG31949-RA	CG31949	flybase	chr2L	2300118	2300717	+					
 CG15357-RA	CG15357	flybase	chr2L	1945304	1945589	-					
 CG17650-RA	CG17650	flybase	chr2L	1758285	1759078	-					

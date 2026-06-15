@@ -13,7 +13,7 @@ table lrSvDecode
     string svType;      "SV Type|DEL, INS, or INSDEL (combined insertion/deletion)"
     int svLen;          "SV Length|Length of the variant on the reference in base pairs"
     int insLen;         "Insertion Length|Length of inserted sequence, 0 for DEL/INV/CPX"
-    int AC;             "Allele Count|Placeholder value (50); awaiting real values from deCODE (#35059)"
+    string AC;          "Allele Count|Not published by deCODE for this site-only callset"
     string trrBegin;    "Tandem Repeat Region Start|Start of the surrounding tandem repeat region, if any (TRRBEGIN)"
     string trrEnd;      "Tandem Repeat Region End|End of the surrounding tandem repeat region, if any (TRREND)"
     )

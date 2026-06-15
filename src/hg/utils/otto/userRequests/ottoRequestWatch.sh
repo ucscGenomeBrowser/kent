@@ -18,8 +18,11 @@
 #9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
 
 set -eEu -o pipefail
+umask 002
 
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+export centDb="hgcentral"
+export hgSql="hgsql -hgenome-centdb"
 
 ##############################################################################
 ### singleton lock - only one instance at a time
@@ -49,8 +52,47 @@ printf "%d\n" "$$" >&9
 ### errors - set error status in the table
 function setErrorStatus() {
   id="${1}"
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=7 WHERE id=${id};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=7 WHERE id=${id};" "${centDb}"
+}
+##############################################################################
+
+##############################################################################
+### getFeatureBitsPct - get percentage coverage from featureBits file
+###   args: srcDb dstDb buildDir
+###   returns percentage string (e.g., "45.2%") or empty string if not found
+###   mimics the featureBitsPct() function from ottoRequestView.cgi
+##############################################################################
+function getFeatureBitsPct() {
+  local srcDb="${1}"
+  local dstDb="${2}"
+  local buildDir="${3}"
+  local DstDb="${dstDb^}"  # first letter capitalized
+
+  if [[ -z "${srcDb}" || -z "${dstDb}" || -z "${buildDir}" ]]; then
+    return
+  fi
+
+  # determine subdirectory: trackData for GenArk, bed for UCSC native
+  local sub
+  if [[ "${srcDb}" == GC* ]]; then
+    sub="trackData"
+  else
+    sub="bed"
+  fi
+
+  # construct path to featureBits file
+#  local fbFile="${buildDir}/${sub}/lastz.${dstDb}/fb.${srcDb}.chain${DstDb}Link.txt"
+  local fbFile="${buildDir}/fb.${srcDb}.chain${DstDb}Link.txt"
+
+  if [[ -f "${fbFile}" ]]; then
+    # extract percentage from file using grep + sed (matches Python regex r'\(([\d.]+)%\)')
+    local pct
+    pct="$(grep -oE '\([0-9.]+%\)' "${fbFile}" 2>/dev/null | sed 's/[()]//g' | head -1)"
+    if [[ -n "${pct}" ]]; then
+      printf "%s" "${pct}"
+    fi
+  fi
 }
 ##############################################################################
 
@@ -103,22 +145,30 @@ function sendNotification() {
   local subject="${2}"
   local msgBody="${3}"
   local toAddr
-  toAddr="$(/cluster/bin/x86_64/hgsql -N -B -e \
-    "SELECT email FROM ottoRequest WHERE id = ${reqId};" hgcentraltest)"
+  toAddr="$(/cluster/bin/x86_64/${hgSql} -N -B -e \
+    "SELECT email FROM ottoRequest WHERE id = ${reqId};" ${centDb})"
   if [ -z "${toAddr}" ]; then
     printf "ERROR: sendNotification: no email for request %s\n" "${reqId}" 1>&2
     return 1
   fi
   local bcc="chain-file-request-group@ucsc.edu"
-  local bounce="genome-www@soe.ucsc.edu"
+  local from="genome-www@soe.ucsc.edu"
+  local bounce="gb"
+  bounce+="aut"
+  bounce+="o"
+  bounce+="@"
+  bounce+="uc"
+  bounce+="sc."
+  bounce+="ed"
+  bounce+="u"
   # -f sets the envelope sender (becomes Return-Path at delivery and the
   #    bounce address); -t reads recipients from To:/Cc:/Bcc: headers;
   #    -oi prevents a lone "." in body from ending the message
   {
-    printf "From: %s\n" "${bounce}"
+    printf "From: %s\n" "${from}"
     printf "To: %s\n" "${toAddr}"
     printf "Bcc: %s\n" "${bcc}"
-    printf "Reply-To: %s\n" "${bounce}"
+    printf "Reply-To: %s\n" "${from}"
     printf "Subject: %s\n" "${subject}"
     printf "\n"
     printf "%s\n" "${msgBody}"
@@ -127,7 +177,7 @@ function sendNotification() {
 ##############################################################################
 
 ##############################################################################
-### installLinks - drop chain/quickLift symlinks and register in hgcentraltest
+### installLinks - drop chain/quickLift symlinks and register in ${centDb}
 ###   args: tDb qDb buildDir
 ###   detects GenArk (tDb starts with "GC") vs UCSC db and chooses the
 ###   matching branch from doBlastzChainNet.pl loadUp().
@@ -220,7 +270,7 @@ function installLinks() {
     quickPath="${gbdbQuickLiftDir}/${quick}.bb"
   fi
 
-  # register both rows in hgcentraltest
+  # register both rows in ${centDb}
   if ! /cluster/bin/x86_64/hgAddLiftOverChain -minMatch=0.1 -multiple \
       -path="${chainPath}" "${tDb}" "${qDb}" > /dev/null 2>&1; then
     printf "ERROR: installLinks: hgAddLiftOverChain failed for %s -> %s\n" \
@@ -271,8 +321,8 @@ fi
 #          push.  Signals (all must hold):
 #            /hive/data/genomes/${fromDb}/bed/lastz.${toDb}  symlink exists
 #            /hive/data/genomes/${toDb}/bed/lastz.${fromDb}  symlink exists
-#            hgcentraltest.liftOverChain   has both directions
-#            hgcentraltest.quickLiftChain  has both directions
+#            ${centDb}.liftOverChain   has both directions
+#            ${centDb}.quickLiftChain  has both directions
 #          When all four hold, fill in buildDir with the resolved
 #          fromDb-side build dir and bump status=5 so
 #          ottoRequestPush.py picks it up.  Anything that doesn't match
@@ -289,25 +339,25 @@ while IFS=$'\t' read -r reqId fromDb toDb; do
   if [ ! -d "${fromBuild}" ] || [ ! -d "${toBuild}" ]; then
     continue
   fi
-  loCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+  loCount=$(/cluster/bin/x86_64/${hgSql} -N -B -e \
     "SELECT COUNT(*) FROM liftOverChain WHERE \
        (fromDb='${fromDb}' AND toDb='${toDb}') OR \
-       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
-  qlCount=$(/cluster/bin/x86_64/hgsql -N -B -e \
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" ${centDb})
+  qlCount=$(/cluster/bin/x86_64/${hgSql} -N -B -e \
     "SELECT COUNT(*) FROM quickLiftChain WHERE \
        (fromDb='${fromDb}' AND toDb='${toDb}') OR \
-       (fromDb='${toDb}'   AND toDb='${fromDb}');" hgcentraltest)
+       (fromDb='${toDb}'   AND toDb='${fromDb}');" ${centDb})
   if [ "${loCount}" -lt 2 ] || [ "${qlCount}" -lt 2 ]; then
     continue
   fi
   printf "# request %s: prior work detected at %s, jumping to push\n" \
     "${reqId}" "${fromBuild}" 1>&2
-  /cluster/bin/x86_64/hgsql -N -e \
+  /cluster/bin/x86_64/${hgSql} -N -e \
     "UPDATE ottoRequest SET status=5, buildDir='${fromBuild}' \
-     WHERE id=${reqId};" hgcentraltest
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+     WHERE id=${reqId};" ${centDb}
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb, toDb FROM ottoRequest \
-   WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 1: new requests needing alignment setup - status=1 AND buildDir=''
@@ -318,9 +368,9 @@ while read -r reqId; do
     printf "# alignment setup FAILED for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id FROM ottoRequest WHERE status = 1 AND buildDir = '' AND requestType = 'liftOver';" \
-  hgcentraltest)
+  ${centDb})
 
 ############################################################################
 # phase 2: in-progress requests needing workflow monitoring
@@ -340,9 +390,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     # workflowMonitor.sh exits 0 both when still running and when complete;
     # check for the success marker to distinguish
     if [ -s "${buildDir}/successInvocationId.txt" ]; then
-      /cluster/bin/x86_64/hgsql -N -e \
+      /cluster/bin/x86_64/${hgSql} -N -e \
         "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
-         WHERE id = ${reqId};" hgcentraltest
+         WHERE id = ${reqId};" ${centDb}
 #     printf "# request %s completed successfully\n" "${reqId}" 1>&2
     fi
     # else: still running, will check again next invocation
@@ -350,9 +400,9 @@ while IFS=$'\t' read -r reqId buildDir; do
     printf "# workflow error for request %s\n" "${reqId}" 1>&2
     setErrorStatus "${reqId}"
   fi
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 2 AND buildDir != '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 3: check for tracks done, setup symlinks set status=5 to indicate
@@ -384,11 +434,14 @@ while IFS=$'\t' read -r reqId buildDir; do
         setErrorStatus "${reqId}"
         continue
       fi
-      if ! "${doTdb}" >> /cluster/home/hiram/kent/src/hg/utils/otto/userRequests/doTdb.log 2>&1; then
+      if ! "${doTdb}" >> /dev/shm/doTdb.$$.log 2>&1; then
         printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+        cat /dev/shm/doTdb.$$.log 1>&2
+        rm -f /dev/shm/doTdb.$$.log
         setErrorStatus "${reqId}"
         continue
       fi
+      rm -f /dev/shm/doTdb.$$.log
       ;;
     *)
       if ! ( cd "${buildDir}" \
@@ -413,11 +466,14 @@ while IFS=$'\t' read -r reqId buildDir; do
         setErrorStatus "${reqId}"
         continue
       fi
-      if ! "${swapTdb}" > /dev/null 2>&1; then
+      if ! "${swapTdb}" >> /dev/shm/swapTdb.$$.log 2>&1; then
         printf "ERROR: %s failed\n" "${swapTdb}" 1>&2
+        cat /dev/shm/swapTdb.$$.log 1>&2
+        rm -f /dev/shm/swapTdb.$$.log
         setErrorStatus "${reqId}"
         continue
       fi
+      rm -f /dev/shm/swapTdb.$$.log
       ;;
     *)
       if ! ( cd "${swapDir}" \
@@ -431,7 +487,7 @@ while IFS=$'\t' read -r reqId buildDir; do
       ;;
   esac
 
-  # install liftOver and quickLift symlinks + register in hgcentraltest,
+  # install liftOver and quickLift symlinks + register in ${centDb},
   # for both directions
   if ! installLinks "${targetDb}" "${queryDb}" "${buildDir}"; then
     setErrorStatus "${reqId}"
@@ -442,11 +498,11 @@ while IFS=$'\t' read -r reqId buildDir; do
     continue
   fi
 
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" hgcentraltest
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" ${centDb}
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, buildDir FROM ottoRequest \
-   WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 4 AND buildDir != '' AND requestType = 'liftOver';" ${centDb})
 
 ############################################################################
 # phase 4: check for push files is complete, send final notification
@@ -470,24 +526,58 @@ while IFS=$'\t' read -r reqId fromDb toDb comment requestTime buildDir; do
     setErrorStatus "${reqId}"
     continue
   fi
+  # source the kegAlign.sh variables to get targetDb, queryDb, and swapDir
+  targetDb="" queryDb="" swapDir=""
+  if [[ -f "${buildDir}/kegAlign.sh" ]]; then
+    source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh" 2>/dev/null || true)
+  fi
+  # get featureBits coverage percentages for both directions
+  # determine which direction is which and use appropriate build directory
+  fromToPct="" toFromPct=""
+  if [[ -n "${targetDb}" && -n "${queryDb}" && -n "${swapDir}" ]]; then
+    if [[ "${fromDb}" == "${targetDb}" ]]; then
+      # fromDb -> toDb uses buildDir, toDb -> fromDb uses swapDir
+      fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${buildDir}")"
+      toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${swapDir}")"
+    else
+      # fromDb -> toDb uses swapDir, toDb -> fromDb uses buildDir
+      fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${swapDir}")"
+      toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${buildDir}")"
+    fi
+  else
+    # fallback: try both directions with buildDir only (may not find swap direction)
+    fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${buildDir}")"
+    toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${buildDir}")"
+  fi
+
+  # construct coverage info for email
+  coverageInfo=""
+  if [[ -n "${fromToPct}" || -n "${toFromPct}" ]]; then
+    coverageInfo="
+Chain coverage (% of genome covered by alignments):
+  ${fromDb} -> ${toDb}: ${fromToPct:-"not available"}
+  ${toDb} -> ${fromDb}: ${toFromPct:-"not available"}
+"
+  fi
+
   sendNotification "${reqId}" \
-"from UCSC: liftOverRequest complete: ${fromDb}<->${toDb}" \
+"from UCSC: ${fromDb}<->${toDb} liftOverRequest complete" \
 "Your lift over request is complete:
      From:     ${fromDb}
        To:     ${toDb}
   comment:     ${comment}
 submitted:     ${requestTime}
-
+${coverageInfo}
 The lift.over files are available at these links:
 
   ${fromUrl}
   ${toUrl}
 "
 
-  /cluster/bin/x86_64/hgsql -N -e \
-      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" hgcentraltest
+  /cluster/bin/x86_64/${hgSql} -N -e \
+      "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" ${centDb}
 
-done < <(/cluster/bin/x86_64/hgsql -N -B -e \
+done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
   "SELECT id, fromDb, toDb, comment, requestTime, buildDir FROM ottoRequest \
-   WHERE status = 6 AND requestType = 'liftOver';" hgcentraltest)
+   WHERE status = 6 AND requestType = 'liftOver';" ${centDb})
 

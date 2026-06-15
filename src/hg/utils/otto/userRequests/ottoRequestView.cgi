@@ -4,8 +4,6 @@
 Read-only display of every row in the table, plus a per-row 'reset
 status' control that is the only write path exposed.
 
-Access is restricted to a single IP (UCSC VPN, 128.114.198.5).
-Any other REMOTE_ADDR gets a 403.
 """
 
 import cgi
@@ -19,11 +17,13 @@ import time
 import urllib.parse
 from datetime import datetime
 
-ALLOWED_IP   = '128.114.198.5'
-HGDB_CONF    = '/usr/local/apache/cgi-bin/hg.conf'
-TRASH    = '/data/apache/trash'
-DB           = 'hgcentraltest'
+TRASH        = '/data/apache/trash'
 TABLE        = 'ottoRequest'
+
+# Configuration will be set dynamically in main()
+HGDB_CONF = None
+DB = None
+USE_PROFILE = None
 
 # Galaxy queue status panel - snapshot is refreshed by ottoRequestWatch.sh
 # (cron, every 11 minutes), CGI just reads it.
@@ -36,8 +36,9 @@ CACHE_TTL  = 1800  # seconds; older than this -> show "stale" instead
 # featureBitsPct() falls back to an NFS read on a snapshot miss.
 FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
 
-# from README.txt in this directory
-STATUS_NAMES = {
+# keep these liftStatus and asmStatus lists at the same length so that
+#   the verification check in doResetStatus() will function on just liftStatus
+liftStatus = {
     0: 'received by API',
     1: 'acknowledged, email sent',
     2: 'galaxy job started',
@@ -45,6 +46,18 @@ STATUS_NAMES = {
     4: 'downloaded, track files made',
     5: 'symlinks ready, awaiting push',
     6: 'push complete',
+    7: 'ERROR',
+    8: 'COMPLETE (final email sent)',
+}
+
+asmStatus = {
+    0: 'received by API',
+    1: 'acknowledged, email sent',
+    2: 'assembly build started',
+    3: 'assembly build done',
+    4: 'assembly available on hgwdev',
+    5: 'assembly available on hgwbeta',
+    6: 'assembly available on hgw2 - done',
     7: 'ERROR',
     8: 'COMPLETE (final email sent)',
 }
@@ -70,10 +83,17 @@ def forbidden(msg):
     sys.exit(0)
 
 
-def checkIp():
-    remote = os.environ.get('REMOTE_ADDR', '')
-    if remote != ALLOWED_IP:
-        forbidden(f"Access denied for {remote!r}; this page is restricted.")
+def setDbConfig(use_otto=False):
+    """Set database configuration globals based on config parameter."""
+    global HGDB_CONF, DB, USE_PROFILE
+    if use_otto:
+        HGDB_CONF = '/data/apache/cgi-bin/otto/.otto.conf'
+        DB = 'hgcentral'
+        USE_PROFILE = False
+    else:
+        HGDB_CONF = '/usr/local/apache/cgi-bin/hg.conf'
+        DB = 'hgcentraltest'
+        USE_PROFILE = True
 
 
 def unescapeMysql(s):
@@ -94,6 +114,11 @@ def unescapeMysql(s):
     return ''.join(out)
 
 
+def getStatusDict(requestType):
+    """Return appropriate status dictionary based on request type."""
+    return asmStatus if requestType == 'assembly' else liftStatus
+
+
 def hgsqlRun(sql):
     """Run sql via hgsql against DB. Returns (ok, stdout, stderr).
     Running under Apache the process has no ~/.hg.conf, so point hgsql
@@ -101,7 +126,10 @@ def hgsqlRun(sql):
     env = dict(os.environ)
     env['HGDB_CONF'] = HGDB_CONF
     env['HOME'] = TRASH
-    cmd = ['/cluster/bin/x86_64/hgsql', '-profile=central', DB, '-N', '-B', '-e', sql]
+    cmd = ['/cluster/bin/x86_64/hgsql']
+    if USE_PROFILE:
+        cmd.append('-profile=central')
+    cmd.extend([DB, '-N', '-B', '-e', sql])
     r = subprocess.run(cmd, capture_output=True, text=True, env=env)
     return (r.returncode == 0, r.stdout, r.stderr)
 
@@ -118,12 +146,14 @@ def fetchRows():
     return rows
 
 
+# the verification of 'stat' here against liftStatus works for both
+# the liftStatus and asmStatus lists because they are kept at the same length
 def doResetStatus(form):
     rid  = form.getfirst('id', '')
     stat = form.getfirst('status', '')
     if not rid.isdigit():
         return None, f"bad id: {rid!r}"
-    if not stat.isdigit() or int(stat) not in STATUS_NAMES:
+    if not stat.isdigit() or int(stat) not in liftStatus:
         return None, f"bad status: {stat!r}"
     sql = (f"UPDATE {TABLE} SET status = {int(stat)} "
            f"WHERE id = {int(rid)}")
@@ -131,7 +161,7 @@ def doResetStatus(form):
     if not ok:
         return None, err.strip() or 'hgsql update failed'
     return (f"id={rid} status set to {stat} "
-            f"({STATUS_NAMES[int(stat)]})"), None
+            f"({liftStatus[int(stat)]})"), None
 
 
 def loadGenarkNames(accessions):
@@ -275,12 +305,13 @@ def loadGalaxyStatus():
     return data
 
 
-def renderPage(rows, info=None, error=None, galaxyStatus=None):
+def renderPage(rows, info=None, error=None, galaxyStatus=None, use_otto=False):
     sys.stdout.write("Content-Type: text/html; charset=utf-8\r\n\r\n")
     out = sys.stdout.write
 
+    db_label = 'RR' if use_otto else 'hgwdev'
     out('<!DOCTYPE html>\n<html><head><meta charset="utf-8">\n')
-    out(f'<title>{TABLE}</title>\n')
+    out(f'<title>{TABLE} ({db_label})</title>\n')
     out('<style>\n'
         'body{font-family:sans-serif;margin:1em;font-size:13px}\n'
         'h2{margin:.2em 0}\n'
@@ -301,9 +332,18 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
         '.legend code{background:#eee;padding:0 3px;font-size:14px}\n'
         '.refreshBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
         'cursor:pointer}\n'
+        '.toggleBtn{font-size:14px;padding:3px 10px;margin-left:6px;'
+        'cursor:pointer;background:#f0f0f0;border:1px solid #ccc}\n'
+        '.configBtn{font-size:14px;padding:4px 12px;margin-left:6px;'
+        'cursor:pointer;background:#e6f3ff;border:2px solid #0066cc;'
+        'font-weight:bold;color:#0066cc}\n'
+        '.hide-complete tr.s8{display:none}\n'
+        '.hide-assembly tr.assembly{display:none}\n'
+        '.hide-liftover tr.liftover{display:none}\n'
         '</style></head><body>\n')
 
-    out(f'<h2>{DB}.{TABLE}</h2>\n')
+    db_label = 'RR' if use_otto else 'hgwdev'
+    out(f'<h2>{DB}.{TABLE} ({db_label})</h2>\n')
     if galaxyStatus:
         staleNote = ' <b>[stale]</b>' if galaxyStatus.get('stale') else ''
         out('<div class="legend">Galaxy queue: '
@@ -321,11 +361,34 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
         out(f'<div class="banner error">{html.escape(error)}</div>\n')
 
     out('<div class="legend">status: ')
+    # Show both status types
+    out('<strong>liftOver:</strong> ')
     out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
-                          for k, v in STATUS_NAMES.items()))
+                          for k, v in liftStatus.items()))
+    out('<br><strong>assembly:</strong> ')
+    out(' &middot; '.join(f'<code>{k}</code>={html.escape(v)}'
+                          for k, v in asmStatus.items()))
+    # Count rows by type for toggle button labels
+    completed_count = sum(1 for r in rows if len(r) > 7 and r[7] == '8')
+    assembly_count = sum(1 for r in rows if len(r) > 1 and r[1] == 'assembly')
+    liftover_count = sum(1 for r in rows if len(r) > 1 and r[1] == 'liftOver')
+    # Config toggle button - switches between test and production databases
+    current_config = 'otto' if use_otto else 'test'
+    switch_config = 'test' if use_otto else 'otto'
+    switch_label = 'Switch to hgwdev' if use_otto else 'Switch to RR'
+    config_url = f'?config={switch_config}'
+
     out(f' &middot; <b>{len(rows)}</b> row(s)'
+        f'<a href="{config_url}" class="configBtn">{switch_label}</a>'
         '<button class="refreshBtn" type="button" '
-        'onclick="location.reload()">refresh</button></div>\n')
+        'onclick="location.reload()">refresh</button>'
+        f'<button class="toggleBtn" type="button" id="toggleComplete" '
+        f'onclick="toggleCompleted()">hide completed ({completed_count})</button>'
+        f'<button class="toggleBtn" type="button" id="toggleAssembly" '
+        f'onclick="toggleAssembly()">hide assembly ({assembly_count})</button>'
+        f'<button class="toggleBtn" type="button" id="toggleLiftover" '
+        f'onclick="toggleLiftover()">hide liftOver ({liftover_count})</button></div>\n')
+    out(f'<div class="legend">cron times: 9,20,31,42,53 for ottoRequestWatch.sh, and 4,26,46 for ottoRequestPush and 1,8,15,22,29,36,43,50,57 for the first acknowledgement</div>\n')
 
     out('<table class="sortable">\n<tr>')
     for c in COLS:
@@ -339,6 +402,7 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
     doneIdx = COLS.index('completeTime')
     fromIdx = COLS.index('fromDb')
     toIdx   = COLS.index('toDb')
+    typeIdx = COLS.index('requestType')
 
     for r in rows:
         rid = r[0]
@@ -346,14 +410,24 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
             stnum = int(r[7])
         except (ValueError, IndexError):
             stnum = -1
-        cls = f's{stnum}' if stnum in (7, 8) else ''
+        cls_parts = []
+        if stnum in (7, 8):
+            cls_parts.append(f's{stnum}')
+        # Add requestType class for toggle filtering
+        if typeIdx < len(r):
+            req_type = r[typeIdx].lower()
+            if req_type in ('assembly', 'liftover'):
+                cls_parts.append(req_type)
+        cls = ' '.join(cls_parts)
         out(f'<tr class="{cls}">')
         for i, c in enumerate(COLS):
             cell = r[i] if i < len(r) else ''
             if c == 'comment':
                 out(f'<td class="comment">{html.escape(cell)}</td>')
             elif c == 'status':
-                label = STATUS_NAMES.get(stnum, '?')
+                reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+                statusDict = getStatusDict(reqType)
+                label = statusDict.get(stnum, '?')
                 out(f'<td><b>{html.escape(cell)}</b> '
                     f'<small>{html.escape(label)}</small></td>')
             elif c in ('fromDb', 'toDb') and cell:
@@ -387,28 +461,99 @@ def renderPage(rows, info=None, error=None, galaxyStatus=None):
             '<input type="hidden" name="action" value="resetStatus">'
             f'<input type="hidden" name="id" value="{html.escape(rid)}">'
             '<select name="status">')
-        for k in sorted(STATUS_NAMES):
+        reqType = r[typeIdx] if typeIdx < len(r) else 'liftOver'
+        statusDict = getStatusDict(reqType)
+        for k in sorted(statusDict):
             sel = ' selected' if k == stnum else ''
             out(f'<option value="{k}"{sel}>{k}</option>')
         out('</select> <button type="submit">set</button></form></td>')
         out('</tr>\n')
     out('</table>\n')
     out('<script src="/js/sorttable.js"></script>\n')
+    out('<script>\n'
+        'function toggleCompleted() {\n'
+        '    var table = document.querySelector("table");\n'
+        '    var btn = document.getElementById("toggleComplete");\n'
+        '    var isHidden = table.classList.contains("hide-complete");\n'
+        '    if (isHidden) {\n'
+        '        table.classList.remove("hide-complete");\n'
+        f'        btn.textContent = "hide completed ({completed_count})";\n'
+        '        localStorage.setItem("hideCompleted", "false");\n'
+        '    } else {\n'
+        '        table.classList.add("hide-complete");\n'
+        '        btn.textContent = "show completed";\n'
+        '        localStorage.setItem("hideCompleted", "true");\n'
+        '    }\n'
+        '}\n'
+        'function toggleAssembly() {\n'
+        '    var table = document.querySelector("table");\n'
+        '    var btn = document.getElementById("toggleAssembly");\n'
+        '    var isHidden = table.classList.contains("hide-assembly");\n'
+        '    if (isHidden) {\n'
+        '        table.classList.remove("hide-assembly");\n'
+        f'        btn.textContent = "hide assembly ({assembly_count})";\n'
+        '        localStorage.setItem("hideAssembly", "false");\n'
+        '    } else {\n'
+        '        table.classList.add("hide-assembly");\n'
+        '        btn.textContent = "show assembly";\n'
+        '        localStorage.setItem("hideAssembly", "true");\n'
+        '    }\n'
+        '}\n'
+        'function toggleLiftover() {\n'
+        '    var table = document.querySelector("table");\n'
+        '    var btn = document.getElementById("toggleLiftover");\n'
+        '    var isHidden = table.classList.contains("hide-liftover");\n'
+        '    if (isHidden) {\n'
+        '        table.classList.remove("hide-liftover");\n'
+        f'        btn.textContent = "hide liftOver ({liftover_count})";\n'
+        '        localStorage.setItem("hideLiftover", "false");\n'
+        '    } else {\n'
+        '        table.classList.add("hide-liftover");\n'
+        '        btn.textContent = "show liftOver";\n'
+        '        localStorage.setItem("hideLiftover", "true");\n'
+        '    }\n'
+        '}\n'
+        '// Restore toggle states from localStorage\n'
+        'window.addEventListener("load", function() {\n'
+        '    var table = document.querySelector("table");\n'
+        '    if (localStorage.getItem("hideCompleted") === "true") {\n'
+        '        var btn = document.getElementById("toggleComplete");\n'
+        '        table.classList.add("hide-complete");\n'
+        '        btn.textContent = "show completed";\n'
+        '    }\n'
+        '    if (localStorage.getItem("hideAssembly") === "true") {\n'
+        '        var btn = document.getElementById("toggleAssembly");\n'
+        '        table.classList.add("hide-assembly");\n'
+        '        btn.textContent = "show assembly";\n'
+        '    }\n'
+        '    if (localStorage.getItem("hideLiftover") === "true") {\n'
+        '        var btn = document.getElementById("toggleLiftover");\n'
+        '        table.classList.add("hide-liftover");\n'
+        '        btn.textContent = "show liftOver";\n'
+        '    }\n'
+        '});\n'
+        '</script>\n')
     out('</body></html>\n')
 
 def main():
-    checkIp()
+
+    # Create FieldStorage once - it consumes stdin and can't be read twice
+    form = cgi.FieldStorage()
+
+    # Detect configuration from URL parameter
+    use_otto = form.getfirst('config') == 'otto'
+    setDbConfig(use_otto)
 
     # POST/Redirect/GET: handle the write, then 303 to a GET of the same URL
     # so a browser reload doesn't re-submit the form and re-run the UPDATE.
     if os.environ.get('REQUEST_METHOD', 'GET') == 'POST':
-        form = cgi.FieldStorage()
         action = form.getfirst('action', '')
         if action == 'resetStatus':
             info, error = doResetStatus(form)
         else:
             info, error = None, f"unknown action: {action!r}"
         params = {}
+        if use_otto: params['config'] = 'otto'  # preserve config in redirect
         if info:  params['info']  = info
         if error: params['error'] = error
         qs = ('?' + urllib.parse.urlencode(params)) if params else ''
@@ -418,9 +563,8 @@ def main():
         return
 
     # GET: pick up banner messages left by the PRG redirect, if any
-    qs = cgi.FieldStorage()
-    info  = qs.getfirst('info')  or None
-    error = qs.getfirst('error') or None
+    info  = form.getfirst('info')  or None
+    error = form.getfirst('error') or None
 
     try:
         rows = fetchRows()
@@ -443,7 +587,7 @@ def main():
 
     galaxyStatus = loadGalaxyStatus()
 
-    renderPage(rows, info=info, error=error, galaxyStatus=galaxyStatus)
+    renderPage(rows, info=info, error=error, galaxyStatus=galaxyStatus, use_otto=use_otto)
 
 
 if __name__ == '__main__':

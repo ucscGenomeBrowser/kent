@@ -19,23 +19,28 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
+from lrSvCommon import svName, normalizeSvType, svColor
 
 # AoU Phase-I (2025) SV panel: 1,027 samples => 2,054 alleles (diploid)
 # No per-variant AC in the site-level release; approximate AC as
 # round(max_popAF * N_alleles) for naming purposes only.
 AOU_N_ALLELES = 2054
 
-SV_COLORS = {
-    "DEL": "200,0,0",
-    "INS": "0,0,200",
-}
+
+def encodeNonAscii(s):
+    """Replace non-ASCII characters with numeric HTML entities so detail
+    pages render them correctly instead of as mojibake. The source CSV has
+    gene/trait text with accented names, Greek letters, curly quotes and
+    en-dashes (e.g. ö, β, ', –)."""
+    return "".join(c if ord(c) < 128 else f"&#{ord(c)};" for c in s)
+
 
 def na(val):
-    """Return empty string for NA values."""
+    """Return empty string for NA values, else the value with any non-ASCII
+    characters numeric-entity encoded."""
     if val == "NA" or val == "No" or val == "":
         return ""
-    return val
+    return encodeNonAscii(val)
 
 def main():
     if len(sys.argv) != 3:
@@ -44,11 +49,15 @@ def main():
 
     inFile, outFile = sys.argv[1], sys.argv[2]
 
+    seen = set()
+    nIn = 0
+    nDup = 0
     with gzip.open(inFile, "rt") as fIn, open(outFile, "w") as fOut:
         reader = csv.reader(fIn)
         header = next(reader)
 
         for row in reader:
+            nIn += 1
             coord = row[0]       # chr1:10627
             svTypeRaw = row[2]
             svType = normalizeSvType(svTypeRaw)
@@ -74,7 +83,7 @@ def main():
             else:
                 insLen = 0
 
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             # Parse population AFs (column 5): "0.001,0.002,0.003,0.004,0.005"
             afStr = row[5]
@@ -150,7 +159,15 @@ def main():
                 gwas,
                 traitAssoc,
             ]
-            fOut.write("\t".join(bedRow) + "\n")
+            line_out = "\t".join(bedRow)
+            if line_out in seen:
+                nDup += 1
+                continue
+            seen.add(line_out)
+            fOut.write(line_out + "\n")
+
+    print(f"AoU 1K: {nIn:,} input records, {nDup:,} duplicate rows dropped, "
+          f"{nIn - nDup:,} written", file=sys.stderr)
 
 if __name__ == "__main__":
     main()

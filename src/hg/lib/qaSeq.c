@@ -192,7 +192,7 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 if (s == NULL)
     return FALSE;
-strncpy(name, s, sizeof(name));    	
+safecpy(name, sizeof(name), s);
 
 /* Read numbers until next '>' line or end of file. */
 /* Read to first non-space line.  Complain if it doesn't start with '>' */

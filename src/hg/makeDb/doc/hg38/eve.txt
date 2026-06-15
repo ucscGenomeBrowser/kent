@@ -1,0 +1,44 @@
+# [Claude/max] EVE - Evolutionary model of Variant Effect (2025-05-28)
+
+# Data downloaded from https://evemodel.org/download/bulk as EVE_all_data.zip.
+# Reference: Frazer et al. (2021) Nature 599:91-95, PMID 34707284.
+# https://doi.org/10.1038/s41586-021-04043-8
+
+mkdir -p /hive/data/genomes/hg38/bed/eve/input
+cd /hive/data/genomes/hg38/bed/eve/input
+wget https://evemodel.org/download/bulk -O EVE_all_data.zip
+unzip EVE_all_data.zip
+# This extracts, among other things, vcf_files_missense_mutations/ with one VCF per protein.
+
+# Convert VCF files to heatmap bigBed format.
+# Each protein becomes one BED12+ entry. Columns = amino acid positions (at codon
+# genomic coordinates), rows = 20 standard amino acids (A-Y).
+# Multiple codon changes encoding the same amino acid substitution are deduplicated
+# (they carry identical EVE scores). Wildtype cells are left empty.
+# Colors: blue (#2166ac) EVE=0 benign, white (#f7f7f7) EVE=0.5 uncertain,
+#         red (#d6604d) EVE=1 pathogenic.
+
+cd /hive/data/genomes/hg38/bed/eve
+python3 ~/kent/src/hg/makeDb/scripts/eve/vcfToEveHeatmap.py \
+    input/vcf_files_missense_mutations/ \
+    eve_raw.bed
+
+# Two proteins had VCF coordinates on non-standard assembly scaffolds
+# (G6PT1/O43826 on chrCHR_HG2217_PATCH, MAFIP/Q8WZ33 on chrGL000194.1)
+# and were removed by filtering to chromosomes present in chrom.sizes.
+
+bedSort eve_raw.bed eve_sorted.bed
+
+awk 'NR==FNR{valid[$1]=1; next} $1 in valid {print}' \
+    /hive/data/genomes/hg38/chrom.sizes \
+    eve_sorted.bed > eve_filtered.bed
+
+bedToBigBed -type=bed12+ -tab \
+    -as=~/kent/src/hg/makeDb/scripts/eve/eve_heatmap.as \
+    eve_filtered.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    eve.bb
+# Result: 2,949 proteins, 1,717,072 total amino acid positions.
+
+mkdir -p /gbdb/hg38/eve
+ln -s /hive/data/genomes/hg38/bed/eve/eve.bb /gbdb/hg38/eve/eve.bb

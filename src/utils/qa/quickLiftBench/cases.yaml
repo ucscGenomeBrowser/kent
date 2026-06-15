@@ -62,6 +62,23 @@ cases:
     compare:
       - [native, lifted]
 
+  # -------- Mode A: saved-session pair on hgwbeta --------
+  # Two saved sessions on hgwbeta -- one rendering the source assembly natively,
+  # one rendering the quickLifted target assembly. Tests the full saved-session
+  # path (cart restore + position from session) on the beta server rather than
+  # dev.
+  - id: mode_a_beta
+    description: |
+      Mode A on hgwbeta: native saved session (quickBenchSource1) vs the
+      quickLifted equivalent (quickBenchTarget1). Each session renders at
+      its own saved region.
+    server: beta
+    variants:
+      native: Braney/quickBenchSource1
+      lifted: Braney/quickBenchTarget1
+    compare:
+      - [native, lifted]
+
   # -------- Mode B: native on source assembly vs lifted to a different one --------
   # Same hub, but the native variant views the source bigBed/bigWig on its
   # own assembly (hg38) while the lifted variant views the same data quickLifted

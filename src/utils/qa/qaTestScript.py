@@ -186,7 +186,7 @@ if len(driver.window_handles) > 1:
     print("A second window has opened.")
     driver.quit()
     sys.exit()
-driver.find_element(By.XPATH, "//*/text()[normalize-space(.)='Cancel']/parent::*").click()
+driver.find_element(By.XPATH, "//span[text()='Drag-and-select']/../..//button[text()='Cancel']").click()
 time.sleep(3)
 
 # Tests multi-region for hg38
@@ -363,8 +363,9 @@ driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element(By.NAME, "hgt.positionInput").clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_000310.4(PPT1):c.271_287del17insTT")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.XPATH, "//td[@id='td_data_ncbiRefSeqSelect']/div[2]/map/area[7]").click()
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//td[@id='td_data_ncbiRefSeqSelect']/div[2]/map/area[7]"))).click()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element(By.NAME, "hgt.positionInput").clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_007262.5(PARK7):c.-24+75_-24+92dup")
@@ -390,8 +391,9 @@ driver.find_element(By.ID, "goButton").click()
 wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("BRCA1 Ala744Cys")
 driver.find_element(By.ID, "goButton").click()
-time.sleep(2)
-driver.find_element(By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[3]").click()
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located(
+        (By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[3]"))).click()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("NM_000828.5:c.-2G>A")

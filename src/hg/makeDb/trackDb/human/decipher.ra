@@ -4,6 +4,7 @@ shortLabel DECIPHER
 longLabel DECIPHER
 cartVersion 7
 group phenDis
+dataVersion /gbdb/$D/decipher/version.txt
 
     track decipher
     priority 1

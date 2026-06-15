@@ -1109,12 +1109,15 @@ void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
 {
-va_list(args);
+va_list args;
 va_start(args, format);
-hPrintf(" TITLE=\"");
-hvPrintf(format, args);
-hPutc('"');
+struct dyString *dy = dyStringNew(0);
+dyStringVaPrintf(dy, format, args);
 va_end(args);
+char *encoded = attributeEncode(dy->string);
+hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encoded);
+freeMem(encoded);
+dyStringFree(&dy);
 }
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -3005,14 +3008,14 @@ for (ref = exonList; TRUE; )
 		--numExonIntrons;  // introns are one fewer than exons
 		}
 
-            char strandChar;
+            char* strandStr;
 	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-                strandChar = '+';
+                strandStr = "Forw";
             }
 	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
-                strandChar = '-';
+                strandStr = "Rev";
             }
 
             // we still need to show the existing mouseover text
@@ -3083,10 +3086,16 @@ for (ref = exonList; TRUE; )
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
                                     if (codonHgvsIx >= 0)
-                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d<br>", codonHgvsIx + 1, codonHgvsIx + 3);
+                                        {
+                                        int cStart = codonHgvsIx + 1;
+                                        int cEnd = codonHgvsIx + 3;
+                                        int pStart = codonHgvsIx / 3;
+                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d (p.%d-%d)<br>", 
+                                                cStart, cEnd, pStart, pStart+1);
+                                        }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %c&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
-                                                strandChar, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
+                                                strandStr, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
@@ -3110,8 +3119,8 @@ for (ref = exonList; TRUE; )
 
 
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
-                            "<b>Strand:</b> %c<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>Length:</b> %d bp<br>%s",
-                        existingText, posNote, strandChar, exonOrIntron, exonIntronText,
+                            "<b>Strand:</b> %s<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>Length:</b> %d bp<br>%s",
+                        existingText, posNote, strandStr, exonOrIntron, exonIntronText,
                         exonIntronNumber, numExonIntrons, e - s, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
@@ -6313,10 +6322,7 @@ if (liftDb != NULL)
     struct sqlConnection *conn = hAllocConn(liftDb);
     char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 
-// using this loader on genePred tables with less than 15 fields may be a problem.
-extern struct genePred *genePredExtLoad15(char **row);
-
-    struct genePred *gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table, chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
 
     calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);

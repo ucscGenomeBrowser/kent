@@ -1,0 +1,81 @@
+<h2>Description</h2>
+<p>
+This track combines the structural-variant (SV) callsets from the individual
+subtracks of the <a href="hgTrackUi?g=lrSv">Long-read SVs</a> supertrack into a
+single, position-merged overview. Each item is an SV locus seen in one or more
+of the contributing long-read databases. For every merged locus the track
+records which databases report it, the summed allele count across those
+databases, and the range of allele frequencies observed, making it useful for
+quickly seeing how widely an SV has been reported across cohorts.
+</p>
+<p>
+This is a summary view. For cohort-specific genotypes, per-population allele
+frequencies, and dataset-specific annotations, use the individual subtracks of
+the supertrack. The merge includes the released long-read callsets only;
+preliminary or unpublished subtracks (e.g. the Kim PD brain, 1000 Genomes
+linear, and HPRC Jasmine sets) are <b>not</b> part of this merged track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type, matching the individual subtracks:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+<li><span style="color: rgb(140,0,200);">Complex and other multi-allele events</span> - purple</li>
+</ul>
+</p>
+<p>
+The mouseover shows the variant name, SV type, reference and insertion lengths,
+the list of contributing source databases, the allele-frequency range across
+those databases, and the total allele count. Filters are available for the
+<b>source database</b>, <b>SV type</b>, <b>SV length</b>, <b>insertion
+length</b>, <b>total allele count</b>, <b>minimum and maximum allele
+frequency</b>, and the <b>number of source databases</b> reporting each locus.
+The detail page lists the per-database allele counts.
+</p>
+
+<h2>Methods</h2>
+<p>
+The merged track is built by the <tt>lrSvMergeAll.py</tt> script, which reads
+the bigBed of each contributing subtrack (configured in
+<tt>databases.tsv</tt>) and groups records that share an identical
+<tt>(chromosome, start, end)</tt> position and SV type. For each merged locus
+the script records the set of contributing databases (<tt>sources</tt>), the
+number of those databases (<tt>sourceCount</tt>), the sum of their allele counts
+(<tt>AC</tt>), and the minimum and maximum allele frequency across databases
+that report one (<tt>minAF</tt>, <tt>maxAF</tt>). The per-database allele counts
+are carried as additional columns.
+</p>
+<p>
+The step-by-step build commands are recorded in the UCSC makeDoc for this track
+collection:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The merge script and autoSql schema live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>lrSvAll</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/lrSv/" target="_blank">our
+download server</a> as <tt>lrSvAll.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/lrSv/lrSvAll.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This merged view is derived entirely from the contributing long-read SV
+callsets; please see the individual subtrack description pages for the data
+producers and citations for each cohort.
+</p>

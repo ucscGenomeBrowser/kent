@@ -13,15 +13,15 @@ The callset contains approximately 36.2 million variants genotyped across
 up to 552 samples (maximum allele number 1104 on the autosomes). Each
 variant is annotated with allele count (AC), total called alleles (AN),
 cohort allele frequency (AF), variant type (substitution, insertion or
-deletion) and the corresponding allele frequency in gnomAD v3.0 where
+deletion), and the corresponding gnomAD v3.0 allele frequency if one is
 available.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-The track uses the standard VCF display. By default, variants are shown as
-colored marks along the genome; clicking an item opens the detail page
-with per-site INFO fields including AC, AN, AF and the gnomAD v3 allele
+The track uses the standard VCF display. By default, variants appear as
+colored marks along the genome. Click an item to open its detail page,
+which lists the per-site INFO fields AC, AN, AF and the gnomAD v3 allele
 frequency.
 </p>
 
@@ -40,8 +40,8 @@ unrelated Children's Mercy individual, or (2) matching a variant observed in
 a sample from the Human Pangenome Reference Consortium (HPRC).
 </p>
 <p>
-The GA4K release is provided as 24 per-chromosome VCF files (chr1-22, chrX,
-chrY). For display on the Genome Browser, these were concatenated with
+The GA4K release ships as 24 per-chromosome VCF files (chr1-22, chrX,
+chrY). For the Genome Browser, these were concatenated with
 <tt>bcftools concat</tt> into a single bgzip-compressed, tabix-indexed file.
 </p>
 
@@ -63,8 +63,8 @@ github.com/ChildrensMercyResearchInstitute/GA4K</a>.
 <h2>Credits</h2>
 <p>
 Thanks to the Children's Mercy Research Institute and the Genomic Answers
-for Kids participants and their families for making this dataset publicly
-available.
+for Kids participants and their families, who released this dataset to the
+public.
 </p>
 
 <h2>References</h2>

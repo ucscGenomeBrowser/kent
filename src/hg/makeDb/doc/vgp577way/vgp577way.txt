@@ -11,9 +11,11 @@
 ls *.single.maf.gz | grep -v Anc | xargs du -ksc | sort -n
 
 4392699 vgp-577way-v1-european_river_lamprey.single.maf.gz
+27378844        vgp-577way-v1-mexican_tetra.single.maf.gz
 27465651        vgp-577way-v1-catshark.single.maf.gz
 27956344        vgp-577way-v1-spotted_gar.single.maf.gz
 28298848        vgp-577way-v1-zebrafish.single.maf.gz
+33433099        vgp-577way-v1-coastal_tailed_frog.single.maf.gz
 33562001        vgp-577way-v1-coelacanth.single.maf.gz
 34730114        vgp-577way-v1-european_eel.single.maf.gz
 36304442        vgp-577way-v1-tiny_cayenne_caecilian.single.maf.gz
@@ -37,9 +39,11 @@ ls *.single.maf.gz | grep -v Anc | xargs du -ksc | sort -n
 ls -og *.single.maf.gz | grep -v Anc | sed -e 's#^-rw-r--r-- 1 \+##;' | sort -n
 
 4498122844 Apr 18 01:29 vgp-577way-v1-european_river_lamprey.single.maf.gz
+28035936114 Apr 24 21:36 vgp-577way-v1-mexican_tetra.single.maf.gz
 28124825995 Mar 20 10:07 vgp-577way-v1-catshark.single.maf.gz
 28627295445 Mar 22 04:32 vgp-577way-v1-spotted_gar.single.maf.gz
 28978019428 Mar 20 07:42 vgp-577way-v1-zebrafish.single.maf.gz
+34235492910 Apr 27 21:21 vgp-577way-v1-coastal_tailed_frog.single.maf.gz
 34367488940 Apr 18 10:24 vgp-577way-v1-coelacanth.single.maf.gz
 35563635801 Mar 22 21:31 vgp-577way-v1-european_eel.single.maf.gz
 37175748583 Apr 18 18:27 vgp-577way-v1-tiny_cayenne_caecilian.single.maf.gz
@@ -186,6 +190,8 @@ cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoS
 mkdir iRows
 cd iRows
 ~/kent/src/hg/makeDb/doc/vgp577way/linkSizes.sh
+  577 sizes
+
 ~/kent/src/hg/makeDb/doc/vgp577way/mkNbeds.sh
   577 nBeds
   577 sizes
@@ -216,8 +222,8 @@ mkdir -p result
 ~/kent/src/hg/makeDb/doc/vgp577way/mkIRowsJL.sh \
   /hive/data/genomes/asmHubs/refseqBuild/GCF/037/176/765/GCF_037176765.1_rAnoSag1.mat/trackData/addMask/GCF_037176765.1_rAnoSag1.mat.masked.2bit > jobList
 
-### 54g seems about right
-para -ram=54g create jobList
+### 64g seems about right
+para -ram=64g create jobList
 para push
 ### when done
 para time > run.time
@@ -388,20 +394,19 @@ para push
 para time > run.time
 
 ls result/*.bed | xargs cut -f2- \
-   | $HOME/bin/x86_64/gnusort --parallel=32 -k1,1 -k2,2n > vgp577waySummary.bed
+   | $HOME/bin/x86_64/gnusort --parallel=32 -k1,1 -k2,2n |
+     gzip -c > vgp577waySummary.bed.gz
 ### makes a big file:
 -rw-rw-r-- 1 4157628035 Apr 24 14:41 vgp577waySummary.bed
 
 bedToBigBed -type=bed3+4 -as=$HOME/kent/src/hg/lib/mafSummary.as -tab \
-    vgp577waySummary.bed ../../../*.chrom.sizes \
+    vgp577waySummary.bed.gz ../../../*.chrom.sizes \
     ../`pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\1_#;" | cut -d"_" -f1-2`.vgp577waySummary.bb
 
 bigBedInfo ../*.vgp577waySummary.bb
 
-### gzip the bed file:
-gzip vgp577waySummary.bed
+### the bed file was gzipped:
 -rw-rw-r-- 1 679264107 Apr 24 14:41 vgp577waySummary.bed.gz
-
 
 ########################################################################
 ### construct the trackDb
@@ -509,8 +514,38 @@ GCF_037176765.1 https://genome-test.gi.ucsc.edu/s/Hiram/GCF_037176765.1.vgp577wa
     ### then run:
 ./mkIndex.sh > index.html
 
-    ### It is now available as a link fro the index page:
+    ### It is now available as a link from the index page:
 
     https://hgwdev-hiram.gi.ucsc.edu/~hiram/VGP/vgp577way/
 
 ########################################################################
+### clean up and construct download maf files:
+rm -fr ucscMaf &
+rm -fr split &
+rm -fr bigMaf/*.bigMaf.gz &
+cd iRows/result
+# the -P 5 runs 5 gzips at a time in parallel
+ls -S *.maf | xargs -P 5 -I{} gzip {} > ../../gzip.log 2>&1 &
+wait
+### when the gzip is finished
+md5sum *.maf.gz > md5sum.txt
+
+########################################################################
+### when the rsync is done to hgdownload and the trackDb has been remade
+###
+pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2
+
+og ../../contrib/vgp577way/`pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2`.*.b[bw]
+rm ../../contrib/vgp577way/`pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2`.*.b[bw]
+
+ln -s `pwd`/iRows/result /hive/data/genomes/asmHubs/VGP/vgp577way/maf/`pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2`
+
+og /hive/data/genomes/asmHubs/VGP/vgp577way/maf
+
+rsync -L -P -a /hive/data/genomes/asmHubs/VGP/vgp577way/maf/ qateam@hgdownload1:/data/hubs/VGP/vgp577way/maf/
+rsync -L -P -a /hive/data/genomes/asmHubs/VGP/vgp577way/maf/ qateam@hgdownload3:/data/hubs/VGP/vgp577way/maf/
+
+### refresh the trackDb, the hub files and push them out to hgdownload
+ottoBuildGenArkHub.py \
+    `pwd -P | sed -e "s#.*/GC\([AF]\)_#GC\\1_#;" | cut -d"_" -f1-2`
+

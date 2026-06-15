@@ -19,6 +19,7 @@
 #include "obscure.h"
 #include "hgMaf.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
@@ -233,7 +234,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("myVariants", s) ||
+		   isMyVariantsType(s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||

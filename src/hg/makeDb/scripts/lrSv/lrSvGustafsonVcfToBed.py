@@ -16,14 +16,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-SV_COLORS = {
-    "DEL": "200,0,0",      # red
-    "INS": "0,0,200",      # blue
-    "DUP": "0,160,0",      # green
-    "INV": "230,140,0",    # orange
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 # Jasmine END on chrM can overshoot by one base; clip to chrM length.
 CHRM_LEN = 16569
@@ -52,10 +45,14 @@ def main():
 
     inPath, outPath = sys.argv[1], sys.argv[2]
 
+    seen = set()
+    nIn = 0
+    nDup = 0
     with openVcf(inPath) as fIn, open(outPath, "w") as fOut:
         for line in fIn:
             if line.startswith("#"):
                 continue
+            nIn += 1
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
@@ -99,7 +96,7 @@ def main():
             # is the diploid carrier upper bound.
             ac = supp * 2
 
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             featLen = insLen if svType in ("INS", "MEI") else svLen
             name = svName(svType, featLen, ac)
@@ -123,7 +120,15 @@ def main():
                 str(precise),
                 strands,
             ]
-            fOut.write("\t".join(row) + "\n")
+            line_out = "\t".join(row)
+            if line_out in seen:
+                nDup += 1
+                continue
+            seen.add(line_out)
+            fOut.write(line_out + "\n")
+
+    print(f"Gustafson: {nIn:,} input records, {nDup:,} duplicate rows dropped, "
+          f"{nIn - nDup:,} written", file=sys.stderr)
 
 
 if __name__ == "__main__":

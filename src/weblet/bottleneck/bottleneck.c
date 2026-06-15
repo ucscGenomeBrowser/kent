@@ -233,7 +233,8 @@ for (i=0; i<count; ++i)
     s = netGetString(socket, buf);
     if (s == NULL)
         errAbort("Shut out by bottleneck server %s:%d", host, port);
-    printf("%s millisecond delay recommended\n", s);
+    else
+        printf("%s millisecond delay recommended\n", s);
     close(socket);
     }
 }

@@ -88,7 +88,8 @@ for (key = keyList;  key != NULL;  key = key->next)
     const char *val = mmHashFindVal(mmh, key->name);
     if (val == NULL)
         errAbort("Lookup of key '%s' failed.", key->name);
-    fprintf(f, "%s\t%s\n", key->name, val);
+    else
+        fprintf(f, "%s\t%s\n", key->name, val);
     }
 carefulClose(&f);
 }

@@ -109,18 +109,29 @@ boolean myVariantsRevokeShare(struct sqlConnection *conn,
 /* Delete a share record. ownerUser must match the share's owner.
  * Returns TRUE if a row was deleted, FALSE if not found or not owner. */
 
+boolean myVariantsSetSharePermission(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, int permission);
+/* Update a share's permission (0=read-only, 1=read-write). ownerUser must
+ * match the share's owner. Returns TRUE if a row was updated, FALSE if not
+ * found or not owner. */
+
+boolean myVariantsSetShareTargets(struct sqlConnection *conn,
+    char *shareToken, char *ownerUser, char *targetUser);
+/* Update a share's targetUser list (NULL for anyone with link). ownerUser
+ * must match the share's owner. Returns TRUE if a row was updated, FALSE if
+ * not found or not owner. */
+
+boolean myVariantsShareAllowsUser(struct myVariantsShare *share, char *userName);
+/* Return TRUE if userName may access share. TRUE when targetUser is empty
+ * (anyone with link); otherwise TRUE only if userName is non-empty and
+ * appears in the comma-separated targetUser list. NULL-safe. */
+
 #define MYVAR_SHARE_CGI_VAR "myVarShare"
 #define MYVAR_SHARED_CART_PREFIX "myVarShared_"
 
 char *myVariantsShareCartValue(struct myVariantsShare *share);
 /* Build JSON cart value string from a share record.
  * Caller must freeMem the result. */
-
-boolean myVariantsParseShareCartValue(char *val, char **retOwner,
-    char **retProject, char **retDb, int *retPermission, char **retLabel);
-/* Parse a JSON cart value string back into components. Returns FALSE on bad format.
- * retOwner, retProject, retDb, retLabel are cloneString'd; caller must free.
- * Any ret* param may be NULL; pass NULL to skip. */
 
 #endif /* MYVARIANTSSHARE_H */
 

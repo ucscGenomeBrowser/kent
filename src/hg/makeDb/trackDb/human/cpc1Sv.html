@@ -1,8 +1,8 @@
 <h2>Description</h2>
 
 <p>
-This track displays structural variants (SVs) &mdash; deletions, insertions,
-and complex substitutions of at least 50 bp &mdash; identified by the
+This track displays structural variants (SVs) at least 50 bp long
+(deletions, insertions, and complex substitutions) identified by the
 Chinese Pangenome Consortium (CPC) in 58 samples representing 36 Chinese
 minority ethnic groups.</p>
 
@@ -24,7 +24,7 @@ to hg38 using the UCSC <tt>hs1ToHg38.over.chain.gz</tt> chain. The track
 contains 46,092 snarl sites on hs1 and 36,030 lifted to hg38 (10,062 did
 not lift, typically in T2T-added repetitive regions).</p>
 
-<h2>Display conventions</h2>
+<h2>Display Conventions and Configuration</h2>
 
 <p>Items are colored by SV type:</p>
 <ul>
@@ -45,7 +45,7 @@ The <i>name</i> field is the graph snarl ID (two node identifiers separated
 by strand arrows, e.g. <tt>&gt;2541&gt;2547</tt>). It is stable across the
 graph but has no meaning outside the CPC pangenome graph file.</p>
 
-<h2>Collapsing of multi-allelic sites</h2>
+<h2>Collapsing of Multi-allelic Sites</h2>
 
 <p>
 The source VCF was decomposed with <tt>bcftools norm -m -any</tt>, so each
@@ -57,7 +57,7 @@ one track item:</p>
 <ul>
   <li><b>SV type</b> is the common class of all alts, or <tt>MIXED</tt> if
       they disagree (for example one alt is a DEL and another is an INS).</li>
-  <li><b>SV length</b> is the maximum |len(ALT) − len(REF)| across alts.</li>
+  <li><b>SV length</b> is the maximum |len(ALT) &#8722; len(REF)| across alts.</li>
   <li><b>Allele count</b> is the sum of the per-alt allele counts.</li>
   <li><b>Number of alts</b> records how many alternative alleles were merged.</li>
 </ul>
@@ -66,8 +66,8 @@ one track item:</p>
 
 <p>Available filters:</p>
 <ul>
-  <li><b>SV type</b> — any combination of INS, DEL, CPX, MIXED.</li>
-  <li><b>SV length</b> — maximum allele-length difference.</li>
+  <li><b>SV type</b>: any combination of INS, DEL, CPX, MIXED.</li>
+  <li><b>SV length</b>: maximum allele-length difference.</li>
   <li><b>Allele frequency</b> and <b>allele count</b> across the combined
       105 samples.</li>
 </ul>

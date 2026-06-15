@@ -17,15 +17,11 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
+from lrSvCommon import svName, normalizeSvType, svColor
 
-# Flat solid colors per SV type
-COLORS = {
-    "DEL": "220,50,32",    # red
-    "INS": "0,0,200",      # blue
-    "DUP": "0,160,0",      # green
-    "INV": "230,140,0",    # orange
-}
+# Only these SV types are kept from the CoLoRSdb VCF; anything else
+# (e.g. BND) is dropped. Colors come from the shared svColor() palette.
+KEEP_TYPES = {"DEL", "INS", "DUP", "INV"}
 
 
 def parse_info(info_str):
@@ -88,7 +84,7 @@ def main():
             info_d = parse_info(info)
             sv_raw = info_d.get("SVTYPE", "")
             sv_type = normalizeSvType(sv_raw)
-            if sv_type not in COLORS:
+            if sv_type not in KEEP_TYPES:
                 dropped_no_svtype += 1
                 continue
 
@@ -134,7 +130,7 @@ def main():
             exchet = _float(info_d.get("ExcHet", 0.0))
 
             score = min(1000, max(0, int(round(af * 1000))))
-            rgb = COLORS[sv_type]
+            rgb = svColor(sv_type)
 
             featLen = insLen if sv_type == "INS" else svLen
             name = svName(sv_type, featLen, ac)

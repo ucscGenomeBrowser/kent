@@ -1,6 +1,68 @@
 # ncOrfs - non-canonical ORFs supertrack build notes
 
 ##############################################################################
+# 5ULTRA uORFs - MANE Select uORFs (2026-06-01 Claude)
+
+# 22,567 ATG-initiated uORFs in MANE Select transcripts compiled by
+# Chaldebas et al. (Am J Hum Genet 2026, PMID 41881026) as part of the
+# 5ULTRA variant annotation pipeline. Three types: Non-Overlapping,
+# Overlapping, N-terminal extension.
+#
+# Data source: https://github.com/mchaldebas/5ULTRA
+# The BED file was retrieved by installing the 5ULTRA package and running
+# 5ULTRA-download-data, then copying:
+#   cp ~/.5ULTRA/data/uORFs.MANE.hg38.bed \
+#      /hive/data/genomes/hg38/bed/ncorfs/5ultra/
+
+mkdir -p /hive/data/genomes/hg38/bed/ncorfs/5ultra
+cd /hive/data/genomes/hg38/bed/ncorfs/5ultra
+
+# Remap colors to Okabe-Ito palette and add uorfType field (bed9+1)
+python3 ~/kent/src/hg/makeDb/scripts/ncOrfs/maneUorfsToBed.py \
+  < uORFs.MANE.hg38.bed \
+  > uORFs.MANE.bed9plus1
+
+# Add exon/intron structure from MANE transcripts (bed12+2)
+python3 ~/kent/src/hg/makeDb/scripts/ncOrfs/addIntrons.py \
+  --in  uORFs.MANE.bed9plus1 \
+  --out uORFs.MANE.bed12plus2 \
+  --mane /gbdb/hg38/mane/mane.bb \
+  --fallback /gbdb/hg38/gencode/gencodeV49.bb \
+  --report addIntrons.report.tsv
+
+# Results: mane_introns=3861 mane_noIntron=18652
+#          fallback_introns=9 fallback_noIntron=45
+#          endpoint_in_intron=0 unmatched=0
+
+# Add gene (from GENE_N short name), rank position (N), and kozak (from score)
+# Name is now GENE_N (e.g. PERM1_2); kozak derived from score: 1000=Strong, 700=Moderate, 300=Weak
+awk -F'\t' 'BEGIN{OFS="\t"} {
+    idx=0; for(i=1;i<=length($4);i++) if(substr($4,i,1)=="_") idx=i;
+    gene = (idx>0) ? substr($4,1,idx-1) : $4;
+    pos  = (idx>0) ? substr($4,idx+1)   : "1";
+    sc   = $5+0;
+    kz   = (sc==1000)?"Strong":(sc==700)?"Moderate":(sc==300)?"Weak":"";
+    print $0, gene, pos, kz;
+}' uORFs.MANE.bed12plus2 > uORFs.MANE.bed12plus5
+
+# Sort and build bigBed
+sort -k1,1 -k2,2n uORFs.MANE.bed12plus5 > uORFs.MANE.sorted.bed
+bedToBigBed \
+  -type=bed12+5 \
+  -tab \
+  -as=~/kent/src/hg/makeDb/scripts/ncOrfs/fiveUltraUorfs.as \
+  uORFs.MANE.sorted.bed \
+  /hive/data/genomes/hg38/chrom.sizes \
+  fiveUltraUorfs.bb
+
+# Verify: itemCount should be 22,567, fieldCount 17
+bigBedInfo fiveUltraUorfs.bb
+
+mkdir -p /gbdb/hg38/ncOrfs/fiveUltraUorfs
+ln -s /hive/data/genomes/hg38/bed/ncorfs/5ultra/fiveUltraUorfs.bb \
+      /gbdb/hg38/ncOrfs/fiveUltraUorfs/fiveUltraUorfs.bb
+
+##############################################################################
 # nuORFdb v1.2 (2026-03-19 max)
 
 # nuORFdb is a database of non-canonical ORFs from the Bhatt lab (Broad Institute)
@@ -151,23 +213,28 @@ cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg38
 # Kozak coloring + bigGenePred conversion for all ncORF subtracks
 # 2026-04-29 Claude max
 
-# Goal: color every ncORF feature by Kozak translational efficiency (TE) and
-# enable codon display in hgTracks. Three new annotation fields are added to
-# each output bigBed:
+# Goal: color every ncORF feature by Kozak consensus strength (categorical)
+# and enable codon display in hgTracks. Four new annotation fields are
+# appended to each output bigBed:
 #   startCodon     - first 3 bp of ORF read from genome (ATG / CTG / GTG / ...)
 #   kozakStrength  - Strong / Moderate / Weak (Kozak rule on -3 and +4), or
 #                    "non-ATG" for non-ATG starts, "None" for no context
 #   kozakTE        - Noderer 2014 translational efficiency divided by 100;
 #                    -1 if non-ATG or context unavailable
+#   _teRgb         - alternate RGB string from the TE bin
+#                    (Blue/Teal/Green/Orange/Red, purple for non-ATG, grey
+#                    for missing). The underscore prefix hides it on the
+#                    hgc detail page; kept for future second-color use.
 #
-# The color scheme is set in colorByKozak.py (COLOR_BINS / GREY / PURPLE):
-#   kozakTE  < 0.5         -> Blue   (0,0,255)
-#   kozakTE >= 0.5, < 0.6  -> Teal   (0,128,128)
-#   kozakTE >= 0.6, < 0.7  -> Green  (0,128,0)
-#   kozakTE >= 0.7, < 0.8  -> Orange (255,165,0)
-#   kozakTE >= 0.8         -> Red    (255,0,0)
-#   non-ATG start codon    -> Purple (160,80,160)
-#   no/short context       -> Grey   (128,128,128)
+# The color scheme is set in colorByKozak.py (STRENGTH_COLORS) and is keyed on
+# the categorical kozakStrength label, not the numeric TE score:
+#   Strong   -> golden yellow (245,166,35)   #F5A623
+#   Moderate -> steel blue    ( 91,155,213)  #5B9BD5
+#   Weak     -> medium gray   (169,169,169)  #A9A9A9
+#   non-ATG  -> black         (  0,  0,  0)  #000000
+#   None     -> light gray    (211,211,211)  #D3D3D3   (no genomic context)
+# The kozakTE field is still written for filtering, but is no longer the
+# basis for the color.
 #
 # All output files are bigGenePred so codon shading is enabled (thickStart
 # and thickEnd span the whole ORF, since ncORFs are entirely coding).
@@ -204,24 +271,31 @@ $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.primary.bb       $script
 $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.comprehensive.bb $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.comprehensive.kozak.bb
 
 # utrAnnotUorfs needs an extra step: the source is bed9+1 (no exon blocks),
-# so introns are copied from any matching feature in the other ncORF tracks
-# (matched by exact chrom/start/end/strand). The matching donor's blockCount/
-# blockSizes/chromStarts replace the original single block, and the donor
-# database name(s) are recorded in a new intronsSource field. Of 44,435
-# uORFs, 6,508 received introns (mostly from metamorf); 37,927 stayed
-# single-block (intronsSource=none).
+# so introns are grafted from a host MANE Select / MANE Plus Clinical
+# transcript. addIntrons.py finds, for each uORF, a same-strand MANE
+# transcript whose own coordinates overlap (not necessarily contain) the
+# uORF range, then clips the host transcript's exons to the uORF range so
+# any MANE intron inside the uORF becomes an intron of the bed12 record.
+# A uORF that extends past either end of MANE keeps the MANE introns inside
+# the overlap and gets a single bridging block for the orphan portion. A
+# uORF endpoint that falls inside a MANE intron disqualifies that
+# candidate; if all candidates are disqualified the uORF stays
+# single-block. The chosen MANE transcript ID is recorded in the
+# intronsSource field; uORFs without a MANE host on the same strand, or
+# whose host has no introns inside the uORF range, get intronsSource=none.
 cd /hive/data/genomes/hg38/bed/ncorfs/utrannot
 bigBedToBed utrAnnotUorfs.bb utrAnnotUorfs.bed9.bed
+# addIntrons tries MANE first (preferred donor); if all MANE candidates
+# are rejected for a given uORF it falls back to the full GENCODE
+# comprehensive set. GENCODE covers the cases where the published
+# UTRannotator coords came from an alternative transcript whose UTR exon
+# boundaries differ from MANE's.
 python3 $scriptDir/addIntrons.py \
     --in utrAnnotUorfs.bed9.bed \
     --out utrAnnotUorfs.withIntrons.bed \
     --report utrAnnotUorfs.withIntrons.report.tsv \
-    --source gencNcOrfs:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb \
-    --source gencNcOrfsPrimary:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb \
-    --source gencNcOrfsComprehensive:/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb \
-    --source nuorfdb:/gbdb/hg38/ncOrfs/nuorfdb/nuorfdb.kozak.bb \
-    --source metamorf:/gbdb/hg38/ncOrfs/metamorf/MetamORF.kozak.bb \
-    --source openprot:/gbdb/hg38/ncOrfs/openprot/openprot.kozak.bb
+    --mane /gbdb/hg38/mane/mane.bb \
+    --fallback /gbdb/hg38/gencode/gencodeV49.bb
 python3 $scriptDir/colorByKozak.py \
     --in utrAnnotUorfs.withIntrons.bed \
     --teTable $scriptDir/translational_efficiency.txt \
@@ -229,7 +303,11 @@ python3 $scriptDir/colorByKozak.py \
     --report utrAnnotUorfs.kozak.report.tsv \
     --out utrAnnotUorfs.kozak.bed
 sort -k1,1 -k2,2n utrAnnotUorfs.kozak.bed > utrAnnotUorfs.kozak.sorted.bed
-bedToBigBed -type=bed12+12 -as=$scriptDir/utrAnnotUorfs.as -tab \
+# The .as has 14 extras (8 bigGenePred + uorfType + intronsSource +
+# startCodon + kozakStrength + kozakTE + _teRgb) so the bigBed type is
+# bed12+14. The _teRgb field is a hidden alternate-color string (underscore
+# prefix => skipped by the hgc detail page).
+bedToBigBed -type=bed12+14 -as=$scriptDir/utrAnnotUorfs.as -tab \
     utrAnnotUorfs.kozak.sorted.bed /hive/data/genomes/hg38/chrom.sizes \
     utrAnnotUorfs.kozak.bb
 rm utrAnnotUorfs.bed9.bed utrAnnotUorfs.kozak.bed utrAnnotUorfs.kozak.sorted.bed \
@@ -265,3 +343,62 @@ $scriptDir/run_kozak.sh bigGenePred openprot.ms2.bb $scriptDir/openprot.as openp
 # Wang CL. Quantitative analysis of mammalian translation initiation sites by
 # FACS-seq. Mol Syst Biol. 2014 Aug 28;10(8):748. DOI: 10.15252/msb.20145136
 # PMID: 25170020
+
+##############################################################################
+# GENCODE Phase I ncORFs: peptide evidence from TransCODE/PeptideAtlas
+# 2026-06-02 Claude max
+#
+# Deutsch et al. (Nature 2026, PMID 42092140) queried the 7,264 Phase I ORFs
+# against two PeptideAtlas builds: HLA immunopeptidomics (>100 HLA-typed donors,
+# HLA-I and HLA-II peptidomes) and whole-cell tryptic proteomics. The study
+# introduced the "peptidein" concept for translation products detectable by MS
+# but not yet annotatable as proteins.
+#
+# Five supplementary tables were downloaded from the Nature paper at
+# https://doi.org/10.1038/s41586-026-10459-x and saved to:
+#   /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf/peptideSupport/
+#   41586_2026_10459_MOESM4_ESM_Table_S2.tsv  (non-HLA peptides, per peptide)
+#   41586_2026_10459_MOESM5_ESM_Table_S3.tsv  (non-HLA ORF-level summary)
+#   41586_2026_10459_MOESM8_ESM_Table_S6.tsv  (HLA peptides, per peptide)
+#   41586_2026_10459_MOESM9_ESM_Table_S7.tsv  (HLA ORF-level summary)
+#   41586_2026_10459_MOESM12_ESM_Sheet1.tsv   (peptidein set, Table S12)
+
+cd /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf
+
+# Join all five tables onto the Phase I kozak bigBed by the short ORF identifier.
+# Adds 14 extra fields; ORFs without evidence get default empty values.
+# Uses ~/miniconda3/bin/python (needs py2bit) - the script reads field 9 (Kozak
+# colors) directly from the source bigBed so no color recomputation is needed.
+python3 peptideSupport/addPeptideEvidence.py \
+    2>peptideSupport/addPeptides.log > Ribo-seq_ORFs.kozak.peptides.bed
+
+# Counts: 2,150 ORFs with evidence, 5,114 without
+# Non-HLA peptides with 'exclude' != "" (Maps2Core / TooShort) are skipped: 331
+
+bedSort Ribo-seq_ORFs.kozak.peptides.bed Ribo-seq_ORFs.kozak.peptides.sorted.bed
+bedToBigBed -as=Ribo-seq_ORFs.kozak.peptides.as -type=bed12+ -tab \
+    Ribo-seq_ORFs.kozak.peptides.sorted.bed \
+    /hive/data/genomes/hg38/chrom.sizes \
+    Ribo-seq_ORFs.kozak.peptides.bb
+rm Ribo-seq_ORFs.kozak.peptides.sorted.bed
+
+# Verify: itemCount=7264, fieldCount=44
+bigBedInfo Ribo-seq_ORFs.kozak.peptides.bb
+
+# AutoSql and join script are in:
+#   ~/kent/src/hg/makeDb/scripts/ncOrfs/addPeptideEvidence.py
+#   ~/kent/src/hg/makeDb/scripts/ncOrfs/gencNcOrf.as (shared with kozak step)
+#   Ribo-seq_ORFs.kozak.peptides.as (in data dir, matches 44-field schema)
+
+# To recolor Kozak strength (updates all three kozak bigBeds and then the
+# peptides bigBed). Requires ~/miniconda3/bin/python for py2bit:
+export PATH=~/miniconda3/bin:$PATH
+scriptDir=~/kent/src/hg/makeDb/scripts/ncOrfs
+bash $scriptDir/run_kozak.sh bigGenePred       Ribo-seq_ORFs.bb               $scriptDir/gencNcOrf.as       Ribo-seq_ORFs.kozak.bb
+bash $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.primary.bb       $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.primary.kozak.bb
+bash $scriptDir/run_kozak.sh gencNcOrfBed12    Ribo-seq_ORFs.comprehensive.bb $scriptDir/gencNcOrfPhase2.as Ribo-seq_ORFs.comprehensive.kozak.bb
+# Then rebuild the peptides bigBed as shown above.
+
+# Reference:
+# Deutsch EW et al. Expanding the human proteome with microproteins and peptideins.
+# Nature. 2026 May 6. DOI: 10.1038/s41586-026-10459-x. PMID: 42092140

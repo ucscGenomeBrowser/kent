@@ -11,7 +11,7 @@ CREATE TABLE myVariantsShares (
     project varchar(255) not null,	# Project name, or * for all
     db varchar(255) not null,	# Assembly (hg38, mm39, etc.)
     permission tinyint unsigned not null default 0,	# 0=read-only, 1=read-write
-    targetUser varchar(255) default null,	# Specific user, or NULL for anyone with link
+    targetUser varchar(512) default null,	# Comma-separated usernames, or NULL for anyone with link
     label varchar(255) default null,	# Optional human-readable label
     createdAt timestamp not null default CURRENT_TIMESTAMP,	# Timestamp of creation
               #Indices

@@ -501,7 +501,7 @@ static void capMafOnTrack(struct mafAli *maf, char *track, boolean onlyCds)
 char dbOnly[64];
 char *chrom;
 struct mafComp *mc = maf->components;
-strncpy(dbOnly, mc->src, sizeof(dbOnly));
+safecpy(dbOnly, sizeof(dbOnly), mc->src);
 chrom = chopPrefix(dbOnly);
 capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }

@@ -16,6 +16,7 @@ boolean pslxFmt = FALSE; /* output in pslx format */
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"scores", OPTION_STRING},
+    {"tsv", OPTION_BOOLEAN},
     {"eVal", OPTION_DOUBLE},
     {"pslx", OPTION_BOOLEAN},
     {NULL, 0}
@@ -33,6 +34,7 @@ errAbort(
   "Options:\n"
   "  -scores=file - Write score information to this file.  Format is:\n"
   "       strands qName qStart qEnd tName tStart tEnd bitscore eVal\n"
+  "  -tsv - Write score information with a TSV header.\n"
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
@@ -83,7 +85,7 @@ for (ba = bq->gapped; ba != NULL; ba = ba->next)
     }
 }
 
-static void blastToPsl(char *blastFile, char *pslFile, char* scoreFile)
+static void blastToPsl(char *blastFile, char *pslFile, char* scoreFile, boolean tsv)
 /* process one query in */
 {
 struct blastFile *bf = blastFileOpenVerify(blastFile);
@@ -91,7 +93,7 @@ struct blastQuery *bq;
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
-    scoreFh = pslBuildScoresOpen(scoreFile, FALSE);
+    scoreFh = pslBuildScoresOpen(scoreFile, FALSE, tsv);
 unsigned flags =  pslBuildGetBlastAlgo(bf->program) |  (pslxFmt ? bldPslx : 0);
 
 while ((bq = blastFileNextQuery(bf)) != NULL)
@@ -113,7 +115,7 @@ eVal = optionDouble("eVal", eVal);
 pslxFmt = optionExists("pslx");
 if (argc != 3)
     usage();
-blastToPsl(argv[1], argv[2], optionVal("scores", NULL));
+blastToPsl(argv[1], argv[2], optionVal("scores", NULL), optionExists("tsv"));
 
 return 0;
 }

@@ -270,11 +270,13 @@ finishPsl(psl, flags);
 return psl;
 }
 
-FILE *pslBuildScoresOpen(char *scoreFile, boolean inclDefs)
+FILE *pslBuildScoresOpen(char *scoreFile, boolean inclDefs, boolean isTsv)
 /* open score file and write headers */
 {
+char *header = "#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal";
 FILE *fh = mustOpen(scoreFile, "w");
-fputs("#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal", fh);
+// skip # for real TSV
+fputs(header + (isTsv ? 1 : 0) , fh);
 if (inclDefs)
     fputs("\tqDef\ttDef", fh);
 fputc('\n', fh);

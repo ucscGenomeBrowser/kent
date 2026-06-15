@@ -362,7 +362,6 @@ GCA_902685475.1_mSciCar1.1_alternate_haplotype	gray squirrel (alternate hap 2019
 GCA_902686445.2_mSciCar1.2	gray squirrel (primary hap 2020)
 GCA_905319855.2_mCanLor1.2	gray wolf (2021)
 GCA_905319845.1_mCanLor1.1_alternate_haplotype	gray wolf (alternate hap 2021)
-GCA_038363145.1_mArtInt1.hap1	intermediate fruit-eating bat (hap1 2024)
 GCA_038363095.4_mArtLit1.hap1	great fruit-eating bat (hap1 2025)
 GCA_038363175.2_mArtLit1.hap2	great fruit-eating bat (mArtLit1hap2 2024)
 GCA_038363095.2_mArtLit.hap1	great fruit-eating bat (v2 hap1 2024)
@@ -434,11 +433,13 @@ GCA_030015415.1_ASM3001541v1	Indian short-nosed fruit bat (CYSPWHU 2023)
 GCA_004027635.1_CroInd_v1_BIUU	Indochinese shrew (US011 2019 Broad)
 GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
 GCA_041735815.1_T2T-goat2.0	Inner Mongolia cashmere goat (2024)
+GCA_038363145.1_mArtInt1.hap1	intermediate fruit-eating bat (hap1 2024)
 GCA_043727925.1_ASM4372792v1	intermediate horseshoe bat (China 20211001_DDa alternate hap 2024)
 GCA_043728065.1_ASM4372806v1	intermediate horseshoe bat (China 20211001_DDa primary hap 2024)
 GCA_031876335.1_mHipLar1.pri	intermediate roundleaf bat (primary hap 2023)
 GCA_004023805.1_PanOnc_v1_BIUU	jaguar (BS21 2019)
-GCA_046562885.1_mPanOnc1_haplotype_1	jaguar (hap1 2025)
+GCA_046562885.1_mPanOnc1_haplotype_1	jaguar (hap1 2025 genbank)
+GCF_046562885.1_mPanOnc1_haplotype_1	jaguar (hap1 2025 refseq)
 GCA_046562885.2_mPanOnc1_haplotype_1	jaguar (hap1 2025)
 GCA_046562875.1_mPanOnc1_haplotype_2	jaguar (hap2 2025)
 GCA_046562875.2_mPanOnc1_haplotype_2	jaguar (hap2 2025)
@@ -528,6 +529,7 @@ GCA_015832495.2_NRM_Aalces_2_0.fsa	moose/elk (AALL_1980 2023)
 GCA_007570765.1_GSC_moose_1.0	moose/elk (MIG12-28694850 2019)
 GCA_019843965.1_ASM1984396v1	Mount Data shrew rat (FMNH 198792 2021)
 GCA_004027875.1_AplRuf_v1_BIUU	mountain beaver
+GCA_040438115.1_ASM4043811v1	mountain bongo (Barney_WCC 2024)
 GCA_004026605.1_OndZib_v1_BIUU	muskrat
 GCA_944319725.1_Naked_mole-rat_paternal	naked mole-rat (2022)
 GCA_964261345.1_mHetGlaV3	naked mole-rat (maternal 2024)
@@ -587,6 +589,9 @@ GCA_041222355.1_F344_StmMcwi	Norway rat (F344/Stm 2024)
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCF_000002265.2_Rn_Celera	Norway rat celera
+GCA_045688005.1_Dahl_SR_JrHsd	Norway rat Dahl SR JrHsd (RGD_1582184 2024)
+GCA_045687965.1_Lyon_Hypertensive	Norway rat Lyon Hypertensive(RGD_10755352 2024)
+GCA_045687995.1_Lyon_Normot_Rat_Genome	Norway rat Lyon Normot (RGD_10755354 2024)
 GCF_000001895.5_Rnor_6.0	Norway rat Rnor6.0
 GCA_023515785.1_UTH_Rnor_SHR_Utx	Norway rat SHR/Utx RGD_8142385 2022
 GCA_021556685.1_UTH_Rnor_SHRSP_BbbUtx_1.0	Norway rat SHRSP/BppUtx 2022
@@ -732,6 +737,7 @@ GCA_964165515.1_mMesBid2.hap1.1	Sowerby's beaked whale (hap1 2024)
 GCA_964148845.1_mMesBid2.hap2.1	Sowerby's beaked whale (hap2 2024)
 GCA_004027085.1_MesBid_v1_BIUU	Sowerby's beaked whale (US080 2019)
 GCF_002837175.3_ASM283717v5	sperm whale (SW-GA 2023)
+GCF_008692635.1_BGI_CrCroc_1.0	spotted hyena (KB4526 2019)
 GCA_048593285.1_ASM4859328v1	spotted-tailed quoll (Chaos hap1 2025)
 GCA_048593245.1_ASM4859324v1	spotted-tailed quoll (Chaos hap2 2025)
 GCF_000260355.1_ConCri1.0	star-nosed mole
@@ -792,6 +798,7 @@ GCF_000349705.1_LepWed1.0	Weddell seal (WS11-02 2013 refseq)
 GCF_000296755.1_EriEur2.0	western European hedgehog (2012 refseq)
 GCA_950295305.1_mEriEur2.1_alternate_haplotype	western European hedgehog (alternate hap 2023)
 GCF_950295315.1_mEriEur2.1	western European hedgehog (primary hap 2023 refseq)
+GCA_056825265.1_T2T_mhaESC_v1.5	western European house mouse (C57BL/6 2026)
 GCA_921998345.2_WSB_EiJ_v3	western European house mouse (WSB_EiJ v3 2022)
 GCA_951849835.1_ETH_CapCap1	western roe deer (2023)
 GCA_004023965.1_SpiGra_v1_BIUU	western spotted skunk

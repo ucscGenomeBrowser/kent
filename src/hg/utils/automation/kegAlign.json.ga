@@ -1,23 +1,7 @@
 {
     "a_galaxy_workflow": "true",
-    "annotation": "Should now have axtChainScoreScheme and axtChainLinearGap input options",
+    "annotation": "kegAlign updated to accept scoringMatrix",
     "comments": [
-        {
-            "color": "none",
-            "data": {
-                "text": "Assemblies in fasta format, masked. "
-            },
-            "id": 1,
-            "position": [
-                42.09072708051447,
-                778.882939520563
-            ],
-            "size": [
-                310,
-                55
-            ],
-            "type": "markdown"
-        },
         {
             "child_comments": [
                 1
@@ -40,6 +24,22 @@
                 276
             ],
             "type": "frame"
+        },
+        {
+            "color": "none",
+            "data": {
+                "text": "Assemblies in fasta format, masked. "
+            },
+            "id": 1,
+            "position": [
+                42.09072708051447,
+                778.882939520563
+            ],
+            "size": [
+                310,
+                55
+            ],
+            "type": "markdown"
         }
     ],
     "creator": [
@@ -56,7 +56,7 @@
     ],
     "format-version": "0.1",
     "license": "MIT",
-    "name": "align, chain, and 2x liftOver with input options",
+    "name": "kegAlign_2026-06-11",
     "report": {
         "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
     },
@@ -78,7 +78,7 @@
             "outputs": [],
             "position": {
                 "left": 16.792180016306407,
-                "top": 0.0
+                "top": 0
             },
             "tool_id": null,
             "tool_state": "{\"default\": \"both\", \"multiple\": false, \"validators\": [], \"restrictions\": [\"both\", \"minus\", \"plus\"], \"parameter_type\": \"text\", \"optional\": false}",
@@ -521,7 +521,7 @@
         },
         "16": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy1",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy3",
             "errors": null,
             "id": 16,
             "input_connections": {
@@ -585,6 +585,10 @@
                 },
                 {
                     "description": "runtime parameter for tool KegAlign",
+                    "name": "query"
+                },
+                {
+                    "description": "runtime parameter for tool KegAlign",
                     "name": "scoring_options"
                 },
                 {
@@ -598,6 +602,10 @@
                 {
                     "description": "runtime parameter for tool KegAlign",
                     "name": "sequence_options"
+                },
+                {
+                    "description": "runtime parameter for tool KegAlign",
+                    "name": "target"
                 },
                 {
                     "description": "runtime parameter for tool KegAlign",
@@ -621,16 +629,16 @@
                 "top": 43.847290417174904
             },
             "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy1",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy3",
             "tool_shed_repository": {
-                "changeset_revision": "f885abcfe3a0",
+                "changeset_revision": "c05177db395f",
                 "name": "kegalign",
                 "owner": "richard-burhans",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"gapped_extension_options\": {\"ydrop\": {\"__class__\": \"ConnectedValue\"}, \"gappedthresh\": {\"__class__\": \"ConnectedValue\"}, \"notrivial\": false}, \"interpolation_options\": {\"inner\": {\"__class__\": \"ConnectedValue\"}}, \"output_options\": {\"format\": {\"format_selector\": \"axt\", \"__current_case__\": 4, \"axt_type\": \"axt\"}}, \"query\": {\"__class__\": \"ConnectedValue\"}, \"scoring_options\": {\"scoring\": {\"__class__\": \"RuntimeValue\"}, \"ambiguous_selector\": \"x\", \"ambiguous_params\": {\"set_ambiguous_params_selector\": \"false\", \"__current_case__\": 0}}, \"seeding_options\": {\"seed\": {\"seed_selector\": \"12of19\", \"__current_case__\": 0}, \"step\": {\"__class__\": \"ConnectedValue\"}, \"notransition\": {\"__class__\": \"ConnectedValue\"}}, \"sequence_options\": {\"strand_selector\": {\"__class__\": \"ConnectedValue\"}}, \"system_options\": {\"wga_chunk_size\": \"250000\", \"lastz_interval_size\": \"10000000\", \"seq_block_size\": \"400000000\", \"num_gpu\": \"-1\", \"debug\": false}, \"target\": {\"__class__\": \"ConnectedValue\"}, \"ungapped_extension_options\": {\"xdrop\": {\"__class__\": \"ConnectedValue\"}, \"hspthresh\": {\"__class__\": \"ConnectedValue\"}, \"noentropy\": false}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"developer\": {\"alignment_type\": \"vertebrates_default\"}, \"gapped_extension_options\": {\"ydrop\": {\"__class__\": \"ConnectedValue\"}, \"gappedthresh\": {\"__class__\": \"ConnectedValue\"}, \"notrivial\": false}, \"interpolation_options\": {\"inner\": {\"__class__\": \"ConnectedValue\"}}, \"output_options\": {\"format\": {\"format_selector\": \"axt\", \"__current_case__\": 4, \"axt_type\": \"axt\"}}, \"query\": {\"__class__\": \"RuntimeValue\"}, \"scoring_options\": {\"scoring\": {\"__class__\": \"RuntimeValue\"}, \"ambiguous_selector\": \"x\", \"ambiguous_params\": {\"set_ambiguous_params_selector\": \"false\", \"__current_case__\": 0}}, \"seeding_options\": {\"seed\": {\"seed_selector\": \"12of19\", \"__current_case__\": 0}, \"step\": {\"__class__\": \"ConnectedValue\"}, \"notransition\": {\"__class__\": \"ConnectedValue\"}}, \"sequence_options\": {\"strand_selector\": {\"__class__\": \"ConnectedValue\"}}, \"system_options\": {\"wga_chunk_size\": \"250000\", \"lastz_interval_size\": \"10000000\", \"seq_block_size\": \"400000000\", \"num_gpu\": \"-1\", \"debug\": false}, \"target\": {\"__class__\": \"RuntimeValue\"}, \"ungapped_extension_options\": {\"xdrop\": {\"__class__\": \"ConnectedValue\"}, \"hspthresh\": {\"__class__\": \"ConnectedValue\"}, \"noentropy\": false}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "0.1.2.9+galaxy1",
+            "tool_version": "0.1.2.9+galaxy3",
             "type": "tool",
             "uuid": "7bd758b4-e2cc-4d43-8612-3cd939405586",
             "when": null,
@@ -644,7 +652,7 @@
         },
         "17": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy6",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy7",
             "errors": null,
             "id": 17,
             "input_connections": {
@@ -653,7 +661,12 @@
                     "output_name": "kegalign_output"
                 }
             },
-            "inputs": [],
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Batched LASTZ",
+                    "name": "input"
+                }
+            ],
             "label": "batched_lastz_step",
             "name": "Batched LASTZ",
             "outputs": [
@@ -663,8 +676,8 @@
                 }
             ],
             "position": {
-                "left": 925.677131659099,
-                "top": 174.02599347763862
+                "left": 925.699951171875,
+                "top": 175.0333251953125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput": {
@@ -675,16 +688,16 @@
                     "output_name": "output"
                 }
             },
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy6",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy7",
             "tool_shed_repository": {
-                "changeset_revision": "79182c2a8c80",
+                "changeset_revision": "8cf5c6162cae",
                 "name": "batched_lastz",
                 "owner": "richard-burhans",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"developer\": {\"debug_enabled\": false}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"developer\": {\"debug_enabled\": false, \"alignment_type\": \"vertebrates_default\"}, \"input\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "1.04.22+galaxy6",
+            "tool_version": "1.04.22+galaxy7",
             "type": "tool",
             "uuid": "cd784f91-7a6a-4f48-847d-2761981ca7fe",
             "when": null,
@@ -1425,7 +1438,7 @@
                                 "name": "target_reference_index_source"
                             }
                         ],
-                        "label": "chainne_step",
+                        "label": "chainnet_step",
                         "name": "chainNet",
                         "outputs": [
                             {
@@ -2200,7 +2213,7 @@
                                 "name": "target_reference_index_source"
                             }
                         ],
-                        "label": "chainne_step",
+                        "label": "chainnet_step",
                         "name": "chainNet",
                         "outputs": [
                             {
@@ -2395,6 +2408,6 @@
         "chain",
         "net"
     ],
-    "uuid": "125f8508-9453-48c8-8e0f-93da0be031c7",
+    "uuid": "45670dee-8499-4871-bc3a-c8e9391c8220",
     "version": 1
 }

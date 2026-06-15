@@ -21,6 +21,7 @@ errAbort(
   "options:\n"
   "  -scores=file - Write score information to this file.  Format is:\n"
   "       strands qName qStart qEnd tName tStart tEnd bitscore eVal qDef tDef\n"
+  "  -tsv - Write score information with a TSV header.\n"
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
@@ -39,9 +40,11 @@ errAbort(
   "  -tName=src - define element used to obtain the tName.  The following\n"
   "   values are support:\n"
   "     o Hit_id - use contents of the <Hit-id> element.\n"
+  "     o Hit_id_id - with an id like 'gb|CM102538.1|' pull out `CM102538.1'\n"
   "     o Hit_def0 - use the first white-space separated word of the\n"
   "       <Hit_def> element.\n"
   "     o Hit_accession - contents of the <Hit_accession> element.\n"
+  "        WARNING: this drops the version.\n"
   "   Default is Hit-def0.\n"
   "  -forcePsiBlast - treat as output of PSI-BLAST. blast-2.2.16 and maybe\n"
   "   others indentify psiblast as blastp."
@@ -51,6 +54,7 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"scores", OPTION_STRING},
+    {"tsv", OPTION_BOOLEAN},
     {"eVal", OPTION_DOUBLE},
     {"pslx", OPTION_BOOLEAN},
     {"convertToNucCoords", OPTION_BOOLEAN},
@@ -67,6 +71,7 @@ enum qNameSrc {
 
 enum tNameSrc {
     tNameSrcHitId,
+    tNameSrcHitIdId,
     tNameSrcHitDef0,
     tNameSrcHitAccession
 };
@@ -175,6 +180,18 @@ switch (tNameSrc)
     case tNameSrcHitId:
         dyStringAppend(buf, hitRec->ncbiBlastHitId->text);
         break;
+    case tNameSrcHitIdId:
+        {
+        char *id = cloneString(hitRec->ncbiBlastHitId->text);
+        char *words[4];
+        int n = chopByChar(id, '|', words, ArraySize(words));
+        if (n >= 2)
+            dyStringAppend(buf, words[1]);
+        else
+            dyStringAppend(buf, hitRec->ncbiBlastHitId->text);
+        freeMem(id);
+        break;
+        }
     case tNameSrcHitDef0:
         appendFirstWord(buf, hitRec->ncbiBlastHitDef->text);
         break;        
@@ -266,7 +283,7 @@ for (itersRec = outputRec->ncbiBlastBlastOutputIterations; itersRec != NULL; ite
     }
 }
 
-static void blastXmlToPsl(char *blastXmlFile, char *pslFile, char *scoreFile)
+static void blastXmlToPsl(char *blastXmlFile, char *pslFile, char *scoreFile, boolean tsv)
 /* blastXmlToPsl - convert blast XML output to PSLs. */
 {
 struct xap *xap = xapNew(ncbiBlastStartHandler, ncbiBlastEndHandler, blastXmlFile);
@@ -274,7 +291,7 @@ xapParseFile(xap, blastXmlFile);
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
-    scoreFh = pslBuildScoresOpen(scoreFile, TRUE);
+    scoreFh = pslBuildScoresOpen(scoreFile, TRUE, tsv);
 
 if (xap->topObject == NULL)
     errAbort("empty BLAST XML file: %s", blastXmlFile);
@@ -317,14 +334,16 @@ else
 char *tNameSrcStr = optionVal("tName", "Hit_def0");
 if (sameString(tNameSrcStr, "Hit_id"))
     tNameSrc = tNameSrcHitId;
+else if (sameString(tNameSrcStr, "Hit_id_id"))
+    tNameSrc = tNameSrcHitIdId;
 else if (sameString(tNameSrcStr, "Hit_def0"))
     tNameSrc = tNameSrcHitDef0;
 else if (sameString(tNameSrcStr, "Hit_accession"))
     tNameSrc = tNameSrcHitAccession;
 else
-    errAbort("invalid value for -tName, expect on of: \"Hit_id\",  \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
+    errAbort("invalid value for -tName, expect on of: \"Hit_id\", \"Hit_id_id\", \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
 
-blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL));
+blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL), optionExists("tsv"));
 if (errCount > 0)
     errAbort("%d invalid PSLs created", errCount);
 return 0;

@@ -119,10 +119,23 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
 
   otherPrefix=`echo $otherDb | cut -c1-2`
   if [ "${otherPrefix}" = "GC" ]; then
-    sciName=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
-    organism=`grep -i 'organism name:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
-    taxId=`grep -i 'taxid:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
-    o_date=`grep -i 'date:' ${asmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    # Construct path to query assembly directory: /hive/data/genomes/asmHubs/GCF/000/001/635/GCF_000001635.27/
+    gcPrefix=`echo $otherDb | sed -e 's/_.*//'`
+    numbers=`echo $otherDb | sed -e 's/GC[AF]_//; s/\.[0-9]*$//'`
+    d1=`echo $numbers | cut -c1-3`
+    d2=`echo $numbers | cut -c4-6`
+    d3=`echo $numbers | cut -c7-9`
+    queryBuildDir="/hive/data/genomes/asmHubs/$gcPrefix/$d1/$d2/$d3/$otherDb"
+    queryAsmReport=`ls -d $queryBuildDir/*assembly_report.txt 2> /dev/null || true`
+    if [ -s "${queryAsmReport}" ]; then
+      sciName=`grep -i 'organism name:' ${queryAsmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *//i; s/ *(.*//;'`
+      organism=`grep -i 'organism name:' ${queryAsmReport} | head -1 | tr -d "\r" | sed -e 's/.*organism name: *.*(//i; s/).*//;'`
+      taxId=`grep -i 'taxid:' ${queryAsmReport} | head -1 | tr -d "\r" | sed -e 's/.*taxid: *//i;'`
+      o_date=`grep -i 'date:' ${queryAsmReport} | head -1 | tr -d "\r" | sed -e 's/.*date: *//i;'`
+    else
+      printf "# ERROR: can not find assembly_report.txt for query assembly $otherDb in $queryBuildDir/\n" 1>&2
+      exit 255
+    fi
     matrix=""
     linGap=""
     minScore=""

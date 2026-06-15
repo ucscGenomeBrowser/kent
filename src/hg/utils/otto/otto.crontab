@@ -21,8 +21,8 @@ ottomeister=otto-group@ucsc.edu
 #Format: Minute - Hour - DayofMonth month Day-of-week
 
 MAILTO=otto-group@ucsc.edu
-#Daily sandbox update
-41 00 * * 1-7 /cluster/home/otto/bin/sandboxupdate
+# Daily sandbox update
+41 00 * * 1-7 /cluster/home/otto/bin/readOnlyKentMirror
 
 # save shell history and last log into log files in ~/lastLog/
 # last day of the month to catch them just before log rotation
@@ -55,9 +55,6 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #GeneReviews
 00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
 
-#LRG
-57 9 1 4,6,12 * /hive/data/outside/otto/lrg/lrgWrapper.sh
-
 #dbVar
 13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
 
@@ -80,11 +77,11 @@ MAILTO=otto-group@ucsc.edu
 #LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
-#Mastermind
-05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
-
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
+
+#RefSeq Historical update notifier (RM #35766) - silent unless NCBI has a new release
+40 8 * * 3 /hive/data/outside/otto/refSeqHistorical/checkRefSeqHistoricalUpdate.sh
 
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
@@ -109,13 +106,16 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #vista
 0 9 1 * * /hive/data/outside/otto/vista/vistaOtto.sh
 
+# CIViC update. Releases are typically on the 1st of the month
+12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh
+
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 # liftOver request watch - sends email to configured address in hg.conf
 #   e.g.: chainFileRequestEmail=... - running every 7 minutes
-1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/ottoRequest.py
+1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/devAndRR.sh
 
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity
@@ -166,7 +166,3 @@ MAILTO=mhaeussl@ucsc.edu
 MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
 28 08 * * * /bin/zsh -c 'cd /hive/data/outside/otto/pubtatorDbSnp && ./doUpdate.sh'
-
-MAILTO=cvaske@ucsc.edu
-# CIViC update. Releases are typically on the 1st of the month
-12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh

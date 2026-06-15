@@ -53,6 +53,11 @@ struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, cha
 /* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
  * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
 
+struct genePred *quickLiftGenePreds(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd, char *extraWhere, struct hash *chainHash);
+/* Like quickLiftSql, but load genePreds through a genePredReader so the actual set of
+ * (extended) genePred columns in the table is honored rather than assuming 15 columns.
+ * Fill a hash with the chains that were used to map the desired range. */
+
 unsigned quickLiftGetChainId(struct cart *, char *fromDb, char *toDb);
 /* Return the id from the quickLiftChain table for given assemblies. */
 

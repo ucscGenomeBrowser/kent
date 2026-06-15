@@ -20,6 +20,112 @@
 #include "hgConfig.h"
 #include "jsonWrite.h"
 #include "htmshell.h"
+#include "hgHgvs.h"
+#include "variantProjector.h"
+#include "genePred.h"
+#include "genbank.h"
+#include "bigBed.h"
+#include "chromAlias.h"
+
+static struct genePred *getGeneTrackOverlaps(struct trackDb *geneTdb, char *db, char *chrom,
+                                             int start, int end)
+/* Return transcripts in geneTdb overlapping chrom:start-end, from a bigGenePred file
+ * or a genePred SQL table. */
+{
+struct genePred *gpList = NULL;
+if (sameString(geneTdb->type, "bigGenePred"))
+    {
+    char *fileName = hReplaceGbdb(trackDbSetting(geneTdb, "bigDataUrl"));
+    if (isEmpty(fileName))
+        return NULL;
+    struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+    for (bb = bbList;  bb != NULL;  bb = bb->next)
+        {
+        struct genePred *gp = (struct genePred *)genePredFromBigGenePred(chrom, bb);
+        if (gp != NULL)
+            slAddHead(&gpList, gp);
+        }
+    lmCleanup(&lm);
+    bigBedFileClose(&bbi);
+    freeMem(fileName);
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    int rowOffset = 0;
+    struct sqlResult *sr = hRangeQuery(conn, geneTdb->table, chrom, start, end, NULL, &rowOffset);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        slAddHead(&gpList, genePredLoad(row + rowOffset));
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+slReverse(&gpList);
+return gpList;
+}
+
+static void printMyVariantsHgvs(struct myVariants *item)
+/* For SNV items, show the genomic HGVS g. term and a c./n. term for each overlapping
+ * transcript in the assembly's default (MANE-first) gene track. */
+{
+if (!sameOk(item->itemType, "snv"))
+    return;
+char *db = item->db;
+struct seqWindow *gSeqWin = chromSeqWindowNew(db, NULL, 0, 0);
+struct bed3 variantBed;
+ZeroVar(&variantBed);
+variantBed.chrom = item->chrom;
+variantBed.chromStart = item->chromStart;
+variantBed.chromEnd = item->chromEnd;
+char *chromAcc = hRefSeqAccForChrom(db, item->chrom);
+/* vpGenomicToTranscript requires an IUPAC alt (or "*"/"<DEL>") and aborts otherwise, and
+ * rewrites "<DEL>" in place; work on a copy, normalize "<DEL>", and skip transcript terms
+ * for any alt it can't project. */
+char *alt = cloneString(item->alt);
+boolean altProjectable = (isAllNt(alt, strlen(alt)) ||
+                          sameString(alt, "*") || sameString(alt, "<DEL>"));
+if (sameString(alt, "<DEL>"))
+    alt[0] = '\0';
+char *hgvsG = hgvsGFromVariant(gSeqWin, &variantBed, alt, chromAcc, FALSE);
+
+struct trackDb *geneTdb = altProjectable ? hgvsDefaultGeneTrack(db) : NULL;
+if (geneTdb != NULL)
+    htmlPrintf("<B>HGVS</B> (relative to %s):<BR>\n", geneTdb->shortLabel);
+else
+    printf("<B>HGVS:</B><BR>\n");
+if (isNotEmpty(hgvsG))
+    htmlPrintf("&nbsp;&nbsp;%s<BR>\n", hgvsG);
+
+if (geneTdb == NULL)
+    return;
+
+struct genePred *gp, *gpList = getGeneTrackOverlaps(geneTdb, db, item->chrom,
+                                                    item->chromStart, item->chromEnd);
+for (gp = gpList;  gp != NULL;  gp = gp->next)
+    {
+    char *seq = txSeqFromGp(db, gp);
+    struct dnaSeq *txSeq = newDnaSeq(seq, strlen(seq), gp->name);
+    struct genbankCds cds;
+    genePredToCds(gp, &cds);
+    struct psl *psl = genePredToPsl(gp, hChromSize(db, gp->chrom), txSeq->size);
+    vpExpandIndelGaps(psl, gSeqWin, txSeq);
+    struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed, alt, psl, txSeq);
+    char *hgvsTx = NULL;
+    if (cds.end > cds.start)
+        hgvsTx = hgvsCFromVpTx(vpTx, gSeqWin, psl, &cds, txSeq, FALSE);
+    else
+        hgvsTx = hgvsNFromVpTx(vpTx, gSeqWin, psl, txSeq, FALSE);
+    if (isNotEmpty(hgvsTx))
+        {
+        if (isNotEmpty(gp->name2))
+            htmlPrintf("&nbsp;&nbsp;%s (%s):%s<BR>\n", gp->name, gp->name2, hgvsTx);
+        else
+            htmlPrintf("&nbsp;&nbsp;%s:%s<BR>\n", gp->name, hgvsTx);
+        }
+    }
+}
 
 void doMyVariantsDetails(struct customTrack *ct, char *itemIdString)
 /* Show details of a myVariants item. */
@@ -30,7 +136,7 @@ char *trackName = ct->tdb->track;
 
 /* Detect shared track and resolve table/permissions via hgcentral so that
  * revoked or downgraded shares no longer return owner data. */
-boolean isShared = startsWith("myVariants_shared_", trackName);
+boolean isShared = isMyVariantsSharedTrack(trackName);
 char *dataOwner = NULL;     /* user whose table holds the data */
 char *scopeProject = NULL;  /* live share's project, or NULL for own track */
 char *scopeDb = NULL;       /* live share's db, or NULL for own track */
@@ -91,10 +197,14 @@ if (isNotEmpty(scopeProject) && !sameString(scopeProject, "*"))
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 dyStringFree(&query);
 
-char **row = sqlNextRow(sr);
 struct myVariants *item = NULL;
-if (row != NULL && sameString(row[4], expectedName))
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    {
     item = myVariantsLoad(row);
+    if (!sameOk(item->name, expectedName))
+        myVariantsFree(&item);
+    }
 sqlFreeResult(&sr);
 freeMem(idStrCopy);
 
@@ -115,6 +225,8 @@ if (item != NULL)
 
     if (canEdit)
         {
+        boolean isTranscript = sameOk(item->itemType, "transcript");
+        boolean isCnv = sameOk(item->itemType, "cnv");
         webIncludeResourceFile("spectrum.min.css");
         jsIncludeFile("spectrum.min.js", NULL);
         printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgTracksName());
@@ -160,57 +272,72 @@ if (item != NULL)
         printInfoIcon("0-based half-open end position on the chromosome.");
         printf("<BR>\n");
 
-        /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
-         * updateBlocksFields in hgTracks reads them on submit. */
-        char vBC[128], vBS[128], vBT[128], vCS[128], vCE[128];
-        safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
-        safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
-        safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
-        safef(vCS, sizeof(vCS), "%s_chromStart", trackName);
-        safef(vCE, sizeof(vCE), "%s_chromEnd", trackName);
-        struct dyString *sizesCsv = dyStringNew(64);
-        struct dyString *startsCsv = dyStringNew(64);
-        int bi;
-        for (bi = 0; bi < item->blockCount; bi++)
+        if (isTranscript)
             {
-            if (bi > 0)
+            /* Editable CDS Start / CDS End (stored as thickStart/thickEnd). */
+            printf("<B>CDS Start:</B> ");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "thickStart");
+            cgiMakeIntVarInRange(varName, item->thickStart, NULL, 80, "0", chromSizeString);
+            printInfoIcon("Start of the coding region.");
+            printf("<BR>\n");
+            printf("<B>CDS End:</B> ");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "thickEnd");
+            cgiMakeIntVarInRange(varName, item->thickEnd, NULL, 80, "0", chromSizeString);
+            printInfoIcon("End of the coding region.");
+            printf("<BR>\n");
+
+            /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
+             * updateBlocksFields in hgTracks reads them on submit. */
+            char vBC[128], vBS[128], vBT[128], vCS[128], vCE[128];
+            safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
+            safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
+            safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
+            safef(vCS, sizeof(vCS), "%s_chromStart", trackName);
+            safef(vCE, sizeof(vCE), "%s_chromEnd", trackName);
+            struct dyString *sizesCsv = dyStringNew(64);
+            struct dyString *startsCsv = dyStringNew(64);
+            int bi;
+            for (bi = 0; bi < item->blockCount; bi++)
                 {
-                dyStringAppendC(sizesCsv, ',');
-                dyStringAppendC(startsCsv, ',');
+                if (bi > 0)
+                    {
+                    dyStringAppendC(sizesCsv, ',');
+                    dyStringAppendC(startsCsv, ',');
+                    }
+                dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
+                dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
                 }
-            dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
-            dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
+            char countStr[32];
+            safef(countStr, sizeof(countStr), "%u", item->blockCount);
+            printf("<B>Blocks:</B> ");
+            printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
+            printf("<BR>\n");
+            cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
+            cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
+            cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
+            printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
+            jsIncludeFile("myVariantsBlocks.js", NULL);
+            jsInlineF(
+                "$(function(){\n"
+                "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
+                "  var sizesEl = document.getElementById('%s');\n"
+                "  var startsEl = document.getElementById('%s');\n"
+                "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
+                "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
+                "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
+                "    initialSizes: sizes,\n"
+                "    initialStarts: starts,\n"
+                "    getStart: function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+                "    getEnd:   function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
+                "    hiddenCountInput:  document.getElementById('%s'),\n"
+                "    hiddenSizesInput:  sizesEl,\n"
+                "    hiddenStartsInput: startsEl\n"
+                "  });\n"
+                "});\n",
+                vBS, vBT, vCS, vCE, vBC);
+            dyStringFree(&sizesCsv);
+            dyStringFree(&startsCsv);
             }
-        char countStr[32];
-        safef(countStr, sizeof(countStr), "%u", item->blockCount);
-        printf("<B>Blocks:</B> ");
-        printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
-        printf("<BR>\n");
-        cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
-        cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
-        cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
-        printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
-        jsIncludeFile("myVariantsBlocks.js", NULL);
-        jsInlineF(
-            "$(function(){\n"
-            "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
-            "  var sizesEl = document.getElementById('%s');\n"
-            "  var startsEl = document.getElementById('%s');\n"
-            "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
-            "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
-            "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
-            "    initialSizes: sizes,\n"
-            "    initialStarts: starts,\n"
-            "    getStart: function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
-            "    getEnd:   function(){ return parseInt(document.getElementById('%s').value, 10); },\n"
-            "    hiddenCountInput:  document.getElementById('%s'),\n"
-            "    hiddenSizesInput:  sizesEl,\n"
-            "    hiddenStartsInput: startsEl\n"
-            "  });\n"
-            "});\n",
-            vBS, vBT, vCS, vCE, vBC);
-        dyStringFree(&sizesCsv);
-        dyStringFree(&startsCsv);
 
         /* Edit the color */
         safef(varName, sizeof(varName), "%s_%s", trackName, "itemRgb");
@@ -231,17 +358,42 @@ if (item != NULL)
             varName);
         printf("<br>");
 
-        /* Edit ref/alt */
-        safef(varName, sizeof(varName), "%s_%s", trackName, "ref");
-        printf("<B>Ref:</B> ");
-        cgiMakeTextVar(varName, item->ref, 17);
-        printInfoIcon("Reference allele sequence at this position.");
-        printf("<BR>\n");
-        safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
-        printf("<B>Alt:</B> ");
-        cgiMakeTextVar(varName, item->alt, 17);
-        printInfoIcon("Alternate (variant) allele sequence.");
-        printf("<BR>\n");
+        /* Edit ref/alt. Transcript has no alleles; CNV stores a sequence in alt. */
+        if (isCnv)
+            {
+            safef(varName, sizeof(varName), "%s_%s", trackName, "cnvType");
+            printf("<B>CNV type:</B> ");
+            htmlPrintf("<select name='%s|attr|' id='%s|attr|'>", varName, varName);
+            int ci;
+            for (ci = 0; ci < myVariantsNumCnvTypes; ci++)
+                {
+                boolean sel = sameOk(item->cnvType, myVariantsCnvTypes[ci]);
+                htmlPrintf("<option value='%s|attr|'%s|none|>%s</option>",
+                    myVariantsCnvTypes[ci], sel ? " selected" : "",
+                    myVariantsCnvTypes[ci]);
+                }
+            printf("</select>");
+            printInfoIcon("CNV vocabulary follows gnomAD");
+            printf("<BR>\n");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
+            printf("<B>Sequence:</B> ");
+            cgiMakeTextVar(varName, item->alt, 40);
+            printInfoIcon("Inserted or duplicated sequence at this position.");
+            printf("<BR>\n");
+            }
+        else if (!isTranscript)
+            {
+            safef(varName, sizeof(varName), "%s_%s", trackName, "ref");
+            printf("<B>Ref:</B> ");
+            cgiMakeTextVar(varName, item->ref, 17);
+            printInfoIcon("Reference allele sequence at this position.");
+            printf("<BR>\n");
+            safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
+            printf("<B>Alt:</B> ");
+            cgiMakeTextVar(varName, item->alt, 17);
+            printInfoIcon("Alternate (variant) allele sequence.");
+            printf("<BR>\n");
+            }
 
         /* Project: locked for shared tracks, editable for own track */
         printf("<B>Project:</B> ");
@@ -369,10 +521,13 @@ if (item != NULL)
         safef(colorHex, sizeof(colorHex), "#%06X", item->itemRgb);
         printf("<B>Color:</B> <span style='background:%s; padding:2px 12px'>&nbsp;</span> %s<BR>\n",
             colorHex, colorHex);
+        boolean roIsCnv = sameOk(item->itemType, "cnv");
+        if (roIsCnv && isNotEmpty(item->cnvType))
+            htmlPrintf("<B>CNV type:</B> %s<BR>\n", item->cnvType);
         if (isNotEmpty(item->ref))
             htmlPrintf("<B>Ref:</B> %s<BR>\n", item->ref);
         if (isNotEmpty(item->alt))
-            htmlPrintf("<B>Alt:</B> %s<BR>\n", item->alt);
+            htmlPrintf("<B>%s:</B> %s<BR>\n", roIsCnv ? "Sequence" : "Alt", item->alt);
         if (isNotEmpty(item->project))
             htmlPrintf("<B>Project:</B> %s<BR>\n", item->project);
         if (isNotEmpty(item->mouseover))
@@ -414,6 +569,8 @@ if (item != NULL)
         }
 
     printf("<B>id:</B> %d<BR>\n", item->id);
+
+    printMyVariantsHgvs(item);
 
     /* Overlaps section: only emit if hg.conf names overlap tracks for this assembly.
      * Format: myVariantsOverlapTracks.<db> = track1,track2,...  */

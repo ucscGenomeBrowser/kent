@@ -1,0 +1,140 @@
+<h2>Description</h2>
+
+<p>
+This track shows variants of the human <em>TP53</em> tumor-suppressor gene from the
+<a href="https://p53.fr" target="_blank">UMD TP53 database</a>, a locus-specific
+variant database maintained by Thierry Soussi and Bernard Leroy. It is a
+comprehensive, curated resource for <em>TP53</em> mutations in human cancer,
+integrating data from tumours, cell lines, germline (Li-Fraumeni syndrome and other
+hereditary conditions), and non-neoplastic diseases reported in the published
+literature.
+</p>
+
+<p>
+The track is built from the database's variant file, which lists each unique
+<em>TP53</em> variant once. For every variant the database provides curated
+metadata including a pathogenicity classification, the residual transactivation
+activity of the mutant protein on eight p53 target promoters, functional impact
+predictions from multiple algorithms (SIFT, PolyPhen-2, MutationAssessor, PROVEAN,
+Condel, MutPred Splice), and frequencies in tumours, cell lines, somatic samples,
+and germline cases.
+</p>
+
+<p>
+<em>TP53</em> hot spots such as p.R175H, p.R248Q, p.R248W, p.R273H, p.R273C, and
+p.R282W are visible as the densely-recurrent positions in the DNA-binding domain.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each variant is shown as a single coloured box at its genomic position. The colour
+encodes the database's pathogenicity classification:
+</p>
+
+<table style="border-spacing: 12px 2px">
+  <tr><td style="background:#d42a2a; width:24px">&#160;</td><td>Pathogenic</td></tr>
+  <tr><td style="background:#e65a32; width:24px">&#160;</td><td>Likely Pathogenic</td></tr>
+  <tr><td style="background:#f7941d; width:24px">&#160;</td><td>Possibly pathogenic</td></tr>
+  <tr><td style="background:#e6cd00; width:24px">&#160;</td><td>VUS (variant of uncertain significance)</td></tr>
+  <tr><td style="background:#288c50; width:24px">&#160;</td><td>Benign</td></tr>
+  <tr><td style="background:#a0a0a0; width:24px">&#160;</td><td>Unknown</td></tr>
+</table>
+
+<p>
+Hovering over a variant displays its HGVS cDNA name, protein change on the canonical
+TP53 alpha isoform (NP_000537.3), pathogenicity call, effect class, tumour frequency,
+total occurrence count, and the curator note on residual transactivation activity.
+Clicking opens the full details page with the per-promoter activity values, all
+algorithm-level predictions and scores, the structural domain annotation, links to
+COSMIC and dbSNP, and the curator's final comment.
+</p>
+
+<p>
+The track configuration page supports filters on:
+</p>
+
+<ul>
+  <li><b>Pathogenicity classification</b> &#8212; multi-select dropdown</li>
+  <li><b>Variant classification</b> &#8212; missense, nonsense, synonymous, frameshift,
+      splice, intronic, UTR, etc.</li>
+  <li><b>Variant type</b> &#8212; SNP, DEL, INS, DNP, TNP, ONP</li>
+  <li><b>Minimum tumour frequency (%)</b> &#8212; numeric range slider</li>
+</ul>
+
+<p>
+Variants can be searched from the position box by HGVS cDNA name
+(e.g. <b>c.524G&gt;A</b>) or by canonical protein change (e.g. <b>p.R175H</b>).
+</p>
+
+<h2>Data Updates</h2>
+
+<p>
+The track is rebuilt automatically when a new release of the UMD TP53 database is
+detected at <a href="https://p53.fr/download-the-database" target="_blank">p53.fr</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a>. The underlying
+<a href="../goldenPath/help/bigBed.html">bigBed</a> file may be downloaded directly
+from <code>/gbdb/$db/bbi/umdTp53/umdTp53.bb</code>, and the data can be
+queried programmatically through the
+<a href="https://api.genome.ucsc.edu" target="_blank">REST API</a> via the track name
+<b>umdTp53</b>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The variants file from p53.fr (<code>UMD_variants_US.tsv</code>, one row per unique
+<em>TP53</em> variant) was reformatted to
+<a href="../goldenPath/help/bigBed.html">bigBed</a>. For hg19, genomic coordinates
+were taken directly from the variants file's <code>HG19_Start</code> and
+<code>HG19_End</code> columns. The variants file does not ship hg38 coordinates, so
+for hg38 the coordinates were joined from the companion mutations file
+(<code>UMD_mutations_US.tsv</code>), which contains both hg19 and hg38 positions for
+every variant.
+</p>
+
+<p>
+The curator's residual-activity comment column derives from the eight-promoter
+transactivation assay of Kato <em>et al.</em>, 2003: for missense variants, the
+median of the eight per-promoter activities (expressed as % of wild-type) is mapped
+to one of <em>Fully active</em>, <em>Hyper active</em>, <em>Partial activity</em>,
+<em>No activity</em>, or <em>No data</em>. For nonsense, frameshift, splice-site, and
+similar variants where the assay does not directly apply, the column carries an
+explanatory note (e.g. <em>The activity of truncated p53 is assumed to be nil</em>).
+The eight raw per-promoter values are available on the details page.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Thierry Soussi, Bernard Leroy, and the UMD TP53 database curators for
+maintaining the resource and making it available for download.
+</p>
+
+<h2>References</h2>
+
+<p>
+Leroy B, Anderson M, Soussi T.
+<a href="https://doi.org/10.1002/humu.22552" target="_blank">
+TP53 mutations in human cancer: database reassessment and prospects for the next
+decade</a>.
+<em>Hum Mutat</em>. 2014 Jun;35(6):672-88.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24665023" target="_blank">24665023</a>
+</p>
+
+<p>
+Kato S, Han SY, Liu W, Otsuka K, Shibata H, Kanamaru R, Ishioka C.
+<a href="https://www.pnas.org/doi/10.1073/pnas.1431692100" target="_blank">
+Understanding the function-structure and function-mutation relationships of p53
+tumor suppressor protein by high-resolution missense mutation analysis</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Jul 8;100(14):8424-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12826609" target="_blank">12826609</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC166245/" target="_blank">PMC166245</a>
+</p>

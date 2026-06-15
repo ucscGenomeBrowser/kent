@@ -106,6 +106,7 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "sage.h"
@@ -813,6 +814,12 @@ printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE, smp->name);
 }
 
 
+// Many callers pass a track-specific struct cast to (struct bed *), relying on
+// its bed-compatible leading fields (only the first bedSize fields are read).
+// At -O3 GCC's -Warray-bounds flags those casts because the real object is
+// smaller than struct bed; the accesses are safe by the bed-layout convention.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb)
 /* Print first bedSize fields of a bed type structure in
  * standard format. */
@@ -840,6 +847,7 @@ if (bedSize >= 6)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 
 }
+#pragma GCC diagnostic pop
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -2992,10 +3000,8 @@ if (liftDb != NULL)
     struct hash *chainHash = newHash(8);
     char extraWhere[512];
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", name);
-    extern struct genePred *genePredExtLoad15(char **row);
-    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, rootTable,
-        seqName, winStart, winEnd, NULL, extraWhere,
-        (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, rootTable,
+        seqName, winStart, winEnd, extraWhere, chainHash);
     calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
     }
 else
@@ -3707,8 +3713,7 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-if (!isCustomTrack(tdb->track) &&
-    !(tdb->type && sameString(tdb->type, "myVariants")))
+if (!isCustomTrack(tdb->track) && !isMyVariantsType(tdb->type))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
@@ -9665,12 +9670,9 @@ if (liftDb != NULL)
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
 
-// using this loader on genePred tables with less than 15 fields may be a problem.
-extern struct genePred *genePredExtLoad15(char **row);
-
     char extraWhere[4096];
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", geneName);
-    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, seqName, winStart, winEnd,  NULL, extraWhere, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, table, seqName, winStart, winEnd, extraWhere, chainHash);
     hFreeConn(&conn);
 
     calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
@@ -10260,23 +10262,36 @@ else
         }
     else
         {
-        char constraints[256];
-        sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
-        char *db = database;
         char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-        // When quickLifted, the genePred table lives in the source assembly,
-        // and the click's seqName/winStart/winEnd are in destination coords;
-        // lift them back to source coords so hgSeqItemsInRange finds rows.
-        char *querySeq = seqName;
-        int queryStart = winStart, queryEnd = winEnd;
         if (liftDb != NULL)
             {
-            db = liftDb;
-            quickLiftLiftPos(trackHubSkipHubName(database), liftDb,
-                             seqName, winStart, winEnd,
-                             &querySeq, &queryStart, &queryEnd);
+            // Load the genePred from the source assembly and lift it to
+            // destination coords, so hgSeqBed reads sequence from the
+            // destination assembly at the lifted exon coordinates.
+            struct genePred *gpList = getGenePredForPosition(table, geneName);
+            struct bed *bedList = NULL;
+            struct genePred *gp;
+            for (gp = gpList; gp != NULL; gp = gp->next)
+                slAddHead(&bedList, bedFromGenePred(gp));
+            slReverse(&bedList);
+            char rootName[HDB_MAX_TABLE_STRING];
+            char parsedChrom[HDB_MAX_CHROM_STRING];
+            char *bareTable = trackHubSkipHubName(table);
+            hParseTableName(liftDb, bareTable, rootName, parsedChrom);
+            struct hTableInfo *hti = hFindTableInfo(liftDb, NULL, rootName);
+            if (hti == NULL)
+                webAbort("Error", "Could not find table info for table %s (%s)",
+                         rootName, table);
+            itemCount = hgSeqBed(database, hti, bedList);
+            bedFreeList(&bedList);
+            genePredFreeList(&gpList);
             }
-        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), querySeq, queryStart, queryEnd, constraints);
+        else
+            {
+            char constraints[256];
+            sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
+            itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+            }
         }
     }
 if (itemCount == 0)
@@ -10836,7 +10851,7 @@ if (sameWord(tdb->table, "ensGeneNonCoding"))
 else
     {
     /* print CCDS if this is not a non-coding gene */
-    printCcdsForSrcDb(conn, item);
+    printCcdsForSrcDb(conn, tdb, item);
     printf("<BR>\n");
     }
 
@@ -12235,21 +12250,28 @@ if (url != NULL && url[0] != 0)
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from %s l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
         refLinkTable, itemName, chrom, chromStart, chromEnd);
+        /* Slurp names first; prGRShortRefGene runs its own queries on conn,
+         * which would error with "Commands out of sync" mid-iteration. */
+        struct slName *geneNames = NULL;
         sr = sqlMustGetResult(conn, query);
         if (sr != NULL)
             {
             while ((row = sqlNextRow(sr)) != NULL)
-                {
-                prGRShortRefGene(conn, row[0]);
-                }
+                slNameAddHead(&geneNames, row[0]);
             }
         sqlFreeResult(&sr);
+        slReverse(&geneNames);
+        struct slName *gn;
+        for (gn = geneNames; gn != NULL; gn = gn->next)
+            prGRShortRefGene(conn, gn->name);
+        slFreeList(&geneNames);
         }
 
     showOmimDisorderTable(conn, url, itemName);
     }
 
 printf("</div>"); // #omimText
+hFreeConn(&conn);
 }
 
 static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
@@ -13132,7 +13154,7 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
-void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prRefGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
 {
@@ -13185,7 +13207,7 @@ if (desc != NULL)
 if (isXeno)
     prRefGeneXenoInfo(conn, rl);
 else
-    printCcdsForSrcDb(conn, rl->mrnaAcc);
+    printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13292,7 +13314,7 @@ prGRShortRefGene(conn, rl->name);
 
 }
 
-void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prKnownGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl)
 /* print basic details information and links for a Known Gene */
 {
@@ -13322,7 +13344,7 @@ if (desc != NULL)
     printf("<BR>\n");
     }
 
-printCcdsForSrcDb(conn, rl->mrnaAcc);
+printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13410,7 +13432,7 @@ else
 
 cartWebStart(cart, database, "Known Gene");
 printf("<table border=0>\n<tr>\n");
-prKnownGeneInfo(conn, rnaName, sqlRnaName, rl);
+prKnownGeneInfo(conn, tdb, rnaName, sqlRnaName, rl);
 
 printf("</tr>\n</table>\n");
 
@@ -13501,7 +13523,7 @@ else
 
 /* print the first section with info  */
 printf("<table border=0>\n<tr>\n");
-prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
+prRefGeneInfo(conn, tdb, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
 printf("</tr>\n</table>\n");
@@ -13893,7 +13915,7 @@ static char gi[64];
 if (!startsWith("gi|", ncbiFaHead))
     return NULL;
 ncbiFaHead += 3;
-strncpy(gi, ncbiFaHead, sizeof(gi));
+safecpy(gi, sizeof(gi), ncbiFaHead);
 s = strchr(gi, '|');
 if (s != NULL)
     *s = 0;
@@ -15838,13 +15860,13 @@ if (gp == NULL)
 
 /* extract nib directory from nibfile */
 if (strrchr(nibFile,'/') != NULL)
-    strncpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
+    memcpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",nibFile);
 tNibDir[strlen(nibFile)-strlen(strrchr(nibFile,'/'))] = '\0';
 
 if (strrchr(qNibFile,'/') != NULL)
-    strncpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
+    memcpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",qNibFile);
 qNibDir[strlen(qNibFile)-strlen(strrchr(qNibFile,'/'))] = '\0';
@@ -22967,7 +22989,7 @@ else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
-else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && startsWith("myVariants_", trackId))
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(trackId))
     doMyVariantsDetails(ct, item);
 else if (ct->wiggle)
     {
@@ -25064,7 +25086,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
-printf("<B>Item:</B> %s <BR>\n", itemName);
+printf("<B>Item:</B> %s <BR>\n", naForNull(itemName));
 printf("<B>Outside Link:</B> ");
 printf("<A HREF=");
 printSwissProtVariationUrl(stdout, itemName);
@@ -27203,7 +27225,7 @@ if (seqName == NULL)
     }
 
 struct customTrack *ct = NULL;
-if (isCustomTrack(track) || startsWith("myVariants_", track))
+if (isCustomTrack(track) || isMyVariantsTrack(track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
@@ -27211,7 +27233,7 @@ if (isCustomTrack(track) || startsWith("myVariants_", track))
             break;
     }
 
-if ((!isCustomTrack(track) && !startsWith("myVariants_", track) && dbIsFound)
+if ((!isCustomTrack(track) && !isMyVariantsTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
@@ -27861,7 +27883,7 @@ else if (sameWord(table, "softPromoter"))
     {
     hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(table) || startsWith("myVariants_", table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     if (tdb != NULL)
         {
@@ -28570,7 +28592,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", NULL};
+char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", "quickLiftCcds", NULL};
 
 int main(int argc, char *argv[])
 {

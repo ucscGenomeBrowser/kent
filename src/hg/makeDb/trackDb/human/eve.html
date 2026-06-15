@@ -1,0 +1,123 @@
+<h2>Description</h2>
+<p>
+Missense mutations change a single amino acid in a protein and make up a large fraction
+of the variants observed in human populations. Most have no known clinical significance,
+both because clinical data are limited and because the relationship between sequence change
+and protein function is complex. Computational approaches that model evolutionary
+conservation across species can estimate how much a given position tolerates change, since
+residues critical to function tend to be highly conserved. EVE (Evolutionary model of
+Variant Effect) formalizes this reasoning with a deep generative model trained entirely on
+natural sequence variation, without any reliance on clinical labels. This track shows EVE
+scores for all possible missense substitutions in 2,949 disease-associated proteins.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each entry spans one protein at its genomic locus. The heatmap columns correspond to
+individual amino acid positions in the protein, placed at the codon's genomic coordinate.
+The rows correspond to the 20 standard amino acids (A&ndash;Y, alphabetical). Each cell
+shows the EVE score for substituting the wildtype amino acid at that position with the row
+amino acid. Empty cells indicate the wildtype amino acid at a given position (no
+substitution) or positions for which no score is available.
+</p>
+
+<p>
+Cells are colored on a gradient:
+</p>
+<p>
+<span style="display:inline-block; background-color:#2166ac; width:18px; height:12px; vertical-align:middle;"></span>
+<b>EVE &asymp; 0 &mdash; benign:</b> the substitution is well-tolerated in evolutionary sequence variation<br>
+<span style="display:inline-block; background-color:#f7f7f7; width:18px; height:12px; vertical-align:middle; border:1px solid #ccc;"></span>
+<b>EVE &asymp; 0.5 &mdash; uncertain:</b> the model cannot confidently classify the variant<br>
+<span style="display:inline-block; background-color:#d6604d; width:18px; height:12px; vertical-align:middle;"></span>
+<b>EVE &asymp; 1 &mdash; pathogenic:</b> the substitution is rare or absent across evolutionary sequences
+</p>
+
+<p>
+Hovering over a cell shows the wildtype amino acid, the protein position, the variant amino
+acid, the EVE score, and the Class25 classification (benign, uncertain, or pathogenic using
+a 25% uncertainty threshold).
+</p>
+
+<p>
+For reverse-strand genes, protein positions are displayed left to right in genomic
+order (C-terminus to N-terminus on the screen), consistent with the standard genome
+browser orientation.
+</p>
+
+<h2>Methods</h2>
+<p>
+EVE trains a Bayesian variational autoencoder (VAE) separately for each of 3,219
+disease-associated human proteins; of these, 2,951 have missense VCF scores in the
+public bulk download (the remainder have sequence alignments but no released scores). For each protein, a multiple sequence alignment is
+retrieved by searching roughly 250 million protein sequences from UniRef, and the VAE
+learns the distribution of amino acid sequences across species, capturing both
+per-position conservation and co-evolutionary dependencies between positions. An
+evolutionary index for each single amino acid variant is then computed as the
+approximate negative log-likelihood ratio of the variant versus the wildtype sequence,
+estimated by sampling from the VAE posterior (ensembled over five independently trained
+models). A global-local mixture of Gaussian mixture models, fit to the index distributions
+across all variants and all proteins, converts this continuous index to an EVE score
+between 0 (benign) and 1 (pathogenic) and assigns each variant to a benign, uncertain, or
+pathogenic class. The uncertainty of each classification reflects the predictive entropy of
+the mixture model, and a threshold on this entropy controls what fraction of variants is
+labeled uncertain. The Class25 field used in the track mouseovers classifies variants using
+a 25% uncertainty threshold, which the authors report yields approximately 90% accuracy on
+known ClinVar labels. See Frazer et al. 2021 for full details.
+</p>
+
+<p>
+The data were downloaded as a bulk archive from
+<a href="https://evemodel.org/download/bulk" target="_blank">https://evemodel.org/download/bulk</a>.
+The archive contains one VCF file per protein, each listing every possible missense
+substitution with its EVE score and per-threshold classifications. Multiple VCF records
+encoding different codon changes for the same amino acid substitution carry identical EVE
+scores and were deduplicated to one record per substitution. Records were converted to
+heatmap bigBed format using a custom Python script; full processing instructions are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/eve.txt"
+target="_blank">makedoc file</a>, and the conversion script is available in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/eve"
+target="_blank">our GitHub repository</a>.
+Two proteins (G6PT1, UniProt O43826; and MAFIP, Q8WZ33) were excluded because their
+VCF coordinates mapped to assembly scaffolds (chrCHR_HG2217_PATCH and chrGL000194.1)
+absent from the standard hg38 assembly. The remaining 2,949 proteins covering approximately
+1.7 million amino acid positions are included in this track.
+</p>
+
+<h2>Data Access</h2>
+<p>The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>eve</i>.</p>
+<p>For automated download and analysis, the genome annotation is stored in a bigBed file
+that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve" target="_blank">our download
+server</a>. The file for this track is called <tt>eve.bb</tt>. Individual regions or the
+whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
+compiled from the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve/eve.bb -chrom=chr17
+-start=43000000 -end=43200000 stdout</tt></p>
+<p>The original annotation source data can be downloaded from
+<a href="https://evemodel.org/download/bulk" target="_blank">https://evemodel.org/download/bulk</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Jonathan Frazer, Pascal Notin, Mafalda Dias, and Debora S. Marks at Harvard
+Medical School and Yarin Gal at the University of Oxford for making the EVE scores
+publicly available at
+<a href="https://evemodel.org/" target="_blank">evemodel.org</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Frazer J, Notin P, Dias M, Gomez A, Min JK, Brock K, Gal Y, Marks DS.
+<a href="https://doi.org/10.1038/s41586-021-04043-8" target="_blank">
+Disease variant prediction with deep generative models of evolutionary data</a>.
+<em>Nature</em>. 2021 Nov;599(7883):91-95.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34707284" target="_blank">34707284</a>
+</p>
+

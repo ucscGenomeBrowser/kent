@@ -553,6 +553,9 @@ struct customTrack *track;
 struct dyString *ds = dyStringNew(0);
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* myVariants tracks live in mvCtfile_<db>; skip so they aren't duplicated here. */
+    if (track->tdb && isMyVariantsType(track->tdb->type))
+        continue;
     /* may be coming in here from the table browser.  It has wiggle
      *	ascii data waiting to be encoded into .wib and .wig
      */
@@ -600,19 +603,27 @@ void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack 
 /* Save custom tracks to trash file for database in cart */
 {
 char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
-if (ctList)
+boolean hadRegular = isNotEmpty(cartOptionalString(cart, ctFileVar));
+/* Count only tracks that customTracksSaveFile will actually persist. */
+int persistCount = 0;
+struct customTrack *ct;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (!(ct->tdb && isMyVariantsType(ct->tdb->type)))
+        persistCount++;
+if (persistCount > 0)
     {
     static struct tempName tn;
     trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
     char *ctFileName = tn.forCgi;
     cartSetString(cart, ctFileVar, ctFileName);
     if (printSaveList)
-        fprintf(stderr, "customTrack: saved %d in %s\n", slCount(ctList), ctFileName);
+        fprintf(stderr, "customTrack: saved %d in %s\n", persistCount, ctFileName);
     customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
-else
+else if (hadRegular)
     {
-    /* no custom tracks remaining for this assembly */
+    /* user just emptied this assembly's regular ctfile; drop the pointer
+     * and the per-track ct_* cart vars tied to it. */
     cartRemove(cart, ctFileVar);
     cartRemovePrefix(cart, CT_PREFIX);
     }
@@ -950,58 +961,74 @@ if (customTracksExist(cart, &ctFileName))
     // can try again next click.
     if (loadFailed)
         return NULL;
+    }
 
-    /* handle selected tracks -- update doc, remove, etc. */
-    char *selectedTable = NULL;
-    if (cartVarExists(cart, CT_DO_REMOVE_VAR))
-        selectedTable = cartOptionalString(cart, CT_SELECTED_TABLE_VAR);
-    else
-        selectedTable = cartOptionalString(cart, CT_UPDATED_TABLE_VAR);
-    if (selectedTable)
+/* Layer in the user's myVariants tracks from mvCtfile_<db>. */
+char mvVar[256];
+safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", genomeDb);
+char *mvFile = cartOptionalString(cart, mvVar);
+if (isNotEmpty(mvFile) && fileExists(mvFile))
+    {
+    struct customTrack *mvList = NULL;
+    struct errCatch *mvCatch = errCatchNew();
+    if (errCatchStart(mvCatch))
+        mvList = customFactoryParse(genomeDb, mvFile, TRUE, fileName, NULL);
+    errCatchEnd(mvCatch);
+    if (mvCatch->gotError)
         {
-        for (ct = ctList; ct != NULL; ct = nextCt)
+        if (isNotEmpty(mvCatch->message->string))
+            warn("myVariants load error: %s", mvCatch->message->string);
+        cartRemove(cart, mvVar);
+        mvList = NULL;
+        }
+    errCatchFree(&mvCatch);
+    ctList = slCat(ctList, mvList);
+    }
+
+/* Handle a selected track from hgTrackUi (remove or doc update). */
+char *selectedTable = NULL;
+if (cartVarExists(cart, CT_DO_REMOVE_VAR))
+    selectedTable = cartOptionalString(cart, CT_SELECTED_TABLE_VAR);
+else
+    selectedTable = cartOptionalString(cart, CT_UPDATED_TABLE_VAR);
+if (selectedTable)
+    {
+    for (ct = ctList; ct != NULL; ct = nextCt)
+        {
+        nextCt = ct->next;
+        if (sameString(selectedTable, ct->tdb->track))
             {
-            nextCt = ct->next;
-            if (sameString(selectedTable, ct->tdb->track))
+            if (cartVarExists(cart, CT_DO_REMOVE_VAR))
                 {
-                if (cartVarExists(cart, CT_DO_REMOVE_VAR))
+                removedCt = TRUE;
+                /* myVariants has SQL-backed state to clean up; helper returns
+                 * TRUE when it handled the per-track cart cleanup itself. */
+                boolean handledByMyVariants =
+                    myVariantsHandleCtRemoval(ct, cart, genomeDb);
+                slRemoveEl(&ctList, ct);
+                if (!handledByMyVariants)
                     {
-                    /* remove a track if requested, e.g. by hgTrackUi */
-                    removedCt = TRUE;
-                    /* myVariants tracks need type-specific cleanup so the
-                     * SQL-backed entry doesn't reappear next page load.
-                     * When the helper handled the cart cleanup itself we
-                     * skip the wide cartRemovePrefix below so other-
-                     * assembly per-db labels survive. */
-                    boolean handledByMyVariants =
-                        myVariantsHandleCtRemoval(ct, cart, genomeDb);
-                    slRemoveEl(&ctList, ct);
-                    if (!handledByMyVariants)
-                        {
-                        /* remove visibility variable */
-                        cartRemove(cart, selectedTable);
-                        /* remove configuration variables */
-                        char buf[128];
-                        safef(buf, sizeof buf, "%s.", selectedTable);
-                        cartRemovePrefix(cart, buf);
-                        }
-                    cartRemove(cart, CT_DO_REMOVE_VAR);
+                    cartRemove(cart, selectedTable);
+                    char buf[128];
+                    safef(buf, sizeof buf, "%s.", selectedTable);
+                    cartRemovePrefix(cart, buf);
                     }
-                else
-                    {
-                    if (html && differentString(html, ct->tdb->html))
-                        {
-                        ct->tdb->html = html;
-                        changedCt = TRUE;
-                        }
-                    }
-                break;
+                cartRemove(cart, CT_DO_REMOVE_VAR);
                 }
+            else
+                {
+                if (html && differentString(html, ct->tdb->html))
+                    {
+                    ct->tdb->html = html;
+                    changedCt = TRUE;
+                    }
+                }
+            break;
             }
         }
-    cartRemove(cart, CT_DO_REMOVE_VAR);
-    cartRemove(cart, CT_SELECTED_TABLE_VAR);
     }
+cartRemove(cart, CT_DO_REMOVE_VAR);
+cartRemove(cart, CT_SELECTED_TABLE_VAR);
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);

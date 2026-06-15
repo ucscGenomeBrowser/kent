@@ -43,15 +43,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lrSvCommon import svName, normalizeSvType
-
-# Colors per SV type
-COLORS = {
-    "INS": "0,0,200",       # blue
-    "DEL": "200,0,0",       # red
-    "CPX": "230,140,0",     # orange
-    "MIXED": "120,120,120", # grey
-}
+from lrSvCommon import svName, normalizeSvType, svColor
 
 SIZE_THRESHOLD = 50
 
@@ -96,7 +88,7 @@ def emit(site, fout):
     classes = site["types"]
     sv_type = next(iter(classes)) if len(classes) == 1 else "MIXED"
     sv_type = normalizeSvType(sv_type)
-    rgb = COLORS.get(sv_type, "120,120,120")
+    rgb = svColor(sv_type)
     chrom = site["chrom"]
     start = site["pos0"]
     end = start + max(site["ref_len"], 1)

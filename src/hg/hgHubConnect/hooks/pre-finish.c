@@ -105,12 +105,14 @@ else
         fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
         db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
         // Blocks newline injection into the synthesized hub.txt.
+        // The allowed character class must match sanitizeGenomeName() in
+        // src/hg/js/hgMyData.js.
         if (db && db[0])
             {
             char *p;
             for (p = db; *p; p++)
-                if (!(isalnum((unsigned char)*p) || *p == '_' || *p == '-'))
-                    errAbort("Invalid genome name '%s': only letters, digits, '_' and '-' are allowed", db);
+                if (!(isalnum((unsigned char)*p) || *p == '_' || *p == '-' || *p == '.'))
+                    errAbort("Invalid genome name '%s': only letters, digits, '.', '_' and '-' are allowed", db);
             }
         reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
         if (reqLm)

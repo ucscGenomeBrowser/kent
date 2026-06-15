@@ -27,8 +27,8 @@ target="_blank">Figshare</a> and converted to VCF.
 Whole-genome sequencing of 302 Saudi Arabian individuals was performed on the Illumina HiSeq
 X Ten platform using TruSeq Nano DNA library preparation at 30x target coverage. Sequencing and
 initial bioinformatics processing were carried out by deCODE Genetics (Reykjav&iacute;k, Iceland).
-Reads were aligned to the GRCh38 reference genome using BWA 0.7.10. Per-sample variant calling
-was performed with GATK HaplotypeCaller, followed by joint genotyping using CombineGVCFs and
+Reads were aligned to the GRCh38 reference genome using BWA 0.7.10. Per-sample variants
+were called with GATK HaplotypeCaller, then jointly genotyped with CombineGVCFs and
 GenotypeGVCFs. Variant quality score recalibration (VQSR) was applied for both SNPs and indels.
 The final autosomal callset contains 25.5 million variants across the 302 individuals.
 </p>
@@ -36,8 +36,8 @@ The final autosomal callset contains 25.5 million variants across the 302 indivi
 The variant data were downloaded from
 <a href="https://figshare.com/articles/dataset/A_list_of_Saudi_Arabian_variants_and_their_allele_frequencies/28059686/1?file=51297884"
 target="_blank">Figshare</a> and converted to VCF format using a custom script.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> documents how all source files of the varFreqs track were converted.
+For some tracks, python scripts were needed; these are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>References</h2>
