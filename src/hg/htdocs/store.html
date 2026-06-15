@@ -235,8 +235,8 @@ You can use the GBiC program to install a Genome Browser mirror on any Linux bas
 <li>TCP port 873/9000, used by rsync/<a href="https://github.com/LabAdvComp/UDR" target="_blank">UDR</a>. Without this, you cannot download the software or track data.</li>
 </ul></li>
 </li>The GBiC product installs <a href="http://httpd.apache.org" target="_blank">Apache</a> and <a href="http://dev.mysql.com" target="_blank">MySQL</a>/<a href="https://mariadb.org/" target="_blank">MariaDB</a>. Please follow the links to determine if you have the correct license for each of these open source programs.</li>
-<li>The tool has been tested on Ubuntu 14 & 16 LTS, CentOS 6 & 7, and Fedora 20. Other Linux distributions have not been tested yet and may not work correctly. </li>
-<li>The utility has been tested on virtual machines in Amazon’s EC2 (Centos 6 and Ubuntu 14) and Microsoft’s Azure (Ubuntu). Other cloud providers will likely work, but have not been tested.</li>
+<li>The tool has been tested on Ubuntu 18/20/22/24 LTS, Rocky 9.5, and Fedora 30/35/41. Other Linux distributions have not been tested yet and may not work correctly. </li>
+<li>The utility has been tested on virtual machines in Amazon’s EC2 and Microsoft’s Azure. Other cloud providers will likely work, but have not been tested.</li>
 <li>The minimum amount of disk space needed to load all data from UCSC on-the-fly is about 5GB, although temporary files will accumulate quickly after normal usage and take up more space. In order to fully mirror the hg19 assembly database locally, approximately 10TB of disk space is needed, however most other organism databases are significantly smaller -- in the 5-10GB range -- plus around 40GB for associated GenBank data. This GenBank data will only be downloaded once. </li>
 <li>Around 4GB of memory is required to display all of chromosome 1 on hg19. Most other assemblies will require significantly less memory.</li>
 </ul>
