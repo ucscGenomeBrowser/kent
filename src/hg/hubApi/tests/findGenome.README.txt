@@ -1,0 +1,159 @@
+# FindGenome API Test Harness
+
+This test harness validates that performance optimizations to the findGenome search don't break functionality.
+
+## Quick Start
+
+1. **Make test script executable:**
+   ```bash
+   chmod +x test_findGenome.sh
+   ```
+
+2. **Run baseline tests (before code changes):**
+   ```bash
+   ./test_findGenome.sh before
+   ```
+
+3. **Make your code changes** to `findGenome.c`
+
+4. **Recompile the binary:**
+   ```bash
+   make
+   ```
+
+5. **Run tests after changes:**
+   ```bash
+   ./test_findGenome.sh after
+   ```
+
+6. **Compare results:**
+   ```bash
+   ./test_findGenome.sh compare
+   ```
+
+## Test Coverage
+
+The test suite includes **25+ test cases** covering:
+
+### Text Search Patterns
+- Single words: `human`, `mouse`
+- Multiple words: `white rhino`
+- Quoted phrases: `"white rhino"`
+- Short terms affected by `ft_min_word_len=3`: `hg`, `mm`, `dm`
+
+### Search Operators
+- Force inclusion: `+human`
+- Exclusion: `human -mouse`
+- Wildcards: `homo*`, `hg*`
+- Complex: `+human -mouse sapiens*`
+
+### Filter Combinations
+- RefSeq category: `reference`, `representative`
+- Version status: `latest`, `replaced`, `suppressed`
+- Assembly level: `complete`, `chromosome`, `scaffold`, `contig`
+- Browser existence: `mustExist`, `notExist`, `mayExist`
+
+### Edge Cases
+- No results queries
+- Special characters: `C. elegans`
+- Assembly IDs: `hg38`, `mm39`, `GCA_*`
+
+## Output Structure
+
+```
+findGenome_tests/
+before/
+  basicSingleWord.json
+  shortAssemblyHg.json
+  timing.txt
+  ...
+after/
+  basicSingleWord.json
+  shortAssemblyHg.json
+  timing.txt
+  ...
+```
+
+## Detailed Analysis
+
+Use the helper script for deep analysis:
+
+```bash
+# Overall summary
+python3 analyzeResults.py summary
+
+# Timing analysis
+python3 analyzeResults.py timing
+
+# Specific test details
+python3 analyzeResults.py detail shortAssemblyHg
+
+# Everything
+python3 analyzeResults.py all
+```
+
+## Expected Changes After Optimization
+
+### Should Stay the Same
+- All search result counts (`itemCount`, `totalMatchCount`)
+- Specific assembly results returned
+- Filter behavior
+- API response format
+
+### Should Improve
+- Search timing, especially for:
+  - Short terms like `hg`, `mm` (currently slow due to `ft_min_word_len=3`)
+  - Searches with exact filters (`status=latest`, `category=reference`)
+  - Combined text + filter queries
+
+### Critical Tests
+
+Pay special attention to these tests that target the optimization:
+
+1. **`shortAssembly*`** - Tests short terms affected by FULLTEXT minimum word length
+2. **`filter*`** - Tests exact filter matching that should use B-tree indexes
+3. **`multiFilters`** - Combined filters that should bypass FULLTEXT on filter columns
+4. **`textPlusFilters`** - Mixed text search + exact filters
+
+## Troubleshooting
+
+### Test Failures
+- Check the `.err` files in test directories for error messages
+- Use `analyzeResults.py detail <testName>` for specific comparisons
+- Validate JSON output: `python3 -m json.tool file.json`
+
+### Performance Regressions
+- Look at timing.txt files for per-test timing
+- Use `analyzeResults.py timing` for detailed performance comparison
+- Focus on tests that should improve dramatically
+
+### API Binary Issues
+- Ensure `./hubApi` is compiled and executable
+- Test single command manually: `PATH_INFO="/findGenome" ./hubApi q=human maxItemsOutput=3`
+
+## Manual Testing
+
+You can also run individual tests manually:
+
+```bash
+# Basic search
+PATH_INFO="/findGenome" ./hubApi q="white%20rhino" maxItemsOutput=3
+
+# With filters
+PATH_INFO="/findGenome" ./hubApi q="human" category="reference" status="latest" maxItemsOutput=5
+
+# Short term test
+PATH_INFO="/findGenome" ./hubApi q="hg" maxItemsOutput=10
+```
+
+## CGI Header Filtering
+
+The test harness automatically filters CGI headers using `grep "^{"` to extract only the JSON response from hubApi output.
+
+## Kent Style Notes
+
+- All variable names use camelCase: `testName`, `queryParams`, `beforeDir`
+- All function names use camelCase: `runTest`, `compareResults`, `analyzeTestResult`  
+- Consistent with Kent codebase conventions
+
+This approach ensures your performance optimizations maintain exact functional compatibility while improving speed.

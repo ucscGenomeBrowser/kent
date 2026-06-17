@@ -3,7 +3,7 @@
 This track merges variants from three genotyping-array cohorts into a single bigBed file
 with predicted protein consequences and cross-database filtering. It contains 14.7 million
 variants from the Taiwan Precision Medicine Initiative (TPMI Axiom TPM1 chip,
-~1 million Han Chinese), the Mexico Biobank (MexBB, 6,011 individuals), and UK Biobank
+~1 million Han Chinese), the Mexico Biobank (MexBB, 6,011 individuals), and the UK Biobank
 (361k unrelated white British, imputed from the Neale Lab Round 2 release).
 </p>
 
@@ -50,13 +50,13 @@ Allele frequencies from genotyping arrays are not directly comparable to those f
 whole-genome or whole-exome sequencing. Two limitations to keep in mind:
 </p>
 <ul>
-  <li><b>Probe coverage is sparse and curated.</b> Array variants are only those the
-      manufacturer designed probes for. Absence from this track does <em>not</em> mean a
+  <li><b>Probe coverage is sparse and curated.</b> Array variants are only those for which the
+      manufacturer designed probes. Absence from this track does <em>not</em> mean a
       variant is absent in that population, only that it was not on the chip.</li>
   <li><b>Per-variant call confidence varies and is sometimes unreported.</b> TPMI publishes
       a per-probe <code>NGS_concordance</code> value (chip-vs-sequencing concordance from
       its own validation) in the source VCF; high-AF claims with low concordance are
-      common. MexBB ships only AN/AF/AC with no FILTER column and no per-site QC at all.
+      common. MexBB provides only AN/AF/AC with no FILTER column and no per-site QC.
       For both arrays, high-AF rare-disease candidates should be cross-checked against the
       sequencing-based
       <a href="hgTrackUi?g=varFreqsBackground">Population reference</a> track before
