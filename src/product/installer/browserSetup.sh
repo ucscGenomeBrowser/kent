@@ -1661,8 +1661,10 @@ function installBrowser ()
     fi
     # check if UCSC or genome-euro MySQL server is closer
     echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
-    eurospeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-    ucscspeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    # --connect-timeout/--max-time keep an unreachable site from blocking the build, and the || true keeps
+    # its failure (curl exit 28 under set -e) from aborting the install: a down site just loses the latency race
+    eurospeed=$( (time -p (for i in `seq 10`; do curl --connect-timeout 3 --max-time 5 -sSI genome-euro.ucsc.edu > /dev/null || true; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    ucscspeed=$( (time -p (for i in `seq 10`; do curl --connect-timeout 3 --max-time 5 -sSI genome.ucsc.edu > /dev/null || true; done )) 2>&1 | grep real | cut -d' ' -f2 )
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
        echo modifying hg.conf to pull MariaDB data from genome-euro-mysql instead of genome
