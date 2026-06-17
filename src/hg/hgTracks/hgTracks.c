@@ -656,10 +656,23 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
 {
 boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 // reverse arrow when base complement doesn't match display
-char *text =  (baseCmpl == revCmplDisp) ? "--->" : "<---";
+char *text =  NULL;
+char *mouseOver = NULL;
+
+if (baseCmpl == revCmplDisp)
+    {
+        text = "Click to complement -->";
+        mouseOver = "Forward strand of genome is shown. Click to show the complement (not the reverse complement). Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    }
+else
+    {
+        text = "Click to complement <--";
+        mouseOver = "Reverse strand of genome is shown. Click to show the forward strand. Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    }
+
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
 mapBoxToggleComplement(hvg, x, y, width, height, NULL, chromName, winStart, winEnd,
-                       "complement bases");
+                       mouseOver);
 }
 
 struct track *chromIdeoTrack(struct track *trackList)
@@ -9098,6 +9111,7 @@ zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
+createItemColorHash();
 
 if (psOutput != NULL)
    {
@@ -9110,8 +9124,10 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); 
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
+jsonObjectAdd(jsonForClient, "itemColors",
+              newJsonString(cartUsualString(cart, "itemColors", "")));
 
 if (hPrintStatus()) cartSaveSession(cart);
 

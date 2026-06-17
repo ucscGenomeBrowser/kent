@@ -47,7 +47,7 @@ The score (used for shading) is the pooled background allele frequency times 100
 <b>Background AF</b> is the pooled rate across contributing population cohorts and
 unaffected/control arms: <code>backgroundAF = sum(AC) / sum(AN)</code>, where
 <b>backgroundAC</b> sums the allele counts and <b>backgroundAN</b> sums the allele
-numbers across each cohort/arm that ships both AC and AF (the per-arm AN is derived as
+numbers across each cohort/arm that provides both AC and AF (the per-arm AN is derived as
 <code>round(AC / AF)</code>). Two cohorts that publish only AF (ABraOM, ALFA) contribute
 via a configured <code>default_an</code> in the build configuration. Cohorts that publish
 only AC with no <code>default_an</code> set (currently MGRB and the GREGoR unaffected and
