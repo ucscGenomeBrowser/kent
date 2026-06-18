@@ -59,9 +59,9 @@ if [ ! -s gisaidAndPublic.$today.masked.pb.gz ]; then
     time $scriptDir/maskDelta.sh merged.pb.gz merged.deltaMasked.pb.gz
     # Prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i merged.deltaMasked.pb.gz \
-        --max-parsimony 20 \
-        --max-branch-length 70 \
-        --max-path-length 225 \
+        --max-parsimony 25 \
+        --max-branch-length 75 \
+        --max-path-length 250 \
         -O -o merged.deltaMasked.filtered.pb.gz
     # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
     # -m 0.00000001 -M 4 (avoid identical-child-node problem in
@@ -72,6 +72,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb.gz ]; then
     # B.1.1.7 garbage branch, causing big trouble for lineageTree (23_05_18_updateLineageTreePb.txt).
     # After that I changed it back to -M 2 for my sanity. If the identical-child thing happens again,
     # then I'll probably just run matOptimize twice, with a small radius the second time.
+
     cd $ottoDir/$today && $matOptimize \
         -T 64 -m 0.00000001 -M 2 -S move_log.filtered \
         -i merged.deltaMasked.filtered.pb.gz \
@@ -174,29 +175,29 @@ cut -f 1,3 $epiToPublic > epiToPublic.latest
 
 # Update links to latest public+GISAID protobuf and metadata in /gbdb/wuhCor1/hgPhyloPlaceData/
 dir=/gbdb/wuhCor1/hgPhyloPlaceData
-ln -sf `pwd`/gisaidAndPublic.$today.masked.pb.gz $dir/public.plusGisaid.latest.masked.pb.gz
-ln -sf `pwd`/gisaidAndPublic.$today.metadata.tsv.gz $dir/public.plusGisaid.latest.metadata.tsv.gz
-ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
-ln -sf `pwd`/epiToPublic.latest $dir/
-ln -sf `pwd`/samples.$today.gz $dir/public.plusGisaid.names.gz
+ssh hgwdev ln -sf `pwd`/gisaidAndPublic.$today.masked.pb.gz $dir/public.plusGisaid.latest.masked.pb.gz
+ssh hgwdev ln -sf `pwd`/gisaidAndPublic.$today.metadata.tsv.gz $dir/public.plusGisaid.latest.metadata.tsv.gz
+ssh hgwdev ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
+ssh hgwdev ln -sf `pwd`/epiToPublic.latest $dir/
+ssh hgwdev ln -sf `pwd`/samples.$today.gz $dir/public.plusGisaid.names.gz
 
 # Extract Omicron-only tree for faster searches
 $matUtils extract -i gisaidAndPublic.$today.masked.pb.gz -c B.1.1.529 \
     -o gisaidAndPublic.$today.masked.omicron.pb.gz \
     -u samples.$today.omicron
 pigz -f -p 8 samples.$today.omicron
-ln -sf $(pwd)/gisaidAndPublic.$today.masked.omicron.pb.gz \
+ssh hgwdev ln -sf $(pwd)/gisaidAndPublic.$today.masked.omicron.pb.gz \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.masked.omicron.pb.gz
 sampleCountComma=$(echo $(zcat samples.$today.omicron.gz | wc -l) \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
 echo "$sampleCountComma Omicron genomes from GISAID, GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.plusGisaid.omicron.description.txt
-ln -sf $(pwd)/hgPhyloPlace.plusGisaid.omicron.description.txt \
+ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.plusGisaid.omicron.description.txt \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.omicron.version.txt
 
 # Memory-mapped hash tables for metadata and name lookup
 tabToMmHash gisaidAndPublic.$today.metadata.tsv.gz gisaidAndPublic.$today.metadata.mmh
-ln -sf $(pwd)/gisaidAndPublic.$today.metadata.mmh \
+ssh hgwdev ln -sf $(pwd)/gisaidAndPublic.$today.metadata.mmh \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.metadata.mmh
 for s in samples.$today.gz samples.$today.omicron.gz; do
     zcat $s \
@@ -212,7 +213,7 @@ for s in samples.$today.gz samples.$today.omicron.gz; do
     tabToMmHash nameLookup.tab $mmh
     rm nameLookup.tab
     pub=$(echo $mmh | sed -re 's/'samples.$today'/public.plusGisaid.names/')
-    ln -sf $(pwd)/$mmh /gbdb/wuhCor1/hgPhyloPlaceData/$pub
+    ssh hgwdev ln -sf $(pwd)/$mmh /gbdb/wuhCor1/hgPhyloPlaceData/$pub
 done
 
 # Make Taxonium v2 protobuf for display
