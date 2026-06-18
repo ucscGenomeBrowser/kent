@@ -661,13 +661,13 @@ char *mouseOver = NULL;
 
 if (baseCmpl == revCmplDisp)
     {
-        text = "Click to complement -->";
-        mouseOver = "Forward strand of genome is shown. Click to show the complement (not the reverse complement). Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    text = "Click to complement -->";
+    mouseOver = "Forward strand of genome is shown. Click to show the complement (not the reverse complement). Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
     }
 else
     {
-        text = "Click to complement <--";
-        mouseOver = "Reverse strand of genome is shown. Click to show the forward strand. Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    text = "Click to complement <--";
+    mouseOver = "Reverse strand of genome is shown. Click to show the forward strand. Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
     }
 
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);

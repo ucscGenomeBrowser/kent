@@ -651,14 +651,20 @@ else
     return(peptide - 'A' + 1 + 26);
 }
 
-static int codonToGrayIx(DNA *dna, bool codonFirstColor, boolean *foundStart, 
-			 boolean reverse, boolean colorStopStart)
-/* Return grayIx encoding the codon and color (or alternating shades). */
+static int codonToGrayIx(DNA *dna, bool codonFirstColor, boolean *foundStart,
+			 boolean reverse, boolean colorStopStart, char *retAa)
+/* Return grayIx encoding the codon and color (or alternating shades).
+ * If retAa is non-NULL, also report the codon's display amino-acid letter
+ * (the AA letter, or '*' stop / 'M' start / 'X' error).  retAa is the codon's
+ * semantic payload, computed here at translation time so consumers (e.g. the
+ * codon mouseover) need not reverse-decode it out of the packed grayIx. */
 {
 if (reverse)
     reverseComplement(dna,strlen(dna));
 
 char codonChar = baseColorLookupCodon(dna);
+if (retAa != NULL)
+    *retAa = codonChar;
 if (codonChar == 'M' && foundStart != NULL && !(*foundStart))
     *foundStart = TRUE;
 
@@ -1271,7 +1277,7 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         }
     // Base offsets mod 6 for alternating colors: 0,1,2 --> first codon, 3,4,5 --> second codon.
     bool codonFirstColor = (sf->start % 6 < 3);
-    sf->grayIx = codonToGrayIx(codon, codonFirstColor, NULL, FALSE, TRUE);
+    sf->grayIx = codonToGrayIx(codon, codonFirstColor, NULL, FALSE, TRUE, &sf->codonAa);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }
@@ -1452,10 +1458,11 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    AllocVar(sf);
 		    sf->start = currentStart;
 		    sf->end = currentEnd;
-		    sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
+		    sf->codonAa = 'X';  // stays 'X' for the out-of-CDS (error) branch below
+		    sf->grayIx = ((posStrand && currentEnd <= cdsEnd) ||
 				  (!posStrand && currentStart >= cdsStart)) ?
-			codonToGrayIx(tempCodonSeq, altColor, &foundStart, 
-				      !posStrand, colorStopStart) :
+			codonToGrayIx(tempCodonSeq, altColor, &foundStart,
+				      !posStrand, colorStopStart, &sf->codonAa) :
 			GRAYIX_CDS_ERROR;
                     sf->codonIndex = codonIndex;
 		    slAddHead(&sfList, sf);
@@ -1477,15 +1484,19 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    char *thisDna = getCachedDna(currentStart, currentEnd);
 		    memcpy(currentCodon, thisDna, 3);
 		    currentCodon[3] = '\0';
-		    sf->grayIx = codonToGrayIx(currentCodon, altColor, &foundStart, 
-					       !posStrand, colorStopStart);
+		    sf->grayIx = codonToGrayIx(currentCodon, altColor, &foundStart,
+					       !posStrand, colorStopStart, &sf->codonAa);
 
                     // is this block less than 3 bases away from the previous block (ribo slip)
+                    // (slip only changes the color; the amino-acid letter is unchanged)
                     if (posStrand && (lastEnd + 3 > currentEnd))
                         sf->grayIx = - 'A' + 1 + 52 + baseColorLookupCodon(currentCodon);
 		    }
 		else
+		    {
 		    sf->grayIx = GRAYIX_CDS_ERROR;
+		    sf->codonAa = 'X';
+		    }
 		}
             /*start of a coding block with less than 3 bases*/
             else if (currentSize < 3)
@@ -1494,11 +1505,14 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		AllocVar(sf);
 		sf->start = currentStart;
 		sf->end = currentEnd;
-                if (strlen(partialCodonSeq) == 3) 
+                if (strlen(partialCodonSeq) == 3)
                     sf->grayIx = codonToGrayIx(partialCodonSeq, altColor,
-                            &foundStart, !posStrand, colorStopStart);
+                            &foundStart, !posStrand, colorStopStart, &sf->codonAa);
                 else
+                    {
                     sf->grayIx = GRAYIX_CDS_ERROR;
+                    sf->codonAa = 'X';
+                    }
                 strcpy(partialCodonSeq,"" );
 
                 /*update frame based on bases appended*/
@@ -1663,7 +1677,7 @@ if (mrnaS >= 0)
 	    /* re-set color of this block based on mrna codons rather than
 	     * genomic, but keep the odd/even cycle of dark/light shades. */
 	    int mrnaGrayIx = codonToGrayIx(mrnaBases, (grayIx > 26), NULL,
-					   FALSE, TRUE);
+					   FALSE, TRUE, NULL);
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
 	    color = colorAndCodonFromGrayIx(hvg, mrnaCodon, mrnaGrayIx,
@@ -2239,6 +2253,45 @@ if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
 return drawOpt;
 }
 
+static void baseColorAddRulerCodonMapItem(struct hvGfx *hvg, struct simpleFeature *sf,
+                double scale, int xOff, int y, int height)
+/* Add an image-map mouse-over to one ruler-codon box giving the amino acid's
+ * three-letter abbreviation and full name, e.g. "Ala (alanine)" (stop codons
+ * show "Ter (termination)").  The one-letter code is in sf->codonAa, set when
+ * the codon was translated in baseColorCodonsFromDna().  No-op for an
+ * error/partial codon or when not building an image-map (imageV2) image. */
+{
+if (!(theImgBox && curImgTrack))
+    return;
+char aa = sf->codonAa;
+if (aa == '\0' || aa == 'X')
+    return;  // error/partial codon: nothing meaningful to show
+char title[128];
+if (aa == '*')
+    safecpy(title, sizeof(title), "Ter (termination)");
+else
+    {
+    char abbr[8];
+    char *name = aaToName(aa);
+    aaToAbbr(aa, abbr, sizeof(abbr));
+    if (name != NULL)
+        safef(title, sizeof(title), "%s - %s", abbr, name);
+    else
+        safef(title, sizeof(title), "%s", abbr);
+    }
+int x1, x2;
+if (scaledBoxToPixelCoords(sf->start, sf->end, scale, xOff, &x1, &x2))
+    {
+    int w = x2 - x1;
+    if (w < 1)
+        w = 1;
+    x1 = hvGfxAdjXW(hvg, x1, w);  // flip x for reverse-complement display
+    imgTrackAddMapItem(curImgTrack, TITLE_BUT_NO_LINK, title,
+                       x1, y, x1 + w, y + height, NULL, NULL);
+    }
+}
+
+
 void baseColorDrawRulerCodons(struct hvGfx *hvg, struct simpleFeature *sfList,
                 double scale, int xOff, int y, int height, MgFont *font, 
                 int winStart, int maxPixels, bool zoomedToText)
@@ -2264,6 +2317,10 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);
+
+    /* mouse-over the codon box with the amino acid's three-letter abbreviation
+     * and full name (sf->codonAa was set when the codon was translated) */
+    baseColorAddRulerCodonMapItem(hvg, sf, scale, xOff, y, height);
     }
 }
 

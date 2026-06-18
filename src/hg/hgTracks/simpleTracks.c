@@ -3093,11 +3093,35 @@ for (ref = exonList; TRUE; )
                                         int cStart = codonHgvsIx + 1;
                                         int cEnd = codonHgvsIx + 3;
                                         int pStart = codonHgvsIx / 3;
-                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d (p.%d-%d)<br>", 
+                                        // the one-letter amino acid was stored on the codon when it
+                                        // was translated (cds.c); map it to its three-letter code
+                                        char aaLetter = codon->codonAa;
+                                        char aaAbbr[8];
+                                        char *aaName = NULL;
+                                        if (aaLetter == '*')
+                                            {
+                                            safecpy(aaAbbr, sizeof(aaAbbr), "Ter");
+                                            aaName = "termination";
+                                            }
+                                        else if (aaLetter == 'X')  // error/partial codon: nothing to show
+                                            aaAbbr[0] = '\0';
+                                        else
+                                            {
+                                            aaToAbbr(aaLetter, aaAbbr, sizeof(aaAbbr));
+                                            aaName = aaToName(aaLetter);
+                                            }
+                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d (p.%d-%d)<br>",
                                                 cStart, cEnd, pStart, pStart+1);
+                                        if (!isEmpty(aaAbbr))
+                                            {
+                                            if (aaName != NULL)
+                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s (%s)<br>", aaAbbr, aaName);
+                                            else
+                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s<br>", aaAbbr);
+                                            }
                                         }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Exon Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
                                                 strandStr, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
@@ -3114,17 +3138,19 @@ for (ref = exonList; TRUE; )
                     // if you change the text below, also change hgTracks:mouseOverToExon
                     char *posNote = "";
                     char *exonOrIntron = "Intron";
-                    if (isExon) 
+                    char *lengthLabel = "Length:";
+                    if (isExon)
                         {
                         posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
                         exonOrIntron = "Exon";
+                        lengthLabel = "Exon Length:";
                         }
 
 
                     safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
-                            "<b>Strand:</b> %s<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>Length:</b> %d bp<br>%s",
+                            "<b>Strand:</b> %s<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>%s</b> %d bp<br>%s",
                         existingText, posNote, strandStr, exonOrIntron, exonIntronText,
-                        exonIntronNumber, numExonIntrons, e - s, phaseText);
+                        exonIntronNumber, numExonIntrons, lengthLabel, e - s, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName

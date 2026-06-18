@@ -1229,6 +1229,20 @@ for (ix = 0;  ix < ArraySize(aminoAcidTable);  ix++)
 safef(abbrBuf, abbrBufSize, "?%c?", aa);
 }
 
+char *aaToName(char aa)
+/* Convert an AA single letter such as 'A', 'D' etc. to its full name such as "alanine",
+ * "aspartic acid" etc.  Returns NULL if aa is not found. */
+{
+char aaUC = toupper(aa);
+int ix;
+for (ix = 0;  ix < ArraySize(aminoAcidTable);  ix++)
+    {
+    if (aaUC == aminoAcidTable[ix].letter)
+        return aminoAcidTable[ix].name;
+    }
+return NULL;
+}
+
 void trimRefAltDir(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen,
                    boolean leftJustify)
 /* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */

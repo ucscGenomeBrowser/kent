@@ -383,6 +383,9 @@ struct simpleFeature
     int qStart, qEnd;			/* query start/end */
     int grayIx;                         /* Level of gray usually. */
     int codonIndex;                     /* 1-based codon index (ignored if 0) */
+    char codonAa;                       /* For a codon, its display amino-acid letter:
+                                         * AA letter, '*' stop, 'M' start, 'X' error/partial,
+                                         * 0 if not a codon.  Set when grayIx is. */
     };
 
 /* Some details of how to draw linked features. */

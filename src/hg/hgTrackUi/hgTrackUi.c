@@ -2148,6 +2148,11 @@ boolean showRuler = cartUsualBoolean(cart, BASE_SHOWRULER, TRUE);
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 boolean showPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 boolean showAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
+/* complement-bases var is assembly-specific (same one toggled by the "Click to
+ * complement" arrow next to the ruler, see hgTracks.c drawComplementArrow) */
+boolean complementBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+char complementVar[256];
+safef(complementVar, sizeof(complementVar), "%s_%s", COMPLEMENT_BASES_VAR, database);
 /* title var is assembly-specific */
 char titleVar[256];
 char *title = NULL;
@@ -2166,6 +2171,16 @@ puts("&nbsp;<B>Show scale bar</B>");
 puts("<P>");
 cgiMakeCheckBox(BASE_SHOWASM_SCALEBAR, cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE));
 puts("&nbsp;<B>Show assembly next to scale bar</B>");
+puts("</P>");
+
+puts("<P>");
+cgiMakeCheckBox(complementVar, complementBases);
+puts("&nbsp;<B>Complement the bases</B>");
+printInfoIcon("Show the complementary DNA base at each position. "
+     "Same as the &quot;Click to complement&quot; arrow next to the ruler. "
+     "Does not reverse the sequence. "
+     "To reverse-complement the entire display, sequence and annotations, "
+     "click the \"Reverse\" button under the image instead.");
 puts("</P>");
 
 puts("<P>");

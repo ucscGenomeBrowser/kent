@@ -275,6 +275,10 @@ void aaToAbbr(char aa, char *abbrBuf, size_t abbrBufSize);
 /* Convert an AA single letter such as "A", "D" etc. to its abbreviation such as "Ala", "Asp" etc.
  * abbrBufSize must be at least 4.  If aa is not found, "?%c?",aa is written into abbrBuf. */
 
+char *aaToName(char aa);
+/* Convert an AA single letter such as 'A', 'D' etc. to its full name such as "alanine",
+ * "aspartic acid" etc.  Returns NULL if aa is not found. */
+
 void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen);
 /* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
 
