@@ -67,8 +67,15 @@ const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 if (a->order == b->order)
     {
-    if ((a->track->originalTrack != NULL) || (b->track->originalTrack != NULL))
-        return a->track->visibility - b->track->visibility;
+    // A squishyPack "squink" track (originalTrack set) shares its source track's order and
+    // must sort immediately after that source so the two can be smashed back together (see
+    // smashSquish).  Use visibility to order the genuine source/squink pair, but a squink
+    // compared against an unrelated track that happens to share the same order must fall
+    // through to priority - since the squink carries its source's priority, that keeps it
+    // grouped with its source instead of being separated by the other track.
+    struct track *at = a->track, *bt = b->track;
+    if (sameOk(at->originalTrack, bt->track) || sameOk(bt->originalTrack, at->track))
+        return at->visibility - bt->visibility;
     return tgCmpPriority(&(a->track),&(b->track));
     }
 return (a->order - b->order);
@@ -2083,7 +2090,12 @@ struct imgTrack *nextImg, *imgTrack;
 for (imgTrack = imgTrackList; imgTrack!=NULL;imgTrack = nextImg)
     {
     nextImg = imgTrack->next;
-    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked);
+    // Only smash a squink into the track it was cloned from.  nextImg->linked is set for any
+    // squishyPack squink, but if an unrelated track sorted between a squink and its source we
+    // must not merge the squink's slice into the wrong neighbor (its pixels are elsewhere).
+    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked
+                         && nextImg->tdb != NULL && imgTrack->tdb != NULL
+                         && sameOk(nextImg->tdb->originalTrack, imgTrack->tdb->track));
 
     if (joinNext)  // Smash these together
         {
