@@ -48,10 +48,10 @@ echo "$sampleCountComma genomes from INSDC (GenBank/ENA/DDBJ) ($today)" \
 
 # Update links in /gbdb
 dir=/gbdb/wuhCor1/hgPhyloPlaceData/$asmAcc
-mkdir -p $dir
-ln -sf $(pwd)/mev.$today.pb.gz $dir/mev.latest.pb.gz
-ln -sf $(pwd)/mev.$today.metadata.tsv.gz $dir/mev.latest.metadata.tsv.gz
-ln -sf $(pwd)/hgPhyloPlace.description.txt $dir/mev.latest.version.txt
+ssh hgwdev mkdir -p $dir
+ssh hgwdev ln -sf $(pwd)/mev.$today.pb.gz $dir/mev.latest.pb.gz
+ssh hgwdev ln -sf $(pwd)/mev.$today.metadata.tsv.gz $dir/mev.latest.metadata.tsv.gz
+ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.txt $dir/mev.latest.version.txt
 
 # Extract Newick and VCF for anyone who wants to download those instead of protobuf
 $matUtils extract -i mev.$today.pb.gz \
@@ -68,11 +68,11 @@ done
 # Update hgdownload-test link for archive
 asmDir=$(echo $asmAcc \
          | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV
-ln -sf $archiveRoot/* /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV/
+ssh hgwdev mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV
+ssh hgwdev ln -sf $archiveRoot/* /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV/
 # rsync to hgdownload hubs dir
-for h in hgdownload1 hgdownload3; do
-    if rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV/* \
+for h in hgdownload1 hgdownload2 hgdownload3; do
+    if ssh hgwdev rsync -a -L --delete "/data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_MeV/*" \
              qateam@$h:/mirrordata/hubs/$asmDir/UShER_MeV/; then
         true
     else
@@ -83,7 +83,7 @@ for h in hgdownload1 hgdownload3; do
 done
 
 set +o pipefail
-grep "Could not assign" annotate.log | cat
+grep "Could not assign" matUtils.annotate.err.log | cat
 set -o pipefail
 
 echo All done
