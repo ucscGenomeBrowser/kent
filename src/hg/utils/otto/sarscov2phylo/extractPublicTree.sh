@@ -136,14 +136,14 @@ ln -f $archive/public-$today.all.masked.ShUShER.pb.gz \
     $archiveRoot/public-latest.all.masked.ShUShER.pb.gz
 
 # Update hgdownload-test link for archive
-mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
-ln -sf $archive /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
+ssh hgwdev mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
+ssh hgwdev ln -sf $archive /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
 
 pigz -p 8 -c samples.public.$today > samples.public.$today.gz
 
 # Update links to latest public protobuf and metadata in /gbdb/wuhCor1/hgPhyloPlaceData/
 dir=/gbdb/wuhCor1/hgPhyloPlaceData
-ln -sf `pwd`/public-$today.all.masked.pb.gz $dir/public-latest.all.masked.pb.gz
-ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
-ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
-ln -sf `pwd`/samples.public.$today.gz $dir/public-latest.names.gz
+ssh hgwdev ln -sf `pwd`/public-$today.all.masked.pb.gz $dir/public-latest.all.masked.pb.gz
+ssh hgwdev ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
+ssh hgwdev ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
+ssh hgwdev ln -sf `pwd`/samples.public.$today.gz $dir/public-latest.names.gz
