@@ -112,17 +112,54 @@ return TRUE;
 }
 
 
-static void drawScaledBoxWithText(struct hvGfx *hvg, 
+static void drawCodonStrandArrow(struct hvGfx *hvg, int boundaryX, int midY,
+                                 int height, Color boxColor, int strand)
+/* Draw a strand-direction chevron centered on the left boundary of a codon box
+ * (i.e. in the whitespace between the centered amino-acid letters of two
+ * adjacent codons).  The chevron points in the strand direction (1 = right,
+ * -1 = left; reverse-complement display is handled by hvGfxLine).  It is drawn
+ * in the box's contrasting color (white on the dark-blue codon shades, the same
+ * color as the codon letter) so it reads clearly, and the caller draws it before
+ * the amino-acid text so the letter stays crisp. */
+{
+if (strand == 0)
+    return;
+int bh = (height - 2) / 2;     // chevron half-height
+if (bh > 3)
+    bh = 3;                    // keep it small
+if (bh < 2)
+    return;                    // not enough vertical room
+
+// contrasting color: white on the dark-blue codon shades, matching the letter
+Color aColor = hvGfxContrastingColor(hvg, boxColor);
+if (strand > 0)
+    {
+    // ">" apex on the right, wings opening to the left
+    hvGfxLine(hvg, boundaryX + bh, midY, boundaryX - bh, midY - bh, aColor);
+    hvGfxLine(hvg, boundaryX + bh, midY, boundaryX - bh, midY + bh, aColor);
+    }
+else
+    {
+    // "<" apex on the left, wings opening to the right
+    hvGfxLine(hvg, boundaryX - bh, midY, boundaryX + bh, midY - bh, aColor);
+    hvGfxLine(hvg, boundaryX - bh, midY, boundaryX + bh, midY + bh, aColor);
+    }
+}
+
+static void drawScaledBoxWithText(struct hvGfx *hvg,
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
                                         MgFont *font, char *text, bool zoomed,
-                                        int winStart, int maxPixels, boolean isCoding, boolean justifyString)
+                                        int winStart, int maxPixels, boolean isCoding, boolean justifyString,
+                                        int strand)
 /* Draw a box scaled from chromosome to window coordinates with
-   a codon or set of 3 or less bases drawn in the box. */
+   a codon or set of 3 or less bases drawn in the box.  If strand is non-zero
+   and a whole codon is drawn, a faint strand-direction chevron is drawn in the
+   box before the amino-acid letter. */
 {
 /*first draw the box itself*/
-drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height, 
+drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height,
 		    color);
 
 /*draw text in box if space, and align properly for codons or DNA*/
@@ -141,6 +178,10 @@ if (zoomed)
 
     if (chromEnd - chromStart == 3 && isCoding)
         {
+        /* faint strand arrow between this amino acid and the previous one,
+         * drawn before the letter so the letter stays legible */
+        if (w >= 6)
+            drawCodonStrandArrow(hvg, x1, y + height/2, height, color, strand);
         if (justifyString)
             spreadBasesString(hvg, x1, y, w, height, textColor,  font, text, strlen(text),  TRUE);
         else
@@ -1665,9 +1706,9 @@ if (mrnaS >= 0)
 	{
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
-	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer,
 				    color, lf->score, font, dyMrnaSeq->string,
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE, lf->orientation);
 	}
     else if (drawOpt == baseColorDrawItemCodons)
 	{
@@ -1684,10 +1725,10 @@ if (mrnaS >= 0)
 					    ixColor);
 	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
-	    drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	    drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer,
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
-					maxPixels, isCoding, TRUE);
+					maxPixels, isCoding, TRUE, lf->orientation);
 	    }
 	else
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1701,9 +1742,9 @@ if (mrnaS >= 0)
 	// fprintf(stderr, "drawOpt =- diffBases. %d %d %d %d\n", (int)strlen(genoDna), (int)strlen(dyMrnaSeq->string), (int)dyMrnaSeq->stringSize, e-s);
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
-	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, diffStr, 
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer,
+				    color, lf->score, font, diffStr,
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE, lf->orientation);
 	freeMem(diffStr);
 	}
     else if (drawOpt == baseColorDrawDiffCodons)
@@ -1722,10 +1763,10 @@ if (mrnaS >= 0)
 	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", baseColorLookupCodon(mrnaBases));
 	    if (mrnaCodon[0] != genomicCodon[0])
 		{
-		drawScaledBoxWithText(hvg, s, e, scale, xOff, y, 
+		drawScaledBoxWithText(hvg, s, e, scale, xOff, y,
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
-					    winStart, maxPixels, isCoding, TRUE);
+					    winStart, maxPixels, isCoding, TRUE, lf->orientation);
 		}
 	    else
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1777,15 +1818,15 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
 	{
 	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
 			    lf->highlightColor);
-	drawScaledBoxWithText(hvg, s, e, scale, xOff, y+1, heightPer-2, 
-				    color, lf->score, font, codon, 
-				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y+1, heightPer-2,
+				    color, lf->score, font, codon,
+				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex, lf->orientation);
 	}
     else
 	{
-	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, codon, 
-				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer,
+				    color, lf->score, font, codon,
+				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex, lf->orientation);
 	}
     }
 else if (qSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
@@ -1916,6 +1957,90 @@ if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel && enabled)
     {
     drawCdsDiffBaseTickmarksOnly(tg, lf, hvg, xOff, y, scale,
 				 heightPer, qSeq, qOffset, psl, winStart);
+    }
+}
+
+
+static void drawStrandBarbsInRange(struct hvGfx *hvg, int s, int e, double scale,
+                int xOff, int winStart, int midY, int barbHeight, int barbSpacing,
+                int orientation, Color color)
+/* Clip base range [s,e] to the window and draw evenly-spaced strand chevrons
+ * (barbs only, no connecting line) across it. */
+{
+if (s < winStart) s = winStart;
+if (e > winEnd) e = winEnd;
+if (e <= s)
+    return;
+int x1 = round((double)(s-winStart)*scale) + xOff;
+int x2 = round((double)(e-winStart)*scale) + xOff;
+int w = x2 - x1;
+if (w < barbHeight*2)
+    return;  // too narrow to show an arrow cleanly
+clippedBarbs(hvg, x1, midY, w, barbHeight, barbSpacing, orientation, color, FALSE);
+}
+
+void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
+                            struct hvGfx *hvg, int xOff, int y, double scale,
+                            int heightPer, int winStart, enum baseColorDrawOpt drawOpt,
+                            Color color)
+/* When zoomed in far enough to color the codons, distribute strand-direction
+ * chevrons across each exon on top of the boxes (the per-codon letter arrows in
+ * drawScaledBoxWithText only appear once the codons are big enough to label).
+ * The coding part gets white chevrons at the standard barb spacing, but only
+ * when the codons are too small to label (otherwise the letter arrows cover it).
+ * The UTR parts get the feature's contrasting color at a wider spacing, as a
+ * visual hint that they are non-coding.  No-op below the codon-color zoom level,
+ * when coding coloring is off, or when the strand is unknown. */
+{
+if (drawOpt <= baseColorDrawOff)
+    return;
+if (!zoomedToCdsColorLevel)
+    return;
+if (lf->orientation == 0)
+    return;
+
+if (!cdsColorsMade)
+    {
+    makeCdsShades(hvg, cdsColor);
+    cdsColorsMade = TRUE;
+    }
+
+int midY = y + (heightPer>>1);
+int orientation = lf->orientation;
+
+/* white reads clearly on top of the dark-blue codon shades (the same high
+ * contrast the codon-letter text uses); only draw it when the codons are too
+ * small to show their letters (which carry their own arrows) */
+boolean drawCds = !zoomedToCodonLevel;
+Color cdsColor1 = hvGfxFindColorIx(hvg, 0xff, 0xff, 0xff);
+int cdsBh = tl.barbHeight;
+int cdsSpacing = tl.barbSpacing*2;
+
+/* UTR boxes are drawn shorter and in the feature color, so size the chevron to
+ * the short box (but at least 1px, so it still shows in squish mode where the
+ * box is only a few pixels tall) and use the feature's contrasting color; space
+ * them more widely than the coding chevrons as a cue that UTRs are non-coding */
+int shortOff = heightPer/4;
+int shortHeight = heightPer - 2*shortOff;
+int utrBh = shortHeight/2;
+if (utrBh > tl.barbHeight)
+    utrBh = tl.barbHeight;
+if (utrBh < 1)
+    utrBh = 1;
+Color utrColor = hvGfxContrastingColor(hvg, color);
+int utrSpacing = tl.barbSpacing*3;
+
+struct simpleFeature *sf;
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    if (drawCds)
+        drawStrandBarbsInRange(hvg, max(sf->start, lf->tallStart), min(sf->end, lf->tallEnd),
+                scale, xOff, winStart, midY, cdsBh, cdsSpacing, orientation, cdsColor1);
+    /* 5' and 3' UTR portions of this exon (the parts outside [tallStart,tallEnd]) */
+    drawStrandBarbsInRange(hvg, sf->start, min(sf->end, lf->tallStart),
+            scale, xOff, winStart, midY, utrBh, utrSpacing, orientation, utrColor);
+    drawStrandBarbsInRange(hvg, max(sf->start, lf->tallEnd), sf->end,
+            scale, xOff, winStart, midY, utrBh, utrSpacing, orientation, utrColor);
     }
 }
 
@@ -2313,7 +2438,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     if (zoomedToText)
         drawScaledBoxWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
-				    winStart, maxPixels, TRUE, TRUE);
+				    winStart, maxPixels, TRUE, TRUE, 0);
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);
