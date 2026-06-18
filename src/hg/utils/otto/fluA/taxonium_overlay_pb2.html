@@ -1,0 +1,74 @@
+<h2 class="font-bold">About Taxonium</h2>
+<p>
+  Taxonium is a web application for exploring phylogenetic trees. Find out more at the
+  Github repository (https://github.com/theosanderson/taxonium)
+  or
+  read the documentation (https://docs.taxonium.org).
+</p>
+
+<h2 class="font-bold">About the tree</h2>
+<p>
+  This tree was constructed by the
+  <a href="https://pathogengenomics.ucsc.edu/" target=_blank>Pathogen Genomics Group</a>
+  at the University of California Santa Cruz (UCSC) Genomics Institute.
+  Our automated pipeline downloads Influenza A sequences from
+  <a href="https://www.ncbi.nlm.nih.gov/genbank/" target=_blank>GenBank</a>
+  (i.e. the INSDC databases) and SRA assemblies from
+  <a href="https://github.com/andersen-lab/avian-influenza/" target=_blank>https://github.com/andersen-lab/avian-influenza/</a>,
+  aligns them to the <a href="https://www.ncbi.nlm.nih.gov/refseq/" target=_blank>RefSeq</a> reference sequence
+  for __STRAIN__ segment __SEGNUM__ (__SEGNAME__),
+  __SEGREF__(https://www.ncbi.nlm.nih.gov/nuccore/__SEGREF__),
+  using <a href="https://docs.nextstrain.org/projects/nextclade/en/stable/user/nextclade-cli/index.html" target=_blank>nextclade</a>,
+  and runs <a href="https://usher-wiki.readthedocs.io/en/latest/" target=_blank>UShER</a>
+  to infer the tree structure and
+  <a href="https://usher-wiki.readthedocs.io/en/latest/matOptimize.html" target=_blank>matOptimize</a>
+  to improve it under maximum parsimony.
+</p>
+
+<h2 class="font-bold">About the metadata</h2>
+<p>
+  In addition to metadata from GenBank and https://github.com/andersen-lab/avian-influenza
+  (date, country, host, etc.), a "Differential selection in human vs. avian cells"
+  phenotype score was calculated from
+  Deep Mutational Scanning (DMS) experiments performed by the Bloom lab at the
+  Fred Hutchinson Cancer Center
+  (https://github.com/jbloomlab/PB2-DMS).
+  The score displayed for each sequence was calculated by summing the per-mutation scores
+  for all mutations found in that sequence, which are listed in the metadata as
+  "Differential selection mutations".
+</p>
+
+<h2 class="font-bold">Downloads</h2>
+<p>
+  The tree and metadata files can be downloaded from
+  https://hgdownload.gi.ucsc.edu/hubs/__ASMDIR__/UShER___SEGREF__ .
+</p>
+
+<h2 class="font-bold">Citations</h2>
+<p>
+  If you use Taxonium in your research, please cite:
+  <br>
+  Theo Sanderson (2022)
+  <span class="font-semibold">Taxonium, a web-based tool for exploring large phylogenetic trees</span>
+  <i>eLife</i> 11:e82392.
+  <br>
+  <a href="https://doi.org/10.7554/eLife.82392" target=_blank>https://doi.org/10.7554/eLife.82392</a>
+</p>
+<p>
+  If you use the tree in your research, please cite:
+  <br>
+  Jakob McBroome et al. (2021)
+  <span class="font-semibold">A Daily-Updated Database and Tools for Comprehensive SARS-CoV-2 Mutation-Annotated Trees</span>
+  <i>Mol Biol Evol</i> 38(12):5819-5824.
+  <br>
+  <a href="https://doi.org/10.1093/molbev/msab264" target=_blank>https://doi.org/10.1093/molbev/msab264</a>
+</p>
+<p>
+  If you use the Deep Mutational Scanning phenotype scores in your research, please cite:
+  <br>
+  Shirleen YQ Soh et al. (2019)
+  <span class="font-semibold">Comprehensive mapping of adaptation of the avian influenza polymerase protein PB2 to humans</span>
+  <i>eLife</i> 8:e45079.
+  <br>
+  <a href="https://doi.org/10.7554/eLife.45079" target=_blank>https://doi.org/10.7554/eLife.45079</a>
+</p>
