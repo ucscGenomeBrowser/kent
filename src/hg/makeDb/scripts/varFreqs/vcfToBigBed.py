@@ -726,56 +726,75 @@ def generate_trackdb_fragment(output_path, databases, track_name="varFreqsAll",
 
         # Affected and background frequency summaries (both tracks carry both,
         # so e.g. the Affected track can be filtered to variants rare in the
-        # background). String range filters mirror the per-database AF/AC fields.
+        # background).
+        #
+        # IMPORTANT: hgTrackUi only DISCOVERS a numeric filter from a
+        # "filter.<field>" (or "<field>Filter") setting -- see
+        # FILTER_NUMBER_WILDCARD in hg/inc/bigBedFilter.h and
+        # tdbGetTrackNumFilters() in hg/lib/hui.c. A field that has only
+        # filterByRange./filterLimits. is silently dropped. So every range
+        # filter needs filter.<field> (the default selected range) to render;
+        # filterLimits.<field> only sets the slider bounds shown in the UI.
+        # We set filter.<field> to the FULL range so nothing is filtered by
+        # default. AC/AN are unbounded counts; the caps below are generous
+        # upper bounds (well above the true per-pool maxima) and never hide data.
+        AC_CAP_AFFECTED = 500000      # ~130k affected individuals -> AN up to ~260k
+        AC_CAP_BACKGROUND = 5000000   # ~1.5M individuals pooled -> AN up to ~3M
+        AC_CAP_DB = 2000000           # largest single cohort (FinnGen) AN ~1M
+
+        def range_filter(field, label, lo, hi, enabled=True):
+            # enabled=False emits the same four settings commented out, so the
+            # filter is documented and trivially re-enabled by removing the "# ".
+            pre = "        " if enabled else "        # "
+            f.write(f"{pre}filterByRange.{field} on\n")
+            f.write(f"{pre}filterLabel.{field} {label}\n")
+            f.write(f"{pre}filter.{field} {lo}:{hi}\n")
+            f.write(f"{pre}filterLimits.{field} {lo}:{hi}\n")
+
         f.write("        # Affected/case frequency summary\n")
-        f.write("        filterByRange.affectedAF on\n")
-        f.write("        filterLabel.affectedAF Affected/case AF (pooled)\n")
-        f.write("        filterLimits.affectedAF 0:1\n")
-        f.write("        filterByRange.affectedAC on\n")
-        f.write("        filterLabel.affectedAC Affected/case AC\n")
-        f.write("        filterByRange.affectedAN on\n")
-        f.write("        filterLabel.affectedAN Affected/case AN (pool denominator)\n")
+        range_filter("affectedAF", "Affected/case AF (pooled)", 0, 1)
+        range_filter("affectedAC", "Affected/case AC", 0, AC_CAP_AFFECTED)
+        range_filter("affectedAN", "Affected/case AN (pool denominator)",
+                     0, AC_CAP_AFFECTED)
         f.write("        # Background (population + unaffected) frequency summary\n")
-        f.write("        filterByRange.backgroundAF on\n")
-        f.write("        filterLabel.backgroundAF Background AF (pooled)\n")
-        f.write("        filterLimits.backgroundAF 0:1\n")
-        f.write("        filterByRange.backgroundAC on\n")
-        f.write("        filterLabel.backgroundAC Background AC (population + unaffected)\n")
-        f.write("        filterByRange.backgroundAN on\n")
-        f.write("        filterLabel.backgroundAN Background AN (pool denominator)\n")
+        range_filter("backgroundAF", "Background AF (pooled)", 0, 1)
+        range_filter("backgroundAC", "Background AC (population + unaffected)",
+                     0, AC_CAP_BACKGROUND)
+        range_filter("backgroundAN", "Background AN (pool denominator)",
+                     0, AC_CAP_BACKGROUND)
         f.write("        # Affected/case membership flag\n")
-        f.write("        filterByRange.inAffected on\n")
-        f.write("        filterLabel.inAffected Seen in an affected/case arm (1=yes, 0=no)\n")
-        f.write("        filter.inAffected 0:1\n")
-        f.write("        filterLimits.inAffected 0:1\n")
+        range_filter("inAffected", "Seen in an affected/case arm (1=yes, 0=no)",
+                     0, 1)
 
-        # Per-database AF and AC filters
-        f.write("        # Per-database AF filters\n")
+        # Per-database and per-population AF/AC filters. There are ~130 of these
+        # and they overwhelm the track config page, so they are emitted COMMENTED
+        # OUT (enabled=False). The data columns are still in the bigBed and show
+        # on the details page; only the filter controls are off. Re-enable any of
+        # them by deleting the leading "# " on its four lines.
+        f.write("        # Per-database AF filters (commented out: re-enable as needed)\n")
         for db_key, db_info in databases.items():
-            f.write(f"        filterByRange.{db_key}AF on\n")
-            f.write(f"        filterLabel.{db_key}AF "
-                    f"{db_info['name']} AF\n")
+            range_filter(f"{db_key}AF", f"{db_info['name']} AF", 0, 1,
+                         enabled=False)
 
-        f.write("        # Per-database AC filters\n")
+        f.write("        # Per-database AC filters (commented out: re-enable as needed)\n")
         for db_key, db_info in databases.items():
-            f.write(f"        filterByRange.{db_key}AC on\n")
-            f.write(f"        filterLabel.{db_key}AC "
-                    f"{db_info['name']} AC\n")
+            range_filter(f"{db_key}AC", f"{db_info['name']} AC", 0, AC_CAP_DB,
+                         enabled=False)
 
-        # Population-specific filters
-        f.write("        # Population-specific AF filters\n")
+        # Population-specific filters (commented out: re-enable as needed)
+        f.write("        # Population-specific AF/AC filters (commented out: re-enable as needed)\n")
         for db_key, db_info in databases.items():
             if not db_info["pops"]:
                 continue
             f.write(f"        # {db_info['name']} populations\n")
             for pop in db_info["pops"]:
-                f.write(f"        filterByRange.{db_key}AF_{pop['key']} on\n")
-                f.write(f"        filterLabel.{db_key}AF_{pop['key']} "
-                        f"{db_info['name']} {pop['name']} AF\n")
+                range_filter(f"{db_key}AF_{pop['key']}",
+                             f"{db_info['name']} {pop['name']} AF", 0, 1,
+                             enabled=False)
             for pop in db_info["pops"]:
-                f.write(f"        filterByRange.{db_key}AC_{pop['key']} on\n")
-                f.write(f"        filterLabel.{db_key}AC_{pop['key']} "
-                        f"{db_info['name']} {pop['name']} AC\n")
+                range_filter(f"{db_key}AC_{pop['key']}",
+                             f"{db_info['name']} {pop['name']} AC", 0, AC_CAP_DB,
+                             enabled=False)
 
         f.write("        skipEmptyFields on\n")
 
