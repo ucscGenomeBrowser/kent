@@ -150,6 +150,10 @@ char *trackHubChromSizes(char *database);
  * returns NULL when not present
  */
 
+char *trackHubCoordRuler(char *database);
+/* If this assembly hub names a coordRuler bigBed (synthetic-pos -> source-coord
+ * map for the main base position ruler), return its url, else NULL. */
+
 char *trackHubAliasBbFile(char *database);
 /* see if this assembly hub has an alias bigBed file, return url if present
  * returns NULL when not present

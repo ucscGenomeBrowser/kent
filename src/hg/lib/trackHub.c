@@ -484,6 +484,13 @@ char *trackHubAliasFile(char *database)
 return assemblyHubGenomeSetting(database, "chromAlias");
 }
 
+char *trackHubCoordRuler(char *database)
+/* If this assembly hub names a coordRuler bigBed (synthetic-pos -> source-coord
+ * map for the main base position ruler), return its url, else NULL. */
+{
+return assemblyHubGenomeSetting(database, "coordRuler");
+}
+
 struct chromInfo *trackHubAllChromInfo(char *database)
 /* Return a chromInfo structure for all the chroms in this database. */
 {
@@ -1475,6 +1482,7 @@ if (relativeUrl != NULL)
              startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
              startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
              startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type) ||
+             startsWithWord("bigBaseView", type) ||
              startsWithWord("bigMethyl", type))
         {
         /* Just open and close to verify file exists and is correct type. */

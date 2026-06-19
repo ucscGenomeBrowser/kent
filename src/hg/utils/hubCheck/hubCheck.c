@@ -803,7 +803,7 @@ else if (tdb->subtracks != NULL)
 }
 
 static char *VALID_TRACK_TYPES[] = {
-    "bam", "bigBarChart", "bigBed", "bigChain", "bigGenePred", "bigInteract",
+    "bam", "bigBarChart", "bigBaseView", "bigBed", "bigChain", "bigGenePred", "bigInteract",
     "bigLolly", "bigMaf", "bigMethyl", "bigNarrowPeak", "bigPsl", "bigRmsk",
     "bigWig", "halSnake", "hic", "longTabix", "vcfPhasedTrio", "vcfTabix", NULL};
 

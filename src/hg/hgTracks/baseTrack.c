@@ -1,6 +1,7 @@
 
 #include "common.h"
 #include "hgTracks.h"
+#include "bigBed.h"
 
 struct baseRange
 {
@@ -10,23 +11,23 @@ unsigned start, end;
 unsigned qStart, qEnd;
 };
 
-void loadBaseView(struct track *tg)
+static struct baseRange *baseRangesFromBbi(struct bbiFile *bbi, char *chrom, int start, int end)
+/* Query a baseView bigBed (bed4+1: synthetic start/end -> source qStart/qEnd) and
+ * return the overlapping ranges. */
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  fetchBbiForTrack(tg);
-//struct asObject *as = bigBedAsOrDefault(bbi);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct baseRange *rangeList = NULL;
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
     struct baseRange *range;
     AllocVar(range);
-    range->chrom = chromName;
+    range->chrom = cloneString(chrom);
     range->start = atoi(bedRow[1]);
     range->end = atoi(bedRow[2]);
     range->qStart = atoi(bedRow[3]);
@@ -35,20 +36,42 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     slAddHead(&rangeList, range);
     }
 slReverse(&rangeList);
-tg->items = rangeList;
+lmCleanup(&lm);
+return rangeList;
 }
 
-void drawBaseView(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-                 int xOff, int yOff, int width, MgFont *font, Color color,
-                 enum trackVisibility vis)
+struct baseRange *loadBaseRangesFromUrl(char *bigDataUrl, char *chrom, int start, int end)
+/* Open a baseView bigBed by url and return source-coordinate ranges overlapping
+ * [start,end).  Used to drive the main base position ruler in source coords. */
 {
-unsigned rulerHeight = mgFontLineHeight(font);
-struct baseRange *rangeList = tg->items, *range;
+struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+struct baseRange *ranges = baseRangesFromBbi(bbi, chrom, start, end);
+bbiFileClose(&bbi);
+return ranges;
+}
+
+void loadBaseView(struct track *tg)
+{
+struct bbiFile *bbi = fetchBbiForTrack(tg);
+tg->items = baseRangesFromBbi(bbi, chromName, winStart, winEnd);
+}
+
+void drawSourceCoordRuler(struct hvGfx *hvg, struct baseRange *rangeList,
+                          int seqStart, int seqEnd, int yOff, int rulerHeight, MgFont *font)
+/* Draw a ruler that numbers in source coordinates.  rangeList maps positions in
+ * [seqStart,seqEnd) (synthetic) to source coordinates (qStart/qEnd); a ruler segment
+ * is drawn for each coalesced range and blue boxes fill the gaps between them. */
+{
+struct baseRange *range;
 unsigned prevBase = seqStart;
 double scale = (double) insideWidth / (seqEnd - seqStart) ;
 
-struct baseRange *newRangeList = NULL;
+if (rangeList == NULL)
+    return;
 
+/* coalesce adjacent ranges, flushing a new range whenever the gap on screen is
+ * wide enough to be worth its own numbering */
+struct baseRange *newRangeList = NULL;
 unsigned start = rangeList->start;
 unsigned lastEnd = rangeList->end;
 unsigned qStart = rangeList->qStart;
@@ -105,7 +128,6 @@ for(range = newRangeList; range; range= range->next)
         {
         int x = (prevBase - winStart) * scale + insideX;
         int width = (rangeStart - prevBase) * scale;
-        //hvGfxBox(hvg, x, yOff, width, rulerHeight, 0xffFFBF00);
         hvGfxBox(hvg, x, yOff, width, rulerHeight, 0xff00BFFF);
         }
 
@@ -115,6 +137,14 @@ for(range = newRangeList; range; range= range->next)
                                font, rangeQStart, rangeWidth, 0, 1);
     prevBase = rangeEnd;
     }
+}
+
+void drawBaseView(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+                 int xOff, int yOff, int width, MgFont *font, Color color,
+                 enum trackVisibility vis)
+{
+unsigned rulerHeight = mgFontLineHeight(font);
+drawSourceCoordRuler(hvg, tg->items, seqStart, seqEnd, yOff, rulerHeight, font);
 }
 
 static int baseViewHeight(struct track *tg, enum trackVisibility vis)
@@ -129,5 +159,5 @@ void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
 {
 track->loadItems = loadBaseView;
 track->drawItems = drawBaseView;
-track->totalHeight = baseViewHeight; 
+track->totalHeight = baseViewHeight;
 }

@@ -1745,6 +1745,16 @@ void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* bigBaseView track type methods */
 
+struct baseRange;
+
+struct baseRange *loadBaseRangesFromUrl(char *bigDataUrl, char *chrom, int start, int end);
+/* Open a baseView bigBed by url and return source-coordinate ranges overlapping
+ * [start,end).  Used to drive the main base position ruler in source coords. */
+
+void drawSourceCoordRuler(struct hvGfx *hvg, struct baseRange *rangeList,
+                          int seqStart, int seqEnd, int yOff, int rulerHeight, MgFont *font);
+/* Draw a ruler numbering in source coordinates, using a baseView range list. */
+
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */

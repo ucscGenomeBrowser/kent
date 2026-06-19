@@ -118,6 +118,9 @@ boolean baseShowAsm;           /* TRUE if should display assembly info at top of
 boolean baseShowScaleBar;      /* TRUE if should display scale bar at very top of base track */
 boolean baseShowRuler;         /* TRUE if should display the basic ruler in the base track (default) */
 char *baseTitle = NULL;        /* Title it should display top of base track (optional)*/
+char *coordRulerUrl = NULL;    /* If set (assembly hub "coordRuler" setting), url of a
+                                * baseView bigBed mapping synthetic positions to source
+                                * coordinates; makes the main ruler number in source coords. */
 static char *userSeqString = NULL;  /* User sequence .fa/.psl file. */
 
 /* These variables are set by getPositionFromCustomTracks() at the very
@@ -2125,8 +2128,15 @@ if (baseShowScaleBar)
     }
 if (baseShowRuler && (insideWidth >=36))
     {
-    hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
-                           font, relNumOff, winBaseCount, 0, 1);
+    if (coordRulerUrl != NULL)
+        {
+        /* synthetic assembly: number the ruler in source coordinates */
+        struct baseRange *ranges = loadBaseRangesFromUrl(coordRulerUrl, chromName, winStart, winEnd);
+        drawSourceCoordRuler(hvg, ranges, winStart, winEnd, y, rulerHeight, font);
+        }
+    else
+        hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
+                               font, relNumOff, winBaseCount, 0, 1);
     }
 
 if (zoomedToBaseLevel || rulerCds)
@@ -11094,6 +11104,14 @@ safef(titleVar,sizeof(titleVar),"%s_%s", BASE_TITLE, database);
 baseTitle = cartUsualString(cart, titleVar, "");
 if (sameString(baseTitle, ""))
     baseTitle = NULL;
+
+/* synthetic (pair/multiview) assemblies can ask the main ruler to number in
+ * source coordinates via a "coordRuler" baseView bigBed in the hub genome stanza.
+ * Guard with trackHubDatabase(): trackHubGetGenome() errAborts when no assembly hub
+ * is connected, so only look this up for an actual hub assembly. */
+coordRulerUrl = NULL;
+if (trackHubDatabase(database))
+    coordRulerUrl = trackHubCoordRuler(database);
 
 if  (cgiVarExists("hgt.toggleRevCmplDisp"))
     toggleRevCmplDisp();
