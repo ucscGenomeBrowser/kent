@@ -3720,7 +3720,9 @@ return shadesOfGray[2];
 
 
 void makeGrayShades(struct hvGfx *hvg)
-/* Make eight shades of gray in display. */
+/* Fill shadesOfGray[0..maxShade] with a white-to-black gradient, then set
+ * shadesOfGray[maxShade+1] to red as an overflow sentinel (shadesOfGray is
+ * declared with maxShade+2 entries to leave room for it). */
 {
 hMakeGrayShades(hvg, shadesOfGray, maxShade);
 shadesOfGray[maxShade+1] = MG_RED;
