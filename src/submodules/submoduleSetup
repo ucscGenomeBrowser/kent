@@ -25,3 +25,22 @@ if [ !  -e submodules/htslib/.git -o ! -e submodules/htslib/htscodecs/.git ] ; t
     fi
 fi
 
+# Generate htslib's compiler-probe makefile fragment (htscodecs.mk) and config.h
+# SERIALLY, here, before the parallel ("make -j") build descends into htslib.
+# hts_probe_cc.sh probes SIMD (SSE4/AVX2/AVX512) support using fixed-name
+# conftest.* temp files in submodules/htslib/.  Under -j, a concurrent writer
+# can clobber conftest.c between its creation and compilation, so the AVX2 probe
+# "succeeds" with no -mavx2 flag; that records HTS_BUILD_AVX2=1 with an empty
+# HTS_CFLAGS_AVX2 in htscodecs.mk.  config.h then defines HAVE_AVX2, enabling
+# AVX2 source that is compiled without -mavx2 -> "target specific option
+# mismatch" build failure.  Both files are no-prerequisite make targets, so the
+# corrupt result is cached and reused until deleted.  Building them single-
+# threaded here guarantees the probe runs exactly once and the -j build never
+# triggers it.  Only done when they are missing, so it does not force needless
+# htslib recompiles on incremental builds.
+if [ -e submodules/htslib/Makefile ] && \
+   { [ ! -e submodules/htslib/htscodecs.mk ] || [ ! -e submodules/htslib/config.h ]; } ; then
+    echo "Note: pre-generating htslib htscodecs.mk and config.h (serial; avoids -j probe race)" >&2
+    make -C submodules/htslib -j1 htscodecs.mk config.h >/dev/null
+fi
+
