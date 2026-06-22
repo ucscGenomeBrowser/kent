@@ -1,0 +1,211 @@
+# TADs supertrack (tads) - topologically associating domains and boundaries
+# Redmine #21599
+
+##############################################################################
+# 3D Genome Browser TAD domains - faceted composite (tads3dgb)  2026-06-21 (lou)
+##############################################################################
+
+# Source: 3D Genome Browser 2.0 (Yu et al. 2026, NAR 54:D48-D54, PMID 41206958),
+# http://3dgenome.fsm.northwestern.edu/ . CC BY-NC.
+#
+# DATA PROVENANCE + FETCH (reproducible from hgwdev; the download endpoint is reachable here):
+#   1. Dataset catalog: the full 3DGB curated dataset list (716 records: id, name, species,
+#      assembly, organ, cellType, dataType, resolutions, year, doi, refNo, ...) is preserved at
+#      /hive/users/lrnassar/claude/RM21599/3dgenome/datasets_api.json (obtained from the 3DGB API).
+#   2. Selection: human hg38 Hi-C/Micro-C datasets ->
+#        python3 -c "import json;[print(r['id']) for r in json.load(open('datasets_api.json')) \
+#          if r['species']=='Human' and r['assembly']=='hg38' and r['dataType'] in ('Hi-C','Micro-C')]"
+#      yields 465 candidate ids; 464 returned a TAD bed (1 dataset ships no *_tad.bed) -> tad_beds/.
+#   3. Per-dataset download (the verified, load-bearing fetch):
+#        curl -L "http://3dgenome.fsm.northwestern.edu/api/data/download?dataset_ids=<id>" -o <id>.zip
+#      Each zip holds 3 files: <name>.bedpe (loops), <name>_cis_pc1.bw (compartment PC1), and
+#      <name>_tad.bed (the TAD domains). We extract ONLY <name>_tad.bed into
+#      /hive/users/lrnassar/claude/RM21599/3dgenome/tad_beds/ ; the .bedpe/.bw are not used.
+#   4. classification.tsv (3dgenome/classification.tsv: normal/cancer, baseline/perturbation,
+#      already-in-UCSC have_novel flag, year) is project-derived from the catalog + manual curation.
+# The 464 *_tad.bed are the build input below.
+
+# All 464 datasets are native hg38 TAD domains - no liftOver, re-calling, merging,
+# or recurrence scoring is performed. The only transform is a format normalization:
+# the raw 10-column 3DGB bed (placeholder cols + an alternating two-color itemRgb
+# with no biological meaning) is reshaped to plain bed4 (chrom,start,end,datasetName).
+
+# Subtracks are colored by organ via a TAD-owned color map,
+# /hive/data/outside/tad/organ_colors.json, symlinked into /gbdb/<asm>/bbi/tad/organ_colors.json
+# for each assembly (hg38, mm10, mm39). It started as a copy of the wgEncodeReg4 map
+# (/gbdb/hg38/encode4/regulation/organ_colors.json) so colors stay consistent across tracks, but
+# is kept separate so TAD-specific additions never touch the shared file. Three organ keys used by
+# 3DGB were added to the TAD copy (additive only; colors chosen for contrast against the white
+# background):
+#   Colon  #565624   (= the existing "Large intestine" color)
+#   Bladder #A91D22  (GTEx/ENCODE color; better contrast than grey "Urinary bladder")
+#   Cervix #BA6FA5   (= the existing "Uterus" color; no dedicated Cervix key existed)
+# The five case-only organ labels (Blood Vessel, Lymphoid Tissue, Small Intestine,
+# Adrenal Gland, Connective Tissue) are normalized in the build script to the existing
+# JSON keys (Blood vessel, etc.).
+
+# The build script converts all 464 to bigBed, writes the faceted metadata TSV
+# (primaryKey = the unique 3DGB integer dataset id; facets auto-derive from the
+# remaining non-underscore columns), and generates the faceted composite stanza
+# (one subtrack per dataset; each carries an explicit per-subtrack color resolved
+# from the organ JSON). Reproducible; rerunnable.
+
+# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and
+# symlinked into the per-source build dirs, so the commands below run the in-tree copies.
+cd /hive/data/outside/tad/3dgenome/build
+python3 buildTads3dgb.py
+# -> hg38/tads3dgb/<id>.bb  (464 bigBeds, bed4)
+# -> hg38/tads3dgb_metadata.tsv  (465 rows; cols DatasetId Organ Cell_type Assay
+#    Condition Treatment Provenance Year Study _Description)
+# -> hg38/tads3dgb.ra  (faceted composite header + 464 subtrack stanzas)
+
+# Symlink bigBeds (directory symlink) and the metadata TSV into /gbdb
+cd /gbdb/hg38/bbi/tad
+ln -sfn /hive/data/outside/tad/3dgenome/build/hg38/tads3dgb tads3dgb
+ln -sfn /hive/data/outside/tad/3dgenome/build/hg38/tads3dgb_metadata.tsv tads3dgb_metadata.tsv
+
+# trackDb: generated stanza copied into the trackDb dir, included from tad.ra
+#   ~/kent/src/hg/makeDb/trackDb/human/hg38/tads3dgb.ra   (composite + 464 subtracks)
+#   ~/kent/src/hg/makeDb/trackDb/human/hg38/tads3dgb.html (description page)
+#   tad.ra ends with:  include tads3dgb.ra
+#   tad.ra itself is gated alpha-only from trackDb.ra:  include tad.ra alpha
+cp /hive/data/outside/tad/3dgenome/build/hg38/tads3dgb.ra \
+   ~/kent/src/hg/makeDb/trackDb/human/hg38/tads3dgb.ra
+
+# Load trackDb (new/untracked .ra + .html require FIND=find to deploy)
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38 FIND=find
+
+##############################################################################
+# ENCODE contact domains - faceted composite rebuild (tadsEncode)  2026-06-21 (lou)
+##############################################################################
+
+# Replaces the old 14-subtrack subGroup composite with a faceted composite over ALL
+# 117 single-biosample ENCODE contact-domain datasets on hg38. Source: ENCODE portal
+# (https://www.encodeproject.org/), Hi-C pipeline (Aiden lab / Juicer; domains by Arrowhead).
+#
+# DATA PROVENANCE + FETCH (reproducible; ENCODE is open, no login):
+#   1. Manifest of all released GRCh38 contact-domain files (602) via the ENCODE search API:
+#        https://www.encodeproject.org/search/?type=File&output_type=contact+domains&assembly=GRCh38&format=json&limit=all
+#      saved as source/_cd_select.json (each record: accession, file_format, dataset[experiment],
+#      biosample_ontology, assay_title, preferred_default, href, file_size).
+#   2. Per-file download (href from the manifest):
+#        curl -L "https://www.encodeproject.org/files/<ENCFF>/@@download/<ENCFF>.bedpe.gz" -o <ENCFF>.bedpe.gz
+#      (11 of the 602 are .bed.gz lifted-from-hg19 files.) All 602 are in
+#      /hive/users/lrnassar/claude/RM21599/encode/contact_domains/ .
+#   3. Per-experiment facet metadata + perturbed flag via the ENCODE search API (one batched call
+#      over the chosen experiment accessions), saved as source/encode_meta_all.json and
+#      source/encode_perturbed.json (fields: biosample_ontology.organ_slims, .classification,
+#      replicates.library.biosample.life_stage, biosample_summary, perturbed).
+
+# Selection: exclude the 45 multi-biosample (list biosample_ontology) and 11 aggregate-series
+# (null biosample_ontology) records -> 117 distinct single biosamples. Per biosample, pick one
+# representative experiment, preferring the canonical 16-column Juicer/Arrowhead "blocks" bedpe
+# (full 5-score format), then an untreated baseline experiment over an ENCODE-flagged perturbed
+# one (encode_perturbed.json), then preferred_default, then assay priority (intact > in situ),
+# then total file size. 111 biosamples have 16-col Arrowhead files; A549 has only a 12-col bedpe
+# (cornerScore only); 5 biosamples (LNCaP clone FGC, NCI-H460, RPMI7951, SJCRH30, SK-N-MC) have
+# only hg19-lifted 5-col bed (no Arrowhead scores, flagged "Lifted from hg19" in the Calls facet).
+# 24-col loop files are tiered out (tier 0). (The ENCODE "perturbed" flag is used only as a
+# selection tiebreaker -- it is unreliable for display, so no Treatment facet is shown.)
+
+# Conversion + pooling (buildTadsEncode.py): for the chosen experiment, pool its files of the
+# best tier; keep only domain rows (both bedpe anchors identical: chr1==chr2, x1==y1, x2==y2 --
+# this drops loop files), normalize chrom to "chr*" and validate against chrom.sizes; map
+# bedpe cols to bed4+5 (chrom, x1, x2, biosample, cornerScore=col12, uVarScore=13, lVarScore=14,
+# upSign=15, loSign=16); merge replicate domains whose endpoints both fall within one 5 kb bin,
+# keeping the higher cornerScore (scores taken verbatim, never blended -- verified against the
+# retired tadsEncodeGM12878.bb). autoSql = /hive/data/outside/tad/tadDomainEncode.as.
+# Facet metadata (organ_slims, classification, life_stage) fetched once from the ENCODE REST API
+# for all 228 candidate experiments -> source/encode_meta_all.json; perturbed flag ->
+# source/encode_perturbed.json. organ_slims (lowercase, multi-valued) mapped to organ_colors.json
+# keys and reduced to one organ per biosample by an anatomical-specificity priority (Blood vessel
+# and Muscle rank above Limb/Placenta so HUVEC->Blood vessel, tibial artery->Blood vessel,
+# gastrocnemius->Muscle); 4 biosamples with empty organ_slims assigned by known biology.
+# primaryKey = the chosen experiment Accession (ENCSR), linked to the ENCODE portal via
+# subtrackUrls (like wgEncodeReg4); the readable biosample name (_Biosample) and full ENCODE
+# summary (_Description) are shown in the metadata table but not faceted. shortLabels are
+# word-boundary summaries (no mid-word truncation; CD4-positive->CD4+ etc.); bigBed filenames
+# keep the readable biosample symbol. (A549 organ "musculature of body"->Muscle and similar
+# follow ENCODE's organ_slim verbatim; organ reflects ENCODE's annotation, not a disease-origin call.)
+
+cd /hive/data/outside/tad/encode/build
+python3 buildTadsEncode.py
+# -> hg38/tadsEncode/<symbol>.bb  (117 bigBeds, bigBed 4+5)
+# -> hg38/tadsEncode_metadata.tsv (118 rows; cols Biosample Organ Biosample_type Assay
+#    Life_stage Calls _Biosample)
+# -> hg38/tadsEncode.ra  (faceted composite header + 117 subtrack stanzas)
+
+# Symlink bigBeds (directory symlink) and metadata TSV into /gbdb
+cd /gbdb/hg38/bbi/tad
+ln -sfn /hive/data/outside/tad/encode/build/hg38/tadsEncode tadsEncode
+ln -sfn /hive/data/outside/tad/encode/build/hg38/tadsEncode_metadata.tsv tadsEncode_metadata.tsv
+
+# trackDb: the old inline tadsEncode composite in tad.ra was replaced by:  include tadsEncode.ra
+#   ~/kent/src/hg/makeDb/trackDb/human/hg38/tadsEncode.ra   (composite + 117 subtracks)
+#   ~/kent/src/hg/makeDb/trackDb/human/hg38/tadsEncode.html (description page)
+cp /hive/data/outside/tad/encode/build/hg38/tadsEncode.ra \
+   ~/kent/src/hg/makeDb/trackDb/human/hg38/tadsEncode.ra
+
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38 FIND=find
+
+##############################################################################
+# Dixon 2012 TAD domains (tadsDixon)  built 2026-06-14, documented 2026-06-21 (lou)
+##############################################################################
+# Source: Dixon JR et al. 2012, Nature 485:376, PMID 22495300, doi:10.1038/nature11082.
+# GEO GSE35156. Freely downloadable, no login. The original host (promoter.bx.psu.edu /
+# chromosome.sdsc.edu) is dead; the authoritative copy is the Nature supplemental tables.
+#
+# DATA PROVENANCE + FETCH:
+#   1. Nature Supplementary Table S3 (Domains) = supplemental file MOESM330, downloaded as
+#      /hive/users/lrnassar/claude/RM21599/dixon2012/41586_2012_BFnature11082_MOESM330_ESM.xls
+#      (the full 9-file supplement MOESM329-337 is staged in that dir). Read with python xlrd.
+#   2. Human sheets = "hESC Combined" (3,127 domains) and "IMR90 Combined" (2,348), plain BED3,
+#      40 kb-binned, assembly hg18 (verified by chrom-length test). Other sheets are mouse (mm9)
+#      or reps -> not used. Extracted to source/dixon_{hESC,IMR90}.hg18.bed.
+# BUILD: liftOver hg18->hg38 (hg18ToHg38.over.chain), bedClip to chrom.sizes, drop non-primary
+#   contigs, sort, bedToBigBed -type=bed4 -as=/hive/data/outside/tad/tadDomain.as ->
+#   /hive/data/outside/tad/dixon2012/build/hg38/tadsDixon{HESC,IMR90}.bb (3,051 / ~2.3k after lift).
+#   Symlinked to /gbdb/hg38/bbi/tad/ . trackDb: tadsDixon composite in human/hg38/tad.ra
+#   (longLabel notes "lifted from hg18"). html tadsDixon.html.
+
+##############################################################################
+# Schmitt 2016 TAD boundaries (tadsSchmitt)  built 2026-06-14, documented 2026-06-21 (lou)
+##############################################################################
+# Source: Schmitt AD et al. 2016, Cell Rep 17(8):2042-2059, PMID 27851967,
+# doi:10.1016/j.celrep.2016.10.061. GEO GSE87112 (raw Hi-C only; the calls live in the supplement).
+#
+# DATA PROVENANCE + FETCH:
+#   1. Cell Reports Supplementary Table S3 (TAD boundary annotations) = supplemental file mmc4.xlsx.
+#      ACCESS FRICTION: cell.com is Cloudflare-gated and PMC bins are behind proof-of-work/reCAPTCHA,
+#      so mmc4.xlsx was obtained by MANUAL BROWSER download (open access, CC-BY family, no paywall),
+#      staged at /hive/users/lrnassar/claude/RM21599/schmidtt2016/mmc4.xlsx (note dir spelling).
+#   2. 21 worksheets (one per human sample = 14 tissues + 7 cell lines), each plain BED3, uniform
+#      40 kb boundary bins, assembly hg19. Converted per-sheet -> source/schmitt_<code>.hg19.bed (21).
+# BUILD: liftOver hg19->hg38 (hg19ToHg38.over.chain), bedClip, primary-chrom filter, sort,
+#   bedToBigBed -type=bed4 -as=/hive/data/outside/tad/tadBoundary.as ->
+#   /hive/data/outside/tad/schmitt2016/build/hg38/tadsSchmitt<code>.bb (21 files). Symlinked to
+#   /gbdb/hg38/bbi/tad/ . trackDb: tadsSchmitt composite (subGroups sample-type + organ-system) in
+#   human/hg38/tad.ra. html tadsSchmitt.html.
+
+##############################################################################
+# McArthur 2021 TAD boundary stability (tadsMcArthur)  built 2026-06-14, documented 2026-06-21 (lou)
+##############################################################################
+# Source: McArthur E, Capra JA 2021, Am J Hum Genet 108(2):269-283, PMID 33545030,
+# doi:10.1016/j.ajhg.2021.01.001. GitHub emcarthur/TAD-stability-heritability (MIT). Direct, no login.
+#
+# DATA PROVENANCE + FETCH:
+#   1. Shallow git clone of https://github.com/emcarthur/TAD-stability-heritability (branch master)
+#      to /hive/users/lrnassar/claude/RM21599/mcarthur2021/ .
+#   2. KEY FILE: data/boundariesByStability/100kbBookendBoundaries_mainText/
+#      100kbBookendBoundaries_byStability.bed -> staged at
+#      /hive/data/outside/tad/mcarthur2021/source/100kbBookendBoundaries_byStability.bed .
+#      Format: 5-col TSV w/ header (chr, loc, loc2, counts, stability_percentile); 14,345 boundaries,
+#      100 kb-wide, assembly hg19. `counts` = number of the 37 cell-type maps sharing the boundary (1-37).
+# BUILD: drop header; liftOver hg19->hg38 (hg19ToHg38.over.chain), bedClip, primary-chrom filter, sort.
+#   Emit bigBed 5 + 2 (autoSql /hive/data/outside/tad/tadStability.as): name=boundary id, score=
+#   round(contexts/37*1000) (rendering proxy), contexts (1-37, the real datum), percentile.
+#   bedToBigBed -> /hive/data/outside/tad/mcarthur2021/build/hg38/tadsMcArthur.bb (14,287 after lift).
+#   Symlinked to /gbdb/hg38/bbi/tad/ . trackDb: tadsMcArthur (filter.contexts, spectrum) in
+#   human/hg38/tad.ra. html tadsMcArthur.html.

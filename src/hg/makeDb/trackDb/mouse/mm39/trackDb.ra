@@ -61,3 +61,5 @@ longLabel Pfam Domains in GENCODE Genes
 html gencodePfam
 
 include vgp577way.trackDb.ra alpha
+
+include tad.ra alpha

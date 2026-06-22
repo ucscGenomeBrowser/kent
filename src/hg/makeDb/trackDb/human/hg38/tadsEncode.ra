@@ -1,0 +1,1186 @@
+track tadsEncode
+parent tads
+priority 2
+compositeTrack faceted
+shortLabel ENCODE TADs
+longLabel ENCODE contact domains (TADs) across 117 human biosamples (Arrowhead/Hi-C)
+type bigBed 4 + 5
+group regulation
+visibility pack
+metaDataUrl /gbdb/hg38/bbi/tad/tadsEncode_metadata.tsv
+primaryKey Accession
+colorSettingsUrl /gbdb/hg38/bbi/tad/organ_colors.json
+subtrackUrls Accession=https://www.encodeproject.org/experiments/$$/
+maxCheckboxes 50
+html tadsEncode
+
+    track tadsEncode_ENCSR662QKG
+    parent tadsEncode on
+    shortLabel A549
+    longLabel ENCODE TADs in A549 (ENCSR662QKG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A549.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: A549 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR165UJN
+    parent tadsEncode on
+    shortLabel Dorsolateral
+    longLabel ENCODE TADs in Dorsolateral prefrontal cortex (ENCSR165UJN)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dorsolateralprefrontalcortex.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Dorsolateral prefrontal cortex | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR916MFV
+    parent tadsEncode on
+    shortLabel GM12878
+    longLabel ENCODE TADs in GM12878 (ENCSR916MFV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM12878.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM12878 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR477GZK
+    parent tadsEncode on
+    shortLabel HCT116
+    longLabel ENCODE TADs in HCT116 (ENCSR477GZK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HCT116.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: HCT116 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR324EJR
+    parent tadsEncode on
+    shortLabel Heart left ventricle
+    longLabel ENCODE TADs in Heart left ventricle (ENCSR324EJR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartleftventricle.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Heart left ventricle | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR908NSV
+    parent tadsEncode on
+    shortLabel Heart right ventricle
+    longLabel ENCODE TADs in Heart right ventricle (ENCSR908NSV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartrightventricle.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Heart right ventricle | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR888DEJ
+    parent tadsEncode on
+    shortLabel HepG2
+    longLabel ENCODE TADs in HepG2 (ENCSR888DEJ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HepG2.bb
+    color 137,152,82
+    visibility dense
+    mouseOver Biosample: HepG2 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR683EDC
+    parent tadsEncode on
+    shortLabel HL-60/S4
+    longLabel ENCODE TADs in HL-60/S4 (ENCSR683EDC)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HL60S4.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: HL-60/S4 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR345VTI
+    parent tadsEncode on
+    shortLabel IMR-90
+    longLabel ENCODE TADs in IMR-90 (ENCSR345VTI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/IMR90.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: IMR-90 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR479XDG
+    parent tadsEncode on
+    shortLabel K562
+    longLabel ENCODE TADs in K562 (ENCSR479XDG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/K562.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: K562 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR305RTT
+    parent tadsEncode on
+    shortLabel Motor neuron
+    longLabel ENCODE TADs in Motor neuron (ENCSR305RTT)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/motorneuron.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Motor neuron | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR872ZCP
+    parent tadsEncode on
+    shortLabel Ovary
+    longLabel ENCODE TADs in Ovary (ENCSR872ZCP)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ovary.bb
+    color 161,126,151
+    visibility dense
+    mouseOver Biosample: Ovary | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR408HOG
+    parent tadsEncode on
+    shortLabel Pancreas
+    longLabel ENCODE TADs in Pancreas (ENCSR408HOG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/pancreas.bb
+    color 175,100,41
+    visibility dense
+    mouseOver Biosample: Pancreas | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR258OVY
+    parent tadsEncode on
+    shortLabel Transverse colon
+    longLabel ENCODE TADs in Transverse colon (ENCSR258OVY)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/transversecolon.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Transverse colon | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR455KLX
+    parent tadsEncode off
+    shortLabel A673
+    longLabel ENCODE TADs in A673 (ENCSR455KLX)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A673.bb
+    color 137,135,170
+    visibility dense
+    mouseOver Biosample: A673 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR343VKT
+    parent tadsEncode off
+    shortLabel ACHN
+    longLabel ENCODE TADs in ACHN (ENCSR343VKT)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ACHN.bb
+    color 92,161,153
+    visibility dense
+    mouseOver Biosample: ACHN | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR693PXD
+    parent tadsEncode off
+    shortLabel Activated B cell
+    longLabel ENCODE TADs in Activated B cell (ENCSR693PXD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedBcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated B cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR291EBI
+    parent tadsEncode off
+    shortLabel Activated CD4+ memory
+    longLabel ENCODE TADs in Activated CD4-positive, alpha-beta memory T cell (ENCSR291EBI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetamemoryTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated CD4-positive, alpha-beta memory T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR836MWK
+    parent tadsEncode off
+    shortLabel Activated CD4+ T cell
+    longLabel ENCODE TADs in Activated CD4-positive, alpha-beta T cell (ENCSR836MWK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR351NAI
+    parent tadsEncode off
+    shortLabel Activated CD8+ T cell
+    longLabel ENCODE TADs in Activated CD8-positive, alpha-beta T cell (ENCSR351NAI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD8positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated CD8-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR195ETV
+    parent tadsEncode off
+    shortLabel Activated naive CD4+ T
+    longLabel ENCODE TADs in Activated naive CD4-positive, alpha-beta T cell (ENCSR195ETV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatednaiveCD4positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated naive CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR902BCW
+    parent tadsEncode off
+    shortLabel Activated T-helper 1
+    longLabel ENCODE TADs in Activated T-helper 1 cell (ENCSR902BCW)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper1cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated T-helper 1 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR474VTW
+    parent tadsEncode off
+    shortLabel Activated T-helper 2
+    longLabel ENCODE TADs in Activated T-helper 2 cell (ENCSR474VTW)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper2cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Activated T-helper 2 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR832NED
+    parent tadsEncode off
+    shortLabel Adrenal gland
+    longLabel ENCODE TADs in Adrenal gland (ENCSR832NED)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/adrenalgland.bb
+    color 90,179,68
+    visibility dense
+    mouseOver Biosample: Adrenal gland | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR554SLA
+    parent tadsEncode off
+    shortLabel Aorta
+    longLabel ENCODE TADs in Aorta (ENCSR554SLA)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/aorta.bb
+    color 255,37,41
+    visibility dense
+    mouseOver Biosample: Aorta | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR464RYO
+    parent tadsEncode off
+    shortLabel Ascending aorta
+    longLabel ENCODE TADs in Ascending aorta (ENCSR464RYO)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ascendingaorta.bb
+    color 255,37,41
+    visibility dense
+    mouseOver Biosample: Ascending aorta | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR011GNI
+    parent tadsEncode off
+    shortLabel The cerebellum
+    longLabel ENCODE TADs in Astrocyte of the cerebellum (ENCSR011GNI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthecerebellum.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Astrocyte of the cerebellum | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR974LXZ
+    parent tadsEncode off
+    shortLabel The spinal cord
+    longLabel ENCODE TADs in Astrocyte of the spinal cord (ENCSR974LXZ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthespinalcord.bb
+    color 130,141,158
+    visibility dense
+    mouseOver Biosample: Astrocyte of the spinal cord | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR847RHU
+    parent tadsEncode off
+    shortLabel B cell
+    longLabel ENCODE TADs in B cell (ENCSR847RHU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Bcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: B cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR121ALS
+    parent tadsEncode off
+    shortLabel Pancreas body
+    longLabel ENCODE TADs in Body of pancreas (ENCSR121ALS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/bodyofpancreas.bb
+    color 175,100,41
+    visibility dense
+    mouseOver Biosample: Body of pancreas | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR507AHE
+    parent tadsEncode off
+    shortLabel Brain microvascular
+    longLabel ENCODE TADs in Brain microvascular endothelial cell (ENCSR507AHE)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/brainmicrovascularendothelialcell.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Brain microvascular endothelial cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR326YHP
+    parent tadsEncode off
+    shortLabel Breast epithelium
+    longLabel ENCODE TADs in Breast epithelium (ENCSR326YHP)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/breastepithelium.bb
+    color 65,171,173
+    visibility dense
+    mouseOver Biosample: Breast epithelium | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR820DYU
+    parent tadsEncode off
+    shortLabel Caco-2
+    longLabel ENCODE TADs in Caco-2 (ENCSR820DYU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caco2.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Caco-2 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR401TBQ
+    parent tadsEncode off
+    shortLabel Caki2
+    longLabel ENCODE TADs in Caki2 (ENCSR401TBQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caki2.bb
+    color 92,161,153
+    visibility dense
+    mouseOver Biosample: Caki2 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR118AQZ
+    parent tadsEncode off
+    shortLabel Calu3
+    longLabel ENCODE TADs in Calu3 (ENCSR118AQZ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Calu3.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: Calu3 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR556QHB
+    parent tadsEncode off
+    shortLabel Cardiac septum
+    longLabel ENCODE TADs in Cardiac septum (ENCSR556QHB)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/cardiacseptum.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Cardiac septum | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR236EYO
+    parent tadsEncode off
+    shortLabel CD14+ monocyte
+    longLabel ENCODE TADs in CD14-positive monocyte (ENCSR236EYO)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD14positivemonocyte.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: CD14-positive monocyte | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR379TIE
+    parent tadsEncode off
+    shortLabel CD4+ memory T cell
+    longLabel ENCODE TADs in CD4-positive, alpha-beta memory T cell (ENCSR379TIE)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetamemoryTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: CD4-positive, alpha-beta memory T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR609PCM
+    parent tadsEncode off
+    shortLabel CD4+ T cell
+    longLabel ENCODE TADs in CD4-positive, alpha-beta T cell (ENCSR609PCM)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR558BNW
+    parent tadsEncode off
+    shortLabel CD8+ T cell
+    longLabel ENCODE TADs in CD8-positive, alpha-beta T cell (ENCSR558BNW)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD8positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: CD8-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR317GNS
+    parent tadsEncode off
+    shortLabel Chondrocyte
+    longLabel ENCODE TADs in Chondrocyte (ENCSR317GNS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/chondrocyte.bb
+    color 138,135,169
+    visibility dense
+    mouseOver Biosample: Chondrocyte | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR439ILZ
+    parent tadsEncode off
+    shortLabel Colonic mucosa
+    longLabel ENCODE TADs in Colonic mucosa (ENCSR439ILZ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/colonicmucosa.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Colonic mucosa | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR456QYU
+    parent tadsEncode off
+    shortLabel Dendritic cell
+    longLabel ENCODE TADs in Dendritic cell (ENCSR456QYU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dendriticcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Dendritic cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR213DHH
+    parent tadsEncode off
+    shortLabel DLD1
+    longLabel ENCODE TADs in DLD1 (ENCSR213DHH)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/DLD1.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: DLD1 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR393XVI
+    parent tadsEncode off
+    shortLabel Ectodermal cell
+    longLabel ENCODE TADs in Ectodermal cell (ENCSR393XVI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ectodermalcell.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: Ectodermal cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR233RDF
+    parent tadsEncode off
+    shortLabel Endodermal cell
+    longLabel ENCODE TADs in Endodermal cell (ENCSR233RDF)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endodermalcell.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: Endodermal cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR551IPY
+    parent tadsEncode off
+    shortLabel Endometrial
+    longLabel ENCODE TADs in Endometrial microvascular endothelial cells (ENCSR551IPY)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endometrialmicrovascularendothelialcells.bb
+    color 186,111,165
+    visibility dense
+    mouseOver Biosample: Endometrial microvascular endothelial cells | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR982KWR
+    parent tadsEncode off
+    shortLabel Hepatic sinusoid
+    longLabel ENCODE TADs in Endothelial cell of hepatic sinusoid (ENCSR982KWR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofhepaticsinusoid.bb
+    color 137,152,82
+    visibility dense
+    mouseOver Biosample: Endothelial cell of hepatic sinusoid | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR788FBI
+    parent tadsEncode off
+    shortLabel Umbilical vein
+    longLabel ENCODE TADs in Endothelial cell of umbilical vein (ENCSR788FBI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofumbilicalvein.bb
+    color 255,37,41
+    visibility dense
+    mouseOver Biosample: Endothelial cell of umbilical vein | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR274FJN
+    parent tadsEncode off
+    shortLabel Esophagus muscularis
+    longLabel ENCODE TADs in Esophagus muscularis mucosa (ENCSR274FJN)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagusmuscularismucosa.bb
+    color 159,131,100
+    visibility dense
+    mouseOver Biosample: Esophagus muscularis mucosa | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR015CVF
+    parent tadsEncode off
+    shortLabel Esophagus squamous
+    longLabel ENCODE TADs in Esophagus squamous epithelium (ENCSR015CVF)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagussquamousepithelium.bb
+    color 159,131,100
+    visibility dense
+    mouseOver Biosample: Esophagus squamous epithelium | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR079VIJ
+    parent tadsEncode off
+    shortLabel G401
+    longLabel ENCODE TADs in G401 (ENCSR079VIJ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/G401.bb
+    color 92,161,153
+    visibility dense
+    mouseOver Biosample: G401 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR136MVS
+    parent tadsEncode off
+    shortLabel Gastrocnemius medialis
+    longLabel ENCODE TADs in Gastrocnemius medialis (ENCSR136MVS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/gastrocnemiusmedialis.bb
+    color 137,135,170
+    visibility dense
+    mouseOver Biosample: Gastrocnemius medialis | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR196MPD
+    parent tadsEncode off
+    shortLabel GM11168
+    longLabel ENCODE TADs in GM11168 (ENCSR196MPD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM11168.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM11168 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR634FNY
+    parent tadsEncode off
+    shortLabel GM13976
+    longLabel ENCODE TADs in GM13976 (ENCSR634FNY)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13976.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM13976 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR261EVH
+    parent tadsEncode off
+    shortLabel GM13977
+    longLabel ENCODE TADs in GM13977 (ENCSR261EVH)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13977.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM13977 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR118FFR
+    parent tadsEncode off
+    shortLabel GM18951
+    longLabel ENCODE TADs in GM18951 (ENCSR118FFR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM18951.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM18951 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR966QSW
+    parent tadsEncode off
+    shortLabel GM20431
+    longLabel ENCODE TADs in GM20431 (ENCSR966QSW)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM20431.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: GM20431 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR220MNC
+    parent tadsEncode off
+    shortLabel GM23248
+    longLabel ENCODE TADs in GM23248 (ENCSR220MNC)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM23248.bb
+    color 127,133,209
+    visibility dense
+    mouseOver Biosample: GM23248 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR390HMC
+    parent tadsEncode off
+    shortLabel HAP-1
+    longLabel ENCODE TADs in HAP-1 (ENCSR390HMC)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HAP1.bb
+    color 2,199,185
+    visibility dense
+    mouseOver Biosample: HAP-1 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR874HTT
+    parent tadsEncode off
+    shortLabel Caudate nucleus head
+    longLabel ENCODE TADs in Head of caudate nucleus (ENCSR874HTT)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/headofcaudatenucleus.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Head of caudate nucleus | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR846DUS
+    parent tadsEncode off
+    shortLabel hTERT RPE-1
+    longLabel ENCODE TADs in hTERT RPE-1 (ENCSR846DUS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/hTERTRPE1.bb
+    color 163,127,144
+    visibility dense
+    mouseOver Biosample: hTERT RPE-1 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR282WPK
+    parent tadsEncode off
+    shortLabel HUES64
+    longLabel ENCODE TADs in HUES64 (ENCSR282WPK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HUES64.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: HUES64 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR510GJG
+    parent tadsEncode off
+    shortLabel Jurkat
+    longLabel ENCODE TADs in Jurkat (ENCSR510GJG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Jurkat.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Jurkat | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR987EPR
+    parent tadsEncode off
+    shortLabel KBM-7
+    longLabel ENCODE TADs in KBM-7 (ENCSR987EPR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/KBM7.bb
+    color 2,199,185
+    visibility dense
+    mouseOver Biosample: KBM-7 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR869CSI
+    parent tadsEncode off
+    shortLabel Keratinocyte
+    longLabel ENCODE TADs in Keratinocyte (ENCSR869CSI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/keratinocyte.bb
+    color 127,133,209
+    visibility dense
+    mouseOver Biosample: Keratinocyte | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR044YKV
+    parent tadsEncode off
+    shortLabel Kidney
+    longLabel ENCODE TADs in Kidney (ENCSR044YKV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/kidney.bb
+    color 92,161,153
+    visibility dense
+    mouseOver Biosample: Kidney | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR975NRV
+    parent tadsEncode off
+    shortLabel Left cardiac atrium
+    longLabel ENCODE TADs in Left cardiac atrium (ENCSR975NRV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcardiacatrium.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Left cardiac atrium | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR298UUL
+    parent tadsEncode off
+    shortLabel Left colon
+    longLabel ENCODE TADs in Left colon (ENCSR298UUL)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcolon.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Left colon | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR892BZA
+    parent tadsEncode off
+    shortLabel Left lung
+    longLabel ENCODE TADs in Left lung (ENCSR892BZA)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftlung.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: Left lung | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR352EGR
+    parent tadsEncode off
+    shortLabel Left ventricle
+    longLabel ENCODE TADs in Left ventricle myocardium inferior (ENCSR352EGR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiuminferior.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Left ventricle myocardium inferior | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR333BMU
+    parent tadsEncode off
+    shortLabel Left ventricle
+    longLabel ENCODE TADs in Left ventricle myocardium superior (ENCSR333BMU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiumsuperior.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Left ventricle myocardium superior | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR346DCU
+    parent tadsEncode off
+    shortLabel LNCaP clone FGC
+    longLabel ENCODE TADs in LNCaP clone FGC (ENCSR346DCU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/LNCaPcloneFGC.bb
+    color 140,140,140
+    visibility dense
+    mouseOver Biosample: LNCaP clone FGC | TAD lifted from hg19 (no Arrowhead score)
+
+    track tadsEncode_ENCSR720WEB
+    parent tadsEncode off
+    shortLabel Lower leg skin
+    longLabel ENCODE TADs in Lower leg skin (ENCSR720WEB)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlegskin.bb
+    color 127,133,209
+    visibility dense
+    mouseOver Biosample: Lower leg skin | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR446NJD
+    parent tadsEncode off
+    shortLabel Left lung lower lobe
+    longLabel ENCODE TADs in Lower lobe of left lung (ENCSR446NJD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofleftlung.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: Lower lobe of left lung | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR749PID
+    parent tadsEncode off
+    shortLabel Right lung lower lobe
+    longLabel ENCODE TADs in Lower lobe of right lung (ENCSR749PID)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofrightlung.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: Lower lobe of right lung | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR707XVJ
+    parent tadsEncode off
+    shortLabel Mammary epithelial
+    longLabel ENCODE TADs in Mammary epithelial cell (ENCSR707XVJ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mammaryepithelialcell.bb
+    color 65,171,173
+    visibility dense
+    mouseOver Biosample: Mammary epithelial cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR370TFL
+    parent tadsEncode off
+    shortLabel MCF 10A
+    longLabel ENCODE TADs in MCF 10A (ENCSR370TFL)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF10A.bb
+    color 65,171,173
+    visibility dense
+    mouseOver Biosample: MCF 10A | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR660LPJ
+    parent tadsEncode off
+    shortLabel MCF-7
+    longLabel ENCODE TADs in MCF-7 (ENCSR660LPJ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF7.bb
+    color 65,171,173
+    visibility dense
+    mouseOver Biosample: MCF-7 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR754GTX
+    parent tadsEncode off
+    shortLabel Mesodermal cell
+    longLabel ENCODE TADs in Mesodermal cell (ENCSR754GTX)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesodermalcell.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: Mesodermal cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR944UTX
+    parent tadsEncode off
+    shortLabel Epicardium mesothelial
+    longLabel ENCODE TADs in Mesothelial cell of epicardium (ENCSR944UTX)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesothelialcellofepicardium.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Mesothelial cell of epicardium | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR206OUF
+    parent tadsEncode off
+    shortLabel Descending colon
+    longLabel ENCODE TADs in Mucosa of descending colon (ENCSR206OUF)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mucosaofdescendingcolon.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Mucosa of descending colon | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR215PTV
+    parent tadsEncode off
+    shortLabel Naive CD4+ T cell
+    longLabel ENCODE TADs in Naive thymus-derived CD4-positive, alpha-beta T cell (ENCSR215PTV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naivethymusderivedCD4positivealphabetaTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Naive thymus-derived CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR971CJS
+    parent tadsEncode off
+    shortLabel Natural killer cell
+    longLabel ENCODE TADs in Natural killer cell (ENCSR971CJS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naturalkillercell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Natural killer cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR489OCU
+    parent tadsEncode off
+    shortLabel NCI-H460
+    longLabel ENCODE TADs in NCI-H460 (ENCSR489OCU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/NCIH460.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: NCI-H460 | TAD lifted from hg19 (no Arrowhead score)
+
+    track tadsEncode_ENCSR088BOG
+    parent tadsEncode off
+    shortLabel OCI-LY7
+    longLabel ENCODE TADs in OCI-LY7 (ENCSR088BOG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/OCILY7.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: OCI-LY7 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR584RBV
+    parent tadsEncode off
+    shortLabel Panc1
+    longLabel ENCODE TADs in Panc1 (ENCSR584RBV)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Panc1.bb
+    color 175,100,41
+    visibility dense
+    mouseOver Biosample: Panc1 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR038TZA
+    parent tadsEncode off
+    shortLabel PC-3
+    longLabel ENCODE TADs in PC-3 (ENCSR038TZA)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC3.bb
+    color 140,140,140
+    visibility dense
+    mouseOver Biosample: PC-3 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR859DRK
+    parent tadsEncode off
+    shortLabel PC-9
+    longLabel ENCODE TADs in PC-9 (ENCSR859DRK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC9.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: PC-9 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR395DZW
+    parent tadsEncode off
+    shortLabel Placenta
+    longLabel ENCODE TADs in Placenta (ENCSR395DZW)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/placenta.bb
+    color 104,171,71
+    visibility dense
+    mouseOver Biosample: Placenta | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR169JKC
+    parent tadsEncode off
+    shortLabel Posterior cingulate
+    longLabel ENCODE TADs in Posterior cingulate gyrus (ENCSR169JKC)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorcingulategyrus.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Posterior cingulate gyrus | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR941AMF
+    parent tadsEncode off
+    shortLabel Posterior vena cava
+    longLabel ENCODE TADs in Posterior vena cava (ENCSR941AMF)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorvenacava.bb
+    color 255,37,41
+    visibility dense
+    mouseOver Biosample: Posterior vena cava | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR557QRO
+    parent tadsEncode off
+    shortLabel Prostate gland
+    longLabel ENCODE TADs in Prostate gland (ENCSR557QRO)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/prostategland.bb
+    color 140,140,140
+    visibility dense
+    mouseOver Biosample: Prostate gland | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR173QPK
+    parent tadsEncode off
+    shortLabel Psoas muscle
+    longLabel ENCODE TADs in Psoas muscle (ENCSR173QPK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/psoasmuscle.bb
+    color 137,135,170
+    visibility dense
+    mouseOver Biosample: Psoas muscle | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR022TPX
+    parent tadsEncode off
+    shortLabel Ramos
+    longLabel ENCODE TADs in Ramos (ENCSR022TPX)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Ramos.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Ramos | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR173VDQ
+    parent tadsEncode off
+    shortLabel Right cardiac atrium
+    longLabel ENCODE TADs in Right cardiac atrium (ENCSR173VDQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightcardiacatrium.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Right cardiac atrium | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR753CKM
+    parent tadsEncode off
+    shortLabel Liver right lobe
+    longLabel ENCODE TADs in Right lobe of liver (ENCSR753CKM)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightlobeofliver.bb
+    color 137,152,82
+    visibility dense
+    mouseOver Biosample: Right lobe of liver | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR921BHU
+    parent tadsEncode off
+    shortLabel Right ventricle
+    longLabel ENCODE TADs in Right ventricle myocardium inferior (ENCSR921BHU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiuminferior.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Right ventricle myocardium inferior | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR476RFQ
+    parent tadsEncode off
+    shortLabel Right ventricle
+    longLabel ENCODE TADs in Right ventricle myocardium superior (ENCSR476RFQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiumsuperior.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Right ventricle myocardium superior | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR862OGI
+    parent tadsEncode off
+    shortLabel RPMI7951
+    longLabel ENCODE TADs in RPMI7951 (ENCSR862OGI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/RPMI7951.bb
+    color 127,133,209
+    visibility dense
+    mouseOver Biosample: RPMI7951 | TAD lifted from hg19 (no Arrowhead score)
+
+    track tadsEncode_ENCSR119TFS
+    parent tadsEncode off
+    shortLabel Sciatic nerve
+    longLabel ENCODE TADs in Sciatic nerve (ENCSR119TFS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sciaticnerve.bb
+    color 160,156,0
+    visibility dense
+    mouseOver Biosample: Sciatic nerve | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR123ZFD
+    parent tadsEncode off
+    shortLabel Sigmoid colon
+    longLabel ENCODE TADs in Sigmoid colon (ENCSR123ZFD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sigmoidcolon.bb
+    color 86,86,36
+    visibility dense
+    mouseOver Biosample: Sigmoid colon | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR998ZSP
+    parent tadsEncode off
+    shortLabel SJCRH30
+    longLabel ENCODE TADs in SJCRH30 (ENCSR998ZSP)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SJCRH30.bb
+    color 137,135,170
+    visibility dense
+    mouseOver Biosample: SJCRH30 | TAD lifted from hg19 (no Arrowhead score)
+
+    track tadsEncode_ENCSR312KHQ
+    parent tadsEncode off
+    shortLabel SK-MEL-5
+    longLabel ENCODE TADs in SK-MEL-5 (ENCSR312KHQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKMEL5.bb
+    color 127,133,209
+    visibility dense
+    mouseOver Biosample: SK-MEL-5 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR204CGS
+    parent tadsEncode off
+    shortLabel SK-N-DZ
+    longLabel ENCODE TADs in SK-N-DZ (ENCSR204CGS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNDZ.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: SK-N-DZ | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR834DXR
+    parent tadsEncode off
+    shortLabel SK-N-MC
+    longLabel ENCODE TADs in SK-N-MC (ENCSR834DXR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNMC.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: SK-N-MC | TAD lifted from hg19 (no Arrowhead score)
+
+    track tadsEncode_ENCSR692QWS
+    parent tadsEncode off
+    shortLabel Spleen
+    longLabel ENCODE TADs in Spleen (ENCSR692QWS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/spleen.bb
+    color 136,157,97
+    visibility dense
+    mouseOver Biosample: Spleen | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR569OBN
+    parent tadsEncode off
+    shortLabel Stomach
+    longLabel ENCODE TADs in Stomach (ENCSR569OBN)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/stomach.bb
+    color 145,144,99
+    visibility dense
+    mouseOver Biosample: Stomach | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR949ZZD
+    parent tadsEncode off
+    shortLabel T-helper 1 cell
+    longLabel ENCODE TADs in T-helper 1 cell (ENCSR949ZZD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper1cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: T-helper 1 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR832CKD
+    parent tadsEncode off
+    shortLabel T-helper 2 cell
+    longLabel ENCODE TADs in T-helper 2 cell (ENCSR832CKD)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper2cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: T-helper 2 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR549MGQ
+    parent tadsEncode off
+    shortLabel T47D
+    longLabel ENCODE TADs in T47D (ENCSR549MGQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/T47D.bb
+    color 65,171,173
+    visibility dense
+    mouseOver Biosample: T47D | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR870SXX
+    parent tadsEncode off
+    shortLabel Testis
+    longLabel ENCODE TADs in Testis (ENCSR870SXX)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/testis.bb
+    color 139,140,140
+    visibility dense
+    mouseOver Biosample: Testis | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR043XTM
+    parent tadsEncode off
+    shortLabel Thyroid gland
+    longLabel ENCODE TADs in Thyroid gland (ENCSR043XTM)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/thyroidgland.bb
+    color 27,119,58
+    visibility dense
+    mouseOver Biosample: Thyroid gland | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR601RFS
+    parent tadsEncode off
+    shortLabel Tibial artery
+    longLabel ENCODE TADs in Tibial artery (ENCSR601RFS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/tibialartery.bb
+    color 255,37,41
+    visibility dense
+    mouseOver Biosample: Tibial artery | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR673UZF
+    parent tadsEncode off
+    shortLabel Right lung upper lobe
+    longLabel ENCODE TADs in Upper lobe of right lung (ENCSR673UZF)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/upperlobeofrightlung.bb
+    color 130,163,45
+    visibility dense
+    mouseOver Biosample: Upper lobe of right lung | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR008CUR
+    parent tadsEncode off
+    shortLabel Uterus
+    longLabel ENCODE TADs in Uterus (ENCSR008CUR)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/uterus.bb
+    color 186,111,165
+    visibility dense
+    mouseOver Biosample: Uterus | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR886JAM
+    parent tadsEncode off
+    shortLabel Vagina
+    longLabel ENCODE TADs in Vagina (ENCSR886JAM)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/vagina.bb
+    color 255,101,174
+    visibility dense
+    mouseOver Biosample: Vagina | Arrowhead corner score: $cornerScore
+

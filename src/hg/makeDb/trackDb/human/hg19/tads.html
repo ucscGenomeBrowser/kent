@@ -1,0 +1,90 @@
+<h2>Description</h2>
+<p>
+This track set displays <b>topologically associating domains (TADs)</b> and TAD
+<b>boundaries</b> in the human genome, assembled from published Hi-C studies. TADs are
+self-interacting regions of the genome, typically hundreds of kilobases to about a megabase,
+and themselves nested, with smaller contact domains contained within larger top-level TADs.
+Their boundaries (frequently bound by CTCF and cohesin) insulate neighboring regions and
+constrain enhancer-promoter contacts. Disruption of a TAD boundary can rewire gene regulation
+and cause disease, and TADs are widely used to nominate candidate target genes for non-coding
+variants.
+</p>
+<p>The set contains three complementary sources:</p>
+<ul>
+  <li><b>Dixon 2012 TADs</b> &ndash; the original TAD <em>domains</em> in hESC and IMR90
+      cells (lifted from hg18).</li>
+  <li><b>Schmitt 2016 boundaries</b> &ndash; TAD <em>boundaries</em> across 21 human
+      tissues and cell lines (native hg19).</li>
+  <li><b>TAD boundary stability</b> &ndash; how recurrent each boundary is across 37
+      cell-type maps (McArthur &amp; Capra 2021; native hg19).</li>
+</ul>
+<p>Two further domain sources are available on the hg38 assembly:</p>
+<ul>
+  <li><b>ENCODE contact domains</b> &ndash; uniformly called TAD <em>domains</em> across 117
+      ENCODE human biosamples (hg38 only).</li>
+  <li><b>3D Genome Browser domains</b> &ndash; TAD <em>domains</em> across 464 human
+      Hi-C/Micro-C datasets (hg38 only).</li>
+</ul>
+
+<h2>How to Use These Tracks</h2>
+<p>
+The <b>domain</b> track (Dixon) answers &quot;are my variant and a candidate gene in the
+same TAD?&quot; and helps prioritize target genes at non-coding GWAS loci. The
+<b>boundary</b> tracks (Schmitt, stability) answer &quot;does my structural variant disrupt
+an insulating boundary?&quot; and help interpret the regulatory impact of deletions,
+duplications, and inversions.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each source is shown as a separate track because TAD calls are <b>not directly comparable
+across studies</b>: different algorithms (directionality index/HMM, insulation score) and
+resolutions (40&ndash;100 kb) produce different calls of the same underlying biology.
+<b>Domains</b> are drawn as boxes spanning each self-interacting region; <b>boundaries</b>
+are drawn as the short bins that divide adjacent domains. Because calls are made on binned
+data, domain edges are uncertain to roughly the caller's bin size, and the bin width of a
+boundary feature reflects this localization precision, not a measured physical width. Domains
+do not tile the genome end to end; the gaps between domain boxes are inter-domain or
+unorganized regions, not display artifacts.
+</p>
+
+<h2>Methods</h2>
+<p>
+See the individual subtrack description pages for full methods, source publications, and
+assembly/liftOver details for each dataset. In brief: Dixon domains were called with the
+directionality-index HMM at 40 kb (lifted from hg18); Schmitt boundaries with the
+insulation-score method at 40 kb; and the boundary-stability track counts, per 100 kb window,
+how many of 37 re-processed cell-type maps share a boundary (McArthur &amp; Capra 2021). The
+Schmitt and stability tracks are native to hg19.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Dixon JR, Selvaraj S, Yue F, Kim A, Li Y, Shen Y, Hu M, Liu JS, Ren B.
+Topological domains in mammalian genomes identified by analysis of chromatin
+interactions. <em>Nature</em>. 2012;485(7398):376-80.
+<a href="https://doi.org/10.1038/nature11082" target="_blank">doi:10.1038/nature11082</a>
+</p>
+<p>
+McArthur E, Capra JA. Topologically associating domain boundaries that are stable across
+diverse cell types are evolutionarily constrained and enriched for heritability.
+<em>Am J Hum Genet</em>. 2021;108(2):269-283.
+<a href="https://doi.org/10.1016/j.ajhg.2021.01.001" target="_blank">doi:10.1016/j.ajhg.2021.01.001</a>
+</p>
+<p>
+Schmitt AD, Hu M, Jung I, Xu Z, <em>et al.</em>
+A Compendium of Chromatin Contact Maps Reveals Spatially Active Regions in the Human
+Genome. <em>Cell Rep</em>. 2016;17(8):2042-2059.
+<a href="https://doi.org/10.1016/j.celrep.2016.10.061" target="_blank">doi:10.1016/j.celrep.2016.10.061</a>
+</p>

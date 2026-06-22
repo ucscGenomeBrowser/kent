@@ -940,3 +940,5 @@ include hprcV2.trackDb.txt alpha
 include vgp577way.trackDb.ra alpha
 
 include crPred.ra alpha
+
+include tad.ra alpha

@@ -1,0 +1,78 @@
+<h2>Description</h2>
+<p>
+This track set displays <b>topologically associating domains (TADs)</b> in the mouse genome,
+assembled from published Hi-C studies. TADs are self-interacting regions of the genome,
+typically hundreds of kilobases to about a megabase, and themselves nested, with smaller
+contact domains contained within larger top-level TADs. Their boundaries (frequently bound by
+CTCF and cohesin) insulate neighboring regions and constrain enhancer-promoter contacts.
+</p>
+<p>The set contains three complementary sources, all <b>domain</b> calls:</p>
+<ul>
+  <li><b>Dixon 2012 TADs</b> &ndash; the original TAD domains in mESC and cortex (lifted from mm9).</li>
+  <li><b>ENCODE contact domains</b> &ndash; uniformly called TAD domains across mouse biosamples
+      (Arrowhead/Hi-C), browsable by a faceted selector. Native mm10; lifted to mm39.</li>
+  <li><b>3D Genome Browser domains</b> &ndash; TAD domains across mouse Hi-C/Micro-C datasets,
+      exactly as called and published by the 3D Genome Browser, browsable by a faceted selector.
+      Native mm10; lifted to mm39.</li>
+</ul>
+<p>
+The human counterpart of this track set (on hg38) additionally includes TAD <b>boundary</b>
+tracks (Schmitt 2016, and a boundary-stability track); those datasets are human-only and have
+no mouse equivalent, so the mouse set is domains only.
+</p>
+
+<h2>How to Use These Tracks</h2>
+<p>
+The <b>domain</b> tracks (Dixon, ENCODE, 3D Genome Browser) answer &quot;are my variant
+and a candidate gene in the same TAD?&quot; and help prioritize target genes at non-coding
+regulatory loci. Because the domain tracks are nested (ENCODE calls smaller sub-TAD contact
+domains; Dixon and the 3D Genome Browser call larger top-level TADs), &quot;which TAD?&quot;
+is answered at different scales by different tracks. This mouse set is domains only; to ask
+whether a structural variant disrupts an insulating boundary, see the human (hg38) counterpart,
+which adds dedicated TAD boundary tracks.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each source is shown as a separate track because TAD calls are <b>not directly comparable across
+studies</b>: different algorithms and resolutions produce different calls of the same underlying
+biology. Domains are drawn as boxes spanning each self-interacting region. Calls native to an
+earlier mouse assembly are lifted to the assembly being viewed (Dixon from mm9; ENCODE and the
+3D Genome Browser from mm10 when viewed on mm39); the lift is noted in each track's long label.
+The ENCODE and 3D Genome Browser tracks contain many biosamples and are browsable with a faceted
+selector on their configuration pages.
+</p>
+
+<h2>Methods</h2>
+<p>
+See the individual subtrack description pages for full methods, source publications, and the
+liftOver details for each dataset. In brief: Dixon domains were called with the
+directionality-index HMM at 40 kb; ENCODE contact domains with Arrowhead (Juicer) on the ENCODE
+uniform Hi-C pipeline; and the 3D Genome Browser domains are that resource's own per-dataset TAD
+calls, shown verbatim (format normalization only).
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the track
+can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Dixon JR, Selvaraj S, Yue F, Kim A, Li Y, Shen Y, Hu M, Liu JS, Ren B.
+Topological domains in mammalian genomes identified by analysis of chromatin interactions.
+<em>Nature</em>. 2012;485(7398):376-80.
+<a href="https://doi.org/10.1038/nature11082" target="_blank">doi:10.1038/nature11082</a>
+</p>
+<p>
+Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
+The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D genome
+architecture. <em>Nucleic Acids Res</em>. 2026;54(D1):D48-D54.
+<a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">doi:10.1093/nar/gkaf1109</a>
+</p>

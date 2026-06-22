@@ -36056,3 +36056,42 @@ rm -f *.wig
 mkdir -p /gbdb/hg19/clinPred
 ln -s /hive/data/genomes/hg19/bed/clinPred/{a,c,g,t}.bw /gbdb/hg19/clinPred/
 ln -s /hive/data/genomes/hg19/bed/clinPred/{a,c,g,t}.color.bb /gbdb/hg19/clinPred/
+
+
+# hg19 TADs supertrack (tads) - Redmine #21599
+# hg19 carries the three sources that have hg19-compatible data: Dixon 2012 (domains),
+# Schmitt 2016 (boundaries), McArthur & Capra 2021 (boundary stability). ENCODE contact
+# domains and the 3D Genome Browser collection are hg38-only (not on hg19).
+# Data built 2026-06-14 alongside hg38 (same source files, autoSql, conventions). Full source
+# provenance + fetch for each dataset is in ../hg38/tad.txt (Dixon MOESM330 suppl; Schmitt
+# mmc4.xlsx manual; McArthur
+# GitHub byStability.bed). hg19 differs from hg38 only in the liftOver target:
+
+##############################################################################
+# Dixon 2012 TAD domains (tadsDixon) - hESC + IMR90, lifted hg18 -> hg19
+##############################################################################
+# Nature suppl Table S3 "Combined" sheets (hESC/IMR90, hg18, BED3) staged at
+# /hive/data/outside/tad/dixon2012/source/dixon_{hESC,IMR90}.hg18.bed (name=cell type).
+# liftOver hg18->hg19 (hg18ToHg19.over.chain), bedClip, primary-chrom filter, sort,
+# bedToBigBed -type=bed4 -as=tadDomain.as -> build/hg19/tadsDixon{HESC,IMR90}.bb (HESC 3,062).
+
+##############################################################################
+# Schmitt 2016 TAD boundaries (tadsSchmitt) - 21 samples, NATIVE hg19 (no lift)
+##############################################################################
+# Cell Reports suppl Table S3 (mmc4.xlsx, manual download), 21 per-sample sheets, 40 kb bins,
+# hg19 -> source/schmitt_<code>.hg19.bed. bedToBigBed -type=bed4 -as=tadBoundary.as ->
+# build/hg19/tadsSchmitt<code>.bb (21 files; native hg19, no liftOver).
+
+##############################################################################
+# McArthur 2021 TAD boundary stability (tadsMcArthur) - NATIVE hg19 (no lift)
+##############################################################################
+# GitHub emcarthur/TAD-stability-heritability, 100kbBookendBoundaries_byStability.bed (hg19,
+# 14,345 boundaries, 100 kb; cols chr loc loc2 counts percentile). Drop header, bedToBigBed
+# -type=bed5+2 -as=tadStability.as -> build/hg19/tadsMcArthur.bb (14,344). bed5+2: name,
+# score=round(contexts/37*1000) (render proxy), contexts (1-37), percentile.
+
+# gbdb: /gbdb/hg19/bbi/tad/{tadsDixon*,tadsSchmitt*,tadsMcArthur}.bb (symlinks to build/hg19/).
+# trackDb: human/hg19/tad.ra (priorities Dixon 1 / Schmitt 2 / McArthur 3; superTrack on hide;
+#   Dixon visibility pack, Schmitt+McArthur hide) + tads/tadsDixon/tadsSchmitt/tadsMcArthur .html.
+#   Gated: include tad.ra alpha in human/hg19/trackDb.ra.
+cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg19 FIND=find
