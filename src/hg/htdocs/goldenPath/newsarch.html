@@ -64,6 +64,103 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="062326"></a>
+<h2>Jun. 23, 2026 &nbsp;&nbsp; Non-canonical ORFs track collection on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=ncOrfs" target="_blank"><b>Non-canonical
+ORFs</b></a> track collection on the human genome assembly (GRCh38/hg38),
+bringing together several public databases of open reading frames (ORFs) that
+fall outside annotated protein-coding genes. While the human genome has
+roughly 20,000 annotated protein-coding genes, ribosome profiling (Ribo-seq) and
+proteomics have revealed widespread translation of ORFs in regions long
+considered non-coding, including 5' and 3' UTRs, long non-coding RNAs,
+pseudogenes, and alternative reading frames of known genes.
+</p>
+
+<p>
+These non-canonical ORFs include upstream ORFs (uORFs) in 5' UTRs, which can
+regulate translation of the downstream coding sequence; small ORFs (sORFs),
+generally under 100 codons, many of which produce functional micropeptides;
+downstream ORFs (dORFs) in 3' UTRs; out-of-frame ORFs that overlap known coding
+sequence in an alternative frame; and ORFs in transcripts annotated as
+non-coding RNAs or pseudogenes. The collection gathers the following datasets as
+individual subtracks:
+</p>
+
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs" target="_blank"><b>UTRannotator
+      uORFs</b></a> &ndash; 44,435 curated uORFs in human 5' UTRs from the
+      <a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
+      VEP plugin (Whiffin lab), useful for placing a VEP prediction in genomic
+      context.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs" target="_blank"><b>GENCODE
+      ncORFs</b></a> &ndash; the GENCODE / TransCODE Phase I reference set (7,264
+      ATG-initiated ncORFs with Ribo-seq and peptide evidence), plus Phase II
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary" target="_blank">primary</a>
+      and
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive" target="_blank">comprehensive</a>
+      sets that extend the catalog to shorter and non-AUG ORFs.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=fiveUltraUorfs" target="_blank"><b>5ULTRA
+      uORFs</b></a> &ndash; 22,567 ATG-initiated uORFs mapped to MANE Select
+      transcripts, compiled by the
+      <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a>
+      project for prioritizing 5' UTR variants.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=nuorfdb" target="_blank"><b>nuORFdb</b></a>
+      &ndash; 229,251 non-canonical ORFs with ribosome-profiling evidence from
+      the Broad Institute's
+      <a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a>
+      v1.2.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=metamorf" target="_blank"><b>MetamORF</b></a>
+      &ndash; 664,558 small ORFs consolidated from many primary sources by the
+      <a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF</a>
+      meta-database.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=openprot" target="_blank"><b>OpenProt</b></a>
+      &ndash; 921,170 reference proteins, isoforms, and alternative proteins from
+      <a href="https://www.openprot.org" target="_blank">OpenProt</a> v2.2, with a
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=openprotMs" target="_blank">mass-spectrometry-supported
+      subset</a> (&ge;2 unique peptides).</li>
+</ul>
+
+<p>
+Every ORF in every subtrack is annotated with the strength of its Kozak
+sequence, the sequence context around the start codon that governs how
+efficiently translation initiates. Features are colored by a categorical Kozak
+label:
+</p>
+<ul>
+  <li><span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>strong</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>moderate</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>weak</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>near-cognate</b> &ndash; non-ATG start, shown separately</li>
+</ul>
+<p>
+Each subtrack offers filters for the start codon, Kozak strength, and a numeric Kozak
+translational efficiency score, along with dataset-specific filters such as ORF
+type and evidence category.
+</p>
+
+<p>
+See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=ncOrfs" target="_blank">Non-canonical ORFs
+collection page</a> and the individual subtrack description pages for per-dataset
+methods, item counts, download URLs, and references.
+</p>
+
+<p>
+We would like to thank the data providers who made these resources publicly
+available: Xiaolei Zhang, Nicola Whiffin, and the UTRannotator team at Imperial
+College London; Jonathan Mudge, Jorge Ruiz-Orera, John Prensner, Sebastiaan van
+Heesch, and the GENCODE / TransCODE consortium; Matthieu Chaldebas and the
+5ULTRA team; Tamara Ouspenskaia, Travis Law, Karl Clauser, and colleagues at the
+Broad Institute of MIT and Harvard for nuORFdb; the MetamORF team at the TAGC
+laboratory, Aix-Marseille University; and Xavier Roucou and the OpenProt team at
+the Universit&eacute; de Sherbrooke. We also thank Eric Malekos (UCSC) for
+suggesting nuORFdb, and the VuTR authors (Whiffin lab) for the Kozak-strength
+implementation. Finally, we would like to thank Max Haeussler and Jairo Navarro
+for creating and releasing these UCSC Genome Browser tracks.
+</p>
+
 <a name="060226"></a>
 <h2>Jun. 2, 2026 &nbsp;&nbsp; New Massively Parallel Reporter Assay (MPRA) tracks on hg38</h2>
 <p>

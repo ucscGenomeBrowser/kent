@@ -33,6 +33,19 @@ $(function() {
         return req.then(r => r.ok ? r.json() : null).catch(() => null);
     };
 
+    const showLoading = () => {  // spinner shown during fetch + table build
+        if (document.getElementById("faceted-loading")) return;
+        const el = document.createElement("div");
+        el.id = "faceted-loading";
+        el.innerHTML =
+            `<div class="faceted-spinner"></div><div>Loading metadata…</div>`;
+        document.getElementById("metadata-placeholder").appendChild(el);
+    };
+    const hideLoading = () => {
+        const el = document.getElementById("faceted-loading");
+        if (el) el.remove();
+    };
+
     const toTitleStyle = str =>
             str.replace(/_+/g, " ");
 
@@ -777,6 +790,7 @@ $(function() {
         const table = initTable(dataForTable);
         initFilters(table, dataForTable);
         initSubmit(table);
+        hideLoading();  // table is built and drawn; remove the spinner
     }
 
     function loadDataAndInit() {  // load data and call init functions
@@ -840,6 +854,7 @@ $(function() {
                 });
             })
             .catch(err => {
+                hideLoading();  // stop the spinner before showing the error
                 const table = document.getElementById("theMetaDataTable");
                 if (table) {
                     table.innerHTML =
@@ -854,6 +869,7 @@ $(function() {
     }, true);
 
     generateHTML();
+    showLoading();  // show spinner immediately, before the metadata fetch
     loadDataAndInit();
 
 });

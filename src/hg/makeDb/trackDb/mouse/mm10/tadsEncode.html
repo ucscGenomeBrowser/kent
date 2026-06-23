@@ -1,0 +1,68 @@
+<h2>Description</h2>
+<p>
+This composite shows <b>TAD domains</b> (&quot;contact domains&quot;) called by the ENCODE
+uniform Hi-C pipeline across <b>16 mouse biosamples</b>. Contact domains are regions that
+preferentially self-interact, called by the Arrowhead algorithm (Juicer). Each subtrack is
+one biosample, browsable with a <b>faceted selector</b> (filter by organ, biosample type,
+assay, life stage, and call type).
+</p>
+<p>
+The calls are native to mm10. On mm39 they are shown lifted from mm10 (noted in each track's
+long label); the &quot;Calls&quot; facet records the native call assembly.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each domain is drawn as a box, and subtracks are <b>colored by organ</b>. Mousing over a
+domain shows the biosample and the Arrowhead corner score; the details page also reports
+Arrowhead's upper/lower variance and sign scores. Use the faceted selector on the track
+configuration page to choose biosamples by <b>Organ</b>, <b>Biosample type</b>, <b>Assay</b>
+(intact or in situ Hi-C), <b>Life stage</b>, and <b>Calls</b>. These calls use a different
+algorithm and finer resolution (5 kb sub-TAD contact domains) than the Dixon domains and are
+not directly comparable to them.
+</p>
+
+<h2>Methods</h2>
+<p>
+Contact domains were produced by the ENCODE uniform Hi-C processing pipeline (Aiden lab,
+built on Juicer), which calls domains with Arrowhead. For each biosample, one representative
+experiment was selected (preferring an untreated baseline over a perturbed experiment where
+both were available) and its contact-domain files were pooled: each Juicer/Arrowhead
+paired-anchor BEDPE record (both anchors describing the same domain interval) was reduced to a
+single domain interval, the five Arrowhead scores retained, and replicate calls whose
+endpoints fell within one 5 kb bin merged (keeping the higher corner score). For mm39, the
+mm10 domains were lifted with <b>liftOver</b>. The chosen ENCODE experiment accession is given
+in each subtrack's long label and links to the ENCODE portal.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+The complete dataset is available at the
+<a href="https://www.encodeproject.org/search/?type=File&amp;output_type=contact+domains&amp;assembly=mm10" target="_blank">ENCODE portal</a>.
+</p>
+
+<h2>References</h2>
+<p>
+ENCODE Project Consortium, Snyder MP, Gingeras TR, Moore JE, Weng Z, <em>et al.</em>
+Perspectives on ENCODE. <em>Nature</em>. 2020;583(7818):693-698.
+<a href="https://doi.org/10.1038/s41586-020-2449-8" target="_blank">doi:10.1038/s41586-020-2449-8</a>
+</p>
+<p>
+Rao SS, Huntley MH, Durand NC, Stamenova EK, <em>et al.</em>
+A 3D map of the human genome at kilobase resolution reveals principles of chromatin looping.
+<em>Cell</em>. 2014;159(7):1665-80.
+<a href="https://doi.org/10.1016/j.cell.2014.11.021" target="_blank">doi:10.1016/j.cell.2014.11.021</a>
+</p>
+<p>
+Durand NC, Shamim MS, Machol I, Rao SS, Huntley MH, Lander ES, Aiden EL.
+Juicer Provides a One-Click System for Analyzing Loop-Resolution Hi-C Experiments.
+<em>Cell Syst</em>. 2016;3(1):95-8.
+<a href="https://doi.org/10.1016/j.cels.2016.07.002" target="_blank">doi:10.1016/j.cels.2016.07.002</a>
+</p>

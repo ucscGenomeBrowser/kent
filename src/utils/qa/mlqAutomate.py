@@ -1193,6 +1193,7 @@ def normalize_subject(subject):
     # Use word boundary \b to avoid matching inside words (e.g., "Re-install")
     reply_forward_patterns = [
         r'\bre:\s*',      # Re: RE:
+        r'\bre\s*[\[\(\^]\s*\d+\s*[\]\)]?\s*:\s*',  # Re[2]: Re(2): Re^2: (numbered replies, e.g. mail.ru)
         r'\bfwd?:\s*',    # Fwd: FW: Fw:
         r'\baw:\s*',      # AW: (German "Antwort")
     ]

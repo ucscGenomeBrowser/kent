@@ -15,10 +15,10 @@ general/unaffected background. For the full list of contributing projects, see t
 The affected counts are drawn from the affected or case arm of five disease-study cohorts:
 SFARI SPARK WES and SFARI SPARK WGS (autism spectrum disorder probands), SCHEMA
 (schizophrenia cases), GREGoR (affected rare-disease participants), and GA4K (a pediatric
-rare-disease cohort). For SPARK, SFARI WGS, SCHEMA, and GREGoR the source data carries an
-explicit affected/unaffected (or case/control) label and only the affected arm feeds this
+rare-disease cohort). For SPARK, SFARI WGS, SCHEMA, and GREGoR, the source data carries an
+explicit affected/unaffected (or case/control) label, and only the affected arm feeds this
 track. GA4K reports a single cohort-wide frequency with no per-individual label; because it
-is a rare-disease cohort it is counted as affected here, with the caveat that it enrolls
+is a rare-disease cohort, it is counted as affected here, with the caveat that it enrolls
 parent-child trios, so a minority of its carriers are unaffected parents. Genotyping-array
 cohorts are not included in either track.
 </p>
@@ -49,9 +49,11 @@ The score (used for shading) is the pooled affected/case allele frequency times 
 <p>
 <b>Affected AF</b> is the pooled rate across contributing affected arms:
 <code>affectedAF = sum(AC) / sum(AN)</code>, where <b>affectedAC</b> sums the allele counts
-and <b>affectedAN</b> sums the allele numbers across each cohort/arm that ships both AC and
+and <b>affectedAN</b> sums the allele numbers across each cohort/arm that provides both AC and
 AF (the per-arm AN is derived as <code>round(AC / AF)</code>). Cohorts that publish only AF
-contribute via a configured <code>default_an</code> in the build configuration. Cohorts
+(with no AC or AN of their own) are still pooled by assigning them an assumed allele number,
+set as a <code>default_an</code> in the build configuration; their per-arm AC is then derived
+as <code>round(AF &times; default_an)</code>. Cohorts
 that publish only AC and have no <code>default_an</code> set (currently GREGoR's per-arm
 AC_AFFECTED/UNAFFECTED/UNKNOWN) are listed in <b>affectedCohorts</b> but do not contribute
 to the pool numerator or denominator; their carriers are visible in the per-database AC

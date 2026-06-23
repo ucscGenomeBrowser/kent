@@ -233,7 +233,7 @@ for (i=0; i<count; ++i)
     s = netGetString(socket, buf);
     if (s == NULL)
         errAbort("Shut out by bottleneck server %s:%d", host, port);
-    else
+    else // guard printf: -Wformat-overflow runs before errAbort's noreturn prunes the null path
         printf("%s millisecond delay recommended\n", s);
     close(socket);
     }
