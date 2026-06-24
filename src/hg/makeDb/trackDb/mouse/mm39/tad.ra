@@ -1,0 +1,39 @@
+track tads
+superTrack on hide
+shortLabel TADs
+longLabel Topologically associating domains (TADs) from Hi-C studies
+group regulation
+html tads
+
+track tadsDixon
+parent tads
+priority 1
+compositeTrack on
+shortLabel Dixon 2012 TADs
+longLabel TAD domains in mESC and cortex (Dixon et al. 2012, lifted from mm9)
+type bigBed 4
+group regulation
+visibility pack
+html tadsDixon
+
+    track tadsDixonMESC
+    parent tadsDixon on
+    shortLabel mESC TADs
+    longLabel TAD domains in mouse embryonic stem cells (Dixon et al. 2012, lifted from mm9)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsDixonMESC.bb
+    color 27,158,119
+    mouseOver Cell type: $name (TAD domain)
+
+    track tadsDixonCortex
+    parent tadsDixon on
+    shortLabel Cortex TADs
+    longLabel TAD domains in mouse cortex (Dixon et al. 2012, lifted from mm9)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsDixonCortex.bb
+    color 106,61,154
+    mouseOver Cell type: $name (TAD domain)
+
+include tadsEncode.ra
+
+include tads3dgb.ra

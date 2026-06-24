@@ -1,0 +1,62 @@
+<h2>Description</h2>
+<p>
+This track shows <b>TAD boundary stability</b>: for each 100 kb genomic window, how many of
+37 cell-type contact maps place a TAD boundary there (McArthur &amp; Capra, 2021).
+Boundaries shared by many cell types are evolutionarily constrained and enriched for
+complex-trait heritability.
+</p>
+<p>
+<b>This is a derived, cross-study summary, not a primary set of TAD calls.</b> The 37 maps
+were uniformly re-processed (via the 3D Genome Browser, using the Dixon directionality
+pipeline) from five earlier studies (Rao 2014, Dixon 2015, Leung 2015, Schmitt 2016, and
+ENCODE cancer cell lines); 9 of those contexts overlap the Schmitt boundaries track in
+this set, so the two are not independent. The input maps were called at heterogeneous
+resolution (25 kb for the Rao-lab set, 40 kb for the others).
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each 100 kb &quot;bookend&quot; boundary bin is shaded by the number of cell-type maps
+sharing it (1&ndash;37): darker indicates a boundary shared by more cell types. Use the
+<b>filter</b> to show only boundaries shared by at least a chosen number of maps. We
+describe these as <em>recurrent across N of 37 maps</em>, not &quot;conserved&quot;.
+</p>
+<p>
+<b>Interpreting the score:</b> the score counts how many independent cell-type maps agree on a
+boundary, which serves as a confidence measure. High values mark <b>constitutive</b> boundaries
+shared across cell types: the most reliable, and enriched for CTCF binding and evolutionary
+constraint. Boundaries seen in only one or a few maps are largely cell-type-specific. Raising the
+filter yields a smaller, higher-confidence set of boundaries.
+</p>
+<p>
+<b>Default filter:</b> this track initially shows boundaries shared by at least <b>4 of the 37
+maps</b>. Boundaries seen in only 1&ndash;3 maps are no more CTCF-enriched or evolutionarily
+constrained than expected by chance. Lower the <b>filter</b> (minimum maps) to 1 to display all
+boundaries.
+</p>
+<h2>Methods</h2>
+<p>
+TAD boundaries from 37 re-processed cell-type maps were each represented as the 100 kb
+windows flanking every TAD (&quot;bookend&quot; boundaries); the genome was tiled into
+100 kb windows and, for each window, the number of maps with a boundary in it was counted
+(McArthur &amp; Capra, 2021). Data were obtained from the authors' repository on assembly
+hg19 and lifted to this assembly with the UCSC <b>liftOver</b> tool where needed.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+McArthur E, Capra JA. Topologically associating domain boundaries that are stable across
+diverse cell types are evolutionarily constrained and enriched for heritability.
+<em>Am J Hum Genet</em>. 2021;108(2):269-283.
+<a href="https://doi.org/10.1016/j.ajhg.2021.01.001" target="_blank">doi:10.1016/j.ajhg.2021.01.001</a>
+</p>

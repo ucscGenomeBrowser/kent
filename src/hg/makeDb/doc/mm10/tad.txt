@@ -1,0 +1,105 @@
+# Mouse TADs supertrack (tads) - topologically associating domains, mm10 + mm39
+# Redmine #21599.  Mouse counterpart of human hg38 tads (domains only; the human Schmitt +
+# McArthur boundary tracks have no mouse data). Built by reusing the human pipelines + liftOver.
+# This doc covers BOTH mm10 and mm39 (the build scripts emit both); mm39 trackDb mirrors mm10.
+# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and
+# symlinked into the per-source build dirs, so the commands below run the in-tree copies.
+# Organ colors come from the TAD-owned /hive/data/outside/tad/organ_colors.json (symlinked into
+# /gbdb/<asm>/bbi/tad/organ_colors.json) - a copy of the wgEncodeReg4 map, isolated so TAD
+# additions never touch the shared file.
+
+##############################################################################
+# Dixon 2012 TAD domains (tadsDixon)  2026-06-21 (lou)
+##############################################################################
+# Source: Dixon JR et al. 2012, Nature 485:376, PMID 22495300, doi:10.1038/nature11082.
+# Mouse half of the paper (the human half is the hg38 tadsDixon track).
+#
+# DATA PROVENANCE + FETCH:
+#   - Nature Supplementary Table S3 (Domains) = supplemental file MOESM330, staged at
+#     /hive/users/lrnassar/claude/RM21599/dixon2012/41586_2012_BFnature11082_MOESM330_ESM.xls .
+#   - Mouse sheets "mESC Combined" (2,200 domains) + "cortex Combined" (1,518), plain BED, 40 kb,
+#     assembly mm9 (verified by chrom-length test). Extracted to BED4 (name = cell type):
+#     /hive/users/lrnassar/claude/RM21599/lifttest/mm9_{mesc,cortex}_domains.bed (chr1-19 + X, no chrY).
+# BUILD (liftOver mm9 -> mm10 and mm9 -> mm39; no native mm10 calls exist, so BOTH assemblies are lifted):
+cd /hive/data/outside/tad/dixon2012/build
+bash buildDixonMouse.sh
+#   For each cell type x {mm10,mm39}: set col4 = cell-type name; liftOver -bedPlus=4 -tab with
+#   /gbdb/mm9/liftOver/mm9To{Mm10,Mm39}.over.chain.gz; drop *_random/_alt; bedClip; sort;
+#   bedToBigBed -type=bed4 -tab -as=/hive/data/outside/tad/tadDomain.as ->
+#   build/{mm10,mm39}/tadsDixon{MESC,Cortex}.bb . Lift drop: mESC ~2%, cortex ~2% (reported by the script).
+# Symlink into gbdb:
+for asm in mm10 mm39; do mkdir -p /gbdb/$asm/bbi/tad
+  ln -sfn /hive/data/outside/tad/dixon2012/build/$asm/tadsDixonMESC.bb   /gbdb/$asm/bbi/tad/tadsDixonMESC.bb
+  ln -sfn /hive/data/outside/tad/dixon2012/build/$asm/tadsDixonCortex.bb /gbdb/$asm/bbi/tad/tadsDixonCortex.bb
+done
+# trackDb: tadsDixon composite in mouse/{mm10,mm39}/tad.ra (longLabel "lifted from mm9" on both);
+#   html tads.html + tadsDixon.html. Gated: include tad.ra alpha in mouse/{mm10,mm39}/trackDb.ra.
+cd ~/kent/src/hg/makeDb/trackDb && make DBS=mm10 FIND=find && make DBS=mm39 FIND=find
+
+##############################################################################
+# ENCODE contact domains - faceted composite (tadsEncode)  2026-06-21 (lou)
+##############################################################################
+# Source: ENCODE portal, mouse Hi-C contact domains (Arrowhead/Juicer). Native mm10; lifted to mm39.
+#
+# DATA PROVENANCE + FETCH (reproducible; ENCODE open):
+#   1. Manifest of mm10 contact-domain files (105, all bedpe) via the ENCODE search API:
+#        https://www.encodeproject.org/search/?type=File&output_type=contact+domains&assembly=mm10&format=json&limit=all
+#      saved /hive/data/outside/tad/encode/mouse/source/_cd_select.json (16 biosamples / 46 experiments).
+#   2. Per-file download (href from manifest):
+#        curl -L "https://www.encodeproject.org/files/<ENCFF>/@@download/<ENCFF>.bedpe.gz" -o <ENCFF>.bedpe.gz
+#      -> /hive/data/outside/tad/encode/mouse/contact_domains/ (105 files).
+#   3. Per-experiment facet metadata + perturbed flag via the ENCODE search API ->
+#      mouse/source/encode_meta_all.json + encode_perturbed.json.
+#
+# BUILD - same script as human, assembly-aware (mm10 branch; SLIM2KEY adds lymph node->Lymphoid tissue;
+# Calls value "Arrowhead (mm10)"; out-of-bounds/degenerate domains dropped via the chrom-size guard -
+# 3 T-cell biosamples have spurious chrY domains past mm10 chrY end):
+cd /hive/data/outside/tad/encode/build
+python3 buildTadsEncode.py mm10
+#   -> build/mm10/tadsEncode/<sym>.bb (16, bigBed 4+5) + tadsEncode_metadata.tsv + tadsEncode.ra
+#      (primaryKey Accession -> ENCODE portal via subtrackUrls; default-on: mouse ESC, CH12.LX, heart,
+#       left cerebral cortex).
+# mm39 = lift the finished mm10 bigBeds (-bedPlus=4 -tab carries the 5 score cols), copy TSV, transform
+# the stanza (gbdb path + "lifted from mm10" longLabels):
+bash liftEncodeMouse.sh
+# gbdb + trackDb:
+for asm in mm10 mm39; do
+  ln -sfn /hive/data/outside/tad/encode/build/$asm/tadsEncode              /gbdb/$asm/bbi/tad/tadsEncode
+  ln -sfn /hive/data/outside/tad/encode/build/$asm/tadsEncode_metadata.tsv /gbdb/$asm/bbi/tad/tadsEncode_metadata.tsv
+  cp /hive/data/outside/tad/encode/build/$asm/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/$asm/tadsEncode.ra
+done
+#   mouse/{mm10,mm39}/tad.ra: include tadsEncode.ra ; html tadsEncode.html.
+cd ~/kent/src/hg/makeDb/trackDb && make DBS=mm10 FIND=find && make DBS=mm39 FIND=find
+
+##############################################################################
+# 3D Genome Browser TAD domains - faceted composite (tads3dgb)  2026-06-21 (lou)
+##############################################################################
+# Source: 3D Genome Browser 2.0 (Yu et al. 2026, NAR 54:D48-D54, PMID 41206958). CC BY-NC.
+# Native mm10; lifted to mm39.
+#
+# DATA PROVENANCE + FETCH (download endpoint reachable from hgwdev; verified):
+#   1. Catalog: /hive/users/lrnassar/claude/RM21599/3dgenome/datasets_api.json (the full 3DGB catalog).
+#      Mouse selection: species=Mouse, assembly=mm10, dataType in (Hi-C,Micro-C) -> 53 candidate ids.
+#   2. Per-dataset download + extract the TAD bed (only 30 of the 53 actually ship a *_tad.bed; the
+#      other 23 provide only a compartment bigWig and have no TAD calls):
+#        curl -L "http://3dgenome.fsm.northwestern.edu/api/data/download?dataset_ids=<id>" -o <id>.zip
+#        # zip holds <name>.bedpe (loops) + <name>_cis_pc1.bw + <name>_tad.bed (when present)
+#      extract <name>_tad.bed -> /hive/data/outside/tad/3dgenome/mouse/tad_beds/<id>.bed (30 files).
+#      Metadata (organ, cellType, dataType, year, refNo, description) comes from datasets_api.json.
+#
+# BUILD - same script as human, assembly-aware (mm10 branch iterates the 30 mouse datasets from the
+# API; the human-only Condition/Treatment/Provenance facets are omitted; ships all subtracks off):
+cd /hive/data/outside/tad/3dgenome/build
+python3 buildTads3dgb.py mm10
+#   -> build/mm10/tads3dgb/<id>.bb (30, bed4) + tads3dgb_metadata.tsv (facets Organ/Cell_type/Assay/
+#      Year/Study) + tads3dgb.ra (primaryKey DatasetId).
+# mm39 = lift the finished mm10 bed4 bigBeds, copy TSV, transform stanza ("lifted from mm10"):
+bash liftTads3dgbMouse.sh
+# gbdb + trackDb:
+for asm in mm10 mm39; do
+  ln -sfn /hive/data/outside/tad/3dgenome/build/$asm/tads3dgb              /gbdb/$asm/bbi/tad/tads3dgb
+  ln -sfn /hive/data/outside/tad/3dgenome/build/$asm/tads3dgb_metadata.tsv /gbdb/$asm/bbi/tad/tads3dgb_metadata.tsv
+  cp /hive/data/outside/tad/3dgenome/build/$asm/tads3dgb.ra ~/kent/src/hg/makeDb/trackDb/mouse/$asm/tads3dgb.ra
+done
+#   mouse/{mm10,mm39}/tad.ra: include tads3dgb.ra ; html tads3dgb.html.
+cd ~/kent/src/hg/makeDb/trackDb && make DBS=mm10 FIND=find && make DBS=mm39 FIND=find

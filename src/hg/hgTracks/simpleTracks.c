@@ -3136,8 +3136,8 @@ for (ref = exonList; TRUE; )
                                             }
                                         }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Exon Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
-                                                strandStr, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s<br><b>Exon: </b>%s %d of %d&nbsp;&nbsp;<b>Length: </b>%d bp<br>%s",
+                                                strandStr, exonIntronText, exonIntronNumber, numExonIntrons, e - s, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
@@ -3761,7 +3761,9 @@ return shadesOfGray[2];
 
 
 void makeGrayShades(struct hvGfx *hvg)
-/* Make eight shades of gray in display. */
+/* Fill shadesOfGray[0..maxShade] with a white-to-black gradient, then set
+ * shadesOfGray[maxShade+1] to red as an overflow sentinel (shadesOfGray is
+ * declared with maxShade+2 entries to leave room for it). */
 {
 hMakeGrayShades(hvg, shadesOfGray, maxShade);
 shadesOfGray[maxShade+1] = MG_RED;

@@ -1,0 +1,176 @@
+track tadsEncode
+parent tads
+priority 2
+compositeTrack faceted
+shortLabel ENCODE TADs
+longLabel ENCODE contact domains (TADs) across 16 mouse biosamples (Arrowhead/Hi-C)
+type bigBed 4 + 5
+group regulation
+visibility pack
+metaDataUrl /gbdb/mm10/bbi/tad/tadsEncode_metadata.tsv
+primaryKey Accession
+colorSettingsUrl /gbdb/mm10/bbi/tad/organ_colors.json
+subtrackUrls Accession=https://www.encodeproject.org/experiments/$$/
+maxCheckboxes 50
+html tadsEncode
+
+    track tadsEncode_ENCSR005UON
+    parent tadsEncode on
+    shortLabel CH12.LX
+    longLabel ENCODE TADs in CH12.LX (ENCSR005UON)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/CH12LX.bb
+    color 6,218,147
+    visibility dense
+    mouseOver Biosample: CH12.LX | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR097DFP
+    parent tadsEncode on
+    shortLabel Heart
+    longLabel ENCODE TADs in Heart (ENCSR097DFP)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/heart.bb
+    color 116,50,165
+    visibility dense
+    mouseOver Biosample: Heart | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR639NRL
+    parent tadsEncode on
+    shortLabel Left cerebral cortex
+    longLabel ENCODE TADs in Left cerebral cortex (ENCSR639NRL)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/leftcerebralcortex.bb
+    color 155,155,18
+    visibility dense
+    mouseOver Biosample: Left cerebral cortex | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR028GRK
+    parent tadsEncode on
+    shortLabel Mouse embryonic stem
+    longLabel ENCODE TADs in Mouse embryonic stem cell (ENCSR028GRK)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/mouseembryonicstemcell.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: Mouse embryonic stem cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR820CZQ
+    parent tadsEncode off
+    shortLabel Adrenal gland
+    longLabel ENCODE TADs in Adrenal gland (ENCSR820CZQ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/adrenalgland.bb
+    color 90,179,68
+    visibility dense
+    mouseOver Biosample: Adrenal gland | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR549VZT
+    parent tadsEncode off
+    shortLabel CH12F3
+    longLabel ENCODE TADs in CH12F3 (ENCSR549VZT)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/CH12F3.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: CH12F3 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR051JZL
+    parent tadsEncode off
+    shortLabel ES-E14
+    longLabel ENCODE TADs in ES-E14 (ENCSR051JZL)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/ESE14.bb
+    color 118,158,101
+    visibility dense
+    mouseOver Biosample: ES-E14 | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR136LVP
+    parent tadsEncode off
+    shortLabel Gastrocnemius
+    longLabel ENCODE TADs in Gastrocnemius (ENCSR136LVP)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/gastrocnemius.bb
+    color 137,135,170
+    visibility dense
+    mouseOver Biosample: Gastrocnemius | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR471ZWB
+    parent tadsEncode off
+    shortLabel Mature B cell
+    longLabel ENCODE TADs in Mature B cell (ENCSR471ZWB)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/matureBcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Mature B cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR357JYI
+    parent tadsEncode off
+    shortLabel Mouse trophoblast stem
+    longLabel ENCODE TADs in Mouse trophoblast stem cell (ENCSR357JYI)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/mousetrophoblaststemcell.bb
+    color 104,171,71
+    visibility dense
+    mouseOver Biosample: Mouse trophoblast stem cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR080JTU
+    parent tadsEncode off
+    shortLabel Patski
+    longLabel ENCODE TADs in Patski (ENCSR080JTU)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/Patski.bb
+    color 92,161,153
+    visibility dense
+    mouseOver Biosample: Patski | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR516LTA
+    parent tadsEncode off
+    shortLabel Regulatory T cell
+    longLabel ENCODE TADs in Regulatory T cell (ENCSR516LTA)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/regulatoryTcell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: Regulatory T cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR858EVG
+    parent tadsEncode off
+    shortLabel T-helper 1 cell
+    longLabel ENCODE TADs in T-helper 1 cell (ENCSR858EVG)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/Thelper1cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: T-helper 1 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR072ORZ
+    parent tadsEncode off
+    shortLabel T-helper 17 cell
+    longLabel ENCODE TADs in T-helper 17 cell (ENCSR072ORZ)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/Thelper17cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: T-helper 17 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR407MXC
+    parent tadsEncode off
+    shortLabel T-helper 2 cell
+    longLabel ENCODE TADs in T-helper 2 cell (ENCSR407MXC)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/Thelper2cell.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: T-helper 2 cell | Arrowhead corner score: $cornerScore
+
+    track tadsEncode_ENCSR799QDS
+    parent tadsEncode off
+    shortLabel v-Abl transformed
+    longLabel ENCODE TADs in v-Abl transformed pro-B cells (ENCSR799QDS)
+    type bigBed 4 + 5
+    bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/vAbltransformedproBcells.bb
+    color 254,75,173
+    visibility dense
+    mouseOver Biosample: v-Abl transformed pro-B cells | Arrowhead corner score: $cornerScore
+

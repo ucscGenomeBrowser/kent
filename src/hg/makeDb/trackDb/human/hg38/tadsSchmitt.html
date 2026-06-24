@@ -1,0 +1,44 @@
+<h2>Description</h2>
+<p>
+This composite shows <b>TAD boundaries</b> across 21 human samples (7 cell lines and 14
+primary tissues) from Schmitt <em>et al.</em>, 2016. A boundary is the insulating region
+that separates two adjacent topologically associating domains. These are
+<em>boundaries</em>, not domains; for domain intervals see the Dixon 2012 TADs track.
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each boundary is a 40 kb bin; the bin width reflects the localization precision of the
+40 kb analysis, not a measured physical width. Subtracks are grouped by sample type
+(cell line vs. primary tissue) and organ system, and colored by organ system. Because the
+same boundary is reported independently per sample, turning on multiple subtracks lets you
+read boundary conservation directly: a boundary present in many samples is constitutive,
+while one present in few is cell-type specific. By default a representative subset of
+samples is shown.
+</p>
+<h2>Methods</h2>
+<p>
+Boundaries were called with the insulation-score method at 40 kb resolution (1 Mb
+insulation square, 200 kb delta window) as described in Schmitt <em>et al.</em>, 2016
+(Supplementary Table S3). Per-sample boundary bins were obtained on assembly hg19; for
+this assembly they were used natively or lifted with the UCSC <b>liftOver</b> tool, with a
+small fraction of bins that did not map cleanly dropped.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Schmitt AD, Hu M, Jung I, Xu Z, Qiu Y, Tan CL, Li Y, Lin S, Lin Y, Barr CL, Ren B.
+A Compendium of Chromatin Contact Maps Reveals Spatially Active Regions in the Human
+Genome. <em>Cell Rep</em>. 2016;17(8):2042-2059.
+<a href="https://doi.org/10.1016/j.celrep.2016.10.061" target="_blank">doi:10.1016/j.celrep.2016.10.061</a>
+</p>

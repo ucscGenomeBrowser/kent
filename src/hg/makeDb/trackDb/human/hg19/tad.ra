@@ -1,0 +1,280 @@
+track tads
+superTrack on hide
+shortLabel TADs
+longLabel Topologically associating domains (TADs) and boundaries from Hi-C studies
+group regulation
+html tads
+
+track tadsDixon
+parent tads
+priority 1
+compositeTrack on
+shortLabel Dixon 2012 TADs
+longLabel TAD domains in hESC and IMR90 cells (Dixon et al. 2012, lifted from hg18)
+type bigBed 4
+group regulation
+visibility pack
+html tadsDixon
+
+    track tadsDixonHESC
+    parent tadsDixon on
+    shortLabel hESC TADs
+    longLabel TAD domains in H1 human embryonic stem cells (Dixon et al. 2012)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsDixonHESC.bb
+    color 27,158,119
+    mouseOver Cell type: $name (TAD domain)
+
+    track tadsDixonIMR90
+    parent tadsDixon on
+    shortLabel IMR90 TADs
+    longLabel TAD domains in IMR90 fetal lung fibroblasts (Dixon et al. 2012)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsDixonIMR90.bb
+    color 217,95,2
+    mouseOver Cell type: $name (TAD domain)
+
+track tadsSchmitt
+parent tads
+priority 2
+compositeTrack on
+shortLabel Schmitt 2016 boundaries
+longLabel TAD boundaries across 21 human tissues and cell lines (Schmitt et al. 2016)
+type bigBed 4
+group regulation
+visibility hide
+html tadsSchmitt
+subGroup1 stype Sample_type cellLine=Cell_line tissue=Primary_tissue
+subGroup2 organ Organ_system brain=Brain cardiovascular=Cardiovascular immune=Immune digestive=Digestive endocrine=Endocrine reproductive=Reproductive muscle=Muscle respiratory=Respiratory urinary=Urinary stem=Stem
+dimensions dimX=organ dimY=stype
+sortOrder stype=+ organ=+
+showSubtrackColorOnUi on
+allButtonPair on
+
+    track tadsSchmittGM12878
+    parent tadsSchmitt on
+    shortLabel GM12878 bnd
+    longLabel TAD boundaries in GM12878 lymphoblastoid cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittGM12878.bb
+    subGroups stype=cellLine organ=immune
+    color 51,160,44
+    mouseOver Sample: GM12878 lymphoblastoid cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittH1
+    parent tadsSchmitt on
+    shortLabel H1-hESC bnd
+    longLabel TAD boundaries in H1 human embryonic stem cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittH1.bb
+    subGroups stype=cellLine organ=stem
+    color 152,78,163
+    mouseOver Sample: H1 human embryonic stem cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittIMR90
+    parent tadsSchmitt on
+    shortLabel IMR90 bnd
+    longLabel TAD boundaries in IMR90 fetal lung fibroblasts (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittIMR90.bb
+    subGroups stype=cellLine organ=respiratory
+    color 178,150,40
+    mouseOver Sample: IMR90 fetal lung fibroblasts (TAD boundary, 40 kb bin)
+
+    track tadsSchmittMES
+    parent tadsSchmitt off
+    shortLabel Mesendoderm bnd
+    longLabel TAD boundaries in H1-derived mesendoderm cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMES.bb
+    subGroups stype=cellLine organ=stem
+    color 152,78,163
+    mouseOver Sample: H1-derived mesendoderm cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittMSC
+    parent tadsSchmitt off
+    shortLabel Mesench SC bnd
+    longLabel TAD boundaries in H1-derived mesenchymal stem cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMSC.bb
+    subGroups stype=cellLine organ=stem
+    color 152,78,163
+    mouseOver Sample: H1-derived mesenchymal stem cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittNPC
+    parent tadsSchmitt off
+    shortLabel Neural prog bnd
+    longLabel TAD boundaries in H1-derived neural progenitor cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittNPC.bb
+    subGroups stype=cellLine organ=stem
+    color 152,78,163
+    mouseOver Sample: H1-derived neural progenitor cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittTRO
+    parent tadsSchmitt off
+    shortLabel Trophoblast bnd
+    longLabel TAD boundaries in H1-derived trophoblast-like cells (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittTRO.bb
+    subGroups stype=cellLine organ=stem
+    color 152,78,163
+    mouseOver Sample: H1-derived trophoblast-like cells (TAD boundary, 40 kb bin)
+
+    track tadsSchmittAD
+    parent tadsSchmitt off
+    shortLabel Adrenal bnd
+    longLabel TAD boundaries in adrenal gland (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAD.bb
+    subGroups stype=tissue organ=endocrine
+    color 31,120,180
+    mouseOver Sample: adrenal gland (TAD boundary, 40 kb bin)
+
+    track tadsSchmittAO
+    parent tadsSchmitt off
+    shortLabel Aorta bnd
+    longLabel TAD boundaries in aorta (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAO.bb
+    subGroups stype=tissue organ=cardiovascular
+    color 227,26,28
+    mouseOver Sample: aorta (TAD boundary, 40 kb bin)
+
+    track tadsSchmittBL
+    parent tadsSchmitt off
+    shortLabel Bladder bnd
+    longLabel TAD boundaries in bladder (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittBL.bb
+    subGroups stype=tissue organ=urinary
+    color 251,154,153
+    mouseOver Sample: bladder (TAD boundary, 40 kb bin)
+
+    track tadsSchmittCO
+    parent tadsSchmitt on
+    shortLabel Cortex bnd
+    longLabel TAD boundaries in dorsolateral prefrontal cortex (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittCO.bb
+    subGroups stype=tissue organ=brain
+    color 106,61,154
+    mouseOver Sample: dorsolateral prefrontal cortex (TAD boundary, 40 kb bin)
+
+    track tadsSchmittHC
+    parent tadsSchmitt off
+    shortLabel Hippocampus bnd
+    longLabel TAD boundaries in hippocampus (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittHC.bb
+    subGroups stype=tissue organ=brain
+    color 106,61,154
+    mouseOver Sample: hippocampus (TAD boundary, 40 kb bin)
+
+    track tadsSchmittLG
+    parent tadsSchmitt off
+    shortLabel Lung bnd
+    longLabel TAD boundaries in lung (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLG.bb
+    subGroups stype=tissue organ=respiratory
+    color 178,150,40
+    mouseOver Sample: lung (TAD boundary, 40 kb bin)
+
+    track tadsSchmittLI
+    parent tadsSchmitt on
+    shortLabel Liver bnd
+    longLabel TAD boundaries in liver (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLI.bb
+    subGroups stype=tissue organ=digestive
+    color 255,127,0
+    mouseOver Sample: liver (TAD boundary, 40 kb bin)
+
+    track tadsSchmittLV
+    parent tadsSchmitt off
+    shortLabel Left ventricle bnd
+    longLabel TAD boundaries in left ventricle of heart (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLV.bb
+    subGroups stype=tissue organ=cardiovascular
+    color 227,26,28
+    mouseOver Sample: left ventricle of heart (TAD boundary, 40 kb bin)
+
+    track tadsSchmittOV
+    parent tadsSchmitt off
+    shortLabel Ovary bnd
+    longLabel TAD boundaries in ovary (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittOV.bb
+    subGroups stype=tissue organ=reproductive
+    color 177,89,40
+    mouseOver Sample: ovary (TAD boundary, 40 kb bin)
+
+    track tadsSchmittPA
+    parent tadsSchmitt off
+    shortLabel Pancreas bnd
+    longLabel TAD boundaries in pancreas (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPA.bb
+    subGroups stype=tissue organ=endocrine
+    color 31,120,180
+    mouseOver Sample: pancreas (TAD boundary, 40 kb bin)
+
+    track tadsSchmittPO
+    parent tadsSchmitt off
+    shortLabel Psoas muscle bnd
+    longLabel TAD boundaries in psoas muscle (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPO.bb
+    subGroups stype=tissue organ=muscle
+    color 120,180,200
+    mouseOver Sample: psoas muscle (TAD boundary, 40 kb bin)
+
+    track tadsSchmittRV
+    parent tadsSchmitt off
+    shortLabel Right ventricle bnd
+    longLabel TAD boundaries in right ventricle of heart (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittRV.bb
+    subGroups stype=tissue organ=cardiovascular
+    color 227,26,28
+    mouseOver Sample: right ventricle of heart (TAD boundary, 40 kb bin)
+
+    track tadsSchmittSB
+    parent tadsSchmitt off
+    shortLabel Small bowel bnd
+    longLabel TAD boundaries in small bowel (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSB.bb
+    subGroups stype=tissue organ=digestive
+    color 255,127,0
+    mouseOver Sample: small bowel (TAD boundary, 40 kb bin)
+
+    track tadsSchmittSX
+    parent tadsSchmitt off
+    shortLabel Spleen bnd
+    longLabel TAD boundaries in spleen (Schmitt et al. 2016)
+    type bigBed 4
+    bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSX.bb
+    subGroups stype=tissue organ=immune
+    color 51,160,44
+    mouseOver Sample: spleen (TAD boundary, 40 kb bin)
+
+track tadsMcArthur
+parent tads
+priority 3
+shortLabel TAD boundary stability
+longLabel TAD boundary stability across 37 cell-type maps (McArthur & Capra 2021)
+type bigBed 5 + 2
+bigDataUrl /gbdb/$D/bbi/tad/tadsMcArthur.bb
+group regulation
+visibility hide
+spectrum on
+filter.contexts 4:37
+filterByRange.contexts on
+filterLimits.contexts 1:37
+filterLabel.contexts Minimum number of cell-type maps sharing the boundary (1-37)
+mouseOver Boundary recurrent in $contexts of 37 cell-type maps (percentile $percentile)
+html tadsMcArthur
+
