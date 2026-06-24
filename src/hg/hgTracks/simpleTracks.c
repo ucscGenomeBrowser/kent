@@ -3097,8 +3097,8 @@ for (ref = exonList; TRUE; )
                                                 cStart, cEnd, pStart, pStart+1);
                                         }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
-                                                strandStr, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s<br><b>Exon: </b>%s %d of %d&nbsp;&nbsp;<b>Length: </b>%d bp<br>%s",
+                                                strandStr, exonIntronText, exonIntronNumber, numExonIntrons, e - s, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
