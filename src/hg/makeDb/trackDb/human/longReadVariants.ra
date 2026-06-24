@@ -12,7 +12,7 @@ visibility hide
     type vcfTabix
     visibility pack
     bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.deepvariant.glnexus.vcf.gz
-    html colorsDb.html
+    html colorsDbSnv.html
      
     track pbsv
     parent longReadVariants
@@ -23,7 +23,7 @@ visibility hide
     itemRgb on
     bigDataUrl /gbdb/$D/colorsDb/colorsDb.v1.2.0.sv.bb
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>SV type</b>: ${svType}<br> <b>Length</b>: ${svLen} bp<br> <b>Allele Frequency</b>: ${af}<br> <b>Alt allele count</b>: ${AC} (Hom: ${AC_Hom}, Het: ${AC_Het}, Hemi: ${AC_Hemi})<br> <b>Number of samples</b>: ${NS} <br> <b>Total allele number</b>: ${AN}<br> <b>HWE p-value</b>: ${HWE}<br> <b>ExcHet</b>: ${ExcHet}
-    html colorsDb.html
+    html colorsDbSv.html
     searchIndex name,svType
     filter.svLen 0
     filterByRange.svLen on

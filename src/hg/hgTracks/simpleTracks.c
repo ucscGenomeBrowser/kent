@@ -15,7 +15,6 @@
 #include "portable.h"
 #include "bed.h"
 #include "basicBed.h"
-#include "htmlColor.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -287,8 +286,6 @@ struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 boolean hgFindMatchesShowHighlight; /* For use with pdf mode which suppresses label highlight */
-
-struct hash *itemColorHash; /* Per-item background highlight colors keyed by "track\titemName". */
 
 struct trackLayout tl;
 
@@ -3097,8 +3094,8 @@ for (ref = exonList; TRUE; )
                                                 cStart, cEnd, pStart, pStart+1);
                                         }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
-                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s&nbsp;&nbsp;&nbsp;&nbsp;<b>Length: </b>%dbp<br><b>Exon: </b>%s %d of %d<br>%s",
-                                                strandStr, e - s, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+                                    dyStringPrintf(codonDy, "<b>Strand: </b> %s<br><b>Exon: </b>%s %d of %d&nbsp;&nbsp;<b>Length: </b>%d bp<br>%s",
+                                                strandStr, exonIntronText, exonIntronNumber, numExonIntrons, e - s, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
@@ -4148,56 +4145,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
  * gap if target side is at most 5 times greater than query side. */
 #define CHAIN_GAP_FACTOR 5
 
-struct itemColorSpec
-/* A user-chosen color for a single item, set via the right-click "Color this item" menu. */
-    {
-    Color color;          /* The chosen color. */
-    boolean wholeItem;    /* TRUE to recolor the item glyph, FALSE for a background highlight. */
-    };
-
-static struct itemColorSpec *itemColorLookup(struct track *tg, void *item)
-/* Return the user-chosen color spec for this item, or NULL. Matches on mapItemName, itemName, or
- * genomic position ("pos:chrom:start-end"), the same identities the JS uses to build the record.
- * Nameless items (e.g. bed3) have no usable name, so the position key identifies them. */
-{
-if (itemColorHash == NULL)
-    return NULL;
-char key[2048];
-struct itemColorSpec *spec = NULL;
-if (tg->mapItemName != NULL)
-    {
-    safef(key, sizeof key, "%s\t%s", tg->track, tg->mapItemName(tg, item));
-    spec = hashFindVal(itemColorHash, key);
-    }
-if (spec == NULL && tg->itemName != NULL)
-    {
-    safef(key, sizeof key, "%s\t%s", tg->track, tg->itemName(tg, item));
-    spec = hashFindVal(itemColorHash, key);
-    }
-if (spec == NULL && tg->itemStart != NULL && tg->itemEnd != NULL)
-    {
-    safef(key, sizeof key, "%s\tpos:%s:%d-%d", tg->track, chromName,
-          tg->itemStart(tg, item), tg->itemEnd(tg, item));
-    spec = hashFindVal(itemColorHash, key);
-    }
-return spec;
-}
-
-boolean itemColorOverride(struct track *tg, void *item, Color *retColor, boolean *retWholeItem)
-/* If the user set a per-item color for this item (via right-click), return TRUE and fill in the
- * color and whether it recolors the whole item; otherwise return FALSE. Lets non-linkedFeatures
- * draw routines (e.g. bedDrawSimpleAt) honor right-click item colors. */
-{
-struct itemColorSpec *spec = itemColorLookup(tg, item);
-if (spec == NULL)
-    return FALSE;
-if (retColor != NULL)
-    *retColor = spec->color;
-if (retWholeItem != NULL)
-    *retWholeItem = spec->wholeItem;
-return TRUE;
-}
-
 void linkedFeaturesDrawAt(struct track *tg, void *item,
                           struct hvGfx *hvg, int xOff, int y, double scale,
                           MgFont *font, Color color, enum trackVisibility vis)
@@ -4265,20 +4212,6 @@ if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
 
 color = colorFromCart(tg, color);
 bColor = colorFromCart(tg, bColor);
-
-// user-chosen per-item color (right-click "Color this item"): recolor the whole glyph or
-// fall back to a background highlight, unless the item is already highlighted.
-struct itemColorSpec *userColorSpec = itemColorLookup(tg, lf);
-if (userColorSpec != NULL)
-    {
-    if (userColorSpec->wholeItem)
-        color = bColor = userColorSpec->color;
-    else if (lf->highlightColor == 0)
-        {
-        lf->highlightColor = userColorSpec->color;
-        lf->highlightMode = highlightBackground;
-        }
-    }
 
 struct genePred *gp = NULL;
 if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
@@ -4839,15 +4772,6 @@ if (tg->itemNameColor != NULL)
     {
     color = tg->itemNameColor(tg, item, hvg);
     labelColor = color;
-    if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
-	labelColor = somewhatDarkerColor(hvg, color);
-    }
-
-// user-chosen per-item color (right-click "Color this item"): color the label to match the glyph
-struct itemColorSpec *userColorSpec = itemColorLookup(tg, item);
-if (userColorSpec != NULL && userColorSpec->wholeItem)
-    {
-    color = labelColor = userColorSpec->color;
     if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
 	labelColor = somewhatDarkerColor(hvg, color);
     }
@@ -16111,53 +16035,5 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 hgFindMatchesShowHighlight = TRUE;  // default to showing the highlight searched item label.
-}
-
-void createItemColorHash()
-/* Read the itemColors cart variable into a hash of per-item colors keyed by "track\titemName",
- * keeping only records for the current database. The cart format is db#track#mode#itemName#hexColor
- * records joined by '|', where mode is "item" (recolor the glyph) or "bg" (background highlight).
- * The color is the last '#' field so that item names containing '#' are tolerated; item names
- * containing '|' are not supported. The cart value is user-editable, so malformed records (bad
- * color, missing fields) are skipped rather than aborting the image. */
-{
-char *itemColors = cartOptionalString(cart, "itemColors");
-if (isEmpty(itemColors))
-    return;
-struct slName *recordList = slNameListFromString(itemColors, '|'), *record;
-for (record = recordList; record != NULL; record = record->next)
-    {
-    char *p = record->name;
-    char *db = cloneNextWordByDelimiter(&p, '#');
-    char *track = cloneNextWordByDelimiter(&p, '#');
-    char *mode = cloneNextWordByDelimiter(&p, '#');
-    char *lastHash = (p != NULL) ? strrchr(p, '#') : NULL;
-    if (!isEmpty(db) && !isEmpty(track) && !isEmpty(mode) && lastHash != NULL
-            && sameString(db, database))
-        {
-        *lastHash = '\0';
-        char *itemName = p;
-        char *hex = lastHash + 1;
-        char colorSpec[16];
-        safef(colorSpec, sizeof colorSpec, "#%s", hex);
-        unsigned rgb;
-        if (!isEmpty(itemName) && htmlColorForCode(colorSpec, &rgb))
-            {
-            struct itemColorSpec *spec;
-            AllocVar(spec);
-            spec->color = bedColorToGfxColor(rgb);
-            spec->wholeItem = sameString(mode, "item");
-            char key[2048];
-            safef(key, sizeof key, "%s\t%s", track, itemName);
-            if (itemColorHash == NULL)
-                itemColorHash = newHash(0);
-            hashAdd(itemColorHash, key, spec);
-            }
-        }
-    freeMem(db);
-    freeMem(track);
-    freeMem(mode);
-    }
-slFreeList(&recordList);
 }
 
