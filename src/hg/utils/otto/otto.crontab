@@ -136,7 +136,7 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 
 ### verify liftOverChain and quickLiftChain tables have
 ###     identical fromDb,toDb pairs:
-11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCount.sh
+11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCounts.sh
 
 #NCBI RefSeq
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
