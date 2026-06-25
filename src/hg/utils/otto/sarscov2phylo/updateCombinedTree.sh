@@ -86,9 +86,9 @@ if [ ! -s gisaidAndPublic.$today.masked.pb.gz ]; then
 
     # Again prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb.gz \
-        --max-parsimony 20 \
-        --max-branch-length 70 \
-        --max-path-length 225 \
+        --max-parsimony 25 \
+        --max-branch-length 75 \
+        --max-path-length 250 \
         -O -o gisaidAndPublic.$today.masked.pb.gz
 fi
 
@@ -195,11 +195,31 @@ echo "$sampleCountComma Omicron genomes from GISAID, GenBank, COG-UK and CNCB ($
 ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.plusGisaid.omicron.description.txt \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.omicron.version.txt
 
+# Extract recent-only tree (samples from the past year plus samples within radius 5 of those) for faster searches
+set +x
+conda activate bte
+set -x
+python $scriptDir/find_recent_samples.py -i gisaidAndPublic.$today.metadata.tsv.gz -n 365 -o recent_samples.txt
+python $scriptDir/prune_to_radius.py -i gisaidAndPublic.$today.masked.pb.gz -l recent_samples.txt -r 5 \
+       -o samples.$today.recent
+$matUtils extract -i gisaidAndPublic.$today.masked.pb.gz \
+    -s samples.$today.recent \
+    -o gisaidAndPublic.$today.masked.recent.pb.gz
+pigz -f -p 8 samples.$today.recent
+ssh hgwdev ln -sf $(pwd)/gisaidAndPublic.$today.masked.recent.pb.gz \
+    /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.masked.recent.pb.gz
+sampleCountComma=$(echo $(zcat samples.$today.recent.gz | wc -l) \
+                   | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
+echo "$sampleCountComma recent genomes from GISAID, GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
+    > hgPhyloPlace.plusGisaid.recent.description.txt
+ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.plusGisaid.recent.description.txt \
+    /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.recent.version.txt
+
 # Memory-mapped hash tables for metadata and name lookup
 tabToMmHash gisaidAndPublic.$today.metadata.tsv.gz gisaidAndPublic.$today.metadata.mmh
 ssh hgwdev ln -sf $(pwd)/gisaidAndPublic.$today.metadata.mmh \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.metadata.mmh
-for s in samples.$today.gz samples.$today.omicron.gz; do
+for s in samples.$today.gz samples.$today.omicron.gz samples.$today.recent.gz; do
     zcat $s \
     | awk -F\| '{ print $0 "\t" $0;  print $1 "\t" $0; if ($3 != "") { print $2 "\t" $0; } }' \
     | tawk '$1 != "RNA" && $1 !~ /\/RNA\// && $1 !~/^Germany\/Molecular_surveillance_of_SARS/ && \
