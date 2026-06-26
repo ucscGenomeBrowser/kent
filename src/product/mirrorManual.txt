@@ -1582,11 +1582,12 @@ To turn on the FreeType font rendering you need to add this line to your hg.conf
 
     freeType=on
 
-By default, the Genome Browser looks in the directory 
+By default, the Genome Browser looks in the directory
 
-    /usr/share/fonts/default/Type1 
+    ../htdocs/urw-fonts
 
-for the font files it expects to find. If you have these fonts in a different directory, you need
+for the font files it expects to find. (This path is relative to the CGI working
+directory, so it resolves to the shared htdocs/urw-fonts directory.) If you have these fonts in a different directory, you need
 to add this line to your hg.conf file:
 
     freeTypeDir='<apache accessible directory path with fonts in it>'
@@ -1614,6 +1615,48 @@ The names of the font files that the Genome Browser expects and their md5sums ar
     f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
     f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
     30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb
+
+# Adding a new font to the Genome Browser display
+
+The fonts offered in the hgTracks "configure" page Font menu are defined in a
+table in the source code: the `freeTypeFonts[]` array in
+[`src/hg/hgTracks/config.c`](https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c).
+Adding a font is therefore a source code change, and
+you will need to rebuild the CGIs afterward (see "Building the kent source tree",
+below). There are two steps.
+
+1.  Put the font file where the rendering engine can find it. At run time the
+    file is looked up under the directory given by the `freeTypeDir` setting in
+    hg.conf, which defaults to `../htdocs/urw-fonts`. That path is relative to the
+    CGI working directory, so it resolves to the shared `htdocs/urw-fonts`
+    directory even when you run from a per-user sandbox; you do not need a copy
+    under your own htdocs. Both Type1 (`.pfb`) and TrueType (`.ttf`) font files
+    are supported.
+
+2.  Add a row to the `freeTypeFonts[]` table in `src/hg/hgTracks/config.c`,
+    giving the name to display and the font file name, for example:
+
+        {"Lexend",      "Lexend-Regular.ttf"},
+        {"Lexend-Bold", "Lexend-Bold.ttf"},
+
+    The name is what appears in the configure-page Font menu. The configure page
+    splits the name on the first "-" into a face and a style: the part before the
+    "-" is the face shown in the Font menu, and the part after is an entry in the
+    Style menu. A plain weight is just the face name (Lexend); a variant is
+    written as Face-Style (Lexend-Bold). Group a face's variants on consecutive
+    rows so the Style menu lists them together.
+
+A couple of things to watch out for:
+
+- Avoid variable fonts (for example InterVariable.ttf). The engine opens face
+  index 0 with no named instance selected, so a variable font renders only its
+  default master, which is usually not the weight you expected. The symptom is
+  that the new option appears in the menu but a different font is drawn. Use a
+  static, single-weight file instead (for example Inter-Regular.ttf).
+
+- The menu name must match the table exactly, including the face/style split
+  described above. If a selected name matches no row in the table, the browser
+  silently falls back to the old bitmap font engine.
 
 # Building the kent source tree.
 
