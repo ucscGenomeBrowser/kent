@@ -32,6 +32,7 @@
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
 <h6><a href='#using-freetype-font-support-for-anti-aliased-text'>Using FreeType font support for anti-aliased text</a></h6>
+<h6><a href='#adding-a-new-font-to-the-genome-browser-display'>Adding a new font to the Genome Browser display</a></h6>
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
 <h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
 <h6><a href='#make-the-api-work-in-the-same-way-as-on-the-public-website'>Make the API work in the same way as on the public website</a></h6>
@@ -2157,10 +2158,11 @@ To turn on the FreeType font rendering you need to add this line to your hg.conf
 By default, the Genome Browser looks in the directory
 </p>
 
-<pre><code>/usr/share/fonts/default/Type1 </code></pre>
+<pre><code>../htdocs/urw-fonts</code></pre>
 
 <p>
-for the font files it expects to find. If you have these fonts in a different directory, you need
+for the font files it expects to find. (This path is relative to the CGI working
+directory, so it resolves to the shared htdocs/urw-fonts directory.) If you have these fonts in a different directory, you need
 to add this line to your hg.conf file:
 </p>
 
@@ -2191,6 +2193,66 @@ e97c9af68414fabe157af711b7691df7  n022004l.pfb
 f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
 f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
 30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb</code></pre>
+
+<a name='adding-a-new-font-to-the-genome-browser-display'></a>
+<h2>Adding a new font to the Genome Browser display</h2>
+
+<p>
+The fonts offered in the hgTracks &quot;configure&quot; page Font menu are defined in a
+table in the source code: the <code>freeTypeFonts[]</code> array in
+<code>src/hg/hgTracks/config.c</code>
+(<a href='https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c' title=''>view on GitHub</a>).
+Adding a font is therefore a source code change, and
+you will need to rebuild the CGIs afterward (see &quot;Building the kent source tree&quot;,
+below). There are two steps.
+</p>
+
+<ol>
+<li><p>
+Put the font file where the rendering engine can find it. At run time the
+file is looked up under the directory given by the <code>freeTypeDir</code> setting in
+hg.conf, which defaults to <code>../htdocs/urw-fonts</code>. That path is relative to the
+CGI working directory, so it resolves to the shared <code>htdocs/urw-fonts</code>
+directory even when you run from a per-user sandbox; you do not need a copy
+under your own htdocs. Both Type1 (<code>.pfb</code>) and TrueType (<code>.ttf</code>) font files
+are supported.
+</p></li>
+<li><p>
+Add a row to the <code>freeTypeFonts[]</code> table in <code>src/hg/hgTracks/config.c</code>,
+giving the name to display and the font file name, for example:
+</p>
+
+<pre><code>{&quot;Lexend&quot;,      &quot;Lexend-Regular.ttf&quot;},
+{&quot;Lexend-Bold&quot;, &quot;Lexend-Bold.ttf&quot;},</code></pre>
+
+<p>
+The name is what appears in the configure-page Font menu. The configure page
+splits the name on the first &quot;-&quot; into a face and a style: the part before the
+&quot;-&quot; is the face shown in the Font menu, and the part after is an entry in the
+Style menu. A plain weight is just the face name (Lexend); a variant is
+written as Face-Style (Lexend-Bold). Group a face&#39;s variants on consecutive
+rows so the Style menu lists them together.
+</p></li>
+</ol>
+
+<p>
+A couple of things to watch out for:
+</p>
+
+<ul>
+<li><p>
+Avoid variable fonts (for example InterVariable.ttf). The engine opens face
+index 0 with no named instance selected, so a variable font renders only its
+default master, which is usually not the weight you expected. The symptom is
+that the new option appears in the menu but a different font is drawn. Use a
+static, single-weight file instead (for example Inter-Regular.ttf).
+</p></li>
+<li><p>
+The menu name must match the table exactly, including the face/style split
+described above. If a selected name matches no row in the table, the browser
+silently falls back to the old bitmap font engine.
+</p></li>
+</ul>
 
 <a name='building-the-kent-source-tree'></a>
 <h2>Building the kent source tree.</h2>

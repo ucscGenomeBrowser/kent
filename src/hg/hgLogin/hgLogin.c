@@ -31,6 +31,7 @@
 #include "dystring.h"
 #include "autoUpgrade.h"
 #include "hCommon.h"
+#include "botDelay.h"
 
 #define EMAILSEP ";"
 
@@ -53,6 +54,9 @@ char returnAddr[256];
 char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser, 
     e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if 
     hg.conf login.relativeLink is on. */
+
+/* for earlyBotCheck() function at the beginning of main() */
+#define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -1377,6 +1381,7 @@ int main(int argc, char *argv[])
 {
 
 long enteredMainTime = clock1000();
+earlyBotCheck(enteredMainTime, "hgLogin", delayFraction, 0, 0, "html");
 pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 htmlSetStyleSheet("../style/userAccounts.css");

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-### from source tree: kent/src/hg/utils/otto/chainTables/toFromCount.sh
+### from source tree: kent/src/hg/utils/otto/chainTables/toFromCounts.sh
 ### otto cron job:
-### 11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCount.sh
+### 11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCounts.sh
 ###
 
 cd /hive/data/inside/GenArk/checkChainTables

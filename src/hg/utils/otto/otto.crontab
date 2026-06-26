@@ -134,6 +134,10 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 #    with a lock file.  It will email when it is doing that.
 03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
 
+### verify liftOverChain and quickLiftChain tables have
+###     identical fromDb,toDb pairs:
+11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCounts.sh
+
 #NCBI RefSeq
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
