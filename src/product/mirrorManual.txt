@@ -1620,7 +1620,8 @@ The names of the font files that the Genome Browser expects and their md5sums ar
 
 The fonts offered in the hgTracks "configure" page Font menu are defined in a
 table in the source code: the `freeTypeFonts[]` array in
-[`src/hg/hgTracks/config.c`](https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c).
+`src/hg/hgTracks/config.c`
+([view on GitHub](https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c)).
 Adding a font is therefore a source code change, and
 you will need to rebuild the CGIs afterward (see "Building the kent source tree",
 below). There are two steps.
