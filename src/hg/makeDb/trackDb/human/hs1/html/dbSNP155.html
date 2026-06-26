@@ -5,6 +5,24 @@ These two sets of variants are included together in this track. If you are inter
 <h2>Methods</h2>
 <p>We performed liftover using the GATK release 4.1.9 LiftoverVcf (Picard Version 2.23.3) tool with the default parameters. This successfully lifts over variants that map exactly from GRCh38 to T2T-CHM13v2.0 but does not recover variants with swapped reference and alternative alleles. To recover variants with swapped reference/alternative alleles, we ran LiftoverVCF again, with the <code>RECOVER_SWAPPED_REF_ALT</code> flag. Notably, this feature does not recover multiallelic variants, so to recover these variants, we first separated them into multiple biallelic variants, performed liftover using the <code>RECOVER_SWAPPED_REF_ALT</code> tag, and converted them back to their multiallelic representations.</p>
 
+<h2>Data Access</h2>
+<p>
+The variant data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu" target="_blank">REST
+API</a>, where the track name is <tt>dbSNP155</tt>.</p>
+<p>
+The underlying VCF file is available from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/dbSNP155/" target="_blank">download server</a> as
+<tt>chm13v2.0_dbSNPv155.vcf.gz</tt>.
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">mailing
+list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
 <h2>Contacts</h2>
 <ul>
   <li><a href="mailto:dtaylo95@jhu.edu">Dylan Taylor &lt;dtaylo95 at jhu.edu&gt;</a>
