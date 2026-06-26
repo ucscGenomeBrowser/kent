@@ -2198,7 +2198,7 @@ f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
 <h2>Adding a new font to the Genome Browser display</h2>
 
 <p>
-The fonts offered in the hgTracks &quot;configure&quot; page Font menu are defined in a
+The fonts offered in the hgTracks configure page&#39;s Font menu are defined in a
 table in the source code: the <code>freeTypeFonts[]</code> array in
 <code>src/hg/hgTracks/config.c</code>
 (<a href='https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c' title=''>view on GitHub</a>).
@@ -2230,7 +2230,7 @@ giving the name to display and the font file name, for example:
 {&quot;Lexend-Bold&quot;, &quot;Lexend-Bold.ttf&quot;},</code></pre>
 
 <p>
-The name is what appears in the configure-page Font menu. The configure page
+The name is what appears in the configure page&#39;s Font menu. The configure page
 splits the name on the first &quot;-&quot; into a face and a style: the part before the
 &quot;-&quot; is the face shown in the Font menu, and the part after is an entry in the
 Style menu. A plain weight is just the face name (Lexend); a variant is
@@ -2245,11 +2245,11 @@ A couple of things to watch out for:
 
 <ul>
 <li><p>
-Avoid variable fonts (for example InterVariable.ttf). The engine opens face
+Avoid variable fonts (e.g. InterVariable.ttf). The engine opens face
 index 0 with no named instance selected, so a variable font renders only its
 default master, which is usually not the weight you expected. The symptom is
 that the new option appears in the menu but a different font is drawn. Use a
-static, single-weight file instead (for example Inter-Regular.ttf).
+static, single-weight file instead (e.g. Inter-Regular.ttf).
 </p></li>
 <li><p>
 The menu name must match the table exactly, including the face/style split

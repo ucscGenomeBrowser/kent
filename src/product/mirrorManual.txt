@@ -1618,7 +1618,7 @@ The names of the font files that the Genome Browser expects and their md5sums ar
 
 # Adding a new font to the Genome Browser display
 
-The fonts offered in the hgTracks "configure" page Font menu are defined in a
+The fonts offered in the hgTracks configure page's Font menu are defined in a
 table in the source code: the `freeTypeFonts[]` array in
 `src/hg/hgTracks/config.c`
 ([view on GitHub](https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/hgTracks/config.c)).
@@ -1642,7 +1642,7 @@ Once you have a font file in hand, adding it takes just two steps:
         {"Lexend",      "Lexend-Regular.ttf"},
         {"Lexend-Bold", "Lexend-Bold.ttf"},
 
-    The name is what appears in the configure-page Font menu. The configure page
+    The name is what appears in the configure page's Font menu. The configure page
     splits the name on the first "-" into a face and a style: the part before the
     "-" is the face shown in the Font menu, and the part after is an entry in the
     Style menu. A plain weight is just the face name (Lexend); a variant is
@@ -1651,11 +1651,11 @@ Once you have a font file in hand, adding it takes just two steps:
 
 A couple of things to watch out for:
 
-- Avoid variable fonts (for example InterVariable.ttf). The engine opens face
+- Avoid variable fonts (e.g. InterVariable.ttf). The engine opens face
   index 0 with no named instance selected, so a variable font renders only its
   default master, which is usually not the weight you expected. The symptom is
   that the new option appears in the menu but a different font is drawn. Use a
-  static, single-weight file instead (for example Inter-Regular.ttf).
+  static, single-weight file instead (e.g. Inter-Regular.ttf).
 
 - The menu name must match the table exactly, including the face/style split
   described above. If a selected name matches no row in the table, the browser
