@@ -6871,7 +6871,8 @@ and is particularly useful for tracks with large numbers of categories.
 <p>Some data sets fit easily into the view- and subgroup-based organization scheme.  Other datasets, however,
 may consist of too many tracks to easily coerce into that structure, and may also benefit from mixing
 datasets with different underlying types (e.g. signals and peaks) together under the same heading.
-For those situations, a "faceted composite" track may be appropriate.</p>
+For those situations, a "faceted composite" track may be appropriate.  A discussion of this composite
+type with some worked examples is available <a href="../facetedComposite.html">here</a>.</p>
 <p>A faceted composite track is a composite with no views or subgroups to organize the subtracks.  Instead,
 the subtracks are organized by a list of facets drawn from an accompanying tsv (tab-separated values) file.
 These facets can be combined with an optional <code>dataTypes</code> setting to control which subtracks are
