@@ -21,7 +21,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/144.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: MDA-PCa-2a (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDA-PCa-2a (Prostate, Hi-C)
 
     track tads3dgb_32
     parent tads3dgb off
@@ -31,7 +31,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/32.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone26a mitotic (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone26a mitotic (Cervix, Hi-C)
 
     track tads3dgb_148
     parent tads3dgb off
@@ -41,7 +41,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/148.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 12h H5N1 mock (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 12h H5N1 mock (Blood, Hi-C)
 
     track tads3dgb_169
     parent tads3dgb off
@@ -51,7 +51,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/169.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H596 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H596 (Lung, Hi-C)
 
     track tads3dgb_25
     parent tads3dgb off
@@ -61,7 +61,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/25.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD4 20min stim (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD4 20min stim (Blood, Hi-C)
 
     track tads3dgb_327
     parent tads3dgb off
@@ -71,7 +71,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/327.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: RT-4 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RT-4 (Bladder, Hi-C)
 
     track tads3dgb_451
     parent tads3dgb off
@@ -81,7 +81,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/451.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 Control Merged MicroC (Colon, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 Control Merged MicroC (Colon, Micro-C)
 
     track tads3dgb_634
     parent tads3dgb off
@@ -91,7 +91,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/634.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: CIN-612 9E HPV31 rep2 (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CIN-612 9E HPV31 rep2 (Cervix, Hi-C)
 
     track tads3dgb_131
     parent tads3dgb off
@@ -101,7 +101,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/131.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: K-562 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> K-562 (Blood, Hi-C)
 
     track tads3dgb_337
     parent tads3dgb off
@@ -111,7 +111,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/337.bb
     color 145,144,99
     visibility dense
-    mouseOver 3DGB TAD domain: T990275 (Stomach, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T990275 (Stomach, Hi-C)
 
     track tads3dgb_289
     parent tads3dgb off
@@ -121,7 +121,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/289.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: DD1618 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DD1618 (Blood, Hi-C)
 
     track tads3dgb_192
     parent tads3dgb off
@@ -131,7 +131,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/192.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD6 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD6 (Lung, Hi-C)
 
     track tads3dgb_395
     parent tads3dgb off
@@ -141,7 +141,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/395.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-143-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-143-BL (Prostate, Hi-C)
 
     track tads3dgb_137
     parent tads3dgb off
@@ -151,7 +151,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/137.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LNCaP (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LNCaP (Prostate, Hi-C)
 
     track tads3dgb_459
     parent tads3dgb off
@@ -161,7 +161,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/459.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90-Control Merged MicroC (Lung, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90-Control Merged MicroC (Lung, Micro-C)
 
     track tads3dgb_402
     parent tads3dgb off
@@ -171,7 +171,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/402.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-170-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-170-BL (Prostate, Hi-C)
 
     track tads3dgb_13
     parent tads3dgb off
@@ -181,7 +181,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/13.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: BxPC-3 Lib2 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BxPC-3 Lib2 (Pancreas, Hi-C)
 
     track tads3dgb_455
     parent tads3dgb off
@@ -191,7 +191,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/455.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: HeLa-Control Merged MicroC (Cervix, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HeLa-Control Merged MicroC (Cervix, Micro-C)
 
     track tads3dgb_221
     parent tads3dgb off
@@ -201,7 +201,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/221.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C12AC84G1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C12AC84G1 (Brain, Hi-C)
 
     track tads3dgb_234
     parent tads3dgb off
@@ -211,7 +211,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/234.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C7C8E10 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C7C8E10 (Brain, Hi-C)
 
     track tads3dgb_211
     parent tads3dgb off
@@ -221,7 +221,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/211.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: RPMI-8226 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RPMI-8226 (Blood, Hi-C)
 
     track tads3dgb_456
     parent tads3dgb off
@@ -231,7 +231,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/456.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: HeLa-Nutlin Merged MicroC (Cervix, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HeLa-Nutlin Merged MicroC (Cervix, Micro-C)
 
     track tads3dgb_208
     parent tads3dgb off
@@ -241,7 +241,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/208.bb
     color 116,50,165
     visibility dense
-    mouseOver 3DGB TAD domain: Right Ventricle (Heart, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Right Ventricle (Heart, Hi-C)
 
     track tads3dgb_110
     parent tads3dgb off
@@ -251,7 +251,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/110.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE (Trachea, Hi-C)
 
     track tads3dgb_259
     parent tads3dgb off
@@ -261,7 +261,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/259.bb
     color 159,131,100
     visibility dense
-    mouseOver 3DGB TAD domain: TT (Esophagus, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> TT (Esophagus, Hi-C)
 
     track tads3dgb_122
     parent tads3dgb on
@@ -271,7 +271,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/122.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90 (Lung, Hi-C)
 
     track tads3dgb_398
     parent tads3dgb off
@@ -281,7 +281,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/398.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-149-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-149-BL (Prostate, Hi-C)
 
     track tads3dgb_465
     parent tads3dgb off
@@ -291,7 +291,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/465.bb
     color 121,147,150
     visibility dense
-    mouseOver 3DGB TAD domain: U2OS-Control Merged MicroC (Bone, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> U2OS-Control Merged MicroC (Bone, Micro-C)
 
     track tads3dgb_88
     parent tads3dgb off
@@ -301,7 +301,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/88.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 (Colon, Hi-C)
 
     track tads3dgb_215
     parent tads3dgb off
@@ -311,7 +311,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/215.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SF9427 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SF9427 (Brain, Hi-C)
 
     track tads3dgb_206
     parent tads3dgb off
@@ -321,7 +321,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/206.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: Retina 3 (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Retina 3 (Eye, Hi-C)
 
     track tads3dgb_252
     parent tads3dgb off
@@ -331,7 +331,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/252.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-ALL3 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-ALL3 (Blood, Hi-C)
 
     track tads3dgb_115
     parent tads3dgb off
@@ -341,7 +341,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/115.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 18h H5N1 mock (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 18h H5N1 mock (Trachea, Hi-C)
 
     track tads3dgb_375
     parent tads3dgb off
@@ -351,7 +351,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/375.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-097-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-097-PRO (Prostate, Hi-C)
 
     track tads3dgb_264
     parent tads3dgb off
@@ -361,7 +361,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/264.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: U-87MG (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> U-87MG (Brain, Hi-C)
 
     track tads3dgb_106
     parent tads3dgb off
@@ -371,7 +371,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/106.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: HPDE6c7 Lib3 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HPDE6c7 Lib3 (Pancreas, Hi-C)
 
     track tads3dgb_209
     parent tads3dgb off
@@ -381,7 +381,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/209.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: RPE choroid (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RPE choroid (Eye, Hi-C)
 
     track tads3dgb_249
     parent tads3dgb off
@@ -391,7 +391,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/249.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-47D (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-47D (Breast, Hi-C)
 
     track tads3dgb_9
     parent tads3dgb off
@@ -401,7 +401,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/9.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder (Bladder, Hi-C)
 
     track tads3dgb_236
     parent tads3dgb off
@@ -411,7 +411,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/236.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ WT rep1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ WT rep1 (Brain, Hi-C)
 
     track tads3dgb_244
     parent tads3dgb off
@@ -421,7 +421,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/244.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: Spinal Cord (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Spinal Cord (Nerve, Hi-C)
 
     track tads3dgb_154
     parent tads3dgb off
@@ -431,7 +431,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/154.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 6h H5N1 mock (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 6h H5N1 mock (Blood, Hi-C)
 
     track tads3dgb_352
     parent tads3dgb off
@@ -441,7 +441,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/352.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-037-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-037-BL (Prostate, Hi-C)
 
     track tads3dgb_159
     parent tads3dgb off
@@ -451,7 +451,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/159.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MOLM-13 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MOLM-13 (Blood, Hi-C)
 
     track tads3dgb_381
     parent tads3dgb off
@@ -461,7 +461,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/381.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-119-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-119-PRO (Prostate, Hi-C)
 
     track tads3dgb_653
     parent tads3dgb off
@@ -471,7 +471,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/653.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H660 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H660 (Prostate, Hi-C)
 
     track tads3dgb_417
     parent tads3dgb off
@@ -481,7 +481,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/417.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PR-120-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PR-120-BL (Prostate, Hi-C)
 
     track tads3dgb_462
     parent tads3dgb off
@@ -491,7 +491,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/462.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MCF-7-Nutlin Merged MicroC (Breast, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> MCF-7-Nutlin Merged MicroC (Breast, Micro-C)
 
     track tads3dgb_353
     parent tads3dgb off
@@ -501,7 +501,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/353.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-040-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-040-BL (Prostate, Hi-C)
 
     track tads3dgb_142
     parent tads3dgb off
@@ -511,7 +511,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/142.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDA-MB-436 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDA-MB-436 (Breast, Hi-C)
 
     track tads3dgb_341
     parent tads3dgb off
@@ -521,7 +521,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/341.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-009-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-009-BL (Prostate, Hi-C)
 
     track tads3dgb_45
     parent tads3dgb off
@@ -531,7 +531,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/45.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DU145 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DU145 (Prostate, Hi-C)
 
     track tads3dgb_128
     parent tads3dgb off
@@ -541,7 +541,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/128.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: K-562 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> K-562 (Blood, Hi-C)
 
     track tads3dgb_405
     parent tads3dgb off
@@ -551,7 +551,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/405.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-176-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-176-BL (Prostate, Hi-C)
 
     track tads3dgb_333
     parent tads3dgb off
@@ -561,7 +561,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/333.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: SW480 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SW480 (Colon, Hi-C)
 
     track tads3dgb_76
     parent tads3dgb off
@@ -571,7 +571,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/76.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HAP1 Wapl KO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HAP1 Wapl KO (Blood, Hi-C)
 
     track tads3dgb_248
     parent tads3dgb off
@@ -581,7 +581,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/248.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: SW626 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SW626 (Colon, Hi-C)
 
     track tads3dgb_191
     parent tads3dgb off
@@ -591,7 +591,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/191.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD5 siNT4 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD5 siNT4 (Lung, Hi-C)
 
     track tads3dgb_430
     parent tads3dgb off
@@ -601,7 +601,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/430.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Jurkat MicroC (Blood, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> Jurkat MicroC (Blood, Micro-C)
 
     track tads3dgb_255
     parent tads3dgb off
@@ -611,7 +611,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/255.bb
     color 255,37,41
     visibility dense
-    mouseOver 3DGB TAD domain: TeloHAEC 0h (Blood vessel, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> TeloHAEC 0h (Blood vessel, Hi-C)
 
     track tads3dgb_351
     parent tads3dgb off
@@ -621,7 +621,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/351.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-036-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-036-BL (Prostate, Hi-C)
 
     track tads3dgb_165
     parent tads3dgb off
@@ -631,7 +631,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/165.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H1573 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H1573 (Lung, Hi-C)
 
     track tads3dgb_660
     parent tads3dgb off
@@ -641,7 +641,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/660.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 173.1 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 173.1 (Prostate, Hi-C)
 
     track tads3dgb_87
     parent tads3dgb off
@@ -651,7 +651,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/87.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC70 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC70 (Breast, Hi-C)
 
     track tads3dgb_247
     parent tads3dgb off
@@ -661,7 +661,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/247.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: SW480 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SW480 (Colon, Hi-C)
 
     track tads3dgb_257
     parent tads3dgb off
@@ -671,7 +671,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/257.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: THP-1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> THP-1 (Blood, Hi-C)
 
     track tads3dgb_117
     parent tads3dgb off
@@ -681,7 +681,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/117.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 6h H5N1 (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 6h H5N1 (Trachea, Hi-C)
 
     track tads3dgb_334
     parent tads3dgb off
@@ -691,7 +691,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/334.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: SW780 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SW780 (Bladder, Hi-C)
 
     track tads3dgb_364
     parent tads3dgb off
@@ -701,7 +701,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/364.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-074-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-074-BL (Prostate, Hi-C)
 
     track tads3dgb_243
     parent tads3dgb off
@@ -711,7 +711,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/243.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: SNU-C1 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SNU-C1 (Colon, Hi-C)
 
     track tads3dgb_702
     parent tads3dgb off
@@ -721,7 +721,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/702.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 CT rep1 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 CT rep1 (Lung, Hi-C)
 
     track tads3dgb_120
     parent tads3dgb off
@@ -731,7 +731,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/120.bb
     color 255,37,41
     visibility dense
-    mouseOver 3DGB TAD domain: HUVEC (Blood vessel, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HUVEC (Blood vessel, Hi-C)
 
     track tads3dgb_238
     parent tads3dgb off
@@ -741,7 +741,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/238.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ WT rep3 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ WT rep3 (Brain, Hi-C)
 
     track tads3dgb_53
     parent tads3dgb off
@@ -751,7 +751,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/53.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: ETP-ALL2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> ETP-ALL2 (Blood, Hi-C)
 
     track tads3dgb_323
     parent tads3dgb off
@@ -761,7 +761,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/323.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: OCI-AML-3 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OCI-AML-3 (Blood, Hi-C)
 
     track tads3dgb_416
     parent tads3dgb off
@@ -771,7 +771,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/416.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PR-095-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PR-095-BL (Prostate, Hi-C)
 
     track tads3dgb_216
     parent tads3dgb off
@@ -781,7 +781,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/216.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: SJCRH30 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SJCRH30 (Lung, Hi-C)
 
     track tads3dgb_360
     parent tads3dgb off
@@ -791,7 +791,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/360.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-063-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-063-BL (Prostate, Hi-C)
 
     track tads3dgb_443
     parent tads3dgb off
@@ -801,7 +801,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/443.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: DLD-1 WT (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DLD-1 WT (Colon, Hi-C)
 
     track tads3dgb_171
     parent tads3dgb off
@@ -811,7 +811,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/171.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-minus H2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-minus H2 (Brain, Hi-C)
 
     track tads3dgb_70
     parent tads3dgb off
@@ -821,7 +821,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/70.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-NPC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-NPC (Embryo, Hi-C)
 
     track tads3dgb_200
     parent tads3dgb off
@@ -831,7 +831,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/200.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PrEC (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PrEC (Prostate, Hi-C)
 
     track tads3dgb_326
     parent tads3dgb off
@@ -841,7 +841,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/326.bb
     color 161,126,151
     visibility dense
-    mouseOver 3DGB TAD domain: RMG-1 (Ovary, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RMG-1 (Ovary, Hi-C)
 
     track tads3dgb_4
     parent tads3dgb off
@@ -851,7 +851,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/4.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 (Lung, Hi-C)
 
     track tads3dgb_411
     parent tads3dgb off
@@ -861,7 +861,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/411.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-259-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-259-BL (Prostate, Hi-C)
 
     track tads3dgb_75
     parent tads3dgb off
@@ -871,7 +871,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/75.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HAP1 Scc4 KO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HAP1 Scc4 KO (Blood, Hi-C)
 
     track tads3dgb_145
     parent tads3dgb off
@@ -881,7 +881,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/145.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: MDA-PCa-2b (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDA-PCa-2b (Prostate, Hi-C)
 
     track tads3dgb_5
     parent tads3dgb off
@@ -891,7 +891,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/5.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: A2058 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A2058 (Skin, Hi-C)
 
     track tads3dgb_178
     parent tads3dgb off
@@ -901,7 +901,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/178.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: Neural Retina (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Neural Retina (Eye, Hi-C)
 
     track tads3dgb_212
     parent tads3dgb off
@@ -911,7 +911,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/212.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: RPMI-8402 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RPMI-8402 (Blood, Hi-C)
 
     track tads3dgb_227
     parent tads3dgb off
@@ -921,7 +921,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/227.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C5C83G2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C5C83G2 (Brain, Hi-C)
 
     track tads3dgb_293
     parent tads3dgb off
@@ -931,7 +931,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/293.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: FY1199 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> FY1199 (Blood, Hi-C)
 
     track tads3dgb_278
     parent tads3dgb off
@@ -941,7 +941,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/278.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: BLaER (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BLaER (Blood, Hi-C)
 
     track tads3dgb_283
     parent tads3dgb off
@@ -951,7 +951,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/283.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3412 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3412 (Colon, Hi-C)
 
     track tads3dgb_651
     parent tads3dgb off
@@ -961,7 +961,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/651.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 145.2 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 145.2 (Prostate, Hi-C)
 
     track tads3dgb_177
     parent tads3dgb off
@@ -971,7 +971,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/177.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-plus H4 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-plus H4 (Brain, Hi-C)
 
     track tads3dgb_286
     parent tads3dgb off
@@ -981,7 +981,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/286.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: C4-2B (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> C4-2B (Prostate, Hi-C)
 
     track tads3dgb_153
     parent tads3dgb off
@@ -991,7 +991,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/153.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 6h H5N1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 6h H5N1 (Blood, Hi-C)
 
     track tads3dgb_696
     parent tads3dgb off
@@ -1001,7 +1001,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/696.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868D 1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868D 1 (Embryo, Hi-C)
 
     track tads3dgb_396
     parent tads3dgb off
@@ -1011,7 +1011,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/396.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-146-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-146-BL (Prostate, Hi-C)
 
     track tads3dgb_318
     parent tads3dgb off
@@ -1021,7 +1021,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/318.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH5328 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH5328 (Colon, Hi-C)
 
     track tads3dgb_181
     parent tads3dgb off
@@ -1031,7 +1031,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/181.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NK Cell (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NK Cell (Blood, Hi-C)
 
     track tads3dgb_325
     parent tads3dgb off
@@ -1041,7 +1041,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/325.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: RKO (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RKO (Colon, Hi-C)
 
     track tads3dgb_315
     parent tads3dgb off
@@ -1051,7 +1051,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/315.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH2231 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH2231 (Colon, Hi-C)
 
     track tads3dgb_60
     parent tads3dgb off
@@ -1061,7 +1061,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/60.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Glioblastoma G567 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Glioblastoma G567 (Brain, Hi-C)
 
     track tads3dgb_48
     parent tads3dgb off
@@ -1071,7 +1071,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/48.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: Epidermal Keratinocyte day0 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Epidermal Keratinocyte day0 (Skin, Hi-C)
 
     track tads3dgb_121
     parent tads3dgb off
@@ -1081,7 +1081,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/121.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90 (Lung, Hi-C)
 
     track tads3dgb_129
     parent tads3dgb off
@@ -1091,7 +1091,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/129.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: K-562 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> K-562 (Blood, Hi-C)
 
     track tads3dgb_452
     parent tads3dgb off
@@ -1101,7 +1101,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/452.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116-Nutlin Merged MicroC (Colon, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116-Nutlin Merged MicroC (Colon, Micro-C)
 
     track tads3dgb_697
     parent tads3dgb off
@@ -1111,7 +1111,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/697.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868D 2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868D 2 (Embryo, Hi-C)
 
     track tads3dgb_112
     parent tads3dgb off
@@ -1121,7 +1121,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/112.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 12h H5N1 mock (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 12h H5N1 mock (Trachea, Hi-C)
 
     track tads3dgb_407
     parent tads3dgb off
@@ -1131,7 +1131,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/407.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-183-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-183-BL (Prostate, Hi-C)
 
     track tads3dgb_123
     parent tads3dgb off
@@ -1141,7 +1141,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/123.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90 Flavopiridol (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90 Flavopiridol (Lung, Hi-C)
 
     track tads3dgb_387
     parent tads3dgb off
@@ -1151,7 +1151,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/387.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-128-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-128-BL (Prostate, Hi-C)
 
     track tads3dgb_205
     parent tads3dgb off
@@ -1161,7 +1161,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/205.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: Retina 2 (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Retina 2 (Eye, Hi-C)
 
     track tads3dgb_332
     parent tads3dgb off
@@ -1171,7 +1171,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/332.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: SNU-C1 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SNU-C1 (Colon, Hi-C)
 
     track tads3dgb_162
     parent tads3dgb off
@@ -1181,7 +1181,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/162.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MV4-11 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MV4-11 (Blood, Hi-C)
 
     track tads3dgb_51
     parent tads3dgb off
@@ -1191,7 +1191,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/51.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Erythroid Progenitor (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Erythroid Progenitor (Blood, Hi-C)
 
     track tads3dgb_271
     parent tads3dgb off
@@ -1201,7 +1201,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/271.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 (Lung, Hi-C)
 
     track tads3dgb_73
     parent tads3dgb off
@@ -1211,7 +1211,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/73.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HAP1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HAP1 (Blood, Hi-C)
 
     track tads3dgb_67
     parent tads3dgb on
@@ -1221,7 +1221,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/67.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-ESC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-ESC (Embryo, Hi-C)
 
     track tads3dgb_372
     parent tads3dgb off
@@ -1231,7 +1231,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/372.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-091-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-091-BL (Prostate, Hi-C)
 
     track tads3dgb_245
     parent tads3dgb off
@@ -1241,7 +1241,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/245.bb
     color 136,157,97
     visibility dense
-    mouseOver 3DGB TAD domain: Spleen (Spleen, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Spleen (Spleen, Hi-C)
 
     track tads3dgb_81
     parent tads3dgb off
@@ -1251,7 +1251,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/81.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1806 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1806 (Breast, Hi-C)
 
     track tads3dgb_166
     parent tads3dgb off
@@ -1261,7 +1261,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/166.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H1975 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H1975 (Lung, Hi-C)
 
     track tads3dgb_316
     parent tads3dgb off
@@ -1271,7 +1271,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/316.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH2834 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH2834 (Colon, Hi-C)
 
     track tads3dgb_290
     parent tads3dgb off
@@ -1281,7 +1281,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/290.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: DIPG-3810 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DIPG-3810 (Brain, Hi-C)
 
     track tads3dgb_109
     parent tads3dgb off
@@ -1291,7 +1291,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/109.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HSPC (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HSPC (Blood, Hi-C)
 
     track tads3dgb_52
     parent tads3dgb off
@@ -1301,7 +1301,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/52.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: ETP-ALL1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> ETP-ALL1 (Blood, Hi-C)
 
     track tads3dgb_40
     parent tads3dgb off
@@ -1311,7 +1311,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/40.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CUTLL1 THZ1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CUTLL1 THZ1 (Blood, Hi-C)
 
     track tads3dgb_367
     parent tads3dgb off
@@ -1321,7 +1321,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/367.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-080-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-080-PRO (Prostate, Hi-C)
 
     track tads3dgb_72
     parent tads3dgb off
@@ -1331,7 +1331,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/72.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H9 ESC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H9 ESC (Embryo, Hi-C)
 
     track tads3dgb_704
     parent tads3dgb off
@@ -1341,7 +1341,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/704.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 KO rep1 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 KO rep1 (Lung, Hi-C)
 
     track tads3dgb_388
     parent tads3dgb off
@@ -1351,7 +1351,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/388.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-129-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-129-BL (Prostate, Hi-C)
 
     track tads3dgb_127
     parent tads3dgb off
@@ -1361,7 +1361,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/127.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Jurkat DMSO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Jurkat DMSO (Blood, Hi-C)
 
     track tads3dgb_7
     parent tads3dgb off
@@ -1371,7 +1371,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/7.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Astrocyte Cerebellum (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Astrocyte Cerebellum (Brain, Hi-C)
 
     track tads3dgb_251
     parent tads3dgb off
@@ -1381,7 +1381,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/251.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-ALL2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-ALL2 (Blood, Hi-C)
 
     track tads3dgb_379
     parent tads3dgb off
@@ -1391,7 +1391,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/379.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-110-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-110-BL (Prostate, Hi-C)
 
     track tads3dgb_330
     parent tads3dgb off
@@ -1401,7 +1401,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/330.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-MC (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-MC (Brain, Hi-C)
 
     track tads3dgb_47
     parent tads3dgb off
@@ -1411,7 +1411,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/47.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DU4475 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DU4475 (Prostate, Hi-C)
 
     track tads3dgb_397
     parent tads3dgb off
@@ -1421,7 +1421,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/397.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-148-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-148-BL (Prostate, Hi-C)
 
     track tads3dgb_279
     parent tads3dgb off
@@ -1431,7 +1431,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/279.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3162 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3162 (Colon, Hi-C)
 
     track tads3dgb_336
     parent tads3dgb off
@@ -1441,7 +1441,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/336.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: T47-D (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T47-D (Breast, Hi-C)
 
     track tads3dgb_414
     parent tads3dgb off
@@ -1451,7 +1451,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/414.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PR-056-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PR-056-BL (Prostate, Hi-C)
 
     track tads3dgb_427
     parent tads3dgb off
@@ -1461,7 +1461,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/427.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-hESC MicroC (Embryo, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-hESC MicroC (Embryo, Micro-C)
 
     track tads3dgb_447
     parent tads3dgb off
@@ -1471,7 +1471,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/447.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549-Control Merged MicroC (Lung, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549-Control Merged MicroC (Lung, Micro-C)
 
     track tads3dgb_298
     parent tads3dgb off
@@ -1481,7 +1481,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/298.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: GB238 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GB238 (Brain, Hi-C)
 
     track tads3dgb_356
     parent tads3dgb off
@@ -1491,7 +1491,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/356.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-055-PRO2 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-055-PRO2 (Prostate, Hi-C)
 
     track tads3dgb_38
     parent tads3dgb off
@@ -1501,7 +1501,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/38.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CUTLL1 DMSO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CUTLL1 DMSO (Blood, Hi-C)
 
     track tads3dgb_346
     parent tads3dgb off
@@ -1511,7 +1511,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/346.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-022-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-022-BL (Prostate, Hi-C)
 
     track tads3dgb_335
     parent tads3dgb off
@@ -1521,7 +1521,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/335.bb
     color 145,144,99
     visibility dense
-    mouseOver 3DGB TAD domain: T2000877 (Stomach, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T2000877 (Stomach, Hi-C)
 
     track tads3dgb_74
     parent tads3dgb off
@@ -1531,7 +1531,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/74.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HAP1 DKO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HAP1 DKO (Blood, Hi-C)
 
     track tads3dgb_186
     parent tads3dgb off
@@ -1541,7 +1541,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/186.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD0 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD0 (Lung, Hi-C)
 
     track tads3dgb_378
     parent tads3dgb off
@@ -1551,7 +1551,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/378.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-104-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-104-BL (Prostate, Hi-C)
 
     track tads3dgb_361
     parent tads3dgb off
@@ -1561,7 +1561,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/361.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-064-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-064-BL (Prostate, Hi-C)
 
     track tads3dgb_179
     parent tads3dgb off
@@ -1571,7 +1571,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/179.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NHA (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NHA (Brain, Hi-C)
 
     track tads3dgb_466
     parent tads3dgb off
@@ -1581,7 +1581,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/466.bb
     color 121,147,150
     visibility dense
-    mouseOver 3DGB TAD domain: U2OS-Nutlin Merged MicroC (Bone, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> U2OS-Nutlin Merged MicroC (Bone, Micro-C)
 
     track tads3dgb_412
     parent tads3dgb off
@@ -1591,7 +1591,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/412.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-265-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-265-PRO (Prostate, Hi-C)
 
     track tads3dgb_376
     parent tads3dgb off
@@ -1601,7 +1601,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/376.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-098-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-098-BL (Prostate, Hi-C)
 
     track tads3dgb_156
     parent tads3dgb off
@@ -1611,7 +1611,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/156.bb
     color 121,147,150
     visibility dense
-    mouseOver 3DGB TAD domain: MG-63 (Bone, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MG-63 (Bone, Hi-C)
 
     track tads3dgb_317
     parent tads3dgb off
@@ -1621,7 +1621,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/317.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH3535 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH3535 (Colon, Hi-C)
 
     track tads3dgb_265
     parent tads3dgb off
@@ -1631,7 +1631,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/265.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: VCaP (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> VCaP (Prostate, Hi-C)
 
     track tads3dgb_280
     parent tads3dgb off
@@ -1641,7 +1641,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/280.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3179 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3179 (Colon, Hi-C)
 
     track tads3dgb_90
     parent tads3dgb off
@@ -1651,7 +1651,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/90.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 amanitin (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 amanitin (Colon, Hi-C)
 
     track tads3dgb_312
     parent tads3dgb off
@@ -1661,7 +1661,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/312.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: LS174T (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LS174T (Colon, Hi-C)
 
     track tads3dgb_457
     parent tads3dgb off
@@ -1671,7 +1671,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/457.bb
     color 137,152,82
     visibility dense
-    mouseOver 3DGB TAD domain: HepG2-Control Merged MicroC (Liver, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HepG2-Control Merged MicroC (Liver, Micro-C)
 
     track tads3dgb_172
     parent tads3dgb off
@@ -1681,7 +1681,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/172.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-minus H3 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-minus H3 (Brain, Hi-C)
 
     track tads3dgb_311
     parent tads3dgb off
@@ -1691,7 +1691,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/311.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: LoVo (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LoVo (Colon, Hi-C)
 
     track tads3dgb_184
     parent tads3dgb off
@@ -1701,7 +1701,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/184.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NT LMNB1 1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NT LMNB1 1 (Blood, Hi-C)
 
     track tads3dgb_155
     parent tads3dgb off
@@ -1711,7 +1711,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/155.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 6h H5N1-UV (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 6h H5N1-UV (Blood, Hi-C)
 
     track tads3dgb_368
     parent tads3dgb off
@@ -1721,7 +1721,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/368.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-083-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-083-BL (Prostate, Hi-C)
 
     track tads3dgb_654
     parent tads3dgb off
@@ -1731,7 +1731,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/654.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 70CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 70CR (Prostate, Hi-C)
 
     track tads3dgb_242
     parent tads3dgb off
@@ -1741,7 +1741,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/242.bb
     color 98,98,41
     visibility dense
-    mouseOver 3DGB TAD domain: Small Intestine (Small intestine, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Small Intestine (Small intestine, Hi-C)
 
     track tads3dgb_101
     parent tads3dgb off
@@ -1751,7 +1751,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/101.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HL-60 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HL-60 (Blood, Hi-C)
 
     track tads3dgb_61
     parent tads3dgb off
@@ -1761,7 +1761,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/61.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Glioblastoma G583 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Glioblastoma G583 (Brain, Hi-C)
 
     track tads3dgb_108
     parent tads3dgb off
@@ -1771,7 +1771,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/108.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HSCP Canyon del (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HSCP Canyon del (Blood, Hi-C)
 
     track tads3dgb_220
     parent tads3dgb off
@@ -1781,7 +1781,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/220.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C12AC84E1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C12AC84E1 (Brain, Hi-C)
 
     track tads3dgb_294
     parent tads3dgb off
@@ -1791,7 +1791,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/294.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: GB176 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GB176 (Brain, Hi-C)
 
     track tads3dgb_232
     parent tads3dgb off
@@ -1801,7 +1801,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/232.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C7C8B1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C7C8B1 (Brain, Hi-C)
 
     track tads3dgb_273
     parent tads3dgb off
@@ -1811,7 +1811,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/273.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder Tumor T1 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder Tumor T1 (Bladder, Hi-C)
 
     track tads3dgb_139
     parent tads3dgb off
@@ -1821,7 +1821,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/139.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MAVER-1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MAVER-1 (Blood, Hi-C)
 
     track tads3dgb_428
     parent tads3dgb off
@@ -1831,7 +1831,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/428.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: HFFc6 MicroC (Skin, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HFFc6 MicroC (Skin, Micro-C)
 
     track tads3dgb_23
     parent tads3dgb off
@@ -1841,7 +1841,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/23.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CCRF-CEM (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CCRF-CEM (Blood, Hi-C)
 
     track tads3dgb_287
     parent tads3dgb off
@@ -1851,7 +1851,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/287.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: Caco-2 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Caco-2 (Colon, Hi-C)
 
     track tads3dgb_302
     parent tads3dgb off
@@ -1861,7 +1861,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/302.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 (Colon, Hi-C)
 
     track tads3dgb_58
     parent tads3dgb off
@@ -1871,7 +1871,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/58.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: Gar15-13 Vehicle (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Gar15-13 Vehicle (Breast, Hi-C)
 
     track tads3dgb_291
     parent tads3dgb off
@@ -1881,7 +1881,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/291.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: DLBCL (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DLBCL (Blood, Hi-C)
 
     track tads3dgb_404
     parent tads3dgb off
@@ -1891,7 +1891,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/404.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-173-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-173-BL (Prostate, Hi-C)
 
     track tads3dgb_285
     parent tads3dgb off
@@ -1901,7 +1901,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/285.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: BT-474 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BT-474 (Breast, Hi-C)
 
     track tads3dgb_46
     parent tads3dgb off
@@ -1911,7 +1911,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/46.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DU145 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DU145 (Prostate, Hi-C)
 
     track tads3dgb_253
     parent tads3dgb off
@@ -1921,7 +1921,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/253.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-ALL4 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-ALL4 (Blood, Hi-C)
 
     track tads3dgb_369
     parent tads3dgb off
@@ -1931,7 +1931,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/369.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-085-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-085-BL (Prostate, Hi-C)
 
     track tads3dgb_266
     parent tads3dgb off
@@ -1941,7 +1941,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/266.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: WSU-DLCL2 (Lymphoid tissue, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> WSU-DLCL2 (Lymphoid tissue, Hi-C)
 
     track tads3dgb_650
     parent tads3dgb off
@@ -1951,7 +1951,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/650.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 93 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 93 (Prostate, Hi-C)
 
     track tads3dgb_65
     parent tads3dgb off
@@ -1961,7 +1961,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/65.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-ESC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-ESC (Embryo, Hi-C)
 
     track tads3dgb_118
     parent tads3dgb off
@@ -1971,7 +1971,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/118.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 6h H5N1 mock (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 6h H5N1 mock (Trachea, Hi-C)
 
     track tads3dgb_85
     parent tads3dgb off
@@ -1981,7 +1981,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/85.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC2218 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC2218 (Breast, Hi-C)
 
     track tads3dgb_175
     parent tads3dgb off
@@ -1991,7 +1991,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/175.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-plus H2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-plus H2 (Brain, Hi-C)
 
     track tads3dgb_633
     parent tads3dgb off
@@ -2001,7 +2001,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/633.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: CIN-612 9E HPV31 rep1 (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CIN-612 9E HPV31 rep1 (Cervix, Hi-C)
 
     track tads3dgb_173
     parent tads3dgb off
@@ -2011,7 +2011,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/173.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-minus H4 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-minus H4 (Brain, Hi-C)
 
     track tads3dgb_406
     parent tads3dgb off
@@ -2021,7 +2021,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/406.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-176-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-176-PRO (Prostate, Hi-C)
 
     track tads3dgb_152
     parent tads3dgb off
@@ -2031,7 +2031,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/152.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 18h H5N1-UV (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 18h H5N1-UV (Blood, Hi-C)
 
     track tads3dgb_198
     parent tads3dgb off
@@ -2041,7 +2041,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/198.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: Pancreas (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Pancreas (Pancreas, Hi-C)
 
     track tads3dgb_300
     parent tads3dgb off
@@ -2051,7 +2051,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/300.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: H KA-507202 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H KA-507202 (Blood, Hi-C)
 
     track tads3dgb_700
     parent tads3dgb off
@@ -2061,7 +2061,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/700.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868N 2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868N 2 (Embryo, Hi-C)
 
     track tads3dgb_188
     parent tads3dgb off
@@ -2071,7 +2071,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/188.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD2 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD2 (Lung, Hi-C)
 
     track tads3dgb_41
     parent tads3dgb off
@@ -2081,7 +2081,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/41.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: DIPG-007 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DIPG-007 (Brain, Hi-C)
 
     track tads3dgb_149
     parent tads3dgb off
@@ -2091,7 +2091,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/149.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 12h H5N1-UV (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 12h H5N1-UV (Blood, Hi-C)
 
     track tads3dgb_322
     parent tads3dgb off
@@ -2101,7 +2101,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/322.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H526 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H526 (Lung, Hi-C)
 
     track tads3dgb_6
     parent tads3dgb off
@@ -2111,7 +2111,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/6.bb
     color 90,179,68
     visibility dense
-    mouseOver 3DGB TAD domain: Adrenal Gland (Adrenal gland, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Adrenal Gland (Adrenal gland, Hi-C)
 
     track tads3dgb_17
     parent tads3dgb off
@@ -2121,7 +2121,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/17.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: Capan-1 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Capan-1 (Pancreas, Hi-C)
 
     track tads3dgb_648
     parent tads3dgb off
@@ -2131,7 +2131,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/648.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LNCaP FOXA2-D21 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LNCaP FOXA2-D21 (Prostate, Hi-C)
 
     track tads3dgb_408
     parent tads3dgb off
@@ -2141,7 +2141,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/408.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-206-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-206-BL (Prostate, Hi-C)
 
     track tads3dgb_1
     parent tads3dgb off
@@ -2151,7 +2151,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/1.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: 007-dBET (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 007-dBET (Brain, Hi-C)
 
     track tads3dgb_77
     parent tads3dgb off
@@ -2161,7 +2161,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/77.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1187 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1187 (Breast, Hi-C)
 
     track tads3dgb_54
     parent tads3dgb off
@@ -2171,7 +2171,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/54.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: ETP-ALL3 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> ETP-ALL3 (Blood, Hi-C)
 
     track tads3dgb_343
     parent tads3dgb off
@@ -2181,7 +2181,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/343.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-019-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-019-BL (Prostate, Hi-C)
 
     track tads3dgb_24
     parent tads3dgb off
@@ -2191,7 +2191,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/24.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD4 1hr stim (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD4 1hr stim (Blood, Hi-C)
 
     track tads3dgb_460
     parent tads3dgb off
@@ -2201,7 +2201,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/460.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90-Nutlin Merged MicroC (Lung, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90-Nutlin Merged MicroC (Lung, Micro-C)
 
     track tads3dgb_49
     parent tads3dgb off
@@ -2211,7 +2211,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/49.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: Epidermal Keratinocyte day3 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Epidermal Keratinocyte day3 (Skin, Hi-C)
 
     track tads3dgb_348
     parent tads3dgb off
@@ -2221,7 +2221,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/348.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-032-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-032-BL (Prostate, Hi-C)
 
     track tads3dgb_314
     parent tads3dgb off
@@ -2231,7 +2231,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/314.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH1904 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH1904 (Colon, Hi-C)
 
     track tads3dgb_453
     parent tads3dgb off
@@ -2241,7 +2241,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/453.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: HEK293-Control Merged MicroC (Kidney, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HEK293-Control Merged MicroC (Kidney, Micro-C)
 
     track tads3dgb_694
     parent tads3dgb off
@@ -2251,7 +2251,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/694.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868N 2 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868N 2 (Nerve, Hi-C)
 
     track tads3dgb_69
     parent tads3dgb off
@@ -2261,7 +2261,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/69.bb
     color 138,135,169
     visibility dense
-    mouseOver 3DGB TAD domain: H1-MSC (Connective tissue, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-MSC (Connective tissue, Hi-C)
 
     track tads3dgb_213
     parent tads3dgb off
@@ -2271,7 +2271,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/213.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: RS Proliferative (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RS Proliferative (Lung, Hi-C)
 
     track tads3dgb_657
     parent tads3dgb off
@@ -2281,7 +2281,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/657.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 105CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 105CR (Prostate, Hi-C)
 
     track tads3dgb_695
     parent tads3dgb off
@@ -2291,7 +2291,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/695.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868N 3 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868N 3 (Nerve, Hi-C)
 
     track tads3dgb_365
     parent tads3dgb off
@@ -2301,7 +2301,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/365.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-077-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-077-PRO (Prostate, Hi-C)
 
     track tads3dgb_400
     parent tads3dgb off
@@ -2311,7 +2311,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/400.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-167-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-167-BL (Prostate, Hi-C)
 
     track tads3dgb_151
     parent tads3dgb off
@@ -2321,7 +2321,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/151.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 18h H5N1 mock (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 18h H5N1 mock (Blood, Hi-C)
 
     track tads3dgb_389
     parent tads3dgb off
@@ -2331,7 +2331,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/389.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-130-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-130-BL (Prostate, Hi-C)
 
     track tads3dgb_344
     parent tads3dgb off
@@ -2341,7 +2341,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/344.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-019-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-019-PRO (Prostate, Hi-C)
 
     track tads3dgb_463
     parent tads3dgb off
@@ -2351,7 +2351,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/463.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-SH-Control Merged MicroC (Brain, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-SH-Control Merged MicroC (Brain, Micro-C)
 
     track tads3dgb_202
     parent tads3dgb off
@@ -2361,7 +2361,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/202.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: REC-1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> REC-1 (Blood, Hi-C)
 
     track tads3dgb_89
     parent tads3dgb off
@@ -2371,7 +2371,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/89.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 5AZA treated (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 5AZA treated (Colon, Hi-C)
 
     track tads3dgb_258
     parent tads3dgb off
@@ -2381,7 +2381,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/258.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: THP-1 PMA (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> THP-1 PMA (Blood, Hi-C)
 
     track tads3dgb_269
     parent tads3dgb off
@@ -2391,7 +2391,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/269.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: 786-M1A (Kidney, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 786-M1A (Kidney, Hi-C)
 
     track tads3dgb_307
     parent tads3dgb off
@@ -2401,7 +2401,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/307.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: IMS-M2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMS-M2 (Blood, Hi-C)
 
     track tads3dgb_380
     parent tads3dgb off
@@ -2411,7 +2411,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/380.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-111-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-111-PRO (Prostate, Hi-C)
 
     track tads3dgb_55
     parent tads3dgb off
@@ -2421,7 +2421,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/55.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: ETP-ALL4 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> ETP-ALL4 (Blood, Hi-C)
 
     track tads3dgb_214
     parent tads3dgb off
@@ -2431,7 +2431,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/214.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: RS Senescent (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RS Senescent (Lung, Hi-C)
 
     track tads3dgb_195
     parent tads3dgb off
@@ -2441,7 +2441,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/195.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: PANC-1 Lib1 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PANC-1 Lib1 (Pancreas, Hi-C)
 
     track tads3dgb_79
     parent tads3dgb off
@@ -2451,7 +2451,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/79.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1569 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1569 (Breast, Hi-C)
 
     track tads3dgb_386
     parent tads3dgb off
@@ -2461,7 +2461,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/386.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-127-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-127-PRO (Prostate, Hi-C)
 
     track tads3dgb_329
     parent tads3dgb off
@@ -2471,7 +2471,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/329.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: SK-BR-3 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-BR-3 (Breast, Hi-C)
 
     track tads3dgb_170
     parent tads3dgb off
@@ -2481,7 +2481,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/170.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-minus H1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-minus H1 (Brain, Hi-C)
 
     track tads3dgb_160
     parent tads3dgb off
@@ -2491,7 +2491,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/160.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MOLM-13 WT (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MOLM-13 WT (Blood, Hi-C)
 
     track tads3dgb_246
     parent tads3dgb off
@@ -2501,7 +2501,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/246.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SW1088 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SW1088 (Brain, Hi-C)
 
     track tads3dgb_250
     parent tads3dgb off
@@ -2511,7 +2511,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/250.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-ALL1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-ALL1 (Blood, Hi-C)
 
     track tads3dgb_180
     parent tads3dgb off
@@ -2521,7 +2521,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/180.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: NHEK (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NHEK (Skin, Hi-C)
 
     track tads3dgb_190
     parent tads3dgb off
@@ -2531,7 +2531,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/190.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD5 siDNMT1 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD5 siDNMT1 (Lung, Hi-C)
 
     track tads3dgb_267
     parent tads3dgb off
@@ -2541,7 +2541,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/267.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: WSU-DLCL2 A485 treated (Lymphoid tissue, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> WSU-DLCL2 A485 treated (Lymphoid tissue, Hi-C)
 
     track tads3dgb_223
     parent tads3dgb off
@@ -2551,7 +2551,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/223.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C1C84E12 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C1C84E12 (Brain, Hi-C)
 
     track tads3dgb_324
     parent tads3dgb off
@@ -2561,7 +2561,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/324.bb
     color 159,131,100
     visibility dense
-    mouseOver 3DGB TAD domain: OE33 (Esophagus, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OE33 (Esophagus, Hi-C)
 
     track tads3dgb_224
     parent tads3dgb off
@@ -2571,7 +2571,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/224.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C1C89F4 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C1C89F4 (Brain, Hi-C)
 
     track tads3dgb_274
     parent tads3dgb off
@@ -2581,7 +2581,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/274.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder Tumor T2 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder Tumor T2 (Bladder, Hi-C)
 
     track tads3dgb_309
     parent tads3dgb off
@@ -2591,7 +2591,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/309.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Kasumi-1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Kasumi-1 (Blood, Hi-C)
 
     track tads3dgb_703
     parent tads3dgb off
@@ -2601,7 +2601,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/703.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 CT rep2 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 CT rep2 (Lung, Hi-C)
 
     track tads3dgb_646
     parent tads3dgb off
@@ -2611,7 +2611,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/646.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LNCaP FOXA2-D14 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LNCaP FOXA2-D14 (Prostate, Hi-C)
 
     track tads3dgb_692
     parent tads3dgb off
@@ -2621,7 +2621,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/692.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868D 3 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868D 3 (Nerve, Hi-C)
 
     track tads3dgb_201
     parent tads3dgb off
@@ -2631,7 +2631,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/201.bb
     color 137,135,170
     visibility dense
-    mouseOver 3DGB TAD domain: Psoas (Muscle, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Psoas (Muscle, Hi-C)
 
     track tads3dgb_297
     parent tads3dgb off
@@ -2641,7 +2641,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/297.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: GB183 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GB183 (Brain, Hi-C)
 
     track tads3dgb_18
     parent tads3dgb off
@@ -2651,7 +2651,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/18.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CB CD34 control 1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CB CD34 control 1 (Blood, Hi-C)
 
     track tads3dgb_370
     parent tads3dgb off
@@ -2661,7 +2661,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/370.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-090-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-090-BL (Prostate, Hi-C)
 
     track tads3dgb_305
     parent tads3dgb off
@@ -2671,7 +2671,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/305.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: HT-1376 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HT-1376 (Bladder, Hi-C)
 
     track tads3dgb_319
     parent tads3dgb off
@@ -2681,7 +2681,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/319.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: MGH8416 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MGH8416 (Colon, Hi-C)
 
     track tads3dgb_105
     parent tads3dgb off
@@ -2691,7 +2691,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/105.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: HPDE6c7 Lib1 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HPDE6c7 Lib1 (Pancreas, Hi-C)
 
     track tads3dgb_100
     parent tads3dgb off
@@ -2701,7 +2701,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/100.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HL-60 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HL-60 (Blood, Hi-C)
 
     track tads3dgb_64
     parent tads3dgb off
@@ -2711,7 +2711,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/64.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Granta (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Granta (Blood, Hi-C)
 
     track tads3dgb_450
     parent tads3dgb off
@@ -2721,7 +2721,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/450.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: GM12878-Nutlin Merged MicroC (Blood, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> GM12878-Nutlin Merged MicroC (Blood, Micro-C)
 
     track tads3dgb_701
     parent tads3dgb off
@@ -2731,7 +2731,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/701.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868N 3 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868N 3 (Embryo, Hi-C)
 
     track tads3dgb_98
     parent tads3dgb off
@@ -2741,7 +2741,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/98.bb
     color 137,152,82
     visibility dense
-    mouseOver 3DGB TAD domain: HepG2 (Liver, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HepG2 (Liver, Hi-C)
 
     track tads3dgb_233
     parent tads3dgb off
@@ -2751,7 +2751,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/233.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C7C8D9 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C7C8D9 (Brain, Hi-C)
 
     track tads3dgb_362
     parent tads3dgb off
@@ -2761,7 +2761,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/362.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-069-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-069-BL (Prostate, Hi-C)
 
     track tads3dgb_461
     parent tads3dgb off
@@ -2771,7 +2771,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/461.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MCF-7-Control Merged MicroC (Breast, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> MCF-7-Control Merged MicroC (Breast, Micro-C)
 
     track tads3dgb_204
     parent tads3dgb off
@@ -2781,7 +2781,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/204.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: Retina 1 (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Retina 1 (Eye, Hi-C)
 
     track tads3dgb_194
     parent tads3dgb off
@@ -2791,7 +2791,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/194.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: PANC-1 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PANC-1 (Pancreas, Hi-C)
 
     track tads3dgb_207
     parent tads3dgb off
@@ -2801,7 +2801,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/207.bb
     color 163,127,144
     visibility dense
-    mouseOver 3DGB TAD domain: Retina 4 (Eye, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Retina 4 (Eye, Hi-C)
 
     track tads3dgb_237
     parent tads3dgb off
@@ -2811,7 +2811,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/237.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ WT rep2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ WT rep2 (Brain, Hi-C)
 
     track tads3dgb_102
     parent tads3dgb off
@@ -2821,7 +2821,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/102.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HL-60 ATRA treated (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HL-60 ATRA treated (Blood, Hi-C)
 
     track tads3dgb_103
     parent tads3dgb on
@@ -2831,7 +2831,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/103.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HMEC (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HMEC (Breast, Hi-C)
 
     track tads3dgb_57
     parent tads3dgb off
@@ -2841,7 +2841,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/57.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: Gar15-13 Decitabine (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Gar15-13 Decitabine (Breast, Hi-C)
 
     track tads3dgb_403
     parent tads3dgb off
@@ -2851,7 +2851,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/403.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-172-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-172-BL (Prostate, Hi-C)
 
     track tads3dgb_141
     parent tads3dgb off
@@ -2861,7 +2861,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/141.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDA-MB-231 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDA-MB-231 (Breast, Hi-C)
 
     track tads3dgb_3
     parent tads3dgb off
@@ -2871,7 +2871,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/3.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: A-172 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-172 (Brain, Hi-C)
 
     track tads3dgb_107
     parent tads3dgb off
@@ -2881,7 +2881,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/107.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HS578T (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HS578T (Breast, Hi-C)
 
     track tads3dgb_174
     parent tads3dgb off
@@ -2891,7 +2891,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/174.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-plus H1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-plus H1 (Brain, Hi-C)
 
     track tads3dgb_454
     parent tads3dgb off
@@ -2901,7 +2901,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/454.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: HEK293-Nutlin Merged MicroC (Kidney, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HEK293-Nutlin Merged MicroC (Kidney, Micro-C)
 
     track tads3dgb_12
     parent tads3dgb off
@@ -2911,7 +2911,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/12.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: BxPC-3 Lib1 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BxPC-3 Lib1 (Pancreas, Hi-C)
 
     track tads3dgb_27
     parent tads3dgb off
@@ -2921,7 +2921,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/27.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD4 4hr stim (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD4 4hr stim (Blood, Hi-C)
 
     track tads3dgb_282
     parent tads3dgb off
@@ -2931,7 +2931,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/282.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3378 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3378 (Colon, Hi-C)
 
     track tads3dgb_28
     parent tads3dgb off
@@ -2941,7 +2941,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/28.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD4 unstim (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD4 unstim (Blood, Hi-C)
 
     track tads3dgb_14
     parent tads3dgb off
@@ -2951,7 +2951,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/14.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: BxPC-3 Lib3 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BxPC-3 Lib3 (Pancreas, Hi-C)
 
     track tads3dgb_383
     parent tads3dgb off
@@ -2961,7 +2961,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/383.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-125-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-125-BL (Prostate, Hi-C)
 
     track tads3dgb_394
     parent tads3dgb off
@@ -2971,7 +2971,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/394.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-141-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-141-BL (Prostate, Hi-C)
 
     track tads3dgb_691
     parent tads3dgb off
@@ -2981,7 +2981,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/691.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868D 2 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868D 2 (Nerve, Hi-C)
 
     track tads3dgb_277
     parent tads3dgb off
@@ -2991,7 +2991,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/277.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder Tumor T5 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder Tumor T5 (Bladder, Hi-C)
 
     track tads3dgb_366
     parent tads3dgb off
@@ -3001,7 +3001,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/366.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-080-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-080-BL (Prostate, Hi-C)
 
     track tads3dgb_448
     parent tads3dgb off
@@ -3011,7 +3011,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/448.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549-Nutlin Merged MicroC (Lung, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549-Nutlin Merged MicroC (Lung, Micro-C)
 
     track tads3dgb_239
     parent tads3dgb off
@@ -3021,7 +3021,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/239.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-MC (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-MC (Brain, Hi-C)
 
     track tads3dgb_126
     parent tads3dgb off
@@ -3031,7 +3031,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/126.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Jurkat (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Jurkat (Blood, Hi-C)
 
     track tads3dgb_86
     parent tads3dgb off
@@ -3041,7 +3041,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/86.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC38 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC38 (Breast, Hi-C)
 
     track tads3dgb_146
     parent tads3dgb off
@@ -3051,7 +3051,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/146.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM (Blood, Hi-C)
 
     track tads3dgb_196
     parent tads3dgb off
@@ -3061,7 +3061,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/196.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: PANC-1 Lib2 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PANC-1 Lib2 (Pancreas, Hi-C)
 
     track tads3dgb_410
     parent tads3dgb off
@@ -3071,7 +3071,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/410.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-222-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-222-BL (Prostate, Hi-C)
 
     track tads3dgb_62
     parent tads3dgb off
@@ -3081,7 +3081,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/62.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: GM06990 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GM06990 (Blood, Hi-C)
 
     track tads3dgb_183
     parent tads3dgb off
@@ -3091,7 +3091,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/183.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NT control 2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NT control 2 (Blood, Hi-C)
 
     track tads3dgb_304
     parent tads3dgb off
@@ -3101,7 +3101,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/304.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HL-60 S4 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HL-60 S4 (Blood, Hi-C)
 
     track tads3dgb_284
     parent tads3dgb off
@@ -3111,7 +3111,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/284.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3462 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3462 (Colon, Hi-C)
 
     track tads3dgb_393
     parent tads3dgb off
@@ -3121,7 +3121,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/393.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-140-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-140-BL (Prostate, Hi-C)
 
     track tads3dgb_157
     parent tads3dgb off
@@ -3131,7 +3131,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/157.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Mino-1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Mino-1 (Blood, Hi-C)
 
     track tads3dgb_328
     parent tads3dgb off
@@ -3141,7 +3141,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/328.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: SCaBER (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SCaBER (Bladder, Hi-C)
 
     track tads3dgb_308
     parent tads3dgb off
@@ -3151,7 +3151,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/308.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Jurkat (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Jurkat (Blood, Hi-C)
 
     track tads3dgb_150
     parent tads3dgb off
@@ -3161,7 +3161,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/150.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 18h H5N1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 18h H5N1 (Blood, Hi-C)
 
     track tads3dgb_161
     parent tads3dgb off
@@ -3171,7 +3171,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/161.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MOLT-4 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MOLT-4 (Blood, Hi-C)
 
     track tads3dgb_158
     parent tads3dgb off
@@ -3181,7 +3181,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/158.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: ML-2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> ML-2 (Blood, Hi-C)
 
     track tads3dgb_263
     parent tads3dgb off
@@ -3191,7 +3191,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/263.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: U266 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> U266 (Blood, Hi-C)
 
     track tads3dgb_82
     parent tads3dgb off
@@ -3201,7 +3201,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/82.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1937 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1937 (Breast, Hi-C)
 
     track tads3dgb_373
     parent tads3dgb off
@@ -3211,7 +3211,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/373.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-092-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-092-BL (Prostate, Hi-C)
 
     track tads3dgb_26
     parent tads3dgb off
@@ -3221,7 +3221,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/26.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD4 24hr stim (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD4 24hr stim (Blood, Hi-C)
 
     track tads3dgb_230
     parent tads3dgb off
@@ -3231,7 +3231,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/230.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C6C81G10 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C6C81G10 (Brain, Hi-C)
 
     track tads3dgb_20
     parent tads3dgb off
@@ -3241,7 +3241,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/20.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CB CD34 LMNB1 1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CB CD34 LMNB1 1 (Blood, Hi-C)
 
     track tads3dgb_390
     parent tads3dgb off
@@ -3251,7 +3251,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/390.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-135-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-135-BL (Prostate, Hi-C)
 
     track tads3dgb_288
     parent tads3dgb off
@@ -3261,7 +3261,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/288.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: CHP-212 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CHP-212 (Brain, Hi-C)
 
     track tads3dgb_187
     parent tads3dgb off
@@ -3271,7 +3271,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/187.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD10 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD10 (Lung, Hi-C)
 
     track tads3dgb_99
     parent tads3dgb off
@@ -3281,7 +3281,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/99.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Hippocampus (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Hippocampus (Brain, Hi-C)
 
     track tads3dgb_140
     parent tads3dgb off
@@ -3291,7 +3291,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/140.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MCF-10A (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MCF-10A (Breast, Hi-C)
 
     track tads3dgb_377
     parent tads3dgb off
@@ -3301,7 +3301,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/377.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-101-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-101-BL (Prostate, Hi-C)
 
     track tads3dgb_371
     parent tads3dgb off
@@ -3311,7 +3311,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/371.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-090-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-090-PRO (Prostate, Hi-C)
 
     track tads3dgb_399
     parent tads3dgb off
@@ -3321,7 +3321,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/399.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-156-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-156-BL (Prostate, Hi-C)
 
     track tads3dgb_44
     parent tads3dgb off
@@ -3331,7 +3331,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/44.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: DLPFC (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DLPFC (Brain, Hi-C)
 
     track tads3dgb_111
     parent tads3dgb off
@@ -3341,7 +3341,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/111.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 12h H5N1 (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 12h H5N1 (Trachea, Hi-C)
 
     track tads3dgb_303
     parent tads3dgb off
@@ -3351,7 +3351,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/303.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: HeLa-S3 (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HeLa-S3 (Cervix, Hi-C)
 
     track tads3dgb_71
     parent tads3dgb off
@@ -3361,7 +3361,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/71.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-TRO (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-TRO (Embryo, Hi-C)
 
     track tads3dgb_301
     parent tads3dgb off
@@ -3371,7 +3371,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/301.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HAP1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HAP1 (Blood, Hi-C)
 
     track tads3dgb_132
     parent tads3dgb off
@@ -3381,7 +3381,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/132.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Karpas-422 A485 treated (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Karpas-422 A485 treated (Blood, Hi-C)
 
     track tads3dgb_113
     parent tads3dgb off
@@ -3391,7 +3391,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/113.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 12h H5N1-UV (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 12h H5N1-UV (Trachea, Hi-C)
 
     track tads3dgb_268
     parent tads3dgb off
@@ -3401,7 +3401,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/268.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: 22Rv1 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 22Rv1 (Prostate, Hi-C)
 
     track tads3dgb_299
     parent tads3dgb off
@@ -3411,7 +3411,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/299.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: H KA-275786 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H KA-275786 (Blood, Hi-C)
 
     track tads3dgb_382
     parent tads3dgb off
@@ -3421,7 +3421,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/382.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-124-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-124-BL (Prostate, Hi-C)
 
     track tads3dgb_401
     parent tads3dgb off
@@ -3431,7 +3431,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/401.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-167-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-167-PRO (Prostate, Hi-C)
 
     track tads3dgb_659
     parent tads3dgb off
@@ -3441,7 +3441,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/659.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 167CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 167CR (Prostate, Hi-C)
 
     track tads3dgb_415
     parent tads3dgb off
@@ -3451,7 +3451,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/415.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PR-081-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PR-081-BL (Prostate, Hi-C)
 
     track tads3dgb_276
     parent tads3dgb off
@@ -3461,7 +3461,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/276.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder Tumor T4 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder Tumor T4 (Bladder, Hi-C)
 
     track tads3dgb_656
     parent tads3dgb off
@@ -3471,7 +3471,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/656.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 86.2CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 86.2CR (Prostate, Hi-C)
 
     track tads3dgb_21
     parent tads3dgb off
@@ -3481,7 +3481,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/21.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CBS-KO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CBS-KO (Blood, Hi-C)
 
     track tads3dgb_124
     parent tads3dgb off
@@ -3491,7 +3491,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/124.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-90 TNF-a (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-90 TNF-a (Lung, Hi-C)
 
     track tads3dgb_11
     parent tads3dgb off
@@ -3501,7 +3501,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/11.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: BT-549 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BT-549 (Breast, Hi-C)
 
     track tads3dgb_163
     parent tads3dgb off
@@ -3511,7 +3511,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/163.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H1437 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H1437 (Lung, Hi-C)
 
     track tads3dgb_655
     parent tads3dgb off
@@ -3521,7 +3521,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/655.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 77CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 77CR (Prostate, Hi-C)
 
     track tads3dgb_338
     parent tads3dgb off
@@ -3531,7 +3531,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/338.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-004-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-004-BL (Prostate, Hi-C)
 
     track tads3dgb_219
     parent tads3dgb off
@@ -3541,7 +3541,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/219.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C12AC82B6 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C12AC82B6 (Brain, Hi-C)
 
     track tads3dgb_80
     parent tads3dgb off
@@ -3551,7 +3551,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/80.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1599 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1599 (Breast, Hi-C)
 
     track tads3dgb_699
     parent tads3dgb off
@@ -3561,7 +3561,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/699.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868N 1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868N 1 (Embryo, Hi-C)
 
     track tads3dgb_96
     parent tads3dgb off
@@ -3571,7 +3571,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/96.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 RAD21-mAC auxin 6hr (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 RAD21-mAC auxin 6hr (Colon, Hi-C)
 
     track tads3dgb_68
     parent tads3dgb off
@@ -3581,7 +3581,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/68.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-MES (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-MES (Embryo, Hi-C)
 
     track tads3dgb_37
     parent tads3dgb off
@@ -3591,7 +3591,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/37.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Cortex DLPFC (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Cortex DLPFC (Brain, Hi-C)
 
     track tads3dgb_256
     parent tads3dgb off
@@ -3601,7 +3601,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/256.bb
     color 255,37,41
     visibility dense
-    mouseOver 3DGB TAD domain: TeloHAEC 4h (Blood vessel, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> TeloHAEC 4h (Blood vessel, Hi-C)
 
     track tads3dgb_197
     parent tads3dgb off
@@ -3611,7 +3611,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/197.bb
     color 175,100,41
     visibility dense
-    mouseOver 3DGB TAD domain: PANC-1 Lib3 (Pancreas, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PANC-1 Lib3 (Pancreas, Hi-C)
 
     track tads3dgb_705
     parent tads3dgb off
@@ -3621,7 +3621,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/705.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: A-549 KO rep2 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> A-549 KO rep2 (Lung, Hi-C)
 
     track tads3dgb_270
     parent tads3dgb off
@@ -3631,7 +3631,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/270.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: 786-O (Kidney, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 786-O (Kidney, Hi-C)
 
     track tads3dgb_10
     parent tads3dgb off
@@ -3641,7 +3641,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/10.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: BT-20 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BT-20 (Breast, Hi-C)
 
     track tads3dgb_43
     parent tads3dgb off
@@ -3651,7 +3651,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/43.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: DKO (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DKO (Colon, Hi-C)
 
     track tads3dgb_63
     parent tads3dgb on
@@ -3661,7 +3661,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/63.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: GM12878 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GM12878 (Blood, Hi-C)
 
     track tads3dgb_8
     parent tads3dgb off
@@ -3671,7 +3671,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/8.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: B-cells (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> B-cells (Blood, Hi-C)
 
     track tads3dgb_342
     parent tads3dgb off
@@ -3681,7 +3681,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/342.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-011-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-011-BL (Prostate, Hi-C)
 
     track tads3dgb_235
     parent tads3dgb off
@@ -3691,7 +3691,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/235.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C7C8E2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C7C8E2 (Brain, Hi-C)
 
     track tads3dgb_225
     parent tads3dgb off
@@ -3701,7 +3701,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/225.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C5BC89D4 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C5BC89D4 (Brain, Hi-C)
 
     track tads3dgb_349
     parent tads3dgb off
@@ -3711,7 +3711,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/349.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-034-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-034-BL (Prostate, Hi-C)
 
     track tads3dgb_116
     parent tads3dgb off
@@ -3721,7 +3721,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/116.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 18h H5N1-UV (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 18h H5N1-UV (Trachea, Hi-C)
 
     track tads3dgb_34
     parent tads3dgb off
@@ -3731,7 +3731,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/34.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone27b mitotic (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone27b mitotic (Cervix, Hi-C)
 
     track tads3dgb_42
     parent tads3dgb off
@@ -3741,7 +3741,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/42.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: DIPG-XIII (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DIPG-XIII (Brain, Hi-C)
 
     track tads3dgb_363
     parent tads3dgb off
@@ -3751,7 +3751,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/363.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-071-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-071-BL (Prostate, Hi-C)
 
     track tads3dgb_306
     parent tads3dgb off
@@ -3761,7 +3761,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/306.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: IMR-5 75 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> IMR-5 75 (Brain, Hi-C)
 
     track tads3dgb_30
     parent tads3dgb off
@@ -3771,7 +3771,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/30.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CESS (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CESS (Blood, Hi-C)
 
     track tads3dgb_310
     parent tads3dgb off
@@ -3781,7 +3781,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/310.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LNCaP (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LNCaP (Prostate, Hi-C)
 
     track tads3dgb_125
     parent tads3dgb off
@@ -3791,7 +3791,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/125.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: JeKo-1 (Lymphoid tissue, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> JeKo-1 (Lymphoid tissue, Hi-C)
 
     track tads3dgb_91
     parent tads3dgb off
@@ -3801,7 +3801,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/91.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 auxinamanitin (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 auxinamanitin (Colon, Hi-C)
 
     track tads3dgb_358
     parent tads3dgb off
@@ -3811,7 +3811,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/358.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-060-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-060-BL (Prostate, Hi-C)
 
     track tads3dgb_182
     parent tads3dgb off
@@ -3821,7 +3821,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/182.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NT control 1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NT control 1 (Blood, Hi-C)
 
     track tads3dgb_354
     parent tads3dgb off
@@ -3831,7 +3831,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/354.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-044-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-044-BL (Prostate, Hi-C)
 
     track tads3dgb_130
     parent tads3dgb off
@@ -3841,7 +3841,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/130.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: K-562 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> K-562 (Blood, Hi-C)
 
     track tads3dgb_240
     parent tads3dgb off
@@ -3851,7 +3851,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/240.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-SH (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-SH (Brain, Hi-C)
 
     track tads3dgb_254
     parent tads3dgb off
@@ -3861,7 +3861,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/254.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: T-cell (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> T-cell (Blood, Hi-C)
 
     track tads3dgb_384
     parent tads3dgb off
@@ -3871,7 +3871,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/384.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-126-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-126-BL (Prostate, Hi-C)
 
     track tads3dgb_35
     parent tads3dgb off
@@ -3881,7 +3881,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/35.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone27k async (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone27k async (Cervix, Hi-C)
 
     track tads3dgb_392
     parent tads3dgb off
@@ -3891,7 +3891,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/392.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-138-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-138-BL (Prostate, Hi-C)
 
     track tads3dgb_199
     parent tads3dgb off
@@ -3901,7 +3901,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/199.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PC3 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PC3 (Prostate, Hi-C)
 
     track tads3dgb_114
     parent tads3dgb off
@@ -3911,7 +3911,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/114.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 18h H5N1 (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 18h H5N1 (Trachea, Hi-C)
 
     track tads3dgb_698
     parent tads3dgb off
@@ -3921,7 +3921,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/698.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: NPCs D868D 3 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPCs D868D 3 (Embryo, Hi-C)
 
     track tads3dgb_272
     parent tads3dgb off
@@ -3931,7 +3931,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/272.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: AA86 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> AA86 (Brain, Hi-C)
 
     track tads3dgb_218
     parent tads3dgb off
@@ -3941,7 +3941,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/218.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-AS (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-AS (Brain, Hi-C)
 
     track tads3dgb_193
     parent tads3dgb off
@@ -3951,7 +3951,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/193.bb
     color 161,126,151
     visibility dense
-    mouseOver 3DGB TAD domain: Ovary (Ovary, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Ovary (Ovary, Hi-C)
 
     track tads3dgb_164
     parent tads3dgb off
@@ -3961,7 +3961,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/164.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H1563 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H1563 (Lung, Hi-C)
 
     track tads3dgb_133
     parent tads3dgb off
@@ -3971,7 +3971,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/133.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: KBM-7 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> KBM-7 (Blood, Hi-C)
 
     track tads3dgb_345
     parent tads3dgb off
@@ -3981,7 +3981,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/345.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-021-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-021-BL (Prostate, Hi-C)
 
     track tads3dgb_690
     parent tads3dgb off
@@ -3991,7 +3991,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/690.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868D 1 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868D 1 (Nerve, Hi-C)
 
     track tads3dgb_15
     parent tads3dgb off
@@ -4001,7 +4001,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/15.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: Caki-2 (Kidney, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Caki-2 (Kidney, Hi-C)
 
     track tads3dgb_119
     parent tads3dgb off
@@ -4011,7 +4011,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/119.bb
     color 194,123,160
     visibility dense
-    mouseOver 3DGB TAD domain: HTBE 6h H5N1-UV (Trachea, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HTBE 6h H5N1-UV (Trachea, Hi-C)
 
     track tads3dgb_391
     parent tads3dgb off
@@ -4021,7 +4021,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/391.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-135-PRO (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-135-PRO (Prostate, Hi-C)
 
     track tads3dgb_217
     parent tads3dgb off
@@ -4031,7 +4031,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/217.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: SK-MEL-5 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-MEL-5 (Skin, Hi-C)
 
     track tads3dgb_331
     parent tads3dgb off
@@ -4041,7 +4041,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/331.bb
     color 145,144,99
     visibility dense
-    mouseOver 3DGB TAD domain: SNU-16 (Stomach, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SNU-16 (Stomach, Hi-C)
 
     track tads3dgb_31
     parent tads3dgb off
@@ -4051,7 +4051,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/31.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone26a async (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone26a async (Cervix, Hi-C)
 
     track tads3dgb_228
     parent tads3dgb off
@@ -4061,7 +4061,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/228.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C6BC81A1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C6BC81A1 (Brain, Hi-C)
 
     track tads3dgb_658
     parent tads3dgb off
@@ -4071,7 +4071,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/658.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 147CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 147CR (Prostate, Hi-C)
 
     track tads3dgb_464
     parent tads3dgb off
@@ -4081,7 +4081,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/464.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-SH-Nutlin Merged MicroC (Brain, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-SH-Nutlin Merged MicroC (Brain, Micro-C)
 
     track tads3dgb_83
     parent tads3dgb off
@@ -4091,7 +4091,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/83.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC1954 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC1954 (Breast, Hi-C)
 
     track tads3dgb_340
     parent tads3dgb off
@@ -4101,7 +4101,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/340.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-008-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-008-BL (Prostate, Hi-C)
 
     track tads3dgb_385
     parent tads3dgb off
@@ -4111,7 +4111,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/385.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-127-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-127-BL (Prostate, Hi-C)
 
     track tads3dgb_222
     parent tads3dgb off
@@ -4121,7 +4121,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/222.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C12BC83A5 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C12BC83A5 (Brain, Hi-C)
 
     track tads3dgb_229
     parent tads3dgb off
@@ -4131,7 +4131,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/229.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C6BC81F2 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C6BC81F2 (Brain, Hi-C)
 
     track tads3dgb_409
     parent tads3dgb off
@@ -4141,7 +4141,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/409.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-218-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-218-BL (Prostate, Hi-C)
 
     track tads3dgb_647
     parent tads3dgb off
@@ -4151,7 +4151,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/647.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LNCaP FOXA2-D28 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LNCaP FOXA2-D28 (Prostate, Hi-C)
 
     track tads3dgb_66
     parent tads3dgb off
@@ -4161,7 +4161,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/66.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: H1-ESC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> H1-ESC (Embryo, Hi-C)
 
     track tads3dgb_16
     parent tads3dgb off
@@ -4171,7 +4171,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/16.bb
     color 161,126,151
     visibility dense
-    mouseOver 3DGB TAD domain: Caov-3 (Ovary, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Caov-3 (Ovary, Hi-C)
 
     track tads3dgb_189
     parent tads3dgb off
@@ -4181,7 +4181,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/189.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: OISD4 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> OISD4 (Lung, Hi-C)
 
     track tads3dgb_347
     parent tads3dgb off
@@ -4191,7 +4191,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/347.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-030-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-030-BL (Prostate, Hi-C)
 
     track tads3dgb_147
     parent tads3dgb off
@@ -4201,7 +4201,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/147.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDM 12h H5N1 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDM 12h H5N1 (Blood, Hi-C)
 
     track tads3dgb_320
     parent tads3dgb off
@@ -4211,7 +4211,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/320.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: MOLM-13 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MOLM-13 (Blood, Hi-C)
 
     track tads3dgb_36
     parent tads3dgb off
@@ -4221,7 +4221,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/36.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone27k mitotic (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone27k mitotic (Cervix, Hi-C)
 
     track tads3dgb_313
     parent tads3dgb off
@@ -4231,7 +4231,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/313.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MCF-7 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MCF-7 (Breast, Hi-C)
 
     track tads3dgb_59
     parent tads3dgb off
@@ -4241,7 +4241,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/59.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: Glioblastoma G523 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Glioblastoma G523 (Brain, Hi-C)
 
     track tads3dgb_231
     parent tads3dgb off
@@ -4251,7 +4251,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/231.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C6C83G1 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C6C83G1 (Brain, Hi-C)
 
     track tads3dgb_84
     parent tads3dgb off
@@ -4261,7 +4261,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/84.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: HCC2157 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCC2157 (Breast, Hi-C)
 
     track tads3dgb_138
     parent tads3dgb off
@@ -4271,7 +4271,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/138.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: Lung (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Lung (Lung, Hi-C)
 
     track tads3dgb_56
     parent tads3dgb off
@@ -4281,7 +4281,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/56.bb
     color 92,161,153
     visibility dense
-    mouseOver 3DGB TAD domain: G-401 (Kidney, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> G-401 (Kidney, Hi-C)
 
     track tads3dgb_0
     parent tads3dgb off
@@ -4291,7 +4291,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/0.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: 007-BRD4 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 007-BRD4 (Brain, Hi-C)
 
     track tads3dgb_350
     parent tads3dgb off
@@ -4301,7 +4301,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/350.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-035-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-035-BL (Prostate, Hi-C)
 
     track tads3dgb_210
     parent tads3dgb off
@@ -4311,7 +4311,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/210.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: RPMI-7951 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RPMI-7951 (Skin, Hi-C)
 
     track tads3dgb_33
     parent tads3dgb off
@@ -4321,7 +4321,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/33.bb
     color 186,111,165
     visibility dense
-    mouseOver 3DGB TAD domain: Clone27b async (Cervix, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Clone27b async (Cervix, Hi-C)
 
     track tads3dgb_39
     parent tads3dgb off
@@ -4331,7 +4331,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/39.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CUTLL1 gSI (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CUTLL1 gSI (Blood, Hi-C)
 
     track tads3dgb_167
     parent tads3dgb off
@@ -4341,7 +4341,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/167.bb
     color 130,163,45
     visibility dense
-    mouseOver 3DGB TAD domain: NCI-H460 (Lung, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NCI-H460 (Lung, Hi-C)
 
     track tads3dgb_19
     parent tads3dgb off
@@ -4351,7 +4351,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/19.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CB CD34 control 2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CB CD34 control 2 (Blood, Hi-C)
 
     track tads3dgb_652
     parent tads3dgb off
@@ -4361,7 +4361,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/652.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 147 (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 147 (Prostate, Hi-C)
 
     track tads3dgb_413
     parent tads3dgb off
@@ -4371,7 +4371,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/413.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: PR-040-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> PR-040-BL (Prostate, Hi-C)
 
     track tads3dgb_104
     parent tads3dgb off
@@ -4381,7 +4381,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/104.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: HOTTIP-KO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HOTTIP-KO (Blood, Hi-C)
 
     track tads3dgb_261
     parent tads3dgb off
@@ -4391,7 +4391,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/261.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: U-118MG (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> U-118MG (Brain, Hi-C)
 
     track tads3dgb_295
     parent tads3dgb off
@@ -4401,7 +4401,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/295.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: GB180 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GB180 (Brain, Hi-C)
 
     track tads3dgb_355
     parent tads3dgb off
@@ -4411,7 +4411,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/355.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-053-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-053-BL (Prostate, Hi-C)
 
     track tads3dgb_22
     parent tads3dgb off
@@ -4421,7 +4421,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/22.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CBS-KO-VP-HOTTIP (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CBS-KO-VP-HOTTIP (Blood, Hi-C)
 
     track tads3dgb_226
     parent tads3dgb off
@@ -4431,7 +4431,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/226.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-N-DZ C5C81F11 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-N-DZ C5C81F11 (Brain, Hi-C)
 
     track tads3dgb_359
     parent tads3dgb off
@@ -4441,7 +4441,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/359.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-061-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-061-BL (Prostate, Hi-C)
 
     track tads3dgb_29
     parent tads3dgb off
@@ -4451,7 +4451,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/29.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CD8 positive (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CD8 positive (Blood, Hi-C)
 
     track tads3dgb_292
     parent tads3dgb off
@@ -4461,7 +4461,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/292.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: DLD-1 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DLD-1 (Colon, Hi-C)
 
     track tads3dgb_143
     parent tads3dgb off
@@ -4471,7 +4471,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/143.bb
     color 65,171,173
     visibility dense
-    mouseOver 3DGB TAD domain: MDA-MB-468 (Breast, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> MDA-MB-468 (Breast, Hi-C)
 
     track tads3dgb_449
     parent tads3dgb off
@@ -4481,7 +4481,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/449.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: GM12878-Control Merged MicroC (Blood, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> GM12878-Control Merged MicroC (Blood, Micro-C)
 
     track tads3dgb_649
     parent tads3dgb off
@@ -4491,7 +4491,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/649.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: LuCaP 35CR (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> LuCaP 35CR (Prostate, Hi-C)
 
     track tads3dgb_339
     parent tads3dgb off
@@ -4501,7 +4501,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/339.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-005-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-005-BL (Prostate, Hi-C)
 
     track tads3dgb_693
     parent tads3dgb off
@@ -4511,7 +4511,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/693.bb
     color 160,156,0
     visibility dense
-    mouseOver 3DGB TAD domain: NPC-Derived Neurons D868N 1 (Nerve, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NPC-Derived Neurons D868N 1 (Nerve, Hi-C)
 
     track tads3dgb_262
     parent tads3dgb off
@@ -4521,7 +4521,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/262.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: U-343MG (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> U-343MG (Brain, Hi-C)
 
     track tads3dgb_50
     parent tads3dgb off
@@ -4531,7 +4531,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/50.bb
     color 127,133,209
     visibility dense
-    mouseOver 3DGB TAD domain: Epidermal Keratinocyte day6 (Skin, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Epidermal Keratinocyte day6 (Skin, Hi-C)
 
     track tads3dgb_241
     parent tads3dgb off
@@ -4541,7 +4541,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/241.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: SK-OV-3 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> SK-OV-3 (Brain, Hi-C)
 
     track tads3dgb_2
     parent tads3dgb off
@@ -4551,7 +4551,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/2.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: 007-DMSO (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 007-DMSO (Brain, Hi-C)
 
     track tads3dgb_357
     parent tads3dgb off
@@ -4561,7 +4561,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/357.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-059-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-059-BL (Prostate, Hi-C)
 
     track tads3dgb_185
     parent tads3dgb off
@@ -4571,7 +4571,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/185.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NT LMNB1 2 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NT LMNB1 2 (Blood, Hi-C)
 
     track tads3dgb_281
     parent tads3dgb off
@@ -4581,7 +4581,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/281.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: BRD3187 (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> BRD3187 (Colon, Hi-C)
 
     track tads3dgb_296
     parent tads3dgb off
@@ -4591,7 +4591,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/296.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: GB182 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> GB182 (Brain, Hi-C)
 
     track tads3dgb_374
     parent tads3dgb off
@@ -4601,7 +4601,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/374.bb
     color 140,140,140
     visibility dense
-    mouseOver 3DGB TAD domain: DTB-097-BL (Prostate, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> DTB-097-BL (Prostate, Hi-C)
 
     track tads3dgb_321
     parent tads3dgb off
@@ -4611,7 +4611,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/321.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: NALM-6 (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NALM-6 (Blood, Hi-C)
 
     track tads3dgb_176
     parent tads3dgb off
@@ -4621,7 +4621,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/176.bb
     color 155,155,18
     visibility dense
-    mouseOver 3DGB TAD domain: NeuN-plus H3 (Brain, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> NeuN-plus H3 (Brain, Hi-C)
 
     track tads3dgb_458
     parent tads3dgb off
@@ -4631,7 +4631,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/458.bb
     color 137,152,82
     visibility dense
-    mouseOver 3DGB TAD domain: HepG2-Nutlin Merged MicroC (Liver, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> HepG2-Nutlin Merged MicroC (Liver, Micro-C)
 
     track tads3dgb_275
     parent tads3dgb off
@@ -4641,7 +4641,7 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/275.bb
     color 169,29,34
     visibility dense
-    mouseOver 3DGB TAD domain: Bladder Tumor T3 (Bladder, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Bladder Tumor T3 (Bladder, Hi-C)
 
     track tads3dgb_97
     parent tads3dgb off
@@ -4651,5 +4651,5 @@ html tads3dgb
     bigDataUrl /gbdb/hg38/bbi/tad/tads3dgb/97.bb
     color 86,86,36
     visibility dense
-    mouseOver 3DGB TAD domain: HCT-116 RAD21-mAC no auxin (Colon, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> HCT-116 RAD21-mAC no auxin (Colon, Hi-C)
 

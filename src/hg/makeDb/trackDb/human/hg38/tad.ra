@@ -23,7 +23,7 @@ html tadsDixon
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsDixonHESC.bb
     color 27,158,119
-    mouseOver Cell type: $name (TAD domain)
+    mouseOver <b>Cell type:</b> $name (TAD domain)
 
     track tadsDixonIMR90
     parent tadsDixon on
@@ -32,7 +32,7 @@ html tadsDixon
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsDixonIMR90.bb
     color 217,95,2
-    mouseOver Cell type: $name (TAD domain)
+    mouseOver <b>Cell type:</b> $name (TAD domain)
 
 include tadsEncode.ra
 
@@ -61,7 +61,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittGM12878.bb
     subGroups stype=cellLine organ=immune
     color 51,160,44
-    mouseOver Sample: GM12878 lymphoblastoid cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> GM12878 lymphoblastoid cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittH1
     parent tadsSchmitt on
@@ -71,7 +71,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittH1.bb
     subGroups stype=cellLine organ=stem
     color 152,78,163
-    mouseOver Sample: H1 human embryonic stem cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> H1 human embryonic stem cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittIMR90
     parent tadsSchmitt on
@@ -81,7 +81,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittIMR90.bb
     subGroups stype=cellLine organ=respiratory
     color 178,150,40
-    mouseOver Sample: IMR90 fetal lung fibroblasts (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> IMR90 fetal lung fibroblasts (TAD boundary, 40 kb bin)
 
     track tadsSchmittMES
     parent tadsSchmitt off
@@ -91,7 +91,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMES.bb
     subGroups stype=cellLine organ=stem
     color 152,78,163
-    mouseOver Sample: H1-derived mesendoderm cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> H1-derived mesendoderm cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittMSC
     parent tadsSchmitt off
@@ -101,7 +101,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMSC.bb
     subGroups stype=cellLine organ=stem
     color 152,78,163
-    mouseOver Sample: H1-derived mesenchymal stem cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> H1-derived mesenchymal stem cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittNPC
     parent tadsSchmitt off
@@ -111,7 +111,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittNPC.bb
     subGroups stype=cellLine organ=stem
     color 152,78,163
-    mouseOver Sample: H1-derived neural progenitor cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> H1-derived neural progenitor cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittTRO
     parent tadsSchmitt off
@@ -121,7 +121,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittTRO.bb
     subGroups stype=cellLine organ=stem
     color 152,78,163
-    mouseOver Sample: H1-derived trophoblast-like cells (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> H1-derived trophoblast-like cells (TAD boundary, 40 kb bin)
 
     track tadsSchmittAD
     parent tadsSchmitt off
@@ -131,7 +131,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAD.bb
     subGroups stype=tissue organ=endocrine
     color 31,120,180
-    mouseOver Sample: adrenal gland (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> adrenal gland (TAD boundary, 40 kb bin)
 
     track tadsSchmittAO
     parent tadsSchmitt off
@@ -141,7 +141,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAO.bb
     subGroups stype=tissue organ=cardiovascular
     color 227,26,28
-    mouseOver Sample: aorta (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> aorta (TAD boundary, 40 kb bin)
 
     track tadsSchmittBL
     parent tadsSchmitt off
@@ -151,7 +151,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittBL.bb
     subGroups stype=tissue organ=urinary
     color 251,154,153
-    mouseOver Sample: bladder (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> bladder (TAD boundary, 40 kb bin)
 
     track tadsSchmittCO
     parent tadsSchmitt on
@@ -161,7 +161,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittCO.bb
     subGroups stype=tissue organ=brain
     color 106,61,154
-    mouseOver Sample: dorsolateral prefrontal cortex (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> dorsolateral prefrontal cortex (TAD boundary, 40 kb bin)
 
     track tadsSchmittHC
     parent tadsSchmitt off
@@ -171,7 +171,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittHC.bb
     subGroups stype=tissue organ=brain
     color 106,61,154
-    mouseOver Sample: hippocampus (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> hippocampus (TAD boundary, 40 kb bin)
 
     track tadsSchmittLG
     parent tadsSchmitt off
@@ -181,7 +181,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLG.bb
     subGroups stype=tissue organ=respiratory
     color 178,150,40
-    mouseOver Sample: lung (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> lung (TAD boundary, 40 kb bin)
 
     track tadsSchmittLI
     parent tadsSchmitt on
@@ -191,7 +191,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLI.bb
     subGroups stype=tissue organ=digestive
     color 255,127,0
-    mouseOver Sample: liver (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> liver (TAD boundary, 40 kb bin)
 
     track tadsSchmittLV
     parent tadsSchmitt off
@@ -201,7 +201,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLV.bb
     subGroups stype=tissue organ=cardiovascular
     color 227,26,28
-    mouseOver Sample: left ventricle of heart (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> left ventricle of heart (TAD boundary, 40 kb bin)
 
     track tadsSchmittOV
     parent tadsSchmitt off
@@ -211,7 +211,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittOV.bb
     subGroups stype=tissue organ=reproductive
     color 177,89,40
-    mouseOver Sample: ovary (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> ovary (TAD boundary, 40 kb bin)
 
     track tadsSchmittPA
     parent tadsSchmitt off
@@ -221,7 +221,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPA.bb
     subGroups stype=tissue organ=endocrine
     color 31,120,180
-    mouseOver Sample: pancreas (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> pancreas (TAD boundary, 40 kb bin)
 
     track tadsSchmittPO
     parent tadsSchmitt off
@@ -231,7 +231,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPO.bb
     subGroups stype=tissue organ=muscle
     color 120,180,200
-    mouseOver Sample: psoas muscle (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> psoas muscle (TAD boundary, 40 kb bin)
 
     track tadsSchmittRV
     parent tadsSchmitt off
@@ -241,7 +241,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittRV.bb
     subGroups stype=tissue organ=cardiovascular
     color 227,26,28
-    mouseOver Sample: right ventricle of heart (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> right ventricle of heart (TAD boundary, 40 kb bin)
 
     track tadsSchmittSB
     parent tadsSchmitt off
@@ -251,7 +251,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSB.bb
     subGroups stype=tissue organ=digestive
     color 255,127,0
-    mouseOver Sample: small bowel (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> small bowel (TAD boundary, 40 kb bin)
 
     track tadsSchmittSX
     parent tadsSchmitt off
@@ -261,7 +261,7 @@ allButtonPair on
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSX.bb
     subGroups stype=tissue organ=immune
     color 51,160,44
-    mouseOver Sample: spleen (TAD boundary, 40 kb bin)
+    mouseOver <b>Sample:</b> spleen (TAD boundary, 40 kb bin)
 
 track tadsMcArthur
 parent tads
@@ -277,7 +277,7 @@ filter.contexts 4:37
 filterByRange.contexts on
 filterLimits.contexts 1:37
 filterLabel.contexts Minimum number of cell-type maps sharing the boundary (1-37)
-mouseOver Boundary recurrent in $contexts of 37 cell-type maps (percentile $percentile)
+mouseOver <b>Boundary recurrent:</b> $contexts / 37 cell-type maps<br><b>Percentile:</b> $percentile
 html tadsMcArthur
 
 include tads3dgb.ra

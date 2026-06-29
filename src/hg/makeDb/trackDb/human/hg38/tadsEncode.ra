@@ -22,7 +22,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A549.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: A549 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> A549<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR165UJN
     parent tadsEncode on
@@ -32,7 +32,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dorsolateralprefrontalcortex.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Dorsolateral prefrontal cortex | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Dorsolateral prefrontal cortex<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR916MFV
     parent tadsEncode on
@@ -42,7 +42,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM12878.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM12878 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM12878<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR477GZK
     parent tadsEncode on
@@ -52,7 +52,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HCT116.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: HCT116 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> HCT116<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR324EJR
     parent tadsEncode on
@@ -62,7 +62,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartleftventricle.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Heart left ventricle | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Heart left ventricle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR908NSV
     parent tadsEncode on
@@ -72,7 +72,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartrightventricle.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Heart right ventricle | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Heart right ventricle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR888DEJ
     parent tadsEncode on
@@ -82,7 +82,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HepG2.bb
     color 137,152,82
     visibility dense
-    mouseOver Biosample: HepG2 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> HepG2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR683EDC
     parent tadsEncode on
@@ -92,7 +92,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HL60S4.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: HL-60/S4 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> HL-60/S4<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR345VTI
     parent tadsEncode on
@@ -102,7 +102,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/IMR90.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: IMR-90 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> IMR-90<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR479XDG
     parent tadsEncode on
@@ -112,7 +112,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/K562.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: K562 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> K562<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR305RTT
     parent tadsEncode on
@@ -122,7 +122,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/motorneuron.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Motor neuron | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Motor neuron<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR872ZCP
     parent tadsEncode on
@@ -132,7 +132,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ovary.bb
     color 161,126,151
     visibility dense
-    mouseOver Biosample: Ovary | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Ovary<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR408HOG
     parent tadsEncode on
@@ -142,7 +142,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/pancreas.bb
     color 175,100,41
     visibility dense
-    mouseOver Biosample: Pancreas | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Pancreas<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR258OVY
     parent tadsEncode on
@@ -152,7 +152,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/transversecolon.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Transverse colon | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Transverse colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR455KLX
     parent tadsEncode off
@@ -162,7 +162,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A673.bb
     color 137,135,170
     visibility dense
-    mouseOver Biosample: A673 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> A673<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR343VKT
     parent tadsEncode off
@@ -172,7 +172,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ACHN.bb
     color 92,161,153
     visibility dense
-    mouseOver Biosample: ACHN | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> ACHN<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR693PXD
     parent tadsEncode off
@@ -182,7 +182,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedBcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated B cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated B cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR291EBI
     parent tadsEncode off
@@ -192,7 +192,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetamemoryTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated CD4-positive, alpha-beta memory T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated CD4-positive, alpha-beta memory T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR836MWK
     parent tadsEncode off
@@ -202,7 +202,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR351NAI
     parent tadsEncode off
@@ -212,7 +212,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD8positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated CD8-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated CD8-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR195ETV
     parent tadsEncode off
@@ -222,7 +222,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatednaiveCD4positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated naive CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated naive CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR902BCW
     parent tadsEncode off
@@ -232,7 +232,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper1cell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated T-helper 1 cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated T-helper 1 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR474VTW
     parent tadsEncode off
@@ -242,7 +242,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper2cell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Activated T-helper 2 cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Activated T-helper 2 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR832NED
     parent tadsEncode off
@@ -252,7 +252,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/adrenalgland.bb
     color 90,179,68
     visibility dense
-    mouseOver Biosample: Adrenal gland | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Adrenal gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR554SLA
     parent tadsEncode off
@@ -262,7 +262,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/aorta.bb
     color 255,37,41
     visibility dense
-    mouseOver Biosample: Aorta | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Aorta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR464RYO
     parent tadsEncode off
@@ -272,7 +272,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ascendingaorta.bb
     color 255,37,41
     visibility dense
-    mouseOver Biosample: Ascending aorta | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Ascending aorta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR011GNI
     parent tadsEncode off
@@ -282,7 +282,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthecerebellum.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Astrocyte of the cerebellum | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Astrocyte of the cerebellum<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR974LXZ
     parent tadsEncode off
@@ -292,7 +292,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthespinalcord.bb
     color 130,141,158
     visibility dense
-    mouseOver Biosample: Astrocyte of the spinal cord | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Astrocyte of the spinal cord<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR847RHU
     parent tadsEncode off
@@ -302,7 +302,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Bcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: B cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> B cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR121ALS
     parent tadsEncode off
@@ -312,7 +312,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/bodyofpancreas.bb
     color 175,100,41
     visibility dense
-    mouseOver Biosample: Body of pancreas | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Body of pancreas<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR507AHE
     parent tadsEncode off
@@ -322,7 +322,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/brainmicrovascularendothelialcell.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Brain microvascular endothelial cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Brain microvascular endothelial cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR326YHP
     parent tadsEncode off
@@ -332,7 +332,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/breastepithelium.bb
     color 65,171,173
     visibility dense
-    mouseOver Biosample: Breast epithelium | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Breast epithelium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR820DYU
     parent tadsEncode off
@@ -342,7 +342,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caco2.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Caco-2 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Caco-2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR401TBQ
     parent tadsEncode off
@@ -352,7 +352,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caki2.bb
     color 92,161,153
     visibility dense
-    mouseOver Biosample: Caki2 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Caki2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR118AQZ
     parent tadsEncode off
@@ -362,7 +362,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Calu3.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: Calu3 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Calu3<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR556QHB
     parent tadsEncode off
@@ -372,7 +372,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/cardiacseptum.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Cardiac septum | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Cardiac septum<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR236EYO
     parent tadsEncode off
@@ -382,7 +382,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD14positivemonocyte.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: CD14-positive monocyte | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> CD14-positive monocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR379TIE
     parent tadsEncode off
@@ -392,7 +392,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetamemoryTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: CD4-positive, alpha-beta memory T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> CD4-positive, alpha-beta memory T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR609PCM
     parent tadsEncode off
@@ -402,7 +402,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR558BNW
     parent tadsEncode off
@@ -412,7 +412,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD8positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: CD8-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> CD8-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR317GNS
     parent tadsEncode off
@@ -422,7 +422,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/chondrocyte.bb
     color 138,135,169
     visibility dense
-    mouseOver Biosample: Chondrocyte | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Chondrocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR439ILZ
     parent tadsEncode off
@@ -432,7 +432,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/colonicmucosa.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Colonic mucosa | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Colonic mucosa<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR456QYU
     parent tadsEncode off
@@ -442,7 +442,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dendriticcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Dendritic cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Dendritic cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR213DHH
     parent tadsEncode off
@@ -452,7 +452,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/DLD1.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: DLD1 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> DLD1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR393XVI
     parent tadsEncode off
@@ -462,7 +462,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ectodermalcell.bb
     color 118,158,101
     visibility dense
-    mouseOver Biosample: Ectodermal cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Ectodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR233RDF
     parent tadsEncode off
@@ -472,7 +472,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endodermalcell.bb
     color 118,158,101
     visibility dense
-    mouseOver Biosample: Endodermal cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Endodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR551IPY
     parent tadsEncode off
@@ -482,7 +482,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endometrialmicrovascularendothelialcells.bb
     color 186,111,165
     visibility dense
-    mouseOver Biosample: Endometrial microvascular endothelial cells | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Endometrial microvascular endothelial cells<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR982KWR
     parent tadsEncode off
@@ -492,7 +492,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofhepaticsinusoid.bb
     color 137,152,82
     visibility dense
-    mouseOver Biosample: Endothelial cell of hepatic sinusoid | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Endothelial cell of hepatic sinusoid<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR788FBI
     parent tadsEncode off
@@ -502,7 +502,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofumbilicalvein.bb
     color 255,37,41
     visibility dense
-    mouseOver Biosample: Endothelial cell of umbilical vein | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Endothelial cell of umbilical vein<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR274FJN
     parent tadsEncode off
@@ -512,7 +512,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagusmuscularismucosa.bb
     color 159,131,100
     visibility dense
-    mouseOver Biosample: Esophagus muscularis mucosa | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Esophagus muscularis mucosa<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR015CVF
     parent tadsEncode off
@@ -522,7 +522,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagussquamousepithelium.bb
     color 159,131,100
     visibility dense
-    mouseOver Biosample: Esophagus squamous epithelium | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Esophagus squamous epithelium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR079VIJ
     parent tadsEncode off
@@ -532,7 +532,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/G401.bb
     color 92,161,153
     visibility dense
-    mouseOver Biosample: G401 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> G401<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR136MVS
     parent tadsEncode off
@@ -542,7 +542,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/gastrocnemiusmedialis.bb
     color 137,135,170
     visibility dense
-    mouseOver Biosample: Gastrocnemius medialis | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Gastrocnemius medialis<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR196MPD
     parent tadsEncode off
@@ -552,7 +552,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM11168.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM11168 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM11168<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR634FNY
     parent tadsEncode off
@@ -562,7 +562,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13976.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM13976 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM13976<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR261EVH
     parent tadsEncode off
@@ -572,7 +572,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13977.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM13977 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM13977<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR118FFR
     parent tadsEncode off
@@ -582,7 +582,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM18951.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM18951 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM18951<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR966QSW
     parent tadsEncode off
@@ -592,7 +592,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM20431.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: GM20431 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM20431<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR220MNC
     parent tadsEncode off
@@ -602,7 +602,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM23248.bb
     color 127,133,209
     visibility dense
-    mouseOver Biosample: GM23248 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> GM23248<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR390HMC
     parent tadsEncode off
@@ -612,7 +612,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HAP1.bb
     color 2,199,185
     visibility dense
-    mouseOver Biosample: HAP-1 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> HAP-1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR874HTT
     parent tadsEncode off
@@ -622,7 +622,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/headofcaudatenucleus.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Head of caudate nucleus | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Head of caudate nucleus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR846DUS
     parent tadsEncode off
@@ -632,7 +632,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/hTERTRPE1.bb
     color 163,127,144
     visibility dense
-    mouseOver Biosample: hTERT RPE-1 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> hTERT RPE-1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR282WPK
     parent tadsEncode off
@@ -642,7 +642,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HUES64.bb
     color 118,158,101
     visibility dense
-    mouseOver Biosample: HUES64 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> HUES64<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR510GJG
     parent tadsEncode off
@@ -652,7 +652,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Jurkat.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Jurkat | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Jurkat<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR987EPR
     parent tadsEncode off
@@ -662,7 +662,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/KBM7.bb
     color 2,199,185
     visibility dense
-    mouseOver Biosample: KBM-7 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> KBM-7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR869CSI
     parent tadsEncode off
@@ -672,7 +672,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/keratinocyte.bb
     color 127,133,209
     visibility dense
-    mouseOver Biosample: Keratinocyte | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Keratinocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR044YKV
     parent tadsEncode off
@@ -682,7 +682,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/kidney.bb
     color 92,161,153
     visibility dense
-    mouseOver Biosample: Kidney | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Kidney<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR975NRV
     parent tadsEncode off
@@ -692,7 +692,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcardiacatrium.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Left cardiac atrium | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Left cardiac atrium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR298UUL
     parent tadsEncode off
@@ -702,7 +702,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcolon.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Left colon | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Left colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR892BZA
     parent tadsEncode off
@@ -712,7 +712,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftlung.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: Left lung | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Left lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR352EGR
     parent tadsEncode off
@@ -722,7 +722,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiuminferior.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Left ventricle myocardium inferior | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Left ventricle myocardium inferior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR333BMU
     parent tadsEncode off
@@ -732,7 +732,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiumsuperior.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Left ventricle myocardium superior | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Left ventricle myocardium superior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR346DCU
     parent tadsEncode off
@@ -742,7 +742,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/LNCaPcloneFGC.bb
     color 140,140,140
     visibility dense
-    mouseOver Biosample: LNCaP clone FGC | TAD lifted from hg19 (no Arrowhead score)
+    mouseOver <b>Biosample:</b> LNCaP clone FGC<br>TAD lifted from hg19 (no Arrowhead score)
 
     track tadsEncode_ENCSR720WEB
     parent tadsEncode off
@@ -752,7 +752,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlegskin.bb
     color 127,133,209
     visibility dense
-    mouseOver Biosample: Lower leg skin | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Lower leg skin<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR446NJD
     parent tadsEncode off
@@ -762,7 +762,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofleftlung.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: Lower lobe of left lung | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Lower lobe of left lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR749PID
     parent tadsEncode off
@@ -772,7 +772,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofrightlung.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: Lower lobe of right lung | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Lower lobe of right lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR707XVJ
     parent tadsEncode off
@@ -782,7 +782,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mammaryepithelialcell.bb
     color 65,171,173
     visibility dense
-    mouseOver Biosample: Mammary epithelial cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Mammary epithelial cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR370TFL
     parent tadsEncode off
@@ -792,7 +792,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF10A.bb
     color 65,171,173
     visibility dense
-    mouseOver Biosample: MCF 10A | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> MCF 10A<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR660LPJ
     parent tadsEncode off
@@ -802,7 +802,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF7.bb
     color 65,171,173
     visibility dense
-    mouseOver Biosample: MCF-7 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> MCF-7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR754GTX
     parent tadsEncode off
@@ -812,7 +812,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesodermalcell.bb
     color 118,158,101
     visibility dense
-    mouseOver Biosample: Mesodermal cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Mesodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR944UTX
     parent tadsEncode off
@@ -822,7 +822,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesothelialcellofepicardium.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Mesothelial cell of epicardium | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Mesothelial cell of epicardium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR206OUF
     parent tadsEncode off
@@ -832,7 +832,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mucosaofdescendingcolon.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Mucosa of descending colon | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Mucosa of descending colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR215PTV
     parent tadsEncode off
@@ -842,7 +842,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naivethymusderivedCD4positivealphabetaTcell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Naive thymus-derived CD4-positive, alpha-beta T cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Naive thymus-derived CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR971CJS
     parent tadsEncode off
@@ -852,7 +852,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naturalkillercell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Natural killer cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Natural killer cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR489OCU
     parent tadsEncode off
@@ -862,7 +862,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/NCIH460.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: NCI-H460 | TAD lifted from hg19 (no Arrowhead score)
+    mouseOver <b>Biosample:</b> NCI-H460<br>TAD lifted from hg19 (no Arrowhead score)
 
     track tadsEncode_ENCSR088BOG
     parent tadsEncode off
@@ -872,7 +872,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/OCILY7.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: OCI-LY7 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> OCI-LY7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR584RBV
     parent tadsEncode off
@@ -882,7 +882,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Panc1.bb
     color 175,100,41
     visibility dense
-    mouseOver Biosample: Panc1 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Panc1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR038TZA
     parent tadsEncode off
@@ -892,7 +892,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC3.bb
     color 140,140,140
     visibility dense
-    mouseOver Biosample: PC-3 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> PC-3<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR859DRK
     parent tadsEncode off
@@ -902,7 +902,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC9.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: PC-9 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> PC-9<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR395DZW
     parent tadsEncode off
@@ -912,7 +912,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/placenta.bb
     color 104,171,71
     visibility dense
-    mouseOver Biosample: Placenta | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Placenta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR169JKC
     parent tadsEncode off
@@ -922,7 +922,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorcingulategyrus.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: Posterior cingulate gyrus | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Posterior cingulate gyrus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR941AMF
     parent tadsEncode off
@@ -932,7 +932,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorvenacava.bb
     color 255,37,41
     visibility dense
-    mouseOver Biosample: Posterior vena cava | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Posterior vena cava<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR557QRO
     parent tadsEncode off
@@ -942,7 +942,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/prostategland.bb
     color 140,140,140
     visibility dense
-    mouseOver Biosample: Prostate gland | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Prostate gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR173QPK
     parent tadsEncode off
@@ -952,7 +952,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/psoasmuscle.bb
     color 137,135,170
     visibility dense
-    mouseOver Biosample: Psoas muscle | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Psoas muscle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR022TPX
     parent tadsEncode off
@@ -962,7 +962,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Ramos.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: Ramos | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Ramos<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR173VDQ
     parent tadsEncode off
@@ -972,7 +972,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightcardiacatrium.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Right cardiac atrium | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Right cardiac atrium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR753CKM
     parent tadsEncode off
@@ -982,7 +982,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightlobeofliver.bb
     color 137,152,82
     visibility dense
-    mouseOver Biosample: Right lobe of liver | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Right lobe of liver<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR921BHU
     parent tadsEncode off
@@ -992,7 +992,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiuminferior.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Right ventricle myocardium inferior | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Right ventricle myocardium inferior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR476RFQ
     parent tadsEncode off
@@ -1002,7 +1002,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiumsuperior.bb
     color 116,50,165
     visibility dense
-    mouseOver Biosample: Right ventricle myocardium superior | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Right ventricle myocardium superior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR862OGI
     parent tadsEncode off
@@ -1012,7 +1012,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/RPMI7951.bb
     color 127,133,209
     visibility dense
-    mouseOver Biosample: RPMI7951 | TAD lifted from hg19 (no Arrowhead score)
+    mouseOver <b>Biosample:</b> RPMI7951<br>TAD lifted from hg19 (no Arrowhead score)
 
     track tadsEncode_ENCSR119TFS
     parent tadsEncode off
@@ -1022,7 +1022,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sciaticnerve.bb
     color 160,156,0
     visibility dense
-    mouseOver Biosample: Sciatic nerve | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Sciatic nerve<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR123ZFD
     parent tadsEncode off
@@ -1032,7 +1032,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sigmoidcolon.bb
     color 86,86,36
     visibility dense
-    mouseOver Biosample: Sigmoid colon | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Sigmoid colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR998ZSP
     parent tadsEncode off
@@ -1042,7 +1042,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SJCRH30.bb
     color 137,135,170
     visibility dense
-    mouseOver Biosample: SJCRH30 | TAD lifted from hg19 (no Arrowhead score)
+    mouseOver <b>Biosample:</b> SJCRH30<br>TAD lifted from hg19 (no Arrowhead score)
 
     track tadsEncode_ENCSR312KHQ
     parent tadsEncode off
@@ -1052,7 +1052,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKMEL5.bb
     color 127,133,209
     visibility dense
-    mouseOver Biosample: SK-MEL-5 | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> SK-MEL-5<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR204CGS
     parent tadsEncode off
@@ -1062,7 +1062,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNDZ.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: SK-N-DZ | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> SK-N-DZ<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR834DXR
     parent tadsEncode off
@@ -1072,7 +1072,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNMC.bb
     color 155,155,18
     visibility dense
-    mouseOver Biosample: SK-N-MC | TAD lifted from hg19 (no Arrowhead score)
+    mouseOver <b>Biosample:</b> SK-N-MC<br>TAD lifted from hg19 (no Arrowhead score)
 
     track tadsEncode_ENCSR692QWS
     parent tadsEncode off
@@ -1082,7 +1082,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/spleen.bb
     color 136,157,97
     visibility dense
-    mouseOver Biosample: Spleen | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Spleen<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR569OBN
     parent tadsEncode off
@@ -1092,7 +1092,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/stomach.bb
     color 145,144,99
     visibility dense
-    mouseOver Biosample: Stomach | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Stomach<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR949ZZD
     parent tadsEncode off
@@ -1102,7 +1102,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper1cell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: T-helper 1 cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> T-helper 1 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR832CKD
     parent tadsEncode off
@@ -1112,7 +1112,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper2cell.bb
     color 254,75,173
     visibility dense
-    mouseOver Biosample: T-helper 2 cell | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> T-helper 2 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR549MGQ
     parent tadsEncode off
@@ -1122,7 +1122,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/T47D.bb
     color 65,171,173
     visibility dense
-    mouseOver Biosample: T47D | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> T47D<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR870SXX
     parent tadsEncode off
@@ -1132,7 +1132,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/testis.bb
     color 139,140,140
     visibility dense
-    mouseOver Biosample: Testis | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Testis<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR043XTM
     parent tadsEncode off
@@ -1142,7 +1142,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/thyroidgland.bb
     color 27,119,58
     visibility dense
-    mouseOver Biosample: Thyroid gland | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Thyroid gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR601RFS
     parent tadsEncode off
@@ -1152,7 +1152,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/tibialartery.bb
     color 255,37,41
     visibility dense
-    mouseOver Biosample: Tibial artery | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Tibial artery<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR673UZF
     parent tadsEncode off
@@ -1162,7 +1162,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/upperlobeofrightlung.bb
     color 130,163,45
     visibility dense
-    mouseOver Biosample: Upper lobe of right lung | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Upper lobe of right lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR008CUR
     parent tadsEncode off
@@ -1172,7 +1172,7 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/uterus.bb
     color 186,111,165
     visibility dense
-    mouseOver Biosample: Uterus | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Uterus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR886JAM
     parent tadsEncode off
@@ -1182,5 +1182,5 @@ html tadsEncode
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/vagina.bb
     color 255,101,174
     visibility dense
-    mouseOver Biosample: Vagina | Arrowhead corner score: $cornerScore
+    mouseOver <b>Biosample:</b> Vagina<br><b>Arrowhead corner score:</b> $cornerScore
 
