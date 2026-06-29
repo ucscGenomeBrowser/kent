@@ -514,7 +514,7 @@ def write_trackdb_stanza(out_path, dbs):
         f.write("    filterLabel.sources Source Database\n")
         # SV type
         f.write("    filterValues.svType DEL,INS,DUP,INV,CPX,MIXED,INSDEL,"
-                "CNV,BND,TRA,MEI\n")
+                "TRA\n")
         f.write("    filterType.svType multipleListOr\n")
         f.write("    filterLabel.svType SV Type\n")
         # Range filters

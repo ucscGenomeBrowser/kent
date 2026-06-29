@@ -9,7 +9,7 @@ visibility hide
 # "lrSv.filter.<field>.min/max" are inherited at read time by every
 # subtrack via cartOptionalStringClosestToHome() walking tdb->parent. A
 # subtrack-level filter always wins over the supertrack-level one.
-filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),CNV|CNV (Copy-number variant),CTX|CTX (Chromosomal translocation),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),BND|BND (Breakend / translocation),MEI|MEI (Mobile element insertion),TRA|TRA (Translocation)
+filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),TRA|TRA (Translocation)
 filterType.svType multipleListOr
 filterLabel.svType SV Type
 filter.svLen 0:250000000
@@ -34,7 +34,7 @@ noScoreFilter on
     itemRgb on
     visibility hide
     dataVersion v1.2.0
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$AF AC=$AC/$AN (Hom:$acHom Het:$acHet Hemi:$acHemi) samples=$NS
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AF</b>: $AF<br><b>AC</b>: $AC/$AN (Hom $acHom, Het $acHet, Hemi $acHemi)<br><b>Samples</b>: $NS
     filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -62,7 +62,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen type=$insType family=$family AC=$AC AF=$alleleFreq
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>Type</b>: $insType<br><b>Family</b>: $family<br><b>AC</b>: $AC<br><b>AF</b>: $alleleFreq
     filterValues.svType DEL,INS,CPX
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -96,7 +96,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC samples=$sampleCount
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC</b>: $AC<br><b>Samples</b>: $sampleCount
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -123,7 +123,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF_AFR=$afAfr AF_EUR=$afEur
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC (approx)</b>: $AC<br><b>AF (African)</b>: $afAfr<br><b>AF (European)</b>: $afEur
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -155,7 +155,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC samples=$sampleCount
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AF</b>: $alleleFreq<br><b>AC</b>: $AC<br><b>Samples</b>: $sampleCount
     filterValues.svType DEL,INS,DUP,INV,TRA
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -186,7 +186,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AF</b>: $alleleFreq<br><b>AC</b>: $AC
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -212,7 +212,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC~$AC AF=$alleleFreq carriers=$carrierCount/$sampleTotal
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC (approx)</b>: $AC<br><b>AF</b>: $alleleFreq<br><b>Carriers</b>: $carrierCount/$sampleTotal
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -241,7 +241,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen
     filterValues.svType DEL,INS,INSDEL
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -261,7 +261,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AF=$alleleFreq AC=$AC/$alleleNumber samples=$nSamples
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AF</b>: $alleleFreq<br><b>AC</b>: $AC/$alleleNumber<br><b>Samples</b>: $nSamples
     filterValues.svType INS,DEL
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -331,7 +331,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC AF=$popAllAf
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>Samples</b>: $sampleCount<br><b>AC</b>: $AC<br><b>AF</b>: $popAllAf
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -364,7 +364,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen samples=$sampleCount AC=$AC
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>Samples</b>: $sampleCount<br><b>AC</b>: $AC
     filterValues.svType DEL,INS,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -401,7 +401,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility dense
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC AF_PD=$afPd AF_HC=$afHc diff=$differentialRate
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC</b>: $AC<br><b>AF (PD)</b>: $afPd<br><b>AF (HC)</b>: $afHc<br><b>Case-control diff</b>: $differentialRate
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -443,7 +443,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC</b>: $AC/$alleleNumber<br><b>AF</b>: $alleleFreq<br><b>Samples</b>: $numSamples<br><b>Alts</b>: $numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -469,7 +469,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$alleleNumber AF=$alleleFreq samples=$numSamples alts=$numAlts
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC</b>: $AC/$alleleNumber<br><b>AF</b>: $alleleFreq<br><b>Samples</b>: $numSamples<br><b>Alts</b>: $numAlts
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -495,7 +495,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen genes=$geneCount
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>Genes</b>: $geneCount
     filterValues.svType DEL,INS,DUP,INV,CPX
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -520,7 +520,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>$name</b> ($svType) svLen=$svLen insLen=$insLen AC=$AC/$AN AF=$AF AF_AFR=$afAfr AF_EUR=$afEur samples=$NS
+    mouseOver <b>Var</b>: $name ($svType)<br><b>SV len</b>: $svLen<br><b>Ins len</b>: $insLen<br><b>AC</b>: $AC/$AN<br><b>AF</b>: $AF<br><b>AF (African)</b>: $afAfr<br><b>AF (European)</b>: $afEur<br><b>Samples</b>: $NS
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
