@@ -306,15 +306,17 @@ else if (bIsHub)
 return iDif;
 }
 
-void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
+void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash, boolean keepQuickLift)
 /* Change track visibilities. If groupTarget is
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc.
  * If we are going back to default visibility, then reset the track
- * ordering also. 
+ * ordering also.
  * If excludeHash is not NULL then don't change the visibility of the group names in that hash.
+ * If keepQuickLift is set then don't change the visibility of tracks lifted from another
+ * assembly via QuickLift.
  */
 {
 struct group *group;
@@ -336,6 +338,8 @@ for (group = groupList; group != NULL; group = group->next)
             {
             struct track *track = tr->track;
             struct trackDb *tdb = track->tdb;
+            if (keepQuickLift && (trackDbSetting(tdb, "quickLiftUrl") != NULL))
+                continue;   // leave QuickLifted tracks visible
             if (changeVis == -1) // to default
                 {
                 if (tdbIsComposite(tdb))
@@ -440,7 +444,7 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
  * If we are going back to default visibility, then reset the track
  * ordering also. */
 {
-changeTrackVisExclude(groupList, groupTarget, changeVis, NULL);
+changeTrackVisExclude(groupList, groupTarget, changeVis, NULL, FALSE);
 }
 
 int trackOffsetX()
@@ -7549,7 +7553,7 @@ if (rtsLoad)  // load a recommended track set using the merge method
     // Hide all tracks except custom tracks
     struct hash *excludeHash = newHash(2);
     hashStore(excludeHash, "user");
-    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash);
+    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash, FALSE);
 
     // delete any ordering we have
     char wildCard[32];
@@ -7589,7 +7593,8 @@ if (rtsLoad)  // load a recommended track set using the merge method
 
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 if (hideTracks)
-    changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide
+    // set all top-level tracks to hide, but leave QuickLifted tracks visible
+    changeTrackVisExclude(groupList, NULL, tvHide, NULL, TRUE);
 
 /* Get visibility values if any from ui. */
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
