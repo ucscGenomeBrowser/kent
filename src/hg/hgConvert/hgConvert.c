@@ -146,10 +146,6 @@ if (askAboutQuickLift)
     puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
     cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
     puts(" <label for='doQuickLift' title='Display tracks from the source assembly mapped onto the target assembly'>QuickLift tracks</label>\n");
-    puts(" <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' "
-         "target='ucscHelp' title='QuickLift is in beta testing. Click to view more documentation about this feature.' "
-         "style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px "
-         "4px;background:lavender;border-radius:3px;text-decoration:none;margin-left:6px;'>beta</a>\n");
     puts("</div>\n");
     }
 
