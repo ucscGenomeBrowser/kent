@@ -21,7 +21,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/418.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: mESC (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> mESC (Embryo, Hi-C)
 
     track tads3dgb_424
     parent tads3dgb off
@@ -31,7 +31,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/424.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: CH12-LX (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> CH12-LX (Blood, Hi-C)
 
     track tads3dgb_429
     parent tads3dgb off
@@ -41,7 +41,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/429.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: mESC WT MicroC (Embryo, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> mESC WT MicroC (Embryo, Micro-C)
 
     track tads3dgb_432
     parent tads3dgb off
@@ -51,7 +51,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/432.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: mESC NELFB dTAB T0 MicroC (Embryo, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> mESC NELFB dTAB T0 MicroC (Embryo, Micro-C)
 
     track tads3dgb_445
     parent tads3dgb off
@@ -61,7 +61,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/445.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: SSBP3 DMSO MicroC (Blood, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> SSBP3 DMSO MicroC (Blood, Micro-C)
 
     track tads3dgb_446
     parent tads3dgb off
@@ -71,7 +71,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/446.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: SSBP3 dTAGV1 MicroC (Blood, Micro-C)
+    mouseOver <b>3DGB TAD domain:</b> SSBP3 dTAGV1 MicroC (Blood, Micro-C)
 
     track tads3dgb_621
     parent tads3dgb off
@@ -81,7 +81,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/621.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: Thymus Treg WT (Thymus, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Thymus Treg WT (Thymus, Hi-C)
 
     track tads3dgb_622
     parent tads3dgb off
@@ -91,7 +91,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/622.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: Thymus Treg KO (Thymus, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Thymus Treg KO (Thymus, Hi-C)
 
     track tads3dgb_623
     parent tads3dgb off
@@ -101,7 +101,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/623.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO scr rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO scr rep1 (Embryo, Hi-C)
 
     track tads3dgb_625
     parent tads3dgb off
@@ -111,7 +111,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/625.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO sh1A rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO sh1A rep1 (Embryo, Hi-C)
 
     track tads3dgb_626
     parent tads3dgb off
@@ -121,7 +121,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/626.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO sh1A rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO sh1A rep2 (Embryo, Hi-C)
 
     track tads3dgb_627
     parent tads3dgb off
@@ -131,7 +131,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/627.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO scr DS rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO scr DS rep1 (Embryo, Hi-C)
 
     track tads3dgb_628
     parent tads3dgb off
@@ -141,7 +141,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/628.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO scr DS rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO scr DS rep2 (Embryo, Hi-C)
 
     track tads3dgb_629
     parent tads3dgb off
@@ -151,7 +151,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/629.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO sh1A DS rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO sh1A DS rep1 (Embryo, Hi-C)
 
     track tads3dgb_630
     parent tads3dgb off
@@ -161,7 +161,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/630.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 6KO sh1A DS rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 6KO sh1A DS rep2 (Embryo, Hi-C)
 
     track tads3dgb_631
     parent tads3dgb off
@@ -171,7 +171,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/631.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Spleen WT (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Spleen WT (Blood, Hi-C)
 
     track tads3dgb_632
     parent tads3dgb off
@@ -181,7 +181,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/632.bb
     color 254,75,173
     visibility dense
-    mouseOver 3DGB TAD domain: Spleen KO (Blood, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> Spleen KO (Blood, Hi-C)
 
     track tads3dgb_645
     parent tads3dgb off
@@ -191,7 +191,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/645.bb
     color 6,218,147
     visibility dense
-    mouseOver 3DGB TAD domain: EBKO DNs All (Thymus, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> EBKO DNs All (Thymus, Hi-C)
 
     track tads3dgb_673
     parent tads3dgb off
@@ -201,7 +201,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/673.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: mESC rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> mESC rep1 (Embryo, Hi-C)
 
     track tads3dgb_674
     parent tads3dgb off
@@ -211,7 +211,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/674.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: mESC rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> mESC rep2 (Embryo, Hi-C)
 
     track tads3dgb_675
     parent tads3dgb off
@@ -221,7 +221,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/675.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 2i rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 2i rep1 (Embryo, Hi-C)
 
     track tads3dgb_676
     parent tads3dgb off
@@ -231,7 +231,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/676.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: 2i rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> 2i rep2 (Embryo, Hi-C)
 
     track tads3dgb_677
     parent tads3dgb off
@@ -241,7 +241,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/677.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: EPSC rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> EPSC rep1 (Embryo, Hi-C)
 
     track tads3dgb_678
     parent tads3dgb off
@@ -251,7 +251,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/678.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: EPSC rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> EPSC rep2 (Embryo, Hi-C)
 
     track tads3dgb_679
     parent tads3dgb off
@@ -261,7 +261,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/679.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: RA rep1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RA rep1 (Embryo, Hi-C)
 
     track tads3dgb_680
     parent tads3dgb off
@@ -271,7 +271,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/680.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: RA rep2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> RA rep2 (Embryo, Hi-C)
 
     track tads3dgb_712
     parent tads3dgb off
@@ -281,7 +281,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/712.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: XEN R1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> XEN R1 (Embryo, Hi-C)
 
     track tads3dgb_713
     parent tads3dgb off
@@ -291,7 +291,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/713.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: XEN R2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> XEN R2 (Embryo, Hi-C)
 
     track tads3dgb_714
     parent tads3dgb off
@@ -301,7 +301,7 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/714.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: TSC R1 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> TSC R1 (Embryo, Hi-C)
 
     track tads3dgb_715
     parent tads3dgb off
@@ -311,5 +311,5 @@ html tads3dgb
     bigDataUrl /gbdb/mm39/bbi/tad/tads3dgb/715.bb
     color 118,158,101
     visibility dense
-    mouseOver 3DGB TAD domain: TSC R2 (Embryo, Hi-C)
+    mouseOver <b>3DGB TAD domain:</b> TSC R2 (Embryo, Hi-C)
 

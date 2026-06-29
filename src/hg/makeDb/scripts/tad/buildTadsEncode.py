@@ -296,8 +296,8 @@ html tadsEncode
         for s in sorted(subtracks,key=lambda s:(s["on"]!="on", s["term"].lower())):
             short=scap(shortlab(s["term"],22,ENC_ABBR))
             long="ENCODE TADs in %s (%s)"%(s["dterm"],s["encsr"])
-            mouse=("Biosample: %s | TAD lifted from hg19 (no Arrowhead score)"%s["dterm"] if s["lifted"]
-                   else "Biosample: %s | Arrowhead corner score: $cornerScore"%s["dterm"])
+            mouse=("<b>Biosample:</b> %s<br>TAD lifted from hg19 (no Arrowhead score)"%s["dterm"] if s["lifted"]
+                   else "<b>Biosample:</b> %s<br><b>Arrowhead corner score:</b> $cornerScore"%s["dterm"])
             fh.write(
 """    track tadsEncode_%s
     parent tadsEncode %s

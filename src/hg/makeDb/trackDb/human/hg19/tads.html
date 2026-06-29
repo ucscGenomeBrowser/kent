@@ -18,6 +18,18 @@ variants.
   <li><b>TAD boundary stability</b> &ndash; how recurrent each boundary is across 37
       cell-type maps (McArthur &amp; Capra 2021; native hg19).</li>
 </ul>
+<p>
+The table below summarizes how each of these tracks' domains or boundaries were called and at
+what resolution:
+</p>
+<blockquote>
+<table border=1 class='stdTbl'>
+<tr><th>Track</th><th>Feature</th><th>Calling method</th><th>Resolution</th></tr>
+<tr><td>Dixon 2012</td><td>Domains</td><td>Directionality-index HMM (lifted from hg18)</td><td>40 kb</td></tr>
+<tr><td>Schmitt 2016</td><td>Boundaries</td><td>Insulation score (native hg19)</td><td>40 kb</td></tr>
+<tr><td>McArthur &amp; Capra 2021</td><td>Boundaries (stability)</td><td>Boundary sharing across 37 reprocessed cell-type maps (native hg19)</td><td>100 kb windows</td></tr>
+</table>
+</blockquote>
 <p>Two further domain sources are available on the hg38 assembly:</p>
 <ul>
   <li><b>ENCODE contact domains</b> &ndash; uniformly called TAD <em>domains</em> across 117
@@ -26,7 +38,7 @@ variants.
       Hi-C/Micro-C datasets (hg38 only).</li>
 </ul>
 
-<h2>How to Use These Tracks</h2>
+<h2>How to use these tracks</h2>
 <p>
 The <b>domain</b> track (Dixon) answers &quot;are my variant and a candidate gene in the
 same TAD?&quot; and helps prioritize target genes at non-coding GWAS loci. The
@@ -50,12 +62,16 @@ unorganized regions, not display artifacts.
 
 <h2>Methods</h2>
 <p>
-See the individual subtrack description pages for full methods, source publications, and
-assembly/liftOver details for each dataset. In brief: Dixon domains were called with the
-directionality-index HMM at 40 kb (lifted from hg18); Schmitt boundaries with the
-insulation-score method at 40 kb; and the boundary-stability track counts, per 100 kb window,
-how many of 37 re-processed cell-type maps share a boundary (McArthur &amp; Capra 2021). The
-Schmitt and stability tracks are native to hg19.
+Each source was called independently by its original study; the calling method and resolution
+for each are summarized in the table in the Description above. See the individual subtrack
+description pages for full methods, source publications, and assembly/liftOver details for each
+dataset.
+</p>
+<p>
+The UCSC source for this track set is available on GitHub:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target="_blank">doc/hg19.txt</a> (makedoc),
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/tad" target="_blank">makeDb/scripts/tad</a> (build scripts), and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/hg19/tad.ra" target="_blank">trackDb/human/hg19/tad.ra</a> (trackDb).
 </p>
 
 <h2>Data Access</h2>
