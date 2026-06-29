@@ -4436,8 +4436,8 @@ var rightClick = {
                 menu.push($.contextMenu.separator);
             }
 
-            // add sort options if this is a custom composite
-            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
+            // add sort options if this is a custom composite or a wiggle-only composite
+            if ((rec.isCustomComposite || parentIsAllWiggle(rec)) && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
                 o[" Sort by Magnitude "] = {

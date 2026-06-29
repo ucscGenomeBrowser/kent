@@ -5250,14 +5250,14 @@ if ((sortTrack = cgiOptionalString( "sortSim")) != NULL)
     {
     char buffer[1024];
     safef(buffer, sizeof buffer,  "simOrder_%s", sortTrack);
-    wigOrder = cartString(cart, buffer);
+    wigOrder = cartOptionalString(cart, buffer);
     }
 
 if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
     {
     char buffer[1024];
     safef(buffer, sizeof buffer,  "expOrder_%s", sortTrack);
-    wigOrder = cartString(cart, buffer);
+    wigOrder = cartOptionalString(cart, buffer);
     }
 
 if (wigOrder != NULL)

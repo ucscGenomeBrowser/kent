@@ -495,6 +495,22 @@ function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  === 3); }
 function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  === 2 || tdb.kindOfChild === 3); }
 function tdbHasParent(tdb)            { return (tdb.kindOfChild  !== 0 && tdb.parentTrack); }
 
+function parentIsAllWiggle(tdb)
+{   // True if every subtrack of tdb's parent composite is a wiggle type.
+    if (!tdb.parentTrack)
+        return false;
+    var parentName = tdb.parentTrack, found = false;
+    for (var name in hgTracks.trackDb) {
+        var t = hgTracks.trackDb[name];
+        if (t.parentTrack === parentName) {
+            found = true;
+            if (/^wigMaf/.test(t.type) || !/^(wig|bigWig|bedGraph)/.test(t.type))
+                return false;
+        }
+    }
+    return found;
+}
+
 function cartHideAnyTrack (id, cartVars, cartVals) {
     /* set the right cart variables to hide a track, changes cartVars and cartVals */
     var rec = hgTracks.trackDb[id];
