@@ -350,7 +350,14 @@ OMIM / ClinVar / DGV / Decipher regional annotations.
 <h2>Data Access</h2>
 <p>
 Each subtrack has its own documentation page with details on how to download
-and intersect the underlying annotations.
+and intersect the underlying annotations. The build process for all subtracks
+is recorded in the UCSC makeDoc,
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">doc/hg38/lrSv.txt</a>
+(and <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hs1/lrSv.txt" target="_blank">doc/hs1/lrSv.txt</a>
+for T2T-CHM13); the conversion scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">makeDb/scripts/lrSv</a>,
+and the track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/lrSv.ra" target="_blank">trackDb/human/lrSv.ra</a>.
 </p>
 
 <h2>References</h2>
