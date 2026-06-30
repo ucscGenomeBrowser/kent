@@ -3026,11 +3026,11 @@ for (ref = exonList; TRUE; )
             char* strandStr;
 	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-                strandStr = "Forw";
+                strandStr = "+";
             }
 	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
-                strandStr = "Rev";
+                strandStr = "-";
             }
 
             // we still need to show the existing mouseover text
