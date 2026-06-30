@@ -1514,6 +1514,12 @@ boolean isValidToken(char *token)
 // hg.conf key with the cloud flare secret key, used twice here, so a global macro
 #define CLOUDFLARESITEKEY "cloudFlareSiteKey"
 
+static char *getSessionId()
+/* Get session id if any from CGI. */
+{
+return cgiOptionalString("hgsid");
+}
+
 void printCaptcha() 
 /* print an html page that shows the captcha and on success, reloads the page with the token added as token=x */
 {
@@ -1521,6 +1527,7 @@ void printCaptcha()
     if (!cfSiteKey)
         return;
 
+    fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
     puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");
     puts("<script>");
@@ -1608,6 +1615,7 @@ if (token)
 {
     if (isValidToken(token))
         {
+        fprintf(stderr, "CAPTCHA_VALID %s\n", getSessionId());
         cgiVarExclude("token");
         // Drop any IP-tracking rows for this hguid so a legitimate user
         // who roams networks isn't repeatedly captcha-gated.
@@ -1637,6 +1645,7 @@ if (token)
                 "where you have used the genome browser before, but not from this internet browser. "
                 "You can try our mirror sites, "
                 "genome-euro.ucsc.edu or genome-asia.ucsc.edu, while we are working on a solution.</body></html>");
+        fprintf(stderr, "CAPTCHA_REJECT %s\n", getSessionId());
         exit(0);
         }
 }
@@ -2548,12 +2557,6 @@ static char *getCookieId(char *cookieName)
 /* Get id value from cookie. */
 {
 return findCookieData(cookieName);
-}
-
-static char *getSessionId()
-/* Get session id if any from CGI. */
-{
-return cgiOptionalString("hgsid");
 }
 
 static void clearDbContents(struct sqlConnection *conn, char *table, char * secureId)
