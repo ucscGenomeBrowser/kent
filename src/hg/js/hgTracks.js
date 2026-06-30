@@ -2447,8 +2447,8 @@ var dragSelect = {
                     dragSelect.highlightThisRegion(newPosition, true);
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                 } else {
-                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey) && !rulerClicked)
-                        // don't show the dialog if: clicked on ruler, if dialog deactivated or meta/ctrl was pressed
+                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey) && !(rulerClicked && singleClick))
+                        // don't show the dialog if: single-clicked on ruler, if dialog deactivated or meta/ctrl was pressed
                         dragSelect.selectionEndDialog(newPosition);
                     else {
                         // in every other case, show the dialog
