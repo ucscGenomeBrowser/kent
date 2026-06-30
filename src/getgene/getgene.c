@@ -264,10 +264,10 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
             }
         /* Process name to get rid of isoform letter for Proteome. */
         if (geneName)
-            strcpy(nameBuf, geneName);
+            snprintf(nameBuf, sizeof(nameBuf), "%s", geneName);
         else
             {
-            strcpy(nameBuf, seqName);
+            snprintf(nameBuf, sizeof(nameBuf), "%s", seqName);
 #ifdef NEVER
             /* Sometimes Proteome requires the letter after the orf name
              * in alt-spliced cases, sometimes it can't handle it.... */
@@ -365,7 +365,7 @@ char title[256];
 if (argc == 2 && sameWord(argv[1], "test"))
     putenv("QUERY_STRING=geneName=I:4000-5500&hiliteNear=0.917112&intronsLowerCase=On");
 geneName = cgiString("geneName");
-sprintf(title, "%s DNA Sequence", geneName);
+snprintf(title, sizeof(title), "%s DNA Sequence", geneName);
 dnaUtilOpen();
 htmShell(title, doMiddle, "QUERY");
 return 0;
