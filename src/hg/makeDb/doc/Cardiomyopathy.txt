@@ -1,0 +1,502 @@
+##############################################################################
+# Cardiomyopathy VCEP Track Hub — build documentation
+#
+# Redmine: #37446
+# VCEP:    https://clinicalgenome.org/affiliation/50002/
+# CSpec:   https://cspec.genome.network/cspec/ui/svi/affiliation/50002
+#
+# 8 gene/disease specifications, all dated 2024-04-22:
+#   GN002  MYH7    v2.0.0  HCM + DCM (AD)
+#   GN095  MYBPC3  v1.0.0  HCM (AD) — only PVS1-applicable gene
+#   GN098  TNNI3   v1.0.0  HCM (AD)
+#   GN099  TNNT2   v1.0.0  HCM + DCM (AD)
+#   GN100  TPM1    v1.0.0  HCM (AD)
+#   GN101  ACTC1   v1.0.0  HCM (AD)
+#   GN102  MYL2    v1.0.0  HCM (AD)
+#   GN103  MYL3    v1.0.0  HCM (AD)
+#
+# ARVC genes are out of scope (separate ClinGen panel, affiliation 40003).
+#
+# Expert contacts:
+#   Lucas Bronicki, PhD, FACMG     — Cardiomyopathy VCEP Chair
+#   Haley Garrett, MPH             — Coordinator (Haley_Garrett@med.unc.edu)
+#   ClinVar submitter ID:          506161 ("ClinGen Cardiomyopathy Variant
+#                                  Curation Expert Panel")
+#
+# Calibration sources:
+#   Walsh 2017 (PMID 27532257; Genet Med; DOI 10.1038/gim.2016.90)
+#                                   — PS4 case-control reference (Tables S5A/S5B;
+#                                     60,706 ExAC samples; 7,855 cases)
+#   Walsh 2019 (PMID 30696458; Genome Medicine; DOI 10.1186/s13073-019-0616-z)
+#                                   — PM1 hotspot codon ranges (Table S4),
+#                                     per-gene NonTrunc ExAC denominators
+#                                     (Table S1), and 155 pre-EvRepo per-variant
+#                                     curations (Table S6)
+#
+# MANE Select transcripts (verified against /gbdb/hg38/mane/mane.bb):
+#   MYH7    NM_000257.4    NP_000248.2    chr14 (-)
+#   MYBPC3  NM_000256.3    NP_000247.2    chr11 (-)
+#   TNNT2   NM_001276345.2 NP_001263274.1 chr1  (-)
+#   TNNI3   NM_000363.5    NP_000354.4    chr19 (-)
+#   TPM1    NM_001018005.2 NP_001018005.1 chr15 (+)  ← only plus-strand gene
+#   ACTC1   NM_005159.5    NP_005150.1    chr15 (-)
+#   MYL2    NM_000432.4    NP_000423.2    chr12 (-)
+#   MYL3    NM_000258.3    NP_000249.1    chr3  (-)
+#
+# NOTE on transcripts: the hgVai annotation layer (B.6) and most tracks use the
+# MANE Select transcript above. Two deliberate exceptions:
+#   - TNNT2 PM1 codon range (B.1) and the Walsh-2019 TNNT2 curations (B.7c) use
+#     the classic NM_001001430.2 where the source data is keyed to it; TNNT2
+#     hg19 coordinates for those are derived by liftOver from hg38 (no hg19
+#     transcript alignment). The MANE PM1 range 89-189 is used for the PM1 track.
+##############################################################################
+
+
+##############################################################################
+# Layout
+##############################################################################
+#
+# Working directory:                 /hive/users/lrnassar/claude/RM37446/
+#     hub.txt, genomes.txt
+#     hg38/trackDb.txt, hg19/trackDb.txt
+#     cardiomyopathy.html               (shared description page)
+#     cmp_downloads/                    (source data — checked at A.0 + cached)
+#     scripts_local_copy/               (insurance copy of all 12 build scripts;
+#                                        live copy is at ~/kent/...)
+#     cmpVCEPClinDomains/               (PM1 hotspot regions)
+#     cmpVCEPPVS1/                      (MYBPC3-only PVS1 caveats)
+#     cmpVCEPAFfrequencies/             (gnomAD v4.1 BA1/BS1/PM2_supporting)
+#     cmpVCEPAnnotate/                  (hgVai consequence + HGVSp annotation TSV)
+#     cmpVCEPRevel/                     (REVEL PP3/BP4)
+#     cmpVCEPCardioBoost/               (CardioBoost missense predictor — off)
+#     cmpVCEPEvRepo/                    (VCEP Curated Variants — EvRepo, with codes)
+#     cmpVCEPClinVar506161/             (VCEP ClinVar submissions, no codes)
+#     cmpVCEPWalsh2019/                 (Walsh 2019 Pre-EvRepo Table S6 curations)
+#     cmpVCEPWalshOR/                   (Walsh 2017 gene-level OR — PS4)
+#     cmpVCEPAtlasEF/                   (Atlas of Cardiac Genetic Variation
+#                                        per-variant + UCSC-computed OR — PS4)
+#     cmpVCEPProvisionalClass/          (NON-FINAL combination-rule mockup)
+#
+# Build scripts:                     ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/
+#     cmpVCEPClinDomains.py             (B.1 — PM1 hotspot regions; also provides
+#                                        parse_mane_record, cds_exons,
+#                                        aa_to_genomic_segments helpers imported
+#                                        by B.2, B.6, B.9, B.11)
+#     cmpVCEPPVS1.py                    (B.2)
+#     cmpVCEPAFfrequencies.py           (B.3; fetch_gene_variants() defines the
+#                                        shared variant universe reused by B.6/B.11)
+#     cmpVCEPAnnotate.py                (B.6 — hgVai consequence/HGVSp annotation)
+#     cmpVCEPRevel.py                   (B.4)
+#     cmpVCEPCardioBoost.py             (B.5)
+#     cmpVCEPEvRepo.py                  (B.7)
+#     cmpVCEPWalsh2019.py               (B.7c)
+#     cmpVCEPClinVar506161.py           (B.8)
+#     cmpVCEPWalshOR.py                 (B.9)
+#     cmpVCEPAtlasEF.py                 (B.10)
+#     cmpVCEPProvisionalClass.py        (B.11)
+#
+# Otto cron staging dir:             /hive/data/outside/otto/cardiomyopathyVCEP/
+#                                    (NOT YET WRITTEN — Phase E TODO; mirror TP53)
+
+
+##############################################################################
+# Phase A: Source data
+##############################################################################
+#
+# Working set lives in /hive/users/lrnassar/claude/RM37446/cmp_downloads/.
+# Most files are downloaded once and re-used; EvRepo + ClinVar 506161 are the
+# only sources intended for the weekly otto refresh (Phase E). Atlas is a
+# one-time snapshot (ExAC-based; does not change weekly).
+#
+# A.0  MANE Select transcript verification + Walsh-paper roles per gene
+#      (FIRST ACTION — propagates through all downstream phases)
+#
+#      Extract MANE bigGenePred for our 8 genes:
+#        bigBedToBed /gbdb/hg38/mane/mane.bb stdout \
+#          | awk -F'\t' -v OFS='\t' '
+#              BEGIN{print "geneSym\tchrom\tstart\tend\tstrand\trefSeqAcc\trefSeqProt\tensProtAcc"}
+#              $19 ~ /^(MYH7|MYBPC3|TNNT2|TNNI3|TPM1|ACTC1|MYL2|MYL3)$/ {
+#                print $19, $1, $2, $3, $6, $22, $24, $21
+#              }' | sort > cmp_downloads/mane_8genes.tsv
+#
+#      Walsh paper roles confirmed by parsing each CSpec HTML:
+#        PS4 source       = Walsh 2017 universally (8/8 genes)
+#        PM1 calibration  = Walsh 2019 (only MYH7, MYBPC3, TNNT2, TNNI3 — the
+#                           4 genes with a defined PM1 region)
+#
+#
+# A.1  CSpec HTML pages (8 docs)
+#
+#      mkdir -p cmp_downloads/cspec
+#      for gn in GN002 GN095 GN098 GN099 GN100 GN101 GN102 GN103; do
+#        curl -fsSL "https://cspec.genome.network/cspec/ui/svi/doc/${gn}" \
+#          -o cmp_downloads/cspec/${gn}.html
+#      done
+#
+#      Thresholds transcribed from the CSpec HTML (every value taken directly
+#      from the spec; none invented):
+#        BA1 universal:                >= 0.001    (FAF95 popmax)
+#        BS1 universal (7 of 8):       >= 0.0001
+#        BS1 MYBPC3 outlier:           >= 0.0002    (per GN095)
+#        PM2_supporting universal:     <= 4e-05
+#        PP3 REVEL universal:          >= 0.70
+#        BP4 REVEL universal:          <= 0.40
+#        PS4 OR (CI-lower) strength:   Strong >=20, Moderate >=10, Supporting >=5
+#        PM1 codon ranges:
+#          MYH7    167-931      (Walsh 2019 Table S4)
+#          MYBPC3  485-502 + 1248-1266
+#          TNNT2   89-189       (MANE NM_001276345.2; classic NM_001001430.2 = 79-179)
+#          TNNI3   141-209
+#          (TPM1, ACTC1, MYL2, MYL3 — no PM1 region defined)
+#        MYBPC3 PVS1 caveats:
+#          NMD-escape boundary: codon 1254+
+#          Micro-exons:         10, 11, 14
+#          In-frame exons:      2, 3, 4, 8, 9, 10, 11, 14, 20, 22, 24, 25, 26, 27
+#
+#      CSpec points where the spec is silent / leaves a curator choice (provisional
+#      decisions made for the build; posed to the VCEP for confirmation):
+#        - PS1/PM5 reference DB of "established pathogenic" (spec says "per
+#          Richards 2015", names none) — build uses VCEP EvRepo P/LP, leave-one-out.
+#        - PM4 for MYH7 (PVS1 N/A): spec redirects PM4 to non-NMD truncating at
+#          Moderate/Supporting, no boundary given — build uses last exon OR within
+#          50 nt of the final exon-exon junction.
+#        - BP7 "not highly conserved": no metric/cutoff in spec — build uses
+#          phyloP470way <= 0 together with SpliceAI < 0.20.
+#
+#
+# A.2  ClinGen EvRepo classifications (REST JSON)
+#
+#      curl -fsSL 'https://erepo.genome.network/evrepo/api/classifications?expertpanel=Cardiomyopathy+VCEP&format=json' \
+#        -o cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json
+#
+#      State at 2026-06-29 refresh: 25 variants (all MYH7). One change vs the
+#      April pull — CAR:CA016422 moved Likely Pathogenic -> Uncertain Significance.
+#      April JSON retained as *.april2026.json.bak.
+#
+#
+# A.3  ClinVar submitter 506161 (filter from weekly VCV release)
+#
+#      Precise column-10 match against the submission_summary (loose grep over-
+#      counts because the submitter name also appears in other submitters' text):
+#        zcat /hive/data/outside/otto/clinvar/downloads/$LATEST/submission_summary.txt.gz \
+#          | awk -F'\t' '$10 == "ClinGen Cardiomyopathy Variant Curation Expert Panel"' \
+#          > cmp_downloads/clinvar/cardiomyopathyVCEP_submissions.tsv
+#
+#      State at ClinVar release 2026-05-30: 199 records, 100% "reviewed by
+#      expert panel". Classifications: 33 P + 32 LP + 75 VUS + 9 LB + 50 B = 199.
+#
+#
+# A.4  gnomAD v4.1 exomes (already on hgwdev; no download)
+#      /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr{N}.vcf.bgz
+#      Field used: fafmax_faf95_max (max FAF95 across genetic ancestry groups),
+#      queried per-region via tabix.
+#      Public mirror: https://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v4.1/exomes/exomes.bb
+#
+# A.5  REVEL (already on hgwdev; no download)
+#      /gbdb/hg38/revel/{a,c,g,t}.bw  (per-alt-nucleotide bigwigs)
+#      Public mirror: https://hgdownload.soe.ucsc.edu/gbdb/hg38/revel/
+#
+# A.6  SpliceAI (already on hgwdev; no download)
+#      /gbdb/hg38/bbi/spliceAi.bb  (bed9+4; AIscore in col 9, name="ref>alt")
+#      Used by the B.11 SpliceAI safety net and BP7.
+#
+# A.7  CardioBoost precomputed predictions
+#      cmp_downloads/cardioboost/cm_prediction.RData  (precomputed table,
+#        ~65k rows; ~31k in our 8 genes — NOT just model objects)
+#      Source: https://github.com/ImperialCardioGenetics/CardioBoost_manuscript
+#      Loaded via /usr/bin/Rscript (the team Rscript is broken on hgwdev —
+#      missing libgfortran.so.3). Coordinates are GRCh37 with numeric chrom
+#      names; B.5 adds the chr prefix and liftOvers to hg38.
+#
+# A.8  Walsh PS4 + PM1 calibration supplements
+#      mkdir -p cmp_downloads/walsh ; cd cmp_downloads/walsh
+#      # Walsh 2017 (PS4 case-control) — Springer direct (avoids PMC PoW challenge)
+#      curl -fsSL -o walsh2017_supplement.zip \
+#        "https://static-content.springer.com/esm/art%3A10.1038%2Fgim.2016.90/MediaObjects/41436_2017_BFgim201690_MOESM9_ESM.zip"
+#      unzip -o walsh2017_supplement.zip   # -> Supplementary_Tables_resubmit.xlsx
+#      # Walsh 2019 (PM1 calibration + NonTrunc denoms + Table S6 curations)
+#      curl -fsSL -o walsh2019_supplement.xlsx \
+#        "https://static-content.springer.com/esm/art%3A10.1186%2Fs13073-019-0616-z/MediaObjects/13073_2019_616_MOESM1_ESM.xlsx"
+#      Walsh 2017 Tables S5A (HCM) / S5B (DCM): gene x disease x variant-class
+#        case-control OR + 95% CI (the PS4 source, B.9).
+#      Walsh 2019 Table S4: PM1 codon ranges. Table S1: per-gene NonTrunc ExAC
+#        denominators (B.10). Table S6: 155 per-variant ACMG curations (B.7c).
+#
+# A.9  Atlas of Cardiac Genetic Variation — one-time scrape with on-disk cache
+#      python3 cmp_downloads/atlas/scrape_atlas.py
+#      Two-pass (listing pages + per-variant pages for case_count >= 3), cached
+#      under cmp_downloads/atlas/raw/ + variants/, rate-limited 1.5 req/sec.
+#      The Atlas is a static companion to Walsh 2017 (ExAC controls, ~2016); it
+#      is NOT refreshed by otto. To refresh manually, delete the cache and re-run.
+
+
+##############################################################################
+# Phase B: Build tracks
+##############################################################################
+#
+# All build scripts at ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/
+# Each accepts: --db hg38 --db hg19 --output-dir <path>  (B.6 takes only
+# --output-dir). Each emits .as / .bed / .bb for both assemblies and verifies
+# cross-assembly parity at the end.
+#
+# Build order matters: B.3 defines the variant universe that B.6 annotates;
+# B.11 (Provisional) consumes B.6 (annotation), B.3 (AF), B.4 (REVEL), and the
+# B.7 EvRepo P/LP set (PS1/PM5 reference). Suggested order:
+#
+#   for s in cmpVCEPClinDomains cmpVCEPPVS1 cmpVCEPAFfrequencies cmpVCEPAnnotate \
+#            cmpVCEPRevel cmpVCEPCardioBoost cmpVCEPEvRepo cmpVCEPWalsh2019 \
+#            cmpVCEPClinVar506161 cmpVCEPWalshOR cmpVCEPAtlasEF \
+#            cmpVCEPProvisionalClass; do
+#     python3 ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/${s}.py \
+#       --db hg38 --db hg19 \
+#       --output-dir /hive/users/lrnassar/claude/RM37446 || break
+#   done
+#   # (cmpVCEPAnnotate.py takes only --output-dir.)
+#
+#
+# B.1  cmpVCEPClinDomains.py — PM1 Hotspot Regions
+#      Output: 28 features (4 genes x CDS-exon-spanning AA range; MYH7, MYBPC3,
+#      TNNT2, TNNI3 only). Codon ranges per A.1. Color 230,3,131 (magenta-rose,
+#      the InSiGHT/TP53 clinical-domains convention). Built-in unit tests check
+#      codon-to-genomic conversion across all 8 genes.
+#
+# B.2  cmpVCEPPVS1.py — MYBPC3 PVS1 Evidence (MYBPC3 only)
+#      Output: 16 features (2 NMD-escape genomic segments + 14 in-frame exon
+#      caveats; 3 also tagged micro-exon in the mouseover).
+#
+# B.3  cmpVCEPAFfrequencies.py — gnomAD v4.1 BA1/BS1/PM2_supporting
+#      Variant universe: all gnomAD v4.1 PASS variants in the 8 gene CDS regions
+#      +/- 20 nt splice padding. fetch_gene_variants() is the canonical universe,
+#      reused by B.6 and B.11.
+#      Output: 10,974 features. Applied code: PM2_supporting 9,893, no-code 504,
+#      BS1 367, BA1 210. MYBPC3 BS1 outlier (0.0002) handled per gene.
+#
+# B.6  cmpVCEPAnnotate.py — hgVai consequence + HGVSp annotation layer
+#      Reuses B.3 fetch_gene_variants() for an identical universe, then runs
+#      hgVai per gene via vai.pl on the single MANE Select transcript:
+#        vai.pl --variantLimit=200000000 --hgVai=/usr/local/apache/cgi-bin/hgVai \
+#               --position=<chrom>:<txStart>-<txEnd> --geneTrack=ncbiRefSeqSelect \
+#               --hgvsG=off --hgvsCN=off --hgvsP=on hg38 <variants.vcf.gz>
+#      Each input VCF row carries ID=chrom:pos:ref:alt so indels join exactly on
+#      the way back (without the ID, VEP reformats indel names and ~659 fail to
+#      join). Output cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv: 10,974 rows,
+#      0 unmapped. Columns: chrom,pos,ref,alt,gene,soTerms,proteinPos,aaRef,aaAlt,
+#      codonChange,exonNum,exonTotal,cdnaPos,hgvsp. Feeds PS1/PM5/PM4/BP7 in B.11.
+#      (ncbiRefSeqSelect = single MANE transcript per gene; an intentional
+#      divergence from the evaSnp ncbiRefSeqCurated default — correct for a
+#      curated 8-gene panel. hg38 only; codes carry to hg19 with the variant
+#      universe via the per-track liftOver.)
+#
+# B.4  cmpVCEPRevel.py — REVEL PP3/BP4 thresholded scores
+#      Output: 22,466 features. REVEL >= 0.70 -> PP3_supporting; <= 0.40 ->
+#      BP4_supporting; in-between dropped (nothing drawn). fetch_revel_bedgraph()
+#      splits multi-bp bedGraph runs into 1-bp per-alt records (each position has
+#      its own REF allele).
+#
+# B.5  cmpVCEPCardioBoost.py — CardioBoost missense predictor (informational)
+#      Loads cm_prediction.RData via /usr/bin/Rscript; 31,236 missense predictions
+#      across the 8 genes. GRCh37 native -> add chr prefix -> liftOver to hg38
+#      (0 unmapped). Rendered as a default-OFF subtrack under the Bioinformatic
+#      composite (sibling to REVEL). Colored by CardioBoost's own published class
+#      (probability >= 0.9 Pathogenic, <= 0.1 Benign, else Indeterminate). NOT a
+#      CSpec-specified predictor and fires no ACMG code — informational only.
+#      name field includes ref/alt so same-aa variants via different nt are unique.
+#
+# B.7  cmpVCEPEvRepo.py — VCEP Curated Variants from EvRepo (Final, with codes)
+#      Output: 25 features (all MYH7). The complex repeat-notation p.Glu931del
+#      (c.2785GAG[2]) is recovered via a coords_via_hgvstovcf() fallback.
+#      Mouseover prefix "Final — VCEP EvRepo submission"; codesMet filtered to
+#      status="Met"; codesAll = Met + NotMet where enumerated. Standard 5-tier
+#      ACMG ramp.
+#
+# B.7c cmpVCEPWalsh2019.py — Walsh 2019 Pre-EvRepo curations (Table S6)
+#      Output: 155 features (3 rows outside our 8 genes filtered out). All 155
+#      are rendered: the 32 previously unmatched-to-ClinVar entries (complex
+#      indels + 4 TNNT2 SNVs incl. R92W) are placed via walsh_coords_via_tool()
+#      = hgvsToVcf on each gene's Walsh-paper transcript, gated on FILTER==PASS.
+#      TNNT2 uses NM_001001430.2 (MANE gives HgvsRefAssertedMismatch); TNNT2 hg19
+#      coords via liftOver from hg38. 27 variants tagged "Walsh-upgraded" (the new
+#      PM1 EF rule, asterisked in Table S6). Classification strings normalized to
+#      "Uncertain Significance" (not "VUS"). Standard ACMG ramp.
+#
+# B.8  cmpVCEPClinVar506161.py — VCEP ClinVar submissions (Final, no codes)
+#      Output: 199 features. Joined to variant_summary for hg38 + hg19 coords.
+#      All carry review status "reviewed by expert panel". 25 of 199 overlap
+#      EvRepo (flagged inline in the mouseover). Standard 5-tier ACMG ramp (the
+#      earlier desaturated palette was dropped). Carries no per-code evidence.
+#
+# B.9  cmpVCEPWalshOR.py — Walsh 2017 gene-level case-control OR (PS4)
+#      Source: Walsh 2017 Supplementary_Tables_resubmit.xlsx, Tables S5A (HCM) /
+#      S5B (DCM). Output: 48 features = 8 genes x {HCM, DCM} x {All protein-
+#      altering, Truncating, Non-truncating}, each spanning the gene CDS (MANE),
+#      filterable by gene / cohortDisease / variantClass / ps4Strength.
+#      PS4 strength by OR 95%-CI lower bound (Strong >=20, Moderate >=10,
+#      Supporting >=5, else below threshold): Strong 1, Moderate 7, Supporting 9,
+#      below threshold 31. Standout: MYBPC3 truncating-HCM OR 118.8 (86.1-163.9)
+#      -> Strong. hg38 from MANE CDS; hg19 via liftOver. Replaces the earlier
+#      Walsh-2019 EF table (a different statistic; per CSpec, PS4 cites Walsh 2017).
+#
+# B.10 cmpVCEPAtlasEF.py — Atlas per-variant case-counts + UCSC-computed OR (PS4)
+#      Source: cmp_downloads/atlas/variants/var_*.html (173 parsed; 16 parse
+#      failures). Output: 178 features (a variant renders once per disease cohort
+#      where it has data). UCSC computes the OR (Fisher 2x2 with Haldane 0.5
+#      correction; Woolf log-OR 95% CI) from Atlas case counts against ExAC
+#      controls; per-gene Walsh-2019 NonTrunc ExAC denominators are used for
+#      non-truncating vartypes, else the 60,706 baseline. PS4 strength binning:
+#      Strong 16, Moderate 30, Supporting 44, below threshold 88. Every mouseover
+#      carries the caveat that the OR is UCSC-computed against ExAC (not gnomAD).
+#
+# B.11 cmpVCEPProvisionalClass.py — NON-FINAL Provisional Classification
+#      Variant universe: identical to B.3 (10,974). Consumes the B.6 annotation
+#      TSV. Computable codes applied: BA1/BS1/PM2_supporting (B.3 FAF95),
+#      PP3/BP4 (REVEL, missense), PM1 (CSpec hotspot region), PS1/PM5 (EvRepo
+#      P/LP reference, leave-one-out — a variant cannot earn the code from its
+#      own entry; PS1 reference excludes established splice-impact variants e.g.
+#      MYBPC3 c.2308G>A), PM4 (NMD-escaping truncating, non-MYBPC3: last exon or
+#      within 50 nt of the final exon-exon junction), BP7 (synonymous +
+#      SpliceAI < 0.20 + phyloP470way <= 0).
+#      Combination rules = CSpec GN002 verbatim (NOT Tavtigian point sums; PP2
+#      is not in the GN002 point system and is not emitted). PM1<->PM5 mutual
+#      exclusion enforced per CSpec (keep PM5, the variant-specific code; drop
+#      PM1; PM1+PS1 co-occurrence flagged). BS1-standalone -> Likely Benign per
+#      the GN002 BS1 carve-out. SpliceAI safety net runs last (>= 0.20 on an
+#      LB/B call -> VUS). HCM/DCM diseaseTag populated.
+#      The mockup omits all clinical/functional codes (PS2/PS3/PS4/PP1/PP4/
+#      BS3/BS4), so it structurally cannot reach Pathogenic/Likely Pathogenic;
+#      this is intentional and labeled NON-FINAL throughout (BED name, .as,
+#      trackDb, mouseover, description page). No concordance metric is asserted.
+#      Output: 10,974 features — 0 P / 0 LP / 10,453 VUS / 319 LB / 202 B.
+
+
+##############################################################################
+# Phase C: Hub assembly
+##############################################################################
+#
+# Files written/maintained by hand (NOT generated by the build scripts):
+#   hub.txt, genomes.txt
+#   cardiomyopathy.html        (shared description page; hub descriptionUrl)
+#   hg38/trackDb.txt
+#   hg19/trackDb.txt           (mirrors hg38; differs in bigDataUrl + an hg19
+#                              provenance header noting liftOver-derived coords)
+#
+# trackDb structure: 7 top-level groups -> 11 tracks. Three are composites:
+#   Bioinformatic (REVEL on + CardioBoost off), VCEP Curated Variants (EvRepo on
+#   + ClinVar off + Walsh 2019 off), PS4 Case-Control (Walsh OR on + Atlas EF off).
+# bigBed filterValues on the ACMG-code / ps4Strength fields; default visibility
+# tuned so the first view is clean (dense for the big per-variant tracks).
+#
+# Validation:
+#   hubCheck https://hgwdev.gi.ucsc.edu/~lrnassar/track_hubs/cardiomyopathyVCEP/hub.txt
+#
+# Web access (sandbox; working dir served directly via symlink):
+#   ln -sf /hive/users/lrnassar/claude/RM37446 \
+#          /cluster/home/lrnassar/public_html/track_hubs/cardiomyopathyVCEP
+#   Hub URL: https://hgwdev.gi.ucsc.edu/~lrnassar/track_hubs/cardiomyopathyVCEP/hub.txt
+
+
+##############################################################################
+# Phase D: Verification
+##############################################################################
+#
+# (Build verification only. QA history, audit findings, and review/release
+#  readiness are tracked in Redmine #37446, not here.)
+#
+#   - hubCheck: silent pass (exit 0) on hg38 + hg19.
+#   - Cross-assembly parity (hg38 == hg19 feature counts):
+#       PM1 28 | PVS1 16 | AF 10,974 | REVEL 22,466 | EvRepo 25 | Walsh2019 155 |
+#       ClinVar 199 | WalshOR 48 | AtlasEF 178 | Provisional 10,974 |
+#       CardioBoost 31,236
+#   - Worked example, MYH7 p.Arg870His (NM_000257.4:c.2609G>A, chr14:23424839 hg38):
+#       EvRepo:       Pathogenic, codes PM1;PM2;PP1_Strong;PS4
+#       EvRepo R870C: Likely Pathogenic at the adjacent codon-870 position
+#                     (the PS1/PM5 partner)
+#       PM1:          within MYH7 167-931
+#       REVEL:        0.853 -> PP3_supporting
+#       gnomAD AF:    absent from v4.1 exomes -> PM2_supporting
+#       Walsh OR:     MYH7 non-truncating HCM, OR 12.0 (10.9-13.3) -> Moderate
+#       Provisional:  Uncertain Significance (PM1+PM2+PP3, no clinical PS4/PP1 ->
+#                     no P/LP rule fires) — the expected under-call
+
+
+##############################################################################
+# Phase E: Otto cron (TODO — gated on VCEP sign-off; do AFTER deployment)
+##############################################################################
+#
+# DO NOT enable until the VCEP signs off (Phase F gate). The weekly refresh
+# touches EvRepo + ClinVar 506161 only; premature activation could surface
+# unreviewed VCEP curations on the public hub.
+#
+# Mirror the TP53 pattern at /hive/data/outside/otto/cardiomyopathyVCEP/
+# (doUpdate.sh + checkCMPVCEPClinVar.sh). Crontab (NOT activated until sign-off):
+#   # Cardiomyopathy VCEP weekly EvRepo + ClinVar update
+#   2x 03 * * 2 umask 002; /hive/data/outside/otto/cardiomyopathyVCEP/doUpdate.sh
+# Tuesday ~03:2x UTC — offset a few minutes from TP53 (03:15) and InSiGHT (03:10).
+
+
+##############################################################################
+# Phase F: Deployment to hgdownload (TODO — gated on VCEP expert review)
+##############################################################################
+#
+# Steps:
+#   1. (Done) MYH7 draft sent to Haley Garrett / Lucas Bronicki with a shared
+#      hgwdev session + interpretation questions.
+#   2. After sign-off, decide the NON-FINAL Provisional track's fate (keep as a
+#      labeled mockup vs drop) per VCEP feedback.
+#   3. Symlink hub into hgdownload and coordinate autoPush:
+#        ln -sf /hive/users/lrnassar/claude/RM37446 \
+#               /usr/local/apache/htdocs-hgdownload/hubs/cardiomyopathyVCEP
+#      Public URL: https://hgdownload.soe.ucsc.edu/hubs/cardiomyopathyVCEP/hub.txt
+#   4. Commit to git (per CLAUDE.md, `refs #37446`):
+#        - This file -> ~/kent/src/hg/makeDb/doc/Cardiomyopathy.txt
+#        - All 12 build scripts -> ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/
+#      Then verify the cardiomyopathy.html GitHub "source code" links resolve and
+#      remove the PLACEHOLDER caveat; run encodeEmail.pl (already applied) and
+#      switch the Data Access section to the hgdownload (TP53-style) wording.
+
+
+##############################################################################
+# Phase G: Recommended Track Set (TODO — after Phase E activation)
+##############################################################################
+#
+# Create RTS sessions on dev (hgSession) for hg38 and hg19 with the hub loaded
+# at default subtrack visibility. Save under the VCEP folder alongside InSiGHT
+# and TP53.
+
+
+##############################################################################
+# Phase H: Folder taxonomy (DEFERRED — until a 4th VCEP hub exists)
+##############################################################################
+#
+# With InSiGHT + TP53 + Cardiomyopathy = 3 VCEP hubs, propose an RTS folder
+# structure when a 4th hub lands. Matches the TP53 makedoc Phase H deferral.
+
+
+##############################################################################
+# References
+##############################################################################
+#
+# Walsh R, Thomson KL, et al. (2017). Reassessment of Mendelian gene
+#   pathogenicity using 7,855 cardiomyopathy cases and 60,706 reference
+#   samples. Genet Med. PMID 27532257; DOI 10.1038/gim.2016.90.
+#
+# Walsh R, Mazzarotto F, et al. (2019). Quantitative approaches to variant
+#   classification increase the yield and precision of genetic testing in
+#   Mendelian diseases: the case of hypertrophic cardiomyopathy.
+#   Genome Medicine. PMID 30696458; DOI 10.1186/s13073-019-0616-z.
+#
+# Kelly MA, Caleshu C, et al. (2018). Adaptation and validation of the
+#   ACMG/AMP variant classification framework for MYH7-associated inherited
+#   cardiomyopathies. Genet Med. PMID 29300372.
+#
+# Jordan E, Peterson L, et al. (2021). Evidence-based assessment of genes
+#   in dilated cardiomyopathy. Circulation. PMID 33947203.
+#
+# Zhang X, Walsh R, et al. (2021). Disease-specific variant pathogenicity
+#   prediction significantly improves variant interpretation in inherited
+#   cardiac conditions (CardioBoost). Genome Medicine. PMID 33420041.
+#
+# Richards S, Aziz N, et al. (2015). Standards and guidelines for the
+#   interpretation of sequence variants. Genet Med. PMID 25741868.
+#
+# Remaining/deferred work is tracked in Redmine #37446 and
+# memory/rm37446_v2_punchlist.md (not duplicated here).

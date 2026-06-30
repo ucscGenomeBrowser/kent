@@ -1087,3 +1087,60 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
 #   post : affectedAC=32782 affectedAN=213150 affectedAF=0.153798
 #                            backgroundAC=341065 backgroundAN=2751112
 #                            backgroundAF=0.123974
+
+##########
+# 2026-06-27 Lou (Claude)
+# Added Top 3 source AFs to the varFreqsAffected and varFreqsBackground
+# mouseOver, modeled loosely on gnomAD's PopMaxAF but ranking PROJECTS,
+# not populations. Motivation: variants common in one specific cohort
+# (e.g. the East-Asian founder allele rs4986893 at ~13% in ToMMo Japan
+# and ~10% in KOVA Korea) surface immediately, even when the pooled rate
+# across all contributing arms is much smaller.
+#
+# Implementation: vcfToBigBed.py now tracks per-arm AF contributions
+# alongside the existing pooled AC/AN sums and emits two new string
+# columns, topAffectedSources and topBackgroundSources, formatted as
+# "Source (AF), Source (AF), Source (AF)". For disease cohorts with a
+# phenotype split, the source label carries the arm (e.g. "SPARK ASD",
+# "SCHEMA case", "GREGoR unaffected"); for population cohorts the label
+# is the bare cohort key. Per-population sub-ancestries of population
+# cohorts (e.g. gnomAD HGDP+1kG continental groups) are deliberately
+# excluded so sub-populations don't crowd out actual project signals.
+# AS schema field count: 163 -> 165.
+#
+# Rebuild used the existing merged.annotated.vcf.gz (no re-merge needed);
+# only the Phase 1 per-cohort extract and Phase 2 BED build re-ran.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+cp varFreqsAffected.bb   varFreqsAffected.bb.preTop3.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preTop3.bak
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+
+#
+# 2026-06-29: re-rebuild after Top-3 source audit.
+# A broad AF-distribution sweep across all 28 source cohorts identified two
+# whose per-source AF was unreliable for the Top-3 ranking introduced on
+# 2026-06-27: SGDP and SVatalog both encode AC/AN per genotyped site (small
+# N producing AF=0.5 or AF=1.0 at most variants), so they otherwise
+# dominated the Top-3 list with meaningless values. Pooled AF is unaffected
+# since their AC/AN contributions are tiny relative to the larger cohorts.
+# Added a new "skip_top_ranking" column to databases.tsv (col 9); set to 1
+# for SGDP and SVatalog, 0 (or blank) for every other cohort. Modified
+# vcfToBigBed.py to skip the per-arm AF append into affected_arm_afs /
+# background_arm_afs when skip_top_ranking is set; the cohort still
+# contributes to the pooled AC/AN and still appears in backgroundSources.
+# Description page update: varFreqsBackground.html now documents this
+# exclusion in the "Top population sources by AF" section.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+cp varFreqsAffected.bb   varFreqsAffected.bb.preTopAudit.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preTopAudit.bak
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all

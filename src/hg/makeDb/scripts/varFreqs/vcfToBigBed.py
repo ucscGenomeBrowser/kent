@@ -158,12 +158,20 @@ def load_config(scripts_dir, db_file="databases.tsv",
                 except ValueError:
                     print(f"WARNING: bad default_an for {key}: {parts[7]}",
                           file=sys.stderr)
+            skip_top_ranking = 0
+            if len(parts) > 8 and parts[8].strip():
+                try:
+                    skip_top_ranking = int(parts[8].strip())
+                except ValueError:
+                    print(f"WARNING: bad skip_top_ranking for {key}: {parts[8]}",
+                          file=sys.stderr)
             databases[key] = {
                 "name": name, "vcf": vcf,
                 "ac_field": ac_field, "af_field": af_field,
                 "is_disease": is_disease,
                 "disease_role": disease_role,
                 "default_an": default_an,
+                "skip_top_ranking": skip_top_ranking,
                 "pops": [],
             }
 
@@ -296,6 +304,49 @@ def load_extracted(db_key, chrom, extract_dir):
     return data
 
 
+# Short display label per disease-cohort arm key, used in the topAffectedSources
+# and topBackgroundSources mouseOver fields so a reader of e.g.
+# "SPARK ASD (0.144)" knows which arm of SPARK contributed that AF. Bare
+# population-cohort entries use just the db_key.
+ARM_DISPLAY = {
+    "AUT": "ASD",
+    "NON_AUT": "non-ASD",
+    "CASE": "case",
+    "CTRL": "ctrl",
+    "AFF": "affected",
+    "UNA": "unaffected",
+    "UNK": "unknown",
+}
+
+
+def source_label(db_key, pop_key=None):
+    """Display label for a (cohort, arm) contribution to top-N source AFs."""
+    if pop_key is None:
+        return db_key
+    return f"{db_key} {ARM_DISPLAY.get(pop_key, pop_key)}"
+
+
+def top_n_source_afs(arm_afs, n=3):
+    """Format the top-N (source, AF) entries by AF value.
+
+    arm_afs is a list of (source_label, af_value) tuples. Sources appearing
+    more than once (shouldn't, but defensive) are deduped to the max AF.
+    Ties are broken alphabetically by source label. Returns "" when no
+    entry has AF > 0."""
+    if not arm_afs:
+        return ""
+    by_source = {}
+    for src, af in arm_afs:
+        if af is None or af <= 0:
+            continue
+        if src not in by_source or af > by_source[src]:
+            by_source[src] = af
+    if not by_source:
+        return ""
+    top = sorted(by_source.items(), key=lambda x: (-x[1], x[0]))[:n]
+    return ", ".join(f"{src} ({af:.6f})" for src, af in top)
+
+
 def _pool_arm(ac_val, af_val, default_an):
     """Compute pooled (AC, AN) contribution for one cohort arm.
 
@@ -408,6 +459,14 @@ def process_chromosome(args):
             background_ac = 0
             background_an = 0
             background_sources = []
+            # Per-arm (label, AF) contributions used to compute the top-N
+            # source AFs in the mouseOver. Disease-cohort arms get the arm
+            # label appended ("SPARK ASD"); population cohorts are bare.
+            # Per-population sub-ancestries of population cohorts are
+            # excluded so a high sub-pop AF in a reference panel does not
+            # crowd out actual project signals.
+            affected_arm_afs = []
+            background_arm_afs = []
             db_ac_af = []    # per-database AC, AF (raw, for output columns)
             pop_ac_af = []   # per-population AC, AF (raw, for output columns)
 
@@ -422,6 +481,12 @@ def process_chromosome(args):
                 is_disease_db = db_info.get("is_disease", 0)
                 disease_role = db_info.get("disease_role", "")
                 default_an = db_info.get("default_an", 0)
+                # When set, the cohort's per-source AF is unreliable for the
+                # Top-3 mouseOver ranking (e.g. SGDP and SVatalog encode AC/AN
+                # per genotyped individual, so AF defaults near 0.5). The
+                # cohort still feeds the pooled AC/AN/AF and appears in the
+                # Sources list, just not in the Top-3 ranking.
+                skip_top = db_info.get("skip_top_ranking", 0)
 
                 af_val = None
                 if af:
@@ -453,16 +518,25 @@ def process_chromosome(args):
                         affected_an += an_add
                         if cohort_observes:
                             hits_affected = True
+                        if af_val is not None and af_val > 0 and not skip_top:
+                            affected_arm_afs.append(
+                                (source_label(db_key), af_val))
                     elif disease_role == "unaffected":
                         background_ac += ac_add
                         background_an += an_add
                         if cohort_observes:
                             hits_background = True
+                        if af_val is not None and af_val > 0 and not skip_top:
+                            background_arm_afs.append(
+                                (source_label(db_key), af_val))
                 else:
                     background_ac += ac_add
                     background_an += an_add
                     if cohort_observes:
                         hits_background = True
+                    if af_val is not None and af_val > 0 and not skip_top:
+                        background_arm_afs.append(
+                            (source_label(db_key), af_val))
 
                 db_ac_af.extend([ac, af])
 
@@ -500,6 +574,10 @@ def process_chromosome(args):
                         affected_an += pop_an_add
                         if pop_observes:
                             hits_affected = True
+                        if (pop_af_val is not None and pop_af_val > 0
+                                and not skip_top):
+                            affected_arm_afs.append(
+                                (source_label(db_key, pop["key"]), pop_af_val))
                     elif is_disease_db and pheno in ("unaffected", "unknown"):
                         # Unaffected relatives, controls, and unknown-phenotype
                         # individuals all feed the background.
@@ -507,12 +585,20 @@ def process_chromosome(args):
                         background_an += pop_an_add
                         if pop_observes:
                             hits_background = True
+                        if (pop_af_val is not None and pop_af_val > 0
+                                and not skip_top):
+                            background_arm_afs.append(
+                                (source_label(db_key, pop["key"]), pop_af_val))
                     elif not is_disease_db:
                         # Ancestry breakdown of a population cohort. The
                         # unified row above already pooled the cohort if it
                         # had AC+AF, so we deliberately don't double-count
                         # the per-pop AC/AN here. Per-pop AC and AF still
                         # write to their own bigBed columns above.
+                        # We also deliberately exclude these from the
+                        # top-N source AFs: sub-populations like
+                        # gnomAD-Finnish are not "sources", so they would
+                        # crowd out actual project signals.
                         if pop_observes:
                             hits_background = True
 
@@ -525,6 +611,11 @@ def process_chromosome(args):
             affected_af = (affected_ac / affected_an) if affected_an > 0 else 0.0
             background_af = (background_ac / background_an) \
                 if background_an > 0 else 0.0
+
+            # Top 3 source AFs for the mouseOver. Strings; empty if no source
+            # in the relevant group had AF > 0.
+            top_affected_sources = top_n_source_afs(affected_arm_afs, 3)
+            top_background_sources = top_n_source_afs(background_arm_afs, 3)
 
             in_affected = 1 if (affected_ac > 0 or affected_af > 0) else 0
 
@@ -553,10 +644,12 @@ def process_chromosome(args):
                 str(affected_ac) if affected_ac > 0 else "",
                 str(affected_an) if affected_an > 0 else "",
                 ",".join(affected_cohorts),
+                top_affected_sources,
                 f"{background_af:.6f}" if background_af > 0 else "",
                 str(background_ac) if background_ac > 0 else "",
                 str(background_an) if background_an > 0 else "",
                 ",".join(background_sources),
+                top_background_sources,
                 str(in_affected),
             ]
             # Database AC/AF first, then population AC/AF — must match autoSql order
@@ -637,10 +730,12 @@ def generate_autosql(output_path, databases, table_name="varFreqsAll"):
         f.write('    string affectedAC;      "Summed allele count in affected/case individuals"\n')
         f.write('    string affectedAN;      "Summed allele number in affected/case individuals (pool denominator)"\n')
         f.write('    string affectedCohorts; "Disease cohorts contributing affected/case carriers"\n')
+        f.write('    string topAffectedSources;   "Top 3 affected/case cohorts by per-source AF"\n')
         f.write('    string backgroundAF;    "Pooled allele frequency in population cohorts + unaffected/control individuals (sum AC / sum AN)"\n')
         f.write('    string backgroundAC;    "Summed allele count in population cohorts + unaffected/control individuals"\n')
         f.write('    string backgroundAN;    "Summed allele number in population cohorts + unaffected/control individuals (pool denominator)"\n')
         f.write('    string backgroundSources; "Cohorts contributing to the background (population + unaffected)"\n')
+        f.write('    string topBackgroundSources; "Top 3 background cohorts by per-source AF"\n')
         f.write('    uint inAffected;        "1 if seen in an affected/case arm, else 0"\n')
         # Per-database AC/AF
         for db_key, db_info in databases.items():

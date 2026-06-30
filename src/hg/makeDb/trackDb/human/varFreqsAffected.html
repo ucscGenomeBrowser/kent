@@ -61,6 +61,21 @@ column instead. The pooled rate is preferred over a max-across-cohorts statistic
 small cohort with a high local AF cannot dominate the displayed frequency.
 </p>
 
+<h3>Top affected sources by AF</h3>
+<p>
+Alongside the pooled rate, the mouseover lists the top 3 contributing
+affected arms ranked by their own per-source AF, formatted as
+<code>Source (AF)</code>. This surfaces case cohorts where the variant is
+specifically enriched, even when the pooled rate across all arms is small.
+For disease cohorts that ship a phenotype split (SPARK, SFARI WGS, SCHEMA,
+GREGoR), the displayed AF is the affected-arm AF and the label includes the
+arm (for example <code>SPARK ASD</code>, <code>SCHEMA case</code>); for
+cohorts with no split (GA4K) the label is just the cohort name and the AF
+is the whole-cohort AF. Arms that ship only AC and no AF (currently GREGoR
+per-arm) are not included in this ranking because no AF is available;
+they still appear in <b>affectedCohorts</b>.
+</p>
+
 <h3>Finding case-enriched loss-of-function variants</h3>
 <p>
 To look for protein-truncating variants that are common in affected individuals but rare
