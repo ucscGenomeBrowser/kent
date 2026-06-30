@@ -15,6 +15,9 @@ the fastest way to get started.
 | [Table Browser](/docs/tutorials/tableBrowserTutorial.html) | Query and download Genome Browser data |
 | [Custom Tracks](/docs/tutorials/customTrackTutorial.html) | Display your own annotations in the Genome Browser |
 
+Take a look at our [training slides](/docs/browserSlideDecks.html) for more walk-throughs of Genome Browser features, 
+including cancer data and variant analysis.
+
 Prefer video? Our [training page](/training/index.html) has short how-to
 videos on common tasks like saving sessions, using BLAT and isPCR, and
 finding SNPs in a gene.

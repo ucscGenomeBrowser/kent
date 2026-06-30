@@ -142,7 +142,7 @@ def main():
         dname = scap(name.replace("_", " "))
         short = scap(shortlab(name))
         long  = "%s TAD domains (%s, %s, %s)" % (dname, organ, assay, study)
-        mouse = "3DGB TAD domain: %s (%s, %s)" % (dname, organ, assay)
+        mouse = "<b>3DGB TAD domain:</b> %s (%s, %s)" % (dname, organ, assay)
 
         # bed4: format-only. sort -k1,1 -k2,2n, then chrom/start/end + display name (-tab: name has spaces).
         bb = os.path.join(BBDIR, did + ".bb")

@@ -2447,7 +2447,7 @@ var dragSelect = {
                     dragSelect.highlightThisRegion(newPosition, true);
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                 } else {
-                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey))
+                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey) && !rulerClicked)
                         // don't show the dialog if: clicked on ruler, if dialog deactivated or meta/ctrl was pressed
                         dragSelect.selectionEndDialog(newPosition);
                     else {
@@ -3597,20 +3597,6 @@ var rightClick = {
 
             rightClick.showColorPicker(id);
 
-        } else if (cmd === 'colorThisItem') {
-
-            rightClick.colorThisItem();
-
-        } else if (cmd === 'removeItemColor') {
-
-            var itemToRemove = rightClick.itemFromHref(rightClick.selectedMenuItem.href);
-            if (itemToRemove)
-                rightClick.removeItemColor(itemToRemove.track, itemToRemove.name);
-
-        } else if (cmd === 'clearItemColors') {
-
-            rightClick.clearItemColors();
-
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
@@ -3956,248 +3942,6 @@ var rightClick = {
         });
     },
 
-    // ---- Per-item color (right-click "Color this item") ----
-    // The itemColors cart variable holds db#track#mode#itemName#hexColor records joined by '|',
-    // where mode is "item" (recolor the glyph) or "bg" (background highlight). db, track and mode
-    // are the leading fields and the color is the last '#' field, so item names containing '#'
-    // are tolerated.
-
-    getItemColors: function ()
-    {   // Current itemColors cart string, cached and seeded from the page's hgTracks json.
-        if (rightClick.itemColorsCache === undefined) {
-            rightClick.itemColorsCache =
-                (typeof hgTracks !== "undefined" && typeof hgTracks.itemColors === "string") ?
-                hgTracks.itemColors : "";
-        }
-        return rightClick.itemColorsCache;
-    },
-
-    parseItemColors: function (str)
-    {   // Parse the itemColors string into an array of {db, track, mode, name, hex} records.
-        var records = [];
-        if (!str)
-            return records;
-        str.split("|").forEach(function (rec) {
-            if (!rec)
-                return;
-            var firstHash = rec.indexOf("#");
-            var secondHash = rec.indexOf("#", firstHash + 1);
-            var thirdHash = rec.indexOf("#", secondHash + 1);
-            var lastHash = rec.lastIndexOf("#");
-            if (firstHash < 0 || secondHash < 0 || thirdHash < 0 || lastHash <= thirdHash)
-                return;
-            records.push({
-                db:    rec.substring(0, firstHash),
-                track: rec.substring(firstHash + 1, secondHash),
-                mode:  rec.substring(secondHash + 1, thirdHash),
-                name:  rec.substring(thirdHash + 1, lastHash),
-                hex:   rec.substring(lastHash + 1)   // bare hex, no leading '#'
-            });
-        });
-        return records;
-    },
-
-    serializeItemColors: function (records)
-    {
-        return records.map(function (r) {
-            return r.db + "#" + r.track + "#" + r.mode + "#" + r.name + "#" + r.hex;
-        }).join("|");
-    },
-
-    itemFromHref: function (href)
-    {   // Identify the clicked item from its hgc/hgGene link. Use the real name when it has a usable
-        // one (name field of the returned object), otherwise fall back to genomic position
-        // ("pos:chrom:start-end"). Nameless items (e.g. bed3) all share a placeholder name, so
-        // position - which both the link (c=/o=/t=) and the draw code can produce - identifies them.
-        if (!href)
-            return null;
-        var track, name, m;
-        m = /[&?]g=([^&]+)/.exec(href);
-        if (m && m[1])
-            track = decodeURIComponent(m[1]);
-        m = /[&?]i=([^&]+)/.exec(href);
-        if (m && m[1])
-            name = decodeURIComponent(m[1].replace(/\+/g, " "));
-        if (!name) {   // knownGene-style links
-            m = /[&?]hgg_gene=([^&]+)/.exec(href);
-            if (m && m[1])
-                name = decodeURIComponent(m[1]);
-            if (!track) {
-                m = /[&?]hgg_type=([^&]+)/.exec(href);
-                if (m && m[1])
-                    track = decodeURIComponent(m[1]);
-            }
-        }
-        if (!track)
-            return null;
-        // Custom tracks prefix the bed file path before the item name ("<path> <name>") and use the
-        // literal "NoItemName" when the row has no name; treat empty or "NoItemName" as nameless.
-        var nameless = !name || /(^|\s)NoItemName$/.test(name);
-        if (!nameless)
-            return {track: track, name: name};
-        // o=/t= are 0-based start/end, matching tg->itemStart/itemEnd in the draw code
-        var chrom, start, end;
-        m = /[&?]c=([^&]+)/.exec(href);
-        if (m && m[1]) chrom = decodeURIComponent(m[1]);
-        m = /[&?]o=([^&]+)/.exec(href);
-        if (m && m[1]) start = m[1];
-        m = /[&?]t=([^&]+)/.exec(href);
-        if (m && m[1]) end = m[1];
-        if (chrom && start && end)
-            return {track: track, name: "pos:" + chrom + ":" + start + "-" + end};
-        return null;
-    },
-
-    findItemColor: function (track, name)
-    {   // Return {hex (with leading '#'), mode} stored for this item, or null.
-        var db = getDb();
-        var records = rightClick.parseItemColors(rightClick.getItemColors());
-        for (var i = 0; i < records.length; i++) {
-            if (records[i].db === db && records[i].track === track && records[i].name === name)
-                return {hex: "#" + records[i].hex, mode: records[i].mode};
-        }
-        return null;
-    },
-
-    updateItemColorsVar: function (newStr)
-    {   // Persist the itemColors cart variable and keep the local cache in sync.
-        rightClick.itemColorsCache = newStr;
-        if (typeof hgTracks !== "undefined" && hgTracks)
-            hgTracks.itemColors = newStr;
-        cart.setVars(["itemColors"], [newStr], null, false);
-    },
-
-    setItemColor: function (track, name, hexWithHash, mode)
-    {
-        var db = getDb();
-        var hex = hexWithHash.replace(/^#/, "");
-        var records = rightClick.parseItemColors(rightClick.getItemColors());
-        var found = false;
-        for (var i = 0; i < records.length; i++) {
-            if (records[i].db === db && records[i].track === track && records[i].name === name) {
-                records[i].hex = hex;
-                records[i].mode = mode;
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-            records.push({db: db, track: track, mode: mode, name: name, hex: hex});
-        rightClick.updateItemColorsVar(rightClick.serializeItemColors(records));
-        imageV2.requestImgUpdate(track,
-            "itemColors=" + encodeURIComponent(rightClick.getItemColors()));
-    },
-
-    removeItemColor: function (track, name)
-    {
-        var db = getDb();
-        var records = rightClick.parseItemColors(rightClick.getItemColors()).filter(function (r) {
-            return !(r.db === db && r.track === track && r.name === name);
-        });
-        rightClick.updateItemColorsVar(rightClick.serializeItemColors(records));
-        imageV2.requestImgUpdate(track,
-            "itemColors=" + encodeURIComponent(rightClick.getItemColors()));
-    },
-
-    hasItemColorsForCurrentDb: function ()
-    {   // Are any item colors set for the database currently shown?
-        var db = getDb();
-        return rightClick.parseItemColors(rightClick.getItemColors()).some(function (r) {
-            return r.db === db;
-        });
-    },
-
-    clearItemColors: function ()
-    {   // Clear item colors for the current database only, leaving other assemblies' colors alone.
-        var db = getDb();
-        var records = rightClick.parseItemColors(rightClick.getItemColors()).filter(function (r) {
-            return r.db !== db;
-        });
-        var newStr = rightClick.serializeItemColors(records);
-        rightClick.updateItemColorsVar(newStr);
-        imageV2.fullReload("itemColors=" + encodeURIComponent(newStr));
-    },
-
-    colorThisItem: function ()
-    {   // Open the per-item color dialog for the right-clicked item.
-        var sel = rightClick.selectedMenuItem;
-        var item = sel ? rightClick.itemFromHref(sel.href) : null;
-        if (!item) {
-            warn("Couldn't identify the item to color.");
-            return;
-        }
-        var existing = rightClick.findItemColor(item.track, item.name);
-        var currentColor = existing ? existing.hex : "#ff0000";
-        var currentMode = existing ? existing.mode : "item";
-        rightClick.showItemColorPicker(item.track, item.name, currentColor, currentMode);
-    },
-
-    showItemColorPicker: function (track, itemName, currentColor, currentMode)
-    {   // Spectrum dialog to recolor a single item's glyph or draw a colored background behind it.
-        var dialogId = "itemColorDialog";
-        $("#" + dialogId).remove();
-        var $dlg = $("<div>").attr("id", dialogId).html(
-            "<p>Pick a color for <b></b>:</p>" +
-            "<input type='text' id='itemColorText' size='8' />" +
-            "&nbsp;<input id='itemColorPicker' />" +
-            "<br><br><label><input type='radio' name='itemColorMode' value='item'> " +
-            "Color whole item</label>" +
-            "<br><label><input type='radio' name='itemColorMode' value='bg'> " +
-            "Background highlight</label>");
-        $dlg.find("p b").text(itemName);
-        $dlg.find("#itemColorText").val(currentColor);
-        $dlg.find("input[name='itemColorMode'][value='" +
-                  (currentMode === "bg" ? "bg" : "item") + "']").prop("checked", true);
-        $("body").append($dlg);
-        var hexColorRe = /^#[0-9a-fA-F]{6}$/;
-        $("#itemColorPicker").spectrum({
-            color: currentColor,
-            showPalette: true,
-            showSelectionPalette: true,
-            showInitial: true,
-            showInput: true,
-            preferredFormat: "hex",
-            localStorageKey: "genomebrowser",
-            hideAfterPaletteSelect: true,
-            change: function(color) {
-                $("#itemColorText").val(color.toHexString());
-            }
-        });
-        $("#itemColorText").on("change", function() {
-            var val = $(this).val();
-            if (hexColorRe.test(val))
-                $("#itemColorPicker").spectrum("set", val);
-        });
-        var applyColor = function() {
-            var color = $("#itemColorText").val();
-            if (!hexColorRe.test(color)) {
-                warn("Invalid color '" + color + "'. Expected hex format like #1a2b3c.");
-                return false;
-            }
-            var mode = $("input[name='itemColorMode']:checked").val() || "item";
-            rightClick.setItemColor(track, itemName, color, mode);
-            return true;
-        };
-        $("#" + dialogId).dialog({
-            modal: true,
-            title: "Color this item",
-            closeOnEscape: true,
-            resizable: false,
-            minWidth: 400,
-            buttons: {
-                "Apply": function() { applyColor(); },
-                "Ok": function() {
-                    if (applyColor())
-                        $(this).dialog("close");
-                }
-            },
-            close: function() {
-                $("#itemColorPicker").spectrum("destroy");
-                $(this).remove();
-            }
-        });
-    },
-
     // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
     mouseOverToLabel: function(title)
     {
@@ -4420,34 +4164,13 @@ var rightClick = {
                                                     "selectWholeGene"); return true;
                                           }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] =
+                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] = 
                                 {   onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject,
-                                                       "highlightItem");
+                                                       "highlightItem"); 
                                         return true;
                                     }
                                 };
-                            var itemForColor = rightClick.itemFromHref(href);
-                            if (itemForColor) {
-                                o[rightClick.makeImgTag("palette.png") + " Color " + title + "..."] =
-                                    {   onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                           "colorThisItem");
-                                            return true;
-                                        }
-                                    };
-                                if (rightClick.findItemColor(itemForColor.track,
-                                                             itemForColor.name)) {
-                                    o[rightClick.makeImgTag("palette.png") +
-                                            " Remove color from " + title] =
-                                        {   onclick: function(menuItemClicked, menuObject) {
-                                                rightClick.hit(menuItemClicked, menuObject,
-                                                               "removeItemColor");
-                                                return true;
-                                            }
-                                        };
-                                }
-                            }
                             //o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
                             //    {   onclick: function(menuItemClicked, menuObject) {
                             //            rightClick.hit(menuItemClicked, menuObject,
@@ -4664,13 +4387,6 @@ var rightClick = {
                             return true; }
                     };
                 }
-                if (rightClick.hasItemColorsForCurrentDb()) {
-                    o[rightClick.makeImgTag("palette.png")+" Clear all item colors"] = {
-                        onclick: function(menuItemClicked, menuObject) {
-                            rightClick.hit(menuItemClicked, menuObject, "clearItemColors");
-                            return true; }
-                    };
-                }
 
                 menu.push($.contextMenu.separator);
                 menu.push(o);
@@ -4720,8 +4436,8 @@ var rightClick = {
                 menu.push($.contextMenu.separator);
             }
 
-            // add sort options if this is a custom composite
-            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
+            // add sort options if this is a custom composite or a wiggle-only composite
+            if ((rec.isCustomComposite || parentIsAllWiggle(rec)) && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
                 o[" Sort by Magnitude "] = {

@@ -304,7 +304,7 @@ Important:
 - For DRAFT_RESPONSE, be helpful and concise. Ask clarifying questions if needed. Point to relevant documentation when appropriate."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=800,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -394,7 +394,7 @@ EMAIL 2: SPAM or NOT SPAM
 (etc.)"""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=100,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -662,6 +662,37 @@ def send_error_notification(subject, body):
         return False
 
 
+# Set once per run when a non-retryable Claude API error is reported, so a broken
+# model ID or credential alerts the QA team once per run instead of once per email.
+_claude_fatal_alerted = False
+
+
+def handle_claude_api_error(e, context):
+    """Log a Claude API failure and alert the QA team on non-transient errors.
+
+    Transient errors (429 rate limit, 5xx, connection/timeout) are logged for
+    retry on the next run. Other 4xx client errors -- an invalid or retired model
+    ID, bad auth, a malformed request -- won't resolve on their own, so they also
+    send an email alert to the QA team (at most once per run). The caller still
+    skips the current item either way.
+    """
+    global _claude_fatal_alerted
+
+    status = getattr(e, 'status_code', None)
+    is_fatal = status is not None and 400 <= status < 500 and status not in (408, 409, 429)
+
+    if is_fatal:
+        message = (f"Claude API client error (HTTP {status}) {context}. This will not "
+                   f"resolve on retry and needs investigation. Error: {e}")
+        logger.error(message)
+        if not _claude_fatal_alerted:
+            send_error_notification(f"Claude API client error (HTTP {status})", message)
+            _claude_fatal_alerted = True
+    else:
+        logger.error(f"Claude API unavailable after retries {context}. "
+                     f"Will be retried next run. Error: {e}")
+
+
 def delete_moderation_email(gmail_id):
     """Delete/archive the moderation notification after processing."""
     if DRY_RUN:
@@ -910,7 +941,7 @@ def strip_quoted_content(body):
                         i += 1
                     else:
                         break
-                # Reset cleaned — anything before the quote header was blank/trivial
+                # Reset cleaned -- anything before the quote header was blank/trivial
                 cleaned = []
                 continue
             else:
@@ -1252,7 +1283,7 @@ def find_existing_ticket(subject, thread_emails):
         if normalize_subject(issue['subject']).lower() != normalized.lower():
             continue
 
-        # Staff replies to mailing list threads don't need email match —
+        # Staff replies to mailing list threads don't need email match --
         # subject match is sufficient since staff wouldn't start a new
         # unrelated thread with the same subject. The placeholder subject is
         # shared by all no-subject threads, so it's excluded from this shortcut:
@@ -1679,8 +1710,7 @@ def create_tickets_for_approved(approved_messages):
                 analysis = analyze_email_with_claude(subject, body, sender,
                                                     group_email=group_email)
             except anthropic.APIError as e:
-                logger.error(f"Anthropic API overloaded after retries, skipping email "
-                             f"'{subject[:50]}'. Will be retried next run. Error: {e}")
+                handle_claude_api_error(e, f"analyzing email '{subject[:50]}'")
                 continue
 
             logger.info(f"  Category: {analysis['category']}")
@@ -1723,8 +1753,7 @@ def process_moderated_lists():
     try:
         spam_results = batch_check_spam_with_claude(all_pending)
     except anthropic.APIError as e:
-        logger.error(f"Anthropic API overloaded after retries, skipping spam check this run. "
-                     f"Pending messages will be retried in the next run. Error: {e}")
+        handle_claude_api_error(e, "during the moderation spam check")
         return
 
     # Process results and collect approved messages
@@ -1859,8 +1888,7 @@ def process_emails():
                     group_email=thread['group']
                 )
             except anthropic.APIError as e:
-                logger.error(f"Anthropic API overloaded after retries, skipping email "
-                             f"'{first_email['subject'][:50]}'. Will be retried next run. Error: {e}")
+                handle_claude_api_error(e, f"analyzing email '{first_email['subject'][:50]}'")
                 continue
 
             if analysis['is_spam']:

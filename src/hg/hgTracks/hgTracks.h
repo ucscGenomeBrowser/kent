@@ -1638,15 +1638,6 @@ void createHgFindMatchHash();
 /* Read from the cart the string assocated with matches and
    put the matching items into a hash for highlighting later. */
 
-void createItemColorHash();
-/* Read the itemColors cart variable into a hash of per-item colors keyed by "track\titemName",
- * keeping only records for the current database. Each color either recolors the whole item glyph
- * or draws a background highlight, per the record's mode. */
-
-boolean itemColorOverride(struct track *tg, void *item, Color *retColor, boolean *retWholeItem);
-/* If the user set a per-item color for this item (via right-click), return TRUE and fill in the
- * color and whether it recolors the whole item; otherwise return FALSE. */
-
 TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb);
 /* Lookup handler for track of give name.  Try parents if
  * subtrack has a NULL handler.  Return NULL if none. */

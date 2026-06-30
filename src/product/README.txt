@@ -169,7 +169,7 @@ unusual platforms.
 
 # Using UDR to speed up downloads
 
-[UDR] (UDT Enabled Rsync) is a download protocol that is very efficent
+[UDR] (UDT Enabled Rsync) is a download protocol that is very efficient
 at sending large amounts of data over long distances. UDR utilizes rsync
 as the transport mechanism, but sends the data over the UDT protocol.
 UDR is not written or managed by UCSC. It is an open source tool created
@@ -206,7 +206,7 @@ Red Hat Enterprise Linux 6.x (or variants such as CentOS 6 or Scientific
 Linux 6). You'll find both a 64-bit and 32-bit rpm [here].
 
 Once you have a working UDR binary, either by building from source or by
-installing the rpm, you can download files from either of our our
+installing the rpm, you can download files from either of our
 download servers in a fashion similar to rsync. For example, using
 rsync, all of the MariaDB tables for the hg19
 database can be downloaded using either one of the following two commands:
@@ -228,12 +228,12 @@ would be:
 For questions about installing and mirroring the UCSC Genome Browser, contact the UCSC mailing 
 list [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). **<span class="gbsWarnText">
 Messages sent to this address 
-will be posted the moderated genome-mirror mailing list, which is archived on a SEARCHABLE PUBLIC
+will be posted to the moderated genome-mirror mailing list, which is archived on a SEARCHABLE PUBLIC
 </span>[Google Groups forum](http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror)**.
 
 # What happened to Genome Browser in a Box (GBiB)?
 
-Support for the Genome Browser in a Box (GBiB) product **product ended in 2025**. We recommend
+Support for the Genome Browser in a Box (GBiB) product **ended in 2025**. We recommend
 use of the GBiC [dockerfile](/goldenPath/help/mirror.html#docker-installation-instructions) instead.
 The information below is kept for historical purposes.
 
