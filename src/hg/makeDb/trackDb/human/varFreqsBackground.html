@@ -61,6 +61,35 @@ cohort with a high local AF (for example AllOfUs Oceanian) cannot dominate the d
 frequency.
 </p>
 
+<h3>Top population sources by AF</h3>
+<p>
+Alongside the pooled rate, the mouseover lists the top 3 contributing
+background sources ranked by their own per-source AF, formatted as
+<code>Source (AF)</code>. This surfaces population cohorts where a variant
+is specifically enriched, even when the pooled rate is small; the
+East-Asian founder allele
+<a href="/cgi-bin/hgTracks?db=hg38&position=chr10:111751803-111751805&varFreqs=full&varFreqsBackground=pack" target="_blank">rs4986893</a>,
+for example, ranks ToMMo Japan and KOVA Korea at the top while the pooled
+rate across all contributing sources sits much lower. For disease cohorts
+that ship a phenotype split (SPARK, SFARI WGS, SCHEMA, GREGoR), the
+displayed AF is the unaffected-arm AF and the label includes the arm (for
+example <code>SPARK non-ASD</code>, <code>SCHEMA ctrl</code>); for
+population cohorts, the label is the cohort name and the AF is the unified
+cohort AF. Per-population sub-ancestries of a cohort (such as gnomAD
+HGDP+1kG continental groups) are deliberately excluded from this ranking so
+sub-population frequencies do not crowd out actual project-level signals.
+</p>
+<p>
+Two source cohorts are also excluded from the Top-3 ranking: <b>SGDP</b>
+and <b>SVatalog</b>. Their VCFs encode allele counts per genotyped site
+rather than per population (each variant in a single individual produces
+<code>AC=1, AN=2, AF=0.5</code>), so the per-source AF is not a population
+frequency and would always sit near the top of the ranking with a
+meaningless value. Both cohorts still appear in <b>backgroundSources</b>
+and still contribute their (small) AC and AN to the pooled
+<b>backgroundAF</b>; they are only suppressed from the Top-3 list.
+</p>
+
 <h2>Filters</h2>
 <ul>
   <li><b>Variant Type</b> and <b>Consequence</b>: restrict to SNV/insertion/deletion/MNV
