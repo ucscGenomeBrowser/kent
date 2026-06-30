@@ -119,6 +119,13 @@ def getAllPages(url, results=[]):
         raise Exception("Error when downloading %s: %s" % (url, str(e)))
     return results
 
+def ensemblBuild(ensembl_genes, assembly):
+    """Return the newest Ensembl-release dict for an assembly. The release-number sub-key varies
+    by PanelApp instance (England GRch37/82, GRch38/90; Australia GRch37/87, GRch38/115)."""
+    releases = ensembl_genes[assembly]
+    relKey = sorted(releases.keys(), key=int)[-1]
+    return releases[relKey]
+
 def downloadCnvs(url):
     Error = True
     continuous_count=0
@@ -322,13 +329,13 @@ def downloadTandReps(url):
             alias = ""
             biotype = ""
         try:
-            ensembl_id_37 = gene_data['ensembl_genes']['GRch37']['82']['ensembl_id']
+            ensembl_id_37 = ensemblBuild(gene_data['ensembl_genes'], 'GRch37')['ensembl_id']
         except:
             ensembl_id_37 = "None"
-        try:        
-            ensembl_id_38 = gene_data['ensembl_genes']['GRch38']['90']['ensembl_id']
+        try:
+            ensembl_id_38 = ensemblBuild(gene_data['ensembl_genes'], 'GRch38')['ensembl_id']
         except:
-            ensembl_id_38 = "None"        
+            ensembl_id_38 = "None"
         
         gene_name = gene_data['gene_name']
         #gene_symbol = gene_data['gene_symbol']
@@ -341,7 +348,7 @@ def downloadTandReps(url):
             omim_gene = ' '.join(gene_data['omim_gene'])
         grch37_coordinates = res[count]['grch37_coordinates']
         if grch37_coordinates == None:
-            coordinates = gene_data['ensembl_genes']['GRch37']['82']['location'] 
+            coordinates = ensemblBuild(gene_data['ensembl_genes'], 'GRch37')['location']
             location = coordinates.split(':')
             grch37_coordinates = location[1].split('-')
         chromStart_19 = int(grch37_coordinates[0])
@@ -350,7 +357,7 @@ def downloadTandReps(url):
         # hg38
         grch38_coordinates = res[count]['grch38_coordinates']
         if grch38_coordinates == None:
-            coordinates = gene_data['ensembl_genes']['GRch38']['90']['location'] 
+            coordinates = ensemblBuild(gene_data['ensembl_genes'], 'GRch38')['location']
             location = coordinates.split(':')
             grch38_coordinates = location[1].split('-')
 
@@ -621,7 +628,7 @@ def getGenesLocations(jsonFh,url,onlyPanels):
             gene_range_38 = None
 
             try:
-                ensembl_genes_GRch37_82_location = res[count]['gene_data']['ensembl_genes']['GRch37']['82']['location']
+                ensembl_genes_GRch37_82_location = ensemblBuild(res[count]['gene_data']['ensembl_genes'], 'GRch37')['location']
                 location_37 = ensembl_genes_GRch37_82_location.split(':')
                 chromo_37 = 'chr'+location_37[0]
                 gene_range_37 = location_37[1].split('-')
@@ -630,7 +637,7 @@ def getGenesLocations(jsonFh,url,onlyPanels):
                 genes_missing_info.append(res[count]['gene_data']['gene_symbol']+"/hg19")
 
             try:
-                ensembl_genes_GRch38_90_location = res[count]['gene_data']['ensembl_genes']['GRch38']['90']['location']
+                ensembl_genes_GRch38_90_location = ensemblBuild(res[count]['gene_data']['ensembl_genes'], 'GRch38')['location']
                 location_38 = ensembl_genes_GRch38_90_location.split(':')
                 chromo_38 = 'chr'+location_38[0]
                 # Change mitochondrial chromosomal suffix from MT -> M for hg38 only
@@ -705,8 +712,8 @@ def getGenesLocations(jsonFh,url,onlyPanels):
             #-----------------------------------------------------------------------------------------------------------    
 
             try:
-                ensembl_genes_GRch37_82_ensembl_id = res[count]['gene_data']['ensembl_genes']['GRch37']['82']['ensembl_id']
-                ensembl_genes_GRch38_90_ensembl_id = res[count]['gene_data']['ensembl_genes']['GRch38']['90']['ensembl_id']
+                ensembl_genes_GRch37_82_ensembl_id = ensemblBuild(res[count]['gene_data']['ensembl_genes'], 'GRch37')['ensembl_id']
+                ensembl_genes_GRch38_90_ensembl_id = ensemblBuild(res[count]['gene_data']['ensembl_genes'], 'GRch38')['ensembl_id']
 
             except:
                 ensembl_genes_GRch37_82_ensembl_id = ''
