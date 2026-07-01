@@ -551,6 +551,7 @@ else if (pslOut)
 
     if (pslRawOut)
         exit(0);
+    printf("<TT><PRE>");
     printf("</PRE></TT>");
     }
 else if (jsonOut)  
@@ -647,10 +648,8 @@ else  // hyperlink
 	    printf("</div>\n");
 	    }
 
-        char *trackNameJs = javaScriptLiteralEncode(trackName);
-        char *trackDescriptionJs = javaScriptLiteralEncode(trackDescription);
         jsInlineF(
-
+	    
 	    "var ct_blat = '';\n"
 	    "\n"
 	    "function buildBigPslCtSuccess (content, status)\n"
@@ -676,7 +675,7 @@ else  // hyperlink
 	    "{ // call hgc to buildBigPsl from blat result.\n"
 	    "\n"
 	    "var cgiVars = 'trackName='+encodeURIComponent(trackName)+'&trackDescription='+encodeURIComponent(trackDescription);\n"
-	    "if (ct_blat !== '')\n"
+	    "if (!ct_blat !== '')\n"
 	    "    {\n"  	
 	    "    cgiVars += '&"CT_DO_REMOVE_VAR"='+encodeURIComponent('Remove Custom Track');\n"
 	    "    cgiVars += '&"CT_SELECTED_TABLE_VAR"='+encodeURIComponent(ct_blat);\n"
@@ -710,10 +709,8 @@ else  // hyperlink
 	    "    $('#renameFormItem')[0].style.display = 'block';\n"   
 	    "    $('#deleteCtForm')[0].style.display = 'block';\n"   
 	    "    }\n"
-            "});\n", url->string, trackNameJs, trackDescriptionJs);
-        freeMem(trackNameJs);
-        freeMem(trackDescriptionJs);
-
+            "});\n", url->string, trackName, trackDescription);
+ 
 
             // RENAME CT JS CODE
 	    if (!feelingLucky)
@@ -919,9 +916,6 @@ else  // hyperlink
         printf("\n");
 	}
     printf("</PRE>\n");
-    if (locusConn != NULL)
-        hFreeConn(&locusConn);
-    subTextFreeList(&subList);
     webNewSection("Help");
     puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
     puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
