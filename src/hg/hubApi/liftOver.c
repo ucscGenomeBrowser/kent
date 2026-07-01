@@ -75,7 +75,7 @@ char *filter = cgiOptionalString(argFilter);
 char *fromDb = cgiOptionalString(argFromGenome);
 char *toDb = cgiOptionalString(argToGenome);
 
-struct sqlConnection *conn = hConnectOtto();
+struct sqlConnection *conn = hConnectCentral();
 char *tableName = cloneString(liftOverChainTable());
 struct dyString *query = newDyString(0);
 sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
@@ -143,7 +143,8 @@ liftOverChainFreeList(&chainList);
 if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
     {
     char *ottoTable = cfgOption("ottoTable");
-    if (isNotEmpty(ottoTable) && sqlTableExists(conn, ottoTable))
+    struct sqlConnection *ottoConn = hConnectOtto();
+    if (isNotEmpty(ottoTable) && sqlTableExists(ottoConn, ottoTable))
         {
         struct dyString *pq = newDyString(0);
         sqlDyStringPrintf(pq,
@@ -153,7 +154,7 @@ if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
             "ORDER BY requestTime DESC LIMIT 1",
             ottoTable, fromDb, toDb, toDb, fromDb);
         char **row;
-        struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&pq));
+        struct sqlResult *sr = sqlGetResult(ottoConn, dyStringCannibalize(&pq));
         if ((row = sqlNextRow(sr)) != NULL)
             {
             jsonWriteBoolean(jw, "pending", TRUE);
@@ -162,10 +163,11 @@ if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
             }
         sqlFreeResult(&sr);
         }
+    hDisconnectOtto(&ottoConn);
     }
 
 apiFinishOutput(0, NULL, jw);
-hDisconnectOtto(&conn);
+hDisconnectCentral(&conn);
 }
 
 static void loginStatus()
