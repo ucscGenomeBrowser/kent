@@ -64,6 +64,106 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="070126"></a>
+<h2>Jul. 1, 2026 &nbsp;&nbsp; New SNV Frequencies supertrack on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqs" target="_blank"><b>SNV
+Frequencies</b></a> supertrack on the human assembly (GRCh38/hg38). The
+collection unifies single-nucleotide variant allele frequencies from 30+
+population resequencing and biobank projects worldwide, covering roughly
+1.7 million genomes, exomes, and genotyping arrays, into a single place
+where a variant's frequency can be compared across populations, ancestries,
+and disease cohorts.
+</p>
+
+<p>
+The collection includes three combined tracks that aggregate the source
+data along different lines:
+</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsBackground" target="_blank">
+      <b>Population reference</b></a> (default view): 1.24 billion variants
+      pooled across general-population and biobank cohorts plus the
+      unaffected/control arms of the disease studies.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsAffected" target="_blank">
+      <b>Disease cohorts</b></a>: 133 million variants in the affected or
+      case arms of five disease-study cohorts (SFARI SPARK WES and WGS, SCHEMA,
+      GREGoR, GA4K). Each variant also carries its background frequency for
+      easy case-vs-population comparison.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsArray" target="_blank">
+      <b>Genotyping Array Databases Combined</b></a>: 14.7 million variants
+      from three array cohorts (TPMI Taiwan, Mexico Biobank, UK Biobank
+      imputed), kept separate from the sequencing-based tracks because chip
+      data has different per-variant confidence.</li>
+</ul>
+
+<div class="text-center">
+  <img src="../images/snvFrequenciesNewsarch.png"
+       alt="SNV Frequencies mouseover at rs4986893, a CYP2C19 stop-gained variant common in East Asian populations"
+       width='80%'>
+  <p class="gbsCaption"><em>rs4986893, a CYP2C19 stop-gained variant common in
+  East Asian populations. The mouseover ranks ToMMo Japan, KOVA Korea, and WBBC
+  China at the top, well above the 1.6% pooled background AF.</em></p>
+</div>
+
+<p>
+Each variant in the combined tracks is colored by predicted protein
+consequence
+(<b style="color:#FF0000">loss-of-function</b>,
+<b style="color:#1F77B4">missense</b>,
+<b style="color:#008000">synonymous</b>,
+<b style="color:#808080">non-coding</b>), and
+carries pooled allele counts and pooled allele frequencies (sum AC / sum
+AN) across the contributing cohort arms. Cross-database filters allow
+you to narrow to variant type, consequence, source database, length, or
+any combination of per-track AC/AF/AN ranges.
+</p>
+
+<p>
+The supertrack pulls together cohorts from across the world. A high-level
+summary of the regions and contributing projects is shown below; a
+complete table with per-cohort sample counts, data types, sub-populations
+and download status is on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqs" target="_blank">supertrack
+description page</a>.
+</p>
+
+<table class="stdTbl">
+  <tr><th>Region</th><th>Contributing cohorts</th></tr>
+  <tr><td>East Asia</td><td>ToMMo, GenomeAsia, NPM, KOVA, WBBC, ChinaMAP, TPMI</td></tr>
+  <tr><td>South Asia</td><td>IndiGen, GenomeIndia</td></tr>
+  <tr><td>Africa</td><td>Tishkoff</td></tr>
+  <tr><td>Americas</td><td>AllOfUs, TOPMed, ABraOM, Mexico Biobank</td></tr>
+  <tr><td>Europe</td><td>FinnGen, SweGen, GoNL, HRC, UK Biobank, ALFA</td></tr>
+  <tr><td>Middle East</td><td>Saudi</td></tr>
+  <tr><td>Oceania</td><td>MGRB</td></tr>
+  <tr><td>Disease cohorts</td><td>SFARI SPARK (WES + WGS), SCHEMA, GREGoR, GA4K</td></tr>
+  <tr><td>Global reference panels</td><td>SGDP, gnomAD HGDP+1kG</td></tr>
+  <tr><td>Long-read / linked-read</td><td>GA4K, CoLoRSdb, SVatalog</td></tr>
+</table>
+
+<p>
+License restrictions on some sources limit redistribution; see the
+supertrack description page for per-cohort details.
+</p>
+
+<p>
+We plan to continue updating this track as more population-scale
+allele-frequency datasets become available. If you are involved with a
+project that publishes variant frequencies and would like to contribute,
+please <a href="/contacts.html" target="_blank">reach out</a>.
+</p>
+
+<p>
+We would like to thank the millions of participants worldwide who donated
+samples and shared health information to make this data possible; the
+investigators who provided the variant files, including Matthew Hansen
+(Tishkoff lab), Insoo Jang (KOVA), and Andreas Lahner (MGZ) for feedback;
+and Alex Ioannidis (UCSC) for the motivation behind the track. The track
+was developed by Maximilian Haeussler with QA and review by Lou Nassar.
+</p>
+
 <a name="062526"></a>
 <h2>Jun. 25, 2026 &nbsp;&nbsp; Release 3 update of the Varaico Variants and Varaico Variants (suppl) tracks for hg38 and hg19</h2>
 <p>
