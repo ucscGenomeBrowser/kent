@@ -591,24 +591,9 @@ else  // hyperlink
         if (pslIsProtein(psl))
             dyStringPrintf(url, "&isProt=on");
 
-        /* Pass this request's parameters to hgBlat.js, which builds (and lets the
-           user rename or delete) a stable bigPsl custom track from the blat result. */
-        char *trackNameJs = javaScriptLiteralEncode(trackName);
-        char *trackDescriptionJs = javaScriptLiteralEncode(trackDescription);
-        jsIncludeFile("hgBlat.js", NULL);
         jsInlineF(
 	    "var luckyLocation = '';\n"
-	    "var hgBlatData = {\n"
-	    "    url: '%s',\n"
-	    "    trackName: '%s',\n"
-	    "    trackDescription: '%s',\n"
-	    "    ctTableVar: '%s',\n"
-	    "    ctRemoveVar: '%s'\n"
-	    "    };\n",
-	    url->string, trackNameJs, trackDescriptionJs,
-	    CT_SELECTED_TABLE_VAR, CT_DO_REMOVE_VAR);
-        freeMem(trackNameJs);
-        freeMem(trackDescriptionJs);
+        );
 	if(feelingLucky)
 	    {
 	    /* If we found something jump browser to there. */
@@ -661,6 +646,97 @@ else  // hyperlink
 	    printf("</FORM>\n");
 	    printf("</div>\n");
 	    }
+
+        char *trackNameJs = javaScriptLiteralEncode(trackName);
+        char *trackDescriptionJs = javaScriptLiteralEncode(trackDescription);
+        jsInlineF(
+
+	    "var ct_blat = '';\n"
+	    "\n"
+	    "function buildBigPslCtSuccess (content, status)\n"
+	    "{ // Finishes the successful creation of blat ct bigPsl.  Called by ajax return.\n"
+	    "  // saves the ct name so it can be used later for rename or delete.\n"
+	    "\n"
+	    "var matchWord = '&table=';\n"
+	    "var ct_blatPos = content.indexOf(matchWord) + matchWord.length;\n"
+	    "\n"
+	    "if (ct_blatPos >= 0)\n"
+	    "    {\n"
+	    "    var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
+	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
+	    "    if (luckyLocation == '')\n"
+	    "        {\n"
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[0].value = ct_blat;\n"
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[1].value = ct_blat;\n"
+	    "        }\n"
+	    "    }\n"
+	    "}\n"
+	    "\n"
+	    "function buildBigPslCt (url, trackName, trackDescription)\n"
+	    "{ // call hgc to buildBigPsl from blat result.\n"
+	    "\n"
+	    "var cgiVars = 'trackName='+encodeURIComponent(trackName)+'&trackDescription='+encodeURIComponent(trackDescription);\n"
+	    "if (ct_blat !== '')\n"
+	    "    {\n"  	
+	    "    cgiVars += '&"CT_DO_REMOVE_VAR"='+encodeURIComponent('Remove Custom Track');\n"
+	    "    cgiVars += '&"CT_SELECTED_TABLE_VAR"='+encodeURIComponent(ct_blat);\n"
+	    "    }\n"  	
+	    "\n"
+	    "$.ajax({\n"
+	    "    type: 'GET',\n"
+	    "    url: url,\n"
+	    "    data: cgiVars,\n"
+	    "    dataType: 'html',\n"
+	    "    trueSuccess: buildBigPslCtSuccess,\n"
+	    "    success: catchErrorOrDispatch,\n"
+	    "    error: errorHandler,\n"
+	    "    cache: false,\n"
+	    "    async: false\n"
+	    "    });\n"
+	    "}\n"
+	    "\n"
+	    "var url='%s';\n"
+	    "var trackName='%s';\n"
+	    "var trackDescription='%s';\n"
+            "$(document).ready(function() {\n"
+	    "\n"
+	    "buildBigPslCt(url, trackName, trackDescription);\n"
+	    "if (luckyLocation !== '')\n"
+	    "    {\n"
+            "    location.replace(luckyLocation);\n"
+	    "    }\n"
+	    "else\n"
+	    "    {\n"
+	    "    $('#renameFormItem')[0].style.display = 'block';\n"   
+	    "    $('#deleteCtForm')[0].style.display = 'block';\n"   
+	    "    }\n"
+            "});\n", url->string, trackNameJs, trackDescriptionJs);
+        freeMem(trackNameJs);
+        freeMem(trackDescriptionJs);
+
+
+            // RENAME CT JS CODE
+	    if (!feelingLucky)
+		jsInline("$('#showRenameForm').click(function(){\n"
+		    "  $('#renameForm')[0].style.display = 'block';\n"
+		    "  $('#renameFormItem')[0].style.display = 'none';\n"
+		    "  $('#showRenameForm')[0].style.display = 'none';\n"
+		    "  $('input[name=\"trackName\"]')[0].value = trackName;\n"
+		    "  $('input[name=\"trackDescription\"]')[0].value = trackDescription;\n"
+		    "return false;\n"
+		    "});\n");
+
+            // RENAME CT JS CODE
+	    if (!feelingLucky)
+		jsInline("$('#submitTrackNameDescr').click(function(){\n"
+		    "  $('#renameForm')[0].style.display = 'none';\n"
+		    "  $('#renameFormItem')[0].style.display = 'block';\n"
+		    "  $('#showRenameForm')[0].style.display = 'block';\n"
+		    "  trackName = $('input[name=\"trackName\"]')[0].value;\n"
+		    "  trackDescription = $('input[name=\"trackDescription\"]')[0].value;\n"
+		    "buildBigPslCt(url, trackName, trackDescription);\n"
+		    "return false;\n"
+		    "});\n");
 
         dyStringFree(&url);
 
