@@ -1,0 +1,13 @@
+track popEve
+shortLabel popEVE Scores
+longLabel popEVE proteome-wide missense deleteriousness scores
+type bigBed 12 +
+parent predictionScoresSuper
+bigDataUrl /gbdb/$D/popEve/popEve.bb
+style heatmap
+dataVersion popEVE v1.1 (UKBB), 2025-07-15
+visibility pack
+maxWindowCoverage 200000
+filterText.name .*
+filterType.name regexp
+filterLabel.name Gene symbol

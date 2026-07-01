@@ -1,0 +1,79 @@
+# [Claude/lrnassar] popEVE - proteome-wide missense deleteriousness scores (2026-06-30)
+
+# popEVE places missense variants on a single proteome-wide, human-specific spectrum of
+# deleteriousness by calibrating EVE + ESM-1v evolutionary scores against UK Biobank
+# population variation with a Gaussian process.
+# Reference: Orenbuch et al. (2025) Nat Genet 57:3165-3174, PMID 41286104.
+# https://doi.org/10.1038/s41588-025-02400-1
+
+# Data: the complete UKBB-trained GRCh38 VCF (popEVE v1.1, dated 2025-07-15) from the
+# pop.evemodel.org bulk downloads. The VCF carries, per missense substitution, genomic
+# coordinates plus INFO fields protein (RefSeq NP_), gene, mutant (e.g. E773D),
+# gap_frequency, popEVE, pop-adjusted_EVE, pop-adjusted_ESM1v, EVE, ESM1v.
+# Source size 1476124568 bytes, Last-Modified 2025-10-29.
+
+mkdir -p /hive/data/outside/popEve
+mkdir -p /hive/data/genomes/hg38/bed/popEve/sorttmp
+cd /hive/data/genomes/hg38/bed/popEve
+ln -s /hive/data/outside/popEve input
+
+cd /hive/data/outside/popEve
+wget -nv https://data.evemodel.org/popeve/v1.1/downloads/grch38_popEVE_ukbb_20250715.vcf.gz
+
+# The combined VCF is one position-sorted file with all proteins interleaved (overlapping
+# genes share positions), so records are grouped by protein on disk before conversion.
+# Each protein becomes one heatmap BED12+ entry: columns = amino acid positions at codon
+# genomic coordinates, rows = 20 standard amino acids (A-Y). Multiple codon changes encoding
+# the same amino acid substitution carry identical popEVE scores and are deduplicated.
+# Wildtype cells are empty. popEVE lists only positions carrying a missense alt, so a codon
+# may have only 2 of its 3 genomic positions; block sizes are clamped (min(3, gap-to-next))
+# so adjacent codon blocks cannot overlap, which keeps the file valid for bedToBigBed.
+# Strand is taken from NCBI RefSeq (the VCF has no strand field), cross-checked against the
+# strand inferred from genomic-vs-protein-position direction.
+# Color: global cross-gene gradient keyed to raw popEVE; interior anchors at the published
+# severe (-5.056) and moderate (-4.617) cutoffs and the proteome median (~-3.5); outer
+# saturation anchors at the 0.5th / 99.5th percentiles of the proteome-wide distribution.
+# Records with popEVE=nan (e.g. start-codon M1 variants) are skipped.
+
+cd /hive/data/genomes/hg38/bed/popEve
+# Full build (download already done): strand map, extract, color anchors, sort, convert,
+# filter to chrom.sizes, bigBed. See runBuild.sh in this directory.
+bash runBuild.sh
+
+# runBuild.sh steps, in order:
+#   1. NP_->strand map:
+#        hgsql hg38 -N -e "select distinct l.protAcc, g.chrom, g.strand from ncbiRefSeqLink l
+#          join ncbiRefSeq g on g.name=l.mrnaAcc where l.protAcc like 'NP\_%'"
+#        -> np_strand.tsv (prefer the strand on a primary chromosome)
+#   2. extract: zcat ...vcf.gz | extractPopEve.py > popEve_records.tsv
+#   3. color anchors: p0.5 / p99.5 of popEVE over all records -> anchors.txt
+#   4. sort -t$'\t' -k1,1 -k4,4n -S 4G -T sorttmp popEve_records.tsv > popEve_sorted.tsv
+#   5. vcfToPopEveHeatmap.py popEve_sorted.tsv np_strand.tsv popEve_raw.bed $LO $HI
+#   6. bedSort + awk filter to chrom.sizes -> popEve_filtered.bed
+#   7. bedToBigBed -type=bed12+ -tab -as=popEve_heatmap.as popEve_filtered.bed chrom.sizes popEve.bb
+# Scripts: ~/kent/src/hg/makeDb/scripts/popEve/{extractPopEve.py,vcfToPopEveHeatmap.py,popEve_heatmap.as}
+
+# Notes:
+#  - popEVE is distributed as genomic SNVs, so only single-nucleotide-reachable missense
+#    substitutions are scored; each heatmap column (codon) therefore has ~6-9 of 19 rows
+#    filled. This is expected and sparser than the EVE track (which scores all 19).
+#  - The heatmap renderer parses the score array (chopCommas, keeps trailing empty) and the
+#    label array (chopByCharRespectDoubleQuotesKeepEmpty, drops one trailing empty)
+#    differently. When the last cell (row Y, last column) is empty the counts disagree and
+#    the track aborts; the converter sets a non-empty placeholder label on that one trailing
+#    cell (its score stays empty so the cell is uncolored). trailingFix count below.
+
+# Build results:
+#   records extracted: 66,400,085 (nan skipped: 15,156)
+#   color anchors: loAnchor=-5.742 hiAnchor=-2.287 (popEVE p0.5 / p99.5; median -3.358)
+#   proteins: 18,968 (18,343 distinct gene symbols; remainder are RefSeq isoforms)
+#   amino-acid positions: 10,114,809;  bases covered: 886,638,890
+#   strand: 0 inferred-vs-RefSeq mismatches; 25 proteins not in the RefSeq map (strand from
+#     coordinate inference); 0 with no strand signal; 0 dropped by chrom.sizes filter
+#   trailingFix (trailing empty cell relabeled): 16,571 proteins
+#   mouseover: HTML multi-line labels (<br>/<b>); component scores rounded to 3 dp;
+#     missing/nan components shown as NA
+#   popEve.bb size: 1,593,137,151 bytes
+
+mkdir -p /gbdb/hg38/popEve
+ln -sf /hive/data/genomes/hg38/bed/popEve/popEve.bb /gbdb/hg38/popEve/popEve.bb
