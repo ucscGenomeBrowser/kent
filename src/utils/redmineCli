@@ -7,6 +7,10 @@ Usage:
     redmineCli show 33571
     redmineCli list --project maillists --status open --limit 10
     redmineCli create --subject "Bug report" --description "Details here"
+    redmineCli build-patch --subject "v500 build patch: ..." --description "..." \
+        --developer braney --commit-id abc123 --files src/hg/js/hgTracks.js \
+        --cgis hgTracks --test-case "..." --reviewer hiram \
+        --target-version 500 --relates 27113
     redmineCli comment 33571 --message "Adding a note"
     redmineCli update 33571 --status 1 --assigned-to lou --note "Reopening"
     redmineCli update 33571 --release-log-url "../cgi-bin/hgTrackUi?db=hg38&g=myTrack"
@@ -38,8 +42,11 @@ DEFAULT_REDMINE = "https://redmine.gi.ucsc.edu"
 DEFAULT_PROJECT = "maillists"
 
 TRACKER_MLQ = 7
+TRACKER_BUILD_PATCH = 36
 PRIORITY_UNPRIORITIZED = 12
+PRIORITY_URGENT = 6
 STATUS_NEW = 1
+PROJECT_GB = "genomebrowser"
 
 # Name -> Redmine tracker ID mapping (case-insensitive lookup in resolve_tracker)
 TRACKER_IDS = {
@@ -113,6 +120,15 @@ CF_RELEASED_TO_RR = 47
 CF_FILE_LIST = 43
 CF_TABLE_LIST = 44
 CF_ASSEMBLIES = 2
+
+# Build Patch ticket custom fields (all but Post-mortem are required by the tracker)
+CF_DEVELOPER = 22
+CF_COMMIT_ID = 23
+CF_FILES_CHANGED = 24
+CF_CGIS_RETEST = 25
+CF_TEST_CASE = 27
+CF_CODE_REVIEWER = 31
+CF_POST_MORTEM = 61
 
 
 # Name -> Redmine user ID mapping (short names and full names)
@@ -631,6 +647,88 @@ def cmd_create(args):
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: build-patch
+# ---------------------------------------------------------------------------
+
+def cmd_build_patch(args):
+    """Create a Build Patch ticket with every field the process requires.
+
+    Encodes the team's Build Patch process so the required fields cannot be
+    forgotten: GB project, Build Patch tracker, Urgent priority, New status,
+    no assignee (QA claims it), and the five required custom fields (Commit ID,
+    Files Changed, CGIs to retest, Test Case, Suggested Code Reviewer). Relates
+    the ticket to the bug it fixes and, unless --no-default-watchers is given,
+    adds the QA Team and build meister as watchers.
+    """
+    description = read_text_input(args.description, args.description_file)
+    if not description:
+        sys.exit("Error: --description or --description-file is required")
+    description = strip_emoji(prepend_attribution(description))
+
+    custom_fields = [
+        {"id": CF_DEVELOPER, "value": str(resolve_user(args.developer))},
+        {"id": CF_COMMIT_ID, "value": args.commit_id},
+        {"id": CF_FILES_CHANGED, "value": args.files},
+        {"id": CF_CGIS_RETEST, "value": args.cgis},
+        {"id": CF_TEST_CASE, "value": args.test_case},
+        {"id": CF_CODE_REVIEWER, "value": str(resolve_user(args.reviewer))},
+    ]
+    if args.post_mortem:
+        custom_fields.append({"id": CF_POST_MORTEM, "value": args.post_mortem})
+
+    issue_data = {
+        "issue": {
+            "project_id": args.project,
+            "subject": strip_emoji(args.subject),
+            "description": description,
+            "tracker_id": TRACKER_BUILD_PATCH,
+            "priority_id": PRIORITY_URGENT,
+            "status_id": STATUS_NEW,
+            "fixed_version_id": resolve_version(
+                args.target_version, args.project, args.base_url, args.api_key),
+            "custom_fields": custom_fields,
+        }
+    }
+
+    result = api_post(args.base_url, "/issues.json", args.api_key, issue_data)
+    ticket_id = result["issue"]["id"]
+    print(f"Created Build Patch #{ticket_id}: {make_url(args.base_url, ticket_id)}")
+
+    # Relate to the bug(s) this patch fixes.
+    for bug_id in (args.relates or []):
+        data = {"relation": {"issue_to_id": int(bug_id), "relation_type": "relates"}}
+        try:
+            api_post(args.base_url, f"/issues/{ticket_id}/relations.json",
+                     args.api_key, data)
+            print(f"  Related #{ticket_id} <-> #{bug_id}")
+        except SystemExit as e:
+            if "422" in str(e):
+                print(f"  Already related: #{ticket_id} <-> #{bug_id}")
+            else:
+                raise
+
+    # Watchers: QA Team + build meister by default, plus any extras. The
+    # process requires QA Team on every Build Patch from the start.
+    watchers = [] if args.no_default_watchers else ["qa", "build"]
+    watchers += (args.watch or [])
+    seen = set()
+    for name in watchers:
+        uid = resolve_user(name)
+        if uid in seen:
+            continue
+        seen.add(uid)
+        try:
+            api_post(args.base_url, f"/issues/{ticket_id}/watchers.json",
+                     args.api_key, {"user_id": uid})
+            print(f"  Added watcher {name} (user {uid}) to #{ticket_id}")
+        except SystemExit as e:
+            if "422" in str(e):
+                print(f"  {name} is already watching #{ticket_id}")
+            else:
+                raise
+
+
+# ---------------------------------------------------------------------------
 # Subcommand: comment
 # ---------------------------------------------------------------------------
 
@@ -1004,6 +1102,39 @@ def build_parser():
     p_create.add_argument("--email", help="Sender email (custom field)")
     p_create.add_argument("--mlm", help="MLM name (custom field)")
 
+    # build-patch
+    p_bp = sub.add_parser("build-patch",
+                          help="Create a Build Patch ticket (GB, Urgent, all required fields set)")
+    p_bp.add_argument("--subject", required=True, help="Ticket subject")
+    p_bp.add_argument("--description", help="What is broken and why it needs a patch")
+    p_bp.add_argument("--description-file", dest="description_file",
+                      help="Read description from file (- for stdin)")
+    p_bp.add_argument("--developer", required=True,
+                      help="Developer who caused the bug (name or user ID)")
+    p_bp.add_argument("--commit-id", dest="commit_id", required=True,
+                      help="Fix commit hash; list all hashes if several commits fix it")
+    p_bp.add_argument("--files", required=True,
+                      help="Full paths of the source files changed")
+    p_bp.add_argument("--cgis", required=True,
+                      help="CGIs that could be affected and need retesting")
+    p_bp.add_argument("--test-case", dest="test_case", required=True,
+                      help="Step-by-step to reproduce both the failure and the fix")
+    p_bp.add_argument("--reviewer", required=True,
+                      help="Suggested code reviewer (name or user ID)")
+    p_bp.add_argument("--target-version", dest="target_version", required=True,
+                      help="Release number being built (e.g. 500)")
+    p_bp.add_argument("--post-mortem", dest="post_mortem",
+                      help="Optional plain-language what-happened / how-to-prevent note")
+    p_bp.add_argument("--relates", nargs="+", metavar="BUG_ID",
+                      help="Bug ticket(s) this patch fixes; related on creation")
+    p_bp.add_argument("--watch", nargs="+", metavar="NAME",
+                      help="Extra watchers beyond the QA Team + build meister defaults")
+    p_bp.add_argument("--no-default-watchers", dest="no_default_watchers",
+                      action="store_true",
+                      help="Do not auto-add the QA Team and build meister as watchers")
+    p_bp.add_argument("--project", default=PROJECT_GB,
+                      help="Project (default: %(default)s)")
+
     # comment
     p_comment = sub.add_parser("comment", help="Add a comment to a ticket")
     p_comment.add_argument("ticket_id", help="Ticket ID number")
@@ -1104,6 +1235,7 @@ def main():
         "show": cmd_show,
         "list": cmd_list,
         "create": cmd_create,
+        "build-patch": cmd_build_patch,
         "comment": cmd_comment,
         "update": cmd_update,
         "attach": cmd_attach,
