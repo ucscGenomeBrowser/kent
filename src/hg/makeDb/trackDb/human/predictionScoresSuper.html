@@ -117,6 +117,41 @@ Pathogenic variants are shown in <span style="color:#C80000">red</span>,
 benign in <span style="color:#0000C8">blue</span>.
 </p>
 
+<h3>EVE - hg38</h3>
+<p>
+<b>Interpretation:</b> EVE scores range from 0 (benign) to 1 (pathogenic) and are
+normalized within each protein, so they are not directly comparable across proteins. A
+Class25 label assigns each variant to benign, uncertain, or pathogenic using a 25%
+uncertainty threshold.
+</p>
+<p>
+<a href="hgTrackUi?g=eve">EVE</a>
+(Frazer et al, Nature 2021) is a deep generative model (a Bayesian variational
+autoencoder) trained per protein on evolutionary sequence alignments, without using
+clinical labels. The track shows scores for all possible missense substitutions in
+2,949 disease-associated proteins as a heatmap (rows = amino acids, columns = protein
+positions), colored from <span style="color:#2166ac">benign (blue)</span> through
+uncertain (white) to <span style="color:#d6604d">pathogenic (red)</span>.
+</p>
+
+<h3>popEVE - hg38</h3>
+<p>
+<b>Interpretation:</b> popEVE scores are a continuous, proteome-wide measure of
+deleteriousness and, unlike most missense scores, are calibrated to be comparable across
+genes; lower (more negative) scores are more deleterious. The authors define a
+high-confidence severe threshold at &minus;5.056 and a moderate threshold at &minus;4.617.
+</p>
+<p>
+<a href="hgTrackUi?g=popEve">popEVE</a>
+(Orenbuch et al, Nature Genetics 2025) builds on EVE and the ESM-1v protein language model,
+calibrating their scores against human population variation (UK Biobank) with a Gaussian
+process to place variants across the whole proteome on a single scale. The track shows
+scores for all single-nucleotide-reachable missense substitutions across roughly 18,000
+proteins as a heatmap, colored on a global gradient from
+<span style="color:#b2182b">deleterious (red)</span> to
+<span style="color:#2166ac">tolerated (blue)</span>.
+</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <h3>BayesDel</h3>
@@ -161,6 +196,14 @@ prediction or percentile score. See the per-track description page for details.<
 <p>Four bigWig subtracks (one per alternate nucleotide) covering positions within
 500&nbsp;bp of annotated transcription start sites, plus a bigBed track for
 positions where overlapping transcripts produce different scores.</p>
+
+<h3>EVE and popEVE</h3>
+<p>Each is a single bigBed track displayed as a heatmap: one column per amino acid
+position (placed at the codon's genomic coordinate) and one row per amino acid. Hover
+over a cell to see the substitution and its score. EVE is colored per protein from blue
+(benign) to red (pathogenic); popEVE uses a single global gradient (red = deleterious,
+blue = tolerated) so that cells are comparable across genes. These tracks are best viewed
+zoomed in to a single gene or exon.</p>
 
 <h2>Data Access</h2>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>

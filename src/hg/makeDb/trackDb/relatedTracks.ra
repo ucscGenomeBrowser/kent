@@ -147,6 +147,18 @@ hg38 primateAi clinPred ClinPred, an ensemble missense predictor incorporating g
 hg38 clinPred alphaMissense AlphaMissense, a deep-learning missense pathogenicity predictor
 hg38 alphaMissense clinPred ClinPred, an ensemble missense predictor incorporating gnomAD allele frequency
 
+# popEVE cross-links:
+hg38 popEve eve EVE, a missense pathogenicity predictor trained on evolutionary sequence variation, and an input to popEVE
+hg38 eve popEve popEVE, a proteome-wide missense deleteriousness model built on EVE and calibrated with human population data
+hg38 popEve alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor
+hg38 alphaMissense popEve popEVE, a proteome-wide missense deleteriousness model combining evolutionary and human population data
+hg38 popEve primateAi PrimateAI-3D, a similar deep-learning missense pathogenicity predictor using primate variation
+hg38 primateAi popEve popEVE, a proteome-wide missense deleteriousness model combining evolutionary and human population data
+hg38 popEve clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
+hg38 clinPred popEve popEVE, a proteome-wide missense deleteriousness model combining evolutionary and human population data
+hg38 popEve revel REVEL, an ensemble missense pathogenicity score built from multiple predictors
+hg38 revel popEve popEVE, a proteome-wide missense deleteriousness model combining evolutionary and human population data
+
 hg19 clinPred revel REVEL, an ensemble missense pathogenicity score using a similar machine-learning approach
 hg19 revel clinPred ClinPred, an ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
 hg19 clinPred caddSuper CADD, a similar deleteriousness score
