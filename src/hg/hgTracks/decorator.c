@@ -9,6 +9,7 @@
 #include "bigBedFilter.h"
 #include "spaceSaver.h"
 #include "mouseOver.h"
+#include "chromAlias.h"
 
 // Probably move this to a trackDb variable eventually
 #define MAX_DECORATION_ROWS 3
@@ -843,6 +844,35 @@ while (activeDecorator != NULL)
 }
 
 
+static char *decorationNativeItem(char *decoratedItem)
+/* decoratedItem is "chrom:start-end:name".  Its chrom may be a chromAlias alias
+ * (e.g. a PanSN name) rather than the native sequence name that primary-track items
+ * are keyed on.  Return a copy with the chrom translated to native so the decoration
+ * matches its item; if the chrom is already native (or has no alias entry), return an
+ * unchanged copy. */
+{
+char *firstColon = strchr(decoratedItem, ':');
+if (firstColon == NULL)
+    return cloneString(decoratedItem);   // not in expected format; leave alone
+char *chrom = cloneStringZ(decoratedItem, firstColon - decoratedItem);
+char *native = chromAliasFindNative(chrom);
+char *result;
+if (native != NULL && !sameString(native, chrom))
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringAppend(dy, native);
+    dyStringAppend(dy, firstColon);       // firstColon still points at the leading ':'
+    result = dyStringCannibalize(&dy);
+    }
+else
+    result = cloneString(decoratedItem);
+freeMem(chrom);
+// note: do not free the chromAliasFindNative() result - on a cache hit it returns
+// the pointer owned by its internal cache, so freeing it would corrupt that cache.
+return result;
+}
+
+
 void addToDecorator(struct decorator *decorator, struct decoration *decoration, char *mouseOverText)
 /* Small function that just gets repeated a lot - add the decoration to the decorator and
  * set its mouseOver text.
@@ -893,6 +923,9 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
             continue;
         }
     struct decoration *newDec = decorationFromInterval(chrom, thisInterval);
+    char *nativeItem = decorationNativeItem(newDec->decoratedItem);
+    freeMem(newDec->decoratedItem);
+    newDec->decoratedItem = nativeItem;
     // have to assemble any custom mouseover text here because it may depend on extra bbi fields
     // that won't be included in the decoration structure
     bool reduceGlyphs = FALSE;
