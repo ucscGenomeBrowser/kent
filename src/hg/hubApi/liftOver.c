@@ -143,27 +143,30 @@ liftOverChainFreeList(&chainList);
 if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
     {
     char *ottoTable = cfgOption("ottoTable");
-    struct sqlConnection *ottoConn = hConnectOtto();
-    if (isNotEmpty(ottoTable) && sqlTableExists(ottoConn, ottoTable))
+    if (isNotEmpty(ottoTable))
         {
-        struct dyString *pq = newDyString(0);
-        sqlDyStringPrintf(pq,
-            "SELECT id, status, requestTime FROM %s "
-            "WHERE requestType='liftOver' AND "
-            "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s')) "
-            "ORDER BY requestTime DESC LIMIT 1",
-            ottoTable, fromDb, toDb, toDb, fromDb);
-        char **row;
-        struct sqlResult *sr = sqlGetResult(ottoConn, dyStringCannibalize(&pq));
-        if ((row = sqlNextRow(sr)) != NULL)
+        struct sqlConnection *ottoConn = hConnectOtto();
+        if (sqlTableExists(ottoConn, ottoTable))
             {
-            jsonWriteBoolean(jw, "pending", TRUE);
-            jsonWriteNumber(jw, "pendingStatus", sqlSigned(row[1]));
-            jsonWriteString(jw, "pendingRequestTime", row[2]);
+            struct dyString *pq = newDyString(0);
+            sqlDyStringPrintf(pq,
+                "SELECT id, status, requestTime FROM %s "
+                "WHERE requestType='liftOver' AND "
+                "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s')) "
+                "ORDER BY requestTime DESC LIMIT 1",
+                ottoTable, fromDb, toDb, toDb, fromDb);
+            char **row;
+            struct sqlResult *sr = sqlGetResult(ottoConn, dyStringCannibalize(&pq));
+            if ((row = sqlNextRow(sr)) != NULL)
+                {
+                jsonWriteBoolean(jw, "pending", TRUE);
+                jsonWriteNumber(jw, "pendingStatus", sqlSigned(row[1]));
+                jsonWriteString(jw, "pendingRequestTime", row[2]);
+                }
+            sqlFreeResult(&sr);
             }
-        sqlFreeResult(&sr);
+        hDisconnectOtto(&ottoConn);
         }
-    hDisconnectOtto(&ottoConn);
     }
 
 apiFinishOutput(0, NULL, jw);
