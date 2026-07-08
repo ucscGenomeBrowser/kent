@@ -572,8 +572,8 @@ def build(db, outdir):
         for line in f:
             flds = line.split("\t")
             cnt[flds[9]] += 1
-            af_cnt[flds[13]] += 1
-            if flds[14] == 'BS2':
+            af_cnt[flds[15]] += 1
+            if flds[16] == 'BS2':
                 bs2_cnt += 1
     print("  Class distribution:")
     for k, n in cnt.most_common():
