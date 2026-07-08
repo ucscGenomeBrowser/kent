@@ -34,6 +34,14 @@ doInstall: $(DOCS)
 		mv -f "$$targetdir/$$(basename $$htmlfile).tmp" "$$targetdir/$$(basename $$htmlfile)"; \
 		chmod a+x "$$targetdir/$$(basename $$htmlfile)"; \
 	done
+	@# Copy prebuilt static slide decks (reveal.js HTML) as-is. Their images are
+	@# served separately from /images/slideDecks/ (kept in the htdocsExtras repo),
+	@# so only the HTML is deployed here.
+	@if [ -d slideDecks ]; then \
+		echo "Copying slide-deck HTML -> ${destDir}/docs/slideDecks/"; \
+		mkdir -p "${destDir}/docs"; \
+		rsync ${rsyncOpts} slideDecks "${destDir}/docs/"; \
+	fi
 
 testPandoc:
 	@printf "Test the following path and commands look ok\n"

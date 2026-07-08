@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCSC Genome Browser · Tutorial 1: Basics</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+<style>
+  :root{
+    --ucsc-blue:#1f3a5f;
+    --ucsc-accent:#0b5394;
+    --ucsc-gold:#e6a817;
+  }
+  .reveal { font-size: 32px; }
+  .reveal h1,.reveal h2,.reveal h3 { color: var(--ucsc-blue); text-transform:none; letter-spacing:normal; }
+  .reveal h1 { font-size: 1.9em; }
+  .reveal h2 { font-size: 1.32em; }
+  .reveal section img { border:none; box-shadow:none; }
+  .reveal a { color: var(--ucsc-accent); }
+  .reveal ul { width: 100%; box-sizing: border-box; }
+  .reveal li { margin: 0.16em 0; }
+
+  .divider { background: var(--ucsc-blue); }
+  .divider h1,.divider h2,.divider p { color:#fff !important; }
+  .divider .kicker { color: var(--ucsc-gold) !important; letter-spacing:2px; font-size:0.55em; text-transform:uppercase;}
+  .divider .timing { color:#cdd9e8 !important; font-size:0.62em; margin-top:0.6em; }
+
+  .callout { border-radius:10px; padding:0.55em 0.9em; margin:0.35em 0; font-size:0.8em; text-align:left; }
+  .exercise { background:#eaf6ec; border-left:6px solid #2e8b57; }
+  .demo     { background:#e9f1fb; border-left:6px solid var(--ucsc-accent); }
+  .caution  { background:#fdf3e3; border-left:6px solid var(--ucsc-gold); }
+  .callout .lbl { font-weight:700; display:block; margin-bottom:0.12em; }
+  .exercise .lbl{ color:#2e8b57; }
+  .demo .lbl    { color:var(--ucsc-accent); }
+  .caution .lbl { color:#b8860b; }
+  /* standalone callouts (direct children of a slide) shouldn't span the full width;
+     keep them aligned with the centered content above them */
+  .reveal section > .callout { display:block; box-sizing:border-box; max-width:92%; margin-left:auto; margin-right:auto; }
+
+  .chip { display:inline-block; background:#f0f2f5; border:1px solid #d0d7de; border-radius:6px;
+          padding:0.05em 0.45em; font-family:monospace; font-size:0.78em; color:#24292f; white-space:nowrap; }
+  .grp  { display:inline-block; background:var(--ucsc-blue); color:#fff; border-radius:6px;
+          padding:0.05em 0.45em; font-size:0.72em; }
+
+  .small { font-size:0.8em; color:#555; }
+  .reveal .footer { position:fixed; bottom:8px; left:14px; font-size:13px; color:#9aa4b1; z-index:30; }
+  .twocol { display:flex; gap:1.2em; }
+  .twocol > div { flex:1; min-width:0; overflow-wrap:anywhere; }
+  .tag { font-size:0.6em; background:var(--ucsc-gold); color:#3a2c00; border-radius:5px; padding:0.05em 0.4em; vertical-align:middle;}
+  /* screenshot layouts */
+  .split { display:flex; gap:1.1em; align-items:center; }
+  .split > .txt { flex:1 1 44%; min-width:0; text-align:left; }
+  .split > .figwrap { flex:1 1 56%; min-width:0; }
+  .split img.shot { max-width:100%; height:auto; }
+  /* reveal makes lists inline-block (sizes to content), force block so they wrap to the column */
+  .reveal .split .txt ul, .reveal .split .txt ol,
+  .reveal .twocol ul, .reveal .twocol ol { display:block !important; width:auto !important; box-sizing:border-box; text-align:left; margin:0 0 0.3em 0; padding-left:1.1em; }
+  .reveal .split .txt li, .reveal .twocol li { overflow-wrap:anywhere; }
+  .split .txt p { text-align:left; }
+  /* stacked mini-examples (e.g. display modes) */
+  .stack figure.fig { margin:0 0 0.45em 0; }
+  .stack .modelabel { display:inline-block; background:var(--ucsc-blue); color:#fff; font-size:0.6em; border-radius:5px; padding:0.04em 0.45em; margin-bottom:0.15em; }
+  figure.fig { margin:0; }
+  img.shot { width:100%; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 5px 16px rgba(0,0,0,.18); display:block; }
+  figure.fig figcaption { font-size:0.56em; color:#5b6673; margin-top:0.3em; text-align:left; line-height:1.3; }
+  .shotbig { display:block; margin:0.15em auto 0; max-width:84%; max-height:60vh; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+  figcaption.capbig { font-size:0.58em; color:#5b6673; margin-top:0.35em; text-align:center; }
+  /* annotated control-bar (Navigation & viewing controls) */
+  .navctrls { margin:1.3em 0 0.6em; }
+  .navstrip { position:relative; margin:1.4em auto; max-width:96%; }
+  .navstrip img.shot { width:100%; }
+  .navbadge { position:absolute; bottom:100%; margin-bottom:3px; transform:translateX(-50%);
+    width:1.35em; height:1.35em; line-height:1.3em; text-align:center; box-sizing:border-box;
+    background:var(--ucsc-gold); color:#3a2c00; border:2px solid #fff; border-radius:50%;
+    font-size:0.62em; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.4); }
+  .navkey { font-size:0.64em; text-align:left; gap:1.6em; }
+  .navkey p { margin:0.22em 0; }
+  .navkey .keybadge { display:inline-block; width:1.5em; height:1.5em; line-height:1.5em; text-align:center;
+    background:var(--ucsc-blue); color:#fff; border-radius:50%; font-weight:700; margin-right:0.35em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="footer">UCSC Genome Browser · Tutorial 1: Basics</div>
+<div class="slides">
+
+<section class="divider" data-background-color="#1f3a5f">
+  <p class="kicker">UCSC Genome Browser · Tutorial 1</p>
+  <h1>The Basics</h1>
+  <h2 style="color:#fff;font-weight:400;">Getting oriented, navigating, tracks, and putting your own data on the Browser</h2>
+  <p class="timing">A hands-on introduction · genome.ucsc.edu</p>
+</section>
+
+<section>
+  <h2>How to follow along</h2>
+  <ul>
+    <li>Examples are shown on <strong>human GRCh38 / hg38</strong> throughout.</li>
+    <li><span class="tag">note</span> markers flag what also applies to <strong>hg19</strong> and <strong>other assemblies</strong>.</li>
+    <li>Examples are <strong>cancer / oncology</strong>-focused.</li>
+  </ul>
+  <div style="display:flex;gap:1.2em;justify-content:center;margin:0.5em auto 0;max-width:92%;">
+    <div class="callout exercise" style="margin:0;flex:1;"><span class="lbl">Try it</span> Green = <strong>try it yourself</strong>.</div>
+    <div class="callout demo" style="margin:0;flex:1;"><span class="lbl">Demo</span> Blue = <strong>demo + follow along</strong>.</div>
+  </div>
+  <div class="callout demo"><span class="lbl">Open now</span>
+    <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38">genome.ucsc.edu</a>: keep this tab open.</div>
+  <aside class="notes">
+    Make sure everyone reaches genome.ucsc.edu and is on hg38. Wait for stragglers; the rest of the day depends on it.
+    Explain the green/blue convention so they know when to act vs watch.
+  </aside>
+</section>
+
+<section>
+    <h2>What is the UCSC Genome Browser?</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>A free web tool to <strong>view a genome and everything annotated on it</strong>, at any zoom.</li>
+          <li>Each row of data is a <strong>track</strong>; hundreds come pre-loaded per genome.</li>
+          <li>Add <strong>your own data</strong> and <strong>share a live view</strong>, both later in this tutorial.</li>
+          <li>Backed by databases at UCSC; nothing to install.</li>
+        </ul>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/overview.png" alt="Genome Browser overview at BRAF">
+        <figcaption>Default view at <em>BRAF</em> (hg38): blue menu bar, search box, chromosome ideogram, and stacked tracks (genes, variants, expression, regulation, conservation).</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Analogy: Google Maps for the genome: zoom from a whole chromosome to a single base, with layers (tracks) you switch on and off.
+      Stress: free, public, no install; 25+ years of curated data; and it takes YOUR data too (afternoon).
+    </aside>
+  </section>
+
+<section>
+    <h2>The home page &amp; the blue menu bar</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The <strong>blue menu bar</strong> appears on every page.</li>
+          <li><strong>Genomes</strong> → jump to the Browser, or to the Gateway to pick an assembly.</li>
+          <li><strong>Tools · My Data</strong> (your tracks &amp; sessions) <strong>· Downloads · Help</strong>.</li>
+          <li>News on data/software changes &amp; upcoming conferences.</li>
+        </ul>
+        <figure class="fig" style="margin-top:0.5em;"><img class="shot" src="/images/slideDecks/tutorial1-basics/genomesmenu.jpg" alt="Genomes drop-down menu" style="width:auto;max-width:72%;margin:0;">
+          <figcaption>The <strong>Genomes</strong> drop-down.</figcaption></figure>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/home.png" alt="UCSC Genome Browser home page"></figure></div>
+    </div>
+    <aside class="notes">
+      Orient on the home page; the blue bar is the constant navigation. The Genomes drop-down jumps to popular assemblies or the Gateway; My Data is where custom tracks / hubs / sessions live (afternoon). Point out the News column and Conferences.
+    </aside>
+  </section>
+
+<section>
+    <h2>The Gateway: pick an assembly &amp; search</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" style="max-height:44vh;" src="/images/slideDecks/tutorial1-basics/gateway.png" alt="Genome Browser Gateway page">
+      <figcaption class="capbig">The Gateway: choose a genome on the left, set the assembly and enter a gene / position / term on the right, then press <strong>GO</strong>.</figcaption></figure>
+    <div class="twocol" style="max-width:94%;margin:0.35em auto 0;">
+      <div><ul class="small">
+        <li><strong>Left:</strong> popular species, a box to search thousands of assemblies, and your <strong>Recent Genomes</strong> and connected <strong>hub assemblies</strong>. <strong>&ldquo;Show species tree&rdquo;</strong> opens the full tree.</li>
+      </ul></div>
+      <div><ul class="small">
+        <li><strong>Right:</strong> the assembly drop-down and a search box for a gene, position, or sequence. Over <strong>50,000 assemblies</strong> in all.</li>
+        <li>We use <span class="chip">hg38</span>; <span class="chip">hg19</span> is still common clinically &mdash; pick the right build first.</li>
+      </ul></div>
+    </div>
+    <div class="callout exercise" style="max-width:94%;margin:0.3em auto 0;"><span class="lbl">Try it</span>
+      <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?db=hg38">Genomes</a> &rarr; Human GRCh38/hg38. Search <strong>BRAF</strong>, press Enter.</div>
+    <aside class="notes">
+      The assembly selection and the position/search box are the two things that matter. The Gateway now shows popular species, a species search, and your recent &amp; connected-hub assemblies by default; the old phylogenetic tree is behind "Show species tree". Stress assembly choice: the wrong build is the #1 beginner mistake (clinical work is often hg19). Then everyone searches BRAF and lands on the gene.
+    </aside>
+  </section>
+
+
+<section>
+    <h2>The search box takes more than gene names</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Gene symbol: <span class="chip">BRAF</span></li>
+          <li>A feature within a gene: <span class="chip">SOX2 exon 2</span></li>
+          <li>Position: <span class="chip">chr7:140,753,300-140,753,400</span></li>
+          <li>dbSNP: <span class="chip">rs113488022</span> · HGVS: <span class="chip">NM_004333.6:c.1799T&gt;A</span></li>
+          <li>A pasted DNA sequence (runs BLAT)</li>
+          <li>ClinVar / RefSeq / GENCODE accessions</li>
+        </ul>
+        <div class="callout demo"><span class="lbl">Two ways to search</span>
+          <strong>Quick jump:</strong> pick the gene from the drop-down. <strong>Full search:</strong> press Enter / “Search” to scan all tracks &amp; the whole site.</div>
+        <p class="small">The <strong>“Examples”</strong> link by the box lists every accepted format.</p>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/search_example.png" alt="Gateway search example for BRAF">
+        <figcaption>Searching <em>BRAF</em>: the quick-jump drop-down offers matches; pressing Enter runs a full search.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      The search bar accepts many formats: gene symbol, coordinate range (chr1:127140001-127140001), dbSNP rsID (rs2569190), HGVS (NM_198056.3:c.1654G&gt;T), or a raw DNA sequence (runs BLAT). The "Examples" link lists RefSeq / GENCODE / ClinVar accession formats. Two modes: Quick Jump (drop-down gene match) vs Full Search (Enter → comprehensive search across tracks &amp; the site). Call out rsID and HGVS for clinicians; they paste these from reports.
+    </aside>
+  </section>
+
+<section>
+    <h2>Navigation &amp; viewing controls</h2>
+    <div class="navctrls">
+      <div class="navstrip">
+        <img class="shot" src="/images/slideDecks/tutorial1-basics/nav_posbar.jpg" alt="Position, size and search controls">
+        <span class="navbadge" style="left:17%">4</span>
+        <span class="navbadge" style="left:38%">3</span>
+        <span class="navbadge" style="left:58%">1</span>
+        <span class="navbadge" style="left:96%">2</span>
+      </div>
+      <div class="navstrip">
+        <img class="shot" src="/images/slideDecks/tutorial1-basics/navcontrols.jpg" alt="Move and zoom controls">
+        <span class="navbadge" style="left:18%">5</span>
+        <span class="navbadge" style="left:46%">6</span>
+        <span class="navbadge" style="left:64%">7</span>
+        <span class="navbadge" style="left:89%">6</span>
+      </div>
+    </div>
+    <div class="twocol navkey">
+      <div>
+        <p><span class="keybadge">1</span> Search bar, accepts various formats</p>
+        <p><span class="keybadge">2</span> Examples of accepted formats</p>
+        <p><span class="keybadge">3</span> Current viewing size</p>
+        <p><span class="keybadge">4</span> Current position/range (click to copy)</p>
+      </div>
+      <div>
+        <p><span class="keybadge">5</span> Move to a different position on the chromosome</p>
+        <p><span class="keybadge">6</span> Change the viewing size (zoom in / out)</p>
+        <p><span class="keybadge">7</span> Click "Base" to zoom to nucleotides at center of current view</p>
+      </div>
+    </div>
+    <aside class="notes">
+      Walk each numbered control: (1) the search bar accepts gene / coords / rsID / HGVS / sequence; (2) the Examples link lists every accepted format; (3) the size box shows the current window in bp; (4) the position/range box can be clicked to copy the coordinates; (5) the Move buttons (&lt;&lt;&lt; … &gt;&gt;&gt;) shift along the chromosome; (6) Zoom in / out change the viewing size; (7) "Base" zooms all the way to nucleotides. You can also just drag the image to scroll. Shift-drag to zoom/highlight is the next slide.
+    </aside>
+  </section>
+
+<section>
+    <h2>Shift + drag to zoom or highlight</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><strong>Shift + drag</strong> across the image opens the <em>Drag-and-select</em> dialog: <strong>Zoom In</strong> to that range, or add a coloured <strong>highlight</strong> you can keep.</li>
+          <li><strong>Alt-drag</strong> (Windows) / <strong>Option-drag</strong> (Mac) adds a highlight directly.</li>
+          <li><strong>Ctrl-drag</strong> (Windows) / <strong>Cmd-drag</strong> (Mac) zooms straight to the selected range.</li>
+          <li>Clear highlights via View → Clear Highlights.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Shift-drag over a BRAF exon → <strong>Add Highlight</strong>, pick a colour.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/shiftdrag.jpg" alt="Drag-and-select dialog">
+        <figcaption>Shift-drag → Drag-and-select: zoom to the region, or highlight it in a colour that persists across views.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Persistent highlight bands are great for building figures and for marking a region of interest across zooms and in shared sessions.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <h1>Tracks &amp; display</h1>
+  </section>
+
+<section>
+    <h2>Tracks and display modes</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The <strong>track image</strong> is where every annotation is drawn.</li>
+          <li><strong>Right-click</strong> a track for options: visibility, configure, reorder, hide others.</li>
+          <li>Each track controls its own height/detail via its <strong>visibility</strong> mode.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Right-click a track name to open its menu.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/trackmenu.jpg" alt="Right-click track menu">
+        <figcaption>The right-click menu: hide / dense / squish / pack / full, plus Hide all others, Move to top/bottom, Configure, View image.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      The track image is the canvas; the right-click menu is the fastest way to set visibility and reorder. Leads into the visibility modes: feature tracks, then signal tracks.
+    </aside>
+  </section>
+
+<section>
+    <h2>Visibility modes: “feature” tracks</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><strong>hide</strong>: off</li>
+          <li><strong>dense</strong>: all on one line</li>
+          <li><strong>squish</strong>: thin, many per line</li>
+          <li><strong>pack</strong>: one labelled item per row</li>
+          <li><strong>full</strong>: one row per feature</li>
+        </ul>
+        <p class="small">Right-click a track to set its mode, configure, or reorder. (Same GENCODE region, four modes →)</p>
+      </div>
+      <div class="figwrap stack">
+        <figure class="fig"><span class="modelabel">dense</span><img class="shot" src="/images/slideDecks/tutorial1-basics/vis_dense.png" alt="dense display mode"></figure>
+        <figure class="fig"><span class="modelabel">squish</span><img class="shot" src="/images/slideDecks/tutorial1-basics/vis_squish.png" alt="squish display mode"></figure>
+        <figure class="fig"><span class="modelabel">pack</span><img class="shot" src="/images/slideDecks/tutorial1-basics/vis_pack.png" alt="pack display mode"></figure>
+        <figure class="fig"><span class="modelabel">full</span><img class="shot" src="/images/slideDecks/tutorial1-basics/vis_full.png" alt="full display mode"></figure>
+      </div>
+    </div>
+    <aside class="notes">
+      Live: right-click a track to show the mode menu; cycle GENCODE dense → pack → full so they see the difference.
+      Note the same modes apply to signal/quantitative tracks (dense→full controls height), shown on the next slide.
+    </aside>
+  </section>
+
+<section>
+    <h2>Visibility modes: “signal” tracks</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">Quantitative / “signal” tracks (wiggles, conservation, coverage) use the same menu; here it sets how the data is drawn:</p>
+        <ul class="small">
+          <li><strong>dense</strong>: single heat-style line</li>
+          <li><strong>squish</strong> / <strong>pack</strong>: compact</li>
+          <li><strong>full</strong>: full-height plot with a value axis</li>
+        </ul>
+      </div>
+      <div class="figwrap stack">
+        <figure class="fig"><span class="modelabel">dense</span><img class="shot" src="/images/slideDecks/tutorial1-basics/sig_dense.png" alt="signal dense"></figure>
+        <figure class="fig"><span class="modelabel">squish</span><img class="shot" src="/images/slideDecks/tutorial1-basics/sig_squish.png" alt="signal squish"></figure>
+        <figure class="fig"><span class="modelabel">pack</span><img class="shot" src="/images/slideDecks/tutorial1-basics/sig_pack.png" alt="signal pack"></figure>
+        <figure class="fig"><span class="modelabel">full</span><img class="shot" src="/images/slideDecks/tutorial1-basics/sig_full.png" alt="signal full"></figure>
+      </div>
+    </div>
+    <aside class="notes">
+      Same visibility menu, but for signal tracks it controls how the quantitative data is rendered, from a single dense line up to a full-height wiggle with a numeric scale. Example here: the 100-vertebrate conservation track.
+    </aside>
+  </section>
+
+<section>
+    <h2>Get information out of a track</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><strong>Mouse-over</strong> a feature for a quick tooltip.</li>
+          <li><strong>Click</strong> a feature → details page (significance, links, colour key).</li>
+          <li>Click the <strong>track name</strong> → docs &amp; configuration.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRAF_V600E">▶ open the BRAF V600E session</a></span>
+          Click the <strong>BRAF V600E</strong> ClinVar variant; read its details page. We work through this variant closely in Tutorial 3.</div>
+      </div>
+      <div class="figwrap stack">
+        <figure class="fig"><span class="modelabel">mouse-over (hover)</span><img class="shot" src="/images/slideDecks/tutorial1-basics/mouseover.png" alt="ClinVar variant mouse-over tooltip"></figure>
+        <figure class="fig"><span class="modelabel">click → details page</span><img class="shot" src="/images/slideDecks/tutorial1-basics/details_clinvar.png" alt="ClinVar details page for BRAF V600E"></figure>
+      </div>
+    </div>
+    <aside class="notes">
+      Three ways to dig in: hover (tooltip with significance/consequence/phenotypes), click the feature (full details page), click the track name (docs/config).
+      The mouse-over shown is a real BRAF V600 ClinVar variant; the details page is BRAF V600E (VCV000013961).
+    </aside>
+  </section>
+
+<section>
+    <h2>Mouse-over for quick descriptions</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Hover a <strong>track name</strong> (in the controls) → a one-line description of what it is.</li>
+          <li>Hover a <strong>feature</strong> → its key facts without clicking.</li>
+          <li>The fast way to learn an unfamiliar track before turning it on.</li>
+        </ul>
+      </div>
+      <div class="figwrap stack">
+        <figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/tname_cosmic.png" alt="COSMIC track-name mouse-over"></figure>
+        <figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/tname_omim.png" alt="OMIM track-name mouse-over"></figure>
+      </div>
+    </div>
+    <aside class="notes">
+      Mousing over a track-control name pops a short description (e.g. COSMIC = “Catalogue of Somatic Mutations in Cancer”; OMIM is a container track with sub-tracks). Encourage hovering to explore the hundreds of tracks without opening each.
+    </aside>
+  </section>
+
+<section>
+    <h2>Gene interpretation</h2>
+    <div class="navstrip" style="max-width:94%; margin:1.3em auto 0.3em;">
+      <img class="shot" src="/images/slideDecks/tutorial1-basics/geneinterp_model.jpg" alt="BRAF gene model: exons, introns, UTR">
+      <span class="navbadge" style="left:21%">3</span>
+      <span class="navbadge" style="left:53%">2</span>
+      <span class="navbadge" style="left:45%">1</span>
+    </div>
+    <div class="navkey" style="text-align:center; margin-bottom:0.5em;">
+      <span style="margin:0 0.8em;"><span class="keybadge">1</span> Thin box = <strong>UTR</strong> (untranslated)</span>
+      <span style="margin:0 0.8em;"><span class="keybadge">2</span> Thick box = <strong>exon</strong> (coding)</span>
+      <span style="margin:0 0.8em;"><span class="keybadge">3</span> Line + arrows = <strong>intron</strong> (&amp; strand)</span>
+    </div>
+    <div class="twocol" style="align-items:flex-start; gap:1.4em;">
+      <div>
+        <p class="small" style="margin:0 0 0.2em;"><strong>Zoom to bases, but BRAF is on the (–) strand</strong></p>
+        <figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/geneinterp_genomecodons.jpg" alt="Genome bases C-A-T, codons do not match amino acid">
+          <figcaption>Genome reads <span class="chip">C·A·T</span> (left→right): it does <strong>not</strong> match the amino acid <strong>M</strong>. The displayed genome codons are wrong for a (–)-strand gene.</figcaption></figure>
+      </div>
+      <div>
+        <p class="small" style="margin:0 0 0.2em;"><strong>Click <em>Reverse</em> (below the image) → correct view</strong></p>
+        <figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/geneinterp_codons.jpg" alt="Reversed view: A-T-G = Met, start codon green">
+          <figcaption>Now it reads <span class="chip">A·T·G</span> = <strong>Met</strong>, the <strong>start codon</strong> highlighted green, codons line up with the protein.</figcaption></figure>
+      </div>
+    </div>
+    <div class="callout exercise" style="font-size:0.64em;"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRAFstartGene">▶ open BRAF at the start codon</a></span>
+      Zoom to bases, then hit <strong>Reverse</strong> to line up the codons.</div>
+    <aside class="notes">
+      First the gene model: thin box = UTR, thick box = coding exon, line + arrowheads = intron (arrows also show strand). Then zoom to base level. BRAF is on the (–) strand, so the genome bases shown (C·A·T, left→right) do NOT match the amino acid, you must hit the “Reverse” button (bottom control bar) to reverse-complement; it then reads A·T·G = Met, the green start codon, lining the codons up with the protein. Keep “Reset All User Settings” as the panic button.
+    </aside>
+  </section>
+
+<section>
+    <h2>Track groups = the menu of data (1/3)</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">Below the image, every track sits in a labelled group, your menu of data:</p>
+        <ul class="small">
+          <li><span class="grp">Genes &amp; Gene Predictions</span> GENCODE, RefSeq, MANE</li>
+          <li><span class="grp">Phenotype, Variants &amp; Literature</span> ClinVar, COSMIC, CIViC…</li>
+          <li><span class="grp">Variation</span> dbSNP, gnomAD</li>
+          <li><span class="grp">Expression</span> · <span class="grp">Single Cell</span> · <span class="grp">Regulation</span></li>
+          <li><span class="grp">Comparative Genomics</span> · <span class="grp">Repeats</span></li>
+        </ul>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/controls.png" alt="Track controls with per-track visibility dropdowns">
+        <figcaption>The track-controls area under the image: each track has a visibility dropdown, organised by group. Don’t panic at the volume. The Recommended Track Sets (next) help.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Scroll down to the track-controls area under the image. These groups ARE the Browser's data offerings; we'll pull from several today.
+      Reassure: nobody memorises all of them; that's exactly why Recommended Track Sets exist (next section).
+    </aside>
+  </section>
+
+<section>
+    <h2>A tour of the track groups (2/3)</h2>
+    <div class="twocol">
+      <div>
+        <ul class="small">
+          <li><span class="grp">Mapping &amp; Sequencing</span> assembly, sequence, gaps, GC%</li>
+          <li><span class="grp">Genes &amp; Gene Predictions</span> GENCODE, NCBI RefSeq, MANE, Pfam domains, pseudogenes</li>
+          <li><span class="grp">Phenotype, Variants &amp; Literature</span> clinical / cancer DBs: ClinVar, COSMIC, HGMD…</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="small">
+          <li><span class="grp">Variation</span> observed variants, no disease claim: dbSNP, gnomAD</li>
+          <li><span class="grp">Human Pangenome (HPRC)</span> alignments, references &amp; variants from the pangenome project</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">Phenotype/Variants/Literature = the clinical &amp; cancer databases (ClinVar, COSMIC, HGMD); Variation = population variants with no disease claim (dbSNP, gnomAD = healthy cohorts).</aside>
+  </section>
+
+<section>
+    <h2>A tour of the track groups (3/3)</h2>
+    <div class="twocol">
+      <div>
+        <ul class="small">
+          <li><span class="grp">mRNA &amp; EST</span> older transcript-support assays</li>
+          <li><span class="grp">Expression</span> RNA-seq &amp; promoters: GTEx across tissues</li>
+          <li><span class="grp">Single Cell</span> RNA-seq by tissue / cell type</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="small">
+          <li><span class="grp">Regulation</span> enhancers &amp; promoters, largely from ENCODE</li>
+          <li><span class="grp">Comparative Genomics</span> cross-species genome alignments &amp; conservation</li>
+          <li><span class="grp">Repeats</span> RepeatMasker, satellites, segmental dups</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout caution">
+    Note: not all track groups will be available for all assemblies, especially non-human and non-mouse
+    </div>
+    <aside class="notes">Expression + Single Cell answer "where is it expressed"; Regulation is the epigenetics catalogue (later); Comparative Genomics holds conservation/alignments.</aside>
+  </section>
+
+<section>
+    <h2>Track documentation pages</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Reach it two ways: click the track's <strong>name</strong> in the controls under the image, or <strong>right-click the track &rarr; Configure</strong>.</li>
+          <li>Shows the track's <strong>description</strong>: data, methods &amp; references, and the colour key.</li>
+          <li>The same page holds the track's <strong>settings</strong> (next slide).</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Click the <strong>GENCODE</strong> track name; skim its description.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/trackdoc.jpg" alt="Track documentation page">
+        <figcaption>A track’s documentation page: methods, references, colour key, and configuration controls.</figcaption></figure></div>
+    </div>
+    <aside class="notes">Every track has a doc page reached by clicking its name. Great for QA: methods, data version, and how the track is coloured/filtered.</aside>
+  </section>
+
+<section>
+    <h2>Container tracks: folders of subtracks</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Many entries (like <strong>NCBI RefSeq</strong> or <strong>GTEx</strong>) are really a <strong>group of related tracks</strong> &mdash; a single line in the controls that holds a set of <strong>subtracks</strong>.</li>
+          <li>Open the container (click its name, or right-click &rarr; Configure) to switch its <strong>subtracks on or off</strong> and set each one&rsquo;s display mode.</li>
+          <li>Turn the container <strong>off</strong> to hide all its subtracks at once, or <strong>on</strong> to reveal them and choose individually.</li>
+        </ul>
+        <div class="callout demo"><span class="lbl">Example</span>
+          <strong>NCBI RefSeq</strong> is one container holding RefSeq Curated, Predicted, MANE, HGMD and more &mdash; here only <strong>RefSeq Curated</strong> is on.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/container_track.png" alt="NCBI RefSeq container track configuration with a checkbox list of subtracks">
+        <figcaption>A container track&rsquo;s settings: check or uncheck each <strong>subtrack</strong> to choose what is drawn.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Containers go by a few names in our docs (composite / super-track), but the idea is the same: one track name that groups several related subtracks, each with its own checkbox and display mode.
+      Beginners are often confused that turning on "NCBI RefSeq" or "GTEx" reveals several sub-options; this is why. Point out the checkbox list and that unchecking hides a subtrack.
+    </aside>
+  </section>
+
+<section>
+  <h2>Configure a track: display &amp; filters</h2>
+  <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial1-basics/track_config.png" alt="ClinVar track configuration page with filters">
+    <figcaption class="capbig">ClinVar&rsquo;s settings page: the <strong>display mode</strong>, the boxed <strong>Filter items by</strong> controls, and colour options.</figcaption></figure>
+  <div class="twocol" style="max-width:94%;margin:0.5em auto 0;">
+    <div><ul class="small">
+      <li>Set the <strong>display mode</strong> (hide &rarr; full) and track <strong>colours</strong>.</li>
+      <li><strong>Filter</strong> what&rsquo;s shown &mdash; here by <strong>clinical significance, variant type, allele origin, molecular consequence</strong>, and size.</li>
+    </ul></div>
+    <div><ul class="small">
+      <li><strong>Container tracks</strong> (a folder grouping related tracks) list their <strong>subtracks</strong> to switch on or off individually.</li>
+      <li><strong>Submit</strong> applies your changes; <strong>Reset to defaults</strong> undoes them.</li>
+    </ul></div>
+  </div>
+  <div class="callout exercise" style="max-width:94%;margin:0.4em auto 0;"><span class="lbl">Try it</span>
+    Open <strong>ClinVar</strong>&rsquo;s settings and filter to <strong>Pathogenic</strong> variants only.</div>
+  <aside class="notes">The track configuration/description page (hgTrackUi) is where you set display mode, colours, and per-field filters. ClinVar filters: clinical significance (e.g. Pathogenic only), variant type, allele origin, molecular consequence, and size. Submit applies; Reset to defaults reverts.</aside>
+</section>
+
+<section>
+    <h2>Reset all tracks</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Changed too many tracks and lost your place?</li>
+          <li><strong>Genome Browser → Reset All User Settings</strong> restores the default set.</li>
+        </ul>
+        <div class="callout caution"><span class="lbl">Note</span>
+          Reset clears your track choices, custom tracks, and connected hubs (but not your saved sessions); gives you a clean slate.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/reset.jpg" alt="Default tracks after reset">
+        <figcaption>After Reset All User Settings: the curated default set of tracks is back.</figcaption></figure></div>
+    </div>
+    <aside class="notes">The panic button: reassure beginners they can always return to defaults.</aside>
+  </section>
+
+<section>
+    <h2>Viewing and extracting the DNA sequence</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Want the actual bases of a gene/region? <strong>View → DNA</strong>.</li>
+          <li>Returns the sequence for whatever is currently in view.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Zoom to a <a href="https://genome.ucsc.edu/s/Lou/BRAFstartGene">BRAF exon</a> → View → DNA → Get DNA.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/viewdna_menu.png" alt="View menu → DNA Sequence" style="width:auto;max-width:62%;margin:0 auto;">
+        <figcaption>View → DNA Sequence returns the bases for the current window.</figcaption></figure></div>
+    </div>
+    <aside class="notes">The output is the sequence of the region currently displayed; hovering the gene first tells you strand and exon.</aside>
+  </section>
+
+<section>
+    <h2>Viewing DNA: options</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial1-basics/dna_output.png" alt="DNA sequence output page">
+      <figcaption>The DNA output page: reverse-complement option, extension controls, and the retrieved sequence.</figcaption></figure>
+    <ul class="small" style="max-width:88%;margin:0.45em auto 0;text-align:left;">
+      <li><strong>Reverse complement</strong> for a (–)-strand gene, then <strong>Get DNA</strong>.</li>
+      <li>Extend the output up- / down-stream to grab flanking sequence.</li>
+      <li>Feeds primer design, BLAT, cloning…</li>
+    </ul>
+    <aside class="notes">Reverse-complement matters for minus-strand genes; this "get DNA" output feeds the BLAT exercise coming up.</aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <h1>Tools: Table Browser &amp; BLAT</h1>
+  <p class="timing">get the data out, and find a sequence in the genome</p>
+</section>
+
+<section>
+    <h2>Table Browser: get the data out</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Tools → <strong>Table Browser</strong>: a graphical interface to <strong>all</strong> the underlying Genome Browser data.</li>
+          <li>Get the data <em>behind</em> any track, as a table.</li>
+          <li>Restrict to a region, <strong>filter</strong> by field, <strong>intersect</strong> two tracks.</li>
+          <li>Download BED/CSV, send to Galaxy, or save as a custom track.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRCA2clinvar">▶ open the BRCA2 ClinVar session</a></span>
+          Export <strong>ClinVar</strong> variants in <span class="chip">BRCA2</span>, then intersect with <strong>GENCODE</strong> exons (or cCREs).</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/tablebrowser.png" alt="Table Browser form">
+        <figcaption>The Table Browser: pick a track (here ClinVar on <em>BRCA1</em>), add filters/intersections, choose an output format.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Table Browser is how you get data OUT. Keep it practical: pick a track, set region to a gene, show one filter, then one intersection (ClinVar ∩ exons). Mention output to file / Galaxy / custom track. Don't tour every option: show the shape and move on.
+    </aside>
+  </section>
+
+<section>
+    <h2>BLAT: find a sequence in a genome</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Tools → <strong>BLAT</strong>: paste DNA/protein → its location(s).</li>
+          <li>Place a read, a primer, or a sequence from a paper.</li>
+          <li>“Search all genomes” → where it lands in <strong>other species</strong>.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, paste this BRAF fragment, Submit</span>
+          <div style="font-family:monospace;font-size:0.46em;word-break:break-all;line-height:1.3;background:#f6f8fa;border:1px solid #d0d7de;border-radius:5px;padding:0.3em;">TGGAAAAATAGCCTCAATTCTTACCATCCACAAAATGGATCCAGACAACTGTTCAAACTGATGGGACCCACTCCATCGAGATTTCACTGTAGCTAGACCAAAATCACCTATTTTTACTGTGAGGTCTTCATGAAGAAATATATCTGAGGTGTAGTAAGTAAAGGAAAACAGTAGATCTCATTTTCCTATCAGAGCAAGCA</div>
+          <span class="small">↓ scroll for the results</span></div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/blat.png" alt="BLAT search page">
+        <figcaption>The BLAT page: paste a sequence, pick this genome (or all genomes), Submit.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Step 1 of 3 (scroll down). Have them paste the fragment and Submit. This BRAF kinase-domain fragment maps cleanly; no setup needed.
+    </aside>
+  </section>
+
+<section>
+    <h2>BLAT: the results</h2>
+    <figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/blat_results.png" alt="BLAT results table" style="max-width:94%;display:block;margin:0 auto;">
+      <figcaption>Hits ranked by score &amp; identity: our fragment hits <em>BRAF</em> on chr7 at ~100%. Click <strong>browser</strong> next to the top hit.</figcaption></figure>
+    <aside class="notes">Step 2. Point out score/identity columns and the per-hit browser/details links.</aside>
+  </section>
+
+<section>
+    <h2>BLAT: your sequence aligned in the Browser</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial1-basics/blat_align.png" alt="BLAT hit aligned on the browser">
+      <figcaption>“YourSeq” aligned over the <em>BRAF</em> coding sequence, codons &amp; amino acids at base resolution.</figcaption></figure>
+    <ul class="small" style="max-width:88%;margin:0.45em auto 0;text-align:left;">
+      <li>The query shows up as <strong>“YourSeq”</strong>, aligned to BRAF.</li>
+      <li>Re-run with <strong>“search all genomes”</strong> → the same sequence also hits <strong>other species</strong> (mouse and more).</li>
+    </ul>
+    <div class="callout demo" style="max-width:88%;margin:0.4em auto 0;"><span class="lbl">Tools work cross-species</span>
+      BLAT runs on mouse and any other assembly, with an identical workflow.</div>
+    <aside class="notes">Step 3. The "search all genomes" point reinforces the cross-species theme.</aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <p class="kicker">#1 goal: “visualise my own data”</p>
+    <h1>Custom tracks</h1>
+    <p class="timing">put your lab’s data on the Browser</p>
+  </section>
+
+<section>
+    <h2>What you can load</h2>
+    <ul class="small">
+      <li>Text: <span class="chip">BED</span> <span class="chip">bedGraph</span> <span class="chip">GFF/GTF</span> <span class="chip">VCF</span> <span class="chip">WIG</span></li>
+      <li>Big binary (large data, by URL): <span class="chip">bigBed</span> <span class="chip">bigWig</span> <span class="chip">BAM</span> <span class="chip">VCF+tabix</span> <span class="chip">.hic</span></li>
+      <li>Full list of <a href="/FAQ/FAQformat.html">accepted formats</a></li>
+    </ul>
+    <p class="small">Small data: paste it. Large data: host the file and give the Browser a URL.</p>
+    <aside class="notes">
+      Two families: small text you paste; large data you host and point to by URL (the big* formats are indexed so only the visible slice is fetched).
+      ATAC-seq / RNA-seq / variant calls all fit here, relevant to many labs.
+    </aside>
+  </section>
+
+<section>
+    <h2>Loading a custom track</h2>
+    <div class="split">
+      <div class="txt">
+        <ol class="small">
+          <li>My Data → <strong>Custom Tracks</strong></li>
+          <li>Pick the assembly (hg38)</li>
+          <li>Paste a track line / file URL, or upload</li>
+        </ol>
+        <div class="callout demo"><span class="lbl">One-click examples: try now</span>
+          ▶ <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&amp;position=chr21:33034804-33037719&amp;hgt.customText=track%20type%3DvcfTabix%20name%3DVCF_Example_One%20bigDataUrl%3Dhttp%3A%2F%2Fgenome.ucsc.edu%2FgoldenPath%2Fhelp%2Fexamples%2FvcfExample.vcf.gz%20visibility%3Dpack">Load a <strong>VCF</strong> of variants</a> <span class="small">(hg19)</span><br>
+          ▶ <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgt.customText=track%20type%3DbigWig%20name%3DRNAseq_demo%20bigDataUrl%3Dhttps%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~lrnassar%2FPresentations%2FCJCU2026%2Ffiles%2FMLQ.out.chr.bw%20visibility%3Dfull">Load an <strong>RNA-seq bigWig</strong></a> <span class="small">(hg38)</span></div>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Click the VCF example, then switch it dense ↔ full.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/customtrack_loaded.png" alt="Loaded VCF custom track (1000 Genomes example, hg19)">
+        <figcaption>The UCSC example <strong>VCF</strong> (1000 Genomes, hg19) loaded as a custom track, genotypes shown as a haplotype tree over the variants.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Demo loading the example bigWig by URL, then the BAM, so they see both signal and read-level data appear.
+      Have them load the bigWig themselves and toggle dense/full. (Demo file URLs live in the CJCU2026/files folder, paste-ready.)
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <h1>Track hubs</h1>
+    <p class="timing">many tracks, organised &amp; shareable, by one URL</p>
+  </section>
+
+<section>
+    <h2>Hub vs custom track</h2>
+    <ul>
+      <li><strong>Custom track</strong> = a file or two; quick &amp; personal.</li>
+      <li><strong>Track hub</strong> = a structured, reusable collection of many tracks, configured once, loaded by one URL, ideal to publish or share with a lab.</li>
+    </ul>
+    <aside class="notes">
+      Position hubs as the "grown-up" version of custom tracks: when you have many tracks, or want to share/publish a configured set, you make a hub.
+    </aside>
+  </section>
+
+<section>
+    <h2>Load a hub by URL</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>My Data → <strong>Track Hubs</strong> → My Hubs → paste the hub URL.</li>
+          <li>Or browse <strong>Public Hubs</strong> and use <strong>Hub Search</strong>.</li>
+        </ul>
+        <div class="callout demo"><span class="lbl">Demo: cancer &amp; expression hubs</span>
+          BRCA Exchange · ENCODE4 Regulation · FANTOM5 (multi-species).</div>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Connect a hub by URL and turn on a track. Browse the <a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect">Public Hubs</a> page.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/hubs.png" alt="Track Data Hubs page">
+        <figcaption>The Track Data Hubs page: connect your own hub by URL, or browse hundreds of curated Public Hubs with Hub Search.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Connect one hub live by URL (BRCA Exchange is a nice cancer example). Then show Public Hubs + Hub Search so they can discover data.
+      FANTOM5 is multi-species.
+    </aside>
+  </section>
+
+<section>
+    <h2>Build your own (in brief)</h2>
+    <ul class="small">
+      <li>Three text files: <span class="chip">hub.txt</span> → <span class="chip">genomes.txt</span> → <span class="chip">trackDb.txt</span>, plus your big* data files.</li>
+      <li>Host anywhere reachable by URL; give the Browser the <span class="chip">hub.txt</span> link.</li>
+      <li>Full how-to: <a href="https://genome.ucsc.edu/goldenPath/help/hubBasics.html">Track Hub Basics</a> · take-away <a href="https://hgwdev.gi.ucsc.edu/~lrnassar/Presentations/CJCU2026/files/make_track_hub_example.txt">example file</a></li>
+    </ul>
+    <div class="callout demo"><span class="lbl">New: free hosting: Hub Space <span class="tag">2026</span></span>
+      No web server? Upload bigBed / bigWig / BAM / VCF directly on the Browser: <strong>Track Hubs → Hub Space</strong> tab (10 GB to start &mdash; <a href="mailto:genome-www@soe.ucsc.edu">email us</a> if you need more). <a href="https://genome.ucsc.edu/goldenPath/newsarch.html#020326b">Announcement →</a></div>
+    <aside class="notes">
+      Keep this light unless asked for more detail. Show the three-file structure conceptually; point to the take-away example in CJCU2026/files.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <h1>Sessions: save &amp; share</h1>
+  <p class="timing">turn any view into a stable, shareable link</p>
+</section>
+
+<section>
+    <h2>Sessions: save &amp; share a live view</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>My Data → <strong>My Sessions</strong> → name it → Submit.</li>
+          <li>Captures position, every track setting, <strong>your custom tracks &amp; hubs</strong>.</li>
+          <li>Stable short link: <span class="chip">genome.ucsc.edu/s/user/Name</span></li>
+        </ul>
+        <p class="small">Drop it into emails, papers, figure legends, posters, class handouts.</p>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/sessions.png" alt="Public Sessions gallery">
+        <figcaption>Public Sessions: researchers share snapshots: each is a full Browser view (tracks, position, custom data) behind one link.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Requires a (free) login. Save the current view; show the resulting short link.
+      Emphasise it captures EVERYTHING incl. their custom tracks/hubs: so a collaborator opening the link sees exactly what they see.
+    </aside>
+  </section>
+
+<section>
+    <h2>Sessions = collaboration &amp; teaching</h2>
+    <ul>
+      <li>Some of you want to <strong>teach</strong> with the Browser: a link gives every student the same starting view.</li>
+      <li>The <strong>BRCA·ENIGMA</strong> expert-panel set (Tutorial 3) shared its whole analysis as a session.</li>
+    </ul>
+    <div class="callout exercise"><span class="lbl">Try it</span>
+      Save your current view as a session and copy its short link.</div>
+    <aside class="notes">
+      Bridge to teaching: this is why sessions matter for the educators. Callback to the ENIGMA paper session.
+      Callback: the UCSC teaching modules are built exactly this way: a session + a page. Now they have the missing piece (how to save one).
+    </aside>
+  </section>
+
+<section>
+  <h2>What you can now do</h2>
+  <ul class="small">
+    <li>Navigate the Browser and read any track &amp; gene model.</li>
+    <li>Set track visibility, use the track groups, and reset to defaults.</li>
+    <li>Extract DNA, query the <strong>Table Browser</strong>, and place a sequence with <strong>BLAT</strong>.</li>
+    <li>Load your own data as <strong>custom tracks</strong> and <strong>hubs</strong>, and save &amp; share a <strong>session</strong>.</li>
+  </ul>
+  <div class="callout demo"><span class="lbl">Next</span>
+    <strong>Tutorial 2 (Cancer Data)</strong> tours the clinical databases; <strong>Tutorial 3</strong> puts them to work on real variants.</div>
+</section>
+
+<section>
+  <h2>Where to get help</h2>
+  <ul class="small">
+    <li>Help → <strong>Interactive Tutorials</strong> (in the menu bar).</li>
+    <li>Documentation &amp; tutorials: <a href="https://genome.ucsc.edu/docs/">genome.ucsc.edu/docs</a></li>
+    <li>Email the team: <strong>genome@soe.ucsc.edu</strong></li>
+    <li>All contact options: <a href="https://genome.ucsc.edu/contacts.html">genome.ucsc.edu/contacts.html</a></li>
+  </ul>
+  <aside class="notes">
+    Point at the built-in Interactive Tutorials especially, lowest-friction follow-up. The mailing list is monitored by the team; encourage real questions.
+  </aside>
+</section>
+
+<section>
+  <h2>Who are we?</h2>
+  <div class="split">
+    <div class="txt">
+      <ul class="small">
+        <li>The <strong>UCSC Genome Browser</strong>, based in <strong>Santa Cruz, California</strong>.</li>
+        <li>Online since <strong>2000</strong>.</li>
+        <li>A <strong>small team</strong>, building a free, public resource used worldwide.</li>
+      </ul>
+      <div class="callout demo"><span class="lbl">Acknowledgement</span>
+        Funded by the <strong>National Human Genome Research Institute (NHGRI)</strong> of the <strong>NIH</strong>.</div>
+    </div>
+    <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/gb_team.jpg" alt="UCSC Genome Browser team, July 2025">
+      <figcaption>The UCSC Genome Browser team, July 2025.</figcaption></figure></div>
+  </div>
+  <aside class="notes">
+    Quick, warm intro to the team and project: based at UC Santa Cruz, California; the Browser has been online since 2000, so it turned 25 in 2025; a small team (fewer than 10) maintaining a free, public resource used worldwide. Acknowledge NIH funding. Keep it brief.
+  </aside>
+</section>
+
+<section class="divider" data-background-color="#1f3a5f">
+  <h1 style="color:#fff;margin-bottom:0.12em;">Thank you!</h1>
+  <p style="color:#fff;font-size:0.72em;margin:0.05em 0;">Questions? · genome@soe.ucsc.edu</p>
+  <p style="color:#cdd9e8;font-size:0.55em;margin:0.05em 0 0.45em;">UCSC Genome Browser · genome.ucsc.edu</p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>
