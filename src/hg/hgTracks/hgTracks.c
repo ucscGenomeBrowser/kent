@@ -1962,6 +1962,14 @@ else if ((numFigs >= 6) && (numFigs < 9))
     baseWord = "Mb";
 else if ((numFigs >= 9) && (numFigs < 12))
     baseWord = "Gb";
+// At single-base zoom numBases is 1, which sends the frontNum==1 branch below zero
+// and rounds the scale down to a nonsensical "0 bases".  Never let it drop below one base.
+if (scaleBases < 1)
+    scaleBases = 1;
+if (scaleBasesTextNum < 1)
+    scaleBasesTextNum = 1;
+if ((scaleBasesTextNum == 1) && sameString(baseWord, "bases"))
+    baseWord = "base";
 safef(scaleText, scaleTextSize, "%d %s", scaleBasesTextNum, baseWord);
 return scaleBases;
 }
