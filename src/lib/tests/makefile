@@ -9,7 +9,8 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest
+    tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
+    dnaCodonTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -20,6 +21,13 @@ mkdirs:
 testSumDoubles: testSumDoubles.o ${MYLIBS}
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ./testSumDoubles testSumDoubles.o ${MYLIBS} ${L}
+
+dnaCodonTest: dnaCodonTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/dnaCodonTest dnaCodonTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/dnaCodonTest${EXE}
+	${BIN_DIR}/dnaCodonTest > output/dnaCodonTest
+	diff expected/dnaCodonTest output/dnaCodonTest
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

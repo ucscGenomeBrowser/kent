@@ -17,100 +17,112 @@
 
 
 struct codonTable
-/* The dread codon table. */
+/* The dread codon table.  Amino acid translations live in geneticCodes[]
+ * below (one entry per NCBI genetic code); this table just maps codon <->
+ * index and holds the unique per-codon labels used by lookupUniqCodon. */
     {
     DNA *codon;		/* Lower case. */
-    AA protCode;	/* Upper case. The "Standard" code */
-    AA mitoCode;	/* Upper case. Vertebrate Mitochondrial translations */
     AA uniqCode;	/* unique code for each codon */
     };
 
-struct codonTable codonTable[] = 
-/* The master codon/protein table. */
+struct codonTable codonTable[] =
+/* The master codon table, in NCBI codon order (base1 outer, base3 inner,
+ * each t,c,a,g), which is the order the geneticCodes[] strings index into. */
 {
-    {"ttt", 'F', 'F', 'a'},
-    {"ttc", 'F', 'F', 'b'},
-    {"tta", 'L', 'L', 'c'},
-    {"ttg", 'L', 'L', 'd'},
+    {"ttt", 'a'},
+    {"ttc", 'b'},
+    {"tta", 'c'},
+    {"ttg", 'd'},
 
-    {"tct", 'S', 'S', 'e'},
-    {"tcc", 'S', 'S', 'f'},
-    {"tca", 'S', 'S', 'g'},
-    {"tcg", 'S', 'S', 'h'},
+    {"tct", 'e'},
+    {"tcc", 'f'},
+    {"tca", 'g'},
+    {"tcg", 'h'},
 
-    {"tat", 'Y', 'Y', 'i'},
-    {"tac", 'Y', 'Y', 'j'},
-    {"taa", 0, 0, 'k'},
-    {"tag", 0, 0, 'l'},
+    {"tat", 'i'},
+    {"tac", 'j'},
+    {"taa", 'k'},
+    {"tag", 'l'},
 
-    {"tgt", 'C', 'C', 'm'},
-    {"tgc", 'C', 'C', 'n'},
-    {"tga", 0, 'W', 'o'},
-    {"tgg", 'W', 'W', 'p'},
-
-
-    {"ctt", 'L', 'L', 'q'},
-    {"ctc", 'L', 'L', 'r'},
-    {"cta", 'L', 'L', 's'},
-    {"ctg", 'L', 'L', 't'},
-
-    {"cct", 'P', 'P', 'u'},
-    {"ccc", 'P', 'P', 'v'},
-    {"cca", 'P', 'P', 'w'},
-    {"ccg", 'P', 'P', 'x'},
-
-    {"cat", 'H', 'H', 'y'},
-    {"cac", 'H', 'H', 'z'},
-    {"caa", 'Q', 'Q', 'A'},
-    {"cag", 'Q', 'Q', 'B'},
-
-    {"cgt", 'R', 'R', 'C'},
-    {"cgc", 'R', 'R', 'D'},
-    {"cga", 'R', 'R', 'E'},
-    {"cgg", 'R', 'R', 'F'},
+    {"tgt", 'm'},
+    {"tgc", 'n'},
+    {"tga", 'o'},
+    {"tgg", 'p'},
 
 
-    {"att", 'I', 'I', 'G'},
-    {"atc", 'I', 'I', 'H'},
-    {"ata", 'I', 'M', 'I'},
-    {"atg", 'M', 'M', 'J'},
+    {"ctt", 'q'},
+    {"ctc", 'r'},
+    {"cta", 's'},
+    {"ctg", 't'},
 
-    {"act", 'T', 'T', 'K'},
-    {"acc", 'T', 'T', 'L'},
-    {"aca", 'T', 'T', 'M'},
-    {"acg", 'T', 'T', 'N'},
+    {"cct", 'u'},
+    {"ccc", 'v'},
+    {"cca", 'w'},
+    {"ccg", 'x'},
 
-    {"aat", 'N', 'N', 'O'},
-    {"aac", 'N', 'N', 'P'},
-    {"aaa", 'K', 'K', 'Q'},
-    {"aag", 'K', 'K', 'R'},
+    {"cat", 'y'},
+    {"cac", 'z'},
+    {"caa", 'A'},
+    {"cag", 'B'},
 
-    {"agt", 'S', 'S', 'S'},
-    {"agc", 'S', 'S', 'T'},
-    {"aga", 'R', 0, 'U'},
-    {"agg", 'R', 0, 'V'},
+    {"cgt", 'C'},
+    {"cgc", 'D'},
+    {"cga", 'E'},
+    {"cgg", 'F'},
 
 
-    {"gtt", 'V', 'V', 'W'},
-    {"gtc", 'V', 'V', 'X'},
-    {"gta", 'V', 'V', 'Y'},
-    {"gtg", 'V', 'V', 'Z'},
+    {"att", 'G'},
+    {"atc", 'H'},
+    {"ata", 'I'},
+    {"atg", 'J'},
 
-    {"gct", 'A', 'A', '1'},
-    {"gcc", 'A', 'A', '2'},
-    {"gca", 'A', 'A', '3'},
-    {"gcg", 'A', 'A', '4'},
+    {"act", 'K'},
+    {"acc", 'L'},
+    {"aca", 'M'},
+    {"acg", 'N'},
 
-    {"gat", 'D', 'D', '5'},
-    {"gac", 'D', 'D', '6'},
-    {"gaa", 'E', 'E', '7'},
-    {"gag", 'E', 'E', '8'},
+    {"aat", 'O'},
+    {"aac", 'P'},
+    {"aaa", 'Q'},
+    {"aag", 'R'},
 
-    {"ggt", 'G', 'G', '9'},
-    {"ggc", 'G', 'G', '0'},
-    {"gga", 'G', 'G', '@'},
-    {"ggg", 'G', 'G', '$'},
+    {"agt", 'S'},
+    {"agc", 'T'},
+    {"aga", 'U'},
+    {"agg", 'V'},
+
+
+    {"gtt", 'W'},
+    {"gtc", 'X'},
+    {"gta", 'Y'},
+    {"gtg", 'Z'},
+
+    {"gct", '1'},
+    {"gcc", '2'},
+    {"gca", '3'},
+    {"gcg", '4'},
+
+    {"gat", '5'},
+    {"gac", '6'},
+    {"gaa", '7'},
+    {"gag", '8'},
+
+    {"ggt", '9'},
+    {"ggc", '0'},
+    {"gga", '@'},
+    {"ggg", '$'},
 };
+
+/* struct geneticCode is defined in dnautil.h.  geneticCodes[] below is
+ * auto-generated from NCBI's gc.prt; see the header of geneticCodeTable.h for
+ * how to regenerate it with src/oneShot/dnaGeneticCodes/dnaGeneticCodes.py.
+ * Its aa/starts strings index the same way as codonTable[] above. */
+#include "geneticCodeTable.h"
+
+/* The genetic code lookupCodon/isStopCodon/dnaTranslateSome translate with.
+ * Defaults to Standard (id 1); change with setDefaultGeneticCode.  This is
+ * process-global and not thread-safe. */
+static struct geneticCode *defaultGeneticCode = NULL;
 
 /* A table that gives values 0 for t
 			     1 for c
@@ -194,27 +206,89 @@ if (!inittedNtVal)
     }
 }
 
-/* Returns one letter code for protein, 
- * 0 for stop codon or X for bad input,
- * The "Standard" Code */
-AA lookupCodon(DNA *dna)
+struct geneticCode *geneticCodeForId(int id)
+/* Return the genetic code with the given NCBI transl_table id, or NULL if
+ * there is no such code. */
 {
-int ix;
 int i;
-char c;
+for (i=0; i<ArraySize(geneticCodes); ++i)
+    if (geneticCodes[i].id == id)
+	return &geneticCodes[i];
+return NULL;
+}
 
+struct geneticCode *geneticCodeForName(char *name)
+/* Return the genetic code with the given name (case-insensitive), or NULL if
+ * there is no such code. */
+{
+int i;
+for (i=0; i<ArraySize(geneticCodes); ++i)
+    if (sameWord(geneticCodes[i].name, name))
+	return &geneticCodes[i];
+return NULL;
+}
+
+static int codonIndex(DNA *dna)
+/* Return 0-63 index into a genetic code for the codon at dna, or -1 if any of
+ * the three bases is not a nucleotide. */
+{
+int ix = 0;
+int i;
 if (!inittedNtVal)
     initNtVal();
-ix = 0;
 for (i=0; i<3; ++i)
     {
     int bv = ntVal[(int)dna[i]];
     if (bv<0)
-	return 'X';
+	return -1;
     ix = (ix<<2) + bv;
     }
-c = codonTable[ix].protCode;
-return c;
+return ix;
+}
+
+AA lookupCodonInCode(struct geneticCode *code, DNA *dna)
+/* Return one letter code for protein using the given genetic code,
+ * 0 for stop codon, or X for bad input. */
+{
+int ix = codonIndex(dna);
+if (ix < 0)
+    return 'X';
+AA c = code->aa[ix];
+return (c == '*') ? 0 : c;
+}
+
+static void initDefaultGeneticCode()
+/* Make sure defaultGeneticCode points at something (the Standard code). */
+{
+if (defaultGeneticCode == NULL)
+    defaultGeneticCode = geneticCodeForId(1);
+}
+
+void setDefaultGeneticCode(int id)
+/* Set the genetic code used by lookupCodon/isStopCodon/dnaTranslateSome to the
+ * NCBI transl_table with the given id (1 = Standard).  Aborts on unknown id.
+ * Sets process-global state; not thread-safe. */
+{
+struct geneticCode *code = geneticCodeForId(id);
+if (code == NULL)
+    errAbort("setDefaultGeneticCode: unknown genetic code id %d", id);
+defaultGeneticCode = code;
+}
+
+/* Returns one letter code for protein,
+ * 0 for stop codon or X for bad input,
+ * using the default genetic code (Standard unless setDefaultGeneticCode
+ * changed it). */
+AA lookupCodon(DNA *dna)
+{
+initDefaultGeneticCode();
+return lookupCodonInCode(defaultGeneticCode, dna);
+}
+
+boolean isStopCodonInCode(struct geneticCode *code, DNA *dna)
+/* Return TRUE if it's a stop codon in the given genetic code. */
+{
+return lookupCodonInCode(code, dna) == 0;
 }
 
 boolean isStopCodon(DNA *dna)
@@ -262,28 +336,12 @@ else
 }
 
 
-/* Returns one letter code for protein, 
+/* Returns one letter code for protein,
  * 0 for stop codon or X for bad input,
- * Vertebrate Mitochondrial Code */
+ * Vertebrate Mitochondrial Code (NCBI genetic code 2) */
 AA lookupMitoCodon(DNA *dna)
 {
-int ix;
-int i;
-char c;
-
-if (!inittedNtVal)
-    initNtVal();
-ix = 0;
-for (i=0; i<3; ++i)
-    {
-    int bv = ntVal[(int)dna[i]];
-    if (bv<0)
-	return 'X';
-    ix = (ix<<2) + bv;
-    }
-c = codonTable[ix].mitoCode;
-c = toupper(c);
-return c;
+return lookupCodonInCode(geneticCodeForId(2), dna);
 }
 
 AA lookupUniqCodon(DNA *dna)
@@ -329,9 +387,10 @@ assert(val >= 0 && val < 64);
 return codonTable[val].codon;
 }
 
-void dnaTranslateSome(DNA *dna, char *out, int outSize)
-/* Translate DNA upto a stop codon or until outSize-1 amino acids, 
- * whichever comes first. Output will be zero terminated. */
+void dnaTranslateSomeInCode(struct geneticCode *code, DNA *dna, char *out, int outSize)
+/* Translate DNA with the given genetic code upto a stop codon or until
+ * outSize-1 amino acids, whichever comes first. Output will be zero
+ * terminated. */
 {
 int i;
 int dnaSize;
@@ -343,10 +402,18 @@ for (i=0; i<dnaSize-2; i+=3)
     {
     if (protSize >= outSize)
         break;
-    if ((out[protSize++] = lookupCodon(dna+i)) == 0)
+    if ((out[protSize++] = lookupCodonInCode(code, dna+i)) == 0)
         break;
     }
 out[protSize] = 0;
+}
+
+void dnaTranslateSome(DNA *dna, char *out, int outSize)
+/* Translate DNA upto a stop codon or until outSize-1 amino acids,
+ * whichever comes first. Output will be zero terminated. */
+{
+initDefaultGeneticCode();
+dnaTranslateSomeInCode(defaultGeneticCode, dna, out, outSize);
 }
 
 /* A little array to help us decide if a character is a 

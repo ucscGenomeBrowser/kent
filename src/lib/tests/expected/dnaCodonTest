@@ -1,0 +1,10 @@
+code  1 Standard                   M**GQ*
+code  2 Vertebrate Mitochondrial   MW*GQ*
+code  6 Ciliate Nuclear; Dasycladacean Nuclear; Hexamita Nuclear M*QGQQ
+tga stop standard=1 mito=0
+id 11 name=Bacterial, Archaeal and Plant Plastid
+name Standard id=1
+id 999 isNull=1 name Bogus isNull=1
+default(standard) translateSome=M
+default(mito)     translateSome=MW
+lookupCodon(tga) after reset=0
