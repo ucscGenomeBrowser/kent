@@ -21,6 +21,13 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 #define hgsNewSessionDescription hgSessionPrefix "newSessionDescription"
 #define hgsDoNewSession hgSessionPrefix "doNewSession"
 
+// AJAX endpoint behind the "Share a link" menu button (see topLinks.js).  hgsShareAnon (when
+// set, or when no user is logged in) saves under the reserved anonymous user "l".
+#define hgsDoSaveSessionJson hgSessionPrefix "doSaveSessionJson"
+#define hgsShareAnon hgSessionPrefix "shareAnon"
+// Rename an existing session (hgsOldSessionName -> hgsNewSessionName) for the "Specify name" step.
+#define hgsDoRenameSessionJson hgSessionPrefix "doRenameSessionJson"
+
 #define hgsSharePrefix hgSessionPrefix "share_"
 #define hgsGalleryPrefix hgSessionPrefix "gallery_"
 #define hgsEditPrefix hgSessionPrefix "edit_"

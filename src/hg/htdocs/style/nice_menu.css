@@ -47,6 +47,7 @@ a.skipNav:focus {
 	line-height:19px;
 	font-size:13px;
 	margin:0 0 5px 0;
+	position:relative; /* anchor for #topRightLinks */
 }
 #hgTracks-main-menu-whole {
 	width:100%;
@@ -57,6 +58,70 @@ a.skipNav:focus {
 	line-height:19px;
 	font-size:13px;
 	margin:0 0 5px 0;
+	position:relative; /* anchor for #topRightLinks */
+}
+/* Top-right utility links (Share a link, Login) - sit at the top-right corner of the bar,
+   separate from the menu list.  Filled by menuBar() in lib/web.c and by hgMenubar.c. */
+#topRightLinks {
+	position:absolute;
+	top:0;
+	right:14px;
+	height:32px;
+	line-height:32px;
+	z-index:3;
+	white-space:nowrap;
+}
+#topRightLinks a.topRightLink {
+	color:#fff;
+	margin-left:18px;
+	text-decoration:none;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size:13px;
+}
+#topRightLinks a.topRightLink:hover {
+	text-decoration:underline;
+}
+/* Hamburger toggle: hidden on wide screens (links shown inline); shown on narrow screens below. */
+#trToggle {
+	display:none;
+}
+/* Narrow / phone screens: the fixed-width (min 1000px) bar scrolls horizontally, so the
+   right-edge-pinned links would collide with "About Us".  Instead pin a menu icon to the visible
+   viewport corner and reveal the links as a dropdown when tapped. */
+@media (max-width: 1100px) {
+	#topRightLinks {
+		position:fixed;
+		top:0;
+		right:0;
+		height:32px;
+		line-height:32px;
+		padding:0 8px;
+		background:#00457c;
+		z-index:1000;
+	}
+	#trToggle {
+		display:inline-block;
+		background:none;
+		border:0;
+		color:#fff;
+		font-size:20px;
+		line-height:32px;
+		cursor:pointer;
+		padding:0;
+	}
+	#topRightLinks a.topRightLink {
+		display:none;
+	}
+	#topRightLinks.trOpen {
+		height:auto;
+	}
+	#topRightLinks.trOpen a.topRightLink {
+		display:block;
+		margin:0;
+		padding:8px 12px;
+		background:#00457c;
+		text-align:right;
+	}
 }
 #main-menu {
 	/* width:1031px; */

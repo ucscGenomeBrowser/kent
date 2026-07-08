@@ -4873,7 +4873,18 @@ var popUpHgcOrHgGene = {
         // can jump down the page rather than out to a new tab
         cleanHtml = cleanHtml.replace(/_target ?= ?["']blank["']/g,"");
 
-        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
+        // "Share a link" at the top of the popup: shares a link to this details page
+        // (the hgc URL with the hgsid stripped), handled by topLinks.js.
+        var shareBar = "<div id='hgcShareBar' style='margin:0 0 8px 0; text-align:right;'>" +
+            "<a id='hgcShareLink' href='#'>Share a link</a></div>";
+        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ shareBar + cleanHtml +"</div>");
+        $('#hgcShareLink').on("click", function(e) {
+            e.preventDefault();
+            // Share the details-page URL with hgsid stripped; keep (or add) db so it opens
+            // standalone, and note that the link shows the page, not the user's active tracks.
+            if (window.topLinks && window.topLinks.shareUrl)
+                window.topLinks.shareUrl(popUpHgcOrHgGene.href, {ensureDb: getDb(), pageNote: true});
+        });
         appendNonceJsToPage(nonceJs);
         let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
         popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
