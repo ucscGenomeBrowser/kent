@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCSC Genome Browser · Tutorial 3: Clinical Examples &amp; Variant Interpretation</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+<style>
+  :root{
+    --ucsc-blue:#1f3a5f;
+    --ucsc-accent:#0b5394;
+    --ucsc-gold:#e6a817;
+  }
+  .reveal { font-size: 32px; }
+  .reveal h1,.reveal h2,.reveal h3 { color: var(--ucsc-blue); text-transform:none; letter-spacing:normal; }
+  .reveal h1 { font-size: 1.9em; }
+  .reveal h2 { font-size: 1.32em; }
+  .reveal section img { border:none; box-shadow:none; }
+  .reveal a { color: var(--ucsc-accent); }
+  .reveal ul { width: 100%; box-sizing: border-box; }
+  .reveal li { margin: 0.16em 0; }
+
+  .divider { background: var(--ucsc-blue); }
+  .divider h1,.divider h2,.divider p { color:#fff !important; }
+  .divider .kicker { color: var(--ucsc-gold) !important; letter-spacing:2px; font-size:0.55em; text-transform:uppercase;}
+  .divider .timing { color:#cdd9e8 !important; font-size:0.62em; margin-top:0.6em; }
+
+  .callout { border-radius:10px; padding:0.55em 0.9em; margin:0.35em 0; font-size:0.8em; text-align:left; }
+  .exercise { background:#eaf6ec; border-left:6px solid #2e8b57; }
+  .demo     { background:#e9f1fb; border-left:6px solid var(--ucsc-accent); }
+  .caution  { background:#fdf3e3; border-left:6px solid var(--ucsc-gold); }
+  .callout .lbl { font-weight:700; display:block; margin-bottom:0.12em; }
+  .exercise .lbl{ color:#2e8b57; }
+  .demo .lbl    { color:var(--ucsc-accent); }
+  .caution .lbl { color:#b8860b; }
+  /* standalone callouts (direct children of a slide) shouldn't span the full width;
+     keep them aligned with the centered content above them */
+  .reveal section > .callout { display:block; box-sizing:border-box; max-width:92%; margin-left:auto; margin-right:auto; }
+
+  .chip { display:inline-block; background:#f0f2f5; border:1px solid #d0d7de; border-radius:6px;
+          padding:0.05em 0.45em; font-family:monospace; font-size:0.78em; color:#24292f; white-space:nowrap; }
+  .grp  { display:inline-block; background:var(--ucsc-blue); color:#fff; border-radius:6px;
+          padding:0.05em 0.45em; font-size:0.72em; }
+
+  .small { font-size:0.8em; color:#555; }
+  .reveal .footer { position:fixed; bottom:8px; left:14px; font-size:13px; color:#9aa4b1; z-index:30; }
+  .twocol { display:flex; gap:1.2em; }
+  .twocol > div { flex:1; min-width:0; overflow-wrap:anywhere; }
+  .tag { font-size:0.6em; background:var(--ucsc-gold); color:#3a2c00; border-radius:5px; padding:0.05em 0.4em; vertical-align:middle;}
+  /* screenshot layouts */
+  .split { display:flex; gap:1.1em; align-items:center; }
+  .split > .txt { flex:1 1 44%; min-width:0; text-align:left; }
+  .split > .figwrap { flex:1 1 56%; min-width:0; }
+  .split img.shot { max-width:100%; height:auto; }
+  /* reveal makes lists inline-block (sizes to content), force block so they wrap to the column */
+  .reveal .split .txt ul, .reveal .split .txt ol,
+  .reveal .twocol ul, .reveal .twocol ol { display:block !important; width:auto !important; box-sizing:border-box; text-align:left; margin:0 0 0.3em 0; padding-left:1.1em; }
+  .reveal .split .txt li, .reveal .twocol li { overflow-wrap:anywhere; }
+  .split .txt p { text-align:left; }
+  /* stacked mini-examples (e.g. display modes) */
+  .stack figure.fig { margin:0 0 0.45em 0; }
+  .stack .modelabel { display:inline-block; background:var(--ucsc-blue); color:#fff; font-size:0.6em; border-radius:5px; padding:0.04em 0.45em; margin-bottom:0.15em; }
+  figure.fig { margin:0; }
+  img.shot { width:100%; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 5px 16px rgba(0,0,0,.18); display:block; }
+  figure.fig figcaption { font-size:0.56em; color:#5b6673; margin-top:0.3em; text-align:left; line-height:1.3; }
+  .shotbig { display:block; margin:0.15em auto 0; max-width:84%; max-height:60vh; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+  figcaption.capbig { font-size:0.58em; color:#5b6673; margin-top:0.35em; text-align:center; }
+  /* annotated control-bar (Navigation & viewing controls) */
+  .navctrls { margin:1.3em 0 0.6em; }
+  .navstrip { position:relative; margin:1.4em auto; max-width:96%; }
+  .navstrip img.shot { width:100%; }
+  .navbadge { position:absolute; bottom:100%; margin-bottom:3px; transform:translateX(-50%);
+    width:1.35em; height:1.35em; line-height:1.3em; text-align:center; box-sizing:border-box;
+    background:var(--ucsc-gold); color:#3a2c00; border:2px solid #fff; border-radius:50%;
+    font-size:0.62em; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.4); }
+  .navkey { font-size:0.64em; text-align:left; gap:1.6em; }
+  .navkey p { margin:0.22em 0; }
+  .navkey .keybadge { display:inline-block; width:1.5em; height:1.5em; line-height:1.5em; text-align:center;
+    background:var(--ucsc-blue); color:#fff; border-radius:50%; font-weight:700; margin-right:0.35em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="footer">UCSC Genome Browser · Tutorial 3: Clinical Examples & Variant Interpretation</div>
+<div class="slides">
+
+<section class="divider" data-background-color="#1f3a5f">
+  <p class="kicker">UCSC Genome Browser · Tutorial 3</p>
+  <h1>Clinical Examples &amp; Variant Interpretation</h1>
+  <h2 style="color:#fff;font-weight:400;">From a variant to a call: Recommended Track Sets, regulation, and the evidence</h2>
+  <p class="timing">Worked examples in germline &amp; somatic interpretation · genome.ucsc.edu</p>
+</section>
+
+<section>
+  <h2>A thread for today: three cancer variants</h2>
+  <ul class="small">
+    <li><strong>A BRCA2 variant</strong>: <em>germline</em>, “uncertain significance”. How do experts resolve it? <span class="small" style="color:#9aa4b1">(morning, in the Recommended Track Sets)</span></li>
+    <li><strong>The TERT promoter</strong>: a <em>non-coding driver</em>. The answer lives in the regulation. <span class="small" style="color:#9aa4b1">(morning, then the epigenetics section)</span></li>
+    <li><strong>BRAF V600E</strong>: a <em>coding driver</em> in melanoma. Somatic, famous, druggable. <span class="small" style="color:#9aa4b1">(afternoon, the somatic worked example)</span></li>
+  </ul>
+  <div class="callout demo"><span class="lbl">Watch them recur</span>
+    We will come back to these variants throughout the session. The goal is that by the end you can interpret a variant, explore its regulatory context, load your own data, and share it as a link.</div>
+  <aside class="notes">
+    Plant the spine: three flavours of cancer variant, in the order the day presents them: germline-uncertain (BRCA2, morning), non-coding driver (TERT, morning, revisited in epigenetics), then the somatic coding driver (BRAF V600E, afternoon). Tell them to watch each reappear. This is what turns the day from a tour of buttons into a story where each section pays something off.
+  </aside>
+</section>
+
+<section>
+    <h2>Interpreting a variant = asking questions <span style="font-weight:400;font-size:0.7em;color:#2e8b57">(germline)</span></h2>
+    <p class="small">Databases: ask a question, know which track answers it:</p>
+    <ul class="small">
+      <li><strong>Is it already classified?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=clinvar">ClinVar</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=clinGenComp">ClinGen</a> <span class="small">(germline pathogenicity, ClinVar also carries <em>somatic</em> oncogenicity)</span></li>
+      <li><strong>Is it druggable?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=civic">CIViC</a> (variant → disease → therapy → evidence)</li>
+      <li><strong>How often is it seen in tumours?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cosmicRegions">COSMIC</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gdcCancer">TCGA Pan-Cancer</a></li>
+      <li><strong>Is it just common in healthy people?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gnomadVariants">gnomAD</a> <span class="small">(germline: common ⇒ likely benign)</span></li>
+      <li><strong>Is the gene linked to inherited disease?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=genCC">GenCC</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=omimGene2">OMIM</a></li>
+      <li><strong>Is the position constrained / in a key domain?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cons100way">conservation</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=uniprot">UniProt</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=revel">REVEL</a></li>
+    </ul>
+    <div class="callout demo"><span class="lbl">Germline first</span>
+      These questions fit a <strong>germline</strong> variant, and the <strong>Recommended Track Sets</strong> (next) bundle exactly these tracks. Later we revisit the same questions for <strong>somatic</strong> cancer variants.</div>
+    <aside class="notes">
+      First pass: germline framing, to set up the Recommended Track Sets (next): Clinical SNVs, Non-coding SNVs and the ENIGMA / Lynch expert-panel sets are all germline. Detail to drop in live: GenCC colours = curated evidence strength; REVEL scores missense pathogenicity; UniProt shows the protein-domain hit; gnomAD high frequency argues benign (germline). We re-present this exact slide later with a somatic focus (COSMIC / CIViC + ClinVar somatic), leading into BRAF V600E.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <h1>Recommended Track Sets</h1>
+    <p class="timing">Hundreds of tracks is overwhelming, start from a curated set</p>
+  </section>
+
+<section>
+    <h2>Recommended Track Sets: The problem they solve</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The Browser has <strong>hundreds of tracks</strong>, beginners don’t know which to turn on.</li>
+          <li><strong>Recommended Track Sets</strong> = pre-configured collections for a scenario.</li>
+          <li>One click turns on a themed set, <strong>without changing your locus</strong>.</li>
+          <li>Open via the <strong>“Recommended Track Sets”</strong> menu item.</li>
+        </ul>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/rts_dialog.png" alt="Recommended Track Sets dialog">
+        <figcaption>The Recommended Track Sets menu: each link loads a curated, themed set of tracks at your current position.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      This is the emotional pivot of the morning: acknowledge the firehose of tracks they just saw, then offer the fix.
+      Open the Recommended Track Sets pop-up live (it appears on hg19/hg38). Stress it changes tracks, not your position.
+    </aside>
+  </section>
+
+<section>
+    <h2>Seven sets on hg38</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><strong>Clinical SNVs</strong>: disease contribution of coding SNVs</li>
+          <li><strong>Clinical CNVs</strong>: coding structural variants</li>
+          <li><strong>Non-coding SNVs</strong>: functional context of non-coding variants</li>
+          <li><strong>Determine Exon Relevance</strong>: is the variant in a required exon?</li>
+          <li><strong>Problematic Regions</strong>: low-confidence / high-homology regions</li>
+          <li><strong>ENIGMA BRCA1/BRCA2 VCEP</strong>: expert-panel BRCA rules</li>
+          <li><strong>InSiGHT Lynch Syndrome VCEP</strong>: MLH1, MSH2, MSH6, PMS2</li>
+        </ul>
+        <p class="small"><span class="tag">coming soon</span> a <strong>TP53</strong> Recommended Track Set.</p>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/rts_popup.png" alt="Recommended Track Sets pop-up window on hg38">
+        <figcaption>The “Recommended Track Sets” pop-up (hg38), one click loads a themed set at your current locus.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Read quickly; we demo three (Clinical SNVs, Non-coding SNVs, ENIGMA). Mention the TP53 set is on the way, relevant to this cancer crowd. The pop-up shown is the actual hg38 dialog reached via the “Recommended Track Sets” menu item.
+    </aside>
+  </section>
+
+<section>
+    <h2>Demo 1: Clinical SNVs (coding) (1/2)</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">A curated coding-variant workbench:</p>
+        <ul class="small">
+          <li>MANE / RefSeq, <strong>UniProt</strong> domains</li>
+          <li>ClinVar, ClinGen, GenCC, GeneReviews, HGMD, LOVD</li>
+          <li><strong>REVEL</strong> + <strong>100-way conservation</strong></li>
+        </ul>
+        <p class="small">A clean <strong>pathogenic</strong> example here.</p>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRCA2">▶ open the BRCA2 session</a></span>
+          then open Recommended Track Sets → <strong>Clinical SNVs</strong> yourself.<br>
+          <span style="font-size:0.8em;"><a href="https://genome.ucsc.edu/s/Lou/BRCA2_exon13_SNVrts">Shortcut on dense</a></span></div>
+        <p class="small">We tour the tracks in this set here, then investigate a variant on the next slide.</p>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/rts_clinicalSNVs.png" alt="Clinical SNVs track set at BRCA2">
+        <figcaption>Clinical SNVs at <em>BRCA2</em>: <strong>ClinVar interp</strong> colours each variant pathogenic (red) → VUS (blue) → benign (green), stacked with ClinGen, GenCC, HGMD, LOVD.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Load it while sitting on a gene (BRCA2 works well). Point out the same datasets from the previous section now arranged together: UniProt domains, REVEL, conservation plus the clinical databases.
+    </aside>
+  </section>
+
+<section>
+    <h2>Demo 1 · cont: validating a BRCA2 variant (2/2)</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">Example: <span class="chip">BRCA2 c.8167G&gt;C (p.Asp2723His)</span>: read the ACMG/AMP codes straight off the Clinical SNVs tracks:</p>
+        <ul class="small">
+          <li>Already classified? → <strong>ClinVar</strong> <em>Pathogenic</em> (★★★ expert panel) · <strong>ClinGen</strong></li>
+          <li>Same codon / nearby seen before? (PS1 / PM5) → <strong>ClinVar</strong></li>
+          <li>In a key protein domain? (PM1) → <strong>UniProt</strong>: the <strong>DNA-binding domain</strong> (OB1 fold) ✓</li>
+          <li>Computational? (PP3) → <strong>REVEL ≈ 0.93</strong> + deep conservation ✓</li>
+          <li>Loss-of-function? (PVS1) → gene model (missense → N/A)</li>
+        </ul>
+        <div class="callout demo"><span class="lbl">The point</span>
+          Each line of evidence stacks in one view, here they <strong>all agree on pathogenic</strong>. You read the ACMG codes off the screen. (The harder, guideline-dependent cases come in the ENIGMA set.)</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/asp2723his.png" alt="BRCA2 Asp2723His: RefSeq, UniProt OB1 domain, ClinVar variants">
+        <figcaption>At <em>p.Asp2723His</em>: RefSeq/MANE, the <strong>BRCA2 OB1</strong> UniProt domain (PM1), and ClinVar variants stacked.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      A clean walk-through of the Clinical SNVs set: BRCA2 c.8167G&gt;C p.(Asp2723His), chr13:32,363,369 (hg38). On the stacked tracks: ClinVar = Pathogenic, reviewed by expert panel (3 stars); UniProt puts it in the BRCA2 DNA-binding domain (OB1 fold) → PM1; REVEL = 0.932 (PP3_Strong by the ClinGen/Pejaver calibration) with deep 100-way conservation → PP3; missense, so PVS1 is N/A. Every visible line of evidence agrees → a confident pathogenic call. Teaching point: you read the ACMG codes straight off the stacked tracks. Then tee up Demo 3: the harder, guideline-dependent cases: where the chosen specification changes the call, live in the ENIGMA expert-panel set.
+    </aside>
+  </section>
+
+<section>
+    <h2>Demo 2: Non-coding SNVs <span class="tag">→ epigenetics</span> (1/2)</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">For variants outside coding exons, the regulatory evidence:</p>
+        <ul class="small">
+          <li><strong>GeneHancer</strong> enhancers &amp; enhancer→gene links</li>
+          <li><strong>Hi-C / Micro-C</strong> 3D chromatin contacts</li>
+          <li><strong>JASPAR</strong> TF binding sites · 100-way conservation</li>
+        </ul>
+        <p class="small">Our bridge to <strong>epigenetics</strong> later in this deck, and the set for our <strong>TERT promoter</strong> variant.</p>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/rts_noncoding.png" alt="Non-coding SNVs track set">
+        <figcaption>Non-coding SNVs near the <em>TERT</em> promoter: GeneHancer regulatory elements, JASPAR TF sites, and conservation, the context a non-coding variant needs.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Load it and contrast with Clinical SNVs, now the emphasis is regulatory: GeneHancer, Hi-C/Micro-C, JASPAR, conservation.
+      Explicitly tee up the afternoon: "we'll open up each of these regulatory data types later."
+    </aside>
+  </section>
+
+<section>
+    <h2>Demo 2 · cont: a non-coding variant at TERT (2/2)</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">TERT promoter hotspot mutations (e.g. <span class="chip">C228T</span> · <span class="chip">NM_198253.3(TERT):c.-124C&gt;T</span>) sit ~100–150 bp upstream of the start codon, in the core promoter. With the Non-coding set, ask:</p>
+        <ul class="small">
+          <li>In a regulatory element? → <strong>GeneHancer</strong> / ENCODE <strong>cCRE</strong> (promoter)</li>
+          <li>Creates / breaks a TF site? → <strong>JASPAR</strong> (TF motifs here; the C228T / C250T hotspots create a new <strong>ETS / GABPA</strong> site that switches TERT back on)</li>
+          <li>Contacts a distal gene in 3D? → <strong>Hi-C / Micro-C</strong> (most useful for enhancer variants; less so for this promoter)</li>
+          <li>Evolutionarily constrained? → <strong>conservation</strong></li>
+        </ul>
+        <div class="callout demo"><span class="lbl">No coding ACMG here</span>
+          Non-coding variants aren’t scored by coding ACMG rules, you weigh the <em>regulatory</em> evidence instead.</div>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/TERTnonCodingVar">▶ open the TERT variant session</a></span>
+          The relevant non-coding tracks are already on.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/tert_noncoding.png" alt="JASPAR TF sites, cCRE and GeneHancer at the TERT promoter">
+        <figcaption>The <em>TERT</em> promoter: ENCODE cCRE, GeneHancer, and dense <strong>JASPAR</strong> TF-binding sites, where the hotspot builds a new ETS site.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      The TERT promoter C228T/C250T mutations are the textbook non-coding driver, each creates a de-novo ETS (GABPA) transcription-factor binding site that switches TERT back on. Walk it: GeneHancer/cCRE show it's a promoter; JASPAR shows the new/disrupted TF motif; Hi-C shows promoter–gene contact; conservation shows constraint. Contrast with coding ACMG: there's no PVS1/PM/PP scoring; you reason from regulatory annotation.
+    </aside>
+  </section>
+
+<section>
+    <h2>Demo 3: expert-panel gene sets</h2>
+    <div class="split">
+      <div class="txt">
+        <p class="small">This is the home of our <strong>germline BRCA variant of uncertain significance</strong>.</p>
+        <ul class="small">
+          <li><strong>ENIGMA BRCA1/BRCA2 VCEP</strong>: the exact evidence for ClinGen ENIGMA classification, per exon &amp; variant.</li>
+          <li><strong>InSiGHT Lynch Syndrome VCEP</strong>: same idea for MLH1/MSH2/MSH6/PMS2.</li>
+        </ul>
+        <div class="callout demo"><span class="lbl">Same variant, different rules, <a href="https://genome.ucsc.edu/s/Lou/BRCAexampleReclass">▶ open it</a></span>
+          <span class="chip">BRCA2 c.830A&gt;G (p.Asn277Ser)</span>: standard ACMG reached <strong>likely benign</strong> (REVEL → BP4); under ENIGMA it reverts to <strong>VUS</strong> (BayesDel not allowed here; SpliceAI → PP3). The spec can move a call either way; overall it cut VUS, but not for every variant.</div>
+        <div class="callout demo"><span class="lbl">Published <span class="tag">co-authored</span></span>
+          Benet-Pagès, Laner, <strong>Nassar</strong>… <em>Genet Med Open</em> 2025. Session (hg19): <a href="https://genome.ucsc.edu/s/abenet/BRCA.ENIGMA.hg19">/s/abenet/BRCA.ENIGMA.hg19</a></div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/enigma.png" alt="ENIGMA BRCA1/BRCA2 VCEP track set at a BRCA exon (hg19)">
+        <figcaption>The <strong>ENIGMA BRCA1/BRCA2 VCEP</strong> set at a BRCA1 exon (hg19): the exact evidence the panel rules use, per variant.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Load ENIGMA BRCA1/BRCA2 and jump to a BRCA1 exon. Explain VCEP = expert panel; the set surfaces exactly the evidence those rules need.
+      The headline contrast (from the paper): the ENIGMA spec re-weights evidence vs generic ACMG. BRCA2 c.830A&gt;G p.(Asn277Ser): standard ACMG used REVEL → BP4; ENIGMA weighted SpliceAI → PP3. Other paper examples if asked: BRCA2 c.8668C&gt;A p.(Leu2890Ile) (BP5, in cis with a pathogenic variant); BRCA1 c.4096+4T&gt;C (intronic splice). The ENIGMA-specific evidence (functional PS3/BS3, multifactorial PP4/BP5, exon-specific PM5, PVS1 decision trees) lives in THIS set, not the generic Clinical SNVs set. You can mention you co-authored this and that it cut VUS dramatically. Lynch set = same concept for the mismatch-repair genes.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <p class="kicker">Somatic diagnosis</p>
+  <h1>Somatic variants</h1>
+  <p class="timing">acquired mutations: SNVs, de novo changes, and cancer drivers</p>
+</section>
+
+<section>
+    <h2>Interpreting a variant = asking questions <span style="font-weight:400;font-size:0.7em;color:#b8860b">(somatic)</span></h2>
+    <p class="small">Databases: ask a question, know which track answers it:</p>
+    <ul class="small">
+      <li><strong>Is it already classified?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=clinvar">ClinVar</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=clinGenComp">ClinGen</a> <span class="small">(germline pathogenicity, ClinVar also carries <em>somatic</em> oncogenicity)</span></li>
+      <li><strong>Is it druggable?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=civic">CIViC</a> (variant → disease → therapy → evidence)</li>
+      <li><strong>How often is it seen in tumours?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cosmicRegions">COSMIC</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gdcCancer">TCGA Pan-Cancer</a></li>
+      <li><strong>Is it just common in healthy people?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gnomadVariants">gnomAD</a> <span class="small">(germline: common ⇒ likely benign)</span></li>
+      <li><strong>Is the gene linked to inherited disease?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=genCC">GenCC</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=omimGene2">OMIM</a></li>
+      <li><strong>Is the position constrained / in a key domain?</strong> → <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cons100way">conservation</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=uniprot">UniProt</a>, <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=revel">REVEL</a></li>
+    </ul>
+    <div class="callout caution"><span class="lbl">Germline vs somatic</span>
+      These questions fit a <strong>germline</strong> variant. For a <strong>somatic</strong> driver (BRAF V600E, next) lean on <strong>COSMIC &amp; CIViC</strong> and ClinVar’s <em>somatic</em> oncogenicity / clinical-impact, and don’t read gnomAD frequency as “benign” (a true somatic variant is just absent). REVEL / conservation flag a <strong>damaging residue, not oncogenicity</strong>.</div>
+    <aside class="notes">
+      This reframe is what makes the section practical and memorable. Detail to drop in live: GenCC colours = curated evidence strength; TCGA Pan-Cancer renders as a lollipop plot; REVEL scores missense pathogenicity; UniProt shows the protein domain hit. Flag the germline/somatic split explicitly: the pathogenic/benign + gnomAD-frequency logic is germline ACMG; for somatic drivers the read is oncogenicity + clinical impact (ClinVar somatic fields), recurrence (COSMIC) and actionability (CIViC), and gnomAD is a germline FILTER not a benign signal. We walk these on BRAF V600E next.
+    </aside>
+  </section>
+
+<section>
+    <h2>Worked example: BRAF V600E</h2>
+    <p class="small">The classic melanoma driver: a <strong>somatic</strong> variant. <span class="chip">BRAF V600E</span> <span class="chip">p.Val600Glu</span> <span class="chip">NM_004333.6:c.1799T&gt;A</span> <span class="chip">chr7:140,753,336</span></p>
+    <div class="split">
+      <div class="txt">
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRAF_V600E">▶ open the BRAF V600E session</a></span>
+          <strong>COSMIC</strong>: how often in tumours? · <strong>CIViC</strong>: oncogenic &amp; druggable? · <strong>ClinVar</strong>: its <em>somatic</em> oncogenicity / clinical-impact, not the germline label.</div>
+        <div class="callout caution"><span class="lbl">Somatic ≠ germline</span>
+          <strong>gnomAD won’t “verify” it</strong>: a true somatic variant is simply <strong>absent</strong> from healthy-population data (gnomAD <em>filters out</em> inherited variants).</div>
+        <div class="callout demo"><span class="lbl">Thread tie-in</span>
+          Our <strong>coding driver</strong>: the Recommended “Clinical SNVs” set assembles these in one click.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/braf_v600e.png" alt="BRAF V600E with ClinVar, COSMIC and CIViC (hg38 session)">
+        <figcaption>The <em>BRAF V600E</em> session: ClinVar, COSMIC and CIViC stacked at chr7:140,753,336.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Walk BRAF V600E live from the session (s/Lou/BRAF_V600E), which already has the right tracks/position configured. COSMIC = recurrence across tumours; CIViC = follow variant→disease→therapy→Evidence ID for the drug angle (the clinician "so what"). For ClinVar, point out it now carries somatic ONCOGENICITY + clinical-impact (Tier I) classifications and the allele origin is marked somatic; that is the meaningful read for a driver, not the germline pathogenic/benign call. gnomAD: V600E is absent (as expected for a somatic-only driver); in somatic pipelines population frequency is used to filter OUT germline variants, not to verify a driver. Bridge forward to the Clinical SNVs Recommended Track Set.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <h1>Expression</h1>
+    <p class="timing">where, and in which cell type, is a gene switched on?</p>
+  </section>
+
+<section>
+    <h2>Three expression datasets on hg38</h2>
+    <p class="small" style="text-align:center;max-width:88%;margin:0 auto 0.5em;">“Where is my gene expressed, and in which cell type?” Two axes separate these tracks: bulk tissue vs single cell, and one uniform study vs many pooled together.</p>
+    <div class="twocol" style="align-items:stretch;font-size:0.66em;">
+      <div style="border:1px solid #d0d7de;border-radius:10px;padding:0.6em 0.75em;background:#fafbfc;">
+        <div><span class="chip">GTEx Gene V8</span></div>
+        <p style="margin:.35em 0 .15em;"><strong>Bulk tissue reference.</strong></p>
+        <ul class="small" style="text-align:left;margin:.15em 0 0;padding-left:1.05em;">
+          <li>54 tissues, 948 donors, bulk RNA-seq. On by default.</li>
+          <li>Each bar is a whole tissue, so every cell type is averaged together.</li>
+          <li><em>Best for:</em> which organ is the gene expressed in?</li>
+        </ul>
+      </div>
+      <div style="border:1px solid #d0d7de;border-radius:10px;padding:0.6em 0.75em;background:#fafbfc;">
+        <div><span class="chip">Tabula Sapiens</span></div>
+        <p style="margin:.35em 0 .15em;"><strong>One uniform single-cell atlas.</strong></p>
+        <ul class="small" style="text-align:left;margin:.15em 0 0;padding-left:1.05em;">
+          <li>~480k cells across ~24 organs, one consortium, consistent processing.</li>
+          <li>Bars split by tissue and by cell type, so signal resolves to a cell type.</li>
+          <li><em>Best for:</em> which cell type, answered cleanly within one atlas.</li>
+        </ul>
+      </div>
+      <div style="border:1px solid #d0d7de;border-radius:10px;padding:0.6em 0.75em;background:#fafbfc;">
+        <div><span class="chip">Merged Single-Cell</span></div>
+        <p style="margin:.35em 0 .15em;"><strong>Many single-cell studies at once.</strong></p>
+        <ul class="small" style="text-align:left;margin:.15em 0 0;padding-left:1.05em;">
+          <li>Pools many published atlases (incl. Tabula Sapiens) into one track.</li>
+          <li>Widest coverage, but heterogeneous: compare within a dataset, not across.</li>
+          <li><em>Best for:</em> does it hold across the single-cell literature?</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small" style="text-align:center;max-width:90%;margin:.55em auto 0;">GTEx gives you the <strong>organ</strong>, the single-cell tracks refine it to the <strong>cell type</strong>, and the merged track checks whether it holds across <strong>many studies</strong>.</p>
+    <aside class="notes">
+      Set up the next slide. Three tracks, two axes: bulk vs single cell, and one study vs many. GTEx V8 is bulk RNA-seq over 54 tissues, the well-powered tissue-level reference, but it averages all cell types in a tissue together. Tabula Sapiens is one uniform single-cell atlas, so it resolves expression to specific cell types and the cell types are comparable across organs within it. The Merged Single-Cell track pools many published single-cell datasets, so it has the widest coverage but is heterogeneous, meaning compare within a dataset rather than across them. Then KLK3 next slide walks the arc: GTEx says prostate, single cell says prostate luminal epithelium.
+    </aside>
+  </section>
+
+<section>
+    <h2>Expression: what tissue is it expressed in?</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial3-clinical/klk3_gtex.png" alt="Expression tracks at KLK3 on hg38: GTEx, Tabula Sapiens, and single-cell">
+      <figcaption><em>KLK3</em> on hg38 with GTEx, Tabula Sapiens, and single-cell tracks: the signal spikes in prostate luminal epithelium and is near-silent elsewhere.</figcaption></figure>
+    <p class="small" style="max-width:88%;margin:0.45em auto 0;"><span class="chip">KLK3</span> encodes <strong>PSA</strong> (prostate-specific antigen), the protein behind the prostate-cancer blood test. Expression is restricted to prostate luminal epithelium, so the contrast is clear.</p>
+    <p class="small" style="max-width:88%;margin:0.3em auto 0;">Our thread genes (BRAF, TERT, BRCA2) are broadly expressed, so we pick a textbook tissue-specific gene to make the contrast obvious.</p>
+    <div class="callout exercise" style="max-width:88%;margin:0.4em auto 0;"><span class="lbl">Try it</span>
+      Look up <span class="chip">KLK3</span>; read its GTEx bars (prostate towers over the rest), then Tabula Sapiens for the cell type. <a href="https://genome.ucsc.edu/s/Lou/expressionKLK3">Load the session</a>.</div>
+    <aside class="notes">
+      Show the GTEx bar chart for KLK3 (each bar = a tissue, prostate dominates); click for the boxplot detail page; then Tabula Sapiens for the prostate luminal epithelial cell type. KLK3 makes PSA, the prostate-cancer biomarker, so the tissue specificity has an obvious clinical hook. Keep concrete and brief.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+    <h1>Regulation &amp; epigenetics</h1>
+    <p class="timing">enhancers · histone marks · open chromatin · methylation</p>
+  </section>
+
+<section>
+    <h2>Picking up from “Non-coding SNVs”</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>That set pointed us at <strong>GeneHancer</strong>, <strong>Hi-C/Micro-C</strong>, <strong>JASPAR</strong> and <strong>conservation</strong>.</li>
+          <li>They all live in the <span class="grp">Regulation</span> group, largely from <strong>ENCODE</strong>.</li>
+        </ul>
+        <div class="callout caution"><span class="lbl">Heads-up</span>
+          Two “Regulation” super-tracks exist: <strong>ENCODE3</strong> &amp; <strong>ENCODE4</strong>. Use <strong>ENCODE4</strong>.</div>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/MYCcontact">▶ a real 3D loop at MYC</a></span>
+          HFFc6 Micro-C: a stripe off the <strong>MYC</strong> promoter reaches a loop dot in the 8q24 enhancer desert (chr8:128.31–128.33 Mb).</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/regulation_group.png" alt="Regulation track group controls">
+        <figcaption>The <strong>Regulation</strong> group: ENCODE cCREs, DNA Methylation, GeneHancer, Hi-C and Micro-C, JASPAR, VISTA Enhancers and more, all in one place.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Re-anchor to the Non-coding SNVs set, then open the Regulation group fully.
+      Warn early about the two Regulation super-tracks so nobody turns on the older ENCODE3 one by mistake.
+      MYC / 8q24 3D demo (session s/Lou/MYCcontact): a clear, cancer-relevant way to introduce Hi-C / Micro-C. Display HFFc6 Micro-C with KR normalization at ~10 kb and the colour max turned down (square or triangle). The bright vertical stripe off the MYC promoter (highlighted blue) is an architectural stripe from loop extrusion: cohesin reels the fibre through while MYC's anchor is held, so MYC samples the whole downstream domain. It is a population average over millions of cells, not all-at-once contact; in any single cell MYC touches one spot. The stripe ends in a loop dot at chr8:128,310,000-128,330,000 (O/E ~10), an intergenic CTCF / boundary anchor that frames the regulatory domain (TAD). Teaching beat: Micro-C shows what CAN reach MYC in 3D (the domain); the distal-enhancer cCREs / H3K27ac show which of those are actually regulatory. MYC has a large, tissue-specific enhancer repertoire across the 8q24 desert (dozens across cell types), only a subset active in any one cell. If you widen the view, MYC's strongest contacts of all sit further out, around chr8:128.65-128.93 Mb.
+    </aside>
+  </section>
+
+<section>
+    <h2>Enhancers &amp; promoters: cCREs</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><span class="chip">ENCODE4 cCREs</span>: candidate cis-regulatory elements, on by default.</li>
+          <li>Colour = type: <strong style="color:#c00">red = promoter-like</strong>, <strong style="color:#e08a00">orange = enhancer-like</strong>, + CTCF / accessible-only.</li>
+          <li>Mouse-over gives DNase / H3K4me3 / H3K27ac / CTCF scores; filter by class.</li>
+        </ul>
+        <p class="small">One track answers “enhancer or promoter, and is it active?”.</p>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          We put this to work on the <strong>TERT promoter</strong> in a few slides.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/ccre.png" alt="ENCODE4 cCREs at the GAPDH promoter">
+        <figcaption>cCREs around the <em>GAPDH</em> promoter: a <strong style="color:#c00">red</strong> promoter-like element at the TSS, flanked by <strong style="color:#e08a00">orange</strong> enhancer-like elements.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Turn on ENCODE4 cCREs; click an element to show its class and the mouse-over signal scores. Show the filter-by-class control.
+      This single track is the best teaching object for "enhancer vs promoter, open or not".
+    </aside>
+  </section>
+
+<section>
+    <h2>Histone marks &amp; open chromatin</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial3-clinical/openchromatin_gapdh.png" alt="ENCODE4 DNase, ATAC, H3K4me3 and H3K27ac at the GAPDH promoter">
+      <figcaption>Upstream of <em>GAPDH</em>: ENCODE4 <strong>DNase</strong> &amp; <strong>ATAC</strong> (open chromatin) with <strong>H3K4me3</strong> &amp; <strong>H3K27ac</strong> peaks: the signature of an active promoter.</figcaption></figure>
+    <ul class="small" style="max-width:88%;margin:0.45em auto 0;text-align:left;">
+      <li>Histone marks (ChIP-seq): <span class="chip">H3K27Ac</span>, <span class="chip">H3K4Me1</span>, <span class="chip">H3K4Me3</span>, layered by cell line.</li>
+      <li>Promoter <strong>open or closed</strong>? → <span class="chip">DNase</span> &amp; <span class="chip">ATAC</span>.</li>
+    </ul>
+    <div class="callout exercise" style="max-width:88%;margin:0.4em auto 0;"><span class="lbl">Try it</span>
+      <a href="https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=lou&amp;hgS_otherUserSessionName=openChromatinPromoterGAPDH">Open the GAPDH promoter session</a>: DNase + ATAC with H3K4me3 &amp; H3K27ac.</div>
+    <aside class="notes">
+      Map each organizer ask to a track: histone marks → Layered H3K27Ac/H3K4Me1/Me3; "promoter open or closed" → DNase/ATAC accessibility.
+      Open the GAPDH promoter session (ENCODE4, on hgwdev): DNase + ATAC plus H3K4me3 and H3K27ac all peak at the TSS, the textbook active-promoter signature.
+    </aside>
+  </section>
+
+<section>
+    <h2>Worked locus: the TERT promoter (1/2)</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The classic non-coding driver (melanoma, glioma, bladder), the <strong>third variant in our thread</strong>.</li>
+          <li>At the TSS: a <strong>red promoter cCRE</strong> under <strong>H3K27ac</strong>: a textbook open, active promoter.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/TERTpromoter">▶ open TERT with cCREs + H3K27Ac + DNase + GeneHancer</a></span>
+          Then try <span class="chip">MYC</span> 8q24 for an enhancer landscape.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial3-clinical/ccre_tert.png" alt="cCREs at the TERT promoter">
+        <figcaption>The <em>TERT</em> promoter: the <strong>red</strong> ENCODE4 cCRE = promoter-like; orange = enhancer-like. Layered H3K27Ac and conservation sit alongside.</figcaption></figure></div>
+    </div>
+    <aside class="notes">
+      Navigate to the TERT promoter coordinates; everything lines up: red promoter cCRE + H3K27ac + DNase = open active promoter, an oncology-relevant non-coding driver.
+      If time allows, jump to MYC / 8q24 to show a dense enhancer landscape instead of a single promoter.
+    </aside>
+  </section>
+
+<section>
+    <h2>TERT: the data say “active promoter” (2/2)</h2>
+    <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial3-clinical/tert_findings.png" alt="Active-promoter signals at TERT">
+      <figcaption>At the <em>TERT</em> TSS: red promoter cCRE + H3K27Ac + a DNase peak + GeneHancer: every track points to an active promoter.</figcaption></figure>
+    <ul class="small" style="max-width:90%;margin:0.45em auto 0;text-align:left;">
+      <li><strong>cCRE</strong> coloured <strong style="color:#c00">red</strong> = promoter-like element</li>
+      <li><strong>H3K27Ac</strong> peak = active regulatory region</li>
+      <li><strong>DNase</strong> hypersensitivity = open chromatin</li>
+      <li><strong>GeneHancer</strong> marks the TERT TSS / regulatory element</li>
+    </ul>
+    <div class="callout demo" style="max-width:90%;margin:0.4em auto 0;"><span class="lbl">Conclusion</span>
+      Independent assays converge → a real, <strong>active promoter</strong>, exactly where a non-coding driver mutation bites.</div>
+    <aside class="notes">
+      The payoff of the regulatory section: multiple independent data types (cCRE class, histone acetylation, chromatin accessibility, GeneHancer) all agree this is an active promoter. That convergence is how you build confidence in a non-coding regulatory call, and why a promoter mutation here matters.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <h1>A variant-interpretation toolkit</h1>
+  <p class="timing">AI predictors and population frequencies</p>
+</section>
+
+<section>
+    <h2>AlphaMissense: AI missense pathogenicity</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Google DeepMind's deep-learning score for <strong>every possible missense</strong> substitution (Cheng et al., <em>Science</em> 2023).</li>
+          <li>One value per change, <strong>0 to 1</strong>: likely benign → ambiguous → likely pathogenic, drawn at base resolution.</li>
+          <li>The <strong>AI counterpart to REVEL</strong>: another computational line of evidence (ACMG PP3) for a coding variant.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Open the <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=alphaMissense">AlphaMissense</a> track at <strong>BRAF V600</strong> or <strong>BRCA2</strong>; read the score for our variants.</div>
+      </div>
+      <div class="txt">
+        <div class="callout demo"><span class="lbl">Why it fits</span>
+          We leaned on REVEL for PP3 earlier. AlphaMissense is the same idea, trained by an AI model, and it covers the whole protein so you can scan a gene for predicted hotspots.</div>
+      </div>
+    </div>
+    <aside class="notes">
+      AlphaMissense (Google DeepMind, Science 2023): predicted pathogenicity for ~71M possible missense variants, scored 0 to 1 with likely-benign / ambiguous / likely-pathogenic classes. On hg38 as a per-base track (one sub-track per alternate base A/C/G/T). Pitch it as the AI sequel to REVEL/PP3 from Demo 1; read the score at BRAF V600E and the BRCA2 examples. Caveat: it is a prediction, one PP3-type line of evidence, not a diagnosis.
+    </aside>
+  </section>
+
+<section>
+    <h2>SpliceAI: predicting splice disruption</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Illumina's deep-learning predictor of whether a variant <strong>creates or breaks a splice site</strong> (Jaganathan et al., <em>Cell</em> 2019).</li>
+          <li>Delta scores (0 to 1) for acceptor / donor gain &amp; loss, with the predicted base position.</li>
+          <li>Lives under the <strong>Splicing Impact</strong> super-track; SNVs and indels, raw and masked.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Open <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=spliceImpactSuper">Splicing Impact</a> and inspect a splice-region variant.</div>
+      </div>
+      <div class="txt">
+        <div class="callout demo"><span class="lbl">Closes a loop</span>
+          The ENIGMA demo (Demo 3) cited <strong>SpliceAI → PP3</strong> as the evidence that moved a BRCA2 call. This is that track: see the score that drove the reclassification.</div>
+      </div>
+    </div>
+    <aside class="notes">
+      SpliceAI (Illumina, Cell 2019): predicts splice-altering effects of variants as delta scores (acceptor/donor gain or loss). On hg38 as the Splicing Impact super-track (spliceImpactSuper): precomputed SNV and indel bigBeds plus per-base wiggle tracks, masked and unmasked variants. This explicitly closes the loop from the ENIGMA slide, where SpliceAI -> PP3 reweighted the c.830A>G call, and ties to the splicing education module.
+    </aside>
+  </section>
+
+<section>
+    <h2>Variant frequencies: how common, everywhere</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li><strong>SNV Frequencies</strong>: allele frequencies gathered from population-scale projects worldwide, ~<strong>1.7 million</strong> genomes / exomes / arrays.</li>
+          <li>One place to compare how common a variant is across <strong>populations, ancestries and cohorts</strong>, including national projects <strong>not in gnomAD</strong>.</li>
+          <li>Combined tracks aggregate the data, plus one subtrack per project (TOPMed, gnomAD, 1000 Genomes, and more).</li>
+          <li><span class="tag">note</span> Collected as-is, not re-harmonized: pipelines and assays differ between projects.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it</span>
+          Open the <a href="https://hgwdev.gi.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;c=chr12&amp;g=varFreqs">SNV Frequencies</a> track (on dev).</div>
+      </div>
+    </div>
+    <aside class="notes">
+      SNV Frequencies (varFreqs) gathers variant allele frequencies from many population-scale sequencing and genotyping projects, ~1.7M genomes/exomes/arrays total. The data is collected from each project as-is (not reprocessed/harmonized), so pipelines and technologies differ. The point is a single place to compare how common a variant is across populations and cohorts, especially national projects that gnomAD cannot soon recompute. Three combined tracks aggregate along different lines, with one subtrack per project (TOPMed, gnomAD, 1000 Genomes, and others). Complements gnomAD from the cancer section. Currently on hgwdev.
+    </aside>
+  </section>
+
+<section>
+  <h2>What you can now do</h2>
+  <ul class="small">
+    <li>Turn a variant into a set of answerable questions, germline and somatic.</li>
+    <li>Load a <strong>Recommended Track Set</strong> and read ACMG-style evidence off the tracks.</li>
+    <li>Interpret a <strong>non-coding</strong> variant from its regulatory context.</li>
+    <li>Bring in AI predictors (<strong>AlphaMissense</strong>, <strong>SpliceAI</strong>) as extra lines of evidence.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Where to get help</h2>
+  <ul class="small">
+    <li>Help → <strong>Interactive Tutorials</strong> (in the menu bar).</li>
+    <li>Documentation &amp; tutorials: <a href="https://genome.ucsc.edu/docs/">genome.ucsc.edu/docs</a></li>
+    <li>Email the team: <strong>genome@soe.ucsc.edu</strong></li>
+    <li>All contact options: <a href="https://genome.ucsc.edu/contacts.html">genome.ucsc.edu/contacts.html</a></li>
+  </ul>
+  <aside class="notes">
+    Point at the built-in Interactive Tutorials especially, lowest-friction follow-up. The mailing list is monitored by the team; encourage real questions.
+  </aside>
+</section>
+
+<section class="divider" data-background-color="#1f3a5f">
+  <h1 style="color:#fff;margin-bottom:0.12em;">Thank you!</h1>
+  <p style="color:#fff;font-size:0.72em;margin:0.05em 0;">Questions? · genome@soe.ucsc.edu</p>
+  <p style="color:#cdd9e8;font-size:0.55em;margin:0.05em 0 0.45em;">UCSC Genome Browser · genome.ucsc.edu</p>
+  <figure class="fig" style="margin:0 auto;"><img src="/images/slideDecks/tutorial3-clinical/gb_team.jpg" alt="UCSC Genome Browser team" style="max-height:360px;width:auto;border-radius:8px;"></figure>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contents · UCSC Genome Browser · Tutorial 1: Basics</title>
+<style>
+  :root{ --ucsc-blue:#1f3a5f; --ucsc-accent:#0b5394; --ucsc-gold:#e6a817; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:#24292f; background:#f4f6f9; line-height:1.4; }
+  header.top{ background:var(--ucsc-blue); color:#fff; padding:1.4em 1.2em; }
+  header.top .kick{ color:var(--ucsc-gold); letter-spacing:2px; text-transform:uppercase; font-size:0.72rem; font-weight:700; }
+  header.top h1{ margin:0.15em 0 0; font-size:1.5rem; font-weight:600; }
+  header.top p{ margin:0.3em 0 0; color:#cdd9e8; font-size:0.9rem; }
+  header.top a{ color:#fff; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:1.4em 1.2em 3em; }
+  .groups{ column-width:330px; column-gap:1.4em; margin-top:1em; }
+  .group{ break-inside:avoid; -webkit-column-break-inside:avoid; background:#fff; border:1px solid #dce3ea; border-left:4px solid var(--ucsc-gold); border-radius:8px; padding:0.7em 0.9em; margin:0 0 1.1em; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .group > a.gh{ display:block; color:var(--ucsc-blue); font-weight:700; font-size:1.0rem; text-decoration:none; margin-bottom:0.35em; }
+  .group > a.gh:hover{ text-decoration:underline; }
+  ul.slides{ list-style:none; margin:0; padding:0; }
+  ul.slides li{ margin:0.12em 0; }
+  ul.slides a{ display:flex; gap:0.55em; align-items:baseline; color:#0b5394; text-decoration:none; padding:0.12em 0.2em; border-radius:5px; font-size:0.92rem; }
+  ul.slides a:hover{ background:#eef4fb; text-decoration:underline; }
+  .n{ flex:none; min-width:1.9em; text-align:center; font-family:monospace; font-size:0.78rem; background:#eef1f5; color:#5b6673; border-radius:5px; padding:0.02em 0.3em; }
+  footer{ color:#8a949f; font-size:0.8rem; padding:0 1.2em 2em; max-width:1180px; margin:0 auto; }
+  footer a{ color:var(--ucsc-accent); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="kick">Self-paced tutorial · UCSC Genome Browser</div>
+  <h1>Tutorial 1: Basics — Contents</h1>
+  <p>Jump straight to any slide. <a style="text-decoration:underline" href="../presentation/">Open the full deck &rarr;</a></p>
+</header>
+<div class="wrap">
+  <div class="groups">
+    <div class="group">
+      <a class="gh" href="../presentation/#/0">Welcome</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/0"><span class="n">1</span><span>Title</span></a></li>
+        <li><a href="../presentation/#/1"><span class="n">2</span><span>How to follow along</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/2">Getting oriented</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/2"><span class="n">3</span><span>What is the UCSC Genome Browser?</span></a></li>
+        <li><a href="../presentation/#/3"><span class="n">4</span><span>The home page &amp; the blue menu bar</span></a></li>
+        <li><a href="../presentation/#/4"><span class="n">5</span><span>The Gateway: pick an assembly &amp; search</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/5">Navigating</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/5"><span class="n">6</span><span>The search box takes more than gene names</span></a></li>
+        <li><a href="../presentation/#/6"><span class="n">7</span><span>Navigation &amp; viewing controls</span></a></li>
+        <li><a href="../presentation/#/7"><span class="n">8</span><span>Shift + drag to zoom or highlight</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/8">Tracks & display</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/9"><span class="n">10</span><span>Tracks and display modes</span></a></li>
+        <li><a href="../presentation/#/10"><span class="n">11</span><span>Visibility modes: “feature” tracks</span></a></li>
+        <li><a href="../presentation/#/11"><span class="n">12</span><span>Visibility modes: “signal” tracks</span></a></li>
+        <li><a href="../presentation/#/12"><span class="n">13</span><span>Get information out of a track</span></a></li>
+        <li><a href="../presentation/#/13"><span class="n">14</span><span>Mouse-over for quick descriptions</span></a></li>
+        <li><a href="../presentation/#/14"><span class="n">15</span><span>Gene interpretation</span></a></li>
+        <li><a href="../presentation/#/15"><span class="n">16</span><span>Track groups = the menu of data (1/3)</span></a></li>
+        <li><a href="../presentation/#/16"><span class="n">17</span><span>A tour of the track groups (2/3)</span></a></li>
+        <li><a href="../presentation/#/17"><span class="n">18</span><span>A tour of the track groups (3/3)</span></a></li>
+        <li><a href="../presentation/#/18"><span class="n">19</span><span>Track documentation pages</span></a></li>
+        <li><a href="../presentation/#/19"><span class="n">20</span><span>Container tracks: folders of subtracks</span></a></li>
+        <li><a href="../presentation/#/20"><span class="n">21</span><span>Configure a track: display &amp; filters</span></a></li>
+        <li><a href="../presentation/#/21"><span class="n">22</span><span>Reset all tracks</span></a></li>
+        <li><a href="../presentation/#/22"><span class="n">23</span><span>Viewing and extracting the DNA sequence</span></a></li>
+        <li><a href="../presentation/#/23"><span class="n">24</span><span>Viewing DNA: options</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/24">Tools: Table Browser & BLAT</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/25"><span class="n">26</span><span>Table Browser: get the data out</span></a></li>
+        <li><a href="../presentation/#/26"><span class="n">27</span><span>BLAT: find a sequence in a genome</span></a></li>
+        <li><a href="../presentation/#/27"><span class="n">28</span><span>BLAT: the results</span></a></li>
+        <li><a href="../presentation/#/28"><span class="n">29</span><span>BLAT: your sequence aligned in the Browser</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/29">Custom tracks — your data</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/30"><span class="n">31</span><span>What you can load</span></a></li>
+        <li><a href="../presentation/#/31"><span class="n">32</span><span>Loading a custom track</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/32">Track hubs</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/33"><span class="n">34</span><span>Hub vs custom track</span></a></li>
+        <li><a href="../presentation/#/34"><span class="n">35</span><span>Load a hub by URL</span></a></li>
+        <li><a href="../presentation/#/35"><span class="n">36</span><span>Build your own (in brief)</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/36">Sessions & sharing</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/37"><span class="n">38</span><span>Sessions: save &amp; share a live view</span></a></li>
+        <li><a href="../presentation/#/38"><span class="n">39</span><span>Sessions = collaboration &amp; teaching</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <a class="gh" href="../presentation/#/39">Wrap-up</a>
+      <ul class="slides">
+        <li><a href="../presentation/#/39"><span class="n">40</span><span>What you can now do</span></a></li>
+        <li><a href="../presentation/#/40"><span class="n">41</span><span>Where to get help</span></a></li>
+        <li><a href="../presentation/#/41"><span class="n">42</span><span>Who are we?</span></a></li>
+        <li><a href="../presentation/#/42"><span class="n">43</span><span>Thank you</span></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<footer>UCSC Genome Browser · 42 slides · press <strong>S</strong> in the deck for speaker notes</footer>
+</body>
+</html>
