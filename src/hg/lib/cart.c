@@ -4046,8 +4046,10 @@ if (position == NULL)
 
 /* default if not set at all, as would happen if it came from a URL with no
  * position. Otherwise tell them to go back to the gateway. Also recognize
- * "default" as specifying the default position. */
-if (((position == NULL) || sameString(position, "default"))
+ * "default" as specifying the default position. An empty string is treated the
+ * same as unset (e.g. a stale "position=" left in the cart, or carried over
+ * from another assembly), so we fall back to the default rather than crashing. */
+if ((isEmpty(position) || sameString(position, "default"))
     && (defaultPosition != NULL))
     position = cloneString(defaultPosition);
 
