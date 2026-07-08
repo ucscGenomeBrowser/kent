@@ -88,7 +88,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
    	
     webPrintLinkCellStart();
-    hPrintf("<A HREF=\"hgc?g=ucscRetroAli&i=%s\">%s</A>", name, name);
+    hPrintf("<A HREF=\"hgc?db=%s&g=ucscRetroAli&i=%s\">%s</A>", database, name, name);
     webPrintLinkCellEnd();
     webPrintLinkCellStart();
     hPrintf("%s ", rtype);

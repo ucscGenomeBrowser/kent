@@ -1625,8 +1625,8 @@ void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt,
 if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%s&g=%s&i=%s", hgTrackUiName(),
-          cartSessionVarName(), cartSessionId(cart), trackName, name);
+    safef(link,sizeof(link),"%s?%s=%s&db=%s&g=%s&i=%s", hgTrackUiName(),
+          cartSessionVarName(), cartSessionId(cart), database, trackName, name);
     char title[128];
     safef(title,sizeof(title),"%s controls", shortLabel);
     // Add map item to currnent map (TODO: pass in map)
@@ -1650,8 +1650,8 @@ else
             hvGfxAdjX(hvg, xr), yr,
             hvGfxAdjX(hvg, xb), yb);
     /* move this to hgTracks when finished */
-    hPrintf("HREF=\"%s?%s=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-            cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
+    hPrintf("HREF=\"%s?%s=%s&db=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+            cartSessionVarName(), cartSessionId(cart), database, chromName, trackName, name);
     mapStatusMessage("%s controls", shortLabel);
     hPrintf(">\n");
     }
@@ -1665,8 +1665,8 @@ char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
 if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?%s=%s&g=%s&i=%s",hgTrackUiName(),
-          cartSessionVarName(), cartSessionId(cart), track, track);
+    safef(link,sizeof(link),"%s?%s=%s&db=%s&g=%s&i=%s",hgTrackUiName(),
+          cartSessionVarName(), cartSessionId(cart), database, track, track);
     char title[128];
     safef(title,sizeof(title),"%s controls", tg->track);
     // Add map item to currnent map (TODO: pass in map)
@@ -1681,8 +1681,8 @@ else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ",
             xOff, yOff, xOff+insideWidth, yOff+tg->height);
-    hPrintf("HREF=\"%s?%s=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
-            cartSessionVarName(), cartSessionId(cart), chromName, track, track);
+    hPrintf("HREF=\"%s?%s=%s&db=%s&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+            cartSessionVarName(), cartSessionId(cart), database, chromName, track, track);
     mapStatusMessage("%s controls", tg->track);
     hPrintf(">\n");
     }

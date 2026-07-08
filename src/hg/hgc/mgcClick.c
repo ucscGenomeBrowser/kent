@@ -557,8 +557,8 @@ static void prMethodsLink(struct sqlConnection *conn, char *track)
 /* generate link to methods page */
 {
 webNewSection("Description and Methods");
-printf("Click <A HREF=\"%s&g=htcTrackHtml&table=%s&c=%s&l=%d&r=%d\">here</A> for details",
-       hgcPathAndSettings(), track, seqName, winStart, winEnd);
+printf("Click <A HREF=\"%s&db=%s&g=htcTrackHtml&table=%s&c=%s&l=%d&r=%d\">here</A> for details",
+       hgcPathAndSettings(), database, track, seqName, winStart, winEnd);
 }
 
 static void prOrderLink(char *name, struct cloneInfo *ci)

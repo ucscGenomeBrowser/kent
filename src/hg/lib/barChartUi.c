@@ -457,8 +457,8 @@ if (isPopup)
     char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb,
                     BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
     printf("<div><b>%s:</b>\n", categoryLabel);
-    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>",
-                hTrackUiForTrack(track), track);
+    printf("<a href='%s?db=%s&g=%s'><button type='button'>Change</button><a>",
+                hTrackUiForTrack(track), database, track);
     }
 else
     {
@@ -470,7 +470,7 @@ else
 
     /* Set up url that has enough context to get back to us.  */
     struct dyString *returnUrl = dyStringNew(0);
-    dyStringPrintf(returnUrl, "../cgi-bin/hgTrackUi?g=%s", track);
+    dyStringPrintf(returnUrl, "../cgi-bin/hgTrackUi?db=%s&g=%s", database, track);
     dyStringPrintf(returnUrl, "&%s", cartSidUrlString(cart));
 
     /* Load up table from tsv file */

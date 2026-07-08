@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-B.11 &#8212; NON-FINAL Provisional Classification track (NOT a VCEP classification).
+B.11: Computable ACMG Criteria Summary track (NOT a VCEP classification).
 
 For every gnomAD-observed variant in the 8 cardiomyopathy gene CDS regions &#177;20 nt
-splice padding, computes a NON-FINAL provisional ACMG/AMP classification from the
-subset of evidence codes a hub can compute automatically:
+splice padding, lists the subset of ACMG/AMP evidence codes a hub can compute
+automatically. No overall classification is calculated:
   - BA1 / BS1 / PM2_Supporting  (gnomAD v4.1 FAF95; B.3)
   - PP3 / BP4                   (REVEL; B.4; missense only, per hgVai consequence)
   - PM1                         (B.1 hotspot regions; HCM-scoped; NOT combined with PM5)
@@ -77,19 +77,13 @@ AA3TO1 = {
     'Tyr': 'Y', 'Val': 'V', 'Ter': '*',
 }
 
-COLORS = {
-    'Pathogenic':              '210,0,0',
-    'Likely Pathogenic':       '245,152,152',
-    'Uncertain Significance':  '0,0,136',
-    'Likely Benign':           '213,247,213',
-    'Benign':                  '0,210,0',
-}
+TRACK_COLOR = '91,107,122'   # neutral slate; no classification encoded (evidence-only track)
 
 CHROM_SIZES = {'hg38': '/cluster/data/hg38/chrom.sizes', 'hg19': '/cluster/data/hg19/chrom.sizes'}
 LIFTOVER_HG38_TO_HG19 = '/cluster/data/hg38/bed/liftOver/hg38ToHg19.over.chain.gz'
 
 AUTOSQL = """table cmpVCEPProvisionalClass
-"NON-FINAL provisional ACMG classification (computable-codes subset; NOT a VCEP classification)"
+"Computable ACMG criteria per variant (evidence summary; NOT a VCEP classification)"
     (
     string  chrom;          "Chromosome"
     uint    chromStart;     "Position"
@@ -99,17 +93,15 @@ AUTOSQL = """table cmpVCEPProvisionalClass
     char[1] strand;         "Strand"
     uint    thickStart;     "Same"
     uint    thickEnd;       "Same"
-    uint    itemRgb;        "ACMG color"
+    uint    itemRgb;        "Display color (neutral; no classification encoded)"
     string  gene;           "Gene"
     string  refAllele;      "Ref"
     string  altAllele;      "Alt"
     string  variantKind;    "Predicted consequence (hgVai)"
-    string  classification; "NON-FINAL provisional call"
-    string  appliedCodes;   "ACMG codes met (semicolon-separated, with strengths)"
-    string  ruleMatch;      "Combination rule that fired"
+    string  appliedCodes;   "Computable ACMG codes triggered (semicolon-separated, with strengths)"
     string  diseaseTag;     "HCM/DCM phenotype scoping note (MYH7, TNNT2)"
     string  codeNotes;      "Suppressed/contested codes (e.g. PM5 not combined with PM1)"
-    string  splice_safety;  "yes if SpliceAI >= 0.20 triggered the safety net"
+    string  splice_safety;  "yes if SpliceAI >= 0.20 (possible splice impact; informational)"
     lstring _mouseOver;     "Tooltip"
     )
 """
@@ -119,6 +111,9 @@ AUTOSQL = """table cmpVCEPProvisionalClass
 # Combination rules &#8212; transcribed verbatim from CSpec GN002
 # ============================================================
 
+# RETIRED 2026-07-08 (per CM VCEP chair L. Bronicki): this track no longer computes an overall
+# ACMG classification, only the computable codes that fire. The GN002 combining logic below is
+# kept for reference and is intentionally NOT called.
 def classify(codes):
     """Apply the Cardiomyopathy CSpec (GN002) combining rules.
     `codes` is an iterable of code strings carrying explicit strengths where relevant,
@@ -216,7 +211,7 @@ def load_b4_revel_lookup():
         f = line.rstrip('\n').split('\t')
         if len(f) < 14:
             continue
-        lookup[(f[0], int(f[1]), f[10])] = f[12]   # (chrom, start, alt) -> PP3_/BP4_Supporting
+        lookup[(f[0], int(f[1]), f[10])] = (f[12], f[11])   # (chrom,start,alt) -> (code, REVEL score)
     print(f'  REVEL lookup: {len(lookup)} keys', file=sys.stderr)
     return lookup
 
@@ -366,7 +361,7 @@ def main():
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPProvisionalClass')
     os.makedirs(out_dir, exist_ok=True)
-    print('  [B.11 NON-FINAL Provisional Classification]')
+    print('  [B.11 Computable ACMG Criteria Summary]')
 
     b3 = load_b3_variants()
     revel = load_b4_revel_lookup()
@@ -388,7 +383,7 @@ def main():
         spliceai = batch_spliceai(regions)
         phylop = batch_phylop(regions)
 
-    counts = defaultdict(int)
+    n_features = 0
     code_counts = defaultdict(int)
     bed_lines = []
 
@@ -403,26 +398,36 @@ def main():
         is_synonymous = 'synonymous_variant' in so
 
         codes = set()
+        code_why = {}
         notes = []
+        faf = v['faf95']
 
         # gnomAD AF (B.3)
         if v['af_code'] == 'BA1':
             codes.add('BA1')
+            code_why['BA1'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8805; 0.001'
         elif v['af_code'] == 'BS1':
             codes.add('BS1_Strong')
+            thr = '0.0002' if gene == 'MYBPC3' else '0.0001'
+            code_why['BS1_Strong'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8805; {thr}'
         elif v['af_code'] == 'PM2_supporting':
             codes.add('PM2_Supporting')
+            code_why['PM2_Supporting'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8804; 4e-05 (rare)'
 
         # REVEL PP3/BP4 &#8212; missense only
         if is_missense:
             rc = revel.get((chrom, v['start'], alt))
             if rc:
-                codes.add(rc)
+                code, score = rc
+                codes.add(code)
+                thr = '&#8805; 0.70' if code.startswith('PP3') else '&#8804; 0.40'
+                code_why[code] = f'REVEL {score} ({thr})'
 
         # PM1 hotspot (HCM-calibrated)
         pm1_hit = in_pm1_region(chrom, v['start'], pm1)
         if pm1_hit:
             codes.add('PM1_Moderate')
+            code_why['PM1_Moderate'] = f'in the {gene} PM1 hotspot region (HCM-calibrated)'
 
         # PS1 / PM5 &#8212; EvRepo P/LP reference, LEAVE-ONE-OUT (exclude self by genomic key)
         if is_missense and a.get('codon') and a.get('aaAlt'):
@@ -434,8 +439,10 @@ def main():
                       and e['gkey'] != gkey for e in evref)
             if ps1:
                 codes.add('PS1_Strong')
+                code_why['PS1_Strong'] = f'same amino-acid change as a VCEP EvRepo P/LP variant at codon {codon}'
             if pm5:
                 codes.add('PM5_Moderate')
+                code_why['PM5_Moderate'] = f'a different missense at codon {codon} is classified P/LP in the VCEP EvRepo set'
 
         # PM4 &#8212; NMD-escaping truncating, non-MYBPC3 (CSpec disease-specific; PVS1 N/A for these genes).
         # NMD escapes if the PTC is in the last exon OR within 50 nt of the last exon-exon junction
@@ -447,11 +454,11 @@ def main():
             if nmd_escape:
                 codes.add('PM4_Supporting')
                 last = a.get('exonNum') == a.get('exonTotal')
-                where = 'last exon' if last else 'within 50 nt of last exon-exon junction'
-                notes.append(f'<b>PM4:</b> NMD-escaping truncating ({where}); strength per VCEP')
+                where = 'last exon' if last else 'within 50 nt of the last exon-exon junction'
+                code_why['PM4_Supporting'] = f'NMD-escaping truncating variant ({where})'
         elif gene != 'MYBPC3' and 'stop_lost' in so:
             codes.add('PM4_Supporting')
-            notes.append('<b>PM4:</b> stop-loss; strength per VCEP')
+            code_why['PM4_Supporting'] = 'stop-loss variant'
 
         # BP7 &#8212; synonymous + SpliceAI no-impact + not conserved (conservation cutoff PROVISIONAL)
         sa_score = spliceai.get((chrom, pos1, ref, alt), 0.0)
@@ -459,7 +466,8 @@ def main():
             phy = phylop.get((chrom, pos1))
             if sa_score < BP7_SPLICE_MAX and phy is not None and phy <= BP7_PHYLOP_MAX:
                 codes.add('BP7_Supporting')
-                notes.append(f'<b>BP7:</b> SpliceAI {sa_score:.2f}&lt;{BP7_SPLICE_MAX}, phyloP {phy:.2f}&lt;=0 (cutoff provisional &#8212; VCEP to confirm)')
+                code_why['BP7_Supporting'] = (f'synonymous; SpliceAI {sa_score:.2f} &lt; {BP7_SPLICE_MAX}; '
+                                              f'phyloP {phy:.2f} &#8804; 0 (conservation cutoff provisional)')
 
         # CSpec exclusion: PM1 must NOT be combined with PM5. GN002 PM5: "use of PM5 is most
         # appropriate since it is variant specific" &#8594; keep PM5, drop PM1.
@@ -470,20 +478,17 @@ def main():
         if 'PM1_Moderate' in codes and 'PS1_Strong' in codes:
             notes.append('<b>Note:</b> PM1+PS1 co-occur &#8212; possible double-counting (VCEP question)')
 
-        classification, rule_match = classify(codes)
-
-        # Splice safety net: SpliceAI >= 0.20 on a benign-leaning call -> VUS
+        # Splice signal (informational): SpliceAI >= 0.20 flags possible splice impact.
+        # No longer overrides a call &#8212; this track computes no overall classification.
         splice_safety = 'no'
-        if sa_score >= SPLICE_SAFETY_THRESHOLD and classification in ('Likely Benign', 'Benign'):
-            notes.append(f'<b>Splice safety net:</b> SpliceAI {sa_score:.2f} &gt;= {SPLICE_SAFETY_THRESHOLD} overrode {classification} &#8594; VUS')
-            classification = 'Uncertain Significance'
-            rule_match = f'splice safety net (SpliceAI={sa_score:.2f})'
+        if sa_score >= SPLICE_SAFETY_THRESHOLD:
+            notes.append(f'<b>Splice flag:</b> SpliceAI {sa_score:.2f} &gt;= {SPLICE_SAFETY_THRESHOLD} (possible splice impact; informational)')
             splice_safety = 'yes'
 
-        counts[classification] += 1
+        n_features += 1
         for c in codes:
             code_counts[c] += 1
-        color = COLORS.get(classification, '136,136,136')
+        color = TRACK_COLOR
 
         disease_tag = ''
         if gene in ('MYH7', 'TNNT2'):
@@ -493,30 +498,32 @@ def main():
         notes_str = ' | '.join(notes)
         kind = variant_kind(so)
 
-        mo = [f'<b>NON-FINAL Provisional Classification</b> (NOT a VCEP classification)<br>',
+        mo = [f'<b>Computable ACMG Criteria Summary</b> (NOT a VCEP classification)<br>',
               f'<b>{gene}</b> {chrom}:{pos1} {ref}&gt;{alt}']
         if a.get('hgvsp'):
             mo.append(f' &nbsp;<i>{a["hgvsp"]}</i>')
         mo.append(f'<br><b>Consequence:</b> {kind}<br>')
-        mo.append(f'<b>Codes met:</b> {applied_str}<br>')
-        mo.append(f'<b>Rule:</b> {rule_match}<br>')
-        mo.append(f'<b>Provisional call:</b> {classification}<br>')
+        if codes:
+            mo.append('<b>Computable codes triggered:</b><br>')
+            for c in sorted(codes):
+                why = code_why.get(c, '')
+                mo.append(f'&nbsp;&nbsp;<b>{c}:</b> {why}<br>' if why else f'&nbsp;&nbsp;<b>{c}</b><br>')
+        else:
+            mo.append('<b>Computable codes triggered:</b> none<br>')
         if notes_str:
             mo.append(f'<span style="color:#a00">{notes_str}</span><br>')
-        if 'PS1_Strong' in codes or 'PM5_Moderate' in codes:
-            mo.append('<i>PS1/PM5 from VCEP EvRepo P/LP set (leave-one-out); reference DB is an open VCEP question.</i><br>')
-        mo.append('<i>Mockup of computable codes only &#8212; excludes clinical/functional PS2/PS3/PS4/PP1/PP4/BS3/BS4; '
-                  'best used to flag variants for expert review, not as a classification.</i>')
+        mo.append('<br><i>Shows only the computable ACMG codes that are triggered. Excludes clinical/functional '
+                  'PS2/PS3/PS4/PP1/PP4/BS3/BS4.</i>')
         mouseover = ''.join(mo)
 
-        name = f'{gene}_{pos1}_{ref}>{alt}_{classification[:1]}'
+        name = f'{gene}_{pos1}_{ref}>{alt}'
         bed_lines.append('\t'.join([
             chrom, str(v['start']), str(v['end']), name, '0', v['strand'],
             str(v['start']), str(v['end']), color, gene, ref, alt, kind,
-            classification, applied_str, rule_match, disease_tag, notes_str, splice_safety, mouseover,
+            applied_str, disease_tag, notes_str, splice_safety, mouseover,
         ]))
 
-    print(f'  classifications: {dict(counts)}')
+    print(f'  features: {n_features}')
     print(f'  code firing counts: {dict(sorted(code_counts.items()))}')
 
     bed_lines.sort(key=lambda l: (l.split('\t')[0], int(l.split('\t')[1])))
@@ -532,7 +539,7 @@ def main():
 
     if 'hg38' in args.db:
         hg38_bb = os.path.join(out_dir, 'cmpVCEPProvisionalClassHg38.bb')
-        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+11', '-as=' + as_path,
+        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+9', '-as=' + as_path,
                         hg38_bed, CHROM_SIZES['hg38'], hg38_bb], check=True)
         print(f'  hg38 bigBed: {hg38_bb}')
 
@@ -545,7 +552,7 @@ def main():
             n = sum(1 for line in open(unmapped) if not line.startswith('#'))
             print(f'  WARNING: {n} unmapped in hg19 liftOver: {unmapped}', file=sys.stderr)
         hg19_bb = os.path.join(out_dir, 'cmpVCEPProvisionalClassHg19.bb')
-        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+11', '-as=' + as_path,
+        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+9', '-as=' + as_path,
                         hg19_bed, CHROM_SIZES['hg19'], hg19_bb], check=True)
         print(f'  hg19 bigBed: {hg19_bb}')
 

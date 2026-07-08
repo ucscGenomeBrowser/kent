@@ -75,7 +75,7 @@
 #     cmpVCEPWalshOR/                   (Walsh 2017 gene-level OR — PS4)
 #     cmpVCEPAtlasEF/                   (Atlas of Cardiac Genetic Variation
 #                                        per-variant + UCSC-computed OR — PS4)
-#     cmpVCEPProvisionalClass/          (NON-FINAL combination-rule mockup)
+#     cmpVCEPProvisionalClass/          (Computable ACMG Criteria Summary; per-variant codes)
 #
 # Build scripts:                     ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/
 #     cmpVCEPClinDomains.py             (B.1 — PM1 hotspot regions; also provides
@@ -240,7 +240,7 @@
 # cross-assembly parity at the end.
 #
 # Build order matters: B.3 defines the variant universe that B.6 annotates;
-# B.11 (Provisional) consumes B.6 (annotation), B.3 (AF), B.4 (REVEL), and the
+# B.11 (Computable codes) consumes B.6 (annotation), B.3 (AF), B.4 (REVEL), and the
 # B.7 EvRepo P/LP set (PS1/PM5 reference). Suggested order:
 #
 #   for s in cmpVCEPClinDomains cmpVCEPPVS1 cmpVCEPAFfrequencies cmpVCEPAnnotate \
@@ -346,26 +346,28 @@
 #      Strong 16, Moderate 30, Supporting 44, below threshold 88. Every mouseover
 #      carries the caveat that the OR is UCSC-computed against ExAC (not gnomAD).
 #
-# B.11 cmpVCEPProvisionalClass.py — NON-FINAL Provisional Classification
+# B.11 cmpVCEPProvisionalClass.py — Computable ACMG Criteria Summary
+#      (Formerly "NON-FINAL Provisional Classification"; reframed 2026-07-08 per
+#      the CM VCEP chair L. Bronicki. The track no longer computes an overall ACMG
+#      classification, only the computable codes that fire per variant.)
 #      Variant universe: identical to B.3 (10,974). Consumes the B.6 annotation
 #      TSV. Computable codes applied: BA1/BS1/PM2_supporting (B.3 FAF95),
 #      PP3/BP4 (REVEL, missense), PM1 (CSpec hotspot region), PS1/PM5 (EvRepo
-#      P/LP reference, leave-one-out — a variant cannot earn the code from its
+#      P/LP reference, leave-one-out; a variant cannot earn the code from its
 #      own entry; PS1 reference excludes established splice-impact variants e.g.
 #      MYBPC3 c.2308G>A), PM4 (NMD-escaping truncating, non-MYBPC3: last exon or
 #      within 50 nt of the final exon-exon junction), BP7 (synonymous +
-#      SpliceAI < 0.20 + phyloP470way <= 0).
-#      Combination rules = CSpec GN002 verbatim (NOT Tavtigian point sums; PP2
-#      is not in the GN002 point system and is not emitted). PM1<->PM5 mutual
-#      exclusion enforced per CSpec (keep PM5, the variant-specific code; drop
-#      PM1; PM1+PS1 co-occurrence flagged). BS1-standalone -> Likely Benign per
-#      the GN002 BS1 carve-out. SpliceAI safety net runs last (>= 0.20 on an
-#      LB/B call -> VUS). HCM/DCM diseaseTag populated.
-#      The mockup omits all clinical/functional codes (PS2/PS3/PS4/PP1/PP4/
-#      BS3/BS4), so it structurally cannot reach Pathogenic/Likely Pathogenic;
-#      this is intentional and labeled NON-FINAL throughout (BED name, .as,
-#      trackDb, mouseover, description page). No concordance metric is asserted.
-#      Output: 10,974 features — 0 P / 0 LP / 10,453 VUS / 319 LB / 202 B.
+#      SpliceAI < 0.20 + phyloP470way <= 0). PM1<->PM5 mutual exclusion enforced
+#      per CSpec (keep PM5, the variant-specific code; drop PM1; PM1+PS1
+#      co-occurrence flagged). HCM/DCM diseaseTag populated. A SpliceAI score
+#      >= 0.20 is recorded as an informational splice flag.
+#      Per-variant output = the list of triggered codes only; NO overall
+#      classification is calculated. The GN002 combining logic remains in the
+#      script as classify() but is retired/uncalled. Clinical/functional codes
+#      (PS2/PS3/PS4/PP1/PP4/BS3/BS4) are not computed. Single neutral display
+#      color 91,107,122; no classification encoded.
+#      Output: 10,974 features. Code firing: BA1 210, BS1 367, PM2_Supporting
+#      9,893, PP3 1,436, BP4 1,647, BP7 1,356, PM1 1,293, PM4 27, PM5 11, PS1 0.
 
 
 ##############################################################################
@@ -404,7 +406,7 @@
 #   - hubCheck: silent pass (exit 0) on hg38 + hg19.
 #   - Cross-assembly parity (hg38 == hg19 feature counts):
 #       PM1 28 | PVS1 16 | AF 10,974 | REVEL 22,466 | EvRepo 25 | Walsh2019 155 |
-#       ClinVar 199 | WalshOR 48 | AtlasEF 178 | Provisional 10,974 |
+#       ClinVar 199 | WalshOR 48 | AtlasEF 178 | Computable codes 10,974 |
 #       CardioBoost 31,236
 #   - Worked example, MYH7 p.Arg870His (NM_000257.4:c.2609G>A, chr14:23424839 hg38):
 #       EvRepo:       Pathogenic, codes PM1;PM2;PP1_Strong;PS4
@@ -414,8 +416,8 @@
 #       REVEL:        0.853 -> PP3_supporting
 #       gnomAD AF:    absent from v4.1 exomes -> PM2_supporting
 #       Walsh OR:     MYH7 non-truncating HCM, OR 12.0 (10.9-13.3) -> Moderate
-#       Provisional:  Uncertain Significance (PM1+PM2+PP3, no clinical PS4/PP1 ->
-#                     no P/LP rule fires) — the expected under-call
+#       Computable codes: PM1+PM2+PP3 triggered; no overall classification is
+#                     computed (the VCEP Pathogenic call rests on PS4+PP1, manual)
 
 
 ##############################################################################
@@ -440,8 +442,8 @@
 # Steps:
 #   1. (Done) MYH7 draft sent to Haley Garrett / Lucas Bronicki with a shared
 #      hgwdev session + interpretation questions.
-#   2. After sign-off, decide the NON-FINAL Provisional track's fate (keep as a
-#      labeled mockup vs drop) per VCEP feedback.
+#   2. (Done 2026-07-08) Provisional track reframed to the Computable ACMG Criteria
+#      Summary per the CM VCEP chair: per-variant codes only, no overall classification.
 #   3. Symlink hub into hgdownload and coordinate autoPush:
 #        ln -sf /hive/users/lrnassar/claude/RM37446 \
 #               /usr/local/apache/htdocs-hgdownload/hubs/cardiomyopathyVCEP

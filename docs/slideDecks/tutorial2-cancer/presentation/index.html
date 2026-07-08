@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCSC Genome Browser · Tutorial 2: Cancer Data</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+<style>
+  :root{
+    --ucsc-blue:#1f3a5f;
+    --ucsc-accent:#0b5394;
+    --ucsc-gold:#e6a817;
+  }
+  .reveal { font-size: 32px; }
+  .reveal h1,.reveal h2,.reveal h3 { color: var(--ucsc-blue); text-transform:none; letter-spacing:normal; }
+  .reveal h1 { font-size: 1.9em; }
+  .reveal h2 { font-size: 1.32em; }
+  .reveal section img { border:none; box-shadow:none; }
+  .reveal a { color: var(--ucsc-accent); }
+  .reveal ul { width: 100%; box-sizing: border-box; }
+  .reveal li { margin: 0.16em 0; }
+
+  .divider { background: var(--ucsc-blue); }
+  .divider h1,.divider h2,.divider p { color:#fff !important; }
+  .divider .kicker { color: var(--ucsc-gold) !important; letter-spacing:2px; font-size:0.55em; text-transform:uppercase;}
+  .divider .timing { color:#cdd9e8 !important; font-size:0.62em; margin-top:0.6em; }
+
+  .callout { border-radius:10px; padding:0.55em 0.9em; margin:0.35em 0; font-size:0.8em; text-align:left; }
+  .exercise { background:#eaf6ec; border-left:6px solid #2e8b57; }
+  .demo     { background:#e9f1fb; border-left:6px solid var(--ucsc-accent); }
+  .caution  { background:#fdf3e3; border-left:6px solid var(--ucsc-gold); }
+  .callout .lbl { font-weight:700; display:block; margin-bottom:0.12em; }
+  .exercise .lbl{ color:#2e8b57; }
+  .demo .lbl    { color:var(--ucsc-accent); }
+  .caution .lbl { color:#b8860b; }
+  /* standalone callouts (direct children of a slide) shouldn't span the full width;
+     keep them aligned with the centered content above them */
+  .reveal section > .callout { display:block; box-sizing:border-box; max-width:92%; margin-left:auto; margin-right:auto; }
+
+  .chip { display:inline-block; background:#f0f2f5; border:1px solid #d0d7de; border-radius:6px;
+          padding:0.05em 0.45em; font-family:monospace; font-size:0.78em; color:#24292f; white-space:nowrap; }
+  .grp  { display:inline-block; background:var(--ucsc-blue); color:#fff; border-radius:6px;
+          padding:0.05em 0.45em; font-size:0.72em; }
+
+  .small { font-size:0.8em; color:#555; }
+  .reveal .footer { position:fixed; bottom:8px; left:14px; font-size:13px; color:#9aa4b1; z-index:30; }
+  .twocol { display:flex; gap:1.2em; }
+  .twocol > div { flex:1; min-width:0; overflow-wrap:anywhere; }
+  .tag { font-size:0.6em; background:var(--ucsc-gold); color:#3a2c00; border-radius:5px; padding:0.05em 0.4em; vertical-align:middle;}
+  /* screenshot layouts */
+  .split { display:flex; gap:1.1em; align-items:center; }
+  .split > .txt { flex:1 1 44%; min-width:0; text-align:left; }
+  .split > .figwrap { flex:1 1 56%; min-width:0; }
+  .split img.shot { max-width:100%; height:auto; }
+  /* reveal makes lists inline-block (sizes to content), force block so they wrap to the column */
+  .reveal .split .txt ul, .reveal .split .txt ol,
+  .reveal .twocol ul, .reveal .twocol ol { display:block !important; width:auto !important; box-sizing:border-box; text-align:left; margin:0 0 0.3em 0; padding-left:1.1em; }
+  .reveal .split .txt li, .reveal .twocol li { overflow-wrap:anywhere; }
+  .split .txt p { text-align:left; }
+  /* stacked mini-examples (e.g. display modes) */
+  .stack figure.fig { margin:0 0 0.45em 0; }
+  .stack .modelabel { display:inline-block; background:var(--ucsc-blue); color:#fff; font-size:0.6em; border-radius:5px; padding:0.04em 0.45em; margin-bottom:0.15em; }
+  figure.fig { margin:0; }
+  img.shot { width:100%; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 5px 16px rgba(0,0,0,.18); display:block; }
+  figure.fig figcaption { font-size:0.56em; color:#5b6673; margin-top:0.3em; text-align:left; line-height:1.3; }
+  .shotbig { display:block; margin:0.15em auto 0; max-width:84%; max-height:60vh; border:1px solid #c9d1d9; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+  figcaption.capbig { font-size:0.58em; color:#5b6673; margin-top:0.35em; text-align:center; }
+  /* annotated control-bar (Navigation & viewing controls) */
+  .navctrls { margin:1.3em 0 0.6em; }
+  .navstrip { position:relative; margin:1.4em auto; max-width:96%; }
+  .navstrip img.shot { width:100%; }
+  .navbadge { position:absolute; bottom:100%; margin-bottom:3px; transform:translateX(-50%);
+    width:1.35em; height:1.35em; line-height:1.3em; text-align:center; box-sizing:border-box;
+    background:var(--ucsc-gold); color:#3a2c00; border:2px solid #fff; border-radius:50%;
+    font-size:0.62em; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.4); }
+  .navkey { font-size:0.64em; text-align:left; gap:1.6em; }
+  .navkey p { margin:0.22em 0; }
+  .navkey .keybadge { display:inline-block; width:1.5em; height:1.5em; line-height:1.5em; text-align:center;
+    background:var(--ucsc-blue); color:#fff; border-radius:50%; font-weight:700; margin-right:0.35em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="footer">UCSC Genome Browser · Tutorial 2: Cancer Data</div>
+<div class="slides">
+
+<section class="divider" data-background-color="#1f3a5f">
+  <p class="kicker">UCSC Genome Browser · Tutorial 2</p>
+  <h1>Cancer Data</h1>
+  <h2 style="color:#fff;font-weight:400;">The cancer &amp; clinical databases, worked on BRAF V600E</h2>
+  <p class="timing">A hands-on tour of the oncology tracks · genome.ucsc.edu</p>
+</section>
+
+<section>
+  <h2>What we'll cover</h2>
+  <ul class="small">
+    <li>How to analyse variants using the <strong>cancer database tracks</strong>.</li>
+    <li>The main tracks: <strong>CIViC, COSMIC, ClinVar, TCGA</strong> (somatic) and <strong>GenCC, OMIM, gnomAD</strong> (germline).</li>
+    <li>A running example throughout: <strong>BRAF V600E</strong>, the well-known melanoma driver.</li>
+    <li>Where each database fits when you ask &ldquo;is this variant real, and does it matter?&rdquo;</li>
+  </ul>
+  <div class="callout demo"><span class="lbl">Two kinds of question</span>
+    We split the databases into <strong>somatic</strong> (acquired, in cancer) and <strong>germline</strong> (inherited) diagnosis.</div>
+</section>
+
+<section>
+    <h2>Where the cancer data lives</h2>
+    <p class="small">The key datasets and what each is good for. Click a name for its track description page.</p>
+    <div class="twocol">
+      <div>
+        <p class="small"><strong>Clinical &amp; cancer databases</strong></p>
+        <ul class="small">
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=clinvar">ClinVar</a>: archive of lab and expert-panel variant classifications. Is it already called pathogenic, benign, or VUS (and now its somatic oncogenicity)?</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cosmicRegions">COSMIC</a>: catalogue of somatic mutations in cancer. Shows how recurrently a site is mutated across tumours, flagging likely drivers.</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=civic">CIViC</a>: crowd-sourced, expert-curated clinical interpretations. Is the variant oncogenic and linked to a therapy?</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=genCC">GenCC</a>: curated gene-disease validity with evidence strength. Is the gene genuinely tied to a heritable disease?</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=omimGene2">OMIM</a>: genes and Mendelian phenotypes. The reference for known gene-disease relationships and disease alleles.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="small"><strong>Population frequency &amp; evidence</strong></p>
+        <ul class="small">
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gdcCancer">TCGA Pan-Cancer</a>: somatic mutations across ~10,000 tumours of many types, drawn as a lollipop. Shows recurrence and hotspots by cancer type.</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=gnomadVariants">gnomAD</a>: population allele frequencies from large healthy cohorts. Common implies benign, and it filters germline variants out of somatic calls.</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=uniprot">UniProt</a>: protein domains and key residues. Does the variant fall in a functional region (ACMG PM1)?</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=revel">REVEL</a>: ensemble missense pathogenicity score (0 to 1). High values support a damaging computational call (PP3).</li>
+          <li><a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&amp;g=cons100way">Conservation</a> (100-way): cross-species constraint. Conserved positions are more likely functionally important.</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Frame the two relevant groups. This section is about the datasets themselves; the NEXT section shows the curated sets that combine them.
+      Name-drop each database briefly; we click through them on BRAF V600E next.
+    </aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <p class="kicker">Somatic diagnosis</p>
+  <h1>Somatic variants</h1>
+  <p class="timing">acquired mutations: SNVs, de novo changes, and cancer drivers</p>
+</section>
+
+<section>
+    <h2>CIViC: Clinical Interpretation of Variants in Cancer</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Collaborative and expert-reviewed: submissions are vetted by editors and the community.</li>
+          <li>Links each variant to diseases, drugs and therapies.</li>
+          <li>Every claim carries a cited publication as evidence.</li>
+          <li>Best for: is this variant oncogenic and <strong>linked to a therapy</strong>?</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRAFcivic">▶ open the BRAF CIViC session</a></span>
+          Hover a variant to preview its therapies and diseases.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/civic_annotated.png" alt="CIViC track with two variants pointing to their mouse-over tooltips">
+        <figcaption>Hover a variant in the CIViC track to see its associated therapies and diseases.</figcaption></figure></div>
+    </div>
+    <aside class="notes">Introduce CIViC: a crowd-sourced, expert-moderated knowledgebase of clinically interpreted cancer variants. The track shows variants; the mouse-over previews linked therapies and diseases. This is the actionability/druggability resource.</aside>
+  </section>
+
+<section>
+    <h2>CIViC: click a feature for the details</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/civic_click_annot.png" alt="CIViC variant details page with the link to CIViC boxed in red">
+      <figcaption class="capbig">Click a variant to open its details page; the boxed link goes straight to the CIViC page for that item.</figcaption></figure>
+    <aside class="notes">Demo the click path: feature to Browser details page to the external CIViC entry.</aside>
+  </section>
+
+<section>
+    <h2>CIViC: the page for BRAF V600E</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/civic_braf_annot.png" alt="CIViC web page for BRAF V600E, annotated">
+      <figcaption class="capbig">The CIViC page for BRAF V600E: click a variant for more, and read the diseases and therapies associated with each.</figcaption></figure>
+    <aside class="notes">Show the live CIViC page for BRAF V600E: the diseases and therapies, each clickable.</aside>
+  </section>
+
+<section>
+    <h2>CIViC: the evidence behind each call</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/civic_evidence_annot.png" alt="Clicking an Evidence ID opens its detailed evidence record">
+      <figcaption class="capbig">Click an Evidence ID (EID) in the list to open its full evidence record.</figcaption></figure>
+    <p class="small" style="text-align:center;max-width:80%;margin:0.5em auto 0;">Each disease and therapy links to <strong>Evidence Items (EIDs)</strong>; each EID cites the supporting publication and rates its strength: the “show me the evidence” layer behind actionability.</p>
+    <aside class="notes">Drill into Evidence IDs (EIDs): the literature and evidence level behind each clinical claim.</aside>
+  </section>
+
+<section>
+    <h2>COSMIC: Catalogue of Somatic Mutations in Cancer</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The reference catalogue of somatic mutations seen across tumours.</li>
+          <li>Shows how recurrently a position is mutated, and in which cancer types.</li>
+          <li>Best for: spotting recurrent hotspots and likely drivers.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/cosmicBRAF">▶ open COSMIC at the BRAF hotspot</a></span>
+          The V600 hotspot stands out by recurrence.</div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/cosmic_track.png" alt="COSMIC track in the Genome Browser"><figcaption>COSMIC in the Browser: recurrent somatic mutations across cancer types.</figcaption></figure></div>
+    </div>
+    <aside class="notes">COSMIC = recurrence catalogue of somatic mutations; the breadth tool for how often a site is hit in cancer.</aside>
+  </section>
+
+<section>
+    <h2>ClinVar: variant-disease classifications</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Public archive of submitted clinical classifications, pathogenic to benign, with review status.</li>
+          <li>Increasingly carries <strong>somatic</strong> oncogenicity and clinical-impact calls.</li>
+          <li>Click a variant for its interpretation and submitters.</li>
+        </ul>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/clinvarInterp">▶ open the BRAF ClinVar interpretation track</a></span>
+          Variants coloured by clinical significance.</div>
+      </div>
+      <div class="figwrap stack"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/clinvar_track.png" alt="ClinVar track across a gene"><figcaption>The ClinVar track across a gene, coloured by clinical significance.</figcaption></figure><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/clinvar_braf.png" alt="ClinVar at BRAF V600E" style="width:auto;max-width:78%;margin:0.35em auto 0;"><figcaption>At BRAF V600E: pathogenic submissions (T>A).</figcaption></figure></div>
+    </div>
+    <aside class="notes">ClinVar = aggregated lab and expert-panel classifications with star review status; now also somatic fields.</aside>
+  </section>
+
+<section>
+    <h2>ClinVar database link</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/clinvar_link.png" alt="Clicking a ClinVar interp item in the Browser opens its full ClinVar record">
+      <figcaption class="capbig">Click a variant in the <strong>ClinVar interp</strong> track for its details page, then follow the link out to the variant's full record on ClinVar.</figcaption></figure>
+    <aside class="notes">Show the click path on BRAF: the ClinVar interp item details page in the Browser links straight to the variant's ClinVar page at NCBI (VCV000013961).</aside>
+  </section>
+
+<section>
+    <h2>TCGA Pan-Cancer</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/tcga_annot.png" alt="TCGA lollipop track, with a click to a variant's mouse-over and details page">
+      <figcaption class="capbig">Lollipop track of somatic mutations; click a lollipop for its mouse-over and the item details (here C&gt;T, seen in 38 samples).</figcaption></figure>
+    <ul class="small" style="max-width:84%;margin:0.4em auto 0;text-align:left;">
+      <li>Somatic variants across thousands of tumours and many cancer types; useful for <strong>variant frequency</strong> by cancer type.</li>
+      <li>Drawn as a lollipop plot; mouse-over identifies the variant and its sample count.</li>
+    </ul>
+    <div class="callout caution" style="max-width:84%;margin:0.4em auto 0;font-size:0.64em;"><span class="lbl">COSMIC vs TCGA</span>
+      Both show recurrence. TCGA is <strong>one uniform cohort</strong> with comparable, by-cancer-type frequencies; COSMIC is the <strong>broader aggregate</strong> catalogue (bigger counts plus the driver Census), but heterogeneous.</div>
+    <div class="callout exercise" style="max-width:84%;margin:0.4em auto 0;"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/TCGAbraf">▶ open TCGA Pan-Cancer at BRAF</a></span></div>
+    <aside class="notes">TCGA Pan-Cancer (via the NCI GDC): somatic variants across ~10,000 tumours, drawn as a lollipop; recurrence by cancer type. Click a lollipop for the mouse-over and item details (sample count, variant frequency).</aside>
+  </section>
+
+<section class="divider" data-background-color="#0b5394">
+  <p class="kicker">Germline diagnosis</p>
+  <h1>Germline variants</h1>
+  <p class="timing">inherited disease: gene-level validity and population frequency</p>
+</section>
+
+<section>
+    <h2>GenCC: the Gene Curation Coalition</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/gencc_track.png" alt="GenCC track in the Genome Browser">
+      <figcaption class="capbig">The GenCC track: gene-disease links coloured by evidence strength.</figcaption></figure>
+    <ul class="small" style="max-width:84%;margin:0.4em auto 0;text-align:left;">
+      <li>Aggregates <strong>gene-disease validity</strong> from many expert groups.</li>
+      <li>Germline / Mendelian focus: genes to inherited diseases, not specific variants or somatic mutations.</li>
+      <li>Colour = strength of the link (definitive, strong, moderate, limited); spans the whole gene, mouse-over for the curated detail.</li>
+    </ul>
+    <div class="callout exercise" style="max-width:84%;margin:0.4em auto 0;"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/GenCCbraf">▶ open the GenCC BRAF session</a></span>
+      The gene-disease links for BRAF, coloured by evidence.</div>
+    <aside class="notes">GenCC = curated gene-disease validity (germline). Whole-gene features, colour by evidence strength. Not variant-specific or somatic.</aside>
+  </section>
+
+<section>
+    <h2>GenCC: click through to the source</h2>
+    <figure class="fig"><img class="shotbig" src="/images/slideDecks/tutorial2-cancer/gencc_click_annot.png" alt="Clicking a GenCC feature opens its details, with a link to the GenCC page">
+      <figcaption class="capbig">Click a feature for its details, then follow the boxed link straight to the GenCC page for the gene.</figcaption></figure>
+    <aside class="notes">Same click path as CIViC: feature to details page to the external GenCC entry. The red box marks the link out to GenCC.</aside>
+  </section>
+
+<section>
+    <h2>OMIM: Online Mendelian Inheritance in Man</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>The classic catalogue of human genes and their phenotypes.</li>
+          <li>Mostly inherited disease; well-known genes (e.g. BRAF) can list somatic phenotypes too.</li>
+          <li>Covers whole-gene phenotype links and specific alleles.</li>
+        </ul>
+        <div class="callout caution"><span class="lbl">OMIM vs GenCC</span>
+          OMIM gives per-gene <strong>depth</strong> (narrative biology and specific disease alleles); GenCC gives the standardized gene-disease <strong>validity tier</strong> and is fed partly by OMIM.</div>
+        <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/omimBraf">▶ open OMIM at BRAF</a></span></div>
+      </div>
+      <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/omim.png" alt="OMIM information in the Genome Browser"><figcaption>OMIM in the Browser: gene-phenotype relationships and known disease alleles.</figcaption></figure></div>
+    </div>
+    <aside class="notes">OMIM = genes and Mendelian phenotypes; the reference for gene-disease relationships and known alleles.</aside>
+  </section>
+
+<section>
+    <h2>gnomAD: Genome Aggregation Database</h2>
+    <div class="split">
+      <div class="txt">
+        <ul class="small">
+          <li>Allele frequencies from large, broadly healthy populations (the “normal” database).</li>
+          <li>A variant common here is most likely <strong>benign</strong>.</li>
+          <li>In cancer, used to filter germline and common variants out of somatic calls.</li>
+        </ul>
+      </div>
+      <div class="figwrap stack"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/gnomad_track.png" alt="gnomAD track in the Genome Browser"><figcaption>gnomAD variants across a gene.</figcaption></figure><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial2-cancer/gnomad_tip.png" alt="gnomAD mouse-over detail" style="width:auto;max-width:78%;margin:0.35em auto 0;"><figcaption>Mouse-over: allele frequency, filter status and ancestry.</figcaption></figure></div>
+    </div>
+    <aside class="notes">gnomAD = population allele frequencies from broadly healthy cohorts. High frequency argues benign; in somatic work it is a germline filter.</aside>
+  </section>
+
+<section>
+  <h2>Where to next</h2>
+  <ul class="small">
+    <li>These databases come together in <strong>Tutorial 3: Clinical Examples &amp; Variant Interpretation</strong>, where we work full examples end to end.</li>
+    <li>Help &rarr; <strong>Interactive Tutorials</strong>, or the docs at <a href="https://genome.ucsc.edu/docs/">genome.ucsc.edu/docs</a>.</li>
+    <li>Email the team: <strong>genome@soe.ucsc.edu</strong>.</li>
+  </ul>
+</section>
+
+<section class="divider" data-background-color="#1f3a5f">
+  <h1 style="color:#fff;margin-bottom:0.12em;">Thank you!</h1>
+  <p style="color:#fff;font-size:0.72em;margin:0.05em 0;">Questions? · genome@soe.ucsc.edu</p>
+  <p style="color:#cdd9e8;font-size:0.55em;margin:0.05em 0 0.45em;">UCSC Genome Browser · genome.ucsc.edu</p>
+  <figure class="fig" style="margin:0 auto;"><img src="/images/slideDecks/tutorial2-cancer/gb_team.jpg" alt="UCSC Genome Browser team" style="max-height:360px;width:auto;border-radius:8px;"></figure>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    width: 1280,
+    height: 800,
+    margin: 0.06,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>

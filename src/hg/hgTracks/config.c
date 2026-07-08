@@ -367,9 +367,9 @@ for (group = groupList; group != NULL; group = group->next)
         showedRuler = TRUE;
         hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
 	hPrintf("<TD>");
-        hPrintf("<A HREF=\"%s?%s=%s&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
+        hPrintf("<A HREF=\"%s?%s=%s&db=%s&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
-                chromName, RULER_TRACK_NAME);
+                database, chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
 	hTvDropDownClassVisOnlyWithLabel("ruler", rulerMode, FALSE,
@@ -441,11 +441,11 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintIcons(tdb);
 
         if (track->hasUi)
-            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
+            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&db=%s&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
                     tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
                     hTrackUiForTrack(tdb->track),
-                    cartSessionVarName(), cartSessionId(cart), track->track);
+                    cartSessionVarName(), cartSessionId(cart), database, track->track);
         hPrintf(" %s", tdb->shortLabel);
         if (track->hasUi)
 	    hPrintf("</A>");

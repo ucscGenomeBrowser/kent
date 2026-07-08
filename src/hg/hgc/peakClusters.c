@@ -406,8 +406,8 @@ if (cluster != NULL)
 	    "inputTableFieldDisplay", tdb->track);
     webPrintLinkTableEnd();
     }
-printf("<A HREF=\"%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
-	tdb->track);
+printf("<A HREF=\"%s&db=%s&g=htcListItemsAssayed&table=%s\" TARGET_blank>", hgcPathAndSettings(),
+	database, tdb->track);
 printf("List all items assayed");
 printf("</A><BR>\n");
 webNewSection("Track Description");
