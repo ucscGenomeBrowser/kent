@@ -19301,10 +19301,7 @@ if (pSnpCodonPos != NULL)
     *pSnpCodonPos = snpCodonPos;
 if (pRefAA != NULL)
     {
-    if (isMito(seqName))
-        *pRefAA = lookupMitoCodon(refCodon);
-    else
-        *pRefAA = lookupCodon(refCodon);
+    *pRefAA = lookupCodonInCode(hGeneticCodeForChrom(database, seqName), refCodon);
     if (*pRefAA == '\0') *pRefAA = '*';
     }
 }
@@ -19381,11 +19378,7 @@ for (j = 0;  j < alleleCount;  j++)
         char snpCodon[4];
         safecpy(snpCodon, sizeof(snpCodon), refCodon);
         snpCodon[snpCodonPos] = alBase;
-        char snpAA = '\0';
-        if (isMito(seqName))
-            snpAA = lookupMitoCodon(snpCodon);
-        else
-            snpAA = lookupCodon(snpCodon);
+        char snpAA = lookupCodonInCode(hGeneticCodeForChrom(database, seqName), snpCodon);
         if (snpAA == '\0') snpAA = '*';
         char refCodonHtml[16], snpCodonHtml[16];
         safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));

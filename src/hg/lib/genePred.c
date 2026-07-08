@@ -2351,11 +2351,11 @@ assert((strlen(cds.bases) % 3) == 0);  // ;-)
 return cds.bases;
 }
 
-static char translateCodon(boolean isChrM, char* codon, bool lastCodon, unsigned options)
+static char translateCodon(struct geneticCode *code, char* codon, bool lastCodon, unsigned options)
 /* translate the first three bases starting at codon, handling weird
  * biology as requested giving */
 {
-char aa = isChrM ? lookupMitoCodon(codon) : lookupCodon(codon);
+char aa = lookupCodonInCode(code, codon);
 if (aa == '\0')
     {
     // stop, contains `N' or selenocysteine
@@ -2380,23 +2380,26 @@ if (aa == '\0')
 return aa;
 }
 
-static char* translateCds(char* chrom, char* cds, unsigned options)
-/* translate the CDS */
+static char* translateCds(char *db, char* chrom, char* cds, unsigned options)
+/* translate the CDS using the genetic code assigned to chrom in db (an
+ * assembly hub may set this; chrM/chrMT default to the mitochondrial code). */
 {
 int cdsLen = strlen(cds);
 char *prot = needMem((cdsLen/3)+1);
-boolean isChrM = isMito(chrom);
+struct geneticCode *code = hGeneticCodeForChrom(db, chrom);
 int iCds, iProt;
 for (iCds = 0, iProt = 0; iCds < cdsLen; iCds+=3, iProt++)
-    prot[iProt] = translateCodon(isChrM, cds+iCds, (iCds == cdsLen-3), options);
+    prot[iProt] = translateCodon(code, cds+iCds, (iCds == cdsLen-3), options);
 return prot;
 }
 
 void genePredTranslate(struct genePred *gp, struct nibTwoCache* genomeSeqs, unsigned options,
-                       char **protRet, char **cdsRet)
+                       char *db, char **protRet, char **cdsRet)
 /* Translate a genePred into a protein.  It can also return the CDS part of the
- * mRNA sequence. If the chrom is chrM, the mitochondrial translation tables are
- * used. If protRet or cdsRet is NULL, those sequences are not returned.
+ * mRNA sequence. The genetic code is that assigned to gp->chrom in db (an
+ * assembly hub may set this; chrM/chrMT default to the mitochondrial code).
+ * db may be NULL, in which case only the chrM/chrMT default applies.
+ * If protRet or cdsRet is NULL, those sequences are not returned.
  */
 {
 // note: code tests by genePredToProt
@@ -2405,7 +2408,7 @@ if (!haveFrames)
     genePredAddExonFrames(gp);  // assume correct frame if not included
 
 char* cds = getCdsCodons(gp, genomeSeqs);
-char *prot = translateCds(gp->chrom, cds, options);
+char *prot = translateCds(db, gp->chrom, cds, options);
 
 if (protRet != NULL)
     *protRet = prot;
