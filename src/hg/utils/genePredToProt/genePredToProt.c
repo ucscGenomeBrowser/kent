@@ -29,6 +29,9 @@ errAbort(
   "                  This will result in selenocysteine's being `*', with only codons\n"
   "                  containing `N' being translated to `X'.  This doesn't include terminal\n"
   "                  stop\n"
+  "  -db=database - use the genetic codes assigned by this genome/assembly hub\n"
+  "                  (its genomes.txt \"codonTable\" line).  Without this, chrM/chrMT\n"
+  "                  use the mitochondrial code and all else the standard code.\n"
   );
 }
 
@@ -40,11 +43,13 @@ static struct optionSpec options[] = {
     {"translateSeleno", OPTION_BOOLEAN},
     {"includeStop", OPTION_BOOLEAN},
     {"starForInframeStops", OPTION_BOOLEAN},
+    {"db", OPTION_STRING},
     {NULL, 0},
 };
 
 static char *protIdSuffix = "";
 static char *cdsIdSuffix = "";
+static char *clDb = NULL;
 
 static void writeFa(struct genePred *gp, char* seq, FILE* faFh, char* suffix)
 /* write fasta record, generating comment with genomic location */
@@ -60,7 +65,7 @@ static void translateGenePred(struct genePred *gp, struct nibTwoCache* genomeSeq
 /* translate one genePred record. */
 {
 char *cds, *prot;
-genePredTranslate(gp, genomeSeqs, options, &prot, &cds);
+genePredTranslate(gp, genomeSeqs, options, clDb, &prot, &cds);
 
 writeFa(gp, prot, protFaFh, protIdSuffix);
 if (cdsFaFh != NULL)
@@ -100,6 +105,7 @@ if (argc != 4)
     usage();
 protIdSuffix = optionVal("protIdSuffix", ""),
 cdsIdSuffix = optionVal("cdsIdSuffix", "");
+clDb = optionVal("db", NULL);
 unsigned options = 0;
 if (optionExists("translateSeleno"))
     options |= GENEPRED_TRANSLATE_SELENO;

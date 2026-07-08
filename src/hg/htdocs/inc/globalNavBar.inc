@@ -1,6 +1,11 @@
 <a href="#mainContent" class="skipNav" tabindex="-1">Skip to main content</a>
 <div id="main-menu-whole">
 
+<!-- Top-right links (Share a link, Login).  These comment placeholders are replaced at runtime by
+     menuBar() in lib/web.c (CGI pages) and by hgMenubar.c (static pages).  They sit in their own
+     absolutely-positioned container at the top-right of the bar, not inside the menu list. -->
+<div id="topRightLinks"><button type="button" id="trToggle" aria-label="Menu" aria-expanded="false">&#9776;</button><!-- SHARE_LINK --><!-- LOGIN_LINK --></div>
+
 		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
 
 	<div class="upcorner"></div>

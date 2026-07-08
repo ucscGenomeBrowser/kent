@@ -152,6 +152,84 @@ boolean isMito(char *chrom)
 return sameString(chrom, "chrM") || sameString(chrom, "chrMT");
 }
 
+struct dbCodonTable
+/* Per-database parse of an assembly hub "codonTable" setting. */
+    {
+    struct geneticCode *defaultCode;   /* From "default=N", or NULL if unset. */
+    struct hash *seqToCode;            /* seqName -> struct geneticCode *. */
+    };
+
+static struct dbCodonTable *codonTableForDb(char *db)
+/* Parse (and cache per db) the assembly hub "codonTable" setting, e.g.
+ * "codonTable default=1 chrM=2".  Returns an entry with an empty seqToCode
+ * (and NULL defaultCode) for databases with no such setting. */
+{
+static struct hash *cache = NULL;
+if (cache == NULL)
+    cache = hashNew(0);
+char *key = (db != NULL) ? db : "";
+struct dbCodonTable *ct = hashFindVal(cache, key);
+if (ct != NULL)
+    return ct;
+
+AllocVar(ct);
+ct->seqToCode = hashNew(0);
+char *setting = NULL;
+if (db != NULL && trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    if (genome != NULL)
+        setting = hashFindVal(genome->settingsHash, "codonTable");
+    }
+if (setting != NULL)
+    {
+    char *dupe = cloneString(setting);
+    char *words[512];
+    int wordCount = chopByWhite(dupe, words, ArraySize(words));
+    int i;
+    for (i = 0;  i < wordCount;  ++i)
+        {
+        char *eq = strchr(words[i], '=');
+        if (eq == NULL)
+            {
+            warn("codonTable setting for %s: ignoring \"%s\", expected seqName=id", db, words[i]);
+            continue;
+            }
+        *eq = '\0';
+        char *seq = words[i];
+        struct geneticCode *code = geneticCodeForId(atoi(eq+1));
+        if (code == NULL)
+            {
+            warn("codonTable setting for %s: ignoring \"%s\", unknown genetic code id", db, seq);
+            continue;
+            }
+        if (sameString(seq, "default"))
+            ct->defaultCode = code;
+        else
+            hashAdd(ct->seqToCode, seq, code);
+        }
+    freez(&dupe);
+    }
+hashAdd(cache, key, ct);
+return ct;
+}
+
+struct geneticCode *hGeneticCodeForChrom(char *db, char *chrom)
+/* Return the genetic code (translation table) to use for chrom in db.  An
+ * assembly hub may assign codes per sequence with a genomes.txt line like
+ * "codonTable default=1 chrM=2".  For backward compatibility, when no such
+ * assignment applies, chrM/chrMT use the vertebrate mitochondrial code and all
+ * other sequences use the standard code.  Never returns NULL. */
+{
+struct dbCodonTable *ct = codonTableForDb(db);
+struct geneticCode *code = hashFindVal(ct->seqToCode, chrom);
+if (code == NULL)
+    code = ct->defaultCode;
+if (code == NULL)
+    code = geneticCodeForId(isMito(chrom) ? 2 : 1);
+return code;
+}
+
 struct chromInfo *hGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome (case-insens.) from db.
  * Return NULL if no such chrom. */

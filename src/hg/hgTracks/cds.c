@@ -669,13 +669,12 @@ return color;
 
 
 static char baseColorLookupCodon(DNA *dna)
-/* Call dnautil's lookupCodon, but translate stop codon '\0' to '*' for display. */
+/* Translate a codon to its amino acid, but return '*' for a stop codon instead
+ * of '\0'.  Uses the genetic code assigned to the current sequence, which an
+ * assembly hub may set with a genomes.txt "codonTable" line (chrM/chrMT default
+ * to the vertebrate mitochondrial code). */
 {
-char peptide;
-if (isMito(chromName))
-    peptide = lookupMitoCodon(dna);
-else
-    peptide = lookupCodon(dna);
+char peptide = lookupCodonInCode(hGeneticCodeForChrom(database, chromName), dna);
 if (peptide == '\0')
     peptide = '*';
 return peptide;

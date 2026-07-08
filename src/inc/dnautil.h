@@ -108,12 +108,44 @@ int cmpDnaStrings(DNA *a, DNA *b);
 
 typedef char Codon; /* Our codon type. */
 
+struct geneticCode
+/* One NCBI genetic code / translation table, e.g. Standard or Vertebrate
+ * Mitochondrial.  The aa/starts data for all codes is auto-generated from
+ * NCBI's gc.prt; both strings are 64 chars indexed in the internal codon
+ * order (base1 outer, base3 inner, each t,c,a,g). */
+    {
+    int id;		/* NCBI transl_table id, e.g. 1, 2, 11. */
+    char *name;		/* Descriptive name, e.g. "Vertebrate Mitochondrial". */
+    char *aa;		/* 64 amino acids in codon order, '*' = stop. */
+    char *starts;	/* 64 start flags in codon order, 'M' = start. */
+    };
+
+struct geneticCode *geneticCodeForId(int id);
+/* Return the genetic code with the given NCBI transl_table id (1 = Standard,
+ * 2 = Vertebrate Mitochondrial, 11 = Bacterial, ...), or NULL if none. */
+
+struct geneticCode *geneticCodeForName(char *name);
+/* Return the genetic code with the given name (case-insensitive), or NULL. */
+
+void setDefaultGeneticCode(int id);
+/* Set the genetic code used by lookupCodon/isStopCodon/dnaTranslateSome to the
+ * NCBI transl_table with the given id (1 = Standard).  Aborts on unknown id.
+ * Sets process-global state; not thread-safe. */
+
+AA lookupCodonInCode(struct geneticCode *code, DNA *dna);
+/* Return single letter code (upper case) for protein using the given genetic
+ * code.  Returns X for bad input, 0 for stop codon. */
+
 /* Return single letter code (upper case) for protein.
  * Returns X for bad input, 0 for stop codon.
- * The "Standard" Code */
-AA lookupCodon(DNA *dna); 
+ * Uses the default genetic code (Standard unless setDefaultGeneticCode
+ * changed it). */
+AA lookupCodon(DNA *dna);
 
 AA lookupUniqCodon(DNA *dna);
+
+boolean isStopCodonInCode(struct geneticCode *code, DNA *dna);
+/* Return TRUE if it's a stop codon in the given genetic code. */
 
 boolean isStopCodon(DNA *dna);
 /* Return TRUE if it's a stop codon. */
@@ -144,8 +176,13 @@ extern char *aaAbbr(int i);
 extern char aaLetter(int i);
 /* return AA letter */
 
+void dnaTranslateSomeInCode(struct geneticCode *code, DNA *dna, char *out, int outSize);
+/* Translate DNA with the given genetic code upto a stop codon or until
+ * outSize-1 amino acids, whichever comes first. Output will be zero
+ * terminated. */
+
 void dnaTranslateSome(DNA *dna, char *out, int outSize);
-/* Translate DNA upto a stop codon or until outSize-1 amino acids, 
+/* Translate DNA upto a stop codon or until outSize-1 amino acids,
  * whichever comes first. Output will be zero terminated. */
 
 char *skipIgnoringDash(char *a, int size, bool skipTrailingDash);

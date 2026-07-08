@@ -10,12 +10,43 @@
 #include "filePath.h"
 #include "linefile.h"
 #include "jsHelper.h"
+#include "wikiLink.h"
 
 #define CGI_NAME "cgi-bin/hgMenubar"
 #define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
 #define OLD_HREF "href=\"../"
 
 char* errMessage;
+
+char *loginLinkHtml()
+/* Return HTML <li> for the top-right Login menu item, or "" if no login system is configured.
+ * Static-page variant: the logged-out link uses href="../cgi-bin/hgSession" so the caller's
+ * OLD_HREF substitution rewrites it to a page-relative path; logged-in account-dialog URLs come
+ * from wikiLink and are absolute.  topLinks.js turns the logged-in item into a dialog. */
+{
+if (!(loginSystemEnabled() || wikiLinkEnabled()))
+    return cloneString("");
+struct dyString *dy = dyStringNew(512);
+char *userName = wikiLinkUserName();
+if (userName == NULL)
+    {
+    // Link straight to the login page (absolute URL from wikiLink), not through hgSession.
+    char *loginUrl = wikiLinkUserLoginUrl("");
+    dyStringPrintf(dy, "<a class='topRightLink' href=\"%s\" id='loginLink' "
+        "title='Log in to save and share sessions'>Login</a>", loginUrl);
+    }
+else
+    {
+    // No hgsid available on static pages; the logout return URL simply omits it.
+    char *logoutUrl = wikiLinkUserLogoutUrl("");
+    char *changePwUrl = wikiLinkChangePasswordUrl("");
+    dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
+        "title='Account info and sign out' "
+        "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\">%s</a>",
+        userName, logoutUrl, changePwUrl ? changePwUrl : "", userName);
+    }
+return dyStringCannibalize(&dy);
+}
 
 char *incFilePath(char *cgiPath, char *filePath, char *docRoot)
 /* Replace CGI_NAME in cgiPath with docRoot/filePath.  filePath must begin with "/" eg "/inc/..." */
@@ -30,6 +61,7 @@ printf ("<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaS
 printf ("<script type='text/javascript' SRC='%sjs/jquery.js'></script>\n", baseDir);
 printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n", baseDir);
 printf("<script type='text/javascript' SRC='%s/js/utils.js'></script>\n", baseDir);
+printf("<script type='text/javascript' SRC='%s/js/topLinks.js'></script>\n", baseDir);
 printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css'>\n", baseDir);
 }
 
@@ -54,7 +86,14 @@ while (lineFileNext(menuFile, &oldLine, &lineSize))
     {
     // Not quite as robust as perl search and replace - no variable whitespace handling
     // Also lots of memory leakage - every line is reallocated and forgotten
-    char *newLine = replaceChars(oldLine, OLD_HREF, newHref);
+    char *line = oldLine;
+    // Fill the top-right link placeholders.  Login shows the user or a link to hgSession;
+    // the Share-a-link button is browser-only, so it is dropped on static pages.
+    if (stringIn("<!-- LOGIN_LINK -->", line))
+        line = replaceChars(line, "<!-- LOGIN_LINK -->", loginLinkHtml());
+    if (stringIn("<!-- SHARE_LINK -->", line))
+        line = replaceChars(line, "<!-- SHARE_LINK -->", "");
+    char *newLine = replaceChars(line, OLD_HREF, newHref);
     printf("%s\n", newLine);
     }
 

@@ -19,6 +19,7 @@ GCA_019843855.1_ASM1984385v1	Allen's wood mouse (MVZ Mamm 196246 2021)
 GCF_048564905.1_VicPac4	alpaca (2025)
 GCF_000164845.4_VicPac3.2	alpaca (v3.2 Carlotta AHFN-0088 2019 Deakin U)
 GCF_001458135.2_marMar	Alpine marmot (2019)
+GCA_049901635.1_ASM4990163v1	Alston's brown mouse (SKS-2025a 2025)
 GCA_031001765.1_BBF_mMolAlv_v1	Alvarez's mastiff bat (A012 2023)
 GCA_037157525.1_mMolAlv2.hap1	Alvarez's mastiff bat (hap1 2024)
 GCA_037176705.1_mMolAlv2.hap2	Alvarez's mastiff bat (hap2 2024)
@@ -412,6 +413,7 @@ GCF_030028045.1_mHipAmp2.hap2	hippopotamus (v2 hap2 2023 refseq)
 GCA_004027495.1_BeaHun_v1_BIUU	hirola (BS46 2019 Broad)
 GCA_004363575.1_SolPar_v1_BIUU	Hispaniolan solenodon
 GCA_004025045.1_SigHis_v1_BIUU	hispid cotton rat
+GCA_011751065.5_ASM1175106v5	hoary bat (Cryan_1219 primary hap 2025)
 GCA_000164785.2_C_hoffmanni-2.0.1	Hoffmann's two-fingered sloth
 GCA_004027555.1_CraTho_v1_BIUU	hog-nosed bat
 GCF_014824575.3_WHU_Shon_v2.1	Honduran yellow-shouldered bat (v2.1 Veracruz 20B 2020)
@@ -576,7 +578,8 @@ GCA_026229955.1_mPerMan1.0.p	North American deer mouse (MVZ:Mamm:240117 primary 
 GCA_028500835.1_mEreDor1.alt	North American porcupine (mEreDor1 alternate hap 2023)
 GCA_028451465.1_mEreDor1.pri	North American porcupine (mEreDor1 primary hap 2023)
 GCF_949752795.1_mHypAmp2.1	North Atlantic bottlenose whale
-GCA_028571275.1_mEubGla1.hap1	North Atlantic right whale (hap1 2023)
+GCA_028571275.1_mEubGla1.hap1	North Atlantic right whale (v1 hap1 2023)
+GCA_028571275.2_mEubGla1.1.hap1	North Atlantic right whale (v2 hap1 2023)
 GCF_028564815.1_mEubGla1.1.hap2._XY	North Atlantic right whale (hap2 + XY 2023 refseq)
 GCA_028564815.2_mEubGla1.1.hap2._XY	North Atlantic right whale (hap2._XY 2023)
 GCA_004363455.1_EubJap_v1_BIUU	North Pacific right whale
@@ -779,7 +782,8 @@ GCA_043727835.1_ASM4372783v1	Stoliczka's trident bat (China 2021113_DDA primary 
 GCA_000465285.1_ASM46528v1	straw-colored fruit bat
 GCA_004024845.1_TonSau_v1_BIUU	stripe-headed round-eared bat
 GCA_951394445.1_mSteCoe1.1_alternate_haplotype	striped dolphin (alternate hap 2023)
-GCA_951394435.1_mSteCoe1.1	striped dolphin (primary hap 2023)
+GCA_951394435.1_mSteCoe1.1	striped dolphin (primary hap 2023 genbank)
+GCF_951394435.1_mSteCoe1.1	striped dolphin (primary hap 2023 refseq)
 GCA_004023945.1_HyaHya_v1_BIUU	striped hyena (BS54 2019 Broad)
 GCF_003009895.1_ASM300989v1	striped hyena (Hyena2069 2018 Potsdam U)
 GCA_028583685.1_PetGlider_PUasm1.0	sugar glider (PSGF00001 2023)

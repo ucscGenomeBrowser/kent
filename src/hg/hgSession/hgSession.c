@@ -40,6 +40,7 @@
 #include "trackHub.h"
 #include "errCatch.h"
 #include "sessionData.h"
+#include "jsonParse.h"
 
 char *database = NULL;
 
@@ -999,6 +1000,142 @@ hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
 }
 
+static void saveSessionJsonError(struct sqlConnection *conn, char *message)
+/* Emit a JSON error response for the "Share a link" AJAX endpoints and disconnect. */
+{
+puts("Content-Type:application/json\n");
+printf("{\"error\": \"%s\"}\n", jsonStringEscape(message));
+hDisconnectCentral(&conn);
+}
+
+static void saveSessionJsonResult(struct sqlConnection *conn, char *encUserName,
+                                  char *encSessionName, char *sessionName)
+/* Emit {"name": ..., "url": ...} for the "Share a link" AJAX endpoints and disconnect.
+ * sessionName is the human-readable (decoded) name; the client uses it as the rename "old name". */
+{
+struct dyString *dyUrl = dyStringNew(0);
+addSessionLink(dyUrl, encUserName, encSessionName, FALSE, TRUE);
+puts("Content-Type:application/json\n");
+printf("{\"name\": \"%s\", \"url\": \"%s\"}\n",
+       jsonStringEscape(sessionName), jsonStringEscape(dyUrl->string));
+dyStringFree(&dyUrl);
+hDisconnectCentral(&conn);
+}
+
+void doSaveSessionJson(char *userName)
+/* AJAX endpoint behind the "Share a link" menu button.  Save the current cart as a named session
+ * and print JSON {"name": <session name>, "url": <shareable link>}.  When the user is not logged
+ * in (or hgsShareAnon is set), save under the reserved anonymous user "l" with a random token
+ * name.  When logged in with no name given, generate a short random name.  Saved shared by link so
+ * the link works for anyone.  Reuses saveCartAsSession() and addSessionLink(). */
+{
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, namedSessionTable))
+    {
+    saveSessionJsonError(conn, "Required session table does not exist in the central database.");
+    return;
+    }
+
+boolean anon = isEmpty(userName) || cgiBoolean(hgsShareAnon);
+// Read the requested name from the request, not the cart (hgSession's Save form leaves a sticky
+// value in the cart under this same variable that would otherwise shadow ours).
+char *sessionName = trimSpaces(cloneString(cgiUsualString(hgsNewSessionName, "")));
+
+/* Keep our control variables out of the saved session contents and the user's own cart. */
+cartRemove(cart, hgsDoSaveSessionJson);
+cartRemove(cart, hgsShareAnon);
+cartRemove(cart, hgsNewSessionName);
+cartRemove(cart, hgsNewSessionShare);
+
+char *encUserName = NULL;
+char *encSessionName = NULL;
+if (anon)
+    {
+    encUserName = "l";                    /* reserved anonymous user -> short link /s/l/<token> */
+    sessionName = makeRandomKey(96);      /* 16 URL-safe alphanumeric chars; no encoding needed */
+    encSessionName = sessionName;
+    }
+else
+    {
+    if (isEmpty(sessionName))
+        {
+        /* One-click share: auto-name the session.  "_" is kept verbatim by cgiEncodeFull (unlike
+         * "-"), so the short link /s/<user>/<name> stays clean. */
+        char randName[32];
+        char *rk = makeRandomKey(48);     /* 8 URL-safe alphanumeric chars */
+        safef(randName, sizeof randName, "share_%s", rk);
+        freeMem(rk);
+        sessionName = cloneString(randName);
+        }
+    encUserName = cgiEncodeFull(userName);
+    encSessionName = cgiEncodeFull(sessionName);
+    }
+
+saveCartAsSession(conn, encUserName, encSessionName, 1);  /* shared by link */
+saveSessionJsonResult(conn, encUserName, encSessionName, sessionName);
+}
+
+void doRenameSessionJson(char *userName)
+/* AJAX endpoint for the "Specify name" step of the Share dialog: rename an existing session
+ * (hgsOldSessionName -> hgsNewSessionName) under the current user.  Logged-in only.  Rejects a
+ * name already in use rather than overwriting it.  Returns {"name","url"} or {"error"}. */
+{
+struct sqlConnection *conn = hConnectCentral();
+// Read the names from the request, not the cart: hgSession's Save form also uses these variables
+// and leaves a sticky value (e.g. the username) in the cart that would otherwise shadow ours.
+char *oldName = trimSpaces(cloneString(cgiUsualString(hgsOldSessionName, "")));
+char *newName = trimSpaces(cloneString(cgiUsualString(hgsNewSessionName, "")));
+cartRemove(cart, hgsDoRenameSessionJson);
+cartRemove(cart, hgsOldSessionName);
+cartRemove(cart, hgsNewSessionName);
+
+if (isEmpty(userName))
+    {
+    saveSessionJsonError(conn, "Please log in to name this link.");
+    return;
+    }
+if (isEmpty(oldName) || isEmpty(newName))
+    {
+    saveSessionJsonError(conn, "Please enter a name.");
+    return;
+    }
+
+char *encUserName = cgiEncodeFull(userName);
+char *encOldName = cgiEncodeFull(oldName);
+char *encNewName = cgiEncodeFull(newName);
+char query[1024];
+
+if (sameString(oldName, newName))
+    {
+    saveSessionJsonResult(conn, encUserName, encNewName, newName);
+    return;
+    }
+
+/* Reject a name the user is already using (don't clobber an existing saved session). */
+sqlSafef(query, sizeof query, "select count(*) from %s where userName = '%s' and sessionName = '%s'",
+         namedSessionTable, encUserName, encNewName);
+if (sqlQuickNum(conn, query) > 0)
+    {
+    saveSessionJsonError(conn, "You already have a session with that name. Please pick another.");
+    return;
+    }
+sqlSafef(query, sizeof query, "select count(*) from %s where userName = '%s' and sessionName = '%s'",
+         namedSessionTable, encUserName, encOldName);
+if (sqlQuickNum(conn, query) == 0)
+    {
+    saveSessionJsonError(conn, "Could not find the link to rename.");
+    return;
+    }
+
+/* Same UPDATE that doSessionChange uses to rename a session. */
+sqlSafef(query, sizeof query,
+         "UPDATE %s set sessionName = '%s' WHERE userName = '%s' AND sessionName = '%s';",
+         namedSessionTable, encNewName, encUserName, encOldName);
+sqlUpdate(conn, query);
+
+saveSessionJsonResult(conn, encUserName, encNewName, newName);
+}
+
 int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn, struct dyString *dyMessage)
 /* Create a thumbnail image for the gallery.  If the necessary tools can't be found,
  * add a warning message to dyMessage unless the hg.conf setting
@@ -1931,6 +2068,14 @@ else if (cartVarExists(cart, hgsDoNewSession))
     {
     char *message = doNewSession(userName);
     doMainPage(userName, message);
+    }
+else if (cartVarExists(cart, hgsDoSaveSessionJson))
+    {
+    doSaveSessionJson(userName);
+    }
+else if (cartVarExists(cart, hgsDoRenameSessionJson))
+    {
+    doRenameSessionJson(userName);
     }
 else if (cartVarExists(cart, hgsDoOtherUser))
     {

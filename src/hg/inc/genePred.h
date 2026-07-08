@@ -399,10 +399,12 @@ struct genePredExt  *genePredFromBigGenePredRow(char **row);
                                                        * stop */
 
 void genePredTranslate(struct genePred *gp, struct nibTwoCache* genomeSeqs, unsigned options,
-                       char **protRet, char **cdsRet);
+                       char *db, char **protRet, char **cdsRet);
 /* Translate a genePred into a protein.  It can also return the CDS part of the
- * mRNA sequence. If the chrom is chrM, the mitochondrial translation tables are
- * used. If protRet or cdsRet is NULL, those sequences are not returned.
+ * mRNA sequence. The genetic code is that assigned to gp->chrom in db (an
+ * assembly hub may set this; chrM/chrMT default to the mitochondrial code).
+ * db may be NULL, in which case only the chrM/chrMT default applies.
+ * If protRet or cdsRet is NULL, those sequences are not returned.
  */
 
 void genePredToCds(struct genePred *gp, struct genbankCds *cds);

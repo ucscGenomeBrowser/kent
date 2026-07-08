@@ -60,6 +60,75 @@ $(function() {
         return bar >= 0 ? s.slice(0, bar) : s;
     };
 
+    // Split a TSV row on tabs, respecting double- or single-quoted fields.
+    function parseTsvRow(str) {
+        const fields = [];
+        let i = 0, n = str.length, start = 0, inQuote = false, q = '';
+        while (i < n) {
+            if (inQuote) {
+                if (str[i] === q) {
+                    if (i + 1 < n && str[i + 1] === q) { i += 2; continue; }  // escaped quote
+                    inQuote = false;
+                }
+                i++;
+            } else if (str[i] === '"' || str[i] === "'") {
+                q = str[i]; inQuote = true; i++;
+            } else if (str[i] === '\t') {
+                fields.push(str.slice(start, i)); i++; start = i;
+            } else {
+                i++;
+            }
+        }
+        fields.push(str.slice(start));
+        return fields;
+    }
+
+    // Split a cell value on commas, respecting double- or single-quoted substrings.
+    // Returns the trimmed, non-empty tokens.
+    function parseCsvValues(str) {
+        if (!str) return [];
+        const tokens = [];
+        let i = 0, n = str.length, start = 0, inQuote = false, q = '';
+        while (i < n) {
+            if (inQuote) {
+                if (str[i] === q) {
+                    if (i + 1 < n && str[i + 1] === q) { i += 2; continue; }
+                    inQuote = false;
+                }
+                i++;
+            } else if (str[i] === '"' || str[i] === "'") {
+                q = str[i]; inQuote = true; i++;
+            } else if (str[i] === ',') {
+                tokens.push(str.slice(start, i).trim()); i++; start = i;
+            } else {
+                i++;
+            }
+        }
+        tokens.push(str.slice(start).trim());
+        return tokens.filter(Boolean);
+    }
+
+    // Parse one CSV token into {id, label}.
+    // Format: \w+(\|label)? where label may be a quoted string.
+    // label is null when no | is present; id is used for display in that case.
+    function parseValue(token) {
+        const bar = token.indexOf('|');
+        if (bar < 0) return { id: token.trim(), label: null };
+        const id = token.slice(0, bar).trim();
+        let label = token.slice(bar + 1);
+        if (label.length >= 2) {
+            const f = label[0], l = label[label.length - 1];
+            if ((f === '"' && l === '"') || (f === "'" && l === "'"))
+                label = label.slice(1, -1);
+        }
+        return { id, label };
+    }
+
+    // Return the lowercased ids parsed from a cell value string.
+    function parseCellIds(val) {
+        return parseCsvValues(String(val ?? "")).map(tok => parseValue(tok).id.toLowerCase());
+    }
+
     const embeddedData = (() => {
         // get data that was embedded in the HTML here to use them as globals
         const dataTag = document.getElementById("app-data");
@@ -172,27 +241,24 @@ $(function() {
                 col.render = (data, type) => {
                     if (type !== "display") return data;
                     if (data == null || data === "") return "";
-                    const parts = String(data).split(",")
-                                              .map(s => s.trim())
-                                              .filter(Boolean);
+                    const parts = parseCsvValues(String(data));
+                    if (!parts.length) return String(data);
                     return parts.map(tok => {
-                        let idForUrl = tok, label = tok, encode = true;
-                        const bar = tok.indexOf("|");
-                        if (bar >= 0) {
-                            idForUrl = tok.slice(0, bar);
-                            label    = tok.slice(bar + 1);
-                            encode   = false;
-                            // Strip enclosing quotes from the metadata.tsv
-                            if (label.length >= 2 &&
-                                label.startsWith('"') && label.endsWith('"')) {
-                                label = label.slice(1, -1);
-                            }
-                        }
-                        if (/^https?:/i.test(label)) encode = false;
-                        const sub = encode ? encodeURIComponent(idForUrl) : idForUrl;
+                        const { id, label } = parseValue(tok);
+                        const displayLabel = label !== null ? label : id;
+                        const encode = label === null && !/^https?:/i.test(displayLabel);
+                        const sub = encode ? encodeURIComponent(id) : id;
                         const href = urlTemplate.replace(/\$\$/g, sub);
-                        return `<a href="${href}" target="_blank">${label}</a>`;
+                        return `<a href="${href}" target="_blank">${displayLabel}</a>`;
                     }).join(", ");
+                };
+            } else {
+                col.render = (data, type) => {
+                    if (type !== "display") return data;
+                    if (data == null || data === "") return data;
+                    return parseCsvValues(String(data))
+                        .map(tok => { const {id, label} = parseValue(tok); return label ?? id; })
+                        .join(", ");
                 };
             }
             return col;
@@ -335,7 +401,7 @@ $(function() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
             allTab.textContent = `All (${totalCount})`;
-            selectedTab.textContent = `Selected (${selCount})`;
+            selectedTab.textContent = `Active (${selCount})`;
             const showSelected = toggleCheckbox.checked;
             allTab.classList.toggle("active", !showSelected);
             selectedTab.classList.toggle("active", showSelected);
@@ -451,10 +517,10 @@ $(function() {
     }  // end initTable
 
 
-    // Map of colName -> Map of unescapedValue -> spanElement, for dynamic counts
+    // Map of colName -> Map of lowercaseId -> spanElement, for dynamic counts
     const countSpans = new Map();
     // Filter state for cross-facet count computation
-    const checkboxFilters = new Map();  // colName -> Set<string> (raw values)
+    const checkboxFilters = new Map();  // colName -> Set<string> (lowercase ids)
     const textFilters = new Map();      // colName -> lowercase string
 
     function updateFacetCounts(metadata) {
@@ -462,12 +528,12 @@ $(function() {
         // (excluding this facet's own checkbox filter). This way, unchecked
         // values show how many rows would be added if you checked them.
         for (const [facetCol, valMap] of countSpans) {
-            const counts = new Map();  // lowercased value -> count
+            const counts = new Map();  // lowercased id -> count
             for (const row of metadata) {
                 let passes = true;
-                for (const [col, valueSet] of checkboxFilters) {
+                for (const [col, idSet] of checkboxFilters) {
                     if (col === facetCol) continue;
-                    if (!valueSet.has(row[col]?.toLowerCase())) {
+                    if (!parseCellIds(row[col]).some(id => idSet.has(id))) {
                         passes = false; break;
                     }
                 }
@@ -479,12 +545,13 @@ $(function() {
                     }
                 }
                 if (passes) {
-                    const val = row[facetCol]?.toLowerCase();
-                    counts.set(val, (counts.get(val) ?? 0) + 1);
+                    for (const id of parseCellIds(row[facetCol])) {
+                        counts.set(id, (counts.get(id) ?? 0) + 1);
+                    }
                 }
             }
-            for (const [val, span] of valMap) {
-                span.textContent = `(${counts.get(val.toLowerCase()) ?? 0})`;
+            for (const [id, span] of valMap) {
+                span.textContent = `(${counts.get(id) ?? 0})`;
             }
         }
     }
@@ -493,20 +560,21 @@ $(function() {
         const { metadata, colorMap, colNames } = allData;
 
         // iterate once over entire data not separately per attribute
-        // Case-insensitive: merge variants, keep first-seen casing as display form
-        const possibleValues = {};  // key -> Map<lowerVal, [displayVal, count]>
+        // Keyed by lowercase id; first-seen label (or id) is the canonical display.
+        const possibleValues = {};  // key -> Map<lowerId, {id, display, count}>
         for (const entry of metadata) {
             for (const [key, val] of Object.entries(entry)) {
-                if (!possibleValues[key]) {
-                    possibleValues[key] = new Map();
-                }
+                if (!possibleValues[key]) possibleValues[key] = new Map();
                 const map = possibleValues[key];
-                const lower = val.toLowerCase();
-                const existing = map.get(lower);
-                if (existing) {
-                    existing[1]++;
-                } else {
-                    map.set(lower, [val, 1]);
+                for (const tok of parseCsvValues(val)) {
+                    const { id, label } = parseValue(tok);
+                    const idLower = id.toLowerCase();
+                    const existing = map.get(idLower);
+                    if (existing) {
+                        existing.count++;
+                    } else {
+                        map.set(idLower, { id, display: label ?? id, count: 1 });
+                    }
                 }
             }
         }
@@ -518,35 +586,30 @@ $(function() {
         const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
-        colNames.forEach((key, colIdx) => {
+        colNames.forEach((key) => {
             // skip attributes if they should be excluded from checkbox sets
             if (excludeCheckboxes.includes(key) || key.startsWith("_")) {
                 return;
             }
 
-            // possibleValues[key] is Map<lower, [displayVal, count]>; extract [displayVal, count]
+            // possibleValues[key] is Map<lowerId, {id, display, count}>
             const sortedPossibleVals = Array.from(possibleValues[key].values());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // sort by count descending
+            sortedPossibleVals.sort((a, b) => b.count - a.count);
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
-                .filter(([val, count]) =>
-                    val.trim().toUpperCase() !== "NA" && count > 1)
+                .filter(({id, count}) =>
+                    id.trim().toUpperCase() !== "NA" && count > 1)
                 .slice(0, maxCheckboxes);
 
             // Any "other/Other/OTHER" entry will be put at the end
-            let otherKey = null, otherValue = null;
-            topToShow = topToShow.filter(([val, value]) => {
-                if (val.toLowerCase() === "other") {
-                    otherKey = val;
-                    otherValue = value;
-                    return false;
-                }
+            let otherEntry = null;
+            topToShow = topToShow.filter(entry => {
+                if (entry.id.toLowerCase() === "other") { otherEntry = entry; return false; }
                 return true;
             });
-            if (otherValue !== null) {
-                topToShow.push([otherKey, otherValue]);
-            }
+            if (otherEntry !== null) topToShow.push(otherEntry);
+
             if (topToShow.length <= 1) {  // no point if there's only one group
                 excludeCheckboxes.push(key);
                 return;
@@ -575,31 +638,29 @@ $(function() {
 
             // Build checkbox labels
             const cboxes = [];
-            const rawValues = [];  // parallel to cboxes: unescaped values
             if (!countSpans.has(key)) countSpans.set(key, new Map());
             const colSpans = countSpans.get(key);
-            topToShow.forEach(([val, count]) => {
+            topToShow.forEach(({id, display, count}) => {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                checkbox.value = escapeRegex(val);
+                checkbox.dataset.valueId = id;
                 label.appendChild(checkbox);
                 if (colorMap && key in colorMap) {
                     const colorBox = document.createElement("span");
                     colorBox.classList.add("color-box");
-                    if (val in colorMap[key]) {
-                        colorBox.style.backgroundColor = colorMap[key][val];
+                    if (id in colorMap[key]) {
+                        colorBox.style.backgroundColor = colorMap[key][id];
                     }
                     label.appendChild(colorBox);
                 }
-                label.appendChild(document.createTextNode(`${val} `));
+                label.appendChild(document.createTextNode(`${display} `));
                 const countSpan = document.createElement("span");
                 countSpan.textContent = `(${count})`;
                 label.appendChild(countSpan);
-                colSpans.set(val, countSpan);
+                colSpans.set(id.toLowerCase(), countSpan);
                 facetBody.appendChild(label);
                 cboxes.push(checkbox);
-                rawValues.push(val);
             });
 
             facetDiv.appendChild(facetBody);
@@ -611,25 +672,21 @@ $(function() {
                 heading.classList.toggle("collapsed", isCollapsed);
             });
 
-            // --- Wire up checkbox filtering (same logic as before) ---
-            // colIdx is the 0-based index into colNames; DataTable column is
-            // colIdx + 1 because column 0 is the select-checkbox column.
-            const dtColIdx = colIdx + 1;
+            // --- Wire up checkbox filtering ---
+            // Filtering is handled by the custom search extension below, which
+            // parses each cell's ids and checks them against checkboxFilters.
             cboxes.forEach(cb => {
                 cb.addEventListener("change", () => {
-                    const checked = cboxes.filter(c => c.checked).map(c => c.value);
-                    const query = checked.length ? "^(" + checked.join("|") + ")$" : "";
-                    // Track lowercased values for cross-facet counting
-                    const checkedRaw = new Set();
-                    cboxes.forEach((c, i) => {
-                        if (c.checked) checkedRaw.add(rawValues[i].toLowerCase());
-                    });
-                    if (checkedRaw.size) {
-                        checkboxFilters.set(key, checkedRaw);
+                    const checkedIds = new Set(
+                        cboxes.filter(c => c.checked)
+                              .map(c => c.dataset.valueId.toLowerCase())
+                    );
+                    if (checkedIds.size) {
+                        checkboxFilters.set(key, checkedIds);
                     } else {
                         checkboxFilters.delete(key);
                     }
-                    table.column(dtColIdx).search(query, true, false).draw();
+                    table.draw();
                     updateActiveFilters();
                 });
             });
@@ -638,10 +695,21 @@ $(function() {
             clearBtn.addEventListener("click", () => {
                 cboxes.forEach(cb => cb.checked = false);
                 checkboxFilters.delete(key);
-                table.column(dtColIdx).search("", true, false).draw();
+                table.draw();
                 updateActiveFilters();
             });
         });  // done creating collapsible checkbox filters for each column
+
+        // Custom search extension: filter rows by parsed cell ids vs checkboxFilters.
+        // Replaces the old per-column regex search so that id-based collapsing works
+        // (e.g. "CD8+T" and "CD8+T|CD8+ T Cells" both match the same facet entry).
+        $.fn.dataTable.ext.search.push(function(_, __, dataIndex) {
+            const rowData = table.row(dataIndex).data();
+            for (const [col, idSet] of checkboxFilters) {
+                if (!parseCellIds(rowData[col]).some(id => idSet.has(id))) return false;
+            }
+            return true;
+        });
 
         // Update facet counts whenever the table is redrawn (filtering, search, etc.)
         table.on("draw", () => updateFacetCounts(metadata));
@@ -824,26 +892,24 @@ $(function() {
             .then(tsvText => {  // metadata table is a TSV file to parse
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
-                    const colNames = rows[0].split("\t");
+                    const colNames = parseTsvRow(rows[0]);
                     if (!primaryKey)
                         throw new Error("trackDb setting 'primaryKey' is missing");
                     if (!colNames.includes(primaryKey))
                         throw new Error(`primaryKey '${primaryKey}' not found in metadata columns`);
                     const metadata = rows.slice(1).map(row => {
-                        const values = row.split("\t");
+                        const values = parseTsvRow(row);
                         const obj = {};
-                        colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
+                        colNames.forEach((attrib, i) => { obj[attrib] = values[i] ?? ""; });
                         return obj;
                     });
-                    // Commas in the primaryKey column are ambiguous: a row maps
-                    // to a single subtrack, and trackDb subtrack names can't
-                    // contain commas anyway. Fail loudly so the author notices.
+                    // Each primaryKey cell must map to exactly one subtrack.
                     const badPk = metadata.find(row =>
-                        row[primaryKey] != null && String(row[primaryKey]).includes(","));
+                        parseCsvValues(String(row[primaryKey] ?? "")).length > 1);
                     if (badPk)
                         throw new Error(
-                            `primaryKey column '${primaryKey}' contains a comma in value ` +
-                            `'${badPk[primaryKey]}'; commas are not allowed in primaryKey values`);
+                            `primaryKey column '${primaryKey}' has multiple values in ` +
+                            `'${badPk[primaryKey]}'; only one value is allowed per primaryKey cell`);
                     const rowToIdx = Object.fromEntries(
                         metadata.map((row, i) => [primaryKeyId(row[primaryKey]), i])
                     );

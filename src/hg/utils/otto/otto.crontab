@@ -71,6 +71,10 @@ MAILTO=otto-group@ucsc.edu
 #GenCC
 8 16 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
 
+#G2P (Gene2Phenotype) - monthly on the 5th; G2P publishes near month-end, so an
+#early-month run catches the previous month's update (no-ops if unchanged)
+22 6 5 * * /hive/data/outside/otto/g2p/g2pWrapper.sh
+
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
 

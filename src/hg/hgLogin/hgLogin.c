@@ -1001,6 +1001,15 @@ if (!user || sameString(user,""))
     signupPage(conn);
     return;
     }
+/* Require at least two characters.  Single-character user names are reserved (e.g. "l" is used
+ * internally for anonymous shared-session links). */
+if (strlen(user) < 2)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("User name must be at least two characters long.");
+    signupPage(conn);
+    return;
+    }
 /* Make sure the escaped usrename is less than 32 characters */
 if (strlen(encUserName) > 32)
     {
