@@ -60,6 +60,15 @@ to the pool numerator or denominator; their carriers are visible in the per-data
 column instead. The pooled rate is preferred over a max-across-cohorts statistic so a
 small cohort with a high local AF cannot dominate the displayed frequency.
 </p>
+<p>
+The pooled rate also inherits a <b>shared-sample bias</b>: the SFARI SPARK WGS cohort
+(~12k probands) is a subset of the larger SFARI SPARK WES cohort (~155k probands), so
+probands sequenced in both contribute their AC and AN twice to the affected pool. Where
+this happens, pooled AN is inflated and pooled AF is skewed toward the frequency in the
+shared subset. Treat the pooled rate as a cross-cohort summary rather than an unbiased
+population estimate; the per-cohort AC/AF/AN fields on each variant give the
+single-cohort numbers.
+</p>
 
 <h3>Top affected sources by AF</h3>
 <p>

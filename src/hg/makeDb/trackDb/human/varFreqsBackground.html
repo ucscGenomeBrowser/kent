@@ -60,6 +60,16 @@ AC/AF columns. The pooled rate is preferred over a max-across-cohorts statistic 
 cohort with a high local AF (for example AllOfUs Oceanian) cannot dominate the displayed
 frequency.
 </p>
+<p>
+The pooled rate also inherits a <b>shared-sample bias</b>: several source cohorts overlap
+in the individuals they include. For example, 1000 Genomes samples appear in both gnomAD
+HGDP+1kG and HRC; HGDP and SGDP overlap; AllOfUs and TOPMed share participants; ALFA
+aggregates dbGaP studies used elsewhere in the pool. Where a variant sits in a shared
+sample, both its AC and AN are counted more than once, so pooled AN is inflated and
+pooled AF is skewed toward the frequency in the shared subset. Treat the pooled rate as
+a cross-cohort summary rather than an unbiased population estimate; the per-cohort
+AC/AF/AN fields on each variant give the single-cohort numbers.
+</p>
 
 <h3>Top population sources by AF</h3>
 <p>
