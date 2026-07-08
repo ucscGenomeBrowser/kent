@@ -3901,10 +3901,10 @@ if (!ajax)
             if (sameString(grp->name,tdb->grp))
                 {
                 printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-                       "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
+                       "(<A HREF=\"%s?%s=%s&db=%s&c=%s&hgTracksConfigPage=configure"
                        "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
                        "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
-                       hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,
+                       hgTracksName(), cartSessionVarName(), cartSessionId(cart),database,chromosome,
                        tdb->grp,tdb->grp,grp->label,grp->label,
                        endsWith(grp->label," Tracks")?"":" tracks");
                 break;

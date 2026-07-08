@@ -10571,7 +10571,7 @@ if (pdfFile != NULL)
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
     printf("<UL style=\"margin-top:0px\">\n");
     printf("<LI>Add assembly name and chromosome range to the image on the\n"
-        "<A HREF=\"hgTrackUi?g=ruler\">configuration page of the base position track</A>.\n");
+        "<A HREF=\"hgTrackUi?db=%s&g=ruler\">configuration page of the base position track</A>.\n", database);
     printf("<LI>If using the default genes track (e.g. GENCODE for hg38 or UCSC Genes for older assemblies),\n"
            "consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
     printf("<LI>Increase the font size and remove the light blue vertical guidelines in the \n"

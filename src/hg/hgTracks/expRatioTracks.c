@@ -184,8 +184,8 @@ if (theImgBox && curImgTrack)
     {
     char link[512];
     // NOTE: winStart,winEnd removed due to portal (added back by Galt for multi-region)
-    safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s&i2=%s", 
-        hgcNameAndSettings(), chromName, winStart, winEnd, start, end, track, encodedItem1, encodedItem2);
+    safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s&i2=%s",
+        hgcNameAndSettings(), database, chromName, winStart, winEnd, start, end, track, encodedItem1, encodedItem2);
     #ifdef IMAGEv2_SHORT_MAPITEMS
     if (x < insideX && x+width > insideX)
         warn("mapBoxHcTwoItems(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
@@ -1438,7 +1438,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
         warn("Tim take a look at this link and whether it needs different winStart and winEnd values with dragScroll > 1.");
 #endif
 	// Galt added back winStart, winEnd for multi-region.
-        safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=zoomInMore", hgcNameAndSettings(), chromName, winStart, winEnd, seqStart, seqEnd, tg->track);
+        safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=zoomInMore", hgcNameAndSettings(), database, chromName, winStart, winEnd, seqStart, seqEnd, tg->track);
         #ifdef IMAGEv2_SHORT_MAPITEMS
         if (xOffRc < insideX && xOffRc+insideWidth > insideX)
             warn("expRatioMapBoxes(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d "
