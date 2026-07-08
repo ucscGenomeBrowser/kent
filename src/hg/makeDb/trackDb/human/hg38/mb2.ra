@@ -4,7 +4,6 @@ shortLabel DNA Methylation (alpha)
 longLabel DNA Methylation (alpha)
 group regulation
 priority 3
-pennantIcon New red ../goldenPath/newsarch.html#031626 "Released Mar. 16, 2026"
 html ../dnaMethylation.html
 
 track mb2
