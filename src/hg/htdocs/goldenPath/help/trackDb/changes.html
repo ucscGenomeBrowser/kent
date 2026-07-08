@@ -46,6 +46,18 @@
 </tr>
 
 <tr>
+    <td>2026-07-08</td>
+    <td><b>genomes.txt setting</b></td>
+    <td><a href="../assemblyHubHelp.html#codonTable">codonTable</a></td>
+    <td>New <code>codonTable</code> genome-stanza setting (an assembly hub
+    <code>genomes.txt</code> setting, not a track setting) assigns NCBI genetic
+    codes to individual sequences for amino acid display, e.g.
+    <code>codonTable default=1 NC_017929.1=13</code>. Affects the base position
+    track three-frame translation, codon-colored tracks such as gene
+    predictions, and details pages. Sequences named chrM/chrMT still default to
+    the vertebrate mitochondrial code.</td>
+</tr>
+<tr>
     <td>2026-06-02</td>
     <td>bigBed, bigGenePred</td>
     <td><a href="trackDbHub.html#colorFields">colorFields</a></td>
@@ -178,6 +190,15 @@
     <td>bigWig</td>
     <td><a href="trackDbHub.html#logo">logo</a></td>
     <td>New: <tt>logo on</tt><br>Motif logo of the genome sequence, as a "dynseq" display, see <a href='../bigWig.html#Ex4'>the example</a>.</td>
+</tr>
+<tr>
+    <td>2022-05-11</td>
+    <td><b>genomes.txt setting</b></td>
+    <td><a href="../assemblyHubHelp.html#chromAuthority">chromAuthority</a></td>
+    <td>New <code>chromAuthority</code> genome-stanza setting (an assembly hub
+    <code>genomes.txt</code> setting, not a track setting) chooses which
+    <code>chromAlias</code> name column is displayed by default for the
+    assembly's sequences, e.g. <code>chromAuthority ucsc</code>.</td>
 </tr>
 <tr>
     <td>2022-05-05</td>
