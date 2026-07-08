@@ -2893,9 +2893,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         hPrintIcons(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
         // the <select> tag is only needed to send arguments to the hgTracks CGI. It will be hidden, see below.
-        printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
+        printf("<A HREF='%s?%s=%s&db=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
-                    cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(tdb->track), 
+                    cartSessionVarName(), cartSessionId(cart), database, chromosome, cgiEncode(tdb->track), 
                     id, tdb->shortLabel);
 	jsOnEventById("click", id, "superT.submitAndLink(this);");
         }
@@ -3656,9 +3656,9 @@ struct trackDb *tdbParent = tdb->parent;
 
 printf("<b>Configure track container: "
            "<img height=12 src='../images/ab_up.gif'>"
-            "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
+            "<a href='%s?%s=%s&db=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-            chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
+            database, chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
 
 if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
@@ -3689,9 +3689,9 @@ if (tdbParent->html)
         *end = '\0';
     printf("%s", html);
     printf("<p><i>To view the full description, click "
-                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</a></i>\n",
+                "<a target='_blank' href='%s?%s=%s&db=%s&c=%s&g=%s#TRACK_HTML'>here.</a></i>\n",
                         hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                        chromosome, cgiEncode(tdbParent->track));
+                        database, chromosome, cgiEncode(tdbParent->track));
     jsEndCollapsibleSection();
     printf("</table>\n"); // required by jsCollapsible
     }
@@ -3716,9 +3716,9 @@ for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next
         continue;
         }
     printf("<tr>");
-    printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
+    printf("<td><a href='%s?%s=%s&db=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
                 tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
-                cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
+                cartSessionVarName(), cartSessionId(cart), database, chromosome, cgiEncode(sibTdb->track), 
                 sibTdb->shortLabel);
     printf("<td>%s</td></tr>\n", sibTdb->longLabel);
     }
@@ -4013,15 +4013,15 @@ if (!tdbIsDownloadsOnly(tdb))
 	/* Offer to dupe the non-containery tracks including composite and supertrack elements */
 	if (tdbIsDupable(tdb))
 	    {
-	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=dupe' >Duplicate track</a>\n", 
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&db=%s&c=%s&g=%s&hgTrackUi_op=dupe' >Duplicate track</a>\n", 
 		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		chromosome, cgiEncode(tdb->track));
+		database, chromosome, cgiEncode(tdb->track));
 	    if (isDupTrack(tdb->track))
 		{
 		/* Offer to undupe */
-		printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=undupe' >Remove duplicate</a>\n", 
+		printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&db=%s&c=%s&g=%s&hgTrackUi_op=undupe' >Remove duplicate</a>\n", 
 		    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		    chromosome, cgiEncode(tdb->track));
+		    database, chromosome, cgiEncode(tdb->track));
 		}
 
 	    }
@@ -4029,9 +4029,9 @@ if (!tdbIsDownloadsOnly(tdb))
 	char *quickLiftSourceDb = trackDbSetting(tdb, "quickLiftDb");
 	if (quickLiftSourceDb != NULL)
 	    {
-	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=quickLiftRemove&qlSourceDb=%s' >Remove from QuickLift</a>\n",
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&db=%s&c=%s&g=%s&hgTrackUi_op=quickLiftRemove&qlSourceDb=%s' >Remove from QuickLift</a>\n",
 		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		chromosome, cgiEncode(tdb->track), cgiEncode(quickLiftSourceDb));
+		database, chromosome, cgiEncode(tdb->track), cgiEncode(quickLiftSourceDb));
 	    }
 	}
 

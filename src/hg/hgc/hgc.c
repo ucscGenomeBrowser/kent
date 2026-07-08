@@ -543,8 +543,8 @@ static void hgcAnchorSomewhereExt(char *group, char *item, char *other, char *ch
  * and other parameters. */
 {
 char *itemSafe = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, itemSafe, chrom, start, end, other, tbl);
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), database, group, itemSafe, chrom, start, end, other, tbl);
 freeMem(itemSafe);
 }
 
@@ -561,8 +561,8 @@ void hgcAnchorPosition(char *group, char *item)
  * and group parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-printf("<A HREF=\"%s&g=%s&i=%s&table=%s\">",
-       hgcPathAndSettings(), group, item, tbl);
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&table=%s\">",
+       hgcPathAndSettings(), database, group, item, tbl);
 }
 
 void hgcAnchorWindow(char *group, char *item, int thisWinStart,
@@ -571,8 +571,8 @@ void hgcAnchorWindow(char *group, char *item, int thisWinStart,
  * and other parameters, INCLUDING the ability to specify left and
  * right window positions different from the current window*/
 {
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
-       hgcPathAndSettings(), group, item, chrom,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
+       hgcPathAndSettings(), database, group, item, chrom,
        thisWinStart, thisWinEnd, other);
 }
 
@@ -591,16 +591,16 @@ void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, 
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-printf("<A HREF=\"%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
-       hgcPathAndSettings(), "htcChainTransAli", item, chrom, winStart, winEnd, other,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
+       hgcPathAndSettings(), database, "htcChainTransAli", item, chrom, winStart, winEnd, other,
        tbl, cdsStart, cdsEnd);
 }
 void hgcAnchorPseudoGene(char *item, char *other, char *chrom, char *tag, int start, int end, char *qChrom, int qStart, int qEnd, int chainId, char *db2)
 /* Generate an anchor to htcPseudoGene. */
 {
 char *encodedItem = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&ci=%d&qc=%s&qs=%d&qe=%d&xyzzy=xyzzy#%s\">",
-       hgcPathAndSettings(), "htcPseudoGene", encodedItem, chrom, start, end,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&ci=%d&qc=%s&qs=%d&qe=%d&xyzzy=xyzzy#%s\">",
+       hgcPathAndSettings(), database, "htcPseudoGene", encodedItem, chrom, start, end,
        other, db2, chainId, qChrom, qStart, qEnd, tag);
 }
 
@@ -758,9 +758,9 @@ if (featDna && end > start)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
-	   start, (item != NULL ? cgiEncode(item) : ""),
+	   database, start, (item != NULL ? cgiEncode(item) : ""),
 	   cgiEncode(chrom), start, end, strand, tbl, trackHubSkipHubName(database), trackHubSkipHubName(hGenome(database)));
     }
 }
@@ -12210,7 +12210,7 @@ if (url != NULL && url[0] != 0)
 		    printf("<B>RefSeq Gene(s): </B>");
                 else
 		    printf(", ");
-                printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=",
+                printf("<A HREF=\"../cgi-bin/hgc?db=%s&g=refGene&i=%s&o=%s&t=%s\">", database,
                        row[0], chromStart, chromEnd);
                 printf("%s</A></B>", row[0]);
 	        printedCnt++;
@@ -15428,8 +15428,8 @@ if (tiNum != NULL)
     printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
     }
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("Mouse DNA</A><BR>\n");
 
 /* Print info about mate pair. */
@@ -15450,8 +15450,8 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 	    if (!sameString(ti, itemName))
 	        {
 		printf("Get ");
-		printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-		       hgcPathAndSettings(), seqName, winStart, winEnd, ti);
+		printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+		       hgcPathAndSettings(), database, seqName, winStart, winEnd, ti);
 		printf("DNA for read on other end of plasmid</A><BR>\n");
 		gotMate = TRUE;
 		}
@@ -16003,8 +16003,8 @@ printPosOnChrom(chrom,start,end,NULL,FALSE,NULL);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-               hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+               hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
@@ -16044,8 +16044,8 @@ char *table = "refFullAli"; /* Table with the pertinent PSL data */
 cartWebStart(cart, database, "%s", itemName);
 printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("Sequence</A><BR>\n");
 
 /* Get alignment info and print. */
@@ -16618,8 +16618,8 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapMouseStaticLoad(row, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
 	}
@@ -16804,9 +16804,9 @@ if (row != NULL)
             while ((row = sqlNextRow(sr)) != NULL)
                 {
                 stsMapMouseNewStaticLoad(row, &stsRow);
-                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&"
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&"
                        "g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-                       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
+                       stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
                        stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 		}
 	    printf("</TABLE>\n");
@@ -16984,8 +16984,8 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapRatStaticLoad(row+hasBin, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
 	}
@@ -17474,9 +17474,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
 
 	}
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   el.chromStart, cgiEncode(el.name),
+	   database, el.chromStart, cgiEncode(el.name),
 	   el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
     freez(&elname);
     }
@@ -24548,16 +24548,16 @@ if (cut)
 	int i;
 	puts("<B>Isoschizomers: </B>");
 	for (i = 0; i < cut->numSciz-1; i++)
-	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
-	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
+	    printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
+	printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
 	}
     if (isoligs)
 	{
 	struct slName *cur;
 	puts("<B>Isoligamers: </B>");
 	for (cur = isoligs; cur->next != NULL; cur = cur->next)
-	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
-	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
+	    printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cur->name, cur->name);
+	printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cur->name, cur->name);
 	slFreeList(&isoligs);
 	}
     if (cut->numRefs > 0)
@@ -24582,8 +24582,8 @@ if (cut)
     if (c && o && t)
         {
 	puts("<BR><B>Download BED of enzymes in this browser range:</B>&nbsp");
-	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
-	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
+	printf("<A HREF=\"%s&db=%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, l, r, c);
+	printf("<A HREF=\"%s&db=%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
 	}
     }
 webIncludeHelpFile(CUTTERS_TRACK_NAME, TRUE);

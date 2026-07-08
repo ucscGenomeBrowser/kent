@@ -307,9 +307,9 @@ if ( found )
                 hgTracksPathAndSettings (), database, fields[0],
                 atoi(fields[6]) + 1, fields[7]);
         char *tbl = cgiUsualString ("table", cgiString ("g"));
-        printf (" - <A HREF=\"%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
+        printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
                 "strand=%s&table=%s\">"
-                "DNA</A>\n", hgcPathAndSettings (), fields[6],
+                "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
                 (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
                 fields[0], fields[6], fields[7], cgiEncode (fields[5]),
                 tbl);
