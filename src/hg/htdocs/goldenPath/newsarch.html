@@ -64,6 +64,227 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+
+<a name="071526"></a>
+<h2>Jul. 15, 2026 &nbsp;&nbsp; ENCODE4 cCREs and ENCODE4 Regulation tracks released for human (hg38) and mouse (mm10)</h2>
+<p>
+We are excited to announce our major release of the ENCODE4 data collection on the
+UCSC Genome Browser for both the human (hg38/GRCh38) and mouse (mm10/GRCm38)
+assemblies. This release consists of two major components: the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=cCREs&position=default" target="_blank">
+<b>ENCODE Registry of cCREs</b></a> (candidate Cis-Regulatory Elements) container,
+and the new
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4&position=default" target="_blank">
+<b>ENCODE4 Regulation</b></a> container, both described in
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+Moore <em>et al</em>., <em>Nature</em> 2026</a>.
+</p>
+
+<p>
+Together, these tracks represent the final ENCODE Phase 4 data release integrated
+into the browser and cover chromatin accessibility, histone modification and CTCF
+ChIP-seq, transcription factor binding, and transcription across thousands of
+individual biosamples. As part of this release, the ENCODE4 cCREs and ENCODE4
+Regulation tracks are now the default regulation tracks shown on hg38 and mm10,
+replacing the previous ENCODE3 cCREs and ENCODE3 Regulation tracks. The ENCODE3
+tracks remain available for archival use.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/Lou/HBBexample" target="_blank">
+<img alt="[PLACEHOLDER: Announcement banner showing the ENCODE4 cCREs and ENCODE4 Regulation container in a browser view]" src="/images/encode4ReleaseNews.png" width='75%'></a>
+</div>
+
+<h3>ENCODE4 cCREs (hg38 and mm10)</h3>
+<p>
+The ENCODE Registry of candidate Cis-Regulatory Elements integrates chromatin
+accessibility and ChIP-seq signals across thousands of biosamples into a
+biosample-agnostic annotation of the regulatory landscape. Human and mouse are
+now both up-to-date at ENCODE4:
+</p>
+<ul>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=cCREregistry&position=default" target="_blank">
+ENCODE4 cCREs (hg38)</a>:</b>
+2,348,854 cCREs identified and classified using data from all phases of the
+ENCODE Project (Phases 1&ndash;4). Originally announced in <a href="#011526">January 2026</a>.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=cCREregistry&position=default" target="_blank">
+ENCODE4 cCREs (mm10)</a>:</b>
+926,843 mouse cCREs derived using the same ENCODE4 integrative analysis pipeline
+across mouse ENCODE biosamples.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=coreCcres&position=default" target="_blank">
+ENCODE4 Core Collection (hg38)</a></b> and
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=coreCcres&position=default" target="_blank">
+(mm10)</a>:</b>
+Biosample-specific cCREs alongside underlying epigenomic signals for the ENCODE4
+Core Collection: 170 human and 18 mouse biosamples that were comprehensively
+profiled with all four core assays (DNase-seq, H3K4me3 ChIP-seq, H3K27ac ChIP-seq,
+and CTCF ChIP-seq).</li>
+</ul>
+
+<p>
+Both human and mouse cCREs are colored by their putative functional assignment:
+</p>
+
+<div class="text-center">
+<img alt="[PLACEHOLDER: cCRE classification color legend / example browser view]" src="/images/encode4cCREs.png" width='35%'>
+</div>
+
+<table cellpadding='2' align='center'>
+  <tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;"></th>
+    <th style="border-bottom: 2px solid;">UCSC label</th>
+    <th style="border-bottom: 2px solid;">ENCODE classification</th>
+    <th style="border-bottom: 2px solid;">Classification criteria</th>
+  </tr>
+<tr><td style='background-color: #FF0000;'>&nbsp;&nbsp;&nbsp;</td><td>red</td>
+        <td>promoter</td>
+        <td>promoter-like signature</td>
+        <td>within 200 bp of TSS, high chromatin accessibility and H3K4me3</td></tr>
+<tr><td style='background-color: #FFA700;'>&nbsp;&nbsp;&nbsp;</td><td>orange</td>
+        <td>proximal enhancer</td>
+        <td>TSS-proximal enhancer-like signature</td>
+        <td>high chromatin accessibility and H3K27ac, within 2 kb of TSS; if within 200 bp of TSS, must have low H3K4me3</td></tr>
+<tr><td style='background-color: #FFCD00;'>&nbsp;&nbsp;&nbsp;</td><td>yellow</td>
+        <td>distal enhancer</td>
+        <td>TSS-distal enhancer-like signature</td>
+        <td>high chromatin accessibility and H3K27ac, &gt;2 kb from TSS</td></tr>
+<tr><td style='background-color: #FFAAAA;'>&nbsp;&nbsp;&nbsp;</td><td>pink</td>
+        <td>CA-H3K4me3</td>
+        <td>chromatin accessibility + H3K4me3</td>
+        <td>high chromatin accessibility and H3K4me3, low H3K27ac, not within 200 bp of TSS</td></tr>
+<tr><td style='background-color: #00B0F0;'>&nbsp;&nbsp;&nbsp;</td><td>blue</td>
+        <td>CA-CTCF</td>
+        <td>chromatin accessibility + CTCF</td>
+        <td>high chromatin accessibility and CTCF, low H3K4me3 and H3K27ac</td></tr>
+<tr><td style='background-color: #800080;'>&nbsp;&nbsp;&nbsp;</td><td>dark purple</td>
+        <td>CA-TF</td>
+        <td>chromatin accessibility + transcription factor</td>
+        <td>high chromatin accessibility, low H3K4me3, H3K27ac, and CTCF, bound by transcription factor</td></tr>
+<tr><td style='background-color: #06B050;'>&nbsp;&nbsp;&nbsp;</td><td>green</td>
+        <td>CA</td>
+        <td>chromatin accessibility</td>
+        <td>high chromatin accessibility, low H3K4me3, H3K27ac, and CTCF</td></tr>
+<tr><td style='background-color: #CC99FF;'>&nbsp;&nbsp;&nbsp;</td><td>light purple</td>
+        <td>TF</td>
+        <td>transcription factor</td>
+        <td>low chromatin accessibility, low H3K4me3, H3K27ac, and CTCF, bound by transcription factor</td></tr>
+</table>
+
+<h3>ENCODE4 Regulation container (hg38 and mm10)</h3>
+<p>
+The new
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4&position=default" target="_blank">
+ENCODE4 Regulation (hg38)</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4Reg&position=default" target="_blank">
+ENCODE4 Regulation (mm10)</a>
+containers bring the underlying ENCODE4 experimental data directly into the
+browser. Each container combines organ-averaged summary tracks with searchable,
+faceted views of thousands of individual experiments across both peak and signal
+data types. The following subtracks are available:
+</p>
+
+<p><b>Organ-averaged summary tracks (Layered):</b> transparent overlays of
+signal averaged across biosamples from the same organ or tissue. Each track uses
+consistent per-organ colors so the same organ is comparable across assays:
+</p>
+<ul>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkH3k27ac&position=default" target="_blank">
+H3K27ac (Layered)</a></b> and
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkH3k27ac&position=default" target="_blank">
+mm10</a></b> &mdash; histone modification associated with active enhancers and
+promoters, shown as the default track.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Dnase&position=default" target="_blank">
+DNase (Layered)</a></b> /
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegDnase&position=default" target="_blank">
+mm10</a></b> &mdash; open chromatin identified by DNase I hypersensitivity.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Atac&position=default" target="_blank">
+ATAC (Layered)</a></b> /
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegAtac&position=default" target="_blank">
+mm10</a></b> &mdash; open chromatin identified by Tn5 transposase insertion.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkH3k4me3&position=default" target="_blank">
+H3K4me3 (Layered)</a></b> /
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkH3k4me3&position=default" target="_blank">
+mm10</a></b> &mdash; histone modification associated with active and poised
+promoters.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkCtcf&position=default" target="_blank">
+CTCF (Layered)</a></b> /
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkCtcf&position=default" target="_blank">
+mm10</a></b> &mdash; CTCF binding, marking insulators and chromatin loop
+anchors.</li>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Txn&position=default" target="_blank">
+Transcription (Layered)</a></b> /
+<b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegTxn&position=default" target="_blank">
+mm10</a></b> &mdash; strand-specific total RNA-seq signal, averaged by organ.</li>
+</ul>
+
+<p><b>Transcription factor peak track (hg38)</b>:</p>
+<ul>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4TfPeaks&position=default" target="_blank">
+TF rPeaks</a>:</b>
+Representative peak clusters for 911 transcription factors across 1,152
+biosamples, derived from the ENCODE4 TF ChIP-seq collection. The HGNC symbol of
+each factor is displayed alongside the peak. Overlapping cognate TF motifs from
+<a href="https://www.factorbook.org/" target="_blank">FactorBook</a> are shown
+as a decorator, with linkouts to the corresponding
+<a href="https://screen.wenglab.org/" target="_blank">SCREEN</a> and FactorBook
+pages.</li>
+</ul>
+
+<p><b>Individual-experiment tracks (Indiv.):</b> searchable, faceted
+composites providing access to the underlying data behind the summary tracks.
+Each experiment is shown as a Signal (bigWig) subtrack and, where available, a
+Peak (bigBed) subtrack:
+</p>
+<ul>
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Epigenetics&position=default" target="_blank">
+DNase/ATAC/Histone/CTCF (Indiv.)</a></b>:
+6,353 subtracks (3,199 signal + 3,154 peak) covering DNase-seq, ATAC-seq, and
+ChIP-seq for H3K4me3, H3K27ac, and CTCF. Filterable by assay, organ, biosample
+type, life stage, and data type.
+<br><b>mm10 equivalent:</b> 
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegEpigenetics&position=default" target="_blank">1,178 subtracks</a>.</li>
+
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4TfChip&position=default" target="_blank">
+TF ChIP-seq (Indiv.)</a></b>:
+4,964 subtracks (2,462 signal + 2,502 peak) for ChIP-seq of individual
+transcription factors, DNA-associated proteins, RNA polymerase, and chromatin
+regulators. The experimental basis for the TF rPeaks track above.
+<br><b>mm10 equivalent:</b> 
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegTfChip&position=default" target="_blank">334 subtracks</a>.</li>
+
+<li><b><a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4RnaSeq&position=default" target="_blank">
+RNA-seq (Indiv.)</a></b>:
+1,046 strand-specific total RNA-seq signal subtracks from individual biosamples.
+<br><b>mm10 equivalent:</b> 
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegRnaSeq&position=default" target="_blank">1,054 subtracks</a>.</li>
+</ul>
+
+<div class="text-center">
+<img alt="[PLACEHOLDER: browser view of a locus showing the ENCODE4 Regulation layered tracks plus one or two Indiv. composites with peaks visible]" src="/images/encode4Regulation.png" width='75%'>
+</div>
+
+<p>
+For details, please see the individual track description pages, as well as
+Moore <em>et al</em>.
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying
+Transcriptional Regulation</a>. <em>Nature</em>. 2026 January 7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>.
+</p>
+
+<p>
+This dataset was produced by the ENCODE Data Analysis Center
+(<a href="https://www.umassmed.edu/zlab/" target="_blank">Weng lab</a> at
+UMass Chan Medical School). Major kudos to Mingshi Gao, Jill Moore, and Zhiping Weng for creating and
+improving the expansive track hubs for ENCODE4 and for iterating with us to
+bring them to the browser as native tracks. We also thank the ENCODE Consortium, the ENCODE production
+laboratories, and the ENCODE Data Coordination Center for generating and
+processing the underlying experiments, and Gerardo Perez, Brian Raney, Max
+Haeussler, and Lou Nassar for building and reviewing these tracks.
+</p>
+
 <a name="070726"></a>
 <h2>Jul. 7, 2026 &nbsp;&nbsp; UCSC Genome Browser reaches version 500</h2>
 <p>
