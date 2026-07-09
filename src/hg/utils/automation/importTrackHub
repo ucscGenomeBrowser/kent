@@ -5,6 +5,7 @@ import os
 import sys
 import collections
 import argparse
+import subprocess
 
 def parseArgs(args):
     """
@@ -77,18 +78,18 @@ def main(args):
                 continue
             else: 
                 filesToDownload.append(splitLine[1])
-                cmd = "wget " + splitLine[1]
-                print(cmd)                
+                cmd = ["wget", splitLine[1]]
+                print(" ".join(cmd))
                 if not options.test:
-                    os.system(cmd)
+                    subprocess.call(cmd)
                 fileFormat = localFile.split(".")[-1]
 
-                cmd = "ln -s " + os.getcwd() + "/" + localFile + " " + options.gbdbPath
-                print(cmd)                
+                cmd = ["ln", "-s", os.getcwd() + "/" + localFile, options.gbdbPath]
+                print(" ".join(cmd))
                 newLine = line.replace(splitLine[1], options.gbdbPath + localFile)
                 options.outputFile.write(newLine)
                 if not options.test:
-                    os.system(cmd)
+                    subprocess.call(cmd)
         # Download description pages and put into trackDb 
         elif "html" in splitLine[0]:
             htmlFileName = splitLine[1].split("/")[-1]
@@ -98,14 +99,14 @@ def main(args):
                 continue
             else: 
                 filesToDownload.append(htmlFileName)
-                cmd = "wget " + splitLine[1]
-                print(cmd)                
+                cmd = ["wget", splitLine[1]]
+                print(" ".join(cmd))
                 if not options.test:
-                    os.system(cmd)
-                cmd = "cp " + os.getcwd() + "/" + htmlFileName + " " + options.trackDbPath + currentTrack + ".html"
-                print(cmd)                
+                    subprocess.call(cmd)
+                cmd = ["cp", os.getcwd() + "/" + htmlFileName, options.trackDbPath + currentTrack + ".html"]
+                print(" ".join(cmd))
                 if not options.test:
-                    os.system(cmd)
+                    subprocess.call(cmd)
                 newLine = line.replace(splitLine[1], currentTrack)
                 options.outputFile.write(newLine)
         else:
