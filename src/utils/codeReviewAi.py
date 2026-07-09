@@ -21,6 +21,7 @@ import sys
 import re
 import json
 import base64
+import getpass
 import subprocess
 import argparse
 import requests
@@ -32,9 +33,10 @@ from collections import defaultdict
 REDMINE_URL = "https://redmine.gi.ucsc.edu"
 GIT_REPORTS_PATH = "/hive/groups/qa/git-reports-history"
 GIT_REPO_PATH = "/data/git/kent.git"
-OUTPUT_DIR = "/hive/users/lrnassar/codeReview"
+OUTPUT_DIR = f"/hive/users/{getpass.getuser()}/codeReview"
 MLQ_CONF_PATH = os.path.expanduser("~/.hg.conf")
 DEFAULT_CC = "browser-code-reviews-group@ucsc.edu"
+DEFAULT_ALERT_EMAIL = "browserqa-group@ucsc.edu"
 GMAIL_TOKEN_PATH = os.path.expanduser("~/.gmail_token.json")
 GMAIL_CREDS_PATH = os.path.expanduser("~/.gmail_credentials.json")
 GMAIL_SCOPES = [
@@ -461,6 +463,31 @@ def validate_daily_review_output(response):
         return False, f"Response too short ({len(response)} chars) - may be incomplete"
 
     return True, "OK"
+
+# Substrings that indicate the Claude CLI could not authenticate or otherwise
+# failed to produce a usable review. Used to alert instead of failing silently.
+CLI_AUTH_ERROR_MARKERS = (
+    'Failed to authenticate',
+    'authentication_error',
+    'Invalid authentication credentials',
+    'API Error: 401',
+)
+
+def detect_cli_failure(response, validator):
+    """Return an error description if the CLI response indicates a hard failure
+    (no output, an authentication error, or output that fails validation),
+    otherwise return None. Lets the caller alert rather than silently save a
+    broken review."""
+    if not response:
+        return "No response from Claude CLI (timeout, crash, or empty output)"
+    for marker in CLI_AUTH_ERROR_MARKERS:
+        if marker in response:
+            first_line = next((l for l in response.strip().splitlines() if l.strip()), response)
+            return f"Claude CLI authentication failure: {first_line.strip()[:300]}"
+    is_valid, msg = validator(response)
+    if not is_valid:
+        return f"Invalid or incomplete review output: {msg}"
+    return None
 
 def call_claude_cli(prompt, timeout=600, retries=1, validator=None):
     """Call Claude Code CLI with a prompt and return the response"""
@@ -1250,6 +1277,45 @@ def send_review_email(gmail_service, to_email, author_name, review_text, cc=None
     ).execute()
 
 
+def send_alert_email(gmail_service, to_email, failures, hours, log_dir):
+    """Send a maintainer alert when one or more author reviews failed (e.g. an
+    expired Claude CLI token). This is what keeps the daily cron from failing
+    silently: a broken review is never sent to the author, so without this
+    nobody would notice the tool had stopped working."""
+    lines = [
+        "The automated daily code review (codeReviewAi.py --daily) hit errors and",
+        "did not produce valid reviews for one or more authors.",
+        "",
+        f"Review date:      {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"Look-back window: {hours} hours",
+        f"Failed reviews:   {len(failures)}",
+        "",
+        "Details:",
+    ]
+    for name, err in failures:
+        lines.append(f"  - {name}: {err}")
+    lines += [
+        "",
+        "Most common cause: the 'claude' CLI OAuth token for the cron user has",
+        "expired. Re-run 'claude' interactively as that user and /login, or mint a",
+        "long-lived token with 'claude setup-token', then confirm with:",
+        "  claude -p 'say ok'",
+        "",
+        f"Logs: {log_dir}/",
+        "",
+        "-- codeReviewAi.py automated alert",
+    ]
+    message = MIMEText("\n".join(lines))
+    message['To'] = to_email
+    message['From'] = 'gbauto@ucsc.edu'
+    message['Subject'] = f"[ALERT] Daily Code Review FAILED - {datetime.now().strftime('%Y-%m-%d')}"
+    encoded = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    gmail_service.users().messages().send(
+        userId='me',
+        body={'raw': encoded}
+    ).execute()
+
+
 def review_daily_author(author_name, commits, log_dir):
     """Review all commits by one author for the daily digest.
     Temp files (prompts/responses) are written to log_dir and returned for cleanup."""
@@ -1272,33 +1338,41 @@ def review_daily_author(author_name, commits, log_dir):
     print(f"  Prompt saved to: {prompt_file}")
     print(f"  Calling Claude CLI (this may take a few minutes)...")
 
-    response = call_claude_cli(prompt, timeout=600, validator=validate_daily_review_output)
+    raw_response = call_claude_cli(prompt, timeout=600, validator=validate_daily_review_output)
+    error = detect_cli_failure(raw_response, validate_daily_review_output)
 
-    if response:
+    # Save whatever we got back for debugging, even on failure.
+    if raw_response:
         response_file = os.path.join(log_dir, f".tmp_daily_response_{safe_name}_{date_str}.txt")
         with open(response_file, 'w') as f:
-            f.write(response)
+            f.write(raw_response)
         temp_files.append(response_file)
+
+    if error:
+        print(f"  WARNING: review failed - {error}")
+        response = f"DAILY CODE REVIEW - {author_name}\n\nError: {error}\n"
+    else:
+        response = raw_response
         # Strip any preamble before "DAILY CODE REVIEW"
         match = re.search(r'^DAILY CODE REVIEW', response, re.MULTILINE)
         if match:
             response = response[match.start():]
         print(f"  Review complete")
-    else:
-        print(f"  WARNING: No response received")
-        response = f"DAILY CODE REVIEW - {author_name}\n\nError: Review generation failed - no response from Claude CLI.\n"
 
-    return response, temp_files
+    return response, temp_files, error
 
 
-def run_daily_mode(hours, cc_address, dry_run, log_dir):
-    """Run daily review mode: get recent commits, review per author, email results"""
+def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALERT_EMAIL):
+    """Run daily review mode: get recent commits, review per author, email results.
+    Returns True on full success, False if any author's review failed (so the
+    caller can exit non-zero)."""
     os.makedirs(log_dir, exist_ok=True)
 
     print("=" * 60)
     print(f"DAILY CODE REVIEW MODE")
     print(f"Looking back: {hours} hours")
     print(f"CC: {cc_address or 'None'}")
+    print(f"Alert: {alert_email or 'None'}")
     print(f"Log dir: {log_dir}")
     print(f"Dry run: {dry_run}")
     print("=" * 60)
@@ -1321,13 +1395,14 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir):
     reviews = {}
     all_temp_files = []
     for author_email, data in authors.items():
-        review, temp_files = review_daily_author(data['name'], data['commits'], log_dir)
+        review, temp_files, error = review_daily_author(data['name'], data['commits'], log_dir)
         all_temp_files.extend(temp_files)
         reviews[author_email] = {
             'name': data['name'],
             'email': author_email,
             'review': review,
             'num_commits': len(data['commits']),
+            'error': error,
         }
 
         # Save review to log_dir
@@ -1339,18 +1414,28 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir):
         reviews[author_email]['file'] = filepath
         print(f"  Saved: {filepath}")
 
-    # Phase 3: Send emails (only for reviews with FEEDBACK)
+    # Collect any failures (broken/auth-failed reviews). A failed review is
+    # never emailed to an author; instead we alert the maintainer below.
+    failures = [(d['name'], d['error']) for d in reviews.values() if d['error']]
+
+    def verdict_of(data):
+        if data['error']:
+            return 'FAILED'
+        return 'FEEDBACK' if 'OVERALL STATUS: FEEDBACK' in data['review'] else 'APPROVED'
+
+    # Phase 3: Send emails (only for reviews with FEEDBACK; never for failures)
     print(f"\nPhase 3: Sending emails (FEEDBACK only)...")
     if dry_run:
         print("[DRY RUN] Emails not sent. Reviews saved locally:")
         for author_email, data in reviews.items():
-            verdict = 'FEEDBACK' if 'OVERALL STATUS: FEEDBACK' in data['review'] else 'APPROVED'
-            print(f"  {data['name']} <{author_email}>: {verdict} - {data['file']}")
+            print(f"  {data['name']} <{author_email}>: {verdict_of(data)} - {data['file']}")
     else:
         gmail_service = get_gmail_service()
         for author_email, data in reviews.items():
-            has_feedback = 'OVERALL STATUS: FEEDBACK' in data['review']
-            if not has_feedback:
+            if data['error']:
+                print(f"  {data['name']}: FAILED - skipping author email (will alert maintainer)")
+                continue
+            if 'OVERALL STATUS: FEEDBACK' not in data['review']:
                 print(f"  {data['name']}: APPROVED - skipping email")
                 continue
             print(f"  Emailing {data['name']} <{author_email}> (FEEDBACK)...")
@@ -1359,6 +1444,21 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir):
                 print(f"    SENT")
             except Exception as e:
                 print(f"    FAILED: {e}")
+
+    # Phase 3b: Alert the maintainer if anything failed, so it does not fail silently
+    if failures:
+        print(f"\nPhase 3b: {len(failures)} review(s) FAILED - alerting maintainer...")
+        for name, err in failures:
+            print(f"  {name}: {err}")
+        if dry_run:
+            print(f"[DRY RUN] Alert email not sent (would go to {alert_email}).")
+        elif alert_email:
+            try:
+                gmail_service = get_gmail_service()
+                send_alert_email(gmail_service, alert_email, failures, hours, log_dir)
+                print(f"  Alert sent to {alert_email}")
+            except Exception as e:
+                print(f"  WARNING: failed to send alert email: {e}")
 
     # Clean up temp files
     for f in all_temp_files:
@@ -1374,8 +1474,9 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir):
     print(f"Authors reviewed: {len(reviews)}")
     print(f"Total commits: {total_commits}")
     for author_email, data in reviews.items():
-        verdict = 'FEEDBACK' if 'OVERALL STATUS: FEEDBACK' in data['review'] else 'APPROVED'
-        print(f"  {data['name']}: {data['num_commits']} commits - {verdict}")
+        print(f"  {data['name']}: {data['num_commits']} commits - {verdict_of(data)}")
+
+    return not failures
 
 
 # =============================================================================
@@ -1449,6 +1550,9 @@ Examples:
                         help='Hours to look back for --daily mode (default: 24)')
     parser.add_argument('--cc', type=str, default=DEFAULT_CC,
                         help=f'CC address for --daily emails (default: {DEFAULT_CC})')
+    parser.add_argument('--alert-email', type=str, default=DEFAULT_ALERT_EMAIL,
+                        help=f'Address to alert if a --daily review fails, e.g. an '
+                             f'expired auth token (default: {DEFAULT_ALERT_EMAIL})')
     parser.add_argument('--log-dir', type=str,
                         default=os.path.expanduser('~/codeReviewLogs'),
                         help='Directory for daily review logs and output (default: ~/codeReviewLogs)')
@@ -1458,8 +1562,9 @@ Examples:
     # DAILY MODE (--daily)
     # =================================================================
     if args.daily:
-        run_daily_mode(args.hours, args.cc, args.dry_run, args.log_dir)
-        return
+        ok = run_daily_mode(args.hours, args.cc, args.dry_run, args.log_dir,
+                            alert_email=args.alert_email)
+        sys.exit(0 if ok else 1)
 
     # Load configuration
     config = load_config()
@@ -1468,6 +1573,9 @@ Examples:
     if not redmine_key:
         print("ERROR: redmine.apiKey not found in config")
         sys.exit(1)
+
+    # Ticket/commit modes save reviews and debug files under OUTPUT_DIR
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # =================================================================
     # STANDALONE COMMIT MODE (--commit without --ticket)
