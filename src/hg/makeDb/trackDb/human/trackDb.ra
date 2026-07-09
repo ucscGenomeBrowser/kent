@@ -1,4 +1,4 @@
-include lrSv.ra alpha
+include lrSv.ra
 include srSv.ra alpha
 include mei.ra alpha
 

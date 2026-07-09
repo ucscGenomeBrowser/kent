@@ -395,6 +395,7 @@ noScoreFilter on
     # (removed from databases.tsv) until the data is published and cleaned.
     track kwanhoSv
     parent lrSv
+    release alpha
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
     shortLabel Kim PD 100 prelim
     longLabel Structural Variants from 100 Post-mortem Brains (Parkinson's disease, ILBD, Control; Kim et al. 2026, PacBio HiFi) - PRELIMINARY, data to be updated, contact the authors before using
@@ -514,6 +515,7 @@ noScoreFilter on
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
     parent lrSv
+    release alpha
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
     shortLabel 1KG Linear 1218 SVs
     longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read)
