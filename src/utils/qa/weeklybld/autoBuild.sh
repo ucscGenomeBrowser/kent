@@ -14,16 +14,31 @@
 #   autoBuild.sh preview2
 #   autoBuild.sh final
 #   autoBuild.sh wrapup
+#   autoBuild.sh cherrypick   # build patch: cherry-pick CherryPickCommits.conf onto v${NN}_branch
 #   autoBuild.sh --dry-run [phase]   # show what would happen
 #
-# BUILD PATCHES (not a phase here yet - done manually via the weeklybld scripts):
-#   A build patch cherry-picks approved commit(s) onto v${NN}_branch after the
-#   weekly build, then: tagBeta.csh real -> tag v${NN}_branch.<next> -> update the
-#   Redmine ticket BEFORE any long artifact build.
-#   If the patch lands AFTER the release has gone out to the RR, the already-public
-#   artifacts must be regenerated too: rebuild the source zip (doZip.csh) and the
-#   docker release images (buildReleaseDocker.sh, called from Step 7 below). A pre-RR
-#   patch skips those.
+# BUILD PATCHES -- the `cherrypick` phase (autoBuild.sh cherrypick):
+#   A build patch cherry-picks approved bugfix commit(s) from master onto
+#   v${NN}_branch after the weekly build. List the commit SHAs (one per line, and
+#   NO merge commits) in CherryPickCommits.conf, then run `autoBuild.sh cherrypick`.
+#   It is a forced-only phase (never auto-detected from the calendar) and is
+#   repeatable: each run is one patch round (logs/v${NN}.patch<N>.log), and the
+#   checkpoint state file is cleared on success so the next round starts fresh.
+#
+#   The phase branches on pushedToRR.flag (written by tagBeta at wrap-up, removed
+#   by tagNewBranch at the final build -- so "present" == release already shipped):
+#     PRE-RR  (flag absent, QA window ~days 16-19): cherry-pick onto the branch,
+#       rebuild beta + deploy to hgwbeta so QA can re-test, then git-reports.
+#       Wrap-up does all the tagging + artifacts later.
+#     POST-RR (flag present, release shipped): additionally re-run the relevant
+#       wrap-up steps to regenerate the already-public artifacts -- tagBeta, the
+#       next v${NN}_branch.<N> subversion tag (same logic wrap-up uses), doZip,
+#       userApps, and the docker release images -- then refresh kent-rel. A
+#       reminder to update the Redmine build-patch ticket is emailed BEFORE the
+#       long artifact builds.
+#   (Reverts are NOT a separate phase: a revert is a revert-commit made on master,
+#   reviewed like any change, then cherry-picked onto the branch through this path.)
+#
 #   The docker release build does NOT depend on the RR push: buildReleaseDocker.sh
 #   seeds the amd64 image's CGIs straight from the local hgwdev beta build
 #   (/usr/local/apache/cgi-bin-beta) as an overlay -- the same seed overlay-cgi.sh
@@ -736,11 +751,12 @@ wrapup_tag_beta() {
     return 0
 }
 
-# Tag the official release. NOT idempotent on its own (a re-run would create a
-# duplicate v${NN}_branch.<next> tag), so the checkpoint must ensure it runs
-# exactly once -- which it now does.
-wrapup_tag_release() {
-    log "Tagging official release..."
+# Push the next v${BRANCHNN}_branch.<N> release subversion tag, pointing at the
+# current tip of origin/v${BRANCHNN}_branch. Shared by wrap-up (initial release
+# tag) and the cherry-pick phase (post-RR patch re-tag). NOT idempotent on its
+# own (a re-run would create a duplicate .<N> tag), so every caller runs it under
+# the checkpoint framework so it fires exactly once per phase.
+tag_next_subversion() {
     if $DRY_RUN; then
         log "(dry-run) would create the next v${BRANCHNN}_branch.N release tag"
         return 0
@@ -764,6 +780,14 @@ wrapup_tag_release() {
         die "Failed to push release tag v${BRANCHNN}_branch.${next_sub}"
     run git fetch
     return 0
+}
+
+# Tag the official release. NOT idempotent on its own (a re-run would create a
+# duplicate v${NN}_branch.<next> tag), so the checkpoint must ensure it runs
+# exactly once -- which it now does.
+wrapup_tag_release() {
+    log "Tagging official release..."
+    tag_next_subversion
 }
 
 # Zip source code (takes ~4 min)
@@ -844,19 +868,146 @@ do_wrapup() {
     step userapps-utils   wrapup_userapps_utils
     step tag-beta         wrapup_tag_beta
     step tag-release      wrapup_tag_release
+    # release-markdown must run before zip: doZip.csh attaches the curated
+    # markdown notes to the GitHub release it creates, so they must exist first.
+    step release-markdown wrapup_release_markdown
     step zip              wrapup_zip
     step userapps-src     wrapup_userapps_src
     step docker-release   wrapup_docker_release
     step refresh-containers wrapup_refresh_containers
-    step release-markdown wrapup_release_markdown
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
-    log "  - Create GitHub release at https://github.com/ucscGenomeBrowser/kent/releases/new"
-    log "    Release notes: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "  - Verify the GitHub release doZip.csh created (with submodule-complete"
+    log "    source archives attached): https://github.com/ucscGenomeBrowser/kent/releases"
+    log "    Edit its notes if needed; source: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "    Note: GitHub's own auto-generated 'Source code' zip/tar.gz omit submodules;"
+    log "    users should download the attached kent.src.zip / kent.src.tar.gz instead."
     log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
     log "  - Send mirror announcement email to genome-mirror@soe.ucsc.edu"
+}
+
+##############################################################################
+# Phase: Cherry-pick (build patch)
+#
+# Forced-only (never calendar-detected) and repeatable: each invocation is one
+# "patch round". See the BUILD PATCHES note in the header for the pre-RR vs
+# post-RR behavior. The commits to apply live in CherryPickCommits.conf, one SHA
+# per line, no merge commits.
+##############################################################################
+
+# Log file for the current patch round (set in do_cherrypick).
+CHERRYPICK_LOG=""
+
+# Dry-run pass: cherryPickCommits.csh with no "real" arg verifies each commit in
+# CherryPickCommits.conf exists and shows its diffstat; it makes no changes and
+# errors out if the conf file is missing or empty.
+cherrypick_apply_dryrun() {
+    run_tcsh "./cherryPickCommits.csh >& $CHERRYPICK_LOG"
+}
+
+# Real pass: cherry-pick each commit onto v${BRANCHNN}_branch, push the branch to
+# origin, log to cherryPicks.log, email, and pull the 64-bit build sandbox.
+cherrypick_apply_commits() {
+    run_tcsh "./cherryPickCommits.csh real >>& $CHERRYPICK_LOG" || \
+        die "cherryPickCommits.csh real failed. See $CHERRYPICK_LOG.
+    - If it stopped on a CONFLICT: resolve + commit + 'git push origin v${BRANCHNN}_branch'
+      by hand, then (since the pick already landed) mark step 'apply-commits' done by
+      appending it to $STATE_FILE and re-run to resume at the next step.
+    - If it said 'error updating 64-bit sandbox' and the commit touched inc/common.mk:
+      the cherry-pick + push ALREADY SUCCEEDED (only the sandbox refresh failed). Fix in
+      the sandbox with: git stash push src/inc/common.mk && git pull --ff-only && git stash
+      pop  -- then mark 'apply-commits' done in $STATE_FILE and re-run.
+    - Otherwise fix CherryPickCommits.conf and re-run."
+}
+
+# Email the build-meister a reminder to update the Redmine build-patch ticket.
+# The script runs unattended, so it cannot post to Redmine itself (posting needs
+# human approval per the redmine skill) -- it just reminds. Sent BEFORE the long
+# artifact builds, per the documented build-patch ordering.
+cherrypick_redmine_reminder() {
+    if $DRY_RUN; then
+        log "(dry-run) would email a reminder to update the Redmine build-patch ticket"
+        return 0
+    fi
+    echo "Cherry-pick(s) applied to v${BRANCHNN}_branch (see $CHERRYPICK_LOG). REMINDER: update the Redmine build-patch ticket with the cherry-picked commit(s), per the redmine skill (echo the comment for approval before posting)." \
+        | mail -s "REMINDER: update Redmine build-patch ticket (v${BRANCHNN})" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
+    return 0
+}
+
+# Post-RR only: refresh the kent-rel container against the just-rebuilt release
+# image. (kent-beta was already torn down at wrap-up, so it is not touched here.)
+cherrypick_refresh_rel() {
+    run "$WEEKLYBLD/refresh-instance.sh" rel || \
+        log "WARNING: kent-rel refresh failed; container may be stale"
+    return 0
+}
+
+do_cherrypick() {
+    log "========== PHASE: CHERRY-PICK (build patch) =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+    state_init cherrypick "$PHASE_VER"
+
+    # Repeatable phase: pick the next patch-round number for log names and persist
+    # it in the state file so a resume reuses the same round (and log file).
+    local patchn
+    patchn=$(grep -oP '^patchn=\K[0-9]+' "$STATE_FILE" 2>/dev/null | head -1 || true)
+    if [[ -z "$patchn" ]]; then
+        local n=1
+        while [[ -e "$LOGDIR/v${BRANCHNN}.patch${n}.log" ]]; do n=$((n + 1)); done
+        patchn=$n
+        $DRY_RUN || echo "patchn=${patchn}" >> "$STATE_FILE"
+    fi
+    CHERRYPICK_LOG="$LOGDIR/v${BRANCHNN}.patch${patchn}.log"
+    log "Build-patch round ${patchn} for v${BRANCHNN}; log: $CHERRYPICK_LOG"
+
+    # pushedToRR.flag present => release already shipped => regenerate the public
+    # artifacts (re-run the relevant wrap-up steps). Absent => still in the QA
+    # window; just land the patch + rebuild beta, wrap-up tags/artifacts later.
+    local post_rr=false
+    if [[ -e "$WEEKLYBLD/pushedToRR.flag" ]]; then
+        post_rr=true
+        log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
+    else
+        log "pushedToRR.flag absent -> PRE-RR patch (QA window): landing patch + rebuilding beta only."
+    fi
+
+    # --- Core patch: applies in both cases ---
+    step apply-dryrun     cherrypick_apply_dryrun
+    step apply-commits    cherrypick_apply_commits
+    step redmine-reminder cherrypick_redmine_reminder    # before the long builds
+    step build-beta       final_build_beta               # reused from the final phase
+    step deploy-beta      final_deploy_beta               # rsync cgi-bin-beta -> hgwbeta
+    step git-reports      final_git_reports
+
+    if $post_rr; then
+        # Re-run the relevant wrap-up steps to regenerate already-public artifacts.
+        step tag-beta         wrapup_tag_beta
+        step tag-subversion   tag_next_subversion
+        step release-markdown wrapup_release_markdown
+        step zip              wrapup_zip
+        step userapps-utils   wrapup_userapps_utils
+        step userapps-src     wrapup_userapps_src
+        step docker-release   wrapup_docker_release
+        step refresh-rel      cherrypick_refresh_rel
+    else
+        step refresh-beta     final_refresh_beta          # refresh kent-beta for QA
+    fi
+
+    # Repeatable phase: clear the state file on FULL success so the next patch
+    # round starts fresh. (A failed round leaves it in place so a re-run resumes
+    # at the first incomplete step -- same as every other phase.)
+    $DRY_RUN || rm -f "$STATE_FILE"
+
+    log "Cherry-pick build patch (round ${patchn}) complete for v${BRANCHNN}."
+    if $post_rr; then
+        log "Public artifacts regenerated. Remaining manual steps: verify the GitHub"
+        log "release, push to the genome browser store, and confirm hgdownload."
+    else
+        log "Patch is on v${BRANCHNN}_branch and beta; wrap-up will tag + build artifacts later."
+    fi
 }
 
 ##############################################################################
@@ -872,15 +1023,18 @@ main() {
                 log "DRY RUN MODE - no changes will be made"
                 shift
                 ;;
-            preview1|preview2|final|wrapup)
+            preview1|preview2|final|wrapup|cherrypick)
                 FORCED_PHASE="$1"
                 shift
                 ;;
             --help|-h)
-                echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup]"
+                echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup|cherrypick]"
                 echo ""
                 echo "Runs the CGI build phase for today's date (per Google Calendar),"
                 echo "or a forced phase if specified. Stops on any error."
+                echo ""
+                echo "cherrypick is forced-only (never auto-detected): it applies the"
+                echo "commits in CherryPickCommits.conf onto v\${NN}_branch as a build patch."
                 exit 0
                 ;;
             *)
@@ -938,6 +1092,9 @@ main() {
             ;;
         wrapup)
             do_wrapup
+            ;;
+        cherrypick)
+            do_cherrypick
             ;;
         *)
             die "Unknown phase: $phase"
