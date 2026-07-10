@@ -18,7 +18,9 @@ regardless of other evidence.
 
 DELIBERATELY EXCLUDED from the sum (documented in every mouseover):
   - PVS1 (null variants only; handled in separate track)
-  - PS1 / PS2 / PS4 / PP1 / PP4 / BS4 / BP7 (require clinical observations)
+  - PS1 / PS2 / PS4 / PP1 / PP4 / BS4 (require clinical observations)
+  - BP7 (computational, but synonymous/intronic only; out of scope for this
+    missense-only track)
 
 This is NOT a VCEP classification &#8212; the warning is in every mouseover
 since clinicians live in the mouseover, not the description page.
@@ -374,7 +376,8 @@ def bs2_observed(wt, codon, paths, flossies_lookup, tx):
 
 CAVEATS_STR = (
     "PVS1 (null variants only &#8212; see PVS1 tracks); "
-    "PS1/PS2/PS4/PP1/PP4/BS4/BP7 (require clinical observations)."
+    "PS1/PS2/PS4/PP1/PP4/BS4 (require clinical observations); "
+    "BP7 (synonymous/intronic; N/A to missense)."
 )
 
 
@@ -569,8 +572,8 @@ def build(db, outdir):
         for line in f:
             flds = line.split("\t")
             cnt[flds[9]] += 1
-            af_cnt[flds[13]] += 1
-            if flds[14] == 'BS2':
+            af_cnt[flds[15]] += 1
+            if flds[16] == 'BS2':
                 bs2_cnt += 1
     print("  Class distribution:")
     for k, n in cnt.most_common():

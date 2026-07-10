@@ -493,8 +493,13 @@ var genomePos = {
 
     update: function (img, selection, singleClick)
     {
+        // For a drag-select keep the half-base offset (addHalfBp) so an edge that
+        // ends just before a base does not count that base.  For a single click turn
+        // it off so both edges resolve to the same base under the pointer: with it on,
+        // at single-base zoom a left click drifted one base left while a right click
+        // could not move at all.
         var pos = genomePos.pixelsToBases(img, selection.x1, selection.x2,
-                                            hgTracks.winStart, hgTracks.winEnd, true);
+                                            hgTracks.winStart, hgTracks.winEnd, !singleClick);
         // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
         if (singleClick) {
             var center = (pos.chromStart + pos.chromEnd)/2;
@@ -2422,6 +2427,16 @@ var dragSelect = {
         var now = new Date();
         var doIt = false;
         var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight; // = drag on base position track (no shift)
+        // A single click on the grey side-label/config strip has its x clamped into the
+        // data area by imgAreaSelect, so without this test it looks like a ruler click and
+        // performs the zoom instead of opening the base-position track's config popup (#27113).
+        // Use the raw mouse x (getXLimits gives the data-area bounds) to spot a label-strip
+        // click and let it fall through to the normal config handler.
+        if (rulerClicked && selection.event) {
+            var dataXLimits = genomePos.getXLimits($(img), 0);
+            if (selection.event.pageX < dataXLimits[0] || selection.event.pageX > dataXLimits[1])
+                rulerClicked = false;
+        }
         if (dragSelect.originalCursor)
             jQuery('body').css('cursor', dragSelect.originalCursor);
         if (dragSelect.escPressed)

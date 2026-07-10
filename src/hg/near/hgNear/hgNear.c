@@ -634,8 +634,8 @@ void debugCellPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print value including favorite hyperlink in debug column. */
 {
-hPrintf("<TD><A HREF=\"../cgi-bin/hgc?%s&g=knownGene&i=%s&c=%s&l=%d&r=%d\">",
-	cartSidUrlString(cart), gp->name, gp->chrom, gp->start, gp->end);
+hPrintf("<TD><A HREF=\"../cgi-bin/hgc?%s&db=%s&g=knownGene&i=%s&c=%s&l=%d&r=%d\">",
+	cartSidUrlString(cart), database, gp->name, gp->chrom, gp->start, gp->end);
 hPrintf("%f", gp->distance);
 hPrintf("</A></TD>");
 }

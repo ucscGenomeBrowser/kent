@@ -1,0 +1,116 @@
+<h2>Description</h2>
+<p>
+This track collection shows structural variants (SVs) from long-read
+sequencing, called natively against the T2T-CHM13 reference (hs1). It is the
+T2T-CHM13 companion to the GRCh38 Long-read SVs collection.
+</p>
+<p>
+Only a subset of the long-read SV datasets have been released with native
+T2T-CHM13 coordinates, and those are the subtracks shown here. The remaining
+cohorts in the collection were released on GRCh38 only. For the full set of
+datasets, see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=lrSv">hg38 Long-read SVs</a> track.
+</p>
+
+<h2>Available datasets (T2T-CHM13 native)</h2>
+<table class="stdTbl">
+<tr><th>Dataset</th><th>N samples</th><th>Technology</th><th>SV count (hs1)</th></tr>
+<tr><td><a href="hgTrackUi?g=colorsDbSv">CoLoRSdb</a></td><td>1,427</td><td>PacBio HiFi</td><td>839,714</td></tr>
+<tr><td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a></td><td>1,019</td><td>ONT</td><td>161,332</td></tr>
+<tr><td><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a></td><td>65</td><td>HiFi + ONT</td><td>188,500</td></tr>
+<tr><td><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1</a></td><td>233</td><td>Pangenome (minigraph-cactus)</td><td>541,176</td></tr>
+<tr><td><a href="hgTrackUi?g=aprSv">Arab APR</a></td><td>53</td><td>HiFi + ONT pangenome</td><td>103,077</td></tr>
+<tr><td><a href="hgTrackUi?g=cpc1Sv">CPC</a></td><td>58</td><td>HiFi pangenome</td><td>46,092</td></tr>
+</table>
+<p>
+HGSVC3 and HPRC v2.1 are built directly from the consortia's T2T-CHM13
+releases; CoLoRSdb, 1KG ONT Vienna, Arab APR, and CPC are built from callsets
+or pangenome graphs native to T2T-CHM13. Per-subtrack details, cohorts, and
+citations are on each subtrack's own description page.
+</p>
+
+<h3><a href="hgTrackUi?g=colorsDbSv">CoLoRSdb SVs</a></h3>
+<p>
+Structural variants from the Consortium of Long-Read Sequencing database
+(CoLoRSdb), from 1,427 PacBio HiFi long-read whole-genome sequences. ~840k SVs
+(insertions, deletions, inversions) called with pbsv and merged with Jasmine,
+with allele frequencies, genotype counts and Hardy-Weinberg statistics across
+the cohort.
+</p>
+
+<h3><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna SVs</a></h3>
+<p>
+Structural variants from 1,019 individuals across 26 populations (1000 Genomes
+ONT), called natively against T2T-CHM13. ~161k SVs annotated with SVAN,
+classifying insertions and deletions by mechanism of origin (mobile elements,
+VNTRs, processed pseudogenes, and others).
+</p>
+
+<h3><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3 SVs</a></h3>
+<p>
+Structural variants from 65 diverse individuals sequenced and de novo assembled
+by the Human Genome Structural Variation Consortium phase 3 (HGSVC3), from the
+consortium's native T2T-CHM13 annotation tables. ~189k haplotype-resolved SVs
+(deletions, insertions and inversions) called with PAV and cross-validated with
+ten additional callers, with per-site carrier haplotype lists and structural
+annotations.
+</p>
+
+<h3><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1 SVs</a></h3>
+<p>
+Structural variants derived from the Human Pangenome Reference Consortium
+release-2.1 minigraph-cactus pangenome graph, built from 233 PacBio HiFi
+haplotype-resolved assemblies. ~541k SV-sized alleles (insertions and
+deletions) extracted from the T2T-CHM13 graph with vg deconstruct.
+</p>
+
+<h3><a href="hgTrackUi?g=aprSv">Arab APR SVs</a></h3>
+<p>
+Structural variants from the Arab Pangenome Reference (APR), a
+haplotype-resolved pangenome graph built from 53 UAE-resident Arab individuals
+drawn from eight countries (PacBio HiFi + ultralong ONT + Hi-C; Nassir et al.
+2025). ~103k SVs (deletions, insertions, complex and mixed snarls) in native
+T2T-CHM13 coordinates.
+</p>
+
+<h3><a href="hgTrackUi?g=cpc1Sv">CPC SVs</a></h3>
+<p>
+Structural variants from the Chinese Pangenome Consortium (CPC), 58 samples
+spanning 36 minority ethnic groups (PacBio HiFi pangenome graph; Gao et al.
+2023). This track shows the CPC contribution to the joint CPC+HPRC graph with
+HPRC-specific SVs removed. ~46k SVs (deletions, insertions and mixed snarls) in
+native T2T-CHM13 coordinates.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+<li><span style="color: rgb(140,0,200);">Complex and other multi-allele events</span> - purple</li>
+</ul>
+</p>
+
+<h2>Data Access</h2>
+<p>
+Each subtrack has its own documentation page with details on how to download
+and intersect the underlying annotations. The T2T-CHM13 build steps are
+recorded in the UCSC makeDoc,
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hs1/lrSv.txt" target="_blank">doc/hs1/lrSv.txt</a>
+(with the shared pipeline in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">doc/hg38/lrSv.txt</a>);
+the conversion scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">makeDb/scripts/lrSv</a>,
+and the track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/lrSv.ra" target="_blank">trackDb/human/lrSv.ra</a>.
+</p>
+
+<h2>Contact</h2>
+<p>
+If you know of additional long-read structural-variant datasets on T2T-CHM13
+that we could add, please contact us at
+<a href="mailto:&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u">&#103;en&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;&#100;u</a>.
+</p>
