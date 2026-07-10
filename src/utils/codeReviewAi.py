@@ -60,6 +60,35 @@ def load_config():
 
     return config
 
+def ensure_claude_auth():
+    """Make the Claude CLI auth resilient for unattended/cron runs, where no
+    login shell is sourced. Returns a short label naming the method in effect.
+
+    Preference order (mirrors the CLI's own precedence, high to low):
+      1. CLAUDE_CODE_OAUTH_TOKEN already in the environment - respected as-is.
+      2. A long-lived token stored as claude.oauthToken in ~/.hg.conf - exported
+         so the CLI can authenticate in cron. A setup-token value outranks the
+         interactive login, so this keeps working after the local login lapses.
+      3. Fall back to the local ~/.claude/.credentials.json login.
+
+    Any residual auth failure is still caught and alerted downstream, so a
+    lapsed credential surfaces loudly rather than silently."""
+    if os.environ.get('CLAUDE_CODE_OAUTH_TOKEN'):
+        return "CLAUDE_CODE_OAUTH_TOKEN (environment)"
+    try:
+        with open(MLQ_CONF_PATH, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith('#') or '=' not in line:
+                    continue
+                key, value = line.split('=', 1)
+                if key.strip() == 'claude.oauthToken' and value.strip():
+                    os.environ['CLAUDE_CODE_OAUTH_TOKEN'] = value.strip()
+                    return "CLAUDE_CODE_OAUTH_TOKEN (from ~/.hg.conf)"
+    except OSError:
+        pass
+    return "local login (~/.claude/.credentials.json)"
+
 def redmine_get(endpoint, api_key, params=None):
     """Make a GET request to Redmine API"""
     url = f"{REDMINE_URL}{endpoint}"
@@ -1367,12 +1396,14 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
     Returns True on full success, False if any author's review failed (so the
     caller can exit non-zero)."""
     os.makedirs(log_dir, exist_ok=True)
+    auth_method = ensure_claude_auth()
 
     print("=" * 60)
     print(f"DAILY CODE REVIEW MODE")
     print(f"Looking back: {hours} hours")
     print(f"CC: {cc_address or 'None'}")
     print(f"Alert: {alert_email or 'None'}")
+    print(f"Auth: {auth_method}")
     print(f"Log dir: {log_dir}")
     print(f"Dry run: {dry_run}")
     print("=" * 60)
@@ -1576,6 +1607,7 @@ Examples:
 
     # Ticket/commit modes save reviews and debug files under OUTPUT_DIR
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+    print(f"Auth: {ensure_claude_auth()}")
 
     # =================================================================
     # STANDALONE COMMIT MODE (--commit without --ticket)
