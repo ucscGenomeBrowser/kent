@@ -1,12 +1,12 @@
-track longReadVariants
+track colorsDbLegacy
 superTrack on
-shortLabel Long-read Variants
-longLabel Long-read Variants
+shortLabel CoLoRSdb Legacy
+longLabel CoLoRSdb long-read variants (legacy)
 group varRep
 visibility hide
 
     track deepvariant
-    parent longReadVariants
+    parent colorsDbLegacy
     shortLabel CoLoRSdb small variants
     longLabel CoLoRSdb long-read small variants
     type vcfTabix
@@ -15,7 +15,7 @@ visibility hide
     html colorsDbSnv.html
      
     track pbsv
-    parent longReadVariants
+    parent colorsDbLegacy
     shortLabel CoLoRSdb structural variants
     longLabel CoLoRSdb long-read structural variants
     type bigBed 9 +

@@ -3104,7 +3104,8 @@ for (ref = exonList; TRUE; )
                                         {
                                         int cStart = codonHgvsIx + 1;
                                         int cEnd = codonHgvsIx + 3;
-                                        int pStart = codonHgvsIx / 3;
+                                        // a codon is a single amino acid; p. is 1-based like c.
+                                        int pPos = codonHgvsIx / 3 + 1;
                                         // the one-letter amino acid was stored on the codon when it
                                         // was translated (cds.c); map it to its three-letter code
                                         char aaLetter = codon->codonAa;
@@ -3122,8 +3123,8 @@ for (ref = exonList; TRUE; )
                                             aaToAbbr(aaLetter, aaAbbr, sizeof(aaAbbr));
                                             aaName = aaToName(aaLetter);
                                             }
-                                        dyStringPrintf(codonDy, "<b>Codons: </b> c.%d-%d (p.%d-%d)<br>",
-                                                cStart, cEnd, pStart, pStart+1);
+                                        dyStringPrintf(codonDy, "<b>Codon: </b> c.%d-%d (p.%d)<br>",
+                                                cStart, cEnd, pPos);
                                         if (!isEmpty(aaAbbr))
                                             {
                                             if (aaName != NULL)

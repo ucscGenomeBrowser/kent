@@ -5627,7 +5627,7 @@ include alphaMissense.ra
 include mitoMap.ra
 
 include exonprimers.ra alpha
-include longReadVariants.ra
+include colorsDbLegacy.ra alpha
 
 include g2p.ra
 include varFreqs.ra
