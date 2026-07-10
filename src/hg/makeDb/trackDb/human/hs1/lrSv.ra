@@ -1,4 +1,4 @@
-track lrSv override
+track longReadVariants override
 html html/lrSv
 
 track colorsDbSv override

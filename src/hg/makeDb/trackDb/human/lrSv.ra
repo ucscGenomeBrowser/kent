@@ -1,7 +1,8 @@
-track lrSv
+track longReadVariants
 superTrack on
 shortLabel Long-read SVs
 longLabel Structural Variants from Long-read Sequencing
+html lrSv
 group varRep
 visibility hide
 # Supertrack-level filters. These are rendered on the supertrack's own
@@ -26,7 +27,7 @@ noScoreFilter on
     include lrSvAll.ra
 
     track colorsDbSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/colorsDb/sv.$D.bb
     shortLabel CoLoRSdb 1427 SVs
     longLabel Structural Variants from CoLoRSdb (Consortium of Long-Read Sequencing, 1,427 Samples)
@@ -55,7 +56,7 @@ noScoreFilter on
     priority 1
 
     track lrSv1kgOnt
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/1kgOnt.bb
     shortLabel 1KG ONT 1019 SVs
     longLabel Structural Variants from 1,019 Diverse Humans (Vienna ONT, Schloissnig et al. 2025)
@@ -89,7 +90,7 @@ noScoreFilter on
     priority 2
 
     track gustafsonSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/gustafson.bb
     shortLabel 1KG ONT 100 SVs
     longLabel Structural Variants from 100 1000 Genomes ONT Samples (Gustafson et al. 2024)
@@ -116,7 +117,7 @@ noScoreFilter on
     priority 3
 
     track aou1kSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/aou1k.bb
     shortLabel AoU 1027 SVs
     longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
@@ -148,7 +149,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track han945Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/han945.bb
     shortLabel Han 945 SVs
     longLabel Structural Variants from 945 Han Chinese (Long-read Sequencing)
@@ -179,7 +180,7 @@ noScoreFilter on
     urls chr2="hgTracks?position=$$"
 
     track tommoJpSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/tommoJp.bb
     shortLabel ToMMo 333 SVs
     longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
@@ -205,7 +206,7 @@ noScoreFilter on
     filterLabel.AC Allele Count
 
     track ga4kSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/ga4kSv.bb
     shortLabel GA4K 502 SVs
     longLabel Structural Variants from 502 Children's Mercy GA4K Probands (PacBio HiFi)
@@ -234,7 +235,7 @@ noScoreFilter on
     filterLabel.carrierCount Number of Carrier Samples
 
     track decodeSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/decodeSv.bb
     shortLabel deCODE 3622 SVs
     longLabel High-confidence Structural Variants from 3,622 Icelanders (deCODE, Oxford Nanopore)
@@ -254,7 +255,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track hprc2v21Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/hprc2v21.bb
     shortLabel HPRC v2.1 233 SVs
     longLabel Structural Variants from HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus)
@@ -288,7 +289,7 @@ noScoreFilter on
     # is not for release. bigBed, .as, converter and makeDoc are retained.
     # refs #36258
     #track hprc2JasmineSv
-    #parent lrSv
+    #parent longReadVariants
     #bigDataUrl /gbdb/$D/lrSv/hprc2Jasmine.bb
     #shortLabel HPRC2 Jasmine 231 SVs
     #longLabel Structural Variants from 231 HPRC v2 Assemblies (Jasmine merge of 14 SV callers)
@@ -324,7 +325,7 @@ noScoreFilter on
     #skipEmptyFields on
 
     track hgsvc2Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/hgsvc2.bb
     shortLabel HGSVC2 32 SVs
     longLabel Structural Variants from 32 Haplotype-Resolved Genomes (HGSVC2 freeze 4, Ebert 2021)
@@ -357,7 +358,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track hgsvc3Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/hgsvc3.bb
     shortLabel HGSVC3 65 SVs
     longLabel Structural Variants from 65 Diverse Samples (HGSVC3 ONT+HIFI)
@@ -394,7 +395,7 @@ noScoreFilter on
     # spanning all of chr4). Held on dev/alpha and kept out of the lrSvAll merge
     # (removed from databases.tsv) until the data is published and cleaned.
     track kwanhoSv
-    parent lrSv
+    parent longReadVariants
     release alpha
     bigDataUrl /gbdb/$D/lrSv/kwanho.bb
     shortLabel Kim PD 100 prelim
@@ -437,7 +438,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track aprSv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/apr.bb
     shortLabel Arab APR 53 SVs
     longLabel Structural Variants from the Arab Pangenome Reference (53 UAE-resident Arab samples)
@@ -463,7 +464,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track cpc1Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/cpc1.bb
     shortLabel CPC 58 SVs
     longLabel Structural Variants from the Chinese Pangenome Consortium (58 samples, CPC-only)
@@ -489,7 +490,7 @@ noScoreFilter on
     skipEmptyFields on
 
     track chirmade101Sv
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/chirmade101.bb
     shortLabel SVatalog 101 SVs
     longLabel Structural Variants from 101 Long-read WGS (GWAS SVatalog, Chirmade 2026)
@@ -514,7 +515,7 @@ noScoreFilter on
     # NOT FOR RELEASE: data received from Eichler lab via email, not yet published.
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
-    parent lrSv
+    parent longReadVariants
     release alpha
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
     shortLabel 1KG Linear 1218 SVs
