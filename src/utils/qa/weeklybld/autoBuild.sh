@@ -844,17 +844,22 @@ do_wrapup() {
     step userapps-utils   wrapup_userapps_utils
     step tag-beta         wrapup_tag_beta
     step tag-release      wrapup_tag_release
+    # release-markdown must run before zip: doZip.csh attaches the curated
+    # markdown notes to the GitHub release it creates, so they must exist first.
+    step release-markdown wrapup_release_markdown
     step zip              wrapup_zip
     step userapps-src     wrapup_userapps_src
     step docker-release   wrapup_docker_release
     step refresh-containers wrapup_refresh_containers
-    step release-markdown wrapup_release_markdown
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
-    log "  - Create GitHub release at https://github.com/ucscGenomeBrowser/kent/releases/new"
-    log "    Release notes: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "  - Verify the GitHub release doZip.csh created (with submodule-complete"
+    log "    source archives attached): https://github.com/ucscGenomeBrowser/kent/releases"
+    log "    Edit its notes if needed; source: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "    Note: GitHub's own auto-generated 'Source code' zip/tar.gz omit submodules;"
+    log "    users should download the attached kent.src.zip / kent.src.tar.gz instead."
     log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
     log "  - Send mirror announcement email to genome-mirror@soe.ucsc.edu"
 }
