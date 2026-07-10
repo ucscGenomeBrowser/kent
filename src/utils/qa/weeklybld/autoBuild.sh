@@ -14,13 +14,20 @@
 #   autoBuild.sh preview2
 #   autoBuild.sh final
 #   autoBuild.sh wrapup
-#   autoBuild.sh cherrypick   # build patch: cherry-pick CherryPickCommits.conf onto v${NN}_branch
+#   autoBuild.sh cherrypick [<sha>...]   # build patch: cherry-pick onto v${NN}_branch
+#                                        # (ids given here are written fresh to
+#                                        #  CherryPickCommits.conf; with none, the
+#                                        #  existing conf is used and confirmed if stale)
 #   autoBuild.sh --dry-run [phase]   # show what would happen
 #
 # BUILD PATCHES -- the `cherrypick` phase (autoBuild.sh cherrypick):
 #   A build patch cherry-picks approved bugfix commit(s) from master onto
-#   v${NN}_branch after the weekly build. List the commit SHAs (one per line, and
-#   NO merge commits) in CherryPickCommits.conf, then run `autoBuild.sh cherrypick`.
+#   v${NN}_branch after the weekly build. Give the commit id(s) on the command
+#   line -- `autoBuild.sh cherrypick <sha>...` -- and they are validated and
+#   written fresh to CherryPickCommits.conf; or run `autoBuild.sh cherrypick` with
+#   no ids to reuse the existing conf, which is then confirmed interactively (y/N)
+#   if it looks stale (lists commits already on the branch). Each id is checked to
+#   exist and to not be a merge commit (NO merge commits in a cherry-pick).
 #   It is a forced-only phase (never auto-detected from the calendar) and is
 #   repeatable: each run is one patch round (logs/v${NN}.patch<N>.log), and the
 #   checkpoint state file is cleared on success so the next round starts fresh.
@@ -74,6 +81,7 @@ LOCKFILE="/tmp/autoBuild.lock"
 GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
+CHERRYPICK_ARGS=()   # commit ids given on the command line: autoBuild.sh cherrypick <sha>...
 
 ##############################################################################
 # Helpers
@@ -944,6 +952,95 @@ cherrypick_refresh_rel() {
     return 0
 }
 
+# Preflight (fresh round only): settle exactly which commit ids will be applied
+# and sanity-check them, so cherryPickCommits.csh isn't handed a stale or bad list.
+#
+#   - Command-line ids (autoBuild.sh cherrypick <sha>...) are authoritative: they
+#     are validated and written FRESH to CherryPickCommits.conf (overwriting any
+#     leftover contents). An id already on the branch is a hard error here (it was
+#     typed explicitly, so it's a mistake, not ambiguity).
+#   - No command-line ids => use the existing CherryPickCommits.conf, but treat it
+#     as suspect: if any listed commit is already on v${BRANCHNN}_branch the file
+#     "looks stale", and we ask for interactive y/N confirmation before proceeding
+#     (refusing rather than hanging if there is no terminal).
+#
+# Every id is also checked to exist and to not be a merge commit either way.
+cherrypick_prepare_commits() {
+    local conf="$WEEKLYBLD/CherryPickCommits.conf"
+    local -a shas=()
+    local from_cmdline=false
+
+    if (( ${#CHERRYPICK_ARGS[@]} > 0 )); then
+        from_cmdline=true
+        shas=("${CHERRYPICK_ARGS[@]}")
+        log "Commit id(s) from the command line: ${shas[*]}"
+    else
+        [[ -s "$conf" ]] || die "No commit ids given and $conf is missing/empty. Run: $SCRIPT_NAME cherrypick <sha>..."
+        local tok
+        for tok in $(grep -vE '^[[:space:]]*(#|$)' "$conf" || true); do shas+=("$tok"); done
+        (( ${#shas[@]} > 0 )) || die "$conf has no commit ids. Run: $SCRIPT_NAME cherrypick <sha>..."
+        log "Commit id(s) from $conf: ${shas[*]}"
+    fi
+
+    cd "$WEEKLYBLD"
+    run git fetch -q origin || log "WARNING: git fetch failed; staleness check uses possibly-stale refs"
+    local branchref="origin/v${BRANCHNN}_branch"
+    local have_branch=false
+    if git rev-parse -q --verify "$branchref" >/dev/null 2>&1; then
+        have_branch=true
+    else
+        log "WARNING: $branchref not found; cannot check whether commits are already on the branch."
+    fi
+
+    local stale=false sha short subj
+    for sha in "${shas[@]}"; do
+        git cat-file -e "${sha}^{commit}" 2>/dev/null || \
+            die "Commit '$sha' not found in the repo. Fetch/pull master, or fix the id."
+        if git rev-parse -q --verify "${sha}^2" >/dev/null 2>&1; then
+            die "Commit '$sha' is a MERGE commit -- do not cherry-pick merges (see cherryPickCommits.csh). Use the underlying non-merge commit(s)."
+        fi
+        short=$(git rev-parse --short "$sha")
+        subj=$(git log -1 --format=%s "$sha")
+        if $have_branch && git merge-base --is-ancestor "$sha" "$branchref" 2>/dev/null; then
+            log "  STALE  $short  (already on v${BRANCHNN}_branch)  $subj"
+            stale=true
+        else
+            log "  new    $short  $subj"
+        fi
+    done
+
+    if $stale; then
+        if $from_cmdline; then
+            die "Commit id(s) above are already on v${BRANCHNN}_branch. Nothing to do, or fix the list."
+        fi
+        log "CherryPickCommits.conf looks STALE (lists commit(s) already on v${BRANCHNN}_branch)."
+        if [[ ! -t 0 ]]; then
+            die "Refusing to proceed with a stale conf non-interactively. Re-run in a terminal, or pass fresh ids: $SCRIPT_NAME cherrypick <sha>..."
+        fi
+        if $DRY_RUN; then
+            log "(dry-run) would prompt y/N to proceed with the stale conf"
+        else
+            local ans=""
+            read -r -p "Proceed with this list anyway? [y/N] " ans || true
+            case "$ans" in
+                [yY]|[yY][eE][sS]) log "Proceeding at user confirmation." ;;
+                *) die "Aborted (stale CherryPickCommits.conf). Update it, or pass ids: $SCRIPT_NAME cherrypick <sha>..." ;;
+            esac
+        fi
+    fi
+
+    # Command-line ids become the conf that cherryPickCommits.csh reads.
+    if $from_cmdline; then
+        if $DRY_RUN; then
+            log "(dry-run) would write ${#shas[@]} commit id(s) to $conf"
+        else
+            printf '%s\n' "${shas[@]}" > "$conf"
+            log "Wrote ${#shas[@]} commit id(s) to $conf"
+        fi
+    fi
+    return 0
+}
+
 do_cherrypick() {
     log "========== PHASE: CHERRY-PICK (build patch) =========="
     read_buildenv
@@ -972,6 +1069,15 @@ do_cherrypick() {
         log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
     else
         log "pushedToRR.flag absent -> PRE-RR patch (QA window): landing patch + rebuilding beta only."
+    fi
+
+    # Settle + validate the commit list before applying -- but only on a FRESH
+    # round. On a resume, apply-commits may already have landed commits, which
+    # would make the "already on the branch" staleness check fire on our own work.
+    if step_is_done apply-commits; then
+        log "Resuming after apply-commits; skipping commit-list validation."
+    else
+        cherrypick_prepare_commits
     fi
 
     # --- Core patch: applies in both cases ---
@@ -1028,17 +1134,27 @@ main() {
                 shift
                 ;;
             --help|-h)
-                echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup|cherrypick]"
+                echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup]"
+                echo "       $SCRIPT_NAME [--dry-run] cherrypick [<sha>...]"
                 echo ""
                 echo "Runs the CGI build phase for today's date (per Google Calendar),"
                 echo "or a forced phase if specified. Stops on any error."
                 echo ""
-                echo "cherrypick is forced-only (never auto-detected): it applies the"
-                echo "commits in CherryPickCommits.conf onto v\${NN}_branch as a build patch."
+                echo "cherrypick is forced-only (never auto-detected): it applies build-patch"
+                echo "commit(s) onto v\${NN}_branch. Give the commit id(s) on the command line"
+                echo "(they are written fresh to CherryPickCommits.conf), or run it with no ids"
+                echo "to use the existing CherryPickCommits.conf -- in which case, if that file"
+                echo "looks stale (lists commits already on the branch), it asks for y/N first."
                 exit 0
                 ;;
             *)
-                die "Unknown argument: $1. Use --help for usage."
+                # After 'cherrypick', any remaining non-flag args are commit ids.
+                if [[ "$FORCED_PHASE" == "cherrypick" ]]; then
+                    CHERRYPICK_ARGS+=("$1")
+                    shift
+                else
+                    die "Unknown argument: $1. Use --help for usage."
+                fi
                 ;;
         esac
     done
