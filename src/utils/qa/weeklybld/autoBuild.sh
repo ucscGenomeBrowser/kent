@@ -167,6 +167,28 @@ ensure_binfmt() {
     fi
 }
 
+# Verify the GitHub CLI is authenticated. doZip.csh uses `gh release create/upload`
+# to attach the submodule-complete source archives to the GitHub release (#37741);
+# if the build user's gh token has expired, that step fails LATE (after the ~1hr of
+# hgcentral/userApps/tag/zip work) and only WARNS, so the release silently ships
+# without its assets. Checking up front turns that into a clear, immediate stop.
+# Called at the start of do_wrapup and the post-RR cherry-pick regen path (both run
+# doZip). Not a checkpointed step -- it is a cheap precondition that must re-verify
+# on every (re-)run.
+ensure_gh_auth() {
+    if $DRY_RUN; then
+        log "(dry-run) would verify gh auth status"
+        return 0
+    fi
+    if gh auth status >/dev/null 2>&1; then
+        log "OK: gh authenticated"
+    else
+        die "gh is not authenticated (gh auth status failed). Run 'gh auth login' as
+    the build user, then re-run. doZip.csh needs gh to attach the source archives to
+    the GitHub release ($WEEKLYBLD/doZip.csh, refs #37741)."
+    fi
+}
+
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
 ensure_master_branch() {
     local branch
@@ -870,6 +892,11 @@ do_wrapup() {
     PHASE_VER=$BRANCHNN
 
     log "Running wrap-up for v${BRANCHNN}"
+
+    # Precondition: gh must be authenticated now, so a stale token fails here
+    # rather than after the ~1hr of work leading up to doZip's GitHub upload.
+    ensure_gh_auth
+
     state_init wrapup "$PHASE_VER"
 
     step hgcentral-sql    wrapup_hgcentral_sql
@@ -1067,6 +1094,8 @@ do_cherrypick() {
     if [[ -e "$WEEKLYBLD/pushedToRR.flag" ]]; then
         post_rr=true
         log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
+        # This path re-runs doZip (GitHub upload), so require gh auth up front too.
+        ensure_gh_auth
     else
         log "pushedToRR.flag absent -> PRE-RR patch (QA window): landing patch + rebuilding beta only."
     fi
