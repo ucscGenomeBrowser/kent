@@ -105,18 +105,18 @@ mm10 mouseDevTimecourse encode4Reg Related ENCODE4 Regulation tracks
 mm10 encode4Reg mouseDevTimecourse Related ENCODE Expression track
 
 # hg38 long-read SV supertrack cross-links to other SV resources:
-hg38 lrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
-hg38 gnomadStructuralVariants lrSv Long-read structural variants across multiple cohorts
-hg38 lrSv dbVarSv NCBI dbVar structural variants (short-read and long-read, germline and clinical)
-hg38 dbVarSv lrSv Long-read structural variants across multiple cohorts
-hg38 lrSv dgvPlus Database of Genomic Variants (DGV) structural variation catalog
-hg38 dgvPlus lrSv Long-read structural variants across multiple cohorts
-hg38 lrSv giabSv Genome in a Bottle high-confidence SV benchmark callsets
-hg38 giabSv lrSv Long-read structural variants across multiple cohorts
-hg38 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
-hg38 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
-hs1 lrSv mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
-hs1 mei lrSv Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+hg38 longReadVariants gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
+hg38 gnomadStructuralVariants longReadVariants Long-read structural variants across multiple cohorts
+hg38 longReadVariants dbVarSv NCBI dbVar structural variants (short-read and long-read, germline and clinical)
+hg38 dbVarSv longReadVariants Long-read structural variants across multiple cohorts
+hg38 longReadVariants dgvPlus Database of Genomic Variants (DGV) structural variation catalog
+hg38 dgvPlus longReadVariants Long-read structural variants across multiple cohorts
+hg38 longReadVariants giabSv Genome in a Bottle high-confidence SV benchmark callsets
+hg38 giabSv longReadVariants Long-read structural variants across multiple cohorts
+hg38 longReadVariants mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hg38 mei longReadVariants Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
+hs1 longReadVariants mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
+hs1 mei longReadVariants Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
 
 # EVE cross-links:
 hg38 eve alphaMissense AlphaMissense, a similar deep-learning missense pathogenicity predictor

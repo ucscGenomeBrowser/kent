@@ -58,6 +58,28 @@ ln -f "$BUILDDIR/zips/jksrc.v"$BRANCHNN".tar.gz" "$tgzFile"
 if ( "$tag" == "" ) then
  echo "WARNING: no v${BRANCHNN}_branch release tag found; skipping GitHub upload [${0}: `date`]"
 else
+ # GitHub is a MIRROR of the internal origin (build@hgwdev:/data/git/kent.git);
+ # the release tag we just pushed to origin has to reach github -- at THIS commit --
+ # before we make a release from it. If we ran `gh release create` before the tag
+ # mirrored, gh would create the tag at github's default-branch (master) HEAD: the
+ # WRONG commit. So resolve the tag to its commit locally and confirm github agrees
+ # before proceeding; and pass --target that commit so `create` pins the right SHA
+ # even if the mirror is momentarily behind. refs #37741.
+ set relSha = `git rev-list -n 1 "$tag"`
+ echo "Release tag $tag -> $relSha (local); verifying GitHub has mirrored it [${0}: `date`]"
+ set ghSha = ""
+ @ tries = 0
+ while ( $tries < 20 )
+  set ghSha = `gh api "repos/ucscGenomeBrowser/kent/commits/$tag" --jq .sha`
+  if ( "$ghSha" == "$relSha" ) break
+  @ tries++
+  echo "  GitHub not current yet (has '$ghSha', want '$relSha'); waiting 30s [try $tries/20]"
+  sleep 30
+ end
+ if ( "$ghSha" != "$relSha" ) then
+  echo "WARNING: GitHub tag $tag not confirmed at $relSha after ~10 min; proceeding with --target to force the correct commit [${0}: `date`]"
+ endif
+
  echo "Attaching source archives to GitHub release $tag [${0}: `date`]"
  gh release view "$tag" --repo ucscGenomeBrowser/kent >& /dev/null
  if ( $status == 0 ) then
@@ -66,13 +88,15 @@ else
  else
   # release not created yet; create it now so the assets have a home. Use the
   # curated markdown notes if they have been generated, else GitHub's auto notes.
+  # --target "$relSha" pins the tag/release to the correct commit regardless of
+  # mirror timing (ignored when the tag already exists on github).
   set notes = "$WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
   if ( -e "$notes" ) then
    gh release create "$tag" "$zipFile" "$tgzFile" --repo ucscGenomeBrowser/kent \
-     --title "v${BRANCHNN} Release" --notes-file "$notes"
+     --target "$relSha" --title "v${BRANCHNN} Release" --notes-file "$notes"
   else
    gh release create "$tag" "$zipFile" "$tgzFile" --repo ucscGenomeBrowser/kent \
-     --title "v${BRANCHNN} Release" --generate-notes
+     --target "$relSha" --title "v${BRANCHNN} Release" --generate-notes
   endif
  endif
  if ( $status != 0 ) then

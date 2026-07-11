@@ -2,7 +2,7 @@
 # Do not edit by hand - re-run the merge script and re-commit.
 
     track lrSvAll
-    parent lrSv
+    parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/lrSvAll.bb
     shortLabel All LR SVs merged
     longLabel All long-read SVs merged across subtracks by exact position, with per-database AC
