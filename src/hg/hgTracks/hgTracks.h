@@ -380,7 +380,8 @@ struct simpleFeature
     {
     struct simpleFeature *next;
     int start, end;			/* Start/end in browser coordinates. */
-    int qStart, qEnd;			/* query start/end */
+    int qStart, qEnd;			/* query start/end; only used for alignment tracks
+                                         * (PSL, BAM, chain, snake); 0 for gene models (genePred). */
     int grayIx;                         /* Level of gray usually. */
     int codonIndex;                     /* 1-based codon index (ignored if 0) */
     char codonAa;                       /* For a codon, its display amino-acid letter:
