@@ -16,7 +16,7 @@ import os
 import re
 import glob
 
-STANDARD_AAS  = list('ACDEFGHIKLMNPQRSTVWY')   # 20 standard AAs, alphabetical
+STANDARD_AAS  = list('AVLIMFYWRHKDESTNQGCP')   # 20 standard AAs, by class, to match MaveDB
 COLOR_BOUNDS  = "0,0.5,1"
 COLOR_VALUES  = "#2166ac,#f7f7f7,#d6604d"
 LEGEND        = "EVE score: 0=benign (blue) 0.5=uncertain (white) 1=pathogenic (red)"

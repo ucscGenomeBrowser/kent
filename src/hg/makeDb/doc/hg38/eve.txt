@@ -12,7 +12,8 @@ unzip EVE_all_data.zip
 
 # Convert VCF files to heatmap bigBed format.
 # Each protein becomes one BED12+ entry. Columns = amino acid positions (at codon
-# genomic coordinates), rows = 20 standard amino acids (A-Y).
+# genomic coordinates), rows = 20 standard amino acids ordered by class (A V L I M F Y W R
+# H K D E S T N Q G C P), matching the MaveDB heatmap track.
 # Multiple codon changes encoding the same amino acid substitution are deduplicated
 # (they carry identical EVE scores). Wildtype cells are left empty.
 # Colors: blue (#2166ac) EVE=0 benign, white (#f7f7f7) EVE=0.5 uncertain,
