@@ -23,7 +23,8 @@ wget -nv https://data.evemodel.org/popeve/v1.1/downloads/grch38_popEVE_ukbb_2025
 # The combined VCF is one position-sorted file with all proteins interleaved (overlapping
 # genes share positions), so records are grouped by protein on disk before conversion.
 # Each protein becomes one heatmap BED12+ entry: columns = amino acid positions at codon
-# genomic coordinates, rows = 20 standard amino acids (A-Y). Multiple codon changes encoding
+# genomic coordinates, rows = 20 standard amino acids ordered by class (A V L I M F Y W R H
+# K D E S T N Q G C P), matching the MaveDB heatmap track. Multiple codon changes encoding
 # the same amino acid substitution carry identical popEVE scores and are deduplicated.
 # Wildtype cells are empty. popEVE lists only positions carrying a missense alt, so a codon
 # may have only 2 of its 3 genomic positions; block sizes are clamped (min(3, gap-to-next))
@@ -70,10 +71,10 @@ bash runBuild.sh
 #   amino-acid positions: 10,114,809;  bases covered: 886,638,890
 #   strand: 0 inferred-vs-RefSeq mismatches; 25 proteins not in the RefSeq map (strand from
 #     coordinate inference); 0 with no strand signal; 0 dropped by chrom.sizes filter
-#   trailingFix (trailing empty cell relabeled): 16,571 proteins
+#   trailingFix (trailing empty cell relabeled): 15,555 proteins
 #   mouseover: HTML multi-line labels (<br>/<b>); component scores rounded to 3 dp;
 #     missing/nan components shown as NA
-#   popEve.bb size: 1,593,137,151 bytes
+#   popEve.bb size: 1,592,586,266 bytes
 
 mkdir -p /gbdb/hg38/popEve
 ln -sf /hive/data/genomes/hg38/bed/popEve/popEve.bb /gbdb/hg38/popEve/popEve.bb

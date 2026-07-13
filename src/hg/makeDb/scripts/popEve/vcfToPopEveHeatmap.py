@@ -23,7 +23,7 @@ Produces one heatmap BED12+ line per protein (see popEve_heatmap.as):
 
 import sys
 
-STANDARD_AAS = list('ACDEFGHIKLMNPQRSTVWY')   # 20 standard AAs, alphabetical
+STANDARD_AAS = list('AVLIMFYWRHKDESTNQGCP')   # 20 standard AAs, by class, to match MaveDB
 
 # Published popEVE severity cutoffs (fixed interior color anchors).
 SEVERE_MAX = -5.056      # popEVE < SEVERE_MAX            -> severe
