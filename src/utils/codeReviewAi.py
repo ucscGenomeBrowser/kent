@@ -1414,7 +1414,7 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
 
     if not authors:
         print("No commits found in the specified time window.")
-        return
+        return True
 
     total_commits = sum(len(a['commits']) for a in authors.values())
     print(f"Found {total_commits} commit(s) from {len(authors)} author(s):")
