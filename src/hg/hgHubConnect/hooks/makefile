@@ -1,6 +1,7 @@
 kentSrc = ../../..
 ifeq (${PROG},)
 PROGS = pre-create pre-finish
+sharedObjects = hooklib.o
 include ${kentSrc}/inc/userAppMulti.mk
 else
 extraObjects = hooklib.o
