@@ -2,7 +2,7 @@
 """
 B.11: Computable ACMG Criteria Summary track (NOT a VCEP classification).
 
-For every gnomAD-observed variant in the 8 cardiomyopathy gene CDS regions &#177;20 nt
+For every gnomAD-observed variant in the 8 cardiomyopathy gene CDS regions +/-20 nt
 splice padding, lists the subset of ACMG/AMP evidence codes a hub can compute
 automatically. No overall classification is calculated:
   - BA1 / BS1 / PM2_Supporting  (gnomAD v4.1 FAF95; B.3)
@@ -11,7 +11,7 @@ automatically. No overall classification is calculated:
   - PS1 / PM5                   (EvRepo P/LP reference, LEAVE-ONE-OUT; see caveat below)
   - PM4                         (NMD-escaping truncating variants, non-MYBPC3; CSpec disease-specific)
   - BP7                         (synonymous + SpliceAI no-impact + not conserved)
-  - Splice safety net           (SpliceAI &#8805; 0.20 overrides a benign-leaning call to VUS)
+  - Splice safety net           (SpliceAI >= 0.20 overrides a benign-leaning call to VUS)
   - HCM/DCM tag                 (MYH7, TNNT2: PM1 is HCM-calibrated)
 
 CONSEQUENCE/CODON/AA come from the Phase-1 hgVai annotation TSV (cmpVCEPAnnotate).
@@ -25,7 +25,7 @@ HONESTY / KNOWN LIMITS (surfaced to the VCEP, not hidden):
     We use the VCEP EvRepo P/LP set with LEAVE-ONE-OUT (a variant cannot earn PS1/PM5
     from its own EvRepo entry). The choice of reference DB is an open VCEP question.
   * PM4 strength (MOD vs SUP) and BP7 conservation metric/threshold are not fixed by
-    the CSpec &#8212; surfaced as VCEP questions; provisional choices are flagged in-line.
+    the CSpec - surfaced as VCEP questions; provisional choices are flagged in-line.
 
 Outputs:
   cmpVCEPProvisionalClass/cmpVCEPProvisionalClass.as
@@ -49,7 +49,7 @@ ANNOT_TSV = f'{WORKDIR}/cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv'
 SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAi.bb'
 PHYLOP_BW = '/gbdb/hg38/multiz470way/phyloP470way.bw'
 
-# Per-gene thresholds (from CSpec &#8212; NOT invented here)
+# Per-gene thresholds (from CSpec - NOT invented here)
 BS1_THRESHOLDS = {'MYBPC3': 0.0002}
 DEFAULT_BS1 = 0.0001
 BA1_THRESHOLD = 0.001
@@ -57,15 +57,15 @@ PM2_SUPPORTING_THRESHOLD = 0.00004
 SPLICE_SAFETY_THRESHOLD = 0.20   # SpliceAI delta for safety-net override (standard recall threshold)
 # --- provisional operationalizations the CSpec leaves open (flagged as VCEP questions) ---
 BP7_SPLICE_MAX = 0.20            # SpliceAI "no predicted impact" (standard recall threshold)
-BP7_PHYLOP_MAX = 0.0             # phyloP470way <= 0 == not under purifying selection (PROVISIONAL &#8212; VCEP to confirm metric+cutoff)
+BP7_PHYLOP_MAX = 0.0             # phyloP470way <= 0 == not under purifying selection (PROVISIONAL - VCEP to confirm metric+cutoff)
 
-# NC_ accession (hg38) &#8594; chrom, for parsing EvRepo genomic HGVS (leave-one-out keys)
+# NC_ accession (hg38) -> chrom, for parsing EvRepo genomic HGVS (leave-one-out keys)
 NC_HG38 = {
     'NC_000001.11': 'chr1', 'NC_000003.12': 'chr3', 'NC_000011.10': 'chr11',
     'NC_000012.12': 'chr12', 'NC_000014.9': 'chr14', 'NC_000015.10': 'chr15',
     'NC_000019.10': 'chr19',
 }
-# Variants with established splicing impact &#8212; excluded from the PS1/PM5 reference per GN002 PS1.
+# Variants with established splicing impact - excluded from the PS1/PM5 reference per GN002 PS1.
 PS1_SPLICE_EXCLUDE = {'NM_000256.3:c.2308G>A'}
 NC_G_RE = re.compile(r'^(NC_\d+\.\d+):g\.(\d+)([ACGT]+)>([ACGT]+)$')
 PROT_MISSENSE_RE = re.compile(r'p\.([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})')
@@ -108,7 +108,7 @@ AUTOSQL = """table cmpVCEPProvisionalClass
 
 
 # ============================================================
-# Combination rules &#8212; transcribed verbatim from CSpec GN002
+# Combination rules - transcribed verbatim from CSpec GN002
 # ============================================================
 
 # RETIRED 2026-07-08 (per CM VCEP chair L. Bronicki): this track no longer computes an overall
@@ -414,7 +414,7 @@ def main():
             codes.add('PM2_Supporting')
             code_why['PM2_Supporting'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8804; 4e-05 (rare)'
 
-        # REVEL PP3/BP4 &#8212; missense only
+        # REVEL PP3/BP4 - missense only
         if is_missense:
             rc = revel.get((chrom, v['start'], alt))
             if rc:
@@ -429,7 +429,7 @@ def main():
             codes.add('PM1_Moderate')
             code_why['PM1_Moderate'] = f'in the {gene} PM1 hotspot region (HCM-calibrated)'
 
-        # PS1 / PM5 &#8212; EvRepo P/LP reference, LEAVE-ONE-OUT (exclude self by genomic key)
+        # PS1 / PM5 - EvRepo P/LP reference, LEAVE-ONE-OUT (exclude self by genomic key)
         if is_missense and a.get('codon') and a.get('aaAlt'):
             codon, aaalt = a['codon'], a['aaAlt']
             gkey = (chrom, pos1, ref, alt)
@@ -444,7 +444,7 @@ def main():
                 codes.add('PM5_Moderate')
                 code_why['PM5_Moderate'] = f'a different missense at codon {codon} is classified P/LP in the VCEP EvRepo set'
 
-        # PM4 &#8212; NMD-escaping truncating, non-MYBPC3 (CSpec disease-specific; PVS1 N/A for these genes).
+        # PM4 - NMD-escaping truncating, non-MYBPC3 (CSpec disease-specific; PVS1 N/A for these genes).
         # NMD escapes if the PTC is in the last exon OR within 50 nt of the last exon-exon junction
         # (J = transcript length - last exon length); cDNA position is in transcript orientation.
         if gene != 'MYBPC3' and (so & TRUNCATING_SO):
@@ -460,7 +460,7 @@ def main():
             codes.add('PM4_Supporting')
             code_why['PM4_Supporting'] = 'stop-loss variant'
 
-        # BP7 &#8212; synonymous + SpliceAI no-impact + not conserved (conservation cutoff PROVISIONAL)
+        # BP7 - synonymous + SpliceAI no-impact + not conserved (conservation cutoff PROVISIONAL)
         sa_score = spliceai.get((chrom, pos1, ref, alt), 0.0)
         if is_synonymous and not args.no_spliceai:
             phy = phylop.get((chrom, pos1))
@@ -470,7 +470,7 @@ def main():
                                               f'phyloP {phy:.2f} &#8804; 0 (conservation cutoff provisional)')
 
         # CSpec exclusion: PM1 must NOT be combined with PM5. GN002 PM5: "use of PM5 is most
-        # appropriate since it is variant specific" &#8594; keep PM5, drop PM1.
+        # appropriate since it is variant specific" -> keep PM5, drop PM1.
         if 'PM1_Moderate' in codes and 'PM5_Moderate' in codes:
             codes.discard('PM1_Moderate')
             notes.append('<b>PM1 suppressed:</b> CSpec says PM5 (variant-specific) is preferred over PM1')
@@ -479,7 +479,7 @@ def main():
             notes.append('<b>Note:</b> PM1+PS1 co-occur &#8212; possible double-counting (VCEP question)')
 
         # Splice signal (informational): SpliceAI >= 0.20 flags possible splice impact.
-        # No longer overrides a call &#8212; this track computes no overall classification.
+        # No longer overrides a call - this track computes no overall classification.
         splice_safety = 'no'
         if sa_score >= SPLICE_SAFETY_THRESHOLD:
             notes.append(f'<b>Splice flag:</b> SpliceAI {sa_score:.2f} &gt;= {SPLICE_SAFETY_THRESHOLD} (possible splice impact; informational)')

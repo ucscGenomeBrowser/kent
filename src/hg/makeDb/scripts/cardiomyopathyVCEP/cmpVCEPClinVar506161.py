@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-B.8 &#8212; Cardiomyopathy VCEP ClinVar submitter 506161 track builder.
+B.8 - Cardiomyopathy VCEP ClinVar submitter 506161 track builder.
 
 Renders all 199 ClinVar submissions from "ClinGen Cardiomyopathy Variant Curation
-Expert Panel" &#8212; verified at A.3 to be 100% "reviewed by expert panel" (no relabel
+Expert Panel" - verified at A.3 to be 100% "reviewed by expert panel" (no relabel
 branch needed).
 
 Input:
@@ -38,7 +38,7 @@ COLORS = {
 }
 DEFAULT_COLOR = '136,136,136'
 
-# Per-gene EvRepo VariationIDs &#8212; built once at build-time from EvRepo JSON
+# Per-gene EvRepo VariationIDs - built once at build-time from EvRepo JSON
 EVREPO_VAR_IDS = set()
 EVREPO_JSON = '/hive/users/lrnassar/claude/RM37446/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
 try:
@@ -81,7 +81,7 @@ AUTOSQL = """table cmpVCEPClinVar506161
 
 
 def load_submissions():
-    """Parse 199-row TSV. Returns dict by VariationID (string) &#8594; submission record."""
+    """Parse 199-row TSV. Returns dict by VariationID (string) -> submission record."""
     submissions = {}
     header = None
     for line in open(SUBMISSIONS_TSV):
@@ -110,7 +110,7 @@ def load_submissions():
 
 def load_variant_summary_coords(submissions):
     """Stream variant_summary.txt.gz, picking rows whose VariationID (col 31) is in our set.
-    Returns dict: var_id &#8594; {assembly: {chrom, start_bed, end_bed, ref, alt, hgvs_name, rcv}}."""
+    Returns dict: var_id -> {assembly: {chrom, start_bed, end_bed, ref, alt, hgvs_name, rcv}}."""
     var_ids = set(submissions.keys())
     coords = {vid: {} for vid in var_ids}
 
@@ -125,7 +125,7 @@ def load_variant_summary_coords(submissions):
             f = line.rstrip('\n').split('\t')
             if len(f) < 31:
                 continue
-            var_id = f[30]  # VariationID (1-based col 31 &#8594; 0-based index 30)
+            var_id = f[30]  # VariationID (1-based col 31 -> 0-based index 30)
             if var_id not in var_ids:
                 continue
             n_rows_seen += 1
@@ -216,7 +216,7 @@ def emit_bed(submissions, coords, db, out_path):
     with open(out_path, 'w') as f:
         for line in rows:
             f.write(line + '\n')
-    print(f'  wrote {len(rows)} BED features &#8594; {out_path} (skipped {skipped})')
+    print(f'  wrote {len(rows)} BED features -> {out_path} (skipped {skipped})')
     return len(rows)
 
 
@@ -267,7 +267,7 @@ def main():
         if counts['hg38'] == counts['hg19']:
             print(f'  cross-assembly parity OK: {counts["hg38"]} features each')
         else:
-            print(f'  WARNING: parity FAILED &#8212; hg38={counts["hg38"]} hg19={counts["hg19"]}',
+            print(f'  WARNING: parity FAILED - hg38={counts["hg38"]} hg19={counts["hg19"]}',
                   file=sys.stderr)
 
 

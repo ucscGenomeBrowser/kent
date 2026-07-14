@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-B.2 &#8212; MYBPC3 PVS1 Evidence track builder (MYBPC3-only, the lone PVS1-applicable gene).
+B.2 - MYBPC3 PVS1 Evidence track builder (MYBPC3-only, the lone PVS1-applicable gene).
 
 Per GN095 (verified at A.1):
   - NMD-escape region: codons 1254+ (50 nt upstream of last exon-exon junction at exon 33:34)
@@ -14,7 +14,7 @@ Outputs (per-assembly bigBed):
   cmpVCEPPVS1/cmpVCEPPVS1Hg{38,19}.bed + .bb
 
 Total features: ~15 (1 NMD-escape region + 14 in-frame/micro exon caveats)
-The 3 micro-exons (10, 11, 14) are tagged as in-frame too &#8212; single feature per exon
+The 3 micro-exons (10, 11, 14) are tagged as in-frame too - single feature per exon
 with both caveats listed in the mouseover.
 """
 
@@ -24,7 +24,7 @@ import argparse, os, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cmpVCEPClinDomains import parse_mane_record, cds_exons, aa_to_genomic_segments
 
-# MYBPC3 GN095 PVS1 caveats &#8212; hand-transcribed (will be re-verified at D.0)
+# MYBPC3 GN095 PVS1 caveats - hand-transcribed (will be re-verified at D.0)
 
 # In-frame exons (1-based exon numbering per CDS)
 IN_FRAME_EXONS = [2, 3, 4, 8, 9, 10, 11, 14, 20, 22, 24, 25, 26, 27]
@@ -32,12 +32,12 @@ IN_FRAME_EXONS = [2, 3, 4, 8, 9, 10, 11, 14, 20, 22, 24, 25, 26, 27]
 # Micro-exons (subset of in-frame; splice prediction unreliable)
 MICRO_EXONS = {10, 11, 14}
 
-# NMD-escape: codons 1254+ &#8212; PVS1 should not be applied here
+# NMD-escape: codons 1254+ - PVS1 should not be applied here
 NMD_ESCAPE_CODON_START = 1254
 
-PVS1_NMD_ESCAPE_COLOR    = '136,136,136'  # gray &#8212; "PVS1 not applicable"
-PVS1_MICRO_EXON_COLOR    = '255,140,40'   # orange &#8212; splice unreliable
-PVS1_INFRAME_EXON_COLOR  = '210,80,40'    # red-orange &#8212; caveat for in-frame del
+PVS1_NMD_ESCAPE_COLOR    = '136,136,136'  # gray - "PVS1 not applicable"
+PVS1_MICRO_EXON_COLOR    = '255,140,40'   # orange - splice unreliable
+PVS1_INFRAME_EXON_COLOR  = '210,80,40'    # red-orange - caveat for in-frame del
 
 CHROM_SIZES = {
     'hg38': '/cluster/data/hg38/chrom.sizes',
@@ -97,11 +97,11 @@ def main():
 
     bed_lines = []
 
-    # 1. NMD-escape region: codons 1254+ &#8594; use aa_to_genomic_segments
+    # 1. NMD-escape region: codons 1254+ -> use aa_to_genomic_segments
     cds_total_nt = sum(ee - es for _, es, ee in exons_indexed)
     last_aa = cds_total_nt // 3  # includes stop
     nmd_segments = aa_to_genomic_segments(NMD_ESCAPE_CODON_START, last_aa, mane)
-    print(f'  NMD-escape: codons {NMD_ESCAPE_CODON_START}-{last_aa} &#8594; {len(nmd_segments)} genomic segments')
+    print(f'  NMD-escape: codons {NMD_ESCAPE_CODON_START}-{last_aa} -> {len(nmd_segments)} genomic segments')
     for seg_start, seg_end, exon_idx in nmd_segments:
         name = f'MYBPC3_PVS1_NMD_escape_codon{NMD_ESCAPE_CODON_START}+_ex{exon_idx}'
         mouseover = (
@@ -210,7 +210,7 @@ def main():
         if n38 == n19:
             print(f'  cross-assembly parity OK: {n38} features each')
         else:
-            print(f'  WARNING: parity FAILED &#8212; hg38={n38} hg19={n19}', file=sys.stderr)
+            print(f'  WARNING: parity FAILED - hg38={n38} hg19={n19}', file=sys.stderr)
 
 
 if __name__ == '__main__':

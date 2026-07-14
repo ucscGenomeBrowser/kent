@@ -14,7 +14,7 @@ table bedHeatmapPopEve
     int[blockCount] blockSizes;   "Comma-separated block sizes (codon width, clamped to avoid overlap)"
     int[blockCount] chromStarts;  "Start positions relative to chromStart"
     int _rowCount;    "Number of heatmap rows (20 standard amino acids)"
-    string[_rowCount] _labels; "Row labels|Single-letter amino acid codes (A C D E F G H I K L M N P Q R S T V W Y)"
+    string[_rowCount] _labels; "Row labels|Single-letter amino acid codes by class (A V L I M F Y W R H K D E S T N Q G C P)"
     lstring _colorBounds; "Comma-separated popEVE score thresholds for color interpolation"
     lstring _colorValues; "Comma-separated colors for each threshold score"
     lstring _scoreArray; "Row-major popEVE scores; empty cell = wildtype or no data"

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-B.9 &#8212; Walsh gene-level Odds Ratio track (PS4 calibration source).
+B.9 - Walsh gene-level Odds Ratio track (PS4 calibration source).
 
 Rebuilt from WALSH 2017 (Genetics in Medicine, PMID 27532257) Tables S5A (HCM) and S5B (DCM),
-the case-control OR + 95% CI by gene &#215; disease &#215; variant class. GN002 PS4 explicitly cites
+the case-control OR + 95% CI by gene x disease x variant class. GN002 PS4 explicitly cites
 Walsh 2017 as the preferred case series and defines PS4 strength by the lower bound of the OR's
 95% CI:
    STRONG     CI-lower >= 20   (CSpec, explicit)
@@ -14,7 +14,7 @@ Walsh 2017 as the preferred case series and defines PS4 strength by the lower bo
 statistic; superseded per CSpec. Whether the VCEP also wants the 2019/EF values is a Phase-7
 question.)
 
-Gene-level features: one per (gene &#215; {HCM,DCM} &#215; {All protein-altering, Truncating, Non-truncating}),
+Gene-level features: one per (gene x {HCM,DCM} x {All protein-altering, Truncating, Non-truncating}),
 spanning the gene CDS (MANE), filterable by gene / cohortDisease / variantClass / ps4Strength.
 hg38 built from MANE; hg19 via liftOver.
 
@@ -105,7 +105,7 @@ def main():
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPWalshOR')
     os.makedirs(out_dir, exist_ok=True)
-    print('  [B.9 Walsh 2017 gene-level OR &#8212; PS4]')
+    print('  [B.9 Walsh 2017 gene-level OR - PS4]')
 
     recs = load_walsh2017()
     mane_cache = {g: parse_mane_record(g) for g in OUR_GENES}

@@ -1,10 +1,13 @@
 #!/bin/tcsh
 cd $BUILDDIR
 set zip = "zips/jksrc.v"$BRANCHNN".zip"
-if ( -e $zip ) then
- echo "removing old zip $zip [${0}: `date`]"
- rm $zip
-endif
+set tgz = "zips/jksrc.v"$BRANCHNN".tar.gz"
+foreach old ( $zip $tgz )
+ if ( -e $old ) then
+  echo "removing old archive $old [${0}: `date`]"
+  rm $old
+ endif
+end
 
 # git archive does not include submodule contents (e.g. src/submodules/htslib),
 # so build the zip from a fresh clone of the branch with its submodules checked
@@ -44,18 +47,23 @@ rm -f $htslibDir/htscodecs.mk
 # zip contains only source, matching the old git-archive output.
 find $tmp/kent -name .git -prune -exec rm -rf {} +
 
-echo "Dumping branch $BRANCHNN to zip file. [${0}: `date`]"
+echo "Dumping branch $BRANCHNN to zip and tarball. [${0}: `date`]"
 cd $tmp
 zip -q -r -X $BUILDDIR/$zip kent
 set err = $status
+if ( ! $err ) then
+ # keep the same kent/ top-level prefix as the zip
+ tar -czf $BUILDDIR/$tgz kent
+ set err = $status
+endif
 cd $BUILDDIR
 if ( $err ) then
- echo "error creating zip $zip: $err [${0}: `date`]"
+ echo "error creating source archives: $err [${0}: `date`]"
  rm -fr $tmp
  exit 1
 endif
 
 rm -fr $tmp
-chmod 664 $zip
+chmod 664 $zip $tgz
 echo "Done. [${0}: `date`]"
 exit 0

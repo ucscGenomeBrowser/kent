@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-B.1 &#8212; Cardiomyopathy VCEP PM1 Hotspot Regions track builder.
+B.1 - Cardiomyopathy VCEP PM1 Hotspot Regions track builder.
 
 Renders PM1 hotspot codon regions per the per-gene CSpec for the 4 of 8 genes where
 PM1 is applicable (MYH7, MYBPC3, TNNT2, TNNI3). PM1 is NOT specified for ACTC1,
 MYBPC3*, MYL2, MYL3 (where * = MYBPC3 has PM1 applicable but only on missense).
 
 PM1 ranges (per CSpec, see ../doc/Cardiomyopathy.txt §A.10):
-  MYH7    167&#8211;931   (NM_000257.4 / Walsh 2019 calibration)
-  MYBPC3  485&#8211;502 + 1248&#8211;1266 (NM_000256.3)
-  TNNT2   89&#8211;189    (NM_001276345.2)
-  TNNI3   141&#8211;209   (NM_000363.5)
+  MYH7    167-931   (NM_000257.4 / Walsh 2019 calibration)
+  MYBPC3  485-502 + 1248-1266 (NM_000256.3)
+  TNNT2   89-189    (NM_001276345.2)
+  TNNI3   141-209   (NM_000363.5)
 
 Reads MANE Select bigGenePred from /gbdb/hg38/mane/mane.bb to extract CDS exon
 structure; converts amino-acid ranges to genomic coordinates with explicit
@@ -39,7 +39,7 @@ PM1_REGIONS = {
     'TNNI3':  ('NM_000363.5',     [(141,  209,  'Hotspot')]),
 }
 
-PM1_COLOR = '230,3,131'  # magenta-rose &#8212; matches InSiGHT clinDomains + TP53 clinical-domains convention
+PM1_COLOR = '230,3,131'  # magenta-rose - matches InSiGHT clinDomains + TP53 clinical-domains convention
 
 MANE_BB = '/gbdb/hg38/mane/mane.bb'
 LIFTOVER_HG38_TO_HG19 = '/cluster/data/hg38/bed/liftOver/hg38ToHg19.over.chain.gz'
@@ -97,7 +97,7 @@ def parse_mane_record(gene_symbol):
 
 def cds_exons(mane):
     """Return list of (genomic_start, genomic_end) for CDS portions of each exon,
-    in genomic order (low &#8594; high coord). BED half-open semantics."""
+    in genomic order (low -> high coord). BED half-open semantics."""
     exons = []
     for size, rstart in zip(mane['blockSizes'], mane['chromStarts']):
         es = mane['chromStart'] + rstart
@@ -266,7 +266,7 @@ def emit_bed(output_path):
     with open(output_path, 'w') as f:
         for line in bed_lines:
             f.write(line + '\n')
-    print(f'  wrote {len(bed_lines)} BED features &#8594; {output_path}')
+    print(f'  wrote {len(bed_lines)} BED features -> {output_path}')
     return len(bed_lines)
 
 
@@ -300,7 +300,7 @@ def main():
     out_dir = os.path.join(args.output_dir, 'cmpVCEPClinDomains')
     os.makedirs(out_dir, exist_ok=True)
 
-    # Run unit tests first &#8212; must pass before emitting any features
+    # Run unit tests first - must pass before emitting any features
     unit_test_codon_conversion()
 
     # Write autoSql schema
@@ -329,7 +329,7 @@ def main():
         n_hg38 = sum(1 for _ in open(hg38_bed))
         n_hg19 = sum(1 for _ in open(os.path.join(out_dir, 'cmpVCEPClinDomainsHg19.bed')))
         if n_hg38 != n_hg19:
-            print(f'  WARNING: cross-assembly parity FAILED &#8212; hg38={n_hg38} hg19={n_hg19}',
+            print(f'  WARNING: cross-assembly parity FAILED - hg38={n_hg38} hg19={n_hg19}',
                   file=sys.stderr)
         else:
             print(f'  cross-assembly parity OK: {n_hg38} features each')
