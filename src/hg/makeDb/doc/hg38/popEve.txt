@@ -60,7 +60,7 @@ bash runBuild.sh
 #    filled. This is expected and sparser than the EVE track (which scores all 19).
 #  - The heatmap renderer parses the score array (chopCommas, keeps trailing empty) and the
 #    label array (chopByCharRespectDoubleQuotesKeepEmpty, drops one trailing empty)
-#    differently. When the last cell (row Y, last column) is empty the counts disagree and
+#    differently. When the last cell (last row, last column) is empty the counts disagree and
 #    the track aborts; the converter sets a non-empty placeholder label on that one trailing
 #    cell (its score stays empty so the cell is uncolored). trailingFix count below.
 
