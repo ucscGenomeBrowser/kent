@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Phase 1 &#8212; hgVai annotation layer for the Cardiomyopathy VCEP hub (RM37446).
+Phase 1 - hgVai annotation layer for the Cardiomyopathy VCEP hub (RM37446).
 
 Annotates the gnomAD-observed variant universe (the SAME universe used by the
 AF + Provisional tracks) with protein consequence via the internal UCSC tool
@@ -80,7 +80,7 @@ def parse_extra(extra):
 
 
 def parse_vep(vep_path, gene):
-    """Parse one gene's VEP output &#8594; dict key (chrom,pos,ref,alt) &#8594; annotation.
+    """Parse one gene's VEP output -> dict key (chrom,pos,ref,alt) -> annotation.
     Aggregates SO terms across lines; keeps the coding fields from the line(s)
     that carry them."""
     ann = {}
@@ -165,14 +165,14 @@ def main():
                 ','.join(sorted(r['so'])), r['proteinPos'], r['aaRef'], r['aaAlt'],
                 r['codon'], r['exonNum'], r['exonTotal'], r['hgvsp'], r['cdnaPos'],
             ]) + '\n')
-    print(f'  wrote {len(all_ann)} annotations &#8594; {tsv}')
+    print(f'  wrote {len(all_ann)} annotations -> {tsv}')
 
     unmapped_path = os.path.join(work, 'phase1_unmapped.tsv')
     with open(unmapped_path, 'w') as fh:
         fh.write('#gene\tchrom\tpos\tref\talt\n')
         for row in unmapped:
             fh.write('\t'.join(str(x) for x in row) + '\n')
-    print(f'  {len(unmapped)} unmapped universe variants logged &#8594; {unmapped_path}')
+    print(f'  {len(unmapped)} unmapped universe variants logged -> {unmapped_path}')
 
     # SO-term summary for sanity
     from collections import Counter

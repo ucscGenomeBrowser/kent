@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-B.10 &#8212; Atlas of Cardiac Genetic Variation per-variant track (PS4 case-control).
+B.10 - Atlas of Cardiac Genetic Variation per-variant track (PS4 case-control).
 
 Parses 189 cached per-variant HTML pages from the Atlas scrape (A.9), extracts
-case carriers + cohort + ExAC data, computes Fisher 2&#215;2 OR + 95% CI with
+case carriers + cohort + ExAC data, computes Fisher 2x2 OR + 95% CI with
 Haldane 0.5 correction, and renders as bigBed.
 
 Color by computed CI_lower PS4 strength binning:
@@ -15,8 +15,8 @@ Color by computed CI_lower PS4 strength binning:
 Mouseover shows: case counts, ExAC carriers, computed OR + CI, etiologic fraction
 (from Atlas), OMGL/LMM classification.
 
-Validation: spot-check 5 known PS4-relevant variants &#8212; recompute OR and verify
-within &#177;5% of cardiodb.org/cmgwap/ output (deferred to D.1 audit step).
+Validation: spot-check 5 known PS4-relevant variants - recompute OR and verify
+within +/-5% of cardiodb.org/cmgwap/ output (deferred to D.1 audit step).
 
 Source: cmp_downloads/atlas/variants/var_*.html (cached scrape from A.9)
 
@@ -32,7 +32,7 @@ ATLAS_VAR_DIR = '/hive/users/lrnassar/claude/RM37446/cmp_downloads/atlas/variant
 
 OUR_GENES = {'MYH7', 'MYBPC3', 'TNNT2', 'TNNI3', 'TPM1', 'ACTC1', 'MYL2', 'MYL3'}
 
-# ExAC reference cohort size &#8212; DEFAULT (Walsh 2017 baseline; used as fallback)
+# ExAC reference cohort size - DEFAULT (Walsh 2017 baseline; used as fallback)
 EXAC_TOTAL_INDIVIDUALS = 60706
 
 # Per-gene Non-Truncating ExAC denominators from Walsh 2019 Table S1.
@@ -244,7 +244,7 @@ def ps4_bin(ci_lower):
 
 
 def liftover_grch37_to_grch38(grch37_records, out_dir):
-    """liftOver hg19 &#8594; hg38. Returns dict of grch37_pos &#8594; (chrom, start, end) in hg38."""
+    """liftOver hg19 -> hg38. Returns dict of grch37_pos -> (chrom, start, end) in hg38."""
     if not grch37_records:
         return {}
     tmp_bed = os.path.join(out_dir, '_atlas_lift.bed')
@@ -297,7 +297,7 @@ def main():
 
     # liftOver Atlas GRCh37 coords to hg38
     lift_map = liftover_grch37_to_grch38(records, out_dir)
-    print(f'  liftOver hg19&#8594;hg38: {len(lift_map)} of {len(records)} mapped')
+    print(f'  liftOver hg19->hg38: {len(lift_map)} of {len(records)} mapped')
 
     # Build BED features
     bed_lines = []
@@ -312,7 +312,7 @@ def main():
             if cd['omgl'] is not None or cd['lmm'] is not None:
                 diseases_with_data.append(disease)
         if not diseases_with_data:
-            continue  # no case data &#8594; skip
+            continue  # no case data -> skip
 
         # For each disease, compute OR
         for disease in diseases_with_data:
@@ -324,8 +324,8 @@ def main():
             if case_cohort == 0 or case_carriers == 0:
                 continue  # skip zero-case rows
 
-            # ExAC carriers &#8212; Atlas reports allele count, not individual count.
-            # Use exac_carriers as "individuals carrying" (approximation: rare variants &#8776; heterozygous only)
+            # ExAC carriers - Atlas reports allele count, not individual count.
+            # Use exac_carriers as "individuals carrying" (approximation: rare variants ~ heterozygous only)
             exac_c = r['exac_carriers'] or 0
             # Per D.1 audit P0 #1: use Walsh 2019 Table S1 per-gene NonTrunc denominators
             # for non-truncating variants; truncating/splice fall back to default.
@@ -400,7 +400,7 @@ def main():
     with open(hg38_bed, 'w') as f:
         for l in bed_lines:
             f.write(l + '\n')
-    print(f'  wrote {len(bed_lines)} BED features &#8594; {hg38_bed}')
+    print(f'  wrote {len(bed_lines)} BED features -> {hg38_bed}')
 
     if 'hg38' in args.db:
         hg38_bb = os.path.join(out_dir, 'cmpVCEPAtlasEFHg38.bb')
@@ -413,7 +413,7 @@ def main():
     if 'hg19' in args.db:
         hg19_bed = os.path.join(out_dir, 'cmpVCEPAtlasEFHg19.bed')
         # Re-emit lines using GRCh37 coords from original parse
-        # Build a map var_id &#8594; row, then re-emit with GRCh37 coords
+        # Build a map var_id -> row, then re-emit with GRCh37 coords
         var_recs = {r['var_id']: r for r in records}
         hg19_lines = []
         for line in bed_lines:
@@ -428,7 +428,7 @@ def main():
             r = var_recs.get(var_id)
             if r is None:
                 continue
-            # GRCh37 coords (1-based) &#8594; BED 0-based half-open (assume 1-bp)
+            # GRCh37 coords (1-based) -> BED 0-based half-open (assume 1-bp)
             grch37_start = r['grch37_pos'] - 1
             grch37_end = grch37_start + 1
             f[0] = r['grch37_chrom']
@@ -453,7 +453,7 @@ def main():
         if n38 == n19:
             print(f'  cross-assembly parity OK: {n38} features each')
         else:
-            print(f'  WARNING: parity FAILED &#8212; hg38={n38} hg19={n19}', file=sys.stderr)
+            print(f'  WARNING: parity FAILED - hg38={n38} hg19={n19}', file=sys.stderr)
 
 
 if __name__ == '__main__':

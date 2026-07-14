@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-B.4 &#8212; REVEL track builder (PP3/BP4 evidence per CSpec).
+B.4 - REVEL track builder (PP3/BP4 evidence per CSpec).
 
 Per-missense REVEL scores in the 8 cardiomyopathy genes' CDS regions, applied to
 the CSpec calibration thresholds:
   PP3_supporting  if REVEL >= 0.70
   BP4_supporting  if REVEL <= 0.40
-The indeterminate band (0.40 < score < 0.70) is DROPPED &#8212; per InSiGHT HCI Priors precedent.
+The indeterminate band (0.40 < score < 0.70) is DROPPED - per InSiGHT HCI Priors precedent.
 This reduces clutter and surfaces only actionable evidence.
 
 Source: /gbdb/hg38/revel/{a,c,g,t}.bw (per-alt-nucleotide bigwigs from REVEL paper)
@@ -125,7 +125,7 @@ def main():
                         n_bp4 += 1
                     else:
                         n_dropped += 1
-                        continue  # indeterminate band &#8212; drop per InSiGHT precedent
+                        continue  # indeterminate band - drop per InSiGHT precedent
                     name = f'{gene}_{alt_nt.upper()}_{score:.3f}_{code[:3]}'
                     mouseover = (
                         f'<b>REVEL</b> - {code}<br>'
@@ -157,7 +157,7 @@ def main():
     with open(hg38_bed, 'w') as f:
         for l in bed_lines:
             f.write(l + '\n')
-    print(f'  wrote {len(bed_lines)} BED features &#8594; {hg38_bed}')
+    print(f'  wrote {len(bed_lines)} BED features -> {hg38_bed}')
 
     if 'hg38' in args.db:
         hg38_bb = os.path.join(out_dir, 'cmpVCEPRevelHg38.bb')

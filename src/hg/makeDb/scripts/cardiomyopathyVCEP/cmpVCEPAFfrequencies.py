@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-B.3 &#8212; gnomAD v4.1 Allele Frequencies track builder.
+B.3 - gnomAD v4.1 Allele Frequencies track builder.
 
-For each variant in the 8 cardiomyopathy gene coding regions (&#177;20 nt splice padding),
+For each variant in the 8 cardiomyopathy gene coding regions (+/-20 nt splice padding),
 parse gnomAD v4.1 exomes for the per-variant FAF95 (filtering allele frequency, 95% CI
 lower bound, popmax) and apply per-gene CSpec thresholds:
 
   BA1            if FAF95 >= 0.001     (all 8 genes)
-  BS1            if FAF95 >= 0.0001    (&#8805;0.0002 for MYBPC3 only)
+  BS1            if FAF95 >= 0.0001    (>=0.0002 for MYBPC3 only)
   PM2_supporting if FAF95 <= 0.00004
   no-code        otherwise (still emitted, useful baseline)
 
@@ -23,7 +23,7 @@ import argparse, os, re, subprocess, sys
 
 OUR_GENES = ['MYH7', 'MYBPC3', 'TNNT2', 'TNNI3', 'TPM1', 'ACTC1', 'MYL2', 'MYL3']
 
-# Gene-specific BS1 threshold (per CSpec &#8212; MYBPC3 outlier)
+# Gene-specific BS1 threshold (per CSpec - MYBPC3 outlier)
 BS1_THRESHOLDS = {
     'MYBPC3': 0.0002,
 }
@@ -38,11 +38,11 @@ TABIX = '/cluster/bin/x86_64/tabix'
 
 # Colors (matching plan)
 COLORS = {
-    'BA1':            '0,160,0',     # dark green  &#8212; strong benign frequency
-    'BS1':            '120,200,120', # light green &#8212; benign frequency
-    'PM2_supporting': '250,160,160', # salmon &#8212; rarity (weak pathogenic). Salmon (not the old
+    'BA1':            '0,160,0',     # dark green  - strong benign frequency
+    'BS1':            '120,200,120', # light green - benign frequency
+    'PM2_supporting': '250,160,160', # salmon - rarity (weak pathogenic). Salmon (not the old
                                      # fuchsia) keeps AF distinct; PM1 regions use magenta-rose 230,3,131.
-    'no-code':        '180,180,180', # light gray  &#8212; no AF-based code
+    'no-code':        '180,180,180', # light gray  - no AF-based code
 }
 
 CHROM_SIZES = {
@@ -92,10 +92,10 @@ def parse_vcf_info(info_str):
 
 
 def fetch_gene_variants(gene, mane):
-    """tabix-query gnomAD VCF for gene CDS region (&#177;SPLICE_PADDING). Returns list of variant dicts."""
+    """tabix-query gnomAD VCF for gene CDS region (+/-SPLICE_PADDING). Returns list of variant dicts."""
     chrom = mane['chrom']
     exons = cds_exons(mane)
-    # Build region list: each CDS exon &#177; SPLICE_PADDING
+    # Build region list: each CDS exon +/- SPLICE_PADDING
     regions = []
     for ex_start, ex_end in exons:
         regions.append((max(0, ex_start - SPLICE_PADDING), ex_end + SPLICE_PADDING))
@@ -170,7 +170,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
 
     print('  [B.3 gnomAD v4.1 Allele Frequencies]')
-    print(f'  thresholds: BA1&#8805;{BA1_THRESHOLD}, BS1&#8805;{DEFAULT_BS1} (or 0.0002 MYBPC3), PM2_sup&#8804;{PM2_SUPPORTING_THRESHOLD}')
+    print(f'  thresholds: BA1>={BA1_THRESHOLD}, BS1>={DEFAULT_BS1} (or 0.0002 MYBPC3), PM2_sup<={PM2_SUPPORTING_THRESHOLD}')
 
     bed_lines = []
     counts = {'BA1': 0, 'BS1': 0, 'PM2_supporting': 0, 'no-code': 0}
@@ -179,7 +179,7 @@ def main():
         mane = parse_mane_record(gene)
         print(f'  fetching {gene} ({mane["chrom"]} {mane["strand"]})...')
         variants = fetch_gene_variants(gene, mane)
-        print(f'    {len(variants)} PASS variants in CDS &#177;{SPLICE_PADDING} nt')
+        print(f'    {len(variants)} PASS variants in CDS +/-{SPLICE_PADDING} nt')
 
         for v in variants:
             code, color, bs1_thresh = apply_code(v['faf95'], gene)
@@ -222,7 +222,7 @@ def main():
     with open(hg38_bed, 'w') as f:
         for l in bed_lines:
             f.write(l + '\n')
-    print(f'  wrote {len(bed_lines)} BED features &#8594; {hg38_bed}')
+    print(f'  wrote {len(bed_lines)} BED features -> {hg38_bed}')
 
     if 'hg38' in args.db:
         hg38_bb = os.path.join(out_dir, 'cmpVCEPAFfrequenciesHg38.bb')

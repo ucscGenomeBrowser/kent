@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-B.7c &#8212; Walsh 2019 Pre-EvRepo curated variants subtrack (folds into Curated Variants composite).
+B.7c - Walsh 2019 Pre-EvRepo curated variants subtrack (folds into Curated Variants composite).
 
-Renders 155 per-variant ACMG/AMP rule applications from Walsh 2019 Table S6 &#8212; pre-EvRepo
+Renders 155 per-variant ACMG/AMP rule applications from Walsh 2019 Table S6 - pre-EvRepo
 VCEP curations that document the original calibration cohort. Folds into the Curated Variants
 composite track 4c, off by default.
 
-Source: cmp_downloads/walsh/walsh2019_supplement.xlsx Table S6 (163 rows; filter to our 8 genes)
-Coords: lookup against ClinVar variant_summary by (gene, c.notation); skip variants not in ClinVar
-        (those are novel-to-Walsh and would need MANE CDS conversion &#8212; deferred).
+Source: cmp_downloads/walsh/walsh2019_supplement.xlsx Table S6, filtered to our 8 genes.
+Coords: lookup against ClinVar variant_summary by (gene, c.notation); entries not in ClinVar
+        are mapped via hgvsToVcf on each gene's Walsh transcript (item L), so all 155 render.
 
 Outputs:
   cmpVCEPWalsh2019/cmpVCEPWalsh2019.as
@@ -26,7 +26,7 @@ WALSH_XLSX = '/hive/users/lrnassar/claude/RM37446/cmp_downloads/walsh/walsh2019_
 VARIANT_SUMMARY = '/hive/data/outside/otto/clinvar/downloads/2026-05-30/variant_summary.txt.gz'
 
 # Transcript Walsh 2019 used for c. numbering, per gene (item L: map ClinVar-unmatched entries
-# via hgvsToVcf). NOTE TNNT2 is NOT MANE &#8212; Walsh used the classic cardiac transcript; MANE
+# via hgvsToVcf). NOTE TNNT2 is NOT MANE - Walsh used the classic cardiac transcript; MANE
 # (NM_001276345.2) yields HgvsRefAssertedMismatch. Verified each gives FILTER=PASS.
 HGVSTOVCF = '/cluster/bin/x86_64/hgvsToVcf'
 WALSH_TX = {'MYBPC3': 'NM_000256.3', 'MYH7': 'NM_000257.4',
@@ -146,7 +146,7 @@ AUTOSQL = """table cmpVCEPWalsh2019
 
 
 def load_walsh_table_s6():
-    """Parse Walsh 2019 Table S6 &#8594; list of dict records for our 8 genes."""
+    """Parse Walsh 2019 Table S6 -> list of dict records for our 8 genes."""
     import openpyxl
     wb = openpyxl.load_workbook(WALSH_XLSX, read_only=True, data_only=True)
     ws = wb['Table S6']
@@ -191,7 +191,7 @@ CV_NAME_RE = re.compile(r'^([A-Z]M_[\d\.]+)\(([A-Z0-9]+)\):c\.(\S+?)(?:\s|\(|$)'
 
 
 def build_clinvar_lookup():
-    """Stream variant_summary; build dict (gene, c.notation) &#8594; {assembly: coords + variation_id}."""
+    """Stream variant_summary; build dict (gene, c.notation) -> {assembly: coords + variation_id}."""
     lookup = {}
     n_rows = 0
     with gzip.open(VARIANT_SUMMARY, 'rt') as fh:
@@ -227,7 +227,7 @@ def build_clinvar_lookup():
                 'rcv':   f[11],
             }
             n_rows += 1
-    print(f'  ClinVar lookup: {len(lookup)} (gene, c.notation) keys &#215; up to 2 assemblies = {n_rows} entries')
+    print(f'  ClinVar lookup: {len(lookup)} (gene, c.notation) keys x up to 2 assemblies = {n_rows} entries')
     return lookup
 
 
@@ -285,7 +285,7 @@ def emit_bed(records, lookup, db, out_path):
     with open(out_path, 'w') as f:
         for line in rows_emitted:
             f.write(line + '\n')
-    print(f'  wrote {len(rows_emitted)} BED features &#8594; {out_path} (skipped {len(skipped)})')
+    print(f'  wrote {len(rows_emitted)} BED features -> {out_path} (skipped {len(skipped)})')
     return len(rows_emitted), skipped
 
 
@@ -337,14 +337,14 @@ def main():
         if counts['hg38'] == counts['hg19']:
             print(f'  cross-assembly parity OK: {counts["hg38"]} features each')
         else:
-            print(f'  WARNING: parity FAILED &#8212; hg38={counts["hg38"]} hg19={counts["hg19"]}', file=sys.stderr)
+            print(f'  WARNING: parity FAILED - hg38={counts["hg38"]} hg19={counts["hg19"]}', file=sys.stderr)
 
     # Save skipped list for follow-up
     if skipped_summary:
         skip_path = os.path.join(out_dir, 'walsh2019_unmatched.txt')
         with open(skip_path, 'w') as f:
-            f.write('# Walsh 2019 Table S6 entries NOT found in ClinVar variant_summary\n')
-            f.write('# These need MANE CDS coordinate conversion to render &#8212; deferred to v2 of B.7c\n')
+            f.write('# Walsh 2019 Table S6 entries not placed via ClinVar or the hgvsToVcf fallback\n')
+            f.write('# (expected to be empty; any listed here could not be mapped to genomic coords)\n')
             for r in skipped_summary:
                 f.write(f'{r["gene"]}\t{r["cdna"]}\t{r["protein"]}\t{r["classification"]}\n')
         print(f'  skipped variants logged to: {skip_path}')
