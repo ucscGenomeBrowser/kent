@@ -509,14 +509,18 @@ def detect_cli_failure(response, validator):
     broken review."""
     if not response:
         return "No response from Claude CLI (timeout, crash, or empty output)"
+    # A well-formed review is a success even when its text quotes auth-error
+    # strings - e.g. a review of the auth-handling code itself. Only scan for
+    # auth markers when the output is NOT a valid review, so such reviews are
+    # not misflagged as authentication failures.
+    is_valid, msg = validator(response)
+    if is_valid:
+        return None
     for marker in CLI_AUTH_ERROR_MARKERS:
         if marker in response:
             first_line = next((l for l in response.strip().splitlines() if l.strip()), response)
             return f"Claude CLI authentication failure: {first_line.strip()[:300]}"
-    is_valid, msg = validator(response)
-    if not is_valid:
-        return f"Invalid or incomplete review output: {msg}"
-    return None
+    return f"Invalid or incomplete review output: {msg}"
 
 def call_claude_cli(prompt, timeout=600, retries=1, validator=None):
     """Call Claude Code CLI with a prompt and return the response"""
