@@ -3,15 +3,15 @@ title: "AutoSql Format Specification"
 ---
 
 AutoSql is a small specification language used throughout the UCSC Genome Browser to describe
-the columns of a table or the fields of a annotation file. A single AutoSql file (conventionally
+the columns of a table or the fields of an annotation file. A single AutoSql file (conventionally
 given the `.as` extension) defines the name, type, and a human-readable description of each
-field.
+field. In particular, they are used to add extra fields to a
+[bigBed](/goldenPath/help/bigBed.html) or [bigGenePred](/goldenPath/help/bigGenePred.html) track:
+`bedToBigBed` reads the `.as` file (via its `-as=` option) to learn the names and types of the
+fields beyond the standard BED columns, and the Genome Browser uses those descriptions to label
+values on item detail pages and in filter menus. This page is aimed at track creators and
+hub developers make use of autoSql's more advanced features.
 
-Most Genome Browser users encounter AutoSql when adding extra fields to a
-[bigBed](/goldenPath/help/bigBed.html) or [bigGenePred](/goldenPath/help/bigGenePred.html)
-track. The `bedToBigBed` utility reads an `.as` file (via its `-as=` option) to learn the names
-and types of any fields beyond the standard BED columns, and the Genome Browser uses those field
-descriptions to label values on item detail pages and in filter menus.
 
 ## A simple example
 
@@ -70,9 +70,10 @@ struct bed6
 
 Along with the structure, `autoSql` generates functions to load a row from the database, save a
 structure in tab- or comma-separated form, and free dynamically allocated structures (for
-example, `bed6Load`, `bed6TabOut`, and `bed6Free`). This saves writing the many lines of
-repetitive field-by-field conversion code that reading and writing such records would otherwise
-require.
+example, `bed6Load`, `bed6TabOut`, and `bed6Free`). `bed6Load` reads one row from the database
+into a `bed6` structure, `bed6TabOut` writes a structure back out as a tab-separated line, and
+`bed6Free` releases the memory it used. This saves writing the many lines of repetitive
+field-by-field conversion code that reading and writing such records would otherwise require.
 
 ## Anatomy of a declaration
 
@@ -87,11 +88,11 @@ Every AutoSql object follows the same shape:
     )
 ```
 
-- **declareType** — one of `table`, `object`, or `simple`. See [Object types](#object-types).
-- **name** — a valid identifier: letters, digits, and underscores, starting with a letter.
-- **description** — a double-quoted string describing the object, used as a comment in the
+- **declareType**: one of `table`, `object`, or `simple`. See [Object types](#object-types).
+- **name**: a valid identifier: letters, digits, and underscores, starting with a letter.
+- **description**: a double-quoted string describing the object, used as a comment in the
   generated SQL and C.
-- **fields** — one per line, each with a type, a name, a semicolon, and a double-quoted comment.
+- **fields**: one per line, each with a type, a name, a semicolon, and a double-quoted comment.
 
 The quoted comments are not optional decoration. They are required, and the Genome Browser
 surfaces the per-field comments to users, so write them as if an end user will read them.
@@ -113,7 +114,7 @@ AutoSql supports the following basic field types:
 | `double` | double-precision IEEE floating point |
 | `char` | 8-bit character (can only be used in an array) |
 | `string` | variable-length string, up to 255 bytes |
-| `lstring` | "long string" — variable-length string up to 2 billion bytes |
+| `lstring` | "long string", variable-length string up to 2 billion bytes |
 | `enum` | enumerated type holding a single symbolic value |
 | `set` | set type holding multiple symbolic values |
 
@@ -154,6 +155,10 @@ table symbolCols
     )
 ```
 
+In this example, `sex` is an `enum`, so each row is either `male` or `female` and never both.
+`skills` is a `set`, so one row can combine several of the listed values, such as
+`cProg,pythonProg`.
+
 This is a common pattern for real Genome Browser data. For example, the bigDbSnp format uses an
 enum to record each variant's class:
 
@@ -168,14 +173,13 @@ enum(snv, mnv, ins, del, delins, identity) class;  "Variation class/type"
 If you do not specify any index, `autoSql` assumes the first field is the primary key and indexes
 it. To control indexing, add one of the following keywords after a field name:
 
-- `primary` — make the field the primary key.
-- `unique` — index a field whose values are all unique.
-- `index` — index a field that may contain duplicate values.
+- `primary`: make the field the primary key.
+- `unique`: index a field whose values are all unique.
+- `index`: index a field that may contain duplicate values.
 
 You can index just the first part of a long field by following the keyword with a character count
-in brackets, for example `index[12]`. An integer field can be made auto-incrementing — letting
-the database assign a new numeric value to each row — by adding the `auto` keyword after the index
-keyword, if any.
+in brackets, for example `index[12]`. To make an integer field auto-incrementing, add the `auto`
+keyword after the index keyword, if there is one.
 
 ```
 table bedIndexed
@@ -190,6 +194,9 @@ table bedIndexed
     )
 ```
 
+In `bedIndexed` above, `id` is declared `auto`, so MySQL fills in its value on its own, counting
+up by one for each new row. You never supply an `id` yourself.
+
 ## Object types
 
 AutoSql has three kinds of objects, which differ in what code is generated and in how arrays of
@@ -201,14 +208,18 @@ them are stored in memory:
 | `object` | No | Singly linked list |
 | `table` | Yes (SQL + C) | Singly linked list |
 
-- **`simple`** — objects that do not appear in lists. An array of a `simple` object is stored in
+- **`simple`**: objects that do not appear in lists. An array of a `simple` object is stored in
   memory as a C array. (Historically `simple` objects could not contain strings or
   variable-sized arrays; that restriction has been lifted.)
-- **`object`** — like `simple`, but a `next` pointer is automatically inserted as the first field
+- **`object`**: like `simple`, but a `next` pointer is automatically inserted as the first field
   of the generated C structure, and what looks like an array in the `.as` file becomes a singly
   linked list in memory.
-- **`table`** — like `object`, but `autoSql` also generates a SQL table definition. This is the
+- **`table`**: like `object`, but `autoSql` also generates a SQL table definition. This is the
   type used for anything stored in the database.
+
+A C array stores its elements one after another in a single block of memory, so you can reach any
+element directly by its position. A singly linked list stores each element separately and chains
+them together, so reaching the third element means following the chain from the start.
 
 For example, given `point[3]` as a field, declaring `point` as `simple` stores the three points
 as a C array, while declaring it as `object` stores them as a linked list.
