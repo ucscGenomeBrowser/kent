@@ -1,0 +1,2845 @@
+    track developmentTimecourseSignalMm10
+    parent mouseDevTimecourse
+    compositeTrack on
+    type bigWig
+    shortLabel timecourse signal
+    longLabel ENCODE mouse development time course bulk RNA-seq signal
+    visibility hide
+    group regulation
+    html developmentTimecourseSignalMm10
+    subGroup1 view Views unique=Unique_reads all=All_reads
+    subGroup2 tissue Tissue t01_thymus=thymus t02_spleen=spleen t03_liver=liver t04_heart=heart t05_skeletal_muscle_tissue=skeletal_muscle_tissue t06_urinary_bladder=urinary_bladder t07_adrenal_gland=adrenal_gland t08_kidney=kidney t09_lung=lung t10_stomach=stomach t11_intestine=intestine t12_limb=limb t13_embryonic_facial_prominence=embryonic_facial_prominence t14_forebrain=forebrain t15_midbrain=midbrain t16_hindbrain=hindbrain t17_neural_tube=neural_tube
+    subGroup3 age Age e10_5=e10.5 e11_5=e11.5 e12_5=e12.5 e13_5=e13.5 e14_5=e14.5 e15_5=e15.5 e16_5=e16.5 P0=P0
+    subGroup4 rep Replicate rep1=Rep_1 rep2=Rep_2
+    dimensions dimX=age dimY=tissue dimA=rep
+    dimensionAchecked rep1
+    sortOrder view=+ tissue=+ age=+ rep=+
+    dragAndDrop subTracks
+    noInherit on
+
+        track developmentTimecourseSignalMm10ViewUnique
+        view unique
+        parent developmentTimecourseSignalMm10
+        shortLabel Unique reads
+        type bigWig
+        visibility full
+        autoScale on
+        maxHeightPixels 100:32:8
+
+            track developmentTimecourseSignalMm10_ENCFF304NKC
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e13.5 r1 un
+            longLabel ENCODE mouse midbrain e13.5 rep1 Unique reads (ENCFF304NKC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF304NKC.bigWig
+            color 63,112,255
+
+            track developmentTimecourseSignalMm10_ENCFF877OIK
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e13.5 r2 un
+            longLabel ENCODE mouse midbrain e13.5 rep2 Unique reads (ENCFF877OIK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF877OIK.bigWig
+            color 63,112,255
+
+            track developmentTimecourseSignalMm10_ENCFF846JTZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t08_kidney age=e14_5 rep=rep2
+            type bigWig
+            shortLabel kidney e14.5 r2 uni
+            longLabel ENCODE mouse kidney e14.5 rep2 Unique reads (ENCFF846JTZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF846JTZ.bigWig
+            color 246,195,138
+
+            track developmentTimecourseSignalMm10_ENCFF269LFF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t08_kidney age=e14_5 rep=rep1
+            type bigWig
+            shortLabel kidney e14.5 r1 uni
+            longLabel ENCODE mouse kidney e14.5 rep1 Unique reads (ENCFF269LFF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF269LFF.bigWig
+            color 246,195,138
+
+            track developmentTimecourseSignalMm10_ENCFF696UFM
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e14.5 r1 u
+            longLabel ENCODE mouse forebrain e14.5 rep1 Unique reads (ENCFF696UFM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF696UFM.bigWig
+            color 106,40,184
+
+            track developmentTimecourseSignalMm10_ENCFF484SND
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e14.5 r2 u
+            longLabel ENCODE mouse forebrain e14.5 rep2 Unique reads (ENCFF484SND)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF484SND.bigWig
+            color 106,40,184
+
+            track developmentTimecourseSignalMm10_ENCFF084ZJY
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e16.5 r1 u
+            longLabel ENCODE mouse forebrain e16.5 rep1 Unique reads (ENCFF084ZJY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF084ZJY.bigWig
+            color 52,16,95
+
+            track developmentTimecourseSignalMm10_ENCFF456WRO
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e16.5 r2 u
+            longLabel ENCODE mouse forebrain e16.5 rep2 Unique reads (ENCFF456WRO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF456WRO.bigWig
+            color 52,16,95
+
+            track developmentTimecourseSignalMm10_ENCFF890EMR
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t01_thymus age=P0 rep=rep2
+            type bigWig
+            shortLabel thymus P0 r2 uni
+            longLabel ENCODE mouse thymus P0 rep2 Unique reads (ENCFF890EMR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF890EMR.bigWig
+            color 200,180,0
+
+            track developmentTimecourseSignalMm10_ENCFF232HKB
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t01_thymus age=P0 rep=rep1
+            type bigWig
+            shortLabel thymus P0 r1 uni
+            longLabel ENCODE mouse thymus P0 rep1 Unique reads (ENCFF232HKB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF232HKB.bigWig
+            color 200,180,0
+
+            track developmentTimecourseSignalMm10_ENCFF205DZY
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e15.5 r2 un
+            longLabel ENCODE mouse midbrain e15.5 rep2 Unique reads (ENCFF205DZY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF205DZY.bigWig
+            color 22,55,184
+
+            track developmentTimecourseSignalMm10_ENCFF762UWA
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e15.5 r1 un
+            longLabel ENCODE mouse midbrain e15.5 rep1 Unique reads (ENCFF762UWA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF762UWA.bigWig
+            color 22,55,184
+
+            track developmentTimecourseSignalMm10_ENCFF210SHO
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e12_5 rep=rep1
+            type bigWig
+            shortLabel face e12.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e12.5 rep1 Unique reads (ENCFF210SHO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF210SHO.bigWig
+            color 222,79,126
+
+            track developmentTimecourseSignalMm10_ENCFF751FBV
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e12_5 rep=rep2
+            type bigWig
+            shortLabel face e12.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e12.5 rep2 Unique reads (ENCFF751FBV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF751FBV.bigWig
+            color 222,79,126
+
+            track developmentTimecourseSignalMm10_ENCFF604LEL
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e15.5 r1 u
+            longLabel ENCODE mouse forebrain e15.5 rep1 Unique reads (ENCFF604LEL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF604LEL.bigWig
+            color 75,26,143
+
+            track developmentTimecourseSignalMm10_ENCFF989SNJ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e15.5 r2 u
+            longLabel ENCODE mouse forebrain e15.5 rep2 Unique reads (ENCFF989SNJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF989SNJ.bigWig
+            color 75,26,143
+
+            track developmentTimecourseSignalMm10_ENCFF706QTS
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=P0 rep=rep1
+            type bigWig
+            shortLabel hindbrain P0 r1 uni
+            longLabel ENCODE mouse hindbrain P0 rep1 Unique reads (ENCFF706QTS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF706QTS.bigWig
+            color 8,28,63
+
+            track developmentTimecourseSignalMm10_ENCFF058MDV
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=P0 rep=rep2
+            type bigWig
+            shortLabel hindbrain P0 r2 uni
+            longLabel ENCODE mouse hindbrain P0 rep2 Unique reads (ENCFF058MDV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF058MDV.bigWig
+            color 8,28,63
+
+            track developmentTimecourseSignalMm10_ENCFF222HCV
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t02_spleen age=P0 rep=rep1
+            type bigWig
+            shortLabel spleen P0 r1 uni
+            longLabel ENCODE mouse spleen P0 rep1 Unique reads (ENCFF222HCV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF222HCV.bigWig
+            color 160,133,108
+
+            track developmentTimecourseSignalMm10_ENCFF271VFJ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t02_spleen age=P0 rep=rep2
+            type bigWig
+            shortLabel spleen P0 r2 uni
+            longLabel ENCODE mouse spleen P0 rep2 Unique reads (ENCFF271VFJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF271VFJ.bigWig
+            color 160,133,108
+
+            track developmentTimecourseSignalMm10_ENCFF234CPT
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e13_5 rep=rep2
+            type bigWig
+            shortLabel liver e13.5 r2 uni
+            longLabel ENCODE mouse liver e13.5 rep2 Unique reads (ENCFF234CPT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF234CPT.bigWig
+            color 181,181,181
+
+            track developmentTimecourseSignalMm10_ENCFF031DAO
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e13_5 rep=rep1
+            type bigWig
+            shortLabel liver e13.5 r1 uni
+            longLabel ENCODE mouse liver e13.5 rep1 Unique reads (ENCFF031DAO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF031DAO.bigWig
+            color 181,181,181
+
+            track developmentTimecourseSignalMm10_ENCFF600EOH
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e16_5 rep=rep2
+            type bigWig
+            shortLabel heart e16.5 r2 uni
+            longLabel ENCODE mouse heart e16.5 rep2 Unique reads (ENCFF600EOH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF600EOH.bigWig
+            color 143,21,21
+
+            track developmentTimecourseSignalMm10_ENCFF706CWD
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e16_5 rep=rep1
+            type bigWig
+            shortLabel heart e16.5 r1 uni
+            longLabel ENCODE mouse heart e16.5 rep1 Unique reads (ENCFF706CWD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF706CWD.bigWig
+            color 143,21,21
+
+            track developmentTimecourseSignalMm10_ENCFF475VSW
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e13_5 rep=rep1
+            type bigWig
+            shortLabel heart e13.5 r1 uni
+            longLabel ENCODE mouse heart e13.5 rep1 Unique reads (ENCFF475VSW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF475VSW.bigWig
+            color 230,69,69
+
+            track developmentTimecourseSignalMm10_ENCFF461DBT
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e13_5 rep=rep2
+            type bigWig
+            shortLabel heart e13.5 r2 uni
+            longLabel ENCODE mouse heart e13.5 rep2 Unique reads (ENCFF461DBT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF461DBT.bigWig
+            color 230,69,69
+
+            track developmentTimecourseSignalMm10_ENCFF130QSM
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e11_5 rep=rep1
+            type bigWig
+            shortLabel liver e11.5 r1 uni
+            longLabel ENCODE mouse liver e11.5 rep1 Unique reads (ENCFF130QSM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF130QSM.bigWig
+            color 224,224,224
+
+            track developmentTimecourseSignalMm10_ENCFF117QWC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e11_5 rep=rep2
+            type bigWig
+            shortLabel liver e11.5 r2 uni
+            longLabel ENCODE mouse liver e11.5 rep2 Unique reads (ENCFF117QWC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF117QWC.bigWig
+            color 224,224,224
+
+            track developmentTimecourseSignalMm10_ENCFF527VWZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e11.5 r2 u
+            longLabel ENCODE mouse forebrain e11.5 rep2 Unique reads (ENCFF527VWZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF527VWZ.bigWig
+            color 207,161,242
+
+            track developmentTimecourseSignalMm10_ENCFF687VSF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e11.5 r1 u
+            longLabel ENCODE mouse forebrain e11.5 rep1 Unique reads (ENCFF687VSF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF687VSF.bigWig
+            color 207,161,242
+
+            track developmentTimecourseSignalMm10_ENCFF679LHL
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e14_5 rep=rep1
+            type bigWig
+            shortLabel heart e14.5 r1 uni
+            longLabel ENCODE mouse heart e14.5 rep1 Unique reads (ENCFF679LHL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF679LHL.bigWig
+            color 217,48,48
+
+            track developmentTimecourseSignalMm10_ENCFF077HTC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e14_5 rep=rep2
+            type bigWig
+            shortLabel heart e14.5 r2 uni
+            longLabel ENCODE mouse heart e14.5 rep2 Unique reads (ENCFF077HTC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF077HTC.bigWig
+            color 217,48,48
+
+            track developmentTimecourseSignalMm10_ENCFF908YFY
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e11.5 r2 un
+            longLabel ENCODE mouse midbrain e11.5 rep2 Unique reads (ENCFF908YFY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF908YFY.bigWig
+            color 159,186,255
+
+            track developmentTimecourseSignalMm10_ENCFF099WCR
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e11.5 r1 un
+            longLabel ENCODE mouse midbrain e11.5 rep1 Unique reads (ENCFF099WCR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF099WCR.bigWig
+            color 159,186,255
+
+            track developmentTimecourseSignalMm10_ENCFF818LIM
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e13_5 rep=rep2
+            type bigWig
+            shortLabel limb e13.5 r2 uni
+            longLabel ENCODE mouse limb e13.5 rep2 Unique reads (ENCFF818LIM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF818LIM.bigWig
+            color 224,74,184
+
+            track developmentTimecourseSignalMm10_ENCFF862IJF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e13_5 rep=rep1
+            type bigWig
+            shortLabel limb e13.5 r1 uni
+            longLabel ENCODE mouse limb e13.5 rep1 Unique reads (ENCFF862IJF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF862IJF.bigWig
+            color 224,74,184
+
+            track developmentTimecourseSignalMm10_ENCFF293OVC
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t10_stomach age=P0 rep=rep1
+            type bigWig
+            shortLabel stomach P0 r1 uni
+            longLabel ENCODE mouse stomach P0 rep1 Unique reads (ENCFF293OVC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF293OVC.bigWig
+            color 95,143,31
+
+            track developmentTimecourseSignalMm10_ENCFF126NDZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t10_stomach age=P0 rep=rep2
+            type bigWig
+            shortLabel stomach P0 r2 uni
+            longLabel ENCODE mouse stomach P0 rep2 Unique reads (ENCFF126NDZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF126NDZ.bigWig
+            color 95,143,31
+
+            track developmentTimecourseSignalMm10_ENCFF580ZOD
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e14_5 rep=rep2
+            type bigWig
+            shortLabel limb e14.5 r2 uni
+            longLabel ENCODE mouse limb e14.5 rep2 Unique reads (ENCFF580ZOD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF580ZOD.bigWig
+            color 185,45,143
+
+            track developmentTimecourseSignalMm10_ENCFF525YIT
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e14_5 rep=rep1
+            type bigWig
+            shortLabel limb e14.5 r1 uni
+            longLabel ENCODE mouse limb e14.5 rep1 Unique reads (ENCFF525YIT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF525YIT.bigWig
+            color 185,45,143
+
+            track developmentTimecourseSignalMm10_ENCFF338BGA
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t09_lung age=P0 rep=rep1
+            type bigWig
+            shortLabel lung P0 r1 uni
+            longLabel ENCODE mouse lung P0 rep1 Unique reads (ENCFF338BGA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF338BGA.bigWig
+            color 191,174,47
+
+            track developmentTimecourseSignalMm10_ENCFF570WAR
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t09_lung age=P0 rep=rep2
+            type bigWig
+            shortLabel lung P0 r2 uni
+            longLabel ENCODE mouse lung P0 rep2 Unique reads (ENCFF570WAR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF570WAR.bigWig
+            color 191,174,47
+
+            track developmentTimecourseSignalMm10_ENCFF983MXD
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t11_intestine age=e15_5 rep=rep2
+            type bigWig
+            shortLabel intestine e15.5 r2 u
+            longLabel ENCODE mouse intestine e15.5 rep2 Unique reads (ENCFF983MXD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF983MXD.bigWig
+            color 126,236,192
+
+            track developmentTimecourseSignalMm10_ENCFF646UNN
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t11_intestine age=e15_5 rep=rep1
+            type bigWig
+            shortLabel intestine e15.5 r1 u
+            longLabel ENCODE mouse intestine e15.5 rep1 Unique reads (ENCFF646UNN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF646UNN.bigWig
+            color 126,236,192
+
+            track developmentTimecourseSignalMm10_ENCFF823PMY
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e15_5 rep=rep2
+            type bigWig
+            shortLabel heart e15.5 r2 uni
+            longLabel ENCODE mouse heart e15.5 rep2 Unique reads (ENCFF823PMY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF823PMY.bigWig
+            color 183,31,31
+
+            track developmentTimecourseSignalMm10_ENCFF921TZJ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e15_5 rep=rep1
+            type bigWig
+            shortLabel heart e15.5 r1 uni
+            longLabel ENCODE mouse heart e15.5 rep1 Unique reads (ENCFF921TZJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF921TZJ.bigWig
+            color 183,31,31
+
+            track developmentTimecourseSignalMm10_ENCFF686AKO
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e10.5 r1 un
+            longLabel ENCODE mouse midbrain e10.5 rep1 Unique reads (ENCFF686AKO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF686AKO.bigWig
+            color 198,216,255
+
+            track developmentTimecourseSignalMm10_ENCFF796BFV
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e10.5 r2 un
+            longLabel ENCODE mouse midbrain e10.5 rep2 Unique reads (ENCFF796BFV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF796BFV.bigWig
+            color 198,216,255
+
+            track developmentTimecourseSignalMm10_ENCFF391KZF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e11_5 rep=rep1
+            type bigWig
+            shortLabel face e11.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e11.5 rep1 Unique reads (ENCFF391KZF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF391KZF.bigWig
+            color 233,121,160
+
+            track developmentTimecourseSignalMm10_ENCFF239LVM
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e11_5 rep=rep2
+            type bigWig
+            shortLabel face e11.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e11.5 rep2 Unique reads (ENCFF239LVM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF239LVM.bigWig
+            color 233,121,160
+
+            track developmentTimecourseSignalMm10_ENCFF825CAO
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=P0 rep=rep1
+            type bigWig
+            shortLabel neuraltube P0 r1 uni
+            longLabel ENCODE mouse neural tube P0 rep1 Unique reads (ENCFF825CAO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF825CAO.bigWig
+            color 26,95,111
+
+            track developmentTimecourseSignalMm10_ENCFF935KVC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=P0 rep=rep2
+            type bigWig
+            shortLabel neuraltube P0 r2 uni
+            longLabel ENCODE mouse neural tube P0 rep2 Unique reads (ENCFF935KVC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF935KVC.bigWig
+            color 26,95,111
+
+            track developmentTimecourseSignalMm10_ENCFF233FWM
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e15.5 r1 u
+            longLabel ENCODE mouse hindbrain e15.5 rep1 Unique reads (ENCFF233FWM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF233FWM.bigWig
+            color 26,69,127
+
+            track developmentTimecourseSignalMm10_ENCFF380MBW
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e15.5 r2 u
+            longLabel ENCODE mouse hindbrain e15.5 rep2 Unique reads (ENCFF380MBW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF380MBW.bigWig
+            color 26,69,127
+
+            track developmentTimecourseSignalMm10_ENCFF740FBB
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e12_5 rep=rep2
+            type bigWig
+            shortLabel heart e12.5 r2 uni
+            longLabel ENCODE mouse heart e12.5 rep2 Unique reads (ENCFF740FBB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF740FBB.bigWig
+            color 236,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF424NTK
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e12_5 rep=rep1
+            type bigWig
+            shortLabel heart e12.5 r1 uni
+            longLabel ENCODE mouse heart e12.5 rep1 Unique reads (ENCFF424NTK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF424NTK.bigWig
+            color 236,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF137ONR
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e13.5 r2 u
+            longLabel ENCODE mouse forebrain e13.5 rep2 Unique reads (ENCFF137ONR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF137ONR.bigWig
+            color 143,63,217
+
+            track developmentTimecourseSignalMm10_ENCFF303UCM
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e13.5 r1 u
+            longLabel ENCODE mouse forebrain e13.5 rep1 Unique reads (ENCFF303UCM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF303UCM.bigWig
+            color 143,63,217
+
+            track developmentTimecourseSignalMm10_ENCFF284PTI
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t11_intestine age=e16_5 rep=rep1
+            type bigWig
+            shortLabel intestine e16.5 r1 u
+            longLabel ENCODE mouse intestine e16.5 rep1 Unique reads (ENCFF284PTI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF284PTI.bigWig
+            color 68,196,148
+
+            track developmentTimecourseSignalMm10_ENCFF150IZB
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t11_intestine age=e16_5 rep=rep2
+            type bigWig
+            shortLabel intestine e16.5 r2 u
+            longLabel ENCODE mouse intestine e16.5 rep2 Unique reads (ENCFF150IZB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF150IZB.bigWig
+            color 68,196,148
+
+            track developmentTimecourseSignalMm10_ENCFF606TEC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t10_stomach age=e14_5 rep=rep2
+            type bigWig
+            shortLabel stomach e14.5 r2 uni
+            longLabel ENCODE mouse stomach e14.5 rep2 Unique reads (ENCFF606TEC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF606TEC.bigWig
+            color 215,247,166
+
+            track developmentTimecourseSignalMm10_ENCFF172NDF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t10_stomach age=e14_5 rep=rep1
+            type bigWig
+            shortLabel stomach e14.5 r1 uni
+            longLabel ENCODE mouse stomach e14.5 rep1 Unique reads (ENCFF172NDF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF172NDF.bigWig
+            color 215,247,166
+
+            track developmentTimecourseSignalMm10_ENCFF370AJT
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t09_lung age=e14_5 rep=rep2
+            type bigWig
+            shortLabel lung e14.5 r2 uni
+            longLabel ENCODE mouse lung e14.5 rep2 Unique reads (ENCFF370AJT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF370AJT.bigWig
+            color 255,245,154
+
+            track developmentTimecourseSignalMm10_ENCFF887HVX
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t09_lung age=e14_5 rep=rep1
+            type bigWig
+            shortLabel lung e14.5 r1 uni
+            longLabel ENCODE mouse lung e14.5 rep1 Unique reads (ENCFF887HVX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF887HVX.bigWig
+            color 255,245,154
+
+            track developmentTimecourseSignalMm10_ENCFF723OSL
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e11_5 rep=rep1
+            type bigWig
+            shortLabel limb e11.5 r1 uni
+            longLabel ENCODE mouse limb e11.5 rep1 Unique reads (ENCFF723OSL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF723OSL.bigWig
+            color 241,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF222KKU
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e11_5 rep=rep2
+            type bigWig
+            shortLabel limb e11.5 r2 uni
+            longLabel ENCODE mouse limb e11.5 rep2 Unique reads (ENCFF222KKU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF222KKU.bigWig
+            color 241,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF633YBL
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=e15_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e15.5 r2 
+            longLabel ENCODE mouse neural tube e15.5 rep2 Unique reads (ENCFF633YBL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF633YBL.bigWig
+            color 42,143,184
+
+            track developmentTimecourseSignalMm10_ENCFF317LWR
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=e15_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e15.5 r1 
+            longLabel ENCODE mouse neural tube e15.5 rep1 Unique reads (ENCFF317LWR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF317LWR.bigWig
+            color 42,143,184
+
+            track developmentTimecourseSignalMm10_ENCFF393WYH
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e14.5 r1 u
+            longLabel ENCODE mouse hindbrain e14.5 rep1 Unique reads (ENCFF393WYH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF393WYH.bigWig
+            color 40,95,163
+
+            track developmentTimecourseSignalMm10_ENCFF669KGM
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e14.5 r2 u
+            longLabel ENCODE mouse hindbrain e14.5 rep2 Unique reads (ENCFF669KGM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF669KGM.bigWig
+            color 40,95,163
+
+            track developmentTimecourseSignalMm10_ENCFF357DMT
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t11_intestine age=P0 rep=rep1
+            type bigWig
+            shortLabel intestine P0 r1 uni
+            longLabel ENCODE mouse intestine P0 rep1 Unique reads (ENCFF357DMT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF357DMT.bigWig
+            color 47,143,108
+
+            track developmentTimecourseSignalMm10_ENCFF329NNQ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t11_intestine age=P0 rep=rep2
+            type bigWig
+            shortLabel intestine P0 r2 uni
+            longLabel ENCODE mouse intestine P0 rep2 Unique reads (ENCFF329NNQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF329NNQ.bigWig
+            color 47,143,108
+
+            track developmentTimecourseSignalMm10_ENCFF561NBF
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e14_5 rep=rep2
+            type bigWig
+            shortLabel face e14.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e14.5 rep2 Unique reads (ENCFF561NBF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF561NBF.bigWig
+            color 159,31,77
+
+            track developmentTimecourseSignalMm10_ENCFF335UMY
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e14_5 rep=rep1
+            type bigWig
+            shortLabel face e14.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e14.5 rep1 Unique reads (ENCFF335UMY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF335UMY.bigWig
+            color 159,31,77
+
+            track developmentTimecourseSignalMm10_ENCFF184EFQ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e12_5 rep=rep1
+            type bigWig
+            shortLabel liver e12.5 r1 uni
+            longLabel ENCODE mouse liver e12.5 rep1 Unique reads (ENCFF184EFQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF184EFQ.bigWig
+            color 207,207,207
+
+            track developmentTimecourseSignalMm10_ENCFF547JQS
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e12_5 rep=rep2
+            type bigWig
+            shortLabel liver e12.5 r2 uni
+            longLabel ENCODE mouse liver e12.5 rep2 Unique reads (ENCFF547JQS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF547JQS.bigWig
+            color 207,207,207
+
+            track developmentTimecourseSignalMm10_ENCFF369LDA
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e16.5 r2 un
+            longLabel ENCODE mouse midbrain e16.5 rep2 Unique reads (ENCFF369LDA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF369LDA.bigWig
+            color 15,38,127
+
+            track developmentTimecourseSignalMm10_ENCFF547IWW
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e16.5 r1 un
+            longLabel ENCODE mouse midbrain e16.5 rep1 Unique reads (ENCFF547IWW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF547IWW.bigWig
+            color 15,38,127
+
+            track developmentTimecourseSignalMm10_ENCFF835KFO
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t10_stomach age=e15_5 rep=rep1
+            type bigWig
+            shortLabel stomach e15.5 r1 uni
+            longLabel ENCODE mouse stomach e15.5 rep1 Unique reads (ENCFF835KFO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF835KFO.bigWig
+            color 189,240,111
+
+            track developmentTimecourseSignalMm10_ENCFF527IMQ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t10_stomach age=e15_5 rep=rep2
+            type bigWig
+            shortLabel stomach e15.5 r2 uni
+            longLabel ENCODE mouse stomach e15.5 rep2 Unique reads (ENCFF527IMQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF527IMQ.bigWig
+            color 189,240,111
+
+            track developmentTimecourseSignalMm10_ENCFF403BPJ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e10_5 rep=rep1
+            type bigWig
+            shortLabel limb e10.5 r1 uni
+            longLabel ENCODE mouse limb e10.5 rep1 Unique reads (ENCFF403BPJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF403BPJ.bigWig
+            color 246,195,232
+
+            track developmentTimecourseSignalMm10_ENCFF333AEH
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e10_5 rep=rep2
+            type bigWig
+            shortLabel limb e10.5 r2 uni
+            longLabel ENCODE mouse limb e10.5 rep2 Unique reads (ENCFF333AEH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF333AEH.bigWig
+            color 246,195,232
+
+            track developmentTimecourseSignalMm10_ENCFF893AZR
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t11_intestine age=e14_5 rep=rep1
+            type bigWig
+            shortLabel intestine e14.5 r1 u
+            longLabel ENCODE mouse intestine e14.5 rep1 Unique reads (ENCFF893AZR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF893AZR.bigWig
+            color 182,247,218
+
+            track developmentTimecourseSignalMm10_ENCFF576XQC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t11_intestine age=e14_5 rep=rep2
+            type bigWig
+            shortLabel intestine e14.5 r2 u
+            longLabel ENCODE mouse intestine e14.5 rep2 Unique reads (ENCFF576XQC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF576XQC.bigWig
+            color 182,247,218
+
+            track developmentTimecourseSignalMm10_ENCFF207BTV
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=P0 rep=rep1
+            type bigWig
+            shortLabel midbrain P0 r1 uni
+            longLabel ENCODE mouse midbrain P0 rep1 Unique reads (ENCFF207BTV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF207BTV.bigWig
+            color 8,24,79
+
+            track developmentTimecourseSignalMm10_ENCFF050VFD
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=P0 rep=rep2
+            type bigWig
+            shortLabel midbrain P0 r2 uni
+            longLabel ENCODE mouse midbrain P0 rep2 Unique reads (ENCFF050VFD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF050VFD.bigWig
+            color 8,24,79
+
+            track developmentTimecourseSignalMm10_ENCFF224MAK
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t09_lung age=e15_5 rep=rep2
+            type bigWig
+            shortLabel lung e15.5 r2 uni
+            longLabel ENCODE mouse lung e15.5 rep2 Unique reads (ENCFF224MAK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF224MAK.bigWig
+            color 255,240,102
+
+            track developmentTimecourseSignalMm10_ENCFF075PJZ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t09_lung age=e15_5 rep=rep1
+            type bigWig
+            shortLabel lung e15.5 r1 uni
+            longLabel ENCODE mouse lung e15.5 rep1 Unique reads (ENCFF075PJZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF075PJZ.bigWig
+            color 255,240,102
+
+            track developmentTimecourseSignalMm10_ENCFF377BYA
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e10.5 r1 u
+            longLabel ENCODE mouse forebrain e10.5 rep1 Unique reads (ENCFF377BYA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF377BYA.bigWig
+            color 225,198,247
+
+            track developmentTimecourseSignalMm10_ENCFF580AHG
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e10.5 r2 u
+            longLabel ENCODE mouse forebrain e10.5 rep2 Unique reads (ENCFF580AHG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF580AHG.bigWig
+            color 225,198,247
+
+            track developmentTimecourseSignalMm10_ENCFF844UWJ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e11.5 r1 u
+            longLabel ENCODE mouse hindbrain e11.5 rep1 Unique reads (ENCFF844UWJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF844UWJ.bigWig
+            color 155,188,230
+
+            track developmentTimecourseSignalMm10_ENCFF247LBN
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e11.5 r2 u
+            longLabel ENCODE mouse hindbrain e11.5 rep2 Unique reads (ENCFF247LBN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF247LBN.bigWig
+            color 155,188,230
+
+            track developmentTimecourseSignalMm10_ENCFF197NSK
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=e11_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e11.5 r1 
+            longLabel ENCODE mouse neural tube e11.5 rep1 Unique reads (ENCFF197NSK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF197NSK.bigWig
+            color 214,251,255
+
+            track developmentTimecourseSignalMm10_ENCFF845QAI
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=e11_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e11.5 r2 
+            longLabel ENCODE mouse neural tube e11.5 rep2 Unique reads (ENCFF845QAI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF845QAI.bigWig
+            color 214,251,255
+
+            track developmentTimecourseSignalMm10_ENCFF928OMS
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e12.5 r2 u
+            longLabel ENCODE mouse hindbrain e12.5 rep2 Unique reads (ENCFF928OMS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF928OMS.bigWig
+            color 106,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF505CCQ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e12.5 r1 u
+            longLabel ENCODE mouse hindbrain e12.5 rep1 Unique reads (ENCFF505CCQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF505CCQ.bigWig
+            color 106,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF019ESS
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=P0 rep=rep1
+            type bigWig
+            shortLabel liver P0 r1 uni
+            longLabel ENCODE mouse liver P0 rep1 Unique reads (ENCFF019ESS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF019ESS.bigWig
+            color 77,77,77
+
+            track developmentTimecourseSignalMm10_ENCFF529WII
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=P0 rep=rep2
+            type bigWig
+            shortLabel liver P0 r2 uni
+            longLabel ENCODE mouse liver P0 rep2 Unique reads (ENCFF529WII)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF529WII.bigWig
+            color 77,77,77
+
+            track developmentTimecourseSignalMm10_ENCFF383BUV
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t08_kidney age=e16_5 rep=rep2
+            type bigWig
+            shortLabel kidney e16.5 r2 uni
+            longLabel ENCODE mouse kidney e16.5 rep2 Unique reads (ENCFF383BUV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF383BUV.bigWig
+            color 209,122,44
+
+            track developmentTimecourseSignalMm10_ENCFF705SAG
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t08_kidney age=e16_5 rep=rep1
+            type bigWig
+            shortLabel kidney e16.5 r1 uni
+            longLabel ENCODE mouse kidney e16.5 rep1 Unique reads (ENCFF705SAG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF705SAG.bigWig
+            color 209,122,44
+
+            track developmentTimecourseSignalMm10_ENCFF237PEA
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t07_adrenal_gland age=P0 rep=rep1
+            type bigWig
+            shortLabel adrenal P0 r1 uni
+            longLabel ENCODE mouse adrenal gland P0 rep1 Unique reads (ENCFF237PEA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF237PEA.bigWig
+            color 0,0,0
+
+            track developmentTimecourseSignalMm10_ENCFF983PEH
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t07_adrenal_gland age=P0 rep=rep2
+            type bigWig
+            shortLabel adrenal P0 r2 uni
+            longLabel ENCODE mouse adrenal gland P0 rep2 Unique reads (ENCFF983PEH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF983PEH.bigWig
+            color 0,0,0
+
+            track developmentTimecourseSignalMm10_ENCFF873XFS
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e10_5 rep=rep2
+            type bigWig
+            shortLabel heart e10.5 r2 uni
+            longLabel ENCODE mouse heart e10.5 rep2 Unique reads (ENCFF873XFS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF873XFS.bigWig
+            color 247,198,198
+
+            track developmentTimecourseSignalMm10_ENCFF715GSS
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e10_5 rep=rep1
+            type bigWig
+            shortLabel heart e10.5 r1 uni
+            longLabel ENCODE mouse heart e10.5 rep1 Unique reads (ENCFF715GSS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF715GSS.bigWig
+            color 247,198,198
+
+            track developmentTimecourseSignalMm10_ENCFF319VES
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=e12_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e12.5 r1 
+            longLabel ENCODE mouse neural tube e12.5 rep1 Unique reads (ENCFF319VES)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF319VES.bigWig
+            color 166,240,255
+
+            track developmentTimecourseSignalMm10_ENCFF369QHZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=e12_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e12.5 r2 
+            longLabel ENCODE mouse neural tube e12.5 rep2 Unique reads (ENCFF369QHZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF369QHZ.bigWig
+            color 166,240,255
+
+            track developmentTimecourseSignalMm10_ENCFF155UMX
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e16.5 r2 u
+            longLabel ENCODE mouse hindbrain e16.5 rep2 Unique reads (ENCFF155UMX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF155UMX.bigWig
+            color 15,47,95
+
+            track developmentTimecourseSignalMm10_ENCFF162SRI
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e16.5 r1 u
+            longLabel ENCODE mouse hindbrain e16.5 rep1 Unique reads (ENCFF162SRI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF162SRI.bigWig
+            color 15,47,95
+
+            track developmentTimecourseSignalMm10_ENCFF409AEZ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e14.5 r1 un
+            longLabel ENCODE mouse midbrain e14.5 rep1 Unique reads (ENCFF409AEZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF409AEZ.bigWig
+            color 31,77,230
+
+            track developmentTimecourseSignalMm10_ENCFF599PMH
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e14.5 r2 un
+            longLabel ENCODE mouse midbrain e14.5 rep2 Unique reads (ENCFF599PMH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF599PMH.bigWig
+            color 31,77,230
+
+            track developmentTimecourseSignalMm10_ENCFF711HUC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t15_midbrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e12.5 r2 un
+            longLabel ENCODE mouse midbrain e12.5 rep2 Unique reads (ENCFF711HUC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF711HUC.bigWig
+            color 111,150,255
+
+            track developmentTimecourseSignalMm10_ENCFF496CSL
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t15_midbrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e12.5 r1 un
+            longLabel ENCODE mouse midbrain e12.5 rep1 Unique reads (ENCFF496CSL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF496CSL.bigWig
+            color 111,150,255
+
+            track developmentTimecourseSignalMm10_ENCFF815URA
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=e11_5 rep=rep2
+            type bigWig
+            shortLabel heart e11.5 r2 uni
+            longLabel ENCODE mouse heart e11.5 rep2 Unique reads (ENCFF815URA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF815URA.bigWig
+            color 241,153,153
+
+            track developmentTimecourseSignalMm10_ENCFF943QBN
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=e11_5 rep=rep1
+            type bigWig
+            shortLabel heart e11.5 r1 uni
+            longLabel ENCODE mouse heart e11.5 rep1 Unique reads (ENCFF943QBN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF943QBN.bigWig
+            color 241,153,153
+
+            track developmentTimecourseSignalMm10_ENCFF324QRJ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t04_heart age=P0 rep=rep2
+            type bigWig
+            shortLabel heart P0 r2 uni
+            longLabel ENCODE mouse heart P0 rep2 Unique reads (ENCFF324QRJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF324QRJ.bigWig
+            color 111,15,15
+
+            track developmentTimecourseSignalMm10_ENCFF561IRA
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t04_heart age=P0 rep=rep1
+            type bigWig
+            shortLabel heart P0 r1 uni
+            longLabel ENCODE mouse heart P0 rep1 Unique reads (ENCFF561IRA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF561IRA.bigWig
+            color 111,15,15
+
+            track developmentTimecourseSignalMm10_ENCFF678XDF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t09_lung age=e16_5 rep=rep1
+            type bigWig
+            shortLabel lung e16.5 r1 uni
+            longLabel ENCODE mouse lung e16.5 rep1 Unique reads (ENCFF678XDF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF678XDF.bigWig
+            color 230,216,74
+
+            track developmentTimecourseSignalMm10_ENCFF805ICO
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t09_lung age=e16_5 rep=rep2
+            type bigWig
+            shortLabel lung e16.5 r2 uni
+            longLabel ENCODE mouse lung e16.5 rep2 Unique reads (ENCFF805ICO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF805ICO.bigWig
+            color 230,216,74
+
+            track developmentTimecourseSignalMm10_ENCFF566YKN
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e10_5 rep=rep2
+            type bigWig
+            shortLabel face e10.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e10.5 rep2 Unique reads (ENCFF566YKN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF566YKN.bigWig
+            color 242,179,200
+
+            track developmentTimecourseSignalMm10_ENCFF197MAJ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e10_5 rep=rep1
+            type bigWig
+            shortLabel face e10.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e10.5 rep1 Unique reads (ENCFF197MAJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF197MAJ.bigWig
+            color 242,179,200
+
+            track developmentTimecourseSignalMm10_ENCFF751EJF
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e12_5 rep=rep2
+            type bigWig
+            shortLabel limb e12.5 r2 uni
+            longLabel ENCODE mouse limb e12.5 rep2 Unique reads (ENCFF751EJF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF751EJF.bigWig
+            color 234,115,201
+
+            track developmentTimecourseSignalMm10_ENCFF693FHM
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e12_5 rep=rep1
+            type bigWig
+            shortLabel limb e12.5 r1 uni
+            longLabel ENCODE mouse limb e12.5 rep1 Unique reads (ENCFF693FHM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF693FHM.bigWig
+            color 234,115,201
+
+            track developmentTimecourseSignalMm10_ENCFF533ZBZ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t08_kidney age=e15_5 rep=rep1
+            type bigWig
+            shortLabel kidney e15.5 r1 uni
+            longLabel ENCODE mouse kidney e15.5 rep1 Unique reads (ENCFF533ZBZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF533ZBZ.bigWig
+            color 240,161,77
+
+            track developmentTimecourseSignalMm10_ENCFF644CLX
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t08_kidney age=e15_5 rep=rep2
+            type bigWig
+            shortLabel kidney e15.5 r2 uni
+            longLabel ENCODE mouse kidney e15.5 rep2 Unique reads (ENCFF644CLX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF644CLX.bigWig
+            color 240,161,77
+
+            track developmentTimecourseSignalMm10_ENCFF612COQ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t08_kidney age=P0 rep=rep2
+            type bigWig
+            shortLabel kidney P0 r2 uni
+            longLabel ENCODE mouse kidney P0 rep2 Unique reads (ENCFF612COQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF612COQ.bigWig
+            color 169,92,27
+
+            track developmentTimecourseSignalMm10_ENCFF712EIS
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t08_kidney age=P0 rep=rep1
+            type bigWig
+            shortLabel kidney P0 r1 uni
+            longLabel ENCODE mouse kidney P0 rep1 Unique reads (ENCFF712EIS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF712EIS.bigWig
+            color 169,92,27
+
+            track developmentTimecourseSignalMm10_ENCFF538OJZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t05_skeletal_muscle_tissue age=P0 rep=rep2
+            type bigWig
+            shortLabel muscle P0 r2 uni
+            longLabel ENCODE mouse skeletal muscle tissue P0 rep2 Unique reads (ENCFF538OJZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF538OJZ.bigWig
+            color 255,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF110VDT
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t05_skeletal_muscle_tissue age=P0 rep=rep1
+            type bigWig
+            shortLabel muscle P0 r1 uni
+            longLabel ENCODE mouse skeletal muscle tissue P0 rep1 Unique reads (ENCFF110VDT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF110VDT.bigWig
+            color 255,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF024JDL
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e12.5 r2 u
+            longLabel ENCODE mouse forebrain e12.5 rep2 Unique reads (ENCFF024JDL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF024JDL.bigWig
+            color 179,106,230
+
+            track developmentTimecourseSignalMm10_ENCFF369FKH
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e12.5 r1 u
+            longLabel ENCODE mouse forebrain e12.5 rep1 Unique reads (ENCFF369FKH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF369FKH.bigWig
+            color 179,106,230
+
+            track developmentTimecourseSignalMm10_ENCFF177VZQ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t12_limb age=e15_5 rep=rep1
+            type bigWig
+            shortLabel limb e15.5 r1 uni
+            longLabel ENCODE mouse limb e15.5 rep1 Unique reads (ENCFF177VZQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF177VZQ.bigWig
+            color 127,31,99
+
+            track developmentTimecourseSignalMm10_ENCFF814UQP
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t12_limb age=e15_5 rep=rep2
+            type bigWig
+            shortLabel limb e15.5 r2 uni
+            longLabel ENCODE mouse limb e15.5 rep2 Unique reads (ENCFF814UQP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF814UQP.bigWig
+            color 127,31,99
+
+            track developmentTimecourseSignalMm10_ENCFF838ZTU
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t06_urinary_bladder age=P0 rep=rep1
+            type bigWig
+            shortLabel bladder P0 r1 uni
+            longLabel ENCODE mouse urinary bladder P0 rep1 Unique reads (ENCFF838ZTU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF838ZTU.bigWig
+            color 255,140,0
+
+            track developmentTimecourseSignalMm10_ENCFF177JFM
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t06_urinary_bladder age=P0 rep=rep2
+            type bigWig
+            shortLabel bladder P0 r2 uni
+            longLabel ENCODE mouse urinary bladder P0 rep2 Unique reads (ENCFF177JFM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF177JFM.bigWig
+            color 255,140,0
+
+            track developmentTimecourseSignalMm10_ENCFF996HMC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e15_5 rep=rep2
+            type bigWig
+            shortLabel liver e15.5 r2 uni
+            longLabel ENCODE mouse liver e15.5 rep2 Unique reads (ENCFF996HMC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF996HMC.bigWig
+            color 127,127,127
+
+            track developmentTimecourseSignalMm10_ENCFF390LUQ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e15_5 rep=rep1
+            type bigWig
+            shortLabel liver e15.5 r1 uni
+            longLabel ENCODE mouse liver e15.5 rep1 Unique reads (ENCFF390LUQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF390LUQ.bigWig
+            color 127,127,127
+
+            track developmentTimecourseSignalMm10_ENCFF096XIE
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t14_forebrain age=P0 rep=rep2
+            type bigWig
+            shortLabel forebrain P0 r2 uni
+            longLabel ENCODE mouse forebrain P0 rep2 Unique reads (ENCFF096XIE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF096XIE.bigWig
+            color 34,9,63
+
+            track developmentTimecourseSignalMm10_ENCFF431GTN
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t14_forebrain age=P0 rep=rep1
+            type bigWig
+            shortLabel forebrain P0 r1 uni
+            longLabel ENCODE mouse forebrain P0 rep1 Unique reads (ENCFF431GTN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF431GTN.bigWig
+            color 34,9,63
+
+            track developmentTimecourseSignalMm10_ENCFF487SRQ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=e14_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e14.5 r2 
+            longLabel ENCODE mouse neural tube e14.5 rep2 Unique reads (ENCFF487SRQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF487SRQ.bigWig
+            color 63,191,230
+
+            track developmentTimecourseSignalMm10_ENCFF042EBZ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=e14_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e14.5 r1 
+            longLabel ENCODE mouse neural tube e14.5 rep1 Unique reads (ENCFF042EBZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF042EBZ.bigWig
+            color 63,191,230
+
+            track developmentTimecourseSignalMm10_ENCFF390KUZ
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e15_5 rep=rep2
+            type bigWig
+            shortLabel face e15.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e15.5 rep2 Unique reads (ENCFF390KUZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF390KUZ.bigWig
+            color 111,20,53
+
+            track developmentTimecourseSignalMm10_ENCFF080WKU
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e15_5 rep=rep1
+            type bigWig
+            shortLabel face e15.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e15.5 rep1 Unique reads (ENCFF080WKU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF080WKU.bigWig
+            color 111,20,53
+
+            track developmentTimecourseSignalMm10_ENCFF825BVO
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t17_neural_tube age=e13_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e13.5 r2 
+            longLabel ENCODE mouse neural tube e13.5 rep2 Unique reads (ENCFF825BVO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF825BVO.bigWig
+            color 111,220,255
+
+            track developmentTimecourseSignalMm10_ENCFF502RCV
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t17_neural_tube age=e13_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e13.5 r1 
+            longLabel ENCODE mouse neural tube e13.5 rep1 Unique reads (ENCFF502RCV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF502RCV.bigWig
+            color 111,220,255
+
+            track developmentTimecourseSignalMm10_ENCFF162QMG
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e16_5 rep=rep2
+            type bigWig
+            shortLabel liver e16.5 r2 uni
+            longLabel ENCODE mouse liver e16.5 rep2 Unique reads (ENCFF162QMG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF162QMG.bigWig
+            color 102,102,102
+
+            track developmentTimecourseSignalMm10_ENCFF588ORC
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e16_5 rep=rep1
+            type bigWig
+            shortLabel liver e16.5 r1 uni
+            longLabel ENCODE mouse liver e16.5 rep1 Unique reads (ENCFF588ORC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF588ORC.bigWig
+            color 102,102,102
+
+            track developmentTimecourseSignalMm10_ENCFF222WST
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e13_5 rep=rep1
+            type bigWig
+            shortLabel face e13.5 r1 uni
+            longLabel ENCODE mouse embryonic facial prominence e13.5 rep1 Unique reads (ENCFF222WST)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF222WST.bigWig
+            color 201,45,99
+
+            track developmentTimecourseSignalMm10_ENCFF849VDD
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t13_embryonic_facial_prominence age=e13_5 rep=rep2
+            type bigWig
+            shortLabel face e13.5 r2 uni
+            longLabel ENCODE mouse embryonic facial prominence e13.5 rep2 Unique reads (ENCFF849VDD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF849VDD.bigWig
+            color 201,45,99
+
+            track developmentTimecourseSignalMm10_ENCFF240MZD
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t10_stomach age=e16_5 rep=rep2
+            type bigWig
+            shortLabel stomach e16.5 r2 uni
+            longLabel ENCODE mouse stomach e16.5 rep2 Unique reads (ENCFF240MZD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF240MZD.bigWig
+            color 143,205,60
+
+            track developmentTimecourseSignalMm10_ENCFF799ZHZ
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t10_stomach age=e16_5 rep=rep1
+            type bigWig
+            shortLabel stomach e16.5 r1 uni
+            longLabel ENCODE mouse stomach e16.5 rep1 Unique reads (ENCFF799ZHZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF799ZHZ.bigWig
+            color 143,205,60
+
+            track developmentTimecourseSignalMm10_ENCFF830QLY
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e13.5 r1 u
+            longLabel ENCODE mouse hindbrain e13.5 rep1 Unique reads (ENCFF830QLY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF830QLY.bigWig
+            color 63,126,196
+
+            track developmentTimecourseSignalMm10_ENCFF046OKC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e13.5 r2 u
+            longLabel ENCODE mouse hindbrain e13.5 rep2 Unique reads (ENCFF046OKC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF046OKC.bigWig
+            color 63,126,196
+
+            track developmentTimecourseSignalMm10_ENCFF927QNP
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t03_liver age=e14_5 rep=rep2
+            type bigWig
+            shortLabel liver e14.5 r2 uni
+            longLabel ENCODE mouse liver e14.5 rep2 Unique reads (ENCFF927QNP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF927QNP.bigWig
+            color 154,154,154
+
+            track developmentTimecourseSignalMm10_ENCFF312XSF
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t03_liver age=e14_5 rep=rep1
+            type bigWig
+            shortLabel liver e14.5 r1 uni
+            longLabel ENCODE mouse liver e14.5 rep1 Unique reads (ENCFF312XSF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF312XSF.bigWig
+            color 154,154,154
+
+            track developmentTimecourseSignalMm10_ENCFF078POD
+            parent developmentTimecourseSignalMm10ViewUnique on
+            subGroups view=unique tissue=t16_hindbrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e10.5 r1 u
+            longLabel ENCODE mouse hindbrain e10.5 rep1 Unique reads (ENCFF078POD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF078POD.bigWig
+            color 198,219,240
+
+            track developmentTimecourseSignalMm10_ENCFF714GSC
+            parent developmentTimecourseSignalMm10ViewUnique off
+            subGroups view=unique tissue=t16_hindbrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e10.5 r2 u
+            longLabel ENCODE mouse hindbrain e10.5 rep2 Unique reads (ENCFF714GSC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF714GSC.bigWig
+            color 198,219,240
+
+        track developmentTimecourseSignalMm10ViewAll
+        view all
+        parent developmentTimecourseSignalMm10
+        shortLabel All reads
+        type bigWig
+        visibility hide
+        autoScale on
+        maxHeightPixels 100:32:8
+
+            track developmentTimecourseSignalMm10_ENCFF253TFL
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e13.5 r1 al
+            longLabel ENCODE mouse midbrain e13.5 rep1 All reads (ENCFF253TFL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF253TFL.bigWig
+            color 63,112,255
+
+            track developmentTimecourseSignalMm10_ENCFF447WJC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e13.5 r2 al
+            longLabel ENCODE mouse midbrain e13.5 rep2 All reads (ENCFF447WJC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF447WJC.bigWig
+            color 63,112,255
+
+            track developmentTimecourseSignalMm10_ENCFF862HBZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e14_5 rep=rep2
+            type bigWig
+            shortLabel kidney e14.5 r2 all
+            longLabel ENCODE mouse kidney e14.5 rep2 All reads (ENCFF862HBZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF862HBZ.bigWig
+            color 246,195,138
+
+            track developmentTimecourseSignalMm10_ENCFF402OFE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e14_5 rep=rep1
+            type bigWig
+            shortLabel kidney e14.5 r1 all
+            longLabel ENCODE mouse kidney e14.5 rep1 All reads (ENCFF402OFE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF402OFE.bigWig
+            color 246,195,138
+
+            track developmentTimecourseSignalMm10_ENCFF114LVU
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e14.5 r1 a
+            longLabel ENCODE mouse forebrain e14.5 rep1 All reads (ENCFF114LVU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF114LVU.bigWig
+            color 106,40,184
+
+            track developmentTimecourseSignalMm10_ENCFF102BOV
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e14.5 r2 a
+            longLabel ENCODE mouse forebrain e14.5 rep2 All reads (ENCFF102BOV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF102BOV.bigWig
+            color 106,40,184
+
+            track developmentTimecourseSignalMm10_ENCFF807KVS
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e16.5 r1 a
+            longLabel ENCODE mouse forebrain e16.5 rep1 All reads (ENCFF807KVS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF807KVS.bigWig
+            color 52,16,95
+
+            track developmentTimecourseSignalMm10_ENCFF062DIN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e16.5 r2 a
+            longLabel ENCODE mouse forebrain e16.5 rep2 All reads (ENCFF062DIN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF062DIN.bigWig
+            color 52,16,95
+
+            track developmentTimecourseSignalMm10_ENCFF353NYF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t01_thymus age=P0 rep=rep2
+            type bigWig
+            shortLabel thymus P0 r2 all
+            longLabel ENCODE mouse thymus P0 rep2 All reads (ENCFF353NYF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF353NYF.bigWig
+            color 200,180,0
+
+            track developmentTimecourseSignalMm10_ENCFF440QNM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t01_thymus age=P0 rep=rep1
+            type bigWig
+            shortLabel thymus P0 r1 all
+            longLabel ENCODE mouse thymus P0 rep1 All reads (ENCFF440QNM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF440QNM.bigWig
+            color 200,180,0
+
+            track developmentTimecourseSignalMm10_ENCFF450DVR
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e15.5 r2 al
+            longLabel ENCODE mouse midbrain e15.5 rep2 All reads (ENCFF450DVR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF450DVR.bigWig
+            color 22,55,184
+
+            track developmentTimecourseSignalMm10_ENCFF846UFR
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e15.5 r1 al
+            longLabel ENCODE mouse midbrain e15.5 rep1 All reads (ENCFF846UFR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF846UFR.bigWig
+            color 22,55,184
+
+            track developmentTimecourseSignalMm10_ENCFF718HCF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e12_5 rep=rep1
+            type bigWig
+            shortLabel face e12.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e12.5 rep1 All reads (ENCFF718HCF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF718HCF.bigWig
+            color 222,79,126
+
+            track developmentTimecourseSignalMm10_ENCFF425LRD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e12_5 rep=rep2
+            type bigWig
+            shortLabel face e12.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e12.5 rep2 All reads (ENCFF425LRD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF425LRD.bigWig
+            color 222,79,126
+
+            track developmentTimecourseSignalMm10_ENCFF164VFH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e15.5 r1 a
+            longLabel ENCODE mouse forebrain e15.5 rep1 All reads (ENCFF164VFH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF164VFH.bigWig
+            color 75,26,143
+
+            track developmentTimecourseSignalMm10_ENCFF234FQN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e15.5 r2 a
+            longLabel ENCODE mouse forebrain e15.5 rep2 All reads (ENCFF234FQN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF234FQN.bigWig
+            color 75,26,143
+
+            track developmentTimecourseSignalMm10_ENCFF647LAW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=P0 rep=rep1
+            type bigWig
+            shortLabel hindbrain P0 r1 all
+            longLabel ENCODE mouse hindbrain P0 rep1 All reads (ENCFF647LAW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF647LAW.bigWig
+            color 8,28,63
+
+            track developmentTimecourseSignalMm10_ENCFF635IPD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=P0 rep=rep2
+            type bigWig
+            shortLabel hindbrain P0 r2 all
+            longLabel ENCODE mouse hindbrain P0 rep2 All reads (ENCFF635IPD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF635IPD.bigWig
+            color 8,28,63
+
+            track developmentTimecourseSignalMm10_ENCFF442RAE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t02_spleen age=P0 rep=rep1
+            type bigWig
+            shortLabel spleen P0 r1 all
+            longLabel ENCODE mouse spleen P0 rep1 All reads (ENCFF442RAE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF442RAE.bigWig
+            color 160,133,108
+
+            track developmentTimecourseSignalMm10_ENCFF883YPA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t02_spleen age=P0 rep=rep2
+            type bigWig
+            shortLabel spleen P0 r2 all
+            longLabel ENCODE mouse spleen P0 rep2 All reads (ENCFF883YPA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF883YPA.bigWig
+            color 160,133,108
+
+            track developmentTimecourseSignalMm10_ENCFF053AQV
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e13_5 rep=rep2
+            type bigWig
+            shortLabel liver e13.5 r2 all
+            longLabel ENCODE mouse liver e13.5 rep2 All reads (ENCFF053AQV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF053AQV.bigWig
+            color 181,181,181
+
+            track developmentTimecourseSignalMm10_ENCFF080YMU
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e13_5 rep=rep1
+            type bigWig
+            shortLabel liver e13.5 r1 all
+            longLabel ENCODE mouse liver e13.5 rep1 All reads (ENCFF080YMU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF080YMU.bigWig
+            color 181,181,181
+
+            track developmentTimecourseSignalMm10_ENCFF074GTQ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e16_5 rep=rep2
+            type bigWig
+            shortLabel heart e16.5 r2 all
+            longLabel ENCODE mouse heart e16.5 rep2 All reads (ENCFF074GTQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF074GTQ.bigWig
+            color 143,21,21
+
+            track developmentTimecourseSignalMm10_ENCFF381BDH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e16_5 rep=rep1
+            type bigWig
+            shortLabel heart e16.5 r1 all
+            longLabel ENCODE mouse heart e16.5 rep1 All reads (ENCFF381BDH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF381BDH.bigWig
+            color 143,21,21
+
+            track developmentTimecourseSignalMm10_ENCFF940VJM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e13_5 rep=rep1
+            type bigWig
+            shortLabel heart e13.5 r1 all
+            longLabel ENCODE mouse heart e13.5 rep1 All reads (ENCFF940VJM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF940VJM.bigWig
+            color 230,69,69
+
+            track developmentTimecourseSignalMm10_ENCFF087QAG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e13_5 rep=rep2
+            type bigWig
+            shortLabel heart e13.5 r2 all
+            longLabel ENCODE mouse heart e13.5 rep2 All reads (ENCFF087QAG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF087QAG.bigWig
+            color 230,69,69
+
+            track developmentTimecourseSignalMm10_ENCFF823OJC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e11_5 rep=rep1
+            type bigWig
+            shortLabel liver e11.5 r1 all
+            longLabel ENCODE mouse liver e11.5 rep1 All reads (ENCFF823OJC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF823OJC.bigWig
+            color 224,224,224
+
+            track developmentTimecourseSignalMm10_ENCFF069WGY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e11_5 rep=rep2
+            type bigWig
+            shortLabel liver e11.5 r2 all
+            longLabel ENCODE mouse liver e11.5 rep2 All reads (ENCFF069WGY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF069WGY.bigWig
+            color 224,224,224
+
+            track developmentTimecourseSignalMm10_ENCFF543TJZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e11.5 r2 a
+            longLabel ENCODE mouse forebrain e11.5 rep2 All reads (ENCFF543TJZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF543TJZ.bigWig
+            color 207,161,242
+
+            track developmentTimecourseSignalMm10_ENCFF831UEE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e11.5 r1 a
+            longLabel ENCODE mouse forebrain e11.5 rep1 All reads (ENCFF831UEE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF831UEE.bigWig
+            color 207,161,242
+
+            track developmentTimecourseSignalMm10_ENCFF599RDH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e14_5 rep=rep1
+            type bigWig
+            shortLabel heart e14.5 r1 all
+            longLabel ENCODE mouse heart e14.5 rep1 All reads (ENCFF599RDH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF599RDH.bigWig
+            color 217,48,48
+
+            track developmentTimecourseSignalMm10_ENCFF351JSP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e14_5 rep=rep2
+            type bigWig
+            shortLabel heart e14.5 r2 all
+            longLabel ENCODE mouse heart e14.5 rep2 All reads (ENCFF351JSP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF351JSP.bigWig
+            color 217,48,48
+
+            track developmentTimecourseSignalMm10_ENCFF588IFN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e11.5 r2 al
+            longLabel ENCODE mouse midbrain e11.5 rep2 All reads (ENCFF588IFN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF588IFN.bigWig
+            color 159,186,255
+
+            track developmentTimecourseSignalMm10_ENCFF519QXF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e11.5 r1 al
+            longLabel ENCODE mouse midbrain e11.5 rep1 All reads (ENCFF519QXF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF519QXF.bigWig
+            color 159,186,255
+
+            track developmentTimecourseSignalMm10_ENCFF128OAP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e13_5 rep=rep2
+            type bigWig
+            shortLabel limb e13.5 r2 all
+            longLabel ENCODE mouse limb e13.5 rep2 All reads (ENCFF128OAP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF128OAP.bigWig
+            color 224,74,184
+
+            track developmentTimecourseSignalMm10_ENCFF272JBX
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e13_5 rep=rep1
+            type bigWig
+            shortLabel limb e13.5 r1 all
+            longLabel ENCODE mouse limb e13.5 rep1 All reads (ENCFF272JBX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF272JBX.bigWig
+            color 224,74,184
+
+            track developmentTimecourseSignalMm10_ENCFF548KDZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=P0 rep=rep1
+            type bigWig
+            shortLabel stomach P0 r1 all
+            longLabel ENCODE mouse stomach P0 rep1 All reads (ENCFF548KDZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF548KDZ.bigWig
+            color 95,143,31
+
+            track developmentTimecourseSignalMm10_ENCFF305TSW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=P0 rep=rep2
+            type bigWig
+            shortLabel stomach P0 r2 all
+            longLabel ENCODE mouse stomach P0 rep2 All reads (ENCFF305TSW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF305TSW.bigWig
+            color 95,143,31
+
+            track developmentTimecourseSignalMm10_ENCFF559YQH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e14_5 rep=rep2
+            type bigWig
+            shortLabel limb e14.5 r2 all
+            longLabel ENCODE mouse limb e14.5 rep2 All reads (ENCFF559YQH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF559YQH.bigWig
+            color 185,45,143
+
+            track developmentTimecourseSignalMm10_ENCFF743KAL
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e14_5 rep=rep1
+            type bigWig
+            shortLabel limb e14.5 r1 all
+            longLabel ENCODE mouse limb e14.5 rep1 All reads (ENCFF743KAL)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF743KAL.bigWig
+            color 185,45,143
+
+            track developmentTimecourseSignalMm10_ENCFF844JSD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=P0 rep=rep1
+            type bigWig
+            shortLabel lung P0 r1 all
+            longLabel ENCODE mouse lung P0 rep1 All reads (ENCFF844JSD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF844JSD.bigWig
+            color 191,174,47
+
+            track developmentTimecourseSignalMm10_ENCFF304BNE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=P0 rep=rep2
+            type bigWig
+            shortLabel lung P0 r2 all
+            longLabel ENCODE mouse lung P0 rep2 All reads (ENCFF304BNE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF304BNE.bigWig
+            color 191,174,47
+
+            track developmentTimecourseSignalMm10_ENCFF655RLU
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e15_5 rep=rep2
+            type bigWig
+            shortLabel intestine e15.5 r2 a
+            longLabel ENCODE mouse intestine e15.5 rep2 All reads (ENCFF655RLU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF655RLU.bigWig
+            color 126,236,192
+
+            track developmentTimecourseSignalMm10_ENCFF013UGQ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e15_5 rep=rep1
+            type bigWig
+            shortLabel intestine e15.5 r1 a
+            longLabel ENCODE mouse intestine e15.5 rep1 All reads (ENCFF013UGQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF013UGQ.bigWig
+            color 126,236,192
+
+            track developmentTimecourseSignalMm10_ENCFF872CSG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e15_5 rep=rep2
+            type bigWig
+            shortLabel heart e15.5 r2 all
+            longLabel ENCODE mouse heart e15.5 rep2 All reads (ENCFF872CSG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF872CSG.bigWig
+            color 183,31,31
+
+            track developmentTimecourseSignalMm10_ENCFF666DGB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e15_5 rep=rep1
+            type bigWig
+            shortLabel heart e15.5 r1 all
+            longLabel ENCODE mouse heart e15.5 rep1 All reads (ENCFF666DGB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF666DGB.bigWig
+            color 183,31,31
+
+            track developmentTimecourseSignalMm10_ENCFF289OTC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e10.5 r1 al
+            longLabel ENCODE mouse midbrain e10.5 rep1 All reads (ENCFF289OTC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF289OTC.bigWig
+            color 198,216,255
+
+            track developmentTimecourseSignalMm10_ENCFF994COG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e10.5 r2 al
+            longLabel ENCODE mouse midbrain e10.5 rep2 All reads (ENCFF994COG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF994COG.bigWig
+            color 198,216,255
+
+            track developmentTimecourseSignalMm10_ENCFF559LTK
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e11_5 rep=rep1
+            type bigWig
+            shortLabel face e11.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e11.5 rep1 All reads (ENCFF559LTK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF559LTK.bigWig
+            color 233,121,160
+
+            track developmentTimecourseSignalMm10_ENCFF571RPA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e11_5 rep=rep2
+            type bigWig
+            shortLabel face e11.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e11.5 rep2 All reads (ENCFF571RPA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF571RPA.bigWig
+            color 233,121,160
+
+            track developmentTimecourseSignalMm10_ENCFF876OJZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=P0 rep=rep1
+            type bigWig
+            shortLabel neuraltube P0 r1 all
+            longLabel ENCODE mouse neural tube P0 rep1 All reads (ENCFF876OJZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF876OJZ.bigWig
+            color 26,95,111
+
+            track developmentTimecourseSignalMm10_ENCFF714ZTX
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=P0 rep=rep2
+            type bigWig
+            shortLabel neuraltube P0 r2 all
+            longLabel ENCODE mouse neural tube P0 rep2 All reads (ENCFF714ZTX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF714ZTX.bigWig
+            color 26,95,111
+
+            track developmentTimecourseSignalMm10_ENCFF148TAA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e15_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e15.5 r1 a
+            longLabel ENCODE mouse hindbrain e15.5 rep1 All reads (ENCFF148TAA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF148TAA.bigWig
+            color 26,69,127
+
+            track developmentTimecourseSignalMm10_ENCFF882RHO
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e15_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e15.5 r2 a
+            longLabel ENCODE mouse hindbrain e15.5 rep2 All reads (ENCFF882RHO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF882RHO.bigWig
+            color 26,69,127
+
+            track developmentTimecourseSignalMm10_ENCFF547ZDG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e12_5 rep=rep2
+            type bigWig
+            shortLabel heart e12.5 r2 all
+            longLabel ENCODE mouse heart e12.5 rep2 All reads (ENCFF547ZDG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF547ZDG.bigWig
+            color 236,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF869BDF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e12_5 rep=rep1
+            type bigWig
+            shortLabel heart e12.5 r1 all
+            longLabel ENCODE mouse heart e12.5 rep1 All reads (ENCFF869BDF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF869BDF.bigWig
+            color 236,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF449FIW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e13.5 r2 a
+            longLabel ENCODE mouse forebrain e13.5 rep2 All reads (ENCFF449FIW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF449FIW.bigWig
+            color 143,63,217
+
+            track developmentTimecourseSignalMm10_ENCFF048MBX
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e13.5 r1 a
+            longLabel ENCODE mouse forebrain e13.5 rep1 All reads (ENCFF048MBX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF048MBX.bigWig
+            color 143,63,217
+
+            track developmentTimecourseSignalMm10_ENCFF665SXZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e16_5 rep=rep1
+            type bigWig
+            shortLabel intestine e16.5 r1 a
+            longLabel ENCODE mouse intestine e16.5 rep1 All reads (ENCFF665SXZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF665SXZ.bigWig
+            color 68,196,148
+
+            track developmentTimecourseSignalMm10_ENCFF644LLJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e16_5 rep=rep2
+            type bigWig
+            shortLabel intestine e16.5 r2 a
+            longLabel ENCODE mouse intestine e16.5 rep2 All reads (ENCFF644LLJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF644LLJ.bigWig
+            color 68,196,148
+
+            track developmentTimecourseSignalMm10_ENCFF940SMC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e14_5 rep=rep2
+            type bigWig
+            shortLabel stomach e14.5 r2 all
+            longLabel ENCODE mouse stomach e14.5 rep2 All reads (ENCFF940SMC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF940SMC.bigWig
+            color 215,247,166
+
+            track developmentTimecourseSignalMm10_ENCFF822OVR
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e14_5 rep=rep1
+            type bigWig
+            shortLabel stomach e14.5 r1 all
+            longLabel ENCODE mouse stomach e14.5 rep1 All reads (ENCFF822OVR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF822OVR.bigWig
+            color 215,247,166
+
+            track developmentTimecourseSignalMm10_ENCFF693KKG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e14_5 rep=rep2
+            type bigWig
+            shortLabel lung e14.5 r2 all
+            longLabel ENCODE mouse lung e14.5 rep2 All reads (ENCFF693KKG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF693KKG.bigWig
+            color 255,245,154
+
+            track developmentTimecourseSignalMm10_ENCFF652NHM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e14_5 rep=rep1
+            type bigWig
+            shortLabel lung e14.5 r1 all
+            longLabel ENCODE mouse lung e14.5 rep1 All reads (ENCFF652NHM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF652NHM.bigWig
+            color 255,245,154
+
+            track developmentTimecourseSignalMm10_ENCFF096PLD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e11_5 rep=rep1
+            type bigWig
+            shortLabel limb e11.5 r1 all
+            longLabel ENCODE mouse limb e11.5 rep1 All reads (ENCFF096PLD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF096PLD.bigWig
+            color 241,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF560GMQ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e11_5 rep=rep2
+            type bigWig
+            shortLabel limb e11.5 r2 all
+            longLabel ENCODE mouse limb e11.5 rep2 All reads (ENCFF560GMQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF560GMQ.bigWig
+            color 241,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF282FUC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e15_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e15.5 r2 
+            longLabel ENCODE mouse neural tube e15.5 rep2 All reads (ENCFF282FUC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF282FUC.bigWig
+            color 42,143,184
+
+            track developmentTimecourseSignalMm10_ENCFF591NJB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e15_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e15.5 r1 
+            longLabel ENCODE mouse neural tube e15.5 rep1 All reads (ENCFF591NJB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF591NJB.bigWig
+            color 42,143,184
+
+            track developmentTimecourseSignalMm10_ENCFF899SZS
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e14.5 r1 a
+            longLabel ENCODE mouse hindbrain e14.5 rep1 All reads (ENCFF899SZS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF899SZS.bigWig
+            color 40,95,163
+
+            track developmentTimecourseSignalMm10_ENCFF023UJR
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e14.5 r2 a
+            longLabel ENCODE mouse hindbrain e14.5 rep2 All reads (ENCFF023UJR)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF023UJR.bigWig
+            color 40,95,163
+
+            track developmentTimecourseSignalMm10_ENCFF285BTC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=P0 rep=rep1
+            type bigWig
+            shortLabel intestine P0 r1 all
+            longLabel ENCODE mouse intestine P0 rep1 All reads (ENCFF285BTC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF285BTC.bigWig
+            color 47,143,108
+
+            track developmentTimecourseSignalMm10_ENCFF963RSN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=P0 rep=rep2
+            type bigWig
+            shortLabel intestine P0 r2 all
+            longLabel ENCODE mouse intestine P0 rep2 All reads (ENCFF963RSN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF963RSN.bigWig
+            color 47,143,108
+
+            track developmentTimecourseSignalMm10_ENCFF466TSF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e14_5 rep=rep2
+            type bigWig
+            shortLabel face e14.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e14.5 rep2 All reads (ENCFF466TSF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF466TSF.bigWig
+            color 159,31,77
+
+            track developmentTimecourseSignalMm10_ENCFF441PEY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e14_5 rep=rep1
+            type bigWig
+            shortLabel face e14.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e14.5 rep1 All reads (ENCFF441PEY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF441PEY.bigWig
+            color 159,31,77
+
+            track developmentTimecourseSignalMm10_ENCFF328DQB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e12_5 rep=rep1
+            type bigWig
+            shortLabel liver e12.5 r1 all
+            longLabel ENCODE mouse liver e12.5 rep1 All reads (ENCFF328DQB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF328DQB.bigWig
+            color 207,207,207
+
+            track developmentTimecourseSignalMm10_ENCFF562DWK
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e12_5 rep=rep2
+            type bigWig
+            shortLabel liver e12.5 r2 all
+            longLabel ENCODE mouse liver e12.5 rep2 All reads (ENCFF562DWK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF562DWK.bigWig
+            color 207,207,207
+
+            track developmentTimecourseSignalMm10_ENCFF475SEG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e16.5 r2 al
+            longLabel ENCODE mouse midbrain e16.5 rep2 All reads (ENCFF475SEG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF475SEG.bigWig
+            color 15,38,127
+
+            track developmentTimecourseSignalMm10_ENCFF390XQM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e16.5 r1 al
+            longLabel ENCODE mouse midbrain e16.5 rep1 All reads (ENCFF390XQM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF390XQM.bigWig
+            color 15,38,127
+
+            track developmentTimecourseSignalMm10_ENCFF051OAA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e15_5 rep=rep1
+            type bigWig
+            shortLabel stomach e15.5 r1 all
+            longLabel ENCODE mouse stomach e15.5 rep1 All reads (ENCFF051OAA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF051OAA.bigWig
+            color 189,240,111
+
+            track developmentTimecourseSignalMm10_ENCFF806BBN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e15_5 rep=rep2
+            type bigWig
+            shortLabel stomach e15.5 r2 all
+            longLabel ENCODE mouse stomach e15.5 rep2 All reads (ENCFF806BBN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF806BBN.bigWig
+            color 189,240,111
+
+            track developmentTimecourseSignalMm10_ENCFF574UXU
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e10_5 rep=rep1
+            type bigWig
+            shortLabel limb e10.5 r1 all
+            longLabel ENCODE mouse limb e10.5 rep1 All reads (ENCFF574UXU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF574UXU.bigWig
+            color 246,195,232
+
+            track developmentTimecourseSignalMm10_ENCFF808NME
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e10_5 rep=rep2
+            type bigWig
+            shortLabel limb e10.5 r2 all
+            longLabel ENCODE mouse limb e10.5 rep2 All reads (ENCFF808NME)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF808NME.bigWig
+            color 246,195,232
+
+            track developmentTimecourseSignalMm10_ENCFF021MEX
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e14_5 rep=rep1
+            type bigWig
+            shortLabel intestine e14.5 r1 a
+            longLabel ENCODE mouse intestine e14.5 rep1 All reads (ENCFF021MEX)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF021MEX.bigWig
+            color 182,247,218
+
+            track developmentTimecourseSignalMm10_ENCFF153HSJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t11_intestine age=e14_5 rep=rep2
+            type bigWig
+            shortLabel intestine e14.5 r2 a
+            longLabel ENCODE mouse intestine e14.5 rep2 All reads (ENCFF153HSJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF153HSJ.bigWig
+            color 182,247,218
+
+            track developmentTimecourseSignalMm10_ENCFF739MEH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=P0 rep=rep1
+            type bigWig
+            shortLabel midbrain P0 r1 all
+            longLabel ENCODE mouse midbrain P0 rep1 All reads (ENCFF739MEH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF739MEH.bigWig
+            color 8,24,79
+
+            track developmentTimecourseSignalMm10_ENCFF291KZN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=P0 rep=rep2
+            type bigWig
+            shortLabel midbrain P0 r2 all
+            longLabel ENCODE mouse midbrain P0 rep2 All reads (ENCFF291KZN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF291KZN.bigWig
+            color 8,24,79
+
+            track developmentTimecourseSignalMm10_ENCFF890NUP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e15_5 rep=rep2
+            type bigWig
+            shortLabel lung e15.5 r2 all
+            longLabel ENCODE mouse lung e15.5 rep2 All reads (ENCFF890NUP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF890NUP.bigWig
+            color 255,240,102
+
+            track developmentTimecourseSignalMm10_ENCFF561HNJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e15_5 rep=rep1
+            type bigWig
+            shortLabel lung e15.5 r1 all
+            longLabel ENCODE mouse lung e15.5 rep1 All reads (ENCFF561HNJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF561HNJ.bigWig
+            color 255,240,102
+
+            track developmentTimecourseSignalMm10_ENCFF552UZS
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e10.5 r1 a
+            longLabel ENCODE mouse forebrain e10.5 rep1 All reads (ENCFF552UZS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF552UZS.bigWig
+            color 225,198,247
+
+            track developmentTimecourseSignalMm10_ENCFF006VQY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e10.5 r2 a
+            longLabel ENCODE mouse forebrain e10.5 rep2 All reads (ENCFF006VQY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF006VQY.bigWig
+            color 225,198,247
+
+            track developmentTimecourseSignalMm10_ENCFF308CLM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e11_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e11.5 r1 a
+            longLabel ENCODE mouse hindbrain e11.5 rep1 All reads (ENCFF308CLM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF308CLM.bigWig
+            color 155,188,230
+
+            track developmentTimecourseSignalMm10_ENCFF512LVW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e11_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e11.5 r2 a
+            longLabel ENCODE mouse hindbrain e11.5 rep2 All reads (ENCFF512LVW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF512LVW.bigWig
+            color 155,188,230
+
+            track developmentTimecourseSignalMm10_ENCFF645EAT
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e11_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e11.5 r1 
+            longLabel ENCODE mouse neural tube e11.5 rep1 All reads (ENCFF645EAT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF645EAT.bigWig
+            color 214,251,255
+
+            track developmentTimecourseSignalMm10_ENCFF819EFP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e11_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e11.5 r2 
+            longLabel ENCODE mouse neural tube e11.5 rep2 All reads (ENCFF819EFP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF819EFP.bigWig
+            color 214,251,255
+
+            track developmentTimecourseSignalMm10_ENCFF079PEJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e12.5 r2 a
+            longLabel ENCODE mouse hindbrain e12.5 rep2 All reads (ENCFF079PEJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF079PEJ.bigWig
+            color 106,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF049QFB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e12.5 r1 a
+            longLabel ENCODE mouse hindbrain e12.5 rep1 All reads (ENCFF049QFB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF049QFB.bigWig
+            color 106,156,217
+
+            track developmentTimecourseSignalMm10_ENCFF858DKY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=P0 rep=rep1
+            type bigWig
+            shortLabel liver P0 r1 all
+            longLabel ENCODE mouse liver P0 rep1 All reads (ENCFF858DKY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF858DKY.bigWig
+            color 77,77,77
+
+            track developmentTimecourseSignalMm10_ENCFF176TRW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=P0 rep=rep2
+            type bigWig
+            shortLabel liver P0 r2 all
+            longLabel ENCODE mouse liver P0 rep2 All reads (ENCFF176TRW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF176TRW.bigWig
+            color 77,77,77
+
+            track developmentTimecourseSignalMm10_ENCFF656AHZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e16_5 rep=rep2
+            type bigWig
+            shortLabel kidney e16.5 r2 all
+            longLabel ENCODE mouse kidney e16.5 rep2 All reads (ENCFF656AHZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF656AHZ.bigWig
+            color 209,122,44
+
+            track developmentTimecourseSignalMm10_ENCFF486AAU
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e16_5 rep=rep1
+            type bigWig
+            shortLabel kidney e16.5 r1 all
+            longLabel ENCODE mouse kidney e16.5 rep1 All reads (ENCFF486AAU)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF486AAU.bigWig
+            color 209,122,44
+
+            track developmentTimecourseSignalMm10_ENCFF433HLQ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t07_adrenal_gland age=P0 rep=rep1
+            type bigWig
+            shortLabel adrenal P0 r1 all
+            longLabel ENCODE mouse adrenal gland P0 rep1 All reads (ENCFF433HLQ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF433HLQ.bigWig
+            color 0,0,0
+
+            track developmentTimecourseSignalMm10_ENCFF747PDO
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t07_adrenal_gland age=P0 rep=rep2
+            type bigWig
+            shortLabel adrenal P0 r2 all
+            longLabel ENCODE mouse adrenal gland P0 rep2 All reads (ENCFF747PDO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF747PDO.bigWig
+            color 0,0,0
+
+            track developmentTimecourseSignalMm10_ENCFF360JTH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e10_5 rep=rep2
+            type bigWig
+            shortLabel heart e10.5 r2 all
+            longLabel ENCODE mouse heart e10.5 rep2 All reads (ENCFF360JTH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF360JTH.bigWig
+            color 247,198,198
+
+            track developmentTimecourseSignalMm10_ENCFF548IJA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e10_5 rep=rep1
+            type bigWig
+            shortLabel heart e10.5 r1 all
+            longLabel ENCODE mouse heart e10.5 rep1 All reads (ENCFF548IJA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF548IJA.bigWig
+            color 247,198,198
+
+            track developmentTimecourseSignalMm10_ENCFF979BGY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e12_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e12.5 r1 
+            longLabel ENCODE mouse neural tube e12.5 rep1 All reads (ENCFF979BGY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF979BGY.bigWig
+            color 166,240,255
+
+            track developmentTimecourseSignalMm10_ENCFF261JDF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e12_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e12.5 r2 
+            longLabel ENCODE mouse neural tube e12.5 rep2 All reads (ENCFF261JDF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF261JDF.bigWig
+            color 166,240,255
+
+            track developmentTimecourseSignalMm10_ENCFF849LAH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e16_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e16.5 r2 a
+            longLabel ENCODE mouse hindbrain e16.5 rep2 All reads (ENCFF849LAH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF849LAH.bigWig
+            color 15,47,95
+
+            track developmentTimecourseSignalMm10_ENCFF694PDF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e16_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e16.5 r1 a
+            longLabel ENCODE mouse hindbrain e16.5 rep1 All reads (ENCFF694PDF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF694PDF.bigWig
+            color 15,47,95
+
+            track developmentTimecourseSignalMm10_ENCFF771UPG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e14_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e14.5 r1 al
+            longLabel ENCODE mouse midbrain e14.5 rep1 All reads (ENCFF771UPG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF771UPG.bigWig
+            color 31,77,230
+
+            track developmentTimecourseSignalMm10_ENCFF223PPJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e14_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e14.5 r2 al
+            longLabel ENCODE mouse midbrain e14.5 rep2 All reads (ENCFF223PPJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF223PPJ.bigWig
+            color 31,77,230
+
+            track developmentTimecourseSignalMm10_ENCFF985OSN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel midbrain e12.5 r2 al
+            longLabel ENCODE mouse midbrain e12.5 rep2 All reads (ENCFF985OSN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF985OSN.bigWig
+            color 111,150,255
+
+            track developmentTimecourseSignalMm10_ENCFF465XRO
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t15_midbrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel midbrain e12.5 r1 al
+            longLabel ENCODE mouse midbrain e12.5 rep1 All reads (ENCFF465XRO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF465XRO.bigWig
+            color 111,150,255
+
+            track developmentTimecourseSignalMm10_ENCFF856JFG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e11_5 rep=rep2
+            type bigWig
+            shortLabel heart e11.5 r2 all
+            longLabel ENCODE mouse heart e11.5 rep2 All reads (ENCFF856JFG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF856JFG.bigWig
+            color 241,153,153
+
+            track developmentTimecourseSignalMm10_ENCFF063DDS
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=e11_5 rep=rep1
+            type bigWig
+            shortLabel heart e11.5 r1 all
+            longLabel ENCODE mouse heart e11.5 rep1 All reads (ENCFF063DDS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF063DDS.bigWig
+            color 241,153,153
+
+            track developmentTimecourseSignalMm10_ENCFF450ZDV
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=P0 rep=rep2
+            type bigWig
+            shortLabel heart P0 r2 all
+            longLabel ENCODE mouse heart P0 rep2 All reads (ENCFF450ZDV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF450ZDV.bigWig
+            color 111,15,15
+
+            track developmentTimecourseSignalMm10_ENCFF033ZJO
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t04_heart age=P0 rep=rep1
+            type bigWig
+            shortLabel heart P0 r1 all
+            longLabel ENCODE mouse heart P0 rep1 All reads (ENCFF033ZJO)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF033ZJO.bigWig
+            color 111,15,15
+
+            track developmentTimecourseSignalMm10_ENCFF519VLD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e16_5 rep=rep1
+            type bigWig
+            shortLabel lung e16.5 r1 all
+            longLabel ENCODE mouse lung e16.5 rep1 All reads (ENCFF519VLD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF519VLD.bigWig
+            color 230,216,74
+
+            track developmentTimecourseSignalMm10_ENCFF491LXS
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t09_lung age=e16_5 rep=rep2
+            type bigWig
+            shortLabel lung e16.5 r2 all
+            longLabel ENCODE mouse lung e16.5 rep2 All reads (ENCFF491LXS)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF491LXS.bigWig
+            color 230,216,74
+
+            track developmentTimecourseSignalMm10_ENCFF279ZFT
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e10_5 rep=rep2
+            type bigWig
+            shortLabel face e10.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e10.5 rep2 All reads (ENCFF279ZFT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF279ZFT.bigWig
+            color 242,179,200
+
+            track developmentTimecourseSignalMm10_ENCFF161QEY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e10_5 rep=rep1
+            type bigWig
+            shortLabel face e10.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e10.5 rep1 All reads (ENCFF161QEY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF161QEY.bigWig
+            color 242,179,200
+
+            track developmentTimecourseSignalMm10_ENCFF624HGP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e12_5 rep=rep2
+            type bigWig
+            shortLabel limb e12.5 r2 all
+            longLabel ENCODE mouse limb e12.5 rep2 All reads (ENCFF624HGP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF624HGP.bigWig
+            color 234,115,201
+
+            track developmentTimecourseSignalMm10_ENCFF020TSK
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e12_5 rep=rep1
+            type bigWig
+            shortLabel limb e12.5 r1 all
+            longLabel ENCODE mouse limb e12.5 rep1 All reads (ENCFF020TSK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF020TSK.bigWig
+            color 234,115,201
+
+            track developmentTimecourseSignalMm10_ENCFF394VMB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e15_5 rep=rep1
+            type bigWig
+            shortLabel kidney e15.5 r1 all
+            longLabel ENCODE mouse kidney e15.5 rep1 All reads (ENCFF394VMB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF394VMB.bigWig
+            color 240,161,77
+
+            track developmentTimecourseSignalMm10_ENCFF629JKF
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=e15_5 rep=rep2
+            type bigWig
+            shortLabel kidney e15.5 r2 all
+            longLabel ENCODE mouse kidney e15.5 rep2 All reads (ENCFF629JKF)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF629JKF.bigWig
+            color 240,161,77
+
+            track developmentTimecourseSignalMm10_ENCFF885GBI
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=P0 rep=rep2
+            type bigWig
+            shortLabel kidney P0 r2 all
+            longLabel ENCODE mouse kidney P0 rep2 All reads (ENCFF885GBI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF885GBI.bigWig
+            color 169,92,27
+
+            track developmentTimecourseSignalMm10_ENCFF190IXA
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t08_kidney age=P0 rep=rep1
+            type bigWig
+            shortLabel kidney P0 r1 all
+            longLabel ENCODE mouse kidney P0 rep1 All reads (ENCFF190IXA)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF190IXA.bigWig
+            color 169,92,27
+
+            track developmentTimecourseSignalMm10_ENCFF105SAT
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t05_skeletal_muscle_tissue age=P0 rep=rep2
+            type bigWig
+            shortLabel muscle P0 r2 all
+            longLabel ENCODE mouse skeletal muscle tissue P0 rep2 All reads (ENCFF105SAT)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF105SAT.bigWig
+            color 255,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF130UCP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t05_skeletal_muscle_tissue age=P0 rep=rep1
+            type bigWig
+            shortLabel muscle P0 r1 all
+            longLabel ENCODE mouse skeletal muscle tissue P0 rep1 All reads (ENCFF130UCP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF130UCP.bigWig
+            color 255,107,107
+
+            track developmentTimecourseSignalMm10_ENCFF765WES
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e12_5 rep=rep2
+            type bigWig
+            shortLabel forebrain e12.5 r2 a
+            longLabel ENCODE mouse forebrain e12.5 rep2 All reads (ENCFF765WES)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF765WES.bigWig
+            color 179,106,230
+
+            track developmentTimecourseSignalMm10_ENCFF180YPI
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=e12_5 rep=rep1
+            type bigWig
+            shortLabel forebrain e12.5 r1 a
+            longLabel ENCODE mouse forebrain e12.5 rep1 All reads (ENCFF180YPI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF180YPI.bigWig
+            color 179,106,230
+
+            track developmentTimecourseSignalMm10_ENCFF701KVN
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e15_5 rep=rep1
+            type bigWig
+            shortLabel limb e15.5 r1 all
+            longLabel ENCODE mouse limb e15.5 rep1 All reads (ENCFF701KVN)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF701KVN.bigWig
+            color 127,31,99
+
+            track developmentTimecourseSignalMm10_ENCFF275KGZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t12_limb age=e15_5 rep=rep2
+            type bigWig
+            shortLabel limb e15.5 r2 all
+            longLabel ENCODE mouse limb e15.5 rep2 All reads (ENCFF275KGZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF275KGZ.bigWig
+            color 127,31,99
+
+            track developmentTimecourseSignalMm10_ENCFF355GGH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t06_urinary_bladder age=P0 rep=rep1
+            type bigWig
+            shortLabel bladder P0 r1 all
+            longLabel ENCODE mouse urinary bladder P0 rep1 All reads (ENCFF355GGH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF355GGH.bigWig
+            color 255,140,0
+
+            track developmentTimecourseSignalMm10_ENCFF447UBV
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t06_urinary_bladder age=P0 rep=rep2
+            type bigWig
+            shortLabel bladder P0 r2 all
+            longLabel ENCODE mouse urinary bladder P0 rep2 All reads (ENCFF447UBV)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF447UBV.bigWig
+            color 255,140,0
+
+            track developmentTimecourseSignalMm10_ENCFF867QWH
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e15_5 rep=rep2
+            type bigWig
+            shortLabel liver e15.5 r2 all
+            longLabel ENCODE mouse liver e15.5 rep2 All reads (ENCFF867QWH)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF867QWH.bigWig
+            color 127,127,127
+
+            track developmentTimecourseSignalMm10_ENCFF098GHM
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e15_5 rep=rep1
+            type bigWig
+            shortLabel liver e15.5 r1 all
+            longLabel ENCODE mouse liver e15.5 rep1 All reads (ENCFF098GHM)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF098GHM.bigWig
+            color 127,127,127
+
+            track developmentTimecourseSignalMm10_ENCFF600GFE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=P0 rep=rep2
+            type bigWig
+            shortLabel forebrain P0 r2 all
+            longLabel ENCODE mouse forebrain P0 rep2 All reads (ENCFF600GFE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF600GFE.bigWig
+            color 34,9,63
+
+            track developmentTimecourseSignalMm10_ENCFF075RAD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t14_forebrain age=P0 rep=rep1
+            type bigWig
+            shortLabel forebrain P0 r1 all
+            longLabel ENCODE mouse forebrain P0 rep1 All reads (ENCFF075RAD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF075RAD.bigWig
+            color 34,9,63
+
+            track developmentTimecourseSignalMm10_ENCFF668OBZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e14_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e14.5 r2 
+            longLabel ENCODE mouse neural tube e14.5 rep2 All reads (ENCFF668OBZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF668OBZ.bigWig
+            color 63,191,230
+
+            track developmentTimecourseSignalMm10_ENCFF754RKZ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e14_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e14.5 r1 
+            longLabel ENCODE mouse neural tube e14.5 rep1 All reads (ENCFF754RKZ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF754RKZ.bigWig
+            color 63,191,230
+
+            track developmentTimecourseSignalMm10_ENCFF046OER
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e15_5 rep=rep2
+            type bigWig
+            shortLabel face e15.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e15.5 rep2 All reads (ENCFF046OER)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF046OER.bigWig
+            color 111,20,53
+
+            track developmentTimecourseSignalMm10_ENCFF740AIY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e15_5 rep=rep1
+            type bigWig
+            shortLabel face e15.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e15.5 rep1 All reads (ENCFF740AIY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF740AIY.bigWig
+            color 111,20,53
+
+            track developmentTimecourseSignalMm10_ENCFF102ZOP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e13_5 rep=rep2
+            type bigWig
+            shortLabel neuraltube e13.5 r2 
+            longLabel ENCODE mouse neural tube e13.5 rep2 All reads (ENCFF102ZOP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF102ZOP.bigWig
+            color 111,220,255
+
+            track developmentTimecourseSignalMm10_ENCFF548CMY
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t17_neural_tube age=e13_5 rep=rep1
+            type bigWig
+            shortLabel neuraltube e13.5 r1 
+            longLabel ENCODE mouse neural tube e13.5 rep1 All reads (ENCFF548CMY)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF548CMY.bigWig
+            color 111,220,255
+
+            track developmentTimecourseSignalMm10_ENCFF547BVJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e16_5 rep=rep2
+            type bigWig
+            shortLabel liver e16.5 r2 all
+            longLabel ENCODE mouse liver e16.5 rep2 All reads (ENCFF547BVJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF547BVJ.bigWig
+            color 102,102,102
+
+            track developmentTimecourseSignalMm10_ENCFF164DKB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e16_5 rep=rep1
+            type bigWig
+            shortLabel liver e16.5 r1 all
+            longLabel ENCODE mouse liver e16.5 rep1 All reads (ENCFF164DKB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF164DKB.bigWig
+            color 102,102,102
+
+            track developmentTimecourseSignalMm10_ENCFF373DMP
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e13_5 rep=rep1
+            type bigWig
+            shortLabel face e13.5 r1 all
+            longLabel ENCODE mouse embryonic facial prominence e13.5 rep1 All reads (ENCFF373DMP)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF373DMP.bigWig
+            color 201,45,99
+
+            track developmentTimecourseSignalMm10_ENCFF965PJW
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t13_embryonic_facial_prominence age=e13_5 rep=rep2
+            type bigWig
+            shortLabel face e13.5 r2 all
+            longLabel ENCODE mouse embryonic facial prominence e13.5 rep2 All reads (ENCFF965PJW)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF965PJW.bigWig
+            color 201,45,99
+
+            track developmentTimecourseSignalMm10_ENCFF045KHB
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e16_5 rep=rep2
+            type bigWig
+            shortLabel stomach e16.5 r2 all
+            longLabel ENCODE mouse stomach e16.5 rep2 All reads (ENCFF045KHB)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF045KHB.bigWig
+            color 143,205,60
+
+            track developmentTimecourseSignalMm10_ENCFF024UJG
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t10_stomach age=e16_5 rep=rep1
+            type bigWig
+            shortLabel stomach e16.5 r1 all
+            longLabel ENCODE mouse stomach e16.5 rep1 All reads (ENCFF024UJG)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF024UJG.bigWig
+            color 143,205,60
+
+            track developmentTimecourseSignalMm10_ENCFF531LYD
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e13_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e13.5 r1 a
+            longLabel ENCODE mouse hindbrain e13.5 rep1 All reads (ENCFF531LYD)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF531LYD.bigWig
+            color 63,126,196
+
+            track developmentTimecourseSignalMm10_ENCFF393VKC
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e13_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e13.5 r2 a
+            longLabel ENCODE mouse hindbrain e13.5 rep2 All reads (ENCFF393VKC)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF393VKC.bigWig
+            color 63,126,196
+
+            track developmentTimecourseSignalMm10_ENCFF105KWI
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e14_5 rep=rep2
+            type bigWig
+            shortLabel liver e14.5 r2 all
+            longLabel ENCODE mouse liver e14.5 rep2 All reads (ENCFF105KWI)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF105KWI.bigWig
+            color 154,154,154
+
+            track developmentTimecourseSignalMm10_ENCFF188JIE
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t03_liver age=e14_5 rep=rep1
+            type bigWig
+            shortLabel liver e14.5 r1 all
+            longLabel ENCODE mouse liver e14.5 rep1 All reads (ENCFF188JIE)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF188JIE.bigWig
+            color 154,154,154
+
+            track developmentTimecourseSignalMm10_ENCFF124BQK
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e10_5 rep=rep1
+            type bigWig
+            shortLabel hindbrain e10.5 r1 a
+            longLabel ENCODE mouse hindbrain e10.5 rep1 All reads (ENCFF124BQK)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF124BQK.bigWig
+            color 198,219,240
+
+            track developmentTimecourseSignalMm10_ENCFF812PCJ
+            parent developmentTimecourseSignalMm10ViewAll off
+            subGroups view=all tissue=t16_hindbrain age=e10_5 rep=rep2
+            type bigWig
+            shortLabel hindbrain e10.5 r2 a
+            longLabel ENCODE mouse hindbrain e10.5 rep2 All reads (ENCFF812PCJ)
+            bigDataUrl /gbdb/mm10/mouseDevTimecourse/ENCFF812PCJ.bigWig
+            color 198,219,240
+
