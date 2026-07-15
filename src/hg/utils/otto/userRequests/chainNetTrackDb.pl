@@ -198,7 +198,7 @@ if (!flock($lockFh, LOCK_EX)) {
 
 # refuse to run on a dirty tree -- this clone exists only for this script,
 # so any uncommitted state means something went wrong last time.
-my $dirty = `git -C "$kentTree" status --porcelain 2>&1`;
+my $dirty = `git -C "$kentTree" status --porcelain --untracked-files=no 2>&1`;
 if (length($dirty) > 0) {
   printf STDERR "ERROR: '%s' has uncommitted changes:\n%s",
     $kentTree, $dirty;
