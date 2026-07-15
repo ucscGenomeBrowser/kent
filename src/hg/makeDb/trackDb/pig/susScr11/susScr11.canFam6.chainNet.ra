@@ -1,0 +1,49 @@
+##############################################################################
+# canFam6 - Dog - Canis lupus familiaris - taxId: 9615
+##############################################################################
+track chainNetCanFam6
+compositeTrack on
+shortLabel Dog Chain/Net
+longLabel Dog (Oct. 2020 (Dog10K_Boxer_Tasha/canFam6) canFam6), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb canFam6
+html chainNet
+
+    track chainNetCanFam6Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetCanFam6
+    spectrum on
+
+        track chainCanFam6
+        parent chainNetCanFam6Viewchain
+        subGroups view=chain
+        shortLabel Dog Chain
+        longLabel Dog (Oct. 2020 (Dog10K_Boxer_Tasha/canFam6) canFam6) Chained Alignments
+        type bigChain canFam6
+        bigDataUrl /gbdb/$D/chainNet/$D.chainCanFam6.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainCanFam6Link.bb
+
+        track chainLiftOverCanFam6
+        parent chainNetCanFam6Viewchain
+        subGroups view=chain
+        shortLabel Dog liftOverChain
+        longLabel Dog (Oct. 2020 (Dog10K_Boxer_Tasha/canFam6) canFam6) Lift Over Chained Alignments
+        type bigChain canFam6
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverCanFam6.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverCanFam6Link.bb
+
