@@ -1144,3 +1144,80 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
     --split-affected \
     --threads 8 \
     --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+
+##########
+# 2026-07-09 Claude max
+# gnomAD-Canada HostSeq - 10,487 Canadian COVID-19 WGS genomes, refs #36642.
+#
+# gnomAD-Canada v1.0 is the Canadian arm of the Genome Aggregation Database
+# (CGDC / Pan-Canadian Genome Library). The v1.0 release aggregates the
+# Canadian COVID-19 HostSeq cohort (Yoo et al. 2023, BMC Genom Data,
+# PMID 37131148): 10,487 genomes sequenced at 30X on Illumina NovaSeq 6000,
+# aligned to GRCh38 with DRAGMAP, joint-called with GATK, then run through the
+# Broad gnomAD QC v3 pipeline. Already GRCh38 with chr-prefixed contigs, so no
+# lift or chromosome renaming is needed. Data are freely downloadable, so the
+# gbdb subdir is NOT _-prefixed and the stanza has no `tableBrowser off`.
+#
+# The release ships ONLY as a ~104 GB Hail Table (release_sites_hostseq.tar.gz),
+# not a VCF, so a dedicated Hail environment is required to read it:
+#   micromamba create -y -n hail -c conda-forge python=3.10 openjdk=11 pip
+#   micromamba run -n hail pip install hail        # installed hail 0.2.138
+cd /hive/data/genomes/hg38/bed/varFreqs/hostseq
+wget https://www.bcgsc.ca/gnomad/download/release_sites_hostseq.tar.gz
+tar xzf release_sites_hostseq.tar.gz              # -> release_sites.ht (217 GB)
+# Flatten the freq array (overall + 9 gnomAD genetic-ancestry groups: afr, amr,
+# asj, eas, fin, mid, nfe, oth, sas) into VCF INFO AC/AN/AF plus nhomalt, grpmax,
+# rsID and the variant filter status, then export a sites-only VCF. The source
+# table is split into ~121k tiny partitions, which OOMs the Spark driver, so the
+# script coalesces to 2000 partitions and is run with a large driver heap.
+export PYSPARK_SUBMIT_ARGS="--driver-memory 96g pyspark-shell"
+micromamba run -n hail bash -c 'unset JAVA_HOME; \
+  export PYSPARK_SUBMIT_ARGS="--driver-memory 96g pyspark-shell"; \
+  python3 ~/kent/src/hg/makeDb/scripts/varFreqs/hostseqHtToVcf.py \
+      release_sites.ht hostseq.vcf.bgz --partitions 2000'
+mv -f hostseq.vcf.bgz hostseq.vcf.gz
+tabix -p vcf hostseq.vcf.gz
+# Accounting: 232,028,491 rows in the release table -> 213,382,086 written
+# (18,646,405 AC0 sites with no observed allele in the high-quality release
+# were dropped). Contigs chr1-22 + X/Y (no chrM), all canonical. FILTER of the
+# written variants: 181,149,159 PASS, 32,074,697 RF (gnomAD random-forest),
+# 123,690 InbreedingCoeff, 34,540 InbreedingCoeff;RF. Filter-flagged variants
+# are kept (browsable, hideable via the track filter). Final: 9.5 GB bgzip +
+# 2.6 MB tabix index. Spot-check APOE rs429358 (chr19:44908684 T>C):
+# AF=0.1258 overall, afr 0.234, nfe 0.130, grpmax=afr - consistent with the
+# known APOE e4 frequency.
+#
+# Registered in scripts/varFreqs/databases.tsv (HostSeq, is_disease=0) and the
+# 9 ancestry groups in populations.tsv so the next varFreqsAll combined-track
+# rebuild picks HostSeq up. Per WBBC/ChinaMAP precedent, the combined track was
+# NOT rebuilt here and the varFreqs.ra filter UI fragment was not added yet.
+
+##########
+# 2026-07-11 Claude max
+# Combined-track rebuild: fold HostSeq into varFreqsAffected/varFreqsBackground.
+# refs #36642. HostSeq is is_disease=0 (population reference), so it feeds the
+# background side; varFreqsArray is a genotyping-array track and was NOT
+# touched. HostSeq is the only new cohort vs the prior build - the other 28
+# reuse the normalized/ cache; varFreqsAll is now 29 cohorts.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# Force re-merge + re-csq (keep the per-VCF normalize cache; only hostseq is new)
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+      merged.annotated.vcf.gz.tbi normalized_files.txt
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Merged variants: 1,374,129,993 (HostSeq added ~38M sites not seen in any
+# other cohort). Outputs: varFreqsAffected.bb 18.7 GB / 133,290,997 items,
+# varFreqsBackground.bb 60.0 GB / 1,278,354,588 items; both 185 fields
+# (up from 165: HostSeq adds overall AC/AF + 9 ancestry-group AC/AF = 20 cols).
+# Spot-check APOE rs429358 in the background bb matches the standalone HostSeq
+# VCF exactly: HostSeqAC=2315, AF=0.1258, afr AF=0.234, nfe 0.130, oth 0.079.
+# The /gbdb _affected/_background symlinks point at the in-place .bb (unchanged).
+# varFreqs.ra: added HostSeq|HostSeq Canada to filterValues.backgroundSources in
+# both stanzas (HostSeq is NOT in affectedCohorts) plus commented per-DB
+# HostSeqAF/AC filter blocks. Length and AC/AN filter ranges were unchanged by
+# HostSeq (confirmed against the auto-generated all/varFreqs.trackDb.ra).
