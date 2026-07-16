@@ -904,6 +904,8 @@ include hprcChainNet.ra
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra
 include hprcArr.ra
+include hprc2.ra alpha
+include hprc2Chains.ra alpha
 include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
