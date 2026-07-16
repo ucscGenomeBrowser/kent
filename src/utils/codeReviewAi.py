@@ -509,14 +509,18 @@ def detect_cli_failure(response, validator):
     broken review."""
     if not response:
         return "No response from Claude CLI (timeout, crash, or empty output)"
+    # A well-formed review is a success even when its text quotes auth-error
+    # strings - e.g. a review of the auth-handling code itself. Only scan for
+    # auth markers when the output is NOT a valid review, so such reviews are
+    # not misflagged as authentication failures.
+    is_valid, msg = validator(response)
+    if is_valid:
+        return None
     for marker in CLI_AUTH_ERROR_MARKERS:
         if marker in response:
             first_line = next((l for l in response.strip().splitlines() if l.strip()), response)
             return f"Claude CLI authentication failure: {first_line.strip()[:300]}"
-    is_valid, msg = validator(response)
-    if not is_valid:
-        return f"Invalid or incomplete review output: {msg}"
-    return None
+    return f"Invalid or incomplete review output: {msg}"
 
 def call_claude_cli(prompt, timeout=600, retries=1, validator=None):
     """Call Claude Code CLI with a prompt and return the response"""
@@ -1076,17 +1080,19 @@ def review_standalone_commit(commit, referenced_issues):
 # DAILY REVIEW MODE (when --daily is specified)
 # =============================================================================
 
-def get_commits_since(hours):
-    """Get all commits from the last N hours, grouped by author"""
-    since = datetime.now() - timedelta(hours=hours)
-    since_str = since.strftime('%Y-%m-%d %H:%M:%S')
+def get_commits_since(hours, since=None, until=None):
+    """Get commits grouped by author. By default covers the last N hours; if
+    'since' (and optionally 'until') are given, covers that explicit window
+    instead. 'since'/'until' are passed straight to git log, so any date git
+    understands works (e.g. '2026-06-20' or '2026-06-20 00:00:00')."""
+    since_str = since or (datetime.now() - timedelta(hours=hours)).strftime('%Y-%m-%d %H:%M:%S')
 
     # Get commits with author name, email, hash, and subject
-    result = subprocess.run(
-        ['git', f'--git-dir={GIT_REPO_PATH}', 'log',
-         f'--since={since_str}', '--format=%H%n%an%n%ae%n%s', '--no-merges'],
-        capture_output=True, text=True, timeout=60
-    )
+    cmd = ['git', f'--git-dir={GIT_REPO_PATH}', 'log',
+           f'--since={since_str}', '--format=%H%n%an%n%ae%n%s', '--no-merges']
+    if until:
+        cmd.append(f'--until={until}')
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
     if result.returncode != 0:
         print(f"ERROR: git log failed: {result.stderr}")
         return {}
@@ -1122,8 +1128,8 @@ def get_commits_since(hours):
     return dict(authors)
 
 
-def build_daily_review_prompt(author_name, commits):
-    """Build a prompt for reviewing all of one author's daily commits"""
+def build_daily_review_prompt(author_name, commits, window_label="the last 24 hours"):
+    """Build a prompt for reviewing all of one author's commits in a window"""
 
     commits_list = []
     commit_hashes = []
@@ -1136,7 +1142,7 @@ def build_daily_review_prompt(author_name, commits):
     commits_section = "\n".join(commits_list)
     hashes_section = " ".join(commit_hashes)
 
-    prompt = f"""You are performing a daily code review of all commits by {author_name} in the UCSC Genome Browser kent repository from the last 24 hours.
+    prompt = f"""You are performing a daily code review of all commits by {author_name} in the UCSC Genome Browser kent repository from {window_label}.
 
 ## AUTHOR: {author_name}
 ## COMMITS TO REVIEW ({len(commits)} total)
@@ -1306,7 +1312,7 @@ def send_review_email(gmail_service, to_email, author_name, review_text, cc=None
     ).execute()
 
 
-def send_alert_email(gmail_service, to_email, failures, hours, log_dir):
+def send_alert_email(gmail_service, to_email, failures, window_label, log_dir):
     """Send a maintainer alert when one or more author reviews failed (e.g. an
     expired Claude CLI token). This is what keeps the daily cron from failing
     silently: a broken review is never sent to the author, so without this
@@ -1316,7 +1322,7 @@ def send_alert_email(gmail_service, to_email, failures, hours, log_dir):
         "did not produce valid reviews for one or more authors.",
         "",
         f"Review date:      {datetime.now().strftime('%Y-%m-%d %H:%M')}",
-        f"Look-back window: {hours} hours",
+        f"Review window:    {window_label}",
         f"Failed reviews:   {len(failures)}",
         "",
         "Details:",
@@ -1345,22 +1351,25 @@ def send_alert_email(gmail_service, to_email, failures, hours, log_dir):
     ).execute()
 
 
-def review_daily_author(author_name, commits, log_dir):
+def review_daily_author(author_name, commits, log_dir,
+                        window_label="the last 24 hours", file_suffix=None):
     """Review all commits by one author for the daily digest.
-    Temp files (prompts/responses) are written to log_dir and returned for cleanup."""
+    Temp files (prompts/responses) are written to log_dir and returned for cleanup.
+    file_suffix keys the temp filenames (defaults to today's date); pass an
+    explicit window so same-day backfill runs do not clobber each other."""
     print(f"\n{'='*60}")
     print(f"REVIEWING DAILY COMMITS: {author_name}")
     print(f"Commits: {len(commits)}")
     print(f"{'='*60}")
 
-    prompt = build_daily_review_prompt(author_name, commits)
+    prompt = build_daily_review_prompt(author_name, commits, window_label)
 
     # Save prompt to log_dir for debugging (cleaned up on success)
     safe_name = re.sub(r'[^a-zA-Z0-9]', '_', author_name)
-    date_str = datetime.now().strftime('%Y%m%d')
+    suffix = file_suffix or datetime.now().strftime('%Y%m%d')
     temp_files = []
 
-    prompt_file = os.path.join(log_dir, f".tmp_daily_prompt_{safe_name}_{date_str}.txt")
+    prompt_file = os.path.join(log_dir, f".tmp_daily_prompt_{safe_name}_{suffix}.txt")
     with open(prompt_file, 'w') as f:
         f.write(prompt)
     temp_files.append(prompt_file)
@@ -1372,7 +1381,7 @@ def review_daily_author(author_name, commits, log_dir):
 
     # Save whatever we got back for debugging, even on failure.
     if raw_response:
-        response_file = os.path.join(log_dir, f".tmp_daily_response_{safe_name}_{date_str}.txt")
+        response_file = os.path.join(log_dir, f".tmp_daily_response_{safe_name}_{suffix}.txt")
         with open(response_file, 'w') as f:
             f.write(raw_response)
         temp_files.append(response_file)
@@ -1391,16 +1400,27 @@ def review_daily_author(author_name, commits, log_dir):
     return response, temp_files, error
 
 
-def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALERT_EMAIL):
+def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALERT_EMAIL,
+                   since=None, until=None):
     """Run daily review mode: get recent commits, review per author, email results.
+    By default covers the last N hours; pass since/until to review an explicit
+    window instead (e.g. to backfill a period the cron missed).
     Returns True on full success, False if any author's review failed (so the
     caller can exit non-zero)."""
     os.makedirs(log_dir, exist_ok=True)
     auth_method = ensure_claude_auth()
 
+    # Human- and filename-friendly descriptions of the review window.
+    if since:
+        window_label = f"the window {since} to {until}" if until else f"the window since {since}"
+        file_suffix = re.sub(r'[^0-9]', '', since) + ("-" + re.sub(r'[^0-9]', '', until) if until else "")
+    else:
+        window_label = f"the last {hours} hours"
+        file_suffix = datetime.now().strftime('%Y%m%d')
+
     print("=" * 60)
     print(f"DAILY CODE REVIEW MODE")
-    print(f"Looking back: {hours} hours")
+    print(f"Window: {window_label}")
     print(f"CC: {cc_address or 'None'}")
     print(f"Alert: {alert_email or 'None'}")
     print(f"Auth: {auth_method}")
@@ -1409,12 +1429,12 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
     print("=" * 60)
 
     # Phase 1: Gather commits
-    print(f"\nPhase 1: Gathering commits from the last {hours} hours...")
-    authors = get_commits_since(hours)
+    print(f"\nPhase 1: Gathering commits from {window_label}...")
+    authors = get_commits_since(hours, since=since, until=until)
 
     if not authors:
         print("No commits found in the specified time window.")
-        return
+        return True
 
     total_commits = sum(len(a['commits']) for a in authors.values())
     print(f"Found {total_commits} commit(s) from {len(authors)} author(s):")
@@ -1426,7 +1446,9 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
     reviews = {}
     all_temp_files = []
     for author_email, data in authors.items():
-        review, temp_files, error = review_daily_author(data['name'], data['commits'], log_dir)
+        review, temp_files, error = review_daily_author(
+            data['name'], data['commits'], log_dir,
+            window_label=window_label, file_suffix=file_suffix)
         all_temp_files.extend(temp_files)
         reviews[author_email] = {
             'name': data['name'],
@@ -1438,8 +1460,7 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
 
         # Save review to log_dir
         safe_name = re.sub(r'[^a-zA-Z0-9]', '_', data['name'])
-        date_str = datetime.now().strftime('%Y%m%d')
-        filepath = os.path.join(log_dir, f"daily_review_{safe_name}_{date_str}.txt")
+        filepath = os.path.join(log_dir, f"daily_review_{safe_name}_{file_suffix}.txt")
         with open(filepath, 'w') as f:
             f.write(review)
         reviews[author_email]['file'] = filepath
@@ -1486,7 +1507,7 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
         elif alert_email:
             try:
                 gmail_service = get_gmail_service()
-                send_alert_email(gmail_service, alert_email, failures, hours, log_dir)
+                send_alert_email(gmail_service, alert_email, failures, window_label, log_dir)
                 print(f"  Alert sent to {alert_email}")
             except Exception as e:
                 print(f"  WARNING: failed to send alert email: {e}")
@@ -1567,6 +1588,9 @@ Examples:
   Daily review (cron mode) - review last 24h of commits, email authors:
     python3 codeReviewAi.py --daily --dry-run
     python3 codeReviewAi.py --daily --hours 24 --cc browser-code-reviews-group@ucsc.edu
+
+  Backfill an explicit window (e.g. one week the cron missed), email authors:
+    python3 codeReviewAi.py --daily --since 2026-06-20 --until 2026-06-27 --dry-run
         """
     )
     parser.add_argument('--dry-run', action='store_true',
@@ -1579,6 +1603,13 @@ Examples:
                         help='Daily mode: review recent commits by all authors and email results')
     parser.add_argument('--hours', type=int, default=24,
                         help='Hours to look back for --daily mode (default: 24)')
+    parser.add_argument('--since', type=str,
+                        help='Start of an explicit review window for --daily mode, '
+                             'any date git understands (e.g. 2026-06-20). Overrides '
+                             '--hours. Use for backfilling a missed period.')
+    parser.add_argument('--until', type=str,
+                        help='End of the --since window (e.g. 2026-06-27). '
+                             'Optional; defaults to now.')
     parser.add_argument('--cc', type=str, default=DEFAULT_CC,
                         help=f'CC address for --daily emails (default: {DEFAULT_CC})')
     parser.add_argument('--alert-email', type=str, default=DEFAULT_ALERT_EMAIL,
@@ -1594,7 +1625,8 @@ Examples:
     # =================================================================
     if args.daily:
         ok = run_daily_mode(args.hours, args.cc, args.dry_run, args.log_dir,
-                            alert_email=args.alert_email)
+                            alert_email=args.alert_email,
+                            since=args.since, until=args.until)
         sys.exit(0 if ok else 1)
 
     # Load configuration

@@ -5,9 +5,10 @@ longLabel Structural Variants from Long-read Sequencing
 html lrSv
 group varRep
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#071626 "Released Jul. 16, 2026"
 # Supertrack-level filters. These are rendered on the supertrack's own
 # hgTrackUi page (superTrackUi in hgTrackUi.c). Cart values stored under
-# "lrSv.filter.<field>.min/max" are inherited at read time by every
+# "longReadVariants.filter.<field>.min/max" are inherited at read time by every
 # subtrack via cartOptionalStringClosestToHome() walking tdb->parent. A
 # subtrack-level filter always wins over the supertrack-level one.
 filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),TRA|TRA (Translocation)

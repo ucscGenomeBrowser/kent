@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-B.5 &#8212; CardioBoost disease-specific missense predictor track.
+B.5 - CardioBoost disease-specific missense predictor track.
 
 CardioBoost (Zhang et al. 2021, Genome Medicine 13:31) is a cardiomyopathy/arrhythmia
 disease-specific missense pathogenicity predictor, complementary to REVEL. We render the
-precomputed cardiomyopathy-model scores (cm_prediction.RData &#8594; cardioboost_8genes_hg19.tsv,
+precomputed cardiomyopathy-model scores (cm_prediction.RData -> cardioboost_8genes_hg19.tsv,
 exported with /usr/bin/Rscript) for our 8 genes.
 
 IMPORTANT: CardioBoost is NOT a CSpec-specified predictor (the CSpec uses REVEL for PP3/BP4).
-This track is informational/supplementary &#8212; it does NOT fire an ACMG code. Whether the VCEP
+This track is informational/supplementary - it does NOT fire an ACMG code. Whether the VCEP
 wants it used is an open question (see Phase 7). The displayed CardioBoost class uses the
-tool's OWN published thresholds (>=0.9 pathogenic, <=0.1 benign), cited &#8212; not invented here.
+tool's OWN published thresholds (>=0.9 pathogenic, <=0.1 benign), cited - not invented here.
 
 Source is hg19 (GRCh37); we build hg19 natively and liftOver hg19->hg38.
 
@@ -18,14 +18,12 @@ Outputs:
   cmpVCEPCardioBoost/cmpVCEPCardioBoost.as
   cmpVCEPCardioBoost/cmpVCEPCardioBoostHg{38,19}.bed + .bb
 """
-import os, subprocess, sys
+import argparse, os, subprocess, sys
 
-WORKDIR = '/hive/users/lrnassar/claude/RM37446'
-TSV = f'{WORKDIR}/cmp_downloads/cardioboost/cardioboost_8genes_hg19.tsv'
 CHROM_SIZES = {'hg38': '/cluster/data/hg38/chrom.sizes', 'hg19': '/cluster/data/hg19/chrom.sizes'}
 LIFTOVER_HG19_TO_HG38 = '/cluster/data/hg19/bed/liftOver/hg19ToHg38.over.chain.gz'
 
-# CardioBoost's OWN published classification thresholds (Zhang 2021) &#8212; cited, not invented.
+# CardioBoost's OWN published classification thresholds (Zhang 2021) - cited, not invented.
 CB_PATH = 0.90
 CB_BENIGN = 0.10
 COLORS = {'Pathogenic': '210,0,0', 'Benign': '0,160,0', 'Indeterminate': '150,150,150'}
@@ -62,9 +60,9 @@ def cb_class(score):
     return 'Indeterminate'
 
 
-def build_hg19_bed():
+def build_hg19_bed(tsv):
     rows = []
-    with open(TSV) as fh:
+    with open(tsv) as fh:
         header = fh.readline()
         for line in fh:
             f = line.rstrip('\n').split('\t')
@@ -95,41 +93,49 @@ def build_hg19_bed():
 
 
 def main():
-    out_dir = os.path.join(WORKDIR, 'cmpVCEPCardioBoost')
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--db', action='append', required=True, choices=['hg38', 'hg19'])
+    ap.add_argument('--output-dir', required=True)
+    args = ap.parse_args()
+
+    out_dir = os.path.join(args.output_dir, 'cmpVCEPCardioBoost')
     os.makedirs(out_dir, exist_ok=True)
+    tsv = os.path.join(args.output_dir, 'cmp_downloads/cardioboost/cardioboost_8genes_hg19.tsv')
     print('  [B.5 CardioBoost predictor]')
 
     as_path = os.path.join(out_dir, 'cmpVCEPCardioBoost.as')
     with open(as_path, 'w') as f:
         f.write(AUTOSQL)
 
-    hg19_rows = build_hg19_bed()
+    # hg19 bed is always built: it is the native assembly and the liftOver source for hg38.
+    hg19_rows = build_hg19_bed(tsv)
     hg19_bed = os.path.join(out_dir, 'cmpVCEPCardioBoostHg19.bed')
     with open(hg19_bed, 'w') as f:
         f.write('\n'.join(hg19_rows) + '\n')
     print(f'  hg19 (native): {len(hg19_rows)} variants')
 
-    hg19_bb = os.path.join(out_dir, 'cmpVCEPCardioBoostHg19.bb')
-    subprocess.run(['bedToBigBed', '-tab', '-type=bed9+8', '-as=' + as_path,
-                    hg19_bed, CHROM_SIZES['hg19'], hg19_bb], check=True)
+    if 'hg19' in args.db:
+        hg19_bb = os.path.join(out_dir, 'cmpVCEPCardioBoostHg19.bb')
+        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+8', '-as=' + as_path,
+                        hg19_bed, CHROM_SIZES['hg19'], hg19_bb], check=True)
 
-    # liftOver hg19 -> hg38
-    hg38_bed = os.path.join(out_dir, 'cmpVCEPCardioBoostHg38.bed')
-    unmapped = hg38_bed + '.unmapped'
-    subprocess.run(['liftOver', '-bedPlus=9', '-tab', hg19_bed, LIFTOVER_HG19_TO_HG38,
-                    hg38_bed, unmapped], check=True)
-    n_un = sum(1 for line in open(unmapped) if not line.startswith('#')) if os.path.getsize(unmapped) else 0
-    print(f'  hg38 (liftOver hg19->hg38): {sum(1 for _ in open(hg38_bed))} variants, {n_un} unmapped')
-
-    # re-sort hg38 bed after liftOver
-    lines = [l.rstrip('\n') for l in open(hg38_bed)]
-    lines.sort(key=lambda l: (l.split('\t')[0], int(l.split('\t')[1])))
-    with open(hg38_bed, 'w') as f:
-        f.write('\n'.join(lines) + '\n')
-    hg38_bb = os.path.join(out_dir, 'cmpVCEPCardioBoostHg38.bb')
-    subprocess.run(['bedToBigBed', '-tab', '-type=bed9+8', '-as=' + as_path,
-                    hg38_bed, CHROM_SIZES['hg38'], hg38_bb], check=True)
-    print(f'  wrote bigBeds for both assemblies')
+    if 'hg38' in args.db:
+        # liftOver hg19 -> hg38
+        hg38_bed = os.path.join(out_dir, 'cmpVCEPCardioBoostHg38.bed')
+        unmapped = hg38_bed + '.unmapped'
+        subprocess.run(['liftOver', '-bedPlus=9', '-tab', hg19_bed, LIFTOVER_HG19_TO_HG38,
+                        hg38_bed, unmapped], check=True)
+        n_un = sum(1 for line in open(unmapped) if not line.startswith('#')) if os.path.getsize(unmapped) else 0
+        print(f'  hg38 (liftOver hg19->hg38): {sum(1 for _ in open(hg38_bed))} variants, {n_un} unmapped')
+        # re-sort hg38 bed after liftOver
+        lines = [l.rstrip('\n') for l in open(hg38_bed)]
+        lines.sort(key=lambda l: (l.split('\t')[0], int(l.split('\t')[1])))
+        with open(hg38_bed, 'w') as f:
+            f.write('\n'.join(lines) + '\n')
+        hg38_bb = os.path.join(out_dir, 'cmpVCEPCardioBoostHg38.bb')
+        subprocess.run(['bedToBigBed', '-tab', '-type=bed9+8', '-as=' + as_path,
+                        hg38_bed, CHROM_SIZES['hg38'], hg38_bb], check=True)
+    print('  wrote bigBeds')
 
 
 if __name__ == '__main__':

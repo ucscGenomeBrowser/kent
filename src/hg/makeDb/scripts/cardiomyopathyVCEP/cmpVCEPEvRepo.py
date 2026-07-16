@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-B.7 &#8212; Cardiomyopathy VCEP EvRepo curated variants track builder.
+B.7 - Cardiomyopathy VCEP EvRepo curated variants track builder.
 
 Renders ClinGen Cardiomyopathy VCEP variants from EvRepo (the authoritative source for
 VCEP-curated classifications with full ACMG/AMP rule applications). Currently 25 variants,
@@ -11,7 +11,7 @@ EvRepo JSON schema (per A.2):
     caid: 'CAR:CA012732',
     condition: {label, @id (MONDO)},
     gene: {label, NCBI_id},
-    hgvs: [list of HGVS strings &#8212; includes NC_000NN.11 (hg38) and NC_000NN.10/.8 (hg19)],
+    hgvs: [list of HGVS strings - includes NC_000NN.11 (hg38) and NC_000NN.10/.8 (hg19)],
     publishedDate,
     variationId (ClinVar VCV),
     guidelines: [{
@@ -34,7 +34,7 @@ import argparse, json, os, re, subprocess, sys
 
 EVREPO_JSON = '/hive/users/lrnassar/claude/RM37446/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
 
-# NC_000xxx accession &#8594; (chromosome, assembly) &#8212; covers our 7 chromosomes of interest
+# NC_000xxx accession -> (chromosome, assembly) - covers our 7 chromosomes of interest
 NC_ACCESSIONS = {
     # hg38 (GRCh38)
     'NC_000001.11':  ('chr1',  'hg38'),
@@ -125,7 +125,7 @@ COLORS = {
 }
 DEFAULT_COLOR = '136,136,136'
 
-# Filter values for trackDb filterValues.codeMet field &#8212; generated from data at build time.
+# Filter values for trackDb filterValues.codeMet field - generated from data at build time.
 
 CHROM_SIZES = {
     'hg38': '/cluster/data/hg38/chrom.sizes',
@@ -159,14 +159,14 @@ AUTOSQL = """table cmpVCEPEvRepo
     )
 """
 
-# HGVS regex (per InSiGHT lesson &#8212; catch DOCX-style typos like trailing 'g')
+# HGVS regex (per InSiGHT lesson - catch DOCX-style typos like trailing 'g')
 HGVS_GENOMIC_RE = re.compile(r'^(NC_\d+\.\d+):g\.(\d+)([ACGT]+)>([ACGT]+)$')
 HGVS_GENOMIC_DEL_RE = re.compile(r'^(NC_\d+\.\d+):g\.(\d+)(?:_(\d+))?del')
 HGVS_GENOMIC_INS_RE = re.compile(r'^(NC_\d+\.\d+):g\.(\d+)(?:_(\d+))?(?:ins|dup)([ACGT]*)')
 
 
 def parse_genomic_hgvs(hgvs):
-    """Parse NC_000NN.XX:g.POS{REF>ALT,del,ins,...} &#8594; (chrom, assembly, start_bed, end_bed).
+    """Parse NC_000NN.XX:g.POS{REF>ALT,del,ins,...} -> (chrom, assembly, start_bed, end_bed).
     Returns None if not parseable or assembly not in NC_ACCESSIONS.
     Uses BED half-open semantics (0-based start, exclusive end).
     """
@@ -216,7 +216,7 @@ def extract_record(v):
     if not_met:
         codes_all = sorted(codes_met + not_met)
     else:
-        # Legacy entry &#8212; only Met codes in source; flag explicitly
+        # Legacy entry - only Met codes in source; flag explicitly
         codes_all = codes_met + ['(Not-Met codes not enumerated in source)']
 
     # Pick canonical HGVS strings
@@ -247,7 +247,7 @@ def extract_record(v):
             if coords[asm] is None:
                 coords[asm] = (chrom, s, e)
 
-    # Item K: no genomic NC_ HGVS (e.g. repeat-notation deletions) &#8212; derive via hgvsToVcf
+    # Item K: no genomic NC_ HGVS (e.g. repeat-notation deletions) - derive via hgvsToVcf
     if coords['hg38'] is None or coords['hg19'] is None:
         fb = coords_via_hgvstovcf(hgvs_list)
         for asm in ('hg38', 'hg19'):
@@ -320,7 +320,7 @@ def emit_bed(records, db, out_path):
     with open(out_path, 'w') as f:
         for line in rows:
             f.write(line + '\n')
-    print(f'  wrote {len(rows)} BED features &#8594; {out_path} (skipped {skipped})')
+    print(f'  wrote {len(rows)} BED features -> {out_path} (skipped {skipped})')
     return len(rows)
 
 
@@ -388,7 +388,7 @@ def main():
         if counts['hg38'] == counts['hg19']:
             print(f'  cross-assembly parity OK: {counts["hg38"]} features each')
         else:
-            print(f'  WARNING: parity FAILED &#8212; hg38={counts["hg38"]} hg19={counts["hg19"]}',
+            print(f'  WARNING: parity FAILED - hg38={counts["hg38"]} hg19={counts["hg19"]}',
                   file=sys.stderr)
 
 

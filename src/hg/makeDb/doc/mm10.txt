@@ -19975,4 +19975,79 @@ for facets, cats in [
     print("updated .categories: " + cats)
 EOF
 
+# 2026-06-25 (Gerardo): Ran downloadBigwigs.sh to download RNA-seq signal
+# (bigWig) tracks for the same samples used above, per Peng's request
+# (#36998). Diane sent a biosample TSV as an attachment on #36998
+# (2026-06-08): 156 samples (78 experiments x 2 replicates), each with a
+# signal_of_unique_reads and signal_of_all_reads bigWig URL hosted on the
+# ENCODE Portal. Saved as
+# /hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_biosample.tsv.
+# The script downloads all 312 bigWigs (~55 GB) from those URLs; safe to
+# re-run since it skips files that already exist.
+
+mkdir -p /hive/data/outside/woldlab/mouseDevTimecourse/mm10/bigwig
+
+# Run inside screen so it survives disconnects:
+#   screen -dmS bigwig_download ~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/downloadBigwigs.sh
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/downloadBigwigs.sh
+
+# Symlink into /gbdb/
+cd /gbdb/mm10/mouseDevTimecourse
+for f in /hive/data/outside/woldlab/mouseDevTimecourse/mm10/bigwig/*; do
+    ln -s "$f" .
+done
+
+# 2026-06-29 (Gerardo): Ran generateBigwigTrackDb.py to build a bigWig
+# signal composite (developmentTimecourseSignalMm10) from the downloaded
+# files, per Peng's request (#36998) to add raw signal tracks alongside
+# the existing bigBarChart TPM/FPKM tracks. The script produces a
+# view-based composite matching the Wold Lab's existing hg19 RNA-seq track
+# (wgEncodeCaltechRnaSeq): two views (Unique reads, All reads), with
+# tissue/age/rep as subGroups and a dimensions matrix. Colors per (tissue,
+# age) match the bigBarChart gradient (read from the .facets file).
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/generateBigwigTrackDb.py > developmentTimecourseSignalMm10.ra
+# Added "include developmentTimecourseSignalMm10.ra" to trackDb.ra
+
+# 2026-07-14 (Gerardo): Peng noticed the bigWig tracks display in
+# alphabetical order (#36998 note-79). sortOrder compares the tag strings
+# alphabetically; where a tag sits in the subGroup2 line has no effect.
+# Ran the script below to prefix each tissue tag with a two-digit number
+# matching its position in biological order (t01_thymus, t02_spleen, ...
+# t17_neural_tube), so the alphabetical comparison now produces the right
+# order. The display label is unchanged. Before:
+# adrenal_gland=adrenal_gland (tag and label are the same string). After:
+# t07_adrenal_gland=adrenal_gland (tag has the prefix, label doesn't).
+# generateBigwigTrackDb.py was not updated to match; re-running it would
+# regenerate the old alphabetical tags.
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+
+python3 <<'EOF'
+import re
+
+path = "developmentTimecourseSignalMm10.ra"
+text = open(path).read()
+
+order = [
+    "thymus", "spleen", "liver", "heart", "skeletal_muscle_tissue",
+    "urinary_bladder", "adrenal_gland", "kidney", "lung", "stomach",
+    "intestine", "limb", "embryonic_facial_prominence", "forebrain",
+    "midbrain", "hindbrain", "neural_tube",
+]
+tag_map = {tag: "t%02d_%s" % (i + 1, tag) for i, tag in enumerate(order)}
+
+# subGroup2 header line: new tag=label pairs (tag prefixed, label unprefixed)
+new_line = "    subGroup2 tissue Tissue " + " ".join(tag_map[t] + "=" + t for t in order)
+text = re.sub(r"^    subGroup2 tissue Tissue .*$", new_line, text, count=1, flags=re.MULTILINE)
+
+# Each subtrack's "subGroups view=... tissue=<tag> age=..." line
+def repl(m):
+    return "tissue=" + tag_map[m.group(1)]
+text = re.sub(r"tissue=([a-z_]+)(?= age=)", repl, text)
+
+open(path, "w").write(text)
+EOF
+
 ##############################################################################

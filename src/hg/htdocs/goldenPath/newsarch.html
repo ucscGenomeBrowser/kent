@@ -65,8 +65,9 @@ credits page</a> for acknowledgments of the data we host.</p>
 <a name="2026"></a>
 
 
-<a name="071526"></a>
-<h2>Jul. 15, 2026 &nbsp;&nbsp; ENCODE4 cCREs and ENCODE4 Regulation tracks released for human (hg38) and mouse (mm10)</h2>
+<!-- Hidden until ready to announce, refs #37845
+<a name="072226"></a>
+<h2>Jul. 22, 2026 &nbsp;&nbsp; ENCODE4 cCREs and ENCODE4 Regulation tracks released for human (hg38) and mouse (mm10)</h2>
 <p>
 We are excited to announce our major release of the ENCODE4 data collection on the
 UCSC Genome Browser for both the human (hg38/GRCh38) and mouse (mm10/GRCm38)
@@ -284,6 +285,105 @@ laboratories, and the ENCODE Data Coordination Center for generating and
 processing the underlying experiments, and Gerardo Perez, Brian Raney, Max
 Haeussler, and Lou Nassar for building and reviewing these tracks.
 </p>
+-->
+
+<a name="071626"></a>
+<h2>Jul. 16, 2026 &nbsp;&nbsp; Long-read Structural Variants tracks for human (hg38 and hs1)</h2>
+<p>
+We are excited to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank"><b>Long-read
+Structural Variants</b></a> container track on the human assemblies
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank">GRCh38/hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=hs1&g=longReadVariants&position=default" target="_blank">T2T-CHM13/hs1</a>.
+The container track brings together structural variant (SV) callsets from 14 long-read
+sequencing studies worldwide into a single place where you can compare large genomic
+rearrangements (deletions, insertions, duplications, inversions, and complex events)
+across populations, cohorts, and calling strategies. Long-read technologies span
+repetitive regions and resolve complex loci that are difficult to detect with short
+reads, giving more precise breakpoints and better sensitivity for large variants.
+</p>
+
+<p>
+At the center of the container track is an
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=lrSvAll&position=default" target="_blank"><b>All
+long-read SVs merged</b></a> track that unifies every source callset on identical
+position, type, and length into roughly 2.3 million distinct SV sites, each carrying
+per-database allele counts so you can see at a glance how many studies support a
+given variant and at what frequency. This merged track is the best place to start: we
+recommend using it to survey structural variation across all studies at a
+locus, then turning to the individual dataset tracks for cohort-specific allele
+frequencies, genotypes, and annotations on the variants you want to follow up.
+</p>
+
+<div class="text-center">
+  <img src="../images/longReadSVsAnnouncementImage.png"
+       alt="Long-read Structural Variants container track at the UGT2B17 locus on hg38.
+       The merged track shows a common whole-gene deletion of about 117 kb, echoed by
+       overlapping calls in the individual dataset tracks below. A mouseover reports a
+       79% allele frequency for the deletion in the Chinese Pangenome Consortium."
+       width='80%'>
+  <p class="gbsCaption"><em>The Long-read Structural Variants container track at
+  UGT2B17 (chr4). The merged track (top) unifies a common whole-gene deletion of about
+  117 kb, which recurs across the individual dataset tracks below. The mouseover reports
+  a 79% allele frequency in the Chinese Pangenome Consortium, consistent with the higher
+  frequency of the UGT2B17 deletion in East Asian populations.</em></p>
+</div>
+
+<p>
+Each variant is colored by SV type
+(<b style="color:rgb(200,0,0)">deletions</b>,
+<b style="color:rgb(0,0,200)">insertions</b>,
+<b style="color:rgb(0,160,0)">duplications</b>,
+<b style="color:rgb(230,140,0)">inversions</b>, and
+<b style="color:rgb(140,0,200)">complex or multi-allele events</b>), and carries
+allele frequencies, sample counts, and per-study annotations. Cross-database filters
+let you narrow by SV type, source study, variant length, allele frequency, or the
+number of supporting studies, in any combination.
+</p>
+
+<p>
+The container track pulls together cohorts from across the world. A high-level summary is
+shown below; a complete table with per-study sample counts, cohorts, sequencing
+coverage, and SV counts is on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank">track
+description page</a>.
+</p>
+
+<table class="stdTbl">
+  <tr><th>Region / theme</th><th>Contributing studies</th></tr>
+  <tr><td>East Asia</td><td>Han Chinese 945, ToMMo Japan, Chinese Pangenome Consortium</td></tr>
+  <tr><td>1000 Genomes (global)</td><td>1KG ONT 100 (Gustafson), 1KG ONT Vienna (1,019)</td></tr>
+  <tr><td>Americas</td><td>All of Us, GA4K (pediatric rare disease), SVatalog (cystic fibrosis)</td></tr>
+  <tr><td>Europe</td><td>deCODE (Iceland)</td></tr>
+  <tr><td>Middle East</td><td>Arab Pangenome Reference</td></tr>
+  <tr><td>Global reference &amp; pangenome callsets</td><td>CoLoRSdb, HPRC v2.1, HGSVC2, HGSVC3</td></tr>
+</table>
+
+<p>
+Six of these datasets (CoLoRSdb, 1KG ONT Vienna, HGSVC3, HPRC v2.1, Arab Pangenome
+Reference, and the Chinese Pangenome Consortium) are also released on the
+<a href="/cgi-bin/hgTrackUi?db=hs1&g=longReadVariants&position=default" target="_blank">T2T-CHM13/hs1</a>
+assembly in native coordinates.
+</p>
+
+<p>
+License restrictions on some sources limit redistribution; see the track
+description page for per-study details.
+</p>
+
+<p>
+We plan to keep adding long-read SV callsets as more become available. If you are
+involved with a project that publishes long-read structural variants and would like
+to contribute, please <a href="/contacts.html" target="_blank">reach out</a>.
+</p>
+
+<p>
+We would like to thank the many participants who donated samples, and the consortia
+and investigators who generated and shared these callsets, including Glenn Hickey and
+the Human Pangenome Reference Consortium graph team for providing the HPRC v2.1
+callset. The track was developed by Maximilian Haeussler with QA by Lou Nassar.
+</p>
+
 
 <a name="070726"></a>
 <h2>Jul. 7, 2026 &nbsp;&nbsp; UCSC Genome Browser reaches version 500</h2>
@@ -1901,8 +2001,8 @@ tracks.
 <p>
 We are pleased to announce the release of the <a href="https://www.deciphergenomics.org/ddd/ddgenes"
 target="_blank">Developmental Disorders Genotype-to-Phenotype (DDG2P)</a> track for
-<a href="/cgi-bin/hgTrackUi?db=hg19&g=ddg2p&position=default" target="_blank">hg19</a> and
-<a href="/cgi-bin/hgTrackUi?db=hg38&g=ddg2p&position=default" target="_blank">hg38</a>. The DDG2P
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=g2p&position=default" target="_blank">hg19</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=g2p&position=default" target="_blank">hg38</a>. The DDG2P
 track displays genes associated with severe developmental disorders. The track can be used to
 filter genomic sequencing data of people with genetic disorders to identify likely causative
 variants and accelerate diagnosis.

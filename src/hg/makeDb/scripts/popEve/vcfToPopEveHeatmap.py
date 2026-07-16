@@ -23,7 +23,7 @@ Produces one heatmap BED12+ line per protein (see popEve_heatmap.as):
 
 import sys
 
-STANDARD_AAS = list('ACDEFGHIKLMNPQRSTVWY')   # 20 standard AAs, alphabetical
+STANDARD_AAS = list('AVLIMFYWRHKDESTNQGCP')   # 20 standard AAs, by class, to match MaveDB
 
 # Published popEVE severity cutoffs (fixed interior color anchors).
 SEVERE_MAX = -5.056      # popEVE < SEVERE_MAX            -> severe
@@ -197,9 +197,9 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
 
     # The heatmap renderer parses the score array with chopCommas (keeps a trailing empty
     # field) but the label array with chopByCharRespectDoubleQuotesKeepEmpty (drops one
-    # trailing empty field). When the very last cell (row Y, last column) is empty - common on
-    # minus-strand genes whose last column is the start codon, whose M1 substitutions are
-    # 'nan' and were skipped - the two field counts disagree and the track aborts. Guarantee a
+    # trailing empty field). When the very last cell (last row, last column) has no scored
+    # substitution - common, since each codon has only a few single-nucleotide-reachable
+    # substitutions - the two field counts disagree and the track aborts. Guarantee a
     # non-empty final label cell; the empty score keeps that cell uncolored (background).
     if labelParts[-1] == '':
         labelParts[-1] = '(no popEVE score)'
