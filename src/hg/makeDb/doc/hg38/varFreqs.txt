@@ -95,6 +95,10 @@ bgzip saudi.vcf
 tabix -p vcf saudi.vcf.gz
 
 # SFARI SPARK
+# Initial build (overall AC/AN/AF only). The current build adds ASD/non-ASD
+# phenotype-stratified counts and is documented under the 2026-05-28 entry
+# below ("Phenotype-stratified SPARK counts"), which also describes step by
+# step what sparkMergeVcfAddCounts.sh and the bcftools csq annotation do.
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
 # used globus to download into vcf/
 sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
@@ -888,13 +892,28 @@ tabix -p vcf gonl.vcf.gz
 # refs #36642
 
 # --- 1. Phenotype-stratified SPARK counts -----------------------------------
-# sparkMergeVcfAddCounts.sh now takes an optional 3rd arg: the SPARK
-# individuals_registration TSV. With it, bcftools +fill-tags is given a
-# sample-group file (col1=sample_sp_id, col2=AUT|NON_AUT) so the output
-# sites VCF carries AC_AUT/AN_AUT/AF_AUT and AC_NON_AUT/AN_NON_AUT/AF_NON_AUT
-# in addition to the overall AC/AN/AF. The same registration file (col 8
-# "asd": TRUE/FALSE) covers both WES (142,357 samples) and WGS (12,519
-# samples); samples with a blank asd value are not assigned to either group.
+# What sparkMergeVcfAddCounts.sh does, per chromosome and in parallel:
+#   1. bcftools +fill-tags <chr.vcf.gz> -- -t AC,AN,AF [-S groups.txt]
+#      computes the overall AC/AN/AF from the genotypes. The optional -S
+#      sample-group file additionally emits per-group AC_<grp>/AN_<grp>/AF_<grp>.
+#   2. bcftools view -G drops the genotype columns, leaving an anonymous,
+#      sites-only VCF (required: the genotype-level pVCFs cannot be shared).
+#   3. bcftools concat joins the per-chromosome sites VCFs back into one file.
+# After the script, bcftools norm -m- splits multi-allelic records into one
+# row per ALT allele. There is no allele-frequency cutoff.
+#
+# The script now takes an optional 3rd arg: the SPARK individuals_registration
+# TSV. With it, the -S sample-group file (col1=sample_sp_id, col2=AUT|NON_AUT)
+# makes the output sites VCF carry AC_AUT/AN_AUT/AF_AUT and
+# AC_NON_AUT/AN_NON_AUT/AF_NON_AUT in addition to the overall AC/AN/AF. The
+# same registration file (col 8 "asd": TRUE/FALSE) covers both WES (142,357
+# samples) and WGS (12,519 samples); samples with a blank asd value are not
+# assigned to either group.
+#
+# These .norm.vcf.gz files are what the per-cohort sfariSparkExomes /
+# sfariSparkWgs tracks display. Predicted protein consequences (BCSQ) are
+# added later, in the combined-track build (section 3 below), by the
+# bcftools csq step inside mergeAndAnnotate.sh.
 REG=/hive/data/genomes/hg38/bed/varFreqs/sparkExomes/SPARKDataRelease_2025-12-15/individuals_registration-2025-12-15.tsv
 
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
@@ -941,6 +960,25 @@ mv SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz.tbi SCHEMA_variant_results_h
 # mergeAndAnnotate.sh pins /cluster/software/src/bcftools-1.22/ in front of
 # PATH because bcftools csq's --unify-chr-names was added in 1.22; the conda
 # default (1.14) silently fails the annotate step otherwise.
+#
+# What mergeAndAnnotate.sh does, given a databases.tsv list of cohort VCFs:
+#   - strip + normalize each input VCF (bcftools annotate -x to drop ID/QUAL/
+#     FILTER/INFO, fix chr naming, then bcftools norm -m-any against hg38.fa).
+#   - bcftools merge -m none all normalized VCFs into one sites-only VCF.
+#   - bcftools csq annotates predicted protein consequences against the
+#     Ensembl GRCh38 release-115 GFF3 gene models. The exact call is:
+#         bcftools csq -p a -l -n 64 --unify-chr-names chr,-,chr --force \
+#             -f hg38.fa -g Homo_sapiens.GRCh38.115.chr.gff3.gz \
+#             merged.vcf.gz -Oz -o merged.annotated.vcf.gz
+#     The GFF3 is from
+#       https://ftp.ensembl.org/pub/release-115/gff3/homo_sapiens/Homo_sapiens.GRCh38.115.chr.gff3.gz
+#     (Ensembl, not GENCODE: csq needs the Parent=transcript: attribute format),
+#     sorted, bgzipped and tabix-indexed. --unify-chr-names reconciles the
+#     chr1-style VCF/fasta names with the bare "1" names in the Ensembl GFF3.
+#     The consequence + amino-acid change land in INFO/BCSQ; vcfToBigBed.py
+#     parses BCSQ into the bigBed for the combined tracks.
+# The same csq recipe can be run directly on a single cohort's .norm.vcf.gz
+# (e.g. the SFARI files above) to annotate it with protein effects.
 
 # Reorg removed TPMI and MexBB from databases.tsv (moved to
 # databases_array.tsv) and added UKBB to databases_array.tsv. Both
