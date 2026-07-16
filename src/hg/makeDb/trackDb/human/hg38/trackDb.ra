@@ -10,6 +10,8 @@ include cancerExpr.ra
 
 include mane.ra
 
+include clinvarMapped.ra alpha
+
 include gdcCancer.ra
 
 include cortexVelmeshev.ra
