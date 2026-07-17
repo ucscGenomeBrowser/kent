@@ -513,6 +513,38 @@ noScoreFilter on
     filterLabel.geneCount Gene Count
     skipEmptyFields on
 
+    track cardSv
+    parent longReadVariants
+    bigDataUrl /gbdb/$D/lrSv/card.bb
+    shortLabel CARD 351 SVs
+    longLabel Structural Variants from 351 Brain Samples (NIH CARD Long-read ONT, NABEC + HBCC)
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+    mouseOver <b>Var</b>: ${name} (${svType})<br><b>SV len</b>: ${svLen}<br><b>Ins len</b>: ${insLen}<br><b>AF</b>: ${alleleFreq}<br><b>Carriers</b>: ${AC} (NABEC ${nabecCount}, HBCC ${hbccCount})
+    filterValues.svType DEL,INS,INV,DUP
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 0:30282742
+    filterByRange.svLen on
+    filterLabel.svLen SV Length
+    filter.insLen 0:92867161
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length
+    filter.AC 1:351
+    filterByRange.AC on
+    filterLabel.AC Carrier Count
+    filter.alleleFreq 0:1
+    filterByRange.alleleFreq on
+    filterLimits.alleleFreq 0:1
+    filterLabel.alleleFreq Allele Frequency
+    filter.nabecCount 0:205
+    filterByRange.nabecCount on
+    filterLabel.nabecCount NABEC Carriers (European ancestry)
+    filter.hbccCount 0:146
+    filterByRange.hbccCount on
+    filterLabel.hbccCount HBCC Carriers (African/African-admixed ancestry)
+
     # NOT FOR RELEASE: data received from Eichler lab via email, not yet published.
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
