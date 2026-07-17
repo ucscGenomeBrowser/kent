@@ -946,6 +946,4 @@ include vgp577way.trackDb.ra alpha
 
 include crPred.ra alpha
 
-include andy_tdb.txt alpha
-
 include tad.ra alpha
