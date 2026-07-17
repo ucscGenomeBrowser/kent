@@ -1558,6 +1558,17 @@ var hubCreate = (function() {
         let nameSpan = document.getElementById("hubBannerName");
         if (!banner || !nameSpan) return;
         nameSpan.textContent = hubName;
+        // stash a shareable connect link on the copy button, or hide it if unavailable
+        let copyBtn = document.getElementById("hubBannerCopyBtn");
+        if (copyBtn) {
+            let link = hubShareLink(hubName);
+            if (link) {
+                copyBtn.setAttribute("data-url", link);
+                copyBtn.style.display = "";
+            } else {
+                copyBtn.style.display = "none";
+            }
+        }
         banner.style.display = "";
     }
 
@@ -2356,6 +2367,10 @@ var hubCreate = (function() {
             hubBannerBtn.addEventListener("click", function(e) {
                 viewHubInGenomeBrowser(uiState.currentHub);
             });
+        }
+        let hubBannerCopyBtn = document.getElementById("hubBannerCopyBtn");
+        if (hubBannerCopyBtn) {
+            hubBannerCopyBtn.addEventListener("click", copyHubLinkFromBanner);
         }
         table.on("select", function(e, dt, type, indexes) {
             indexes.forEach(function(i) {
