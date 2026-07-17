@@ -1,0 +1,114 @@
+<h2>Description</h2>
+<p>
+This track shows allele counts and frequencies from
+<a href="https://www.bcgsc.ca/gnomad/" target="_blank">gnomAD-Canada</a>, the Canadian arm of the
+Genome Aggregation Database. The v1.0 release aggregates whole-genome sequencing data from 10,487
+participants in the Canadian COVID-19
+<a href="https://www.cgen.ca/programs/hostseq" target="_blank">HostSeq</a> databank, a national initiative
+launched in April 2020 that recruited people infected with SARS-CoV-2 together with controls from
+fourteen clinical and epidemiological studies across Canada. Because the cohort was assembled to
+study host susceptibility to a common infection rather than a rare genetic disease, it serves here
+as a population-scale reference of Canadian genetic variation.
+</p>
+<p>
+Frequencies are reported for the whole cohort and for nine genetic-ancestry groups inferred by the
+gnomAD pipeline: African/African-American, Latino/Admixed-American, European (non-Finnish),
+Ashkenazi Jewish, East Asian, European (Finnish), Middle Eastern, South Asian, and Remaining
+individuals. The release contains about 213 million variant sites. The per-variant details page
+also shows the group with the highest frequency (grpmax) and the gnomAD variant-quality filter
+status.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+This is a Variant Call Format (VCF) track. Hovering over a variant shows the overall allele
+frequency, and clicking a variant opens a details page with the overall and per-ancestry allele
+counts, allele numbers and frequencies, the dbSNP identifier, and the variant filter status. The
+filter status is one of <tt>PASS</tt>, <tt>RF</tt> (failed the gnomAD random-forest
+variant-quality filter), or <tt>InbreedingCoeff</tt> (excess heterozygosity); variants with zero
+release allele count (<tt>AC0</tt>) are not shown.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
+can be used; the track name is <em>hostseq</em>.
+For bulk download, the VCF is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/hostseq/" target="_blank">our download
+server</a>. The original Hail table can be downloaded from the
+<a href="https://www.bcgsc.ca/gnomad/" target="_blank">gnomAD-Canada portal</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+Whole-genome sequencing was performed on 10,487 HostSeq participants at three CGEn sites on the
+Illumina NovaSeq 6000 platform at 30X coverage. Reads were aligned to GRCh38 with the DRAGEN
+mapper (DRAGMAP v1.3.0), de-duplicated with Picard (v2.25.0) and base-quality-recalibrated with
+GATK (v4.2.5.0). Per-sample SNVs and indels were called with GATK HaplotypeCaller in DRAGEN mode,
+and per-sample gVCFs were joint-genotyped with GATK GenotypeGVCFs. The joint callset was then run
+through the Broad Institute's gnomAD QC v3 pipeline (adapted for on-premises use at the BC Cancer
+Genome Sciences Centre), which performs sample quality control, relatedness and genetic-ancestry
+inference by principal-component analysis, random-forest variant filtering, and computes overall
+and per-ancestry allele frequencies. Full pipeline details are in the
+<a href="https://www.bcgsc.ca/gnomad/download/README.pdf" target="_blank">release README</a> and
+the HostSeq cohort reference below.
+</p>
+<p>
+The release-sites Hail table (<tt>release_sites_hostseq.tar.gz</tt>, ~101 GB) was downloaded from
+<a href="https://www.bcgsc.ca/gnomad/download/release_sites_hostseq.tar.gz" target="_blank">https://www.bcgsc.ca/gnomad/download/release_sites_hostseq.tar.gz</a>
+and read with <a href="https://hail.is" target="_blank">Hail</a>. The overall and per-ancestry
+allele counts, allele numbers and frequencies were flattened from the table's <tt>freq</tt> array
+into VCF INFO fields, together with the dbSNP rsID and the variant filter status, and exported as a
+sites-only VCF. The source table is already biallelic-split and uses UCSC chr-prefixed contigs, so
+no allele-splitting or chromosome renaming was needed. Of the 232,028,491 variant rows in the
+release table, 213,382,086 with a non-zero release allele count were written; the 18,646,405
+<tt>AC0</tt> sites (no observed allele in the high-quality release) were dropped. The source
+covers the autosomes plus chrX and chrY. About 15% of the written variants (32,074,697) carry the
+gnomAD <tt>RF</tt> quality-filter flag and 158,230 the <tt>InbreedingCoeff</tt> flag; the
+remaining 181,149,159 are <tt>PASS</tt>. Filter-flagged variants are retained so the full release
+is browsable, and can be hidden with the track's filter controls.
+Processing documentation is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">varFreqs makeDoc file</a>; the conversion script is in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">our GitHub scripts directory</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Data were generated by the gnomAD-Canada team as part of the Canadian Genomic Data Commons (CGDC)
+and the Pan-Canadian Genome Library (PCGL), using CGEn's HostSeq databank (funded by the Government
+of Canada through Genome Canada, Project DACO-18). Thanks to the HostSeq participants and to the
+gnomAD-Canada project leadership (Jordan Lerner-Ellis, Steven Jones and Daniel Taliun) for making
+the aggregate data publicly available. Per the data providers, no attempts should be made to
+relabel the gnomAD-Canada genetic-ancestry groups.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Yoo S, Garg E, Elliott LT, Hung RJ, Halevy AR, Brooks JD, Bull SB, Gagnon F, Greenwood C, Lawless JF
+<em>et al</em>.
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/pmid/37131148/" target="_blank">
+HostSeq: a Canadian whole genome sequencing and clinical data resource</a>.
+<em>BMC Genom Data</em>. 2023 May 2;24(1):26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37131148" target="_blank">37131148</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10152008/" target="_blank">PMC10152008</a>
+</p>
+
+
+
+<p>
+Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alföldi J, Watts NA, Vittal C,
+Gauthier LD <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06045-0" target="_blank">
+A genomic mutational constraint map using variation in 76,156 human genomes</a>.
+<em>Nature</em>. 2024 Jan;625(7993):92-100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38057664" target="_blank">38057664</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11629659/" target="_blank">PMC11629659</a>
+</p>
+

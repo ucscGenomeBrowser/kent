@@ -2927,6 +2927,58 @@ slFreeList(&crList);
 return result;
 }
 
+static int splicedBaseCount(struct linkedFeatures *lf, int gStart, int gEnd)
+/* Number of exonic (spliced mRNA) bases in the genomic half-open interval
+ * [gStart, gEnd), summed over the transcript's exon blocks (lf->components).
+ * Measuring in spliced space means introns don't inflate UTR distances. */
+{
+if (gStart >= gEnd)
+    return 0;
+int total = 0;
+struct simpleFeature *sf;
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    int s = max(sf->start, gStart);
+    int e = min(sf->end, gEnd);
+    if (e > s)
+        total += e - s;
+    }
+return total;
+}
+
+static void utrHgvsCoord(struct linkedFeatures *lf, int g, char *buf, int bufSize)
+/* Format the HGVS CDS-relative coordinate for the single UTR base at genomic
+ * position g, without the leading "c." : "-N" in the 5' UTR (counting back to
+ * the first coding base) or "*N" in the 3' UTR (counting forward from the last
+ * coding base).  Distances are spliced, and query orientation is taken from
+ * lf->orientation so the same code serves both strands. */
+{
+boolean posStrand = (lf->orientation >= 0);
+int cdsStart = lf->tallStart, cdsEnd = lf->tallEnd;
+if ((posStrand && g < cdsStart) || (!posStrand && g >= cdsEnd))
+    {
+    int n = posStrand ? splicedBaseCount(lf, g, cdsStart)
+                      : splicedBaseCount(lf, cdsEnd, g + 1);
+    safef(buf, bufSize, "-%d", n);
+    }
+else
+    {
+    int n = posStrand ? splicedBaseCount(lf, cdsEnd, g + 1)
+                      : splicedBaseCount(lf, g, cdsStart);
+    safef(buf, bufSize, "*%d", n);
+    }
+}
+
+static int txMrnaPos(struct linkedFeatures *lf, int g)
+/* 1-based spliced (mRNA) position of genomic base g measured from the
+ * transcript's 5' end.  Used for HGVS n. numbering of non-coding transcripts. */
+{
+if (lf->orientation >= 0)
+    return splicedBaseCount(lf, lf->start, g + 1);
+else
+    return splicedBaseCount(lf, g, lf->end);
+}
+
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
     int y, int heightPer, int sItem, int eItem,
     boolean lButton, boolean rButton, int buttonW)
@@ -3133,6 +3185,24 @@ for (ref = exonList; TRUE; )
                                                 dyStringPrintf(codonDy, "<b>Amino acid: </b> %s<br>", aaAbbr);
                                             }
                                         }
+                                    else if (lf->tallStart < lf->tallEnd)
+                                        {
+                                        // UTR block of a coding transcript (codonIndex 0, so no
+                                        // c./p. above): label it with its HGVS UTR range.  codonS/
+                                        // codonE span the whole UTR portion of this exon.
+                                        boolean posStrand = (lf->orientation >= 0);
+                                        int gFivePrime  = posStrand ? codonS : codonE - 1;
+                                        int gThreePrime = posStrand ? codonE - 1 : codonS;
+                                        char loBuf[16], hiBuf[16];
+                                        utrHgvsCoord(lf, gFivePrime,  loBuf, sizeof(loBuf));
+                                        utrHgvsCoord(lf, gThreePrime, hiBuf, sizeof(hiBuf));
+                                        char *utrSide = ((posStrand && codonS < lf->tallStart) ||
+                                                (!posStrand && codonS >= lf->tallEnd)) ? "5' UTR" : "3' UTR";
+                                        if (sameString(loBuf, hiBuf))
+                                            dyStringPrintf(codonDy, "<b>%s: </b> c.%s<br>", utrSide, loBuf);
+                                        else
+                                            dyStringPrintf(codonDy, "<b>%s: </b> c.%s_%s<br>", utrSide, loBuf, hiBuf);
+                                        }
                                     // if you change the text below, also change hgTracks:mouseOverToExon
                                     dyStringPrintf(codonDy, "<b>Strand: </b> %s<br><b>Exon: </b>%s %d of %d&nbsp;&nbsp;<b>Length: </b>%d bp<br>%s",
                                                 strandStr, exonIntronText, exonIntronNumber, numExonIntrons, e - s, phaseText);
@@ -3150,13 +3220,28 @@ for (ref = exonList; TRUE; )
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                     // if you change the text below, also change hgTracks:mouseOverToExon
                     char *posNote = "";
+                    char posBuf[64];
                     char *exonOrIntron = "Intron";
                     char *lengthLabel = "Length:";
                     if (isExon)
                         {
-                        posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
                         exonOrIntron = "Exon";
                         lengthLabel = "Exon Length:";
+                        if (lf->tallStart >= lf->tallEnd && zoomedToCdsColorLevel)
+                            {
+                            // non-coding transcript (no CDS): label the exon with its
+                            // spliced HGVS n. nucleotide range instead of the codon note.
+                            boolean posStrand = (lf->orientation >= 0);
+                            int n5 = txMrnaPos(lf, posStrand ? s : e - 1);
+                            int n3 = txMrnaPos(lf, posStrand ? e - 1 : s);
+                            if (n5 == n3)
+                                safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d<br>", n5);
+                            else
+                                safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d_%d<br>", n5, n3);
+                            posNote = posBuf;
+                            }
+                        else
+                            posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
                         }
 
 

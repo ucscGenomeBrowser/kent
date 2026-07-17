@@ -10,6 +10,8 @@ include cancerExpr.ra
 
 include mane.ra
 
+include clinvarMapped.ra alpha
+
 include gdcCancer.ra
 
 include cortexVelmeshev.ra
@@ -539,7 +541,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -901,6 +904,8 @@ include hprcChainNet.ra
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra
 include hprcArr.ra
+include hprc2.ra alpha
+include hprc2Chains.ra alpha
 include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
@@ -940,5 +945,7 @@ include hprcV2.trackDb.txt alpha
 include vgp577way.trackDb.ra alpha
 
 include crPred.ra alpha
+
+include andy_tdb.txt alpha
 
 include tad.ra alpha

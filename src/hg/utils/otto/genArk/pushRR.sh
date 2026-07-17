@@ -72,4 +72,14 @@ TS=`date "+%T"`
 printf "### finished quickPush.pl %s %s \n" "${DS}" "${TS}" >> "${logFile}"
 gzip "${logFile}"
 
+export L="/hive/data/outside/genark/listings"
+zgrep "/contrib" /hive/data/inside/GenArk/pushRR/hgwbeta.todayList.gz \
+  | cut -f2 | sed -e 's#^GC#/gbdb/genark/GC#;' | sort -u > ${L}/beta.contrib.txt
+
+zgrep "/contrib" /hive/data/inside/GenArk/pushRR/hgw1.todayList.gz \
+  | cut -f2 | sed -e 's#^GC#/gbdb/genark/GC#;' | sort -u > ${L}/RR.contrib.txt
+
+zgrep "/contrib" /hive/data/inside/GenArk/pushRR/dev.todayList.gz \
+  | cut -f2 | sed -e 's#^GC#/gbdb/genark/GC#;' | sort -u > ${L}/hgwdev.contrib.txt
+
 rm lockFile.txt

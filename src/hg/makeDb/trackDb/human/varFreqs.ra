@@ -22,7 +22,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -188,6 +188,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.GoNLAF GoNL Netherlands ~13x SR AF
         # filter.GoNLAF 0:1
         # filterLimits.GoNLAF 0:1
+        # filterByRange.HostSeqAF on
+        # filterLabel.HostSeqAF HostSeq Canada AF
+        # filter.HostSeqAF 0:1
+        # filterLimits.HostSeqAF 0:1
         # Per-database AC filters (commented out: re-enable as needed)
         # filterByRange.AllOfUsAC on
         # filterLabel.AllOfUsAC AllOfUs AC
@@ -301,6 +305,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.GoNLAC GoNL Netherlands ~13x SR AC
         # filter.GoNLAC 0:2000000
         # filterLimits.GoNLAC 0:2000000
+        # filterByRange.HostSeqAC on
+        # filterLabel.HostSeqAC HostSeq Canada AC
+        # filter.HostSeqAC 0:2000000
+        # filterLimits.HostSeqAC 0:2000000
         # Population-specific AF/AC filters (commented out: re-enable as needed)
         # AllOfUs populations
         # filterByRange.AllOfUsAF_AFR on
@@ -640,7 +648,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -806,6 +814,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.GoNLAF GoNL Netherlands ~13x SR AF
         # filter.GoNLAF 0:1
         # filterLimits.GoNLAF 0:1
+        # filterByRange.HostSeqAF on
+        # filterLabel.HostSeqAF HostSeq Canada AF
+        # filter.HostSeqAF 0:1
+        # filterLimits.HostSeqAF 0:1
         # Per-database AC filters (commented out: re-enable as needed)
         # filterByRange.AllOfUsAC on
         # filterLabel.AllOfUsAC AllOfUs AC
@@ -919,6 +931,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.GoNLAC GoNL Netherlands ~13x SR AC
         # filter.GoNLAC 0:2000000
         # filterLimits.GoNLAC 0:2000000
+        # filterByRange.HostSeqAC on
+        # filterLabel.HostSeqAC HostSeq Canada AC
+        # filter.HostSeqAC 0:2000000
+        # filterLimits.HostSeqAC 0:2000000
         # Population-specific AF/AC filters (commented out: re-enable as needed)
         # AllOfUs populations
         # filterByRange.AllOfUsAF_AFR on
@@ -1651,4 +1667,14 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         dataVersion Cell 2023 (hg19 lift)
         tableBrowser off
         priority 1
+
+        track hostseq
+        shortLabel Canada HostSeq 10.5k WGS
+        longLabel SNV Frequencies: gnomAD-Canada HostSeq - 10,487 WGS, Canadian COVID-19 cohort
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/hostseq/hostseq.vcf.gz
+        visibility hide
+        dataVersion gnomAD-Canada v1.0
+        priority 2
 
