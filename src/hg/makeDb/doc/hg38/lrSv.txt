@@ -726,3 +726,14 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvert.as
 #  - Colors from the shared svColor() palette in lrSvCommon.py.
 #
 # Not added to the lrSvAll merge for now.
+
+# Added cardSv (NIH CARD 351) and noyvertSv (Noyvert 888) to the lrSvAll merge:
+# both appended to databases.tsv (CARD uses alleleFreq for max-AF aggregation,
+# Noyvert888 uses AF) and the merge re-run. The merge auto-regenerates
+# lrSvAll.as and trackDb/human/lrSvAll.ra (now 16 source databases,
+# filter.sourceCount 1:16).
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 3,018,404 input variants -> 2,582,278 merged (14.4% dedup), 16 databases
+# (was 2,682,104 -> 2,317,508 with 14 databases). All INS store svLen=1 across
+# every subtrack, so insertions merge on insLen; the merged median svLen is 1
+# (INS are 1.65M of 2.58M rows).
