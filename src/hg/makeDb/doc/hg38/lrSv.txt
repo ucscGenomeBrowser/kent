@@ -672,3 +672,57 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
 # svLen is stored as the reference span (1 bp for INS); the inserted-sequence
 # length lives in insLen. AC is the genotyped carrier count (= nabecCount +
 # hbccCount). Not added to the lrSvAll merge for now.
+
+##########
+# 2026-07-17 Claude max
+
+# noyvertSv: multi-ancestry long-read SV imputation panel, 888 Oxford Nanopore
+# genomes from the 1000 Genomes Project (164 EUR, 144 AMR, 168 EAS, 171 SAS,
+# 241 AFR), SVs jointly called with Sniffles2 v2.0.7.
+# Paper: Noyvert et al. 2025, eLife reviewed preprint, doi 10.7554/eLife.106115
+#   (no PMID; not indexed in PubMed).
+#
+# The authors shared a per-variant summary table (SV.Noyvert.et.al.tsv.gz) with
+# all 107,445 panel SVs: per-superpopulation allele frequencies, Sniffles2
+# stdev metrics, Hardy-Weinberg p-values, leave-one-out and UK Biobank
+# imputation accuracy, and, where applicable, the significant UK Biobank SV-WAS
+# trait associations. Inserted sequences are not included in the file. There is
+# no AC/AN column, only allele frequencies.
+
+cd /hive/data/genomes/hg38/bed/lrSv/noyvert
+# (SV.Noyvert.et.al.tsv.gz was provided by the authors, copied into this dir)
+
+python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvertTsvToBed.py \
+    SV.Noyvert.et.al.tsv.gz noyvertSv.bed /hive/data/genomes/hg38/chrom.sizes
+# Noyvert: wrote 107,445 records to noyvertSv.bed
+# Noyvert: by type: BND=2,696, DEL=38,459, DUP=608, INS=59,953, INV=5,729
+
+bedSort noyvertSv.bed noyvertSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvert.as \
+    -tab noyvertSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes noyvert.bb
+
+# All 107,445 input rows are carried through 1:1 (no rows dropped). The input
+# has no records on chrX/chrY (the panel is autosome-only), and every DEL/INV/DUP
+# reference end was checked against chrom.sizes: none exceed the chromosome, so
+# nothing was clamped.
+#
+# Conventions applied by lrSvNoyvertTsvToBed.py:
+#  - Coordinates: input pos is VCF-style 1-based; chromStart = pos - 1.
+#    DEL/INV/DUP span the reference interval (chromEnd = chromStart + |SVLEN|);
+#    INS and BND are drawn at a single reference base (chromEnd = chromStart+1).
+#  - svLen is the REFERENCE SPAN, svLen = chromEnd - chromStart, matching the
+#    shared lrSv convention (see lrSvCommon.py): 1 bp for INS/BND, the interval
+#    length for DEL/INV/DUP. The inserted-sequence length lives in insLen (INS
+#    only; the source SVLEN). This is why the summary table on the lrSv.html
+#    container page shows min=median=1 for this dataset (INS dominate).
+#  - AC/AN are approximate (the source has only AF): AN = round(2*888*(1-missing
+#    rate)); AC = round(AF*AN). Documented as approximate in trackDb and on the
+#    track description page.
+#  - BND mate breakend loci are stored in the secondBp field with the Sniffles2
+#    'CHR' prefix lower-cased to 'chr' (some mates land on alt/random/Un/M/EBV
+#    contigs; the primary breakpoint is always on a standard autosome).
+#  - UKB_SVWAS_signif is reformatted comma-free into ukbGwas, with the number of
+#    significant trait associations in nGwas (for filtering).
+#  - Colors from the shared svColor() palette in lrSvCommon.py.
+#
+# Not added to the lrSvAll merge for now.

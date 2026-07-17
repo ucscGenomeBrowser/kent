@@ -545,6 +545,60 @@ noScoreFilter on
     filterByRange.hbccCount on
     filterLabel.hbccCount HBCC Carriers (African/African-admixed ancestry)
 
+    track noyvertSv
+    parent longReadVariants
+    bigDataUrl /gbdb/$D/lrSv/noyvert.bb
+    shortLabel Noyvert 888 SVs
+    longLabel Structural Variants from 888 Multi-ancestry Individuals (Oxford Nanopore, Noyvert et al. 2025)
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+    mouseOver <b>Var</b>: ${name} (${svType})<br><b>SV len</b>: ${svLen}<br><b>Ins len</b>: ${insLen}<br><b>AF</b>: ${AF}<br><b>AC</b>: ${AC}/${AN}<br><b>GWAS hits</b>: ${nGwas}
+    filterValues.svType DEL,INS,INV,DUP,BND
+    filterType.svType multipleListOr
+    filterLabel.svType SV Type
+    filter.svLen 0:28634664
+    filterByRange.svLen on
+    filterLabel.svLen SV Length (bp)
+    filter.insLen 0:45109
+    filterByRange.insLen on
+    filterLabel.insLen Insertion Length (bp)
+    filter.AC 0:1776
+    filterByRange.AC on
+    filterLabel.AC Allele Count (approx)
+    filter.AF 0:1
+    filterByRange.AF on
+    filterLimits.AF 0:1
+    filterLabel.AF Allele Frequency
+    filter.afAfr 0:1
+    filterByRange.afAfr on
+    filterLimits.afAfr 0:1
+    filterLabel.afAfr AF African
+    filter.afAmr 0:1
+    filterByRange.afAmr on
+    filterLimits.afAmr 0:1
+    filterLabel.afAmr AF Admixed American
+    filter.afEas 0:1
+    filterByRange.afEas on
+    filterLimits.afEas 0:1
+    filterLabel.afEas AF East Asian
+    filter.afEur 0:1
+    filterByRange.afEur on
+    filterLimits.afEur 0:1
+    filterLabel.afEur AF European
+    filter.afSas 0:1
+    filterByRange.afSas on
+    filterLimits.afSas 0:1
+    filterLabel.afSas AF South Asian
+    filter.nGwas 0:11
+    filterByRange.nGwas on
+    filterLabel.nGwas UK Biobank GWAS Hit Count
+    filter.r2Ukb 0:1
+    filterByRange.r2Ukb on
+    filterLimits.r2Ukb 0:1
+    filterLabel.r2Ukb Imputation r2 (UK Biobank)
+    skipEmptyFields on
+
     # NOT FOR RELEASE: data received from Eichler lab via email, not yet published.
     # Do not add to lrSvAll merged track until a preprint or paper is available.
     track lrSv1kLin
