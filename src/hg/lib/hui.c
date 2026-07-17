@@ -10811,7 +10811,7 @@ if (row != NULL)
         if (otherTdb)
             {
             puts("<li>");
-            printf("<a href=\"%s?g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
+            printf("<a href=\"%s?db=%s&g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), database, otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
             puts(": ");
             puts(why);
             }
