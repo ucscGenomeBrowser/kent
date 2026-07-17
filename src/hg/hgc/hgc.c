@@ -3669,9 +3669,9 @@ char *trackName = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackName, tdb->track))
     parentTdb = hTrackDbForTrack(database, trackName);
-printf("<P><A HREF=\"%s?g=%s&%s\">"
+printf("<P><A HREF=\"%s?db=%s&g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
-       hTrackUiForTrack(tdb->track), trackName, cartSidUrlString(cart), parentTdb->shortLabel);
+       hTrackUiForTrack(tdb->track), database, trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)

@@ -417,8 +417,8 @@ char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_CATEGORY_SELECT);
 if (isPopup)
     {
-    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>", 
-                hTrackUiForTrack(track), track);
+    printf("<a href='%s?db=%s&g=%s'><button type='button'>Change</button><a>",
+                hTrackUiForTrack(track), database, track);
     }
 else
     {
