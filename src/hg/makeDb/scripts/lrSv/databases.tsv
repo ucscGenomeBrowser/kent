@@ -31,3 +31,5 @@ HGSVC3	HGSVC3 65	/gbdb/hg38/lrSv/hgsvc3.bb	AC	AC
 ArabUAE53	Arab APR 53	/gbdb/hg38/lrSv/apr.bb	AC	AC			alleleFreq
 China58	CPC 58 (Chinese)	/gbdb/hg38/lrSv/cpc1.bb	AC	AC			alleleFreq
 Svatalog101	SVatalog 101	/gbdb/hg38/lrSv/chirmade101.bb	UNKNOWN	AC
+CARD	NIH CARD 351 (brain)	/gbdb/hg38/lrSv/card.bb	AC	AC			alleleFreq
+Noyvert888	Noyvert 888 (1000G ONT)	/gbdb/hg38/lrSv/noyvert.bb	AC	AC			AF

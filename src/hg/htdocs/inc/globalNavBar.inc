@@ -79,6 +79,7 @@
 	<li><a id="customTracksMenuLink" title="Manage your custom tracks" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	<li><a id="sessionsMenuLink" title="Create, manage, and share snapshots of Genome Browser configurations" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
 	<li><a id="trackHubsMenuLink" title="Connect and manage your own track hubs or browse public hubs" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
+	<li><a id="hubSpaceMenuLink" title="Upload track hub files" href="../cgi-bin/hgHubConnect#hubUpload">Hub Upload</a></li>
 	<li><a id="customCompositeMenuLink" title="Build your own collection of tracks on the fly" href="../cgi-bin/hgCollection">Track Collection Builder</a></li>
 	<li class="last"><a id="publicSessionsMenuLink" title="See how others are using the Genome Browser" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	</ul>

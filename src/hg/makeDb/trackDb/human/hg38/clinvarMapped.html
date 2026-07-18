@@ -1,0 +1,171 @@
+<h2>Description</h2>
+<p>
+Genes that arose from a common ancestor by duplication, called paralogs, often
+keep a similar protein sequence and three-dimensional structure long after they
+have taken on different roles. Because equivalent positions in a family of
+paralogs tend to play equivalent structural or functional roles, a variant known
+to cause disease at one position in one gene points to a candidate
+disease-associated position at the aligned residue in each of its paralogs. This
+idea, known as <em>paralogue annotation</em>, was introduced for the cardiac ion
+channel genes and has been used to help classify variants of uncertain
+significance.
+</p>
+<p>
+This track container takes every ClinVar variant that changes a protein residue
+and projects it onto the equivalent residue of each paralog of the gene it
+occurs in. It has two parts:
+</p>
+<ul>
+  <li><b>Paralog Variants</b> shows, on each gene, the positions that correspond
+  to protein-changing ClinVar variants in that gene's paralogs. Each feature
+  records the source gene, the source variant and its ClinVar classification,
+  and whether the residue is conserved between the two genes.</li>
+  <li><b>Paralog Alignments</b> shows the pairwise protein alignments that were
+  used to transfer the positions, so that the evidence behind any mapped variant
+  can be inspected directly.</li>
+</ul>
+<p>
+The mapping is purely positional: it indicates that a residue is the alignment
+equivalent of a position that is variant in a paralog. It does not itself assign
+pathogenicity, and a projection is only as reliable as the underlying alignment,
+so the percent-identity and residue-conservation fields should be used to judge
+confidence.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+In the Paralog Variants track, each feature marks the codon in this gene that
+aligns to a protein-changing ClinVar variant in a paralog. Features are colored
+by the ClinVar clinical significance of the source variant:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#D20000;width:2em">&nbsp;</th>
+      <td>Pathogenic or likely pathogenic</td></tr>
+  <tr><th style="background-color:#00D200;width:2em">&nbsp;</th>
+      <td>Benign or likely benign</td></tr>
+  <tr><th style="background-color:#000080;width:2em">&nbsp;</th>
+      <td>Uncertain significance</td></tr>
+  <tr><th style="background-color:#8979D4;width:2em">&nbsp;</th>
+      <td>Conflicting classifications</td></tr>
+  <tr><th style="background-color:#808080;width:2em">&nbsp;</th>
+      <td>Other or risk factor</td></tr>
+</table>
+<p>
+These are the same colors used by the ClinVar track.
+</p>
+<p>
+The details page for each mapped variant links to the original ClinVar record
+and to the position of the source variant on the genome. The track can be
+filtered by clinical significance, ClinVar review status (0 to 4 stars),
+molecular consequence, residue conservation (identical, similar or different
+between the two genes), Ensembl paralog percent identity, and the percent
+identity of the pairwise alignment. Because most protein-changing ClinVar
+variants are classified as uncertain, filtering to pathogenic and likely
+pathogenic classifications and to higher alignment identities is recommended for
+variant-interpretation use.
+</p>
+<p>
+The Paralog Alignments track shows each pairwise protein alignment as a
+blocked feature; the label is the partner gene, and the aligned blocks mark the
+regions that could be compared between the two proteins.
+</p>
+
+<h2>Methods</h2>
+<p>
+Paralog relationships and their percent identities were taken from Ensembl
+BioMart (release 116) as within-species paralog pairs between Ensembl genes. For
+each protein-coding gene, the single representative transcript and protein were
+taken from the MANE Select set, so that residue numbering matches the transcripts
+used in clinical variant reporting. Each pair of paralogs whose proteins share at
+least 20% identity was aligned with a global Needleman-Wunsch alignment
+(BLOSUM62), and the aligned residue positions were recorded. Pairs below 20%
+identity were not aligned, because alignments in that range are not reliable
+enough to transfer positions.
+</p>
+<p>
+Every ClinVar variant with a protein-residue consequence (missense, stop gain or
+loss, start loss and in-frame insertions or deletions) was assigned to the codon
+of the overlapping MANE Select transcript, and its reference residue was taken
+from the translated protein. Each variant was then projected across the
+alignment to the equivalent residue of every paralog, and that residue was mapped
+back to its genomic codon to place the feature. Variants that align to a gap, or
+that occur in a gene with no paralog, were not projected. The pairwise alignments
+themselves were converted to PSL to form the Paralog Alignments track.
+</p>
+<p>
+The ClinVar data were taken from the UCSC ClinVar track for this assembly. The
+paralog list was downloaded from the Ensembl BioMart service at
+<a href="https://www.ensembl.org/biomart/martservice" target="_blank">https://www.ensembl.org/biomart/martservice</a>,
+and the MANE Select set from the UCSC MANE track. The commands used to build the
+track are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/clinvarMapped.txt" target="_blank">makeDoc</a>,
+and the processing scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/clinvarMapped" target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>clinvarMappedParalog</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in bigBed files
+that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/clinvarMapped/" target="_blank">our download server</a>.
+The files for this track are called <tt>clinvarMappedParalog.bb</tt> and
+<tt>clinvarMappedParalogAln.bb</tt>. Individual regions or the whole genome annotation
+can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from
+the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/clinvarMapped/clinvarMappedParalog.bb -chrom=chr2 -start=165000000 -end=166000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Ensembl for the paralog annotations, to the MANE collaboration between
+NCBI and EMBL-EBI for the reference transcript set, and to ClinVar for the variant
+data. The paralogue annotation concept was developed by Ware, Walsh, Cook and
+colleagues.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Ware JS, Walsh R, Cunningham F, Birney E, Cook SA.
+<a href="https://doi.org/10.1002/humu.22114" target="_blank">
+Paralogous annotation of disease-causing variants in long QT syndrome genes</a>.
+<em>Hum Mutat</em>. 2012 Aug;33(8):1188-1191.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22581653" target="_blank">22581653</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4640174/" target="_blank">PMC4640174</a>
+</p>
+
+
+
+<p>
+Walsh R, Peters NS, Cook SA, Ware JS.
+<a href="http://jmg.bmj.com/lookup/pmidlookup?view=long&amp;pmid=24136861" target="_blank">
+Paralogue annotation identifies novel pathogenic variants in patients with Brugada syndrome and
+catecholaminergic polymorphic ventricular tachycardia</a>.
+<em>J Med Genet</em>. 2014 Jan;51(1):35-44.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24136861" target="_blank">24136861</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3888601/" target="_blank">PMC3888601</a>
+</p>
+
+
+
+<p>
+Morales J, Pujar S, Loveland JE, Astashyn A, Bennett R, Berry A, Cox E, Davidson C, Ermolaeva O,
+Farrell CM <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-022-04558-8" target="_blank">
+A joint NCBI and EMBL-EBI transcript set for clinical genomics and research</a>.
+<em>Nature</em>. 2022 Apr;604(7905):310-315.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35388217" target="_blank">35388217</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9007741/" target="_blank">PMC9007741</a>
+</p>
+

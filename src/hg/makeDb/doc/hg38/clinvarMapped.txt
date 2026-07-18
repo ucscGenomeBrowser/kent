@@ -1,0 +1,89 @@
+# 2026-07-13 Claude (max): ClinVar variants mapped to related loci (clinvarMapped)
+
+# The clinvarMapped track container maps protein-changing ClinVar variants onto
+# related loci by sequence homology. The first (and so far only) method is
+# paralog mapping: every variant is projected onto the equivalent (aligned)
+# residue of each of its gene's paralogs, with the pairwise protein alignments
+# provided as evidence. Two bigBed outputs:
+#   clinvarMappedParalog     projected variants (bigBed 12+)
+#   clinvarMappedParalogAln  bigPsl alignments (with query CDS sequence)
+# (Future methods, e.g. mapping through PFAM domains, will add sibling subtracks.)
+#
+# Inputs, all already on hg38:
+#   /gbdb/hg38/bbi/clinvar/clinvarMain.bb   ClinVar short variants
+#   /gbdb/hg38/mane/mane.bb                 MANE Select + Plus Clinical
+#   /gbdb/hg38/hg38.2bit                    genome
+#   Ensembl BioMart release 116             within-species paralog pairs
+#
+# All scripts are in kent/src/hg/makeDb/scripts/clinvarMapped . Python steps
+# run in the micromamba "claude" env (needs parasail, biopython, py2bit).
+# Scripts named clinvarMapped*  are reusable infrastructure; clinvarMappedParalog*
+# are specific to the paralog mapping method.
+
+dir=/hive/data/genomes/hg38/bed/clinvarMapped
+scr=~/kent/src/hg/makeDb/scripts/clinvarMapped
+mkdir -p $dir && cd $dir
+
+# 1. Paralog pairs from Ensembl BioMart, one chromosome per request (a single
+#    genome-wide request never closes its socket and always times out).
+$scr/clinvarMappedParalogPairs.sh $dir
+#    -> paralogPairs.tsv  (3,552,265 pairs; geneId geneSym paralogId paralogSym percIdQ percIdT)
+
+# 2. MANE Select transcript set: one representative transcript+protein per gene,
+#    translated straight from the genome so protein and coordinate mapping agree.
+$scr/clinvarMappedMane.sh $dir
+#    -> maneSelect.gp, maneSelect.faa, maneMeta.tsv  (19,293 protein-coding genes)
+
+# 3. Coverage stats (genes with/without a paralog, percent-id distribution).
+$scr/clinvarMappedParalogStats.sh $dir
+#    -> paralogStats.log  (15,278 of 19,293 genes have a MANE-mappable paralog)
+
+# 4. Restrict to unordered pairs whose proteins share >=20% identity, and make a
+#    per-gene protein FASTA keyed by Ensembl gene id.
+awk -F'\t' 'BEGIN{OFS="\t"}
+  { q=$5+0; t=$6+0; m=(q>t?q:t); if(m<20) next;
+    a=$1; b=$3;
+    if(a<b){k=a"\t"b; sa=$2; sb=$4; p1=$5; p2=$6}
+    else   {k=b"\t"a; sa=$4; sb=$2; p1=$6; p2=$5}
+    if(!(k in seen) || m>best[k]){seen[k]=sa"\t"sb; best[k]=m; pid[k]=p1"\t"p2} }
+  END{ for(k in seen) print k, seen[k], pid[k], best[k] }' \
+  paralogPairs.mane.tsv | sort -k1,1 -k2,2 > pairs.ge20.tsv
+#    -> pairs.ge20.tsv  (94,471 pairs)
+
+awk -F'\t' '{print $1"\t"$2}' maneMeta.tsv > .enst2ensg
+awk 'BEGIN{while((getline l < ".enst2ensg")>0){split(l,a,"\t"); m[a[1]]=a[2]}}
+     /^>/{ id=substr($1,2); g=m[id]; if(g=="") {skip=1; next} skip=0; print ">"g; next }
+     !skip{print}' maneSelect.faa > geneProt.faa && rm -f .enst2ensg
+
+# 5. Pairwise global protein alignment (BLOSUM62) of every >=20% pair; output is
+#    ungapped aligned blocks in protein coordinates (fast, ~3 s with parasail).
+python $scr/clinvarMappedParalogAlign.py geneProt.faa pairs.ge20.tsv -o alnBlocks.tsv -j 48
+#    -> alnBlocks.tsv  (94,471 alignments)
+
+# 6. Assign every protein-changing ClinVar variant to its MANE codon. --selftest
+#    verifies the genomic<->codon math; the result matches ClinVar's own protein
+#    HGVS for 99.9% of missense variants.
+python $scr/clinvarMappedCodons.py /gbdb/hg38/bbi/clinvar/clinvarMain.bb \
+  maneSelect.gp geneProt.faa maneMeta.tsv -o clinvarCodons.tsv --selftest
+#    -> clinvarCodons.tsv  (2,623,549 variant-codon rows from 2,648,470 coding variants)
+
+# 7. Project each variant across its paralog alignments -> variant bigBed. Colors
+#    match the ClinVar track (clinVarToBed).
+python $scr/clinvarMappedParalogProject.py $dir -o clinvarMappedParalog.bed -j 48
+export LC_ALL=C
+sort -S8G --parallel=16 -k1,1 -k2,2n clinvarMappedParalog.bed -o clinvarMappedParalog.sorted.bed
+bedToBigBed -tab -type=bed12+14 -as=$scr/clinvarMappedParalog.as \
+  clinvarMappedParalog.sorted.bed /hive/data/genomes/hg38/chrom.sizes clinvarMappedParalog.bb
+#    -> clinvarMappedParalog.bb  (16,750,740 features)
+
+# 8. Turn the same alignments into PSL (both orientations) -> bigPsl evidence
+#    track. --faOut writes a per-gene CDS FASTA (keyed by gene symbol = the PSL
+#    qName) built from the same coordinates, so the embedded query sequence lets
+#    the browser shade base matches/mismatches in the alignment.
+python $scr/clinvarMappedParalogAlnPsl.py $dir /hive/data/genomes/hg38/chrom.sizes \
+  -o clinvarMappedParalogAln.psl --faOut geneCds.fa --twoBit /gbdb/hg38/hg38.2bit
+pslToBigPsl clinvarMappedParalogAln.psl -fa=geneCds.fa stdout \
+  | sort -S4G --parallel=16 -k1,1 -k2,2n > clinvarMappedParalogAln.bigPslInput
+bedToBigBed -as=$HOME/kent/src/hg/lib/bigPsl.as -type=bed12+13 -tab \
+  clinvarMappedParalogAln.bigPslInput /hive/data/genomes/hg38/chrom.sizes clinvarMappedParalogAln.bb
+#    -> clinvarMappedParalogAln.bb  (188,942 alignment features, with query sequence)

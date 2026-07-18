@@ -1,0 +1,60 @@
+track clinvarMapped
+compositeTrack on
+shortLabel ClinVar Mapped
+longLabel ClinVar coding variants mapped to related loci by sequence homology
+group phenDis
+visibility hide
+type bigBed
+dataVersion Ensembl 116 paralogs, MANE Select 1.5, ClinVar as of build date
+html clinvarMapped
+
+    track clinvarMappedParalog
+    parent clinvarMapped on
+    shortLabel Paralog Variants
+    longLabel ClinVar coding variants mapped to the equivalent residue of paralogous genes
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/clinvarMapped/clinvarMappedParalog.bb
+    itemRgb on
+    noScoreFilter on
+    maxItems 100000
+    urls vcvId="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" sourceLocus="hgTracks?db=hg38&position=$$"
+    mouseOver Mapped from ${sourceGene} ${sourceVariant} &mdash; ${clinSign} (${reviewStars} star)<br>Source residue ${srcRes}${sourceAaPos} in ${sourceGene}; aligned residue here is ${thisRes} (${residueMatch})<br>Ensembl paralog identity ${bioPercId}%, alignment identity ${alnPercId}%
+    filterText.sourceGene *
+    filterType.sourceGene wildcard
+    filterLabel.sourceGene Source gene (wildcards allowed, e.g. SCN5A or SCN*)
+    filterValues.clinSignCode PG|pathogenic,LP|likely pathogenic,CF|conflicting,VUS|uncertain,RF|risk factor,OT|other,LB|likely benign,BN|benign
+    filterValuesDefault.clinSignCode PG,LP
+    filterType.clinSignCode multipleListOr
+    filterLabel.clinSignCode Clinical significance
+    filterValues.residueMatch identical,similar,different
+    filterType.residueMatch multipleListOr
+    filterLabel.residueMatch Residue conservation
+    filterValues.molConseq missense variant,nonsense,inframe deletion,inframe insertion,inframe indel,initiator codon variant,stop lost
+    filterType.molConseq multipleListOr
+    filterLabel.molConseq Source molecular consequence
+    filterByRange.reviewStars on
+    filter.reviewStars 0:4
+    filterLimits.reviewStars 0:4
+    filterLabel.reviewStars ClinVar review stars
+    filterByRange.bioPercId on
+    filter.bioPercId 0:100
+    filterLimits.bioPercId 0:100
+    filterLabel.bioPercId Ensembl paralog percent identity
+    filterByRange.alnPercId on
+    filter.alnPercId 0:100
+    filterLimits.alnPercId 0:100
+    filterLabel.alnPercId Alignment percent identity
+
+    track clinvarMappedParalogAln
+    parent clinvarMapped off
+    shortLabel Paralog Alignments
+    longLabel Paralog protein alignments used to map the variants
+    type bigPsl
+    bigDataUrl /gbdb/hg38/clinvarMapped/clinvarMappedParalogAln.bb
+    visibility pack
+    baseColorUseSequence lfExtra
+    baseColorDefault diffBases
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    indelDoubleInsert on
+    indelQueryInsert on

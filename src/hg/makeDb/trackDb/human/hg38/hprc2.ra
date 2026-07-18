@@ -1,0 +1,91 @@
+track hprc2
+superTrack on hide
+shortLabel HPRC2 Alignments
+longLabel HPRC Release 2 assembly comparisons to GRCh38 (462 haplotypes)
+group hprc
+html hprc2
+
+    track hprc2Coverage
+    parent hprc2
+    shortLabel HPRC2 Coverage
+    longLabel HPRC2 assembly coverage of GRCh38 (fraction of 462 haplotypes aligning)
+    type bigWig 0 1
+    bigDataUrl /gbdb/hg38/hprc2/hprc2Coverage.bw
+    color 0,0,64
+    maxHeightPixels 128:64:16
+    viewLimits 0.0:1.0
+    autoScale off
+    graphTypeDefault bar
+    visibility full
+    priority 1
+
+    track hprc2Breaks
+    parent hprc2
+    shortLabel HPRC2 Breaks
+    longLabel HPRC2 assembly alignment breaks in GRCh38
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/hprc2/hprc2Breaks.bb
+    itemRgb on
+    visibility hide
+    priority 2
+
+    track hprc2Rearr
+    parent hprc2
+    compositeTrack on
+    shortLabel HPRC2 Rearrangements
+    longLabel HPRC2 assembly rearrangements and indels relative to GRCh38
+    type bigBed 9 +
+    itemRgb on
+    exonArrows off
+    labelFields label
+    mouseOverField _mouseover
+    maxItems 100000
+    filter.score 1
+    filterLabel.score Minimum number of assemblies with this event
+    filterByRange.size on
+    filter.size 50:250000000
+    filterLimits.size 1:250000000
+    filterLabel.size Event size (bp)
+    visibility hide
+    priority 3
+
+        track hprc2Ins
+        parent hprc2Rearr on
+        shortLabel HPRC2 Insertions
+        longLabel HPRC2 insertions: sequence present in the assemblies but absent from GRCh38
+        bigDataUrl /gbdb/hg38/hprc2/hprc2Ins.bb
+        type bigBed 9 +
+        priority 1
+
+        track hprc2Del
+        parent hprc2Rearr on
+        shortLabel HPRC2 Deletions
+        longLabel HPRC2 deletions: sequence present in GRCh38 but absent from the assemblies
+        bigDataUrl /gbdb/hg38/hprc2/hprc2Del.bb
+        type bigBed 9 +
+        priority 2
+
+        track hprc2Inv
+        parent hprc2Rearr on
+        shortLabel HPRC2 Inversions
+        longLabel HPRC2 inversions relative to GRCh38
+        bigDataUrl /gbdb/hg38/hprc2/hprc2Inv.bb
+        type bigBed 9 +
+        priority 3
+
+        track hprc2Dup
+        parent hprc2Rearr on
+        shortLabel HPRC2 Duplications
+        longLabel HPRC2 duplications relative to GRCh38
+        bigDataUrl /gbdb/hg38/hprc2/hprc2Dup.bb
+        type bigBed 9 +
+        priority 4
+
+        track hprc2Double
+        parent hprc2Rearr
+        shortLabel HPRC2 Complex
+        longLabel HPRC2 complex events: sequence unalignable in both GRCh38 and the assemblies
+        bigDataUrl /gbdb/hg38/hprc2/hprc2Double.bb
+        type bigBed 9 +
+        visibility hide
+        priority 5

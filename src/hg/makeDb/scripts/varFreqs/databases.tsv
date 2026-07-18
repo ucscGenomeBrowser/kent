@@ -48,3 +48,4 @@ WBBC	WBBC China	/gbdb/hg38/varFreqs/wbbc/wbbc.vcf.gz	AC	AF	0
 ChinaMAP	China ChinaMAP	/gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz	AC	AF	0
 GenomeIndia	GenomeIndia 9.7k WGS	/gbdb/hg38/varFreqs/_genomeindia/genomeindia.vcf.gz	AC	AF	0
 GoNL	GoNL Netherlands ~13x SR	/gbdb/hg38/varFreqs/gonl/gonl.vcf.gz	AC	AF	0
+HostSeq	HostSeq Canada	/gbdb/hg38/varFreqs/hostseq/hostseq.vcf.gz	AC	AF	0
