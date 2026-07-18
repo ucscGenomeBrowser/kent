@@ -1558,6 +1558,17 @@ var hubCreate = (function() {
         let nameSpan = document.getElementById("hubBannerName");
         if (!banner || !nameSpan) return;
         nameSpan.textContent = hubName;
+        // stash a shareable connect link on the copy button, or hide it if unavailable
+        let copyBtn = document.getElementById("hubBannerCopyBtn");
+        if (copyBtn) {
+            let link = hubShareLink(hubName);
+            if (link) {
+                copyBtn.setAttribute("data-url", link);
+                copyBtn.style.display = "";
+            } else {
+                copyBtn.style.display = "none";
+            }
+        }
         banner.style.display = "";
     }
 
@@ -1707,16 +1718,18 @@ var hubCreate = (function() {
             let bannerViewBtn = document.getElementById("viewSelectedFilesBanner");
             bannerViewBtn.addEventListener("click", viewAllInGenomeBrowser);
             bannerViewBtn.textContent = "View selected";
+            bannerViewBtn.style.display = "inline-block";
             let bannerDeleteBtn = document.getElementById("deleteSelectedFilesBanner");
             bannerDeleteBtn.addEventListener("click", deleteFileList);
             bannerDeleteBtn.textContent = "Delete selected";
+            bannerDeleteBtn.style.display = "inline-block";
             // when exactly one hub is selected, offer a shareable connect link
             let copyBtn = document.getElementById("copyHubLinkBanner");
             let singleHub = (data.length === 1 && data[0].fileType === "dir" &&
                 !data[0].parentDir && hubHasHubTxt(data[0].fullPath)) ? data[0].fullPath : null;
             let singleHubLink = singleHub ? hubShareLink(singleHub) : null;
             if (singleHubLink) {
-                copyBtn.textContent = "Copy link to hub";
+                copyBtn.textContent = "Share hub";
                 copyBtn.setAttribute("data-url", singleHubLink);
                 copyBtn.addEventListener("click", copyHubLinkFromBanner);
                 copyBtn.style.display = "inline-block";
@@ -1725,7 +1738,10 @@ var hubCreate = (function() {
             }
         } else {
             span.textContent = "";
-            bannerSpan.textContent = "";
+            // banner stays present at the top level, so show a zero count and no buttons
+            bannerSpan.textContent = "0 hub";
+            document.getElementById("viewSelectedFilesBanner").style.display = "none";
+            document.getElementById("deleteSelectedFilesBanner").style.display = "none";
             document.getElementById("copyHubLinkBanner").style.display = "none";
         }
 
@@ -1733,7 +1749,8 @@ var hubCreate = (function() {
         spanParentDiv.style.display = numSelected === 0 ? "none": "block";
         let placeholder = document.getElementById("placeHolderInfo");
         placeholder.style.display = numSelected === 0 ? "block" : "none";
-        banner.style.display = (numSelected === 0 || !atTopLevel) ? "none" : "";
+        // the share banner is always shown at the top level, hidden inside a hub
+        banner.style.display = atTopLevel ? "" : "none";
     }
 
     function handleCheckboxSelect(evtype, table, selectedRow) {
@@ -1829,6 +1846,7 @@ var hubCreate = (function() {
         });
         uiState.currentHub = "";
         hideHubBanner();
+        updateSelectedFileDiv(null);
     }
 
     function dataTableShowDir(table, dirName, dirFullPath) {
@@ -1856,6 +1874,7 @@ var hubCreate = (function() {
         uiState.currentHub = dirName;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
         showHubBanner(dirName);
+        updateSelectedFileDiv(null);
     }
 
     // when we move into a new directory, we remove the row from the table
@@ -2356,6 +2375,10 @@ var hubCreate = (function() {
             hubBannerBtn.addEventListener("click", function(e) {
                 viewHubInGenomeBrowser(uiState.currentHub);
             });
+        }
+        let hubBannerCopyBtn = document.getElementById("hubBannerCopyBtn");
+        if (hubBannerCopyBtn) {
+            hubBannerCopyBtn.addEventListener("click", copyHubLinkFromBanner);
         }
         table.on("select", function(e, dt, type, indexes) {
             indexes.forEach(function(i) {

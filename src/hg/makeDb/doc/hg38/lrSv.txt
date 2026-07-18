@@ -639,3 +639,101 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # inflated the per-database and total AC columns.
 python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # 2,682,104 input variants -> 2,317,508 merged (13.6% dedup), 14 databases
+
+##########
+# 2026-07-16 Claude max
+
+# cardSv: SVs from the NIH CARD Long-read Initiative, 351 post-mortem brain
+# samples (205 NABEC European ancestry, 146 HBCC African/African-admixed).
+# Paper: Billingsley et al. 2024, bioRxiv 2024.12.16.628723, PMID 39764002.
+# NAPU pipeline: Kolmogorov et al. 2023, Nat Methods, PMID 37710018.
+#
+# The NIH CARD group distributes a ready-made display bigBed on GitHub. It does
+# not follow the lrSv conventions (signed svLen, no insLen, ColorBrewer colors),
+# so it is re-derived into the shared schema by lrSvCardBbToBed.py.
+
+cd /hive/data/genomes/hg38/bed/lrSv/card
+base=https://raw.githubusercontent.com/meredith705/card_genome_browserTrack/main/hg38
+curl -sL $base/NIH_CARD_longReadSVs.bb -o NIH_CARD_longReadSVs.bb
+
+bigBedToBed NIH_CARD_longReadSVs.bb stdin \
+  | python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCardBbToBed.py /dev/stdin cardSv.bed
+# CARD: 228,855 input records written; by type: DEL=101,570, DUP=1,
+#       INS=126,853, INV=431
+# CARD: 32 records with svLen or insLen > 1 Mb kept (large ONT/assembly calls)
+bedSort cardSv.bed cardSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
+    -tab cardSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes cardSv.bb
+
+# All 228,855 provider records are carried through 1:1 (no rows dropped). The
+# provider bigBed itself is a subset of the ~234,905 SVs reported in the paper.
+# A handful of very large calls (INS up to 92 Mb, several multi-Mb INV/DEL) are
+# almost certainly ONT/assembly artifacts but are kept, not silently dropped.
+# svLen is stored as the reference span (1 bp for INS); the inserted-sequence
+# length lives in insLen. AC is the genotyped carrier count (= nabecCount +
+# hbccCount). Not added to the lrSvAll merge for now.
+
+##########
+# 2026-07-17 Claude max
+
+# noyvertSv: multi-ancestry long-read SV imputation panel, 888 Oxford Nanopore
+# genomes from the 1000 Genomes Project (164 EUR, 144 AMR, 168 EAS, 171 SAS,
+# 241 AFR), SVs jointly called with Sniffles2 v2.0.7.
+# Paper: Noyvert et al. 2025, eLife reviewed preprint, doi 10.7554/eLife.106115
+#   (no PMID; not indexed in PubMed).
+#
+# The authors shared a per-variant summary table (SV.Noyvert.et.al.tsv.gz) with
+# all 107,445 panel SVs: per-superpopulation allele frequencies, Sniffles2
+# stdev metrics, Hardy-Weinberg p-values, leave-one-out and UK Biobank
+# imputation accuracy, and, where applicable, the significant UK Biobank SV-WAS
+# trait associations. Inserted sequences are not included in the file. There is
+# no AC/AN column, only allele frequencies.
+
+cd /hive/data/genomes/hg38/bed/lrSv/noyvert
+# (SV.Noyvert.et.al.tsv.gz was provided by the authors, copied into this dir)
+
+python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvertTsvToBed.py \
+    SV.Noyvert.et.al.tsv.gz noyvertSv.bed /hive/data/genomes/hg38/chrom.sizes
+# Noyvert: wrote 107,445 records to noyvertSv.bed
+# Noyvert: by type: BND=2,696, DEL=38,459, DUP=608, INS=59,953, INV=5,729
+
+bedSort noyvertSv.bed noyvertSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvert.as \
+    -tab noyvertSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes noyvert.bb
+
+# All 107,445 input rows are carried through 1:1 (no rows dropped). The input
+# has no records on chrX/chrY (the panel is autosome-only), and every DEL/INV/DUP
+# reference end was checked against chrom.sizes: none exceed the chromosome, so
+# nothing was clamped.
+#
+# Conventions applied by lrSvNoyvertTsvToBed.py:
+#  - Coordinates: input pos is VCF-style 1-based; chromStart = pos - 1.
+#    DEL/INV/DUP span the reference interval (chromEnd = chromStart + |SVLEN|);
+#    INS and BND are drawn at a single reference base (chromEnd = chromStart+1).
+#  - svLen is the REFERENCE SPAN, svLen = chromEnd - chromStart, matching the
+#    shared lrSv convention (see lrSvCommon.py): 1 bp for INS/BND, the interval
+#    length for DEL/INV/DUP. The inserted-sequence length lives in insLen (INS
+#    only; the source SVLEN). This is why the summary table on the lrSv.html
+#    container page shows min=median=1 for this dataset (INS dominate).
+#  - AC/AN are approximate (the source has only AF): AN = round(2*888*(1-missing
+#    rate)); AC = round(AF*AN). Documented as approximate in trackDb and on the
+#    track description page.
+#  - BND mate breakend loci are stored in the secondBp field with the Sniffles2
+#    'CHR' prefix lower-cased to 'chr' (some mates land on alt/random/Un/M/EBV
+#    contigs; the primary breakpoint is always on a standard autosome).
+#  - UKB_SVWAS_signif is reformatted comma-free into ukbGwas, with the number of
+#    significant trait associations in nGwas (for filtering).
+#  - Colors from the shared svColor() palette in lrSvCommon.py.
+#
+# Not added to the lrSvAll merge for now.
+
+# Added cardSv (NIH CARD 351) and noyvertSv (Noyvert 888) to the lrSvAll merge:
+# both appended to databases.tsv (CARD uses alleleFreq for max-AF aggregation,
+# Noyvert888 uses AF) and the merge re-run. The merge auto-regenerates
+# lrSvAll.as and trackDb/human/lrSvAll.ra (now 16 source databases,
+# filter.sourceCount 1:16).
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 3,018,404 input variants -> 2,582,278 merged (14.4% dedup), 16 databases
+# (was 2,682,104 -> 2,317,508 with 14 databases). All INS store svLen=1 across
+# every subtrack, so insertions merge on insLen; the merged median svLen is 1
+# (INS are 1.65M of 2.58M rows).
