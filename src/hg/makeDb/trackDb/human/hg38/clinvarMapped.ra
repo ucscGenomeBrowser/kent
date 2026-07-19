@@ -5,7 +5,7 @@ longLabel ClinVar coding variants mapped to related loci by sequence homology
 group phenDis
 visibility hide
 type bigBed
-dataVersion Ensembl 116 paralogs, MANE Select 1.5, ClinVar as of build date
+dataVersion Ensembl 116 paralogs, Pfam-A 38.2, MANE Select 1.5, ClinVar as of build date
 html clinvarMapped
 
     track clinvarMappedParalog
@@ -58,3 +58,49 @@ html clinvarMapped
     showDiffBasesMaxZoom 10000.0
     indelDoubleInsert on
     indelQueryInsert on
+
+    track clinvarMappedPfam
+    parent clinvarMapped off
+    shortLabel Pfam Domain Variants
+    longLabel ClinVar coding variants mapped to the equivalent Pfam domain position in other genes
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/clinvarMapped/clinvarMappedPfam.bb
+    itemRgb on
+    noScoreFilter on
+    maxItems 100000
+    urls vcvId="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" sourceLocus="hgTracks?db=hg38&position=$$" pfamAcc="https://www.ebi.ac.uk/interpro/entry/pfam/$$/"
+    mouseOver Mapped from ${sourceGene} ${sourceVariant} &mdash; ${clinSign} (${reviewStars} star)<br>${pfamId} domain position ${domainColumn}: source residue ${srcRes}${sourceAaPos} in ${sourceGene}, residue here is ${thisRes} in ${thisGene} (${residueMatch})
+    filterText.sourceGene *
+    filterType.sourceGene wildcard
+    filterLabel.sourceGene Source gene (wildcards allowed, e.g. SCN5A or SCN*)
+    filterText.pfamId *
+    filterType.pfamId wildcard
+    filterLabel.pfamId Pfam domain (wildcards allowed)
+    filterValues.clinSignCode PG|pathogenic,LP|likely pathogenic,CF|conflicting,VUS|uncertain,RF|risk factor,OT|other,LB|likely benign,BN|benign
+    filterValuesDefault.clinSignCode PG,LP
+    filterType.clinSignCode multipleListOr
+    filterLabel.clinSignCode Clinical significance
+    filterValues.residueMatch identical,similar,different
+    filterType.residueMatch multipleListOr
+    filterLabel.residueMatch Residue conservation
+    filterValues.molConseq missense variant,nonsense,inframe deletion,inframe insertion,inframe indel,initiator codon variant,stop lost
+    filterType.molConseq multipleListOr
+    filterLabel.molConseq Source molecular consequence
+    filterByRange.reviewStars on
+    filter.reviewStars 0:4
+    filterLimits.reviewStars 0:4
+    filterLabel.reviewStars ClinVar review stars
+
+    track clinvarMappedPfamAln
+    parent clinvarMapped off
+    shortLabel Pfam Domains (MANE)
+    longLabel Pfam domain footprints on MANE Select genes, evidence for the Pfam mapping
+    type bigBed 12 +
+    bigDataUrl /gbdb/hg38/clinvarMapped/clinvarMappedPfamAln.bb
+    visibility pack
+    filterText.pfamId *
+    filterType.pfamId wildcard
+    filterLabel.pfamId Pfam domain (wildcards allowed)
+    filterText.gene *
+    filterType.gene wildcard
+    filterLabel.gene Gene (wildcards allowed)

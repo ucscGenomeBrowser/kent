@@ -12,8 +12,21 @@ significance.
 </p>
 <p>
 This track container takes every ClinVar variant that changes a protein residue
-and projects it onto the equivalent residue of each paralog of the gene it
-occurs in. It has two parts:
+and projects it onto the equivalent residue in related genes. It offers two ways
+of deciding which positions are equivalent, and shows the evidence for each.
+</p>
+<p>
+The first method uses <b>paralogs</b>: genes are aligned to the other genes they
+descend from by duplication, and a variant is carried to the aligned residue of
+each paralog. The second method uses <b>protein domains</b>: many genes share a
+conserved domain even when they are not paralogs, and the Pfam profile model of a
+domain provides a common numbering for its positions across every gene that
+carries it. A variant that falls inside a domain is carried to the same domain
+position in every other gene with that domain. Because domains are shared more
+widely than paralogy, the domain method reaches relationships the paralog method
+does not: for example, a variant in a sodium-channel pore domain is carried both
+to the other sodium channels and to the calcium channels, which share the same
+domain without being paralogs.
 </p>
 <ul>
   <li><b>Paralog Variants</b> shows, on each gene, the positions that correspond
@@ -23,13 +36,20 @@ occurs in. It has two parts:
   <li><b>Paralog Alignments</b> shows the pairwise protein alignments that were
   used to transfer the positions, so that the evidence behind any mapped variant
   can be inspected directly.</li>
+  <li><b>Pfam Domain Variants</b> shows, on each gene, the positions that
+  correspond to protein-changing ClinVar variants at the same domain position in
+  any other gene sharing that Pfam domain. Each feature records the source gene
+  and variant, the domain and the domain position, and whether the residue is the
+  same as in the source gene.</li>
+  <li><b>Pfam Domains</b> shows the Pfam domains found on each gene, the footprint
+  over which the domain method can carry variants.</li>
 </ul>
 <p>
-The mapping is purely positional: it indicates that a residue is the alignment
-equivalent of a position that is variant in a paralog. It does not itself assign
-pathogenicity, and a projection is only as reliable as the underlying alignment,
-so the percent-identity and residue-conservation fields should be used to judge
-confidence.
+The mapping is purely positional: it indicates that a residue is the equivalent,
+by alignment or by shared domain position, of a position that is variant in a
+related gene. It does not itself assign pathogenicity, and a projection is only as
+reliable as the underlying alignment, so the residue-conservation field, and for
+paralogs the percent-identity fields, should be used to judge confidence.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -69,6 +89,16 @@ The Paralog Alignments track shows each pairwise protein alignment as a
 blocked feature; the label is the partner gene, and the aligned blocks mark the
 regions that could be compared between the two proteins.
 </p>
+<p>
+The Pfam Domain Variants track uses the same clinical-significance colors. Each
+feature marks the codon in this gene that shares a domain position with a
+protein-changing ClinVar variant in another gene, and its details give the domain,
+the domain position, the source gene and variant, and whether the residue is the
+same as in the source gene. It can be filtered by source gene, Pfam domain,
+clinical significance, review status, molecular consequence and residue
+conservation. The Pfam Domains track shows the domain footprints, labeled and
+searchable by domain name and gene.
+</p>
 
 <h2>Methods</h2>
 <p>
@@ -93,6 +123,24 @@ that occur in a gene with no paralog, were not projected. The pairwise alignment
 themselves were converted to PSL to form the Paralog Alignments track.
 </p>
 <p>
+For the domain method, the MANE Select proteins were searched against the Pfam-A
+profile library (release 38.2) with HMMER, using each family's curated gathering
+threshold to decide domain membership. For every domain family found in two or
+more genes, the matched protein regions were aligned to the family model, and each
+residue was assigned the model match-state column it occupies; this column is the
+shared numbering that makes a position in one gene comparable to a position in
+another. Each ClinVar coding variant that falls on a domain column was then
+carried to the residue in the same column in every other gene that has the domain,
+and that residue was mapped back to its genomic codon. A residue that falls
+between the modeled positions of a domain, in an insertion relative to the model,
+has no shared column and was not carried across. Because a few domains occur in
+hundreds of genes, each variant is shown at its 25 most conserved equivalents
+(residues identical to the source residue first, then chemically similar, then
+different); without this limit the largest families would produce hundreds of
+projections per variant. The Pfam Domains track records, for each domain instance,
+the gene, the domain and the range of model columns it covers.
+</p>
+<p>
 The ClinVar data were taken from the UCSC ClinVar track for this assembly. The
 paralog list was downloaded from the Ensembl BioMart service at
 <a href="https://www.ensembl.org/biomart/martservice" target="_blank">https://www.ensembl.org/biomart/martservice</a>,
@@ -115,8 +163,9 @@ or tab-sep tables. From scripts, the data can be accessed through our
 For automated download and analysis, the annotation is stored in bigBed files
 that can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/clinvarMapped/" target="_blank">our download server</a>.
-The files for this track are called <tt>clinvarMappedParalog.bb</tt> and
-<tt>clinvarMappedParalogAln.bb</tt>. Individual regions or the whole genome annotation
+The files for this track are called <tt>clinvarMappedParalog.bb</tt>,
+<tt>clinvarMappedParalogAln.bb</tt>, <tt>clinvarMappedPfam.bb</tt> and
+<tt>clinvarMappedPfamAln.bb</tt>. Individual regions or the whole genome annotation
 can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from
 the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
@@ -128,9 +177,9 @@ The tool can also be used to obtain features within a given range, e.g.
 <h2>Credits</h2>
 <p>
 Thanks to Ensembl for the paralog annotations, to the MANE collaboration between
-NCBI and EMBL-EBI for the reference transcript set, and to ClinVar for the variant
-data. The paralogue annotation concept was developed by Ware, Walsh, Cook and
-colleagues.
+NCBI and EMBL-EBI for the reference transcript set, to the Pfam team at EMBL-EBI
+for the protein domain models, and to ClinVar for the variant data. The paralogue
+annotation concept was developed by Ware, Walsh, Cook and colleagues.
 </p>
 
 <h2>References</h2>
@@ -167,5 +216,15 @@ A joint NCBI and EMBL-EBI transcript set for clinical genomics and research</a>.
 <em>Nature</em>. 2022 Apr;604(7905):310-315.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35388217" target="_blank">35388217</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9007741/" target="_blank">PMC9007741</a>
+</p>
+
+<p>
+Mistry J, Chuguransky S, Williams L, Qureshi M, Salazar GA, Sonnhammer ELL, Tosatto SCE, Paladin L,
+Raj S, Richardson LJ <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33125078" target="_blank">
+Pfam: The protein families database in 2021</a>.
+<em>Nucleic Acids Res</em>. 2021 Jan 8;49(D1):D412-D419.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33125078" target="_blank">33125078</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7779014/" target="_blank">PMC7779014</a>
 </p>
 

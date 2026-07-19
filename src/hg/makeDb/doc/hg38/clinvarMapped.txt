@@ -87,3 +87,69 @@ pslToBigPsl clinvarMappedParalogAln.psl -fa=geneCds.fa stdout \
 bedToBigBed -as=$HOME/kent/src/hg/lib/bigPsl.as -type=bed12+13 -tab \
   clinvarMappedParalogAln.bigPslInput /hive/data/genomes/hg38/chrom.sizes clinvarMappedParalogAln.bb
 #    -> clinvarMappedParalogAln.bb  (188,942 alignment features, with query sequence)
+
+#############################################################################
+# ClinVar Mapped - Pfam domain method (Claude, 2026-07)
+#
+# Second mapping method under the clinvarMapped container. Instead of pairwise
+# paralog alignments, it uses each Pfam-A family's profile HMM as a shared
+# coordinate: every instance of a domain is aligned to the same model, so a
+# residue in gene A and a residue in gene B are the same position in the domain
+# when they align to the same HMM match state (consensus column). This links all
+# genes that carry a domain, not only annotated paralogs. Reuses the MANE Select
+# proteins, CDS->genome maps and ClinVar codon assignments from the paralog steps
+# above (geneProt.faa, maneSelect.gp, maneMeta.tsv, clinvarCodons.tsv).
+
+dir=/hive/data/genomes/hg38/bed/clinvarMapped
+scr=$HOME/kent/src/hg/makeDb/scripts/clinvarMapped
+hmmerBin=/hive/data/outside/pfam/Pfam29.0/PfamScan/hmmer-3.1b2-linux-intel-x86_64/binaries
+mkdir -p $dir/pfam; cd $dir/pfam
+
+# 1. Pfam-A (Pfam 38.2), downloaded and pressed/indexed for hmmsearch/hmmfetch.
+mkdir -p /hive/data/outside/pfam/Pfam38.2; cd /hive/data/outside/pfam/Pfam38.2
+wget https://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam38.2/Pfam-A.hmm.gz
+gunzip Pfam-A.hmm.gz
+cd $dir/pfam
+ln -sf /hive/data/outside/pfam/Pfam38.2/Pfam-A.hmm Pfam-A.hmm
+$hmmerBin/hmmpress Pfam-A.hmm
+$hmmerBin/hmmfetch --index Pfam-A.hmm
+
+# 2. Domain membership: every Pfam family vs the 19,293 MANE proteins, at Pfam's
+#    curated per-family gathering thresholds (--cut_ga).
+$hmmerBin/hmmsearch --cpu 15 --cut_ga --domtblout maneHits.domtbl -o hmmsearch.out \
+  Pfam-A.hmm $dir/geneProt.faa
+#    -> 66,043 domain instances, 9,094 families, 18,750 of 19,293 genes
+
+# 3. Per-residue HMM column map. For each family present in >=2 genes, fetch the
+#    model and realign the matched subsequences with hmmalign; the #=GC RF line of
+#    the alignment gives each residue its match-state column.
+python $scr/clinvarMappedPfamAlign.py $dir --hmmDir $dir/pfam --hmmerBin $hmmerBin -j 24
+#    -> alnCols.tsv (5,826,029 residue-column rows), famStats.tsv
+#       4,394 mappable families, 689,578 distinct (family,column) cells
+
+# 4. Project each ClinVar coding variant that sits on a domain column onto the
+#    equivalent residue of every other gene at that column, keeping the 25 most
+#    conserved targets per variant (identical > similar > different), then map
+#    each back to its genomic codon. Needs BLOSUM62 (biopython, env "claude").
+micromamba run -p $HOME/miniconda3/envs/claude python $scr/clinvarMappedPfamProject.py \
+  $dir -o pfam/clinvarMappedPfam.bed --maxFanout 25 -j 40
+#    -> 1,066,320 of 2,623,549 variants (40.6%) land on a domain column;
+#       15,947,052 projected features (unbounded would be several hundred M)
+#       residue match: identical 9,513,991; similar 2,523,863; different 3,909,198
+export LC_ALL=C
+sort -S8G --parallel=16 -k1,1 -k2,2n clinvarMappedPfam.bed -o clinvarMappedPfam.sorted.bed
+bedToBigBed -tab -type=bed12+16 -as=$scr/clinvarMappedPfam.as \
+  clinvarMappedPfam.sorted.bed /hive/data/genomes/hg38/chrom.sizes clinvarMappedPfam.bb
+
+# 5. Evidence track: each MANE domain instance placed on the genome (the
+#    MANE-restricted analog of ucscGenePfam), carrying its HMM column range.
+python $scr/clinvarMappedPfamAln.py $dir -o pfam/clinvarMappedPfamAln.bed
+#    -> 66,043 domain footprints
+sort -S4G --parallel=8 -k1,1 -k2,2n clinvarMappedPfamAln.bed -o clinvarMappedPfamAln.sorted.bed
+bedToBigBed -tab -type=bed12+8 -as=$scr/clinvarMappedPfamAln.as \
+  clinvarMappedPfamAln.sorted.bed /hive/data/genomes/hg38/chrom.sizes clinvarMappedPfamAln.bb
+
+# Validation: 400 random projected codons re-translated from hg38.2bit all matched
+# the claimed residue (strand, split codons, blocks correct). SCN5A pathogenic
+# Ion_trans variants map to the sodium-channel paralogs and, via the shared
+# domain, to the calcium channels (CACNA1x, NALCN) that paralog annotation misses.
