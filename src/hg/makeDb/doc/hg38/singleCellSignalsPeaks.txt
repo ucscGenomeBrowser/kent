@@ -1,0 +1,72 @@
+# hg38 singleCellSignalsPeaks track  -  2026-07-20  Claude (mspeir)  refs #37820
+
+# The native hg38 "singleCellSignalsPeaks" faceted composite is the Genome
+# Browser version of the UCSC Cell Browser all-tracks super hub (Redmine #37820,
+# built under /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build). It
+# gathers the per-cell-type signal (bigWig) and peak (bigBed / bigNarrowPeak)
+# tracks from the single-cell ATAC datasets in the Cell Browser and re-parents
+# them under one faceted composite. cCREs and interactions live in their own
+# composites in the hub and are NOT part of this track.
+
+##############################################################################
+# 1. Source data
+##############################################################################
+# The track mirrors the hub's main hg38 signal-&-peaks faceted composite
+# (cellBrowserHg38). That composite and its facet metadata are produced by the
+# hub build from the Cell Browser dataset tree (/hive/data/inside/cells/datasets):
+#
+#   cd /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+#   python3 build_manifest.py            # scan datasets -> manifest.tsv
+#   python3 build_stanzas.py             # manifest -> stanzas/hg38.trackDb.txt
+#                                        #            + meta/hg38.metadata.tsv
+#
+# The per-track source files (abs_path column of manifest.tsv) are the files the
+# Cell Browser datasets already serve; nothing is regenerated here, only copied.
+
+##############################################################################
+# 2. Copy the data files into place  (bed dir, served via a /gbdb symlink)
+##############################################################################
+# Every subtrack of the cellBrowserHg38 composite is copied into
+#   /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/<served-relpath>
+# keeping each file's served relative path (e.g.
+#   human-enhancer-atlas/.../Adipocyte.bw ,
+#   allen-brain-science/seaad_MTG/bw/ADNC0Astro.bw ).
+# The served subpath is preserved on purpose: 18 peak-file basenames repeat
+# across datasets (cortex-atac), so a flat directory would clobber them.
+#   936 files total (bigWig + bigBed/bigNarrowPeak), ~206 GB.
+#
+# The file list comes straight from the composite's bigDataUrl lines mapped back
+# to manifest abs_paths; copy each abs_path to bed/<relpath> (mkdir -p parents).
+
+##############################################################################
+# 3. Generate the trackDb .ra
+##############################################################################
+# makeSingleCellSignalsPeaksRa.py reads the hub's hg38 stanzas, keeps the
+# cellBrowserHg38 subtracks, renames the composite to singleCellSignalsPeaks,
+# repoints every bigDataUrl at the local /gbdb copy, and writes the .ra with
+# group=regulation (ATAC signal/peaks sit with the ENCODE regulatory tracks).
+# Subtrack colors and labels (incl. the SEA-AD subclass colors) carry through.
+#
+#   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
+#   python3 $scriptDir/makeSingleCellSignalsPeaksRa.py \
+#       --stanzas /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build/stanzas/hg38.trackDb.txt \
+#       --out $HOME/kent/src/hg/makeDb/trackDb/human/hg38/singleCellSignalsPeaks.ra
+#
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
+
+##############################################################################
+# 4. Facet metadata
+##############################################################################
+# The faceted composite's metaDataUrl points at a copy of the hub's hg38
+# main-faceted metadata (primaryKey = Track):
+#
+#   cp /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build/meta/hg38.metadata.tsv \
+#      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
+
+##############################################################################
+# Counts
+##############################################################################
+# 936 subtracks across 9 datasets: human-enhancer-atlas (444), sea-ad-brain-atac
+# (184), cortex-atac (91), retina (69), neuro-degen-atac (67),
+# multiomic-human-heart (40), cardiogenesis-atac (19), olg-eae-ms (18),
+# brainvar (4). Facet metadata rows match the subtracks 1:1.
