@@ -1,1 +1,95 @@
-<!-- placeholder - no preprint available yet -->
+<h2>Description</h2>
+<p>
+This track shows structural variants (SVs) from an integrated long-read
+callset spanning 1,218 individuals of the 1000 Genomes Project. Structural
+variants are genomic rearrangements larger than about 50 bp, such as
+deletions and insertions; because they alter large stretches of DNA at once,
+they can affect gene dosage and regulation more strongly than
+single-nucleotide changes, and long reads resolve them far better than
+short-read data.
+</p>
+<p>
+Rather than coming from a single sequencing run, the calls are drawn together
+from several 1000 Genomes long-read efforts that use different technologies:
+HiFi and genome-assembly-based calls from the Human Pangenome Reference
+Consortium (<a href="hgTrackUi?g=hprc2v21Sv">HPRC year 2</a>), assembly-based
+calls from the <a href="hgTrackUi?g=hgsvc3Sv">Human Genome Structural
+Variation Consortium (HGSVC3)</a>, and Oxford Nanopore calls from the
+<a href="hgTrackUi?g=lrSv1kgOnt">Vienna 1000 Genomes ONT release</a>, together
+with Oxford Nanopore sequencing from the University of Washington 1000 Genomes
+ONT effort (see <a href="hgTrackUi?g=gustafsonSv">1KG ONT UW</a>). Sequencing
+of the 1000 Genomes collection is ongoing, so the number of individuals and
+variants in this track is expected to grow over time.
+</p>
+<p>
+This track is preliminary and unpublished; its sample composition and variant
+counts will be updated as more long-read data becomes available.
+</p>
+<p>
+The current release contains more than 580,000 SVs on GRCh38 (about 391,000
+insertions and 196,000 deletions), each annotated with an overall allele
+frequency and allele frequencies for the five 1000 Genomes superpopulations
+(African, Admixed American, East Asian, European, South Asian). This is a
+preliminary, unpublished callset; the counts and sample composition will be
+updated as more data is added.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type, matching the other subtracks of the container:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Deletion (DEL)</td></tr>
+  <tr><th style="background-color:#0000C8;width:2em">&nbsp;</th>
+      <td>Insertion (INS)</td></tr>
+</table>
+<p>
+Insertions are drawn at the insertion site with a width of 1 bp, and the
+length of inserted sequence is reported as the insertion length; deletions
+span the affected reference interval. The mouseover shows the variant name,
+SV type, reference and insertion lengths, allele count and per-population
+allele frequencies. Filters are available for SV type, SV length, insertion
+length, allele count, and overall and per-population allele frequency.
+</p>
+
+<h2>Methods</h2>
+<p>
+Per-sample long-read SV calls from the contributing 1000 Genomes efforts
+(HiFi and assembly-based calls from HPRC year 2 and HGSVC3, and Oxford
+Nanopore calls from the Vienna and University of Washington releases) were
+combined across the 1,218 individuals and merged into a single site-level
+callset with Truvari v5.2.0. Overall and per-superpopulation allele
+frequencies (EUR, AMR, EAS, AFR, SAS) were then added with bcftools
+fill-tags. Only deletions and insertions are reported in the current release.
+The callset is provided on both GRCh38/hg38 and T2T-CHM13/hs1 from the
+respective native assemblies.
+</p>
+<p>
+The data was provided by the laboratories of Evan Eichler and Danny Miller
+(University of Washington) and is preliminary and unpublished; a manuscript
+is in preparation. The step-by-step build commands (format conversion and
+bigBed build) are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion script and autoSql schema live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>, and the track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/lrSv.ra" target="_blank">trackDb/human/lrSv.ra</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>lrSv1kLin</i>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Evan Eichler, Danny Miller and colleagues at the University of
+Washington, and to the contributing 1000 Genomes long-read consortia (HPRC,
+HGSVC and the 1000 Genomes ONT sequencing groups), for generating and sharing
+this callset.
+</p>

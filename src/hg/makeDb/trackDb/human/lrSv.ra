@@ -93,8 +93,8 @@ noScoreFilter on
     track gustafsonSv
     parent longReadVariants
     bigDataUrl /gbdb/$D/lrSv/gustafson.bb
-    shortLabel 1KG ONT 100 SVs
-    longLabel Structural Variants from 100 1000 Genomes ONT Samples (Gustafson et al. 2024)
+    shortLabel 1KG ONT UW 100 SVs
+    longLabel Structural Variants from University of Washington 1000 Genomes ONT sequencing (100 samples, Gustafson et al. 2024)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -605,8 +605,8 @@ noScoreFilter on
     parent longReadVariants
     release alpha
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
-    shortLabel 1KG Linear 1218 SVs
-    longLabel Structural Variants from 1,218 Individuals (1000 Genomes, Linear Long-read)
+    shortLabel 1KG LRS 1218 SVs
+    longLabel Structural Variants from 1218 1KG individuals (HiFi, ONT & assembly)
     type bigBed 9 +
     itemRgb on
     visibility hide
