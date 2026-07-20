@@ -627,18 +627,23 @@ noScoreFilter on
     filterByRange.AF on
     filterLimits.AF 0:1
     filterLabel.AF Allele Frequency
+    filter.afAfr 0:1
     filterByRange.afAfr on
     filterLimits.afAfr 0:1
     filterLabel.afAfr AF African
+    filter.afAmr 0:1
     filterByRange.afAmr on
     filterLimits.afAmr 0:1
     filterLabel.afAmr AF Admixed American
+    filter.afEas 0:1
     filterByRange.afEas on
     filterLimits.afEas 0:1
     filterLabel.afEas AF East Asian
+    filter.afEur 0:1
     filterByRange.afEur on
     filterLimits.afEur 0:1
     filterLabel.afEur AF European
+    filter.afSas 0:1
     filterByRange.afSas on
     filterLimits.afSas 0:1
     filterLabel.afSas AF South Asian

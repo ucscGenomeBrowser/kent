@@ -81,9 +81,28 @@ makeDb/scripts/lrSv</a>, and the track configuration is in
 <p>
 The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
-programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
-track=<i>lrSv1kLin</i>.
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-separated tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>lrSv1kLin</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in bigBed files
+that can be downloaded from our download server:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/lin1218.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/lin1218.bb</a> (GRCh38/hg38,
+native) and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/lin1218.bb" target="_blank">
+http://hgdownload.soe.ucsc.edu/gbdb/hs1/lrSv/lin1218.bb</a> (T2T-CHM13/hs1,
+native). Individual regions or the whole annotation can be obtained with the
+<tt>bigBedToBed</tt> utility, which can be compiled from source or downloaded
+as a precompiled binary from our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">utilities
+page</a>. The tool can also extract features within a given range, for example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/lin1218.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+This is a preliminary, unpublished callset provided by the authors; the
+underlying per-sample sequencing data is not yet publicly released.
 </p>
 
 <h2>Credits</h2>
