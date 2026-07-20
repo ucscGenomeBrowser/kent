@@ -144,6 +144,9 @@ extern "C" char *cStraw (Straw *hicFile, char *norm, int binsize, char *chr1loc,
     try {
     strawRecords = straw("observed",  thisnorm, *(hicFile->fileName),
             thischr1loc, thischr2loc, unit, binsize);
+    } catch (strawChromNotFoundException& err) {
+      // Chromosome not in file: intentionally return an empty result set rather than an
+      // error.  strawRecords stays empty and we fall through to return 0 records below.
     } catch (strawException& err) {
       char *errMsg = (char*) calloc((size_t) strlen(err.what())+1, sizeof(char));
       strcpy(errMsg, err.what());
