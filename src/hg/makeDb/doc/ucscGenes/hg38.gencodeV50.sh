@@ -8,6 +8,8 @@ PATH=$HOME/kent/src/hg/utils/otto/knownGene":$PATH"
 cp /hive/data/genomes/${db}/bed/gencode${PREV_GENCODE_VERSION}/build/buildEnv.sh  buildEnv.sh
 
 # edit buildEnv.sh
+# NB - commented out the line that causes gnfU95Distance to be built, since the corresponding
+# line in hgNearData has been commented out for a while.
 . buildEnv.sh
 
 cp ${oldGeneDir}/${PREV_GENCODE_VERSION}.files.txt .

@@ -124,6 +124,15 @@ class strawException : public std::runtime_error {
     }
 };
 
+class strawChromNotFoundException : public strawException {
+/* Thrown when a requested chromosome is not present in the .hic file, so callers
+ * that prefer an empty result over an error can distinguish this case. */
+    public:
+    strawChromNotFoundException(const std::string& error):
+        strawException(error) {
+    }
+};
+
 std::set<std::string> getNormOptions();
 /* Return the set of normalization options that have been encountered through footer parsing.
  * The result will be empty unless at least one straw() request has been made.
