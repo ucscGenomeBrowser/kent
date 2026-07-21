@@ -4416,6 +4416,17 @@ if (!hideArrows)
 
 components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
 
+/* For direction barbs, merge blocks that touch in pixel space into a single
+ * span (accumulated in the loop below) so the chevrons run continuously across
+ * them.  This matters for chains, whose blocks smash together when zoomed out:
+ * individually most are too narrow to hold a chevron.  barbRunX1 < 0 means no
+ * run is currently open. */
+static int barbMergePixels = -1;   // max pixel gap between blocks still merged for
+if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
+    barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
+Color barbColor = hvGfxContrastingColor(hvg, color);
+int barbRunX1 = -1;
+int barbRunX2 = -1;
 
 for (sf = components; sf != NULL; sf = sf->next)
     {
@@ -4496,22 +4507,42 @@ for (sf = components; sf != NULL; sf = sf->next)
                && (sf->start <= winStart || sf->start == lf->start)
                && (sf->end   >= winEnd   || sf->end   == lf->end)))
                 {
-                Color barbColor = hvGfxContrastingColor(hvg, color);
                 // This scaling of bases to an image window occurs in several places.
                 // It should really be broken out into a function.
-                if (s < winStart)
-                    s = winStart;
-                if (e > winEnd)
-                    e = winEnd;
-                x1 = round((double)((int)s-winStart)*scale) + xOff;
-                x2 = round((double)((int)e-winStart)*scale) + xOff;
-                w = x2-x1;
-                clippedBarbs(hvg, x1+1, midY, x2-x1-2, tl.barbHeight, tl.barbSpacing,
-                             lf->orientation, barbColor, TRUE);
+                int bs = s, be = e;
+                if (bs < winStart)
+                    bs = winStart;
+                if (be > winEnd)
+                    be = winEnd;
+                x1 = round((double)((int)bs-winStart)*scale) + xOff;
+                x2 = round((double)((int)be-winStart)*scale) + xOff;
+                if (barbRunX1 < 0)
+                    {           // start a new run
+                    barbRunX1 = x1;
+                    barbRunX2 = x2;
+                    }
+                else if (barbMergePixels > 0 && x1 <= barbRunX2 + barbMergePixels)
+                    {           // this block touches the run: extend it
+                    if (x2 > barbRunX2)
+                        barbRunX2 = x2;
+                    }
+                else
+                    {           // real gap: flush the run and start a new one
+                    clippedBarbs(hvg, barbRunX1+1, midY, barbRunX2-barbRunX1-2,
+                                 tl.barbHeight, tl.barbSpacing, lf->orientation,
+                                 barbColor, TRUE);
+                    barbRunX1 = x1;
+                    barbRunX2 = x2;
+                    }
                 }
             }
 	}
     }
+
+/* Flush the final merged barb run. */
+if (barbRunX1 >= 0)
+    clippedBarbs(hvg, barbRunX1+1, midY, barbRunX2-barbRunX1-2,
+                 tl.barbHeight, tl.barbSpacing, lf->orientation, barbColor, TRUE);
 
 if ((intronGap > 0) || chainLines)
     lfDrawSpecialGaps(lf, intronGap, chainLines, gapFactor,
