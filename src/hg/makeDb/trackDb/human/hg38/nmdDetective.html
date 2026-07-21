@@ -1,7 +1,9 @@
 <h2>Description</h2>
 <p>
 The <b>NMDetective</b> tracks display genome-wide predictions of nonsense-mediated mRNA
-decay (NMD) efficiency from
+decay (NMD) efficiency using the NMDetective-A and NMDetective-B models from
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">Lindeboom et al. 2019</a>,
+trained on the NMD efficiency measure from
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>.
 NMDetective scores predict whether a premature termination codon (PTC) at a given position
 will trigger NMD and mRNA degradation, or whether the transcript will escape NMD and
@@ -9,10 +11,10 @@ potentially produce a truncated protein.
 </p>
 
 <p>
-Scores range from approximately &minus;1 to +1. Positive values indicate that a PTC at
-that position is predicted to trigger NMD (the mRNA is degraded). Negative values indicate
+Scores range from 0 to 1. Values near 1 indicate that a PTC at
+that position is predicted to trigger NMD (the mRNA is degraded). Values near 0 indicate
 that the PTC is predicted to escape NMD (the truncated mRNA may be translated into an
-aberrant protein). Values near zero indicate intermediate or uncertain NMD efficiency.
+aberrant protein). Values in between indicate intermediate NMD efficiency.
 </p>
 
 <h3>Subtracks</h3>
@@ -36,10 +38,8 @@ aberrant protein). Values near zero indicate intermediate or uncertain NMD effic
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each subtrack is displayed as a signal (bigWig) track. By default, the vertical axis
-ranges from &minus;1 to +1. Regions with positive values (predicted NMD-triggering) are
-shown above the baseline; regions with negative values (predicted NMD escape) are shown
-below.
+Each subtrack is displayed as a signal (bigWig) track. Values closer to 1 indicate
+predicted NMD-triggering, while values closer to 0 indicate predicted NMD escape.
 </p>
 <ul>
   <li><font color="#0080FF"><b>Blue tracks</b></font> (NMDetective-A and -B): predictions
@@ -50,9 +50,12 @@ below.
 
 <h2>Methods</h2>
 <p>
-The NMDetective models were trained on somatic nonsense mutation data from 9,769 cancer
-patients and validated with frameshift mutations and germline variants
-(<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">Lindeboom et al. 2019</a>).
+<b>NMDetective-A</b> and <b>NMDetective-B</b> were introduced in
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">Lindeboom et al. 2019</a>,
+trained on NMD efficiency scores derived from somatic nonsense mutation data from 9,769 cancer
+patients
+(<a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>),
+and tested on an independent set of frameshift mutations.
 The models incorporate the following features to predict NMD efficiency:
 </p>
 <ul>

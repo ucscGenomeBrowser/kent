@@ -95,7 +95,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         visibility hide
         color 0,128,255
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 2
@@ -109,7 +109,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         visibility hide
         color 0,128,255
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 3
@@ -123,7 +123,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         visibility hide
         color 0,153,102
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 4
@@ -137,7 +137,7 @@ pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
         visibility hide
         color 0,153,102
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 5

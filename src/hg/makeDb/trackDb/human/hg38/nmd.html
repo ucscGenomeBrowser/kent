@@ -40,10 +40,15 @@ that were used (50 bp, intronless, 100 bp, long exon &gt;400 nt).
 <h3>NMDetective scores</h3>
 <p>
 Machine-learning predictions of NMD efficiency from
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31659324" target="_blank">Lindeboom
+et al. 2019</a> (NMDetective-A and NMDetective-B models, trained on
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom
-et al. 2016</a> (A and B models) and from Veiner <em>et al.</em>
-(NMDetective-AI, pre-print 2026). Positive scores indicate predicted NMD
-triggering; negative scores indicate predicted escape.
+et al. 2016</a>) and from Veiner <em>et al.</em>
+(NMDetective-AI, pre-print 2026). NMDetective-A and NMDetective-B scores range
+from 0 to 1, with values near 1 indicating predicted NMD triggering and values
+near 0 indicating predicted escape. NMDetective-AI uses a different scale,
+roughly -1.1 to +1.5, with higher values indicating triggering and lower
+values indicating escape.
 </p>
 <ul>
   <li><b><a href="hgTrackUi?g=nmdDetectiveA">NMDetective-A</a></b>:
