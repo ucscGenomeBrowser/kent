@@ -25,7 +25,7 @@ DELIBERATELY EXCLUDED from the sum (documented in every mouseover):
 This is NOT a VCEP classification &#8212; the warning is in every mouseover
 since clinicians live in the mouseover, not the description page.
 
-bigBed 9+9.
+bigBed 9+10.
 """
 
 import argparse
@@ -561,7 +561,7 @@ def build(db, outdir):
         f.write("\n".join(bed_lines) + "\n")
     lib.run_sort_bed(bed)
     bb = os.path.join(outdir, "TP53ProvisionalClass{}.bb".format(db.capitalize()))
-    lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+9")
+    lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+10")
     print("  wrote {}".format(bb))
 
     from collections import Counter
