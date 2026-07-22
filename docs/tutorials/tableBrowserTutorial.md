@@ -63,12 +63,10 @@ width=65%
 <div class="row">
   <div class="col-md-6">
 ### Step 1: Select Your Assembly
-  
-  Use the **Clade**, **Genome**, and **Assembly** menus to choose your reference genome.
-  
-  - *Clade*: Major organism group (e.g., Mammal, Vertebrate)
-  - *Genome*: Species (e.g., Human, Mouse)
-  - *Assembly*: Specific genome version (e.g., hg38)
+
+  Use the **Genome** search box to choose your reference genome. Start typing a species name,
+  common name, or assembly ID and pick a match from the list that drops down. The Table Browser
+  reloads on that assembly, and **Assembly** shows which one you are using.
   </div>
 
   <div class="col-md-6">
@@ -147,9 +145,27 @@ width=65%
   - Entering a position (e.g., `chr7:117199645-117356025`)
   - Typing a gene name and clicking <button>Lookup</button>
   - Using <button>Define regions</button> to upload/paste multiple coordinates
+  - Pasting or uploading a list of identifiers, such as gene names or accessions, with
+    <button>Paste list</button> or <button>Upload list</button> to return only those items
   
   </div>
 </div>
+
+---
+
+### Optional: filter, subset, or combine tracks
+
+The **Filter** and **Intersection** tools, in the *Subset, combine, compare with another
+track* section, let you narrow down or combine data before you get output.
+
+Click <button>Create</button> next to **Filter** to keep only the rows that match conditions
+you set, for example genes on the plus strand or items above a score cutoff. A filter stays
+in place until you clear it, so you can switch tracks or regions and rerun the same query.
+
+Click <button>Create</button> next to **Intersection** to combine the current track with a
+second one. This answers questions like which SNPs fall inside RefSeq coding exons, or which
+of your regions overlap a peak track. You pick the second track and whether to keep the rows
+that overlap or the ones that don't.
 
 ---
 
@@ -160,9 +176,12 @@ width=65%
   
   Options include:
   
-  - All fields from the table
-  - Selected fields only
-  - File formats like BED, GTF, or custom tracks
+  - **All fields from selected table** returns the table as it is stored.
+  - **Selected fields from primary and related tables** lets you pick just the columns you
+    want, and pull in columns from related tables in the same query. This is the easiest way
+    to get something like gene names next to coordinates without downloading the whole table.
+  - File formats like **BED**, **GTF**, or a **custom track** you can load back into the browser.
+  - **Sequence** returns the DNA, or protein for some tracks, covered by your table.
   </div>
   <div class="col-md-6">
   ``` image
