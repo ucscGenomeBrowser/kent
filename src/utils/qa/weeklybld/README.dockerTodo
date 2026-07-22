@@ -13,7 +13,8 @@ reproduce a user-reported bug against the exact code version that user is on,
 without touching production hgwdev. The three:
 
 - `kent-tip`  -> image `kent:tip`, port 127.0.0.1:8081, current master + alpha CGIs, rebuilt nightly
-- `kent-beta` -> image `kent:beta`, port 127.0.0.1:8082, current beta CGIs, exists only between `autoBuild.sh do_final` and the next `do_wrapup`
+- `kent-beta` -> image `kent:beta` (amd64), port 127.0.0.1:8082, current beta CGIs, exists only between `autoBuild.sh do_final` and the next `do_wrapup`
+- `kent-beta-arm64` -> image `kent:beta-arm64`, port 127.0.0.1:8084, the arm64 beta compiled from source in-image (runs emulated on this amd64 host via QEMU), exists only between `do_final` and the next `do_wrapup`. Lets QA smoke-test the arm64 release artifact before it is pushed at `do_wrapup`. NOT overlaid (amd64 cgi-bin-beta binaries can't run under arm64), so it is genuine beta code baked at build time.
 - `kent-rel`  -> image `genomebrowser/server:latest`, port 127.0.0.1:8083, the released image, refreshed at `do_wrapup`
 
 The lifecycle scripts in this directory implement the build/start/refresh/remove

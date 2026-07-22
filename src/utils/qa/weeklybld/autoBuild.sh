@@ -637,11 +637,11 @@ final_robots() {
     return 0
 }
 
-# Build the beta image locally on hgwdev; do NOT push to Docker Hub. kent-beta
-# runs from this image and is torn down again on do_wrapup. refs #37655.
-# amd64 only: the container only runs on hgwdev (amd64) and is never pushed, so
-# no arm64 build, no manifest, no binfmt. Now fatal-on-failure (was a warning):
-# the checkpoint model makes a retry just a re-run that resumes at this step.
+# Build the amd64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# kent-beta runs from this image and is torn down again on do_wrapup. refs #37655.
+# The arm64 beta is a separate step (final_docker_beta_arm64) below. Neither is
+# pushed, so there is no manifest dance. Fatal-on-failure (was a warning): the
+# checkpoint model makes a retry just a re-run that resumes at this step.
 final_docker_beta() {
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ ! -d "$dockerdir" ]]; then
@@ -652,6 +652,29 @@ final_docker_beta() {
 
 final_refresh_beta() {
     run "$WEEKLYBLD/refresh-instance.sh" beta
+}
+
+# Build the arm64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# Unlike the amd64 kent:beta (public CGIs baked in, then overlay-cgi.sh streams
+# hgwdev's amd64 cgi-bin-beta into the running container), an arm64 image cannot
+# run those amd64 binaries, so it COMPILES the beta branch from source inside the
+# image -- exactly what the arm64 release image does in buildReleaseDocker.sh,
+# just built here at final so QA can smoke-test the arm64 artifact before it is
+# pushed at wrapup. Needs the QEMU binfmt handlers (cleared on reboot); the
+# cross-arch compile under emulation is slow. kent-beta-arm64 is torn down again
+# at do_wrapup alongside kent-beta. Fatal-on-failure like the amd64 build: the
+# checkpoint model makes a retry just a re-run that resumes at this step. refs #37655
+final_docker_beta_arm64() {
+    local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
+    if [[ ! -d "$dockerdir" ]]; then
+        die "Docker directory not found at $dockerdir"
+    fi
+    ensure_binfmt
+    run_tcsh "cd $dockerdir && docker build --no-cache --platform linux/arm64 -t kent:beta-arm64 . >& $LOGDIR/v${BRANCHNN}.docker-beta-arm64.log"
+}
+
+final_refresh_beta_arm64() {
+    run "$WEEKLYBLD/refresh-instance.sh" beta-arm64
 }
 
 do_final() {
@@ -683,6 +706,8 @@ do_final() {
     step robots               final_robots
     step docker-beta          final_docker_beta
     step refresh-beta         final_refresh_beta
+    step docker-beta-arm64    final_docker_beta_arm64
+    step refresh-beta-arm64   final_refresh_beta_arm64
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
@@ -875,6 +900,9 @@ wrapup_refresh_containers() {
     log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
     run "$WEEKLYBLD/remove-instance.sh" beta || \
         log "WARNING: kent-beta teardown failed; check container/image manually"
+    log "Removing local kent-beta-arm64 container and image (v${BRANCHNN} has shipped)..."
+    run "$WEEKLYBLD/remove-instance.sh" beta-arm64 || \
+        log "WARNING: kent-beta-arm64 teardown failed; check container/image manually"
     return 0
 }
 
