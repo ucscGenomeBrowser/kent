@@ -404,7 +404,7 @@
     bigInteract, bigMaf, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak, bigWig, vcfTabix, or hic.
     Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
-    standard suffix (".bai" and ".tbi" respectively), unless <A
+    standard suffix (".bai" and ".tbi" respectively), unless
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
@@ -672,7 +672,7 @@
     <pre>   downloadUrl.2 "BED Format" https://mywebsite.com/ucscTrack.bed.gz</pre>
 </DIV>
 
-<DIV class="otherSpecies"><span class="types all"></span>
+<DIV class="otherSpecies"><span class="types halSnake"></span>
 <div class="format"><code>otherSpecies &lt;otherSpecies&gt;</code></div>
     <P>The name of the other assembly in the pairwise alignment for this track. </P>
     <P><B>Example:</B></P>
@@ -2208,7 +2208,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   maxItems 25</pre>
 </DIV>
 
-<DIV class="maxWindowCoverage"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
+<DIV class="maxWindowCoverage"><span class="types bed genePred bam rmsk narrowPeak broadPeak bigWig bedLogR"></span>
 <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
@@ -2220,7 +2220,7 @@ There are no extra options that can appear on the type hic line.
     being displayed as a density coverage graph.</p>
 </DIV>
 
-<DIV class="maxWindowToDraw"><span class="types bed genepred bam rmsk narrowPeak broadPeak bigWig bedlogR"></span>
+<DIV class="maxWindowToDraw"><span class="types bed genePred bam rmsk narrowPeak broadPeak bigWig bedLogR"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
@@ -2920,7 +2920,7 @@ that identifies the reference sequence.
     can scale it up to 100 pixels.</P>
 </DIV>
 
-<DIV class="maxWindowToQuery"><span class="types bed bigWig bedlogR"></span>
+<DIV class="maxWindowToQuery"><span class="types bed bigWig bedLogR"></span>
 <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
     <P><I>For bigWigs only</I></P>
     <P>When signal data is clicked in the Browser image, the details of the signal
