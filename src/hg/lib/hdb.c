@@ -589,22 +589,26 @@ return db;
 
 static char *firstExistingDbFromQuery(struct sqlConnection *conn, char *query)
 /* Perform query; result is a list of database names.  Clone and return the first database
- * that exists, or NULL if the query has no results or none of the databases exist. */
+ * that exists as a real SQL database or as a curated hub (GenArk) assembly, or NULL if the
+ * query has no results or none of the databases exist. */
 {
 char *db = NULL;
 struct slName *sl, *list = sqlQuickList(conn, query);
 for (sl = list;  sl != NULL;  sl = sl->next)
     {
-    if (sqlDatabaseExists(sl->name))
+    if (sqlDatabaseExists(sl->name) || hubConnectIsCurated(sl->name))
+        {
         db = cloneString(sl->name);
-    break;
+        break;
+        }
     }
 slFreeList(&list);
 return db;
 }
 
 char *hDbForTaxon(int taxon)
-/* Get default database associated with NCBI taxon number, or NULL if not found. */
+/* Get default database associated with NCBI taxon number, or NULL if not found.
+ * The returned db may be a curated hub (GenArk) assembly rather than a real SQL database. */
 {
 char *db = NULL;
 if (taxon != 0)
