@@ -19,11 +19,22 @@ without touching production hgwdev. The three:
 
 The lifecycle scripts in this directory implement the build/start/refresh/remove
 cycle: `buildTipImage.sh`, `run-instance.sh`, `refresh-instance.sh`,
-`remove-instance.sh`, `overlay-cgi.sh`, `start-all.sh`, `stop-all.sh`, the
-shell-in helpers `kent-tip` / `kent-beta` / `kent-rel`, and the off-host
-`tunnel-tip.sh` / `tunnel-beta.sh` / `tunnel-rel.sh`. `autoBuild.sh` was
+`remove-instance.sh`, `overlay-cgi.sh`, `smoke-instance.sh`, `start-all.sh`,
+`stop-all.sh`, the shell-in helpers `kent-tip` / `kent-beta` /
+`kent-beta-arm64` / `kent-rel`, and the off-host `tunnel-tip.sh` /
+`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh`. `autoBuild.sh` was
 modified to invoke the lifecycle scripts at `do_final` (build kent:beta +
-refresh kent-beta) and `do_wrapup` (refresh kent-rel + tear down kent-beta).
+kent:beta-arm64, refresh + smoke-test both) and `do_wrapup` (refresh kent-rel +
+tear down kent-beta and kent-beta-arm64).
+
+`smoke-instance.sh [tip|beta|beta-arm64|rel ...] [--version NN]` is a quick
+post-start health check: container running, hgGateway, an hg38 + hg19 hgTracks
+render (a real drawn PNG, not just HTTP 200, so it exercises Apache + the CGI +
+MariaDB + trackDb together), hgBlat, hgTables, and the CGI version. With no
+instance argument it tests both beta instances. `do_final` runs it after each
+beta instance starts; a smoke failure is NON-FATAL (the build continues) but is
+made obvious -- a loud banner, a marker file that survives the checkpoint/resume,
+and a warning re-surfaced in the end-of-phase summary and the completion email.
 
 ## Hard design rules - do not violate
 
