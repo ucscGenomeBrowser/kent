@@ -10,7 +10,11 @@ siblings (svLen = reference span, insLen = inserted length, shared svColor()).
 
 Input is the provider bigBed dumped to BED with bigBedToBed, i.e. 15 columns:
     chrom start end name score strand thickStart thickEnd reserved
-    svType svLen(signed) alleleFreq carrierCount nabecCount hbccCount
+    svType svLen(signed) alleleFreq alleleCount nabecAlleleCount hbccAlleleCount
+
+As of the 2026-07 provider update the count columns are allele counts (diploid;
+alleleCount = nabecAlleleCount + hbccAlleleCount), not genotyped carrier counts
+as in the earlier release.
 
 Usage:
     bigBedToBed NIH_CARD_longReadSVs.bb stdin | lrSvCardBbToBed.py /dev/stdin out.bed
@@ -61,9 +65,9 @@ def main():
             svTypeRaw = f[9]
             svLenSigned = int(f[10])
             alleleFreq = fmtAf(f[11])
-            carrierCount = int(f[12])
-            nabecCount = int(f[13])
-            hbccCount = int(f[14])
+            alleleCount = int(f[12])
+            nabecAc = int(f[13])
+            hbccAc = int(f[14])
 
             svType = normalizeSvType(TYPE_FIX.get(svTypeRaw, svTypeRaw))
 
@@ -75,9 +79,9 @@ def main():
             else:
                 insLen = 0
 
-            # CARD publishes genotyped carrier counts, not allele counts; the
-            # carrier count is the closest integer to the supertrack's AC.
-            ac = carrierCount
+            # CARD now publishes diploid allele counts, matching the
+            # supertrack's AC convention directly.
+            ac = alleleCount
 
             featLen = insLen if svType == "INS" else svLen
             name = svName(svType, featLen, ac)
@@ -102,8 +106,8 @@ def main():
                 str(insLen),
                 str(ac),
                 alleleFreq,
-                str(nabecCount),
-                str(hbccCount),
+                str(nabecAc),
+                str(hbccAc),
             ]
             fOut.write("\t".join(row) + "\n")
 

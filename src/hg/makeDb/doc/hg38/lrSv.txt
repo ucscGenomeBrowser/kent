@@ -737,3 +737,35 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # (was 2,682,104 -> 2,317,508 with 14 databases). All INS store svLen=1 across
 # every subtrack, so insertions merge on insLen; the merged median svLen is 1
 # (INS are 1.65M of 2.58M rows).
+
+##########
+# 2026-07-22 Claude max
+#
+# cardSv update: the NIH CARD provider (Melissa Meredith) republished the
+# display bigBed with the count columns changed from genotyped carrier/sample
+# counts to diploid ALLELE counts (alleleCount = nabecAlleleCount +
+# hbccAlleleCount), and renamed the .as fields accordingly. AF is unchanged;
+# item count and SV-type breakdown are unchanged (228,855: DEL 101,570,
+# INS 126,853, INV 431, DUP 1). No Alzheimer's disease cases are in either
+# cohort (confirmed by the author).
+#
+# Re-downloaded and rebuilt (converter now reads the allele-count columns,
+# lrSvCard.as fields renamed AC / nabecAc / hbccAc):
+cd /hive/data/genomes/hg38/bed/lrSv/card
+base=https://raw.githubusercontent.com/meredith705/card_genome_browserTrack/main/hg38
+curl -sL $base/NIH_CARD_longReadSVs.bb -o NIH_CARD_longReadSVs.bb
+bigBedToBed NIH_CARD_longReadSVs.bb stdout \
+  | python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCardBbToBed.py /dev/stdin cardSv.bed
+# CARD: 228,855 input records written; by type: DEL=101,570, DUP=1,
+#       INS=126,853, INV=431
+bedSort cardSv.bed cardSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
+    -tab cardSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes cardSv.bb
+# Max allele counts: AC=702 (2x351), nabecAc=410 (2x205), hbccAc=292 (2x146).
+# trackDb filter ranges/labels updated to allele counts; mouseOver and the
+# cardSv.html / lrSv.html wording changed from "carriers" to "allele counts".
+#
+# Re-ran the merge so lrSvAll carries CARD's allele counts (databases.tsv
+# unchanged; CARD still contributes via valueField=AC):
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 3,018,404 input -> 2,582,278 merged, 16 databases (unchanged structure).

@@ -13,8 +13,8 @@ table lrSvCard
     string svType;          "SV Type|DEL, INS, INV or DUP"
     int svLen;              "SV Length|Length of the variant on the reference in base pairs"
     int insLen;             "Insertion Length|Length of inserted sequence, 0 for DEL/INV/DUP"
-    int AC;                 "Allele Count|Number of samples carrying this variant (genotyped carrier count)"
-    float alleleFreq;       "Allele Frequency|Fraction of samples carrying this variant (source VCF AF)"
-    uint nabecCount;        "NABEC Carriers|Carrier samples of European ancestry (NABEC cohort)"
-    uint hbccCount;         "HBCC Carriers|Carrier samples of African/African-admixed ancestry (HBCC cohort)"
+    int AC;                 "Allele Count|Alternate allele count for this variant (NABEC + HBCC)"
+    float alleleFreq;       "Allele Frequency|Alternate allele frequency (source VCF AF)"
+    uint nabecAc;           "NABEC Allele Count|Alternate allele count in the European-ancestry NABEC cohort"
+    uint hbccAc;            "HBCC Allele Count|Alternate allele count in the African/African-admixed HBCC cohort"
     )

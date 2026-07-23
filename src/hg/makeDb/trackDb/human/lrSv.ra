@@ -521,7 +521,7 @@ noScoreFilter on
     type bigBed 9 +
     itemRgb on
     visibility hide
-    mouseOver <b>Var</b>: ${name} (${svType})<br><b>SV len</b>: ${svLen}<br><b>Ins len</b>: ${insLen}<br><b>AF</b>: ${alleleFreq}<br><b>Carriers</b>: ${AC} (NABEC ${nabecCount}, HBCC ${hbccCount})
+    mouseOver <b>Var</b>: ${name} (${svType})<br><b>SV len</b>: ${svLen}<br><b>Ins len</b>: ${insLen}<br><b>AF</b>: ${alleleFreq}<br><b>AC</b>: ${AC} (NABEC ${nabecAc}, HBCC ${hbccAc})
     filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
@@ -531,19 +531,19 @@ noScoreFilter on
     filter.insLen 0:92867161
     filterByRange.insLen on
     filterLabel.insLen Insertion Length
-    filter.AC 1:351
+    filter.AC 0:702
     filterByRange.AC on
-    filterLabel.AC Carrier Count
+    filterLabel.AC Allele Count
     filter.alleleFreq 0:1
     filterByRange.alleleFreq on
     filterLimits.alleleFreq 0:1
     filterLabel.alleleFreq Allele Frequency
-    filter.nabecCount 0:205
-    filterByRange.nabecCount on
-    filterLabel.nabecCount NABEC Carriers (European ancestry)
-    filter.hbccCount 0:146
-    filterByRange.hbccCount on
-    filterLabel.hbccCount HBCC Carriers (African/African-admixed ancestry)
+    filter.nabecAc 0:410
+    filterByRange.nabecAc on
+    filterLabel.nabecAc NABEC Allele Count (European ancestry)
+    filter.hbccAc 0:292
+    filterByRange.hbccAc on
+    filterLabel.hbccAc HBCC Allele Count (African/African-admixed ancestry)
 
     track noyvertSv
     parent longReadVariants
