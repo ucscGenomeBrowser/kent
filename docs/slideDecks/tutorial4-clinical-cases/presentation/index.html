@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCSC Genome Browser · Tutorial 4: Clinical case studies</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+<link rel="stylesheet" href="../../reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="../../reveal.js/dist/theme/white.css" id="theme">
 
 <style>
   :root{
@@ -97,7 +97,7 @@
 <section>
   <h2>How these case studies work</h2>
   <ul class="small">
-    <li>Each case is a <strong>real diagnostic variant</strong> saved as a live UCSC <strong>session</strong> &mdash; open it and follow along.</li>
+    <li>Each case is a <strong>real diagnostic variant</strong> saved as a live UCSC <strong>session</strong>, so you can open it and follow along.</li>
     <li>They are grouped by <strong>variant class</strong>: coding, splicing, non-coding/regulatory, and structural/repeat.</li>
     <li>The recurring move: pick the right <strong>Recommended Track Set</strong>, then read the evidence off the stacked tracks.</li>
     <li>Cases contributed by clinical collaborators (credited per slide); sessions are public.</li>
@@ -107,11 +107,11 @@
 
 <section class="divider" data-background-color="#0b5394">
   <h1>Coding variants</h1>
-  <p class="timing">read the call &mdash; then check the transcript</p>
+  <p class="timing">read the call, then check the transcript</p>
 </section>
 
 <section>
-  <h2>MECP2 &mdash; Rett syndrome</h2>
+  <h2>MECP2: Rett syndrome</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">NM_001110792.2(MECP2):c.538C&gt;T</span> <span class="chip">p.Arg180Ter (R168X)</span> <span class="chip">chrX</span></p>
@@ -126,14 +126,14 @@
 </section>
 
 <section>
-  <h2>MAP2K2 &mdash; a small missense</h2>
+  <h2>MAP2K2: a small missense</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">NM_030662.4(MAP2K2):c.401A&gt;G</span> <span class="chip">p.Tyr134Cys</span></p>
-      <ul class="small"><li>A RASopathy-gene <strong>missense</strong> change &mdash; the everyday coding question.</li><li>The <strong>SNV Recommended Track Set</strong> is on display here.</li></ul>
+      <ul class="small"><li>A RASopathy-gene <strong>missense</strong> change, the everyday coding question.</li><li>The <strong>SNV Recommended Track Set</strong> is on display here.</li></ul>
       <div class="callout demo"><span class="lbl">Lines of evidence</span> ClinVar submitted interpretations &amp; evidence, plus <strong>Varaico</strong> literature annotations for Y134C, sit together in one view.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Lou/clinGenMissenseExample">open the session</a></span> Read the ClinVar interpretations and the Varaico annotation for Y134C.</div>
-      <p class="small" style="color:#5b6673;margin-top:0.3em;">Example session (variant via Marina Di Stefano, Broad Institute)</p>
+      <p class="small" style="color:#5b6673;margin-top:0.3em;">Variant via Marina Di Stefano, Broad Institute</p>
     </div>
     <div class="figwrap"><figure class="fig"><img class="shot" style="max-height:70vh;max-width:100%;width:auto;display:block;margin:0 auto;" src="/images/slideDecks/tutorial4-clinical-cases/map2k2_missense.png" alt="MAP2K2 c.401A&gt;G missense on hg38"><figcaption>MAP2K2 Y134C missense with SNV Recommended Track Set</figcaption></figure></div>
   </div>
@@ -146,12 +146,12 @@
 </section>
 
 <section>
-  <h2>TCF4 &mdash; but do you trust this exon?</h2>
+  <h2>TCF4, but do you trust this exon?</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">p.Ser504Ter</span> <span class="chip">chr18:55,234,435G&gt;T</span> <span class="chip">ENST00000635822.2</span></p>
       <ul class="small"><li>Gene implicated in a syndromic intellectual disability; this looks like a <strong>stop-gain</strong>.</li><li>But the exon is coding <strong>only in one transcript</strong>, and it is <strong>not conserved</strong> across vertebrates.</li></ul>
-      <div class="callout demo"><span class="lbl">The catch</span> If the exon is not a real coding region, the &ldquo;nonsense&rdquo; call collapses &mdash; the variant is most likely <strong>benign</strong>. Always check the transcript and conservation.</div>
+      <div class="callout demo"><span class="lbl">The catch</span> If the exon is not a real coding region, the &ldquo;nonsense&rdquo; call collapses, and the variant is most likely <strong>benign</strong>. Always check the transcript and conservation.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/tcf">open the session</a></span> Compare transcripts; read the 100-vertebrate conservation over this exon.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Case: Irina Giurgea, H&ocirc;pital Trousseau</p>
     </div>
@@ -166,11 +166,11 @@
 </section>
 
 <section>
-  <h2>IGHMBP2 &mdash; a new splice site deep in an intron</h2>
+  <h2>IGHMBP2: a new splice site deep in an intron</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">NM_002180(IGHMBP2):c.712-610A&gt;G</span> <span class="chip">hg38 chr11:68,914,208</span></p>
-      <ul class="small"><li>A variant <strong>deep in an intron</strong>, far from any coding exon &mdash; easy to dismiss.</li><li>But it can create a <strong>new splice site</strong>.</li></ul>
+      <ul class="small"><li>A variant <strong>deep in an intron</strong>, far from any coding exon, easy to dismiss.</li><li>But it can create a <strong>new splice site</strong>.</li></ul>
       <div class="callout demo"><span class="lbl">Scan the predictors</span> The <strong>Splicing Impact</strong> / SpliceAI track flags the gain; SpliceVarDB and a PubTator hit corroborate it.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/ighmbp2.712">open the session</a></span> Turn on Splicing Impact; inspect the SpliceAI delta scores at the variant.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Session: s/Max/ighmbp2.712 &middot; PMID 33189025</p>
@@ -181,11 +181,11 @@
 </section>
 
 <section>
-  <h2>KCTD7 &mdash; a synonymous variant that isn't silent</h2>
+  <h2>KCTD7: a synonymous variant that isn't silent</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">KCTD7:c.456G&gt;A</span> <span class="chip">p.Val152Val</span> <span class="chip">exon 3</span></p>
-      <ul class="small"><li>A <strong>synonymous</strong> change &mdash; no amino-acid change, so it looks harmless.</li><li>But it disrupts <strong>splicing</strong>.</li></ul>
+      <ul class="small"><li>A <strong>synonymous</strong> change with no amino-acid change, so it looks harmless.</li><li>But it disrupts <strong>splicing</strong>.</li></ul>
       <div class="callout demo"><span class="lbl">Synonymous &ne; silent</span> The <strong>Splicing Impact</strong> track shows the effect; the variant is in the LOVD of a 2019 paper from the same lab.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/kctd7.456GA">open the session</a></span> Check the splicing predictions over this synonymous position.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Session: s/Max/kctd7.456GA &middot; PMC10506157</p>
@@ -201,11 +201,11 @@
 </section>
 
 <section>
-  <h2>POU1F1 &mdash; a deletion upstream of the gene</h2>
+  <h2>POU1F1: a deletion upstream of the gene</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">8.7 kb deletion, ~3 kb upstream</span> <span class="chip">hg38 chr3:87,279,612-87,288,322</span></p>
-      <ul class="small"><li>Homozygous deletion upstream of <strong>POU1F1</strong>, a pituitary transcription factor (pituitary hormone deficiency).</li><li>No coding sequence is touched &mdash; the evidence is <strong>regulatory</strong>.</li></ul>
+      <ul class="small"><li>Homozygous deletion upstream of <strong>POU1F1</strong>, a pituitary transcription factor (pituitary hormone deficiency).</li><li>No coding sequence is touched, so the evidence is <strong>regulatory</strong>.</li></ul>
       <div class="callout demo"><span class="lbl">Read the regulation</span> The deletion removes an ENCODE <strong>cCRE</strong> with a distal-enhancer signature; <strong>conservation</strong> and <strong>GTEx</strong> (pituitary +++) support its role.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/pou1f1">open the session</a></span> Turn on ENCODE cCREs, 100-vertebrate conservation, and GTEx over the deleted region.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Case: Amselem &amp; Legendre labs, H&ocirc;pital Trousseau</p>
@@ -216,7 +216,7 @@
 </section>
 
 <section>
-  <h2>SHH / ZRS &mdash; a limb enhancer in an intron of LMBR1</h2>
+  <h2>SHH / ZRS: a limb enhancer in an intron of LMBR1</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">Patient chr7:156,791,472C&gt;T</span> <span class="chip">intron 5 of LMBR1 (the ZRS)</span></p>
@@ -231,11 +231,11 @@
 </section>
 
 <section>
-  <h2>RNU4-2 &mdash; a variant in a non-coding RNA gene</h2>
+  <h2>RNU4-2: a variant in a non-coding RNA gene</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">hg38 chr12:120,291,858 C&gt;T</span> <span class="chip">RNU4-2 (NR_003137.3):n.46G&gt;A</span></p>
-      <ul class="small"><li><strong>RNU4-2</strong> encodes the U4 spliceosomal snRNA &mdash; a non-coding RNA gene, not a protein.</li><li>Recently (2024) shown to cause one of the most common monogenic neurodevelopmental disorders (ReNU syndrome).</li></ul>
+      <ul class="small"><li><strong>RNU4-2</strong> encodes the U4 spliceosomal snRNA, a non-coding RNA gene, not a protein.</li><li>Recently (2024) shown to cause one of the most common monogenic neurodevelopmental disorders (ReNU syndrome).</li></ul>
       <div class="callout demo"><span class="lbl">No protein here</span> There is no coding consequence to read; you reason from the <strong>RNA gene</strong> itself and the recent literature.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/rnu42.c46ga">open the session</a></span> View the variant within the RNU4-2 gene body; a second hotspot sits at n.129G&gt;A.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Case: Jon Bernstein &middot; medRxiv 2025</p>
@@ -255,10 +255,10 @@
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">chr22:g.18,895,798-21,111,753dup</span> <span class="chip">GRCh38</span> <span class="chip">2.22 Mb</span></p>
-      <ul class="small"><li>A large copy-number gain at <strong>22q11.2</strong> &mdash; a different interpretation problem from SNVs.</li><li>Load the <strong>CNV Recommended Track Set</strong>.</li></ul>
-      <div class="callout demo"><span class="lbl">CNV-specific evidence</span> <strong>ClinGen Dosage</strong> (triplosensitivity), <strong>ClinVar CNVs</strong>, <strong>DECIPHER</strong> and <strong>PanelApp</strong> CNV regions &mdash; each filterable.</div>
+      <ul class="small"><li>A large copy-number gain at <strong>22q11.2</strong>, a different interpretation problem from SNVs.</li><li>Load the <strong>CNV Recommended Track Set</strong>.</li></ul>
+      <div class="callout demo"><span class="lbl">CNV-specific evidence</span> <strong>ClinGen Dosage</strong> (triplosensitivity), <strong>ClinVar CNVs</strong>, <strong>DECIPHER</strong> and <strong>PanelApp</strong> CNV regions, each filterable.</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Lou/clinGenCNVsDupExample">open the session</a></span> Load the CNV RTS; compare the duplication against ClinGen Dosage and DECIPHER.</div>
-      <p class="small" style="color:#5b6673;margin-top:0.3em;">Example session</p>
+      <p class="small" style="color:#5b6673;margin-top:0.3em;">Session: s/Lou/clinGenCNVsDupExample</p>
     </div>
     <div class="figwrap"><figure class="fig"><img class="shot" style="max-height:70vh;max-width:100%;width:auto;display:block;margin:0 auto;" src="/images/slideDecks/tutorial4-clinical-cases/chr22_cnvdup.png" alt="chr22 2.22 Mb duplication on hg38"><figcaption>A 2.22 Mb duplication with ClinGen Dosage, ClinVar CNVs, DECIPHER and PanelApp</figcaption></figure></div>
   </div>
@@ -266,11 +266,11 @@
 </section>
 
 <section>
-  <h2>FGF14 &mdash; a GAA repeat expansion</h2>
+  <h2>FGF14: a GAA repeat expansion</h2>
   <div class="split">
     <div class="txt">
       <p class="small"><span class="chip">FGF14 intron 1</span> <span class="chip">hg38 chr13:102,161,567</span> <span class="chip">~270-300 GAA repeats</span></p>
-      <ul class="small"><li>Late-onset cerebellar ataxia (SCA27B) caused by an intronic <strong>repeat expansion</strong> &mdash; not an SNV or CNV.</li><li>A distinct class of variant with its own resources.</li></ul>
+      <ul class="small"><li>Late-onset cerebellar ataxia (SCA27B) caused by an intronic <strong>repeat expansion</strong>, not an SNV or CNV.</li><li>A distinct class of variant with its own resources.</li></ul>
       <div class="callout demo"><span class="lbl">A third variant class</span> View the intron-1 GAA locus in the Browser, then cross-check dedicated tandem-repeat resources (<strong>WebSTR</strong>, <strong>TRatlas</strong>).</div>
       <div class="callout exercise"><span class="lbl">Try it, &#9654; <a href="https://genome.ucsc.edu/s/Max/fgf14">open the session</a></span> Navigate to the intron-1 repeat; compare against the tandem-repeat tracks/resources.</div>
       <p class="small" style="color:#5b6673;margin-top:0.3em;">Session: s/Max/fgf14</p>
@@ -287,12 +287,12 @@
 
 <section>
   <h2>More cases: de novo neurodevelopmental variants</h2>
-  <p class="small">A gallery of further worked cases (GSS series) &mdash; each opens as a live session:</p>
+  <p class="small">A gallery of further worked cases (GSS series), each opening as a live session:</p>
   <ul class="small">
-    <li><strong>LRRC8A</strong> <span class="chip">c.730T&gt;C</span> p.Phe244Leu &mdash; multisystem disorder, de novo heterozygous. <a href="https://genome.ucsc.edu/s/Max/lrrc8a">session</a></li>
-    <li><strong>KPNA4</strong> <span class="chip">c.557G&gt;A</span> p.Gly186Asp <span class="chip">chr3:160,526,107C&gt;T</span> &mdash; seizures, developmental delay, autism. <a href="https://genome.ucsc.edu/s/Max/kpn4a">session</a></li>
-    <li><strong>ERCC8</strong> <span class="chip">c.550+2T&gt;C</span> splice + a complex maternal SV &mdash; compound heterozygous, Cockayne-spectrum. <a href="https://genome.ucsc.edu/s/Max/ercc8">session</a></li>
-    <li><strong>RNU4ATAC</strong> <span class="chip">n.12C&gt;T</span> + <span class="chip">n.120T&gt;G</span> &mdash; minor-spliceosome snRNA, compound heterozygous, multisystem.</li>
+    <li><strong>LRRC8A</strong> <span class="chip">c.730T&gt;C</span> p.Phe244Leu, multisystem disorder, de novo heterozygous. <a href="https://genome.ucsc.edu/s/Max/lrrc8a">session</a></li>
+    <li><strong>KPNA4</strong> <span class="chip">c.557G&gt;A</span> p.Gly186Asp <span class="chip">chr3:160,526,107C&gt;T</span>, seizures, developmental delay, autism. <a href="https://genome.ucsc.edu/s/Max/kpn4a">session</a></li>
+    <li><strong>ERCC8</strong> <span class="chip">c.550+2T&gt;C</span> splice + a complex maternal SV, compound heterozygous, Cockayne-spectrum. <a href="https://genome.ucsc.edu/s/Max/ercc8">session</a></li>
+    <li><strong>RNU4ATAC</strong> <span class="chip">n.12C&gt;T</span> + <span class="chip">n.120T&gt;G</span>, minor-spliceosome snRNA, compound heterozygous, multisystem.</li>
   </ul>
   <div class="callout demo"><span class="lbl">Same recipe</span> Different genes and mechanisms, one workflow: open the session, load the right track set, read the evidence.</div>
 </section>
@@ -300,8 +300,8 @@
 <section>
   <h2>What these cases show</h2>
   <ul class="small">
-    <li><strong>Coding</strong> variants can be read almost off the tracks &mdash; but always check the <em>transcript</em> and <em>conservation</em> (TCF4).</li>
-    <li><strong>Synonymous</strong> and <strong>deep-intronic</strong> variants can still break splicing &mdash; scan the splicing predictors.</li>
+    <li><strong>Coding</strong> variants can be read almost off the tracks, but always check the <em>transcript</em> and <em>conservation</em> (TCF4).</li>
+    <li><strong>Synonymous</strong> and <strong>deep-intronic</strong> variants can still break splicing, so scan the splicing predictors.</li>
     <li><strong>Non-coding</strong> variants are interpreted from regulatory context: cCREs, conservation, expression, TF motifs.</li>
     <li><strong>CNVs</strong> and <strong>repeat expansions</strong> are their own classes, each with dedicated tracks and resources.</li>
   </ul>
@@ -318,8 +318,8 @@
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="../../reveal.js/dist/reveal.js"></script>
+<script src="../../reveal.js/plugin/notes/notes.js"></script>
 <script>
   Reveal.initialize({
     hash: true,
