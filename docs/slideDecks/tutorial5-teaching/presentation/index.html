@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCSC Genome Browser · Tutorial 5: Teaching with the Browser</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+<link rel="stylesheet" href="../../reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="../../reveal.js/dist/theme/white.css" id="theme">
 
 <style>
   :root{
@@ -101,7 +101,7 @@
         <ul class="small">
           <li><a href="https://genome.ucsc.edu/training/education/">genome.ucsc.edu/training/education</a>: ~20 interactive modules + videos.</li>
           <li>Self-contained, undergraduate-level, each built on clickable Browser sessions.</li>
-          <li>Topics: codons &amp; reading frames, the <strong>Variants curriculum</strong>, splicing, CpG/methylation, CRISPR, Huntington’s, lactase, FOXP2…</li>
+          <li>Topics: codons &amp; reading frames, variant effects, splicing, CpG/methylation, CRISPR, Huntington’s disease, lactase, FOXP2…</li>
         </ul>
         <p class="small">Can be used as part of a lecture or assignments.</p>
       </div>
@@ -122,11 +122,11 @@
 <section>
   <h2>Reading the gene, base by base</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>5&prime; &rarr; 3&prime; direction</strong> &mdash; which way a gene is transcribed <a href="https://genome.ucsc.edu/training/education/fivePrime.html">open</a></li>
-      <li><strong>Start &amp; stop codons</strong> &mdash; the signals that begin and end translation <a href="https://genome.ucsc.edu/training/education/startStop.html">open</a></li>
-      <li><strong>Three reading frames</strong> &mdash; how one sequence can be read three ways <a href="https://genome.ucsc.edu/training/education/threeFrames.html">open</a></li>
+      <li><strong>5&prime; &rarr; 3&prime; direction</strong>: which way a gene is transcribed <a href="https://genome.ucsc.edu/training/education/fivePrime.html">open</a></li>
+      <li><strong>Start &amp; stop codons</strong>: the signals that begin and end translation <a href="https://genome.ucsc.edu/training/education/startStop.html">open</a></li>
+      <li><strong>Three reading frames</strong>: how one sequence can be read three ways <a href="https://genome.ucsc.edu/training/education/threeFrames.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section>
@@ -141,7 +141,7 @@
         <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/education/hg19_wobble2">▶ open s/education/hg19_wobble2</a></span>
           Find a column where a base varies between species but the amino acid stays the same.</div>
         <div class="callout demo"><span class="lbl">Same recipe</span>
-          Another <strong>session + a page</strong>: the portal has ~20 like this.</div>
+          Another saved session; the portal has ~20 like this.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial5-teaching/wobble.png" alt="Wobble-base module session at GRK4">
         <figcaption>The <em>GRK4</em> kinase domain (hg19): codons + amino acids, PhyloP conservation, and a 100-vertebrate alignment, the protein is conserved while the wobble (3rd) base varies.</figcaption></figure></div>
@@ -159,11 +159,11 @@
 <section>
   <h2>Variants and their effects</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>Synonymous</strong> &mdash; a base change that leaves the amino acid unchanged <a href="https://genome.ucsc.edu/training/education/variantSynon.html">open</a></li>
-      <li><strong>Nonsense</strong> &mdash; a change that creates a premature stop codon <a href="https://genome.ucsc.edu/training/education/variantNonsense.html">open</a></li>
-      <li><strong>Frameshift</strong> &mdash; an insertion or deletion that shifts the reading frame <a href="https://genome.ucsc.edu/training/education/variantFrameshift.html">open</a></li>
+      <li><strong>Synonymous</strong>: a base change that leaves the amino acid unchanged <a href="https://genome.ucsc.edu/training/education/variantSynon.html">open</a></li>
+      <li><strong>Nonsense</strong>: a change that creates a premature stop codon <a href="https://genome.ucsc.edu/training/education/variantNonsense.html">open</a></li>
+      <li><strong>Frameshift</strong>: an insertion or deletion that shifts the reading frame <a href="https://genome.ucsc.edu/training/education/variantFrameshift.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section>
@@ -172,20 +172,20 @@
       <div class="txt">
         <ul class="small">
           <li>The <a href="https://genome.ucsc.edu/training/education/variantMissense.html">Missense Variants module</a> teaches a missense variant on the cancer gene <strong>BRCA2</strong> (<span class="chip">rs135936718</span>, His→Gln).</li>
-          <li>Students click a <strong>shared link</strong>; dbSNP colours green = synonymous, red = missense.</li>
+          <li>Open the <strong>shared link</strong>; dbSNP colors green = synonymous, red = missense.</li>
           <li>A nice <strong>sum-up of the basics</strong>: it reuses the gene model, codons &amp; amino acids, and clicking a variant.</li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it</span>
           Open <a href="https://genome.ucsc.edu/s/education/hg19_BRCA2missense">s/education/hg19_BRCA2missense</a>; find the red variant.</div>
         <div class="callout demo"><span class="lbl">The takeaway</span>
-          A module is just a <strong>saved view + a web page</strong>. You’ll learn to build your own in the <strong>Sessions</strong> section of Tutorial 1.</div>
+          A module is just a <strong>session</strong>. You’ll learn to build your own in the <strong>Sessions</strong> section of Tutorial 1.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial5-teaching/missense.png" alt="Missense module session at BRCA2">
-        <figcaption>The module’s session at <em>BRCA2</em>: codons &amp; amino acids over the sequence, with dbSNP variants coloured <span style="color:#c00">red = missense</span> / <span style="color:#080">green = synonymous</span>.</figcaption></figure></div>
+        <figcaption>The module’s session at <em>BRCA2</em>: codons &amp; amino acids over the sequence, with dbSNP variants colored <span style="color:#c00">red = missense</span> / <span style="color:#080">green = synonymous</span>.</figcaption></figure></div>
     </div>
     <aside class="notes">
-      Walk the module live: open the BRCA2 missense session, point out the dbSNP colour key (green synonymous / red missense), the codon change His→Gln, and the ClinVar call.
-      Use this to wrap up the navigation/tracks basics; it reuses the gene model, codons and clicking-a-variant they just practised. Forward pointers (don't dwell): BRAF V600E, coming up in the oncology section, is itself a missense variant; and a module is just a session + a page, so they'll be able to author their own once you save a session in Tutorial 1.
+      Walk the module live: open the BRCA2 missense session, point out the dbSNP color key (green synonymous / red missense), the codon change His→Gln, and the ClinVar call.
+      Use this to wrap up the navigation/tracks basics; it reuses the gene model, codons and clicking-a-variant they just practised. Forward pointers (don't dwell): BRAF V600E, coming up in the oncology section, is itself a missense variant; and a module is really just a saved session, so they'll be able to author their own once you save a session in Tutorial 1.
     </aside>
   </section>
 
@@ -206,7 +206,7 @@
         <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/education/fgfr2_highlights">▶ open the FGFR2 session</a></span>
           Compare isoforms across the two highlighted exons.</div>
         <div class="callout demo"><span class="lbl">Same recipe</span>
-          Another session + a page, one of ~20 ready-made modules.</div>
+          Another saved session, one of ~20 ready-made modules.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial5-teaching/splicing.png" alt="FGFR2 alternative splicing (hg19)">
         <figcaption><em>FGFR2</em> (hg19): GENCODE isoforms include or skip the highlighted exons, the essence of alternative splicing.</figcaption></figure></div>
@@ -219,10 +219,10 @@
 <section>
   <h2>Isoforms and tissues</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>Isoforms across tissues</strong> &mdash; tissue-dependent alternative splicing <a href="https://genome.ucsc.edu/training/education/isoforms.html">open</a></li>
-      <li><strong>Tissue-specific expression</strong> &mdash; where a gene is switched on (the PLP gene) <a href="https://genome.ucsc.edu/training/education/plp.html">open</a></li>
+      <li><strong>Isoforms across tissues</strong>: tissue-dependent alternative splicing <a href="https://genome.ucsc.edu/training/education/isoforms.html">open</a></li>
+      <li><strong>Tissue-specific expression</strong>: where a gene is switched on (the PLP gene) <a href="https://genome.ucsc.edu/training/education/plp.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section>
@@ -230,20 +230,20 @@
     <div class="split">
       <div class="txt">
         <ul class="small">
-          <li>The <strong>GTEx</strong> track shows how strongly a gene is expressed across <strong>54 human tissues</strong> &mdash; one coloured bar per tissue.</li>
+          <li>The <strong>GTEx</strong> track shows how strongly a gene is expressed across <strong>54 human tissues</strong>: one colored bar per tissue.</li>
           <li>Example: <strong>PLP1</strong>, a myelin gene, is switched on almost only in the <strong>brain</strong> (the tall yellow bars).</li>
           <li>A quick, visual way to ask <strong>&ldquo;where is this gene active?&rdquo;</strong></li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;position=PLP1&amp;gtexGene=pack">&#9654; open PLP1 with GTEx</a></span>
           Read which tissues light up for this gene.</div>
         <div class="callout demo"><span class="lbl">Same recipe</span>
-          Another session + a page, one of ~20 ready-made modules.</div>
+          Another saved session, one of ~20 ready-made modules.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial5-teaching/gtex_tissue.png" alt="GTEx tissue-expression barchart for PLP1">
         <figcaption><em>PLP1</em> GTEx expression: each bar is a tissue; the tall yellow bars are brain, where this myelin gene is active.</figcaption></figure></div>
     </div>
     <aside class="notes">
-      A tissue-expression spotlight to pair with the isoforms menu. Open PLP1 with the GTEx track: the colour-coded bars show expression per tissue, and PLP1 (a myelin protein) lights up almost only in brain. Makes "tissue-specific expression" concrete and visual. Same module recipe as the others: a saved view plus a short page.
+      A tissue-expression spotlight to pair with the isoforms menu. Open PLP1 with the GTEx track: the color-coded bars show expression per tissue, and PLP1 (a myelin protein) lights up almost only in brain. Makes "tissue-specific expression" concrete and visual. Same module recipe as the others: a saved session.
     </aside>
   </section>
 
@@ -255,10 +255,10 @@
 <section>
   <h2>Regulation &amp; epigenetics</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>CpG islands &amp; methylation</strong> &mdash; DNA methylation and epigenetic regulation <a href="https://genome.ucsc.edu/training/education/methylation.html">open</a></li>
-      <li><strong>CRISPR</strong> &mdash; gene editing, explored in the Browser <a href="https://genome.ucsc.edu/training/education/crispr.html">open</a></li>
+      <li><strong>CpG islands &amp; methylation</strong>: DNA methylation and epigenetic regulation <a href="https://genome.ucsc.edu/training/education/methylation.html">open</a></li>
+      <li><strong>CRISPR</strong>: gene editing, explored in the Browser <a href="https://genome.ucsc.edu/training/education/crispr.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section class="divider" data-background-color="#0b5394">
@@ -269,21 +269,21 @@
 <section>
   <h2>Case studies: disease</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>Huntington&rsquo;s &amp; CAG repeats</strong> &mdash; a trinucleotide-repeat expansion in HTT <a href="https://genome.ucsc.edu/training/education/cag.html">open</a></li>
-      <li><strong>Lactase persistence (LCT)</strong> &mdash; the genetics of digesting milk <a href="https://genome.ucsc.edu/training/education/lactase.html">open</a></li>
-      <li><strong>Alcohol intolerance</strong> &mdash; variation in alcohol metabolism in East Asians <a href="https://genome.ucsc.edu/training/education/ethanol.html">open</a></li>
+      <li><strong>Huntington&rsquo;s &amp; CAG repeats</strong>: a trinucleotide-repeat expansion in HTT <a href="https://genome.ucsc.edu/training/education/cag.html">open</a></li>
+      <li><strong>Lactase persistence (LCT)</strong>: the genetics of digesting milk <a href="https://genome.ucsc.edu/training/education/lactase.html">open</a></li>
+      <li><strong>Alcohol intolerance</strong>: variation in alcohol metabolism in East Asians <a href="https://genome.ucsc.edu/training/education/ethanol.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section>
   <h2>Case studies: evolution</h2>
   <ul class="small" style="max-width:92%;margin:0 auto;">
-      <li><strong>FOXP2 &amp; the evolution of speech</strong> &mdash; comparing a speech gene across species <a href="https://genome.ucsc.edu/training/education/speech.html">open</a></li>
-      <li><strong>Why apes have no tails</strong> &mdash; an evolutionary loss, seen in the genome <a href="https://genome.ucsc.edu/training/education/apes.html">open</a></li>
-      <li><strong>Ebola &amp; Marburg conservation</strong> &mdash; conserved regions of viral genomes <a href="https://genome.ucsc.edu/training/education/ebola.html">open</a></li>
+      <li><strong>FOXP2 &amp; the evolution of speech</strong>: comparing a speech gene across species <a href="https://genome.ucsc.edu/training/education/speech.html">open</a></li>
+      <li><strong>Why apes have no tails</strong>: an evolutionary loss, seen in the genome <a href="https://genome.ucsc.edu/training/education/apes.html">open</a></li>
+      <li><strong>Ebola &amp; Marburg conservation</strong>: conserved regions of viral genomes <a href="https://genome.ucsc.edu/training/education/ebola.html">open</a></li>
       </ul>
-  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is a <strong>clickable session + a short page</strong>, ready to drop into a lecture or assignment.</div>
+  <div class="callout demo" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Same recipe</span> Each module is really just a <strong>saved session</strong> you can reuse, ready to drop into a lecture or assignment.</div>
 </section>
 
 <section>
@@ -292,16 +292,16 @@
       <div class="txt">
         <ul class="small">
           <li>An <strong>Alu insertion</strong> (a &ldquo;jumping-gene&rdquo; element) landed inside the tail-development gene <strong>TBXT</strong> in the common ancestor of apes.</li>
-          <li>It makes an <strong>exon get skipped</strong>, altering the protein &mdash; linked to the loss of the tail.</li>
+          <li>It makes an <strong>exon get skipped</strong>, altering the protein, and this is linked to the loss of the tail.</li>
           <li>The <strong>RepeatMasker</strong> track marks the Alu (highlighted); the GENCODE isoforms show the affected exon.</li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/education/hg19_TBXTalus">&#9654; open s/education/hg19_TBXTalus</a></span>
           Find the highlighted Alu element inside the <strong>TBXT</strong> gene.</div>
         <div class="callout demo"><span class="lbl">Same recipe</span>
-          Another session + a page, one of ~20 ready-made modules.</div>
+          Another saved session, one of ~20 ready-made modules.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial5-teaching/tbxt_apes.png" alt="TBXT gene with a highlighted Alu element (hg19)">
-        <figcaption><em>TBXT</em> (hg19): the highlighted <strong>Alu</strong> element (a RepeatMasker SINE) sits inside the gene &mdash; tied to tail loss in apes.</figcaption></figure></div>
+        <figcaption><em>TBXT</em> (hg19): the highlighted <strong>Alu</strong> element (a RepeatMasker SINE) sits inside the gene, tied to tail loss in apes.</figcaption></figure></div>
     </div>
     <aside class="notes">
       An evolution spotlight to pair with the case-studies menu. Based on the 2021 finding that an AluY insertion in TBXT causes exon skipping and is associated with tail loss in apes/humans. Open the session: the highlight marks the Alu (RepeatMasker SINE) within TBXT, and the GENCODE isoforms show the exon it affects. Ties conservation, repeats and gene models together.
@@ -313,7 +313,7 @@
   <ul class="small">
     <li>Around <strong>20 self-contained modules</strong>, each built on a clickable Browser session.</li>
     <li>They span the <strong>central dogma</strong> (reading frames, codons, splicing), <strong>variant effects</strong>, and real <strong>disease &amp; evolution</strong> case studies.</li>
-    <li>Use them as lecture demos or student assignments &mdash; no install required.</li>
+    <li>Use them as lecture demos or student assignments, with no install required.</li>
     <li>Build your own the same way: save a <strong>session</strong> (see Tutorial 1) and wrap it in a page.</li>
   </ul>
   <div class="callout exercise" style="max-width:92%;margin:0.4em auto 0;"><span class="lbl">Try it</span> Browse the full library at <a href="https://genome.ucsc.edu/training/education/">genome.ucsc.edu/training/education</a>.</div>
@@ -329,8 +329,8 @@
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="../../reveal.js/dist/reveal.js"></script>
+<script src="../../reveal.js/plugin/notes/notes.js"></script>
 <script>
   Reveal.initialize({
     hash: true,

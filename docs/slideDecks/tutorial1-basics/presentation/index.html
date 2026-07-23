@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UCSC Genome Browser · Tutorial 1: Basics</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+<link rel="stylesheet" href="../../reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="../../reveal.js/dist/theme/white.css" id="theme">
 
 <style>
   :root{
@@ -163,7 +163,7 @@
       </ul></div>
       <div><ul class="small">
         <li><strong>Right:</strong> the assembly drop-down and a search box for a gene, position, or sequence. Over <strong>50,000 assemblies</strong> in all.</li>
-        <li>We use <span class="chip">hg38</span>; <span class="chip">hg19</span> is still common clinically &mdash; pick the right build first.</li>
+        <li>We use <span class="chip">hg38</span>, but <span class="chip">hg19</span> is still common clinically, so pick the right build first.</li>
       </ul></div>
     </div>
     <div class="callout exercise" style="max-width:94%;margin:0.3em auto 0;"><span class="lbl">Try it</span>
@@ -182,7 +182,8 @@
           <li>Gene symbol: <span class="chip">BRAF</span></li>
           <li>A feature within a gene: <span class="chip">SOX2 exon 2</span></li>
           <li>Position: <span class="chip">chr7:140,753,300-140,753,400</span></li>
-          <li>dbSNP: <span class="chip">rs113488022</span> · HGVS: <span class="chip">NM_004333.6:c.1799T&gt;A</span></li>
+          <li>dbSNP: <span class="chip">rs113488022</span></li>
+          <li>HGVS: <span class="chip">NM_004333.6:c.1799T&gt;A</span></li>
           <li>A pasted DNA sequence (runs BLAT)</li>
           <li>ClinVar / RefSeq / GENCODE accessions</li>
         </ul>
@@ -212,7 +213,7 @@
         <img class="shot" src="/images/slideDecks/tutorial1-basics/navcontrols.jpg" alt="Move and zoom controls">
         <span class="navbadge" style="left:18%">5</span>
         <span class="navbadge" style="left:46%">6</span>
-        <span class="navbadge" style="left:64%">7</span>
+        <span class="navbadge" style="left:61%">7</span>
         <span class="navbadge" style="left:89%">6</span>
       </div>
     </div>
@@ -239,16 +240,16 @@
     <div class="split">
       <div class="txt">
         <ul class="small">
-          <li><strong>Shift + drag</strong> across the image opens the <em>Drag-and-select</em> dialog: <strong>Zoom In</strong> to that range, or add a coloured <strong>highlight</strong> you can keep.</li>
+          <li><strong>Shift + drag</strong> across the image opens the <em>Drag-and-select</em> dialog: <strong>Zoom In</strong> to that range, or add a colored <strong>highlight</strong> you can keep.</li>
           <li><strong>Alt-drag</strong> (Windows) / <strong>Option-drag</strong> (Mac) adds a highlight directly.</li>
           <li><strong>Ctrl-drag</strong> (Windows) / <strong>Cmd-drag</strong> (Mac) zooms straight to the selected range.</li>
-          <li>Clear highlights via View → Clear Highlights.</li>
+          <li>Clear highlights via View → Remove all highlights.</li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it</span>
-          Shift-drag over a BRAF exon → <strong>Add Highlight</strong>, pick a colour.</div>
+          Shift-drag over a BRAF exon → <strong>Add Highlight</strong>, pick a color.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/shiftdrag.jpg" alt="Drag-and-select dialog">
-        <figcaption>Shift-drag → Drag-and-select: zoom to the region, or highlight it in a colour that persists across views.</figcaption></figure></div>
+        <figcaption>Shift-drag → Drag-and-select: zoom to the region, or highlight it in a color that persists across views.</figcaption></figure></div>
     </div>
     <aside class="notes">
       Persistent highlight bands are great for building figures and for marking a region of interest across zooms and in shared sessions.
@@ -283,11 +284,12 @@
     <h2>Visibility modes: “feature” tracks</h2>
     <div class="split">
       <div class="txt">
+        <p class="small">A <strong>feature</strong> is a single item drawn in a track, such as a gene, an exon, or a variant. Feature tracks draw these one at a time based on their chromosome start position, and the visibility mode sets how they stack:</p>
         <ul class="small">
           <li><strong>hide</strong>: off</li>
           <li><strong>dense</strong>: all on one line</li>
           <li><strong>squish</strong>: thin, many per line</li>
-          <li><strong>pack</strong>: one labelled item per row</li>
+          <li><strong>pack</strong>: each row can contain multiple features</li>
           <li><strong>full</strong>: one row per feature</li>
         </ul>
         <p class="small">Right-click a track to set its mode, configure, or reorder. (Same GENCODE region, four modes →)</p>
@@ -334,7 +336,7 @@
       <div class="txt">
         <ul class="small">
           <li><strong>Mouse-over</strong> a feature for a quick tooltip.</li>
-          <li><strong>Click</strong> a feature → details page (significance, links, colour key).</li>
+          <li><strong>Click</strong> a feature → details page (significance, links, color key).</li>
           <li>Click the <strong>track name</strong> → docs &amp; configuration.</li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it, <a href="https://genome.ucsc.edu/s/Lou/BRAF_V600E">▶ open the BRAF V600E session</a></span>
@@ -352,13 +354,12 @@
   </section>
 
 <section>
-    <h2>Mouse-over for quick descriptions</h2>
+    <h2>Mouse-over a track name for a description</h2>
     <div class="split">
       <div class="txt">
         <ul class="small">
-          <li>Hover a <strong>track name</strong> (in the controls) → a one-line description of what it is.</li>
-          <li>Hover a <strong>feature</strong> → its key facts without clicking.</li>
-          <li>The fast way to learn an unfamiliar track before turning it on.</li>
+          <li>Hover a <strong>track name</strong> in the controls under the image (not a feature in the image itself) → a one-line description of what that track is.</li>
+          <li>The fast way to learn an unfamiliar track before you turn it on.</li>
         </ul>
       </div>
       <div class="figwrap stack">
@@ -407,7 +408,7 @@
     <h2>Track groups = the menu of data (1/3)</h2>
     <div class="split">
       <div class="txt">
-        <p class="small">Below the image, every track sits in a labelled group, your menu of data:</p>
+        <p class="small">Below the image, every track sits in a labeled group, your menu of data:</p>
         <ul class="small">
           <li><span class="grp">Genes &amp; Gene Predictions</span> GENCODE, RefSeq, MANE</li>
           <li><span class="grp">Phenotype, Variants &amp; Literature</span> ClinVar, COSMIC, CIViC…</li>
@@ -417,7 +418,7 @@
         </ul>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/controls.png" alt="Track controls with per-track visibility dropdowns">
-        <figcaption>The track-controls area under the image: each track has a visibility dropdown, organised by group. Don’t panic at the volume. The Recommended Track Sets (next) help.</figcaption></figure></div>
+        <figcaption>The track-controls area under the image: each track has a visibility dropdown, organized by group. Don’t panic at the volume. The Recommended Track Sets (next) help.</figcaption></figure></div>
     </div>
     <aside class="notes">
       Scroll down to the track-controls area under the image. These groups ARE the Browser's data offerings; we'll pull from several today.
@@ -466,7 +467,7 @@
     <div class="callout caution">
     Note: not all track groups will be available for all assemblies, especially non-human and non-mouse
     </div>
-    <aside class="notes">Expression + Single Cell answer "where is it expressed"; Regulation is the epigenetics catalogue (later); Comparative Genomics holds conservation/alignments.</aside>
+    <aside class="notes">Expression + Single Cell answer "where is it expressed"; Regulation is the epigenetics catalog (later); Comparative Genomics holds conservation/alignments.</aside>
   </section>
 
 <section>
@@ -475,16 +476,16 @@
       <div class="txt">
         <ul class="small">
           <li>Reach it two ways: click the track's <strong>name</strong> in the controls under the image, or <strong>right-click the track &rarr; Configure</strong>.</li>
-          <li>Shows the track's <strong>description</strong>: data, methods &amp; references, and the colour key.</li>
+          <li>Shows the track's <strong>description</strong>: data, methods &amp; references, and the color key.</li>
           <li>The same page holds the track's <strong>settings</strong> (next slide).</li>
         </ul>
         <div class="callout exercise"><span class="lbl">Try it</span>
           Click the <strong>GENCODE</strong> track name; skim its description.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/trackdoc.jpg" alt="Track documentation page">
-        <figcaption>A track’s documentation page: methods, references, colour key, and configuration controls.</figcaption></figure></div>
+        <figcaption>A track’s documentation page: methods, references, color key, and configuration controls.</figcaption></figure></div>
     </div>
-    <aside class="notes">Every track has a doc page reached by clicking its name. Great for QA: methods, data version, and how the track is coloured/filtered.</aside>
+    <aside class="notes">Every track has a doc page reached by clicking its name. Great for QA: methods, data version, and how the track is colored/filtered.</aside>
   </section>
 
 <section>
@@ -492,12 +493,12 @@
     <div class="split">
       <div class="txt">
         <ul class="small">
-          <li>Many entries (like <strong>NCBI RefSeq</strong> or <strong>GTEx</strong>) are really a <strong>group of related tracks</strong> &mdash; a single line in the controls that holds a set of <strong>subtracks</strong>.</li>
+          <li>Many entries (like <strong>NCBI RefSeq</strong> or <strong>GTEx</strong>) are really a <strong>group of related tracks</strong>: a single line in the controls that holds a set of <strong>subtracks</strong>.</li>
           <li>Open the container (click its name, or right-click &rarr; Configure) to switch its <strong>subtracks on or off</strong> and set each one&rsquo;s display mode.</li>
           <li>Turn the container <strong>off</strong> to hide all its subtracks at once, or <strong>on</strong> to reveal them and choose individually.</li>
         </ul>
         <div class="callout demo"><span class="lbl">Example</span>
-          <strong>NCBI RefSeq</strong> is one container holding RefSeq Curated, Predicted, MANE, HGMD and more &mdash; here only <strong>RefSeq Curated</strong> is on.</div>
+          <strong>NCBI RefSeq</strong> is one container holding RefSeq Curated, Predicted, MANE, HGMD and more. Here, only <strong>RefSeq Curated</strong> is on.</div>
       </div>
       <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/container_track.png" alt="NCBI RefSeq container track configuration with a checkbox list of subtracks">
         <figcaption>A container track&rsquo;s settings: check or uncheck each <strong>subtrack</strong> to choose what is drawn.</figcaption></figure></div>
@@ -511,11 +512,11 @@
 <section>
   <h2>Configure a track: display &amp; filters</h2>
   <figure class="fig" style="margin:0 auto;"><img class="shotbig" src="/images/slideDecks/tutorial1-basics/track_config.png" alt="ClinVar track configuration page with filters">
-    <figcaption class="capbig">ClinVar&rsquo;s settings page: the <strong>display mode</strong>, the boxed <strong>Filter items by</strong> controls, and colour options.</figcaption></figure>
+    <figcaption class="capbig">ClinVar&rsquo;s settings page: the <strong>display mode</strong> and the boxed <strong>Filter items by</strong> controls.</figcaption></figure>
   <div class="twocol" style="max-width:94%;margin:0.5em auto 0;">
     <div><ul class="small">
-      <li>Set the <strong>display mode</strong> (hide &rarr; full) and track <strong>colours</strong>.</li>
-      <li><strong>Filter</strong> what&rsquo;s shown &mdash; here by <strong>clinical significance, variant type, allele origin, molecular consequence</strong>, and size.</li>
+      <li>Set the <strong>display mode</strong> (hide &rarr; full).</li>
+      <li><strong>Filter</strong> what&rsquo;s shown, here by <strong>clinical significance, variant type, allele origin, molecular consequence</strong>, and size.</li>
     </ul></div>
     <div><ul class="small">
       <li><strong>Container tracks</strong> (a folder grouping related tracks) list their <strong>subtracks</strong> to switch on or off individually.</li>
@@ -524,7 +525,7 @@
   </div>
   <div class="callout exercise" style="max-width:94%;margin:0.4em auto 0;"><span class="lbl">Try it</span>
     Open <strong>ClinVar</strong>&rsquo;s settings and filter to <strong>Pathogenic</strong> variants only.</div>
-  <aside class="notes">The track configuration/description page (hgTrackUi) is where you set display mode, colours, and per-field filters. ClinVar filters: clinical significance (e.g. Pathogenic only), variant type, allele origin, molecular consequence, and size. Submit applies; Reset to defaults reverts.</aside>
+  <aside class="notes">The track configuration/description page (hgTrackUi) is where you set display mode, colors, and per-field filters. ClinVar filters: clinical significance (e.g. Pathogenic only), variant type, allele origin, molecular consequence, and size. Submit applies; Reset to defaults reverts.</aside>
 </section>
 
 <section>
@@ -686,7 +687,7 @@
 
 <section class="divider" data-background-color="#0b5394">
     <h1>Track hubs</h1>
-    <p class="timing">many tracks, organised &amp; shareable, by one URL</p>
+    <p class="timing">many tracks, organized &amp; shareable, by one URL</p>
   </section>
 
 <section>
@@ -730,7 +731,7 @@
       <li>Full how-to: <a href="https://genome.ucsc.edu/goldenPath/help/hubBasics.html">Track Hub Basics</a> · take-away <a href="https://hgwdev.gi.ucsc.edu/~lrnassar/Presentations/CJCU2026/files/make_track_hub_example.txt">example file</a></li>
     </ul>
     <div class="callout demo"><span class="lbl">New: free hosting: Hub Space <span class="tag">2026</span></span>
-      No web server? Upload bigBed / bigWig / BAM / VCF directly on the Browser: <strong>Track Hubs → Hub Space</strong> tab (10 GB to start &mdash; <a href="mailto:genome-www@soe.ucsc.edu">email us</a> if you need more). <a href="https://genome.ucsc.edu/goldenPath/newsarch.html#020326b">Announcement →</a></div>
+      No web server? Upload bigBed / bigWig / BAM / VCF directly on the Browser: <strong>Track Hubs → Hub Space</strong> tab (10 GB to start; <a href="mailto:genome-www@soe.ucsc.edu">email us</a> if you need more). <a href="https://genome.ucsc.edu/goldenPath/newsarch.html#020326b">Read the announcement</a>.</div>
     <aside class="notes">
       Keep this light unless asked for more detail. Show the three-file structure conceptually; point to the take-away example in CJCU2026/files.
     </aside>
@@ -757,7 +758,7 @@
     </div>
     <aside class="notes">
       Requires a (free) login. Save the current view; show the resulting short link.
-      Emphasise it captures EVERYTHING incl. their custom tracks/hubs: so a collaborator opening the link sees exactly what they see.
+      Emphasize it captures EVERYTHING incl. their custom tracks/hubs: so a collaborator opening the link sees exactly what they see.
     </aside>
   </section>
 
@@ -809,7 +810,7 @@
         <li>Online since <strong>2000</strong>.</li>
         <li>A <strong>small team</strong>, building a free, public resource used worldwide.</li>
       </ul>
-      <div class="callout demo"><span class="lbl">Acknowledgement</span>
+      <div class="callout demo"><span class="lbl">Acknowledgment</span>
         Funded by the <strong>National Human Genome Research Institute (NHGRI)</strong> of the <strong>NIH</strong>.</div>
     </div>
     <div class="figwrap"><figure class="fig"><img class="shot" src="/images/slideDecks/tutorial1-basics/gb_team.jpg" alt="UCSC Genome Browser team, July 2025">
@@ -829,8 +830,8 @@
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="../../reveal.js/dist/reveal.js"></script>
+<script src="../../reveal.js/plugin/notes/notes.js"></script>
 <script>
   Reveal.initialize({
     hash: true,
