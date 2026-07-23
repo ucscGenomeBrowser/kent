@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "hdb.h"
+#include "hubConnect.h"
 #include "jksql.h"
 #include "handlerList.h"
 
@@ -63,6 +64,11 @@ sqlSafef(query, sizeof(query), "select taxon from accToTaxon where acc = '%s'", 
 int taxon = sqlQuickNum(conn, query);
 if (taxon != 0)
     db = hDbForTaxon(taxon);
+/* hDbForTaxon may return a curated hub (GenArk) assembly with no real SQL
+ * database.  This handler issues "use <db>" and queries native tables, so a
+ * hub db name would abort.  Treat it as no usable native db. */
+if (db != NULL && hubConnectIsCurated(db))
+    db = NULL;
 return db;
 }
 
