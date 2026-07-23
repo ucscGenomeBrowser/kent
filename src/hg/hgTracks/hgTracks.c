@@ -9116,6 +9116,9 @@ zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
+boolean canColorItems = cfgOptionBooleanDefault("canColorItems", FALSE);
+if (canColorItems)
+    createItemColorHash();
 
 if (psOutput != NULL)
    {
@@ -9128,8 +9131,12 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); 
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
+jsonObjectAdd(jsonForClient, "canColorItems", newJsonBoolean(canColorItems));
+if (canColorItems)
+    jsonObjectAdd(jsonForClient, "itemColors",
+                  newJsonString(cartUsualString(cart, "itemColors", "")));
 
 if (hPrintStatus()) cartSaveSession(cart);
 
