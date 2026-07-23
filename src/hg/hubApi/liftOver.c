@@ -214,7 +214,11 @@ static boolean onGenomeRRMachine()
 if (hIsPrivateHost())	// stay on localhost for hgwdev and hgwbeta
     return TRUE;
 char *hostName = thisHostName();
-if (hostName[0] == '\0' || !startsWith("hgw", hostName))
+if (isEmpty(hostName))
+    return FALSE;
+if (startsWith("hgwbeta", hostName))
+    return TRUE;
+if (!startsWith("hgw", hostName))
     return FALSE;
 char afterHgw = hostName[3];
 return (afterHgw >= '0' && afterHgw <= '9');

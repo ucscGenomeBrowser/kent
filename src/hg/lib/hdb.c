@@ -4247,7 +4247,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             if (tdb->subtracks == NULL)
                 tdbMarkAsCompositeChild(tdb);
             else
-                tdbMarkAsCompositeView(tdb);
+                {
+                if (trackDbLocalSetting(tdb, "container"))
+                    tdbMarkAsCompositeChild(tdb);
+                else
+                    tdbMarkAsCompositeView(tdb);
+                }
             }
         }
     trackDbContainerMarkup(tdb, tdb->subtracks);

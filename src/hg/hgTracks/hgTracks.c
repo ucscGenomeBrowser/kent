@@ -7623,8 +7623,13 @@ for (track = trackList; track != NULL; track = track->next)
 
         if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
+            // QuickLifted tracks are exempt from hideTracks -- their visibility is
+            // carried over from the source assembly's cart (and may still be under the
+            // undecorated name until migrated below), so consult the cart, not the URL.
+            boolean superFromCart = !hideTracks ||
+                (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
             // first deal with visibility of super track
-            char *s = hideTracks ? cgiOptionalString(track->tdb->parent->track) : cartOptionalString(cart, track->tdb->parent->track);
+            char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
             if (s)
                 {
                 track->tdb->parent->visibility = hTvFromString(s) ;
@@ -7632,7 +7637,7 @@ for (track = trackList; track != NULL; track = track->next)
                 }
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
-                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track));
+                s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
                 if (s)
                     {
                     cartSetString(cart, track->tdb->parent->track, s);
@@ -9116,6 +9121,9 @@ zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
+boolean canColorItems = cfgOptionBooleanDefault("canColorItems", FALSE);
+if (canColorItems)
+    createItemColorHash();
 
 if (psOutput != NULL)
    {
@@ -9128,8 +9136,12 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); 
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
+jsonObjectAdd(jsonForClient, "canColorItems", newJsonBoolean(canColorItems));
+if (canColorItems)
+    jsonObjectAdd(jsonForClient, "itemColors",
+                  newJsonString(cartUsualString(cart, "itemColors", "")));
 
 if (hPrintStatus()) cartSaveSession(cart);
 

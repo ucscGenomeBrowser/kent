@@ -9,7 +9,7 @@ generative model that combines cross-species evolutionary scores with human popu
 variation: scores from EVE (an evolutionary variational autoencoder) and the ESM-1v protein
 language model are calibrated against allele observations in the UK Biobank using a Gaussian
 process, yielding a continuous, human-specific measure of variant impact. This track shows
-popEVE scores for single-nucleotide missense substitutions across roughly 18,000 human proteins.
+popEVE scores for all missense substitutions across roughly 18,000 human proteins.
 </p>
 
 <h2>Display Conventions</h2>
@@ -19,10 +19,10 @@ individual amino acid positions in the protein, placed at the codon's genomic co
 The rows correspond to the 20 standard amino acids, ordered by amino acid class to match
 the MaveDB track. Each cell
 shows the popEVE score for substituting the wildtype amino acid at that position with the
-row amino acid. Because popEVE is distributed as a list of genomic single-nucleotide
-variants, only amino acid substitutions reachable by a single-nucleotide change are scored;
-cells for substitutions requiring more than one nucleotide change, for the wildtype amino
-acid, or for positions without a score (for example start codons) are left empty.
+row amino acid. All 19 possible substitutions are scored at each position; only the wildtype
+cell is left empty. A small number of proteins, taken from an earlier data release that
+provided only genomic single-nucleotide variants, show just the substitutions reachable by a
+single-nucleotide change (roughly 6 of 19 per position) and therefore appear sparser.
 </p>
 
 <p>
@@ -37,7 +37,7 @@ severe and moderate thresholds are fixed anchors, and the extremes saturate at t
     <th style="border:1px solid #ccc;padding:6px 12px;background:#f2f2f2;">popEVE score</th>
     <th style="border:1px solid #ccc;padding:6px 12px;background:#f2f2f2;">Interpretation</th></tr>
 <tr><td style="border:1px solid #ccc;background:#b2182b;width:50px;">&nbsp;</td>
-    <td style="border:1px solid #ccc;padding:4px 10px;">&le; &minus;5.74</td>
+    <td style="border:1px solid #ccc;padding:4px 10px;">&le; &minus;6.04</td>
     <td style="border:1px solid #ccc;padding:4px 10px;">Most deleterious (color saturates here)</td></tr>
 <tr><td style="border:1px solid #ccc;background:#d6604d;width:50px;">&nbsp;</td>
     <td style="border:1px solid #ccc;padding:4px 10px;">&asymp; &minus;5.056</td>
@@ -49,7 +49,7 @@ severe and moderate thresholds are fixed anchors, and the extremes saturate at t
     <td style="border:1px solid #ccc;padding:4px 10px;">&asymp; &minus;3.5</td>
     <td style="border:1px solid #ccc;padding:4px 10px;">Near the proteome-wide median</td></tr>
 <tr><td style="border:1px solid #ccc;background:#2166ac;width:50px;">&nbsp;</td>
-    <td style="border:1px solid #ccc;padding:4px 10px;">&ge; &minus;2.29</td>
+    <td style="border:1px solid #ccc;padding:4px 10px;">&ge; &minus;2.41</td>
     <td style="border:1px solid #ccc;padding:4px 10px;">Most tolerated (color saturates here)</td></tr>
 </table>
 <p>
@@ -66,7 +66,7 @@ example:
 <p style="border:1px solid #ccc; padding:6px 12px; display:inline-block;">
 G1042&rarr;A<br>
 <b>popEVE:</b> -3.652 (tolerated)<br>
-<b>EVE:</b> 6.75<br>
+<b>EVE index:</b> 6.75<br>
 <b>ESM1v:</b> -8.779<br>
 <b>popAdj:</b> EVE -3.537 / ESM1v -3.767<br>
 <b>gap:</b> 0.277
@@ -78,7 +78,7 @@ G1042&rarr;A<br>
     <td style="border:1px solid #ccc;padding:4px 10px;">The substitution: the wildtype amino acid (G) at the protein position (1042) changed to the variant amino acid (A) represented by this row.</td></tr>
 <tr><td style="border:1px solid #ccc;padding:4px 10px;"><tt>popEVE</tt></td>
     <td style="border:1px solid #ccc;padding:4px 10px;">The popEVE score and its severity class (severe / moderate / tolerated). This is the calibrated, proteome-wide score &mdash; comparable across genes, with lower (more negative) values more deleterious &mdash; and it determines the cell color.</td></tr>
-<tr><td style="border:1px solid #ccc;padding:4px 10px;"><tt>EVE</tt></td>
+<tr><td style="border:1px solid #ccc;padding:4px 10px;"><tt>EVE index</tt></td>
     <td style="border:1px solid #ccc;padding:4px 10px;">The raw EVE evolutionary index used as an input to popEVE (a log-likelihood-ratio scale on which higher values are more deleterious). This is not the same as the 0&ndash;1 score shown in the separate EVE track.</td></tr>
 <tr><td style="border:1px solid #ccc;padding:4px 10px;"><tt>ESM1v</tt></td>
     <td style="border:1px solid #ccc;padding:4px 10px;">The raw ESM-1v protein language model score used as the other input to popEVE, on which more negative values are more deleterious.</td></tr>
@@ -120,12 +120,14 @@ derived from a two-component Gaussian mixture fit. See Orenbuch et al. 2025 for 
 </p>
 
 <p>
-The data were downloaded as a complete GRCh38 VCF (UKBB-trained popEVE, version 1.1) from
-<a href="https://pop.evemodel.org" target="_blank">https://pop.evemodel.org</a>.
-The VCF lists, for every possible missense substitution, its genomic coordinates, the RefSeq
-protein accession and gene symbol, the popEVE score and component scores. Multiple codon
-changes encoding the same amino acid substitution carry identical popEVE scores and were
-deduplicated to one record per substitution. Records were converted to heatmap bigBed format
+The full per-amino-acid popEVE score matrices (all substitutions at every position, with the
+popEVE score and component scores) were downloaded as per-transcript files from
+<a href="https://pop.evemodel.org" target="_blank">https://pop.evemodel.org</a>
+(UKBB-trained popEVE, version 1.1). Because those files are keyed by RefSeq protein position
+rather than by genome coordinate, the genomic codon coordinates for each residue were taken
+from the companion complete GRCh38 popEVE VCF. A small number of proteins present in the VCF
+but not in the per-transcript release retain only their single-nucleotide-reachable
+substitutions. Records were converted to heatmap bigBed format
 with a custom Python script; full processing instructions are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/popEve.txt"
 target="_blank">makedoc file</a>, and the conversion scripts are available in
