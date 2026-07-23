@@ -194,10 +194,16 @@ return host;
 }
 
 static boolean inUcscEduDomain()
-/* Return TRUE if this host is anywhere under the ucsc.edu domain. */
+/* Return TRUE if this machine is configured as belonging to the ucsc.edu
+ * domain, per hg.conf's central.domain setting (the same setting used for
+ * the cross-host login cookie domain).  This is deployment config rather
+ * than something derived from the machine's own OS hostname/DNS: a box's
+ * local/cloud-assigned hostname and its UCSC-facing name (e.g.
+ * genome-euro.ucsc.edu) can be unrelated DNS labels with no way to bridge
+ * them via gethostname()/getaddrinfo(). */
 {
-char *hostName = thisHostName();
-return (hostName[0] != '\0' && endsWith(hostName, ".ucsc.edu"));
+char *domain = cfgOption(CFG_CENTRAL_DOMAIN);
+return (domain != NULL && strstr(domain, ".ucsc.edu") != NULL);
 }
 
 static boolean onGenomeRRMachine()
