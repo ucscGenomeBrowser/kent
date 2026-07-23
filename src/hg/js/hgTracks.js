@@ -1826,10 +1826,11 @@ var posting = {
                     location.assign(href);
                 }
             } else if (cgi === "hgc") {
-                if (id.startsWith("multiz")) {
+                if (id.startsWith("multiz") || id.startsWith("tabulaSapiens") || id.startsWith("crossTissue")) {
                     // multiz tracks have a form that lets you change highlighted bases
                     // that does not play well in a pop up
-                    // toga tracks require bootstrap which does not work with something
+                    // the faceted bar charts have a custom hgc page that resubmits on most clicks
+                    // so we need to overhaul the page before allowing them in popups
                     location.assign(href);
                     return false;
                 }
