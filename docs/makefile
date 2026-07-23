@@ -36,7 +36,8 @@ doInstall: $(DOCS)
 	done
 	@# Copy prebuilt static slide decks (reveal.js HTML) as-is. Their images are
 	@# served separately from /images/slideDecks/ (kept in the htdocsExtras repo),
-	@# so only the HTML is deployed here.
+	@# and the reveal.js library/CSS are served from /js/ and /style/ (installed
+	@# by src/hg/js/external and src/hg/htdocs/style), so only the HTML is deployed here.
 	@if [ -d slideDecks ]; then \
 		echo "Copying slide-deck HTML -> ${destDir}/docs/slideDecks/"; \
 		mkdir -p "${destDir}/docs"; \
