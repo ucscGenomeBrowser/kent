@@ -1,29 +1,38 @@
 #!/usr/bin/env python3
 """Convert popEVE records (extracted, sorted by protein then position) to heatmap bigBed.
 
-Usage: vcfToPopEveHeatmap.py <sorted_tsv> <strandMap> <output_bed> [loAnchor] [hiAnchor]
+Usage: vcfToPopEveHeatmap.py <sorted_tsv> <strandMap> <output_bed> <loAnchor> <hiAnchor> [csvDir]
 
 Input <sorted_tsv> is the output of extractPopEve.py sorted by:
     sort -t$'\\t' -k1,1 -k4,4n
-so every protein's records are contiguous and in ascending genomic order.
+so every protein's records are contiguous and in ascending genomic order.  This supplies
+the genomic codon coordinates, strand signal, wildtype residue, and gene symbol.
 
 <strandMap> is a TSV "protAcc<TAB>strand" (one preferred mapping per NP_ accession,
 from hg38 ncbiRefSeq) used to validate / override the strand inferred from coordinates.
 
+<csvDir> (optional) is the directory of per-transcript popEVE score CSVs (one <NP_acc>.csv
+per protein, columns: mutant,gap frequency,popEVE,popped EVE,popped ESM-1v,EVE,ESM-1v).
+When given, each protein's full per-amino-acid matrix (all 19 substitutions per position) is
+taken from its CSV, producing a dense heatmap.  Proteins with no CSV fall back to the
+single-nucleotide-reachable substitutions from <sorted_tsv> (sparse).  The codon genomic
+coordinates always come from <sorted_tsv>.
+
 Produces one heatmap BED12+ line per protein (see popEve_heatmap.as):
   Columns = protein positions ordered by ascending genomic coordinate; reverse-strand
             genes therefore read C-terminus -> N-terminus, matching genomic orientation.
-  Rows    = 20 standard amino acids (A C D E F G H I K L M N P Q R S T V W Y).
-  Each codon is a block.  popEVE lists only positions carrying a missense alt, so a codon
-  may have 2 of 3 genomic positions; block sizes are therefore clamped so adjacent blocks
-  cannot overlap (min(3, gap-to-next)), keeping the file valid for bedToBigBed.
-  Wildtype cells are left empty.  Mouseover carries popEVE + severity class plus the
-  component EVE / ESM-1v / pop-adjusted scores and gap frequency.
+  Rows    = 20 standard amino acids ordered by class (A V L I M F Y W R H K D E S T N Q G C P).
+  Each codon is a block; block sizes are clamped so adjacent blocks cannot overlap (a codon
+  may have only 2 of its 3 genomic positions represented), keeping the file valid for
+  bedToBigBed.  Wildtype cells are left empty.  Mouseover carries popEVE + severity class
+  plus the component EVE / ESM-1v / pop-adjusted scores and gap frequency.
 """
 
 import sys
+import os
 
 STANDARD_AAS = list('AVLIMFYWRHKDESTNQGCP')   # 20 standard AAs, by class, to match MaveDB
+STANDARD_SET = set(STANDARD_AAS)
 
 # Published popEVE severity cutoffs (fixed interior color anchors).
 SEVERE_MAX = -5.056      # popEVE < SEVERE_MAX            -> severe
@@ -70,6 +79,41 @@ def loadStrandMap(path):
     return d
 
 
+def loadCsv(csvDir, protein):
+    """Load a protein's full per-amino-acid popEVE matrix from its CSV.
+
+    Returns {protPos: {'wt': wt, 'vars': {var: (popEVE, EVE, ESM1v, popAdjEVE, popAdjESM1v,
+    gap)}}} or None if the CSV is absent.  CSV columns:
+    mutant,gap frequency,popEVE,popped EVE,popped ESM-1v,EVE,ESM-1v.
+    """
+    if csvDir is None:
+        return None
+    path = os.path.join(csvDir, protein + '.csv')
+    if not os.path.exists(path):
+        return None
+    data = {}
+    with open(path) as fh:
+        fh.readline()   # header
+        for line in fh:
+            f = line.rstrip('\n').split(',')
+            if len(f) < 7:
+                continue
+            m = f[0]                                 # e.g. G1042A
+            wt, var = m[0], m[-1]
+            if wt not in STANDARD_SET or var not in STANDARD_SET:
+                continue
+            try:
+                pos = int(m[1:-1])
+            except ValueError:
+                continue
+            gap, pe, paEve, paEsm, eve, esm = f[1], f[2], f[3], f[4], f[5], f[6]
+            d = data.get(pos)
+            if d is None:
+                d = data[pos] = {'wt': wt, 'vars': {}}
+            d['vars'][var] = (pe, eve, esm, paEve, paEsm, gap)
+    return data
+
+
 def inferStrand(sortedPos):
     """Infer strand from whether protein position decreases as genomic coordinate increases.
     sortedPos is a list of (genomic_start0, prot_pos) sorted by genomic_start0.
@@ -85,11 +129,13 @@ def inferStrand(sortedPos):
     return '-' if last < first else '+'
 
 
-def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats):
+def buildEntry(protein, gene, records, csvData, strandMap, loAnchor, hiAnchor, out, stats):
     """Write one heatmap BED12+ line for a protein.
 
     records: list of (chrom, pos0, wt, protPos, var, popEVE, EVE, ESM1v, popAdjEVE,
                       popAdjESM1v, gapFreq) where pos0 is the 0-based genomic base.
+    csvData: the protein's full matrix from loadCsv(), or None to use only the sparse
+             single-nucleotide-reachable substitutions in records.
     """
     # Group by protein position: wt aa, codon's genomic base set, and {var: (score, extras)}.
     byPos = {}
@@ -110,6 +156,22 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
         stats['multiChrom'] += 1
         return
     chrom = next(iter(chroms))
+
+    # Densify: where the full per-amino-acid CSV covers a position, replace the sparse
+    # single-nucleotide-reachable scores with the complete set of 19 substitutions.  Codon
+    # coordinates (bases) and the wildtype residue stay from the genomic records.
+    if csvData is not None:
+        stats['dense'] += 1
+        for protPos, d in byPos.items():
+            cd = csvData.get(protPos)
+            if cd is None:
+                continue
+            if cd['wt'] != d['wt']:
+                stats['wtMismatch'] += 1
+            d['scores'] = {var: v[0] for var, v in cd['vars'].items()}
+            d['extra'] = {var: v[1:] for var, v in cd['vars'].items()}
+    else:
+        stats['sparse'] += 1
 
     # One column per protein position, ordered by ascending genomic coordinate.
     # Column start = min(codon bases) (0-based); size clamped below.
@@ -137,8 +199,8 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
 
     chromStart = colStarts0[0]
 
-    # Clamp block sizes so adjacent blocks cannot overlap (popEVE codons may have only
-    # 2 of 3 positions, so naive size-3 blocks would collide -> bedToBigBed aborts).
+    # Clamp block sizes so adjacent blocks cannot overlap (a codon may have only 2 of 3
+    # genomic positions, so naive size-3 blocks would collide -> bedToBigBed aborts).
     blockSizes = []
     for i in range(nCols):
         if i < nCols - 1:
@@ -186,7 +248,8 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
                 cls = classify(float(pe))
                 # Mouseover rendered as HTML (<br>/<b>). No commas inside labels (the field is
                 # comma-split by the renderer); values use '.' and '/' only, so labels are unquoted.
-                lbl = ("%s%s&rarr;%s<br><b>popEVE:</b> %s (%s)<br><b>EVE:</b> %s<br>"
+                # "EVE index" is the raw EVE evolutionary index (not the 0-1 score in the EVE track).
+                lbl = ("%s%s&rarr;%s<br><b>popEVE:</b> %s (%s)<br><b>EVE index:</b> %s<br>"
                        "<b>ESM1v:</b> %s<br><b>popAdj:</b> EVE %s / ESM1v %s<br><b>gap:</b> %s" %
                        (wt, protPos, aa, r3(pe), cls, comp(eve), comp(esm), comp(paEve),
                         comp(paEsm), comp(gap)))
@@ -198,9 +261,8 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
     # The heatmap renderer parses the score array with chopCommas (keeps a trailing empty
     # field) but the label array with chopByCharRespectDoubleQuotesKeepEmpty (drops one
     # trailing empty field). When the very last cell (last row, last column) has no scored
-    # substitution - common, since each codon has only a few single-nucleotide-reachable
-    # substitutions - the two field counts disagree and the track aborts. Guarantee a
-    # non-empty final label cell; the empty score keeps that cell uncolored (background).
+    # substitution the two field counts disagree and the track aborts. Guarantee a non-empty
+    # final label cell; the empty score keeps that cell uncolored (background).
     if labelParts[-1] == '':
         labelParts[-1] = '(no popEVE score)'
         stats['trailingFix'] += 1
@@ -223,20 +285,23 @@ def buildEntry(protein, gene, records, strandMap, loAnchor, hiAnchor, out, stats
 
 
 def main():
-    if len(sys.argv) < 4:
-        sys.exit("Usage: %s <sorted_tsv> <strandMap> <output_bed> [loAnchor] [hiAnchor]"
+    if len(sys.argv) < 6:
+        sys.exit("Usage: %s <sorted_tsv> <strandMap> <output_bed> <loAnchor> <hiAnchor> [csvDir]"
                  % sys.argv[0])
     sortedTsv = sys.argv[1]
     strandMapPath = sys.argv[2]
     outputBed = sys.argv[3]
-    loAnchor = float(sys.argv[4]) if len(sys.argv) > 4 else -7.0
-    hiAnchor = float(sys.argv[5]) if len(sys.argv) > 5 else -2.0
+    loAnchor = float(sys.argv[4])
+    hiAnchor = float(sys.argv[5])
+    csvDir = sys.argv[6] if len(sys.argv) > 6 else None
 
     strandMap = loadStrandMap(strandMapPath)
     sys.stderr.write("Loaded %d NP_->strand mappings.\n" % len(strandMap))
+    if csvDir:
+        sys.stderr.write("Dense mode: full per-amino-acid matrices from %s\n" % csvDir)
 
     stats = {'ok': 0, 'multiChrom': 0, 'overlap': 0, 'strandMismatch': 0,
-             'strandDefault': 0, 'trailingFix': 0}
+             'strandDefault': 0, 'trailingFix': 0, 'dense': 0, 'sparse': 0, 'wtMismatch': 0}
 
     with open(sortedTsv) as fh, open(outputBed, 'w') as out:
         curProt = None
@@ -250,18 +315,21 @@ def main():
              eve, esm, paEve, paEsm, gap) = f[:13]
             if protein != curProt:
                 if curProt is not None:
-                    buildEntry(curProt, curGene, recs, strandMap, loAnchor, hiAnchor, out, stats)
+                    buildEntry(curProt, curGene, recs, loadCsv(csvDir, curProt),
+                               strandMap, loAnchor, hiAnchor, out, stats)
                 curProt = protein
                 curGene = gene
                 recs = []
             recs.append((chrom, int(pos) - 1, wt, int(protPos), var, pe,
                          eve, esm, paEve, paEsm, gap))
         if curProt is not None:
-            buildEntry(curProt, curGene, recs, strandMap, loAnchor, hiAnchor, out, stats)
+            buildEntry(curProt, curGene, recs, loadCsv(csvDir, curProt),
+                       strandMap, loAnchor, hiAnchor, out, stats)
 
-    sys.stderr.write("Done: %(ok)d proteins written; multiChrom %(multiChrom)d, "
-                     "overlap %(overlap)d, strandMismatch %(strandMismatch)d, "
-                     "strandDefault %(strandDefault)d, trailingFix %(trailingFix)d\n" % stats)
+    sys.stderr.write("Done: %(ok)d proteins written; dense %(dense)d, sparse %(sparse)d, "
+                     "multiChrom %(multiChrom)d, overlap %(overlap)d, "
+                     "strandMismatch %(strandMismatch)d, strandDefault %(strandDefault)d, "
+                     "wtMismatch %(wtMismatch)d, trailingFix %(trailingFix)d\n" % stats)
 
 
 if __name__ == '__main__':
