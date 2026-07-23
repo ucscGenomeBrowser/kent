@@ -173,11 +173,31 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static char *thisHostName()
+/* Return this machine's own hostname via gethostname().  Unlike hHttpHost(),
+ * which reflects the client-supplied HTTP_HOST/Host: header, this can't be
+ * spoofed by the request and doesn't change depending on which round-robin
+ * name (e.g. genome.ucsc.edu) the client used to reach this box -- using
+ * hHttpHost() here made onGenomeRRMachine() misclassify RR machines reached
+ * via the genome.ucsc.edu name, sending them into an infinite self-relay
+ * loop in fetchGbMembersFromCentral(). */
+{
+static char host[256];
+static boolean init = FALSE;
+if (!init)
+    {
+    if (gethostname(host, sizeof(host)) != 0)
+        host[0] = '\0';
+    init = TRUE;
+    }
+return host;
+}
+
 static boolean inUcscEduDomain()
 /* Return TRUE if this host is anywhere under the ucsc.edu domain. */
 {
-char *httpHost = hHttpHost();
-return (httpHost != NULL && endsWith(httpHost, ".ucsc.edu"));
+char *hostName = thisHostName();
+return (hostName[0] != '\0' && endsWith(hostName, ".ucsc.edu"));
 }
 
 static boolean onGenomeRRMachine()
@@ -187,10 +207,10 @@ static boolean onGenomeRRMachine()
 {
 if (hIsPrivateHost())	// stay on localhost for hgwdev and hgwbeta
     return TRUE;
-char *httpHost = hHttpHost();
-if (httpHost == NULL || !startsWith("hgw", httpHost))
+char *hostName = thisHostName();
+if (hostName[0] == '\0' || !startsWith("hgw", hostName))
     return FALSE;
-char afterHgw = httpHost[3];
+char afterHgw = hostName[3];
 return (afterHgw >= '0' && afterHgw <= '9');
 }
 
