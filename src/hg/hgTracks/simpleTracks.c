@@ -15554,7 +15554,7 @@ unsigned char altR = track->altColor.r, altG = track->altColor.g,
                             altB = track->altColor.b, altA = track->altColor.a;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0, deltaA = 0;
 
-struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeavesOrContainers(tdb->subtracks);
 
 struct trackDb *subTdb;
 int subCount = slCount(tdbRefList);
@@ -15602,9 +15602,20 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
-    if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
-        handler(subtrack);
+    boolean isNestedContainer = (trackDbLocalSetting(subTdb, "container") != NULL);
+    if (isNestedContainer)
+        {
+        /* A container (e.g. multiWig) nested inside the composite.  Build its children
+         * and install the container's aggregate methods (multiWigContainerMethods) so it
+         * draws as a single aggregated row rather than one row per child. */
+        makeContainerTrack(subtrack, subTdb);
+        }
+    else
+        {
+        boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
+        if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
+            handler(subtrack);
+        }
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
      * needed in the "not noInherit" case that hopefully will go away soon. */
@@ -15614,6 +15625,14 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subtrack->longLabel = subTdb->longLabel;
     subtrack->priority = subTdb->priority;
     subtrack->parent = track;
+
+    if (isNestedContainer)
+        {
+        /* The container's wig children carry their own colors; skip the composite
+         * color gradient for the container track itself. */
+        slAddHead(&track->subtracks, subtrack);
+        continue;
+        }
 
     /* Add color gradient. */
     if (finalR || finalG || finalB)

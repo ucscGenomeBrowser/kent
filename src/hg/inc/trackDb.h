@@ -549,6 +549,10 @@ struct slRef *trackDbListGetRefsToDescendants(struct trackDb *tdbForest);
 struct slRef *trackDbListGetRefsToDescendantLeaves(struct trackDb *tdbForest);
 /* Return reference list all leaves in forest. Do slFreeList when done. */
 
+struct slRef *trackDbListGetRefsToDescendantLeavesOrContainers(struct trackDb *tdbForest);
+/* Return reference list of all leaves in forest, plus any container (multiWig) nodes,
+ * not descending into containers. Do slFreeList when done. */
+
 int trackDbRefCmp(const void *va, const void *vb);
 /* Do trackDbCmp on list of references as opposed to actual trackDbs. */
 
