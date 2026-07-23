@@ -15,7 +15,7 @@ sortOrder dataType=+ organ=+ biosampleType=+
 shortLabel ENCODE4 Core Collection
 visibility hide
 dataVersion ENCODE release 4, 2024. (Includes ENCODE2, ENCODE3, and mouse ENCODE data)
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#072226 "Released Jul. 22, 2026"
 
 track cCREs_view
 view cCREs_view

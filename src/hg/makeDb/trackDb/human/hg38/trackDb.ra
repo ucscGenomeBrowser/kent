@@ -683,8 +683,7 @@ bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
 include trackDb.gencode.ra
 
-include wgEncodeReg.ra beta,public
-include wgEncodeReg.alpha.ra alpha
+include wgEncodeReg.ra
 include wgEncodeReg4.ra
 
 include encode3.ra
