@@ -1,7 +1,7 @@
 # ENCODE Integrated Regulation Track (Chris Eisenhart, Kate)
 
 track wgEncodeReg
-superTrack on show
+superTrack on hide
 shortLabel ENCODE3 Regulation
 longLabel Integrated Regulation from ENCODE3
 group regulation
