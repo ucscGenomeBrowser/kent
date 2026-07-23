@@ -3633,14 +3633,25 @@ var rightClick = {
             rec = hgTracks.trackDb[id];
             if (tdbHasParent(rec) && tdbIsLeaf(rec))
                 url += rec.parentTrack;
+            else if (tdbHasParent(rec) && tdbIsContainer(rec))
+                // A container (e.g. multiWig) nested in a composite configures itself,
+                // not its parent (whose link is on the shared row button).
+                url += id;
             else {
                 // The button already has the ref
-                var link = normed($( 'td#td_btn_'+ rightClick.selectedMenuItem.id ).children('a')); 
+                var link = normed($( 'td#td_btn_'+ rightClick.selectedMenuItem.id ).children('a'));
                 if (link)
                     url = $(link).attr('href');
                 else
                     url += rightClick.selectedMenuItem.id;
             }
+            location.assign(url);
+
+        } else if (cmd === 'hgTrackUi_followParent') {
+
+            // Configure the parent container (e.g. the composite) of a nested container track.
+            rec = hgTracks.trackDb[id];
+            url = "hgTrackUi?hgsid=" + getHgsid() + "&g=" + rec.parentTrack;
             location.assign(url);
 
         } else if (cmd === 'newCollection') {
@@ -4642,6 +4653,16 @@ var rightClick = {
                             rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_follow");
                             return true; }
                       };
+                    if (rec.parentTrack) {
+                        // A container (e.g. multiWig) nested in a composite: also offer
+                        // the parent composite's configuration.
+                        o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
+                          rec.parentLabel + " track set..."] = {
+                            onclick: function(menuItemClicked, menuObject) {
+                                rightClick.hit(menuItemClicked,menuObject,"hgTrackUi_followParent");
+                                return true; }
+                          };
+                    }
                 }
                 if (jQuery.floatMgr) {
                     o[(rightClick.selectedMenuItem.id === rightClick.floatingMenuItem ?
