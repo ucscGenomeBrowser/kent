@@ -173,6 +173,66 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static boolean inUcscEduDomain()
+/* Return TRUE if this host is anywhere under the ucsc.edu domain. */
+{
+char *httpHost = hHttpHost();
+return (httpHost != NULL && endsWith(httpHost, ".ucsc.edu"));
+}
+
+static boolean onGenomeRRMachine()
+/* Return TRUE if running on one of the genome.ucsc.edu round-robin
+ * machines (hgw0, hgw1, hgw2, ...), which carry SQL grants on
+ * hgcentral.gbMembers.  Only meaningful within inUcscEduDomain(). */
+{
+if (hIsPrivateHost())	// stay on localhost for hgwdev and hgwbeta
+    return TRUE;
+char *httpHost = hHttpHost();
+if (httpHost == NULL || !startsWith("hgw", httpHost))
+    return FALSE;
+char afterHgw = httpHost[3];
+return (afterHgw >= '0' && afterHgw <= '9');
+}
+
+static boolean fetchGbMembersFromCentral(char *userName, char **retEmail, char **retRealName)
+/* Relay to genome.ucsc.edu's own loginStatus endpoint to get email/realName
+ * for userName, forwarding this request's Cookie header so genome.ucsc.edu
+ * authenticates the same session.  Used on ucsc.edu hosts that lack SQL
+ * grants on hgcentral.gbMembers.  Returns FALSE on any failure. */
+{
+char *cookieHeader = getenv("HTTP_COOKIE");
+if (isEmpty(cookieHeader))
+    return FALSE;
+
+struct dyString *reqHeader = dyStringNew(0);
+dyStringPrintf(reqHeader, "Cookie: %s\r\n", cookieHeader);
+char *url = "https://genome.ucsc.edu/cgi-bin/hubApi/liftOver/loginStatus";
+int sd = netOpenHttpExt(url, "GET", reqHeader->string);
+dyStringFree(&reqHeader);
+if (sd < 0)
+    return FALSE;
+
+char *redirectedUrl = NULL;
+if (!netSkipHttpHeaderLinesWithRedirect(sd, url, &redirectedUrl))
+    {
+    close(sd);
+    return FALSE;
+    }
+
+struct dyString *body = netSlurpFile(sd);
+close(sd);
+struct jsonElement *json = jsonParse(body->string);
+dyStringFree(&body);
+if (json == NULL)
+    return FALSE;
+
+char *email = jsonStringField(json, "email");
+char *realName = jsonStringField(json, "realName");
+*retEmail = cloneString(email ? email : "");
+*retRealName = cloneString(realName ? realName : "");
+return TRUE;
+}
+
 static void loginStatus()
 /* output current user login status as JSON */
 {
@@ -190,27 +250,38 @@ else
 if (userName != NULL)
     {
     // Get both email and realName from gbMembers table
-    struct sqlConnection *sc = NULL;
-    if (privateHost)
-	sc = hConnectCentral();
-    else
-	sc = hConnectOtto();
-    struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
-    struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
-    char **row = sqlNextRow(sr);
-
     char *email = NULL;
     char *realName = NULL;
-    if (row != NULL)
+
+    if (inUcscEduDomain() && !onGenomeRRMachine())
         {
-        email = cloneString(row[0] ? row[0] : "");
-        realName = cloneString(row[1] ? row[1] : "");
+        // dev sandboxes, hgwbeta, etc: no local grants on gbMembers,
+        // relay to genome.ucsc.edu instead
+        fetchGbMembersFromCentral(userName, &email, &realName);
         }
-    sqlFreeResult(&sr);
-    if (privateHost)
-	hDisconnectCentral(&sc);
     else
-	hDisconnectOtto(&sc);
+        {
+        // RR machines, and anything entirely outside ucsc.edu: unchanged
+        struct sqlConnection *sc = NULL;
+        if (privateHost)
+	    sc = hConnectCentral();
+        else
+	    sc = hConnectOtto();
+        struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
+        struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
+        char **row = sqlNextRow(sr);
+
+        if (row != NULL)
+            {
+            email = cloneString(row[0] ? row[0] : "");
+            realName = cloneString(row[1] ? row[1] : "");
+            }
+        sqlFreeResult(&sr);
+        if (privateHost)
+	    hDisconnectCentral(&sc);
+        else
+	    hDisconnectOtto(&sc);
+        }
 
     // Build logout URL with returnto parameter
     char *returnTo = cgiOptionalString("returnTo");

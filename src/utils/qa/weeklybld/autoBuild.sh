@@ -259,6 +259,24 @@ STATE_FILE=""
 # Each do_* sets this so the success email reports the right version.
 PHASE_VER=""
 
+# Docker smoke-test failures are NON-FATAL (the beta instances are QA aids, not
+# release artifacts), but must not be missed. Each failure drops a marker file so
+# it survives the checkpoint/resume model -- the smoke step checkpoints and is
+# skipped on a re-run, so a global variable alone would forget an earlier failure
+# by the end-of-phase summary / completion email. smoke_marker names the file;
+# smoke_failed_list globs the markers for the current build and echoes the failed
+# instance names (empty if none).
+smoke_marker() { echo "$LOGDIR/.smoke-failed.v${BRANCHNN}.$1"; }
+smoke_failed_list() {
+    local m base names=""
+    for m in "$LOGDIR"/.smoke-failed.v${BRANCHNN}.*; do
+        [[ -e "$m" ]] || continue          # no-match glob stays literal; skip it
+        base="${m##*/}"
+        names="${names:+$names }${base#.smoke-failed.v${BRANCHNN}.}"
+    done
+    echo "$names"
+}
+
 state_init() {
     # $1 = phase name, $2 = version (NN) this phase produces
     mkdir -p "$LOGDIR"
@@ -637,11 +655,11 @@ final_robots() {
     return 0
 }
 
-# Build the beta image locally on hgwdev; do NOT push to Docker Hub. kent-beta
-# runs from this image and is torn down again on do_wrapup. refs #37655.
-# amd64 only: the container only runs on hgwdev (amd64) and is never pushed, so
-# no arm64 build, no manifest, no binfmt. Now fatal-on-failure (was a warning):
-# the checkpoint model makes a retry just a re-run that resumes at this step.
+# Build the amd64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# kent-beta runs from this image and is torn down again on do_wrapup. refs #37655.
+# The arm64 beta is a separate step (final_docker_beta_arm64) below. Neither is
+# pushed, so there is no manifest dance. Fatal-on-failure (was a warning): the
+# checkpoint model makes a retry just a re-run that resumes at this step.
 final_docker_beta() {
     local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
     if [[ ! -d "$dockerdir" ]]; then
@@ -653,6 +671,101 @@ final_docker_beta() {
 final_refresh_beta() {
     run "$WEEKLYBLD/refresh-instance.sh" beta
 }
+
+# Build the arm64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# Unlike the amd64 kent:beta (public CGIs baked in, then overlay-cgi.sh streams
+# hgwdev's amd64 cgi-bin-beta into the running container), an arm64 image cannot
+# run those amd64 binaries, so it COMPILES from source inside the image.
+#
+# CRITICAL -- which source: browserSetup.sh hardcodes `git clone -b beta`, but the
+# public `beta` branch does NOT advance to this build's version until wrap-up
+# (tagBeta.csh does `git checkout -b beta origin/v${NN}_branch; git push origin
+# beta`). So a stock arm64 build here at final would compile the PREVIOUS release,
+# not the version we just built. Instead we build from v${BRANCHNN}_branch, which
+# final_tag_branch has already pushed to GitHub: we generate a patched build
+# context -- a copy of browserSetup.sh with its clone pointed at v${BRANCHNN}_branch,
+# and a copy of the Dockerfile that COPYs that patched script instead of ADDing
+# master's from GitHub. browserSetup only clones when ~/kent is absent, so
+# redirecting its clone branch is all that is needed; the arm64 beta then reflects
+# this build, matching the amd64 beta, and the smoke step's version check holds.
+#
+# Needs the QEMU binfmt handlers (cleared on reboot); the cross-arch compile under
+# emulation is slow. kent-beta-arm64 is torn down at do_wrapup alongside kent-beta.
+# Fatal-on-failure like the amd64 build: the checkpoint model makes a retry just a
+# re-run that resumes at this step. refs #37655
+final_docker_beta_arm64() {
+    local srcdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer"
+    local dockerdir="$srcdir/docker"
+    [[ -d "$dockerdir" ]]            || die "Docker directory not found at $dockerdir"
+    [[ -f "$srcdir/browserSetup.sh" ]] || die "browserSetup.sh not found at $srcdir"
+    ensure_binfmt
+
+    local ctx="$LOGDIR/.beta-arm64-ctx"
+    local log="$LOGDIR/v${BRANCHNN}.docker-beta-arm64.log"
+    if $DRY_RUN; then
+        log "(dry-run) would build kent:beta-arm64 from v${BRANCHNN}_branch"
+        return 0
+    fi
+    rm -rf "$ctx"; mkdir -p "$ctx"
+    # patch the clone branch: beta -> v${BRANCHNN}_branch
+    sed "s|git clone -b beta |git clone -b v${BRANCHNN}_branch |" \
+        "$srcdir/browserSetup.sh" > "$ctx/browserSetup.sh"
+    grep -q "git clone -b v${BRANCHNN}_branch " "$ctx/browserSetup.sh" \
+        || die "arm64 beta: failed to patch browserSetup.sh clone branch to v${BRANCHNN}_branch"
+    # Dockerfile: same as the release one, but COPY the patched browserSetup.sh
+    # from the context instead of ADDing master's copy from GitHub.
+    sed -E "s|^ADD [^ ]*browserSetup.sh /root/browserSetup.sh|COPY browserSetup.sh /root/browserSetup.sh|" \
+        "$dockerdir/Dockerfile" > "$ctx/Dockerfile"
+    grep -q "^COPY browserSetup.sh /root/browserSetup.sh" "$ctx/Dockerfile" \
+        || die "arm64 beta: failed to rewrite Dockerfile browserSetup line to COPY"
+
+    docker build --no-cache --platform linux/arm64 -t kent:beta-arm64 \
+        -f "$ctx/Dockerfile" "$ctx" >& "$log" \
+        || die "arm64 beta docker build failed; see $log"
+    rm -rf "$ctx"
+}
+
+final_refresh_beta_arm64() {
+    run "$WEEKLYBLD/refresh-instance.sh" beta-arm64
+}
+
+# Smoke-test a freshly started beta instance: hgGateway, an hg38 + hg19 hgTracks
+# render (real drawn image, not just HTTP 200), hgBlat, hgTables, and that the
+# CGI version served matches the version this phase built ($PHASE_VER). Output is
+# teed to a per-step log.
+#
+# NON-FATAL: a smoke failure does NOT halt the build (the beta instances are QA
+# aids, not release artifacts), so this always returns 0 and the step checkpoints.
+# The failure is made obvious instead: a loud banner here, a marker file so it
+# survives a resume, and it is re-surfaced in the end-of-phase summary and the
+# completion email. refs #37655
+smoke_instance() {
+    local name="$1"
+    local logf="$LOGDIR/v${BRANCHNN}.smoke-${name}.log"
+    local marker; marker="$(smoke_marker "$name")"
+    local rc=0
+    if run "$WEEKLYBLD/smoke-instance.sh" "$name" --version "$PHASE_VER" 2>&1 | tee "$logf"; then
+        rc=0
+    else
+        rc=$?
+    fi
+    if [[ "$rc" -ne 0 ]]; then
+        $DRY_RUN || : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! DOCKER SMOKE TEST FAILED for kent-${name} (exit $rc)"
+        log "!!! Build CONTINUES (smoke failures are non-fatal), but this"
+        log "!!! instance is broken -- investigate before using it for QA."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    else
+        $DRY_RUN || rm -f "$marker"      # clear any stale marker from a prior run
+        log "docker smoke test PASSED for kent-${name}"
+    fi
+    return 0
+}
+
+final_smoke_beta()       { smoke_instance beta; }
+final_smoke_beta_arm64() { smoke_instance beta-arm64; }
 
 do_final() {
     log "========== PHASE: FINAL BUILD =========="
@@ -683,9 +796,23 @@ do_final() {
     step robots               final_robots
     step docker-beta          final_docker_beta
     step refresh-beta         final_refresh_beta
+    step smoke-beta           final_smoke_beta
+    step docker-beta-arm64    final_docker_beta_arm64
+    step refresh-beta-arm64   final_refresh_beta_arm64
+    step smoke-beta-arm64     final_smoke_beta_arm64
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
+
+    local smoke_failed; smoke_failed="$(smoke_failed_list)"
+    if [[ -n "$smoke_failed" ]]; then
+        log "############################################################"
+        log "##  WARNING: docker smoke test FAILED for:$smoke_failed"
+        log "##  The build completed, but the above beta instance(s) are"
+        log "##  broken and must be investigated before QA. Per-instance"
+        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log"
+        log "############################################################"
+    fi
 }
 
 ##############################################################################
@@ -875,6 +1002,9 @@ wrapup_refresh_containers() {
     log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
     run "$WEEKLYBLD/remove-instance.sh" beta || \
         log "WARNING: kent-beta teardown failed; check container/image manually"
+    log "Removing local kent-beta-arm64 container and image (v${BRANCHNN} has shipped)..."
+    run "$WEEKLYBLD/remove-instance.sh" beta-arm64 || \
+        log "WARNING: kent-beta-arm64 teardown failed; check container/image manually"
     return 0
 }
 
@@ -1250,12 +1380,24 @@ main() {
     log "BUILD PHASE '$phase' COMPLETED SUCCESSFULLY"
     log "============================================"
 
+    # Non-fatal docker smoke failures completed the phase but must be flagged in
+    # the completion banner and email so they are not missed.
+    local smoke_failed; smoke_failed="$(smoke_failed_list)"
+    if [[ -n "$smoke_failed" ]]; then
+        log "*** NOTE: docker smoke test FAILED for:$smoke_failed -- see the WARNING above ***"
+    fi
+
     # Send success notification. Use PHASE_VER (the version this phase produces),
     # not BRANCHNN, since preview1/preview2 run before BRANCHNN is bumped.
     local ver="${PHASE_VER:-$BRANCHNN}"
     if ! $DRY_RUN; then
-        echo "autoBuild.sh completed phase '$phase' for v${ver} successfully at $(date)" \
-            | mail -s "AUTOBUILD OK: $phase v${ver}" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
+        local subj="AUTOBUILD OK: $phase v${ver}"
+        local body="autoBuild.sh completed phase '$phase' for v${ver} successfully at $(date)"
+        if [[ -n "$smoke_failed" ]]; then
+            subj="AUTOBUILD OK (SMOKE FAILED:$smoke_failed): $phase v${ver}"
+            body="$body"$'\n\n'"WARNING: docker smoke test FAILED for:$smoke_failed"$'\n'"Those beta instance(s) are broken; investigate before QA. See $LOGDIR/v${ver}.smoke-<name>.log"
+        fi
+        echo "$body" | mail -s "$subj" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
 }
 

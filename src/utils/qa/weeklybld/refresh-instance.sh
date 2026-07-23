@@ -21,9 +21,9 @@ usage() {
 [[ $# -eq 1 ]] || usage
 name="$1"
 case "$name" in
-    tip|beta) ;;
-    rel)      docker pull genomebrowser/server:latest ;;
-    *)        usage ;;
+    tip|beta|beta-arm64) ;;
+    rel)                 docker pull genomebrowser/server:latest ;;
+    *)                   usage ;;
 esac
 container="kent-$name"
 
