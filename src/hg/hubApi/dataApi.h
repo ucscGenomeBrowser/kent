@@ -96,6 +96,9 @@
 #define argAsmId "asmId"
 #define argName "name"
 #define argBetterName "betterName"
+/* used by the internal /submitOttoRequest relay endpoint */
+#define argRequestType "requestType"
+#define argRelaySecret "relaySecret"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
@@ -291,11 +294,32 @@ void textLineOut(char *lineOut);
 void textFinishOutput();
 /* all done with text output, print it all out */
 
-struct sqlConnection *hConnectOtto();
-/* Connect to otto database using otto profile, fallback to central */
+boolean inUcscEduDomain();
+/* Return TRUE if this machine is configured (via hg.conf's central.domain)
+ * as belonging to the ucsc.edu domain. */
 
-void hDisconnectOtto(struct sqlConnection **pConn);
-/* Disconnect otto connection */
+boolean onGenomeRRMachine();
+/* Return TRUE if running on one of the genome.ucsc.edu round-robin
+ * machines (hgw0, hgw1, hgw2, ... or hgwbeta), which carry direct SQL
+ * grants on hgcentral.  Only meaningful within inUcscEduDomain(). */
+
+char *submitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment);
+/* Record a row in the ottoRequest table via hConnectCentral(), applying the
+ * liftOver duplicate/daily-rate guards when requestType is "liftOver", or a
+ * plain insert when requestType is "assembly".  Returns a status string:
+ * "disabled", "duplicate", "rateLimited", "accepted", or "error".  Never
+ * apiErrAbort()s -- used both for direct local calls (this host has
+ * hgcentral write grants) and to answer relaySubmitOttoRequest() calls. */
+
+char *relaySubmitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment);
+/* Relay an ottoRequest submission to genome.ucsc.edu's /submitOttoRequest
+ * endpoint, for hosts that lack local hgcentral write grants.  Returns the
+ * same status vocabulary as submitOttoRequest(). */
+
+void apiSubmitOttoRequest(char *words[MAX_PATH_INFO]);
+/* Internal server-to-server endpoint backing relaySubmitOttoRequest():
+ * authenticates via the shared hg.conf secret 'hubApi.relaySecret', then
+ * calls submitOttoRequest() locally and returns its status as JSON. */
 
 /* ######################################################################### */
 /*  functions in getData.c */

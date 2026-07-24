@@ -1005,6 +1005,7 @@ hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
 hashAdd(apiFunctionHash, "liftOver", &apiLiftOver);
 hashAdd(apiFunctionHash, "liftRequest", &apiLiftRequest);
 hashAdd(apiFunctionHash, "assemblyRequest", &apiAssemblyRequest);
+hashAdd(apiFunctionHash, "submitOttoRequest", &apiSubmitOttoRequest);
 hashAdd(apiFunctionHash, "blat", &apiBlat);
 }
 

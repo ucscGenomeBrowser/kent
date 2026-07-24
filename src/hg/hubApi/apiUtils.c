@@ -2,6 +2,8 @@
 
 #include "trackHub.h"
 #include "dataApi.h"
+#include "net.h"
+#include "wikiLink.h"
 
 /* when measureTiming is used */
 static long processingStart = 0;
@@ -820,21 +822,215 @@ puts("Content-Type:text/plain\n");
 printf("%s", dyStringCannibalize(&textOutput));
 }
 
-struct sqlConnection *hConnectOtto()
-/* Connect to otto database using otto profile, fallback to central */
+static char *thisHostName()
+/* Return this machine's own hostname via gethostname().  Unlike hHttpHost(),
+ * which reflects the client-supplied HTTP_HOST/Host: header, this can't be
+ * spoofed by the request and doesn't change depending on which round-robin
+ * name (e.g. genome.ucsc.edu) the client used to reach this box -- using
+ * hHttpHost() here made onGenomeRRMachine() misclassify RR machines reached
+ * via the genome.ucsc.edu name, sending them into an infinite self-relay
+ * loop. */
 {
-char *ottoDb = cfgOption2("otto", "db");
-if (isEmpty(ottoDb)) // No otto profile defined, use central
-    return hConnectCentralNoCache();
-
-struct sqlConnection *conn = sqlConnectProfile("otto", ottoDb);
-if (conn == NULL)
-    errAbort("Cannot connect to otto database '%s' using otto profile", ottoDb);
-return conn;
+static char host[256];
+static boolean init = FALSE;
+if (!init)
+    {
+    if (gethostname(host, sizeof(host)) != 0)
+        host[0] = '\0';
+    init = TRUE;
+    }
+return host;
 }
 
-void hDisconnectOtto(struct sqlConnection **pConn)
-/* Disconnect otto connection */
+boolean inUcscEduDomain()
+/* Return TRUE if this machine is configured as belonging to the ucsc.edu
+ * domain, per hg.conf's central.domain setting (the same setting used for
+ * the cross-host login cookie domain).  This is deployment config rather
+ * than something derived from the machine's own OS hostname/DNS: a box's
+ * local/cloud-assigned hostname and its UCSC-facing name (e.g.
+ * genome-euro.ucsc.edu) can be unrelated DNS labels with no way to bridge
+ * them via gethostname()/getaddrinfo(). */
 {
-sqlDisconnect(pConn);
+char *domain = cfgOption(CFG_CENTRAL_DOMAIN);
+return (domain != NULL && strstr(domain, ".ucsc.edu") != NULL);
 }
+
+boolean onGenomeRRMachine()
+/* Return TRUE if running on one of the genome.ucsc.edu round-robin
+ * machines (hgw0, hgw1, hgw2, ...), which carry SQL grants on
+ * hgcentral.gbMembers.  Only meaningful within inUcscEduDomain(). */
+{
+if (hIsPrivateHost())	// stay on localhost for hgwdev and hgwbeta
+    return TRUE;
+char *hostName = thisHostName();
+if (isEmpty(hostName))
+    return FALSE;
+if (startsWith("hgwbeta", hostName))
+    return TRUE;
+if (!startsWith("hgw", hostName))
+    return FALSE;
+char afterHgw = hostName[3];
+return (afterHgw >= '0' && afterHgw <= '9');
+}
+
+char *submitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment)
+/* Record a row in the ottoRequest table via hConnectCentral(), applying the
+ * liftOver duplicate/daily-rate guards when requestType is "liftOver", or a
+ * plain insert when requestType is "assembly".  Returns a status string:
+ * "disabled", "duplicate", "rateLimited", "accepted", or "error".  Never
+ * apiErrAbort()s -- used both for direct local calls (this host has
+ * hgcentral write grants) and to answer relaySubmitOttoRequest() calls. */
+{
+char *ottoTable = cfgOption("ottoTable");
+if (isEmpty(ottoTable))
+    return "disabled";
+
+struct sqlConnection *conn = hConnectCentral();
+if (!sqlTableExists(conn, ottoTable))
+    {
+    hDisconnectCentral(&conn);
+    return "disabled";
+    }
+
+char *status = "error";
+if (sameString(requestType, "liftOver"))
+    {
+    struct dyString *dq = dyStringNew(0);
+    sqlDyStringPrintf(dq,
+        "SELECT COUNT(*) FROM %s WHERE requestType='liftOver' AND "
+        "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))",
+        ottoTable, fromDb, toDb, toDb, fromDb);
+    int dupCount = sqlQuickNum(conn, dyStringCannibalize(&dq));
+    if (dupCount > 0)
+        status = "duplicate";
+    else
+        {
+        char *limitStr = cfgOption("liftDailyLimit");
+        int dailyLimit = isNotEmpty(limitStr) ? atoi(limitStr) : 0;
+        boolean rateLimited = FALSE;
+        if (dailyLimit > 0)
+            {
+            struct dyString *q = dyStringNew(0);
+            sqlDyStringPrintf(q,
+                "SELECT COUNT(*) FROM %s WHERE requestType='liftOver' AND email='%s' "
+                "AND DATE(requestTime) = CURDATE()",
+                ottoTable, email);
+            int todayCount = sqlQuickNum(conn, dyStringCannibalize(&q));
+            rateLimited = (todayCount >= dailyLimit);
+            }
+        if (rateLimited)
+            status = "rateLimited";
+        else
+            {
+            /* Atomic insert with duplicate re-check, closing the race window
+             * between the SELECT above and this INSERT. */
+            struct dyString *update = dyStringNew(0);
+            sqlDyStringPrintf(update,
+                "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) "
+                "SELECT 'liftOver', '%s', '%s', '%s', '%s', now(), 0, '' "
+                "WHERE NOT EXISTS ("
+                "  SELECT 1 FROM %s WHERE requestType='liftOver' AND "
+                "  ((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s'))"
+                ")",
+                ottoTable, fromDb, toDb, email, comment,
+                ottoTable, fromDb, toDb, toDb, fromDb);
+            int rowsAffected = sqlUpdateRows(conn, dyStringCannibalize(&update), NULL);
+            status = (rowsAffected > 0) ? "accepted" : "duplicate";
+            }
+        }
+    }
+else if (sameString(requestType, "assembly"))
+    {
+    struct dyString *update = dyStringNew(0);
+    sqlDyStringPrintf(update,
+        "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) "
+        "VALUES ('assembly', '%s', '%s', '%s', '%s', now(), 0, '')",
+        ottoTable, fromDb, toDb, email, comment);
+    sqlUpdate(conn, dyStringCannibalize(&update));
+    status = "accepted";
+    }
+hDisconnectCentral(&conn);
+return status;
+}
+
+char *relaySubmitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment)
+/* Relay an ottoRequest submission to genome.ucsc.edu's /submitOttoRequest
+ * endpoint, for hosts that lack local hgcentral write grants (see
+ * inUcscEduDomain()/onGenomeRRMachine()).  Authenticates with the shared
+ * hg.conf secret 'hubApi.relaySecret', which must also be configured on
+ * genome.ucsc.edu.  Returns the same status vocabulary as
+ * submitOttoRequest(): "disabled", "duplicate", "rateLimited", "accepted",
+ * or "error" (including when the secret isn't configured locally, or the
+ * relay call itself fails). */
+{
+char *secret = cfgOption("hubApi.relaySecret");
+if (isEmpty(secret))
+    return "error";
+
+struct dyString *url = dyStringNew(0);
+dyStringPrintf(url, "https://genome.ucsc.edu/cgi-bin/hubApi/submitOttoRequest"
+    "?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
+    argRequestType, cgiEncode(requestType),
+    argFromGenome, cgiEncode(fromDb),
+    argToGenome, cgiEncode(toDb),
+    argEmail, cgiEncode(email),
+    argComment, cgiEncode(comment),
+    argRelaySecret, cgiEncode(secret));
+
+int sd = netUrlOpen(dyStringContents(url));
+if (sd < 0)
+    {
+    dyStringFree(&url);
+    return "error";
+    }
+char *redirectedUrl = NULL;
+if (!netSkipHttpHeaderLinesWithRedirect(sd, dyStringContents(url), &redirectedUrl))
+    {
+    close(sd);
+    dyStringFree(&url);
+    return "error";
+    }
+dyStringFree(&url);
+struct dyString *body = netSlurpFile(sd);
+close(sd);
+struct jsonElement *json = jsonParse(body->string);
+dyStringFree(&body);
+if (json == NULL)
+    return "error";
+char *status = jsonStringField(json, "status");
+return isNotEmpty(status) ? cloneString(status) : "error";
+}
+
+void apiSubmitOttoRequest(char *words[MAX_PATH_INFO])
+/* Internal server-to-server endpoint: record a row in the ottoRequest table
+ * on behalf of a hubApi host that lacks its own hgcentral write grants (see
+ * relaySubmitOttoRequest()).  Requires the shared hg.conf secret
+ * 'hubApi.relaySecret' to match, since this performs the actual database
+ * write without the bot-challenge cookie check that /liftRequest and
+ * /assemblyRequest do locally -- that check already ran on the relaying
+ * host before it got here.  Always answers 200 + a JSON "status" field;
+ * never apiErrAbort()s for a duplicate/rateLimited outcome, so the relay
+ * caller can distinguish it from a hard failure. */
+{
+char *secret = cfgOption("hubApi.relaySecret");
+char *givenSecret = cgiOptionalString(argRelaySecret);
+if (isEmpty(secret) || isEmpty(givenSecret) || !sameString(secret, givenSecret))
+    apiErrAbort(err403, err403Msg, "not authorized for endpoint '/submitOttoRequest");
+
+char *requestType = cgiOptionalString(argRequestType);
+char *fromDb = cgiOptionalString(argFromGenome);
+char *toDb = cgiOptionalString(argToGenome);
+char *email = cgiOptionalString(argEmail);
+char *comment = cgiOptionalString(argComment);
+if (isEmpty(requestType) || isEmpty(fromDb) || isEmpty(toDb) || isEmpty(email) || isEmpty(comment))
+    apiErrAbort(err400, err400Msg, "must have all arguments: %s, %s, %s, %s, %s for endpoint '/submitOttoRequest",
+        argRequestType, argFromGenome, argToGenome, argEmail, argComment);
+if (!sameString(requestType, "liftOver") && !sameString(requestType, "assembly"))
+    apiErrAbort(err400, err400Msg, "unrecognized %s '%s' for endpoint '/submitOttoRequest", argRequestType, requestType);
+
+char *status = submitOttoRequest(requestType, fromDb, toDb, email, comment);
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "status", status);
+apiFinishOutput(0, NULL, jw);
+}
+

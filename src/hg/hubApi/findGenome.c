@@ -581,6 +581,19 @@ if (isNotEmpty(betterName))
 if (isNotEmpty(comment))
     dyStringPrintf(fullComment, "; comment: '%s'", comment);
 
+/* Record the request in the ottoRequest table (asmId placed in both fromDb
+ * and toDb in case toDb does not allow empty).  Done locally (this host has
+ * hgcentral write grants) or relayed to genome.ucsc.edu (it doesn't) -- see
+ * inUcscEduDomain()/onGenomeRRMachine(). */
+char *ottoStatus;
+if (inUcscEduDomain() && !onGenomeRRMachine())
+    ottoStatus = relaySubmitOttoRequest("assembly", asmId, asmId, email, dyStringContents(fullComment));
+else
+    ottoStatus = submitOttoRequest("assembly", asmId, asmId, email, dyStringContents(fullComment));
+
+if (sameString(ottoStatus, "error"))
+    apiErrAbort(err500, err500Msg, "internal error recording assembly request");
+
 char nowTime[256];
 time_t seconds = clock1();
 struct tm *timeNow = localtime(&seconds);
@@ -595,23 +608,6 @@ dyStringPrintf(msg, "%s\nAssembly request\nasmId: %s\nname: %s\nemail: %s\nbette
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "msg", dyStringContents(msg));
 apiFinishOutput(0, NULL, jw);
-
-char *ottoTable = cfgOption("ottoTable");        /* probably ottoRequest */
-if (isNotEmpty(ottoTable))
-    {
-    struct sqlConnection *conn = hConnectOtto();
-    if (sqlTableExists(conn, ottoTable))
-        {
-        /* asmId placed in both fromDb and toDb in case toDb does not allow empty */
-        struct dyString *update = dyStringNew(0);
-        sqlDyStringPrintf(update,
-            "INSERT INTO %s (requestType, fromDb, toDb, email, comment, requestTime, status, buildDir) "
-            "VALUES ('assembly', '%s', '%s', '%s', '%s', now(), 0, '')",
-            ottoTable, asmId, asmId, email, dyStringContents(fullComment));
-        sqlUpdate(conn, dyStringCannibalize(&update));
-        }
-    hDisconnectOtto(&conn);
-    }
 
 dyStringFree(&fullComment);
 dyStringFree(&msg);
