@@ -16,6 +16,7 @@
 #define CFG_COOKIIENAME_USERNAME  "wiki.userNameCookie"
 #define CFG_COOKIIENAME_USERID  "wiki.loggedInCookie"
 #define CFG_APPROVED_HOSTS "login.approvedReturn"
+#define CFG_LOGIN_PWD_EYE_ICON "login.pwdEyeIcon"
 #endif /* hgLogin_H */
 
 
