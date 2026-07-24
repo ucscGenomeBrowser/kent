@@ -2,8 +2,8 @@
 set -beEu -o pipefail
 
 # Do required submodule setup to support building the browser
-# If need, do the submodule init, also check from having remains of
-# old htslib copy to deal with switch from old version.
+# Sync submodules to the commits pinned by the parent repo, and check for
+# having remains of old htslib copy to deal with switch from old version.
 
 if [ -e htslib ] ; then
     echo "*********************************************************************" >&2
@@ -12,17 +12,18 @@ if [ -e htslib ] ; then
     echo "*********************************************************************" >&2
 fi
 
-if [ !  -e submodules/htslib/.git -o ! -e submodules/htslib/htscodecs/.git ] ; then
-    if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
-        echo "Note: initializing git submodules" >&2
-        (set -x; git -c protocol.file.allow=always submodule update --init --recursive)
-    elif [ ! -e submodules/htslib/hts.c -o ! -e submodules/htslib/htscodecs/htscodecs/htscodecs.c ] ; then
-        # not a git working tree (e.g. a source release); submodule sources must
-        # already be present since they can not be checked out without git.
-        echo "Error: submodule sources under submodules/htslib are missing and this" >&2
-        echo "       is not a git working tree, so they can not be initialized." >&2
-        exit 1
-    fi
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
+    # Sync submodules to the commits pinned by the parent repo on every build,
+    # not just on first-time init, so a moved pointer (e.g. after a pull) is
+    # always checked out.  --init covers the first-time case, --recursive also
+    # updates the nested htscodecs submodule.  git is silent when already in sync.
+    git -c protocol.file.allow=always submodule update --init --recursive
+elif [ ! -e submodules/htslib/hts.c -o ! -e submodules/htslib/htscodecs/htscodecs/htscodecs.c ] ; then
+    # not a git working tree (e.g. a source release); submodule sources must
+    # already be present since they can not be checked out without git.
+    echo "Error: submodule sources under submodules/htslib are missing and this" >&2
+    echo "       is not a git working tree, so they can not be initialized." >&2
+    exit 1
 fi
 
 # Generate htslib's compiler-probe makefile fragment (htscodecs.mk) and config.h
