@@ -873,8 +873,6 @@ int maxItemsToUseOverflow = maxItemsToOverflow(tg);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
 
-boolean isCompactPack = trackDbSettingOn(tg->tdb, "compactPack");
-
 /* Note that the maxCount variable passed to packCountRowsOverflow()
    is tied to the maximum height allowed for a track and influences
    decisions about when to squish, dense, or overflow a track.
@@ -902,11 +900,6 @@ switch (vis)
 	break;
     case tvPack:
 	{
-	if (isCompactPack)
-	    {
-	    tg->heightPer = heightPer / 2;
-	    tg->lineHeight = tg->heightPer;
-	    }
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow, vis);
 	else
@@ -922,18 +915,10 @@ switch (vis)
 	}
     case tvSquish:
         {
-	if (isCompactPack)
-	    {
-	    tg->heightPer = 3;
-	    tg->lineHeight = 3;
-	    }
-	else
-	    {
-	    tg->heightPer = heightPer/2;
-	    if ((tg->heightPer & 1) == 0)
-		tg->heightPer -= 1;
-	    tg->lineHeight = tg->heightPer + 1;
-	    }
+	tg->heightPer = heightPer/2;
+	if ((tg->heightPer & 1) == 0)
+	    tg->heightPer -= 1;
+	tg->lineHeight = tg->heightPer + 1;
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow, vis);
 	else
@@ -3180,7 +3165,7 @@ for (ref = exonList; TRUE; )
                                         if (!isEmpty(aaAbbr))
                                             {
                                             if (aaName != NULL)
-                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s - %s<br>", aaAbbr, aaName);
+                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s (%s)<br>", aaAbbr, aaName);
                                             else
                                                 dyStringPrintf(codonDy, "<b>Amino acid: </b> %s<br>", aaAbbr);
                                             }
@@ -4524,9 +4509,6 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
-    /* When codons are colored, distribute strand arrows across the exons on top
-     * of the boxes (coding exons when too small to label, plus the UTRs). */
-    baseColorDrawCdsArrows(tg, lf, hvg, xOff, y, scale, heightPer, winStart, drawOpt, color);
     if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,
