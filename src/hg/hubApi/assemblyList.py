@@ -323,8 +323,8 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             if gcAccession in prioExists:
                continue
             if len(row) != 38:
-                print(f"ERROR: incorrect number of fields in {file}")
-                sys.exit(255)
+                print(f"WARNING: incorrect number of fields: 38 != {len(row)} in {filePath}")
+                continue
             strain = re.sub(r'breed=', '', row[8])
             s0 = re.sub(r'cultivar=', '', strain)
             strain = re.sub(r'ecotype=', '', s0)
