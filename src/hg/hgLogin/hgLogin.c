@@ -54,7 +54,7 @@ char returnAddr[256];
 char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser,
     e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if
     hg.conf login.relativeLink is on. */
-boolean pwdEyeIconEnabled = FALSE; /* show/hide eye icon on password fields;
+boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
     set from hg.conf login.pwdEyeIcon in doMiddle() */
 
 /* for earlyBotCheck() function at the beginning of main() */
@@ -1426,7 +1426,7 @@ safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
 safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
-pwdEyeIconEnabled = cfgOptionBooleanDefault(CFG_LOGIN_PWD_EYE_ICON, FALSE);
+pwdEyeIconEnabled = cfgOptionBooleanDefault(CFG_LOGIN_PWD_EYE_ICON, TRUE);
 
 if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
