@@ -316,10 +316,7 @@ struct dyString *getLoginCookieJS(char *userName, uint idx)
 struct dyString *result = dyStringNew(1024);
 struct slName *newCookies = loginLoginUser(userName, idx), *sl;
 for (sl = newCookies;  sl != NULL;  sl = sl->next)
-{
-verbose(0, "DBG login cookie: '%s'\n", sl->name);
     dyStringPrintf(result, " document.cookie = '%s';", sl->name);
-}
 return result; 
 }
 
@@ -757,7 +754,6 @@ jsInline(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-verbose(0, "DBG hgLogin displayLoginPage\n");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "\n"
@@ -1398,7 +1394,6 @@ gbMembersFree(&m);
 void  displayLogoutSuccess()
 /* display logout success msg, and reset cookie */
 {
-verbose(0, "DBG hgLogin displayLogoutSuccess\n");
 hPrintf("<h2>%s Sign Out</h2>", brwName);
 hPrintf(
     "<p align=\"left\">"
@@ -1408,10 +1403,7 @@ hPrintf(
 struct dyString *javascript = dyStringNew(1024);
 struct slName *newCookies = loginLogoutUser(), *sl;
 for (sl = newCookies;  sl != NULL;  sl = sl->next)
-{
-verbose(0, "DBG logout cookie: '%s'\n", sl->name);
     dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
-}
 jsInline(javascript->string);
 /* return to "returnto" URL */
 returnToURL(150);
