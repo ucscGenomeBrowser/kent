@@ -165,10 +165,14 @@ noScoreFilter on
     filter.nGwas 0:11
     filterByRange.nGwas on
     filterLabel.nGwas UK Biobank GWAS Hit Count
-    filter.r2Ukb 0:1
-    filterByRange.r2Ukb on
-    filterLimits.r2Ukb 0:1
-    filterLabel.r2Ukb Imputation r2 (UK Biobank)
+    filter.r2Loo 0:1
+    filterByRange.r2Loo on
+    filterLimits.r2Loo 0:1
+    filterLabel.r2Loo Imputation r2 (leave-one-out)
+    filter.concordanceLoo 0:1
+    filterByRange.concordanceLoo on
+    filterLimits.concordanceLoo 0:1
+    filterLabel.concordanceLoo Minor Allele Concordance (leave-one-out)
     skipEmptyFields on
 
     track lrSv1kLin

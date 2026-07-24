@@ -769,3 +769,16 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
 # unchanged; CARD still contributes via valueField=AC):
 python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # 3,018,404 input -> 2,582,278 merged, 16 databases (unchanged structure).
+
+##########
+# 2026-07-24 Claude max
+#
+# noyvertSv: per author (Boris Noyvert) request, replaced the UK Biobank
+# imputation-r2 filter (r2Ukb) with two leave-one-out reference-panel quality
+# filters, r2Loo and concordanceLoo, which are the primary SV imputation
+# quality measures for the multi-ancestry panel (r2Ukb mainly reflects
+# European-ancestry performance). trackDb-only change; both fields already
+# exist in noyvert.bb (floats, 0:1), so no rebuild was needed. Also replaced
+# the Description text on noyvertSv.html with the author's revised version
+# (reordered, plus a comparison with the 1KG ONT Vienna dataset, Schloissnig
+# et al. 2025).

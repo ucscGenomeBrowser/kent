@@ -1,25 +1,32 @@
 <h2>Description</h2>
 <p>
-This track shows structural variants (SVs) identified by Oxford Nanopore
-long-read sequencing of 888 individuals from the 1000 Genomes Project,
-spanning five ancestry groups. Structural variants are genomic rearrangements
-larger than about 50 bp, such as deletions, insertions, inversions,
-duplications and breakends (rearrangement junctions); because they alter or
-move large stretches of DNA at once, they can affect gene dosage and gene
-regulation more strongly than single-nucleotide changes, yet they are largely
-missed by the short-read data used in most large studies.
+The structural variants (SVs) in this dataset were identified using Oxford
+Nanopore long-read whole-genome sequencing of 888 individuals from the 1000
+Genomes Project, representing five ancestry groups. The SVs were merged with
+previously identified short variants from the same individuals to generate a
+multi-ancestry SV imputation reference panel. This panel was used to impute
+SVs in approximately 500,000 UK Biobank participants and test their
+associations with 32 disease-relevant traits.
 </p>
 <p>
-The panel contains more than 107,000 SVs called against GRCh38: about 60,000
-insertions, 38,000 deletions, 5,700 inversions, 2,700 breakends and 600
-duplications. Each variant carries an overall allele frequency and allele
-frequencies for each of the five superpopulations (African, Admixed American,
-East Asian, European, South Asian), Sniffles2 quality metrics, Hardy-Weinberg
-p-values, and internal (leave-one-out) and UK Biobank imputation accuracy.
-The authors used this panel to impute SVs into about 500,000 UK Biobank
-participants and to test them for association with disease-relevant traits and
-protein levels; where a variant reached genome-wide significance, the
-associated traits are listed on its details page.
+The track contains all 107,445 SVs in the reference panel: 59,953 insertions,
+38,459 deletions, 5,729 inversions, 2,696 breakends, and 608 duplications.
+Each variant is annotated with its overall allele frequency; allele
+frequencies across five superpopulations (African, Admixed American, East
+Asian, European, and South Asian); Hardy-Weinberg equilibrium p-values; and
+imputation accuracy metrics from internal leave-one-out validation and UK
+Biobank imputation. For SVs reaching genome-wide significance, the associated
+traits, p-values, and INFO scores are listed on the corresponding variant
+details page.
+</p>
+<p>
+The 888 samples in this dataset are a subset of the 1,019 samples included in
+the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track (Schloissnig et
+al. 2025), with both datasets based on the same underlying sequencing data.
+However, the data-processing and SV-calling methods differ between the two
+tracks. The imputation reference panel, UK Biobank imputation results, and
+SV-wide association study (SV-WAS) results described here are specific to this
+track.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -53,7 +60,8 @@ The mouseover shows the variant name, SV type, reference and insertion lengths,
 allele frequency, approximate allele count, and the number of UK Biobank trait
 associations. Filters are available for SV type, SV length, insertion length,
 approximate allele count, overall and per-population allele frequency, the
-number of UK Biobank GWAS hits, and the UK Biobank imputation r&sup2;.
+number of UK Biobank GWAS hits, and the leave-one-out imputation r&sup2; and
+minor-allele concordance.
 </p>
 
 <h2>Methods</h2>
