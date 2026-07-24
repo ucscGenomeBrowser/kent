@@ -934,7 +934,8 @@ if (sameString(requestType, "liftOver"))
                 ")",
                 ottoTable, fromDb, toDb, email, comment,
                 ottoTable, fromDb, toDb, toDb, fromDb);
-            int rowsAffected = sqlUpdateRows(conn, dyStringCannibalize(&update), NULL);
+            sqlUpdate(conn, dyStringCannibalize(&update));
+            int rowsAffected = sqlQuickNum(conn, "SELECT ROW_COUNT()");
             status = (rowsAffected > 0) ? "accepted" : "duplicate";
             }
         }
