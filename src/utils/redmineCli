@@ -7,6 +7,8 @@ Usage:
     redmineCli show 33571
     redmineCli list --project maillists --status open --limit 10
     redmineCli create --subject "Bug report" --description "Details here"
+    redmineCli create --project genomebrowser --tracker 11 --subject "New track" \
+        --description "Details here" --assemblies hg38   # Track tracker requires Assemblies
     redmineCli build-patch --subject "v500 build patch: ..." --description "..." \
         --developer braney --commit-id abc123 --files src/hg/js/hgTracks.js \
         --cgis hgTracks --test-case "..." --reviewer hiram \
@@ -635,6 +637,19 @@ def cmd_create(args):
         custom_fields.append({"id": CF_EMAIL, "value": args.email})
     if args.mlm:
         custom_fields.append({"id": CF_MLM, "value": args.mlm})
+    if getattr(args, "assemblies", None) is not None:
+        custom_fields.append({"id": CF_ASSEMBLIES, "value": args.assemblies})
+    for cf_spec in (getattr(args, "custom_field", None) or []):
+        if "=" not in cf_spec:
+            sys.exit(f"Error: --custom-field must be ID=VALUE, got: {cf_spec}")
+        cf_id, cf_val = cf_spec.split("=", 1)
+        if not cf_id.isdigit():
+            sys.exit(f"Error: custom field ID must be numeric, got: {cf_id}")
+        cf_id = int(cf_id)
+        if cf_id in FIELD_VALIDATORS:
+            validator, name = FIELD_VALIDATORS[cf_id]
+            cf_val = validator(cf_val, f"--custom-field {cf_id} ({name})")
+        custom_fields.append({"id": cf_id, "value": cf_val})
     if custom_fields:
         issue_data["issue"]["custom_fields"] = custom_fields
 
@@ -1101,6 +1116,13 @@ def build_parser():
     p_create.add_argument("--category", help="MLQ Category (custom field)")
     p_create.add_argument("--email", help="Sender email (custom field)")
     p_create.add_argument("--mlm", help="MLM name (custom field)")
+    p_create.add_argument("--assemblies",
+                          help="Assemblies (custom field, e.g. 'hg38')")
+    p_create.add_argument("--custom-field", dest="custom_field",
+                          action="append", metavar="ID=VALUE",
+                          help="Set an arbitrary custom field by numeric ID "
+                               "(repeatable). Use for required fields on trackers "
+                               "like Track that would otherwise 422.")
 
     # build-patch
     p_bp = sub.add_parser("build-patch",

@@ -10,9 +10,9 @@ my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov.
 
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
-  printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
-  printf STDERR "e.g.: mkGenomes.pl dynablat-01 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
-  printf STDERR "e.g.: mkGenomes.pl hgwdev 4040 vgp.primary.assemblies.tsv > .../vgp/download.genomes.txt\n";
+  printf STDERR "nextGenome.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
+  printf STDERR "e.g.: nextGenome.pl dynablat-01 4040 vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+  printf STDERR "e.g.: nextGenome.pl hgwdev 4040 vgp.primary.assemblies.tsv > .../vgp/download.genomes.txt\n";
   printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
   printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
   printf STDERR "column 2: common name for species, columns separated by tab\n";
@@ -21,6 +21,9 @@ if ($argc != 3) {
   printf STDERR "and a local asmId.groups.txt file for each hub\n";
   printf STDERR "and the output to stdout will be the overall genomes.txt\n";
   printf STDERR "index file for all genomes in the given list\n";
+  printf STDERR "\nthis version also writes alpha.hub.txt for each hub, which\n";
+  printf STDERR "includes *every* contrib/ track found on disk, unfiltered by\n";
+  printf STDERR "publicGenArk.txt/betaGenArk.txt membership\n";
   exit 255;
 }
 
@@ -56,22 +59,24 @@ if ( -s "$srcTrackDb/publicGenArk.txt" ) {
 }
 
 my $downloadHost = "hgwdev";
-my @blatHosts = qw( dynablat-01 dynablat-01 dynablat-01 dynablat-01 );
-my @blatPorts = qw( 4040 4040 4040 4040 );
+my @blatHosts = qw( dynablat-01 dynablat-01 dynablat-01 dynablat-01 dynablat-01 );
+my @blatPorts = qw( 4040 4040 4040 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
-################### writing out hub.txt file, four times ##########################
+################### writing out hub.txt file, five times ##########################
 sub writeHubTxtFiles($$$$$$$$$$$$$$) {
   my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority, $hugeGenome) = @_;
   my @fhN;
   push @fhN, $fh1;      # file 1
   push @fhN, $fh2;      # file 2
   # the order of these file handles is important since different contents
-  # will be output to the 4th one (beta.hub.txt)
+  # will be output to the last two of them (beta.hub.txt and alpha.hub.txt)
   # the first three will have identical contents, representing the 'public'
-  # version of hub.txt.  The fourth will be the beta.hub.txt which could have
-  # a different set of contrib tracks.
+  # version of hub.txt.  The fourth is beta.hub.txt which could have
+  # a different set of contrib tracks.  The fifth is alpha.hub.txt which
+  # gets *every* contrib track found on disk, unfiltered by the
+  # publicGenArk.txt/betaGenArk.txt control lists.
 
   # check for contrib tracks that are to go public
   my %publicTrackDb;	# key is track name, value is trackDb.txt content
@@ -103,10 +108,43 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
          }
      }
   }
+  # alpha.hub.txt: scan contrib/ directly and pick up *every* track found
+  # there, regardless of whether it is listed in publicGenArk.txt or
+  # betaGenArk.txt.  This is deliberately not permission-controlled.
+  my %alphaTrackDb;	# key is track name, value is trackDb.txt content
+  my $alphaCount = 0;
+  my $contribBase = "$buildDir/contrib";
+  if ( -d "${contribBase}" ) {
+     opendir(my $dh, "${contribBase}") or die "can not opendir ${contribBase}";
+     while (my $contribTrack = readdir($dh)) {
+        next if ($contribTrack =~ m/^\.\.?$/);
+        my $contribDir = "${contribBase}/$contribTrack";
+        next if ( ! -d "${contribDir}" );
+        my $contribTdb = "$contribDir/${contribTrack}.trackDb.txt";
+        if ( -s "${contribTdb}" ) {
+           my $tdb = `cat "${contribTdb}"`;
+           chomp $tdb;
+           $alphaTrackDb{$contribTrack} .= $tdb;
+           ++$alphaCount;
+        }
+     }
+     closedir($dh);
+  }
   open (my $ph, ">", "$buildDir/public.hub.txt") or die "can not write to $buildDir/public.hub.txt";
   push @fhN, $ph;	# file 3
   open (my $bh, ">", "$buildDir/beta.hub.txt") or die "can not write to $buildDir/beta.hub.txt";
   push @fhN, $bh;	# file 4
+  # alpha.hub.txt is only needed when there are contrib tracks to show;
+  # otherwise the plain singleFile.hub.txt is sufficient, skip writing it.
+  # remove any stale alpha.hub.txt left over from a previous build where
+  # contrib tracks did exist.
+  my $ah;
+  if ($alphaCount > 0) {
+    open ($ah, ">", "$buildDir/alpha.hub.txt") or die "can not write to $buildDir/alpha.hub.txt";
+    push @fhN, $ah;	# file 5
+  } elsif ( -e "$buildDir/alpha.hub.txt" ) {
+    unlink "$buildDir/alpha.hub.txt";
+  }
 
   my %liftOverChain;	# key is 'otherDb' name, value is bbi path
   my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path
@@ -192,7 +230,14 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
            printf $fh "%s\n", $betaTrackDb{$contribTrack};
          }
       }
-    } else {			# the other 3 get the public tracks
+    } elsif (4 == $fileCount) {	# writing to alpha.hub.txt
+      if (%alphaTrackDb) {
+         foreach my $contribTrack (sort keys %alphaTrackDb) {
+           printf $fh "\n";	# ensure there is a blank line between entries
+           printf $fh "%s\n", $alphaTrackDb{$contribTrack};
+         }
+      }
+    } else {			# the other 3 (HT, DL, public.hub.txt) get the public tracks
       if (%publicTrackDb) {
          foreach my $contribTrack (sort keys %publicTrackDb) {
            printf $fh "\n";	# ensure there is a blank line between entries
@@ -390,6 +435,10 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   ### becomes the 'hub.txt' on hgdownload and in /gbdb/ and that file is
   ### identical to public.hub.txt
   `touch -r "$buildDir/${asmId}.singleFile.hub.txt" "$buildDir/public.hub.txt"`;
+
+  ### alpha.hub.txt is not part of the otto push detection scheme -- it is
+  ### an unfiltered, always-includes-all-contrib-tracks view of the hub,
+  ### and its mtime is left alone so its own changes are visible.
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";

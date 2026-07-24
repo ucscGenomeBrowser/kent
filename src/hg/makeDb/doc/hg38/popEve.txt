@@ -55,9 +55,9 @@ bash runBuild.sh
 # Scripts: ~/kent/src/hg/makeDb/scripts/popEve/{extractPopEve.py,vcfToPopEveHeatmap.py,popEve_heatmap.as}
 
 # Notes:
-#  - popEVE is distributed as genomic SNVs, so only single-nucleotide-reachable missense
-#    substitutions are scored; each heatmap column (codon) therefore has ~6-9 of 19 rows
-#    filled. This is expected and sparser than the EVE track (which scores all 19).
+#  - The genomic VCF contains only single-nucleotide-reachable substitutions (~6-9 of 19 per
+#    codon). The DENSE REBUILD below supersedes this with the full per-amino-acid matrix; the
+#    VCF-derived popEve_sorted.tsv remains the source of genomic codon coordinates and strand.
 #  - The heatmap renderer parses the score array (chopCommas, keeps trailing empty) and the
 #    label array (chopByCharRespectDoubleQuotesKeepEmpty, drops one trailing empty)
 #    differently. When the last cell (last row, last column) is empty the counts disagree and
@@ -75,6 +75,44 @@ bash runBuild.sh
 #   mouseover: HTML multi-line labels (<br>/<b>); component scores rounded to 3 dp;
 #     missing/nan components shown as NA
 #   popEve.bb size: 1,592,586,266 bytes
+
+# ============================================================================
+# DENSE REBUILD (2026-07-23) - full per-amino-acid matrix, per collaborator request
+# ============================================================================
+# The popEVE authors confirmed the per-transcript CSV download carries the COMPLETE
+# per-amino-acid matrix (all 19 substitutions per position), unlike the genomic VCF above
+# (single-nucleotide-reachable only, ~6 of 19 per codon). This rebuild takes the SCORES from
+# the per-transcript CSVs and REUSES the genomic codon coordinates, strand, and blocks
+# already derived from the VCF (popEve_sorted.tsv), producing dense heatmaps. Proteins present
+# in the VCF but absent from the (older, March 2025) CSV release fall back to sparse VCF scores.
+
+cd /hive/data/outside/popEve
+wget -nv https://data.evemodel.org/popeve/v1.1/downloads/popEVE_ukbb_20250312.zip
+#   2915714283 bytes, Last-Modified 2025-10-29
+mkdir -p popeve_csv
+unzip -q popEVE_ukbb_20250312.zip -d popeve_csv/
+#   18,332 per-transcript CSVs at popeve_csv/popEVE_ukbb_20250312/<NP_acc>.csv
+#   columns: mutant,gap frequency,popEVE,popped EVE,popped ESM-1v,EVE,ESM-1v
+
+cd /hive/data/genomes/hg38/bed/popEve
+bash runBuildDense.sh
+# runBuildDense.sh steps:
+#   1. proteins not in the CSV (sparse fallback): 637
+#   2. color anchors: p0.5 / p99.5 of popEVE over the full matrix (all CSV popEVE values plus
+#      VCF popEVE for the 637 non-CSV proteins) -> anchorsDense.txt
+#   3. vcfToPopEveHeatmap.py popEve_sorted.tsv np_strand.tsv popEve_dense_raw.bed $LO $HI <csvDir>
+#        the optional <csvDir> arg enables dense mode; loadCsv() fills all 19 substitutions
+#        per position from the CSV, keeping the VCF codon coordinates and wildtype residue
+#   4. bedSort + filter to chrom.sizes + bedToBigBed -> popEve.bb
+
+# Dense build results:
+#   full-matrix popEVE values: 187,547,662
+#   color anchors: loAnchor=-6.035 hiAnchor=-2.407 (popEVE p0.5 / p99.5; median -3.489)
+#   proteins: 18,968 (dense 18,331 from CSV; sparse 637 VCF fallback)
+#   NP_065910.3 (SHROOM3) is in the CSV but not the VCF coordinate set (all its VCF records
+#     were nan-skipped start codons), so its dense matrix is unused -> 18,331 dense, not 18,332
+#   wtMismatch 0 (CSV and VCF wildtype residues agree); trailingFix 1043
+#   popEve.bb size: 4,726,263,622 bytes
 
 mkdir -p /gbdb/hg38/popEve
 ln -sf /hive/data/genomes/hg38/bed/popEve/popEve.bb /gbdb/hg38/popEve/popEve.bb

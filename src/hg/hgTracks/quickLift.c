@@ -169,7 +169,12 @@ for(; hr; hr = hr->next)
     else
         safef(mouseOver, sizeof mouseOver, "double %ldbp", hr->oChromEnd - hr->oChromStart);
 
-    mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, hr->id, mouseOver);
+    // Encode the specific difference in the item name so the details page can
+    // identify which one was clicked: chainId.type.chromStart.chromEnd.  The
+    // "identical" boxes above keep the bare chain id.
+    char itemName[256];
+    safef(itemName, sizeof itemName, "%s.%d.%ld.%ld", hr->id, hr->type, hr->chromStart, hr->chromEnd);
+    mapBoxHc(hvg, seqStart, seqEnd, startX, yOff, endX - startX, height, tg->track, itemName, mouseOver);
     lastId = hr->id;
     }
 if (drawTriangle && (pos != xOff))

@@ -54,6 +54,8 @@ include gnomad.pext.ra
 include rnaMod.ra alpha
 include m6aAtlas.ra alpha
 
+include singleCellSignalsPeaks.ra alpha
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
@@ -541,8 +543,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 include knownGeneArchive.ra
 include knownGene.nmd_deco.ra alpha
 
@@ -682,8 +683,7 @@ bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
 include trackDb.gencode.ra
 
-include wgEncodeReg.ra beta,public
-include wgEncodeReg.alpha.ra alpha
+include wgEncodeReg.ra
 include wgEncodeReg4.ra
 
 include encode3.ra

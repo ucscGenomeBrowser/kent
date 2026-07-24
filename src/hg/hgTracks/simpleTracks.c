@@ -15,6 +15,7 @@
 #include "portable.h"
 #include "bed.h"
 #include "basicBed.h"
+#include "htmlColor.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -286,6 +287,8 @@ struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 boolean hgFindMatchesShowHighlight; /* For use with pdf mode which suppresses label highlight */
+
+struct hash *itemColorHash; /* Per-item background highlight colors keyed by "track\titemName". */
 
 struct trackLayout tl;
 
@@ -4272,6 +4275,56 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
  * gap if target side is at most 5 times greater than query side. */
 #define CHAIN_GAP_FACTOR 5
 
+struct itemColorSpec
+/* A user-chosen color for a single item, set via the right-click "Color this item" menu. */
+    {
+    Color color;          /* The chosen color. */
+    boolean wholeItem;    /* TRUE to recolor the item glyph, FALSE for a background highlight. */
+    };
+
+static struct itemColorSpec *itemColorLookup(struct track *tg, void *item)
+/* Return the user-chosen color spec for this item, or NULL. Matches on mapItemName, itemName, or
+ * genomic position ("pos:chrom:start-end"), the same identities the JS uses to build the record.
+ * Nameless items (e.g. bed3) have no usable name, so the position key identifies them. */
+{
+if (itemColorHash == NULL)
+    return NULL;
+char key[2048];
+struct itemColorSpec *spec = NULL;
+if (tg->mapItemName != NULL)
+    {
+    safef(key, sizeof key, "%s\t%s", tg->track, tg->mapItemName(tg, item));
+    spec = hashFindVal(itemColorHash, key);
+    }
+if (spec == NULL && tg->itemName != NULL)
+    {
+    safef(key, sizeof key, "%s\t%s", tg->track, tg->itemName(tg, item));
+    spec = hashFindVal(itemColorHash, key);
+    }
+if (spec == NULL && tg->itemStart != NULL && tg->itemEnd != NULL)
+    {
+    safef(key, sizeof key, "%s\tpos:%s:%d-%d", tg->track, chromName,
+          tg->itemStart(tg, item), tg->itemEnd(tg, item));
+    spec = hashFindVal(itemColorHash, key);
+    }
+return spec;
+}
+
+boolean itemColorOverride(struct track *tg, void *item, Color *retColor, boolean *retWholeItem)
+/* If the user set a per-item color for this item (via right-click), return TRUE and fill in the
+ * color and whether it recolors the whole item; otherwise return FALSE. Lets non-linkedFeatures
+ * draw routines (e.g. bedDrawSimpleAt) honor right-click item colors. */
+{
+struct itemColorSpec *spec = itemColorLookup(tg, item);
+if (spec == NULL)
+    return FALSE;
+if (retColor != NULL)
+    *retColor = spec->color;
+if (retWholeItem != NULL)
+    *retWholeItem = spec->wholeItem;
+return TRUE;
+}
+
 void linkedFeaturesDrawAt(struct track *tg, void *item,
                           struct hvGfx *hvg, int xOff, int y, double scale,
                           MgFont *font, Color color, enum trackVisibility vis)
@@ -4340,6 +4393,20 @@ if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
 color = colorFromCart(tg, color);
 bColor = colorFromCart(tg, bColor);
 
+// user-chosen per-item color (right-click "Color this item"): recolor the whole glyph or
+// fall back to a background highlight, unless the item is already highlighted.
+struct itemColorSpec *userColorSpec = itemColorLookup(tg, lf);
+if (userColorSpec != NULL)
+    {
+    if (userColorSpec->wholeItem)
+        color = bColor = userColorSpec->color;
+    else if (lf->highlightColor == 0)
+        {
+        lf->highlightColor = userColorSpec->color;
+        lf->highlightMode = highlightBackground;
+        }
+    }
+
 struct genePred *gp = NULL;
 if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
     gp = (struct genePred *)(lf->original);
@@ -4392,9 +4459,12 @@ if (lf->highlightColor && (lf->highlightMode == highlightBackground))
     // draw the background
     hvGfxBox(hvg, x1, y, w, heightPer, lf->highlightColor);
 
-    // draw the item slightly smaller
+    // draw the item slightly smaller, and re-center the thin (UTR) boxes for the
+    // reduced height so they stay symmetric within the highlight
     y++;
     heightPer -=2;
+    shortOff = heightPer/4;
+    shortHeight = heightPer - 2*shortOff;
     }
 
 if (!hideLine)
@@ -4416,6 +4486,17 @@ if (!hideArrows)
 
 components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
 
+/* For direction barbs, merge blocks that touch in pixel space into a single
+ * span (accumulated in the loop below) so the chevrons run continuously across
+ * them.  This matters for chains, whose blocks smash together when zoomed out:
+ * individually most are too narrow to hold a chevron.  barbRunX1 < 0 means no
+ * run is currently open. */
+static int barbMergePixels = -1;   // max pixel gap between blocks still merged for
+if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
+    barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
+Color barbColor = hvGfxContrastingColor(hvg, color);
+int barbRunX1 = -1;
+int barbRunX2 = -1;
 
 for (sf = components; sf != NULL; sf = sf->next)
     {
@@ -4496,22 +4577,42 @@ for (sf = components; sf != NULL; sf = sf->next)
                && (sf->start <= winStart || sf->start == lf->start)
                && (sf->end   >= winEnd   || sf->end   == lf->end)))
                 {
-                Color barbColor = hvGfxContrastingColor(hvg, color);
                 // This scaling of bases to an image window occurs in several places.
                 // It should really be broken out into a function.
-                if (s < winStart)
-                    s = winStart;
-                if (e > winEnd)
-                    e = winEnd;
-                x1 = round((double)((int)s-winStart)*scale) + xOff;
-                x2 = round((double)((int)e-winStart)*scale) + xOff;
-                w = x2-x1;
-                clippedBarbs(hvg, x1+1, midY, x2-x1-2, tl.barbHeight, tl.barbSpacing,
-                             lf->orientation, barbColor, TRUE);
+                int bs = s, be = e;
+                if (bs < winStart)
+                    bs = winStart;
+                if (be > winEnd)
+                    be = winEnd;
+                x1 = round((double)((int)bs-winStart)*scale) + xOff;
+                x2 = round((double)((int)be-winStart)*scale) + xOff;
+                if (barbRunX1 < 0)
+                    {           // start a new run
+                    barbRunX1 = x1;
+                    barbRunX2 = x2;
+                    }
+                else if (barbMergePixels > 0 && x1 <= barbRunX2 + barbMergePixels)
+                    {           // this block touches the run: extend it
+                    if (x2 > barbRunX2)
+                        barbRunX2 = x2;
+                    }
+                else
+                    {           // real gap: flush the run and start a new one
+                    clippedBarbs(hvg, barbRunX1+1, midY, barbRunX2-barbRunX1-2,
+                                 tl.barbHeight, tl.barbSpacing, lf->orientation,
+                                 barbColor, TRUE);
+                    barbRunX1 = x1;
+                    barbRunX2 = x2;
+                    }
                 }
             }
 	}
     }
+
+/* Flush the final merged barb run. */
+if (barbRunX1 >= 0)
+    clippedBarbs(hvg, barbRunX1+1, midY, barbRunX2-barbRunX1-2,
+                 tl.barbHeight, tl.barbSpacing, lf->orientation, barbColor, TRUE);
 
 if ((intronGap > 0) || chainLines)
     lfDrawSpecialGaps(lf, intronGap, chainLines, gapFactor,
@@ -4902,6 +5003,15 @@ if (tg->itemNameColor != NULL)
     {
     color = tg->itemNameColor(tg, item, hvg);
     labelColor = color;
+    if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
+	labelColor = somewhatDarkerColor(hvg, color);
+    }
+
+// user-chosen per-item color (right-click "Color this item"): color the label to match the glyph
+struct itemColorSpec *userColorSpec = itemColorLookup(tg, item);
+if (userColorSpec != NULL && userColorSpec->wholeItem)
+    {
+    color = labelColor = userColorSpec->color;
     if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
 	labelColor = somewhatDarkerColor(hvg, color);
     }
@@ -15523,7 +15633,7 @@ unsigned char altR = track->altColor.r, altG = track->altColor.g,
                             altB = track->altColor.b, altA = track->altColor.a;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0, deltaA = 0;
 
-struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeavesOrContainers(tdb->subtracks);
 
 struct trackDb *subTdb;
 int subCount = slCount(tdbRefList);
@@ -15571,9 +15681,20 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subTdb = tdbRef->val;
 
     subtrack = trackFromTrackDb(subTdb);
-    boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
-    if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
-        handler(subtrack);
+    boolean isNestedContainer = (trackDbLocalSetting(subTdb, "container") != NULL);
+    if (isNestedContainer)
+        {
+        /* A container (e.g. multiWig) nested inside the composite.  Build its children
+         * and install the container's aggregate methods (multiWigContainerMethods) so it
+         * draws as a single aggregated row rather than one row per child. */
+        makeContainerTrack(subtrack, subTdb);
+        }
+    else
+        {
+        boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
+        if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
+            handler(subtrack);
+        }
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
      * needed in the "not noInherit" case that hopefully will go away soon. */
@@ -15583,6 +15704,14 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subtrack->longLabel = subTdb->longLabel;
     subtrack->priority = subTdb->priority;
     subtrack->parent = track;
+
+    if (isNestedContainer)
+        {
+        /* The container's wig children carry their own colors; skip the composite
+         * color gradient for the container track itself. */
+        slAddHead(&track->subtracks, subtrack);
+        continue;
+        }
 
     /* Add color gradient. */
     if (finalR || finalG || finalB)
@@ -16165,5 +16294,53 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 hgFindMatchesShowHighlight = TRUE;  // default to showing the highlight searched item label.
+}
+
+void createItemColorHash()
+/* Read the itemColors cart variable into a hash of per-item colors keyed by "track\titemName",
+ * keeping only records for the current database. The cart format is db#track#mode#itemName#hexColor
+ * records joined by '|', where mode is "item" (recolor the glyph) or "bg" (background highlight).
+ * The color is the last '#' field so that item names containing '#' are tolerated; item names
+ * containing '|' are not supported. The cart value is user-editable, so malformed records (bad
+ * color, missing fields) are skipped rather than aborting the image. */
+{
+char *itemColors = cartOptionalString(cart, "itemColors");
+if (isEmpty(itemColors))
+    return;
+struct slName *recordList = slNameListFromString(itemColors, '|'), *record;
+for (record = recordList; record != NULL; record = record->next)
+    {
+    char *p = record->name;
+    char *db = cloneNextWordByDelimiter(&p, '#');
+    char *track = cloneNextWordByDelimiter(&p, '#');
+    char *mode = cloneNextWordByDelimiter(&p, '#');
+    char *lastHash = (p != NULL) ? strrchr(p, '#') : NULL;
+    if (!isEmpty(db) && !isEmpty(track) && !isEmpty(mode) && lastHash != NULL
+            && sameString(db, database))
+        {
+        *lastHash = '\0';
+        char *itemName = p;
+        char *hex = lastHash + 1;
+        char colorSpec[16];
+        safef(colorSpec, sizeof colorSpec, "#%s", hex);
+        unsigned rgb;
+        if (!isEmpty(itemName) && htmlColorForCode(colorSpec, &rgb))
+            {
+            struct itemColorSpec *spec;
+            AllocVar(spec);
+            spec->color = bedColorToGfxColor(rgb);
+            spec->wholeItem = sameString(mode, "item");
+            char key[2048];
+            safef(key, sizeof key, "%s\t%s", track, itemName);
+            if (itemColorHash == NULL)
+                itemColorHash = newHash(0);
+            hashAdd(itemColorHash, key, spec);
+            }
+        }
+    freeMem(db);
+    freeMem(track);
+    freeMem(mode);
+    }
+slFreeList(&recordList);
 }
 

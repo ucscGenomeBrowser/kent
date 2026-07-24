@@ -73,12 +73,10 @@ width=65%
 <div class="row">
   <div class="col-md-6">
 ### Step 1: Select Your Assembly
-  
-  Use the **Clade**, **Genome**, and **Assembly** menus to choose your reference genome.
-  
-  - *Clade*: Major organism group (e.g., Mammal, Vertebrate)
-  - *Genome*: Species (e.g., Human, Mouse)
-  - *Assembly*: Specific genome version (e.g., hg38)
+
+  Use the **Change selected genome** search box to switch assemblies. Type a species name, common
+  name, or assembly ID, then choose one from the list. **Current Genome** shows which assembly is
+  active.
   </div>
 
   <div class="col-md-6">
@@ -113,6 +111,26 @@ width=65%
     browser attribute_name attribute_value(s)
   </div>
 </div>
+
+---
+
+### The track line
+
+Along with the browser line, a **track line** sits above your data and sets what the track is
+called and how it looks. It is optional for a quick look, but worth adding if you plan to keep
+or share the track. Common attributes:
+
+- `name` — the short label shown to the left of the track
+- `description` — the longer text shown in the track's title and details page
+- `visibility` — how the track is drawn: `hide`, `dense`, `squish`, `pack`, or `full`
+- `color` — the feature color as RGB values, for example `color=0,0,255` for blue
+
+A track line looks like:
+
+    track name="My variants" description="Sample calls" visibility=pack color=0,0,255
+
+For bigBed, bigWig, bigGenePred, CRAM, BAM, and VCF files you can skip the track line and
+paste just the URL to the file, one per line.
 
 ---
 

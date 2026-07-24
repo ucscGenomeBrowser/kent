@@ -173,6 +173,96 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static char *thisHostName()
+/* Return this machine's own hostname via gethostname().  Unlike hHttpHost(),
+ * which reflects the client-supplied HTTP_HOST/Host: header, this can't be
+ * spoofed by the request and doesn't change depending on which round-robin
+ * name (e.g. genome.ucsc.edu) the client used to reach this box -- using
+ * hHttpHost() here made onGenomeRRMachine() misclassify RR machines reached
+ * via the genome.ucsc.edu name, sending them into an infinite self-relay
+ * loop in fetchGbMembersFromCentral(). */
+{
+static char host[256];
+static boolean init = FALSE;
+if (!init)
+    {
+    if (gethostname(host, sizeof(host)) != 0)
+        host[0] = '\0';
+    init = TRUE;
+    }
+return host;
+}
+
+static boolean inUcscEduDomain()
+/* Return TRUE if this machine is configured as belonging to the ucsc.edu
+ * domain, per hg.conf's central.domain setting (the same setting used for
+ * the cross-host login cookie domain).  This is deployment config rather
+ * than something derived from the machine's own OS hostname/DNS: a box's
+ * local/cloud-assigned hostname and its UCSC-facing name (e.g.
+ * genome-euro.ucsc.edu) can be unrelated DNS labels with no way to bridge
+ * them via gethostname()/getaddrinfo(). */
+{
+char *domain = cfgOption(CFG_CENTRAL_DOMAIN);
+return (domain != NULL && strstr(domain, ".ucsc.edu") != NULL);
+}
+
+static boolean onGenomeRRMachine()
+/* Return TRUE if running on one of the genome.ucsc.edu round-robin
+ * machines (hgw0, hgw1, hgw2, ...), which carry SQL grants on
+ * hgcentral.gbMembers.  Only meaningful within inUcscEduDomain(). */
+{
+if (hIsPrivateHost())	// stay on localhost for hgwdev and hgwbeta
+    return TRUE;
+char *hostName = thisHostName();
+if (isEmpty(hostName))
+    return FALSE;
+if (startsWith("hgwbeta", hostName))
+    return TRUE;
+if (!startsWith("hgw", hostName))
+    return FALSE;
+char afterHgw = hostName[3];
+return (afterHgw >= '0' && afterHgw <= '9');
+}
+
+static boolean fetchGbMembersFromCentral(char *userName, char **retEmail, char **retRealName)
+/* Relay to genome.ucsc.edu's own loginStatus endpoint to get email/realName
+ * for userName, forwarding this request's Cookie header so genome.ucsc.edu
+ * authenticates the same session.  Used on ucsc.edu hosts that lack SQL
+ * grants on hgcentral.gbMembers.  Returns FALSE on any failure. */
+{
+char *cookieHeader = getenv("HTTP_COOKIE");
+if (isEmpty(cookieHeader))
+    return FALSE;
+
+struct dyString *reqHeader = dyStringNew(0);
+dyStringPrintf(reqHeader, "Cookie: %s\r\n", cookieHeader);
+char *url = "https://genome.ucsc.edu/cgi-bin/hubApi/liftOver/loginStatus";
+int sd = netOpenHttpExt(url, "GET", reqHeader->string);
+dyStringFree(&reqHeader);
+if (sd < 0)
+    return FALSE;
+
+char *redirectedUrl = NULL;
+if (!netSkipHttpHeaderLinesWithRedirect(sd, url, &redirectedUrl))
+    {
+    close(sd);
+    return FALSE;
+    }
+
+struct dyString *body = netSlurpFile(sd);
+close(sd);
+struct jsonElement *json = jsonParse(body->string);
+dyStringFree(&body);
+if (json == NULL)
+    return FALSE;
+
+char *email = jsonStringField(json, "email");
+char *realName = jsonStringField(json, "realName");
+*retEmail = cloneString(email ? email : "");
+*retRealName = cloneString(realName ? realName : "");
+return TRUE;
+}
+
 static void loginStatus()
 /* output current user login status as JSON */
 {
@@ -190,27 +280,38 @@ else
 if (userName != NULL)
     {
     // Get both email and realName from gbMembers table
-    struct sqlConnection *sc = NULL;
-    if (privateHost)
-	sc = hConnectCentral();
-    else
-	sc = hConnectOtto();
-    struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
-    struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
-    char **row = sqlNextRow(sr);
-
     char *email = NULL;
     char *realName = NULL;
-    if (row != NULL)
+
+    if (inUcscEduDomain() && !onGenomeRRMachine())
         {
-        email = cloneString(row[0] ? row[0] : "");
-        realName = cloneString(row[1] ? row[1] : "");
+        // dev sandboxes, hgwbeta, etc: no local grants on gbMembers,
+        // relay to genome.ucsc.edu instead
+        fetchGbMembersFromCentral(userName, &email, &realName);
         }
-    sqlFreeResult(&sr);
-    if (privateHost)
-	hDisconnectCentral(&sc);
     else
-	hDisconnectOtto(&sc);
+        {
+        // RR machines, and anything entirely outside ucsc.edu: unchanged
+        struct sqlConnection *sc = NULL;
+        if (privateHost)
+	    sc = hConnectCentral();
+        else
+	    sc = hConnectOtto();
+        struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
+        struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
+        char **row = sqlNextRow(sr);
+
+        if (row != NULL)
+            {
+            email = cloneString(row[0] ? row[0] : "");
+            realName = cloneString(row[1] ? row[1] : "");
+            }
+        sqlFreeResult(&sr);
+        if (privateHost)
+	    hDisconnectCentral(&sc);
+        else
+	    hDisconnectOtto(&sc);
+        }
 
     // Build logout URL with returnto parameter
     char *returnTo = cgiOptionalString("returnTo");

@@ -36,9 +36,15 @@ $endfor$
     function onScroll() {
         var scrollY = window.scrollY || window.pageYOffset;
         var current = sections[0];
-        for (var i = 0; i < sections.length; i++) {
-            if (sections[i].target.offsetTop <= scrollY + 80) {
-                current = sections[i];
+        // At the bottom of the page the last section is often too short to
+        // scroll within the 80px threshold, so highlight it explicitly.
+        if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 2) {
+            current = sections[sections.length - 1];
+        } else {
+            for (var i = 0; i < sections.length; i++) {
+                if (sections[i].target.offsetTop <= scrollY + 80) {
+                    current = sections[i];
+                }
             }
         }
         for (var i = 0; i < sections.length; i++) {

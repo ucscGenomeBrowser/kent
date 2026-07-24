@@ -6,8 +6,9 @@ This page collects training slides for the UCSC Genome Browser. Each slide deck
 has been curated with a specific purpose, from basic navigation to interpreting
 clinical variants. They are self-contained web decks: open one in any browser,
 present it full-screen (press <kbd>F</kbd>), read the presenter notes
-(press <kbd>S</kbd>), or jump to any slide from its **Contents** page. Feel free
-to use them in your courses or local trainings.
+(press <kbd>S</kbd>, which opens them in a separate browser tab; close that tab
+when you are done with them), or jump to any slide from its **Contents** page.
+Feel free to use them in your courses or local trainings.
 [Contact us](/contacts.html) to suggest new slide decks or improvements to the
 current ones.
 
@@ -15,9 +16,9 @@ current ones.
 
 Basic features and navigation of the
 [main genome browser display](/cgi-bin/hgTracks): configuring tracks and display
-modes, reading the gene model, the track groups, viewing and extracting DNA, the
-Table Browser, aligning sequences with BLAT, and loading your own data as custom
-tracks, track hubs, and sessions.
+modes, reading the gene model, browsing the track groups, viewing and extracting
+DNA, querying the Table Browser, aligning sequences with BLAT, and loading your
+own data as custom tracks, track hubs, and sessions.
 
 **[&#9654; Open the deck](/docs/slideDecks/tutorial1-basics/presentation/)**
 &nbsp;·&nbsp; [Contents](/docs/slideDecks/tutorial1-basics/tableOfContents/)
@@ -28,9 +29,9 @@ tracks, track hubs, and sessions.
 ## Deck 2: Cancer Data in the Genome Browser
 
 An overview of the cancer and clinical databases hosted by the Genome Browser,
-organized by **somatic** and **germline** diagnosis and worked on the
-<em>BRAF</em> V600E example: CIViC, COSMIC, ClinVar, and TCGA Pan-Cancer for
-somatic variants, and GenCC, OMIM, and gnomAD for germline questions.
+organized by **somatic** and **germline** diagnosis CIViC, COSMIC, ClinVar, and TCGA
+Pan-Cancer for somatic variants, and GenCC, OMIM, and gnomAD for germline
+questions. These databases are explored with a consistent <em>BRAF</em> V600E example throughout.
 
 **[&#9654; Open the deck](/docs/slideDecks/tutorial2-cancer/presentation/)**
 &nbsp;·&nbsp; [Contents](/docs/slideDecks/tutorial2-cancer/tableOfContents/)
@@ -70,7 +71,7 @@ Ready-made, interactive teaching modules from our
 [Education portal](/training/education/): the central dogma (reading frames,
 codons, splicing), variant effects (synonymous, missense, nonsense, frameshift),
 and real disease and evolution case studies. Each module is a clickable session
-plus a short page, ready to drop into a lecture or assignment.
+plus a short description of that session and what it shows, ready to drop into a lecture or assignment.
 
 **[&#9654; Open the deck](/docs/slideDecks/tutorial5-teaching/presentation/)**
 &nbsp;·&nbsp; [Contents](/docs/slideDecks/tutorial5-teaching/tableOfContents/)

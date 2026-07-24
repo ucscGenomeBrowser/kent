@@ -23,11 +23,15 @@ usage() {
 
 [[ $# -eq 1 ]] || usage
 name="$1"
+platform=""
 case "$name" in
-    tip)  port=8081; image=kent:tip ;;
-    beta) port=8082; image=kent:beta ;;
-    rel)  port=8083; image=genomebrowser/server:latest ;;
-    *)    usage ;;
+    tip)        port=8081; image=kent:tip ;;
+    beta)       port=8082; image=kent:beta ;;
+    rel)        port=8083; image=genomebrowser/server:latest ;;
+    # beta-arm64 is an arm64 image running emulated on this amd64 host, so pin
+    # the platform explicitly; it needs the QEMU binfmt handlers registered.
+    beta-arm64) port=8084; image=kent:beta-arm64; platform="--platform linux/arm64" ;;
+    *)          usage ;;
 esac
 container="kent-$name"
 
@@ -37,6 +41,7 @@ container="kent-$name"
 #   reboot without manual intervention.
 # --memory/--cpus cap resource use so a runaway query can't starve hgwdev.
 docker run -d --name "$container" \
+    $platform \
     --restart=unless-stopped \
     --memory=8g --cpus=2 \
     -p "127.0.0.1:${port}:80" \
@@ -46,6 +51,9 @@ docker run -d --name "$container" \
 
 # tip and beta ship the public release CGIs from the image; overlay the
 # matching hgwdev CGIs (master for tip, branch beta for beta) on top.
+# beta-arm64 is deliberately NOT overlaid: the hgwdev cgi-bin-beta binaries are
+# amd64 and cannot run in an arm64 container, so that image compiled the beta
+# branch from source at build time and already IS the beta code.
 case "$name" in
     tip|beta) "$selfDir/overlay-cgi.sh" "$name" ;;
 esac

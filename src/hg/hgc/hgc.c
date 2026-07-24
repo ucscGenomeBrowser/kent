@@ -4813,6 +4813,26 @@ struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 boolean otherIsActive = FALSE;
 
+// The item name is either a bare chain id (from the "identical" regions) or
+// "chainId.type.chromStart.chromEnd" identifying the specific difference that
+// was clicked.  Pull the chain id off the front and remember the clicked
+// region (if any) so we can bold it in the tables below.
+char *chainItem = cloneString(item);
+long clickStart = -1, clickEnd = -1;
+char *dot = strchr(chainItem, '.');
+if (dot != NULL)
+    {
+    *dot = 0;
+    char *rest = dot + 1;
+    char *words[4];
+    if (chopByChar(rest, '.', words, ArraySize(words)) == 3)
+        {
+        clickStart = atol(words[1]);
+        clickEnd = atol(words[2]);
+        }
+    }
+item = chainItem;
+
 if (hDbIsActive(otherDb))
     otherIsActive = TRUE;
 
@@ -4905,6 +4925,11 @@ for(hr = regions; hr; hr = hr->next)
         }
     }
 
+// If the click came from a specific difference (not one of the "identical"
+// regions), the matching row is shown in bold in the tables below.
+if (clickStart >= 0)
+    printf("<BR>The item you clicked on is shown in <B>bold</B> in the tables below.<BR>\n");
+
 if (deletions)
     {
     printf("<BR><B>Deletions in Window:</B><BR>");
@@ -4920,7 +4945,8 @@ if (deletions)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4943,7 +4969,8 @@ if (insertions)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->bases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4966,7 +4993,8 @@ if (doubles)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4989,7 +5017,8 @@ if (mismatches)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5035,6 +5064,7 @@ type = words[0];
 if (container == NULL && wordCount > 0)
     {
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
+        || sameString(type, "bigQuickLiftChain")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
     else if ((  sameString(type, "narrowPeak")

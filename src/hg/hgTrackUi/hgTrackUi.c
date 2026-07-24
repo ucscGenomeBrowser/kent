@@ -3886,6 +3886,18 @@ else
     // set large title font size, but less so for long labels to minimize wrap
     printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
                 tdb->longLabel, tdbIsSuper(tdb) ? " tracks" : "");
+
+    // Add a description link if there is one.  Only for faceted composites for now.
+    if (isNotEmpty(tdb->html) && (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")))
+        {
+        char *downArrow = "&dArr;";
+        enum browserType browser = cgiBrowser();
+        if (browser == btIE || browser == btFF)
+            downArrow = "&darr;";
+        printf("&nbsp;&nbsp;(<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
+               "Description%s</A>)", downArrow);
+        }
+
     }
 
 
@@ -4106,20 +4118,6 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                "Contact%s</A>", downArrow);
             }
         printf("&nbsp;</span>");
-        }
-    else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
-        {
-        char *downArrow = "&dArr;";
-        enum browserType browser = cgiBrowser();
-        if (browser == btIE || browser == btFF)
-            downArrow = "&darr;";
-        if (isNotEmpty(tdb->html))
-            {
-            printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-            printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
-                   "Description%s</A>", downArrow);
-            printf("&nbsp;</span>");
-            }
         }
     }
 if (!tdbIsSuperTrack(tdb) && !tdbIsComposite(tdb))
@@ -4350,20 +4348,16 @@ freeMem(urlClone);
 boolean matchFound = FALSE;
 
 // Check if fileUrl falls under a connected hub's base directory
-struct slName *hubIds = hubConnectHubsInCart(cart);
-struct slName *thisHubId = hubIds;
-while (thisHubId != NULL)
+struct hubConnectStatus *hubStatusList = hubConnectStatusListFromCartAll(cart);
+struct hubConnectStatus *hubStatus = hubStatusList;
+while (hubStatus != NULL)
     {
-    struct hubConnectStatus *hubStatus = hubFromIdNoAbort(sqlUnsigned(thisHubId->name));
-    if (hubStatus != NULL)
+    if (isEmpty(hubStatus->errorMessage) && fileUrlMatchesHub(fileUrl, hubStatus))
         {
-        if (isEmpty(hubStatus->errorMessage) && fileUrlMatchesHub(fileUrl, hubStatus))
-            {
-            matchFound = TRUE;
-            break;
-            }
+        matchFound = TRUE;
+        break;
         }
-    thisHubId = thisHubId->next;
+    hubStatus = hubStatus->next;
     }
 
 // For native database tracks (not hub or custom tracks), check if fileUrl matches

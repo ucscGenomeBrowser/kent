@@ -17,7 +17,8 @@ JS_FILES= BackboneExtend.js \
 	lodash.3.10.0.compat.min.js \
 	react-with-addons-0.12.2.min.js \
 	sorttable.js tus.min.js \
-	shepherd.min.js
+	shepherd.min.js \
+	reveal-5.1.0.js reveal-notes-5.1.0.js
 
 # Don't bother jshint'ing external libs.
 jshint:

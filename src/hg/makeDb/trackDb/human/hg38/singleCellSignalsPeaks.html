@@ -1,0 +1,266 @@
+<h2>Description</h2>
+<p>
+This track collects the cell-type chromatin accessibility tracks from the
+single-cell ATAC-seq datasets in the
+<a href="https://cells.ucsc.edu" target="_blank">UCSC Cell Browser</a>. For each
+dataset it shows the read-coverage signal (bigWig) and, where the study
+reported them, the accessible-region peak calls (bigBed and narrowPeak), split
+out by cell type. The datasets cover several human tissues, including brain,
+heart, and retina.
+</p>
+<p>
+The subtracks come from these datasets:
+</p>
+<ul>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=human-enhancer-atlas" target="_blank">Human Enhancer Atlas</a></b>:
+    chromatin accessibility across 30 adult and 15 fetal human tissue types;
+    the study mapped about 1.2 million candidate cis-regulatory elements across
+    222 cell types. 222 signal and 222 peak subtracks (Zhang et al. 2021).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=cortex-atac" target="_blank">Cortex ATAC</a></b>:
+    single-cell epigenomes of the developing human brain and cortical
+    organoids. 12 signal and 79 peak subtracks (Ziffra et al. 2021).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=retina" target="_blank">Human and Mouse Retina Cell Atlas</a></b>:
+    accessibility across retinal cell types. 39 signal and 30 peak subtracks
+    (Li et al. 2023, preprint).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=neuro-degen-atac" target="_blank">Risk Loci in Alzheimer's and Parkinson's</a></b>:
+    accessibility across six adult human brain regions, with 359,022 cell
+    type-specific regulatory elements used to interpret disease-associated
+    variants. 65 signal and 2 peak subtracks (Corces et al. 2020).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=multiomic-human-heart" target="_blank">Multiomic Human Heart</a></b>:
+    accessibility across human cardiac development, aging, and disease, paired
+    with expression data. 40 signal subtracks (Gao et al. 2026).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=cardiogenesis-atac" target="_blank">Human Cardiogenesis</a></b>:
+    accessibility of human fetal hearts at three early developmental stages,
+    used to prioritize noncoding variants in congenital heart disease. 19
+    signal subtracks (Ameen et al. 2022).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=olg-eae-ms" target="_blank">Oligodendrocytes in Mouse EAE Model of MS</a></b>:
+    accessibility in the oligodendrocyte lineage; the tracks here are the
+    accessibility measured in oligodendroglia from adult human brain. 18 signal
+    subtracks (Meijer et al. 2022).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=brainvar+gene-activity" target="_blank">BrainVar</a></b>:
+    gene-activity signal from snATAC-seq of prenatal dorsolateral prefrontal
+    cortex. 4 signal subtracks.
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=sea-ad-mtg+cohort" target="_blank">SEA-AD Brain ATAC</a></b>:
+    chromatin accessibility per cell subclass across the spectrum of Alzheimer's
+    disease neuropathological change, from middle temporal gyrus and prefrontal
+    cortex; tracks are colored by SEA-AD subclass. 184 signal subtracks
+    (Gabitto et al. 2024).
+  </li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This is a faceted collection, so the subtracks are chosen with filter menus
+rather than a long checkbox list. Use the facets on the track configuration
+page to narrow the subtracks by dataset, tissue, life stage, condition, data
+type, assay, and cell type, then turn on the ones you want. Signal subtracks draw
+as coverage graphs and peak subtracks draw as boxes. Each subtrack links back to
+its source dataset in the Cell Browser.
+</p>
+
+<h2>Methods</h2>
+<p>
+Each dataset was produced and processed by a different group, so the assays and
+analysis pipelines vary. The signal and peak files here are the same ones served
+by the individual Cell Browser datasets, copied into the browser without change.
+The table summarizes each dataset; see the linked publication for full detail.
+</p>
+<table class="stdTbl">
+  <tr><th>Dataset</th><th>Assay</th><th>Processing summary</th></tr>
+  <tr>
+    <td>Human Enhancer Atlas</td>
+    <td>single-cell ATAC-seq (adult and fetal tissues)</td>
+    <td>Accessibility profiled across 30 adult and 15 fetal tissues, integrated to call about 1.2 million candidate cis-regulatory elements across 222 cell types.</td>
+  </tr>
+  <tr>
+    <td>Cortex ATAC</td>
+    <td>10x single-cell ATAC-seq</td>
+    <td>Developing human cortex and organoid nuclei clustered by accessibility; gene-activity signal derived from accessibility near genes.</td>
+  </tr>
+  <tr>
+    <td>Human and Mouse Retina Cell Atlas</td>
+    <td>single-nucleus ATAC-seq</td>
+    <td>Retinal nuclei clustered into cell types, with per-cell-type coverage and peak calls.</td>
+  </tr>
+  <tr>
+    <td>Risk Loci in Alzheimer's and Parkinson's</td>
+    <td>10x single-cell ATAC-seq</td>
+    <td>70,631 nuclei from six adult brain regions clustered by iterative LSI; peaks called per cluster with MACS2 (501 bp summits, blacklist-filtered), giving 359,022 cell type-specific elements.</td>
+  </tr>
+  <tr>
+    <td>Multiomic Human Heart</td>
+    <td>single-nucleus ATAC-seq (with snRNA-seq)</td>
+    <td>106 snATAC datasets processed with SnapATAC2, batch-corrected by donor and study, integrated with expression from 299 donors.</td>
+  </tr>
+  <tr>
+    <td>Human Cardiogenesis</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Human fetal hearts from three early stages profiled to map dynamic regulatory elements across cardiac differentiation trajectories.</td>
+  </tr>
+  <tr>
+    <td>Oligodendrocytes in Mouse EAE Model of MS</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Accessibility of the oligodendrocyte lineage; the human tracks show accessibility in oligodendroglia from adult human brain.</td>
+  </tr>
+  <tr>
+    <td>BrainVar</td>
+    <td>single-nucleus ATAC-seq</td>
+    <td>Prenatal dorsolateral prefrontal cortex nuclei summarized as gene-activity coverage per major cell class.</td>
+  </tr>
+  <tr>
+    <td>SEA-AD Brain ATAC</td>
+    <td>single-nucleus ATAC-seq</td>
+    <td>Pseudobulk accessibility per cell subclass across donors spanning the full range of Alzheimer's disease neuropathological change, from middle temporal gyrus and prefrontal cortex; tracks colored by SEA-AD subclass.</td>
+  </tr>
+</table>
+<p>
+The steps used to assemble the files into this track are recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/singleCellSignalsPeaks.txt" target="_blank">makeDoc</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The subtracks can be explored in table form with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a>, and read from scripts through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>.
+</p>
+<p>
+For automated download and analysis, the signal and peak files are stored under
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/" target="_blank">http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/</a>,
+keeping the same per-dataset subdirectories shown on the configuration page. The
+files can be read with the command-line tools <tt>bigWigToBedGraph</tt> (for the
+signal bigWigs) and <tt>bigBedToBed</tt> (for the peak files), which can be
+compiled from source or downloaded as
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">precompiled binaries</a>.
+Both take a region so you do not have to download the whole file, for example:
+</p>
+<pre><code>bigWigToBedGraph -chrom=chr1 -start=1000000 -end=1100000 \
+  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/neuronal-celltypes/projNeuron_LDSCgroup-VIP_Interneurons_GRanges_insertions_bin100_RIPnorm.bw \
+  stdout
+
+bigBedToBed -chrom=chr21 -start=0 -end=48000000 \
+  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/cortex-atac/hub/Enhancerpeaks/AstroOligo.bb \
+  stdout</code></pre>
+<p>
+The underlying matrices, metadata, and per-dataset download details are on each
+dataset's page in the <a href="https://cells.ucsc.edu" target="_blank">UCSC Cell
+Browser</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the UCSC Cell Browser team and the research groups whose single-cell
+datasets are shown here. Questions about a particular subtrack are best directed
+to the dataset page it links to.
+</p>
+
+<h2>References</h2>
+
+<p>
+Zhang K, Hocker JD, Miller M, Hou X, Chiou J, Poirion OB, Qiu Y, Li YE, Gaulton KJ, Wang A <em>et
+al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(21)01279-4" target="_blank">
+A single-cell atlas of chromatin accessibility in the human genome</a>.
+<em>Cell</em>. 2021 Nov 24;184(24):5985-6001.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34774128" target="_blank">34774128</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8664161/" target="_blank">PMC8664161</a>
+</p>
+
+<p>
+Ziffra RS, Kim CN, Ross JM, Wilfert A, Turner TN, Haeussler M, Casella AM, Przytycki PF, Keough KC,
+Shin D <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-021-03209-8" target="_blank">
+Single-cell epigenomics reveals mechanisms of human cortical development</a>.
+<em>Nature</em>. 2021 Oct;598(7879):205-213.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34616060" target="_blank">34616060</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8494642/" target="_blank">PMC8494642</a>
+</p>
+
+<p>
+Li J, Wang J, Ibarra IL, Cheng X, Luecken MD, Lu J, Monavarfeshani A, Yan W, Zheng Y, Zuo Z <em>et
+al</em>.
+<a href="https://www.biorxiv.org/content/10.1101/2023.11.07.566105v1" target="_blank">
+Integrated multi-omics single cell atlas of the human retina</a>.
+<em>bioRxiv</em>. 2023 Nov 8.
+</p>
+
+<p>
+Corces MR, Shcherbina A, Kundu S, Gloudemans MJ, Frésard L, Granja JM, Louie BH, Eulalio T, Shams S,
+Bagdatli ST <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-020-00721-x" target="_blank">
+Single-cell epigenomic analyses implicate candidate causal variants at inherited risk loci for
+Alzheimer's and Parkinson's diseases</a>.
+<em>Nat Genet</em>. 2020 Nov;52(11):1158-1168.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33106633" target="_blank">33106633</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7606627/" target="_blank">PMC7606627</a>
+</p>
+
+<p>
+Gao W, Hu P, Wick B, Qiu Q, Zhang H, Li Y, Kang X, Bedi K, Haeussler M, Sasaki K <em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-026-04061-7" target="_blank">
+An integrative single-nucleus multiomic atlas of the human left ventricle identifies gene regulatory
+network dynamics across cardiac development, aging, and disease</a>.
+<em>Genome Biol</em>. 2026 Apr 6;27(1).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41937210" target="_blank">41937210</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13067603/" target="_blank">PMC13067603</a>
+</p>
+
+<p>
+Ameen M, Sundaram L, Shen M, Banerjee A, Kundu S, Nair S, Shcherbina A, Gu M, Wilson KD, Varadarajan
+A <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)01503-3" target="_blank">
+Integrative single-cell analysis of cardiogenesis identifies developmental trajectories and non-
+coding mutations in congenital heart disease</a>.
+<em>Cell</em>. 2022 Dec 22;185(26):4937-4953.e23.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36563664" target="_blank">36563664</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10122433/" target="_blank">PMC10122433</a>
+</p>
+
+<p>
+Meijer M, Agirre E, Kabbe M, van Tuijn CA, Heskol A, Zheng C, Mendanha Falcão A, Bartosovic M, Kirby
+L, Calini D <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0896-6273(21)01089-8" target="_blank">
+Epigenomic priming of immune genes implicates oligodendroglia in multiple sclerosis
+susceptibility</a>.
+<em>Neuron</em>. 2022 Apr 6;110(7):1193-1210.e13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35093191" target="_blank">35093191</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9810341/" target="_blank">PMC9810341</a>
+</p>
+
+<p>
+Gabitto MI, Travaglini KJ, Rachleff VM, Kaplan ES, Long B, Ariza J, Ding Y, Mahoney JT, Dee N, Goldy
+J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41593-024-01774-5" target="_blank">
+Integrated multimodal cell atlas of Alzheimer's disease</a>.
+<em>Nat Neurosci</em>. 2024 Dec;27(12):2366-2383.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39402379" target="_blank">39402379</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11614693/" target="_blank">PMC11614693</a>
+</p>
+
+<p>
+Hawrylycz M, Kaplan ES, Travaglini KJ, Gabitto MI, Miller JA, Ng L, Close JL, Hodge RD, Long B,
+Mollenkopf T <em>et al</em>.
+<a href="https://doi.org/10.1038/s43587-024-00719-8" target="_blank">
+SEA-AD is a multimodal cellular atlas and resource for Alzheimer's disease</a>.
+<em>Nat Aging</em>. 2024 Oct;4(10):1331-1334.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39402332" target="_blank">39402332</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11577961/" target="_blank">PMC11577961</a>
+</p>

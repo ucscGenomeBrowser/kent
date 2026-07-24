@@ -5,13 +5,12 @@ title: "AutoSql Format Specification"
 AutoSql is a small specification language used throughout the UCSC Genome Browser to describe
 the columns of a table or the fields of an annotation file. A single AutoSql file (conventionally
 given the `.as` extension) defines the name, type, and a human-readable description of each
-field. In particular, they are used to add extra fields to a
+field. In particular, these files are used to add extra fields to a
 [bigBed](/goldenPath/help/bigBed.html) or [bigGenePred](/goldenPath/help/bigGenePred.html) track:
 `bedToBigBed` reads the `.as` file (via its `-as=` option) to learn the names and types of the
 fields beyond the standard BED columns, and the Genome Browser uses those descriptions to label
-values on item detail pages and in filter menus. This page is aimed at track creators and
-hub developers make use of autoSql's more advanced features.
-
+values on item detail pages and in filter menus. This page aims to help track creators and
+hub developers make use of AutoSql's more advanced features.
 
 ## A simple example
 
