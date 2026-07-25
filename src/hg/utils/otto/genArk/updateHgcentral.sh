@@ -91,6 +91,8 @@ rsync -a qateam@hgdownload:/mirrordata/hubs/UCSC_GI.assemblyHubList.txt ./list.$
 newSum=`grep -v "^#" list.${DS} | sort | md5sum | cut -d' ' -f1`
 prevSum=`grep -v "^#" previousList.txt | sort | md5sum | cut -d' ' -f1`
 
+printf "# new list: %d, prevList: %d\n" "`grep -c . list.${DS}`" "`grep -c . previousList.txt`" 1>&2
+
 if [ "${prevSum}" = "${newSum}" ]; then
   rm -f list.${DS}
   ### new assemblyList table in hgcentraltest 2024-08-08
@@ -106,7 +108,6 @@ countToday=`grep -c -v "^#" list.${DS}`
 rowCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
 
 if [ "${countToday}" -gt "${rowCount}" ]; then
-
   ./genArkListToSql.pl list.${DS} > genark.tsv
   ### new assemblyList table in hgcentraltest 2024-08-08 - loads genark table
   /hive/data/inside/GenArk/addAssemblyList.sh
