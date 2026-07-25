@@ -51,9 +51,11 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
-char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser, 
-    e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if 
+char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser,
+    e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if
     hg.conf login.relativeLink is on. */
+boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
+    set from hg.conf login.pwdEyeIcon in doMiddle() */
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
@@ -711,6 +713,44 @@ sendActivateMail(email, username, tokenMD5);
 return;
 }
 
+void printPwdEyeIcon(char *iconId, char *slashId)
+/* print a clickable eye icon, absolutely positioned inside a password
+ * input's wrapper span; slashId is the <line> toggled to show "hidden".
+ * No-op if disabled via hg.conf login.pwdEyeIcon. */
+{
+if (!pwdEyeIconEnabled)
+    return;
+hPrintf(
+    "<span id=\"%s\" title=\"Show/hide password\" "
+    "style=\"position:absolute; right:8px; top:50%%; transform:translateY(-50%%); "
+    "cursor:pointer; user-select:none;\">"
+    "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" "
+    "stroke=\"#666\" stroke-width=\"2\">"
+    "<path d=\"M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z\"/>"
+    "<circle cx=\"12\" cy=\"12\" r=\"3\"/>"
+    "<line id=\"%s\" x1=\"2\" y1=\"2\" x2=\"22\" y2=\"22\" style=\"display:none;\"/>"
+    "</svg>"
+    "</span>", iconId, slashId);
+}
+
+void printPwdToggleJS()
+/* define the password show/hide toggle function used by all eye icons */
+{
+jsInline(
+    "function togglePwdVisibility(inputId, slashId) {\n"
+    "  var inp = document.getElementById(inputId);\n"
+    "  var slash = document.getElementById(slashId);\n"
+    "  if (inp.type === 'password') {\n"
+    "    inp.type = 'text';\n"
+    "    slash.style.display = 'inline';\n"
+    "  } else {\n"
+    "    inp.type = 'password';\n"
+    "    slash.style.display = 'none';\n"
+    "  }\n"
+    "}\n"
+    );
+}
+
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
@@ -735,14 +775,24 @@ hPrintf("<form method=post action=\"%s\" name=\"accountLoginForm\" id=\"accountL
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"password\">Password</label>"
+    "<span style=\"position:relative; display:inline-block;\">"
     "<input type=password name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"password\">"
+    , hgLoginUrl, username);
+printPwdEyeIcon("pwdEyeIcon", "pwdEyeSlash");
+hPrintf(
+    "</span>"
     "</div>"
     "\n"
     "<div class=\"formControls\">"
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
     "    &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
-    , hgLoginUrl, username, getReturnToURL());
+    , getReturnToURL());
+if (pwdEyeIconEnabled)
+    {
+    printPwdToggleJS();
+    jsOnEventById("click", "pwdEyeIcon", "togglePwdVisibility('password','pwdEyeSlash');");
+    }
 cartSaveSession(cart);
 hPrintf(
     "</form>"
@@ -811,17 +861,29 @@ hPrintf(
 hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<label for=\"currentPw\">Current or Emailed Password</label>"
-    "<input type=\"password\" name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"currentPw\">"
+    "<span style=\"position:relative; display:inline-block;\">"
+    "<input type=\"password\" name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"currentPw\">");
+printPwdEyeIcon("curPwEyeIcon", "curPwEyeSlash");
+hPrintf(
+    "</span>"
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"newPw1\">New Password</label>"
-    "<input type=\"password\" name=\"hgLogin_newPassword1\" value=\"\" size=\"30\" id=\"newPw\">"
+    "<span style=\"position:relative; display:inline-block;\">"
+    "<input type=\"password\" name=\"hgLogin_newPassword1\" value=\"\" size=\"30\" id=\"newPw1\">");
+printPwdEyeIcon("newPw1EyeIcon", "newPw1EyeSlash");
+hPrintf(
+    "</span>"
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"newPw2\">Re-enter New Password</label>"
-    "<input type=\"password\" name=\"hgLogin_newPassword2\" value=\"\" size=\"30\" id=\"newPw\">"
+    "<span style=\"position:relative; display:inline-block;\">"
+    "<input type=\"password\" name=\"hgLogin_newPassword2\" value=\"\" size=\"30\" id=\"newPw2\">");
+printPwdEyeIcon("newPw2EyeIcon", "newPw2EyeSlash");
+hPrintf(
+    "</span>"
     "</div>"
     "\n"
     "<div class=\"formControls\">"
@@ -833,6 +895,13 @@ hPrintf("<div class=\"inputGroup\">"
     "\n"
     "</div><!-- END - changePwBox -->"
     "\n", getReturnToURL());
+if (pwdEyeIconEnabled)
+    {
+    printPwdToggleJS();
+    jsOnEventById("click", "curPwEyeIcon", "togglePwdVisibility('currentPw','curPwEyeSlash');");
+    jsOnEventById("click", "newPw1EyeIcon", "togglePwdVisibility('newPw1','newPw1EyeSlash');");
+    jsOnEventById("click", "newPw2EyeIcon", "togglePwdVisibility('newPw2','newPw2EyeSlash');");
+    }
 cartSaveSession(cart);
 }
 
@@ -967,12 +1036,22 @@ if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
 
 hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
-    "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
+    "<span style=\"position:relative; display:inline-block;\">"
+    "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">",
+    cartUsualString(cart, "hgLogin_password", ""));
+printPwdEyeIcon("signupPwEyeIcon", "signupPwEyeSlash");
+hPrintf(
+    "</span>"
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
-    "<label for=\"password\">Re-enter Password</label>"
-    "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">"
+    "<label for=\"passwordCheck\">Re-enter Password</label>"
+    "<span style=\"position:relative; display:inline-block;\">"
+    "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">",
+    cartUsualString(cart, "hgLogin_password2", ""));
+printPwdEyeIcon("signupPwCheckEyeIcon", "signupPwCheckEyeSlash");
+hPrintf(
+    "</span>"
     "\n"
     "</div>"
     "\n"
@@ -982,9 +1061,13 @@ hPrintf("<div class=\"inputGroup\">"
     "</div>"
     "</form>"
     "</div><!-- END - signUpBox -->",
-    cartUsualString(cart, "hgLogin_password", ""), 
-    cartUsualString(cart, "hgLogin_password2", ""),
     getReturnToURL());
+if (pwdEyeIconEnabled)
+    {
+    printPwdToggleJS();
+    jsOnEventById("click", "signupPwEyeIcon", "togglePwdVisibility('password','signupPwEyeSlash');");
+    jsOnEventById("click", "signupPwCheckEyeIcon", "togglePwdVisibility('passwordCheck','signupPwCheckEyeSlash');");
+    }
 cartSaveSession(cart);
 }
 
@@ -1343,6 +1426,7 @@ safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
 safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
+pwdEyeIconEnabled = cfgOptionBooleanDefault(CFG_LOGIN_PWD_EYE_ICON, TRUE);
 
 if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);

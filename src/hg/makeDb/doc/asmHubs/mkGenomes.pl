@@ -134,17 +134,10 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
   push @fhN, $ph;	# file 3
   open (my $bh, ">", "$buildDir/beta.hub.txt") or die "can not write to $buildDir/beta.hub.txt";
   push @fhN, $bh;	# file 4
-  # alpha.hub.txt is only needed when there are contrib tracks to show;
-  # otherwise the plain singleFile.hub.txt is sufficient, skip writing it.
-  # remove any stale alpha.hub.txt left over from a previous build where
-  # contrib tracks did exist.
-  my $ah;
-  if ($alphaCount > 0) {
-    open ($ah, ">", "$buildDir/alpha.hub.txt") or die "can not write to $buildDir/alpha.hub.txt";
-    push @fhN, $ah;	# file 5
-  } elsif ( -e "$buildDir/alpha.hub.txt" ) {
-    unlink "$buildDir/alpha.hub.txt";
-  }
+  # alpha.hub.txt is always written, even when there are no contrib tracks,
+  # so it exists in every build.
+  open (my $ah, ">", "$buildDir/alpha.hub.txt") or die "can not write to $buildDir/alpha.hub.txt";
+  push @fhN, $ah;	# file 5
 
   my %liftOverChain;	# key is 'otherDb' name, value is bbi path
   my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path

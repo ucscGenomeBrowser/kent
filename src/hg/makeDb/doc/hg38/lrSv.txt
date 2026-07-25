@@ -671,7 +671,7 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
 # almost certainly ONT/assembly artifacts but are kept, not silently dropped.
 # svLen is stored as the reference span (1 bp for INS); the inserted-sequence
 # length lives in insLen. AC is the genotyped carrier count (= nabecCount +
-# hbccCount). Not added to the lrSvAll merge for now.
+# hbccCount). Included in the lrSvAll merge (source key CARD).
 
 ##########
 # 2026-07-17 Claude max

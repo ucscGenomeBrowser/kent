@@ -11,7 +11,7 @@ pennantIcon New red ../goldenPath/newsarch.html#071626 "Released Jul. 16, 2026"
 # "longReadVariants.filter.<field>.min/max" are inherited at read time by every
 # subtrack via cartOptionalStringClosestToHome() walking tdb->parent. A
 # subtrack-level filter always wins over the supertrack-level one.
-filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),TRA|TRA (Translocation)
+filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),INV|INV (Inversion),CPX|CPX (Complex rearrangement),DUP|DUP (Duplication),INSDEL|INSDEL (Insertion-deletion),MIXED|MIXED (multi-allele snarl),TRA|TRA (Translocation),BND|BND (Breakend)
 filterType.svType multipleListOr
 filterLabel.svType SV Type
 filter.svLen 0:250000000

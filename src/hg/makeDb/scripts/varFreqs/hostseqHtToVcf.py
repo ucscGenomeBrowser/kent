@@ -46,7 +46,7 @@ POPS = [
     ("fin", "European (Finnish)"),
     ("mid", "Middle Eastern"),
     ("nfe", "European (non-Finnish)"),
-    ("oth", "Remaining/Other individuals"),
+    ("oth", "Remaining individuals"),
     ("sas", "South Asian"),
 ]
 
