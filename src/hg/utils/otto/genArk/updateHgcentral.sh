@@ -101,15 +101,15 @@ fi
 # save this new list in history
 mkdir -p history/${YYYY}
 cp -p list.${DS} history/${YYYY}
-countToday=`grep -v "^#" list.${DS} | wc -l`
+gzip history/${YYYY}/list.${DS}
+countToday=`grep -c -v "^#" list.${DS}`
 rowCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
 
 if [ "${countToday}" -gt "${rowCount}" ]; then
 
   ./genArkListToSql.pl list.${DS} > genark.tsv
-  hgsql hgcentraltest -e 'drop table genark;'
-  hgsql hgcentraltest < /hive/data/inside/GenArk/genark.sql
- hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'genark.tsv' INTO TABLE genark;"
+  ### new assemblyList table in hgcentraltest 2024-08-08 - loads genark table
+  /hive/data/inside/GenArk/addAssemblyList.sh
   newCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
   if [ "${newCount}" -gt "${rowCount}" ]; then
     updateOK "${newCount}" "${rowCount}"
@@ -123,8 +123,5 @@ else
   oddRowCounts "${countToday}" "${rowCount}"
   exit 255
 fi
-
-### new assemblyList table in hgcentraltest 2024-08-08
-/hive/data/inside/GenArk/addAssemblyList.sh
 
 exit $?
