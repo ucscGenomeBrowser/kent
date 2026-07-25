@@ -1676,5 +1676,5 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         bigDataUrl /gbdb/$D/varFreqs/hostseq/hostseq.vcf.gz
         visibility hide
         dataVersion gnomAD-Canada v1.0
-        priority 2
+        priority 33
 

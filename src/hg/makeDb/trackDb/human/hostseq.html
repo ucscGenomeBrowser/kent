@@ -15,18 +15,41 @@ Frequencies are reported for the whole cohort and for nine genetic-ancestry grou
 gnomAD pipeline: African/African-American, Latino/Admixed-American, European (non-Finnish),
 Ashkenazi Jewish, East Asian, European (Finnish), Middle Eastern, South Asian, and Remaining
 individuals. The release contains about 213 million variant sites. The per-variant details page
-also shows the group with the highest frequency (grpmax) and the gnomAD variant-quality filter
-status.
+also shows the group with the highest frequency (grpmax), the count of homozygous alternate
+individuals (nhomalt), and the gnomAD variant-quality filter status.
 </p>
 
 <h2>Display Conventions</h2>
 <p>
 This is a Variant Call Format (VCF) track. Hovering over a variant shows the overall allele
 frequency, and clicking a variant opens a details page with the overall and per-ancestry allele
-counts, allele numbers and frequencies, the dbSNP identifier, and the variant filter status. The
-filter status is one of <tt>PASS</tt>, <tt>RF</tt> (failed the gnomAD random-forest
-variant-quality filter), or <tt>InbreedingCoeff</tt> (excess heterozygosity); variants with zero
-release allele count (<tt>AC0</tt>) are not shown.
+counts, allele numbers and frequencies, the dbSNP identifier, the group with the highest
+frequency (grpmax), the count of homozygous alternate individuals (nhomalt), and the variant
+filter status. The filter status is one of <tt>PASS</tt>, <tt>RF</tt> (failed the gnomAD
+random-forest variant-quality filter), <tt>InbreedingCoeff</tt> (excess heterozygosity), or
+<tt>InbreedingCoeff;RF</tt> (both flags); variants with zero release allele count
+(<tt>AC0</tt>) are not shown.
+</p>
+
+<h3>Effective sample size per ancestry group</h3>
+<p>
+The gnomAD-Canada v1.0 sample composition is heavily skewed toward non-Finnish European
+individuals, so the effective sample size in the per-ancestry AC/AN/AF fields varies by
+more than three orders of magnitude across groups. For a typical variant with good
+genotyping success, the per-group allele numbers (AN) correspond to roughly:
+</p>
+<ul>
+  <li>European (non-Finnish): ~5,900 individuals</li>
+  <li>East Asian, South Asian, Remaining, African/African-American, Latino/Admixed-American,
+      Ashkenazi Jewish: ~400 to 700 each</li>
+  <li>Middle Eastern: ~70</li>
+  <li>European (Finnish): ~4</li>
+</ul>
+<p>
+Per-ancestry allele frequencies for the two smallest groups (Middle Eastern and especially
+European (Finnish)) should be treated as informational rather than as reliable population
+estimates. Every AF_fin value falls on a 1/8 grid and reflects at most a handful of alleles;
+users looking for a robust Finnish reference should consult FinnGen instead.
 </p>
 
 <h2>Data Access</h2>
@@ -37,7 +60,7 @@ The data can be explored interactively with the
 For programmatic access, our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
 can be used; the track name is <em>hostseq</em>.
 For bulk download, the VCF is available from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/hostseq/" target="_blank">our download
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/varFreqs/hostseq/" target="_blank">our download
 server</a>. The original Hail table can be downloaded from the
 <a href="https://www.bcgsc.ca/gnomad/" target="_blank">gnomAD-Canada portal</a>.
 </p>
@@ -100,10 +123,8 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37131148" target="_blank">371
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10152008/" target="_blank">PMC10152008</a>
 </p>
 
-
-
 <p>
-Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alföldi J, Watts NA, Vittal C,
+Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alf&#246;ldi J, Watts NA, Vittal C,
 Gauthier LD <em>et al</em>.
 <a href="https://doi.org/10.1038/s41586-023-06045-0" target="_blank">
 A genomic mutational constraint map using variation in 76,156 human genomes</a>.

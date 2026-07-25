@@ -50,7 +50,7 @@ WBBC	North	North Han	.	North_AF
 WBBC	Central	Central Han	.	Central_AF
 WBBC	South	South Han	.	South_AF
 WBBC	Lingnan	Lingnan Han	.	Lingnan_AF
-# gnomAD-Canada HostSeq genetic-ancestry groups (key "oth" = Remaining/Other)
+# gnomAD-Canada HostSeq genetic-ancestry groups (key "oth" = Remaining individuals)
 HostSeq	afr	African/African-American	AC_afr	AF_afr
 HostSeq	amr	Latino/Admixed-American	AC_amr	AF_amr
 HostSeq	asj	Ashkenazi Jewish	AC_asj	AF_asj
@@ -58,5 +58,5 @@ HostSeq	eas	East Asian	AC_eas	AF_eas
 HostSeq	fin	European (Finnish)	AC_fin	AF_fin
 HostSeq	mid	Middle Eastern	AC_mid	AF_mid
 HostSeq	nfe	European (non-Finnish)	AC_nfe	AF_nfe
-HostSeq	oth	Remaining/Other	AC_oth	AF_oth
+HostSeq	oth	Remaining individuals	AC_oth	AF_oth
 HostSeq	sas	South Asian	AC_sas	AF_sas
