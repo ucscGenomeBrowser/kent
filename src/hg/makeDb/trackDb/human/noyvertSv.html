@@ -26,7 +26,14 @@ used for the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track
 1,019 samples included in that track, with both datasets based on the same
 underlying sequencing data.
 However, the data-processing and SV-calling methods differ between the two
-tracks. The imputation reference panel, UK Biobank imputation results, and
+tracks, so the individual calls are only partially concordant. This track has
+about 38,000 deletions and the Vienna track about 58,000; at a 50%
+reciprocal-overlap threshold roughly 12,000 are shared. That is about a third
+of the deletions in this track and, conversely, about a fifth of the Vienna
+deletions; requiring at least 90% mutual overlap lowers these shares to roughly
+a quarter and a sixth, respectively. A similar fraction (about a quarter) of
+the insertions in this track have a size-matched Vienna insertion within
+100 bp. The imputation reference panel, UK Biobank imputation results, and
 SV-wide association study (SV-WAS) results described here are specific to this
 track.
 </p>
