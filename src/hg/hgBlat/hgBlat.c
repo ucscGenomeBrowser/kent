@@ -681,10 +681,10 @@ for (psl = pslList; psl != NULL; psl = psl->next)
             psl->tStart, psl->tEnd, database, uiState);
     else
         /* Shared-link reopen: there is no trash .pslx, but the durable bigPsl custom track (now in
-         * this cart) lets hgc's htcBlatAlign rebuild the base alignment from the stored query seq. */
-        jsonWriteStringf(jw, "detailsUrl", "%s?g=htcBlatAlign&db=%s&c=%s&o=%d&l=%d&r=%d&i=%s&%s",
-            hgcUrl, database, psl->tName, psl->tStart, psl->tStart, psl->tEnd,
-            cgiEncode(psl->qName), uiState);
+         * this cart) lets hgc's htcBlatAlign rebuild the base alignment from the stored query seq.
+         * chrom/start/qName select the hit; db and the browser window come from the loaded cart. */
+        jsonWriteStringf(jw, "detailsUrl", "%s?g=htcBlatAlign&db=%s&c=%s&o=%d&i=%s&%s",
+            hgcUrl, database, psl->tName, psl->tStart, cgiEncode(psl->qName), uiState);
     if (locusConn)
         {
         struct sqlResult *sr = hRangeQuery(locusConn, "locusName", psl->tName, psl->tStart, psl->tEnd, NULL, 0);
