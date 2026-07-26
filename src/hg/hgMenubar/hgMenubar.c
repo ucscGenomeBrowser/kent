@@ -41,10 +41,13 @@ else
     // No hgsid available on static pages; the logout return URL simply omits it.
     char *logoutUrl = wikiLinkUserLogoutUrl("");
     char *changePwUrl = wikiLinkChangePasswordUrl("");
+    char *changeEmailUrl = wikiLinkChangeEmailUrl("");
     dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
         "title='Account info and sign out' "
-        "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\">%s</a>",
-        userName, logoutUrl, changePwUrl ? changePwUrl : "", userName);
+        "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
+        "data-changeemailurl=\"%s\">%s</a>",
+        userName, logoutUrl, changePwUrl ? changePwUrl : "",
+        changeEmailUrl ? changeEmailUrl : "", userName);
     }
 return dyStringCannibalize(&dy);
 }

@@ -1690,10 +1690,13 @@ if(scriptName)
             char *hgsid = cart ? cartSessionId(cart) : NULL;
             char *logoutUrl = wikiLinkUserLogoutUrl(hgsid);
             char *changePwUrl = wikiLinkChangePasswordUrl(hgsid);
+            char *changeEmailUrl = wikiLinkChangeEmailUrl(hgsid);
             dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
                 "title='Account info and sign out' "
-                "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\">%s</a>",
-                userName, logoutUrl, changePwUrl ? changePwUrl : "", userName);
+                "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
+                "data-changeemailurl=\"%s\">%s</a>",
+                userName, logoutUrl, changePwUrl ? changePwUrl : "",
+                changeEmailUrl ? changeEmailUrl : "", userName);
             }
         loginLi = dyStringCannibalize(&dy);
         }

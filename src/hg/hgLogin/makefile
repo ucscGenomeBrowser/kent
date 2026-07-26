@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgLogin
 
-O = gbMembers.o $A.o
+O = gbMembers.o oauthLogin.o $A.o
 
 include ../../inc/cgi_build_rules.mk
 
