@@ -977,6 +977,22 @@ MgFont *mgFontForSize(char *textSize)
 return mgFontForSizeAndStyle(textSize, "medium");
 }
 
+MgFont *mgFontForCellHeight(int cellHeight)
+/* Return a font whose reported cell height is cellHeight, cloned from the small
+ * font.  Built-in fonts only come in fixed sizes, but the FreeType engine
+ * derives its render size from the font's cell height (see getFontCorrection in
+ * freeType.c), so this yields an in-between size that no fixed font offers (e.g.
+ * cellHeight 10 renders ~9px).  VALID ONLY UNDER FREETYPE: the GEM bitmap engine
+ * indexes fixed bitmap rows by this height, so the glyphs would be misread.
+ * Callers must fall back to a real fixed-size font when FreeType is off.  Not
+ * thread-safe; it hands back one static header re-stamped on each call. */
+{
+static struct font_hdr clone;
+clone = *mgSmallFont();        // copy the header; FreeType ignores the glyph data
+clone.frm_hgt = cellHeight;    // this is what mgFontPixelHeight() returns
+return &clone;
+}
+
 
 void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
 /* Draw a dot when a macro won't do. */
