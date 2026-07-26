@@ -117,49 +117,71 @@ if (mcMaster == NULL)
 return mcMaster;
 }
 
-char *mafSplitSrcGetChrom(char *src, char* database) 
-/* src can be in format chrom, db|chrom or db.chrom: split string on separator and return pointer to chrom.
- * the db part of src can also have a dot in it, but only if the 'database' argument is not null.
- * Changes 'src': The side effect of this function is that src contains only the db, not the chrom anymore.
+char *mafSplitSrcGetChrom(char *src, char* database)
+/* src is one of: chrom, db|chrom, or db.chrom.  Return a pointer to the chrom part and
+ * truncate src in place so it holds only the db.
+ *
+ * The hard part is that BOTH db and chrom may themselves contain dots, so the db/chrom
+ * split is not simply "the first dot" or "the middle dot".  We resolve it like this,
+ * in order:
+ *   1. A pipe '|' is always an explicit, unambiguous separator -- use it if present.
+ *   2. No dot at all -> the whole string is the chrom (db is empty).
+ *   3. If the caller passed the reference 'database' and src begins with "<database>.",
+ *      split right there.  This nails the master component whether or not database itself
+ *      contains a dot (e.g. a GenArk db like GCF_000001405.40).
+ *   4. A GenArk accession db (GCA_/GCF_) is the only db that legitimately carries an
+ *      internal dot -- its accession.version adds exactly one -- so its db ends at the
+ *      SECOND dot and the chrom follows.
+ *   5. Every other db (hg38, mm10, a species name, ...) has no dot, so split at the FIRST
+ *      dot; anything after it (including further dots, e.g. an accession.version chrom) is
+ *      the chrom.
+ *
+ * There is no universal way to resolve an ambiguous multi-dot name from the dots alone: if
+ * the db part is itself a dotted accession that is not a GenArk GCA_/GCF_ id (e.g. a bare
+ * INSDC accession used as the assembly), step 5 may split it in the wrong place.  For those,
+ * use the pipe form db|chrom, which is always unambiguous.
+ * Changes 'src': afterwards src contains only the db, not the chrom.
  * */
 {
+/* 1. A pipe is always an explicit db|chrom separator. */
 char *pipe = strchr(src, '|');
-// pipe found? It's the new format, db|chrom
-if (pipe) {
+if (pipe != NULL)
+    {
     *pipe = '\0';
-    return pipe+1;
+    return pipe + 1;
     }
 
 char *dot1 = strchr(src, '.');
-if (!dot1)
-    return src;  // if there are no dots, assume the name is the chrom
+if (dot1 == NULL)
+    return src;  // no separator: the whole thing is the chrom
 
-if (database)
+/* 3. When we know the reference database and src starts with "<database>.", split there. */
+if (database != NULL)
     {
-    // if 'database' is not NULL we can resolve a situation like GCF_1234.3.CJS12323.4 because we know that
-    // GCF_1234.3 is the db part
-    if (differentString(src, database))
+    int dbLen = strlen(database);
+    if (startsWith(database, src) && src[dbLen] == '.')
         {
-        // the database name isn't matching the first part of the component source,
-        // look to see if maybe the database has a dot in it
-        *dot1 = '.';   // replace the dot
-        char *dot2 = strchr(dot1 + 1, '.'); // look for the next dot
-        if (dot2 != NULL)
-            {
-            *dot2 = 0;
-            char *chrom = dot2 + 1;
-            return chrom;
-            }
-
-        if ((dot2 == NULL) || differentString(src, database))
-            errAbort("expecting first component to have assembly name with no more than one dot");
+        src[dbLen] = '\0';
+        return src + dbLen + 1;
         }
     }
 
-// if database is NULL and there is no pipe character, just split on the first dot and that's it
-char* chrom = dot1 + 1;
+/* 4. A GenArk accession db (GCA_/GCF_) carries one internal dot (accession.version),
+ *    so the db ends at the second dot. */
+if (startsWith("GCA_", src) || startsWith("GCF_", src))
+    {
+    char *dot2 = strchr(dot1 + 1, '.');
+    if (dot2 != NULL)
+        {
+        *dot2 = '\0';
+        return dot2 + 1;
+        }
+    // accession with no chrom after the version: fall through to the first-dot split
+    }
+
+/* 5. Ordinary db with no dot: split at the first dot. */
 *dot1 = '\0';
-return chrom;
+return dot1 + 1;
 }
 
 long processMaf(struct mafAli *maf, struct hash *componentHash, 
