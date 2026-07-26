@@ -249,6 +249,7 @@
 #include "geneReviewsClick.h"
 #include "bigBed.h"
 #include "bigPsl.h"
+#include "blatShare.h"
 #include "bedTabix.h"
 #include "longRange.h"
 #include "hmmstats.h"
@@ -8231,7 +8232,8 @@ else
     fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
 	    qName, psl->tName, psl->tStart+1, psl->tEnd);
 
-fputs("Click on links in the frame to the left to navigate through "
+if (!cartUsualBoolean(cart, "blatNewPage", FALSE))  /* no "frame" in the new single-page view */
+    fputs("Click on links in the frame to the left to navigate through "
       "the alignment.\n", f);
 blockCount = pslShowAlignment(psl, qType == gftProt,
                               qName, qSeq, qStart, qEnd,
@@ -8346,7 +8348,8 @@ if (restrictToWindow)
 char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
 	psl->qName, displayChromName, partTStart+1, partTEnd);
-fprintf(body, "Click on links in the frame to the left to navigate through "
+if (!cartUsualBoolean(cart, "blatNewPage", FALSE))  /* no "frame" in the new single-page view */
+    fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
 blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
@@ -9008,6 +9011,180 @@ htmlFramesetStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
 }
 
+static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType qType,
+                       int qStart, int qEnd, char *qName, int cdsS, int cdsE)
+/* Modern single-page version of showSomeAlignment for hgBlat's new table mode: a one-line summary,
+ * a back link and three "jump to" links, then the base-by-base alignment inlined below with
+ * steel-blue section headers - all in one white panel, so the whole page scrolls (no <frameset>).
+ * The alignment body itself is generated exactly as before.  The caller supplies the page chrome
+ * via cartWebStart(). */
+{
+if (qName == NULL)
+    qName = psl->qName;
+char *chrom = chromAliasGetDisplayChrom(database, cart, psl->tName);
+double ident = 100.0 - pslCalcMilliBad(psl, TRUE) * 0.1;
+
+char *idColor = (ident >= 98) ? "#1f7a34" : (ident >= 95) ? "#4d7c0f" :
+                (ident >= 90) ? "#b45309" : "#b1301f";
+
+/* Offer "Share a link" only when a durable bigPsl custom track backs these results; without it there
+ * is nothing for a shared session to rebuild the alignment from. */
+char *shareBb = blatFindPinnedBigPsl(cart);
+boolean canShare = (shareBb != NULL);
+freeMem(shareBb);
+
+/* Colors imported from the BLAT Redesign (slide 3): grey page, steel-blue section-header bars,
+ * navy links with maroon hover, slate text.  The <h2>/<hr> the shared alignment code emits are
+ * hidden; its <h4> section headings become the steel-blue bars. */
+printf("<style>"
+       "#main-menu-whole{margin-bottom:0}"   /* drop the 5px gap (cream body) between nav and title */
+       ".subheadingBar{background:#e9cf9a; color:#0a2b6b; box-sizing:border-box; display:flex;"
+       " align-items:center; justify-content:space-between; padding:5px 14px}"  /* gold title band */
+       "table.hgInside{background:#eef1f4}"
+       "#blatAlnBody{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:#374a5e;"
+       " display:grid; grid-template-columns:220px 1fr}"      /* full-height sidebar + content column */
+       "#blatAlnBody a{color:#0a3a7a}"
+       "#blatAlnBody a:hover{color:#8b1a1a}"
+       "#blatAlnNav{background:#f4f7fb; border-right:1px solid #dde3ea; padding:18px 20px;"
+       " display:flex; flex-direction:column; gap:16px}"
+       "#blatAlnNav a{font-weight:700; text-decoration:none}"   /* already obviously links; no underline */
+       "#blatAlnBlocks{display:flex; flex-direction:column; gap:8px; margin:2px 0 0 14px}"  /* block links, indented under side-by-side */
+       "#blatAlnBlocks a{font-weight:400; font-size:13px}"
+       "#blatAlnContent{min-width:0; padding:0 20px 14px}"
+       "#blatAlnContent h2{display:none}"
+       "#blatAlnContent hr{display:none}"
+       "#blatAlnContent h4{margin:16px -20px 0; padding:8px 20px; background:#4c7093; color:#fff;"
+       " font-size:15px; font-weight:700}"                     /* -20px: bar spans full content width */
+       "#blatAlnContent h4:first-child{margin-top:0}"          /* Alignment Summary flush at top */
+       "#blatAlnContent h4 a{color:#fff}"
+       "#blatAlnContent pre{margin:0; padding:2px 0 12px; line-height:1.4}"
+       "</style>\n");
+
+/* one white panel laid out as two grid columns: a full-height "jump to" sidebar on the left, and on
+ * the right an "Alignment Summary" header, the summary line, and the base-by-base alignment inlined
+ * so the whole page scrolls */
+if (canShare)
+    printf("<div id='blatAlnShareBox' style='display:none; margin:0 0 12px; padding:10px 14px; "
+           "background:#f4f7fb; border:1px solid #dde3ea; border-radius:3px; font-size:13px; "
+           "color:#374a5e'></div>\n");
+
+printf("<div id='blatAlnBody' style='background:#fff; border:1px solid #c4cdd6; "
+       "overflow:hidden; margin:0 0 20px'>\n");
+
+printf("<div id='blatAlnNav'>\n");
+printf("<a href='#cDNA'>Only query sequence</a>\n"
+       "<a href='#genomic'>Only genome sequence</a>\n"
+       "<a href='#ali'>Side-by-side alignment</a>\n");
+if (psl->blockCount > 1)   /* per-block jump links, indented under the side-by-side item */
+    {
+    int bi;
+    printf("<div id='blatAlnBlocks'>\n");
+    for (bi = 1;  bi <= psl->blockCount;  ++bi)
+        printf("<a href='#%d'>Block %d</a>\n", bi, bi);
+    printf("</div>\n");
+    }
+printf("</div>\n");
+
+printf("<div id='blatAlnContent'>\n");
+printf("<h4>Alignment Summary</h4>\n");
+printf("<p><b>%s</b> aligned to <b>%s:%d-%d</b>, "
+       "<b style='color:%s'>%.1f%% identity</b>, "
+       "%d of %d bases matched, strand <b>%s</b>.</p>\n",
+       qName, chrom, psl->tStart + 1, psl->tEnd, idColor, ident,
+       psl->match + psl->repMatch, psl->qSize, psl->strand);
+if (qType == gftRna || qType == gftDna)
+    showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
+else
+    showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
+printf("</div>\n");   /* #blatAlnContent */
+
+printf("</div>\n");   /* #blatAlnBody */
+
+/* Two touch-ups that need the rendered DOM: (1) the cDNA/Genomic section headers come from shared
+ * library code (fuzzyShow.c / pslShow.c) as "cDNA <qName>" / "Genomic <chrom> :" - relabel them to
+ * match the sidebar wording, keeping the #cDNA/#genomic jump anchors; (2) add a right-aligned "Back
+ * to results" button into the gold title band.  qName and chrom are already sanitized. */
+jsInlineF(
+    "(function(){\n"
+    "function relabel(anchor, text){\n"
+    "  var a = document.getElementsByName(anchor);\n"
+    "  if (a && a.length){\n"
+    "    var h = a[0].parentNode;\n"
+    "    h.textContent = '';\n"
+    "    var k = document.createElement('a'); k.name = anchor; h.appendChild(k);\n"
+    "    h.appendChild(document.createTextNode(text));\n"
+    "  }\n"
+    "}\n"
+    "relabel('cDNA', 'Only query sequence: %s');\n"
+    "relabel('genomic', 'Only genome sequence: %s');\n"
+    "var t = document.getElementById('sectTtl');\n"
+    "if (t) t.textContent = 'BLAT Base Alignment: %s';\n"
+    "var bar = document.querySelector('.subheadingBar');\n"
+    "if (bar){\n"
+    "  var b = document.createElement('a');\n"
+    "  b.id = 'blatBackBtn';\n"
+    "  b.href = 'hgBlat?blatReopen=1&hgsid=%s';\n"
+    "  b.textContent = '\\u2039 Back to results';\n"
+    "  b.style.cssText = 'padding:5px 15px; background:#0a2b6b; color:#fff; font-weight:700;"
+    " font-size:13px; border-radius:3px; text-decoration:none; white-space:nowrap';\n"
+    "  bar.appendChild(b);\n"
+    "}\n"
+    "})();\n",
+    qName, chrom, database, cartSessionId(cart));
+
+/* "Share a link" button in the gold title band: save an anonymous session (hgSession API), then
+ * build a durable hgc?g=htcBlatAlign link that rebuilds THIS alignment from the session's durable
+ * bigPsl custom track (no BLAT re-run, no stored trash sequence).  Mirrors hgBlat.js blatShareLink();
+ * qName is already sanitized. */
+if (canShare)
+    jsInlineF(
+    "(function(){\n"
+    "var bar = document.querySelector('.subheadingBar');\n"
+    "if (!bar) return;\n"
+    "var btn = document.createElement('a');\n"
+    "btn.href = '#';\n"
+    "btn.textContent = 'Share a link';\n"
+    "btn.style.cssText = 'padding:5px 15px; background:#fff; color:#0a2b6b; border:1px solid #0a2b6b;"
+    " font-weight:700; font-size:13px; border-radius:3px; text-decoration:none; white-space:nowrap;"
+    " cursor:pointer';\n"
+    "var backBtn = document.getElementById('blatBackBtn');\n"
+    "if (backBtn) bar.insertBefore(btn, backBtn); else bar.appendChild(btn);\n"
+    "var box = document.getElementById('blatAlnShareBox');\n"
+    "btn.addEventListener('click', function(ev){\n"
+    "  ev.preventDefault();\n"
+    "  if (!box) return;\n"
+    "  box.style.display = 'block';\n"
+    "  box.textContent = 'Creating shareable link\\u2026';\n"
+    "  fetch('../cgi-bin/hgSession', {method:'POST', credentials:'same-origin',"
+    " headers:{'Content-Type':'application/x-www-form-urlencoded'},"
+    " body:'hgsid=%s&hgS_doSaveSessionJson=1&hgS_shareAnon=1'})\n"
+    "  .then(function(r){ return r.json(); }).then(function(data){\n"
+    "    if (!data || !data.name){ box.textContent = 'Could not create link.'; return; }\n"
+    "    var link = window.location.origin + window.location.pathname +\n"
+    "      '?g=htcBlatAlign&db=%s&c=%s&o=%d&l=%d&r=%d&i=' + encodeURIComponent('%s') +\n"
+    "      '&u=l&s=' + encodeURIComponent(data.name);\n"
+    "    box.innerHTML = '';\n"
+    "    var msg = document.createElement('div');\n"
+    "    msg.textContent = 'Shareable link (opens this alignment for anyone):';\n"
+    "    msg.style.marginBottom = '6px';\n"
+    "    var inp = document.createElement('input');\n"
+    "    inp.type = 'text'; inp.readOnly = true; inp.value = link;\n"
+    "    inp.style.cssText = 'width:70%%; max-width:640px; font-size:13px; padding:5px 8px;"
+    " border:1px solid #c4cdd6; border-radius:3px';\n"
+    "    var cp = document.createElement('button');\n"
+    "    cp.type = 'button'; cp.textContent = 'Copy';\n"
+    "    cp.style.cssText = 'margin-left:8px; padding:5px 12px; font-size:13px;"
+    " border:1px solid #0a2b6b; background:#0a2b6b; color:#fff; border-radius:3px; cursor:pointer';\n"
+    "    cp.addEventListener('click', function(){ inp.select();"
+    " if (navigator.clipboard){ navigator.clipboard.writeText(link); }"
+    " else { document.execCommand('copy'); } cp.textContent = 'Copied'; });\n"
+    "    box.appendChild(msg); box.appendChild(inp); box.appendChild(cp);\n"
+    "  }).catch(function(){ box.textContent = 'Could not reach the server. Please try again.'; });\n"
+    "});\n"
+    "})();\n",
+    cartSessionId(cart), database, psl->tName, psl->tStart, psl->tStart, psl->tEnd, qName);
+}
+
 void htcUserAli(char *fileNames)
 /* Show alignment for accession. */
 {
@@ -9018,10 +9195,16 @@ struct psl *psl;
 int start;
 enum gfType tt, qt;
 boolean isProt;
+/* In hgBlat's new table mode (blatNewPage) show a modern single-page alignment instead of the
+ * classic two-frame <frameset>. */
+boolean modern = cartUsualBoolean(cart, "blatNewPage", FALSE);
 
 char title[1024];
 safef(title, sizeof title, "User Sequence vs Genomic");
-htmlFramesetStart(title);
+if (modern)
+    cartWebStart(cart, database, "BLAT Base Alignment");   // full page chrome: menubar + sans-serif
+else
+    htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
@@ -9043,7 +9226,38 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
 	break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
-showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);
+if (modern)
+    showSomeAlignmentModern(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);  // cartWebStart page; framework closes it
+else
+    showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);        // classic frameset; exits itself
+}
+
+void htcBlatAlign(char *qName)
+/* Durable base-by-base alignment for a shared BLAT link (g=htcBlatAlign): rebuild one alignment from
+ * the saved session's durable bigPsl custom track (blatLastBigBed) instead of the ephemeral trash
+ * .pslx/.fa the fresh-search htcUserAli path reads.  seqName and o identify the hit; the query
+ * sequence comes from the bigPsl record itself, so no stored trash sequence is needed.  This backs
+ * the "Share a link" button on the modern alignment page. */
+{
+cartWebStart(cart, database, "BLAT Base Alignment");   // full page chrome: menubar + sans-serif
+char *bbFile = blatFindPinnedBigPsl(cart);
+if (bbFile == NULL || !fileExists(bbFile))
+    {
+    printf("<p>This shared BLAT alignment is no longer available. The custom track that stored it "
+           "has expired or been removed. Please run a new <a href=\"hgBlat\">BLAT search</a>.</p>\n");
+    return;
+    }
+int start = cartInt(cart, "o");
+char *seq = NULL;
+struct psl *psl = pslFromBigPslFileMatch(bbFile, seqName, start, qName, &seq, NULL);
+if (psl == NULL || seq == NULL)
+    {
+    printf("<p>This alignment was not found in the shared BLAT results.</p>\n");
+    return;
+    }
+enum gfType qType = pslIsProtein(psl) ? gftProt : gftDna;
+struct dnaSeq *oSeq = newDnaSeq(cloneString(seq), strlen(seq), qName);
+showSomeAlignmentModern(psl, oSeq, qType, 0, oSeq->size, NULL, 0, 0);  // cartWebStart page; framework closes it
 }
 
 void htcProteinAli(char *readName, char *table)
@@ -27138,6 +27352,11 @@ theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);
 
+/* Pin this bigPsl file in the cart so hgBlat's Table view can reopen exactly these results from a
+ * shared session (see doShareReopen in hgBlat.c) - unambiguously, even when the cart holds several
+ * BLAT custom tracks from earlier searches. */
+cartSetString(cart, "blatLastBigBed", bigBedFile);
+
 cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
 
@@ -27166,9 +27385,41 @@ jsInlineF("var doHPRCTable = true;\n");
 
 boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item);
 
+static void loadBlatShareSessionIfAny()
+/* A durable BLAT "Share a link" alignment (hgc?g=htcBlatAlign&u=l&s=NAME&...) rebuilds one alignment
+ * from a saved anonymous session's durable bigPsl custom track.  Load that session so the cart gets
+ * its blatLastBigBed and custom track, then restore this link's own db/position/track/item, which
+ * identify the specific alignment rather than the session's saved browser view. */
+{
+if (cgiOptionalString("s") == NULL || !sameOk(cgiOptionalString("g"), "htcBlatAlign"))
+    return;
+/* The whole-cart session load can overwrite these with the session's saved values; remember the
+ * link's own copies and put them back afterwards. */
+char *keep[] = {"g", "db", "c", "o", "t", "l", "r", "i"};
+struct hash *saved = hashNew(0);
+int i;
+for (i = 0; i < ArraySize(keep); ++i)
+    {
+    char *v = cgiOptionalString(keep[i]);
+    if (v != NULL)
+        hashAdd(saved, keep[i], cloneString(v));
+    }
+struct sqlConnection *sConn = hConnectCentral();
+cartLoadUserSession(sConn, cgiUsualString("u", "l"), cgiString("s"), cart, NULL, NULL);
+hDisconnectCentral(&sConn);
+for (i = 0; i < ArraySize(keep); ++i)
+    {
+    char *v = hashFindVal(saved, keep[i]);
+    if (v != NULL)
+        cartSetString(cart, keep[i], v);
+    }
+hashFree(&saved);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
+loadBlatShareSessionIfAny();
 char *track = cartString(cart, "g");
 char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
@@ -28043,6 +28294,10 @@ else if (sameWord(table, "htcCdnaAli"))
 else if (sameWord(table, "htcUserAli"))
     {
     htcUserAli(item);
+    }
+else if (sameWord(table, "htcBlatAlign"))
+    {
+    htcBlatAlign(item);
     }
 else if (sameWord(table, "htcGetBlastPep"))
     {
