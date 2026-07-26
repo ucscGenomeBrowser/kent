@@ -127,7 +127,7 @@ def main():
             score = max(0, min(1000, int(round(altAF * 1000))))
             color = COLOR_BY_CLASS[cls]
 
-            name = f"INS-{cls}-{carrierCount}"
+            name = f"{cls}-{carrierCount}"
 
             out.write("\t".join([
                 chrom,
