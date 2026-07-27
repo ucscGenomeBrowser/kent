@@ -101,6 +101,17 @@ else
             errAbort("No filename found in upload metadata (checked fileName, filename, and name)");
             }
         char *reqParentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        // Trim first, a hub name with a trailing space is impossible to spot in an error
+        // message, then check what is left. The browser does this too, but hubtools and
+        // any other tus client post here directly
+        reqParentDir = normalizeParentDir(reqParentDir);
+        if (reqParentDir && isEmpty(reqParentDir))
+            errAbort("Hub name for file '%s' is only whitespace, please give the hub a name",
+                    reqFileName);
+        if (!isValidParentDir(reqParentDir))
+            errAbort("Hub name '%s' for file '%s' can only contain letters, numbers, periods "
+                    "and underscores, in '/' separated components. Please rename the hub.",
+                    reqParentDir, reqFileName);
         boolean isHubToolsUpload = FALSE;
         char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
         if (hubtoolsStr)

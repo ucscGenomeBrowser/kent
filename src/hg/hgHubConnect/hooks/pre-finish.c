@@ -120,6 +120,8 @@ else
         else
             lastModified = time(NULL); // fallback to current time if not provided
         parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        // must match what pre-create did to this value, or we build a different path
+        parentDir = normalizeParentDir(parentDir);
         fprintf(stderr, "parentDir = '%s'\n", parentDir ? parentDir : "(null)");
         // strip out plain leading '.' and '/' components
         // middle '.' components are dealt with later
