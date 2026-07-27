@@ -96,6 +96,15 @@ VERSION_FILE = "hg/inc/versionInfo.h"
 CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                      "hgConfAges.json")
 
+# Bumped when the shape of the cache changes.  A cache written by an older
+# version is still usable for dates, so a mismatch is reported rather than
+# treated as an error, but the fields added since will be missing.
+CACHE_SCHEMA = 2
+
+# "refs #37925", "#37925", "fixes #37925".  Three digits minimum, so a commit
+# talking about #10 or a C preprocessor line does not read as a ticket.
+TICKET_RE = re.compile(r'#\s*(\d{3,6})')
+
 # How each accessor lays out its arguments.  nameArg is the index of the
 # hg.conf name; defArg is the index of the compiled-in default, if any;
 # twoPart means the name is arg0 + "." + arg1.
@@ -529,25 +538,97 @@ def current_version():
     return int(m.group(1)) if m else None
 
 
-def harvest_ages(refresh=False):
-    """First version each hg.conf variable was read in, and when a flag flipped.
+def commit_messages(shas):
+    """sha -> full commit message, in batches so this is a few git calls."""
+    msgs = {}
+    shas = sorted(set(shas))
+    for i in range(0, len(shas), 200):
+        # \x01 between records and \x02 between the hash and the body, so a
+        # multi-line commit message can be split back apart safely.
+        raw = git("show", "-s", "--format=%x01%H%x02%B", *shas[i:i + 200])
+        for rec in raw.split("\x01"):
+            if not rec.strip():
+                continue
+            sha, _, body = rec.partition("\x02")
+            msgs[sha.strip()] = body
+    return msgs
 
-    One history traversal with -G'cfgOption', recording for each name the
-    earliest commit that added a line reading it, and for boolean flags the
-    earliest commit that added a read with a TRUE compiled-in default.  That
-    second date is what turns a release gate's lifecycle into something the
-    tree knows rather than something a person maintains by hand: a gate is
-    introduced defaulting FALSE, flips to TRUE when the feature ships, and only
-    the removal deadline is left as a judgement call.
 
-    About two minutes, so the result is cached next to this script.
+def tickets_in(msg):
+    return sorted({int(m) for m in TICKET_RE.findall(msg or "")})
 
-    Caveats.  This dates the earliest surviving *read* of a name, which is the
-    right question for "how long has this been in the tree", but a name removed
-    and later reintroduced dates from the reintroduction.  A flag whose default
-    flipped TRUE and then back to FALSE still reports the first flip.  Reads
-    whose name comes from a macro are not datable at all and come back absent,
-    which --check reports rather than guesses at.
+
+def walk_adds(pattern, matcher, paths=("hg", "lib")):
+    """Every commit that added a line matching, oldest first, per name.
+
+    One -G traversal.  matcher(line) returns the names that line introduces.
+    Returns {name: [(timestamp, sha)]} with consecutive duplicates collapsed,
+    so the first entry is the introducing commit and the rest are later
+    commits that touched a read of the same name.
+    """
+    out = git("log", "--reverse", "-G", pattern, "--format=COMMIT %at %H",
+              "-p", "--unified=0", "--", *paths)
+    hits = {}
+    ts = sha = None
+    for line in out.splitlines():
+        if line.startswith("COMMIT "):
+            f = line.split()
+            if len(f) >= 3:
+                ts, sha = int(f[1]), f[2]
+            continue
+        if not line.startswith("+") or ts is None:
+            continue
+        for name in matcher(line):
+            lst = hits.setdefault(name, [])
+            if not lst or lst[-1][1] != sha:
+                lst.append((ts, sha))
+    return hits
+
+
+def harvest_ages(names=None, refresh=False):
+    """When each hg.conf variable arrived, when a flag flipped, and under
+    which ticket.
+
+    Two history traversals.  The first is filtered on -G'cfgOption' and
+    records, for each name, the earliest commit that added a line reading it,
+    plus for boolean flags the earliest commit that added a read with a TRUE
+    compiled-in default.  That second date is what turns a release gate's
+    lifecycle into something the tree knows rather than something a person
+    maintains by hand: a gate is introduced defaulting FALSE, flips to TRUE
+    when the feature ships, and only the removal deadline is left as a
+    judgement call.
+
+    The second traversal exists because a read whose name comes from a macro
+    is invisible to the first.  cfgOptionBooleanDefault(CFG_LOGIN_HTTPS, ...)
+    carries no literal, so login.https is dated from the #define instead, by
+    walking the names the first pass missed.  That covers 274 of the 281
+    catalogued settings; the remainder are the names built at run time, which
+    have no single birthday to find.
+
+    Attribution.  Each commit message is searched for a Redmine ticket, and
+    only two commits are allowed to speak for a setting: the one that added
+    the read, and for a flag the one that turned its default on.  Nothing
+    else is used, and the reason is worth writing down.  An earlier draft
+    fell back to the next later commit that touched the same read, which
+    tripled coverage and was wrong: it credited wiki.host and textSize to
+    #37838, a 2026 cart refactor that happened to touch those lines.  A
+    commit that edits a line is not a commit about the setting on it.
+
+    So roughly 40% of settings get a ticket and the rest honestly have none.
+    Of those, about half were added before the tree used Redmine at all and
+    can never have one.  The rest are recent enough that somebody chose not
+    to cite a ticket, and --tickets lists them separately as the ones a human
+    could still fill in.
+
+    About four minutes for both walks, so the result is cached next to this
+    script.
+
+    Caveats.  This dates the earliest surviving read of a name, which is the
+    right question for "how long has this been in the tree", but a name
+    removed and later reintroduced dates from the reintroduction.  A flag
+    whose default flipped TRUE and then back to FALSE still reports the first
+    flip.  A ticket number in a commit message is whatever the committer
+    typed, so a typo becomes a wrong ticket here.
     """
     if not refresh and os.path.exists(CACHE):
         with open(CACHE) as f:
@@ -562,42 +643,91 @@ def harvest_ages(refresh=False):
         ages["stale"] = (ages["cachedAt"] is not None
                          and ages["current"] is not None
                          and ages["cachedAt"] < ages["current"])
+        ages["oldSchema"] = ages.get("schema", 1) < CACHE_SCHEMA
         return ages
 
     timeline = version_timeline()
-    out = git("log", "--reverse", "-G", "cfgOption",
-              "--format=COMMIT %at %H", "-p", "--unified=0", "--", "hg", "lib")
-    # Any literal in a cfgOption* call on an added line.  Deliberately looser
-    # than the real scan: here a false positive only mis-dates a name, while a
-    # miss loses it entirely.
-    pat = re.compile(r'cfg(?:Option[A-Za-z0-9]*|Val)\s*\(\s*'
-                     r'(?:"[^"]*"\s*,\s*)?"([^"]+)"')
+
+    # Pass one: any literal in a cfgOption* call on an added line.
+    # Deliberately looser than the real scan, since here a false positive only
+    # mis-dates a name while a miss loses it entirely.
+    call_re = re.compile(r'cfg(?:Option[A-Za-z0-9]*|Val)\s*\(\s*'
+                         r'(?:"[^"]*"\s*,\s*)?"([^"]+)"')
     # cfgOptionBooleanDefault("name", TRUE) specifically, for the flip date.
     true_re = re.compile(r'cfgOptionBooleanDefault\s*\(\s*"([^"]+)"\s*,\s*'
                          r'(TRUE|1)\s*\)')
-    first = {}
-    first_true = {}
-    ts = None
-    for line in out.splitlines():
-        if line.startswith("COMMIT "):
-            ts = int(line.split()[1])
-            continue
-        if not line.startswith("+") or ts is None:
-            continue
-        for name in pat.findall(line):
-            first.setdefault(name, ts)
-        for name, _ in true_re.findall(line):
-            first_true.setdefault(name, ts)
+    # Both come out of the same traversal.  A flip is tagged with a prefix a
+    # setting name cannot contain, then split back out below, so that turning
+    # this into two walks costs nothing.
+    def reads_and_flips(line):
+        return (call_re.findall(line)
+                + ["\x00" + n for n, _ in true_re.findall(line)])
 
-    ages = {"current": current_version(),
+    walked = walk_adds("cfgOption", reads_and_flips)
+    hits = {n: v for n, v in walked.items() if not n.startswith("\x00")}
+    flips = {n[1:]: v for n, v in walked.items() if n.startswith("\x00")}
+
+    # Pass two: the catalogued names pass one never saw, matched as a quoted
+    # literal anywhere, which finds the macro definition that names them.
+    chased = {}
+    todo = sorted(n for n in (names or [])
+                  if n not in hits and not n.startswith("{"))
+    if todo:
+        alt = "|".join(re.escape(n) for n in
+                       sorted(todo, key=len, reverse=True))
+        lit = {n: re.compile('"' + re.escape(n) + '"') for n in todo}
+        chased = walk_adds(alt, lambda line: [n for n, p in lit.items()
+                                              if p.search(line)])
+
+    msgs = commit_messages([s for lst in hits.values() for _, s in lst]
+                           + [s for lst in flips.values() for _, s in lst]
+                           + [s for lst in chased.values() for _, s in lst])
+
+    def record(lst, via):
+        ts, sha = lst[0]
+        return {"ts": ts, "version": version_at(ts, timeline),
+                "commit": sha[:11], "tickets": tickets_in(msgs.get(sha)),
+                "subject": (msgs.get(sha, "").splitlines() or [""])[0][:120],
+                "via": via}
+
+    first = {n: record(lst, "call") for n, lst in hits.items()}
+    for n, lst in chased.items():
+        first[n] = record(lst, "literal")
+
+    ages = {"schema": CACHE_SCHEMA,
+            "current": current_version(),
             "timeline": timeline,
-            "first": {n: {"ts": t, "version": version_at(t, timeline)}
-                      for n, t in first.items()},
-            "firstTrue": {n: {"ts": t, "version": version_at(t, timeline)}
-                          for n, t in first_true.items()}}
+            "first": first,
+            "firstTrue": {n: record(lst, "call") for n, lst in flips.items()}}
     with open(CACHE, "w") as f:
         json.dump(ages, f, indent=1, sort_keys=True)
     return ages
+
+
+def ticket_for(name, ages):
+    """(tickets, kind) for a setting, where kind says what the tickets are.
+
+    kind is "introduced" when the commit that added the read cites tickets,
+    "flip" when only the commit that turned the flag's default on does, and
+    None when neither names one.  The list is every ticket that commit cited,
+    kept whole rather than reduced to the first, because a commit citing three
+    tickets has not told us which one asked for the setting.
+    """
+    rec = (ages.get("first") or {}).get(name) or {}
+    if rec.get("tickets"):
+        return rec["tickets"], "introduced"
+    flip = (ages.get("firstTrue") or {}).get(name) or {}
+    if flip.get("tickets"):
+        return flip["tickets"], "flip"
+    return [], None
+
+
+def cite(tickets, kind):
+    """Render a ticket list for a plain-text report."""
+    if not tickets:
+        return ""
+    s = ", ".join("#%d" % t for t in tickets)
+    return s if kind == "introduced" else s + " (flip)"
 
 
 # ---------------------------------------------------------------------------
@@ -697,8 +827,10 @@ def report_ages(found, ages, out=sys.stdout):
              if n in first and first[n].get("version")]
     known.sort()
     for ver, name in known:
-        print("    v%-5s %-42s %d sites" % (ver, name,
-              len(names[name]["sites"])), file=out)
+        tickets, kind = ticket_for(name, ages)
+        print("    v%-5s %-42s %-22s %d sites"
+              % (ver, name, cite(tickets, kind),
+                 len(names[name]["sites"])), file=out)
     missing = [n for n in sorted(names)
                if not n.startswith("{") and n not in first]
     if missing:
@@ -706,6 +838,88 @@ def report_ages(found, ages, out=sys.stdout):
               "renamed" % len(missing), file=out)
         for n in missing:
             print("    %s" % n, file=out)
+    dated = [n for _, n in known]
+    intro = [n for n in dated if ticket_for(n, ages)[1] == "introduced"]
+    print("\n%d of %d dated names cite a ticket in the commit that added them.  "
+          "See --tickets\nfor the rest, which mostly predate the tree's use of "
+          "Redmine." % (len(intro), len(dated)), file=out)
+
+
+# The tree started citing Redmine tickets in commit messages around here.  A
+# setting older than this cannot have one, so it is reported as out of scope
+# rather than as a gap somebody should go and fill.
+REDMINE_ERA = 270
+
+
+def report_tickets(found, ages, out=sys.stdout):
+    """Which ticket introduced each setting, and where that is not knowable.
+
+    Only the commit that added the read, and for a flag the commit that turned
+    its default on, are allowed to answer.  See harvest_ages for why nothing
+    looser is used.
+    """
+    names = by_name(found)
+    first = ages.get("first", {})
+    rows = []
+    for name in sorted(names):
+        if name.startswith("{"):
+            continue
+        tickets, kind = ticket_for(name, ages)
+        rows.append({"name": name, "tickets": tickets, "kind": kind,
+                     "version": first.get(name, {}).get("version"),
+                     "commit": first.get(name, {}).get("commit")})
+
+    def show(sel):
+        for r in sorted(sel, key=lambda r: (r["version"] or 0, r["name"])):
+            print("    %-42s %-7s %-22s %s"
+                  % (r["name"], "v%s" % r["version"] if r["version"] else "?",
+                     cite(r["tickets"], r["kind"]), r["commit"] or ""),
+                  file=out)
+
+    print("\n=== the ticket that introduced each setting ===", file=out)
+    print("\nOnly two commits get to answer for a setting: the one that added "
+          "the read,\nand for a flag the one that turned its default on.",
+          file=out)
+
+    have = [r for r in rows if r["kind"] == "introduced"]
+    print("\nATTRIBUTED, from the commit that added the read: %d" % len(have),
+          file=out)
+    show(have)
+
+    flip = [r for r in rows if r["kind"] == "flip"]
+    print("\nATTRIBUTED, only from the commit that turned the default on: %d"
+          % len(flip), file=out)
+    print("  The ticket that shipped the feature, which is not necessarily "
+          "the one that\n  asked for the flag.", file=out)
+    show(flip)
+
+    # A dated name with no version is older than the first CGI_VERSION stamp
+    # the timeline reaches, so it belongs here rather than nowhere.
+    old = [r for r in rows if not r["kind"]
+           and (r["version"] or 0) < REDMINE_ERA]
+    print("\nBEFORE REDMINE (added before ~v%d, so there is no ticket to "
+          "find): %d" % (REDMINE_ERA, len(old)), file=out)
+    show(old)
+
+    gap = [r for r in rows if not r["kind"]
+           and (r["version"] or 0) >= REDMINE_ERA]
+    print("\nNO TICKET CITED (added late enough that there probably was one): "
+          "%d" % len(gap), file=out)
+    print("  This is the actionable list.  Each of these was added by a commit "
+          "that names\n  no ticket, so the only way to fill it in is somebody "
+          "who remembers, or a\n  search of Redmine for the setting name.",
+          file=out)
+    show(gap)
+
+    undated = [n for n in sorted(names)
+               if not n.startswith("{") and n not in first]
+    if undated:
+        print("\nNO BIRTHDAY TO FIND (the name is built at run time): %d\n    %s"
+              % (len(undated), ", ".join(undated)), file=out)
+    runtime = [n for n in sorted(names) if n.startswith("{")]
+    if runtime:
+        print("\nNot settings, so not attributed: %s" % ", ".join(runtime),
+              file=out)
 
 
 def counts(found):
@@ -742,9 +956,16 @@ def as_json(found, ages):
             rec["env"] = d["env"]
         if name in first:
             rec["firstVersion"] = first[name].get("version")
+            rec["firstCommit"] = first[name].get("commit")
         flip = (ages or {}).get("firstTrue", {}).get(name)
         if flip:
             rec["flippedVersion"] = flip.get("version")
+            rec["flippedCommit"] = flip.get("commit")
+        if ages:
+            tickets, kind = ticket_for(name, ages)
+            if tickets:
+                rec["tickets"] = tickets
+                rec["ticketFrom"] = kind
         out[name] = rec
     return {"names": out,
             "profiles": {s: sorted({p for p, _, _ in v})
@@ -765,16 +986,21 @@ def main():
     ap.add_argument("--profiles", action="store_true")
     ap.add_argument("--docs", action="store_true")
     ap.add_argument("--age", action="store_true")
+    ap.add_argument("--tickets", action="store_true",
+                    help="the ticket that introduced each setting")
     ap.add_argument("--refresh", action="store_true",
-                    help="rebuild the age cache (walks history, ~2 minutes)")
+                    help="rebuild the age cache (walks history, ~4 minutes)")
     ap.add_argument("--json")
     args = ap.parse_args()
 
     found, macro = harvest()
 
     ages = None
-    if args.age or args.gates or args.json or args.refresh:
-        ages = harvest_ages(refresh=args.refresh)
+    if args.age or args.gates or args.tickets or args.json or args.refresh:
+        # The scanned names let the refresh chase the ones whose reads name
+        # them through a macro, which the cfgOption filter cannot see.
+        ages = harvest_ages(names=sorted(by_name(found)),
+                            refresh=args.refresh)
 
     if args.reads:
         report_reads(found)
@@ -786,6 +1012,8 @@ def main():
         report_docs(found)
     if args.age:
         report_ages(found, ages)
+    if args.tickets:
+        report_tickets(found, ages)
     if args.names:
         for n in sorted(by_name(found)):
             print(n)
@@ -795,7 +1023,7 @@ def main():
         print("wrote %s" % args.json)
 
     if not any([args.reads, args.gates, args.profiles, args.docs, args.age,
-                args.names, args.json]):
+                args.tickets, args.names, args.json]):
         c = counts(found)
         print("macros resolved   %d" % len(macro))
         for k in sorted(c):

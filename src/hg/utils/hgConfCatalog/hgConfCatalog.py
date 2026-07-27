@@ -76,6 +76,8 @@ import sys
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
 
+REDMINE = "https://redmine.gi.ucsc.edu/issues/%d"
+
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -1289,11 +1291,15 @@ def gate_lifecycle(cat, ages):
     first = ages.get("first", {})
     first_true = ages.get("firstTrue", {})
     cur = ages.get("current")
+    hh = load_harvester()
     out = []
     for v in gates(cat):
         name = v["name"]
         added = (first.get(name) or {}).get("version")
         flipped = (first_true.get(name) or {}).get("version")
+        tickets, ticket_from = ([], None)
+        if hh and hasattr(hh, "ticket_for"):
+            tickets, ticket_from = hh.ticket_for(name, ages)
         shipped = v.get("default") == "TRUE"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
@@ -1308,6 +1314,7 @@ def gate_lifecycle(cat, ages):
             "shipped": shipped, "reverted": reverted, "sunset": sunset,
             "current": cur,
             "age": (cur - added) if (cur and added) else None,
+            "tickets": tickets, "ticketFrom": ticket_from,
         })
     return out
 
@@ -1332,6 +1339,13 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     print("policy: keep a flag %d releases after its default flips TRUE; "
           "a gate\nstill defaulting FALSE after %d releases is stalled.\n"
           % (KEEP_AFTER_FLIP, QA_GRACE), file=out)
+    noticket = [g["name"] for g in life if not g["tickets"]]
+    if noticket:
+        print("The ticket column is the ticket cited by the commit that added "
+              "the flag, or\nby the commit that turned it on, marked (flip).  "
+              "%d of %d gates have neither\nand are blank: %s\n"
+              % (len(noticket), len(life), ", ".join(sorted(noticket))),
+              file=out)
 
     def line(g):
         bits = []
@@ -1345,7 +1359,11 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
             bits.append("sunset v%d" % g["sunset"])
         n = len((sites or {}).get(g["name"], [])) or None
         tail = "%d call site%s" % (n, "" if n == 1 else "s") if n else ""
-        return "  %-26s %-46s %s" % (g["name"], ", ".join(bits), tail)
+        tik = ", ".join("#%d" % t for t in g["tickets"])
+        if tik and g["ticketFrom"] == "flip":
+            tik += " (flip)"
+        return "  %-26s %-46s %-16s %s" % (g["name"], ", ".join(bits),
+                                           tik, tail)
 
     overdue = sorted([g for g in life if g["sunset"] and cur
                       and g["sunset"] <= cur], key=lambda g: g["sunset"])
@@ -1626,7 +1644,34 @@ def esc(s):
     return html.escape(str(s), quote=False)
 
 
-def var_rows(vs, life_by_name=None):
+def ticket_map(cat, ages):
+    """name -> (tickets, kind) for every setting git can attribute.
+
+    kind is "introduced" when the commit that added the read cited the ticket
+    and "flip" when only the commit that turned a flag on did.  A setting
+    missing from this map has no ticket in either commit, which for anything
+    added before about v270 means the tree predates Redmine.
+    """
+    hh = load_harvester()
+    if not (ages and hh and hasattr(hh, "ticket_for")):
+        return {}
+    out = {}
+    for v in all_vars(cat):
+        tickets, kind = hh.ticket_for(v["name"], ages)
+        if tickets:
+            out[v["name"]] = (tickets, kind)
+    return out
+
+
+def ticket_links(rec):
+    tickets, kind = rec
+    links = " ".join('<a href="%s">#%d</a>' % (REDMINE % t, t) for t in tickets)
+    if kind == "flip":
+        return "turned on by %s" % links
+    return "introduced by %s" % links
+
+
+def var_rows(vs, life_by_name=None, tickets=None):
     rows = []
     for v in sorted(vs, key=lambda x: x["name"].lower()):
         tags = ['<span class="kind">%s</span>' % esc(v["kind"])]
@@ -1655,6 +1700,9 @@ def var_rows(vs, life_by_name=None):
             extra = "added v%d" % life["added"]
             if life.get("flipped"):
                 extra += ", flipped v%d" % life["flipped"]
+        tik = (tickets or {}).get(v["name"])
+        if tik:
+            extra += (", " if extra else "") + ticket_links(tik)
         note = ""
         if v.get("note"):
             note = '<div class="note">%s</div>' % esc(v["note"])
@@ -1677,15 +1725,16 @@ def var_rows(vs, life_by_name=None):
     return "\n".join(rows)
 
 
-def table_of(vs, life_by_name=None):
+def table_of(vs, life_by_name=None, tickets=None):
     return ("<table><tr><th>setting</th><th>kind</th><th>default</th>"
             "<th>read at</th></tr>\n%s\n</table>"
-            % var_rows(vs, life_by_name))
+            % var_rows(vs, life_by_name, tickets))
 
 
 def render_html(cat, ages=None, sites=None):
     life_by_name = {}
     sunset_html = ""
+    tickets = ticket_map(cat, ages)
     if ages:
         life = gate_lifecycle(cat, ages)
         life_by_name = {g["name"]: g for g in life}
@@ -1713,6 +1762,23 @@ def render_html(cat, ages=None, sites=None):
              '<div class="box">%s</div>' % esc(cat["boundary"]),
              sunset_html]
 
+    if tickets:
+        intro = len([1 for _, k in tickets.values() if k == "introduced"])
+        parts.append(
+            '<div class="policy"><b>Where a setting came from.</b> Each entry '
+            'below carries the Redmine ticket cited by the commit that added '
+            'the read, or for a flag the commit that turned its default on, '
+            'marked there as "turned on by". %d of %d settings are attributed '
+            'that way. The rest are blank on purpose: no commit in the chain '
+            'names a ticket, and for anything added before about v270 the tree '
+            'predates our use of Redmine, so there is nothing to find. Nothing '
+            'here is inferred from a later commit that merely edited the line, '
+            'which would have credited half the file to whatever refactor '
+            'touched it last. <code>harvestHgConf.py --tickets</code> lists '
+            'the unattributed settings, separating the ones old enough to be '
+            'hopeless from the ones somebody could still fill in.</div>'
+            % (intro, c["distinctNames"]))
+
     parts.append("<h2>Contents</h2><ul class='toc'>")
     for sec in cat["sections"]:
         parts.append("<li><a href='#%s'>%s</a></li>"
@@ -1739,7 +1805,7 @@ def render_html(cat, ages=None, sites=None):
         parts.append("<h2 id='%s'>%s</h2>"
                      % (esc(sec["title"].replace(" ", "-")), esc(sec["title"])))
         parts.append("<p class='what'>%s</p>" % esc(sec["what"]))
-        parts.append(table_of(sec["vars"], life_by_name))
+        parts.append(table_of(sec["vars"], life_by_name, tickets))
 
     return ("<!DOCTYPE html>\n<html><head><meta charset='utf-8'>"
             "<title>hg.conf variables</title><style>%s</style></head>"
@@ -1765,13 +1831,13 @@ def main():
 
     ages = None
     sites = None
-    if args.sunset or args.html:
+    if args.sunset or args.html or args.json:
         hh = load_harvester()
         if hh is None:
             print("harvestHgConf.py not importable", file=sys.stderr)
             return 1
-        ages = hh.harvest_ages()
         found, _ = hh.harvest()
+        ages = hh.harvest_ages(names=sorted(hh.by_name(found)))
         sites = {n: d["sites"] for n, d in hh.by_name(found).items()}
 
     rc = 0
@@ -1782,6 +1848,12 @@ def main():
     if args.sunset:
         sunset_report(cat, ages, sites)
     if args.json:
+        # Attribution rides along with each setting rather than in a table of
+        # its own, so a consumer reading one entry sees where it came from.
+        tmap = ticket_map(cat, ages)
+        for v in all_vars(cat):
+            if v["name"] in tmap:
+                v["tickets"], v["ticketFrom"] = tmap[v["name"]]
         with open(args.json, "w") as f:
             json.dump(cat, f, indent=1)
         print("wrote %s" % args.json)
