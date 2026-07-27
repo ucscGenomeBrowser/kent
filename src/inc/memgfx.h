@@ -331,6 +331,12 @@ MgFont *mgFontForSize(char *textSize);
  * The textSize should be 6,8,10,12,14,18,24 or 34.  For backwards compatibility
  * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok. */
 
+MgFont *mgFontForCellHeight(int cellHeight);
+/* Return a font whose reported cell height is cellHeight, for FreeType rendering
+ * at an in-between size no fixed built-in font offers (cellHeight 10 -> ~9px).
+ * VALID ONLY UNDER FREETYPE; callers must fall back to a fixed-size font when
+ * FreeType is off (the GEM engine would misread the glyph bitmaps). */
+
 void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
 	int bottom, Color color);
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at

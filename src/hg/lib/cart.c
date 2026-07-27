@@ -2779,10 +2779,15 @@ for (h = httpHeaders; h != NULL; h = h->next)
 }
 
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
-/* write http headers including cookie and content type line. 
- * contType defaults to text/html when NULL. 
+/* write http headers including cookie and content type line.
+ * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
+/* The CGI header must be written exactly once; a second write lands in the page body.  Some flows
+ * (e.g. hgc) emit it early via cartAndCookieWithHtml before a later webStart also asks for it, so
+ * guard here rather than trusting every caller to check cartDidContentType first. */
+if (cartDidContentType)
+    return;
 if (!contType)
     contType = "text/html";
 if (!cookieName)

@@ -155,8 +155,8 @@ def main():
             # Inserted DNA: VCF convention puts the anchor base at ALT[0] (= REF[0]).
             insertSeq = alt[1:] if len(alt) > 1 else ""
 
-            # Name format matches lrSv tracks: INS-<svLen>:<carrierCount>.
-            name = f"INS-{svLen}:{carrierCount}"
+            # Name format: <class>-<svLen>:<carrierCount> (e.g. Alu-281:33).
+            name = f"{cls}-{svLen}:{carrierCount}"
 
             out.write("\t".join([
                 chrom,

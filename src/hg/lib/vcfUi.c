@@ -442,6 +442,20 @@ cgiMakeDoubleVarInRange(varName, cartMinFreq, "minor allele frequency between 0.
 puts("<BR>");
 }
 
+static void vcfCfgMinAc(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+			char *name, boolean parentLevel)
+/* Show input for minimum alternate allele count, if INFO column includes AC.  This lets
+ * the user filter on a whole-number count (e.g. 2 to hide singletons) instead of having to
+ * enter a tiny frequency cutoff. */
+{
+printf("<B>Minimum allele count (if INFO column includes AC), e.g. 2 to hide singletons:</B>\n");
+int cartMinAc = cartOrTdbInt(cart, tdb, VCF_MIN_AC_VAR, VCF_DEFAULT_MIN_AC);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_MIN_AC_VAR, name);
+cgiMakeIntVarWithMin(varName, cartMinAc, "minimum allele count", 5, 0);
+puts("<BR>");
+}
+
 static char *getChildSample(struct trackDb *tdb)
 /* Return just the VCF sample name of the phased trio child setting */
 {
@@ -700,6 +714,7 @@ if (vcff != NULL)
     boolean doVcfFilterUi = cartOrTdbBoolean(cart, tdb, VCF_DO_FILTER_UI, TRUE);
     boolean doVcfQualUi = cartOrTdbBoolean(cart, tdb, VCF_DO_QUAL_UI, TRUE);
     boolean doVcfMafUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MAF_UI, TRUE);
+    boolean doVcfMinAcUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MIN_AC_UI, TRUE);
     if (vcff->genotypeCount > 1 && !sameString(tdb->type, "vcfPhasedTrio"))
         {
         vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
@@ -718,6 +733,8 @@ if (vcff != NULL)
         }
     if (doVcfMafUi)
         vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
+    if (doVcfMinAcUi)
+        vcfCfgMinAc(cart, tdb, vcff, name, parentLevel);
     }
 else
     {
