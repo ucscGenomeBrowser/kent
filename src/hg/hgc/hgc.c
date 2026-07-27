@@ -3585,11 +3585,16 @@ if (showEvery)
     printf("<H3>Genomic Alignments</H3>");
 else
     printf("<H3>%s/Genomic Alignments</H3>", item);
+/* Hub track names have special characters replaced with underbar, but tdb->table does not. */
+char *aliTable = cloneString(tdb->table);
+if (isHubTrack(aliTable))
+    trackHubFixName(aliTable);
 if (showEvery || pslIsProtein(pslList))
-    printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
+    printAlignmentsSimple(pslList, start, "htcBigPslAli", aliTable, item);
 else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
-        tdb->table, item);
+        aliTable, item);
+freeMem(aliTable);
 pslFreeList(&pslList);
 
 
