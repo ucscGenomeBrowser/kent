@@ -574,7 +574,8 @@ GCA_030445055.2_mDasNov1.1.hap1	nine-banded armadillo (v2 hap1 2023)
 GCF_030445035.2_mDasNov1.1.hap2	nine-banded armadillo (v2 hap2 2023)
 GCF_000208655.3_Dasnov3.2	nine-banded armadillo (v3.2 3-136 2012 Baylor)
 GCA_026167925.1_mPerMan1.0.a	North American deer mouse (MVZ:Mamm:240117 alternate hap 2022)
-GCA_026229955.1_mPerMan1.0.p	North American deer mouse (MVZ:Mamm:240117 primary hap 2022)
+GCA_026229955.1_mPerMan1.0.p	North American deer mouse (v1 MVZ:Mamm:240117 primary hap 2022)
+GCA_026229955.2_mPerMan1.1.pri	North American deer mouse (v2 MVZ:Mamm:240117 primary hap 2026)
 GCA_028500835.1_mEreDor1.alt	North American porcupine (mEreDor1 alternate hap 2023)
 GCA_028451465.1_mEreDor1.pri	North American porcupine (mEreDor1 primary hap 2023)
 GCF_949752795.1_mHypAmp2.1	North Atlantic bottlenose whale
@@ -608,6 +609,7 @@ GCA_043748905.1_ASM4374890v1	northern woolly horseshoe bat (20210929_DDc alterna
 GCA_043748575.1_ASM4374857v1	northern woolly horseshoe bat (20210929_DDc primary hap 2024)
 GCA_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024 genbank)
 GCF_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024 refseq)
+GCA_058775275.1_LE_Stm	Norway rat (LE/Stm RGD_629485 2026)
 GCA_041222355.1_F344_StmMcwi	Norway rat (F344/Stm 2024)
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
@@ -733,6 +735,7 @@ GCA_965194725.1_mBalBor1.hap2.1	sei whale (hap2.1 2025)
 GCA_040805955.1_T2T-sheep1.0	sheep (hu hu3095 2024)
 GCF_016772045.2_ARS-UI_Ramb_v3.0	sheep (OAR_USU_Benz2616 2023)
 GCA_000298735.2_Oar_v4.0	sheep (Texel 2015)
+GCA_051295465.2_mBlaBre1_p1.2	short-tailed shrew (CBP01580 primary hap 2026)
 GCF_900095145.1_PAHARI_EIJ_v1.1	shrew mouse
 GCA_023856395.1_Psun_UM_1.1	Siberian hamster (SSSS 2022)
 GCA_004024705.1_MosMos_v1_BIUU	Siberian musk deer (BS20 2019 Broad)
