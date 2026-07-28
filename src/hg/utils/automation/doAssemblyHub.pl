@@ -1878,11 +1878,14 @@ _EOF_
   export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
   rm -f \$asmId.exons.bed
   ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
-    | sort -u > \$asmId.ncbiGene.ix.txt
+    > \$asmId.gpToIx.txt
+  ~/kent/src/hg/utils/automation/gffAttrsToIx.py \$asmId.geneAttrs.ncbi.txt \\
+     \$ncbiGenePred > \$asmId.attrsToIx.txt
+  sort -u \$asmId.gpToIx.txt \$asmId.attrsToIx.txt > \$asmId.ncbiGene.ix.txt
   if [ -s \$asmId.ncbiGene.ix.txt ]; then
     ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
   fi
-  rm -f \$asmId.ncbiGene.ix.txt
+  rm -f \$asmId.ncbiGene.ix.txt \$asmId.gpToIx.txt \$asmId.attrsToIx.txt
   genePredToBigGenePred \$ncbiGenePred stdout \\
       | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
   (bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
