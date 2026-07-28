@@ -15,6 +15,8 @@
 #     make            # build every mp4 whose script (or docent.js) changed
 #     make AP1        # build just ../AP1.mp4 (if stale)
 #     make -B AP2     # force a rebuild
+#     make FAST=1 BP1 # figures only, no video -- roughly a third of the wall clock
+#     make -j6        # scenarios in parallel (each run gets its own browser + cart)
 #     make list       # list the base names discovered
 #     make clean      # remove generated mp4s and stills/
 #
@@ -31,12 +33,17 @@ MP4S    := $(addprefix $(FIGDIR)/,$(addsuffix .mp4,$(BASES)))
 # at UCSC this is the ~/pwrec tree.
 PW_ENV  ?= PLAYWRIGHT_BROWSERS_PATH=$(HOME)/pwrec/browsers NODE_PATH=$(HOME)/pwrec/node_modules
 
+# FAST=1 -> figures only: no dwells, no cursor animation, no screen recording, no mp4.
+# Same stills, about a third of the wall clock. Use it while iterating on figure content;
+# drop it for the final build that has to produce the videos.
+FAST_ENV = $(if $(FAST),DOCENT_FAST=1 ,)
+
 .PHONY: all list clean $(BASES)
 
 all: $(MP4S)
 
 $(FIGDIR)/%.mp4: %.docent.yaml $(DOCENT)
-	$(PW_ENV) node $(DOCENT) $<
+	$(FAST_ENV)$(PW_ENV) node $(DOCENT) $<
 
 # Convenience: `make AP1` -> build ../AP1.mp4
 $(BASES): %: $(FIGDIR)/%.mp4

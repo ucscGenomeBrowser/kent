@@ -21,6 +21,7 @@
 const { chromium } = require('playwright');
 const yaml = require('js-yaml');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
@@ -76,24 +77,132 @@ const resolveTarget = t => {
 const SERVER = resolveTarget(doc.target).replace(/\/$/, '');
 const [VW, VH] = doc.size || [1000, 760];
 const PIX = doc.pix || 850;
-const PACE = Math.round((doc.pace ?? 1.2) * 1000);             // dwell after each step
-const SHOTHOLD = Math.round((doc.shotHold ?? 2.2) * 1000);    // extra dwell (pause) at a shot
+// FAST: iterate on the FIGURES. Everything that exists only for the video is dropped --
+// the dwells, the cursor animation, the dropdown theatrics, the screen recording and the
+// mp4 transcode. The stills are byte-for-byte what a full run produces, and a run costs
+// roughly a third as long. `fast: true` in the script, DOCENT_FAST=1, or `make FAST=1 BP1`.
+const FAST = !!(doc.fast || process.env.DOCENT_FAST);
+const PACE = FAST ? 0 : Math.round((doc.pace ?? 1.2) * 1000);   // dwell after each step
+const SHOTHOLD = FAST ? 0 : Math.round((doc.shotHold ?? 2.2) * 1000);  // extra pause at a shot
 
-// track-name -> cart params (composite tracks expand to their learned "clean" config)
-const TRACKS = {
-  mane: m => [`mane=${m}`],
-  dbSnp155: m => [`dbSnp155Composite=${m}`, `dbSnp155Common=${m}`, `dbSnp155ViewVariants=${m}`, `dbSnp155ViewErrs=hide`],
-  clinvar: m => [`clinvar=${m}`, `clinvarMain=dense`, `clinvarSubLolly=${m}`, `clinvarCnv=hide`],
-};
-// The control-dropdown name and the data-image id can differ from the shortcut name:
-// composites are turned on via their composite cart var, and dbSNP's visible pixels
-// live in the "Common" subtrack's data image.
-const CTRL = { dbSnp155: 'dbSnp155Composite' };          // select[name=...] in the track controls
-const DATAIMG = { dbSnp155: 'dbSnp155Common', clinvar: 'clinvarMain' };  // #img_data_... that holds the drawn items
-const ctrlName = t => CTRL[t] || t;
-const imgTrack = t => DATAIMG[t] || t;
+// ---------- trackDb ----------
+// Docent carries NO table of per-track cart variables. Such a table encodes one snapshot
+// of trackDb and then quietly lies when trackDb changes (this file used to pin
+// `clinvarMain=dense` for every `clinvar:` step, for instance). Instead ask the server for
+// the trackDb it is driving -- hubApi /list/tracks -- and derive what a step needs:
+//
+//   * the containers above a subtrack (composite, view, superTrack) that have to be
+//     turned on with it, and what each of those takes (a superTrack wants show/hide),
+//   * whether trackDb leaves that subtrack UNSELECTED (`parent <c> off`), in which case
+//     the subtrack checkbox `<name>_sel` has to come along,
+//   * which leaf actually draws the pixels for a container name.
+//
+// Everything else -- which dropdown to open, which row to hover -- is read off the live
+// page. Tracks the listing doesn't know (attached hubs, custom tracks, quickLift's own
+// tracks on the target) fall back to a literal `name=mode`, which is all Docent could
+// honestly do for them anyway.
+const TDB_TTL = 24 * 3600 * 1000;                              // re-fetch a cached listing daily
+const TDB_CACHE = path.join(os.tmpdir(), `docent-tdb-${SERVER.replace(/[^\w.-]+/g, '_')}`);
+let tdbPending = null;                                         // db -> Promise<Map|null>, once each
+function tdbParse(genome) {
+  const idx = new Map();
+  const add = (name, o) => {
+    const p = String(o.parent || '').trim().split(/\s+/);
+    idx.set(name, {
+      name,
+      parent: p[0] || null,
+      parentState: (p[1] || '').toLowerCase(),                 // on | off | a visibility | ''
+      vis: o.visibility || null,
+      view: o.view || null,
+      superChild: !!o.superTrack,                              // member of a superTrack
+      superTrack: false,                                       // set below for containers
+      children: [],
+    });
+    for (const [k, v] of Object.entries(o))
+      if (v && typeof v === 'object' && !Array.isArray(v)) add(k, v);
+  };
+  for (const [k, v] of Object.entries(genome || {}))
+    if (v && typeof v === 'object' && !Array.isArray(v)) add(k, v);
+  // hubApi flattens superTrack members to the top level and never lists the superTrack
+  // itself, so synthesize the container from the `parent` field it points at.
+  for (const n of [...idx.values()]) {
+    if (!n.parent) continue;
+    if (!idx.has(n.parent))
+      idx.set(n.parent, { name: n.parent, parent: null, parentState: '', vis: null, view: null,
+                          superChild: false, superTrack: true, children: [] });
+    idx.get(n.parent).children.push(n.name);
+  }
+  return idx;
+}
+// The cache holds the DERIVED index (a few hundred kB), not hubApi's reply (~30 MB for
+// hg38): same information for our purposes, ~20x less to read and parse on every run.
+function tdbFlatten(idx) {
+  return { docentIndex: 1,
+           rows: [...idx.values()].map(n => [n.name, n.parent, n.parentState, n.vis, n.view,
+                                             n.superChild ? 1 : 0, n.superTrack ? 1 : 0]) };
+}
+function tdbInflate(o) {
+  const idx = new Map();
+  for (const [name, parent, parentState, vis, view, superChild, superTrack] of o.rows)
+    idx.set(name, { name, parent, parentState, vis, view,
+                    superChild: !!superChild, superTrack: !!superTrack, children: [] });
+  for (const n of idx.values()) if (n.parent && idx.has(n.parent)) idx.get(n.parent).children.push(n.name);
+  return idx;
+}
+async function tdbIndex(db) {
+  if (!tdbPending) tdbPending = new Map();
+  if (tdbPending.has(db)) return tdbPending.get(db);
+  const p = (async () => {
+    const cache = `${TDB_CACHE}-${db}.json`;
+    try {
+      const st = fs.statSync(cache);
+      if (Date.now() - st.mtimeMs < TDB_TTL) {
+        const o = JSON.parse(fs.readFileSync(cache, 'utf8'));
+        return o && o.docentIndex ? tdbInflate(o) : tdbParse(o);
+      }
+    } catch (e) {}
+    const url = `${SERVER}/hubApi/list/tracks?genome=${enc(db)}&trackLeavesOnly=0`;
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      const genome = j[db];
+      // A hub-supplied genome (an assembly hub, or quickLift's own generated target hub)
+      // isn't in the server's trackDb listing at all -- expected, not a failure.
+      if (!genome) {
+        console.log(`trackDb: ${db} is not a server assembly (hub genome), `
+          + `so track steps there are sent as literal name=mode`);
+        return null;
+      }
+      const idx = tdbParse(genome);
+      // Write via a unique temp file + rename so parallel builds (make -j) can't read a
+      // half-written cache.
+      try {
+        const tmp = `${cache}.${process.pid}.tmp`;
+        fs.writeFileSync(tmp, JSON.stringify(tdbFlatten(idx)));
+        fs.renameSync(tmp, cache);
+      } catch (e) {}
+      console.log(`trackDb: ${idx.size} tracks for ${db} from ${SERVER}/hubApi`);
+      return idx;
+    } catch (e) {
+      console.warn(`trackDb: could not read ${url} (${e.message}) -- `
+        + `falling back to literal name=mode for every track step`);
+      return null;
+    }
+  })();
+  tdbPending.set(db, p);
+  return p;
+}
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+// A pause that exists only so a viewer can follow the video: skipped entirely in FAST.
+const dwell = ms => (FAST ? Promise.resolve() : sleep(ms));
+// Typing is shown on screen for the video; in FAST just put the text in the box (fill()
+// still fires the input events the autocompletes listen for).
+async function typeIn(pg, sel, text) {
+  if (FAST) await pg.fill(sel, String(text));
+  else await pg.type(sel, String(text), { delay: 45 });
+}
 const enc = s => encodeURIComponent(String(s));
 const state = { db: doc.db || 'hg38', position: doc.position || '', hgsid: '' };
 
@@ -111,6 +220,7 @@ const CURSOR_INIT = () => {
     document.addEventListener('mousemove', e => place(e.clientX, e.clientY), true);
     document.addEventListener('mousedown', e => {
       const r = document.createElement('div');
+      r.className = '__ripple';
       r.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:2147483645;pointer-events:none;width:6px;height:6px;margin:-3px 0 0 -3px;border:3px solid rgba(225,30,30,.95);border-radius:50%;`;
       document.documentElement.appendChild(r);
       r.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(6)', opacity: 0 }], { duration: 520, easing: 'ease-out' });
@@ -128,12 +238,13 @@ function absurl(u) {
   return SERVER + '/' + u;
 }
 
+const T_START = Date.now();
 (async () => {
   fs.mkdirSync(STILLDIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, args: ['--force-color-profile=srgb'] });
   const ctx = await browser.newContext({
     viewport: { width: VW, height: VH }, deviceScaleFactor: 1,
-    recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } },
+    ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
   await ctx.addInitScript(CURSOR_INIT);
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
@@ -159,9 +270,17 @@ function absurl(u) {
       });
       if (pos) state.position = pos;
     } catch (e) {}
+    // Authoring aid: DOCENT_ROWS=1 logs the rows hgTracks actually drew, so "why is that
+    // subtrack still there / why is my mouseover track not shown" is one run, not a guess.
+    if (process.env.DOCENT_ROWS) {
+      const rows = await page.evaluate(() =>
+        [...document.querySelectorAll('[id^="img_data_"]')].map(e => e.id.replace('img_data_', ''))).catch(() => null);
+      if (rows) console.log('  rows:', rows.join(', ') || '(none)');
+    }
   }
   async function nav(u) { pinnedTips.length = 0; await page.goto(absurl(u), { waitUntil: 'load' }); await captureState(); await page.mouse.move(cur.x, cur.y); }
   async function glide(x, y) {
+    if (FAST) { await page.mouse.move(x, y); cur.x = x; cur.y = y; return; }
     const steps = Math.max(10, Math.round(Math.hypot(x - cur.x, y - cur.y) / 9));
     for (let i = 1; i <= steps; i++) { await page.mouse.move(cur.x + (x - cur.x) * i / steps, cur.y + (y - cur.y) * i / steps); await sleep(15); }
     cur.x = x; cur.y = y;
@@ -180,6 +299,10 @@ function absurl(u) {
   // track-controls gesture, where the actual state is applied by a follow-up nav().
   async function openSelectVisible(sel, val, rows = 12, commit = true) {
     const loc = page.locator(sel).first();
+    if (FAST) {   // no one is watching: just set it (the open/highlight is video-only)
+      if (commit) { await loc.selectOption(val).catch(() => {}); await sleep(120); }
+      return;
+    }
     await loc.evaluate(el => { try { el.scrollIntoView({ block: 'center' }); } catch (e) { el.scrollIntoView(); } });
     await sleep(350); await glideTo(sel); await sleep(300);
     await loc.evaluate((el, r) => {
@@ -199,8 +322,146 @@ function absurl(u) {
     }
     await loc.evaluate(el => { el.size = parseInt(el.dataset._sz) || 1; el.style.cssText = el.dataset._cs || ''; }).catch(() => {});
   }
+  // ---------- position-box suggestions (the gene-name path of goShow) ----------
+  // Rows of the open suggest menu, minus the category headings (and the trailing
+  // "Unable to find a genome?" div, which is not an <li>).
+  const SUGGEST_ROW = 'ul.ui-autocomplete li:not(.ui-autocomplete-category):visible';
+  async function suggestRows() {
+    return await page.evaluate(() => {
+      const rows = [...document.querySelectorAll('ul.ui-autocomplete li')]
+        .filter(li => !li.classList.contains('ui-autocomplete-category') && li.offsetWidth > 0);
+      return rows.map(li => {
+        let d = null;
+        try { if (window.jQuery) d = jQuery(li).data('ui-autocomplete-item') || null; } catch (e) {}
+        return {
+          text: (li.innerText || li.textContent || '').trim(),
+          // The item's own identifier, preferred over its display label: a gene suggestion
+          // carries geneSymbol, a genome suggestion (the Convert page's target search)
+          // carries db/genome. `value` comes LAST because jQuery UI copies the label into
+          // it when the item has none, which would make every row "match" its own text.
+          sym: d ? String(d.geneSymbol || d.db || d.genome || d.value || '') : '',
+          recent: !!(d && d.displayCategory === 'Recent'),       // a previously-visited position
+        };
+      });
+    });
+  }
+  // Choose the suggestion row for `term`, waiting out the hgSuggest ajax. Two traps this
+  // handles: the "Recent" positions render INSTANTLY, so a plain "menu is up" wait picks a
+  // recent position instead of the gene; and when the real suggestions arrive the menu is
+  // re-rendered, so a row chosen too early is gone by the time we click it. So: poll until
+  // a row actually matches AND the menu has stopped changing. `want` (goShow's `pick:`)
+  // overrides the match, for a term with several sensible hits. Returns {index, text} into
+  // the SUGGEST_ROW set, or null if nothing ever matched.
+  async function pickSuggest(term, want, ms = 8000) {
+    const t0 = Date.now();
+    const low = s => String(s).toLowerCase();
+    const demote = (s, r) => (s ? s - (r.recent ? 0.5 : 0) : 0);  // a real hit beats a recent one
+    // A term that appears as a whole token in the row text counts as a real match -- an
+    // accession sits in parentheses ("human (HG02148.mat 2021) (GCA_018471535.1)"), so
+    // neither an id compare nor startsWith would catch it.
+    const tokenRe = new RegExp(`(^|[^A-Za-z0-9_.])${String(term).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Za-z0-9_.]|$)`, 'i');
+    const scoreTerm = r => demote(
+      low(r.sym) === low(term) ? 3 :                              // the item's own id
+      low(r.text).startsWith(low(term)) ? 2 :                     // label starts with the term
+      tokenRe.test(r.text) ? 2 :                                  // term appears as a token
+      low(r.text).includes(low(term)) ? 1 : 0, r);
+    const scoreWant = r => demote(want && low(r.text).includes(low(want)) ? 3 : 0, r);
+    const pickBest = (rows, fn) => {
+      let bi = -1, bs = 0;
+      rows.forEach((r, i) => { const s = fn(r); if (s > bs) { bs = s; bi = i; } });
+      return bi < 0 ? null : { index: bi, text: rows[bi].text, score: bs };
+    };
+    const deadline = Date.now() + ms;
+    let prev = null, byTerm = null, byWant = null;
+    while (Date.now() < deadline) {
+      const rows = await suggestRows();
+      const sig = JSON.stringify(rows.map(r => r.text));
+      // Same authoring aid as the drawn-row dump: shows what the menu offered and what
+      // identifier each row carries, which is how you tell why a pick went elsewhere.
+      if (process.env.DOCENT_ROWS && sig !== prev) console.log('  suggest:', JSON.stringify(rows));
+      byTerm = pickBest(rows, scoreTerm) || byTerm;
+      byWant = want ? (pickBest(rows, scoreWant) || byWant) : null;
+      const b = want ? byWant : byTerm;
+      // matched, and the menu settled
+      if (b && b.score >= 2 && sig === prev) return { ...b, ms: Date.now() - t0 };
+      prev = sig;
+      await sleep(400);
+    }
+    // `pick:` that matches nothing shouldn't throw away the gene: fall back to the plain
+    // term match (and say so) rather than skipping the menu and submitting raw text.
+    if (want && !byWant && byTerm)
+      console.warn(`goShow ${term}: pick "${want}" matched no suggestion, using "${byTerm.text}"`);
+    const out = want ? (byWant || byTerm) : byTerm;
+    return out ? { ...out, ms: Date.now() - t0, timedOut: true } : null;
+  }
+  // ---------- what a `track:` step has to send, per trackDb ----------
+  // Cart variables that put `name` in `mode`, as [key, value] pairs: the track itself, its
+  // subtrack checkbox if trackDb leaves it unselected, and every container above it -- a
+  // composite or view takes the mode, a superTrack takes show. Nothing is pushed DOWNWARD:
+  // a container's visibility reaches its selected children on its own (`clinvar=pack` draws
+  // clinvarMain/clinvarCnv/clinvarSubLolly, `dbSnp155Composite=pack` draws dbSnp155Common),
+  // which is why the author only has to name deviations from trackDb. A name trackDb doesn't
+  // know (hub, custom, quickLift target) gets a literal `name=mode`.
+  async function visVars(name, mode) {
+    const idx = await tdbIndex(state.db);
+    const n = idx && idx.get(name);
+    if (!n) return [[name, mode]];
+    if (n.superTrack && !['show', 'hide'].includes(mode)) {
+      console.warn(`track ${name}: superTrack container takes show/hide, not "${mode}" -- using show`);
+      mode = 'show';
+    }
+    const out = [[name, mode]];
+    // A subtrack of a composite is governed by its CHECKBOX, not its visibility: when the
+    // container's own vis var is in the same request, hgTracks reshapes the composite and a
+    // bare `clinvarCnv=hide` is dropped (the cart keeps clinvarCnv_sel=1 and the row still
+    // draws). So state the selection explicitly in both directions. Views are containers,
+    // not selectable rows, so they are left out of this.
+    const parent = n.parent ? idx.get(n.parent) : null;
+    if (parent && !parent.superTrack && !n.children.length)
+      out.push([`${name}_sel`, mode === 'hide' ? '0' : '1']);
+    // Hiding a subtrack says NOTHING about its container: propagating `hide` upward would
+    // turn the whole composite off (`{clinvar: pack, clinvarCnv: hide}` would end in
+    // clinvar=hide and no ClinVar at all).
+    if (mode === 'hide') return out;
+    for (let p = n.parent; p; ) {
+      const pn = idx.get(p);
+      out.push([p, pn && pn.superTrack ? 'show' : mode]);
+      p = pn ? pn.parent : null;
+    }
+    return out;
+  }
+  // Leaf descendants of a container, in trackDb order (a container draws no pixels of its
+  // own, so a `mouseover:`/`click:` naming one has to be resolved to a row that does).
+  async function tdbLeaves(name) {
+    const idx = await tdbIndex(state.db);
+    const n = idx && idx.get(name);
+    if (!n || !n.children.length) return [];
+    const out = [];
+    const walk = k => {
+      const c = idx.get(k);
+      if (!c || !c.children.length) out.push(k);
+      else c.children.forEach(walk);
+    };
+    n.children.forEach(walk);
+    return out;
+  }
+  // The track-controls dropdown to open for the visible gesture. Composite children have no
+  // dropdown of their own (the container carries it), so walk up until the DOM has one.
+  async function ctrlSelect(name) {
+    const idx = await tdbIndex(state.db);
+    for (let k = name; k; ) {
+      const sel = `select[name="${k}"]`;
+      if (await page.locator(sel).count()) return sel;
+      const n = idx && idx.get(k);
+      k = n ? n.parent : null;
+    }
+    return null;
+  }
   async function shot(name) {
     const p = path.join(STILLDIR, name + '.png');
+    // Drop any click ripple still fading: it reads as a red blob over whatever was just
+    // clicked. It belongs to the video, not to a figure.
+    await page.evaluate(() => document.querySelectorAll('.__ripple').forEach(e => e.remove())).catch(() => {});
     // If a mouseover tooltip is currently up, capture the image + tooltip together
     // (the tooltip is appended to <body>, so an #imgTbl element shot would clip it).
     const clip = await page.evaluate(() => {
@@ -221,9 +482,13 @@ function absurl(u) {
     });
     if (clip) {
       await page.screenshot({ path: p, clip });
+    } else if (await page.locator('#imgTbl').count()) {
+      await page.locator('#imgTbl').screenshot({ path: p });
     } else {
-      const el = (await page.locator('#imgTbl').count()) ? page.locator('#imgTbl') : page.locator('main');
-      await el.screenshot({ path: p });
+      // Not a tracks page (hgc detail page, an external page a link led to, ...). An element
+      // shot of <main> would run the whole scrolling page -- thousands of pixels tall and
+      // unusable as a figure. Capture the viewport only, i.e. the top of the page.
+      await page.screenshot({ path: p });
     }
     console.log('SHOT', p);
     await sleep(SHOTHOLD);
@@ -231,14 +496,21 @@ function absurl(u) {
   // Resolve a track name to its DOM key + data-image and row bounding boxes. On a
   // quickLift/Convert target the tracks come from a hub, so ids gain a dynamic
   // `hub_<n>_` prefix -- match by suffix so the YAML can just say `track: quickLiftChain`.
+  // A container draws nothing itself, so if the name given is one, fall through to the
+  // leaves trackDb lists under it and take the first that is actually on the page.
   async function trackBox(t) {
-    const want0 = imgTrack(t);
-    const key = await page.evaluate(k => {
-      if (document.getElementById('img_data_' + k)) return k;
-      const el = [...document.querySelectorAll('[id^="img_data_"]')]
-        .find(e => e.id === 'img_data_' + k || e.id.endsWith('_' + k));
-      return el ? el.id.replace('img_data_', '') : k;
-    }, want0);
+    const cands = [t, ...await tdbLeaves(t)];
+    let key = null;
+    for (const c of cands) {
+      key = await page.evaluate(k => {
+        if (document.getElementById('img_data_' + k)) return k;
+        const el = [...document.querySelectorAll('[id^="img_data_"]')]
+          .find(e => e.id === 'img_data_' + k || e.id.endsWith('_' + k));
+        return el ? el.id.replace('img_data_', '') : null;
+      }, c);
+      if (key) { if (c !== t) console.log(`track ${t}: drawn by "${c}"`); break; }
+    }
+    if (!key) throw new Error(`track "${t}" not shown (no #img_data_ for ${cands.join(', ')})`);
     const img = await page.locator(`#img_data_${key}`).first().boundingBox({ timeout: 8000 }).catch(() => null);
     const row = await page.locator(`#imgTbl tr#tr_${key}`).first().boundingBox({ timeout: 8000 }).catch(() => null);
     if (!img || !row) throw new Error(`track "${t}" not shown (need #img_data_${key} + #tr_${key})`);
@@ -317,14 +589,37 @@ function absurl(u) {
     const { x, y } = (want != null)
       ? await itemXY(t, want, o.title != null && o.item == null && o.value == null)
       : await posXY(t, o);
-    // Dismiss any tooltip a previous mouseover left open (over the grey side-label strip,
-    // which has no items) so THIS item raises a FRESH tooltip -- otherwise a back-to-back
-    // pinned mouseover can capture the previous item's stale popup text.
-    await page.mouse.move(2, y); cur.x = 2; cur.y = y; await sleep(120);
+    // Raise a FRESH tooltip for THIS item. Two waits, both on the tooltip's actual state
+    // rather than on a duration: park over the grey side-label strip (no items there) until
+    // the previous tooltip is GONE, then hover the item until a tooltip is up whose content
+    // differs from the one we just dismissed. Sleeping instead only looks right -- with the
+    // dwells trimmed (FAST) a back-to-back pinned mouseover captured the PREVIOUS item's
+    // text, and even at full pace that was a race waiting to be lost.
+    const tipHtml = () => page.evaluate(() => {
+      const c = document.getElementById('mouseoverContainer');
+      if (!c || !c.offsetWidth) return null;
+      const st = getComputedStyle(c);
+      return (st.display === 'none' || st.visibility === 'hidden') ? null : c.innerHTML;
+    });
+    const prevTip = await tipHtml();
+    await page.mouse.move(2, y); cur.x = 2; cur.y = y;
+    if (prevTip) await page.waitForFunction(() => {
+      const c = document.getElementById('mouseoverContainer');
+      if (!c || !c.offsetWidth) return true;
+      const st = getComputedStyle(c);
+      return st.display === 'none' || st.visibility === 'hidden';
+    }, null, { timeout: 2000 }).catch(() => {});
+    await sleep(60);
     await glide(x, y);
     // small jiggle so the mousemove handler definitely fires and positions the tooltip
     await page.mouse.move(x + 1, y); await sleep(60); await page.mouse.move(x, y);
-    await page.waitForSelector('#mouseoverContainer', { state: 'visible', timeout: 2500 }).catch(() => {});
+    await page.waitForFunction(prev => {
+      const c = document.getElementById('mouseoverContainer');
+      if (!c || !c.offsetWidth) return false;
+      const st = getComputedStyle(c);
+      if (st.display === 'none' || st.visibility === 'hidden') return false;
+      return prev == null || c.innerHTML !== prev;
+    }, prevTip, { timeout: 3000 }).catch(() => {});
     // Optionally RECORD this tooltip so a later `pinShot:` can show several mouseovers
     // open together in one figure. We only record (position + the tooltip's own HTML)
     // here -- nothing is injected into the recorded page, so the mp4 still shows just the
@@ -332,7 +627,7 @@ function absurl(u) {
     // `pinMouseovers:` default. Records accumulate within a view and are cleared on nav.
     const pin = (o.pin != null) ? o.pin : (doc.pinMouseovers === true);
     if (pin) await recordTip(x, y);
-    await sleep(o.hold != null ? Number(o.hold) * 1000 : SHOTHOLD);
+    if (!FAST) await sleep(o.hold != null ? Number(o.hold) * 1000 : SHOTHOLD);
     if (o.shot) await shot(o.shot);
   }
   // Grab the live mouseover tooltip's HTML and anchor it at the ITEM's coordinate (x,y
@@ -431,8 +726,7 @@ function absurl(u) {
     let y = tbl.y + Math.min(90, tbl.height / 2);
     let y1 = 0, y2 = tbl.height;
     if (o.track) {
-      const key = imgTrack(o.track);
-      const row = await page.locator(`#imgTbl tr#tr_${key}`).first().boundingBox().catch(() => null);
+      const row = await trackBox(o.track).then(b => b.row).catch(() => null);
       if (row) { y = row.y + row.height / 2; y1 = row.y - tbl.y; y2 = row.y - tbl.y + row.height; }
     }
     // The selected genomic range: from coord endpoints we already have it; otherwise
@@ -519,22 +813,78 @@ function absurl(u) {
   }
   async function convert(o) {
     o = o || {};
+    // `shot:` here can name up to three moments of the Convert page, none of which any
+    // other verb can reach (after Submit the tour is already on the results page):
+    //   shot: convert_filled                 -- just before Submit (the common one)
+    //   shot: {opened: a, filled: b, result: c}
+    //     opened  the page as it comes up, nothing chosen yet
+    //     filled  target searched for, QuickLift/Hide-defaults set -- ready to Submit
+    //     result  the conversion result page (the coordinate link `open: lift` clicks)
+    const shots = (o.shot == null) ? {}
+                : (typeof o.shot === 'string' ? { filled: o.shot } : o.shot);
+    for (const k of Object.keys(shots))
+      if (!['opened', 'filled', 'result'].includes(k))
+        console.warn(`convert shot: unknown moment "${k}" (use opened, filled or result)`);
     try {
-      await glideTo('#view'); await page.hover('#view'); await sleep(900);
+      await glideTo('#view'); await page.hover('#view'); await dwell(900);
       await clickGlide('a#convertMenuLink'); await page.waitForSelector('#hglft_toDbSelect', { timeout: 8000 });
     } catch (e) {
       await nav(`/cgi-bin/hgConvert?hgsid=${state.hgsid}&db=${state.db}&position=${enc(state.position)}`);
       await page.waitForSelector('#hglft_toDbSelect');
     }
+    if (shots.opened) await shot(shots.opened);
+    // Find the target the way a user does: TYPE it into the Convert page's own "Search for
+    // target genome" bar and click the suggestion (the species autocomplete takes an
+    // accession or a name, and is already filtered to assemblies hg38 can lift to). So the
+    // string the script names is visibly searched for on screen, not silently selected.
+    // `search:` overrides what gets typed; `pick:` disambiguates the menu.
+    const term = o.search != null ? o.search : o.to;
+    let searched = false;
+    if (term != null && await page.locator('#toGenomeSearch:visible').count()) {
+      await glideTo('#toGenomeSearch'); await page.click('#toGenomeSearch'); await dwell(160);
+      await page.fill('#toGenomeSearch', '');
+      const label0 = await page.locator('#toGenomeLabel').textContent().catch(() => '');
+      await typeIn(page, '#toGenomeSearch', term);
+      await dwell(300);
+      const hit = await pickSuggest(String(term), o.pick);
+      if (hit) {
+        console.log(`convert: searched "${term}" -> "${hit.text}"`
+          + (hit.timedOut ? ` (no strong match, waited ${hit.ms}ms)` : ''));
+        const li = page.locator(SUGGEST_ROW).nth(hit.index);
+        const b = await li.boundingBox().catch(() => null);
+        if (b) await glide(b.x + b.width / 2, b.y + b.height / 2);
+        await dwell(220);
+        await li.click();
+        // Picking a genome repopulates the Assembly dropdown (ajax) and rewrites the hidden
+        // toDb field. Wait for the "Selected:" label to actually change instead of guessing
+        // a duration -- right on a fast server, still correct on a slow one.
+        await page.waitForFunction(b0 => {
+          const el = document.getElementById('toGenomeLabel');
+          return el && (el.textContent || '') !== b0;
+        }, label0, { timeout: 5000 }).catch(() => {});
+        await dwell(300);
+        searched = true;
+      } else {
+        console.warn(`convert: "${term}" matched nothing in the target-genome search`);
+      }
+    }
+    // The Assembly dropdown is what actually gets submitted, so confirm it landed on the
+    // requested assembly; open it visibly only if the search didn't get us there.
     const val = await resolveTarget(o.to);
-    await openSelectVisible('#hglft_toDbSelect', val);
+    const landed = await page.locator('#hglft_toDbSelect').inputValue().catch(() => null);
+    if (!searched || landed !== val) {
+      if (searched) console.log(`convert: Assembly dropdown is on "${landed}", picking ${val}`);
+      await openSelectVisible('#hglft_toDbSelect', val);
+    }
     await page.waitForSelector('#doQuickLift', { timeout: 8000 }).catch(() => {});
-    await sleep(400);
+    await dwell(400);
     if (o.quicklift !== false) await checkGlide('#doQuickLift', true);
     await checkGlide('#hideTracksOnConvert', o.hideDefaults !== false);  // reverts on assembly change -> set explicitly
-    await sleep(300);
+    await dwell(300);
+    if (shots.filled) await shot(shots.filled);
     await clickGlide('#hglft_doConvert');
     await page.waitForLoadState('load'); await captureState();
+    if (shots.result) await shot(shots.result);
   }
 
   // On the "Hub Connect Successful" page, click the "Open:" link for `db` so the demo
@@ -570,20 +920,122 @@ function absurl(u) {
         if (arg === true || arg === '' || arg == null) { await clickGlide('.jwGoButtonContainer'); await page.waitForSelector('#imgTbl'); }
         else { await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(arg)}&pix=${PIX}`); }
         await captureState(); break;
+      case 'goShow': {
+        // DEMONSTRATE the position change through the UI (vs. `go:` which navs straight to
+        // the new position): glide to the position box, clear it, type on screen, then let
+        // the page take it from there -- "Search" (#goButton) on hgTracks, the arrow
+        // (.jwGoButtonContainer) on hgGateway, so one verb covers either page.
+        //
+        // Takes a POSITION or a GENE NAME (or any search term the box accepts: HGVS, an
+        // accession, ...). A gene name goes through the browser's own suggestion menu, the
+        // way a user does it: wait for the menu, then click the matching item -- hgTracks'
+        // handler sets the position from that item and submits, so we land on the gene
+        // instead of the search-results page. `pick:` chooses among the suggestions when
+        // the term is ambiguous (substring of the menu row); default is an exact symbol
+        // match, else the first row.
+        //
+        //   goShow: BRCA1
+        //   goShow: {gene: SHH, shot: source}
+        //   goShow: {position: "chr7:155,799,529-155,812,871", shot: source}
+        //   goShow: {gene: BRCA1, pick: "NM_007294", shot: source}
+        const o = (typeof arg === 'string') ? { position: arg } : (arg || {});
+        const pos = [o.position, o.pos, o.gene, o.search].find(v => v != null && v !== '');
+        if (pos == null) { console.warn('goShow: no position or gene given'); break; }
+        const term = String(pos).trim();
+        // A coordinate has no suggestions to wait on; anything else is a search term.
+        const isPos = /^[\w.|-]+:[\d,]+(-[\d,]+)?$/.test(term);
+        if (!await page.locator('#positionInput:visible').count())
+          throw new Error('goShow: no position box on this page (need hgTracks or hgGateway) -- ' + page.url());
+        await glideTo('#positionInput'); await page.click('#positionInput'); await dwell(160);
+        await page.fill('#positionInput', '');                            // clear the old position
+        await dwell(200);
+        await typeIn(page, '#positionInput', term);                       // visible typing
+        await dwell(450);
+        pinnedTips.length = 0;                                            // new view, old tips don't apply
+        let done = null;
+        if (!isPos) {
+          const hit = await pickSuggest(term, o.pick != null ? o.pick : o.match);
+          if (hit) {
+            console.log(`goShow ${term}: suggestion "${hit.text}"`
+              + (hit.timedOut ? ` (no strong match, waited ${hit.ms}ms)` : ''));
+            // Address the row by index at click time (a late re-render replaces the <li>
+            // elements, so a handle or a marker attribute taken earlier goes stale).
+            const li = page.locator(SUGGEST_ROW).nth(hit.index);
+            // Arm the nav wait BEFORE the click (the page's own handler submits the form for
+            // us), and wait on 'commit' so we can tell "navigated" from "only filled the box".
+            const committed = page.waitForNavigation({ waitUntil: 'commit', timeout: 15000 }).catch(() => null);
+            const b = await li.boundingBox().catch(() => null);
+            if (b) await glide(b.x + b.width / 2, b.y + b.height / 2);
+            await sleep(220);
+            await li.click();
+            done = await committed;
+            if (done) await page.waitForLoadState('load').catch(() => {});
+          } else {
+            console.warn(`goShow ${term}: no suggestion matched, submitting the term as typed`);
+          }
+        }
+        // Coordinate, no suggestions, or hgGateway (where picking a suggestion only fills
+        // the box): click the page's own go button. Arm the nav wait BEFORE the click -- on
+        // hgTracks the OLD page already has an #imgTbl, so waiting on the selector alone
+        // returns instantly and a following shot races the reload ("Cannot find context
+        // with specified id").
+        if (!done) {
+          const navDone = page.waitForNavigation({ waitUntil: 'load', timeout: 30000 }).catch(() => {});
+          await clickGlide((await page.locator('#goButton').count()) ? '#goButton' : '.jwGoButtonContainer');
+          await navDone;
+        }
+        // A unique hit lands on the track image; a term with no suggestion and several
+        // matches lands on the search-results page instead, which has no #imgTbl -- that's
+        // legal, the script can `click` a result from there.
+        await page.waitForSelector('#imgTbl', { timeout: 15000 }).catch(() => {});
+        await captureState();
+        await page.mouse.move(cur.x, cur.y);                              // re-show the cursor overlay
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
       case 'hide': if (arg === 'all' || arg === true) { await clickGlide('#hgt\\.hideAll'); await page.waitForSelector('#imgTbl'); } break;
       case 'track': {
-        const parts = [];
-        for (const [name, mode] of Object.entries(arg)) {
-          // Visible gesture: drive the real track-controls dropdown so the mouse is
-          // seen turning the track on. State is still applied by the nav() below
-          // (so composite "clean" configs come through), so this open is non-committing.
-          if (doc.trackAnim !== false) {
-            const csel = `select[name="${ctrlName(name)}"]`;
-            if (await page.locator(csel).count()) await openSelectVisible(csel, mode, 6, false);
+        const entries = Object.entries(arg);
+        const named = new Set(entries.map(([n]) => n));          // what the author spelled out
+        const idx = await tdbIndex(state.db);
+        // Visible gesture first: drive the real track-controls dropdowns so the mouse is
+        // seen turning the tracks on. State is still applied by the nav()s below (which
+        // carry the container/checkbox vars too), so these opens are non-committing.
+        if (doc.trackAnim !== false)
+          for (const [name, mode] of entries) {
+            const csel = await ctrlSelect(name);
+            if (csel) await openSelectVisible(csel, mode, 6, false);
           }
-          const fn = TRACKS[name]; parts.push(...(fn ? fn(mode) : [`${name}=${mode}`]));
+        // hgTracks RESHAPES a composite when its container visibility changes, and that wipes
+        // per-subtrack overrides arriving in the same request (`clinvar=pack&clinvarCnv=hide`
+        // leaves clinvarCnv_sel=1 and the CNV row still drawn). So a step that names both a
+        // composite and something under it is applied in rounds -- container first, then the
+        // deviations -- which is exactly what writing them as two steps does. superTracks
+        // don't reshape, so they don't force a round.
+        const rounds = new Map();
+        for (const e of entries) {
+          let d = 0;
+          for (let k = e[0]; ;) {
+            const n = idx && idx.get(k);
+            if (!n || !n.parent) break;
+            const p = idx.get(n.parent);
+            if (named.has(n.parent) && !(p && p.superTrack)) d++;
+            k = n.parent;
+          }
+          if (!rounds.has(d)) rounds.set(d, []);
+          rounds.get(d).push(e);
         }
-        await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(state.position)}&${parts.join('&')}&pix=${PIX}`);
+        for (const d of [...rounds.keys()].sort((a, b) => a - b)) {
+          const vars = new Map();
+          for (const [name, mode] of rounds.get(d))
+            // A derived variable never overrides one the step names itself, whatever the
+            // order: `{clinvar: pack, clinvarCnv: hide}` keeps clinvar=pack.
+            for (const [k, v] of await visVars(name, mode))
+              if (k === name || !named.has(k)) vars.set(k, v);
+          const parts = [...vars].map(([k, v]) => `${k}=${v}`);
+          console.log('track:', parts.join(' '));   // what trackDb turned the step into
+          await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(state.position)}&${parts.join('&')}&pix=${PIX}`);
+        }
         break;
       }
       case 'convert': await convert(arg); break;
@@ -738,21 +1190,40 @@ function absurl(u) {
 
   if (doc.reset) await page.goto(absurl('/cgi-bin/cartReset?skipLs=1'), { waitUntil: 'domcontentloaded' });
   const steps = doc.steps || [];
+  const timing = [];
   for (let i = 0; i < steps.length; i++) {
     const s = norm(steps[i]);
+    const t0 = Date.now();
     try { await run(s); }
     catch (e) { console.error(`step ${i + 1} (${s.verb}) failed:`, e.message); await ctx.close(); await browser.close(); process.exit(1); }
+    timing.push({ n: i + 1, verb: s.verb, ms: Date.now() - t0 });
   }
 
   await page.waitForTimeout(300);
   await ctx.close();
   await browser.close();
 
+  // Where did the wall clock go? DOCENT_TIME=1 prints the per-step table -- the dwells
+  // (pace/shotHold) and the page loads dominate, which is what FAST=1 trims.
+  if (process.env.DOCENT_TIME) {
+    const tot = timing.reduce((a, t) => a + t.ms, 0);
+    console.log(`--- steps: ${(tot / 1000).toFixed(1)}s total`);
+    for (const t of [...timing].sort((a, b) => b.ms - a.ms))
+      console.log(`  ${(t.ms / 1000).toFixed(1)}s  step ${t.n} ${t.verb}`);
+  }
+  if (FAST) {
+    console.log('DONE (fast: stills only, no mp4) -> stills in', STILLDIR,
+                `| ${((Date.now() - T_START) / 1000).toFixed(0)}s`);
+    return;
+  }
+  const tVid = Date.now();
   // transcode webm -> silent mp4
   const vdir = path.join(HERE, '.vid_' + base);
   const webm = fs.readdirSync(vdir).filter(f => f.endsWith('.webm')).map(f => path.join(vdir, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   const FF = execFileSync('python3', ['-c', 'import imageio_ffmpeg,sys;sys.stdout.write(imageio_ffmpeg.get_ffmpeg_exe())']).toString().trim();
   execFileSync(FF, ['-y', '-loglevel', 'error', '-i', webm, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-movflags', '+faststart', OUTMP4]);
   fs.rmSync(vdir, { recursive: true, force: true });
-  console.log('DONE ->', OUTMP4, '| stills in', STILLDIR);
+  if (process.env.DOCENT_TIME) console.log(`--- mp4 transcode: ${((Date.now() - tVid) / 1000).toFixed(1)}s`);
+  console.log('DONE ->', OUTMP4, '| stills in', STILLDIR,
+              `| ${((Date.now() - T_START) / 1000).toFixed(0)}s`);
 })().catch(e => { console.error(e); process.exit(1); });
