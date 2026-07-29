@@ -46,6 +46,7 @@ comment at the top of that file.
 ```yaml
 target: genome-test     # or rr, hgwdev, hgwbeta, hgwdev-<user>, or a full https://.../cgi-bin
 db: hg38                # source assembly
+position: chr7:155.8M   # starting position (tracked from then on; `go:` sets it too)
 reset: true             # cartReset first (clean cart + fresh quickLift hub)
 size: [1000, 760]       # viewport
 pix: 850                # browser image width
