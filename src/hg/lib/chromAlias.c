@@ -415,13 +415,13 @@ char *chromAliasFindNative(char *alias)
 static struct hash *cachedNative;
 char *chrom;
 
+/* Everything below touches the shared cache, so it all has to be under the
+ * lock.  hgTracks calls this from several threads at once (loading decorators,
+ * for example) and an unlocked read or lazy init here will corrupt the hash. */
+getLock();
 if (cachedNative == NULL)
     cachedNative = newHash(6);
 
-if ((chrom = hashFindVal(cachedNative, alias)) != NULL)
-    return chrom;
-
-getLock();
 if ((chrom = hashFindVal(cachedNative, alias)) == NULL)
     {
     if (chromAliasGlobals.bbi)
@@ -458,13 +458,11 @@ struct slName *chromAliasFindAliases(char *seqName)
 static struct hash *cachedAliases;
 struct slName *aliases;
 
+/* As in chromAliasFindNative, the whole cache access has to be inside the lock. */
+getLock();
 if (cachedAliases == NULL)
     cachedAliases = newHash(6);
 
-if ((aliases = hashFindVal(cachedAliases, seqName)) != NULL)
-    return aliases;
-
-getLock();
 if ((aliases = hashFindVal(cachedAliases, seqName)) == NULL)
     {
     if (chromAliasGlobals.bbi)

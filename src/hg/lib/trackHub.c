@@ -407,10 +407,15 @@ else
 }
 
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom)
-/* Return a chromInfo structure for just this chrom in this database. 
+/* Return a chromInfo structure for just this chrom in this database.  The database
+ * may be decorated with a hub_<id>_ prefix or undecorated.
  * Return NULL if chrom doesn't exist. */
 {
-struct trackHubGenome *genome = trackHubGetGenome(database);
+struct trackHubGenome *genome = NULL;
+if (hubAssemblyHash != NULL)
+    genome = trackHubGetGenome(database);
+if (genome == NULL)
+    genome = trackHubGetGenomeUndecorated(trackHubSkipHubName(database));
 if (genome == NULL)
     return NULL;
 
