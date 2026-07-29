@@ -85,7 +85,7 @@ clean::
 	rmdir testOutput
 
 # exclude these lines from the JSON output for comparison with expected
-excludeLines = downloadTime|dataTime|priority
+excludeLines = downloadTime|dataTime|priority|clade
 
 # testing /list/noSubCommand, /list/publicHubs and /list/ucscGenomes
 test0: setOutput
