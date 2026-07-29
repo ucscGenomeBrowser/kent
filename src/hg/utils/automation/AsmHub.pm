@@ -156,7 +156,7 @@ _EOF_
       $html .= "</p>\n<ul>\n";
       foreach my $version (@versions) {
         my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$hashedPath/$accession/archive/ncbiGene/$version/hub.txt";
-        my $url = "https://genome.ucsc.edu/h/$accession?hubUrl=$hubUrl";
+        my $url = "/h/$accession?hubUrl=$hubUrl";
         $html .= "<li><a href='$url' target='_blank'>$version</a></li>\n";
       }
       $html .= "</ul>\n\n";
