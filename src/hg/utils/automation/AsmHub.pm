@@ -155,7 +155,8 @@ _EOF_
       $html .= "Earlier versions of this track, from before NCBI updated the source annotation, remain available as standalone track hubs:\n";
       $html .= "</p>\n<ul>\n";
       foreach my $version (@versions) {
-        my $url = "https://hgdownload.soe.ucsc.edu/hubs/$hashedPath/$accession/archive/ncbiGene/$version/hub.txt";
+        my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$hashedPath/$accession/archive/ncbiGene/$version/hub.txt";
+        my $url = "https://genome.ucsc.edu/h/$accession?hubUrl=$hubUrl";
         $html .= "<li><a href='$url' target='_blank'>$version</a></li>\n";
       }
       $html .= "</ul>\n\n";
