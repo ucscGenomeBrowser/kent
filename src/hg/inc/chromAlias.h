@@ -71,7 +71,8 @@ void chromAliasSetup(char *database);
 /* Read in the chromAlias file/table for this database. */
 
 char *chromAliasFindNative(char *name);
-/* Find the native seqName for a given alias. */
+/* Find the native seqName for a given alias.  Returns a freshly allocated
+ * string (or NULL), so the caller owns it and should freeMem it. */
 
 struct slName *chromAliasFindAliases(char *seqName);
 /* Get the list of aliases for this sequence name. */
