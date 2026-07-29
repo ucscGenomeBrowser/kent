@@ -867,8 +867,7 @@ if (native != NULL && !sameString(native, chrom))
 else
     result = cloneString(decoratedItem);
 freeMem(chrom);
-// note: do not free the chromAliasFindNative() result - on a cache hit it returns
-// the pointer owned by its internal cache, so freeing it would corrupt that cache.
+freeMem(native);
 return result;
 }
 
