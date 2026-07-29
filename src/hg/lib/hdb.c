@@ -124,7 +124,9 @@ static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 {
 struct chromInfo *ci = NULL;
 
-if (trackHubDatabase(db))
+/* An assembly hub keeps its sequence in a 2bit file and has no chromInfo table.  A curated
+ * hub reaches us as an undecorated db name, so check the undecorated hub genomes too. */
+if (trackHubDatabase(db) || trackHubGetGenomeUndecorated(trackHubSkipHubName(db)) != NULL)
     {
     ci = trackHubMaybeChromInfo(db, chrom);
     return ci;
