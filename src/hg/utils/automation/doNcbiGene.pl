@@ -45,9 +45,14 @@ $base =~ s/^(.*\/)?//;
 sub usage {
   my ($status, $detailed) = @_;
   print STDERR "
-usage: $base [options] asmId
+usage: $base [options] asmId db
 required arguments:
-    asmId              - assembly identifier, e.g. GCF_000001405.32_GRCh38.p6
+    asmId              - assembly identifier at NCBI, e.g.
+                          GCF_000001405.32_GRCh38.p6 -- used to locate the
+                          source gff3/lift/remove.dups.list files.
+    db                 - name used for the track's own output files, e.g.
+                          bigDataUrl bbi/db.ncbiGene.bb -- may equal asmId
+                          for a plain GenArk build, or be a custom -dbName.
 
 options:
 ";
@@ -56,12 +61,11 @@ options:
     -buildDir dir         Use dir instead of default (current directory).
                           This *is* the runDir -- typically the hub's
                           trackData/ncbiGene -- no further nesting is added.
-    -assemblySource dir   Directory holding \${asmId}_genomic.gff.gz (and
-                          optionally \${asmId}.remove.dups.list).
+    -assemblySource dir   Directory holding \${asmId}_genomic.gff.gz.
     -chromSizes path      Path to the assembly's chrom.sizes file.
-    -namesFile path       Path to the hub's \$asmId.names.tab (built by the
+    -namesFile path       Path to the hub's \$db.names.tab (built by the
                           gatewayPage step), e.g.
-                          \$buildDir/../../html/\$asmId.names.tab -- used
+                          \$buildDir/../../html/\$db.names.tab -- used
                           for the archived-version description page.
     -liftFile path        Optional lift file translating NCBI names to
                           UCSC names, e.g.
@@ -74,7 +78,7 @@ _EOF_
   print STDERR "
 Automates construction of the 'ncbiGene' track from an assembly's own
 NCBI GFF3 gene predictions, for assembly hub (GenArk) builds. Steps:
-    ncbiGene: if a previous \${asmId}.ncbiGene.bb exists and the source gff
+    ncbiGene: if a previous \$db.ncbiGene.bb exists and the source gff
               is newer, archive the previous version under archive/<date>/
               (keyed by the previous build's own gff-derived mtime), then
               translate the current gff3 into a bigGenePred track and swap
@@ -86,7 +90,7 @@ NCBI GFF3 gene predictions, for assembly hub (GenArk) builds. Steps:
 }
 
 # Globals:
-my ($asmId);
+my ($asmId, $db);
 my ($buildDir, $assemblySource, $chromSizes, $namesFile, $liftFile);
 my ($secondsStart, $secondsEnd);
 
@@ -125,7 +129,7 @@ sub needsUpdate($$) {
 # so it doubles as a version string for free -- no separate release
 # metadata needed, unlike ncbiRefSeq's NCBI-supplied $verString).
 sub archivePriorVersion {
-  my $priorBb = "$buildDir/$asmId.ncbiGene.bb";
+  my $priorBb = "$buildDir/$db.ncbiGene.bb";
   return if (! -s "$priorBb");
 
   my $priorMtime = stat($priorBb)->mtime;
@@ -140,13 +144,13 @@ sub archivePriorVersion {
   }
   &HgAutomate::mustMkdir($archiveDir);
   foreach my $ext (qw( bb gtf.gz ix ixx stats.txt )) {
-    my $f = "$buildDir/$asmId.ncbiGene.$ext";
-    rename($f, "$archiveDir/$asmId.ncbiGene.$ext") if (-e "$f");
+    my $f = "$buildDir/$db.ncbiGene.$ext";
+    rename($f, "$archiveDir/$db.ncbiGene.$ext") if (-e "$f");
   }
-  my $geneAttrs = "$buildDir/$asmId.geneAttrs.ncbi.txt.gz";
-  rename($geneAttrs, "$archiveDir/$asmId.geneAttrs.ncbi.txt.gz") if (-e "$geneAttrs");
-  my $fb = "$buildDir/fb.$asmId.ncbiGene.txt";
-  rename($fb, "$archiveDir/fb.$asmId.ncbiGene.txt") if (-e "$fb");
+  my $geneAttrs = "$buildDir/$db.geneAttrs.ncbi.txt.gz";
+  rename($geneAttrs, "$archiveDir/$db.geneAttrs.ncbi.txt.gz") if (-e "$geneAttrs");
+  my $fb = "$buildDir/fb.$db.ncbiGene.txt";
+  rename($fb, "$archiveDir/fb.$db.ncbiGene.txt") if (-e "$fb");
 
   writeArchiveHub($archiveDir, $priorVersion);
 
@@ -157,21 +161,23 @@ sub archivePriorVersion {
 #########################################################################
 # a single hub.txt (useOneFile on) that puts just the archived ncbiGene
 # track up for viewing.  No twoBitPath/organism/defaultPos are needed in
-# the genome stanza: $asmId is already a published GenArk genome, so
-# 'genome $asmId' with no twoBitPath just attaches this one extra track
-# to that already-known assembly (see trackHubGenomeReadRa() in
-# hg/lib/trackHub.c -- twoBitPath is only required when *introducing* a
-# new genome).
+# the genome stanza: the true NCBI accession is already a published
+# GenArk genome, so 'genome $accession' with no twoBitPath just attaches
+# this one extra track to that already-known assembly (see
+# trackHubGenomeReadRa() in hg/lib/trackHub.c -- twoBitPath is only
+# required when *introducing* a new genome).
 sub writeArchiveHub {
   my ($archiveDir, $priorVersion) = @_;
-  my $haveIx = ( -s "$archiveDir/$asmId.ncbiGene.ix" );
+  my $haveIx = ( -s "$archiveDir/$db.ncbiGene.ix" );
 
   writeArchiveHtml($archiveDir, $priorVersion);
 
   # 'genome' wants the bare accession (GCF_937001465.1), not the full
   # asmId with its _assemblyName suffix (GCF_937001465.1_mOrcOrc1.1) --
   # that suffix is what NCBI adds for the gff/download file names, but
-  # it is not the name the genome is registered under.
+  # it is not the name the genome is registered under.  This must come
+  # from the true NCBI $asmId, not the output-naming $db, since $db may
+  # be an arbitrary -dbName.
   my @parts = split('_', $asmId);
   my $accession = "$parts[0]_$parts[1]";
 
@@ -194,11 +200,11 @@ color 0,80,150
 altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
 type bigGenePred
-bigDataUrl $asmId.ncbiGene.bb
-html $asmId.ncbiGene
+bigDataUrl $db.ncbiGene.bb
+html $db.ncbiGene
 _HUB_
   if ($haveIx) {
-    print $fh "searchIndex name\nsearchTrix $asmId.ncbiGene.ix\n";
+    print $fh "searchIndex name\nsearchTrix $db.ncbiGene.ix\n";
   }
   close($fh);
 } # writeArchiveHub
@@ -210,14 +216,14 @@ _HUB_
 # just with an extra banner noting it is a superseded version.
 sub writeArchiveHtml {
   my ($archiveDir, $priorVersion) = @_;
-  my $bbPath = "$archiveDir/$asmId.ncbiGene.bb";
-  my $statsPath = "$archiveDir/$asmId.ncbiGene.stats.txt";
+  my $bbPath = "$archiveDir/$db.ncbiGene.bb";
+  my $statsPath = "$archiveDir/$db.ncbiGene.stats.txt";
   my $archiveNote = "This is an archived copy of the ncbiGene track as it stood on $priorVersion, before NCBI's source GFF3 annotation was updated to a newer version.";
 
   my $html = AsmHub::ncbiGeneDescription($bbPath, $statsPath, $chromSizes,
                                           $namesFile, $asmId, $archiveNote);
 
-  my $htmlPath = "$archiveDir/$asmId.ncbiGene.html";
+  my $htmlPath = "$archiveDir/$db.ncbiGene.html";
   open(my $fh, ">", $htmlPath) or die "can not write $htmlPath: $!";
   print $fh $html;
   close($fh);
@@ -231,7 +237,7 @@ sub doNcbiGene {
     &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  $gffFile\n");
     return;
   }
-  if ( ! needsUpdate($gffFile, "$buildDir/$asmId.ncbiGene.bb") ) {
+  if ( ! needsUpdate($gffFile, "$buildDir/$db.ncbiGene.bb") ) {
     &HgAutomate::verbose(1, "# ncbiGene step previously completed\n");
     return;
   }
@@ -244,12 +250,14 @@ sub doNcbiGene {
                     $workhorse, $buildDir, $whatItDoes);
 
   my $dupList = "";
-  if ( -s "${assemblySource}/${asmId}.remove.dups.list" ) {
-    $dupList = " | (grep -v -f \"${assemblySource}/${asmId}.remove.dups.list\"  || true)";
+  # this list is curated by hand into the build's own download/ area,
+  # not something NCBI supplies in $assemblySource
+  if ( -s "${buildDir}/../../download/${asmId}.remove.dups.list" ) {
+    $dupList = " | (grep -v -f \"${buildDir}/../../download/${asmId}.remove.dups.list\"  || true)";
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$db
 export gffFile=$gffFile
 export chromSizes=$chromSizes
 
@@ -341,7 +349,7 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$buildDir/doCleanup.csh", $fileServer,
 				      $buildDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-gzip -f $asmId.geneAttrs.ncbi.txt $asmId.ncbiGene.log.txt
+gzip -f $db.geneAttrs.ncbi.txt $db.ncbiGene.log.txt
 _EOF_
   );
   $bossScript->execute();
@@ -353,12 +361,12 @@ _EOF_
 &HgAutomate::closeStdin();
 
 &checkOptions();
-&usage(1) if (scalar(@ARGV) != 1);
+&usage(1) if (scalar(@ARGV) != 2);
 
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
-($asmId) = @ARGV;
+($asmId, $db) = @ARGV;
 
 $assemblySource = $opt_assemblySource or die "ERROR: -assemblySource is required\n";
 $chromSizes = $opt_chromSizes or die "ERROR: -chromSizes is required\n";
