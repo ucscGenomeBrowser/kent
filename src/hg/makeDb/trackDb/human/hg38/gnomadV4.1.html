@@ -1,13 +1,17 @@
 <h2>Description</h2>
 <p>
 GnomAD 4 used the whole-genome data from gnomAD 3 and added more exomes.
-The current v4.1 release includes a fix for the allele number
+The v4.1 release included a fix for the allele number
 <a target="_blank" href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">issue</a>.
-The v4.1 track shows variants from 807,162 individuals, including 730,947
+The current v4.1.1 release, from March 30, 2026, revises the LOFTEE END_TRUNC GERP distance
+threshold from -58.0 to 0.0. This reclassifies about 79,920 predicted loss-of-function (pLoF)
+variants from high-confidence to low-confidence. For more information, see the related <a
+target="_blank" href="https://gnomad.broadinstitute.org/news/2026-03-gnomad-v4-1-1/">blog post</a>.
+</p>
+<p>
+The track shows variants from 807,162 individuals, including 730,947
 exomes and 76,215 genomes. This includes the 76,156 genomes from the gnomAD v3.1.2 release as well
-as new exome data from 416,555 UK Biobank individuals. For more detailed information on gnomAD
-v4.1, see the related <a target="_blank"
-href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">blog post</a>.
+as exome data from 416,555 UK Biobank individuals.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -68,7 +72,7 @@ There is one additional configurable filter on the minimum minor allele frequenc
 
 <h2>UCSC Methods</h2>
 <p>
-The gnomAD v4.1 data is unfiltered.</p>
+The gnomAD v4.1.1 data is unfiltered.</p>
 
 <p>
 For the full steps used to create the gnomAD tracks at UCSC, please see the
@@ -84,13 +88,13 @@ Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data
 automated analysis, the data may be queried from our <a target="_blank"
 href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
 can be downloaded from our <a
-href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1/" target="_blank">download server</a>, subject
+href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1.1/" target="_blank">download server</a>, subject
 to the conditions set forth by the gnomAD consortium (see below).</p>
 
 <p>
 The underlying bigBed only contains enough information necessary to use the track in the browser.
 The extra data like VEP annotations and CADD scores are available in the
-<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1/">same directory</a>
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1.1/">same directory</a>
 as the bigBed but in the files <em>details.tab.gz</em> and <em>details.tab.gz.gzi</em>. The
 details.tab.gz contains the gzip compressed extra data in JSON format, and the .gzi file is
 available to speed searching of this data. Each variant has an associated md5sum in the name field
@@ -103,7 +107,7 @@ bigBedToBed genomes.bb stdout | head -4 | tail -1
 chr1    12416    12417    854246d79dc5d02dcdbd5f5438542b6e    [..omitted..]    67293    902
 
 # use _dataOffset and _dataLen (add one to _dataLen for the newline character):
-bgzip -b 67293 -s 903 gnomad.v4.1.genomes.details.tab.gz
+bgzip -b 67293 -s 903 gnomad.v4.1.1.genomes.details.tab.gz
 854246d79dc5d02dcdbd5f5438542b6e    {"DDX11L1": {"cons": ["non_coding_transcript_variant"...
 </pre>
 
