@@ -171,6 +171,9 @@ else
             fillOutHttpResponseSuccess(response);
             }
         }
+    // pop the handlers before handling the error, so an errAbort in the error
+    // path cannot longjmp back into this same block
+    errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
         // App-level reject: tusd treats exit 0 + RejectUpload=true as a clean
@@ -180,7 +183,6 @@ else
         rejectUpload(response, errCatch->message->string);
         exitStatus = 0;
         }
-    errCatchEnd(errCatch);
     }
 // always print a response no matter what
 jsonPrintToFile(response, NULL, stdout, 0);
