@@ -79,10 +79,13 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         {
         char *trackName = table->name, *tableName = table->name;
         struct trackDb *tdb = NULL;
-        // clear the tdb cache if this track is a hub track
+        // these are pseudo-table names with no trackDb entry to look up. chromInfo is what
+        // hgFind uses for a plain position range or a genomic HGVS match
         if (! (sameString("trackDb", tableName) || sameString("helpDocs", tableName) ||
-                sameString("publicHubs", tableName)))
+                sameString("publicHubs", tableName) || sameString("chromInfo", tableName)))
             {
+            // a native tdbList carried over from an earlier table won't hold hub tracks,
+            // drop it so tdbForTrack takes its hub lookup path
             if (isHubTrack(tableName))
                 tdbList = NULL;
             tdb = tdbForTrack(db, tableName, &tdbList);

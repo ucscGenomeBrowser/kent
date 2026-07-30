@@ -164,7 +164,8 @@ struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom);
-/* Return a chromInfo structure for just this chrom in this database. 
+/* Return a chromInfo structure for just this chrom in this database.  The database
+ * may be decorated with a hub_<id>_ prefix or undecorated.
  * Return NULL if chrom doesn't exist. */
 
 struct chromInfo *trackHubChromInfo(char *database, char *chrom);
