@@ -246,7 +246,14 @@ sub doNcbiGene {
   archivePriorVersion();
 
   my $whatItDoes = "translate NCBI GFF3 gene definitions into a track";
-  my $bossScript = newBash HgRemoteScript("$buildDir/doNcbiGene.bash",
+  # NOTE: must not be named doNcbiGene.bash -- doAssemblyHub.pl's own
+  # wrapper script that invokes this program is *already* named
+  # $buildDir/doNcbiGene.bash and is still running (mid-ssh-exec) at the
+  # moment this line runs.  Reusing that filename here truncates and
+  # rewrites the file the outer shell is still reading, corrupting its
+  # read position and producing a bogus "syntax error" once the outer
+  # shell resumes -- after the real work below has already succeeded.
+  my $bossScript = newBash HgRemoteScript("$buildDir/buildNcbiGene.bash",
                     $workhorse, $buildDir, $whatItDoes);
 
   my $dupList = "";

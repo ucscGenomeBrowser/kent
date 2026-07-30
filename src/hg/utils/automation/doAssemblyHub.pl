@@ -1818,6 +1818,8 @@ sub doNcbiGene {
   }
 
   $bossScript->add(<<_EOF_
+if [ $gffFile -nt $defaultName.ncbiGene.bb ]; then
+
 ~/kent/src/hg/utils/automation/doNcbiGene.pl \\
     -assemblySource=$assemblySource \\
     -chromSizes="$buildDir/$defaultName.chrom.sizes" \\
@@ -1825,6 +1827,10 @@ sub doNcbiGene {
     $liftSpec -buildDir=`pwd` -dbHost=$dbHost \\
     -workhorse=$workhorse -fileServer=$fileServer \\
     $asmId $defaultName
+
+else
+  printf "# ncbiGene step previously completed\\n" 1>&2
+fi
 _EOF_
   );
   $bossScript->execute();
