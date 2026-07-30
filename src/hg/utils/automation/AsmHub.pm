@@ -9,6 +9,7 @@ use warnings;
 use strict;
 use Carp;
 use File::Basename;
+use File::stat;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
@@ -72,6 +73,14 @@ sub ncbiGeneDescription($$$$$;$) {
      substr($partNames[1],6,3), $ncbiAsmId);
   my $asmType = ($partNames[0] =~ m/GCA/) ? "genbank" : "refseq";
 
+  # the .bb's mtime is stamped from the source gff's own mtime (see the
+  # 'touch -r $gffFile' step in doNcbiGene.pl), so it doubles as this
+  # track's own version/build date -- the same convention archiving uses
+  # to name archive/<date>/ directories, which is why this lines up with
+  # the dates listed under "Archived versions" below.
+  my ($mday,$mon,$year) = (localtime(stat($bbPath)->mtime))[3,4,5];
+  my $dataVersion = sprintf("%04d-%02d-%02d", $year+1900, $mon+1, $mday);
+
   my $totalBases = asmSize($chromSizes);
   my $geneStats = `cat $statsPath | awk '{printf "%d\\n", \$2}' | xargs echo`;
   chomp $geneStats;
@@ -122,6 +131,7 @@ _EOF_
   $html .= <<_EOF_;
 <h2>Track statistics summary</h2>
 <p>
+<b>Data version: </b>$dataVersion<br>
 <b>Total genome size: </b>$totalBasesText<br>
 <b>Gene count: </b>$itemCount<br>
 <b>Bases in genes: </b>$basesCovered<br>
