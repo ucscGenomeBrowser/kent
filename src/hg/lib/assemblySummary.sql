@@ -21,14 +21,14 @@ CREATE TABLE assemblySummary (
     genomeRep varchar(20),	# Full/Partial
     seqRelDate date,	# date YYYY-MM-DD sequence released to INSDC
     asmName varchar(255),	# submitter supplied name
-    asmSubmitter varchar(500),	# institution submitting assembly
+    asmSubmitter text,	# institution submitting assembly (occasionally a full grant-acknowledgment paragraph)
     gbrsPairedAsm varchar(20),	# GenBank<->RefSeq GCA/GCF relationship
     pairedAsmComp varchar(20),	# identical/different for GCA<->GCF relationship
     ftpPath varchar(500),	# ftp.ncbi.nlm.nih.gov/genomes/all/GCx/012/345/678/asmId
     excludedFromRefseq text,	# noted reason for exclusion from RefSeq
     relationToTypeMaterial varchar(255),	# note of assembly relation to sample
     asmNotLiveDate date,	# date YYYY-MM-DD assembly suppressed/replaced -- historical files only
-    assemblyType varchar(20),	# haploid/diploid/haploid-with-alt-loci/alternate-pseudohaplotype
+    assemblyType varchar(30),	# haploid/diploid/haploid-with-alt-loci/alternate-pseudohaplotype
     taxonGroup varchar(30),	# bacteria/viral/archaea/fungi/metagenomes/invertebrate/other/vertebrate_other/plant/vertebrate_mammalian/protozoa
     genomeSize bigint unsigned,	# total length of all top-level sequences in the primary assembly
     genomeSizeUngapped bigint unsigned,	# genome length not counting gaps (gap == 10 or more Ns)
@@ -43,9 +43,10 @@ CREATE TABLE assemblySummary (
     proteinCodingGeneCount int unsigned,	# protein coding gene count in annotation
     nonCodingGeneCount int unsigned,	# non coding gene count in annotation
     pubmedId text,	# semicolon separated list of PubMed ID(s)
-              #Indices	  PRIMARY KEY (assemblyAccession),
-    INDEX(taxId),	  KEY idxTaxid (taxid),
-    INDEX(organismName(100)),	  KEY idxOrganismName (organismName(100)),
-    INDEX(assemblyLevel),	  KEY idxTaxonGroup (taxonGroup),
-    INDEX(taxonGroup)	  KEY idxAssemblyLevel (assemblyLevel)
-);	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+              #Indices
+    PRIMARY KEY (assemblyAccession),
+    KEY idxTaxId (taxId),
+    KEY idxOrganismName (organismName(100)),
+    KEY idxTaxonGroup (taxonGroup),
+    KEY idxAssemblyLevel (assemblyLevel)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
