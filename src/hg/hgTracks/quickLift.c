@@ -111,6 +111,13 @@ if (!drawTriangle && isCenterLabelIncluded(tg))
     {
     height += fontHeight;
     yOff -= fontHeight;
+    if ((regions != NULL) && theImgBox && curImgTrack)
+        {
+        // There are lines to draw and they go up over the center label.  dragScroll
+        // can't show that slice of the image while the image is moving, so tell it to
+        // put up the center label as text instead (see panImages() in hgTracks.js).
+        curImgTrack->cntrLabDrawnOver = TRUE;
+        }
     }
 
 if (drawTriangle && (hr == NULL))  
