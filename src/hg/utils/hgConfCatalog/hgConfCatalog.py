@@ -233,6 +233,15 @@ RELEASE_GATES = {
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12116", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
+        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:178",
+          default="FALSE", role="gate", verified=True, ticket="37973",
+          note="A link from the Convert page to liftRequest.html, the page "
+               "that requests a new whole-genome alignment.  The assembly "
+               "list only offers targets that already have a chain from the "
+               "source, so the Convert page is where a user finds out theirs "
+               "is missing, but nothing in the tree linked to the request "
+               "page.  Off until the request pipeline is confirmed ready to "
+               "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10152",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
