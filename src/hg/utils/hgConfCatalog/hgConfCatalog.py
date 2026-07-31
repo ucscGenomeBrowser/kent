@@ -1081,9 +1081,6 @@ EXTERNAL = {
           note="A prefix family enumerated at runtime: alternative "
                "namedSessionDb locations to search when resolving a shared "
                "session."),
-        h("encpipeline_prod", "internal", "hg/hgTracks/hgTracks.c:9867",
-          verified=True, deprecated=True,
-          note="Read via cfgValsWithPrefix from the ENCODE pipeline era."),
     ],
 }
 

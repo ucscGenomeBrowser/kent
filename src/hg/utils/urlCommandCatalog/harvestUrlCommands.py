@@ -99,19 +99,10 @@ def build_macros():
         r'(?:\s+(?:(?:"(?:[^"\\]|\\.)*")|(?:[A-Za-z_]\w*)))*)'
         r'\s*(?:/[/*].*)?$')
     piece_re = re.compile(r'"(?:[^"\\]|\\.)*"|[A-Za-z_]\w*')
-    # static char *dbCgiName = "db";  Not every name is a #define: web.c holds
-    # db, org and clade this way, and they are the most-used URL params there are.
-    const_re = re.compile(
-        r'^\s*(?:static\s+)?(?:const\s+)?char\s*\*\s*([A-Za-z_]\w*)\s*=\s*'
-        r'("(?:[^"\\]|\\.)*")\s*;')
 
     for fn in macro_files():
         for line in open(fn, errors="replace"):
             m = lit_re.match(line)
-            if m:
-                macro.setdefault(m.group(1), m.group(2)[1:-1])
-                continue
-            m = const_re.match(line)
             if m:
                 macro.setdefault(m.group(1), m.group(2)[1:-1])
                 continue
@@ -137,8 +128,13 @@ def build_macros():
     return macro
 
 
-def resolve(tok, macro):
-    """Turn one C token into the name it stands for, or {ident} if unknown."""
+def resolve(tok, macro, localconst=None):
+    """Turn one C token into the name it stands for, or {ident} if unknown.
+
+    localconst is the file's own char * constants, which take precedence over
+    the shared #define table and must never be shared between files: see
+    CONST_RE for why.
+    """
     tok = tok.strip()
     if not tok:
         return None
@@ -146,6 +142,8 @@ def resolve(tok, macro):
         return tok[1:-1]
     if tok == "NULL":
         return None
+    if localconst and tok in localconst:
+        return localconst[tok]
     if tok in macro:
         return macro[tok]
     if re.match(r'^[A-Za-z_]\w*$', tok):
@@ -156,6 +154,25 @@ def resolve(tok, macro):
 # ---------------------------------------------------------------------------
 # scanning
 # ---------------------------------------------------------------------------
+
+# static char *dbCgiName = "db";  Not every name is a #define: web.c holds db,
+# org and clade this way, and they are the most-used URL params there are.
+# Resolved per file and never pooled, because the same identifier means
+# different things in different programs, and a pooled table let whichever file
+# was walked first answer for all of them: five unrelated cartRemove(cart,
+# varName) sites were reported as removing "dnaLines", the value an assembly
+# tool happens to give its own varName.
+#
+# The cost is the genuine cross-file case, a const defined in one .c and
+# declared extern in a header: snp125ColorSourceOldVar (hg/cgilib/snp125Ui.c)
+# now reads as {snp125ColorSourceOldVar} at its hgTrackUi call site.  Pooling
+# only extern-declared names would recover it but bring the collisions back,
+# since `database` is extern in hgTracks and separately initialized to a
+# literal in an unrelated ENCODE tool.  One honest {ident} beats eleven
+# confident wrong answers.
+CONST_RE = re.compile(
+    r'^[ \t]*(?:static[ \t]+)?(?:const[ \t]+)?char[ \t]*\*[ \t]*([A-Za-z_]\w*)'
+    r'[ \t]*=[ \t]*("(?:[^"\\]|\\.)*")[ \t]*;', re.M)
 
 EXCLUDE_RE = re.compile(r'\bchar\s*\*\s*excludeVars\s*\[\s*\]\s*=\s*\{')
 
@@ -217,7 +234,7 @@ def owner(path):
     return r
 
 
-def find_exclude_vars(text, path, macro):
+def find_exclude_vars(text, path, macro, localconst):
     """Pull the members out of every excludeVars[] declaration in one file."""
     out = []
     for m in EXCLUDE_RE.finditer(text):
@@ -246,19 +263,19 @@ def find_exclude_vars(text, path, macro):
         body = re.sub(r'/\*.*?\*/', '', body, flags=re.S)
         body = re.sub(r'//[^\n]*', '', body)
         for tok in body.split(","):
-            name = resolve(tok, macro)
+            name = resolve(tok, macro, localconst)
             if name:
                 out.append((name, "%s:%d" % (rel(path), line)))
     return out
 
 
-def find_matches(regex, text, path, macro, skip=()):
+def find_matches(regex, text, path, macro, localconst, skip=()):
     out = []
     for m in regex.finditer(text):
         tok = m.group(1)
         if tok in skip:
             continue
-        name = resolve(tok, macro)
+        name = resolve(tok, macro, localconst)
         if not name:
             continue
         line = text.count("\n", 0, m.start()) + 1
@@ -280,12 +297,15 @@ def harvest():
                 and "cartRemove" not in text:
             continue
         who = owner(path)
-        for name, src in find_exclude_vars(text, path, macro):
+        localconst = {m.group(1): m.group(2)[1:-1]
+                      for m in CONST_RE.finditer(text)}
+        for name, src in find_exclude_vars(text, path, macro, localconst):
             found["excludeVars"][who].append((name, src))
         for name, src in find_matches(CGI_READ_RE, text, path, macro,
-                                      CGI_READ_SKIP):
+                                      localconst, CGI_READ_SKIP):
             found["cgiReads"][who].append((name, src))
-        for name, src in find_matches(CART_REMOVE_RE, text, path, macro):
+        for name, src in find_matches(CART_REMOVE_RE, text, path, macro,
+                                      localconst):
             found["cartRemoves"][who].append((name, src))
     return found, macro
 
