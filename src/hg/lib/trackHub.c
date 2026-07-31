@@ -1893,6 +1893,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        startsWithNoCase("gvf", tdb->type) || \
        startsWithNoCase("genePred", tdb->type) || \
        startsWithNoCase("narrowPeak", tdb->type) || \
+       startsWithNoCase("broadPeak", tdb->type) || \
        startsWithNoCase("bigLolly", tdb->type) || \
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
