@@ -20,6 +20,11 @@ ln -s /hive/data/outside/popEve input
 cd /hive/data/outside/popEve
 wget -nv https://data.evemodel.org/popeve/v1.1/downloads/grch38_popEVE_ukbb_20250715.vcf.gz
 
+# NOTE: the steps in this section produce the intermediate SPARSE heatmap. The final track is
+# DENSE (all 19 substitutions per position); see the DENSE REBUILD section below. These steps
+# still run because they produce popEve_sorted.tsv, the codon-coordinate and strand source
+# reused by the dense build.
+#
 # The combined VCF is one position-sorted file with all proteins interleaved (overlapping
 # genes share positions), so records are grouped by protein on disk before conversion.
 # Each protein becomes one heatmap BED12+ entry: columns = amino acid positions at codon
@@ -52,7 +57,9 @@ bash runBuild.sh
 #   5. vcfToPopEveHeatmap.py popEve_sorted.tsv np_strand.tsv popEve_raw.bed $LO $HI
 #   6. bedSort + awk filter to chrom.sizes -> popEve_filtered.bed
 #   7. bedToBigBed -type=bed12+ -tab -as=popEve_heatmap.as popEve_filtered.bed chrom.sizes popEve.bb
-# Scripts: ~/kent/src/hg/makeDb/scripts/popEve/{extractPopEve.py,vcfToPopEveHeatmap.py,popEve_heatmap.as}
+# Scripts (all in ~/kent/src/hg/makeDb/scripts/popEve/): extractPopEve.py,
+#   vcfToPopEveHeatmap.py, popEve_heatmap.as, and the build drivers runBuild.sh (sparse /
+#   coordinate foundation) and runBuildDense.sh (dense rebuild).
 
 # Notes:
 #  - The genomic VCF contains only single-nucleotide-reachable substitutions (~6-9 of 19 per
@@ -111,7 +118,10 @@ bash runBuildDense.sh
 #   proteins: 18,968 (dense 18,331 from CSV; sparse 637 VCF fallback)
 #   NP_065910.3 (SHROOM3) is in the CSV but not the VCF coordinate set (all its VCF records
 #     were nan-skipped start codons), so its dense matrix is unused -> 18,331 dense, not 18,332
-#   wtMismatch 0 (CSV and VCF wildtype residues agree); trailingFix 1043
+#   wtMismatch 0 (CSV and VCF wildtype residues agree); posSparse 0 (every dense position
+#     also had CSV coverage); trailingFix 1043. The converter skips CSV rows with a nan/empty
+#     popEVE and skips positions where the CSV wildtype disagrees with the genomic one; both
+#     are 0 in this build (empty-popEVE rows already render as empty cells).
 #   popEve.bb size: 4,726,263,622 bytes
 
 mkdir -p /gbdb/hg38/popEve
