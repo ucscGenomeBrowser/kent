@@ -233,6 +233,15 @@ RELEASE_GATES = {
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12116", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
+        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:178",
+          default="FALSE", role="gate", verified=True, ticket="37973",
+          note="A link from the Convert page to liftRequest.html, the page "
+               "that requests a new whole-genome alignment.  The assembly "
+               "list only offers targets that already have a chain from the "
+               "source, so the Convert page is where a user finds out theirs "
+               "is missing, but nothing in the tree linked to the request "
+               "page.  Off until the request pipeline is confirmed ready to "
+               "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10152",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
@@ -569,11 +578,11 @@ CENTRAL_TABLES = {
           verified=True, env="HGDB_CLADETABLE", default="clade"),
         h("genomeCladeTableName", "table", "hg/lib/hdb.c:97", public=True,
           verified=True, env="HGDB_GENOMECLADETABLE", default="genomeClade"),
-        h("userDbName", "table", "hg/lib/cartDb.c:329", verified=True,
-          env="HGDB_USERDBTABLE", default="userDb",
+        h("userDbName", "table", "hg/lib/cartDb.c:329", public=True,
+          verified=True, env="HGDB_USERDBTABLE", default="userDb",
           note="Per-user cart storage."),
-        h("sessionDbName", "table", "hg/lib/cartDb.c:339", verified=True,
-          env="HGDB_SESSIONDBTABLE", default="sessionDb"),
+        h("sessionDbName", "table", "hg/lib/cartDb.c:339", public=True,
+          verified=True, env="HGDB_SESSIONDBTABLE", default="sessionDb"),
         h("defaultCartName", "table", "hg/lib/cartDb.c:319", public=True,
           verified=True, env="HGDB_DEFAULTCARTTABLE"),
         h("namedSessionDbName", "table", "hg/lib/cart.c:382", verified=True,
@@ -1081,9 +1090,6 @@ EXTERNAL = {
           note="A prefix family enumerated at runtime: alternative "
                "namedSessionDb locations to search when resolving a shared "
                "session."),
-        h("encpipeline_prod", "internal", "hg/hgTracks/hgTracks.c:9867",
-          verified=True, deprecated=True,
-          note="Read via cfgValsWithPrefix from the ENCODE pipeline era."),
     ],
 }
 

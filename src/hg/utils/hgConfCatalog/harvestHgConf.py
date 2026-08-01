@@ -128,6 +128,17 @@ PREFIX_CALL_RE = re.compile(
     r'\bcfg(?:Names|Vals)WithPrefix\s*\(\s*'
     r'("(?:[^"\\]|\\.)*"|[A-Za-z_]\w*)\s*\)')
 
+# Not every settings name is a #define; some files hold one in a file-scope
+# char * instead.  These are resolved per file and never pooled, because the
+# same identifier means different things in different programs: hgTracks passes
+# a runtime `database` to cfgNamesWithPrefix, while docIdView.c has a
+# file-scope `char *database = "encpipeline_prod"`.  Pooling them let one
+# program's constant answer for every other file, first one walked winning, and
+# put a hardcoded MySQL database name in the registry as an hg.conf setting.
+CONST_RE = re.compile(
+    r'^[ \t]*(?:static[ \t]+)?(?:const[ \t]+)?char[ \t]*\*[ \t]*([A-Za-z_]\w*)'
+    r'[ \t]*=[ \t]*("(?:[^"\\]|\\.)*")[ \t]*;', re.M)
+
 
 # ---------------------------------------------------------------------------
 # macro table
@@ -151,19 +162,10 @@ def build_macros():
         r'(?:\s+(?:(?:"(?:[^"\\]|\\.)*")|(?:[A-Za-z_]\w*)))*)'
         r'\s*(?:/[/*].*)?$')
     piece_re = re.compile(r'"(?:[^"\\]|\\.)*"|[A-Za-z_]\w*')
-    # Not every name is a #define.  cart.c holds several of the central-table
-    # settings in file-scope char * variables instead.
-    const_re = re.compile(
-        r'^\s*(?:static\s+)?(?:const\s+)?char\s*\*\s*([A-Za-z_]\w*)\s*=\s*'
-        r'("(?:[^"\\]|\\.)*")\s*;')
 
     for fn in macro_files():
         for line in open(fn, errors="replace"):
             m = lit_re.match(line)
-            if m:
-                macro.setdefault(m.group(1), m.group(2)[1:-1])
-                continue
-            m = const_re.match(line)
             if m:
                 macro.setdefault(m.group(1), m.group(2)[1:-1])
                 continue
@@ -189,8 +191,13 @@ def build_macros():
     return macro
 
 
-def resolve(tok, macro):
-    """Turn one C token into the name it stands for, or {ident} if unknown."""
+def resolve(tok, macro, localconst=None):
+    """Turn one C token into the name it stands for, or {ident} if unknown.
+
+    localconst is the file's own char * constants, which take precedence over
+    the shared #define table and must never be shared between files: see
+    CONST_RE for why.
+    """
     tok = tok.strip()
     if not tok:
         return None
@@ -198,6 +205,8 @@ def resolve(tok, macro):
         return tok[1:-1]
     if tok == "NULL":
         return None
+    if localconst and tok in localconst:
+        return localconst[tok]
     if tok in macro:
         return macro[tok]
     if re.match(r'^[A-Za-z_]\w*$', tok):
@@ -351,6 +360,8 @@ def scan_file(path, macro, found):
     # not settings reads.  Its cfgVal/cfgOption uses inside other functions are
     # still real, so only the definitions are skipped, by name, below.
     text = strip_comments(raw)
+    localconst = {m.group(1): m.group(2)[1:-1]
+                  for m in CONST_RE.finditer(text)}
     who = owner(path)
     for m in CFG_CALL_RE.finditer(text):
         op = m.end() - 1
@@ -375,8 +386,8 @@ def scan_file(path, macro, found):
             # parameters through.  Those are the implementation, not a read.
             if args[0] in NAME_SKIP or args[1] in NAME_SKIP:
                 continue
-            pre = resolve(args[0], macro)
-            suf = resolve(args[1], macro)
+            pre = resolve(args[0], macro, localconst)
+            suf = resolve(args[1], macro, localconst)
             if pre is None or suf is None:
                 continue
             if pre.startswith("{"):
@@ -394,12 +405,12 @@ def scan_file(path, macro, found):
         tok = args[idx]
         if tok in NAME_SKIP:
             continue
-        name = resolve(tok, macro)
+        name = resolve(tok, macro, localconst)
         if not name:
             continue
         rec = {"name": name, "src": src, "func": fn, "default": default}
         if spec.get("envArg") is not None and len(args) > spec["envArg"]:
-            env = resolve(args[spec["envArg"]], macro)
+            env = resolve(args[spec["envArg"]], macro, localconst)
             if env:
                 rec["env"] = env
         if spec.get("boolean"):
@@ -409,7 +420,10 @@ def scan_file(path, macro, found):
         found["reads"][who].append(rec)
 
     for m in PREFIX_CALL_RE.finditer(text):
-        name = resolve(m.group(1), macro)
+        if m.group(1) in NAME_SKIP:
+            # cfgValsWithPrefix passing its own parameter to cfgNamesWithPrefix
+            continue
+        name = resolve(m.group(1), macro, localconst)
         if name:
             line = text.count("\n", 0, m.start()) + 1
             found["prefixScans"][name].append("%s:%d" % (rel(path), line))

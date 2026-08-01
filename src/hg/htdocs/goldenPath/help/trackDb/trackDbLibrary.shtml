@@ -6933,8 +6933,8 @@ those values will be used to identify subtracks.
 </p>
 </div>
 
-<DIV class="maxCheckBoxes"><span class="types faceted composite"></span>
-<div class="format"><code>maxCheckBoxes &lt;integer&gt;</code></div>
+<DIV class="maxCheckboxes"><span class="types faceted composite"></span>
+<div class="format"><code>maxCheckboxes &lt;integer&gt;</code></div>
 <p>
 Frequently a facet may have a long list of possible values - too many to display at once in
 the track selection interface.  This setting limits the number of facet values displayed on

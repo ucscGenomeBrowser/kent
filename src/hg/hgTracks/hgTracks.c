@@ -1700,6 +1700,17 @@ if (track->limitedVis != tvHide)
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, labelfont, label);
+        if (theImgBox && curImgTrack)
+            {
+            // Keep the label as text too.  If something ends up drawn over this label
+            // (quickLift difference lines), dragScroll can't show the image slice while
+            // the image is moving, and puts up an html stand-in built from this instead.
+            struct rgbColor rgb = hvGfxColorIxToRgb(hvg, labelColor);
+            char color[16];
+            safef(color, sizeof color, "#%02X%02X%02X", rgb.r, rgb.g, rgb.b);
+            curImgTrack->cntrLabText = cloneString(label);
+            curImgTrack->cntrLabTextColor = cloneString(color);
+            }
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
