@@ -874,9 +874,18 @@ OTHER_CGIS = {
         "what": "The gateway and search pages, which share a cartJson command "
                 "channel.",
         "cmds": [
-            c("hgt_tSearch", "action", "hg/hgGateway/hgGateway.c:1250",
+            c("hggw_term", "action", "hg/hgGateway/hgGateway.c:1254",
               value="<term>", verified=True,
-              note="Search term. Same variable name the track search uses."),
+              note="Species or assembly search term for the gateway's "
+                   "autocomplete.  Read before the cart is loaded, to keep the "
+                   "lookup fast, and in hgGateway's excludeVars.  Spelled "
+                   "SEARCH_TERM in the source, which is why this row used to "
+                   "say hgt_tSearch: that name is the track search's, and a "
+                   "pooled #define table answered for both."),
+            c("hgcd_term", "action", "hg/hgChooseDb/hgChooseDb.c:224",
+              value="<term>", verified=True,
+              note="The same search term on hgChooseDb, which spells its own "
+                   "SEARCH_TERM differently.  In that CGI's excludeVars."),
             c("cjCmd", "action", "hg/inc/cartJson.h:11", value="<json>",
               verified=True,
               note="cartJson command channel, used by the page's own AJAX."),

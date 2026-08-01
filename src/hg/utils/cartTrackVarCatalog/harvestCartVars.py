@@ -69,8 +69,16 @@ MACRO_DIRS = ["inc", "lib", "hg/inc"]
 # ---------------------------------------------------------------------------
 
 def build_macros(dirs):
-    """Map every #define that resolves to a string literal, chasing aliases."""
+    """(name -> literal, names defined inconsistently) over the scanned dirs.
+
+    The second return value exists because a pooled table gives a name that two
+    files define differently whichever value the directory listing reached
+    first, so the answer changes between two checkouts of the same commit.
+    Those names resolve to {NAME} unless the file being scanned defines them
+    itself, the same call the per-file char * constants make.
+    """
     macro = {}
+    conflict = set()
     chains = []
     def_re = re.compile(
         r'^\s*#\s*define\s+([A-Za-z_][A-Za-z0-9_]*)\s+'
@@ -88,7 +96,10 @@ def build_macros(dirs):
             for line in open(os.path.join(p, fn), errors="replace"):
                 m = def_re.match(line)
                 if m:
-                    macro.setdefault(m.group(1), m.group(2)[1:-1])
+                    name, val = m.group(1), m.group(2)[1:-1]
+                    if name in macro and macro[name] != val:
+                        conflict.add(name)
+                    macro.setdefault(name, val)
                     continue
                 m = chain_re.match(line)
                 if m:
@@ -97,7 +108,23 @@ def build_macros(dirs):
         for a, b in chains:
             if a not in macro and b in macro:
                 macro[a] = macro[b]
-    return macro
+                if b in conflict:
+                    conflict.add(a)            # alias of an ambiguous name
+    return macro, conflict
+
+
+# #define NAME "literal" in the file being scanned.  Its own definition is the
+# one that file means, whatever the rest of the tree says.
+LOCAL_DEFINE_RE = re.compile(
+    r'^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)[ \t]+'
+    r'("(?:[^"\\]|\\.)*")[ \t]*(?:/[/*].*)?$', re.M)
+
+
+def local_defines(text):
+    # CONST_RE next door captures inside the quotes, so strip them here to
+    # match: localconst holds bare values.
+    return {m.group(1): m.group(2)[1:-1]
+            for m in LOCAL_DEFINE_RE.finditer(text)}
 
 
 # ---------------------------------------------------------------------------
@@ -158,8 +185,13 @@ def split_args(s):
     return out
 
 
-def resolve(arg, localconst, macro):
-    """Turn an argument into the string it evaluates to, if we can."""
+def resolve(arg, localconst, macro, conflict=None):
+    """Turn an argument into the string it evaluates to, if we can.
+
+    conflict is the set of names the tree defines inconsistently; without the
+    file's own definition to go on, those stay {NAME} rather than taking
+    whichever value was seen first.
+    """
     arg = arg.strip()
     if re.fullmatch(r'"((?:[^"\\]|\\.)*)"', arg):
         return arg[1:-1]
@@ -173,6 +205,8 @@ def resolve(arg, localconst, macro):
                 vals.append(t[1:-1])
             elif t in localconst:
                 vals.append(localconst[t])
+            elif conflict and t in conflict:
+                vals.append("{" + t + "}")
             elif t in macro:
                 vals.append(macro[t])
             else:
@@ -218,10 +252,13 @@ def enclosing_functions(lines):
     return encl
 
 
-def scan_file(fp, rel, macro):
+def scan_file(fp, rel, macro, conflict=None):
     """Return one record per track-scoped cart name found in one file."""
     txt = open(fp, errors="replace").read()
+    # The file's own #defines join its char * constants: both are what this
+    # file means, whatever the rest of the tree calls the same name.
     localconst = {m.group(1): m.group(2) for m in CONST_RE.finditer(txt)}
+    localconst.update(local_defines(txt))
     encl = enclosing_functions(txt.split("\n"))
 
     starts = [0]
@@ -246,7 +283,8 @@ def scan_file(fp, rel, macro):
         args = split_args(txt[i+1:match_close(txt, i)])
         if len(args) >= 4:
             ln = lineno(m.start())
-            recs.append(dict(var=resolve(args[3], localconst, macro),
+            recs.append(dict(var=resolve(args[3], localconst, macro,
+                                         conflict),
                              file=rel, line=ln, func=encl[ln], how="cth"))
 
     for m in FMT_RE.finditer(txt):
@@ -260,7 +298,7 @@ def scan_file(fp, rel, macro):
                 break
         if fi is None:
             continue
-        fmt = resolve(args[fi], localconst, macro)
+        fmt = resolve(args[fi], localconst, macro, conflict)
         rest = args[fi+1:]
         mm = re.match(r'^%s([._])(.*)$', fmt or "")
         if not mm:
@@ -271,13 +309,13 @@ def scan_file(fp, rel, macro):
                              func=encl[ln], how="fmtlit"))
         elif tail == "%s" and len(rest) >= 2:
             # "%s.%s", track, SUFFIX -> the suffix is the SECOND vararg
-            v = resolve(rest[1], localconst, macro)
+            v = resolve(rest[1], localconst, macro, conflict)
             if v and not v.startswith("EXPR:"):
                 recs.append(dict(var=sep+v, file=rel, line=ln,
                                  func=encl[ln], how="fmt"))
         elif tail == "%s.%s" and len(rest) >= 3:
-            v1 = resolve(rest[1], localconst, macro)
-            v2 = resolve(rest[2], localconst, macro)
+            v1 = resolve(rest[1], localconst, macro, conflict)
+            v2 = resolve(rest[2], localconst, macro, conflict)
             if not v1.startswith("EXPR:") and not v2.startswith("EXPR:"):
                 recs.append(dict(var=sep+v1+"."+v2, file=rel, line=ln,
                                  func=encl[ln], how="fmt3"))
@@ -295,7 +333,7 @@ def harvest(dirs=None, quiet=False):
     definition rather than one here and a second one written out by hand.
     """
     dirs = dirs or [d.strip() for d in DEFAULT_DIRS.split(",") if d.strip()]
-    macro = build_macros(dirs)
+    macro, conflict = build_macros(dirs)
 
     files = []
     for d in dirs:
@@ -308,7 +346,8 @@ def harvest(dirs=None, quiet=False):
 
     records = []
     for fp in files:
-        records.extend(scan_file(fp, os.path.relpath(fp, ROOT), macro))
+        records.extend(scan_file(fp, os.path.relpath(fp, ROOT), macro,
+                                 conflict))
 
     if not quiet:
         print("scanned %d files in %d dirs, %d macros, %d records"
