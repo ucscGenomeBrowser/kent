@@ -71,7 +71,10 @@ import re
 import subprocess
 import sys
 
-ROOT = os.path.expanduser("~/kent/src")
+# The tree to scan.  KENT_SRC lets a nightly run point at a pristine
+# checkout instead of somebody's working tree, where a stray .c file or a
+# half-finished edit would show up as a finding.
+ROOT = os.environ.get("KENT_SRC") or os.path.expanduser("~/kent/src")
 
 # Walked for call sites.  lib is in here because a few generic settings
 # (udc.*, noSqlInj.*) are read from the core library rather than from hg.
