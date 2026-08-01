@@ -50,7 +50,10 @@ import os
 import re
 import sys
 
-ROOT = os.path.expanduser("~/kent/src")
+# The tree to scan.  KENT_SRC lets a nightly run point at a pristine
+# checkout instead of somebody's working tree, where a stray .c file or a
+# half-finished edit would show up as a finding.
+ROOT = os.environ.get("KENT_SRC") or os.path.expanduser("~/kent/src")
 
 # Everything that draws or configures a track.  hgc and hgTables are in the
 # default list because they read and write per-track vars too, which is easy
@@ -282,6 +285,55 @@ def scan_file(fp, rel, macro):
 
 
 # ---------------------------------------------------------------------------
+# entry point for the catalog next door
+# ---------------------------------------------------------------------------
+
+def harvest(dirs=None, quiet=False):
+    """Scan the tree and return the raw records.
+
+    cartTrackVarCatalog.py --reconcile imports this, so the scan has one
+    definition rather than one here and a second one written out by hand.
+    """
+    dirs = dirs or [d.strip() for d in DEFAULT_DIRS.split(",") if d.strip()]
+    macro = build_macros(dirs)
+
+    files = []
+    for d in dirs:
+        p = os.path.join(ROOT, d)
+        if not os.path.isdir(p):
+            sys.exit("no such directory: %s" % p)
+        for fn in sorted(os.listdir(p)):
+            if fn.endswith(".c"):
+                files.append(os.path.join(p, fn))
+
+    records = []
+    for fp in files:
+        records.extend(scan_file(fp, os.path.relpath(fp, ROOT), macro))
+
+    if not quiet:
+        print("scanned %d files in %d dirs, %d macros, %d records"
+              % (len(files), len(dirs), len(macro), len(records)),
+              file=sys.stderr)
+    return records
+
+
+def resolved(records):
+    """name -> first file:line, for the names the scan resolved to a literal.
+
+    An EXPR: or {ident} record marks a name built at run time, which is signal
+    for a person reading the harvester output but cannot be compared against a
+    catalog of literal names, so it is dropped here.
+    """
+    out = {}
+    for r in sorted(records, key=lambda r: (r["file"], r["line"])):
+        var = r["var"]
+        if var.startswith("EXPR:") or "{" in var:
+            continue
+        out.setdefault(var, "%s:%d" % (r["file"], r["line"]))
+    return out
+
+
+# ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
 
@@ -302,23 +354,7 @@ def main():
     args = ap.parse_args()
 
     dirs = [d.strip() for d in args.dirs.split(",") if d.strip()]
-    macro = build_macros(dirs)
-
-    files = []
-    for d in dirs:
-        p = os.path.join(ROOT, d)
-        if not os.path.isdir(p):
-            sys.exit("no such directory: %s" % p)
-        for fn in sorted(os.listdir(p)):
-            if fn.endswith(".c"):
-                files.append(os.path.join(p, fn))
-
-    records = []
-    for fp in files:
-        records.extend(scan_file(fp, os.path.relpath(fp, ROOT), macro))
-
-    print("scanned %d files in %d dirs, %d macros, %d records"
-          % (len(files), len(dirs), len(macro), len(records)), file=sys.stderr)
+    records = harvest(dirs)
 
     def wanted(var):
         if args.keep_unresolved:
