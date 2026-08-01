@@ -26,7 +26,9 @@
 # Calibration sources:
 #   Walsh 2017 (PMID 27532257; Genet Med; DOI 10.1038/gim.2016.90)
 #                                   — PS4 case-control reference (Tables S5A/S5B;
-#                                     60,706 ExAC samples; 7,855 cases)
+#                                     60,706 ExAC samples; 7,855 cases). NOTE: the
+#                                     Walsh-2017 PS4 track was RETIRED from the hub
+#                                     2026-07 per the VCEP (Q5).
 #   Walsh 2019 (PMID 30696458; Genome Medicine; DOI 10.1186/s13073-019-0616-z)
 #                                   — PM1 hotspot codon ranges (Table S4),
 #                                     per-gene NonTrunc ExAC denominators
@@ -72,10 +74,10 @@
 #     cmpVCEPEvRepo/                    (VCEP Curated Variants — EvRepo, with codes)
 #     cmpVCEPClinVar506161/             (VCEP ClinVar submissions, no codes)
 #     cmpVCEPWalsh2019/                 (Walsh 2019 Pre-EvRepo Table S6 curations)
-#     cmpVCEPWalshOR/                   (Walsh 2017 gene-level OR — PS4)
+#     cmpVCEPWalshOR/                   (Walsh 2017 gene-level OR — PS4; RETIRED from hub, Q5)
 #     cmpVCEPAtlasEF/                   (Atlas of Cardiac Genetic Variation
-#                                        per-variant + UCSC-computed OR — PS4)
-#     cmpVCEPProvisionalClass/          (Computable ACMG Criteria Summary; per-variant codes)
+#                                        per-variant + UCSC OR — PS4; RETIRED from hub, Q5)
+#     cmpVCEPProvisionalClass/          (Variant Evidence Summary; per-variant evidence + criteria)
 #
 # Build scripts:                     ~/kent/src/hg/makeDb/scripts/cardiomyopathyVCEP/
 #     cmpVCEPClinDomains.py             (B.1 — PM1 hotspot regions; also provides
@@ -160,8 +162,8 @@
 #        - PM4 for MYH7 (PVS1 N/A): spec redirects PM4 to non-NMD truncating at
 #          Moderate/Supporting, no boundary given — build uses last exon OR within
 #          50 nt of the final exon-exon junction.
-#        - BP7 "not highly conserved": no metric/cutoff in spec — build uses
-#          phyloP470way <= 0 together with SpliceAI < 0.20.
+#        - BP7 "not highly conserved": the VCEP removed the conservation requirement
+#          and set BP7 at SpliceAI < 0.1 (Walker 2023, PMID 37352859).
 #
 #
 # A.2  ClinGen EvRepo classifications (REST JSON)
@@ -198,7 +200,7 @@
 #
 # A.6  SpliceAI (already on hgwdev; no download)
 #      /gbdb/hg38/bbi/spliceAi.bb  (bed9+4; AIscore in col 9, name="ref>alt")
-#      Used by the B.11 SpliceAI safety net and BP7.
+#      Used by the B.11 splice flag and BP7 (SpliceAI < 0.1).
 #
 # A.7  CardioBoost precomputed predictions
 #      cmp_downloads/cardioboost/cm_prediction.RData  (precomputed table,
@@ -326,6 +328,8 @@
 #      earlier desaturated palette was dropped). Carries no per-code evidence.
 #
 # B.9  cmpVCEPWalshOR.py — Walsh 2017 gene-level case-control OR (PS4)
+#      [RETIRED from the hub 2026-07 per the VCEP (Q5: do not display Walsh 2017/2019
+#       PS4; ORs use current cohorts). Script + data retained in the tree for reference.]
 #      Source: Walsh 2017 Supplementary_Tables_resubmit.xlsx, Tables S5A (HCM) /
 #      S5B (DCM). Output: 48 features = 8 genes x {HCM, DCM} x {All protein-
 #      altering, Truncating, Non-truncating}, each spanning the gene CDS (MANE),
@@ -337,6 +341,7 @@
 #      Walsh-2019 EF table (a different statistic; per CSpec, PS4 cites Walsh 2017).
 #
 # B.10 cmpVCEPAtlasEF.py — Atlas per-variant case-counts + UCSC-computed OR (PS4)
+#      [RETIRED from the hub 2026-07 per the VCEP (Q5). Script + data retained.]
 #      Source: cmp_downloads/atlas/variants/var_*.html (173 parsed; 16 parse
 #      failures). Output: 178 features (a variant renders once per disease cohort
 #      where it has data). UCSC computes the OR (Fisher 2x2 with Haldane 0.5
@@ -346,28 +351,30 @@
 #      Strong 16, Moderate 30, Supporting 44, below threshold 88. Every mouseover
 #      carries the caveat that the OR is UCSC-computed against ExAC (not gnomAD).
 #
-# B.11 cmpVCEPProvisionalClass.py — Computable ACMG Criteria Summary
-#      (Formerly "NON-FINAL Provisional Classification"; reframed 2026-07-08 per
-#      the CM VCEP chair L. Bronicki. The track no longer computes an overall ACMG
-#      classification, only the computable codes that fire per variant.)
+# B.11 cmpVCEPProvisionalClass.py — Variant Evidence Summary
+#      (Formerly "NON-FINAL Provisional Classification"; reframed 2026-07 per the
+#      CM VCEP. Computes no overall classification. For each variant it lists,
+#      evidence-first, the computable evidence and the ACMG criterion each item
+#      would support.)
 #      Variant universe: identical to B.3 (10,974). Consumes the B.6 annotation
-#      TSV. Computable codes applied: BA1/BS1/PM2_supporting (B.3 FAF95),
+#      TSV. Evidence gathered: BA1/BS1/PM2_supporting (B.3 FAF95),
 #      PP3/BP4 (REVEL, missense), PM1 (CSpec hotspot region), PS1/PM5 (EvRepo
 #      P/LP reference, leave-one-out; a variant cannot earn the code from its
 #      own entry; PS1 reference excludes established splice-impact variants e.g.
 #      MYBPC3 c.2308G>A), PM4 (NMD-escaping truncating, non-MYBPC3: last exon or
 #      within 50 nt of the final exon-exon junction), BP7 (synonymous +
-#      SpliceAI < 0.20 + phyloP470way <= 0). PM1<->PM5 mutual exclusion enforced
-#      per CSpec (keep PM5, the variant-specific code; drop PM1; PM1+PS1
-#      co-occurrence flagged). HCM/DCM diseaseTag populated. A SpliceAI score
-#      >= 0.20 is recorded as an informational splice flag.
-#      Per-variant output = the list of triggered codes only; NO overall
+#      SpliceAI < 0.1, per Walker 2023 PMID 37352859; conservation requirement
+#      removed per the VCEP). PM1<->PM5 mutual exclusion enforced per CSpec (keep
+#      PM5, the variant-specific code; drop PM1; PM1+PS1 co-occurrence flagged).
+#      HCM/DCM diseaseTag populated. A SpliceAI score >= 0.20 is recorded as an
+#      informational splice flag.
+#      Mouseover is evidence-first ("evidence -> supports CODE"); NO overall
 #      classification is calculated. The GN002 combining logic remains in the
 #      script as classify() but is retired/uncalled. Clinical/functional codes
 #      (PS2/PS3/PS4/PP1/PP4/BS3/BS4) are not computed. Single neutral display
 #      color 91,107,122; no classification encoded.
-#      Output: 10,974 features. Code firing: BA1 210, BS1 367, PM2_Supporting
-#      9,893, PP3 1,436, BP4 1,647, BP7 1,356, PM1 1,293, PM4 27, PM5 11, PS1 0.
+#      Output: 10,974 features. Evidence firing: BA1 210, BS1 367, PM2_Supporting
+#      9,893, PP3 1,436, BP4 1,647, BP7 2,419, PM1 1,293, PM4 27, PM5 11, PS1 0.
 
 
 ##############################################################################
@@ -381,9 +388,10 @@
 #   hg19/trackDb.txt           (mirrors hg38; differs in bigDataUrl + an hg19
 #                              provenance header noting liftOver-derived coords)
 #
-# trackDb structure: 7 top-level groups -> 11 tracks. Three are composites:
-#   Bioinformatic (REVEL on + CardioBoost off), VCEP Curated Variants (EvRepo on
-#   + ClinVar off + Walsh 2019 off), PS4 Case-Control (Walsh OR on + Atlas EF off).
+# trackDb structure: 6 top-level groups -> 9 tracks. Two are composites:
+#   Bioinformatic (REVEL on + CardioBoost off) and VCEP Curated Variants (EvRepo on
+#   + ClinVar off + Walsh 2019 off). (The PS4 Case-Control composite was retired
+#   from the hub per the VCEP, 2026-07.)
 # bigBed filterValues on the ACMG-code / ps4Strength fields; default visibility
 # tuned so the first view is clean (dense for the big per-variant tracks).
 #
@@ -406,8 +414,7 @@
 #   - hubCheck: silent pass (exit 0) on hg38 + hg19.
 #   - Cross-assembly parity (hg38 == hg19 feature counts):
 #       PM1 28 | PVS1 16 | AF 10,974 | REVEL 22,466 | EvRepo 25 | Walsh2019 155 |
-#       ClinVar 199 | WalshOR 48 | AtlasEF 178 | Computable codes 10,974 |
-#       CardioBoost 31,236
+#       ClinVar 199 | Variant evidence 10,974 | CardioBoost 31,236
 #   - Worked example, MYH7 p.Arg870His (NM_000257.4:c.2609G>A, chr14:23424839 hg38):
 #       EvRepo:       Pathogenic, codes PM1;PM2;PP1_Strong;PS4
 #       EvRepo R870C: Likely Pathogenic at the adjacent codon-870 position
@@ -415,9 +422,9 @@
 #       PM1:          within MYH7 167-931
 #       REVEL:        0.853 -> PP3_supporting
 #       gnomAD AF:    absent from v4.1 exomes -> PM2_supporting
-#       Walsh OR:     MYH7 non-truncating HCM, OR 12.0 (10.9-13.3) -> Moderate
-#       Computable codes: PM1+PM2+PP3 triggered; no overall classification is
-#                     computed (the VCEP Pathogenic call rests on PS4+PP1, manual)
+#       Variant evidence: PM1 hotspot, PM2 rarity, PP3/REVEL shown (each tagged with
+#                     the criterion it supports); no overall classification (the VCEP
+#                     Pathogenic call rests on PS4+PP1, manual)
 
 
 ##############################################################################
