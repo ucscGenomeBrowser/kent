@@ -73,10 +73,10 @@ width=65%
 <div class="row">
   <div class="col-md-6">
 ### Step 1: Select Your Assembly
-
   Use the **Change selected genome** search box to switch assemblies. Type a species name, common
   name, or assembly ID, then choose one from the list. **Current Genome** shows which assembly is
   active.
+
   </div>
 
   <div class="col-md-6">
