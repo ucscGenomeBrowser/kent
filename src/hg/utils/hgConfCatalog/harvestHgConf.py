@@ -71,7 +71,10 @@ import re
 import subprocess
 import sys
 
-ROOT = os.path.expanduser("~/kent/src")
+# The tree to scan.  KENT_SRC lets a nightly run point at a pristine
+# checkout instead of somebody's working tree, where a stray .c file or a
+# half-finished edit would show up as a finding.
+ROOT = os.environ.get("KENT_SRC") or os.path.expanduser("~/kent/src")
 
 # Walked for call sites.  lib is in here because a few generic settings
 # (udc.*, noSqlInj.*) are read from the core library rather than from hg.
@@ -145,13 +148,20 @@ CONST_RE = re.compile(
 # ---------------------------------------------------------------------------
 
 def build_macros():
-    """Map every #define that resolves to a string literal, chasing aliases.
+    """(name -> literal, names defined inconsistently) over the whole tree.
 
     Same two-pass approach as harvestUrlCommands.py: the tree defines names in
     terms of other names, so concatenating forms are resolved right to left
     over several rounds until nothing new appears.
+
+    And the same reason for the second return value: a pooled table gives a name
+    that two files define differently whichever value the filesystem walk
+    reached first, so the answer changes between two checkouts of the same
+    commit.  Those names resolve to {NAME} unless the file being scanned defines
+    them itself.
     """
     macro = {}
+    conflict = set()
     chains = []
     lit_re = re.compile(
         r'^\s*#\s*define\s+([A-Za-z_]\w*)\s+'
@@ -167,7 +177,10 @@ def build_macros():
         for line in open(fn, errors="replace"):
             m = lit_re.match(line)
             if m:
-                macro.setdefault(m.group(1), m.group(2)[1:-1])
+                name, val = m.group(1), m.group(2)[1:-1]
+                if name in macro and macro[name] != val:
+                    conflict.add(name)
+                macro.setdefault(name, val)
                 continue
             m = cat_re.match(line)
             if m:
@@ -183,20 +196,36 @@ def build_macros():
                     out += piece[1:-1]
                 elif piece in macro:
                     out += macro[piece]
+                    if piece in conflict:
+                        conflict.add(name)     # built on an ambiguous piece
                 else:
                     out = None
                     break
             if out is not None:
                 macro[name] = out
-    return macro
+    return macro, conflict
 
 
-def resolve(tok, macro, localconst=None):
+# #define NAME "literal" in the file being scanned.  Its own definition is the
+# one that file means, whatever the rest of the tree says.
+LOCAL_DEFINE_RE = re.compile(
+    r'^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)[ \t]+'
+    r'("(?:[^"\\]|\\.)*")[ \t]*(?:/[/*].*)?$', re.M)
+
+
+def local_defines(text):
+    return {m.group(1): m.group(2)[1:-1]
+            for m in LOCAL_DEFINE_RE.finditer(text)}
+
+
+def resolve(tok, macro, localconst=None, conflict=None):
     """Turn one C token into the name it stands for, or {ident} if unknown.
 
-    localconst is the file's own char * constants, which take precedence over
-    the shared #define table and must never be shared between files: see
-    CONST_RE for why.
+    localconst is the file's own char * constants and #defines, which take
+    precedence over the shared #define table and must never be shared between
+    files: see CONST_RE for why.  conflict is the set of names the tree defines
+    inconsistently; without the file's own definition to go on, those are
+    {ident} rather than a guess.
     """
     tok = tok.strip()
     if not tok:
@@ -207,6 +236,8 @@ def resolve(tok, macro, localconst=None):
         return None
     if localconst and tok in localconst:
         return localconst[tok]
+    if conflict and tok in conflict:
+        return "{%s}" % tok
     if tok in macro:
         return macro[tok]
     if re.match(r'^[A-Za-z_]\w*$', tok):
@@ -349,7 +380,7 @@ def strip_comments(text):
 # scanning
 # ---------------------------------------------------------------------------
 
-def scan_file(path, macro, found):
+def scan_file(path, macro, found, conflict=None):
     try:
         raw = open(path, errors="replace").read()
     except OSError:
@@ -360,8 +391,11 @@ def scan_file(path, macro, found):
     # not settings reads.  Its cfgVal/cfgOption uses inside other functions are
     # still real, so only the definitions are skipped, by name, below.
     text = strip_comments(raw)
+    # The file's own #defines join its char * constants: both are what this
+    # file means, whatever the rest of the tree calls the same name.
     localconst = {m.group(1): m.group(2)[1:-1]
                   for m in CONST_RE.finditer(text)}
+    localconst.update(local_defines(text))
     who = owner(path)
     for m in CFG_CALL_RE.finditer(text):
         op = m.end() - 1
@@ -386,8 +420,8 @@ def scan_file(path, macro, found):
             # parameters through.  Those are the implementation, not a read.
             if args[0] in NAME_SKIP or args[1] in NAME_SKIP:
                 continue
-            pre = resolve(args[0], macro, localconst)
-            suf = resolve(args[1], macro, localconst)
+            pre = resolve(args[0], macro, localconst, conflict)
+            suf = resolve(args[1], macro, localconst, conflict)
             if pre is None or suf is None:
                 continue
             if pre.startswith("{"):
@@ -405,12 +439,12 @@ def scan_file(path, macro, found):
         tok = args[idx]
         if tok in NAME_SKIP:
             continue
-        name = resolve(tok, macro, localconst)
+        name = resolve(tok, macro, localconst, conflict)
         if not name:
             continue
         rec = {"name": name, "src": src, "func": fn, "default": default}
         if spec.get("envArg") is not None and len(args) > spec["envArg"]:
-            env = resolve(args[spec["envArg"]], macro, localconst)
+            env = resolve(args[spec["envArg"]], macro, localconst, conflict)
             if env:
                 rec["env"] = env
         if spec.get("boolean"):
@@ -423,14 +457,14 @@ def scan_file(path, macro, found):
         if m.group(1) in NAME_SKIP:
             # cfgValsWithPrefix passing its own parameter to cfgNamesWithPrefix
             continue
-        name = resolve(m.group(1), macro, localconst)
+        name = resolve(m.group(1), macro, localconst, conflict)
         if name:
             line = text.count("\n", 0, m.start()) + 1
             found["prefixScans"][name].append("%s:%d" % (rel(path), line))
 
 
 def harvest():
-    macro = build_macros()
+    macro, conflict = build_macros()
     found = {"reads": collections.defaultdict(list),
              "profiles": collections.defaultdict(list),
              "prefixScans": collections.defaultdict(list)}
@@ -438,9 +472,9 @@ def harvest():
         # The accessors themselves live here; their bodies read the config
         # hash directly and would otherwise show up as reads of {name}.
         if rel(path) in ("hg/lib/hgConfig.c", "hg/inc/hgConfig.h"):
-            scan_file(path, macro, found)
+            scan_file(path, macro, found, conflict)
             continue
-        scan_file(path, macro, found)
+        scan_file(path, macro, found, conflict)
     return found, macro
 
 

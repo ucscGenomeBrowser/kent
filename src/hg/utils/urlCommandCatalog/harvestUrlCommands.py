@@ -54,7 +54,10 @@ import os
 import re
 import sys
 
-ROOT = os.path.expanduser("~/kent/src")
+# The tree to scan.  KENT_SRC lets a nightly run point at a pristine
+# checkout instead of somebody's working tree, where a stray .c file or a
+# half-finished edit would show up as a finding.
+ROOT = os.environ.get("KENT_SRC") or os.path.expanduser("~/kent/src")
 
 # Walked for call sites.  hg/lib and hg/cgilib are in here because the cart
 # machinery itself reads URL commands (hgsid, ignoreCookie, the session
@@ -77,7 +80,7 @@ MACRO_DIRS = ["inc", "hg/inc"]
 # ---------------------------------------------------------------------------
 
 def build_macros():
-    """Map every #define that resolves to a string literal, chasing aliases.
+    """(name -> literal, names defined inconsistently) over the whole tree.
 
     Two passes, because the tree defines names in terms of other names:
         #define hgHub          "hgHubConnect."
@@ -85,8 +88,19 @@ def build_macros():
         #define hgHubDoClear   hgHubDo "clear"
     The concatenating form is handled by resolving right to left over several
     rounds until nothing new appears.
+
+    The second return value is the reason this is not just a dict.  A pooled
+    table answers for the whole tree, so a name that two CGIs define
+    differently gets whichever value the walk reached first, and the walk order
+    is the filesystem's: SEARCH_TERM is "hggw_term" in hgGateway and
+    "hgcd_term" in hgChooseDb, and a fresh clone and a working tree of the same
+    commit disagreed about which one hgGateway reads.  Those names are reported
+    as ambiguous and resolve to {NAME} unless the file being scanned defines
+    them itself, which is the same call CONST_RE makes below and for the same
+    reason.
     """
     macro = {}
+    conflict = set()
     chains = []
     # #define NAME "literal"
     lit_re = re.compile(
@@ -104,7 +118,10 @@ def build_macros():
         for line in open(fn, errors="replace"):
             m = lit_re.match(line)
             if m:
-                macro.setdefault(m.group(1), m.group(2)[1:-1])
+                name, val = m.group(1), m.group(2)[1:-1]
+                if name in macro and macro[name] != val:
+                    conflict.add(name)
+                macro.setdefault(name, val)
                 continue
             m = cat_re.match(line)
             if m:
@@ -120,20 +137,36 @@ def build_macros():
                     out += piece[1:-1]
                 elif piece in macro:
                     out += macro[piece]
+                    if piece in conflict:
+                        conflict.add(name)     # built on an ambiguous piece
                 else:
                     out = None
                     break
             if out is not None:
                 macro[name] = out
-    return macro
+    return macro, conflict
 
 
-def resolve(tok, macro, localconst=None):
+# #define NAME "literal" in the file being scanned.  Its own definition is the
+# one that file means, whatever the rest of the tree says.
+LOCAL_DEFINE_RE = re.compile(
+    r'^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)[ \t]+'
+    r'("(?:[^"\\]|\\.)*")[ \t]*(?:/[/*].*)?$', re.M)
+
+
+def local_defines(text):
+    return {m.group(1): m.group(2)[1:-1]
+            for m in LOCAL_DEFINE_RE.finditer(text)}
+
+
+def resolve(tok, macro, localconst=None, conflict=None):
     """Turn one C token into the name it stands for, or {ident} if unknown.
 
-    localconst is the file's own char * constants, which take precedence over
-    the shared #define table and must never be shared between files: see
-    CONST_RE for why.
+    localconst is the file's own char * constants and #defines, which take
+    precedence over the shared #define table and must never be shared between
+    files: see CONST_RE for why.  conflict is the set of names the tree defines
+    inconsistently; without the file's own definition to go on, those are
+    {ident} rather than a guess.
     """
     tok = tok.strip()
     if not tok:
@@ -144,6 +177,8 @@ def resolve(tok, macro, localconst=None):
         return None
     if localconst and tok in localconst:
         return localconst[tok]
+    if conflict and tok in conflict:
+        return "{%s}" % tok
     if tok in macro:
         return macro[tok]
     if re.match(r'^[A-Za-z_]\w*$', tok):
@@ -234,7 +269,7 @@ def owner(path):
     return r
 
 
-def find_exclude_vars(text, path, macro, localconst):
+def find_exclude_vars(text, path, macro, localconst, conflict=None):
     """Pull the members out of every excludeVars[] declaration in one file."""
     out = []
     for m in EXCLUDE_RE.finditer(text):
@@ -263,19 +298,19 @@ def find_exclude_vars(text, path, macro, localconst):
         body = re.sub(r'/\*.*?\*/', '', body, flags=re.S)
         body = re.sub(r'//[^\n]*', '', body)
         for tok in body.split(","):
-            name = resolve(tok, macro, localconst)
+            name = resolve(tok, macro, localconst, conflict)
             if name:
                 out.append((name, "%s:%d" % (rel(path), line)))
     return out
 
 
-def find_matches(regex, text, path, macro, localconst, skip=()):
+def find_matches(regex, text, path, macro, localconst, skip=(), conflict=None):
     out = []
     for m in regex.finditer(text):
         tok = m.group(1)
         if tok in skip:
             continue
-        name = resolve(tok, macro, localconst)
+        name = resolve(tok, macro, localconst, conflict)
         if not name:
             continue
         line = text.count("\n", 0, m.start()) + 1
@@ -284,7 +319,7 @@ def find_matches(regex, text, path, macro, localconst, skip=()):
 
 
 def harvest():
-    macro = build_macros()
+    macro, conflict = build_macros()
     found = {"excludeVars": collections.defaultdict(list),
              "cgiReads": collections.defaultdict(list),
              "cartRemoves": collections.defaultdict(list)}
@@ -297,15 +332,19 @@ def harvest():
                 and "cartRemove" not in text:
             continue
         who = owner(path)
+        # The file's own #defines join its char * constants: both are what
+        # this file means, whatever the rest of the tree calls the same name.
         localconst = {m.group(1): m.group(2)[1:-1]
                       for m in CONST_RE.finditer(text)}
-        for name, src in find_exclude_vars(text, path, macro, localconst):
+        localconst.update(local_defines(text))
+        for name, src in find_exclude_vars(text, path, macro, localconst,
+                                           conflict):
             found["excludeVars"][who].append((name, src))
         for name, src in find_matches(CGI_READ_RE, text, path, macro,
-                                      localconst, CGI_READ_SKIP):
+                                      localconst, CGI_READ_SKIP, conflict):
             found["cgiReads"][who].append((name, src))
         for name, src in find_matches(CART_REMOVE_RE, text, path, macro,
-                                      localconst):
+                                      localconst, conflict=conflict):
             found["cartRemoves"][who].append((name, src))
     return found, macro
 
