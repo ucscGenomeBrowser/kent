@@ -1,0 +1,22 @@
+Excitatory neuron	0,114,178
+Inhibitory neuron	213,94,0
+Medium spiny neuron	230,159,0
+Other neuron	86,180,233
+Neural progenitor	51,34,136
+Astrocyte	0,158,115
+Oligodendrocyte	204,121,167
+Oligodendrocyte precursor	240,228,66
+Microglia	0,0,0
+Ependymal	68,170,153
+Choroid plexus	136,34,85
+Endothelial	136,204,238
+Mural	221,204,119
+Immune	238,102,119
+Erythroid	170,68,153
+Hematopoietic stem/progenitor	153,153,51
+Muscle	102,17,0
+Cardiomyocyte	170,68,0
+Epithelial	17,119,51
+Stromal	153,79,0
+Other	153,153,153
+Unknown	187,187,187

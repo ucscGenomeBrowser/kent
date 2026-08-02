@@ -1,0 +1,235 @@
+code	canonical_cell_type	broad_class	tissue	age_months	note
+BM.Basophil.03	Basophil	Immune	Bone marrow	3	
+BM.Basophil.10	Basophil	Immune	Bone marrow	10	
+BM.Basophil.18	Basophil	Immune	Bone marrow	18	
+BM.Dendritic.03	Dendritic cell	Immune	Bone marrow	3	
+BM.Dendritic.10	Dendritic cell	Immune	Bone marrow	10	
+BM.Dendritic.18	Dendritic cell	Immune	Bone marrow	18	
+BM.Endo.03	Endothelial cell	Endothelial	Bone marrow	3	
+BM.Endo.10	Endothelial cell	Endothelial	Bone marrow	10	
+BM.Endo.18	Endothelial cell	Endothelial	Bone marrow	18	
+BM.Eryth.03	Erythroid cell	Erythroid	Bone marrow	3	
+BM.Eryth.10	Erythroid cell	Erythroid	Bone marrow	10	
+BM.Eryth.18	Erythroid cell	Erythroid	Bone marrow	18	
+BM.HSC.03	Hematopoietic stem cell	Hematopoietic stem/progenitor	Bone marrow	3	
+BM.HSC.10	Hematopoietic stem cell	Hematopoietic stem/progenitor	Bone marrow	10	
+BM.HSC.18	Hematopoietic stem cell	Hematopoietic stem/progenitor	Bone marrow	18	
+BM.Late pro b.03	Late pro-B cell	Immune	Bone marrow	3	B-lineage progenitor
+BM.Late pro b.10	Late pro-B cell	Immune	Bone marrow	10	B-lineage progenitor
+BM.Late pro b.18	Late pro-B cell	Immune	Bone marrow	18	B-lineage progenitor
+BM.Macg.03	Macrophage	Immune	Bone marrow	3	
+BM.Macg.10	Macrophage	Immune	Bone marrow	10	
+BM.Macg.18	Macrophage	Immune	Bone marrow	18	
+BM.MeSC.03	Mesenchymal stem cell	Stromal	Bone marrow	3	Bone marrow mesenchymal stromal cell
+BM.MeSC.10	Mesenchymal stem cell	Stromal	Bone marrow	10	Bone marrow mesenchymal stromal cell
+BM.MeSC.18	Mesenchymal stem cell	Stromal	Bone marrow	18	Bone marrow mesenchymal stromal cell
+BM.Monocyte.03	Monocyte	Immune	Bone marrow	3	
+BM.Monocyte.10	Monocyte	Immune	Bone marrow	10	
+BM.Monocyte.18	Monocyte	Immune	Bone marrow	18	
+BM.Naive B cell.03	Naive B cell	Immune	Bone marrow	3	
+BM.Naive B cell.10	Naive B cell	Immune	Bone marrow	10	
+BM.Naive B cell.18	Naive B cell	Immune	Bone marrow	18	
+BM.Neutrophil.Gpr27.03	Neutrophil (Gpr27+)	Immune	Bone marrow	3	marker-defined neutrophil subset
+BM.Neutrophil.Gpr27.10	Neutrophil (Gpr27+)	Immune	Bone marrow	10	marker-defined neutrophil subset
+BM.Neutrophil.Gpr27.18	Neutrophil (Gpr27+)	Immune	Bone marrow	18	marker-defined neutrophil subset
+BM.Neutrophil.Il1b.03	Neutrophil (Il1b+)	Immune	Bone marrow	3	marker-defined neutrophil subset
+BM.Neutrophil.Il1b.10	Neutrophil (Il1b+)	Immune	Bone marrow	10	marker-defined neutrophil subset
+BM.Neutrophil.Il1b.18	Neutrophil (Il1b+)	Immune	Bone marrow	18	marker-defined neutrophil subset
+BM.Neutrophil.Ms4a3.03	Neutrophil (Ms4a3+)	Immune	Bone marrow	3	marker-defined neutrophil subset
+BM.Neutrophil.Ms4a3.10	Neutrophil (Ms4a3+)	Immune	Bone marrow	10	marker-defined neutrophil subset
+BM.Neutrophil.Ms4a3.18	Neutrophil (Ms4a3+)	Immune	Bone marrow	18	marker-defined neutrophil subset
+BM.Plasma.03	Plasma cell	Immune	Bone marrow	3	
+BM.Plasma.10	Plasma cell	Immune	Bone marrow	10	
+BM.Plasma.18	Plasma cell	Immune	Bone marrow	18	
+BM.Pre B cell.03	Pre-B cell	Immune	Bone marrow	3	B-lineage progenitor
+BM.Pre B cell.10	Pre-B cell	Immune	Bone marrow	10	B-lineage progenitor
+BM.Pre B cell.18	Pre-B cell	Immune	Bone marrow	18	B-lineage progenitor
+BM.Pro eryth.03	Proerythroblast	Erythroid	Bone marrow	3	erythroid progenitor
+BM.Pro eryth.10	Proerythroblast	Erythroid	Bone marrow	10	erythroid progenitor
+BM.Pro eryth.18	Proerythroblast	Erythroid	Bone marrow	18	erythroid progenitor
+BM.T cell.03	T cell	Immune	Bone marrow	3	
+BM.T cell.10	T cell	Immune	Bone marrow	10	
+BM.T cell.18	T cell	Immune	Bone marrow	18	
+DH.Asc.03	Astrocyte	Astrocyte	Dorsal hippocampus	3	Asc=astrocyte per paper
+DH.Asc.10	Astrocyte	Astrocyte	Dorsal hippocampus	10	Asc=astrocyte per paper
+DH.Asc.18	Astrocyte	Astrocyte	Dorsal hippocampus	18	Asc=astrocyte per paper
+DH.CA1.03	CA1 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	3	
+DH.CA1.10	CA1 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	10	
+DH.CA1.18	CA1 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	18	
+DH.CA2.3.03	CA2/CA3 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	3	
+DH.CA2.3.10	CA2/CA3 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	10	
+DH.CA2.3.18	CA2/CA3 pyramidal neuron	Excitatory neuron	Dorsal hippocampus	18	
+DH.DG.1.03	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	3	DG subtype 1
+DH.DG.1.10	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	10	DG subtype 1
+DH.DG.1.18	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	18	DG subtype 1
+DH.DG.2.03	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	3	DG subtype 2
+DH.DG.2.10	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	10	DG subtype 2
+DH.DG.2.18	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	18	DG subtype 2
+DH.DG.3.03	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	3	DG subtype 3
+DH.DG.3.10	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	10	DG subtype 3
+DH.DG.3.18	Dentate gyrus granule cell	Excitatory neuron	Dorsal hippocampus	18	DG subtype 3
+DH.Endo.03	Endothelial cell	Endothelial	Dorsal hippocampus	3	
+DH.Endo.10	Endothelial cell	Endothelial	Dorsal hippocampus	10	
+DH.Endo.18	Endothelial cell	Endothelial	Dorsal hippocampus	18	
+DH.InN.03	Inhibitory neuron	Inhibitory neuron	Dorsal hippocampus	3	
+DH.InN.10	Inhibitory neuron	Inhibitory neuron	Dorsal hippocampus	10	
+DH.InN.18	Inhibitory neuron	Inhibitory neuron	Dorsal hippocampus	18	
+DH.Low quality.03	Low quality	Other	Dorsal hippocampus	3	QC-flagged low-quality nuclei, not a cell type
+DH.Low quality.10	Low quality	Other	Dorsal hippocampus	10	QC-flagged low-quality nuclei, not a cell type
+DH.Low quality.18	Low quality	Other	Dorsal hippocampus	18	QC-flagged low-quality nuclei, not a cell type
+DH.Mgc.03	Microglia	Microglia	Dorsal hippocampus	3	Mgc=microglia per paper
+DH.Mgc.10	Microglia	Microglia	Dorsal hippocampus	10	Mgc=microglia per paper
+DH.Mgc.18	Microglia	Microglia	Dorsal hippocampus	18	Mgc=microglia per paper
+DH.Ogc.03	Oligodendrocyte	Oligodendrocyte	Dorsal hippocampus	3	Ogc=oligodendrocyte per paper
+DH.Ogc.10	Oligodendrocyte	Oligodendrocyte	Dorsal hippocampus	10	Ogc=oligodendrocyte per paper
+DH.Ogc.18	Oligodendrocyte	Oligodendrocyte	Dorsal hippocampus	18	Ogc=oligodendrocyte per paper
+DH.Opc.03	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Dorsal hippocampus	3	Opc per paper
+DH.Opc.10	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Dorsal hippocampus	10	Opc per paper
+DH.Opc.18	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Dorsal hippocampus	18	Opc per paper
+DH.Peri.03	Pericyte	Mural	Dorsal hippocampus	3	
+DH.Peri.10	Pericyte	Mural	Dorsal hippocampus	10	
+DH.Peri.18	Pericyte	Mural	Dorsal hippocampus	18	
+DH.SMC.03	Smooth muscle cell	Mural	Dorsal hippocampus	3	
+DH.SMC.10	Smooth muscle cell	Mural	Dorsal hippocampus	10	
+DH.SMC.18	Smooth muscle cell	Mural	Dorsal hippocampus	18	
+DH.Sub ent.03	Subiculum/entorhinal neuron	Excitatory neuron	Dorsal hippocampus	3	Sub_Ent per paper
+DH.Sub ent.10	Subiculum/entorhinal neuron	Excitatory neuron	Dorsal hippocampus	10	Sub_Ent per paper
+DH.Sub ent.18	Subiculum/entorhinal neuron	Excitatory neuron	Dorsal hippocampus	18	Sub_Ent per paper
+FC.Asc.03	Astrocyte	Astrocyte	Frontal cortex	3	Asc=astrocyte per paper
+FC.Asc.10	Astrocyte	Astrocyte	Frontal cortex	10	Asc=astrocyte per paper
+FC.Asc.18	Astrocyte	Astrocyte	Frontal cortex	18	Asc=astrocyte per paper
+FC.Claustrum.03	Claustrum neuron	Excitatory neuron	Frontal cortex	3	
+FC.Claustrum.10	Claustrum neuron	Excitatory neuron	Frontal cortex	10	
+FC.Claustrum.18	Claustrum neuron	Excitatory neuron	Frontal cortex	18	
+FC.Endo.03	Endothelial cell	Endothelial	Frontal cortex	3	
+FC.Endo.10	Endothelial cell	Endothelial	Frontal cortex	10	
+FC.Endo.18	Endothelial cell	Endothelial	Frontal cortex	18	
+FC.InN.Lrrc38.Plcxd3.03	Inhibitory neuron (Lrrc38/Plcxd3)	Inhibitory neuron	Frontal cortex	3	marker-defined interneuron subset
+FC.InN.Lrrc38.Plcxd3.10	Inhibitory neuron (Lrrc38/Plcxd3)	Inhibitory neuron	Frontal cortex	10	marker-defined interneuron subset
+FC.InN.Lrrc38.Plcxd3.18	Inhibitory neuron (Lrrc38/Plcxd3)	Inhibitory neuron	Frontal cortex	18	marker-defined interneuron subset
+FC.InN.Meis2.03	Inhibitory neuron (Meis2)	Inhibitory neuron	Frontal cortex	3	marker-defined interneuron subset
+FC.InN.Meis2.10	Inhibitory neuron (Meis2)	Inhibitory neuron	Frontal cortex	10	marker-defined interneuron subset
+FC.InN.Meis2.18	Inhibitory neuron (Meis2)	Inhibitory neuron	Frontal cortex	18	marker-defined interneuron subset
+FC.InN.Six3.03	Inhibitory neuron (Six3)	Inhibitory neuron	Frontal cortex	3	marker-defined interneuron subset
+FC.InN.Six3.10	Inhibitory neuron (Six3)	Inhibitory neuron	Frontal cortex	10	marker-defined interneuron subset
+FC.InN.Six3.18	Inhibitory neuron (Six3)	Inhibitory neuron	Frontal cortex	18	marker-defined interneuron subset
+FC.InN.Sst.Pvalb.03	Inhibitory neuron (Sst/Pvalb)	Inhibitory neuron	Frontal cortex	3	marker-defined interneuron subset
+FC.InN.Sst.Pvalb.10	Inhibitory neuron (Sst/Pvalb)	Inhibitory neuron	Frontal cortex	10	marker-defined interneuron subset
+FC.InN.Sst.Pvalb.18	Inhibitory neuron (Sst/Pvalb)	Inhibitory neuron	Frontal cortex	18	marker-defined interneuron subset
+FC.InN.Vip.Npy.03	Inhibitory neuron (Vip/Npy)	Inhibitory neuron	Frontal cortex	3	marker-defined interneuron subset
+FC.InN.Vip.Npy.10	Inhibitory neuron (Vip/Npy)	Inhibitory neuron	Frontal cortex	10	marker-defined interneuron subset
+FC.InN.Vip.Npy.18	Inhibitory neuron (Vip/Npy)	Inhibitory neuron	Frontal cortex	18	marker-defined interneuron subset
+FC.L2.3.03	Layer 2/3 excitatory neuron	Excitatory neuron	Frontal cortex	3	
+FC.L2.3.10	Layer 2/3 excitatory neuron	Excitatory neuron	Frontal cortex	10	
+FC.L2.3.18	Layer 2/3 excitatory neuron	Excitatory neuron	Frontal cortex	18	
+FC.L4.03	Layer 4 excitatory neuron	Excitatory neuron	Frontal cortex	3	
+FC.L4.10	Layer 4 excitatory neuron	Excitatory neuron	Frontal cortex	10	
+FC.L4.18	Layer 4 excitatory neuron	Excitatory neuron	Frontal cortex	18	
+FC.L5.Deptor.03	Layer 5 excitatory neuron (Deptor)	Excitatory neuron	Frontal cortex	3	marker-defined L5 subset
+FC.L5.Deptor.10	Layer 5 excitatory neuron (Deptor)	Excitatory neuron	Frontal cortex	10	marker-defined L5 subset
+FC.L5.Deptor.18	Layer 5 excitatory neuron (Deptor)	Excitatory neuron	Frontal cortex	18	marker-defined L5 subset
+FC.L5.Fezf2.03	Layer 5 excitatory neuron (Fezf2)	Excitatory neuron	Frontal cortex	3	marker-defined L5 subset
+FC.L5.Fezf2.10	Layer 5 excitatory neuron (Fezf2)	Excitatory neuron	Frontal cortex	10	marker-defined L5 subset
+FC.L5.Fezf2.18	Layer 5 excitatory neuron (Fezf2)	Excitatory neuron	Frontal cortex	18	marker-defined L5 subset
+FC.L5.Parm1.03	Layer 5 excitatory neuron (Parm1)	Excitatory neuron	Frontal cortex	3	marker-defined L5 subset
+FC.L5.Parm1.10	Layer 5 excitatory neuron (Parm1)	Excitatory neuron	Frontal cortex	10	marker-defined L5 subset
+FC.L5.Parm1.18	Layer 5 excitatory neuron (Parm1)	Excitatory neuron	Frontal cortex	18	marker-defined L5 subset
+FC.L6.03	Layer 6 excitatory neuron	Excitatory neuron	Frontal cortex	3	
+FC.L6.10	Layer 6 excitatory neuron	Excitatory neuron	Frontal cortex	10	
+FC.L6.18	Layer 6 excitatory neuron	Excitatory neuron	Frontal cortex	18	
+FC.Mgc.03	Microglia	Microglia	Frontal cortex	3	Mgc=microglia per paper
+FC.Mgc.10	Microglia	Microglia	Frontal cortex	10	Mgc=microglia per paper
+FC.Mgc.18	Microglia	Microglia	Frontal cortex	18	Mgc=microglia per paper
+FC.Ogc.03	Oligodendrocyte	Oligodendrocyte	Frontal cortex	3	Ogc=oligodendrocyte per paper
+FC.Ogc.10	Oligodendrocyte	Oligodendrocyte	Frontal cortex	10	Ogc=oligodendrocyte per paper
+FC.Ogc.18	Oligodendrocyte	Oligodendrocyte	Frontal cortex	18	Ogc=oligodendrocyte per paper
+FC.Opc.03	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Frontal cortex	3	Opc per paper
+FC.Opc.10	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Frontal cortex	10	Opc per paper
+FC.Opc.18	Oligodendrocyte precursor cell	Oligodendrocyte precursor	Frontal cortex	18	Opc per paper
+FC.Peri.03	Pericyte	Mural	Frontal cortex	3	
+FC.Peri.10	Pericyte	Mural	Frontal cortex	10	
+FC.Peri.18	Pericyte	Mural	Frontal cortex	18	
+HT.B cell.03	B cell	Immune	Heart	3	
+HT.B cell.10	B cell	Immune	Heart	10	
+HT.B cell.18	B cell	Immune	Heart	18	
+HT.CM.03	Cardiomyocyte	Cardiomyocyte	Heart	3	CM=cardiomyocyte
+HT.CM.10	Cardiomyocyte	Cardiomyocyte	Heart	10	CM=cardiomyocyte
+HT.CM.18	Cardiomyocyte	Cardiomyocyte	Heart	18	CM=cardiomyocyte
+HT.Endo.03	Endothelial cell	Endothelial	Heart	3	
+HT.Endo.10	Endothelial cell	Endothelial	Heart	10	
+HT.Endo.18	Endothelial cell	Endothelial	Heart	18	
+HT.Endocardial.03	Endocardial cell	Endothelial	Heart	3	endocardial endothelium
+HT.Endocardial.10	Endocardial cell	Endothelial	Heart	10	endocardial endothelium
+HT.Endocardial.18	Endocardial cell	Endothelial	Heart	18	endocardial endothelium
+HT.FB.03	Fibroblast	Stromal	Heart	3	
+HT.FB.10	Fibroblast	Stromal	Heart	10	
+HT.FB.18	Fibroblast	Stromal	Heart	18	
+HT.Fat.03	Adipocyte	Other	Heart	3	adipocyte; no adipose class in vocab
+HT.Fat.10	Adipocyte	Other	Heart	10	adipocyte; no adipose class in vocab
+HT.Fat.18	Adipocyte	Other	Heart	18	adipocyte; no adipose class in vocab
+HT.Low quality.03	Low quality	Other	Heart	3	QC-flagged low-quality nuclei, not a cell type
+HT.Low quality.10	Low quality	Other	Heart	10	QC-flagged low-quality nuclei, not a cell type
+HT.Low quality.18	Low quality	Other	Heart	18	QC-flagged low-quality nuclei, not a cell type
+HT.Macg.03	Macrophage	Immune	Heart	3	
+HT.Macg.10	Macrophage	Immune	Heart	10	
+HT.Macg.18	Macrophage	Immune	Heart	18	
+HT.SMC.03	Smooth muscle cell	Mural	Heart	3	
+HT.SMC.10	Smooth muscle cell	Mural	Heart	10	
+HT.SMC.18	Smooth muscle cell	Mural	Heart	18	
+HT.T cell.03	T cell	Immune	Heart	3	
+HT.T cell.10	T cell	Immune	Heart	10	
+HT.T cell.18	T cell	Immune	Heart	18	
+HT.doublet.03	Doublet	Other	Heart	3	multiplet artifact, not a cell type
+HT.doublet.10	Doublet	Other	Heart	10	multiplet artifact, not a cell type
+HT.doublet.18	Doublet	Other	Heart	18	multiplet artifact, not a cell type
+LM.B cell.03	B cell	Immune	Limb muscle	3	
+LM.B cell.10	B cell	Immune	Limb muscle	10	
+LM.B cell.18	B cell	Immune	Limb muscle	18	
+LM.Endo.03	Endothelial cell	Endothelial	Limb muscle	3	
+LM.Endo.10	Endothelial cell	Endothelial	Limb muscle	10	
+LM.Endo.18	Endothelial cell	Endothelial	Limb muscle	18	
+LM.Eryth.03	Erythroid cell	Erythroid	Limb muscle	3	
+LM.Eryth.10	Erythroid cell	Erythroid	Limb muscle	10	
+LM.Eryth.18	Erythroid cell	Erythroid	Limb muscle	18	
+LM.FB.03	Fibroblast	Stromal	Limb muscle	3	
+LM.FB.10	Fibroblast	Stromal	Limb muscle	10	
+LM.FB.18	Fibroblast	Stromal	Limb muscle	18	
+LM.Fat.03	Adipocyte	Other	Limb muscle	3	adipocyte; no adipose class in vocab
+LM.Fat.10	Adipocyte	Other	Limb muscle	10	adipocyte; no adipose class in vocab
+LM.Fat.18	Adipocyte	Other	Limb muscle	18	adipocyte; no adipose class in vocab
+LM.Kerat.03	Keratinocyte	Epithelial	Limb muscle	3	
+LM.Kerat.10	Keratinocyte	Epithelial	Limb muscle	10	
+LM.Kerat.18	Keratinocyte	Epithelial	Limb muscle	18	
+LM.Low quality.03	Low quality	Other	Limb muscle	3	QC-flagged low-quality nuclei, not a cell type
+LM.Low quality.10	Low quality	Other	Limb muscle	10	QC-flagged low-quality nuclei, not a cell type
+LM.Low quality.18	Low quality	Other	Limb muscle	18	QC-flagged low-quality nuclei, not a cell type
+LM.MTJ.03	Myotendinous junction myonuclei	Muscle	Limb muscle	3	myotendinous junction
+LM.MTJ.10	Myotendinous junction myonuclei	Muscle	Limb muscle	10	myotendinous junction
+LM.MTJ.18	Myotendinous junction myonuclei	Muscle	Limb muscle	18	myotendinous junction
+LM.Macg.03	Macrophage	Immune	Limb muscle	3	
+LM.Macg.10	Macrophage	Immune	Limb muscle	10	
+LM.Macg.18	Macrophage	Immune	Limb muscle	18	
+LM.MuSC.03	Muscle satellite cell	Muscle	Limb muscle	3	muscle stem/satellite cell
+LM.MuSC.10	Muscle satellite cell	Muscle	Limb muscle	10	muscle stem/satellite cell
+LM.MuSC.18	Muscle satellite cell	Muscle	Limb muscle	18	muscle stem/satellite cell
+LM.NMJ.03	Neuromuscular junction myonuclei	Muscle	Limb muscle	3	neuromuscular junction
+LM.NMJ.10	Neuromuscular junction myonuclei	Muscle	Limb muscle	10	neuromuscular junction
+LM.NMJ.18	Neuromuscular junction myonuclei	Muscle	Limb muscle	18	neuromuscular junction
+LM.Neutrophil.03	Neutrophil	Immune	Limb muscle	3	
+LM.Neutrophil.10	Neutrophil	Immune	Limb muscle	10	
+LM.Neutrophil.18	Neutrophil	Immune	Limb muscle	18	
+LM.SMC.03	Smooth muscle cell	Mural	Limb muscle	3	
+LM.SMC.10	Smooth muscle cell	Mural	Limb muscle	10	
+LM.SMC.18	Smooth muscle cell	Mural	Limb muscle	18	
+LM.Skm.Gm5141.03	Skeletal myofiber (Gm5141)	Muscle	Limb muscle	3	skeletal muscle fiber subtype
+LM.Skm.Gm5141.10	Skeletal myofiber (Gm5141)	Muscle	Limb muscle	10	skeletal muscle fiber subtype
+LM.Skm.Gm5141.18	Skeletal myofiber (Gm5141)	Muscle	Limb muscle	18	skeletal muscle fiber subtype
+LM.Skm.Myh1.03	Skeletal myofiber (Myh1, type IIx)	Muscle	Limb muscle	3	fast type IIx fiber
+LM.Skm.Myh1.10	Skeletal myofiber (Myh1, type IIx)	Muscle	Limb muscle	10	fast type IIx fiber
+LM.Skm.Myh1.18	Skeletal myofiber (Myh1, type IIx)	Muscle	Limb muscle	18	fast type IIx fiber
+LM.Skm.Myh4.1.03	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	3	fast type IIb fiber, subset 1
+LM.Skm.Myh4.1.10	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	10	fast type IIb fiber, subset 1
+LM.Skm.Myh4.1.18	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	18	fast type IIb fiber, subset 1
+LM.Skm.Myh4.2.03	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	3	fast type IIb fiber, subset 2
+LM.Skm.Myh4.2.10	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	10	fast type IIb fiber, subset 2
+LM.Skm.Myh4.2.18	Skeletal myofiber (Myh4, type IIb)	Muscle	Limb muscle	18	fast type IIb fiber, subset 2

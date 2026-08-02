@@ -1,0 +1,47 @@
+code	canonical_cell_type	broad_class	brain_region	note
+Dorsal	Dorsal striatum medium spiny neuron	Medium spiny neuron	Striatum	Anatomical merge (dorsal striatum MSNs); D1/D2 identity not resolved
+MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Merged group; Allen STR D1 Gaba (direct pathway)
+MSN d1 dorsal	D1 medium spiny neuron (dorsal)	Medium spiny neuron	Striatum	Dorsal-striatum D1 MSN merge; Allen STR D1 Gaba
+MSN d1 ventral	D1 medium spiny neuron (ventral)	Medium spiny neuron	Striatum	Ventral-striatum D1 MSN merge; Allen STR D1 Gaba
+MSN d2	D2 medium spiny neuron	Medium spiny neuron	Striatum	Merged group; Allen STR D2 Gaba (indirect pathway)
+MSN d2 dorsal	D2 medium spiny neuron (dorsal)	Medium spiny neuron	Striatum	Dorsal-striatum D2 MSN merge; Allen STR D2 Gaba
+MSN d2 ventral	D2 medium spiny neuron (ventral)	Medium spiny neuron	Striatum	Ventral-striatum D2 MSN merge; Allen STR D2 Gaba
+Ventral	Ventral striatum medium spiny neuron	Medium spiny neuron	Striatum	Anatomical merge (ventral striatum MSNs); D1/D2 identity not resolved
+X1039 sAMY PAL chst9	Chst9 GABAergic neuron (MSN-like)	Inhibitory neuron	sAMY/Pallidum	Allen STR-PAL Chst9 Gaba (subclass 064); MSN-like GABAergic, ventral pallidum/striatum
+X1040 sAMY PAL chst9	Chst9 GABAergic neuron (MSN-like)	Inhibitory neuron	sAMY/Pallidum	Allen STR-PAL Chst9 Gaba (subclass 064); MSN-like GABAergic, ventral pallidum/striatum
+X1061 MSN d1 outer	D1 medium spiny neuron	Medium spiny neuron	Striatum	D1 MSN, outer/matrix compartment; Allen STR D1 Gaba
+X1066 MSN d2	D2 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D2 Gaba (indirect pathway)
+X1067 MSN d2	D2 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D2 Gaba (indirect pathway)
+X1080 MSN d2	D2 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D2 Gaba (indirect pathway)
+X1081 MSN d2	D2 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D2 Gaba (indirect pathway)
+X1091 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1099 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1106 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1116 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1117 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1122 MSN d1	D1 medium spiny neuron	Medium spiny neuron	Striatum	Allen STR D1 Gaba (direct pathway)
+X1126 HY PAL STR folh1	Folh1 GABAergic neuron (D3 MSN-like)	Inhibitory neuron	Striatum/Pallidum	Folh1/Drd3 marker; Allen OT D3 Folh1 Gaba (olfactory tubercle MSN-like); spans HY/PAL/STR
+X1728 PAL sln	Sln pallidal GABAergic neuron	Inhibitory neuron	Pallidum	Sarcolipin (Sln)-marked pallidal GABAergic neuron
+X1794 sAMY PAL HY skor1	Skor1 GABAergic neuron	Inhibitory neuron	sAMY/Pallidum/Hypothalamus	Skor1-marked GABAergic neuron of sAMY-PAL-HY territory
+X2016 TH prkcd grin2c	Thalamic glutamatergic neuron	Excitatory neuron	Thalamus	Allen TH Prkcd Grin2c Glut; thalamic excitatory subclass
+X306 OLF CTXsp tfap2d	Olfactory/cortical-subplate Tfap2d neuron	Other neuron	Olfactory/Cortical subplate	Tfap2d-marked OLF/CTXsp neuron; excitatory vs inhibitory identity not resolved from taxonomy
+X3825 OLF frmd7	Olfactory bulb granule GABAergic neuron	Inhibitory neuron	Olfactory	Allen Frmd7 Gaba; olfactory bulb granule-layer GABAergic neuron
+X387 lamp5	Lamp5 GABAergic interneuron	Inhibitory neuron	Striatum	Allen Lamp5 Gaba interneuron subclass
+X3893 OPC	Oligodendrocyte precursor cell	Oligodendrocyte precursor		Non-neuronal; OPC
+X3911 oligo	Oligodendrocyte	Oligodendrocyte		Non-neuronal; mature oligodendrocyte
+X3914 oligo	Oligodendrocyte	Oligodendrocyte		Non-neuronal; mature oligodendrocyte
+X3916 oligo	Oligodendrocyte	Oligodendrocyte		Non-neuronal; mature oligodendrocyte
+X3918 CHOR	Choroid plexus epithelial cell	Choroid plexus		Non-neuronal; CHOR = choroid plexus
+X3934 astro	Astrocyte	Astrocyte		Non-neuronal; astrocyte
+X3936 astro	Astrocyte	Astrocyte		Non-neuronal; astrocyte
+X3942 astro	Astrocyte	Astrocyte		Non-neuronal; astrocyte
+X3945 astro	Astrocyte	Astrocyte		Non-neuronal; astrocyte
+X3982 micro PVM	Microglia / perivascular macrophage	Microglia		Non-neuronal; microglia and perivascular macrophage (PVM/immune)
+X3988 VLMC	Vascular leptomeningeal cell	Other		Non-neuronal; VLMC (fibroblast-like leptomeningeal cell), not mural/endothelial
+X3992 VLMC	Vascular leptomeningeal cell	Other		Non-neuronal; VLMC (fibroblast-like leptomeningeal cell), not mural/endothelial
+X4016 endo	Endothelial cell	Endothelial		Non-neuronal; vascular endothelium
+X458 prox1 lhx6	Prox1/Lhx6 GABAergic interneuron	Inhibitory neuron	Striatum	Allen STR Prox1 Lhx6 Gaba (subclass 054); MGE/CGE-derived interneuron
+X527 sst chodl	Sst Chodl interneuron	Inhibitory neuron	Striatum	Allen Sst Chodl Gaba (subclass 056); long-range SST interneuron
+X564 sAMY PAL HY lhx8	Lhx8 GABAergic neuron	Inhibitory neuron	sAMY/Pallidum/Hypothalamus	Allen NDB-SI-MA-STRv Lhx8 Gaba (subclass 057); basal forebrain GABAergic/cholinergic-related
+X652 sAMY PAL HY lhx8	Lhx8 GABAergic neuron	Inhibitory neuron	sAMY/Pallidum/Hypothalamus	Allen NDB-SI-MA-STRv Lhx8 Gaba (subclass 057); basal forebrain GABAergic/cholinergic-related
+X839 sAMY PAL ebf1	Ebf1 GABAergic neuron	Inhibitory neuron	sAMY/Pallidum	Ebf1-marked striatal/pallidal GABAergic neuron
