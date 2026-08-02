@@ -54,12 +54,37 @@ Usage:
     urlCommandCatalog.py --html out.html
     urlCommandCatalog.py --check         # counts and consistency checks
     urlCommandCatalog.py --reconcile     # diff the catalog against the tree
+    urlCommandCatalog.py --reconcile --verbose        # ... with the full diff
+    urlCommandCatalog.py --update-baseline            # accept new tree names
+
+--reconcile is the mode meant for a nightly cron: it prints nothing and exits 0
+when nothing has changed, and exits 1 with a list when somebody has added a CGI
+parameter nobody has classified, or when the leak audit's answer has moved.
+
+The catalog covers the parameters a user can put on a browser URL, but the
+harvester sees every cgiOptionalString() in the tree, which is form fields,
+debug switches and the arguments of small utility CGIs as well.  The names in
+that gap are recorded in BASELINE_FILE next to this script rather than argued
+with one at a time: reconcile complains only about a name in neither the catalog
+nor the baseline, so what it reports is what arrived since the baseline was
+last accepted.  When the new names really are out of scope, add them with
+--update-baseline and commit the file, which puts the decision in the git log
+where it can be read later.
 """
 
 import argparse
 import html
 import json
+import os
 import sys
+
+# Tree names deliberately outside the catalog's scope.  See the docstring.
+BASELINE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "urlNamesNotCataloged.txt")
+
+# Floor on how many names a working scan finds; well under the real count.  See
+# the check in reconcile().
+MIN_TREE_NAMES = 300
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -825,6 +850,19 @@ OTHER_CGIS = {
             c("showPage", "action", "hg/hgBlat/hgBlat.c:2616", verified=True),
             c("changeInfo", "action", "hg/hgBlat/hgBlat.c:2616",
               verified=True),
+            c("blatNewPage", "setting", "hg/hgBlat/hgBlat.c:776", value="0|1",
+              persists=True, verified=True,
+              note="Which results page to draw: the classic hyperlink list or "
+                   "the sortable table.  A preference on purpose, so the "
+                   "choice sticks for later searches, and hgBlat carries it "
+                   "across a session load (hgBlat.c:2679).  hgc reads it too, "
+                   "to match the alignment display (hgc.c:9234)."),
+            c("blatReopen", "action", "hg/hgBlat/hgBlat.c:2707",
+              verified=True,
+              note="Re-render the results already in the cart, rather than "
+                   "running a new search.  How the banner and the table's "
+                   "'Old BLAT result page' link switch format without "
+                   "resubmitting the query."),
             c("wp_f", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
               public=True, verified=True, note="Forward primer."),
             c("wp_r", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
@@ -836,9 +874,18 @@ OTHER_CGIS = {
         "what": "The gateway and search pages, which share a cartJson command "
                 "channel.",
         "cmds": [
-            c("hgt_tSearch", "action", "hg/hgGateway/hgGateway.c:1250",
+            c("hggw_term", "action", "hg/hgGateway/hgGateway.c:1254",
               value="<term>", verified=True,
-              note="Search term. Same variable name the track search uses."),
+              note="Species or assembly search term for the gateway's "
+                   "autocomplete.  Read before the cart is loaded, to keep the "
+                   "lookup fast, and in hgGateway's excludeVars.  Spelled "
+                   "SEARCH_TERM in the source, which is why this row used to "
+                   "say hgt_tSearch: that name is the track search's, and a "
+                   "pooled #define table answered for both."),
+            c("hgcd_term", "action", "hg/hgChooseDb/hgChooseDb.c:224",
+              value="<term>", verified=True,
+              note="The same search term on hgChooseDb, which spells its own "
+                   "SEARCH_TERM differently.  In that CGI's excludeVars."),
             c("cjCmd", "action", "hg/inc/cartJson.h:11", value="<json>",
               verified=True,
               note="cartJson command channel, used by the page's own AJAX."),
@@ -1176,23 +1223,82 @@ def check(cat, out=sys.stderr):
     return bad
 
 
-def reconcile(cat, out=sys.stdout):
-    """Diff the catalog against what the tree actually says.
+def read_baseline(path=BASELINE_FILE):
+    """The tree names already known to be outside the catalog's scope."""
+    names = set()
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.split("#", 1)[0].strip()
+                if line:
+                    names.add(line)
+    except OSError:
+        pass                    # no baseline yet: every tree name is new
+    return names
 
-    This is the loop the whole design is for: the harvester finds what is
-    there, the catalog says what it means, and this reports where they have
-    drifted apart.  Neither direction is automatically a bug -- a catalog name
-    missing from the tree may be a family stand-in like hgta_do*, and a tree
-    name missing from the catalog may be a form button nobody needs to know
-    about -- so this prints rather than fails.
+
+def write_baseline(names, sites=None, path=BASELINE_FILE):
+    """Write the baseline, annotating each name with the file that reads it.
+
+    The comment carries the file but not the line, so that ordinary edits above
+    a read do not rewrite hundreds of lines here and bury the one name that
+    actually changed.
+    """
+    with open(path, "w") as f:
+        f.write("""\
+# urlNamesNotCataloged.txt - CGI variable names the tree reads that
+# urlCommandCatalog.py deliberately does not describe: form fields, debug
+# switches, and the arguments of utility CGIs that are not browser URL
+# parameters.  Refs #37923.
+#
+# urlCommandCatalog.py --reconcile complains about any name in neither the
+# catalog nor this file, so this is what keeps a nightly run quiet until
+# something actually changes.  Regenerate with --update-baseline, then read the
+# diff before committing: a name appearing here is a decision that it does not
+# belong on a URL, and a name disappearing means its read went away.
+#
+# The first version of this file was accepted wholesale, as a snapshot of the
+# gap on the day reconcile learned to fail.  So a name being in here is not
+# evidence that anybody has looked at it; only the ones added since, which
+# arrive a few at a time in a reviewable diff, carry that weight.
+#
+# The comment on each line is the file that reads it, as a hint for whoever
+# reviews the next change to this file.  Names under hg/hgTracks, hg/hgc,
+# hg/hgTrackUi, hg/hgTables and hg/lib are worth a second look, since those are
+# the CGIs whose parameters the catalog is supposed to cover.
+""")
+        sites = sites or {}
+        for n in sorted(names):
+            where = sites.get(n, "").rsplit(":", 1)[0]
+            if where:
+                f.write("%-34s # %s\n" % (n, where))
+            else:
+                f.write("%s\n" % n)
+
+
+def tree_names(cat):
+    """(tree names, name -> file:line, catalog names, raw harvest), or None.
+
+    None means the harvester could not be imported.  Shared by reconcile and
+    --update-baseline so the two cannot disagree about what counts as a name.
     """
     try:
         import harvestUrlCommands as h
     except ImportError:
         print("harvestUrlCommands.py not importable from here", file=sys.stderr)
-        return 1
+        return None
     found, _ = h.harvest()
-    tree = set(h.all_names(found))
+
+    # stand-ins that are not literal parameter names, and {ident} names the
+    # harvester could not resolve to a literal
+    def literal(n):
+        return not any(ch in n for ch in "<*") and not n.startswith("{")
+
+    site = {}
+    for which in found:
+        for pairs in found[which].values():
+            for name, src in pairs:
+                site.setdefault(name, src)
 
     cat_names = set()
     for e in all_cmds(cat):
@@ -1200,30 +1306,78 @@ def reconcile(cat, out=sys.stdout):
         for m in e.get("members", []):
             cat_names.add(m)
 
-    # stand-ins that are not literal parameter names
-    def literal(n):
-        return not any(ch in n for ch in "<*")
-
-    only_cat = sorted(n for n in cat_names - tree if literal(n))
-    only_tree = sorted(n for n in tree - cat_names
-                       if literal(n) and not n.startswith("{"))
-
-    print("catalog names      %d" % len(cat_names))
-    print("tree names         %d" % len(tree))
-    print("both               %d" % len(cat_names & tree))
-    print("\nin catalog, not found in tree (%d)" % len(only_cat))
-    for n in only_cat:
-        print("    %s" % n)
-    print("\nin tree, not in catalog (%d)" % len(only_tree))
-    for n in only_tree:
-        print("    %s" % n)
-
-    print("\n" + "-" * 66)
-    print(persistence_audit(cat, found))
-    return 0
+    tree = set(n for n in h.all_names(found) if literal(n))
+    return tree, site, cat_names, found
 
 
-def persistence_audit(cat, found, out=sys.stdout):
+def reconcile(cat, out=sys.stdout, verbose=False):
+    """Diff the catalog against what the tree actually says.
+
+    This is the loop the whole design is for: the harvester finds what is
+    there, the catalog says what it means, and this reports where they have
+    drifted apart.
+
+    Two of those differences mean somebody has to do something:
+
+      1. a name the tree reads that is in neither the catalog nor the baseline,
+         which is a parameter that arrived without anybody saying what it is
+      2. a disagreement between a persists=False claim and what the tree
+         actually excludes or removes, in either direction
+
+    The rest is standing drift.  A catalog name with no read found is usually a
+    family stand-in like hgta_do*, and the several hundred tree names outside the
+    catalog's scope are in the baseline; both would print identically on every
+    run, so they go out only under --verbose.  Silent and 0 means nothing new.
+    """
+    t = tree_names(cat)
+    if t is None:
+        return 1
+    tree, site, cat_names, found = t
+
+    # A scan that finds almost nothing is a broken scan, not a clean tree, and
+    # the difference matters: pointed at the wrong KENT_SRC or an empty clone,
+    # everything below would come up empty and report all clear forever.
+    if len(tree) < MIN_TREE_NAMES:
+        print("only %d names found: expected at least %d, so the scan is "
+              "broken rather\nthan the tree being clean.  Check KENT_SRC."
+              % (len(tree), MIN_TREE_NAMES), file=out)
+        return 1
+
+    baseline = read_baseline()
+
+    only_cat = sorted(n for n in cat_names - tree
+                      if not any(ch in n for ch in "<*"))
+    new = sorted(tree - cat_names - baseline)
+    problems = len(new)
+
+    if verbose:
+        print("catalog names      %d" % len(cat_names), file=out)
+        print("tree names         %d" % len(tree), file=out)
+        print("both               %d" % len(cat_names & tree), file=out)
+        print("baseline names     %d" % len(baseline), file=out)
+        print("\nin catalog, not found in tree (%d)" % len(only_cat), file=out)
+        for n in only_cat:
+            print("    %s" % n, file=out)
+        known = sorted((tree - cat_names) & baseline)
+        print("\nin tree, in the baseline rather than the catalog (%d)"
+              % len(known), file=out)
+        for n in known:
+            print("    %-28s %s" % (n, site.get(n, "")), file=out)
+
+    if new:
+        print("\nread by the tree, in neither the catalog nor the baseline "
+              "(%d):" % len(new), file=out)
+        print("    (describe each in urlCommandCatalog.py if it can go on a "
+              "browser URL,\n     otherwise accept it with "
+              "--update-baseline)", file=out)
+        for n in new:
+            print("    %-28s %s" % (n, site.get(n, "")), file=out)
+
+    problems += persistence_audit(cat, found, out=out, verbose=verbose)
+    return problems
+
+
+def persistence_audit(cat, found, out=sys.stdout, verbose=False):
     """Check every persists=False claim against what the tree actually does.
 
     cartExclude() is the only thing that keeps a CGI variable out of the saved
@@ -1233,7 +1387,9 @@ def persistence_audit(cat, found, out=sys.stdout):
     parameter that reads like a one-shot command but is quietly being written
     into the user's session, which is the class of bug #37923 is chasing.
 
-    Returns a one-line summary; details go to out.
+    Returns the number of disagreements found, either direction, and prints
+    them.  The count of leaks already recorded in the catalog is not one: those
+    are known and are the finding of #37923, not news.
     """
     dropped = set()
     for which in ("excludeVars", "cartRemoves"):
@@ -1255,17 +1411,24 @@ def persistence_audit(cat, found, out=sys.stdout):
     if unclaimed:
         print("\nleaks into the session but not marked leaks=True (%d)"
               % len(unclaimed), file=out)
+        print("    (nothing excludes or removes these, so they are being "
+              "written into the\n     user's session; mark them leaks=True or "
+              "fix the CGI)", file=out)
         for e in unclaimed:
             print("    %-28s %s" % (e["name"], e["src"]), file=out)
     if overclaimed:
         print("\nmarked leaks=True but the tree does drop them (%d)"
               % len(overclaimed), file=out)
+        print("    (somebody fixed these; drop leaks=True from the catalog "
+              "row)", file=out)
         for e in overclaimed:
             print("    %-28s %s" % (e["name"], e["src"]), file=out)
 
-    n_leak = len([e for e in all_cmds(cat) if e.get("leaks")])
-    return ("persistence audit: %d known leaks, %d unrecorded, %d stale"
-            % (n_leak, len(unclaimed), len(overclaimed)))
+    if verbose:
+        n_leak = len([e for e in all_cmds(cat) if e.get("leaks")])
+        print("\npersistence audit: %d known leaks, %d unrecorded, %d stale"
+              % (n_leak, len(unclaimed), len(overclaimed)), file=out)
+    return len(unclaimed) + len(overclaimed)
 
 
 # ---------------------------------------------------------------------------
@@ -1448,6 +1611,14 @@ def main():
     ap.add_argument("--html")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--reconcile", action="store_true")
+    ap.add_argument("--verbose", action="store_true",
+                    help="with --reconcile, also print the standing drift "
+                         "that needs no action")
+    ap.add_argument("--update-baseline", dest="updateBaseline",
+                    action="store_true",
+                    help="rewrite %s from the current tree; read the diff "
+                         "before committing it"
+                         % os.path.basename(BASELINE_FILE))
     args = ap.parse_args()
 
     cat = build()
@@ -1460,8 +1631,19 @@ def main():
         with open(args.html, "w") as f:
             f.write(render_html(cat))
         print("wrote %s" % args.html)
+    if args.updateBaseline:
+        t = tree_names(cat)
+        if t is None:
+            return 1
+        tree, site, cat_names, _ = t
+        was = read_baseline()
+        now = tree - cat_names
+        write_baseline(now, site)
+        print("wrote %s: %d names, %d added, %d dropped"
+              % (BASELINE_FILE, len(now), len(now - was), len(was - now)))
+        return 0
     if args.reconcile:
-        return reconcile(cat)
+        return 1 if reconcile(cat, verbose=args.verbose) else 0
     if args.check or not (args.json or args.html):
         c = counts(cat)
         for k in sorted(c):

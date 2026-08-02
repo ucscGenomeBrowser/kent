@@ -63,7 +63,15 @@ Usage:
     hgConfCatalog.py --html out.html
     hgConfCatalog.py --check         # counts and internal consistency
     hgConfCatalog.py --reconcile     # diff the catalog against the tree
+    hgConfCatalog.py --reconcile --verbose      # ... with the standing drift
     hgConfCatalog.py --sunset        # what should be deleted, and when
+
+--reconcile is the mode meant for a nightly cron: it prints nothing and exits 0
+when the tree holds no setting the catalog has not classified, and exits 1 with
+the list when somebody has added one.  Nothing else belongs in a cron.  --sunset
+in particular reports every overdue gate on every run whether or not anything
+changed, so as cron mail it is noise; it is a report a person reads at release
+time.
 """
 
 import argparse
@@ -75,6 +83,10 @@ import sys
 # Sunset policy, in releases.  See the module docstring.
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
+
+# Floor on how many settings a working scan finds; well under the real count.
+# See the check in reconcile().
+MIN_TREE_NAMES = 150
 
 REDMINE = "https://redmine.gi.ucsc.edu/issues/%d"
 
@@ -226,6 +238,18 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:784", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:741", default="TRUE",
+          role="gate", verified=True,
+          note="The banner on the classic BLAT results page that offers a "
+               "one-click switch to the new sortable table display.  Guards "
+               "the advertisement, not the feature: turning it off stops the "
+               "browser recommending the new page without releasing new CGIs, "
+               "and users who already opted in or follow a direct link still "
+               "get it.  Goes away with the banner, once the new page is the "
+               "default.",
+          debatable="Born TRUE, so like sleepOn429 it never held anything "
+                    "back, and a mirror might want to stop advertising a new "
+                    "page permanently, which would make it a knob."),
         h("genarkLiftOver", "flag", "hg/lib/genark.c:413", default="FALSE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
@@ -233,6 +257,15 @@ RELEASE_GATES = {
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12116", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
+        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:178",
+          default="FALSE", role="gate", verified=True, ticket="37973",
+          note="A link from the Convert page to liftRequest.html, the page "
+               "that requests a new whole-genome alignment.  The assembly "
+               "list only offers targets that already have a chain from the "
+               "source, so the Convert page is where a user finds out theirs "
+               "is missing, but nothing in the tree linked to the request "
+               "page.  Off until the request pipeline is confirmed ready to "
+               "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10152",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
@@ -569,11 +602,11 @@ CENTRAL_TABLES = {
           verified=True, env="HGDB_CLADETABLE", default="clade"),
         h("genomeCladeTableName", "table", "hg/lib/hdb.c:97", public=True,
           verified=True, env="HGDB_GENOMECLADETABLE", default="genomeClade"),
-        h("userDbName", "table", "hg/lib/cartDb.c:329", verified=True,
-          env="HGDB_USERDBTABLE", default="userDb",
+        h("userDbName", "table", "hg/lib/cartDb.c:329", public=True,
+          verified=True, env="HGDB_USERDBTABLE", default="userDb",
           note="Per-user cart storage."),
-        h("sessionDbName", "table", "hg/lib/cartDb.c:339", verified=True,
-          env="HGDB_SESSIONDBTABLE", default="sessionDb"),
+        h("sessionDbName", "table", "hg/lib/cartDb.c:339", public=True,
+          verified=True, env="HGDB_SESSIONDBTABLE", default="sessionDb"),
         h("defaultCartName", "table", "hg/lib/cartDb.c:319", public=True,
           verified=True, env="HGDB_DEFAULTCARTTABLE"),
         h("namedSessionDbName", "table", "hg/lib/cart.c:382", verified=True,
@@ -1081,9 +1114,6 @@ EXTERNAL = {
           note="A prefix family enumerated at runtime: alternative "
                "namedSessionDb locations to search when resolving a shared "
                "session."),
-        h("encpipeline_prod", "internal", "hg/hgTracks/hgTracks.c:9867",
-          verified=True, deprecated=True,
-          note="Read via cfgValsWithPrefix from the ENCODE pipeline era."),
     ],
 }
 
@@ -1480,7 +1510,7 @@ def wrap_text(s, width):
     return lines
 
 
-def reconcile(cat, out=sys.stdout):
+def reconcile(cat, out=sys.stdout, verbose=False):
     """Diff the catalog against what the tree actually reads.
 
     Three questions:
@@ -1489,6 +1519,13 @@ def reconcile(cat, out=sys.stdout):
       3. is every boolean flag in the tree classified gate or knob
     The third is the one that keeps the sunset report honest: an unclassified
     flag is one nobody has decided the fate of.
+
+    Only 2 and 3 count as problems, because only those two mean somebody added
+    a setting and did not write it down, which is the one thing a person has to
+    act on.  The rest is drift that has been there for years (documentation for
+    a feature that was deleted, a read that moved into a helper), and printing
+    it on every run is what would turn a nightly cron into mail nobody reads.
+    So it goes out only under --verbose.  Silent and 0 means nothing new.
     """
     hh = load_harvester()
     if hh is None:
@@ -1499,6 +1536,16 @@ def reconcile(cat, out=sys.stdout):
     tree = hh.by_name(found)
     cataloged = by_name(cat)
     problems = 0
+
+    # A scan that finds almost nothing is a broken scan, not a clean tree, and
+    # the difference matters: pointed at the wrong KENT_SRC or an empty clone,
+    # everything below would come up empty and report all clear forever.  The
+    # real number is in the hundreds.
+    if len(tree) < MIN_TREE_NAMES:
+        print("only %d settings found under %s: expected at least %d, so the "
+              "scan is\nbroken rather than the tree being clean.  Check "
+              "KENT_SRC." % (len(tree), hh.ROOT, MIN_TREE_NAMES), file=out)
+        return 1
 
     # Three kinds of name legitimately have no literal read to point at, and
     # all three have to be excused or the report is nothing but false alarms:
@@ -1516,7 +1563,8 @@ def reconcile(cat, out=sys.stdout):
             return True
         return any(name.startswith(p) for p in prefix_scans)
 
-    print("=== catalog vs tree ===", file=out)
+    if verbose:
+        print("=== catalog vs tree ===", file=out)
 
     missing = sorted(n for n in tree
                      if n not in cataloged and not n.startswith("{"))
@@ -1534,7 +1582,7 @@ def reconcile(cat, out=sys.stdout):
     stale = sorted(n for n in cataloged
                    if n not in tree and not is_profile_member(n)
                    and not is_prefix_family(n))
-    if stale:
+    if stale and verbose:
         print("\nin the catalog, no literal read found (%d):" % len(stale),
               file=out)
         print("    (a prefix family or a profile member is expected here; "
@@ -1543,29 +1591,32 @@ def reconcile(cat, out=sys.stdout):
         for n in stale:
             print("    %-40s %s" % (n, cataloged[n]["src"]), file=out)
 
-    print("\n=== boolean flags: every one must be a gate or a knob ===",
-          file=out)
+    if verbose:
+        print("\n=== boolean flags: every one must be a gate or a knob ===",
+              file=out)
     tree_flags = {n for n, d in tree.items() if d["boolean"]}
     classified = {v["name"] for v in gates(cat)} | {v["name"] for v in knobs(cat)}
     unclassified = sorted(tree_flags - classified)
     if unclassified:
         problems += len(unclassified)
-        print("unclassified (%d): nobody has decided whether these are "
-              "temporary" % len(unclassified), file=out)
+        print("\nboolean flag classified neither gate nor knob (%d): nobody "
+              "has decided\nwhether these are temporary:" % len(unclassified),
+              file=out)
         for n in unclassified:
             print("    %-40s %s" % (n, sorted(tree[n]["sites"])[0]), file=out)
-    else:
+    elif verbose:
         print("all %d boolean flags in the tree are classified" %
               len(tree_flags), file=out)
 
     phantom = sorted(classified - tree_flags)
-    if phantom:
+    if phantom and verbose:
         print("\nclassified as a flag but not read with "
               "cfgOptionBooleanDefault (%d):" % len(phantom), file=out)
         for n in phantom:
             print("    %-40s %s" % (n, cataloged[n]["src"]), file=out)
 
-    print("\n=== product/ex.hg.conf ===", file=out)
+    if verbose:
+        print("\n=== product/ex.hg.conf ===", file=out)
     docs = hh.parse_doc_files()
     pub = {v["name"] for v in all_vars(cat) if v["public"]}
     # A prefix family counts as documented if any member of it is.
@@ -1574,7 +1625,7 @@ def reconcile(cat, out=sys.stdout):
             return True
         return name.endswith(".") and any(d.startswith(name) for d in docs)
     undocumented = sorted(n for n in pub if not documented(n))
-    if undocumented:
+    if undocumented and verbose:
         print("marked public in the catalog, absent from the example configs "
               "(%d):" % len(undocumented), file=out)
         print("    (these are settings a mirror operator would want and has no "
@@ -1584,7 +1635,7 @@ def reconcile(cat, out=sys.stdout):
     only_docs = sorted(n for n in docs
                        if n not in cataloged and not is_profile_member(n)
                        and not is_prefix_family(n))
-    if only_docs:
+    if only_docs and verbose:
         print("\nin the example configs, nothing in the tree reads them (%d):"
               % len(only_docs), file=out)
         print("    (either the feature was deleted and the documentation was "
@@ -1593,7 +1644,13 @@ def reconcile(cat, out=sys.stdout):
         for n in only_docs:
             print("    %-40s %s" % (n, docs[n]["sites"][0]), file=out)
 
-    print("\nproblems: %d" % problems, file=out)
+    if problems:
+        print("\nproblems: %d.  Add a row to hgConfCatalog.py for each, in "
+              "the same commit\nas the code that reads it; see the "
+              "'Registering a new hg.conf variable'\nsection of the "
+              "edit-kent-code skill." % problems, file=out)
+    elif verbose:
+        print("\nproblems: 0", file=out)
     return problems
 
 
@@ -1825,6 +1882,9 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--reconcile", action="store_true")
     ap.add_argument("--sunset", action="store_true")
+    ap.add_argument("--verbose", action="store_true",
+                    help="with --reconcile, also print the standing drift "
+                         "that needs no action")
     args = ap.parse_args()
 
     cat = build()
@@ -1844,7 +1904,7 @@ def main():
     if args.check:
         rc |= 1 if check(cat) else 0
     if args.reconcile:
-        rc |= 1 if reconcile(cat) else 0
+        rc |= 1 if reconcile(cat, verbose=args.verbose) else 0
     if args.sunset:
         sunset_report(cat, ages, sites)
     if args.json:

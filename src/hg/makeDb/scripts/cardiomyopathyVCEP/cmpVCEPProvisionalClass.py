@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-B.11: Computable ACMG Criteria Summary track (NOT a VCEP classification).
+B.11: Variant Evidence Summary track (NOT a VCEP classification).
 
 For every gnomAD-observed variant in the 8 cardiomyopathy gene CDS regions +/-20 nt
-splice padding, lists the subset of ACMG/AMP evidence codes a hub can compute
-automatically. No overall classification is calculated:
+splice padding, lists, per variant, the computable evidence and the ACMG/AMP criterion
+each item would support. No overall classification is calculated:
   - BA1 / BS1 / PM2_Supporting  (gnomAD v4.1 FAF95; B.3)
   - PP3 / BP4                   (REVEL; B.4; missense only, per hgVai consequence)
   - PM1                         (B.1 hotspot regions; HCM-scoped; NOT combined with PM5)
   - PS1 / PM5                   (EvRepo P/LP reference, LEAVE-ONE-OUT; see caveat below)
   - PM4                         (NMD-escaping truncating variants, non-MYBPC3; CSpec disease-specific)
-  - BP7                         (synonymous + SpliceAI no-impact + not conserved)
-  - Splice safety net           (SpliceAI >= 0.20 overrides a benign-leaning call to VUS)
+  - BP7                         (synonymous + SpliceAI < 0.1, per Walker 2023; conservation not required)
+  - Splice flag                 (SpliceAI >= 0.20 shown as possible splice impact; informational)
   - HCM/DCM tag                 (MYH7, TNNT2: PM1 is HCM-calibrated)
 
 CONSEQUENCE/CODON/AA come from the Phase-1 hgVai annotation TSV (cmpVCEPAnnotate).
@@ -21,11 +21,10 @@ HONESTY / KNOWN LIMITS (surfaced to the VCEP, not hidden):
     PP4, BS3, BS4). Many true P/LP calls rest on those, so this track structurally
     under-calls pathogenicity. It is best read as a benign/VUS-axis + "flag for
     expert review" aid, NOT an accuracy claim. No concordance metric is asserted.
-  * PS1/PM5 reference set: the CSpec names NO database ("apply per Richards 2015").
-    We use the VCEP EvRepo P/LP set with LEAVE-ONE-OUT (a variant cannot earn PS1/PM5
-    from its own EvRepo entry). The choice of reference DB is an open VCEP question.
-  * PM4 strength (MOD vs SUP) and BP7 conservation metric/threshold are not fixed by
-    the CSpec - surfaced as VCEP questions; provisional choices are flagged in-line.
+  * PS1/PM5 reference set: the VCEP confirmed EvRepo as the source. We use the VCEP EvRepo
+    P/LP set with LEAVE-ONE-OUT (a variant cannot earn PS1/PM5 from its own EvRepo entry).
+  * BP7 is applied per the CM VCEP: SpliceAI < 0.1, no conservation requirement (Walker 2023,
+    PMID 37352859). PM4 strength (MOD vs SUP) remains a per-variant judgement per the CSpec.
 
 Outputs:
   cmpVCEPProvisionalClass/cmpVCEPProvisionalClass.as
@@ -47,17 +46,16 @@ B1_BED = f'{WORKDIR}/cmpVCEPClinDomains/cmpVCEPClinDomainsHg38.bed'
 EVREPO_JSON = f'{WORKDIR}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
 ANNOT_TSV = f'{WORKDIR}/cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv'
 SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAi.bb'
-PHYLOP_BW = '/gbdb/hg38/multiz470way/phyloP470way.bw'
 
 # Per-gene thresholds (from CSpec - NOT invented here)
 BS1_THRESHOLDS = {'MYBPC3': 0.0002}
 DEFAULT_BS1 = 0.0001
 BA1_THRESHOLD = 0.001
 PM2_SUPPORTING_THRESHOLD = 0.00004
-SPLICE_SAFETY_THRESHOLD = 0.20   # SpliceAI delta for safety-net override (standard recall threshold)
-# --- provisional operationalizations the CSpec leaves open (flagged as VCEP questions) ---
-BP7_SPLICE_MAX = 0.20            # SpliceAI "no predicted impact" (standard recall threshold)
-BP7_PHYLOP_MAX = 0.0             # phyloP470way <= 0 == not under purifying selection (PROVISIONAL - VCEP to confirm metric+cutoff)
+SPLICE_SAFETY_THRESHOLD = 0.20   # SpliceAI delta flagged as possible splice impact (informational)
+# BP7: synonymous with no predicted splice impact. The CM VCEP set this at SpliceAI < 0.1 and
+# removed the conservation requirement, per Walker 2023 (PMID 37352859).
+BP7_SPLICE_MAX = 0.10
 
 # NC_ accession (hg38) -> chrom, for parsing EvRepo genomic HGVS (leave-one-out keys)
 NC_HG38 = {
@@ -83,7 +81,7 @@ CHROM_SIZES = {'hg38': '/cluster/data/hg38/chrom.sizes', 'hg19': '/cluster/data/
 LIFTOVER_HG38_TO_HG19 = '/cluster/data/hg38/bed/liftOver/hg38ToHg19.over.chain.gz'
 
 AUTOSQL = """table cmpVCEPProvisionalClass
-"Computable ACMG criteria per variant (evidence summary; NOT a VCEP classification)"
+"Variant evidence summary per variant (computable evidence + supported ACMG criteria; NOT a VCEP classification)"
     (
     string  chrom;          "Chromosome"
     uint    chromStart;     "Position"
@@ -98,7 +96,7 @@ AUTOSQL = """table cmpVCEPProvisionalClass
     string  refAllele;      "Ref"
     string  altAllele;      "Alt"
     string  variantKind;    "Predicted consequence (hgVai)"
-    string  appliedCodes;   "Computable ACMG codes triggered (semicolon-separated, with strengths)"
+    string  appliedCodes;   "ACMG criteria supported by the evidence (semicolon-separated, with strengths)"
     string  diseaseTag;     "HCM/DCM phenotype scoping note (MYH7, TNNT2)"
     string  codeNotes;      "Suppressed/contested codes (e.g. PM5 not combined with PM1)"
     string  splice_safety;  "yes if SpliceAI >= 0.20 (possible splice impact; informational)"
@@ -319,25 +317,6 @@ def batch_spliceai(regions):
     return sa
 
 
-def batch_phylop(regions):
-    """Per gene region: (chrom, pos1) -> phyloP470way value."""
-    pp = {}
-    for chrom, start, end in regions:
-        try:
-            out = subprocess.check_output(['bigWigToBedGraph', PHYLOP_BW, 'stdout',
-                                           f'-chrom={chrom}', f'-start={start}', f'-end={end}'],
-                                          text=True, stderr=subprocess.DEVNULL)
-        except subprocess.CalledProcessError:
-            continue
-        for line in out.splitlines():
-            c, s, e, val = line.split('\t')
-            s, e, val = int(s), int(e), float(val)
-            for p0 in range(s, e):
-                pp[(chrom, p0 + 1)] = val   # 1-based
-    print(f'  phyloP positions: {len(pp)}', file=sys.stderr)
-    return pp
-
-
 TRUNCATING_SO = {'stop_gained', 'frameshift_variant'}
 
 
@@ -356,12 +335,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--db', action='append', required=True, choices=['hg38', 'hg19'])
     ap.add_argument('--output-dir', required=True)
-    ap.add_argument('--no-spliceai', action='store_true', help='Skip SpliceAI/BP7-conservation (debug only)')
+    ap.add_argument('--no-spliceai', action='store_true', help='Skip SpliceAI (debug only)')
     args = ap.parse_args()
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPProvisionalClass')
     os.makedirs(out_dir, exist_ok=True)
-    print('  [B.11 Computable ACMG Criteria Summary]')
+    print('  [B.11 Variant Evidence Summary]')
 
     b3 = load_b3_variants()
     revel = load_b4_revel_lookup()
@@ -377,11 +356,7 @@ def main():
         bs = m['blockSizes']
         last_exon = bs[0] if m['strand'] == '-' else bs[-1]   # 3'-most transcript exon
         nmd_junction[gene] = sum(bs) - last_exon
-    if args.no_spliceai:
-        spliceai, phylop = {}, {}
-    else:
-        spliceai = batch_spliceai(regions)
-        phylop = batch_phylop(regions)
+    spliceai = {} if args.no_spliceai else batch_spliceai(regions)
 
     n_features = 0
     code_counts = defaultdict(int)
@@ -398,21 +373,23 @@ def main():
         is_synonymous = 'synonymous_variant' in so
 
         codes = set()
-        code_why = {}
         notes = []
         faf = v['faf95']
+        # captured evidence values for the evidence-first mouseover
+        af_ev = revel_ev = pm4_ev = None
+        ps1_codon = pm5_codon = None
 
         # gnomAD AF (B.3)
         if v['af_code'] == 'BA1':
             codes.add('BA1')
-            code_why['BA1'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8805; 0.001'
+            af_ev = ('BA1', f'FAF95 {faf:.2e}, &#8805; 0.001')
         elif v['af_code'] == 'BS1':
             codes.add('BS1_Strong')
             thr = '0.0002' if gene == 'MYBPC3' else '0.0001'
-            code_why['BS1_Strong'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8805; {thr}'
+            af_ev = ('BS1_Strong', f'FAF95 {faf:.2e}, &#8805; {thr}')
         elif v['af_code'] == 'PM2_supporting':
             codes.add('PM2_Supporting')
-            code_why['PM2_Supporting'] = f'gnomAD FAF95 (popmax) {faf:.2e} &#8804; 4e-05 (rare)'
+            af_ev = ('PM2_Supporting', f'FAF95 {faf:.2e}, rare (&#8804; 4e-05)')
 
         # REVEL PP3/BP4 - missense only
         if is_missense:
@@ -421,13 +398,12 @@ def main():
                 code, score = rc
                 codes.add(code)
                 thr = '&#8805; 0.70' if code.startswith('PP3') else '&#8804; 0.40'
-                code_why[code] = f'REVEL {score} ({thr})'
+                revel_ev = (code, f'{score} ({thr})')
 
         # PM1 hotspot (HCM-calibrated)
         pm1_hit = in_pm1_region(chrom, v['start'], pm1)
         if pm1_hit:
             codes.add('PM1_Moderate')
-            code_why['PM1_Moderate'] = f'in the {gene} PM1 hotspot region (HCM-calibrated)'
 
         # PS1 / PM5 - EvRepo P/LP reference, LEAVE-ONE-OUT (exclude self by genomic key)
         if is_missense and a.get('codon') and a.get('aaAlt'):
@@ -439,10 +415,10 @@ def main():
                       and e['gkey'] != gkey for e in evref)
             if ps1:
                 codes.add('PS1_Strong')
-                code_why['PS1_Strong'] = f'same amino-acid change as a VCEP EvRepo P/LP variant at codon {codon}'
+                ps1_codon = codon
             if pm5:
                 codes.add('PM5_Moderate')
-                code_why['PM5_Moderate'] = f'a different missense at codon {codon} is classified P/LP in the VCEP EvRepo set'
+                pm5_codon = codon
 
         # PM4 - NMD-escaping truncating, non-MYBPC3 (CSpec disease-specific; PVS1 N/A for these genes).
         # NMD escapes if the PTC is in the last exon OR within 50 nt of the last exon-exon junction
@@ -455,35 +431,30 @@ def main():
                 codes.add('PM4_Supporting')
                 last = a.get('exonNum') == a.get('exonTotal')
                 where = 'last exon' if last else 'within 50 nt of the last exon-exon junction'
-                code_why['PM4_Supporting'] = f'NMD-escaping truncating variant ({where})'
+                pm4_ev = f'truncating, escapes NMD ({where})'
         elif gene != 'MYBPC3' and 'stop_lost' in so:
             codes.add('PM4_Supporting')
-            code_why['PM4_Supporting'] = 'stop-loss variant'
+            pm4_ev = 'stop-loss variant'
 
-        # BP7 - synonymous + SpliceAI no-impact + not conserved (conservation cutoff PROVISIONAL)
+        # BP7 - synonymous with no predicted splice impact (SpliceAI < 0.1, per Walker 2023
+        # PMID 37352859). The CM VCEP removed the conservation requirement, so no phyloP gate.
         sa_score = spliceai.get((chrom, pos1, ref, alt), 0.0)
         if is_synonymous and not args.no_spliceai:
-            phy = phylop.get((chrom, pos1))
-            if sa_score < BP7_SPLICE_MAX and phy is not None and phy <= BP7_PHYLOP_MAX:
+            if sa_score < BP7_SPLICE_MAX:
                 codes.add('BP7_Supporting')
-                code_why['BP7_Supporting'] = (f'synonymous; SpliceAI {sa_score:.2f} &lt; {BP7_SPLICE_MAX}; '
-                                              f'phyloP {phy:.2f} &#8804; 0 (conservation cutoff provisional)')
 
         # CSpec exclusion: PM1 must NOT be combined with PM5. GN002 PM5: "use of PM5 is most
         # appropriate since it is variant specific" -> keep PM5, drop PM1.
+        pm1_suppressed = False
         if 'PM1_Moderate' in codes and 'PM5_Moderate' in codes:
             codes.discard('PM1_Moderate')
-            notes.append('<b>PM1 suppressed:</b> CSpec says PM5 (variant-specific) is preferred over PM1')
-        # CSpec is silent on PM1+PS1; flag as possible double-count for VCEP (do not suppress)
+            pm1_suppressed = True
+        # CSpec is silent on PM1+PS1; flag as a possible double-count (do not suppress).
         if 'PM1_Moderate' in codes and 'PS1_Strong' in codes:
-            notes.append('<b>Note:</b> PM1+PS1 co-occur &#8212; possible double-counting (VCEP question)')
+            notes.append('PM1 and PS1 co-occur here, a possible double-count (open VCEP question)')
 
         # Splice signal (informational): SpliceAI >= 0.20 flags possible splice impact.
-        # No longer overrides a call - this track computes no overall classification.
-        splice_safety = 'no'
-        if sa_score >= SPLICE_SAFETY_THRESHOLD:
-            notes.append(f'<b>Splice flag:</b> SpliceAI {sa_score:.2f} &gt;= {SPLICE_SAFETY_THRESHOLD} (possible splice impact; informational)')
-            splice_safety = 'yes'
+        splice_safety = 'yes' if sa_score >= SPLICE_SAFETY_THRESHOLD else 'no'
 
         n_features += 1
         for c in codes:
@@ -495,32 +466,56 @@ def main():
             disease_tag = 'PM1 HCM-calibrated' if pm1_hit else 'HCM/DCM'
 
         applied_str = ';'.join(sorted(codes)) or 'no codes'
-        notes_str = ' | '.join(notes)
         kind = variant_kind(so)
 
-        mo = [f'<b>Computable ACMG Criteria Summary</b> (NOT a VCEP classification)<br>',
-              f'<b>{gene}</b> {chrom}:{pos1} {ref}&gt;{alt}']
+        # ---- evidence-first mouseover: the data leads; the ACMG code is a subordinate tag ----
+        ev = []
+        if af_ev:
+            ev.append(f'<b>Population frequency (gnomAD v4.1):</b> {af_ev[1]} &rarr; supports {af_ev[0]}')
+        if revel_ev:
+            ev.append(f'<b>Missense predictor (REVEL):</b> {revel_ev[1]} &rarr; supports {revel_ev[0]}')
+        if ps1_codon:
+            ev.append(f'<b>Known variants at residue {ps1_codon} (EvRepo):</b> the same amino-acid change is '
+                      f'VCEP P/LP &rarr; supports PS1_Strong')
+        if pm5_codon:
+            ev.append(f'<b>Known variants at residue {pm5_codon} (EvRepo):</b> a different VCEP P/LP change '
+                      f'exists at this residue &rarr; supports PM5_Moderate')
+        if pm1_hit:
+            if pm1_suppressed:
+                ev.append(f'<b>PM1 hotspot region:</b> within the {gene} hotspot (HCM only); not counted here, '
+                          f'PM5 (variant-specific) is preferred per CSpec')
+            else:
+                ev.append(f'<b>PM1 hotspot region:</b> within the {gene} hotspot (HCM only) &rarr; supports PM1_Moderate')
+        if pm4_ev:
+            ev.append(f'<b>Protein-truncating:</b> {pm4_ev} &rarr; supports PM4_Supporting')
+        if 'BP7_Supporting' in codes:
+            ev.append(f'<b>Synonymous, splicing (SpliceAI):</b> {sa_score:.2f}, no predicted impact '
+                      f'(&#8804; 0.1, per Walker 2023) &rarr; supports BP7_Supporting')
+        if splice_safety == 'yes':
+            ev.append(f'<b>Splicing (SpliceAI):</b> {sa_score:.2f}, possible splice impact (informational)')
+
+        mo = ['<b>Variant evidence</b> (not a VCEP classification)<br>',
+              f'<b>{gene}</b> &middot; {chrom}:{pos1} {ref}&gt;{alt}']
         if a.get('hgvsp'):
-            mo.append(f' &nbsp;<i>{a["hgvsp"]}</i>')
-        mo.append(f'<br><b>Consequence:</b> {kind}<br>')
-        if codes:
-            mo.append('<b>Computable codes triggered:</b><br>')
-            for c in sorted(codes):
-                why = code_why.get(c, '')
-                mo.append(f'&nbsp;&nbsp;<b>{c}:</b> {why}<br>' if why else f'&nbsp;&nbsp;<b>{c}</b><br>')
+            mo.append(f' &middot; <i>{a["hgvsp"]}</i>')
+        mo.append(f' &middot; {kind}<br>')
+        if ev:
+            for line in ev:
+                mo.append(line + '<br>')
         else:
-            mo.append('<b>Computable codes triggered:</b> none<br>')
-        if notes_str:
-            mo.append(f'<span style="color:#a00">{notes_str}</span><br>')
-        mo.append('<br><i>Shows only the computable ACMG codes that are triggered. Excludes clinical/functional '
-                  'PS2/PS3/PS4/PP1/PP4/BS3/BS4.</i>')
+            mo.append('No computable evidence at this position.<br>')
+        if notes:
+            mo.append('<span style="color:#a00">' + ' | '.join(notes) + '</span><br>')
+        mo.append('<br><i>Shows the computable evidence and the ACMG criteria it would support. '
+                  'Not a VCEP review or classification; clinical/functional evidence '
+                  '(PS2/PS3/PS4/PP1/PP4/BS3/BS4) is not included.</i>')
         mouseover = ''.join(mo)
 
         name = f'{gene}_{pos1}_{ref}>{alt}'
         bed_lines.append('\t'.join([
             chrom, str(v['start']), str(v['end']), name, '0', v['strand'],
             str(v['start']), str(v['end']), color, gene, ref, alt, kind,
-            applied_str, disease_tag, notes_str, splice_safety, mouseover,
+            applied_str, disease_tag, ' | '.join(notes), splice_safety, mouseover,
         ]))
 
     print(f'  features: {n_features}')

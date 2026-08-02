@@ -688,14 +688,26 @@ const T_START = Date.now();
     pinnedTips.length = 0;   // consume the set
   }
   // Shift+drag across the track image to open the browser's own drag-select dialog
-  // ("Zoom In / Single Highlight / ..."), then act on it. Endpoints are given as
-  // genomic coords (from:/to:), a fraction across the view (fromFrac:/toFrac:) or a
-  // raw pixel (fromX:/toX:). Optional `track:` picks the row the drag runs over (y);
-  // default is the middle of the image. `shot:` captures the open dialog (e.g. the
-  // Figure 1A drag-select box). `then:` = zoom (default, clicks Zoom In) | highlight
-  // (Single Highlight) | cancel (Escape, leaves the view unchanged).
+  // ("Zoom In / Single Highlight / ..."), then act on it. The usual form gives one
+  // genomic region and zooms:  drag: chr7:155,806,100-155,806,557
+  // Any other action needs the map form, which is also how you pass shot:/track:
+  //   drag: {range: "chr7:155,806,100-155,806,557", then: highlight}
+  // Endpoints that are not genomic coords use a fraction
+  // across the view (fromFrac:/toFrac:) or a raw pixel (fromX:/toX:) instead.
+  // Optional `track:` picks the row the drag runs over (y); default is the middle of
+  // the image. `shot:` captures the open dialog (e.g. the Figure 1A drag-select box).
+  // `then:` = zoom (default, clicks Zoom In) | highlight (Single Highlight) | cancel
+  // (Escape, leaves the view unchanged).
   async function drag(o) {
+    // A bare string is the region; `range:` is the same thing with room for other
+    // keys. Both expand to the from:/to: endpoints the rest of this function uses.
+    if (typeof o === 'string') o = { range: o };
     o = o || {};
+    if (o.range != null) {
+      const m = String(o.range).match(/^\s*(.+):([\d,]+)\s*-\s*([\d,]+)\s*$/);
+      if (!m) throw new Error(`drag: range "${o.range}" is not chrom:start-end`);
+      o = Object.assign({}, o, { from: `${m[1]}:${m[2]}`, to: `${m[1]}:${m[3]}` });
+    }
     const img = await page.locator('img[id^="img_data_"]').first().boundingBox({ timeout: 8000 }).catch(() => null);
     const tbl = await page.locator('#imgTbl').first().boundingBox({ timeout: 8000 }).catch(() => null);
     if (!img || !tbl) throw new Error('drag: track image not shown (need #imgTbl)');

@@ -20,13 +20,45 @@ Usage:
     cartTrackVarCatalog.py --json out.json
     cartTrackVarCatalog.py --html out.html
     cartTrackVarCatalog.py --check      # sanity checks, prints counts
+    cartTrackVarCatalog.py --reconcile  # diff the catalog against the tree
+    cartTrackVarCatalog.py --reconcile --verbose      # ... with the full diff
+    cartTrackVarCatalog.py --update-baseline          # accept new tree names
+
+--reconcile is the mode meant for a nightly cron: it prints nothing and exits 0
+when nothing has changed, and exits 1 with a list when the tree has grown a
+track-scoped name that is in neither the catalog nor the baseline.  --check is a
+different thing, and not a substitute: it only reads this file, so it cannot see
+the tree move at all.
+
+Matching is on the variable name with its leading separator stripped, because
+the harvester cannot always tell which separator a name is used with: the fourth
+argument of cart*ClosestToHome() is a bare suffix, while a safef("%s.%s") site
+carries the dot.  So <track>.foo and <track>_foo reconcile as one name here,
+even though the catalog records the two spellings separately and the difference
+between them is a live bug in at least one place (see _pairEndsByName).
+
+The scan cannot tell a cart variable from a table name, a filename suffix or an
+SQL fragment, so a good part of what it finds is not a cart variable at all
+(.bai, _gold, .tbi).  Those live in BASELINE_FILE next to this script rather
+than being argued with one at a time: reconcile complains only about a name in
+neither the catalog nor the baseline.  Accept new ones with --update-baseline and
+commit the file, which puts the decision in the git log.
 """
 
 import argparse
 import html
 import json
+import os
 import re
 import sys
+
+# Harvested names that are not track-scoped cart variables.  See the docstring.
+BASELINE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "cartVarsNotCataloged.txt")
+
+# Floor on how many names a working scan finds; well under the real count.  See
+# the check in reconcile().
+MIN_TREE_NAMES = 150
 
 # ---------------------------------------------------------------------------
 # how a track-scoped name is built
@@ -1386,6 +1418,253 @@ def counts(cat):
 
 
 # ---------------------------------------------------------------------------
+# reconcile against the tree
+# ---------------------------------------------------------------------------
+
+def all_vars():
+    """Every catalog entry, from every section."""
+    out = []
+    for group in (COMMON, CONTAINER, FAMILIES, TYPES, BY_TRACK_NAME,
+                  OTHER_CGIS):
+        for g in group.values():
+            out.extend(g["vars"])
+    out.extend(GLOBAL_BUT_TRACK_SPECIFIC)
+    return out
+
+
+def key(name):
+    """A harvested and a cataloged name reduced to a comparable form.
+
+    The leading separator goes because the harvester cannot always report it;
+    see the module docstring.
+    """
+    return name.lstrip("._")
+
+
+WILDCARD_RE = re.compile(r"<[a-zA-Z]+>|\*")
+
+
+def as_pattern(n):
+    """Compile a catalog name with <field>/<name>/* stand-ins into a regex."""
+    rx = re.escape(n)
+    rx = re.sub(r"\\<[a-zA-Z]+\\>", r"[A-Za-z0-9_.]+", rx)
+    rx = rx.replace(r"\*", r"[A-Za-z0-9_.]*")
+    return re.compile(r"\A%s\Z" % rx)
+
+
+def leaf_of(n):
+    """The trailing literal component of a wildcard name, or None.
+
+    The harvester sees only the innermost suffix of a nested name: what the
+    catalog calls decorator.<name>.blockMode arrives as blockMode, because the
+    decorator and its name are supplied at run time.  So a wildcard name also
+    registers its last component, but only where that component is a component
+    -- preceded by a separator, or the whole name after a leading stand-in.
+    That keeps filter.<field>Max from registering a bare "Max", which would
+    match anything.
+    """
+    parts = WILDCARD_RE.split(n)
+    tail = parts[-1]
+    if not tail or WILDCARD_RE.search(tail):
+        return None
+    if tail.startswith(".") or tail.startswith("_"):
+        return tail[1:] or None
+    if len(parts) == 2 and not parts[0]:        # "<field>FilterType"
+        return tail
+    return None
+
+
+def catalog_keys():
+    """(literal names, compiled patterns) the catalog already accounts for.
+
+    A name with <field> or <species> in it is a family stand-in rather than a
+    literal, so it becomes a pattern: filter.<field> has to match the
+    filter.score the tree actually reads.
+    """
+    literals, patterns = set(), []
+    for e in all_vars():
+        n = key(e["name"])
+        if not n:
+            continue                    # the bare track name, no suffix
+        if WILDCARD_RE.search(n):
+            patterns.append(as_pattern(n))
+            leaf = leaf_of(n)
+            if leaf:
+                literals.add(leaf)
+        else:
+            literals.add(n)
+    # The exceptions section records names built prefix-first or keyed by
+    # something other than a track; they are described, just not as entries.
+    for e in EXCEPTIONS:
+        for pat in e["pattern"].split(","):
+            n = key(pat.strip())
+            if not n:
+                continue
+            patterns.append(as_pattern(n))
+            leaf = leaf_of(n)
+            if leaf:
+                literals.add(leaf)
+    return literals, patterns
+
+
+def cataloged_test():
+    """A predicate: does the catalog already account for this harvested name?
+
+    Built once and shared by --reconcile and --update-baseline, so the two
+    cannot disagree about what is already described.
+    """
+    literals, patterns = catalog_keys()
+
+    def cataloged(n):
+        if n in literals or any(p.match(n) for p in patterns):
+            return True
+        # The harvested name can itself be a wildcard, from a cartRemoveLike()
+        # or a format string with the track name in the middle: hgTrackUi's
+        # "*_*_sel" is the _sel the catalog already describes.
+        if "*" in n:
+            leaf = leaf_of(n)
+            if leaf and leaf in literals:
+                return True
+            rx = as_pattern(n)
+            return any(rx.match(c) for c in literals)
+        return False
+
+    return cataloged, literals, patterns
+
+
+def read_baseline(path=BASELINE_FILE):
+    """The harvested names already known not to be cart variables."""
+    names = set()
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.split("#", 1)[0].strip()
+                if line:
+                    names.add(line)
+    except OSError:
+        pass                    # no baseline yet: every harvested name is new
+    return names
+
+
+def write_baseline(names, sites=None, path=BASELINE_FILE):
+    """Write the baseline, annotating each name with the file that reads it.
+
+    The comment carries the file but not the line, so that ordinary edits above
+    a call site do not rewrite hundreds of lines here and bury the one name that
+    actually changed.
+    """
+    with open(path, "w") as f:
+        f.write("""\
+# cartVarsNotCataloged.txt - names that harvestCartVars.py finds at a
+# cart*ClosestToHome() or safef("%s.%s") call site but that cartTrackVarCatalog.py
+# does not describe as a track-scoped cart variable.  Refs #37838.
+#
+# Most are not cart variables at all: the scan cannot tell one from a table
+# name, a filename suffix or an SQL fragment, so .bai, _gold and .tbi come out
+# of it too.  Some are cart variables that simply have not been cataloged yet.
+#
+# cartTrackVarCatalog.py --reconcile complains about any harvested name in
+# neither the catalog nor this file, so this is what keeps a nightly run quiet
+# until something actually changes.  Regenerate with --update-baseline, then read
+# the diff before committing: a name appearing here is a decision that it is not
+# a cart variable worth cataloging, and a name disappearing means its call site
+# went away.
+#
+# The first version of this file was accepted wholesale, as a snapshot of the
+# gap on the day reconcile learned to fail.  So a name being in here is not
+# evidence that anybody has looked at it; only the ones added since, which
+# arrive a few at a time in a reviewable diff, carry that weight.
+#
+# Names are stored with the leading separator stripped, which is how reconcile
+# compares them.
+""")
+        sites = sites or {}
+        for n in sorted(names):
+            where = sites.get(n, "").rsplit(":", 1)[0]
+            if where:
+                f.write("%-34s # %s\n" % (n, where))
+            else:
+                f.write("%s\n" % n)
+
+
+def harvested():
+    """(name -> file:line) for every literal name the tree yields, or None.
+
+    Keyed the same way the catalog is, so the two are directly comparable.
+    """
+    try:
+        import harvestCartVars as h
+    except ImportError:
+        print("harvestCartVars.py not importable from here", file=sys.stderr)
+        return None
+    out = {}
+    for name, src in h.resolved(h.harvest(quiet=True)).items():
+        k = key(name)
+        if k:
+            out.setdefault(k, src)
+    return out
+
+
+def reconcile(cat, out=sys.stdout, verbose=False):
+    """Diff the catalog against the names the tree actually builds.
+
+    The one thing here that needs a person is a name the tree builds that is in
+    neither the catalog nor the baseline, because that is a track-scoped
+    variable somebody added without saying what it is.  A catalog entry with no
+    call site found is not: several are read through a helper or spelled with a
+    macro the scan cannot follow, and printing them on every run is what would
+    make a nightly unreadable.  So that half goes out only under --verbose.
+    Silent and 0 means nothing new.
+    """
+    tree = harvested()
+    if tree is None:
+        return 1
+
+    # A scan that finds almost nothing is a broken scan, not a clean tree, and
+    # the difference matters: pointed at the wrong KENT_SRC or an empty clone,
+    # everything below would come up empty and report all clear forever.
+    if len(tree) < MIN_TREE_NAMES:
+        print("only %d names found: expected at least %d, so the scan is "
+              "broken rather\nthan the tree being clean.  Check KENT_SRC."
+              % (len(tree), MIN_TREE_NAMES), file=out)
+        return 1
+
+    cataloged, literals, patterns = cataloged_test()
+    baseline = read_baseline()
+
+    new = sorted(n for n in tree if not cataloged(n) and n not in baseline)
+    only_cat = sorted(n for n in literals if n not in tree)
+
+    if verbose:
+        print("catalog literal names   %d" % len(literals), file=out)
+        print("catalog patterns        %d" % len(patterns), file=out)
+        print("harvested names         %d" % len(tree), file=out)
+        print("baseline names          %d" % len(baseline), file=out)
+        print("\nin the catalog, no call site found (%d)" % len(only_cat),
+              file=out)
+        print("    (expected for a name read through a helper or built from a "
+              "macro the\n     scan cannot follow; anything else is an entry "
+              "whose read has gone away)", file=out)
+        for n in only_cat:
+            print("    %s" % n, file=out)
+        known = sorted(n for n in tree if n in baseline)
+        print("\nharvested, in the baseline rather than the catalog (%d)"
+              % len(known), file=out)
+        for n in known:
+            print("    %-30s %s" % (n, tree[n]), file=out)
+
+    if new:
+        print("\nbuilt by the tree, in neither the catalog nor the baseline "
+              "(%d):" % len(new), file=out)
+        print("    (add an entry to cartTrackVarCatalog.py if it is a "
+              "track-scoped cart\n     variable, otherwise accept it with "
+              "--update-baseline)", file=out)
+        for n in new:
+            print("    %-30s %s" % (n, tree[n]), file=out)
+    return len(new)
+
+
+# ---------------------------------------------------------------------------
 # HTML rendering
 # ---------------------------------------------------------------------------
 
@@ -1669,8 +1948,30 @@ def main():
     ap.add_argument("--json")
     ap.add_argument("--html")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--reconcile", action="store_true")
+    ap.add_argument("--verbose", action="store_true",
+                    help="with --reconcile, also print the standing drift "
+                         "that needs no action")
+    ap.add_argument("--update-baseline", dest="updateBaseline",
+                    action="store_true",
+                    help="rewrite %s from the current tree; read the diff "
+                         "before committing it"
+                         % os.path.basename(BASELINE_FILE))
     args = ap.parse_args()
     cat = build()
+    if args.updateBaseline:
+        tree = harvested()
+        if tree is None:
+            return 1
+        cataloged, _, _ = cataloged_test()
+        was = read_baseline()
+        now = set(n for n in tree if not cataloged(n))
+        write_baseline(now, tree)
+        print("wrote %s: %d names, %d added, %d dropped"
+              % (BASELINE_FILE, len(now), len(now - was), len(was - now)))
+        return 0
+    if args.reconcile:
+        return 1 if reconcile(cat, verbose=args.verbose) else 0
     if args.json:
         with open(args.json, "w") as f:
             json.dump(cat, f, indent=1)

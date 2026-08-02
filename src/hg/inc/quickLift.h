@@ -67,6 +67,11 @@ char *quickLiftGetChainPath(struct cart *, char *fromDb, char *toDb);
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 // Map a list of bedd in query coordinates to our current reference
 
+struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash);
+// Map a list of encodePeaks in query coordinates to our current reference.  These can't go
+// through quickLiftBeds:  the thickStart and thickEnd it assigns overlay signalValue and
+// pValue in struct encodePeak.
+
 boolean quickLiftEnabled(struct cart *cart);
 /* Return TRUE if feature is available */
 

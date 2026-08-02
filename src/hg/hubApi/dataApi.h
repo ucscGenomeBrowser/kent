@@ -98,7 +98,6 @@
 #define argBetterName "betterName"
 /* used by the internal /submitOttoRequest relay endpoint */
 #define argRequestType "requestType"
-#define argRelaySecret "relaySecret"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
@@ -318,8 +317,9 @@ char *relaySubmitOttoRequest(char *requestType, char *fromDb, char *toDb, char *
 
 void apiSubmitOttoRequest(char *words[MAX_PATH_INFO]);
 /* Internal server-to-server endpoint backing relaySubmitOttoRequest():
- * authenticates via the shared hg.conf secret 'hubApi.relaySecret', then
- * calls submitOttoRequest() locally and returns its status as JSON. */
+ * authenticates via the shared hg.conf secret 'hubApi.relaySecret', sent as
+ * the 'X-Relay-Secret' request header, then calls submitOttoRequest()
+ * locally and returns its status as JSON. */
 
 /* ######################################################################### */
 /*  functions in getData.c */
