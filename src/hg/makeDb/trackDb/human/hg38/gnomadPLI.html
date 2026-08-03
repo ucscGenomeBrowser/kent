@@ -26,14 +26,16 @@ There are two &quot;groups&quot; of tracks in this set, and four gnomAD versions
     level or whole transcript level for three different types of variation: missense, synonymous,
     and predicted loss of function. The Gene Constraint track displays metrics for a canonical 
     transcript per gene defined as the longest isoform. The Transcript Constraint track displays 
-    metrics for all transcript isoforms. Items on both tracks are shaded according to the pLI score,
-    with outlier items shaded in grey.
+    metrics for all transcript isoforms. Items on both tracks are shaded according to the LOEUF score
+    (the upper bound of the O/E confidence interval, see Methods below) with outlier items shaded in
+    grey.
   <br><img src="../images/gnomAD_LOEUFkey.png"  width='33%'alt="LOEUF score legend"><br>
     Please note there is no gene-level track available for v4.0, v4.1, or v4.1.1.
   <li><b>Gene/Transcript Missense Constraint tracks</b>: The missense constraint tracks are built
     similarly to the LoF constraint tracks, however the items displayed are based on 
     <a href="https://gnomad.broadinstitute.org/help/constraint" target="_blank">missense Z scores</a>.
-    All items are colored black, and individual Z scores can be seen on mouseover. 
+    Items are colored red when the missense Z-score exceeds 3.09, and black otherwise; individual Z
+    scores can be seen on mouseover. 
 </ol>
 All tracks follow the general configuration settings for bigBed tracks. Mouseover on the 
 Gene/Transcript Constraint tracks shows the <b>pLI score</b> and the loss of function 
@@ -126,7 +128,7 @@ Please see Samocha et al., 2014 and Lek et al., 2016 for further discussion of t
 
 <h3>Constraint and Gene Quality Flags (v4.1.1)</h3>
 <p>
-Starting with v4.1.1, the Transcript LoF and Transcript Missense tracks carry two additional flag
+Starting with v4.1.1, the Transcript LoF and Transcript Missense tracks carry three additional
 fields, shown on the item details page:
 <ul>
   <li><b>Constraint flags</b>: <code>outlier_lof</code>, <code>outlier_mis</code>, and
@@ -138,11 +140,12 @@ fields, shown on the item details page:
   <li><b>Gene flags</b>: <code>low_exome_coverage</code> and <code>low_exome_mapping_quality</code>
   mark transcripts overlapping regions of low exome sequencing coverage or low mapping quality.
   Constraint metrics for flagged transcripts should be treated with caution.
+  <li><b>Exome quality metrics</b>: <code>prop bp AN90</code> (proportion of transcript bases with
+  allele number at or above 90% of the maximum) and <code>mean AS MQ</code> (mean allele-specific
+  mapping quality) are the coverage and mapping-quality statistics underlying the gene flags above.
+  <code>prop segdup</code> and <code>prop LCR</code> report the proportion of the transcript
+  overlapping segmental duplications or low-complexity regions. Not available for all transcripts.
 </ul>
-The underlying per-transcript coverage and mapping statistics used to derive these flags
-(proportion of bases with allele number at or above 90% of the maximum, mean allele-specific
-mapping quality, and proportion of the transcript overlapping segmental duplications or
-low-complexity regions) are also shown on the item details page.
 </p>
 
 <h3>Transcripts Included</h3>
@@ -170,7 +173,7 @@ on gene symbols instead of ENSG identifiers. In total 19567/19704 genes were map
 </p>
 
 <p>
-For version v4.0 and v4.1, the gnomAD transcript data is based on hg38. In order to map the
+For version v4.0, v4.1, and v4.1.1, the gnomAD transcript data is based on hg38. In order to map the
 transcripts to hg38, the transcript version numbers in the gnomAD download file were joined with
 GENCODE V39 and NCBI RefSeq coordinates available at UCSC.
 </p>
