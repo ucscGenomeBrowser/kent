@@ -5,7 +5,7 @@ type bigBed 12 +
 parent predictionScoresSuper
 bigDataUrl /gbdb/$D/popEve/popEve.bb
 style heatmap
-dataVersion popEVE v1.1 (UKBB), 2025-07-15
+dataVersion popEVE v1.1 (UKBB); scores 2025-03-12, coordinates 2025-07-15
 visibility pack
 maxWindowCoverage 200000
 filterText.name .*

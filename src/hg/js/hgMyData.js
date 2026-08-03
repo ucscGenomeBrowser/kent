@@ -125,6 +125,20 @@ const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names
 const fileNameFixRegex = /[^0-9a-zA-Z_]+/g; // '.' get replaced to underbars in trackHub.c. Also any files uploaded from hubtools that may have weird chars need to be escaped
 const parentDirSegmentRegex = /^[0-9a-zA-Z._]+$/; // allowed characters in each hub-path segment
 
+function normalizeParentDir(file) {
+    // Strip surrounding whitespace off a file's parentDir, writing the trimmed value back
+    // into the file metadata. A trailing space is invisible in the hub name field, so
+    // rejecting it outright gives the user an error they cannot see the cause of. Must be
+    // called before isValidParentDir so we validate what will actually be uploaded.
+    let parentDir = (file.meta && file.meta.parentDir) || "";
+    let trimmed = parentDir.trim();
+    if (trimmed !== parentDir) {
+        uppy.setFileMeta(file.id, {parentDir: trimmed});
+        file.meta.parentDir = trimmed;
+    }
+    return trimmed;
+}
+
 function isValidParentDir(parentDir) {
     // Slash-separated path of segments matching parentDirSegmentRegex; no '..'.
     if (!parentDir) return false;
@@ -382,7 +396,7 @@ const uppy = new Uppy.Uppy({
                 doUpload = false;
                 continue;
             }
-            if (!isValidParentDir(file.meta.parentDir)) {
+            if (!isValidParentDir(normalizeParentDir(file))) {
                 uppy.info(`Error: Hub path has special characters, please rename hub: ${file.meta.parentDir} for file: ${file.meta.name} to a path of alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 doUpload = false;
                 continue;
@@ -992,7 +1006,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 if (!fileNameMatch || fileNameMatch[0] !== file.meta.name) {
                     uppy.info(`Error: File name has special characters, please rename file: '${file.meta.name}' to only include alpha-numeric characters, period, or underscore.`, 'error', 5000);
                 }
-                if (!isValidParentDir(file.meta.parentDir)) {
+                if (!isValidParentDir(normalizeParentDir(file))) {
                     uppy.info(`Error: Hub path '${file.meta.parentDir}' must be alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 }
             }

@@ -64,9 +64,22 @@
 #      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
 
 ##############################################################################
+# 5. Labels, colors, and facets
+##############################################################################
+# The cell type / cell class / longLabel / color / facet values are all derived
+# by build_stanzas.py, not copied from the source hubs. That logic (paper-curated
+# cell-type crosswalks, the shared broad-class color palette, the rebuilt
+# longLabels, and the per-collection tissue/life-stage/condition parsing incl.
+# SEA-AD region + ADNC) is documented once in doc/mm10/singleCellSignalsPeaks.txt
+# section 4; it runs identically for hg38. Tracks are colored by broad cell class
+# from the same palette as mm10, so a class is the same color on both assemblies.
+
+##############################################################################
 # Counts
 ##############################################################################
-# 936 subtracks across 9 datasets: human-enhancer-atlas (444), sea-ad-brain-atac
-# (184), cortex-atac (91), retina (69), neuro-degen-atac (67),
+# 936 files resolved across 9 datasets: human-enhancer-atlas (444),
+# sea-ad-brain-atac (184), cortex-atac (91), retina (69), neuro-degen-atac (67),
 # multiomic-human-heart (40), cardiogenesis-atac (19), olg-eae-ms (18),
-# brainvar (4). Facet metadata rows match the subtracks 1:1.
+# brainvar (4). 10 mislabeled interaction bigBeds (cortex-atac interact.old/) are
+# reclassified to the interact composite and 1 QC cluster is dropped, leaving 925
+# subtracks in the track. Facet metadata rows match the subtracks 1:1.

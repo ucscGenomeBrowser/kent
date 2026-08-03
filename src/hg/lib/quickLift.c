@@ -24,6 +24,7 @@
 #include "bigLink.h"
 #include "chromAlias.h"
 #include "customTrack.h"
+#include "encode/encodePeak.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -341,6 +342,30 @@ for(bed = bedList; bed; bed = nextBed)
         }
     }
 return liftedBedList;
+}
+
+struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash)
+// Map a list of encodePeaks in query coordinates to our current reference.  These can't go
+// through quickLiftBeds:  the thickStart and thickEnd it assigns overlay signalValue and
+// pValue in struct encodePeak.
+{
+struct encodePeak *liftedList = NULL;
+struct encodePeak *nextPeak;
+struct encodePeak *peak;
+for(peak = peakList; peak; peak = nextPeak)
+    {
+    nextPeak = peak->next;
+    peak->next = NULL;
+
+    char *error = liftOverRemapRange(chainHash, 0.0, peak->chrom, peak->chromStart, peak->chromEnd,
+                            peak->strand[0],
+                            0.001, &peak->chrom, (int *)&peak->chromStart, (int *)&peak->chromEnd,
+                            &peak->strand[0]);
+
+    if (error == NULL)
+        slAddHead(&liftedList, peak);
+    }
+return liftedList;
 }
 
 boolean quickLiftEnabled(struct cart *cart)

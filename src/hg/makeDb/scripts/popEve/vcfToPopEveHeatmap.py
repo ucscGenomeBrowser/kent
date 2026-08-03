@@ -107,6 +107,12 @@ def loadCsv(csvDir, protein):
             except ValueError:
                 continue
             gap, pe, paEve, paEsm, eve, esm = f[1], f[2], f[3], f[4], f[5], f[6]
+            try:                                     # skip rows with no usable popEVE score
+                fpe = float(pe)
+            except ValueError:
+                continue
+            if fpe != fpe or fpe in (float('inf'), float('-inf')):   # NaN / inf
+                continue
             d = data.get(pos)
             if d is None:
                 d = data[pos] = {'wt': wt, 'vars': {}}
@@ -165,9 +171,15 @@ def buildEntry(protein, gene, records, csvData, strandMap, loAnchor, hiAnchor, o
         for protPos, d in byPos.items():
             cd = csvData.get(protPos)
             if cd is None:
+                # Position has genomic coordinates but no CSV row: leave it sparse.
+                stats['posSparse'] += 1
                 continue
             if cd['wt'] != d['wt']:
+                # CSV keyed to a different residue at this position (e.g. a different
+                # transcript version): keep the correct sparse genomic data rather than
+                # attaching CSV scores computed for the wrong wildtype.
                 stats['wtMismatch'] += 1
+                continue
             d['scores'] = {var: v[0] for var, v in cd['vars'].items()}
             d['extra'] = {var: v[1:] for var, v in cd['vars'].items()}
     else:
@@ -301,7 +313,8 @@ def main():
         sys.stderr.write("Dense mode: full per-amino-acid matrices from %s\n" % csvDir)
 
     stats = {'ok': 0, 'multiChrom': 0, 'overlap': 0, 'strandMismatch': 0,
-             'strandDefault': 0, 'trailingFix': 0, 'dense': 0, 'sparse': 0, 'wtMismatch': 0}
+             'strandDefault': 0, 'trailingFix': 0, 'dense': 0, 'sparse': 0, 'wtMismatch': 0,
+             'posSparse': 0}
 
     with open(sortedTsv) as fh, open(outputBed, 'w') as out:
         curProt = None
@@ -329,7 +342,8 @@ def main():
     sys.stderr.write("Done: %(ok)d proteins written; dense %(dense)d, sparse %(sparse)d, "
                      "multiChrom %(multiChrom)d, overlap %(overlap)d, "
                      "strandMismatch %(strandMismatch)d, strandDefault %(strandDefault)d, "
-                     "wtMismatch %(wtMismatch)d, trailingFix %(trailingFix)d\n" % stats)
+                     "wtMismatch %(wtMismatch)d, posSparse %(posSparse)d, "
+                     "trailingFix %(trailingFix)d\n" % stats)
 
 
 if __name__ == '__main__':

@@ -2895,7 +2895,19 @@ jQuery.fn.panImages = function(){
     var portalWidth = 0;
     var portalAbsoluteX = 0;
     var savedPosition;
-    var highlightAreas  = null; // Used to ensure dragSelect highlight will scroll. 
+    var highlightAreas  = null; // Used to ensure dragSelect highlight will scroll.
+    // quickLift draws its difference lines up into the center labels, but center labels do
+    // not scroll with the data.  Rather than leave the lines standing still over an image
+    // that is moving underneath them, these slices are swapped for a text stand-in of the
+    // center label (written by hgTracks) while the image is being dragged.
+    var cntrLabLines    = null;
+
+    function cntrLabDragSwap(dragging) {
+        if (cntrLabLines === null || cntrLabLines.length === 0)
+            return;
+        cntrLabLines.css( {'display': (dragging ? 'none' : '')} );
+        cntrLabLines.siblings('.cntrLabStandIn').css( {'display': (dragging ? 'block':'none')});
+    }
 
     this.each(function(){
 
@@ -2948,6 +2960,9 @@ jQuery.fn.panImages = function(){
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
                 highlightAreas = $('.highlightItem');
+                // quickLift lines in center labels.  ':visible' so that turning center
+                // labels off leaves drag scrolling exactly as it was.
+                cntrLabLines = $('img.cntrLabLines:visible');
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).on('mousemove',panner);
                 $(document).on('mouseup', panMouseUp);  // Will exec only once
@@ -2999,6 +3014,7 @@ jQuery.fn.panImages = function(){
                 if (!posStatus.isOutsideChrom)
                     scrollHighlight(relativeX);
 
+                cntrLabDragSwap(true);  // center label lines can't scroll: use the text
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
@@ -3031,6 +3047,7 @@ jQuery.fn.panImages = function(){
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
+                cntrLabDragSwap(false);  // image is back where it started, lines line up
                 if (highlightAreas)
                     imageV2.drawHighlights();
                 return true;
@@ -3058,7 +3075,20 @@ jQuery.fn.panImages = function(){
                     hgTracks.imgBoxPortalOffsetX = (prevX * -1) - hgTracks.imgBoxLeftLabel;
                     hgTracks.imgBoxPortalLeft = newX.toString() + "px";
                 }
-            }
+                // No new image is coming, but the center label slices didn't move with the
+                // data, so the quickLift lines hidden above can only come back in the right
+                // place with a redraw.  Ask for one.
+                if (cntrLabLines && cntrLabLines.length > 0) {
+                    if (imageV2.inPlaceUpdate) {
+                        var newPos = parsePosition(genomePos.get());
+                        imageV2.navigateInPlace("db=" + getDb() + "&position=" +
+                                encodeURIComponent(newPos.chrom + ":" + newPos.start + "-" +
+                                                   newPos.end), null, true);
+                    } else
+                        cntrLabDragSwap(false);
+                }
+            } else
+                cntrLabDragSwap(false);  // drag ended where it started, nothing moved
         }
     }
     });  // end of this.each(function(){

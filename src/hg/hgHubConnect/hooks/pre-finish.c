@@ -120,6 +120,8 @@ else
         else
             lastModified = time(NULL); // fallback to current time if not provided
         parentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        // must match what pre-create did to this value, or we build a different path
+        parentDir = normalizeParentDir(parentDir);
         fprintf(stderr, "parentDir = '%s'\n", parentDir ? parentDir : "(null)");
         // strip out plain leading '.' and '/' components
         // middle '.' components are dealt with later
@@ -242,6 +244,9 @@ else
             fflush(stderr);
             }
         }
+    // pop the handlers before handling the error, the cleanup below can itself
+    // errAbort, which would longjmp back into this same block
+    errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
         // App-level reject: exit 0 + RejectUpload=true is the tusd protocol for
@@ -259,7 +264,6 @@ else
         // drop any rows we may have added because the upload didn't full go through
         exitStatus = 0;
         }
-    errCatchEnd(errCatch);
     }
 // always print a response no matter what
 jsonPrintToFile(response, NULL, stdout, 0);

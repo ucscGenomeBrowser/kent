@@ -29,7 +29,7 @@ own data as custom tracks, track hubs, and sessions.
 ## Deck 2: Cancer Data in the Genome Browser
 
 An overview of the cancer and clinical databases hosted by the Genome Browser,
-organized by **somatic** and **germline** diagnosis CIViC, COSMIC, ClinVar, and TCGA
+organized by **somatic** and **germline** diagnosis: CIViC, COSMIC, ClinVar, and TCGA
 Pan-Cancer for somatic variants, and GenCC, OMIM, and gnomAD for germline
 questions. These databases are explored with a consistent <em>BRAF</em> V600E example throughout.
 

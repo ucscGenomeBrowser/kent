@@ -360,6 +360,7 @@ include encode3RenEnhancerGene.ra
 include encode.cCREs.override.ra
 include encode4Reg.ra
 include fantom5.ra
+include singleCellSignalsPeaks.ra alpha
 
 track epdNew
 compositeTrack on

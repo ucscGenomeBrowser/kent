@@ -1,0 +1,124 @@
+# mm10 singleCellSignalsPeaks track  -  2026-07-22  Claude (mspeir)  refs #37914
+
+# The native mm10 "singleCellSignalsPeaks" faceted composite is the Genome
+# Browser version of the mm10 signal-&-peaks composite (cellBrowserMm10) of the
+# UCSC Cell Browser all-tracks super hub (built under
+# /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build). It gathers the
+# per-cell-type ATAC-seq signal (bigWig) and peak (bigNarrowPeak) tracks from the
+# single-cell ATAC datasets in the Cell Browser and re-parents them under one
+# faceted composite. It is the mm10 counterpart of the hg38 track of the same
+# name (see doc/hg38/singleCellSignalsPeaks.txt, Redmine #37820). Histone marks,
+# cCREs, RNA/expression, interactions, and the separately-faceted motor-neuron
+# and brain-spatial sets each live in their own hub composites and are NOT part
+# of this track.
+
+##############################################################################
+# 1. Source data
+##############################################################################
+# The track mirrors the hub's main mm10 signal-&-peaks faceted composite
+# (cellBrowserMm10): 647 subtracks (641 bigWig, 6 bigNarrowPeak) from 9 datasets
+# - catlas-mouse-aging (234), catlas-mouse-brain (160), allen-basal-ganglia-atac
+# (131), olg-dyn-eae-multiome (28), mouse-lvcp-multiome (23, incl. the 6 peaks),
+# catlas-paired-tag (21), mouse-kidney-atac (19), olg-eae-ms (16) and
+# mouse-epi-juv-brain (15). That composite and its facet metadata are produced by
+# the hub build from the Cell Browser dataset tree:
+#
+#   cd /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+#   python3 build_manifest.py            # scan datasets -> manifest.tsv
+#   python3 build_stanzas.py             # manifest -> stanzas/mm10.trackDb.txt
+#                                        #            + meta/mm10.metadata.tsv
+#
+# The per-track source files (abs_path column of manifest.tsv) are the files the
+# Cell Browser datasets already serve; nothing is regenerated here, only copied.
+
+##############################################################################
+# 2. Copy the data files into place  (bed dir, served via a /gbdb symlink)
+##############################################################################
+# copySingleCellSignalsPeaksFiles.py copies every cellBrowserMm10 subtrack file
+# into /hive/data/genomes/mm10/bed/singleCellSignalsPeaks/<served-relpath>,
+# keeping each file's served relative path, and copies the composite's facet
+# metadata to <bed>/singleCellSignalsPeaks_metadata.tsv. The served subpath is
+# preserved on purpose: some coverage/peak basenames (e.g. MOL.bw, OPC.bw) repeat
+# across datasets, so a flat directory would clobber them.  89.6 GB, 647 files.
+#
+#   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
+#   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10 --dry-run
+#   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10
+
+##############################################################################
+# 3. Generate the trackDb .ra
+##############################################################################
+# makeSingleCellSignalsPeaksRa.py reads the hub's mm10 stanzas, keeps the
+# cellBrowserMm10 subtracks, renames the composite to singleCellSignalsPeaks,
+# repoints every bigDataUrl at the local /gbdb copy, and writes the .ra with
+# group=regulation (ATAC signal/peaks sit with the ENCODE regulatory tracks).
+# The generator also: drops any subtrack whose source path is under a deprecated
+# "*.old/" dir, sets every subtrack "off" by default (users pick tracks from the
+# faceted selector), and assigns "priority" by cell class so same-class tracks
+# group together in the display. Labels/colors/facets are already resolved by
+# build_stanzas (see section 4); the generator carries them through unchanged.
+#
+#   python3 $scriptDir/makeSingleCellSignalsPeaksRa.py --assembly mm10
+#
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
+
+##############################################################################
+# 4. Labels, colors, and facets  (build_stanzas.py)
+##############################################################################
+# build_stanzas.py derives the display metadata rather than copying the source
+# hub's cryptic cluster labels. The same logic runs for hg38 (see
+# doc/hg38/singleCellSignalsPeaks.txt).
+#
+# Cell type: the source cluster label is cleaned and, for datasets with coded
+#   cluster names, mapped to a canonical name via a paper-curated crosswalk
+#   (celltype-crosswalks/<collection>.tsv; codes decoded from Li 2021 PMID 34616068,
+#   Zhang 2022 PMID 36207411, Zhu 2021 PMID 33589836, and the Allen whole-brain
+#   taxonomy). Redundant synonyms are merged, QC clusters (doublet / low-quality /
+#   batch) are dropped, and commas become ';' (the faceted UI tokenizes cell
+#   values on commas). The full cell type is a searchable table column (_Cell_type),
+#   not a facet -- there are too many values.
+#
+# Cell class: each cell type is assigned one of ~22 broad classes
+#   (celltype-crosswalks/celltype-class.tsv, built by build_celltype_crosswalks.py).
+#   The class drives BOTH the track color (one colorblind-conscious palette,
+#   celltype-palette.tsv, shared by hg38 and mm10 so a class is the same color on
+#   both assemblies) and the subtrack priority. Cell class is the primary cell facet.
+#
+# Tissue / Life stage / Condition: filled per collection from hub_config.json
+#   (tissue_from_path, collection_lifestage, collection_condition) plus dataset-
+#   specific parsing in build_stanzas.py. SEA-AD, for example, gets its region
+#   (seaad_MTG/PFC -> middle temporal gyrus / dorsolateral prefrontal cortex),
+#   Aged life stage (donors 65-102), and ADNC neuropathology level (no AD / low /
+#   intermediate / high) from the path + "ADNC<n>" filename prefix; regions and
+#   ADNC categories per Gabitto 2024 (PMID 39402379) and Hawrylycz 2024 (PMID
+#   39402332).
+#
+# longLabel: rebuilt from the harmonized facets as
+#     <cell type>[, <condition if not healthy>][, <tissue if a specific region>]
+#     [, <extra>] (<dataset>)
+#   so the cryptic source short labels decode, e.g. "ADNC0 Astro" ->
+#   "Astrocyte, ADNC 0 (no AD), middle temporal gyrus (SEA-AD Brain ATAC)", and
+#   "LM.Macg.03" -> "Macrophage, muscle, 3 months (CATLAS Mouse Aging Brain)". The
+#   CATLAS aging age-in-months (the ".NN" filename suffix) is the <extra> descriptor
+#   -- kept in the label, not made a facet, so Life stage stays coarse (Adult/Aged)
+#   and consistent across datasets. The source shortLabel is kept as-is (it is
+#   length-limited, so the longLabel is where the track is decoded).
+#
+# The curation of record is archived with the scripts:
+#   scripts/singleCellSignalsPeaks/build_celltype_crosswalks.py
+#   scripts/singleCellSignalsPeaks/celltype-crosswalks/       (per-collection crosswalks,
+#       celltype-palette.tsv, celltype-class.tsv, sea-ad-celltype-crosswalk.tsv)
+#   scripts/singleCellSignalsPeaks/celltype-crosswalks/paper-decodes/  (the paper-curated
+#       decode tables, each row's `note` giving its source justification)
+# build_celltype_crosswalks.py rebuilds the crosswalks + palette from paper-decodes/.
+# The general hub machinery that consumes them (build_manifest.py, build_stanzas.py,
+# hub_config.json) lives in the all-tracks-hub-build dir noted above, not in the kent
+# tree -- it builds the whole super hub, not just this track.
+
+##############################################################################
+# Counts
+##############################################################################
+# 647 files resolved from the hub manifest (0 missing) and copied to the bed dir.
+# 18 QC-cluster tracks (doublet / low-quality / batch) are dropped when the .ra is
+# generated, leaving 629 subtracks in the track (623 signal + 6 peak). Facet
+# metadata rows match the subtracks 1:1.

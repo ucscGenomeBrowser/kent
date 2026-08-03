@@ -6,7 +6,7 @@ compositeTrack On
 group varRep
 type bigBed 12
 labelFields name,geneName
-dataVersion Release v4.1.1 (March 2026), Release v4.1 (April 19, 2024), Release v4 (November 2023), Release 2.1.1 (March 6, 2019)
+dataVersion Release v4.1.1 (March 30, 2026), Release v4.1 (April 19, 2024), Release v4 (November 2023), Release 2.1.1 (March 6, 2019)
 subGroup1 view Views v2=constraintV2 v4=constraintV4 v4_1=constraintV4.1 v4_1_1=constraintV4.1.1
 html gnomadPLI.html
 visibility hide

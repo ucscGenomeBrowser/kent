@@ -67,6 +67,7 @@ width=65%
   Use the **Genome** search box to choose your reference genome. Start typing a species name,
   common name, or assembly ID and pick a match from the list that drops down. The Table Browser
   reloads on that assembly, and **Assembly** shows which one you are using.
+
   </div>
 
   <div class="col-md-6">
@@ -94,6 +95,7 @@ width=65%
   
   - Tracks are grouped similarly to those on the Genome Browser main page.
   - Use "All Tracks" for comprehensive options.
+
   </div>
 </div>
 
@@ -182,6 +184,7 @@ that overlap or the ones that don't.
     to get something like gene names next to coordinates without downloading the whole table.
   - File formats like **BED**, **GTF**, or a **custom track** you can load back into the browser.
   - **Sequence** returns the DNA, or protein for some tracks, covered by your table.
+
   </div>
   <div class="col-md-6">
   ``` image

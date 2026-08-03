@@ -63,7 +63,15 @@ Usage:
     hgConfCatalog.py --html out.html
     hgConfCatalog.py --check         # counts and internal consistency
     hgConfCatalog.py --reconcile     # diff the catalog against the tree
+    hgConfCatalog.py --reconcile --verbose      # ... with the standing drift
     hgConfCatalog.py --sunset        # what should be deleted, and when
+
+--reconcile is the mode meant for a nightly cron: it prints nothing and exits 0
+when the tree holds no setting the catalog has not classified, and exits 1 with
+the list when somebody has added one.  Nothing else belongs in a cron.  --sunset
+in particular reports every overdue gate on every run whether or not anything
+changed, so as cron mail it is noise; it is a report a person reads at release
+time.
 """
 
 import argparse
@@ -75,6 +83,12 @@ import sys
 # Sunset policy, in releases.  See the module docstring.
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
+
+# Floor on how many settings a working scan finds; well under the real count.
+# See the check in reconcile().
+MIN_TREE_NAMES = 150
+
+REDMINE = "https://redmine.gi.ucsc.edu/issues/%d"
 
 
 # ---------------------------------------------------------------------------
@@ -224,6 +238,18 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:784", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:741", default="TRUE",
+          role="gate", verified=True,
+          note="The banner on the classic BLAT results page that offers a "
+               "one-click switch to the new sortable table display.  Guards "
+               "the advertisement, not the feature: turning it off stops the "
+               "browser recommending the new page without releasing new CGIs, "
+               "and users who already opted in or follow a direct link still "
+               "get it.  Goes away with the banner, once the new page is the "
+               "default.",
+          debatable="Born TRUE, so like sleepOn429 it never held anything "
+                    "back, and a mirror might want to stop advertising a new "
+                    "page permanently, which would make it a knob."),
         h("genarkLiftOver", "flag", "hg/lib/genark.c:413", default="FALSE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
@@ -231,6 +257,15 @@ RELEASE_GATES = {
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12116", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
+        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:178",
+          default="FALSE", role="gate", verified=True, ticket="37973",
+          note="A link from the Convert page to liftRequest.html, the page "
+               "that requests a new whole-genome alignment.  The assembly "
+               "list only offers targets that already have a chain from the "
+               "source, so the Convert page is where a user finds out theirs "
+               "is missing, but nothing in the tree linked to the request "
+               "page.  Off until the request pipeline is confirmed ready to "
+               "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10152",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
@@ -567,11 +602,11 @@ CENTRAL_TABLES = {
           verified=True, env="HGDB_CLADETABLE", default="clade"),
         h("genomeCladeTableName", "table", "hg/lib/hdb.c:97", public=True,
           verified=True, env="HGDB_GENOMECLADETABLE", default="genomeClade"),
-        h("userDbName", "table", "hg/lib/cartDb.c:329", verified=True,
-          env="HGDB_USERDBTABLE", default="userDb",
+        h("userDbName", "table", "hg/lib/cartDb.c:329", public=True,
+          verified=True, env="HGDB_USERDBTABLE", default="userDb",
           note="Per-user cart storage."),
-        h("sessionDbName", "table", "hg/lib/cartDb.c:339", verified=True,
-          env="HGDB_SESSIONDBTABLE", default="sessionDb"),
+        h("sessionDbName", "table", "hg/lib/cartDb.c:339", public=True,
+          verified=True, env="HGDB_SESSIONDBTABLE", default="sessionDb"),
         h("defaultCartName", "table", "hg/lib/cartDb.c:319", public=True,
           verified=True, env="HGDB_DEFAULTCARTTABLE"),
         h("namedSessionDbName", "table", "hg/lib/cart.c:382", verified=True,
@@ -1079,9 +1114,6 @@ EXTERNAL = {
           note="A prefix family enumerated at runtime: alternative "
                "namedSessionDb locations to search when resolving a shared "
                "session."),
-        h("encpipeline_prod", "internal", "hg/hgTracks/hgTracks.c:9867",
-          verified=True, deprecated=True,
-          note="Read via cfgValsWithPrefix from the ENCODE pipeline era."),
     ],
 }
 
@@ -1289,11 +1321,15 @@ def gate_lifecycle(cat, ages):
     first = ages.get("first", {})
     first_true = ages.get("firstTrue", {})
     cur = ages.get("current")
+    hh = load_harvester()
     out = []
     for v in gates(cat):
         name = v["name"]
         added = (first.get(name) or {}).get("version")
         flipped = (first_true.get(name) or {}).get("version")
+        tickets, ticket_from = ([], None)
+        if hh and hasattr(hh, "ticket_for"):
+            tickets, ticket_from = hh.ticket_for(name, ages)
         shipped = v.get("default") == "TRUE"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
@@ -1308,6 +1344,7 @@ def gate_lifecycle(cat, ages):
             "shipped": shipped, "reverted": reverted, "sunset": sunset,
             "current": cur,
             "age": (cur - added) if (cur and added) else None,
+            "tickets": tickets, "ticketFrom": ticket_from,
         })
     return out
 
@@ -1332,6 +1369,13 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     print("policy: keep a flag %d releases after its default flips TRUE; "
           "a gate\nstill defaulting FALSE after %d releases is stalled.\n"
           % (KEEP_AFTER_FLIP, QA_GRACE), file=out)
+    noticket = [g["name"] for g in life if not g["tickets"]]
+    if noticket:
+        print("The ticket column is the ticket cited by the commit that added "
+              "the flag, or\nby the commit that turned it on, marked (flip).  "
+              "%d of %d gates have neither\nand are blank: %s\n"
+              % (len(noticket), len(life), ", ".join(sorted(noticket))),
+              file=out)
 
     def line(g):
         bits = []
@@ -1345,7 +1389,11 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
             bits.append("sunset v%d" % g["sunset"])
         n = len((sites or {}).get(g["name"], [])) or None
         tail = "%d call site%s" % (n, "" if n == 1 else "s") if n else ""
-        return "  %-26s %-46s %s" % (g["name"], ", ".join(bits), tail)
+        tik = ", ".join("#%d" % t for t in g["tickets"])
+        if tik and g["ticketFrom"] == "flip":
+            tik += " (flip)"
+        return "  %-26s %-46s %-16s %s" % (g["name"], ", ".join(bits),
+                                           tik, tail)
 
     overdue = sorted([g for g in life if g["sunset"] and cur
                       and g["sunset"] <= cur], key=lambda g: g["sunset"])
@@ -1462,7 +1510,7 @@ def wrap_text(s, width):
     return lines
 
 
-def reconcile(cat, out=sys.stdout):
+def reconcile(cat, out=sys.stdout, verbose=False):
     """Diff the catalog against what the tree actually reads.
 
     Three questions:
@@ -1471,6 +1519,13 @@ def reconcile(cat, out=sys.stdout):
       3. is every boolean flag in the tree classified gate or knob
     The third is the one that keeps the sunset report honest: an unclassified
     flag is one nobody has decided the fate of.
+
+    Only 2 and 3 count as problems, because only those two mean somebody added
+    a setting and did not write it down, which is the one thing a person has to
+    act on.  The rest is drift that has been there for years (documentation for
+    a feature that was deleted, a read that moved into a helper), and printing
+    it on every run is what would turn a nightly cron into mail nobody reads.
+    So it goes out only under --verbose.  Silent and 0 means nothing new.
     """
     hh = load_harvester()
     if hh is None:
@@ -1481,6 +1536,16 @@ def reconcile(cat, out=sys.stdout):
     tree = hh.by_name(found)
     cataloged = by_name(cat)
     problems = 0
+
+    # A scan that finds almost nothing is a broken scan, not a clean tree, and
+    # the difference matters: pointed at the wrong KENT_SRC or an empty clone,
+    # everything below would come up empty and report all clear forever.  The
+    # real number is in the hundreds.
+    if len(tree) < MIN_TREE_NAMES:
+        print("only %d settings found under %s: expected at least %d, so the "
+              "scan is\nbroken rather than the tree being clean.  Check "
+              "KENT_SRC." % (len(tree), hh.ROOT, MIN_TREE_NAMES), file=out)
+        return 1
 
     # Three kinds of name legitimately have no literal read to point at, and
     # all three have to be excused or the report is nothing but false alarms:
@@ -1498,7 +1563,8 @@ def reconcile(cat, out=sys.stdout):
             return True
         return any(name.startswith(p) for p in prefix_scans)
 
-    print("=== catalog vs tree ===", file=out)
+    if verbose:
+        print("=== catalog vs tree ===", file=out)
 
     missing = sorted(n for n in tree
                      if n not in cataloged and not n.startswith("{"))
@@ -1516,7 +1582,7 @@ def reconcile(cat, out=sys.stdout):
     stale = sorted(n for n in cataloged
                    if n not in tree and not is_profile_member(n)
                    and not is_prefix_family(n))
-    if stale:
+    if stale and verbose:
         print("\nin the catalog, no literal read found (%d):" % len(stale),
               file=out)
         print("    (a prefix family or a profile member is expected here; "
@@ -1525,29 +1591,32 @@ def reconcile(cat, out=sys.stdout):
         for n in stale:
             print("    %-40s %s" % (n, cataloged[n]["src"]), file=out)
 
-    print("\n=== boolean flags: every one must be a gate or a knob ===",
-          file=out)
+    if verbose:
+        print("\n=== boolean flags: every one must be a gate or a knob ===",
+              file=out)
     tree_flags = {n for n, d in tree.items() if d["boolean"]}
     classified = {v["name"] for v in gates(cat)} | {v["name"] for v in knobs(cat)}
     unclassified = sorted(tree_flags - classified)
     if unclassified:
         problems += len(unclassified)
-        print("unclassified (%d): nobody has decided whether these are "
-              "temporary" % len(unclassified), file=out)
+        print("\nboolean flag classified neither gate nor knob (%d): nobody "
+              "has decided\nwhether these are temporary:" % len(unclassified),
+              file=out)
         for n in unclassified:
             print("    %-40s %s" % (n, sorted(tree[n]["sites"])[0]), file=out)
-    else:
+    elif verbose:
         print("all %d boolean flags in the tree are classified" %
               len(tree_flags), file=out)
 
     phantom = sorted(classified - tree_flags)
-    if phantom:
+    if phantom and verbose:
         print("\nclassified as a flag but not read with "
               "cfgOptionBooleanDefault (%d):" % len(phantom), file=out)
         for n in phantom:
             print("    %-40s %s" % (n, cataloged[n]["src"]), file=out)
 
-    print("\n=== product/ex.hg.conf ===", file=out)
+    if verbose:
+        print("\n=== product/ex.hg.conf ===", file=out)
     docs = hh.parse_doc_files()
     pub = {v["name"] for v in all_vars(cat) if v["public"]}
     # A prefix family counts as documented if any member of it is.
@@ -1556,7 +1625,7 @@ def reconcile(cat, out=sys.stdout):
             return True
         return name.endswith(".") and any(d.startswith(name) for d in docs)
     undocumented = sorted(n for n in pub if not documented(n))
-    if undocumented:
+    if undocumented and verbose:
         print("marked public in the catalog, absent from the example configs "
               "(%d):" % len(undocumented), file=out)
         print("    (these are settings a mirror operator would want and has no "
@@ -1566,7 +1635,7 @@ def reconcile(cat, out=sys.stdout):
     only_docs = sorted(n for n in docs
                        if n not in cataloged and not is_profile_member(n)
                        and not is_prefix_family(n))
-    if only_docs:
+    if only_docs and verbose:
         print("\nin the example configs, nothing in the tree reads them (%d):"
               % len(only_docs), file=out)
         print("    (either the feature was deleted and the documentation was "
@@ -1575,7 +1644,13 @@ def reconcile(cat, out=sys.stdout):
         for n in only_docs:
             print("    %-40s %s" % (n, docs[n]["sites"][0]), file=out)
 
-    print("\nproblems: %d" % problems, file=out)
+    if problems:
+        print("\nproblems: %d.  Add a row to hgConfCatalog.py for each, in "
+              "the same commit\nas the code that reads it; see the "
+              "'Registering a new hg.conf variable'\nsection of the "
+              "edit-kent-code skill." % problems, file=out)
+    elif verbose:
+        print("\nproblems: 0", file=out)
     return problems
 
 
@@ -1626,7 +1701,34 @@ def esc(s):
     return html.escape(str(s), quote=False)
 
 
-def var_rows(vs, life_by_name=None):
+def ticket_map(cat, ages):
+    """name -> (tickets, kind) for every setting git can attribute.
+
+    kind is "introduced" when the commit that added the read cited the ticket
+    and "flip" when only the commit that turned a flag on did.  A setting
+    missing from this map has no ticket in either commit, which for anything
+    added before about v270 means the tree predates Redmine.
+    """
+    hh = load_harvester()
+    if not (ages and hh and hasattr(hh, "ticket_for")):
+        return {}
+    out = {}
+    for v in all_vars(cat):
+        tickets, kind = hh.ticket_for(v["name"], ages)
+        if tickets:
+            out[v["name"]] = (tickets, kind)
+    return out
+
+
+def ticket_links(rec):
+    tickets, kind = rec
+    links = " ".join('<a href="%s">#%d</a>' % (REDMINE % t, t) for t in tickets)
+    if kind == "flip":
+        return "turned on by %s" % links
+    return "introduced by %s" % links
+
+
+def var_rows(vs, life_by_name=None, tickets=None):
     rows = []
     for v in sorted(vs, key=lambda x: x["name"].lower()):
         tags = ['<span class="kind">%s</span>' % esc(v["kind"])]
@@ -1655,6 +1757,9 @@ def var_rows(vs, life_by_name=None):
             extra = "added v%d" % life["added"]
             if life.get("flipped"):
                 extra += ", flipped v%d" % life["flipped"]
+        tik = (tickets or {}).get(v["name"])
+        if tik:
+            extra += (", " if extra else "") + ticket_links(tik)
         note = ""
         if v.get("note"):
             note = '<div class="note">%s</div>' % esc(v["note"])
@@ -1677,15 +1782,16 @@ def var_rows(vs, life_by_name=None):
     return "\n".join(rows)
 
 
-def table_of(vs, life_by_name=None):
+def table_of(vs, life_by_name=None, tickets=None):
     return ("<table><tr><th>setting</th><th>kind</th><th>default</th>"
             "<th>read at</th></tr>\n%s\n</table>"
-            % var_rows(vs, life_by_name))
+            % var_rows(vs, life_by_name, tickets))
 
 
 def render_html(cat, ages=None, sites=None):
     life_by_name = {}
     sunset_html = ""
+    tickets = ticket_map(cat, ages)
     if ages:
         life = gate_lifecycle(cat, ages)
         life_by_name = {g["name"]: g for g in life}
@@ -1713,6 +1819,23 @@ def render_html(cat, ages=None, sites=None):
              '<div class="box">%s</div>' % esc(cat["boundary"]),
              sunset_html]
 
+    if tickets:
+        intro = len([1 for _, k in tickets.values() if k == "introduced"])
+        parts.append(
+            '<div class="policy"><b>Where a setting came from.</b> Each entry '
+            'below carries the Redmine ticket cited by the commit that added '
+            'the read, or for a flag the commit that turned its default on, '
+            'marked there as "turned on by". %d of %d settings are attributed '
+            'that way. The rest are blank on purpose: no commit in the chain '
+            'names a ticket, and for anything added before about v270 the tree '
+            'predates our use of Redmine, so there is nothing to find. Nothing '
+            'here is inferred from a later commit that merely edited the line, '
+            'which would have credited half the file to whatever refactor '
+            'touched it last. <code>harvestHgConf.py --tickets</code> lists '
+            'the unattributed settings, separating the ones old enough to be '
+            'hopeless from the ones somebody could still fill in.</div>'
+            % (intro, c["distinctNames"]))
+
     parts.append("<h2>Contents</h2><ul class='toc'>")
     for sec in cat["sections"]:
         parts.append("<li><a href='#%s'>%s</a></li>"
@@ -1739,7 +1862,7 @@ def render_html(cat, ages=None, sites=None):
         parts.append("<h2 id='%s'>%s</h2>"
                      % (esc(sec["title"].replace(" ", "-")), esc(sec["title"])))
         parts.append("<p class='what'>%s</p>" % esc(sec["what"]))
-        parts.append(table_of(sec["vars"], life_by_name))
+        parts.append(table_of(sec["vars"], life_by_name, tickets))
 
     return ("<!DOCTYPE html>\n<html><head><meta charset='utf-8'>"
             "<title>hg.conf variables</title><style>%s</style></head>"
@@ -1759,29 +1882,38 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--reconcile", action="store_true")
     ap.add_argument("--sunset", action="store_true")
+    ap.add_argument("--verbose", action="store_true",
+                    help="with --reconcile, also print the standing drift "
+                         "that needs no action")
     args = ap.parse_args()
 
     cat = build()
 
     ages = None
     sites = None
-    if args.sunset or args.html:
+    if args.sunset or args.html or args.json:
         hh = load_harvester()
         if hh is None:
             print("harvestHgConf.py not importable", file=sys.stderr)
             return 1
-        ages = hh.harvest_ages()
         found, _ = hh.harvest()
+        ages = hh.harvest_ages(names=sorted(hh.by_name(found)))
         sites = {n: d["sites"] for n, d in hh.by_name(found).items()}
 
     rc = 0
     if args.check:
         rc |= 1 if check(cat) else 0
     if args.reconcile:
-        rc |= 1 if reconcile(cat) else 0
+        rc |= 1 if reconcile(cat, verbose=args.verbose) else 0
     if args.sunset:
         sunset_report(cat, ages, sites)
     if args.json:
+        # Attribution rides along with each setting rather than in a table of
+        # its own, so a consumer reading one entry sees where it came from.
+        tmap = ticket_map(cat, ages)
+        for v in all_vars(cat):
+            if v["name"] in tmap:
+                v["tickets"], v["ticketFrom"] = tmap[v["name"]]
         with open(args.json, "w") as f:
             json.dump(cat, f, indent=1)
         print("wrote %s" % args.json)

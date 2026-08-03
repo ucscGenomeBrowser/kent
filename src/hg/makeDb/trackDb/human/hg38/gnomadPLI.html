@@ -1,8 +1,8 @@
 <H2>Description</H2>
 <P>
 The <b>Genome Aggregation Database (gnomAD) - Predicted Constraint Metrics</b> track set contains
-metrics of pathogenicity per-gene as predicted for gnomAD v2.1.1, v4.0, or v4.1 and identifies genes subject to
-strong selection against various classes of mutation.
+metrics of pathogenicity per-gene as predicted for gnomAD v2.1.1, v4.0, v4.1, or v4.1.1 and
+identifies genes subject to strong selection against various classes of mutation.
 </p>
 
 <p>
@@ -20,20 +20,22 @@ The metrics include:
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are two &quot;groups&quot; of tracks in this set, and three gnomAD versions (v2.1.1, v4.0, and v4.1):
+There are two &quot;groups&quot; of tracks in this set, and four gnomAD versions (v2.1.1, v4.0, v4.1, and v4.1.1):
 <ol>
   <li><b>Gene/Transcript LoF Constraint tracks</b>: Predicted constraint metrics at the whole gene
     level or whole transcript level for three different types of variation: missense, synonymous,
     and predicted loss of function. The Gene Constraint track displays metrics for a canonical 
     transcript per gene defined as the longest isoform. The Transcript Constraint track displays 
-    metrics for all transcript isoforms. Items on both tracks are shaded according to the pLI score,
-    with outlier items shaded in grey.
+    metrics for all transcript isoforms. Items on both tracks are shaded according to the LOEUF score
+    (the upper bound of the O/E confidence interval, see Methods below) with outlier items shaded in
+    grey.
   <br><img src="../images/gnomAD_LOEUFkey.png"  width='33%'alt="LOEUF score legend"><br>
-    Please note there is no gene-level track available for v4.0 and v4.1.
+    Please note there is no gene-level track available for v4.0, v4.1, or v4.1.1.
   <li><b>Gene/Transcript Missense Constraint tracks</b>: The missense constraint tracks are built
     similarly to the LoF constraint tracks, however the items displayed are based on 
     <a href="https://gnomad.broadinstitute.org/help/constraint" target="_blank">missense Z scores</a>.
-    All items are colored black, and individual Z scores can be seen on mouseover. 
+    Items are colored red when the missense Z-score exceeds 3.09, and black otherwise; individual Z
+    scores can be seen on mouseover. 
 </ol>
 All tracks follow the general configuration settings for bigBed tracks. Mouseover on the 
 Gene/Transcript Constraint tracks shows the <b>pLI score</b> and the loss of function 
@@ -78,7 +80,7 @@ assist interpretation of the scores.
 When evaluating how constrained a gene is, <b>it is essential to consider the CI when using O/E</b>. In 
 research and clinical interpretation of Mendelian cases, <b>pLI > 0.9</b> has been widely used for 
 filtering. Accordingly, the Gnomad team suggests using the upper bound of the O/E confidence interval
-<b>LOEUF &lt; 0.35</b> as a threshold if needed.
+<b>LOEUF &lt; 0.45</b> as a threshold if needed (this was &lt;0.35 prior to v4.1.1, see Methods below).
 <p>
 Please see the Methods section below for more information about how the scores were calculated.
 </p>
@@ -124,6 +126,28 @@ class to each gene or transcript. pLI is the probability of belonging in the hap
 Please see Samocha et al., 2014 and Lek et al., 2016 for further discussion of these metrics.
 </p>
 
+<h3>Constraint and Gene Quality Flags (v4.1.1)</h3>
+<p>
+Starting with v4.1.1, the Transcript LoF and Transcript Missense tracks carry three additional
+fields, shown on the item details page:
+<ul>
+  <li><b>Constraint flags</b>: <code>outlier_lof</code>, <code>outlier_mis</code>, and
+  <code>outlier_syn</code> mark transcripts whose raw z-score for that class of variation is a
+  statistical outlier (outside gnomAD's default -5.0 to 5.0 range) and should be interpreted with
+  caution. <code>no_exp_lof</code>, <code>no_exp_mis</code>, and <code>no_exp_syn</code> mark
+  transcripts with a missing or zero expected variant count for that class, so constraint metrics
+  are not calculated for it.
+  <li><b>Gene flags</b>: <code>low_exome_coverage</code> and <code>low_exome_mapping_quality</code>
+  mark transcripts overlapping regions of low exome sequencing coverage or low mapping quality.
+  Constraint metrics for flagged transcripts should be treated with caution.
+  <li><b>Exome quality metrics</b>: <code>prop bp AN90</code> (proportion of transcript bases with
+  allele number at or above 90% of the maximum) and <code>mean AS MQ</code> (mean allele-specific
+  mapping quality) are the coverage and mapping-quality statistics underlying the gene flags above.
+  <code>prop segdup</code> and <code>prop LCR</code> report the proportion of the transcript
+  overlapping segmental duplications or low-complexity regions. Not available for all transcripts.
+</ul>
+</p>
+
 <h3>Transcripts Included</h3>
 <p>
 For version 2.1.1 only, the GENCODE transcripts were filtered according to the following criteria:
@@ -149,7 +173,7 @@ on gene symbols instead of ENSG identifiers. In total 19567/19704 genes were map
 </p>
 
 <p>
-For version v4.0 and v4.1, the gnomAD transcript data is based on hg38. In order to map the
+For version v4.0, v4.1, and v4.1.1, the gnomAD transcript data is based on hg38. In order to map the
 transcripts to hg38, the transcript version numbers in the gnomAD download file were joined with
 GENCODE V39 and NCBI RefSeq coordinates available at UCSC.
 </p>
@@ -192,6 +216,25 @@ https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/constraint/gn
 These data were then joined to the Gencode/NCBI set of genes/transcripts available at the UCSC
 Genome Browser and then transformed into a bigBed 12+5. For the full list of commands used to
 make this track please see the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt">makedoc</a>.
+</p>
+
+<h4>Version based on gnomAD v4.1.1</h4>
+<h5>Transcript Constraint tracks</h5>
+<p>
+Per transcript data were downloaded from the gnomAD Google Storage bucket:
+<pre>
+https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1.1/constraint/gnomad.v4.1.1.constraint_metrics.tsv.bgz
+</pre>
+gnomAD recomputed the constraint metrics for v4.1.1. The LOEUF calculation changed from a
+frequentist approach using a Poisson distribution to a Bayesian framework using a Gamma posterior
+distribution. The coverage model was expanded from a depth cutoff to using allele number (AN) as a
+proxy for coverage, with a regression model for sites with intermediate coverage. Constraint
+metrics are now also available for chrX and chrY. gnomAD's recommended LOEUF threshold changed
+from &lt;0.35 to &lt;0.45 accordingly. These data were then joined to the Gencode/NCBI set of
+genes/transcripts available at the UCSC Genome Browser and transformed into a bigBed 12+9
+(Transcript LoF) and bigBed 12+8 (Transcript Missense). For the full list of commands used to make
+this track please see the
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt">makedoc</a>.
 </p>
 

@@ -1,0 +1,46 @@
+Dorsal	Dorsal striatum medium spiny neuron	230,159,0	brain	Adult	Healthy
+MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+MSN d1 dorsal	D1 medium spiny neuron (dorsal)	230,159,0	brain	Adult	Healthy
+MSN d1 ventral	D1 medium spiny neuron (ventral)	230,159,0	brain	Adult	Healthy
+MSN d2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+MSN d2 dorsal	D2 medium spiny neuron (dorsal)	230,159,0	brain	Adult	Healthy
+MSN d2 ventral	D2 medium spiny neuron (ventral)	230,159,0	brain	Adult	Healthy
+Ventral	Ventral striatum medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1039 sAMY PAL chst9	Chst9 GABAergic neuron (MSN-like)	213,94,0	brain	Adult	Healthy
+X1040 sAMY PAL chst9	Chst9 GABAergic neuron (MSN-like)	213,94,0	brain	Adult	Healthy
+X1061 MSN d1 outer	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1066 MSN d2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1067 MSN d2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1080 MSN d2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1081 MSN d2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1091 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1099 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1106 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1116 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1117 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1122 MSN d1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+X1126 HY PAL STR folh1	Folh1 GABAergic neuron (D3 MSN-like)	213,94,0	brain	Adult	Healthy
+X1728 PAL sln	Sln pallidal GABAergic neuron	213,94,0	brain	Adult	Healthy
+X1794 sAMY PAL HY skor1	Skor1 GABAergic neuron	213,94,0	brain	Adult	Healthy
+X2016 TH prkcd grin2c	Thalamic glutamatergic neuron	0,114,178	brain	Adult	Healthy
+X306 OLF CTXsp tfap2d	Olfactory/cortical-subplate Tfap2d neuron	86,180,233	brain	Adult	Healthy
+X3825 OLF frmd7	Olfactory bulb granule GABAergic neuron	213,94,0	brain	Adult	Healthy
+X387 lamp5	Lamp5 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+X3893 OPC	Oligodendrocyte precursor cell	240,228,66	brain	Adult	Healthy
+X3911 oligo	Oligodendrocyte	204,121,167	brain	Adult	Healthy
+X3914 oligo	Oligodendrocyte	204,121,167	brain	Adult	Healthy
+X3916 oligo	Oligodendrocyte	204,121,167	brain	Adult	Healthy
+X3918 CHOR	Choroid plexus epithelial cell	136,34,85	brain	Adult	Healthy
+X3934 astro	Astrocyte	0,158,115	brain	Adult	Healthy
+X3936 astro	Astrocyte	0,158,115	brain	Adult	Healthy
+X3942 astro	Astrocyte	0,158,115	brain	Adult	Healthy
+X3945 astro	Astrocyte	0,158,115	brain	Adult	Healthy
+X3982 micro PVM	Microglia / perivascular macrophage	0,0,0	brain	Adult	Healthy
+X3988 VLMC	Vascular leptomeningeal cell	221,204,119	brain	Adult	Healthy
+X3992 VLMC	Vascular leptomeningeal cell	221,204,119	brain	Adult	Healthy
+X4016 endo	Endothelial cell	136,204,238	brain	Adult	Healthy
+X458 prox1 lhx6	Prox1/Lhx6 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+X527 sst chodl	Sst Chodl interneuron	213,94,0	brain	Adult	Healthy
+X564 sAMY PAL HY lhx8	Lhx8 GABAergic neuron	213,94,0	brain	Adult	Healthy
+X652 sAMY PAL HY lhx8	Lhx8 GABAergic neuron	213,94,0	brain	Adult	Healthy
+X839 sAMY PAL ebf1	Ebf1 GABAergic neuron	213,94,0	brain	Adult	Healthy

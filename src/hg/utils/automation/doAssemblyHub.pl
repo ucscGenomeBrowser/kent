@@ -1792,6 +1792,7 @@ _EOF_
 #########################################################################
 # * step: ncbiGene [workhorse]
 sub doNcbiGene {
+  # skip this procedure if the gff file is not available
   my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
   if ( ! -s "${gffFile}" ) {
     &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  $gffFile\n");
@@ -1803,100 +1804,30 @@ sub doNcbiGene {
       exit 255;
     }
   }
-  my $runDir = "$buildDir/trackData/ncbiGene";
-  if (-d "${runDir}" ) {
-     if (! -s "$runDir/$defaultName.ncbiGene.bb") {
-       &HgAutomate::verbose(1,
-       "WARNING ncbiGene step may already be running, but not completed ?\n");
-       return;
-     } elsif (! needsUpdate("$gffFile", "$runDir/$defaultName.ncbiGene.bb")) {
-       &HgAutomate::verbose(1, "# ncbiGene step previously completed\n");
-       return;
-     }
-  }
-  if (! -s "$buildDir/$defaultName.faSize.txt") {
-    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$defaultName.faSize.txt\n");
-    exit 255;
-  }
 
+  my $runDir = "$buildDir/trackData/ncbiGene";
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "translate NCBI GFF3 gene definitions into a track";
+  my $whatItDoes = "run doNcbiGene.pl to construct the ncbiGene track";
   my $bossScript = newBash HgRemoteScript("$runDir/doNcbiGene.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  my $dupList = "";
-  if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
-    $dupList = " | (grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\"  || true)";
-  }
-
-  $bossScript->add(<<_EOF_
-export asmId=$defaultName
-export gffFile=$gffFile
-export DS=`date "+%F"`
-
-function cleanUp() {
-  rm -f \$asmId.ncbiGene.genePred.gz \$asmId.ncbiGene.genePred
-  rm -f \$asmId.geneAttrs.ncbi.txt
-}
-
-if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
-  ln -s \$gffFile ./
-  (gff3ToGenePred -warnAndContinue -useName \\
-    -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
-      2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
-         -chromSizes=../../\$asmId.chrom.sizes stdin stdout \\
-        $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
-  genePredCheck \$asmId.ncbiGene.genePred.gz
-  zcat \$asmId.ncbiGene.genePred.gz > ncbiGene.\$DS
-  genePredToGtf -utr file ncbiGene.\$DS  stdout | gzip -c > \$asmId.ncbiGene.gtf.gz
-  rm -f ncbiGene.\$DS
-  export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
-  if [ "\${howMany}" -eq 0 ]; then
-     printf "# ncbiGene: no gene definitions found in \$gffFile\n";
-     cleanUp
-     exit 0
-  fi
-  export ncbiGenePred="\$asmId.ncbiGene.genePred.gz"
-_EOF_
-  );
+  my $liftSpec = "";
   if ($ucscNames) {
-    $bossScript->add(<<_EOF_
-  liftUp -extGenePred -type=.gp stdout \\
-    ../../sequence/$asmId.ncbiToUcsc.lift warn \\
-      \$asmId.ncbiGene.genePred.gz | gzip -c \\
-        > \$asmId.ncbiGene.ucsc.genePred.gz
-  ncbiGenePred="\$asmId.ncbiGene.ucsc.genePred.gz"
-_EOF_
-      );
+    $liftSpec = "-liftFile=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
   }
+
   $bossScript->add(<<_EOF_
-  genePredToBed -tab -fillSpace \$ncbiGenePred stdout \\
-    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
-  export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
-  export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
-  export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-  rm -f \$asmId.exons.bed
-  ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
-    | sort -u > \$asmId.ncbiGene.ix.txt
-  if [ -s \$asmId.ncbiGene.ix.txt ]; then
-    ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
-  fi
-  rm -f \$asmId.ncbiGene.ix.txt
-  genePredToBigGenePred \$ncbiGenePred stdout \\
-      | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
-  (bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
-      -extraIndex=name \$asmId.ncbiGene.bed \\
-        ../../\$asmId.chrom.sizes \$asmId.ncbiGene.bb || true)
-  if [ ! -s "\$asmId.ncbiGene.bb" ]; then
-    printf "# ncbiGene: failing bedToBigBed\\n" 1>&2
-    exit 255
-  fi
-  touch -r\$gffFile \$asmId.ncbiGene.bb
-  bigBedInfo \$asmId.ncbiGene.bb | egrep "^itemCount:|^basesCovered:" \\
-    | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt
-  LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt` | xargs echo
-  printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$asmId.ncbiGene.txt
+if [ $gffFile -nt $defaultName.ncbiGene.bb ]; then
+
+~/kent/src/hg/utils/automation/doNcbiGene.pl \\
+    -assemblySource=$assemblySource \\
+    -chromSizes="$buildDir/$defaultName.chrom.sizes" \\
+    -namesFile="$buildDir/html/$defaultName.names.tab" \\
+    $liftSpec -buildDir=`pwd` -dbHost=$dbHost \\
+    -workhorse=$workhorse -fileServer=$fileServer \\
+    $asmId $defaultName
+
 else
   printf "# ncbiGene step previously completed\\n" 1>&2
 fi

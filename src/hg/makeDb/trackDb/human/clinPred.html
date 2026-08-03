@@ -30,7 +30,7 @@ scores missense variants. Positions with no exome coverage are shown as gaps.
 </p>
 
 <p>
-When using this track, zoom in until you can see every basepair at the top of
+When using this track, zoom in until you can see every base at the top of
 the display. Otherwise, several nucleotides fall under each pixel and no score
 will be shown on the mouseover tooltip.
 </p>
@@ -75,14 +75,14 @@ The ClinPred data on the UCSC Genome Browser can be explored interactively with
 the <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated download
 and analysis, the data are stored in bigWig files and can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/" target="_blank">our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/" target="_blank">our
 download server</a>. The files are named <tt>a.bw, c.bw, g.bw, t.bw</tt>.
 Individual regions can be obtained using <tt>bigWigToBedGraph</tt>, which can
 be compiled from source or downloaded as a precompiled binary; instructions
-are <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+are <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 For example:
 <br>&nbsp;<br>
-<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/a.bw stdout</tt>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 https://hgdownload.soe.ucsc.edu/gbdb/$db/clinPred/a.bw stdout</tt>
 </p>
 
 <h2>Methods</h2>
@@ -93,7 +93,7 @@ Data were downloaded from the
 website</a> on May 5, 2026, and converted into four per-alternate-base bigWig
 files using a custom script. As with all other tracks, a full log of the
 commands used for the conversion is available in our
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/" target="_blank">source repository</a>, for
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/" target="_blank">source repository</a> for
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt" target="_blank">hg19</a> and
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/clinPred.txt" target="_blank">hg38</a>.
 </p>

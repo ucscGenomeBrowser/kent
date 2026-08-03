@@ -1,0 +1,21 @@
+Astro myoc	Astrocyte (Myoc+)	0,158,115	brain	Adult	Healthy
+Astro nnat	Astrocyte (Nnat+)	0,158,115	brain	Adult	Healthy
+Endothelial cell	Endothelial cell	136,204,238	brain	Adult	Healthy
+Ependymal	Ependymal cell	68,170,153	brain	Adult	Healthy
+FC CT	Cortical excitatory neuron (L6 CT, corticothalamic)	0,114,178	brain	Adult	Healthy
+FC NP	Cortical excitatory neuron (near-projecting)	0,114,178	brain	Adult	Healthy
+FC PT	Cortical excitatory neuron (L5 PT, pyramidal tract)	0,114,178	brain	Adult	Healthy
+FC l23	Cortical excitatory neuron (L2/3)	0,114,178	brain	Adult	Healthy
+FC l4	Cortical excitatory neuron (L4)	0,114,178	brain	Adult	Healthy
+FC l5	Cortical excitatory neuron (L5)	0,114,178	brain	Adult	Healthy
+FC l6	Cortical excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+HC CA1	CA1 pyramidal neuron	0,114,178	brain	Adult	Healthy
+HC CA23	CA2/CA3 pyramidal neuron	0,114,178	brain	Adult	Healthy
+HC DG	Dentate gyrus granule neuron	0,114,178	brain	Adult	Healthy
+In CGE	CGE-derived interneuron	213,94,0	brain	Adult	Healthy
+In pvalb	Pvalb interneuron	213,94,0	brain	Adult	Healthy
+In sst	Sst interneuron	213,94,0	brain	Adult	Healthy
+Microglia	Microglia	0,0,0	brain	Adult	Healthy
+Oligo MFOL	Myelin-forming oligodendrocyte	204,121,167	brain	Adult	Healthy
+Oligo MOL	Mature oligodendrocyte	204,121,167	brain	Adult	Healthy
+Oligodendrocyte precursor	Oligodendrocyte precursor cell	240,228,66	brain	Adult	Healthy

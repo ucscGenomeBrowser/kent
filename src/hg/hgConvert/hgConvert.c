@@ -28,6 +28,7 @@
 #include "chromAlias.h"
 #include "jsHelper.h"
 #include "hPrint.h"
+#include "hgConfig.h"
 #ifdef NOTNOW
 #include "bigChain.h"
 #include "bigLink.h"
@@ -170,6 +171,16 @@ if (askAboutQuickLift)
         "    if (ql) ql.addEventListener('change', hgcUpdateHideTracks);\n"
         "    hgcUpdateHideTracks();\n"
         "});\n");
+    }
+
+/* The assembly list only offers targets that already have a chain from this source, so
+ * this is where a user finds out theirs is missing.  Point them at the request page. */
+if (cfgOptionBooleanDefault("showLiftRequest", FALSE))
+    {
+    puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
+    puts("Target assembly not listed? "
+         "<a href='../liftRequest.html' target='_blank'>Request an alignment</a>\n");
+    puts("</div>\n");
     }
 
 puts("</div>\n");  /* end destination section */

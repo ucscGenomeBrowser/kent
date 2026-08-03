@@ -70,10 +70,10 @@ group varRep
 bigDataUrl /gbdb/hg38/gnomAD/mpc/mpcOverlaps.bb
 dataVersion Release v4.1.1 (2026-02-10)
 labelFields name
-skipFields transcripts,mpcByTranscript
 filter.mpcMax 0:6
 filterByRange.mpcMax on
 filterLimits.mpcMax 0:6
 filterLabel.mpcMax Filter by max MPC score
-mouseOver <b>$ref&gt;$alt</b>, max MPC = $mpcMax across $nTranscripts transcripts
+mouseOver <b>Variant:</b> $ref&gt;$alt<br> <b>Max MPC score:</b> $mpcMax<br> <b>Number of transcripts:</b> $nTranscripts
+scoreLabel MPC score (0-1000 scale)
 html gnomadMpc

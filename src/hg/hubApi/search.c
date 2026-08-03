@@ -52,6 +52,10 @@ void getSearchResults(char *searchTerm, char *db, char *hubUrl, char *categories
 /* Output search results for db, potentially limited by categories */
 {
 initGenbankTableNames(db);
+/* No cart is built for API requests, so nothing has attached the hub yet.  Open it to
+ * register the assembly, position searches need its 2bit rather than a chromInfo table. */
+if (isNotEmpty(hubUrl))
+    (void) errCatchTrackHubOpen(hubUrl);
 struct cart *bogusCart = cartOfNothing();
 cartAddString(bogusCart, "db", db);
 hashTracksAndGroups(bogusCart, db);

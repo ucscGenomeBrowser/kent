@@ -75,6 +75,52 @@ as coverage graphs and peak subtracks draw as boxes. Each subtrack links back to
 its source dataset in the Cell Browser.
 </p>
 
+<p>
+Subtracks are colored by broad cell-type class, so the same class is shown in the same color across datasets and matches the coloring of the corresponding mouse track. The classes are:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:rgb(0,114,178);width:2em">&nbsp;</th>
+      <td>Excitatory neuron &mdash; glutamatergic neurons of the cortical layers, hippocampal CA fields and dentate gyrus, and claustrum</td></tr>
+  <tr><th style="background-color:rgb(213,94,0);width:2em">&nbsp;</th>
+      <td>Inhibitory neuron &mdash; GABAergic neurons and interneurons (Pvalb, Sst, Lamp5, and CGE- and MGE-derived types)</td></tr>
+  <tr><th style="background-color:rgb(230,159,0);width:2em">&nbsp;</th>
+      <td>Medium spiny neuron &mdash; striatal D1 and D2 projection neurons of the direct and indirect pathways</td></tr>
+  <tr><th style="background-color:rgb(86,180,233);width:2em">&nbsp;</th>
+      <td>Other neuron &mdash; remaining neuronal types, such as Cajal-Retzius cells</td></tr>
+  <tr><th style="background-color:rgb(51,34,136);width:2em">&nbsp;</th>
+      <td>Neural progenitor &mdash; neuroblasts, radial glia, and nephron progenitors</td></tr>
+  <tr><th style="background-color:rgb(0,158,115);width:2em">&nbsp;</th>
+      <td>Astrocyte &mdash; astrocytes, including Bergmann glia and fibrous and protoplasmic subtypes</td></tr>
+  <tr><th style="background-color:rgb(204,121,167);width:2em">&nbsp;</th>
+      <td>Oligodendrocyte &mdash; oligodendrocytes across the newly-formed, myelin-forming, and mature stages</td></tr>
+  <tr><th style="background-color:rgb(240,228,66);width:2em">&nbsp;</th>
+      <td>Oligodendrocyte precursor &mdash; oligodendrocyte precursor cells (OPCs) and committed precursors</td></tr>
+  <tr><th style="background-color:rgb(0,0,0);width:2em">&nbsp;</th>
+      <td>Microglia &mdash; microglia and perivascular macrophages</td></tr>
+  <tr><th style="background-color:rgb(136,204,238);width:2em">&nbsp;</th>
+      <td>Endothelial &mdash; endothelial cells of arteries, capillaries, veins, and endocardium</td></tr>
+  <tr><th style="background-color:rgb(221,204,119);width:2em">&nbsp;</th>
+      <td>Mural &mdash; pericytes, smooth muscle, and vascular leptomeningeal cells</td></tr>
+  <tr><th style="background-color:rgb(238,102,119);width:2em">&nbsp;</th>
+      <td>Immune &mdash; lymphoid (B, T) and myeloid (macrophage, dendritic, basophil) immune cells</td></tr>
+  <tr><th style="background-color:rgb(170,68,153);width:2em">&nbsp;</th>
+      <td>Erythroid &mdash; erythroid cells and erythroblasts</td></tr>
+  <tr><th style="background-color:rgb(153,153,51);width:2em">&nbsp;</th>
+      <td>Hematopoietic stem/progenitor &mdash; hematopoietic stem and progenitor cells</td></tr>
+  <tr><th style="background-color:rgb(170,68,0);width:2em">&nbsp;</th>
+      <td>Cardiomyocyte &mdash; heart muscle cells</td></tr>
+  <tr><th style="background-color:rgb(102,17,0);width:2em">&nbsp;</th>
+      <td>Muscle &mdash; skeletal muscle myofibers, satellite cells, and junctional myonuclei</td></tr>
+  <tr><th style="background-color:rgb(17,119,51);width:2em">&nbsp;</th>
+      <td>Epithelial &mdash; epithelial cells of many tissues, such as airway, gut, kidney tubule, and secretory epithelia</td></tr>
+  <tr><th style="background-color:rgb(153,79,0);width:2em">&nbsp;</th>
+      <td>Stromal &mdash; fibroblasts, mesenchymal, and other stromal cells</td></tr>
+  <tr><th style="background-color:rgb(153,153,153);width:2em">&nbsp;</th>
+      <td>Other &mdash; other or mixed cell types, such as olfactory ensheathing cells and melanocytes</td></tr>
+  <tr><th style="background-color:rgb(187,187,187);width:2em">&nbsp;</th>
+      <td>Unknown &mdash; cell type not resolved from the source data</td></tr>
+</table>
+
 <h2>Methods</h2>
 <p>
 Each dataset was produced and processed by a different group, so the assays and
@@ -153,11 +199,11 @@ compiled from source or downloaded as
 Both take a region so you do not have to download the whole file, for example:
 </p>
 <pre><code>bigWigToBedGraph -chrom=chr1 -start=1000000 -end=1100000 \
-  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/neuronal-celltypes/projNeuron_LDSCgroup-VIP_Interneurons_GRanges_insertions_bin100_RIPnorm.bw \
+  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/cardiogenesis-atac/hub/in-vivo/Veins.bw \
   stdout
 
 bigBedToBed -chrom=chr21 -start=0 -end=48000000 \
-  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/cortex-atac/hub/Enhancerpeaks/AstroOligo.bb \
+  http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/singleCellSignalsPeaks/cortex-atac/hub/peaks.bb \
   stdout</code></pre>
 <p>
 The underlying matrices, metadata, and per-dataset download details are on each

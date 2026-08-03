@@ -23,6 +23,15 @@ char *encodePath(char *path);
 /* Return a string where each individual component of a '/' separated
  * string has been cgiEncoded, but not the '/' chars themselves */
 
+char *normalizeParentDir(char *parentDir);
+/* Return parentDir with any surrounding whitespace trimmed off, or NULL if it was NULL.
+ * Every hook that builds a path from this metadata value must normalize it the same way */
+
+boolean isValidParentDir(char *parentDir);
+/* Return TRUE if every '/' separated component of parentDir holds only alphanumeric,
+ * period or underscore characters. NULL or empty means the top level of the user's
+ * directory, which is allowed */
+
 char *setUploadPath(char *userName, char *fileName, char *parentDir, boolean forceOverwrite);
 /* return the path, relative to hg.conf tusdDataDir, where we will store this upload
  * the full path would be /tusdDataDir/userNamePrefix/userName/parentDir/fileName */
