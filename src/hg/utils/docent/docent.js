@@ -528,7 +528,8 @@ const T_START = Date.now();
       const cands = [];
       for (const a of areas) {
         const href = a.getAttribute('href') || '';
-        const title = a.getAttribute('title') || a.getAttribute('data-tooltip') || '';
+        const title = a.getAttribute('title') || a.getAttribute('data-tooltip')
+                   || a.getAttribute('mouseoverText') || '';
         const hay = titleOnly ? title : (href + ' ' + title);
         if (!hay.includes(want)) continue;
         const c = (a.getAttribute('coords') || '').split(',').map(Number);
@@ -539,12 +540,27 @@ const T_START = Date.now();
         const r = im ? im.getBoundingClientRect() : null;
         const ox = r ? r.left : imgBox.x, oy = r ? r.top : imgBox.y;
         const cx = ox + (c[0] + c[2]) / 2, cy = oy + (c[1] + c[3]) / 2;
-        cands.push({ cx, cy, href, inBand: cy >= band.top - 1 && cy <= band.bot + 1 });
+        // The tooltip's own text, so the hover can wait for THIS item's tooltip rather than
+        // for any tooltip at all (see mouseover()). Rendered exactly the way the tooltip
+        // renders it -- innerHTML then textContent -- because the attribute holds markup AND
+        // undecoded entities (`<b>`, `&#9733;`) that getAttribute hands back literally.
+        const tmp = document.createElement('div');
+        tmp.innerHTML = title;
+        const tip = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+        cands.push({ cx, cy, href, tip, inBand: cy >= band.top - 1 && cy <= band.bot + 1 });
       }
       const inBand = cands.filter(h => h.inBand);
-      return (inBand[0] || cands[0]) || null;
+      const pick = (inBand[0] || cands[0]) || null;
+      return pick && { ...pick, n: cands.length, nBand: inBand.length,
+                       all: cands.map(c => Math.round(c.cx)) };
     }, { want: String(want), titleOnly: !!titleOnly, band, imgBox: img });
-    if (area) return { x: area.cx, y: area.cy, href: area.href };
+    if (area) {
+      if (process.env.DOCENT_ROWS)
+        console.log(`  item "${want}" in ${t}: ${area.n} map box(es) match (${area.nBand} in row), `
+                  + `centers x=[${area.all}] -> hovering (${Math.round(area.cx)},${Math.round(area.cy)})`
+                  + (area.tip ? `, expecting tip "${area.tip.slice(0, 40)}"` : ''));
+      return { x: area.cx, y: area.cy, href: area.href, tip: area.tip };
+    }
     const span = await page.evaluate(({ keys, want }) => {
       const md = window.mapData; if (!md || !md.spans) return null;
       for (const k of keys) {
@@ -586,15 +602,18 @@ const T_START = Date.now();
     o = o || {};
     const t = o.track; if (!t) throw new Error('mouseover: needs a track');
     const want = o.item ?? o.title ?? o.value;         // identity mode if any is set
-    const { x, y } = (want != null)
+    const spot = (want != null)
       ? await itemXY(t, want, o.title != null && o.item == null && o.value == null)
       : await posXY(t, o);
-    // Raise a FRESH tooltip for THIS item. Two waits, both on the tooltip's actual state
-    // rather than on a duration: park over the grey side-label strip (no items there) until
-    // the previous tooltip is GONE, then hover the item until a tooltip is up whose content
-    // differs from the one we just dismissed. Sleeping instead only looks right -- with the
-    // dwells trimmed (FAST) a back-to-back pinned mouseover captured the PREVIOUS item's
-    // text, and even at full pace that was a race waiting to be lost.
+    const { x, y } = spot;
+    // Raise a FRESH tooltip for THIS item, and be sure it IS this item's. The browser shows
+    // a tooltip on MOUSEENTER after a 500ms delay and hides it 500ms after mouseleave
+    // (hg/js/utils.js addMouseover), so while the cursor glides in it crosses other items
+    // and any of THEIR tooltips can still be on screen when we arrive -- an Alignment
+    // Differences item recorded as "identical" (the neighbouring aligned block, lingering in
+    // its grace period) when the item under the cursor reads "mismatch C->T". Waiting for
+    // "some tooltip is visible" is therefore not enough: when we know the item's own text
+    // (from its map box) we wait for exactly that.
     const tipHtml = () => page.evaluate(() => {
       const c = document.getElementById('mouseoverContainer');
       if (!c || !c.offsetWidth) return null;
@@ -613,13 +632,62 @@ const T_START = Date.now();
     await glide(x, y);
     // small jiggle so the mousemove handler definitely fires and positions the tooltip
     await page.mouse.move(x + 1, y); await sleep(60); await page.mouse.move(x, y);
-    await page.waitForFunction(prev => {
+    const shown = () => page.evaluate(() => {
       const c = document.getElementById('mouseoverContainer');
-      if (!c || !c.offsetWidth) return false;
+      if (!c || !c.offsetWidth) return null;
       const st = getComputedStyle(c);
-      if (st.display === 'none' || st.visibility === 'hidden') return false;
-      return prev == null || c.innerHTML !== prev;
-    }, prevTip, { timeout: 3000 }).catch(() => {});
+      if (st.display === 'none' || st.visibility === 'hidden') return null;
+      return (c.textContent || '').replace(/\s+/g, ' ').trim();
+    });
+    const wantTip = spot.tip || null;
+    if (wantTip) {
+      // The item's own tooltip, or nothing. A neighbour's tooltip lingering from the glide
+      // fails this test, so we keep waiting until the 500ms show timer fires for OUR item.
+      // Compared with ALL whitespace removed: the title's markup (`<b>rsID</b>: ...`, `<br>`)
+      // leaves no whitespace at all in textContent, so any tag-to-space normalisation would
+      // never match and the wait would just burn its timeout on a tooltip that was right.
+      await page.waitForFunction(w => {
+        const c = document.getElementById('mouseoverContainer');
+        if (!c || !c.offsetWidth) return false;
+        const st = getComputedStyle(c);
+        if (st.display === 'none' || st.visibility === 'hidden') return false;
+        const flat = z => z.replace(/\s+/g, '');
+        // A distinctive PREFIX, not the whole string: the head of a mouseOver carries the
+        // item's identity (its name/HGVS), while the tail can render differently from the
+        // title it came from (entities, stars, a max-width span). Short tips match whole.
+        return flat(c.textContent || '').includes(flat(w).slice(0, 60));
+      }, wantTip, { timeout: 4000 }).catch(() => {});
+      const flat = z => (z || '').replace(/\s+/g, '');
+      if (process.env.DOCENT_ROWS && !flat(await shown()).includes(flat(wantTip).slice(0, 60)))
+        console.warn(`  WARNING: mouseover ${t} "${want}": tooltip never showed its own text\n`
+                   + `      want: ${JSON.stringify(flat(wantTip).slice(0, 70))}\n`
+                   + `      got : ${JSON.stringify(flat(await shown()).slice(0, 70))}`);
+    } else {
+      await page.waitForFunction(prev => {
+        const c = document.getElementById('mouseoverContainer');
+        if (!c || !c.offsetWidth) return false;
+        const st = getComputedStyle(c);
+        if (st.display === 'none' || st.visibility === 'hidden') return false;
+        return prev == null || c.innerHTML !== prev;
+      }, prevTip, { timeout: 3000 }).catch(() => {});
+    }
+    // A POSITIONAL hover has no expected text to wait for, so the best it can do is let the
+    // tooltip settle: the content stops changing once the cursor is parked, so sample until
+    // two reads agree. (A pinned positional hover therefore still records whatever is under
+    // the point -- `frac: 0.5` can land between two features and report the block they sit
+    // in. Name the item when the figure depends on which tooltip it is.)
+    if (!wantTip) {
+      let settled = await tipHtml();
+      for (let i = 0; i < 15; i++) {
+        await sleep(80);
+        const now = await tipHtml();
+        if (now && now === settled) break;
+        settled = now;
+      }
+    }
+    if (process.env.DOCENT_ROWS)
+      console.log(`  tip at (${Math.round(x)},${Math.round(y)}): `
+        + JSON.stringify(((await shown()) || '').slice(0, 90)));
     // Optionally RECORD this tooltip so a later `pinShot:` can show several mouseovers
     // open together in one figure. We only record (position + the tooltip's own HTML)
     // here -- nothing is injected into the recorded page, so the mp4 still shows just the
@@ -1007,9 +1075,29 @@ const T_START = Date.now();
       }
       case 'hide': if (arg === 'all' || arg === true) { await clickGlide('#hgt\\.hideAll'); await page.waitForSelector('#imgTbl'); } break;
       case 'track': {
-        const entries = Object.entries(arg);
-        const named = new Set(entries.map(([n]) => n));          // what the author spelled out
+        let entries = Object.entries(arg);
+        const isKidHide = ([, mode]) => String(mode).toLowerCase() === 'hidekids';
+        // What the author spelled out AS A VISIBILITY. A `hideKids` container is deliberately
+        // NOT in here: it names no mode of its own, so it must not suppress the container
+        // variable derived from a child below it (`pubtator: pack` is what turns varsInPubs on).
+        const named = new Set(entries.filter(e => !isKidHide(e)).map(([n]) => n));
         const idx = await tdbIndex(state.db);
+        // `hideKids` is not a visibility -- it is "hide everything under this container", so
+        // that a child named alongside it is left the only one drawn. A superTrack needs it:
+        // unlike a composite, its own mode does NOT reach its children, so every child comes
+        // up at its own trackDb visibility and an earlier `hide: all` does not stick
+        // (`{varsInPubs: show}` alone draws all eight of its members). The expansion skips any
+        // child the step names itself, and runs in a round of its own AFTER the rest, because
+        // a subtrack hide travelling in the same request as its container can be dropped by
+        // the cart (#37953) -- so the container goes on first and the hides follow.
+        const kidHides = [];
+        for (const e of entries.filter(isKidHide)) {
+          const leaves = (await tdbLeaves(e[0])).filter(k => !named.has(k));
+          if (!leaves.length)
+            console.warn(`track ${e[0]}: hideKids -- trackDb gives it no children to hide`);
+          for (const k of leaves) kidHides.push([k, 'hide']);
+        }
+        entries = entries.filter(e => !isKidHide(e));
         // Visible gesture first: drive the real track-controls dropdowns so the mouse is
         // seen turning the tracks on. State is still applied by the nav()s below (which
         // carry the container/checkbox vars too), so these opens are non-committing.
@@ -1037,6 +1125,7 @@ const T_START = Date.now();
           if (!rounds.has(d)) rounds.set(d, []);
           rounds.get(d).push(e);
         }
+        if (kidHides.length) rounds.set(Number.MAX_SAFE_INTEGER, kidHides);
         for (const d of [...rounds.keys()].sort((a, b) => a - b)) {
           const vars = new Map();
           for (const [name, mode] of rounds.get(d))
