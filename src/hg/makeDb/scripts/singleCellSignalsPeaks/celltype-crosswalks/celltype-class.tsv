@@ -104,7 +104,7 @@ Excitatory neuron	Excitatory neuron	0,114,178
 Extravillous trophoblast	Epithelial	17,119,51
 Fibroblast	Stromal	153,79,0
 Fibroblast like cells	Stromal	153,79,0
-Flat midget biploar	Excitatory neuron	0,114,178
+Flat midget bipolar	Excitatory neuron	0,114,178
 Folh1 GABAergic neuron (D3 MSN-like)	Inhibitory neuron	213,94,0
 Foveolar	Epithelial	17,119,51
 GABAergic	Inhibitory neuron	213,94,0
@@ -112,11 +112,11 @@ GABAergic neuron	Inhibitory neuron	213,94,0
 Gastric goblet	Epithelial	17,119,51
 Gastric neuroendocrine	Epithelial	17,119,51
 Glial	Other	153,153,153
-Glutaminergic neuron	Excitatory neuron	0,114,178
+Glutamatergic neuron	Excitatory neuron	0,114,178
 Glycinergic	Inhibitory neuron	213,94,0
 Goblet	Epithelial	17,119,51
 Granular epidermal	Epithelial	17,119,51
-Hematopoeitic stem	Hematopoietic stem/progenitor	153,153,51
+Hematopoietic stem	Hematopoietic stem/progenitor	153,153,51
 Hematopoietic stem cell	Hematopoietic stem/progenitor	153,153,51
 Hepatic macrophage	Immune	238,102,119
 Hepatic stellate	Stromal	153,79,0
@@ -192,7 +192,7 @@ Myotendinous junction myonuclei	Muscle	102,17,0
 Naive B cell	Immune	238,102,119
 Naive T	Immune	238,102,119
 Natural killer T	Immune	238,102,119
-Nephron progenitor	Neural progenitor	51,34,136
+Nephron progenitor	Stromal	153,79,0
 Neural crest	Neural progenitor	51,34,136
 Neural retinal progenitor	Neural progenitor	51,34,136
 Neuromuscular junction myonuclei	Muscle	102,17,0
@@ -310,7 +310,7 @@ Sst interneuron	Inhibitory neuron	213,94,0
 Striatal GABAergic interneuron	Inhibitory neuron	213,94,0
 Stromal cell	Stromal	153,79,0
 Subiculum/entorhinal neuron	Excitatory neuron	0,114,178
-Syncitiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	17,119,51
+Syncytiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	17,119,51
 T cell	Immune	238,102,119
 T lymphocyte	Immune	238,102,119
 Thalamic glutamatergic neuron	Excitatory neuron	0,114,178
@@ -335,7 +335,6 @@ Vein	Endothelial	136,204,238
 Venous endothelial cell	Endothelial	136,204,238
 Ventral striatum medium spiny neuron	Medium spiny neuron	230,159,0
 Ventricular cardiomyocyte	Cardiomyocyte	170,68,0
-Ventricular cardioyocyte	Cardiomyocyte	170,68,0
 Vip	Inhibitory neuron	213,94,0
 Vip GABAergic interneuron	Inhibitory neuron	213,94,0
 Zona fasciculata cortical	Epithelial	17,119,51

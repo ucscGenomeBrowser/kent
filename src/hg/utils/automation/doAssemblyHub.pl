@@ -1977,14 +1977,16 @@ _EOF_
 } # doXenoRefGene
 
 #########################################################################
-# * step: trackDb [workhorse]
+# * step: trackDb [dbHost]
 sub doTrackDb {
   my $runDir = "$buildDir";
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct asmId.trackDb.txt file";
+  # must run on $dbHost: asmHubTrackDb.sh calls per-track html description
+  # generators (e.g. asmHubNcbiGene.pl) that hgsql the 'genark' database
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
-                    $workhorse, $runDir, $whatItDoes);
+                    $dbHost, $runDir, $whatItDoes);
 
   if (! -s "${buildDir}/trackData/chromAlias/${defaultName}.chromAlias.txt" ) {
     die "ERROR: can not find ${defaultName}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";

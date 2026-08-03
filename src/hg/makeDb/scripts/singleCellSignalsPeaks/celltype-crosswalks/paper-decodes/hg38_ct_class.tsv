@@ -50,18 +50,18 @@ Excitatory neuron	Excitatory neuron
 Extravillous trophoblast	Epithelial	trophoblast
 Fibroblast	Stromal
 Fibroblast like cells	Stromal
-Flat midget biploar	Excitatory neuron	retinal midget bipolar (glutamatergic)
+Flat midget bipolar	Excitatory neuron	retinal midget bipolar (glutamatergic)
 Foveolar	Epithelial	gastric foveolar/pit epithelium
 GABAergic	Inhibitory neuron
 GABAergic neuron	Inhibitory neuron
 Gastric goblet	Epithelial
 Gastric neuroendocrine	Epithelial	gut neuroendocrine epithelial cell
 Glial	Other	unspecified glia (ambiguous astro/oligo/other)
-Glutaminergic neuron	Excitatory neuron	glutamatergic
+Glutamatergic neuron	Excitatory neuron	glutamatergic
 Glycinergic	Inhibitory neuron	glycinergic (retinal amacrine)
 Goblet	Epithelial
 Granular epidermal	Epithelial	granular-layer keratinocyte
-Hematopoeitic stem	Hematopoietic stem/progenitor	HSC
+Hematopoietic stem	Hematopoietic stem/progenitor	HSC
 Hepatic macrophage	Immune	Kupffer cell
 Hepatic stellate	Stromal	stellate cell
 Hepatoblast	Epithelial	fetal hepatocyte progenitor
@@ -179,7 +179,7 @@ Smooth muscle	Mural	smooth muscle grouped with mural
 Sncg	Inhibitory neuron	GABAergic subclass
 Sst	Inhibitory neuron	GABAergic subclass
 Sst Chodl	Inhibitory neuron	GABAergic subclass
-Syncitiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	trophoblast
+Syncytiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	trophoblast
 T lymphocyte	Immune
 Thymocyte	Immune	developing T cell
 Thyroid follicular	Epithelial
@@ -193,7 +193,6 @@ VLMC	Mural	vascular leptomeningeal cell
 Vascular smooth muscle	Mural
 Vein	Endothelial	venous endothelium
 Ventricular cardiomyocyte	Cardiomyocyte
-Ventricular cardioyocyte	Cardiomyocyte	(typo variant of ventricular cardiomyocyte)
 Vip	Inhibitory neuron	GABAergic subclass
 Zona fasciculata cortical	Epithelial	adrenal cortex (steroidogenic)
 Zona glomerulosa cortical	Epithelial	adrenal cortex (steroidogenic)
