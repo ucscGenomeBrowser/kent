@@ -149,6 +149,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/trackDb.txt"`;
   `rm -f "${destDir}/genomes.txt"`;
   `rm -f "${destDir}/download.genomes.txt"`;
+  `rm -f "${destDir}/archive/ncbiGene"`;
   `rm -f "${destDir}/hub.txt"`;
   `rm -f "${gbdbDir}/hub.txt"`;
   foreach my $hubTxt (@stageHub) {
@@ -247,12 +248,14 @@ foreach my $asmId (@orderList) {
    if (-d "${buildDir}/trackData/ncbiGene/archive") {
       `mkdir -p "${buildDir}/archive"`;
       `mkdir -p "${buildDir}/archive/ncbiGene"`;
+      `mkdir -p "${destDir}/archive"`;
       foreach my $subDir (grep { -d } glob("${buildDir}/trackData/ncbiGene/archive/20*")) {
         $subDir =~ s#${buildDir}/##;
         my $archiveDate = basename(${subDir});
         `rm -f "${buildDir}/archive/ncbiGene/${archiveDate}"`;
         `ln -s "../../${subDir}" "${buildDir}/archive/ncbiGene/"`;
       }
+      `ln -s "${buildDir}/archive/ncbiGene" "${destDir}/archive/ncbiGene"`;
    }
   # trackDb.txt still needed for use by top-level genomes.txt file
   `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/trackDb.txt"` if (-s "${buildDir}/${asmId}.trackDb.txt");
