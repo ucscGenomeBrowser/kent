@@ -87,6 +87,9 @@ char *wikiLinkUserSignupUrl(char *hgsid);
 char *wikiLinkChangePasswordUrl(char *hgsid);
 /* Return the URL for the user change password page. */
 
+char *wikiLinkChangeEmailUrl(char *hgsid);
+/* Return the URL for the user change email page. */
+
 char *wikiServerAndCgiDir();
 /* return the current full absolute URL up to the CGI name, like
  * http://genome.ucsc.edu/cgi-bin/. If login.relativeLink=on is

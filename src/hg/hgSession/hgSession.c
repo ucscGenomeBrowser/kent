@@ -89,10 +89,14 @@ if (loginSystemEnabled()) /* Using the new hgLogin CGI for login */
         "<li>Username:  %s</li>",wikiUserName);
 
     if (loginUseBasicAuth())
-        printf("<li>The Genome Browser is configured to use HTTP Basic Authentication, so the password cannot be changed here.</li></ul>");
+        printf("<li>The Genome Browser is configured to use HTTP Basic Authentication, so the password cannot be changed here.</li>");
     else
-        printf("<li><A HREF=\"%s\">Change password</A></li></ul>",
+        printf("<li><A HREF=\"%s\">Change password</A></li>",
             wikiLinkChangePasswordUrl(cartSessionId(cart)));
+    char *changeEmailUrl = wikiLinkChangeEmailUrl(cartSessionId(cart));
+    if (changeEmailUrl != NULL)
+        printf("<li><A HREF=\"%s\">Change email</A></li>", changeEmailUrl);
+    printf("</ul>");
 
     printf("<p><A id='logoutLink' HREF=\"%s\">Sign out</A></p>",
         wikiLinkUserLogoutUrl(cartSessionId(cart)));
