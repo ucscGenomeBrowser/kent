@@ -26,12 +26,14 @@
 #include "wikiLink.h"
 #include "hgLogin.h"
 #include "gbMembers.h"
+#include "oauthLogin.h"
 #include "versionInfo.h"
 #include "mailViaPipe.h"
 #include "dystring.h"
 #include "autoUpgrade.h"
 #include "hCommon.h"
 #include "botDelay.h"
+#include "errCatch.h"
 
 #define EMAILSEP ";"
 
@@ -40,9 +42,10 @@ char msg[4096] = "";
 char *incorrectUsernameOrPassword="The username or password you entered is incorrect.";
 char *incorrectUsername="The username you entered is incorrect.";
 /* The excludeVars are not saved to the cart. */
-char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", 
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
      "hgLogin_password", "hgLogin_password2", "hgLogin_newPassword1",
-     "hgLogin_newPassword2", NULL };
+     "hgLogin_newPassword2", "hgLogin_newEmail1", "hgLogin_newEmail2",
+     "code", "state", "provider", "user", "token", NULL };
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
@@ -59,6 +62,14 @@ boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
+
+/* Forward declarations for functions used before their definitions. */
+static void printSocialButtons();
+static void printUsernameNote();
+void displayLoginPage(struct sqlConnection *conn);
+void displayAccHelpPage(struct sqlConnection *conn);
+void completeAccountPage(struct sqlConnection *conn);
+void sendEmailLink(struct sqlConnection *conn);
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -607,6 +618,8 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
     "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\">"
     "<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
+    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"loginLink\" id=\"loginLink\">"
+    "<label for=\"loginLink\" class=\"radioLabel\">Email me a <b>login link</b> so I can sign in without a password.</label></div>"
     "\n"
     "</div>"
     "\n");
@@ -628,6 +641,7 @@ hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "</div><!-- END - accountHelpBox -->", username, email, getReturnToURL());
 jsOnEventById("click", "password", "toggle('showU');");
 jsOnEventById("click", "username", "toggle('showE');");
+jsOnEventById("click", "loginLink", "toggle('showE');");
 cartSaveSession(cart);
 }
 
@@ -794,12 +808,11 @@ if (pwdEyeIconEnabled)
     jsOnEventById("click", "pwdEyeIcon", "togglePwdVisibility('password','pwdEyeSlash');");
     }
 cartSaveSession(cart);
+hPrintf("</form>\n");
+printSocialButtons();
 hPrintf(
-    "</form>"
-    "\n"
-    "\n"
     "<div id=\"helpBox\">"
-    "<a href=\"%s?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
+    "<a href=\"%s?hgLogin.do.displayAccHelpPage=1\">Forgot username, password or sign in with an email link</a><br>"
     "Need an account? <a href=\"%s?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
     "</div><!-- END - helpBox -->"
     "</div><!-- END - loginBox -->"
@@ -997,6 +1010,85 @@ jsInline(cookieJS->string);
 returnToURL(150);
 }
 
+void changeEmailPage(struct sqlConnection *conn)
+/* Draw the change-email page for the currently logged-in user.  The account is taken from
+ * the validated login cookie (wikiLinkUserName), never from a form field, so a user can only
+ * change their own email.  Being logged in is the authorization; no password is required,
+ * which also lets social-login accounts (which have no password) change their email. */
+{
+char *user = wikiLinkUserName();
+if (isEmpty(user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please log in first to change your email address.");
+    displayLoginPage(conn);
+    return;
+    }
+char query[256];
+sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+char *curEmail = sqlQuickString(conn, query);
+
+hPrintf("<div id=\"changeEmailBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<h3>Change Email</h3>");
+hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg ? errMsg : "");
+hPrintf("<form method=\"post\" action=\"%s\" name=\"changeEmailForm\">", hgLoginUrl);
+hPrintf("<p>Signed in as <b>%s</b>.<br>Current email address: <b>%s</b></p>",
+    user, isNotEmpty(curEmail) ? curEmail : "(none)");
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"newEmail1\">New email address</label>"
+    "<input type=\"text\" name=\"hgLogin_newEmail1\" value=\"\" size=\"30\" id=\"newEmail1\">"
+    "</div>");
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"newEmail2\">Re-enter new email address</label>"
+    "<input type=\"text\" name=\"hgLogin_newEmail2\" value=\"\" size=\"30\" id=\"newEmail2\">"
+    "</div>");
+hPrintf("<div class=\"formControls\">"
+    "<input type=\"submit\" name=\"hgLogin.do.changeEmail\" value=\"Change Email\" class=\"largeButton\">"
+    " &nbsp;<a href=\"%s\">Cancel</a>"
+    "</div></form></div><!-- END - changeEmailBox -->", getReturnToURL());
+cartSaveSession(cart);
+}
+
+void changeEmail(struct sqlConnection *conn)
+/* Process the change-email form for the currently logged-in user. */
+{
+char *user = wikiLinkUserName();
+if (isEmpty(user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please log in first to change your email address.");
+    displayLoginPage(conn);
+    return;
+    }
+char *email1 = cartUsualString(cart, "hgLogin_newEmail1", "");
+char *email2 = cartUsualString(cart, "hgLogin_newEmail2", "");
+if (isEmpty(email1) || spc_email_isvalid(email1) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter a valid email address.");
+    changeEmailPage(conn);
+    return;
+    }
+if (differentString(email1, email2))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email addresses do not match.");
+    changeEmailPage(conn);
+    return;
+    }
+char query[512];
+sqlSafef(query, sizeof(query),
+    "UPDATE gbMembers SET email='%s', lastUse=NOW() WHERE userName='%s'", email1, user);
+sqlUpdate(conn, query);
+cartRemove(cart, "hgLogin_newEmail1");
+cartRemove(cart, "hgLogin_newEmail2");
+hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
+hPrintf("<h3>Your email address has been changed.</h3>");
+hPrintf("<p>Your email address is now <b>%s</b>.</p></div>", email1);
+returnToURL(1500);
+}
+
 void signupPage(struct sqlConnection *conn)
 /* draw the signup page */
 {
@@ -1006,10 +1098,12 @@ hPrintf(
     "<p>Signing up enables you to save multiple sessions and to share your sessions with others.</p>"
     "Already have an account? <a href=\"%s?hgLogin.do.displayLoginPage=1\">Login</a>.<br>"
     "\n", hgLoginUrl);
+printSocialButtons();
 hPrintf("<h3>Sign Up</h3>"
     "<form method=\"post\" action=\"%s\" name=\"mainForm\">"
     "<span style='color:red;'>%s</span>"
     "\n", hgLoginUrl, errMsg ? errMsg : "");
+printUsernameNote();
 hPrintf("<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
     "<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
@@ -1228,6 +1322,13 @@ char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
 
+/* Passwordless email login link */
+if (sameString(helpWith,"loginLink"))
+    {
+    sendEmailLink(conn);
+    return;
+    }
+
 /* Forgot username */
 if (sameString(helpWith,"username"))
     {
@@ -1409,6 +1510,580 @@ jsInline(javascript->string);
 returnToURL(150);
 }
 
+/* ---- Social login (OAuth) and passwordless email-link login ---- */
+
+static void printSocialButtons()
+/* Print sign-in buttons for any enabled social login providers.  Prints nothing if no
+ * provider is configured, so mirrors without OAuth credentials are unaffected. */
+{
+if (!oauthAnyProviderEnabled())
+    return;
+hPrintf("<div class=\"socialLogin\">"
+    "<div class=\"orDivider\"><span>or</span></div>");
+if (oauthProviderEnabled(OAUTH_PROVIDER_GOOGLE))
+    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=google\">"
+            "Sign in with Google</a>", hgLoginUrl);
+if (oauthProviderEnabled(OAUTH_PROVIDER_ORCID))
+    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=orcid\">"
+            "Sign in with ORCID</a>", hgLoginUrl);
+hPrintf("</div>");
+}
+
+static void printUsernameNote()
+/* Print a short hint, shown wherever a new username is chosen, explaining that the username
+ * shows up in every short link the user later creates, so it should be short and easy to type. */
+{
+hPrintf("<p style=\"font-size:0.9em\">Note: your username becomes part of every short link "
+    "you create later (for example <code>%s/s/<b>username</b>/MySession</code>), so choose "
+    "something short and easy to type.</p>", brwAddr);
+}
+
+static void loginAndReturn(char *userName, uint idx)
+/* Set the permanent login cookies for userName and bounce back to the returnto URL.
+ * Every login method (password, social, email link) funnels through here, so they all
+ * produce the same long-lived login cookies. */
+{
+hPrintf("<h2>%s</h2>", brwName);
+hPrintf("<p>Login successful, setting cookies now&hellip;</p>");
+struct dyString *cookieJS = getLoginCookieJS(userName, idx);
+jsInline(cookieJS->string);
+cartRemove(cart, "hgLogin_userName");
+returnToURL(150);
+}
+
+static void createIdentityTable(struct sqlConnection *conn)
+/* Create the gbMemberIdentity table if it does not exist.  On a mirror whose central db
+ * is read-only this may fail; social login simply won't work there (and won't be enabled
+ * without client secrets anyway), so ignore any error. */
+{
+if (sqlTableExists(conn, "gbMemberIdentity"))
+    return;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct dyString *dy = sqlDyStringCreate(
+        "CREATE TABLE IF NOT EXISTS gbMemberIdentity ("
+        "idx int unsigned NOT NULL,"
+        "provider varchar(16) NOT NULL,"
+        "subject varchar(255) NOT NULL,"
+        "email varchar(255) NOT NULL default '',"
+        "created DATETIME NOT NULL,"
+        "lastUse DATETIME NOT NULL,"
+        "UNIQUE KEY provSub (provider, subject),"
+        "INDEX(idx))");
+    sqlUpdate(conn, dyStringContents(dy));
+    dyStringFree(&dy);
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+}
+
+static boolean userNameTaken(struct sqlConnection *conn, char *userName)
+/* Return TRUE if userName already exists in gbMembers. */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM gbMembers WHERE userName='%s'", userName);
+return sqlQuickNum(conn, query) > 0;
+}
+
+static char *suggestUsername(struct sqlConnection *conn, char *email, char *displayName)
+/* Suggest an available username from the email local-part (falling back to the display
+ * name), keeping only valid username characters and appending a number to avoid clashes. */
+{
+char raw[256];
+raw[0] = 0;
+if (isNotEmpty(email) && strchr(email, '@'))
+    {
+    safecpy(raw, sizeof(raw), email);
+    char *at = strchr(raw, '@');
+    *at = 0;
+    }
+else if (isNotEmpty(displayName))
+    safecpy(raw, sizeof(raw), displayName);
+char clean[256];
+int j = 0;
+char *s;
+for (s = raw; *s != 0 && j < (int)sizeof(clean)-1; s++)
+    if (isalnum(*s) || *s == '_' || *s == '-')
+        clean[j++] = tolower((unsigned char)*s);
+clean[j] = 0;
+if (strlen(clean) < 2)
+    safecpy(clean, sizeof(clean), "user");
+char candidate[288];
+safecpy(candidate, sizeof(candidate), clean);
+int n = 1;
+while (userNameTaken(conn, candidate))
+    safef(candidate, sizeof(candidate), "%s%d", clean, ++n);
+return cloneString(candidate);
+}
+
+static struct gbMembers *memberForIdentity(struct sqlConnection *conn, struct oauthIdentity *id)
+/* Return the gbMembers account already linked to this provider identity, or NULL. */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT idx FROM gbMemberIdentity WHERE provider='%s' AND subject='%s'",
+    id->provider, id->subject);
+uint idx = (uint)sqlQuickLongLong(conn, query);
+if (idx == 0)
+    return NULL;
+sqlSafef(query, sizeof(query), "SELECT * FROM gbMembers WHERE idx=%u", idx);
+return gbMembersLoadByQuery(conn, query);
+}
+
+static void setPendingIdentity(struct oauthIdentity *id)
+/* Stash an authenticated-but-not-yet-linked identity in the cart so it survives a form
+ * round-trip (the "choose a username" or "choose an account" page). */
+{
+cartSetString(cart, "oauth_pending_provider", id->provider);
+cartSetString(cart, "oauth_pending_subject", id->subject);
+cartSetString(cart, "oauth_pending_email", emptyForNull(id->email));
+cartSetString(cart, "oauth_pending_name", emptyForNull(id->displayName));
+}
+
+static void clearPendingIdentity()
+/* Remove the pending-identity cart variables once the account is linked. */
+{
+cartRemove(cart, "oauth_pending_provider");
+cartRemove(cart, "oauth_pending_subject");
+cartRemove(cart, "oauth_pending_email");
+cartRemove(cart, "oauth_pending_name");
+}
+
+static void linkIdentity(struct sqlConnection *conn, uint idx, struct oauthIdentity *id)
+/* Insert or refresh the gbMemberIdentity row linking idx to this provider identity. */
+{
+char query[1024];
+char *email = emptyForNull(id->email);
+sqlSafef(query, sizeof(query),
+    "INSERT INTO gbMemberIdentity SET idx=%u, provider='%s', subject='%s', email='%s', "
+    "created=NOW(), lastUse=NOW() "
+    "ON DUPLICATE KEY UPDATE idx=%u, email='%s', lastUse=NOW()",
+    idx, id->provider, id->subject, email, idx, email);
+sqlUpdate(conn, query);
+}
+
+void completeAccountPage(struct sqlConnection *conn)
+/* Ask a first-time social-login user to confirm a username (and email) for a new account. */
+{
+char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+char *email = cartUsualString(cart, "oauth_pending_email", "");
+char *name = cartUsualString(cart, "oauth_pending_name", "");
+if (isEmpty(provider))
+    {
+    displayLoginPage(conn);
+    return;
+    }
+char *suggested = cartUsualString(cart, "hgLogin_userName", "");
+if (isEmpty(suggested))
+    suggested = suggestUsername(conn, email, name);
+
+hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<h3>Choose a username</h3>");
+hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
+    "You can change the suggested name below.</p>",
+    sameString(provider, OAUTH_PROVIDER_ORCID) ? "ORCID" : "Google", brwName);
+printUsernameNote();
+hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
+hPrintf("<form method=\"post\" action=\"%s\" name=\"completeAccountForm\">", hgLoginUrl);
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"userName\">Username</label>"
+    "<input type=\"text\" name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
+    "</div>", suggested);
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"emailAddr\">Email address</label>"
+    "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
+    "</div>", email);
+hPrintf("<div class=\"formControls\">"
+    "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create Account\" class=\"largeButton\">"
+    " &nbsp;<a href=\"%s\">Cancel</a>"
+    "</div></form></div><!-- END - completeAccountBox -->", getReturnToURL());
+cartSaveSession(cart);
+}
+
+void completeAccount(struct sqlConnection *conn)
+/* Create the account for a first-time social-login user, link the identity, and log in. */
+{
+char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+char *subject = cartUsualString(cart, "oauth_pending_subject", "");
+if (isEmpty(provider) || isEmpty(subject))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Your login session expired. Please sign in again.");
+    displayLoginPage(conn);
+    return;
+    }
+char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *encUserName = cgiEncodeFull(user);
+if (isEmpty(user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter a username.");
+    completeAccountPage(conn);
+    return;
+    }
+if (strlen(user) < 2)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("User name must be at least two characters long.");
+    completeAccountPage(conn);
+    return;
+    }
+if (strlen(encUserName) > 32)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please use a shorter user name: less than 32 characters after URL encoding.");
+    completeAccountPage(conn);
+    return;
+    }
+if (userNameTaken(conn, user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("A user with this name already exists. Please choose another.");
+    completeAccountPage(conn);
+    return;
+    }
+char *email = cartUsualString(cart, "hgLogin_email", "");
+if (isEmpty(email))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter an email address.");
+    completeAccountPage(conn);
+    return;
+    }
+if (spc_email_isvalid(email) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid email address format.");
+    completeAccountPage(conn);
+    return;
+    }
+char *name = cartUsualString(cart, "oauth_pending_name", "");
+char *realName = isNotEmpty(name) ? name : user;
+
+struct dyString *q = sqlDyStringCreate(
+    "INSERT INTO gbMembers SET userName='%s', realName='%s', password='', email='%s', "
+    "lastUse=NOW(), dateActivated=NOW(), accountActivated='Y'",
+    user, realName, emptyForNull(email));
+sqlUpdate(conn, dyStringContents(q));
+dyStringFree(&q);
+uint idx = sqlLastAutoId(conn);
+
+struct oauthIdentity pending;
+ZeroVar(&pending);
+pending.provider = provider;
+pending.subject = subject;
+pending.email = email;
+linkIdentity(conn, idx, &pending);
+
+clearPendingIdentity();
+loginAndReturn(user, idx);
+}
+
+void chooseAccountPage(struct sqlConnection *conn)
+/* When a verified OAuth email matches several accounts, ask the user which one to sign
+ * in to (and link this social identity to). */
+{
+char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+char *email = cartUsualString(cart, "oauth_pending_email", "");
+if (isEmpty(provider) || isEmpty(email))
+    {
+    displayLoginPage(conn);
+    return;
+    }
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT * FROM gbMembers WHERE email='%s' ORDER BY idx", email);
+struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
+
+hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<h3>Choose an account</h3>");
+hPrintf("<p>The email address <b>%s</b> is associated with more than one %s account. "
+    "Select the account you would like to sign in to; your %s login will be linked to it.</p>",
+    email, brwName, sameString(provider, OAUTH_PROVIDER_ORCID) ? "ORCID" : "Google");
+hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
+hPrintf("<form method=\"post\" action=\"%s\" name=\"chooseAccountForm\">", hgLoginUrl);
+hPrintf("<div class=\"inputGroup\">");
+boolean first = TRUE;
+for (m = list;  m != NULL;  m = m->next)
+    {
+    hPrintf("<div class=\"acctHelpSection\">"
+        "<input name=\"hgLogin_chosenUser\" type=\"radio\" value=\"%s\" id=\"acct_%u\"%s>"
+        "<label for=\"acct_%u\" class=\"radioLabel\">%s</label></div>",
+        m->userName, m->idx, first ? " checked" : "", m->idx, m->userName);
+    first = FALSE;
+    }
+hPrintf("</div>");
+hPrintf("<div class=\"formControls\">"
+    "<input type=\"submit\" name=\"hgLogin.do.chooseAccount\" value=\"Sign In\" class=\"largeButton\">"
+    " &nbsp;<a href=\"%s\">Cancel</a>"
+    "</div></form></div><!-- END - chooseAccountBox -->", getReturnToURL());
+cartSaveSession(cart);
+gbMembersFreeList(&list);
+}
+
+void chooseAccount(struct sqlConnection *conn)
+/* Link the pending OAuth identity to the account the user picked, then log in. */
+{
+char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+char *subject = cartUsualString(cart, "oauth_pending_subject", "");
+char *email = cartUsualString(cart, "oauth_pending_email", "");
+char *chosen = cartUsualString(cart, "hgLogin_chosenUser", "");
+if (isEmpty(provider) || isEmpty(subject) || isEmpty(email))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Your login session expired. Please sign in again.");
+    displayLoginPage(conn);
+    return;
+    }
+/* Security: only allow linking to an account that really shares the verified email,
+ * not an arbitrary username the client might submit. */
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT * FROM gbMembers WHERE userName='%s' AND email='%s'", chosen, email);
+struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+if (m == NULL)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please choose one of the listed accounts.");
+    chooseAccountPage(conn);
+    return;
+    }
+struct oauthIdentity pending;
+ZeroVar(&pending);
+pending.provider = provider;
+pending.subject = subject;
+pending.email = email;
+linkIdentity(conn, m->idx, &pending);
+clearPendingIdentity();
+cartRemove(cart, "hgLogin_chosenUser");
+loginAndReturn(m->userName, m->idx);
+gbMembersFree(&m);
+}
+
+static void resolveIdentity(struct sqlConnection *conn, struct oauthIdentity *id)
+/* Log in the user behind an authenticated provider identity:
+ *  1. If the provider gave a verified email matching MORE THAN ONE account, always let the
+ *     user pick which one -- even if this identity was linked before. Because login cookies
+ *     never expire, a user goes through OAuth very rarely, so an occasional pick is cheap
+ *     and it lets a person with several same-email accounts choose freely each time.
+ *  2. Else if the (provider,subject) is already linked, log into that account.
+ *  3. Else if the verified email matches exactly one account, auto-link and log in.
+ *  4. Else send the user to the "choose a username" page to finish a new account.
+ * (Providers that don't release an email, e.g. ORCID, never reach step 1 or 3 and rely on
+ *  the stored link from step 2.) */
+{
+struct gbMembers *matches = NULL;
+int n = 0;
+if (id->emailVerified && isNotEmpty(id->email))
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query),
+        "SELECT * FROM gbMembers WHERE email='%s' ORDER BY idx", id->email);
+    matches = gbMembersLoadByQuery(conn, query);
+    n = slCount(matches);
+    }
+
+if (n > 1)
+    {
+    setPendingIdentity(id);
+    gbMembersFreeList(&matches);
+    chooseAccountPage(conn);
+    return;
+    }
+
+struct gbMembers *linked = memberForIdentity(conn, id);
+if (linked != NULL)
+    {
+    linkIdentity(conn, linked->idx, id);
+    loginAndReturn(linked->userName, linked->idx);
+    gbMembersFree(&linked);
+    gbMembersFreeList(&matches);
+    return;
+    }
+
+if (n == 1)
+    {
+    linkIdentity(conn, matches->idx, id);
+    loginAndReturn(matches->userName, matches->idx);
+    gbMembersFreeList(&matches);
+    return;
+    }
+
+gbMembersFreeList(&matches);
+setPendingIdentity(id);
+completeAccountPage(conn);
+}
+
+void oauthStart(struct sqlConnection *conn)
+/* Begin a social login: save an anti-CSRF state nonce (in the cart) and redirect the
+ * browser to the provider's authorization page. */
+{
+char *provider = cgiUsualString("provider", "");
+if (!oauthProviderEnabled(provider))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("That login method is not available on this server.");
+    displayLoginPage(conn);
+    return;
+    }
+char *state = makeRandomKey(128+33);
+cartSetString(cart, "oauth_state", state);
+cartSetString(cart, "oauth_provider", provider);
+/* returnto is already in the cart from the incoming link; leave it in place so the
+ * provider round-trip returns the user to where they started. */
+char *url = oauthLoginUrl(provider, hgLoginUrl, state);
+if (isEmpty(url))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Could not start social login. Please try again.");
+    displayLoginPage(conn);
+    return;
+    }
+jsInlineF("window.location = '%s';\n", url);
+}
+
+void oauthReturn(struct sqlConnection *conn)
+/* Handle the provider's redirect back to us: verify state, exchange the code for the
+ * user's identity, and resolve/auto-link the account. */
+{
+char *state = cgiUsualString("state", "");
+char *savedState = cartUsualString(cart, "oauth_state", "");
+char *provider = cartUsualString(cart, "oauth_provider", "");
+cartRemove(cart, "oauth_state");   // one-time use
+
+if (isNotEmpty(cgiUsualString("error", "")))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Social login was cancelled or denied.");
+    displayLoginPage(conn);
+    return;
+    }
+if (isEmpty(state) || isEmpty(savedState) || differentString(state, savedState))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Your login session expired or was invalid. Please try again.");
+    displayLoginPage(conn);
+    return;
+    }
+char *code = cgiUsualString("code", "");
+struct oauthIdentity *id = oauthFetchIdentity(provider, code, hgLoginUrl);
+if (id == NULL)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("We could not complete the social login. Please try again.");
+    displayLoginPage(conn);
+    return;
+    }
+resolveIdentity(conn, id);
+oauthIdentityFree(&id);
+}
+
+void displayLoginLinkSuccess()
+/* Confirmation shown after a passwordless login link is (possibly) emailed.  Phrased so it
+ * does not reveal whether an account exists for the address. */
+{
+char *email = cartUsualString(cart, "hgLogin_sendMailTo", "");
+hPrintf("<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<p id=\"confirmationMsg\" class=\"confirmationTxt\">If an account exists for "
+    "<B>%s</B>, a login link has been sent to that address.<BR><BR>"
+    "Click the link in that email to sign in &mdash; no password needed. "
+    "The link works once and expires in one hour.</p>", email);
+hPrintf("<p>If you don't see the email, please check your spam folder.</p>");
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n", hgLoginUrl);
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_sendMailTo");
+cartRemove(cart, "hgLogin_helpWith");
+}
+
+void sendLoginLinkMail(char *username, char *email, char *token)
+/* Email a one-time passwordless login link to the user. */
+{
+char subject[256];
+char msg[4096];
+char url[512];
+char *remoteAddr = getenv("REMOTE_ADDR");
+safef(url, sizeof(url), "%s?hgLogin.do.emailLogin=1&user=%s&token=%s",
+    hgLoginUrl, cgiEncode(username), cgiEncode(token));
+safef(subject, sizeof(subject), "Your login link for the %s", brwName);
+safef(msg, sizeof(msg),
+    "Someone (probably you, from IP address %s) requested a login link for the %s account "
+    "\"%s\".\nClick the link below to sign in without a password. It works once and expires "
+    "in one hour:\n\n%s\n\nIf you did not request this, you can safely ignore this email.\n\n%s\n%s",
+    remoteAddr, brwName, username, url, signature, returnAddr);
+sendActMailOut(email, subject, msg);
+}
+
+void sendEmailLink(struct sqlConnection *conn)
+/* Generate and email a one-time passwordless login link to the address on file. */
+{
+char *email = cartUsualString(cart, "hgLogin_email", "");
+if (isEmpty(email) || spc_email_isvalid(email) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter a valid email address.");
+    displayAccHelpPage(conn);
+    return;
+    }
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT * FROM gbMembers WHERE email='%s' OR recovEmail='%s'", email, email);
+struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
+for (m = list; m != NULL; m = m->next)
+    {
+    char *token = makeRandomKey(128+33);
+    char *tokenMD5 = generateTokenMD5(token);
+    sqlSafef(query, sizeof(query),
+        "UPDATE gbMembers SET loginToken='%s', "
+        "loginTokenExpires=DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE idx=%u",
+        tokenMD5, m->idx);
+    sqlUpdate(conn, query);
+    sendLoginLinkMail(m->userName, email, token);
+    }
+/* Always show the same confirmation, even when no account matched, so we don't reveal
+ * whether an address is registered. */
+cartSetString(cart, "hgLogin_sendMailTo", email);
+displayLoginLinkSuccess();
+}
+
+void emailLogin(struct sqlConnection *conn)
+/* Validate a one-time email login token and log the user in. */
+{
+char *user = cgiUsualString("user", "");
+char *token = cgiUsualString("token", "");
+char query[512];
+sqlSafef(query, sizeof(query), "SELECT * FROM gbMembers WHERE userName='%s'", user);
+struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+if (m == NULL)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("This login link is invalid or has expired. Please request a new one.");
+    displayLoginPage(conn);
+    return;
+    }
+char *tokenMD5 = generateTokenMD5(token);
+sqlSafef(query, sizeof(query),
+    "SELECT count(*) FROM gbMembers WHERE userName='%s' AND loginToken='%s' "
+    "AND loginToken<>'' AND loginTokenExpires > NOW()", user, tokenMD5);
+if (sqlQuickNum(conn, query) == 1)
+    {
+    sqlSafef(query, sizeof(query),
+        "UPDATE gbMembers SET loginToken='', lastUse=NOW() WHERE userName='%s'", user);
+    sqlUpdate(conn, query);
+    loginAndReturn(m->userName, m->idx);
+    }
+else
+    {
+    freez(&errMsg);
+    errMsg = cloneString("This login link is invalid or has expired. Please request a new one.");
+    displayLoginPage(conn);
+    }
+gbMembersFree(&m);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page.
  * This routine sets up some globals and then
@@ -1421,6 +2096,16 @@ if (sqlFieldIndex(conn, "gbMembers", "recovEmail") == -1) {
     autoUpgradeTableAddColumn(conn, "gbMembers", "recovEmail", "varchar(255)", FALSE, "''");
 }
 
+// columns for the passwordless email-link login feature
+if (sqlFieldIndex(conn, "gbMembers", "loginToken") == -1)
+    autoUpgradeTableAddColumn(conn, "gbMembers", "loginToken", "varchar(255)", FALSE, "NULL");
+if (sqlFieldIndex(conn, "gbMembers", "loginTokenExpires") == -1)
+    autoUpgradeTableAddColumn(conn, "gbMembers", "loginTokenExpires", "DATETIME", FALSE, "NULL");
+
+// table linking accounts to social (Google/ORCID) identities; only needed where OAuth is set up
+if (oauthAnyProviderEnabled())
+    createIdentityTable(conn);
+
 cart = theCart;
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
@@ -1428,10 +2113,28 @@ safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 pwdEyeIconEnabled = cfgOptionBooleanDefault(CFG_LOGIN_PWD_EYE_ICON, TRUE);
 
-if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
+// A provider's OAuth redirect back to us carries 'code' and 'state' but none of our own
+// hgLogin.do.* variables, so detect it up front.
+if (cgiOptionalString("code") != NULL && cgiOptionalString("state") != NULL)
+    oauthReturn(conn);
+else if (cartVarExists(cart, "hgLogin.do.oauthStart"))
+    oauthStart(conn);
+else if (cartVarExists(cart, "hgLogin.do.completeAccount"))
+    completeAccount(conn);
+else if (cartVarExists(cart, "hgLogin.do.chooseAccount"))
+    chooseAccount(conn);
+else if (cartVarExists(cart, "hgLogin.do.sendEmailLink"))
+    sendEmailLink(conn);
+else if (cartVarExists(cart, "hgLogin.do.emailLogin"))
+    emailLogin(conn);
+else if (cartVarExists(cart, "hgLogin.do.changePasswordPage"))
     changePasswordPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.changePassword"))
     changePassword(conn);
+else if (cartVarExists(cart, "hgLogin.do.changeEmailPage"))
+    changeEmailPage(conn);
+else if (cartVarExists(cart, "hgLogin.do.changeEmail"))
+    changeEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
     displayAccHelpPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
