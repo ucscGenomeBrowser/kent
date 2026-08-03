@@ -63,9 +63,21 @@ NORM = {
     "Other neural": "Other", "Other glia": "Other", "Aggregate": "Other",
     "Progenitor": "Neural progenitor",
 }
+# The decode tables use a bare "Progenitor" broad class. Almost every one of them is
+# neural (radial glia, neuroblasts, intermediate progenitors), which is why NORM defaults
+# it to "Neural progenitor" -- but a bare "Progenitor" is not by itself evidence of a
+# neural lineage, and the default silently mis-assigned the one row that is not. Nephron
+# progenitors are Six2+ kidney cap mesenchyme, so they belong with the mesenchymal cells.
+# Keyed on the canonical cell type; anything not listed keeps the neural default.
+NON_NEURAL_PROGENITOR = {
+    "nephron progenitor": "Stromal",       # kidney cap mesenchyme, per clean5 kidney decode
+}
 def norm_class(bc, canonical):
-    bc = NORM.get(bc, bc)
     cl = canonical.lower()
+    if bc == "Progenitor" and cl in NON_NEURAL_PROGENITOR:
+        bc = NON_NEURAL_PROGENITOR[cl]
+    else:
+        bc = NORM.get(bc, bc)
     if "vlmc" in cl or "leptomening" in cl:       # VLMC -> Mural (agents used "Other")
         bc = "Mural"
     if canonical.startswith("OBDOP") or "olfactory bulb dopaminergic" in cl:
@@ -111,7 +123,6 @@ for coll, fn in [("catlas-mouse-brain", "xwalk_catlas-mouse-brain.tsv"),
             [r["code"], r["canonical_cell_type"], rgb(bc), tis, life, cond])
 
 # clean-5: color + canonical only; keep computed tissue/life_stage/condition (blank)
-CLEAN5_COLL = {"Astrocyte", "Bergmann glia"}  # (placeholder; clean5 rows are global by raw name)
 clean5 = read_tsv("xwalk_clean5.tsv")
 # clean5 raw names are global; emit one shared file applied to all 5 clean collections
 clean5_rows = []
