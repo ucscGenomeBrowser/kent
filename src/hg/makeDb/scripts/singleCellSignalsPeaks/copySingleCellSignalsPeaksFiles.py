@@ -21,7 +21,11 @@ Usage:
 import re, os, shutil, argparse
 from urllib.parse import urlparse
 
-HUB_BUILD = "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build"
+# Where the hub build writes manifest.tsv. That machinery builds the whole Cell Browser
+# super hub, not just this track, so it lives outside the kent tree; override with
+# HUB_BUILD when it moves (or pass --manifest).
+HUB_BUILD = os.environ.get(
+    "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
 
 def load_relpath_to_abs(manifest, asm):
