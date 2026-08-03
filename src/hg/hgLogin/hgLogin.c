@@ -64,8 +64,10 @@ boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
 #define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
 
 /* Forward declarations for functions used before their definitions. */
-static void printSocialButtons();
+static void printSocialButtons(boolean dividerAbove, boolean dividerBelow);
+static void printEmailLinkButton();
 static void printUsernameNote();
+void emailLinkPage(struct sqlConnection *conn);
 void displayLoginPage(struct sqlConnection *conn);
 void displayAccHelpPage(struct sqlConnection *conn);
 void completeAccountPage(struct sqlConnection *conn);
@@ -809,7 +811,8 @@ if (pwdEyeIconEnabled)
     }
 cartSaveSession(cart);
 hPrintf("</form>\n");
-printSocialButtons();
+printEmailLinkButton();
+printSocialButtons(TRUE, FALSE);
 hPrintf(
     "<div id=\"helpBox\">"
     "<a href=\"%s?hgLogin.do.displayAccHelpPage=1\">Forgot username, password or sign in with an email link</a><br>"
@@ -1096,10 +1099,12 @@ hPrintf("<div id=\"signUpBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf(
     "<p>Signing up enables you to save multiple sessions and to share your sessions with others.</p>"
-    "Already have an account? <a href=\"%s?hgLogin.do.displayLoginPage=1\">Login</a>.<br>"
-    "\n", hgLoginUrl);
-printSocialButtons();
-hPrintf("<h3>Sign Up</h3>"
+    "\n");
+hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.displayLoginPage=1\">"
+    "Sign in with username and password</a>", hgLoginUrl);
+printEmailLinkButton();
+printSocialButtons(TRUE, TRUE);
+hPrintf("<h3>Sign Up Using Email</h3>"
     "<form method=\"post\" action=\"%s\" name=\"mainForm\">"
     "<span style='color:red;'>%s</span>"
     "\n", hgLoginUrl, errMsg ? errMsg : "");
@@ -1150,7 +1155,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"formControls\">"
-    "    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign Up\" class=\"largeButton\"> &nbsp; "
+    "    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign Up using Email\" class=\"largeButton\"> &nbsp; "
     "    <a href=\"%s\">Cancel</a>"
     "</div>"
     "</form>"
@@ -1512,21 +1517,34 @@ returnToURL(150);
 
 /* ---- Social login (OAuth) and passwordless email-link login ---- */
 
-static void printSocialButtons()
-/* Print sign-in buttons for any enabled social login providers.  Prints nothing if no
+static void printSocialButtons(boolean dividerAbove, boolean dividerBelow)
+/* Print sign-in buttons for any enabled social login providers, optionally bracketed by "or"
+ * dividers.  The login page uses only the top divider (separating the buttons from the
+ * password form above); the signup page uses both, so the buttons sit in their own section
+ * between the "already have an account" link and the email signup form.  Prints nothing if no
  * provider is configured, so mirrors without OAuth credentials are unaffected. */
 {
 if (!oauthAnyProviderEnabled())
     return;
-hPrintf("<div class=\"socialLogin\">"
-    "<div class=\"orDivider\"><span>or</span></div>");
-if (oauthProviderEnabled(OAUTH_PROVIDER_GOOGLE))
-    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=google\">"
-            "Sign in with Google</a>", hgLoginUrl);
-if (oauthProviderEnabled(OAUTH_PROVIDER_ORCID))
-    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=orcid\">"
-            "Sign in with ORCID</a>", hgLoginUrl);
+hPrintf("<div class=\"socialLogin\">");
+if (dividerAbove)
+    hPrintf("<div class=\"orDivider\"><span>or</span></div>");
+struct slName *prov, *providers = oauthProviderNames();
+for (prov = providers;  prov != NULL;  prov = prov->next)
+    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=%s\">"
+            "Sign in with %s</a>",
+            hgLoginUrl, cgiEncode(prov->name), oauthProviderLabel(prov->name));
+if (dividerBelow)
+    hPrintf("<div class=\"orDivider\"><span>or</span></div>");
 hPrintf("</div>");
+}
+
+static void printEmailLinkButton()
+/* Print a grey button that opens the passwordless email-link login page.  Always available
+ * (this is core hgLogin functionality, independent of any OAuth configuration). */
+{
+hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.emailLinkPage=1\">"
+    "Sign in with an email link</a>", hgLoginUrl);
 }
 
 static void printUsernameNote()
@@ -1564,7 +1582,7 @@ if (errCatchStart(errCatch))
     struct dyString *dy = sqlDyStringCreate(
         "CREATE TABLE IF NOT EXISTS gbMemberIdentity ("
         "idx int unsigned NOT NULL,"
-        "provider varchar(16) NOT NULL,"
+        "provider varchar(64) NOT NULL,"
         "subject varchar(255) NOT NULL,"
         "email varchar(255) NOT NULL default '',"
         "created DATETIME NOT NULL,"
@@ -1683,7 +1701,7 @@ hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
 hPrintf("<h3>Choose a username</h3>");
 hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
     "You can change the suggested name below.</p>",
-    sameString(provider, OAUTH_PROVIDER_ORCID) ? "ORCID" : "Google", brwName);
+    oauthProviderLabel(provider), brwName);
 printUsernameNote();
 hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"completeAccountForm\">", hgLoginUrl);
@@ -1802,7 +1820,7 @@ hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
 hPrintf("<h3>Choose an account</h3>");
 hPrintf("<p>The email address <b>%s</b> is associated with more than one %s account. "
     "Select the account you would like to sign in to; your %s login will be linked to it.</p>",
-    email, brwName, sameString(provider, OAUTH_PROVIDER_ORCID) ? "ORCID" : "Google");
+    email, brwName, oauthProviderLabel(provider));
 hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"chooseAccountForm\">", hgLoginUrl);
 hPrintf("<div class=\"inputGroup\">");
@@ -1981,6 +1999,27 @@ resolveIdentity(conn, id);
 oauthIdentityFree(&id);
 }
 
+void emailLinkPage(struct sqlConnection *conn)
+/* Standalone page that asks for an email address and sends a one-time login link. */
+{
+hPrintf("<div id=\"emailLinkBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<h3>Sign in with an email link</h3>");
+hPrintf("<p>Enter your email address and we'll send you a link that signs you in without a "
+    "password. This is handy on a computer where you don't have your password saved.</p>");
+hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
+hPrintf("<form method=\"post\" action=\"%s\" name=\"emailLinkForm\">", hgLoginUrl);
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"emailLink\">Email address</label>"
+    "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailLink\">"
+    "</div>", cartUsualString(cart, "hgLogin_email", ""));
+hPrintf("<div class=\"formControls\">"
+    "<input type=\"submit\" name=\"hgLogin.do.sendEmailLink\" value=\"Send login link\" class=\"largeButton\">"
+    " &nbsp;<a href=\"%s\">Cancel</a>"
+    "</div></form></div><!-- END - emailLinkBox -->", getReturnToURL());
+cartSaveSession(cart);
+}
+
 void displayLoginLinkSuccess()
 /* Confirmation shown after a passwordless login link is (possibly) emailed.  Phrased so it
  * does not reveal whether an account exists for the address. */
@@ -2025,7 +2064,7 @@ if (isEmpty(email) || spc_email_isvalid(email) == 0)
     {
     freez(&errMsg);
     errMsg = cloneString("Please enter a valid email address.");
-    displayAccHelpPage(conn);
+    emailLinkPage(conn);
     return;
     }
 char query[512];
@@ -2123,6 +2162,8 @@ else if (cartVarExists(cart, "hgLogin.do.completeAccount"))
     completeAccount(conn);
 else if (cartVarExists(cart, "hgLogin.do.chooseAccount"))
     chooseAccount(conn);
+else if (cartVarExists(cart, "hgLogin.do.emailLinkPage"))
+    emailLinkPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.sendEmailLink"))
     sendEmailLink(conn);
 else if (cartVarExists(cart, "hgLogin.do.emailLogin"))
