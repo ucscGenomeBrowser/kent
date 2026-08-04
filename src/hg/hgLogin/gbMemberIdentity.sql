@@ -5,7 +5,7 @@
 
 CREATE TABLE gbMemberIdentity (
     idx int unsigned NOT NULL,			# gbMembers.idx of the linked account
-    provider varchar(16) NOT NULL,		# Identity provider: 'google' or 'orcid'
+    provider varchar(64) NOT NULL,		# Identity provider short name: google, orcid, github, ...
     subject varchar(255) NOT NULL,		# Stable unique subject id from the provider
     email varchar(255) NOT NULL default '',	# Email reported by provider at last login
     created DATETIME NOT NULL,			# Date this identity link was created
