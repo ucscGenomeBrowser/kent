@@ -66,13 +66,27 @@
 ##############################################################################
 # 5. Labels, colors, and facets
 ##############################################################################
-# The cell type / cell class / longLabel / color / facet values are all derived
-# by build_stanzas.py, not copied from the source hubs. That logic (paper-curated
-# cell-type crosswalks, the shared broad-class color palette, the rebuilt
-# longLabels, and the per-collection tissue/life-stage/condition parsing incl.
-# SEA-AD region + ADNC) is documented once in doc/mm10/singleCellSignalsPeaks.txt
+# The cell type / cell class / shortLabel / longLabel / color / facet values are
+# all derived by build_stanzas.py, not copied from the source hubs. That logic
+# (paper-curated cell-type crosswalks, the shared broad-class color palette, the
+# rebuilt short and long labels, the variant descriptors that keep every label
+# unique, and the per-collection tissue/life-stage/condition parsing incl. SEA-AD
+# region + ADNC) is documented once in doc/mm10/singleCellSignalsPeaks.txt
 # section 4; it runs identically for hg38. Tracks are colored by broad cell class
 # from the same palette as mm10, so a class is the same color on both assemblies.
+#
+# hg38-specific label notes:
+#   - cortex-atac calls peaks three ways and serves all three for each cell type.
+#     The method is a filename suffix on some files (AstroOligo_MACSpeaks.bb) and
+#     the containing directory on others (MACSpeaks/AstroOligo.bb) -- both layouts
+#     appear in the same dataset and the two files are genuinely different peak
+#     sets, so both forms are detected and named in the label.
+#   - human-enhancer-atlas rolls tissue-qualified fibroblast/endothelial clusters
+#     (Fibro_Muscle, Endothelial_General_2) up to one cell type; the source code
+#     goes in the label so the clusters stay distinguishable.
+#   - SEA-AD shortLabels carry a compact region + ADNC token (Astrocyte MTG A0),
+#     since the longLabel distinction alone would leave eight identical short
+#     labels per cell type (2 regions x 4 ADNC levels).
 
 ##############################################################################
 # Counts
@@ -83,3 +97,4 @@
 # brainvar (4). 10 mislabeled interaction bigBeds (cortex-atac interact.old/) are
 # reclassified to the interact composite and 1 QC cluster is dropped, leaving 925
 # subtracks in the track. Facet metadata rows match the subtracks 1:1.
+# All 925 longLabels are unique; shortLabels are <=22 chars with no underscores.
