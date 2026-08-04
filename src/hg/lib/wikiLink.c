@@ -548,10 +548,13 @@ return(cloneString(buf));
 }
 
 char *wikiLinkChangeEmailUrl(char *hgsid)
-/* Return the URL for the user change email page.  Only supported by the hgLogin
- * login system; returns NULL when a remote wiki handles logins. */
+/* Return the URL for the user change email page, or NULL if unavailable.  Supported only by
+ * the hgLogin login system, and only when the login.emailLink feature is enabled in hg.conf
+ * (the same switch that controls the passwordless email-link sign-in). */
 {
 if (!loginSystemEnabled())
+    return NULL;
+if (!cfgOptionBooleanDefault(CFG_LOGIN_EMAIL_LINK, FALSE))
     return NULL;
 char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);

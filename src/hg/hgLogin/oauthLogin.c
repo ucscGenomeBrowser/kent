@@ -256,19 +256,33 @@ freeMem(body);
 return json;
 }
 
-static struct jsonElement *postForm(char *url, char *body)
-/* POST an x-www-form-urlencoded body and return the parsed JSON response, or NULL. */
+static char *formValue(char *body, char *name)
+/* Return the URL-decoded value of name in an x-www-form-urlencoded body, or NULL.  Allocd. */
 {
-struct dyString *header = dyStringNew(256);
-dyStringPrintf(header, "Content-Type: application/x-www-form-urlencoded\r\n");
-dyStringPrintf(header, "Accept: application/json\r\n");
-dyStringPrintf(header, "User-Agent: UCSC-Genome-Browser\r\n");
-dyStringPrintf(header, "Content-Length: %d\r\n", (int)strlen(body));
-char *respBody = httpRequest(url, "POST", header->string, body);
-dyStringFree(&header);
-struct jsonElement *json = jsonParseSafe(respBody);
-freeMem(respBody);
-return json;
+char *dupe = cloneString(body);
+char *result = NULL;
+int n = countChars(dupe, '&') + 1;
+char **pairs;
+AllocArray(pairs, n);
+n = chopByChar(dupe, '&', pairs, n);
+int i;
+for (i = 0;  i < n;  i++)
+    {
+    char *eq = strchr(pairs[i], '=');
+    if (eq == NULL)
+        continue;
+    *eq = '\0';
+    if (sameString(pairs[i], name))
+        {
+        char *val = eq + 1;
+        cgiDecode(val, val, strlen(val));
+        result = cloneString(val);
+        break;
+        }
+    }
+freeMem(pairs);
+freeMem(dupe);
+return result;
 }
 
 static void ensureEndpoints(struct oauthProvider *p)
@@ -326,14 +340,43 @@ return body;
 }
 
 static char *tokenExchange(struct oauthProvider *p, char *code, char *redirectUri)
-/* Run the code->token exchange and return the access_token, or NULL. */
+/* Run the code->token exchange and return the access_token, or NULL.  The response may be
+ * JSON (Google, ORCID) or x-www-form-urlencoded (GitHub's default), so try both. */
 {
-struct dyString *body = tokenExchangeBody(p, code, redirectUri);
-struct jsonElement *tok = postForm(p->tokenUrl, body->string);
-dyStringFree(&body);
-if (tok == NULL)
+struct dyString *reqBody = tokenExchangeBody(p, code, redirectUri);
+struct dyString *header = dyStringNew(256);
+dyStringPrintf(header, "Content-Type: application/x-www-form-urlencoded\r\n");
+dyStringPrintf(header, "Accept: application/json\r\n");
+dyStringPrintf(header, "User-Agent: UCSC-Genome-Browser\r\n");
+dyStringPrintf(header, "Content-Length: %d\r\n", (int)reqBody->stringSize);
+char *resp = httpRequest(p->tokenUrl, "POST", header->string, reqBody->string);
+dyStringFree(&header);
+dyStringFree(&reqBody);
+if (isEmpty(resp))
     return NULL;
-return cloneString(jsonOptionalStringField(tok, "access_token", NULL));
+char *access = NULL;
+struct jsonElement *tok = jsonParseSafe(resp);
+if (tok != NULL)
+    access = cloneString(jsonOptionalStringField(tok, "access_token", NULL));
+if (isEmpty(access))
+    access = formValue(resp, "access_token");
+freeMem(resp);
+return access;
+}
+
+static boolean jsonFieldIsTrue(struct jsonElement *obj, char *field)
+/* Read a boolean-ish field tolerantly: a JSON boolean true, or the string "true"/"1".
+ * The OIDC spec says email_verified is a boolean, but some providers send it as a string;
+ * jsonOptionalBooleanField would abort on that, so read the type ourselves. */
+{
+struct jsonElement *el = jsonFindNamedField(obj, "", field);
+if (el == NULL)
+    return FALSE;
+if (el->type == jsonBoolean)
+    return el->val.jeBoolean;
+if (el->type == jsonString)
+    return sameWord(el->val.jeString, "true") || sameString(el->val.jeString, "1");
+return FALSE;
 }
 
 static struct oauthIdentity *oidcFetch(struct oauthProvider *p, char *code, char *redirectUri)
@@ -354,7 +397,7 @@ AllocVar(id);
 id->provider = cloneString(p->name);
 id->subject = cloneString(sub);
 id->email = cloneString(jsonOptionalStringField(info, "email", NULL));
-id->emailVerified = jsonOptionalBooleanField(info, "email_verified", FALSE);
+id->emailVerified = jsonFieldIsTrue(info, "email_verified");
 id->displayName = cloneString(jsonOptionalStringField(info, "name", NULL));
 return id;
 }
@@ -365,16 +408,18 @@ static void githubBestEmail(char *accessToken, char **retEmail, boolean *retVeri
 *retEmail = NULL;
 *retVerified = FALSE;
 struct jsonElement *emails = httpGetJson("https://api.github.com/user/emails", accessToken);
-if (emails == NULL)
+if (emails == NULL || emails->type != jsonList)
+    // GitHub returns an object (not an array) on error, e.g. a token without the user:email
+    // scope.  Treat that as "no email available" and let login proceed without one.
     return;
 struct slRef *list = jsonListVal(emails, "emails"), *ref;
 for (ref = list;  ref != NULL;  ref = ref->next)
     {
     struct jsonElement *el = ref->val;
-    if (jsonOptionalBooleanField(el, "primary", FALSE))
+    if (jsonFieldIsTrue(el, "primary"))
         {
         *retEmail = cloneString(jsonOptionalStringField(el, "email", NULL));
-        *retVerified = jsonOptionalBooleanField(el, "verified", FALSE);
+        *retVerified = jsonFieldIsTrue(el, "verified");
         return;
         }
     }
@@ -416,9 +461,26 @@ if (p == NULL || isEmpty(code))
 ensureEndpoints(p);
 if (isEmpty(p->tokenUrl) || isEmpty(p->userinfoUrl))
     return NULL;
-if (sameWord(p->type, "github"))
-    return githubFetch(p, code, redirectUri);
-return oidcFetch(p, code, redirectUri);
+/* Catch any errAbort raised while reading unexpected JSON shapes from the provider (the
+ * jsonXxxVal accessors abort on a type mismatch), so a misbehaving provider yields a clean
+ * "login failed" rather than an error page. */
+struct oauthIdentity *id = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (sameWord(p->type, "github"))
+        id = githubFetch(p, code, redirectUri);
+    else
+        id = oidcFetch(p, code, redirectUri);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    fprintf(stderr, "hgLogin oauth: identity fetch for %s failed: %s\n", name, errCatch->message->string);
+    id = NULL;
+    }
+errCatchFree(&errCatch);
+return id;
 }
 
 void oauthIdentityFree(struct oauthIdentity **pId)

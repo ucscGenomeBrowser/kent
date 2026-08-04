@@ -2,6 +2,10 @@
 
 body.accountScreen {background-color: #fffee8;}
 
+/* Use the same sans-serif font as the rest of the site (the page would otherwise fall back
+ * to the browser default, Times New Roman). */
+body {font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;}
+
 .formBox a {text-decoration: none}
 
 .formBox a:hover {text-decoration: underline;}
@@ -19,6 +23,10 @@ body.accountScreen {background-color: #fffee8;}
     background-color: #fff9d2;
 }
 
+/* The signup and login pages have more content (form + social buttons), so give them a
+ * little more room than the default 400px formBox. */
+#signUpBox, #loginBox {width: 480px;}
+
 .formBox input {font-size: 1.04em;}
 
 .formBox label {display: block; margin-top: 10px;}
@@ -27,6 +35,39 @@ body.accountScreen {background-color: #fffee8;}
 
 .formControls {
 	margin: 1em 0;
+}
+
+/* The form submit buttons ("Login", "Sign Up", ...) and the "Cancel" link share one
+ * consistent button style, so Cancel looks like the other buttons rather than a plain link. */
+input.largeButton,
+a.cancelButton {
+    display: inline-block;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    border: 1px solid #999;
+    border-radius: 3px;
+    background: #f0f0f0;
+    color: #222 !important;
+    text-decoration: none !important;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+input.largeButton:hover,
+a.cancelButton:hover {
+    background: #e6e6e6;
+    border-color: #666;
+}
+
+/* Small "Forgot username / password" links under the login form fields. */
+a.forgotLink {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.8em;
+    text-align: left;
 }
 
 #helpBox {
