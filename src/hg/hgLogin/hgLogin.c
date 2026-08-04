@@ -2084,10 +2084,20 @@ char *savedState = cartUsualString(cart, "oauth_state", "");
 char *provider = cartUsualString(cart, "oauth_provider", "");
 cartRemove(cart, "oauth_state");   // one-time use
 
-if (isNotEmpty(cgiUsualString("error", "")))
+char *errParam = cgiUsualString("error", "");
+if (isNotEmpty(errParam))
     {
+    // The provider redirected back with an OAuth error instead of a code (e.g. the user
+    // declined, or the client is misconfigured/unapproved).  Show its message rather than
+    // silently falling through to another page.
+    char *desc = cgiUsualString("error_description", "");
+    struct dyString *dy = dyStringNew(256);
+    dyStringAppend(dy, "Social login failed. ");
+    if (isNotEmpty(desc))
+        dyStringPrintf(dy, "%s ", htmlEncode(desc));
+    dyStringPrintf(dy, "(%s)", htmlEncode(errParam));
     freez(&errMsg);
-    errMsg = cloneString("Social login was cancelled or denied.");
+    errMsg = dyStringCannibalize(&dy);
     displayLoginPage(conn);
     return;
     }
@@ -2293,9 +2303,12 @@ safecpy(signature,sizeof(signature), mailSignature());
 safecpy(returnAddr,sizeof(returnAddr), mailReturnAddr());
 pwdEyeIconEnabled = cfgOptionBooleanDefault(CFG_LOGIN_PWD_EYE_ICON, TRUE);
 
-// A provider's OAuth redirect back to us carries 'code' and 'state' but none of our own
-// hgLogin.do.* variables, so detect it up front.
-if (cgiOptionalString("code") != NULL && cgiOptionalString("state") != NULL)
+// A provider's OAuth redirect back to us carries 'code' (success) or 'error' (failure) but
+// none of our own hgLogin.do.* variables, so detect it up front.  We gate on an OAuth flow
+// being in progress (oauth_provider set by oauthStart) so a stray code/error param can't
+// trigger this.  Error returns may omit 'code' and even 'state', so we must not require them.
+if ((cgiOptionalString("code") != NULL || cgiOptionalString("error") != NULL)
+    && isNotEmpty(cartUsualString(cart, "oauth_provider", "")))
     oauthReturn(conn);
 else if (cartVarExists(cart, "hgLogin.do.oauthStart"))
     oauthStart(conn);

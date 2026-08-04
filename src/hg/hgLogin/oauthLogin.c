@@ -50,6 +50,17 @@ if (isEmpty(val))
 return val;
 }
 
+static char *cfgTrim(char *name, char *field)
+/* Like provCfg, but with surrounding whitespace removed and NULL for empty.  A stray trailing
+ * space in an hg.conf value (e.g. on an issuer or endpoint) would otherwise corrupt the URLs
+ * built from it. */
+{
+char *val = provCfg(name, field);
+if (isEmpty(val))
+    return NULL;
+return trimSpaces(cloneString(val));
+}
+
 static void fillBuiltinDefaults(struct oauthProvider *p)
 /* For well-known provider names, fill in type/label/endpoints/scopes that were not set
  * explicitly in hg.conf. */
@@ -89,15 +100,15 @@ static struct oauthProvider *newProvider(char *name)
 struct oauthProvider *p;
 AllocVar(p);
 p->name = cloneString(name);
-p->label = cloneString(provCfg(name, "label"));
-p->type = cloneString(provCfg(name, "type"));
-p->clientId = cloneString(provCfg(name, "clientId"));
-p->clientSecret = cloneString(provCfg(name, "clientSecret"));
-p->authUrl = cloneString(provCfg(name, "authUrl"));
-p->tokenUrl = cloneString(provCfg(name, "tokenUrl"));
-p->userinfoUrl = cloneString(provCfg(name, "userinfoUrl"));
-p->scopes = cloneString(provCfg(name, "scopes"));
-p->issuer = cloneString(provCfg(name, "issuer"));
+p->label = cfgTrim(name, "label");
+p->type = cfgTrim(name, "type");
+p->clientId = cfgTrim(name, "clientId");
+p->clientSecret = cfgTrim(name, "clientSecret");
+p->authUrl = cfgTrim(name, "authUrl");
+p->tokenUrl = cfgTrim(name, "tokenUrl");
+p->userinfoUrl = cfgTrim(name, "userinfoUrl");
+p->scopes = cfgTrim(name, "scopes");
+p->issuer = cfgTrim(name, "issuer");
 fillBuiltinDefaults(p);
 if (isEmpty(p->type))
     p->type = "oidc";
@@ -298,7 +309,11 @@ char url[1024];
 safef(url, sizeof(url), "%s/.well-known/openid-configuration", p->issuer);
 struct jsonElement *j = jsonParseSafe(httpRequest(url, "GET", "Accept: application/json\r\n", NULL));
 if (j == NULL)
+    {
+    fprintf(stderr, "hgLogin oauth: OIDC discovery failed for provider '%s' at %s "
+        "(check login.oauth.%s.issuer)\n", p->name, url, p->name);
     return;
+    }
 if (isEmpty(p->authUrl))
     p->authUrl = cloneString(jsonOptionalStringField(j, "authorization_endpoint", NULL));
 if (isEmpty(p->tokenUrl))

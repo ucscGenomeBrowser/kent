@@ -1478,6 +1478,14 @@ other OIDC provider above (a label, client id/secret and issuer):
     CILogon, for US universities:        https://cilogon.org/oauth2/register
     LifeScience RI, for EU universities: https://services.aai.lifescience-ri.eu/spreg/auth
 
+Their issuer values are below. Endpoint discovery does not follow redirects, so the issuer
+must be the exact URL whose /.well-known/openid-configuration is served directly (for
+example, LifeScience RI needs the /oidc path, and neither issuer should have a trailing
+space or slash):
+
+    login.oauth.cilogon.issuer=https://cilogon.org
+    login.oauth.lsaii.issuer=https://login.aai.lifescience-ri.eu/oidc
+
 A provider's button appears on the login and sign-up pages only when both its client id and
 secret are set, so unconfigured mirrors are unaffected. When a provider reports an email
 address that it has verified, and that address matches an existing account, that account is
