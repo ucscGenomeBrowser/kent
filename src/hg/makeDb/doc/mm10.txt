@@ -20020,7 +20020,9 @@ cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
 # adrenal_gland=adrenal_gland (tag and label are the same string). After:
 # t07_adrenal_gland=adrenal_gland (tag has the prefix, label doesn't).
 # generateBigwigTrackDb.py was not updated to match; re-running it would
-# regenerate the old alphabetical tags.
+# regenerate the old alphabetical tags. (Folded into the script during QA on
+# 2026-08-04, see below; the one-off snippet here is kept for the record but
+# is no longer needed.)
 
 cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
 
@@ -20049,5 +20051,54 @@ text = re.sub(r"tissue=([a-z_]+)(?= age=)", repl, text)
 
 open(path, "w").write(text)
 EOF
+
+# 2026-08-04 (Lou, QA #37001): three corrections to the bigWig composite, all
+# folded into generateBigwigTrackDb.py so it now reproduces the committed .ra.
+#
+# 1. Replicate numbers were wrong on 124 of the 312 subtracks (31 of the 78
+#    experiments had their two replicates swapped). Diane's biosample TSV has no
+#    replicate column, so the script had been deriving one by sorting biosample
+#    accessions alphabetically, which bears no relation to ENCODE's
+#    biological_replicate_number. Added fetchReplicateNumbers.py to pull the real
+#    values from the ENCODE portal:
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fetchReplicateNumbers.py \
+  > /hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_replicates.tsv
+
+# 2. shortLabels were built and then hard-truncated at 20 characters, which cut
+#    the view suffix off entirely for the 10 longest and gave 20 subtracks
+#    duplicate labels ("neuraltube e15.5 r1 " for both the unique-reads and
+#    all-reads subtrack). The script now emits a one-character view code (U/A)
+#    and errors out instead of truncating.
+#
+# 3. Tissue tags and the html line are emitted by the script rather than patched
+#    in afterwards, and all labels are Title Cased.
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/generateBigwigTrackDb.py \
+  > developmentTimecourseSignalMm10.ra
+
+# 2026-08-04 (Lou, QA #37001): corrected a 1-bp off-by-one in the bigBarChart
+# chromStart. The hub builder wrote 1-based GTF gene starts into the 0-based BED
+# chromStart field, so every gene sat one base right of its true start while
+# chromEnd was correct. Verified against GENCODE on mm10 before the fix:
+# 42081/42093 genes (VM21) and 35323/35333 (VM4) were start+1 with none exact
+# and ends matching. Reported upstream to Diane Trout; like the tissue reorder
+# and the color update above, this has to be reapplied after any hub refetch.
+# Originals are kept as *.bb.preStartFix.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fixBarChartStarts.sh mm10 \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_TPM_M4_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_FPKM_M4_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_TPM_M21_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_FPKM_M21_mm10.bb
+
+# Re-verified afterwards: zero genes remain at start+1, and 42073 of the 42093
+# comparable genes match GENCODE VM21 exactly on both start and end (42081 on
+# start, 42079 on end). The ~20 that still differ are genes where the track and
+# wgEncodeGencodeCompVM21 disagree on the gene extent, since Comp excludes some
+# transcript biotypes; they are not coordinate errors. itemCount is unchanged and
+# every non-coordinate field (name, score, strand, name2, expCount, expScores) is
+# byte-identical.
 
 ##############################################################################

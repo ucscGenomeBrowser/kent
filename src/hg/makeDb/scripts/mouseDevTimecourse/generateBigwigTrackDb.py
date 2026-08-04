@@ -10,6 +10,15 @@ tissue/age/rep stay as subGroups underneath.
 Per-(tissue, age) colors are read from the local .facets file and
 emitted as RGB on each subtrack, matching the bigBarChart gradient.
 
+Replicate numbers come from ENCSR574CRQ_replicates.tsv, which
+fetchReplicateNumbers.py builds from the ENCODE portal. The biosample TSV
+has no replicate column, so that file has to be built first.
+
+Tissue subGroup tags carry a two-digit prefix (t01_thymus ... t17_neural_tube)
+to give the biological order the data authors asked for (#36998 note-79).
+sortOrder compares tag strings, so without the prefix the matrix sorts
+alphabetically.
+
 The composite is hidden by default. When the user enables it, rep1 +
 unique-reads subtracks turn on (one signal per (tissue, age) sample,
 78 tracks); rep2 and all-reads stay off and can be enabled via the
@@ -22,14 +31,59 @@ import sys
 
 DEFAULT_TSV = '/hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_biosample.tsv'
 FACETS = '/hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_M21.facets'
+REPLICATES = '/hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_replicates.tsv'
 
+# Biological order the data authors asked for, not alphabetical order.
+TISSUE_ORDER = [
+    'thymus',
+    'spleen',
+    'liver',
+    'heart',
+    'skeletal muscle tissue',
+    'urinary bladder',
+    'adrenal gland',
+    'kidney',
+    'lung',
+    'stomach',
+    'intestine',
+    'limb',
+    'embryonic facial prominence',
+    'forebrain',
+    'midbrain',
+    'hindbrain',
+    'neural tube',
+]
+
+# Tissue names abbreviated to fit the shortLabel budget (see MAX_SHORT_LABEL).
+# The tissues sampled at embryonic ages get a 5-character age string, leaving
+# only 6 characters for the name; the five P0-only tissues have room for 9.
 TISSUE_SHORT = {
     'adrenal gland': 'adrenal',
     'urinary bladder': 'bladder',
     'embryonic facial prominence': 'face',
     'skeletal muscle tissue': 'muscle',
-    'neural tube': 'neuraltube',
+    'neural tube': 'ntube',
+    'forebrain': 'fbrain',
+    'midbrain': 'mbrain',
+    'hindbrain': 'hbrain',
+    'intestine': 'intest',
+    'stomach': 'stomch',
 }
+
+# One-letter view code. A longer suffix does not fit, and truncating one gives
+# sibling subtracks the same label.
+VIEW_CODE = {'unique': 'U', 'all': 'A'}
+
+# A shortLabel a few characters over the nominal 17 is fine by house convention;
+# 23 is the practical ceiling. What is NOT fine is two subtracks that differ only
+# past column 17: hgTracks draws the left-hand label in a 17-character area by
+# default (goldenPath/help/hgTracksHelp.html), so those render identically in the
+# browser image even though their trackDb labels differ. Hence two separate
+# checks: a length ceiling, and uniqueness of the first LEFT_LABEL_WIDTH
+# characters, which is the invariant that actually protects the display.
+MAX_SHORT_LABEL = 23
+LEFT_LABEL_WIDTH = 17
+MAX_LONG_LABEL = 80
 
 
 def tissue_short(name):
@@ -38,6 +92,11 @@ def tissue_short(name):
 
 def tissue_key(name):
     return name.replace(' ', '_')
+
+
+def tissue_tag(name):
+    """subGroup tag carrying the biological sort order, e.g. t14_forebrain."""
+    return 't%02d_%s' % (TISSUE_ORDER.index(name) + 1, tissue_key(name))
 
 
 def age_label(life_stage, age):
@@ -77,9 +136,25 @@ def load_colors():
     return colors
 
 
+def load_replicates():
+    """Build a file accession -> ENCODE biological replicate number map."""
+    reps = {}
+    with open(REPLICATES) as f:
+        f.readline()
+        for line in f:
+            line = line.rstrip('\n')
+            if not line:
+                continue
+            acc, rep = line.split('\t')
+            reps[acc] = int(rep)
+    return reps
+
+
 def main():
     tsv_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TSV
     colors = load_colors()
+    replicates = load_replicates()
+    seen_labels = {}
 
     rows = []
     with open(tsv_path) as f:
@@ -90,17 +165,11 @@ def main():
                 continue
             rows.append(dict(zip(header, line.split('\t'))))
 
-    # Replicate numbers (1 or 2) per experiment by biosample order.
-    exp_biosamples = {}
-    for row in rows:
-        exp = row['experiment']
-        if exp not in exp_biosamples:
-            exp_biosamples[exp] = []
-        exp_biosamples[exp].append(row['biosample'])
-    for exp in exp_biosamples:
-        exp_biosamples[exp].sort()
+    unknown = sorted({t for t in (r['biosample_term_name'] for r in rows)
+                      if t not in TISSUE_ORDER})
+    if unknown:
+        sys.exit('tissue missing from TISSUE_ORDER: %s' % ', '.join(unknown))
 
-    tissues = sorted({row['biosample_term_name'] for row in rows})
     ages = sorted(
         {(row['mouse_life_stage'], row['age']) for row in rows},
         key=lambda p: (p[0], float(p[1])),
@@ -111,13 +180,14 @@ def main():
     print('    parent mouseDevTimecourse')
     print('    compositeTrack on')
     print('    type bigWig')
-    print('    shortLabel timecourse signal')
+    print('    shortLabel Timecourse Signal')
     print('    longLabel ENCODE mouse development time course bulk RNA-seq signal')
     print('    visibility hide')
     print('    group regulation')
+    print('    html developmentTimecourseSignalMm10')
     print('    subGroup1 view Views unique=Unique_reads all=All_reads')
 
-    tissue_grp = ' '.join(tissue_key(t) + '=' + tissue_key(t) for t in tissues)
+    tissue_grp = ' '.join(tissue_tag(t) + '=' + tissue_key(t) for t in TISSUE_ORDER)
     print('    subGroup2 tissue Tissue ' + tissue_grp)
 
     age_grp = ' '.join(age_key(ls, age) + '=' + age_label(ls, age) for ls, age in ages)
@@ -149,14 +219,11 @@ def main():
         print()
 
         for row in rows:
-            exp = row['experiment']
-            bs = row['biosample']
             tissue = row['biosample_term_name']
             ls = row['mouse_life_stage']
             age = row['age']
-            rep_num = exp_biosamples[exp].index(bs) + 1
 
-            t_key = tissue_key(tissue)
+            t_tag = tissue_tag(tissue)
             a_key = age_key(ls, age)
             a_lbl = age_label(ls, age)
             t_short = tissue_short(tissue)
@@ -165,7 +232,14 @@ def main():
             acc = accession(url)
             big_data_url = '/gbdb/mm10/mouseDevTimecourse/' + acc + '.bigWig'
 
-            hex_color = colors.get((tissue, a_lbl), '#888888')
+            if acc not in replicates:
+                sys.exit('%s has no replicate number in %s; rerun '
+                         'fetchReplicateNumbers.py' % (acc, REPLICATES))
+            rep_num = replicates[acc]
+
+            hex_color = colors.get((tissue, a_lbl))
+            if hex_color is None:
+                sys.exit('no color in %s for (%s, %s)' % (FACETS, tissue, a_lbl))
             rgb = hex_to_rgb(hex_color)
 
             track = 'developmentTimecourseSignalMm10_' + acc
@@ -175,17 +249,31 @@ def main():
             # enable them from the trackUi page.
             parent_state = 'on' if (rep_num == 1 and view_key == 'unique') else 'off'
 
-            short = t_short + ' ' + a_lbl + ' r' + str(rep_num) + ' ' + view_key[:3]
-            short = short[:20]
+            # Title Case on the tissue and the replicate marker; e14.5 / P0 stay
+            # as written since they are standard developmental stage notation.
+            short = (t_short.capitalize() + ' ' + a_lbl + ' R' + str(rep_num)
+                     + ' ' + VIEW_CODE[view_key])
+            if len(short) > MAX_SHORT_LABEL:
+                sys.exit('shortLabel %d chars, limit %d: %s'
+                         % (len(short), MAX_SHORT_LABEL, short))
+            clipped = short[:LEFT_LABEL_WIDTH]
+            if clipped in seen_labels and seen_labels[clipped] != short:
+                sys.exit('shortLabels "%s" and "%s" are identical in the first %d '
+                         'characters, so hgTracks draws them the same. Shorten the '
+                         'tissue abbreviation in TISSUE_SHORT.'
+                         % (seen_labels[clipped], short, LEFT_LABEL_WIDTH))
+            seen_labels[clipped] = short
 
             long_ = ('ENCODE mouse ' + tissue + ' ' + a_lbl
                      + ' rep' + str(rep_num) + ' ' + view_label
                      + ' (' + acc + ')')
-            long_ = long_[:80]
+            if len(long_) > MAX_LONG_LABEL:
+                sys.exit('longLabel %d chars, limit %d: %s'
+                         % (len(long_), MAX_LONG_LABEL, long_))
 
             print('            track ' + track)
             print('            parent ' + view_container + ' ' + parent_state)
-            print('            subGroups view=' + view_key + ' tissue=' + t_key
+            print('            subGroups view=' + view_key + ' tissue=' + t_tag
                   + ' age=' + a_key + ' rep=rep' + str(rep_num))
             print('            type bigWig')
             print('            shortLabel ' + short)
