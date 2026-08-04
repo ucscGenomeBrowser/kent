@@ -27,6 +27,7 @@
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
 <h6><a href='#debugging-the-cgi-binaries'>Debugging the CGI binaries</a></h6>
 <h6><a href='#notes-on-security'>Notes on security</a></h6>
+<h6><a href='#user-login-social-sign-in-and-email-sign-in-links'>User login: social sign-in and email sign-in links</a></h6>
 <h6><a href='#proxy-support'>Proxy support</a></h6>
 <h6><a href='#support-for-cloud-urls'>Support for cloud URLs</a></h6>
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
@@ -1927,6 +1928,89 @@ them unsafe, but our use of CSP and a nonce means that possible XSS problems can
 security scanners also cannot detect that. To reduce these warnings, we are in the process of upgrading our
 Javascript dependencies where possible.</li>
 </ul>
+
+<a name='user-login-social-sign-in-and-email-sign-in-links'></a>
+<h2>User login: social sign-in and email sign-in links</h2>
+
+<p>
+User accounts on the Genome Browser are handled by the hgLogin CGI, with the accounts stored
+in the gbMembers table of the hgcentral database. An account lets a user save and share named
+sessions. Enabling the login system itself (the login.systemName, wiki.host and cookie
+settings) is described at http://genomewiki.ucsc.edu/index.php/Enabling_hgLogin and in the
+comments of the example hg.conf. Once login is enabled, users can register with a username
+and password. The settings below add three optional, and by default disabled, extra ways to
+sign in.
+</p>
+
+<p>
+A note on secrets first: the file cgi-bin/hg.conf is part of the source tree and is not
+private, so it must never contain passwords or OAuth client secrets. Put all secrets in
+cgi-bin/hg.conf.private, a file that hg.conf includes and that is not shared. Non-secret
+settings such as the provider list, labels and endpoint URLs can live in either file.
+</p>
+
+<h2 id="social-sign-in-google-orcid-github-or-any-openid-connect-provider">Social sign-in (Google, ORCID, GitHub, or any OpenID Connect provider)</h2>
+
+<p>
+You can let users sign in with an external identity provider using OAuth 2.0 / OpenID
+Connect. First register an OAuth client with each provider and set its &quot;redirect&quot; or
+&quot;callback&quot; URL to your hgLogin URL exactly, for example
+https://yourbrowser.university.edu/cgi-bin/hgLogin . Then list the providers to offer and
+give each one a block of settings:
+</p>
+
+<pre><code>login.oauth.providers=google,orcid,github,myuni</code></pre>
+
+<p>
+The names google, orcid and github are recognized and come with built-in endpoints, so they
+only need a client id and secret (put the secrets in hg.conf.private):
+</p>
+
+<pre><code>login.oauth.google.clientId=xxxxxxxx.apps.googleusercontent.com
+login.oauth.google.clientSecret=xxxxxxxx
+login.oauth.orcid.clientId=APP-XXXXXXXXXXXXXXXX
+login.oauth.orcid.clientSecret=xxxxxxxx
+login.oauth.github.clientId=Iv1.xxxxxxxx
+login.oauth.github.clientSecret=xxxxxxxx</code></pre>
+
+<p>
+Any other OpenID Connect server works too. Give it a label (used on the button), credentials,
+and either an issuer, from which the endpoints are discovered automatically, or the three
+endpoint URLs written out explicitly:
+</p>
+
+<pre><code>login.oauth.myuni.label=My University
+login.oauth.myuni.clientId=xxxx
+login.oauth.myuni.clientSecret=xxxx
+login.oauth.myuni.issuer=https://idp.myuni.edu
+# ... or, instead of the issuer line, spell out the endpoints:
+login.oauth.myuni.authUrl=https://idp.myuni.edu/authorize
+login.oauth.myuni.tokenUrl=https://idp.myuni.edu/token
+login.oauth.myuni.userinfoUrl=https://idp.myuni.edu/userinfo
+login.oauth.myuni.scopes=openid email profile</code></pre>
+
+<p>
+A provider&#39;s button appears on the login and sign-up pages only when both its client id and
+secret are set, so unconfigured mirrors are unaffected. When a provider reports an email
+address that it has verified, and that address matches an existing account, that account is
+automatically linked to the new identity and the user is signed in; if the address matches
+several accounts, the user is asked which one to use. GitHub is a plain OAuth 2.0 provider
+rather than OpenID Connect and is handled as a special case; it is the only non-OIDC provider
+supported without extra code. (The older, un-prefixed keys login.google.clientId and
+login.orcid.clientId are still recognized for backward compatibility.)
+</p>
+
+<h2 id="passwordless-email-sign-in-link-and-changing-the-account-email">Passwordless email sign-in link, and changing the account email</h2>
+
+<pre><code>login.emailLink=on</code></pre>
+
+<p>
+When this is on, the login page offers an &quot;Email me a sign-in link&quot; option: the user types
+their email address and receives a one-time link that signs them in without a password, which
+is convenient on a computer where the password is not saved. The same switch also enables the
+&quot;Change email&quot; option in the account menu. It is off by default and needs working outbound
+email (see login.mailReturnAddr), so turn it on only where email delivery is configured.
+</p>
 
 <a name='proxy-support'></a>
 <h2>Proxy support</h2>
