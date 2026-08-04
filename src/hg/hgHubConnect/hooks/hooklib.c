@@ -64,12 +64,12 @@ return trimSpaces(cloneString(parentDir));
 
 boolean isValidParentDir(char *parentDir)
 /* Return TRUE if every '/' separated component of parentDir holds only alphanumeric,
- * period or underscore characters. NULL or empty means the top level of the user's
- * directory, which is allowed. Mirrors the same named check in hgMyData.js, which the
- * browser does first, but hubtools and any other tus client come straight here */
+ * period or underscore characters. NULL or empty is invalid, every upload belongs to
+ * a hub. Mirrors the same named check in hgMyData.js, which the browser does first,
+ * but hubtools and any other tus client come straight here */
 {
 if (isEmpty(parentDir))
-    return TRUE;
+    return FALSE;
 if (startsWith("/", parentDir) || endsWith(parentDir, "/"))
     return FALSE;
 int maxSeps = 256;

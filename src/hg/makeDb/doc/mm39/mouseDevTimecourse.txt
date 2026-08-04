@@ -180,4 +180,26 @@ for facets, cats in [("mouse_development_M21.facets",
     print("updated .categories: " + cats)
 EOF
 
+# 2026-08-04 (Lou, QA #37001): corrected a 1-bp off-by-one in the bigBarChart
+# chromStart, inherited from mm10 through the liftOver. The hub builder wrote
+# 1-based GTF gene starts into the 0-based BED chromStart field, so every gene
+# sat one base right of its true start while chromEnd was correct. Confirmed on
+# mm10 against GENCODE VM21 (42081/42093 genes were start+1, none exact) and on
+# mm39 against knownGene, where +1 is the dominant offset. Reported upstream to
+# Diane Trout; like the tissue reorder and the color update above, this has to be
+# reapplied after any hub refetch. Originals are kept as *.bb.preStartFix.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fixBarChartStarts.sh mm39 \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_TPM_M21_mm39.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_FPKM_M21_mm39.bb
+
+# liftOver accounting, for the description page: mm10 M21 has 55536 genes and
+# mm39 M21 has 55447, so 89 genes failed to lift from GRCm38 to GRCm39 and none
+# were gained. 42 of the 89 are on chr14, 40 of those within chr14:3.2-26.3 Mb;
+# the rest are scattered. 45 of the 89 carry Gm* or *Rik names.
+# One gene, Il11ra2, is duplicated in the
+# mm39 files: ENSMUSG00000078735.3 on mm10 chr4 and ENSMUSG00000095623.1 on the
+# unplaced scaffold chr4_JH584294_random both lift to mm39 chr4:42656355-42661893,
+# and their expression vectors are identical. Left in place as a known artifact.
+
 ##############################################################################

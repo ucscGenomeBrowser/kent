@@ -458,6 +458,18 @@ MIRROR_KNOBS = {
         h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:1429",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
+        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1563",
+          default="FALSE", role="knob", public=True, verified=True,
+          ticket="37929",
+          note="Passwordless sign-in: the user is emailed a one-time link "
+               "instead of typing a password.  The same switch shows the "
+               "change-email page, since that page has no password check "
+               "either.  It needs working outbound mail, so a mirror without "
+               "it leaves this off permanently.",
+          debatable="Filed as a knob because outbound mail is a property of "
+                    "the machine, not of the release.  It is a gate if the "
+                    "plan is to flip the default TRUE once the flow is "
+                    "proven on the RR, in which case it needs a sunset."),
         h("analytics.trackClicks", "flag", "hg/lib/googleAnalytics.c:63",
           default="TRUE", role="knob", verified=True,
           note="Report link clicks to analytics.  A mirror with its own "
@@ -1005,6 +1017,14 @@ LOGIN = {
         h("login.cookieSalt", "credential",
           "hg/hgPhyloPlace/hgPhyloPlace.c:581", public=True, verified=True,
           family="login", note="Salt for the login cookie.  A secret."),
+        h("login.oauth.providers", "internal",
+          "hg/hgLogin/oauthLogin.c:127", public=True, verified=True,
+          family="login", ticket="37984",
+          note="Comma-separated list of social sign-in providers to offer.  "
+               "Each name listed here is then configured through its own "
+               "login.oauth.<name>.* settings, none of which appear as "
+               "literals in the tree; see {key}.  google, orcid and github "
+               "are picked up even when unlisted, if they carry a clientId."),
         h("wiki.host", "url", "hg/lib/wikiLink.c:199", public=True,
           verified=True, family="wiki", deprecated=True),
         h("wiki.userNameCookie", "internal", "hg/lib/wikiLink.c:50",
@@ -1212,6 +1232,15 @@ RUNTIME_NAMES = {
           note="quickLift colour settings, named per use."),
         h("{overlapKey}", "internal", "hg/hgc/myVariantsClick.c:579",
           verified=True, note="Goes with the doMyVariants gate."),
+        h("{key}", "internal", "hg/hgLogin/oauthLogin.c:44", verified=True,
+          ticket="37984",
+          note="login.oauth.<provider>.<field>, built with safef from the "
+               "provider names in login.oauth.providers, so the whole family "
+               "is invisible to any scan.  The fields are clientId, "
+               "clientSecret, label, type, issuer, authUrl, tokenUrl, "
+               "userinfoUrl and scopes.  A second read tries the older "
+               "login.<provider>.<field> spelling, which is why a mirror can "
+               "have credentials under either prefix."),
         h("{temp}", "internal", "hg/hgcentralTidy/hgcentralTidy.c:80",
           verified=True),
         h("{cdwSetting}", "internal",
