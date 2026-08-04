@@ -41,15 +41,16 @@ function blatInjectStyle() {
         --muted:#5b6572; --faint:#93a0ad; --line:#c4cdd6; --lineSoft:#e4e9ef; --card:#ffffff;
         --panel:#f4f7fb; --section:#4c7093; --headrow:#dbe4ee; --headrowLine:#a9bcd1;
         --sel:#cfe0f5; --hover:#eef3fb; --stripe:#f4f7fb;
+        --title:#e9cf9a; --titleLine:#d9bd82; --titleSub:#5a4a24;
         --btn:#ffffff; --btnLine:#999999; --btnText:#0a2b6b; --btnHover:#eef2f7;
         --btnDark:#0a2b6b; --btnDarkHover:#0a2350;
         font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:var(--ink); font-size:14px; }
     .blatCard { background:var(--card); border:1px solid var(--line); border-radius:3px; overflow:hidden;
         box-shadow:0 1px 2px rgba(20,40,70,.10); margin:12px 0 24px; }
     .blatHead { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-        padding:9px 18px; background:var(--section); }
-    .blatHead .t { font-weight:700; font-size:16px; color:#ffffff; }
-    .blatHead .t .sub { color:#d7e2ee; font-weight:400; }
+        padding:9px 18px; background:var(--title); border-bottom:1px solid var(--titleLine); }
+    .blatHead .t { font-weight:700; font-size:16px; color:var(--navy); }
+    .blatHead .t .sub { color:var(--titleSub); font-weight:400; }
     .blatHeadActions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .blatStrip { display:flex; align-items:center; gap:24px; flex-wrap:wrap;
         padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
