@@ -54,7 +54,7 @@ function blatInjectStyle() {
     .blatStrip { display:flex; align-items:center; gap:24px; flex-wrap:wrap;
         padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
     .blatStat { display:flex; flex-direction:column; gap:1px; }
-    .blatStat .k { font-size:12px; color:var(--faint); font-weight:700; }
+    .blatStat .k { font-size:12px; color:var(--muted); font-weight:700; }
     .blatStat .v { font-size:14px; font-weight:700; color:var(--ink); }
     .blatDiv { width:1px; height:28px; background:var(--line); }
     .blatStripActions { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
@@ -92,10 +92,10 @@ function blatInjectStyle() {
     .blatLocus { max-width:230px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .chrNote { color:var(--faint); cursor:help; margin-left:4px; }
     .blatIdWrap { display:flex; align-items:center; gap:9px; justify-content:flex-end; }
-    .blatIdBar { flex:0 0 54px; height:8px; background:#dce4ee; border:1px solid var(--headrowLine); overflow:hidden; }
+    .blatIdBar { flex:0 0 54px; height:8px; background:var(--headrow); border:1px solid var(--headrowLine); overflow:hidden; }
     .blatIdBar > i { display:block; height:100%; }
     .blatIdPct { font-size:13px; font-weight:700; width:48px; text-align:right; font-variant-numeric:tabular-nums; }
-    .blatCov { position:relative; display:block; width:150px; height:10px; background:#dce4ee; border:1px solid var(--headrowLine); }
+    .blatCov { position:relative; display:block; width:150px; height:10px; background:var(--headrow); border:1px solid var(--headrowLine); }
     .blatCov > i { position:absolute; top:0; bottom:0; background:var(--accent); }
     #blatTable_filter { float:left; margin:0 0 10px; }
     #blatTable_filter input { width:300px; max-width:55vw; border:1px solid var(--btnLine);
@@ -103,13 +103,13 @@ function blatInjectStyle() {
     #blatTable_wrapper { padding:6px 18px 4px; }
     .blatDetail { border-bottom:1px solid var(--line); background:var(--panel); padding:14px 18px 16px; }
     .blatDetail .dhead { display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
-    .blatDetail .dhead .lab { font-size:13px; color:var(--faint); }
-    .blatDetail .dhead .loc { font-size:15px; font-weight:700; color:var(--accent); }
+    .blatDetail .dhead .lab { font-size:13px; color:var(--muted); }
+    .blatDetail .dhead .loc { font-size:14px; font-weight:700; color:var(--ink); }
     .blatDetailCard { display:flex; gap:26px; flex-wrap:wrap; padding:14px 16px; background:var(--card);
         border:1px solid var(--line); border-radius:3px; }
     .blatTiles { display:grid; grid-template-columns:repeat(4,auto); gap:14px 26px; }
-    .blatTile .k { font-size:13px; color:var(--faint); cursor:help; }
-    .blatTile .v { font-size:17px; font-weight:700; color:var(--ink); }
+    .blatTile .k { font-size:13px; color:var(--muted); cursor:help; }
+    .blatTile .v { font-size:14px; font-weight:700; color:var(--ink); }
     .blatDetailActions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
     `;
     var st = document.createElement('style');
@@ -220,8 +220,8 @@ function blatDetailSkeleton() {
     var tiles =
         blatTileSkeleton('Score', 'dvScore') +
         blatTileSkeleton('Identity', 'dvIdentity') +
-        blatTileSkeleton('Matches', 'dvMatches', '#15803d') +
-        blatTileSkeleton('Mismatch', 'dvMismatch', '#b45309') +
+        blatTileSkeleton('Matches', 'dvMatches') +
+        blatTileSkeleton('Mismatch', 'dvMismatch') +
         blatTileSkeleton('Gaps', 'dvGaps') +
         blatTileSkeleton('Blocks', 'dvBlocks') +
         blatTileSkeleton('Strand', 'dvStrand') +
