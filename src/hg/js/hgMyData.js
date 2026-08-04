@@ -923,8 +923,8 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             this.uppy.setFileMeta(file.id, defaultMeta);
 
             // When drilled into an assembly hub, inherit and lock its genome.
-            if (hubCreate.uiState.currentHub &&
-                hubCreate.uiState.currentHub === defaultMeta.parentDir) {
+            let openDir = hubCreate.uiState.currentHubPath || hubCreate.uiState.currentHub;
+            if (openDir && openDir === defaultMeta.parentDir) {
                 let existing = hubCreate.uiState.filesHash[defaultMeta.parentDir];
                 if (existing && existing.hubType === "assemblyHub") {
                     this.uppy.setFileMeta(file.id, {
@@ -1024,6 +1024,8 @@ var hubCreate = (function() {
         hubNameDefault: "",
         currentHub: "", // if the user has a hub dir open, set the name here and use it as the default
                         // hub name when uploading a new file with the dir open, otherwise hubNameDefault
+        currentHubPath: "", // full path of the open dir, so we can tell which hub it belongs to
+                            // when it is a subdirectory like myHub/hg38
         isLoggedIn: "",
         maxQuota: 0,
         userQuota: 0,
@@ -1053,7 +1055,17 @@ var hubCreate = (function() {
     };
 
     function getDefaultHubName() {
-        return uiState.currentHub.length > 0 ? uiState.currentHub : uiState.hubNameDefault;
+        // with a directory open, new files default into that directory, which for a
+        // subdirectory is the whole path like myHub/hg38
+        let openDir = uiState.currentHubPath || uiState.currentHub;
+        return openDir.length > 0 ? openDir : uiState.hubNameDefault;
+    }
+
+    function hubRootForCurrentDir() {
+        // the hub is the first path segment: hub.txt and the hub's own row live there
+        // even when the user has drilled down into a subdirectory of it
+        let path = uiState.currentHubPath || uiState.currentHub;
+        return path ? path.split("/")[0] : "";
     }
 
     function sanitizeGenomeName(name) {
@@ -1859,6 +1871,7 @@ var hubCreate = (function() {
             return !rowData.parentDir;
         });
         uiState.currentHub = "";
+        uiState.currentHubPath = "";
         hideHubBanner();
         updateSelectedFileDiv(null);
     }
@@ -1886,8 +1899,9 @@ var hubCreate = (function() {
             }
         });
         uiState.currentHub = dirName;
+        uiState.currentHubPath = dirFullPath;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
-        showHubBanner(dirName);
+        showHubBanner(hubRootForCurrentDir());
         updateSelectedFileDiv(null);
     }
 
@@ -2161,8 +2175,16 @@ var hubCreate = (function() {
         // to have the new rows rendered to do the order because the order
         // will copy the actual DOM node
         parseFileListIntoHash(uiState.fileList);
-        dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
-        dataTableCustomOrder(table, hubDirData);
+        // stay in the directory the user has open, the upload may have gone into a
+        // subdirectory of the hub and would not be listed at the hub level. Both calls
+        // have to name the same directory, or the row moved into the header and the row
+        // dropped from the table are different ones
+        let showDirData = hubDirData;
+        if (uiState.currentHubPath && uiState.currentHubPath in uiState.filesHash) {
+            showDirData = uiState.filesHash[uiState.currentHubPath];
+        }
+        dataTableShowDir(table, showDirData.fileName, showDirData.fullPath);
+        dataTableCustomOrder(table, showDirData);
         table.draw();
     }
 
@@ -2387,7 +2409,7 @@ var hubCreate = (function() {
         let hubBannerBtn = document.getElementById("hubBannerViewBtn");
         if (hubBannerBtn) {
             hubBannerBtn.addEventListener("click", function(e) {
-                viewHubInGenomeBrowser(uiState.currentHub);
+                viewHubInGenomeBrowser(hubRootForCurrentDir());
             });
         }
         let hubBannerCopyBtn = document.getElementById("hubBannerCopyBtn");
@@ -2512,6 +2534,8 @@ var hubCreate = (function() {
             // Multi-segment parentDir (split-hub uploads) needs per-segment rows.
             let parentSegments = metadata.parentDir.split("/");
             let parentLeaf = parentSegments[parentSegments.length - 1];
+            // the hub.txt lives at the hub, not in the subdirectory the file went into
+            let hubRoot = parentSegments[0];
             newReqObj = {
                 "fileName": cgiEncode(metadata.fileName),
                 "fileSize": metadata.fileSize,
@@ -2532,7 +2556,7 @@ var hubCreate = (function() {
             // in filesHash from a prior upload, or coming in this same batch -
             // upload-success order is arbitrary so the hub.txt row may not be
             // in filesHash yet when a sibling's upload-success fires).
-            let dirHash = uiState.filesHash[cgiEncode(metadata.parentDir)];
+            let dirHash = uiState.filesHash[cgiEncode(hubRoot)];
             let hubTxtExists = !!(dirHash && dirHash.children &&
                 dirHash.children.some(c => c.fileType === "hub.txt"));
             let batchHasHubTxt = metadata.batchHasHubTxt === "true";
@@ -2544,8 +2568,8 @@ var hubCreate = (function() {
                     "fileSize": 0,
                     "fileType": "hub.txt",
                     "genome": metadata.genome,
-                    "parentDir": cgiEncode(parentLeaf),
-                    "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
+                    "parentDir": cgiEncode(hubRoot),
+                    "fullPath": cgiEncode(hubRoot) + "/hub.txt",
                     "hubType": hubType,
                 };
             }
