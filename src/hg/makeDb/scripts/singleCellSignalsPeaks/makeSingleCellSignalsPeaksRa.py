@@ -25,7 +25,11 @@ Usage:
 import re, os, argparse
 from urllib.parse import urlparse
 
-HUB_BUILD = "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build"
+# Where the hub build (build_manifest.py / build_stanzas.py) writes its stanzas and
+# metadata. That machinery builds the whole Cell Browser super hub, not just this track,
+# so it lives outside the kent tree; override with HUB_BUILD when it moves.
+HUB_BUILD = os.environ.get(
+    "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
 GROUP = "regulation"                  # ATAC-seq signal/peaks live with the ENCODE
                                       # regulatory tracks, not under singleCell
@@ -66,7 +70,12 @@ def main():
     # with the source (hub/dataset) order preserved within a class. The subtrack's
     # broad class is recovered from its color (palette is 1:1 class<->color).
     color_rank = {}
-    _palf = os.path.join(HUB_BUILD, "celltype-crosswalks", "celltype-palette.tsv")
+    # prefer the palette archived alongside this script (the copy of record, written by
+    # build_celltype_crosswalks.py); fall back to the hub build dir
+    _palf = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "celltype-crosswalks", "celltype-palette.tsv")
+    if not os.path.isfile(_palf):
+        _palf = os.path.join(HUB_BUILD, "celltype-crosswalks", "celltype-palette.tsv")
     for _i, _l in enumerate(open(_palf)):
         _pp = _l.rstrip("\n").split("\t")
         if len(_pp) >= 2:
