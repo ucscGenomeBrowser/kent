@@ -607,8 +607,10 @@ struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 
 jsonWriteObjectStart(jw, "config");
-jsonWriteString(jw, "db", database);
-jsonWriteString(jw, "organism", organism);
+/* For assembly/GenArk hubs the internal names carry a "hub_NNN_" prefix; drop it so the Assembly
+ * field reads cleanly (and doesn't show the prefix twice), matching the BLAT Results page title. */
+jsonWriteString(jw, "db", trackHubSkipHubName(database));
+jsonWriteString(jw, "organism", trackHubSkipHubName(organism));
 jsonWriteString(jw, "queryName", pslList->qName);
 jsonWriteNumber(jw, "querySize", pslList->qSize);
 jsonWriteNumber(jw, "hitCount", slCount(pslList));

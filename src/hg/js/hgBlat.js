@@ -84,7 +84,8 @@ function blatInjectStyle() {
     #blatTable td.num, #blatTable th.num { text-align:right; font-variant-numeric:tabular-nums; }
     #blatTable td.rankCol { color:var(--faint); }
     #blatTable td.strandCol { text-align:center; color:var(--muted); }
-    #blatTable td.actionsCol a { color:var(--accent); font-weight:700; margin-right:12px; }
+    #blatTable td.actionsCol a { color:var(--accent); font-weight:700; }
+    #blatTable td.actionsCol .blatActSep { color:var(--line); margin:0 10px; }
     #blatTable a { color:var(--accent); text-decoration:none; }
     #blatTable a:hover { color:var(--accentHover); text-decoration:underline; }
     .blatRowHint { padding:11px 18px 2px; font-size:13px; color:var(--muted); }
@@ -129,9 +130,11 @@ function blatPositionCell(hit) {
 function blatActionsCell(hit) {
     // detailsUrl is the base-by-base alignment page (htcUserAli on a fresh search, htcBlatAlign on a
     // shared-link reopen); it is always present now, but guard in case a future caller omits it.
-    var align = hit.detailsUrl ? `<a href="${hit.detailsUrl}">Alignment</a>` : '';
-    return `<a href="${hit.browserUrl}">Browser</a>` +
-        `<a target="_blank" href="${hit.newTabUrl}">New&nbsp;tab</a>` + align;
+    var parts = [`<a href="${hit.browserUrl}">Browser</a>`,
+        `<a target="_blank" href="${hit.newTabUrl}">New&nbsp;tab</a>`];
+    if (hit.detailsUrl) { parts.push(`<a href="${hit.detailsUrl}">Alignment</a>`); }
+    // a thin divider between the links makes the grouping clearer
+    return parts.join('<span class="blatActSep">|</span>');
 }
 
 function blatLocusCell(hit, cfg) {
@@ -165,14 +168,21 @@ function blatCoverageCell(hit) {
 
 // ---- summary strip + detail panel ---------------------------------------
 
-function blatSummaryStrip(cfg) {
+function blatSummaryStrip(cfg, queryCount) {
     var stat = (k, v) => `<div class="blatStat"><span class="k">${k}</span>` +
         `<span class="v">${v}</span></div>`;
     var div = '<span class="blatDiv"></span>';
-    var stats = stat('Query', blatEsc(cfg.queryName)) + div +
-        stat('Length', blatFmt(cfg.querySize) + ' bp') + div +
-        stat('Assembly', blatEsc(cfg.organism) + ' / ' + blatEsc(cfg.db)) + div +
+    var assembly = stat('Assembly', blatEsc(cfg.organism) + ' / ' + blatEsc(cfg.db)) + div +
         stat('Hits', blatFmt(cfg.hitCount));
+    var stats;
+    if (cfg.multiQuery) {
+        // With more than one query sequence a single query name/length would be wrong, so show the
+        // number of distinct queries; each hit's own query is in the table's Query column.
+        stats = stat('Queries', blatFmt(queryCount)) + div + assembly;
+    } else {
+        stats = stat('Query', blatEsc(cfg.queryName)) + div +
+            stat('Length', blatFmt(cfg.querySize) + ' bp') + div + assembly;
+    }
     var actions = '';
     // "Share a link" saves a durable anonymous session that reopens these results; it only works
     // when a stable custom track was made from them (cfg.canShare, i.e. autoBigPsl is on).
@@ -248,8 +258,9 @@ function blatRenderDetail(hit) {
     if (!document.getElementById('dvScore')) { blatDetailSkeleton(); }
     var idc = blatIdColor(hit.identity);
     var locus = hit.locusText ? blatEsc(hit.locusText) + ' · ' : '';
+    var q = hgBlatData.config.multiQuery ? blatEsc(hit.qName) + ' · ' : '';
     blatSet('dvLoc', 'html',
-        `#${hit.rank} · ${locus}${blatEsc(hit.chrom)}:${blatFmt(hit.tStart)}-${blatFmt(hit.tEnd)}`);
+        `#${hit.rank} · ${q}${locus}${blatEsc(hit.chrom)}:${blatFmt(hit.tStart)}-${blatFmt(hit.tEnd)}`);
     blatSet('dvScore', 'text', blatFmt(hit.score));
     blatSet('dvIdentity', 'text', hit.identity.toFixed(1) + '%');
     blatSet('dvIdentity', 'color', idc);
@@ -287,6 +298,7 @@ function blatSelect(dt, rank) {
 
 var BLAT_HEADER_TIPS = {
     '#': 'Rank by the chosen sort order',
+    'Query': 'The query sequence this hit came from',
     'Position': 'Genomic location of the match (1-based). Click to open the Genome Browser.',
     'Actions': 'Open the match in the browser, see the alignment details, or open in a new tab',
     'Locus': 'Nearest gene(s), and whether the hit falls in an exon, intron, or intergenic region',
@@ -376,8 +388,11 @@ function blatBuild() {
         `<span class="blatHeadActions">${oldPage}${back}` +
         `<a class="blatPill primary" href="${cfg.newSearchUrl}">New BLAT search</a></span></div>`;
 
+    var queryCount = new Set(hits.map(h => h.qName)).size;
+
     var th = [];
     th.push('<th class="num">#</th>');
+    if (cfg.multiQuery) { th.push('<th>Query</th>'); }
     th.push('<th>Position</th>');
     th.push('<th>Actions</th>');
     if (cfg.hasLocus) { th.push('<th>Locus</th>'); }
@@ -389,7 +404,7 @@ function blatBuild() {
 
     // detail dock sits above the table: with long hit lists a bottom dock scrolls out of view
     document.getElementById('blatResults').innerHTML =
-        `<div class="blatCard">${headHtml}${blatSummaryStrip(cfg)}` +
+        `<div class="blatCard">${headHtml}${blatSummaryStrip(cfg, queryCount)}` +
         `<div id="blatShareBox" class="blatShareBox" style="display:none"></div>` +
         `<div id="blatDetail" class="blatDetail"></div>` +
         `<div class="blatRowHint">Click any row to inspect it in the panel above.</div>` +
@@ -405,6 +420,7 @@ function blatBuild() {
 
     var columns = [];
     columns.push({ data: 'rank', className: 'num rankCol' });
+    if (cfg.multiQuery) { columns.push({ data: 'qName', className: 'queryCol' }); }
     columns.push({ data: null, orderable: false, className: 'blatPos',
         render: (d, type, row) => (type === 'display' ? blatPositionCell(row) : row.chrom + ':' + row.tStart) });
     columns.push({ data: null, orderable: false, className: 'actionsCol',
@@ -444,7 +460,10 @@ function blatBuild() {
         if (blatSelectedRank !== null) { blatSelect(dt, blatSelectedRank); }
     });
 
-    if (hits.length) { blatSelect(dt, hits[0].rank); }
+    // No hit is pre-selected: several hits are often tied on score/identity, so picking one for the
+    // user is misleading.  The detail panel shows a prompt until a row is clicked.
+    document.getElementById('blatDetail').innerHTML =
+        `<div class="dhead"><span class="lab">Select a hit below to see its alignment details.</span></div>`;
     blatApplyTooltips();
 }
 

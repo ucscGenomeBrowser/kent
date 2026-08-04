@@ -9026,7 +9026,10 @@ if (!trackHubDatabase(database))
 char *acc = trackHubSkipHubName(database);   /* drop the "hub_NNN_" prefix -> the accession */
 char *org = hGenome(acc);                    /* GenArk table's friendly genome name for GC* accs */
 if (isEmpty(org))
+    {
     org = trackHubAssemblyField(database, "organism");   /* else the hub's genomes.txt organism */
+    org = trackHubSkipHubName(org);          /* strip the "hub_NNN_" prefix addHubName() baked in */
+    }
 if (isEmpty(org))
     return cloneString(acc);
 char buf[256];
@@ -9134,11 +9137,18 @@ printf("<div id='blatAlnBody'>\n");
 
 printf("<div id='blatAlnContent'>\n");
 printf("<h4>Alignment Summary</h4>\n");
-printf("<p><b>%s</b> aligned to <b>%s:%d-%d</b>, "
+/* comma-format the coordinates and base counts, matching the new Table view (readable at the
+ * hundreds-of-millions scale of genomic coordinates, and the convention elsewhere in the browser) */
+char tStartC[32], tEndC[32], matchC[32], qSizeC[32];
+sprintLongWithCommas(tStartC, psl->tStart + 1);
+sprintLongWithCommas(tEndC, psl->tEnd);
+sprintLongWithCommas(matchC, psl->match + psl->repMatch);
+sprintLongWithCommas(qSizeC, psl->qSize);
+printf("<p><b>%s</b> aligned to <b>%s:%s-%s</b>, "
        "<b style='color:%s'>%.1f%% identity</b>, "
-       "%d of %d bases matched, strand <b>%s</b>.</p>\n",
-       qName, chrom, psl->tStart + 1, psl->tEnd, idColor, ident,
-       psl->match + psl->repMatch, psl->qSize, psl->strand);
+       "%s of %s bases matched, strand <b>%s</b>.</p>\n",
+       qName, chrom, tStartC, tEndC, idColor, ident,
+       matchC, qSizeC, psl->strand);
 if (isNotEmpty(aliasStr))
     printf("<p>Genome sequence %s is also known as: %s.</p>\n", chrom, aliasStr);
 /* The shared library returns the number of alignment blocks it actually shows.  The DNA path merges
@@ -9156,7 +9166,7 @@ printf("</div>\n");   /* #blatAlnContent */
 printf("<div id='blatAlnNav'><div id='blatAlnNavInner'>\n");
 printf("<a href='#cDNA'>Only query sequence</a>\n"
        "<a href='#genomic'>Only genome sequence</a>\n"
-       "<a href='#ali'>Side-by-side alignment</a>\n");
+       "<a href='#ali'>Side by Side Alignment</a>\n");
 if (blockCount > 1)   /* per-block jump links, indented under the side-by-side item */
     {
     int bi;
