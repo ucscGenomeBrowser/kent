@@ -255,6 +255,7 @@ boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
 boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
+boolean baseColorDrawCodonArrows = TRUE; /* Draw a strand chevron on each codon box? Off in squish. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withIndividualLabels = TRUE;    /* print labels on item-by-item basis (false to skip) */
@@ -876,6 +877,8 @@ int maxItemsToUseOverflow = maxItemsToOverflow(tg);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
 
+boolean isCompactPack = trackDbSettingOn(tg->tdb, "compactPack");
+
 /* Note that the maxCount variable passed to packCountRowsOverflow()
    is tied to the maximum height allowed for a track and influences
    decisions about when to squish, dense, or overflow a track.
@@ -903,6 +906,11 @@ switch (vis)
 	break;
     case tvPack:
 	{
+	if (isCompactPack)
+	    {
+	    tg->heightPer = heightPer / 2;
+	    tg->lineHeight = tg->heightPer;
+	    }
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow, vis);
 	else
@@ -918,10 +926,18 @@ switch (vis)
 	}
     case tvSquish:
         {
-	tg->heightPer = heightPer/2;
-	if ((tg->heightPer & 1) == 0)
-	    tg->heightPer -= 1;
-	tg->lineHeight = tg->heightPer + 1;
+	if (isCompactPack)
+	    {
+	    tg->heightPer = 3;
+	    tg->lineHeight = 3;
+	    }
+	else
+	    {
+	    tg->heightPer = heightPer/2;
+	    if ((tg->heightPer & 1) == 0)
+		tg->heightPer -= 1;
+	    tg->lineHeight = tg->heightPer + 1;
+	    }
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow, vis);
 	else
@@ -3168,7 +3184,7 @@ for (ref = exonList; TRUE; )
                                         if (!isEmpty(aaAbbr))
                                             {
                                             if (aaName != NULL)
-                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s (%s)<br>", aaAbbr, aaName);
+                                                dyStringPrintf(codonDy, "<b>Amino acid: </b> %s - %s<br>", aaAbbr, aaName);
                                             else
                                                 dyStringPrintf(codonDy, "<b>Amino acid: </b> %s<br>", aaAbbr);
                                             }
@@ -4310,6 +4326,25 @@ if (retWholeItem != NULL)
 return TRUE;
 }
 
+static MgFont *squishCodonFont()
+/* Pick a small-but-readable amino-acid font for the short squish rows, where the
+ * full track font is taller than the row and gets clipped.  We want ~9px.  The
+ * built-in fonts jump from 8px straight to 11px, but the FreeType engine can
+ * render an in-between size, so use a 9px font there; under the GEM bitmap engine
+ * (which cannot fake a size) fall back to the size-8 font. */
+{
+boolean freetypeActive =
+#ifdef USE_FREETYPE
+    sameString(cfgOptionDefault("freeType", "on"), "on")
+#else
+    FALSE
+#endif
+    && differentString(tl.textFont, "Bitmap");
+if (freetypeActive)
+    return mgFontForCellHeight(10);   // getFontCorrection(10) renders ~9px
+return mgFontForSize("8");
+}
+
 void linkedFeaturesDrawAt(struct track *tg, void *item,
                           struct hvGfx *hvg, int xOff, int y, double scale,
                           MgFont *font, Color color, enum trackVisibility vis)
@@ -4392,6 +4427,18 @@ if (userColorSpec != NULL)
         }
     }
 
+/* In squish the codon/CDS strand chevrons are too busy for the short rows, so
+ * turn them off and rely on the (thinned, widely spaced) intron barbs for the
+ * strand cue.  Also shrink the amino-acid font so the letters fit the row
+ * instead of being clipped by it. */
+MgFont *codonFont = font;
+baseColorDrawCodonArrows = TRUE;
+if (vis == tvSquish)
+    {
+    baseColorDrawCodonArrows = FALSE;
+    codonFont = squishCodonFont();
+    }
+
 struct genePred *gp = NULL;
 if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
     gp = (struct genePred *)(lf->original);
@@ -4458,13 +4505,27 @@ if (!hideLine)
     }
 if (!hideArrows)
     {
-    if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
+    if ((intronGap == 0) && (vis == tvFull || vis == tvPack || vis == tvSquish))
 	{
+	int barbHeight = tl.barbHeight;
+	int barbSpacing = tl.barbSpacing;
+	if (vis == tvSquish)
+	    {
+	    /* Keep squish subtle: thin barbs sized to the short row, and spaced
+	     * 4x wider so there are far fewer of them.  In squish the codon/CDS
+	     * chevrons are turned off, so these intron barbs are the strand cue. */
+	    barbHeight = (heightPer-1)/2;
+	    if (barbHeight > tl.barbHeight)
+		barbHeight = tl.barbHeight;
+	    if (barbHeight < 1)
+		barbHeight = 1;
+	    barbSpacing = tl.barbSpacing*4;
+	    }
 	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
-	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+	    clippedBarbs(hvg, x1, midY, w, barbHeight, barbSpacing,
                          lf->orientation, lf->highlightColor, FALSE);
         else
-            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+            clippedBarbs(hvg, x1, midY, w, barbHeight, barbSpacing,
                          lf->orientation, bColor, FALSE);
         }
     }
@@ -4527,7 +4588,7 @@ for (sf = components; sf != NULL; sf = sf->next)
         &&  e + 6 >= winStart
         &&  s - 6 <  winEnd
         &&  (e-s <= 3 || !baseColorNeedsCodons))
-            baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
+            baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, codonFont, s, e, heightPer,
                               zoomedToCodonLevel, qSeq, qOffset, sf, psl, drawOpt, MAXPIXELS, winStart,
                               color);
         else
@@ -4610,6 +4671,12 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
+    /* When codons are colored, distribute strand arrows across the exons on top
+     * of the boxes (coding exons when too small to label, plus the UTRs).  Not
+     * in squish, where these are too busy for the short rows and the strand is
+     * shown by the intron barbs instead. */
+    if (vis != tvSquish)
+        baseColorDrawCdsArrows(tg, lf, hvg, xOff, y, scale, heightPer, winStart, drawOpt, color);
     if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,

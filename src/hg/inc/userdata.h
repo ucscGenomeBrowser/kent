@@ -78,6 +78,16 @@ char *hubNameFromPath(char *path);
 /* Return the last directory component of path. Assume that a '.' char in the last component
  * means that component is a filename and go back further */
 
+char *hubRootFromParentDir(char *parentDir);
+/* Return the first '/' separated component of parentDir, which is the hub itself.
+ * The hub.txt and the hubSpace dir row for a hub both live at that level, while
+ * hubNameFromPath gives the immediately containing directory, which for a nested
+ * parentDir like 'myHub/hg38' is a subdirectory of the hub */
+
+char *hubPathFromParentDir(char *parentDir, char *userDataDir);
+/* Return the directory holding this hub's hub.txt, that is the user's directory
+ * plus the hub component of parentDir */
+
 char *writeHubText(char *path, char *userName, char *db, char *twoBitFileName);
 /* Create a hub.txt file, optionally creating the directory holding it.
  * If twoBitFileName is non-NULL, write an assembly hub stanza referencing it
@@ -85,7 +95,7 @@ char *writeHubText(char *path, char *userName, char *db, char *twoBitFileName);
  * the 2bit). For convenience, return the file name of the created hub, which
  * can be freed. */
 
-void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir, char *parentDir);
+void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir);
 /* Creates a hub.txt for this upload, and updates the hubSpace table for the
  * hub.txt and any parentDirs we need to create. */
 
@@ -102,9 +112,6 @@ void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir
  * hub.txt, upgrade that hub.txt to include the assembly stanza and mark every
  * hubSpace row for this hub as hubType='assemblyHub'. No-op unless rowForFile
  * is a 2bit, or the synthesized hub.txt does not exist. */
-
-boolean literalHubTxtExistsOnDisk(char *parentDir, char *userDataDir);
-/* Return TRUE if path/hub.txt exists as a real file in this user's parentDir. */
 
 int lockHubDir(char *hubDir);
 /* Acquire an exclusive flock on hubDir/.hub.lock; returns a file descriptor.

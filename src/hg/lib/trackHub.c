@@ -407,10 +407,15 @@ else
 }
 
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom)
-/* Return a chromInfo structure for just this chrom in this database. 
+/* Return a chromInfo structure for just this chrom in this database.  The database
+ * may be decorated with a hub_<id>_ prefix or undecorated.
  * Return NULL if chrom doesn't exist. */
 {
-struct trackHubGenome *genome = trackHubGetGenome(database);
+struct trackHubGenome *genome = NULL;
+if (hubAssemblyHash != NULL)
+    genome = trackHubGetGenome(database);
+if (genome == NULL)
+    genome = trackHubGetGenomeUndecorated(trackHubSkipHubName(database));
 if (genome == NULL)
     return NULL;
 
@@ -1878,17 +1883,20 @@ static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **ba
 /* Make sure the tdb is a track type we grok.  badList may be NULL to validate
  * silently (no user-facing complaint about non-liftable types). */
 {
+// trackDb types are matched without regard to case since that's how the rest of the
+// browser reads them (some trackDb stanzas say "bigbed" rather than "bigBed").
 if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
-    !( startsWith("bigBed", tdb->type) || \
-       startsWith("bigWig", tdb->type) || \
-       startsWith("bigDbSnp", tdb->type) || \
-       startsWith("bigGenePred", tdb->type) || \
-       startsWith("gvf", tdb->type) || \
-       startsWith("genePred", tdb->type) || \
-       startsWith("narrowPeak", tdb->type) || \
-       startsWith("bigLolly", tdb->type) || \
-       sameString("bed", tdb->type) ||
-       startsWith("bed ", tdb->type)))
+    !( startsWithNoCase("bigBed", tdb->type) || \
+       startsWithNoCase("bigWig", tdb->type) || \
+       startsWithNoCase("bigDbSnp", tdb->type) || \
+       startsWithNoCase("bigGenePred", tdb->type) || \
+       startsWithNoCase("gvf", tdb->type) || \
+       startsWithNoCase("genePred", tdb->type) || \
+       startsWithNoCase("narrowPeak", tdb->type) || \
+       startsWithNoCase("broadPeak", tdb->type) || \
+       startsWithNoCase("bigLolly", tdb->type) || \
+       sameWord("bed", tdb->type) ||
+       startsWithNoCase("bed ", tdb->type)))
     {
     if (badList != NULL)
         slAddHead(badList, tdb);
@@ -1896,8 +1904,8 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
     }
 
 // make sure we have a bigDataUrl
-if (startsWith("bigBed", tdb->type) || \
-       startsWith("bigWig", tdb->type))
+if (startsWithNoCase("bigBed", tdb->type) || \
+       startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
 

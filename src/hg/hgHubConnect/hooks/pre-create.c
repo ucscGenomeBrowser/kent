@@ -101,6 +101,16 @@ else
             errAbort("No filename found in upload metadata (checked fileName, filename, and name)");
             }
         char *reqParentDir = jsonQueryString(req, "", "Event.Upload.MetaData.parentDir", NULL);
+        // Trim first, a hub name with a trailing space is impossible to spot in an error
+        // message, then check what is left. The browser does this too, but hubtools and
+        // any other tus client post here directly
+        reqParentDir = normalizeParentDir(reqParentDir);
+        if (isEmpty(reqParentDir))
+            errAbort("No hub name for file '%s', please give the hub a name", reqFileName);
+        if (!isValidParentDir(reqParentDir))
+            errAbort("Hub name '%s' for file '%s' can only contain letters, numbers, periods "
+                    "and underscores, in '/' separated components. Please rename the hub.",
+                    reqParentDir, reqFileName);
         boolean isHubToolsUpload = FALSE;
         char *hubtoolsStr = jsonQueryString(req, "", "Event.Upload.MetaData.hubtools", NULL);
         if (hubtoolsStr)
@@ -131,7 +141,9 @@ else
         if (sameOk(reqFileType, "2bit") && reqGenome[0] &&
             (hDbExists(reqGenome) || isGenArk(reqGenome)))
             {
-            char *hubName = reqParentDir ? hubNameFromPath(reqParentDir) : "";
+            // existingHubTypeForDir looks up the hub's row at the top level, so give it
+            // the hub component of parentDir rather than a nested subdirectory
+            char *hubName = hubRootFromParentDir(reqParentDir);
             char *existingHubType = existingHubTypeForDir(userName, hubName);
             if (!sameOk(existingHubType, "assemblyHub"))
                 errAbort(HUB_GENOME_COLLISION_ERR_FMT, reqGenome, reqGenome);
@@ -160,16 +172,18 @@ else
             fillOutHttpResponseSuccess(response);
             }
         }
+    // pop the handlers before handling the error, so an errAbort in the error
+    // path cannot longjmp back into this same block
+    errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
         // App-level reject: tusd treats exit 0 + RejectUpload=true as a clean
         // rejection and forwards our HTTPResponse body verbatim. Non-zero
         // would be wrapped in "ERR_INTERNAL_SERVER_ERROR ... from hook
         // endpoint: ..." which buries the real message.
-        rejectUpload(response, errCatch->message->string);
+        rejectUpload(response, "%s", errCatch->message->string);
         exitStatus = 0;
         }
-    errCatchEnd(errCatch);
     }
 // always print a response no matter what
 jsonPrintToFile(response, NULL, stdout, 0);

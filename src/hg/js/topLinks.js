@@ -98,6 +98,7 @@ var topLinks = (function() {
         var user = link.getAttribute("data-username");
         var logoutUrl = link.getAttribute("data-logouturl");
         var changePwUrl = link.getAttribute("data-changepwurl");
+        var changeEmailUrl = link.getAttribute("data-changeemailurl");
         var body = document.createElement("div");
         var p = el("p");
         p.appendChild(document.createTextNode("Signed in as "));
@@ -125,6 +126,8 @@ var topLinks = (function() {
                                borderTop: "1px solid #ddd", paddingTop: "8px"});
         if (changePwUrl)
             addLink(ul, changePwUrl, "Change password");
+        if (changeEmailUrl)
+            addLink(ul, changeEmailUrl, "Change email");
         addLink(ul, logoutUrl, "Sign out");
         body.appendChild(ul);
         showModal("Account", body);

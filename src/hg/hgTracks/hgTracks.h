@@ -599,6 +599,7 @@ extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
 extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
+extern boolean baseColorDrawCodonArrows; /* Draw a strand chevron on each codon box? Off in squish. */
 
 extern char *ctFileName;	/* Custom track file. */
 extern struct customTrack *ctList;  /* Custom tracks. */

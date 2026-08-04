@@ -92,6 +92,19 @@ if (minFreq > 0)
 return FALSE;
 }
 
+static boolean getMinAc(struct trackDb *tdb, int *retMinAc)
+/* Return TRUE and set retMinAc if cart contains a positive minimum allele count. */
+{
+int minAc = cartOrTdbInt(cart, tdb, VCF_MIN_AC_VAR, VCF_DEFAULT_MIN_AC);
+if (minAc > 0)
+    {
+    if (retMinAc != NULL)
+	*retMinAc = minAc;
+    return TRUE;
+    }
+return FALSE;
+}
+
 static boolean minFreqFail(struct vcfRecord *record, double minFreq)
 /* Return TRUE if record's INFO include AF (alternate allele frequencies) or AC+AN
  * (alternate allele counts and total count of observed alleles) and the minor allele
@@ -174,6 +187,32 @@ if (gotInfo)
 return FALSE;
 }
 
+static boolean minAcFail(struct vcfRecord *record, int minAc)
+/* Return TRUE if record's INFO includes AC (alternate allele counts) and the largest
+ * alternate allele count is less than minAc.  Records whose INFO lacks AC are not filtered. */
+{
+struct vcfFile *vcff = record->file;
+const struct vcfInfoElement *acEl = vcfRecordFindInfo(record, "AC");
+const struct vcfInfoDef *acDef = vcfInfoDefForKey(vcff, "AC");
+if (acEl == NULL || acDef == NULL || acDef->type != vcfInfoInteger)
+    return FALSE;
+int i;
+int maxAc = 0;
+boolean gotAc = FALSE;
+for (i = 0;  i < acEl->count;  i++)
+    {
+    if (acEl->missingData[i])
+	continue;
+    gotAc = TRUE;
+    int altCount = acEl->values[i].datInt;
+    if (altCount > maxAc)
+	maxAc = altCount;
+    }
+if (gotAc && maxAc < minAc)
+    return TRUE;
+return FALSE;
+}
+
 static void filterRefOnlyAlleles(struct vcfFile *vcff, struct trackDb *tdb)
 /* Drop items from VCF that don't differ from the reference for any of the
  * samples specified in trackDb */
@@ -207,11 +246,13 @@ struct trackDb *tdb = tg->tdb;
 double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
 double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
+int minAc = VCF_DEFAULT_MIN_AC;
 boolean gotQualFilter = getMinQual(tdb, &minQual);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
+boolean gotMinAcFilter = getMinAc(tdb, &minAc);
 int filtOut = 0;
-if (gotQualFilter || gotFilterFilter || gotMinFreqFilter) 
+if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter)
     {
     struct vcfRecord *rec, *nextRec, *newList = NULL;
     for (rec = vcff->records;  rec != NULL;  rec = nextRec)
@@ -219,7 +260,8 @@ if (gotQualFilter || gotFilterFilter || gotMinFreqFilter)
         nextRec = rec->next;
         if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
                (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
-               (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
+               (gotMinFreqFilter && minFreqFail(rec, minFreq)) ||
+               (gotMinAcFilter && minAcFail(rec, minAc)) ))
             slAddHead(&newList, rec);
         else 
             filtOut++;

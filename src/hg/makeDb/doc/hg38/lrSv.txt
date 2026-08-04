@@ -782,3 +782,16 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # the Description text on noyvertSv.html with the author's revised version
 # (reordered, plus a comparison with the 1KG ONT Vienna dataset, Schloissnig
 # et al. 2025).
+
+# Added a clarifying sentence to noyvertSv.html: the Noyvert (Boehringer) panel
+# is an independent reprocessing of the same ONT reads as the 1KG ONT Vienna
+# track (Schloissnig et al. 2025), plus a rough call-level overlap on hg38.
+# Overlap analysis (scratch, overlapSelect + bedtools, Boehringer vs Vienna):
+#   DEL (Boehringer 38,459 / Vienna 58,637): reciprocal >=50% = 12,529 (33%);
+#       >=90% = 9,136 (24%); >=10% = 15,127 (39%). Cross-checked with
+#       bedtools intersect -f .5 -r (11,802). Reverse direction ~ same.
+#   INS (Boehringer 59,953 / Vienna 73,298): within +-100bp and insLen ratio
+#       >=0.5 = 13,535 (23%); plateaus at ~26% out to +-1000bp (so not a
+#       liftOver positional-shift artifact - Vienna hg38 is lifted from CHM13).
+#   INV/DUP/BND have no comparable Vienna type (Vienna calls only DEL/INS/CPX).
+# Only trackDb HTML changed; no data rebuild.

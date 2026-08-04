@@ -1,5 +1,12 @@
-# A space delimited file of track relatedness. All entries must be reciprocal. Format:
+# A space delimited file of track relatedness. Format:
 # ucscDb track trackLinkingTo reason
+#
+# By default entries are reciprocal, so each relationship needs a line in each
+# direction. Prefix the first track with '>' for a relationship that only goes one
+# way, or with '~' to get both directions out of a single line when the reason is
+# the same either way. Neither form needs a reciprocal line. Format:
+# ucscDb >track trackLinkingTo reason
+# ucscDb ~track trackLinkingTo reason
 
 # hg38:
 hg38 knownGene knownGeneArchive View previous versions of GENCODE Genes

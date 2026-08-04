@@ -13,6 +13,8 @@
 #include "encode/encodePeak.h"
 #include "peptideMapping.h"
 #include "chromAlias.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 #ifdef UNUSED
 static boolean pairInList(struct slPair *pair, struct slPair *list)
@@ -104,6 +106,53 @@ if (qValue >= 0)
     printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);
 }
 
+static void printLiftedPeak(struct encodePeak *peak, char *item, char *chrom, int start, int end,
+    enum encodePeakType peakType)
+/* Print a quickLifted peak.  Like printPeak, but works from the loaded structure since
+ * the item has been mapped out of the source assembly and there is no SQL row to print. */
+{
+if ((peak->chromStart != start) || (peak->chromEnd != end))
+    return;
+if (!sameString(peak->name, item))
+    return;
+
+if (peak->name[0] != '.')
+    printf("<B>Name:</B> %s<BR>\n", peak->name);
+printf("<B>Position:</B> "
+   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+   hgTracksPathAndSettings(), database, chrom, start+1, end, chrom, start+1, end);
+if (((peakType == narrowPeak) || (peakType == encodePeak)) && (peak->peak > -1))
+    printf("<B>Peak point:</B> %d<BR>\n", start + peak->peak + 1); // one based
+if (peak->strand[0] != '.')
+    printf("<B>Strand:</B> %c<BR>\n", peak->strand[0]);
+printf("<B>Score:</B> %d<BR>\n", peak->score);
+if (peak->signalValue >= 0)
+    printf("<B>Signal value:</B> %.3f<BR>\n", peak->signalValue);
+if (peak->pValue >= 0)
+    printf("<B>P-value (-log10):</B> %.3f<BR>\n", peak->pValue);
+if (peak->qValue >= 0)
+    printf("<B>Q-value (FDR): </B> %.3f<BR>\n", peak->qValue);
+}
+
+static ItemLoader2 peakLoaderForType(enum encodePeakType peakType)
+/* Return the loader that reads a SQL row of the given peak type. */
+{
+switch(peakType)
+    {
+    case narrowPeak:
+        return (ItemLoader2)narrowPeakLoad;
+    case broadPeak:
+        return (ItemLoader2)broadPeakLoad;
+    case gappedPeak:
+        return (ItemLoader2)gappedPeakLoad;
+    case encodePeak:
+        return (ItemLoader2)encodePeakLoad;
+    default:
+        errAbort("bad value for peak type %d\n", peakType);
+    }
+return NULL;
+}
+
 void doBigEncodePeak(struct trackDb *tdb, struct customTrack *ct, char *item)
 /*  details for encodePeak type tracks. */
 {
@@ -157,22 +206,51 @@ if (ct)
     }
 else
     db = database;
+
+// quickLifted tracks live in the source assembly, and tdb->table carries the hub_NNN_ prefix
+char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+if (liftDb != NULL)
+    {
+    quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->track), &table, &liftDb);
+    db = liftDb;
+    }
+
 conn = hAllocConn(db);
 peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
 if (peakType == 0)
     errAbort("unrecognized peak type from table %s", tdb->table);
 genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway (maybe except for encodePeak custom tracks).
-sr = hOrderedRangeQuery(conn, table, chrom, start, end,
-			NULL, &rowOffset);
-while((row = sqlNextRow(sr)) != NULL)
+if (liftDb != NULL)
     {
-    if (firstTime)
-        firstTime = FALSE;
-    else // print separator
-        printf("<BR>\n");
-    printPeak(row, rowOffset, item, chrom, start, end, peakType);
+    struct hash *chainHash = newHash(12);
+    char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+    struct encodePeak *peakList = (struct encodePeak *)quickLiftSql(conn, quickLiftFile, table,
+        chrom, start, end, NULL, NULL, peakLoaderForType(peakType), 0, chainHash);
+    struct encodePeak *liftedPeaks = quickLiftPeaks(peakList, chainHash);
+
+    for(; liftedPeaks != NULL; liftedPeaks = liftedPeaks->next)
+        {
+        if (firstTime)
+            firstTime = FALSE;
+        else // print separator
+            printf("<BR>\n");
+        printLiftedPeak(liftedPeaks, item, chrom, start, end, peakType);
+        }
     }
-sqlFreeResult(&sr);
+else
+    {
+    sr = hOrderedRangeQuery(conn, table, chrom, start, end,
+                            NULL, &rowOffset);
+    while((row = sqlNextRow(sr)) != NULL)
+        {
+        if (firstTime)
+            firstTime = FALSE;
+        else // print separator
+            printf("<BR>\n");
+        printPeak(row, rowOffset, item, chrom, start, end, peakType);
+        }
+    sqlFreeResult(&sr);
+    }
 hFreeConn(&conn);
 }
 

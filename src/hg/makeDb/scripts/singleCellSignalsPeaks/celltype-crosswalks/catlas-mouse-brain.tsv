@@ -1,0 +1,160 @@
+ASCG	Astrocyte (protoplasmic, grey matter)	0,158,115	brain	Adult	Healthy
+ASCN	Astrocyte (OLIG2-lineage, pallidal/septal)	0,158,115	brain	Adult	Healthy
+ASCW	Astrocyte (fibrous, white matter)	0,158,115	brain	Adult	Healthy
+CA1GL1	Hippocampal CA1 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA1GL2	Hippocampal CA1 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA1GL3	Hippocampal CA1 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL1	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL2	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL3	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL4	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL5	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CA3GL6	Hippocampal CA3 excitatory neuron	0,114,178	brain	Adult	Healthy
+CLAGL1	Claustrum excitatory neuron	0,114,178	brain	Adult	Healthy
+CLAGL2	Claustrum excitatory neuron	0,114,178	brain	Adult	Healthy
+CLAGL3	Claustrum excitatory neuron	0,114,178	brain	Adult	Healthy
+CNUGA	Cerebral nuclei GABAergic neuron	213,94,0	brain	Adult	Healthy
+COP	Committed oligodendrocyte precursor (COP)	240,228,66	brain	Adult	Healthy
+CRC	Cajal-Retzius cell	86,180,233	brain	Adult	Healthy
+CTGL1	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+CTGL2	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+CTGL3	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+CTGL4	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+CTGL5	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+CTGL6	Cortical corticothalamic excitatory neuron (L6 CT)	0,114,178	brain	Adult	Healthy
+D1MSN1	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D1MSN2	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D1MSN3	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D1MSN4	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D1MSN5	D1 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D2MSN1	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D2MSN2	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D2MSN3	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+D2MSN4	D2 medium spiny neuron	230,159,0	brain	Adult	Healthy
+DGGR	Dentate gyrus granule cell	0,114,178	brain	Adult	Healthy
+DGNBL1	Dentate gyrus granule neuroblast	51,34,136	brain	Adult	Healthy
+DGNBL2	Dentate gyrus granule neuroblast	51,34,136	brain	Adult	Healthy
+DGNBL3	Dentate gyrus granule neuroblast	51,34,136	brain	Adult	Healthy
+ITHGL1	Intratelencephalic excitatory neuron (hippocampal formation)	0,114,178	brain	Adult	Healthy
+ITHGL2	Intratelencephalic excitatory neuron (hippocampal formation)	0,114,178	brain	Adult	Healthy
+ITHGL3	Intratelencephalic excitatory neuron (hippocampal formation)	0,114,178	brain	Adult	Healthy
+ITL23GL1	Cortical IT excitatory neuron (L2/3)	0,114,178	brain	Adult	Healthy
+ITL23GL2	Cortical IT excitatory neuron (L2/3)	0,114,178	brain	Adult	Healthy
+ITL23GL3	Cortical IT excitatory neuron (L2/3)	0,114,178	brain	Adult	Healthy
+ITL4GL1	Cortical IT excitatory neuron (L4)	0,114,178	brain	Adult	Healthy
+ITL4GL2	Cortical IT excitatory neuron (L4)	0,114,178	brain	Adult	Healthy
+ITL5GL1	Cortical IT excitatory neuron (L5)	0,114,178	brain	Adult	Healthy
+ITL5GL2	Cortical IT excitatory neuron (L5)	0,114,178	brain	Adult	Healthy
+ITL5GL3	Cortical IT excitatory neuron (L5)	0,114,178	brain	Adult	Healthy
+ITL6GL1	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+ITL6GL2	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+ITL6GL3	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+ITL6GL4	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+ITL6GL5	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+ITL6GL6	Cortical IT excitatory neuron (L6)	0,114,178	brain	Adult	Healthy
+L6bGL1	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+L6bGL2	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+L6bGL3	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+L6bGL4	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+L6bGL5	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+L6bGL6	Cortical excitatory neuron (L6b)	0,114,178	brain	Adult	Healthy
+LAMGA1	Lamp5 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+LAMGA2	Lamp5 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+LAMGA3	Lamp5 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+LAMGA4	Lamp5 GABAergic interneuron	213,94,0	brain	Adult	Healthy
+LSXGA1	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA2	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA3	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA4	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA5	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA6	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+LSXGA7	Lateral septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MFOL	Myelin-forming oligodendrocyte	204,121,167	brain	Adult	Healthy
+MGL	Microglia	0,0,0	brain	Adult	Healthy
+MOL	Mature oligodendrocyte	204,121,167	brain	Adult	Healthy
+MSGA1	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA10	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA11	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA12	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA13	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA2	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA3	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA4	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA5	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA6	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA7	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA8	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MSGA9	Medial septum GABAergic neuron	213,94,0	brain	Adult	Healthy
+MXD	Matrix D1 neuron (pallidum)	230,159,0	brain	Adult	Healthy
+NFOL	Newly formed oligodendrocyte	204,121,167	brain	Adult	Healthy
+NIPC	Neuronal intermediate progenitor cell	51,34,136	brain	Adult	Healthy
+NPGL1	Cortical near-projecting excitatory neuron	0,114,178	brain	Adult	Healthy
+NPGL2	Cortical near-projecting excitatory neuron	0,114,178	brain	Adult	Healthy
+NPGL3	Cortical near-projecting excitatory neuron	0,114,178	brain	Adult	Healthy
+NPGL4	Cortical near-projecting excitatory neuron	0,114,178	brain	Adult	Healthy
+NPGL5	Cortical near-projecting excitatory neuron	0,114,178	brain	Adult	Healthy
+OBDOP1	Olfactory bulb dopaminergic neuron	213,94,0	brain	Adult	Healthy
+OBDOP2	Olfactory bulb dopaminergic neuron	213,94,0	brain	Adult	Healthy
+OBGA1	Olfactory bulb GABAergic neuron	213,94,0	brain	Adult	Healthy
+OBGA2	Olfactory bulb GABAergic neuron	213,94,0	brain	Adult	Healthy
+OBGL1	Olfactory bulb excitatory neuron	0,114,178	brain	Adult	Healthy
+OBGL2	Olfactory bulb excitatory neuron	0,114,178	brain	Adult	Healthy
+OBGL3	Olfactory bulb excitatory neuron	0,114,178	brain	Adult	Healthy
+OBGL4	Olfactory bulb excitatory neuron	0,114,178	brain	Adult	Healthy
+OBGL5	Olfactory bulb excitatory neuron	0,114,178	brain	Adult	Healthy
+OBNBL	Olfactory bulb neuroblast	51,34,136	brain	Adult	Healthy
+OLFGL1	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL2	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL3	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL4	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL5	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL6	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+OLFGL7	Olfactory areas excitatory neuron	0,114,178	brain	Adult	Healthy
+Oligodendrocyte precursor	Oligodendrocyte precursor cell (OPC)	240,228,66	brain	Adult	Healthy
+PER	Pericyte	221,204,119	brain	Adult	Healthy
+PIRGL	Piriform cortex excitatory neuron	0,114,178	brain	Adult	Healthy
+PTGL1	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL2	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL3	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL4	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL5	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL6	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL7	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PTGL8	Cortical pyramidal-tract excitatory neuron (L5 ET)	0,114,178	brain	Adult	Healthy
+PVGA1	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA2	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA3	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA4	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA5	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA6	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVGA7	Parvalbumin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+PVM	Perivascular macrophage	238,102,119	brain	Adult	Healthy
+RGDG	Radial glia-like cell (dentate gyrus)	51,34,136	brain	Adult	Healthy
+RGSZ	Radial glia-like cell (subventricular zone)	51,34,136	brain	Adult	Healthy
+SSTGA1	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA10	Somatostatin GABAergic interneuron (Sst-Chodl-like)	213,94,0	brain	Adult	Healthy
+SSTGA2	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA3	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA4	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA5	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA6	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA7	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA8	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+SSTGA9	Somatostatin GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA1	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA2	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA3	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA4	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA5	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+STRGA6	Striatal GABAergic interneuron	213,94,0	brain	Adult	Healthy
+VEC	Vascular endothelial cell	136,204,238	brain	Adult	Healthy
+VIPGA1	Vip GABAergic interneuron	213,94,0	brain	Adult	Healthy
+VIPGA2	Vip GABAergic interneuron	213,94,0	brain	Adult	Healthy
+VIPGA3	Vip GABAergic interneuron	213,94,0	brain	Adult	Healthy
+VIPGA4	Vip GABAergic interneuron	213,94,0	brain	Adult	Healthy
+VLMC1	Vascular and leptomeningeal cell	221,204,119	brain	Adult	Healthy
+VLMC2	Vascular and leptomeningeal cell	221,204,119	brain	Adult	Healthy
+VLMC3	Vascular and leptomeningeal cell	221,204,119	brain	Adult	Healthy
+VPIA1	VPIA1	187,187,187	brain	Adult	Healthy
+VPIA2	VPIA2	187,187,187	brain	Adult	Healthy
+VPIA3	VPIA3	187,187,187	brain	Adult	Healthy

@@ -6933,8 +6933,8 @@ those values will be used to identify subtracks.
 </p>
 </div>
 
-<DIV class="maxCheckBoxes"><span class="types faceted composite"></span>
-<div class="format"><code>maxCheckBoxes &lt;integer&gt;</code></div>
+<DIV class="maxCheckboxes"><span class="types faceted composite"></span>
+<div class="format"><code>maxCheckboxes &lt;integer&gt;</code></div>
 <p>
 Frequently a facet may have a long list of possible values - too many to display at once in
 the track selection interface.  This setting limits the number of facet values displayed on
@@ -7285,6 +7285,41 @@ display custom genome assemblies in the Genome Browser.</p>
     </P>
     <P><B>Example:</B></P>
     <pre>   chromSizes thisGenome.chromSizes.txt</pre>
+</DIV>
+
+<DIV class="codonTable"><span class="types all"></span>
+<div class="format"><code>codonTable default=&lt;id&gt; &lt;sequenceName&gt;=&lt;id&gt; ...</code></div>
+    <P>By default the Genome Browser translates codons to amino acids with the standard
+    genetic code, except for sequences named <code>chrM</code> or <code>chrMT</code>, which
+    use the vertebrate mitochondrial code. An assembly hub can assign a different
+    <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi" target="_blank">NCBI
+    genetic code</a> to individual sequences with the <code>codonTable</code> setting in the
+    genome stanza.</p>
+
+    <p>The value is a space-separated list of <code>sequenceName=id</code> pairs, where
+    <code>id</code> is an NCBI translation table number (for example 1 for the standard code,
+    2 for vertebrate mitochondrial, 13 for ascidian mitochondrial). The special name
+    <code>default</code> sets the code used for any sequence not listed. Sequences with no
+    assignment keep the default behavior described above. This affects amino acid display in
+    the base position track's three-frame translation, in codon-colored annotation tracks such
+    as gene predictions, and on the details pages.</p>
+
+    <p><B>Note</B>: <code>sequenceName</code> must be the sequence's own name as stored in the
+    assembly's <em>.2bit</em> file (the same name used in <code>chrom.sizes</code>), for
+    example a RefSeq or GenBank accession such as <code>NC_017929.1</code>. This is the
+    internal name even when a <code>chromAlias</code> and <code>chromAuthority</code> cause a
+    different name (such as <code>chrM</code>) to be displayed. Because the special
+    <code>chrM</code>/<code>chrMT</code> mitochondrial default only applies to sequences whose
+    own name is literally <code>chrM</code> or <code>chrMT</code>, an assembly whose
+    mitochondrial sequence has an accession name needs an explicit <code>codonTable</code>
+    entry to translate it with a mitochondrial code.</p>
+
+    <p>See our assembly hub <a
+    href="/goldenPath/help/assemblyHubHelp.html#codonTable">codonTable</a> documentation for
+    more details.</p>
+
+    <P><B>Example:</B></P>
+    <pre>   codonTable default=1 NC_017929.1=13</pre>
 </DIV>
 
 <DIV class="defaultPos"><span class="types all"></span>

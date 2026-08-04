@@ -935,7 +935,9 @@ if (sameString(requestType, "liftOver"))
                 ottoTable, fromDb, toDb, email, comment,
                 ottoTable, fromDb, toDb, toDb, fromDb);
             sqlUpdate(conn, dyStringCannibalize(&update));
-            int rowsAffected = sqlQuickNum(conn, "SELECT ROW_COUNT()");
+            char rowCountQuery[64];
+            sqlSafef(rowCountQuery, sizeof(rowCountQuery), "SELECT ROW_COUNT()");
+            int rowsAffected = sqlQuickNum(conn, rowCountQuery);
             status = (rowsAffected > 0) ? "accepted" : "duplicate";
             }
         }
@@ -970,15 +972,17 @@ if (isEmpty(secret))
 
 struct dyString *url = dyStringNew(0);
 dyStringPrintf(url, "https://genome.ucsc.edu/cgi-bin/hubApi/submitOttoRequest"
-    "?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
+    "?%s=%s&%s=%s&%s=%s&%s=%s&%s=%s",
     argRequestType, cgiEncode(requestType),
     argFromGenome, cgiEncode(fromDb),
     argToGenome, cgiEncode(toDb),
     argEmail, cgiEncode(email),
-    argComment, cgiEncode(comment),
-    argRelaySecret, cgiEncode(secret));
+    argComment, cgiEncode(comment));
 
-int sd = netUrlOpen(dyStringContents(url));
+struct dyString *header = dyStringNew(0);
+dyStringPrintf(header, "X-Relay-Secret: %s\r\n", secret);
+int sd = netOpenHttpExt(dyStringContents(url), "GET", dyStringContents(header));
+dyStringFree(&header);
 if (sd < 0)
     {
     dyStringFree(&url);
@@ -1014,7 +1018,7 @@ void apiSubmitOttoRequest(char *words[MAX_PATH_INFO])
  * caller can distinguish it from a hard failure. */
 {
 char *secret = cfgOption("hubApi.relaySecret");
-char *givenSecret = cgiOptionalString(argRelaySecret);
+char *givenSecret = getenv("HTTP_X_RELAY_SECRET");
 if (isEmpty(secret) || isEmpty(givenSecret) || !sameString(secret, givenSecret))
     apiErrAbort(err403, err403Msg, "not authorized for endpoint '/submitOttoRequest");
 

@@ -43,6 +43,14 @@ GMAIL_SCOPES = [
     'https://www.googleapis.com/auth/gmail.send',
 ]
 CLAUDE_CLI = os.path.expanduser('~/.local/bin/claude')
+# Daily reviews get a timeout scaled to the batch size. A flat 600s limit timed
+# out repeatedly on 8-11 commit days, and since the retry reused the same limit
+# those authors' commits went unreviewed with no later window to catch them.
+# The floor keeps small batches at the old flat 600s rather than shrinking them.
+DAILY_TIMEOUT_BASE = 300
+DAILY_TIMEOUT_PER_COMMIT = 120
+DAILY_TIMEOUT_MIN = 600
+DAILY_TIMEOUT_MAX = 2400
 
 def load_config():
     """Load API keys from ~/.hg.conf"""
@@ -1374,9 +1382,13 @@ def review_daily_author(author_name, commits, log_dir,
         f.write(prompt)
     temp_files.append(prompt_file)
     print(f"  Prompt saved to: {prompt_file}")
-    print(f"  Calling Claude CLI (this may take a few minutes)...")
 
-    raw_response = call_claude_cli(prompt, timeout=600, validator=validate_daily_review_output)
+    timeout = min(DAILY_TIMEOUT_MAX,
+                  max(DAILY_TIMEOUT_MIN,
+                      DAILY_TIMEOUT_BASE + DAILY_TIMEOUT_PER_COMMIT * len(commits)))
+    print(f"  Calling Claude CLI (timeout {timeout}s for {len(commits)} commit(s))...")
+    raw_response = call_claude_cli(prompt, timeout=timeout,
+                                   validator=validate_daily_review_output)
     error = detect_cli_failure(raw_response, validate_daily_review_output)
 
     # Save whatever we got back for debugging, even on failure.

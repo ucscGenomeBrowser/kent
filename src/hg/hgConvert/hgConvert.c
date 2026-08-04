@@ -28,6 +28,7 @@
 #include "chromAlias.h"
 #include "jsHelper.h"
 #include "hPrint.h"
+#include "hgConfig.h"
 #ifdef NOTNOW
 #include "bigChain.h"
 #include "bigLink.h"
@@ -161,8 +162,13 @@ if (askAboutQuickLift)
         "    let ql = document.getElementById('doQuickLift');\n"
         "    let hideBox = document.getElementById('hideTracksOnConvert');\n"
         "    let hideRow = document.getElementById('hideTracksOnConvertRow');\n"
+        "    let hideShadow = document.getElementById('boolshad.hideTracksOnConvert');\n"
         "    if (!ql || !hideBox || !hideRow) return;\n"
         "    hideBox.disabled = !ql.checked;\n"
+        "    // A disabled checkbox is not submitted but its shadow variable is, which\n"
+        "    // would store an unchecked value in the cart when the target assembly\n"
+        "    // changes.  Disable the shadow too so the setting survives the reload.\n"
+        "    if (hideShadow) hideShadow.disabled = !ql.checked;\n"
         "    hideRow.style.opacity = ql.checked ? '1' : '0.5';\n"
         "}\n"
         "document.addEventListener('DOMContentLoaded', function() {\n"
@@ -170,6 +176,16 @@ if (askAboutQuickLift)
         "    if (ql) ql.addEventListener('change', hgcUpdateHideTracks);\n"
         "    hgcUpdateHideTracks();\n"
         "});\n");
+    }
+
+/* The assembly list only offers targets that already have a chain from this source, so
+ * this is where a user finds out theirs is missing.  Point them at the request page. */
+if (cfgOptionBooleanDefault("showLiftRequest", FALSE))
+    {
+    puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
+    puts("Target assembly not listed? "
+         "<a href='../liftRequest.html' target='_blank'>Request an alignment</a>\n");
+    puts("</div>\n");
     }
 
 puts("</div>\n");  /* end destination section */

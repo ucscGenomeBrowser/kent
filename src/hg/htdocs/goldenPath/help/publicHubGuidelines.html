@@ -54,6 +54,16 @@ target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
      squish, or dense), and try to have no more than 10 tracks enabled by default upon first 
      connecting your hub.
  </li>
+ <li>Every track MUST have a <a target="_blank"
+     href="trackDb/trackDbHub.html#shortLabel">shortLabel</a> and
+     <a target="_blank" href="trackDb/trackDbHub.html#longLabel">longLabel</a> that tell it apart
+     from the other tracks in your hub. Labels are how a user identifies a track in the browser
+     image, in the track list, and in the Table Browser, so tracks that share a label cannot be
+     distinguished in any of those places. If your hub contains many similar tracks, include
+     whatever varies between them, such as the sample, tissue, condition or replicate, in the
+     label. Note that listing those values in a metadata table on a composite configuration page
+     does not satisfy this, because they are not shown anywhere outside that page.
+ </li>
  <li>Have a descriptionUrl html page specified in your hub.txt. This should be a URL to a description
      page for your entire hub, often public hubs will link to a full-text paper or to their
      laboratory webpage that describes the research presented in the hub. These links are presented

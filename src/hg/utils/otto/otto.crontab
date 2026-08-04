@@ -90,6 +90,11 @@ MAILTO=otto-group@ucsc.edu
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
 
+# VCEP hub spec version notifier (RM #37795) - monthly, silent unless one of our
+# VCEP hub description pages is behind the ClinGen CSpec registry
+MAILTO=otto-group@ucsc.edu
+40 06 15 * * /hive/data/outside/otto/vcepVersions/checkVcepVersions.py
+
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
@@ -177,3 +182,8 @@ MAILTO=jbirgmei@ucsc.edu
 
 MAILTO=cells@ucsc.edu
 @reboot umask 0000; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000
+
+# cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
+# (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
+* * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+@reboot umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
