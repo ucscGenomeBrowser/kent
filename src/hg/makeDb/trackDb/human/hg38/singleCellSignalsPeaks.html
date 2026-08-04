@@ -21,7 +21,7 @@ The subtracks come from these datasets:
   <li>
     <b><a href="https://cells.ucsc.edu/?ds=cortex-atac" target="_blank">Cortex ATAC</a></b>:
     single-cell epigenomes of the developing human brain and cortical
-    organoids. 12 signal and 79 peak subtracks (Ziffra et al. 2021).
+    organoids. 12 signal and 69 peak subtracks (Ziffra et al. 2021).
   </li>
   <li>
     <b><a href="https://cells.ucsc.edu/?ds=retina" target="_blank">Human and Mouse Retina Cell Atlas</a></b>:
@@ -32,7 +32,7 @@ The subtracks come from these datasets:
     <b><a href="https://cells.ucsc.edu/?ds=neuro-degen-atac" target="_blank">Risk Loci in Alzheimer's and Parkinson's</a></b>:
     accessibility across six adult human brain regions, with 359,022 cell
     type-specific regulatory elements used to interpret disease-associated
-    variants. 65 signal and 2 peak subtracks (Corces et al. 2020).
+    variants. 64 signal and 2 peak subtracks (Corces et al. 2020).
   </li>
   <li>
     <b><a href="https://cells.ucsc.edu/?ds=multiomic-human-heart" target="_blank">Multiomic Human Heart</a></b>:
@@ -76,6 +76,17 @@ its source dataset in the Cell Browser.
 </p>
 
 <p>
+Most subtracks are marked <em>Healthy</em> in the condition facet. The SEA-AD brain
+tracks instead carry an ADNC level, short for Alzheimer's disease neuropathological
+change. This is the NIA-AA score that combines the anatomical distribution of amyloid
+plaques (Thal phase), the stage of neurofibrillary tangle spread (Braak stage), and
+neuritic plaque density (CERAD) into four ordinal levels, shown here as ADNC 0 (no AD),
+ADNC 1 (low), ADNC 2 (intermediate), and ADNC 3 (high). ADNC grades neuropathology
+rather than symptoms: donors with high ADNC do not necessarily have dementia, and
+SEA-AD records cognitive status as a separate measure.
+</p>
+
+<p>
 Subtracks are colored by broad cell-type class, so the same class is shown in the same color across datasets and matches the coloring of the corresponding mouse track. The classes are:
 </p>
 <table class="stdTbl">
@@ -88,7 +99,7 @@ Subtracks are colored by broad cell-type class, so the same class is shown in th
   <tr><th style="background-color:rgb(86,180,233);width:2em">&nbsp;</th>
       <td>Other neuron &mdash; remaining neuronal types, such as Cajal-Retzius cells</td></tr>
   <tr><th style="background-color:rgb(51,34,136);width:2em">&nbsp;</th>
-      <td>Neural progenitor &mdash; neuroblasts, radial glia, and nephron progenitors</td></tr>
+      <td>Neural progenitor &mdash; neuroblasts, radial glia, and other neural progenitors</td></tr>
   <tr><th style="background-color:rgb(0,158,115);width:2em">&nbsp;</th>
       <td>Astrocyte &mdash; astrocytes, including Bergmann glia and fibrous and protoplasmic subtypes</td></tr>
   <tr><th style="background-color:rgb(204,121,167);width:2em">&nbsp;</th>

@@ -95,14 +95,78 @@
 #
 # longLabel: rebuilt from the harmonized facets as
 #     <cell type>[, <condition if not healthy>][, <tissue if a specific region>]
-#     [, <extra>] (<dataset>)
+#     [, <extra>][, <variant>] (<dataset>)
 #   so the cryptic source short labels decode, e.g. "ADNC0 Astro" ->
 #   "Astrocyte, ADNC 0 (no AD), middle temporal gyrus (SEA-AD Brain ATAC)", and
 #   "LM.Macg.03" -> "Macrophage, muscle, 3 months (CATLAS Mouse Aging Brain)". The
 #   CATLAS aging age-in-months (the ".NN" filename suffix) is the <extra> descriptor
 #   -- kept in the label, not made a facet, so Life stage stays coarse (Adult/Aged)
-#   and consistent across datasets. The source shortLabel is kept as-is (it is
-#   length-limited, so the longLabel is where the track is decoded).
+#   and consistent across datasets.
+#
+# Variant descriptors (track_variant): the cell-type harmonization above drops
+#   detail on purpose to keep the facets compact -- collapse_celltype strips trailing
+#   cluster numbers, rollup_celltype strips parenthetical qualifiers, and
+#   celltype_strip_suffix_regex strips peak-method suffixes. That detail is real, and
+#   without it hundreds of genuinely different subtracks collapsed onto one label
+#   (before this was added, hg38 had 925 subtracks sharing only 401 distinct
+#   longLabels, mm10 629 sharing 359). The variant descriptors put the meaningful
+#   distinctions back: how the peaks were called, which grouping level the track
+#   belongs to, which cohort, and signal vs peaks. They compose, since a peak file
+#   from one cohort needs both markers.
+#
+# Cluster identity (disambiguate_labels): any label still shared after the variant
+#   descriptors is qualified with its source cluster code, which is unique and is
+#   what the source paper calls the cluster. CATLAS mouse brain alone rolls
+#   MSGA1..MSGA13 into one "Medial septum GABAergic neuron", and ITL4GL1/ITL5GL2 into
+#   one "Cortical IT excitatory neuron" even though those encode different cortical
+#   layers -- right for a facet, wrong for a label. Every longLabel is now unique on
+#   both assemblies.
+#
+# shortLabel: rebuilt too (the source shortLabels were not in fact length-limited --
+#   they ran to 50 chars, carried underscores, ArchR filename tails and R-mangled
+#   names like X1126_HY_PAL_STR_Folh1_1). Built from the harmonized cell type,
+#   abbreviated word-by-word through a curated table (CT_ABBREV) only when it does
+#   not fit, plus the variant token and, where the longLabel distinction would
+#   otherwise be invisible, a compact facet token (SEA-AD region + ADNC level,
+#   CATLAS aging age: "Astrocyte MTG A0", "Basophil 3mo"). Budget is 22 chars: there
+#   is no hard limit in the tree (excluding this track, hg38's trackDb runs a median
+#   of 18 and 54% of tracks exceed the classic 17), but the left label area crowds
+#   past that and 22 leaves room for the distinguishing token.
+#
+# Spelling: known source misspellings are corrected before the plural/case merge so
+#   a typo'd variant lands in the same group as its correctly-spelled twin instead of
+#   becoming a second facet value ("Ventricular cardioyocyte" vs "Ventricular
+#   cardiomyocyte" were two separate Cell_type values). See CELLTYPE_SPELLING.
+#   The plural/case merge picks the singular form first and only then the most
+#   frequent -- frequency alone made the facet inconsistent, choosing the singular
+#   for 15 of 17 merged groups but the plural for Megakaryocytes/Oligodendrocytes.
+#
+#   IMPORTANT, if you add to CELLTYPE_SPELLING: the misspelled strings are load-bearing
+#   *keys* in the curated tables (celltype-class.tsv, and hub_config.json's
+#   celltype_rollup_overrides / celltype_expansions / celltype_expansions_global /
+#   celltype_tissue). Correcting a cell type without correcting those keys makes the
+#   lookup miss silently, and the track loses its rollup, tissue, broad class and color.
+#   That happened: correcting Broncial / Hematopoeitic / Syncitio / Glutaminergic, plus
+#   canonicalizing Megakaryocytes to the singular, quietly cost 16 hg38 tracks their
+#   Cell_class and color. The tables now normalize their keys on load (class_key,
+#   _ct_lower_key, _ct_matchkey) so either spelling matches, and any cell type with no
+#   broad class is reported in unclassified-celltypes.log plus counted in
+#   facet-coverage.md rather than silently becoming "unknown".
+#
+# Cell classes: Nephron progenitor used to come out as class "Neural progenitor". The
+#   decode tables carry a bare broad class of "Progenitor", and build_celltype_crosswalks
+#   mapped that to "Neural progenitor" -- right for the radial glia and neuroblasts that
+#   make up the rest of the class, wrong for kidney. Nephron progenitors are Six2+ cap
+#   mesenchyme, so they are now classed Stromal (NON_NEURAL_PROGENITOR); the HTML legend
+#   no longer lists them under Neural progenitor. Note celltype-class.tsv is hand-curated
+#   (the union of the mm10 crosswalk classes with paper-decodes/hg38_ct_class.tsv), NOT
+#   generated -- build_celltype_crosswalks.py does not write it, so a class change has to
+#   be made there too.
+#
+# One copy of the crosswalks: build_stanzas reads celltype-crosswalks/ out of the kent
+#   tree (XWALK_ROOT, overridable), not the copy in the hub-build dir. There used to be
+#   two independent copies and they drifted -- a stale local copy silently reverted the
+#   cell-class fix above while the kent copy looked correct.
 #
 # The curation of record is archived with the scripts:
 #   scripts/singleCellSignalsPeaks/build_celltype_crosswalks.py
@@ -116,9 +180,29 @@
 # tree -- it builds the whole super hub, not just this track.
 
 ##############################################################################
+# 5. Redundant allen-brain-science copies removed
+##############################################################################
+# The Allen basal-ganglia dataset serves each unchanged per-cluster bigWig from all
+# four of its grouping directories (bg_regrouping_cl, bg_merge_D1_D2,
+# bg_merge_dorsal_ventral, bg_merge_D1_D2_dorsal_ventral). For 14 basenames those
+# four copies are byte-identical (md5-verified), so they rendered as four
+# indistinguishable subtracks and cost 4.4 GB of duplicated storage. build_stanzas
+# keeps the bg_regrouping_cl copy -- the cluster-level source the merges are built
+# from -- and skips the other three (allen_duplicate_skip; see
+# all-tracks-hub-build/allen-duplicates.log for the list). Where the four copies
+# genuinely differ (14 other basenames, different aggregations and different file
+# sizes) all four are kept and told apart by the grouping-level variant descriptor.
+# The 42 redundant files were deleted from the bed dir; the list is kept alongside
+# them in deleted-redundant-allen-copies.txt. Only the one directory-level /gbdb
+# symlink exists, so nothing needed cleaning up there.
+#
+#   xargs -a deleted-redundant-allen-copies.txt rm
+
+##############################################################################
 # Counts
 ##############################################################################
 # 647 files resolved from the hub manifest (0 missing) and copied to the bed dir.
-# 18 QC-cluster tracks (doublet / low-quality / batch) are dropped when the .ra is
-# generated, leaving 629 subtracks in the track (623 signal + 6 peak). Facet
-# metadata rows match the subtracks 1:1.
+# 42 byte-identical Allen copies were then removed, leaving 605 data files. 18
+# QC-cluster tracks (doublet / low-quality / batch) are dropped when the .ra is
+# generated, leaving 587 subtracks in the track (581 signal + 6 peak). Facet
+# metadata rows match the subtracks 1:1, and all 587 longLabels are unique.

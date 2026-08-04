@@ -52,6 +52,27 @@ sub asmIdToPath($) {
   return $ret;
 }
 
+# Look up NCBI's own annotation provider/name/date for an accession from
+# the 'genark' database's assemblySummary{Genbank,Refseq} table, falling
+# back to the ...Historical variant when the accession isn't in the
+# current one (a superseded/suppressed assembly).  Returns an empty list
+# if found in neither.
+sub fetchAnnotationInfo($$) {
+  my ($asmType, $accession) = @_;
+  my $table = "assemblySummary" . ucfirst($asmType);
+  foreach my $t ($table, "${table}Historical") {
+    my $result = `hgsql -N -e 'select annotationProvider,annotationName,annotationDate from $t where assemblyAccession="$accession";' genark 2> /dev/null`;
+    chomp $result;
+    next if ($result eq "");
+    my ($provider, $name, $date) = split('\t', $result);
+    $provider = "" if ( ! defined $provider || $provider eq "NULL" );
+    $name = "" if ( ! defined $name || $name eq "NULL" );
+    $date = "" if ( ! defined $date || $date eq "NULL" );
+    return ($provider, $name, $date) if ($provider ne "" || $name ne "" || $date ne "");
+  }
+  return ();
+} # fetchAnnotationInfo
+
 # Build the 'ncbiGene' track description HTML body.  Used both by
 # asmHubNcbiGene.pl for the live track, and by doNcbiGene.pl for the
 # one-track archive hubs it writes under trackData/ncbiGene/archive/ --
@@ -72,6 +93,11 @@ sub ncbiGeneDescription($$$$$;$) {
      substr($partNames[1],0,3), substr($partNames[1],3,3),
      substr($partNames[1],6,3), $ncbiAsmId);
   my $asmType = ($partNames[0] =~ m/GCA/) ? "genbank" : "refseq";
+
+  # bare accession (GCF_937001465.1), not the full asmId with its
+  # _assemblyName suffix -- used both for the genark annotation lookup
+  # below and for the archived-hub links further down.
+  my $accession = "$partNames[0]_$partNames[1]";
 
   # the .bb's mtime is stamped from the source gff's own mtime (see the
   # 'touch -r $gffFile' step in doNcbiGene.pl), so it doubles as this
@@ -140,6 +166,36 @@ _EOF_
 
 _EOF_
 
+  # Only the live page gets NCBI's own annotation source info -- the
+  # genark tables hold NCBI's current-as-of-now metadata for this
+  # accession, not a per-archived-snapshot history, so showing it under
+  # an "archived version" banner would misleadingly imply it describes
+  # that old snapshot specifically.
+  if ( ! $archiveNote ) {
+    my ($annotationProvider, $annotationName, $annotationDate) =
+        fetchAnnotationInfo($asmType, $accession);
+    if ($annotationProvider ne "" || $annotationName ne "" || $annotationDate ne "") {
+      my $showProvider = $annotationProvider;
+      my $showName = $annotationName;
+      if ($showName ne "") {
+        (my $stripped = $showName) =~ s/^Annotation submitted by\s*//i;
+        $stripped =~ s/^\s+|\s+$//g;
+        my $providerTrim = $showProvider;
+        $providerTrim =~ s/^\s+|\s+$//g;
+        # if the name is just "Annotation submitted by <provider>", the
+        # name adds nothing over the provider field -- show it only when
+        # the two are actually different
+        $showName = ($providerTrim ne "" && lc($stripped) eq lc($providerTrim))
+                    ? "" : $stripped;
+      }
+      $html .= "<h2>Annotation source</h2>\n<p>\n";
+      $html .= "<b>Annotation provider: </b>$showProvider<br>\n" if ($showProvider ne "");
+      $html .= "<b>Annotation name: </b>$showName<br>\n" if ($showName ne "");
+      $html .= "<b>Annotation date: </b>$annotationDate<br>\n" if ($annotationDate ne "");
+      $html .= "</p>\n\n";
+    }
+  }
+
   # Only the live page advertises archives (an archived page's own
   # description already carries $archiveNote and has nothing further
   # under it to list).  Archived copies are published to hgdownload at
@@ -158,8 +214,6 @@ _EOF_
       }
     }
     if (@versions) {
-      my @parts = split('_', $ncbiAsmId);
-      my $accession = "$parts[0]_$parts[1]";
       my $hashedPath = asmIdToPath($ncbiAsmId);
       $html .= "<h2>Archived versions</h2>\n<p>\n";
       $html .= "Earlier versions of this track, from before NCBI updated the source annotation, remain available as standalone track hubs:\n";
