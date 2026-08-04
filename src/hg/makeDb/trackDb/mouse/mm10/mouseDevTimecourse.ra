@@ -17,7 +17,6 @@ html mouseDevTimecourse
     barChartFacets tissue,timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
-    barChartMerge on
     barChartMetric sample
     labelFields name,name2
     defaultLabelFields name
@@ -37,7 +36,6 @@ html mouseDevTimecourse
     barChartFacets tissue,timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
-    barChartMerge on
     barChartMetric sample
     labelFields name,name2
     defaultLabelFields name
@@ -57,7 +55,6 @@ html mouseDevTimecourse
     barChartFacets tissue,timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
-    barChartMerge on
     barChartMetric sample
     labelFields name,name2
     defaultLabelFields name
@@ -77,7 +74,6 @@ html mouseDevTimecourse
     barChartFacets tissue,timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
-    barChartMerge on
     barChartMetric sample
     labelFields name,name2
     defaultLabelFields name
