@@ -1433,8 +1433,17 @@ settings such as the provider list, labels and endpoint URLs can live in either 
 You can let users sign in with an external identity provider using OAuth 2.0 / OpenID
 Connect. First register an OAuth client with each provider and set its "redirect" or
 "callback" URL to your hgLogin URL exactly, for example
-https://yourbrowser.university.edu/cgi-bin/hgLogin . Then list the providers to offer and
-give each one a block of settings:
+https://yourbrowser.university.edu/cgi-bin/hgLogin . You create the client id and secret at
+each provider's developer console:
+
+    Google:  https://console.cloud.google.com/auth/clients
+    ORCID:   https://orcid.org/developer-tools
+    GitHub:  https://github.com/settings/applications/
+
+For GitHub you can register a whole domain, such as gi.ucsc.edu, which then covers all of its
+subdomains (handy if you have several sandboxes); the other providers require each exact
+hostname to be listed. Then list the providers to offer and give each one a block of
+settings:
 
     login.oauth.providers=google,orcid,github,myuni
 
@@ -1461,6 +1470,13 @@ endpoint URLs written out explicitly:
     login.oauth.myuni.tokenUrl=https://idp.myuni.edu/token
     login.oauth.myuni.userinfoUrl=https://idp.myuni.edu/userinfo
     login.oauth.myuni.scopes=openid email profile
+
+Two OpenID Connect federations are useful for reaching many universities at once, without
+registering separately with each institution. Register with them and configure them like any
+other OIDC provider above (a label, client id/secret and issuer):
+
+    CILogon, for US universities:        https://cilogon.org/oauth2/register
+    LifeScience RI, for EU universities: https://services.aai.lifescience-ri.eu/spreg/auth
 
 A provider's button appears on the login and sign-up pages only when both its client id and
 secret are set, so unconfigured mirrors are unaffected. When a provider reports an email
