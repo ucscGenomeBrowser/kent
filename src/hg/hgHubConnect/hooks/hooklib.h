@@ -40,6 +40,10 @@ void fillOutHttpResponseError(struct jsonElement *response);
 
 void fillOutHttpResponseSuccess(struct jsonElement *response);
 
+void setUploadedFileList(struct jsonElement *response, char *userName, struct hubSpace *fileList);
+/* Put the hubSpace rows this upload created or changed into the response body. tusd
+ * forwards the body to the client, which shows the rows the server actually holds */
+
 struct jsonElement *makeDefaultResponse();
 /* Create the default response json with some fields pre-filled */
 

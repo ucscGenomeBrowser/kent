@@ -7,6 +7,7 @@
 #define USERDATA_H
 
 #include "hubSpace.h"
+#include "jsonWrite.h"
 
 // 2bit genome-name collision error. Shared with the JS client so it
 // can identify this error from the message.
@@ -132,6 +133,13 @@ void removeFileForUser(char *fname, char *userName);
 
 struct hubSpace *listFilesForUser(char *userName);
 /* Return the files the user has uploaded */
+
+struct hubSpace *listFilesInHubDir(char *userName, char *hubName);
+/* Return the user's rows for one hub: the hub's own directory row plus every row
+ * underneath it */
+
+void hubSpaceWriteFileList(struct jsonWrite *jw, char *userName, struct hubSpace *fileList);
+/* Write fileList as the "fileList" array of jw, in the row shape the My Data table reads */
 
 char *defaultHubNameForUser(char *userName);
 /* Return a name to use as a default for a hub, starts with myFirstHub, then myFirstHub2, ... */

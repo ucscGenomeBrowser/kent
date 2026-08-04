@@ -259,12 +259,35 @@ else
             // inserts it, so two uploads to one hub would otherwise both insert the
             // same directory row
             // first make the parentDir rows
-            makeParentDirRows(row->userName, sqlDateToUnixTime(row->lastModified), row->db, row->parentDir, userDataDir, row->hubType);
+            // the directory rows carry the upload's own timestamp. row->lastModified
+            // holds it as a GMT clock string, which sqlDateToUnixTime would read as
+            // local time, so pass the seconds directly
+            makeParentDirRows(row->userName, lastModified, row->db, row->parentDir, userDataDir, row->hubType);
             row->parentDir = encodedParentDir ? hubNameFromPath(encodedParentDir) : "";
             addHubSpaceRowForFile(row);
             unlockHubDir(hubLockFd);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);
+
+            // Send the client the hub as it now stands, so it can show the new file,
+            // its directories and the hub.txt. The upload has already succeeded at
+            // this point, so catch errors here rather than let them reject it: the
+            // worst case is a client that shows nothing new until the page is reloaded
+            struct errCatch *respCatch = errCatchNew(0);
+            if (errCatchStart(respCatch))
+                {
+                if (encodedParentDir)
+                    {
+                    char *hubName = hubRootFromParentDir(encodedParentDir);
+                    setUploadedFileList(response, userName, listFilesInHubDir(userName, hubName));
+                    freeMem(hubName);
+                    }
+                }
+            errCatchEnd(respCatch);
+            if (respCatch->gotError)
+                fprintf(stderr, "could not list hub for response: %s\n",
+                        respCatch->message->string);
+            errCatchFree(&respCatch);
             }
         }
     // pop the handlers before handling the error, the cleanup below can itself
