@@ -25,6 +25,7 @@
 #include "errCatch.h"
 #include "twoBit.h"
 #include "trackHub.h"
+#include "jsonWrite.h"
 #include <limits.h>
 
 // how long a pre-finish hook waits for another upload to the same hub, and how
@@ -886,14 +887,79 @@ else
 // TODO: we should also modify the hub.txt associated with this file
 }
 
+static struct dyString *hubSpaceQueryForUser(char *userName)
+/* Return a select of every hubSpace column the My Data table needs, restricted to
+ * one user. Callers narrow it further with sqlDyStringPrintf.
+ * Both times come back as seconds since the epoch so the browser can show them in
+ * the reader's own timezone. They need different conversions to get there:
+ * creationTime is mysql's CURRENT_TIMESTAMP, so UNIX_TIMESTAMP reads it correctly,
+ * while every writer of lastModified stores a GMT clock reading, which TIMESTAMPDIFF
+ * measures without applying the session timezone a second time */
+{
+return sqlDyStringCreate("select userName, fileName, fileSize, fileType, "
+    "UNIX_TIMESTAMP(creationTime) as creationTime, "
+    "TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', lastModified) as lastModified, "
+    "db, location, md5sum, parentDir, hubType from hubSpace where userName='%s'", userName);
+}
+
 struct hubSpace *listFilesForUser(char *userName)
 /* Return the files the user has uploaded */
 {
 struct sqlConnection *conn = hConnectCentral();
-struct dyString *query = sqlDyStringCreate("select userName, fileName, fileSize, fileType, creationTime, DATE_FORMAT(lastModified, '%%c/%%d/%%Y, %%l:%%i:%%s %%p') as lastModified, db, location, md5sum, parentDir, hubType from hubSpace where userName='%s' order by location,creationTime", userName);
+struct dyString *query = hubSpaceQueryForUser(userName);
+sqlDyStringPrintf(query, " order by location,creationTime");
 struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 return fileList;
+}
+
+struct hubSpace *listFilesInHubDir(char *userName, char *hubName)
+/* Return the user's rows for one hub: the hub's own directory row plus every row
+ * underneath it */
+{
+if (isEmpty(hubName))
+    return NULL;
+struct hubSpace *hubList = NULL, *file, *next;
+struct dyString *prefix = dyStringCreate("%s/", hubName);
+// select the rows in C on the path stripDataDir gives, rather than on location in
+// the query. A row's location can carry either the hg.conf tusdDataDir or the
+// tusdMountPoint prefix, and stripDataDir is what knows about both
+for (file = listFilesForUser(userName); file != NULL; file = next)
+    {
+    next = file->next;
+    char *path = stripDataDir(file->location, userName);
+    if (sameOk(path, hubName) || (path && startsWith(dyStringContents(prefix), path)))
+        {
+        file->next = NULL;
+        slAddHead(&hubList, file);
+        }
+    }
+slReverse(&hubList);
+dyStringFree(&prefix);
+return hubList;
+}
+
+void hubSpaceWriteFileList(struct jsonWrite *jw, char *userName, struct hubSpace *fileList)
+/* Write fileList as the "fileList" array of jw, in the row shape the My Data table reads */
+{
+jsonWriteListStart(jw, "fileList");
+struct hubSpace *file;
+for (file = fileList; file != NULL; file = file->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "fileName", file->fileName);
+    jsonWriteNumber(jw, "fileSize", file->fileSize);
+    jsonWriteString(jw, "fileType", file->fileType);
+    jsonWriteString(jw, "parentDir", file->parentDir);
+    jsonWriteString(jw, "genome", file->db);
+    jsonWriteNumber(jw, "lastModified", file->lastModified ? sqlLongLong(file->lastModified) : 0);
+    jsonWriteNumber(jw, "uploadTime", file->creationTime ? sqlLongLong(file->creationTime) : 0);
+    jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
+    jsonWriteString(jw, "md5sum", file->md5sum);
+    jsonWriteString(jw, "hubType", file->hubType ? file->hubType : "trackHub");
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
 }
 
 #define defaultHubName "defaultHub"
