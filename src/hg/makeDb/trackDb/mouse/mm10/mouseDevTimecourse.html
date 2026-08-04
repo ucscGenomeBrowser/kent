@@ -11,20 +11,23 @@ signal (bigWig) tracks are also available for the same samples.</p>
 The data were produced as part of the <a href="https://www.encodeproject.org/"
 target="_blank">ENCODE</a> project at the <a href="http://woldlab.caltech.edu/"
 target="_blank">Wold Lab</a>,
-Caltech. Each tissue and time point has two biological replicates, each displayed
-as its own bar.</p>
+Caltech. Each tissue and time point has two biological replicates. The
+two replicates are averaged into a single bar; bars can be grouped
+further by tissue or time point using the <b>merge</b> links in the
+track configuration page. Per-replicate values remain available through
+the Table Browser and the signal tracks.</p>
 
 <p>The five sub tracks are:</p>
 <ul>
-  <li><b>timecourse M4 TPM</b> &ndash; TPM values using GENCODE M4
+  <li><b>Timecourse M4 TPM</b> &ndash; TPM values using GENCODE M4
   annotations</li>
-  <li><b>timecourse M4 FPKM</b> &ndash; FPKM values using GENCODE M4
+  <li><b>Timecourse M4 FPKM</b> &ndash; FPKM values using GENCODE M4
   annotations</li>
-  <li><b>timecourse M21 TPM</b> &ndash; TPM values using GENCODE M21
+  <li><b>Timecourse M21 TPM</b> &ndash; TPM values using GENCODE M21
   annotations</li>
-  <li><b>timecourse M21 FPKM</b> &ndash; FPKM values using GENCODE M21
+  <li><b>Timecourse M21 FPKM</b> &ndash; FPKM values using GENCODE M21
   annotations</li>
-  <li><b>timecourse signal</b> &ndash; RNA-seq signal (bigWig) tracks for
+  <li><b>Timecourse Signal</b> &ndash; RNA-seq signal (bigWig) tracks for
   unique and all aligned reads</li>
 </ul>
 
@@ -43,6 +46,16 @@ matrix. This matrix was then converted into the UCSC
 <a href="/goldenPath/help/barChart.html#example6" target="_blank">faceted
 bigBarChart</a> format (bed, categories, and facet files), and the bed
 file was converted into a bigBarChart bigBed file.</p>
+
+<p>
+The steps used to build this track are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10.txt"
+target="_blank">doc/mm10.txt</a> makedoc, the build scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mouseDevTimecourse"
+target="_blank">makeDb/scripts/mouseDevTimecourse</a>, and the track
+configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/mouse/mm10/mouseDevTimecourse.ra"
+target="_blank">trackDb/mouse/mm10/mouseDevTimecourse.ra</a>.</p>
 
 <h2>Data Access</h2>
 <p>
