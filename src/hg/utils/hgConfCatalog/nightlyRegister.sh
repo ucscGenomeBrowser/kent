@@ -28,7 +28,12 @@
 # Everything it writes is regenerable from the tree, so on any doubt it throws
 # its own work away rather than leave a mess for the build to trip over.
 #
-# Quiet when there is nothing to say, because cron mails whatever this prints.
+# HEARTBEAT.  A job that only speaks up when something is wrong is a job nobody
+# notices has died, so while this one is still new it says one line every night,
+# whatever happened, and appends the same line to a history file.  The mail is
+# the part that keeps it in mind; the history outlives the mail, so a gap in the
+# dates shows when it stopped.  Turn the mail off once it is boring, with
+# HGCONF_NIGHTLY_HEARTBEAT=no in the crontab, and the history keeps going.
 
 set -euo pipefail
 
@@ -38,8 +43,35 @@ LOCKFILE=${AUTOBUILD_LOCKFILE:-/tmp/autoBuild.lock}
 RELPATH=src/hg/utils/hgConfCatalog/hgConfCatalog.py
 CATALOG=$CHECKOUT/$RELPATH
 PUSH=${HGCONF_NIGHTLY_PUSH:-yes}
+HEARTBEAT=${HGCONF_NIGHTLY_HEARTBEAT:-yes}
+# The build's own log directory: untracked, already written to by the build
+# account, and the place a buildmeister is already looking.
+LOGDIR=${HGCONF_NIGHTLY_LOGDIR:-$CHECKOUT/src/utils/qa/weeklybld/logs}
+HISTORY=$LOGDIR/hgConfRegister.history
 
-fail() { echo "nightlyRegister: $*" >&2; exit 1; }
+# One line per run, to the history file always and to stdout unless the mail has
+# been turned off.  Called on every exit path, including the ones that do
+# nothing, because "skipped, a build was running" is a heartbeat too and its
+# absence is the thing worth noticing.
+beat() {
+    local line
+    line="$(date '+%Y-%m-%d %H:%M') $*"
+    mkdir -p "$LOGDIR" 2>/dev/null || true
+    echo "$line" >> "$HISTORY" 2>/dev/null || true
+    if [[ $HEARTBEAT == yes ]]; then
+        echo "$line"
+    fi
+}
+
+# A failure is loud on stderr regardless of the heartbeat setting, and is worth
+# a history line of its own so a run that died is distinguishable from one that
+# never happened.
+fail() {
+    echo "nightlyRegister: $*" >&2
+    mkdir -p "$LOGDIR" 2>/dev/null || true
+    echo "$(date '+%Y-%m-%d %H:%M') FAILED: $*" >> "$HISTORY" 2>/dev/null || true
+    exit 1
+}
 
 [[ -d $CHECKOUT/.git ]] || fail "no checkout at $CHECKOUT"
 [[ -x $CATALOG ]] || fail "no hgConfCatalog.py at $CATALOG"
@@ -50,14 +82,16 @@ cd "$CHECKOUT"
 if [[ -f $LOCKFILE ]]; then
     lock_pid=$(cat "$LOCKFILE" 2>/dev/null || echo)
     if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
+        beat "skipped: a build is running (pid $lock_pid)"
         exit 0
     fi
 fi
 
-# Rule 1.  Not master, not our business.  Silent because mid-build is a normal
-# state for this tree, not an error worth mailing about every night.
+# Rule 1.  Not master, not our business.  Mid-build is a normal state for this
+# tree rather than an error, so this is a heartbeat line and not a complaint.
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ $branch != master ]]; then
+    beat "skipped: tree is on $branch, not master"
     exit 0
 fi
 
@@ -103,9 +137,18 @@ trap 'cleanup; rm -rf "$work"' EXIT
 # whenever a row is waiting to be classified, so the exit code is information.
 "$CATALOG" --reconcile > "$work/reconcile" 2>&1 || true
 
+# State worth carrying in one line: a bare pulse would say the cron is alive
+# without saying whether it is doing anything, and the point of the heartbeat is
+# to keep this job in mind rather than merely prove it ran.
+waiting=$(sed -n 's/^problems: \([0-9]*\).*/\1/p' "$work/reconcile" | head -1)
+: "${waiting:=0}"
+at=$(git rev-parse --short HEAD)
+
 if git diff --quiet -- "$RELPATH"; then
-    # Nothing to write down.  Still speak up if reconcile found something the
-    # machine cannot fix on its own, since that is the whole point of running.
+    beat "nothing to register, $waiting awaiting classification, tree at $at"
+    # Still speak up if reconcile found something the machine cannot fix on its
+    # own, since that is the whole point of running.  This goes out whatever the
+    # heartbeat setting: it is news, not a pulse.
     if [[ -s $work/reconcile ]]; then
         echo "hg.conf catalog: nothing to register, but --reconcile has notes:"
         cat "$work/reconcile"
@@ -155,12 +198,14 @@ if [[ $PUSH == yes ]]; then
         # in the build's tree where the next build would carry it along.
         git reset --hard --quiet origin/master
         committed=yes   # tree is clean again; nothing for the trap to undo
+        beat "push rejected, dropped the commit, will redo it tomorrow"
         echo "hg.conf catalog: push rejected, dropped the commit and will redo it tomorrow."
         cat "$work/pusherr"
         exit 0
     fi
 fi
 
+beat "committed ${count:-0} row(s) at $(git rev-parse --short HEAD), $waiting awaiting classification"
 echo "hg.conf catalog: $subject"
 echo
 sed 's/^/  /' "$work/register"
