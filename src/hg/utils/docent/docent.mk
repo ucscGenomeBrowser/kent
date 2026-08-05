@@ -38,12 +38,30 @@ PW_ENV  ?= PLAYWRIGHT_BROWSERS_PATH=$(HOME)/pwrec/browsers NODE_PATH=$(HOME)/pwr
 # drop it for the final build that has to produce the videos.
 FAST_ENV = $(if $(FAST),DOCENT_FAST=1 ,)
 
-.PHONY: all list clean $(BASES)
+.PHONY: all list clean hires $(BASES)
 
 all: $(MP4S)
 
 $(FIGDIR)/%.mp4: %.docent.yaml $(DOCENT)
 	$(FAST_ENV)$(PW_ENV) node $(DOCENT) $<
+
+# hires: the same tours rendered for print -- SCALE times the pixels (a wider server image
+# drawn with a bigger track font, the HTML zoomed to match), stills only, written to their
+# own tree so the screen stills and the videos are left alone. Always a full rebuild: a
+# print run is rare and cheap to ask for exactly when it is wanted.
+#
+#   make hires                     # every scenario at 3x -> stills.hires/<base>/
+#   make hires SCALE=2             # 2x
+#   make hires BASES=BP1           # one scenario
+#
+SCALE ?= 3
+HIRES ?= stills.hires
+hires:
+	@for b in $(BASES); do \
+	  echo "=== $$b at $(SCALE)x"; \
+	  DOCENT_SCALE=$(SCALE) DOCENT_STILLS=$(HIRES) DOCENT_FAST=1 $(PW_ENV) \
+	    node $(DOCENT) $$b.docent.yaml || exit 1; \
+	done
 
 # Convenience: `make AP1` -> build ../AP1.mp4
 $(BASES): %: $(FIGDIR)/%.mp4
@@ -53,4 +71,4 @@ list:
 
 clean:
 	rm -f $(MP4S)
-	rm -rf stills
+	rm -rf stills $(HIRES)
