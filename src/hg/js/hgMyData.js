@@ -557,6 +557,21 @@ const uppy = new Uppy.Uppy({
                 filesToOverwrite.forEach(f => f.meta.allowOverwrite = "true");
             }
         }
+        // A hub we synthesize gets one genome line, so everything going into it has to
+        // agree. Runs after the loop above, which trims parentDir, stamps a 2bit's
+        // genome onto its siblings and adopts an existing assembly hub's genome, so
+        // this sees the values the server will. A batch bringing its own hub.txt
+        // states its own genomes, and hubtools does not come through here at all
+        if (!isSplitHub && !hubTxtInBatch) {
+            for (let m of hubsWithMixedGenomes(Object.values(files))) {
+                uppy.info(`Error: the hub "${m.hub}" would hold files for more than ` +
+                    `one genome (${m.genomes.join(", ")}). The hub.txt this page ` +
+                    `writes for you can only name one genome. Give each genome its ` +
+                    `own hub name, or include your own hub.txt. hubtools can upload ` +
+                    `a hub covering several genomes.`, "error", 10000);
+                doUpload = false;
+            }
+        }
         if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
             uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
             doUpload = false;
@@ -599,6 +614,91 @@ function looksLikeHubTxt(f) {
     // Accept exact "hub.txt" or any "*.hub.txt" (e.g. "araTha1.hub.txt").
     let n = (f.name || "").toLowerCase();
     return n === "hub.txt" || n.endsWith(".hub.txt");
+}
+
+function genomesInHub(hub) {
+    // Genomes already stored under this hub, so a later upload cannot slip a second
+    // genome into a hub that was built for one
+    let found = [];
+    for (let row of hubCreate.uiState.fileList || []) {
+        if (row.fullPath !== hub && !row.fullPath.startsWith(hub + "/")) {
+            continue;
+        }
+        if (row.genome && !found.includes(row.genome)) {
+            found.push(row.genome);
+        }
+    }
+    return found;
+}
+
+function hubsWithMixedGenomes(fileList) {
+    // Return [{hub, genomes}] for every hub that would end up holding more than one
+    // genome, counting both what is already stored and what this batch adds.
+    // Grouped by the first path segment, so per-genome subdirectories of one hub
+    // count together. writeHubText gives a synthesized hub.txt a single genome line
+    // and later files only append a track stanza, so it cannot describe them all.
+    // Object.create(null) because a hub may be named 'constructor' or 'toString'
+    let byHub = Object.create(null);
+    let storedCount = Object.create(null);
+    for (let f of fileList) {
+        // trim to match normalizeParentDir, or a stray space makes its own hub
+        let hub = (((f.meta && f.meta.parentDir) || "").trim()).split("/")[0];
+        let genome = (f.meta && f.meta.genome) || "";
+        if (!hub || !genome) {
+            continue;
+        }
+        if (!(hub in byHub)) {
+            let stored = genomesInHub(hub);
+            byHub[hub] = stored.slice();
+            storedCount[hub] = stored.length;
+        }
+        if (!byHub[hub].includes(genome)) {
+            byHub[hub].push(genome);
+        }
+    }
+    let mixed = [];
+    for (let hub of Object.keys(byHub)) {
+        // a hub already holding several genomes came from a hub.txt of the user's
+        // own or from hubtools, so it is not ours to refuse
+        if (storedCount[hub] > 1) {
+            continue;
+        }
+        if (byHub[hub].length > 1) {
+            mixed.push({hub: hub, genomes: byHub[hub]});
+        }
+    }
+    return mixed;
+}
+
+// The last mixed-genome warning shown, so saving a file card repeatedly does not
+// repeat it. Uppy's Informer keys its list on the message text
+let lastMixedGenomeWarning = "";
+
+function warnOnMixedGenomes(uppyInstance) {
+    // Say something as soon as the user picks the genomes, rather than leaving it to
+    // the error onBeforeUpload raises
+    let fileList = uppyInstance.getFiles();
+    let descriptor = hubCreate.getLastHubBatchDescriptor();
+    if ((descriptor && descriptor.isSplit) ||
+            fileList.some(looksLikeHubTxt) ||
+            fileList.some(f => f.meta && f.meta.batchSplitHub === "true")) {
+        return;
+    }
+    let mixed = hubsWithMixedGenomes(fileList);
+    if (!mixed.length) {
+        lastMixedGenomeWarning = "";
+        return;
+    }
+    let m = mixed[0];
+    let msg = `The hub "${m.hub}" now has files for ${m.genomes.join(", ")}. ` +
+        `The hub.txt this page writes for you can only name one genome, so give ` +
+        `each genome its own hub name before uploading. Your own hub.txt, or ` +
+        `hubtools, can cover several genomes.`;
+    if (msg === lastMixedGenomeWarning) {
+        return;
+    }
+    lastMixedGenomeWarning = msg;
+    uppyInstance.info(msg, "warning", 10000);
 }
 
 let hubBatchParsesInFlight = 0;
@@ -960,6 +1060,8 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 }
                 this.uppy.setFileMeta(file.id, {parentDir: newParent});
             }
+            // merging separate hubs under one name can bring two genomes together
+            warnOnMixedGenomes(this.uppy);
         });
 
         batchSelectDiv.appendChild(batchParentDirLabel);
@@ -1153,6 +1255,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             }
             // a hub name edited on a file card has to reach the batch box too
             refreshBatchHubNameInput(this.uppy);
+            warnOnMixedGenomes(this.uppy);
         });
     }
     uninstall() {
