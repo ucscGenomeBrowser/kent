@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "hmac.h"
 #include "obscure.h"
 #include "hgConfig.h"
 #include "cheapcgi.h"
@@ -1675,17 +1676,21 @@ return gbMembersLoadByQuery(conn, query);
 }
 
 static char *oauthPendingSig(char *provider, char *subject, char *email)
-/* Signature over a pending social identity, keyed by the secret login.cookieSalt.  Only
+/* HMAC-MD5 over a pending social identity, keyed by the secret login.cookieSalt.  Only
  * resolveIdentity (which runs after a genuine provider verification) can produce a valid one,
  * so a pending identity injected through cart/CGI variables will not validate.  (Not bound to
  * the session id: the hgsid is regenerated across the provider redirect, so a session-bound
  * signature would never match on the way back.)  Result is allocd. */
 {
+char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
+if (isEmpty(salt))
+    errAbort("Signing in with an external identity provider requires %s in hg.conf, set to a "
+        "secret random string.  Without a secret we cannot sign the pending identity, and the "
+        "account chooser would accept a forged one.", CFG_LOGIN_COOKIE_SALT);
 char buf[1024];
-safef(buf, sizeof(buf), "%s|%s|%s|%s",
-    emptyForNull(cfgOption(CFG_LOGIN_COOKIE_SALT)),
+safef(buf, sizeof(buf), "%s|%s|%s",
     emptyForNull(provider), emptyForNull(subject), emptyForNull(email));
-return generateTokenMD5(buf);
+return hmacMd5(salt, buf);
 }
 
 static boolean pendingIdentityValid()
