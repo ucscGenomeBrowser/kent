@@ -90,6 +90,20 @@ What k does:
   picture, not a bigger one.
 - **`zoom: 1/k` on the image table**, handing that wider image the 1x amount of layout
   space, so one image pixel lands on one device pixel. Native resolution, no resampling.
+- **The tooltip font is pinned back to its 1x size.** hgTracks takes the tooltip's
+  font-size from the browser text size (`window.browserTextSize` → `hg/js/utils.js`
+  `addMouseover`), which `textSize × k` has just tripled — and then the device pixel ratio
+  scales the same text a second time. Left alone, a 3x still gets tooltips 3x too big: the
+  popups swamp the figure and the last one pinned falls off the crop.
+- **Every drawn row asks for k times its height** (`<track>.heightPer`, sent after each view
+  change for the rows the page actually drew). A track with a FIXED PIXEL height does not
+  follow `pix` or `textSize` — a bigLolly or wiggle row is a pixel count from trackDb/the
+  cart — so a 128px row that was 15% of an 850px image would be 5% of a 2550px one. That is
+  how ClinVar's lollipop row came out a sliver with unreadable y-axis labels. It is asked of
+  the **drawn** row names, which is the only way to reach a **lifted/quickLift view**, whose
+  tracks are hub tracks under names trackDb never saw. Each track's own `maxHeightPixels`
+  still clamps the request, so **a fixed-height track needs a ceiling in trackDb to grow**:
+  without one the default (128) is also the maximum and the request is silently clamped.
 
 Everything hgTracks reports about the image — map-box coords, mouseOver spans, `insideX` —
 is in the pixels the server drew, so it goes through the image's natural-to-displayed ratio
