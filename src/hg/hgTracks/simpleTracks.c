@@ -299,6 +299,10 @@ void initTl()
 {
 trackLayoutInit(&tl, cart);
 
+// Settle the text engine here, with the rest of the font setup, so that every
+// string measured from now on -- including the item labels that decide how pack
+// mode lays out its rows -- is measured with the engine that will draw it.
+initFontEngine();
 }
 
 static boolean isTooLightForTextOnWhite(struct hvGfx *hvg, Color color)

@@ -152,28 +152,50 @@ char *defaultState = "off";
 return sameString(cfgOptionDefault("freeType", defaultState), "on");
 }
 
-void maybeNewFonts(struct hvGfx *hvg)
-/* Check to see if we want to use the alternate font engine (FreeType2). */
+static char *chosenFreeTypeFont(char **retFontName)
+/* Return the file holding the FreeType font the user has picked, and its name in
+ * retFontName.  NULL means stay on the bitmap engine. */
 {
 if (!freeTypeOn())
-    return;
+    return NULL;
 
 if (sameString(tl.textFont, "Bitmap"))
-    return;
-
-char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
-char buffer[4096];
+    return NULL;
 
 int ii;
 for(ii=0; ii < ArraySize(freeTypeFonts); ii++)
     if (sameString(freeTypeFonts[ii].name, tl.textFont))
         break;
 if (ii == ArraySize(freeTypeFonts))
-    return;   // not a font we know about; leave the bitmap engine in place
-char *fontFile = freeTypeFonts[ii].file;
-char *fontName = freeTypeFonts[ii].name;
-safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+    return NULL;   // not a font we know about; leave the bitmap engine in place
+
+static char buffer[PATH_LEN];
+char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
+safef(buffer, sizeof buffer, "%s/%s", fontDir, freeTypeFonts[ii].file);
+*retFontName = freeTypeFonts[ii].name;
+return buffer;
+}
+
+void initFontEngine()
+/* Load the text engine the user has picked, before anything measures a string.
+ * Pack mode reserves room for an item by measuring its label, and
+ * mgFontStringWidth answers from whichever engine is loaded at the time.  Doing
+ * this up front keeps the packing from depending on whether some earlier image
+ * on the page -- the ideogram -- happened to load FreeType first. */
+{
+char *fontName = NULL;
+char *fontFile = chosenFreeTypeFont(&fontName);
+if (fontFile != NULL)
+    mgLoadFontEngine(FONT_METHOD_FREETYPE, fontFile);
+}
+
+void maybeNewFonts(struct hvGfx *hvg)
+/* Check to see if we want to use the alternate font engine (FreeType2). */
+{
+char *fontName = NULL;
+char *fontFile = chosenFreeTypeFont(&fontName);
+if (fontFile != NULL)
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, fontFile);
 }
 
 static void textFontDropDown()
