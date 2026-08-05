@@ -112,6 +112,7 @@ TEST_DIRS = \
 	gtfToGenePred \
 	hgvsToVcf \
 	hubCheck \
+	mafToBigMafSummary \
 	overlapSelect \
 	pslToBigPsl \
 	refSeqGet \
