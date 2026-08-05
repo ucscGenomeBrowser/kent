@@ -9,7 +9,7 @@ table g2p
     char[1] strand;       "+ or - for strand"
     uint   thickStart;    "Coding region start"
     uint   thickEnd;      "Coding region end"
-    uint   itemRGB;       "Color based on confidence (R,G,B values)"
+    uint   itemRgb;       "Color based on confidence (R,G,B values)"
 
     # ----- 20 additional custom fields -----
     string g2p_id;                           "G2P ID"

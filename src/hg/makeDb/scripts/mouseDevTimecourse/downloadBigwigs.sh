@@ -36,7 +36,9 @@ for URL in $URLS; do
         continue
     fi
     echo "[$i/$TOTAL] fetching: $NAME" >> "$LOG"
-    curl -sSL -o "$OUT.partial" "$URL"
+    # -f so an HTTP error body is never saved as a .bigWig. Without it a 404 page
+    # lands at $OUT and the [ -s "$OUT" ] check above then skips it forever.
+    curl -fsSL -o "$OUT.partial" "$URL"
     rc=$?
     if [ $rc -eq 0 ]; then
         mv "$OUT.partial" "$OUT"

@@ -160,24 +160,7 @@ if (userName)
     {
     // the url for this user:
     jsonWriteString(jw, "userUrl", webDataDir(userName));
-    jsonWriteListStart(jw, "fileList");
-    struct hubSpace *file, *fileList = listFilesForUser(userName);
-    for (file = fileList; file != NULL; file = file->next)
-        {
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteString(jw, "fileName", file->fileName);
-        jsonWriteNumber(jw, "fileSize", file->fileSize);
-        jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "parentDir", file->parentDir);
-        jsonWriteString(jw, "genome", file->db);
-        jsonWriteString(jw, "lastModified", file->lastModified);
-        jsonWriteString(jw, "uploadTime", file->creationTime);
-        jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
-        jsonWriteString(jw, "md5sum", file->md5sum);
-        jsonWriteString(jw, "hubType", file->hubType ? file->hubType : "trackHub");
-        jsonWriteObjectEnd(jw);
-        }
-    jsonWriteListEnd(jw);
+    hubSpaceWriteFileList(jw, userName, listFilesForUser(userName));
     }
 jsonWriteBoolean(jw, "isLoggedIn", getUserName() ? TRUE : FALSE);
 jsonWriteString(jw, "hubNameDefault", defaultHubNameForUser(getUserName()));

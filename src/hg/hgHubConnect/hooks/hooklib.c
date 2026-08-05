@@ -12,6 +12,7 @@
 #include "userdata.h"
 #include "jsonQuery.h"
 #include "jsHelper.h"
+#include "jsonWrite.h"
 #include "errCatch.h"
 #include "obscure.h"
 #include "cheapcgi.h"
@@ -64,12 +65,12 @@ return trimSpaces(cloneString(parentDir));
 
 boolean isValidParentDir(char *parentDir)
 /* Return TRUE if every '/' separated component of parentDir holds only alphanumeric,
- * period or underscore characters. NULL or empty means the top level of the user's
- * directory, which is allowed. Mirrors the same named check in hgMyData.js, which the
- * browser does first, but hubtools and any other tus client come straight here */
+ * period or underscore characters. NULL or empty is invalid, every upload belongs to
+ * a hub. Mirrors the same named check in hgMyData.js, which the browser does first,
+ * but hubtools and any other tus client come straight here */
 {
 if (isEmpty(parentDir))
-    return TRUE;
+    return FALSE;
 if (startsWith("/", parentDir) || endsWith(parentDir, "/"))
     return FALSE;
 int maxSeps = 256;
@@ -159,6 +160,19 @@ fprintf(stderr, "http response success!\n");
 jsonPrintToFile(response, NULL, stderr, 0);
 }
 
+void setUploadedFileList(struct jsonElement *response, char *userName, struct hubSpace *fileList)
+/* Put the hubSpace rows this upload created or changed into the response body. tusd
+ * forwards the body to the client, which shows the rows the server actually holds */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+hubSpaceWriteFileList(jw, userName, fileList);
+jsonWriteObjectEnd(jw);
+struct jsonElement *httpResponse = jsonMustFindNamedField(response, "", HTTP_NAME);
+jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringContents(jw->dy)));
+jsonWriteFree(&jw);
+}
+
 struct jsonElement *makeDefaultResponse()
 /* Create the default response json with some fields pre-filled */
 {
@@ -190,7 +204,7 @@ struct dyString *ds = dyStringNew(0);
 dyStringVaPrintf(ds, msg, args);
 va_end(args);
 // find the HTTPResponse object and fill it out with msg:
-struct jsonElement *httpResponse = jsonFindNamedField(response, "", HTTP_NAME);
+struct jsonElement *httpResponse = jsonMustFindNamedField(response, "", HTTP_NAME);
 jsonObjectAdd(httpResponse, HTTP_STATUS, newJsonNumber(500));
 jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringCannibalize(&ds)));
 }

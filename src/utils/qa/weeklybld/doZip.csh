@@ -68,14 +68,23 @@ else
  set relSha = `git rev-list -n 1 "$tag"`
  echo "Release tag $tag -> $relSha (local); verifying GitHub has mirrored it [${0}: `date`]"
  set ghSha = ""
+ set ghTmp = /tmp/doZip.ghSha.$$
  @ tries = 0
  while ( $tries < 20 )
-  set ghSha = `gh api "repos/ucscGenomeBrowser/kent/commits/$tag" --jq .sha`
+  # While the tag is still unmirrored this call fails with HTTP 422 and gh prints the
+  # raw JSON error body to STDOUT. Unquoted backticks let csh brace-expand that body
+  # -- the word {"message":"No carries an unbalanced brace, so csh died with
+  # "Missing '}'" and the poll never ran at all (v501). Send stderr to /dev/null,
+  # capture stdout via a temp file, and keep only a leading bare sha, so an error
+  # body yields an empty $ghSha instead of crashing or comparing equal to $relSha.
+  ( gh api repos/ucscGenomeBrowser/kent/commits/$tag --jq .sha > $ghTmp ) >& /dev/null
+  set ghSha = "`grep -E -o '^[0-9a-f]+' $ghTmp`"
   if ( "$ghSha" == "$relSha" ) break
   @ tries++
   echo "  GitHub not current yet (has '$ghSha', want '$relSha'); waiting 30s [try $tries/20]"
   sleep 30
  end
+ rm -f $ghTmp
  if ( "$ghSha" != "$relSha" ) then
   echo "WARNING: GitHub tag $tag not confirmed at $relSha after ~10 min; proceeding with --target to force the correct commit [${0}: `date`]"
  endif

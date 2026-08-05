@@ -12,6 +12,19 @@ function prettyFileSize(num) {
     }
 }
 
+function renderTimeCell(data, type) {
+    // DataTables renderer for the two time columns. The server sends seconds since
+    // the epoch, so the reader sees their own timezone rather than the server's,
+    // while ordering stays on the number
+    if (type !== "display") {
+        return data;
+    }
+    if (!data) {
+        return "";
+    }
+    return new Date(data * 1000).toLocaleString();
+}
+
 function cgiEncode(value) {
     // copy of cheapgi.c:cgiEncode except we are explicitly leaving '/' characters, and
     // space becomes '+':
@@ -923,8 +936,8 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             this.uppy.setFileMeta(file.id, defaultMeta);
 
             // When drilled into an assembly hub, inherit and lock its genome.
-            if (hubCreate.uiState.currentHub &&
-                hubCreate.uiState.currentHub === defaultMeta.parentDir) {
+            let openDir = hubCreate.uiState.currentHubPath || hubCreate.uiState.currentHub;
+            if (openDir && openDir === defaultMeta.parentDir) {
                 let existing = hubCreate.uiState.filesHash[defaultMeta.parentDir];
                 if (existing && existing.hubType === "assemblyHub") {
                     this.uppy.setFileMeta(file.id, {
@@ -1024,6 +1037,8 @@ var hubCreate = (function() {
         hubNameDefault: "",
         currentHub: "", // if the user has a hub dir open, set the name here and use it as the default
                         // hub name when uploading a new file with the dir open, otherwise hubNameDefault
+        currentHubPath: "", // full path of the open dir, so we can tell which hub it belongs to
+                            // when it is a subdirectory like myHub/hg38
         isLoggedIn: "",
         maxQuota: 0,
         userQuota: 0,
@@ -1053,7 +1068,17 @@ var hubCreate = (function() {
     };
 
     function getDefaultHubName() {
-        return uiState.currentHub.length > 0 ? uiState.currentHub : uiState.hubNameDefault;
+        // with a directory open, new files default into that directory, which for a
+        // subdirectory is the whole path like myHub/hg38
+        let openDir = uiState.currentHubPath || uiState.currentHub;
+        return openDir.length > 0 ? openDir : uiState.hubNameDefault;
+    }
+
+    function hubRootForCurrentDir() {
+        // the hub is the first path segment: hub.txt and the hub's own row live there
+        // even when the user has drilled down into a subdirectory of it
+        let path = uiState.currentHubPath || uiState.currentHub;
+        return path ? path.split("/")[0] : "";
     }
 
     function sanitizeGenomeName(name) {
@@ -1805,7 +1830,8 @@ var hubCreate = (function() {
         if (doAddEvent) {
             newSpan.addEventListener("click", function(e) {
                 dataTableShowDir(table, dirName, dirFullPath);
-                dataTableCustomOrder(table, {"fullPath": dirFullPath});
+                // the whole row, so the back button this builds knows the parentDir
+                dataTableCustomOrder(table, uiState.filesHash[dirFullPath] || {"fullPath": dirFullPath});
                 table.draw();
             });
         } else {
@@ -1859,6 +1885,7 @@ var hubCreate = (function() {
             return !rowData.parentDir;
         });
         uiState.currentHub = "";
+        uiState.currentHubPath = "";
         hideHubBanner();
         updateSelectedFileDiv(null);
     }
@@ -1868,8 +1895,7 @@ var hubCreate = (function() {
         clearSearch(table);
         // deselect any selected rows like Finder et al when moving into/upto a directory
         table.rows({selected: true}).deselect();
-        // Callers must call table.draw() after this so filter + order changes
-        // from showDir/customOrder render in a single redraw.
+        // Callers must call table.draw() after this to render the new filter.
         table.search.fixed("oneHub", function(searchStr, rowData, rowIx) {
             // calculate the fullPath of this rows parentDir in case the dirName passed
             // to this function has the same name as a parentDir further up in the
@@ -1886,8 +1912,9 @@ var hubCreate = (function() {
             }
         });
         uiState.currentHub = dirName;
+        uiState.currentHubPath = dirFullPath;
         dataTableCreateBreadcrumb(table, dirName, dirFullPath);
-        showHubBanner(dirName);
+        showHubBanner(hubRootForCurrentDir());
         updateSelectedFileDiv(null);
     }
 
@@ -1914,21 +1941,29 @@ var hubCreate = (function() {
         } else {
             // move the dirName row into the header, then the other files can
             // sort normally
-            let row = table.row((idx,data) => data.fullPath === dirData.fullPath);
-            let rowNode = row.node();
             if (oldRowData) {
                 // restore the previous row, which will be not displayed by the search anyways:
                 table.row.add(oldRowData);
                 oldRowData = null;
             }
+            // A row only has a node while it is on the page being displayed, and
+            // deferRender means the rows of other pages have none at all. Order by
+            // fullPath so this directory sorts first, its path being a prefix of every
+            // row the filter leaves visible, and draw to return to the first page.
+            // Without this a directory holding more than one page of files sorts onto
+            // a later page by uploadTime, and has no node to move into the header
+            table.order([{name: "fullPath", dir: "asc"}]).draw();
+            let row = table.row((idx,data) => data.fullPath === dirData.fullPath);
+            let rowNode = row.node();
             if (!rowNode) {
-                // if we are using the breadcrumb to jump back 2 directories or doing an upload
-                // while a subdirectory is opened, we won't have a rowNode because the row will
-                // not have been rendered yet. So draw the table with the oldRowData restored
-                table.draw();
-                // and now we can try again
-                row = table.row((idx,data) => data.fullPath === dirData.fullPath);
-                rowNode = row.node();
+                // no row for this directory, so take out whatever directory the
+                // header is still showing rather than leave it naming another place
+                let staleHead = document.querySelector(".dt-scroll-headInner > table:nth-child(1) > thead:nth-child(1)");
+                if (staleHead.childNodes.length > 1) {
+                    staleHead.removeChild(staleHead.lastChild);
+                }
+                table.order([{name: "uploadTime", dir: "desc"}]);
+                return;
             }
             oldRowData = row.data();
             // put the data in the header:
@@ -1949,7 +1984,8 @@ var hubCreate = (function() {
                 if (parentDirPath.length) {
                     // Mirror the click-down path: filter, then move header row.
                     dataTableShowDir(table, parentDir, parentDirPath);
-                    dataTableCustomOrder(table, {fullPath: parentDirPath});
+                    // the whole row, so going back again knows this directory's parent
+                    dataTableCustomOrder(table, uiState.filesHash[parentDirPath] || {fullPath: parentDirPath});
                 } else {
                     dataTableShowTopLevel(table);
                     dataTableCustomOrder(table);
@@ -2121,38 +2157,74 @@ var hubCreate = (function() {
         container.textContent = `Using ${prettyFileSize(uiState.userQuota)} of ${prettyFileSize(uiState.maxQuota)}`;
     }
 
+    // Response bodies from tus, keyed by upload URL. Uppy's tus plugin aborts the
+    // request before it emits upload-success, and aborting an XMLHttpRequest clears
+    // its status and its responseText, so the body has to be read while the request
+    // is still live
+    let tusResponseBodies = {};
+
+    function rememberTusResponseBody(req, res) {
+        // tus onAfterResponse hook, called for every request an upload makes. Only the
+        // PATCH that finishes the upload carries the file list from the pre-finish hook
+        if (req.getMethod() !== "PATCH") {
+            return;
+        }
+        let body = res.getBody();
+        if (body) {
+            tusResponseBodies[req.getURL()] = body;
+        }
+    }
+
+    function uploadedHubFromResponse(response) {
+        // Return the hubSpace rows the pre-finish hook reported for this upload, or
+        // null. tusd forwards the hook's response body on the request that completes
+        // the upload, which rememberTusResponseBody saved under this upload's URL
+        let url = response ? response.uploadURL : null;
+        if (!url) {
+            return null;
+        }
+        let text = tusResponseBodies[url];
+        delete tusResponseBodies[url];
+        if (!text) {
+            return null;
+        }
+        try {
+            let parsed = JSON.parse(text);
+            return parsed.fileList && parsed.fileList.length > 0 ? parsed.fileList : null;
+        } catch (e) {
+            console.error(`could not parse upload response: ${e}`);
+            return null;
+        }
+    }
+
     function addNewUploadedHubToTable(hub) {
-        // hub is a list of objects representing the file just uploaded, the associated
-        // hub.txt, and directory. Make a new row for each in the filesTable, except for
-        // maybe the hub directory row and hub.txt which we may have already seen before
+        // hub is the list of rows the server holds for the hub this upload went into:
+        // the file itself, the hub.txt, and a row per directory. Add the ones the table
+        // has not seen and refresh the ones it has
         let table = $("#filesTable").DataTable();
-        let justUploaded = {}; // hash of contents of hub but keyed by fullPath
         let hubDirData = {}; // the data for the parentDir of the uploaded file
+        // index the table once: hub carries every row of the hub, so looking each one
+        // up by scanning the table would be quadratic on a hub with many files
+        let rowIndexByPath = {};
+        table.rows().every(function() {
+            rowIndexByPath[this.data().fullPath] = this.index();
+        });
         for (let obj of hub) {
             if (!obj.parentDir) {
                 hubDirData = obj;
             }
-            let rowObj;
             if (!(obj.fullPath in uiState.filesHash)) {
-                justUploaded[obj.fullPath] = obj;
-                rowObj = table.row.add(obj);
+                table.row.add(obj);
                 uiState.fileList.push(obj);
                 // NOTE: we don't add the obj to the filesHash until after we're done
                 // so we don't need to reparse all files each time we add one
             } else {
-                // File already exists - update the existing row with new data (for overwrites)
-                let existingObj = uiState.filesHash[obj.fullPath];
-                existingObj.fileSize = obj.fileSize;
-                existingObj.lastModified = obj.lastModified;
-                existingObj.uploadTime = obj.uploadTime;
-                // Find and invalidate the row in DataTable to refresh display
-                let allRows = table.rows().indexes();
-                for (let j = 0; j < allRows.length; j++) {
-                    let rowData = table.row(allRows[j]).data();
-                    if (rowData.fullPath === obj.fullPath) {
-                        table.row(allRows[j]).invalidate();
-                        break;
-                    }
+                // Row already in the table, take the server's values for it. An upload
+                // changes more than its own row: a 2bit flips every row in the hub to
+                // assemblyHub, and a re-upload changes size, md5sum and times
+                Object.assign(uiState.filesHash[obj.fullPath], obj);
+                if (obj.fullPath in rowIndexByPath) {
+                    table.row(rowIndexByPath[obj.fullPath]).invalidate();
                 }
             }
         }
@@ -2161,8 +2233,24 @@ var hubCreate = (function() {
         // to have the new rows rendered to do the order because the order
         // will copy the actual DOM node
         parseFileListIntoHash(uiState.fileList);
-        dataTableShowDir(table, hubDirData.fileName, hubDirData.fullPath);
-        dataTableCustomOrder(table, hubDirData);
+        // stay in the directory the user has open, the upload may have gone into a
+        // subdirectory of the hub and would not be listed at the hub level. Both calls
+        // have to name the same directory, or the row moved into the header and the row
+        // dropped from the table are different ones
+        let showDirData = hubDirData;
+        if (uiState.currentHubPath && uiState.currentHubPath in uiState.filesHash) {
+            showDirData = uiState.filesHash[uiState.currentHubPath];
+        }
+        if (showDirData.fullPath) {
+            dataTableShowDir(table, showDirData.fileName, showDirData.fullPath);
+            dataTableCustomOrder(table, showDirData);
+        } else {
+            // no directory to open, so show everything rather than filter on a
+            // path we do not have
+            dataTableShowTopLevel(table);
+            dataTableCustomOrder(table);
+            dataTableEmptyBreadcrumb(table);
+        }
         table.draw();
     }
 
@@ -2307,8 +2395,8 @@ var hubCreate = (function() {
             {data: "fileType", title: "File type"},
             {data: "genome", title: "Genome"},
             {data: "parentDir", title: "Hubs"},
-            {data: "lastModified", title: "File Last Modified"},
-            {data: "uploadTime", title: "Upload Time", name: "uploadTime"},
+            {data: "lastModified", title: "File Last Modified", render: renderTimeCell},
+            {data: "uploadTime", title: "Upload Time", name: "uploadTime", render: renderTimeCell},
             {data: "fullPath", title: "fullPath", name: "fullPath"},
         ],
         drawCallback: function(settings) {
@@ -2387,7 +2475,7 @@ var hubCreate = (function() {
         let hubBannerBtn = document.getElementById("hubBannerViewBtn");
         if (hubBannerBtn) {
             hubBannerBtn.addEventListener("click", function(e) {
-                viewHubInGenomeBrowser(uiState.currentHub);
+                viewHubInGenomeBrowser(hubRootForCurrentDir());
             });
         }
         let hubBannerCopyBtn = document.getElementById("hubBannerCopyBtn");
@@ -2440,7 +2528,7 @@ var hubCreate = (function() {
                 let data = row.data();
                 if (data.children && data.children.length > 0) {
                     dataTableShowDir(table, data.fileName, data.fullPath);
-                    dataTableCustomOrder(table, {"fullPath": data.fullPath});
+                    dataTableCustomOrder(table, data);
                     table.draw();
                 } else {
                     if (row.selected()) {
@@ -2473,6 +2561,7 @@ var hubCreate = (function() {
             withCredentials: true,
             retryDelays: null,
             removeFingerprintOnSuccess: true, // clean up localStorage after successful upload
+            onAfterResponse: rememberTusResponseBody,
         };
 
         uppy.use(Uppy.Tus, tusOptions);
@@ -2501,87 +2590,26 @@ var hubCreate = (function() {
             }
         });
         uppy.on('upload-success', (file, response) => {
-            const metadata = file.meta;
-            const d = new Date(metadata.lastModified);
-            const pad = (num) => String(num).padStart(2, '0');
-            const dFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-            const now = new Date(Date.now());
-            const nowFormatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-            let newReqObj, hubTxtObj;
-            let hubType = metadata.hubType || "trackHub";
-            // Multi-segment parentDir (split-hub uploads) needs per-segment rows.
-            let parentSegments = metadata.parentDir.split("/");
-            let parentLeaf = parentSegments[parentSegments.length - 1];
-            newReqObj = {
-                "fileName": cgiEncode(metadata.fileName),
-                "fileSize": metadata.fileSize,
-                "fileType": metadata.fileType,
-                "genome": metadata.genome,
-                "parentDir": cgiEncode(parentLeaf),
-                "lastModified": dFormatted,
-                "uploadTime": nowFormatted,
-                "fullPath": cgiEncode(metadata.parentDir) + "/" + cgiEncode(metadata.fileName),
-                "hubType": hubType,
-            };
-            // from what I can tell, any response we would create in the pre-finish hook
-            // is completely ignored for some reason, so we have to fake the other files
-            // we would have created with this one file and add them to the table if they
-            // weren't already there:
-            // Only fabricate a hub.txt row when the backend actually synthesized
-            // one. Skip if the user supplied their own *.hub.txt (either already
-            // in filesHash from a prior upload, or coming in this same batch -
-            // upload-success order is arbitrary so the hub.txt row may not be
-            // in filesHash yet when a sibling's upload-success fires).
-            let dirHash = uiState.filesHash[cgiEncode(metadata.parentDir)];
-            let hubTxtExists = !!(dirHash && dirHash.children &&
-                dirHash.children.some(c => c.fileType === "hub.txt"));
-            let batchHasHubTxt = metadata.batchHasHubTxt === "true";
-            if (metadata.fileType !== "hub.txt" && !hubTxtExists && !batchHasHubTxt) {
-                hubTxtObj = {
-                    "uploadTime": nowFormatted,
-                    "lastModified": dFormatted,
-                    "fileName": "hub.txt",
-                    "fileSize": 0,
-                    "fileType": "hub.txt",
-                    "genome": metadata.genome,
-                    "parentDir": cgiEncode(parentLeaf),
-                    "fullPath": cgiEncode(metadata.parentDir) + "/hub.txt",
-                    "hubType": hubType,
-                };
-            }
-            // One dir row per path segment; leaf-only db, matching makeParentDirRows().
-            // For split hubs the hub-root dir stays empty regardless of layout.
-            let isSplitHub = metadata.batchSplitHub === "true";
-            let dirRows = [];
-            for (let i = 0; i < parentSegments.length; i++) {
-                let dirFullPath = parentSegments.slice(0, i + 1)
-                                                .map(cgiEncode).join("/");
-                let dirParent = i > 0 ? cgiEncode(parentSegments[i - 1]) : "";
-                let isLeaf = (i === parentSegments.length - 1);
-                let dirDb;
-                if (isSplitHub) {
-                    dirDb = (isLeaf && parentSegments.length > 1) ? metadata.genome : "";
+            // the file is on the server whatever the table does with it
+            updateQuota(file.meta.fileSize);
+            // uppy resolves this file's upload only after every upload-success listener
+            // has returned, so an error thrown here leaves the batch unfinished and the
+            // dialog open. The upload itself has already succeeded, keep it that way
+            try {
+                let hub = uploadedHubFromResponse(response);
+                if (hub) {
+                    addNewUploadedHubToTable(hub);
                 } else {
-                    dirDb = isLeaf ? metadata.genome : "";
+                    // the hook reports the rows it wrote, so an empty body means the
+                    // table cannot be updated without asking the server again
+                    console.error(`upload of '${file.meta.fileName}' returned no file list`);
+                    uppy.info(`'${file.meta.fileName}' uploaded, but this page could not ` +
+                        `be updated to show it. Reload the page to see your files.`,
+                        'warning', 10000);
                 }
-                dirRows.push({
-                    "uploadTime": nowFormatted,
-                    "lastModified": dFormatted,
-                    "fileName": cgiEncode(parentSegments[i]),
-                    "fileSize": 0,
-                    "fileType": "dir",
-                    "genome": dirDb,
-                    "parentDir": dirParent,
-                    "fullPath": dirFullPath,
-                    "hubType": hubType,
-                });
+            } catch (e) {
+                console.error(`could not show '${file.meta.fileName}' in the table:`, e);
             }
-            let hub = dirRows.concat([newReqObj]);
-            if (hubTxtObj) {
-                hub.push(hubTxtObj);
-            }
-            addNewUploadedHubToTable(hub);
-            updateQuota(metadata.fileSize);
         });
         uppy.on('complete', (result) => {
             history.replaceState(uiState, "", document.location.href);

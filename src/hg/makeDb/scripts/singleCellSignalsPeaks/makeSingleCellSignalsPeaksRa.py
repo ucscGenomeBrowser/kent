@@ -22,7 +22,7 @@ trackDb .ra.
 Usage:
   makeSingleCellSignalsPeaksRa.py [--assembly hg38|mm10] [--stanzas STANZAS] [--out OUT]
 """
-import re, os, argparse
+import re, os, sys, argparse
 from urllib.parse import urlparse
 
 # Where the hub build (build_manifest.py / build_stanzas.py) writes its stanzas and
@@ -88,11 +88,19 @@ def main():
     OLD_SEG = re.compile(r"(^|/)[^/]*(\.old|_old|\bold)($|/)", re.I)
 
     out_stanzas = [header]
-    n = skipped_old = 0
+    n = skipped_old = n_stanzas = n_parented = 0
     for s in re.split(r"\n\s*\n", open(stanzas).read().strip()):
         lines = s.splitlines()
-        parent = next((l for l in lines if l.startswith("parent ")), "")
-        if parent.strip() != "parent " + hub_composite:
+        n_stanzas += 1
+        # Match on the parent's first token rather than the whole line. The exact-string
+        # compare this replaces would have silently skipped every stanza if the hub ever
+        # emitted "parent <composite> off" or changed its spacing, leaving a header-only
+        # .ra and a zero exit status.
+        parent = next((l for l in lines if l.strip().startswith("parent ")), "")
+        ptoks = parent.split()
+        if len(ptoks) >= 2:
+            n_parented += 1
+        if len(ptoks) < 2 or ptoks[1] != hub_composite:
             continue
         bdu = next((l for l in lines if l.strip().startswith("bigDataUrl ")), "")
         rel_check = urlparse(bdu.split(None, 1)[1].strip()).path if bdu else ""
@@ -111,7 +119,7 @@ def main():
             if l.startswith("track "):
                 suffix = l.split(None, 1)[1][len(hub_composite) + 1:]
                 newl.append("track %s_%s" % (TRACK, suffix))
-            elif l.strip() == "parent " + hub_composite:
+            elif l.strip().startswith("parent ") and l.split()[1] == hub_composite:
                 # "off" so every subtrack is unchecked by default; the user turns
                 # on individual tracks via the faceted selector
                 newl.append("parent " + TRACK + " off")
@@ -122,6 +130,29 @@ def main():
             else:
                 newl.append(l)
         out_stanzas.append("\n".join(newl))
+
+    # Sanity checks: fail loudly rather than write a truncated .ra. A hub-format change
+    # that stops the parent line matching would otherwise produce a header-only file and
+    # exit 0, and the next trackDb load would quietly drop every subtrack.
+    if n == 0:
+        sys.exit("ERROR: no subtracks matched composite '%s' in %s "
+                 "(%d stanzas, %d with a parent line). Has the hub stanza format "
+                 "changed?" % (hub_composite, stanzas, n_stanzas, n_parented))
+    # The facet metadata is the parallel artifact: build_stanzas writes one row per
+    # subtrack of this composite, so the counts must agree once the old-dir skips are
+    # added back. A mismatch means the .ra and the metadata disagree, which shows up in
+    # the browser as subtracks with no facet row (or facet rows with no track).
+    meta = os.path.join(HUB_BUILD, "meta", "%s.metadata.tsv" % asm)
+    if os.path.isfile(meta):
+        with open(meta) as fh:
+            meta_rows = sum(1 for _ in fh) - 1          # minus the header
+        if meta_rows != n + skipped_old:
+            sys.exit("ERROR: %s has %d rows but %d subtracks were kept (+%d old-dir "
+                     "skipped); the .ra and the facet metadata must match 1:1"
+                     % (meta, meta_rows, n, skipped_old))
+    else:
+        sys.stderr.write("WARNING: no facet metadata at %s, skipping the 1:1 check\n"
+                         % meta)
 
     with open(os.path.abspath(out), "w") as fh:
         fh.write("\n\n".join(out_stanzas) + "\n")
