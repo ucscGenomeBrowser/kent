@@ -200,6 +200,21 @@ ensure_master_branch() {
 }
 
 # Pull latest and check for uncommitted changes.
+#
+# NOT THE ONLY WRITER IN THIS TREE any more, which matters when this function is
+# what fails.  nightlyRegister.sh (hg/utils/hgConfCatalog, refs #37925) runs from
+# the build account's crontab, writes rows for hg.conf settings the tree reads
+# that the registry is missing, and commits and pushes that one file from
+# $BUILDHOME/kent.  So `hgConfCatalog: register ...` commits on master with
+# nobody behind them are expected, not a stray edit somebody left here.
+#
+# It is written to stay out of the way and should never be what trips the check
+# below: it acts only when HEAD is master (cherryPickCommits.csh and tagBeta.csh
+# both check out release branches in this tree), it restores the file on any exit
+# that did not commit, and it stands aside entirely while $LOCKFILE is held.  If
+# this function ever does report hgConfCatalog.py as dirty, that script died
+# between writing and committing; `git checkout -- <file>` is the whole fix, and
+# the next run redoes the work from scratch.
 ensure_clean_git() {
     cd "$WEEKLYBLD"
     local status_out
