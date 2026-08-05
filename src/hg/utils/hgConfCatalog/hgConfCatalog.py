@@ -87,6 +87,7 @@ import argparse
 import html
 import json
 import os
+import re
 import sys
 
 # Sunset policy, in releases.  See the module docstring.
@@ -234,7 +235,7 @@ RELEASE_GATES = {
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
                "was reverted.  Four call sites."),
-        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:175",
+        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:179",
           default="FALSE", role="gate", verified=True,
           note="Short session links.  Added v374 and never flipped, which is "
                "the longest-running dark feature here."),
@@ -242,7 +243,7 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:2629",
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:2972",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
                "page can be reopened and shared.  The read at hgBlat.c:2972 "
@@ -252,7 +253,7 @@ RELEASE_GATES = {
                "Filed as a knob until that was read, on the strength of the "
                "default being an identifier the harvester could not resolve; "
                "a flag whose own source says to flip it later is a gate."),
-        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:784", default="FALSE",
+        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1068", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
         h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:741", default="TRUE",
@@ -273,10 +274,10 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
                "genark.c and hdb.c."),
-        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12116", default="FALSE",
+        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12113", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
-        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:178",
+        h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:183",
           default="FALSE", role="gate", verified=True, ticket="37973",
           note="A link from the Convert page to liftRequest.html, the page "
                "that requests a new whole-genome alignment.  The assembly "
@@ -285,16 +286,16 @@ RELEASE_GATES = {
                "is missing, but nothing in the tree linked to the request "
                "page.  Off until the request pipeline is confirmed ready to "
                "take traffic from the browser UI."),
-        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10152",
+        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10162",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
                "layout."),
-        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7515",
+        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7526",
           default="FALSE", role="gate", verified=True,
           note="Let the calculated GC track coexist with the stored one.  A "
                "sub-flag of gcOnTheFly, so it should be deleted with it "
                "rather than outliving it."),
-        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9824", default="FALSE",
+        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9835", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
         h("showColorPicker", "flag", "hg/lib/hui.c:6066", default="FALSE",
@@ -310,7 +311,7 @@ RELEASE_GATES = {
           note="Per-hguid IP tracking for abuse detection.  Its three "
                "companion settings (maxIps, table, windowSeconds) are plain "
                "values and are listed under abuse control."),
-        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9124",
+        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9135",
           default="FALSE", role="gate", verified=True,
           note="Added in the current release, so it is doing exactly what a "
                "gate is supposed to do and has not earned a deadline yet."),
@@ -323,11 +324,11 @@ RELEASE_GATES = {
         h("canDupTracks", "flag", "hg/lib/dupTrack.c:257", default="TRUE",
           role="gate", verified=True,
           note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c:3928", default="TRUE", role="gate",
+        h("canSnake", "flag", "hg/hgc/hgc.c:3934", default="TRUE", role="gate",
           verified=True,
           note="Snake display for chain and alignment tracks.  Public since "
                "v467."),
-        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:8999",
+        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:9010",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
         h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c:194",
@@ -342,7 +343,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
                "since v492.  Three call sites."),
-        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10404",
+        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10401",
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
@@ -357,12 +358,12 @@ RELEASE_GATES = {
         h("newBotDelay", "flag", "hg/lib/botDelay.c:215", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
-        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7514", default="TRUE",
+        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7525", default="TRUE",
           role="gate", verified=True,
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:480", default="TRUE",
+        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:760", default="TRUE",
           role="gate", verified=True,
           note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c:34", default="TRUE",
@@ -396,11 +397,11 @@ MIRROR_KNOBS = {
     "what": "Boolean flags that are legitimate, permanent deployment switches. "
             "Listed explicitly so the sunset report does not nag about them.",
     "vars": [
-        h("isGbib", "flag", "hg/lib/hdb.c:3712", default="FALSE", role="knob",
+        h("isGbib", "flag", "hg/lib/hdb.c:3714", default="FALSE", role="knob",
           public=True, verified=True,
           note="This is the Genome Browser in a Box.  Changes paths and "
                "disables features that make no sense on a VM."),
-        h("isGbic", "flag", "hg/lib/hdb.c:3718", default="FALSE", role="knob",
+        h("isGbic", "flag", "hg/lib/hdb.c:3720", default="FALSE", role="knob",
           public=True, verified=True,
           note="This is a Genome Browser in the Cloud install."),
         h("allowNib", "flag", "hg/lib/hdb.c:2772", default="TRUE", role="knob",
@@ -410,7 +411,7 @@ MIRROR_KNOBS = {
                "through hReplaceGbdbSeqDir.  Ancient, but an old mirror may "
                "still hold nib assemblies, so it stays.  See forceTwoBit, "
                "which decides the same question one level up."),
-        h("forceTwoBit", "flag", "hg/lib/hdb.c:1224", default="TRUE",
+        h("forceTwoBit", "flag", "hg/lib/hdb.c:1226", default="TRUE",
           role="knob", public=True, verified=True,
           note="Where hNibForChrom looks for a chromosome's sequence: on, "
                "always /gbdb/<db>/<db>.2bit through hReplaceGbdb; off, fall "
@@ -433,7 +434,7 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
-        h("trustTrackDb", "flag", "hg/lib/hdb.c:4130", default="FALSE",
+        h("trustTrackDb", "flag", "hg/lib/hdb.c:4132", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
                "actually exists, in addTrackIfDataAccessible.  Whether a "
@@ -481,10 +482,10 @@ MIRROR_KNOBS = {
           role="knob", verified=True,
           note="Never treat the database as local, so no local file "
                "shortcuts.  Deployment topology, not a feature."),
-        h("traceGbdb", "flag", "hg/lib/hdb.c:1594", default="FALSE",
+        h("traceGbdb", "flag", "hg/lib/hdb.c:1596", default="FALSE",
           role="knob", verified=True,
           note="Log every /gbdb file the CGI opens.  A diagnostic."),
-        h("drawDot", "flag", "hg/hgc/hgc.c:3452", default="FALSE", role="knob",
+        h("drawDot", "flag", "hg/hgc/hgc.c:3453", default="FALSE", role="knob",
           verified=True,
           note="Emit graphviz dot output from the details page instead of a "
                "rendered image.  A developer diagnostic."),
@@ -496,7 +497,7 @@ MIRROR_KNOBS = {
           role="knob", public=True, verified=True,
           note="Take identity from HTTP basic auth rather than the login "
                "system."),
-        h("login.relativeLink", "flag", "hg/lib/hdb.c:3650", default="FALSE",
+        h("login.relativeLink", "flag", "hg/lib/hdb.c:3652", default="FALSE",
           role="knob", public=True, verified=True,
           note="Relative rather than absolute login links."),
         h("login.acceptAnyId", "flag", "hg/lib/wikiLink.c:248",
@@ -505,7 +506,7 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:1429",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2294",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
         h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1563",
@@ -548,7 +549,7 @@ MIRROR_KNOBS = {
                "dialog is hidden, which cannot be what either read intended.  "
                "Needs whoever owns that dialog to say which default is right; "
                "the classification does not depend on the answer."),
-        h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6144", default="FALSE",
+        h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6146", default="FALSE",
           role="knob", verified=True,
           note="In hdbDefaultKnownDb, ignore the defaultKnown table and treat "
                "the requested db as its own known-genes db.  A property of a "
@@ -570,24 +571,24 @@ DATABASE = {
         h("db.host", "profile", "hg/qaPushQ/qaPushQ.c:2435", public=True,
           verified=True, env="HGDB_HOST", family="db",
           note="The main assembly database server."),
-        h("db.user", "profile", "hg/hgc/hgc.c:1295", public=True,
+        h("db.user", "profile", "hg/hgc/hgc.c:1296", public=True,
           verified=True, env="HGDB_USER", family="db"),
-        h("db.password", "credential", "hg/hgc/hgc.c:1296", public=True,
+        h("db.password", "credential", "hg/hgc/hgc.c:1297", public=True,
           verified=True, env="HGDB_PASSWORD", family="db"),
-        h("db.trackDb", "table", "hg/lib/hdb.c:352", public=True,
+        h("db.trackDb", "table", "hg/lib/hdb.c:354", public=True,
           verified=True, env="HGDB_TRACKDB", family="db",
           note="Comma-separated list of trackDb tables, searched in order.  "
                "This is how a developer layers a personal trackDb over "
                "production, and why a sandbox hg.conf can be much slower than "
                "the CGI's own."),
         h("db.metaDb", "table", "hg/lib/mdb.c:945", verified=True, family="db"),
-        h("db.grp", "table", "hg/lib/hdb.c:5479", default="grp", public=True,
+        h("db.grp", "table", "hg/lib/hdb.c:5481", default="grp", public=True,
           verified=True, family="db",
           note="Comma-separated list of grp tables holding the track groups.  "
                "The name reaches cfgOption as a parameter of loadGrps(), so "
                "the harvester can only see it as {confName} and the reconcile "
                "would otherwise call it dead documentation."),
-        h("db.relatedTrack", "table", "hg/lib/hui.c:10772",
+        h("db.relatedTrack", "table", "hg/lib/hui.c:10812",
           default='"relatedTrack"', verified=True, family="db"),
         h("central.host", "profile", "hg/qaPushQ/qaPushQ.c:2448", public=True,
           verified=True, family="central",
@@ -607,15 +608,15 @@ DATABASE = {
           public=True, verified=True, family="central",
           note="Name of the user-identity cookie.  Changing it logs every "
                "user out."),
-        h("cart.host", "profile", "hg/lib/hdb.c:937", public=True,
+        h("cart.host", "profile", "hg/lib/hdb.c:939", public=True,
           verified=True, family="cart",
           note="Optional separate server for cart traffic, which is the "
                "heaviest write load in the browser."),
-        h("cart.user", "profile", "hg/lib/hdb.c:938", public=True,
+        h("cart.user", "profile", "hg/lib/hdb.c:940", public=True,
           verified=True, family="cart"),
-        h("cart.password", "credential", "hg/lib/hdb.c:938", public=True,
+        h("cart.password", "credential", "hg/lib/hdb.c:940", public=True,
           verified=True, family="cart"),
-        h("cart.db", "profile", "hg/lib/hdb.c:937", public=True, verified=True,
+        h("cart.db", "profile", "hg/lib/hdb.c:939", public=True, verified=True,
           family="cart"),
         h("customTracks.host", "profile", "product/ex.hg.conf", public=True,
           family="customTracks",
@@ -683,7 +684,7 @@ CENTRAL_TABLES = {
           verified=True, env="HGDB_ASSEMBLYLIST_STATUS_TABLE", family="hub"),
         h("liftOverChainName", "table", "hg/lib/liftOver.c:1984",
           verified=True, env="LIFTOVERCHAINNAME", default="liftOverChain"),
-        h("quickLiftChainName", "table", "hg/lib/quickLift.c:582",
+        h("quickLiftChainName", "table", "hg/lib/quickLift.c:607",
           verified=True, env="QUICKLIFTCHAINNAME", default="quickLiftChain",
           ticket="37788"),
         h("blatServersTbl", "table", "hg/hgPcr/hgPcr.c:122",
@@ -719,11 +720,11 @@ PATHS = {
     "what": "Where things live on disk.  These are the settings a mirror is "
             "most likely to have to change.",
     "vars": [
-        h("gbdbLoc1", "path", "hg/lib/hdb.c:1551", public=True, verified=True,
+        h("gbdbLoc1", "path", "hg/lib/hdb.c:1553", public=True, verified=True,
           note="Primary /gbdb location.  Any C code opening a /gbdb path is "
                "supposed to run it through hReplaceGbdb() so this takes "
                "effect."),
-        h("gbdbLoc2", "path", "hg/lib/hdb.c:1582", public=True, verified=True,
+        h("gbdbLoc2", "path", "hg/lib/hdb.c:1584", public=True, verified=True,
           note="Fallback /gbdb location, tried when a file is missing from "
                "gbdbLoc1.  This is how a mirror keeps part of /gbdb local and "
                "the rest remote."),
@@ -733,7 +734,7 @@ PATHS = {
                "where every hub file lands."),
         h("udc.localDir", "path", "hg/lib/customFactory.c:204", public=True,
           verified=True),
-        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12061", verified=True,
+        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12058", verified=True,
           note="Log UDC fetches, which is the first thing to turn on when a "
                "hub is slow."),
         h("cacheTrackDbDir", "path", "hg/lib/trackDbCache.c:483",
@@ -756,10 +757,10 @@ PATHS = {
           "hg/cgilib/sessionThumbnail.c:30", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.convertPath", "path",
-          "hg/hgSession/hgSession.c:1153", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1157", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.suppress", "flag",
-          "hg/hgSession/hgSession.c:1149", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1153", public=True, verified=True,
           family="sessionThumbnail"),
         h("freeTypeDir", "path", "hg/hgTracks/config.c:164",
           default='"../htdocs/urw-fonts"', verified=True),
@@ -769,14 +770,14 @@ PATHS = {
           public=True, verified=True),
         h("textSize", "internal", "hg/cgilib/trackLayout.c:80",
           default='"small"', verified=True),
-        h("tusdDataDir", "path", "hg/lib/userdata.c:115", verified=True,
+        h("tusdDataDir", "path", "hg/lib/userdata.c:122", verified=True,
           family="hubSpace", note="Hub space upload staging."),
-        h("tusdMountPoint", "path", "hg/lib/userdata.c:116", verified=True,
+        h("tusdMountPoint", "path", "hg/lib/userdata.c:123", verified=True,
           family="hubSpace"),
-        h("hubSpaceUrl", "url", "hg/lib/userdata.c:176", verified=True,
+        h("hubSpaceUrl", "url", "hg/lib/userdata.c:183", verified=True,
           family="hubSpace"),
         h("hubSpaceTusdEndpoint", "url",
-          "hg/hgHubConnect/trackHubWizard.c:260", default="NULL",
+          "hg/hgHubConnect/trackHubWizard.c:243", default="NULL",
           verified=True, family="hubSpace"),
         h("myVariantsDataDir", "path", "hg/lib/myVariants.c:783",
           verified=True, note="Goes with the doMyVariants gate."),
@@ -821,34 +822,48 @@ LIMITS = {
           note="Address-space cap applied by cfgSetMaxMem() at CGI startup.  "
                "Exceeding it is what produces the hogExit entries in the "
                "error log."),
-        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10786",
+        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10783",
           verified=True, note="Log a warning for any hgTracks render slower "
                               "than this."),
-        h("maxItemsPossible", "limit", "hg/hgTracks/simpleTracks.c:830",
+        h("hubSpaceLockTimeout", "limit", "hg/lib/userdata.c:593",
+          default='"300"', verified=True, ticket="37964",
+          note="Seconds an upload will wait for another upload to the same "
+               "hub to finish before giving up.  lockHubDir takes an flock on "
+               "hubDir/.hub.lock to serialise the hub.txt "
+               "read-modify-write across parallel pre-finish hooks, and polls "
+               "with LOCK_NB every 100ms rather than blocking, so one wedged "
+               "upload cannot hold a hub indefinitely; on expiry the user is "
+               "told to try again.  The call site clamps it to 1..3600 and "
+               "falls back to the compiled-in 300 outside that, so a "
+               "mistyped hg.conf value cannot produce a negative or "
+               "unbounded wait.  Not marked public: hubSpace is a "
+               "UCSC-hosted feature and its other settings are not "
+               "documented for mirrors either."),
+        h("maxItemsPossible", "limit", "hg/hgTracks/simpleTracks.c:831",
           default='"100000"', public=True, verified=True),
         h("BAMMaxItems", "limit", "hg/hgTracks/bamTrack.c:54",
           default='"10000"', verified=True),
         h("bigBedMaxItems", "limit", "hg/hgTracks/bigBedTrack.c:481",
           default='"10000"', public=True, verified=True),
-        h("vcfMaxItems", "limit", "hg/hgTracks/vcfTrack.c:3023",
+        h("vcfMaxItems", "limit", "hg/hgTracks/vcfTrack.c:3065",
           default='"10000"', public=True, verified=True),
-        h("maxTrackImageHeightPx", "limit", "hg/hgTracks/hgTracks.c:5321",
+        h("maxTrackImageHeightPx", "limit", "hg/hgTracks/hgTracks.c:5332",
           default='"32000"', verified=True,
           note="Hard ceiling on image height, which is what stops a dense "
                "track from producing a PNG no browser will render."),
         h("maxDisplayPixelWidth", "limit", "hg/cgilib/trackLayout.c:20",
           default="NULL", public=True, verified=True),
-        h("barbMergePixels", "limit", "hg/hgTracks/simpleTracks.c:4481",
+        h("barbMergePixels", "limit", "hg/hgTracks/simpleTracks.c:4542",
           default='"3"', public=True, verified=True),
-        h("quickLift.lengthLimit", "limit", "hg/lib/quickLift.c:446",
+        h("quickLift.lengthLimit", "limit", "hg/lib/quickLift.c:471",
           default='"10000"', verified=True, ticket="37788"),
         h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:908", verified=True,
           note="Per-day liftOver cap for the hub API."),
-        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:1776",
+        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2016",
           default="NULL", public=True, verified=True),
-        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:2442",
+        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:2785",
           default='"20"', public=True, verified=True),
-        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:2473",
+        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:2816",
           default='"90"', public=True, verified=True),
         h("logCgiVarMaxLen", "limit", "hg/lib/hgConfig.c:386", default='"0"',
           public=True, verified=True,
@@ -903,11 +918,11 @@ LOGGING = {
     "what": "Diagnostics.  Several of these are safe to leave on and a few "
             "are expensive, so they are worth telling apart.",
     "vars": [
-        h("browser.cgiTime", "debug", "hg/lib/cart.c:3866", default='"yes"',
+        h("browser.cgiTime", "debug", "hg/lib/cart.c:3871", default='"yes"',
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
-        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9228", default='"off"',
+        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9239", default='"off"',
           verified=True, note="Log which tracks were drawn per request."),
         h("noSqlInj.level", "internal", "hg/lib/cart.c:2732",
           default='"abort"', verified=True, family="noSqlInj",
@@ -949,7 +964,7 @@ LOGGING = {
 BRANDING = {
     "what": "Text, styling and links that differ between UCSC and a mirror.",
     "vars": [
-        h("browser.style", "internal", "hg/lib/cart.c:2993", public=True,
+        h("browser.style", "internal", "hg/lib/cart.c:2998", public=True,
           verified=True, note="Stylesheet override."),
         h("browser.theme.", "internal", "hg/hgTracks/config.c:31",
           public=True, verified=True,
@@ -959,7 +974,7 @@ BRANDING = {
         h("addJs", "internal", "hg/lib/web.c:1587", verified=True,
           note="Extra JavaScript file to include on every page."),
         h("help.html", "path", "hg/lib/hui.c:702", verified=True),
-        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9895",
+        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9906",
           public=True, verified=True,
           note="A banner on the browser page.  This is where a mirror puts "
                "its own notice."),
@@ -976,20 +991,20 @@ BRANDING = {
         h("hubSurveyLabel", "internal",
           "hg/hgHubConnect/hgHubConnect.c:1676", verified=True,
           env="HGDB_HUB_SURVEY_LABEL"),
-        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8867",
+        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8878",
           default='"../goldenPath/help/query.html"', verified=True),
-        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8868",
+        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8879",
           default='"Examples"', verified=True),
         h("analyticsKey", "credential", "hg/lib/googleAnalytics.c:13",
           public=True, verified=True),
-        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:11996",
+        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:11993",
           default='"on"', verified=True,
           note="Not the same thing as the showMouseovers gate: this one is on "
                "by default and controls the existing tooltip behaviour.  The "
                "near-identical names are a trap worth fixing."),
         h("bigWarn", "internal", "hg/hgTracks/bigWarn.c:56", default='"on"',
           public=True, verified=True),
-        h("defaultGenome", "internal", "hg/lib/hdb.c:513",
+        h("defaultGenome", "internal", "hg/lib/hdb.c:515",
           default="DEFAULT_GENOME", public=True, verified=True),
         h("browser.popularGenomes", "internal",
           "hg/hgIntegrator/hgIntegrator.c:956",
@@ -1012,7 +1027,7 @@ BRANDING = {
           verified=True, note="Which curated hubs this machine shows."),
         h("genarkHubPrefix", "internal", "hg/hgGateway/hgGateway.c:1128",
           verified=True),
-        h("test.preview", "flag", "hg/lib/hdb.c:3726", verified=True,
+        h("test.preview", "flag", "hg/lib/hdb.c:3728", verified=True,
           note="Marks a preview machine, which changes some banners and "
                "links.  Part of the release plumbing, but a permanent part."),
         h("restoreMapFind", "internal", "hg/hgTracks/imageV2.c:496",
@@ -1051,15 +1066,15 @@ LOGIN = {
     "vars": [
         h("login.systemName", "internal", "hg/lib/wikiLink.c:31", public=True,
           verified=True, family="login"),
-        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:67",
+        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:81",
           public=True, verified=True, family="login"),
-        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:76", public=True,
+        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:90", public=True,
           verified=True, family="login"),
-        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:85",
+        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:99",
           public=True, verified=True, family="login"),
-        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:96",
+        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:110",
           public=True, verified=True, family="login"),
-        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:326",
+        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:340",
           default="NULL", verified=True, family="login"),
         h("login.cookieSalt", "credential",
           "hg/hgPhyloPlace/hgPhyloPlace.c:581", public=True, verified=True,
@@ -1135,7 +1150,7 @@ EXTERNAL = {
           default='"off"', verified=True, family="hubApi"),
         h("hubApi.blatDelayFraction", "limit", "hg/hubApi/blat.c:312",
           default="NULL", verified=True, family="hubApi"),
-        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:1016",
+        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:1020",
           verified=True, family="hubApi"),
         h("apiFromEmail", "email", "hg/hubApi/liftOver.c:528", verified=True),
         h("chainFileRequestEmail", "email", "hg/hubApi/liftOver.c:527",
@@ -1297,6 +1312,26 @@ RUNTIME_NAMES = {
 }
 
 
+AWAITING_REVIEW = {
+    "what": "Settings the tree reads that --auto-register wrote down without "
+            "a person's help, so no read goes unrecorded while it waits to be "
+            "classified.  Everything in a row here is a fact copied off the "
+            "call: name, call site, and the compiled-in default when it is a "
+            "literal.  Nothing here is a judgement.  A row leaves this "
+            "section by hand, once somebody reads the call site and can say "
+            "what the setting is for, whether a boolean is a gate or a knob, "
+            "and whether a mirror operator would want it; then it moves to "
+            "the section it belongs in with verified=True.  Rows are not "
+            "expected to stay here, and --reconcile counts every one of them "
+            "as needing attention.",
+    "vars": [
+        # --auto-register inserts new rows directly below this line.  Leave the
+        # marker in place; it is how the writer finds its way in.
+        # AUTO-REGISTER INSERTION POINT
+    ],
+}
+
+
 # ---------------------------------------------------------------------------
 # assembly
 # ---------------------------------------------------------------------------
@@ -1316,7 +1351,10 @@ SECTIONS = [
     ("External services", EXTERNAL),
     ("Retired", RETIRED),
     ("Runtime-built names", RUNTIME_NAMES),
+    ("Awaiting review", AWAITING_REVIEW),
 ]
+
+AWAITING_TITLE = "Awaiting review"
 
 
 def build():
@@ -1771,24 +1809,284 @@ def wrap_text(s, width):
     return lines
 
 
+def stale_citations(cat, sites):
+    """Rows whose src no longer points at a read of that setting.
+
+    src is the one field here that is a pointer rather than a claim, and it is
+    what --json, --html and the sunset report print next to a gate, so a
+    reader who follows it lands on whatever code happens to occupy that line
+    now.  Nothing compared it against the tree until this check: the citations
+    were right when written and then drifted as unrelated edits pushed the
+    reads down, in one case by 343 lines, onto an unrelated function.
+
+    Repairable means the harvester still finds a read of that name somewhere
+    in the cited file, so the line number alone is wrong and --fix-citations
+    can move it.  The rest is a read that left the file entirely, which needs
+    somebody to decide which of its call sites the row should point at.
+
+    Names the harvester has no site for at all are not judged: a read reached
+    through a helper (db.grp goes through loadGrps) or a prefix family has no
+    single literal line to check against.
+    """
+    repairable, moved = [], []
+    for name, row in sorted(by_name(cat).items()):
+        src = row.get("src") or ""
+        if ":" not in src or name.startswith("{"):
+            continue
+        path, _, line = src.rpartition(":")
+        if not line.isdigit():
+            continue
+        seen = sites.get(name)
+        if not seen or src in seen:
+            continue
+        here = sorted(s for s in seen if s.rpartition(":")[0] == path)
+        if here:
+            near = min(here, key=lambda s: abs(int(s.rpartition(":")[2])
+                                               - int(line)))
+            repairable.append((name, src, near))
+        else:
+            moved.append((name, src, sorted(seen)))
+    return repairable, moved
+
+
+def fix_citations(cat, sites, out=sys.stdout):
+    """Rewrite the drifted line numbers in this file, in place."""
+    repairable, _ = stale_citations(cat, sites)
+    if not repairable:
+        print("no citation to fix", file=out)
+        return 0
+    path = os.path.abspath(__file__)
+    with open(path) as f:
+        txt = f.read()
+    fixed = 0
+    for name, src, near in repairable:
+        # Anchor on the row's own h() call, because one file:line can be cited
+        # by more than one row (cart.db and cart.host share theirs).
+        anchor = 'h("%s",' % name
+        at = txt.find(anchor)
+        if at < 0 or txt.count(anchor) != 1:
+            print("    %-40s no single h() row to edit, left alone"
+                  % name, file=out)
+            continue
+        window = txt[at:at + 400]
+        if '"%s"' % src not in window:
+            print("    %-40s src not in its h() row, left alone"
+                  % name, file=out)
+            continue
+        txt = (txt[:at]
+               + window.replace('"%s"' % src, '"%s"' % near, 1)
+               + txt[at + 400:])
+        fixed += 1
+        print("    %-40s %s -> %s" % (name, src, near.rpartition(":")[2]),
+              file=out)
+    with open(path, "w") as f:
+        f.write(txt)
+    print("fixed %d citation%s in %s"
+          % (fixed, "" if fixed == 1 else "s", os.path.basename(path)),
+          file=out)
+    return fixed
+
+
+def awaiting_review(cat):
+    """Rows the writer put in the holding pen, still unclassified."""
+    for sec in cat["sections"]:
+        if sec["title"] == AWAITING_TITLE:
+            return list(sec["vars"])
+    return []
+
+
+def introducing_commit(hh, name, path):
+    """The oldest commit whose diff touched this setting name in this file.
+
+    Attribution is worth having automatically because it is the one thing a
+    reviewer wants first and the slowest to dig up by hand: which change
+    brought the setting in, and under which ticket.  The age cache carries
+    this for every name it has seen, but a setting added since the last
+    --refresh is missing from it, and a name added yesterday is exactly the
+    case this writer exists to serve.  One pickaxe walk over a single file is
+    seconds, against the four minutes a full refresh costs.
+    """
+    out = hh.git("log", "--reverse", "--format=%h\t%s", "-S", name, "--",
+                 path)
+    for line in out.splitlines():
+        if "\t" not in line:
+            continue
+        commit, _, subject = line.partition("\t")
+        tickets = re.findall(r"#(\d{4,6})", subject)
+        return commit.strip(), subject.strip(), tickets
+    return None, None, []
+
+
+def wrap_note(note, width):
+    """Wrap a note the way the hand-written ones are spaced.
+
+    wrap_text would do, except that it rejoins on single spaces and every note
+    in this file puts two after a full stop.  A machine-written row sitting
+    next to hand-written ones should not be spottable by its spacing.
+    """
+    lines, cur = [], ""
+    for w in note.split():
+        sep = "" if not cur else ("  " if cur.endswith(".") else " ")
+        if cur and len(cur) + len(sep) + len(w) > width:
+            lines.append(cur)
+            cur = w
+        else:
+            cur = cur + sep + w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def render_row(name, kind, src, default=None, ticket=None, note=None):
+    """One h(...) call as source text, wrapped the way the file is written."""
+    head = '        h("%s", "%s", "%s"' % (name, kind, src)
+    args = []
+    if default is not None:
+        args.append('default="%s"' % default)
+    if ticket:
+        args.append('ticket="%s"' % ticket)
+    lines = []
+    cur = head
+    for a in args:
+        if len(cur) + 2 + len(a) > 78:
+            lines.append(cur + ",")
+            cur = "          " + a
+        else:
+            cur = cur + ", " + a
+    if note:
+        wrapped = wrap_note(note, 61)
+        if len(cur) + 2 > 78:
+            lines.append(cur + ",")
+            cur = "          "
+        else:
+            cur = cur + ",\n          "
+        cur += 'note="%s "' % wrapped[0] if len(wrapped) > 1 \
+            else 'note="%s"' % wrapped[0]
+        lines.append(cur)
+        for i, w in enumerate(wrapped[1:], start=1):
+            last = i == len(wrapped) - 1
+            lines.append('               "%s%s"' % (w, "" if last else " "))
+        lines[-1] += "),"
+    else:
+        lines.append(cur + "),")
+    return "\n".join(lines) + "\n"
+
+
+def auto_register(cat, hh, found, out=sys.stdout):
+    """Write a row for every setting the tree reads and the catalog lacks.
+
+    The developer who adds an hg.conf read should not have to know this
+    catalog exists, and asking them to has not worked: hubSpaceLockTimeout
+    arrived as one supporting line inside an unrelated bugfix and nothing
+    caught it until somebody ran --reconcile by hand a day later.  So the
+    facts get recorded here instead of being requested from them.
+
+    What goes in is only what the call itself says: the name, the site, the
+    compiled-in default when it is a literal, and the commit and ticket that
+    introduced it.  What stays out is every judgement.  role= in particular
+    is left unset on purpose, and that is the whole design: guessing "knob"
+    would exempt a real release gate from the sunset report forever, which is
+    the exact failure this catalog exists to prevent, and guessing "gate"
+    would feed fiction into the overdue arithmetic.  verified= stays false
+    because no person has read the call site.
+
+    So this buys silence for the developer, not for us: every row it writes
+    is counted by --reconcile as needing attention until somebody classifies
+    it and moves it out of the holding pen.
+    """
+    tree = hh.by_name(found)
+    cataloged = by_name(cat)
+    pending = {v["name"] for v in awaiting_review(cat)}
+    new = sorted(n for n in tree if n not in cataloged and n not in pending)
+    if not new:
+        print("no unregistered setting to write down", file=out)
+        return 0
+
+    # The default is only worth copying when the tree states it outright.  An
+    # identifier (hubSpaceLockTimeout's is HUB_LOCK_TIMEOUT_DEFAULT) says
+    # nothing at this level, and reconcile's default check compares literals
+    # only, so recording the identifier would just look like a fact.
+    literal = re.compile(r'^(TRUE|FALSE|-?\d+|".*")$')
+    reads = {}
+    for rec in hh.all_reads(found):
+        reads.setdefault(rec["name"], []).append(rec)
+
+    path = os.path.abspath(__file__)
+    with open(path) as f:
+        txt = f.read()
+    marker = "        # AUTO-REGISTER INSERTION POINT\n"
+    if marker not in txt:
+        print("the AUTO-REGISTER INSERTION POINT marker is gone from %s; "
+              "cannot write rows" % os.path.basename(path), file=out)
+        return 0
+
+    block = ""
+    for name in new:
+        recs = reads.get(name, [])
+        src = sorted(tree[name]["sites"])[0]
+        boolean = tree[name].get("boolean")
+        kind = "flag" if boolean else "unreviewed"
+        default = None
+        raw = recs[0].get("default") if recs else None
+        if raw and literal.match(str(raw)):
+            default = str(raw).strip('"')
+        commit, subject, tickets = introducing_commit(
+            hh, name, src.rpartition(":")[0])
+        note = ("Written down by --auto-register, not yet reviewed by a "
+                "person.  Read with %s at %s."
+                % (recs[0]["func"] if recs else "an accessor", src))
+        if len(recs) > 1:
+            note += "  %d call sites." % len(recs)
+        if raw and default is None:
+            note += ("  The compiled-in default is %s, an identifier the scan "
+                     "cannot resolve." % raw)
+        if commit:
+            note += "  Came in at %s, %s." % (commit, subject.rstrip("."))
+        # For a boolean the kind is not in question: the call says it is a
+        # flag.  What is missing is the gate-or-knob call.  For anything else
+        # the kind is the placeholder above and has to be chosen too.
+        note += ("  Needs a description and a gate or knob call."
+                 if boolean else
+                 "  Needs a kind, a description, and a section to live in.")
+        block += render_row(name, kind, src, default=default,
+                            ticket=tickets[0] if tickets else None, note=note)
+        print("    %-40s %s%s"
+              % (name, src, " (%s)" % tickets[0] if tickets else ""), file=out)
+
+    txt = txt.replace(marker, marker + block, 1)
+    with open(path, "w") as f:
+        f.write(txt)
+    print("wrote %d row%s to the '%s' section of %s; classify %s and move %s "
+          "out" % (len(new), "" if len(new) == 1 else "s", AWAITING_TITLE,
+                   os.path.basename(path),
+                   "it" if len(new) == 1 else "them",
+                   "it" if len(new) == 1 else "them"), file=out)
+    return len(new)
+
+
 def reconcile(cat, out=sys.stdout, verbose=False):
     """Diff the catalog against what the tree actually reads.
 
-    Four questions:
+    Five questions:
       1. does the catalog list something the tree no longer reads
       2. does the tree read something the catalog has not classified
       3. is every boolean flag in the tree classified gate or knob
       4. does each flag's hand-written default still match the tree's
-    The last two are the ones that keep the sunset report honest: an
+      5. does each row's file:line still point at a read of it
+    Questions 3 and 4 are the ones that keep the sunset report honest: an
     unclassified flag is one nobody has decided the fate of, and a wrong
     default puts a shipped gate in the stalled list or the reverse.
 
-    Only 2, 3 and 4 count as problems, because only those mean somebody
+    Only 2, 3, 4 and 5 count as problems, because only those mean somebody
     changed a setting and did not write it down, which is the one thing a
     person has to act on.  The rest is drift that has been there for years (documentation for
     a feature that was deleted, a read that moved into a helper), and printing
     it on every run is what would turn a nightly cron into mail nobody reads.
     So it goes out only under --verbose.  Silent and 0 means nothing new.
+
+    5 is a problem that answers itself: the list goes out one line at a time
+    only under --verbose, and the count comes with the --fix-citations command
+    that repairs it, so the nightly asks for a commit rather than a decision.
     """
     hh = load_harvester()
     if hh is None:
@@ -1859,7 +2157,11 @@ def reconcile(cat, out=sys.stdout, verbose=False):
               file=out)
     tree_flags = {n for n, d in tree.items() if d["boolean"]}
     classified = {v["name"] for v in gates(cat)} | {v["name"] for v in knobs(cat)}
-    unclassified = sorted(tree_flags - classified)
+    pending = {v["name"] for v in awaiting_review(cat)}
+    # A flag the writer put in the holding pen is unclassified too, but it is
+    # already written down and reported under its own heading below, so saying
+    # it twice under two different instructions would just be confusing.
+    unclassified = sorted(tree_flags - classified - pending)
     if unclassified:
         problems += len(unclassified)
         print("\nboolean flag classified neither gate nor knob (%d): nobody "
@@ -1925,6 +2227,44 @@ def reconcile(cat, out=sys.stdout, verbose=False):
                 for site in sorted(bool_defaults[n][val]):
                     print("        %-8s %s" % (val, site), file=out)
 
+    # The holding pen.  These are counted as problems on purpose: the writer
+    # buys the developer silence, not us, and if nothing ever pressed for the
+    # classification we would have traded a loud failure for a quiet pile.
+    waiting = awaiting_review(cat)
+    if waiting:
+        problems += len(waiting)
+        print("\nwritten down but not classified (%d): --auto-register "
+              "recorded the read;\nsomebody has to read the call site, say "
+              "what it is for, and move the row\ninto the section it belongs "
+              "in with verified=True:" % len(waiting), file=out)
+        for v in waiting:
+            print("    %-40s %s" % (v["name"], v["src"]), file=out)
+
+    # Does each row's src still point at a read of it?
+    if verbose:
+        print("\n=== file:line citations ===", file=out)
+    repairable, moved = stale_citations(
+        cat, {n: d["sites"] for n, d in tree.items()})
+    if repairable:
+        problems += len(repairable)
+        print("\nfile:line no longer points at the read (%d): the line number "
+              "drifted as\nthe file was edited.  Repair and commit with "
+              "hgConfCatalog.py --fix-citations" % len(repairable), file=out)
+        if verbose:
+            for name, src, near in repairable:
+                print("    %-40s %s -> %s"
+                      % (name, src, near.rpartition(":")[2]), file=out)
+    if moved:
+        problems += len(moved)
+        print("\nthe read named in file:line has left that file (%d): pick "
+              "which call site\nthe row should cite:" % len(moved), file=out)
+        for name, src, sites in moved:
+            print("    %-40s %s, now read at %s"
+                  % (name, src, ", ".join(sites[:3])), file=out)
+    if not repairable and not moved and verbose:
+        print("every file:line citation points at a read of its setting",
+              file=out)
+
     phantom = sorted(classified - tree_flags)
     if phantom and verbose:
         print("\nclassified as a flag but not read with "
@@ -1961,11 +2301,23 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         for n in only_docs:
             print("    %-40s %s" % (n, docs[n]["sites"][0]), file=out)
 
-    if problems:
-        print("\nproblems: %d.  Add or correct the row in hgConfCatalog.py "
-              "for each, in the same\ncommit as the code that reads it; see "
-              "the 'Registering a new hg.conf variable'\nsection of the "
-              "edit-kent-code skill." % problems, file=out)
+    if problems and problems == len(waiting):
+        # Nothing here is the developer's to do: the reads are all written
+        # down, and what is left is the judgement --auto-register refuses to
+        # fake.  Telling somebody to add a row in the same commit as the code
+        # would be the wrong instruction, and would be aimed at the wrong
+        # person besides.
+        print("\nproblems: %d, all of them rows waiting to be classified.  "
+              "Read each call site,\nfill in the kind, the note and (for a "
+              "boolean) role=gate or role=knob, set\nverified=True, and move "
+              "the row into the section it belongs in." % problems, file=out)
+    elif problems:
+        print("\nproblems: %d.  Add or correct the row in hgConfCatalog.py for "
+              "each.  A name the\ntree reads and this catalog does not is "
+              "normally written down by nightlyRegister.sh\nwithout anybody "
+              "asking, so one showing up here means either the run has not "
+              "come\nround yet or the name is invisible to the harvester and "
+              "has to be added by hand." % problems, file=out)
     elif verbose:
         print("\nproblems: 0", file=out)
     return problems
@@ -2208,6 +2560,17 @@ def main():
                     help="rewrite %s from the current tree; read the diff "
                          "before committing it"
                          % os.path.basename(BACKLOG_FILE))
+    ap.add_argument("--auto-register", dest="autoRegister",
+                    action="store_true",
+                    help="write a row for every setting the tree reads that "
+                         "the catalog lacks, into the '%s' section, with the "
+                         "facts filled in and every judgement left out; read "
+                         "the diff before committing it" % AWAITING_TITLE)
+    ap.add_argument("--fix-citations", dest="fixCitations",
+                    action="store_true",
+                    help="rewrite the file:line citations whose line number "
+                         "has drifted, in place; read the diff before "
+                         "committing it")
     ap.add_argument("--verbose", action="store_true",
                     help="with --reconcile, also print the standing drift "
                          "that needs no action")
@@ -2226,8 +2589,11 @@ def main():
 
     ages = None
     sites = None
+    hh = None
+    found = None
     if (args.sunset or args.sunsetNew or args.updateBaseline
-            or args.html or args.json or args.refresh):
+            or args.html or args.json or args.refresh or args.fixCitations
+            or args.autoRegister):
         hh = load_harvester()
         if hh is None:
             print("harvestHgConf.py not importable", file=sys.stderr)
@@ -2249,8 +2615,16 @@ def main():
     rc = 0
     if args.check:
         rc |= 1 if check(cat) else 0
+    if args.autoRegister:
+        # The section dicts are module-level literals, so the rows just written
+        # are not in this process's `cat`.  Say so rather than let a combined
+        # --auto-register --reconcile run report the state from before the write.
+        if auto_register(cat, hh, found) and args.reconcile:
+            print("re-run --reconcile to see the catalog as it now stands")
     if args.reconcile:
         rc |= 1 if reconcile(cat, verbose=args.verbose) else 0
+    if args.fixCitations:
+        fix_citations(cat, sites)
     if args.sunset:
         sunset_report(cat, ages, sites)
     if args.sunsetNew:
@@ -2280,7 +2654,8 @@ def main():
         print("wrote %s" % args.html)
 
     if not any([args.check, args.reconcile, args.sunset, args.sunsetNew,
-                args.updateBaseline, args.json, args.html, args.refresh]):
+                args.updateBaseline, args.json, args.html, args.refresh,
+                args.fixCitations, args.autoRegister]):
         for k, v in sorted(counts(cat).items()):
             print("%-16s %s" % (k, v))
     return rc
