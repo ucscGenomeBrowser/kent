@@ -12,6 +12,7 @@ import base64
 import re
 import logging
 import html as html_module
+import json
 import time
 from datetime import datetime, timedelta
 from difflib import SequenceMatcher
@@ -203,11 +204,24 @@ def get_google_credentials():
     token_path = os.path.expanduser('~/.gmail_token.json')
     creds_path = os.path.expanduser('~/.gmail_credentials.json')
 
+    downscoped = False
+
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        # The token file is shared with other gbauto automation, which can leave behind an
+        # access token minted with a narrower scope set. creds.valid only reports expiry, and
+        # from_authorized_user_file stamps SCOPES onto the object regardless of what the token
+        # really carries, so check the scopes recorded in the file instead. Otherwise every API
+        # call returns 403 insufficientPermissions until that token expires on its own.
+        with open(token_path) as f:
+            stored_scopes = json.load(f).get('scopes')
+        if stored_scopes is not None and not set(SCOPES).issubset(stored_scopes):
+            logger.warning(f"Token in {token_path} is missing scope(s) "
+                           f"{sorted(set(SCOPES) - set(stored_scopes))}, forcing a refresh")
+            downscoped = True
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
+    if not creds or not creds.valid or downscoped:
+        if creds and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
