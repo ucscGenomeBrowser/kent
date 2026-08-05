@@ -5,7 +5,9 @@
  * from hgLoadMafSummary.c rather than refactored into a shared library.
  * That code is stable, hgLoadMafSummary is widely referenced from existing
  * makedocs, and a refactor would force retesting all of those pipelines for
- * minimal payoff.  If you change one, change the other. */
+ * minimal payoff.  If you change one, change the other.
+ * The sequence-name splitting that used to be duplicated here is the exception:
+ * it now lives in jkweb as mafSplitSrcGetChrom(), called by both tools. */
 
 #include "common.h"
 #include "linefile.h"
@@ -99,36 +101,6 @@ if (mcMaster == NULL)
     errAbort("Couldn't find %s. sequence line %d of %s\n",
              referenceDb, mf->lf->lineIx, fileName);
 return mcMaster;
-}
-
-char *mafSplitSrcGetChrom(char *src, char *database)
-/* src can be in format chrom, db|chrom or db.chrom: split string on separator and return pointer to chrom.
- * If database is non-NULL and src starts with "database.", strip exactly that prefix
- * (so a database name like GCF_1234.3 with its own dot is handled correctly).
- * Side effect: src is truncated at the separator (so it becomes just the db). */
-{
-char *pipe = strchr(src, '|');
-if (pipe)
-    {
-    *pipe = '\0';
-    return pipe + 1;
-    }
-
-if (database != NULL)
-    {
-    int dbLen = strlen(database);
-    if (strncmp(src, database, dbLen) == 0 && src[dbLen] == '.')
-        {
-        src[dbLen] = '\0';
-        return src + dbLen + 1;
-        }
-    }
-
-char *dot = strchr(src, '.');
-if (!dot)
-    return src;
-*dot = '\0';
-return dot + 1;
 }
 
 long processMaf(struct mafAli *maf, struct hash *componentHash,
