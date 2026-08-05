@@ -571,6 +571,14 @@
    "version": 371,
    "via": "literal"
   },
+  "blatNewPageBanner": {
+   "commit": "c683ecb63d7",
+   "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
+   "tickets": [],
+   "ts": 1785029100,
+   "version": 501,
+   "via": "call"
+  },
   "blatServers": {
    "commit": "88485cfa7f1",
    "subject": "hgPcr working",
@@ -2240,6 +2248,17 @@
    "version": 342,
    "via": "literal"
   },
+  "login.emailLink": {
+   "commit": "4b04bd017d7",
+   "subject": "hgLogin: gate email-link sign-in and change-email behind login.emailLink (default off), refs #37929",
+   "tickets": [
+    37929,
+    37984
+   ],
+   "ts": 1785837116,
+   "version": 501,
+   "via": "literal"
+  },
   "login.https": {
    "commit": "d81a994fc5b",
    "subject": "Added a new hg.conf setting, login.https, so that mirror sites can turn off https for hgLogin if they don't support http",
@@ -2269,6 +2288,26 @@
    "ts": 1340388788,
    "version": 268,
    "via": "literal"
+  },
+  "login.oauth.providers": {
+   "commit": "f85553903a3",
+   "subject": "hgLogin: configurable OIDC providers, GitHub login, top-level email-link button, sign-in wording. refs #37984",
+   "tickets": [
+    37984
+   ],
+   "ts": 1785786753,
+   "version": 501,
+   "via": "call"
+  },
+  "login.orcid.sandbox": {
+   "commit": "5f7a14fde8c",
+   "subject": "hgLogin: social login (Google/ORCID), email login link, change email. refs #37929",
+   "tickets": [
+    37929
+   ],
+   "ts": 1785046566,
+   "version": 501,
+   "via": "call"
   },
   "login.pwdEyeIcon": {
    "commit": "80bedbcf180",
@@ -3002,6 +3041,16 @@
    "version": 487,
    "via": "call"
   },
+  "showLiftRequest": {
+   "commit": "fbfdc0a36bb",
+   "subject": "hgConvert: link to the alignment request page, behind showLiftRequest, refs #37973",
+   "tickets": [
+    37973
+   ],
+   "ts": 1785534915,
+   "version": 501,
+   "via": "call"
+  },
   "showMouseovers": {
    "commit": "447513356fc",
    "subject": "Add code to create tooltips under our control. Convert title attributes",
@@ -3549,6 +3598,14 @@
    "tickets": [],
    "ts": 1768605506,
    "version": 492,
+   "via": "call"
+  },
+  "blatNewPageBanner": {
+   "commit": "c683ecb63d7",
+   "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
+   "tickets": [],
+   "ts": 1785029100,
+   "version": 501,
    "via": "call"
   },
   "canDoHgcInPopUp": {

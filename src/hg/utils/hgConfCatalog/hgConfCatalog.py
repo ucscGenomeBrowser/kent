@@ -65,13 +65,22 @@ Usage:
     hgConfCatalog.py --reconcile     # diff the catalog against the tree
     hgConfCatalog.py --reconcile --verbose      # ... with the standing drift
     hgConfCatalog.py --sunset        # what should be deleted, and when
+    hgConfCatalog.py --sunset-new    # ... only what changed since the backlog
+    hgConfCatalog.py --update-baseline          # accept the current backlog
+    hgConfCatalog.py --refresh --sunset-new     # ... rebuilding the age cache
+    hgConfCatalog.py --cache /tmp/ages.json --refresh --sunset-new
+                                     # ... without writing into the tree
 
 --reconcile is the mode meant for a nightly cron: it prints nothing and exits 0
 when the tree holds no setting the catalog has not classified, and exits 1 with
-the list when somebody has added one.  Nothing else belongs in a cron.  --sunset
-in particular reports every overdue gate on every run whether or not anything
-changed, so as cron mail it is noise; it is a report a person reads at release
-time.
+the list when somebody has added one.  --sunset-new is the same shape for the
+release side, and is what belongs in the weekly build's wrap-up: it reports the
+gates that went overdue or stalled since the backlog file was last accepted, and
+the ones that were cleaned up, and says nothing about the standing backlog.
+
+--sunset itself reports every overdue gate on every run whether or not anything
+changed.  That is the right thing for a person working the list down and the
+wrong thing for anything automated, which is why it is a separate mode.
 """
 
 import argparse
@@ -83,6 +92,13 @@ import sys
 # Sunset policy, in releases.  See the module docstring.
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
+
+# The gates already known to be overdue or stalled, so --sunset-new can report
+# what changed rather than the whole standing list.  Regenerate with
+# --update-baseline and commit it; the diff is then the release-to-release
+# history of the backlog, in the git log rather than in somebody's memory.
+BACKLOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "hgConfGateBacklog.txt")
 
 # Floor on how many settings a working scan finds; well under the real count.
 # See the check in reconcile().
@@ -218,15 +234,6 @@ RELEASE_GATES = {
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
                "was reverted.  Four call sites."),
-        h("trustTrackDb", "flag", "hg/lib/hdb.c:4130", default="FALSE",
-          role="gate", verified=True,
-          note="Skip the check that a trackDb row's table actually exists.  A "
-               "speed optimisation for machines whose trackDb is known good.  "
-               "Flipped TRUE at v458 and back to FALSE since.",
-          debatable="Reads as much like a knob as a gate: whether a machine's "
-                    "trackDb can be trusted is a property of that machine, "
-                    "not of a feature waiting to ship.  If it is a knob it "
-                    "should stop appearing in the stalled list."),
         h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:175",
           default="FALSE", role="gate", verified=True,
           note="Short session links.  Added v374 and never flipped, which is "
@@ -235,6 +242,16 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:2629",
+          default="FALSE", role="gate", verified=True, ticket="32751",
+          note="Always create a custom track from BLAT results, so a result "
+               "page can be reopened and shared.  The read at hgBlat.c:2972 "
+               "overrides the file-scope autoBigPsl, which is initialised "
+               "FALSE at hgBlat.c:60 under the comment \"DEFAULT VALUE change "
+               "to TRUE in future\", and eleven branches downstream test it.  "
+               "Filed as a knob until that was read, on the strength of the "
+               "default being an identifier the harvester could not resolve; "
+               "a flag whose own source says to flip it later is a gate."),
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:784", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
@@ -246,10 +263,12 @@ RELEASE_GATES = {
                "browser recommending the new page without releasing new CGIs, "
                "and users who already opted in or follow a direct link still "
                "get it.  Goes away with the banner, once the new page is the "
-               "default.",
-          debatable="Born TRUE, so like sleepOn429 it never held anything "
-                    "back, and a mirror might want to stop advertising a new "
-                    "page permanently, which would make it a knob."),
+               "default.  Kept a gate rather than a knob because what it "
+               "turns off is a sentence recommending another page, and no "
+               "mirror needs that switch forever; the deadline the report "
+               "computes for it is really a deadline on deciding whether the "
+               "new page becomes the default, which is the conversation the "
+               "nag is supposed to force."),
         h("genarkLiftOver", "flag", "hg/lib/genark.c:413", default="FALSE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
@@ -338,14 +357,6 @@ RELEASE_GATES = {
         h("newBotDelay", "flag", "hg/lib/botDelay.c:215", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
-        h("sleepOn429", "flag", "hg/lib/botDelay.c:423", default="TRUE",
-          role="gate", verified=True,
-          note="Sleep rather than reject on a rate-limit hit.  Defaulted TRUE "
-               "from the start at v481.",
-          debatable="Never defaulted FALSE, so it never actually gated "
-                    "anything.  A flag born TRUE is either a knob or a "
-                    "leftover from a change that was made unconditionally; "
-                    "worth deciding which."),
         h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7514", default="TRUE",
           role="gate", verified=True,
           note="Calculate the GC percent track at draw time instead of "
@@ -357,30 +368,22 @@ RELEASE_GATES = {
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c:34", default="TRUE",
           role="gate", verified=True,
           note="Honour a BED's itemRgb without requiring the track setting.  "
-               "Defaulted TRUE from v466.",
-          debatable="Like sleepOn429, born TRUE and so never gated anything."),
+               "Defaulted TRUE from v466.  Born TRUE, so it never gated a "
+               "release; it is the switch back to how the browser coloured "
+               "BED items before v466, and unlike sleepOn429 the off position "
+               "describes an old version of the browser rather than a "
+               "property of the machine, which is what keeps it a gate.  The "
+               "last test in bedItemRgb is the only thing it controls, so "
+               "deleting it is a two-line change."),
         h("hgHubConnect.validateHub", "flag",
           "hg/hgHubConnect/hgHubConnect.c:1728", default="TRUE", role="gate",
           verified=True,
-          note="Run hubCheck when a hub is attached.  Public since v427.",
-          debatable="A mirror might legitimately want to skip hub validation "
-                    "for speed or because it attaches only hubs it controls, "
-                    "which would make this a knob."),
-        h("forceTwoBit", "flag", "hg/lib/hdb.c:1224", default="TRUE",
-          role="gate", verified=True,
-          note="Require 2bit sequence rather than falling back to nib.  Public "
-               "since v456.",
-          debatable="Its companion allowNib is classified as a knob, and both "
-                    "settings control the same nib fallback.  One of the two "
-                    "is filed wrong; they should be decided together."),
-        h("freeType", "flag", "hg/cgilib/trackLayout.c:65", default="TRUE",
-          role="gate", verified=True,
-          note="FreeType font rendering in track images rather than the built "
-               "in bitmap fonts.  Public since v412.  Its companions "
-               "freeTypeDir and freeTypeFont are plain values and stay.",
-          debatable="A mirror without the URW fonts installed has to be able "
-                    "to turn this off, which is knob behaviour.  Deleting the "
-                    "flag would remove the bitmap font path entirely."),
+          note="The Hub Development tab on hgHubConnect, which is where a hub "
+               "author runs hubCheck from the browser.  Two call sites, the "
+               "tab itself and hgHubConnectDeveloperMode below it.  Public "
+               "since v427.  Described here as \"run hubCheck when a hub is "
+               "attached\" until the call site was read: it gates the tab, "
+               "not attachment, so a hub is validated on attach either way."),
     ],
 }
 
@@ -400,10 +403,57 @@ MIRROR_KNOBS = {
         h("isGbic", "flag", "hg/lib/hdb.c:3718", default="FALSE", role="knob",
           public=True, verified=True,
           note="This is a Genome Browser in the Cloud install."),
-        h("allowNib", "flag", "hg/lib/hdb.c:2770", default="TRUE", role="knob",
+        h("allowNib", "flag", "hg/lib/hdb.c:2772", default="TRUE", role="knob",
           public=True, verified=True,
-          note="Permit nib sequence files.  Ancient, but an old mirror may "
-               "still hold nib assemblies, so it stays."),
+          note="Permit nib sequence files.  In hDbDbNibPath: on, the sequence "
+               "directory comes from dbDb.nibPath; off, it is /gbdb/<db> "
+               "through hReplaceGbdbSeqDir.  Ancient, but an old mirror may "
+               "still hold nib assemblies, so it stays.  See forceTwoBit, "
+               "which decides the same question one level up."),
+        h("forceTwoBit", "flag", "hg/lib/hdb.c:1224", default="TRUE",
+          role="knob", public=True, verified=True,
+          note="Where hNibForChrom looks for a chromosome's sequence: on, "
+               "always /gbdb/<db>/<db>.2bit through hReplaceGbdb; off, fall "
+               "back to chromInfo.fileName and then to a nib under "
+               "dbDb.nibPath.  Filed as a gate until this was settled "
+               "against the code, on the strength of its TRUE default, but "
+               "the off position describes where a machine keeps its "
+               "sequence, not a browser feature waiting to ship, which is "
+               "the same thing allowNib says.  Deleting it "
+               "would delete the chromInfo and nib fallbacks with it, and "
+               "nobody has proposed that."),
+        h("freeType", "flag", "hg/cgilib/trackLayout.c:65", default="TRUE",
+          role="knob", public=True, verified=True,
+          note="FreeType font rendering in track images rather than the built "
+               "in bitmap fonts.  Off selects the Helvetica bitmap path in "
+               "trackLayoutInit.  Filed as a gate until this was settled "
+               "against the code, because it shipped at v412, but a mirror "
+               "without the URW fonts installed has to be able to turn it "
+               "off, and the bitmap path is also "
+               "measurably faster to draw, so both positions have a "
+               "constituency.  Its companions freeTypeDir and freeTypeFont "
+               "are plain values and stay."),
+        h("trustTrackDb", "flag", "hg/lib/hdb.c:4130", default="FALSE",
+          role="knob", verified=True,
+          note="Skip the per-track check that a trackDb row's table or file "
+               "actually exists, in addTrackIfDataAccessible.  Whether a "
+               "machine's trackDb can be trusted is a property of that "
+               "machine: on a mirror carrying only tracks it loaded itself "
+               "the check is pure cost, and on hgwdev it catches real "
+               "breakage.  Filed as a gate until this was settled against "
+               "the code, where its FALSE default put it in the stalled list "
+               "for 43 releases; it was never a feature "
+               "waiting to ship.  The flip to TRUE at v458 and back is a "
+               "record of somebody trying it on a machine, not of a release."),
+        h("sleepOn429", "flag", "hg/lib/botDelay.c:423", default="TRUE",
+          role="knob", verified=True,
+          note="After emitting the 429 page, hold the process for ten seconds "
+               "before exiting, which slows a robot that ignores the status "
+               "code.  Filed as a gate until this was settled against the "
+               "code, but it was born TRUE at v481 and so never held a "
+               "feature back; the off position is for "
+               "a machine that would rather not tie up an Apache child, which "
+               "is a deployment call."),
         h("browser.dumpStack", "flag", "hg/lib/hCommon.c:370", default="FALSE",
           role="knob", public=True, verified=True,
           note="Dump a stack trace to the error log on a crash.  A debugging "
@@ -465,11 +515,11 @@ MIRROR_KNOBS = {
                "instead of typing a password.  The same switch shows the "
                "change-email page, since that page has no password check "
                "either.  It needs working outbound mail, so a mirror without "
-               "it leaves this off permanently.",
-          debatable="Filed as a knob because outbound mail is a property of "
-                    "the machine, not of the release.  It is a gate if the "
-                    "plan is to flip the default TRUE once the flow is "
-                    "proven on the RR, in which case it needs a sunset."),
+               "it leaves this off permanently, and that is what settles it as "
+               "a knob rather than a gate: a machine that cannot send mail can "
+               "never turn it on, so there is no release at which the flag "
+               "could be deleted.  If the RR's default ever flips TRUE the "
+               "flag still has to stay for everyone else."),
         h("analytics.trackClicks", "flag", "hg/lib/googleAnalytics.c:63",
           default="TRUE", role="knob", verified=True,
           note="Report link clicks to analytics.  A mirror with its own "
@@ -488,26 +538,23 @@ MIRROR_KNOBS = {
                "which are not part of the browser release."),
         h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:990",
           default="FALSE", role="knob", public=True, verified=True,
-          note="Put the multi-region button in the top bar.",
-          debatable="Read twice with two different compiled-in defaults, which "
-                    "is a smell either way.  If it was a layout gate that was "
-                    "never flipped it belongs in the stalled list rather than "
-                    "here."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:2629",
-          default="autoBigPsl", role="knob", verified=True,
-          note="Its default is another variable rather than a literal, so the "
-               "harvester reports the identifier.",
-          debatable="Because the default is a variable, nothing here can say "
-                    "whether it is on or off in practice.  Needs a read of "
-                    "hgBlat.c before it can be classified with any "
-                    "confidence."),
+          note="Where the multi-region button lives, which is a layout "
+               "preference a mirror is entitled to keep, so a knob.  But the "
+               "two reads disagree about the compiled-in default: "
+               "hgTracks.c:9126 uses TRUE and config.c:990 uses FALSE, both "
+               "through MULTI_REGION_CFG_BUTTON_TOP.  So on a machine that "
+               "does not set it the button is in the top bar while the \"Show "
+               "all\" checkbox the same flag guards in the multi-region "
+               "dialog is hidden, which cannot be what either read intended.  "
+               "Needs whoever owns that dialog to say which default is right; "
+               "the classification does not depend on the answer."),
         h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6144", default="FALSE",
           role="knob", verified=True,
-          note="Ignore the default known-genes setting when resolving the gene "
-               "track.  Used on machines with unusual gene tables.",
-          debatable="Filed as a knob on the strength of its comment.  If it "
-                    "was added for one assembly's migration it is really an "
-                    "expired gate."),
+          note="In hdbDefaultKnownDb, ignore the defaultKnown table and treat "
+               "the requested db as its own known-genes db.  A property of a "
+               "machine whose gene tables are not laid out the way the RR's "
+               "are, so a knob; it gates no feature and there is nothing to "
+               "flip."),
     ],
 }
 
@@ -1378,10 +1425,189 @@ def gate_lifecycle(cat, ages):
     return out
 
 
+def gate_states(life, cur):
+    """name -> "overdue" or "stalled", for the gates a release can act on.
+
+    The two states the backlog file tracks.  A gate in neither is scheduled,
+    inside its QA grace period, or undatable, and none of those is news.  The
+    precedence matches sunset_report: an overdue gate is reported as overdue
+    even if it would also qualify as stalled.
+    """
+    states = {}
+    for g in life:
+        if g["sunset"] and cur and g["sunset"] <= cur:
+            states[g["name"]] = "overdue"
+        elif (not g["shipped"] and g["age"] is not None
+              and g["age"] > QA_GRACE):
+            states[g["name"]] = "stalled"
+    return states
+
+
+def read_backlog(path=None):
+    """The overdue and stalled gates already accounted for.
+
+    Returns {name: (state, firstVersion)}.  A missing file means nothing has
+    been accepted yet, so every flagged gate reads as new; that is the right
+    behaviour the first time this runs, and --update-baseline is how it stops.
+
+    The default resolves at call time rather than at import, so a test can point
+    BACKLOG_FILE somewhere else.
+    """
+    path = path or BACKLOG_FILE
+    known = {}
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.split("#", 1)[0].strip()
+                if not line:
+                    continue
+                f3 = line.split()
+                if len(f3) < 2:
+                    continue
+                ver = None
+                if len(f3) > 2 and f3[2].lstrip("v").isdigit():
+                    ver = int(f3[2].lstrip("v"))
+                known[f3[0]] = (f3[1], ver)
+    except OSError:
+        pass
+    return known
+
+
+def write_backlog(states, cur, life=None, path=None):
+    """Write the backlog, keeping each gate's original first-reported version.
+
+    A gate that changes state keeps the version it was first flagged at, since
+    the useful number is how long it has been somebody's problem, not when it
+    last changed shape.
+    """
+    path = path or BACKLOG_FILE
+    was = read_backlog(path)
+    notes = {g["name"]: g for g in (life or [])}
+    with open(path, "w") as f:
+        f.write("""\
+# hgConfGateBacklog.txt - the hg.conf release gates already known to be overdue
+# for deletion or stalled in QA.  Refs #37925.
+#
+# hgConfCatalog.py --sunset-new reports only the gates that are not in here, so
+# this is what lets the weekly build's wrap-up say "two gates went overdue this
+# release" instead of reprinting the whole standing list every three weeks.
+# Regenerate with --update-baseline and read the diff before committing: a name
+# arriving is a new gate nobody sunset, and a name leaving means somebody
+# actually deleted a flag, which is the outcome the whole exercise is for.
+#
+# The first version of this file was accepted wholesale, as a snapshot of the
+# backlog on the day the report learned to tell new from standing.  So a name
+# being in here is not evidence that anybody reviewed it; only the ones added
+# since, which arrive a few at a time in a reviewable diff, carry that weight.
+#
+# Fields: name, state (overdue or stalled), and the release it was first
+# reported at.  hgConfCatalog.py --sunset prints the full list with dates.
+""")
+        for name in sorted(states):
+            first = was.get(name, (None, None))[1]
+            if first is None:
+                first = cur
+            g = notes.get(name, {})
+            note = ""
+            if g.get("flipped") and states[name] == "overdue":
+                note = "  # flipped v%s" % g["flipped"]
+            elif g.get("added"):
+                note = "  # added v%s" % g["added"]
+            f.write("%-26s %-8s %s%s\n"
+                    % (name, states[name],
+                       "v%s" % first if first else "?", note))
+
+
+def sunset_delta(cat, ages, sites=None, out=sys.stdout):
+    """Only what changed since the backlog was last accepted.
+
+    The mode meant for the weekly build's wrap-up, and the reason the backlog
+    file exists.  --sunset is an 18-line standing list that reads as a worklist
+    the first week and as wallpaper by the third; what a release can actually
+    act on is the handful of gates that crossed a deadline while it was being
+    built.
+
+    Prints a one-line summary on every run, so silence means the step did not
+    run rather than that nothing changed.  Exits nonzero when there is
+    something new, the same contract as --reconcile, and also when the age
+    cache is stale, because a stale cache is exactly the condition under which
+    a newly overdue gate would go unreported.
+    """
+    cur = ages.get("current")
+    life = gate_lifecycle(cat, ages)
+    now = gate_states(life, cur)
+    was = read_backlog()
+    byname = {g["name"]: g for g in life}
+
+    fresh = sorted(n for n in now if n not in was)
+    moved = sorted(n for n in now if n in was and was[n][0] != now[n])
+    gone = sorted(n for n in was if n not in now)
+
+    print("hg.conf release gates at v%s: %d newly overdue or stalled, "
+          "%d resolved, %d in the standing backlog (%s)"
+          % (cur, len(fresh) + len(moved), len(gone), len(now),
+             os.path.basename(BACKLOG_FILE)), file=out)
+
+    def describe(name):
+        g = byname.get(name, {})
+        bits = []
+        if g.get("added"):
+            bits.append("added v%d" % g["added"])
+        if g.get("flipped") and not g.get("reverted"):
+            bits.append("flipped v%d" % g["flipped"])
+        if g.get("sunset"):
+            bits.append("sunset v%d" % g["sunset"])
+        n = len((sites or {}).get(name, [])) or 0
+        if n:
+            bits.append("%d call site%s" % (n, "" if n == 1 else "s"))
+        tik = ", ".join("#%d" % t for t in g.get("tickets") or [])
+        if tik:
+            bits.append(tik)
+        return "  %-26s %s" % (name, ", ".join(bits))
+
+    if fresh:
+        print("\nNEWLY FLAGGED (was fine at the last release, is not now):",
+              file=out)
+        for name in sorted(fresh, key=lambda n: now[n]):
+            print(describe(name) + "  [%s]" % now[name], file=out)
+    if moved:
+        print("\nCHANGED STATE:", file=out)
+        for name in moved:
+            print(describe(name) + "  [%s -> %s]" % (was[name][0], now[name]),
+                  file=out)
+    if gone:
+        print("\nRESOLVED since the backlog was accepted:", file=out)
+        for name in gone:
+            n = len((sites or {}).get(name, [])) or 0
+            if n:
+                # Still read, so it left the list by being reclassified, by
+                # shipping, or by being given a later deadline, not by being
+                # deleted.  Worth naming either way: the flag is still there.
+                print("  %-26s no longer flagged, but still read at %d call "
+                      "site%s" % (name, n, "" if n == 1 else "s"), file=out)
+            else:
+                print("  %-26s reads are gone from the tree; drop its catalog "
+                      "row too" % name, file=out)
+    if fresh or moved or gone:
+        print("\nFull list: hgConfCatalog.py --sunset\n"
+              "Accept the new state: hgConfCatalog.py --update-baseline, then "
+              "commit %s" % os.path.basename(BACKLOG_FILE), file=out)
+
+    if ages.get("stale"):
+        print("\nWARNING: the age cache was built at v%s and the tree is now "
+              "at v%s, so a gate\nadded since v%s has no date and cannot be "
+              "reported here at all.  Rebuild with\nharvestHgConf.py --age "
+              "--refresh and commit hgConfAges.json."
+              % (ages.get("cachedAt"), cur, ages.get("cachedAt")), file=out)
+        return 1
+    return 1 if (fresh or moved) else 0
+
+
 def sunset_report(cat, ages, sites=None, out=sys.stdout):
     """What should be deleted, what has no deadline, what is stuck in QA."""
     cur = ages.get("current")
     life = gate_lifecycle(cat, ages)
+    known = read_backlog()
     print("current tree version: v%s" % cur, file=out)
     if ages.get("stale"):
         print("\nWARNING: the age cache was built at v%s and the tree is now "
@@ -1421,6 +1647,12 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
         tik = ", ".join("#%d" % t for t in g["tickets"])
         if tik and g["ticketFrom"] == "flip":
             tik += " (flip)"
+        # A gate in the backlog file has been reported before, so say since
+        # when.  Anything unmarked in the overdue or stalled lists crossed its
+        # line during this release and is what --sunset-new would have printed.
+        first = known.get(g["name"], (None, None))[1]
+        if first:
+            tail = (tail + "  backlog since v%d" % first).strip()
         return "  %-26s %-46s %-16s %s" % (g["name"], ", ".join(bits),
                                            tik, tail)
 
@@ -1542,16 +1774,18 @@ def wrap_text(s, width):
 def reconcile(cat, out=sys.stdout, verbose=False):
     """Diff the catalog against what the tree actually reads.
 
-    Three questions:
+    Four questions:
       1. does the catalog list something the tree no longer reads
       2. does the tree read something the catalog has not classified
       3. is every boolean flag in the tree classified gate or knob
-    The third is the one that keeps the sunset report honest: an unclassified
-    flag is one nobody has decided the fate of.
+      4. does each flag's hand-written default still match the tree's
+    The last two are the ones that keep the sunset report honest: an
+    unclassified flag is one nobody has decided the fate of, and a wrong
+    default puts a shipped gate in the stalled list or the reverse.
 
-    Only 2 and 3 count as problems, because only those two mean somebody added
-    a setting and did not write it down, which is the one thing a person has to
-    act on.  The rest is drift that has been there for years (documentation for
+    Only 2, 3 and 4 count as problems, because only those mean somebody
+    changed a setting and did not write it down, which is the one thing a
+    person has to act on.  The rest is drift that has been there for years (documentation for
     a feature that was deleted, a read that moved into a helper), and printing
     it on every run is what would turn a nightly cron into mail nobody reads.
     So it goes out only under --verbose.  Silent and 0 means nothing new.
@@ -1637,6 +1871,60 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         print("all %d boolean flags in the tree are classified" %
               len(tree_flags), file=out)
 
+    # Does the catalog's default= still match the tree's?
+    #
+    # This field is hand-written while everything else about a gate's lifecycle
+    # is read out of git, and until this check nothing compared the two.  It
+    # matters more than it looks: gate_lifecycle decides a gate has shipped
+    # from this field alone, so a flag whose compiled-in default was flipped
+    # TRUE without the row being updated sits in the sunset report's stalled
+    # list forever, under a heading telling somebody to turn on a flag that is
+    # already on.  A stale age cache is announced; this was not.
+    #
+    # Only reads whose default is the literal TRUE or FALSE can be compared.
+    # Where the default is an identifier (autoBlatBigPsl's is the file-scope
+    # autoBigPsl) the tree does not say what it is at this level, so the row's
+    # default stands unchallenged and the note has to carry the argument.
+    bool_defaults = {}
+    for rec in hh.all_reads(found):
+        if rec.get("boolean") and rec.get("default") in ("TRUE", "FALSE"):
+            bool_defaults.setdefault(rec["name"], {}).setdefault(
+                rec["default"], []).append(rec["src"])
+
+    mismatched = []
+    split = []
+    for n in sorted(bool_defaults):
+        seen = bool_defaults[n]
+        if len(seen) > 1:
+            split.append(n)
+            continue
+        row = cataloged.get(n)
+        if row is None or row.get("default") not in ("TRUE", "FALSE"):
+            continue
+        treeval = next(iter(seen))
+        if row["default"] != treeval:
+            mismatched.append((n, row["default"], treeval, seen[treeval][0]))
+    if mismatched:
+        problems += len(mismatched)
+        print("\nthe catalog's default disagrees with the tree (%d): the "
+              "sunset report reads\nthis field to decide whether a gate has "
+              "shipped, so it has to be right:" % len(mismatched), file=out)
+        for n, catval, treeval, site in mismatched:
+            print("    %-40s catalog %s, tree %s at %s"
+                  % (n, catval, treeval, site), file=out)
+    if split and verbose:
+        # Two reads of one flag with opposite compiled-in defaults.  Not a
+        # catalog error, so not a problem here: on a machine that does not set
+        # the flag the two halves of the feature disagree, and only whoever
+        # owns that code can say which default was meant.
+        print("\nread with both TRUE and FALSE as the compiled-in default "
+              "(%d):" % len(split), file=out)
+        for n in split:
+            print("    %s" % n, file=out)
+            for val in sorted(bool_defaults[n]):
+                for site in sorted(bool_defaults[n][val]):
+                    print("        %-8s %s" % (val, site), file=out)
+
     phantom = sorted(classified - tree_flags)
     if phantom and verbose:
         print("\nclassified as a flag but not read with "
@@ -1674,9 +1962,9 @@ def reconcile(cat, out=sys.stdout, verbose=False):
             print("    %-40s %s" % (n, docs[n]["sites"][0]), file=out)
 
     if problems:
-        print("\nproblems: %d.  Add a row to hgConfCatalog.py for each, in "
-              "the same commit\nas the code that reads it; see the "
-              "'Registering a new hg.conf variable'\nsection of the "
+        print("\nproblems: %d.  Add or correct the row in hgConfCatalog.py "
+              "for each, in the same\ncommit as the code that reads it; see "
+              "the 'Registering a new hg.conf variable'\nsection of the "
               "edit-kent-code skill." % problems, file=out)
     elif verbose:
         print("\nproblems: 0", file=out)
@@ -1911,23 +2199,52 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--reconcile", action="store_true")
     ap.add_argument("--sunset", action="store_true")
+    ap.add_argument("--sunset-new", dest="sunsetNew", action="store_true",
+                    help="report only the gates that went overdue or stalled "
+                         "since %s was accepted, and exit 1 if any did"
+                         % os.path.basename(BACKLOG_FILE))
+    ap.add_argument("--update-baseline", dest="updateBaseline",
+                    action="store_true",
+                    help="rewrite %s from the current tree; read the diff "
+                         "before committing it"
+                         % os.path.basename(BACKLOG_FILE))
     ap.add_argument("--verbose", action="store_true",
                     help="with --reconcile, also print the standing drift "
                          "that needs no action")
+    ap.add_argument("--cache",
+                    help="read and write the age cache here instead of "
+                         "hgConfAges.json next to the harvester.  Also "
+                         "settable as HGCONF_AGE_CACHE")
+    ap.add_argument("--refresh", action="store_true",
+                    help="rebuild the age cache before reporting (walks "
+                         "history, a few minutes).  Needed after a release "
+                         "bumps CGI_VERSION, or a flag added since the cache "
+                         "was built has no date at all")
     args = ap.parse_args()
 
     cat = build()
 
     ages = None
     sites = None
-    if args.sunset or args.html or args.json:
+    if (args.sunset or args.sunsetNew or args.updateBaseline
+            or args.html or args.json or args.refresh):
         hh = load_harvester()
         if hh is None:
             print("harvestHgConf.py not importable", file=sys.stderr)
             return 1
+        if args.cache:
+            hh.CACHE = args.cache
         found, _ = hh.harvest()
-        ages = hh.harvest_ages(names=sorted(hh.by_name(found)))
+        ages = hh.harvest_ages(names=sorted(hh.by_name(found)),
+                               refresh=args.refresh)
         sites = {n: d["sites"] for n, d in hh.by_name(found).items()}
+        if args.refresh:
+            print("rebuilt the age cache at %s: v%s, %d dated names, %d "
+                  "recorded flips"
+                  % (hh.CACHE, ages.get("current"),
+                     len([1 for e in ages.get("first", {}).values()
+                          if e.get("version")]),
+                     len(ages.get("firstTrue", {}))))
 
     rc = 0
     if args.check:
@@ -1936,6 +2253,17 @@ def main():
         rc |= 1 if reconcile(cat, verbose=args.verbose) else 0
     if args.sunset:
         sunset_report(cat, ages, sites)
+    if args.sunsetNew:
+        rc |= 1 if sunset_delta(cat, ages, sites) else 0
+    if args.updateBaseline:
+        cur = ages.get("current")
+        life = gate_lifecycle(cat, ages)
+        states = gate_states(life, cur)
+        was = read_backlog()
+        write_backlog(states, cur, life)
+        print("wrote %s: %d gates, %d added, %d dropped"
+              % (BACKLOG_FILE, len(states),
+                 len(set(states) - set(was)), len(set(was) - set(states))))
     if args.json:
         # Attribution rides along with each setting rather than in a table of
         # its own, so a consumer reading one entry sees where it came from.
@@ -1951,7 +2279,8 @@ def main():
             f.write(render_html(cat, ages, sites))
         print("wrote %s" % args.html)
 
-    if not any([args.check, args.reconcile, args.sunset, args.json, args.html]):
+    if not any([args.check, args.reconcile, args.sunset, args.sunsetNew,
+                args.updateBaseline, args.json, args.html, args.refresh]):
         for k, v in sorted(counts(cat).items()):
             print("%-16s %s" % (k, v))
     return rc
