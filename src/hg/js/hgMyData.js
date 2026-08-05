@@ -77,6 +77,74 @@ function initAutocompleteForInput(inpIdStr, selectEle) {
     return false;
 }
 
+function removeBatchSelectDiv() {
+    // Take down the batch controls. The autocomplete memo is keyed by input id, so
+    // it has to be cleared alongside the div; a rebuilt search bar reuses the same
+    // id and initAutocompleteForInput would skip it
+    let div = document.getElementById("batch-selector-div");
+    if (div) {
+        autocompletes.batchDbSearchBar = false;
+        div.remove();
+    }
+}
+
+// Set once the user types a hub name in the batch box, so a hub.txt parsed after
+// that does not take the name back off them. Cleared when the batch empties
+let userSetBatchHubName = false;
+
+function applyHubTxtHubName(uppyInstance, descriptor) {
+    // A hub.txt names the directory its hub lives in, so use that as the hubSpace
+    // hub name. Only the first path segment is swapped, so a folder drop keeps
+    // whatever subdirectories it came with
+    if (userSetBatchHubName) {
+        return;
+    }
+    let raw = descriptor && descriptor.hubMeta ? descriptor.hubMeta.hubName : null;
+    let hubRoot = hubCreate.sanitizeHubName(raw);
+    if (!hubRoot) {
+        return;
+    }
+    if (raw.trim() !== hubRoot) {
+        uppyInstance.info(`Using "${hubRoot}" as the hub name. The name "${raw.trim()}" ` +
+            `in hub.txt has characters that cannot be used in a directory name.`,
+            "info", 6000);
+    }
+    if (hubRoot in hubCreate.uiState.filesHash) {
+        uppyInstance.info(`These files will be added to your existing hub "${hubRoot}", ` +
+            `named by the hub.txt in this upload.`, "warning", 8000);
+    }
+    for (let f of uppyInstance.getFiles()) {
+        let segments = ((f.meta && f.meta.parentDir) || "").split("/");
+        let newParent;
+        if (segments.length > 1) {
+            newParent = hubRoot + "/" + segments.slice(1).join("/");
+        } else {
+            newParent = hubRoot;
+        }
+        uppyInstance.setFileMeta(f.id, {parentDir: newParent});
+    }
+    refreshBatchHubNameInput(uppyInstance);
+}
+
+function refreshBatchHubNameInput(uppyInstance) {
+    // Point the batch Hub Name box at the hub the files are really set to. Leaves
+    // the box alone when the batch spans more than one hub
+    let input = document.getElementById("batchParentDir");
+    if (!input) {
+        return;
+    }
+    let roots = [];
+    for (let f of uppyInstance.getFiles()) {
+        let root = ((f.meta && f.meta.parentDir) || "").split("/")[0];
+        if (root && !roots.includes(root)) {
+            roots.push(root);
+        }
+    }
+    if (roots.length === 1) {
+        input.value = roots[0];
+    }
+}
+
 function generateApiKey() {
     let apiKeyInstr = document.getElementById("apiKeyInstructions");
     let apiKeyDiv = document.getElementById("apiKey");
@@ -336,6 +404,10 @@ let uppyOptions = {
     },
     doneButtonHandler: function() {
         uppy.clear();
+        // uppy.clear only resets state, it emits no file-removed, so the batch
+        // controls would otherwise survive into the next batch
+        removeBatchSelectDiv();
+        userSetBatchHubName = false;
     },
 };
 
@@ -384,10 +456,24 @@ const uppy = new Uppy.Uppy({
                           `a name for your assembly.`, "error", 5000);
                 return false;
             }
+            // Every file in the batch takes its hub root from the hub-defining
+            // file, which is the hub.txt when the user supplied one. Editing the
+            // hub name on a file card changes only that file's meta
+            let hubDefiner = Object.values(files).find(looksLikeHubTxt) || batchTwoBit;
+            let asmHubRoot = (hubDefiner.meta.parentDir || "").trim().split("/")[0];
             for (let f of Object.values(files)) {
                 f.meta.genome = asmGenome;
                 f.meta.genomeLabel = asmGenome;
                 f.meta.hubType = "assemblyHub";
+                if (asmHubRoot) {
+                    // swap the first segment only, a folder drop keeps its subdirectory
+                    let segments = (f.meta.parentDir || "").split("/");
+                    if (segments.length > 1) {
+                        f.meta.parentDir = asmHubRoot + "/" + segments.slice(1).join("/");
+                    } else {
+                        f.meta.parentDir = asmHubRoot;
+                    }
+                }
                 // fileType may also be stale; recompute from filename if missing
                 if (!f.meta.fileType) {
                     f.meta.fileType = hubCreate.detectFileType(f.name);
@@ -601,6 +687,8 @@ function propagateAssemblyHubMeta(uppyInstance) {
             if (syncParentDir && !isNestedLayout) meta.parentDir = syncParentDir;
             uppyInstance.setFileMeta(f.id, meta);
         }
+        // keep the batch Hub Name box showing where the files are really going
+        refreshBatchHubNameInput(uppyInstance);
     }
 
     if (hubTxt) {
@@ -617,21 +705,23 @@ function propagateAssemblyHubMeta(uppyInstance) {
             }
             if (descriptor.isSplit) {
                 applySplitHubDescriptor(uppyInstance, descriptor);
-                return;
-            }
-            // Single-file hub: hub.txt is authoritative for the one genome
-            // it declares. Lock all siblings to that genome.
-            let parsed = descriptor.hubMeta || {};
-            if (parsed.isAssemblyHub && parsed.genome) {
-                applyGenomeToSiblings(parsed.genome, true);
-                uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
-            } else if (parsed.genome && twoBit) {
-                let twoBitGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
-                if (parsed.genome !== twoBitGenome) {
+            } else {
+                // Single-file hub: hub.txt is authoritative for the one genome
+                // it declares. Lock all siblings to that genome.
+                let parsed = descriptor.hubMeta || {};
+                if (parsed.isAssemblyHub && parsed.genome) {
                     applyGenomeToSiblings(parsed.genome, true);
-                    uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt (overrides 2bit default)`, "warning", 5000);
+                    uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
+                } else if (parsed.genome && twoBit) {
+                    let twoBitGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
+                    if (parsed.genome !== twoBitGenome) {
+                        applyGenomeToSiblings(parsed.genome, true);
+                        uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt (overrides 2bit default)`, "warning", 5000);
+                    }
                 }
             }
+            // last, so it wins over the parentDir the other two stamp
+            applyHubTxtHubName(uppyInstance, descriptor);
         }).catch((err) => {
             console.warn("Could not read hub.txt for genome detection:", err);
         }).finally(() => {
@@ -683,171 +773,135 @@ class BatchChangePlugin extends Uppy.BasePlugin {
     }
 
     removeBatchSelectsFromDashboard() {
-        let batchSelectDiv = document.getElementById("batch-selector-div");
-        if (batchSelectDiv) {
-            batchSelectDiv.remove();
-        }
+        removeBatchSelectDiv();
     }
 
     addBatchSelectsToDashboard() {
-        if (!document.getElementById("batch-selector-div")) {
-            // If the batch contains a 2bit, the UCSC genome picker makes no
-            // sense - show the custom genome name read-only instead. Detect by
-            // filename rather than meta.hubType because setFileMeta updates
-            // Uppy state immutably and the meta may not be visible on file
-            // objects captured from getFiles() earlier in this event. A split
-            // assembly hub can declare more than one 2bit (one per genome);
-            // join all of them.
-            let assemblyHubGenomes = [];
-            for (let f of this.uppy.getFiles()) {
-                if (looksLikeTwoBit(f)) {
-                    let g = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
-                    if (g && !assemblyHubGenomes.includes(g)) {
-                        assemblyHubGenomes.push(g);
-                    }
+        // If the batch contains a 2bit, the UCSC genome picker makes no
+        // sense - show the custom genome name read-only instead. Detect by
+        // filename rather than meta.hubType because setFileMeta updates
+        // Uppy state immutably and the meta may not be visible on file
+        // objects captured from getFiles() earlier in this event. A split
+        // assembly hub can declare more than one 2bit (one per genome);
+        // join all of them.
+        let assemblyHubGenomes = [];
+        for (let f of this.uppy.getFiles()) {
+            if (looksLikeTwoBit(f)) {
+                let g = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
+                if (g && !assemblyHubGenomes.includes(g)) {
+                    assemblyHubGenomes.push(g);
                 }
             }
-            let assemblyHubGenome = null;
-            if (assemblyHubGenomes.length) {
-                assemblyHubGenome = assemblyHubGenomes.join(", ");
+        }
+        // The genome row is built one way for an assembly hub and another for a
+        // track hub, so a 2bit joining or leaving an existing batch has to
+        // rebuild the whole thing rather than leave the old row in place
+        let asmSignature = assemblyHubGenomes.join(", ");
+        let staleDiv = document.getElementById("batch-selector-div");
+        if (staleDiv) {
+            if (staleDiv.dataset.asmGenome === asmSignature) {
+                refreshBatchHubNameInput(this.uppy);
+                return;
             }
+            removeBatchSelectDiv();
+        }
+        let assemblyHubGenome = null;
+        if (assemblyHubGenomes.length) {
+            assemblyHubGenome = assemblyHubGenomes.join(", ");
+        }
 
-            let batchSelectDiv = document.createElement("div");
-            batchSelectDiv.id = "batch-selector-div";
-            batchSelectDiv.style.display = "grid";
-            batchSelectDiv.style.width = "80%";
-            // the grid syntax is 2 columns, 3 rows
-            batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
-            batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
-            batchSelectDiv.style.margin = "10px auto"; // centers this div
-            batchSelectDiv.style.fontSize = "14px";
-            batchSelectDiv.style.gap = "8px";
-            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                batchSelectDiv.style.color = "#eaeaea";
-            }
+        let batchSelectDiv = document.createElement("div");
+        batchSelectDiv.id = "batch-selector-div";
+        batchSelectDiv.dataset.asmGenome = asmSignature;
+        batchSelectDiv.style.display = "grid";
+        batchSelectDiv.style.width = "80%";
+        // the grid syntax is 2 columns, 3 rows
+        batchSelectDiv.style.gridTemplateColumns = "max-content minmax(0, 200px) max-content 1fr min-content";
+        batchSelectDiv.style.gridTemplateRows = "repest(3, auto)";
+        batchSelectDiv.style.margin = "10px auto"; // centers this div
+        batchSelectDiv.style.fontSize = "14px";
+        batchSelectDiv.style.gap = "8px";
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            batchSelectDiv.style.color = "#eaeaea";
+        }
 
-            // first just explanatory text:
-            let batchSelectText = document.createElement("div");
-            batchSelectText.textContent = "Change options for all files:";
-            // syntax here is rowStart / columnStart / rowEnd / columnEnd
-            batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
+        // first just explanatory text:
+        let batchSelectText = document.createElement("div");
+        batchSelectText.textContent = "Change options for all files:";
+        // syntax here is rowStart / columnStart / rowEnd / columnEnd
+        batchSelectText.style.gridArea = "1 / 1 / 1 / 2";
 
-            let batchDbLabel = document.createElement("label");
-            batchDbLabel.textContent = "Genome";
-            batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
+        let batchDbLabel = document.createElement("label");
+        batchDbLabel.textContent = "Genome";
+        batchDbLabel.style.gridArea = "2 / 1 / 2 / 1";
 
-            let batchDbSelect = null;
-            let batchDbGenomeSearchBar = null;
-            let batchDbGenomeSearchButton = null;
-            let batchDbSearchBarLabel = null;
+        let batchDbSelect = null;
+        let batchDbGenomeSearchBar = null;
+        let batchDbGenomeSearchButton = null;
+        let batchDbSearchBarLabel = null;
 
-            if (assemblyHubGenome) {
-                // Assembly hub: show the custom genome name as a locked text
-                // field, no UCSC picker or search.
-                let locked = document.createElement("input");
-                locked.type = "text";
-                locked.id = "batchAsmHubGenome";
-                locked.value = assemblyHubGenome;
-                locked.disabled = true;
-                locked.classList.add("uppy-u-reset", "uppy-c-textInput");
-                locked.style.gridArea = "2 / 2 / 2 / 2";
-                locked.style.margin = "2px";
-                batchDbLabel.for = "batchAsmHubGenome";
+        if (assemblyHubGenome) {
+            // Assembly hub: show the custom genome name as a locked text
+            // field, no UCSC picker or search.
+            let locked = document.createElement("input");
+            locked.type = "text";
+            locked.id = "batchAsmHubGenome";
+            locked.value = assemblyHubGenome;
+            locked.disabled = true;
+            locked.classList.add("uppy-u-reset", "uppy-c-textInput");
+            locked.style.gridArea = "2 / 2 / 2 / 2";
+            locked.style.margin = "2px";
+            batchDbLabel.for = "batchAsmHubGenome";
 
-                let note = document.createElement("div");
-                if (assemblyHubGenomes.length > 1) {
-                    note.textContent = "(assembly hub - genome per file is set by genomes.txt; this list shows all genomes in the hub)";
-                } else {
-                    note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
-                }
-                note.style.gridArea = "2 / 3 / 2 / 5";
-                note.style.margin = "auto 0";
-                note.style.fontStyle = "italic";
-
-                batchSelectDiv.appendChild(batchSelectText);
-                batchSelectDiv.appendChild(batchDbLabel);
-                batchSelectDiv.appendChild(locked);
-                batchSelectDiv.appendChild(note);
+            let note = document.createElement("div");
+            if (assemblyHubGenomes.length > 1) {
+                note.textContent = "(assembly hub - genome per file is set by genomes.txt; this list shows all genomes in the hub)";
             } else {
-                // Track hub: the usual UCSC picker + autocomplete.
-                batchDbSelect = document.createElement("select");
-                this.createOptsForSelect(batchDbSelect, hubCreate.makeGenomeSelectOptions());
-                batchDbSelect.id = "batchDbSelect";
-                batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
-                batchDbSelect.style.margin = "2px";
-                batchDbLabel.for = "batchDbSelect";
-
-                batchDbSearchBarLabel = document.createElement("label");
-                batchDbSearchBarLabel.textContent = "or search for your genome:";
-                batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
-                batchDbSearchBarLabel.style.margin = "auto";
-
-                batchDbGenomeSearchBar = document.createElement("input");
-                batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
-                batchDbGenomeSearchBar.type = "text";
-                batchDbGenomeSearchBar.id = "batchDbSearchBar";
-                batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
-                batchDbGenomeSearchButton = document.createElement("input");
-                batchDbGenomeSearchButton.type = "button";
-                batchDbGenomeSearchButton.value = "search";
-                batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
-                batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
-
-                batchDbSelect.addEventListener("change", (ev) => {
-                    let files = this.uppy.getFiles();
-                    let val = ev.target.value;
-                    let label = ev.target.selectedOptions[0].label;
-                    let hub = hubCreate.assemblyHubByGenome(val);
-                    let newRoot = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
-                    for (let [key, file] of Object.entries(files)) {
-                        // Keep the file's subdirectory under whatever root the
-                        // batch genome change implies; only the root segment
-                        // moves.
-                        let oldParent = (file.meta && file.meta.parentDir) || "";
-                        let segments = oldParent.split("/");
-                        let newParent;
-                        if (segments.length > 1) {
-                            newParent = newRoot + "/" + segments.slice(1).join("/");
-                        } else {
-                            newParent = newRoot;
-                        }
-                        let meta = {
-                            genome: val,
-                            genomeLabel: label,
-                            hubType: hub ? "assemblyHub" : "trackHub",
-                            parentDir: newParent,
-                        };
-                        this.uppy.setFileMeta(file.id, meta);
-                    }
-                });
-
-                batchSelectDiv.appendChild(batchSelectText);
-                batchSelectDiv.appendChild(batchDbLabel);
-                batchSelectDiv.appendChild(batchDbSelect);
-                batchSelectDiv.appendChild(batchDbSearchBarLabel);
-                batchSelectDiv.appendChild(batchDbGenomeSearchBar);
-                batchSelectDiv.appendChild(batchDbGenomeSearchButton);
+                note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
             }
+            note.style.gridArea = "2 / 3 / 2 / 5";
+            note.style.margin = "auto 0";
+            note.style.fontStyle = "italic";
 
-            // the batch change hub name (shown in both modes)
-            let batchParentDirLabel = document.createElement("label");
-            batchParentDirLabel.textContent = "Hub Name";
-            batchParentDirLabel.for = "batchParentDir";
-            batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
+            batchSelectDiv.appendChild(batchSelectText);
+            batchSelectDiv.appendChild(batchDbLabel);
+            batchSelectDiv.appendChild(locked);
+            batchSelectDiv.appendChild(note);
+        } else {
+            // Track hub: the usual UCSC picker + autocomplete.
+            batchDbSelect = document.createElement("select");
+            this.createOptsForSelect(batchDbSelect, hubCreate.makeGenomeSelectOptions());
+            batchDbSelect.id = "batchDbSelect";
+            batchDbSelect.style.gridArea = "2 / 2 / 2 / 2";
+            batchDbSelect.style.margin = "2px";
+            batchDbLabel.for = "batchDbSelect";
 
-            let batchParentDirInput = document.createElement("input");
-            batchParentDirInput.id = "batchParentDir";
-            batchParentDirInput.value = hubCreate.getDefaultHubName();
-            batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
-            batchParentDirInput.style.margin= "1px 1px auto";
-            batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
+            batchDbSearchBarLabel = document.createElement("label");
+            batchDbSearchBarLabel.textContent = "or search for your genome:";
+            batchDbSearchBarLabel.style.gridArea = "2 / 3 /2 / 3";
+            batchDbSearchBarLabel.style.margin = "auto";
 
-            batchParentDirInput.addEventListener("change", (ev) => {
+            batchDbGenomeSearchBar = document.createElement("input");
+            batchDbGenomeSearchBar.classList.add("uppy-u-reset", "uppy-c-textInput");
+            batchDbGenomeSearchBar.type = "text";
+            batchDbGenomeSearchBar.id = "batchDbSearchBar";
+            batchDbGenomeSearchBar.style.gridArea = "2 / 4 / 2 / 4";
+            batchDbGenomeSearchButton = document.createElement("input");
+            batchDbGenomeSearchButton.type = "button";
+            batchDbGenomeSearchButton.value = "search";
+            batchDbGenomeSearchButton.id = "batchDbSearchBarButton";
+            batchDbGenomeSearchButton.style.gridArea = "2 / 5 / 2 / 5";
+
+            batchDbSelect.addEventListener("change", (ev) => {
                 let files = this.uppy.getFiles();
-                let newRoot = ev.target.value;
+                let val = ev.target.value;
+                let label = ev.target.selectedOptions[0].label;
+                let hub = hubCreate.assemblyHubByGenome(val);
+                let newRoot = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
                 for (let [key, file] of Object.entries(files)) {
-                    // Swap only the root segment; preserve any per-genome
-                    // subdirectory the user supplied via a folder drop.
+                    // Keep the file's subdirectory under whatever root the
+                    // batch genome change implies; only the root segment
+                    // moves.
                     let oldParent = (file.meta && file.meta.parentDir) || "";
                     let segments = oldParent.split("/");
                     let newParent;
@@ -856,32 +910,80 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     } else {
                         newParent = newRoot;
                     }
-                    this.uppy.setFileMeta(file.id, {parentDir: newParent});
+                    let meta = {
+                        genome: val,
+                        genomeLabel: label,
+                        hubType: hub ? "assemblyHub" : "trackHub",
+                        parentDir: newParent,
+                    };
+                    this.uppy.setFileMeta(file.id, meta);
                 }
             });
 
-            batchSelectDiv.appendChild(batchParentDirLabel);
-            batchSelectDiv.appendChild(batchParentDirInput);
+            batchSelectDiv.appendChild(batchSelectText);
+            batchSelectDiv.appendChild(batchDbLabel);
+            batchSelectDiv.appendChild(batchDbSelect);
+            batchSelectDiv.appendChild(batchDbSearchBarLabel);
+            batchSelectDiv.appendChild(batchDbGenomeSearchBar);
+            batchSelectDiv.appendChild(batchDbGenomeSearchButton);
+        }
 
-            // append the batch changes to the bottom of the file list, for some reason
-            // I can't append to the actual Dashboard-files, it must be getting emptied
-            // and re-rendered or something
-            let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
-            if (uppyFilesDiv) {
-                uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
-            }
+        // the batch change hub name (shown in both modes)
+        let batchParentDirLabel = document.createElement("label");
+        batchParentDirLabel.textContent = "Hub Name";
+        batchParentDirLabel.for = "batchParentDir";
+        batchParentDirLabel.style.gridArea = "3 / 1 / 3 / 1";
 
-            // autocomplete only applies in the track-hub path
-            if (batchDbSelect && batchDbGenomeSearchBar && batchDbGenomeSearchButton) {
-                let justInitted = initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
-                if (justInitted) {
-                    batchDbGenomeSearchButton.addEventListener("click", (e) => {
-                        let inp = document.getElementById(batchDbGenomeSearchBar.id).value;
-                        let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
-                        $(selector).autocompleteCat("search", inp);
-                    });
+        let batchParentDirInput = document.createElement("input");
+        batchParentDirInput.id = "batchParentDir";
+        // refreshBatchHubNameInput replaces this with the files' own hub below
+        batchParentDirInput.value = hubCreate.getDefaultHubName();
+        batchParentDirInput.style.gridArea = "3 / 2 / 3 / 2";
+        batchParentDirInput.style.margin= "1px 1px auto";
+        batchParentDirInput.classList.add("uppy-u-reset", "uppy-c-textInput");
+
+        batchParentDirInput.addEventListener("change", (ev) => {
+            let files = this.uppy.getFiles();
+            let newRoot = ev.target.value;
+            // the user's own name outranks anything a hub.txt asks for later
+            userSetBatchHubName = true;
+            for (let [key, file] of Object.entries(files)) {
+                // Swap only the root segment; preserve any per-genome
+                // subdirectory the user supplied via a folder drop.
+                let oldParent = (file.meta && file.meta.parentDir) || "";
+                let segments = oldParent.split("/");
+                let newParent;
+                if (segments.length > 1) {
+                    newParent = newRoot + "/" + segments.slice(1).join("/");
+                } else {
+                    newParent = newRoot;
                 }
+                this.uppy.setFileMeta(file.id, {parentDir: newParent});
             }
+        });
+
+        batchSelectDiv.appendChild(batchParentDirLabel);
+        batchSelectDiv.appendChild(batchParentDirInput);
+
+        // append the batch changes to the bottom of the file list, for some reason
+        // I can't append to the actual Dashboard-files, it must be getting emptied
+        // and re-rendered or something
+        let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
+        if (uppyFilesDiv) {
+            uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+        }
+        refreshBatchHubNameInput(this.uppy);
+
+        // autocomplete only applies in the track-hub path
+        if (batchDbSelect && batchDbGenomeSearchBar && batchDbGenomeSearchButton) {
+            initAutocompleteForInput(batchDbGenomeSearchBar.id, batchDbSelect);
+            // this button belongs to the element just built, so it is bound
+            // every time, unlike the autocomplete which is memoized by id
+            batchDbGenomeSearchButton.addEventListener("click", (e) => {
+                let inp = document.getElementById(batchDbGenomeSearchBar.id).value;
+                let selector = "[id='"+batchDbGenomeSearchBar.id+"']";
+                $(selector).autocompleteCat("search", inp);
+            });
         }
     }
 
@@ -968,6 +1070,9 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             if (this.uppy.getFiles().length < 2) {
                 this.removeBatchSelectsFromDashboard();
             }
+            if (this.uppy.getFiles().length === 0) {
+                userSetBatchHubName = false;
+            }
             // If a hub-definition file leaves the batch, the cached split-hub
             // descriptor is no longer valid. Clear the cache and the per-file
             // stamps so pre-finish re-evaluates from scratch.
@@ -984,11 +1089,34 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 }
                 propagateAssemblyHubMeta(this.uppy);
             }
+            // The last 2bit leaving takes the assembly hub with it, so let the
+            // siblings it stamped go back to being ordinary track files. A hub.txt
+            // still in the batch defines the hub on its own, so leave those alone
+            if (looksLikeTwoBit(file) &&
+                    !this.uppy.getFiles().some(looksLikeTwoBit) &&
+                    !this.uppy.getFiles().some(looksLikeHubTxt)) {
+                for (let f of this.uppy.getFiles()) {
+                    // a file headed into an existing assembly hub keeps its lock,
+                    // that came from the destination and not from the 2bit
+                    let dest = hubCreate.uiState.filesHash[f.meta && f.meta.parentDir];
+                    if (dest && dest.hubType === "assemblyHub") {
+                        continue;
+                    }
+                    this.uppy.setFileMeta(f.id, {
+                        hubType: "trackHub",
+                        genomeLocked: false,
+                    });
+                }
+            }
+            if (this.uppy.getFiles().length > 1) {
+                // rebuilds only if the batch changed shape, see the signature check
+                this.addBatchSelectsToDashboard();
+            }
         });
 
         this.uppy.on("dashboard:modal-open", () => {
             // check if there were already files chosen from before:
-            if (this.uppy.getFiles().length > 2) {
+            if (this.uppy.getFiles().length > 1) {
                 this.addBatchSelectsToDashboard();
             }
             if (this.uppy.getFiles().length < 2) {
@@ -1023,6 +1151,8 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     uppy.info(`Error: Hub path '${file.meta.parentDir}' must be alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 }
             }
+            // a hub name edited on a file card has to reach the batch box too
+            refreshBatchHubNameInput(this.uppy);
         });
     }
     uninstall() {
@@ -1093,6 +1223,17 @@ var hubCreate = (function() {
         return stem;
     }
 
+    function sanitizeHubName(name) {
+        // Turn the hub.txt 'hub' line into a name usable as a hubSpace directory.
+        // The allowed characters are the ones isValidParentDir accepts in one path
+        // segment, a narrower set than sanitizeGenomeName permits, so these two
+        // cannot share an implementation. Returns empty string if nothing is left.
+        if (!name) return "";
+        let clean = name.trim().replace(/[^A-Za-z0-9._]/g, "_");
+        if (clean === "." || clean === "..") return "";
+        return clean;
+    }
+
     function hubTxtPathForHub(hubName) {
         // Return the fullPath of the hub.txt file inside hubName as recorded in
         // hubSpace, falling back to "hubName/hub.txt" if there's no row yet.
@@ -1147,12 +1288,15 @@ var hubCreate = (function() {
     }
 
     function parseHubTxt(text) {
-        // Returns {genome, twoBitPath, isAssemblyHub, genomesFile, useOneFile}.
+        // Returns {genome, twoBitPath, isAssemblyHub, genomesFile, useOneFile, hubName}.
         let ret = {genome: null, twoBitPath: null, isAssemblyHub: false,
-                   genomesFile: null, useOneFile: false};
+                   genomesFile: null, useOneFile: false, hubName: null};
         if (!text) return ret;
         let stanzas = parseRaSettings(text);
         let hub = stanzas[0] || {};
+        // the hub setting names the directory the hub lives in, see the hub.txt
+        // description in hgTrackHubHelp.html
+        if (hub.hub) ret.hubName = hub.hub;
         if (hub.genome) ret.genome = hub.genome;
         if (hub.twoBitPath) {
             ret.twoBitPath = hub.twoBitPath;
@@ -2677,6 +2821,7 @@ var hubCreate = (function() {
              getDefaultHubName: getDefaultHubName,
              detectFileType: detectFileType,
              sanitizeGenomeName: sanitizeGenomeName,
+             sanitizeHubName: sanitizeHubName,
              readFileAsText: readFileAsText,
              parseHubTxt: parseHubTxt,
              parseHubBatch: parseHubBatch,
