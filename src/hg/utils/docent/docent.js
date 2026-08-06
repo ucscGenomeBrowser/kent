@@ -119,6 +119,12 @@ const SCALE_ARGS = { k: SCALE, tipPx: Math.round(TEXTSIZE / SCALE) };
 // track a `track:` step turns on. It is harmless where it means nothing (a bigBed never reads
 // heightPer) and each track's own `maxHeightPixels` still clamps it, so a track that should
 // stay short does -- raise that ceiling in trackDb for one that should not.
+// The k*128 is the DEFAULT height scaled, not each track's own: a row configured at 50px or
+// 300px gets k*128 too, which is proportional only for the tracks that took the default. That
+// covers every track a tour has used so far, and going further would mean reading each row's
+// heightPer out of the cart before asking for k times it. If a tour ever wants a figure of a
+// deliberately short or tall row, that is the fix -- the symptom is a row that comes back the
+// wrong size in a scaled still and the right size at 1x.
 const HEIGHTPER = SCALE > 1 ? Math.round(128 * SCALE) : 0;
 // FAST: iterate on the FIGURES. Everything that exists only for the video is dropped --
 // the dwells, the cursor animation, the dropdown theatrics, the screen recording and the
