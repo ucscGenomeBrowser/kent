@@ -88,20 +88,25 @@ def validateColumns(csvFile):
                  "The source format may have changed; check %s" % (missing, csvFile))
 
 
-def confidence_to_color(confidence):
-    """Map a confidence string to an RGB color string for UCSC BED itemRgb."""
-    color_map = {
-        "definitive": "39,103,73",   # dark green
-        "strong": "56,161,105",      # green
-        "moderate": "104,211,145",   # light green
-        "limited": "252,129,129",    # pink
-        "disputed": "229,62,62",     # red
-        "refuted": "155,44,44",      # dark red
-    }
-    return color_map.get(confidence.lower(), "0,0,0")  # default black
+# Confidence value -> itemRgb color. Unrecognized values fall back to DEFAULT_COLOR
+# (black) and are counted/logged by joinAndWrite so a source change is visible.
+CONFIDENCE_COLORS = {
+    "definitive": "39,103,73",   # dark green
+    "strong": "56,161,105",      # green
+    "moderate": "104,211,145",   # light green
+    "limited": "252,129,129",    # pink
+    "disputed": "229,62,62",     # red
+    "refuted": "155,44,44",      # dark red
+}
+DEFAULT_COLOR = "0,0,0"          # black, for unrecognized confidence values
 
 
-def load_g2p(file_path):
+def confidenceToColor(confidence):
+    """Return the itemRgb color for a confidence string, or None if unrecognized."""
+    return CONFIDENCE_COLORS.get(confidence.lower().strip())
+
+
+def loadG2p(file_path):
     """Load G2P CSV into a dict keyed by HGNC ID (each value is a list of rows)."""
     g2p_map = {}
     numOfRows = 0
@@ -115,7 +120,7 @@ def load_g2p(file_path):
     return g2p_map
 
 
-def load_coordinates(db, hgnc_ids):
+def loadCoordinates(db, hgnc_ids):
     """Build a dict of gene coordinates for the given HGNC IDs from the HGNC bigBed.
 
     One bigBedToBed pass over the whole track (~49k rows) instead of one
@@ -136,13 +141,26 @@ def load_coordinates(db, hgnc_ids):
     return coord_map
 
 
-def join_and_write(g2p_data, coords, output_file):
-    """Join G2P records and HGNC coordinates into BED 9+20 and write to output_file."""
+def joinAndWrite(g2p_data, coords, output_file):
+    """Join G2P records and HGNC coordinates into BED 9+20 and write to output_file.
+
+    Returns a stats dict:
+      "unmatched"         -> count of G2P records whose HGNC ID had no coordinate
+                             match in this assembly's HGNC track (they are skipped).
+      "unknownConfidence" -> {confidence value: count} for values not in
+                             CONFIDENCE_COLORS (colored black).
+    """
+    unmatched = 0
+    unknownConfidence = {}
     with open(output_file, "w", newline="", encoding="utf-8") as out:
         writer = csv.writer(out, delimiter="\t")
         for hgnc_id, rows in g2p_data.items():
+            matches = coords.get(hgnc_id, [])
+            if not matches:
+                unmatched += len(rows)
+                continue
             for row in rows:
-                for coord in coords.get(hgnc_id, []):
+                for coord in matches:
                     # BED 9 fields
                     chrom       = coord[0]
                     chromStart  = coord[1]
@@ -152,7 +170,11 @@ def join_and_write(g2p_data, coords, output_file):
                     strand      = coord[5]
                     thickStart  = coord[6]
                     thickEnd    = coord[7]
-                    rgb         = confidence_to_color(row["confidence"])
+                    rgb         = confidenceToColor(row["confidence"])
+                    if rgb is None:
+                        unknownConfidence[row["confidence"]] = \
+                            unknownConfidence.get(row["confidence"], 0) + 1
+                        rgb = DEFAULT_COLOR
 
                     # G2P 20 fields
                     g2p_id      = row["g2p id"]
@@ -183,6 +205,7 @@ def join_and_write(g2p_data, coords, output_file):
                         mol_mech, mol_mech_cat, mol_mech_ev, phenotypes, publications, panel,
                         comments, date_review,
                     ])
+    return {"unmatched": unmatched, "unknownConfidence": unknownConfidence}
 
 
 def itemCount(bb):
@@ -229,11 +252,11 @@ def main():
     bash("mkdir -p %s" % buildDir)
     bash("cp %s %s/AllG2P.csv" % (NEW_CSV, buildDir))
 
-    g2p_data = load_g2p(NEW_CSV)
+    g2p_data = loadG2p(NEW_CSV)
     hgnc_ids = list(g2p_data.keys())
     print("Number of HGNC IDs found: %s" % len(hgnc_ids))
 
-    coordsByDb = {db: load_coordinates(db, hgnc_ids) for db in DBS}
+    coordsByDb = {db: loadCoordinates(db, hgnc_ids) for db in DBS}
     for db in DBS:
         print("Loaded %s %s HGNC IDs" % (len(coordsByDb[db]), db))
 
@@ -242,8 +265,14 @@ def main():
         bedFile = "%s/%s_g2p_all.bed" % (buildDir, db)
         bbFile = "%s/%s_g2p.bb" % (buildDir, db)
         twoBit = "/gbdb/%s/%s.2bit" % (db, db)
-        join_and_write(g2p_data, coordsByDb[db], bedFile)
+        stats = joinAndWrite(g2p_data, coordsByDb[db], bedFile)
         print("Wrote %s" % bedFile)
+        if stats["unmatched"]:
+            print("%s: %d G2P record(s) had no HGNC coordinate match and were skipped"
+                  % (db, stats["unmatched"]))
+        for conf, n in sorted(stats["unknownConfidence"].items()):
+            print("%s: unrecognized confidence value %r on %d record(s); colored black"
+                  % (db, conf, n))
         bash("bedToBigBed -type=bed9+20 -tab -sort "
              "-as=%s -sizesIs2Bit -extraIndex=name,g2p_id,gene_mim,hgnc_id %s %s %s"
              % (AS_FILE, bedFile, twoBit, bbFile))

@@ -200,6 +200,21 @@ ensure_master_branch() {
 }
 
 # Pull latest and check for uncommitted changes.
+#
+# NOT THE ONLY WRITER IN THIS TREE any more, which matters when this function is
+# what fails.  nightlyRegister.sh (hg/utils/hgConfCatalog, refs #37925) runs from
+# the build account's crontab, writes rows for hg.conf settings the tree reads
+# that the registry is missing, and commits and pushes that one file from
+# $BUILDHOME/kent.  So `hgConfCatalog: register ...` commits on master with
+# nobody behind them are expected, not a stray edit somebody left here.
+#
+# It is written to stay out of the way and should never be what trips the check
+# below: it acts only when HEAD is master (cherryPickCommits.csh and tagBeta.csh
+# both check out release branches in this tree), it restores the file on any exit
+# that did not commit, and it stands aside entirely while $LOCKFILE is held.  If
+# this function ever does report hgConfCatalog.py as dirty, that script died
+# between writing and committing; `git checkout -- <file>` is the whole fix, and
+# the next run redoes the work from scratch.
 ensure_clean_git() {
     cd "$WEEKLYBLD"
     local status_out
@@ -1008,6 +1023,83 @@ wrapup_refresh_containers() {
     return 0
 }
 
+# Report the hg.conf release gates whose deletion deadline passed during this
+# release cycle (refs #37925). Release gates are the boolean flags added so a
+# feature can ship dark behind cfgOptionBooleanDefault(name, FALSE); once the
+# default is flipped they are supposed to be deleted, and nobody does that step.
+# The release is the moment the deadline arithmetic changes, so it is the moment
+# worth printing. Nobody is expected to act during wrap-up: this is config
+# hygiene, not part of shipping, so every failure path here warns and returns 0.
+#
+# --sunset-new, not --sunset: --sunset reprints the whole standing backlog every
+# week (wallpaper in a build log), --sunset-new prints a summary line plus only
+# what crossed a deadline since hgConfGateBacklog.txt was last accepted. Its
+# exit 1 means "there is news", NOT "the tool broke".
+#
+# Deliberately no --update-baseline: accepting the new backlog produces a
+# committed diff and is a human decision. A build that accepted its own findings
+# would report all clear forever.
+#
+# The age cache is rebuilt into $LOGDIR, not in place: the committed
+# hgConfAges.json lives inside the source tree and refreshing it there would
+# leave the build tree's checkout dirty. The rebuild walks git history and takes
+# ~4 minutes. logs/ is untracked, so the cache adds no git noise.
+wrapup_sunset_report() {
+    local catalog="$BUILDHOME/kent/src/hg/utils/hgConfCatalog/hgConfCatalog.py"
+    local slog="$LOGDIR/v${BRANCHNN}.hgConfSunset.log"
+    local cache="$LOGDIR/v${BRANCHNN}.hgConfAges.json"
+
+    if [[ ! -x "$catalog" ]]; then
+        log "WARNING: $catalog not found; skipping the hg.conf release gate report"
+        return 0
+    fi
+
+    # Feature-detect the flags instead of trusting the exit code: --sunset-new,
+    # --cache and --refresh postdate the rest of the catalog, and an older copy
+    # answers an unknown flag with argparse's exit 2 -- which the news-vs-failure
+    # logic below could not tell apart from the meaningful exit 1.
+    if ! "$catalog" --help 2>&1 | grep -q -- '--sunset-new'; then
+        log "WARNING: $catalog predates --sunset-new (refs #37925);" \
+            "skipping the hg.conf release gate report"
+        return 0
+    fi
+
+    # Every deadline is dated from the CGI_VERSION of the tree being scanned.
+    # versionInfo.h is bumped on final day, so at wrap-up it normally equals
+    # BRANCHNN; if it does not, this wrap-up is running late enough that the next
+    # release already bumped it and every deadline is measured against the wrong
+    # release. The harvester guards against being pointed at the wrong tree (it
+    # fails on implausibly few settings); the version arithmetic does not.
+    # The `|| true` on both greps here is load-bearing under `set -e`: a grep
+    # that matches nothing exits 1, and this step must never abort wrap-up.
+    local treever
+    treever=$(grep -oP 'CGI_VERSION\s+"\K[0-9]+' \
+        "$BUILDHOME/kent/src/hg/inc/versionInfo.h" 2>/dev/null) || true
+    if [[ "$treever" != "$BRANCHNN" ]]; then
+        log "WARNING: tree CGI_VERSION=$treever but BRANCHNN=$BRANCHNN;" \
+            "hg.conf gate deadlines will be measured against v$treever"
+    fi
+
+    log "Checking hg.conf release gates (rebuilds the age cache, ~4 min)..."
+    if $DRY_RUN; then
+        log "(dry-run, skipped)"
+        return 0
+    fi
+    if ! KENT_SRC="$BUILDHOME/kent/src" "$catalog" \
+            --cache "$cache" --refresh --sunset-new >& "$slog"; then
+        log "hg.conf release gates need attention:"
+        while IFS= read -r line; do log "  $line"; done < "$slog"
+        log "Full list: $catalog --sunset"
+        return 0
+    fi
+    # Match the summary line rather than taking the first line: --refresh
+    # announces the cache rebuild on stderr, which >& puts ahead of it.
+    local summary
+    summary=$(grep -m1 'release gates at v' "$slog") || true
+    log "${summary:-hg.conf release gates: no summary line; see $slog}"
+    return 0
+}
+
 # Generate markdown release notes for GitHub
 wrapup_release_markdown() {
     if ! $DRY_RUN; then
@@ -1040,6 +1132,8 @@ do_wrapup() {
     step userapps-src     wrapup_userapps_src
     step docker-release   wrapup_docker_release
     step refresh-containers wrapup_refresh_containers
+    # Last: a report, so nothing that matters waits on its ~4 minutes.
+    step sunset-report    wrapup_sunset_report
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"

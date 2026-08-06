@@ -1,6 +1,7 @@
 #!/bin/bash
 # popEVE hg38 build — extract, sort, color anchors, convert, bigBed.
 set -e
+set -o pipefail   # do not let a failure in a piped step be masked by the pipe's last command
 export PATH=$PATH:$HOME/bin/x86_64
 cd /hive/data/genomes/hg38/bed/popEve
 
@@ -62,9 +63,11 @@ awk 'NR==FNR{ok[$1]=1;next} $1 in ok' $CHROMSIZES popEve_sorted_bed.bed > popEve
 echo "raw $(wc -l < popEve_raw.bed)  filtered $(wc -l < popEve_filtered.bed)"
 
 echo "[$(date +%T)] 7. bedToBigBed"
+# Output is popEve_sparse.bb, not popEve.bb: this sparse build is superseded by runBuildDense.sh
+# (the final track). A distinct name avoids clobbering the dense popEve.bb if this is re-run.
 bedToBigBed -type=bed12+ -tab -as=$KS/popEve_heatmap.as \
-  popEve_filtered.bed $CHROMSIZES popEve.bb
-ls -l popEve.bb
+  popEve_filtered.bed $CHROMSIZES popEve_sparse.bb
+ls -l popEve_sparse.bb
 
 echo "[$(date +%T)] 8. total amino-acid positions (sum of blockCount)"
 awk -F'\t' '{s+=$10} END{print "proteins:",NR,"  AA positions:",s}' popEve_filtered.bed

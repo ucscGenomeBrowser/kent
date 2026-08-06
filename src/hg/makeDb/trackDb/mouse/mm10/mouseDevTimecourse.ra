@@ -10,12 +10,16 @@ html mouseDevTimecourse
     track developmentTimecourseM4mm10TPM
     parent mouseDevTimecourse
     type bigBarChart
-    shortLabel timecourse M4 TPM
+    shortLabel Timecourse M4 TPM
     longLabel ENCODE mouse development time course GENCODE M4 TPM
     visibility hide
     barChartUnit TPM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
+    maxWindowToDraw 10000000
+    barChartMetric sample
+    labelFields name,name2
+    defaultLabelFields name
     bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_TPM_M4_mm10.bb
     barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.categories
     barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.facets
@@ -25,12 +29,16 @@ html mouseDevTimecourse
     track developmentTimecourseM4mm10FPKM
     parent mouseDevTimecourse
     type bigBarChart
-    shortLabel timecourse M4 FPKM
+    shortLabel Timecourse M4 FPKM
     longLabel ENCODE mouse development time course GENCODE M4 FPKM
     visibility hide
     barChartUnit FPKM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
+    maxWindowToDraw 10000000
+    barChartMetric sample
+    labelFields name,name2
+    defaultLabelFields name
     bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_FPKM_M4_mm10.bb
     barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.categories
     barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M4.facets
@@ -40,12 +48,16 @@ html mouseDevTimecourse
     track developmentTimecourseM21mm10TPM
     parent mouseDevTimecourse
     type bigBarChart
-    shortLabel timecourse M21 TPM
+    shortLabel Timecourse M21 TPM
     longLabel ENCODE mouse development time course GENCODE M21 TPM
     visibility pack
     barChartUnit TPM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
+    maxWindowToDraw 10000000
+    barChartMetric sample
+    labelFields name,name2
+    defaultLabelFields name
     bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_TPM_M21_mm10.bb
     barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.categories
     barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.facets
@@ -55,12 +67,16 @@ html mouseDevTimecourse
     track developmentTimecourseM21mm10FPKM
     parent mouseDevTimecourse
     type bigBarChart
-    shortLabel timecourse M21 FPKM
+    shortLabel Timecourse M21 FPKM
     longLabel ENCODE mouse development time course GENCODE M21 FPKM
     visibility hide
     barChartUnit FPKM
     barChartFacets tissue,timepoint
     barChartStretchToItem on
+    maxWindowToDraw 10000000
+    barChartMetric sample
+    labelFields name,name2
+    defaultLabelFields name
     bigDataUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_FPKM_M21_mm10.bb
     barChartCategoryUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.categories
     barChartStatsUrl /gbdb/mm10/mouseDevTimecourse/mouse_development_M21.facets

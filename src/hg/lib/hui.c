@@ -6961,43 +6961,6 @@ if (sameString("qValue", field))
 return -1;
 }
 
-static void warnOrphanedRangeFilters(struct trackDb *tdb)
-/* A numeric filter is only DISCOVERED from a filter.<field> (or <field>Filter)
- * setting -- see FILTER_NUMBER_WILDCARD and tdbGetTrackNumFilters(). A
- * filterByRange.<field> or filterLimits.<field> with no matching filter.<field>
- * is silently ignored and its control never appears, which is an easy and
- * confusing mistake to make. Warn so the track/hub developer sees why a filter
- * they configured did not show up. */
-{
-struct slName *orphans = slCat(trackDbSettingsWildMatch(tdb, "filterByRange.*"),
-                               trackDbSettingsWildMatch(tdb, "filterLimits.*"));
-struct hash *seen = hashNew(0);
-struct slName *s;
-for (s = orphans; s != NULL; s = s->next)
-    {
-    char *field = strchr(s->name, '.');
-    if (field == NULL)
-        continue;
-    field++; // skip past the '.'
-    if (hashLookup(seen, field) != NULL)
-        continue;
-    hashAdd(seen, field, NULL);
-    char setting[512];
-    safef(setting, sizeof setting, "filter.%s", field);
-    if (trackDbSettingClosestToHome(tdb, setting) != NULL)
-        continue;
-    safef(setting, sizeof setting, "%s%s", field, FILTER_NUMBER_NAME_CAP);
-    if (trackDbSettingClosestToHome(tdb, setting) != NULL)
-        continue;
-    warn("Track %s: a filterByRange/filterLimits setting exists for field '%s' "
-         "but there is no filter.%s (the default range), so this filter is not "
-         "shown. Add 'filter.%s min:max' to enable it.",
-         tdb->track, field, field, field);
-    }
-hashFree(&seen);
-slFreeList(&orphans);
-}
-
 static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
                                  boolean boxed, boolean parentLevel,char *name, char *title,
                                  boolean isHighlight)
@@ -7008,10 +6971,7 @@ struct trackDbFilter *trackDbFilters = NULL;
 if (isHighlight)
     trackDbFilters = tdbGetTrackNumHighlights(tdb);
 else
-    {
     trackDbFilters = tdbGetTrackNumFilters(tdb);
-    warnOrphanedRangeFilters(tdb);
-    }
 if (trackDbFilters)
     {
     puts("<BR>");

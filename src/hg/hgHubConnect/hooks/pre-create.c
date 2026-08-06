@@ -105,9 +105,8 @@ else
         // message, then check what is left. The browser does this too, but hubtools and
         // any other tus client post here directly
         reqParentDir = normalizeParentDir(reqParentDir);
-        if (reqParentDir && isEmpty(reqParentDir))
-            errAbort("Hub name for file '%s' is only whitespace, please give the hub a name",
-                    reqFileName);
+        if (isEmpty(reqParentDir))
+            errAbort("No hub name for file '%s', please give the hub a name", reqFileName);
         if (!isValidParentDir(reqParentDir))
             errAbort("Hub name '%s' for file '%s' can only contain letters, numbers, periods "
                     "and underscores, in '/' separated components. Please rename the hub.",
@@ -142,7 +141,9 @@ else
         if (sameOk(reqFileType, "2bit") && reqGenome[0] &&
             (hDbExists(reqGenome) || isGenArk(reqGenome)))
             {
-            char *hubName = reqParentDir ? hubNameFromPath(reqParentDir) : "";
+            // existingHubTypeForDir looks up the hub's row at the top level, so give it
+            // the hub component of parentDir rather than a nested subdirectory
+            char *hubName = hubRootFromParentDir(reqParentDir);
             char *existingHubType = existingHubTypeForDir(userName, hubName);
             if (!sameOk(existingHubType, "assemblyHub"))
                 errAbort(HUB_GENOME_COLLISION_ERR_FMT, reqGenome, reqGenome);
@@ -180,7 +181,7 @@ else
         // rejection and forwards our HTTPResponse body verbatim. Non-zero
         // would be wrapped in "ERR_INTERNAL_SERVER_ERROR ... from hook
         // endpoint: ..." which buries the real message.
-        rejectUpload(response, errCatch->message->string);
+        rejectUpload(response, "%s", errCatch->message->string);
         exitStatus = 0;
         }
     }

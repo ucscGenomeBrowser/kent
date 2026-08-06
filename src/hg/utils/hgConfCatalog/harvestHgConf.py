@@ -41,10 +41,19 @@ count, which is the work of removing it later.
 Ages.  --age dates each variable by walking the history once with
 -G'cfgOption' and recording the first commit that added a line reading it, then
 mapping that commit's date onto the CGI_VERSION in effect at the time, taken
-from the history of hg/inc/versionInfo.h.  Both traversals are slow (~2 minutes
-together) so the result is cached; pass --refresh to rebuild it.  This is what
-lets hgConfCatalog.py --sunset report a gate's real age instead of a
+from the history of hg/inc/versionInfo.h.  Both traversals are slow (about 3.5
+minutes together) so the result is cached in hgConfAges.json next to this
+script and committed; pass --refresh to rebuild it, and --cache (or
+HGCONF_AGE_CACHE) to put it somewhere other than the tree, which is what lets
+an automated run refresh without dirtying a git checkout.  This is what lets
+hgConfCatalog.py --sunset report a gate's real age instead of a
 hand-maintained guess.
+
+The cache must be rebuilt after a release bumps CGI_VERSION.  Existing entries
+never change, so the cost of a stale one is omission: a flag added since it was
+built has no date, and a flag whose default flipped TRUE since has no deadline.
+Both are reported rather than assumed, by --sunset's staleness warning and by
+--sunset-new's nonzero exit.
 
 Output needs curation.  The scan cannot tell a mirror configuration knob from a
 release gate, cannot tell a live variable from one whose feature was deleted
@@ -96,8 +105,12 @@ DOC_FILES = ["product/ex.hg.conf", "product/minimal.hg.conf"]
 # date -> version mapping used by --age.
 VERSION_FILE = "hg/inc/versionInfo.h"
 
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                     "hgConfAges.json")
+# The committed age cache.  HGCONF_AGE_CACHE moves it, which is what lets an
+# automated refresh write somewhere other than a git checkout: the default is a
+# path inside the tree, so a --refresh run from the weekly build would otherwise
+# leave the build's own working copy dirty.
+CACHE = os.environ.get("HGCONF_AGE_CACHE") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "hgConfAges.json")
 
 # Bumped when the shape of the cache changes.  A cache written by an older
 # version is still usable for dates, so a mismatch is reported rather than
@@ -694,6 +707,15 @@ def harvest_ages(names=None, refresh=False):
         ages["oldSchema"] = ages.get("schema", 1) < CACHE_SCHEMA
         return ages
 
+    if not refresh:
+        # Reached only because the cache is not where CACHE points, so the walk
+        # is about to run for several minutes without having been asked for.
+        # Say so: the usual cause is a mistyped --cache or HGCONF_AGE_CACHE,
+        # and silence there looks like the tool has hung.
+        print("no age cache at %s: walking history to rebuild it, a few "
+              "minutes.\n(If that path is not the one you meant, stop now and "
+              "fix --cache or\nHGCONF_AGE_CACHE.)" % CACHE, file=sys.stderr)
+
     timeline = version_timeline()
 
     # Pass one: any literal in a cfgOption* call on an added line.
@@ -1038,8 +1060,17 @@ def main():
                     help="the ticket that introduced each setting")
     ap.add_argument("--refresh", action="store_true",
                     help="rebuild the age cache (walks history, ~4 minutes)")
+    ap.add_argument("--cache",
+                    help="read and write the age cache here instead of "
+                         "hgConfAges.json next to this script, so a refresh "
+                         "outside a developer's tree does not dirty a git "
+                         "checkout.  Also settable as HGCONF_AGE_CACHE")
     ap.add_argument("--json")
     args = ap.parse_args()
+
+    if args.cache:
+        global CACHE
+        CACHE = args.cache
 
     found, macro = harvest()
 

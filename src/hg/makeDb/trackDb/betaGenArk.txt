@@ -9,3 +9,4 @@ evaSnp9
 vgp577way
 HPRCv2
 lowelab
+hprc2annot

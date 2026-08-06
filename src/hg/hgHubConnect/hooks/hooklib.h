@@ -29,8 +29,8 @@ char *normalizeParentDir(char *parentDir);
 
 boolean isValidParentDir(char *parentDir);
 /* Return TRUE if every '/' separated component of parentDir holds only alphanumeric,
- * period or underscore characters. NULL or empty means the top level of the user's
- * directory, which is allowed */
+ * period or underscore characters. NULL or empty is invalid, every upload belongs to
+ * a hub */
 
 char *setUploadPath(char *userName, char *fileName, char *parentDir, boolean forceOverwrite);
 /* return the path, relative to hg.conf tusdDataDir, where we will store this upload
@@ -40,11 +40,19 @@ void fillOutHttpResponseError(struct jsonElement *response);
 
 void fillOutHttpResponseSuccess(struct jsonElement *response);
 
+void setUploadedFileList(struct jsonElement *response, char *userName, struct hubSpace *fileList);
+/* Put the hubSpace rows this upload created or changed into the response body. tusd
+ * forwards the body to the client, which shows the rows the server actually holds */
+
 struct jsonElement *makeDefaultResponse();
 /* Create the default response json with some fields pre-filled */
 
-void rejectUpload(struct jsonElement *response, char *msg, ...);
+void rejectUpload(struct jsonElement *response, char *msg, ...)
 /* Set the keys for stopping an upload */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
 boolean isFileTypeRecognized(char *fileName);
 /* Return true if this file one of our recognized types */

@@ -402,28 +402,52 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-char *mafCompGetSrcDb(struct mafComp *mc, char *buf, int bufSize)
-/* parse the srcDb name from the mafComp src name, return NULL if no srcDb */
+char *mafSplitSrcGetChrom(char *src, char *database)
+/* Split a maf sequence name into its db and chrom: truncate src in place so it holds only
+ * the db, and return a pointer to the chrom.  The numbered steps below are spelled out in
+ * maf.h, which is the authority on the rules.  See mafSrcDb for the simpler
+ * non-destructive first-dot-only version used by the track display code. */
 {
-char *e = strchr(mc->src, '.');
-if (e == NULL)
-    return NULL;
-int len = e - mc->src;
-if (len >= bufSize-1)
-    errAbort("srcDb name in \"%s\" overflows buffer length of %d", mc->src, bufSize);
-strncpy(buf, mc->src, len);
-buf[len] = '\0';
-return buf;
-}
+/* 1. A pipe is always an explicit db|chrom separator. */
+char *pipe = strchr(src, '|');
+if (pipe != NULL)
+    {
+    *pipe = '\0';
+    return pipe + 1;
+    }
 
-char *mafCompGetSrcName(struct mafComp *mc)
-/* parse the src sequence name from the mafComp src name */
-{
-char *e = strchr(mc->src, '.');
-if (e == NULL)
-    return mc->src;
-else
-    return e+1;
+/* 2. No separator at all: the whole string is the chrom, and src is left whole. */
+char *dot1 = strchr(src, '.');
+if (dot1 == NULL)
+    return src;
+
+/* 3. When we know the reference database and src starts with "<database>.", split there. */
+if (database != NULL)
+    {
+    int dbLen = strlen(database);
+    if (startsWith(database, src) && src[dbLen] == '.')
+        {
+        src[dbLen] = '\0';
+        return src + dbLen + 1;
+        }
+    }
+
+/* 4. A GenArk accession db (GCA_/GCF_) carries one internal dot (accession.version),
+ *    so the db ends at the second dot. */
+if (startsWith("GCA_", src) || startsWith("GCF_", src))
+    {
+    char *dot2 = strchr(dot1 + 1, '.');
+    if (dot2 != NULL)
+        {
+        *dot2 = '\0';
+        return dot2 + 1;
+        }
+    // accession with no chrom after the version: fall through to the first-dot split
+    }
+
+/* 5. Ordinary db with no dot: split at the first dot. */
+*dot1 = '\0';
+return dot1 + 1;
 }
 
 int mafPlusStart(struct mafComp *comp)

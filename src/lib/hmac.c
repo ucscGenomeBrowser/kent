@@ -17,11 +17,11 @@ char *hmacSha1(char *key, char *data)
 {
 unsigned char* digest;
 digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
-char hmacStr[40];
+char hmacStr[40+1];   /* the last sprintf writes its terminating zero at [40] */
 int i;
 for(i = 0; i < 20; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneStringZ(hmacStr, sizeof(hmacStr));
+return cloneString(hmacStr);
 }
 
 char *hmacMd5(char *key, char *data)
@@ -30,10 +30,10 @@ char *hmacMd5(char *key, char *data)
 unsigned char* digest;
 digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
 //printf("Raw mdr digest: %s\n", digest);
-char hmacStr[32];
+char hmacStr[32+1];   /* the last sprintf writes its terminating zero at [32] */
 int i;
 for(i = 0; i < 16; i++)
     sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
-return cloneStringZ(hmacStr, sizeof(hmacStr));
+return cloneString(hmacStr);
 }
 
