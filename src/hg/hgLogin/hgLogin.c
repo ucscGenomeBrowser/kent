@@ -743,15 +743,15 @@ return;
 }
 
 void printPwdEyeIcon(char *iconId, char *slashId)
-/* print a clickable eye icon, absolutely positioned inside a password
- * input's wrapper span; slashId is the <line> toggled to show "hidden".
- * No-op if disabled via hg.conf login.pwdEyeIcon. */
+/* print a clickable eye icon as a normal sibling right after a password
+ * input (not overlapping it); slashId is the <line> toggled to show
+ * "hidden". No-op if disabled via hg.conf login.pwdEyeIcon. */
 {
 if (!pwdEyeIconEnabled)
     return;
 hPrintf(
     "<span id=\"%s\" title=\"Show/hide password\" "
-    "style=\"position:absolute; right:8px; top:50%%; transform:translateY(-50%%); "
+    "style=\"display:inline-block; margin-left:6px; vertical-align:middle; "
     "cursor:pointer; user-select:none;\">"
     "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" "
     "stroke=\"#666\" stroke-width=\"2\">"
@@ -806,7 +806,7 @@ hPrintf("<form method=post action=\"%s\" name=\"accountLoginForm\" id=\"accountL
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"password\">Password</label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"password\">"
     , hgLoginUrl, username, hgLoginUrl);
 printPwdEyeIcon("pwdEyeIcon", "pwdEyeSlash");
@@ -889,7 +889,7 @@ hPrintf(
 hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<label for=\"currentPw\">Current or Emailed Password</label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"currentPw\">");
 printPwdEyeIcon("curPwEyeIcon", "curPwEyeSlash");
 hPrintf(
@@ -898,7 +898,7 @@ hPrintf(
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"newPw1\">New Password</label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_newPassword1\" value=\"\" size=\"30\" id=\"newPw1\">");
 printPwdEyeIcon("newPw1EyeIcon", "newPw1EyeSlash");
 hPrintf(
@@ -907,7 +907,7 @@ hPrintf(
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"newPw2\">Re-enter New Password</label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_newPassword2\" value=\"\" size=\"30\" id=\"newPw2\">");
 printPwdEyeIcon("newPw2EyeIcon", "newPw2EyeSlash");
 hPrintf(
@@ -1295,7 +1295,7 @@ if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
 
 hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">",
     cartUsualString(cart, "hgLogin_password", ""));
 printPwdEyeIcon("signupPwEyeIcon", "signupPwEyeSlash");
@@ -1305,7 +1305,7 @@ hPrintf(
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"passwordCheck\">Re-enter Password</label>"
-    "<span style=\"position:relative; display:inline-block;\">"
+    "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">",
     cartUsualString(cart, "hgLogin_password2", ""));
 printPwdEyeIcon("signupPwCheckEyeIcon", "signupPwCheckEyeSlash");
