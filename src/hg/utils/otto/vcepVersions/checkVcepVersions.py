@@ -55,21 +55,29 @@ cspecUrl = "https://cspec.genome.network/cspec/ui/svi/affiliation/"
 def fetchUrl(url):
     """Fetch url and return its text. Retries a few times so a transient network
     blip does not turn into a false alarm, then raises."""
+    attempts = 5
     lastErr = None
-    for attempt in range(5):
+    for attempt in range(attempts):
         try:
             with urllib.request.urlopen(url, timeout=120) as resp:
                 return resp.read().decode("utf-8", "replace")
         except (urllib.error.URLError, OSError) as e:
             lastErr = e
-            time.sleep(30)
-    raise RuntimeError("could not fetch " + url + " after 5 attempts: " + str(lastErr))
+            if attempt < attempts - 1:
+                time.sleep(30)
+    raise RuntimeError("could not fetch " + url + " after " + str(attempts) +
+                       " attempts: " + str(lastErr))
 
 
 def normalizeVersion(version):
     """Turn a dotted version into a tuple for comparison, dropping trailing
-    zeroes so ClinGen's '2.0' matches our page's '2.0.0'."""
-    parts = [int(p) for p in version.split(".")]
+    zeroes so ClinGen's '2.0' matches our page's '2.0.0'. ClinGen's version is a
+    free-form string, so an unparseable one is reported rather than raising past
+    the per-VCEP error handling and killing the rest of the run."""
+    try:
+        parts = [int(p) for p in version.split(".")]
+    except ValueError:
+        raise RuntimeError("could not parse version string '" + version + "'")
     while len(parts) > 1 and parts[-1] == 0:
         parts.pop()
     return tuple(parts)
@@ -117,12 +125,12 @@ def checkVcep(name, config, report):
     try:
         ourVersion = getOurVersion(config)
         clinGenVersions = getClinGenVersions(config)
+        stale = {g: v for g, v in clinGenVersions.items()
+                 if normalizeVersion(v) != normalizeVersion(ourVersion)}
     except RuntimeError as e:
         report.append(name + ": check failed: " + str(e))
         return False
 
-    stale = {g: v for g, v in clinGenVersions.items()
-             if normalizeVersion(v) != normalizeVersion(ourVersion)}
     if stale:
         geneList = ", ".join(g + "=" + stale[g] for g in sorted(stale))
         report.append(name + " is out of date.")

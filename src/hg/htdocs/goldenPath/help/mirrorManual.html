@@ -2011,8 +2011,18 @@ other OIDC provider above (a label, client id/secret and issuer):
 LifeScience RI, for EU universities: https://services.aai.lifescience-ri.eu/spreg/auth</code></pre>
 
 <p>
-login.cookieSalt must also be set, to a secret random string: it is the key that signs the
-identity handed back from the provider, so hgLogin refuses to run a social login without it.
+Their issuer values are below. Endpoint discovery does not follow redirects, so the issuer
+must be the exact URL whose /.well-known/openid-configuration is served directly (for
+example, LifeScience RI needs the /oidc path, and neither issuer should have a trailing
+space or slash):
+</p>
+
+<pre><code>login.oauth.cilogon.issuer=https://cilogon.org
+login.oauth.lsaii.issuer=https://login.aai.lifescience-ri.eu/oidc</code></pre>
+
+<p>
+(For social login, login.cookieSalt must be set, to a secret random string: it is the key that signs the
+identity handed back from the provider, so hgLogin refuses to run a social login without it.)
 </p>
 
 <p>

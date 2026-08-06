@@ -78,11 +78,35 @@ void mafCompFree(struct mafComp **pObj);
 void mafCompFreeList(struct mafComp **pList);
 /* Free up a list of maf components. */
 
-char *mafCompGetSrcDb(struct mafComp *mc, char *buf, int bufSize);
-/* parse the srcDb name from the mafComp src name, return NULL if no srcDb */
-
-char *mafCompGetSrcName(struct mafComp *mc);
-/* parse the src sequence name from the mafComp src name */
+char *mafSplitSrcGetChrom(char *src, char *database);
+/* src is one of: chrom, db|chrom, or db.chrom.  Return a pointer to the chrom part and
+ * truncate src in place so it holds only the db.  See mafSrcDb for the simpler
+ * non-destructive first-dot-only version used by the track display code.
+ *
+ * The hard part is that BOTH db and chrom may themselves contain dots, so the db/chrom
+ * split is not simply "the first dot" or "the middle dot".  We resolve it like this,
+ * in order:
+ *   1. A pipe '|' is always an explicit, unambiguous separator -- use it if present.
+ *   2. No dot at all -> the whole string is the chrom, and src is left untouched, so a
+ *      caller that wants the db gets the whole string too.
+ *   3. If the caller passed the reference 'database' and src begins with "<database>.",
+ *      split right there.  This nails the master component whether or not database itself
+ *      contains a dot (e.g. a GenArk db like GCF_000001405.40).  The match must end at a
+ *      dot, so "hg38" does not claim "hg38Patch11.chr1".  'database' is trusted as
+ *      given: it wins over the GCA_/GCF_ rule below.
+ *   4. A GenArk accession db (GCA_/GCF_) is the only db that legitimately carries an
+ *      internal dot -- its accession.version adds exactly one -- so its db ends at the
+ *      SECOND dot and the chrom follows.  A GCA_/GCF_ name with no second dot has no
+ *      chrom to hand back, so it falls through to step 5 ("GCA_123.1" -> db "GCA_123",
+ *      chrom "1").
+ *   5. Every other db (hg38, mm10, a species name, ...) has no dot, so split at the FIRST
+ *      dot; anything after it (including further dots, e.g. an accession.version chrom) is
+ *      the chrom.
+ *
+ * There is no universal way to resolve an ambiguous multi-dot name from the dots alone: if
+ * the db part is itself a dotted accession that is not a GenArk GCA_/GCF_ id (e.g. a bare
+ * INSDC accession used as the assembly), step 5 may split it in the wrong place.  For those,
+ * use the pipe form db|chrom, which is always unambiguous. */
 
 struct mafRegDef
 /* MAF region definition (r line) */

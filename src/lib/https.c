@@ -24,6 +24,8 @@ char *https_cert_check = "log";                 // DEFAULT certificate check is 
 char *https_cert_check_depth = "9";             // DEFAULT depth check level is 9.
 char *https_cert_check_verbose = "off";         // DEFAULT verbose is off.
 char *https_cert_check_domain_exceptions = "";  // DEFAULT space separated list is empty string.
+static boolean https_cert_check_forced = FALSE; // TRUE once httpsSetCertCheck() pins the mode,
+                                                 // so openSslInit() won't override it from env.
 
 char *https_proxy = NULL;
 char *log_proxy = NULL;
@@ -95,6 +97,19 @@ if (value)
      *pMySetting = cloneString(value);
 }
 
+void httpsSetCertCheck(char *mode)
+/* Pin the TLS certificate-check mode ("abort", "warn", or "log") for every HTTPS connection this
+ * process makes from here on, overriding hg.conf's httpsCertCheck and the https_cert_check env
+ * var.  Use where a caller must never accept an unverified certificate however the site is
+ * configured (e.g. hgLogin's OAuth requests, which carry a client secret).  Order does not
+ * matter: openSslInit() will not overwrite a pinned value from the environment, and
+ * verify_callback reads the live value on each connection, so this takes effect whether it is
+ * called before or after the first HTTPS connection. */
+{
+https_cert_check = cloneString(mode);
+https_cert_check_forced = TRUE;
+}
+
 void openSslInit()
 /* do only once */
 {
@@ -104,7 +119,8 @@ pthread_mutex_lock( &osiMutex );
 if (!done)
     {
     // setenv avoided since not thread-safe
-    myGetenv(&https_cert_check,                   "https_cert_check");
+    if (!https_cert_check_forced)   // httpsSetCertCheck() wins over the env var
+        myGetenv(&https_cert_check,               "https_cert_check");
     myGetenv(&https_cert_check_depth,             "https_cert_check_depth");
     myGetenv(&https_cert_check_verbose,           "https_cert_check_verbose");
     myGetenv(&https_cert_check_domain_exceptions, "https_cert_check_domain_exceptions");
