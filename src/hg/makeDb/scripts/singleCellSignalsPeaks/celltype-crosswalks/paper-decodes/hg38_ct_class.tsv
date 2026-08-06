@@ -37,7 +37,7 @@ Endocardium	Endothelial	specialized endothelium
 Endothelial	Endothelial
 Endothelial and mural	Endothelial	combined vascular label; also includes mural cells
 Endothelial cell	Endothelial
-Enteric glia	Astrocyte	enteric glia grouped with astroglia
+Enteric glia	Other	enteric nervous system glia, neural-crest derived; PNS not CNS
 Enteric neuron	Other neuron
 Enterochromaffin	Epithelial	gut enteroendocrine (EC) cell
 Enterocyte	Epithelial
@@ -169,9 +169,9 @@ Retinal pigment	Epithelial	retinal pigment epithelium (RPE)
 Retinal progenitors and muller glia	Neural progenitor	combined; also includes Muller glia (astroglia)
 Rod photoreceptor	Other neuron	photoreceptor
 S cone	Other neuron	short-wave cone photoreceptor
-Satellite	Astrocyte	satellite glia (PNS); ambiguous with muscle satellite cell
-Schwann	Astrocyte	Schwann/peripheral glia grouped with astroglia
-Schwann cell	Astrocyte	peripheral glia grouped with astroglia
+Satellite	Muscle	muscle satellite cell (myogenic), not satellite glia
+Schwann	Other	peripheral (PNS) glia; grouped with Other, not astroglia
+Schwann cell	Other	peripheral (PNS) glia; grouped with Other, not astroglia
 Skeletal myocyte	Muscle
 Small intestinal enterocyte	Epithelial
 Small intestinal goblet	Epithelial

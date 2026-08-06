@@ -2583,39 +2583,39 @@ longLabel Plasma, peaks (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_satellite
 parent singleCellSignalsPeaks off
-priority 500011
+priority 1600000
 type bigWig 1.794446 328.383636
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/adult/Satellite.bw
 autoScale group
-color 0,158,115
+color 102,17,0
 shortLabel Satellite
 longLabel Satellite (Satellite) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_satellite_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500012
+priority 1600001
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/adult/Satellite.sorted.narrowPeak.bb
-color 0,158,115
+color 102,17,0
 shortLabel pk Satellite
 longLabel Satellite, peaks (Satellite) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_schwann_general
 parent singleCellSignalsPeaks off
-priority 500013
+priority 2000005
 type bigWig 0.148828 409.128387
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/adult/Schwann_General.bw
 autoScale group
-color 0,158,115
+color 153,153,153
 shortLabel Schwann cell
 longLabel Schwann cell (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_schwann_general_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500014
+priority 2000006
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/adult/Schwann_General.sorted.narrowPeak.bb
-color 0,158,115
+color 153,153,153
 shortLabel Schwann cell pk
 longLabel Schwann cell, peaks (Human Enhancer Atlas)
 
@@ -2982,7 +2982,7 @@ longLabel Tuft, peaks (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_type_i_skeletal_myocyte
 parent singleCellSignalsPeaks off
-priority 1600000
+priority 1600002
 type bigWig 0.038788 182.925766
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/adult/Type_I_Skeletal_Myocyte.bw
 autoScale group
@@ -2992,7 +2992,7 @@ longLabel Type I skeletal myocyte (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_type_i_skeletal_myocyte_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 1600001
+priority 1600003
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/adult/Type_I_Skeletal_Myocyte.sorted.narrowPeak.bb
 color 102,17,0
@@ -3001,7 +3001,7 @@ longLabel Type I skeletal myocyte, peaks (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_type_ii_skeletal_myocyte
 parent singleCellSignalsPeaks off
-priority 1600002
+priority 1600004
 type bigWig 0.108891 231.719818
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/adult/Type_II_Skeletal_Myocyte.bw
 autoScale group
@@ -3011,7 +3011,7 @@ longLabel Type II skeletal myocyte (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__adult_type_ii_skeletal_myocyte_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 1600003
+priority 1600005
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/adult/Type_II_Skeletal_Myocyte.sorted.narrowPeak.bb
 color 102,17,0
@@ -3229,7 +3229,7 @@ longLabel Epithelial cell, peaks (Fetal_Alveolar_Epithelial_2) (Human Enhancer A
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_1
 parent singleCellSignalsPeaks off
-priority 500015
+priority 500011
 type bigWig 0.100364 182.261230
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Astrocyte_1.bw
 autoScale group
@@ -3239,7 +3239,7 @@ longLabel Astrocyte (Fetal_Astrocyte_1) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_1_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500016
+priority 500012
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Astrocyte_1.sorted.narrowPeak.bb
 color 0,158,115
@@ -3248,7 +3248,7 @@ longLabel Astrocyte, peaks (Fetal_Astrocyte_1) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_2
 parent singleCellSignalsPeaks off
-priority 500017
+priority 500013
 type bigWig 0.609186 213.824173
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Astrocyte_2.bw
 autoScale group
@@ -3258,7 +3258,7 @@ longLabel Astrocyte (Fetal_Astrocyte_2) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_2_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500018
+priority 500014
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Astrocyte_2.sorted.narrowPeak.bb
 color 0,158,115
@@ -3267,7 +3267,7 @@ longLabel Astrocyte, peaks (Fetal_Astrocyte_2) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_3
 parent singleCellSignalsPeaks off
-priority 500019
+priority 500015
 type bigWig 0.690839 194.125702
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Astrocyte_3.bw
 autoScale group
@@ -3277,7 +3277,7 @@ longLabel Astrocyte (Fetal_Astrocyte_3) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_3_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500020
+priority 500016
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Astrocyte_3.sorted.narrowPeak.bb
 color 0,158,115
@@ -3286,7 +3286,7 @@ longLabel Astrocyte, peaks (Fetal_Astrocyte_3) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_4
 parent singleCellSignalsPeaks off
-priority 500021
+priority 500017
 type bigWig 0.858021 150.153717
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Astrocyte_4.bw
 autoScale group
@@ -3296,7 +3296,7 @@ longLabel Astrocyte (Fetal_Astrocyte_4) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_4_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500022
+priority 500018
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Astrocyte_4.sorted.narrowPeak.bb
 color 0,158,115
@@ -3305,7 +3305,7 @@ longLabel Astrocyte, peaks (Fetal_Astrocyte_4) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_5
 parent singleCellSignalsPeaks off
-priority 500023
+priority 500019
 type bigWig 11.628881 360.495300
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Astrocyte_5.bw
 autoScale group
@@ -3315,7 +3315,7 @@ longLabel Astrocyte (Fetal_Astrocyte_5) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_astrocyte_5_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500024
+priority 500020
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Astrocyte_5.sorted.narrowPeak.bb
 color 0,158,115
@@ -3609,20 +3609,20 @@ longLabel Endothelial cell, peaks (Fetal_Endothelial_Placental) (Human Enhancer 
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_enteric_glia
 parent singleCellSignalsPeaks off
-priority 500025
+priority 2000007
 type bigWig 0.895487 185.365738
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Enteric_Glia.bw
 autoScale group
-color 0,158,115
+color 153,153,153
 shortLabel Enteric glia
 longLabel Enteric glia (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_enteric_glia_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500026
+priority 2000008
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Enteric_Glia.sorted.narrowPeak.bb
-color 0,158,115
+color 153,153,153
 shortLabel Enteric glia pk
 longLabel Enteric glia, peaks (Human Enhancer Atlas)
 
@@ -4882,64 +4882,64 @@ longLabel Retinal progenitors and muller glia, peaks (Fetal_Retinal_Progenitor_2
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_satellite_1
 parent singleCellSignalsPeaks off
-priority 500027
+priority 1600006
 type bigWig 0.464761 184.510162
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Satellite_1.bw
 autoScale group
-color 0,158,115
+color 102,17,0
 shortLabel Fetal Satellite 1
 longLabel Satellite (Fetal_Satellite_1) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_satellite_1_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500028
+priority 1600007
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Satellite_1.sorted.narrowPeak.bb
-color 0,158,115
+color 102,17,0
 shortLabel pk Fetal Satellite 1
 longLabel Satellite, peaks (Fetal_Satellite_1) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_satellite_2
 parent singleCellSignalsPeaks off
-priority 500029
+priority 1600008
 type bigWig 1.369688 171.210953
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Satellite_2.bw
 autoScale group
-color 0,158,115
+color 102,17,0
 shortLabel Fetal Satellite 2
 longLabel Satellite (Fetal_Satellite_2) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_satellite_2_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500030
+priority 1600009
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Satellite_2.sorted.narrowPeak.bb
-color 0,158,115
+color 102,17,0
 shortLabel pk Fetal Satellite 2
 longLabel Satellite, peaks (Fetal_Satellite_2) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_schwann_general
 parent singleCellSignalsPeaks off
-priority 500031
+priority 2000009
 type bigWig 0.438237 159.079895
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Schwann_General.bw
 autoScale group
-color 0,158,115
+color 153,153,153
 shortLabel Schwann
 longLabel Schwann (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_schwann_general_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 500032
+priority 2000010
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Schwann_General.sorted.narrowPeak.bb
-color 0,158,115
+color 153,153,153
 shortLabel Schwann pk
 longLabel Schwann, peaks (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_1
 parent singleCellSignalsPeaks off
-priority 1600004
+priority 1600010
 type bigWig 0.025229 145.190247
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Skeletal_Myocyte_1.bw
 autoScale group
@@ -4949,7 +4949,7 @@ longLabel Skeletal myocyte (Fetal_Skeletal_Myocyte_1) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_1_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 1600005
+priority 1600011
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Skeletal_Myocyte_1.sorted.narrowPeak.bb
 color 102,17,0
@@ -4958,7 +4958,7 @@ longLabel Skeletal myocyte, peaks (Fetal_Skeletal_Myocyte_1) (Human Enhancer Atl
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_2
 parent singleCellSignalsPeaks off
-priority 1600006
+priority 1600012
 type bigWig 1.983681 236.058044
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Skeletal_Myocyte_2.bw
 autoScale group
@@ -4968,7 +4968,7 @@ longLabel Skeletal myocyte (Fetal_Skeletal_Myocyte_2) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_2_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 1600007
+priority 1600013
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Skeletal_Myocyte_2.sorted.narrowPeak.bb
 color 102,17,0
@@ -4977,7 +4977,7 @@ longLabel Skeletal myocyte, peaks (Fetal_Skeletal_Myocyte_2) (Human Enhancer Atl
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_3
 parent singleCellSignalsPeaks off
-priority 1600008
+priority 1600014
 type bigWig 0.909999 159.249878
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bw/fetal/Fetal_Skeletal_Myocyte_3.bw
 autoScale group
@@ -4987,7 +4987,7 @@ longLabel Skeletal myocyte (Fetal_Skeletal_Myocyte_3) (Human Enhancer Atlas)
 
 track singleCellSignalsPeaks_human_enhancer_atlas__fetal_fetal_skeletal_myocyte_3_sorted_narrowpeak
 parent singleCellSignalsPeaks off
-priority 1600009
+priority 1600015
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/human-enhancer-atlas/hub/bb/fetal/Fetal_Skeletal_Myocyte_3.sorted.narrowPeak.bb
 color 102,17,0
@@ -5586,7 +5586,7 @@ longLabel Vascular smooth muscle, heart, postnatal cohort (Multiomic Human Heart
 
 track singleCellSignalsPeaks_neuro_degen_atac__broad_celltypes_astrocytes_insertions_bin100_ripnorm
 parent singleCellSignalsPeaks off
-priority 500033
+priority 500021
 type bigWig 0.000000 1904.430298
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/broad-celltypes/Astrocytes-insertions_bin100_RIPnorm.bw
 autoScale group
@@ -5686,7 +5686,7 @@ longLabel Inhibitory neuron (Cluster12-insertions_bin100_TSSnorm) (Risk Loci in 
 
 track singleCellSignalsPeaks_neuro_degen_atac__clusters_cluster13_insertions_bin100_tssnorm
 parent singleCellSignalsPeaks off
-priority 500034
+priority 500022
 type bigWig 0.000000 1629.979126
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/clusters/Cluster13-insertions_bin100_TSSnorm.bw
 autoScale group
@@ -5696,7 +5696,7 @@ longLabel Astrocyte (Cluster13-insertions_bin100_TSSnorm) (Risk Loci in Alzheime
 
 track singleCellSignalsPeaks_neuro_degen_atac__clusters_cluster14_insertions_bin100_tssnorm
 parent singleCellSignalsPeaks off
-priority 500035
+priority 500023
 type bigWig 0.000000 2185.754150
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/clusters/Cluster14-insertions_bin100_TSSnorm.bw
 autoScale group
@@ -5706,7 +5706,7 @@ longLabel Astrocyte (Cluster14-insertions_bin100_TSSnorm) (Risk Loci in Alzheime
 
 track singleCellSignalsPeaks_neuro_degen_atac__clusters_cluster15_insertions_bin100_tssnorm
 parent singleCellSignalsPeaks off
-priority 500036
+priority 500024
 type bigWig 0.000000 1961.028809
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/clusters/Cluster15-insertions_bin100_TSSnorm.bw
 autoScale group
@@ -5716,7 +5716,7 @@ longLabel Astrocyte (Cluster15-insertions_bin100_TSSnorm) (Risk Loci in Alzheime
 
 track singleCellSignalsPeaks_neuro_degen_atac__clusters_cluster16_insertions_bin100_tssnorm
 parent singleCellSignalsPeaks off
-priority 500037
+priority 500025
 type bigWig 0.000000 1221.828247
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/clusters/Cluster16-insertions_bin100_TSSnorm.bw
 autoScale group
@@ -5726,7 +5726,7 @@ longLabel Astrocyte (Cluster16-insertions_bin100_TSSnorm) (Risk Loci in Alzheime
 
 track singleCellSignalsPeaks_neuro_degen_atac__clusters_cluster17_insertions_bin100_tssnorm
 parent singleCellSignalsPeaks off
-priority 500038
+priority 500026
 type bigWig 0.000000 2105.731445
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/bigWig/clusters/Cluster17-insertions_bin100_TSSnorm.bw
 autoScale group
@@ -6226,7 +6226,7 @@ longLabel Neuron cluster9 (Risk Loci in Alzheimer)
 
 track singleCellSignalsPeaks_neuro_degen_atac__peaks
 parent singleCellSignalsPeaks off
-priority 2000005
+priority 2000011
 type bigNarrowPeak
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/peaks.bb
 color 153,153,153
@@ -6235,7 +6235,7 @@ longLabel All cell types, peaks (peaks) (Risk Loci in Alzheimer)
 
 track singleCellSignalsPeaks_neuro_degen_atac__peaks_2
 parent singleCellSignalsPeaks off
-priority 2000006
+priority 2000012
 type bigBed 5 +
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/peaks.v2.bb
 labelFields geneSymbol,annotation,distanceToTss
@@ -6248,7 +6248,7 @@ longLabel All cell types, peaks (peaks.v2) (Risk Loci in Alzheimer)
 
 track singleCellSignalsPeaks_olg_eae_ms__human_multiomics_control__subsample_1_pd003_atac_hs_ctr_roche_astro_rnd_peaks
 parent singleCellSignalsPeaks off
-priority 500039
+priority 500027
 type bigWig 0.000000 188.000000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/olg-eae-ms/human-multiomics-control/hub/subsample_1/PD003_atac_HS_Ctr_roche_ASTRO_RND.peaks.bw
 autoScale group
@@ -6308,7 +6308,7 @@ longLabel Oligodendrocyte precursor cell (PD003_atac_HS_Ctr_roche_OPC_RND) (Olig
 
 track singleCellSignalsPeaks_olg_eae_ms__human_multiomics_control__subsample_2_pd004_atac_hs_ctr_roche_astro_rnd_peaks
 parent singleCellSignalsPeaks off
-priority 500040
+priority 500028
 type bigWig 0.000000 230.000000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/olg-eae-ms/human-multiomics-control/hub/subsample_2/PD004_atac_HS_Ctr_roche_ASTRO_RND.peaks.bw
 autoScale group
@@ -6368,7 +6368,7 @@ longLabel Oligodendrocyte precursor cell (PD004_atac_HS_Ctr_roche_OPC_RND) (Olig
 
 track singleCellSignalsPeaks_olg_eae_ms__human_multiomics_control__subsample_3_atac_hs_ctr_roche_astro_rnd_peaks
 parent singleCellSignalsPeaks off
-priority 500041
+priority 500029
 type bigWig 0.000000 261.000000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/olg-eae-ms/human-multiomics-control/hub/subsample_3/atac_HS_Ctr_roche_ASTRO_RND.peaks.bw
 autoScale group
@@ -6437,7 +6437,7 @@ longLabel Amacrine, eye, peaks, major class (Human and Mouse Retina Cell Atlas)
 
 track singleCellSignalsPeaks_retina__hrca__bb_astrocyte_peaks_bed
 parent singleCellSignalsPeaks off
-priority 500042
+priority 500030
 type bigBed 3 .
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/retina/hrca/hub/majorclass/bb/Astrocyte_peaks_bed.bb
 color 0,158,115
@@ -6626,7 +6626,7 @@ longLabel Bipolar cell, eye, peaks, bipolar subtype (IMB) (Human and Mouse Retin
 
 track singleCellSignalsPeaks_retina__hrca__bb_mg_peaks_bed
 parent singleCellSignalsPeaks off
-priority 500043
+priority 500031
 type bigBed 3 .
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/retina/hrca/hub/majorclass/bb/MG_peaks_bed.bb
 color 0,158,115
@@ -6708,7 +6708,7 @@ longLabel Amacrine, eye, major class (Human and Mouse Retina Cell Atlas)
 
 track singleCellSignalsPeaks_retina__hrca__bw_astrocyte
 parent singleCellSignalsPeaks off
-priority 500044
+priority 500032
 type bigWig 0.000000 2.254269
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/retina/hrca/hub/majorclass/bw/Astrocyte-TileSize-100-normMethod-ReadsInTSS-ArchR.bw
 autoScale group
@@ -6918,7 +6918,7 @@ longLabel Bipolar cell, eye, bipolar subtype (IMB) (Human and Mouse Retina Cell 
 
 track singleCellSignalsPeaks_retina__hrca__bw_mg
 parent singleCellSignalsPeaks off
-priority 500045
+priority 500033
 type bigWig 0.000000 1.558894
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/retina/hrca/hub/majorclass/bw/MG-TileSize-100-normMethod-ReadsInTSS-ArchR.bw
 autoScale group
@@ -7038,7 +7038,7 @@ longLabel Horizontal, eye (Human and Mouse Retina Cell Atlas)
 
 track singleCellSignalsPeaks_retina__hrca__developmental_mg
 parent singleCellSignalsPeaks off
-priority 500046
+priority 500034
 type bigWig 0.000000 1539.000000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/retina/hrca/hub/developmental/MG-TileSize-100-normMethod-None-ArchR.bw
 autoScale group
@@ -7088,7 +7088,7 @@ longLabel Rod photoreceptor, eye (Human and Mouse Retina Cell Atlas)
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc0astro
 parent singleCellSignalsPeaks off
-priority 500047
+priority 500035
 type bigWig 0.023400 70.387199
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_MTG/bw/ADNC0Astro.bw
 autoScale on
@@ -7099,7 +7099,7 @@ longLabel Astrocyte, ADNC 0 (no AD), middle temporal gyrus (SEA-AD Brain ATAC)
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc0astrocyte
 parent singleCellSignalsPeaks off
-priority 500048
+priority 500036
 type bigWig 0.035300 82.425499
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_PFC/bw/ADNC0Astrocyte.bw
 autoScale on
@@ -7594,7 +7594,7 @@ longLabel VLMC, ADNC 0 (no AD), dorsolateral prefrontal cortex (SEA-AD Brain ATA
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc1astro
 parent singleCellSignalsPeaks off
-priority 500049
+priority 500037
 type bigWig 0.023400 70.387199
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_MTG/bw/ADNC1Astro.bw
 autoScale on
@@ -7605,7 +7605,7 @@ longLabel Astrocyte, ADNC 1 (low), middle temporal gyrus (SEA-AD Brain ATAC)
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc1astrocyte
 parent singleCellSignalsPeaks off
-priority 500050
+priority 500038
 type bigWig 0.011600 94.435600
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_PFC/bw/ADNC1Astrocyte.bw
 autoScale on
@@ -8100,7 +8100,7 @@ longLabel VLMC, ADNC 1 (low), dorsolateral prefrontal cortex (SEA-AD Brain ATAC)
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc2astro
 parent singleCellSignalsPeaks off
-priority 500051
+priority 500039
 type bigWig 0.007000 65.723000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_MTG/bw/ADNC2Astro.bw
 autoScale on
@@ -8111,7 +8111,7 @@ longLabel Astrocyte, ADNC 2 (intermediate), middle temporal gyrus (SEA-AD Brain 
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc2astrocyte
 parent singleCellSignalsPeaks off
-priority 500052
+priority 500040
 type bigWig 0.015500 60.558498
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_PFC/bw/ADNC2Astrocyte.bw
 autoScale on
@@ -8606,7 +8606,7 @@ longLabel VLMC, ADNC 2 (intermediate), dorsolateral prefrontal cortex (SEA-AD Br
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc3astro
 parent singleCellSignalsPeaks off
-priority 500053
+priority 500041
 type bigWig 0.004700 65.236000
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_MTG/bw/ADNC3Astro.bw
 autoScale on
@@ -8617,7 +8617,7 @@ longLabel Astrocyte, ADNC 3 (high), middle temporal gyrus (SEA-AD Brain ATAC)
 
 track singleCellSignalsPeaks_sea_ad_brain_atac__adnc3astrocyte
 parent singleCellSignalsPeaks off
-priority 500054
+priority 500042
 type bigWig 0.005000 80.745003
 bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/allen-brain-science/seaad_PFC/bw/ADNC3Astrocyte.bw
 autoScale on

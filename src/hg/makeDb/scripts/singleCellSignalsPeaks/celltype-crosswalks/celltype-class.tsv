@@ -1,35 +1,51 @@
+15A	Unknown	187,187,187
+15B	Unknown	187,187,187
+26	Unknown	187,187,187
+3T3	Stromal	153,79,0
+90	Unknown	187,187,187
+97	Unknown	187,187,187
+98	Unknown	187,187,187
+ABC	Unknown	187,187,187
+Acinar	Epithelial	17,119,51
 Adipocyte	Stromal	153,79,0
 Adrenal chromaffin	Other neuron	86,180,233
 Adrenal cortical	Epithelial	17,119,51
 Adrenal neuron	Other neuron	86,180,233
 Adrenal sympathoblasts	Other neuron	86,180,233
+Adrenocortical	Epithelial	17,119,51
 Airway goblet	Epithelial	17,119,51
 All cell types	Other	153,153,153
 All cells	Other	153,153,153
 All immune cells	Immune	238,102,119
 All mesenchymal cells	Stromal	153,79,0
+All tissue.merged.peaks	Unknown	187,187,187
 Alveolar type 1	Epithelial	17,119,51
 Alveolar type 2	Epithelial	17,119,51
+Alveolar type 2;Immune	Epithelial	17,119,51
 Amacrine	Inhibitory neuron	213,94,0
+Antigen presenting	Immune	238,102,119
 Arterial endothelial cell	Endothelial	136,204,238
 Astrocyte	Astrocyte	0,158,115
+Astrocyte (fibrous; white matter)	Astrocyte	0,158,115
 Astrocyte (Myoc+)	Astrocyte	0,158,115
 Astrocyte (Nnat+)	Astrocyte	0,158,115
 Astrocyte (OLIG2-lineage; pallidal/septal)	Astrocyte	0,158,115
-Astrocyte (fibrous; white matter)	Astrocyte	0,158,115
 Astrocyte (protoplasmic; grey matter)	Astrocyte	0,158,115
 Astrocytes and oligodendrocytes	Astrocyte	0,158,115
+Astrocytes-oligodendrocytes	Astrocyte	0,158,115
 Atrial cardiomyocyte	Cardiomyocyte	170,68,0
 B cell	Immune	238,102,119
 B lymphocyte	Immune	238,102,119
 Basal epidermal	Epithelial	17,119,51
+Basal epithelial mammary	Epithelial	17,119,51
 Basophil	Immune	238,102,119
 Bergmann glia	Astrocyte	0,158,115
 Bipolar cell	Excitatory neuron	0,114,178
+BM	Unknown	187,187,187
+C2	Unknown	187,187,187
+C3	Unknown	187,187,187
 CA1 pyramidal neuron	Excitatory neuron	0,114,178
 CA2/CA3 pyramidal neuron	Excitatory neuron	0,114,178
-CGE-derived interneuron	Inhibitory neuron	213,94,0
-CNS;Enteric neuron	Other neuron	86,180,233
 Cajal-Retzius cell	Other neuron	86,180,233
 Capillary	Endothelial	136,204,238
 Capillary endothelial cell	Endothelial	136,204,238
@@ -37,26 +53,32 @@ Cardiac fibroblast	Stromal	153,79,0
 Cardiac fibroblast progenitors	Stromal	153,79,0
 Cardiac pericyte	Mural	221,204,119
 Cardiomyocyte	Cardiomyocyte	170,68,0
+Cardiomyocytes-vascular endothelial	Cardiomyocyte	170,68,0
+CBDevelopingneuron1	Other neuron	86,180,233
 Cerebral nuclei GABAergic neuron	Inhibitory neuron	213,94,0
+CGE-derived interneuron	Inhibitory neuron	213,94,0
 Chandelier	Inhibitory neuron	213,94,0
+Chiasmglia	Other	153,153,153
 Chief	Epithelial	17,119,51
 Cholangiocytes	Epithelial	17,119,51
+Choroid plexus	Choroid plexus	136,34,85
 Choroid plexus / ependymal	Ependymal	68,170,153
 Choroid plexus epithelial cell	Choroid plexus	136,34,85
+Chromaffin	Other	153,153,153
 Chst9 GABAergic neuron (MSN-like)	Inhibitory neuron	213,94,0
 Ciliated cell	Epithelial	17,119,51
 Ciliated epithelial cell	Epithelial	17,119,51
 Claustrum excitatory neuron	Excitatory neuron	0,114,178
 Claustrum neuron	Excitatory neuron	0,114,178
 Club	Epithelial	17,119,51
+CNS;Enteric neuron	Other neuron	86,180,233
 Collecting duct intercalated cell	Epithelial	17,119,51
 Collecting duct principal cell	Epithelial	17,119,51
 Colonic goblet	Epithelial	17,119,51
 Committed oligodendrocyte precursor	Oligodendrocyte precursor	240,228,66
 Cone photoreceptor	Other neuron	86,180,233
 Connecting tubule cell	Epithelial	17,119,51
-Cortical IT excitatory neuron	Excitatory neuron	0,114,178
-Cortical IT excitatory neuron (L2/3)	Excitatory neuron	0,114,178
+Cortexglia	Other	153,153,153
 Cortical corticothalamic excitatory neuron (L6 CT)	Excitatory neuron	0,114,178
 Cortical epithelial-like	Epithelial	17,119,51
 Cortical excitatory neuron	Excitatory neuron	0,114,178
@@ -65,6 +87,8 @@ Cortical excitatory neuron (L5 PT; pyramidal tract)	Excitatory neuron	0,114,178
 Cortical excitatory neuron (L6 CT; corticothalamic)	Excitatory neuron	0,114,178
 Cortical excitatory neuron (L6b)	Excitatory neuron	0,114,178
 Cortical excitatory neuron (near-projecting)	Excitatory neuron	0,114,178
+Cortical IT excitatory neuron	Excitatory neuron	0,114,178
+Cortical IT excitatory neuron (L2/3)	Excitatory neuron	0,114,178
 Cortical near-projecting excitatory neuron	Excitatory neuron	0,114,178
 Cortical pyramidal-tract excitatory neuron (L5 ET)	Excitatory neuron	0,114,178
 D1 medium spiny neuron	Medium spiny neuron	230,159,0
@@ -77,8 +101,12 @@ Dendritic cell	Immune	238,102,119
 Dentate gyrus granule cell	Excitatory neuron	0,114,178
 Dentate gyrus granule neuroblast	Neural progenitor	51,34,136
 Dentate gyrus granule neuron	Excitatory neuron	0,114,178
+DH	Unknown	187,187,187
 Distal convoluted tubule cell	Epithelial	17,119,51
+Dm3	Other neuron	86,180,233
+Dm8 dm11	Other neuron	86,180,233
 Dorsal striatum medium spiny neuron	Medium spiny neuron	230,159,0
+Ductal	Epithelial	17,119,51
 Ductal cell	Epithelial	17,119,51
 Early cardiomyocytes	Cardiomyocyte	170,68,0
 Ebf1 GABAergic neuron	Inhibitory neuron	213,94,0
@@ -89,7 +117,8 @@ Endocardium	Endothelial	136,204,238
 Endothelial	Endothelial	136,204,238
 Endothelial and mural	Endothelial	136,204,238
 Endothelial cell	Endothelial	136,204,238
-Enteric glia	Astrocyte	0,158,115
+Ensheathingglia	Other	153,153,153
+Enteric glia	Other	153,153,153
 Enteric neuron	Other neuron	86,180,233
 Enterochromaffin	Epithelial	17,119,51
 Enterocyte	Epithelial	17,119,51
@@ -102,13 +131,16 @@ Erythroblast	Erythroid	170,68,153
 Erythroid cell	Erythroid	170,68,153
 Excitatory neuron	Excitatory neuron	0,114,178
 Extravillous trophoblast	Epithelial	17,119,51
+FC	Unknown	187,187,187
 Fibroblast	Stromal	153,79,0
 Fibroblast like cells	Stromal	153,79,0
 Flat midget bipolar	Excitatory neuron	0,114,178
+Flybrain consensus	Unknown	187,187,187
 Folh1 GABAergic neuron (D3 MSN-like)	Inhibitory neuron	213,94,0
 Foveolar	Epithelial	17,119,51
 GABAergic	Inhibitory neuron	213,94,0
 GABAergic neuron	Inhibitory neuron	213,94,0
+Ganglion	Other neuron	86,180,233
 Gastric goblet	Epithelial	17,119,51
 Gastric neuroendocrine	Epithelial	17,119,51
 Glial	Other	153,153,153
@@ -116,6 +148,7 @@ Glutamatergic neuron	Excitatory neuron	0,114,178
 Glycinergic	Inhibitory neuron	213,94,0
 Goblet	Epithelial	17,119,51
 Granular epidermal	Epithelial	17,119,51
+Granule neurons	Excitatory neuron	0,114,178
 Hematopoietic stem	Hematopoietic stem/progenitor	153,153,51
 Hematopoietic stem cell	Hematopoietic stem/progenitor	153,153,51
 Hepatic macrophage	Immune	238,102,119
@@ -126,6 +159,7 @@ Hippocampal CA1 excitatory neuron	Excitatory neuron	0,114,178
 Hippocampal CA3 excitatory neuron	Excitatory neuron	0,114,178
 Horizontal	Inhibitory neuron	213,94,0
 Horizontal cell	Inhibitory neuron	213,94,0
+HT	Unknown	187,187,187
 Immune cell	Immune	238,102,119
 Inhibitory neuron	Inhibitory neuron	213,94,0
 Inhibitory neuron (Lrrc38/Plcxd3)	Inhibitory neuron	213,94,0
@@ -137,7 +171,12 @@ Insular neurons	Other neuron	86,180,233
 Intermediate progenitor	Neural progenitor	51,34,136
 Interneuron	Inhibitory neuron	213,94,0
 Intratelencephalic excitatory neuron (hippocampal formation)	Excitatory neuron	0,114,178
+Islet endocrine	Epithelial	17,119,51
+KC AB	Other neuron	86,180,233
+KC ABp	Other neuron	86,180,233
+KC G	Other neuron	86,180,233
 Keratinocyte	Epithelial	17,119,51
+L2 l3	Unknown	187,187,187
 L2/3 IT	Excitatory neuron	0,114,178
 L4 IT	Excitatory neuron	0,114,178
 L5 ET	Excitatory neuron	0,114,178
@@ -159,13 +198,16 @@ Layer 5 excitatory neuron (Fezf2)	Excitatory neuron	0,114,178
 Layer 5 excitatory neuron (Parm1)	Excitatory neuron	0,114,178
 Layer 6 excitatory neuron	Excitatory neuron	0,114,178
 Lhx8 GABAergic neuron	Inhibitory neuron	213,94,0
+Limbic system neurons	Other neuron	86,180,233
+LLPC1	Unknown	187,187,187
+LM	Unknown	187,187,187
 Loop of Henle cell	Epithelial	17,119,51
 Luteal cell	Epithelial	17,119,51
 Lymphatic endothelial	Endothelial	136,204,238
 Lymphocyte	Immune	238,102,119
 Lymphoid	Immune	238,102,119
-MGE progenitors	Neural progenitor	51,34,136
-ML cone	Other neuron	86,180,233
+Lymphoid and myeloid	Immune	238,102,119
+Lymphoid-myeloid	Immune	238,102,119
 Macrophage	Immune	238,102,119
 Mast	Immune	238,102,119
 Matrix D1 neuron (pallidum)	Medium spiny neuron	230,159,0
@@ -175,13 +217,19 @@ Megakaryocytes	Erythroid	170,68,153
 Melanocyte	Other	153,153,153
 Memory B	Immune	238,102,119
 Mesangial	Mural	221,204,119
+MESC	Unknown	187,187,187
 Mesenchymal cell	Stromal	153,79,0
 Mesenchymal stem cell	Stromal	153,79,0
 Mesothelial	Epithelial	17,119,51
 Metanephric	Epithelial	17,119,51
+MGE progenitors	Neural progenitor	51,34,136
+Mi1	Other neuron	86,180,233
+Mi15	Other neuron	86,180,233
+Mi9	Other neuron	86,180,233
 Microglia	Microglia	0,0,0
 Microglia / perivascular macrophage	Microglia	0,0,0
 Microglia-PVM	Microglia	0,0,0
+ML cone	Other neuron	86,180,233
 Monocyte	Immune	238,102,119
 Muller glia	Astrocyte	0,158,115
 Muscle satellite cell	Muscle	102,17,0
@@ -195,6 +243,7 @@ Natural killer T	Immune	238,102,119
 Nephron progenitor	Stromal	153,79,0
 Neural crest	Neural progenitor	51,34,136
 Neural retinal progenitor	Neural progenitor	51,34,136
+Neuroendocrine	Epithelial	17,119,51
 Neuromuscular junction myonuclei	Muscle	102,17,0
 Neuron cluster10	Other neuron	86,180,233
 Neuron cluster11	Other neuron	86,180,233
@@ -223,31 +272,37 @@ Neuron cluster9	Other neuron	86,180,233
 Neuronal	Other neuron	86,180,233
 Neuronal and glial	Other	153,153,153
 Neuronal intermediate progenitor cell	Neural progenitor	51,34,136
+Neurons	Other neuron	86,180,233
 Neutrophil	Immune	238,102,119
 Neutrophil (Gpr27+)	Immune	238,102,119
 Neutrophil (Il1b+)	Immune	238,102,119
 Neutrophil (Ms4a3+)	Immune	238,102,119
 Newly formed oligodendrocyte	Oligodendrocyte	204,121,167
 Nigral neurons	Other neuron	86,180,233
+Non oligo	Other	153,153,153
 Non-Neuronal	Other	153,153,153
-OPC	Oligodendrocyte precursor	240,228,66
+Not assigned	Unknown	187,187,187
 Olfactory areas excitatory neuron	Excitatory neuron	0,114,178
-Olfactory bulb GABAergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb dopaminergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb excitatory neuron	Excitatory neuron	0,114,178
+Olfactory bulb GABAergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb granule GABAergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb neuroblast	Neural progenitor	51,34,136
 Olfactory ensheathing cell	Other	153,153,153
 Olfactory/cortical-subplate Tfap2d neuron	Other neuron	86,180,233
+Oli-neu	Oligodendrocyte	204,121,167
+Oligo	Oligodendrocyte	204,121,167
 Oligodendrocyte	Oligodendrocyte	204,121,167
 Oligodendrocyte precursor cell	Oligodendrocyte precursor	240,228,66
 Oligodendrocytes	Oligodendrocyte	204,121,167
+OPC	Oligodendrocyte precursor	240,228,66
 Other neurons	Other neuron	86,180,233
 Outflow tract	Cardiomyocyte	170,68,0
-Pancreatic Delta;Gamma	Epithelial	17,119,51
+Paired tag CREs	Unknown	187,187,187
 Pancreatic acinar	Epithelial	17,119,51
 Pancreatic alpha	Epithelial	17,119,51
 Pancreatic beta	Epithelial	17,119,51
+Pancreatic Delta;Gamma	Epithelial	17,119,51
 Pancreatic ductal	Epithelial	17,119,51
 Pancreatic islet	Epithelial	17,119,51
 Paneth	Epithelial	17,119,51
@@ -255,7 +310,9 @@ Parietal	Epithelial	17,119,51
 Parietal;Chief	Epithelial	17,119,51
 Parvalbumin GABAergic interneuron	Inhibitory neuron	213,94,0
 Pax6	Inhibitory neuron	213,94,0
+PB4	Unknown	187,187,187
 Pericyte	Mural	221,204,119
+Perineurialglia	Other	153,153,153
 Peripheral nerve stromal	Stromal	153,79,0
 Perivascular macrophage	Immune	238,102,119
 Photoreceptor	Other neuron	86,180,233
@@ -265,7 +322,10 @@ Placental macrophage	Immune	238,102,119
 Placental neuron	Other neuron	86,180,233
 Plasma	Immune	238,102,119
 Plasma cell	Immune	238,102,119
+Plasmatocytes	Immune	238,102,119
+Pm4	Other neuron	86,180,233
 Podocyte	Epithelial	17,119,51
+Poxn	Other neuron	86,180,233
 Pre cardiac fibroblast	Stromal	153,79,0
 Pre smooth muscle	Mural	221,204,119
 Pre-B cell	Immune	238,102,119
@@ -276,6 +336,12 @@ Prox1/Lhx6 GABAergic interneuron	Inhibitory neuron	213,94,0
 Proximal tubule	Epithelial	17,119,51
 Proximal tubule cell	Epithelial	17,119,51
 Pulmonary neuroendocrine	Epithelial	17,119,51
+Purkinje neurons	Other neuron	86,180,233
+PV	Inhibitory neuron	213,94,0
+PV KO	Inhibitory neuron	213,94,0
+PV TG	Inhibitory neuron	213,94,0
+PV TG WT	Inhibitory neuron	213,94,0
+PV WT	Inhibitory neuron	213,94,0
 Pvalb	Inhibitory neuron	213,94,0
 Pvalb interneuron	Inhibitory neuron	213,94,0
 Radial glia	Neural progenitor	51,34,136
@@ -285,11 +351,13 @@ Retinal ganglion	Other neuron	86,180,233
 Retinal neuron	Other neuron	86,180,233
 Retinal pigment	Epithelial	17,119,51
 Retinal progenitors and muller glia	Neural progenitor	51,34,136
+RNA	Unknown	187,187,187
 Rod photoreceptor	Other neuron	86,180,233
 S cone	Other neuron	86,180,233
-Satellite	Astrocyte	0,158,115
-Schwann	Astrocyte	0,158,115
-Schwann cell	Astrocyte	0,158,115
+Satellite	Muscle	102,17,0
+Schwann	Other	153,153,153
+Schwann cell	Other	153,153,153
+Skeletal muscle	Muscle	102,17,0
 Skeletal myocyte	Muscle	102,17,0
 Skeletal myofiber (Gm5141)	Muscle	102,17,0
 Skeletal myofiber (Myh1; type IIx)	Muscle	102,17,0
@@ -307,25 +375,45 @@ Sst	Inhibitory neuron	213,94,0
 Sst Chodl	Inhibitory neuron	213,94,0
 Sst Chodl interneuron	Inhibitory neuron	213,94,0
 Sst interneuron	Inhibitory neuron	213,94,0
+Stellate	Stromal	153,79,0
 Striatal GABAergic interneuron	Inhibitory neuron	213,94,0
 Stromal cell	Stromal	153,79,0
 Subiculum/entorhinal neuron	Excitatory neuron	0,114,178
+Subperineurialglia	Other	153,153,153
+Sympathoblasts	Other neuron	86,180,233
+Syncytiotrophoblast and villous cytotrophoblasts	Epithelial	17,119,51
 Syncytiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	17,119,51
+Syncytiotrophoblasts and villous cytotrophoblasts	Epithelial	17,119,51
 T cell	Immune	238,102,119
 T lymphocyte	Immune	238,102,119
+T1	Other neuron	86,180,233
+T2	Other neuron	86,180,233
+T2a	Other neuron	86,180,233
+T3	Other neuron	86,180,233
+T4	Other neuron	86,180,233
+T5	Other neuron	86,180,233
 Thalamic glutamatergic neuron	Excitatory neuron	0,114,178
 Thymocyte	Immune	238,102,119
 Thyroid follicular	Epithelial	17,119,51
+Tm1 TmY8	Other neuron	86,180,233
+Tm2	Other neuron	86,180,233
+Tm20	Other neuron	86,180,233
+Tm3	Other neuron	86,180,233
+Tm4	Other neuron	86,180,233
+Tm9	Other neuron	86,180,233
+TmY3	Other neuron	86,180,233
+TmY5a	Other neuron	86,180,233
+Total	Unknown	187,187,187
+Total cortex	Unknown	187,187,187
 Transitional zone cortical	Epithelial	17,119,51
+Trophoblast giant	Epithelial	17,119,51
 Tuft	Epithelial	17,119,51
 Type I skeletal myocyte	Muscle	102,17,0
 Type II skeletal myocyte	Muscle	102,17,0
 Unannotated	Unknown	187,187,187
+uni	Unknown	187,187,187
+Unk	Unknown	187,187,187
 Ureteric bud	Epithelial	17,119,51
-VLMC	Mural	221,204,119
-VPIA1	Unknown	187,187,187
-VPIA2	Unknown	187,187,187
-VPIA3	Unknown	187,187,187
 Vascular and leptomeningeal cell	Mural	221,204,119
 Vascular endothelial cell	Endothelial	136,204,238
 Vascular leptomeningeal cell	Mural	221,204,119
@@ -337,5 +425,9 @@ Ventral striatum medium spiny neuron	Medium spiny neuron	230,159,0
 Ventricular cardiomyocyte	Cardiomyocyte	170,68,0
 Vip	Inhibitory neuron	213,94,0
 Vip GABAergic interneuron	Inhibitory neuron	213,94,0
+VLMC	Mural	221,204,119
+VPIA1	Unknown	187,187,187
+VPIA2	Unknown	187,187,187
+VPIA3	Unknown	187,187,187
 Zona fasciculata cortical	Epithelial	17,119,51
 Zona glomerulosa cortical	Epithelial	17,119,51
