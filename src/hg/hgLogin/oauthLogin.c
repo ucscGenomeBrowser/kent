@@ -10,6 +10,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 #include "net.h"
+#include "https.h"
 #include "htmlPage.h"
 #include "jsonParse.h"
 #include "oauthLogin.h"
@@ -210,6 +211,14 @@ return (p != NULL) ? p->label : name;
 static char *httpRequest(char *url, char *method, char *header, char *body)
 /* Make an HTTP(S) request and return the response body (allocd), or NULL on failure. */
 {
+/* Insist on a valid TLS certificate for these calls, whatever the site's httpsCertCheck is set
+ * to.  We send the client secret to the token endpoint and then trust the identity in the
+ * response, so a forged certificate on a man-in-the-middle would hand over the secret and let an
+ * attacker claim any verified email.  The default httpsCertCheck is "log", which accepts any
+ * certificate.  httpsSetCertCheck() pins "abort" for the rest of this process regardless of when
+ * the first HTTPS connection happens; this is the choke point every outbound request goes
+ * through, so pinning it here covers all of them. */
+httpsSetCertCheck("abort");
 char *result = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
