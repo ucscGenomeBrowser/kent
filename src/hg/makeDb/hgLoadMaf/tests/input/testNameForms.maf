@@ -1,0 +1,12 @@
+##maf version=1 scoring=blastz
+a score=1000.0
+s hg38.chr1                      100 10 + 248956422 ACGTACGTAC
+s mm10.chr2                      200 10 + 182113224 ACGTACGTAC
+s hg38Patch11.chr1               250 10 + 248956422 ACGTACGTAC
+s Pan_troglodytes.NBAG03003257.1 300 10 +  10000000 ACGTACGTAC
+s GCF_000001405.40.NC_000001.11  400 10 + 248956422 ACGTACGTAC
+s GCA_009914755.4.CM034974.1     500 10 + 248387328 ACGTACGTAC
+s foo|weird.chrom.name           600 10 +  10000000 ACGTACGTAC
+s nodots                         700 10 +  10000000 ACGTACGTAC
+s GCA_123456789.1                800 10 +  10000000 ACGTACGTAC
+

@@ -3,6 +3,7 @@
 # genomic coordinates reused from the VCF-derived popEve_sorted.tsv. Proteins absent from
 # the CSV fall back to the sparse (single-nucleotide-reachable) VCF scores.
 set -e
+set -o pipefail   # so a bedToBigBed failure piped to tail is not masked
 export PATH=$PATH:$HOME/bin/x86_64
 cd /hive/data/genomes/hg38/bed/popEve
 KS=$HOME/kent/src/hg/makeDb/scripts/popEve

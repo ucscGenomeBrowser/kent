@@ -4317,6 +4317,13 @@ function titleTagToMouseover(mapEl) {
         addMouseover(mapEl, mapEl.title);
 }
 
+function htmlEncode(s) {
+    /* HTML-escape a value (&, <, >, ", ') so it is safe to insert as text or into an attribute
+     * value in a string of HTML.  Shared helper: prefer this over rolling a per-file escaper.
+     * Uses the browser's own text->markup conversion via a detached element (jQuery required). */
+    return $('<div>').text(s === null || s === undefined ? '' : String(s)).html();
+}
+
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     document.querySelectorAll("[title],[data-tooltip]").forEach(function(a, i) {

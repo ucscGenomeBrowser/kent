@@ -77,15 +77,21 @@ def parseArgs():
     return  options
 
 def bash(cmd,mergeStderr=True):
-    """Run the cmd in bash subprocess. Callers that parse the output should pass
-    mergeStderr=False so that a warning cannot splice itself into a data line."""
+    """Run the cmd in a bash subprocess. Callers that parse the output should pass
+    mergeStderr=False so that a warning cannot splice itself into a data line, a
+    failing command still reports its stderr either way. executable is pinned to bash
+    because the commands here use bash features, 'set -o pipefail' and ANSI-C quoting
+    in the sort, that plain sh does not have."""
     try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True, executable="/bin/bash",\
                                        stdout=subprocess.PIPE, universal_newlines=True,\
                                        stderr=subprocess.STDOUT if mergeStderr else subprocess.PIPE)
         bashStdoutt = rawBashOutput.stdout
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+        errorText = e.output if e.output else ""
+        if e.stderr:
+            errorText += e.stderr
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, errorText))
     return(bashStdoutt)
 
 def file_exists(filepath):
@@ -130,6 +136,11 @@ def buildTrackDbCache(dbs):
             trackDbCache[trackName]['parentName'] = settings["parent"].split(" ")[0]
         elif "superTrack" in settings and settings["superTrack"].split(" ")[0] != "on":
             trackDbCache[trackName]['parentName'] = settings["superTrack"].split(" ")[0]
+    #tdbQuery exits 0 and prints nothing for a database it does not know, so an empty cache
+    #means a bad db name. Without this the run carries on, treats every track as notInTrackDb,
+    #and only fails later with a message blaming the usage logs.
+    if not trackDbCache:
+        sys.exit("Error: tdbQuery returned no trackDb entries for '"+dbs+"'. Check the database name.")
     print("trackDb entries cached for "+dbs+": "+str(len(trackDbCache)))
     return(trackDbCache)
 
@@ -169,14 +180,24 @@ def generateTrackCounts(dbs,workDir,startDate,endDate):
     #while awk field matching is exact. The awk also does what the old 'cut -f2-' did.
     awkFilter = "awk -F'\\t' 'BEGIN{OFS=\"\\t\"} $1!~/^#/ && $2!~/^(hub_|ct_|dup_)/ " + \
         "{out=$2; for(i=3;i<=NF;i++) out=out OFS $i; print out}'"
-    reportCmd = "/hive/users/chmalee/logs/byDate/makeUsageReport -t -db " + dbs + \
+    #pipefail so that makeUsageReport dying partway through counts as a failure. Without it
+    #the pipeline reports awk's status, awk is perfectly happy with truncated input, and the
+    #half written file would be treated as a valid cache by every later run.
+    reportCmd = "set -o pipefail; /hive/users/chmalee/logs/byDate/makeUsageReport -t -db " + dbs + \
         " --bin-months -s " + startDate + " -e " + endDate + \
         " | " + awkFilter + " > " + outputFileName
 
     if not file_exists(outputFileName):
         print("Generating new file")
         print(reportCmd)
-        bash(reportCmd)
+        try:
+            bash(reportCmd)
+        except RuntimeError:
+            #A run that died partway still leaves what it managed to write, so clear it out
+            #rather than leave a partial file for the next run to pick up as cached.
+            if file_exists(outputFileName):
+                os.remove(outputFileName)
+            raise
     else:
         print("File already generated: " + outputFileName)
 

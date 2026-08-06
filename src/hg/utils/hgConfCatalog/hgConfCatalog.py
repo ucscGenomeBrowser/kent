@@ -506,10 +506,10 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2294",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2299",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
-        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1563",
+        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1564",
           default="FALSE", role="knob", public=True, verified=True,
           ticket="37929",
           note="Passwordless sign-in: the user is emailed a one-time link "
@@ -1066,15 +1066,15 @@ LOGIN = {
     "vars": [
         h("login.systemName", "internal", "hg/lib/wikiLink.c:31", public=True,
           verified=True, family="login"),
-        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:81",
+        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:82",
           public=True, verified=True, family="login"),
-        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:90", public=True,
+        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:91", public=True,
           verified=True, family="login"),
-        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:99",
+        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:100",
           public=True, verified=True, family="login"),
-        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:110",
+        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:111",
           public=True, verified=True, family="login"),
-        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:340",
+        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:341",
           default="NULL", verified=True, family="login"),
         h("login.cookieSalt", "credential",
           "hg/hgPhyloPlace/hgPhyloPlace.c:581", public=True, verified=True,
@@ -1937,14 +1937,28 @@ def wrap_note(note, width):
     return lines
 
 
+def pyq(s):
+    """Escape text for splicing into a double-quoted Python string literal.
+
+    render_row writes source into this very file, and --auto-register runs it
+    unattended from cron over text nobody vetted: a git commit subject that
+    quotes a setting name would otherwise land a bare " in a generated row and
+    break every import of the catalog, with no human in the loop to notice.
+    Newlines and tabs go too, since a row has to stay on the lines it was
+    wrapped onto.
+    """
+    s = re.sub(r"[\x00-\x1f\x7f]", " ", str(s))
+    return s.replace("\\", "\\\\").replace('"', '\\"')
+
+
 def render_row(name, kind, src, default=None, ticket=None, note=None):
     """One h(...) call as source text, wrapped the way the file is written."""
-    head = '        h("%s", "%s", "%s"' % (name, kind, src)
+    head = '        h("%s", "%s", "%s"' % (pyq(name), pyq(kind), pyq(src))
     args = []
     if default is not None:
-        args.append('default="%s"' % default)
+        args.append('default="%s"' % pyq(default))
     if ticket:
-        args.append('ticket="%s"' % ticket)
+        args.append('ticket="%s"' % pyq(ticket))
     lines = []
     cur = head
     for a in args:
@@ -1954,7 +1968,10 @@ def render_row(name, kind, src, default=None, ticket=None, note=None):
         else:
             cur = cur + ", " + a
     if note:
-        wrapped = wrap_note(note, 61)
+        # Wrap on the text as read, escape each piece after: the escapes are
+        # not what a reader of the file sees, so they should not push a note
+        # onto an extra line.
+        wrapped = [pyq(w) for w in wrap_note(note, 61)]
         if len(cur) + 2 > 78:
             lines.append(cur + ",")
             cur = "          "

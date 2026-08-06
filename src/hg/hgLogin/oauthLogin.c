@@ -10,6 +10,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 #include "net.h"
+#include "https.h"
 #include "htmlPage.h"
 #include "jsonParse.h"
 #include "oauthLogin.h"
@@ -48,6 +49,17 @@ if (isEmpty(val))
     val = cfgOption(key);
     }
 return val;
+}
+
+static char *cfgTrim(char *name, char *field)
+/* Like provCfg, but with surrounding whitespace removed and NULL for empty.  A stray trailing
+ * space in an hg.conf value (e.g. on an issuer or endpoint) would otherwise corrupt the URLs
+ * built from it. */
+{
+char *val = provCfg(name, field);
+if (isEmpty(val))
+    return NULL;
+return trimSpaces(cloneString(val));
 }
 
 static void fillBuiltinDefaults(struct oauthProvider *p)
@@ -89,15 +101,15 @@ static struct oauthProvider *newProvider(char *name)
 struct oauthProvider *p;
 AllocVar(p);
 p->name = cloneString(name);
-p->label = cloneString(provCfg(name, "label"));
-p->type = cloneString(provCfg(name, "type"));
-p->clientId = cloneString(provCfg(name, "clientId"));
-p->clientSecret = cloneString(provCfg(name, "clientSecret"));
-p->authUrl = cloneString(provCfg(name, "authUrl"));
-p->tokenUrl = cloneString(provCfg(name, "tokenUrl"));
-p->userinfoUrl = cloneString(provCfg(name, "userinfoUrl"));
-p->scopes = cloneString(provCfg(name, "scopes"));
-p->issuer = cloneString(provCfg(name, "issuer"));
+p->label = cfgTrim(name, "label");
+p->type = cfgTrim(name, "type");
+p->clientId = cfgTrim(name, "clientId");
+p->clientSecret = cfgTrim(name, "clientSecret");
+p->authUrl = cfgTrim(name, "authUrl");
+p->tokenUrl = cfgTrim(name, "tokenUrl");
+p->userinfoUrl = cfgTrim(name, "userinfoUrl");
+p->scopes = cfgTrim(name, "scopes");
+p->issuer = cfgTrim(name, "issuer");
 fillBuiltinDefaults(p);
 if (isEmpty(p->type))
     p->type = "oidc";
@@ -199,6 +211,14 @@ return (p != NULL) ? p->label : name;
 static char *httpRequest(char *url, char *method, char *header, char *body)
 /* Make an HTTP(S) request and return the response body (allocd), or NULL on failure. */
 {
+/* Insist on a valid TLS certificate for these calls, whatever the site's httpsCertCheck is set
+ * to.  We send the client secret to the token endpoint and then trust the identity in the
+ * response, so a forged certificate on a man-in-the-middle would hand over the secret and let an
+ * attacker claim any verified email.  The default httpsCertCheck is "log", which accepts any
+ * certificate.  httpsSetCertCheck() pins "abort" for the rest of this process regardless of when
+ * the first HTTPS connection happens; this is the choke point every outbound request goes
+ * through, so pinning it here covers all of them. */
+httpsSetCertCheck("abort");
 char *result = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -298,7 +318,11 @@ char url[1024];
 safef(url, sizeof(url), "%s/.well-known/openid-configuration", p->issuer);
 struct jsonElement *j = jsonParseSafe(httpRequest(url, "GET", "Accept: application/json\r\n", NULL));
 if (j == NULL)
+    {
+    fprintf(stderr, "hgLogin oauth: OIDC discovery failed for provider '%s' at %s "
+        "(check login.oauth.%s.issuer)\n", p->name, url, p->name);
     return;
+    }
 if (isEmpty(p->authUrl))
     p->authUrl = cloneString(jsonOptionalStringField(j, "authorization_endpoint", NULL));
 if (isEmpty(p->tokenUrl))

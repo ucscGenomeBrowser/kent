@@ -9026,7 +9026,10 @@ if (!trackHubDatabase(database))
 char *acc = trackHubSkipHubName(database);   /* drop the "hub_NNN_" prefix -> the accession */
 char *org = hGenome(acc);                    /* GenArk table's friendly genome name for GC* accs */
 if (isEmpty(org))
+    {
     org = trackHubAssemblyField(database, "organism");   /* else the hub's genomes.txt organism */
+    org = trackHubSkipHubName(org);          /* strip the "hub_NNN_" prefix addHubName() baked in */
+    }
 if (isEmpty(org))
     return cloneString(acc);
 char buf[256];
@@ -9082,7 +9085,7 @@ freeMem(shareBb);
 printf("<style>"
        "#main-menu-whole{margin-bottom:0}"   /* no gap between the menubar and the title bar */
        "#mainContent{background:#eef1f4}"     /* grey page behind the white alignment panel */
-       ".blatTitleBar{background:#e9cf9a; color:#0a2b6b; box-sizing:border-box; display:flex;"
+       ".blatTitleBar{background:#eaca92; color:#000; box-sizing:border-box; display:flex;"
        " align-items:center; justify-content:space-between; padding:8px 16px}"  /* gold title band */
        ".blatTitleBar .blatTtl{font-size:18px; font-weight:700}"
        ".blatTitleBar .blatBtns{display:flex; gap:8px; align-items:center}"
@@ -9106,7 +9109,7 @@ printf("<style>"
        "#blatAlnContent{grid-column:2; grid-row:1; min-width:0; padding:0 20px 14px}"
        "#blatAlnContent h2{display:none}"
        "#blatAlnContent hr{display:none}"
-       "#blatAlnContent h4{margin:16px -20px 0; padding:8px 20px; background:#4c7093; color:#fff;"
+       "#blatAlnContent h4{margin:16px -20px 0; padding:8px 20px; background:#4c759c; color:#fff;"
        " font-size:15px; font-weight:700}"                     /* -20px: bar spans full content width */
        "#blatAlnContent h4:first-child{margin-top:0}"          /* Alignment Summary flush at top */
        "#blatAlnContent h4 a{color:#fff}"
@@ -9114,6 +9117,12 @@ printf("<style>"
         * it would give <pre> a grey box, a border and word-break that mangles the alignment */
        "#blatAlnContent pre{margin:0; padding:2px 0 12px; line-height:1.4; background:none; border:0;"
        " border-radius:0; color:#374a5e; white-space:pre; word-break:normal; word-wrap:normal}"
+       /* key-value summary strip, mirroring hgBlat's .blatStrip (label over value, thin dividers) */
+       ".blatAlnStrip{display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:2px 0 14px}"
+       ".blatAlnStat{display:flex; flex-direction:column; gap:1px}"
+       ".blatAlnStat .k{font-size:12px; color:#5b6572; font-weight:700}"
+       ".blatAlnStat .v{font-size:14px; color:#1e2833; font-weight:700}"
+       ".blatAlnStrip .d{width:1px; height:28px; background:#d0d0d0}"
        "</style>\n");
 
 /* gold title bar, drawn directly (no framework subheadingBar, no JS): title on the left, then a
@@ -9134,11 +9143,28 @@ printf("<div id='blatAlnBody'>\n");
 
 printf("<div id='blatAlnContent'>\n");
 printf("<h4>Alignment Summary</h4>\n");
-printf("<p><b>%s</b> aligned to <b>%s:%d-%d</b>, "
-       "<b style='color:%s'>%.1f%% identity</b>, "
-       "%d of %d bases matched, strand <b>%s</b>.</p>\n",
-       qName, chrom, psl->tStart + 1, psl->tEnd, idColor, ident,
-       psl->match + psl->repMatch, psl->qSize, psl->strand);
+/* comma-format the coordinates and base counts, matching the new Table view (readable at the
+ * hundreds-of-millions scale of genomic coordinates, and the convention elsewhere in the browser) */
+char tStartC[32], tEndC[32], matchC[32], qSizeC[32];
+sprintLongWithCommas(tStartC, psl->tStart + 1);
+sprintLongWithCommas(tEndC, psl->tEnd);
+sprintLongWithCommas(matchC, psl->match + psl->repMatch);
+sprintLongWithCommas(qSizeC, psl->qSize);
+/* key-value strip (Query / Position / Identity / Matches / Strand), styled like hgBlat's summary
+ * strip so the two pages read as one design. */
+printf("<div class='blatAlnStrip'>"
+       "<div class='blatAlnStat'><span class='k'>Query</span><span class='v'>%s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Position</span><span class='v'>%s:%s-%s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Identity</span>"
+       "<span class='v' style='color:%s'>%.1f%%</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Matches</span><span class='v'>%s of %s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Strand</span><span class='v'>%s</span></div>"
+       "</div>\n",
+       qName, chrom, tStartC, tEndC, idColor, ident, matchC, qSizeC, psl->strand);
 if (isNotEmpty(aliasStr))
     printf("<p>Genome sequence %s is also known as: %s.</p>\n", chrom, aliasStr);
 /* The shared library returns the number of alignment blocks it actually shows.  The DNA path merges
@@ -9156,7 +9182,7 @@ printf("</div>\n");   /* #blatAlnContent */
 printf("<div id='blatAlnNav'><div id='blatAlnNavInner'>\n");
 printf("<a href='#cDNA'>Only query sequence</a>\n"
        "<a href='#genomic'>Only genome sequence</a>\n"
-       "<a href='#ali'>Side-by-side alignment</a>\n");
+       "<a href='#ali'>Side by Side Alignment</a>\n");
 if (blockCount > 1)   /* per-block jump links, indented under the side-by-side item */
     {
     int bi;
@@ -27386,7 +27412,8 @@ makeBigPsl(pslName, faName, database, bigBedFile);
 char* host = getenv("HTTP_HOST");
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";  
+// blatResult=on tags this as a BLAT results track so previous ones can be found (see blatOldTracks).
+char *customTextTemplate = "track type=bigPsl blatResult=on indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";
 char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)
@@ -27396,6 +27423,36 @@ safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraFor
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
+
+/* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
+ * confused about which results are current.  hg.conf "blatOldTracks":
+ *   keep   (default) - do nothing, every search's track stays as-is
+ *   hide             - leave earlier BLAT tracks in the session but set them to hide
+ *   delete           - remove earlier BLAT tracks from the session (their trash files age out)
+ * Only BLAT-tagged tracks are touched; the track just made is left alone. */
+char *oldTracks = cfgOptionDefault("blatOldTracks", "keep");
+if (differentString(oldTracks, "keep"))
+    {
+    struct customTrack *ct, *next, *keptList = NULL;
+    for (ct = ctList; ct != NULL; ct = next)
+        {
+        next = ct->next;
+        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+            {
+            if (sameString(oldTracks, "hide"))
+                {
+                cartSetString(cart, ct->tdb->track, "hide");
+                slAddHead(&keptList, ct);   /* keep it in the session, just hidden */
+                }
+            /* "delete": drop it from the list so customTracksSaveCart writes it out */
+            }
+        else
+            slAddHead(&keptList, ct);
+        }
+    slReverse(&keptList);
+    ctList = keptList;
+    }
+
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);

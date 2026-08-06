@@ -1460,3 +1460,69 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     # no data available.
 
 #############################################################################
+# cactus447way length-bug fix, "fix2" rebuild (DONE - 2026-08-06 - Max)
+#     refs #37841
+#
+# The 2023 cactus447way files carry the known cactus/hal2maf size bug
+# (github ComparativeGenomicsToolkit/cactus#1201): the "s" line size field
+# disagrees with the non-gap character count in some blocks (94 blocks /
+# 232 s-lines on chrY in our old files). The alignment content is fine, only
+# the size integers are wrong. The alignment authors re-ran hal2maf and
+# published a corrected single-copy MAF, so the fix is to adopt that file,
+# not to patch our size integers: the corrected file is a fully regenerated
+# alignment whose blocks do not correspond 1:1 to the old ones.
+
+    # corrected published source (single-copy, hg38-referenced, .tai indexed):
+    #   https://cgl.gi.ucsc.edu/data/cactus/447-mammalian-2022v1.fix2.single.maf.gz
+    # all work under:
+    WORK=/hive/data/genomes/hg38/bed/cactus447fix2
+
+    # Per-chrom slices were pulled from the indexed source by contig byte-range.
+    # Only the reference row is renamed accession->UCSC via chromAlias; the 446
+    # query rows keep their cactus Species.scaffold names. Then iRows added:
+    #   mafAddIRows -nBeds=nBeds <chrom>.maf hg38.2bit <chrom>.iRows.maf
+    # final per-chrom iRows mafs (also the per-chrom download source):
+    #   $WORK/iRows/result/chrN.iRows.maf.gz
+
+    # bigMaf bb: per-chrom builds with uniform genome-wide chrom numbering and
+    # zoom schedule, so they stitch without re-sorting the ~1.5 TB of block text
+    # (bedToBigBed -globalChromIds/-cat/-zoomInitial, added to
+    # src/utils/bedToBigBed/bedToBigBed.c this cycle - its own commit/ticket).
+    # per chrom:
+    #   mafToBigMaf hg38 <chrom>.iRows.maf stdout | sort -k1,1 -k2,2n > <chrom>.bigMaf
+    #   bedToBigBed -globalChromIds -zoomInitial=147 -itemsPerSlot=4 -type=bed3+1 \
+    #     -as=$HOME/kent/src/hg/lib/bigMaf.as -tab \
+    #     <chrom>.bigMaf /hive/data/genomes/hg38/chrom.sizes <chrom>.bb
+    # stitch all 194 per-chrom bb into the genome bb (no re-parse / no re-deflate):
+    #   bedToBigBed -cat=allbb.list $WORK/hg38.cactus447way.bb
+    #     -> 1.48 TB, itemCount 97,277,175, chromCount 711, basesCovered 3,099,750,718
+
+    # summary bb: replicate the 2023 summary pipeline with the FIXED
+    # hgLoadMafSummary. Build and run it from ~/bin/$MACHTYPE, NOT the bare name -
+    # the PATH resolves to the old production binary. Script: $WORK/summary/summaryAll.sh
+    # per chrom:
+    #   hgLoadMafSummary -minSize=30000 -mergeGap=1500 -maxSize=200000 -test \
+    #     hg38 <chrom> <chrom>.maf ; cut -f2- <chrom>.tab | sort -k1,1 -k2,2n
+    # then:
+    #   bedToBigBed -type=bed3+4 -as=$HOME/kent/src/hg/lib/mafSummary.as -tab \
+    #     cactus447Summary.bed /hive/data/genomes/hg38/chrom.sizes cactus447waySummary.bb
+    #     -> $WORK/summary/cactus447waySummary.bb
+    #        1.03 GB, itemCount 74,427,201, maxDepth 446 (= 447 - hg38 reference)
+
+    # VERIFICATION (all pass):
+    #   old chrY size!=nongap blocks: 94 (232 s-lines) ; new: 0
+    #   summary src column: 446 clean Genus_species names genome-wide (chrY and
+    #     chr1 both), 0 with a residual dot. This is the hgLoadMafSummary
+    #     name-split fix, refs #37928 (commit 2db6bab8db0, jkweb move 2070aedea88).
+    #   genome bb itemCount == exact sum of the 194 per-chrom itemCounts.
+
+    # STAGING (reversible; genome-test/hgwdev only - NOT pushed to public):
+    #   /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/cactus447way/
+    #     {hg38.cactus447way.bb, cactus447waySummary.bb, maf/} symlinked -> fix2
+    #   rollback: $WORK/swap_rollback.sh
+    # trackDb (human/hg38/trackDb.447way.ra, track cactus447way) already points
+    # bigDataUrl/summary at hgdownload.soe.ucsc.edu; the corrected files reach the
+    # live browser only after the build/QA rsync pushes fix2 to the public server.
+    # frames bb (cactus447wayFrames.bb) not rebuilt (derived; reassess if needed).
+
+#############################################################################

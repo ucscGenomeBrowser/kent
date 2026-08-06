@@ -56,7 +56,8 @@ bash runBuild.sh
 #   4. sort -t$'\t' -k1,1 -k4,4n -S 4G -T sorttmp popEve_records.tsv > popEve_sorted.tsv
 #   5. vcfToPopEveHeatmap.py popEve_sorted.tsv np_strand.tsv popEve_raw.bed $LO $HI
 #   6. bedSort + awk filter to chrom.sizes -> popEve_filtered.bed
-#   7. bedToBigBed -type=bed12+ -tab -as=popEve_heatmap.as popEve_filtered.bed chrom.sizes popEve.bb
+#   7. bedToBigBed -type=bed12+ -tab -as=popEve_heatmap.as popEve_filtered.bed chrom.sizes popEve_sparse.bb
+#      (distinct name from the dense popEve.bb so re-running this sparse build cannot clobber it)
 # Scripts (all in ~/kent/src/hg/makeDb/scripts/popEve/): extractPopEve.py,
 #   vcfToPopEveHeatmap.py, popEve_heatmap.as, and the build drivers runBuild.sh (sparse /
 #   coordinate foundation) and runBuildDense.sh (dense rebuild).
@@ -81,7 +82,7 @@ bash runBuild.sh
 #   trailingFix (trailing empty cell relabeled): 15,555 proteins
 #   mouseover: HTML multi-line labels (<br>/<b>); component scores rounded to 3 dp;
 #     missing/nan components shown as NA
-#   popEve.bb size: 1,592,586,266 bytes
+#   popEve_sparse.bb size: 1,592,586,266 bytes
 
 # ============================================================================
 # DENSE REBUILD (2026-07-23) - full per-amino-acid matrix, per collaborator request
