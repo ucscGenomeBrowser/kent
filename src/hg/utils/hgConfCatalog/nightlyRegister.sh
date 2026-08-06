@@ -139,8 +139,14 @@ trap 'cleanup; rm -rf "$work"' EXIT
 
 # State worth carrying in one line: a bare pulse would say the cron is alive
 # without saying whether it is doing anything, and the point of the heartbeat is
-# to keep this job in mind rather than merely prove it ran.
-waiting=$(sed -n 's/^problems: \([0-9]*\).*/\1/p' "$work/reconcile" | head -1)
+# to keep this job in mind rather than merely prove it ran.  Count the holding
+# pen itself, not reconcile's "problems:" total: that total also carries wrong
+# hand-written defaults and citations whose call site left the file, neither of
+# which is a row awaiting classification, and a heartbeat that quietly reports
+# the wrong number is worse than one that reports none.
+waiting=$(sed -n \
+    's/^written down but not classified (\([0-9]*\)).*/\1/p' \
+    "$work/reconcile" | head -1)
 : "${waiting:=0}"
 at=$(git rev-parse --short HEAD)
 
