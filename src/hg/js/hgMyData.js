@@ -331,7 +331,25 @@ let uppyOptions = {
                             let val = e.target.value;
                             let label = e.target.selectedOptions[0].label;
                             let hub = hubCreate.assemblyHubByGenome(val);
-                            let newParentDir = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
+                            // Keep a hub name the user typed or that came from the
+                            // folder they opened. A genome from one of their assembly
+                            // hubs still moves the file, that hub is the only place
+                            // the genome exists.
+                            // Read the box rather than file.meta, which the file card
+                            // only writes when the card is saved
+                            let pdInput = document.getElementById("uppy-Dashboard-FileCard-input-parentDir");
+                            let currentParentDir = (pdInput ? pdInput.value :
+                                    ((file.meta && file.meta.parentDir) || "")).trim();
+                            let userNamedHub = currentParentDir &&
+                                    currentParentDir !== hubCreate.uiState.hubNameDefault;
+                            let newParentDir;
+                            if (hub) {
+                                newParentDir = hub.fullPath;
+                            } else if (userNamedHub) {
+                                newParentDir = currentParentDir;
+                            } else {
+                                newParentDir = hubCreate.uiState.hubNameDefault;
+                            }
                             // we call onChange here, which will do an onChange with a potentially
                             // stale metadata if the user has also edited parentDir. later we will
                             // fix that up and use the genome name as the recommended parentDir
@@ -458,7 +476,10 @@ const uppy = new Uppy.Uppy({
             }
             // Every file in the batch takes its hub root from the hub-defining
             // file, which is the hub.txt when the user supplied one. Editing the
-            // hub name on a file card changes only that file's meta
+            // hub name on a file card changes only that file's meta.
+            // One 2bit means one hub for the whole batch, so a file whose hub
+            // name says otherwise is moved into the 2bit's hub on purpose. Files
+            // headed for a different hub belong in their own batch
             let hubDefiner = Object.values(files).find(looksLikeHubTxt) || batchTwoBit;
             let asmHubRoot = (hubDefiner.meta.parentDir || "").trim().split("/")[0];
             for (let f of Object.values(files)) {
@@ -997,7 +1018,22 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 let val = ev.target.value;
                 let label = ev.target.selectedOptions[0].label;
                 let hub = hubCreate.assemblyHubByGenome(val);
-                let newRoot = hub ? hub.fileName : hubCreate.uiState.hubNameDefault;
+                // Keep the hub name the user typed or that came from the folder
+                // they opened, only an untouched default gets replaced. A genome
+                // from one of their assembly hubs still moves the files, that hub
+                // is the only place the genome exists
+                let nameInput = document.getElementById("batchParentDir");
+                let currentRoot = (nameInput ? nameInput.value : "").trim();
+                let keepName = currentRoot && (userSetBatchHubName ||
+                        currentRoot !== hubCreate.uiState.hubNameDefault);
+                let newRoot;
+                if (hub) {
+                    newRoot = hub.fullPath;
+                } else if (keepName) {
+                    newRoot = currentRoot;
+                } else {
+                    newRoot = hubCreate.uiState.hubNameDefault;
+                }
                 for (let [key, file] of Object.entries(files)) {
                     // Keep the file's subdirectory under whatever root the
                     // batch genome change implies; only the root segment
@@ -1017,6 +1053,11 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                         parentDir: newParent,
                     };
                     this.uppy.setFileMeta(file.id, meta);
+                }
+                // show where the files actually went. Assigning the value fires no
+                // change event, so this does not count as the user naming the hub
+                if (nameInput) {
+                    nameInput.value = newRoot;
                 }
             });
 
@@ -1204,9 +1245,14 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                     if (dest && dest.hubType === "assemblyHub") {
                         continue;
                     }
+                    // the genome was the 2bit's assembly name, which means
+                    // nothing without the 2bit. Clear it so the upload check
+                    // makes the user pick a real genome
                     this.uppy.setFileMeta(f.id, {
                         hubType: "trackHub",
                         genomeLocked: false,
+                        genome: "",
+                        genomeLabel: "",
                     });
                 }
             }
@@ -1252,6 +1298,26 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 if (!isValidParentDir(normalizeParentDir(file))) {
                     uppy.info(`Error: Hub path '${file.meta.parentDir}' must be alpha-numeric / period / underscore segments separated by '/'.`, 'error', 5000);
                 }
+            }
+            // Renaming the assembly on the 2bit's card leaves its siblings on the
+            // old name, which reads as two genomes in one hub. Restamp them from
+            // the 2bit first, the way adding a file does, and say so since the
+            // user only edited the one card
+            if (file && looksLikeTwoBit(file)) {
+                let asmGenome = file.meta.genome || hubCreate.sanitizeGenomeName(file.name);
+                let renamed = this.uppy.getFiles().filter(
+                    f => f.id !== file.id && f.meta && f.meta.genome !== asmGenome);
+                if (asmGenome && renamed.length) {
+                    let lead;
+                    if (renamed.length === 1) {
+                        lead = "The other file in this batch now uses";
+                    } else {
+                        lead = `The other ${renamed.length} files in this batch now use`;
+                    }
+                    uppy.info(`${lead} the genome "${asmGenome}", since every file ` +
+                              `in the batch goes into this one assembly hub.`, "info", 5000);
+                }
+                propagateAssemblyHubMeta(this.uppy);
             }
             // a hub name edited on a file card has to reach the batch box too
             refreshBatchHubNameInput(this.uppy);
@@ -1307,11 +1373,16 @@ var hubCreate = (function() {
         return openDir.length > 0 ? openDir : uiState.hubNameDefault;
     }
 
-    function hubRootForCurrentDir() {
+    function hubRootFromPath(path) {
         // the hub is the first path segment: hub.txt and the hub's own row live there
-        // even when the user has drilled down into a subdirectory of it
-        let path = uiState.currentHubPath || uiState.currentHub;
+        // even for a file down in a subdirectory of the hub. Matches
+        // hubRootFromParentDir in hg/lib/userdata.c
         return path ? path.split("/")[0] : "";
+    }
+
+    function hubRootForCurrentDir() {
+        // the hub of the directory the user has open
+        return hubRootFromPath(uiState.currentHubPath || uiState.currentHub);
     }
 
     function sanitizeGenomeName(name) {
@@ -1877,10 +1948,10 @@ var hubCreate = (function() {
                         // TODO: this should probably raise an alert to click through
             let hubsAdded = {};
             _.forEach(data, (d) => {
+                let hubRoot = hubRootFromPath(d.fullPath);
                 if (!genome) {
                     // Hub-level rows carry empty db; fall back via the subtree.
                     genome = d.genome;
-                    let hubRoot = (d.fileType === "dir") ? d.fullPath : d.parentDir;
                     if (!genome && hubRoot) {
                         genome = findHubGenome(hubRoot);
                     }
@@ -1898,16 +1969,15 @@ var hubCreate = (function() {
                     // TODO: tusd should return this location in it's response after
                     // uploading a file and then we can look it up somehow, the cgi can
                     // write the links directly into the html directly for prev uploaded files maybe?
-                    if (!(d.parentDir in hubsAdded)) {
+                    if (!(hubRoot in hubsAdded)) {
                         // NOTE: hubUrls get added regardless of whether they are on this assembly
                         // or not, because multiple genomes may have been requested. If this user
                         // switches to another genome we want this hub to be connected already
                         // Resolve the actual hub.txt filename - user may have
                         // uploaded "<prefix>.hub.txt" rather than literal hub.txt.
-                        let hubDir = d.parentDir.replace(/\/$/, "");
-                        url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(hubTxtPathForHub(hubDir)));
+                        url += "&hubUrl=" + encodeURIComponent(uiState.userUrl + cgiEncode(hubTxtPathForHub(hubRoot)));
                     }
-                    hubsAdded[d.parentDir] = true;
+                    hubsAdded[hubRoot] = true;
                     if (d.genome == genome) {
                         // turn the track on if its for this db
                         url += "&" + trackHubFixName(d.fileName) + "=pack";
@@ -1938,9 +2008,12 @@ var hubCreate = (function() {
         let blockedTwoBits = [];
         for (let d of selectedValues) {
             if (d.fileType !== "2bit") continue;
-            let hub = uiState.filesHash[d.parentDir];
+            // hubType lives on the hub's own row, which for a 2bit in a
+            // subdirectory is not the directory holding it
+            let hubRoot = hubRootFromPath(d.fullPath);
+            let hub = uiState.filesHash[hubRoot];
             if (!hub || hub.hubType !== "assemblyHub") continue;
-            if (!selectedHubDirs.has(d.parentDir)) blockedTwoBits.push(d);
+            if (!selectedHubDirs.has(hubRoot)) blockedTwoBits.push(d);
         }
         if (blockedTwoBits.length > 0) {
             let names = blockedTwoBits.map(d => d.fullPath).join("\n  ");
@@ -2343,7 +2416,7 @@ var hubCreate = (function() {
                 viewBtn.type = 'button';
                 viewBtn.addEventListener("click", function(e) {
                     e.stopPropagation();
-                    viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, rowData.parentDir, rowData.hubType);
+                    viewInGenomeBrowser(rowData.fileName, rowData.fileType, rowData.genome, hubRootFromPath(rowData.fullPath), rowData.hubType);
                 });
                 container.appendChild(viewBtn);
                 return container;

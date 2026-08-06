@@ -291,13 +291,20 @@ const SCALE_INIT = ({ k, tipPx }) => {
 };
 
 // ---------- animated cursor (same technique as the walkthrough-video skill's record.js) ----------
-const CURSOR_INIT = () => {
+// The glyph and its box are shared with pinShot(), which draws a STATIC copy at every
+// pinned mouseover so a combined figure shows where each tooltip was raised from. Keep
+// them one definition: a pinned cursor that did not match the animated one would read as
+// a different pointer rather than as the same tour paused.
+const CURSOR_BOX = 'position:fixed;left:0;top:0;z-index:2147483647;pointer-events:none;'
+  + 'width:24px;height:24px;margin-left:-3px;margin-top:-2px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));';
+const CURSOR_SVG = '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 2 L3 19 L7.5 14.5 L10.5 21.5 L13.5 20.2 L10.6 13.5 L17 13.5 Z" fill="#111" stroke="#fff" stroke-width="1.3"/></svg>';
+const CURSOR_INIT = ({ box, svg }) => {
   const add = () => {
     if (document.getElementById('__cur')) return;
     const c = document.createElement('div');
     c.id = '__cur';
-    c.style.cssText = 'position:fixed;left:0;top:0;z-index:2147483647;pointer-events:none;width:24px;height:24px;margin-left:-3px;margin-top:-2px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));';
-    c.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 2 L3 19 L7.5 14.5 L10.5 21.5 L13.5 20.2 L10.6 13.5 L17 13.5 Z" fill="#111" stroke="#fff" stroke-width="1.3"/></svg>';
+    c.style.cssText = box;
+    c.innerHTML = svg;
     document.documentElement.appendChild(c);
     const place = (x, y) => { c.style.transform = `translate(${x}px,${y}px)`; };
     place(120, 120);
@@ -331,7 +338,7 @@ const T_START = Date.now();
     ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
   if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE_ARGS);
-  await ctx.addInitScript(CURSOR_INIT);
+  await ctx.addInitScript(CURSOR_INIT, { box: CURSOR_BOX, svg: CURSOR_SVG });
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
   const page = await ctx.newPage();
   const cur = { x: 120, y: 120 };
@@ -388,7 +395,22 @@ const T_START = Date.now();
     try { await nav(`/cgi-bin/hgTracks?${fresh.map(n => `${n}.heightPer=${HEIGHTPER}`).join('&')}&${IMGVARS}`); }
     finally { inHeightNav = false; }
   }
-  async function nav(u) { pinnedTips.length = 0; await page.goto(absurl(u), { waitUntil: 'load' }); await captureState(); await page.mouse.move(cur.x, cur.y); }
+  // Apache's LimitRequestLine defaults to 8190 bytes for the whole request line, and a
+  // step that derives a lot of cart variables can sail past it. The server then answers 414
+  // and the page LOADS -- so nothing throws, captureState finds no image, and the next
+  // shot: quietly photographs "Request-URI Too Long". Say so, since only an eyeball on the
+  // still would otherwise catch it.
+  const URL_WARN = 7800;
+  async function nav(u) {
+    const full = absurl(u);
+    if (full.length > URL_WARN)
+      console.warn(`nav: URL is ${full.length} chars, over Apache's usual ${8190} limit `
+        + `-- expect a 414 "Request-URI Too Long" page instead of the view`);
+    pinnedTips.length = 0;
+    await page.goto(full, { waitUntil: 'load' });
+    await captureState();
+    await page.mouse.move(cur.x, cur.y);
+  }
   async function glide(x, y) {
     if (FAST) { await page.mouse.move(x, y); cur.x = x; cur.y = y; return; }
     const steps = Math.max(10, Math.round(Math.hypot(x - cur.x, y - cur.y) / 9));
@@ -551,6 +573,32 @@ const T_START = Date.now();
       const c = idx.get(k);
       if (!c || !c.children.length) out.push(k);
       else c.children.forEach(walk);
+    };
+    n.children.forEach(walk);
+    return out;
+  }
+  // What `hideKids` actually has to send. NOT the same thing as tdbLeaves(): hiding a
+  // COMPOSITE already reaches its subtracks, so the walk stops at the first container that
+  // propagates its own visibility and only keeps descending through superTracks, which do
+  // not. hubApi never lists a superTrack container -- tdbParse synthesizes it and flags
+  // superTrack -- so anything else holding children came from hubApi's own nesting and is a
+  // composite or a view.
+  //
+  // Descending all the way to leaves here is how `{cCREs: hideKids}` on hg38 came to send
+  // 1701 cart variables in a 42,020-character GET: the walk went straight through the
+  // ENCODE4 Core Collection composite and enumerated all 850 of its ENCFF subtracks. Apache
+  // answered 414 and the next shot: photographed the error page, with nothing failing the
+  // build. Stopping at the composite makes that same step three names.
+  async function tdbHideTargets(name) {
+    const idx = await tdbIndex(state.db);
+    const n = idx && idx.get(name);
+    if (!n || !n.children.length) return [];
+    const out = [];
+    const walk = k => {
+      const c = idx.get(k);
+      if (!c || !c.children.length) { out.push(k); return; }   // a real leaf
+      if (!c.superTrack) { out.push(k); return; }              // composite/view: hide as a unit
+      c.children.forEach(walk);                                // superTrack: does not propagate
     };
     n.children.forEach(walk);
     return out;
@@ -854,20 +902,29 @@ const T_START = Date.now();
   // browser parks its own tooltip at a near-fixed spot, so two tips would stack; anchoring
   // to the item keeps each pinned tooltip on its own feature (and robust to the throwaway
   // page's image sitting at a different offset).
+  // cx/cy is the HOVER POINT itself (also image-relative), kept alongside the tooltip's
+  // own offset so pinShot() can draw a cursor exactly where the tip was raised from.
   async function recordTip(x, y) {
     const t = await page.evaluate(({ x, y }) => {
       const c = document.getElementById('mouseoverContainer');
       if (!c || !c.offsetWidth) return null;
       const im = document.getElementById('imgTbl');
       const ir = im ? im.getBoundingClientRect() : { left: 0, top: 0 };
-      return { dx: x - ir.left + 8, dy: y - ir.top + 8, html: c.outerHTML };
+      return { cx: x - ir.left, cy: y - ir.top,
+               dx: x - ir.left + 8, dy: y - ir.top + 8, html: c.outerHTML };
     }, { x, y });
     if (t) pinnedTips.push(t);
   }
   // Render every recorded tooltip open at once in a still, WITHOUT touching the recorded
   // page (so the mp4 is unaffected): reload the current view on a throwaway page that
   // shares the session cookie (cart), inject the recorded tooltips, screenshot, discard.
-  async function pinShot(name) {
+  // Bare string is the still's name; the map form adds `cursors:` (default true) to draw
+  // a static pointer at every pinned hover point, so a combined figure says which feature
+  // each tooltip came off rather than leaving the reader to infer it from the anchor.
+  async function pinShot(arg) {
+    const o = (arg && typeof arg === 'object') ? arg : { name: arg };
+    const name = o.name ?? o.shot;
+    const cursors = (o.cursors != null) ? o.cursors !== false : true;
     if (!pinnedTips.length) { console.warn(`pinShot ${name}: no pinned mouseovers recorded (set pin: true / pinMouseovers: true)`); return; }
     const url = page.url();
     const ctx2 = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE });
@@ -876,7 +933,7 @@ const T_START = Date.now();
     const pg2 = await ctx2.newPage();
     await pg2.goto(url, { waitUntil: 'load' });
     await pg2.waitForSelector('#imgTbl', { timeout: 8000 }).catch(() => {});
-    await pg2.evaluate((tips) => {
+    await pg2.evaluate(({ tips, cursors, box, svg }) => {
       window.scrollTo(0, 0);
       const im = document.getElementById('imgTbl');
       const ir = im ? im.getBoundingClientRect() : { left: 0, top: 0 };
@@ -891,12 +948,23 @@ const T_START = Date.now();
         el.style.opacity = '1'; el.style.visibility = 'visible';
         el.style.display = 'inline-block'; el.style.pointerEvents = 'none';
         document.documentElement.appendChild(el);
+        // A pointer at the hover point, drawn the same way the live overlay draws it.
+        // It lands on the tooltip's top-left corner, which is exactly where a real
+        // screenshot of that hover would put it.
+        if (cursors && t.cx != null) {
+          const c = document.createElement('div');
+          c.className = '__pinnedCursor';
+          c.style.cssText = box;
+          c.innerHTML = svg;
+          c.style.transform = `translate(${ir.left + t.cx}px,${ir.top + t.cy}px)`;
+          document.documentElement.appendChild(c);
+        }
       }
-    }, pinnedTips);
+    }, { tips: pinnedTips, cursors, box: CURSOR_BOX, svg: CURSOR_SVG });
     const p = path.join(STILLDIR, name + '.png');
     const clip = await pg2.evaluate(() => {
       const im = document.getElementById('imgTbl'); if (!im) return null;
-      const els = [im, ...document.querySelectorAll('.__pinnedTip')];
+      const els = [im, ...document.querySelectorAll('.__pinnedTip, .__pinnedCursor')];
       let x = Infinity, y = Infinity, x2 = -Infinity, y2 = -Infinity;
       for (const o of els) { const r = o.getBoundingClientRect(); x = Math.min(x, r.left); y = Math.min(y, r.top); x2 = Math.max(x2, r.right); y2 = Math.max(y2, r.bottom); }
       return { x: Math.max(0, x - 4), y: Math.max(0, y - 4), width: (x2 - x) + 8, height: (y2 - y) + 8 };
@@ -906,6 +974,72 @@ const T_START = Date.now();
     await ctx2.close();
     console.log('SHOT', p, `(pinned: ${pinnedTips.length})`);
     pinnedTips.length = 0;   // consume the set
+  }
+  // Compose stills already written this run into ONE multi-panel PNG, which is what a
+  // journal wants for a figure with parts (A), (B), ... Doing it here rather than in a
+  // project script keeps the composite a product of the same tour: rename a shot and the
+  // montage follows, instead of silently dropping a panel at submission time.
+  //
+  //   montage: {name: figure1, shots: [source_hg38, lifted_hs1]}
+  //   montage: {name: fig2, shots: [a, b], direction: horizontal, labels: [Before, After]}
+  //
+  // Composed in a browser page at deviceScaleFactor 1 with every panel at its NATURAL
+  // pixel size, so the composite is pixel-for-pixel the panels -- a `make hires` montage
+  // is print resolution because its inputs were, not because anything was upscaled.
+  // Panels narrower than the widest are left-aligned and padded, never stretched.
+  async function montage(arg) {
+    const o = (arg && typeof arg === 'object') ? arg : { name: arg };
+    const name = o.name ?? o.shot;
+    const shots = o.shots || o.panels || [];
+    if (!name || !shots.length) { console.warn(`montage: needs {name:, shots: [...]}`); return; }
+    const dir = (o.direction || 'vertical').startsWith('h') ? 'row' : 'column';
+    const gap = o.gap != null ? Number(o.gap) : 14;
+    const auto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const panels = [];
+    for (let i = 0; i < shots.length; i++) {
+      const src = path.join(STILLDIR, shots[i] + '.png');
+      if (!fs.existsSync(src)) { console.warn(`montage ${name}: no still "${shots[i]}.png" -- panel skipped`); continue; }
+      panels.push({ data: 'data:image/png;base64,' + fs.readFileSync(src).toString('base64'),
+                    label: (o.labels && o.labels[i] != null) ? String(o.labels[i])
+                         : (o.labels === false ? '' : auto[i] || String(i + 1)) });
+    }
+    if (!panels.length) { console.warn(`montage ${name}: no panels to compose`); return; }
+    const ctx3 = await browser.newContext({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 });
+    const pg3 = await ctx3.newPage();
+    await pg3.setContent('<!doctype html><body style="margin:0;background:#fff"><div id="__fig"></div></body>');
+    const labelSize = await pg3.evaluate(({ panels, dir, gap, labelSize }) => {
+      const fig = document.getElementById('__fig');
+      fig.style.cssText = `display:inline-flex;flex-direction:${dir};align-items:flex-start;`
+        + `gap:${gap}px;background:#fff;padding:${gap}px;font-family:Helvetica,Arial,sans-serif;`;
+      const rows = panels.map(p => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;';
+        const lab = document.createElement('div');
+        lab.className = '__figLabel';
+        lab.textContent = p.label;
+        const img = document.createElement('img');
+        img.src = p.data; img.style.display = 'block';
+        row.appendChild(lab); row.appendChild(img);
+        fig.appendChild(row);
+        return { lab, img };
+      });
+      return Promise.all(rows.map(r => r.img.decode().catch(() => {}))).then(() => {
+        // Label size follows the panels' own resolution, so a 3x montage gets 3x lettering
+        // rather than a caption that shrinks to nothing next to a 2500px panel.
+        const maxW = Math.max(...rows.map(r => r.img.naturalWidth));
+        const fs = labelSize != null ? labelSize : Math.max(11, Math.round(maxW / 55));
+        for (const r of rows) {
+          r.lab.style.cssText = `flex:0 0 ${Math.round(fs * 1.5)}px;font-weight:bold;`
+            + `font-size:${fs}px;line-height:1;color:#111;`;
+          r.img.style.width = r.img.naturalWidth + 'px';   // natural size, never stretched
+        }
+        return fs;
+      });
+    }, { panels, dir, gap, labelSize: o.labelSize != null ? Number(o.labelSize) : null });
+    const p = path.join(STILLDIR, name + '.png');
+    await pg3.locator('#__fig').screenshot({ path: p });
+    await ctx3.close();
+    console.log('SHOT', p, `(montage: ${panels.length} panels, label ${labelSize}px)`);
   }
   // Shift+drag across the track image to open the browser's own drag-select dialog
   // ("Zoom In / Single Highlight / ..."), then act on it. The usual form gives one
@@ -1250,7 +1384,7 @@ const T_START = Date.now();
         // the cart (#37953) -- so the container goes on first and the hides follow.
         const kidHides = [];
         for (const e of entries.filter(isKidHide)) {
-          const leaves = (await tdbLeaves(e[0])).filter(k => !named.has(k));
+          const leaves = (await tdbHideTargets(e[0])).filter(k => !named.has(k));
           if (!leaves.length)
             console.warn(`track ${e[0]}: hideKids -- trackDb gives it no children to hide`);
           for (const k of leaves) kidHides.push([k, 'hide']);
@@ -1431,6 +1565,7 @@ const T_START = Date.now();
       }
       case 'shot': await shot(arg); return;                       // shot supplies its own dwell
       case 'pinShot': await pinShot(arg); break;                  // combined figure, off the mp4 timeline
+      case 'montage': await montage(arg); break;                  // stills -> one multi-panel PNG
       case 'mouseover': await mouseover(arg); return;             // supplies its own dwell (o.hold)
       // escape hatches
       case 'goto': await nav(arg); break;
