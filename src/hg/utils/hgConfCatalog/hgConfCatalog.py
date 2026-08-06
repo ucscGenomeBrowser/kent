@@ -1937,14 +1937,28 @@ def wrap_note(note, width):
     return lines
 
 
+def pyq(s):
+    """Escape text for splicing into a double-quoted Python string literal.
+
+    render_row writes source into this very file, and --auto-register runs it
+    unattended from cron over text nobody vetted: a git commit subject that
+    quotes a setting name would otherwise land a bare " in a generated row and
+    break every import of the catalog, with no human in the loop to notice.
+    Newlines and tabs go too, since a row has to stay on the lines it was
+    wrapped onto.
+    """
+    s = re.sub(r"[\x00-\x1f\x7f]", " ", str(s))
+    return s.replace("\\", "\\\\").replace('"', '\\"')
+
+
 def render_row(name, kind, src, default=None, ticket=None, note=None):
     """One h(...) call as source text, wrapped the way the file is written."""
-    head = '        h("%s", "%s", "%s"' % (name, kind, src)
+    head = '        h("%s", "%s", "%s"' % (pyq(name), pyq(kind), pyq(src))
     args = []
     if default is not None:
-        args.append('default="%s"' % default)
+        args.append('default="%s"' % pyq(default))
     if ticket:
-        args.append('ticket="%s"' % ticket)
+        args.append('ticket="%s"' % pyq(ticket))
     lines = []
     cur = head
     for a in args:
@@ -1954,7 +1968,10 @@ def render_row(name, kind, src, default=None, ticket=None, note=None):
         else:
             cur = cur + ", " + a
     if note:
-        wrapped = wrap_note(note, 61)
+        # Wrap on the text as read, escape each piece after: the escapes are
+        # not what a reader of the file sees, so they should not push a note
+        # onto an extra line.
+        wrapped = [pyq(w) for w in wrap_note(note, 61)]
         if len(cur) + 2 > 78:
             lines.append(cur + ",")
             cur = "          "
