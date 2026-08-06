@@ -1420,8 +1420,9 @@ in the gbMembers table of the hgcentral database. An account lets a user save an
 sessions. Enabling the login system itself (the login.systemName, wiki.host and cookie
 settings) is described at http://genomewiki.ucsc.edu/index.php/Enabling_hgLogin and in the
 comments of the example hg.conf. Once login is enabled, users can register with a username
-and password. The settings below add three optional, and by default disabled, extra ways to
-sign in.
+and password. The settings below add two more ways to sign in, both optional and both off
+until you configure them: with an external identity provider, or with a one-time link sent by
+email.
 
 A note on secrets first: the file cgi-bin/hg.conf is part of the source tree and is not
 private, so it must never contain passwords or OAuth client secrets. Put all secrets in
@@ -1477,6 +1478,9 @@ other OIDC provider above (a label, client id/secret and issuer):
 
     CILogon, for US universities:        https://cilogon.org/oauth2/register
     LifeScience RI, for EU universities: https://services.aai.lifescience-ri.eu/spreg/auth
+
+login.cookieSalt must also be set, to a secret random string: it is the key that signs the
+identity handed back from the provider, so hgLogin refuses to run a social login without it.
 
 A provider's button appears on the login and sign-up pages only when both its client id and
 secret are set, so unconfigured mirrors are unaffected. When a provider reports an email

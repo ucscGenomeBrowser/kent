@@ -57,7 +57,12 @@ const HERE = path.dirname(path.resolve(SCRIPT));
 const base = path.basename(SCRIPT).replace(/\.(docent\.)?ya?ml$/i, '').replace(/\.docent$/i, '');
 const FIGDIR = path.resolve(HERE, '..');                       // figures dir beside the scripts
 const OUTMP4 = process.argv[3] || doc.mp4 || path.join(FIGDIR, base + '.mp4');
-const STILLDIR = doc.stills ? path.resolve(HERE, doc.stills) : path.join(HERE, 'stills', base);
+// Stills go to stills/<base>/. DOCENT_STILLS names a different PARENT ("stills.hires"),
+// which is how a high-resolution run keeps its figures beside the screen-resolution ones
+// instead of overwriting them.
+const STILLPARENT = process.env.DOCENT_STILLS;
+const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
+  : doc.stills ? path.resolve(HERE, doc.stills) : path.join(HERE, 'stills', base);
 
 // `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
 // (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
@@ -75,13 +80,54 @@ const resolveTarget = t => {
   return t;                                                    // full URL
 };
 const SERVER = resolveTarget(doc.target).replace(/\/$/, '');
+// SCALE: the same tour rendered at k times the resolution, for figures that have to print.
+// Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
+// is asked to draw k times as many while the layout is left alone:
+//
+//   * deviceScaleFactor: k. The viewport keeps its 1x CSS size, so the page lays out exactly
+//     as at 1x -- same line breaks, same jQuery-dialog width, same tooltip placement -- and
+//     every bit of it is rasterized with k times the pixels. The retina case, natively.
+//   * `pix` x k, so the server draws the browser image k times as wide, with `textSize`
+//     stepped up to match so hgTracks makes the SAME layout decisions in that bigger image:
+//     same tick spacing, same room for labels, same packing of features into rows. Without
+//     the font, a wider image is a different picture rather than a bigger one.
+//   * `zoom: 1/k` on the image table (SCALE_INIT below), handing that k-times-wider image
+//     back the 1x amount of layout space. One image pixel then falls on exactly one device
+//     pixel: native resolution, no resampling anywhere in the path.
+//
+// So the still comes out k times the 1x still in each dimension, showing the same figure --
+// not a variation of it rendered in a bigger window.
+const SCALE = Math.max(1, Number(process.env.DOCENT_SCALE || doc.scale || 1));
 const [VW, VH] = doc.size || [1000, 760];
-const PIX = doc.pix || 850;
+const PIX = Math.round((doc.pix || 850) * SCALE);
+// hgTracks offers a fixed ladder of track font sizes (hgTracks/config.c); step to the one
+// closest to scaling its 8px default, so rows and labels grow with the image instead of
+// staying 8px tall in a 3x-wide picture.
+const TEXTSIZE = [6, 8, 10, 12, 14, 18, 24, 34].reduce((a, b) =>
+  Math.abs(b - 8 * SCALE) < Math.abs(a - 8 * SCALE) ? b : a);
+// What every hgTracks nav carries: the image width, plus the font to draw it with at scale.
+const IMGVARS = `pix=${PIX}` + (SCALE > 1 ? `&textSize=${TEXTSIZE}` : '');
+// The tooltip's font-size, forced back to what a 1x run gives it (see SCALE_INIT). hgTracks
+// takes it from the browser text size, which is TEXTSIZE on a scaled run, and then the device
+// pixel ratio scales it a second time.
+const SCALE_ARGS = { k: SCALE, tipPx: Math.round(TEXTSIZE / SCALE) };
+// `pix` makes the image k times WIDER; nothing makes a fixed-height track taller. A bigLolly
+// or wiggle row is a pixel count (`DEFAULT_HEIGHT_PER` = 128 in hg/inc/wiggle.h), read from
+// trackDb/the cart and untouched by `pix` or `textSize` -- so a 128px row that was 15% of an
+// 850px image is 5% of a 2550px one, which is how the ClinVar lollipop row came out a sliver
+// with unreadable y-axis labels. A print run therefore asks for k times the height of every
+// track a `track:` step turns on. It is harmless where it means nothing (a bigBed never reads
+// heightPer) and each track's own `maxHeightPixels` still clamps it, so a track that should
+// stay short does -- raise that ceiling in trackDb for one that should not.
+const HEIGHTPER = SCALE > 1 ? Math.round(128 * SCALE) : 0;
 // FAST: iterate on the FIGURES. Everything that exists only for the video is dropped --
 // the dwells, the cursor animation, the dropdown theatrics, the screen recording and the
 // mp4 transcode. The stills are byte-for-byte what a full run produces, and a run costs
 // roughly a third as long. `fast: true` in the script, DOCENT_FAST=1, or `make FAST=1 BP1`.
-const FAST = !!(doc.fast || process.env.DOCENT_FAST);
+// A scaled run is a figure run: at 3x the video would be a 3000px-wide recording of a tour
+// nobody watches at that size, so the mp4 is skipped and only the stills are produced. Build
+// the video from an unscaled run of the same script.
+const FAST = !!(doc.fast || process.env.DOCENT_FAST || SCALE > 1);
 const PACE = FAST ? 0 : Math.round((doc.pace ?? 1.2) * 1000);   // dwell after each step
 const SHOTHOLD = FAST ? 0 : Math.round((doc.shotHold ?? 2.2) * 1000);  // extra pause at a shot
 
@@ -206,6 +252,38 @@ async function typeIn(pg, sel, text) {
 const enc = s => encodeURIComponent(String(s));
 const state = { db: doc.db || 'hg38', position: doc.position || '', hgsid: '' };
 
+// ---------- SCALE: give the k-times-wider browser image the 1x amount of layout space ----------
+// hgTracks sizes the image table in the HTML it writes, so shrinking the <img> elements alone
+// would leave the table 3x wider than its own contents. Zoom the table: the zoom reaches the
+// images inside it, and its box goes back to the width the 1x page gives it -- 854 CSS px for
+// a pix=850 run, whatever k is -- so the rest of the page is laid out exactly as at 1x while
+// the image keeps all k times its pixels (one per device pixel at deviceScaleFactor: k).
+//
+// Installed for the whole run rather than at the shutter: the tour's own geometry -- a drag
+// across the image, a mouseover on a feature -- then works in the same coordinates a 1x run
+// works in, and needs no scale arithmetic of its own.
+//
+// The tooltip needs the opposite correction. It is a DOM element, so deviceScaleFactor
+// already draws it k times bigger -- and hgTracks sets its font-size from the BROWSER TEXT
+// SIZE (`window.browserTextSize` -> hg/js/utils.js addMouseover, hgTracks.js #mouseOverText),
+// which a print run has just multiplied by k for the image. Both scalings land on the same
+// text, so a 3x still gets a tooltip 3x too big -- the popups swamp the figure and the last
+// one pinned falls off the crop. Pin the font-size back to the 1x value (TEXTSIZE / k); it
+// is written as an inline style, so the rule has to be !important to win. `.__pinnedTip` is
+// a recorded tooltip re-injected by pinShot() (which strips the id, keeps the class).
+const SCALE_INIT = ({ k, tipPx }) => {
+  const add = () => {
+    if (document.getElementById('__scale')) return;
+    const s = document.createElement('style');
+    s.id = '__scale';
+    s.textContent = `#imgTbl, #chromIdeoImg, img[src*="hgtIdeo"] { zoom: ${1 / k} !important; }`
+      + `\n#mouseoverContainer, #mouseOverText, .tooltip, .__pinnedTip { font-size: ${tipPx}px !important; }`;
+    (document.head || document.documentElement).appendChild(s);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
+  else add();
+};
+
 // ---------- animated cursor (same technique as the walkthrough-video skill's record.js) ----------
 const CURSOR_INIT = () => {
   const add = () => {
@@ -243,9 +321,10 @@ const T_START = Date.now();
   fs.mkdirSync(STILLDIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, args: ['--force-color-profile=srgb'] });
   const ctx = await browser.newContext({
-    viewport: { width: VW, height: VH }, deviceScaleFactor: 1,
+    viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE,
     ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
+  if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE_ARGS);
   await ctx.addInitScript(CURSOR_INIT);
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
   const page = await ctx.newPage();
@@ -277,6 +356,31 @@ const T_START = Date.now();
         [...document.querySelectorAll('[id^="img_data_"]')].map(e => e.id.replace('img_data_', ''))).catch(() => null);
       if (rows) console.log('  rows:', rows.join(', ') || '(none)');
     }
+    await scaleHeights();   // print runs only; see below
+  }
+  // A print run makes the image k times wider, and a track with a FIXED PIXEL height does not
+  // follow: a bigLolly or wiggle row is a pixel count read from trackDb/the cart, untouched by
+  // `pix` and `textSize`, so a 128px row that was 15% of an 850px image is 5% of a 2550px one.
+  // That is how the ClinVar lollipop row came out a sliver with unreadable y-axis labels next to
+  // a bed track that DID grow with the font. So after each view change, ask for k times the
+  // height of every row hgTracks just drew. It is asked of the rows the page actually has --
+  // which is the only way to reach the LIFTED view, whose tracks are hub tracks under names
+  // trackDb never saw. Harmless where it means nothing (a bigBed never reads heightPer), and
+  // each track's own `maxHeightPixels` still clamps it, so a track that should stay short does;
+  // raise that ceiling in trackDb for one that should not (clinvarSubLolly does this).
+  const heightsSent = new Set();
+  let inHeightNav = false;
+  async function scaleHeights() {
+    if (!HEIGHTPER || inHeightNav) return;
+    const drawn = await page.evaluate(() =>
+      [...document.querySelectorAll('#imgTbl [id^="img_data_"]')].map(e => e.id.replace('img_data_', ''))
+    ).catch(() => []);
+    const fresh = (drawn || []).filter(n => n && !heightsSent.has(n));
+    if (!fresh.length) return;                      // same rows as last time: no second load
+    fresh.forEach(n => heightsSent.add(n));
+    inHeightNav = true;                             // the nav below must not recurse
+    try { await nav(`/cgi-bin/hgTracks?${fresh.map(n => `${n}.heightPer=${HEIGHTPER}`).join('&')}&${IMGVARS}`); }
+    finally { inHeightNav = false; }
   }
   async function nav(u) { pinnedTips.length = 0; await page.goto(absurl(u), { waitUntil: 'load' }); await captureState(); await page.mouse.move(cur.x, cur.y); }
   async function glide(x, y) {
@@ -514,14 +618,22 @@ const T_START = Date.now();
     const img = await page.locator(`#img_data_${key}`).first().boundingBox({ timeout: 8000 }).catch(() => null);
     const row = await page.locator(`#imgTbl tr#tr_${key}`).first().boundingBox({ timeout: 8000 }).catch(() => null);
     if (!img || !row) throw new Error(`track "${t}" not shown (need #img_data_${key} + #tr_${key})`);
-    return { key, img, row };
+    // Everything hgTracks reports about the image -- map-box coords, mouseOver spans,
+    // insideX -- is in the pixels of the image the SERVER drew, which is not the size the
+    // page shows it at when the image is scaled (SCALE). imgPx is that ratio, so those
+    // numbers can be turned into page coordinates: 1 normally, 1/SCALE for a print render.
+    const imgPx = await page.evaluate(k => {
+      const im = document.getElementById('img_data_' + k);
+      return im && im.naturalWidth ? im.getBoundingClientRect().width / im.naturalWidth : 1;
+    }, key);
+    return { key, img, row, imgPx: imgPx || 1 };
   }
   // Resolve a NAMED item to a point {x,y} + its map-box HREF (the item's hgc link). We
   // pick the map <area> whose href(&i=<name>)/title carries the name AND whose box sits in
   // this track's own ROW band (so stacked items on other rows don't win); fall back to the
   // JSON mouseOver spans (wig/dense tracks, no per-item href).
   async function itemXY(t, want, titleOnly) {
-    const { key, img, row } = await trackBox(t);
+    const { key, img, row, imgPx } = await trackBox(t);
     const band = { top: row.y, bot: row.y + row.height };
     const area = await page.evaluate(({ want, titleOnly, band, imgBox }) => {
       const areas = [...document.querySelectorAll('map[name^="map_"] area')];
@@ -539,7 +651,9 @@ const T_START = Date.now();
         const im = nm && document.querySelector(`img[usemap="#${nm}"]`);
         const r = im ? im.getBoundingClientRect() : null;
         const ox = r ? r.left : imgBox.x, oy = r ? r.top : imgBox.y;
-        const cx = ox + (c[0] + c[2]) / 2, cy = oy + (c[1] + c[3]) / 2;
+        // coords are in the drawn image's own pixels; s converts them to page pixels
+        const s = (r && im.naturalWidth) ? r.width / im.naturalWidth : 1;
+        const cx = ox + s * (c[0] + c[2]) / 2, cy = oy + s * (c[1] + c[3]) / 2;
         // The tooltip's own text, so the hover can wait for THIS item's tooltip rather than
         // for any tooltip at all (see mouseover()). Rendered exactly the way the tooltip
         // renders it -- innerHTML then textContent -- because the attribute holds markup AND
@@ -570,17 +684,48 @@ const T_START = Date.now();
       }
       return null;
     }, { keys: [key, t], want: String(want) });
-    if (!span) throw new Error(`item "${want}" not found in track "${t}" (searched map-box areas + mouseOver spans)`);
-    return { x: img.x + (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
+    if (!span) {
+      // Say WHAT is there instead. An item name that has gone missing is usually a track
+      // whose items depend on the pixel width -- a print render (SCALE) draws a wider image,
+      // so features hgTracks merged into one box at screen width come apart into several
+      // with names of their own -- and the fix is to pick from the names that do exist.
+      const near = await page.evaluate(({ band }) => {
+        const out = [];
+        for (const a of document.querySelectorAll('map[name^="map_"] area')) {
+          const c = (a.getAttribute('coords') || '').split(',').map(Number);
+          if (c.length < 4) continue;
+          const m = a.closest('map'), nm = m && m.getAttribute('name');
+          const im = nm && document.querySelector(`img[usemap="#${nm}"]`);
+          if (!im) continue;
+          const r = im.getBoundingClientRect();
+          const s = im.naturalWidth ? r.width / im.naturalWidth : 1;
+          const cy = r.top + s * (c[1] + c[3]) / 2;
+          if (cy < band.top - 1 || cy > band.bot + 1) continue;
+          const i = (a.getAttribute('href') || '').match(/[?&]i=([^&]+)/);
+          if (i) out.push(decodeURIComponent(i[1]));
+        }
+        return out;
+      }, { band }).catch(() => []);
+      const win = await page.evaluate(() => {
+        try { return `${hgTracks.chromName}:${hgTracks.winStart}-${hgTracks.winEnd}`; }
+        catch (_) { return '?'; }
+      }).catch(() => '?');
+      const show = process.env.DOCENT_ROWS ? near : near.slice(0, 12);
+      throw new Error(`item "${want}" not found in track "${t}" (searched map-box areas + `
+        + `mouseOver spans). Window ${win}.${near.length ? ` In that row: ${show.join(', ')}`
+          + `${show.length < near.length ? `, ... (${near.length} total; DOCENT_ROWS=1 for all)` : ''}`
+          : ''}`);
+    }
+    return { x: img.x + imgPx * (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
   }
   // POSITIONAL point: at:/frac:/x: -> x, y forced to the track row's middle. The grey
   // side-label strip (insideX) is baked into the image's left, so a fraction/coord maps
   // across [img.x+insideX, img.x+img.width], not the whole image width.
   async function posXY(t, o) {
-    const { img, row } = await trackBox(t);
-    const insideX = await page.evaluate(() => { try { return hgTracks.insideX || 0; } catch (_) { return 0; } });
+    const { img, row, imgPx } = await trackBox(t);
+    const insideX = imgPx * await page.evaluate(() => { try { return hgTracks.insideX || 0; } catch (_) { return 0; } });
     let x;
-    if (o.x != null) x = img.x + insideX + Number(o.x);
+    if (o.x != null) x = img.x + insideX + imgPx * Number(o.x);
     else {
       const frac = (o.frac != null) ? Number(o.frac)
         : (o.at != null) ? await page.evaluate(at => {
@@ -719,7 +864,8 @@ const T_START = Date.now();
   async function pinShot(name) {
     if (!pinnedTips.length) { console.warn(`pinShot ${name}: no pinned mouseovers recorded (set pin: true / pinMouseovers: true)`); return; }
     const url = page.url();
-    const ctx2 = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 1 });
+    const ctx2 = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE });
+    if (SCALE > 1) await ctx2.addInitScript(SCALE_INIT, SCALE_ARGS);
     await ctx2.addCookies(await ctx.cookies());
     const pg2 = await ctx2.newPage();
     await pg2.goto(url, { waitUntil: 'load' });
@@ -787,10 +933,16 @@ const T_START = Date.now();
     // The grey side-label strip is baked into the LEFT of every full-width track
     // image, so the genomic data area starts insideX px in — fractions/coords map
     // across [img.x+insideX, img.x+img.width], not the whole image width.
-    const insideX = await page.evaluate(() => { try { return hgTracks.insideX || 0; } catch (_) { return 0; } });
+    // insideX and any px: endpoint are in the drawn image's pixels; imgPx converts them to
+    // page pixels (1 normally, 1/SCALE when the image is scaled for print).
+    const imgPx = await page.evaluate(() => {
+      const im = document.querySelector('img[id^="img_data_"]');
+      return im && im.naturalWidth ? im.getBoundingClientRect().width / im.naturalWidth : 1;
+    }) || 1;
+    const insideX = imgPx * await page.evaluate(() => { try { return hgTracks.insideX || 0; } catch (_) { return 0; } });
     const dataLeft = img.x + insideX, dataW = Math.max(1, img.width - insideX);
     const endX = async (px, fr, coord) => {
-      if (px != null) return img.x + Number(px);
+      if (px != null) return img.x + imgPx * Number(px);
       const f = (fr != null) ? Number(fr) : (coord != null ? await coordFrac(coord) : null);
       if (f == null) throw new Error('drag: need endpoints as coord (from:/to:), frac (fromFrac:/toFrac:) or px (fromX:/toX:)');
       return dataLeft + f * dataW;
@@ -998,7 +1150,7 @@ const T_START = Date.now();
       case 'gateway': await nav(`/cgi-bin/hgGateway?db=${state.db}`); break;
       case 'go':
         if (arg === true || arg === '' || arg == null) { await clickGlide('.jwGoButtonContainer'); await page.waitForSelector('#imgTbl'); }
-        else { await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(arg)}&pix=${PIX}`); }
+        else { await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(arg)}&${IMGVARS}`); }
         await captureState(); break;
       case 'goShow': {
         // DEMONSTRATE the position change through the UI (vs. `go:` which navs straight to
@@ -1135,7 +1287,7 @@ const T_START = Date.now();
               if (k === name || !named.has(k)) vars.set(k, v);
           const parts = [...vars].map(([k, v]) => `${k}=${v}`);
           console.log('track:', parts.join(' '));   // what trackDb turned the step into
-          await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(state.position)}&${parts.join('&')}&pix=${PIX}`);
+          await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(state.position)}&${parts.join('&')}&${IMGVARS}`);
         }
         break;
       }
@@ -1150,7 +1302,7 @@ const T_START = Date.now();
         const pos = o.position != null ? o.position : state.position;
         const parts = [`db=${db}`, `hubUrl=${enc(o.url)}`];
         if (pos) parts.push(`position=${enc(pos)}`);
-        parts.push(`pix=${PIX}`);
+        parts.push(IMGVARS);
         await nav(`/cgi-bin/hgTracks?${parts.join('&')}`);
         await page.waitForSelector('#imgTbl').catch(() => {});
         break;
@@ -1253,7 +1405,24 @@ const T_START = Date.now();
       }
       case 'drag': await drag(arg); break;
       case 'open': if (arg === 'lift') { await clickGlide('main a[href*="hgTracks"]'); await page.waitForSelector('#imgTbl'); await captureState(); } break;
-      case 'zoom': { const btn = (arg === 'in') ? '#hgt\\.in2' : '#hgt\\.out2'; await clickGlide(btn); await page.waitForSelector('#imgTbl'); break; }
+      case 'zoom': {
+        const btn = (arg === 'in') ? '#hgt\\.in2' : '#hgt\\.out2';
+        const was = await page.evaluate(() => {
+          try { return `${hgTracks.winStart}-${hgTracks.winEnd}`; } catch (_) { return ''; }
+        });
+        await clickGlide(btn);
+        await page.waitForSelector('#imgTbl');
+        // The zoom buttons redraw the image in place (ajax), so #imgTbl never went away and
+        // waiting for it proves nothing: the next step can read the OLD view's map boxes and
+        // report an item "not found" that simply is not in view yet. Wait for the window to
+        // change instead. Until FAST there was always a dwell here hiding this.
+        if (was) await page.waitForFunction(
+            w => { try { return `${hgTracks.winStart}-${hgTracks.winEnd}` !== w; } catch (_) { return false; } },
+            was, { timeout: 15000 })
+          .catch(() => console.warn(`zoom ${arg}: window still ${was} after 15s`));
+        await captureState();
+        break;
+      }
       case 'shot': await shot(arg); return;                       // shot supplies its own dwell
       case 'pinShot': await pinShot(arg); break;                  // combined figure, off the mp4 timeline
       case 'mouseover': await mouseover(arg); return;             // supplies its own dwell (o.hold)
@@ -1289,6 +1458,9 @@ const T_START = Date.now();
     await sleep(PACE);
   }
 
+  if (SCALE > 1)
+    console.log(`scale: ${SCALE}x -- pix=${PIX}, textSize=${TEXTSIZE}, dpr=${SCALE} at ${VW}x${VH}, `
+                + `stills only (no mp4) -> ${STILLDIR}`);
   if (doc.reset) await page.goto(absurl('/cgi-bin/cartReset?skipLs=1'), { waitUntil: 'domcontentloaded' });
   const steps = doc.steps || [];
   const timing = [];

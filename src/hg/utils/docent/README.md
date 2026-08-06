@@ -54,6 +54,7 @@ pace: 1.2               # seconds to dwell after each step
 shotHold: 2.2           # extra seconds the video pauses at a shot
 trackAnim: false        # skip the visible dropdown gesture on `track:` (nav only)
 fast: false             # true = figures only: no dwells, no cursor animation, no mp4
+scale: 1                # >1 = print-resolution stills (see Print resolution)
 pinMouseovers: false    # record every mouseover for `pinShot:` (see below)
 mp4: ../myname.mp4      # override output paths if you want
 stills: stills/AP1
@@ -61,6 +62,65 @@ stills: stills/AP1
 
 `target:` defaults to genome-test, so a script that forgets to say where it runs will
 not quietly hit someone's personal sandbox.
+
+## Print resolution
+
+A screen still is about 120 dpi across a journal's 7-inch column — fine on a monitor,
+too coarse to print. `scale:` (or `DOCENT_SCALE=k`, or `make hires`) renders **the same
+tour with k times the pixels**, which is not the same thing as enlarging the stills
+afterwards: a still only ever has the pixels it was drawn with, so every layer is asked
+to draw more of them.
+
+```
+make hires                 # every scenario at 3x -> stills.hires/<base>/
+make hires SCALE=2         # 2x
+make hires BASES=BP1       # one scenario
+DOCENT_SCALE=3 DOCENT_STILLS=stills.hires DOCENT_FAST=1 node docent.js BP1.docent.yaml
+```
+
+What k does:
+
+- **deviceScaleFactor: k**, with the viewport left at its 1x CSS size. The page lays out
+  exactly as at 1x — same line breaks, same jQuery-dialog width, same tooltip placement —
+  and all of it rasterizes with k times the pixels.
+- **`pix` × k, `textSize` stepped up with it** (hgTracks' size ladder: 6, 8, 10, 12, 14,
+  18, 24, 34; 3x lands exactly on 24). The server draws a genuinely wider image, and the
+  bigger font keeps its layout decisions proportional — tick spacing, room for labels,
+  how features pack into rows. A wider image with an 8px font would be a different
+  picture, not a bigger one.
+- **`zoom: 1/k` on the image table**, handing that wider image the 1x amount of layout
+  space, so one image pixel lands on one device pixel. Native resolution, no resampling.
+- **The tooltip font is pinned back to its 1x size.** hgTracks takes the tooltip's
+  font-size from the browser text size (`window.browserTextSize` → `hg/js/utils.js`
+  `addMouseover`), which `textSize × k` has just tripled — and then the device pixel ratio
+  scales the same text a second time. Left alone, a 3x still gets tooltips 3x too big: the
+  popups swamp the figure and the last one pinned falls off the crop.
+- **Every drawn row asks for k times its height** (`<track>.heightPer`, sent after each view
+  change for the rows the page actually drew). A track with a FIXED PIXEL height does not
+  follow `pix` or `textSize` — a bigLolly or wiggle row is a pixel count from trackDb/the
+  cart — so a 128px row that was 15% of an 850px image would be 5% of a 2550px one. That is
+  how ClinVar's lollipop row came out a sliver with unreadable y-axis labels. It is asked of
+  the **drawn** row names, which is the only way to reach a **lifted/quickLift view**, whose
+  tracks are hub tracks under names trackDb never saw. Each track's own `maxHeightPixels`
+  still clamps the request, so **a fixed-height track needs a ceiling in trackDb to grow**:
+  without one the default (128) is also the maximum and the request is silently clamped.
+
+Everything hgTracks reports about the image — map-box coords, mouseOver spans, `insideX` —
+is in the pixels the server drew, so it goes through the image's natural-to-displayed ratio
+before it becomes a page coordinate. That is why a `mouseover: {item: ...}` lands on the
+same feature at 3x as at 1x.
+
+Two things to expect:
+
+- **No mp4.** A scaled run is a figure run; build the video from an unscaled run of the
+  same script.
+- **Densely packed tracks come out shorter.** hgTracks' font metrics are not perfectly
+  linear across the size ladder, so a 24px font is a little narrower than three 8px ones
+  and `pack` fits the same features into fewer rows. Same window, same tracks, same items,
+  slightly roomier picture.
+
+Use `DOCENT_STILLS=<parent>` (what `make hires` does) so a print render lands beside the
+screen stills instead of overwriting them.
 
 ## Steps
 

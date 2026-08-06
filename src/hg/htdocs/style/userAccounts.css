@@ -70,12 +70,6 @@ a.forgotLink {
     text-align: left;
 }
 
-#helpBox {
-    margin-top: 20px;
-    padding: 20px 0 10px 0; 
-    border-top: 1px solid #eed5b7;
-}
-
 label small {
     font-style: italic;
     font-size: 0.9em;
