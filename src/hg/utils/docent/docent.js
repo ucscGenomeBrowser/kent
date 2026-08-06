@@ -107,6 +107,19 @@ const TEXTSIZE = [6, 8, 10, 12, 14, 18, 24, 34].reduce((a, b) =>
   Math.abs(b - 8 * SCALE) < Math.abs(a - 8 * SCALE) ? b : a);
 // What every hgTracks nav carries: the image width, plus the font to draw it with at scale.
 const IMGVARS = `pix=${PIX}` + (SCALE > 1 ? `&textSize=${TEXTSIZE}` : '');
+// The tooltip's font-size, forced back to what a 1x run gives it (see SCALE_INIT). hgTracks
+// takes it from the browser text size, which is TEXTSIZE on a scaled run, and then the device
+// pixel ratio scales it a second time.
+const SCALE_ARGS = { k: SCALE, tipPx: Math.round(TEXTSIZE / SCALE) };
+// `pix` makes the image k times WIDER; nothing makes a fixed-height track taller. A bigLolly
+// or wiggle row is a pixel count (`DEFAULT_HEIGHT_PER` = 128 in hg/inc/wiggle.h), read from
+// trackDb/the cart and untouched by `pix` or `textSize` -- so a 128px row that was 15% of an
+// 850px image is 5% of a 2550px one, which is how the ClinVar lollipop row came out a sliver
+// with unreadable y-axis labels. A print run therefore asks for k times the height of every
+// track a `track:` step turns on. It is harmless where it means nothing (a bigBed never reads
+// heightPer) and each track's own `maxHeightPixels` still clamps it, so a track that should
+// stay short does -- raise that ceiling in trackDb for one that should not.
+const HEIGHTPER = SCALE > 1 ? Math.round(128 * SCALE) : 0;
 // FAST: iterate on the FIGURES. Everything that exists only for the video is dropped --
 // the dwells, the cursor animation, the dropdown theatrics, the screen recording and the
 // mp4 transcode. The stills are byte-for-byte what a full run produces, and a run costs
@@ -249,12 +262,22 @@ const state = { db: doc.db || 'hg38', position: doc.position || '', hgsid: '' };
 // Installed for the whole run rather than at the shutter: the tour's own geometry -- a drag
 // across the image, a mouseover on a feature -- then works in the same coordinates a 1x run
 // works in, and needs no scale arithmetic of its own.
-const SCALE_INIT = (k) => {
+//
+// The tooltip needs the opposite correction. It is a DOM element, so deviceScaleFactor
+// already draws it k times bigger -- and hgTracks sets its font-size from the BROWSER TEXT
+// SIZE (`window.browserTextSize` -> hg/js/utils.js addMouseover, hgTracks.js #mouseOverText),
+// which a print run has just multiplied by k for the image. Both scalings land on the same
+// text, so a 3x still gets a tooltip 3x too big -- the popups swamp the figure and the last
+// one pinned falls off the crop. Pin the font-size back to the 1x value (TEXTSIZE / k); it
+// is written as an inline style, so the rule has to be !important to win. `.__pinnedTip` is
+// a recorded tooltip re-injected by pinShot() (which strips the id, keeps the class).
+const SCALE_INIT = ({ k, tipPx }) => {
   const add = () => {
     if (document.getElementById('__scale')) return;
     const s = document.createElement('style');
     s.id = '__scale';
-    s.textContent = `#imgTbl, #chromIdeoImg, img[src*="hgtIdeo"] { zoom: ${1 / k} !important; }`;
+    s.textContent = `#imgTbl, #chromIdeoImg, img[src*="hgtIdeo"] { zoom: ${1 / k} !important; }`
+      + `\n#mouseoverContainer, #mouseOverText, .tooltip, .__pinnedTip { font-size: ${tipPx}px !important; }`;
     (document.head || document.documentElement).appendChild(s);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
@@ -301,7 +324,7 @@ const T_START = Date.now();
     viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE,
     ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
-  if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE);
+  if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE_ARGS);
   await ctx.addInitScript(CURSOR_INIT);
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
   const page = await ctx.newPage();
@@ -333,6 +356,31 @@ const T_START = Date.now();
         [...document.querySelectorAll('[id^="img_data_"]')].map(e => e.id.replace('img_data_', ''))).catch(() => null);
       if (rows) console.log('  rows:', rows.join(', ') || '(none)');
     }
+    await scaleHeights();   // print runs only; see below
+  }
+  // A print run makes the image k times wider, and a track with a FIXED PIXEL height does not
+  // follow: a bigLolly or wiggle row is a pixel count read from trackDb/the cart, untouched by
+  // `pix` and `textSize`, so a 128px row that was 15% of an 850px image is 5% of a 2550px one.
+  // That is how the ClinVar lollipop row came out a sliver with unreadable y-axis labels next to
+  // a bed track that DID grow with the font. So after each view change, ask for k times the
+  // height of every row hgTracks just drew. It is asked of the rows the page actually has --
+  // which is the only way to reach the LIFTED view, whose tracks are hub tracks under names
+  // trackDb never saw. Harmless where it means nothing (a bigBed never reads heightPer), and
+  // each track's own `maxHeightPixels` still clamps it, so a track that should stay short does;
+  // raise that ceiling in trackDb for one that should not (clinvarSubLolly does this).
+  const heightsSent = new Set();
+  let inHeightNav = false;
+  async function scaleHeights() {
+    if (!HEIGHTPER || inHeightNav) return;
+    const drawn = await page.evaluate(() =>
+      [...document.querySelectorAll('#imgTbl [id^="img_data_"]')].map(e => e.id.replace('img_data_', ''))
+    ).catch(() => []);
+    const fresh = (drawn || []).filter(n => n && !heightsSent.has(n));
+    if (!fresh.length) return;                      // same rows as last time: no second load
+    fresh.forEach(n => heightsSent.add(n));
+    inHeightNav = true;                             // the nav below must not recurse
+    try { await nav(`/cgi-bin/hgTracks?${fresh.map(n => `${n}.heightPer=${HEIGHTPER}`).join('&')}&${IMGVARS}`); }
+    finally { inHeightNav = false; }
   }
   async function nav(u) { pinnedTips.length = 0; await page.goto(absurl(u), { waitUntil: 'load' }); await captureState(); await page.mouse.move(cur.x, cur.y); }
   async function glide(x, y) {
@@ -817,7 +865,7 @@ const T_START = Date.now();
     if (!pinnedTips.length) { console.warn(`pinShot ${name}: no pinned mouseovers recorded (set pin: true / pinMouseovers: true)`); return; }
     const url = page.url();
     const ctx2 = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE });
-    if (SCALE > 1) await ctx2.addInitScript(SCALE_INIT, SCALE);
+    if (SCALE > 1) await ctx2.addInitScript(SCALE_INIT, SCALE_ARGS);
     await ctx2.addCookies(await ctx.cookies());
     const pg2 = await ctx2.newPage();
     await pg2.goto(url, { waitUntil: 'load' });

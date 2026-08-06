@@ -1,0 +1,6 @@
+##maf version=1 scoring=blastz
+a score=1000.0
+s AABBCC010000001.1.contig7       100 10 +  10000000 ACGTACGTAC
+s hg38.chr1                       200 10 + 248956422 ACGTACGTAC
+s Pan_troglodytes.NBAG03003257.1  300 10 +  10000000 ACGTACGTAC
+
