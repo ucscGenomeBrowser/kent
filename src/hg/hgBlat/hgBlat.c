@@ -526,11 +526,12 @@ printf("details</A> ");
 }
 
 static char *chromTypeNote(char *tName)
-/* Return a short explanation for _alt/_fix/_random/chrUn sequences, or NULL for a normal chrom. */
+/* Return a short explanation for special sequence names (alt/fix/random/hap/unplaced), or NULL for a
+ * normal chromosome.  tName should be the display name the user sees. */
 {
 if (endsWith(tName, "_fix"))
     return "Assembly fix patch: corrects an error in the reference assembly.";
-if (endsWith(tName, "_alt"))
+if (endsWith(tName, "_alt") || stringIn("_hap", tName))
     return "Alternate haplotype: an alternate sequence for this region.";
 if (endsWith(tName, "_random"))
     return "Unlocalized sequence: known chromosome, position not determined.";
@@ -619,12 +620,39 @@ jsonWriteBoolean(jw, "hasLocus", locusConn != NULL);
 /* Sharing a link only makes sense when a durable bigPsl custom track was made from the results
  * (autoBigPsl); otherwise there is nothing for the shared session to reopen from. */
 jsonWriteBoolean(jw, "canShare", autoBigPsl);
+/* Renaming the results custom track needs the bigPsl track + the C blatRenameCt() helper, both only
+ * present with autoBigPsl.  hgBlat.js shows its own "Rename BLAT Track" button + modal in that case,
+ * pre-filled with the track's current name/description (below) so it needs no page-global. */
+jsonWriteBoolean(jw, "canRename", autoBigPsl);
+if (autoBigPsl)
+    {
+    char *ctName = NULL, *ctDescription = NULL;
+    getCustomName(database, cart, pslList, &ctName, &ctDescription);
+    jsonWriteString(jw, "trackName", ctName);
+    jsonWriteString(jw, "trackDescription", ctDescription);
+    }
 /* The classic "Old BLAT result page" view re-reads the trash .pslx from the current search, so it
  * is only offered on a fresh search (pslName set), not on a shared-link reopen rebuilt from the
  * durable custom track (where the trash files may be long gone). */
 jsonWriteBoolean(jw, "canOldPage", pslName != NULL);
 jsonWriteString(jw, "hgsid", cartSessionId(cart));
 jsonWriteStringf(jw, "newSearchUrl", "hgBlat?db=%s&%s", database, uiState);
+/* Stable, shareable page URL: it reopens straight from the trash .pslx/.fa (no saved session, no
+ * sessionData - the link works until trash is cleaned).  Carry only the random basenames as tokens;
+ * the reopen reconstructs the trash paths, so no filesystem path or session id is exposed in the URL,
+ * and the recipient uses their own cart.  Present whenever the trash files exist (fresh search or a
+ * trash reopen), so hgBlat.js can pin it into the address bar with history.replaceState(). */
+if (pslName != NULL && faName != NULL)
+    {
+    char *pslId = cloneString(strrchr(pslName, '/') ? strrchr(pslName, '/') + 1 : pslName);
+    char *faId  = cloneString(strrchr(faName,  '/') ? strrchr(faName,  '/') + 1 : faName);
+    chopSuffix(pslId);   /* drop ".pslx" -> bare token */
+    chopSuffix(faId);    /* drop ".fa"   -> bare token */
+    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s",
+        database, pslId, faId);
+    freeMem(pslId);
+    freeMem(faId);
+    }
 char *posStr = cartOptionalString(cart, "position");
 if (posStr != NULL)
     {
@@ -640,7 +668,26 @@ else if (!autoBigPsl && pslName != NULL)
 dyStringPrintf(va, "&%s%s", uiState, unhideTrack);
 jsonWriteString(jw, "viewAllUrl", va->string);
 dyStringFree(&va);
-jsonWriteStringf(jw, "geneUrlBase", "%s?db=%s&%s&position=", browserUrl, database, uiState);
+/* The query sequence(s) for the "Show Query Sequence" button.  Only available on a fresh search,
+ * where the uploaded FASTA is still in trash (faName); on a shared-link reopen faName is NULL and
+ * the button is omitted client-side. */
+if (faName != NULL && fileExists(faName))
+    {
+    struct dnaSeq *qSeqList = faReadAllMixed(faName), *qSeq;
+    if (qSeqList != NULL)
+        {
+        jsonWriteListStart(jw, "querySeqs");
+        for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteString(jw, "name", qSeq->name);
+            jsonWriteString(jw, "seq", qSeq->dna);
+            jsonWriteObjectEnd(jw);
+            }
+        jsonWriteListEnd(jw);
+        }
+    dnaSeqFreeList(&qSeqList);
+    }
 jsonWriteObjectEnd(jw);   // config
 
 jsonWriteListStart(jw, "hits");
@@ -661,7 +708,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     jsonWriteNumber(jw, "score", pslScore(psl));
     jsonWriteDouble(jw, "identity", ident);
     jsonWriteString(jw, "chrom", displayChromName);
-    char *note = chromTypeNote(psl->tName);
+    char *note = chromTypeNote(displayChromName);   /* note must match the NAME the user sees */
     if (note != NULL)
         jsonWriteString(jw, "chromNote", note);
     jsonWriteString(jw, "strand", psl->strand);
@@ -679,7 +726,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     jsonWriteString(jw, "newTabUrl", newTabUrl);
     if (pslName != NULL)
         jsonWriteStringf(jw, "detailsUrl", "%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s",
-            hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName, psl->tName,
+            hgcUrl, psl->tStart, pslName, cgiEncode(faName), cgiEncode(psl->qName), psl->tName,
             psl->tStart, psl->tEnd, database, uiState);
     else
         /* Shared-link reopen: there is no trash .pslx, but the durable bigPsl custom track (now in
@@ -736,22 +783,25 @@ static void printNewDisplayBanner(char *uiState)
 /* On the classic hyperlink results page, offer a one-click switch to the modern Table display.
  * The link sets the blatNewPage cart variable (so the choice sticks for future searches) and
  * reopens the current results (blatReopen) in the new format.
- * The banner is on by default but can be turned off in hg.conf (blatNewPageBanner=off) to stop
- * advertising the new page - without releasing new CGIs - while the display itself stays available
- * to users who already opted in or use a direct link. */
+ * The banner is OFF by default while the new page is still being tested; set blatNewPageBanner=on
+ * in hg.conf to advertise the new page - without releasing new CGIs.  The new display itself stays
+ * reachable by users who already opted in or use a direct blatNewPage=1 link. */
 {
-if (!cfgOptionBooleanDefault("blatNewPageBanner", TRUE))
+if (!cfgOptionBooleanDefault("blatNewPageBanner", FALSE))
     return;
-printf("<div style=\"display:flex;align-items:center;gap:16px;max-width:900px;"
-       "margin:0 0 20px;padding:14px 18px;border:1px solid #cfe0f5;border-radius:6px;"
-       "background:#f0f6ff\">"
-       "<span style=\"flex:1;font-size:15px;color:#1f2937;line-height:1.5\">"
-       "There is a new BLAT results page, with a sortable and filterable table of hits, "
-       "gene loci and query coverage.</span>"
-       "<a href=\"hgBlat?blatNewPage=1&blatReopen=1&%s\" "
-       "style=\"white-space:nowrap;padding:9px 18px;border-radius:4px;background:#2c5aa0;"
-       "color:#ffffff;text-decoration:none;font-size:14px;font-weight:600\">"
-       "Try the new page</a></div>\n", uiState);
+/* Reuse the new page's ".blatBanner" look (house style: wheat box, square corners, navy links).
+ * The classic page doesn't load hgBlat.js's injected CSS, so define the same class here.  Keep these
+ * values in sync with the .blatBanner rule in hgBlat.js. */
+printf("<style>"
+       ".blatBanner{background:#fbf3e2;border:1px solid #d9bd82;padding:10px 14px;margin:12px 0 20px;"
+       "font-size:14px;color:#1e2833}"
+       ".blatBanner a{color:#003a72}"
+       ".blatBanner a:hover{color:#8b1a1a}"
+       "</style>"
+       "<div class=\"blatBanner\">"
+       "We are testing a BLAT results page, with a sortable and filterable table of hits, "
+       "gene loci and query coverage. "
+       "<a href=\"hgBlat?blatNewPage=1&blatReopen=1&%s\">Try the new page</a>.</div>\n", uiState);
 }
 
 void showAliPlaces(char *pslName, char *faName, char *customText, char *database,
@@ -898,7 +948,8 @@ else  // hyperlink
 	    {
 	    printf("<div id=renameFormItem style='display: none'>\n");
 	    printf("<FORM ACTION=>\n");
-	    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename Custom Track\">\n");
+	    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename BLAT Track\" "
+	           "title=\"Give the BLAT results custom track a name and description of your choosing\">\n");
 	    printf("</FORM>\n");
 	    printf("</div>\n");
 
@@ -925,18 +976,9 @@ else  // hyperlink
 	    printf("</div>\n");
 	    }
 
-        if (!feelingLucky)
-	    {
-	    // REMOVE CT BUTTON FORM.
-	    printf("<div id=deleteCtForm style='display: none'>\n");
-	    printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\"MAIN_FORM\" METHOD=%s>\n\n",
-		hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
-	    cartSaveSession(cart);
-	    cgiMakeButton(CT_DO_REMOVE_VAR, "Delete Custom Track");
-	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");
-	    printf("</FORM>\n");
-	    printf("</div>\n");
-	    }
+        /* The standalone "Delete Custom Track" button was removed from the new table page: users had
+	 * no clear reason to delete the track they just made.  (The rename flow still removes/replaces
+	 * the old track internally via CT_DO_REMOVE_VAR.) */
 
         jsInlineF(
 	    
@@ -955,8 +997,9 @@ else  // hyperlink
 	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
 	    "    if (luckyLocation == '')\n"
 	    "        {\n"
-	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[0].value = ct_blat;\n"
-	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[1].value = ct_blat;\n"
+	    /* set the ct name on whatever CT_SELECTED_TABLE_VAR inputs are present (the rename form has
+	     * one; the old delete form that had a second was removed), so no [1] undefined error */
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]').each(function(){ this.value = ct_blat; });\n"
 	    "        }\n"
 	    "    }\n"
 	    "}\n"
@@ -987,6 +1030,12 @@ else  // hyperlink
 	    "var url='%s';\n"
 	    "var trackName='%s';\n"
 	    "var trackDescription='%s';\n"
+	    /* Exposed for hgBlat.js's rename modal: rebuild the custom track under a new name/description,
+	     * reusing the same buildBigPslCt() call and closed-over url, so the client needs no globals. */
+	    "window.blatRenameCt = function(name, description) {\n"
+	    "    trackName = name; trackDescription = description;\n"
+	    "    buildBigPslCt(url, name, description);\n"
+	    "};\n"
             "$(document).ready(function() {\n"
 	    "\n"
 	    "buildBigPslCt(url, trackName, trackDescription);\n"
@@ -996,8 +1045,7 @@ else  // hyperlink
 	    "    }\n"
 	    "else\n"
 	    "    {\n"
-	    "    $('#renameFormItem')[0].style.display = 'block';\n"   
-	    "    $('#deleteCtForm')[0].style.display = 'block';\n"   
+	    "    $('#renameFormItem')[0].style.display = 'block';\n"
 	    "    }\n"
             "});\n", url->string, trackName, trackDescription);
  
@@ -2228,6 +2276,11 @@ if (!allGenomes)
      * (see doOldPageReopen).  These are just short paths; the query sequence is not stored. */
     cartSetString(cart, "blatPslFile", pslTn.forCgi);
     cartSetString(cart, "blatFaFile", faTn.forCgi);
+    /* Remember the db/organism the search actually ran against, so a later blatReopen renders with
+     * the right assembly even if the cart's current db has since drifted (e.g. the user searched a
+     * different assembly in between).  The trash PSLs carry this assembly's chrom names. */
+    cartSetString(cart, "blatDb", serve->db);
+    cartSetString(cart, "blatOrganism", organism);
     showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType,
               organism, feelingLucky);
     }
@@ -2597,9 +2650,15 @@ printf("</PRE>\n");
 }
 
 
+/* LEGACY (see /hive/groups/browser/redmineNotes/37893/): new "Share a link" links no longer save a
+ * session - they carry the trash .pslx/.fa basenames and reopen via doTrashShareReopen (no session,
+ * no sessionData; they expire when trash is cleaned).  This ?u=&s= session path is kept only so any
+ * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
+ * trash tier, for links that should outlive normal trash, is still wanted later (see the
+ * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
 static void doShareReopen(char *database, char *organism)
-/* Rebuild the Table view for a shared link (?u=&s=) from the durable bigPsl custom track that was
- * saved with the session, without re-running BLAT and without any stored query sequence.  The
+/* Rebuild the Table view for an OLD shared link (?u=&s=) from the durable bigPsl custom track that
+ * was saved with the session, without re-running BLAT and without any stored query sequence.  The
  * custom track (and its bigBed file) is kept alive by refreshNamedSessionCustomTracks for as long
  * as the shared session exists, so this is durable. */
 {
@@ -2643,6 +2702,17 @@ static void doReopenResults(char *database, char *organism)
 {
 char *pslFile = cartOptionalString(cart, "blatPslFile");
 char *faFile = cartOptionalString(cart, "blatFaFile");
+/* Use the db/organism the saved search ran against, not the cart's current db (which may have
+ * drifted): the trash PSLs carry that assembly's chrom names, so rendering under any other db
+ * gives broken position and "View alignment" links (hgc "bad input variables"). */
+char *savedDb = cartOptionalString(cart, "blatDb");
+if (isNotEmpty(savedDb))
+    {
+    database = savedDb;
+    char *savedOrg = cartOptionalString(cart, "blatOrganism");
+    if (isNotEmpty(savedOrg))
+        organism = savedOrg;
+    }
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
 if (pslFile == NULL || faFile == NULL || !fileExists(pslFile))
@@ -2651,6 +2721,45 @@ if (pslFile == NULL || faFile == NULL || !fileExists(pslFile))
 else
     showAliPlaces(pslFile, faFile, NULL, database, gftDna, gftDna, organism, FALSE);
 cartWebEnd();
+}
+
+static boolean blatSafeTrashId(char *s)
+/* TRUE only if s is a bare trash-file basename token (letters, digits, underscore).  Because it can
+ * contain no '/', '.' or '..', a path built from it cannot escape the trash directory. */
+{
+if (isEmpty(s))
+    return FALSE;
+char *p;
+for (p = s; *p != '\0'; ++p)
+    if (!isalnum((unsigned char)*p) && *p != '_')
+        return FALSE;
+return TRUE;
+}
+
+static void doTrashShareReopen(char *database, char *organism, char *pslId, char *faId)
+/* Reopen a shared BLAT results link that carries the trash .pslx/.fa basenames (blatPslId/blatFaId in
+ * the URL) - no saved session, no sessionData; the link works until trash is cleaned.  Reconstruct
+ * the trash paths from the validated tokens, point the cart's blatPslFile/blatFaFile at them, and
+ * hand off to doReopenResults (which rebuilds the Table view and handles cleaned-up trash gracefully).
+ * The recipient uses their own cart, so pin the shared results' db here (their cart may carry a stale
+ * blatDb from an earlier search of their own). */
+{
+cartSetString(cart, "blatNewPage", "1");   /* a shared table link always shows the table */
+if (!blatSafeTrashId(pslId) || !blatSafeTrashId(faId))
+    {
+    cartWebStart(cart, database, "BLAT Results");
+    printf("<p>This shared BLAT link is not valid.</p>\n");
+    cartWebEnd();
+    return;
+    }
+char pslPath[1024], faPath[1024];
+safef(pslPath, sizeof pslPath, "%s/hgSs/%s.pslx", trashDir(), pslId);
+safef(faPath,  sizeof faPath,  "%s/hgSs/%s.fa",   trashDir(), faId);
+cartSetString(cart, "blatPslFile", pslPath);
+cartSetString(cart, "blatFaFile",  faPath);
+cartSetString(cart, "blatDb", database);
+cartSetString(cart, "blatOrganism", organism);
+doReopenResults(database, organism);
 }
 
 void doMiddle(struct cart *theCart)
@@ -2701,6 +2810,13 @@ chromAliasSetup(db);
 if (cgiVarExists("s"))
     {
     doShareReopen(db, organism);
+    return;
+    }
+/* Stable shareable-link reopen (blatPslId/blatFaId): rebuild the Table straight from the trash
+ * .pslx/.fa named in the URL - no session, no sessionData.  See doTrashShareReopen. */
+if (cgiOptionalString("blatPslId") != NULL && cgiOptionalString("blatFaId") != NULL)
+    {
+    doTrashShareReopen(db, organism, cgiString("blatPslId"), cgiString("blatFaId"));
     return;
     }
 /* The classic page's "Try the new display" banner and the Table view's "Old BLAT result page" link
