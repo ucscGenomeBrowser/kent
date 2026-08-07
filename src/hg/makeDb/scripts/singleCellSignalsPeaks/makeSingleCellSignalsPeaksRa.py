@@ -89,8 +89,13 @@ def main():
 
     out_stanzas = [header]
     n = skipped_old = n_stanzas = n_parented = 0
+    bad_src = []          # source track names not in the cellBrowser<Asm>_ namespace
     for s in re.split(r"\n\s*\n", open(stanzas).read().strip()):
-        lines = s.splitlines()
+        # Dedent: the hub stanzas are indented to show their hierarchy, and this script
+        # re-indents on write. Parsing them indented broke the "track " rename below
+        # without tripping any count check -- subtracks kept their cellBrowser<Asm> names
+        # and no longer matched their facet metadata rows.
+        lines = [l.lstrip() for l in s.splitlines()]
         n_stanzas += 1
         # Match on the parent's first token rather than the whole line. The exact-string
         # compare this replaces would have silently skipped every stanza if the hub ever
@@ -117,7 +122,16 @@ def main():
         newl = []
         for l in lines:
             if l.startswith("track "):
-                suffix = l.split(None, 1)[1][len(hub_composite) + 1:]
+                # Validate the SOURCE name before slicing it. This used to chop a fixed
+                # number of characters off whatever it was given, so a track not actually
+                # named cellBrowser<Asm>_* came out silently mangled but well-formed
+                # (BOGUS_allen_basal_ganglia_atac__dorsal -> ..._ia_atac__dorsal), which no
+                # check on the output could catch.
+                src_name = l.split(None, 1)[1]
+                if not src_name.startswith(hub_composite + "_"):
+                    bad_src.append(src_name)
+                    continue
+                suffix = src_name[len(hub_composite) + 1:]
                 newl.append("track %s_%s" % (TRACK, suffix))
             elif l.strip().startswith("parent ") and l.split()[1] == hub_composite:
                 # "off" so every subtrack is unchecked by default; the user turns
@@ -130,6 +144,20 @@ def main():
             else:
                 newl.append(l)
         out_stanzas.append("\n".join(newl))
+
+    # Every emitted subtrack must be "track <TRACK>_<non-empty suffix>". Checking only the
+    # prefix was not enough: the rename always prepends it, so a source name that did not
+    # start with the hub composite still passed, just with an empty suffix.
+    if bad_src:
+        sys.exit("ERROR: %d source track name(s) are not %s_* , e.g. %r. Renaming them "
+                 "would silently mangle the name. Has the hub stanza layout changed?"
+                 % (len(bad_src), hub_composite, bad_src[0]))
+    _ok = re.compile(r"^track %s_\S+$" % re.escape(TRACK))
+    bad = [x.split("\n", 1)[0] for x in out_stanzas[1:]
+           if not _ok.match(x.split("\n", 1)[0])]
+    if bad:
+        sys.exit("ERROR: %d subtrack(s) were not renamed into the %s namespace, e.g. %r. "
+                 "Has the hub stanza layout changed?" % (len(bad), TRACK, bad[0]))
 
     # Sanity checks: fail loudly rather than write a truncated .ra. A hub-format change
     # that stops the parent line matching would otherwise produce a header-only file and
@@ -154,8 +182,18 @@ def main():
         sys.stderr.write("WARNING: no facet metadata at %s, skipping the 1:1 check\n"
                          % meta)
 
+    # Indent subtracks under the composite, as the trackDb .ra files in the tree do
+    # (chainNet, encode3): the container sits flush left and each level below it is
+    # indented one step, with every line of the stanza moving together.
+    def indent(stanza, width=4):
+        lines = stanza.split("\n")
+        if not any(l.startswith("parent ") for l in lines):
+            return stanza
+        pad = " " * width
+        return "\n".join(pad + l if l.strip() else l for l in lines)
+
     with open(os.path.abspath(out), "w") as fh:
-        fh.write("\n\n".join(out_stanzas) + "\n")
+        fh.write("\n\n".join(indent(s) for s in out_stanzas) + "\n")
     print("wrote %s: %d subtracks (assembly=%s, composite=%s, group=%s; skipped %d old-dir)" % (
         out, n, asm, hub_composite, GROUP, skipped_old))
 
