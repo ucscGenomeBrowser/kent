@@ -851,7 +851,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             {
             if (quickLiftFile)
                 {
-                if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) != NULL)
+                if ((bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb)) != NULL)
                     {
                     bedCopy = cloneBed(bed);
                     lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
