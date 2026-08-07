@@ -395,7 +395,22 @@ const T_START = Date.now();
     try { await nav(`/cgi-bin/hgTracks?${fresh.map(n => `${n}.heightPer=${HEIGHTPER}`).join('&')}&${IMGVARS}`); }
     finally { inHeightNav = false; }
   }
-  async function nav(u) { pinnedTips.length = 0; await page.goto(absurl(u), { waitUntil: 'load' }); await captureState(); await page.mouse.move(cur.x, cur.y); }
+  // Apache's LimitRequestLine defaults to 8190 bytes for the whole request line, and a
+  // step that derives a lot of cart variables can sail past it. The server then answers 414
+  // and the page LOADS -- so nothing throws, captureState finds no image, and the next
+  // shot: quietly photographs "Request-URI Too Long". Say so, since only an eyeball on the
+  // still would otherwise catch it.
+  const URL_WARN = 7800;
+  async function nav(u) {
+    const full = absurl(u);
+    if (full.length > URL_WARN)
+      console.warn(`nav: URL is ${full.length} chars, over Apache's usual ${8190} limit `
+        + `-- expect a 414 "Request-URI Too Long" page instead of the view`);
+    pinnedTips.length = 0;
+    await page.goto(full, { waitUntil: 'load' });
+    await captureState();
+    await page.mouse.move(cur.x, cur.y);
+  }
   async function glide(x, y) {
     if (FAST) { await page.mouse.move(x, y); cur.x = x; cur.y = y; return; }
     const steps = Math.max(10, Math.round(Math.hypot(x - cur.x, y - cur.y) / 9));
@@ -558,6 +573,32 @@ const T_START = Date.now();
       const c = idx.get(k);
       if (!c || !c.children.length) out.push(k);
       else c.children.forEach(walk);
+    };
+    n.children.forEach(walk);
+    return out;
+  }
+  // What `hideKids` actually has to send. NOT the same thing as tdbLeaves(): hiding a
+  // COMPOSITE already reaches its subtracks, so the walk stops at the first container that
+  // propagates its own visibility and only keeps descending through superTracks, which do
+  // not. hubApi never lists a superTrack container -- tdbParse synthesizes it and flags
+  // superTrack -- so anything else holding children came from hubApi's own nesting and is a
+  // composite or a view.
+  //
+  // Descending all the way to leaves here is how `{cCREs: hideKids}` on hg38 came to send
+  // 1701 cart variables in a 42,020-character GET: the walk went straight through the
+  // ENCODE4 Core Collection composite and enumerated all 850 of its ENCFF subtracks. Apache
+  // answered 414 and the next shot: photographed the error page, with nothing failing the
+  // build. Stopping at the composite makes that same step three names.
+  async function tdbHideTargets(name) {
+    const idx = await tdbIndex(state.db);
+    const n = idx && idx.get(name);
+    if (!n || !n.children.length) return [];
+    const out = [];
+    const walk = k => {
+      const c = idx.get(k);
+      if (!c || !c.children.length) { out.push(k); return; }   // a real leaf
+      if (!c.superTrack) { out.push(k); return; }              // composite/view: hide as a unit
+      c.children.forEach(walk);                                // superTrack: does not propagate
     };
     n.children.forEach(walk);
     return out;
@@ -1343,7 +1384,7 @@ const T_START = Date.now();
         // the cart (#37953) -- so the container goes on first and the hides follow.
         const kidHides = [];
         for (const e of entries.filter(isKidHide)) {
-          const leaves = (await tdbLeaves(e[0])).filter(k => !named.has(k));
+          const leaves = (await tdbHideTargets(e[0])).filter(k => !named.has(k));
           if (!leaves.length)
             console.warn(`track ${e[0]}: hideKids -- trackDb gives it no children to hide`);
           for (const k of leaves) kidHides.push([k, 'hide']);

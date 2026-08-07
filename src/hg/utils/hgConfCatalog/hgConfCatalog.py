@@ -243,7 +243,7 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:2972",
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3090",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
                "page can be reopened and shared.  The read at hgBlat.c:2972 "
@@ -253,10 +253,10 @@ RELEASE_GATES = {
                "Filed as a knob until that was read, on the strength of the "
                "default being an identifier the harvester could not resolve; "
                "a flag whose own source says to flip it later is a gate."),
-        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1068", default="FALSE",
+        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1118", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:741", default="TRUE",
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:790", default="TRUE",
           role="gate", verified=True,
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
@@ -363,7 +363,7 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:760", default="TRUE",
+        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:812", default="TRUE",
           role="gate", verified=True,
           note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c:34", default="TRUE",
@@ -506,10 +506,10 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2299",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2517",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
-        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1564",
+        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1705",
           default="FALSE", role="knob", public=True, verified=True,
           ticket="37929",
           note="Passwordless sign-in: the user is emailed a one-time link "
@@ -588,7 +588,7 @@ DATABASE = {
                "The name reaches cfgOption as a parameter of loadGrps(), so "
                "the harvester can only see it as {confName} and the reconcile "
                "would otherwise call it dead documentation."),
-        h("db.relatedTrack", "table", "hg/lib/hui.c:10812",
+        h("db.relatedTrack", "table", "hg/lib/hui.c:10772",
           default='"relatedTrack"', verified=True, family="db"),
         h("central.host", "profile", "hg/qaPushQ/qaPushQ.c:2448", public=True,
           verified=True, family="central",
@@ -859,11 +859,11 @@ LIMITS = {
           default='"10000"', verified=True, ticket="37788"),
         h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:908", verified=True,
           note="Per-day liftOver cap for the hub API."),
-        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2016",
+        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2066",
           default="NULL", public=True, verified=True),
-        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:2785",
+        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:2903",
           default='"20"', public=True, verified=True),
-        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:2816",
+        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:2934",
           default='"90"', public=True, verified=True),
         h("logCgiVarMaxLen", "limit", "hg/lib/hgConfig.c:386", default='"0"',
           public=True, verified=True,
@@ -1066,21 +1066,21 @@ LOGIN = {
     "vars": [
         h("login.systemName", "internal", "hg/lib/wikiLink.c:31", public=True,
           verified=True, family="login"),
-        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:82",
+        h("login.browserName", "internal", "hg/hgLogin/hgLogin.c:84",
           public=True, verified=True, family="login"),
-        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:91", public=True,
+        h("login.browserAddr", "url", "hg/hgLogin/hgLogin.c:93", public=True,
           verified=True, family="login"),
-        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:100",
+        h("login.mailSignature", "internal", "hg/hgLogin/hgLogin.c:102",
           public=True, verified=True, family="login"),
-        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:111",
+        h("login.mailReturnAddr", "email", "hg/hgLogin/hgLogin.c:113",
           public=True, verified=True, family="login"),
-        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:341",
+        h("login.approvedReturn", "url", "hg/hgLogin/hgLogin.c:343",
           default="NULL", verified=True, family="login"),
         h("login.cookieSalt", "credential",
           "hg/hgPhyloPlace/hgPhyloPlace.c:581", public=True, verified=True,
           family="login", note="Salt for the login cookie.  A secret."),
         h("login.oauth.providers", "internal",
-          "hg/hgLogin/oauthLogin.c:127", public=True, verified=True,
+          "hg/hgLogin/oauthLogin.c:139", public=True, verified=True,
           family="login", ticket="37984",
           note="Comma-separated list of social sign-in providers to offer.  "
                "Each name listed here is then configured through its own "
@@ -1328,6 +1328,12 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("blatOldTracks", "unreviewed", "hg/hgc/hgc.c:27433", default="keep",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionDefault at hg/hgc/hgc.c:27433. "
+               "Came in at 81d7cff6cb6, hgBlat new results page: table "
+               "redesign, rename modal, share link, and an XSS fix.  Needs a "
+               "kind, a description, and a section to live in."),
     ],
 }
 
