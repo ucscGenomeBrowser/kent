@@ -797,10 +797,14 @@ if (!mouseOverIdx)
 // a fake item that is the union of the items that span the current  window
 struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
+unsigned notLifted = 0;
 struct bed *bed = NULL, *bedCopy = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
+    // an item that passed the filters but has no clean mapping through the chain was
+    // dropped by the lift, not by a filter, and needs to be reported in its own words
+    boolean liftFailed = FALSE;
     bedCopy = NULL;
     char *bedRow[bbi->fieldCount];
     if (sameString(track->tdb->type, "bigPsl"))
@@ -853,6 +857,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
                         scoreMin, scoreMax, useItemRgb);
                     }
+                else
+                    liftFailed = TRUE;
                 }
             else
                 {
@@ -933,7 +939,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     if (lf == NULL)
         {
-        filtered++;
+        if (liftFailed)
+            notLifted++;
+        else
+            filtered++;
         continue;
         }
 
@@ -979,6 +988,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 if (filtered)
    labelTrackAsFilteredNumber(track, filtered);
+
+if (notLifted)
+   track->longLabel = labelAsNotLiftedNumber(track->longLabel, notLifted);
 
 if (doWindowSizeFilter)
     // add the number of merged items to the track longLabel
