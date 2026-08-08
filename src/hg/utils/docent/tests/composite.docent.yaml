@@ -1,0 +1,25 @@
+# A composite named together with a deviation under it.
+#
+# hgTracks RESHAPES a composite when its container visibility changes, and that wipes
+# per-subtrack overrides arriving in the same request: `clinvar=pack&clinvarCnv=hide`
+# alone leaves clinvarCnv_sel=1 and the CNV row still drawn (#37953). Docent sends it
+# in two rounds, container first. That split is invisible in the output, so this test
+# is the only thing standing between it and a quiet regression.
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - hide: all
+
+  # The container reaches its selected children on its own, so naming it draws all three.
+  - track: {clinvar: pack}
+  - expect: {rows: [clinvarMain, clinvarCnv, clinvarSubLolly]}
+
+  # Now the same step with one deviation. clinvarCnv must go, the others must stay, and
+  # the container must NOT be turned off by the hide travelling upward.
+  - hide: all
+  - track: {clinvar: pack, clinvarCnv: hide}
+  - expect: {rows: [clinvarMain, clinvarSubLolly], noRows: [clinvarCnv], noText: "Too Long"}

@@ -334,8 +334,18 @@ function absurl(u) {
   return SERVER + '/' + u;
 }
 
+// DOCENT_DERIVE=1: print what each `track:` step turns into and stop, with no browser and
+// no server drive. Most of Docent's own decisions live in that derivation -- which
+// containers come along, which `_sel` goes with them, where a hideKids walk stops -- and
+// until now the only way to see them was the log of a full run against a live view. This
+// makes them cheap to look at, and cheap to diff when the derivation is changed.
+const DERIVE = !!process.env.DOCENT_DERIVE;
+
 const T_START = Date.now();
 (async () => {
+  // Before the browser: nothing in the derivation touches the page, and the point is to
+  // not pay for one. (The helpers below are function declarations, so they are hoisted.)
+  if (DERIVE) { await deriveMain(); return; }
   fs.mkdirSync(STILLDIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, args: ['--force-color-profile=srgb'] });
   const ctx = await browser.newContext({
@@ -1475,6 +1485,93 @@ const T_START = Date.now();
     return true;
   }
 
+  // What a `track:` step turns into: an ordered list of ROUNDS, each a list of `name=value`
+  // cart variables, plus the entries the visible dropdown gesture should walk. No browser
+  // anywhere in here, which is what lets DOCENT_DERIVE print it without launching one --
+  // and this is where Docent's real decisions are made, so being able to look at them
+  // cheaply matters more than it looks.
+  async function trackRounds(arg) {
+    let entries = Object.entries(arg);
+    const isKidHide = ([, mode]) => String(mode).toLowerCase() === 'hidekids';
+    // What the author spelled out AS A VISIBILITY. A `hideKids` container is deliberately
+    // NOT in here: it names no mode of its own, so it must not suppress the container
+    // variable derived from a child below it (`pubtator: pack` is what turns varsInPubs on).
+    const named = new Set(entries.filter(e => !isKidHide(e)).map(([n]) => n));
+    const idx = await tdbIndex(state.db);
+    // `hideKids` is not a visibility -- it is "hide everything under this container", so
+    // that a child named alongside it is left the only one drawn. A superTrack needs it:
+    // unlike a composite, its own mode does NOT reach its children, so every child comes
+    // up at its own trackDb visibility and an earlier `hide: all` does not stick
+    // (`{varsInPubs: show}` alone draws all eight of its members). The expansion skips any
+    // child the step names itself, and runs in a round of its own AFTER the rest, because
+    // a subtrack hide travelling in the same request as its container can be dropped by
+    // the cart (#37953) -- so the container goes on first and the hides follow.
+    const kidHides = [];
+    for (const e of entries.filter(isKidHide)) {
+      const leaves = (await tdbHideTargets(e[0])).filter(k => !named.has(k));
+      if (!leaves.length)
+        console.warn(`track ${e[0]}: hideKids -- trackDb gives it no children to hide`);
+      for (const k of leaves) kidHides.push([k, 'hide']);
+    }
+    entries = entries.filter(e => !isKidHide(e));
+    // hgTracks RESHAPES a composite when its container visibility changes, and that wipes
+    // per-subtrack overrides arriving in the same request (`clinvar=pack&clinvarCnv=hide`
+    // leaves clinvarCnv_sel=1 and the CNV row still drawn). So a step that names both a
+    // composite and something under it is applied in rounds -- container first, then the
+    // deviations -- which is exactly what writing them as two steps does. superTracks
+    // don't reshape, so they don't force a round.
+    const byDepth = new Map();
+    for (const e of entries) {
+      let d = 0;
+      for (let k = e[0]; ;) {
+        const n = idx && idx.get(k);
+        if (!n || !n.parent) break;
+        const p = idx.get(n.parent);
+        if (named.has(n.parent) && !(p && p.superTrack)) d++;
+        k = n.parent;
+      }
+      if (!byDepth.has(d)) byDepth.set(d, []);
+      byDepth.get(d).push(e);
+    }
+    if (kidHides.length) byDepth.set(Number.MAX_SAFE_INTEGER, kidHides);
+    const rounds = [];
+    for (const d of [...byDepth.keys()].sort((a, b) => a - b)) {
+      const vars = new Map();
+      for (const [name, mode] of byDepth.get(d))
+        // A derived variable never overrides one the step names itself, whatever the
+        // order: `{clinvar: pack, clinvarCnv: hide}` keeps clinvar=pack.
+        for (const [k, v] of await visVars(name, mode))
+          if (k === name || !named.has(k)) vars.set(k, v);
+      rounds.push([...vars].map(([k, v]) => `${k}=${v}`));
+    }
+    return { entries, rounds };
+  }
+  // DOCENT_DERIVE=1: the `track:` steps of a script, resolved against the driven server's
+  // trackDb and printed. No browser, no navigation, nothing changed anywhere -- so it is
+  // quick enough to run on every script, and its output is a thing you can diff when you
+  // have just changed visVars() or tdbHideTargets() and want to know what moved.
+  //
+  // db comes from the top of the file. A script that changes assembly mid-tour (`convert:`,
+  // a `go:` onto another db) is not followed, and a quickLift target is not in trackDb at
+  // all, so those steps derive against the starting assembly and say so.
+  async function deriveMain() {
+    console.log(`# ${path.basename(SCRIPT)}: track steps derived against ${SERVER}, db ${state.db}`);
+    const steps = doc.steps || [];
+    let n = 0;
+    for (let i = 0; i < steps.length; i++) {
+      const s = norm(steps[i]);
+      if (s.verb === 'convert')
+        console.log(`# step ${i + 1} convert: everything after this is on another assembly, `
+          + `still derived against ${state.db}`);
+      if (s.verb !== 'track' || !s.arg || typeof s.arg !== 'object') continue;
+      n++;
+      const { rounds } = await trackRounds(s.arg);
+      console.log(`step ${i + 1} track ${JSON.stringify(s.arg)}`);
+      rounds.forEach((parts, r) =>
+        console.log(`  round ${r + 1} (${parts.length} vars): ${parts.join(' ')}`));
+    }
+    if (!n) console.log('# no track: steps in this script');
+  }
   function norm(step) {
     if (typeof step === 'string') { const [v, ...r] = step.trim().split(/\s+/); return { verb: v, arg: r.length ? r.join(' ') : true }; }
     const k = Object.keys(step)[0]; return { verb: k, arg: step[k] };
@@ -1561,29 +1658,7 @@ const T_START = Date.now();
       }
       case 'hide': if (arg === 'all' || arg === true) { await clickGlide('#hgt\\.hideAll'); await page.waitForSelector('#imgTbl'); } break;
       case 'track': {
-        let entries = Object.entries(arg);
-        const isKidHide = ([, mode]) => String(mode).toLowerCase() === 'hidekids';
-        // What the author spelled out AS A VISIBILITY. A `hideKids` container is deliberately
-        // NOT in here: it names no mode of its own, so it must not suppress the container
-        // variable derived from a child below it (`pubtator: pack` is what turns varsInPubs on).
-        const named = new Set(entries.filter(e => !isKidHide(e)).map(([n]) => n));
-        const idx = await tdbIndex(state.db);
-        // `hideKids` is not a visibility -- it is "hide everything under this container", so
-        // that a child named alongside it is left the only one drawn. A superTrack needs it:
-        // unlike a composite, its own mode does NOT reach its children, so every child comes
-        // up at its own trackDb visibility and an earlier `hide: all` does not stick
-        // (`{varsInPubs: show}` alone draws all eight of its members). The expansion skips any
-        // child the step names itself, and runs in a round of its own AFTER the rest, because
-        // a subtrack hide travelling in the same request as its container can be dropped by
-        // the cart (#37953) -- so the container goes on first and the hides follow.
-        const kidHides = [];
-        for (const e of entries.filter(isKidHide)) {
-          const leaves = (await tdbHideTargets(e[0])).filter(k => !named.has(k));
-          if (!leaves.length)
-            console.warn(`track ${e[0]}: hideKids -- trackDb gives it no children to hide`);
-          for (const k of leaves) kidHides.push([k, 'hide']);
-        }
-        entries = entries.filter(e => !isKidHide(e));
+        const { entries, rounds } = await trackRounds(arg);
         // Visible gesture first: drive the real track-controls dropdowns so the mouse is
         // seen turning the tracks on. State is still applied by the nav()s below (which
         // carry the container/checkbox vars too), so these opens are non-committing.
@@ -1592,34 +1667,7 @@ const T_START = Date.now();
             const csel = await ctrlSelect(name);
             if (csel) await openSelectVisible(csel, mode, 6, false);
           }
-        // hgTracks RESHAPES a composite when its container visibility changes, and that wipes
-        // per-subtrack overrides arriving in the same request (`clinvar=pack&clinvarCnv=hide`
-        // leaves clinvarCnv_sel=1 and the CNV row still drawn). So a step that names both a
-        // composite and something under it is applied in rounds -- container first, then the
-        // deviations -- which is exactly what writing them as two steps does. superTracks
-        // don't reshape, so they don't force a round.
-        const rounds = new Map();
-        for (const e of entries) {
-          let d = 0;
-          for (let k = e[0]; ;) {
-            const n = idx && idx.get(k);
-            if (!n || !n.parent) break;
-            const p = idx.get(n.parent);
-            if (named.has(n.parent) && !(p && p.superTrack)) d++;
-            k = n.parent;
-          }
-          if (!rounds.has(d)) rounds.set(d, []);
-          rounds.get(d).push(e);
-        }
-        if (kidHides.length) rounds.set(Number.MAX_SAFE_INTEGER, kidHides);
-        for (const d of [...rounds.keys()].sort((a, b) => a - b)) {
-          const vars = new Map();
-          for (const [name, mode] of rounds.get(d))
-            // A derived variable never overrides one the step names itself, whatever the
-            // order: `{clinvar: pack, clinvarCnv: hide}` keeps clinvar=pack.
-            for (const [k, v] of await visVars(name, mode))
-              if (k === name || !named.has(k)) vars.set(k, v);
-          const parts = [...vars].map(([k, v]) => `${k}=${v}`);
+        for (const parts of rounds) {
           console.log('track:', parts.join(' '));   // what trackDb turned the step into
           await nav(`/cgi-bin/hgTracks?db=${state.db}&position=${enc(state.position)}&${parts.join('&')}&${IMGVARS}`);
         }

@@ -1,0 +1,22 @@
+# A print run has to be the SAME picture with more pixels, not a different picture.
+#
+# `scale: 3` widens the server image, steps the track font up the hgTracks size ladder,
+# zooms the image table back down so one image pixel lands on one device pixel, and asks
+# every drawn row for three times its height. The invariant worth asserting is that none
+# of that changes WHICH rows are drawn or which items are in them.
+#
+# The height band is deliberately loose. Densely packed tracks come out shorter at 3x,
+# because a 24px font is a little narrower than three 8px ones and `pack` fits the same
+# features into fewer rows, so an exact multiple would be wrong. A row count that changed
+# would break the `exact:` check above long before the band mattered.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+scale: 3
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [ruler, mane], exact: true, height: ">140"}
+  - expect: {height: "<400"}

@@ -1,0 +1,30 @@
+# Docent self-test: session -> expect -> loadSession, in one run.
+#
+# Not part of `make test` in the kent tree: it drives a real server over the
+# network and needs the shared Playwright install. Run it by hand:
+#
+#     cd kent/src/hg/utils/docent/tests && make test
+#
+# It passes silently and exits 0. Any failure is an `expect:` step, which names
+# what it wanted and what was actually drawn, and exits 1.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+
+  # session: writes the whole cart at this step, and expect: agrees with it.
+  - session: saved
+  - expect: {rows: [ruler, mane], exact: true, height: 2000, noRows: [clinvarMain]}
+
+  # Move somewhere else, so a restore has something to undo.
+  - track: {clinvar: pack}
+  - expect: {rows: [clinvarMain], noText: "Too Long"}
+
+  # loadSession: from the local file puts the earlier state back exactly.
+  - loadSession: {file: saved}
+  - expect: {rows: [ruler, mane], exact: true, noRows: [clinvarMain]}

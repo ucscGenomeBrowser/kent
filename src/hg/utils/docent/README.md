@@ -305,6 +305,19 @@ you publish:
 `DOCENT_TIME=1` prints where the time actually went, slowest step first — worth a look
 before assuming a script is slow for a reason you can fix.
 
+`DOCENT_DERIVE=1` skips the browser altogether and prints what each `track:` step turns
+into — the rounds, and the cart variables in each. That is where Docent's own decisions
+are made, and it answers "what will this send" in about a second instead of a full run:
+
+    DOCENT_DERIVE=1 node docent.js urllen.docent.yaml
+    step 3 track {"cCREs":"hideKids"}
+      round 1 (3 vars): cCREregistry=hide coreCcres=hide encodeCcreCombined=hide
+
+db comes from the top of the file; a script that changes assembly mid-tour is not
+followed, and it says so. `tests/` keeps baselines of this for a few scripts (`make
+derive`), which is what catches a change to the derivation that a rendered page would
+hide.
+
 Two more things that help:
 
 - `make -j6` builds scenarios in parallel. Each run has its own browser, context and cart,

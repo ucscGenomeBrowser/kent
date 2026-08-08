@@ -1,0 +1,22 @@
+# addCustomTrack: drives My Data -> Custom Tracks, types the data into the paste box,
+# submits, and clicks through to the browser. The data is inserted literally, so the
+# tabs and newlines of a block scalar have to survive the trip.
+#
+# The track is inline rather than a URL on purpose: a test that depends on a file
+# somewhere else fails for reasons that have nothing to do with Docent.
+#
+# A custom track's row id is assigned by hgTracks and is not the name written here, so
+# this asserts on the label text rather than on `rows:`.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - addCustomTrack: |
+      track name=docentTest description="Docent self-test custom track" visibility=pack color=200,0,0
+      chr7	155799600	155800200	firstItem	0	+
+      chr7	155805000	155806000	secondItem	0	-
+  - expect: {text: "docentTest", noText: "Error"}
