@@ -256,15 +256,18 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1118", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:790", default="TRUE",
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:790", default="FALSE",
           role="gate", verified=True,
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
-               "the advertisement, not the feature: turning it off stops the "
-               "browser recommending the new page without releasing new CGIs, "
-               "and users who already opted in or follow a direct link still "
-               "get it.  Goes away with the banner, once the new page is the "
-               "default.  Kept a gate rather than a knob because what it "
+               "the advertisement, not the feature: turning it on makes the "
+               "browser recommend the new page without releasing new CGIs, "
+               "and users who already opted in or follow a direct link get "
+               "the new page either way.  Goes away with the banner, once the "
+               "new page is the default.  Born TRUE at c683ecb63d7 and put "
+               "back to FALSE at 81d7cff6cb6 while the new page is still "
+               "being tested, so it is gating again rather than shipped.  "
+               "Kept a gate rather than a knob because what it "
                "turns off is a sentence recommending another page, and no "
                "mirror needs that switch forever; the deadline the report "
                "computes for it is really a deadline on deciding whether the "
@@ -394,8 +397,11 @@ RELEASE_GATES = {
 # ---------------------------------------------------------------------------
 
 MIRROR_KNOBS = {
-    "what": "Boolean flags that are legitimate, permanent deployment switches. "
-            "Listed explicitly so the sunset report does not nag about them.",
+    "what": "Settings that are legitimate, permanent deployment switches.  "
+            "Nearly all are boolean flags, and those are listed explicitly so "
+            "the sunset report does not nag about them; a few are strings that "
+            "choose between behaviours rather than turning one off, and those "
+            "carry no gate/knob role because only booleans have one.",
     "vars": [
         h("isGbib", "flag", "hg/lib/hdb.c:3714", default="FALSE", role="knob",
           public=True, verified=True,
@@ -556,6 +562,20 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27433", default="keep",
+          verified=True,
+          note="What happens to the custom tracks left behind by a user's "
+               "earlier BLAT searches when a new search makes another one.  "
+               "Three values: keep (the default) leaves every one of them "
+               "alone, hide leaves them in the session but sets them to hide, "
+               "delete drops them from the session and lets their trash files "
+               "age out.  Only tracks tagged blatResult=on are touched, and "
+               "the track the current search just made is always left alone.  "
+               "A string rather than a flag, so it carries no gate/knob role, "
+               "but it is a knob in spirit: which of the three a site wants "
+               "depends on whether its users run many searches in a session "
+               "and get confused about which results are current, and that "
+               "does not stop being a question after a release."),
     ],
 }
 
@@ -1328,12 +1348,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("blatOldTracks", "unreviewed", "hg/hgc/hgc.c:27433", default="keep",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault at hg/hgc/hgc.c:27433. "
-               "Came in at 81d7cff6cb6, hgBlat new results page: table "
-               "redesign, rename modal, share link, and an XSS fix.  Needs a "
-               "kind, a description, and a section to live in."),
     ],
 }
 
