@@ -5,13 +5,15 @@ that tour, written down: an ordered list of high-level verbs (`go`, `hide`,
 `track`, `mouseover`, `convert`, `drag`, `shot`) that drive a real browser against a
 real server.
 
-`docent.js` renders one script into two things at once:
+`docent.js` renders one script into three things at once:
 
-- a **silent mp4** of the whole tour, and
-- a named **PNG still** at every `shot:` marker.
+- a **silent mp4** of the whole tour,
+- a named **PNG still** at every `shot:` marker, and
+- a loadable **session file** at every `session:` marker.
 
 So a published figure is literally a frame of the tour, and the two can never drift
-apart. The surface syntax is YAML — so ordinary editors highlight it and no one has to
+apart. A session file goes further: it hands back the state itself, so a reader can open
+the view the figure was taken from instead of only looking at it. The surface syntax is YAML — so ordinary editors highlight it and no one has to
 learn a new parser — but the language is the verb vocabulary layered on top, not the
 serialization. Scripts are named `<base>.docent.yaml` (a bare `<base>.docent` works too).
 
@@ -36,6 +38,7 @@ Outputs, relative to the script's own directory:
 
 - mp4 → `../<base>.mp4` (override with `mp4:` or a second argument)
 - stills → `stills/<base>/<name>.png` (override with `stills:`)
+- sessions → `sessions/<base>/<name>.txt` (override the parent with `sessions:`)
 
 `docent.mk` in this directory has the make rules — include it from a project that keeps
 a set of scripts and it rebuilds only the ones whose source changed. See the usage
@@ -58,6 +61,8 @@ scale: 1                # >1 = print-resolution stills (see Print resolution)
 pinMouseovers: false    # record every mouseover for `pinShot:` (see below)
 mp4: ../myname.mp4      # override output paths if you want
 stills: stills/AP1
+sessions: sessions      # PARENT of the session dirs; files land in <parent>/<base>/
+sessionUrlBase: https://hgwdev-you.gi.ucsc.edu/~you/docent/sessions   # see Sessions
 ```
 
 `target:` defaults to genome-test, so a script that forgets to say where it runs will
@@ -153,10 +158,127 @@ screen stills instead of overwriting them.
 | `open: lift` | Click the returned coordinate link → the lifted view. |
 | `zoom: out` / `zoom: in` | One zoom step (2×). |
 | `montage: {name: figure1, shots: [source, lifted]}` | Compose stills already written this run into **one multi-panel PNG**, which is what a journal wants for a figure with parts (A), (B), and so on. Panels are stacked in order and lettered automatically; `labels: [Before, After]` overrides the letters, `labels: false` drops them, `direction: horizontal` puts them side by side, and `gap:` / `labelSize:` tune the spacing and lettering. Composed at deviceScaleFactor 1 with every panel at its **natural pixel size**, so the composite is pixel-for-pixel its inputs: a `make hires` montage is print resolution because the panels were, not because anything was upscaled. Panels narrower than the widest are left-aligned and padded, never stretched. A named shot that was never taken is warned about and skipped. Put it last, after the `shot:`/`pinShot:` steps it names. |
+| `loadSession: https://example.org/settings.txt` | Start from a **saved state** instead of a clean cart, so one tour can begin where another ended and a bug report that arrives as a session link becomes a starting position. Four forms: a **settings file by URL** (as above), a **share link** (`loadSession: https://genome.ucsc.edu/s/Braney/hg38`), a **named session** (`loadSession: {user: Braney, name: hg38}`), or a **local file** written by an earlier `session:` (`loadSession: {file: saved}` → `sessions/<base>/saved.txt`, sent up through hgSession's own upload form, so the project's sessions need not be published at all). Quick and silent, like `hub:` — this is setup, not something the tour demonstrates; add `shot:` to capture where it lands. Whatever the form, the load is issued against `target:` — see **Sessions** for why a share link is not simply followed. |
+| `expect: {rows: [ruler, mane]}` | **The one verb that can fail a run.** Everything else renders happily whatever it is handed, so a wrong figure is written over a right one and only an eye catches it. State the expectation instead and the run stops, non-zero, at the step that broke it. Checks, any combination: `rows:` (these were drawn — plain names, matched by suffix so a lifted `hub_<n>_mane` counts), `exact: true` (…and nothing else), `noRows:` (these were not), `height: 2000` (the still is no taller than that in pixels; `"<1200"`, `">=300"` for another comparison), `tip: "mismatch A->C"` (the tooltip now up says this), `text:` / `noText:` (the page does / does not contain this — `noText: "Too Long"` catches the Apache 414 that renders as a perfectly good page). A failure names every check that failed **and the rows actually drawn**. `warn: true` downgrades it to a warning for a check worth logging but not worth stopping a build over. |
+| `session: source` | Write `sessions/<base>/<name>.txt`: the **whole cart at this step**, in the format hgSession's "save settings to a local file" produces, so anyone can load it and get this exact view. Every track's visibility, the attached hubs, the custom tracks, the window. Off the video and off the page — it is fetched over the tour's own cookies, so the tour is not disturbed and nothing appears in the mp4. With `sessionUrlBase:` set at the top of the file, the run also prints the ready-made load URL. See **Sessions**. |
 | `shot: source` | Write `<name>.png` **and** pause the video here. On a tracks page the still is the track image (`#imgTbl`), plus any open tooltip/dialog. On any other page (an hgc detail page, an external page a link led to) it is the **viewport only — the top of the page**, never the whole scrolling document. |
 
 Escape hatches for anything the verbs don't cover: `goto: <url>`, `click: <sel>`,
 `hover: <sel>`, `wait: <sel>`, `sleep: <ms>`.
+
+## Sessions
+
+A `shot:` gives a picture of the view. A `session:` gives the view itself:
+
+```yaml
+sessionUrlBase: https://hgwdev-you.gi.ucsc.edu/~you/docent/sessions
+steps:
+  - hide: all
+  - track: {clinvar: pack}
+  - session: clinvar_view
+  - shot: clinvar_view
+```
+
+That writes `sessions/<base>/clinvar_view.txt` and prints the URL that loads it:
+
+```
+SESSION sessions/BP1/clinvar_view.txt (221 settings)
+  https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=https%3A%2F%2F...
+```
+
+The file is what hgSession's **save settings to a local file** button produces, and it is
+made the same way (`doSaveLocal` in `hg/hgSession/hgSession.c`), so **no login is
+involved** and the file holds the whole cart: every track's visibility, the attached hubs,
+the custom tracks, the window.
+
+It is a **file rather than a live `hgsid` link** because the hgsid cart goes on changing as
+the tour runs. A link handed out at step 5 would open on whatever step 20 left behind. The
+file is a snapshot of the step it was taken at, which is what `shot:` already means — so a
+figure and a working session can be produced at the same moment and cannot disagree.
+
+The fetch goes through the tour's own cookies but never through the page, so **the tour is
+not disturbed and nothing appears in the mp4**. hgSession drops its own `hgS_*` variables
+before it checks the cart out, so the next step starts from an unchanged state.
+
+Publishing is the project's business, the way stills already are. `sessionUrlBase:` is the
+http URL of the **parent** of the `<base>/` directories; without it, only the path is
+printed. hgTracks fetches the file itself, so it has to be reachable over http by the
+server named in `target:` — a `~/public_html` path on hgwdev is enough, and a private one
+is not.
+
+### Starting from one
+
+`loadSession:` is the other direction, and it is what makes a session useful for work rather
+than only for sharing. A bug report usually arrives as a session link, and a tour that has to
+rebuild that state by hand is guessing at it:
+
+```yaml
+steps:
+  - loadSession: https://genome.ucsc.edu/s/Braney/hg38
+  - expect: {noText: "Can't find session"}
+  - shot: as_reported
+```
+
+The load always goes to the server named in `target:`, even when the link names another
+host. Every later step navigates to `target:` by absolute URL, so following the link would
+leave the tour on the other server's cart and the next step would silently abandon it.
+**Named sessions are per-server** — the RR reads `hgcentral`, hgwdev and genome-test read
+`hgcentraltest` — so a link copied off genome.ucsc.edu only loads if that session also
+exists on the machine being driven. Docent warns when the hosts differ. A settings *file* by
+URL has no such problem, since hgTracks simply fetches it, and no warning is given.
+
+`loadSession: {file: <name>}` reads a file written by an earlier `session:` in the same
+project and sends it up through hgSession's upload form, so a script can save a state,
+wander off, and come back to it without publishing anything.
+
+### Two things to know
+
+- **A session taken on a lifted view is short-lived.** quickLift builds its hub under
+  `trash/`, and the file records it by that path (`assumesHub 192070=../trash/quickLift/...`).
+  It reloads correctly while the hub is there; it stops working when trash is cleaned. The
+  GenArk hub beside it is a stable `/gbdb` path and does not expire. So a lifted session is
+  good for showing a colleague what you are looking at this week, not for a paper.
+- **`make hires` writes to `sessions.hires/`.** A print run's cart carries `pix=2550` and
+  `textSize=24`, which is not a state anyone wants handed to them, so it is kept out of the
+  way of the screen run's files rather than overwriting them.
+
+## Expectations
+
+Every other verb renders happily whatever it is handed. A superTrack that came up whole
+makes an image 7,581 px tall, a subtrack that never hid stays in the figure, a pinned
+tooltip grabs the neighbouring item, an Apache 414 arrives as a perfectly valid page saying
+*Request-URI Too Long*. All of those have shipped at least once, all were caught by eye, and
+all of them are mechanically checkable. `expect:` is the only verb that stops a run:
+
+```yaml
+  - track: {varsInPubs: hideKids, pubtator: pack}
+  - expect: {rows: [ruler, mane, pubtator], exact: true, height: 2000, noText: "Too Long"}
+  - mouseover: {track: quickLiftChain, item: "4.3.157828209.157828210", pin: true}
+  - expect: {tip: "mismatch A->C"}
+```
+
+A failure prints every check that failed **and the rows that were actually drawn**, then
+exits non-zero at that step, so `make` fails instead of writing a wrong figure over a right
+one and the stills that would have followed are never taken:
+
+```
+step 5 (expect) failed: rows not drawn: clinvarMain; image is 69px, wanted <50
+  drawn: ruler, mane
+```
+
+Notes:
+
+- **Row names are matched by suffix**, the way `mouseover:` resolves a track, so `mane`
+  is satisfied by a lifted view's `hub_192070_mane` and a script does not have to know the
+  per-run hub number.
+- **`height:` is in still pixels**, which is the CSS height times the device pixel ratio —
+  the number someone means by "7,581 px tall". A print run makes it k times bigger, so a
+  ceiling that passes at 1x will fail at 3x. Scale it with `scale:` or leave the check to
+  the screen run.
+- **A bare number is a ceiling** (`height: 2000` means no taller than 2000), which is the
+  check anyone actually wants. `"<1200"`, `">=300"` and `"=850"` are there when it is not.
+- **`warn: true`** logs the failure and carries on, for a check worth recording but not
+  worth stopping a build over.
 
 ## Speed
 

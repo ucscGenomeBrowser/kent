@@ -48,7 +48,9 @@ $(FIGDIR)/%.mp4: %.docent.yaml $(DOCENT)
 # hires: the same tours rendered for print -- SCALE times the pixels (a wider server image
 # drawn with a bigger track font, the HTML zoomed to match), stills only, written to their
 # own tree so the screen stills and the videos are left alone. Always a full rebuild: a
-# print run is rare and cheap to ask for exactly when it is wanted.
+# print run is rare and cheap to ask for exactly when it is wanted. Its `session:` files go
+# to their own tree too: a print run's cart carries pix=2550 and textSize=24, which is not
+# the state anyone wants handed to them.
 #
 #   make hires                     # every scenario at 3x -> stills.hires/<base>/
 #   make hires SCALE=2             # 2x
@@ -56,11 +58,12 @@ $(FIGDIR)/%.mp4: %.docent.yaml $(DOCENT)
 #
 SCALE ?= 3
 HIRES ?= stills.hires
+HIRESSESS ?= sessions.hires
 hires:
 	@for b in $(BASES); do \
 	  echo "=== $$b at $(SCALE)x"; \
-	  DOCENT_SCALE=$(SCALE) DOCENT_STILLS=$(HIRES) DOCENT_FAST=1 $(PW_ENV) \
-	    node $(DOCENT) $$b.docent.yaml || exit 1; \
+	  DOCENT_SCALE=$(SCALE) DOCENT_STILLS=$(HIRES) DOCENT_SESSIONS=$(HIRESSESS) DOCENT_FAST=1 \
+	    $(PW_ENV) node $(DOCENT) $$b.docent.yaml || exit 1; \
 	done
 
 # Convenience: `make AP1` -> build ../AP1.mp4
@@ -71,4 +74,4 @@ list:
 
 clean:
 	rm -f $(MP4S)
-	rm -rf stills $(HIRES)
+	rm -rf stills $(HIRES) sessions $(HIRESSESS)

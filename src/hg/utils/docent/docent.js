@@ -63,6 +63,11 @@ const OUTMP4 = process.argv[3] || doc.mp4 || path.join(FIGDIR, base + '.mp4');
 const STILLPARENT = process.env.DOCENT_STILLS;
 const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
   : doc.stills ? path.resolve(HERE, doc.stills) : path.join(HERE, 'stills', base);
+// Saved sessions go to sessions/<base>/, beside stills/. `sessions:` and DOCENT_SESSIONS
+// name the PARENT (not the per-scenario directory), so `sessionUrlBase:` below always maps
+// onto it as <base>/<name>.txt, and a print run keeps its files out of the screen run's way.
+const SESSDIR = path.join(
+  path.resolve(HERE, process.env.DOCENT_SESSIONS || doc.sessions || 'sessions'), base);
 
 // `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
 // (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
@@ -1041,6 +1046,195 @@ const T_START = Date.now();
     await ctx3.close();
     console.log('SHOT', p, `(montage: ${panels.length} panels, label ${labelSize}px)`);
   }
+  // `shot:` writes a picture of the view; `session:` writes the view ITSELF, as a settings
+  // file anyone can load into their own browser. hgSession's save-to-a-local-file path
+  // (doSaveLocal, hg/hgSession/hgSession.c) needs no wiki login, so a plain GET returns the
+  // whole cart -- every track's visibility, the attached hubs, the custom tracks, the window.
+  //
+  // A FILE rather than the live hgsid URL, because the hgsid cart goes on changing as the
+  // tour runs: a link handed out at step 5 would open on whatever step 20 left behind. The
+  // file is a snapshot of this step, which is what `shot:` already means.
+  //
+  // Fetched through ctx.request, which shares the context's cookies -- so it reaches the same
+  // cart -- but never touches the page, so nothing about it lands in the recorded video.
+  // hgSession drops its own hgS_* variables before it checks the cart out
+  // (cleanHgSessionFromCart), so the tour carries on from an unchanged state.
+  async function session(arg) {
+    const o = (arg && typeof arg === 'object') ? arg : { name: arg };
+    const name = String(o.name || base);
+    // Every nav so far may have gone by cookie alone, in which case state.hgsid is still
+    // empty; the page itself always carries one, in a form field or in its own links.
+    if (!state.hgsid) {
+      const h = await page.evaluate(() => {
+        const i = document.querySelector('input[name="hgsid"]');
+        if (i && i.value) return i.value;
+        for (const a of document.querySelectorAll('a[href*="hgsid="]')) {
+          const m = /[?&]hgsid=([\w.]+)/.exec(a.getAttribute('href') || '');
+          if (m) return m[1];
+        }
+        return null;
+      }).catch(() => null);
+      if (h) state.hgsid = h;
+    }
+    const res = await ctx.request.get(`${SERVER}/hgSession?`
+      + (state.hgsid ? `hgsid=${enc(state.hgsid)}&` : '')
+      + `hgS_doSaveLocal=submit&hgS_saveLocalFileName=${enc(name + '.txt')}`
+      + `&hgS_saveLocalFileCompress=none`);
+    const body = await res.text();
+    // An hgSession error is still a 200 with an HTML page in it. Written out unchecked, that
+    // "settings file" would only be found to be an error page by whoever tried to load it.
+    const settings = body.split('\n').filter(l => /^\S+ /.test(l)).length;
+    if (!res.ok() || /^\s*</.test(body) || settings < 5) {
+      console.warn(`session ${name}: hgSession answered ${res.status()} with no settings `
+        + `("${body.slice(0, 120).replace(/\s+/g, ' ')}") -- nothing written`);
+      return;
+    }
+    fs.mkdirSync(SESSDIR, { recursive: true });
+    const file = path.join(SESSDIR, name + '.txt');
+    fs.writeFileSync(file, body);
+    console.log('SESSION', file, `(${settings} settings)`);
+    // hgTracks reads the file over http, so a URL can only be printed once the script says
+    // where that directory is published.
+    if (doc.sessionUrlBase)
+      console.log(`  ${SERVER}/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=`
+        + enc(`${String(doc.sessionUrlBase).replace(/\/+$/, '')}/${base}/${name}.txt`));
+    else
+      console.log('  (no sessionUrlBase: at the top of the script, so no load URL -- '
+        + 'hgTracks reads the file over http, so the sessions directory has to be published)');
+  }
+  // The inverse of `session:`: start the tour FROM a saved state instead of from a clean
+  // cart. A script can then begin where another ended, and a bug report that arrives as a
+  // session link becomes a starting position rather than something to rebuild by hand.
+  //
+  //   loadSession: https://example.org/settings.txt          a settings file, by URL
+  //   loadSession: https://genome.ucsc.edu/s/braney/myView   a share link
+  //   loadSession: {user: braney, name: myView}              a named session
+  //   loadSession: {file: source}                            sessions/<base>/source.txt
+  //
+  // Quick and silent, like `hub:` -- this is setup, not something the tour demonstrates.
+  //
+  // Whatever form it takes, the load is issued against `target:`. A share link naming
+  // another host is turned into a named-session load HERE rather than followed there,
+  // because every later step navigates to `target:` by absolute URL: following the link
+  // would leave the tour on the other server's cart and the next step would silently
+  // abandon it. Named sessions are per-server (hgcentral vs hgcentraltest), so a link
+  // copied off the RR only works if that session also exists on the machine being driven.
+  async function loadSession(arg) {
+    const o = (arg && typeof arg === 'object') ? arg : { from: arg };
+    const from = o.from ?? o.url ?? o.file ?? o.name;
+    if (from == null) throw new Error('loadSession: nothing to load');
+    if (o.user) {
+      await nav(`/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=${enc(o.user)}`
+        + `&hgS_otherUserSessionName=${enc(o.name ?? from)}`);
+    } else if (o.file || !/^https?:/i.test(String(from))) {
+      // A file on disk goes up through hgSession's own upload form: hgTracks can only read a
+      // session over http, and a project's sessions/ directory need not be published at all.
+      const n = String(o.file ?? from);
+      const file = path.isAbsolute(n) ? n : path.join(SESSDIR, /\.\w+$/.test(n) ? n : n + '.txt');
+      if (!fs.existsSync(file)) throw new Error(`loadSession: no such file: ${file}`);
+      await nav('/cgi-bin/hgSession');
+      await page.setInputFiles('input[name="hgS_loadLocalFileName"]', file);
+      await page.click('input[name="hgS_doLoadLocal"]');
+      await page.waitForLoadState('load').catch(() => {});
+      await nav('/cgi-bin/hgTracks');
+    } else {
+      const u = new URL(String(from));
+      const share = /^\/s\/([^/]+)\/(.+)$/.exec(u.pathname);
+      const hgs = [...u.searchParams.keys()].some(k => k.startsWith('hgS_'));
+      // Only a link that names a SESSION cares which host it came from: the session lives in
+      // that machine's hgcentral. A settings file is just a file, and being on another host
+      // is the normal case -- hgTracks fetches it over http.
+      if ((share || hgs) && u.host !== new URL(SERVER).host)
+        console.warn(`loadSession: the link names ${u.host} but the tour drives `
+          + `${new URL(SERVER).host}, so it is loaded there instead `
+          + `-- a named session has to exist on the machine being driven`);
+      if (share)
+        await nav(`/cgi-bin/hgTracks?hgS_doOtherUser=submit`
+          + `&hgS_otherUserName=${enc(decodeURIComponent(share[1]))}`
+          + `&hgS_otherUserSessionName=${enc(decodeURIComponent(share[2]))}`);
+      else if (hgs)
+        await nav(`/cgi-bin/hgTracks?${u.search.slice(1)}`);
+      else
+        await nav(`/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=${enc(String(from))}`);
+    }
+    await page.waitForSelector('#imgTbl').catch(() => {});
+    await captureState();
+    if (o.shot) await shot(o.shot);
+  }
+  // The only verb that can fail a run. Every other verb renders happily whatever it is
+  // handed: a superTrack that came up whole and made an image 7,581 px tall, a subtrack
+  // that never hid, a pinned tooltip that grabbed the neighbouring item, an Apache 414
+  // page where the view should be. All of those shipped once and all were caught by eye.
+  // Stating the expectation instead stops the run, non-zero, at the step that broke it --
+  // `make` then fails rather than writing a wrong figure over a right one.
+  //
+  //   expect: {rows: [ruler, mane]}         these rows were drawn
+  //   expect: {rows: [ruler, mane], exact: true}   ... and nothing else
+  //   expect: {noRows: [clinvarCnv]}        this row was not
+  //   expect: {height: 2000}                the still is no taller than this ("<1200" etc.)
+  //   expect: {tip: "mismatch A->C"}        the tooltip now up says this
+  //   expect: {text: "...", noText: "..."}  the page does / does not contain this
+  //
+  // `warn: true` downgrades a failure to a warning, for a check worth logging but not worth
+  // stopping a build over.
+  async function expectState(arg) {
+    const o = (arg && typeof arg === 'object') ? arg : { text: arg };
+    const seen = await page.evaluate(() => {
+      const im = document.getElementById('imgTbl');
+      const tip = document.getElementById('mouseoverContainer');
+      const up = tip && tip.offsetWidth > 0 && getComputedStyle(tip).display !== 'none'
+        && getComputedStyle(tip).visibility !== 'hidden';
+      return {
+        rows: [...document.querySelectorAll('[id^="img_data_"]')].map(e => e.id.replace('img_data_', '')),
+        cssHeight: im ? im.getBoundingClientRect().height : 0,
+        tip: up ? tip.innerText.trim() : '',
+        text: document.body ? document.body.innerText : '',
+      };
+    });
+    // The still is a screenshot of #imgTbl, so its height in PIXELS is the CSS height times
+    // the device pixel ratio -- which is what someone means by "7,581 px tall", and what a
+    // print run makes k times bigger.
+    const height = Math.round(seen.cssHeight * SCALE);
+    // A hub track's row id carries a per-run hub_<n>_ prefix (a quickLift target's rows all
+    // do), so match the plain name by suffix, the way `mouseover:` resolves a track.
+    const drawn = w => seen.rows.some(r => r === w || r.endsWith('_' + w));
+    const list = v => v == null ? [] : (Array.isArray(v) ? v : [v]).map(String);
+    const bad = [];
+    const want = list(o.rows);
+    const missing = want.filter(w => !drawn(w));
+    if (missing.length) bad.push(`rows not drawn: ${missing.join(', ')}`);
+    if (o.exact && want.length) {
+      const extra = seen.rows.filter(r => !want.some(w => r === w || r.endsWith('_' + w)));
+      if (extra.length) bad.push(`unexpected rows: ${extra.join(', ')}`);
+    }
+    const banned = list(o.noRows).filter(w => drawn(w));
+    if (banned.length) bad.push(`rows that should not be drawn: ${banned.join(', ')}`);
+    if (o.height != null) {
+      // A bare number is a ceiling, which is the check anyone actually wants.
+      const m = /^\s*(<=|>=|<|>|=)?\s*(\d+)\s*$/.exec(String(o.height));
+      if (!m) bad.push(`height: cannot read "${o.height}"`);
+      else {
+        const n = Number(m[2]), op = m[1] || '<=';
+        const ok = op === '<' ? height < n : op === '>' ? height > n
+          : op === '>=' ? height >= n : op === '=' ? height === n : height <= n;
+        if (!ok) bad.push(`image is ${height}px, wanted ${op}${n}`);
+      }
+    }
+    if (o.tip != null && !seen.tip.includes(String(o.tip)))
+      bad.push(seen.tip ? `tooltip says "${seen.tip}", wanted "${o.tip}"`
+                        : `no tooltip is up, wanted "${o.tip}"`);
+    if (o.text != null && !seen.text.includes(String(o.text)))
+      bad.push(`page does not contain "${o.text}"`);
+    if (o.noText != null && seen.text.includes(String(o.noText)))
+      bad.push(`page contains "${o.noText}"`);
+    if (!bad.length) {
+      console.log(`EXPECT ok -- ${seen.rows.length} row(s), ${height}px`);
+      return;
+    }
+    const msg = bad.join('; ') + `\n  drawn: ${seen.rows.join(', ') || '(none)'}`;
+    if (o.warn) console.warn('EXPECT (warning only):', msg);
+    else throw new Error(msg);
+  }
   // Shift+drag across the track image to open the browser's own drag-select dialog
   // ("Zoom In / Single Highlight / ..."), then act on it. The usual form gives one
   // genomic region and zooms:  drag: chr7:155,806,100-155,806,557
@@ -1566,6 +1760,9 @@ const T_START = Date.now();
       case 'shot': await shot(arg); return;                       // shot supplies its own dwell
       case 'pinShot': await pinShot(arg); break;                  // combined figure, off the mp4 timeline
       case 'montage': await montage(arg); break;                  // stills -> one multi-panel PNG
+      case 'session': await session(arg); break;                  // the cart itself, as a loadable file
+      case 'loadSession': await loadSession(arg); break;          // ... and back in again
+      case 'expect': await expectState(arg); break;               // the one verb that can fail a run
       case 'mouseover': await mouseover(arg); return;             // supplies its own dwell (o.hold)
       // escape hatches
       case 'goto': await nav(arg); break;
