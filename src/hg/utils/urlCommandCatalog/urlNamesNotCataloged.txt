@@ -107,6 +107,8 @@ dots                               # hg/mouseStuff/libScan/libScan.c
 dup_                               # hg/lib/dupTrack.c
 dupes                              # hg/gigAssembler/ooWeedZero/ooWeedZero.c
 elia                               # hg/makeDb/outside/hgExonerate/hgExonerate.c
+emailLogin_email                   # hg/hgLogin/hgLogin.c
+emailLogin_tokenMd5                # hg/hgLogin/hgLogin.c
 endIntron                          # hg/gigAssembler/ooGreedy/scanIntrons/scanIntrons.c
 endRange                           # hg/gigAssembler/ooGreedy/getgene/getgene.c
 estPrior                           # hg/altSplice/altSplice/spliceStats.c
@@ -139,9 +141,13 @@ haplotypes_distMinor               # hg/hgGene/alleles.c
 hc_one_url                         # hg/hgHubConnect/hgHubConnect.c
 hgLogin.do.                        # hg/hgLogin/hgLogin.c
 hgLogin_changeRequired             # hg/hgLogin/hgLogin.c
+hgLogin_chosenIdx                  # hg/hgLogin/hgLogin.c
+hgLogin_curPassword                # hg/hgLogin/hgLogin.c
 hgLogin_email                      # hg/hgLogin/hgLogin.c
 hgLogin_email2                     # hg/hgLogin/hgLogin.c
 hgLogin_helpWith                   # hg/hgLogin/hgLogin.c
+hgLogin_newEmail1                  # hg/hgLogin/hgLogin.c
+hgLogin_newEmail2                  # hg/hgLogin/hgLogin.c
 hgLogin_newPassword1               # hg/hgLogin/hgLogin.c
 hgLogin_newPassword2               # hg/hgLogin/hgLogin.c
 hgLogin_password                   # hg/hgLogin/hgLogin.c
@@ -330,6 +336,14 @@ noShort                            # hg/lib/hgFind.c
 nohead                             # hg/pslCat/pslCat.c
 numTests                           # hg/hgCoordConv/hgCoordConv.c
 o                                  # hg/hgc/cgapSageClick.c
+oauth_pending_email                # hg/hgLogin/hgLogin.c
+oauth_pending_email_verified       # hg/hgLogin/hgLogin.c
+oauth_pending_name                 # hg/hgLogin/hgLogin.c
+oauth_pending_provider             # hg/hgLogin/hgLogin.c
+oauth_pending_sig                  # hg/hgLogin/hgLogin.c
+oauth_pending_subject              # hg/hgLogin/hgLogin.c
+oauth_pending_time                 # hg/hgLogin/hgLogin.c
+oauth_state                        # hg/hgLogin/hgLogin.c
 oldPosition                        # hg/lib/web.c
 oldTable                           # hg/makeDb/hgLoadSample/hgLoadSample.c
 organism                           # hg/encode/hgEncodeVocab/hgEncodeVocab.c

@@ -863,6 +863,19 @@ OTHER_CGIS = {
                    "running a new search.  How the banner and the table's "
                    "'Old BLAT result page' link switch format without "
                    "resubmitting the query."),
+            c("blatPslId", "action", "hg/hgBlat/hgBlat.c:2817", value="<file>",
+              verified=True, leaks=True,
+              note="Half of the stable shareable link: with blatFaId, rebuild "
+                   "the table straight from the named trash .pslx and .fa, "
+                   "with no session and no sessionData behind it.  Both must "
+                   "be present or the normal search flow runs.  One-shot by "
+                   "intent, but hgBlat's excludeVars (hgBlat.c:3077) lists "
+                   "the older u and s share parameters and not these two, so "
+                   "the trash file names are written into the user's session."),
+            c("blatFaId", "action", "hg/hgBlat/hgBlat.c:2817", value="<file>",
+              verified=True, leaks=True,
+              note="The .fa half of the blatPslId share link.  Leaks for the "
+                   "same reason."),
             c("wp_f", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
               public=True, verified=True, note="Forward primer."),
             c("wp_r", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
@@ -943,6 +956,64 @@ OTHER_CGIS = {
               verified=True),
             c("showLongLabel", "action", "hg/hgApi/hgApi.c:288",
               verified=True),
+        ],
+    },
+    "hgLogin": {
+        "what": "Sign-in.  Unusual in that most of these are not typed by a "
+                "user or emitted by us: they arrive on a redirect from an "
+                "external identity provider, or from a signed link in a "
+                "message we mailed.  So the values are attacker-reachable by "
+                "construction, and each one's authorization is checked in the "
+                "code rather than assumed from the fact that it is on our "
+                "URL.  The whole family is live only where the mirror has "
+                "configured it: login.oauth.providers for the social ones, "
+                "login.emailLink for the mail ones.",
+        "cmds": [
+            c("provider", "action", "hg/hgLogin/hgLogin.c:2265",
+              value="<name>", verified=True,
+              note="Which configured provider to start a social login with, "
+                   "in oauthStart.  Refused unless oauthProviderEnabled(), so "
+                   "an unknown name cannot start a redirect."),
+            c("code", "action", "hg/hgLogin/hgLogin.c:2322", value="<code>",
+              verified=True,
+              note="The provider's authorization code, handed back on its "
+                   "redirect and exchanged server-side for the user's "
+                   "identity."),
+            c("state", "action", "hg/hgLogin/hgLogin.c:2293", value="<nonce>",
+              verified=True,
+              note="The anti-CSRF nonce, compared against the oauth_state "
+                   "cart variable that oauthStart saved and then removes, so "
+                   "it is single use."),
+            c("error", "action", "hg/hgLogin/hgLogin.c:2298", value="<code>",
+              verified=True, leaks=True,
+              note="The provider redirected back with an error instead of a "
+                   "code, for instance because the user declined.  Shown "
+                   "rather than dropped, so the user is not silently sent to "
+                   "the signup page.  hgLogin's excludeVars (hgLogin.c:47) "
+                   "covers code, state and provider but not this, so a string "
+                   "chosen by whoever wrote the redirect is kept in the "
+                   "user's session."),
+            c("error_description", "action", "hg/hgLogin/hgLogin.c:2304",
+              value="<text>", verified=True, leaks=True,
+              note="The provider's human-readable error text, printed through "
+                   "htmlEncode.  Leaks into the session for the same reason "
+                   "as error."),
+            c("newEmail", "action", "hg/hgLogin/hgLogin.c:1219",
+              value="<email>", verified=True,
+              note="The address a change-of-email confirmation link is "
+                   "claiming.  Authorized by sig rather than by a login "
+                   "cookie, on purpose, so the link works from the new "
+                   "mailbox in any browser."),
+            c("exp", "action", "hg/hgLogin/hgLogin.c:1220", value="<epoch>",
+              verified=True,
+              note="When that confirmation link stops working.  Inside the "
+                   "signed material, so it cannot be pushed out by editing "
+                   "the URL."),
+            c("sig", "action", "hg/hgLogin/hgLogin.c:1221", value="<hmac>",
+              verified=True,
+              note="The signature over user, newEmail and exp that "
+                   "authorizes the change.  Checked before anything else in "
+                   "the link is trusted."),
         ],
     },
     "smaller CGIs": {
