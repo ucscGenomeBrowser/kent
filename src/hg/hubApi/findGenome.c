@@ -550,7 +550,11 @@ hDisconnectCentral(&conn);
 void apiAssemblyRequest(char *words[MAX_PATH_INFO])
 /* interface to the assemblySearch.html request form.  Replaces the
  *   primitive /cgi-bin/asr perl CGI script.  Inserts a row into the
- *   ottoRequest table; the otto cron job watcher handles email.
+ *   ottoRequest table; the otto cron job watcher handles email.  When
+ *   asmAlias already maps the requested asmId to an existing browser,
+ *   that db goes into toDb instead of a duplicate asmId, which tells
+ *   ottoRequest.py to send an "already available" acknowledgement
+ *   instead of queuing a build.
  */
 {
 char *extraArgs = verifyLegalArgs(argAssemblyRequest);
@@ -581,15 +585,30 @@ if (isNotEmpty(betterName))
 if (isNotEmpty(comment))
     dyStringPrintf(fullComment, "; comment: '%s'", comment);
 
-/* Record the request in the ottoRequest table (asmId placed in both fromDb
- * and toDb in case toDb does not allow empty).  Done locally (this host has
- * hgcentral write grants) or relayed to genome.ucsc.edu (it doesn't) -- see
- * inUcscEduDomain()/onGenomeRRMachine(). */
+/* If asmAlias already maps this asmId to a browser we have, there is
+ * nothing to build.  asmAliasFind() returns its argument unchanged when
+ * no alias row matches, so differentString() is the standard way (see
+ * hubApi.c and hg/lib/web.c) to detect a real hit. */
+char *existingBrowser = asmAliasFind(asmId);
+boolean alreadyExists = differentString(existingBrowser, asmId);
+
+/* Record the request in the ottoRequest table.  For a normal request,
+ * asmId is placed in both fromDb and toDb (toDb otherwise unused for
+ * requestType='assembly', and left non-empty in case the column does
+ * not allow empty).  When asmAlias resolves asmId to an existing
+ * browser, toDb carries that browser's db/asmId instead -- fromDb !=
+ * toDb is then the signal that ottoRequest.py uses to send the "already
+ * available" acknowledgement and close out the row immediately instead
+ * of handing it to asmRequestWatch.sh, which would otherwise wait
+ * forever for a build that will never happen.  Done locally (this host
+ * has hgcentral write grants) or relayed to genome.ucsc.edu (it
+ * doesn't) -- see inUcscEduDomain()/onGenomeRRMachine(). */
+char *toDb = alreadyExists ? existingBrowser : asmId;
 char *ottoStatus;
 if (inUcscEduDomain() && !onGenomeRRMachine())
-    ottoStatus = relaySubmitOttoRequest("assembly", asmId, asmId, email, dyStringContents(fullComment));
+    ottoStatus = relaySubmitOttoRequest("assembly", asmId, toDb, email, dyStringContents(fullComment));
 else
-    ottoStatus = submitOttoRequest("assembly", asmId, asmId, email, dyStringContents(fullComment));
+    ottoStatus = submitOttoRequest("assembly", asmId, toDb, email, dyStringContents(fullComment));
 
 if (sameString(ottoStatus, "error"))
     apiErrAbort(err500, err500Msg, "internal error recording assembly request");
@@ -604,9 +623,14 @@ dyStringPrintf(msg, "%s\nAssembly request\nasmId: %s\nname: %s\nemail: %s\nbette
     nowTime, asmId, name, email,
     isNotEmpty(betterName) ? betterName : "",
     isNotEmpty(comment) ? comment : "");
+if (alreadyExists)
+    dyStringPrintf(msg, "\nnote: an equivalent browser for '%s' already exists as '%s'; "
+        "a confirmation email with a link is on its way instead of a new build",
+        asmId, existingBrowser);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "msg", dyStringContents(msg));
+jsonWriteString(jw, "existingBrowser", alreadyExists ? existingBrowser : NULL);
 apiFinishOutput(0, NULL, jw);
 
 dyStringFree(&fullComment);

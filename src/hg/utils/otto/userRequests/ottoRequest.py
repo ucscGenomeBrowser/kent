@@ -180,6 +180,19 @@ def parseAssemblyComment(comment):
     return name, betterName, userComment
 
 
+def browserUrl(db):
+    """Return the hgTracks URL for a browser db -- a GenArk hub accession
+    (GC[AF]_...) needs the mirrored hub.txt gbdb path, a UCSC native db
+    just needs db=.  Mirrors asmRequestWatch.sh phase 6's URL
+    construction (accessionToPath() + hubTxt)."""
+    m = re.match(r'^(GC[AF])_(\d{3})(\d{3})(\d{3})', db)
+    if m:
+        gcX, d0, d1, d2 = m.groups()
+        gbDbPath = f"/gbdb/genark/{gcX}/{d0}/{d1}/{d2}/{db}/hub.txt"
+        return f"https://genome.ucsc.edu/cgi-bin/hgTracks?genome={db}&hubUrl={gbDbPath}"
+    return f"https://genome.ucsc.edu/cgi-bin/hgTracks?db={db}"
+
+
 def sendMail(toAddr, subject, body, fromAddr=None, bccAddr=None, bounceAddr=None):
     """Send email via /usr/sbin/sendmail.
     If fromAddr is provided it is used as the envelope sender (-f)
@@ -252,9 +265,39 @@ def main():
                   f" skipping", file=sys.stderr)
             continue
 
+        # findGenome.c:apiAssemblyRequest() sets toDb != fromDb when
+        # asmAlias already maps the requested asmId to a browser we have
+        # -- no build is needed, so send the "already available"
+        # acknowledgement here and close out the row now instead of
+        # handing it to asmRequestWatch.sh, which would otherwise wait
+        # forever for a build that will never happen.
+        alreadyExists = (reqType == 'assembly' and req['toDb']
+                          and req['toDb'] != req['fromDb'])
+
         subject = (f"UCSC Genome Browser: your {reqType}"
                    f" request has been received")
-        if reqType == 'assembly':
+        if alreadyExists:
+            subject = "UCSC Genome Browser: your assembly request is already available"
+            name, betterName, userComment = parseAssemblyComment(req['comment'])
+            body = (
+                f"Good news -- the assembly you requested already has an\n"
+                f"equivalent browser available, so no new build is needed.\n"
+                f"\n"
+                f"name: '{name}'\n"
+                f"email: '{userEmail}'\n"
+                f"requested asmId: '{req['fromDb']}'\n"
+                f"existing browser: '{req['toDb']}'\n"
+                f"comment: '{userComment.rstrip()}'\n"
+                f"date: '{req['requestTime']}'\n"
+                f"\n"
+                f"View it here:\n"
+                f"  {browserUrl(req['toDb'])}\n"
+                f"\n"
+                f"If this is insufficient for your research purpose, please let us know in response to this email.\n"
+                f"\n"
+                f"-- UCSC Genome Browser\n"
+            )
+        elif reqType == 'assembly':
             name, betterName, userComment = parseAssemblyComment(req['comment'])
             body = (
                 f"Your assembly request has been received and is being\n"
@@ -289,8 +332,14 @@ def main():
         bitParts = ["gb", "aut", "o", "@", "uc", "sc.", "ed", "u"]
         if sendMail(userEmail, subject, body,
            fromAddr=NOTIFY_FROM, bccAddr=bccAddr, bounceAddr="".join(bitParts)):
-               hgsqlUpdate(dbHost, ottoDb, f"UPDATE {ottoTable} SET status = 1"
-                   f" WHERE id = {req['id']}")
+            if alreadyExists:
+                # resolved by asmAlias -- no build, close the row out now
+                hgsqlUpdate(dbHost, ottoDb,
+                    f"UPDATE {ottoTable} SET status = 8, completeTime = NOW()"
+                    f" WHERE id = {req['id']}")
+            else:
+                hgsqlUpdate(dbHost, ottoDb, f"UPDATE {ottoTable} SET status = 1"
+                    f" WHERE id = {req['id']}")
         else:
             print(f"Failed to send notification for request #{req['id']}",
                   file=sys.stderr)
