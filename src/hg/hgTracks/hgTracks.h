@@ -1927,6 +1927,9 @@ Color colorFromSoTerm(enum soTerm term);
 void maybeNewFonts(struct hvGfx *hvg);
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 
+void initFontEngine();
+/* Load the text engine the user has picked, before anything measures a string. */
+
 Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 
