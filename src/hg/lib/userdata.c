@@ -237,39 +237,35 @@ if (pathPrefix)
 return NULL;
 }
 
-static boolean checkHubSpaceRowExists(struct hubSpace *row)
-/* Return TRUE if row already exists */
-{
-struct sqlConnection *conn = hConnectCentral();
-struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and fileName='%s' and parentDir='%s'", row->userName, row->fileName, row->parentDir);
-int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
-hDisconnectCentral(&conn);
-return ret > 0;
-}
-
 static boolean checkHubSpaceLocationExists(char *userName, char *location)
-/* Return TRUE if location exists for userName and has exactly one row */
+/* Return TRUE if this user already has a row for location. location is the row's
+ * identity: a file name plus its immediate parent directory is not unique, two hubs
+ * can each hold a 'sub/test.bb' */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *queryCheck = sqlDyStringCreate("select count(*) from hubSpace where userName='%s' and location='%s'", userName, location);
 int ret = sqlQuickNum(conn, dyStringCannibalize(&queryCheck));
 hDisconnectCentral(&conn);
-return ret == 1;
+return ret > 0;
 }
 
-boolean userHasOwnNamedHubTxtInDir(char *userName, char *parentDir)
+boolean userHasOwnNamedHubTxtInDir(char *userName, char *hubName, char *hubDir)
 /* Return TRUE if the user uploaded a *.hub.txt file NOT literally named 'hub.txt'
- * (e.g. 'araTha1.hub.txt') in parentDir. Distinguishes "user's own authoritative
- * hub.txt" from "backend-synthesized hub.txt that we're free to modify". */
+ * (e.g. 'araTha1.hub.txt') at the top level of hubDir. Distinguishes "user's own
+ * authoritative hub.txt" from "backend-synthesized hub.txt that we're free to modify".
+ * parentDir alone would also match a *.hub.txt sitting in some other hub's
+ * subdirectory that happens to be named hubName, so pin it to hubDir as well */
 {
-if (!userName || !parentDir || !parentDir[0]) return FALSE;
+if (isEmpty(userName) || isEmpty(hubName) || isEmpty(hubDir)) return FALSE;
+struct dyString *prefix = dyStringCreate("%s/", hubDir);
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *q = sqlDyStringCreate(
     "select count(*) from hubSpace where userName='%s' and parentDir='%s' "
-    "and fileType='hub.txt' and fileName<>'hub.txt'",
-    userName, parentDir);
+    "and left(location,%d)='%s' and fileType='hub.txt' and fileName<>'hub.txt'",
+    userName, hubName, (int)dyStringLen(prefix), dyStringContents(prefix));
 int ret = sqlQuickNum(conn, dyStringCannibalize(&q));
 hDisconnectCentral(&conn);
+dyStringFree(&prefix);
 return ret > 0;
 }
 
@@ -288,27 +284,20 @@ hDisconnectCentral(&conn);
 return ret;
 }
 
-char *hubNameFromPath(char *path)
-/* Return the last directory component of path. Assume that a '.' char in the last component
- * means that component is a filename and go back further */
+char *hubLeafFromPath(char *path)
+/* Return the last '/' separated component of path, ignoring a trailing '/'. Callers
+ * pass a directory, so there is no filename to guess at: a '.' in the last component
+ * is part of a directory name, which isValidParentDir allows */
 {
 char *copy = cloneString(path);
-if (endsWith(copy, "/"))
+while (endsWith(copy, "/"))
     trimLastChar(copy);
-char *ptr = strrchr(copy, '/');
-// check to see if we're in a file name, like /blah/blah/name/hub.txt
-if (ptr)
+char *lastSlash = strrchr(copy, '/');
+if (lastSlash)
     {
-    if (strchr(ptr, '.'))
-        {
-        *ptr = 0;
-        ptr = strrchr(copy, '/');
-        }
-    if (ptr)
-        {
-        ++ptr;
-        return cloneString(ptr);
-        }
+    char *leaf = cloneString(lastSlash + 1);
+    freeMem(copy);
+    return leaf;
     }
 return copy;
 }
@@ -324,6 +313,23 @@ if (!sqlTableExistsOnMain(conn, "hubSpace"))
     errAbort("No hubSpace MySQL table is present. Please send an email to genome-www@soe.ucsc.edu  describing the exact steps you took just before you got this error");
     }
 hubSpaceSaveToDb(conn, row, "hubSpace", 0);
+hDisconnectCentral(&conn);
+}
+
+static void fillEmptyDirRowDb(char *userName, char *location, char *db)
+/* Give a directory row a genome if it does not have one yet. The rows above a file
+ * are created without one, so a hub whose first upload landed in a subdirectory has
+ * no genome on its own row, and the UI then reads it as a hub for genome "" and
+ * refuses to add anything to it. Only ever fills an empty value, so a hub that
+ * already has a genome keeps it */
+{
+if (isEmpty(userName) || isEmpty(location) || isEmpty(db))
+    return;
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *q = sqlDyStringCreate(
+    "update hubSpace set db='%s' where userName='%s' and location='%s' and db=''",
+    db, userName, location);
+sqlUpdate(conn, dyStringCannibalize(&q));
 hDisconnectCentral(&conn);
 }
 
@@ -361,9 +367,11 @@ for (i = 0; i < foundSlashes; i++)
     row->md5sum = "";
     row->parentDir = i > 0 ? components[i-1] : "";
     row->hubType = hubType ? hubType : "trackHub";
-    // only insert a row for this parentDir if it's unique to the table
-    if (!checkHubSpaceRowExists(row))
+    // only insert a row for this directory if it's not in the table yet
+    if (!checkHubSpaceLocationExists(row->userName, row->location))
         addHubSpaceRowForFile(row);
+    else
+        fillEmptyDirRowDb(row->userName, row->location, db);
     }
 }
 
@@ -396,7 +404,7 @@ return result;
 char *hubRootFromParentDir(char *parentDir)
 /* Return the first '/' separated component of parentDir, which is the hub itself.
  * The hub.txt and the hubSpace dir row for a hub both live at that level, while
- * hubNameFromPath gives the immediately containing directory, which for a nested
+ * hubLeafFromPath gives the immediately containing directory, which for a nested
  * parentDir like 'myHub/hg38' is a subdirectory of the hub */
 {
 char *copy = cloneString(parentDir);
@@ -541,37 +549,44 @@ dyStringFree(&out);
 slNameFreeList(&lines);
 }
 
-static void refreshHubTextRow(char *userName, char *hubFile, char *hubName)
+static void refreshHubTextRow(char *userName, char *hubFile)
 /* Bring the hubSpace row for a hub.txt back in line with the file on disk. Called
  * after rewriting a hub.txt that already has a row, so My Data and the quota do not
- * keep reporting the size and checksum from before the rewrite */
+ * keep reporting the size and checksum from before the rewrite. Keyed on location:
+ * a user can have a subdirectory whose name is another hub's name, which would give
+ * two hub.txt rows the same fileName and parentDir */
 {
-if (!fileExists(hubFile))
+if (isEmpty(userName) || !fileExists(hubFile))
     return;
 time_t modTime = fileModTime(hubFile);
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *q = sqlDyStringCreate(
     "update hubSpace set fileSize=%lld, md5sum='%s', lastModified='%s' "
-    "where userName='%s' and fileName='hub.txt' and parentDir='%s'",
+    "where userName='%s' and location='%s'",
     (long long)fileSize(hubFile), md5HexForFile(hubFile),
-    sqlUnixTimeToDate(&modTime, TRUE), userName, hubName);
+    sqlUnixTimeToDate(&modTime, TRUE), userName, hubFile);
 sqlUpdate(conn, dyStringCannibalize(&q));
 hDisconnectCentral(&conn);
 }
 
-static void setAssemblyHubTypeForDir(char *userName, char *parentDir)
-/* Flip this user's hub (dir row + direct-child files) to hubType='assemblyHub'.
- * Does not recurse into nested parentDirs like hubName/tracks; only the
- * hubtools-then-UI promotion flow can produce those. */
+static void setAssemblyHubTypeForDir(char *userName, char *hubDir)
+/* Flip every row of this user's hub to hubType='assemblyHub': the hub's own directory
+ * row and everything below it, however deeply nested. Matches on a location prefix
+ * with left() rather than LIKE, since a hub name may contain '_' and LIKE would read
+ * that as a wildcard. left() counts characters, which is the same as bytes here
+ * because cgiEncodeFull leaves only ASCII in a path. Callers run in the tusd hook,
+ * where getDataDir has already canonicalized the prefix the rows were written with */
 {
-if (!userName || !parentDir || parentDir[0] == '\0') return;
+if (isEmpty(userName) || isEmpty(hubDir)) return;
+struct dyString *prefix = dyStringCreate("%s/", hubDir);
 struct sqlConnection *conn = hConnectCentral();
 struct dyString *q = sqlDyStringCreate(
     "update hubSpace set hubType='assemblyHub' "
-    "where userName='%s' and (parentDir='%s' or (fileName='%s' and parentDir=''))",
-    userName, parentDir, parentDir);
+    "where userName='%s' and (location='%s' or left(location,%d)='%s')",
+    userName, hubDir, (int)dyStringLen(prefix), dyStringContents(prefix));
 sqlUpdate(conn, dyStringCannibalize(&q));
 hDisconnectCentral(&conn);
+dyStringFree(&prefix);
 }
 
 int lockHubDir(char *hubDir)
@@ -617,7 +632,7 @@ if (fd >= 0)
     close(fd);
 }
 
-void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir, char *encodedParentDir)
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir)
 /* When a 2bit lands in a hub, add the assembly stanza to hub.txt (if the
  * backend owns it) and flip every row for this hub to hubType='assemblyHub'.
  * No-op unless rowForFile is a 2bit. */
@@ -631,15 +646,9 @@ struct dyString *hubFileDy = dyStringCreate("%s%shub.txt",
 char *hubFile = dyStringCannibalize(&hubFileDy);
 upgradeHubTxtForAssembly(hubFile, rowForFile->db, rowForFile->location);
 
-// setAssemblyHubTypeForDir looks up the hub's row at the top level, so give it the
-// hub component of parentDir rather than a nested subdirectory
-char *hubNameOnly = encodedParentDir ? hubRootFromParentDir(encodedParentDir) : NULL;
-if (hubNameOnly && hubNameOnly[0])
-    {
-    setAssemblyHubTypeForDir(rowForFile->userName, hubNameOnly);
-    // hub.txt just changed on disk, so the row's size and md5 are out of date
-    refreshHubTextRow(rowForFile->userName, hubFile, hubNameOnly);
-    }
+setAssemblyHubTypeForDir(rowForFile->userName, hubDir);
+// hub.txt just changed on disk, so the row's size and md5 are out of date
+refreshHubTextRow(rowForFile->userName, hubFile);
 
 freeMem(hubFile);
 }
@@ -666,7 +675,7 @@ hubFile = dyStringCannibalize(&hubFileDy);
 if (fileExists(hubFile))
     return hubFile;
 
-char *hubName = hubNameFromPath(path);
+char *hubName = hubLeafFromPath(path);
 FILE *f = mustOpen(hubFile, "w");
 fprintf(f, "hub %s\n"
     "email %s\n"
@@ -826,9 +835,11 @@ hubTextRow->lastModified = sqlUnixTimeToDate(&lastModTime, TRUE);
 hubTextRow->db = rowForFile->db;
 hubTextRow->location = hubPath;
 hubTextRow->md5sum = md5HexForFile(hubPath);
-hubTextRow->parentDir = hubNameFromPath(hubPath);
+// the hub.txt sits at the hub root, so take the hub name from the file's parentDir
+// rather than picking it back out of the hub.txt path
+hubTextRow->parentDir = hubRootFromParentDir(rowForFile->parentDir);
 hubTextRow->hubType = rowForFile->hubType ? rowForFile->hubType : "trackHub";
-if (!checkHubSpaceRowExists(hubTextRow))
+if (!checkHubSpaceLocationExists(hubTextRow->userName, hubTextRow->location))
     addHubSpaceRowForFile(hubTextRow);
 }
 

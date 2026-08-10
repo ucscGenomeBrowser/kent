@@ -17,9 +17,9 @@ CREATE TABLE hubSpace (
     parentDir varchar(1024) not null, # parent directory of file
     hubType varchar(255) not null default 'trackHub', # type of hub this file belongs to: trackHub or assemblyHub
               #Indices
-    PRIMARY KEY(userName, fileName(500), parentDir(245)),
+    PRIMARY KEY(userName, location(700)),
     INDEX(userName),
-    INDEX(fileName(25)),
+    INDEX(fileName(25), parentDir(245)),
     INDEX(fileType),
     INDEX(db),
     INDEX(location(25)),
