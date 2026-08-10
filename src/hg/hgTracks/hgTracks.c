@@ -4999,6 +4999,27 @@ for (track = trackList; track != NULL; track = nextTrack)
         {
         double squishyPackPoint = atof(string);
 
+        /* Items outside the window are never laid out into a row, so a squished track
+         * built only from those has no rows, no height, and nothing drawn, but still
+         * claims a row in the image.  Only split the track when the squished part has
+         * something to show here. */
+        struct linkedFeatures *item;
+        boolean squishyInWindow = FALSE;
+        for (item = track->items; item != NULL; item = item->next)
+            {
+            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, item->name))
+                continue;   // an hgFind match always stays in pack
+            if (item->squishyPackVal > squishyPackPoint
+            &&  track->itemStart(track, item) < winEnd
+            &&  track->itemEnd(track, item)   > winStart)
+                {
+                squishyInWindow = TRUE;
+                break;
+                }
+            }
+        if (!squishyInWindow)
+            continue;
+
         /* clone the track */
         char buffer[strlen(track->track) + strlen("Squinked") + 1];
         safef(buffer, sizeof buffer, "%sSquinked", track->track);
@@ -5029,10 +5050,6 @@ for (track = trackList; track != NULL; track = nextTrack)
             else
                 slAddHead(&track->items, lf);
             }
-
-        // if the squish track has no items, don't bother including it
-        if (slCount(squishTrack->items) == 0)
-            continue;
 
         slReverse(&track->items);
         slReverse(&squishTrack->items);

@@ -24,10 +24,18 @@ errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=
 #else 
 FT_Library    library;
 FT_Face       face;
+static char *loadedFile = NULL;  /* Font file the current face was built from. */
 
 int ftInitialize(char *fontFile)
 {
 FT_Error error;
+
+// Keep the face we already have if it is the one being asked for.  The glyph
+// cache hangs off the face, so reloading would quietly throw it away, and every
+// image in a page asks for the same font.
+if (face != NULL && loadedFile != NULL && sameString(loadedFile, fontFile))
+    return 0;
+
 error = FT_Init_FreeType( &library );              /* initialize library */
 
 if (error !=0)
@@ -41,6 +49,8 @@ error = FT_Select_Charmap(face, FT_ENCODING_UNICODE);
 if ((error !=0) || (face == NULL))
     errAbort("Cannot select Unicode character map");
 
+freeMem(loadedFile);
+loadedFile = cloneString(fontFile);
 return 0;
 }
 
