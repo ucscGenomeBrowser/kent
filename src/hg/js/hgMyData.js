@@ -124,6 +124,7 @@ function applyHubTxtHubName(uppyInstance, descriptor) {
         uppyInstance.setFileMeta(f.id, {parentDir: newParent});
     }
     refreshBatchHubNameInput(uppyInstance);
+    refreshBatchSelects(uppyInstance);
 }
 
 function refreshBatchHubNameInput(uppyInstance) {
@@ -142,6 +143,16 @@ function refreshBatchHubNameInput(uppyInstance) {
     }
     if (roots.length === 1) {
         input.value = roots[0];
+    }
+}
+
+function refreshBatchSelects(uppyInstance) {
+    // Rebuild the batch controls so the genome box shows what the files actually
+    // carry. addBatchSelectsToDashboard only rebuilds when the batch changed shape,
+    // so this is cheap to call after anything that restamps genome metadata
+    let plugin = uppyInstance.getPlugin("BatchChangePlugin");
+    if (plugin && uppyInstance.getFiles().length > 1) {
+        plugin.addBatchSelectsToDashboard();
     }
 }
 
@@ -282,7 +293,7 @@ let uppyOptions = {
                     let label;
                     if (editable2bit) {
                         label = "Genome name for your assembly hub:";
-                    } else if (isHubTxt || (isTwoBit && batchHasHubTxt)) {
+                    } else if (isHubTxt || batchHasHubTxt) {
                         label = "Genome (locked by hub.txt - edit hub.txt locally and re-add to change):";
                     } else {
                         label = "Genome (locked by this assembly hub):";
@@ -544,7 +555,7 @@ const uppy = new Uppy.Uppy({
                     file.meta.genomeLabel = existing.genome;
                     file.meta.hubType = "assemblyHub";
                 } else {
-                    uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${existing.genome}". Please select the correct genome, a different hub or make a new hub.`);
+                    uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${existing.genome}". Please select the correct genome, a different hub or make a new hub.`, 'error', 10000);
                     doUpload = false;
                     continue;
                 }
@@ -570,8 +581,13 @@ const uppy = new Uppy.Uppy({
         }
         // If any files will overwrite existing ones, show a single confirmation dialog
         if (filesToOverwrite.length > 0) {
-            let fileNames = filesToOverwrite.map(f => f.meta.name).join("\n  ");
+            let names = filesToOverwrite.map(f => f.meta.name);
+            let fileNames = names.join("\n  ");
             if (!confirm(`The following file(s) already exist and will be overwritten:\n  ${fileNames}\n\nContinue?`)) {
+                // the confirm is the only thing that stopped the upload, so say so
+                // rather than leave the Upload button sitting there with no reason
+                uppy.info(`Upload cancelled. It would have overwritten: ${names.join(", ")}. ` +
+                          `Rename those files or use a different hub name.`, 'warning', 10000);
                 doUpload = false;
             } else {
                 // Set metadata flag to allow overwrite on backend for each file
@@ -594,7 +610,7 @@ const uppy = new Uppy.Uppy({
             }
         }
         if (thisQuota + hubCreate.uiState.userQuota > hubCreate.uiState.maxQuota) {
-            uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`);
+            uppy.info(`Error: this file batch exceeds your quota. Please delete some files to make space or email genome-www@soe.ucsc.edu if you feel you need more space.`, 'error', 10000);
             doUpload = false;
         }
         return doUpload ? files : false;
@@ -759,6 +775,7 @@ function applySplitHubDescriptor(uppyInstance, descriptor) {
         }
         uppyInstance.setFileMeta(f.id, meta);
     }
+    refreshBatchSelects(uppyInstance);
     let names = descriptor.genomes.map(g => g.name).join(", ");
     if (names) {
         uppyInstance.info(`Split hub detected. Genomes: ${names}`, "info", 4000);
@@ -781,7 +798,7 @@ function propagateAssemblyHubMeta(uppyInstance) {
         return;
     }
 
-    function applyGenomeToSiblings(genome, alsoLockHubDefiners) {
+    function applyGenomeToSiblings(genome, alsoLockHubDefiners, hubType) {
         // Set genome/hubType on every file in the batch. Non-hub-defining
         // files (i.e. the sibling tracks) are always locked to this genome so
         // the user can't drift them. The hub-defining files (2bit, hub.txt)
@@ -802,7 +819,7 @@ function propagateAssemblyHubMeta(uppyInstance) {
             let meta = {
                 genome: genome,
                 genomeLabel: genome,
-                hubType: "assemblyHub",
+                hubType: hubType,
                 genomeLocked: !isHubDefining || alsoLockHubDefiners,
             };
             if (syncParentDir && !isNestedLayout) meta.parentDir = syncParentDir;
@@ -810,6 +827,8 @@ function propagateAssemblyHubMeta(uppyInstance) {
         }
         // keep the batch Hub Name box showing where the files are really going
         refreshBatchHubNameInput(uppyInstance);
+        // and the genome box showing the genome they just picked up
+        refreshBatchSelects(uppyInstance);
     }
 
     if (hubTxt) {
@@ -828,16 +847,19 @@ function propagateAssemblyHubMeta(uppyInstance) {
                 applySplitHubDescriptor(uppyInstance, descriptor);
             } else {
                 // Single-file hub: hub.txt is authoritative for the one genome
-                // it declares. Lock all siblings to that genome.
+                // it declares, whether or not it is an assembly hub. Without
+                // this the batch keeps the session's assembly and the rows are
+                // written for a genome the hub.txt never mentions.
                 let parsed = descriptor.hubMeta || {};
-                if (parsed.isAssemblyHub && parsed.genome) {
-                    applyGenomeToSiblings(parsed.genome, true);
-                    uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
-                } else if (parsed.genome && twoBit) {
-                    let twoBitGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
-                    if (parsed.genome !== twoBitGenome) {
-                        applyGenomeToSiblings(parsed.genome, true);
+                if (parsed.genome) {
+                    let batchHubType = (parsed.isAssemblyHub || twoBit) ? "assemblyHub" : "trackHub";
+                    applyGenomeToSiblings(parsed.genome, true, batchHubType);
+                    let twoBitGenome = twoBit ?
+                        (twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name)) : null;
+                    if (twoBitGenome && parsed.genome !== twoBitGenome) {
                         uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt (overrides 2bit default)`, "warning", 5000);
+                    } else {
+                        uppyInstance.info(`Using genome "${parsed.genome}" from hub.txt`, "info", 4000);
                     }
                 }
             }
@@ -853,7 +875,7 @@ function propagateAssemblyHubMeta(uppyInstance) {
     }
 
     let asmGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
-    applyGenomeToSiblings(asmGenome, false);
+    applyGenomeToSiblings(asmGenome, false, "assemblyHub");
 }
 
 // create a custom uppy plugin to batch change the type and db fields
@@ -898,26 +920,34 @@ class BatchChangePlugin extends Uppy.BasePlugin {
     }
 
     addBatchSelectsToDashboard() {
-        // If the batch contains a 2bit, the UCSC genome picker makes no
-        // sense - show the custom genome name read-only instead. Detect by
-        // filename rather than meta.hubType because setFileMeta updates
-        // Uppy state immutably and the meta may not be visible on file
-        // objects captured from getFiles() earlier in this event. A split
-        // assembly hub can declare more than one 2bit (one per genome);
-        // join all of them.
-        let assemblyHubGenomes = [];
-        for (let f of this.uppy.getFiles()) {
-            if (looksLikeTwoBit(f)) {
-                let g = f.meta.genome || hubCreate.sanitizeGenomeName(f.name);
-                if (g && !assemblyHubGenomes.includes(g)) {
-                    assemblyHubGenomes.push(g);
+        // When the batch's genome is decided for it - by a 2bit, or by a hub.txt
+        // that names one - the UCSC picker makes no sense, so show the genome
+        // read-only instead. A 2bit is detected by filename rather than
+        // meta.hubType because setFileMeta updates Uppy state immutably and the
+        // meta may not be visible on file objects captured from getFiles()
+        // earlier in this event. A split assembly hub can declare more than one
+        // genome; join all of them.
+        // Only a hub-defining file in the batch locks the box. A file drilled into an
+        // existing assembly hub also carries genomeLocked, but the user can still
+        // retarget that batch at another hub, and then the picker has to come back.
+        let lockedGenomes = [];
+        let hubDefined = this.uppy.getFiles().some(
+            f => looksLikeTwoBit(f) || looksLikeHubTxt(f));
+        if (hubDefined) {
+            for (let f of this.uppy.getFiles()) {
+                let g = looksLikeTwoBit(f) ?
+                    (f.meta.genome || hubCreate.sanitizeGenomeName(f.name)) : f.meta.genome;
+                if (g && !lockedGenomes.includes(g)) {
+                    lockedGenomes.push(g);
                 }
             }
         }
-        // The genome row is built one way for an assembly hub and another for a
-        // track hub, so a 2bit joining or leaving an existing batch has to
-        // rebuild the whole thing rather than leave the old row in place
-        let asmSignature = assemblyHubGenomes.join(", ");
+        // The genome row is built one way for a locked genome and another for a
+        // free one, so a 2bit or hub.txt joining or leaving an existing batch has
+        // to rebuild the whole thing rather than leave the old row in place. The
+        // signature also changes when the locked genome is renamed, which is what
+        // keeps the read-only box from showing a stale name
+        let asmSignature = lockedGenomes.join(", ");
         let staleDiv = document.getElementById("batch-selector-div");
         if (staleDiv) {
             if (staleDiv.dataset.asmGenome === asmSignature) {
@@ -926,10 +956,7 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             }
             removeBatchSelectDiv();
         }
-        let assemblyHubGenome = null;
-        if (assemblyHubGenomes.length) {
-            assemblyHubGenome = assemblyHubGenomes.join(", ");
-        }
+        let lockedGenome = lockedGenomes.length ? asmSignature : null;
 
         let batchSelectDiv = document.createElement("div");
         batchSelectDiv.id = "batch-selector-div";
@@ -961,24 +988,28 @@ class BatchChangePlugin extends Uppy.BasePlugin {
         let batchDbGenomeSearchButton = null;
         let batchDbSearchBarLabel = null;
 
-        if (assemblyHubGenome) {
-            // Assembly hub: show the custom genome name as a locked text
-            // field, no UCSC picker or search.
+        if (lockedGenome) {
+            // The genome is decided by a 2bit or a hub.txt: show it as a locked
+            // text field, no UCSC picker or search.
             let locked = document.createElement("input");
             locked.type = "text";
             locked.id = "batchAsmHubGenome";
-            locked.value = assemblyHubGenome;
+            locked.value = lockedGenome;
             locked.disabled = true;
             locked.classList.add("uppy-u-reset", "uppy-c-textInput");
             locked.style.gridArea = "2 / 2 / 2 / 2";
             locked.style.margin = "2px";
             batchDbLabel.for = "batchAsmHubGenome";
 
+            // say which file decided the genome, so the box is not just read-only
+            // with no explanation
             let note = document.createElement("div");
-            if (assemblyHubGenomes.length > 1) {
-                note.textContent = "(assembly hub - genome per file is set by genomes.txt; this list shows all genomes in the hub)";
-            } else {
+            if (lockedGenomes.length > 1) {
+                note.textContent = "(genome per file is set by genomes.txt; this list shows all genomes in the hub)";
+            } else if (this.uppy.getFiles().some(looksLikeTwoBit)) {
                 note.textContent = "(assembly hub - genome locked; shared by all files in this batch)";
+            } else {
+                note.textContent = "(genome locked by hub.txt; shared by all files in this batch)";
             }
             note.style.gridArea = "2 / 3 / 2 / 5";
             note.style.margin = "auto 0";
@@ -1112,9 +1143,13 @@ class BatchChangePlugin extends Uppy.BasePlugin {
         // I can't append to the actual Dashboard-files, it must be getting emptied
         // and re-rendered or something
         let uppyFilesDiv = document.querySelector(".uppy-Dashboard-progressindicators");
-        if (uppyFilesDiv) {
-            uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
+        if (!uppyFilesDiv) {
+            // nothing to attach to yet. Bail rather than fall through to the
+            // autocomplete setup below, which would memoize an id belonging to a
+            // detached element and leave the search box dead for the rest of the page
+            return;
         }
+        uppyFilesDiv.insertBefore(batchSelectDiv, uppyFilesDiv.firstChild);
         refreshBatchHubNameInput(this.uppy);
 
         // autocomplete only applies in the track-hub path
@@ -1319,8 +1354,10 @@ class BatchChangePlugin extends Uppy.BasePlugin {
                 }
                 propagateAssemblyHubMeta(this.uppy);
             }
-            // a hub name edited on a file card has to reach the batch box too
+            // a hub name or genome edited on a file card has to reach the batch
+            // boxes too, or they keep showing what the batch used to say
             refreshBatchHubNameInput(this.uppy);
+            refreshBatchSelects(this.uppy);
             warnOnMixedGenomes(this.uppy);
         });
     }
