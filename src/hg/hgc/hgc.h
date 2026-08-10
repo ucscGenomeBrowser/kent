@@ -105,6 +105,10 @@ void writeFramesetType();
 void htmlFramesetStart(char *title);
 /* Write DOCTYPE HTML and HEAD sections for framesets. */
 
+void alnModernStart(char *classicTitle);
+/* Begin an alignment page: modern single-page chrome when the modernAlignPage hg.conf flag is set
+ * (showSomeAlignment then renders the modern body), else the classic <frameset>. */
+
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 /* get the list of alignments for the specified acc */
 

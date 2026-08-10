@@ -8374,7 +8374,6 @@ return blockCount;
 static boolean gAlnModern = FALSE;
 static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType qType,
                        int qStart, int qEnd, char *qName, int cdsS, int cdsE, boolean blatContext);
-static void alnModernStart(char *classicTitle);
 
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq,
                        enum gfType qType, int qStart, int qEnd,
@@ -9290,11 +9289,12 @@ if (canShare)
     cartSessionId(cart), psl->tName, psl->tStart, qName);
 }
 
-static void alnModernStart(char *classicTitle)
+void alnModernStart(char *classicTitle)
 /* Begin an alignment page.  With the modernAlignPage hg.conf flag set, start the modern single-page
  * chrome (webStartGbNoBanner) and arm gAlnModern so showSomeAlignment() renders the modern body;
  * otherwise start the classic <frameset>.  This is the plain track-click entry point (mRNA/EST/PSL
- * details), so the modern page is drawn in its neutral, non-BLAT form. */
+ * details, transMap, retrogene, literature alignments), so the modern page is drawn in its neutral,
+ * non-BLAT form.  Callers must pair it with showSomeAlignment(), which honors gAlnModern. */
 {
 if (cfgOptionBooleanDefault("modernAlignPage", FALSE))
     {

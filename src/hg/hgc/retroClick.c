@@ -812,7 +812,7 @@ char acc[512];
 
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", mi->seqId, track);
-htmlFramesetStart(title);
+alnModernStart(title);
 
 /* Look up alignment and sequence in database.  Always get sequence
  * from defaultDb */
