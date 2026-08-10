@@ -75,14 +75,15 @@ char *prefixUserFile(char *userName, char *fname, char *parentDir);
  * we cannot construct a full path because of a realpath(3) failure.
  * parentDir is optional and will go in between the per-user dir and the fname */
 
-char *hubNameFromPath(char *path);
-/* Return the last directory component of path. Assume that a '.' char in the last component
- * means that component is a filename and go back further */
+char *hubLeafFromPath(char *path);
+/* Return the last '/' separated component of path, ignoring a trailing '/'. Callers
+ * pass a directory, so there is no filename to guess at: a '.' in the last component
+ * is part of a directory name, which isValidParentDir allows */
 
 char *hubRootFromParentDir(char *parentDir);
 /* Return the first '/' separated component of parentDir, which is the hub itself.
  * The hub.txt and the hubSpace dir row for a hub both live at that level, while
- * hubNameFromPath gives the immediately containing directory, which for a nested
+ * hubLeafFromPath gives the immediately containing directory, which for a nested
  * parentDir like 'myHub/hg38' is a subdirectory of the hub */
 
 char *hubPathFromParentDir(char *parentDir, char *userDataDir);
@@ -100,15 +101,17 @@ void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, cha
 /* Creates a hub.txt for this upload, and updates the hubSpace table for the
  * hub.txt and any parentDirs we need to create. */
 
-boolean userHasOwnNamedHubTxtInDir(char *userName, char *parentDir);
-/* Return TRUE if user uploaded a *.hub.txt NOT literally named 'hub.txt' in parentDir.
- * Used to decide whether the backend can modify hub.txt (synthesize / append / upgrade)
- * or should leave it alone because the user has their own authoritative config. */
+boolean userHasOwnNamedHubTxtInDir(char *userName, char *hubName, char *hubDir);
+/* Return TRUE if the user uploaded a *.hub.txt file NOT literally named 'hub.txt'
+ * (e.g. 'araTha1.hub.txt') at the top level of hubDir. Distinguishes "user's own
+ * authoritative hub.txt" from "backend-synthesized hub.txt that we're free to modify".
+ * parentDir alone would also match a *.hub.txt sitting in some other hub's
+ * subdirectory that happens to be named hubName, so pin it to hubDir as well */
 
 char *existingHubTypeForDir(char *userName, char *hubName);
 /* Return the hubType of this user's hub dir row, or NULL if no such row exists. */
 
-void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir, char *encodedParentDir);
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir);
 /* Race-proofing: when a 2bit arrives into a hub that already has a synthesized
  * hub.txt, upgrade that hub.txt to include the assembly stanza and mark every
  * hubSpace row for this hub as hubType='assemblyHub'. No-op unless rowForFile

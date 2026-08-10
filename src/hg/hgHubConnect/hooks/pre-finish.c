@@ -208,6 +208,8 @@ else
             // both lookups below are about the hub as a whole, whose row and hub.txt
             // live at the top level, so use the hub component of parentDir
             char *parentDirForCheck = encodedParentDir ? hubRootFromParentDir(encodedParentDir) : "";
+            char *hubDir = encodedParentDir ?
+                hubPathFromParentDir(encodedParentDir, userDataDir) : NULL;
             if (sameOk(fileType, "2bit"))
                 row->hubType = "assemblyHub";
             else
@@ -217,7 +219,7 @@ else
                 }
             char *batchHasHubTxtStr = jsonQueryString(req, "", "Event.Upload.MetaData.batchHasHubTxt", NULL);
             boolean batchHasHubTxt = sameOk(batchHasHubTxtStr, "true");
-            boolean userOwnNamedHubTxt = userHasOwnNamedHubTxtInDir(userName, parentDirForCheck);
+            boolean userOwnNamedHubTxt = userHasOwnNamedHubTxtInDir(userName, parentDirForCheck, hubDir);
             boolean userAuth = batchHasHubTxt || userOwnNamedHubTxt;
             boolean isHubTxt = sameOk(fileType, "hub.txt");
             boolean isTwoBit = sameOk(fileType, "2bit");
@@ -229,12 +231,8 @@ else
             // Lock the directory the hub.txt is in, so uploads into different
             // subdirectories of one hub still serialize against each other.
             int hubLockFd = -1;
-            if (encodedParentDir)
-                {
-                char *hubDir = hubPathFromParentDir(encodedParentDir, userDataDir);
+            if (hubDir)
                 hubLockFd = lockHubDir(hubDir);
-                freeMem(hubDir);
-                }
             if (!isHubToolsUpload && !isHubTxt)
                 {
                 if (!userAuth)
@@ -244,7 +242,7 @@ else
                         // createNewTempHubForUpload is a no-op when the hub.txt and its
                         // row are already there, and it backfills the row when they are not
                         createNewTempHubForUpload(reqId, row, userDataDir);
-                        upgradeExistingHubToAssembly(row, userDataDir, encodedParentDir);
+                        upgradeExistingHubToAssembly(row, userDataDir);
                         }
                     else
                         createNewTempHubForUpload(reqId, row, userDataDir);
@@ -252,7 +250,7 @@ else
                 else if (isTwoBit)
                     {
                     // user's hub.txt is authoritative; just flip rows to assemblyHub.
-                    upgradeExistingHubToAssembly(row, userDataDir, encodedParentDir);
+                    upgradeExistingHubToAssembly(row, userDataDir);
                     }
                 }
             // still under the hub lock: makeParentDirRows checks for a row and then
@@ -263,7 +261,7 @@ else
             // holds it as a GMT clock string, which sqlDateToUnixTime would read as
             // local time, so pass the seconds directly
             makeParentDirRows(row->userName, lastModified, row->db, row->parentDir, userDataDir, row->hubType);
-            row->parentDir = encodedParentDir ? hubNameFromPath(encodedParentDir) : "";
+            row->parentDir = encodedParentDir ? hubLeafFromPath(encodedParentDir) : "";
             addHubSpaceRowForFile(row);
             unlockHubDir(hubLockFd);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
