@@ -1655,6 +1655,14 @@ safef(buffer, sizeof buffer, " (%d items filtered out)", numOut);
 return catTwoStrings(label, buffer);
 }
 
+char *labelAsNotLiftedNumber(char *label, unsigned numOut)
+/* add text to label to indicate items were dropped by the lift, not by a filter */
+{
+char buffer[2048];
+safef(buffer, sizeof buffer, " (%d items could not be lifted)", numOut);
+return catTwoStrings(label, buffer);
+}
+
 char *labelAsFiltered(char *label)
 /* add text to label to indicate filter is active */
 {

@@ -766,6 +766,9 @@ char *labelAsFiltered(char *label);
 char *labelAsFilteredNumber(char *label, unsigned number);
 /* add text to label to indicate filter is active */
 
+char *labelAsNotLiftedNumber(char *label, unsigned number);
+/* add text to label to indicate items were dropped by the lift, not by a filter */
+
 int trackDbGetCartVersion();
 /* Get the highest cart version that a set of trackDb entries has specified. */
 

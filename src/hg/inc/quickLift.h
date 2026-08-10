@@ -49,6 +49,11 @@ struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash,
  * on the reference.
  */
 
+struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb);
+/* Like quickLiftIntervalsToBed, but an item too big for the chains we loaded is pulled in
+ * to what they cover rather than dropped.  Callers that need the item's true extent (the
+ * details page) should use quickLiftIntervalsToBed instead. */
+
 struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd,  char *query, char *extraWhere, ItemLoader2 loader, int numFields, struct hash *chainHash);
 /* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
  * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
