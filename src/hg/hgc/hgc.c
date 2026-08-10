@@ -9104,7 +9104,7 @@ printf("<style>"
        "#blatAlnNavInner{position:sticky; top:0; padding:18px 20px; display:flex; flex-direction:column;"
        " gap:16px}"
        "#blatAlnNav a{font-weight:700; text-decoration:none}"   /* already obviously links; no underline */
-       "#blatAlnBlocks{display:flex; flex-direction:column; gap:8px; margin:2px 0 0 14px}"  /* block links, indented under side-by-side */
+       "#blatAlnBlocks{display:flex; flex-direction:column; gap:2px; margin:2px 0 0 14px}"  /* block links, tight list indented under genome sequence */
        "#blatAlnBlocks a{font-weight:400; font-size:13px}"
        "#blatAlnContent{grid-column:2; grid-row:1; min-width:0; padding:0 20px 14px}"
        "#blatAlnContent h2{display:none}"
@@ -9142,7 +9142,7 @@ printf("</span></div>\n");
 printf("<div id='blatAlnBody'>\n");
 
 printf("<div id='blatAlnContent'>\n");
-printf("<h4>Alignment Summary</h4>\n");
+printf("<h4>Alignment summary</h4>\n");
 /* comma-format the coordinates and base counts, matching the new Table view (readable at the
  * hundreds-of-millions scale of genomic coordinates, and the convention elsewhere in the browser) */
 char tStartC[32], tEndC[32], matchC[32], qSizeC[32];
@@ -9171,19 +9171,39 @@ if (isNotEmpty(aliasStr))
  * blocks separated by gaps <= 8 bases, so this can be fewer than psl->blockCount; use it (not
  * psl->blockCount) so the sidebar's "Block N" links match the #1..#N anchors that were emitted. */
 int blockCount;
+/* Capture the shared library's alignment HTML so we can reorder its sections for this page.  The
+ * library emits them as Query (#cDNA), Genome (#genomic), then Side-by-side (#ali), with the
+ * per-block anchors living inside the Genome section.  We want Query, Side-by-side, Genome so the
+ * long per-block list sits at the bottom of both the page and the sidebar.  Reorder here, on the
+ * server, rather than in JS, so the page does not reflow after it loads. */
+char *alnHtml = NULL;
+size_t alnLen = 0;
+FILE *alnF = open_memstream(&alnHtml, &alnLen);
 if (qType == gftRna || qType == gftDna)
-    blockCount = showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
+    blockCount = showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
 else
-    blockCount = showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
+    blockCount = showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
+fclose(alnF);
+char *pGenome = (alnHtml != NULL) ? stringIn("<H4><A NAME=genomic>", alnHtml) : NULL;
+char *pAli    = (alnHtml != NULL) ? stringIn("<H4><A NAME=ali>", alnHtml) : NULL;
+if (pGenome != NULL && pAli != NULL && pGenome < pAli)
+    {                                                /* Query, then Side-by-side, then Genome */
+    fwrite(alnHtml, 1, pGenome - alnHtml, stdout);   /* legend + Query (#cDNA) section */
+    fputs(pAli, stdout);                             /* Side-by-side (#ali) section, through footnote */
+    fwrite(pGenome, 1, pAli - pGenome, stdout);      /* Genome (#genomic) section, with block anchors */
+    }
+else
+    fputs((alnHtml != NULL) ? alnHtml : "", stdout);
+free(alnHtml);   /* libc free: open_memstream's buffer is malloc'd, not a kent needMem block */
 printf("</div>\n");   /* #blatAlnContent */
 
 /* Sidebar, emitted after the alignment so blockCount is known; CSS grid puts it back in column 1.
  * The inner div is position:sticky so the links stay in view as the long alignment scrolls. */
 printf("<div id='blatAlnNav'><div id='blatAlnNavInner'>\n");
 printf("<a href='#cDNA'>Only query sequence</a>\n"
-       "<a href='#genomic'>Only genome sequence</a>\n"
-       "<a href='#ali'>Side by Side Alignment</a>\n");
-if (blockCount > 1)   /* per-block jump links, indented under the side-by-side item */
+       "<a href='#ali'>Side by side alignment</a>\n"
+       "<a href='#genomic'>Only genome sequence</a>\n");
+if (blockCount > 1)   /* per-block jump links, indented under the genome-sequence item where their anchors live */
     {
     int bi;
     printf("<div id='blatAlnBlocks'>\n");
@@ -9195,22 +9215,25 @@ printf("</div></div>\n");
 
 printf("</div>\n");   /* #blatAlnBody */
 
-/* The cDNA/Genomic section headers come from shared library code (fuzzyShow.c / pslShow.c) as
- * "cDNA <qName>" / "Genomic <chrom> :"; relabel them to the sidebar wording via JS (there is no C
- * hook for it), keeping the #cDNA/#genomic jump anchors.  qName and chrom are already sanitized. */
+/* The cDNA/Genomic/Side-by-side section headers come from shared library code (fuzzyShow.c /
+ * pslShow.c) as "cDNA <qName>" / "Genomic <chrom> :" / "Side by Side Alignment"; relabel them to
+ * the sidebar wording (sentence case) via JS (there is no C hook for it), keeping the
+ * #cDNA/#genomic/#ali jump anchors.  qName and chrom are already sanitized. */
 jsInlineF(
     "(function(){\n"
     "function relabel(anchor, text){\n"
     "  var a = document.getElementsByName(anchor);\n"
     "  if (a && a.length){\n"
     "    var h = a[0].parentNode;\n"
+    "    var star = /\\*\\s*$/.test(h.textContent) ? '*' : '';\n"  // keep the footnote marker if present
     "    h.textContent = '';\n"
     "    var k = document.createElement('a'); k.name = anchor; h.appendChild(k);\n"
-    "    h.appendChild(document.createTextNode(text));\n"
+    "    h.appendChild(document.createTextNode(text + star));\n"
     "  }\n"
     "}\n"
     "relabel('cDNA', 'Only query sequence: %s');\n"
     "relabel('genomic', 'Only genome sequence: %s');\n"
+    "relabel('ali', 'Side by side alignment');\n"   // match the sidebar wording and sentence case
     "})();\n",
     qName, chrom);
 
@@ -9272,6 +9295,13 @@ else
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
+if (modern && (!fileExists(pslName) || !fileExists(faName)))
+    {   /* the search's trash files have been cleaned up: a friendly note, not a raw file error */
+    printf("<p>This BLAT alignment is no longer available. The search results it came from have "
+           "expired. Please run a new <a href=\"hgBlat\">BLAT search</a>.</p>\n");
+    webEndGb();
+    exit(0);
+    }
 pslxFileOpen(pslName, &qt, &tt, &lf);
 isProt = (qt == gftProt);
 while ((psl = pslNext(lf)) != NULL)
