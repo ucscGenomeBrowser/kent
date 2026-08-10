@@ -256,6 +256,12 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1118", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9299", default="FALSE",
+          role="gate", verified=True, ticket="37893",
+          note="Use the modern single-page base-by-base alignment view (the one "
+               "hgBlat's new results page uses) for ordinary alignment clicks too "
+               "- mRNA/EST, PSL and similar hgc details - instead of the classic "
+               "two-frame <frameset>.  Off during QA; flip to TRUE once released."),
         h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:790", default="FALSE",
           role="gate", verified=True,
           note="The banner on the classic BLAT results page that offers a "
