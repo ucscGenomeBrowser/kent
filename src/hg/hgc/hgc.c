@@ -9144,8 +9144,9 @@ printf("<style>"
        "</style>\n");
 
 /* gold title bar, drawn directly (no framework subheadingBar, no JS): title on the left, then (in
- * the hgBlat context only) a "Back to results" and, when a durable track backs the results, a
- * "Share a link" button. */
+ * the hgBlat context) a "Back to results" and, when a durable track backs the results, a "Share a
+ * link" button; in a plain track click, a "Back to Genome Browser" button that returns to hgTracks
+ * at this alignment's location. */
 printf("<div class='blatTitleBar'>");
 printf("<span class='blatTtl'>%s Base Alignment: %s</span>",
        blatContext ? "BLAT" : "", blatAsmLabel(database));
@@ -9153,6 +9154,10 @@ printf("<span class='blatBtns'>");
 if (blatContext)
     printf("<a href='hgBlat?blatReopen=1&hgsid=%s' class='blatBtn'>"
            "\xe2\x80\xb9 Back to results</a>", cartSessionId(cart));
+else
+    printf("<a href='hgTracks?db=%s&position=%s:%d-%d&hgsid=%s' class='blatBtn'>"
+           "Back to Genome Browser \xe2\x80\xba</a>",
+           database, psl->tName, psl->tStart + 1, psl->tEnd, cartSessionId(cart));
 if (canShare)
     printf("<a href='#' id='blatShareBtn' class='blatBtn'>Share a link</a>");
 printf("</span></div>\n");
