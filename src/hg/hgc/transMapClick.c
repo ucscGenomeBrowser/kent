@@ -435,7 +435,7 @@ if (isEmpty(bag->meta->oCDS) || !genbankCdsParse(bag->meta->oCDS, &cds))
 
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic", mappedId);
-htmlFramesetStart(title);
+alnModernStart(title);
 showSomeAlignment(bag->psl, seq, gftDna, 0, seq->size, NULL, cds.start, cds.end);
 dnaSeqFree(&seq);
 transMapBagFree(&bag);

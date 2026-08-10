@@ -1820,7 +1820,8 @@ return gbMembersLoadByQuery(conn, query);
  * or an account, short enough that a leaked signature is quickly useless. */
 #define OAUTH_PENDING_TTL 900
 
-static char *oauthPendingSig(char *provider, char *subject, char *email, char *timeStr)
+static char *oauthPendingSig(char *provider, char *subject, char *email, char *emailVerified,
+                             char *timeStr)
 /* HMAC-MD5 over a pending social identity, keyed by the secret login.cookieSalt.  Only
  * resolveIdentity (which runs after a genuine provider verification) can produce a valid one,
  * so a pending identity injected through cart/CGI variables will not validate.  The signature
@@ -1835,9 +1836,9 @@ if (isEmpty(salt))
         "secret random string.  Without a secret we cannot sign the pending identity, and the "
         "account chooser would accept a forged one.", CFG_LOGIN_COOKIE_SALT);
 char buf[1024];
-safef(buf, sizeof(buf), "%s|%s|%s|%s|%s",
+safef(buf, sizeof(buf), "%s|%s|%s|%s|%s|%s",
     emptyForNull(provider), emptyForNull(subject), emptyForNull(email),
-    emptyForNull(cart->userId), emptyForNull(timeStr));
+    emptyForNull(emailVerified), emptyForNull(cart->userId), emptyForNull(timeStr));
 return hmacMd5(salt, buf);
 }
 
@@ -1855,6 +1856,7 @@ if (clock1() - atol(timeStr) > OAUTH_PENDING_TTL)
 char *expected = oauthPendingSig(cartUsualString(cart, "oauth_pending_provider", ""),
                                  cartUsualString(cart, "oauth_pending_subject", ""),
                                  cartUsualString(cart, "oauth_pending_email", ""),
+                                 cartUsualString(cart, "oauth_pending_email_verified", ""),
                                  timeStr);
 boolean ok = sameString(sig, expected);
 freeMem(expected);
@@ -1871,11 +1873,12 @@ safef(timeStr, sizeof(timeStr), "%ld", clock1());
 cartSetString(cart, "oauth_pending_provider", id->provider);
 cartSetString(cart, "oauth_pending_subject", id->subject);
 cartSetString(cart, "oauth_pending_email", emptyForNull(id->email));
-cartSetString(cart, "oauth_pending_email_verified", id->emailVerified ? "1" : "0");
+char *emailVerified = id->emailVerified ? "1" : "0";
+cartSetString(cart, "oauth_pending_email_verified", emailVerified);
 cartSetString(cart, "oauth_pending_name", emptyForNull(id->displayName));
 cartSetString(cart, "oauth_pending_time", timeStr);
 cartSetString(cart, "oauth_pending_sig",
-    oauthPendingSig(id->provider, id->subject, emptyForNull(id->email), timeStr));
+    oauthPendingSig(id->provider, id->subject, emptyForNull(id->email), emailVerified, timeStr));
 }
 
 static void clearPendingIdentity()
@@ -2069,7 +2072,7 @@ if (emailMode)
     // Only the accounts that hold the just-validated login token, matching what emailLogin saw.
     sqlSafef(query, sizeof(query),
         "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s' "
-        "AND loginToken<>'' AND loginTokenExpires > NOW() ORDER BY idx",
+        "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
         email, email, cartUsualString(cart, "emailLogin_tokenMd5", ""));
 else
     sqlSafef(query, sizeof(query),
@@ -2139,7 +2142,8 @@ if (isEmpty(provider))
         }
     sqlSafef(query, sizeof(query),
         "SELECT * FROM gbMembers WHERE idx=%d AND (email='%s' OR recovEmail='%s') "
-        "AND loginToken='%s' AND loginToken<>'' AND loginTokenExpires > NOW()",
+        "AND loginToken='%s' AND loginToken<>'' AND loginTokenExpires > NOW() "
+        "AND accountActivated='Y'",
         chosenIdx, email, email, tokenMd5);
     struct gbMembers *m = gbMembersLoadByQuery(conn, query);
     if (m == NULL)
@@ -2417,7 +2421,8 @@ if (isEmpty(email) || spc_email_isvalid(email) == 0)
     }
 char query[512];
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM gbMembers WHERE email='%s' OR recovEmail='%s'", email, email);
+    "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y'",
+    email, email);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 if (list != NULL)
     {
@@ -2460,7 +2465,8 @@ char *tokenMD5 = generateTokenMD5(token);
 char query[512];
 sqlSafef(query, sizeof(query),
     "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s' "
-    "AND loginToken<>'' AND loginTokenExpires > NOW() ORDER BY idx", email, email, tokenMD5);
+    "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
+    email, email, tokenMD5);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query);
 int n = slCount(list);
 if (n == 0)

@@ -1115,7 +1115,7 @@ bioSeq *oSeq = NULL;
 
 char title[1024];
 safef(title, sizeof title, "Literature Sequence vs Genomic");
-htmlFramesetStart(title);
+alnModernStart(title);
 
 struct psl *psl = getAlignments(conn, pslTable, item);
 if (psl == NULL)
