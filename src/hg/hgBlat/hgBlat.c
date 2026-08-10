@@ -535,9 +535,26 @@ if (endsWith(tName, "_alt") || stringIn("_hap", tName))
     return "Alternate haplotype: an alternate sequence for this region.";
 if (endsWith(tName, "_random"))
     return "Unlocalized sequence: known chromosome, position not determined.";
-if (startsWith(tName, "chrUn"))
+if (startsWith("chrUn", tName))
     return "Unplaced sequence: chromosome of origin unknown.";
 return NULL;
+}
+
+static char *blatSeqNote(char *tName, char *displayName)
+/* The info-icon note for one hit.  chromTypeNote() only sees the single display name, but a
+ * sequence can have several aliases and the chosen display name may not be the chrUn/alt/fix one
+ * (e.g. a GenArk hub shows a GenBank accession while "chrUn_..." is only an alias).  So if the
+ * display name looks ordinary, scan the sequence's other aliases too. */
+{
+char *note = chromTypeNote(displayName);
+if (note == NULL)
+    {
+    struct slName *al;   /* chromAliasFindAliases returns a cached list - do not free it */
+    for (al = chromAliasFindAliases(tName);  al != NULL;  al = al->next)
+        if ((note = chromTypeNote(al->name)) != NULL)
+            break;
+    }
+return note;
 }
 
 static char *blatBrowserUrl(struct psl *psl, char *database, char *browserUrl,
@@ -708,7 +725,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     jsonWriteNumber(jw, "score", pslScore(psl));
     jsonWriteDouble(jw, "identity", ident);
     jsonWriteString(jw, "chrom", displayChromName);
-    char *note = chromTypeNote(displayChromName);   /* note must match the NAME the user sees */
+    char *note = blatSeqNote(psl->tName, displayChromName);   /* check the display name and its aliases */
     if (note != NULL)
         jsonWriteString(jw, "chromNote", note);
     jsonWriteString(jw, "strand", psl->strand);
@@ -1200,7 +1217,7 @@ else  // hyperlink
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
         else if (endsWith(seq, "_random"))
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
-        else if (startsWith(seq, "chrUn"))
+        else if (startsWith("chrUn", seq))
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
         printf("\n");
 	}

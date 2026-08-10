@@ -623,7 +623,7 @@ static void printHelpLinks(struct gfPcrOutput *gpoList) {
                 isAlt = TRUE;
             else if (endsWith(seq, "_random"))
                 isRandom = TRUE;
-            else if (startsWith(seq, "chrUn"))
+            else if (startsWith("chrUn", seq))
                 isChrUn = TRUE;
             }
         }
