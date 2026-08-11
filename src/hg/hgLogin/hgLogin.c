@@ -2085,8 +2085,11 @@ if (emailMode)
         "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
         email, email, cartUsualString(cart, "emailLogin_tokenMd5", ""));
 else
+    // Only activated accounts, matching what chooseAccount() and resolveIdentity() accept;
+    // otherwise the page offers a row the action refuses, and shows the username of an
+    // unactivated row anyone could have created with this address.
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE email='%s' ORDER BY idx", email);
+        "SELECT * FROM gbMembers WHERE email='%s' AND accountActivated='Y' ORDER BY idx", email);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 
 hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
@@ -2312,7 +2315,20 @@ void oauthReturn(struct sqlConnection *conn)
 char *state = cgiUsualString("state", "");
 char *savedState = cartUsualString(cart, "oauth_state", "");
 char *provider = cartUsualString(cart, "oauth_provider", "");
-cartRemove(cart, "oauth_state");   // one-time use
+
+// Validate the anti-CSRF state before consuming any cart state or acting on an error param.  A
+// stray code/error link (a re-opened redirect, or a crafted hgLogin?error=...) must not be able to
+// consume the state nonce of a login in flight, so check first and only then clear the flow.  A
+// compliant provider echoes state on an error return too (RFC 6749 4.1.2.1), and we always send it.
+if (isEmpty(state) || isEmpty(savedState) || differentString(state, savedState))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Your login session expired or was invalid. Please try again.");
+    displayLoginPage(conn);
+    return;
+    }
+cartRemove(cart, "oauth_state");      // one-time use
+cartRemove(cart, "oauth_provider");   // end the flow so a later code/error param can't re-enter
 
 char *errParam = cgiUsualString("error", "");
 if (isNotEmpty(errParam))
@@ -2328,13 +2344,6 @@ if (isNotEmpty(errParam))
     dyStringPrintf(dy, "(%s)", htmlEncode(errParam));
     freez(&errMsg);
     errMsg = dyStringCannibalize(&dy);
-    displayLoginPage(conn);
-    return;
-    }
-if (isEmpty(state) || isEmpty(savedState) || differentString(state, savedState))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Your login session expired or was invalid. Please try again.");
     displayLoginPage(conn);
     return;
     }
