@@ -69,7 +69,11 @@ char *fullFileName;
 sqlSafef(query, sizeof(query),
     "select edwFileName from vf where licensePlate = '%s'", licensePlate);
 fileName = sqlQuickString(conn, query);
-fullFileName = strcat(edwDataRoot(), fileName);
+/* Do not strcat onto edwDataRoot()'s exact-sized cloneString buffer, which overruns it;
+ * build a right-sized string instead. refs #38055 */
+char *dataRoot = edwDataRoot();
+fullFileName = catTwoStrings(dataRoot, fileName);
+freeMem(dataRoot);
 return fullFileName;
 }
 
@@ -96,9 +100,14 @@ boolean tokenValid(char *accession, char *date, char *token, char *user)
 /* Check the token to ensure that the query string was created by
  * encodedcc without any modification */ 
 {
-char *hStr=strcat(strcat(date,accession),user);
-char *digest;
-digest=hmacSha1(edwKey(), hStr);
+/* Build the HMAC input in a right-sized buffer; do not strcat onto the callers'
+ * exact-sized cgi string buffers, which overruns them (and runs before this token
+ * check, so it is reachable without valid credentials). refs #38055 */
+int hLen = strlen(date) + strlen(accession) + strlen(user) + 1;
+char *hStr = needMem(hLen);
+safef(hStr, hLen, "%s%s%s", date, accession, user);
+char *digest = hmacSha1(edwKey(), hStr);
+freez(&hStr);
 if (sameString(digest, token))
     return TRUE;
 return FALSE;
