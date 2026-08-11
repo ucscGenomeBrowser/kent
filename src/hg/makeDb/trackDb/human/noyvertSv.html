@@ -2,7 +2,13 @@
 <p>
 The structural variants (SVs) in this dataset were identified using Oxford
 Nanopore long-read whole-genome sequencing of 888 individuals from the 1000
-Genomes Project, representing five ancestry groups. The SVs were merged with
+Genomes Project, representing five ancestry groups. 
+This dataset and the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track
+(Schloissnig et al. 2025) are based on the same underlying Oxford Nanopore
+sequencing data; the 888 samples here are a subset of the 1,019 samples in that
+track and only SVs that appear in a single sample (singletons) were removed from this track,
+so this callset is smaller than the Schloissnig dataset. The reason is that
+this callset was created primarily for imputation: The SVs here were merged with
 previously identified short variants from the same individuals to generate a
 multi-ancestry SV imputation reference panel. This panel was used to impute
 SVs in approximately 500,000 UK Biobank participants and test their
@@ -11,6 +17,9 @@ associations with 32 disease-relevant traits.
 <p>
 The track contains all 107,445 SVs in the reference panel: 59,953 insertions,
 38,459 deletions, 5,729 inversions, 2,696 breakends, and 608 duplications.
+Variants seen in only a single individual (singletons) were excluded from the
+panel, so every SV shown was observed in at least two individuals; the panel is
+therefore not exhaustive for very rare variants.
 Each variant is annotated with its overall allele frequency; allele
 frequencies across five superpopulations (African, Admixed American, East
 Asian, European, and South Asian); Hardy-Weinberg equilibrium p-values; and
@@ -20,22 +29,14 @@ traits, p-values, and INFO scores are listed on the corresponding variant
 details page.
 </p>
 <p>
-This dataset is an independent reprocessing of the same Oxford Nanopore reads
-used for the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track
-(Schloissnig et al. 2025). The 888 samples in this dataset are a subset of the
-1,019 samples included in that track, with both datasets based on the same
-underlying sequencing data.
-However, the data-processing and SV-calling methods differ between the two
-tracks, so the individual calls are only partially concordant. This track has
-about 38,000 deletions and the Vienna track about 58,000; at a 50%
-reciprocal-overlap threshold roughly 12,000 are shared. That is about a third
-of the deletions in this track and, conversely, about a fifth of the Vienna
-deletions; requiring at least 90% mutual overlap lowers these shares to roughly
-a quarter and a sixth, respectively. A similar fraction (about a quarter) of
-the insertions in this track have a size-matched Vienna insertion within
-100 bp. The imputation reference panel, UK Biobank imputation results, and
-SV-wide association study (SV-WAS) results described here are specific to this
-track.
+This dataset and the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track
+(Schloissnig et al. 2025) are based on the same underlying Oxford Nanopore
+sequencing data; the 888 samples here are a subset of the 1,019 samples in that
+track. The two studies applied different data-processing and SV-calling
+pipelines to address distinct research objectives, so the individual calls are
+only partially concordant. The imputation reference panel, UK Biobank
+imputation results, and SV-wide association study (SV-WAS) results described
+here are specific to this track.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -144,4 +145,9 @@ Noyvert B, Erzurumluoglu AM, Drichel D, Omland S, Andlauer TFM <em>et al</em>.
 Imputation of structural variants using a multi-ancestry long-read sequencing panel enables
 identification of disease associations</a>.
 <em>eLife</em>. 2025. doi:10.7554/eLife.106115.1
+</p>
+<p>
+A continuously updated preprint version of this study is available on medRxiv:
+<a href="https://doi.org/10.1101/2023.12.20.23300308" target="_blank">
+doi:10.1101/2023.12.20.23300308</a>.
 </p>
