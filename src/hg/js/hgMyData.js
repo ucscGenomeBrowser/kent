@@ -544,9 +544,13 @@ const uppy = new Uppy.Uppy({
                 continue;
             }
             // check if this hub already exists and the genome is different from what was
-            // just selected, if so, make the user create a new hub
-            if (file.meta.parentDir in hubCreate.uiState.filesHash && hubCreate.uiState.filesHash[file.meta.parentDir].genome !== file.meta.genome) {
-                let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
+            // just selected, if so, make the user create a new hub. A blank genome means
+            // none has been set yet, not a hub for a genome named "": a directory row is
+            // blank until an upload carrying a genome lands in it, and the hub level
+            // files of a hub that brings its own hub.txt have no genome of their own.
+            // So a blank on either side is not a mismatch.
+            let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
+            if (existing && existing.genome && existing.genome !== file.meta.genome) {
                 // If the existing hub is an assembly hub, adopt its genome
                 // automatically rather than erroring - the UI hid the picker
                 // for this case, so the mismatch is just stale metadata.
@@ -554,7 +558,7 @@ const uppy = new Uppy.Uppy({
                     file.meta.genome = existing.genome;
                     file.meta.genomeLabel = existing.genome;
                     file.meta.hubType = "assemblyHub";
-                } else {
+                } else if (file.meta.genome) {
                     uppy.info(`Error: the hub ${file.meta.parentDir} already exists and is for genome "${existing.genome}". Please select the correct genome, a different hub or make a new hub.`, 'error', 10000);
                     doUpload = false;
                     continue;
@@ -1379,7 +1383,8 @@ var hubCreate = (function() {
         maxQuota: 0,
         userQuota: 0,
         userFiles: {}, // same as uiData.userFiles on page load
-        filesHash: {}, // for each file, userFiles.fullPath is the key, and then the userFiles.fileList data as the value, with an extra key for the child fullPaths if the file is a directory
+        // Object.create(null) because a hub may be named 'constructor' or 'toString'
+        filesHash: Object.create(null), // for each file, userFiles.fullPath is the key, and then the userFiles.fileList data as the value, with an extra key for the child fullPaths if the file is a directory
     };
 
     let extensionMap = {
@@ -2475,7 +2480,7 @@ var hubCreate = (function() {
         });
         uiState.fileList = uiState.fileList.filter(toKeep);
         // Rebuild filesHash from remaining fileList to remove stale entries
-        uiState.filesHash = {};
+        uiState.filesHash = Object.create(null);
         parseFileListIntoHash(uiState.fileList);
         // If the currently viewed hub directory was deleted (its data is in oldRowData
         // because dataTableCustomOrder moved it to the header), clean up that stale state
