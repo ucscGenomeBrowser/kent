@@ -4253,7 +4253,15 @@ while (i < formatLen)
 			    }
 			else
 			    {
-			    escStringsSize += strlen(s);
+			    /* SECURITY (refs #38051): the value must not contain our in-band
+			     * escape marker.  Two of them forge an extra delimiter pair, and
+			     * sqlEscapeAllStrings then copies the text between them raw
+			     * instead of escaping it, smuggling live quotes into the query.
+			     * A raw 0x01 is never legitimate in a SQL string value. */
+			    int sLen = strlen(s);
+			    if (memchr(s, escPunc, sLen) != NULL)
+				errAbort("Illegal control character in SQL string value.");
+			    escStringsSize += sLen;
 			    }
 			}
 		    else  // quoted -s has no meaning or use, so not allow.
