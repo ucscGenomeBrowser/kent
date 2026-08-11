@@ -619,6 +619,7 @@ static void printBlatResultsApp(struct psl *pslList, char *database, char *organ
 {
 struct psl *psl;
 jsIncludeDataTablesLibs();
+webIncludeResourceFile("hgBlat.css");
 jsIncludeFile("hgBlat.js", NULL);
 
 struct jsonWrite *jw = jsonWriteNew();
@@ -796,6 +797,42 @@ jsInlineF("var hgBlatData = %s;\n", jw->dy->string);
 jsonWriteFree(&jw);
 }
 
+static void printBlatBannerStyle()
+/* Emit the .blatBanner rule for the classic, C-rendered pages.  Those don't load hgBlat.js, which
+ * is where the new pages get this class from, so define the same thing here; keep the values in
+ * sync with the .blatBanner rule in hgBlat.js.  Only the first call emits anything, so a page may
+ * carry more than one banner without repeating the stylesheet. */
+{
+static boolean styleDone = FALSE;
+if (styleDone)
+    return;
+styleDone = TRUE;
+printf("<style>"
+       ".blatBanner{background:#fbf3e2;border:1px solid #d9bd82;padding:10px 14px;margin:12px 0 20px;"
+       "font-size:14px;color:#1e2833}"
+       ".blatBanner a{color:#003a72}"
+       ".blatBanner a:hover{color:#8b1a1a}"
+       "</style>");
+}
+
+static void printNewFormBanner()
+/* On the classic search form, offer the JavaScript-built one.  Without this the new form's "go back
+ * to the original page" link is a one-way door.
+ * Shown wherever the new form is enabled (blatNewForm), which is what makes the round trip work;
+ * blatNewFormBanner overrides that in either direction.  On a machine where the new form is off
+ * there is nothing to advertise, so nothing is printed. */
+{
+if (!cfgOptionBooleanDefault("blatNewFormBanner",
+			     cfgOptionBooleanDefault("blatNewForm", FALSE)))
+    return;
+printBlatBannerStyle();
+printf("<div class=\"blatBanner\">"
+       "We are testing a <a href=\"hgBlat?blatNewForm=1&%s=%s\">new BLAT search page</a>. "
+       "If you have feedback on this new page, do not hesitate to let us know via "
+       "<a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>.</div>\n",
+       cartSessionVarName(), cartSessionId(cart));
+}
+
 static void printNewDisplayBanner(char *uiState)
 /* On the classic hyperlink results page, offer a one-click switch to the modern Table display.
  * The link sets the blatNewPage cart variable (so the choice sticks for future searches) and
@@ -806,16 +843,8 @@ static void printNewDisplayBanner(char *uiState)
 {
 if (!cfgOptionBooleanDefault("blatNewPageBanner", FALSE))
     return;
-/* Reuse the new page's ".blatBanner" look (house style: wheat box, square corners, navy links).
- * The classic page doesn't load hgBlat.js's injected CSS, so define the same class here.  Keep these
- * values in sync with the .blatBanner rule in hgBlat.js. */
-printf("<style>"
-       ".blatBanner{background:#fbf3e2;border:1px solid #d9bd82;padding:10px 14px;margin:12px 0 20px;"
-       "font-size:14px;color:#1e2833}"
-       ".blatBanner a{color:#003a72}"
-       ".blatBanner a:hover{color:#8b1a1a}"
-       "</style>"
-       "<div class=\"blatBanner\">"
+printBlatBannerStyle();
+printf("<div class=\"blatBanner\">"
        "We are testing a BLAT results page, with a sortable and filterable table of hits, "
        "gene loci and query coverage. "
        "<a href=\"hgBlat?blatNewPage=1&blatReopen=1&%s\">Try the new page</a>.</div>\n", uiState);
@@ -2318,7 +2347,9 @@ findServer(db, FALSE);
 char *userSeq = NULL;
 char *type = NULL;
 
-printf( 
+printNewFormBanner();
+
+printf(
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
@@ -2526,9 +2557,123 @@ printf("<INPUT TYPE=HIDDEN NAME=Submit VALUE=submit>\n");
 printf("</FORM>\n");
 }
 
+static void blatFormJsonList(struct jsonWrite *jw, char *name, char *list[], int count)
+/* Write a JSON array of the strings in list, for a dropdown in the JS-built form. */
+{
+jsonWriteListStart(jw, name);
+int i;
+for (i = 0;  i < count;  ++i)
+    jsonWriteString(jw, NULL, list[i]);
+jsonWriteListEnd(jw);
+}
+
+void askForSeqJs(char *organism, char *db)
+/* "New form" mode: emit the real <form> plus an inline hgBlatFormData object and an empty
+ * container, and let hgBlat.js build the controls inside that form.  Mirrors how showAliPlacesTable
+ * feeds the results page, and reuses hgBlat.js's stylesheet so both pages look alike - including
+ * the gold page-title bar, which is the framework's own #sectTtl styled by .subheadingBar.
+ *
+ * The controls hgBlat.js builds are ordinary named form fields, so the browser serializes them
+ * itself (the file input included) and Submit / Lucky / Clear stay plain submit buttons handled by
+ * the same C code as the classic form.  Nothing is mirrored into a shadow form on submit. */
+{
+/* ignore struct serverTable* return, but can error out if not found */
+findServer(db, FALSE);
+
+printf("<form action=\"../cgi-bin/hgBlat\" method=\"POST\" enctype=\"multipart/form-data\" "
+       "name=\"mainForm\">\n");
+cartSaveSession(cart);
+printf("<input type='hidden' name='changeInfo' value=''>\n");
+/* Set by the genome search bar's onSelect below, which then submits to reload in the new db. */
+printf("<input type='hidden' name='db' value='%s'>\n", db);
+
+/* The genome/assembly picker is the shared search bar from web.c, with its real autocomplete over
+ * every species and assembly.  It is emitted here and relocated into the layout by hgBlat.js, so
+ * the picker and its wiring stay in one place instead of being reimplemented in the new form. */
+printf("<div id='blatGenomeHolder'>\n");
+jsIncludeAutoCompleteLibs();
+char *searchBarId = "genomeSearch";
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, NULL, NULL);
+printf("</div>\n");
+/* Unlike the classic form (and hgPcr/hgTables/hgVai/hgLiftOver/hgCustom, which must reload to
+ * rebuild db-dependent menus), nothing here needs a round trip on genome change: the label is
+ * updated by setupGenomeSearchBar itself, and blatFormSetDb() updates the hidden db field and the
+ * db-bearing sidebar links in place.  So no submit() - picking a genome no longer reloads. */
+/* setupGenomeSelector is the combobox version of setupGenomeSearchBar - same config, caret inside
+ * the field, common assemblies as pills underneath.  Swapping the two function names is the whole
+ * change, so the other CGIs on the old widget can move over one at a time. */
+jsInlineF(
+    "setupGenomeSelector({\n"
+    "    inputId: '%s',\n"
+    "    onSelect: function(item) {\n"
+    "        blatFormSetDb(dbFromRecentItem(item));\n"
+    "    }\n"
+    "});\n"
+    , searchBarId
+);
+
+printf("<div id='blatFormBox'></div>\n");
+printf("</form>\n");
+
+webIncludeResourceFile("hgBlat.css");
+jsIncludeFile("hgBlat.js", NULL);
+
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "db", trackHubSkipHubName(db));
+jsonWriteString(jw, "organism", trackHubSkipHubName(organism));
+/* Shown as the search bar's own contents rather than in a separate "Current genome:" line: the bar
+ * is wide enough for the full assembly description, and setupGenomeSearchBar keeps it up to date as
+ * the user picks a different one. */
+jsonWriteString(jw, "dbLabel", getCurrentGenomeLabel(db));
+jsonWriteString(jw, "userSeq", cartUsualString(cart, "userSeq", ""));
+blatFormJsonList(jw, "types", typeList, ArraySize(typeList));
+jsonWriteString(jw, "type", cartUsualString(cart, "type", typeList[0]));
+/* Sort and output have no dropdown on this page - hgBlat.js submits them as hidden fields, so the
+ * request is unchanged.  They are pinned to the defaults rather than read from the cart: with no
+ * control to change them, a stale cart value (say output=psl left over from the classic form) would
+ * otherwise be stuck for the rest of the session with no way for the user to get back. */
+jsonWriteString(jw, "sort", pslSortList[0]);      /* "query,score" */
+jsonWriteString(jw, "output", outputList[0]);     /* "hyperlink" */
+jsonWriteBoolean(jw, "allResults", allResults);
+jsonWriteBoolean(jw, "autoRearr", autoRearr);
+jsonWriteBoolean(jw, "allGenomes", allGenomes);
+/* "Keep results" only means something on a machine configured to clear earlier BLAT result tracks.
+ * With blatOldTracks at its "keep" default, or at "hide", there is nothing to opt out of, so the
+ * checkbox is not shown at all.  hgc.c (buildBigPsl) is what acts on blatKeepResults. */
+jsonWriteBoolean(jw, "showKeepResults",
+                 sameString(cfgOptionDefault("blatOldTracks", "keep"), "delete"));
+jsonWriteBoolean(jw, "keepResults", cartUsualBoolean(cart, "blatKeepResults", FALSE));
+/* The example is fetched on demand rather than inlined: it is a realistic ~14 kb sequence, which
+ * would otherwise be embedded in every page load of the form just to serve the few users who click
+ * "Load example". */
+jsonWriteString(jw, "exampleUrl", "../goldenPath/help/blatExample.fa");
+jsonWriteString(jw, "exampleLabel", "Load example - human SOD1 locus");
+/* Same "similar tools" links the classic page offered, so the sidebar isn't a set of dead links.
+ * These carry $DB$ rather than a baked-in db: picking a genome no longer reloads the page, so
+ * blatFormSetDb() re-expands them against the newly chosen assembly.
+ *
+ * Deliberately NOT gated on hgPcrOk() the way the classic form was.  That test can only be made for
+ * the assembly the page happened to load with, so on a page where the genome can be changed without
+ * a round trip it goes stale immediately: loading on an assembly without a PCR server would hide
+ * these links for the rest of the session, even after switching to hg38.  hgPcr reports an
+ * unsupported assembly perfectly well itself, so an occasionally-unsupported link beats a link that
+ * silently disappears. */
+jsonWriteString(jw, "pcrUrlTpl", "../cgi-bin/hgPcr?db=$DB$");
+jsonWriteStringf(jw, "oligoMatchUrlTpl", "hgTrackUi?%s=%s&db=$DB$&g=oligoMatch&oligoMatch=pack",
+                 cartSessionVarName(), cartSessionId(cart));
+/* Link back to the classic form.  blatNewForm is a cart variable (defaulting to the hg.conf
+ * setting), so this is a per-user opt-out rather than a machine-wide switch. */
+jsonWriteStringf(jw, "classicUrl", "hgBlat?blatNewForm=0&%s=%s&db=%s",
+                 cartSessionVarName(), cartSessionId(cart), db);
+jsonWriteObjectEnd(jw);
+jsInlineF("var hgBlatFormData = %s;\n", jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 void hideWeakerOfQueryRcPairs(struct genomeHits* gH1)
 /* hide the weaker of the pair of rc'd query results
- * so users sees only one strand with the best gene hit. 
+ * so users sees only one strand with the best gene hit.
  * Input must be sorted already into the pairs. */
 {
 struct genomeHits* gH2 = NULL;
@@ -2867,12 +3012,36 @@ if (isEmpty(userSeq))
     }
 if (isEmpty(userSeq) || orgChange)
     {
-    cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
+    /* The JS-built search form is an opt-in replacement for the classic one, controlled by the
+     * blatNewForm cart variable, which defaults to the hg.conf setting of the same name.  Making it
+     * a cart variable (like blatNewPage for the results page) is what lets the new form's banner
+     * offer a working "go back to the original page" link. */
+    boolean newForm = cartUsualBoolean(cart, "blatNewForm",
+				       cfgOptionBooleanDefault("blatNewForm", FALSE));
+    /* The new search form and the new results table are one experience: opting into the new form
+     * also opts into the new results page, so a submission from here never lands back on the
+     * classic results.  Setting it in the cart now (while the form is shown) carries the choice
+     * into the next request, the actual search.  The results page still has its own toggle to
+     * switch back for a given session. */
+    if (newForm)
+	cartSetBoolean(cart, "blatNewPage", TRUE);
+    /* Title from the page design.  The new form names the current assembly in its own genome
+     * picker, so prefixing the title with it as well just repeats it - and for a hub assembly that
+     * prefix is very long ("HG02257.alt.pat.f1_v2 May 2021 BLAT Search").  cartWebStart HTML-escapes
+     * its title, so this has to be a literal em dash, not &mdash;; the page is served as UTF-8 (the
+     * Content-Type header wins over the stale iso-8859-1 <meta>), so the character survives. */
+    if (newForm)
+	cartWebStart(theCart, db, "BLAT — Search the genome for DNA and protein sequence matches");
+    else
+	cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
     if (differentString(oldDb, db))
 	printf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
 	       "defaulting to %s %s</EM></P><HR>\n",
 	       hGenome(oldDb), hFreezeDate(oldDb), organism, hFreezeDate(db));
-    askForSeq(organism,db);
+    if (newForm)
+	askForSeqJs(organism, db);
+    else
+	askForSeq(organism, db);
     cartWebEnd();
     }
 else

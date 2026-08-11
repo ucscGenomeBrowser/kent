@@ -581,7 +581,29 @@ MIRROR_KNOBS = {
                "but it is a knob in spirit: which of the three a site wants "
                "depends on whether its users run many searches in a session "
                "and get confused about which results are current, and that "
-               "does not stop being a question after a release."),
+               "does not stop being a question after a release.  When set to "
+               "delete, the BLAT search form shows a Keep results checkbox so "
+               "a user can opt out for one search (cart variable "
+               "blatKeepResults, read back in hg/hgc/hgc.c)."),
+        h("blatNewForm", "gate", "hg/hgBlat/hgBlat.c:2913", default="off",
+          verified=True,
+          note="Replaces hgBlat's classic C-generated search form with the "
+               "JavaScript-built one in hg/js/hgBlat.js, which shares its "
+               "styling and page header with the new BLAT results page.  Off "
+               "while the new form is being tested.  Read through "
+               "cartUsualBoolean, so this is only the default: the form's "
+               "banner offers a per-user opt-out that sets blatNewForm=0 in "
+               "the cart.  A gate - it comes out once the new form replaces "
+               "the old one."),
+        h("blatNewFormBanner", "gate", "hg/hgBlat/hgBlat.c:800",
+          default="follows blatNewForm", verified=True,
+          note="Whether the classic BLAT search form carries a banner offering "
+               "the new one.  Defaults to whatever blatNewForm is set to: "
+               "where the new form is enabled, a user who took its go-back "
+               "link needs a way to return, and where it is disabled there is "
+               "nothing to advertise.  Set explicitly to override either way.  "
+               "Sibling of blatNewPageBanner, which does the same job for the "
+               "results page."),
     ],
 }
 

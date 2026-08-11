@@ -26,152 +26,6 @@ function blatIdColor(id) {
     return '#b1301f';
 }
 
-function blatInjectStyle() {
-    if (document.getElementById('blatStyle')) { return; }
-    // UCSC house style (per the project's UCSC UI Style Guide): steel-blue section header, tan/white
-    // content, navy links with maroon hover, #dbe4ee table header, zebra rows, navy selection bar.
-    var css = `
-    /* Plain white page background, matching the track-settings model (gb.css).  The framework body
-     * is cream (#FFF9D2) and the hgInside content table carries a BGCOLOR=#FFFEE8 attribute; override
-     * both to white so the results sit on one uniform white background. */
-    body.cgi { background:#fff; }
-    table.hgInside { background:#fff; }
-    /* Main page header, styled like gb.css .gbTrackTitleBanner (hgGtexTrackSettings model): black
-     * title on the house gold.  The framework's #sectTtl already holds "<assembly> BLAT Results". */
-    .subheadingBar { background:#eaca92; padding:9px 16px; margin:0; border:0; box-sizing:border-box; }
-    .subheadingBar #sectTtl { color:#000; font-weight:700; font-size:18px;
-        display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-    #blatResults { --accent:#003a72; --accentHover:#8b1a1a; --navy:#0a2b6b; --ink:#1e2833;
-        --muted:#5b6572; --faint:#93a0ad; --line:#d0d0d0; --lineSoft:#ececec; --card:#ffffff;
-        --panel:#ffffff; --section:#4c759c; --headrow:#ededed; --headrowLine:#cccccc;
-        --sel:#cfe0f5; --hover:#f0f0f0; --stripe:#f7f7f7;
-        --title:#eaca92; --titleLine:#d9bd82; --titleSub:#5a4a24;
-        --btn:#ffffff; --btnLine:#999999; --btnText:#003a72; --btnHover:#eef2f7;
-        --btnDark:#0a2b6b; --btnDarkHover:#0a2350;
-        font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:var(--ink); font-size:14px; }
-    .blatCard { background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden;
-        box-shadow:0 1px 2px rgba(20,40,70,.10); margin:12px 0 24px; }
-    /* Page actions sit in the gold main header (#sectTtl); no separate toolbar. */
-    .blatHeadActions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .blatStrip { display:flex; align-items:center; gap:24px; flex-wrap:wrap;
-        padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
-    .blatStat { display:flex; flex-direction:column; gap:1px; }
-    .blatStat .k { font-size:12px; color:var(--muted); font-weight:700; }
-    .blatStat .v { font-size:14px; font-weight:700; color:var(--ink); }
-    .blatDiv { width:1px; height:28px; background:var(--line); }
-    .blatStripActions { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    /* Buttons live both inside the card (#blatResults) and in the gold header (#sectTtl); scope to
-     * both ids so the framework's link styles (which would add an underline) can't beat them. */
-    #blatResults .blatPill, #sectTtl .blatPill, #blatResults .blatStripActions input[type=submit],
-    #blatResults .blatStripActions input[type=button] {
-        font-family:inherit; font-size:13px; font-weight:700; color:var(--btnText); background:var(--btn);
-        border:1px solid var(--btnLine); border-radius:0; padding:5px 12px; cursor:pointer;
-        text-decoration:none; display:inline-block; line-height:1.5; }
-    #blatResults .blatPill:hover, #sectTtl .blatPill:hover,
-    #blatResults .blatStripActions input[type=submit]:hover,
-    #blatResults .blatStripActions input[type=button]:hover { background:var(--btnHover); text-decoration:none; }
-    #blatResults .blatPill.primary, #sectTtl .blatPill.primary { background:var(--btnDark); color:#fff; border-color:var(--btnDark); }
-    #blatResults .blatPill.primary:hover, #sectTtl .blatPill.primary:hover { background:var(--btnDarkHover); }
-    /* In the gold header (#sectTtl) the framework's link styles would otherwise beat .blatPill, so
-     * re-assert the button look with id-level specificity. */
-    #sectTtl .blatPill { color:#003a72; background:#fff; border:1px solid #999; text-decoration:none; }
-    #sectTtl .blatPill:hover { background:#eef2f7; text-decoration:none; }
-    #sectTtl .blatPill.primary { background:#0a2b6b; color:#fff; border-color:#0a2b6b; }
-    #sectTtl .blatPill.primary:hover { background:#0a2350; }
-    .blatShareIcon { vertical-align:-2px; margin-right:6px; }
-    .blatShareBox { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-        padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
-    .blatShareMsg { font-size:14px; color:var(--muted); }
-    .blatShareInput { flex:1; min-width:260px; font-size:13px; padding:5px 8px;
-        border:1px solid var(--btnLine); border-radius:0; background:#fff; }
-    .blatBanner { background:#fbf3e2; border:1px solid var(--titleLine); padding:10px 14px;
-        margin:12px 0 0; font-size:14px; color:var(--ink); }
-    .blatBanner a { color:var(--accent); }
-    .blatBanner a:hover { color:var(--accentHover); }
-    .blatSeqBar { flex:1 1 100%; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .blatSeqText { flex:1 1 100%; min-height:150px; margin-top:10px; padding:8px; white-space:pre;
-        font-family:'Roboto Mono','Courier New',monospace; font-size:13px; color:var(--ink);
-        border:1px solid var(--btnLine); background:#fff; overflow:auto; }
-    #blatTable { font-size:13px; width:100%; border-collapse:collapse; }
-    /* Let the long text columns wrap so the table shrinks to fit smaller screens, while the fixed
-     * bar columns keep a min-width so they never compress into an overlap; when even that won't fit,
-     * #blatTable_wrapper scrolls horizontally. */
-    #blatTable td.blatPos, #blatTable td.queryCol { white-space:normal; word-break:break-word; }
-    #blatTable td.scoreCol { min-width:118px; }
-    #blatTable td.covCol { min-width:120px; }
-    #blatTable thead th { background:var(--headrow); border-bottom:1px solid var(--headrowLine);
-        font-size:12px; color:var(--navy); font-weight:700; padding:8px 12px; white-space:nowrap; }
-    #blatTable tbody td { padding:8px 12px; border-bottom:1px solid var(--lineSoft); white-space:nowrap;
-        vertical-align:middle; }
-    #blatTable tbody tr { cursor:pointer; }
-    #blatTable tbody tr:nth-child(even) { background:var(--stripe); }
-    #blatTable tbody tr:hover { background:var(--hover); }
-    #blatTable tbody tr.blatSel { background:var(--sel); box-shadow:inset 3px 0 0 var(--navy); }
-    #blatTable td.num, #blatTable th.num { text-align:right; font-variant-numeric:tabular-nums; }
-    #blatTable td.rankCol { color:var(--faint); }
-    #blatTable td.strandCol { text-align:center; color:var(--muted); }
-    #blatTable td.actionsCol a { color:var(--accent); font-weight:700; }
-    #blatTable td.actionsCol .blatActSep { color:var(--line); margin:0 10px; }
-    /* "New tab" shown as the usual box-with-arrow icon (via a CSS background so it isn't repeated in
-     * every row's markup), sitting right after the position link with just a space between them. */
-    #blatTable a.blatNewTab { display:inline-block; width:11px; height:11px;
-        margin-left:4px; vertical-align:-1px; background-repeat:no-repeat; background-position:center;
-        background-size:contain; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23003a72' d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/%3E%3C/svg%3E"); }
-    #blatTable a.blatNewTab:hover { opacity:.65; }
-    #blatTable a { color:var(--accent); text-decoration:none; }
-    #blatTable a:hover { color:var(--accentHover); text-decoration:underline; }
-    .blatRowHint { padding:11px 18px 2px; font-size:13px; color:var(--muted); }
-    .blatLocus { max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .chrNote { color:var(--faint); text-decoration:none; margin-left:4px; }
-    .chrNote:hover { color:var(--accent); }
-    .blatScoreWrap { display:flex; align-items:center; gap:9px; justify-content:flex-end; }
-    .blatScoreVal { font-size:13px; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
-    .blatScoreBar { flex:0 0 54px; height:8px; background:var(--headrow); border:1px solid var(--headrowLine); overflow:hidden; }
-    .blatScoreBar > i { display:block; height:100%; background:var(--accent); }
-    .blatIdPct { font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
-    .blatCov { position:relative; display:block; width:150px; max-width:100%; height:10px; background:var(--headrow); border:1px solid var(--headrowLine); }
-    .blatCov > i { position:absolute; top:0; bottom:0; background:var(--accent); }
-    #blatTable_filter { float:left; margin:0 0 10px; }
-    #blatTable_filter input { width:300px; max-width:55vw; border:1px solid var(--btnLine);
-        border-radius:0; padding:5px 9px; font-size:14px; }
-    #blatTable_wrapper { padding:6px 0 4px; overflow-x:auto; }
-    .blatDetail { border-bottom:1px solid var(--line); background:var(--panel); padding:14px 18px 16px; }
-    .blatDetail .dhead { display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
-    .blatDetail .dhead .lab { font-size:13px; color:var(--muted); }
-    .blatSelectHint { font-size:14px; color:var(--ink); }
-    .blatSelectHint a { color:var(--accent); }
-    .blatSelectHint a:hover { color:var(--accentHover); }
-    .blatDetail .dhead .loc { font-size:14px; font-weight:700; color:var(--ink); }
-    .blatDetailCard { display:flex; gap:26px; flex-wrap:wrap; padding:14px 16px; background:var(--card);
-        border:1px solid var(--line); border-radius:0; }
-    .blatTiles { display:grid; grid-template-columns:repeat(4,auto); gap:14px 26px; }
-    .blatTile .k { font-size:13px; color:var(--muted); cursor:help; }
-    .blatTile .v { font-size:14px; font-weight:700; color:var(--ink); }
-    .blatDetailActions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
-    /* Rename modal.  On this page the old C-emitted inline rename form (#renameFormItem / #renameForm)
-     * is replaced by the JS button + modal below, so keep the C markup hidden even though hgBlat.c
-     * flips its display to block after buildBigPsl (our !important beats that inline style). */
-    #renameFormItem, #renameForm { display:none !important; }
-    .blatModalBg { position:fixed; top:0; right:0; bottom:0; left:0; z-index:1000;
-        background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; }
-    .blatModal { background:#fff; border:1px solid var(--line); border-radius:0;
-        box-shadow:0 4px 18px rgba(0,0,0,.28); padding:18px 20px; min-width:340px; max-width:92vw; }
-    .blatModalTitle { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:12px; }
-    .blatModalText { font-size:13px; color:var(--ink); line-height:1.5; max-width:430px; margin-bottom:14px; }
-    .blatModalText a { color:var(--accent); }
-    .blatModalText a:hover { color:var(--accentHover); }
-    .blatModalLabel { display:block; font-size:12px; font-weight:700; color:var(--muted);
-        margin:10px 0 3px; }
-    .blatModalInput { width:100%; box-sizing:border-box; border:1px solid var(--btnLine);
-        border-radius:0; padding:6px 8px; font-size:14px; font-family:inherit; background:#fff; }
-    .blatModalBtns { display:flex; gap:8px; justify-content:flex-end; margin-top:18px; }
-    `;
-    var st = document.createElement('style');
-    st.id = 'blatStyle';
-    st.textContent = css;
-    document.head.appendChild(st);
-}
-
 // ---- cell renderers ------------------------------------------------------
 
 function blatPositionCell(hit) {
@@ -317,17 +171,15 @@ function blatDetailSkeleton() {
     document.getElementById('blatDetail').innerHTML =
         `<div class="dhead"><span class="lab">Selected hit</span>` +
         `<span class="loc" id="dvLoc"></span></div>` +
-        `<div class="blatDetailCard"><div style="display:flex;flex-direction:column;gap:16px;min-width:250px">` +
+        `<div class="blatDetailCard"><div class="blatDetailCol">` +
         `<div class="blatTiles">${tiles}</div>` +
         `<div class="blatDetailActions">` +
         `<a class="blatPill" id="dvBrowser" title="Open this hit in the Genome Browser" href="#">Open in browser</a>` +
         `<a class="blatPill" id="dvNewTab" target="_blank" title="Open this hit in the Genome Browser in a new tab" href="#">Open in new tab</a></div></div>` +
-        `<div id="dvAlignBox" style="flex:1;min-width:320px;border-left:1px solid var(--line);padding-left:24px;` +
-        `display:flex;flex-direction:column;justify-content:center">` +
+        `<div id="dvAlignBox" class="blatAlignBox">` +
         `<div class="blatTile"><div class="k">Alignment</div></div>` +
-        `<div id="dvAlign" style="font-size:14px;color:var(--muted);line-height:1.55;` +
-        `margin:8px 0 14px;max-width:360px"></div>` +
-        `<a class="blatPill" id="dvViewAlign" style="align-self:flex-start" ` +
+        `<div id="dvAlign" class="blatAlignText"></div>` +
+        `<a class="blatPill" id="dvViewAlign" ` +
         `title="See the base-by-base alignment of your query against this hit" href="#">` +
         `View alignment</a></div></div>`;
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
@@ -337,7 +189,6 @@ function blatSet(id, prop, val) {
     var e = document.getElementById(id);
     if (!e) { return; }
     if (prop === 'text') { e.textContent = val; }
-    else if (prop === 'html') { e.innerHTML = val; }
     else if (prop === 'href') { e.setAttribute('href', val); }
     else if (prop === 'color') { e.style.color = val; }
 }
@@ -346,10 +197,12 @@ function blatRenderDetail(hit) {
     if (!hit || !document.getElementById('blatDetail')) { return; }
     if (!document.getElementById('dvScore')) { blatDetailSkeleton(); }
     var idc = blatIdColor(hit.identity);
-    var locus = hit.locusText ? htmlEncode(hit.locusText) + ' · ' : '';
-    var q = hgBlatData.config.multiQuery ? htmlEncode(hit.qName) + ' · ' : '';
-    blatSet('dvLoc', 'html',
-        `#${hit.rank} · ${q}${locus}${htmlEncode(hit.chrom)}:${blatFmt(hit.tStart)}-${blatFmt(hit.tEnd)}`);
+    // Location line is plain text, so set it via textContent (blatSet 'text') - no HTML, nothing to
+    // escape.  q and locus stay raw here for that reason.
+    var locus = hit.locusText ? hit.locusText + ' · ' : '';
+    var q = hgBlatData.config.multiQuery ? hit.qName + ' · ' : '';
+    blatSet('dvLoc', 'text',
+        `#${hit.rank} · ${q}${locus}${hit.chrom}:${blatFmt(hit.tStart)}-${blatFmt(hit.tEnd)}`);
     blatSet('dvScore', 'text', blatFmt(hit.score));
     blatSet('dvIdentity', 'text', hit.identity.toFixed(1) + '%');
     blatSet('dvIdentity', 'color', idc);
@@ -423,7 +276,7 @@ function blatShareLink() {
     var url = window.location.href;
     box.style.display = 'flex';
     box.innerHTML =
-        '<span class="blatShareMsg" style="flex:1 1 100%">Shareable link — anyone with it can reopen ' +
+        '<span class="blatShareMsg blatShareFull">Shareable link — anyone with it can reopen ' +
         'these results. The results are stored temporarily, so the link works for at least 48 hours ' +
         'after they were last viewed.</span>' +
         '<input id="blatShareInput" class="blatShareInput" type="text" readonly>' +
@@ -566,7 +419,6 @@ function blatShowQuerySeq() {
 function blatBuild() {
     var cfg = hgBlatData.config;
     var hits = hgBlatData.hits;
-    blatInjectStyle();
 
     // Pin a stable, shareable URL into the address bar (no server redirect) so refresh, bookmark and
     // "Share a link" all use the trash-backed reopen link instead of the transient POST/search URL.
@@ -614,7 +466,7 @@ function blatBuild() {
         `<div id="blatShareBox" class="blatShareBox" style="display:none"></div>` +
         `<div id="blatSeqBox" class="blatShareBox" style="display:none"></div>` +
         `<div id="blatDetail" class="blatDetail"></div>` +
-        `<table id="blatTable" class="display" style="width:100%"><thead><tr>${th.join('')}</tr></thead></table></div>` +
+        `<table id="blatTable" class="display"><thead><tr>${th.join('')}</tr></thead></table></div>` +
         (cfg.canRename ? blatRenameModalHtml(cfg) : '');
 
     // Put the page actions in the gold main-header bar, to the right of the title (framework #sectTtl).
@@ -686,8 +538,362 @@ function blatBuild() {
     blatApplyTooltips();
 }
 
+// ==== search form (the input page) ========================================
+// hgBlat.c emits  var hgBlatFormData = {...}  together with a real <form name="mainForm"> that
+// contains an empty <div id="blatFormBox"> and the C-generated genome search bar.  We build the
+// controls as real form fields *inside that form*, so the browser serializes them natively -
+// including the file input - and Submit / I'm feeling lucky / Clear stay plain submit buttons
+// handled by the existing C code.  There is no shadow form and no copying of values on submit.
+// Styling comes from hgBlat.css (loaded by webIncludeResourceFile in hgBlat.c), shared with the results page.
+
+// The Genome Browser's standard info icon, copied from printInfoIconSvg() in hg/lib/hui.c so the
+// form's icons are pixel-identical to the C-rendered ones elsewhere in the browser.
+var BLAT_INFO_SVG =
+    "<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' " +
+    "xmlns='http://www.w3.org/2000/svg'>" +
+    "<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>" +
+    "<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>" +
+    "<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/></svg>";
+
+// The assembly-search syntax help.  setupGenomeSelector hides the info icon that
+// printGenomeSearchBar (hg/lib/web.c) normally puts next to the box, so the new form loses that
+// explanation of +word/-word/word*/"phrase"; we re-attach it to an icon after the label instead.
+// Kept word-for-word in sync with searchHelpText in web.c so both pickers explain the box the same
+// way.  This is HTML (a bullet list), rendered as such by the mouseover, so it is NOT htmlEncode'd -
+// like the C printInfoIcon, it relies on the string containing no double quotes to sit in a title=.
+var BLAT_GENOME_SEARCH_HELP =
+    "All genome searches are case-insensitive.  Single-word searches default to prefix " +
+    "matching if an exact match is not found. " +
+    "<ul id='searchTipList' class='noBullets'>" +
+    "<li> Force inclusion: Use a + sign before <b>+word</b> to ensure it appears in result.</li>" +
+    "<li> Exclude words: Use a - sign before <b>-word</b> to exclude it from the search result.</li>" +
+    "<li> Wildcard search: Add an * (asterisk) at end of <b>word*</b> to search for all terms starting with that prefix.</li>" +
+    "<li> Phrase search: Enclose 'words in quotes' to search for the exact phrase.</li>" +
+    "</ul>";
+
+// Cross-session memory of the "Keep results" checkbox.  A plain '1'/'0' string under one key;
+// wrapped in try/catch because localStorage throws in private-mode / disabled-storage browsers, in
+// which case we simply fall back to the cart-supplied default and skip persistence.
+var BLAT_KEEP_RESULTS_KEY = 'blatKeepResults';
+
+function blatGetKeepResultsPref() {
+    // Returns true/false for a stored preference, or null if the user has never set one here.
+    try {
+        var v = localStorage.getItem(BLAT_KEEP_RESULTS_KEY);
+        return v === null ? null : (v === '1');
+    } catch (e) { return null; }
+}
+
+function blatSetKeepResultsPref(on) {
+    try { localStorage.setItem(BLAT_KEEP_RESULTS_KEY, on ? '1' : '0'); } catch (e) { /* ignore */ }
+}
+
+function blatOpts(list, cur) {
+    return list.map(function(v) {
+        return `<option value="${htmlEncode(v)}"${v === cur ? ' selected' : ''}>${htmlEncode(v)}</option>`;
+    }).join('');
+}
+
+function blatFormCount() {
+    // Live character count under the textarea.  Only these two nodes are touched on input - the
+    // textarea itself is never re-rendered, so the caret stays where the user put it.
+    var ta = document.getElementById('blatUserSeq');
+    var out = document.getElementById('blatCountText');
+    if (!ta || !out) { return; }
+    var n = ta.value.replace(/[^A-Za-z*]/g, '').length;
+    out.textContent = blatFmt(n) + ' of 25,000 characters';
+    $('#blatLimitLink').toggleClass('over', n > 25000);
+}
+
+function blatFormTab(showUpload) {
+    $('#blatTabPaste').toggleClass('on', !showUpload);
+    $('#blatTabUpload').toggleClass('on', showUpload);
+    $('#blatPanePaste').toggle(!showUpload);
+    $('#blatPaneUpload').toggle(showUpload);
+}
+
+function blatFormLimitsModal() {
+    var row = (k, v) => `<div class="blatLimitRow"><span>${k}</span><strong>${v}</strong></div>`;
+    return '<div id="blatLimitsBg" class="blatModalBg" style="display:none">' +
+        '<div class="blatModal" role="dialog" aria-modal="true" aria-labelledby="blatLimitsTitle">' +
+        '<div class="blatModalTitle" id="blatLimitsTitle">Input limits</div>' +
+        row('DNA per sequence', '25,000 bases') +
+        row('Protein / translated', '10,000 letters') +
+        row('Sequences per run', '25') +
+        row('Total per submission', '50,000 bases') +
+        '<div class="blatModalText blatModalNote">Queries above these limits are rejected ' +
+        'before alignment. For larger jobs, run BLAT from the ' +
+        '<a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
+        'command line</a> on your own server.</div>' +
+        '<div class="blatModalBtns"><button type="button" class="blatPill" id="blatLimitsClose">Close</button></div>' +
+        '</div></div>';
+}
+
+function blatFormSetDb(db) {
+    // Called by hgBlat.c's setupGenomeSearchBar onSelect.  Picking a genome does not reload the
+    // page, so everything on it that depends on db is updated here instead: the hidden field that
+    // the search is submitted with, and the sidebar links that carry a db= parameter.  The current
+    // assembly label is updated by setupGenomeSearchBar itself.
+    document.mainForm.db.value = db;
+    $('#blatFormBox a[data-urltpl]').each(function() {
+        this.href = this.getAttribute('data-urltpl').replace('$DB$', encodeURIComponent(db));
+    });
+}
+
+function blatFormSidebar(cfg) {
+    // Same links the classic page offered.  hgBlat.c supplies them as templates holding $DB$ (see
+    // blatFormSetDb); the template is kept in data-urltpl so the link can be retargeted later.
+    var tools = '';
+    var tplLink = (tpl, label) => {
+        var href = tpl.replace('$DB$', encodeURIComponent(hgBlatFormData.db));
+        return `<a data-urltpl="${htmlEncode(tpl)}" href="${htmlEncode(href)}">${label}</a>`;
+    };
+    if (cfg.pcrUrlTpl) {
+        tools += `<div>${tplLink(cfg.pcrUrlTpl, 'In-Silico PCR')} — better than BLAT for ` +
+            'locating PCR primers.</div>';
+    }
+    if (cfg.oligoMatchUrlTpl) {
+        tools += `<div>${tplLink(cfg.oligoMatchUrlTpl, 'Short Sequence Match')} — for ` +
+            'sequences under 20 bp, within the region shown in the Genome Browser.</div>';
+    }
+    tools += '<div><a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
+        'findMotifs</a> — command-line search across a whole genome.</div>';
+    return '<div>' +
+        (tools ? `<div class="blatCard"><h3>Similar tools</h3>${tools}</div>` : '') +
+        '<div class="blatCard"><h3>Help</h3>' +
+        '<div><a href="../FAQ/FAQblat.html">BLAT FAQ</a></div>' +
+        '<div><a href="../goldenPath/help/hgTracksHelp.html#BLATAlign">BLAT documentation</a></div>' +
+        // No "Search all genomes FAQ" here: that link now lives in the "Search many genomes"
+        // tooltip, next to the checkbox it actually explains.
+        '<div><a href="../FAQ/FAQblat.html#blat14">Programmatic / batch BLAT</a></div>' +
+        '</div>' +
+        '<div class="blatCard"><h3>About BLAT</h3>' +
+        '<div>DNA BLAT quickly finds sequences of 95% and greater similarity that are at least 25 bases ' +
+        'long; it finds perfect matches down to 20 bases, and may miss shorter or more divergent ' +
+        'alignments. Protein BLAT finds sequences of 80% and greater similarity at least 20 amino acids ' +
+        'long.</div>' +
+        '<div>Kent WJ. <a target="_blank" href="https://genome.cshlp.org/content/12/4/656.abstract">' +
+        'BLAT — the BLAST-like alignment tool</a>. Genome Res. 2002 Apr;12(4):656-64.</div>' +
+        '</div></div>';
+}
+
+function blatFormBuild() {
+    var cfg = hgBlatFormData;
+
+    var banner = '';
+    if (cfg.classicUrl) {
+        banner = '<div class="blatBanner">We are testing a new BLAT search page. You can go back to ' +
+            `<a href="${htmlEncode(cfg.classicUrl)}">the original page</a> anytime. If you have feedback ` +
+            'on this new page, do not hesitate to let us know via ' +
+            '<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>';
+    }
+
+    // Checkbox plus the browser's standard info icon.  Same SVG and same title +
+    // convertTitleTagsToMouseovers mechanism as printInfoIcon()/printInfoIconSvg() in hg/lib/hui.c,
+    // so these read identically to the info icons on every other Genome Browser page.
+    var check = (name, on, label, tip) =>
+        `<span class="blatCheck"><label><input type="checkbox" name="${name}" ` +
+        `id="blat_${name}"${on ? ' checked' : ''}>${label}</label>` +
+        `<span class="blatInfo" title="${htmlEncode(tip)}">${BLAT_INFO_SVG}</span></span>`;
+
+    // "Keep results" starting state.  The cart (cfg.keepResults) only remembers the choice within a
+    // session; localStorage carries it across sessions so a user who wants their BLAT results to
+    // accumulate does not have to re-tick the box on every visit.  localStorage wins when set (it is
+    // the more durable record of the user's own preference); the cart is the fallback for a browser
+    // that has never stored one.  Only consulted where the box is actually shown (blatOldTracks=
+    // delete); elsewhere the choice has no effect, so there is nothing worth persisting.
+    var keepResultsInit = cfg.keepResults;
+    if (cfg.showKeepResults) {
+        var storedKeep = blatGetKeepResultsPref();
+        if (storedKeep !== null) { keepResultsInit = storedKeep; }
+    }
+
+    document.getElementById('blatFormBox').innerHTML =
+        banner +
+        '<div class="blatFormGrid"><div>' +
+
+        '<div class="blatSection">Search &ndash; type keywords to find the target assembly</div>' +
+        '<div class="blatRow">' +
+            '<div class="blatField blatGenomeSlot"><span>Genome or assembly ' +
+                `<span class="blatInfo" title="${BLAT_GENOME_SEARCH_HELP}">${BLAT_INFO_SVG}</span>` +
+                '</span>' +
+                '<div id="blatGenomeSlot"></div></div>' +
+            `<label class="blatField"><span>Query type</span><select name="type">${blatOpts(cfg.types, cfg.type)}</select></label>` +
+            // Sort and output are submitted but not offered: sorting by anything other than score
+            // is rarely useful, and this page always wants the hyperlink (results table) output.
+            // Kept as hidden fields so the request hgBlat receives is unchanged.
+            `<input type="hidden" name="sort" value="${htmlEncode(cfg.sort)}">` +
+            `<input type="hidden" name="output" value="${htmlEncode(cfg.output)}">` +
+        '</div>' +
+
+        '<div class="blatChecks">' +
+            // The mouseover popup keeps itself open while the pointer is inside it (see the
+            // mouseoverContainer mouseenter handler in utils.js), and renders its text as HTML, so
+            // a link in the tip is genuinely clickable.  htmlEncode keeps the title attribute
+            // well-formed; the browser decodes it back to markup before it is injected.
+            check('allGenomes', cfg.allGenomes, 'Search many genomes',
+                'Runs the same query against every default assembly and attached hub that has a ' +
+                'dedicated BLAT server. Dynamic BLAT servers are skipped and listed as such in the ' +
+                "output. See our <a target='_blank' href='../FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> " +
+                'for more information.') +
+            check('allResults', cfg.allResults, 'No min. score',
+                'Turns off minimum-match filtering so every alignment is returned. A human DNA search ' +
+                'normally requires 20 matching bases, based on the genome size, to filter out ' +
+                'lower-quality results; useful for short queries and the tiny genomes of ' +
+                'microorganisms.') +
+            check('autoRearr', cfg.autoRearr, 'Show rearrangements',
+                'Shows duplications of the query sequence using multiple lines with connecting lines ' +
+                'between fragments, and displays inversions better (the "snakes" display). Can also ' +
+                'be switched on or off from the BLAT track configuration page.') +
+            // Only offered where hg.conf blatOldTracks=delete, i.e. where there is something to opt
+            // out of.  Unlike the three above (which keep the classic form's plain-checkbox
+            // behaviour), this one is submitted through an explicit hidden field: a checkbox sends
+            // nothing when unticked, so cartUsualBoolean would never see it go back to false and
+            // "Keep results" could not be switched off again once used.
+            (cfg.showKeepResults ?
+                '<span class="blatCheck">' +
+                `<input type="hidden" name="blatKeepResults" id="blatKeepResultsVal" value="${keepResultsInit ? 1 : 0}">` +
+                `<label><input type="checkbox" id="blat_keepResults"${keepResultsInit ? ' checked' : ''}>` +
+                'Keep results</label>' +
+                `<span class="blatInfo" title="${htmlEncode(
+                    'A new BLAT search always overrides your previous BLAT results: each search ' +
+                    'replaces the result track of the one before it in the Genome Browser. Check ' +
+                    'this box to keep earlier results instead, so every search adds its own track ' +
+                    'and results accumulate. Your choice is remembered for next time.')}">` +
+                `${BLAT_INFO_SVG}</span></span>` : '') +
+        '</div>' +
+
+        '<div class="blatSection">Query sequence</div>' +
+        '<div class="blatTabs">' +
+            '<button type="button" class="blatTab on" id="blatTabPaste">Paste sequence</button>' +
+            '<button type="button" class="blatTab" id="blatTabUpload">Upload file</button>' +
+        '</div>' +
+
+        '<div id="blatPanePaste">' +
+            '<div class="blatPaneHint"><span>Separate multiple sequences with a &gt;name line. ' +
+            'Up to 25 sequences.</span>' +
+            `<a href="#" id="blatExample">${htmlEncode(cfg.exampleLabel)}</a></div>` +
+            '<textarea class="blatSeq" name="userSeq" id="blatUserSeq" spellcheck="false" ' +
+            'aria-label="Paste in a query sequence"></textarea>' +
+            '<div class="blatCount"><span id="blatCountText"></span>' +
+            '<a href="#" id="blatLimitLink">Show input limits</a></div>' +
+        '</div>' +
+
+        '<div id="blatPaneUpload" style="display:none">' +
+            '<div class="blatDrop" id="blatDrop">' +
+                '<div class="blatDropTitle">Drop a sequence file here</div>' +
+                '<div class="blatDropSub">Plain text or FASTA, up to 50,000 bases total</div>' +
+                '<input type="file" name="seqFile" id="blatSeqFile">' +
+                '<div class="blatFileName" id="blatFileName"></div>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="blatActions">' +
+            '<input type="submit" class="blatPill primary" name="Submit" value="Submit" ' +
+            `title="${htmlEncode('Align the sequence and show all matches')}">` +
+            '<input type="submit" class="blatPill" name="Lucky" value="I&#39;m feeling lucky" ' +
+            `title="${htmlEncode('Skip the list of matches and open the best-scoring one straight ' +
+                'away in the Genome Browser. Ignored when "Search many genomes" is ticked.')}">` +
+            '<input type="submit" class="blatPill" name="Clear" value="Clear" ' +
+            `title="${htmlEncode('Empty the query sequence box')}">` +
+        '</div>' +
+
+        '</div>' + blatFormSidebar(cfg) + '</div>' +
+        blatFormLimitsModal();
+
+    // Move the C-generated genome search bar (real autocomplete over every assembly, already wired
+    // by setupGenomeSearchBar) into its slot, rather than reimplementing it with a hardcoded list.
+    var holder = document.getElementById('blatGenomeHolder');
+    if (holder) { document.getElementById('blatGenomeSlot').appendChild(holder); }
+
+
+    // Show the current assembly in the search bar itself instead of in a separate "Current genome:"
+    // line - the bar is wide enough for the whole description.  setupGenomeSearchBar writes the new
+    // one in on each pick, and focusing the bar selects all of it, so it reads as a filled-in search
+    // box rather than as a value the user has to clear by hand.
+    var genomeInput = document.getElementById('genomeSearch');
+    if (genomeInput && cfg.dbLabel) { genomeInput.value = cfg.dbLabel; }
+
+    // Restore the sequence from the cart without going through innerHTML (avoids re-escaping).
+    document.getElementById('blatUserSeq').value = cfg.userSeq || '';
+    blatFormCount();
+
+    $('#blatUserSeq').on('input', blatFormCount);
+    // Mirror the "Keep results" checkbox into its hidden field so an unticked box submits an
+    // explicit 0 rather than nothing at all, and remember the choice in localStorage so it comes
+    // back pre-set on the user's next visit (see keepResultsInit above).
+    $('#blat_keepResults').on('change', function() {
+        document.getElementById('blatKeepResultsVal').value = this.checked ? '1' : '0';
+        blatSetKeepResultsPref(this.checked);
+    });
+    $('#blatTabPaste').on('click', function() { blatFormTab(false); });
+    $('#blatTabUpload').on('click', function() { blatFormTab(true); });
+    // The example sequence is a real ~14 kb query, fetched on demand so it is not carried in every
+    // page load.  The link doubles as its own status indicator while the request is in flight.
+    $('#blatExample').on('click', function(ev) {
+        ev.preventDefault();
+        var link = this;
+        var label = cfg.exampleLabel;
+        link.textContent = 'Loading example…';
+        fetch(cfg.exampleUrl)
+            .then(function(resp) {
+                if (!resp.ok) { throw new Error('HTTP ' + resp.status); }
+                return resp.text();
+            })
+            .then(function(fa) {
+                var ta = document.getElementById('blatUserSeq');
+                ta.value = fa.trim();
+                blatFormCount();
+                ta.focus();
+                ta.setSelectionRange(0, 0);
+                ta.scrollTop = 0;
+                link.textContent = label;
+                blatFormTab(false);   // in case the user was on the upload tab
+            })
+            .catch(function(err) {
+                link.textContent = 'Could not load example';
+                // Leave the message up briefly, then let the user try again.
+                setTimeout(function() { link.textContent = label; }, 4000);
+                console.error('hgBlat: example fetch failed:', err);
+            });
+    });
+    $('#blatLimitLink').on('click', function(ev) {
+        ev.preventDefault();
+        $('#blatLimitsBg').css('display', 'flex');
+    });
+    $('#blatLimitsClose').on('click', function() { $('#blatLimitsBg').hide(); });
+    $('#blatLimitsBg').on('click', function(ev) { if (ev.target === this) { $(this).hide(); } });
+    $(document).on('keydown.blatLimits', function(ev) {
+        if (ev.key === 'Escape') { $('#blatLimitsBg').hide(); }
+    });
+
+    var fileInput = document.getElementById('blatSeqFile');
+    var drop = document.getElementById('blatDrop');
+    $(fileInput).on('change', function() {
+        document.getElementById('blatFileName').textContent =
+            this.files && this.files.length ? this.files[0].name : '';
+    });
+    ['dragenter', 'dragover'].forEach(function(e) {
+        drop.addEventListener(e, function(ev) { ev.preventDefault(); drop.classList.add('hot'); });
+    });
+    ['dragleave', 'drop'].forEach(function(e) {
+        drop.addEventListener(e, function(ev) { ev.preventDefault(); drop.classList.remove('hot'); });
+    });
+    drop.addEventListener('drop', function(ev) {
+        if (ev.dataTransfer.files.length) {
+            fileInput.files = ev.dataTransfer.files;
+            $(fileInput).trigger('change');
+        }
+    });
+
+    if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
+}
+
 $(document).ready(function() {
     if (typeof hgBlatData !== 'undefined' && document.getElementById('blatResults')) {
         blatBuild();
+    }
+    if (typeof hgBlatFormData !== 'undefined' && document.getElementById('blatFormBox')) {
+        blatFormBuild();
     }
 });

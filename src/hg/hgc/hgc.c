@@ -27528,6 +27528,10 @@ if (differentString(oldTracks, "keep") && differentString(oldTracks, "hide")
          "Treating as 'keep'.", oldTracks);
     oldTracks = "keep";
     }
+/* The BLAT search form shows a "Keep results" checkbox when this is set to "delete", letting the
+ * user opt out per search; blatKeepResults is the cart variable it sets. */
+if (cartUsualBoolean(cart, "blatKeepResults", FALSE))
+    oldTracks = "keep";
 if (differentString(oldTracks, "keep"))
     {
     struct customTrack *ct, *next, *keptList = NULL;
