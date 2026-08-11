@@ -64,6 +64,65 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="081126"></a>
+<h2>Aug. 11, 2026 &nbsp;&nbsp; Deleteriousness Predictions: ClinPred for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of the ClinPred pathogenicity score track for
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=clinPred" target="_blank">hg19</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=clinPred" target="_blank">hg38</a>.
+ClinPred is a machine-learning predictor of pathogenicity for nonsynonymous (missense)
+single-nucleotide variants, combining existing pathogenicity scores with population allele
+frequency from gnomAD. It was trained on confidently annotated disease-causing and benign
+variants from ClinVar. Pre-computed scores are provided for all possible human missense
+variants in the exome.
+</p>
+
+<p>
+Scores range from 0 to 1, with higher values indicating a greater predicted likelihood
+that a variant is disease-relevant. The authors recommend a score of &ge; 0.5 as evidence
+of pathogenicity. As with any pathogenicity prediction score, ClinPred is intended as
+supporting evidence rather than a stand-alone classifier.
+</p>
+
+<p>
+There are four subtracks in this collection, one for each possible alternate nucleotide
+(A, C, G, T). At every exome position covered by ClinPred, three of the four subtracks
+show a score (one per non-reference base), and the fourth, corresponding to the reference
+base, is set to 0. Synonymous alternates are also set to 0, since ClinPred only scores
+missense variants. Positions with no exome coverage are shown as gaps.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/bkitiyakara/share_JMwPz7ty" target="_blank">
+<img alt="Genome Browser screenshot of the ClinPred track" src="/images/newsArchImages/ClinPred.png"
+width='55%'></a>
+<p class="gbsCaption"><em>ClinPred pathogenicity scores for all possible single-nucleotide
+substitutions (A, C, G, and T) at a genomic locus (chr7, GRCh38/hg38). The four ClinPred
+subtracks display predicted pathogenicity scores for each possible alternate allele, where
+higher scores indicate a greater likelihood that the variant is disease-causing.</em></p>
+</div>
+
+<p>
+Items in this track are colored according to score:
+</p>
+
+<ul>
+  <li><span style="color:red;"><b>Red</b></span> &ndash; Likely pathogenic (&ge; 0.5)</li>
+  <li><span style="color:blue;"><b>Blue</b></span> &ndash; Likely benign (&lt; 0.5)</li>
+</ul>
+
+<p>
+<b>Note:</b> Zoom in until every base is visible at the top of the display; otherwise,
+multiple nucleotides will fall under a single pixel, and no score will be shown on the
+mouseover tooltip.
+</p>
+
+<p>
+We would like to thank the ClinPred authors for making the pre-computed scores publicly
+available. This track was developed by Lou Nassar and Max Haeussler with QA by Eliza Alde,
+Jairo Navarro, and Barali Kitiyakara.
+</p>
+
 <a name="072226"></a>
 <h2>Jul. 22, 2026 &nbsp;&nbsp; ENCODE4 cCREs and ENCODE4 Regulation tracks released for human (hg38) and mouse (mm10)</h2>
 <p>
