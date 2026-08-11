@@ -2359,8 +2359,16 @@ var dragSelect = {
                 $(this).dialog("close");
             },
             "Save Color": function() {
+                // Honor "don't show this again", the same as every other button here.
+                // The close handler already removes the dialog when the box is checked, but
+                // saveHlColor only writes prevHlColor, so without this the setting is never
+                // stored and the dialog comes back on the next drag.
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
                 var hlColor = $("#hlColorInput").val();
                 dragSelect.saveHlColor( hlColor );
+                if (!hgTracks.enableHighlightingDialog)
+                    cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
                 $(this).dialog("close");
             }
         };
