@@ -1025,27 +1025,33 @@ jsInline(cookieJS->string);
 returnToURL(150);
 }
 
-static char *changeEmailSig(char *user, char *newEmail, char *expStr)
+static char *changeEmailSig(char *user, char *curEmail, char *newEmail, char *expStr)
 /* HMAC-MD5 over a pending email change, keyed by the secret login.cookieSalt.  It goes in the
  * confirmation link so that clicking the link -- and only clicking it -- applies the change,
- * proving the new address really reaches the requester.  Result is allocd. */
+ * proving the new address really reaches the requester.  curEmail is the account's address when
+ * the link was minted; because confirmChangeEmail recomputes the signature from the address
+ * currently on the account, a link stops validating once it has been used (the address is no
+ * longer curEmail), so each link works exactly once and a stale link cannot silently undo a
+ * newer change.  Result is allocd. */
 {
 char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
 if (isEmpty(salt))
     errAbort("Confirming an email change requires %s in hg.conf, set to a secret random "
         "string.  Without a secret we cannot sign the confirmation link.", CFG_LOGIN_COOKIE_SALT);
 char buf[1024];
-safef(buf, sizeof(buf), "changeEmail|%s|%s|%s",
-    emptyForNull(user), emptyForNull(newEmail), emptyForNull(expStr));
+safef(buf, sizeof(buf), "changeEmail|%s|%s|%s|%s",
+    emptyForNull(user), emptyForNull(curEmail), emptyForNull(newEmail), emptyForNull(expStr));
 return hmacMd5(salt, buf);
 }
 
-static void sendChangeEmailConfirmMail(char *newEmail, char *user)
-/* Email a one-time link to newEmail that, when opened, changes user's address to newEmail. */
+static void sendChangeEmailConfirmMail(char *newEmail, char *user, char *curEmail)
+/* Email a one-time link to newEmail that, when opened, changes user's address to newEmail.
+ * curEmail is the account's current address; it is folded into the signature so the link stops
+ * working once the change has been applied (see changeEmailSig). */
 {
 char expStr[32];
 safef(expStr, sizeof(expStr), "%ld", clock1() + 3600);   // link good for one hour
-char *sig = changeEmailSig(user, newEmail, expStr);
+char *sig = changeEmailSig(user, curEmail, newEmail, expStr);
 char url[1024];
 safef(url, sizeof(url),
     "%s?hgLogin.do.confirmChangeEmail=1&user=%s&newEmail=%s&exp=%s&sig=%s",
@@ -1190,7 +1196,9 @@ if (isNotEmpty(curPwd))
  * apply the change only when it is clicked (see confirmChangeEmail).  This proves the address
  * is real and controlled by the requester, so an unconfirmed address cannot silently become
  * the account's recovery address. */
-sendChangeEmailConfirmMail(email1, user);
+sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+char *curEmail = sqlQuickString(conn, query);
+sendChangeEmailConfirmMail(email1, user, curEmail);
 cartRemove(cart, "hgLogin_newEmail1");
 cartRemove(cart, "hgLogin_newEmail2");
 cartRemove(cart, "hgLogin_curPassword");
@@ -1218,13 +1226,19 @@ char *user = cgiUsualString("user", "");
 char *newEmail = cgiUsualString("newEmail", "");
 char *expStr = cgiUsualString("exp", "");
 char *sig = cgiUsualString("sig", "");
-char *expected = changeEmailSig(user, newEmail, expStr);
+/* Recompute the signature over the address currently on the account.  Once the change has been
+ * applied that address is newEmail, so re-opening the same link no longer matches: the link works
+ * exactly once, and a stale link cannot silently undo a newer change. */
+char query[512];
+sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+char *oldEmail = sqlQuickString(conn, query);
+char *expected = changeEmailSig(user, emptyForNull(oldEmail), newEmail, expStr);
 boolean sigOk = isNotEmpty(sig) && sameString(sig, expected);
 freeMem(expected);
 if (!sigOk || isEmpty(user) || spc_email_isvalid(newEmail) == 0)
     {
     freez(&errMsg);
-    errMsg = cloneString("This confirmation link is not valid.");
+    errMsg = cloneString("This confirmation link is not valid or has already been used.");
     displayLoginPage(conn);
     return;
     }
@@ -1235,9 +1249,6 @@ if (clock1() > atol(expStr))
     displayLoginPage(conn);
     return;
     }
-char query[512];
-sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
-char *oldEmail = sqlQuickString(conn, query);
 sqlSafef(query, sizeof(query),
     "UPDATE gbMembers SET email='%s', lastUse=NOW() WHERE userName='%s'", newEmail, user);
 sqlUpdate(conn, query);
@@ -2156,6 +2167,11 @@ if (isEmpty(provider))
     sqlSafef(query, sizeof(query),
         "UPDATE gbMembers SET loginToken='' WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s'",
         email, email, tokenMd5);
+    sqlUpdate(conn, query);
+    /* Record the sign-in on the account actually chosen, the same as the single-account path in
+     * emailLogin, so lastUse reflects the login. */
+    sqlSafef(query, sizeof(query),
+        "UPDATE gbMembers SET lastUse=NOW() WHERE idx=%u", m->idx);
     sqlUpdate(conn, query);
     cartRemove(cart, "emailLogin_email");
     cartRemove(cart, "emailLogin_tokenMd5");
