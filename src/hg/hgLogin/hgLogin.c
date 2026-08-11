@@ -439,7 +439,7 @@ if (result == -1)
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
-char *sendMailTo = cartUsualString(cart, "hgLogin_sendMailTo", "");
+char *sendMailTo = htmlEncode(cartUsualString(cart, "hgLogin_sendMailTo", ""));  // printed into the page; escape (XSS)
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
@@ -460,7 +460,7 @@ cartRemove(cart, "hgLogin_sendMailContain");
 void  displayMailSuccessPwd()
 /* display mail success confirmation box */
 {
-char *username = cgiUsualString("user","");
+char *username = htmlEncode(cgiUsualString("user",""));  // printed into the page; escape (XSS)
 hPrintf(
     "<div id=\"confirmationBoxPwd\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
@@ -595,8 +595,9 @@ sendPwdMailOut(email, recovEmail, subject, msg, username);
 void displayAccHelpPage(struct sqlConnection *conn)
 /* draw the account help page */
 {
-char *email = cartUsualString(cart, "hgLogin_email", "");
-char *username = cartUsualString(cart, "hgLogin_userName", "");
+// these go into value="" attributes further down; escape them (reflected XSS)
+char *email = htmlEncode(cartUsualString(cart, "hgLogin_email", ""));
+char *username = htmlEncode(cartUsualString(cart, "hgLogin_userName", ""));
 
 jsInline(
     "function toggle(value){\n"
@@ -783,7 +784,8 @@ jsInline(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-char *username = cartUsualString(cart, "hgLogin_userName", "");
+// goes into a value="" attribute further down; escape it (reflected XSS)
+char *username = htmlEncode(cartUsualString(cart, "hgLogin_userName", ""));
 hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>"
@@ -885,7 +887,7 @@ hPrintf(
     "<input type=\"text\" name=\"hgLogin_userName\" size=\"30\" value=\"%s\" id=\"email\">"
     "</div>"
     "\n", errMsg ? errMsg : "", hgLoginUrl,
-    cartUsualString(cart, "hgLogin_userName", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_userName", "")));  // value="" attribute; escape (XSS)
 hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<label for=\"currentPw\">Current or Emailed Password</label>"
@@ -1293,8 +1295,9 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"reenterEmail\">Re-enter Email address</label>"
     "<input type=text name=\"hgLogin_email2\" value=\"%s\" size=\"30\" id=\"emailCheck\">"
     "</div>\n",
-    cartUsualString(cart, "hgLogin_userName", ""), cartUsualString(cart, "hgLogin_email", ""),
-    cartUsualString(cart, "hgLogin_email2", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_userName", "")),   // all three go into value="" attributes; escape (XSS)
+    htmlEncode(cartUsualString(cart, "hgLogin_email", "")),
+    htmlEncode(cartUsualString(cart, "hgLogin_email2", "")));
 
 if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
     hPrintf("<div class=\"inputGroup\">"
@@ -1307,7 +1310,7 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">",
-    cartUsualString(cart, "hgLogin_password", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_password", "")));  // value="" attribute; escape (XSS)
 printPwdEyeIcon("signupPwEyeIcon", "signupPwEyeSlash");
 hPrintf(
     "</span>"
@@ -1317,7 +1320,7 @@ hPrintf(
     "<label for=\"passwordCheck\">Re-enter Password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">",
-    cartUsualString(cart, "hgLogin_password2", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_password2", "")));  // value="" attribute; escape (XSS)
 printPwdEyeIcon("signupPwCheckEyeIcon", "signupPwCheckEyeSlash");
 hPrintf(
     "</span>"
