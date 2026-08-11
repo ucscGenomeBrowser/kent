@@ -15,6 +15,7 @@
 
 #define CGI_NAME "cgi-bin/hgMenubar"
 #define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
+#define NAVBAR_INC_DIR "/inc/"    /* the only directory an incFile value may name, refs #38052 */
 #define OLD_HREF "href=\"../"
 
 char* errMessage;
@@ -160,6 +161,18 @@ char *cgiPath, *docRoot, *pagePath;
 parseEnvOrDie(&cgiPath, &docRoot, &pagePath);
 cgiSpoof(&argc, argv);
 char *incFile = cgiUsualString("incFile", NAVBAR_INC_PATH);
+/* SECURITY (refs #38052): incFile names a server-side include that we open and print
+ * line by line, so a request must not be able to point it wherever it likes.  The path
+ * is built as docRoot + incFile with no traversal stripping, so a value like
+ * "/../../../../etc/passwd" would echo any file the server can read.  Require the known
+ * include directory and no "..".  Fall back to the normal menu bar on anything else
+ * rather than aborting, because this CGI is included into every static page and an
+ * abort would break the page instead of just ignoring a bad parameter. */
+if (!startsWith(NAVBAR_INC_DIR, incFile) || stringIn("..", incFile) != NULL)
+    {
+    fprintf(stderr, "hgMenubar: ignoring unexpected incFile value [%s]\n", incFile);
+    incFile = NAVBAR_INC_PATH;
+    }
 printMenuBar(cgiPath, docRoot, pagePath, incFile);
 if (errMessage)
     puts(errMessage);
