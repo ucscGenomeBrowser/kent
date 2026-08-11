@@ -5534,7 +5534,12 @@ void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
 static char buf[512*2];
 int wordCount;
 char *words[4];
-strcpy(buf, ss);
+/* SECURITY (refs #38054): ss comes from the cart variable of the same name, or from
+ * the item name, and a visitor controls both.  A legitimate value is a short triple
+ * of trash file paths, so anything that does not fit is a bug or an attack.  safecpy
+ * aborts instead of writing past the end of the buffer, which matches the errAborts
+ * below on the other malformed cases. */
+safecpy(buf, sizeof buf, ss);
 wordCount = chopLine(buf, words);
 
 if (wordCount < 1)
