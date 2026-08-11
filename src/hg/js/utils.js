@@ -4320,8 +4320,14 @@ function titleTagToMouseover(mapEl) {
 function htmlEncode(s) {
     /* HTML-escape a value (&, <, >, ", ') so it is safe to insert as text or into an attribute
      * value in a string of HTML.  Shared helper: prefer this over rolling a per-file escaper.
-     * Uses the browser's own text->markup conversion via a detached element (jQuery required). */
-    return $('<div>').text(s === null || s === undefined ? '' : String(s)).html();
+     * Uses the browser's own text->markup conversion via a detached element (jQuery required).
+     * That conversion only escapes &, < and > - quotes need no escaping in text, so it leaves them
+     * alone - hence the explicit quote handling below.  Without it this function silently failed
+     * the "safe in an attribute" half of its contract: a value containing a double quote closed the
+     * attribute early, truncating it (and worse, allowing markup injection). */
+    return $('<div>').text(s === null || s === undefined ? '' : String(s)).html()
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function convertTitleTagsToMouseovers() {

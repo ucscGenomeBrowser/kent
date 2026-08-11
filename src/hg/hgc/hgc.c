@@ -9148,8 +9148,8 @@ printf("<style>"
  * link" button; in a plain track click, a "Back to Genome Browser" button that returns to hgTracks
  * at this alignment's location. */
 printf("<div class='blatTitleBar'>");
-printf("<span class='blatTtl'>%s Base Alignment: %s</span>",
-       blatContext ? "BLAT" : "", blatAsmLabel(database));
+printf("<span class='blatTtl'>%sBase Alignment: %s</span>",
+       blatContext ? "BLAT " : "", blatAsmLabel(database));
 printf("<span class='blatBtns'>");
 if (blatContext)
     printf("<a href='hgBlat?blatReopen=1&hgsid=%s' class='blatBtn'>"
@@ -9205,22 +9205,34 @@ int blockCount;
 char *alnHtml = NULL;
 size_t alnLen = 0;
 FILE *alnF = open_memstream(&alnHtml, &alnLen);
-if (qType == gftRna || qType == gftDna)
-    blockCount = showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
-else
-    blockCount = showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
-fclose(alnF);
-char *pGenome = (alnHtml != NULL) ? stringIn("<H4><A NAME=genomic>", alnHtml) : NULL;
-char *pAli    = (alnHtml != NULL) ? stringIn("<H4><A NAME=ali>", alnHtml) : NULL;
-if (pGenome != NULL && pAli != NULL && pGenome < pAli)
-    {                                                /* Query, then Side-by-side, then Genome */
-    fwrite(alnHtml, 1, pGenome - alnHtml, stdout);   /* legend + Query (#cDNA) section */
-    fputs(pAli, stdout);                             /* Side-by-side (#ali) section, through footnote */
-    fwrite(pGenome, 1, pAli - pGenome, stdout);      /* Genome (#genomic) section, with block anchors */
+if (alnF == NULL)
+    {
+    /* open_memstream failed (out of memory): render straight to stdout, skipping the section
+     * reorder, rather than passing a NULL FILE to the renderer and then calling fclose(NULL). */
+    if (qType == gftRna || qType == gftDna)
+        blockCount = showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
+    else
+        blockCount = showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
     }
 else
-    fputs((alnHtml != NULL) ? alnHtml : "", stdout);
-free(alnHtml);   /* libc free: open_memstream's buffer is malloc'd, not a kent needMem block */
+    {
+    if (qType == gftRna || qType == gftDna)
+        blockCount = showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
+    else
+        blockCount = showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
+    fclose(alnF);
+    char *pGenome = (alnHtml != NULL) ? stringIn("<H4><A NAME=genomic>", alnHtml) : NULL;
+    char *pAli    = (alnHtml != NULL) ? stringIn("<H4><A NAME=ali>", alnHtml) : NULL;
+    if (pGenome != NULL && pAli != NULL && pGenome < pAli)
+        {                                                /* Query, then Side-by-side, then Genome */
+        fwrite(alnHtml, 1, pGenome - alnHtml, stdout);   /* legend + Query (#cDNA) section */
+        fputs(pAli, stdout);                             /* Side-by-side (#ali) section, through footnote */
+        fwrite(pGenome, 1, pAli - pGenome, stdout);      /* Genome (#genomic) section, with block anchors */
+        }
+    else
+        fputs((alnHtml != NULL) ? alnHtml : "", stdout);
+    free(alnHtml);   /* libc free: open_memstream's buffer is malloc'd, not a kent needMem block */
+    }
 printf("</div>\n");   /* #blatAlnContent */
 
 /* Sidebar, emitted after the alignment so blockCount is known; CSS grid puts it back in column 1.
@@ -27506,6 +27518,16 @@ struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, N
  *   delete           - remove earlier BLAT tracks from the session (their trash files age out)
  * Only BLAT-tagged tracks are touched; the track just made is left alone. */
 char *oldTracks = cfgOptionDefault("blatOldTracks", "keep");
+/* Fail safe on an unrecognized value (e.g. a typo in hg.conf): fall back to "keep" rather than to
+ * the destructive "delete" branch below, so a misconfiguration never silently discards a user's
+ * previous BLAT tracks. */
+if (differentString(oldTracks, "keep") && differentString(oldTracks, "hide")
+    && differentString(oldTracks, "delete"))
+    {
+    warn("hg.conf blatOldTracks has unrecognized value '%s'; expected keep|hide|delete. "
+         "Treating as 'keep'.", oldTracks);
+    oldTracks = "keep";
+    }
 if (differentString(oldTracks, "keep"))
     {
     struct customTrack *ct, *next, *keptList = NULL;
