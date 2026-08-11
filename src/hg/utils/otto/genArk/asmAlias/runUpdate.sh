@@ -23,7 +23,7 @@ if [ ! -s "${prevAliasTsv}" ]; then
     | gzip -c > "${prevAliasTsv}"
 fi
 
-printf "### cwd: %s\n" "`pwd -P`" >> "${logFile}"
+printf "### cwd: %s\n" "$(pwd -P)" >> "${logFile}"
 printf "### logFile: log/${Y}/${M}/${DS}.txt.gz\n" >> "${logFile}"
 printf "####### running the update command:\n" >> "${logFile}"
 printf "time (./asmAliasUpdate.py -o update.${YMD}.tsv > update.${DS}.out 2> update.${DS}.err) >> logFile\n" >> "${logFile}"
