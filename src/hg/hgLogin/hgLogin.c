@@ -439,7 +439,7 @@ if (result == -1)
 void  displayMailSuccess()
 /* display mail success confirmation box */
 {
-char *sendMailTo = cartUsualString(cart, "hgLogin_sendMailTo", "");
+char *sendMailTo = htmlEncode(cartUsualString(cart, "hgLogin_sendMailTo", ""));  // printed into the page; escape (XSS)
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
@@ -460,7 +460,7 @@ cartRemove(cart, "hgLogin_sendMailContain");
 void  displayMailSuccessPwd()
 /* display mail success confirmation box */
 {
-char *username = cgiUsualString("user","");
+char *username = htmlEncode(cgiUsualString("user",""));  // printed into the page; escape (XSS)
 hPrintf(
     "<div id=\"confirmationBoxPwd\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
@@ -595,8 +595,9 @@ sendPwdMailOut(email, recovEmail, subject, msg, username);
 void displayAccHelpPage(struct sqlConnection *conn)
 /* draw the account help page */
 {
-char *email = cartUsualString(cart, "hgLogin_email", "");
-char *username = cartUsualString(cart, "hgLogin_userName", "");
+// these go into value="" attributes further down; escape them (reflected XSS)
+char *email = htmlEncode(cartUsualString(cart, "hgLogin_email", ""));
+char *username = htmlEncode(cartUsualString(cart, "hgLogin_userName", ""));
 
 jsInline(
     "function toggle(value){\n"
@@ -783,7 +784,8 @@ jsInline(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-char *username = cartUsualString(cart, "hgLogin_userName", "");
+// goes into a value="" attribute further down; escape it (reflected XSS)
+char *username = htmlEncode(cartUsualString(cart, "hgLogin_userName", ""));
 hPrintf("<div id=\"loginBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>"
@@ -885,7 +887,7 @@ hPrintf(
     "<input type=\"text\" name=\"hgLogin_userName\" size=\"30\" value=\"%s\" id=\"email\">"
     "</div>"
     "\n", errMsg ? errMsg : "", hgLoginUrl,
-    cartUsualString(cart, "hgLogin_userName", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_userName", "")));  // value="" attribute; escape (XSS)
 hPrintf("<div class=\"inputGroup\">"
     "\n"
     "<label for=\"currentPw\">Current or Emailed Password</label>"
@@ -1025,27 +1027,33 @@ jsInline(cookieJS->string);
 returnToURL(150);
 }
 
-static char *changeEmailSig(char *user, char *newEmail, char *expStr)
+static char *changeEmailSig(char *user, char *curEmail, char *newEmail, char *expStr)
 /* HMAC-MD5 over a pending email change, keyed by the secret login.cookieSalt.  It goes in the
  * confirmation link so that clicking the link -- and only clicking it -- applies the change,
- * proving the new address really reaches the requester.  Result is allocd. */
+ * proving the new address really reaches the requester.  curEmail is the account's address when
+ * the link was minted; because confirmChangeEmail recomputes the signature from the address
+ * currently on the account, a link stops validating once it has been used (the address is no
+ * longer curEmail), so each link works exactly once and a stale link cannot silently undo a
+ * newer change.  Result is allocd. */
 {
 char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
 if (isEmpty(salt))
     errAbort("Confirming an email change requires %s in hg.conf, set to a secret random "
         "string.  Without a secret we cannot sign the confirmation link.", CFG_LOGIN_COOKIE_SALT);
 char buf[1024];
-safef(buf, sizeof(buf), "changeEmail|%s|%s|%s",
-    emptyForNull(user), emptyForNull(newEmail), emptyForNull(expStr));
+safef(buf, sizeof(buf), "changeEmail|%s|%s|%s|%s",
+    emptyForNull(user), emptyForNull(curEmail), emptyForNull(newEmail), emptyForNull(expStr));
 return hmacMd5(salt, buf);
 }
 
-static void sendChangeEmailConfirmMail(char *newEmail, char *user)
-/* Email a one-time link to newEmail that, when opened, changes user's address to newEmail. */
+static void sendChangeEmailConfirmMail(char *newEmail, char *user, char *curEmail)
+/* Email a one-time link to newEmail that, when opened, changes user's address to newEmail.
+ * curEmail is the account's current address; it is folded into the signature so the link stops
+ * working once the change has been applied (see changeEmailSig). */
 {
 char expStr[32];
 safef(expStr, sizeof(expStr), "%ld", clock1() + 3600);   // link good for one hour
-char *sig = changeEmailSig(user, newEmail, expStr);
+char *sig = changeEmailSig(user, curEmail, newEmail, expStr);
 char url[1024];
 safef(url, sizeof(url),
     "%s?hgLogin.do.confirmChangeEmail=1&user=%s&newEmail=%s&exp=%s&sig=%s",
@@ -1190,7 +1198,9 @@ if (isNotEmpty(curPwd))
  * apply the change only when it is clicked (see confirmChangeEmail).  This proves the address
  * is real and controlled by the requester, so an unconfirmed address cannot silently become
  * the account's recovery address. */
-sendChangeEmailConfirmMail(email1, user);
+sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+char *curEmail = sqlQuickString(conn, query);
+sendChangeEmailConfirmMail(email1, user, curEmail);
 cartRemove(cart, "hgLogin_newEmail1");
 cartRemove(cart, "hgLogin_newEmail2");
 cartRemove(cart, "hgLogin_curPassword");
@@ -1218,13 +1228,19 @@ char *user = cgiUsualString("user", "");
 char *newEmail = cgiUsualString("newEmail", "");
 char *expStr = cgiUsualString("exp", "");
 char *sig = cgiUsualString("sig", "");
-char *expected = changeEmailSig(user, newEmail, expStr);
+/* Recompute the signature over the address currently on the account.  Once the change has been
+ * applied that address is newEmail, so re-opening the same link no longer matches: the link works
+ * exactly once, and a stale link cannot silently undo a newer change. */
+char query[512];
+sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+char *oldEmail = sqlQuickString(conn, query);
+char *expected = changeEmailSig(user, emptyForNull(oldEmail), newEmail, expStr);
 boolean sigOk = isNotEmpty(sig) && sameString(sig, expected);
 freeMem(expected);
 if (!sigOk || isEmpty(user) || spc_email_isvalid(newEmail) == 0)
     {
     freez(&errMsg);
-    errMsg = cloneString("This confirmation link is not valid.");
+    errMsg = cloneString("This confirmation link is not valid or has already been used.");
     displayLoginPage(conn);
     return;
     }
@@ -1235,9 +1251,6 @@ if (clock1() > atol(expStr))
     displayLoginPage(conn);
     return;
     }
-char query[512];
-sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
-char *oldEmail = sqlQuickString(conn, query);
 sqlSafef(query, sizeof(query),
     "UPDATE gbMembers SET email='%s', lastUse=NOW() WHERE userName='%s'", newEmail, user);
 sqlUpdate(conn, query);
@@ -1282,8 +1295,9 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"reenterEmail\">Re-enter Email address</label>"
     "<input type=text name=\"hgLogin_email2\" value=\"%s\" size=\"30\" id=\"emailCheck\">"
     "</div>\n",
-    cartUsualString(cart, "hgLogin_userName", ""), cartUsualString(cart, "hgLogin_email", ""),
-    cartUsualString(cart, "hgLogin_email2", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_userName", "")),   // all three go into value="" attributes; escape (XSS)
+    htmlEncode(cartUsualString(cart, "hgLogin_email", "")),
+    htmlEncode(cartUsualString(cart, "hgLogin_email2", "")));
 
 if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
     hPrintf("<div class=\"inputGroup\">"
@@ -1296,7 +1310,7 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">",
-    cartUsualString(cart, "hgLogin_password", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_password", "")));  // value="" attribute; escape (XSS)
 printPwdEyeIcon("signupPwEyeIcon", "signupPwEyeSlash");
 hPrintf(
     "</span>"
@@ -1306,7 +1320,7 @@ hPrintf(
     "<label for=\"passwordCheck\">Re-enter Password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">",
-    cartUsualString(cart, "hgLogin_password2", ""));
+    htmlEncode(cartUsualString(cart, "hgLogin_password2", "")));  // value="" attribute; escape (XSS)
 printPwdEyeIcon("signupPwCheckEyeIcon", "signupPwCheckEyeSlash");
 hPrintf(
     "</span>"
@@ -2074,8 +2088,11 @@ if (emailMode)
         "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
         email, email, cartUsualString(cart, "emailLogin_tokenMd5", ""));
 else
+    // Only activated accounts, matching what chooseAccount() and resolveIdentity() accept;
+    // otherwise the page offers a row the action refuses, and shows the username of an
+    // unactivated row anyone could have created with this address.
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE email='%s' ORDER BY idx", email);
+        "SELECT * FROM gbMembers WHERE email='%s' AND accountActivated='Y' ORDER BY idx", email);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 
 hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
@@ -2156,6 +2173,11 @@ if (isEmpty(provider))
     sqlSafef(query, sizeof(query),
         "UPDATE gbMembers SET loginToken='' WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s'",
         email, email, tokenMd5);
+    sqlUpdate(conn, query);
+    /* Record the sign-in on the account actually chosen, the same as the single-account path in
+     * emailLogin, so lastUse reflects the login. */
+    sqlSafef(query, sizeof(query),
+        "UPDATE gbMembers SET lastUse=NOW() WHERE idx=%u", m->idx);
     sqlUpdate(conn, query);
     cartRemove(cart, "emailLogin_email");
     cartRemove(cart, "emailLogin_tokenMd5");
@@ -2296,7 +2318,20 @@ void oauthReturn(struct sqlConnection *conn)
 char *state = cgiUsualString("state", "");
 char *savedState = cartUsualString(cart, "oauth_state", "");
 char *provider = cartUsualString(cart, "oauth_provider", "");
-cartRemove(cart, "oauth_state");   // one-time use
+
+// Validate the anti-CSRF state before consuming any cart state or acting on an error param.  A
+// stray code/error link (a re-opened redirect, or a crafted hgLogin?error=...) must not be able to
+// consume the state nonce of a login in flight, so check first and only then clear the flow.  A
+// compliant provider echoes state on an error return too (RFC 6749 4.1.2.1), and we always send it.
+if (isEmpty(state) || isEmpty(savedState) || differentString(state, savedState))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Your login session expired or was invalid. Please try again.");
+    displayLoginPage(conn);
+    return;
+    }
+cartRemove(cart, "oauth_state");      // one-time use
+cartRemove(cart, "oauth_provider");   // end the flow so a later code/error param can't re-enter
 
 char *errParam = cgiUsualString("error", "");
 if (isNotEmpty(errParam))
@@ -2312,13 +2347,6 @@ if (isNotEmpty(errParam))
     dyStringPrintf(dy, "(%s)", htmlEncode(errParam));
     freez(&errMsg);
     errMsg = dyStringCannibalize(&dy);
-    displayLoginPage(conn);
-    return;
-    }
-if (isEmpty(state) || isEmpty(savedState) || differentString(state, savedState))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Your login session expired or was invalid. Please try again.");
     displayLoginPage(conn);
     return;
     }

@@ -125,4 +125,7 @@ else
   exit 255
 fi
 
+### adding asmAlias table update 2026-08-11
+/hive/data/inside/GenArk/asmAlias/runUpdate.sh
+
 exit $?

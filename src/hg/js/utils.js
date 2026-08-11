@@ -4320,8 +4320,14 @@ function titleTagToMouseover(mapEl) {
 function htmlEncode(s) {
     /* HTML-escape a value (&, <, >, ", ') so it is safe to insert as text or into an attribute
      * value in a string of HTML.  Shared helper: prefer this over rolling a per-file escaper.
-     * Uses the browser's own text->markup conversion via a detached element (jQuery required). */
-    return $('<div>').text(s === null || s === undefined ? '' : String(s)).html();
+     * Uses the browser's own text->markup conversion via a detached element (jQuery required).
+     * That conversion only escapes &, < and > - quotes need no escaping in text, so it leaves them
+     * alone - hence the explicit quote handling below.  Without it this function silently failed
+     * the "safe in an attribute" half of its contract: a value containing a double quote closed the
+     * attribute early, truncating it (and worse, allowing markup injection). */
+    return $('<div>').text(s === null || s === undefined ? '' : String(s)).html()
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function convertTitleTagsToMouseovers() {
@@ -4534,7 +4540,10 @@ function getRecentGenomes() {
 function getPopularGenomes($inputEl) {
     // Parse the popular assemblies JSON embedded in the page by printGenomeSearchBar().
     // Returns an array of autocomplete-formatted items with category "Popular".
-    // Items already present in recents are excluded to avoid duplicates.
+    // The Popular list is deliberately NOT filtered against the recents: an assembly may appear
+    // under both headings.  Suppressing the duplicate made entries shift position as soon as one
+    // was used, so the list a user had learned to click at kept rearranging itself under them.
+    // A stable Popular list is worth more than avoiding the repeat.
     let inputId = $inputEl.attr('id');
     let dataEl = document.getElementById(inputId + 'PopularData');
     if (!dataEl) return [];
@@ -4544,15 +4553,8 @@ function getPopularGenomes($inputEl) {
     } catch (e) {
         return [];
     }
-    // Build a set of db names already in recents to avoid duplicates
-    let recentDbs = new Set();
-    let recents = getRecentGenomes();
-    for (let r of recents) {
-        recentDbs.add(r.db || r.genome);
-    }
     let results = [];
     for (let p of popularData) {
-        if (recentDbs.has(p.db)) continue;
         results.push({
             genome: p.db,
             db: p.db,
@@ -5008,12 +5010,28 @@ function setupGenomeSearchBar(config) {
         return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
     }
 
+    // What to put back in the search box if the user opens it and leaves without picking anything.
+    // Shared between wrappedSelect and the focus/blur pair below so that a genuine selection wins
+    // over the restore.
+    let restoreVal = null;
+
     function wrappedSelect(labelElement, item) {
         // Standard validation - all CGIs check this
         if (item.disabled || !item.genome) return;
         // Standard label update - all CGIs do this
         if (labelElement)
             labelElement.innerHTML = item.label;
+        // Make the search box show what was just picked.  autoCompleteSelect() in
+        // autocompleteCat.js blurs the input, and jQuery UI's blur handler restores its last search
+        // term; when the list came from the recent/popular dropdown that term is the empty string
+        // (the toggle clears the input before searching), so the box would be left blank after
+        // choosing a recent genome.  Deferring past that blur makes the selection stick.
+        let selInput = document.getElementById(config.inputId);
+        if (selInput) {
+            let text = (item.label || item.value || '').replace(/<[^>]*>/g, '');
+            restoreVal = text;   // a real pick, so this is what blur should leave behind
+            setTimeout(function() { selInput.value = text; }, 0);
+        }
         // Call user's custom callback for CGI-specific logic
         if (typeof config.onSelect === 'function') {
             config.onSelect(item, labelElement);
@@ -5027,6 +5045,37 @@ function setupGenomeSearchBar(config) {
 
         initSpeciesAutoCompleteDropdown(config.inputId, boundSelect,
             config.apiUrl || null, null, config.onServerReply || null, onSearchError);
+
+        // Opt-in (config.focusOpensDropdown): behave like a normal search box - focusing it selects
+        // whatever is in it, so typing replaces the current genome instead of appending to it, and
+        // opens the suggestion list right away.  The source function treats an empty term as
+        // "show recent + popular", so this needs no special casing.  Off by default so the CGIs
+        // that already use this widget keep their current behaviour.
+        if (config.focusOpensDropdown) {
+            let input = document.getElementById(config.inputId);
+            if (input) {
+                input.addEventListener("focus", () => {
+                    // Empty the box before searching, exactly as the toggle button does.  jQuery
+                    // UI's search() takes its highlight term from the input's own value rather
+                    // than the term passed in, so leaving a full assembly description in place
+                    // bolds fragments of it ("Dec", "2013", ...) across unrelated entries further
+                    // down the list.  Clearing also makes this behave like an ordinary search box:
+                    // the caret sits in an empty field ready for typing.
+                    restoreVal = input.value;
+                    input.value = "";
+                    // Empty term is what the source function treats as "show recent + popular".
+                    $("[id='" + config.inputId + "']").autocompleteCat("search", "");
+                });
+                input.addEventListener("blur", () => {
+                    // Left without choosing anything: put back whatever was showing before, so the
+                    // bar keeps naming the current assembly.  A real pick has already updated
+                    // restoreVal in wrappedSelect, so this restores the new genome, not the old.
+                    if (!input.value && restoreVal) {
+                        input.value = restoreVal;
+                    }
+                });
+            }
+        }
 
         // Standard search button handler
         let btn = document.getElementById(config.inputId + "Button");
@@ -5068,4 +5117,368 @@ function isGenarkItem(item) {
     return (typeof item.hubUrl !== "undefined" && item.hubUrl) &&
         (typeof item.genome !== "undefined" && item.genome) &&
         (item.genome.startsWith('GCA_') || item.genome.startsWith('GCF_'));
+}
+
+// ---------------------------------------------------------------------------
+// setupGenomeSelector - combobox replacement for setupGenomeSearchBar
+// ---------------------------------------------------------------------------
+// Same call signature and same config contract as setupGenomeSearchBar, so a CGI switches over by
+// changing only the function name in its setupGenomeSearchBar({...}) call.  The markup still comes
+// from printGenomeSearchBar() in hg/lib/web.c: this takes over the <input> that emitted, re-houses
+// it inside a combobox, and hides that widget's separate toggle / search button / info icon.
+//
+// Differences from setupGenomeSearchBar, per the Assembly Selector design (option 2a):
+//   - the caret sits *inside* the field, so it reads as one control with two ways in, rather than
+//     as a second control competing with the search box
+//   - the common assemblies appear as a row of short pills under the field, one click each
+//   - focusing the empty field opens the common list immediately; typing swaps the same panel to
+//     matching assemblies
+// The suggestions themselves come from exactly where they did before: recent genomes from
+// localStorage, popular ones from the JSON printGenomeSearchBar embeds, and everything else from
+// hubApi/findGenome via processFindGenome.
+
+var genomeSelectorStyleDone = false;
+
+function genomeSelectorInjectStyle() {
+    /* One stylesheet for every selector on the page; injected rather than added to HGStyle.css so
+     * the component is self-contained and can be dropped into a CGI without a second edit. */
+    if (genomeSelectorStyleDone) { return; }
+    genomeSelectorStyleDone = true;
+    var css = `
+    .gsWrap { position:relative; max-width:620px; }
+    .gsField { display:flex; align-items:stretch; border:1px solid #9aa6b2; background:#fff; }
+    .gsField.gsFocus { border-color:#14487f; box-shadow:0 0 0 2px rgba(20,72,127,0.18); }
+    .gsField input[type=text] { flex:1; min-width:0; border:0; outline:none; padding:11px 12px;
+        font-size:16px; font-family:inherit; color:#23303f; background:transparent; }
+    .gsCaret { border:0; border-left:1px solid #dbe1e7; background:#f4f7f9; width:42px;
+        display:flex; align-items:center; justify-content:center; cursor:pointer; color:#14487f; }
+    .gsCaret:hover { background:#e7edf2; }
+    .gsMenu { position:absolute; z-index:20; top:calc(100% + 4px); left:0; right:0; background:#fff;
+        border:1px solid #c3ccd5; box-shadow:0 8px 24px rgba(20,40,70,0.16); max-height:296px;
+        overflow:auto; display:none; }
+    .gsMenu.gsOpen { display:block; }
+    /* Tighter than the design's spacing: the mockup shows five rows, the real list runs to fifteen
+     * or more, so the padding that reads as comfortable there turns into a lot of scrolling here.
+     * Trimming the vertical padding fits roughly a third more rows in the same panel. */
+    .gsHead { padding:3px 12px; font-size:11.5px; font-weight:700; letter-spacing:0.06em;
+        text-transform:uppercase; color:#7c8896; background:#f4f7f9; border-bottom:1px solid #e6eaee;
+        position:sticky; top:0; }
+    .gsRow { display:flex; align-items:baseline; gap:8px; padding:3px 12px; cursor:pointer;
+        border-bottom:1px solid #f0f3f6; line-height:1.4; }
+    .gsRow.gsActive { background:#eef4fa; }
+    .gsRow .gsName { font-size:14px; color:#23303f; font-weight:600; }
+    .gsRow .gsSpecies { font-size:13px; color:#6b7885; font-style:italic; }
+    .gsRow .gsAcc { margin-left:auto; font-size:12.5px; color:#8b96a2; font-variant-numeric:tabular-nums; }
+    .gsEmpty { padding:10px 12px; font-size:14px; color:#6b7885; }
+    .gsPicks { margin-top:10px; display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+    .gsPicksLabel { font-size:13px; color:#6b7885; }
+    /* Smaller than the design's 14px and than the house minimum: these are short, high-contrast db
+     * names on a secondary row, and keeping them small stops the shortcuts from competing with the
+     * field above.  Weight 600 holds legibility at this size. */
+    .gsPick { font-family:inherit; font-size:12.5px; font-weight:600; padding:3px 10px;
+        border:1px solid #b9c4ce; background:#fff; color:#14487f; cursor:pointer; border-radius:999px;
+        /* A GenArk db name is a full accession (GCA_018466985.1), far longer than "hg38"; clip it
+         * rather than let one recent assembly stretch the row.  The tooltip has the full name. */
+        max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .gsPick:hover { border-color:#14487f; }
+    .gsPick.gsPickOn { background:#14487f; color:#fff; border-color:#14487f; }
+    .gsStatus { margin-top:10px; font-size:14px; color:#6b7885; min-height:20px; }
+    `;
+    var st = document.createElement('style');
+    st.id = 'genomeSelectorStyle';
+    st.textContent = css;
+    document.head.appendChild(st);
+}
+
+function genomeSelectorReady(fn) {
+    /* Run fn once the DOM is parsed, whether or not DOMContentLoaded has already fired - the CGIs
+     * emit their setup call at the end of the body, but a later caller should still work. */
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        fn();
+    }
+}
+
+function setupGenomeSelector(config) {
+/* Combobox genome/assembly picker.  See the block comment above; config is the same object
+ * setupGenomeSearchBar takes:
+ *   inputId (required), labelElementId, onSelect, apiUrl, onServerReply, onFilterDropdown
+ * plus, for this selector only:
+ *   quickPickCount - how many pills to show under the field (default 5)
+ */
+    genomeSelectorReady(function() {
+        var input = document.getElementById(config.inputId);
+        if (!input) { return; }
+        genomeSelectorInjectStyle();
+
+        var labelElement = document.getElementById(config.labelElementId || 'genomeLabel');
+        var searchUrl = config.apiUrl || 'hubApi/findGenome?browser=mustExist&q=';
+        var reply = config.onServerReply || processFindGenome;
+        var rows = [];        // items currently in the menu
+        var active = -1;      // keyboard-highlighted row
+        var committed = null; // the item last chosen, for highlighting the matching pill
+        // Has the user typed in the field since it was last filled in for them?  If not, whatever
+        // it contains is a label the page or a selection put there, so focusing means "open the
+        // common list" rather than "search for this text" - a field pre-filled with
+        // "Dec. 2013 (GRCh38/hg38)" must not send that whole string to findGenome, which matches
+        // nothing.  A flag rather than comparing against the initial value, because the caller may
+        // fill the field in after this setup runs (hgBlat does) and any captured value would be stale.
+        var userTyped = false;
+        var cache = {};
+        var timer = null;
+
+        // ---- build the shell around the existing input -----------------------------------
+        var wrap = document.createElement('div');
+        wrap.className = 'gsWrap';
+        var field = document.createElement('div');
+        field.className = 'gsField';
+        var caret = document.createElement('button');
+        caret.type = 'button';
+        caret.className = 'gsCaret';
+        caret.setAttribute('aria-label', 'Show common genomes');
+        caret.innerHTML = "<svg width='12' height='8' viewBox='0 0 12 8' fill='none' aria-hidden='true'>" +
+            "<path d='M1 1.5L6 6.5L11 1.5' stroke='currentColor' stroke-width='1.8' " +
+            "stroke-linecap='round' stroke-linejoin='round'></path></svg>";
+        var menu = document.createElement('div');
+        menu.className = 'gsMenu';
+        var picks = document.createElement('div');
+        picks.className = 'gsPicks';
+        // The "Selected: ..." line from the design is opt-in (config.showStatus).  The field itself
+        // already shows the chosen assembly, and callers that want it elsewhere pass labelElementId,
+        // so by default this would be a redundant line reserving 20px of empty space under the pills.
+        var status = null;
+        if (config.showStatus) {
+            status = document.createElement('div');
+            status.className = 'gsStatus';
+        }
+
+        // printGenomeSearchBar wraps the input in .searchBarAndButton alongside a toggle, an
+        // optional search button and an info icon; this control replaces all three, so put the
+        // combobox where that wrapper was and drop the wrapper.
+        var oldBar = input.closest('.searchBarAndButton') || input.parentNode;
+        oldBar.parentNode.insertBefore(wrap, oldBar);
+        field.appendChild(input);
+        field.appendChild(caret);
+        wrap.appendChild(field);
+        wrap.appendChild(menu);
+        wrap.parentNode.insertBefore(picks, wrap.nextSibling);
+        if (status) { picks.parentNode.insertBefore(status, picks.nextSibling); }
+        oldBar.parentNode.removeChild(oldBar);
+        input.removeAttribute('size');
+
+        // ---- data ------------------------------------------------------------------------
+        function commonList() {
+            var recent = (typeof getRecentGenomes === 'function') ? getRecentGenomes() : [];
+            var popular = (typeof getPopularGenomes === 'function') ? getPopularGenomes($(input)) : [];
+            var all = recent.concat(popular);
+            if (typeof config.onFilterDropdown === 'function') { all = config.onFilterDropdown(all); }
+            return all;
+        }
+
+        function rowFor(item) {
+            // The API and the recent/popular lists carry different fields; fall back through them
+            // so a row always has something in each column rather than a gap.
+            return {
+                item: item,
+                name: item.label || item.genome || item.db || '',
+                species: item.scientificName || '',
+                acc: item.db || item.genome || ''
+            };
+        }
+
+        function render(heading, list, emptyMsg) {
+            // Items carry displayCategory ("Recent", "Popular"); start a new heading whenever it
+            // changes, so the two are told apart the way the old jQuery UI menu did.  Server
+            // results have no category, so they all fall under the heading passed in.
+            rows = list.map(rowFor);
+            active = rows.length ? 0 : -1;
+            var html = '';
+            if (!rows.length) {
+                html = '<div class="gsHead">' + htmlEncode(heading) + '</div>' +
+                       '<div class="gsEmpty">' + htmlEncode(emptyMsg) + '</div>';
+            } else {
+                var group = null;
+                rows.forEach(function(r, i) {
+                    var g = r.item.displayCategory || heading;
+                    if (g !== group) {
+                        group = g;
+                        html += '<div class="gsHead">' + htmlEncode(g) + '</div>';
+                    }
+                    html += '<div class="gsRow' + (i === active ? ' gsActive' : '') + '" data-i="' + i + '">' +
+                        '<span class="gsName">' + htmlEncode(r.name) + '</span>' +
+                        '<span class="gsSpecies">' + htmlEncode(r.species) + '</span>' +
+                        '<span class="gsAcc">' + htmlEncode(r.acc) + '</span></div>';
+                });
+            }
+            menu.innerHTML = html;
+        }
+
+        function openCommon() {
+            render('Common genomes', commonList(), 'No common genomes configured.');
+            menu.classList.add('gsOpen');
+        }
+
+        function search(term) {
+            var t = term.trim();
+            if (!t) { openCommon(); return; }
+            if (t.length < 2) {
+                // One character is not worth a round trip; filter what is already in hand, which is
+                // what the jQuery UI version does too.
+                var hits = commonList().filter(function(d) {
+                    return (d.label || '').toLowerCase().indexOf(t.toLowerCase()) >= 0 ||
+                           (d.genome || '').toLowerCase().indexOf(t.toLowerCase()) >= 0;
+                });
+                render('Matching assemblies', hits, 'No assembly matches that name.');
+                menu.classList.add('gsOpen');
+                return;
+            }
+            if (cache[t]) {
+                render('Matching assemblies', cache[t], 'No assembly matches that name.');
+                menu.classList.add('gsOpen');
+                return;
+            }
+            $.getJSON(searchUrl + encodeURIComponent(t))
+                .done(function(res) {
+                    var list = reply(res, t);
+                    cache[t] = list;
+                    if (input.value.trim() === t) {   // ignore replies for a term already typed past
+                        render('Matching assemblies', list, 'No assembly matches that name.');
+                        menu.classList.add('gsOpen');
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    var list = (typeof config.onError === 'function') ?
+                        config.onError(jqXHR, textStatus, errorThrown, t) : null;
+                    render('Matching assemblies', list || [], 'No assembly matches that name.');
+                    menu.classList.add('gsOpen');
+                });
+        }
+
+        // ---- selection --------------------------------------------------------------------
+        function choose(item) {
+            if (!item || item.disabled || !(item.genome || item.db)) { return; }
+            committed = item;
+            input.value = item.label || item.genome || item.db;
+            userTyped = false;
+            if (labelElement) { labelElement.innerHTML = item.label || ''; }
+            if (status) { status.textContent = 'Selected: ' + input.value; }
+            menu.classList.remove('gsOpen');
+            field.classList.remove('gsFocus');
+            // Keep the recent-genomes list working exactly as it does for the old widget.
+            if (typeof addRecentGenome === 'function' && item.db) { addRecentGenome(item); }
+            renderPicks();
+            if (typeof config.onSelect === 'function') { config.onSelect(item, labelElement); }
+        }
+
+        function renderPicks() {
+            var n = config.quickPickCount || 5;
+            var popular = (typeof getPopularGenomes === 'function') ? getPopularGenomes($(input)) : [];
+            var list = popular.slice(0, n);
+            // Lead with the most recent assembly that is not already one of the popular pills.
+            // Two things fall out of picking it that way rather than just taking recent[0]:
+            //   - no duplicate pill.  In the dropdown, seeing a genome under both Recent and Popular
+            //     is useful; two identical pills side by side just reads as a bug.
+            //   - the lead pill stops flickering.  Choosing a popular assembly moves it to the head
+            //     of the recents, which under recent[0] wiped out the lead pill that was there;
+            //     since that assembly already has its own pill, the first non-popular recent - and
+            //     so the pill - is unchanged.  A GenArk assembly stays reachable in one click while
+            //     the user flips between hg38 and hg19.
+            // Prepending rather than reordering keeps the popular pills in their familiar places.
+            var recent = (typeof getRecentGenomes === 'function') ? getRecentGenomes() : [];
+            var inList = function(g) {
+                return list.some(function(p) { return (p.db || p.genome) === (g.db || g.genome); });
+            };
+            var top = null;
+            for (var ri = 0; ri < recent.length; ri++) {
+                if (!inList(recent[ri])) { top = recent[ri]; break; }
+            }
+            if (top) { list = [top].concat(list); }
+            if (!list.length) { picks.innerHTML = ''; return; }
+            picks.innerHTML = '<span class="gsPicksLabel">Quick picks:</span>';
+            list.forEach(function(d) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                // The pill shows the short db name; the full description is the tooltip, which is
+                // what keeps the row to one line.
+                b.className = 'gsPick' + (committed && committed.db === d.db ? ' gsPickOn' : '');
+                b.textContent = d.db || d.genome;
+                b.title = (top && d === top ? 'Most recently used: ' : '') + (d.label || '');
+                b.addEventListener('click', function() { choose(d); });
+                picks.appendChild(b);
+            });
+        }
+
+        function setActive(i) {
+            if (!rows.length) { return; }
+            active = Math.max(0, Math.min(i, rows.length - 1));
+            Array.prototype.forEach.call(menu.querySelectorAll('.gsRow'), function(el, j) {
+                el.classList.toggle('gsActive', j === active);
+            });
+            var el = menu.querySelector('.gsRow.gsActive');
+            if (el && el.scrollIntoView) { el.scrollIntoView({ block: 'nearest' }); }
+        }
+
+        // ---- events -------------------------------------------------------------------------
+        input.addEventListener('focus', function() {
+            field.classList.add('gsFocus');
+            // Select what is there so typing replaces the assembly name instead of appending to it.
+            // Deferred, because the click that delivers focus would otherwise collapse the selection.
+            setTimeout(function() { input.select(); }, 0);
+            // An empty field, or one still showing the label we put there, means "show me the common
+            // list"; anything else is something the user typed, so treat it as a query.
+            if (!input.value.trim() || !userTyped) {
+                openCommon();
+            } else {
+                search(input.value);
+            }
+        });
+        input.addEventListener('input', function() {
+            committed = null;
+            userTyped = true;
+            clearTimeout(timer);
+            var v = input.value;
+            timer = setTimeout(function() { search(v); }, 300);
+        });
+        input.addEventListener('keydown', function(ev) {
+            if (ev.key === 'ArrowDown') { ev.preventDefault(); menu.classList.add('gsOpen'); setActive(active + 1); }
+            else if (ev.key === 'ArrowUp') { ev.preventDefault(); setActive(active - 1); }
+            else if (ev.key === 'Enter') {
+                if (menu.classList.contains('gsOpen') && rows[active]) {
+                    ev.preventDefault();          // do not submit the form on the same keystroke
+                    choose(rows[active].item);
+                }
+            }
+            else if (ev.key === 'Escape') { menu.classList.remove('gsOpen'); }
+        });
+        caret.addEventListener('click', function(ev) {
+            ev.preventDefault();
+            if (menu.classList.contains('gsOpen')) {
+                menu.classList.remove('gsOpen');
+            } else {
+                input.focus();
+                openCommon();
+            }
+        });
+        menu.addEventListener('mousedown', function(ev) {
+            // mousedown, not click: the input's blur would otherwise close the menu first.
+            var row = ev.target.closest ? ev.target.closest('.gsRow') : null;
+            if (!row) { return; }
+            ev.preventDefault();
+            var r = rows[parseInt(row.getAttribute('data-i'), 10)];
+            if (r) { choose(r.item); }
+        });
+        menu.addEventListener('mouseover', function(ev) {
+            var row = ev.target.closest ? ev.target.closest('.gsRow') : null;
+            if (row) { setActive(parseInt(row.getAttribute('data-i'), 10)); }
+        });
+        document.addEventListener('click', function(ev) {
+            if (!wrap.contains(ev.target)) {
+                menu.classList.remove('gsOpen');
+                field.classList.remove('gsFocus');
+            }
+        });
+
+        renderPicks();
+    });
 }

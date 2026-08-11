@@ -122,7 +122,9 @@ tolowers(qLetters);
     htmHorizontalLine(f);
     }
 fprintf(f, "</TT></PRE>\n");
-fprintf(f, "<H4><A NAME=genomic></A>%s %s:</H4>\n", 
+/* hgc's htcBlatAlignment reorders these sections by matching the literal "<H4><A NAME=genomic>"
+ * and "<H4><A NAME=ali>" prefixes; keep them intact (or update hgc.c) so the reorder still fires. */
+fprintf(f, "<H4><A NAME=genomic></A>%s %s:</H4>\n",
 	tName, (tIsRc ? "(reverse strand)" : ""));
 fprintf(f, "<PRE><TT>");
 
