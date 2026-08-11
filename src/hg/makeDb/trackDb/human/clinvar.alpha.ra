@@ -93,6 +93,9 @@ dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
         yAxisLabel.4 4 on 150,150,150 LP
         yAxisLabel.5 5 on 150,150,150 P
         lollyMaxSize 10
+        # Keep in step with clinvarSubLolly in clinvar.ra: default 128, raised ceiling so a
+        # figure render can ask for a taller row.
+        maxHeightPixels 512:128:11
         viewLimits 0:5
         mouseOverField _mouseOver
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
