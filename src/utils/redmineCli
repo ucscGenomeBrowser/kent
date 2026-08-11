@@ -674,7 +674,8 @@ def cmd_build_patch(args):
     no assignee (QA claims it), and the five required custom fields (Commit ID,
     Files Changed, CGIs to retest, Test Case, Suggested Code Reviewer). Relates
     the ticket to the bug it fixes and, unless --no-default-watchers is given,
-    adds the QA Team and build meister as watchers.
+    adds the QA Team, the build meister, and the suggested code reviewer as
+    watchers.
     """
     description = read_text_input(args.description, args.description_file)
     if not description:
@@ -723,9 +724,11 @@ def cmd_build_patch(args):
             else:
                 raise
 
-    # Watchers: QA Team + build meister by default, plus any extras. The
-    # process requires QA Team on every Build Patch from the start.
-    watchers = [] if args.no_default_watchers else ["qa", "build"]
+    # Watchers: QA Team + build meister + the suggested code reviewer by
+    # default, plus any extras. The process requires QA Team on every Build
+    # Patch from the start, and the reviewer has to set Code Review Status
+    # before QA can test, so they need the notification too.
+    watchers = [] if args.no_default_watchers else ["qa", "build", args.reviewer]
     watchers += (args.watch or [])
     seen = set()
     for name in watchers:
@@ -1154,7 +1157,7 @@ def build_parser():
     p_bp.add_argument("--test-case", dest="test_case", required=True,
                       help="Step-by-step to reproduce both the failure and the fix")
     p_bp.add_argument("--reviewer", required=True,
-                      help="Suggested code reviewer (name or user ID)")
+                      help="Suggested code reviewer (name or user ID); also added as a watcher")
     p_bp.add_argument("--target-version", dest="target_version", required=True,
                       help="Release number being built (e.g. 500)")
     p_bp.add_argument("--post-mortem", dest="post_mortem",
@@ -1162,10 +1165,10 @@ def build_parser():
     p_bp.add_argument("--relates", nargs="+", metavar="BUG_ID",
                       help="Bug ticket(s) this patch fixes; related on creation")
     p_bp.add_argument("--watch", nargs="+", metavar="NAME",
-                      help="Extra watchers beyond the QA Team + build meister defaults")
+                      help="Extra watchers beyond the QA Team + build meister + reviewer defaults")
     p_bp.add_argument("--no-default-watchers", dest="no_default_watchers",
                       action="store_true",
-                      help="Do not auto-add the QA Team and build meister as watchers")
+                      help="Do not auto-add the QA Team, build meister, and reviewer as watchers")
     p_bp.add_argument("--project", default=PROJECT_GB,
                       help="Project (default: %(default)s)")
 
