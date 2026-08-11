@@ -1484,18 +1484,25 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     # final per-chrom iRows mafs (also the per-chrom download source):
     #   $WORK/iRows/result/chrN.iRows.maf.gz
 
-    # bigMaf bb: per-chrom builds with uniform genome-wide chrom numbering and
-    # zoom schedule, so they stitch without re-sorting the ~1.5 TB of block text
-    # (bedToBigBed -globalChromIds/-cat/-zoomInitial, added to
-    # src/utils/bedToBigBed/bedToBigBed.c this cycle - its own commit/ticket).
-    # per chrom:
+    # bigMaf bb: built the 2023 way with stock tools - per-chrom mafToBigMaf,
+    # then concatenate, sort genome-wide, and one bedToBigBed. per chrom:
     #   mafToBigMaf hg38 <chrom>.iRows.maf stdout | sort -k1,1 -k2,2n > <chrom>.bigMaf
-    #   bedToBigBed -globalChromIds -zoomInitial=147 -itemsPerSlot=4 -type=bed3+1 \
-    #     -as=$HOME/kent/src/hg/lib/bigMaf.as -tab \
-    #     <chrom>.bigMaf /hive/data/genomes/hg38/chrom.sizes <chrom>.bb
-    # stitch all 194 per-chrom bb into the genome bb (no re-parse / no re-deflate):
-    #   bedToBigBed -cat=allbb.list $WORK/hg38.cactus447way.bb
-    #     -> 1.48 TB, itemCount 97,277,175, chromCount 711, basesCovered 3,099,750,718
+    # merge the (already-sorted) per-chrom files, then build the genome bb:
+    #   sort -m -k1,1 -k2,2n $WORK/*.bigMaf > $WORK/hg38.sorted447way.bigMaf
+    #   bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 \
+    #     -as=$HOME/kent/src/hg/lib/bigMaf.as -tab $WORK/hg38.sorted447way.bigMaf \
+    #     /hive/data/genomes/hg38/chrom.sizes $WORK/hg38.cactus447way.bb
+    #     -> itemCount 97,277,175, basesCovered 3,099,750,718
+    #
+    # NOTE on chromCount (711 vs ~194): bigBedInfo on the currently-staged
+    # hg38.cactus447way.bb reports chromCount 711, which is every sequence listed
+    # in hg38 chrom.sizes, not only the ~194 chroms that actually carry alignment
+    # blocks. A plain bedToBigBed as documented above indexes only the chroms that
+    # have data, so rebuilding it gives chromCount ~194. This is a chrom-B-tree
+    # bookkeeping difference only: the alignment is identical either way (same
+    # itemCount 97,277,175, same basesCovered), and the empty chroms in the B-tree
+    # do not affect display or queries. If an exact chromCount match to this doc is
+    # wanted, rebuild the bb with the command above.
 
     # summary bb: replicate the 2023 summary pipeline with the FIXED
     # hgLoadMafSummary. Build and run it from ~/bin/$MACHTYPE, NOT the bare name -
@@ -1523,6 +1530,24 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     # trackDb (human/hg38/trackDb.447way.ra, track cactus447way) already points
     # bigDataUrl/summary at hgdownload.soe.ucsc.edu; the corrected files reach the
     # live browser only after the build/QA rsync pushes fix2 to the public server.
-    # frames bb (cactus447wayFrames.bb) not rebuilt (derived; reassess if needed).
+    # frames bb (cactus447wayFrames.bb, DONE 2026-08-10): the 2023 frames were
+    # built from the old blocks, so rebuilt for fix2. The per-species gene
+    # predictions are gene annotations, unchanged by the re-alignment, so reuse the
+    # 2023 genes/ set (44 gene assemblies). genePredToMafFrames accepts all gene
+    # sets in one call and spends ~95% of its time reading the MAF, so read each
+    # chrom once (one call, all gene sets) instead of per (chrom x gene). Ran on
+    # hgwdev, 8 chroms in parallel (script $WORK/frames/framesAll.sh):
+    #   GENES=/hive/data/genomes/hg38/bed/cactus447/frames/genes
+    #   GENEARGS="" ; for gp in $GENES/*.gp.gz; do g=$(basename $gp .gp.gz); \
+    #     GENEARGS="$GENEARGS $g $gp"; done
+    #   # per chrom:
+    #   zcat $WORK/iRows/result/<chrom>.iRows.maf.gz \
+    #     | genePredToMafFrames hg38 stdin stdout $GENEARGS \
+    #     | gzip > parts/<chrom>.mafFrames.gz
+    #   find parts -name '*.mafFrames.gz' | while read F; do zcat "$F" | awk '11==NF'; done \
+    #     | sort -k1,1 -k2,2n > cactus447wayFrames.bed
+    #   bedToBigBed -type=bed3+7 -as=$HOME/kent/src/hg/lib/mafFrames.as -tab \
+    #     cactus447wayFrames.bed /hive/data/genomes/hg38/chrom.sizes cactus447wayFrames.bb
+    #     -> 168 MB, itemCount 16,098,320, basesCovered 66,595,568 (2023: ~16,063,019)
 
 #############################################################################
