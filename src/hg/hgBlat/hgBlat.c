@@ -3018,13 +3018,13 @@ if (isEmpty(userSeq) || orgChange)
      * offer a working "go back to the original page" link. */
     boolean newForm = cartUsualBoolean(cart, "blatNewForm",
 				       cfgOptionBooleanDefault("blatNewForm", FALSE));
-    /* The new search form and the new results table are one experience: opting into the new form
-     * also opts into the new results page, so a submission from here never lands back on the
-     * classic results.  Setting it in the cart now (while the form is shown) carries the choice
-     * into the next request, the actual search.  The results page still has its own toggle to
-     * switch back for a given session. */
-    if (newForm)
-	cartSetBoolean(cart, "blatNewPage", TRUE);
+    /* The search form and the results table are one experience: the results page defaults to match
+     * the form the search came from.  A submission from the new form lands on the new results
+     * table; one from the classic form lands on the classic results table (which still advertises
+     * the new one through its banner).  Setting it in the cart now, while the form is shown, carries
+     * the choice into the next request - the actual search.  The results page still has its own
+     * toggle to switch for a given session. */
+    cartSetBoolean(cart, "blatNewPage", newForm);
     /* Title from the page design.  The new form names the current assembly in its own genome
      * picker, so prefixing the title with it as well just repeats it - and for a hub assembly that
      * prefix is very long ("HG02257.alt.pat.f1_v2 May 2021 BLAT Search").  cartWebStart HTML-escapes
