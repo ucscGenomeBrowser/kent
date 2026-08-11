@@ -94,6 +94,11 @@ dataVersion /gbdb/$D/bbi/clinvar/version.txt
         yAxisLabel.4 4 on 150,150,150 LP
         yAxisLabel.5 5 on 150,150,150 P
         lollyMaxSize 10
+        # Default stays the bigLolly default of 128; the ceiling is raised so a print/figure
+        # render can ask for a taller row (clinvarSubLolly.heightPer). Without this,
+        # cartTdbFetchMinMaxPixels clamps any request back to 128 and the lollipop row is a
+        # sliver in a 3x-wide image.
+        maxHeightPixels 512:128:11
         viewLimits 0:5
         mouseOverField _mouseOver
         filterValues.score 5|Pathogenic,4|Likely Pathogenic,3|Variant of Unknown Significance,2|Likely Benign,1|Benign,0|Others

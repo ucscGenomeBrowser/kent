@@ -857,13 +857,22 @@ int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
 return mgFontStringWidth(font, string);
 }
 
+void mgLoadFontEngine(unsigned int method, char *fontFile)
+/* Load a text engine without attaching it to an image.  Text measurement
+ * (mgFontStringWidth) answers from whichever engine is loaded, so a caller that
+ * measures text before it has an image to draw on needs to load the engine
+ * first, or it will measure with one engine and draw with another. */
+{
+if (method == FONT_METHOD_FREETYPE)
+    ftInitialize(fontFile);
+}
+
 void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontName, char *fontFile)
 /* Which font drawing method shoud we use. */
 {
 mg->fontMethod = method;
 
-if (method == FONT_METHOD_FREETYPE)
-    ftInitialize(fontFile);
+mgLoadFontEngine(method, fontFile);
 }
 
 int mgFontCharWidth(MgFont *font, char c)

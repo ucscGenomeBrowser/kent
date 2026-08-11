@@ -316,6 +316,12 @@ int mgFontStringWidth(MgFont *font, char *string);
 int mgFontCharWidth(MgFont *font, char c);
 /* How wide is a character? */
 
+void mgLoadFontEngine(unsigned int method, char *fontFile);
+/* Load a text engine without attaching it to an image.  Text measurement
+ * (mgFontStringWidth) answers from whichever engine is loaded, so a caller that
+ * measures text before it has an image to draw on needs to load the engine
+ * first, or it will measure with one engine and draw with another. */
+
 char *mgFontSizeBackwardsCompatible(char *size);
 /* Given "size" argument that may be in old tiny/small/medium/big/huge format,
  * return it in new numerical string format. Do NOT free the return string*/

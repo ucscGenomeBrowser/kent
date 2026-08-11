@@ -1982,12 +1982,12 @@ if (tdb->subtracks)
 return validateOneTdb(db, tdb, badList);
 }
 
-static void outTrack(FILE *f, struct cart *cart, struct trackDb *tdb, unsigned priority)
+static void outTrack(FILE *f, struct cart *cart, struct trackDb *tdb, double priority)
 /* Set priority and output track to hub. */
 {
 char buffer[1024];
 
-safef(buffer, sizeof buffer, "%d", priority);
+safef(buffer, sizeof buffer, "%g", priority);
 hashReplace(tdb->settingsHash, "priority", cloneString(buffer));
 
 struct dyString *dy = trackDbString(cart, tdb);
@@ -2010,18 +2010,29 @@ return trackDbSetting(tdb, "quickLiftUrl") != NULL ||
        trackDbSetting(tdb, "quickLifted") != NULL;
 }
 
-static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList, struct hash *existingTracks, unsigned startPriority)
+static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList, struct hash *existingTracks)
 /* walk tree looking for visible tracks to output to hub.  Skip tracks that already
  * came from a quickLift hub, and skip tracks whose name is already present in
  * the existing hub file. */
 {
-unsigned priority = startPriority;
 struct hash *haveSuper = newHash(0);
 struct trackDb *tdbNext = NULL;
+
+// The priority written to the hub is the track's rank in the source list, which the
+// caller has sorted on group priority and then track priority.  The rank has to count
+// every track we walk past, not just the ones we output: the hub file is appended to
+// across requests, so the number a track gets must depend only on how the source is
+// laid out, never on which request it happened to be added in.
+//
+// The source priority itself will not do.  All lifted tracks land in one group on the
+// target (trackHubAddGroupName rewrites the group of every hub track), so a priority
+// that only orders within a source group is being compared across groups.
+double rank = 0;
 
 for(; tdb; tdb = tdbNext)
     {
     tdbNext = tdb->next;
+    rank += 1;
 
     if (isFromQuickLiftHub(tdb))
         continue;
@@ -2045,7 +2056,9 @@ for(; tdb; tdb = tdbNext)
                     hashLookup(existingTracks, bareParent) == NULL)
                     {
                     tdb->parent->visibility = hTvFromString("tvShow");
-                    outTrack(f, cart, tdb->parent, priority++);
+                    // a superTrack is not in the list we are walking, so it has no rank
+                    // of its own.  Slot it just above the first child that brought it in.
+                    outTrack(f, cart, tdb->parent, rank - 0.5);
                     }
                 hashStore(haveSuper, tdb->parent->track);
                 }
@@ -2066,18 +2079,15 @@ for(; tdb; tdb = tdbNext)
             hashReplace(tdb->settingsHash, "longLabel", trackDbSetting(tdb, "description"));
             }
 
-        outTrack(f, cart, tdb, priority++);
+        outTrack(f, cart, tdb, rank);
         }
     }
 }
 
-static void readExistingHubTracks(char *filename, struct hash *trackNames, unsigned *retMaxPriority)
+static void readExistingHubTracks(char *filename, struct hash *trackNames)
 /* Scan an existing quickLift hub file and populate trackNames with the set of
- * track names already present.  Also returns the highest priority value seen
- * (0 if the file has no track stanzas yet) so new tracks can be appended after
- * existing ones. */
+ * track names already present. */
 {
-unsigned maxPriority = 0;
 struct lineFile *lf = lineFileMayOpen(filename, TRUE);
 if (lf != NULL)
     {
@@ -2090,21 +2100,9 @@ if (lf != NULL)
             if (isNotEmpty(name))
                 hashStoreName(trackNames, cloneString(firstWordInLine(name)));
             }
-        else if (startsWithWord("priority", line))
-            {
-            char *val = skipLeadingSpaces(line + 8);
-            if (isNotEmpty(val))
-                {
-                unsigned p = sqlUnsigned(firstWordInLine(val));
-                if (p > maxPriority)
-                    maxPriority = p;
-                }
-            }
         }
     lineFileClose(&lf);
     }
-if (retMaxPriority != NULL)
-    *retMaxPriority = maxPriority;
 }
 
 static int cmpPriority(const void *va, const void *vb)
@@ -2151,8 +2149,7 @@ slSort(&tdbList, cmpPriority);
 char *filename = getHubName(cart, db);
 
 struct hash *existingTracks = newHash(8);
-unsigned maxPriority = 0;
-readExistingHubTracks(filename, existingTracks, &maxPriority);
+readExistingHubTracks(filename, existingTracks);
 boolean hubExists = (hashNumEntries(existingTracks) > 0);
 
 FILE *f = mustOpen(filename, hubExists ? "a" : "w");
@@ -2160,7 +2157,7 @@ chmod(filename, 0666);
 if (!hubExists)
     outHubHeader(f, trackHubSkipHubName(db));
 
-walkTree(f, db, cart, tdbList, visDy, badList, existingTracks, maxPriority + 1);
+walkTree(f, db, cart, tdbList, visDy, badList, existingTracks);
 fclose(f);
 
 return cloneString(filename);

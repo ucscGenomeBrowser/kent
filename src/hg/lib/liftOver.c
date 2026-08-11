@@ -103,6 +103,32 @@ if (map == NULL)
 return binKeeperFind(map->bk, start, (end == start) ? end + 1 : end);
 }
 
+struct chain *liftOverChainForRange(struct hash *chainHash, char *chrom, int start, int end)
+/* Return the chain in chainHash covering the most aligned bases in the given range,
+ * or NULL if none overlap it.  This is the chain remapBlockedBed would also pick. */
+{
+struct binElement *binList = findRange(chainHash, chrom, start, end), *el;
+struct chain *best = NULL;
+int bestOverlap = 0;
+
+for (el = binList; el != NULL; el = el->next)
+    {
+    struct chain *chain = el->val;
+    struct cBlock *b;
+    int overlap = 0;
+
+    for (b = chain->blockList; b != NULL; b = b->next)
+        overlap += positiveRangeIntersection(b->tStart, b->tEnd, start, end);
+    if (overlap > bestOverlap)
+        {
+        bestOverlap = overlap;
+        best = chain;
+        }
+    }
+slFreeList(&binList);
+return best;
+}
+
 static int chainAliSize(struct chain *chain)
 /* Return size of all blocks in chain. */
 {

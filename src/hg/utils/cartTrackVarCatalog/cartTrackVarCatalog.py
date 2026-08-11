@@ -103,19 +103,29 @@ NAMING = {
 # ---------------------------------------------------------------------------
 
 def v(name, type_, src, sep=".", values=None, default=None, note=None,
-      tdb=None, multi=False):
+      tdb=None, multi=False, aliases=None, valuesSrc=None):
     """One catalog entry.
 
     name    variable name after the <track> prefix and separator
     type_   bool | int | float | string | enum | list | color | hidden
     src     file:line where the tree reads or writes it
     sep     '.' (canonical) or '_' (legacy)
-    values  allowed values for enums
+    values  the values the CART may hold, exactly as the reader compares them
+    aliases other spellings a writer may use -> the canonical cart value.
+            Usually the trackDb vocabulary, which is often not the cart
+            vocabulary; see the autoScale entry for the case that proved it.
+    valuesSrc  the C array the values were checked against.  Name it for any
+            enum whose value list is not obvious from src, so the next reader
+            can re-verify instead of trusting this file.
     tdb     trackDb setting that supplies the default, if differently named
     """
     d = {"name": name, "type": type_, "sep": sep, "src": src}
     if values:
         d["values"] = values
+    if aliases:
+        d["aliases"] = aliases
+    if valuesSrc:
+        d["valuesSrc"] = valuesSrc
     if default is not None:
         d["default"] = default
     if tdb:
@@ -466,33 +476,67 @@ TYPES = {
         "vars": [
             v("minY", "float", "hg/inc/wiggle.h:MIN_Y", tdb="viewLimits"),
             v("maxY", "float", "hg/inc/wiggle.h:MAX_Y", tdb="viewLimits"),
-            v("autoScale", "enum", "hg/inc/wiggle.h:AUTOSCALE",
-              values=["on", "off", "group", "cumulative"],
-              tdb="autoScaleDefault"),
+            v("autoScale", "enum", "hg/lib/wiggleCart.c:448",
+              values=["use vertical viewing range setting",
+                      "auto-scale to data view",
+                      "group auto-scale"],
+              valuesSrc="hg/lib/hui.c:1973 wiggleScaleOptionsParent",
+              aliases={"off": "use vertical viewing range setting",
+                       "on": "auto-scale to data view",
+                       "group": "group auto-scale"},
+              tdb="autoScaleDefault",
+              note="Two vocabularies, and this entry had the wrong one until "
+                   "2026-08-08.  The cart holds one of the three long "
+                   "literals.  on/off/group are the *trackDb* spellings, "
+                   "translated to the literals at wiggleCart.c:454-459, and "
+                   "they are never stored.  'cumulative' was in this list by "
+                   "mistake: it is the C enum identifier wiggleScaleCumulative "
+                   "(hui.h:576), not a value.  This matters more than a "
+                   "documentation slip because wiggleScaleStringToEnum() "
+                   "errAborts on an unknown value (hui.c:1985), so "
+                   "autoScale=on in a cart CRASHES hgTracks instead of being "
+                   "ignored.  A JSON writer must accept the aliases and store "
+                   "the literal."),
             v("alwaysZero", "enum", "hg/inc/wiggle.h:ALWAYSZERO",
-              values=["on", "off"]),
+              values=["OFF", "ON"],
+              valuesSrc="hg/lib/hui.c:2173 wiggleAlwaysZeroOptions"),
             v("lineBar", "enum", "hg/inc/wiggle.h:LINEBAR",
-              values=["Bar", "Points"], tdb="graphTypeDefault"),
+              values=["points", "bar"], tdb="graphTypeDefault",
+              valuesSrc="hg/lib/hui.c:2017 wiggleGraphOptions"),
             v("transformFunc", "enum", "hg/inc/wiggle.h:TRANSFORMFUNC",
-              values=["NONE", "LOG"]),
+              values=["NONE", "LOG"],
+              valuesSrc="hg/lib/hui.c:2145 wiggleTransformFuncOptions"),
             v("negateValues", "bool", "hg/inc/wiggle.h:DONEGATIVEMODE"),
             v("sequenceLogo", "bool", "hg/inc/wiggle.h:DOSEQUENCELOGOMODE"),
             v("horizGrid", "enum", "hg/inc/wiggle.h:HORIZGRID",
-              values=["on", "off"], tdb="gridDefault"),
+              values=["ON", "OFF"], tdb="gridDefault",
+              valuesSrc="hg/lib/hui.c:2198 wiggleGridOptions"),
             v("yLineOnOff", "enum", "hg/inc/wiggle.h:YLINEONOFF",
-              values=["on", "off"]),
+              values=["OFF", "ON"],
+              valuesSrc="hg/lib/hui.c:1943 wiggleYLineMarkOptions"),
             v("yLineMark", "float", "hg/inc/wiggle.h:YLINEMARK"),
             v("smoothingWindow", "enum", "hg/inc/wiggle.h:SMOOTHINGWINDOW",
-              values=["off", "2", "3", "4", "...", "16"]),
+              values=["OFF", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                      "11", "12", "13", "14", "15", "16"],
+              valuesSrc="hg/lib/hui.c:1913 wiggleSmoothingOptions",
+              note="The list used to be written 'off, 2, 3, 4, ..., 16', with "
+                   "the ellipsis sitting in the values array as if it were a "
+                   "value.  Enumerated now, because a generated validator "
+                   "would have accepted the literal string '...'."),
             v("windowingFunction", "enum",
               "hg/inc/wiggle.h:WINDOWINGFUNCTION",
-              values=["mean+whiskers", "maximum", "mean", "minimum", "sum"]),
+              values=["mean+whiskers", "maximum", "mean", "minimum", "sum"],
+              valuesSrc="hg/lib/hui.c:1880 wiggleWindowingOptions"),
             v("aggregate", "enum", "hg/inc/wiggle.h:AGGREGATE",
               values=["none", "transparentOverlay", "solidOverlay",
                       "stacked", "add", "subtract"],
+              valuesSrc="hg/lib/hui.c:2054 aggregateExtraValues "
+                        "(hui.h:652 WIG_AGGREGATE_*)",
               note="Container-level, but readable at leaf level too."),
             v("viewFunc", "enum", "hg/inc/wiggle.h:VIEWFUNC",
-              values=["showAll", "addAll", "subtractAll"]),
+              values=["showAll", "addAll", "subtractAll"],
+              valuesSrc="hg/lib/hui.c:2118 viewFuncValues "
+                        "(hui.h:636 WIG_VIEWFUNC_*)"),
             v("missingMethod", "enum", "hg/lib/hui.c:6257",
               note="How to render gaps in the data."),
             v("heightPer", "int", "hg/inc/wiggle.h:HEIGHTPER", default="128"),
@@ -787,8 +831,18 @@ TYPES = {
         "families": ["score", "numericFilter", "filterBy", "label"],
         "vars": [
             v("heightPer", "int", "hg/lib/hui.c:lollyCfgUi"),
-            v("autoScale", "enum", "hg/lib/hui.c:lollyCfgUi",
-              values=["on", "off"]),
+            v("autoScale", "enum", "hg/hgTracks/lollyTrack.c:485",
+              values=["use vertical viewing range setting",
+                      "auto-scale to data view",
+                      "group auto-scale"],
+              valuesSrc="hg/lib/hui.c:1973 wiggleScaleOptionsParent",
+              aliases={"off": "use vertical viewing range setting",
+                       "on": "auto-scale to data view",
+                       "group": "group auto-scale"},
+              note="Same var, same reader and same fix as wig.autoScale: "
+                   "lollyTrack.c:485 calls wigFetchAutoScaleWithCart(), so the "
+                   "cart vocabulary is the wiggle one, not on/off.  This entry "
+                   "carried on/off until 2026-08-08."),
             v("minY", "float", "hg/lib/hui.c:lollyCfgUi"),
             v("maxY", "float", "hg/lib/hui.c:lollyCfgUi"),
             v("popMethod", "enum", "hg/lib/hui.c:lollyCfgUi",
@@ -1432,6 +1486,56 @@ def all_vars():
     return out
 
 
+ELLIPSIS = ("...", "…", "etc", "etc.")
+
+
+def check_values(out=sys.stdout):
+    """Sanity checks on enum value lists.  Returns the number of errors.
+
+    The autoScale entry (fixed 2026-08-08) had three separate faults that all
+    came from curating a value list by eye: it recorded the trackDb vocabulary
+    instead of the cart vocabulary, it included a C enum identifier as if it
+    were a value, and nothing pointed at the array the values had to match.
+    A wrong value here is not a documentation slip - every wiggle
+    *StringToEnum() errAborts on an unknown string, so it crashes hgTracks.
+    These checks catch the mechanical part of that mistake.
+    """
+    bad = 0
+    noSrc = []
+    for e in all_vars():
+        vals = e.get("values")
+        name = e["name"] or "<bare track name>"
+        # A placeholder in a values list becomes a real accepted value the
+        # moment anything generates a validator from this file.
+        for val in vals or []:
+            if val.strip().lower() in ELLIPSIS:
+                print("%s: %r in values is a placeholder, not a value; "
+                      "enumerate the list" % (name, val), file=sys.stderr)
+                bad += 1
+        # An alias has to resolve to something the reader will accept.
+        for alias, target in (e.get("aliases") or {}).items():
+            if not vals:
+                print("%s: alias %r on an entry with no values"
+                      % (name, alias), file=sys.stderr)
+                bad += 1
+            elif target not in vals:
+                print("%s: alias %r -> %r, which is not in values"
+                      % (name, alias, target), file=sys.stderr)
+                bad += 1
+            elif alias in vals:
+                print("%s: alias %r is also a value, so it cannot be "
+                      "translated" % (name, alias), file=sys.stderr)
+                bad += 1
+        if e["type"] == "enum" and vals and not e.get("valuesSrc"):
+            noSrc.append(name)
+    print("values ok" if not bad else "values: %d problem(s)" % bad, file=out)
+    # Not an error.  It is the backlog: an enum whose values nobody has
+    # checked against the C array that actually gates them.
+    print("enums with no valuesSrc: %d (unverified value lists)" % len(noSrc),
+          file=out)
+    return bad
+
+
 def key(name):
     """A harvested and a cataloged name reduced to a comparable form.
 
@@ -1783,6 +1887,14 @@ def var_rows(vars_, prefix=None):
         if e.get("values"):
             bits.append('<span class="vals">' +
                         esc(" | ".join(e["values"])) + "</span>")
+        if e.get("aliases"):
+            bits.append('<span class="note">also accepts ' +
+                        esc(", ".join("%s = %s" % (a, t) for a, t
+                                      in sorted(e["aliases"].items()))) +
+                        "</span>")
+        if e.get("valuesSrc"):
+            bits.append('<span class="src">values: ' +
+                        esc(e["valuesSrc"]) + "</span>")
         if e.get("default") is not None:
             bits.append('<span class="note">default ' +
                         esc(e["default"]) + "</span>")
@@ -1996,6 +2108,9 @@ def main():
         if bad:
             return 1
         print("families ok")
+        bad += check_values()
+        if bad:
+            return 1
     return 0
 
 

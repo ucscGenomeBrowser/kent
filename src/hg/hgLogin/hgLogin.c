@@ -1057,8 +1057,7 @@ char message[4096];
 safef(message, sizeof(message),
     "Someone (probably you, from IP address %s) asked to change the email address on the %s "
     "account \"%s\" to this address.\nTo confirm the change, open this link in your browser:\n\n"
-    "%s\n\nThe link works once and expires in one hour.  If you did not request this, you can "
-    "safely ignore this email and your address will stay as it is.\n\n%s\n%s",
+    "%s\n\nThe link works once and expires in one hour.\n\n%s\n%s",
     emptyForNull(remoteAddr), brwName, user, url, signature, returnAddr);
 sendActMailOut(newEmail, subject, message);
 freeMem(sig);
@@ -1197,7 +1196,7 @@ cartRemove(cart, "hgLogin_newEmail2");
 cartRemove(cart, "hgLogin_curPassword");
 char *encEmail = htmlEncode(email1);
 hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
-hPrintf("<h3>Almost done &mdash; please check your email</h3>");
+hPrintf("<h3>Almost done. Please check your email</h3>");
 hPrintf("<p>We sent a confirmation link to <b>%s</b>. Open the link in that message to finish "
     "changing your email address. The link works once and expires in one hour.</p></div>",
     encEmail);
@@ -2373,7 +2372,7 @@ hPrintf("<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf("<p id=\"confirmationMsg\" class=\"confirmationTxt\">If an account exists for "
     "<B>%s</B>, a login link has been sent to that address.<BR><BR>"
-    "Click the link in that email to sign in &mdash; no password needed. "
+    "Click the link in that email to sign in. No password needed. "
     "The link works once and expires in one hour.</p>", email);
 hPrintf("<p>If you don't see the email, please check your spam folder.</p>");
 hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n", hgLoginUrl);
@@ -2397,8 +2396,7 @@ safef(subject, sizeof(subject), "Your login link for the %s", brwName);
 safef(msg, sizeof(msg),
     "Someone (probably you, from IP address %s) requested a login link for the %s account "
     "registered to this email address.\nClick the link below to sign in without a password. "
-    "It works once and expires in one hour:\n\n%s\n\nIf you did not request this, you can "
-    "safely ignore this email.\n\n%s\n%s",
+    "It works once and expires in one hour:\n\n%s\n\n%s\n%s",
     remoteAddr, brwName, url, signature, returnAddr);
 sendActMailOut(email, subject, msg);
 }

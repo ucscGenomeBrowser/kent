@@ -131,10 +131,111 @@ bed->chromStarts = needMem(sizeof(int));
 bed->chromStarts[0] = 0;
 }
 
+static int snapToBlock(struct chain *chain, int pos, boolean forward)
+/* remapRangeList will only place a coordinate that falls inside an aligned block, so a
+ * clipped end has to land on real alignment, not merely inside the chain.  Return pos if
+ * it is already aligned, otherwise the nearest aligned coordinate looking forward (for a
+ * start) or backward (for an end).  Return -1 if there is no such coordinate.
+ * The asymmetry matches remapRangeList: a start needs b->tStart <= start < b->tEnd, so
+ * b->tStart is legal; an end needs b->tStart < end <= b->tEnd, so b->tEnd is legal. */
+{
+struct cBlock *b, *prev = NULL;
+
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if ((b->tStart <= pos) && (pos < b->tEnd))
+        return pos;
+    if (forward && (b->tStart > pos))
+        return b->tStart;
+    if (b->tEnd <= pos)
+        prev = b;
+    }
+
+return (!forward && (prev != NULL)) ? prev->tEnd : -1;
+}
+
+static boolean clipBedToChains(struct hash *chainHash, struct bed *bed)
+/* An item can be far bigger than the region we loaded chains for -- ClinVar has copy
+ * number variants spanning most of a chromosome.  Its ends then sit where no chain
+ * reaches, remapRangeList can place neither of them, and the whole item is dropped even
+ * though the part on screen maps perfectly well.  Pull the ends in to the nearest aligned
+ * base so the visible part can lift.  Return TRUE if the item was clipped. */
+{
+struct chain *chain = liftOverChainForRange(chainHash, bed->chrom,
+                                            bed->chromStart, bed->chromEnd);
+if (chain == NULL)
+    return FALSE;               // nothing covers it, let it fail the way it used to
+
+int newStart = snapToBlock(chain, bed->chromStart, TRUE);
+int newEnd = snapToBlock(chain, bed->chromEnd, FALSE);
+
+if ((newStart < 0) || (newEnd < 0) || (newStart >= newEnd))
+    return FALSE;
+if ((newStart == bed->chromStart) && (newEnd == bed->chromEnd))
+    return FALSE;               // both ends already sit on alignment, nothing to do
+
+/* Trim the blocks to the new range.  Blocks are in ascending order, so walk them and
+ * keep the part that survives; a block entirely outside the range is dropped. */
+if (bed->blockCount > 0)
+    {
+    int i, keep = 0;
+    for (i = 0;  i < bed->blockCount;  ++i)
+        {
+        int bStart = bed->chromStart + bed->chromStarts[i];
+        int bEnd = bStart + bed->blockSizes[i];
+
+        if (bStart < newStart)
+            bStart = newStart;
+        if (bEnd > newEnd)
+            bEnd = newEnd;
+        if (bStart >= bEnd)
+            continue;
+        bed->chromStarts[keep] = bStart - newStart;
+        bed->blockSizes[keep] = bEnd - bStart;
+        keep++;
+        }
+    if (keep == 0)
+        return FALSE;
+    bed->blockCount = keep;
+    }
+
+bed->chromStart = newStart;
+bed->chromEnd = newEnd;
+if (bed->thickStart < newStart)
+    bed->thickStart = newStart;
+if (bed->thickEnd > newEnd)
+    bed->thickEnd = newEnd;
+if (bed->thickStart > bed->thickEnd)
+    bed->thickStart = bed->thickEnd;
+
+return TRUE;
+}
+
+static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip);
+
 struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
  */
+{
+return quickLiftBed(bbi, chainHash, bb, FALSE);
+}
+
+struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
+/* Like quickLiftIntervalsToBed, but an item too big for the chains we loaded is pulled in
+ * to what they cover rather than dropped.  Callers that need the item's true extent (the
+ * details page) should use quickLiftIntervalsToBed instead. */
+{
+// quickLiftClipToChains=off restores the old behavior, where an item whose ends fall
+// outside the chains we loaded is dropped instead of being pulled in.
+boolean clip = cfgOptionBooleanDefault("quickLiftClipToChains", TRUE);
+
+return quickLiftBed(bbi, chainHash, bb, clip);
+}
+
+static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip)
+/* Port a bigBedInterval to a bed on the reference.  If clip, an item too big for the
+ * chains we loaded is pulled in to what they cover rather than dropped. */
 {
 char startBuf[16], endBuf[16];
 char *bedRow[bbi->fieldCount];
@@ -149,6 +250,9 @@ struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
 char *error;
 if (bbi->definedFieldCount < 12)
     make12(bed);
+
+if (clip)
+    clipBedToChains(chainHash, bed);
 
 if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
     return bed;
