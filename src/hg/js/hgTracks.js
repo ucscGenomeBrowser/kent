@@ -2257,7 +2257,14 @@ var dragSelect = {
                              "<li>Clear specific highlights with right click &gt; Remove highlight" +
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>");
-            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
+            // Start the picker on the color the user last saved.  This dialog is removed from
+            // the DOM on close when "don't show this again" is checked, so this runs again on
+            // the next drag.  makeHighlightPicker's own loadHlColor() reads a different
+            // prevHlColor than the one dragSelect.saveHlColor writes, so without the color
+            // passed in here the rebuilt picker falls back to the default and the saved color
+            // is lost.  Fourth argument stays undefined so the label keeps its default.
+            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null,
+                                undefined, dragSelect.loadHlColor());
             $("#dragSelectDialog").append("<div style='padding-top: 4px'><input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
                              "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></div>"+ 
