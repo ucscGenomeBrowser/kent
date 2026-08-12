@@ -26,6 +26,7 @@ usage:
 
 import sys
 import gzip
+import re
 from collections import defaultdict
 
 # GFF3/attrsOut attribute names worth surfacing as search terms, and
@@ -65,7 +66,8 @@ def genePredNames(gpFile):
     seen = set()
     with openMaybeGz(gpFile) as fh:
         for line in fh:
-            if line.startswith("#"):
+            line = line.strip()
+            if not line or line.startswith("#"):
                 continue
             name = line.split(None, 1)[0]
             if name not in seen:
@@ -90,7 +92,6 @@ def dbxrefTerms(values):
 
 def noSuffix(name):
     """strip a trailing .NNN version suffix, same trick as gpToIx.pl"""
-    import re
     stripped = re.sub(r"\.[0-9]+$", "", name)
     return stripped if stripped != name else None
 
