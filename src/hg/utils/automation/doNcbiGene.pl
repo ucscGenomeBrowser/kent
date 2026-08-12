@@ -33,7 +33,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $dbHost = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $defaultFileServer = 'hgwdev';
@@ -72,8 +71,7 @@ options:
                           \$buildDir/../../sequence/\$asmId.ncbiToUcsc.lift
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
-					'workhorse' => $defaultWorkhorse,
+  print STDERR &HgAutomate::getCommonOptionHelp('workhorse' => $defaultWorkhorse,
 					'fileServer' => $defaultFileServer);
   print STDERR "
 Automates construction of the 'ncbiGene' track from an assembly's own
@@ -111,7 +109,6 @@ sub checkOptions {
   &HgAutomate::processCommonOptions();
   my $err = $stepper->processOptions();
   usage(1) if ($err);
-  $dbHost = $opt_dbHost if ($opt_dbHost);
   $workhorse = $opt_workhorse if ($opt_workhorse);
   $fileServer = $opt_fileServer if ($opt_fileServer);
 }
@@ -349,7 +346,7 @@ _EOF_
     printf "# ncbiGene: failing bedToBigBed\\n" 1>&2
     exit 255
   fi
-  touch -r\$gffFile \$asmId.ncbiGene.bb.new
+  touch -r \$gffFile \$asmId.ncbiGene.bb.new
   bigBedInfo \$asmId.ncbiGene.bb.new | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt.new
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt.new` | xargs echo
