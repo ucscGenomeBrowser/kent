@@ -704,17 +704,41 @@ else
     return TRUE;	/* might be true */
 }
 
+static struct hash *dbExistsCache = NULL;	/* memoize sqlDatabaseExists() below,
+	 * protectedTrack() is called once per track in a listing */
+
 boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
-// if the table is from hub, assume db should be from hub as well
+// A hub track's table name always carries the hub_<id>_ prefix, but db only
+// needs that same prefix reconstructed when db itself is an assembly hub
+// genome (accessControlInit()/trackHubDatabase() look it up by its decorated
+// name).  When db is a real, existing database -- as it is for a hub track
+// that merely overlays an existing genome, e.g. a hub track on hg19 -- db
+// must be left alone, or accessControlInit()'s hAllocConn() aborts with
+// "Unknown database".
 if (isHubTrack(tableName))
     {
-    char buffer[4096];
+    if (dbExistsCache == NULL)
+        dbExistsCache = hashNew(0);
+    struct hashEl *hel = hashLookup(dbExistsCache, db);
+    boolean isRealDb;
+    if (hel == NULL)
+        {
+        isRealDb = sqlDatabaseExists(db);
+        hashAdd(dbExistsCache, db, isRealDb ? intToPt(1) : intToPt(0));
+        }
+    else
+        isRealDb = ptToInt(hel->val);
 
-    safef(buffer, sizeof buffer, "hub_%d_%s",hubIdFromTrackName(tableName), db);
+    if (! isRealDb)
+        {
+        char buffer[4096];
 
-    db = cloneString(buffer);
+        safef(buffer, sizeof buffer, "hub_%d_%s",hubIdFromTrackName(tableName), db);
+
+        db = cloneString(buffer);
+        }
     }
 
 return cartTrackDbIsAccessDenied(db, tableName) || cartTrackDbIsNoGenome(db, tableName);
@@ -852,7 +876,7 @@ boolean inUcscEduDomain()
  * them via gethostname()/getaddrinfo(). */
 {
 char *domain = cfgOption(CFG_CENTRAL_DOMAIN);
-return (domain != NULL && strstr(domain, ".ucsc.edu") != NULL);
+return (domain != NULL && endsWith(domain, ".ucsc.edu"));
 }
 
 boolean onGenomeRRMachine()
@@ -998,12 +1022,20 @@ if (!netSkipHttpHeaderLinesWithRedirect(sd, dyStringContents(url), &redirectedUr
 dyStringFree(&url);
 struct dyString *body = netSlurpFile(sd);
 close(sd);
-struct jsonElement *json = jsonParse(body->string);
+
+char *status = "error";
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct jsonElement *json = jsonParse(body->string);
+    char *statusField = jsonStringField(json, "status");
+    if (isNotEmpty(statusField))
+        status = cloneString(statusField);
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
 dyStringFree(&body);
-if (json == NULL)
-    return "error";
-char *status = jsonStringField(json, "status");
-return isNotEmpty(status) ? cloneString(status) : "error";
+return status;
 }
 
 void apiSubmitOttoRequest(char *words[MAX_PATH_INFO])
