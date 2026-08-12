@@ -30,6 +30,8 @@ simpleTest: mkout
 	diff ${OUT}/sqlCheck.8 ${EXP}/sqlCheck.8
 	${TESTER} IL "chromStart,chromEnd,'.',score" >& ${OUT}/sqlCheck.9
 	diff ${OUT}/sqlCheck.9 ${EXP}/sqlCheck.9
+	-${TESTER} XM "' OR '1'='1" 2>&1 | grep -v '0x' >& ${OUT}/sqlCheck.10
+	diff ${OUT}/sqlCheck.10 ${EXP}/sqlCheck.10
 
 mkout:
 	@${MKDIR} ${OUT}

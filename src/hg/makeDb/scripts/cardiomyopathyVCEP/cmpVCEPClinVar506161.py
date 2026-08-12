@@ -39,14 +39,8 @@ COLORS = {
 DEFAULT_COLOR = '136,136,136'
 
 # Per-gene EvRepo VariationIDs - built once at build-time from EvRepo JSON
-EVREPO_VAR_IDS = set()
+EVREPO_VAR_IDS = set()   # populated in main() once EVREPO_JSON is resolved from --output-dir
 EVREPO_JSON = '/hive/users/lrnassar/claude/RM37446/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
-try:
-    _erepo = json.load(open(EVREPO_JSON))
-    EVREPO_VAR_IDS = set(v.get('variationId', '') for v in _erepo['variantInterpretations'] if v.get('variationId'))
-    print(f'  loaded {len(EVREPO_VAR_IDS)} EvRepo VariationIDs (will tag overlapping rows)')
-except Exception as e:
-    print(f'  WARNING: could not load EvRepo JSON: {e}', file=sys.stderr)
 
 CHROM_SIZES = {
     'hg38': '/cluster/data/hg38/chrom.sizes',
@@ -232,6 +226,17 @@ def main():
     ap.add_argument('--db', action='append', required=True, choices=['hg38', 'hg19'])
     ap.add_argument('--output-dir', required=True)
     args = ap.parse_args()
+
+    # Source files live under --output-dir/cmp_downloads (see cmpVCEPProvisionalClass).
+    global SUBMISSIONS_TSV, EVREPO_JSON, EVREPO_VAR_IDS
+    SUBMISSIONS_TSV = f'{args.output_dir}/cmp_downloads/clinvar/cardiomyopathyVCEP_submissions.tsv'
+    EVREPO_JSON = f'{args.output_dir}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
+    try:   # load here, not at import, so the resolved EVREPO_JSON is used
+        _erepo = json.load(open(EVREPO_JSON))
+        EVREPO_VAR_IDS = set(v.get('variationId', '') for v in _erepo['variantInterpretations'] if v.get('variationId'))
+        print(f'  loaded {len(EVREPO_VAR_IDS)} EvRepo VariationIDs (will tag overlapping rows)')
+    except Exception as e:
+        print(f'  WARNING: could not load EvRepo JSON: {e}', file=sys.stderr)
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPClinVar506161')
     os.makedirs(out_dir, exist_ok=True)

@@ -60,6 +60,64 @@ AUTOSQL = """table cmpVCEPRevel
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cmpVCEPClinDomains import parse_mane_record, cds_exons
 
+# Standard genetic code + amino-acid 3-letter names, for the mouseover aa change.
+# REVEL is per-alt-nucleotide on the genomic forward strand; without the resulting aa change
+# a curator on a minus-strand gene reads the wrong allele's score (e.g. reads R870L for R870H).
+CODON1 = {
+    'TTT':'F','TTC':'F','TTA':'L','TTG':'L','CTT':'L','CTC':'L','CTA':'L','CTG':'L',
+    'ATT':'I','ATC':'I','ATA':'I','ATG':'M','GTT':'V','GTC':'V','GTA':'V','GTG':'V',
+    'TCT':'S','TCC':'S','TCA':'S','TCG':'S','CCT':'P','CCC':'P','CCA':'P','CCG':'P',
+    'ACT':'T','ACC':'T','ACA':'T','ACG':'T','GCT':'A','GCC':'A','GCA':'A','GCG':'A',
+    'TAT':'Y','TAC':'Y','TAA':'*','TAG':'*','CAT':'H','CAC':'H','CAA':'Q','CAG':'Q',
+    'AAT':'N','AAC':'N','AAA':'K','AAG':'K','GAT':'D','GAC':'D','GAA':'E','GAG':'E',
+    'TGT':'C','TGC':'C','TGA':'*','TGG':'W','CGT':'R','CGC':'R','CGA':'R','CGG':'R',
+    'AGT':'S','AGC':'S','AGA':'R','AGG':'R','GGT':'G','GGC':'G','GGA':'G','GGG':'G',
+}
+AA3 = {'A':'Ala','R':'Arg','N':'Asn','D':'Asp','C':'Cys','Q':'Gln','E':'Glu','G':'Gly',
+       'H':'His','I':'Ile','L':'Leu','K':'Lys','M':'Met','F':'Phe','P':'Pro','S':'Ser',
+       'T':'Thr','W':'Trp','Y':'Tyr','V':'Val','*':'Ter'}
+COMP = str.maketrans('ACGTacgt', 'TGCAtgca')
+TWOBIT = '/gbdb/hg38/hg38.2bit'
+
+
+def _fetch_seq(chrom, start, end):
+    out = subprocess.check_output(['twoBitToFa', f'{TWOBIT}:{chrom}:{start}-{end}', 'stdout'], text=True)
+    return ''.join(out.splitlines()[1:]).upper()
+
+
+def build_codon_index(mane):
+    """Return (cds coding sequence, {genomic 0-based pos -> CDS index}) for this MANE transcript.
+    Positions are in transcription order; minus-strand exons are reverse-complemented."""
+    chrom, strand = mane['chrom'], mane['strand']
+    seq_parts, order = [], []
+    exons = cds_exons(mane)   # ascending genomic (start, end), 0-based half-open
+    for s, e in (exons if strand == '+' else reversed(exons)):
+        seg = _fetch_seq(chrom, s, e)
+        if strand == '+':
+            seq_parts.append(seg);                 order.extend(range(s, e))
+        else:
+            seq_parts.append(seg.translate(COMP)[::-1]); order.extend(range(e - 1, s - 1, -1))
+    cds = ''.join(seq_parts)
+    return cds, {p: i for i, p in enumerate(order)}
+
+
+def revel_hgvsp(cds, pos2idx, strand, gpos0, alt_fwd):
+    """(hgvsp, short) for a forward-strand SNV at genomic 0-based gpos0, or None if not missense."""
+    idx = pos2idx.get(gpos0)
+    if idx is None:
+        return None
+    cnum, cp = idx // 3, idx % 3
+    ref_codon = cds[cnum * 3: cnum * 3 + 3]
+    if len(ref_codon) < 3:
+        return None
+    coding_alt = alt_fwd if strand == '+' else alt_fwd.translate(COMP)
+    alt_codon = ref_codon[:cp] + coding_alt + ref_codon[cp + 1:]
+    ra, aa = CODON1.get(ref_codon), CODON1.get(alt_codon)
+    if ra is None or aa is None or ra == aa:
+        return None
+    n = cnum + 1
+    return (f'p.{AA3[ra]}{n}{AA3[aa]}', f'{ra}{n}{aa}')
+
 
 def fetch_revel_bedgraph(chrom, start, end, alt_nt):
     """Return list of (genomic_start, genomic_end, score) for REVEL alt=alt_nt in this region.
@@ -108,6 +166,7 @@ def main():
         chrom = mane['chrom']
         strand = mane['strand']
         exons = cds_exons(mane)
+        cds, pos2idx = build_codon_index(mane)
 
         for ex_start, ex_end in exons:
             for alt_nt in 'acgt':
@@ -127,11 +186,15 @@ def main():
                         n_dropped += 1
                         continue  # indeterminate band - drop per InSiGHT precedent
                     name = f'{gene}_{alt_nt.upper()}_{score:.3f}_{code[:3]}'
+                    hp = revel_hgvsp(cds, pos2idx, strand, s, alt_nt.upper())
+                    aa_html = f'<b>{hp[0]}</b> ({hp[1]})<br>' if hp else ''
                     mouseover = (
                         f'<b>REVEL</b> - {code}<br>'
-                        f'{gene} {chrom}:{s+1} alt={alt_nt.upper()}<br>'
-                        f'<b>REVEL score:</b> {score:.3f}<br>'
-                        f'<b>CSpec threshold:</b> PP3 &#8805; {PP3_THRESHOLD}; BP4 &#8804; {BP4_THRESHOLD}'
+                        f'{gene} {chrom}:{s+1}<br>'
+                        + aa_html
+                        + f'<b>REVEL score:</b> {score:.3f} '
+                        f'(genomic forward-strand alt {alt_nt.upper()})<br>'
+                        + f'<b>CSpec threshold:</b> PP3 &#8805; {PP3_THRESHOLD}; BP4 &#8804; {BP4_THRESHOLD}'
                     )
                     bed_lines.append('\t'.join([
                         chrom, str(s), str(e),

@@ -4294,23 +4294,28 @@ static struct itemColorSpec *itemColorLookup(struct track *tg, void *item)
 {
 if (itemColorHash == NULL)
     return NULL;
-char key[2048];
+static struct dyString *key = NULL;
+if (!key)
+    key = dyStringNew(0);
 struct itemColorSpec *spec = NULL;
 if (tg->mapItemName != NULL)
     {
-    safef(key, sizeof key, "%s\t%s", tg->track, tg->mapItemName(tg, item));
-    spec = hashFindVal(itemColorHash, key);
+    dyStringClear(key);
+    dyStringPrintf(key, "%s\t%s", tg->track, tg->mapItemName(tg, item));
+    spec = hashFindVal(itemColorHash, dyStringContents(key));
     }
 if (spec == NULL && tg->itemName != NULL)
     {
-    safef(key, sizeof key, "%s\t%s", tg->track, tg->itemName(tg, item));
-    spec = hashFindVal(itemColorHash, key);
+    dyStringClear(key);
+    dyStringPrintf(key, "%s\t%s", tg->track, tg->itemName(tg, item));
+    spec = hashFindVal(itemColorHash, dyStringContents(key));
     }
 if (spec == NULL && tg->itemStart != NULL && tg->itemEnd != NULL)
     {
-    safef(key, sizeof key, "%s\tpos:%s:%d-%d", tg->track, chromName,
+    dyStringClear(key);
+    dyStringPrintf(key, "%s\tpos:%s:%d-%d", tg->track, chromName,
           tg->itemStart(tg, item), tg->itemEnd(tg, item));
-    spec = hashFindVal(itemColorHash, key);
+    spec = hashFindVal(itemColorHash, dyStringContents(key));
     }
 return spec;
 }
@@ -16361,6 +16366,8 @@ char *itemColors = cartOptionalString(cart, "itemColors");
 if (isEmpty(itemColors))
     return;
 struct slName *recordList = slNameListFromString(itemColors, '|'), *record;
+struct dyString *colorSpec = dyStringNew(0);
+struct dyString *keyStr = dyStringNew(0);
 for (record = recordList; record != NULL; record = record->next)
     {
     char *p = record->name;
@@ -16374,26 +16381,28 @@ for (record = recordList; record != NULL; record = record->next)
         *lastHash = '\0';
         char *itemName = p;
         char *hex = lastHash + 1;
-        char colorSpec[16];
-        safef(colorSpec, sizeof colorSpec, "#%s", hex);
+        dyStringPrintf(colorSpec, "#%s", hex);
         unsigned rgb;
-        if (!isEmpty(itemName) && htmlColorForCode(colorSpec, &rgb))
+        if (!isEmpty(itemName) && htmlColorForCode(dyStringContents(colorSpec), &rgb))
             {
             struct itemColorSpec *spec;
             AllocVar(spec);
             spec->color = bedColorToGfxColor(rgb);
             spec->wholeItem = sameString(mode, "item");
-            char key[2048];
-            safef(key, sizeof key, "%s\t%s", track, itemName);
+            dyStringPrintf(keyStr, "%s\t%s", track, itemName);
             if (itemColorHash == NULL)
                 itemColorHash = newHash(0);
-            hashAdd(itemColorHash, key, spec);
+            hashAdd(itemColorHash, dyStringContents(keyStr), spec);
             }
+        dyStringClear(keyStr);
+        dyStringClear(colorSpec);
         }
     freeMem(db);
     freeMem(track);
     freeMem(mode);
     }
+dyStringFree(&keyStr);
+dyStringFree(&colorSpec);
 slFreeList(&recordList);
 }
 

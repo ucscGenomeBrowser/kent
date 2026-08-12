@@ -1361,6 +1361,14 @@ return outString;
  * Since FTP does not use URLs with query parameters, use the Full version.
  */
 
+/* SECURITY (refs #38051): 0x01 is the in-band marker that sqlSafef (jksql.c) and
+ * htmlSafef (htmshell.c) use to delimit the values they must escape.  A request
+ * value carrying this byte can forge a delimiter pair and smuggle unescaped text
+ * into a query or into page output, so drop it here as it is decoded.  It is
+ * never legitimate in a request.  Only 0x01 - tab, newline and CR are left alone,
+ * since those are legitimate in custom-track textarea uploads. */
+#define CGI_ESCAPE_MARKER 0x01
+
 void cgiDecode(char *in, char *out, int inLength)
 /* Decode from cgi pluses-for-spaces format to normal.
  * Out will be a little shorter than in typically, and
@@ -1380,8 +1388,12 @@ for (i=0; i<inLength;++i)
 	    code = '?';
 	in += 2;
 	i += 2;
+	if (code == CGI_ESCAPE_MARKER)
+	    continue;			// drop our reserved escape marker
 	*out++ = code;
 	}
+    else if (c == CGI_ESCAPE_MARKER)
+	continue;			// drop our reserved escape marker
     else
 	*out++ = c;
     }
@@ -1405,8 +1417,12 @@ for (i=0; i<inLength;++i)
 	    code = '?';
 	in += 2;
 	i += 2;
+	if (code == CGI_ESCAPE_MARKER)
+	    continue;			// drop our reserved escape marker
 	*out++ = code;
 	}
+    else if (c == CGI_ESCAPE_MARKER)
+	continue;			// drop our reserved escape marker
     else
 	*out++ = c;
     }

@@ -57,3 +57,46 @@ docker run -d --name "$container" \
 case "$name" in
     tip|beta) "$selfDir/overlay-cgi.sh" "$name" ;;
 esac
+
+# `docker run -d` returns as soon as the container is CREATED, which is many
+# seconds before Apache and MariaDB inside it answer a request -- and on a fresh
+# named volume MariaDB also has to seed from the image first. Callers treat our
+# exit 0 as "this instance is usable" (autoBuild.sh runs smoke-instance.sh
+# immediately after refresh-instance.sh), so block until the instance really
+# serves a page. Without this the emulated arm64 instance reliably failed its
+# smoke test with connection-refused on every weekly final build, which trained
+# everyone to ignore a warning that is supposed to mean something. refs #37655
+wait_until_serving() {
+    local url="http://127.0.0.1:${port}/cgi-bin/hgGateway"
+    # the arm64 image runs under QEMU emulation and starts several times slower
+    local limit=180
+    [[ "$name" == *arm64 ]] && limit=600
+    local start=$SECONDS code=""
+    while (( SECONDS - start < limit )); do
+        code="$(curl -s -o /dev/null -m 20 -w '%{http_code}' "$url" 2>/dev/null || true)"
+        if [[ "$code" == 200 ]]; then
+            echo "$container is serving on 127.0.0.1:${port} (after $((SECONDS - start))s)"
+            return 0
+        fi
+        # a container that died on startup will never come up -- don't sit here
+        # for the full timeout waiting on it
+        if [[ "$(docker inspect -f '{{.State.Running}}' "$container" 2>/dev/null)" != true ]]; then
+            echo "WARNING: $container exited while starting up. Last log lines:" >&2
+            docker logs --tail 20 "$container" >&2 || true
+            return 0
+        fi
+        sleep 5
+    done
+    echo "WARNING: $container did not serve $url within ${limit}s (last HTTP ${code:-none})." >&2
+    echo "         The container is running but not answering; last log lines:" >&2
+    docker logs --tail 20 "$container" >&2 || true
+    return 0
+}
+
+# Deliberately advisory, never fatal: we return 0 even when the instance never
+# came up. autoBuild.sh's step() calls die() on a non-zero exit, and these
+# containers are QA aids -- a sick emulated arm64 instance must not abort a
+# weekly build, still less the release wrap-up (which also refreshes kent-beta).
+# So report the problem here and leave the verdict to the smoke step, whose
+# failures are already non-fatal-but-loud. refs #37655
+wait_until_serving

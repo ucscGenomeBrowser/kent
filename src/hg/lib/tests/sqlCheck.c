@@ -24,6 +24,7 @@ printf(
  "  IL for Identifier List -- these should be identifiers comma-separated list. Currently '.' is allowed as a special exception.\n"
  "  ES for Escape the string using mysql -- this should allow all and escape all characters except 0 (which is useful for binary but not strings)\n"
  "  EE for Escape Every evil character -- this should append escaped all forbidden characters except 0 (which is useful for binary but not strings)\n"
+ "  XM for escape Marker bypass -- wraps the value in the 0x01 escape marker sqlSafef uses internally; this must abort, refs #38051\n"
  "\n"
  );
 exit(1);
@@ -76,6 +77,17 @@ else if (sameString(theType,"XX")) // test sqlSafef
     //sqlSafef(query, sizeof query, "SELECT * FROM %s where id=%d and field like '%%%s' and ptr=%p", "table", 3, value, value);
     //sqlSafef(query, sizeof query, "SELECT * FROM %s where field = '%-s'", "table", value);
     //sqlSafef(query, sizeof query, "SELECT %-s FROM TABLE where field = '%s'", sqlCkIl(value), "value");
+    printf("query=%s\n", query);
+    }
+else if (sameString(theType,"XM")) // test sqlSafef against the escape-marker bypass, refs #38051
+    {
+    // Wrap the value in the 0x01 marker that sqlSafef uses internally to delimit
+    // the spans it must escape.  Two of them forge an extra delimiter pair, and
+    // sqlEscapeAllStrings then copies the text between them raw.  This must abort.
+    char evil[512];
+    safef(evil, sizeof evil, "x%c%s%cx", 0x01, value, 0x01);
+    char query[1024];
+    sqlSafef(query, sizeof query, "SELECT * FROM %s where field = '%s'", "table", evil);
     printf("query=%s\n", query);
     }
 else if (sameString(theType,"XY")) // test sqlDyStringPrintf
