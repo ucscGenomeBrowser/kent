@@ -388,8 +388,18 @@ sub doCleanup {
   my $whatItDoes = "compress intermediate files";
   my $bossScript = new HgRemoteScript("$buildDir/doCleanup.csh", $fileServer,
 				      $buildDir, $whatItDoes);
+  # guard each file individually -- this step has no needsUpdate() check
+  # of its own, so it can be re-run (e.g. by the outer driver script) on
+  # a later invocation where ncbiGene did nothing new; by then these are
+  # already $file.gz from the previous successful cleanup, and a plain
+  # 'gzip -f' on a now-missing plain-named file would die under this
+  # script's 'csh -e'
   $bossScript->add(<<_EOF_
-gzip -f $db.geneAttrs.ncbi.txt $db.ncbiGene.log.txt $db.ncbiGene.bed
+foreach f ( $db.geneAttrs.ncbi.txt $db.ncbiGene.log.txt $db.ncbiGene.bed )
+  if ( -e \$f ) then
+    gzip -f \$f
+  endif
+end
 _EOF_
   );
   $bossScript->execute();
