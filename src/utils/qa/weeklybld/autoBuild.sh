@@ -14,6 +14,7 @@
 #   autoBuild.sh preview2
 #   autoBuild.sh final
 #   autoBuild.sh wrapup
+#   autoBuild.sh patchtickets [<id>...]  # build patch driven off the Redmine tickets
 #   autoBuild.sh cherrypick [<sha>...]   # build patch: cherry-pick onto v${NN}_branch
 #                                        # (ids given here are written fresh to
 #                                        #  CherryPickCommits.conf; with none, the
@@ -82,6 +83,8 @@ GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78
 DRY_RUN=false
 FORCED_PHASE=""
 CHERRYPICK_ARGS=()   # commit ids given on the command line: autoBuild.sh cherrypick <sha>...
+PATCHTICKET_ARGS=()  # ticket ids given on the command line: autoBuild.sh patchtickets <id>...
+PATCHTICKETS_ASSUME_YES=false   # --yes: skip the patchtickets go/no-go prompt
 
 ##############################################################################
 # Helpers
@@ -1370,6 +1373,255 @@ do_cherrypick() {
 }
 
 ##############################################################################
+# Phase: Patch tickets (Redmine-driven build patch)
+#
+# Forced-only and repeatable. This is the `cherrypick` phase with the Redmine
+# bookkeeping on both ends: it asks Redmine which Build Patch tickets QA has
+# handed over, cherry-picks their commits in one round, then comments on each
+# ticket and sets it to Patched.
+#
+# The eligibility gate lives in `redmineCli patch-queue` (status Approved +
+# assigned to Build Meister + right target version + a usable commit hash).
+# Nothing here second-guesses it.
+#
+# Two things are deliberately left to a human:
+#   - CONFLICTS. A conflict means master and the branch have diverged on that
+#     code and picking the right resolution needs someone who knows what the fix
+#     was for. cherryPickCommits.csh stops, and because the ticket updates come
+#     after the cherry-pick, no ticket is touched -- the round is re-runnable
+#     once the conflict is resolved by hand.
+#   - THE BETA DEPLOY. This phase rebuilds and deploys to hgwbeta, which QA is
+#     actively testing on. Landing that unannounced pulls the floor out from
+#     under whoever is mid-test-case, so the plan is shown and confirmed first
+#     (--yes to skip, for a scheduled run).
+#
+# The per-ticket comment is templated on purpose. It says the same thing every
+# time and carries no findings or judgment, so it does not need drafting or
+# approval the way a substantive ticket comment does.
+##############################################################################
+
+REDMINECLI="/cluster/home/build/kent/src/utils/redmineCli"
+
+# Worklist for the current round: "<ticket-id><TAB><comma-separated-shas>" per
+# line. Written by the query step and re-read by later steps so a resume does
+# not depend on re-querying Redmine (whose answer may have changed by then).
+PATCHTICKETS_WORKLIST=""
+
+# Ask Redmine which tickets are ready, log the ones that are not, and write the
+# eligible ones to the worklist. Dies if nothing is eligible -- that is not a
+# failure exactly, but there is no work to do and continuing would rebuild beta
+# for no reason.
+patchtickets_query() {
+    local out ver_arg=("--target-version" "$BRANCHNN")
+    local tickets_arg=()
+    if (( ${#PATCHTICKET_ARGS[@]} > 0 )); then
+        tickets_arg=("--tickets" "${PATCHTICKET_ARGS[@]}")
+        log "Restricting to ticket(s) given on the command line: ${PATCHTICKET_ARGS[*]}"
+    fi
+
+    # The build tree routinely lags origin/master, so the ticket commits may not
+    # be local yet. Fetch before anything tries to resolve them -- the confirm
+    # step prints commit subjects, well before the cherrypick phase's own fetch.
+    cd "$WEEKLYBLD"
+    run git fetch -q origin || log "WARNING: git fetch failed; ticket commits may not resolve below"
+
+    out=$("$REDMINECLI" patch-queue --tsv "${ver_arg[@]}" "${tickets_arg[@]}") || \
+        die "redmineCli patch-queue failed. Check the API key in ~/.hg.conf and that Redmine is reachable."
+
+    [[ -n "$out" ]] || die "No Build Patch tickets found for v${BRANCHNN} at all. Nothing to patch."
+
+    # Field order is verdict/id/commits/subject/notes -- notes last because bash
+    # `read` collapses an empty tab-delimited field in the middle of a line.
+    local verdict tid commits note subject eligible=0
+    local -a lines=()
+    while IFS=$'\t' read -r verdict tid commits subject note; do
+        [[ -n "$verdict" ]] || continue
+        case "$verdict" in
+            ELIGIBLE)
+                eligible=$((eligible + 1))
+                log "  READY    #${tid}  ${commits}  ${subject}"
+                [[ -z "$note" ]] || log "           ^ ${note}"
+                lines+=("${tid}"$'\t'"${commits}")
+                ;;
+            *)
+                log "  SKIP     #${tid}  ${subject}"
+                log "           ^ ${note}"
+                ;;
+        esac
+    done <<< "$out"
+
+    (( eligible > 0 )) || die "No Build Patch ticket for v${BRANCHNN} is ready to patch (see the SKIP reasons above). Nothing to do."
+
+    if $DRY_RUN; then
+        # Later dry-run steps still need the list, so keep it in a temp file
+        # rather than writing the real worklist under logs/.
+        log "(dry-run) would write ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
+        PATCHTICKETS_WORKLIST=$(mktemp)
+        printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"
+        log "(dry-run) using temp worklist $PATCHTICKETS_WORKLIST"
+    else
+        printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"
+        log "Wrote ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
+    fi
+    return 0
+}
+
+# Every commit from the worklist, ordered oldest-first by commit date on master.
+# Order matters: two patches touching the same file apply cleanly in the order
+# they were originally committed, and not necessarily in ticket-number order.
+patchtickets_commits_in_order() {
+    local tid commits
+    local -a all=()
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        local sha
+        for sha in ${commits//,/ }; do all+=("$sha"); done
+    done < "$PATCHTICKETS_WORKLIST"
+    (( ${#all[@]} > 0 )) || return 1
+    cd "$WEEKLYBLD"
+    # Trailing "--" so an id can never be taken for a pathname. A hash that does
+    # not resolve makes git fail the whole list rather than silently dropping it;
+    # that is caught by the caller's emptiness check and by cherrypick's own
+    # per-commit validation.
+    git log --no-walk --format='%ct %H' "${all[@]}" -- 2>/dev/null | sort -n | awk '{print $2}'
+}
+
+# Show the plan and get a go/no-go before anything is pushed or deployed.
+patchtickets_confirm() {
+    local tid commits
+    log "----------------------------------------------------------------"
+    log "Build-patch plan for v${BRANCHNN}:"
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        log "  #${tid}  ${commits}"
+    done < "$PATCHTICKETS_WORKLIST"
+    log ""
+    log "Apply order (oldest commit on master first):"
+    local sha
+    while read -r sha; do
+        [[ -n "$sha" ]] || continue
+        log "  $(git -C "$WEEKLYBLD" log -1 --format='%h  %s' "$sha")"
+    done < <(patchtickets_commits_in_order)
+    log ""
+    log "This pushes v${BRANCHNN}_branch to origin, rebuilds the affected CGIs,"
+    log "and deploys to hgwbeta -- which QA is testing on right now."
+    log "----------------------------------------------------------------"
+
+    if $PATCHTICKETS_ASSUME_YES; then
+        log "--yes given; proceeding without confirmation."
+        return 0
+    fi
+    if $DRY_RUN; then
+        log "(dry-run) would prompt y/N to proceed"
+        return 0
+    fi
+    [[ -t 0 ]] || die "Refusing to patch and deploy to beta unattended. Re-run in a terminal, or pass --yes."
+    local ans=""
+    read -r -p "Proceed? [y/N] " ans || true
+    case "$ans" in
+        [yY]|[yY][eE][sS]) log "Proceeding at user confirmation."; return 0 ;;
+        *) die "Aborted at confirmation. No commits applied, no tickets touched." ;;
+    esac
+}
+
+# Run one cherry-pick round for the worklist commits by delegating to the
+# existing phase, which owns branch handling, validation, the push, the beta
+# rebuild/deploy, git-reports and the docker refresh (and pre-RR vs post-RR).
+#
+# do_cherrypick runs state_init, which repoints the global STATE_FILE at its own
+# state file and deletes it on success -- so save and restore ours around the
+# call. The nesting is deliberate: the cherry-pick round stays independently
+# resumable, and if it dies partway, re-running patchtickets re-enters
+# do_cherrypick, which picks up at its own first incomplete step.
+patchtickets_cherrypick() {
+    local saved_state="$STATE_FILE"
+    CHERRYPICK_ARGS=()
+    local sha
+    while read -r sha; do
+        [[ -n "$sha" ]] || continue
+        CHERRYPICK_ARGS+=("$sha")
+    done < <(patchtickets_commits_in_order)
+    (( ${#CHERRYPICK_ARGS[@]} > 0 )) || die "No commits to apply (worklist is empty or its hashes are not in git)."
+
+    log "Handing ${#CHERRYPICK_ARGS[@]} commit(s) to the cherrypick phase: ${CHERRYPICK_ARGS[*]}"
+    do_cherrypick
+    local rc=$?
+    STATE_FILE="$saved_state"
+    return $rc
+}
+
+# Comment on one ticket and set it to Patched. Templated text -- see the phase
+# header for why this one does not need approval.
+patchtickets_update_ticket() {
+    local tid="$1" commits="$2"
+    local msg="Cherry-picked onto v${BRANCHNN}_branch and deployed to hgwbeta.
+
+Commit(s): <code>${commits//,/, }</code>
+
+Ready for verification on beta."
+
+    if $DRY_RUN; then
+        log "(dry-run) would comment on #${tid} and set it to Patched"
+        return 0
+    fi
+    "$REDMINECLI" comment "$tid" --message "$msg" || \
+        die "Failed to comment on #${tid}. The patch is already on the branch and beta -- fix the ticket by hand, or re-run to resume (earlier tickets are recorded as done)."
+    "$REDMINECLI" update "$tid" --status Patched || \
+        die "Commented on #${tid} but could not set it to Patched. Set it by hand, then append 'ticket-${tid}' to $STATE_FILE and re-run."
+    log "#${tid}: commented and set to Patched"
+    return 0
+}
+
+do_patchtickets() {
+    log "========== PHASE: PATCH TICKETS (Redmine-driven build patch) =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+    state_init patchtickets "$PHASE_VER"
+    local my_state="$STATE_FILE"
+
+    # Round number, persisted so a resume reuses the same worklist file.
+    local roundn
+    roundn=$(grep -oP '^roundn=\K[0-9]+' "$my_state" 2>/dev/null | head -1 || true)
+    if [[ -z "$roundn" ]]; then
+        local n=1
+        while [[ -e "$LOGDIR/.patchtickets.v${BRANCHNN}.round${n}" ]]; do n=$((n + 1)); done
+        roundn=$n
+        $DRY_RUN || echo "roundn=${roundn}" >> "$my_state"
+    fi
+    PATCHTICKETS_WORKLIST="$LOGDIR/.patchtickets.v${BRANCHNN}.round${roundn}"
+    log "Patch-ticket round ${roundn} for v${BRANCHNN}; worklist: $PATCHTICKETS_WORKLIST"
+
+    step query-tickets  patchtickets_query
+    STATE_FILE="$my_state"
+    [[ -s "$PATCHTICKETS_WORKLIST" ]] || \
+        die "Worklist $PATCHTICKETS_WORKLIST is missing or empty. Delete $my_state and start a fresh round."
+
+    step confirm-plan   patchtickets_confirm
+    STATE_FILE="$my_state"
+
+    # Applies the commits and does everything downstream of them (push, beta
+    # rebuild + deploy, git-reports, docker). Tickets are untouched until this
+    # succeeds, so a conflict leaves Redmine consistent with the branch.
+    step cherrypick-round patchtickets_cherrypick
+    STATE_FILE="$my_state"
+
+    # Per-ticket steps so a Redmine hiccup partway through resumes cleanly
+    # instead of double-commenting the tickets that already went through.
+    local tid commits
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        step "ticket-${tid}" patchtickets_update_ticket "$tid" "$commits"
+        STATE_FILE="$my_state"
+    done < "$PATCHTICKETS_WORKLIST"
+
+    $DRY_RUN || rm -f "$my_state"
+
+    log "Patch-ticket round ${roundn} complete for v${BRANCHNN}."
+    log "Tickets patched: $(cut -f1 "$PATCHTICKETS_WORKLIST" | sed 's/^/#/' | tr '\n' ' ')"
+    log "Hand back to QA for verification on hgwbeta."
+}
+
+##############################################################################
 # Main
 ##############################################################################
 
@@ -1382,8 +1634,12 @@ main() {
                 log "DRY RUN MODE - no changes will be made"
                 shift
                 ;;
-            preview1|preview2|final|wrapup|cherrypick)
+            preview1|preview2|final|wrapup|cherrypick|patchtickets)
                 FORCED_PHASE="$1"
+                shift
+                ;;
+            --yes|-y)
+                PATCHTICKETS_ASSUME_YES=true
                 shift
                 ;;
             --help|-h)
@@ -1398,12 +1654,23 @@ main() {
                 echo "(they are written fresh to CherryPickCommits.conf), or run it with no ids"
                 echo "to use the existing CherryPickCommits.conf -- in which case, if that file"
                 echo "looks stale (lists commits already on the branch), it asks for y/N first."
+                echo ""
+                echo "patchtickets is forced-only too: it asks Redmine which Build Patch tickets"
+                echo "QA has handed over for v\${NN} (status Approved, assigned to Build Meister),"
+                echo "cherry-picks their commits in one round, then comments on each ticket and"
+                echo "sets it to Patched. Name ticket id(s) to restrict it to those; with none it"
+                echo "takes every eligible ticket. It shows the plan and asks y/N before pushing"
+                echo "and deploying to beta -- pass --yes to skip that for a scheduled run."
                 exit 0
                 ;;
             *)
-                # After 'cherrypick', any remaining non-flag args are commit ids.
+                # After 'cherrypick' / 'patchtickets', remaining non-flag args are
+                # commit ids / ticket ids respectively.
                 if [[ "$FORCED_PHASE" == "cherrypick" ]]; then
                     CHERRYPICK_ARGS+=("$1")
+                    shift
+                elif [[ "$FORCED_PHASE" == "patchtickets" ]]; then
+                    PATCHTICKET_ARGS+=("${1#\#}")
                     shift
                 else
                     die "Unknown argument: $1. Use --help for usage."
@@ -1464,6 +1731,9 @@ main() {
             ;;
         cherrypick)
             do_cherrypick
+            ;;
+        patchtickets)
+            do_patchtickets
             ;;
         *)
             die "Unknown phase: $phase"
