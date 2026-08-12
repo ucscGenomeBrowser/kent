@@ -342,6 +342,17 @@ def main():
     ap.add_argument('--no-spliceai', action='store_true', help='Skip SpliceAI (debug only)')
     args = ap.parse_args()
 
+    # Resolve every input relative to --output-dir (the sibling track outputs and the
+    # cmp_downloads sources are all produced under it), so a different --output-dir does
+    # not silently mix fresh outputs with stale inputs from the default WORKDIR.
+    global B3_BED, B4_BED, B1_BED, EVREPO_JSON, ANNOT_TSV
+    wd = args.output_dir
+    B3_BED = f'{wd}/cmpVCEPAFfrequencies/cmpVCEPAFfrequenciesHg38.bed'
+    B4_BED = f'{wd}/cmpVCEPRevel/cmpVCEPRevelHg38.bed'
+    B1_BED = f'{wd}/cmpVCEPClinDomains/cmpVCEPClinDomainsHg38.bed'
+    EVREPO_JSON = f'{wd}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
+    ANNOT_TSV = f'{wd}/cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv'
+
     out_dir = os.path.join(args.output_dir, 'cmpVCEPProvisionalClass')
     os.makedirs(out_dir, exist_ok=True)
     print('  [B.11 Variant Evidence Summary]')
@@ -404,8 +415,11 @@ def main():
                 thr = '&#8805; 0.70' if code.startswith('PP3') else '&#8804; 0.40'
                 revel_ev = (code, f'{score} ({thr})')
 
-        # PM1 hotspot (HCM-calibrated)
-        pm1_hit = in_pm1_region(chrom, v['start'], pm1)
+        # PM1 hotspot (HCM-calibrated). The CSpec applies PM1 to MISSENSE variants only
+        # ("Applicable to missense variants ... in the specific regions listed"), so gate on
+        # consequence, not position alone - otherwise synonymous/truncating/splice variants in
+        # the hotspot codons wrongly earn PM1 (and collide with BA1/BS1/BP7).
+        pm1_hit = is_missense and in_pm1_region(chrom, v['start'], pm1)
         if pm1_hit:
             codes.add('PM1_Moderate')
 
@@ -472,7 +486,8 @@ def main():
 
         disease_tag = ''
         if gene in ('MYH7', 'TNNT2'):
-            disease_tag = 'PM1 HCM-calibrated' if pm1_hit else 'HCM/DCM'
+            # key off the counted code, not raw pm1_hit, so a suppressed PM1 is not labelled
+            disease_tag = 'PM1 HCM-calibrated' if 'PM1_Moderate' in codes else 'HCM/DCM'
 
         applied_str = ';'.join(sorted(codes)) or 'no codes'
         kind = variant_kind(so)
