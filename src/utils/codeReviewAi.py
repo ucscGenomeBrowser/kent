@@ -1976,8 +1976,16 @@ def get_gmail_service():
     return google_build('gmail', 'v1', credentials=creds, cache_discovery=False)
 
 
-def send_review_email(gmail_service, to_email, author_name, review_text, cc=None):
-    """Send a code review email to the author"""
+def send_review_email(gmail_service, to_email, author_name, review_text, cc=None,
+                      review_file=None):
+    """Send a code review email to the author.
+    review_file is the path to the saved text copy of this same review; it is quoted
+    at the bottom so the author can point a tool at the file instead of copying the
+    body out of the email."""
+    if review_file:
+        review_text = (review_text.rstrip('\n') + "\n\n" + "-" * 70 + "\n" +
+                       "Text version of this review, readable on hgwdev:\n" +
+                       f"  {review_file}\n")
     message = MIMEText(review_text)
     message['To'] = to_email
     message['From'] = 'gbauto@ucsc.edu'
@@ -2352,7 +2360,10 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
 
         # Save review to log_dir
         safe_name = re.sub(r'[^a-zA-Z0-9]', '_', data['name'])
-        filepath = os.path.join(log_dir, f"daily_review_{safe_name}_{file_suffix}.txt")
+        # Absolute, because this path is quoted in the author's email and has to be
+        # usable from wherever they happen to be sitting.
+        filepath = os.path.abspath(
+            os.path.join(log_dir, f"daily_review_{safe_name}_{file_suffix}.txt"))
         with open(filepath, 'w') as f:
             f.write(review)
         reviews[author_email]['file'] = filepath
@@ -2408,7 +2419,9 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
                       f"emailing anyway rather than dropping a possible FEEDBACK")
             print(f"  Emailing {data['name']} <{author_email}> (FEEDBACK)...")
             try:
-                send_review_email(gmail_service, author_email, data['name'], data['review'], cc=cc_address)
+                send_review_email(gmail_service, author_email, data['name'],
+                                  data['review'], cc=cc_address,
+                                  review_file=data.get('file'))
                 print(f"    SENT")
             except Exception as e:
                 # This email is the only channel that tells an author a commit of
