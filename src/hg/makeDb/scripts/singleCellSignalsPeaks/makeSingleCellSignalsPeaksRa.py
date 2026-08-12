@@ -25,9 +25,11 @@ Usage:
 import re, os, sys, argparse
 from urllib.parse import urlparse
 
-# Where the hub build (build_manifest.py / build_stanzas.py) writes its stanzas and
-# metadata. That machinery builds the whole Cell Browser super hub, not just this track,
-# so it lives outside the kent tree; override with HUB_BUILD when it moves.
+# Where the hub build writes its stanzas and metadata -- its OUTPUT dir, not its code.
+# The build itself lives in the cellBrowser repo (ucsc/allTracksHub), since it builds the
+# whole Cell Browser super hub and not just this track:
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+# Its output dir is set there by CBHUB_OUT; keep this default in step with it.
 HUB_BUILD = os.environ.get(
     "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
