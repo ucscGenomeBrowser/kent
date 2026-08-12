@@ -991,7 +991,9 @@ char *relaySubmitOttoRequest(char *requestType, char *fromDb, char *toDb, char *
  * relay call itself fails). */
 {
 char *secret = cfgOption("hubApi.relaySecret");
-if (isEmpty(secret))
+/* Guard against CR/LF in the configured secret: it goes verbatim into an
+ * HTTP header below, and a stray newline there would inject headers. */
+if (isEmpty(secret) || strpbrk(secret, "\r\n"))
     return "error";
 
 struct dyString *url = dyStringNew(0);
