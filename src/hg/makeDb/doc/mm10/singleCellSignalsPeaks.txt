@@ -2,9 +2,11 @@
 
 # The native mm10 "singleCellSignalsPeaks" faceted composite is the Genome
 # Browser version of the mm10 signal-&-peaks composite (cellBrowserMm10) of the
-# UCSC Cell Browser all-tracks super hub (built under
-# /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build). It gathers the
-# per-cell-type ATAC-seq signal (bigWig) and peak (bigNarrowPeak) tracks from the
+# UCSC Cell Browser all-tracks super hub, whose build lives in the cellBrowser
+# repo, ucsc/allTracksHub:
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+#
+# It gathers the per-cell-type ATAC-seq signal (bigWig) and peak (bigNarrowPeak) tracks from the
 # single-cell ATAC datasets in the Cell Browser and re-parents them under one
 # faceted composite. It is the mm10 counterpart of the hg38 track of the same
 # name (see doc/hg38/singleCellSignalsPeaks.txt, Redmine #37820). Histone marks,
@@ -23,10 +25,13 @@
 # mouse-epi-juv-brain (15). That composite and its facet metadata are produced by
 # the hub build from the Cell Browser dataset tree:
 #
-#   cd /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+#   cd $HOME/cellBrowser/ucsc/allTracksHub
 #   python3 build_manifest.py            # scan datasets -> manifest.tsv
 #   python3 build_stanzas.py             # manifest -> stanzas/mm10.trackDb.txt
 #                                        #            + meta/mm10.metadata.tsv
+#
+# The build writes its output to $CBHUB_OUT, NOT next to the scripts (that dir is
+# git-controlled). Default: /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
 #
 # The per-track source files (abs_path column of manifest.tsv) are the files the
 # Cell Browser datasets already serve; nothing is regenerated here, only copied.
@@ -176,8 +181,11 @@
 #       decode tables, each row's `note` giving its source justification)
 # build_celltype_crosswalks.py rebuilds the crosswalks + palette from paper-decodes/.
 # The general hub machinery that consumes them (build_manifest.py, build_stanzas.py,
-# hub_config.json) lives in the all-tracks-hub-build dir noted above, not in the kent
-# tree -- it builds the whole super hub, not just this track.
+# build_hub.py, hub_config.json) lives in the cellBrowser repo, not in the kent tree --
+# it builds the whole super hub, not just this track:
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+# build_stanzas finds the crosswalks archived here via XWALK_ROOT, so the hub and these
+# native tracks always color a cell class the same.
 
 ##############################################################################
 # 5. Redundant allen-brain-science copies removed
@@ -189,7 +197,7 @@
 # indistinguishable subtracks and cost 4.4 GB of duplicated storage. build_stanzas
 # keeps the bg_regrouping_cl copy -- the cluster-level source the merges are built
 # from -- and skips the other three (allen_duplicate_skip; see
-# all-tracks-hub-build/allen-duplicates.log for the list). Where the four copies
+# $CBHUB_OUT/allen-duplicates.log for the list). Where the four copies
 # genuinely differ (14 other basenames, different aggregations and different file
 # sizes) all four are kept and told apart by the grouping-level variant descriptor.
 # The 42 redundant files were deleted from the bed dir; the list is kept alongside

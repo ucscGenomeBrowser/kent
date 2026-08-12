@@ -208,6 +208,14 @@ def build_clinvar_lookup():
             m = CV_NAME_RE.match(name)
             if not m:
                 continue
+            # For genes with a specified Walsh transcript, match only ClinVar rows on THAT
+            # transcript. Otherwise a classic-vs-MANE c.notation collision mis-places the
+            # variant (TNNT2 classic c.275G>A [R92Q] vs MANE c.275G>A [G92E]); for TNNT2 this
+            # drops the MANE-named rows so the entry falls to the hgvsToVcf-on-classic path.
+            # Genes not in WALSH_TX (ACTC1/MYL2/MYL3/TPM1) use MANE == ClinVar's Name transcript,
+            # so there is no collision and the (gene, c.notation) match stands.
+            if gene in WALSH_TX and m.group(1) != WALSH_TX[gene]:
+                continue
             cdna = 'c.' + m.group(3)
             assembly = f[16]
             db = 'hg38' if assembly == 'GRCh38' else ('hg19' if assembly == 'GRCh37' else None)
@@ -301,6 +309,10 @@ def main():
     ap.add_argument('--db', action='append', required=True, choices=['hg38', 'hg19'])
     ap.add_argument('--output-dir', required=True)
     args = ap.parse_args()
+
+    # Source file lives under --output-dir/cmp_downloads (see cmpVCEPProvisionalClass).
+    global WALSH_XLSX
+    WALSH_XLSX = f'{args.output_dir}/cmp_downloads/walsh/walsh2019_supplement.xlsx'
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPWalsh2019')
     os.makedirs(out_dir, exist_ok=True)

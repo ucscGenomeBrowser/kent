@@ -51,6 +51,10 @@ PRIORITY_URGENT = 6
 STATUS_NEW = 1
 PROJECT_GB = "genomebrowser"
 
+# Redmine display name of the build-meister account. QA assigns a Build Patch
+# ticket to this user to hand it over for patching; patch-queue gates on it.
+BUILD_MEISTER_NAME = "Build Meister"
+
 # Name -> Redmine tracker ID mapping (case-insensitive lookup in resolve_tracker)
 TRACKER_IDS = {
     "bug": 21,
@@ -475,6 +479,8 @@ def cmd_show(args):
     out.append(f"- **Author:** {issue['author']['name']}")
     if issue.get("assigned_to"):
         out.append(f"- **Assigned to:** {issue['assigned_to']['name']}")
+    if issue.get("fixed_version"):
+        out.append(f"- **Target version:** {issue['fixed_version']['name']}")
     out.append(f"- **Created:** {format_date(issue['created_on'])}")
     out.append(f"- **Updated:** {format_date(issue['updated_on'])}")
     if issue.get("closed_on"):
@@ -555,6 +561,115 @@ def download_file(url, dest_path, api_key):
 # ---------------------------------------------------------------------------
 # Subcommand: list
 # ---------------------------------------------------------------------------
+
+def cmd_patch_queue(args):
+    """Report which Build Patch tickets are ready for the build meister to patch.
+
+    This is the machine-readable gate behind `autoBuild.sh patchtickets`. It
+    encodes the handoff point in the build-patch process: a second developer
+    reviews, QA tests on hgwdev and sets the ticket to Approved, then QA assigns
+    the build meister. So "ready to patch" means status Approved AND assigned to
+    the build meister, for the release being built, with a usable commit hash.
+
+    Code Review Status is reported but NOT enforced. In practice QA approves and
+    hands over tickets whose Code Review Status was never moved off New, so
+    blocking on it would reject nearly everything. It comes back as a warning
+    instead, which is the useful behavior: the patch still runs, and the
+    inconsistency is visible.
+
+    TSV output is one row per ticket: verdict, id, comma-separated commit hashes,
+    subject, notes -- notes LAST because it is the only field that is routinely
+    empty, and a tab-delimited reader that treats tabs as whitespace (bash `read`
+    does) collapses an empty field in the middle and shifts everything after it.
+    Verdict is ELIGIBLE or BLOCKED. Commit hashes are only
+    lifted out of the Commit ID field here -- whether they exist in git, are
+    merge commits, or are already on the branch is git's business, and
+    autoBuild.sh/cherryPickCommits.csh check all three before applying.
+    """
+    params = {
+        "project_id": PROJECT_GB,
+        "tracker_id": TRACKER_BUILD_PATCH,
+        "status_id": args.status,
+        "limit": str(args.limit),
+        "sort": "id:asc",
+    }
+    query = urllib.parse.urlencode(params)
+    data = api_get(args.base_url, f"/issues.json?{query}", args.api_key)
+    issues = data.get("issues", [])
+
+    rows = []
+
+    if args.tickets:
+        wanted = []
+        for t in args.tickets:
+            try:
+                wanted.append(int(str(t).lstrip("#")))
+            except ValueError:
+                sys.exit(f"error: '{t}' is not a ticket number")
+        found = {i["id"] for i in issues}
+        issues = [i for i in issues if i["id"] in set(wanted)]
+        for missing in [w for w in wanted if w not in found]:
+            rows.append(("BLOCKED", missing, "",
+                         f"not an open Build Patch ticket in {PROJECT_GB} "
+                         f"(status filter: {args.status})", ""))
+
+    target = args.target_version.lstrip("vV") if args.target_version else None
+
+    for iss in issues:
+        cf = {c["name"]: (c.get("value") or "") for c in iss.get("custom_fields", [])}
+        version = (iss.get("fixed_version") or {}).get("name", "")
+        status = iss["status"]["name"]
+        assignee = (iss.get("assigned_to") or {}).get("name", "")
+        review = cf.get("Code Review Status", "")
+        commits = re.findall(r"\b[0-9a-f]{7,40}\b", cf.get("Commit ID", "").lower())
+
+        blockers = []
+        if target and version.lstrip("vV") != target:
+            blockers.append("target version is '%s', not %s"
+                            % (version or "unset", target))
+        if status != "Approved":
+            blockers.append("status is '%s', not Approved" % status)
+        if assignee != BUILD_MEISTER_NAME:
+            blockers.append("assigned to '%s', not %s"
+                            % (assignee or "nobody", BUILD_MEISTER_NAME))
+        if not commits:
+            blockers.append("Commit ID field has no usable commit hash (value: '%s')"
+                            % cf.get("Commit ID", ""))
+
+        if blockers:
+            rows.append(("BLOCKED", iss["id"], ",".join(commits),
+                         "; ".join(blockers), iss["subject"]))
+        else:
+            note = ""
+            if review != "Approved":
+                note = ("WARNING: Code Review Status is '%s', not Approved"
+                        % (review or "unset"))
+            rows.append(("ELIGIBLE", iss["id"], ",".join(commits),
+                         note, iss["subject"]))
+
+    if args.tsv:
+        for verdict, tid, commits, note, subject in rows:
+            print("\t".join([verdict, str(tid), commits, subject, note]))
+        return
+
+    if not rows:
+        print("No Build Patch tickets matched.")
+        return
+
+    out = ["| Verdict | # | Commit(s) | Subject | Notes |",
+           "|---------|---|-----------|---------|-------|"]
+    for verdict, tid, commits, note, subject in rows:
+        out.append("| %s | %s | %s | %s | %s |"
+                   % (verdict, tid, commits or "—",
+                      subject[:50].replace("|", "\\|") or "—",
+                      note.replace("|", "\\|") or "—"))
+    eligible = sum(1 for r in rows if r[0] == "ELIGIBLE")
+    out.append("")
+    out.append("%d of %d ready to patch%s."
+               % (eligible, len(rows),
+                  " for v%s" % target if target else ""))
+    print("\n".join(out))
+
 
 def cmd_list(args):
     """List/search tickets with filters."""
@@ -1112,6 +1227,20 @@ def build_parser():
     p_list.add_argument("--sort", default="updated_on:desc",
                         help="Sort field:direction (default: %(default)s)")
 
+    # patch-queue
+    p_pq = sub.add_parser("patch-queue",
+                          help="Report which Build Patch tickets are ready to patch")
+    p_pq.add_argument("--target-version", dest="target_version",
+                      help="Only accept tickets targeting this release (e.g. 502)")
+    p_pq.add_argument("--tickets", nargs="+", metavar="ID",
+                      help="Restrict to these ticket numbers (default: all open Build Patches)")
+    p_pq.add_argument("--status", default="open",
+                      help="Status filter passed to Redmine: open, closed, * (default: %(default)s)")
+    p_pq.add_argument("--limit", type=int, default=100,
+                      help="Max tickets to examine (default: %(default)s)")
+    p_pq.add_argument("--tsv", action="store_true",
+                      help="Machine-readable output: verdict/id/commits/notes/subject")
+
     # create
     p_create = sub.add_parser("create", help="Create a new ticket")
     p_create.add_argument("--subject", required=True, help="Ticket subject")
@@ -1276,6 +1405,7 @@ def main():
     commands = {
         "show": cmd_show,
         "list": cmd_list,
+        "patch-queue": cmd_patch_queue,
         "create": cmd_create,
         "build-patch": cmd_build_patch,
         "comment": cmd_comment,

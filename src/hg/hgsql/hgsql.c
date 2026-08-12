@@ -14,10 +14,10 @@ void usage()
 errAbort(
   "hgsql - Execute some sql code using connection information in .hg.conf\n"
   "usage:\n"
-  "   hgsql [mysqlOptions] [database]\n"
+  "   hgsql [mariadbOptions] [database]\n"
   "or:\n"
-  "   hgsql [mysqlOptions] [database] < file.sql\n"
-  "Generally anything in command line is passed to mysql\n"
+  "   hgsql [mariadbOptions] [database] < file.sql\n"
+  "Generally anything in command line is passed to mariadb\n"
   "after an implicit '-A -u user -ppassword'.  If no options\n"
   "or database is specified, this usage message is printed."
   "\n"
@@ -28,7 +28,7 @@ void hgsql(int argc, char *argv[])
 /* hgsql - Execute some sql code using passwords in .hg.conf. */
 {
 static char *progArgs[] = {"-A", NULL};
-sqlExecProg("mysql", progArgs, argc, argv);
+sqlExecProg("mariadb", progArgs, argc, argv);
 }
 
 int main(int argc, char *argv[])

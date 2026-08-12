@@ -1,9 +1,11 @@
 # hg38 singleCellSignalsPeaks track  -  2026-07-20  Claude (mspeir)  refs #37820
 
 # The native hg38 "singleCellSignalsPeaks" faceted composite is the Genome
-# Browser version of the UCSC Cell Browser all-tracks super hub (Redmine #37820,
-# built under /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build). It
-# gathers the per-cell-type signal (bigWig) and peak (bigBed / bigNarrowPeak)
+# Browser version of the UCSC Cell Browser all-tracks super hub (Redmine #37820).
+# The hub build lives in the cellBrowser repo, ucsc/allTracksHub:
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+#
+# It gathers the per-cell-type signal (bigWig) and peak (bigBed / bigNarrowPeak)
 # tracks from the single-cell ATAC datasets in the Cell Browser and re-parents
 # them under one faceted composite. cCREs and interactions live in their own
 # composites in the hub and are NOT part of this track.
@@ -15,10 +17,13 @@
 # (cellBrowserHg38). That composite and its facet metadata are produced by the
 # hub build from the Cell Browser dataset tree (/hive/data/inside/cells/datasets):
 #
-#   cd /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+#   cd $HOME/cellBrowser/ucsc/allTracksHub
 #   python3 build_manifest.py            # scan datasets -> manifest.tsv
 #   python3 build_stanzas.py             # manifest -> stanzas/hg38.trackDb.txt
 #                                        #            + meta/hg38.metadata.tsv
+#
+# The build writes its output to $CBHUB_OUT, NOT next to the scripts (that dir is
+# git-controlled). Default: /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
 #
 # The per-track source files (abs_path column of manifest.tsv) are the files the
 # Cell Browser datasets already serve; nothing is regenerated here, only copied.
@@ -49,7 +54,7 @@
 #
 #   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
 #   python3 $scriptDir/makeSingleCellSignalsPeaksRa.py \
-#       --stanzas /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build/stanzas/hg38.trackDb.txt \
+#       --stanzas $CBHUB_OUT/stanzas/hg38.trackDb.txt \
 #       --out $HOME/kent/src/hg/makeDb/trackDb/human/hg38/singleCellSignalsPeaks.ra
 #
 # https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
@@ -60,7 +65,7 @@
 # The faceted composite's metaDataUrl points at a copy of the hub's hg38
 # main-faceted metadata (primaryKey = Track):
 #
-#   cp /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build/meta/hg38.metadata.tsv \
+#   cp $CBHUB_OUT/meta/hg38.metadata.tsv \
 #      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
 
 ##############################################################################

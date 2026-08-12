@@ -3735,6 +3735,11 @@ var rightClick = {
             imageV2.fullReload();
         } else if (cmd === "hideOthers") {
             rightClick.hideOthers(id);
+        } else if (cmd === "deleteCustomTrack") {
+            deleteCustomTrack(id);
+            // remove the track from the image in place (no page reload); hideTracks()
+            // drops its row, updates hgTracks.trackDb and redraws via afterImgChange().
+            rightClick.hideTracks([id]);
         } else if (cmd === "moveTop") {
             rightClick.moveTo(id, "top");
         } else if (cmd === "moveBottom") {
@@ -4642,6 +4647,29 @@ var rightClick = {
             };  
             menu.push(o);
 
+            // custom tracks (id starts with "ct_", matching isCustomTrack() in the C code)
+            // can be deleted here, the same as clicking their trash icon in the track list.
+            var ctId = rightClick.selectedMenuItem.id;
+            if (ctId && ctId.startsWith("ct_")) {
+                o = {};
+                // trash-can icon, inlined from printTrashIcon() in hgTracks.c so we
+                // don't pay an extra http round trip for a tiny PNG icon
+                var trashSvg = "<svg xmlns='http://www.w3.org/2000/svg' " +
+                    "style='height:16px;vertical-align:middle;' viewBox='0 0 448 512'>" +
+                    "<path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 " +
+                    "17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 " +
+                    "32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 " +
+                    "64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 " +
+                    "0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 " +
+                    "0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg>";
+                o[trashSvg + " Delete Custom Track"] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        rightClick.hit(menuItemClicked, menuObject, "deleteCustomTrack");
+                        return true; }
+                };
+                menu.push(o);
+            }
+
             //o = {};
             //o[" Float "] = {
                 //onclick: function(menuItemClicked, menuObject) {
@@ -5516,18 +5544,24 @@ function highlightCurrentPosition(mode) {
     }
 }
 
-function onTrackDelIconClick (ev) {
-    /* delete custom track if user clicks its trash icon */
+function deleteCustomTrack (trackName) {
+    /* Tell hgCustom to delete the given custom track. Shared by the trash icon
+     * and the right-click context menu so there is only one deletion code path. */
     // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
-    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
-    var trackName = divEl.getAttribute("data-track");
     var hgsid = getHgsid();
     var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
-    xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     // this cannot be asyncronous, as users can click quickly here and the hgCustom calls above cannot run in parallel
     // since we store custom tracks as a text file, not mysql tables
     xhttp.open("GET", url, false);
     xhttp.send();
+}
+
+function onTrackDelIconClick (ev) {
+    /* delete custom track if user clicks its trash icon */
+    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
+    var trackName = divEl.getAttribute("data-track");
+    deleteCustomTrack(trackName);
     divEl.closest("td").remove();
 }
 

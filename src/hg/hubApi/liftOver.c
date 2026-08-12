@@ -200,16 +200,22 @@ if (!netSkipHttpHeaderLinesWithRedirect(sd, url, &redirectedUrl))
 
 struct dyString *body = netSlurpFile(sd);
 close(sd);
-struct jsonElement *json = jsonParse(body->string);
-dyStringFree(&body);
-if (json == NULL)
-    return FALSE;
 
-char *email = jsonStringField(json, "email");
-char *realName = jsonStringField(json, "realName");
-*retEmail = cloneString(email ? email : "");
-*retRealName = cloneString(realName ? realName : "");
-return TRUE;
+boolean ok = FALSE;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct jsonElement *json = jsonParse(body->string);
+    char *email = jsonStringField(json, "email");
+    char *realName = jsonStringField(json, "realName");
+    *retEmail = cloneString(email ? email : "");
+    *retRealName = cloneString(realName ? realName : "");
+    ok = TRUE;
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+dyStringFree(&body);
+return ok;
 }
 
 static void loginStatus()
@@ -236,7 +242,8 @@ if (userName != NULL)
         {
         // dev sandboxes, hgwbeta, etc: no local grants on gbMembers,
         // relay to genome.ucsc.edu instead
-        fetchGbMembersFromCentral(userName, &email, &realName);
+        if (!fetchGbMembersFromCentral(userName, &email, &realName))
+            warn("loginStatus: failed to fetch email/realName from genome.ucsc.edu relay for user '%s'", userName);
         }
     else
         {
@@ -419,7 +426,7 @@ unsigned uEnd = 0;
 uStart = sqlUnsigned(start);
 uEnd = sqlUnsigned(end);
 if (uEnd < uStart)
-    apiErrAbort(err400, err400Msg, "given start coordinate %u is greater than given end coordinate", uStart, uEnd);
+    apiErrAbort(err400, err400Msg, "given start coordinate %u is greater than given end coordinate %u", uStart, uEnd);
 
 struct dbDb *fromDb = hDbDb(fromGenome);
 if (fromDb == NULL)
@@ -488,14 +495,17 @@ if (toDb == NULL)
     {
     toDb = genarkLiftOverDb(toGenome);
     }
-if ( (fromDb == NULL) || (fromDb == NULL) )
+if ( (fromDb == NULL) || (toDb == NULL) )
     {
     if ( (fromDb == NULL) && (toDb == NULL) )
 	    apiErrAbort(err400, err400Msg, "can not find either 'fromGenome=%s' or 'toGenome=%s' for endpoint '/liftOver", fromGenome, toGenome);
         else
-	    apiErrAbort(err400, err400Msg, "can not find 'fromoGenome=%s' for endpoint '/liftOver", fromGenome);
-    if (toDb == NULL)
-        apiErrAbort(err400, err400Msg, "can not find 'toGenome=%s' for endpoint '/liftOver", toGenome);
+	    {
+	    if (fromDb == NULL)
+		apiErrAbort(err400, err400Msg, "can not find 'fromoGenome=%s' for endpoint '/liftOver", fromGenome);
+	    else
+		apiErrAbort(err400, err400Msg, "can not find 'toGenome=%s' for endpoint '/liftOver", toGenome);
+	    }
     }
 
 /* Record the request in the ottoRequest table: duplicate-row guard, daily
