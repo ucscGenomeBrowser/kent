@@ -45,7 +45,7 @@ B4_BED = f'{WORKDIR}/cmpVCEPRevel/cmpVCEPRevelHg38.bed'
 B1_BED = f'{WORKDIR}/cmpVCEPClinDomains/cmpVCEPClinDomainsHg38.bed'
 EVREPO_JSON = f'{WORKDIR}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
 ANNOT_TSV = f'{WORKDIR}/cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv'
-SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAi.bb'
+SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAIsnvsMasked.bb'   # released masked-SNV file (what the live UCSC track serves)
 
 # Per-gene thresholds (from CSpec - NOT invented here)
 BS1_THRESHOLDS = {'MYBPC3': 0.0002}
@@ -438,7 +438,12 @@ def main():
 
         # BP7 - synonymous with no predicted splice impact (SpliceAI < 0.1, per Walker 2023
         # PMID 37352859). The CM VCEP removed the conservation requirement, so no phyloP gate.
-        sa_score = spliceai.get((chrom, pos1, ref, alt), 0.0)
+        # The SpliceAI file has a 0.02 reporting floor, so a lookup miss means the true
+        # score is below 0.02 (hence below 0.1) - BP7 still applies. Track presence so the
+        # mouseover does not print a missing record as a measured "0.00".
+        sa_hit = spliceai.get((chrom, pos1, ref, alt))
+        sa_present = sa_hit is not None
+        sa_score = sa_hit if sa_present else 0.0
         if is_synonymous and not args.no_spliceai:
             if sa_score < BP7_SPLICE_MAX:
                 codes.add('BP7_Supporting')
@@ -489,8 +494,9 @@ def main():
         if pm4_ev:
             ev.append(f'<b>Protein-truncating:</b> {pm4_ev} &rarr; supports PM4_Supporting')
         if 'BP7_Supporting' in codes:
-            ev.append(f'<b>Synonymous, splicing (SpliceAI):</b> {sa_score:.2f}, no predicted impact '
-                      f'(&#8804; 0.1, per Walker 2023) &rarr; supports BP7_Supporting')
+            sa_txt = f'{sa_score:.2f}' if sa_present else 'no record (below the 0.02 reporting floor)'
+            ev.append(f'<b>Synonymous, splicing (SpliceAI):</b> {sa_txt}, no predicted impact '
+                      f'(&lt; 0.1, per Walker 2023) &rarr; supports BP7_Supporting')
         if splice_safety == 'yes':
             ev.append(f'<b>Splicing (SpliceAI):</b> {sa_score:.2f}, possible splice impact (informational)')
 
@@ -511,11 +517,18 @@ def main():
                   '(PS2/PS3/PS4/PP1/PP4/BS3/BS4) is not included.</i>')
         mouseover = ''.join(mo)
 
+        # codeNotes data field: contested/double-count notes plus any suppressed code.
+        # The mouseover renders suppression inline as an evidence line, so it is kept out
+        # of the red-span `notes` above to avoid duplication; it belongs in the data field.
+        code_notes = list(notes)
+        if pm1_suppressed:
+            code_notes.append('PM1 present but not combined with PM5 (PM5 preferred per CSpec)')
+
         name = f'{gene}_{pos1}_{ref}>{alt}'
         bed_lines.append('\t'.join([
             chrom, str(v['start']), str(v['end']), name, '0', v['strand'],
             str(v['start']), str(v['end']), color, gene, ref, alt, kind,
-            applied_str, disease_tag, ' | '.join(notes), splice_safety, mouseover,
+            applied_str, disease_tag, ' | '.join(code_notes), splice_safety, mouseover,
         ]))
 
     print(f'  features: {n_features}')
