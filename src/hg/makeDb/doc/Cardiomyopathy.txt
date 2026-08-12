@@ -199,8 +199,13 @@
 #      Public mirror: https://hgdownload.soe.ucsc.edu/gbdb/hg38/revel/
 #
 # A.6  SpliceAI (already on hgwdev; no download)
-#      /gbdb/hg38/bbi/spliceAIsnvsMasked.bb  (bed9+4; AIscore in col 9, name="ref>alt")
-#      This is the released masked-SNV file that the live UCSC spliceAI track serves.
+#      /gbdb/hg38/bbi/spliceAIsnvs.bb  (bed9+4; AIscore in col 9, name="ref>alt")
+#      This is the released RAW (unmasked) SNV file. We use RAW, not the masked file,
+#      because Walker 2023 (PMID 37352859) - the calibration our BP7/BP4 SpliceAI cutoff
+#      cites - derived the <0.1 threshold on the raw max delta score. The masked file
+#      zeroes losses at unannotated (cryptic) splice sites; for our 8 genes that would
+#      grant BP7 to 66 synonymous variants whose raw score is up to 0.87, so RAW keeps the
+#      score type matched to the calibration and is the more conservative benign call.
 #      (The older /gbdb/hg38/bbi/spliceAi.bb symlink is superseded and no longer used.)
 #      Used by the B.11 splice flag and BP7 (SpliceAI < 0.1). The file has a 0.02
 #      reporting floor, so a variant with no record has a true score below 0.02
@@ -379,7 +384,7 @@
 #      (PS2/PS3/PS4/PP1/PP4/BS3/BS4) are not computed. Single neutral display
 #      color 91,107,122; no classification encoded.
 #      Output: 10,974 features. Evidence firing: BA1 210, BS1 367, PM2_Supporting
-#      9,893, PP3 1,436, BP4 1,647, BP7 2,415, PM1 1,293, PM4 27, PM5 11, PS1 0.
+#      9,893, PP3 1,436, BP4 1,647, BP7 2,334, PM1 1,293, PM4 27, PM5 11, PS1 0.
 
 
 ##############################################################################

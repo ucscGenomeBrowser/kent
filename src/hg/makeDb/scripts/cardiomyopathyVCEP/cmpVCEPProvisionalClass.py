@@ -45,7 +45,11 @@ B4_BED = f'{WORKDIR}/cmpVCEPRevel/cmpVCEPRevelHg38.bed'
 B1_BED = f'{WORKDIR}/cmpVCEPClinDomains/cmpVCEPClinDomainsHg38.bed'
 EVREPO_JSON = f'{WORKDIR}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
 ANNOT_TSV = f'{WORKDIR}/cmpVCEPAnnotate/cmpVCEPAnnotations.hg38.tsv'
-SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAIsnvsMasked.bb'   # released masked-SNV file (what the live UCSC track serves)
+SPLICEAI_BB = '/gbdb/hg38/bbi/spliceAIsnvs.bb'   # released RAW (unmasked) SNV file.
+# Walker 2023 (PMID 37352859), the calibration our BP7/BP4 SpliceAI cutoff cites, derived
+# the <0.1 threshold on the raw max delta. The masked file zeroes losses at unannotated
+# (cryptic) sites, which for our 8 genes would grant BP7 to 66 synonymous variants whose raw
+# score is up to 0.87; using the raw file keeps the score type matched to the calibration.
 
 # Per-gene thresholds (from CSpec - NOT invented here)
 BS1_THRESHOLDS = {'MYBPC3': 0.0002}
