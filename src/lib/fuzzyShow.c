@@ -299,7 +299,9 @@ if (showHaystack)
     char *h = cloneMem(haystack, haySize);
     char *accentFlags = needMem(haySize);
     zeroBytes(accentFlags, haySize);
-    fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
+    /* hgc's htcBlatAlignment reorders these sections by matching the literal "<H4><A NAME=genomic>"
+     * and "<H4><A NAME=ali>" prefixes; keep them intact (or update hgc.c) so the reorder still fires. */
+    fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
     fprintf(f, "<PRE><TT>\n");

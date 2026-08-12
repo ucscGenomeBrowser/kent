@@ -13,7 +13,8 @@ set -beEu -o pipefail
 function usage() {
   printf "usage: ./updateCentral.sh makeItSo\n" 1>&2
   printf "updates hgcentraltest.genark with the latest hub list from hgdownload\n" 1>&2
-  printf "and the hgcentraltest.assemblyList table from NCBI listings.\n" 1>&2
+  printf "and the hgcentraltest.assemblyList table from NCBI listings,\n" 1>&2
+  printf "and the hgcentraltest.asmAlias table from NCBI listings.\n" 1>&2
 }
 
 # check for an 'unbound' variable safely
@@ -28,11 +29,13 @@ if [ "xxx$1" != "xxxmakeItSo" ]; then
 fi
 
 cd /hive/data/inside/GenArk
-export DS=`date "+%F"`
-export YYYY=`date "+%Y"`
+export DS=$(date "+%F")
+export YYYY=$(date "+%Y")
 export LC_NUMERIC=en_US
 export msgTo="hclawson@ucsc.edu,otto-group@ucsc.edu"
 export msgFile="/tmp/ottoGenArk.$$.txt"
+export asmAliasLog=""
+export asmAliasRc=0
 
 ###########################################################################
 ### helper functions
@@ -44,8 +47,21 @@ function msgToFrom() {
 }
 
 function sendMsg() {
+  printf "\n%s\n" "${asmAliasLog}" >> ${msgFile}
+  if [ "${asmAliasRc}" -eq 0 ]; then
+     printf "### asmAlias update SUCCESSFUL\n" >> ${msgFile}
+  else
+     printf "### asmAlias update FAILED\n" >> ${msgFile}
+  fi
   cat $msgFile | /usr/sbin/sendmail -t -oi
   rm -f $msgFile
+}
+
+function asmAliasFail() {
+  msgToFrom
+  printf "Subject: ALERT: hgcentraltest.asmAlias update problem\n" >> ${msgFile}
+  printf "\n" >> ${msgFile}
+  sendMsg
 }
 
 function oddRowCounts() {
@@ -84,19 +100,33 @@ function updateOK() {
 ### begin processing
 ###########################################################################
 
+### adding asmAlias table update 2026-08-11
+if asmAliasLog=$(/hive/data/inside/GenArk/asmAlias/runUpdate.sh 2>&1); then
+    asmAliasRc=0
+else
+    asmAliasRc=$?
+    asmAliasFail
+fi
+
 # everything depends on this file from hgdownload
 rsync -a qateam@hgdownload:/mirrordata/hubs/UCSC_GI.assemblyHubList.txt ./list.${DS}
 
 #  see if it became newer than previous
-newSum=`grep -v "^#" list.${DS} | sort | md5sum | cut -d' ' -f1`
-prevSum=`grep -v "^#" previousList.txt | sort | md5sum | cut -d' ' -f1`
+newSum=$(grep -v "^#" list.${DS} | sort | md5sum | cut -d' ' -f1)
+prevSum=$(grep -v "^#" previousList.txt | sort | md5sum | cut -d' ' -f1)
 
-printf "# new list: %d, prevList: %d\n" "`grep -c . list.${DS}`" "`grep -c . previousList.txt`" 1>&2
+printf "# new list: %d, prevList: %d\n" "$(grep -c . list.${DS})" "$(grep -c . previousList.txt)" 1>&2
 
 if [ "${prevSum}" = "${newSum}" ]; then
   rm -f list.${DS}
   ### new assemblyList table in hgcentraltest 2024-08-08
   /hive/data/inside/GenArk/addAssemblyList.sh
+  if [ "${asmAliasRc}" -eq 0 ]; then
+    msgToFrom
+    printf "Subject: NOTE: hgcentraltest.asmAlias has been updated\n" >> ${msgFile}
+    printf "\n" >> ${msgFile}
+    sendMsg
+  fi
   exit 0
 fi
 
@@ -104,14 +134,14 @@ fi
 mkdir -p history/${YYYY}
 cp -p list.${DS} history/${YYYY}
 gzip history/${YYYY}/list.${DS}
-countToday=`grep -c -v "^#" list.${DS}`
-rowCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
+countToday=$(grep -c -v "^#" list.${DS})
+rowCount=$(hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat)
 
 if [ "${countToday}" -gt "${rowCount}" ]; then
   ./genArkListToSql.pl list.${DS} > genark.tsv
   ### new assemblyList table in hgcentraltest 2024-08-08 - loads genark table
   /hive/data/inside/GenArk/addAssemblyList.sh
-  newCount=`hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat`
+  newCount=$(hgsql -N hgcentraltest -e 'select count(*) from genark;' | cat)
   if [ "${newCount}" -gt "${rowCount}" ]; then
     updateOK "${newCount}" "${rowCount}"
     rm -f previousList.txt

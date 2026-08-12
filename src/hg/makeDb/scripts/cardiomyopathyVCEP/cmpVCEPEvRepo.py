@@ -68,7 +68,7 @@ def load_mane_acc():
         acc[f[0]] = f[6]   # geneSym -> refSeqAcc (e.g. NM_000257.4)
     return acc
 
-MANE_ACC = load_mane_acc()
+MANE_ACC = {}   # populated in main() once MANE_TSV is resolved from --output-dir
 
 
 def normalize_hgvs_version(hgvs, gene):
@@ -336,6 +336,12 @@ def main():
     ap.add_argument('--db', action='append', required=True, choices=['hg38', 'hg19'])
     ap.add_argument('--output-dir', required=True)
     args = ap.parse_args()
+
+    # Source files live under --output-dir/cmp_downloads (see cmpVCEPProvisionalClass).
+    global EVREPO_JSON, MANE_TSV, MANE_ACC
+    EVREPO_JSON = f'{args.output_dir}/cmp_downloads/erepo/cardiomyopathyVCEP_classifications.json'
+    MANE_TSV = f'{args.output_dir}/cmp_downloads/mane_8genes.tsv'
+    MANE_ACC = load_mane_acc()   # load here, not at import, so the resolved MANE_TSV is used
 
     out_dir = os.path.join(args.output_dir, 'cmpVCEPEvRepo')
     os.makedirs(out_dir, exist_ok=True)
