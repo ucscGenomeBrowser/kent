@@ -176,10 +176,8 @@ MAILTO=cells@ucsc.edu
 
 # DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
 # alive (reads the /hive job queue); restarts if down / on reboot.
-* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >>
-/hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
-@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >>
-/hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 
