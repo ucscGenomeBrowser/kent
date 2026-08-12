@@ -266,6 +266,13 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
+// tdb->track (and tdb->parent->track) carry the hub_<id>_ decoration;
+// display and outgoing URLs should show/use the name as it actually
+// appears in trackDb.txt.  protectedTrack() below still needs the
+// decorated tdb->track, untouched, to recognize a hub track.
+char *trackName = trackHubSkipHubName(tdb->track);
+char *parentName = tdb->parent ? trackHubSkipHubName(tdb->parent->track) : NULL;
+
 struct dyString *extraDyFlags = dyStringNew(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
@@ -274,44 +281,44 @@ if (jsonOutputArrays)
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
 if (protectedTrack(db, tdb, tdb->track))
-    hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
+    hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", trackName, tdb->type);
 else if (db)
     {
     if (hub)
 	{
 	char urlReference[2048];
-	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
+	safef(urlReference,	sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, trackName, extraFlags, errorPrint);
 
 	if (tdb->parent)
-	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
+	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", trackName, tdb->type, parentName, urlReference);
 	else
-	    hPrintf("<li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, urlReference);
+	    hPrintf("<li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, urlReference);
 	}
     else
 	{
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, tdb->track, extraFlags, errorPrint);
+	safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, db, trackName, extraFlags, errorPrint);
 
 	if (superChild)
-	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
+	    hPrintf("<li><b>%s</b>: %s superTrack child of parent: %s%s</li>\n", trackName, tdb->type, parentName, urlReference);
 	else if (tdb->parent)
-	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
+	    hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", trackName, tdb->type, parentName, urlReference);
 	else
-	    hPrintf("<li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, urlReference );
+	    hPrintf("<li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, urlReference );
 	}
     }
 else if (hub)
     {
     char urlReference[2048];
-    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
+    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, trackName, extraFlags, errorPrint);
 
     if (tdb->parent)
-	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", tdb->track, tdb->type, tdb->parent->track, urlReference);
+	hPrintf("<li><b>%s</b>: %s subtrack of parent: %s%s</li>\n", trackName, tdb->type, parentName, urlReference);
     else
-	hPrintf("<li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, urlReference);
+	hPrintf("<li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, urlReference);
     }
 else
-    hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
+    hPrintf("<li>%s : %s not db hub track ?</li>\n", trackName, tdb->type);
 }
 
 static void hubSampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb,
@@ -344,28 +351,32 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
+// display and outgoing URLs get the name as it appears in trackDb.txt;
+// protectedTrack() below still needs the decorated tdb->track, untouched.
+char *trackName = trackHubSkipHubName(tdb->track);
+
 if (protectedTrack(db, tdb, tdb->track))
-    hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
+    hPrintf("    <li><b>%s</b>: %s protected data</li>\n", trackName, tdb->type);
 else if (isSupportedType(tdb->type))
     {
 	char urlReference[2048];
-	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, tdb->track, extraFlags, errorPrint);
+	safef(urlReference, sizeof(urlReference), "<a href='%s/getData/track?hubUrl=%s;genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)%s</a>\n", urlPrefix, hub->url, genome, trackName, extraFlags, errorPrint);
 
 	if (allowedBigBedType(tdb->type))
-            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
+            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", trackName, tdb->type, countsMessage, urlReference);
         else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
+            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", trackName, tdb->type, countsMessage, urlReference);
         else
-            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", tdb->track, tdb->type, countsMessage, urlReference);
+            hPrintf("    <li><b>%s</b>: %s%s%s</li>\n", trackName, tdb->type, countsMessage, urlReference);
     }
 else
     {
         if (allowedBigBedType(tdb->type))
-            hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+            hPrintf("    <li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, countsMessage);
         else if (startsWithWord("bigWig", tdb->type))
-            hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+            hPrintf("    <li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, countsMessage);
         else
-            hPrintf("    <li><b>%s</b>: %s%s</li>\n", tdb->track, tdb->type, countsMessage);
+            hPrintf("    <li><b>%s</b>: %s%s</li>\n", trackName, tdb->type, countsMessage);
     }
 }	/* static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
 	 * long chromCount, long itemCount, char *genome)
@@ -401,6 +412,16 @@ static int bbiBriefMeasure(char *type, char *bigDataUrl, char *bigDataIndex, lon
 int retVal = 0;
 *chromCount = 0;
 *itemCount = 0;
+if (isEmpty(bigDataUrl))
+    {
+    // a container/parent-level tdb (superTrack parent, view, etc. not
+    // already filtered out by the caller) has no bigDataUrl of its own --
+    // nothing to measure.  Every bigFileOpen()/udcFileOpen() below assumes
+    // a non-NULL URL string and segfaults on NULL rather than erring out
+    // through the errCatch below, so this must be checked before any of it.
+    dyStringPrintf(errors, "no bigDataUrl to measure for type %s", type);
+    return 1;
+    }
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
@@ -504,7 +525,7 @@ static void hubSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb,
 hPrintf("    <li><ul>\n");
 if (debug)
     {
-    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
+    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", trackHubSkipHubName(tdb->track), db);
     hPrintf("    <li>chrom: '%s' size: %u</li>\n", chromName, chromSize);
     }
 if (tdb->subtracks)
@@ -512,9 +533,14 @@ if (tdb->subtracks)
     struct trackDb *tdbEl = NULL;
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
-	boolean compositeContainer = tdbIsComposite(tdbEl);
-	boolean compositeView = tdbIsCompositeView(tdbEl);
-	if (! (compositeContainer || compositeView) )
+	// display name as it appears in trackDb.txt; tdbEl->track itself
+	// stays decorated for hashCountTrack()/recursive calls below
+	char *tdbElName = trackHubSkipHubName(tdbEl->track);
+	char *tdbElParentName = tdbEl->parent ? trackHubSkipHubName(tdbEl->parent->track) : NULL;
+	// trackHasData() also excludes tdbIsContainer() (e.g. 'container
+	// multiWig'), which has no bigDataUrl of its own -- its data comes
+	// from its children.
+	if (trackHasData(tdbEl))
 	    {
             char *bigDataIndex = NULL;
             char *relIdxUrl = trackDbSetting(tdbEl, "bigDataIndex");
@@ -529,13 +555,13 @@ if (tdb->subtracks)
             chromName = longName;
 	    }
         if (tdbIsCompositeView(tdbEl))
-	    hPrintf("<li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+	    hPrintf("<li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdbElName, tdbEl->type, tdbElParentName);
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
 		hubSampleUrl(hub, db, tdbEl, chromCount, itemCount, genome, errorString);
 	    else
-		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbElName, tdbEl->type, tdbElParentName);
 	    }
 	hashCountTrack(tdbEl, countTracks);
         if (tdbEl->subtracks)
@@ -616,7 +642,7 @@ if (tdb->subtracks)
 
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
-        hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
+        hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", trackHubSkipHubName(tdbEl->track), trackHubSkipHubName(tdbEl->parent->track), tdbEl->type);
 	hashCountTrack(tdbEl, countTracks);
 	trackSettings(db, tdbEl, countTracks);
 	}
@@ -642,8 +668,10 @@ struct dyString *errors = dyStringNew(1024);
 
 /* if given a chromSize, it belongs to a UCSC db and this is *not* an
  *   assembly hub, otherwise, look up a chrom and size in the bbi file
+ * trackHasData() also excludes tdbIsContainer() (e.g. 'container multiWig'),
+ * which has no bigDataUrl of its own -- its data comes from its children.
  */
-if (! (compositeContainer || compositeView) )
+if (trackHasData(tdb))
     {
     if (chromSize < 1 || depthSearch)
 	{
@@ -655,6 +683,11 @@ if (! (compositeContainer || compositeView) )
 	}
     }
 
+// display name as it appears in trackDb.txt; tdb->track itself stays
+// decorated for hashCountTrack()/protectedTrack()/recursive calls
+char *trackName = trackHubSkipHubName(tdb->track);
+char *parentName = tdb->parent ? trackHubSkipHubName(tdb->parent->track) : NULL;
+
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
@@ -663,15 +696,15 @@ if (depthSearch && bigDataUrl)
 else
     {
     if (compositeContainer)
-        hPrintf("    <li><b>%s</b>: %s : composite track container has %d subtracks</li>\n", tdb->track, tdb->type, slCount(tdb->subtracks));
+        hPrintf("    <li><b>%s</b>: %s : composite track container has %d subtracks</li>\n", trackName, tdb->type, slCount(tdb->subtracks));
     else if (compositeView)
-        hPrintf("    <li><b>%s</b>: %s : composite view of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
+        hPrintf("    <li><b>%s</b>: %s : composite view of parent: %s</li>\n", trackName, tdb->type, parentName);
     else if (superChild)
 	{
 	if (isSupportedType(tdb->type))
 	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome,  errors->string);
 	else
-	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
+	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", trackName, tdb->type, parentName);
 	}
     else if (! depthSearch && bigDataUrl)
 	{
@@ -687,7 +720,7 @@ else
 	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	else
-	    hPrintf("    <li><b>%s</b>: %s (what is this)</li>\n", tdb->track, tdb->type);
+	    hPrintf("    <li><b>%s</b>: %s (what is this)</li>\n", trackName, tdb->type);
         }
     }
 if (allTrackSettings)
@@ -804,7 +837,13 @@ if (topTrackDb)
 	    bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
         char *defaultGenome = NULL;
         if (isNotEmpty(genome->name))
-	    defaultGenome = genome->name;
+	    // genome->name is hub_<id>_ decorated for assembly hub genomes
+	    // (anything with twoBitPath); strip it here so defaultGenome
+	    // matches what every other consumer (list.c) passes around --
+	    // otherwise protectedTrack() re-decorates an already-decorated
+	    // name to hub_<id>_hub_<id>_<genome> and hAllocConn() on that
+	    // aborts with "Unknown database"
+	    defaultGenome = trackHubSkipHubName(genome->name);
         char *chromName = NULL;
         unsigned chromSize = 0;
 	int chromCount = 0;
@@ -923,22 +962,29 @@ for ( ; genome; genome = genome->next )
     {
     ++totalAssemblyCount;
     char urlReference[2048];
+    // genome->name and genome->organism carry the hub_<id>_ decoration for
+    // assembly hub genomes (trackHub.c addHubName()); display and outgoing
+    // links should show/use the name as it actually appears in genomes.txt.
+    // trackHubAllChromInfo()/trackHubGetGenome() lookups still need the
+    // decorated genome->name, untouched, to find the genome in hubAssemblyHash.
+    char *displayGenome = trackHubSkipHubName(genome->name);
+    char *displayOrganism = trackHubSkipHubName(genome->organism);
     if (isNotEmpty(genome->twoBitPath))
 	{
-	hPrintf("<li><b>Assembly genome</b> '%s' <b>twoBitPath</b>: '%s'</li>\n", genome->name, genome->twoBitPath);
+	hPrintf("<li><b>Assembly genome</b> '%s' <b>twoBitPath</b>: '%s'</li>\n", displayGenome, genome->twoBitPath);
 	char *chromName = NULL;
 	struct chromInfo *ci = trackHubAllChromInfo(genome->name);
         unsigned chromSize = largestChromInfo(ci, &chromName);
 	char sizeString[64];
 	sprintLongWithCommas(sizeString, chromSize);
 	hPrintf("<li><b>Sequence count</b> %d, <b>largest</b>: %s at %s bases</li>\n", slCount(ci), chromName, sizeString);
-       safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, genome->name, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
+       safef(urlReference, sizeof(urlReference), " <a href='%s/getData/sequence?hubUrl=%s;genome=%s;chrom=%s;start=%u;end=%u' target=_blank>JSON example sequence output: %s:%u-%u</a>", urlPrefix, hubTop->url, displayGenome, chromName, chromSize/4, (chromSize/4)+128, chromName, chromSize/4, (chromSize/4)+128);
         hPrintf("<li>%s</li>\n", urlReference);
 	}
-    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, genome->name, trackLeavesOnly ? ";trackLeavesOnly=1" : "");
+    safef(urlReference, sizeof(urlReference), " <a href='%s/list/tracks?hubUrl=%s;genome=%s%s' target=_blank>JSON example list tracks output</a>", urlPrefix, hubTop->url, displayGenome, trackLeavesOnly ? ";trackLeavesOnly=1" : "");
     hPrintf("<li>%s</li>\n", urlReference);
-    hubInfo("organism", genome->organism);
-    hubInfo("name", genome->name);
+    hubInfo("organism", displayOrganism);
+    hubInfo("name", displayGenome);
     hubInfo("description", genome->description);
     hubInfo("groups", genome->groups);
     hubInfo("defaultPos", genome->defaultPos);
