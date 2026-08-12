@@ -79,10 +79,13 @@ _EOF_
 Automates construction of the 'ncbiGene' track from an assembly's own
 NCBI GFF3 gene predictions, for assembly hub (GenArk) builds. Steps:
     ncbiGene: if a previous \$db.ncbiGene.bb exists and the source gff
-              is newer, archive the previous version under archive/<date>/
-              (keyed by the previous build's own gff-derived mtime), then
-              translate the current gff3 into a bigGenePred track and swap
-              it into place atomically.
+              is newer, translate the current gff3 into a bigGenePred track,
+              building it entirely under *.new file names so the existing
+              live track is never touched while the build might still fail.
+              Only once that build has fully succeeded is the previous
+              version archived under archive/<date>/ (keyed by the previous
+              build's own gff-derived mtime) and the new *.new files
+              promoted into place.
     cleanup:  compress intermediate files
 ";
   print "\n";
@@ -157,6 +160,24 @@ sub archivePriorVersion {
   &HgAutomate::verbose(1,
     "# ncbiGene: archived previous version to archive/$priorVersion/\n");
 } # archivePriorVersion
+
+#########################################################################
+# promote a successful *.new build into the live $db.ncbiGene.* names.
+# Only ever called after archivePriorVersion() and only after the boss
+# script below has exited 0 -- i.e. after the new track has already been
+# fully built and validated under *.new names, so every rename() here is
+# just swapping a already-good file into place, never risking the live
+# track on a build that might still fail.
+sub promoteNewBuild {
+  foreach my $ext (qw( bb gtf.gz ix ixx stats.txt )) {
+    my $new = "$buildDir/$db.ncbiGene.$ext.new";
+    rename($new, "$buildDir/$db.ncbiGene.$ext") if (-e "$new");
+  }
+  my $geneAttrsNew = "$buildDir/$db.geneAttrs.ncbi.txt.new";
+  rename($geneAttrsNew, "$buildDir/$db.geneAttrs.ncbi.txt") if (-e "$geneAttrsNew");
+  my $fbNew = "$buildDir/fb.$db.ncbiGene.txt.new";
+  rename($fbNew, "$buildDir/fb.$db.ncbiGene.txt") if (-e "$fbNew");
+} # promoteNewBuild
 
 #########################################################################
 # a single hub.txt (useOneFile on) that puts just the archived ncbiGene
@@ -243,7 +264,13 @@ sub doNcbiGene {
   }
   &HgAutomate::mustMkdir($buildDir);
 
-  archivePriorVersion();
+  # NOTE: the previous live version is deliberately *not* archived here.
+  # Everything below builds under *.new file names, leaving the existing
+  # live track completely untouched; archivePriorVersion() only runs
+  # after $bossScript->execute() returns below, i.e. only once the new
+  # build has actually succeeded (execute() dies on any remote failure,
+  # via 'set -e' in the boss script, so a failed build never reaches
+  # that line and the live track is left exactly as it was).
 
   my $whatItDoes = "translate NCBI GFF3 gene definitions into a track";
   # NOTE: must not be named doNcbiGene.bash -- doAssemblyHub.pl's own
@@ -270,19 +297,19 @@ export chromSizes=$chromSizes
 
 function cleanUp() {
   rm -f \$asmId.ncbiGene.genePred.gz \$asmId.ncbiGene.genePred
-  rm -f \$asmId.geneAttrs.ncbi.txt
+  rm -f \$asmId.geneAttrs.ncbi.txt.new
 }
 
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   ln -sf \$gffFile ./
   (gff3ToGenePred -warnAndContinue -useName \\
-    -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
+    -attrsOut=\$asmId.geneAttrs.ncbi.txt.new \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
          -chromSizes=\$chromSizes stdin stdout \\
         $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
   zcat \$asmId.ncbiGene.genePred.gz > ncbiGene.\$asmId.gp
-  genePredToGtf -utr file ncbiGene.\$asmId.gp stdout | gzip -c > \$asmId.ncbiGene.gtf.gz
+  genePredToGtf -utr file ncbiGene.\$asmId.gp stdout | gzip -c > \$asmId.ncbiGene.gtf.gz.new
   rm -f ncbiGene.\$asmId.gp
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
   if [ "\${howMany}" -eq 0 ]; then
@@ -306,7 +333,7 @@ _EOF_
   $bossScript->add(<<_EOF_
   ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
     > \$asmId.gpToIx.txt
-  ~/kent/src/hg/utils/automation/gffAttrsToIx.py \$asmId.geneAttrs.ncbi.txt \\
+  ~/kent/src/hg/utils/automation/gffAttrsToIx.py \$asmId.geneAttrs.ncbi.txt.new \\
      \$ncbiGenePred > \$asmId.attrsToIx.txt
   sort -u \$asmId.gpToIx.txt \$asmId.attrsToIx.txt > \$asmId.ncbiGene.ix.txt
   if [ -s \$asmId.ncbiGene.ix.txt ]; then
@@ -324,29 +351,35 @@ _EOF_
   fi
   touch -r\$gffFile \$asmId.ncbiGene.bb.new
   bigBedInfo \$asmId.ncbiGene.bb.new | egrep "^itemCount:|^basesCovered:" \\
-    | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt
-  LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt` | xargs echo
+    | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt.new
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt.new` | xargs echo
 
   # basesCovered comes straight out of the bigBedInfo call above --
   # no need to separately rebuild exons via bedToExons/bedSingleCover.pl
   export totalBases=`ave -col=2 \$chromSizes | grep total | awk '{printf "%d", \$NF}'`
-  export basesCovered=`grep basesCovered \$asmId.ncbiGene.stats.txt | awk '{printf "%s", \$NF}'`
+  export basesCovered=`grep basesCovered \$asmId.ncbiGene.stats.txt.new | awk '{printf "%s", \$NF}'`
   export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.\$asmId.ncbiGene.txt
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.\$asmId.ncbiGene.txt.new
 
-  # atomic swap -- a client mid-read of the .bb/.ix/.ixx over http never
-  # sees a half-written file, unlike the old build-in-place behavior
-  mv -f \$asmId.ncbiGene.bb.new \$asmId.ncbiGene.bb
-  if [ -s \$asmId.ncbiGene.ix.new ]; then
-    mv -f \$asmId.ncbiGene.ix.new \$asmId.ncbiGene.ix
-    mv -f \$asmId.ncbiGene.ixx.new \$asmId.ncbiGene.ixx
-  fi
+  # Everything above is built entirely under *.new (or otherwise
+  # non-live) file names -- nothing under the live \$asmId.ncbiGene.*
+  # names has been touched.  The calling doNcbiGene.pl only archives the
+  # previous live version and promotes these *.new files into place
+  # once this script has exited 0, so a failure at any point above
+  # (this script runs under 'set -e') leaves the existing live track
+  # completely untouched.
 else
   printf "# ncbiGene step previously completed\\n" 1>&2
 fi
 _EOF_
   );
   $bossScript->execute();
+
+  # reached only if the boss script above exited 0 -- the new build is
+  # complete and validated under *.new file names, so it is now safe to
+  # archive the previous live version and promote the new one into place
+  archivePriorVersion();
+  promoteNewBuild();
 } # doNcbiGene
 
 #########################################################################
@@ -356,7 +389,7 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$buildDir/doCleanup.csh", $fileServer,
 				      $buildDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-gzip -f $db.geneAttrs.ncbi.txt $db.ncbiGene.log.txt
+gzip -f $db.geneAttrs.ncbi.txt $db.ncbiGene.log.txt $db.ncbiGene.bed
 _EOF_
   );
   $bossScript->execute();
