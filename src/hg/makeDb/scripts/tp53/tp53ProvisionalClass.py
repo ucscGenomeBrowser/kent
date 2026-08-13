@@ -22,7 +22,7 @@ DELIBERATELY EXCLUDED from the sum (documented in every mouseover):
   - BP7 (computational, but synonymous/intronic only; out of scope for this
     missense-only track)
 
-This is NOT a VCEP classification &#8212; the warning is in every mouseover
+This is NOT a ClinGen classification &#8212; the warning is in every mouseover
 since clinicians live in the mouseover, not the description page.
 
 bigBed 9+10.
@@ -68,7 +68,6 @@ POINTS = {
     'BA1': 0,                   # stand-alone B -> not summed; forces class
     'BS1': -4,
     'PM2_Supporting': 1,
-    'BS2': -4,
     'No evidence': 0, 'Indeterminate': 0,
 }
 
@@ -96,7 +95,7 @@ CLASS_COLOR = {
 }
 
 AUTOSQL = """table TP53ProvisionalClass
-"TP53 NON-FINAL Provisional Classification by Tavtigian point sum (NOT a VCEP classification)"
+"TP53 NON-FINAL Provisional Classification by Tavtigian point sum (NOT a ClinGen classification)"
    (
    string chrom;             "Reference sequence chromosome or scaffold"
    uint   chromStart;        "Start position in chromosome"
@@ -255,12 +254,16 @@ def load_af_lookup(db):
     return out
 
 
+BS2_TIER_POINTS = {'BS2': -4, 'BS2_Moderate': -2, 'BS2_Supporting': -1}
+
+
 def load_flossies_lookup(db):
-    """Read TP53Flossies_<db>.bed and return set of (chrom, pos1based, ref, alt)
-    keys for rows with BS2 applicability = 'BS2'. Match is variant-specific
-    (a FLOSSIES observation supports BS2 only for the exact nt change observed,
-    not for any change at the same codon)."""
-    out = set()
+    """Read TP53Flossies_<db>.bed and return {(chrom, pos1based, ref, alt) ->
+    (bs2_label, points)} for rows that meet BS2 at any tier (BS2 / BS2_Moderate
+    / BS2_Supporting). Match is variant-specific (a FLOSSIES observation
+    supports BS2 only for the exact nt change observed, not for any change at
+    the same codon). The tier reflects the carrier count per CSpec GN009."""
+    out = {}
     path = FLOSSIES_BED_TPL.format(db)
     if not os.path.exists(path):
         return out
@@ -269,13 +272,14 @@ def load_flossies_lookup(db):
             flds = line.rstrip("\n").split("\t")
             if len(flds) < 19:
                 continue
-            if flds[9] != 'BS2':
+            pts = BS2_TIER_POINTS.get(flds[9])
+            if pts is None:
                 continue
             chrom = flds[0]
             start = int(flds[1])
             ref = flds[17]
             alt = flds[18]
-            out.add((chrom, start + 1, ref, alt))
+            out[(chrom, start + 1, ref, alt)] = (flds[9], pts)
     return out
 
 
@@ -351,14 +355,15 @@ def af_code_and_points(wt, codon, alt, paths, af_lookup, tx):
     return ('', 0, '')
 
 
-def bs2_observed(wt, codon, paths, flossies_lookup, tx):
-    """Return True if any (c.X>Y) path resolves to a FLOSSIES variant that
-    matches by exact genomic position AND ref/alt. BS2 requires the SAME
-    nt change &#8212; an observation of c.1120G>A does not support BS2 for
-    c.1120G>C even though both yield p.G374R."""
+def bs2_evidence(wt, codon, paths, flossies_lookup, tx):
+    """Return (bs2_label, points) for the strongest FLOSSIES BS2 tier matching
+    any (c.X>Y) path by exact genomic position AND ref/alt, else (None, 0).
+    BS2 requires the SAME nt change &#8212; an observation of c.1120G>A does
+    not support BS2 for c.1120G>C even though both yield p.G374R."""
     chrom = tx['chrom']
     strand = tx['strand']
     rcomp = {'A':'T','T':'A','C':'G','G':'C'}
+    best = (None, 0)
     for c_pos, c_ref, c_alt in paths:
         g = lib.cdna_coding_to_genomic(c_pos, tx)
         if g is None:
@@ -369,9 +374,10 @@ def bs2_observed(wt, codon, paths, flossies_lookup, tx):
         else:
             g_ref = c_ref
             g_alt = c_alt
-        if (chrom, g + 1, g_ref, g_alt) in flossies_lookup:
-            return True
-    return False
+        hit = flossies_lookup.get((chrom, g + 1, g_ref, g_alt))
+        if hit and hit[1] < best[1]:
+            best = hit
+    return best
 
 
 CAVEATS_STR = (
@@ -383,7 +389,7 @@ CAVEATS_STR = (
 
 HEADER_WARNING = (
     "<b style='color:#c00000'>"
-    "NON-FINAL: NOT a VCEP classification &#8212; preliminary point-sum only."
+    "NON-FINAL: NOT a ClinGen classification &#8212; preliminary point-sum only."
     "</b>"
 )
 
@@ -480,10 +486,10 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, flossies_lookup, tx):
         af_lbl = "{} ({})".format(af_code, af_qty) if af_code else ''
         ba1 = (af_code == 'BA1')
 
-        # BS2 from FLOSSIES
-        bs2_applies = bs2_observed(wt, codon, paths, flossies_lookup, tx)
-        bs2_pts = POINTS['BS2'] if bs2_applies else 0
-        bs2_lbl = "BS2 (-4 pts)" if bs2_applies else "Not observed"
+        # BS2 from FLOSSIES (tiered by carrier count per CSpec GN009)
+        bs2_label, bs2_pts = bs2_evidence(wt, codon, paths, flossies_lookup, tx)
+        bs2_applies = bs2_label is not None
+        bs2_lbl = "{} ({} pts)".format(bs2_label, bs2_pts) if bs2_applies else "Not observed"
 
         total = pm1_pts + ps3_pts + pp3_pts + af_pts + bs2_pts
 
@@ -508,7 +514,7 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, flossies_lookup, tx):
             sign = "+" if af_pts > 0 else ""
             applied_codes.append("{} ({}{})".format(af_code, sign, af_pts))
         if bs2_applies:
-            applied_codes.append("BS2 (-4)")
+            applied_codes.append("{} ({})".format(bs2_label, bs2_pts))
         applied = "; ".join(applied_codes)
 
         short = "{}{}{}".format(wt, codon, alt)
@@ -530,7 +536,7 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, flossies_lookup, tx):
                 ps3_lbl or "-",
                 pp3_lbl or "-",
                 af_code or "-",
-                "BS2" if bs2_applies else "-",
+                bs2_label if bs2_applies else "-",
                 "{:.2f}".format(spliceai) if spliceai else "0.00",
                 mo,
             ]))
@@ -567,19 +573,19 @@ def build(db, outdir):
     from collections import Counter
     cnt = Counter()
     af_cnt = Counter()
-    bs2_cnt = 0
+    bs2_cnt = Counter()
     with open(bed) as f:
         for line in f:
             flds = line.split("\t")
             cnt[flds[9]] += 1
             af_cnt[flds[15]] += 1
-            if flds[16] == 'BS2':
-                bs2_cnt += 1
+            if flds[16] in BS2_TIER_POINTS:
+                bs2_cnt[flds[16]] += 1
     print("  Class distribution:")
     for k, n in cnt.most_common():
         print("    {}: {}".format(k, n))
     print("  AF code distribution: {}".format(dict(af_cnt)))
-    print("  BS2 applied: {} rows".format(bs2_cnt))
+    print("  BS2 applied: {} rows {}".format(sum(bs2_cnt.values()), dict(bs2_cnt)))
 
 
 def main():
