@@ -1,6 +1,13 @@
-#!/bin/sh 
+#!/bin/sh
 set -e
 # processing raw data file from GENEREVIEWS
+
+# The NCBI files are Latin-1, not UTF-8.  Under a UTF-8 locale grep treats them
+# as binary and silently drops the lines that hold the high bytes, so two
+# disease titles go missing.  cron runs with no locale set and is safe, but a
+# hand-run from a login shell is not.  Pin the locale so both behave the same.
+LC_ALL=C
+export LC_ALL
 
 geneDiseaseFile="geneReviewsGeneDiseases.tab"
 

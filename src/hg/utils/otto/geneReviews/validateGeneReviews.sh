@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+# Pin the locale so sort and join agree, whether run by cron or by hand.
+LC_ALL=C
+export LC_ALL
+
 db=$1
 tooMuch=0.1000   # how much change (either gain or loss) is too much
 

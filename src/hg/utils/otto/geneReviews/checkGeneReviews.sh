@@ -8,6 +8,12 @@
 #       current login requires the user be chinhli
 umask 002
 
+# Pin the locale so a hand-run from a login shell behaves like the cron run.
+# See the note in buildGeneReviews.sh: the NCBI files are Latin-1 and a UTF-8
+# locale makes grep drop lines, and sort and join order differently.
+LC_ALL=C
+export LC_ALL
+
 WORKDIR=$1
 export WORKDIR
 
