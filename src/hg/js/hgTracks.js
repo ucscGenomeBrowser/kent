@@ -5562,6 +5562,11 @@ function onTrackDelIconClick (ev) {
     var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
     var trackName = divEl.getAttribute("data-track");
     deleteCustomTrack(trackName);
+    // if the track is currently drawn, also remove it from the image and update
+    // hgTracks.trackDb/cart, the same cleanup the right-click delete does. hideTracks()
+    // assumes the track is in hgTracks.trackDb, so only call it when it is.
+    if (hgTracks.trackDb && hgTracks.trackDb[trackName])
+        rightClick.hideTracks([trackName]);
     divEl.closest("td").remove();
 }
 
