@@ -394,6 +394,40 @@ RELEASE_GATES = {
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
                "not attachment, so a hub is validated on attach either way."),
+        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3020", default="FALSE",
+          role="gate", verified=True, ticket="37893",
+          note="Replaces hgBlat's classic C-generated search form with the "
+               "JavaScript-built one in hg/js/hgBlat.js, which shares its "
+               "styling and page header with the new BLAT results page.  Off "
+               "while the new form is being tested.  Read through "
+               "cartUsualBoolean, so this is only the default: the form's "
+               "banner offers a per-user opt-out that sets blatNewForm=0 in "
+               "the cart.  It comes out once the new form replaces the old "
+               "one, which is what makes it a gate rather than a knob."),
+        h("blatNewFormBanner", "flag", "hg/hgBlat/hgBlat.c:825",
+          default="follows blatNewForm", role="gate", verified=True,
+          ticket="37893",
+          note="Whether the classic BLAT search form carries a banner offering "
+               "the new one.  Defaults to whatever blatNewForm is set to: "
+               "where the new form is enabled, a user who took its go-back "
+               "link needs a way to return, and where it is disabled there is "
+               "nothing to advertise.  Set explicitly to override either way.  "
+               "The default is that nested read rather than a literal, so the "
+               "sunset report cannot tell from the tree whether this one has "
+               "shipped; it ships and goes away with blatNewForm.  Sibling of "
+               "blatNewPageBanner, which does the same job for the results "
+               "page."),
+        h("quickLiftClipToChains", "flag", "hg/lib/quickLift.c:231",
+          default="TRUE", role="gate", verified=True, ticket="38042",
+          note="Whether an item too big for the chains quickLift loaded is "
+               "pulled in to what they cover rather than dropped.  Read once, "
+               "in quickLiftIntervalsToBedClip, which is the display path; "
+               "the details page calls quickLiftIntervalsToBed and always "
+               "sees the item's true extent.  Born TRUE, so it never gated a "
+               "release: like alwaysItemRgb, the off position is the way the "
+               "browser behaved before the change rather than anything about "
+               "the machine, so it is a gate and should go once nobody has "
+               "asked for the old behaviour."),
     ],
 }
 
@@ -585,25 +619,6 @@ MIRROR_KNOBS = {
                "delete, the BLAT search form shows a Keep results checkbox so "
                "a user can opt out for one search (cart variable "
                "blatKeepResults, read back in hg/hgc/hgc.c)."),
-        h("blatNewForm", "gate", "hg/hgBlat/hgBlat.c:3020", default="off",
-          verified=True,
-          note="Replaces hgBlat's classic C-generated search form with the "
-               "JavaScript-built one in hg/js/hgBlat.js, which shares its "
-               "styling and page header with the new BLAT results page.  Off "
-               "while the new form is being tested.  Read through "
-               "cartUsualBoolean, so this is only the default: the form's "
-               "banner offers a per-user opt-out that sets blatNewForm=0 in "
-               "the cart.  A gate - it comes out once the new form replaces "
-               "the old one."),
-        h("blatNewFormBanner", "gate", "hg/hgBlat/hgBlat.c:825",
-          default="follows blatNewForm", verified=True,
-          note="Whether the classic BLAT search form carries a banner offering "
-               "the new one.  Defaults to whatever blatNewForm is set to: "
-               "where the new form is enabled, a user who took its go-back "
-               "link needs a way to return, and where it is disabled there is "
-               "nothing to advertise.  Set explicitly to override either way.  "
-               "Sibling of blatNewPageBanner, which does the same job for the "
-               "results page."),
     ],
 }
 
@@ -1376,14 +1391,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("quickLiftClipToChains", "flag", "hg/lib/quickLift.c:231",
-          default="TRUE", ticket="38042",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault at "
-               "hg/lib/quickLift.c:231.  Came in at 7f65d3da8f2, quickLift: "
-               "clip an oversized item to the chains we loaded instead of "
-               "dropping it, refs #38042.  Needs a description and a gate or "
-               "knob call."),
     ],
 }
 
