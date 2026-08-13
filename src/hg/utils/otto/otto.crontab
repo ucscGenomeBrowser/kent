@@ -169,6 +169,15 @@ MAILTO=cells@ucsc.edu
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
+# cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
+# (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
+* * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+@reboot umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+
+# DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
+# alive (reads the /hive job queue); restarts if down / on reboot.
+* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 
@@ -182,8 +191,3 @@ MAILTO=jbirgmei@ucsc.edu
 
 MAILTO=cells@ucsc.edu
 @reboot umask 0000; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000
-
-# cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
-# (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
-* * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
-@reboot umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1

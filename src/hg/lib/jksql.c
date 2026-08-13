@@ -4358,7 +4358,7 @@ int sqlSafef(char* buffer, int bufSize, char *format, ...)
  * checking.  The resulting string is always terminated with zero byte. 
  * Scans unquoted string parameters for illegal literal sql chars.
  * Escapes quoted string parameters. 
- * NOSLQINJ tag is added to beginning. */
+ * NOSQLINJ tag is added to beginning. */
 {
 int sz;
 va_list args;
@@ -4375,7 +4375,7 @@ return sz;
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSQLINJ tag is added to beginning if it is a new empty string. */
 {
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
@@ -4416,7 +4416,7 @@ while (TRUE)
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. 
+ * NOSQLINJ tag is added to beginning if it is a new empty string.
  * Appends to existing string. */
 {
 va_list args;

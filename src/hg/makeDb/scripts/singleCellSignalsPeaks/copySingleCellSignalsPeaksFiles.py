@@ -21,9 +21,11 @@ Usage:
 import re, os, shutil, argparse
 from urllib.parse import urlparse
 
-# Where the hub build writes manifest.tsv. That machinery builds the whole Cell Browser
-# super hub, not just this track, so it lives outside the kent tree; override with
-# HUB_BUILD when it moves (or pass --manifest).
+# Where the hub build writes manifest.tsv -- its OUTPUT dir, not its code. The build
+# itself lives in the cellBrowser repo (ucsc/allTracksHub):
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+# Its output dir is set there by CBHUB_OUT; keep this default in step with it (or pass
+# --manifest).
 HUB_BUILD = os.environ.get(
     "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
@@ -58,9 +60,13 @@ def main():
     nbytes = 0
     misses = []
     for s in re.split(r"\n\s*\n", open(stanzas).read().strip()):
-        lines = s.splitlines()
-        parent = next((l for l in lines if l.startswith("parent ")), "").strip()
-        if parent != "parent " + hub_composite:
+        # Dedent, and match the parent's first token rather than the whole line. The hub
+        # stanzas are indented to show their hierarchy and each child says
+        # "parent <composite> off", so an anchored whole-line compare matched nothing and
+        # this copied zero files without complaining.
+        lines = [l.lstrip() for l in s.splitlines()]
+        parent = next((l for l in lines if l.startswith("parent ")), "").split()
+        if len(parent) < 2 or parent[1] != hub_composite:
             continue
         bdu = next((l for l in lines if l.strip().startswith("bigDataUrl ")), None)
         if not bdu:
@@ -86,6 +92,10 @@ def main():
         os.makedirs(beddir, exist_ok=True)
         shutil.copy2(meta_src, meta_dst)
 
+    if total == 0:
+        raise SystemExit("ERROR: no subtracks of %s found in %s. Has the hub stanza "
+                         "layout changed? Copying nothing is never right here."
+                         % (hub_composite, stanzas))
     print("assembly=%s composite=%s: subtracks=%d copied=%d missing=%d  ~%.1f GB%s"
           % (asm, hub_composite, total, copied, missing, nbytes / 1e9,
              "  (dry-run)" if args.dry_run else "  -> " + beddir))

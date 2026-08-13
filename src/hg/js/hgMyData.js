@@ -1,4 +1,30 @@
 /* jshint esversion: 8 */
+
+/* This file contains all the code needed to get the HubSpace UI functioning.
+ * There are some helper functions that are sort of general and could probably
+ * be added to utils.js or similar as well as 3 main pieces:
+ * - the api key generation/revocation: functions to request new/revoke old apiKeys
+ *       this code runs on the Hub Development tab of hgHubConnect
+ * - uppyOptions and uppy constructor: Uppy is a 3rd party library for handling
+ *       user uploads. The uppyOptions object and constructor are used to modify
+ *       the default behavior, including what to do when a file has been added
+ *       to the dashboard, verifying file name legality, etc. Code in these sections
+ *       also modifies the default preact/react rendering of elements, so it looks
+ *       a little different than normal kent javascript.
+ * - BatchChangePlugin class: a custom class again used to extend the default Uppy
+ *       interface. This time to put some inputs at the bottom of the dashboard
+ *       that changes metadata for all the files a user has selected
+ * - hubCreate: An IIFE that runs on document ready that sets up or controls the
+ *       whole UI. The UI is a combindation of Uppy for the actual file selection
+ *       and DataTables for showing the uploaded files. There are many helper functions
+ *       within this block that also could probably be moved to a lib, but haven't as
+ *       the code has evolved over time.
+ *
+ *   TODO: most of this code could probably be modularized successfully, or split up
+ *   so it is easier to read.
+ */
+
+
 var debugCartJson = true;
 
 function prettyFileSize(num) {

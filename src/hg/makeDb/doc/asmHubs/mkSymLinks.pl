@@ -250,7 +250,7 @@ foreach my $asmId (@orderList) {
       `mkdir -p "${buildDir}/archive/ncbiGene"`;
       `mkdir -p "${destDir}/archive"`;
       foreach my $subDir (grep { -d } glob("${buildDir}/trackData/ncbiGene/archive/20*")) {
-        $subDir =~ s#${buildDir}/##;
+        $subDir =~ s#\Q${buildDir}\E/##;
         my $archiveDate = basename(${subDir});
         `rm -f "${buildDir}/archive/ncbiGene/${archiveDate}"`;
         `ln -s "../../${subDir}" "${buildDir}/archive/ncbiGene/"`;
