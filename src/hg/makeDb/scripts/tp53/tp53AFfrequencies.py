@@ -5,16 +5,19 @@ TP53 VCEP Allele Frequencies (BA1/BS1/PM2) track generator.
 Pulls gnomAD v4.1 exome variants at the TP53 locus and classifies them
 per CSpec GN009 v2.4.0 thresholds:
 
-    BA1            FAF >= 0.001                                     stand-alone B
-    BS1            0.0003 <= FAF < 0.001                            -4 pts
+    BA1            non-founder grpmax AF >= 0.001                   stand-alone B
+    BS1            0.0003 <= non-founder grpmax AF < 0.001          -4 pts
     PM2_Supporting AF < 0.00003 global AND grpmax AF < 0.00004      +1 pt
 
-Uses faf95 (col 16) from the UCSC gnomAD v4.1 bigBed, plus grpmax AF
-(col 27) and global AF (col 15). CHIP note (col 29) surfaced in mouseover.
+BA1/BS1 use the max AF of a single non-founder continental ancestry group
+(AF_grpmax, col 27), per the CSpec's continental-subpopulation FAF rule, when
+that group has >=2000 alleles tested (AN_grpmax, col 26). Global AF (col 15)
+and faf95 (col 16) are shown in the mouseover. CHIP note (col 29) surfaced too.
 
-Founder-effect ancestry groups (AJ/FIN/AMI/MID/Remaining) are EXCLUDED from
-the per-ancestry check per CSpec &#8212; our PM2_Supporting uses grpmax as a
-conservative proxy and flags when the proxy may miss qualifying variants.
+Founder-effect ancestry groups (AJ/FIN/AMI/MID/Remaining) are EXCLUDED per
+CSpec: if the top group is a founder group we do not apply BA1/BS1, and because
+gnomAD v4.1 exposes only the single top group we cannot recover the next-highest
+non-founder group in that case (a documented limitation).
 """
 
 import argparse
@@ -35,6 +38,16 @@ BS1_FAF_HIGH = 0.001
 PM2_AF_GLOBAL_MAX = 0.00003
 PM2_AF_GRPMAX_MAX = 0.00004
 
+# CSpec GN009 excludes these founder-effect ancestry groups from the
+# frequency-based codes; BA1/BS1 use the max AF of a *non-founder* continental
+# ancestry group. gnomAD v4.1 exposes only the single top group (AF_grpmax) with
+# no per-group filtering AF, so we threshold on AF_grpmax when that group is
+# non-founder and >=2000 alleles were tested (a documented approximation of the
+# continental-subpopulation FAF the CSpec specifies).
+FOUNDER_GROUPS = {'Ashkenazi Jewish', 'Finnish', 'Amish',
+                  'Middle Eastern', 'Remaining'}
+GRPMAX_MIN_AN = 2000
+
 COLORS = {
     'BA1':             '2,82,66',         # dark teal (stand-alone B)
     'BS1':             '35,159,134',      # teal
@@ -48,8 +61,8 @@ POINTS = {
 }
 
 RULES = {
-    'BA1': 'gnomAD v4.1 FAF >= 0.001 (0.1%)',
-    'BS1': 'gnomAD v4.1 FAF in [0.0003, 0.001)',
+    'BA1': 'gnomAD v4.1 non-founder ancestry-group AF >= 0.001 (0.1%)',
+    'BS1': 'gnomAD v4.1 non-founder ancestry-group AF in [0.0003, 0.001)',
     'PM2_Supporting': 'gnomAD v4.1 AF < 3e-5 global AND grpmax < 4e-5',
 }
 
@@ -77,10 +90,17 @@ AUTOSQL = """table TP53AF
 """
 
 
-def classify(af_global, faf, af_grpmax):
-    if faf is not None and faf >= BA1_FAF:
+def classify(af_global, faf, af_grpmax, grpmax_pop, an_grpmax):
+    # BA1/BS1 per CSpec GN009 use the filtering AF of a single non-founder
+    # continental ancestry group. Approximated here by AF_grpmax when the top
+    # group is non-founder and >=2000 alleles were tested.
+    grpmax_usable = (af_grpmax is not None
+                     and grpmax_pop is not None
+                     and grpmax_pop not in FOUNDER_GROUPS
+                     and an_grpmax is not None and an_grpmax >= GRPMAX_MIN_AN)
+    if grpmax_usable and af_grpmax >= BA1_FAF:
         return 'BA1'
-    if faf is not None and BS1_FAF_LOW <= faf < BS1_FAF_HIGH:
+    if grpmax_usable and BS1_FAF_LOW <= af_grpmax < BS1_FAF_HIGH:
         return 'BS1'
     # PM2_Supporting: rare globally AND grpmax under limit
     if (af_global is not None and af_global < PM2_AF_GLOBAL_MAX
@@ -143,20 +163,24 @@ def classify_and_build_rows(tx, chrom):
 
     # Build rows keyed on the hg38 display id
     classified = []  # list of dicts with all fields; hg38 coords fixed
+    all_records = []  # every gnomAD variant, for the PM2 "present in gnomAD" set
     stats = dict(total=len(rows), BA1=0, BS1=0, PM2=0, skipped=0)
     for r in rows:
         c_start = int(r[1])
         c_end = int(r[2])
         ref = r[9]
         alt = r[10]
+        all_records.append({'chrom': chrom, 'hg38_start': c_start,
+                            'hg38_end': c_end, 'ref': ref, 'alt': alt})
         af_global = safe_float(r[14])
         faf = safe_float(r[15])
         af_grpmax = safe_float(r[26])
+        an_grpmax = safe_float(r[25])
         grpmax_pop = r[23] if r[23] not in ('N/A', '') else None
         chip = r[28] if len(r) > 28 else ''
         hg38_name = "{}-{}-{}-{}".format(chrom, c_start + 1, ref, alt)
 
-        code = classify(af_global, faf, af_grpmax)
+        code = classify(af_global, faf, af_grpmax, grpmax_pop, an_grpmax)
         if code is None:
             stats['skipped'] += 1
             continue
@@ -172,7 +196,47 @@ def classify_and_build_rows(tx, chrom):
             'code': code,
         })
     print("  classified: BA1={BA1} BS1={BS1} PM2={PM2} skipped={skipped}".format(**stats))
-    return classified
+    return classified, all_records
+
+
+def write_present_set(all_records, db, outdir):
+    """Write the set of every gnomAD variant key ('chrom-pos1-ref-alt') present
+    at the TP53 locus, in the coordinates of the requested assembly. The
+    Provisional track uses this to tell 'absent from gnomAD' (PM2_Supporting
+    applies) apart from 'present but not rare enough to be coded' (no PM2). For
+    hg19 the hg38 coords are lifted so the keys match the hg19 Provisional build."""
+    path = os.path.join(outdir, "TP53AF_present_{}.txt".format(db))
+    keys = []
+    if db == 'hg38':
+        for r in all_records:
+            keys.append("{}-{}-{}-{}".format(
+                r['chrom'], r['hg38_start'] + 1, r['ref'], r['alt']))
+    else:
+        chain = "/cluster/data/hg38/bed/liftOver/hg38ToHg19.over.chain.gz"
+        in_bed = os.path.join(outdir, ".present_lift_in.bed")
+        out_bed = os.path.join(outdir, ".present_lift_out.bed")
+        unmapped = os.path.join(outdir, ".present_unmapped.bed")
+        with open(in_bed, 'w') as f:
+            for i, r in enumerate(all_records):
+                f.write("{}\t{}\t{}\t{}\n".format(
+                    r['chrom'], r['hg38_start'], r['hg38_end'], i))
+        lib.run_liftOver(in_bed, chain, out_bed, unmapped)
+        idxmap = {}
+        with open(out_bed) as f:
+            for line in f:
+                fl = line.rstrip("\n").split("\t")
+                if len(fl) >= 4:
+                    idxmap[int(fl[3])] = (fl[0], int(fl[1]))
+        for i, r in enumerate(all_records):
+            if i in idxmap:
+                c, s = idxmap[i]
+                keys.append("{}-{}-{}-{}".format(c, s + 1, r['ref'], r['alt']))
+        for p in (in_bed, out_bed, unmapped):
+            if os.path.exists(p):
+                os.remove(p)
+    with open(path, 'w') as f:
+        f.write("\n".join(keys) + "\n")
+    print("  wrote gnomAD present-set: {} keys -> {}".format(len(keys), path))
 
 
 def emit_rows(classified, assembly, coord_lookup=None):
@@ -238,7 +302,7 @@ def build(db, outdir):
     os.makedirs(outdir, exist_ok=True)
     # We always query gnomAD on hg38 (the source), then lift to hg19 if needed
     tx_hg38 = lib.get_transcript_info('hg38')
-    classified = classify_and_build_rows(tx_hg38, tx_hg38['chrom'])
+    classified, all_records = classify_and_build_rows(tx_hg38, tx_hg38['chrom'])
 
     as_file = os.path.join(outdir, "TP53AF.as")
     lib.write_autosql(as_file, AUTOSQL)
@@ -252,6 +316,7 @@ def build(db, outdir):
         lib.run_sort_bed(bed)
         lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+8")
         print("  wrote {}".format(bb))
+        write_present_set(all_records, db, outdir)
         return
 
     # hg19 build: liftOver each record and rewrite display name
@@ -265,6 +330,7 @@ def build(db, outdir):
     lib.run_sort_bed(bed)
     lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+8")
     print("  wrote {}".format(bb))
+    write_present_set(all_records, db, outdir)
     return
 
 
