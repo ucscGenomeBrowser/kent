@@ -28,6 +28,16 @@ for i in `cat ../geneReviews.tables`
     echo "GENEREVIEWS Installed `date` in $1"
 }
 
+function installGeneReviewsBigBed() {
+# Point /gbdb at the bigBed built in the current directory.  buildGeneReviews.sh
+# makes the file but does not move the link, so this runs only after validation
+# passes and the tables are installed.
+gbdb="/gbdb/$1/geneReviews"
+mkdir -p $gbdb
+rm -f $gbdb/geneReviews.bb
+ln -s `pwd`/geneReviews.$1.bb $gbdb/geneReviews.bb
+}
+
 
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
@@ -49,13 +59,26 @@ then
 
     # build the new GENEREVIEWS track tables
     ../buildGeneReviews.sh
-    ../validateGeneReviews.sh hg38
-    ../validateGeneReviews.sh hg19
-    ../validateGeneReviews.sh hg18
+
+    # Validate all three assemblies before deciding, so one bad assembly does
+    # not hide the state of the others.
+    validateFailed=0
+    for db in "hg38" "hg19" "hg18"
+    do
+        ../validateGeneReviews.sh $db || validateFailed=1
+    done
+    if [ $validateFailed -ne 0 ]; then
+        echo "ERROR: GeneReviews validation failed, nothing installed"
+        exit 1
+    fi
+
     # now install
-    installGeneReviewTables "hg38"  
-    installGeneReviewTables "hg19"    
+    installGeneReviewTables "hg38"
+    installGeneReviewTables "hg19"
     installGeneReviewTables "hg18"
+    installGeneReviewsBigBed "hg38"
+    installGeneReviewsBigBed "hg19"
+    installGeneReviewsBigBed "hg18"
     # now archive
     for db in "hg18" "hg19" "hg38"
     do

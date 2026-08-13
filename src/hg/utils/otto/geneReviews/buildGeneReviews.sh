@@ -63,11 +63,12 @@ if [ $oldLc -ne 0 ]; then
         awk '{if (($2-$1)/$1 > 0.1) {printf "validate $db GENE REVIEWS failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 fi
 
-#install
+# Build the bigBed, but leave /gbdb pointing at the previous build for now.
+# checkGeneReviews.sh moves the link after validation passes, so the browser
+# image and the geneReviews/geneReviewsDetail tables always come from the same
+# build.
 bedToBigBed -tab -type=bed9+2 -as=../geneReviews.as geneReviewsExt.$db.bed \
          /hive/data/genomes/$db/chrom.sizes geneReviews.$db.bb
-rm -f $gbdb/geneReviews.bb
-ln -s `pwd`/geneReviews.$db.bb $gbdb/geneReviews.bb
 
 # Create and load geneReviewsDetail table
 hgsql $1 -N -e \
