@@ -12,5 +12,5 @@ include mcap.ra
 include primateAi.ra
 include promoterAi.ra
 include clinPred.ra
-include eve.ra alpha
+include eve.ra alpha,beta
 include popEve.ra alpha,beta
