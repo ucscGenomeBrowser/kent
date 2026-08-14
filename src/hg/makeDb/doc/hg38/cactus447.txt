@@ -1517,7 +1517,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
     #        1.03 GB, itemCount 74,427,201, maxDepth 446 (= 447 - hg38 reference)
 
     # VERIFICATION (all pass):
-    #   old chrY size!=nongap blocks: 94 (232 s-lines) ; new: 0
+    #   size vs non-gap base count, full scan of all 194 fix2 per-chrom MAF files
+    #     (QA 2026-08-06, refs #37841): 97,277,175 blocks, 34,527,556,943 s-lines,
+    #     0 s-lines where size != the non-gap base count, 0 where start+size runs
+    #     past srcSize. Positive control, the old (2023) chrY: 5,995 bad s-lines
+    #     out of 122,335,442. An earlier figure here, "old chrY 94 blocks
+    #     (232 s-lines)", came from a partial scan of that chrom and should not be
+    #     read as a chrY-wide count; the conclusion is unchanged.
     #   summary src column: 446 clean Genus_species names genome-wide (chrY and
     #     chr1 both), 0 with a residual dot. This is the hgLoadMafSummary
     #     name-split fix, refs #37928 (commit 2db6bab8db0, jkweb move 2070aedea88).
