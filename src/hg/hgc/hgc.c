@@ -8957,15 +8957,18 @@ if (sameWord(otherDb, "seq"))
     qSeq = hExtSeqPart(database, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s", psl->qName);
     }
+else if (otherTbf != NULL && !sqlDatabaseExists(otherDb))
+    {
+    // the query assembly has no database of its own (an assembly hub or a GenArk
+    // accession, as when a quickLift chain comes from one), so read the sequence
+    // out of the two bit file the track points at.
+    qSeq = twoBitReadSeqFragLower(otherTbf, psl->qName, psl->qStart, psl->qEnd);
+    safef(name, sizeof name, "%s", psl->qName);
+    }
 else if (otherDb != NULL)
     {
     qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
-    }
-else if (otherTbf != NULL)
-    {
-    qSeq = twoBitReadSeqFragLower(otherTbf, psl->qName, psl->qStart, psl->qEnd);
-    safef(name, sizeof name, "%s", psl->qName);
     }
 if (qSeq == NULL)
     {
