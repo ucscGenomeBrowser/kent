@@ -2519,6 +2519,29 @@ else
 gbMembersFreeList(&list);
 }
 
+static void dropRequestSuppliedFlowVars()
+/* The cart variables holding the state of a login in flight are written by hgLogin and by
+ * nothing else: the nonce and provider of an OAuth round trip, the pending identity behind
+ * the account chooser, and the verified address behind the email-link chooser.  The cart
+ * takes CGI variables verbatim (loadCgiOverHash in hg/lib/cart.c), so a copy arriving with
+ * the request would stand in for the copy we stored.  Drop those before anything reads them;
+ * a flow whose state is dropped fails closed and the user starts it again.  Note that
+ * excludeVars would not do this job: it governs what is saved at the end of a request, not
+ * what is read during it. */
+{
+static char *serverOwned[] = {
+    "oauth_state", "oauth_provider",
+    "oauth_pending_provider", "oauth_pending_subject", "oauth_pending_email",
+    "oauth_pending_email_verified", "oauth_pending_name", "oauth_pending_time",
+    "oauth_pending_sig",
+    "emailLogin_email", "emailLogin_tokenMd5",
+    };
+int i;
+for (i = 0;  i < ArraySize(serverOwned);  i++)
+    if (cgiVarExists(serverOwned[i]))
+        cartRemove(cart, serverOwned[i]);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page.
  * This routine sets up some globals and then
@@ -2542,6 +2565,7 @@ if (oauthAnyProviderEnabled())
     createIdentityTable(conn);
 
 cart = theCart;
+dropRequestSuppliedFlowVars();
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
 safecpy(signature,sizeof(signature), mailSignature());

@@ -343,7 +343,6 @@ oauth_pending_provider             # hg/hgLogin/hgLogin.c
 oauth_pending_sig                  # hg/hgLogin/hgLogin.c
 oauth_pending_subject              # hg/hgLogin/hgLogin.c
 oauth_pending_time                 # hg/hgLogin/hgLogin.c
-oauth_state                        # hg/hgLogin/hgLogin.c
 oldPosition                        # hg/lib/web.c
 oldTable                           # hg/makeDb/hgLoadSample/hgLoadSample.c
 organism                           # hg/encode/hgEncodeVocab/hgEncodeVocab.c

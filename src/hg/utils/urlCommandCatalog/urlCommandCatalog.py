@@ -984,6 +984,26 @@ OTHER_CGIS = {
               note="The anti-CSRF nonce, compared against the oauth_state "
                    "cart variable that oauthStart saved and then removes, so "
                    "it is single use."),
+            c("oauth_state", "setting", "hg/hgLogin/hgLogin.c:2319",
+              value="<nonce>", persists=True, verified=True,
+              note="The server's copy of the nonce above, saved by oauthStart "
+                   "so it survives the round trip to the provider and removed "
+                   "by oauthReturn once it has been used.  hgLogin writes it "
+                   "and nothing else does: a copy arriving with the request "
+                   "is dropped in dropRequestSuppliedFlowVars before anything "
+                   "reads it, so what the check compares against is always "
+                   "the value oauthStart stored.  Listed here rather than in "
+                   "urlNamesNotCataloged.txt, where it sat until #38037, "
+                   "because a cart variable is reachable from a URL by "
+                   "default and calling this one out of scope is what hid "
+                   "that."),
+            c("oauth_provider", "setting", "hg/hgLogin/hgLogin.c:2320",
+              value="<name>", persists=True, verified=True,
+              note="Which provider the login in flight belongs to, saved by "
+                   "oauthStart alongside oauth_state, removed with it, and "
+                   "server-owned in the same way.  The dispatcher in doMiddle "
+                   "reads it to tell a provider's redirect back to us from "
+                   "any other request carrying a code or error parameter."),
             c("error", "action", "hg/hgLogin/hgLogin.c:2298", value="<code>",
               verified=True, leaks=True,
               note="The provider redirected back with an error instead of a "
