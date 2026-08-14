@@ -44,6 +44,7 @@ SRC_S3 = "/hive/users/lrnassar/claude/RM37399/tp53_downloads/Functional-workshee
 SRC_S2 = "/hive/users/lrnassar/claude/RM37399/tp53_downloads/bioinformatic_worksheet.xlsx"
 HOTSPOTS_JSON = "/hive/users/lrnassar/claude/RM37399/cancerHotspots/cancerhotspots_single.json"
 AF_BED_TPL = "/hive/users/lrnassar/claude/RM37399/afFrequencies/TP53AF_{}.bed"
+AF_PRESENT_TPL = "/hive/users/lrnassar/claude/RM37399/afFrequencies/TP53AF_present_{}.txt"
 FLOSSIES_BED_TPL = "/hive/users/lrnassar/claude/RM37399/flossies/TP53Flossies_{}.bed"
 
 PM1_HARDCODED_CODONS = {175, 245, 248, 249, 273, 282}
@@ -254,6 +255,24 @@ def load_af_lookup(db):
     return out
 
 
+def load_gnomad_present(db):
+    """Read TP53AF_present_<db>.txt (one 'chrN-pos-ref-alt' key per line, 1-based)
+    and return a set of (chrom, pos1based, ref, alt) for every gnomAD variant at
+    the TP53 locus. Used to tell 'absent from gnomAD' from 'present but not
+    coded' when deciding PM2_Supporting."""
+    out = set()
+    path = AF_PRESENT_TPL.format(db)
+    if not os.path.exists(path):
+        return out
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            m = re.match(r'^(chr[^-]+)-(\d+)-([ACGT-]+)-([ACGT-]+)$', line)
+            if m:
+                out.add((m.group(1), int(m.group(2)), m.group(3), m.group(4)))
+    return out
+
+
 BS2_TIER_POINTS = {'BS2': -4, 'BS2_Moderate': -2, 'BS2_Supporting': -1}
 
 
@@ -320,17 +339,24 @@ def pp3_bp4_label_and_points(code):
     return ('', 0)
 
 
-def af_code_and_points(wt, codon, alt, paths, af_lookup, tx):
+def af_code_and_points(wt, codon, alt, paths, af_lookup, present_set, tx):
     """For a (wt, codon, alt) protein change, look up gnomAD v4.1 AF at every
     c.X>Y path and return the strongest applicable code.
 
     Priority (most-benign first): BA1 > BS1 > PM2_Supporting > none.
     BA1 is stand-alone Benign; the caller forces classification = Benign.
+
+    PM2_Supporting applies either when a path is coded PM2 (present but rare) or
+    when every path is absent from gnomAD (present_set). A path that is present
+    in gnomAD but not rare enough to be coded blocks the absent-based PM2, so a
+    variant seen in gnomAD at moderate frequency is not given PM2.
     """
     chrom = tx['chrom']
     strand = tx['strand']
     rcomp = {'A':'T','T':'A','C':'G','G':'C'}
     seen = []
+    any_present = False
+    any_absent = False
     for c_pos, c_ref, c_alt in paths:
         g = lib.cdna_coding_to_genomic(c_pos, tx)
         if g is None:
@@ -346,12 +372,19 @@ def af_code_and_points(wt, codon, alt, paths, af_lookup, tx):
         code = af_lookup.get(key)
         if code:
             seen.append(code)
+        if key in present_set:
+            any_present = True
+        else:
+            any_absent = True
     if 'BA1' in seen:
         return ('BA1', 0, 'stand-alone Benign')
     if 'BS1' in seen:
         return ('BS1', POINTS['BS1'], '-4 pts')
     if 'PM2_Supporting' in seen:
         return ('PM2_Supporting', POINTS['PM2_Supporting'], '+1 pt')
+    if any_absent and not any_present:
+        return ('PM2_Supporting', POINTS['PM2_Supporting'],
+                '+1 pt (absent from gnomAD)')
     return ('', 0, '')
 
 
@@ -451,7 +484,7 @@ def mouseover(name, cls, pts, pm1, ps3, pp3, af_lbl, bs2_lbl, applied,
              cav=CAVEATS_STR)
 
 
-def generate_bed(s3, s2, hotspot_occ, af_lookup, flossies_lookup, tx):
+def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, tx):
     lines = []
     chrom = tx['chrom']
     for (wt, codon, alt), s3_rec in sorted(s3.items(), key=lambda kv: (kv[0][1], kv[0][2])):
@@ -482,7 +515,7 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, flossies_lookup, tx):
 
         # Allele-frequency code (BA1 / BS1 / PM2_Supporting)
         af_code, af_pts, af_qty = af_code_and_points(
-            wt, codon, alt, paths, af_lookup, tx)
+            wt, codon, alt, paths, af_lookup, present_set, tx)
         af_lbl = "{} ({})".format(af_code, af_qty) if af_code else ''
         ba1 = (af_code == 'BA1')
 
@@ -550,14 +583,15 @@ def build(db, outdir):
     s2 = load_s2(SRC_S2)
     hotspots = load_hotspot_occurrences(HOTSPOTS_JSON)
     af_lookup = load_af_lookup(db)
+    present_set = load_gnomad_present(db)
     flossies_lookup = load_flossies_lookup(db)
     print("  S3 entries: {}   S2 entries: {}   "
-          "cancerhotspots: {}   AF: {}   FLOSSIES BS2: {}".format(
+          "cancerhotspots: {}   AF: {}   gnomAD present: {}   FLOSSIES BS2: {}".format(
               len(s3), len(s2), len(hotspots),
-              len(af_lookup), len(flossies_lookup)))
+              len(af_lookup), len(present_set), len(flossies_lookup)))
 
     tx = lib.get_transcript_info(db)
-    bed_lines = generate_bed(s3, s2, hotspots, af_lookup, flossies_lookup, tx)
+    bed_lines = generate_bed(s3, s2, hotspots, af_lookup, present_set, flossies_lookup, tx)
     print("  {} BED rows".format(len(bed_lines)))
 
     as_file = os.path.join(outdir, "TP53ProvisionalClass.as")

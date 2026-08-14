@@ -529,10 +529,18 @@ bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2JasmineBuild.sh
 # (EUR, AMR, EAS, AFR, SAS) annotated with bcftools fill-tags.
 # Only DEL and INS variant types are present.
 # GRCh38: 587,779 SVs (196,369 DEL, 391,410 INS)
-# CHM13:  614,522 SVs
-# NOTE: data was received from the Eichler lab via email and has not been
-# published. Do NOT release this track and do NOT add it to lrSvAll until
-# a preprint or paper is available. HTML page is a placeholder.
+# CHM13:  614,522 SVs (238,405 DEL, 376,117 INS)
+# Callset integrated with the BoostSV machine-learning tool (Lin et al.).
+# NOTE: data was received from the Eichler lab. Manuscript submitted 2026:
+# Lin et al., "A high-resolution human pangenome structural variant resource
+# for improved disease association" (Maximilian Haeussler is a co-author).
+# Track released (release alpha removed) once the manuscript was submitted.
+# Added to the lrSvAll merge (databases.tsv key Lin1218) per user request.
+# Caveat: Lin1218 is itself a merge of overlapping 1KG callsets (HPRC, HGSVC3,
+# IB-ONT/Vienna, UW-ONT/Gustafson), so those samples are represented both in
+# their own database columns and in the Lin1218 column of lrSvAll; the merge
+# keeps per-database AC columns (it does not sum a single AC), so this is
+# double-representation, not double-counting of a single number.
 
 mkdir -p /hive/data/genomes/hg38/bed/lrSv/1k-lin
 cd /hive/data/genomes/hg38/bed/lrSv/1k-lin
@@ -795,3 +803,17 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 #       liftOver positional-shift artifact - Vienna hg38 is lifted from CHM13).
 #   INV/DUP/BND have no comparable Vienna type (Vienna calls only DEL/INS/CPX).
 # Only trackDb HTML changed; no data rebuild.
+
+# 2026-08-13 (Claude) lrSv1kLin released and added to the lrSvAll merge.
+# The Lin et al. manuscript was submitted ("A high-resolution human pangenome
+# structural variant resource for improved disease association"; Maximilian
+# Haeussler is a co-author), so `release alpha` was removed from the lrSv1kLin
+# stanza and the label became "1KG Lin 1218 SVs". Description/methods pages
+# rewritten from the manuscript (BoostSV integration, 293 HGSVC+HPRC assemblies
+# + 480 UW-ONT + 445 IB-ONT = 1,218; 587,779 SVs hg38 / 614,522 hs1).
+# Appended databases.tsv key Lin1218 and re-ran the merge:
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# lrSvAll grew 2,582,278 -> 3,111,026 variants (17 source databases). Note the
+# Lin1218 callset already merges several 1KG datasets (HPRC, HGSVC3, IB-ONT,
+# UW-ONT), so those samples appear both in their own columns and in Lin1218AC;
+# the merge keeps per-database AC columns, so no single count is inflated.
