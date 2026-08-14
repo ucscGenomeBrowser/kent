@@ -37,13 +37,14 @@ COLORS = {
 # Per CSpec GN009 v2.4.0 §BS2: variant observed in a cohort of healthy
 # adult women >70 weakens disease-causation evidence. The VCEP weights BS2
 # by the number of carriers in the cohort: 2-3 -> BS2_Supporting, 4-7 ->
-# BS2_Moderate, 8+ -> BS2. In the FLOSSIES TP53 export the coding
-# observations that carry a consequence in CODING_CONSEQUENCES are all
-# missense; those with a single carrier are shown but do not meet BS2. All
-# other observations (synonymous, labeled "silent" here, plus UTR / deep
-# intronic) are flagged "Informational" since BS2 is not applied to them.
+# BS2_Moderate, 8+ -> BS2. The carrier tiers apply to the protein-altering
+# coding consequences in CODING_CONSEQUENCES below; a coding observation with a
+# single carrier is shown but does not meet BS2. Synonymous (labeled "silent"
+# in this export), UTR, and intronic observations are not protein-altering and
+# are flagged "Informational" (BS2 is not applied to them). In the current
+# FLOSSIES TP53 export the only coding consequence present is missense.
 CODING_CONSEQUENCES = {
-    'missense_variant', 'synonymous_variant', 'splice_donor_variant',
+    'missense_variant', 'splice_donor_variant',
     'splice_acceptor_variant', 'splice_region_variant', 'stop_gained',
     'stop_lost', 'start_lost', 'frameshift_variant',
     'inframe_insertion', 'inframe_deletion',
