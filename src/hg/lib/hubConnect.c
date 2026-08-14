@@ -1138,6 +1138,29 @@ if ((trackHub != NULL) && (trackHub->hubStatus != NULL))
 return 0;
 }
 
+static unsigned lookForGenarkHub(struct sqlConnection *conn, struct cart *cart, char *genarkPrefix, char *name, boolean *added)
+// See if genark hosts an assembly hub for this accession; if so attach it
+// and return its hub id (0 if genark doesn't have it, or the attach failed).
+{
+char query[4096];
+char buffer[4096];
+sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genarkTableName(), name);
+if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
+    {
+    char url[4096];
+    safef(url, sizeof url, "%s/%s", genarkPrefix, buffer);
+
+    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+
+    if (status)
+        {
+        *added = TRUE;
+        return status->id;
+        }
+    }
+return 0;
+}
+
 static boolean lookForLonelyHubs(struct cart *cart, struct hubConnectStatus  *hubList, char **newDatabase, char *genarkPrefix)
 // We go through the hubs and see if any of them reference an assembly
 // that is NOT currently loaded, but we know a URL to load it.
@@ -1161,45 +1184,59 @@ for(hub = hubList; hub; hub = hub->next)
         {
         char *name = genome->name;
 
-        name = asmAliasFind(name);
-        if (!hDbIsActive(name) )
+        // a non-NULL twoBitPath means this genome carries its own sequence,
+        // i.e. it's a real assembly hub, not just a track hub naming an
+        // assembly it expects to find hosted elsewhere.  Its own declared
+        // GCA/GCF accession is what should be displayed -- don't redirect it
+        // to a different, merely "equivalent" hub via asmAlias.
+        if (genome->twoBitPath != NULL)
+            continue;
+
+        char *aliasName = asmAliasFind(name);
+
+        // if the assembly is already active under its alias (a classic
+        // database, or a hub already attached under that name), there's
+        // nothing more to do
+        if (hDbIsActive(aliasName))
+            continue;
+
+        char buffer[4096];
+        unsigned newId = 0;
+
+        // Prefer keeping the hub on the accession exactly as the hub author
+        // declared it: only fall back to an asmAlias-equivalent accession
+        // if the declared one isn't available anywhere -- not already
+        // attached, and genark doesn't host it either.
+        char *targetName = name;
+        if (!(newId = lookForUndecoratedDb(name)))
+            newId = lookForGenarkHub(conn, cart, genarkPrefix, name, &added);
+
+        if (!newId && differentString(aliasName, name))
             {
-            char buffer[4096];
-            unsigned newId = 0;
+            targetName = aliasName;
+            if (!(newId = lookForUndecoratedDb(aliasName)))
+                newId = lookForGenarkHub(conn, cart, genarkPrefix, aliasName, &added);
+            }
 
-            // look with undecorated name for an attached assembly hub
-            if (!(newId = lookForUndecoratedDb(name)))
-                {
-                // see if genark has this assembly
-                char query[4096];
-                sqlSafef(query, sizeof query, "select hubUrl from %s where gcAccession='%s'", genarkTableName(), name);
-                if (sqlQuickQuery(conn, query, buffer, sizeof buffer))
-                    {
-                    char url[4096];
-                    safef(url, sizeof url, "%s/%s", genarkPrefix, buffer);
+        // if we found an id, change some names to use it as a decoration
+        if (newId)
+            {
+            safef(buffer, sizeof buffer, "hub_%d_%s", newId, targetName);
 
-                    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+            genome->name = cloneString(buffer);
 
-                    if (status)
-                        {
-                        newId = status->id;
-                        added = TRUE;
-                        }
-                    }
-                }
+            // genome was registered in tHub->genomeHash under its original
+            // name when the hub was parsed; trackHubFindGenome() looks
+            // genomes up by name through that hash, so re-register it under
+            // its new name now that we've renamed it in place, the same way
+            // hubConnectStatusForIdExt() does for quickLifted hubs.
+            hashAdd(tHub->genomeHash, genome->name, genome);
+            hashAdd(tHub->genomeHash, hubConnectSkipHubPrefix(genome->name), genome);
 
-            // if we found an id, change some names to use it as a decoration
-            if (newId)
-                {
-                safef(buffer, sizeof buffer, "hub_%d_%s", newId, name);
-
-                genome->name = cloneString(buffer);
-    
-                // if our new database is an undecorated db, decorate it
-                if (*newDatabase && sameString(*newDatabase, name))
-                    *newDatabase = cloneString(buffer);
-                }
-
+            // if our new database is an undecorated db (either as the hub
+            // author declared it, or its asmAlias-equivalent form), decorate it
+            if (*newDatabase && (sameString(*newDatabase, name) || sameString(*newDatabase, aliasName)))
+                *newDatabase = cloneString(buffer);
             }
         }
     }

@@ -552,7 +552,7 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2549",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2573",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
         h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1718",

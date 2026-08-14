@@ -17,6 +17,10 @@ export logFile="${logDir}/${DS}.txt"
 export prevAliasTsv="${logDir}/${YMD}.asmAlias.tsv.gz"
 export updateTsv="${logDir}/update.${YMD}.tsv"
 
+printf "### logFile: log/${Y}/${M}/${DS}.txt.gz\n" >> "${logFile}"
+printf "asmAlias update disabled until code fix in place\n"  >> "${logFile}"
+exit 0
+
 # do not overwrite this copy if it was already done today
 if [ ! -s "${prevAliasTsv}" ]; then
   hgsql -N -e 'select * from asmAlias;' "${db}" \

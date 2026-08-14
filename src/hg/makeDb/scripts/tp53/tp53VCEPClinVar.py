@@ -30,6 +30,42 @@ EVREPO_URL = ("https://erepo.genome.network/evrepo/api/classifications"
               "?gene=TP53&matchLimit=2000&format=json")
 CLINVAR_EFETCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 
+# The VCEP bioinformatic worksheet (Table S2). Used to restore the strength that
+# EvRepo's structured export drops from BP4: EvRepo emits a bare "BP4" tag with
+# no BP4_Moderate variant (unlike PP3_Moderate / PM2_Supporting, which it keeps).
+# Validated against the ClinVar interpretation prose: where that text is
+# parseable, its BP4 strength matches Table S2 for every missense variant.
+SRC_S2 = "/hive/users/lrnassar/claude/RM37399/tp53_downloads/bioinformatic_worksheet.xlsx"
+_S2_BP4MOD = None
+
+
+def _norm_c(s):
+    """Strip a transcript prefix so 'NM_000546.6:c.886C>T' -> 'c.886C>T'."""
+    if not s:
+        return ''
+    return re.sub(r'^NM_000546\.[0-9]*:', '', s.strip())
+
+
+def load_s2_bp4_moderate():
+    """Return the set of c. notations that Table S2 assigns BP4_Moderate."""
+    global _S2_BP4MOD
+    if _S2_BP4MOD is not None:
+        return _S2_BP4MOD
+    out = set()
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(SRC_S2, data_only=True)
+        ws = wb["Supplementary Table S2"]
+        for row in ws.iter_rows(min_row=4, values_only=True):
+            hgvsc = row[0]
+            code = str(row[4]).strip() if row[4] is not None else ''
+            if isinstance(hgvsc, str) and code.lower() == 'bp4_moderate':
+                out.add(_norm_c(hgvsc))
+    except Exception as ex:
+        log("  WARNING: Table S2 BP4-strength recovery unavailable: {}".format(ex))
+    _S2_BP4MOD = out
+    return out
+
 # HGVS genomic regex for hg38 (NC_000017.11) and hg19 (NC_000017.10)
 HGVS_G_RE = re.compile(r'^NC_0000(17)\.(\d+):g\.(\d+)([ACGT])>([ACGT])$')
 HGVS_G_INDEL_RE = re.compile(r'^NC_0000(17)\.(\d+):g\.(\d+)_?(\d+)?(del|ins|dup).*$')
@@ -203,6 +239,11 @@ def parse_entry(entry):
         m = re.search(r'c\.[^\s(]+', picks['hgvsp_full'])
         if m:
             hgvsc = 'NM_000546.6:' + m.group(0)
+
+    # Restore the BP4 strength EvRepo drops (bare "BP4" -> "BP4_Moderate") from
+    # Table S2, matched on the exact nt change.
+    if 'BP4' in met and _norm_c(hgvsc) in load_s2_bp4_moderate():
+        met = ['BP4_Moderate' if c == 'BP4' else c for c in met]
 
     return {
         'var_id': entry.get('variationId', ''),

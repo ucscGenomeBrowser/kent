@@ -5,20 +5,26 @@ studies. Structural variants are genomic rearrangements larger than ~50 bp, incl
 deletions, insertions, duplications, inversions, and translocations. Long-read sequencing
 technologies can span repetitive regions and resolve complex rearrangements
 that are difficult to detect with short-read methods.
-</p>
+The long read datasets described below were produced with one of two sequencing technologies, Oxford Nanopore
+Technologies (ONT) or Pacific Biosciences (PacBio, whose highly accurate reads are also called
+HiFi, unlike the longer but less accurate CLR, Continous Long-Reads). </p>
 
 <h3>Available Datasets</h3>
 <p>
-SV length statistics (min / median / max) are computed from the <tt>svLen</tt>
-field of each track, in base pairs. Some tracks include sites with
-<tt>svLen=0</tt> (complex events where the reference and alternate alleles
-differ in sequence but not in length).
+SV length statistics (min / median / max) use the size of the variant in base
+pairs: the inserted-sequence length for insertions and the reference span for
+deletions and other types. (For insertions the <tt>svLen</tt> reference-span
+field is only a 1-2 bp placeholder, so the inserted length is reported
+instead.) Some tracks include sites of length 0, complex events where the
+reference and alternate alleles differ in sequence but not in length.
+For example, two different insertions, one in either sequence, is usually
+called a "complex" event.
 </p>
-<p>
+<!-- <p>
 For short-read structural-variant comparators (CCDG 17,795, 1KG 3202,
 ToMMo 48K CNV) see the companion
 <a href="hgTrackUi?g=srSv">Short-read SVs</a> supertrack.
-</p>
+</p> -->
 <p>
 Polymorphic <b>Mobile Element Insertions</b> (Alu, L1, SVA, HERVK,
 snRNA) called from HGSVC3 long-read assemblies are released as a
@@ -44,8 +50,8 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
   <td>&mdash;</td>
   <td>All long-read SV datasets merged on identical position+type+length, with per-database AC</td>
   <td>mixed</td>
-  <td>mixed (PacBio HiFi, ONT)</td>
-  <td>2,582,278</td>
+  <td>mixed (HiFi, ONT)</td>
+  <td>3,111,026</td>
   <td>1</td>
   <td>1</td>
   <td>57,207,413</td>
@@ -62,29 +68,29 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
   <td>101,381</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=han945Sv">Han 945</a></td>
-  <td>945</td>
-  <td>Han Chinese, general population</td>
-  <td>No</td>
-  <td>~17x ONT</td>
-  <td>111,288</td>
-  <td>1</td>
-  <td>254</td>
-  <td>99,744</td>
+  <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
+  <td>1,027</td>
+  <td>All of Us, self-identified Black/African American; biobank includes a variety of conditions (diabetes, hearing loss, etc.), filtered for allele count &gt; 20</td>
+  <td>Yes (mixed)</td>
+  <td>~8x HiFi</td>
+  <td>540,155</td>
+  <td>50</td>
+  <td>152</td>
+  <td>9,998</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=gustafsonSv">1KG ONT UW</a></td>
-  <td>100</td>
-  <td>1000 Genomes, 5 superpopulations / 19 subpopulations (University of Washington ONT effort)</td>
+  <td><a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged</a></td>
+  <td>1,218</td>
+  <td>1000 Genomes long-read merge (HiFi assemblies + ONT), Lin et al.</td>
   <td>No</td>
-  <td>~37x ONT (R9.4.1)</td>
-  <td>113,159</td>
-  <td>1</td>
-  <td>167</td>
-  <td>98,290</td>
+  <td>mixed (HiFi assembly, ONT R9/R10)</td>
+  <td>587,779</td>
+  <td>50</td>
+  <td>171</td>
+  <td>99,968</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a></td>
+  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG Vienna ONT</a></td>
   <td>1,019</td>
   <td>1000 Genomes, diverse</td>
   <td>No</td>
@@ -95,70 +101,37 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
   <td>49,171</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=tommoJpSv">ToMMo Japanese</a></td>
-  <td>333 (111 trios)</td>
-  <td>Japanese, general population</td>
+  <td><a href="hgTrackUi?g=gustafsonSv">1KG UW ONT</a></td>
+  <td>100</td>
+  <td>1000 Genomes, 5 superpopulations / 19 subpopulations (University of Washington ONT effort)</td>
   <td>No</td>
-  <td>~22x ONT</td>
-  <td>74,201</td>
-  <td>51</td>
-  <td>158</td>
-  <td>99,985</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=aou1kSv">AoU 1K</a></td>
-  <td>1,027</td>
-  <td>All of Us, self-identified Black/African American; biobank includes a variety of conditions (diabetes, hearing loss, etc.)</td>
-  <td>Yes (mixed)</td>
-  <td>~8x HiFi</td>
-  <td>540,155</td>
-  <td>50</td>
-  <td>152</td>
-  <td>9,998</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=ga4kSv">GA4K</a></td>
-  <td>502</td>
-  <td>Children's Mercy, pediatric rare disease probands + families</td>
-  <td>Yes (probands)</td>
-  <td>~27x HiFi</td>
-  <td>115,554</td>
-  <td>50</td>
-  <td>186</td>
-  <td>809,712</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=decodeSv">deCODE 3,622</a></td>
-  <td>3,622</td>
-  <td>Icelandic general population</td>
-  <td>No</td>
-  <td>~17x ONT</td>
-  <td>119,453</td>
+  <td>~37x ONT (R9.4.1)</td>
+  <td>113,159</td>
   <td>1</td>
-  <td>154</td>
-  <td>861,081</td>
+  <td>167</td>
+  <td>98,290</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=noyvertSv">1KG Boehringer ONT 888</a></td>
+  <td>888</td>
+  <td>1000 Genomes, 5 superpopulations; used to impute SVs into ~500,000 UK Biobank participants</td>
+  <td>No</td>
+  <td>~15x ONT (R9.4.1)</td>
+  <td>107,445</td>
+  <td>1</td>
+  <td>1</td>
+  <td>28,634,664</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1</a></td>
   <td>233</td>
-  <td>HPRC release-2 pangenome (CHM13 + diverse 1KG assemblies)</td>
+  <td>HPRC 2.1 pangenome (CHM13, some 1KG assemblies)</td>
   <td>No</td>
   <td>~60x HiFi + ~30x ONT (pangenome graph)</td>
   <td>549,649</td>
   <td>50</td>
   <td>261</td>
   <td>1,064,897</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=hgsvc2Sv">HGSVC2</a></td>
-  <td>32</td>
-  <td>HGSVC2 haplotype-resolved assemblies (5 superpopulations)</td>
-  <td>No</td>
-  <td>&gt;40x PacBio CLR + &gt;20x HiFi (+ Strand-seq)</td>
-  <td>111,746</td>
-  <td>50</td>
-  <td>168</td>
-  <td>57,207,413</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a></td>
@@ -172,37 +145,15 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
   <td>30,176,500</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=aprSv">Arab APR</a></td>
-  <td>53</td>
-  <td>UAE-resident Arabs from 8 countries (Arab Pangenome Reference)</td>
+  <td><a href="hgTrackUi?g=hgsvc2Sv">HGSVC2</a></td>
+  <td>32</td>
+  <td>HGSVC2 haplotype-resolved assemblies (5 superpopulations)</td>
   <td>No</td>
-  <td>~35x HiFi + ~54x ONT (+ Hi-C, pangenome graph)</td>
-  <td>72,656</td>
-  <td>1</td>
-  <td>121</td>
-  <td>584,016</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=cpc1Sv">CPC</a></td>
-  <td>58</td>
-  <td>Chinese Pangenome Consortium, 36 minority ethnic groups (HPRC-specific SVs removed)</td>
-  <td>No</td>
-  <td>~30x HiFi (pangenome graph)</td>
-  <td>36,030</td>
+  <td>&gt;40x PacBio CLR + &gt;20x HiFi (+ Strand-seq)</td>
+  <td>111,746</td>
   <td>50</td>
-  <td>134</td>
-  <td>8,998,096</td>
-</tr>
-<tr>
-  <td><a href="hgTrackUi?g=chirmade101Sv">SVatalog 101</a></td>
-  <td>101</td>
-  <td>Cystic fibrosis (CF) patients from the CF Canada-Sick Kids Program in Individual CF Therapy (CFIT). Long-read WGS used for GWAS LD fine-mapping</td>
-  <td>Yes (all CF)</td>
-  <td>~50x PacBio CLR (34, Sequel I) + ~76x HiFi (67, Sequel II)</td>
-  <td>87,068</td>
-  <td>4</td>
-  <td>160</td>
-  <td>1,321,484</td>
+  <td>168</td>
+  <td>57,207,413</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=cardSv">NIH CARD 351</a></td>
@@ -216,15 +167,81 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
   <td>30,282,742</td>
 </tr>
 <tr>
-  <td><a href="hgTrackUi?g=noyvertSv">Noyvert 888</a></td>
-  <td>888</td>
-  <td>1000 Genomes, 5 superpopulations; used to impute SVs into ~500,000 UK Biobank participants</td>
+  <td><a href="hgTrackUi?g=decodeSv">deCODE 3,622</a></td>
+  <td>3,622</td>
+  <td>Icelandic general population</td>
   <td>No</td>
-  <td>~15x ONT (R9.4.1)</td>
-  <td>107,445</td>
+  <td>~17x ONT</td>
+  <td>119,453</td>
   <td>1</td>
+  <td>154</td>
+  <td>861,081</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=han945Sv">Han 945</a></td>
+  <td>945</td>
+  <td>Han Chinese, general population</td>
+  <td>No</td>
+  <td>~17x ONT</td>
+  <td>111,288</td>
   <td>1</td>
-  <td>28,634,664</td>
+  <td>254</td>
+  <td>99,744</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=cpc1Sv">CPC</a></td>
+  <td>58</td>
+  <td>Chinese Pangenome Consortium, 36 minority ethnic groups (HPRC-specific SVs removed)</td>
+  <td>No</td>
+  <td>~30x HiFi (pangenome graph)</td>
+  <td>36,030</td>
+  <td>50</td>
+  <td>134</td>
+  <td>8,998,096</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=tommoJpSv">ToMMo Japanese</a></td>
+  <td>333 (111 trios)</td>
+  <td>Japanese, general population</td>
+  <td>No</td>
+  <td>~22x ONT</td>
+  <td>74,201</td>
+  <td>51</td>
+  <td>158</td>
+  <td>99,985</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=aprSv">Arab APR</a></td>
+  <td>53</td>
+  <td>UAE-resident Arabs from 8 countries (Arab Pangenome Reference)</td>
+  <td>No</td>
+  <td>~35x HiFi + ~54x ONT (+ Hi-C, pangenome graph)</td>
+  <td>72,656</td>
+  <td>1</td>
+  <td>121</td>
+  <td>584,016</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=ga4kSv">GA4K</a></td>
+  <td>502</td>
+  <td>Children's Mercy, pediatric rare disease probands + families</td>
+  <td>Yes (probands)</td>
+  <td>~27x HiFi</td>
+  <td>115,554</td>
+  <td>50</td>
+  <td>186</td>
+  <td>809,712</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=chirmade101Sv">SVatalog 101</a></td>
+  <td>101</td>
+  <td>Cystic fibrosis (CF) patients from the CF Canada-Sick Kids Program in Individual CF Therapy (CFIT). Long-read WGS used for GWAS LD fine-mapping</td>
+  <td>Yes (all CF)</td>
+  <td>~50x PacBio CLR (34, Sequel I) + ~76x HiFi (67, Sequel II)</td>
+  <td>87,068</td>
+  <td>4</td>
+  <td>160</td>
+  <td>1,321,484</td>
 </tr>
 </table>
 
@@ -232,6 +249,66 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
 Note: there is likely some overlap in sample composition across these collections.
 For example, 1000 Genomes samples are also included in HPRC and CoLoRSdb.
 </p>
+
+<h3 id='1000genomes'>1000 Genomes long-read callsets</h3>
+<p>
+Several of the datasets above are long-read callsets on the 1000 Genomes
+Project samples, produced by different groups with different technologies and
+variant-calling strategies. The
+<a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged</a> track combines these and added more 1000 genomes assemblies for a
+single 1,218-individual callset (Lin et al., submitted). The table below lists
+the merged release and the callsets that contribute to it.
+</p>
+<table class="stdTbl">
+<tr>
+  <th>Callset</th>
+  <th>N samples</th>
+  <th>Study</th>
+  <th>Data source</th>
+  <th>Variant calling</th>
+  <th>UCSC track</th>
+</tr>
+<tr>
+  <td>Lin_1218</td>
+  <td>1,218</td>
+  <td>Lin et al., A high-resolution human pangenome structural variant resource for improved disease association</td>
+  <td>HGSVC3, HPRC2 293 graph+linear, UW ONT (480; 383 newly generated by UW, 97 from Gustafson et al.), Vienna ONT (445)</td>
+  <td>Linear-reference-based merge</td>
+  <td><a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged</a></td>
+</tr>
+<tr>
+  <td>Vienna ONT</td>
+  <td>1,019</td>
+  <td>Schloissnig et al., Structural variation in 1,019 diverse humans based on long-read sequencing</td>
+  <td>Low-pass 17x ONT</td>
+  <td>Graph-based</td>
+  <td><a href="hgTrackUi?g=lrSv1kgOnt">1KG Vienna ONT</a></td>
+</tr>
+<tr>
+  <td>UW ONT</td>
+  <td>100</td>
+  <td>Gustafson et al., High-coverage nanopore sequencing of samples from the 1000 Genomes Project</td>
+  <td>High-coverage 37x ONT</td>
+  <td>Linear-reference-based</td>
+  <td><a href="hgTrackUi?g=gustafsonSv">1KG UW ONT</a></td>
+</tr>
+<tr>
+  <td>HPRC2 Minigraph-Cactus</td>
+  <td>232</td>
+  <td>Lucas et al., HPRC2: a human pangenome reference with near-complete coverage of common genetic variation</td>
+  <td>Near-T2T assembly (30x-60x HiFi+ONT), <a target=_blank href="https://github.com/wwliao/hprc_release2_variant_calling">a linear callset</a> was included for Lin et al merge. </td>
+  <td>Minigraph-cactus graph</td>
+  <td><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1</a></td>
+</tr>
+<tr>
+  <td>HGSVC3</td>
+  <td>65</td>
+  <td>Logsdon et al., Complex genetic variation in nearly complete human genomes</td>
+  <td>Near-T2T assembly (37-40x HiFi+ONT)</td>
+  <td>Linear-reference-based</td>
+  <td><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a></td>
+</tr>
+</table>
 
 <h3><a href="hgTrackUi?g=colorsDbSv">CoLoRSdb SVs</a></h3>
 <p>
@@ -242,40 +319,6 @@ merged with Jasmine, with allele frequencies, genotype counts and
 Hardy-Weinberg statistics across the cohort.
 </p>
 
-<h3><a href="hgTrackUi?g=han945Sv">Han 945 SVs</a></h3>
-<p>
-Structural variants from 945 Han Chinese individuals. ~111k SVs
-(deletions, insertions, duplications, inversions, translocations) merged with SURVIVOR.
-Includes allele frequencies and per-sample support.
-</p>
-
-<h3><a href="hgTrackUi?g=gustafsonSv">1KG ONT UW SVs</a></h3>
-<p>
-Structural variants from Oxford Nanopore long-read sequencing of 100
-1000 Genomes samples (5 superpopulations, 19 subpopulations) from the
-University of Washington-led 1000 Genomes ONT sequencing effort, described in
-Gustafson et al. 2024. ~114k SVs (insertions, deletions, duplications,
-inversions) called with five callers and merged with Jasmine. This is mostly a
-separate dataset from the Vienna 1KG-ONT release described next (directly below);
-only two samples (HG03499 and HG03548) overlap.
-</p>
-
-<h3><a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna SVs</a></h3>
-<p>
-Structural variants from 1,019 individuals across 26 populations (1000 Genomes ONT).
-~161k SVs annotated with SVAN, classifying insertions and deletions by mechanism
-of origin (mobile elements, VNTRs, processed pseudogenes, etc.).
-Original coordinates are on T2T-CHM13 (hs1); the hg38 version was created via liftOver.
-Two samples (HG03499 and HG03548) overlap with the 1KG ONT UW dataset.
-</p>
-
-<h3><a href="hgTrackUi?g=tommoJpSv">ToMMo Japanese SVs</a></h3>
-<p>
-Structural variants from 333 Japanese individuals (111 trios) from the Tohoku Medical
-Megabank (ToMMo). ~74k SVs (deletions and insertions) with trio-based Mendelian
-error rates and allele frequencies.
-</p>
-
 <h3><a href="hgTrackUi?g=aou1kSv">AoU 1K SVs</a></h3>
 <p>
 Structural variants from 1,027 individuals from the All of Us (AoU) Research Program,
@@ -284,27 +327,57 @@ that includes participants with a range of conditions (e.g. diabetes,
 hearing loss, hypertension), so the cohort is not disease-free.
 ~541k SVs (insertions and deletions) with population-specific allele
 frequencies, gene annotations, and clinical trait associations.
+Due to data sharing rules of the All of Us project, only variants with an allele
+count &gt; 20 can be shown here.
 </p>
 
-<h3><a href="hgTrackUi?g=ga4kSv">GA4K SVs</a></h3>
+<h3><a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged SVs</a></h3>
 <p>
-Structural variants from 502 probands and family members enrolled in the
-Genomic Answers for Kids (GA4K) pediatric rare-disease program at Children's
-Mercy Research Institute, sequenced with PacBio HiFi long reads. ~116k
-replicated SVs (deletions, insertions, duplications, inversions) called with
-pbsv and merged with JASMINE. The matched GA4K small-variant callset (SNVs
-and short indels) lives alongside other population allele-frequency resources
-as <a href="hgTrackUi?g=ga4kSnv">GA4K 552 PacBio LR</a> in the Variant
-Frequencies track collection.
+A single nonredundant long-read callset across 1,218 1000 Genomes individuals
+(Lin et al.), combining 293 near-T2T HGSVC and HPRC assemblies, 480 University
+of Washington Oxford Nanopore genomes (including the Gustafson et al. samples),
+and 445 low-pass Oxford Nanopore genomes from the Vienna release. Structural
+variants from ten long-read callers were integrated with the BoostSV
+machine-learning tool. ~588k SVs on GRCh38 (391k insertions, 196k deletions),
+each with an overall and per-superpopulation allele frequency. Because it
+already merges several of the 1000 Genomes datasets above, its samples are also
+represented in those individual tracks.
 </p>
 
-<h3><a href="hgTrackUi?g=decodeSv">deCODE 3,622 SVs</a></h3>
+<h3><a href="hgTrackUi?g=lrSv1kgOnt">1KG Vienna ONT SVs</a></h3>
 <p>
-High-confidence structural variants from 3,622 Icelanders (deCODE genetics),
-sequenced with Oxford Nanopore long reads. ~134k SVs (deletions, insertions
-and combined insertion/deletion events). Site-only callset with annotated
-surrounding tandem-repeat regions.
+Structural variants from 1,019 individuals across 26 populations (1000 Genomes ONT).
+~161k SVs annotated with SVAN, classifying insertions and deletions by mechanism
+of origin (mobile elements, VNTRs, processed pseudogenes, etc.).
+Original coordinates are on T2T-CHM13 (hs1); the hg38 version was created via liftOver.
+Two samples (HG03499 and HG03548) overlap with the 1KG UW ONT dataset.
 </p>
+
+<h3><a href="hgTrackUi?g=gustafsonSv">1KG UW ONT SVs</a></h3>
+<p>
+Structural variants from Oxford Nanopore long-read sequencing of 100
+1000 Genomes samples (5 superpopulations, 19 subpopulations) from the
+University of Washington-led 1000 Genomes ONT sequencing effort, described in
+Gustafson et al. 2024. ~114k SVs (insertions, deletions, duplications,
+inversions) called with five callers and merged with Jasmine. This is mostly a
+separate dataset from the 1KG Vienna ONT release described directly above;
+only two samples (HG03499 and HG03548) overlap.
+</p>
+
+<h3><a href="hgTrackUi?g=noyvertSv">1KG Boehringer ONT 888 SVs</a></h3>
+<p>
+Structural variants from Oxford Nanopore long-read sequencing of 888
+individuals from the 1000 Genomes Project, spanning five ancestry groups
+(European, Admixed American, East Asian, South Asian, African; Noyvert et al.
+2025). ~107k SVs (insertions, deletions, inversions, breakends and
+duplications) called with Sniffles2, with overall and per-superpopulation
+allele frequencies, Sniffles2 and Hardy-Weinberg quality metrics, and
+imputation accuracy. The panel was used to impute SVs into about 500,000 UK
+Biobank participants and test them for association with disease traits and
+protein levels; genome-wide significant UK Biobank associations are listed on
+each variant's details page.
+</p>
+
 
 <h3><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1 SVs</a></h3>
 <p>
@@ -312,7 +385,18 @@ Structural variants derived from the Human Pangenome Reference Consortium
 release-2.1 minigraph-cactus pangenome graph, built from 233 PacBio HiFi
 haplotype-resolved assemblies (CHM13 + diverse 1000 Genomes samples).
 About 550k SV-sized alleles (insertions and deletions) extracted from the
-graph with <tt>vg deconstruct</tt>.
+graph with <tt>vg deconstruct</tt>. A more traditional, linear callset was
+made by Wenwei Liao and is available 
+<a target=_blank href="https://github.com/wwliao/hprc_release2_variant_calling">from GitHub</a>.
+</p>
+
+<h3><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3 65 SVs</a></h3>
+<p>
+Structural variants from 65 diverse individuals sequenced and de novo
+assembled by the Human Genome Structural Variation Consortium phase 3
+(HGSVC3). ~177k haplotype-resolved SVs (deletions, insertions and
+inversions) called with PAV and cross-validated with ten additional callers,
+with per-site carrier haplotype lists and structural annotations.
 </p>
 
 <h3><a href="hgTrackUi?g=hgsvc2Sv">HGSVC2 32 SVs</a></h3>
@@ -325,13 +409,48 @@ deletions) and rich structural/gene annotations. An earlier HGSVC release
 complementary to <a href="hgTrackUi?g=hgsvc3Sv">HGSVC3</a>.
 </p>
 
-<h3><a href="hgTrackUi?g=hgsvc3Sv">HGSVC3 65 SVs</a></h3>
+<h3><a href="hgTrackUi?g=cardSv">NIH CARD 351 SVs</a></h3>
 <p>
-Structural variants from 65 diverse individuals sequenced and de novo
-assembled by the Human Genome Structural Variation Consortium phase 3
-(HGSVC3). ~177k haplotype-resolved SVs (deletions, insertions and
-inversions) called with PAV and cross-validated with ten additional callers,
-with per-site carrier haplotype lists and structural annotations.
+Structural variants from Oxford Nanopore long-read sequencing of post-mortem
+brain tissue (prefrontal cortex) from 351 individuals, generated by the NIH
+Center for Alzheimer's and Related Dementias (NIH CARD) Long-Read Initiative
+(Billingsley et al. 2024). These are population brain-tissue cohorts with no
+Alzheimer's disease cases. The cohort combines 205 European-ancestry samples
+(North American Brain Expression Consortium, NABEC) and 146 African /
+African-admixed samples (NIMH Human Brain Collection Core, HBCC). ~229k SVs
+(insertions, deletions, inversions) with per-cohort allele counts and allele
+frequencies.
+</p>
+
+<h3><a href="hgTrackUi?g=decodeSv">deCODE 3,622 SVs</a></h3>
+<p>
+High-confidence structural variants from 3,622 Icelanders (deCODE genetics),
+sequenced with Oxford Nanopore long reads. ~134k SVs (deletions, insertions
+and combined insertion/deletion events). Site-only callset with annotated
+surrounding tandem-repeat regions.
+</p>
+
+<h3><a href="hgTrackUi?g=han945Sv">Han 945 SVs</a></h3>
+<p>
+Structural variants from 945 Han Chinese individuals. ~111k SVs
+(deletions, insertions, duplications, inversions, translocations) merged with SURVIVOR.
+Includes allele frequencies and per-sample support.
+</p>
+
+<h3><a href="hgTrackUi?g=cpc1Sv">CPC 58 SVs</a></h3>
+<p>
+Structural variants from the Chinese Pangenome Consortium (CPC), 58 samples
+spanning 36 minority ethnic groups (PacBio HiFi pangenome graph; Gao et al.
+2023). This track shows the CPC contribution to the joint CPC+HPRC graph with
+HPRC-specific SVs removed. ~36k SVs on hg38 (deletions, insertions and mixed
+snarls), lifted from the native T2T-CHM13 assembly; the hs1 track is native.
+</p>
+
+<h3><a href="hgTrackUi?g=tommoJpSv">ToMMo Japanese SVs</a></h3>
+<p>
+Structural variants from 333 Japanese individuals (111 trios) from the Tohoku Medical
+Megabank (ToMMo). ~74k SVs (deletions and insertions) with trio-based Mendelian
+error rates and allele frequencies.
 </p>
 
 <h3><a href="hgTrackUi?g=aprSv">Arab APR 53 SVs</a></h3>
@@ -344,13 +463,16 @@ lifted from the native T2T-CHM13 assembly; the hs1 track uses the native
 coordinates.
 </p>
 
-<h3><a href="hgTrackUi?g=cpc1Sv">CPC 58 SVs</a></h3>
+<h3><a href="hgTrackUi?g=ga4kSv">GA4K SVs</a></h3>
 <p>
-Structural variants from the Chinese Pangenome Consortium (CPC), 58 samples
-spanning 36 minority ethnic groups (PacBio HiFi pangenome graph; Gao et al.
-2023). This track shows the CPC contribution to the joint CPC+HPRC graph with
-HPRC-specific SVs removed. ~36k SVs on hg38 (deletions, insertions and mixed
-snarls), lifted from the native T2T-CHM13 assembly; the hs1 track is native.
+Structural variants from 502 probands and family members enrolled in the
+Genomic Answers for Kids (GA4K) pediatric rare-disease program at Children's
+Mercy Research Institute, sequenced with PacBio HiFi long reads. ~116k
+replicated SVs (deletions, insertions, duplications, inversions) called with
+pbsv and merged with JASMINE. The matched GA4K small-variant callset (SNVs
+and short indels) lives alongside other population allele-frequency resources
+as <a href="hgTrackUi?g=ga4kSnv">GA4K 552 PacBio LR</a> in the Variant
+Frequencies track collection.
 </p>
 
 <h3><a href="hgTrackUi?g=chirmade101Sv">SVatalog 101 SVs - Cystic Fibrosis</a></h3>
@@ -367,34 +489,6 @@ annotated with gene overlaps, ClinGen / gnomAD constraint scores,
 OMIM / ClinVar / DGV / Decipher regional annotations.
 </p>
 
-<h3><a href="hgTrackUi?g=cardSv">NIH CARD 351 SVs</a></h3>
-<p>
-Structural variants from Oxford Nanopore long-read sequencing of post-mortem
-brain tissue (prefrontal cortex) from 351 individuals, generated by the NIH
-Center for Alzheimer's and Related Dementias (NIH CARD) Long-Read Initiative
-(Billingsley et al. 2024). These are population brain-tissue cohorts with no
-Alzheimer's disease cases. The cohort combines 205 European-ancestry samples
-(North American Brain Expression Consortium, NABEC) and 146 African /
-African-admixed samples (NIMH Human Brain Collection Core, HBCC). ~229k SVs
-(insertions, deletions, inversions) with per-cohort allele counts and allele
-frequencies.
-</p>
-
-<h3><a href="hgTrackUi?g=noyvertSv">Noyvert 888 SVs</a></h3>
-<p>
-Structural variants from Oxford Nanopore long-read sequencing of 888
-individuals from the 1000 Genomes Project, spanning five ancestry groups
-(European, Admixed American, East Asian, South Asian, African; Noyvert et al.
-2025). ~107k SVs (insertions, deletions, inversions, breakends and
-duplications) called with Sniffles2, with overall and per-superpopulation
-allele frequencies, Sniffles2 and Hardy-Weinberg quality metrics, and
-imputation accuracy. The panel was used to impute SVs into about 500,000 UK
-Biobank participants and test them for association with disease traits and
-protein levels; genome-wide significant UK Biobank associations are listed on
-each variant's details page.
-</p>
-
-
 <h2>Data Access</h2>
 <p>
 Each subtrack has its own documentation page with details on how to download
@@ -409,6 +503,12 @@ and the track configuration is in
 </p>
 
 <h2>References</h2>
+
+<p>
+Lin J, <em>et al</em>. A high-resolution human pangenome structural variant
+resource for improved disease association. Submitted.
+(1KG Lin merged callset and dataset overview provided by Jiadong Lin.)
+</p>
 
 <p>
 Gong J, Sun H, Wang K, Zhao Y, Huang Y, Chen Q, Qiao H, Gao Y, Zhao J, Ling Y <em>et al</em>.

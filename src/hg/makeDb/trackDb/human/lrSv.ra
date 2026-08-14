@@ -29,9 +29,10 @@ noScoreFilter on
 
     track colorsDbSv
     parent longReadVariants
+    priority 1
     bigDataUrl /gbdb/$D/lrSv/colorsDb/sv.$D.bb
     shortLabel CoLoRSdb 1427 SVs
-    longLabel Structural Variants from CoLoRSdb (Consortium of Long-Read Sequencing, 1,427 Samples)
+    longLabel Structural Variants from 1,427 CoLoRSdb samples (Consortium of Long-Read Sequencing, PacBio HiFi)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -54,13 +55,13 @@ noScoreFilter on
     filterLimits.AF 0:1
     filterLabel.AF Allele Frequency (AF)
     skipEmptyFields on
-    priority 1
 
     track lrSv1kgOnt
     parent longReadVariants
+    priority 4
     bigDataUrl /gbdb/$D/lrSv/1kgOnt.bb
-    shortLabel 1KG ONT 1019 SVs
-    longLabel Structural Variants from 1000 Genomes Vienna ONT - 1,019 genomes (Schloissnig et al. 2025)
+    shortLabel 1KG Vienna ONT SVs
+    longLabel Structural Variants from 1,019 1000 Genomes samples (Vienna ONT; Schloissnig et al. 2025)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -88,13 +89,13 @@ noScoreFilter on
     filterLabel.AC Allele Count
     skipEmptyFields on
     dataVersion 1.1
-    priority 2
 
     track gustafsonSv
     parent longReadVariants
+    priority 5
     bigDataUrl /gbdb/$D/lrSv/gustafson.bb
-    shortLabel 1KG ONT UW 100 SVs
-    longLabel Structural Variants from 1000 Genomes University of Washington ONT - 100 samples (Gustafson et al. 2024)
+    shortLabel 1KG UW ONT SVs
+    longLabel Structural Variants from 100 1000 Genomes samples (University of Washington ONT; Gustafson et al. 2024)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -115,13 +116,13 @@ noScoreFilter on
     filterByRange.sampleCount on
     filterLabel.sampleCount Number of Carrier Samples
     skipEmptyFields on
-    priority 3
 
     track noyvertSv
     parent longReadVariants
+    priority 6
     bigDataUrl /gbdb/$D/lrSv/noyvert.bb
-    shortLabel 1KG ONT Boehringer
-    longLabel Structural Variants from 1000 Genomes ONT Boehringer - 888 Individuals (Noyvert et al. 2025)
+    shortLabel 1KG Boehringer ONT SVs
+    longLabel Structural Variants from 888 1000 Genomes samples (Boehringer ONT; Noyvert et al. 2025)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -177,10 +178,10 @@ noScoreFilter on
 
     track lrSv1kLin
     parent longReadVariants
-    release alpha
+    priority 3
     bigDataUrl /gbdb/$D/lrSv/lin1218.bb
-    shortLabel 1KG Merged 1218 SVs
-    longLabel Structural Variants from 1000 Genomes merged - 1218 individuals (HiFi, ONT & assembly)
+    shortLabel 1KG Lin 1218 SVs
+    longLabel Structural Variants from 1,218 1000 Genomes samples (long-read merge; Lin et al.)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -228,9 +229,10 @@ noScoreFilter on
 
     track aou1kSv
     parent longReadVariants
+    priority 2
     bigDataUrl /gbdb/$D/lrSv/aou1k.bb
     shortLabel AoU 1027 SVs
-    longLabel Structural Variants from 1,027 AoU Individuals (PacBio HiFi Long-read)
+    longLabel Structural Variants from 1,027 All of Us samples (PacBio HiFi)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -260,9 +262,10 @@ noScoreFilter on
 
     track han945Sv
     parent longReadVariants
+    priority 12
     bigDataUrl /gbdb/$D/lrSv/han945.bb
     shortLabel Han 945 SVs
-    longLabel Structural Variants from 945 Han Chinese (Long-read Sequencing)
+    longLabel Structural Variants from 945 Han Chinese samples (long-read)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -291,9 +294,10 @@ noScoreFilter on
 
     track tommoJpSv
     parent longReadVariants
+    priority 14
     bigDataUrl /gbdb/$D/lrSv/tommoJp.bb
     shortLabel ToMMo 333 SVs
-    longLabel Structural Variants from 333 Japanese Individuals (ToMMo, 111 Trios)
+    longLabel Structural Variants from 333 Japanese samples (ToMMo, 111 trios)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -317,9 +321,10 @@ noScoreFilter on
 
     track ga4kSv
     parent longReadVariants
+    priority 16
     bigDataUrl /gbdb/$D/lrSv/ga4kSv.bb
     shortLabel GA4K 502 SVs
-    longLabel Structural Variants from 502 Children's Mercy GA4K Probands (PacBio HiFi)
+    longLabel Structural Variants from 502 GA4K samples (Children's Mercy, pediatric rare disease; PacBio HiFi)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -346,9 +351,10 @@ noScoreFilter on
 
     track decodeSv
     parent longReadVariants
+    priority 11
     bigDataUrl /gbdb/$D/lrSv/decodeSv.bb
     shortLabel deCODE 3622 SVs
-    longLabel High-confidence Structural Variants from 3,622 Icelanders (deCODE, Oxford Nanopore)
+    longLabel Structural Variants from 3,622 deCODE samples (Icelandic; Oxford Nanopore)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -366,9 +372,10 @@ noScoreFilter on
 
     track hprc2v21Sv
     parent longReadVariants
+    priority 7
     bigDataUrl /gbdb/$D/lrSv/hprc2v21.bb
     shortLabel HPRC v2.1 233 SVs
-    longLabel Structural Variants from HPRC v2.1 Pangenome Graph (233 samples, minigraph-cactus)
+    longLabel Structural Variants from 233 HPRC v2.1 assemblies (minigraph-cactus pangenome graph)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -436,9 +443,10 @@ noScoreFilter on
 
     track hgsvc2Sv
     parent longReadVariants
+    priority 9
     bigDataUrl /gbdb/$D/lrSv/hgsvc2.bb
     shortLabel HGSVC2 32 SVs
-    longLabel Structural Variants from 32 Haplotype-Resolved Genomes (HGSVC2 freeze 4, Ebert 2021)
+    longLabel Structural Variants from 32 HGSVC2 assemblies (freeze 4; Ebert et al. 2021)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -469,9 +477,10 @@ noScoreFilter on
 
     track hgsvc3Sv
     parent longReadVariants
+    priority 8
     bigDataUrl /gbdb/$D/lrSv/hgsvc3.bb
     shortLabel HGSVC3 65 SVs
-    longLabel Structural Variants from 65 Diverse Samples (HGSVC3 ONT+HIFI)
+    longLabel Structural Variants from 65 HGSVC3 assemblies (diverse ancestry; HiFi + ONT)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -549,9 +558,10 @@ noScoreFilter on
 
     track aprSv
     parent longReadVariants
+    priority 15
     bigDataUrl /gbdb/$D/lrSv/apr.bb
     shortLabel Arab APR 53 SVs
-    longLabel Structural Variants from the Arab Pangenome Reference (53 UAE-resident Arab samples)
+    longLabel Structural Variants from 53 Arab Pangenome Reference samples (UAE-resident; HiFi + ONT)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -575,9 +585,10 @@ noScoreFilter on
 
     track cpc1Sv
     parent longReadVariants
+    priority 13
     bigDataUrl /gbdb/$D/lrSv/cpc1.bb
     shortLabel CPC 58 SVs
-    longLabel Structural Variants from the Chinese Pangenome Consortium (58 samples, CPC-only)
+    longLabel Structural Variants from 58 Chinese Pangenome Consortium samples (CPC-only; HiFi)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -601,9 +612,10 @@ noScoreFilter on
 
     track chirmade101Sv
     parent longReadVariants
+    priority 17
     bigDataUrl /gbdb/$D/lrSv/chirmade101.bb
     shortLabel SVatalog 101 SVs
-    longLabel Structural Variants from 101 Long-read WGS (GWAS SVatalog, Chirmade 2026)
+    longLabel Structural Variants from 101 SVatalog samples (cystic fibrosis; Chirmade et al. 2026)
     type bigBed 9 +
     itemRgb on
     visibility hide
@@ -624,9 +636,10 @@ noScoreFilter on
 
     track cardSv
     parent longReadVariants
+    priority 10
     bigDataUrl /gbdb/$D/lrSv/card.bb
     shortLabel CARD 351 SVs
-    longLabel Structural Variants from 351 Brain Samples (NIH CARD Long-read ONT, NABEC + HBCC)
+    longLabel Structural Variants from 351 NIH CARD brain samples (ONT; NABEC + HBCC)
     type bigBed 9 +
     itemRgb on
     visibility hide
