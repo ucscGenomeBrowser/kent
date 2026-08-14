@@ -11,7 +11,8 @@ else
     ERLIBS  = -lpthread
 endif
 
-CFLAGS = -pipe -Wall -W -O2 -DLINUX -DUNICODE -D_REENTRANT -DPOSIX
+# The -D flags are required by the ERMapper (libecwj2) JPEG2000 headers.
+CFLAGS += -pipe -DLINUX -DUNICODE -D_REENTRANT -DPOSIX
 
 L += -lm -ljpeg
 MYLIBDIR = ../../../lib/${MACHTYPE}

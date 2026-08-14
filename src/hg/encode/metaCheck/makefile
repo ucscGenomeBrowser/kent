@@ -1,5 +1,4 @@
 kentSrc = ../../..
-COPT= -g
 include ../../../inc/common.mk
 
 L += -lm  $(MYSQLLIBS)

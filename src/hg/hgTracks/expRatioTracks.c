@@ -1322,16 +1322,16 @@ if (tmp != NULL)
     tmp = strstr(tmp, "_(");
     if(tmp != NULL)
 	*tmp = '\0';
-    strncpy(abbrev, full, sizeof(abbrev));
+    safencpy(abbrev, sizeof(abbrev), full, sizeof(abbrev)-1);
     freez(&full);
     }
 else if (lfs->name != NULL)
     {
-    strncpy(abbrev, lfs->name, sizeof(abbrev));
+    safencpy(abbrev, sizeof(abbrev), lfs->name, sizeof(abbrev)-1);
     }
 else
     {
-    strncpy(abbrev, tg->shortLabel, sizeof(abbrev));
+    safencpy(abbrev, sizeof(abbrev), tg->shortLabel, sizeof(abbrev)-1);
     }
 return abbrev;
 }

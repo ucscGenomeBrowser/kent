@@ -1,7 +1,6 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-CFLAGS= -ggdb
 
 L +=  ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}

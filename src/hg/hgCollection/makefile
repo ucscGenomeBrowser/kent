@@ -1,4 +1,3 @@
-COPT=-ggdb
 kentSrc = ../..
 include ../../inc/common.mk
 

@@ -6676,7 +6676,7 @@ struct linkedFeatures *lf = item;
 char *full = lf->name;
 static char abbrev[32];
 
-strncpy(abbrev, full, sizeof(abbrev));
+safencpy(abbrev, sizeof(abbrev), full, sizeof(abbrev)-1);
 abbr(abbrev, "00000");
 abbr(abbrev, "0000");
 abbr(abbrev, "000");
@@ -8834,7 +8834,7 @@ struct linkedFeatures *lf = item;
 char *full = lf->name;
 static char abbrev[SMALLBUF];
 
-strncpy(abbrev, full, sizeof(abbrev));
+safencpy(abbrev, sizeof(abbrev), full, sizeof(abbrev)-1);
 abbr(abbrev, "Em:");
 abbr(abbrev, ".C22");
 //abbr(abbrev, ".mRNA");

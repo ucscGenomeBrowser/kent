@@ -6,7 +6,6 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 INSTALLDIR = ${BINDIR}
 SCRIPT_DIR = /cluster/data/encode/bin/scripts
-CFLAGS = -g
 
 PROG = regionOrtho
 O = ${PROG}.o
