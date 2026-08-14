@@ -95,6 +95,10 @@ bgzip saudi.vcf
 tabix -p vcf saudi.vcf.gz
 
 # SFARI SPARK
+# Initial build (overall AC/AN/AF only). The current build adds ASD/non-ASD
+# phenotype-stratified counts and is documented under the 2026-05-28 entry
+# below ("Phenotype-stratified SPARK counts"), which also describes step by
+# step what sparkMergeVcfAddCounts.sh and the bcftools csq annotation do.
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
 # used globus to download into vcf/
 sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh vcf/SPARK.iWES_v3.2024_08.deepvariant 8
@@ -239,3 +243,1019 @@ tabix allOfUs.locAncFreq.vcf.gz
 # Data files remain in /hive/data/genomes/hg38/bed/lrSv/
 # Symlinks moved from /gbdb/{hg38,hs1}/lrSv/ to /gbdb/{hg38,hs1}/phasedVars/
 # Build documentation for these tracks is in lrSv.txt
+
+##########
+# 2026-04-20 Claude max
+
+# CoLoRSdb v1.2.0 long-read SNV/indel population frequencies added as
+# the colorsDbSnv subtrack of varFreqs, for both hg38 and hs1.
+#
+# Upstream VCFs (GRCh38 and CHM13 releases) are already present in
+# /hive/data/genomes/hg38/bed/lrSv/colorsDb/ (placed there when the
+# CoLoRSdb SV track was first built under lrSv). We just add VCF
+# symlinks under each assembly's varFreqs directory using a consistent
+# filename so the shared trackDb stanza can use $D.
+
+mkdir -p /gbdb/hg38/varFreqs/colorsDb /gbdb/hs1/varFreqs/colorsDb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.GRCh38.v1.2.0.deepvariant.glnexus.vcf.gz     /gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz
+ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.GRCh38.v1.2.0.deepvariant.glnexus.vcf.gz.tbi /gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz.tbi
+ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.CHM13.v1.2.0.deepvariant.glnexus.vcf.gz      /gbdb/hs1/varFreqs/colorsDb/colorsDbSnv.vcf.gz
+ln -sf /hive/data/genomes/hg38/bed/lrSv/colorsDb/CoLoRSdb.CHM13.v1.2.0.deepvariant.glnexus.vcf.gz.tbi  /gbdb/hs1/varFreqs/colorsDb/colorsDbSnv.vcf.gz.tbi
+
+# The varFreqs.ra trackDb file is already in human/ (shared for both
+# hg38 and hs1 via the human/trackDb.ra include), so no move was needed.
+# Only colorsDbSnv is expected to render on hs1 - the other varFreqs
+# subtracks have hg38-only data and will silently show nothing there.
+
+##########
+# 2026-04-20 Claude max
+#
+# Rebuilt varFreqsAll combined bigBed to include GA4K and CoLoRSdb
+# long-read PacBio subtracks that were added to varFreqs since the
+# last build (Mar 20).
+#
+# Steps (in /hive/data/genomes/hg38/bed/varFreqs/all):
+# 1. Added GA4K and CoLoRSdb rows to
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv
+#    and appended their /gbdb paths to files.txt.
+# 2. Deleted merged.vcf.gz and merged.annotated.vcf.gz to force a full
+#    merge + bcftools csq re-annotation (per-sample normalized VCFs
+#    from the previous run were kept; only the two new VCFs were
+#    normalized in Step 4).
+# 3. Ran ./mergeAndAnnotate.sh (~55 min: 5 min per-file, ~15 min merge,
+#    ~35 min csq).
+# 4. Ran ./vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 pre-extract ~90 min, Phase 2 chrom BED build ~30 min).
+# 5. bedToBigBed on 275 GB sorted BED (~2 h) to produce 37.7 GB
+#    varFreqsAll.bb with 1,165,666,478 records and 113 fields.
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.GA4KAF/AC and filterByRange.CoLoRSdbAF/AC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink was preserved.
+
+# 2026-04-22 Claude max
+# GWAS SVatalog small-variant (SNV/indel) allele frequencies from the 101
+# SVatalog samples, sibling of the lrSv chirmade101Sv structural-variant
+# track. Paper: Chirmade et al. 2026, Heredity, PMID 41203876.
+# SNPs were called from 10X Genomics linked short-read WGS of the 101
+# samples with GATK HaplotypeCaller v4.0.0.0 and phased with SHAPEIT v4.2.0.
+# Data: the per-chromosome allele-frequency text files were downloaded into
+# /hive/data/genomes/hg38/bed/varFreqs/svCatalog/ alongside the LD-stats
+# files (see the companion Zenodo deposit 13367574).
+cd /hive/data/genomes/hg38/bed/varFreqs/svCatalog/
+# Convert the 23 per-chrom *_allele_freq.txt files to a single sites-only
+# VCF with AF/AC/AN plus gnomAD v3.1 NFE AF and dbSNP RSID as INFO fields.
+# AC is synthesized as round(AF * 202) and AN is fixed at 202 since the
+# source release does not ship AC/AN.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/svatalogFreqToVcf.py \
+    svatalog.vcf chr{1..22}_allele_freq.txt chrX_allele_freq.txt
+bcftools sort svatalog.vcf -Oz -m 16G -T /tmp/ -o svatalog.vcf.gz
+tabix -p vcf svatalog.vcf.gz
+rm -f svatalog.vcf
+# 8,814,835 variants -> 172 MB bgzipped + 1.6 MB tabix index.
+# Symlinks placed under /gbdb/hg38/varFreqs/svatalog/ for the svatalogSnv
+# stanza in trackDb/human/varFreqs.ra.
+
+# varFreqsAll rebuild, 2026-04-22 Claude max
+# Regenerate the All Databases Combined track to include SVatalog. Source
+# count rises from 23 to 24 databases; final bigBed is 35.3 GB with
+# 1,166,005,346 records and 115 fields (up from 113). Pipeline run in
+# /hive/data/genomes/hg38/bed/varFreqs/all/:
+# 1. Added /gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz to files.txt and
+#    the SVatalog row to ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv.
+# 2. Cleared stale merged.vcf.gz / merged.annotated.vcf.gz to force re-merge.
+# 3. Ran ./mergeAndAnnotate.sh (~60 min: pre-extract skip+svatalog, ~20 min
+#    merge, ~35 min csq).
+# 4. Ran python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 ~90 min re-extract, Phase 2 chrom BED build ~30 min,
+#    concat+sort ~45 min).
+# 5. bedToBigBed on 260 GB sorted BED (~2h 15m) -> 35.3 GB varFreqsAll.bb.
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.SVatalogAF / filterByRange.SVatalogAC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink (pointing at
+# /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb) was preserved
+# and now resolves to the new 35.3 GB build.
+
+##########
+# 2026-04-29 Claude max
+# Indigenous African 180 WGS allele frequencies (Tishkoff lab,
+# Fan et al. 2023 Cell, PMID 36868214). 180 individuals (15 per
+# population) from 12 indigenous African populations sequenced at >30x
+# on Illumina HiSeq X Ten. Sites-only SNP VCF with aggregate AC/AF/AN
+# (no per-population frequencies) was supplied directly by Matthew
+# Hansen (mhansen@upenn.edu, Tishkoff lab) via Box. Original calls on
+# hs37d5 (GRCh37) so we lift to hg38.
+cd /hive/data/genomes/hg38/bed/varFreqs/tishkoff/
+# Source: 180wgs.SNPs.sites.AF.vcf.gz (~316 MB, 33,618,897 SNPs,
+# autosomes only, bare chromosome names "1"-"22").
+# Step 1: rename bare chromosome names to chr-prefixed UCSC names.
+bcftools annotate --rename-chrs chrRename.txt -Oz \
+    -o tishkoff.hg19.chr.vcf.gz 180wgs.SNPs.sites.AF.vcf.gz
+# Step 2: lift to hg38 with CrossMap (~5 min). hg38.fa is the same
+# /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa used elsewhere.
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    tishkoff.hg19.chr.vcf.gz \
+    /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa \
+    tishkoff.hg38.unsorted.vcf
+# CrossMap reports: 33,618,897 input -> 9,066 unmapped, 33,609,831 lifted.
+# Step 3: drop variants that landed on alt/random/Un/fix contigs and
+# fix the contig= header lines (CrossMap dropped the chr prefix from
+# the contig IDs even though data lines have it).
+awk 'BEGIN{OFS="\t"} /^#/ {next} $1 ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/ {print}' \
+    tishkoff.hg38.unsorted.vcf > tishkoff.hg38.canon.body
+awk 'BEGIN{OFS="\t"} /^##contig=/ {sub(/<ID=/,"<ID=chr"); print; next} /^#/ {print}' \
+    tishkoff.hg38.unsorted.vcf > tishkoff.hg38.canon.header
+cat tishkoff.hg38.canon.header tishkoff.hg38.canon.body > tishkoff.hg38.canon.fixed.vcf
+# 33,600,472 variants survive (9,359 of the lifted variants landed on
+# alt/random/Un contigs and were dropped).
+# Step 4: sort + bgzip + tabix.
+bcftools sort tishkoff.hg38.canon.fixed.vcf -Oz -m 16G -T /data/tmp/ \
+    -o tishkoff180.vcf.gz
+tabix -p vcf tishkoff180.vcf.gz
+rm tishkoff.hg38.unsorted.vcf tishkoff.hg38.canon.* tishkoff.hg19.chr.vcf.gz
+# Final: 346 MB bgzip + 1.6 MB tabix index, 33,600,472 SNPs (autosomes
+# + a handful of chrX entries from the PAR regions). 18,425 of the
+# 33,618,897 source variants (0.055%) are not represented after lift
+# (9,066 failed liftOver, 9,359 mapped to non-canonical contigs).
+# Symlinks placed at /gbdb/hg38/varFreqs/tishkoff/ for the tishkoff180
+# stanza in trackDb/human/varFreqs.ra.
+
+# varFreqsAll rebuild, 2026-04-30 Claude max
+# Regenerate the All Databases Combined track to include Tishkoff180.
+# Source count rises from 24 to 25 databases; final bigBed is 35.6 GB
+# (37.9 GB on disk before zoom indexes) with 1,169,063,801 records and
+# 117 fields (up from 115). Pipeline run in
+# /hive/data/genomes/hg38/bed/varFreqs/all/:
+# 1. Added /gbdb/hg38/varFreqs/tishkoff/tishkoff180.vcf.gz to files.txt
+#    and the Tishkoff180 row to
+#    ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv.
+# 2. Cleared stale merged.vcf.gz / merged.annotated.vcf.gz to force re-merge.
+# 3. Ran ./mergeAndAnnotate.sh: per-VCF strip+norm reused cached files for
+#    the 24 unchanged DBs; only tishkoff180 was normalized (~5 min).
+#    bcftools merge ~25 min; bcftools csq ~35 min.
+#    Output: 1,169,064,168 merged variants (up from 1,166,005,346).
+#    Tishkoff added ~3.06M sites that were not present in any other DB
+#    (most of its 33.6M SNPs were already covered by the bigger DBs).
+# 4. Ran python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+#    (Phase 1 ~90 min re-extract of all 25 DBs, Phase 2 ~25 min chrom BED
+#    build, concat+sort ~45 min).
+# 5. bedToBigBed on the sorted BED -> 35.6 GB varFreqsAll.bb (1.169B
+#    records, 117 fields).
+# 6. Updated varFreqs.ra filterValues.sources and added
+#    filterByRange.Tishkoff180AF / filterByRange.Tishkoff180AC.
+# Existing /gbdb/hg38/varFreqs/varFreqsAll.bb symlink (pointing at
+# /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb) was preserved
+# and now resolves to the new 35.6 GB build.
+
+# Performance follow-up note (Claude max, 2026-04-30):
+# An incremental add currently takes ~10 hours. The biggest wins for a
+# future incremental-add workflow are:
+#   - Phase 1 of vcfToBigBed.py re-extracts per-DB TSVs for ALL databases
+#     every run (~90 min). Skip extraction when the per-DB output dir is
+#     already present and source mtime is unchanged. Estimated saving:
+#     ~85 min when adding one DB.
+#   - bcftools merge re-merges all 25 normalized VCFs (~25 min). For a
+#     pure additive change, `bcftools merge old_merged.vcf.gz new.vcf.gz`
+#     is much cheaper than re-merging from scratch. Estimated saving:
+#     ~20 min.
+# We tested a BCSQ cache (csqWithCache.sh, prototype in this directory's
+# git history), splitting merged variants into "cached" vs "uncached" via
+# bcftools isec and only running csq on the uncached subset. It is
+# correct but NOT a win: bcftools csq runs at ~30M records/min and is
+# already well-threaded; bcftools isec / annotate over the same volume
+# is slower than just running csq again. Don't pursue. The script was
+# removed after benchmarking; see this commit's history if you want to
+# re-test on different hardware.
+
+##########
+# 2026-05-05 Claude max
+# GenomeAsia Pilot (gasp + gaspIndel) GRCh37 -> hg38 lift, refs #36642
+#
+# Lou's QA (note 2026-05-04) showed both subtracks were GRCh37 sites
+# served at /gbdb/hg38/, so positions were off by tens of kb to many
+# Mb (e.g. rs1050171 at hg19 chr7:55,249,063 instead of hg38
+# chr7:55,174,014). Three confirmations: contig lengths in the VCF
+# header are GRCh37, every contig record declares assembly=b37, and
+# the GATK reference FASTA is human_g1k_v37_decoy.fasta.
+#
+# Source files (sites-only, bare chromosome names "1"-"22", "X", "Y"):
+#   /hive/data/genomes/hg38/bed/varFreqs/ga100k/ga100k.subst.vcf.gz
+#       (66,236,516 SNVs, autosomes only)
+#   /hive/data/genomes/hg38/bed/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz
+#       (4,415,156 indels, 1-22 + X/Y/MT plus GL*/hs37d5 alt contigs)
+# The indel VCF has a malformed #CHROM line (declares FORMAT but has
+# no sample columns and no FORMAT field on data lines); the lift
+# script strips it on the fly.
+#
+# Lift script: ~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh
+# Recipe is the same as tishkoff180: chr-prefix rename via
+# bcftools annotate --rename-chrs, CrossMap.py vcf with
+# hg19ToHg38.over.chain.gz, post-filter to canonical chr1-22/X/Y/M,
+# fix contig= header (CrossMap drops the chr prefix from contig IDs),
+# bcftools sort, bgzip, tabix.
+mkdir -p /hive/data/genomes/hg38/bed/varFreqs/ga100k/lift
+cd /hive/data/genomes/hg38/bed/varFreqs/ga100k/lift
+# chrRename.txt is in this directory (1 -> chr1 ... MT -> chrM).
+~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh \
+    /hive/data/genomes/hg38/bed/varFreqs/ga100k/ga100k.subst.vcf.gz \
+    ./ga100k.subst.hg38
+~/kent/src/hg/makeDb/scripts/varFreqs/gaspLift.sh \
+    /hive/data/genomes/hg38/bed/varFreqs/ga100k/All.indels.annot.cont_withmaf.vcf.gz \
+    ./ga100k.indels.hg38
+# Lift accounting is logged in subst.lift.log and indel.lift.log.
+# After lift, /gbdb symlinks point at the lifted .vcf.gz / .tbi pair.
+# trackDb bigDataUrl for gaspIndel was renamed to ga100k.indels.vcf.gz
+# (the old All.indels.annot.cont_withmaf.vcf.gz file name was a
+# verbatim copy of the GenomeAsia download name).
+
+##########
+# 2026-05-06 Claude max
+# varFreqsAll rebuild: 5 vcfToBigBed.py fixes + add NPM (Singapore SG10K_Health),
+# refs #36642 notes 49, 51, 53, 55.
+
+# 1. Moved scripts from /hive/.../all/ into kent so the build is reproducible
+#    from a fresh checkout (Lou's note 49):
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py   (driver)
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh (merge+csq)
+#    Original /hive/.../all/ paths are now symlinks into kent.
+
+# 2. vcfToBigBed.py fixes in this round:
+#    - normalize_consequence(): bcftools csq emits "&"-joined compounds
+#      (e.g. "stop_gained&frameshift") which exact-match-failed the old
+#      8-bucket consequence filter and orphaned ~8.5 M records. The
+#      normalizer rewrites "&" to "," so a single record can match multiple
+#      filter buckets, and appends ",others" to any token list with no named
+#      filter present so nothing is orphaned.  trackdb gains 4 new buckets
+#      (3_prime_utr, 5_prime_utr, non_coding, others) and switches to
+#      filterType.consequence multipleListOr.
+#    - Source-attribution bug: the old check only inspected the unified
+#      AC/AF slot, so AllOfUs (which ships only per-population fields)
+#      attributed to ZERO of its 67.5 M variants — ~43 M phantom rows in
+#      the previous bigBed had an empty "sources" column. The fix scans
+#      per-population slots before declaring "no data".
+#    - parse_bcsq() now returns "" instead of "." for aaChange/dnaChange on
+#      non-coding variants, so the mouseOver/detail page renders a clean
+#      blank line instead of a stray dot.
+#    - maxAF format: "{:.6g}" -> "{:.6f}" so very small AFs print as
+#      "0.000003" instead of "3.31347e-06".
+#    - autoSql `table varFreqs` -> `table varFreqsAll` (matches the bigBed
+#      filename; required for hgIntegrator to wire up correctly).
+
+# 3. NPM Singapore (SG10K_Health) added to databases.tsv + files.txt +
+#    populations.tsv (SgChinese / SgMalay / SgIndian ancestry groups) +
+#    trackDb filter UI.  The individual `npm` subtrack still has
+#    tableBrowser off (license), but its data is folded into varFreqsAll
+#    same as for finngen / kova / mgrb / swefreq / tishkoff180 (precedent).
+
+cd /hive/data/genomes/hg38/bed/varFreqs/all/
+# Force re-merge + re-csq (existing per-VCF normalize cache is reused).
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+    merged.annotated.vcf.gz.tbi
+rm -rf extracted beds varFreqsAll.bed
+./mergeAndAnnotate.sh
+python3 vcfToBigBed.py --output-prefix varFreqsAll --threads 8
+# Build is in-place: /gbdb/hg38/varFreqs/varFreqsAll.bb stays symlinked
+# at /hive/.../all/varFreqsAll.bb, which is overwritten at the end of
+# the bedToBigBed step.
+
+##########
+# 2026-05-12 Claude max
+# UK Biobank Neale Lab Round 2 variant manifest, refs #36642 (varFreqs).
+#
+# Source: variants.tsv.bgz (~916 MB, 13,791,467 rows), the Neale Lab
+# Round 2 UKB GWAS variant table with imputation INFO score, post-QC
+# allele counts and minor-allele frequencies from 361,194 imputed UK
+# Biobank samples restricted to white British ancestry. The TSV ships
+# bare chromosome names ("1".."22","X") in GRCh37 coordinates, so we
+# convert to a sites-only VCF, then lift to hg38.
+cd /hive/data/genomes/hg38/bed/varFreqs/ukbb
+# Step 1: TSV -> VCF (hg19, chr-prefixed). Drops AC=0 rows (variants
+# present in the imputation panel but not observed in the cohort), sets
+# AN = 2 * n_called, and carries the imputation INFO score, HWE p-value,
+# hom-ref / het / hom-alt sample counts, and the VEP consequence /
+# Neale Lab consequence_category as INFO fields.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/ukbbToVcf.py
+# total=13,791,467 written=13,751,808 skipped_AC0=39,659
+# Step 2: lift to hg38 with CrossMap.
+CrossMap.py vcf /gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz \
+    ukbb.hg19.vcf \
+    /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa \
+    ukbb.hg38.unsorted.vcf
+# Total entries: 13,751,808, Failed to map: 6,889 -> 13,744,919 lifted.
+# Step 3: filter to canonical chromosomes (chr1-22/X/Y/M) in both the
+# data lines and the contig header (CrossMap emits every hg38 contig).
+awk '
+    /^##contig=/ {
+      if (match($0, /ID=([^,>]+)/, m) && m[1] ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/) print
+      next
+    }
+    /^#/ {print}
+' ukbb.hg38.unsorted.vcf > header.vcf
+awk -F'\t' 'BEGIN{OFS="\t"} !/^#/ && $1 ~ /^chr([1-9]|1[0-9]|2[0-2]|X|Y|M)$/ {print}' \
+    ukbb.hg38.unsorted.vcf > body.vcf
+cat header.vcf body.vcf > ukbb.hg38.canon.vcf
+# 13,743,085 variants survive (1,834 of the lifted variants landed on
+# alt/random/Un/fix contigs and were dropped).
+# Step 4: sort, bgzip, tabix.
+bcftools sort ukbb.hg38.canon.vcf -Oz -m 16G -T /data/tmp/ -o ukbb.vcf.gz
+tabix -p vcf ukbb.vcf.gz
+rm -f ukbb.hg19.vcf ukbb.hg38.unsorted.vcf ukbb.hg38.unsorted.vcf.unmap \
+    ukbb.hg38.canon.vcf header.vcf body.vcf
+# Final: 551 MB bgzip + 1.7 MB tabix index, 13,743,085 variants.
+# 48,382 of the 13,791,467 source rows (0.35%) are not represented in
+# hg38: 39,659 had AC=0 (panel-only), 6,889 failed CrossMap, 1,834
+# lifted to non-canonical contigs.
+
+##########
+# 2026-05-13 Claude max
+# Westlake BioBank for Chinese (WBBC) WGS allele frequencies, refs #36642.
+#
+# 4,480 WGS samples sequenced to ~13.9x at Westlake University. The pilot
+# project has been folded into the larger China Precision BioBank (CPBB);
+# the variant file we host is unchanged from the WBBC Phase I v20210103
+# release. Paper: Cong et al. 2022 Nat Commun, PMID 35618720.
+#
+# Source: 22 per-chromosome sites-only VCFs already on GRCh38 with
+# chr-prefixed chromosomes (autosomes only - no chrX/Y in the download).
+# INFO fields ship cohort AC/AF/AN/NS plus per-region AC/AN for the four
+# Han Chinese geographic subgroups (North, Central, South, Lingnan) plus
+# per-genotype RR|RA|AA counts, total DP and the GATK VQSLOD score.
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina/download
+for i in $(seq 1 22); do wget -nv https://wbbc.westlake.edu.cn/data/WBBC.chr$i.GRCh38.vcf.gz; done
+# bcftools concat needs tabix indices when the per-chrom VCFs lack
+# ##contig header lines (they do here).
+parallel -j 8 tabix -p vcf {} ::: WBBC.chr{1..22}.GRCh38.vcf.gz
+cd /hive/data/genomes/hg38/bed/varFreqs/westlakeChina
+bcftools concat --threads 8 -Oz -o wbbc.allChrom.vcf.gz \
+    download/WBBC.chr{1..22}.GRCh38.vcf.gz
+# Stream re-header + filter AC=0. The Python helper inserts proper
+# ##contig (with lengths) and ##INFO lines, drops the dangling
+# SHAPEIT FORMAT line, and skips any row whose INFO starts AC=0;.
+zcat wbbc.allChrom.vcf.gz \
+    | python3 ~/kent/src/hg/makeDb/scripts/varFreqs/wbbcFix.py \
+    | bgzip -@ 8 -c > wbbc.vcf.gz
+tabix -p vcf wbbc.vcf.gz
+rm -f wbbc.allChrom.vcf.gz
+# Final: 2.2 GB bgzip + 2.2 MB tabix index, 78,594,274 variants.
+# 1,495,967 rows (~1.86%) with AC=0 were dropped.
+# Symlinks placed under /gbdb/hg38/varFreqs/wbbc/ for the wbbc stanza
+# in trackDb/human/varFreqs.ra.
+#
+# databases.tsv and populations.tsv now list WBBC + the four Han
+# regional groups, so the next varFreqsAll rebuild will pick the cohort
+# up. The trackDb filter UI (filterByRange.WBBCAF etc.) was deliberately
+# NOT added yet - those will be added together with the next rebuild
+# of varFreqsAll, otherwise the filters would appear in the UI before
+# the underlying bigBed has the columns.
+
+# Taiwan Precision Medicine Initiative (TPMI) - 2026-05-15 Claude max
+# TPMI is a Han-Chinese cohort of 565,390 participants (Yang et al. 2025,
+# Nature, PMID 41092961). Genotyping was done with two custom Axiom SNP
+# arrays (TPMv1 on 165,596 individuals; TPMv2 on 321,360 individuals).
+# Thermo Fisher publishes a chip annotation CSV for each array; the TPM1
+# annotation embeds the TPMI cohort allele frequency in a column named
+# "Allele Frequency". The TPM2 annotation does not (it only carries the
+# Affymetrix-bundled CEU/CHB/JPT/YRI HapMap freqs), so this track is
+# TPM1-only. The annotation CSVs declare hg38 coordinates, so no lift.
+cd /hive/data/genomes/hg38/bed/varFreqs/tpmi
+# TPM1_Array_Annotation.csv (~926 MB) and TPM2_Array_Annotation.csv
+# (~1.0 GB) were already in this directory at the start. Only the TPM1
+# file is used.
+# CSV -> VCF: filters out rows with no AF / blacklist / alt-or-random
+# chrom, anchors indels (Affymetrix uses "-" for the empty allele) by
+# fetching the anchor base from hg38.2bit via twoBitToFa, and derives
+# AC = round(AF * 100000). AN=100000 is the implied precision of the
+# AF values (every reported AF rounds to an exact integer at 1/100000;
+# AF=0 is also kept, AC=0). The true TPMv1 cohort AN is ~330,000 for
+# autosomes, so AC values are proportional to but smaller than the
+# real counts; documented in the VCF header and tpmi.html caveat.
+python3 ~/kent/src/hg/makeDb/scripts/tpmi/tpmiToVcf.py \
+    TPM1_Array_Annotation.csv /hive/data/genomes/hg38/hg38.2bit tpmi.vcf
+bcftools sort -Oz -o tpmi.vcf.gz tpmi.vcf
+tabix -f -p vcf tpmi.vcf.gz
+rm -f tpmi.vcf
+# 752,921 source rows -> 672,843 VCF records. Skipped: 80,034 with no
+# reported AF (includes the entire chrY content); 36 on alt/random
+# contigs; 8 with no defined REF. Blacklist rows (~61k) all have no AF
+# so they are filtered by the no-AF rule. Distribution: 623,203 SNVs,
+# 34,954 deletions, 13,537 insertions, 1,149 MNVs.
+# Symlinks placed under /gbdb/hg38/varFreqs/tpmi/ for the tpmi stanza
+# in trackDb/human/varFreqs.ra (priority 5.6, next to wbbc/tommo).
+
+##########
+# 2026-05-15 Claude max
+# Strip three unused FILTER definitions from the tishkoff180 VCF header.
+# Matt Hansen (mhansen@upenn.edu, 2026-04-29 email): the source header
+# declared LowQual, VQSRTrancheSNP99.90to100.00, and
+# VQSRTrancheSNP99.90to100.00+ but he had already removed the
+# corresponding INFO values and only kept PASS variants. The hgTracks
+# VCF code auto-generates filter checkboxes from ##FILTER lines, so
+# these spurious entries showed up on hgTrackUi. Confirmed every record
+# has FILTER=PASS, then rewrote only the header (body untouched) with
+# bcftools reheader and re-indexed.
+cd /hive/data/genomes/hg38/bed/varFreqs/tishkoff/
+bcftools view -h tishkoff180.vcf.gz \
+    | grep -vE '^##FILTER=<ID=(LowQual|VQSRTrancheSNP99\.90to100\.00\+?),' \
+    > header.new.txt
+bcftools reheader -h header.new.txt -o tishkoff180.new.vcf.gz tishkoff180.vcf.gz
+tabix -p vcf tishkoff180.new.vcf.gz
+# Sanity check: same 33,600,472 records, only PASS remains.
+mv tishkoff180.vcf.gz     tishkoff180.vcf.gz.bak
+mv tishkoff180.vcf.gz.tbi tishkoff180.vcf.gz.tbi.bak
+mv tishkoff180.new.vcf.gz     tishkoff180.vcf.gz
+mv tishkoff180.new.vcf.gz.tbi tishkoff180.vcf.gz.tbi
+rm header.new.txt
+# /gbdb/hg38/varFreqs/tishkoff/ symlinks unchanged. The .bak originals
+# can be removed once the change has been verified on hgwdev.
+
+##########
+# 2026-05-15 Claude max
+# Hide all non-downloadable varFreqs subdirs from hgdownload by prefixing
+# the gbdb subdirectory with "_". hgdownload rsync excludes underscore-
+# prefixed directories, so this is the standard way to keep a track
+# usable in the browser (vcfTabix random access via /gbdb still works)
+# while preventing bulk download. Applies to every track that has
+# `tableBrowser off` in trackDb/human/varFreqs.ra, plus the combined
+# varFreqsAll bigBed (mixed licenses, never downloadable).
+cd /gbdb/hg38/varFreqs
+mv allofus  _allofus
+mv topmed   _topmed
+mv sfari    _sfari
+mv finngen  _finngen
+mv swefreq  _swefreq
+mv mgrb     _mgrb
+mv kova     _kova
+mv npm      _npm
+mv mxb      _mxb
+mv tishkoff _tishkoff
+mkdir _all && mv varFreqsAll.bb _all/varFreqsAll.bb
+# Symlink targets under /hive/data/genomes/... unchanged; only the gbdb
+# directory names change. Updated bigDataUrl paths for the matching 12
+# stanzas in trackDb/human/varFreqs.ra (allofus, topmed, sfariSparkExomes,
+# sfariSparkWgs, finngen, swefreq, mgrb, kova, npm, mxbFreq, tishkoff180,
+# varFreqsAll).
+# Also fixed Data Access wording in description pages that still claimed
+# Table Browser / download server availability: topmed.html, allofus.html,
+# sfariSparkExomes.html (shared by sfariSparkWgs), mxbFreq.html. The
+# standard restricted-track disclaimer (already in finngen.html, kova.html,
+# mgrb.html, npm.html, swefreq.html, tishkoff180.html, varFreqsAll.html)
+# is now uniform across all 11 restricted tracks plus the combined track.
+
+##########
+# 2026-05-15 Claude max
+# Hide tpmi from bulk download (same _-prefix pattern as the other
+# license-restricted varFreqs subdirs).
+cd /gbdb/hg38/varFreqs
+mv tpmi _tpmi
+# Updated trackDb/human/varFreqs.ra tpmi stanza: bigDataUrl now points to
+# _tpmi/, and `tableBrowser off` was added. tpmi.html Data Access section
+# rewritten to the standard restricted-track disclaimer.
+# Registered tpmi in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   TPMI    TPMI Taiwan    /gbdb/hg38/varFreqs/_tpmi/tpmi.vcf.gz    AC    AF
+
+##########
+# 2026-05-17 Claude max
+# ChinaMAP phase 1 - 10,588 deep-WGS Chinese individuals (Cao et al. 2020,
+# Cell Res, PMID 32355288). 136.75 M SNPs + 10.70 M short indels on chr1-22.
+# License: data may not be redistributed (see ChinaMAP Limitations on Use,
+# http://chinamapwgs.mbiobank.com/download/), so the subdirectory under
+# /gbdb is _-prefixed (hides from hgdownload) and the trackDb stanza has
+# `tableBrowser off`.
+cd /hive/data/genomes/hg38/bed/varFreqs/chinamap
+# mbiobank_ChinaMAP.phase1.vcf.gz (~2.0 GB) was already in this directory at
+# the start, fetched manually from http://chinamapwgs.mbiobank.com/download/
+# (one-time link, registration required). The file is already on GRCh38 with
+# chr-prefixed chromosome names, autosomes only, sorted, and ships AC/AF/AN
+# plus matched 1KGP_* INFO fields. No conversion/lift/normalisation needed -
+# just index.
+ln -s mbiobank_ChinaMAP.phase1.vcf.gz chinamap.vcf.gz
+tabix -p vcf chinamap.vcf.gz
+# Final: 147,448,941 variants (matches the 136.75 M SNPs + 10.70 M indels
+# reported in Cao et al.). 2.0 GB bgzip + 2.1 MB tabix index.
+# Registered ChinaMAP in scripts/varFreqs/databases.tsv so the next
+# varFreqsAll combined-track rebuild picks it up:
+#   ChinaMAP    China ChinaMAP    /gbdb/hg38/varFreqs/_chinamap/chinamap.vcf.gz    AC    AF
+# The varFreqs.ra filter UI fragment (filterByRange.ChinaMAPAF/AC, sources
+# filterValues) is deliberately NOT added yet; it will be added together
+# with the next rebuild of varFreqsAll (WBBC/TPMI precedent), otherwise
+# the filters would appear in the UI before the columns exist in the bb.
+
+##########
+# 2026-05-17 Claude max
+# GenomeIndia: 9,768 WGS, 83 endogamous Indian populations
+# (Bhattacharyya et al. 2025 Nat Genet, PMID 40200122,
+# DOI 10.1038/s41588-025-02153-x).
+#
+# Source: 22 per-chromosome TSV files (autosomes only, no header) with
+# CHROM/POS/ID/REF/ALT/AF columns, distributed by the Indian Biological
+# Data Centre as 9768GI_SummaryStats.tar.gz. The release ships only the
+# alternate allele frequency: no AC, no AN, no per-population breakdown.
+# 129,938,889 high-confidence biallelic variants total.
+cd /hive/data/genomes/hg38/bed/varFreqs/genomeindia
+# Download (already done; raw TSVs live under
+# /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats/ from the original
+# wget by Max).
+# Convert TSV -> sorted, bgzipped, tabix-indexed VCF. Script synthesizes
+# AN = 2 * 9768 = 19536 and AC = round(AF*AN). See script header for the
+# caveat re: NS_GT >= 98% upstream filter.
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/genomeindiaToVcf.py \
+    /gbdb/hg38/varFreqs/genomeindia/9768GI_SummaryStats \
+    genomeindia.vcf.gz
+# Output: 129,938,889 variants, 0 skipped; matches the paper exactly.
+# Final size: 791 MB bgzip + 1.9 MB tabix index.
+# Symlinks placed at /gbdb/hg38/varFreqs/_genomeindia/{genomeindia.vcf.gz,
+# .tbi} for the genomeindia stanza in trackDb/human/varFreqs.ra.
+#
+# Combined-track wiring (filter UI fragment is added now, in the same
+# style as the GenomeAsia rebuild precedent, because GenomeIndia/AC and
+# /AF will be present in the next varFreqsAll rebuild):
+#   1. Added GenomeIndia row to
+#      ~/kent/src/hg/makeDb/scripts/varFreqs/databases.tsv
+#      (key=GenomeIndia, ac_field=AC, af_field=AF, no populations).
+#   2. Added GenomeIndia|GenomeIndia 9.7k WGS to filterValues.sources
+#      and filterByRange.GenomeIndiaAF/AC stanzas in varFreqs.ra.
+# A full varFreqsAll rebuild has NOT been re-run yet; do that after QA
+# clears the standalone subtrack.
+
+##########
+# 2026-05-17 -> 2026-05-18 Claude max
+# varFreqsAll combined-track rebuild incorporating the four new subtracks
+# registered earlier in May: WBBC (~78.6M), TPMI (~672k), ChinaMAP
+# (~147M), GenomeIndia (~130M). Also drops IndiGen (no AC/AF in source)
+# from the merged output - the standalone indigenomes subtrack is
+# unchanged but no longer contributes a column to varFreqsAll.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# files.txt regenerated from databases.tsv to point at the new
+# _-prefixed /gbdb paths (allofus, sfari, npm, kova, finngen, swefreq,
+# topmed, mgrb, mxb, tishkoff, tpmi, chinamap, genomeindia) and to add
+# wbbc/tpmi/chinamap/genomeindia.
+# Forced merge+csq re-run; existing per-VCF normalize cache reused for
+# the 25 unchanged databases. Removed stale IndiGenomes_Variants.norm
+# cache so it would not sneak into the find-based merge input list.
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+    merged.annotated.vcf.gz.tbi normalized_files.txt
+rm -f normalized/IndiGenomes_Variants.norm.vcf.gz*
+./mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --output-prefix varFreqsAll --threads 8
+# Final varFreqsAll.bb: 46 GB, 1,335,789,391 items, 147 fields, 25
+# chromosomes. Symlinked through /gbdb/hg38/varFreqs/_all/varFreqsAll.bb
+# (unchanged - the script writes the bb in place; symlink already
+# points at it).
+#
+# mergeAndAnnotate.sh fix: bcftools 1.22 (newer than the previous
+# build) is stricter than older versions about chromosome-naming
+# mismatches between the merged VCF (chr1..) and the Ensembl GFF3
+# (1..). Added --unify-chr-names chr,-,chr to the bcftools csq
+# invocation; also added --force so it tolerates the 5 alt contigs
+# (chr15_KI270850v1_alt etc.) that SCHEMA contributes to the merged
+# VCF but that the GFF3 does not annotate - earlier bcftools just
+# emitted them without csq calls; 1.22 aborts.
+#
+# trackDb fragment updated in human/varFreqs.ra: WBBC, TPMI, ChinaMAP,
+# GenomeIndia rows added to filterValues.sources and as per-database
+# filterByRange.<DB>AF/AC pairs; IndiGen pair removed (matches the new
+# bb columns). WBBC 4-region populations (North/Central/South/Lingnan)
+# added at the end of the per-population block. Auto-generated raw
+# fragment lives at /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.trackDb.ra
+# for reference; the manual filterType.consequence multipleListOr line
+# and the expanded consequence buckets (3_prime_utr, 5_prime_utr,
+# non_coding, others) are NOT in the auto-fragment - they have to be
+# kept on top of it.
+
+##########
+# 2026-05-19 Claude max
+# Post-rebuild cleanups to scripts/varFreqs (no track change, just safer
+# next rebuild):
+#  - mergeAndAnnotate.sh now reads VCF paths directly from databases.tsv
+#    in both Step 4 (per-VCF strip+norm) and Step 5 (merge list). The old
+#    files.txt is no longer consulted; that file and databases.tsv used to
+#    drift, and Step 5's `find normalized/` would silently re-merge stale
+#    entries (e.g. IndiGenomes_Variants.norm.vcf.gz after IndiGen was
+#    dropped from databases.tsv).
+#  - vcfToBigBed.py concat step now streams `sort -k2,2n chr.bed >> out`
+#    via subprocess stdout= rather than capture_output=True. The old form
+#    buffered the entire sorted chrom (~24 GB for chr1) in Python RAM;
+#    fine on hgwdev's 4 TB box, OOMable elsewhere.
+#  - vcfToBigBed.py generate_trackdb_fragment() now emits the three
+#    customizations that previously had to be added on top of the
+#    auto-fragment by hand: filterType.consequence multipleListOr, the
+#    expanded consequence buckets (3_prime_utr, 5_prime_utr, non_coding,
+#    others), and skipEmptyFields on. The fragment is now paste-and-go.
+
+##########
+# 2026-05-20 Claude max
+# Genome of the Netherlands (GoNL), GRCh38 re-analysis (v1.0).
+# Site-only VCF with INFO AC/AF/AN for the 498 unrelated parents
+# (250 fathers + 248 mothers, 2 mothers failed QC). Original paper
+# Genome of the Netherlands Consortium, Nat Genet 2014, PMID 24974849;
+# the GRCh38 re-analysis pipeline is described in the README that ships
+# with the download.
+cd /hive/data/genomes/hg38/bed/varFreqs/gonl/
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/README.txt
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/multisample.parents_only.info_only.vcf.gz
+wget https://download.molgeniscloud.org/downloads/gonl_public/variants/GoNL_GRCh38_1.0/multisample.parents_only.info_only.vcf.gz.tbi
+# Source already uses UCSC chr-prefixed names, so no chromosome renaming
+# needed. Drop the GRCh38 decoy contigs (chrUn_JTFH01*, chrUn_KN707* etc.)
+# and chrEBV that ship with the analysis-set FASTA but are not part of the
+# UCSC hg38 assembly.
+cut -f1 /hive/data/genomes/hg38/chrom.sizes | sort > hg38.chroms.txt
+zcat multisample.parents_only.info_only.vcf.gz | grep -v '^#' | cut -f1 \
+    | sort -u > gonl.chroms.txt
+comm -12 gonl.chroms.txt hg38.chroms.txt > keep.chroms.txt
+( bcftools view -h multisample.parents_only.info_only.vcf.gz; \
+  bcftools view -H multisample.parents_only.info_only.vcf.gz \
+    | awk -F'\t' 'BEGIN{while((getline k < "keep.chroms.txt") > 0) ok[k]=1} ok[$1]' \
+) | bgzip -@ 8 -c > gonl.preNorm.vcf.gz
+tabix -p vcf gonl.preNorm.vcf.gz
+# 31,114,481 input records -> 30,904,161 kept (0.68% dropped, all on
+# decoy / EBV contigs not present in hg38). Max AN = 996, matching 498
+# diploid parents.
+# Split multiallelic sites and left-align indels against the hg38 reference.
+ln -sf /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa hg38.fa
+ln -sf /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa.fai hg38.fa.fai
+bcftools norm -f hg38.fa -m-any --threads 8 gonl.preNorm.vcf.gz -Oz -o gonl.vcf.gz
+tabix -p vcf gonl.vcf.gz
+# norm stats: 30,904,161 -> 36,363,474 records (2,629,361 multiallelic
+# sites split, 3,559,402 indels left-realigned, 0 dup/mismatch).
+# GoNL added to databases.tsv as well, so the next mergeAndAnnotate.sh
+# run will pick it up into varFreqsAll.bb. The current /gbdb _all
+# bigBed predates GoNL.
+
+##########
+# 2026-05-28 Claude max
+# varFreqs reorg: split SFARI SPARK into ASD/non-ASD counts, add SCHEMA
+# case/control counts, drop genotyping-array cohorts (TPMI + MexBB) from the
+# WGS/WES varFreqsAll track, and add two new combined tracks:
+#   varFreqsDisease  (SPARK, SFARI WGS, TOPMed, SCHEMA, GREGoR, GA4K)
+#   varFreqsArray    (TPMI, MexBB, UKBB)
+# refs #36642
+
+# --- 1. Phenotype-stratified SPARK counts -----------------------------------
+# What sparkMergeVcfAddCounts.sh does, per chromosome and in parallel:
+#   1. bcftools +fill-tags <chr.vcf.gz> -- -t AC,AN,AF [-S groups.txt]
+#      computes the overall AC/AN/AF from the genotypes. The optional -S
+#      sample-group file additionally emits per-group AC_<grp>/AN_<grp>/AF_<grp>.
+#   2. bcftools view -G drops the genotype columns, leaving an anonymous,
+#      sites-only VCF (required: the genotype-level pVCFs cannot be shared).
+#   3. bcftools concat joins the per-chromosome sites VCFs back into one file.
+# After the script, bcftools norm -m- splits multi-allelic records into one
+# row per ALT allele. There is no allele-frequency cutoff.
+#
+# The script now takes an optional 3rd arg: the SPARK individuals_registration
+# TSV. With it, the -S sample-group file (col1=sample_sp_id, col2=AUT|NON_AUT)
+# makes the output sites VCF carry AC_AUT/AN_AUT/AF_AUT and
+# AC_NON_AUT/AN_NON_AUT/AF_NON_AUT in addition to the overall AC/AN/AF. The
+# same registration file (col 8 "asd": TRUE/FALSE) covers both WES (142,357
+# samples) and WGS (12,519 samples); samples with a blank asd value are not
+# assigned to either group.
+#
+# These .norm.vcf.gz files are what the per-cohort sfariSparkExomes /
+# sfariSparkWgs tracks display. Predicted protein consequences (BCSQ) are
+# added later, in the combined-track build (section 3 below), by the
+# bcftools csq step inside mergeAndAnnotate.sh.
+REG=/hive/data/genomes/hg38/bed/varFreqs/sparkExomes/SPARKDataRelease_2025-12-15/individuals_registration-2025-12-15.tsv
+
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkExomes/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh \
+    vcf/SPARK.iWES_v3.2024_08.deepvariant 8 "$REG"
+bcftools norm -m- SPARK.iWES_v3.2024_08.deepvariant.sites.vcf.gz \
+    -Oz -o SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+tabix -p vcf SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz
+# 13,299,149 variants out, identical position list to the pre-pheno build.
+
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/sparkMergeVcfAddCounts.sh \
+    vcf/wgs_12519_genome.deepvariant 8 "$REG"
+bcftools norm -m- wgs_12519_genome.deepvariant.sites.vcf.gz \
+    -Oz -o wgs_12519_genome.deepvariant.norm.vcf.gz
+tabix -p vcf wgs_12519_genome.deepvariant.norm.vcf.gz
+# 177,384,905 variants out. WGS coverage by phenotype: 3,565 AUT + 8,784
+# NON_AUT + 170 unassigned of 12,519 samples.
+
+# --- 2. SCHEMA case/control counts ------------------------------------------
+# schema_addAcAnAf.py now also emits AC_CASE/AN_CASE/AF_CASE and
+# AC_CTRL/AN_CTRL/AF_CTRL by summing the per-cohort ac_case/an_case and
+# ac_ctrl/an_ctrl arrays. The script is idempotent (it strips and re-adds
+# the fields it manages) so it can be re-run on the already-lifted
+# hg38_sorted file without re-running CrossMap.
+cd /hive/data/genomes/hg38/bed/varFreqs/schema
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/schema_addAcAnAf.py \
+    SCHEMA_variant_results_hg38_sorted.vcf.gz \
+    SCHEMA_variant_results_hg38_sorted.withCC.vcf
+bgzip -f SCHEMA_variant_results_hg38_sorted.withCC.vcf
+tabix -f -p vcf SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz
+mv SCHEMA_variant_results_hg38_sorted.vcf.gz     SCHEMA_variant_results_hg38_sorted.vcf.gz.preCC.bak
+mv SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi.preCC.bak
+mv SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz     SCHEMA_variant_results_hg38_sorted.vcf.gz
+mv SCHEMA_variant_results_hg38_sorted.withCC.vcf.gz.tbi SCHEMA_variant_results_hg38_sorted.vcf.gz.tbi
+# 8,864,488 variants, AC_CASE+AC_CTRL = AC, sums verified.
+
+# --- 3. Three combined-track builds -----------------------------------------
+# mergeAndAnnotate.sh and vcfToBigBed.py now accept --databases /
+# --databases-file flags, so the same code drives three builds from three
+# config TSVs: databases.tsv, databases_disease.tsv, databases_array.tsv.
+# The normalized/ cache under all/normalized is shared across builds
+# (positions are identical regardless of which combined track they feed).
+# mergeAndAnnotate.sh pins /cluster/software/src/bcftools-1.22/ in front of
+# PATH because bcftools csq's --unify-chr-names was added in 1.22; the conda
+# default (1.14) silently fails the annotate step otherwise.
+#
+# What mergeAndAnnotate.sh does, given a databases.tsv list of cohort VCFs:
+#   - strip + normalize each input VCF (bcftools annotate -x to drop ID/QUAL/
+#     FILTER/INFO, fix chr naming, then bcftools norm -m-any against hg38.fa).
+#   - bcftools merge -m none all normalized VCFs into one sites-only VCF.
+#   - bcftools csq annotates predicted protein consequences against the
+#     Ensembl GRCh38 release-115 GFF3 gene models. The exact call is:
+#         bcftools csq -p a -l -n 64 --unify-chr-names chr,-,chr --force \
+#             -f hg38.fa -g Homo_sapiens.GRCh38.115.chr.gff3.gz \
+#             merged.vcf.gz -Oz -o merged.annotated.vcf.gz
+#     The GFF3 is from
+#       https://ftp.ensembl.org/pub/release-115/gff3/homo_sapiens/Homo_sapiens.GRCh38.115.chr.gff3.gz
+#     (Ensembl, not GENCODE: csq needs the Parent=transcript: attribute format),
+#     sorted, bgzipped and tabix-indexed. --unify-chr-names reconciles the
+#     chr1-style VCF/fasta names with the bare "1" names in the Ensembl GFF3.
+#     The consequence + amino-acid change land in INFO/BCSQ; vcfToBigBed.py
+#     parses BCSQ into the bigBed for the combined tracks.
+# The same csq recipe can be run directly on a single cohort's .norm.vcf.gz
+# (e.g. the SFARI files above) to annotate it with protein effects.
+
+# Reorg removed TPMI and MexBB from databases.tsv (moved to
+# databases_array.tsv) and added UKBB to databases_array.tsv. Both
+# databases_disease.tsv and databases_array.tsv reuse populations.tsv:
+# load_config only attaches a population row to a database that is in the
+# active config, so the same populations file works for all three builds.
+
+# varFreqsAll (28 cohorts, all WGS/WES; ~1.34 billion variants, 48 GB):
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.annotated.vcf.gz \
+    --output-prefix varFreqsAll \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/all/varFreqsAll.bb \
+        /gbdb/hg38/varFreqs/_all/varFreqsAll.bb
+
+# varFreqsDisease (6 cohorts; ~932 M variants, 23 GB):
+SCR=~/kent/src/hg/makeDb/scripts/varFreqs
+bash $SCR/mergeAndAnnotate.sh --databases $SCR/databases_disease.tsv --tag .disease
+python3 $SCR/vcfToBigBed.py \
+    --databases-file $SCR/databases_disease.tsv \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.disease.annotated.vcf.gz \
+    --output-prefix varFreqsDisease \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/disease
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/disease/varFreqsDisease.bb \
+        /gbdb/hg38/varFreqs/_disease/varFreqsDisease.bb
+
+##########
+# 2026-06-02 -> 2026-06-03 Claude max
+# Replaced the single varFreqsAll combined track (and the older varFreqsDisease
+# track) with TWO matched comparison tracks so the affected-vs-background
+# difference can be seen visually (e.g. autism-gene pLoF in cases vs the general
+# population). refs #36642
+#   varFreqsAffected   - variants seen in the affected/case arm of the disease
+#                        cohorts
+#   varFreqsBackground - "all other variants": population reference cohorts +
+#                        the unaffected/control/unknown arms of disease cohorts
+# A variant present in both groups appears in both tracks (overlap is intended).
+# Genotyping-array cohorts are in neither (they stay in varFreqsArray).
+#
+# Cohort classification (databases.tsv columns is_disease, disease_role):
+#   - TOPMed is a population cohort (is_disease=0): an NHLBI population/biobank
+#     reference, not an affected-disease case cohort, no affected/unaffected
+#     label. It feeds the background.
+#   - Disease-study cohorts (is_disease=1): SPARK, SFARI_WGS, SCHEMA, GREGoR
+#     (per-arm phenotype split) and GA4K (disease_role=affected: rare-disease
+#     cohort with no split, counted as affected; caveat - GA4K enrolls trios so
+#     a minority of carriers are unaffected parents).
+#   - populations.tsv has a 6th column "phenotype" (affected|unaffected|unknown)
+#     tagging the AUT/NON_AUT, CASE/CTRL, AFF/UNA/UNK arms. affected arms feed
+#     the affected track; unaffected/unknown arms feed the background track.
+#
+# Both tracks share one autoSql schema. Summary fields after dnaChange:
+#   affectedAF/AC      (string)  max AF / summed AC in affected/case arms
+#   affectedCohorts    (string)  disease cohorts contributing affected carriers
+#   backgroundAF/AC    (string)  max AF / summed AC in population + unaffected
+#   backgroundSources  (string)  cohorts contributing to the background
+#   inAffected         (uint)    1 if seen in an affected/case arm, else 0
+# followed by the per-database and per-population AC/AF columns. Each track
+# carries BOTH summaries (so the Affected track can be filtered to variants rare
+# in the background). Row inclusion: affected track = affectedAF/AC present;
+# background track = backgroundAF/AC present. score = that track's AF * 1000.
+# vcfToBigBed.py derives the length-filter ranges (filter.refLen/altLen/varLen)
+# from the observed data and emits them in the auto trackDb fragment.
+#
+# vcfToBigBed.py --split-affected emits the two tracks in one pass (shared
+# Phase 1 extract). Without the flag it writes a single track (used by the
+# array build).
+#
+# Naming: SPARK WGS display name -> "SFARI SPARK WGS" and SPARK WES -> "SFARI
+# SPARK WES" to match the standalone sfariSparkWgs/sfariSparkExomes subtracks
+# (internal key SFARI_WGS kept). mouseOver fields are wrapped in ${} to avoid
+# the trackDb subMultiField prefix-substitution bug (hui.old.c).
+#
+# Rebuild uses existing merged.annotated.vcf.gz (no re-merge needed).
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Produces varFreqsAffected.bb and varFreqsBackground.bb. Symlinked under
+# /gbdb/hg38/varFreqs/_affected/ and /gbdb/hg38/varFreqs/_background/. The
+# varFreqsAffected and varFreqsBackground filter blocks in
+# trackDb/human/varFreqs.ra come from the paste-and-go auto fragment
+# varFreqs.trackDb.ra produced by this run (both stanzas use the same fragment;
+# only the mouseOver differs).
+
+# varFreqsArray (TPMI + MexBB + UKBB; ~14.7 M variants, 750 MB):
+bash $SCR/mergeAndAnnotate.sh --databases $SCR/databases_array.tsv --tag .array
+python3 $SCR/vcfToBigBed.py \
+    --databases-file $SCR/databases_array.tsv \
+    --annotated-vcf /hive/data/genomes/hg38/bed/varFreqs/all/merged.array.annotated.vcf.gz \
+    --output-prefix varFreqsArray \
+    --threads 6 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/array
+ln -sfn /hive/data/genomes/hg38/bed/varFreqs/array/varFreqsArray.bb \
+        /gbdb/hg38/varFreqs/_array/varFreqsArray.bb
+
+##########
+# 2026-06-12 Lou (Claude)
+# Switched the varFreqsAffected and varFreqsBackground combined tracks to a
+# pooled-AF formulation: affectedAF = sum(AC)/sum(AN) across the contributing
+# affected arms (and backgroundAF the same for the background arms), replacing
+# the prior max-across-cohorts AF. The change fixes a known artifact where a
+# small per-population subgroup with AC=AN=1 (e.g. AllOfUs Oceanian at the
+# APOE ε4 site) drove backgroundAF to 1.0 even though the genuine pooled rate
+# is ~0.12.
+#
+# vcfToBigBed.py now infers per-arm AN as round(AC/AF) when both are reported.
+# databases.tsv grew an 8th column "default_an": for cohorts that publish only
+# AF (ABraOM, ALFA), set this to the diploid cohort size so AC can be
+# synthesized (AC = round(AF * default_an)) and default_an feeds the pool
+# denominator. ABraOM=2342, ALFA=816000. Cohorts that publish only AC with no
+# default_an (MGRB, GREGoR per-arm AC_AFFECTED/UNAFFECTED/UNKNOWN, AllOfUs
+# per-population) appear in affectedCohorts/backgroundSources but contribute
+# 0 to the pool, preserving the invariant that pooled AF cannot exceed 1.
+#
+# Two new bigBed columns: affectedAN and backgroundAN (pool denominators).
+# mouseOver was updated to show "Affected AC/AN: 33238 / 213150" so the ratio
+# is visible. The combined-track filter UI exposes affectedAN and backgroundAN
+# as numeric range filters. AS schema field count: 161 -> 163.
+#
+# Rebuild used the existing merged.annotated.vcf.gz (no re-merge needed);
+# Phase 1 re-extracted per-cohort AC/AF, Phase 2 wrote the new BEDs, then
+# concat + bedToBigBed. Total wall-clock ~8 hours.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# Back up first (the script overwrites):
+cp varFreqsAffected.bb   varFreqsAffected.bb.preAfPool.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preAfPool.bak
+# Build:
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Spot-check (APOE rs429358, chr19:44908683-44908684 T>C):
+#   pre  : affectedAC=33238 affectedAF=0.181730 (max, GA4K-dominated)
+#                            backgroundAF=1.000000 (max, AllOfUs_OCE artifact)
+#   post : affectedAC=32782 affectedAN=213150 affectedAF=0.153798
+#                            backgroundAC=341065 backgroundAN=2751112
+#                            backgroundAF=0.123974
+
+##########
+# 2026-06-27 Lou (Claude)
+# Added Top 3 source AFs to the varFreqsAffected and varFreqsBackground
+# mouseOver, modeled loosely on gnomAD's PopMaxAF but ranking PROJECTS,
+# not populations. Motivation: variants common in one specific cohort
+# (e.g. the East-Asian founder allele rs4986893 at ~13% in ToMMo Japan
+# and ~10% in KOVA Korea) surface immediately, even when the pooled rate
+# across all contributing arms is much smaller.
+#
+# Implementation: vcfToBigBed.py now tracks per-arm AF contributions
+# alongside the existing pooled AC/AN sums and emits two new string
+# columns, topAffectedSources and topBackgroundSources, formatted as
+# "Source (AF), Source (AF), Source (AF)". For disease cohorts with a
+# phenotype split, the source label carries the arm (e.g. "SPARK ASD",
+# "SCHEMA case", "GREGoR unaffected"); for population cohorts the label
+# is the bare cohort key. Per-population sub-ancestries of population
+# cohorts (e.g. gnomAD HGDP+1kG continental groups) are deliberately
+# excluded so sub-populations don't crowd out actual project signals.
+# AS schema field count: 163 -> 165.
+#
+# Rebuild used the existing merged.annotated.vcf.gz (no re-merge needed);
+# only the Phase 1 per-cohort extract and Phase 2 BED build re-ran.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+cp varFreqsAffected.bb   varFreqsAffected.bb.preTop3.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preTop3.bak
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+
+#
+# 2026-06-29: re-rebuild after Top-3 source audit.
+# A broad AF-distribution sweep across all 28 source cohorts identified two
+# whose per-source AF was unreliable for the Top-3 ranking introduced on
+# 2026-06-27: SGDP and SVatalog both encode AC/AN per genotyped site (small
+# N producing AF=0.5 or AF=1.0 at most variants), so they otherwise
+# dominated the Top-3 list with meaningless values. Pooled AF is unaffected
+# since their AC/AN contributions are tiny relative to the larger cohorts.
+# Added a new "skip_top_ranking" column to databases.tsv (col 9); set to 1
+# for SGDP and SVatalog, 0 (or blank) for every other cohort. Modified
+# vcfToBigBed.py to skip the per-arm AF append into affected_arm_afs /
+# background_arm_afs when skip_top_ranking is set; the cohort still
+# contributes to the pooled AC/AN and still appears in backgroundSources.
+# Description page update: varFreqsBackground.html now documents this
+# exclusion in the "Top population sources by AF" section.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+cp varFreqsAffected.bb   varFreqsAffected.bb.preTopAudit.bak
+cp varFreqsBackground.bb varFreqsBackground.bb.preTopAudit.bak
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+
+##########
+# 2026-07-09 Claude max
+# gnomAD-Canada HostSeq - 10,487 Canadian COVID-19 WGS genomes, refs #36642.
+#
+# gnomAD-Canada v1.0 is the Canadian arm of the Genome Aggregation Database
+# (CGDC / Pan-Canadian Genome Library). The v1.0 release aggregates the
+# Canadian COVID-19 HostSeq cohort (Yoo et al. 2023, BMC Genom Data,
+# PMID 37131148): 10,487 genomes sequenced at 30X on Illumina NovaSeq 6000,
+# aligned to GRCh38 with DRAGMAP, joint-called with GATK, then run through the
+# Broad gnomAD QC v3 pipeline. Already GRCh38 with chr-prefixed contigs, so no
+# lift or chromosome renaming is needed. Data are freely downloadable, so the
+# gbdb subdir is NOT _-prefixed and the stanza has no `tableBrowser off`.
+#
+# The release ships ONLY as a ~104 GB Hail Table (release_sites_hostseq.tar.gz),
+# not a VCF, so a dedicated Hail environment is required to read it:
+#   micromamba create -y -n hail -c conda-forge python=3.10 openjdk=11 pip
+#   micromamba run -n hail pip install hail        # installed hail 0.2.138
+cd /hive/data/genomes/hg38/bed/varFreqs/hostseq
+wget https://www.bcgsc.ca/gnomad/download/release_sites_hostseq.tar.gz
+tar xzf release_sites_hostseq.tar.gz              # -> release_sites.ht (217 GB)
+# Flatten the freq array (overall + 9 gnomAD genetic-ancestry groups: afr, amr,
+# asj, eas, fin, mid, nfe, oth, sas) into VCF INFO AC/AN/AF plus nhomalt, grpmax,
+# rsID and the variant filter status, then export a sites-only VCF. The source
+# table is split into ~121k tiny partitions, which OOMs the Spark driver, so the
+# script coalesces to 2000 partitions and is run with a large driver heap.
+export PYSPARK_SUBMIT_ARGS="--driver-memory 96g pyspark-shell"
+micromamba run -n hail bash -c 'unset JAVA_HOME; \
+  export PYSPARK_SUBMIT_ARGS="--driver-memory 96g pyspark-shell"; \
+  python3 ~/kent/src/hg/makeDb/scripts/varFreqs/hostseqHtToVcf.py \
+      release_sites.ht hostseq.vcf.bgz --partitions 2000'
+mv -f hostseq.vcf.bgz hostseq.vcf.gz
+tabix -p vcf hostseq.vcf.gz
+# Accounting: 232,028,491 rows in the release table -> 213,382,086 written
+# (18,646,405 AC0 sites with no observed allele in the high-quality release
+# were dropped). Contigs chr1-22 + X/Y (no chrM), all canonical. FILTER of the
+# written variants: 181,149,159 PASS, 32,074,697 RF (gnomAD random-forest),
+# 123,690 InbreedingCoeff, 34,540 InbreedingCoeff;RF. Filter-flagged variants
+# are kept (browsable, hideable via the track filter). Final: 9.5 GB bgzip +
+# 2.6 MB tabix index. Spot-check APOE rs429358 (chr19:44908684 T>C):
+# AF=0.1258 overall, afr 0.234, nfe 0.130, grpmax=afr - consistent with the
+# known APOE e4 frequency.
+#
+# Registered in scripts/varFreqs/databases.tsv (HostSeq, is_disease=0) and the
+# 9 ancestry groups in populations.tsv so the next varFreqsAll combined-track
+# rebuild picks HostSeq up. Per WBBC/ChinaMAP precedent, the combined track was
+# NOT rebuilt here and the varFreqs.ra filter UI fragment was not added yet.
+
+##########
+# 2026-07-11 Claude max
+# Combined-track rebuild: fold HostSeq into varFreqsAffected/varFreqsBackground.
+# refs #36642. HostSeq is is_disease=0 (population reference), so it feeds the
+# background side; varFreqsArray is a genotyping-array track and was NOT
+# touched. HostSeq is the only new cohort vs the prior build - the other 28
+# reuse the normalized/ cache; varFreqsAll is now 29 cohorts.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+# Force re-merge + re-csq (keep the per-VCF normalize cache; only hostseq is new)
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+      merged.annotated.vcf.gz.tbi normalized_files.txt
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz \
+    --output-prefix varFreqs \
+    --split-affected \
+    --threads 8 \
+    --work-dir /hive/data/genomes/hg38/bed/varFreqs/all
+# Merged variants: 1,374,129,993 (HostSeq added ~38M sites not seen in any
+# other cohort). Outputs: varFreqsAffected.bb 18.7 GB / 133,290,997 items,
+# varFreqsBackground.bb 60.0 GB / 1,278,354,588 items; both 185 fields
+# (up from 165: HostSeq adds overall AC/AF + 9 ancestry-group AC/AF = 20 cols).
+# Spot-check APOE rs429358 in the background bb matches the standalone HostSeq
+# VCF exactly: HostSeqAC=2315, AF=0.1258, afr AF=0.234, nfe 0.130, oth 0.079.
+# The /gbdb _affected/_background symlinks point at the in-place .bb (unchanged).
+# varFreqs.ra: added HostSeq|HostSeq Canada to filterValues.backgroundSources in
+# both stanzas (HostSeq is NOT in affectedCohorts) plus commented per-DB
+# HostSeqAF/AC filter blocks. Length and AC/AN filter ranges were unchanged by
+# HostSeq (confirmed against the auto-generated all/varFreqs.trackDb.ra).

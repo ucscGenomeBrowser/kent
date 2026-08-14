@@ -27,11 +27,7 @@ FREE Licenses:
     file formats, such as bigBed and bigWig, and the command line tools for
     these, bedToBigBed, wigToBigWig and the tagStorm tools and the parasol job
     scheduler.
-  - also, third-party code for reading BAM files bundled for convenience,
-    in src/htslib (MIT)
-2. A modified BSD license for src/htslib/cram/, see src/htslib/LICENSE. 
-   Copyright (C) 2012-2014 Genome Research Ltd.
-3. A public domain "with attribution" license for sorting bigWig files, 
+2. A public domain "with attribution" license for sorting bigWig files, 
    see src/optimalLeaf/LICENSE
 
 NON-COMMERCIAL licenses:
@@ -51,9 +47,6 @@ for commercial use for the case (4) and (5): Commercial users interested in the
 interactive Genome Browser web software listed under (4) should contact
 genomebrowser@ucsc.edu. Those interested in BLAT, so any code listed under (5),
 should contact kent@soe.ucsc.edu.
-
-The code in src/htslib is distributed under a dual license as noted in the LICENSE
-file in that directory.
 
 Mandatory acknowledgements for third party open source libraries that are used but not
 distributed as part of this source tree are provided at https://genome.ucsc.edu/license/

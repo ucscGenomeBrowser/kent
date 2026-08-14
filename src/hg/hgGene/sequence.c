@@ -25,6 +25,7 @@ void printPrimer3Anchor(char *table, char *itemName,
 {
 hPrintf("<A HREF=\"%s?%s", hgcName(),
    cartSidUrlString(cart));
+hPrintf("&db=%s", database);
 hPrintf("&g=htcDnaNearGene&i=%s", itemName);
 hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
 hPrintf("&o=%s&table=%s&primer3=1", table, table);
@@ -37,6 +38,7 @@ static void printGenomicAnchor(char *table, char *itemName,
 {
 hPrintf("<A HREF=\"%s?%s", hgcName(),
    cartSidUrlString(cart));
+hPrintf("&db=%s", database);
 hPrintf("&g=htcGeneInGenome&i=%s", itemName);
 hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
 hPrintf("&o=%s&table=%s", table, table);
@@ -104,8 +106,8 @@ if (liftDb) // if we're quicklifting go through hgc because local functions assu
     {
     char *command = "htcGeneMrna";
     webPrintWideCellStart(2, HG_COL_TABLE);
-    printf("<A class=\"toc\" HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, globalTdb->track,globalTdb->track);
+    printf("<A class=\"toc\" HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), database, command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, globalTdb->track,globalTdb->track);
     printf("Predicted mRNA from genomic DNA</A>\n");
     webPrintLinkCellEnd();
     return;
@@ -128,8 +130,8 @@ if (liftDb) // if we're quicklifting go through hgc because local functions assu
     {
     char *command = "htcTranslatedPredMRna";
     webPrintWideCellStart(3, HG_COL_TABLE);
-    printf("<A class=\"toc\" HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, "translate", globalTdb->track);
+    printf("<A class=\"toc\" HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), database, command, geneId, curGenePred->chrom, curGenePred->txStart, curGenePred->txEnd, "translate", globalTdb->track);
     printf("Translated Protein from genomic DNA</A>\n");
     webPrintLinkCellEnd();
     return;

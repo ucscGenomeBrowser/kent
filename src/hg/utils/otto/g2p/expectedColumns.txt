@@ -1,0 +1,21 @@
+g2p id
+gene symbol
+gene mim
+hgnc id
+previous gene symbols
+disease name
+disease mim
+disease MONDO
+allelic requirement
+cross cutting modifier
+confidence
+variant consequence
+variant types
+molecular mechanism
+molecular mechanism categorisation
+molecular mechanism evidence
+phenotypes
+publications
+panel
+comments
+date of last review

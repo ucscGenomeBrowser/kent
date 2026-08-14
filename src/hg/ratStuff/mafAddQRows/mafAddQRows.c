@@ -227,7 +227,7 @@ struct qData *qd;
 struct indexEntry *ie;
 
 /* separate species and chrom */
-strncpy(buffer, mc->src, sizeof(buffer));
+safecpy(buffer, sizeof(buffer), mc->src);
 species = chrom = buffer;
 if ((chrom = strchr(buffer, '.')) == NULL)
     errAbort("can't find chrom for %s\n", buffer);

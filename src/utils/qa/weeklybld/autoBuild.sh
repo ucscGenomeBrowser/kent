@@ -3,7 +3,7 @@
 # autoBuild.sh - Fully automated CGI build process
 #
 # Runs the appropriate build phase (preview1, preview2, final build,
-# or wrap-up) based on the schedule in buildSchedule.txt.
+# or wrap-up) based on the Google Calendar build schedule.
 #
 # Exits non-zero (and loudly) at the first sign of anything wrong.
 # Designed to be run from cron or manually with no human interaction.
@@ -14,7 +14,60 @@
 #   autoBuild.sh preview2
 #   autoBuild.sh final
 #   autoBuild.sh wrapup
+#   autoBuild.sh patchtickets [<id>...]  # build patch driven off the Redmine tickets
+#   autoBuild.sh cherrypick [<sha>...]   # build patch: cherry-pick onto v${NN}_branch
+#                                        # (ids given here are written fresh to
+#                                        #  CherryPickCommits.conf; with none, the
+#                                        #  existing conf is used and confirmed if stale)
 #   autoBuild.sh --dry-run [phase]   # show what would happen
+#
+# BUILD PATCHES -- the `cherrypick` phase (autoBuild.sh cherrypick):
+#   A build patch cherry-picks approved bugfix commit(s) from master onto
+#   v${NN}_branch after the weekly build. Give the commit id(s) on the command
+#   line -- `autoBuild.sh cherrypick <sha>...` -- and they are validated and
+#   written fresh to CherryPickCommits.conf; or run `autoBuild.sh cherrypick` with
+#   no ids to reuse the existing conf, which is then confirmed interactively (y/N)
+#   if it looks stale (lists commits already on the branch). Each id is checked to
+#   exist and to not be a merge commit (NO merge commits in a cherry-pick).
+#   It is a forced-only phase (never auto-detected from the calendar) and is
+#   repeatable: each run is one patch round (logs/v${NN}.patch<N>.log), and the
+#   checkpoint state file is cleared on success so the next round starts fresh.
+#
+#   The phase branches on pushedToRR.flag (written by tagBeta at wrap-up, removed
+#   by tagNewBranch at the final build -- so "present" == release already shipped):
+#     PRE-RR  (flag absent, QA window ~days 16-19): cherry-pick onto the branch,
+#       rebuild beta + deploy to hgwbeta so QA can re-test, then git-reports.
+#       Wrap-up does all the tagging + artifacts later.
+#     POST-RR (flag present, release shipped): additionally re-run the relevant
+#       wrap-up steps to regenerate the already-public artifacts -- tagBeta, the
+#       next v${NN}_branch.<N> subversion tag (same logic wrap-up uses), doZip,
+#       userApps, and the docker release images -- then refresh kent-rel. A
+#       reminder to update the Redmine build-patch ticket is emailed BEFORE the
+#       long artifact builds.
+#   (Reverts are NOT a separate phase: a revert is a revert-commit made on master,
+#   reviewed like any change, then cherry-picked onto the branch through this path.)
+#
+#   The docker release build does NOT depend on the RR push: buildReleaseDocker.sh
+#   seeds the amd64 image's CGIs straight from the local hgwdev beta build
+#   (/usr/local/apache/cgi-bin-beta) as an overlay -- the same seed overlay-cgi.sh
+#   uses for the kent-beta QA container -- so the image carries the just-built beta
+#   code immediately, without waiting for that code to propagate to
+#   hgdownload.soe.ucsc.edu::cgi-bin via the external RR/production push. arm64
+#   compiles the beta branch from source, so it is patched too. (Earlier versions
+#   waited on hgdownload; see commit cc9fa7b4ea1 if you ever need that gate back.)
+#
+#   COMMON.MK CHERRY-PICK GOTCHA: cherryPickCommits.csh does a `git pull` in the
+#   64-bit build sandbox ($BUILDDIR/v${NN}_branch/kent) after pushing the cherry-pick.
+#   configureSandbox.csh (run at branch creation) PREPENDS USE_BAM=1 / KNETFILE_HOOKS=1
+#   to that sandbox's src/inc/common.mk as a permanent uncommitted working-tree change.
+#   So if the cherry-picked commit touches inc/common.mk, the pull aborts ("local
+#   changes would be overwritten") and the script prints "error updating 64-bit sandbox"
+#   -- but the cherry-pick + push to origin/v${NN}_branch ALREADY SUCCEEDED; only the
+#   sandbox refresh failed. Fix in the sandbox:
+#       git stash push src/inc/common.mk && git pull --ff-only && git stash pop
+#   (the flag lines and the incoming change are in different parts of the file, so the
+#   pop is clean). This sandbox is not used by doZip or the docker build, so this is
+#   hygiene, not a blocker.
 #
 set -eEu -o pipefail
 
@@ -22,13 +75,16 @@ set -eEu -o pipefail
 # Configuration
 ##############################################################################
 SCRIPT_NAME="$(basename "$0")"
-SCHEDULE_FILE="$WEEKLYBLD/buildSchedule.txt"
 WEEKLYBLD="/hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld"
 BUILDENV="$WEEKLYBLD/buildEnv.csh"
 LOGDIR="$WEEKLYBLD/logs"
 LOCKFILE="/tmp/autoBuild.lock"
+GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
 FORCED_PHASE=""
+CHERRYPICK_ARGS=()   # commit ids given on the command line: autoBuild.sh cherrypick <sha>...
+PATCHTICKET_ARGS=()  # ticket ids given on the command line: autoBuild.sh patchtickets <id>...
+PATCHTICKETS_ASSUME_YES=false   # --yes: skip the patchtickets go/no-go prompt
 
 ##############################################################################
 # Helpers
@@ -39,10 +95,10 @@ log() {
 }
 
 die() {
-    log "FATAL: $*"
-    log "Build ABORTED."
+    log "FATAL: $*" >&2
+    log "Build ABORTED." >&2
     if ! $DRY_RUN; then
-        log "Sending alert email."
+        log "Sending alert email." >&2
         local subject="AUTOBUILD FAILED: $*"
         echo "$subject" | mail -s "$subject" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
@@ -87,6 +143,55 @@ check_file_fresh() {
     log "OK: $file exists and is ${age_min}m old"
 }
 
+# Register QEMU binfmt_misc handlers so `docker build --platform linux/arm64`
+# works on an amd64 host. Handlers are kernel state and are cleared on reboot,
+# so we re-register on every build. The container is idempotent and fast (~1s)
+# when handlers are already registered.
+#
+# POST-REBOOT DOCKER FRAGILITY (two separate failure modes; both surface only in
+# the docker-testing / docker-release steps after an hgwdev reboot):
+#   1. binfmt handlers cleared -> arm64 build dies at the first RUN with
+#      "exec /bin/sh: exec format error". ensure_binfmt() below fixes this.
+#   2. docker bridge networking broken -> containers on docker0 (172.17.0.0/16)
+#      can't reach DNS or the outside, so `apt-get update` inside the build fails
+#      with "Temporary failure resolving 'archive.ubuntu.com'" and then
+#      "E: Unable to locate package wget/rsync". The reboot leaves docker's
+#      iptables MASQUERADE/FORWARD rules uninstalled. Diagnose (no sudo):
+#          docker run --rm alpine sh -c "nc -zv 10.1.1.10 53; nc -zv 8.8.8.8 443"
+#      If both time out but the host pings 10.1.1.10 fine, it's the bridge.
+#      Fix (needs sudo): `sudo systemctl restart docker` reinstalls the rules.
+#      Then re-run the failed docker step.
+ensure_binfmt() {
+    log "Registering QEMU binfmt handlers for cross-arch docker builds..."
+    if run docker run --privileged --rm tonistiigi/binfmt --install all >/dev/null 2>&1; then
+        log "OK: binfmt handlers registered"
+    else
+        log "WARNING: binfmt registration failed; arm64 docker builds may fail"
+    fi
+}
+
+# Verify the GitHub CLI is authenticated. doZip.csh uses `gh release create/upload`
+# to attach the submodule-complete source archives to the GitHub release (#37741);
+# if the build user's gh token has expired, that step fails LATE (after the ~1hr of
+# hgcentral/userApps/tag/zip work) and only WARNS, so the release silently ships
+# without its assets. Checking up front turns that into a clear, immediate stop.
+# Called at the start of do_wrapup and the post-RR cherry-pick regen path (both run
+# doZip). Not a checkpointed step -- it is a cheap precondition that must re-verify
+# on every (re-)run.
+ensure_gh_auth() {
+    if $DRY_RUN; then
+        log "(dry-run) would verify gh auth status"
+        return 0
+    fi
+    if gh auth status >/dev/null 2>&1; then
+        log "OK: gh authenticated"
+    else
+        die "gh is not authenticated (gh auth status failed). Run 'gh auth login' as
+    the build user, then re-run. doZip.csh needs gh to attach the source archives to
+    the GitHub release ($WEEKLYBLD/doZip.csh, refs #37741)."
+    fi
+}
+
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
 ensure_master_branch() {
     local branch
@@ -98,6 +203,21 @@ ensure_master_branch() {
 }
 
 # Pull latest and check for uncommitted changes.
+#
+# NOT THE ONLY WRITER IN THIS TREE any more, which matters when this function is
+# what fails.  nightlyRegister.sh (hg/utils/hgConfCatalog, refs #37925) runs from
+# the build account's crontab, writes rows for hg.conf settings the tree reads
+# that the registry is missing, and commits and pushes that one file from
+# $BUILDHOME/kent.  So `hgConfCatalog: register ...` commits on master with
+# nobody behind them are expected, not a stray edit somebody left here.
+#
+# It is written to stay out of the way and should never be what trips the check
+# below: it acts only when HEAD is master (cherryPickCommits.csh and tagBeta.csh
+# both check out release branches in this tree), it restores the file on any exit
+# that did not commit, and it stands aside entirely while $LOCKFILE is held.  If
+# this function ever does report hgConfCatalog.py as dirty, that script died
+# between writing and committing; `git checkout -- <file>` is the whole fix, and
+# the next run redoes the work from scratch.
 ensure_clean_git() {
     cd "$WEEKLYBLD"
     local status_out
@@ -135,25 +255,138 @@ read_buildenv() {
 }
 
 ##############################################################################
-# Determine which phase to run from the schedule
+# Checkpoint / resume framework
+#
+# Each phase is a sequence of named steps. Completed steps are appended to a
+# per-phase, per-version state file under $LOGDIR. On restart, completed steps
+# are skipped and the phase resumes at the first incomplete step, so a re-run
+# after a mid-build failure runs the non-idempotent steps (version bump,
+# CGI-version commit, branch tag, team emails) exactly once. As a second safety
+# net, the buildEnv bump self-detects an already-applied bump by date, so it can
+# never double-increment even if the state file is lost.
+#
+# The state file is NOT removed on success: it doubles as a per-build record,
+# and re-running a fully-completed phase is then a harmless all-steps-skipped
+# no-op rather than a dangerous fresh start.
+##############################################################################
+
+STATE_FILE=""
+
+# Version (NN) the current phase produces. preview1/preview2 produce BRANCHNN+1
+# (BRANCHNN is not bumped until the final build), final/wrapup produce BRANCHNN.
+# Each do_* sets this so the success email reports the right version.
+PHASE_VER=""
+
+# Docker smoke-test failures are NON-FATAL (the beta instances are QA aids, not
+# release artifacts), but must not be missed. Each failure drops a marker file so
+# it survives the checkpoint/resume model -- the smoke step checkpoints and is
+# skipped on a re-run, so a global variable alone would forget an earlier failure
+# by the end-of-phase summary / completion email. smoke_marker names the file;
+# smoke_failed_list globs the markers for the current build and echoes the failed
+# instance names (empty if none).
+smoke_marker() { echo "$LOGDIR/.smoke-failed.v${BRANCHNN}.$1"; }
+smoke_failed_list() {
+    local m base names=""
+    for m in "$LOGDIR"/.smoke-failed.v${BRANCHNN}.*; do
+        [[ -e "$m" ]] || continue          # no-match glob stays literal; skip it
+        base="${m##*/}"
+        names="${names:+$names }${base#.smoke-failed.v${BRANCHNN}.}"
+    done
+    echo "$names"
+}
+
+state_init() {
+    # $1 = phase name, $2 = version (NN) this phase produces
+    mkdir -p "$LOGDIR"
+    STATE_FILE="$LOGDIR/.autobuild.state.v${2}.${1}"
+    if [[ -f "$STATE_FILE" ]]; then
+        local done_steps
+        done_steps=$(tr '\n' ' ' < "$STATE_FILE")
+        log "Resuming phase '$1' for v$2 (state file: $STATE_FILE)"
+        log "Already-completed steps: ${done_steps:-(none)}"
+    else
+        $DRY_RUN || : > "$STATE_FILE"
+        log "Starting phase '$1' for v$2 (state file: $STATE_FILE)"
+    fi
+}
+
+step_is_done() { grep -qxF "$1" "$STATE_FILE" 2>/dev/null; }
+
+# step <id> <function> [args...]
+# Run the step once. If already recorded as done, skip it. On success, record
+# it; on failure, die (the state file keeps every step completed before this
+# one, so re-running resumes here). NOTE: because the step body runs in an `if`
+# condition, `set -e` does not abort inside it -- each step function below is
+# written so its RETURN VALUE reflects success (critical command last, or
+# `|| return 1`, or an explicit die on a checked failure).
+step() {
+    local id="$1"; shift
+    if step_is_done "$id"; then
+        log "SKIP (already done): $id"
+        return 0
+    fi
+    log ">>> STEP START: $id"
+    if "$@"; then
+        $DRY_RUN || echo "$id" >> "$STATE_FILE"
+        log "<<< STEP DONE:  $id"
+    else
+        die "step '$id' failed. Fix the problem and re-run autoBuild.sh to resume from this step."
+    fi
+}
+
+##############################################################################
+# Determine which phase to run from Google Calendar
 ##############################################################################
 
 detect_phase() {
-    local ds
-    ds=$(date "+%F")
-    local entry
-    entry=$(grep "^${ds}" "$SCHEDULE_FILE" 2>/dev/null | head -1 | cut -f2) || true
+    local ds_dash
+    ds_dash=$(date "+%F")           # YYYY-MM-DD for logs
+    local ds_ical
+    ds_ical=$(date "+%Y%m%d")       # YYYYMMDD for iCal DTSTART matching
 
-    if [[ -z "$entry" ]]; then
-        die "No entry for today ($ds) in $SCHEDULE_FILE. Is the schedule up to date?"
+    # Primary source: Google Calendar iCal feed
+    local entry=""
+    log "Fetching build schedule from Google Calendar..." >&2
+    local ical_data
+    ical_data=$(curl -sS --max-time 30 "$GCAL_ICAL_URL" 2>/dev/null) || true
+
+    if [[ -n "$ical_data" ]]; then
+        # Parse iCal: find VEVENT whose DTSTART matches today, extract SUMMARY
+        entry=$(echo "$ical_data" | awk -v date="$ds_ical" '
+            /^BEGIN:VEVENT/ { in_event=1; summary=""; dtstart="" }
+            /^END:VEVENT/ {
+                if (in_event && dtstart == date && summary != "") print summary
+                in_event=0
+            }
+            in_event && /^DTSTART/ {
+                gsub(/.*:/, ""); gsub(/\r/, ""); dtstart=$0
+            }
+            in_event && /^SUMMARY/ {
+                gsub(/^SUMMARY:/, ""); gsub(/\r/, ""); summary=$0
+            }
+        ' | head -1)
+
+        if [[ -n "$entry" ]]; then
+            log "Google Calendar entry for $ds_dash: $entry" >&2
+        else
+            log "WARNING: No Google Calendar entry for today ($ds_dash)" >&2
+        fi
+    else
+        log "WARNING: Could not fetch Google Calendar iCal feed" >&2
     fi
 
-    log "Schedule entry for $ds: $entry" >&2
+    if [[ -z "$entry" ]]; then
+        die "No entry for today ($ds_dash) in Google Calendar. Is the calendar up to date?"
+    fi
 
-    if echo "$entry" | grep -qi "preview 1"; then
-        echo "preview1"
-    elif echo "$entry" | grep -qi "preview 2"; then
+    log "Schedule entry for $ds_dash: $entry" >&2
+
+    # Match digit or Roman-numeral forms ("Preview 1"/"Preview I", "Preview 2"/"Preview II").
+    # Check II/2 before I/1 so "Preview II" does not fall through to preview1.
+    if echo "$entry" | grep -qiE 'preview (2|ii)\b'; then
         echo "preview2"
+    elif echo "$entry" | grep -qiE 'preview (1|i)\b'; then
+        echo "preview1"
     elif echo "$entry" | grep -qi "final build"; then
         echo "final"
     else
@@ -165,63 +398,64 @@ detect_phase() {
 # Phase: Preview 1 (Day 1)
 ##############################################################################
 
-do_preview1() {
-    log "========== PHASE: PREVIEW 1 =========="
+# --- Preview 1 steps (decomposed from doNewReview.csh for resumability) ---
+
+preview1_buildenv_bump() {
     read_buildenv
-
+    if [[ "$REVIEWDAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (REVIEWDAY=$REVIEWDAY) - skipping bump"
+        return 0
+    fi
     local NEXTNN=$((BRANCHNN + 1))
-    # The new REVIEWDAY is today, the old REVIEWDAY becomes LASTREVIEWDAY
-    local new_REVIEWDAY
-    new_REVIEWDAY=$(date "+%F")
+    local new_REVIEWDAY; new_REVIEWDAY=$(date "+%F")
     local new_LASTREVIEWDAY="$REVIEWDAY"
-
     log "Updating buildEnv.csh: LASTREVIEWDAY=$new_LASTREVIEWDAY -> REVIEWDAY=$new_REVIEWDAY (v${NEXTNN} preview)"
-
-    # Validate: new dates must be sane
     if [[ "$new_REVIEWDAY" < "$new_LASTREVIEWDAY" ]]; then
         die "Date sanity check failed: new REVIEWDAY ($new_REVIEWDAY) < new LASTREVIEWDAY ($new_LASTREVIEWDAY)"
     fi
-
     if ! $DRY_RUN; then
-        # Edit buildEnv.csh - update LASTREVIEWDAY and REVIEWDAY
         sed -i \
             -e "s|^setenv LASTREVIEWDAY .*|setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}                     # v${BRANCHNN} preview|" \
             -e "s|^setenv REVIEWDAY .*|setenv REVIEWDAY ${new_REVIEWDAY}                     # v${NEXTNN} preview|" \
             "$BUILDENV"
+        grep -q "setenv REVIEWDAY ${new_REVIEWDAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for REVIEWDAY"
+        grep -q "setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for LASTREVIEWDAY"
     fi
-    log "buildEnv.csh updated"
+    run_tcsh "source $BUILDENV && env | egrep VIEWDAY" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview1 (automated)' buildEnv.csh && git push" || return 1
+    read_buildenv
+    return 0
+}
 
-    # Verify the edit
-    if ! grep -q "setenv REVIEWDAY ${new_REVIEWDAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for REVIEWDAY"
+preview1_tag_preview() {
+    run_tcsh "./tagPreview.csh real >& $LOGDIR/v$((BRANCHNN + 1)).tagPreview.log"
+}
+
+preview1_git_reports() {
+    run_tcsh "./buildGitReports.csh review real >& $LOGDIR/v$((BRANCHNN + 1)).gitReports.review.log"
+}
+
+preview1_email_pairings() {
+    local NEXTNN=$((BRANCHNN + 1))
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 2, v${NEXTNN} preview)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
     fi
-    if ! grep -q "setenv LASTREVIEWDAY ${new_LASTREVIEWDAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for LASTREVIEWDAY"
-    fi
+    echo "Ready for pairings, day 2, Git reports completed for v${NEXTNN} preview http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
 
-    # Re-source and verify
-    run_tcsh "source $BUILDENV && env | egrep VIEWDAY"
+do_preview1() {
+    log "========== PHASE: PREVIEW 1 =========="
+    read_buildenv
+    # Preview produces v(BRANCHNN+1); BRANCHNN is unchanged by a preview bump.
+    PHASE_VER=$((BRANCHNN + 1))
+    state_init preview1 "$PHASE_VER"
 
-    # Commit
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview1 (automated)' buildEnv.csh && git push"
-
-    # Run doNewReview.csh (dry-run first, then real)
-    log "Running doNewReview.csh dry-run check..."
-    run_tcsh "./doNewReview.csh"
-
-    log "Running doNewReview.csh for real..."
-    local logfile="$LOGDIR/v${NEXTNN}.doNewRev.log"
-    run_tcsh "./doNewReview.csh real >& $logfile"
-    local rc=$?
-
-    if [[ $rc -ne 0 ]]; then
-        die "doNewReview.csh failed with exit code $rc. See $logfile"
-    fi
-
-    # Sanity check the log for errors
-    if grep -qi "failed\|error" "$logfile" 2>/dev/null | grep -vi "0 errors" | head -5 | grep -q .; then
-        log "WARNING: Possible errors in $logfile - review manually"
-    fi
+    step buildenv-bump   preview1_buildenv_bump
+    step tag-preview     preview1_tag_preview
+    step git-reports     preview1_git_reports
+    step email-pairings  preview1_email_pairings
 
     log "Preview 1 complete."
 }
@@ -230,59 +464,69 @@ do_preview1() {
 # Phase: Preview 2 (Day 8)
 ##############################################################################
 
-do_preview2() {
-    log "========== PHASE: PREVIEW 2 =========="
+# --- Preview 2 steps (decomposed from doNewReview2.csh for resumability) ---
+
+preview2_buildenv_bump() {
     read_buildenv
-
+    if [[ "$REVIEW2DAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (REVIEW2DAY=$REVIEW2DAY) - skipping bump"
+        return 0
+    fi
     local NEXTNN=$((BRANCHNN + 1))
-    local new_REVIEW2DAY
-    new_REVIEW2DAY=$(date "+%F")
+    local new_REVIEW2DAY; new_REVIEW2DAY=$(date "+%F")
     local new_LASTREVIEW2DAY="$REVIEW2DAY"
-
     log "Updating buildEnv.csh: LASTREVIEW2DAY=$new_LASTREVIEW2DAY -> REVIEW2DAY=$new_REVIEW2DAY (v${NEXTNN} preview2)"
-
     if [[ "$new_REVIEW2DAY" < "$new_LASTREVIEW2DAY" ]]; then
         die "Date sanity check failed: new REVIEW2DAY ($new_REVIEW2DAY) < new LASTREVIEW2DAY ($new_LASTREVIEW2DAY)"
     fi
-
     if ! $DRY_RUN; then
         sed -i \
             -e "s|^setenv LASTREVIEW2DAY .*|setenv LASTREVIEW2DAY  ${new_LASTREVIEW2DAY}               # v${BRANCHNN} preview2|" \
             -e "s|^setenv REVIEW2DAY .*|setenv REVIEW2DAY  ${new_REVIEW2DAY}               # v${NEXTNN} preview2|" \
             "$BUILDENV"
+        grep -q "setenv REVIEW2DAY  ${new_REVIEW2DAY}" "$BUILDENV" || die "buildEnv.csh edit verification failed for REVIEW2DAY"
     fi
-    log "buildEnv.csh updated"
+    run_tcsh "source $BUILDENV && env | grep 2DAY" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview2 (automated)' buildEnv.csh && git push" || return 1
+    read_buildenv
+    return 0
+}
 
-    if ! grep -q "setenv REVIEW2DAY  ${new_REVIEW2DAY}" "$BUILDENV"; then
-        $DRY_RUN || die "buildEnv.csh edit verification failed for REVIEW2DAY"
+preview2_tag_preview2() {
+    run_tcsh "./tagPreview2.csh real >& $LOGDIR/v$((BRANCHNN + 1)).tagPreview2.log"
+}
+
+preview2_git_reports() {
+    run_tcsh "./buildGitReports.csh review2 real >& $LOGDIR/v$((BRANCHNN + 1)).gitReports.review2.log"
+}
+
+preview2_email_pairings() {
+    local NEXTNN=$((BRANCHNN + 1))
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 9, v${NEXTNN} preview2)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
     fi
+    echo "Ready for pairings, day 9, Git reports completed for v${NEXTNN} preview2 http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 9, v${NEXTNN} preview2)." "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
 
-    run_tcsh "source $BUILDENV && env | grep 2DAY"
-
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${NEXTNN} preview2 (automated)' buildEnv.csh && git push"
-
-    # Run doNewReview2.csh
-    log "Running doNewReview2.csh dry-run check..."
-    run_tcsh "./doNewReview2.csh"
-
-    log "Running doNewReview2.csh for real..."
-    local logfile="$LOGDIR/v${NEXTNN}.doNewRev2.log"
-    run_tcsh "./doNewReview2.csh real >& $logfile"
-    local rc=$?
-
-    if [[ $rc -ne 0 ]]; then
-        die "doNewReview2.csh failed with exit code $rc. See $logfile"
-    fi
-
-    # Run the preview2 tables test robot
+preview2_tables_robot() {
+    local NEXTNN=$((BRANCHNN + 1))
     log "Running preview2TablesTestRobot.csh (takes ~1h40m)..."
-    local tableslog="$LOGDIR/v${NEXTNN}.preview2.hgTables.log"
-    run_tcsh "time ./preview2TablesTestRobot.csh >& $tableslog"
-    local rc2=$?
+    run_tcsh "time ./preview2TablesTestRobot.csh >& $LOGDIR/v${NEXTNN}.preview2.hgTables.log"
+}
 
-    if [[ $rc2 -ne 0 ]]; then
-        die "preview2TablesTestRobot.csh failed with exit code $rc2. See $tableslog"
-    fi
+do_preview2() {
+    log "========== PHASE: PREVIEW 2 =========="
+    read_buildenv
+    PHASE_VER=$((BRANCHNN + 1))
+    state_init preview2 "$PHASE_VER"
+
+    step buildenv-bump   preview2_buildenv_bump
+    step tag-preview2    preview2_tag_preview2
+    step git-reports     preview2_git_reports
+    step email-pairings  preview2_email_pairings
+    step tables-robot    preview2_tables_robot
 
     log "Preview 2 complete."
 }
@@ -291,121 +535,302 @@ do_preview2() {
 # Phase: Final Build (Day 15)
 ##############################################################################
 
-do_final() {
-    log "========== PHASE: FINAL BUILD =========="
-    read_buildenv
+# --- Final build steps (decomposed from doNewBranch.csh + the robots/docker
+#     tail of the original do_final, so a mid-build failure resumes here) ---
 
-    # Check SSH logins first
+final_checklogins() {
     log "Checking SSH logins to remote hosts..."
-    run bash "$WEEKLYBLD/checkLogins.sh" 2>&1 | tee /tmp/autoBuild_checkLogins.log
-    if grep -qi "failed" /tmp/autoBuild_checkLogins.log; then
+    run bash "$WEEKLYBLD/checkLogins.sh" 2>&1 | tee /tmp/autoBuild_checkLogins.log || true
+    if grep -qi "failed" /tmp/autoBuild_checkLogins.log 2>/dev/null; then
         die "SSH login check failed. Fix SSH keys before proceeding. See /tmp/autoBuild_checkLogins.log"
     fi
     log "OK: All SSH logins successful"
+}
 
-    # Compute new values
+final_buildenv_bump() {
+    read_buildenv
+    if [[ "$TODAY" == "$(date +%F)" ]]; then
+        log "buildEnv already bumped for today (BRANCHNN=$BRANCHNN, TODAY=$TODAY) - skipping bump"
+        return 0
+    fi
     local new_BRANCHNN=$((BRANCHNN + 1))
-    local new_TODAY
-    new_TODAY=$(date "+%F")
+    local new_TODAY; new_TODAY=$(date "+%F")
     local new_LASTWEEK="$TODAY"
-
     log "Updating buildEnv.csh: BRANCHNN=$BRANCHNN -> $new_BRANCHNN, LASTWEEK=$new_LASTWEEK, TODAY=$new_TODAY"
-
-    # Sanity checks
     if [[ "$new_TODAY" < "$new_LASTWEEK" ]]; then
         die "Date sanity check failed: new TODAY ($new_TODAY) < new LASTWEEK ($new_LASTWEEK)"
     fi
     if [[ $new_BRANCHNN -le $BRANCHNN ]]; then
         die "BRANCHNN sanity check failed: $new_BRANCHNN <= $BRANCHNN"
     fi
-
     if ! $DRY_RUN; then
         sed -i \
             -e "s|^setenv BRANCHNN .*|setenv BRANCHNN ${new_BRANCHNN}                    # increment for new build|" \
             -e "s|^setenv TODAY .*|setenv TODAY ${new_TODAY}                     # v${new_BRANCHNN} final|" \
             -e "s|^setenv LASTWEEK .*|setenv LASTWEEK ${new_LASTWEEK}                     # v${BRANCHNN} final|" \
             "$BUILDENV"
-    fi
-    log "buildEnv.csh updated"
-
-    # Verify edits
-    if ! $DRY_RUN; then
         grep -q "setenv BRANCHNN ${new_BRANCHNN}" "$BUILDENV" || die "BRANCHNN edit verification failed"
         grep -q "setenv TODAY ${new_TODAY}" "$BUILDENV" || die "TODAY edit verification failed"
         grep -q "setenv LASTWEEK ${new_LASTWEEK}" "$BUILDENV" || die "LASTWEEK edit verification failed"
     fi
-
-    run_tcsh "source $BUILDENV && env | egrep 'DAY|NN|WEEK'"
-
-    # Commit
-    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${new_BRANCHNN} final build (automated)' buildEnv.csh && git push"
-
-    # Now BRANCHNN has changed - re-read
+    run_tcsh "source $BUILDENV && env | egrep 'DAY|NN|WEEK'" || return 1
+    run_tcsh "cd $WEEKLYBLD && git add buildEnv.csh && git commit -m 'v${new_BRANCHNN} final build (automated)' buildEnv.csh && git push" || return 1
     read_buildenv
-    log "After re-read: BRANCHNN=$BRANCHNN"
+    log "After bump: BRANCHNN=$BRANCHNN"
+    return 0
+}
 
-    # Run doNewBranch.csh dry-run
-    log "Running doNewBranch.csh dry-run check..."
-    run_tcsh "./doNewBranch.csh"
+# updateCgiVersion.csh / tagNewBranch.csh are NOT idempotent on their own (a
+# re-run would hit "nothing to commit" / "tag exists"), so the checkpoint must
+# ensure each runs exactly once -- which it does.
+final_cgi_version() {
+    run_tcsh "./updateCgiVersion.csh real >& $LOGDIR/v${BRANCHNN}.updateCgiVersion.log"
+}
 
-    # Run for real (~1 hour)
-    log "Running doNewBranch.csh for real (takes ~1 hour)..."
-    local logfile="$LOGDIR/v${BRANCHNN}.doNewBranch.log"
-    run_tcsh "./doNewBranch.csh real >& $logfile"
-    local rc=$?
+final_tag_branch() {
+    run_tcsh "./tagNewBranch.csh real >& $LOGDIR/v${BRANCHNN}.tagNewBranch.log"
+}
 
-    if [[ $rc -ne 0 ]]; then
-        die "doNewBranch.csh failed with exit code $rc. See $logfile"
+final_git_reports() {
+    if ! $DRY_RUN && [[ -e "$WEEKLYBLD/GitReports.ok" ]]; then
+        rm -f "$WEEKLYBLD/GitReports.ok"
     fi
-
-    # Verify success artifacts
-    if ! $DRY_RUN; then
-        if [[ ! -f "$WEEKLYBLD/GitReports.ok" ]]; then
-            log "WARNING: GitReports.ok not found - git reports may have had issues"
-        else
-            log "OK: GitReports.ok exists"
-        fi
-
-        # Check CGI timestamps in beta
-        log "Checking CGI timestamps in cgi-bin-beta..."
-        local newest_cgi
-        newest_cgi=$(ls -lt /usr/local/apache/cgi-bin-beta/ 2>/dev/null | head -5) || true
-        log "Newest CGIs in beta:\n$newest_cgi"
-
-        # Verify the CGIs were built today
-        local today_date
-        today_date=$(date "+%b %e" | sed 's/  / /')  # e.g. "Mar 17"
-        if ! echo "$newest_cgi" | grep -q "$(date '+%b')" 2>/dev/null; then
-            log "WARNING: CGIs in cgi-bin-beta may not have been updated today. Check manually."
-        fi
+    run_tcsh "./buildGitReports.csh branch real >& doNewGit.log" || return 1
+    if ! $DRY_RUN && [[ ! -e "$WEEKLYBLD/GitReports.ok" ]]; then
+        die "git-reports completed but GitReports.ok not found. See doNewGit.log"
     fi
+    return 0
+}
 
-    # Run robots in background (takes 6+ hours, wiki says don't wait)
-    log "Starting doRobots.csh (runs for 6+ hours in background)..."
+final_cobranch() {
+    run_tcsh "./coBranch.csh"
+}
+
+# If this dies with a missing htslib header (e.g.
+# "../../inc/bamFile.h: htslib/sam.h: No such file or directory"), it is a
+# transient parallel-make (-j) race -- htslib hadn't finished building when a
+# dependent target needed its header. It is NOT a real environment/header
+# problem: do not investigate htslib setup or compare sandboxes. Just re-run
+# autoBuild.sh; the checkpoint resumes here and the make succeeds.
+final_build_utils() {
+    run_tcsh "./buildUtils.csh"
+}
+
+final_build_beta() {
+    run_tcsh "./buildBeta.csh"
+}
+
+final_deploy_beta() {
+    if $DRY_RUN; then
+        log "(dry-run) would rsync cgi-bin-beta + htdocs-beta to qateam@hgwbeta"
+        return 0
+    fi
+    rsync -rLptgoD -P --exclude=hg.conf --exclude=hg.conf.private \
+        /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
+        /usr/local/apache/htdocs-beta/ qateam@hgwbeta:/data/apache/htdocs/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+        /usr/local/apache/htdocs-beta/js/ qateam@hgwbeta:/data/apache/htdocs/js/ && \
+    rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
+        /usr/local/apache/htdocs-beta/style/ qateam@hgwbeta:/data/apache/htdocs/style/
+}
+
+final_email_build_complete() {
+    if $DRY_RUN; then
+        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL galt kent browser-qa"
+        return 0
+    fi
+    echo "v${BRANCHNN} built successfully on beta (day 16)." \
+        | mail -s "v${BRANCHNN} Build complete on beta (day 16)." \
+        "$BUILDMEISTEREMAIL" galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+}
+
+final_email_pairings() {
+    if $DRY_RUN; then
+        log "(dry-run) would email 'Ready for pairings (day 16, v${BRANCHNN} review)' to $BUILDMEISTEREMAIL clayfischer jnavarr5"
+        return 0
+    fi
+    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." \
+        | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." \
+        "$BUILDMEISTEREMAIL" clayfischer@ucsc.edu jnavarr5@ucsc.edu
+}
+
+# Emails every v(BRANCHNN) committer a request for their code summaries. Kept a
+# separate checkpoint so a resume never re-spams the whole committer list.
+final_committer_emails() {
+    local LASTNN=$((BRANCHNN - 1))
+    run_tcsh "./sendLogEmail.pl $LASTNN $BRANCHNN"
+}
+
+final_robots() {
+    if $DRY_RUN; then
+        log "(dry-run) would launch doRobots.csh in background (6+ hours)"
+        return 0
+    fi
     local robotlog="$LOGDIR/v${BRANCHNN}.robots.log"
-    if ! $DRY_RUN; then
-        nohup /bin/tcsh -c "source $BUILDENV && cd $WEEKLYBLD && ./doRobots.csh >& $robotlog" &
-        local robot_pid=$!
-        log "doRobots.csh started in background (PID $robot_pid). Log: $robotlog"
-    fi
+    nohup /bin/tcsh -c "source $BUILDENV && cd $WEEKLYBLD && ./doRobots.csh >& $robotlog" >/dev/null 2>&1 &
+    log "doRobots.csh launched in background (PID $!). Log: $robotlog"
+    return 0
+}
 
-    # Docker testing image build
-    log "Building testing Docker images..."
-    local dockerdir
-    dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-testing.log"
-        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-        run_tcsh "cd $dockerdir && setenv stage testing && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage}" >& "$dockerlog" || {
-            log "WARNING: Docker testing build had issues. See $dockerlog (non-fatal, continuing)"
-        }
-        log "Docker testing build complete (or skipped on error)."
-    else
-        log "WARNING: Docker directory not found at $dockerdir - skipping Docker build"
+# Build the amd64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# kent-beta runs from this image and is torn down again on do_wrapup. refs #37655.
+# The arm64 beta is a separate step (final_docker_beta_arm64) below. Neither is
+# pushed, so there is no manifest dance. Fatal-on-failure (was a warning): the
+# checkpoint model makes a retry just a re-run that resumes at this step.
+final_docker_beta() {
+    local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
+    if [[ ! -d "$dockerdir" ]]; then
+        die "Docker directory not found at $dockerdir"
     fi
+    run_tcsh "cd $dockerdir && docker build --no-cache --platform linux/amd64 -t kent:beta . >& $LOGDIR/v${BRANCHNN}.docker-beta.log"
+}
+
+final_refresh_beta() {
+    run "$WEEKLYBLD/refresh-instance.sh" beta
+}
+
+# Build the arm64 beta image locally on hgwdev; do NOT push to Docker Hub.
+# Unlike the amd64 kent:beta (public CGIs baked in, then overlay-cgi.sh streams
+# hgwdev's amd64 cgi-bin-beta into the running container), an arm64 image cannot
+# run those amd64 binaries, so it COMPILES from source inside the image.
+#
+# CRITICAL -- which source: browserSetup.sh hardcodes `git clone -b beta`, but the
+# public `beta` branch does NOT advance to this build's version until wrap-up
+# (tagBeta.csh does `git checkout -b beta origin/v${NN}_branch; git push origin
+# beta`). So a stock arm64 build here at final would compile the PREVIOUS release,
+# not the version we just built. Instead we build from v${BRANCHNN}_branch, which
+# final_tag_branch has already pushed to GitHub: we generate a patched build
+# context -- a copy of browserSetup.sh with its clone pointed at v${BRANCHNN}_branch,
+# and a copy of the Dockerfile that COPYs that patched script instead of ADDing
+# master's from GitHub. browserSetup only clones when ~/kent is absent, so
+# redirecting its clone branch is all that is needed; the arm64 beta then reflects
+# this build, matching the amd64 beta, and the smoke step's version check holds.
+#
+# Needs the QEMU binfmt handlers (cleared on reboot); the cross-arch compile under
+# emulation is slow. kent-beta-arm64 is torn down at do_wrapup alongside kent-beta.
+# Fatal-on-failure like the amd64 build: the checkpoint model makes a retry just a
+# re-run that resumes at this step. refs #37655
+final_docker_beta_arm64() {
+    local srcdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer"
+    local dockerdir="$srcdir/docker"
+    [[ -d "$dockerdir" ]]            || die "Docker directory not found at $dockerdir"
+    [[ -f "$srcdir/browserSetup.sh" ]] || die "browserSetup.sh not found at $srcdir"
+    ensure_binfmt
+
+    local ctx="$LOGDIR/.beta-arm64-ctx"
+    local log="$LOGDIR/v${BRANCHNN}.docker-beta-arm64.log"
+    if $DRY_RUN; then
+        log "(dry-run) would build kent:beta-arm64 from v${BRANCHNN}_branch"
+        return 0
+    fi
+    rm -rf "$ctx"; mkdir -p "$ctx"
+    # patch the clone branch: beta -> v${BRANCHNN}_branch
+    sed "s|git clone -b beta |git clone -b v${BRANCHNN}_branch |" \
+        "$srcdir/browserSetup.sh" > "$ctx/browserSetup.sh"
+    grep -q "git clone -b v${BRANCHNN}_branch " "$ctx/browserSetup.sh" \
+        || die "arm64 beta: failed to patch browserSetup.sh clone branch to v${BRANCHNN}_branch"
+    # Dockerfile: same as the release one, but COPY the patched browserSetup.sh
+    # from the context instead of ADDing master's copy from GitHub.
+    sed -E "s|^ADD [^ ]*browserSetup.sh /root/browserSetup.sh|COPY browserSetup.sh /root/browserSetup.sh|" \
+        "$dockerdir/Dockerfile" > "$ctx/Dockerfile"
+    grep -q "^COPY browserSetup.sh /root/browserSetup.sh" "$ctx/Dockerfile" \
+        || die "arm64 beta: failed to rewrite Dockerfile browserSetup line to COPY"
+
+    docker build --no-cache --platform linux/arm64 -t kent:beta-arm64 \
+        -f "$ctx/Dockerfile" "$ctx" >& "$log" \
+        || die "arm64 beta docker build failed; see $log"
+    rm -rf "$ctx"
+}
+
+final_refresh_beta_arm64() {
+    run "$WEEKLYBLD/refresh-instance.sh" beta-arm64
+}
+
+# Smoke-test a freshly started beta instance: hgGateway, an hg38 + hg19 hgTracks
+# render (real drawn image, not just HTTP 200), hgBlat, hgTables, and that the
+# CGI version served matches the version this phase built ($PHASE_VER). Output is
+# teed to a per-step log.
+#
+# NON-FATAL: a smoke failure does NOT halt the build (the beta instances are QA
+# aids, not release artifacts), so this always returns 0 and the step checkpoints.
+# The failure is made obvious instead: a loud banner here, a marker file so it
+# survives a resume, and it is re-surfaced in the end-of-phase summary and the
+# completion email. refs #37655
+smoke_instance() {
+    local name="$1"
+    local logf="$LOGDIR/v${BRANCHNN}.smoke-${name}.log"
+    local marker; marker="$(smoke_marker "$name")"
+    local rc=0
+    if run "$WEEKLYBLD/smoke-instance.sh" "$name" --version "$PHASE_VER" 2>&1 | tee "$logf"; then
+        rc=0
+    else
+        rc=$?
+    fi
+    if [[ "$rc" -ne 0 ]]; then
+        $DRY_RUN || : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! DOCKER SMOKE TEST FAILED for kent-${name} (exit $rc)"
+        log "!!! Build CONTINUES (smoke failures are non-fatal), but this"
+        log "!!! instance is broken -- investigate before using it for QA."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    else
+        $DRY_RUN || rm -f "$marker"      # clear any stale marker from a prior run
+        log "docker smoke test PASSED for kent-${name}"
+    fi
+    return 0
+}
+
+final_smoke_beta()       { smoke_instance beta; }
+final_smoke_beta_arm64() { smoke_instance beta-arm64; }
+
+do_final() {
+    log "========== PHASE: FINAL BUILD =========="
+    read_buildenv
+    # If TODAY already == today, the bump ran on a prior (failed) attempt and
+    # BRANCHNN is already the new version; otherwise this run will bump to +1.
+    local FINAL_VER
+    if [[ "$TODAY" == "$(date +%F)" ]]; then
+        FINAL_VER=$BRANCHNN
+    else
+        FINAL_VER=$((BRANCHNN + 1))
+    fi
+    PHASE_VER=$FINAL_VER
+    state_init final "$FINAL_VER"
+
+    step checklogins          final_checklogins
+    step buildenv-bump        final_buildenv_bump
+    step cgi-version          final_cgi_version
+    step tag-branch           final_tag_branch
+    step git-reports          final_git_reports
+    step cobranch             final_cobranch
+    step build-utils          final_build_utils
+    step build-beta           final_build_beta
+    step deploy-beta          final_deploy_beta
+    step email-build-complete final_email_build_complete
+    step email-pairings       final_email_pairings
+    step committer-emails     final_committer_emails
+    step robots               final_robots
+    step docker-beta          final_docker_beta
+    step refresh-beta         final_refresh_beta
+    step smoke-beta           final_smoke_beta
+    step docker-beta-arm64    final_docker_beta_arm64
+    step refresh-beta-arm64   final_refresh_beta_arm64
+    step smoke-beta-arm64     final_smoke_beta_arm64
 
     log "Final Build complete. Robots running in background."
     log "Next steps: QA tests on hgwbeta, then cherry-picks as needed, then push."
+
+    local smoke_failed; smoke_failed="$(smoke_failed_list)"
+    if [[ -n "$smoke_failed" ]]; then
+        log "############################################################"
+        log "##  WARNING: docker smoke test FAILED for:$smoke_failed"
+        log "##  The build completed, but the above beta instance(s) are"
+        log "##  broken and must be investigated before QA. Per-instance"
+        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log"
+        log "############################################################"
+    fi
 }
 
 ##############################################################################
@@ -453,126 +878,747 @@ generate_release_markdown() {
 # Phase: Wrap-up (Day 23, after push to RR)
 ##############################################################################
 
-do_wrapup() {
-    log "========== PHASE: WRAP-UP =========="
-    read_buildenv
+# --- Wrap-up steps (decomposed for resumability) ---
+#
+# do_wrapup was historically a straight-line sequence with NO checkpointing. If
+# it died partway through, re-running `autoBuild.sh wrapup` re-did every earlier
+# step: it re-pushed hgcentral, rebuilt userApps, re-tagged beta, and -- worst --
+# created a DUPLICATE release tag (v${NN}_branch.2). The fix was to finish the
+# remaining steps by hand. These steps now run under the same checkpoint
+# framework as preview1/preview2/final: the non-idempotent steps (hgcentral push,
+# tagBeta, tag-release) run exactly once, and a re-run resumes at the first
+# incomplete step instead of redoing committed work.
 
-    log "Running wrap-up for v${BRANCHNN}"
-
-    # Step 1: Build hgcentral SQL
+wrapup_hgcentral_sql() {
     log "Building hgcentral SQL (dry run first)..."
     local hgclog="$LOGDIR/v${BRANCHNN}.buildHgCentralSql.log"
     run_tcsh "./buildHgCentralSql.csh >& $hgclog"
     log "hgcentral dry-run complete. Checking for differences..."
-
     if grep -q "No differences" "$hgclog" 2>/dev/null; then
         log "No hgcentral differences - skipping real hgcentral push."
     else
         log "hgcentral differences found. Running for real..."
-        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog"
-        local rc=$?
-        if [[ $rc -ne 0 ]]; then
-            die "buildHgCentralSql.csh real failed (rc=$rc). See $hgclog"
-        fi
+        run_tcsh "./buildHgCentralSql.csh real >>& $hgclog" || \
+            die "buildHgCentralSql.csh real failed. See $hgclog"
         log "hgcentral SQL built and pushed."
     fi
+    return 0
+}
 
-    # Step 2: Build userApps (takes ~50 minutes)
+# Build userApps (takes ~50 minutes)
+wrapup_userapps_utils() {
     log "Building userApps via doHgDownloadUtils.csh (takes ~50 min)..."
     local utilslog="$LOGDIR/v${BRANCHNN}.doHgDownloadUtils.log"
-    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doHgDownloadUtils.csh failed (rc=$rc). See $utilslog"
-    fi
+    run_tcsh "time ./doHgDownloadUtils.csh >& $utilslog" || \
+        die "doHgDownloadUtils.csh failed. See $utilslog"
     log "userApps build complete."
+    return 0
+}
 
-    # Step 3: Tag beta
+wrapup_tag_beta() {
     log "Tagging beta (dry run first)..."
     local taglog="$LOGDIR/v${BRANCHNN}.tagBeta.log"
     run_tcsh "./tagBeta.csh >& $taglog"
-
     log "Tagging beta for real..."
-    run_tcsh "./tagBeta.csh real >>& $taglog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "tagBeta.csh real failed (rc=$rc). See $taglog"
-    fi
+    run_tcsh "./tagBeta.csh real >>& $taglog" || \
+        die "tagBeta.csh real failed. See $taglog"
     log "Beta tagged."
+    return 0
+}
 
-    # Step 4: Tag the official release
-    log "Tagging official release..."
-    if ! $DRY_RUN; then
-        cd "$WEEKLYBLD"
-        git fetch
-
-        # Find next available subversion tag
-        local existing_tags
-        existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
-        local next_sub=1
-        if [[ -n "$existing_tags" ]]; then
-            local last_sub
-            last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
-            if [[ -n "$last_sub" ]]; then
-                next_sub=$((last_sub + 1))
-            fi
-        fi
-        log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
-        run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}"
-        run git fetch
+# Push the next v${BRANCHNN}_branch.<N> release subversion tag, pointing at the
+# current tip of origin/v${BRANCHNN}_branch. Shared by wrap-up (initial release
+# tag) and the cherry-pick phase (post-RR patch re-tag). NOT idempotent on its
+# own (a re-run would create a duplicate .<N> tag), so every caller runs it under
+# the checkpoint framework so it fires exactly once per phase.
+tag_next_subversion() {
+    if $DRY_RUN; then
+        log "(dry-run) would create the next v${BRANCHNN}_branch.N release tag"
+        return 0
     fi
+    cd "$WEEKLYBLD"
+    git fetch
 
-    # Step 5: Zip source code (takes ~4 min)
+    # Find next available subversion tag
+    local existing_tags
+    existing_tags=$(git tag | grep "v${BRANCHNN}_branch" | sort -t. -k2 -n | tail -1) || true
+    local next_sub=1
+    if [[ -n "$existing_tags" ]]; then
+        local last_sub
+        last_sub=$(echo "$existing_tags" | grep -oP '\.\K[0-9]+$') || true
+        if [[ -n "$last_sub" ]]; then
+            next_sub=$((last_sub + 1))
+        fi
+    fi
+    log "Creating release tag v${BRANCHNN}_branch.${next_sub}"
+    run git push origin "origin/v${BRANCHNN}_branch:refs/tags/v${BRANCHNN}_branch.${next_sub}" || \
+        die "Failed to push release tag v${BRANCHNN}_branch.${next_sub}"
+    run git fetch
+    return 0
+}
+
+# Tag the official release. NOT idempotent on its own (a re-run would create a
+# duplicate v${NN}_branch.<next> tag), so the checkpoint must ensure it runs
+# exactly once -- which it now does.
+wrapup_tag_release() {
+    log "Tagging official release..."
+    tag_next_subversion
+}
+
+# Zip source code (takes ~4 min)
+wrapup_zip() {
     log "Zipping source code..."
     local ziplog="$LOGDIR/v${BRANCHNN}.doZip.log"
-    run_tcsh "time ./doZip.csh >& $ziplog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "doZip.csh failed (rc=$rc). See $ziplog"
-    fi
+    run_tcsh "time ./doZip.csh >& $ziplog" || \
+        die "doZip.csh failed. See $ziplog"
     log "Source zip complete."
+    return 0
+}
 
-    # Step 6: Wait 10 minutes for rsync, then package userApps source
+# Wait 10 minutes for rsync, then package userApps source
+wrapup_userapps_src() {
     log "Waiting 10 minutes before userApps.sh (as specified in wiki)..."
     if ! $DRY_RUN; then
         sleep 600
     fi
-
     log "Running userApps.sh..."
     local uaLog="$LOGDIR/v${BRANCHNN}.userApps.log"
-    run_tcsh "time ./userApps.sh >& $uaLog"
-    local rc=$?
-    if [[ $rc -ne 0 ]]; then
-        die "userApps.sh failed (rc=$rc). See $uaLog"
-    fi
+    run_tcsh "time ./userApps.sh >& $uaLog" || \
+        die "userApps.sh failed. See $uaLog"
     log "userApps.sh complete."
+    return 0
+}
 
-    # Step 7: Build release Docker images
-    log "Building release Docker images..."
-    local dockerdir="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/docker"
-    if [[ -d "$dockerdir" ]]; then
-        local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
-        # refs #37350: rm stale local manifest before create, drop --amend to prevent digest accumulation
-        run_tcsh "cd $dockerdir && setenv stage v${BRANCHNN} && docker build --no-cache --platform linux/amd64 -t genomebrowser/server:\${stage}-amd64 . && docker push genomebrowser/server:\${stage}-amd64 && docker build --no-cache --platform linux/arm64 -t genomebrowser/server:\${stage}-arm64 . && docker push genomebrowser/server:\${stage}-arm64 && docker manifest rm genomebrowser/server:\${stage} >& /dev/null ; docker manifest create genomebrowser/server:\${stage} genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:\${stage} && docker manifest rm genomebrowser/server:latest >& /dev/null ; docker manifest create genomebrowser/server:latest genomebrowser/server:\${stage}-amd64 genomebrowser/server:\${stage}-arm64 && docker manifest push genomebrowser/server:latest" >& "$dockerlog" || {
-            log "WARNING: Docker release build had issues. See $dockerlog (non-fatal)"
-        }
-        log "Docker release build complete."
-    else
-        log "WARNING: Docker directory not found - skipping Docker release build"
+# Build release Docker images via buildReleaseDocker.sh.
+# amd64 = base image (browserSetup public CGIs) + a local beta-CGI overlay from
+# /usr/local/apache/cgi-bin-beta, so the image carries the just-built beta code
+# WITHOUT waiting for the RR/production push to propagate to hgdownload -- the same
+# seed overlay-cgi.sh uses for the kent-beta QA container. arm64 compiles the beta
+# branch from source. See the BUILD PATCHES note in the header. buildReleaseDocker.sh
+# verifies the overlay landed (in-image hgTracks == cgi-bin-beta) before pushing.
+# Fatal on failure: wrap-up is checkpointed, so a retry resumes at this step, and
+# buildReleaseDocker.sh is idempotent (--no-cache rebuild + re-push + manifest
+# recreate). On apt-get DNS errors or an arm64 "exec format error", see the
+# post-reboot docker fragility note at ensure_binfmt.
+wrapup_docker_release() {
+    log "Building release Docker images (amd64 beta-overlay + arm64 beta-source)..."
+    ensure_binfmt
+    local dockerlog="$LOGDIR/v${BRANCHNN}.docker-release.log"
+    run "$WEEKLYBLD/buildReleaseDocker.sh" "v${BRANCHNN}" >& "$dockerlog" || \
+        die "Docker release build failed. See $dockerlog"
+    log "Docker release build complete."
+    return 0
+}
+
+# Refresh kent-rel against the just-pushed release image, then tear down the beta
+# container/image now that v${BRANCHNN} has shipped. refs #37655. Container
+# hygiene only, so a failure here warns but does not abort the phase.
+wrapup_refresh_containers() {
+    log "Refreshing local kent-rel container..."
+    run "$WEEKLYBLD/refresh-instance.sh" rel || \
+        log "WARNING: kent-rel refresh failed; container may be stale"
+    log "Removing local kent-beta container and image (v${BRANCHNN} has shipped)..."
+    run "$WEEKLYBLD/remove-instance.sh" beta || \
+        log "WARNING: kent-beta teardown failed; check container/image manually"
+    log "Removing local kent-beta-arm64 container and image (v${BRANCHNN} has shipped)..."
+    run "$WEEKLYBLD/remove-instance.sh" beta-arm64 || \
+        log "WARNING: kent-beta-arm64 teardown failed; check container/image manually"
+    return 0
+}
+
+# Report the hg.conf release gates whose deletion deadline passed during this
+# release cycle (refs #37925). Release gates are the boolean flags added so a
+# feature can ship dark behind cfgOptionBooleanDefault(name, FALSE); once the
+# default is flipped they are supposed to be deleted, and nobody does that step.
+# The release is the moment the deadline arithmetic changes, so it is the moment
+# worth printing. Nobody is expected to act during wrap-up: this is config
+# hygiene, not part of shipping, so every failure path here warns and returns 0.
+#
+# --sunset-new, not --sunset: --sunset reprints the whole standing backlog every
+# week (wallpaper in a build log), --sunset-new prints a summary line plus only
+# what crossed a deadline since hgConfGateBacklog.txt was last accepted. Its
+# exit 1 means "there is news", NOT "the tool broke".
+#
+# Deliberately no --update-baseline: accepting the new backlog produces a
+# committed diff and is a human decision. A build that accepted its own findings
+# would report all clear forever.
+#
+# The age cache is rebuilt into $LOGDIR, not in place: the committed
+# hgConfAges.json lives inside the source tree and refreshing it there would
+# leave the build tree's checkout dirty. The rebuild walks git history and takes
+# ~4 minutes. logs/ is untracked, so the cache adds no git noise.
+wrapup_sunset_report() {
+    local catalog="$BUILDHOME/kent/src/hg/utils/hgConfCatalog/hgConfCatalog.py"
+    local slog="$LOGDIR/v${BRANCHNN}.hgConfSunset.log"
+    local cache="$LOGDIR/v${BRANCHNN}.hgConfAges.json"
+
+    if [[ ! -x "$catalog" ]]; then
+        log "WARNING: $catalog not found; skipping the hg.conf release gate report"
+        return 0
     fi
 
-    # Step 8: Generate markdown release notes for GitHub
+    # Feature-detect the flags instead of trusting the exit code: --sunset-new,
+    # --cache and --refresh postdate the rest of the catalog, and an older copy
+    # answers an unknown flag with argparse's exit 2 -- which the news-vs-failure
+    # logic below could not tell apart from the meaningful exit 1.
+    if ! "$catalog" --help 2>&1 | grep -q -- '--sunset-new'; then
+        log "WARNING: $catalog predates --sunset-new (refs #37925);" \
+            "skipping the hg.conf release gate report"
+        return 0
+    fi
+
+    # Every deadline is dated from the CGI_VERSION of the tree being scanned.
+    # versionInfo.h is bumped on final day, so at wrap-up it normally equals
+    # BRANCHNN; if it does not, this wrap-up is running late enough that the next
+    # release already bumped it and every deadline is measured against the wrong
+    # release. The harvester guards against being pointed at the wrong tree (it
+    # fails on implausibly few settings); the version arithmetic does not.
+    # The `|| true` on both greps here is load-bearing under `set -e`: a grep
+    # that matches nothing exits 1, and this step must never abort wrap-up.
+    local treever
+    treever=$(grep -oP 'CGI_VERSION\s+"\K[0-9]+' \
+        "$BUILDHOME/kent/src/hg/inc/versionInfo.h" 2>/dev/null) || true
+    if [[ "$treever" != "$BRANCHNN" ]]; then
+        log "WARNING: tree CGI_VERSION=$treever but BRANCHNN=$BRANCHNN;" \
+            "hg.conf gate deadlines will be measured against v$treever"
+    fi
+
+    log "Checking hg.conf release gates (rebuilds the age cache, ~4 min)..."
+    if $DRY_RUN; then
+        log "(dry-run, skipped)"
+        return 0
+    fi
+    if ! KENT_SRC="$BUILDHOME/kent/src" "$catalog" \
+            --cache "$cache" --refresh --sunset-new >& "$slog"; then
+        log "hg.conf release gates need attention:"
+        while IFS= read -r line; do log "  $line"; done < "$slog"
+        log "Full list: $catalog --sunset"
+        return 0
+    fi
+    # Match the summary line rather than taking the first line: --refresh
+    # announces the cache rebuild on stderr, which >& puts ahead of it.
+    local summary
+    summary=$(grep -m1 'release gates at v' "$slog") || true
+    log "${summary:-hg.conf release gates: no summary line; see $slog}"
+    return 0
+}
+
+# Generate markdown release notes for GitHub
+wrapup_release_markdown() {
     if ! $DRY_RUN; then
         generate_release_markdown "$BRANCHNN"
     fi
+    return 0
+}
+
+do_wrapup() {
+    log "========== PHASE: WRAP-UP =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+
+    log "Running wrap-up for v${BRANCHNN}"
+
+    # Precondition: gh must be authenticated now, so a stale token fails here
+    # rather than after the ~1hr of work leading up to doZip's GitHub upload.
+    ensure_gh_auth
+
+    state_init wrapup "$PHASE_VER"
+
+    step hgcentral-sql    wrapup_hgcentral_sql
+    step userapps-utils   wrapup_userapps_utils
+    step tag-beta         wrapup_tag_beta
+    step tag-release      wrapup_tag_release
+    # release-markdown must run before zip: doZip.csh attaches the curated
+    # markdown notes to the GitHub release it creates, so they must exist first.
+    step release-markdown wrapup_release_markdown
+    step zip              wrapup_zip
+    step userapps-src     wrapup_userapps_src
+    step docker-release   wrapup_docker_release
+    step refresh-containers wrapup_refresh_containers
+    # Last: a report, so nothing that matters waits on its ~4 minutes.
+    step sunset-report    wrapup_sunset_report
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
-    log "  - Create GitHub release at https://github.com/ucscGenomeBrowser/kent/releases/new"
-    log "    Release notes: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "  - Verify the GitHub release doZip.csh created (with submodule-complete"
+    log "    source archives attached): https://github.com/ucscGenomeBrowser/kent/releases"
+    log "    Edit its notes if needed; source: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "    Note: GitHub's own auto-generated 'Source code' zip/tar.gz omit submodules;"
+    log "    users should download the attached kent.src.zip / kent.src.tar.gz instead."
     log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
     log "  - Send mirror announcement email to genome-mirror@soe.ucsc.edu"
+}
+
+##############################################################################
+# Phase: Cherry-pick (build patch)
+#
+# Forced-only (never calendar-detected) and repeatable: each invocation is one
+# "patch round". See the BUILD PATCHES note in the header for the pre-RR vs
+# post-RR behavior. The commits to apply live in CherryPickCommits.conf, one SHA
+# per line, no merge commits.
+##############################################################################
+
+# Log file for the current patch round (set in do_cherrypick).
+CHERRYPICK_LOG=""
+
+# Dry-run pass: cherryPickCommits.csh with no "real" arg verifies each commit in
+# CherryPickCommits.conf exists and shows its diffstat; it makes no changes and
+# errors out if the conf file is missing or empty.
+cherrypick_apply_dryrun() {
+    run_tcsh "./cherryPickCommits.csh >& $CHERRYPICK_LOG"
+}
+
+# Real pass: cherry-pick each commit onto v${BRANCHNN}_branch, push the branch to
+# origin, log to cherryPicks.log, email, and pull the 64-bit build sandbox.
+cherrypick_apply_commits() {
+    run_tcsh "./cherryPickCommits.csh real >>& $CHERRYPICK_LOG" || \
+        die "cherryPickCommits.csh real failed. See $CHERRYPICK_LOG.
+    - If it stopped on a CONFLICT: resolve + commit + 'git push origin v${BRANCHNN}_branch'
+      by hand, then (since the pick already landed) mark step 'apply-commits' done by
+      appending it to $STATE_FILE and re-run to resume at the next step.
+    - If it said 'error updating 64-bit sandbox' and the commit touched inc/common.mk:
+      the cherry-pick + push ALREADY SUCCEEDED (only the sandbox refresh failed). Fix in
+      the sandbox with: git stash push src/inc/common.mk && git pull --ff-only && git stash
+      pop  -- then mark 'apply-commits' done in $STATE_FILE and re-run.
+    - Otherwise fix CherryPickCommits.conf and re-run."
+}
+
+# Email the build-meister a reminder to update the Redmine build-patch ticket.
+# The script runs unattended, so it cannot post to Redmine itself (posting needs
+# human approval per the redmine skill) -- it just reminds. Sent BEFORE the long
+# artifact builds, per the documented build-patch ordering.
+cherrypick_redmine_reminder() {
+    if $DRY_RUN; then
+        log "(dry-run) would email a reminder to update the Redmine build-patch ticket"
+        return 0
+    fi
+    echo "Cherry-pick(s) applied to v${BRANCHNN}_branch (see $CHERRYPICK_LOG). REMINDER: update the Redmine build-patch ticket with the cherry-picked commit(s), per the redmine skill (echo the comment for approval before posting)." \
+        | mail -s "REMINDER: update Redmine build-patch ticket (v${BRANCHNN})" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
+    return 0
+}
+
+# Post-RR only: refresh the kent-rel container against the just-rebuilt release
+# image. (kent-beta was already torn down at wrap-up, so it is not touched here.)
+cherrypick_refresh_rel() {
+    run "$WEEKLYBLD/refresh-instance.sh" rel || \
+        log "WARNING: kent-rel refresh failed; container may be stale"
+    return 0
+}
+
+# Preflight (fresh round only): settle exactly which commit ids will be applied
+# and sanity-check them, so cherryPickCommits.csh isn't handed a stale or bad list.
+#
+#   - Command-line ids (autoBuild.sh cherrypick <sha>...) are authoritative: they
+#     are validated and written FRESH to CherryPickCommits.conf (overwriting any
+#     leftover contents). An id already on the branch is a hard error here (it was
+#     typed explicitly, so it's a mistake, not ambiguity).
+#   - No command-line ids => use the existing CherryPickCommits.conf, but treat it
+#     as suspect: if any listed commit is already on v${BRANCHNN}_branch the file
+#     "looks stale", and we ask for interactive y/N confirmation before proceeding
+#     (refusing rather than hanging if there is no terminal).
+#
+# Every id is also checked to exist and to not be a merge commit either way.
+cherrypick_prepare_commits() {
+    local conf="$WEEKLYBLD/CherryPickCommits.conf"
+    local -a shas=()
+    local from_cmdline=false
+
+    if (( ${#CHERRYPICK_ARGS[@]} > 0 )); then
+        from_cmdline=true
+        shas=("${CHERRYPICK_ARGS[@]}")
+        log "Commit id(s) from the command line: ${shas[*]}"
+    else
+        [[ -s "$conf" ]] || die "No commit ids given and $conf is missing/empty. Run: $SCRIPT_NAME cherrypick <sha>..."
+        local tok
+        for tok in $(grep -vE '^[[:space:]]*(#|$)' "$conf" || true); do shas+=("$tok"); done
+        (( ${#shas[@]} > 0 )) || die "$conf has no commit ids. Run: $SCRIPT_NAME cherrypick <sha>..."
+        log "Commit id(s) from $conf: ${shas[*]}"
+    fi
+
+    cd "$WEEKLYBLD"
+    run git fetch -q origin || log "WARNING: git fetch failed; staleness check uses possibly-stale refs"
+    local branchref="origin/v${BRANCHNN}_branch"
+    local have_branch=false
+    if git rev-parse -q --verify "$branchref" >/dev/null 2>&1; then
+        have_branch=true
+    else
+        log "WARNING: $branchref not found; cannot check whether commits are already on the branch."
+    fi
+
+    local stale=false sha short subj
+    for sha in "${shas[@]}"; do
+        git cat-file -e "${sha}^{commit}" 2>/dev/null || \
+            die "Commit '$sha' not found in the repo. Fetch/pull master, or fix the id."
+        if git rev-parse -q --verify "${sha}^2" >/dev/null 2>&1; then
+            die "Commit '$sha' is a MERGE commit -- do not cherry-pick merges (see cherryPickCommits.csh). Use the underlying non-merge commit(s)."
+        fi
+        short=$(git rev-parse --short "$sha")
+        subj=$(git log -1 --format=%s "$sha")
+        if $have_branch && git merge-base --is-ancestor "$sha" "$branchref" 2>/dev/null; then
+            log "  STALE  $short  (already on v${BRANCHNN}_branch)  $subj"
+            stale=true
+        else
+            log "  new    $short  $subj"
+        fi
+    done
+
+    if $stale; then
+        if $from_cmdline; then
+            die "Commit id(s) above are already on v${BRANCHNN}_branch. Nothing to do, or fix the list."
+        fi
+        log "CherryPickCommits.conf looks STALE (lists commit(s) already on v${BRANCHNN}_branch)."
+        if [[ ! -t 0 ]]; then
+            die "Refusing to proceed with a stale conf non-interactively. Re-run in a terminal, or pass fresh ids: $SCRIPT_NAME cherrypick <sha>..."
+        fi
+        if $DRY_RUN; then
+            log "(dry-run) would prompt y/N to proceed with the stale conf"
+        else
+            local ans=""
+            read -r -p "Proceed with this list anyway? [y/N] " ans || true
+            case "$ans" in
+                [yY]|[yY][eE][sS]) log "Proceeding at user confirmation." ;;
+                *) die "Aborted (stale CherryPickCommits.conf). Update it, or pass ids: $SCRIPT_NAME cherrypick <sha>..." ;;
+            esac
+        fi
+    fi
+
+    # Command-line ids become the conf that cherryPickCommits.csh reads.
+    if $from_cmdline; then
+        if $DRY_RUN; then
+            log "(dry-run) would write ${#shas[@]} commit id(s) to $conf"
+        else
+            printf '%s\n' "${shas[@]}" > "$conf"
+            log "Wrote ${#shas[@]} commit id(s) to $conf"
+        fi
+    fi
+    return 0
+}
+
+do_cherrypick() {
+    log "========== PHASE: CHERRY-PICK (build patch) =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+    state_init cherrypick "$PHASE_VER"
+
+    # Repeatable phase: pick the next patch-round number for log names and persist
+    # it in the state file so a resume reuses the same round (and log file).
+    local patchn
+    patchn=$(grep -oP '^patchn=\K[0-9]+' "$STATE_FILE" 2>/dev/null | head -1 || true)
+    if [[ -z "$patchn" ]]; then
+        local n=1
+        while [[ -e "$LOGDIR/v${BRANCHNN}.patch${n}.log" ]]; do n=$((n + 1)); done
+        patchn=$n
+        $DRY_RUN || echo "patchn=${patchn}" >> "$STATE_FILE"
+    fi
+    CHERRYPICK_LOG="$LOGDIR/v${BRANCHNN}.patch${patchn}.log"
+    log "Build-patch round ${patchn} for v${BRANCHNN}; log: $CHERRYPICK_LOG"
+
+    # pushedToRR.flag present => release already shipped => regenerate the public
+    # artifacts (re-run the relevant wrap-up steps). Absent => still in the QA
+    # window; just land the patch + rebuild beta, wrap-up tags/artifacts later.
+    local post_rr=false
+    if [[ -e "$WEEKLYBLD/pushedToRR.flag" ]]; then
+        post_rr=true
+        log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
+        # This path re-runs doZip (GitHub upload), so require gh auth up front too.
+        ensure_gh_auth
+    else
+        log "pushedToRR.flag absent -> PRE-RR patch (QA window): landing patch + rebuilding beta only."
+    fi
+
+    # Settle + validate the commit list before applying -- but only on a FRESH
+    # round. On a resume, apply-commits may already have landed commits, which
+    # would make the "already on the branch" staleness check fire on our own work.
+    if step_is_done apply-commits; then
+        log "Resuming after apply-commits; skipping commit-list validation."
+    else
+        cherrypick_prepare_commits
+    fi
+
+    # --- Core patch: applies in both cases ---
+    step apply-dryrun     cherrypick_apply_dryrun
+    step apply-commits    cherrypick_apply_commits
+    step redmine-reminder cherrypick_redmine_reminder    # before the long builds
+    step build-beta       final_build_beta               # reused from the final phase
+    step deploy-beta      final_deploy_beta               # rsync cgi-bin-beta -> hgwbeta
+    step git-reports      final_git_reports
+
+    if $post_rr; then
+        # Re-run the relevant wrap-up steps to regenerate already-public artifacts.
+        step tag-beta         wrapup_tag_beta
+        step tag-subversion   tag_next_subversion
+        step release-markdown wrapup_release_markdown
+        step zip              wrapup_zip
+        step userapps-utils   wrapup_userapps_utils
+        step userapps-src     wrapup_userapps_src
+        step docker-release   wrapup_docker_release
+        step refresh-rel      cherrypick_refresh_rel
+    else
+        step refresh-beta     final_refresh_beta          # refresh kent-beta for QA
+    fi
+
+    # Repeatable phase: clear the state file on FULL success so the next patch
+    # round starts fresh. (A failed round leaves it in place so a re-run resumes
+    # at the first incomplete step -- same as every other phase.)
+    $DRY_RUN || rm -f "$STATE_FILE"
+
+    log "Cherry-pick build patch (round ${patchn}) complete for v${BRANCHNN}."
+    if $post_rr; then
+        log "Public artifacts regenerated. Remaining manual steps: verify the GitHub"
+        log "release, push to the genome browser store, and confirm hgdownload."
+    else
+        log "Patch is on v${BRANCHNN}_branch and beta; wrap-up will tag + build artifacts later."
+    fi
+}
+
+##############################################################################
+# Phase: Patch tickets (Redmine-driven build patch)
+#
+# Forced-only and repeatable. This is the `cherrypick` phase with the Redmine
+# bookkeeping on both ends: it asks Redmine which Build Patch tickets QA has
+# handed over, cherry-picks their commits in one round, then comments on each
+# ticket and sets it to Patched.
+#
+# The eligibility gate lives in `redmineCli patch-queue` (status Approved +
+# assigned to Build Meister + right target version + a usable commit hash).
+# Nothing here second-guesses it.
+#
+# Two things are deliberately left to a human:
+#   - CONFLICTS. A conflict means master and the branch have diverged on that
+#     code and picking the right resolution needs someone who knows what the fix
+#     was for. cherryPickCommits.csh stops, and because the ticket updates come
+#     after the cherry-pick, no ticket is touched -- the round is re-runnable
+#     once the conflict is resolved by hand.
+#   - THE BETA DEPLOY. This phase rebuilds and deploys to hgwbeta, which QA is
+#     actively testing on. Landing that unannounced pulls the floor out from
+#     under whoever is mid-test-case, so the plan is shown and confirmed first
+#     (--yes to skip, for a scheduled run).
+#
+# The per-ticket comment is templated on purpose. It says the same thing every
+# time and carries no findings or judgment, so it does not need drafting or
+# approval the way a substantive ticket comment does.
+##############################################################################
+
+REDMINECLI="/cluster/home/build/kent/src/utils/redmineCli"
+
+# Worklist for the current round: "<ticket-id><TAB><comma-separated-shas>" per
+# line. Written by the query step and re-read by later steps so a resume does
+# not depend on re-querying Redmine (whose answer may have changed by then).
+PATCHTICKETS_WORKLIST=""
+
+# Ask Redmine which tickets are ready, log the ones that are not, and write the
+# eligible ones to the worklist. Dies if nothing is eligible -- that is not a
+# failure exactly, but there is no work to do and continuing would rebuild beta
+# for no reason.
+patchtickets_query() {
+    local out ver_arg=("--target-version" "$BRANCHNN")
+    local tickets_arg=()
+    if (( ${#PATCHTICKET_ARGS[@]} > 0 )); then
+        tickets_arg=("--tickets" "${PATCHTICKET_ARGS[@]}")
+        log "Restricting to ticket(s) given on the command line: ${PATCHTICKET_ARGS[*]}"
+    fi
+
+    # The build tree routinely lags origin/master, so the ticket commits may not
+    # be local yet. Fetch before anything tries to resolve them -- the confirm
+    # step prints commit subjects, well before the cherrypick phase's own fetch.
+    cd "$WEEKLYBLD"
+    run git fetch -q origin || log "WARNING: git fetch failed; ticket commits may not resolve below"
+
+    out=$("$REDMINECLI" patch-queue --tsv "${ver_arg[@]}" "${tickets_arg[@]}") || \
+        die "redmineCli patch-queue failed. Check the API key in ~/.hg.conf and that Redmine is reachable."
+
+    [[ -n "$out" ]] || die "No Build Patch tickets found for v${BRANCHNN} at all. Nothing to patch."
+
+    # Field order is verdict/id/commits/subject/notes -- notes last because bash
+    # `read` collapses an empty tab-delimited field in the middle of a line.
+    local verdict tid commits note subject eligible=0
+    local -a lines=()
+    while IFS=$'\t' read -r verdict tid commits subject note; do
+        [[ -n "$verdict" ]] || continue
+        case "$verdict" in
+            ELIGIBLE)
+                eligible=$((eligible + 1))
+                log "  READY    #${tid}  ${commits}  ${subject}"
+                [[ -z "$note" ]] || log "           ^ ${note}"
+                lines+=("${tid}"$'\t'"${commits}")
+                ;;
+            *)
+                log "  SKIP     #${tid}  ${subject}"
+                log "           ^ ${note}"
+                ;;
+        esac
+    done <<< "$out"
+
+    (( eligible > 0 )) || die "No Build Patch ticket for v${BRANCHNN} is ready to patch (see the SKIP reasons above). Nothing to do."
+
+    if $DRY_RUN; then
+        # Later dry-run steps still need the list, so keep it in a temp file
+        # rather than writing the real worklist under logs/.
+        log "(dry-run) would write ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
+        PATCHTICKETS_WORKLIST=$(mktemp)
+        printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"
+        log "(dry-run) using temp worklist $PATCHTICKETS_WORKLIST"
+    else
+        printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"
+        log "Wrote ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
+    fi
+    return 0
+}
+
+# Every commit from the worklist, ordered oldest-first by commit date on master.
+# Order matters: two patches touching the same file apply cleanly in the order
+# they were originally committed, and not necessarily in ticket-number order.
+patchtickets_commits_in_order() {
+    local tid commits
+    local -a all=()
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        local sha
+        for sha in ${commits//,/ }; do all+=("$sha"); done
+    done < "$PATCHTICKETS_WORKLIST"
+    (( ${#all[@]} > 0 )) || return 1
+    cd "$WEEKLYBLD"
+    # Trailing "--" so an id can never be taken for a pathname. A hash that does
+    # not resolve makes git fail the whole list rather than silently dropping it;
+    # that is caught by the caller's emptiness check and by cherrypick's own
+    # per-commit validation.
+    git log --no-walk --format='%ct %H' "${all[@]}" -- 2>/dev/null | sort -n | awk '{print $2}'
+}
+
+# Show the plan and get a go/no-go before anything is pushed or deployed.
+patchtickets_confirm() {
+    local tid commits
+    log "----------------------------------------------------------------"
+    log "Build-patch plan for v${BRANCHNN}:"
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        log "  #${tid}  ${commits}"
+    done < "$PATCHTICKETS_WORKLIST"
+    log ""
+    log "Apply order (oldest commit on master first):"
+    local sha
+    while read -r sha; do
+        [[ -n "$sha" ]] || continue
+        log "  $(git -C "$WEEKLYBLD" log -1 --format='%h  %s' "$sha")"
+    done < <(patchtickets_commits_in_order)
+    log ""
+    log "This pushes v${BRANCHNN}_branch to origin, rebuilds the affected CGIs,"
+    log "and deploys to hgwbeta -- which QA is testing on right now."
+    log "----------------------------------------------------------------"
+
+    if $PATCHTICKETS_ASSUME_YES; then
+        log "--yes given; proceeding without confirmation."
+        return 0
+    fi
+    if $DRY_RUN; then
+        log "(dry-run) would prompt y/N to proceed"
+        return 0
+    fi
+    [[ -t 0 ]] || die "Refusing to patch and deploy to beta unattended. Re-run in a terminal, or pass --yes."
+    local ans=""
+    read -r -p "Proceed? [y/N] " ans || true
+    case "$ans" in
+        [yY]|[yY][eE][sS]) log "Proceeding at user confirmation."; return 0 ;;
+        *) die "Aborted at confirmation. No commits applied, no tickets touched." ;;
+    esac
+}
+
+# Run one cherry-pick round for the worklist commits by delegating to the
+# existing phase, which owns branch handling, validation, the push, the beta
+# rebuild/deploy, git-reports and the docker refresh (and pre-RR vs post-RR).
+#
+# do_cherrypick runs state_init, which repoints the global STATE_FILE at its own
+# state file and deletes it on success -- so save and restore ours around the
+# call. The nesting is deliberate: the cherry-pick round stays independently
+# resumable, and if it dies partway, re-running patchtickets re-enters
+# do_cherrypick, which picks up at its own first incomplete step.
+patchtickets_cherrypick() {
+    local saved_state="$STATE_FILE"
+    CHERRYPICK_ARGS=()
+    local sha
+    while read -r sha; do
+        [[ -n "$sha" ]] || continue
+        CHERRYPICK_ARGS+=("$sha")
+    done < <(patchtickets_commits_in_order)
+    (( ${#CHERRYPICK_ARGS[@]} > 0 )) || die "No commits to apply (worklist is empty or its hashes are not in git)."
+
+    log "Handing ${#CHERRYPICK_ARGS[@]} commit(s) to the cherrypick phase: ${CHERRYPICK_ARGS[*]}"
+    do_cherrypick
+    local rc=$?
+    STATE_FILE="$saved_state"
+    return $rc
+}
+
+# Comment on one ticket and set it to Patched. Templated text -- see the phase
+# header for why this one does not need approval.
+patchtickets_update_ticket() {
+    local tid="$1" commits="$2"
+    local msg="Cherry-picked onto v${BRANCHNN}_branch and deployed to hgwbeta.
+
+Commit(s): <code>${commits//,/, }</code>
+
+Ready for verification on beta."
+
+    if $DRY_RUN; then
+        log "(dry-run) would comment on #${tid} and set it to Patched"
+        return 0
+    fi
+    "$REDMINECLI" comment "$tid" --message "$msg" || \
+        die "Failed to comment on #${tid}. The patch is already on the branch and beta -- fix the ticket by hand, or re-run to resume (earlier tickets are recorded as done)."
+    "$REDMINECLI" update "$tid" --status Patched || \
+        die "Commented on #${tid} but could not set it to Patched. Set it by hand, then append 'ticket-${tid}' to $STATE_FILE and re-run."
+    log "#${tid}: commented and set to Patched"
+    return 0
+}
+
+do_patchtickets() {
+    log "========== PHASE: PATCH TICKETS (Redmine-driven build patch) =========="
+    read_buildenv
+    PHASE_VER=$BRANCHNN
+    state_init patchtickets "$PHASE_VER"
+    local my_state="$STATE_FILE"
+
+    # Round number, persisted so a resume reuses the same worklist file.
+    local roundn
+    roundn=$(grep -oP '^roundn=\K[0-9]+' "$my_state" 2>/dev/null | head -1 || true)
+    if [[ -z "$roundn" ]]; then
+        local n=1
+        while [[ -e "$LOGDIR/.patchtickets.v${BRANCHNN}.round${n}" ]]; do n=$((n + 1)); done
+        roundn=$n
+        $DRY_RUN || echo "roundn=${roundn}" >> "$my_state"
+    fi
+    PATCHTICKETS_WORKLIST="$LOGDIR/.patchtickets.v${BRANCHNN}.round${roundn}"
+    log "Patch-ticket round ${roundn} for v${BRANCHNN}; worklist: $PATCHTICKETS_WORKLIST"
+
+    step query-tickets  patchtickets_query
+    STATE_FILE="$my_state"
+    [[ -s "$PATCHTICKETS_WORKLIST" ]] || \
+        die "Worklist $PATCHTICKETS_WORKLIST is missing or empty. Delete $my_state and start a fresh round."
+
+    step confirm-plan   patchtickets_confirm
+    STATE_FILE="$my_state"
+
+    # Applies the commits and does everything downstream of them (push, beta
+    # rebuild + deploy, git-reports, docker). Tickets are untouched until this
+    # succeeds, so a conflict leaves Redmine consistent with the branch.
+    step cherrypick-round patchtickets_cherrypick
+    STATE_FILE="$my_state"
+
+    # Per-ticket steps so a Redmine hiccup partway through resumes cleanly
+    # instead of double-commenting the tickets that already went through.
+    local tid commits
+    while IFS=$'\t' read -r tid commits; do
+        [[ -n "$tid" ]] || continue
+        step "ticket-${tid}" patchtickets_update_ticket "$tid" "$commits"
+        STATE_FILE="$my_state"
+    done < "$PATCHTICKETS_WORKLIST"
+
+    $DRY_RUN || rm -f "$my_state"
+
+    log "Patch-ticket round ${roundn} complete for v${BRANCHNN}."
+    log "Tickets patched: $(cut -f1 "$PATCHTICKETS_WORKLIST" | sed 's/^/#/' | tr '\n' ' ')"
+    log "Hand back to QA for verification on hgwbeta."
 }
 
 ##############################################################################
@@ -588,19 +1634,47 @@ main() {
                 log "DRY RUN MODE - no changes will be made"
                 shift
                 ;;
-            preview1|preview2|final|wrapup)
+            preview1|preview2|final|wrapup|cherrypick|patchtickets)
                 FORCED_PHASE="$1"
+                shift
+                ;;
+            --yes|-y)
+                PATCHTICKETS_ASSUME_YES=true
                 shift
                 ;;
             --help|-h)
                 echo "Usage: $SCRIPT_NAME [--dry-run] [preview1|preview2|final|wrapup]"
+                echo "       $SCRIPT_NAME [--dry-run] cherrypick [<sha>...]"
                 echo ""
-                echo "Runs the CGI build phase for today's date (per buildSchedule.txt),"
+                echo "Runs the CGI build phase for today's date (per Google Calendar),"
                 echo "or a forced phase if specified. Stops on any error."
+                echo ""
+                echo "cherrypick is forced-only (never auto-detected): it applies build-patch"
+                echo "commit(s) onto v\${NN}_branch. Give the commit id(s) on the command line"
+                echo "(they are written fresh to CherryPickCommits.conf), or run it with no ids"
+                echo "to use the existing CherryPickCommits.conf -- in which case, if that file"
+                echo "looks stale (lists commits already on the branch), it asks for y/N first."
+                echo ""
+                echo "patchtickets is forced-only too: it asks Redmine which Build Patch tickets"
+                echo "QA has handed over for v\${NN} (status Approved, assigned to Build Meister),"
+                echo "cherry-picks their commits in one round, then comments on each ticket and"
+                echo "sets it to Patched. Name ticket id(s) to restrict it to those; with none it"
+                echo "takes every eligible ticket. It shows the plan and asks y/N before pushing"
+                echo "and deploying to beta -- pass --yes to skip that for a scheduled run."
                 exit 0
                 ;;
             *)
-                die "Unknown argument: $1. Use --help for usage."
+                # After 'cherrypick' / 'patchtickets', remaining non-flag args are
+                # commit ids / ticket ids respectively.
+                if [[ "$FORCED_PHASE" == "cherrypick" ]]; then
+                    CHERRYPICK_ARGS+=("$1")
+                    shift
+                elif [[ "$FORCED_PHASE" == "patchtickets" ]]; then
+                    PATCHTICKET_ARGS+=("${1#\#}")
+                    shift
+                else
+                    die "Unknown argument: $1. Use --help for usage."
+                fi
                 ;;
         esac
     done
@@ -618,10 +1692,6 @@ main() {
 
     if [[ "$(whoami)" != "build" ]]; then
         die "Must run as 'build' user (current user: $(whoami))"
-    fi
-
-    if [[ ! -f "$SCHEDULE_FILE" ]]; then
-        die "Schedule file not found: $SCHEDULE_FILE"
     fi
 
     if [[ ! -f "$BUILDENV" ]]; then
@@ -659,6 +1729,12 @@ main() {
         wrapup)
             do_wrapup
             ;;
+        cherrypick)
+            do_cherrypick
+            ;;
+        patchtickets)
+            do_patchtickets
+            ;;
         *)
             die "Unknown phase: $phase"
             ;;
@@ -668,10 +1744,24 @@ main() {
     log "BUILD PHASE '$phase' COMPLETED SUCCESSFULLY"
     log "============================================"
 
-    # Send success notification
+    # Non-fatal docker smoke failures completed the phase but must be flagged in
+    # the completion banner and email so they are not missed.
+    local smoke_failed; smoke_failed="$(smoke_failed_list)"
+    if [[ -n "$smoke_failed" ]]; then
+        log "*** NOTE: docker smoke test FAILED for:$smoke_failed -- see the WARNING above ***"
+    fi
+
+    # Send success notification. Use PHASE_VER (the version this phase produces),
+    # not BRANCHNN, since preview1/preview2 run before BRANCHNN is bumped.
+    local ver="${PHASE_VER:-$BRANCHNN}"
     if ! $DRY_RUN; then
-        echo "autoBuild.sh completed phase '$phase' for v${BRANCHNN} successfully at $(date)" \
-            | mail -s "AUTOBUILD OK: $phase v${BRANCHNN}" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
+        local subj="AUTOBUILD OK: $phase v${ver}"
+        local body="autoBuild.sh completed phase '$phase' for v${ver} successfully at $(date)"
+        if [[ -n "$smoke_failed" ]]; then
+            subj="AUTOBUILD OK (SMOKE FAILED:$smoke_failed): $phase v${ver}"
+            body="$body"$'\n\n'"WARNING: docker smoke test FAILED for:$smoke_failed"$'\n'"Those beta instance(s) are broken; investigate before QA. See $LOGDIR/v${ver}.smoke-<name>.log"
+        fi
+        echo "$body" | mail -s "$subj" "${BUILDMEISTEREMAIL:-braney@ucsc.edu}" 2>/dev/null || true
     fi
 }
 

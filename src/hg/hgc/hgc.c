@@ -106,6 +106,7 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "sage.h"
@@ -248,6 +249,7 @@
 #include "geneReviewsClick.h"
 #include "bigBed.h"
 #include "bigPsl.h"
+#include "blatShare.h"
 #include "bedTabix.h"
 #include "longRange.h"
 #include "hmmstats.h"
@@ -542,8 +544,8 @@ static void hgcAnchorSomewhereExt(char *group, char *item, char *other, char *ch
  * and other parameters. */
 {
 char *itemSafe = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, itemSafe, chrom, start, end, other, tbl);
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), database, group, itemSafe, chrom, start, end, other, tbl);
 freeMem(itemSafe);
 }
 
@@ -560,8 +562,8 @@ void hgcAnchorPosition(char *group, char *item)
  * and group parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-printf("<A HREF=\"%s&g=%s&i=%s&table=%s\">",
-       hgcPathAndSettings(), group, item, tbl);
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&table=%s\">",
+       hgcPathAndSettings(), database, group, item, tbl);
 }
 
 void hgcAnchorWindow(char *group, char *item, int thisWinStart,
@@ -570,8 +572,8 @@ void hgcAnchorWindow(char *group, char *item, int thisWinStart,
  * and other parameters, INCLUDING the ability to specify left and
  * right window positions different from the current window*/
 {
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
-       hgcPathAndSettings(), group, item, chrom,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
+       hgcPathAndSettings(), database, group, item, chrom,
        thisWinStart, thisWinEnd, other);
 }
 
@@ -590,16 +592,16 @@ void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, 
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-printf("<A HREF=\"%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
-       hgcPathAndSettings(), "htcChainTransAli", item, chrom, winStart, winEnd, other,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
+       hgcPathAndSettings(), database, "htcChainTransAli", item, chrom, winStart, winEnd, other,
        tbl, cdsStart, cdsEnd);
 }
 void hgcAnchorPseudoGene(char *item, char *other, char *chrom, char *tag, int start, int end, char *qChrom, int qStart, int qEnd, int chainId, char *db2)
 /* Generate an anchor to htcPseudoGene. */
 {
 char *encodedItem = cgiEncode(item);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&ci=%d&qc=%s&qs=%d&qe=%d&xyzzy=xyzzy#%s\">",
-       hgcPathAndSettings(), "htcPseudoGene", encodedItem, chrom, start, end,
+printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&ci=%d&qc=%s&qs=%d&qe=%d&xyzzy=xyzzy#%s\">",
+       hgcPathAndSettings(), database, "htcPseudoGene", encodedItem, chrom, start, end,
        other, db2, chainId, qChrom, qStart, qEnd, tag);
 }
 
@@ -757,9 +759,9 @@ if (featDna && end > start)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
-	   start, (item != NULL ? cgiEncode(item) : ""),
+	   database, start, (item != NULL ? cgiEncode(item) : ""),
 	   cgiEncode(chrom), start, end, strand, tbl, trackHubSkipHubName(database), trackHubSkipHubName(hGenome(database)));
     }
 }
@@ -813,6 +815,12 @@ printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE, smp->name);
 }
 
 
+// Many callers pass a track-specific struct cast to (struct bed *), relying on
+// its bed-compatible leading fields (only the first bedSize fields are read).
+// At -O3 GCC's -Warray-bounds flags those casts because the real object is
+// smaller than struct bed; the accesses are safe by the bed-layout convention.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb)
 /* Print first bedSize fields of a bed type structure in
  * standard format. */
@@ -840,6 +848,7 @@ if (bedSize >= 6)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 
 }
+#pragma GCC diagnostic pop
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -2964,10 +2973,12 @@ switch (cdsStatus)
 void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
-char *rootTable = tdb->table;
 char query[512];
 char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 char *db = (liftDb == NULL) ? database : liftDb;
+// tdb->table carries the hub_NNN_ prefix for quickLifted tracks; the
+// actual SQL table lives in the source assembly under the bare name.
+char *rootTable = (liftDb == NULL) ? tdb->table : trackHubSkipHubName(tdb->table);
 struct sqlConnection *conn = hAllocConn(db);
 struct genePred *gpList = NULL, *gp = NULL;
 char table[HDB_MAX_TABLE_STRING];
@@ -2979,7 +2990,23 @@ char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 if (!hFindSplitTable(db, seqName, rootTable, table, sizeof table, NULL))
     errAbort("showGenePos track %s not found", rootTable);
 sqlSafef(query, sizeof(query), "name = \"%s\"", name);
-gpList = genePredReaderLoadQuery(conn, table, query);
+if (liftDb != NULL)
+    {
+    // Fetch via quickLiftSql so we get both the items and the set of
+    // swapped chains that map them back to the destination assembly, then
+    // lift the genePreds with calcLiftOverGenePreds.  seqName/winStart/
+    // winEnd are destination coords; quickLiftSql picks up the chains
+    // that overlap that window on the destination side.
+    char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+    struct hash *chainHash = newHash(8);
+    char extraWhere[512];
+    sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", name);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, rootTable,
+        seqName, winStart, winEnd, extraWhere, chainHash);
+    calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
+    }
+else
+    gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
@@ -3148,6 +3175,11 @@ void geneShowPosAndLinksPal(char *geneName, char *pepName, struct trackDb *tdb,
  * it's the old table name, but will check gbSeq first. */
 {
 char *geneTable = tdb->table;
+// For quickLifted tracks, SQL tables (gbSeq, yalePseudoAssoc, …) live in
+// the source assembly; use that for table existence / hGenBank checks so
+// we don't hit "Unknown database hub_NNN_<db>".
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
 boolean foundPep = FALSE;
 
 showGenePos(geneName, tdb);
@@ -3156,9 +3188,9 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
     {
     char *yaleTable = trackDbSetting(tdb, "yalePseudoAssoc");
 
-    if ((yaleTable != NULL) && (hTableExists(database, yaleTable)))
+    if ((yaleTable != NULL) && (hTableExists(srcDb, yaleTable)))
         {
-        struct sqlConnection *conn = hAllocConn(database);
+        struct sqlConnection *conn = hAllocConn(srcDb);
         char query[512];
         sqlSafef(query, sizeof(query),
             "select * from %s where transcript = '%s'", yaleTable, geneName);
@@ -3181,7 +3213,7 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
+if ((pepTable != NULL) && hGenBankHaveSeq(srcDb, pepName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
@@ -3238,9 +3270,12 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (palInfo)
+// Skip the CDS FASTA alignment link for quickLifted tracks: hgPal would try
+// to open the destination's hub-virtual db, and palInfo coords are in
+// destination space while the multiZ alignment lives in source coords.
+if (palInfo && liftDb == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConn(srcDb);
     addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left,
         palInfo->right, palInfo->rnaName);
     hFreeConn(&conn);
@@ -3550,11 +3585,16 @@ if (showEvery)
     printf("<H3>Genomic Alignments</H3>");
 else
     printf("<H3>%s/Genomic Alignments</H3>", item);
+/* Hub track names have special characters replaced with underbar, but tdb->table does not. */
+char *aliTable = cloneString(tdb->table);
+if (isHubTrack(aliTable))
+    trackHubFixName(aliTable);
 if (showEvery || pslIsProtein(pslList))
-    printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
+    printAlignmentsSimple(pslList, start, "htcBigPslAli", aliTable, item);
 else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
-        tdb->table, item);
+        aliTable, item);
+freeMem(aliTable);
 pslFreeList(&pslList);
 
 
@@ -3635,9 +3675,9 @@ char *trackName = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackName, tdb->track))
     parentTdb = hTrackDbForTrack(database, trackName);
-printf("<P><A HREF=\"%s?g=%s&%s\">"
+printf("<P><A HREF=\"%s?db=%s&g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
-       hTrackUiForTrack(tdb->track), trackName, cartSidUrlString(cart), parentTdb->shortLabel);
+       hTrackUiForTrack(tdb->track), database, trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
@@ -3679,7 +3719,7 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-if (!isCustomTrack(tdb->track))
+if (!isCustomTrack(tdb->track) && !isMyVariantsType(tdb->type))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb, cart);
@@ -4779,6 +4819,26 @@ struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 boolean otherIsActive = FALSE;
 
+// The item name is either a bare chain id (from the "identical" regions) or
+// "chainId.type.chromStart.chromEnd" identifying the specific difference that
+// was clicked.  Pull the chain id off the front and remember the clicked
+// region (if any) so we can bold it in the tables below.
+char *chainItem = cloneString(item);
+long clickStart = -1, clickEnd = -1;
+char *dot = strchr(chainItem, '.');
+if (dot != NULL)
+    {
+    *dot = 0;
+    char *rest = dot + 1;
+    char *words[4];
+    if (chopByChar(rest, '.', words, ArraySize(words)) == 3)
+        {
+        clickStart = atol(words[1]);
+        clickEnd = atol(words[2]);
+        }
+    }
+item = chainItem;
+
 if (hDbIsActive(otherDb))
     otherIsActive = TRUE;
 
@@ -4871,6 +4931,11 @@ for(hr = regions; hr; hr = hr->next)
         }
     }
 
+// If the click came from a specific difference (not one of the "identical"
+// regions), the matching row is shown in bold in the tables below.
+if (clickStart >= 0)
+    printf("<BR>The item you clicked on is shown in <B>bold</B> in the tables below.<BR>\n");
+
 if (deletions)
     {
     printf("<BR><B>Deletions in Window:</B><BR>");
@@ -4886,7 +4951,8 @@ if (deletions)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4909,7 +4975,8 @@ if (insertions)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->bases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4932,7 +4999,8 @@ if (doubles)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -4955,7 +5023,8 @@ if (mismatches)
         ourPos = cloneString(addCommasToPos(database, position));
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
-        printf("<TR><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
+        char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
+        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5001,6 +5070,7 @@ type = words[0];
 if (container == NULL && wordCount > 0)
     {
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
+        || sameString(type, "bigQuickLiftChain")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
     else if ((  sameString(type, "narrowPeak")
@@ -5464,7 +5534,12 @@ void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
 static char buf[512*2];
 int wordCount;
 char *words[4];
-strcpy(buf, ss);
+/* SECURITY (refs #38054): ss comes from the cart variable of the same name, or from
+ * the item name, and a visitor controls both.  A legitimate value is a short triple
+ * of trash file paths, so anything that does not fit is a bug or an attack.  safecpy
+ * aborts instead of writing past the end of the buffer, which matches the errAborts
+ * below on the other malformed cases. */
+safecpy(buf, sizeof buf, ss);
 wordCount = chopLine(buf, words);
 
 if (wordCount < 1)
@@ -6620,10 +6695,12 @@ if (row != NULL)
     }
 }
 
-void printGeneCards(char *geneName)
-/* Print out a link to GeneCards (Human only). */
+void printGeneCards(char *db, char *geneName)
+/* Print out a link to GeneCards (Human only).
+ * Caller passes the assembly db so quickLifted callers can pass the source
+ * (quickLiftDb) rather than the destination hub_NNN_<db>. */
 {
-if (startsWith("hg", database) && isNotEmpty(geneName))
+if (startsWith("hg", db) && isNotEmpty(geneName))
     {
     printf("<B>GeneCards:</B> "
 	   "<A HREF = \"http://www.genecards.org/cgi-bin/cardsearch.pl?"
@@ -7008,7 +7085,11 @@ struct psl *psl, *pslList = NULL;
 boolean hasBin;
 char splitTable[HDB_MAX_TABLE_STRING];
 char query[1024];
-if (!hFindSplitTable(database, seqName, table, splitTable, sizeof splitTable, &hasBin))
+// Use the conn's db rather than the global `database`; for quickLifted
+// tracks the conn is on the source assembly while `database` is the
+// destination (possibly hub_NNN_<db>).
+char *connDb = sqlGetDatabase(conn);
+if (!hFindSplitTable(connDb, seqName, table, splitTable, sizeof splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
 if (isNotEmpty(tName))
     sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'",
@@ -8161,7 +8242,8 @@ else
     fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
 	    qName, psl->tName, psl->tStart+1, psl->tEnd);
 
-fputs("Click on links in the frame to the left to navigate through "
+if (!cartUsualBoolean(cart, "blatNewPage", FALSE))  /* no "frame" in the new single-page view */
+    fputs("Click on links in the frame to the left to navigate through "
       "the alignment.\n", f);
 blockCount = pslShowAlignment(psl, qType == gftProt,
                               qName, qSeq, qStart, qEnd,
@@ -8276,7 +8358,8 @@ if (restrictToWindow)
 char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
 	psl->qName, displayChromName, partTStart+1, partTEnd);
-fprintf(body, "Click on links in the frame to the left to navigate through "
+if (!cartUsualBoolean(cart, "blatNewPage", FALSE))  /* no "frame" in the new single-page view */
+    fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
 blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
@@ -8288,11 +8371,26 @@ blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
 return blockCount;
 }
 
+/* The modern single-page alignment (webStartGbNoBanner chrome, no <frameset>) can now stand in for
+ * the classic frameset on any alignment page, not just hgBlat's - gated by the modernAlignPage
+ * hg.conf flag.  alnModernStart() starts the right page chrome and sets gAlnModern; showSomeAlignment()
+ * then renders the modern or classic body to match.  These are forward-declared here because
+ * showSomeAlignment() sits above their definitions. */
+static boolean gAlnModern = FALSE;
+static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType qType,
+                       int qStart, int qEnd, char *qName, int cdsS, int cdsE, boolean blatContext);
+
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq,
                        enum gfType qType, int qStart, int qEnd,
                        char *qName, int cdsS, int cdsE)
-/* Display protein or DNA alignment in a frame. */
+/* Display protein or DNA alignment in a frame (or the modern single page when gAlnModern). */
 {
+if (gAlnModern)
+    {   /* modern single-page view; blatContext=FALSE -> neutral chrome (no BLAT title/buttons) */
+    showSomeAlignmentModern(psl, oSeq, qType, qStart, qEnd, qName, cdsS, cdsE, FALSE);
+    webEndGb();
+    exit(0);   // we drew the whole page; skip the frameset close
+    }
 int blockCount, i;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
@@ -8458,7 +8556,7 @@ if (!trackHubDatabase(database))
 
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
-htmlFramesetStart(title);
+alnModernStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "l");
@@ -8612,7 +8710,7 @@ aliTable = cartString(cart, "aliTable");
 char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
-htmlFramesetStart(title);
+alnModernStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "o");
@@ -8876,7 +8974,7 @@ if (qSeq == NULL)
 char title[1024];
 safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
-htmlFramesetStart(title);
+alnModernStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -8933,9 +9031,302 @@ else
 char title[1024];
 safef(title, sizeof title, "%s %s vs %s %s ",
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
-htmlFramesetStart(title);
+alnModernStart(title);
 /*showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0); */
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
+}
+
+static char *blatAsmLabel(char *database)
+/* A user-facing assembly label for the page title.  For an assembly hub the internal
+ * "hub_NNN_GCA_..." database name is not helpful, so use the assembly's friendly organism plus its
+ * accession; for a native assembly just use the db name (e.g. "hg38"). */
+{
+if (!trackHubDatabase(database))
+    return cloneString(database);
+char *acc = trackHubSkipHubName(database);   /* drop the "hub_NNN_" prefix -> the accession */
+char *org = hGenome(acc);                    /* GenArk table's friendly genome name for GC* accs */
+if (isEmpty(org))
+    {
+    org = trackHubAssemblyField(database, "organism");   /* else the hub's genomes.txt organism */
+    org = trackHubSkipHubName(org);          /* strip the "hub_NNN_" prefix addHubName() baked in */
+    }
+if (isEmpty(org))
+    return cloneString(acc);
+char buf[256];
+safef(buf, sizeof buf, "%s %s", org, acc);
+return cloneString(buf);
+}
+
+static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType qType,
+                       int qStart, int qEnd, char *qName, int cdsS, int cdsE, boolean blatContext)
+/* Modern single-page version of showSomeAlignment: a gold title bar, a full-height "jump to"
+ * sidebar, then an "Alignment summary" and the base-by-base alignment inlined below with steel-blue
+ * section headers, so the whole page scrolls (no <frameset>).  The alignment body itself is
+ * generated by the shared library as before.  The caller supplies the page chrome via
+ * webStartGbNoBanner()/webEndGb() - a menubar and <main> with no legacy section tables - so
+ * everything here is plain, table-free HTML.  blatContext=TRUE is the hgBlat path: the title says
+ * "BLAT" and the bar carries "Back to results" and "Share a link"; blatContext=FALSE is a plain
+ * track click (mRNA/EST/PSL...), which has no BLAT results to go back to or share. */
+{
+if (qName == NULL)
+    qName = psl->qName;
+char *chrom = chromAliasGetDisplayChrom(database, cart, psl->tName);
+/* Alternate (chromAlias) names for the genomic sequence - e.g. its RefSeq/GenBank/Ensembl accessions
+ * - shown after the main name in the "Only genome sequence" header. */
+struct dyString *aliasDy = dyStringNew(128);
+struct slName *aliasList = chromAliasFindAliases(psl->tName), *al;
+struct hash *seenAlias = hashNew(0);
+hashStore(seenAlias, chrom);        /* skip the name already shown, and the native name */
+hashStore(seenAlias, psl->tName);
+boolean firstAlias = TRUE;
+for (al = aliasList; al != NULL; al = al->next)
+    {
+    if (isEmpty(al->name) || hashLookup(seenAlias, al->name))
+        continue;   /* skip empties, the shown name, and duplicates (e.g. Ensembl and GenBank "7") */
+    hashStore(seenAlias, al->name);
+    dyStringPrintf(aliasDy, "%s%s", firstAlias ? "" : ", ", al->name);
+    firstAlias = FALSE;
+    }
+hashFree(&seenAlias);
+char *aliasStr = dyStringCannibalize(&aliasDy);   /* "NC_000007.14, CM000669.2, 7" or "" */
+double ident = 100.0 - pslCalcMilliBad(psl, TRUE) * 0.1;
+
+char *idColor = (ident >= 98) ? "#1f7a34" : (ident >= 95) ? "#4d7c0f" :
+                (ident >= 90) ? "#b45309" : "#b1301f";
+
+/* Offer "Share a link" only in the hgBlat context, and only when a durable bigPsl custom track
+ * backs these results; without it there is nothing for a shared session to rebuild the alignment
+ * from.  A plain track click has no BLAT session to share. */
+char *shareBb = blatContext ? blatFindPinnedBigPsl(cart) : NULL;
+boolean canShare = (shareBb != NULL);
+freeMem(shareBb);
+
+/* Colors imported from the BLAT Redesign (slide 3): grey page, steel-blue section-header bars, navy
+ * links with maroon hover, slate text.  The <h2>/<hr> the shared alignment code emits are hidden; its
+ * <h4> section headings become the steel-blue bars.  The page chrome is webStartGbNoBanner (a menubar
+ * and <main>, no legacy section tables), so we draw our own gold title bar in plain HTML. */
+printf("<style>"
+       "#main-menu-whole{margin-bottom:0}"   /* no gap between the menubar and the title bar */
+       "#mainContent{background:#eef1f4}"     /* grey page behind the white alignment panel */
+       ".blatTitleBar{background:#eaca92; color:#000; box-sizing:border-box; display:flex;"
+       " align-items:center; justify-content:space-between; padding:8px 16px}"  /* gold title band */
+       ".blatTitleBar .blatTtl{font-size:18px; font-weight:700}"
+       ".blatTitleBar .blatBtns{display:flex; gap:8px; align-items:center}"
+       ".blatBtn{padding:4px 12px; font-size:13px; border:1px solid #999; border-radius:3px;"
+       " background:#e6e6e6; text-decoration:none; white-space:nowrap; cursor:pointer}"
+       /* nice_menu.css sets a:link blue (specificity 0,1,1); a.blatBtn:link (0,2,1) beats it */
+       "a.blatBtn:link, a.blatBtn:visited, a.blatBtn:hover{color:#000; text-decoration:none}"
+       ".blatBtn:hover{background:#d8d8d8}"
+       "#blatAlnBody{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:#374a5e;"
+       " display:grid; grid-template-columns:220px 1fr;"      /* full-height sidebar + content column */
+       " background:#fff}"                                    /* edge to edge: no margin, no border */
+       "#blatAlnBody a{color:#0a3a7a}"
+       "#blatAlnBody a:hover{color:#8b1a1a}"
+       "#blatAlnNav{grid-column:1; grid-row:1; background:#f4f7fb; border-right:1px solid #dde3ea}"
+       /* keep the grey column full height, but pin the links so they stay visible while scrolling */
+       "#blatAlnNavInner{position:sticky; top:0; padding:18px 20px; display:flex; flex-direction:column;"
+       " gap:16px}"
+       "#blatAlnNav a{font-weight:700; text-decoration:none}"   /* already obviously links; no underline */
+       "#blatAlnBlocks{display:flex; flex-direction:column; gap:2px; margin:2px 0 0 14px}"  /* block links, tight list indented under genome sequence */
+       "#blatAlnBlocks a{font-weight:400; font-size:13px}"
+       "#blatAlnContent{grid-column:2; grid-row:1; min-width:0; padding:0 20px 14px}"
+       "#blatAlnContent h2{display:none}"
+       "#blatAlnContent hr{display:none}"
+       "#blatAlnContent h4{margin:16px -20px 0; padding:8px 20px; background:#4c759c; color:#fff;"
+       " font-size:15px; font-weight:700}"                     /* -20px: bar spans full content width */
+       "#blatAlnContent h4:first-child{margin-top:0}"          /* Alignment Summary flush at top */
+       "#blatAlnContent h4 a{color:#fff}"
+       /* undo bootstrap.css (pulled in by webStartGbNoBanner's gbHeader) on the sequence blocks:
+        * it would give <pre> a grey box, a border and word-break that mangles the alignment */
+       "#blatAlnContent pre{margin:0; padding:2px 0 12px; line-height:1.4; background:none; border:0;"
+       " border-radius:0; color:#374a5e; white-space:pre; word-break:normal; word-wrap:normal}"
+       /* key-value summary strip, mirroring hgBlat's .blatStrip (label over value, thin dividers) */
+       ".blatAlnStrip{display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:2px 0 14px}"
+       ".blatAlnStat{display:flex; flex-direction:column; gap:1px}"
+       ".blatAlnStat .k{font-size:12px; color:#5b6572; font-weight:700}"
+       ".blatAlnStat .v{font-size:14px; color:#1e2833; font-weight:700}"
+       ".blatAlnStrip .d{width:1px; height:28px; background:#d0d0d0}"
+       "</style>\n");
+
+/* gold title bar, drawn directly (no framework subheadingBar, no JS): title on the left, then (in
+ * the hgBlat context) a "Back to results" and, when a durable track backs the results, a "Share a
+ * link" button; in a plain track click, a "Back to Genome Browser" button that returns to hgTracks
+ * at this alignment's location. */
+printf("<div class='blatTitleBar'>");
+printf("<span class='blatTtl'>%sBase Alignment: %s</span>",
+       blatContext ? "BLAT " : "", blatAsmLabel(database));
+printf("<span class='blatBtns'>");
+if (blatContext)
+    printf("<a href='hgBlat?blatReopen=1&hgsid=%s' class='blatBtn'>"
+           "\xe2\x80\xb9 Back to results</a>", cartSessionId(cart));
+else
+    printf("<a href='hgTracks?db=%s&position=%s:%d-%d&hgsid=%s' class='blatBtn'>"
+           "Back to Genome Browser \xe2\x80\xba</a>",
+           database, psl->tName, psl->tStart + 1, psl->tEnd, cartSessionId(cart));
+if (canShare)
+    printf("<a href='#' id='blatShareBtn' class='blatBtn'>Share a link</a>");
+printf("</span></div>\n");
+
+/* one white panel laid out as two grid columns: a full-height "jump to" sidebar on the left, and on
+ * the right an "Alignment Summary" header, the summary line, and the base-by-base alignment inlined
+ * so the whole page scrolls */
+printf("<div id='blatAlnBody'>\n");
+
+printf("<div id='blatAlnContent'>\n");
+printf("<h4>Alignment summary</h4>\n");
+/* comma-format the coordinates and base counts, matching the new Table view (readable at the
+ * hundreds-of-millions scale of genomic coordinates, and the convention elsewhere in the browser) */
+char tStartC[32], tEndC[32], matchC[32], qSizeC[32];
+sprintLongWithCommas(tStartC, psl->tStart + 1);
+sprintLongWithCommas(tEndC, psl->tEnd);
+sprintLongWithCommas(matchC, psl->match + psl->repMatch);
+sprintLongWithCommas(qSizeC, psl->qSize);
+/* key-value strip (Query / Position / Identity / Matches / Strand), styled like hgBlat's summary
+ * strip so the two pages read as one design. */
+printf("<div class='blatAlnStrip'>"
+       "<div class='blatAlnStat'><span class='k'>Query</span><span class='v'>%s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Position</span><span class='v'>%s:%s-%s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Identity</span>"
+       "<span class='v' style='color:%s'>%.1f%%</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Matches</span><span class='v'>%s of %s</span></div>"
+       "<div class='d'></div>"
+       "<div class='blatAlnStat'><span class='k'>Strand</span><span class='v'>%s</span></div>"
+       "</div>\n",
+       qName, chrom, tStartC, tEndC, idColor, ident, matchC, qSizeC, psl->strand);
+if (isNotEmpty(aliasStr))
+    printf("<p>Genome sequence %s is also known as: %s.</p>\n", chrom, aliasStr);
+/* The shared library returns the number of alignment blocks it actually shows.  The DNA path merges
+ * blocks separated by gaps <= 8 bases, so this can be fewer than psl->blockCount; use it (not
+ * psl->blockCount) so the sidebar's "Block N" links match the #1..#N anchors that were emitted. */
+int blockCount;
+/* Capture the shared library's alignment HTML so we can reorder its sections for this page.  The
+ * library emits them as Query (#cDNA), Genome (#genomic), then Side-by-side (#ali), with the
+ * per-block anchors living inside the Genome section.  We want Query, Side-by-side, Genome so the
+ * long per-block list sits at the bottom of both the page and the sidebar.  Reorder here, on the
+ * server, rather than in JS, so the page does not reflow after it loads. */
+char *alnHtml = NULL;
+size_t alnLen = 0;
+FILE *alnF = open_memstream(&alnHtml, &alnLen);
+if (alnF == NULL)
+    {
+    /* open_memstream failed (out of memory): render straight to stdout, skipping the section
+     * reorder, rather than passing a NULL FILE to the renderer and then calling fclose(NULL). */
+    if (qType == gftRna || qType == gftDna)
+        blockCount = showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
+    else
+        blockCount = showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
+    }
+else
+    {
+    if (qType == gftRna || qType == gftDna)
+        blockCount = showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
+    else
+        blockCount = showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
+    fclose(alnF);
+    char *pGenome = (alnHtml != NULL) ? stringIn("<H4><A NAME=genomic>", alnHtml) : NULL;
+    char *pAli    = (alnHtml != NULL) ? stringIn("<H4><A NAME=ali>", alnHtml) : NULL;
+    if (pGenome != NULL && pAli != NULL && pGenome < pAli)
+        {                                                /* Query, then Side-by-side, then Genome */
+        fwrite(alnHtml, 1, pGenome - alnHtml, stdout);   /* legend + Query (#cDNA) section */
+        fputs(pAli, stdout);                             /* Side-by-side (#ali) section, through footnote */
+        fwrite(pGenome, 1, pAli - pGenome, stdout);      /* Genome (#genomic) section, with block anchors */
+        }
+    else
+        fputs((alnHtml != NULL) ? alnHtml : "", stdout);
+    free(alnHtml);   /* libc free: open_memstream's buffer is malloc'd, not a kent needMem block */
+    }
+printf("</div>\n");   /* #blatAlnContent */
+
+/* Sidebar, emitted after the alignment so blockCount is known; CSS grid puts it back in column 1.
+ * The inner div is position:sticky so the links stay in view as the long alignment scrolls. */
+printf("<div id='blatAlnNav'><div id='blatAlnNavInner'>\n");
+printf("<a href='#cDNA'>Only query sequence</a>\n"
+       "<a href='#ali'>Side by side alignment</a>\n"
+       "<a href='#genomic'>Only genome sequence</a>\n");
+if (blockCount > 1)   /* per-block jump links, indented under the genome-sequence item where their anchors live */
+    {
+    int bi;
+    printf("<div id='blatAlnBlocks'>\n");
+    for (bi = 1;  bi <= blockCount;  ++bi)
+        printf("<a href='#%d'>Block %d</a>\n", bi, bi);
+    printf("</div>\n");
+    }
+printf("</div></div>\n");
+
+printf("</div>\n");   /* #blatAlnBody */
+
+/* The cDNA/Genomic/Side-by-side section headers come from shared library code (fuzzyShow.c /
+ * pslShow.c) as "cDNA <qName>" / "Genomic <chrom> :" / "Side by Side Alignment"; relabel them to
+ * the sidebar wording (sentence case) via JS (there is no C hook for it), keeping the
+ * #cDNA/#genomic/#ali jump anchors.  qName and chrom are already sanitized. */
+jsInlineF(
+    "(function(){\n"
+    "function relabel(anchor, text){\n"
+    "  var a = document.getElementsByName(anchor);\n"
+    "  if (a && a.length){\n"
+    "    var h = a[0].parentNode;\n"
+    "    var star = /\\*\\s*$/.test(h.textContent) ? '*' : '';\n"  // keep the footnote marker if present
+    "    h.textContent = '';\n"
+    "    var k = document.createElement('a'); k.name = anchor; h.appendChild(k);\n"
+    "    h.appendChild(document.createTextNode(text + star));\n"
+    "  }\n"
+    "}\n"
+    "relabel('cDNA', 'Only query sequence: %s');\n"
+    "relabel('genomic', 'Only genome sequence: %s');\n"
+    "relabel('ali', 'Side by side alignment');\n"   // match the sidebar wording and sentence case
+    "})();\n",
+    qName, chrom);
+
+/* "Share a link": save an anonymous session (hgSession API), build a durable hgc?g=htcBlatAlign link
+ * that rebuilds THIS alignment from the session's durable bigPsl custom track (no BLAT re-run, no
+ * stored trash sequence), and hand it to the shared "Share a link" modal (topLinks.js shareUrl,
+ * loaded by the menu bar) so it looks like every other share dialog.  qName is already sanitized. */
+if (canShare)
+    jsInlineF(
+    "(function(){\n"
+    "var btn = document.getElementById('blatShareBtn');\n"
+    "if (!btn) return;\n"
+    "btn.addEventListener('click', function(ev){\n"
+    "  ev.preventDefault();\n"
+    "  if (btn.dataset.busy) return;\n"
+    "  btn.dataset.busy = '1';\n"
+    "  var label = btn.textContent;\n"
+    "  btn.textContent = 'Creating link\\u2026';\n"
+    "  fetch('../cgi-bin/hgSession', {method:'POST', credentials:'same-origin',"
+    " headers:{'Content-Type':'application/x-www-form-urlencoded'},"
+    " body:'hgsid=%s&hgS_doSaveSessionJson=1&hgS_shareAnon=1'})\n"
+    "  .then(function(r){ return r.json(); }).then(function(data){\n"
+    "    btn.textContent = label; btn.dataset.busy = '';\n"
+    "    if (!data || !data.name) return;\n"
+    "    var link = window.location.origin + window.location.pathname +\n"
+    "      '?g=htcBlatAlign&c=%s&o=%d&i=' + encodeURIComponent('%s') +\n"  // db comes from the session
+    "      '&u=l&s=' + encodeURIComponent(data.name);\n"
+    "    if (window.topLinks && topLinks.shareUrl) topLinks.shareUrl(link);\n"
+    "  }).catch(function(){ btn.textContent = label; btn.dataset.busy = ''; });\n"
+    "});\n"
+    "})();\n",
+    cartSessionId(cart), psl->tName, psl->tStart, qName);
+}
+
+void alnModernStart(char *classicTitle)
+/* Begin an alignment page.  With the modernAlignPage hg.conf flag set, start the modern single-page
+ * chrome (webStartGbNoBanner) and arm gAlnModern so showSomeAlignment() renders the modern body;
+ * otherwise start the classic <frameset>.  This is the plain track-click entry point (mRNA/EST/PSL
+ * details, transMap, retrogene, literature alignments), so the modern page is drawn in its neutral,
+ * non-BLAT form.  Callers must pair it with showSomeAlignment(), which honors gAlnModern. */
+{
+if (cfgOptionBooleanDefault("modernAlignPage", FALSE))
+    {
+    gAlnModern = TRUE;
+    char pageTitle[256];
+    safef(pageTitle, sizeof pageTitle, "Base Alignment: %s", blatAsmLabel(database));
+    webStartGbNoBanner(cart, database, pageTitle);   // menubar + <main>, no legacy section tables
+    }
+else
+    htmlFramesetStart(classicTitle);
 }
 
 void htcUserAli(char *fileNames)
@@ -8948,13 +9339,31 @@ struct psl *psl;
 int start;
 enum gfType tt, qt;
 boolean isProt;
+/* In hgBlat's new table mode (blatNewPage), or wherever the modernAlignPage flag is set, show a
+ * modern single-page alignment instead of the classic two-frame <frameset>. */
+boolean modern = cartUsualBoolean(cart, "blatNewPage", FALSE)
+                 || cfgOptionBooleanDefault("modernAlignPage", FALSE);
 
 char title[1024];
 safef(title, sizeof title, "User Sequence vs Genomic");
-htmlFramesetStart(title);
+if (modern)
+    {
+    char pageTitle[256];
+    safef(pageTitle, sizeof pageTitle, "BLAT Base Alignment: %s", blatAsmLabel(database));
+    webStartGbNoBanner(cart, database, pageTitle);   // menubar + <main>, no legacy section tables
+    }
+else
+    htmlFramesetStart(title);
 
 start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
+if (modern && (!fileExists(pslName) || !fileExists(faName)))
+    {   /* the search's trash files have been cleaned up: a friendly note, not a raw file error */
+    printf("<p>This BLAT alignment is no longer available. The search results it came from have "
+           "expired. Please run a new <a href=\"hgBlat\">BLAT search</a>.</p>\n");
+    webEndGb();
+    exit(0);
+    }
 pslxFileOpen(pslName, &qt, &tt, &lf);
 isProt = (qt == gftProt);
 while ((psl = pslNext(lf)) != NULL)
@@ -8973,7 +9382,48 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
 	break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
-showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);
+if (modern)
+    {
+    showSomeAlignmentModern(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0, TRUE);   // hgBlat context
+    webEndGb();
+    exit(0);   // we drew the whole page; skip the framework's table-closing cartHtmlEnd
+    }
+else
+    showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);        // classic frameset; exits itself
+}
+
+void htcBlatAlign(char *qName)
+/* Durable base-by-base alignment for a shared BLAT link (g=htcBlatAlign): rebuild one alignment from
+ * the saved session's durable bigPsl custom track (blatLastBigBed) instead of the ephemeral trash
+ * .pslx/.fa the fresh-search htcUserAli path reads.  seqName and o identify the hit; the query
+ * sequence comes from the bigPsl record itself, so no stored trash sequence is needed.  This backs
+ * the "Share a link" button on the modern alignment page. */
+{
+char pageTitle[256];
+safef(pageTitle, sizeof pageTitle, "BLAT Base Alignment: %s", database);
+webStartGbNoBanner(cart, database, pageTitle);   // menubar + <main>, no legacy section tables
+char *bbFile = blatFindPinnedBigPsl(cart);
+if (bbFile == NULL || !fileExists(bbFile))
+    {
+    printf("<p>This shared BLAT alignment is no longer available. The custom track that stored it "
+           "has expired or been removed. Please run a new <a href=\"hgBlat\">BLAT search</a>.</p>\n");
+    webEndGb();
+    exit(0);
+    }
+int start = cartInt(cart, "o");
+char *seq = NULL;
+struct psl *psl = pslFromBigPslFileMatch(bbFile, seqName, start, qName, &seq, NULL);
+if (psl == NULL || seq == NULL)
+    {
+    printf("<p>This alignment was not found in the shared BLAT results.</p>\n");
+    webEndGb();
+    exit(0);
+    }
+enum gfType qType = pslIsProtein(psl) ? gftProt : gftDna;
+struct dnaSeq *oSeq = newDnaSeq(cloneString(seq), strlen(seq), qName);
+showSomeAlignmentModern(psl, oSeq, qType, 0, oSeq->size, NULL, 0, 0, TRUE);   // hgBlat shared-link context
+webEndGb();
+exit(0);   // we drew the whole page; skip the framework's table-closing cartHtmlEnd
 }
 
 void htcProteinAli(char *readName, char *table)
@@ -8994,7 +9444,7 @@ char *pred = NULL;
 
 char title[1024];
 safef(title, sizeof title, "Protein Sequence vs Genomic");
-htmlFramesetStart(title);
+alnModernStart(title);
 
 addp = cartUsualInt(cart, "addp",0);
 pred = cartUsualString(cart, "pred",NULL);
@@ -9059,7 +9509,7 @@ boolean hasBin;
 
 char title[1024];
 safef(title, sizeof title, "Sequence %s", readName);
-htmlFramesetStart(title);
+alnModernStart(title);
 
 start = cartInt(cart, "o");
 if (!hFindSplitTable(database, seqName, table, fullTable, sizeof fullTable, &hasBin))
@@ -9409,7 +9859,7 @@ int rowOffset = hOffsetPastBin(database, seqName, pslTable);
 
 char title[1024];
 safef(title, sizeof title, "Sequence %s", probeName);
-htmlFramesetStart(title);
+alnModernStart(title);
 start = cartInt(cart, "o");
 /* get psl */
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -9626,16 +10076,13 @@ if (liftDb != NULL)
         table = trackDbSetting(tdb, "dbTableName");
         }
     else
-        table = tdb->table;
+        table = trackHubSkipHubName(tdb->table);
     struct hash *chainHash = newHash(8);
     struct sqlConnection *conn = hAllocConn(liftDb);
 
-// using this loader on genePred tables with less than 15 fields may be a problem.
-extern struct genePred *genePredExtLoad15(char **row);
-
     char extraWhere[4096];
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", geneName);
-    gpList = (struct genePred *)quickLiftSql(conn, quickLiftFile, table, seqName, winStart, winEnd,  NULL, extraWhere, (ItemLoader2)genePredExtLoad15, 0, chainHash);
+    gpList = quickLiftGenePreds(conn, quickLiftFile, table, seqName, winStart, winEnd, extraWhere, chainHash);
     hFreeConn(&conn);
 
     calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
@@ -10225,13 +10672,36 @@ else
         }
     else
         {
-        char constraints[256];
-        sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
-        char *db = database;
         char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
-        if (liftDb != NULL) 
-            db = liftDb;
-        itemCount = hgSeqItemsInRange(db, trackHubSkipHubName(table), seqName, winStart, winEnd, constraints);
+        if (liftDb != NULL)
+            {
+            // Load the genePred from the source assembly and lift it to
+            // destination coords, so hgSeqBed reads sequence from the
+            // destination assembly at the lifted exon coordinates.
+            struct genePred *gpList = getGenePredForPosition(table, geneName);
+            struct bed *bedList = NULL;
+            struct genePred *gp;
+            for (gp = gpList; gp != NULL; gp = gp->next)
+                slAddHead(&bedList, bedFromGenePred(gp));
+            slReverse(&bedList);
+            char rootName[HDB_MAX_TABLE_STRING];
+            char parsedChrom[HDB_MAX_CHROM_STRING];
+            char *bareTable = trackHubSkipHubName(table);
+            hParseTableName(liftDb, bareTable, rootName, parsedChrom);
+            struct hTableInfo *hti = hFindTableInfo(liftDb, NULL, rootName);
+            if (hti == NULL)
+                webAbort("Error", "Could not find table info for table %s (%s)",
+                         rootName, table);
+            itemCount = hgSeqBed(database, hti, bedList);
+            bedFreeList(&bedList);
+            genePredFreeList(&gpList);
+            }
+        else
+            {
+            char constraints[256];
+            sqlSafef(constraints, sizeof(constraints), "name = '%s'", geneName);
+            itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+            }
         }
     }
 if (itemCount == 0)
@@ -10791,7 +11261,7 @@ if (sameWord(tdb->table, "ensGeneNonCoding"))
 else
     {
     /* print CCDS if this is not a non-coding gene */
-    printCcdsForSrcDb(conn, item);
+    printCcdsForSrcDb(conn, tdb, item);
     printf("<BR>\n");
     }
 
@@ -12150,7 +12620,7 @@ if (url != NULL && url[0] != 0)
 		    printf("<B>RefSeq Gene(s): </B>");
                 else
 		    printf(", ");
-                printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=",
+                printf("<A HREF=\"../cgi-bin/hgc?db=%s&g=refGene&i=%s&o=%s&t=%s\">", database,
                        row[0], chromStart, chromEnd);
                 printf("%s</A></B>", row[0]);
 	        printedCnt++;
@@ -12190,21 +12660,28 @@ if (url != NULL && url[0] != 0)
         sqlSafef(query, sizeof(query),
           "select distinct r.name2 from %s l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
         refLinkTable, itemName, chrom, chromStart, chromEnd);
+        /* Slurp names first; prGRShortRefGene runs its own queries on conn,
+         * which would error with "Commands out of sync" mid-iteration. */
+        struct slName *geneNames = NULL;
         sr = sqlMustGetResult(conn, query);
         if (sr != NULL)
             {
             while ((row = sqlNextRow(sr)) != NULL)
-                {
-                prGRShortRefGene(row[0]);
-                }
+                slNameAddHead(&geneNames, row[0]);
             }
         sqlFreeResult(&sr);
+        slReverse(&geneNames);
+        struct slName *gn;
+        for (gn = geneNames; gn != NULL; gn = gn->next)
+            prGRShortRefGene(conn, gn->name);
+        slFreeList(&geneNames);
         }
 
     showOmimDisorderTable(conn, url, itemName);
     }
 
 printf("</div>"); // #omimText
+hFreeConn(&conn);
 }
 
 static void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
@@ -13053,7 +13530,9 @@ if (!sqlTableExists(conn, gbCdnaInfoTable))
     return 0;
     }
 
-if (hHasField(database, gbCdnaInfoTable, "version"))
+// Use the conn's db so we don't abort when called from quickLifted paths
+// where `database` is the destination (possibly hub_NNN_<db>).
+if (hHasField(sqlGetDatabase(conn), gbCdnaInfoTable, "version"))
     {
     char query[128];
     sqlSafef(query, sizeof(query),
@@ -13085,20 +13564,25 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
-void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prRefGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
 {
 struct sqlResult *sr;
 char **row;
 char query[256];
+// For quickLifted tracks the conn is on the source assembly, while the
+// `database` global is the destination (possibly hub_NNN_<db>, which is
+// not a real MySQL db).  Use the conn's db for hTableExists/startsWith
+// checks so we don't abort on "Unknown database".
+char *srcDb = sqlGetDatabase(conn);
 int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
 char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 if (isXeno)
     {
-    if (startsWith("panTro", database))
+    if (startsWith("panTro", srcDb))
         printf("<H2>Other RefSeq Gene %s</H2>\n", rl->name);
     else
         printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
@@ -13133,7 +13617,7 @@ if (desc != NULL)
 if (isXeno)
     prRefGeneXenoInfo(conn, rl);
 else
-    printCcdsForSrcDb(conn, rl->mrnaAcc);
+    printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13179,7 +13663,7 @@ if (rl->locusLinkId != 0)
     }
 if (!startsWith("Worm", organism))
     {
-    if (startsWith("dm", database))
+    if (startsWith("dm", srcDb))
 	{
         /* PubMed never seems to have BDGP gene IDs... so if that's all
          * that's given for a name/product, ignore name / truncate product. */
@@ -13205,9 +13689,9 @@ if (!startsWith("Worm", organism))
 	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     printf("\n");
-    printGeneCards(rl->name);
+    printGeneCards(srcDb, rl->name);
     }
-if (hTableExists(database, "jaxOrtholog"))
+if (hTableExists(srcDb, "jaxOrtholog"))
     {
     struct jaxOrtholog jo;
     char * sqlRlName = rl->name;
@@ -13228,7 +13712,7 @@ if (hTableExists(database, "jaxOrtholog"))
 	}
     sqlFreeResult(&sr);
     }
-if (startsWith("hg", database))
+if (startsWith("hg", srcDb))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
@@ -13236,11 +13720,11 @@ if (startsWith("hg", database))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-prGRShortRefGene(rl->name);
+prGRShortRefGene(conn, rl->name);
 
 }
 
-void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
+void prKnownGeneInfo(struct sqlConnection *conn, struct trackDb *tdb, char *rnaName,
                    char *sqlRnaName, struct refLink *rl)
 /* print basic details information and links for a Known Gene */
 {
@@ -13270,7 +13754,7 @@ if (desc != NULL)
     printf("<BR>\n");
     }
 
-printCcdsForSrcDb(conn, rl->mrnaAcc);
+printCcdsForSrcDb(conn, tdb, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
@@ -13358,7 +13842,7 @@ else
 
 cartWebStart(cart, database, "Known Gene");
 printf("<table border=0>\n<tr>\n");
-prKnownGeneInfo(conn, rnaName, sqlRnaName, rl);
+prKnownGeneInfo(conn, tdb, rnaName, sqlRnaName, rl);
 
 printf("</tr>\n</table>\n");
 
@@ -13416,7 +13900,7 @@ char **row;
 char query[256];
 char *sqlRnaName = rnaName;
 char *summary = NULL;
-boolean isXeno = sameString(tdb->table, "xenoRefGene");
+boolean isXeno = sameString(trackHubSkipHubName(tdb->table), "xenoRefGene");
 struct refLink *rl;
 
 /* Make sure to escape single quotes for DB parseability */
@@ -13449,7 +13933,7 @@ else
 
 /* print the first section with info  */
 printf("<table border=0>\n<tr>\n");
-prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
+prRefGeneInfo(conn, tdb, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
 printf("</tr>\n</table>\n");
@@ -13471,7 +13955,12 @@ return rl;
 void doNcbiRefSeq(struct trackDb *tdb, char *itemName)
 /* Process click on a NCBI RefSeq gene. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+// When the track is quickLifted, ncbiRefSeqLink and related tables live in
+// the source assembly, not in the destination the user is viewing.
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
+char *bareTrack = trackHubSkipHubName(tdb->track);
+struct sqlConnection *conn = hAllocConn(srcDb);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -13576,7 +14065,7 @@ if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
 	    {
 	    if (!dbToLabel)
 	        errAbort("can not find trackDb dbPrefixLabels to correspond with dbPrefixUrls\n");
-	    char *databasePrefix = cloneString(database);
+	    char *databasePrefix = cloneString(srcDb);
 	    while (strlen(databasePrefix) && isdigit(lastChar(databasePrefix)))
 	        trimLastChar(databasePrefix);
 	    struct hashEl *hel = hashLookup(dbToUrl, databasePrefix);
@@ -13587,8 +14076,8 @@ if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
 		    errAbort("missing trackDb dbPrefixLabels for database prefix: '%s'\n", databasePrefix);
 		char *url = (char *)hel->val;
 		char *labelStr = (char *)label->val;
-		char *idUrl = replaceInUrl(url, nrl->externalId, cart, database,
-		    nrl->externalId, winStart, winEnd, tdb->track, TRUE, NULL);
+		char *idUrl = replaceInUrl(url, nrl->externalId, cart, srcDb,
+		    nrl->externalId, winStart, winEnd, bareTrack, TRUE, NULL);
 		printf("<b>%s:</b> ", labelStr);
 		printf("<a href='%s' target='_blank'>%s</a><br>\n",
 		    idUrl, nrl->externalId);
@@ -13607,8 +14096,8 @@ if (differentWord(nrl->locusLinkId, ""))
 
 if (differentWord(nrl->name,""))
     {
-    printGeneCards(nrl->name);
-    if (startsWith("hg", database))
+    printGeneCards(srcDb, nrl->name);
+    if (startsWith("hg", srcDb))
         {
         printf("<b>AceView:</b> ");
         printf("<a href = 'https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s' target=_blank>",
@@ -13624,36 +14113,41 @@ if (differentWord("", nrl->description))
     }
 
 static boolean hasSequence = TRUE;
-struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
-// if the itemName isn't found, it might be found as the nrl->mrnaAcc
-if (! pslList)
-    pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
-if (pslList)
+// Alignments live in the source assembly's coordinates and the table's
+// htcCdnaAli links wouldn't line up with the destination window; skip
+// the block entirely for quickLifted tracks.
+if (liftDb == NULL)
     {
-    char query[256];
-    /* verify itemName has RNA sequence to work with */
-    sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
-    char * result= sqlQuickString(conn, query);
-    if (isEmpty(result))
+    struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
+    // if the itemName isn't found, it might be found as the nrl->mrnaAcc
+    if (! pslList)
+        pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
+    if (pslList)
         {
-        printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
-        hasSequence = FALSE;
+        char query[256];
+        /* verify itemName has RNA sequence to work with */
+        sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
+        char * result= sqlQuickString(conn, query);
+        if (isEmpty(result))
+            {
+            printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
+            hasSequence = FALSE;
+            }
+        else
+            {
+            printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
+            int start = cartInt(cart, "o");
+            printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+            }
         }
     else
         {
-        printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
-        int start = cartInt(cart, "o");
-        printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+        printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
         }
-    }
-else
-    {
-    printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
+    htmlHorizontalLine();
     }
 
-htmlHorizontalLine();
-
-if (! ( sameString(tdb->track, "ncbiRefSeqPsl") || sameString(tdb->track, "ncbiRefSeqOther" ) ) )
+if (! ( sameString(bareTrack, "ncbiRefSeqPsl") || sameString(bareTrack, "ncbiRefSeqOther" ) ) )
     showGenePos(itemName, tdb);
 
 printf("<h3>Links to sequence:</h3>\n");
@@ -13661,14 +14155,25 @@ printf("<ul>\n");
 if (differentWord("", nrl->protAcc))
     {
     puts("<li>\n");
-    hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
+    // For quickLifted tracks, translate from destination-genome CDS so
+    // any destination-specific substitutions are reflected.  On the
+    // source assembly, keep the NCBI-authored protein from refPep/gbSeq.
+    if (liftDb != NULL)
+        hgcAnchorSomewhere("htcTranslatedPredMRna", itemName, "ncbiRefSeqPepTable", seqName);
+    else
+        hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
     printf("Predicted Protein</a> \n");
     puts("</li>\n");
     }
 if (hasSequence)
     {
     puts("<li>\n");
-    hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
+    // Same split: destination-derived mRNA when quickLifted, NCBI-authored
+    // seqNcbiRefSeq otherwise.
+    if (liftDb != NULL)
+        hgcAnchorSomewhere("htcGeneMrna", itemName, "ncbiRefSeqPsl", seqName);
+    else
+        hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
     printf("%s</a> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
     puts("</li>\n");
@@ -13687,13 +14192,19 @@ hFreeConn(&conn);
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+// When the track is quickLifted, refLink/refSeqAli/xenoRefSeqAli live in
+// the source assembly.  Connect there and compare against the bare track
+// name (tdb->track and tdb->table have a hub_NNN_ prefix otherwise).
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
+char *bareTrack = trackHubSkipHubName(tdb->track);
+struct sqlConnection *conn = hAllocConn(srcDb);
 int start = cartInt(cart, "o");
 int left = cartInt(cart, "l");
 int right = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 
-boolean isXeno = sameString(tdb->table, "xenoRefGene");
+boolean isXeno = sameString(bareTrack, "xenoRefGene");
 if (isXeno)
     cartWebStart(cart, database, "Non-%s RefSeq Gene", organism);
 else
@@ -13701,18 +14212,23 @@ else
 struct refLink *rl = printRefSeqInfo( conn, tdb, rnaName, NULL);
 
 /* print alignments that track was based on */
-char *aliTbl = (sameString(tdb->table, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
-if (hTableExists(database, aliTbl))
+// Alignments live in the source assembly's coordinates and the table's
+// htcCdnaAli links wouldn't line up with the destination window; skip
+// the block entirely for quickLifted tracks.
+char *aliTbl = (sameString(bareTrack, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
+if (liftDb == NULL)
     {
-    struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
-    printf("<H3>mRNA/Genomic Alignments</H3>");
-    printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+    if (hTableExists(srcDb, aliTbl))
+        {
+        struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+        printf("<H3>mRNA/Genomic Alignments</H3>");
+        printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+        }
+    else
+        warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed "
+                "on this server", srcDb);
+    htmlHorizontalLine();
     }
-else
-    warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed " 
-            "on this server", database);
-
-htmlHorizontalLine();
 
 struct palInfo *palInfo = NULL;
 
@@ -13725,8 +14241,27 @@ if (genbankIsRefSeqCodingMRnaAcc(rnaName))
     palInfo->rnaName = rnaName;
     }
 
-geneShowPosAndLinksPal(rl->mrnaAcc, rl->protAcc, tdb, refPepTable, "htcTranslatedProtein",
-		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+// For quickLifted tracks, route the Predicted Protein/mRNA links to the
+// genome-derived handlers so the sequences reflect the destination
+// assembly at the lifted exon coordinates, rather than the NCBI-authored
+// sequence that lives with the source refPep/refMrna extFiles.
+// htcTranslatedPredMRna keys on the transcript name rather than the
+// protein accession, so swap the pepName for that case.  For non-coding
+// transcripts (NR_*) leave pepName as the empty protAcc, otherwise gbSeq
+// would match the mrnaAcc and we'd offer a Predicted Protein link that
+// htcTranslatedPredMRna can only abort on.
+char *pepClick = "htcTranslatedProtein";
+char *pepName = rl->protAcc;
+char *mrnaClick = "htcRefMrna";
+if (liftDb != NULL)
+    {
+    pepClick = "htcTranslatedPredMRna";
+    if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+        pepName = rl->mrnaAcc;
+    mrnaClick = "htcGeneMrna";
+    }
+geneShowPosAndLinksPal(rl->mrnaAcc, pepName, tdb, refPepTable, pepClick,
+		    mrnaClick, "htcGeneInGenome", "mRNA Sequence",palInfo);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -13790,7 +14325,7 @@ static char gi[64];
 if (!startsWith("gi|", ncbiFaHead))
     return NULL;
 ncbiFaHead += 3;
-strncpy(gi, ncbiFaHead, sizeof(gi));
+safecpy(gi, sizeof(gi), ncbiFaHead);
 s = strchr(gi, '|');
 if (s != NULL)
     *s = 0;
@@ -15303,8 +15838,8 @@ if (tiNum != NULL)
     printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
     }
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("Mouse DNA</A><BR>\n");
 
 /* Print info about mate pair. */
@@ -15325,8 +15860,8 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 	    if (!sameString(ti, itemName))
 	        {
 		printf("Get ");
-		printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-		       hgcPathAndSettings(), seqName, winStart, winEnd, ti);
+		printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+		       hgcPathAndSettings(), database, seqName, winStart, winEnd, ti);
 		printf("DNA for read on other end of plasmid</A><BR>\n");
 		gotMate = TRUE;
 		}
@@ -15735,13 +16270,13 @@ if (gp == NULL)
 
 /* extract nib directory from nibfile */
 if (strrchr(nibFile,'/') != NULL)
-    strncpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
+    memcpy(tNibDir, nibFile, strlen(nibFile)-strlen(strrchr(nibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",nibFile);
 tNibDir[strlen(nibFile)-strlen(strrchr(nibFile,'/'))] = '\0';
 
 if (strrchr(qNibFile,'/') != NULL)
-    strncpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
+    memcpy(qNibDir, qNibFile, strlen(qNibFile)-strlen(strrchr(qNibFile,'/')));
 else
     errAbort("Cannot find nib directory for %s\n",qNibFile);
 qNibDir[strlen(qNibFile)-strlen(strrchr(qNibFile,'/'))] = '\0';
@@ -15839,7 +16374,7 @@ qSeq = loadGenomePart(otherDb, qChrom, psl->qStart, psl->qEnd);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
 char title[1024];
 safef(title, sizeof title, "%s %dk", name, psl->qStart/1000);
-htmlFramesetStart(title);
+alnModernStart(title);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
@@ -15878,8 +16413,8 @@ printPosOnChrom(chrom,start,end,NULL,FALSE,NULL);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-               hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+               hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
@@ -15919,8 +16454,8 @@ char *table = "refFullAli"; /* Table with the pertinent PSL data */
 cartWebStart(cart, database, "%s", itemName);
 printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
 printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("<A HREF=\"%s&db=%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), database, seqName, winStart, winEnd, itemName);
 printf("Sequence</A><BR>\n");
 
 /* Get alignment info and print. */
@@ -16493,8 +17028,8 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapMouseStaticLoad(row, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
 	}
@@ -16679,9 +17214,9 @@ if (row != NULL)
             while ((row = sqlNextRow(sr)) != NULL)
                 {
                 stsMapMouseNewStaticLoad(row, &stsRow);
-                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&"
+                printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&"
                        "g=stsMapMouseNew&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-                       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
+                       stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name,
                        stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 		}
 	    printf("</TABLE>\n");
@@ -16859,8 +17394,8 @@ if (row != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    stsMapRatStaticLoad(row+hasBin, &stsRow);
-	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%s&db=%s&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, database, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
 	printf("</TABLE>\n");
 	}
@@ -17349,9 +17884,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
 
 	}
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   el.chromStart, cgiEncode(el.name),
+	   database, el.chromStart, cgiEncode(el.name),
 	   el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
     freez(&elname);
     }
@@ -19176,10 +19711,7 @@ if (pSnpCodonPos != NULL)
     *pSnpCodonPos = snpCodonPos;
 if (pRefAA != NULL)
     {
-    if (isMito(seqName))
-        *pRefAA = lookupMitoCodon(refCodon);
-    else
-        *pRefAA = lookupCodon(refCodon);
+    *pRefAA = lookupCodonInCode(hGeneticCodeForChrom(database, seqName), refCodon);
     if (*pRefAA == '\0') *pRefAA = '*';
     }
 }
@@ -19256,11 +19788,7 @@ for (j = 0;  j < alleleCount;  j++)
         char snpCodon[4];
         safecpy(snpCodon, sizeof(snpCodon), refCodon);
         snpCodon[snpCodonPos] = alBase;
-        char snpAA = '\0';
-        if (isMito(seqName))
-            snpAA = lookupMitoCodon(snpCodon);
-        else
-            snpAA = lookupCodon(snpCodon);
+        char snpAA = lookupCodonInCode(hGeneticCodeForChrom(database, seqName), snpCodon);
         if (snpAA == '\0') snpAA = '*';
         char refCodonHtml[16], snpCodonHtml[16];
         safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
@@ -22864,8 +23392,8 @@ else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
-else if (sameWord(type, "makeItems"))
-    doMakeItemsDetails(ct, fileName);	// fileName is first word, which is, go figure, id
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(trackId))
+    doMyVariantsDetails(ct, item);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)
@@ -24430,16 +24958,16 @@ if (cut)
 	int i;
 	puts("<B>Isoschizomers: </B>");
 	for (i = 0; i < cut->numSciz-1; i++)
-	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
-	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
+	    printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
+	printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
 	}
     if (isoligs)
 	{
 	struct slName *cur;
 	puts("<B>Isoligamers: </B>");
 	for (cur = isoligs; cur->next != NULL; cur = cur->next)
-	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
-	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
+	    printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cur->name, cur->name);
+	printf("<A HREF=\"%s&db=%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, cur->name, cur->name);
 	slFreeList(&isoligs);
 	}
     if (cut->numRefs > 0)
@@ -24464,8 +24992,8 @@ if (cut)
     if (c && o && t)
         {
 	puts("<BR><B>Download BED of enzymes in this browser range:</B>&nbsp");
-	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
-	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
+	printf("<A HREF=\"%s&db=%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, l, r, c);
+	printf("<A HREF=\"%s&db=%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), database, CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
 	}
     }
 webIncludeHelpFile(CUTTERS_TRACK_NAME, TRUE);
@@ -24961,7 +25489,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
-printf("<B>Item:</B> %s <BR>\n", itemName);
+printf("<B>Item:</B> %s <BR>\n", naForNull(itemName));
 printf("<B>Outside Link:</B> ");
 printf("<A HREF=");
 printSwissProtVariationUrl(stdout, itemName);
@@ -26976,7 +27504,8 @@ makeBigPsl(pslName, faName, database, bigBedFile);
 char* host = getenv("HTTP_HOST");
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";  
+// blatResult=on tags this as a BLAT results track so previous ones can be found (see blatOldTracks).
+char *customTextTemplate = "track type=bigPsl blatResult=on indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";
 char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)
@@ -26986,9 +27515,58 @@ safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraFor
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
+
+/* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
+ * confused about which results are current.  hg.conf "blatOldTracks":
+ *   keep   (default) - do nothing, every search's track stays as-is
+ *   hide             - leave earlier BLAT tracks in the session but set them to hide
+ *   delete           - remove earlier BLAT tracks from the session (their trash files age out)
+ * Only BLAT-tagged tracks are touched; the track just made is left alone. */
+char *oldTracks = cfgOptionDefault("blatOldTracks", "keep");
+/* Fail safe on an unrecognized value (e.g. a typo in hg.conf): fall back to "keep" rather than to
+ * the destructive "delete" branch below, so a misconfiguration never silently discards a user's
+ * previous BLAT tracks. */
+if (differentString(oldTracks, "keep") && differentString(oldTracks, "hide")
+    && differentString(oldTracks, "delete"))
+    {
+    warn("hg.conf blatOldTracks has unrecognized value '%s'; expected keep|hide|delete. "
+         "Treating as 'keep'.", oldTracks);
+    oldTracks = "keep";
+    }
+/* The BLAT search form shows a "Keep results" checkbox when this is set to "delete", letting the
+ * user opt out per search; blatKeepResults is the cart variable it sets. */
+if (cartUsualBoolean(cart, "blatKeepResults", FALSE))
+    oldTracks = "keep";
+if (differentString(oldTracks, "keep"))
+    {
+    struct customTrack *ct, *next, *keptList = NULL;
+    for (ct = ctList; ct != NULL; ct = next)
+        {
+        next = ct->next;
+        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+            {
+            if (sameString(oldTracks, "hide"))
+                {
+                cartSetString(cart, ct->tdb->track, "hide");
+                slAddHead(&keptList, ct);   /* keep it in the session, just hidden */
+                }
+            /* "delete": drop it from the list so customTracksSaveCart writes it out */
+            }
+        else
+            slAddHead(&keptList, ct);
+        }
+    slReverse(&keptList);
+    ctList = keptList;
+    }
+
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);
+
+/* Pin this bigPsl file in the cart so hgBlat's Table view can reopen exactly these results from a
+ * shared session (see doShareReopen in hgBlat.c) - unambiguously, even when the cart holds several
+ * BLAT custom tracks from earlier searches. */
+cartSetString(cart, "blatLastBigBed", bigBedFile);
 
 cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
@@ -27018,9 +27596,43 @@ jsInlineF("var doHPRCTable = true;\n");
 
 boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item);
 
+static void loadBlatShareSessionIfAny()
+/* A durable BLAT "Share a link" alignment (hgc?g=htcBlatAlign&u=l&s=NAME&...) rebuilds one alignment
+ * from a saved anonymous session's durable bigPsl custom track.  Load that session so the cart gets
+ * its db, blatLastBigBed and custom track, then restore the link's own hit selectors, which identify
+ * which single alignment to show rather than the session's saved browser view.  Only g/c/o/i are
+ * selectors (the handler, chrom, start and query name); db and the browser window come from the
+ * session, so the shared link needs to carry only those four. */
+{
+if (cgiOptionalString("s") == NULL || !sameOk(cgiOptionalString("g"), "htcBlatAlign"))
+    return;
+/* The whole-cart session load frees the cart's current values; remember the link's own selectors and
+ * put them back afterwards (g and i are also excluded from saved sessions, so they must come here). */
+char *keep[] = {"g", "c", "o", "i"};
+struct hash *saved = hashNew(0);
+int i;
+for (i = 0; i < ArraySize(keep); ++i)
+    {
+    char *v = cgiOptionalString(keep[i]);
+    if (v != NULL)
+        hashAdd(saved, keep[i], cloneString(v));
+    }
+struct sqlConnection *sConn = hConnectCentral();
+cartLoadUserSession(sConn, cgiUsualString("u", "l"), cgiString("s"), cart, NULL, NULL);
+hDisconnectCentral(&sConn);
+for (i = 0; i < ArraySize(keep); ++i)
+    {
+    char *v = hashFindVal(saved, keep[i]);
+    if (v != NULL)
+        cartSetString(cart, keep[i], v);
+    }
+hashFree(&saved);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
+loadBlatShareSessionIfAny();
 char *track = cartString(cart, "g");
 char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
@@ -27100,7 +27712,7 @@ if (seqName == NULL)
     }
 
 struct customTrack *ct = NULL;
-if (isCustomTrack(track))
+if (isCustomTrack(track) || isMyVariantsTrack(track))
     {
     struct customTrack *ctList = getCtList();
     for (ct = ctList; ct != NULL; ct = ct->next)
@@ -27108,7 +27720,7 @@ if (isCustomTrack(track))
             break;
     }
 
-if ((!isCustomTrack(track) && dbIsFound)
+if ((!isCustomTrack(track) && !isMyVariantsTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
@@ -27202,6 +27814,10 @@ boolean findNameBasedHandler(struct trackDb *tdb, char *track, char *item)
 char* handler = trackDbSetting(tdb, "trackHandler");
 
 char *table = (tdb ? tdb->table : track);
+// Quick-lifted tracks come in with hub_NNN_ prefixed names; strip the prefix
+// so the unprefixed comparisons below match and the native handler fires.
+if (tdb && trackDbSetting(tdb, "quickLifted"))
+    table = trackHubSkipHubName(table);
 if (sameWord(table, "getDna"))
     {
     htmlDoNotTranslate();
@@ -27754,7 +28370,7 @@ else if (sameWord(table, "softPromoter"))
     {
     hgSoftPromoter(table, item);
     }
-else if (isCustomTrack(table))
+else if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     if (tdb != NULL)
         {
@@ -27891,6 +28507,10 @@ else if (sameWord(table, "htcCdnaAli"))
 else if (sameWord(table, "htcUserAli"))
     {
     htcUserAli(item);
+    }
+else if (sameWord(table, "htcBlatAlign"))
+    {
+    htcBlatAlign(item);
     }
 else if (sameWord(table, "htcGetBlastPep"))
     {
@@ -28463,7 +29083,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", NULL};
+char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", "quickLiftCcds", NULL};
 
 int main(int argc, char *argv[])
 {

@@ -1,0 +1,6 @@
+# 2026-05-09 Claude (max) - Mobile Element Insertions track collection (mei)
+# The mei supertrack lives in the human/ directory of trackDb so the
+# hg38 and hs1 builds share a single trackDb stanza (with $D substitution
+# in bigDataUrl). The build steps for both assemblies are documented
+# together in:
+#   ~/kent/src/hg/makeDb/doc/hg38/mei.txt

@@ -29,6 +29,7 @@ UTILS_APPLIST = \
 	chainStitchId \
 	chainSwap \
 	chainToAxt \
+	chainToMaf \
 	chainToPsl \
 	chainToPslBasic \
 	lavToAxt \

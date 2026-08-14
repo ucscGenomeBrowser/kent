@@ -74,7 +74,7 @@ of the contigs on either side of the gap.
 <p>
 _EOF_
     ;
-my $gapCount = `bigBedInfo $allGapsBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/gap count/; s/basesCovered/bases covered/;'`;
+my $gapCount = `/cluster/bin/x86_64/bigBedInfo $allGapsBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/gap count/; s/basesCovered/bases covered/;'`;
 chomp $gapCount;
 printf "Gap count and coverage: %s</li>\n", $gapCount;
 

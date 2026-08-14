@@ -121,15 +121,15 @@ void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb)
 /* Return combined string of session id plus sessionKey in buf if turned on.*/
 {
 if (cartDbUseSessionKey() && !sameString(cartDb->sessionKey,""))
-    safef(buf, bufSize, "%u_%s", cartDb->id, cartDb->sessionKey);
+    safef(buf, bufSize, "%lu_%s", cartDb->id, cartDb->sessionKey);
 else
-    safef(buf, bufSize, "%u", cartDb->id);
+    safef(buf, bufSize, "%lu", cartDb->id);
 }
 
-unsigned int cartDbParseId(char *id, char **pSessionKey)
+unsigned long int cartDbParseId(char *id, char **pSessionKey)
 /* Parse out the numeric id and id_sessionKey string if present. */
 {
-unsigned int result = 0;
+unsigned long int result = 0;
 if (sameString(id,"")) // some users reported blank cookie values.
     {
     verbose(1, "cartDbParseId: id with empty string found.");
@@ -140,7 +140,7 @@ if (sameString(id,"")) // some users reported blank cookie values.
 char *e = strchr(id, '_');
 if (e)
     *e = 0;
-result = sqlUnsigned(id);
+result = sqlUnsignedLong(id);
 if (e)
     {
     *e = '_';
@@ -161,7 +161,7 @@ void cartDbStaticLoad(char **row, struct cartDb *ret)
  * be replaced at the next call to this function. */
 {
 
-ret->id = sqlUnsigned(row[0]);
+ret->id = sqlUnsignedLong(row[0]);
 ret->contents = row[1];
 ret->reserved = sqlSigned(row[2]);
 ret->firstUse = row[3];
@@ -178,7 +178,7 @@ struct cartDb *cartDbLoad(char **row)
 struct cartDb *ret;
 
 AllocVar(ret);
-ret->id = sqlUnsigned(row[0]);
+ret->id = sqlUnsignedLong(row[0]);
 ret->contents = cloneString(row[1]);
 ret->reserved = sqlSigned(row[2]);
 ret->firstUse = cloneString(row[3]);
@@ -241,7 +241,7 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->id = sqlUnsignedComma(&s);
+ret->id = sqlUnsignedLongComma(&s);
 ret->contents = sqlStringComma(&s);
 ret->reserved = sqlSignedComma(&s);
 ret->firstUse = sqlStringComma(&s);
@@ -285,7 +285,7 @@ void cartDbOutput(struct cartDb *el, FILE *f, char sep, char lastSep)
 /* Print out cartDb.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%u", el->id);
+fprintf(f, "%lu", el->id);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

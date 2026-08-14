@@ -15,7 +15,7 @@ html methylationAtlas.html
         type bigBed 9 .
         itemRgb on
         shortLabel All Unmeth Regions
-        longLabel All unmethylated regions
+        longLabel Methylation Atlas: All unmethylated regions
         parent humanMethylationAtlasSummary on
         bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryUnmethylated.bb
         visibility dense
@@ -27,7 +27,7 @@ html methylationAtlas.html
         type bigBed 9 .
         itemRgb on
         shortLabel Putative Enhancers
-        longLabel Putative enhancers from unmethylated regions
+        longLabel Methylation Atlas: Putative enhancers from unmethylated regions
         parent humanMethylationAtlasSummary on
         bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryPutEnhancers.bb
         visibility dense
@@ -39,7 +39,7 @@ html methylationAtlas.html
         type bigBed 9 .
         itemRgb on
         shortLabel Top 250 UMRs/Cell
-        longLabel Top 250 unmethylated regions specific to each cell type
+        longLabel Methylation Atlas: Top 250 unmethylated regions specific to each cell type
         parent humanMethylationAtlasSummary on
         bigDataUrl /gbdb/$D/dnaMethylationAtlas/hmaSummaryU250.bb
         visibility dense

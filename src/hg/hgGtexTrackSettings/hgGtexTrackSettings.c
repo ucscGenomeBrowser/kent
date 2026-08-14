@@ -75,11 +75,11 @@ if (tdb->parent)
     char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
     puts("&nbsp;");
     printf(
-    "       <a href='%s?%s=%s&c=%s&g=%s' title='Go to container track (%s)'>\n"
+    "       <a href='%s?%s=%s&db=%s&c=%s&g=%s' title='Go to container track (%s)'>\n"
     "           <i class='gbIconLevelUp fa fa-level-up'></i>\n"
     "       </a>\n",
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, encodedMapName, tdb->parent->shortLabel
+                database, chromosome, encodedMapName, tdb->parent->shortLabel
     );
     freeMem(encodedMapName);
     }

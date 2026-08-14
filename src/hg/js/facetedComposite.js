@@ -33,12 +33,101 @@ $(function() {
         return req.then(r => r.ok ? r.json() : null).catch(() => null);
     };
 
-    const toTitleCase = str =>
-          str.toLowerCase()
-          .split(/[_\s-]+/)  // Split on underscore, space, or hyphen
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    const showLoading = () => {  // spinner shown during fetch + table build
+        if (document.getElementById("faceted-loading")) return;
+        const el = document.createElement("div");
+        el.id = "faceted-loading";
+        el.innerHTML =
+            `<div class="faceted-spinner"></div><div>Loading metadata…</div>`;
+        document.getElementById("metadata-placeholder").appendChild(el);
+    };
+    const hideLoading = () => {
+        const el = document.getElementById("faceted-loading");
+        if (el) el.remove();
+    };
+
+    const toTitleStyle = str =>
+            str.replace(/_+/g, " ");
 
     const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // For primaryKey values that use the 'id|label' form, return just the id.
+    // The label is for display only; the cart and rowToIdx need the bare id.
+    const primaryKeyId = v => {
+        if (v == null) return v;
+        const s = String(v);
+        const bar = s.indexOf("|");
+        return bar >= 0 ? s.slice(0, bar) : s;
+    };
+
+    // Split a TSV row on tabs, respecting double- or single-quoted fields.
+    function parseTsvRow(str) {
+        const fields = [];
+        let i = 0, n = str.length, start = 0, inQuote = false, q = '';
+        while (i < n) {
+            if (inQuote) {
+                if (str[i] === q) {
+                    if (i + 1 < n && str[i + 1] === q) { i += 2; continue; }  // escaped quote
+                    inQuote = false;
+                }
+                i++;
+            } else if (str[i] === '"' || str[i] === "'") {
+                q = str[i]; inQuote = true; i++;
+            } else if (str[i] === '\t') {
+                fields.push(str.slice(start, i)); i++; start = i;
+            } else {
+                i++;
+            }
+        }
+        fields.push(str.slice(start));
+        return fields;
+    }
+
+    // Split a cell value on commas, respecting double- or single-quoted substrings.
+    // Returns the trimmed, non-empty tokens.
+    function parseCsvValues(str) {
+        if (!str) return [];
+        const tokens = [];
+        let i = 0, n = str.length, start = 0, inQuote = false, q = '';
+        while (i < n) {
+            if (inQuote) {
+                if (str[i] === q) {
+                    if (i + 1 < n && str[i + 1] === q) { i += 2; continue; }
+                    inQuote = false;
+                }
+                i++;
+            } else if (str[i] === '"' || str[i] === "'") {
+                q = str[i]; inQuote = true; i++;
+            } else if (str[i] === ',') {
+                tokens.push(str.slice(start, i).trim()); i++; start = i;
+            } else {
+                i++;
+            }
+        }
+        tokens.push(str.slice(start).trim());
+        return tokens.filter(Boolean);
+    }
+
+    // Parse one CSV token into {id, label}.
+    // Format: \w+(\|label)? where label may be a quoted string.
+    // label is null when no | is present; id is used for display in that case.
+    function parseValue(token) {
+        const bar = token.indexOf('|');
+        if (bar < 0) return { id: token.trim(), label: null };
+        const id = token.slice(0, bar).trim();
+        let label = token.slice(bar + 1);
+        if (label.length >= 2) {
+            const f = label[0], l = label[label.length - 1];
+            if ((f === '"' && l === '"') || (f === "'" && l === "'"))
+                label = label.slice(1, -1);
+        }
+        return { id, label };
+    }
+
+    // Return the lowercased ids parsed from a cell value string.
+    function parseCellIds(val) {
+        return parseCsvValues(String(val ?? "")).map(tok => parseValue(tok).id.toLowerCase());
+    }
 
     const embeddedData = (() => {
         // get data that was embedded in the HTML here to use them as globals
@@ -128,16 +217,48 @@ $(function() {
     function initTable(allData) {
         const { metadata, rowToIdx, colNames } = allData;
 
+        // Match subtrackUrls trackDb keys against metadata column names
+        // ignoring leading underscores on either side, so authors can toggle
+        // facet visibility by adding/removing a '_' prefix in the metadata
+        // file without having to re-edit trackDb.
+        const stripUnderscores = s => s.replace(/^_+/, "");
+        const subtrackUrls = Object.fromEntries(
+            Object.entries(embeddedData.subtrackUrls || {})
+                  .map(([k, v]) => [stripUnderscores(k), v])
+        );
+
         const ordinaryColumns = colNames.map(key => {
             const col = {
                 data: key,
-                title: toTitleCase(key.replace(/^_/, "")),
+                title: toTitleStyle(key.replace(/^_+/, "")),
             };
-            if (key === embeddedData.primaryKey && embeddedData.subtrackUrl) {
+            const urlTemplate = subtrackUrls[stripUnderscores(key)];
+            if (urlTemplate) {
+                // Mirrors hgc/hgc.c:printIdOrLinks(): split cell on ',', each
+                // token may be 'id|label' (id substitutes $$, label is shown).
+                // urlTemplate is html-encoded server-side (htmlEncode in
+                // hgTrackUi.c), so it's safe to interpolate into an href.
                 col.render = (data, type) => {
                     if (type !== "display") return data;
-                    const url = embeddedData.subtrackUrl.replace("$$", encodeURIComponent(data));
-                    return `<a href="${url}" target="_blank">${data}</a>`;
+                    if (data == null || data === "") return "";
+                    const parts = parseCsvValues(String(data));
+                    if (!parts.length) return String(data);
+                    return parts.map(tok => {
+                        const { id, label } = parseValue(tok);
+                        const displayLabel = label !== null ? label : id;
+                        const encode = label === null && !/^https?:/i.test(displayLabel);
+                        const sub = encode ? encodeURIComponent(id) : id;
+                        const href = urlTemplate.replace(/\$\$/g, sub);
+                        return `<a href="${href}" target="_blank">${displayLabel}</a>`;
+                    }).join(", ");
+                };
+            } else {
+                col.render = (data, type) => {
+                    if (type !== "display") return data;
+                    if (data == null || data === "") return data;
+                    return parseCsvValues(String(data))
+                        .map(tok => { const {id, label} = parseValue(tok); return label ?? id; })
+                        .join(", ");
                 };
             }
             return col;
@@ -177,7 +298,10 @@ $(function() {
             deferRender: true,    // seems faster
             columns: columns,
             columnDefs: [ { targets:0, render: DataTable.render.select() } ],
-            responsive: true,
+            // 'responsive' (collapsing overflow columns) is intentionally off:
+            // a wide table instead gets an internal horizontal scrollbar via
+            // the .table-xscroll wrapper added at the end of initTable.
+            responsive: false,
             layout: {
                 topStart: 'pageLength',
                 topEnd: null,        // omit global search
@@ -247,44 +371,60 @@ $(function() {
 
         updateSelectAllCheckbox(table);  // set initial state after pre-selections
 
-        // Create "show only selected" toggle in the toolbar
+        // Create "All / Selected" segmented tabs in the toolbar. These are a
+        // re-skin of a simple on/off selection filter: a hidden checkbox holds
+        // the filter state so the search-filter plug-in and selection handlers
+        // below can stay unchanged; the tabs just drive that checkbox.
         const lengthDiv = document.querySelector(
             "#theMetaDataTable_wrapper .dt-length");
         const toggleWrapper = document.createElement("div");
         toggleWrapper.id = "selected-filter";
-        const toggleLabel = document.createElement("label");
-        toggleLabel.classList.add("toggle-switch");
         const toggleCheckbox = document.createElement("input");
         toggleCheckbox.type = "checkbox";
         toggleCheckbox.dataset.selectFilter = "true";
-        toggleLabel.appendChild(toggleCheckbox);
-        toggleLabel.appendChild(Object.assign(
-            document.createElement("span"), {className: "toggle-slider"}));
-        toggleWrapper.appendChild(toggleLabel);
-        const toggleText = Object.assign(
-            document.createElement("span"), {id: "selected-filter-text"});
-        toggleWrapper.appendChild(toggleText);
+        toggleCheckbox.style.display = "none";
+        toggleWrapper.appendChild(toggleCheckbox);
+        const allTab = Object.assign(document.createElement("button"),
+            {type: "button", className: "filter-tab"});
+        const selectedTab = Object.assign(document.createElement("button"),
+            {type: "button", className: "filter-tab"});
+        toggleWrapper.appendChild(allTab);
+        toggleWrapper.appendChild(selectedTab);
         lengthDiv.appendChild(toggleWrapper);
 
-        // Disable toggle initially if no rows are selected
-        toggleCheckbox.disabled = (prevSelCount === 0);
-
+        // Refresh the tab labels and the active-tab highlight. Counts are grand
+        // totals (default search:'none'), independent of the facet/search
+        // filters, so "Selected" never misleadingly reads 0 when tracks are
+        // selected but currently hidden by a facet. How many rows are actually
+        // visible is reported by DataTables' bottom info line.
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
-            toggleText.textContent =
-                `Show only selected ${itemLabel} (${selCount} of ${totalCount} selected)`;
+            allTab.textContent = `All (${totalCount})`;
+            selectedTab.textContent = `Active (${selCount})`;
+            const showSelected = toggleCheckbox.checked;
+            allTab.classList.toggle("active", !showSelected);
+            selectedTab.classList.toggle("active", showSelected);
         }
         updateSelectedText();
+
+        // Clicking a tab switches the selection filter and redraws. "Selected"
+        // is always clickable; with nothing selected it just shows an empty list.
+        function setFilterMode(showSelected) {
+            toggleCheckbox.checked = showSelected;
+            table.draw();
+            updateSelectedText();
+        }
+        allTab.addEventListener("click", () => setFilterMode(false));
+        selectedTab.addEventListener("click", () => setFilterMode(true));
 
         // Unified handler for selection changes
         function onSelectionChanged() {
             const selCount = table.rows({selected: true}).count();
 
-            // Disable toggle when nothing is selected; auto-uncheck if count hits 0
-            toggleCheckbox.disabled = (selCount === 0);
-            if (selCount === 0 && toggleCheckbox.checked) {
-                toggleCheckbox.checked = false;
+            // Keep the "Selected" view in sync as rows are (de)selected; no need
+            // to redraw while showing all rows.
+            if (toggleCheckbox.checked) {
                 table.draw();
             }
 
@@ -349,8 +489,6 @@ $(function() {
             const row = table.row(dataIndex);
             return row.select && row.selected();
         });
-        $("#selected-filter input[data-select-filter]")
-            .on("change", function () { table.draw(); });
 
         // implement the 'select all' at the top of the checkbox column
         $("#select-all").closest("label").attr(
@@ -363,14 +501,26 @@ $(function() {
                 table.rows({ search: "applied" }).deselect();
             }
         });
+
+        // Wrap the table in a horizontally-scrolling box. When the metadata has
+        // many fields the table is wider than the viewport; this gives it its
+        // own internal X scrollbar instead of letting it spill off the right
+        // edge of the screen (which also dragged the "Show N" / paging controls
+        // off-screen). The toolbar rows stay outside this box, so they remain
+        // visible at the wrapper's width regardless of how wide the table gets.
+        const scrollBox = document.createElement("div");
+        scrollBox.className = "table-xscroll";
+        tableEl.parentNode.insertBefore(scrollBox, tableEl);
+        scrollBox.appendChild(tableEl);
+
         return table;
     }  // end initTable
 
 
-    // Map of colName -> Map of unescapedValue -> spanElement, for dynamic counts
+    // Map of colName -> Map of lowercaseId -> spanElement, for dynamic counts
     const countSpans = new Map();
     // Filter state for cross-facet count computation
-    const checkboxFilters = new Map();  // colName -> Set<string> (raw values)
+    const checkboxFilters = new Map();  // colName -> Set<string> (lowercase ids)
     const textFilters = new Map();      // colName -> lowercase string
 
     function updateFacetCounts(metadata) {
@@ -378,12 +528,12 @@ $(function() {
         // (excluding this facet's own checkbox filter). This way, unchecked
         // values show how many rows would be added if you checked them.
         for (const [facetCol, valMap] of countSpans) {
-            const counts = new Map();  // lowercased value -> count
+            const counts = new Map();  // lowercased id -> count
             for (const row of metadata) {
                 let passes = true;
-                for (const [col, valueSet] of checkboxFilters) {
+                for (const [col, idSet] of checkboxFilters) {
                     if (col === facetCol) continue;
-                    if (!valueSet.has(row[col]?.toLowerCase())) {
+                    if (!parseCellIds(row[col]).some(id => idSet.has(id))) {
                         passes = false; break;
                     }
                 }
@@ -395,12 +545,13 @@ $(function() {
                     }
                 }
                 if (passes) {
-                    const val = row[facetCol]?.toLowerCase();
-                    counts.set(val, (counts.get(val) ?? 0) + 1);
+                    for (const id of parseCellIds(row[facetCol])) {
+                        counts.set(id, (counts.get(id) ?? 0) + 1);
+                    }
                 }
             }
-            for (const [val, span] of valMap) {
-                span.textContent = `(${counts.get(val.toLowerCase()) ?? 0})`;
+            for (const [id, span] of valMap) {
+                span.textContent = `(${counts.get(id) ?? 0})`;
             }
         }
     }
@@ -409,20 +560,21 @@ $(function() {
         const { metadata, colorMap, colNames } = allData;
 
         // iterate once over entire data not separately per attribute
-        // Case-insensitive: merge variants, keep first-seen casing as display form
-        const possibleValues = {};  // key -> Map<lowerVal, [displayVal, count]>
+        // Keyed by lowercase id; first-seen label (or id) is the canonical display.
+        const possibleValues = {};  // key -> Map<lowerId, {id, display, count}>
         for (const entry of metadata) {
             for (const [key, val] of Object.entries(entry)) {
-                if (!possibleValues[key]) {
-                    possibleValues[key] = new Map();
-                }
+                if (!possibleValues[key]) possibleValues[key] = new Map();
                 const map = possibleValues[key];
-                const lower = val.toLowerCase();
-                const existing = map.get(lower);
-                if (existing) {
-                    existing[1]++;
-                } else {
-                    map.set(lower, [val, 1]);
+                for (const tok of parseCsvValues(val)) {
+                    const { id, label } = parseValue(tok);
+                    const idLower = id.toLowerCase();
+                    const existing = map.get(idLower);
+                    if (existing) {
+                        existing.count++;
+                    } else {
+                        map.set(idLower, { id, display: label ?? id, count: 1 });
+                    }
                 }
             }
         }
@@ -434,35 +586,30 @@ $(function() {
         const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
-        colNames.forEach((key, colIdx) => {
+        colNames.forEach((key) => {
             // skip attributes if they should be excluded from checkbox sets
             if (excludeCheckboxes.includes(key) || key.startsWith("_")) {
                 return;
             }
 
-            // possibleValues[key] is Map<lower, [displayVal, count]>; extract [displayVal, count]
+            // possibleValues[key] is Map<lowerId, {id, display, count}>
             const sortedPossibleVals = Array.from(possibleValues[key].values());
-            sortedPossibleVals.sort((a, b) => b[1] - a[1]);  // sort by count descending
+            sortedPossibleVals.sort((a, b) => b.count - a.count);
 
             // Use 'maxCheckboxes' most frequent items (if they appear > 1 time)
             let topToShow = sortedPossibleVals
-                .filter(([val, count]) =>
-                    val.trim().toUpperCase() !== "NA" && count > 1)
+                .filter(({id, count}) =>
+                    id.trim().toUpperCase() !== "NA" && count > 1)
                 .slice(0, maxCheckboxes);
 
             // Any "other/Other/OTHER" entry will be put at the end
-            let otherKey = null, otherValue = null;
-            topToShow = topToShow.filter(([val, value]) => {
-                if (val.toLowerCase() === "other") {
-                    otherKey = val;
-                    otherValue = value;
-                    return false;
-                }
+            let otherEntry = null;
+            topToShow = topToShow.filter(entry => {
+                if (entry.id.toLowerCase() === "other") { otherEntry = entry; return false; }
                 return true;
             });
-            if (otherValue !== null) {
-                topToShow.push([otherKey, otherValue]);
-            }
+            if (otherEntry !== null) topToShow.push(otherEntry);
+
             if (topToShow.length <= 1) {  // no point if there's only one group
                 excludeCheckboxes.push(key);
                 return;
@@ -474,7 +621,7 @@ $(function() {
 
             // Clickable heading that toggles collapse
             const heading = Object.assign(document.createElement("strong"), {
-                textContent: toTitleCase(key),
+                textContent: toTitleStyle(key),
                 className: "facet-heading",
             });
             facetDiv.appendChild(heading);
@@ -491,31 +638,29 @@ $(function() {
 
             // Build checkbox labels
             const cboxes = [];
-            const rawValues = [];  // parallel to cboxes: unescaped values
             if (!countSpans.has(key)) countSpans.set(key, new Map());
             const colSpans = countSpans.get(key);
-            topToShow.forEach(([val, count]) => {
+            topToShow.forEach(({id, display, count}) => {
                 const label = document.createElement("label");
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                checkbox.value = escapeRegex(val);
+                checkbox.dataset.valueId = id;
                 label.appendChild(checkbox);
                 if (colorMap && key in colorMap) {
                     const colorBox = document.createElement("span");
                     colorBox.classList.add("color-box");
-                    if (val in colorMap[key]) {
-                        colorBox.style.backgroundColor = colorMap[key][val];
+                    if (id in colorMap[key]) {
+                        colorBox.style.backgroundColor = colorMap[key][id];
                     }
                     label.appendChild(colorBox);
                 }
-                label.appendChild(document.createTextNode(`${val} `));
+                label.appendChild(document.createTextNode(`${display} `));
                 const countSpan = document.createElement("span");
                 countSpan.textContent = `(${count})`;
                 label.appendChild(countSpan);
-                colSpans.set(val, countSpan);
+                colSpans.set(id.toLowerCase(), countSpan);
                 facetBody.appendChild(label);
                 cboxes.push(checkbox);
-                rawValues.push(val);
             });
 
             facetDiv.appendChild(facetBody);
@@ -527,25 +672,21 @@ $(function() {
                 heading.classList.toggle("collapsed", isCollapsed);
             });
 
-            // --- Wire up checkbox filtering (same logic as before) ---
-            // colIdx is the 0-based index into colNames; DataTable column is
-            // colIdx + 1 because column 0 is the select-checkbox column.
-            const dtColIdx = colIdx + 1;
+            // --- Wire up checkbox filtering ---
+            // Filtering is handled by the custom search extension below, which
+            // parses each cell's ids and checks them against checkboxFilters.
             cboxes.forEach(cb => {
                 cb.addEventListener("change", () => {
-                    const checked = cboxes.filter(c => c.checked).map(c => c.value);
-                    const query = checked.length ? "^(" + checked.join("|") + ")$" : "";
-                    // Track lowercased values for cross-facet counting
-                    const checkedRaw = new Set();
-                    cboxes.forEach((c, i) => {
-                        if (c.checked) checkedRaw.add(rawValues[i].toLowerCase());
-                    });
-                    if (checkedRaw.size) {
-                        checkboxFilters.set(key, checkedRaw);
+                    const checkedIds = new Set(
+                        cboxes.filter(c => c.checked)
+                              .map(c => c.dataset.valueId.toLowerCase())
+                    );
+                    if (checkedIds.size) {
+                        checkboxFilters.set(key, checkedIds);
                     } else {
                         checkboxFilters.delete(key);
                     }
-                    table.column(dtColIdx).search(query, true, false).draw();
+                    table.draw();
                     updateActiveFilters();
                 });
             });
@@ -554,10 +695,21 @@ $(function() {
             clearBtn.addEventListener("click", () => {
                 cboxes.forEach(cb => cb.checked = false);
                 checkboxFilters.delete(key);
-                table.column(dtColIdx).search("", true, false).draw();
+                table.draw();
                 updateActiveFilters();
             });
         });  // done creating collapsible checkbox filters for each column
+
+        // Custom search extension: filter rows by parsed cell ids vs checkboxFilters.
+        // Replaces the old per-column regex search so that id-based collapsing works
+        // (e.g. "CD8+T" and "CD8+T|CD8+ T Cells" both match the same facet entry).
+        $.fn.dataTable.ext.search.push(function(_, __, dataIndex) {
+            const rowData = table.row(dataIndex).data();
+            for (const [col, idSet] of checkboxFilters) {
+                if (!parseCellIds(rowData[col]).some(id => idSet.has(id))) return false;
+            }
+            return true;
+        });
 
         // Update facet counts whenever the table is redrawn (filtering, search, etc.)
         table.on("draw", () => updateFacetCounts(metadata));
@@ -642,7 +794,7 @@ $(function() {
 
             // Get current data element selections
             const currentDataElements = table.rows({selected: true}).data().toArray()
-                .map(obj => obj[primaryKey]);
+                .map(obj => primaryKeyId(obj[primaryKey]));
 
             // Enforce an upper bound on the number of tracks on at the same time.
             // This is imperfect when data types are present - some combinations might
@@ -706,6 +858,7 @@ $(function() {
         const table = initTable(dataForTable);
         initFilters(table, dataForTable);
         initSubmit(table);
+        hideLoading();  // table is built and drawn; remove the spinner
     }
 
     function loadDataAndInit() {  // load data and call init functions
@@ -739,19 +892,26 @@ $(function() {
             .then(tsvText => {  // metadata table is a TSV file to parse
                 loadOptional(colorSettingsUrl, hgsid, track).then(colorMap => {
                     const rows = tsvText.trim().split("\n");
-                    const colNames = rows[0].split("\t");
+                    const colNames = parseTsvRow(rows[0]);
                     if (!primaryKey)
                         throw new Error("trackDb setting 'primaryKey' is missing");
                     if (!colNames.includes(primaryKey))
                         throw new Error(`primaryKey '${primaryKey}' not found in metadata columns`);
                     const metadata = rows.slice(1).map(row => {
-                        const values = row.split("\t");
+                        const values = parseTsvRow(row);
                         const obj = {};
-                        colNames.forEach((attrib, i) => { obj[attrib] = values[i]; });
+                        colNames.forEach((attrib, i) => { obj[attrib] = values[i] ?? ""; });
                         return obj;
                     });
+                    // Each primaryKey cell must map to exactly one subtrack.
+                    const badPk = metadata.find(row =>
+                        parseCsvValues(String(row[primaryKey] ?? "")).length > 1);
+                    if (badPk)
+                        throw new Error(
+                            `primaryKey column '${primaryKey}' has multiple values in ` +
+                            `'${badPk[primaryKey]}'; only one value is allowed per primaryKey cell`);
                     const rowToIdx = Object.fromEntries(
-                        metadata.map((row, i) => [row[primaryKey], i])
+                        metadata.map((row, i) => [primaryKeyId(row[primaryKey]), i])
                     );
                     colorMap = isValidColorMap(colorMap) ? colorMap : null;
                     const freshData = { metadata, rowToIdx, colNames, colorMap };
@@ -760,6 +920,7 @@ $(function() {
                 });
             })
             .catch(err => {
+                hideLoading();  // stop the spinner before showing the error
                 const table = document.getElementById("theMetaDataTable");
                 if (table) {
                     table.innerHTML =
@@ -774,6 +935,7 @@ $(function() {
     }, true);
 
     generateHTML();
+    showLoading();  // show spinner immediately, before the metadata fetch
     loadDataAndInit();
 
 });

@@ -470,10 +470,11 @@ int i;
 int baseWordCount = (target->baseCount/caTileSize);
 int tOffset = 0;
 
-/* Handle big/little endian problem. */
-bits32 endianTest = 0x12345678;
-bits16 *endianPt = (bits16*)(void*)(&endianTest);
-boolean needSwap = (*endianPt == 0x5678);
+/* Handle big/little endian problem.  Use a union for the type-punning so we
+ * don't run afoul of strict-aliasing analysis at -O3. */
+union { bits32 whole; bits16 half[2]; } endianTest;
+endianTest.whole = 0x12345678;
+boolean needSwap = (endianTest.half[0] == 0x5678);
 int swapOffset[2];
 int swapIx = 0;
 

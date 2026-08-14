@@ -300,7 +300,7 @@ else
     }
 
     struct encodePeak *peakList = (struct encodePeak *)quickLiftSql(conn, quickLiftFile, table, chromName, winStart, winEnd,  NULL, NULL, (ItemLoader2)loader, 0, chainHash);
-    struct encodePeak *liftedPeaks = (struct encodePeak *)quickLiftBeds((struct bed *)peakList, chainHash, FALSE);
+    struct encodePeak *liftedPeaks = quickLiftPeaks(peakList, chainHash);
 
     for(; liftedPeaks; liftedPeaks = liftedPeaks->next)
         {

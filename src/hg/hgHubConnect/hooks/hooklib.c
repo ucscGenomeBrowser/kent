@@ -12,6 +12,7 @@
 #include "userdata.h"
 #include "jsonQuery.h"
 #include "jsHelper.h"
+#include "jsonWrite.h"
 #include "errCatch.h"
 #include "obscure.h"
 #include "cheapcgi.h"
@@ -51,6 +52,47 @@ for (; i < numChops; i++)
 return dyStringCannibalize(&ret);
 }
 
+char *normalizeParentDir(char *parentDir)
+/* Return parentDir with any surrounding whitespace trimmed off, or NULL if it was NULL.
+ * The pre-create and pre-finish hooks each build paths from this metadata value
+ * independently, so they have to normalize it identically or they end up disagreeing
+ * about which directory the upload belongs in */
+{
+if (parentDir == NULL)
+    return NULL;
+return trimSpaces(cloneString(parentDir));
+}
+
+boolean isValidParentDir(char *parentDir)
+/* Return TRUE if every '/' separated component of parentDir holds only alphanumeric,
+ * period or underscore characters. NULL or empty is invalid, every upload belongs to
+ * a hub. Mirrors the same named check in hgMyData.js, which the browser does first,
+ * but hubtools and any other tus client come straight here */
+{
+if (isEmpty(parentDir))
+    return FALSE;
+if (startsWith("/", parentDir) || endsWith(parentDir, "/"))
+    return FALSE;
+int maxSeps = 256;
+char *pathArr[maxSeps];
+char *copy = cloneString(parentDir);
+int numChops = chopString(copy, "/", pathArr, maxSeps);
+int i = 0;
+for (; i < numChops; i++)
+    {
+    char *component = pathArr[i];
+    if (isEmpty(component) || sameString(component, ".") || sameString(component, ".."))
+        return FALSE;
+    char *c = component;
+    for (; *c != '\0'; c++)
+        {
+        if (!isalnum((unsigned char)*c) && *c != '.' && *c != '_')
+            return FALSE;
+        }
+    }
+return TRUE;
+}
+
 char *setUploadPath(char *userName, char *fileName, char *parentDir, boolean forceOverwrite)
 /* return the path, relative to hg.conf tusdDataDir, where we will store this upload
  * ensures all subdirectories on the final path will exist, and then returns
@@ -60,10 +102,12 @@ char *setUploadPath(char *userName, char *fileName, char *parentDir, boolean for
 char *dataDir = getDataDir(userName);
 struct dyString *fullFilePath = dyStringNew(0);
 struct dyString *retPath = dyStringNew(0);
-// if parentDir provided we are throwing the files in there
+// if parentDir provided we are throwing the files in there. Stays empty when there
+// is no parentDir so the path we return below is still correct
+char *encodedParentDir = "";
 if (parentDir)
     {
-    char *encodedParentDir = encodePath(parentDir);
+    encodedParentDir = encodePath(parentDir);
     if (!endsWith(encodedParentDir, "/"))
         encodedParentDir = catTwoStrings(encodedParentDir, "/");
     dataDir = catTwoStrings(dataDir, encodedParentDir);
@@ -93,8 +137,11 @@ else
         // restore umask
         umask(oldUmask);
         }
-    // now we can construct the path relative to tusd uploadDir
-    dyStringPrintf(retPath, "%s/%s/%s", getEncodedUserNamePath(userName), parentDir, fileName);
+    // now we can construct the path relative to tusd uploadDir. This must use the
+    // same encoded parentDir as the dataDir we just made above: if it doesn't, tusd
+    // creates the unencoded directory itself when it writes the file, leaving two
+    // directories for one hub and the file in the one we never made
+    dyStringPrintf(retPath, "%s/%s%s", getEncodedUserNamePath(userName), encodedParentDir, fileName);
     return dyStringCannibalize(&retPath);
     }
 // on error return NULL
@@ -111,6 +158,19 @@ void fillOutHttpResponseSuccess(struct jsonElement *response)
 fprintf(stderr, "http response success!\n");
 // DEBUG: comment out after a few releases
 jsonPrintToFile(response, NULL, stderr, 0);
+}
+
+void setUploadedFileList(struct jsonElement *response, char *userName, struct hubSpace *fileList)
+/* Put the hubSpace rows this upload created or changed into the response body. tusd
+ * forwards the body to the client, which shows the rows the server actually holds */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+hubSpaceWriteFileList(jw, userName, fileList);
+jsonWriteObjectEnd(jw);
+struct jsonElement *httpResponse = jsonMustFindNamedField(response, "", HTTP_NAME);
+jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringContents(jw->dy)));
+jsonWriteFree(&jw);
 }
 
 struct jsonElement *makeDefaultResponse()
@@ -144,7 +204,7 @@ struct dyString *ds = dyStringNew(0);
 dyStringVaPrintf(ds, msg, args);
 va_end(args);
 // find the HTTPResponse object and fill it out with msg:
-struct jsonElement *httpResponse = jsonFindNamedField(response, "", HTTP_NAME);
+struct jsonElement *httpResponse = jsonMustFindNamedField(response, "", HTTP_NAME);
 jsonObjectAdd(httpResponse, HTTP_STATUS, newJsonNumber(500));
 jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringCannibalize(&ds)));
 }

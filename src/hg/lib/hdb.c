@@ -124,7 +124,9 @@ static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 {
 struct chromInfo *ci = NULL;
 
-if (trackHubDatabase(db))
+/* An assembly hub keeps its sequence in a 2bit file and has no chromInfo table.  A curated
+ * hub reaches us as an undecorated db name, so check the undecorated hub genomes too. */
+if (trackHubDatabase(db) || trackHubGetGenomeUndecorated(trackHubSkipHubName(db)) != NULL)
     {
     ci = trackHubMaybeChromInfo(db, chrom);
     return ci;
@@ -150,6 +152,84 @@ boolean isMito(char *chrom)
 /* Return True if chrom is chrM or chrMT */
 {
 return sameString(chrom, "chrM") || sameString(chrom, "chrMT");
+}
+
+struct dbCodonTable
+/* Per-database parse of an assembly hub "codonTable" setting. */
+    {
+    struct geneticCode *defaultCode;   /* From "default=N", or NULL if unset. */
+    struct hash *seqToCode;            /* seqName -> struct geneticCode *. */
+    };
+
+static struct dbCodonTable *codonTableForDb(char *db)
+/* Parse (and cache per db) the assembly hub "codonTable" setting, e.g.
+ * "codonTable default=1 chrM=2".  Returns an entry with an empty seqToCode
+ * (and NULL defaultCode) for databases with no such setting. */
+{
+static struct hash *cache = NULL;
+if (cache == NULL)
+    cache = hashNew(0);
+char *key = (db != NULL) ? db : "";
+struct dbCodonTable *ct = hashFindVal(cache, key);
+if (ct != NULL)
+    return ct;
+
+AllocVar(ct);
+ct->seqToCode = hashNew(0);
+char *setting = NULL;
+if (db != NULL && trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    if (genome != NULL)
+        setting = hashFindVal(genome->settingsHash, "codonTable");
+    }
+if (setting != NULL)
+    {
+    char *dupe = cloneString(setting);
+    char *words[512];
+    int wordCount = chopByWhite(dupe, words, ArraySize(words));
+    int i;
+    for (i = 0;  i < wordCount;  ++i)
+        {
+        char *eq = strchr(words[i], '=');
+        if (eq == NULL)
+            {
+            warn("codonTable setting for %s: ignoring \"%s\", expected seqName=id", db, words[i]);
+            continue;
+            }
+        *eq = '\0';
+        char *seq = words[i];
+        struct geneticCode *code = geneticCodeForId(atoi(eq+1));
+        if (code == NULL)
+            {
+            warn("codonTable setting for %s: ignoring \"%s\", unknown genetic code id", db, seq);
+            continue;
+            }
+        if (sameString(seq, "default"))
+            ct->defaultCode = code;
+        else
+            hashAdd(ct->seqToCode, seq, code);
+        }
+    freez(&dupe);
+    }
+hashAdd(cache, key, ct);
+return ct;
+}
+
+struct geneticCode *hGeneticCodeForChrom(char *db, char *chrom)
+/* Return the genetic code (translation table) to use for chrom in db.  An
+ * assembly hub may assign codes per sequence with a genomes.txt line like
+ * "codonTable default=1 chrM=2".  For backward compatibility, when no such
+ * assignment applies, chrM/chrMT use the vertebrate mitochondrial code and all
+ * other sequences use the standard code.  Never returns NULL. */
+{
+struct dbCodonTable *ct = codonTableForDb(db);
+struct geneticCode *code = hashFindVal(ct->seqToCode, chrom);
+if (code == NULL)
+    code = ct->defaultCode;
+if (code == NULL)
+    code = geneticCodeForId(isMito(chrom) ? 2 : 1);
+return code;
 }
 
 struct chromInfo *hGetChromInfo(char *db, char *chrom)
@@ -212,7 +292,7 @@ ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 
-return cloneString(chromAliasFindNative(name));
+return chromAliasFindNative(name);	// already returns an allocated string
 }	/*	char *hgOfficialChromName(char *db, char *name)	*/
 
 boolean hgIsOfficialChromName(char *db, char *name)
@@ -511,22 +591,26 @@ return db;
 
 static char *firstExistingDbFromQuery(struct sqlConnection *conn, char *query)
 /* Perform query; result is a list of database names.  Clone and return the first database
- * that exists, or NULL if the query has no results or none of the databases exist. */
+ * that exists as a real SQL database or as a curated hub (GenArk) assembly, or NULL if the
+ * query has no results or none of the databases exist. */
 {
 char *db = NULL;
 struct slName *sl, *list = sqlQuickList(conn, query);
 for (sl = list;  sl != NULL;  sl = sl->next)
     {
-    if (sqlDatabaseExists(sl->name))
+    if (sqlDatabaseExists(sl->name) || hubConnectIsCurated(sl->name))
+        {
         db = cloneString(sl->name);
-    break;
+        break;
+        }
     }
 slFreeList(&list);
 return db;
 }
 
 char *hDbForTaxon(int taxon)
-/* Get default database associated with NCBI taxon number, or NULL if not found. */
+/* Get default database associated with NCBI taxon number, or NULL if not found.
+ * The returned db may be a curated hub (GenArk) assembly rather than a real SQL database. */
 {
 char *db = NULL;
 if (taxon != 0)
@@ -2304,7 +2388,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		strncpy(bedItem->strand, "+", 2);
 	    }
 	else
-	    strncpy(bedItem->strand, row[4], 2);
+	    safecpy(bedItem->strand, sizeof(bedItem->strand), row[4]);
     else
 	strcpy(bedItem->strand, ".");
     if (canDoUTR)
@@ -4165,7 +4249,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             if (tdb->subtracks == NULL)
                 tdbMarkAsCompositeChild(tdb);
             else
-                tdbMarkAsCompositeView(tdb);
+                {
+                if (trackDbLocalSetting(tdb, "container"))
+                    tdbMarkAsCompositeChild(tdb);
+                else
+                    tdbMarkAsCompositeView(tdb);
+                }
             }
         }
     trackDbContainerMarkup(tdb, tdb->subtracks);

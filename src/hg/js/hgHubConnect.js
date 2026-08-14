@@ -69,22 +69,37 @@ $(function() {
 // initializes the tabs - with cookie option
 // cookie option requires jquery.cookie.js
 $(function() {
+  // maps a URL hash to the index of the matching tab, or -1 if none matches
+  function tabIndexForHash(hash) {
+      if (hash === "#conn") { hash = "#unlistedHubs"; }
+      if (hash === "#dev")  { hash = "#hubDeveloper"; }
+      return $("#tabs > ul > li > a[href='" + hash + "']").parent().index();
+  }
+
   $("#tabs").tabs({
       active: localStorage.getItem("hubTab") !== null ? localStorage.getItem("hubTab") : 0,
       activate: function(event, ui) {
           localStorage.setItem("hubTab", ui.newTab.index());
       },
   });
-  // activate tabs if the current URL ends with the appropriate tab name
-  var tabName = window.location.hash;
-  if (tabName==="#publicHubs")
-      $("#tabs").tabs("option", "active", 0);
-  if (tabName==="#conn" || tabName === "#unlistedHubs")
-      $("#tabs").tabs("option", "active", 1);
-  if (tabName==="#dev" || tabName === "#hubDeveloper")
-      $("#tabs").tabs("option", "active", 2);
-  if (tabName==="#hubUpload")
-      $("#tabs").tabs("option", "active", 3);
+  // activate the tab named by the current URL hash
+  var initialIndex = tabIndexForHash(window.location.hash);
+  if (initialIndex >= 0)
+      $("#tabs").tabs("option", "active", initialIndex);
+
+  // menubar links point to hgHubConnect#<tab>. When already on this page a same-page
+  // hash link only scrolls; intercept and switch tabs instead.
+  $(document).on("click", "a[href*='hgHubConnect'][href*='#']", function(ev) {
+      var index = tabIndexForHash(this.hash);
+      if (index >= 0) {
+          ev.preventDefault();
+          $("#tabs").tabs("option", "active", index);
+          // we didn't navigate, so close the hover menu holding this link
+          var $menuParent = $(this).closest("li.menuparent");
+          $menuParent.hideSuperfishUl();
+          $menuParent.find("> button, > a").attr("aria-expanded", "false");
+      }
+  });
 
   $("#tabs").tabs().on("tabsactivate", function(event, ui) {
     const  newHash = ui.newTab.find("a").attr("href");

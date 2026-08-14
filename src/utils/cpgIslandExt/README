@@ -6,7 +6,7 @@ We've been running this on hard-masked sequence (RepeatMasker and TRF
 with period <= 12 results are masked to 'N') in order to avoid CpG 
 islands in Alu repeats in human.
 
-The original cpg.c was written by Gos Miklem from the Sanger Center.  
+The original cpg.c was written by Gos Micklem from the Sanger Center.  
 LaDeana Hillier added some modifications --> cpg_lh.c, and UCSC has 
 added some further modifications to cpg_lh.c, so that its expected 
 number of CpGs in an island is calculated as described in 

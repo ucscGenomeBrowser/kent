@@ -1,0 +1,577 @@
+GCA_000001405.15	Homo sapiens	human/GRCh38/hg38	mammals-euarchontoglires
+GCA_000001635.9	Mus musculus	mouse/GRCm38/mm39	mammals-euarchontoglires
+GCA_003287225.2	Phascolarctos cinereus	koala	mammals-other
+GCA_005190385.3	Monodon monoceros	narwhal	mammals-laurasiatheria
+GCA_008658365.1	Alca Torda	razorbill	birds-waterbirds
+GCA_009764595.1	Geothlypis trichas	common yellowthroat	birds-landbirds
+GCA_009769465.1	Tauraco erythrolophus	red-crested turaco	birds-other
+GCA_009769525.1	Pterocles gutturalis	yellow-throated sandgrouse	birds-other
+GCA_009769605.1	Bucorvus abyssinicus	Abyssinian ground hornbill	birds-landbirds
+GCA_009819595.1	Merops nubicus	carmine bee-eater	birds-landbirds
+GCA_009819605.1	Sterna hirundo	common tern	birds-waterbirds
+GCA_009819775.1	Phoenicopterus ruber	American flamingo	birds-other
+GCA_009819825.1	Cariama cristata	red-legged seriema	birds-landbirds
+GCA_009914755.4	Homo sapiens	human/CHM13-T2T/hs1	mammals-euarchontoglires
+GCA_011004875.1	Balearica regulorum gibbericeps	grey crowned-crane	birds-waterbirds
+GCA_011762505.3	Arvicanthis niloticus	Nile rat	mammals-euarchontoglires
+GCA_013358685.1	Antennarius maculatus	warty frogfish	fishes-ray-finned
+GCA_014706295.1	Lycocorax pyrrhopterus obiensis	Obi paradise-crow	birds-landbirds
+GCA_014839685.1	Anableps anableps	largescale four-eyes	fishes-ray-finned
+GCA_014839755.1	Sylvia borin	garden warbler	birds-landbirds
+GCA_014839995.1	Xenentodon cancila	needlefish	fishes-ray-finned
+GCA_015852565.1	Branchiostoma floridae	Florida amphioxus	invertebrates
+GCA_016904835.1	Acanthisitta chloris	rifleman	birds-other
+GCA_017639485.1	Pluvialis apricaria	European golden plover	birds-waterbirds
+GCA_017639555.1	Ciconia maguari	Maguari stork	birds-waterbirds
+GCA_017639675.1	Aplochiton taeniatus	peladilla	fishes-ray-finned
+GCA_019207075.1	Branchiostoma belcheri	belcher's lancelet	invertebrates
+GCA_019677235.1	Micropterus salmoides	large-mouth bass	fishes-ray-finned
+GCA_020510985.1	Pholidichthys leucotaenia	convict blenny	fishes-ray-finned
+GCA_020745685.1	Tautogolabrus adspersus	cunner	fishes-ray-finned
+GCA_020745705.1	Hemiprocne comata	whiskered treeswift	birds-other
+GCA_020745775.1	Theristicus caerulescens	plumbeous ibis	birds-waterbirds
+GCA_020746105.1	Trogon surrucura	surucua trogon	birds-landbirds
+GCA_020800305.1	Porphyrio hochstetteri	takahe	birds-waterbirds
+GCA_021292165.1	Shinisaurus crocodilurus	Chinese crocodile lizard	reptiles
+GCA_022682495.2	Desmodus rotundus	common vampire bat	mammals-laurasiatheria
+GCA_023333525.2	Aspidoscelis tigris stejnegeri	Western whiptail stejnegeri	reptiles
+GCA_023637945.2	Phaethornis superciliosus	long-tailed hermit	birds-other
+GCA_023851605.1	Tamandua tetradactyla	Southern tamandua 	mammals-other
+GCA_024256435.1	Clarias gariepinus	North African catfish	fishes-ray-finned
+GCA_024294585.1	Vipera latastei	snub-nosed viber	reptiles
+GCA_026018925.1	Tupaia tana	large tree shrew	mammals-euarchontoglires
+GCA_026229955.1	Peromyscus maniculatus sonoriensis	North American deer mouse	mammals-euarchontoglires
+GCA_026230055.1	Corynorhinus townsendii	Townsend's big-eared bat	mammals-laurasiatheria
+GCA_027410445.1	Discoglossus pictus	painted frog	amphibians
+GCA_027474245.1	Spheniscus humboldti	Humboldt penguin	birds-waterbirds
+GCA_027559615.1	Acridotheres tristis	common myna	birds-landbirds
+GCA_027563665.1	Antrozous pallidus	pallid bat	mammals-laurasiatheria
+GCA_027574665.1	Rhynochetos jubatus	Kagu	birds-waterbirds
+GCA_027917425.1	Gastrophryne carolinensis	Eastern narrow-mouthed toad	amphibians
+GCA_027942865.1	Odontesthes bonariensis	pejerrey	fishes-ray-finned
+GCA_028020825.1	Podargus strigoides	tawny frogmouth	birds-other
+GCA_028022725.1	Lycodopsis pacificus	blackbelly eelpout	fishes-ray-finned
+GCA_028022735.1	Gypaetus barbatus	bearded vulture	birds-landbirds
+GCA_028451465.1	Erethizon dorsatum	North American porcupine	mammals-euarchontoglires
+GCA_028571685.1	Heterohyrax brucei	yellow-spotted rock hyrax	mammals-other
+GCA_028858755.1	Ara ararauna	blue-and-gold macaw	birds-landbirds
+GCA_029215775.1	Anniella stebbinsi	San Diegan legless lizard	reptiles
+GCA_030020295.1	Gavialis gangeticus	Indian gharial	reptiles
+GCA_030035585.1	Dugong dugon	dugong	mammals-other
+GCA_030412105.1	Cyclura pinguis	stout iguana	reptiles
+GCA_030440675.1	Furcifer pardalis	panther chameleon	reptiles
+GCA_030463565.1	Pelecanus crispus	dalmatian pelican	birds-waterbirds
+GCA_030848825.1	Tadarida brasiliensis	Brazilian free-tailed bat	mammals-laurasiatheria
+GCA_030867105.1	Liasis olivaceus	olive python	reptiles
+GCA_030867145.1	Opisthocomus hoazin	hoatzin	birds-waterbirds
+GCA_031216445.1	Lateolabrax maculatus	Chinese sea bass	fishes-ray-finned
+GCA_031468815.1	Morus bassanus	Northern gannet	birds-waterbirds
+GCA_031876335.1	Hipposideros larvatus	intermediate roundleaf bat	mammals-laurasiatheria
+GCA_031877795.1	Strix aluco	tawny owl	birds-landbirds
+GCA_031878675.1	Thomomys bottae	Botta's pocket gopher	mammals-euarchontoglires
+GCA_031878705.1	Tapirus indicus	Malayan tapir	mammals-laurasiatheria
+GCA_031885435.1	Passerculus sandwichensis	Savannah sparrow	birds-landbirds
+GCA_031893055.1	Leptodactylus fuscus	rufous frog	amphibians
+GCA_032164245.1	Sternotherus odoratus	eastern musk turtle	reptiles
+GCA_033349115.1	Macrochelys suwanniensis	Suwannee snapping turtle	reptiles
+GCA_033958435.1	Carettochelys insculpta	pig-nosed turtle	reptiles
+GCA_034619465.1	Leptosomus discolor	cuckoo-roller	birds-landbirds
+GCA_035046505.1	Tiliqua scincoides	blue-tongue skink	reptiles
+GCA_035083965.1	Branchiostoma lanceolatum	European lancelet	invertebrates
+GCA_035084275.1	Hydrolagus colliei	spotted ratfish	fishes-other
+GCA_036010785.1	Ammospiza maritima	seaside sparrow	birds-landbirds
+GCA_036172795.1	Pelodytes ibericus	Iberian parsley frog	amphibians
+GCA_036417435.1	Inia geoffrensis	Amazon river dolphin	mammals-laurasiatheria
+GCA_036417535.1	Chlamydotis macqueenii	MacQueen's bustard	birds-other
+GCA_036426135.1	Equus caballus	Arabian horse	mammals-laurasiatheria
+GCA_036784965.1	Salvelinus alpinus oquassa	Arctic char	fishes-ray-finned
+GCA_036873955.1	Mergus octosetaceus	Brazilian merganser	birds-other
+GCA_037038515.1	Microtus pennsylvanicus	Eastern meadow vole	mammals-euarchontoglires
+GCA_037038545.1	Rhynchonycteris naso	proboscis bat	mammals-laurasiatheria
+GCA_037039145.1	Fundulus diaphanus	banded killifish	fishes-ray-finned
+GCA_037157525.1	Molossus alvarezi 	Alvarez's mastiff bat	mammals-laurasiatheria
+GCA_037306005.1	Rhinophrynus dorsalis	Mexican burrowing toad	amphibians
+GCA_037893015.1	Macrotis lagotis	greater bilby	mammals-other
+GCA_037962945.1	Sarcoramphus papa	king vulture	birds-landbirds
+GCA_038024135.1	Cyprinella venusta	blacktail shiner	fishes-ray-finned
+GCA_038048845.1	Mixophyes fleayi	Fleay's barred frog	amphibians
+GCA_038355195.1	Osmerus mordax	rainbow smelt	fishes-ray-finned
+GCA_038363095.2	Artibeus lituratus	great fruit-eating bat	mammals-laurasiatheria
+GCA_038363145.1	Artibeus intermedius	intermediate fruit-eating bat	mammals-laurasiatheria
+GCA_038501925.1	Xenopus petersii	Peter's clawed frog	amphibians
+GCA_039655065.1	Glossophaga mutica	Merriam's long-tongued bat	mammals-laurasiatheria
+GCA_039720435.1	Amazona ochrocephala 	yellow-crowned amazon	birds-landbirds
+GCA_039878825.1	Coturnix chinensis	king quail	birds-other
+GCA_039880945.1	Molossus nigricans	Ebon mastiff bat	mammals-laurasiatheria
+GCA_039906565.1	Aegotheles albertisi	mountain owlet-nightjar	birds-other
+GCA_040206685.1	Ascaphus truei	coastal tailed frog	amphibians
+GCA_040805955.1	Ovis aries	domestic sheep	mammals-laurasiatheria
+GCA_040894355.2	Myuchelys georgesi	Bellinger river turtle	reptiles
+GCA_040954625.2	Balanoglossus misakiensis	tongue acorn worm	invertebrates
+GCA_040955705.1	Lycaon pictus	African hunting dog	mammals-laurasiatheria
+GCA_041735815.1	Capra hircus	goat	mammals-laurasiatheria
+GCA_041753875.1	Acanthopagrus schlegelii	black porgy	fishes-ray-finned
+GCA_041834305.1	Megaptera novaeangliae	humpback whale	mammals-laurasiatheria
+GCA_041902795.1	Electrophorus electricus	electric eel	fishes-ray-finned
+GCA_041903045.1	Epinephelus lanceolatus	giant grouper	fishes-ray-finned
+GCA_042242135.1	Arripis georgiana	Australian herring	fishes-ray-finned
+GCA_043250625.1	Sebastes fasciatus	Acadian redfish	fishes-ray-finned
+GCA_043290085.1	Rhynchocyon petersi	black and rufous elephant shrew	mammals-other
+GCA_043727835.1	Aselliscus stoliczkanus	Stoliczka's trident bat	mammals-laurasiatheria
+GCA_043728065.1	Rhinolophus affinis	intermediate horseshoe bat	mammals-laurasiatheria
+GCA_043728145.1	Rhinolophus trifoliatus	trefoil horseshoe bat	mammals-laurasiatheria
+GCA_043748575.1	Rhinolophus perniger lanosus	Northern woolly horseshoe bat	mammals-laurasiatheria
+GCA_043748645.1	Mops condylurus	Angolan free-tailed bat	mammals-laurasiatheria
+GCA_043880285.1	Doryrhina cyclops	Cyclops roundleaf bat	mammals-laurasiatheria
+GCA_043880425.1	Rhinolophus yonghoiseni	Yong hoi sen's woolly horseshoe bat	mammals-laurasiatheria
+GCA_043880545.1	Rhinopoma microphyllum	Greater mouse-tailed bat	mammals-laurasiatheria
+GCA_043880595.1	Megaderma spasma	Lesser false vampire bat	mammals-laurasiatheria
+GCA_044231665.1	Neosynchiropus ocellatus	ocellated dragonet	fishes-ray-finned
+GCA_044231675.1	Synchiropus picturatus	picturesque dragonet	fishes-ray-finned
+GCA_045345405.1	Guaruba guaruba	golden parakeet	birds-landbirds
+GCA_045345515.1	Morphnus guianensis	crested eagle	birds-landbirds
+GCA_045362495.1	Lethrinus nebulosus	spangled emperor	fishes-ray-finned
+GCA_045363895.1	Pristipomoides typus	sharptooth jobfish	fishes-ray-finned
+GCA_045364795.1	Willisornis vidua	Xingu scale-backed antbird	birds-landbirds
+GCA_045364815.1	Podocnemis expansa	arrau turtle	reptiles
+GCA_045781085.1	Pangshura tecta	Indian roofed turtle	reptiles
+GCA_045843805.1	Urocitellus parryii	Arctic ground squirrel	mammals-euarchontoglires
+GCA_046126795.1	Dibamus smithi	Smith's blind skink	reptiles
+GCA_046129655.1	Cyanocitta cristata	blue jay	birds-landbirds
+GCA_046129695.1	Lonchura striata domestica	Bengalese finch	birds-landbirds
+GCA_046255685.1	Amblyopsis spelaea	Northern cavefish	fishes-ray-finned
+GCA_046562885.1	Panthera onca	jaguar	mammals-laurasiatheria
+GCA_046562895.1	Trichechus inunguis	Amazon manatee	mammals-other
+GCA_047301625.1	Choerodon schoenleinii	blackspot tuskfish	fishes-ray-finned
+GCA_047511565.1	Polymixia lowei	beardfish	fishes-ray-finned
+GCA_047511655.1	Castor canadensis	North American beaver	mammals-euarchontoglires
+GCA_047715975.1	Bradypodion pumilum	lizards B.pumilum	reptiles
+GCA_047830755.1	Zonotrichia albicollis	white-throated sparrow	birds-landbirds
+GCA_047922985.1	Eudromia elegans	elegant crested tinamou	birds-other
+GCA_048126345.1	Notoryctes typhlops	marsupial mole	mammals-other
+GCA_048126635.1	Spinachia spinachia	sea stickleback	fishes-ray-finned
+GCA_048126745.1	Dama dama	fallow deer	mammals-laurasiatheria
+GCA_048128725.1	Symphorus nematophorus	chinamanfish	fishes-ray-finned
+GCA_048128805.1	Centroberyx gerrardi	bight redfish	fishes-ray-finned
+GCA_048129055.1	Caesio teres	yellow and blueback fusilier	fishes-ray-finned
+GCA_048129235.1	Epinephelus rankini	rankin cod	fishes-ray-finned
+GCA_048301445.1	Syngnathus typhle	broad-nosed pipefish	fishes-ray-finned
+GCA_048301465.1	Aulostomus maculatus	West Atlantic trumpetfish	fishes-ray-finned
+GCA_048301585.1	Rhinogobio nasutus	Rhinogobio nasutus	fishes-ray-finned
+GCA_048338725.1	Sus scrofa	pig	mammals-laurasiatheria
+GCA_048537225.1	Polymixia cf. hollisterae	Bermuda beardfish	fishes-ray-finned
+GCA_048544225.1	Coilia mystus	Osbeck's grenadier anchovy	fishes-ray-finned
+GCA_048565345.1	Mantella aurantiaca	golden mantella	amphibians
+GCA_048565385.1	Saimiri boliviensis	Bolivian squirrel monkey	mammals-euarchontoglires
+GCA_048569125.1	Diretmus argenteus	silver spinyfin	fishes-ray-finned
+GCA_048569485.1	Anomaloglossus baeobatrachus	Edward's Rocket Frog	amphibians
+GCA_048593225.1	Sarcophilus harrisii	Tasmanian devil	mammals-other
+GCA_048593235.1	Sminthopsis crassicaudata	fat-tailed dunnart	mammals-other
+GCA_048593285.1	Dasyurus maculatus	tiger quoll	mammals-other
+GCA_048628825.1	Menidia menidia	Atlantic silverside	fishes-ray-finned
+GCA_048771875.1	Ctenodactylus gundi	common gundi	mammals-euarchontoglires
+GCA_048771995.1	Taeniopygia guttata	zebra finch	birds-landbirds
+GCA_048772815.1	Callospermophilus lateralis	golden-mantled ground squirrel	mammals-euarchontoglires
+GCA_048934315.1	Petromyzon marinus	sea lamprey	fishes-other
+GCA_049082185.1	Cristiceps australis	crested weedfish	fishes-ray-finned
+GCA_049190665.1	Melanonus zugmayeri	arrowtail	fishes-ray-finned
+GCA_049354715.1	Callithrix jacchus	common marmoset	mammals-euarchontoglires
+GCA_901001165.2	Salmo trutta	brown trout	fishes-ray-finned
+GCA_901699155.2	Streptopelia turtur	European turtle dove	birds-other
+GCA_901765095.2	Microcaecilia unicolor	tiny cayenne caecilian	amphibians
+GCA_902686455.2	Sciurus vulgaris	Eurasian red squirrel	mammals-euarchontoglires
+GCA_903797595.2	Erithacus rubecula	European robin	birds-landbirds
+GCA_903992545.1	Pipistrellus pipistrellus	common pipistrelle	mammals-laurasiatheria
+GCA_905171665.2	Trachurus trachurus	Atlantic horse mackerel	fishes-ray-finned
+GCA_905319855.2	Canis lupus	gray wolf	mammals-laurasiatheria
+GCA_907165065.1	Caprimulgus europaeus	Eurasian nightjar	birds-other
+GCA_910589615.1	Taurulus bubalis	long-spined sea scorpion	fishes-ray-finned
+GCA_910591455.2	Pholis gunnellus	rock gunnel	fishes-ray-finned
+GCA_918807975.1	Aplidium turbinatum	clonial sea squirt	invertebrates
+GCA_933228915.1	Telmatherina bonti	telmatherina bonti	fishes-ray-finned
+GCA_936440315.1	Barbus barbus	barbel	fishes-ray-finned
+GCA_944039275.1	Danio rerio	zebrafish	fishes-ray-finned
+GCA_946808225.1	Silurus aristotelis	Aristotle's catfish	fishes-ray-finned
+GCA_947034865.1	Barbatula barbatula	stone loach	fishes-ray-finned
+GCA_947247035.1	Vipera ursinii	Hungarian meadow viper	reptiles
+GCA_947561715.1	Ascidia mentula	pink sea squirt	invertebrates
+GCA_947623445.1	Clavelina lepadiformis	light-bulb sea squirt	invertebrates
+GCA_947650265.1	Symphodus melops	corkwing wrasse	fishes-ray-finned
+GCA_949152265.1	Phoxinus phoxinus	Eurasian minnow	fishes-ray-finned
+GCA_949316315.1	Mus musculus	house mouse	mammals-euarchontoglires
+GCA_949319135.1	Squalius cephalus	European chub	fishes-ray-finned
+GCA_949357685.1	Gobio gobio	gudgeon	fishes-ray-finned
+GCA_949357725.1	Hyperoplus immaculatus	greater sand eel	fishes-ray-finned
+GCA_949606895.1	Notothenia rossii 	marbled rockcod	fishes-ray-finned
+GCA_949628215.1	Gulosus aristotelis	European shag	birds-waterbirds
+GCA_949748355.1	Melanostigma gelatinosum	limp eelpout	fishes-ray-finned
+GCA_949752795.1	Hyperoodon ampullatus	North Atlantic bottlenose whale	mammals-laurasiatheria
+GCA_949987555.1	Borostomias antarcticus	large-eye snaggletooth	fishes-ray-finned
+GCA_949987585.1	Pipistrellus pygmaeus	soprano pipistrelle	mammals-laurasiatheria
+GCA_949987615.1	Pollachius pollachius	European pollock	fishes-ray-finned
+GCA_949987685.1	Ammodytes marinus	lesseer sand eel	fishes-ray-finned
+GCA_951216825.1	Electrona antarctica	Antarctic lanternfish	fishes-ray-finned
+GCA_951394365.1	Tetrao urogallus	Western capercaillie	birds-other
+GCA_951394435.1	Stenella coeruleoalba	striped dolphin	mammals-laurasiatheria
+GCA_951640355.1	Eptesicus nilssonii 	northern bat	mammals-laurasiatheria
+GCA_951799395.1	Argentina silus	greater argentine	fishes-ray-finned
+GCA_951799975.1	Gobius niger	black goby	fishes-ray-finned
+GCA_951802725.1	Rutilus rutilus	roach minnow	fishes-ray-finned
+GCA_951804945.1	Podarcis cretensis	Cretan wall lizard	reptiles
+GCA_960531495.1	Zeus faber	John dory	fishes-ray-finned
+GCA_963082525.1	Nesoenas mayeri	pink pigeon	birds-other
+GCA_963082875.1	Corella eumyota	Orange-tipped sea squirt	invertebrates
+GCA_963210335.1	Falco punctatus	Mauritius kestrel	birds-landbirds
+GCA_963264785.1	Psittacula echo	Mauritius parakeet	birds-landbirds
+GCA_963280865.1	Gymnoscopelus braueri	Brauer's lanternfish	fishes-ray-finned
+GCA_963383615.1	Lipophrys pholis	shanny	fishes-ray-finned
+GCA_963383645.1	Muscardinus avellanarius	common dormouse	mammals-euarchontoglires
+GCA_963422515.1	Blennius ocellaris	butterfly blenny	fishes-ray-finned
+GCA_963454915.1	Gymnoscopelus microlampas	minispotted lanternfish	fishes-ray-finned
+GCA_963455305.1	Plecotus auritus	brown big-eared bat	mammals-laurasiatheria
+GCA_963455335.1	Martes martes	European pine marten	mammals-laurasiatheria
+GCA_963457635.1	Microchirus variegatus	thickback sole	fishes-ray-finned
+GCA_963457725.1	Sprattus sprattus	European sprat	fishes-ray-finned
+GCA_963513975.1	Fringilla coelebs	common chaffinch	birds-landbirds
+GCA_963514005.1	Raja brachyura	blonde ray	fishes-other
+GCA_963514085.1	Chelon labrosus	thicklip grey mullet	fishes-ray-finned
+GCA_963514095.1	Eutrigla gurnardus	grey gurnard	fishes-ray-finned
+GCA_963675345.1	Trididemnum clinides	Trididemnum clinides	invertebrates
+GCA_963691815.1	Echiichthys vipera	lesser weever	fishes-ray-finned
+GCA_963854745.1	Scophthalmus maximus	turbot	fishes-ray-finned
+GCA_963921795.1	Nannobrachium achirus	Lantern fish	fishes-ray-finned
+GCA_963924005.1	Protomyctophum bolini	Bolin’s lanternfish	fishes-ray-finned
+GCA_963924515.1	Vespertilio murinus	particolored bat	mammals-laurasiatheria
+GCA_963924565.1	Ascidiella aspersa	European sea squirt	invertebrates
+GCA_963924665.1	Micromys minutus	European harvest mouse	mammals-euarchontoglires
+GCA_963932225.1	Larus fuscus	lesser black-backed gull	birds-waterbirds
+GCA_963969265.1	Rhamphochromis chilingali	Chilingali cichlid	fishes-ray-finned
+GCA_963971535.1	Notolepis coatsi	Antarctic jonasfish	fishes-ray-finned
+GCA_963989245.1	Nansenia antarctica	pencil smelt	fishes-ray-finned
+GCA_963989345.1	Clangula hyemalis	long-tailed duck	birds-other
+GCA_963993115.1	Abramis brama	common bream	fishes-ray-finned
+GCA_964030765.1	Micromesistius poutassou	blue whiting	fishes-ray-finned
+GCA_964034855.1	Anser brachyrhynchus	pink-footed goose	birds-other
+GCA_964035555.1	Netta rufina	red-crested pochard	birds-other
+GCA_964059595.1	Bucephala clangula	common goldeneye	birds-other
+GCA_964094495.2	Myotis mystacinus	whiskered bat	mammals-laurasiatheria
+GCA_964106545.1	Neogale vison	American mink	mammals-laurasiatheria
+GCA_964106645.2	Podarcis pityusensis	Ibiza wall lizard	reptiles
+GCA_964106825.2	Vulpes vulpes	red fox	mammals-laurasiatheria
+GCA_964106855.1	Grus grus	Eurasian crane	birds-waterbirds
+GCA_964106895.1	Numenius arquata	Eurasian curlew	birds-waterbirds
+GCA_964106915.2	Podarcis gaigeae	Skyros wall lizard	reptiles
+GCA_964146895.2	Miniopterus schreibersii	Schreibers' long-fingered bat	mammals-laurasiatheria
+GCA_964165515.1	Mesoplodon bidens	Sowerby's beaked whale	mammals-laurasiatheria
+GCA_964187855.1	Myxine glutinosa	Atlantic hagfish	fishes-other
+GCA_964188175.1	Podarcis siculus	Italian wall lizard	reptiles
+GCA_964188305.1	Podarcis bocagei	Bocage's wall lizard	reptiles
+GCA_964188315.1	Podarcis muralis	common wall lizard	reptiles
+GCA_964188345.1	Anas platyrhynchos	mallard	birds-other
+GCA_964188355.1	Buteo buteo	common buzzard	birds-landbirds
+GCA_964188405.1	Protomyctophum parallelum 	parallel lanternfish	fishes-ray-finned
+GCA_964194105.1	Spermophilus citellus	European ground squirrel	mammals-euarchontoglires
+GCA_964194135.1	Talpa europaea	European mole	mammals-laurasiatheria
+GCA_964194155.1	Cetorhinus maximus	basking shark	fishes-other
+GCA_964194185.1	Rhinolophus hipposideros	lesser horseshoe bat	mammals-laurasiatheria
+GCA_964194415.1	Vipera berus	adder	reptiles
+GCA_964195595.2	Calonectris borealis	Cory's shearwater	birds-waterbirds
+GCA_964197995.1	Scardinius erythrophthalmus	common rudd	fishes-ray-finned
+GCA_964198595.1	Lampetra fluviatilis	European river lamprey	fishes-other
+GCA_964199755.1	Larus michahellis	yellow-legged gull	birds-waterbirds
+GCA_964204865.1	Styela clava	tunicate S.clava	invertebrates
+GCA_964205295.1	Bombina variegata	yellow-bellied toad	amphibians
+GCA_964211825.1	Aythya ferina	common pochard	birds-other
+GCA_964211835.1	Anser anser	domestic goose	birds-other
+GCA_964212035.2	Myotis nattereri	Natterer's bat	mammals-laurasiatheria
+GCA_964213995.1	Mustelus asterias	starry smooth-hound shark	fishes-other
+GCA_964234715.1	Podarcis melisellensis	Dalmatian wall lizard	reptiles
+GCA_964237585.1	Gallinula chloropus	common moorhen	birds-waterbirds
+GCA_964252035.1	Podarcis erhardii	Aegean wall lizard	reptiles
+GCA_964263955.1	Coregonus lavaretus	common whitefish	fishes-ray-finned
+GCA_964264875.2	Nyctalus leisleri	lesser noctule	mammals-laurasiatheria
+GCA_964266715.1	Microstomus kitt	lemon sole	fishes-ray-finned
+GCA_964270895.1	Podarcis filfolensis	Filfola wall lizard	reptiles
+GCA_964270905.1	Lagenorhynchus acutus	Atlantic white-sided dolphin	mammals-laurasiatheria
+GCA_964271855.1	Acomys minous	Crete spiny mouse	mammals-euarchontoglires
+GCA_964273445.1	Streptopelia decaocto	Eurasian collared-dove	birds-other
+GCA_964273705.1	Natrix helvetica	barred grass snake	reptiles
+GCA_964276395.1	Gasterosteus aculeatus	three-spined stickleback	fishes-ray-finned
+GCA_964289735.1	Phaethon aethereus	red-billed tropicbird	birds-waterbirds
+GCA_964339955.1	Pipistrellus hanaki	Hanaki's dwarf bat	mammals-laurasiatheria
+GCA_964341445.1	Mesoplodon mirus	True's beaked whale	mammals-laurasiatheria
+GCA_964374135.1	Grampus griseus	Risso's dolphin	mammals-laurasiatheria
+GCA_964374335.1	Astatotilapia calliptera	Eastern happy	fishes-ray-finned
+GCA_964417175.1	Larus argentatus	herring gull	birds-waterbirds
+GCA_964638095.1	Poromitra crassiceps	crested bigscale	fishes-ray-finned
+GCA_964656225.1	Pipistrellus nathusii	Nathusius's pipistrelle	mammals-laurasiatheria
+GCA_964656455.1	Halichoerus grypus	grey seal	mammals-laurasiatheria
+GCA_964662115.1	Mustela nivalis vulgaris	least weasel 	mammals-laurasiatheria
+GCA_965112155.1	Podarcis liolepis	Columbretes wall lizard	reptiles
+GCA_965113295.1	Leuciscus leuciscus	common dace	fishes-ray-finned
+GCA_965113315.1	Podarcis vaucheri	Andalusian wall lizard	reptiles
+GCA_965115925.1	Myotis emarginatus	Geoffroy's bat	mammals-laurasiatheria
+GCA_965119305.1	Pelophylax lessonae	pool frog	amphibians
+GCA_965140235.1	Caretta caretta	loggerhead sea turtle	reptiles
+GCA_965140245.1	Athene noctua	little owl	birds-landbirds
+GCA_965140285.1	Lepidochelys kempii	Kemp's ridley sea turtle	reptiles
+GCA_965140295.1	Lepidochelys olivacea	Pacific ridley	reptiles
+GCA_965140915.1	Aythya marila	greater scaup	birds-other
+GCA_965151615.1	Cygnus columbianus	tundra swan	birds-other
+GCA_965152235.1	Eretmochelys imbricata	Hawksbill sea turtle	reptiles
+GCA_965152275.1	Natator depressus	Australian flatback sea turtle	reptiles
+GCA_965153285.1	Podarcis tiliguerta	Tyrrhenian wall lizard	reptiles
+GCA_965178545.1	Coloeus monedula	Western jackdaw	birds-landbirds
+GCA_965183815.1	Platalea leucorodia	Eurasian spoonbill	birds-waterbirds
+GCA_965194805.1	Balaenoptera borealis	sei whale	mammals-laurasiatheria
+GCA_965194825.1	Balaenoptera physalus	finback whale	mammals-laurasiatheria
+GCA_965202585.1	Thalia democratica	Thalia democratica	invertebrates
+GCA_965226115.1	Aulonocara stuartgranti	flavescent peacock cichlid	fishes-ray-finned
+GCA_965226575.1	Pagrus pagrus	common seabream	fishes-ray-finned
+GCA_965231255.1	Vanellus vanellus	Northern Lapwing	birds-waterbirds
+GCA_965231275.1	Zosterops lateralis	silver-eye	birds-landbirds
+GCA_965231335.1	Branta canadensis	Canada goose	birds-other
+GCF_003369695.1	Bos taurus	Brahman cow	mammals-laurasiatheria
+GCF_003957555.1	Calypte anna	Anna's hummingbird	birds-other
+GCF_004027225.2	Strigops habroptilus	kakapo	birds-landbirds
+GCF_004115215.2	Ornithorhynchus anatinus	platypus	mammals-other
+GCF_004115265.2	Rhinolophus ferrumequinum	greater horseshoe bat	mammals-laurasiatheria
+GCF_004126475.2	Phyllostomus discolor	pale spear-nosed bat	mammals-laurasiatheria
+GCF_007364275.1	Archocentrus centrarchus	flier cichlid	fishes-ray-finned
+GCF_007399415.2	Gopherus evgoodei	Goode's Thornscrub Tortoise	reptiles
+GCF_007474595.2	Lynx canadensis	Canada lynx	mammals-laurasiatheria
+GCF_008692025.1	Phocoena sinus	vaquita	mammals-laurasiatheria
+GCF_009650955.1	Corvus moneduloides	New Caledonian crow	birds-landbirds
+GCF_009762305.2	Zalophus californianus	California sea lion	mammals-laurasiatheria
+GCF_009762535.1	Notolabrus celidotus	New Zealand spotty wrasse	fishes-ray-finned
+GCF_009764475.1	Pristis pectinata	smalltooth sawfish	fishes-other
+GCF_009764565.3	Dermochelys coriacea	leatherback sea turtle	reptiles
+GCF_009769535.1	Thamnophis elegans	Western terrestrial garter snake	reptiles
+GCF_009769545.1	Cyclopterus lumpus	lumpfish	fishes-ray-finned
+GCF_009769625.2	Cygnus olor	mute swan	birds-other
+GCF_009819535.1	Lacerta agilis	sand lizard	reptiles
+GCF_009819655.1	Sylvia atricapilla	European blackcap	birds-landbirds
+GCF_009819705.1	Hippoglossus hippoglossus	Atlantic halibut	fishes-ray-finned
+GCF_009819795.1	Aythya fuligula	tufted duck	birds-other
+GCF_009819885.2	Catharus ustulatus	Swainson's thrush	birds-landbirds
+GCF_009829125.3	Periophthalmus magnuspinnatus	Korean giant-fin mudskipper	fishes-ray-finned
+GCF_009829145.1	Chiroxiphia lanceolata	lanced-tailed manakin	birds-landbirds
+GCF_009829155.1	Mustela erminea	stout	mammals-laurasiatheria
+GCF_009873245.2	Balaenoptera musculus	blue whale	mammals-laurasiatheria
+GCF_010909765.2	Amblyraja radiata	thorny skate	fishes-other
+GCF_011004845.1	Esox lucius	Northern pike	fishes-ray-finned
+GCF_011100635.1	Trichosurus vulpecula	common brushtail possum	mammals-other
+GCF_011100685.1	Canis lupus familiaris	dog	mammals-laurasiatheria
+GCF_011762595.1	Tursiops truncatus	common bottlenose dolphin	mammals-laurasiatheria
+GCF_012275295.1	Melopsittacus undulatus	budgerigar	birds-landbirds
+GCF_013347855.1	Anguilla anguilla	European eel	fishes-ray-finned
+GCF_013368585.1	Megalops cyprinoides	Indo-pacific tarpon	fishes-ray-finned
+GCF_013368605.1	Nyctibius grandis	great potoo	birds-other
+GCF_014108235.1	Myotis myotis	greater mouse-eared bat	mammals-laurasiatheria
+GCF_014108245.1	Pipistrellus kuhlii	Kuhl's pipistrelle	mammals-laurasiatheria
+GCF_014108415.1	Molossus molossus	Pallas's mastiff bat	mammals-laurasiatheria
+GCF_014176215.1	Rousettus aegyptiacus	Egyptian rousette	mammals-laurasiatheria
+GCF_014839835.1	Dryobates pubescens	downy woodpecker	birds-landbirds
+GCF_015220075.1	Falco rusticolus	gyrfalcon	birds-landbirds
+GCF_015220235.1	Choloepus didactylus	Linnaeus's two-toed sloth	mammals-other
+GCF_015220715.1	Pygocentrus nattereri	red-bellied piranha	fishes-ray-finned
+GCF_015220745.1	Sebastes umbrosus	honeycomb rockfish	fishes-ray-finned
+GCF_015220805.1	Pogoniulus pusillus	red-fronted tinkerbird	birds-landbirds
+GCF_015227675.2	Rattus norvegicus	Norway rat	mammals-euarchontoglires
+GCF_015227805.1	Hirundo rustica	barn swallow	birds-landbirds
+GCF_015237465.2	Chelonia mydas	green sea turtle	reptiles
+GCF_015852505.1	Tachyglossus aculeatus	short-beaked echidna	mammals-other
+GCF_016700215.2	Gallus gallus	white leghorn layer chicken	birds-other
+GCF_017639515.1	Carcharodon carcharias	great white shark	fishes-other
+GCF_017639655.2	Falco naumanni	lesser kestrel	birds-landbirds
+GCF_017639745.1	Melanotaenia boesemani	Boeseman’s rainbowfish	fishes-ray-finned
+GCF_017976325.1	Chelmon rostratus	copperband butterflyfish	fishes-ray-finned
+GCF_017976375.1	Cuculus canorus	common cuckoo	birds-other
+GCF_017976425.1	Toxotes jaculatrix	banded archerfish	fishes-ray-finned
+GCF_018492685.1	Alosa sapidissima	American shad	fishes-ray-finned
+GCF_019393635.1	Dromiciops gliroides	monito del montes	mammals-other
+GCF_020382885.2	Scatophagus argus	spotted scat	fishes-ray-finned
+GCF_020740605.2	Lemur catta	ring-tailed lemur	mammals-euarchontoglires
+GCF_020740685.1	Jaculus jaculus	Lesser Egyptian jerboa	mammals-euarchontoglires
+GCF_020740725.1	Corvus hawaiiensis	Hawaiian crow	birds-landbirds
+GCF_020740795.1	Apus apus	common swift	birds-other
+GCF_020745735.1	Hemiscyllium ocellatum	epaulette shark	fishes-other
+GCF_020745825.1	Agelaius phoeniceus	red-winged blackbird	birds-landbirds
+GCF_020826845.1	Diceros bicornis minor	Southern black rhinoceros	mammals-laurasiatheria
+GCF_021462225.1	Girardinichthys multiradiatus	darkedged splitfin	fishes-ray-finned
+GCF_023053635.1	Elgaria multicarinata webbii	Southern alligator lizard	reptiles
+GCF_023343835.1	Lagopus muta	rock ptarmigan	birds-other
+GCF_023375975.1	Astyanax mexicanus	Mexican tetra	fishes-ray-finned
+GCF_023634085.1	Falco cherrug	saker falcon	birds-landbirds
+GCF_023634155.1	Falco peregrinus	peregrine falcon	birds-landbirds
+GCF_023638135.1	Falco biarmicus	Lanner falcon	birds-landbirds
+GCF_024139225.1	Suncus etruscus	Etruscan shrew	mammals-laurasiatheria
+GCF_024166365.1	Elephas maximus indicus	Asian elephant	mammals-other
+GCF_025201925.1	Gopherus flavomarginatus	Mexican gopher tortoise	reptiles
+GCF_025265405.1	Mesoplodon densirostris	Blainville's beaked whale	mammals-laurasiatheria
+GCF_026419915.1	Harpia harpyja	harpy eagle	birds-landbirds
+GCF_026419965.1	Kogia breviceps	pygmy sperm whale	mammals-laurasiatheria
+GCF_026979565.1	Vidua chalybeata	village indigobird	birds-landbirds
+GCF_027172205.1	Podarcis raffonei	Aeolian wall lizard	reptiles
+GCF_027358585.1	Pangasianodon hypophthalmus	striped catfish	fishes-ray-finned
+GCF_027358695.1	Spea bombifrons	plain spadefoot toad	amphibians
+GCF_027406575.1	Nycticebus coucang	sunda slow loris	mammals-euarchontoglires
+GCF_027409185.1	Cynocephalus volans	Philippine flying lemur	mammals-euarchontoglires
+GCF_027409825.1	Scomber japonicus	Pacific chub mackerel	fishes-ray-finned
+GCF_027477595.1	Haemorhous mexicanus	house finch	birds-landbirds
+GCF_027574615.1	Eptesicus fuscus	big brown bat	mammals-laurasiatheria
+GCF_027579445.1	Ammospiza nelsoni	Nelson's sparrow	birds-landbirds
+GCF_027579695.1	Neoarius graeffei	blue salmon catfish	fishes-ray-finned
+GCF_027579735.1	Bombina bombina	European fire-bellied toad	amphibians
+GCF_027595985.1	Sorex araneus	European shrew	mammals-laurasiatheria
+GCF_027789765.1	Dendropsophus ebraccatus	hourglass treefrog	amphibians
+GCF_027887145.1	Ammodramus caudacutus	saltmarsh sparrow	birds-landbirds
+GCF_027887155.1	Malaclemys terrapin	diamondback terrapin	reptiles
+GCF_027887165.1	Monodelphis domestica	gray short-tailed opossum	mammals-other
+GCF_028017835.1	Emys orbicularis	European pond turtle	reptiles
+GCF_028018385.1	Neofelis nebulosa	clouded leopard	mammals-laurasiatheria
+GCF_028018845.1	Melospiza georgiana	swamp sparrow	birds-landbirds
+GCF_028021215.1	Eschrichtius robustus	gray whale	mammals-laurasiatheria
+GCF_028023285.1	Balaenoptera ricei	Rice's whale	mammals-laurasiatheria
+GCF_028372415.1	Macropus eugenii	Tammar wallaby	mammals-other
+GCF_028389875.1	Rhea pennata	lesser rhea 	birds-other
+GCF_028390025.1	Pseudophryne corroboree	Southern corroboree frog	amphibians
+GCF_028500815.1	Rissa tridactyla	black-legged kittiwake	birds-waterbirds
+GCF_028564815.1	Eubalaena glacialis	North Atlantic right whale	mammals-laurasiatheria
+GCF_028583425.1	Eublepharis macularius	leopard gecko	reptiles
+GCF_028858705.1	Grus americana	whooping crane	birds-waterbirds
+GCF_028858725.1	Colius striatus	speckled mousebird	birds-landbirds
+GCF_028858775.2	Pan troglodytes	chimpanzee	mammals-euarchontoglires
+GCF_028878055.3	Symphalangus syndactylus	siamang gibbon	mammals-euarchontoglires
+GCF_028885625.2	Pongo pygmaeus	Bornean orangutan	mammals-euarchontoglires
+GCF_028885655.2	Pongo abelii 	Sumatran orangutan	mammals-euarchontoglires
+GCF_029281585.2	Gorilla gorilla	gorilla	mammals-euarchontoglires
+GCF_029289425.2	Pan paniscus	bonobo	mammals-euarchontoglires
+GCF_029499605.1	Hyla sarda	Sardinian treefrog	amphibians
+GCF_029582105.1	Oenanthe melanoleuca	eastern black-eared wheatear	birds-landbirds
+GCF_029633855.1	Hoplias malabaricus	trahira	fishes-ray-finned
+GCF_029633865.1	Lampris incognitus	smalleye Pacific opah	fishes-ray-finned
+GCF_029931775.1	Euleptes europaea	European leaf-toed gecko	reptiles
+GCF_030014295.1	Loxodonta africana	African elephant	mammals-other
+GCF_030014385.1	Trichomycterus rosablanca	Rosablanca cavefish	fishes-ray-finned
+GCF_030020395.1	Manis pentadactyla	Chinese pangolin	mammals-laurasiatheria
+GCF_030028045.1	Hippopotamus amphibius	common hippopotamus	mammals-laurasiatheria
+GCF_030028105.1	Mobula birostris	Atlantic manta ray	fishes-other
+GCF_030035675.1	Rhineura floridana	Florida worm lizard	reptiles
+GCF_030144855.1	Hypanus sabinus	Atlantic stingray	fishes-other
+GCF_030435755.1	Ochotona princeps	American pika	mammals-euarchontoglires
+GCF_030435805.1	Mustela lutreola	European mink	mammals-laurasiatheria
+GCF_030445035.2	Dasypus novemcinctus	nine-banded armadillo	mammals-other
+GCF_030463535.1	Salminus brasiliensis	golden dorado	fishes-ray-finned
+GCF_030490865.1	Poecile atricapillus	black-capped chickadee	birds-landbirds
+GCF_030684315.1	Stegostoma tigrinum	zebra shark	fishes-other
+GCF_030867095.1	Alligator mississippiensis	American alligator	reptiles
+GCF_030936135.1	Gavia stellata	red-throated Loon	birds-waterbirds
+GCF_031021105.1	Erythrolamprus reginae	royal ground snake	reptiles
+GCF_032444005.1	Ranitomeya imitator	mimic poison frog	amphibians
+GCF_035084215.1	Heptranchias perlo	sharpnose sevengill shark	fishes-other
+GCF_035149785.1	Candoia aspera	viper boa	reptiles
+GCF_035609145.1	Eleutherodactylus coqui	coqui	amphibians
+GCF_035770615.1	Melospiza melodia	song sparrow	birds-landbirds
+GCF_036013445.1	Caloenas nicobarica	Nicobar pigeon	birds-other
+GCF_036013475.1	Columba livia	rock dove	birds-other
+GCF_036169615.1	Heliangelus exortis	tourmaline sunangel	birds-other
+GCF_036172605.1	Pelobates fuscus	common spadefoot toad	amphibians
+GCF_036250125.1	Dixiphia pipra	white-crowned manakin	birds-landbirds
+GCF_036321535.1	Camelus dromedarius	Dromedary camel	mammals-laurasiatheria
+GCF_036365525.1	Heterodontus francisci	horn shark	fishes-other
+GCF_036370855.1	Dromaius novaehollandiae	emu	birds-other
+GCF_036373705.1	Amia calva	bowfin	fishes-ray-finned
+GCF_036417665.1	Passer domesticus	house sparrow	birds-landbirds
+GCF_036417845.1	Apteryx mantelli	North Island brown kiwi	birds-other
+GCF_036850765.1	Saccopteryx bilineata	greater sac-winged bat	mammals-laurasiatheria
+GCF_036850995.1	Saccopteryx leptura	lesser sac-winged bat	mammals-laurasiatheria
+GCF_036971445.1	Narcine bancroftii	lesser electric ray	fishes-other
+GCF_037038585.1	Patagioenas fasciata	band-tailed pigeon	birds-other
+GCF_037157495.1	Lathamus discolor	swift parrot	birds-landbirds
+GCF_037176765.1	Anolis sagrei	brown anole	reptiles
+GCF_037176945.1	Latimeria chalumnae	African coelacanth	fishes-other
+GCF_037993035.1	Macaca fascicularis	crab-eating macaque	mammals-euarchontoglires
+GCF_039877785.1	Chaetodon trifascialis	chevron butterflyfish	fishes-ray-finned
+GCF_039906515.1	Pseudorca crassidens	false killer whale	mammals-laurasiatheria
+GCF_040182565.1	Anser cygnoides	swan goose	birds-other
+GCF_040807025.1	Struthio camelus australis	common ostrich	birds-other
+GCF_040894005.1	Engystomops pustulosus	tungara frog	amphibians
+GCF_040937935.1	Hyperolius riggenbachi	Riggenbach's reed frog	amphibians
+GCF_040954835.1	Lepisosteus oculatus	spotted gar	fishes-ray-finned
+GCF_042242105.1	Pempheris klunzingeri	rough bullseye	fishes-ray-finned
+GCF_042477335.2	Ovis canadensis	bighorn sheep	mammals-laurasiatheria
+GCF_043159975.1	Macaca nemestrina	pig-tailed macaque	mammals-euarchontoglires
+GCF_043641665.1	Enoplosus armatus	old wife	fishes-ray-finned
+GCF_044704955.1	Pristiophorus japonicus	Japanese sawshark	fishes-other
+GCF_047511675.1	Marmota flaviventris	yellow bellied marmot	mammals-euarchontoglires
+GCF_048164855.1	Canis lupus	Mexican gray wolf	mammals-laurasiatheria
+GCF_900324465.2	Anabas testudineus	climbing perch	fishes-ray-finned
+GCF_900324485.2	Mastacembelus armatus	zig-zag eel	fishes-ray-finned
+GCF_900496995.4	Aquila chrysaetos	European golden eagle	birds-landbirds
+GCF_900634415.1	Cottoperca gobio	channel bull blenny	fishes-ray-finned
+GCF_900634625.1	Parambassis ranga	Indian glassy fish	fishes-ray-finned
+GCF_900634775.1	Gouania willdenowi	blunt-snouted clingfish	fishes-ray-finned
+GCF_900634795.4	Betta splendens	Siamese fighting fish	fishes-ray-finned
+GCF_900700375.1	Denticeps clupeoides	denticle herring	fishes-ray-finned
+GCF_900747795.2	Erpetoichthys calabaricus	reedfish	fishes-ray-finned
+GCF_900880675.1	Sparus aurata	gilthead seabream	fishes-ray-finned
+GCF_900963305.1	Echeneis naucrates	live sharksucker	fishes-ray-finned
+GCF_900964775.1	Scleropages formosus	golden arowana	fishes-ray-finned
+GCF_901000725.2	Takifugu rubripes	Japanese puffer (torafugu)	fishes-ray-finned
+GCF_901001135.1	Rhinatrema bivittatum	two-lined caecilian	amphibians
+GCF_901709675.1	Syngnathus acus	greater pipefish	fishes-ray-finned
+GCF_902148845.1	Salarias fasciatus	jewelled blenny	fishes-ray-finned
+GCF_902148855.1	Sphaeramia orbicularis	orbiculate cardinalfish	fishes-ray-finned
+GCF_902150065.1	Myripristis murdjan	pinecone soldierfish	fishes-ray-finned
+GCF_902167405.1	Gadus morhua	Atlantic cod	fishes-ray-finned
+GCF_902362185.1	Chanos chanos	milkfish	fishes-ray-finned
+GCF_902459465.1	Asterias rubens	common starfish	invertebrates
+GCF_902459505.1	Geotrypetes seraphini	Gaboon caecilian	amphibians
+GCF_902500255.1	Thalassophryne amazonica	prehistoric monster fish	fishes-ray-finned
+GCF_902655055.1	Lutra lutra	Eurasian otter	mammals-laurasiatheria
+GCF_902686445.1	Sciurus carolinensis 	grey squirrel	mammals-euarchontoglires
+GCF_902713425.1	Acipenser ruthenus	sterlet	fishes-ray-finned
+GCF_902713615.1	Scyliorhinus canicula	small-spotted catshark	fishes-other
+GCF_903992535.2	Arvicola amphibius	European water vole	mammals-euarchontoglires
+GCF_903995425.1	Onychomys torridus	Southern grasshopper mouse	mammals-euarchontoglires
+GCF_903995435.1	Acomys russatus	golden spiny mouse	mammals-euarchontoglires
+GCF_904848185.1	Acanthopagrus latus	yellowfin sea bream	fishes-ray-finned
+GCF_905171765.1	Bufo bufo	European toad	amphibians
+GCF_905171775.1	Rana temporaria	European common frog	amphibians
+GCF_910594005.1	Cervus elaphus	red deer	mammals-laurasiatheria
+GCF_910596095.1	Thunnus maccoyii	southern bluefin tuna	fishes-ray-finned
+GCF_914725855.1	Thunnus albacares	yellowfin tuna	fishes-ray-finned
+GCF_922984935.1	Meles meles	European badger	mammals-laurasiatheria
+GCF_929443795.1	Accipiter gentilis	Northern goshawk	birds-landbirds
+GCF_937001465.1	Orcinus orca	killer whale	mammals-laurasiatheria
+GCF_947179515.1	Apodemus sylvaticus	European woodmouse	mammals-euarchontoglires
+GCF_947347685.1	Pleuronectes platessa	European plaice	fishes-ray-finned
+GCF_947461875.1	Haliaeetus albicilla	white-tailed eagle	birds-landbirds
+GCF_949316205.1	Platichthys flesus	European flounder	fishes-ray-finned
+GCF_949316345.1	Pungitius pungitius	ninespine stickleback	fishes-ray-finned
+GCF_949774975.1	Lagenorhynchus albirostris	white-beaked dolphin	mammals-laurasiatheria
+GCF_949987515.2	Delphinus delphis	saddleback dolphin	mammals-laurasiatheria
+GCF_949987535.1	Balaenoptera acutorostrata	common minke whale	mammals-laurasiatheria
+GCF_950005125.1	Chionomys nivalis	European snow vole	mammals-euarchontoglires
+GCF_950295315.1	Erinaceus europaeus	European hedgehog	mammals-laurasiatheria
+GCF_958295425.1	Solea solea	common sole	fishes-ray-finned
+GCF_963082965.1	Carassius carassius	common carp	fishes-ray-finned
+GCF_963259705.1	Myotis daubentonii	Daubenton's bat	mammals-laurasiatheria
+GCF_963455315.2	Globicephala melas	long-finned pilot whale	mammals-laurasiatheria
+GCF_963506605.1	Zootoca vivipara	European common lizard	reptiles
+GCF_963514075.1	Conger conger	European conger	fishes-ray-finned
+GCF_963576545.1	Limanda limanda	common dab	fishes-ray-finned
+GCF_963584025.1	Labrus mixtus	cuckoo wrasse	fishes-ray-finned
+GCF_963662255.1	Cinclus cinclus	white-throated dipper	birds-landbirds
+GCF_963691925.1	Scomber scombrus	Atlantic mackerel	fishes-ray-finned
+GCF_963692335.1	Osmerus eperlanus	European smelt	fishes-ray-finned
+GCF_963854185.1	Sardina pilchardus	sardine	fishes-ray-finned
+GCF_963921805.1	Phalacrocorax carbo	great cormorant	birds-waterbirds
+GCF_963924245.1	Chroicocephalus ridibundus	black-headed gull	birds-waterbirds
+GCF_963924675.1	Phocoena phocoena	harbor porpoise	mammals-laurasiatheria
+GCF_963924715.1	Thunnus thynnus	northern bluefin tuna	fishes-ray-finned
+GCF_963930625.1	Muntiacus reevesi	Reeves' muntjac	mammals-laurasiatheria
+GCF_963930695.1	Labrus bergylta	ballan wrasse	fishes-ray-finned
+GCF_963932015.1	Anas acuta	northern pintail	birds-other
+GCF_964237555.1	Oryctolagus cuniculus	European rabbit	mammals-euarchontoglires

@@ -83,6 +83,7 @@
 #include "decoratorUi.h"
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
+#include "myVariants.h"
 
 //#include "bed3Sources.h"
 
@@ -105,6 +106,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
+            "myVarShare",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -197,6 +199,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 #endif /* DEBUG */
+
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -303,15 +306,17 @@ else if (bIsHub)
 return iDif;
 }
 
-void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
+void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash, boolean keepQuickLift)
 /* Change track visibilities. If groupTarget is
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc.
  * If we are going back to default visibility, then reset the track
- * ordering also. 
+ * ordering also.
  * If excludeHash is not NULL then don't change the visibility of the group names in that hash.
+ * If keepQuickLift is set then don't change the visibility of tracks lifted from another
+ * assembly via QuickLift.
  */
 {
 struct group *group;
@@ -333,6 +338,8 @@ for (group = groupList; group != NULL; group = group->next)
             {
             struct track *track = tr->track;
             struct trackDb *tdb = track->tdb;
+            if (keepQuickLift && (trackDbSetting(tdb, "quickLiftUrl") != NULL))
+                continue;   // leave QuickLifted tracks visible
             if (changeVis == -1) // to default
                 {
                 if (tdbIsComposite(tdb))
@@ -437,7 +444,7 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
  * If we are going back to default visibility, then reset the track
  * ordering also. */
 {
-changeTrackVisExclude(groupList, groupTarget, changeVis, NULL);
+changeTrackVisExclude(groupList, groupTarget, changeVis, NULL, FALSE);
 }
 
 int trackOffsetX()
@@ -653,10 +660,23 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
 {
 boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 // reverse arrow when base complement doesn't match display
-char *text =  (baseCmpl == revCmplDisp) ? "--->" : "<---";
+char *text =  NULL;
+char *mouseOver = NULL;
+
+if (baseCmpl == revCmplDisp)
+    {
+    text = "Click to complement -->";
+    mouseOver = "Forward strand of genome is shown. Click to show the complement (not the reverse complement). Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    }
+else
+    {
+    text = "Click to complement <--";
+    mouseOver = "Reverse strand of genome is shown. Click to show the forward strand. Configure this track to show amino acids for three reading frames. Use the \"Reverse\" button below the image to reverse complement the sequence shown and to also show all annotations on the reverse strand.";
+    }
+
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
 mapBoxToggleComplement(hvg, x, y, width, height, NULL, chromName, winStart, winEnd,
-                       "complement bases");
+                       mouseOver);
 }
 
 struct track *chromIdeoTrack(struct track *trackList)
@@ -1680,6 +1700,17 @@ if (track->limitedVis != tvHide)
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, labelfont, label);
+        if (theImgBox && curImgTrack)
+            {
+            // Keep the label as text too.  If something ends up drawn over this label
+            // (quickLift difference lines), dragScroll can't show the image slice while
+            // the image is moving, and puts up an html stand-in built from this instead.
+            struct rgbColor rgb = hvGfxColorIxToRgb(hvg, labelColor);
+            char color[16];
+            safef(color, sizeof color, "#%02X%02X%02X", rgb.r, rgb.g, rgb.b);
+            curImgTrack->cntrLabText = cloneString(label);
+            curImgTrack->cntrLabTextColor = cloneString(color);
+            }
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
@@ -4968,6 +4999,27 @@ for (track = trackList; track != NULL; track = nextTrack)
         {
         double squishyPackPoint = atof(string);
 
+        /* Items outside the window are never laid out into a row, so a squished track
+         * built only from those has no rows, no height, and nothing drawn, but still
+         * claims a row in the image.  Only split the track when the squished part has
+         * something to show here. */
+        struct linkedFeatures *item;
+        boolean squishyInWindow = FALSE;
+        for (item = track->items; item != NULL; item = item->next)
+            {
+            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, item->name))
+                continue;   // an hgFind match always stays in pack
+            if (item->squishyPackVal > squishyPackPoint
+            &&  track->itemStart(track, item) < winEnd
+            &&  track->itemEnd(track, item)   > winStart)
+                {
+                squishyInWindow = TRUE;
+                break;
+                }
+            }
+        if (!squishyInWindow)
+            continue;
+
         /* clone the track */
         char buffer[strlen(track->track) + strlen("Squinked") + 1];
         safef(buffer, sizeof buffer, "%sSquinked", track->track);
@@ -4998,10 +5050,6 @@ for (track = trackList; track != NULL; track = nextTrack)
             else
                 slAddHead(&track->items, lf);
             }
-
-        // if the squish track has no items, don't bother including it
-        if (slCount(squishTrack->items) == 0)
-            continue;
 
         slReverse(&track->items);
         slReverse(&squishTrack->items);
@@ -5234,14 +5282,14 @@ if ((sortTrack = cgiOptionalString( "sortSim")) != NULL)
     {
     char buffer[1024];
     safef(buffer, sizeof buffer,  "simOrder_%s", sortTrack);
-    wigOrder = cartString(cart, buffer);
+    wigOrder = cartOptionalString(cart, buffer);
     }
 
 if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
     {
     char buffer[1024];
     safef(buffer, sizeof buffer,  "expOrder_%s", sortTrack);
-    wigOrder = cartString(cart, buffer);
+    wigOrder = cartOptionalString(cart, buffer);
     }
 
 if (wigOrder != NULL)
@@ -6753,11 +6801,10 @@ else if (sameString(type, "vcf"))
     vcfMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
-else if (sameString(type, "makeItems"))
+else if (isMyVariantsType(type))
     {
     tg = trackFromTrackDb(tdb);
-    makeItemsMethods(tg);
-    tg->nextItemButtonable = TRUE;
+    myVariantsMethods(tg);
     tg->customPt = ct;
     }
 else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
@@ -6830,6 +6877,22 @@ char *getPositionFromCustomTracks()
 {
 char *pos = NULL;
 struct slName *bl = NULL;
+
+// If the user has myVariants data for this database, refresh the on-disk
+// ctfile and point the mvCtfile_<db> cart variable at it.  customTracksParseCart
+// reads that variable independently of ctfile_<db>, so regular custom tracks
+// are unaffected.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    char *userName = getUserName();
+    char *ctFile = myVariantsWriteCtFile(userName, database, cart);
+    char mvVarName[256];
+    safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
+    if (isNotEmpty(ctFile))
+        cartSetString(cart, mvVarName, ctFile);
+    else
+        cartRemove(cart, mvVarName);
+    }
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
@@ -7518,35 +7581,48 @@ if (rtsLoad)  // load a recommended track set using the merge method
     // Hide all tracks except custom tracks
     struct hash *excludeHash = newHash(2);
     hashStore(excludeHash, "user");
-    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash);
+    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash, FALSE);
 
     // delete any ordering we have
     char wildCard[32];
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
 
-    // now we have to restart to load the session since that happens at cart initialization
-    
-    char newUrl[4096];
-    safef(newUrl, sizeof newUrl,
-        "./hgTracks?"
-        hgsOtherUserSessionName "=%s"
-        "&" hgsOtherUserName "=%s"
-        "&" hgsMergeCart "=on"
-        "&" hgsDoOtherUser "=submit"
-	"&hgsid=%s"
-        , otherUserSessionName, otherUserName,cartSessionId(cart));
+    if (loadRecTrackSetFromFile(cart, rtsLoad))
+        {
+        // Settings from the htdocs file are now overlaid on the cart.  The visibility
+        // loop below and the draw path read them, so no redirect is needed.  Record
+        // which set is loaded so hasRecTrackSet() and change detection still work, and
+        // drop the one-shot action variable so it does not persist in the cart.
+        cartSetString(cart, hgsOtherUserSessionName, rtsLoad);
+        cartRemove(cart, "rtsLoad");
+        }
+    else
+        {
+        // No htdocs file for this set: fall back to loading the session from hgcentral.
+        // That happens at cart initialization, so we have to restart to load it.
+        char newUrl[4096];
+        safef(newUrl, sizeof newUrl,
+            "./hgTracks?"
+            hgsOtherUserSessionName "=%s"
+            "&" hgsOtherUserName "=%s"
+            "&" hgsMergeCart "=on"
+            "&" hgsDoOtherUser "=submit"
+            "&hgsid=%s"
+            , otherUserSessionName, otherUserName,cartSessionId(cart));
 
-    cartCheckout(&cart);   // make sure cart records all our changes above
+        cartCheckout(&cart);   // make sure cart records all our changes above
 
-    // output the redirect and exit
-    printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
-    exit(0);
+        // output the redirect and exit
+        printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
+        exit(0);
+        }
     }
 
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 if (hideTracks)
-    changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide
+    // set all top-level tracks to hide, but leave QuickLifted tracks visible
+    changeTrackVisExclude(groupList, NULL, tvHide, NULL, TRUE);
 
 /* Get visibility values if any from ui. */
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
@@ -7575,8 +7651,13 @@ for (track = trackList; track != NULL; track = track->next)
 
         if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
+            // QuickLifted tracks are exempt from hideTracks -- their visibility is
+            // carried over from the source assembly's cart (and may still be under the
+            // undecorated name until migrated below), so consult the cart, not the URL.
+            boolean superFromCart = !hideTracks ||
+                (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
             // first deal with visibility of super track
-            char *s = hideTracks ? cgiOptionalString(track->tdb->parent->track) : cartOptionalString(cart, track->tdb->parent->track);
+            char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
             if (s)
                 {
                 track->tdb->parent->visibility = hTvFromString(s) ;
@@ -7584,7 +7665,7 @@ for (track = trackList; track != NULL; track = track->next)
                 }
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
-                s = hideTracks ? cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track)) :  cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track));
+                s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
                 if (s)
                     {
                     cartSetString(cart, track->tdb->parent->track, s);
@@ -7891,8 +7972,8 @@ void jsCommandDispatch(char *command, struct track *trackList)
  * This gets executed after the track list is built, but before
  * the track->loadItems methods are called.  */
 {
-if (startsWithWord("makeItems", command))
-    makeItemsJsCommand(command, trackList, trackHash);
+if (startsWithWord("myVariants", command))
+    myVariantsJsCommand(command, trackList, trackHash);
 else
     warn("Unrecognized jsCommand %s", command);
 }
@@ -7952,8 +8033,18 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
+char *db = database;
 
-return customFactoryParallelLoad(bdu, track->tdb->type, database, TRUE) && (track->subtracks == NULL);
+// quickLifted tracks fetch from the source assembly via the chain in
+// quickLiftUrl, so their bigDataUrl is /gbdb/<sourceDb>/... -- the source
+// db, not the current target db. customFactoryParallelLoad's bigDataUrl
+// validity check requires /gbdb/<X>/ to match its db argument, so when
+// the track declares its source via quickLiftDb, validate against that.
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    db = quickLiftDb;
+
+return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
@@ -8064,6 +8155,12 @@ void loadDecorators(struct track *track)
  */
 {
 struct trackDb *decoratorTdbs = getTdbsForDecorators(track->tdb);
+// quickLifted tracks fetch from the source assembly, so their decorator
+// bigDataUrls live under /gbdb/<sourceDb>/... -- validate against that.
+char *decoratorDb = database;
+char *quickLiftDb = trackDbSetting(track->tdb, "quickLiftDb");
+if (quickLiftDb != NULL)
+    decoratorDb = quickLiftDb;
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
@@ -8079,7 +8176,7 @@ for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        if (isValidBigDataUrl(decoratorUrl,TRUE, database, TRUE))
+        if (isValidBigDataUrl(decoratorUrl,TRUE, decoratorDb, TRUE))
             bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
         }
     errCatchEnd(errCatch);
@@ -8709,12 +8806,41 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "Multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
-static void printTrackDelIcon(struct track *track)
-/* little track icon after track name. Github uses SVG elements for all icons, apparently that is faster */
-/* we probably should have a library with all the icons, at least for the <svg> part */
+static void printTrashIcon(char *title, char *cssClass, char *dataAttrs)
+/* Print a trash-can icon as a clickable <div>.  title is the hover text,
+ * cssClass selects the click behavior/styling, and dataAttrs holds any
+ * preformatted data-* attributes that the click handler reads.
+ * Github uses SVG elements for all icons, apparently that is faster.
+ * We probably should have a library with all the icons, at least for the <svg> part. */
 {
-    hPrintf("<div title='Delete this custom track' data-track='%s' class='trackDeleteIcon'><svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>", track->track);
+hPrintf("<div title='%s' %s class='%s'>"
+        "<svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'>"
+        "<!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License "
+        "- https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->"
+        "<path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 "
+        "0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 "
+        "35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 "
+        "16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 "
+        "16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 "
+        "16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>",
+        title, dataAttrs, cssClass);
+}
 
+static void printTrackDelIcon(struct track *track)
+/* Trash-can icon after a custom track's name; clicking it deletes the track. */
+{
+char dataAttrs[512];
+safef(dataAttrs, sizeof dataAttrs, "data-track='%s'", track->track);
+printTrashIcon("Delete this custom track", "trackDeleteIcon", dataAttrs);
+}
+
+static void printQuickLiftDelIcon(struct track *track, char *sourceDb)
+/* Trash-can icon next to a track in a quickLift group; clicking it removes
+ * the track from the quickLift hub. */
+{
+char dataAttrs[1024];
+safef(dataAttrs, sizeof dataAttrs, "data-track='%s' data-sourcedb='%s'", track->track, sourceDb);
+printTrashIcon("Remove this track from the QuickLift group", "quickLiftDelIcon", dataAttrs);
 }
 
 static void printTrackLink(struct track *track)
@@ -8722,6 +8848,15 @@ static void printTrackLink(struct track *track)
 {
 if (sameOk(track->groupName, "user"))
     printTrackDelIcon(track);
+
+char *quickLiftSourceDb = (track->tdb != NULL) ?
+        trackDbSetting(track->tdb, "quickLiftDb") : NULL;
+/* skip the synthetic "Alignment Differences" track -- it's added at runtime
+ * by hubConnect, not from the hub file, so removing it from the file is a
+ * no-op and it would reappear on the next page load. */
+if (quickLiftSourceDb != NULL &&
+    (track->tdb->type == NULL || !startsWith("bigQuickLiftChain", track->tdb->type)))
+    printQuickLiftDelIcon(track, quickLiftSourceDb);
 
 if (track->hasUi)
     {
@@ -8830,6 +8965,64 @@ hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
+// put up the My Variants dialog if the hg.conf statement is present.
+// Anonymous visitors see the button too; the JS dialog tells them to log in.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
+    jsInline("var doMyVariants = true;\n");
+    jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
+    // Get existing project values for dropdown
+    char *userName = getUserName();
+    if (userName)
+        {
+        struct slName *projects = myVariantsGetProjects(userName);
+        if (projects)
+            {
+            struct jsonElement *projectList = newJsonList(NULL);
+            struct slName *proj;
+            for (proj = projects; proj != NULL; proj = proj->next)
+                jsonListAdd(projectList, newJsonString(proj->name));
+            slReverse(&projectList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
+            slFreeList(&projects);
+            }
+        /* Get existing custom field names for the create dialog */
+        struct slName *customFields = myVariantsGetCustomFields(userName);
+        if (customFields)
+            {
+            struct jsonElement *cfList = newJsonList(NULL);
+            struct slName *cf;
+            for (cf = customFields; cf != NULL; cf = cf->next)
+                jsonListAdd(cfList, newJsonString(cf->name));
+            slReverse(&cfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsCustomFields", cfList);
+            slFreeList(&customFields);
+            }
+        /* Get hidden field names for the restore UI */
+        struct slName *hiddenFields = myVariantsGetHiddenFields(userName);
+        if (hiddenFields)
+            {
+            struct jsonElement *hfList = newJsonList(NULL);
+            struct slName *hf;
+            for (hf = hiddenFields; hf != NULL; hf = hf->next)
+                jsonListAdd(hfList, newJsonString(hf->name));
+            slReverse(&hfList->val.jeList);
+            jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
+            slFreeList(&hiddenFields);
+            }
+        }
+    else if (loginSystemEnabled() || wikiLinkEnabled())
+        {
+        // Hand the JS dialog a login URL that returns to this hgTracks page.
+        char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
+        char *loginUrl = wikiLinkUserLoginUrlReturning(cartSessionId(cart), retUrl);
+        jsInlineF("var myVariantsLoginUrl = \"%s\";\n", loginUrl);
+        freez(&retUrl);
+        freez(&loginUrl);
+        }
+    }
+
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
@@ -8876,8 +9069,12 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='Also known as: %s'>"
-       "<a>&#9432; Aliases</a></span>", encoded);
+printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+       "Alternative sequence names can be used in the position box, custom tracks, "
+       "track hubs, bigBed, bigWig, and similar files. "
+       "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
+       "for more information'>"
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
 freeMem(encoded);
 dyStringFree(&dy);
 }
@@ -8952,6 +9149,9 @@ zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
 zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
+boolean canColorItems = cfgOptionBooleanDefault("canColorItems", FALSE);
+if (canColorItems)
+    createItemColorHash();
 
 if (psOutput != NULL)
    {
@@ -8964,8 +9164,12 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
-jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX)); 
+jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
+jsonObjectAdd(jsonForClient, "canColorItems", newJsonBoolean(canColorItems));
+if (canColorItems)
+    jsonObjectAdd(jsonForClient, "itemColors",
+                  newJsonString(cartUsualString(cart, "itemColors", "")));
 
 if (hPrintStatus()) cartSaveSession(cart);
 
@@ -9016,14 +9220,6 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
         }
 
     }
-
-char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
-if (!isEmpty(jsCommand))
-   {
-   cartRemove(cart, hgtJsCommand);
-   jsCommandDispatch(jsCommand, trackList);
-   }
-
 
 /* adjust visibility */
 for (track = trackList; track != NULL; track = track->next)
@@ -9468,9 +9664,11 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
-    // right-click to change viz 
+    // right-click to change viz
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
+    if (measureTiming)
+        printTrackTiming();
     return;  // bail out b/c we are done
     }
 
@@ -9651,6 +9849,9 @@ if (!hideControls)
             hPrintf(" ");
             }
 
+        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
+            printAliases(chromName, virtChromName);
+
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
 	else
@@ -9678,8 +9879,6 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
-        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
-            printAliases(chromName, virtChromName);
 
         printPatchNote();
 
@@ -9905,7 +10104,6 @@ if (!hideControls)
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
         struct hash *superHash = hashNew(8);
-        long trackCount = 0;
 	for (group = groupList; group != NULL; group = group->next)
 	    {
 	    if ((group->trackList == NULL) && (group->errMessage == NULL))
@@ -10095,8 +10293,6 @@ if (!hideControls)
 		if (tdbIsSuperTrackChild(track->tdb))
 		    /* don't display supertrack members */
 		    continue;
-                // only top level tracks contribute to the total count
-                trackCount++;
 		myControlGridStartCell(cg, isOpen, group->name,
                                        shouldBreakAll(track->shortLabel));
 
@@ -10129,17 +10325,6 @@ if (!hideControls)
 	    if (group->next != NULL)
 		controlGridEndRow(cg);
 	    }
-        if (trackCount < 32)
-            {
-            // visible tracks not needed, set to display: none
-            // we have to do this here because we need to account for super tracks
-            // not being in the list until groupTrackListAddSuper has been called
-            jsInline("let visTrs = document.querySelectorAll(\"[id^=visible-]\");\n"
-                    "let prev = visTrs[0].previousSibling;\n"
-                    "visTrs.forEach( (v) => v.style.display = \"none\");\n"
-                    "prev.style.display = \"none\";\n"
-                    );
-            }
         hashFree(&superHash);
 	endControlGrid(&cg);
 
@@ -10412,7 +10597,7 @@ if (pdfFile != NULL)
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
     printf("<UL style=\"margin-top:0px\">\n");
     printf("<LI>Add assembly name and chromosome range to the image on the\n"
-        "<A HREF=\"hgTrackUi?g=ruler\">configuration page of the base position track</A>.\n");
+        "<A HREF=\"hgTrackUi?db=%s&g=ruler\">configuration page of the base position track</A>.\n", database);
     printf("<LI>If using the default genes track (e.g. GENCODE for hg38 or UCSC Genes for older assemblies),\n"
            "consider showing only one transcript per gene by turning off splice variants on the track configuration page.\n");
     printf("<LI>Increase the font size and remove the light blue vertical guidelines in the \n"
@@ -10642,6 +10827,23 @@ boolean findNearest = cartUsualBoolean(cart, "findNearest", FALSE);
 cartRemove(cart, "findNearest");
 
 boolean positionIsVirt = FALSE;
+
+/* Process JS commands (e.g., myVariants insert) BEFORE building track list/CTs */
+char *jsEarly = cartCgiUsualString(cart, hgtJsCommand, "");
+if (!isEmpty(jsEarly))
+    {
+    cartRemove(cart, hgtJsCommand);
+    jsCommandDispatch(jsEarly, NULL);
+    }
+
+/* Accept incoming share links before CT file generation so the cart var is
+ * visible to shared track rendering in the same request. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    myVariantsProcessShareParam();
+    myVariantsProcessSharedEdits();
+    }
+
 position = getPositionFromCustomTracks();
 if (NULL == position)
     {
@@ -11922,6 +12124,7 @@ if(!trackImgOnly)
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
+    jsIncludeFile("myVariantsBlocks.js", NULL);
 
     // remove the hg.conf option once this feature is released
     if (cfgOptionBooleanDefault("showIgv", FALSE))

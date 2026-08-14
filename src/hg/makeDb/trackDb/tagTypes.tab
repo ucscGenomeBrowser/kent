@@ -507,6 +507,8 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *FilterLimits bed narrowPeak broadPeak
 *FilterByRange bed narrowPeak broadPeak
 *FilterLabel bed narrowPeak broadPeak big*
+*FilterPriority bed narrowPeak broadPeak big*
+*HighlightPriority bed narrowPeak broadPeak big*
 sampleColorFile vcf vcfTabix
 sampleMetadataFile vcf vcfTabix
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
@@ -559,6 +561,7 @@ speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
 spectrum *
+colorFields bigBed bigGenePred
 squishyPackField  bigBed bigGenePred
 squishyPackPoint bigBed bigGenePred
 squishyPackLabel bigBed bigGenePred
@@ -577,7 +580,7 @@ subGroups *
 subGroupMetaTables *
 subTrack *
 subgroups bed
-subtrackUrl *
+subtrackUrls *
 summary wigMaf bigMaf
 superTrack *
 symbolTable bed genePred

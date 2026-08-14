@@ -1,0 +1,10 @@
+# Database configuration for the varFreqsDisease combined track.
+# Only cohorts with a direct disease connection (autism, schizophrenia,
+# rare disease, NHLBI heart/lung/blood). Same column format as databases.tsv:
+# key	name	vcf	ac_field	af_field
+SPARK	SPARK WES	/gbdb/hg38/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz	AC	AF
+SFARI_WGS	SFARI WGS	/gbdb/hg38/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF
+TOPMed	TOPMed	/gbdb/hg38/varFreqs/_topmed/topmed10.vcf.gz	AC	AF
+SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF
+GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF
+GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF

@@ -15,7 +15,7 @@
 #include "asParse.h"
 #include "quickLift.h"
 
-#define LOLLY_DIAMETER    2 * (lollyCart->radius + 2)
+#define LOLLY_DIAMETER    2 * (lollyMaxRadius(tg) + 2)
 
 struct lolly
 {
@@ -29,6 +29,25 @@ unsigned height;  /* height of the lolly */
 Color color;      /* color of the lolly */
 char *mouseOver;
 };
+
+static unsigned lollyMaxRadius(struct track *tg)
+/* Return the radius of the largest lolly that will be drawn.  A track that sets
+ * lollySizeField scales each radius by the track height at load time, so a lolly
+ * can be bigger than lollyMaxSize.  Reserving margins from lollyMaxSize alone
+ * clips the top row once that happens. */
+{
+unsigned maxRadius = tg->lollyCart->radius;
+struct lolly *pop;
+
+for(pop = tg->items; pop; pop = pop->next)
+    {
+    // a radius of -1 means the lolly takes the default, which is the floor above
+    if ((pop->radius != -1) && (pop->radius > maxRadius))
+        maxRadius = pop->radius;
+    }
+
+return maxRadius;
+}
 
 static unsigned getLollyColor( struct hvGfx *hvg, unsigned color)
 /* Get the device color from our internal definition. */
@@ -344,7 +363,7 @@ else
     bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
-struct lolly *popList = NULL, *pop;
+struct lolly *popList = NULL, *pop = NULL;
 
 unsigned lollyField = getField(tg->tdb, "lollyField", as, 5);  // we use the score field by default
 int lollySizeField = getField(tg->tdb, "lollySizeField", as, -1);  // no size field by default
@@ -405,6 +424,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             pop->start = bed->chromStart;
             pop->end = bed->chromEnd;
             }
+        else 
+            continue;
         }
     else
         {

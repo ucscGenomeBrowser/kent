@@ -1461,3 +1461,9 @@ to data/release_46lift37/ and rerun the make
     # commit all
     jkmake DBS=hg19 alpha
 #########################################################################
+2026-04-23: import of GENCODE V50 pre-release for GENCODE Versions (markd)
+Ensembl release 116 scheduled for mid-May. 
+
+cd ~/kent/src/hg/makeDb/outside/gencode
+i./bin/gencodeBuildRelease hg19 50lift37 pre "May 2026" 116 >& hg19.log&
+#########################################################################

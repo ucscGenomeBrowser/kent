@@ -17,6 +17,9 @@ errAbort(
   "vcfParseTest - Parse VCF header and data lines in given position range.\n"
   "usage:\n"
   "   vcfParseTest fileOrUrl.vcf.gz seqName start end\n"
+  "options:\n"
+  "   -headerOnly  print header summary only (version, def counts, sample IDs)\n"
+  "                and skip the position-range parse.  seqName/start/end are ignored.\n"
   "\n"
   "fileOrUrl.vcf.gz needs to have been compressed by tabix, and index file\n"
   "fileOrUrl.vcf.gz.tbi must exist.\n"
@@ -24,8 +27,28 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"headerOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+static void vcfHeaderTest(char *fileOrUrl)
+/* Open via tabix path and dump header summary -- regression-tests that the
+ * VCF header is actually read through the tabix iterator code path. */
+{
+struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, 100, -1);
+if (vcff == NULL)
+    errAbort("Failed to open \"%s\"", fileOrUrl);
+printf("file: %s\n", fileOrUrl);
+printf("version: %d.%d\n", vcff->majorVersion, vcff->minorVersion);
+printf("infoDefs: %d\n", slCount(vcff->infoDefs));
+printf("filterDefs: %d\n", slCount(vcff->filterDefs));
+printf("gtFormatDefs: %d\n", slCount(vcff->gtFormatDefs));
+printf("genotypeCount: %d\n", vcff->genotypeCount);
+int i;
+for (i = 0;  i < vcff->genotypeCount && i < 5;  i++)
+    printf("genotypeId[%d]: %s\n", i, vcff->genotypeIds[i]);
+vcfFileFree(&vcff);
+}
 
 void vcfParseTest(char *fileOrUrl, char *seqName, int start, int end)
 /* vcfParseTest - Parse VCF header and data lines in given position range.. */
@@ -55,6 +78,13 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("headerOnly"))
+    {
+    if (argc != 2)
+	usage();
+    vcfHeaderTest(argv[1]);
+    return 0;
+    }
 if (argc != 5)
     usage();
 vcfParseTest(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]));

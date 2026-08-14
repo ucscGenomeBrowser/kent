@@ -1,0 +1,127 @@
+<h2>Description</h2>
+<p>
+This composite shows <b>TAD domains</b> from the
+<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>
+(3DGB) across <b>464 human Hi-C and Micro-C datasets</b> on hg38. Each subtrack is one
+3DGB dataset, displayed exactly as called and published by 3DGB. TAD domains are
+megabase-scale regions of the genome that preferentially self-interact; their boundaries
+(frequently bound by CTCF and cohesin) insulate neighboring regions and constrain
+enhancer-promoter contacts.
+</p>
+<p>
+The 464 datasets span a wide range of normal and cancer samples, baseline and
+perturbation conditions, organs, and cell types, drawn from many published studies and
+re-processed by 3DGB through a single TAD-calling pipeline. They are browsable with a
+<b>faceted selector</b> (see below); the displayed domain intervals are 3DGB's own, with
+no UCSC re-calling, merging, lifting, or recurrence scoring.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each subtrack is drawn as boxes spanning the self-interacting domains and is
+<b>colored by organ</b>. By default a small set of canonical reference datasets is shown
+(GM12878, H1-ESC, IMR-90, and HMEC); all other datasets are turned off and can be enabled
+through the faceted selector. Mousing over a domain shows the dataset name, organ, and
+assay.
+</p>
+<p>
+These 464 datasets are <b>not a cross-comparable consensus</b>. Each represents one
+dataset's own TAD calls, made by different laboratories on different samples; coordinates
+are therefore not directly comparable across subtracks, and they are not directly
+comparable to the other TAD tracks in this set (which use different callers and
+resolutions). Because calls are made on binned Hi-C data (3DGB calls TADs at 25 kb),
+domain edges are uncertain to roughly the bin size, and domains do not tile the genome end
+to end.
+</p>
+
+<h3>Faceted selector</h3>
+<p>
+Use the faceted selector on the track configuration page to choose which datasets to
+display. Datasets can be filtered by:
+</p>
+<ul>
+  <li><b>Organ</b> &ndash; the organ of the sample (used for subtrack color).</li>
+  <li><b>Cell type</b> &ndash; the cell type, where annotated by 3DGB
+      (&quot;(unspecified)&quot; when 3DGB does not record one).</li>
+  <li><b>Assay</b> &ndash; Hi-C or Micro-C.</li>
+  <li><b>Condition</b> &ndash; whether the sample is normal or cancer.</li>
+  <li><b>Treatment</b> &ndash; baseline (untreated) or perturbation (e.g. drug treatment,
+      gene knockout, or other experimental manipulation).</li>
+  <li><b>Provenance</b> &ndash; see below.</li>
+  <li><b>Year</b> and <b>Study</b> &ndash; the publication year and the source data
+      accession (e.g. a GEO series) that 3DGB re-processed.</li>
+</ul>
+
+<h3>The &quot;Provenance&quot; facet</h3>
+<p>
+Because this track ships every 3DGB human dataset, a few of the underlying source studies
+are <b>already represented elsewhere in the UCSC Genome Browser</b>. The Provenance facet
+flags these so they can be identified or filtered out:
+</p>
+<ul>
+  <li><b>Novel to browser</b> (422 datasets) &ndash; the source study is not otherwise
+      displayed in the UCSC Genome Browser.</li>
+  <li><b>Also in another UCSC track</b> (42 datasets) &ndash; the underlying Hi-C study is
+      already represented elsewhere in the UCSC Genome Browser, either as its own track or
+      as an input to another track in this TAD set. These include Schmitt 2016 (11 datasets,
+      also shown directly as the <b>Schmitt 2016 boundaries</b> track here), Rao 2014 (7
+      datasets; the Rao 2014 Hi-C maps are also offered in the browser), a few ENCODE
+      datasets (overlapping the <b>ENCODE contact domains</b> track), and several studies
+      (e.g. Dixon 2015) that are inputs to the <b>TAD boundary stability</b> track rather
+      than displayed individually. The flag is intended to help avoid double-counting; it
+      does not imply each dataset is separately viewable elsewhere.</li>
+</ul>
+<p>
+To view only datasets that are new to the browser, select &quot;Novel to browser&quot; in
+the Provenance facet. Note that even the &quot;Also in another UCSC track&quot; datasets
+may differ in their displayed coordinates from the other UCSC tracks, because 3DGB
+re-processed and re-called each study through its own pipeline.
+</p>
+
+<h2>Methods</h2>
+<p>
+TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim.
+UCSC performed only a format normalization: each 3DGB per-dataset TAD file (a BED-like
+file with placeholder columns and an alternating two-color shading that carries no
+biological meaning) was reshaped to a plain four-column bigBed (chromosome, start, end,
+dataset name) and indexed. No domain coordinates were changed, and no re-calling, merging,
+lifting (all datasets are native hg38), or recurrence scoring was performed. The dataset
+metadata used to drive the faceted selector (organ, cell type, assay, year, study) was
+copied directly from the 3D Genome Browser.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+The complete original datasets are available from the
+<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the 3D Genome Browser team (Yue lab, Northwestern University) for assembling and
+uniformly processing these datasets. The 3D Genome Browser data are distributed under a
+<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+license (free for non-commercial use). Please cite the 3D Genome Browser, and the original
+studies, when using these data.
+</p>
+
+<h2>References</h2>
+<p>
+Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
+The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D
+genome architecture. <em>Nucleic Acids Res</em>. 2026;54(D1):D48-D54.
+<a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">doi:10.1093/nar/gkaf1109</a>
+</p>
+<p>
+Wang Y, Song F, Zhang B, Zhang L, <em>et al.</em>
+The 3D Genome Browser: a web-based browser for visualizing 3D genome organization and
+long-range chromatin interactions. <em>Genome Biol</em>. 2018;19(1):151.
+<a href="https://doi.org/10.1186/s13059-018-1519-9" target="_blank">doi:10.1186/s13059-018-1519-9</a>
+</p>

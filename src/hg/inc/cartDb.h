@@ -16,7 +16,7 @@ struct cartDb
 /* A simple id/contents pair for persistent storing of cart variables */
     {
     struct cartDb *next;  /* Next in singly linked list. */
-    unsigned int id;	/* Cart ID */
+    unsigned long id;	/* Cart ID */
     char *contents;	/* Contents - encoded variables */
     int reserved;	/* Reserved, currently always zero. */
     char *firstUse;	/* First time this was used */
@@ -34,7 +34,7 @@ boolean cartDbUseSessionKey();
 void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb);
 /* Return combined string of session id plus sessionKey in buf if turned on.*/
 
-unsigned int cartDbParseId(char *id, char **pSessionKey);
+unsigned long cartDbParseId(char *id, char **pSessionKey);
 /* Parse out and return just the numeric id from the id_sessionKey string. */
 
 void cartDbStaticLoad(char **row, struct cartDb *ret);

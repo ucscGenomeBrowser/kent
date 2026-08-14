@@ -164,7 +164,8 @@ struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom);
-/* Return a chromInfo structure for just this chrom in this database. 
+/* Return a chromInfo structure for just this chrom in this database.  The database
+ * may be decorated with a hub_<id>_ prefix or undecorated.
  * Return NULL if chrom doesn't exist. */
 
 struct chromInfo *trackHubChromInfo(char *database, char *chrom);
@@ -195,6 +196,9 @@ char *trackHubGetHubName(char *name);
 
 char *trackHubSkipHubName(char *name);
 /* Skip the hub_#_ prefix in a hub name. */
+
+struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName);
+/* Recursively search tdbList (and subtracks) for a tdb whose bare track name matches. */
 
 struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
@@ -245,5 +249,10 @@ struct grp *readGroupRa(char *groupFileName);
 
 struct trackDb *trackHubAddTracksGenome(struct trackHubGenome *hubGenome);
 /* Load up stuff from data hub and return list. */
+
+boolean trackHubIsValidSeqName(char *name);
+/* Return TRUE if name is a valid sequence name: non-empty, starts with a
+ * letter or digit, and contains only [A-Za-z0-9._-]. */
+
 #endif /* TRACKHUB_H */
 

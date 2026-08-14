@@ -1,0 +1,46 @@
+# gnomAD MPC v4.1.1 track - 2026-04-23, Claude/max
+# Per-variant MPC (Missense badness, PolyPhen-2, Constraint) scores from the
+# gnomAD 2026 regional missense constraint release, aligned to GRCh38.
+# Previously released for hg19 as a regional/transcript track; on hg38 the
+# upstream data is per-variant and is modeled here as four bigWigs (one per
+# ALT base), following the AlphaMissense track conventions.
+
+cd /hive/data/genomes/hg38/bed/gnomad/mpc
+
+# Download the precomputed MPC scores (one row per locus/alleles/transcript).
+# ~490 MB compressed, ~70.3 M rows covering chr1-22, X, Y.
+wget https://storage.googleapis.com/gcp-public-data--gnomad/papers/2026-rmc/gnomad_v4.1.1_mpc.tsv.bgz -O gnomad_v4.1.1_mpc.tsv.gz
+
+# Convert to four fixedStep wig files, one per ALT base (A/C/G/T).
+# If multiple transcripts score the same variant, keep the max MPC.
+# Positions with no MPC (or ALT == REF) are emitted as 0.0.
+time python3 ~/kent/src/hg/makeDb/scripts/gnomadMpc/gnomadMpcToWig.py gnomad_v4.1.1_mpc.tsv.gz
+
+wigToBigWig a.wig /hive/data/genomes/hg38/chrom.sizes a.bw &
+wigToBigWig c.wig /hive/data/genomes/hg38/chrom.sizes c.bw &
+wigToBigWig g.wig /hive/data/genomes/hg38/chrom.sizes g.bw &
+wigToBigWig t.wig /hive/data/genomes/hg38/chrom.sizes t.bw &
+wait
+
+# Drop the intermediate wig files once the bigWigs look good.
+rm a.wig c.wig g.wig t.wig
+
+# --- Companion bigBed for multi-transcript variants only ---
+# Single-transcript variants are fully represented by the four bigWigs, so
+# the bigBed is filtered down to the ~250K variants that are scored against
+# more than one transcript (the "overlaps"). Per-transcript scores are
+# folded into aligned comma-separated lstring fields (transcripts,
+# mpcByTranscript); the 'mpcMax' field is the per-variant max and drives
+# both the score column and itemRgb color.
+time python3 ~/kent/src/hg/makeDb/scripts/gnomadMpc/gnomadMpcToBed.py gnomad_v4.1.1_mpc.tsv.gz mpcOverlaps.unsorted.bed
+LC_ALL=C sort -k1,1 -k2,2n mpcOverlaps.unsorted.bed > mpcOverlaps.bed
+rm mpcOverlaps.unsorted.bed
+bedToBigBed -tab -type=bed9+6 -as=~/kent/src/hg/makeDb/scripts/gnomadMpc/gnomadMpc.as \
+    mpcOverlaps.bed /hive/data/genomes/hg38/chrom.sizes mpcOverlaps.bb
+rm mpcOverlaps.bed
+
+# Summary report: input rows vs. emitted wig values
+#   Input rows (excl. header): 70,313,598
+#   Unique (chrom, pos, alt):  70,047,670 (the rest are duplicate transcripts,
+#                              folded into max MPC per variant)
+#   Non-SNV rows skipped:      0 (all alleles are A/C/G/T in this release)

@@ -34,4 +34,172 @@ cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
 # Load trackDb
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=mm39
+
+# 2026-05-13 (Gerardo): Reorder tissue rows in .facets files per author
+# request. Redmine #36998 note-43. Peng (lead author) asked
+# for the tissues to be displayed in his biological order instead of the
+# alphabetical order from the hub. The reorder is made to the files in
+# /hive/data/outside/woldlab/mouseDevTimecourse/mm39/ only; the hub at
+# woldlab.caltech.edu still has the alphabetical order, so re-running the
+# curl above will overwrite the reorder and require re-running the snippet
+# below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+
+python3 <<'EOF'
+TISSUE_ORDER = [
+    "thymus",
+    "spleen",
+    "liver",
+    "heart",
+    "skeletal muscle tissue",
+    "urinary bladder",
+    "adrenal gland",
+    "kidney",
+    "lung",
+    "stomach",
+    "intestine",
+    "limb",
+    "embryonic facial prominence",
+    "forebrain",
+    "midbrain",
+    "hindbrain",
+    "neural tube",
+]
+FILES = ["mouse_development_M21.facets"]
+
+for path in FILES:
+    with open(path) as f:
+        lines = f.readlines()
+    header = lines[0]
+    data = []
+    for ln in lines[1:]:
+        if ln.strip():
+            data.append(ln)
+    groups = {}
+    for ln in data:
+        cols = ln.rstrip("\n").split("\t")
+        groups.setdefault(cols[2], []).append(ln)
+    out = [header]
+    for tissue in TISSUE_ORDER:
+        for ln in groups[tissue]:
+            out.append(ln)
+    with open(path, "w") as f:
+        f.writelines(out)
+    print("reordered: " + path + "  (" + str(len(data)) + " rows)")
+EOF
+
+# 2026-05-21 (Gerardo): Update colors in .facets and .categories files per
+# author request via the Cell Browser team (Brittney Wick). Redmine #37001
+# note-23. Peng asked that the bar colors match the per-sample colors used in
+# the Cell Browser. Brittney provided a tab-separated file with the colors at
+# /hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv (78 rows,
+# one color per (tissue, timepoint) pair, encoded as gradients within each
+# tissue from light at the earliest time point to dark at P0). The update is
+# made to the files in /hive/data/outside/woldlab/mouseDevTimecourse/mm39/
+# only; the hub at woldlab.caltech.edu still has the old per-tissue colors,
+# so re-running the curl above will overwrite the colors and require re-running
+# the snippet below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm39
+
+python3 <<'EOF'
+TISSUE_MAP = {
+    "adrenal": "adrenal gland",
+    "bladder": "urinary bladder",
+    "face": "embryonic facial prominence",
+    "forebrain": "forebrain",
+    "heart": "heart",
+    "hindbrain": "hindbrain",
+    "intestine": "intestine",
+    "kidney": "kidney",
+    "limbs": "limb",
+    "liver": "liver",
+    "lung": "lung",
+    "midbrain": "midbrain",
+    "muscle": "skeletal muscle tissue",
+    "neuraltube": "neural tube",
+    "spleen": "spleen",
+    "stomach": "stomach",
+    "thymus": "thymus",
+}
+
+# Build (tissue, timepoint) -> color from Brittney's TSV
+tsv = {}
+with open("/hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv") as f:
+    f.readline()
+    for line in f:
+        line = line.rstrip("\n")
+        if not line:
+            continue
+        sample, color = line.split("\t")
+        tissue_part, _, tp = sample.rpartition("_")
+        our_tissue = TISSUE_MAP[tissue_part]
+        our_tp = "P0" if tp == "p0" else tp
+        tsv[(our_tissue, our_tp)] = color
+
+# Update .facets files (column 5 is the color)
+for facets in ["mouse_development_M21.facets"]:
+    with open(facets) as f:
+        lines = f.readlines()
+    out = [lines[0]]
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[4] = tsv[(cols[2], cols[3])]
+        out.append("\t".join(cols) + "\n")
+    with open(facets, "w") as f:
+        f.writelines(out)
+    print("updated .facets: " + facets)
+
+# Update .categories files (column 2 is the color). Look up each label's
+# color in the matching .facets file (column 5).
+for facets, cats in [("mouse_development_M21.facets",
+                      "mouse_development_M21.categories")]:
+    label_color = {}
+    with open(facets) as f:
+        f.readline()
+        for line in f:
+            if not line.strip():
+                continue
+            cols = line.rstrip("\n").split("\t")
+            label_color[cols[0]] = cols[4]
+    with open(cats) as f:
+        lines = f.readlines()
+    out = []
+    for line in lines:
+        if not line.strip():
+            out.append(line)
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[1] = label_color[cols[0]]
+        out.append("\t".join(cols) + "\n")
+    with open(cats, "w") as f:
+        f.writelines(out)
+    print("updated .categories: " + cats)
+EOF
+
+# 2026-08-04 (Lou, QA #37001): corrected a 1-bp off-by-one in the bigBarChart
+# chromStart, inherited from mm10 through the liftOver. The hub builder wrote
+# 1-based GTF gene starts into the 0-based BED chromStart field, so every gene
+# sat one base right of its true start while chromEnd was correct. Confirmed on
+# mm10 against GENCODE VM21 (42081/42093 genes were start+1, none exact) and on
+# mm39 against knownGene, where +1 is the dominant offset. Reported upstream to
+# Diane Trout; like the tissue reorder and the color update above, this has to be
+# reapplied after any hub refetch. Originals are kept as *.bb.preStartFix.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fixBarChartStarts.sh mm39 \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_TPM_M21_mm39.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_FPKM_M21_mm39.bb
+
+# liftOver accounting, for the description page: mm10 M21 has 55536 genes and
+# mm39 M21 has 55447, so 89 genes failed to lift from GRCm38 to GRCm39 and none
+# were gained. 42 of the 89 are on chr14, 40 of those within chr14:3.2-26.3 Mb;
+# the rest are scattered. 45 of the 89 carry Gm* or *Rik names.
+# One gene, Il11ra2, is duplicated in the
+# mm39 files: ENSMUSG00000078735.3 on mm10 chr4 and ENSMUSG00000095623.1 on the
+# unplaced scaffold chr4_JH584294_random both lift to mm39 chr4:42656355-42661893,
+# and their expression vectors are identical. Left in place as a known artifact.
+
 ##############################################################################

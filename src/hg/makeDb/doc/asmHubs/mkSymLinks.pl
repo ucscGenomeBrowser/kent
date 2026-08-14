@@ -149,6 +149,7 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/trackDb.txt"`;
   `rm -f "${destDir}/genomes.txt"`;
   `rm -f "${destDir}/download.genomes.txt"`;
+  `rm -f "${destDir}/archive/ncbiGene"`;
   `rm -f "${destDir}/hub.txt"`;
   `rm -f "${gbdbDir}/hub.txt"`;
   foreach my $hubTxt (@stageHub) {
@@ -244,6 +245,18 @@ foreach my $asmId (@orderList) {
   `ln -s "${buildDir}/${asmId}.repeatModeler.2bit" "${destDir}/${accessionId}.repeatModeler.2bit"` if (-s "${buildDir}/${asmId}.repeatModeler.2bit");
   `ln -s "${buildDir}/${asmId}.rmod.log.txt" "${destDir}/${accessionId}.rmod.log.txt"` if (-s "${buildDir}/${asmId}.rmod.log.txt");
   `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/download/${asmId}_assembly_report.txt");
+   if (-d "${buildDir}/trackData/ncbiGene/archive") {
+      `mkdir -p "${buildDir}/archive"`;
+      `mkdir -p "${buildDir}/archive/ncbiGene"`;
+      `mkdir -p "${destDir}/archive"`;
+      foreach my $subDir (grep { -d } glob("${buildDir}/trackData/ncbiGene/archive/20*")) {
+        $subDir =~ s#\Q${buildDir}\E/##;
+        my $archiveDate = basename(${subDir});
+        `rm -f "${buildDir}/archive/ncbiGene/${archiveDate}"`;
+        `ln -s "../../${subDir}" "${buildDir}/archive/ncbiGene/"`;
+      }
+      `ln -s "${buildDir}/archive/ncbiGene" "${destDir}/archive/ncbiGene"`;
+   }
   # trackDb.txt still needed for use by top-level genomes.txt file
   `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/trackDb.txt"` if (-s "${buildDir}/${asmId}.trackDb.txt");
   # genomes.txt obsolete now with single file

@@ -1,12 +1,69 @@
 #!/bin/tcsh
 cd $BUILDDIR
 set zip = "zips/jksrc.v"$BRANCHNN".zip"
-if ( -e $zip ) then
- echo "removing old zip $zip [${0}: `date`]"
- rm $zip
+set tgz = "zips/jksrc.v"$BRANCHNN".tar.gz"
+foreach old ( $zip $tgz )
+ if ( -e $old ) then
+  echo "removing old archive $old [${0}: `date`]"
+  rm $old
+ endif
+end
+
+# git archive does not include submodule contents (e.g. src/submodules/htslib),
+# so build the zip from a fresh clone of the branch with its submodules checked
+# out, then strip the git metadata.
+set tmp = "zips/jksrc.v"$BRANCHNN".tmp"
+if ( -e $tmp ) then
+ echo "removing old tmp clone $tmp [${0}: `date`]"
+ rm -fr $tmp
 endif
-echo "Dumping branch $BRANCHNN to zip file. [${0}: `date`]"
-git archive --format=zip --prefix=kent/ --remote=$GITSHAREDREPO v${BRANCHNN}_branch > $zip
-chmod 664 $zip
+mkdir -p $tmp
+
+echo "Cloning branch $BRANCHNN with submodules. [${0}: `date`]"
+git clone -q --recurse-submodules --branch v${BRANCHNN}_branch $GITSHAREDREPO $tmp/kent
+set err = $status
+if ( $err ) then
+ echo "error cloning branch v${BRANCHNN}_branch: $err [${0}: `date`]"
+ rm -fr $tmp
+ exit 1
+endif
+
+# htslib's htscodecs version.h is generated from git describe and is only built
+# when a .git is present, so generate it now while the clone still has git.
+# htscodecs.mk is a generated compiler-probe config that the build recreates, so
+# drop it to keep the zip a clean source release.
+set htslibDir = "$tmp/kent/src/submodules/htslib"
+echo "Generating htslib version headers. [${0}: `date`]"
+( cd $htslibDir && make version.h htscodecs/htscodecs/version.h )
+set err = $status
+if ( $err ) then
+ echo "error generating htslib version headers: $err [${0}: `date`]"
+ rm -fr $tmp
+ exit 1
+endif
+rm -f $htslibDir/htscodecs.mk
+
+# drop git metadata (superproject .git dir and submodule .git files) so the
+# zip contains only source, matching the old git-archive output.
+find $tmp/kent -name .git -prune -exec rm -rf {} +
+
+echo "Dumping branch $BRANCHNN to zip and tarball. [${0}: `date`]"
+cd $tmp
+zip -q -r -X $BUILDDIR/$zip kent
+set err = $status
+if ( ! $err ) then
+ # keep the same kent/ top-level prefix as the zip
+ tar -czf $BUILDDIR/$tgz kent
+ set err = $status
+endif
+cd $BUILDDIR
+if ( $err ) then
+ echo "error creating source archives: $err [${0}: `date`]"
+ rm -fr $tmp
+ exit 1
+endif
+
+rm -fr $tmp
+chmod 664 $zip $tgz
 echo "Done. [${0}: `date`]"
 exit 0

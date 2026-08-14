@@ -120,7 +120,7 @@ slFreeList(&list);
 void makeTrfRootName(char trfRootName[512], char *faFile)
 /* Make root name of files trf produces from faFile. */
 {
-sprintf(trfRootName, "%s.2.7.7.80.10.50.%d", faFile, maxPeriod);
+safef(trfRootName, 512, "%s.2.7.7.80.10.50.%d", faFile, maxPeriod);
 }
 
 void trfSysCall(char *faFile)

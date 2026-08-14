@@ -19,6 +19,7 @@
 #include "obscure.h"
 #include "hgMaf.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "regexHelper.h"
 #include "fieldedTable.h"
 #include "tagRepo.h"
@@ -233,7 +234,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("makeItems", s) ||
+		   isMyVariantsType(s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
@@ -1051,15 +1052,10 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	    errAbort("Track %s lists itself as its own parent", tdb->track);
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
-        {
-        if (trackDbLocalSetting(tdb, "container"))
             {
-            errAbort("Composite track '%s' cannot have child track '%s',"
-                " which is a container  multiWig.", parentName, tdb->track);
+            slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
+            tdb->parent = parent;
             }
-        slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
-        tdb->parent = parent;
-        }
 	else
 	    {
 	    errAbort("Parent track %s of child %s doesn't exist", parentName, tdb->track);
@@ -1216,6 +1212,31 @@ struct slRef *trackDbListGetRefsToDescendantLeaves(struct trackDb *tdbList)
 {
 struct slRef *refList = NULL;
 rGetRefsToDescendantLeaves(&refList, tdbList);
+slReverse(&refList);
+return refList;
+}
+
+static void rGetRefsToDescendantLeavesOrContainers(struct slRef **pList, struct trackDb *tdbList)
+/* Like rGetRefsToDescendantLeaves, but stop at (and include) container (multiWig) nodes
+ * instead of descending into them.  Still recurses through views and other non-container
+ * intermediate nodes. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->subtracks != NULL && trackDbLocalSetting(tdb, "container") == NULL)
+	rGetRefsToDescendantLeavesOrContainers(pList, tdb->subtracks);
+    else
+	refAdd(pList, tdb);   // a leaf, or a container node we stop at
+    }
+}
+
+struct slRef *trackDbListGetRefsToDescendantLeavesOrContainers(struct trackDb *tdbList)
+/* Return reference list of all leaves in forest, plus any container (multiWig) nodes,
+ * not descending into containers. Do slFreeList when done. */
+{
+struct slRef *refList = NULL;
+rGetRefsToDescendantLeavesOrContainers(&refList, tdbList);
 slReverse(&refList);
 return refList;
 }
@@ -1631,6 +1652,14 @@ char *labelAsFilteredNumber(char *label, unsigned numOut)
 {
 char buffer[2048];
 safef(buffer, sizeof buffer, " (%d items filtered out)", numOut);
+return catTwoStrings(label, buffer);
+}
+
+char *labelAsNotLiftedNumber(char *label, unsigned numOut)
+/* add text to label to indicate items were dropped by the lift, not by a filter */
+{
+char buffer[2048];
+safef(buffer, sizeof buffer, " (%d items could not be lifted)", numOut);
 return catTwoStrings(label, buffer);
 }
 

@@ -510,7 +510,7 @@ boolean wormIsGeneName(char *name)
 {
 char buf[128];
 int partCount;
-strncpy(buf, name, sizeof(buf));
+safecpy(buf, sizeof(buf), name);
 partCount = chopString(buf, "-", NULL, 0);
 if (partCount == 2)
     {
@@ -867,7 +867,7 @@ int wordCount;
 char *chromId;
 char buf[128];
 
-strncpy(buf, in, sizeof(buf));
+safecpy(buf, sizeof(buf), in);
 wordCount = chopString(buf, "- \t\r\n:", words, ArraySize(words));
 if (wordCount != 3)
     return FALSE;

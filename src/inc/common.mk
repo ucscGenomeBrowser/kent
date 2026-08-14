@@ -2,6 +2,12 @@
 CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
+# Several long-standing idioms in the tree alias memory through incompatible
+# types (e.g. the dlList sentinel trick in lib/dlist.c, which overlays
+# struct dlNode on struct dlList).  -fstrict-aliasing (on at -O2 and above, but
+# not at -O1) miscompiles these, silently corrupting results.  Disable it so the
+# higher -O levels are safe.  refs #37761
+CFLAGS += -fno-strict-aliasing
 
 # This is required to get the cgiLoader.mk compile target to work.  for some
 # reason, make's %.o: %.c overrides the rule below, cause the compiles to fail
@@ -15,7 +21,7 @@ L += ${LDFLAGS}
 
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
-    COPT=-O -g
+    COPT=-O3 -g
 endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)
@@ -28,7 +34,7 @@ ifneq (,$(findstring -,$(MACHTYPE)))
 endif
 
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
-HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I$(kentSrc)/htslib
+HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I$(kentSrc)/submodules/htslib
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
@@ -278,7 +284,7 @@ ifneq ($(MAKECMDGOALS),clean)
     else
         MYSQLCONFIG := mysql_config
     endif
-	
+
     MYSQLINC := $(shell ${MYSQLCONFIG} --include | sed -e 's/-I//' || true)
         # $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
   endif
@@ -340,15 +346,19 @@ ifeq (${BZ2LIB},)
    endif
 endif
 
+# htslib (libhts.a) must come before its dependency libs (-lcurl -llzma, and
+# -lz -lbz2 below) on the link line. With the linker default --as-needed (e.g.
+# Debian/Ubuntu), a dependency listed before libhts.a gets dropped, producing
+# undefined lzma_*/curl_* references when libhts.a is linked. refs #37741
+L += $(kentSrc)/submodules/htslib/libhts.a
+
 # on hgwdev, use the static libraries
 ifeq (${IS_HGWDEV},yes)
    HG_INC += -I${OURSTUFF}/include
    HG_INC += -I${OURSTUFF}/include/mariadb 
    FULLWARN = yes
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a
-   L+=${OURSTUFF}/lib/libcurl.a
-   L+=${OURSTUFF}/lib64/libssl.a ${OURSTUFF}/lib64/libcrypto.a
-
+   L += -lcurl -llzma -lssl -lcrypto
    ifeq (${HOSTNAME},hgwdev)
        PNGLIB=${OURSTUFF}/lib/libpng.a
        PNGINCL=-I${OURSTUFF}/include/libpng16
@@ -367,7 +377,7 @@ ifeq (${IS_HGWDEV},yes)
    endif
 
 else
-   L+=-lcurl
+   L+=-lcurl -llzma
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.so ${PREFIX}/lib/libcrypto.so
    else
@@ -385,7 +395,6 @@ else
 endif
 
 #global external libraries
-L += $(kentSrc)/htslib/libhts.a
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${BZ2LIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
 

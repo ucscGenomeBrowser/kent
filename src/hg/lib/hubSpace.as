@@ -11,4 +11,5 @@ table hubSpace
     string location; "file system path or URL to file"
     string md5sum; "md5sum of file"
     string parentDir; "parent directory of file"
+    string hubType; "type of hub this file belongs to: trackHub or assemblyHub"
     )

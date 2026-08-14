@@ -1,0 +1,5583 @@
+{
+ "current": 501,
+ "first": {
+  "../cgi-bin/RNAplot": {
+   "commit": "a127c65d3af",
+   "subject": "Fixing RNAplot problem with newer versions, refs #11957, note 178 and",
+   "tickets": [
+    6382,
+    11957
+   ],
+   "ts": 1394017544,
+   "version": 296,
+   "via": "call"
+  },
+  "../goldenPath/help/query.html": {
+   "commit": "33db6013f1b",
+   "subject": "removing the hg.conf dependency and changing \"examples\" help text to Jim's suggested text, refs #28072",
+   "tickets": [
+    28072
+   ],
+   "ts": 1633958818,
+   "version": 421,
+   "via": "call"
+  },
+  "../htdocs/urw-fonts": {
+   "commit": "e68383a5913",
+   "subject": "turn freeType fonts on by default.  Look for them in ../htdocs/urw-fonts",
+   "tickets": [],
+   "ts": 1617745525,
+   "version": 412,
+   "via": "call"
+  },
+  "../images/floret.jpg": {
+   "commit": "5420804fd75",
+   "subject": "make background image configurable",
+   "tickets": [],
+   "ts": 1134695700,
+   "version": 123,
+   "via": "call"
+  },
+  "../js/dbDbTaxonomy.js": {
+   "commit": "48a35fc7fbf",
+   "subject": "Enable phylogenetic tree by default so mirrors don't have to go out of their way to get it, at least for genomes that th",
+   "tickets": [
+    17316
+   ],
+   "ts": 1465232412,
+   "version": 333,
+   "via": "call"
+  },
+  "/data/tmp": {
+   "commit": "5d5708c5a03",
+   "subject": "Adding use of /data/tmp or customTrash.tmpdir directory for database loading",
+   "tickets": [],
+   "ts": 1168645950,
+   "version": 149,
+   "via": "call"
+  },
+  "/dev/shm/trackDbCache": {
+   "commit": "68ddd76f1be",
+   "subject": "make /dev/shm/trackDbCache the default directory for the trackDb cache refs #35945",
+   "tickets": [
+    35945
+   ],
+   "ts": 1771635048,
+   "version": 494,
+   "via": "call"
+  },
+  "/gbdb": {
+   "commit": "16720e7dfab",
+   "subject": "first big commit for hgGeneGraph. Others will follow as QA progresses.  refs #13634",
+   "tickets": [
+    13634
+   ],
+   "ts": 1493419148,
+   "version": 348,
+   "via": "call"
+  },
+  "/gbdb/": {
+   "commit": "225c0d55992",
+   "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
+   "tickets": [],
+   "ts": 1389803637,
+   "version": 294,
+   "via": "call"
+  },
+  "/gbdb/$db/trackDb.ix": {
+   "commit": "45430d7206c",
+   "subject": "add config variable to put trix file somewhere else",
+   "tickets": [],
+   "ts": 1287777831,
+   "version": 242,
+   "via": "call"
+  },
+  "/usr/share/fonts/default/Type1": {
+   "commit": "50214f80596",
+   "subject": "support font choice in freetype font support",
+   "tickets": [],
+   "ts": 1601426972,
+   "version": 404,
+   "via": "call"
+  },
+  "0": {
+   "commit": "1d95bea96bc",
+   "subject": "adding CGI var logging option for hg.conf, refs #36533",
+   "tickets": [
+    36533
+   ],
+   "ts": 1761309294,
+   "version": 489,
+   "via": "call"
+  },
+  "1": {
+   "commit": "cde87e3d79e",
+   "subject": "improved bottleneck penalty for custom track loading even when they fail to load refs #28049",
+   "tickets": [
+    28049
+   ],
+   "ts": 1630527962,
+   "version": 419,
+   "via": "call"
+  },
+  "10": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "call"
+  },
+  "10000": {
+   "commit": "c59e64a740c",
+   "subject": "use 10,000 for the number of items to load from a bigBed",
+   "tickets": [],
+   "ts": 1705605275,
+   "version": 459,
+   "via": "call"
+  },
+  "100000": {
+   "commit": "7b475d1ee80",
+   "subject": "make maxItemsPossible an hg.conf variable",
+   "tickets": [],
+   "ts": 1710536073,
+   "version": 462,
+   "via": "call"
+  },
+  "1000000": {
+   "commit": "cd40e92bef5",
+   "subject": "limit maxItems to maxItemsPerRow (1,000).   Use one million for the",
+   "tickets": [],
+   "ts": 1705353483,
+   "version": 459,
+   "via": "call"
+  },
+  "20": {
+   "commit": "d282b1c0b5e",
+   "subject": "implement cgiApoptosis system",
+   "tickets": [],
+   "ts": 1306951036,
+   "version": 251,
+   "via": "call"
+  },
+  "20s": {
+   "commit": "cf913e42c14",
+   "subject": "making sure that hgGeneGraph is not spawning more and more dot programs. This came up because on Nov 14 today, a lot of ",
+   "tickets": [],
+   "ts": 1731599443,
+   "version": 473,
+   "via": "call"
+  },
+  "3": {
+   "commit": "48886c882e7",
+   "subject": "hgTracks: merge pixel-adjacent blocks when drawing direction barbs",
+   "tickets": [
+    37889
+   ],
+   "ts": 1784666288,
+   "version": 501,
+   "via": "call"
+  },
+  "50000": {
+   "commit": "a33f1b92820",
+   "subject": "use summary information in bigBeds when filters are off and there are",
+   "tickets": [],
+   "ts": 1706218657,
+   "version": 459,
+   "via": "call"
+  },
+  "600": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "call"
+  },
+  "90": {
+   "commit": "e72cf0100e0",
+   "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
+   "tickets": [],
+   "ts": 1309810115,
+   "version": 253,
+   "via": "call"
+  },
+  "BAMMaxItems": {
+   "commit": "540506f7475",
+   "subject": "change BAM support to use maxItems as a signal to go into coverage",
+   "tickets": [],
+   "ts": 1745884559,
+   "version": 481,
+   "via": "literal"
+  },
+  "Bitmap": {
+   "commit": "deca5eaeff6",
+   "subject": "finalizing freeType font work",
+   "tickets": [],
+   "ts": 1605990583,
+   "version": 407,
+   "via": "call"
+  },
+  "Examples": {
+   "commit": "3f5d580335f",
+   "subject": "adding view chrom sizes menu entry and improving the seq view page a little, refs #25796",
+   "tickets": [
+    25796
+   ],
+   "ts": 1711460186,
+   "version": 462,
+   "via": "call"
+  },
+  "HGDB_ASSEMBLYLIST_STATUS_TABLE": {
+   "commit": "3e420ec8296",
+   "subject": "helper function assemblyListTableName() refs #32897",
+   "tickets": [
+    32897
+   ],
+   "ts": 1723597387,
+   "version": 469,
+   "via": "call"
+  },
+  "HGDB_CAN_DO_COVERAGE": {
+   "commit": "dbff2df65c3",
+   "subject": "add the ability to get coverage (wiggle) plots for bed type tracks #952",
+   "tickets": [
+    952
+   ],
+   "ts": 1417828027,
+   "version": 309,
+   "via": "call"
+  },
+  "HGDB_CLADETABLE": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "call"
+  },
+  "HGDB_DBDBTABLE": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "call"
+  },
+  "HGDB_DEFAULTCARTTABLE": {
+   "commit": "a3388dd3d91",
+   "subject": "add ability to have a default cart other than the empty one.",
+   "tickets": [],
+   "ts": 1606057828,
+   "version": 407,
+   "via": "call"
+  },
+  "HGDB_DEFAULTDBTABLE": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "call"
+  },
+  "HGDB_GENARK_STATUS_TABLE": {
+   "commit": "d58aec2ee04",
+   "subject": "check to make sure genark table exists before using it.",
+   "tickets": [],
+   "ts": 1620777844,
+   "version": 414,
+   "via": "call"
+  },
+  "HGDB_GENOMECLADETABLE": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "call"
+  },
+  "HGDB_HUB_PUBLIC_TABLE": {
+   "commit": "e77dcca9b1b",
+   "subject": "allow specifying different names for the hubPublic and hubStatus tables (#6162)",
+   "tickets": [
+    6162
+   ],
+   "ts": 1322699150,
+   "version": 259,
+   "via": "call"
+  },
+  "HGDB_HUB_STATUS_TABLE": {
+   "commit": "e77dcca9b1b",
+   "subject": "allow specifying different names for the hubPublic and hubStatus tables (#6162)",
+   "tickets": [
+    6162
+   ],
+   "ts": 1322699150,
+   "version": 259,
+   "via": "call"
+  },
+  "HGDB_NAMED_SESSION_DB": {
+   "commit": "4d2eb49f841",
+   "subject": "Change recommended track sets to merge with the current session.  refs #28525",
+   "tickets": [
+    28525
+   ],
+   "ts": 1680816542,
+   "version": 446,
+   "via": "call"
+  },
+  "HGDB_SESSIONDBTABLE": {
+   "commit": "1d8785d66ed",
+   "subject": "allow for different names for the sessionDb and userDb tables",
+   "tickets": [],
+   "ts": 1428523543,
+   "version": 314,
+   "via": "call"
+  },
+  "HGDB_USERDBTABLE": {
+   "commit": "1d8785d66ed",
+   "subject": "allow for different names for the sessionDb and userDb tables",
+   "tickets": [],
+   "ts": 1428523543,
+   "version": 314,
+   "via": "call"
+  },
+  "Helvetica": {
+   "commit": "c73823892aa",
+   "subject": "get the postscript driver to allow font specification.   Use the correct",
+   "tickets": [],
+   "ts": 1601502828,
+   "version": 404,
+   "via": "call"
+  },
+  "JKSQL_TRACE": {
+   "commit": "fd591cb7db4",
+   "subject": "Adding GBIB/GBIC support to hgGeneGraph, refs #13634",
+   "tickets": [
+    13634
+   ],
+   "ts": 1499369605,
+   "version": 351,
+   "via": "call"
+  },
+  "LIFTOVERCHAINNAME": {
+   "commit": "e8c22713a73",
+   "subject": "allow quickLiftChain and liftOverChain tables to have different names",
+   "tickets": [],
+   "ts": 1757548483,
+   "version": 487,
+   "via": "call"
+  },
+  "Please take our survey": {
+   "commit": "381da604707",
+   "subject": "Adding back support for hg.conf settings survey and surveyLabel to hgGateway.",
+   "tickets": [],
+   "ts": 1467842604,
+   "version": 335,
+   "via": "call"
+  },
+  "QUICKLIFTCHAINNAME": {
+   "commit": "e8c22713a73",
+   "subject": "allow quickLiftChain and liftOverChain tables to have different names",
+   "tickets": [],
+   "ts": 1757548483,
+   "version": 487,
+   "via": "call"
+  },
+  "Search Help": {
+   "commit": "871f2d65497",
+   "subject": "Adding \"search help\" link to hgTracks, refs #15554",
+   "tickets": [
+    15554
+   ],
+   "ts": 1630066704,
+   "version": 419,
+   "via": "call"
+  },
+  "abort": {
+   "commit": "87d0536f281",
+   "subject": "Oops. I meant to turn this to default abort a long time ago.",
+   "tickets": [],
+   "ts": 1518138351,
+   "version": 360,
+   "via": "call"
+  },
+  "addJs": {
+   "commit": "5ee63c17bf3",
+   "subject": "increasing buffer for connected hubs, refs #33973",
+   "tickets": [
+    33973
+   ],
+   "ts": 1718373644,
+   "version": 466,
+   "via": "call"
+  },
+  "allowNib": {
+   "commit": "ed552b421c0",
+   "subject": "Fixing hgVai again for gbib, refs #11957 and refs #12717. One problem",
+   "tickets": [
+    11957,
+    12717
+   ],
+   "ts": 1396453562,
+   "version": 297,
+   "via": "call"
+  },
+  "alwaysItemRgb": {
+   "commit": "ffbb6c9d2c3",
+   "subject": "always switch on itemRgb by default if alwaysItemRgb is on in hg.conf, refs #28498",
+   "tickets": [
+    28498
+   ],
+   "ts": 1718883805,
+   "version": 466,
+   "via": "call"
+  },
+  "analytics.trackButtons": {
+   "commit": "58bdb6ef0be",
+   "subject": "adding button click tracking to hgTracks, refs #27283",
+   "tickets": [
+    27283
+   ],
+   "ts": 1625574799,
+   "version": 417,
+   "via": "call"
+  },
+  "analytics.trackClicks": {
+   "commit": "aff3e9935d8",
+   "subject": "fix outlink tracking, refs #21916",
+   "tickets": [
+    21916
+   ],
+   "ts": 1615475195,
+   "version": 411,
+   "via": "call"
+  },
+  "analyticsHostList": {
+   "commit": "ca7986770a9",
+   "subject": "Fixup usage of htmlEnd cartEnd to lessen their proliferation and add googleAnalytics",
+   "tickets": [],
+   "ts": 1210281570,
+   "version": 181,
+   "via": "call"
+  },
+  "analyticsKey": {
+   "commit": "ca7986770a9",
+   "subject": "Fixup usage of htmlEnd cartEnd to lessen their proliferation and add googleAnalytics",
+   "tickets": [],
+   "ts": 1210281570,
+   "version": 181,
+   "via": "call"
+  },
+  "apiFromEmail": {
+   "commit": "440a9e30c2a",
+   "subject": "using configuration specifications from hg.conf for the email addresses to and from for the chain request refs #31811",
+   "tickets": [
+    31811
+   ],
+   "ts": 1768592697,
+   "version": 492,
+   "via": "call"
+  },
+  "archivecentral.db": {
+   "commit": "3a973e6a2c0",
+   "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
+   "tickets": [],
+   "ts": 1081990199,
+   "version": null,
+   "via": "call"
+  },
+  "archivecentral.host": {
+   "commit": "3a973e6a2c0",
+   "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
+   "tickets": [],
+   "ts": 1081990199,
+   "version": null,
+   "via": "call"
+  },
+  "archivecentral.password": {
+   "commit": "3a973e6a2c0",
+   "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
+   "tickets": [],
+   "ts": 1081990199,
+   "version": null,
+   "via": "call"
+  },
+  "archivecentral.user": {
+   "commit": "3a973e6a2c0",
+   "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
+   "tickets": [],
+   "ts": 1081990199,
+   "version": null,
+   "via": "call"
+  },
+  "authTableName": {
+   "commit": "929bf2136f6",
+   "subject": "Let auth table name for apiKeys be configued in hg.conf, refs #36428",
+   "tickets": [
+    36428
+   ],
+   "ts": 1759362093,
+   "version": 488,
+   "via": "call"
+  },
+  "autoBlatBigPsl": {
+   "commit": "0bae2d58f02",
+   "subject": "Merging in simplifyBlatAlwaysCreateCT. Uses ajax and hg.conf setting. fixes #32751.",
+   "tickets": [
+    32751
+   ],
+   "ts": 1747717532,
+   "version": 482,
+   "via": "call"
+  },
+  "barbMergePixels": {
+   "commit": "48886c882e7",
+   "subject": "hgTracks: merge pixel-adjacent blocks when drawing direction barbs",
+   "tickets": [
+    37889
+   ],
+   "ts": 1784666288,
+   "version": 501,
+   "via": "literal"
+  },
+  "bigBedMaxItems": {
+   "commit": "cd40e92bef5",
+   "subject": "limit maxItems to maxItemsPerRow (1,000).   Use one million for the",
+   "tickets": [],
+   "ts": 1705353483,
+   "version": 459,
+   "via": "literal"
+  },
+  "bigBedOnePath": {
+   "commit": "ff70fc9c934",
+   "subject": "one path for bigBed, bigPs, bigGenePred, bigDbSNp.  refs #19984",
+   "tickets": [
+    19984
+   ],
+   "ts": 1762212019,
+   "version": 489,
+   "via": "call"
+  },
+  "bigWarn": {
+   "commit": "61e3dea584f",
+   "subject": "make sure bigWarn statements end up in the log.",
+   "tickets": [],
+   "ts": 1538093483,
+   "version": 371,
+   "via": "literal"
+  },
+  "blatNewPageBanner": {
+   "commit": "c683ecb63d7",
+   "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
+   "tickets": [],
+   "ts": 1785029100,
+   "version": 501,
+   "via": "call"
+  },
+  "blatServers": {
+   "commit": "88485cfa7f1",
+   "subject": "hgPcr working",
+   "tickets": [],
+   "ts": 1607490135,
+   "version": 408,
+   "via": "call"
+  },
+  "blatServersTbl": {
+   "commit": "88485cfa7f1",
+   "subject": "hgPcr working",
+   "tickets": [],
+   "ts": 1607490135,
+   "version": 408,
+   "via": "literal"
+  },
+  "blatShowLocus": {
+   "commit": "39209bcbf01",
+   "subject": "show locus name on blat results table, refs #35993",
+   "tickets": [
+    35993
+   ],
+   "ts": 1751289752,
+   "version": 483,
+   "via": "call"
+  },
+  "blockRtracklayer": {
+   "commit": "27370697e01",
+   "subject": "adding cloudflare bot protection, refs #35790",
+   "tickets": [
+    35790
+   ],
+   "ts": 1748382665,
+   "version": 482,
+   "via": "call"
+  },
+  "bottleneck.except": {
+   "commit": "0db1b3807a4",
+   "subject": "improving botDelay to give us control to allow our own robots to run unbottlenecked if desired via hg.conf setting bottl",
+   "tickets": [],
+   "ts": 1340841914,
+   "version": 269,
+   "via": "call"
+  },
+  "bottleneck.host": {
+   "commit": "e0d3d4459af",
+   "subject": "Making it so that hgBotDelay skips bottleneck if no",
+   "tickets": [],
+   "ts": 1075568737,
+   "version": null,
+   "via": "call"
+  },
+  "bottleneck.port": {
+   "commit": "e0d3d4459af",
+   "subject": "Making it so that hgBotDelay skips bottleneck if no",
+   "tickets": [],
+   "ts": 1075568737,
+   "version": null,
+   "via": "call"
+  },
+  "browser.background": {
+   "commit": "bf73a8d0f37",
+   "subject": "add hDocumentRoot() option",
+   "tickets": [],
+   "ts": 1138387183,
+   "version": 125,
+   "via": "call"
+  },
+  "browser.bgcolor": {
+   "commit": "6567f4f1e49",
+   "subject": "added ability to set html backgroud color in hg.conf",
+   "tickets": [],
+   "ts": 1212268459,
+   "version": 183,
+   "via": "call"
+  },
+  "browser.cgiExpireMinutes": {
+   "commit": "d282b1c0b5e",
+   "subject": "implement cgiApoptosis system",
+   "tickets": [],
+   "ts": 1306951036,
+   "version": 251,
+   "via": "literal"
+  },
+  "browser.cgiRoot": {
+   "commit": "85ea6b5bd2d",
+   "subject": "add hCgiRoot",
+   "tickets": [],
+   "ts": 1209503202,
+   "version": 181,
+   "via": "call"
+  },
+  "browser.cgiTime": {
+   "commit": "d43504e6496",
+   "subject": "add browser.cgiTime option to allow turning off timing information from CGIs, refs #10611",
+   "tickets": [
+    10611
+   ],
+   "ts": 1366389695,
+   "version": 282,
+   "via": "literal"
+  },
+  "browser.documentRoot": {
+   "commit": "bf73a8d0f37",
+   "subject": "add hDocumentRoot() option",
+   "tickets": [],
+   "ts": 1138387183,
+   "version": 125,
+   "via": "call"
+  },
+  "browser.dumpStack": {
+   "commit": "cf54d24bdbd",
+   "subject": "added option to generate stack dumps when browser errors occur",
+   "tickets": [],
+   "ts": 1243989251,
+   "version": 207,
+   "via": "call"
+  },
+  "browser.exportedDataHubs": {
+   "commit": "8ccceea1c52",
+   "subject": "added exportedDataHubs dialog and code to deal with quickLifted hubs",
+   "tickets": [],
+   "ts": 1710276069,
+   "version": 462,
+   "via": "call"
+  },
+  "browser.geoSuffix": {
+   "commit": "70d8c69d81d",
+   "subject": "added support for database-based GUI menu items in Mirror menu. also added support for hg.conf browser.geoSuffix for tes",
+   "tickets": [],
+   "ts": 1358384453,
+   "version": 277,
+   "via": "call"
+  },
+  "browser.indelOptions": {
+   "commit": "89672527a4d",
+   "subject": "Added routines for indel display options (double-sided gaps, query inserts).",
+   "tickets": [],
+   "ts": 1172531106,
+   "version": 152,
+   "via": "call"
+  },
+  "browser.javaScriptDir": {
+   "commit": "fb76972b6e2",
+   "subject": "change jsIncludeFile to use a new hg.conf setting (browser.javaScriptDir) to support developer specific javascript direc",
+   "tickets": [],
+   "ts": 1213046137,
+   "version": 183,
+   "via": "literal"
+  },
+  "browser.node": {
+   "commit": "58017171c4c",
+   "subject": "add euronode redirect code (#3104); mostly written by galt with some minor changes by me. Has some debug stuff which wil",
+   "tickets": [
+    3104
+   ],
+   "ts": 1324590647,
+   "version": 260,
+   "via": "call"
+  },
+  "browser.popularGenomes": {
+   "commit": "16eee40c920",
+   "subject": "Adds an hg.conf defined 'popular' species list to the new search bar as a 'default' list of results upon focus of the se",
+   "tickets": [
+    36232
+   ],
+   "ts": 1772565923,
+   "version": 494,
+   "via": "call"
+  },
+  "browser.quickLift": {
+   "commit": "6823728f163",
+   "subject": "ongoing work on quickLift.  Added support for SQL beds",
+   "tickets": [],
+   "ts": 1739736793,
+   "version": 477,
+   "via": "call"
+  },
+  "browser.recTrackSets": {
+   "commit": "bd6e3996c72",
+   "subject": "Add hg.conf var to enable Recommended Track Sets.  Remove hgSession URL mod, in favor of hgTracks detecting non-Track-Se",
+   "tickets": [
+    25601
+   ],
+   "ts": 1597276217,
+   "version": 402,
+   "via": "call"
+  },
+  "browser.recTrackSetsDetectChange": {
+   "commit": "81a8a460976",
+   "subject": "Add hg.conf variable 'browser.recTrackSetsDetectChangge' to control whether recommended track sets features attempts to ",
+   "tickets": [
+    25601
+   ],
+   "ts": 1596221452,
+   "version": 401,
+   "via": "call"
+  },
+  "browser.sessionKey": {
+   "commit": "561b7988132",
+   "subject": "add a registry of hg.conf variables with a sunset mechanism for release gates refs #37925",
+   "tickets": [
+    37838,
+    37923,
+    37925
+   ],
+   "ts": 1785013052,
+   "version": 501,
+   "via": "literal"
+  },
+  "browser.style": {
+   "commit": "384695a6009",
+   "subject": "support browser.style",
+   "tickets": [],
+   "ts": 1339101635,
+   "version": 268,
+   "via": "call"
+  },
+  "browser.styleDir": {
+   "commit": "8140039c43f",
+   "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
+   "tickets": [],
+   "ts": 1287763278,
+   "version": 242,
+   "via": "literal"
+  },
+  "browser.styleImagesDir": {
+   "commit": "8140039c43f",
+   "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
+   "tickets": [],
+   "ts": 1287763278,
+   "version": 242,
+   "via": "literal"
+  },
+  "browser.trixPath": {
+   "commit": "45430d7206c",
+   "subject": "add config variable to put trix file somewhere else",
+   "tickets": [],
+   "ts": 1287777831,
+   "version": 242,
+   "via": "literal"
+  },
+  "cacheTrackDb": {
+   "commit": "fa7a11afb5f",
+   "subject": "first cut at caching trackDb in a shared memory location.   No changes",
+   "tickets": [],
+   "ts": 1559163344,
+   "version": 382,
+   "via": "call"
+  },
+  "cacheTrackDbDir": {
+   "commit": "17a171a4b23",
+   "subject": "changes in response to code review (thanks Jonathan!)",
+   "tickets": [],
+   "ts": 1560989665,
+   "version": 383,
+   "via": "call"
+  },
+  "canColorItems": {
+   "commit": "2961c25331a",
+   "subject": "Trying this again. Let users use a rightclick option to change the color of single bed-like items, gated via hg.conf set",
+   "tickets": [
+    37778
+   ],
+   "ts": 1784830360,
+   "version": 501,
+   "via": "call"
+  },
+  "canDoHgcInPopUp": {
+   "commit": "c3a239aa11c",
+   "subject": "Add a configure page option for controlling whether hgc clicks open in pop-ups, refs #33216",
+   "tickets": [
+    33216
+   ],
+   "ts": 1722544493,
+   "version": 468,
+   "via": "call"
+  },
+  "canDupTracks": {
+   "commit": "ec2f9cd20b7",
+   "subject": "put track duplication under hg.conf control",
+   "tickets": [],
+   "ts": 1668556121,
+   "version": 439,
+   "via": "call"
+  },
+  "canSnake": {
+   "commit": "693a69d6c9b",
+   "subject": "add option to show chains as snakes under hg.conf control",
+   "tickets": [],
+   "ts": 1675293513,
+   "version": 443,
+   "via": "call"
+  },
+  "cart.db": {
+   "commit": "77c72446123",
+   "subject": "allow cart to be configured on a seperate server",
+   "tickets": [],
+   "ts": 1075367860,
+   "version": null,
+   "via": "call"
+  },
+  "cart.host": {
+   "commit": "77c72446123",
+   "subject": "allow cart to be configured on a seperate server",
+   "tickets": [],
+   "ts": 1075367860,
+   "version": null,
+   "via": "call"
+  },
+  "cart.password": {
+   "commit": "77c72446123",
+   "subject": "allow cart to be configured on a seperate server",
+   "tickets": [],
+   "ts": 1075367860,
+   "version": null,
+   "via": "call"
+  },
+  "cart.trace": {
+   "commit": "1075819e8c8",
+   "subject": "If hg.conf has cart.trace, print out some cart properties when opening, overloading (hgSession) or closing the cart, to ",
+   "tickets": [],
+   "ts": 1214856869,
+   "version": 185,
+   "via": "call"
+  },
+  "cart.user": {
+   "commit": "77c72446123",
+   "subject": "allow cart to be configured on a seperate server",
+   "tickets": [],
+   "ts": 1075367860,
+   "version": null,
+   "via": "call"
+  },
+  "cartTrace": {
+   "commit": "04e020b9f6e",
+   "subject": "special penalty for bots with invalid hgsids",
+   "tickets": [],
+   "ts": 1747861717,
+   "version": 482,
+   "via": "call"
+  },
+  "cartVersion": {
+   "commit": "6629bda6c73",
+   "subject": "implement cart editing.  Needs doc.  ;-)",
+   "tickets": [],
+   "ts": 1621989098,
+   "version": 415,
+   "via": "literal"
+  },
+  "cdw.siteIsPublic": {
+   "commit": "d102cec7b6e",
+   "subject": "Fix cirm public downloads to not require login/auth/tokens. cdwWebBrowse and cdwGetFile affected. fixes #21315",
+   "tickets": [
+    21315
+   ],
+   "ts": 1524281568,
+   "version": 364,
+   "via": "call"
+  },
+  "central.cookie": {
+   "commit": "2da27d0ce25",
+   "subject": "distinguishing users from robots by presence of hguid cookie",
+   "tickets": [],
+   "ts": 1226605290,
+   "version": 195,
+   "via": "call"
+  },
+  "central.db": {
+   "commit": "bede9e19013",
+   "subject": "Added logic to deal with new config options in the hg.conf file to",
+   "tickets": [],
+   "ts": 1027103884,
+   "version": null,
+   "via": "call"
+  },
+  "central.domain": {
+   "commit": "1e25af7b101",
+   "subject": "Moved domain name of cookie to config file.",
+   "tickets": [],
+   "ts": 1011330594,
+   "version": null,
+   "via": "call"
+  },
+  "central.host": {
+   "commit": "eb941282e23",
+   "subject": "Fixed crash in hgFind on December browser from uninitialized",
+   "tickets": [],
+   "ts": 1007489063,
+   "version": null,
+   "via": "call"
+  },
+  "central.password": {
+   "commit": "4a784e60997",
+   "subject": "Reading hgcentral host,user,password from hg.conf file.",
+   "tickets": [],
+   "ts": 1008702317,
+   "version": null,
+   "via": "call"
+  },
+  "central.user": {
+   "commit": "4a784e60997",
+   "subject": "Reading hgcentral host,user,password from hg.conf file.",
+   "tickets": [],
+   "ts": 1008702317,
+   "version": null,
+   "via": "call"
+  },
+  "cgb.server": {
+   "commit": "0fae1f13323",
+   "subject": "Added hIsCgbServer().",
+   "tickets": [],
+   "ts": 1225492469,
+   "version": 194,
+   "via": "call"
+  },
+  "chainFileRequestEmail": {
+   "commit": "440a9e30c2a",
+   "subject": "using configuration specifications from hg.conf for the email addresses to and from for the chain request refs #31811",
+   "tickets": [
+    31811
+   ],
+   "ts": 1768592697,
+   "version": 492,
+   "via": "call"
+  },
+  "cladeTableName": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "literal"
+  },
+  "cloudFlareSecretKey": {
+   "commit": "27370697e01",
+   "subject": "adding cloudflare bot protection, refs #35790",
+   "tickets": [
+    35790
+   ],
+   "ts": 1748382665,
+   "version": 482,
+   "via": "call"
+  },
+  "cloudFlareSiteKey": {
+   "commit": "27370697e01",
+   "subject": "adding cloudflare bot protection, refs #35790",
+   "tickets": [
+    35790
+   ],
+   "ts": 1748382665,
+   "version": 482,
+   "via": "literal"
+  },
+  "cramRef": {
+   "commit": "173bacbf6c2",
+   "subject": "some tweaks to CRAM support #14717",
+   "tickets": [
+    14717
+   ],
+   "ts": 1450125196,
+   "version": 326,
+   "via": "call"
+  },
+  "curatedHubPrefix": {
+   "commit": "05eb41c63af",
+   "subject": "changes to support curated hubs",
+   "tickets": [],
+   "ts": 1653607507,
+   "version": 431,
+   "via": "call"
+  },
+  "curl": {
+   "commit": "c1322ce22bf",
+   "subject": "no feedback from QA for a long time, so committing curl button now but putting under hg.conf control, refs #33415",
+   "tickets": [
+    33415
+   ],
+   "ts": 1725407550,
+   "version": 470,
+   "via": "call"
+  },
+  "customTracks.botCheckMult": {
+   "commit": "cde87e3d79e",
+   "subject": "improved bottleneck penalty for custom track loading even when they fail to load refs #28049",
+   "tickets": [
+    28049
+   ],
+   "ts": 1630527962,
+   "version": 419,
+   "via": "literal"
+  },
+  "customTracks.db": {
+   "commit": "36f8c9e2348",
+   "subject": "Beginning to recognize a custom track asking for a database",
+   "tickets": [],
+   "ts": 1147216883,
+   "version": 133,
+   "via": "call"
+  },
+  "customTracks.host": {
+   "commit": "36f8c9e2348",
+   "subject": "Beginning to recognize a custom track asking for a database",
+   "tickets": [],
+   "ts": 1147216883,
+   "version": 133,
+   "via": "call"
+  },
+  "customTracks.maxBytes": {
+   "commit": "41f5ddb8366",
+   "subject": "add support for maf tracks",
+   "tickets": [],
+   "ts": 1212241357,
+   "version": 183,
+   "via": "call"
+  },
+  "customTracks.password": {
+   "commit": "36f8c9e2348",
+   "subject": "Beginning to recognize a custom track asking for a database",
+   "tickets": [],
+   "ts": 1147216883,
+   "version": 133,
+   "via": "call"
+  },
+  "customTracks.tmpdir": {
+   "commit": "5d5708c5a03",
+   "subject": "Adding use of /data/tmp or customTrash.tmpdir directory for database loading",
+   "tickets": [],
+   "ts": 1168645950,
+   "version": 149,
+   "via": "literal"
+  },
+  "customTracks.useAll": {
+   "commit": "348d79cbf30",
+   "subject": "dbTrackName is actually dbTableName and beginning to allow all custom tracks to go into the DB",
+   "tickets": [],
+   "ts": 1149113928,
+   "version": 134,
+   "via": "call"
+  },
+  "customTracks.user": {
+   "commit": "36f8c9e2348",
+   "subject": "Beginning to recognize a custom track asking for a database",
+   "tickets": [],
+   "ts": 1147216883,
+   "version": 133,
+   "via": "call"
+  },
+  "database": {
+   "commit": "b7cca1d9fe8",
+   "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
+   "tickets": [],
+   "ts": 1220469713,
+   "version": 190,
+   "via": "call"
+  },
+  "db": {
+   "commit": "b7cca1d9fe8",
+   "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
+   "tickets": [],
+   "ts": 1220469713,
+   "version": 190,
+   "via": "call"
+  },
+  "db.database": {
+   "commit": "40f5f832da8",
+   "subject": "Simple tests for functions generated by -dbLink flag",
+   "tickets": [],
+   "ts": 1051599622,
+   "version": null,
+   "via": "call"
+  },
+  "db.host": {
+   "commit": "42b7adb983b",
+   "subject": "added hgConfig.c to read configuration from file:",
+   "tickets": [],
+   "ts": 995440953,
+   "version": null,
+   "via": "call"
+  },
+  "db.mdb": {
+   "commit": "71389a0a19c",
+   "subject": "The metaTbl has been renamed 'mdb' and objType has been dropped.",
+   "tickets": [],
+   "ts": 1271187624,
+   "version": 228,
+   "via": "call"
+  },
+  "db.metaDb": {
+   "commit": "90b4a73e704",
+   "subject": "Renamed mdb to metaDb",
+   "tickets": [],
+   "ts": 1272407602,
+   "version": 229,
+   "via": "call"
+  },
+  "db.metaTbl": {
+   "commit": "9a7769431c0",
+   "subject": "Tightening screws. Don't allow shared metaTbl update except from protected file.",
+   "tickets": [],
+   "ts": 1270078568,
+   "version": 227,
+   "via": "call"
+  },
+  "db.neverLocal": {
+   "commit": "538487796cd",
+   "subject": "renaming to db.neverLocal to keep in line with the other hg.conf directives",
+   "tickets": [],
+   "ts": 1379018757,
+   "version": 289,
+   "via": "call"
+  },
+  "db.password": {
+   "commit": "42b7adb983b",
+   "subject": "added hgConfig.c to read configuration from file:",
+   "tickets": [],
+   "ts": 995440953,
+   "version": null,
+   "via": "call"
+  },
+  "db.relatedTrack": {
+   "commit": "8d8e3092680",
+   "subject": "Put related tracks section under hg.conf control in addition to requiring a relatedTrack table, refs #25721",
+   "tickets": [
+    25721
+   ],
+   "ts": 1599847080,
+   "version": 403,
+   "via": "call"
+  },
+  "db.trackDb": {
+   "commit": "a89f7eed41b",
+   "subject": "Added support for multiple trackDb tables in database to be chosen from hg.conf file",
+   "tickets": [],
+   "ts": 1019784415,
+   "version": null,
+   "via": "call"
+  },
+  "db.trackDbLocal": {
+   "commit": "cf7e0f4136b",
+   "subject": "added support for trackDbLocal use to override trackDb entries (for MGC)",
+   "tickets": [],
+   "ts": 1076060492,
+   "version": null,
+   "via": "call"
+  },
+  "db.user": {
+   "commit": "42b7adb983b",
+   "subject": "added hgConfig.c to read configuration from file:",
+   "tickets": [],
+   "ts": 995440953,
+   "version": null,
+   "via": "call"
+  },
+  "dbDbTableName": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "literal"
+  },
+  "defaultCartName": {
+   "commit": "a3388dd3d91",
+   "subject": "add ability to have a default cart other than the empty one.",
+   "tickets": [],
+   "ts": 1606057828,
+   "version": 407,
+   "via": "literal"
+  },
+  "defaultDbTableName": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "literal"
+  },
+  "defaultGenome": {
+   "commit": "eef8a09acca",
+   "subject": "find defaultGenome from hg.conf if present",
+   "tickets": [],
+   "ts": 1267825341,
+   "version": 226,
+   "via": "call"
+  },
+  "detectMysqlLoadWarnings": {
+   "commit": "73df2d32a41",
+   "subject": "mysql load data file warnings abort - adding some caution about changing stuff, so for now warning detection activates o",
+   "tickets": [],
+   "ts": 1332788999,
+   "version": 264,
+   "via": "call"
+  },
+  "doHgcInPopUp": {
+   "commit": "3d3f084876b",
+   "subject": "Show hgc details pages in a dialog on hgTracks. Currently under hg.conf",
+   "tickets": [
+    33216
+   ],
+   "ts": 1710372599,
+   "version": 462,
+   "via": "call"
+  },
+  "doMyVariants": {
+   "commit": "4bb9e8caea5",
+   "subject": "Initial myVariants implementation: a form on hgTracks where users can enter item details in one of three ways: hgvs/item",
+   "tickets": [],
+   "ts": 1777669800,
+   "version": 497,
+   "via": "call"
+  },
+  "dot": {
+   "commit": "16720e7dfab",
+   "subject": "first big commit for hgGeneGraph. Others will follow as QA progresses.  refs #13634",
+   "tickets": [
+    13634
+   ],
+   "ts": 1493419148,
+   "version": 348,
+   "via": "call"
+  },
+  "downloads.server": {
+   "commit": "009c3b7bcdb",
+   "subject": "Switch ENCODE downloads link to appropriate downloads server.  Also, Add link to multi-view help.",
+   "tickets": [],
+   "ts": 1236644294,
+   "version": 201,
+   "via": "literal"
+  },
+  "drawDot": {
+   "commit": "13d50002b54",
+   "subject": "ongoing work on snakes... added optional dotplot for bigPsl hgc pages",
+   "tickets": [],
+   "ts": 1677880376,
+   "version": 444,
+   "via": "call"
+  },
+  "encodeDataWarehouse.dataRoot": {
+   "commit": "bebe7d814f0",
+   "subject": "Header for edwWebXSendFile",
+   "tickets": [],
+   "ts": 1389017887,
+   "version": 293,
+   "via": "literal"
+  },
+  "encodeDataWarehouse.key": {
+   "commit": "bebe7d814f0",
+   "subject": "Header for edwWebXSendFile",
+   "tickets": [],
+   "ts": 1389017887,
+   "version": 293,
+   "via": "literal"
+  },
+  "examples": {
+   "commit": "33db6013f1b",
+   "subject": "removing the hg.conf dependency and changing \"examples\" help text to Jim's suggested text, refs #28072",
+   "tickets": [
+    28072
+   ],
+   "ts": 1633958818,
+   "version": 421,
+   "via": "call"
+  },
+  "fonts.extra": {
+   "commit": "4f032489281",
+   "subject": "added function to check config variable to allow extra fonts",
+   "tickets": [],
+   "ts": 1134276417,
+   "version": 122,
+   "via": "call"
+  },
+  "forceTwoBit": {
+   "commit": "8f5aa500310",
+   "subject": "make hg.conf option false by default after comment from Braney",
+   "tickets": [],
+   "ts": 1398168708,
+   "version": 298,
+   "via": "call"
+  },
+  "freeType": {
+   "commit": "deca5eaeff6",
+   "subject": "finalizing freeType font work",
+   "tickets": [],
+   "ts": 1605990583,
+   "version": 407,
+   "via": "call"
+  },
+  "freeTypeDir": {
+   "commit": "50214f80596",
+   "subject": "support font choice in freetype font support",
+   "tickets": [],
+   "ts": 1601426972,
+   "version": 404,
+   "via": "literal"
+  },
+  "freeTypeFont": {
+   "commit": "c73823892aa",
+   "subject": "get the postscript driver to allow font specification.   Use the correct",
+   "tickets": [],
+   "ts": 1601502828,
+   "version": 404,
+   "via": "literal"
+  },
+  "ftpProxy": {
+   "commit": "36071edc040",
+   "subject": "Adds ftp proxy capability to system. Works with Squid 3.5 ftp_port at least. refs #19124",
+   "tickets": [
+    19124
+   ],
+   "ts": 1490312529,
+   "version": 346,
+   "via": "call"
+  },
+  "galaxyUrl": {
+   "commit": "c7dc2516f4e",
+   "subject": "adding an hg.conf var for galaxy, refs #12642",
+   "tickets": [
+    12642
+   ],
+   "ts": 1436454092,
+   "version": 318,
+   "via": "call"
+  },
+  "gbdbLoc1": {
+   "commit": "225c0d55992",
+   "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
+   "tickets": [],
+   "ts": 1389803637,
+   "version": 294,
+   "via": "call"
+  },
+  "gbdbLoc2": {
+   "commit": "225c0d55992",
+   "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
+   "tickets": [],
+   "ts": 1389803637,
+   "version": 294,
+   "via": "call"
+  },
+  "gcOnTheFly": {
+   "commit": "da33d70c10d",
+   "subject": "allow calculation of GC percent on the fly with code help from claude refs #35958",
+   "tickets": [
+    35958
+   ],
+   "ts": 1773781044,
+   "version": 495,
+   "via": "call"
+  },
+  "gcOnTheFlyCoExist": {
+   "commit": "da33d70c10d",
+   "subject": "allow calculation of GC percent on the fly with code help from claude refs #35958",
+   "tickets": [
+    35958
+   ],
+   "ts": 1773781044,
+   "version": 495,
+   "via": "call"
+  },
+  "genarkHubPrefix": {
+   "commit": "b85df0a600a",
+   "subject": "if a track hub specifies a database that's not native, look for in among",
+   "tickets": [],
+   "ts": 1618532443,
+   "version": 413,
+   "via": "call"
+  },
+  "genarkLiftOver": {
+   "commit": "d947dcc75b0",
+   "subject": "let genark hubs appear in hgConvert if we can figure out their UCSC org",
+   "tickets": [],
+   "ts": 1751324456,
+   "version": 484,
+   "via": "call"
+  },
+  "genbankDb": {
+   "commit": "aba8125cb53",
+   "subject": "changes to allow for GenBank metadata to be held in a common table.  #16809",
+   "tickets": [
+    16809
+   ],
+   "ts": 1455140367,
+   "version": 328,
+   "via": "call"
+  },
+  "geneTracks": {
+   "commit": "f93b8662afd",
+   "subject": "Add exon search: jump to GENE exon N from position box",
+   "tickets": [],
+   "ts": 1780651456,
+   "version": 499,
+   "via": "call"
+  },
+  "genome-archive.cse.ucsc.edu": {
+   "commit": "29f4d2cd73c",
+   "subject": "Initial implementation of archive central database access functions.  Not tested.",
+   "tickets": [],
+   "ts": 1081920256,
+   "version": null,
+   "via": "call"
+  },
+  "genome@soe.ucsc.edu": {
+   "commit": "5d837d61083",
+   "subject": "add the ability to put the hgHubConnect contact email address in hg.conf (by request of the Lowe lab)",
+   "tickets": [],
+   "ts": 1314056201,
+   "version": 255,
+   "via": "call"
+  },
+  "genomeCladeTableName": {
+   "commit": "c4fe426d093",
+   "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
+   "tickets": [],
+   "ts": 1426458132,
+   "version": 313,
+   "via": "literal"
+  },
+  "genomeSpace": {
+   "commit": "7fdfab0ba90",
+   "subject": "Fixes #12559. GenomeSpace support added to hgTables.",
+   "tickets": [
+    12559
+   ],
+   "ts": 1407261448,
+   "version": 303,
+   "via": "call"
+  },
+  "genomeSpace.{variable}": {
+   "commit": "561b7988132",
+   "subject": "add a registry of hg.conf variables with a sunset mechanism for release gates refs #37925",
+   "tickets": [
+    37838,
+    37923,
+    37925
+   ],
+   "ts": 1785013052,
+   "version": 501,
+   "via": "literal"
+  },
+  "gisaid.server": {
+   "commit": "f254b5afc72",
+   "subject": "Added hIsGisaidServer().",
+   "tickets": [],
+   "ts": 1244149710,
+   "version": 207,
+   "via": "call"
+  },
+  "gisaid.structDir": {
+   "commit": "0cc5bd8e126",
+   "subject": "get gisaid locations from hg.conf",
+   "tickets": [],
+   "ts": 1245110210,
+   "version": 208,
+   "via": "call"
+  },
+  "gisaid.structUrl": {
+   "commit": "0cc5bd8e126",
+   "subject": "get gisaid locations from hg.conf",
+   "tickets": [],
+   "ts": 1245110210,
+   "version": 208,
+   "via": "call"
+  },
+  "graphvizPath": {
+   "commit": "33d37d6a601",
+   "subject": "adding help page for mirrors where graphviz may not work, refs #13634",
+   "tickets": [
+    13634
+   ],
+   "ts": 1495663460,
+   "version": 349,
+   "via": "call"
+  },
+  "grepIndex.default": {
+   "commit": "028dd397639",
+   "subject": "Fixed some security/error-handling problems pointed out by Mark in doGrepQuery()",
+   "tickets": [],
+   "ts": 1113347276,
+   "version": 104,
+   "via": "call"
+  },
+  "grepIndex.genbank": {
+   "commit": "028dd397639",
+   "subject": "Fixed some security/error-handling problems pointed out by Mark in doGrepQuery()",
+   "tickets": [],
+   "ts": 1113347276,
+   "version": 104,
+   "via": "call"
+  },
+  "greyBarIcons": {
+   "commit": "6f7f5bac129",
+   "subject": "When mousing over a track, put a gear icon over the grey bar to hint that a context click is available. Put a 'x' icon t",
+   "tickets": [
+    34420
+   ],
+   "ts": 1753309501,
+   "version": 485,
+   "via": "call"
+  },
+  "groupDropdown": {
+   "commit": "ae63ce55185",
+   "subject": "adding ancient dna track, refs #36592",
+   "tickets": [
+    36592
+   ],
+   "ts": 1762185794,
+   "version": 489,
+   "via": "call"
+  },
+  "gsid.server": {
+   "commit": "4aaca109c3b",
+   "subject": "Added hIsGsidServer().",
+   "tickets": [],
+   "ts": 1169228865,
+   "version": 150,
+   "via": "call"
+  },
+  "gsidCertId": {
+   "commit": "6892de422e9",
+   "subject": "added support for expires; made customized signed encrypted buttons; made https secure callback to paypal for ipn verifi",
+   "tickets": [],
+   "ts": 1169847381,
+   "version": 150,
+   "via": "call"
+  },
+  "gtexBodyMap": {
+   "commit": "66e096cba6f",
+   "subject": "Add hg.conf setting to enable new GTEx trackUI.  For removal when new CGI is fully released. refs #17369",
+   "tickets": [
+    17369
+   ],
+   "ts": 1478823437,
+   "version": 341,
+   "via": "call"
+  },
+  "help.html": {
+   "commit": "999f7190e2f",
+   "subject": "Change allows alternate location for help files -- can be set in hg.conf with help.html variable",
+   "tickets": [],
+   "ts": 1134002009,
+   "version": 122,
+   "via": "call"
+  },
+  "hgBlat.maxSequenceCount": {
+   "commit": "cbb1262183e",
+   "subject": "allow maximum sequence count to be defined in hg.conf hgBlat.maxSequenceCount no redmine",
+   "tickets": [],
+   "ts": 1531153919,
+   "version": 368,
+   "via": "call"
+  },
+  "hgEncodeVocabDocBaseUrl": {
+   "commit": "42cd711f346",
+   "subject": "adding option to create links back to UCSC for encode .pdf files, refs #11957 and #12717",
+   "tickets": [
+    11957,
+    12717
+   ],
+   "ts": 1396052803,
+   "version": 297,
+   "via": "call"
+  },
+  "hgGateway.dbDbTaxonomy": {
+   "commit": "915f56e3f34",
+   "subject": "Simplify the generation of hgGateway's dbDbTaxonomy tree info and support mirrors better: new hg.conf setting hgGateway.",
+   "tickets": [
+    15277
+   ],
+   "ts": 1461098208,
+   "version": 331,
+   "via": "call"
+  },
+  "hgHubConnect.cacheDir": {
+   "commit": "a5cd114e4b6",
+   "subject": "hgHubConnect needed to support an hg.conf-specified cache directory for search, refs #13625",
+   "tickets": [
+    13625
+   ],
+   "ts": 1497566680,
+   "version": 350,
+   "via": "call"
+  },
+  "hgHubConnect.validateHub": {
+   "commit": "77dde8a8310",
+   "subject": "First pass on validate hub tab for hgHubConnect, currently hg.conf controlled. Work in progress still, refs #18870",
+   "tickets": [
+    18870
+   ],
+   "ts": 1555438924,
+   "version": 380,
+   "via": "call"
+  },
+  "hgPhyloPlaceEnabled": {
+   "commit": "e14c2761ca0",
+   "subject": "New CGI hgPhyloPlace: place SARS-CoV-2 genomes in fasta or VCF on phylogenetic tree using Yatish Turakhia's UShER progra",
+   "tickets": [
+    25943
+   ],
+   "ts": 1605819841,
+   "version": 407,
+   "via": "call"
+  },
+  "hgPhyloPlaceServerDir": {
+   "commit": "0fffa3c31de",
+   "subject": "Performance improvements for trees with millions of sequences:",
+   "tickets": [],
+   "ts": 1666994886,
+   "version": 438,
+   "via": "call"
+  },
+  "hgSession.shortLink": {
+   "commit": "d66dce5cf7d",
+   "subject": "hgSession prints out short links when an 'hgSession.shortLink' hg.conf variable is on, refs #8520",
+   "tickets": [
+    8520
+   ],
+   "ts": 1543425030,
+   "version": 374,
+   "via": "call"
+  },
+  "hgTracks.trackReordering": {
+   "commit": "0d28aaf1d99",
+   "subject": "add hg.conf option to enable track reordering",
+   "tickets": [],
+   "ts": 1153891975,
+   "version": 138,
+   "via": "call"
+  },
+  "hgTracksNoteHtml": {
+   "commit": "11d274be1e5",
+   "subject": "adding option for QA to show any random piece of html on hgTracks, refs #30376",
+   "tickets": [
+    30376
+   ],
+   "ts": 1670590925,
+   "version": 440,
+   "via": "call"
+  },
+  "hgc.ghostscriptPath": {
+   "commit": "f3372f36f74",
+   "subject": "Use hg.conf settings to determine GMT executable paths and enable/disable images, instead of hIsPrivateHost.",
+   "tickets": [],
+   "ts": 1234218625,
+   "version": 200,
+   "via": "call"
+  },
+  "hgc.ps2rasterPath": {
+   "commit": "f3372f36f74",
+   "subject": "Use hg.conf settings to determine GMT executable paths and enable/disable images, instead of hIsPrivateHost.",
+   "tickets": [],
+   "ts": 1234218625,
+   "version": 200,
+   "via": "call"
+  },
+  "hgc.psxyPath": {
+   "commit": "f3372f36f74",
+   "subject": "Use hg.conf settings to determine GMT executable paths and enable/disable images, instead of hIsPrivateHost.",
+   "tickets": [],
+   "ts": 1234218625,
+   "version": 200,
+   "via": "call"
+  },
+  "hgdbtest.host": {
+   "commit": "a34a0fac445",
+   "subject": "Initial version",
+   "tickets": [],
+   "ts": 1033493421,
+   "version": null,
+   "via": "call"
+  },
+  "hgdbtest.password": {
+   "commit": "a34a0fac445",
+   "subject": "Initial version",
+   "tickets": [],
+   "ts": 1033493421,
+   "version": null,
+   "via": "call"
+  },
+  "hgdbtest.user": {
+   "commit": "a34a0fac445",
+   "subject": "Initial version",
+   "tickets": [],
+   "ts": 1033493421,
+   "version": null,
+   "via": "call"
+  },
+  "hgdownload.cse.ucsc.edu": {
+   "commit": "009c3b7bcdb",
+   "subject": "Switch ENCODE downloads link to appropriate downloads server.  Also, Add link to multi-view help.",
+   "tickets": [],
+   "ts": 1236644294,
+   "version": 201,
+   "via": "call"
+  },
+  "hgdownload.soe.ucsc.edu": {
+   "commit": "110f5e12a63",
+   "subject": "changing cse to soe in domains, sometimes gi. ref #21876",
+   "tickets": [
+    21876
+   ],
+   "ts": 1534279737,
+   "version": 369,
+   "via": "call"
+  },
+  "hgta.disableAllTables": {
+   "commit": "7ebfe73b8ed",
+   "subject": "added option to disable All Tables in table browser to support collaborator",
+   "tickets": [],
+   "ts": 1220898038,
+   "version": 190,
+   "via": "call"
+  },
+  "hgta.disableSendOutput": {
+   "commit": "4c119082b36",
+   "subject": "adding config option to suppress sending output to galaxy or great, refs #12717",
+   "tickets": [
+    12717
+   ],
+   "ts": 1396048348,
+   "version": 297,
+   "via": "call"
+  },
+  "hguid": {
+   "commit": "7702d14f3b9",
+   "subject": "Added support for hg.conf option central.cookie to hUserCookie().",
+   "tickets": [],
+   "ts": 1119895266,
+   "version": 110,
+   "via": "call"
+  },
+  "hguidIpAccess": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "call"
+  },
+  "hguidIpTracking.enabled": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "call"
+  },
+  "hguidIpTracking.maxIps": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "literal"
+  },
+  "hguidIpTracking.table": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "literal"
+  },
+  "hguidIpTracking.windowSeconds": {
+   "commit": "99273435366",
+   "subject": "Reducing bot abuse by restricting the number of IP addresses we'll accept the same hguid",
+   "tickets": [
+    37494
+   ],
+   "ts": 1779123521,
+   "version": 498,
+   "via": "literal"
+  },
+  "hotkeys": {
+   "commit": "7da0c98cb4a",
+   "subject": "adding keyboard shortcuts, refs #15370",
+   "tickets": [
+    15370
+   ],
+   "ts": 1432293321,
+   "version": 316,
+   "via": "call"
+  },
+  "httpProxy": {
+   "commit": "ac1da3ba482",
+   "subject": "Adding support for http(s) proxy",
+   "tickets": [],
+   "ts": 1271230977,
+   "version": 228,
+   "via": "call"
+  },
+  "httpsCertCheck": {
+   "commit": "5b281c69d7c",
+   "subject": "Squashed commit of the following:",
+   "tickets": [
+    28332,
+    28457,
+    28458
+   ],
+   "ts": 1636484999,
+   "version": 423,
+   "via": "call"
+  },
+  "httpsCertCheckDepth": {
+   "commit": "5b281c69d7c",
+   "subject": "Squashed commit of the following:",
+   "tickets": [
+    28332,
+    28457,
+    28458
+   ],
+   "ts": 1636484999,
+   "version": 423,
+   "via": "call"
+  },
+  "httpsCertCheckDomainExceptions": {
+   "commit": "6dd4b07138e",
+   "subject": "Add domain exceptions whitelist for allowing us to configure a small number of exceptions that are old servers that are ",
+   "tickets": [
+    28458
+   ],
+   "ts": 1637011807,
+   "version": 423,
+   "via": "call"
+  },
+  "httpsCertCheckVerbose": {
+   "commit": "5b281c69d7c",
+   "subject": "Squashed commit of the following:",
+   "tickets": [
+    28332,
+    28457,
+    28458
+   ],
+   "ts": 1636484999,
+   "version": 423,
+   "via": "call"
+  },
+  "httpsProxy": {
+   "commit": "3b7af84b7d8",
+   "subject": "Initial check-in of proxy stuff. Added support for https_proxy for configuring https proxy. Added no_proxy for configuri",
+   "tickets": [],
+   "ts": 1489987469,
+   "version": 346,
+   "via": "call"
+  },
+  "hub.assemblyListTableName": {
+   "commit": "3e420ec8296",
+   "subject": "helper function assemblyListTableName() refs #32897",
+   "tickets": [
+    32897
+   ],
+   "ts": 1723597387,
+   "version": 469,
+   "via": "literal"
+  },
+  "hub.genArkTableName": {
+   "commit": "d58aec2ee04",
+   "subject": "check to make sure genark table exists before using it.",
+   "tickets": [],
+   "ts": 1620777844,
+   "version": 414,
+   "via": "literal"
+  },
+  "hub.publicTableName": {
+   "commit": "e66fc3455af",
+   "subject": "fiddle a bit with the hg.conf variables to change hubPublc and hubStatus (#6162)",
+   "tickets": [
+    6162
+   ],
+   "ts": 1322761458,
+   "version": 259,
+   "via": "literal"
+  },
+  "hub.statusTableName": {
+   "commit": "e66fc3455af",
+   "subject": "fiddle a bit with the hg.conf variables to change hubPublc and hubStatus (#6162)",
+   "tickets": [
+    6162
+   ],
+   "ts": 1322761458,
+   "version": 259,
+   "via": "literal"
+  },
+  "hubApi.allowHtml": {
+   "commit": "183a7505b52",
+   "subject": "add hg.conf variable to turn on the html output on the URL /cgi-bin/hubApi refs #18869",
+   "tickets": [
+    18869
+   ],
+   "ts": 1556747181,
+   "version": 381,
+   "via": "literal"
+  },
+  "hubApi.blatDelayFraction": {
+   "commit": "2197f6d5208",
+   "subject": "hubApi: add /blat endpoint with apiKey gating, format=hgblat, and known-agent bypass",
+   "tickets": [
+    36315
+   ],
+   "ts": 1779204234,
+   "version": 498,
+   "via": "call"
+  },
+  "hubApi.relaySecret": {
+   "commit": "e2c9cfc1bb6",
+   "subject": "refactor the ottoRequest table access with relay requests from Euro/Asia nodes to the RR system refs #31811",
+   "tickets": [
+    31811
+   ],
+   "ts": 1784911899,
+   "version": 501,
+   "via": "call"
+  },
+  "hubApi.showActive0": {
+   "commit": "fd532108ac0",
+   "subject": "for list/ucscGenomes function only show active=1 genomes by default with hidden option showActive0=on to allow show of a",
+   "tickets": [
+    18869
+   ],
+   "ts": 1557342520,
+   "version": 381,
+   "via": "literal"
+  },
+  "hubSearchText": {
+   "commit": "79e2e0421ff",
+   "subject": "hgHubConnect now displays search details and indexes description content, refs #13625",
+   "tickets": [
+    13625
+   ],
+   "ts": 1497564976,
+   "version": 350,
+   "via": "call"
+  },
+  "hubSearchTextTable": {
+   "commit": "79e2e0421ff",
+   "subject": "hgHubConnect now displays search details and indexes description content, refs #13625",
+   "tickets": [
+    13625
+   ],
+   "ts": 1497564976,
+   "version": 350,
+   "via": "literal"
+  },
+  "hubSearchTrixFile": {
+   "commit": "c4ebea6f863",
+   "subject": "adding the ability to search hubs for content.",
+   "tickets": [],
+   "ts": 1400027199,
+   "version": 299,
+   "via": "call"
+  },
+  "hubSpaceTusdEndpoint": {
+   "commit": "a6e5c99f562",
+   "subject": "Make hubspace tusd endpoint defined by hg.conf variable hubSpaceTusdEndpoint",
+   "tickets": [],
+   "ts": 1736896778,
+   "version": 476,
+   "via": "call"
+  },
+  "hubSpaceUrl": {
+   "commit": "b50eb72560c",
+   "subject": "oops I deleted the web accessible file uploads location not the tusd endpoint location, refs Hiram email",
+   "tickets": [],
+   "ts": 1736899712,
+   "version": 476,
+   "via": "call"
+  },
+  "hubSurvey": {
+   "commit": "e2789669df9",
+   "subject": "add survey link to hgHubConnect #5819",
+   "tickets": [
+    5819
+   ],
+   "ts": 1320257085,
+   "version": 258,
+   "via": "call"
+  },
+  "hubSurveyLabel": {
+   "commit": "e2789669df9",
+   "subject": "add survey link to hgHubConnect #5819",
+   "tickets": [
+    5819
+   ],
+   "ts": 1320257085,
+   "version": 258,
+   "via": "call"
+  },
+  "ignoreDefaultKnown": {
+   "commit": "a010673c4c3",
+   "subject": "dealing with carts that have knownGene in them when a different default",
+   "tickets": [],
+   "ts": 1605213740,
+   "version": 406,
+   "via": "call"
+  },
+  "isCirmPublicSite": {
+   "commit": "68468b245ea",
+   "subject": "CIRM: fixing download instructions for cirm public site",
+   "tickets": [],
+   "ts": 1509408499,
+   "version": 357,
+   "via": "call"
+  },
+  "isGbib": {
+   "commit": "87d46dad589",
+   "subject": "adding a hg.conf option \"isGbib\", after gbib meeting",
+   "tickets": [],
+   "ts": 1412673765,
+   "version": 306,
+   "via": "call"
+  },
+  "isGbic": {
+   "commit": "c9cff716524",
+   "subject": "making the gbic mirrors identify itself to phoneHome with a distinct",
+   "tickets": [
+    14399
+   ],
+   "ts": 1481841338,
+   "version": 342,
+   "via": "call"
+  },
+  "js": {
+   "commit": "fb76972b6e2",
+   "subject": "change jsIncludeFile to use a new hg.conf setting (browser.javaScriptDir) to support developer specific javascript direc",
+   "tickets": [],
+   "ts": 1213046137,
+   "version": 183,
+   "via": "call"
+  },
+  "liftDailyLimit": {
+   "commit": "19e53453973",
+   "subject": "rate limit the lifrt requests to \"liftDailyLimi\" setting from hg.conf refs #31811",
+   "tickets": [
+    31811
+   ],
+   "ts": 1778537350,
+   "version": 498,
+   "via": "call"
+  },
+  "liftOverChainName": {
+   "commit": "e8c22713a73",
+   "subject": "allow quickLiftChain and liftOverChain tables to have different names",
+   "tickets": [],
+   "ts": 1757548483,
+   "version": 487,
+   "via": "literal"
+  },
+  "localDb.host": {
+   "commit": "6c43cf0f823",
+   "subject": "add sqlExecProglocal function",
+   "tickets": [],
+   "ts": 1204076245,
+   "version": 176,
+   "via": "call"
+  },
+  "localDb.password": {
+   "commit": "6c43cf0f823",
+   "subject": "add sqlExecProglocal function",
+   "tickets": [],
+   "ts": 1204076245,
+   "version": 176,
+   "via": "call"
+  },
+  "localDb.user": {
+   "commit": "6c43cf0f823",
+   "subject": "add sqlExecProglocal function",
+   "tickets": [],
+   "ts": 1204076245,
+   "version": 176,
+   "via": "call"
+  },
+  "logCgiVarMaxLen": {
+   "commit": "1d95bea96bc",
+   "subject": "adding CGI var logging option for hg.conf, refs #36533",
+   "tickets": [
+    36533
+   ],
+   "ts": 1761309294,
+   "version": 489,
+   "via": "literal"
+  },
+  "logProxy": {
+   "commit": "10ed5851072",
+   "subject": "added logProxy=on setting to hg.conf to help confirm that the proxy is actually doing the expected thing. Not meant to b",
+   "tickets": [
+    19124
+   ],
+   "ts": 1490334966,
+   "version": 346,
+   "via": "call"
+  },
+  "login.acceptAnyId": {
+   "commit": "fba55c7cdca",
+   "subject": "Having absolutely no new security is a bummer, so for now, by default, check incoming cookie vs. gbMembers.idx, but add ",
+   "tickets": [
+    17327
+   ],
+   "ts": 1481589963,
+   "version": 342,
+   "via": "literal"
+  },
+  "login.acceptIdx": {
+   "commit": "fba55c7cdca",
+   "subject": "Having absolutely no new security is a bummer, so for now, by default, check incoming cookie vs. gbMembers.idx, but add ",
+   "tickets": [
+    17327
+   ],
+   "ts": 1481589963,
+   "version": 342,
+   "via": "literal"
+  },
+  "login.approvedReturn": {
+   "commit": "ee5221ac43d",
+   "subject": "New hg.conf option 'login.approvedReturn' that hgLogin uses to check the validity of the returnto argument set by hgSess",
+   "tickets": [
+    36485
+   ],
+   "ts": 1760470384,
+   "version": 489,
+   "via": "literal"
+  },
+  "login.basicAuth": {
+   "commit": "e2316d8ff89",
+   "subject": "Changes to hgLogin and hgSession to replace hgLogin with Apache's Basic authentication system, refs #19424,",
+   "tickets": [
+    19424
+   ],
+   "ts": 1494971740,
+   "version": 349,
+   "via": "literal"
+  },
+  "login.browserAddr": {
+   "commit": "e61c0b17e8c",
+   "subject": "Bug #8250 Replace hard coded 'UCSC Genome Browser', signature and return address in GUI and mail text with value from hg",
+   "tickets": [
+    8250
+   ],
+   "ts": 1340388788,
+   "version": 268,
+   "via": "literal"
+  },
+  "login.browserName": {
+   "commit": "e61c0b17e8c",
+   "subject": "Bug #8250 Replace hard coded 'UCSC Genome Browser', signature and return address in GUI and mail text with value from hg",
+   "tickets": [
+    8250
+   ],
+   "ts": 1340388788,
+   "version": 268,
+   "via": "literal"
+  },
+  "login.cookieSalt": {
+   "commit": "e5c786377ce",
+   "subject": "Better cookies and validation for hgLogin: instead of sending gbMembers.idx as",
+   "tickets": [
+    17327
+   ],
+   "ts": 1481563506,
+   "version": 342,
+   "via": "literal"
+  },
+  "login.emailLink": {
+   "commit": "4b04bd017d7",
+   "subject": "hgLogin: gate email-link sign-in and change-email behind login.emailLink (default off), refs #37929",
+   "tickets": [
+    37929,
+    37984
+   ],
+   "ts": 1785837116,
+   "version": 501,
+   "via": "literal"
+  },
+  "login.https": {
+   "commit": "d81a994fc5b",
+   "subject": "Added a new hg.conf setting, login.https, so that mirror sites can turn off https for hgLogin if they don't support http",
+   "tickets": [
+    17778
+   ],
+   "ts": 1469834335,
+   "version": 336,
+   "via": "literal"
+  },
+  "login.mailReturnAddr": {
+   "commit": "e61c0b17e8c",
+   "subject": "Bug #8250 Replace hard coded 'UCSC Genome Browser', signature and return address in GUI and mail text with value from hg",
+   "tickets": [
+    8250
+   ],
+   "ts": 1340388788,
+   "version": 268,
+   "via": "literal"
+  },
+  "login.mailSignature": {
+   "commit": "e61c0b17e8c",
+   "subject": "Bug #8250 Replace hard coded 'UCSC Genome Browser', signature and return address in GUI and mail text with value from hg",
+   "tickets": [
+    8250
+   ],
+   "ts": 1340388788,
+   "version": 268,
+   "via": "literal"
+  },
+  "login.oauth.providers": {
+   "commit": "f85553903a3",
+   "subject": "hgLogin: configurable OIDC providers, GitHub login, top-level email-link button, sign-in wording. refs #37984",
+   "tickets": [
+    37984
+   ],
+   "ts": 1785786753,
+   "version": 501,
+   "via": "call"
+  },
+  "login.orcid.sandbox": {
+   "commit": "5f7a14fde8c",
+   "subject": "hgLogin: social login (Google/ORCID), email login link, change email. refs #37929",
+   "tickets": [
+    37929
+   ],
+   "ts": 1785046566,
+   "version": 501,
+   "via": "call"
+  },
+  "login.pwdEyeIcon": {
+   "commit": "80bedbcf180",
+   "subject": "add password reveal button to hgLogin form refs ##37921",
+   "tickets": [
+    37921
+   ],
+   "ts": 1784918088,
+   "version": 501,
+   "via": "literal"
+  },
+  "login.relativeLink": {
+   "commit": "0cbc15777c7",
+   "subject": "CIRM: fixing a bug in hgLogin that appears only when using it through a",
+   "tickets": [],
+   "ts": 1494004030,
+   "version": 348,
+   "via": "call"
+  },
+  "login.systemName": {
+   "commit": "7ef1462ddbf",
+   "subject": "Reuse the wiki cookies so that the existing session user can stay logged in and do not need to login to the new hgLogin ",
+   "tickets": [],
+   "ts": 1336170706,
+   "version": 266,
+   "via": "literal"
+  },
+  "mafClickMafFrag": {
+   "commit": "4d91bce1e02",
+   "subject": "Gate new mafFrag MAF click display behind hg.conf mafClickMafFrag setting",
+   "tickets": [],
+   "ts": 1773191684,
+   "version": 495,
+   "via": "call"
+  },
+  "maxDisplayPixelWidth": {
+   "commit": "77663f3ad7d",
+   "subject": "allow hg.conf override of 5000 pixel wide limit refs #10411",
+   "tickets": [
+    10411
+   ],
+   "ts": 1411156813,
+   "version": 305,
+   "via": "call"
+  },
+  "maxItemsPossible": {
+   "commit": "7b475d1ee80",
+   "subject": "make maxItemsPossible an hg.conf variable",
+   "tickets": [],
+   "ts": 1710536073,
+   "version": 462,
+   "via": "literal"
+  },
+  "maxMem": {
+   "commit": "37d145c7180",
+   "subject": "set up a mechanism to limit memory through an hg.conf variable",
+   "tickets": [],
+   "ts": 1707329543,
+   "version": 460,
+   "via": "call"
+  },
+  "maxTrackImageHeightPx": {
+   "commit": "5a451c3cc7c",
+   "subject": "Adding an hg.conf option to control max image height, refs #34152",
+   "tickets": [
+    34152
+   ],
+   "ts": 1722815935,
+   "version": 468,
+   "via": "literal"
+  },
+  "mergeRecommended": {
+   "commit": "37e40ae31e0",
+   "subject": "make recommended track sets merge with current cart instead of",
+   "tickets": [],
+   "ts": 1677280741,
+   "version": 444,
+   "via": "call"
+  },
+  "mgc.server": {
+   "commit": "6e571f5f6ba",
+   "subject": "configure mgc host in hg.conf file",
+   "tickets": [],
+   "ts": 1056327149,
+   "version": null,
+   "via": "call"
+  },
+  "microbeTraceHost": {
+   "commit": "b6d356738ff",
+   "subject": "Add linkout (per subtree) to MicrobeTrace (in addition to Nextstrain) if subtreeSize is at most 500.",
+   "tickets": [],
+   "ts": 1694560564,
+   "version": 453,
+   "via": "call"
+  },
+  "mouseOverEnabled": {
+   "commit": "dd675e620b1",
+   "subject": "mouseOver now enabled via hg.conf variable refs #21980",
+   "tickets": [
+    21980
+   ],
+   "ts": 1604004988,
+   "version": 406,
+   "via": "call"
+  },
+  "multiRegionButtonTop": {
+   "commit": "f71865cec0d",
+   "subject": "Place multi-region button move under hg.conf control. Add 'pressed' styling to arbitrary buttons. refs #26385",
+   "tickets": [
+    26385
+   ],
+   "ts": 1615695868,
+   "version": 411,
+   "via": "call"
+  },
+  "myVariantsDataDir": {
+   "commit": "d7dd4f55e28",
+   "subject": "Adds hg.conf myVariantsDataDir for writing ctfiles outside trash/, per-db short/long label rename on hgTrackUi, and a sh",
+   "tickets": [
+    33808
+   ],
+   "ts": 1778695677,
+   "version": 498,
+   "via": "call"
+  },
+  "n022003l.pfb": {
+   "commit": "50214f80596",
+   "subject": "support font choice in freetype font support",
+   "tickets": [],
+   "ts": 1601426972,
+   "version": 404,
+   "via": "call"
+  },
+  "na": {
+   "commit": "aa6e0dbdda4",
+   "subject": "Warning only for javascriipt developers",
+   "tickets": [],
+   "ts": 1261009586,
+   "version": 221,
+   "via": "call"
+  },
+  "name": {
+   "commit": "561b7988132",
+   "subject": "add a registry of hg.conf variables with a sunset mechanism for release gates refs #37925",
+   "tickets": [
+    37838,
+    37923,
+    37925
+   ],
+   "ts": 1785013052,
+   "version": 501,
+   "via": "call"
+  },
+  "namedSessionAlt": {
+   "commit": "8ada9901deb",
+   "subject": "trying to lock out bots that make hgsids, no redmine",
+   "tickets": [],
+   "ts": 1747859850,
+   "version": 482,
+   "via": "call"
+  },
+  "namedSessionDbName": {
+   "commit": "4d2eb49f841",
+   "subject": "Change recommended track sets to merge with the current session.  refs #28525",
+   "tickets": [
+    28525
+   ],
+   "ts": 1680816542,
+   "version": 446,
+   "via": "literal"
+  },
+  "newBotDelay": {
+   "commit": "589c304d7e7",
+   "subject": "Added option to better penalize webcrawlers sharing hgsids, refs #35584",
+   "tickets": [
+    35584
+   ],
+   "ts": 1746636630,
+   "version": 481,
+   "via": "call"
+  },
+  "newCustomTrackValidate": {
+   "commit": "2866dd07e3c",
+   "subject": "This is a squashed merge to make git-reports code-review simpler.",
+   "tickets": [],
+   "ts": 1334362081,
+   "version": 265,
+   "via": "call"
+  },
+  "newExonTooltips": {
+   "commit": "05e67c59a20",
+   "subject": "more features to hubtools: search in both parent and subdirs, better docs",
+   "tickets": [],
+   "ts": 1726837398,
+   "version": 471,
+   "via": "call"
+  },
+  "newTrackControls": {
+   "commit": "05e67c59a20",
+   "subject": "more features to hubtools: search in both parent and subdirs, better docs",
+   "tickets": [],
+   "ts": 1726837398,
+   "version": 471,
+   "via": "call"
+  },
+  "nextstrainHost": {
+   "commit": "e14c2761ca0",
+   "subject": "New CGI hgPhyloPlace: place SARS-CoV-2 genomes in fasta or VCF on phylogenetic tree using Yatish Turakhia's UShER progra",
+   "tickets": [
+    25943
+   ],
+   "ts": 1605819841,
+   "version": 407,
+   "via": "call"
+  },
+  "noCookieTrace": {
+   "commit": "eaf4969a2f3",
+   "subject": "after comments from QA, making warning about request without cookie depend on hg.conf statement, no redmine, email from ",
+   "tickets": [],
+   "ts": 1746608684,
+   "version": 481,
+   "via": "call"
+  },
+  "noProxy": {
+   "commit": "417d09f28ac",
+   "subject": "fixing some minor details for no_proxy.",
+   "tickets": [],
+   "ts": 1490221738,
+   "version": 346,
+   "via": "call"
+  },
+  "noSqlInj.dumpStack": {
+   "commit": "080a160c7b9",
+   "subject": "fix SQL Injection",
+   "tickets": [],
+   "ts": 1370287013,
+   "version": 284,
+   "via": "call"
+  },
+  "noSqlInj.level": {
+   "commit": "080a160c7b9",
+   "subject": "fix SQL Injection",
+   "tickets": [],
+   "ts": 1370287013,
+   "version": 284,
+   "via": "call"
+  },
+  "no_proxy": {
+   "commit": "3b7af84b7d8",
+   "subject": "Initial check-in of proxy stuff. Added support for https_proxy for configuring https proxy. Added no_proxy for configuri",
+   "tickets": [],
+   "ts": 1489987469,
+   "version": 346,
+   "via": "call"
+  },
+  "off": {
+   "commit": "21baf6b0943",
+   "subject": "output the list of visible tracks to error_log #13626",
+   "tickets": [
+    13626
+   ],
+   "ts": 1406686778,
+   "version": 303,
+   "via": "call"
+  },
+  "okUserAgent": {
+   "commit": "27370697e01",
+   "subject": "adding cloudflare bot protection, refs #35790",
+   "tickets": [
+    35790
+   ],
+   "ts": 1748382665,
+   "version": 482,
+   "via": "call"
+  },
+  "on": {
+   "commit": "61e3dea584f",
+   "subject": "make sure bigWarn statements end up in the log.",
+   "tickets": [],
+   "ts": 1538093483,
+   "version": 371,
+   "via": "call"
+  },
+  "ottoTable": {
+   "commit": "c9604780dd0",
+   "subject": "write liftRequest entry into the hgcentral.ottoRequest table refs #31811",
+   "tickets": [
+    31811
+   ],
+   "ts": 1768858256,
+   "version": 492,
+   "via": "call"
+  },
+  "paraLoadTimeout": {
+   "commit": "6afa9dd4343",
+   "subject": "add ability to set a timeout on remote loads",
+   "tickets": [],
+   "ts": 1726705995,
+   "version": 471,
+   "via": "call"
+  },
+  "parallelFetch.threads": {
+   "commit": "e72cf0100e0",
+   "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
+   "tickets": [],
+   "ts": 1309810115,
+   "version": 253,
+   "via": "literal"
+  },
+  "parallelFetch.timeout": {
+   "commit": "e72cf0100e0",
+   "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
+   "tickets": [],
+   "ts": 1309810115,
+   "version": 253,
+   "via": "literal"
+  },
+  "paypalAcademicFee": {
+   "commit": "8e2a526fcee",
+   "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
+   "tickets": [],
+   "ts": 1169534292,
+   "version": 150,
+   "via": "call"
+  },
+  "paypalCert": {
+   "commit": "6892de422e9",
+   "subject": "added support for expires; made customized signed encrypted buttons; made https secure callback to paypal for ipn verifi",
+   "tickets": [],
+   "ts": 1169847381,
+   "version": 150,
+   "via": "call"
+  },
+  "paypalCommercialFee": {
+   "commit": "8e2a526fcee",
+   "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
+   "tickets": [],
+   "ts": 1169534292,
+   "version": 150,
+   "via": "call"
+  },
+  "paypalEmail": {
+   "commit": "8e2a526fcee",
+   "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
+   "tickets": [],
+   "ts": 1169534292,
+   "version": 150,
+   "via": "call"
+  },
+  "paypalIpnServer": {
+   "commit": "8e2a526fcee",
+   "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
+   "tickets": [],
+   "ts": 1169534292,
+   "version": 150,
+   "via": "call"
+  },
+  "paypalServer": {
+   "commit": "8e2a526fcee",
+   "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
+   "tickets": [],
+   "ts": 1169534292,
+   "version": 150,
+   "via": "call"
+  },
+  "pq.crossHost": {
+   "commit": "f6a79b66b48",
+   "subject": "dealing with move to hgofbeta",
+   "tickets": [],
+   "ts": 1237513847,
+   "version": 202,
+   "via": "call"
+  },
+  "pq.db": {
+   "commit": "f6bac8b5112",
+   "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
+   "tickets": [],
+   "ts": 1082579076,
+   "version": null,
+   "via": "call"
+  },
+  "pq.host": {
+   "commit": "f6bac8b5112",
+   "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
+   "tickets": [],
+   "ts": 1082579076,
+   "version": null,
+   "via": "call"
+  },
+  "pq.password": {
+   "commit": "f6bac8b5112",
+   "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
+   "tickets": [],
+   "ts": 1082579076,
+   "version": null,
+   "via": "call"
+  },
+  "pq.user": {
+   "commit": "f6bac8b5112",
+   "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
+   "tickets": [],
+   "ts": 1082579076,
+   "version": null,
+   "via": "call"
+  },
+  "punishInvalidHgsid": {
+   "commit": "8ada9901deb",
+   "subject": "trying to lock out bots that make hgsids, no redmine",
+   "tickets": [],
+   "ts": 1747859850,
+   "version": 482,
+   "via": "call"
+  },
+  "quickLift.lengthLimit": {
+   "commit": "a47a1512c60",
+   "subject": "allow quickLift highlight colors and limit to be set in hg.conf",
+   "tickets": [],
+   "ts": 1744479416,
+   "version": 480,
+   "via": "literal"
+  },
+  "quickLiftChainName": {
+   "commit": "e8c22713a73",
+   "subject": "allow quickLiftChain and liftOverChain tables to have different names",
+   "tickets": [],
+   "ts": 1757548483,
+   "version": 487,
+   "via": "literal"
+  },
+  "relatedTrack": {
+   "commit": "d156aaa50bb",
+   "subject": "hgc and hgTrackUi can query a 'relatedTrack' table to print a list of related tracks to the one being looked at along wi",
+   "tickets": [
+    25721
+   ],
+   "ts": 1597863829,
+   "version": 402,
+   "via": "call"
+  },
+  "resolvCmd": {
+   "commit": "bebcb6453c5",
+   "subject": "first go at s3:// support, refs #30445",
+   "tickets": [
+    30445
+   ],
+   "ts": 1672929454,
+   "version": 441,
+   "via": "call"
+  },
+  "resolvPrefix": {
+   "commit": "6b5d81231f6",
+   "subject": "adding resolvPrefix to our hg.conf statements for the udc resolver, refs #34240",
+   "tickets": [
+    34240
+   ],
+   "ts": 1722939734,
+   "version": 469,
+   "via": "call"
+  },
+  "resolvProts": {
+   "commit": "bebcb6453c5",
+   "subject": "first go at s3:// support, refs #30445",
+   "tickets": [
+    30445
+   ],
+   "ts": 1672929454,
+   "version": 441,
+   "via": "call"
+  },
+  "restoreMapFind": {
+   "commit": "f05bd698ed7",
+   "subject": "optimization to avoid worrying about overlapping map boxes.",
+   "tickets": [],
+   "ts": 1473376447,
+   "version": 338,
+   "via": "call"
+  },
+  "rnaPlotPath": {
+   "commit": "a127c65d3af",
+   "subject": "Fixing RNAplot problem with newer versions, refs #11957, note 178 and",
+   "tickets": [
+    6382,
+    11957
+   ],
+   "ts": 1394017544,
+   "version": 296,
+   "via": "literal"
+  },
+  "ro.password": {
+   "commit": "37595602555",
+   "subject": "user ro user/pass if in .hg.conf; add option to not strip version numbers",
+   "tickets": [],
+   "ts": 1073381567,
+   "version": null,
+   "via": "call"
+  },
+  "ro.user": {
+   "commit": "37595602555",
+   "subject": "user ro user/pass if in .hg.conf; add option to not strip version numbers",
+   "tickets": [],
+   "ts": 1073381567,
+   "version": null,
+   "via": "call"
+  },
+  "rrcentral.db": {
+   "commit": "57cacc3c147",
+   "subject": "removing dependencies on old settings",
+   "tickets": [],
+   "ts": 1197492210,
+   "version": 172,
+   "via": "call"
+  },
+  "rrcentral.host": {
+   "commit": "57cacc3c147",
+   "subject": "removing dependencies on old settings",
+   "tickets": [],
+   "ts": 1197492210,
+   "version": 172,
+   "via": "call"
+  },
+  "rrcentral.password": {
+   "commit": "57cacc3c147",
+   "subject": "removing dependencies on old settings",
+   "tickets": [],
+   "ts": 1197492210,
+   "version": 172,
+   "via": "call"
+  },
+  "rrcentral.user": {
+   "commit": "57cacc3c147",
+   "subject": "removing dependencies on old settings",
+   "tickets": [],
+   "ts": 1197492210,
+   "version": 172,
+   "via": "call"
+  },
+  "rtdb.databases": {
+   "commit": "c9e3274f8d3",
+   "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
+   "tickets": [],
+   "ts": 1137805232,
+   "version": 125,
+   "via": "call"
+  },
+  "rtdb.port": {
+   "commit": "c9e3274f8d3",
+   "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
+   "tickets": [],
+   "ts": 1137805232,
+   "version": 125,
+   "via": "call"
+  },
+  "rtdb.server": {
+   "commit": "c9e3274f8d3",
+   "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
+   "tickets": [],
+   "ts": 1137805232,
+   "version": 125,
+   "via": "call"
+  },
+  "rtdb.update": {
+   "commit": "e0a1222c6be",
+   "subject": "Added stuff for putting the rtdbUpdate command in a hg.conf file instead of a #define.",
+   "tickets": [],
+   "ts": 1131501225,
+   "version": 120,
+   "via": "call"
+  },
+  "searchHelpLabel": {
+   "commit": "871f2d65497",
+   "subject": "Adding \"search help\" link to hgTracks, refs #15554",
+   "tickets": [
+    15554
+   ],
+   "ts": 1630066704,
+   "version": 419,
+   "via": "literal"
+  },
+  "searchHelpUrl": {
+   "commit": "871f2d65497",
+   "subject": "Adding \"search help\" link to hgTracks, refs #15554",
+   "tickets": [
+    15554
+   ],
+   "ts": 1630066704,
+   "version": 419,
+   "via": "call"
+  },
+  "sessionDataDbPrefix": {
+   "commit": "a8273be9da3",
+   "subject": "New hg.conf settings sessionDataDir and sessionDataDbPrefix enable hgSession to move saved session trash files and custo",
+   "tickets": [
+    22440
+   ],
+   "ts": 1548294122,
+   "version": 376,
+   "via": "call"
+  },
+  "sessionDataDir": {
+   "commit": "a8273be9da3",
+   "subject": "New hg.conf settings sessionDataDir and sessionDataDbPrefix enable hgSession to move saved session trash files and custo",
+   "tickets": [
+    22440
+   ],
+   "ts": 1548294122,
+   "version": 376,
+   "via": "call"
+  },
+  "sessionDataDirOld": {
+   "commit": "cc91854c275",
+   "subject": "Adding hg.conf setting sessionDataDirOld so that isValidBigDataUrl won't complain about absolute paths of trashCleaner-s",
+   "tickets": [
+    22440
+   ],
+   "ts": 1558553100,
+   "version": 382,
+   "via": "call"
+  },
+  "sessionDbName": {
+   "commit": "1d8785d66ed",
+   "subject": "allow for different names for the sessionDb and userDb tables",
+   "tickets": [],
+   "ts": 1428523543,
+   "version": 314,
+   "via": "literal"
+  },
+  "sessionKey": {
+   "commit": "4b5cd619507",
+   "subject": "initial work on creating a random session key for greater securiy of cart data",
+   "tickets": [],
+   "ts": 1392064220,
+   "version": 295,
+   "via": "call"
+  },
+  "sessionThumbnail.convertPath": {
+   "commit": "ae843e42c15",
+   "subject": "Additional configuration options for session thumbnail creation and examples for same, refs #17469",
+   "tickets": [
+    17469
+   ],
+   "ts": 1467834304,
+   "version": 335,
+   "via": "call"
+  },
+  "sessionThumbnail.imgDir": {
+   "commit": "10d24a04f2c",
+   "subject": "Initial commit of public session listing CGI hgPublicSessions and supporting changes to hgSession. refs #15312",
+   "tickets": [
+    15312
+   ],
+   "ts": 1464391764,
+   "version": 333,
+   "via": "call"
+  },
+  "sessionThumbnail.suppress": {
+   "commit": "ae843e42c15",
+   "subject": "Additional configuration options for session thumbnail creation and examples for same, refs #17469",
+   "tickets": [
+    17469
+   ],
+   "ts": 1467834304,
+   "version": 335,
+   "via": "call"
+  },
+  "sessionThumbnail.webPath": {
+   "commit": "10d24a04f2c",
+   "subject": "Initial commit of public session listing CGI hgPublicSessions and supporting changes to hgSession. refs #15312",
+   "tickets": [
+    15312
+   ],
+   "ts": 1464391764,
+   "version": 333,
+   "via": "call"
+  },
+  "showAliases": {
+   "commit": "b5cbbe9353e",
+   "subject": "Show alternative chromosome names from chromAlias on hgTracks position line, refs #29201",
+   "tickets": [
+    29201
+   ],
+   "ts": 1776021684,
+   "version": 496,
+   "via": "call"
+  },
+  "showColorPicker": {
+   "commit": "8593c40cb74",
+   "subject": "Fix color picker from code review, refs #37329, refs #20460",
+   "tickets": [
+    20460,
+    37329
+   ],
+   "ts": 1775850884,
+   "version": 496,
+   "via": "call"
+  },
+  "showDownloadUi": {
+   "commit": "b508259e8ce",
+   "subject": "Prototype download track data button. An hg.conf controlled button that",
+   "tickets": [
+    30024
+   ],
+   "ts": 1674844319,
+   "version": 442,
+   "via": "call"
+  },
+  "showEarlyErrors": {
+   "commit": "7220331d99c",
+   "subject": "add a hg.conf option that makes sure that errAbort messages are always",
+   "tickets": [
+    15332
+   ],
+   "ts": 1431788802,
+   "version": 316,
+   "via": "call"
+  },
+  "showHubApiKey": {
+   "commit": "0dab88f8198",
+   "subject": "adding API key section to hgHubConnect, for the \"hubtools up\" command, refs #34405",
+   "tickets": [
+    34405
+   ],
+   "ts": 1730990980,
+   "version": 473,
+   "via": "call"
+  },
+  "showIgv": {
+   "commit": "2f73d7595b0",
+   "subject": "Merging Jim Robinsons code into the kent tree. Due to whitespace changes in his IDE, I'm merging this manually.",
+   "tickets": [],
+   "ts": 1757518383,
+   "version": 487,
+   "via": "call"
+  },
+  "showLiftRequest": {
+   "commit": "fbfdc0a36bb",
+   "subject": "hgConvert: link to the alignment request page, behind showLiftRequest, refs #37973",
+   "tickets": [
+    37973
+   ],
+   "ts": 1785534915,
+   "version": 501,
+   "via": "call"
+  },
+  "showMouseovers": {
+   "commit": "447513356fc",
+   "subject": "Add code to create tooltips under our control. Convert title attributes",
+   "tickets": [],
+   "ts": 1680797081,
+   "version": 446,
+   "via": "call"
+  },
+  "showTableCache": {
+   "commit": "b60e379ef27",
+   "subject": "support showTableCache config in sqlListTables",
+   "tickets": [],
+   "ts": 1251159044,
+   "version": 213,
+   "via": "call"
+  },
+  "showTutorial": {
+   "commit": "13a71608b50",
+   "subject": "Proof of concept tutorial overlay done",
+   "tickets": [],
+   "ts": 1676665727,
+   "version": 443,
+   "via": "call"
+  },
+  "signalsHandler": {
+   "commit": "137dba98ca8",
+   "subject": "added handler for a few signals that will log the errors",
+   "tickets": [],
+   "ts": 1192231361,
+   "version": 168,
+   "via": "call"
+  },
+  "sleepOn429": {
+   "commit": "1db14ecb301",
+   "subject": "making sleep depend on hg.conf statement suggested by Jonathan, no redmine ticket yet",
+   "tickets": [],
+   "ts": 1747075805,
+   "version": 481,
+   "via": "call"
+  },
+  "sqlNeverLocal": {
+   "commit": "9348f62b4a8",
+   "subject": "adding flag to hg.conf to disable LOCAL in mysql commands entirely",
+   "tickets": [],
+   "ts": 1378947455,
+   "version": 289,
+   "via": "call"
+  },
+  "storeUserFiles": {
+   "commit": "c79deb30151",
+   "subject": "Experiment number one, can succesfully upload a file and store it via",
+   "tickets": [],
+   "ts": 1683331173,
+   "version": 447,
+   "via": "call"
+  },
+  "style": {
+   "commit": "8140039c43f",
+   "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
+   "tickets": [],
+   "ts": 1287763278,
+   "version": 242,
+   "via": "call"
+  },
+  "style/images": {
+   "commit": "8140039c43f",
+   "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
+   "tickets": [],
+   "ts": 1287763278,
+   "version": 242,
+   "via": "call"
+  },
+  "suggest.browserName": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.filterKeyword": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.humanThreshold": {
+   "commit": "c2913e6958b",
+   "subject": "adding silent google reCAPTCHA v3 function to hgUserSuggestion refs #31325",
+   "tickets": [
+    31325
+   ],
+   "ts": 1686448986,
+   "version": 449,
+   "via": "literal"
+  },
+  "suggest.mailFromAddr": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.mailReturnAddr": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.mailSignature": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.mailToAddr": {
+   "commit": "96ef6308daf",
+   "subject": "Feature 9142 suggestion form code checkin for preview1",
+   "tickets": [],
+   "ts": 1370305021,
+   "version": 284,
+   "via": "literal"
+  },
+  "suggest.secretKey": {
+   "commit": "c2913e6958b",
+   "subject": "adding silent google reCAPTCHA v3 function to hgUserSuggestion refs #31325",
+   "tickets": [
+    31325
+   ],
+   "ts": 1686448986,
+   "version": 449,
+   "via": "literal"
+  },
+  "suggest.siteKey": {
+   "commit": "c2913e6958b",
+   "subject": "adding silent google reCAPTCHA v3 function to hgUserSuggestion refs #31325",
+   "tickets": [
+    31325
+   ],
+   "ts": 1686448986,
+   "version": 449,
+   "via": "literal"
+  },
+  "suppressVeryEarlyErrors": {
+   "commit": "af565cdd7ce",
+   "subject": "adding hg.conf option to suppress error output for very early errors",
+   "tickets": [
+    16439
+   ],
+   "ts": 1448389745,
+   "version": 325,
+   "via": "call"
+  },
+  "survey": {
+   "commit": "b7cca1d9fe8",
+   "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
+   "tickets": [],
+   "ts": 1220469713,
+   "version": 190,
+   "via": "call"
+  },
+  "surveyLabel": {
+   "commit": "7479340e053",
+   "subject": "Generalize survey link",
+   "tickets": [],
+   "ts": 1268873488,
+   "version": 226,
+   "via": "call"
+  },
+  "surveyLabelImage": {
+   "commit": "f1b861623af",
+   "subject": "Added new hg.conf setting surveyLabelImage -- if present, then hgGateway will display an <img> with the setting value as",
+   "tickets": [
+    17622
+   ],
+   "ts": 1468945272,
+   "version": 335,
+   "via": "call"
+  },
+  "svgBarChart": {
+   "commit": "ea164606817",
+   "subject": "Putting this under control of svgBarChart variable in hg.conf to keep feature from leaking to users too soon.  Changing ",
+   "tickets": [],
+   "ts": 1610398585,
+   "version": 408,
+   "via": "call"
+  },
+  "tableList": {
+   "commit": "8b03c499cbf",
+   "subject": "use showTableCache config option",
+   "tickets": [],
+   "ts": 1307643864,
+   "version": 252,
+   "via": "call"
+  },
+  "test.preview": {
+   "commit": "b312b42ad8c",
+   "subject": "Support for genome browser preview site.",
+   "tickets": [],
+   "ts": 1296195020,
+   "version": 246,
+   "via": "call"
+  },
+  "textSize": {
+   "commit": "b1b14e7aafe",
+   "subject": "Adding configuration button and page to genome browser",
+   "tickets": [],
+   "ts": 1107300837,
+   "version": 97,
+   "via": "literal"
+  },
+  "traceGbdb": {
+   "commit": "07d10481f82",
+   "subject": "adding tracking code for gbdb redirects to GBIB/GBIC, refs #27121",
+   "tickets": [
+    27121
+   ],
+   "ts": 1617884170,
+   "version": 412,
+   "via": "call"
+  },
+  "trackDb.db": {
+   "commit": "2756877051f",
+   "subject": "Added more logic to handle non-hg18 scenarios in trackDbConn().",
+   "tickets": [],
+   "ts": 1207267695,
+   "version": 179,
+   "via": "call"
+  },
+  "trackDb.host": {
+   "commit": "d57448d660a",
+   "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
+   "tickets": [],
+   "ts": 1207056687,
+   "version": 178,
+   "via": "call"
+  },
+  "trackDb.ix": {
+   "commit": "46602c2943c",
+   "subject": "Trix is in /gbdb/ so must have separate name for beta version in order to avoid beta stepping on RR.  This is done by a ",
+   "tickets": [],
+   "ts": 1286826571,
+   "version": 241,
+   "via": "call"
+  },
+  "trackDb.password": {
+   "commit": "d57448d660a",
+   "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
+   "tickets": [],
+   "ts": 1207056687,
+   "version": 178,
+   "via": "call"
+  },
+  "trackDb.user": {
+   "commit": "d57448d660a",
+   "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
+   "tickets": [],
+   "ts": 1207056687,
+   "version": 178,
+   "via": "call"
+  },
+  "trackHubsCanAddGroups": {
+   "commit": "530842acf92",
+   "subject": "allow track hubs to make groups",
+   "tickets": [],
+   "ts": 1713468691,
+   "version": 463,
+   "via": "call"
+  },
+  "trackLog": {
+   "commit": "21baf6b0943",
+   "subject": "output the list of visible tracks to error_log #13626",
+   "tickets": [
+    13626
+   ],
+   "ts": 1406686778,
+   "version": 303,
+   "via": "literal"
+  },
+  "trustTrackDb": {
+   "commit": "72e4774cd62",
+   "subject": "add hg.conf variable (trustTrackDb) to force the CGI's to validate",
+   "tickets": [],
+   "ts": 1702500856,
+   "version": 458,
+   "via": "call"
+  },
+  "tusdBasePath": {
+   "commit": "dbc7d6bb223",
+   "subject": "Start on trackHubWizard module",
+   "tickets": [],
+   "ts": 1696622621,
+   "version": 454,
+   "via": "call"
+  },
+  "tusdDataDir": {
+   "commit": "81ddc517bd6",
+   "subject": "Resolve tusdDataDir hg.conf setting because it may be a symlink, refs Jairo email",
+   "tickets": [],
+   "ts": 1745945935,
+   "version": 481,
+   "via": "call"
+  },
+  "tusdMountPoint": {
+   "commit": "de181afb7e1",
+   "subject": "Fix hubspace pre-create hook to check for an apiKey only if a valid login cookie was not provided. Add a new hg.conf sta",
+   "tickets": [],
+   "ts": 1752863113,
+   "version": 484,
+   "via": "call"
+  },
+  "tusdPort": {
+   "commit": "dbc7d6bb223",
+   "subject": "Start on trackHubWizard module",
+   "tickets": [],
+   "ts": 1696622621,
+   "version": 454,
+   "via": "call"
+  },
+  "udc.cacheDir": {
+   "commit": "9d8e4676e45",
+   "subject": "fixing cgis so that udcCache dir is set by new hg.conf setting udc.cacheDir=",
+   "tickets": [],
+   "ts": 1240526548,
+   "version": 204,
+   "via": "call"
+  },
+  "udc.localDir": {
+   "commit": "b4e629844bb",
+   "subject": "changes to UDC that allow to",
+   "tickets": [],
+   "ts": 1427470679,
+   "version": 313,
+   "via": "call"
+  },
+  "udc.useLocalDiskCache": {
+   "commit": "b4e629844bb",
+   "subject": "changes to UDC that allow to",
+   "tickets": [],
+   "ts": 1427470679,
+   "version": 313,
+   "via": "call"
+  },
+  "udcFuse.mountPoint": {
+   "commit": "5e1e35857fe",
+   "subject": "If udcFuse.mountPoint is set in hg.conf, translate BAM URLs into filenames underneath that mount point, which mirrors th",
+   "tickets": [],
+   "ts": 1257208425,
+   "version": 218,
+   "via": "call"
+  },
+  "udcLog": {
+   "commit": "49ba5b90814",
+   "subject": "a very basic instrumentation of UDC  (no redmine)",
+   "tickets": [],
+   "ts": 1446850035,
+   "version": 324,
+   "via": "call"
+  },
+  "useBlatBigPsl": {
+   "commit": "3a5ceb6cf9b",
+   "subject": "implements blat results to custom track using bigPsl.  Requires hg.conf",
+   "tickets": [],
+   "ts": 1479949312,
+   "version": 341,
+   "via": "call"
+  },
+  "userDataDir": {
+   "commit": "c79deb30151",
+   "subject": "Experiment number one, can succesfully upload a file and store it via",
+   "tickets": [],
+   "ts": 1683331173,
+   "version": 447,
+   "via": "call"
+  },
+  "userDbName": {
+   "commit": "1d8785d66ed",
+   "subject": "allow for different names for the sessionDb and userDb tables",
+   "tickets": [],
+   "ts": 1428523543,
+   "version": 314,
+   "via": "literal"
+  },
+  "vcfMaxItems": {
+   "commit": "5a73e86ce84",
+   "subject": "limit VCF track loads to 10,000 items",
+   "tickets": [],
+   "ts": 1705608166,
+   "version": 459,
+   "via": "literal"
+  },
+  "versionStamped": {
+   "commit": "584b419ec86",
+   "subject": "changes to facilitate beta builds on dev.  Appropriating beta target, and assuming that USER=beta exists on dev.",
+   "tickets": [],
+   "ts": 1374884581,
+   "version": 286,
+   "via": "call"
+  },
+  "warnSeconds": {
+   "commit": "f1739937876",
+   "subject": "bringing back the default tracks and default order buttons, refs #30809",
+   "tickets": [
+    30809
+   ],
+   "ts": 1678714969,
+   "version": 444,
+   "via": "call"
+  },
+  "wiki.host": {
+   "commit": "188adbec7c0",
+   "subject": "Adding wikiLink: interoperate with a wiki site (share user identities).",
+   "tickets": [],
+   "ts": 1146074262,
+   "version": 132,
+   "via": "literal"
+  },
+  "wiki.loggedInCookie": {
+   "commit": "188adbec7c0",
+   "subject": "Adding wikiLink: interoperate with a wiki site (share user identities).",
+   "tickets": [],
+   "ts": 1146074262,
+   "version": 132,
+   "via": "literal"
+  },
+  "wiki.sessionCookie": {
+   "commit": "a0f10fcfe54",
+   "subject": "Adding a session cookie variable",
+   "tickets": [],
+   "ts": 1180133719,
+   "version": 159,
+   "via": "literal"
+  },
+  "wiki.userNameCookie": {
+   "commit": "188adbec7c0",
+   "subject": "Adding wikiLink: interoperate with a wiki site (share user identities).",
+   "tickets": [],
+   "ts": 1146074262,
+   "version": 132,
+   "via": "literal"
+  },
+  "wikiTrack.URL": {
+   "commit": "767bec529e5",
+   "subject": "Initial contents for wiki track item edit and display",
+   "tickets": [],
+   "ts": 1179861012,
+   "version": 159,
+   "via": "call"
+  },
+  "wikiTrack.browser": {
+   "commit": "4ff9b8f1b2c",
+   "subject": "Add the delete item function, and a cfg variable for browser return URL",
+   "tickets": [],
+   "ts": 1180724798,
+   "version": 160,
+   "via": "literal"
+  },
+  "wikiTrack.dbList": {
+   "commit": "38c6f2ebecf",
+   "subject": "Enhance wikiTrackEnabled to check against database list",
+   "tickets": [],
+   "ts": 1207697804,
+   "version": 179,
+   "via": "literal"
+  },
+  "wikiTrack.editors": {
+   "commit": "f42dbb51b6d",
+   "subject": "Now creating multiple entries when a gene symbol is clustered elsewhere in multiple locations",
+   "tickets": [],
+   "ts": 1182898916,
+   "version": 162,
+   "via": "call"
+  },
+  "wikiTrack.readOnly": {
+   "commit": "4a12b8e105e",
+   "subject": "make the wiki track read only be an option in hg.conf",
+   "tickets": [],
+   "ts": 1340646970,
+   "version": 268,
+   "via": "literal"
+  },
+  "yes": {
+   "commit": "d43504e6496",
+   "subject": "add browser.cgiTime option to allow turning off timing information from CGIs, refs #10611",
+   "tickets": [
+    10611
+   ],
+   "ts": 1366389695,
+   "version": 282,
+   "via": "call"
+  }
+ },
+ "firstTrue": {
+  "allowNib": {
+   "commit": "ed552b421c0",
+   "subject": "Fixing hgVai again for gbib, refs #11957 and refs #12717. One problem",
+   "tickets": [
+    11957,
+    12717
+   ],
+   "ts": 1396453562,
+   "version": 297,
+   "via": "call"
+  },
+  "alwaysItemRgb": {
+   "commit": "ffbb6c9d2c3",
+   "subject": "always switch on itemRgb by default if alwaysItemRgb is on in hg.conf, refs #28498",
+   "tickets": [
+    28498
+   ],
+   "ts": 1718883805,
+   "version": 466,
+   "via": "call"
+  },
+  "analytics.trackButtons": {
+   "commit": "58bdb6ef0be",
+   "subject": "adding button click tracking to hgTracks, refs #27283",
+   "tickets": [
+    27283
+   ],
+   "ts": 1625574799,
+   "version": 417,
+   "via": "call"
+  },
+  "analytics.trackClicks": {
+   "commit": "aff3e9935d8",
+   "subject": "fix outlink tracking, refs #21916",
+   "tickets": [
+    21916
+   ],
+   "ts": 1615475195,
+   "version": 411,
+   "via": "call"
+  },
+  "bigBedOnePath": {
+   "commit": "adc2acdfe83",
+   "subject": "make bigBedOnePath be on by default",
+   "tickets": [],
+   "ts": 1768605506,
+   "version": 492,
+   "via": "call"
+  },
+  "blatNewPageBanner": {
+   "commit": "c683ecb63d7",
+   "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
+   "tickets": [],
+   "ts": 1785029100,
+   "version": 501,
+   "via": "call"
+  },
+  "canDoHgcInPopUp": {
+   "commit": "12947e6dc05",
+   "subject": "Make ability to do hgc in popups on by default, still need the cart variable doHgcInPopUp (which also defaults to true) ",
+   "tickets": [
+    36953
+   ],
+   "ts": 1768517066,
+   "version": 492,
+   "via": "call"
+  },
+  "canDupTracks": {
+   "commit": "ab5e0ceb76e",
+   "subject": "changed it so by default users can duplicate tracks",
+   "tickets": [],
+   "ts": 1675377896,
+   "version": 443,
+   "via": "call"
+  },
+  "canSnake": {
+   "commit": "0c423c0be45",
+   "subject": "make canSnake and mergeRecommend to be on by default",
+   "tickets": [],
+   "ts": 1719434505,
+   "version": 467,
+   "via": "call"
+  },
+  "forceTwoBit": {
+   "commit": "b8058e48cdf",
+   "subject": "defaulting to TRUE for forceTwoBit, refs #22554",
+   "tickets": [
+    22554
+   ],
+   "ts": 1698750081,
+   "version": 456,
+   "via": "call"
+  },
+  "freeType": {
+   "commit": "e68383a5913",
+   "subject": "turn freeType fonts on by default.  Look for them in ../htdocs/urw-fonts",
+   "tickets": [],
+   "ts": 1617745525,
+   "version": 412,
+   "via": "call"
+  },
+  "gcOnTheFly": {
+   "commit": "16113a55a85",
+   "subject": "restore the hg.conf switches to control the gcOnFly track - lost in later edits",
+   "tickets": [],
+   "ts": 1775509540,
+   "version": 496,
+   "via": "call"
+  },
+  "greyBarIcons": {
+   "commit": "4f8248a37b7",
+   "subject": "Make grey bar icons default to always on, refs #36956",
+   "tickets": [
+    36956
+   ],
+   "ts": 1768516916,
+   "version": 492,
+   "via": "call"
+  },
+  "hgHubConnect.validateHub": {
+   "commit": "e25b1163ff4",
+   "subject": "hub developer mode was already on by default but was not controlled via hg.conf. Leave it on by default but allow it to ",
+   "tickets": [
+    28831
+   ],
+   "ts": 1646686731,
+   "version": 427,
+   "via": "call"
+  },
+  "mergeRecommended": {
+   "commit": "0c423c0be45",
+   "subject": "make canSnake and mergeRecommend to be on by default",
+   "tickets": [],
+   "ts": 1719434505,
+   "version": 467,
+   "via": "call"
+  },
+  "name": {
+   "commit": "561b7988132",
+   "subject": "add a registry of hg.conf variables with a sunset mechanism for release gates refs #37925",
+   "tickets": [
+    37838,
+    37923,
+    37925
+   ],
+   "ts": 1785013052,
+   "version": 501,
+   "via": "call"
+  },
+  "newBotDelay": {
+   "commit": "8b35afcffce",
+   "subject": "Setting the new botdelay scheme (which we've been using for a while) to be the default, refs #36952",
+   "tickets": [
+    36952
+   ],
+   "ts": 1768508493,
+   "version": 492,
+   "via": "call"
+  },
+  "showDownloadUi": {
+   "commit": "f56632e7b85",
+   "subject": "Make 'download tracks in view' menu option present by default. Can still be turned off via hg.conf",
+   "tickets": [],
+   "ts": 1719608805,
+   "version": 467,
+   "via": "call"
+  },
+  "showEarlyErrors": {
+   "commit": "75b3dceab13",
+   "subject": "setting showEarlyErrors to on by default, refs #33992",
+   "tickets": [
+    33992
+   ],
+   "ts": 1719327093,
+   "version": 467,
+   "via": "call"
+  },
+  "showTutorial": {
+   "commit": "374ee75c2d2",
+   "subject": "Make the hgTracks tutorial javascript included by default, can be turned off via hg.conf, refs #33992",
+   "tickets": [
+    33992
+   ],
+   "ts": 1718741667,
+   "version": 466,
+   "via": "call"
+  },
+  "sleepOn429": {
+   "commit": "1db14ecb301",
+   "subject": "making sleep depend on hg.conf statement suggested by Jonathan, no redmine ticket yet",
+   "tickets": [],
+   "ts": 1747075805,
+   "version": 481,
+   "via": "call"
+  },
+  "storeUserFiles": {
+   "commit": "dbc7d6bb223",
+   "subject": "Start on trackHubWizard module",
+   "tickets": [],
+   "ts": 1696622621,
+   "version": 454,
+   "via": "call"
+  },
+  "svgBarChart": {
+   "commit": "e1f7896a08f",
+   "subject": "make svgBarChart and multiRegionButtonTop be on by default",
+   "tickets": [],
+   "ts": 1648598692,
+   "version": 428,
+   "via": "call"
+  },
+  "trackHubsCanAddGroups": {
+   "commit": "3563a2ab31f",
+   "subject": "make trackHubsCanAddGroups on by default refs #36955",
+   "tickets": [
+    36955
+   ],
+   "ts": 1768784169,
+   "version": 492,
+   "via": "call"
+  },
+  "trustTrackDb": {
+   "commit": "72e4774cd62",
+   "subject": "add hg.conf variable (trustTrackDb) to force the CGI's to validate",
+   "tickets": [],
+   "ts": 1702500856,
+   "version": 458,
+   "via": "call"
+  },
+  "udc.useLocalDiskCache": {
+   "commit": "b4e629844bb",
+   "subject": "changes to UDC that allow to",
+   "tickets": [],
+   "ts": 1427470679,
+   "version": 313,
+   "via": "call"
+  },
+  "useBlatBigPsl": {
+   "commit": "3deb44e4e36",
+   "subject": "make offering custom tracks with blat results the default",
+   "tickets": [],
+   "ts": 1493840576,
+   "version": 348,
+   "via": "call"
+  }
+ },
+ "schema": 2,
+ "timeline": [
+  [
+   1083000392,
+   61
+  ],
+  [
+   1083198572,
+   62
+  ],
+  [
+   1083803564,
+   63
+  ],
+  [
+   1084407923,
+   64
+  ],
+  [
+   1085012895,
+   65
+  ],
+  [
+   1085617787,
+   66
+  ],
+  [
+   1086222927,
+   67
+  ],
+  [
+   1087432372,
+   68
+  ],
+  [
+   1088091841,
+   69
+  ],
+  [
+   1088642743,
+   70
+  ],
+  [
+   1089246583,
+   71
+  ],
+  [
+   1089850784,
+   72
+  ],
+  [
+   1090457152,
+   73
+  ],
+  [
+   1091062193,
+   74
+  ],
+  [
+   1091680195,
+   75
+  ],
+  [
+   1092330165,
+   76
+  ],
+  [
+   1092876057,
+   77
+  ],
+  [
+   1093489066,
+   78
+  ],
+  [
+   1094080476,
+   79
+  ],
+  [
+   1094692445,
+   80
+  ],
+  [
+   1095299549,
+   81
+  ],
+  [
+   1095902852,
+   82
+  ],
+  [
+   1096509804,
+   83
+  ],
+  [
+   1097109572,
+   84
+  ],
+  [
+   1097719756,
+   85
+  ],
+  [
+   1098363749,
+   86
+  ],
+  [
+   1098927804,
+   87
+  ],
+  [
+   1099533875,
+   88
+  ],
+  [
+   1100136828,
+   89
+  ],
+  [
+   1100745210,
+   90
+  ],
+  [
+   1101951169,
+   91
+  ],
+  [
+   1102558229,
+   92
+  ],
+  [
+   1103160824,
+   93
+  ],
+  [
+   1104976088,
+   94
+  ],
+  [
+   1105580570,
+   95
+  ],
+  [
+   1106183127,
+   96
+  ],
+  [
+   1106787974,
+   97
+  ],
+  [
+   1107394613,
+   98
+  ],
+  [
+   1107998795,
+   99
+  ],
+  [
+   1108604347,
+   100
+  ],
+  [
+   1109640724,
+   101
+  ],
+  [
+   1110853700,
+   102
+  ],
+  [
+   1112062681,
+   103
+  ],
+  [
+   1113272365,
+   104
+  ],
+  [
+   1114478989,
+   105
+  ],
+  [
+   1115690595,
+   106
+  ],
+  [
+   1116905830,
+   107
+  ],
+  [
+   1118110288,
+   108
+  ],
+  [
+   1118803134,
+   109
+  ],
+  [
+   1119455697,
+   110
+  ],
+  [
+   1119937672,
+   111
+  ],
+  [
+   1121139238,
+   112
+  ],
+  [
+   1122348794,
+   113
+  ],
+  [
+   1123555381,
+   114
+  ],
+  [
+   1124756649,
+   115
+  ],
+  [
+   1125973515,
+   116
+  ],
+  [
+   1127185640,
+   117
+  ],
+  [
+   1128391635,
+   118
+  ],
+  [
+   1129603750,
+   119
+  ],
+  [
+   1130815147,
+   120
+  ],
+  [
+   1132022188,
+   121
+  ],
+  [
+   1133234557,
+   122
+  ],
+  [
+   1134436064,
+   123
+  ],
+  [
+   1136256664,
+   124
+  ],
+  [
+   1137468821,
+   125
+  ],
+  [
+   1138677482,
+   126
+  ],
+  [
+   1139885733,
+   127
+  ],
+  [
+   1141091258,
+   128
+  ],
+  [
+   1142311138,
+   129
+  ],
+  [
+   1143509104,
+   130
+  ],
+  [
+   1144715111,
+   131
+  ],
+  [
+   1145924740,
+   132
+  ],
+  [
+   1147136901,
+   133
+  ],
+  [
+   1149044621,
+   134
+  ],
+  [
+   1150169152,
+   135
+  ],
+  [
+   1151376220,
+   136
+  ],
+  [
+   1152578328,
+   137
+  ],
+  [
+   1153786261,
+   138
+  ],
+  [
+   1155000843,
+   139
+  ],
+  [
+   1155696241,
+   140
+  ],
+  [
+   1156818415,
+   141
+  ],
+  [
+   1158022924,
+   142
+  ],
+  [
+   1159320002,
+   143
+  ],
+  [
+   1160448589,
+   144
+  ],
+  [
+   1161664143,
+   145
+  ],
+  [
+   1162873390,
+   146
+  ],
+  [
+   1164684472,
+   147
+  ],
+  [
+   1165901494,
+   148
+  ],
+  [
+   1167762781,
+   149
+  ],
+  [
+   1168993216,
+   150
+  ],
+  [
+   1170134632,
+   151
+  ],
+  [
+   1171336671,
+   152
+  ],
+  [
+   1172548086,
+   153
+  ],
+  [
+   1173739885,
+   154
+  ],
+  [
+   1174998968,
+   155
+  ],
+  [
+   1175613397,
+   156
+  ],
+  [
+   1176822506,
+   157
+  ],
+  [
+   1178031397,
+   158
+  ],
+  [
+   1179242641,
+   159
+  ],
+  [
+   1180473780,
+   160
+  ],
+  [
+   1181662965,
+   161
+  ],
+  [
+   1182881142,
+   162
+  ],
+  [
+   1184081096,
+   163
+  ],
+  [
+   1185297364,
+   164
+  ],
+  [
+   1186504517,
+   165
+  ],
+  [
+   1188271757,
+   166
+  ],
+  [
+   1190133736,
+   167
+  ],
+  [
+   1191346174,
+   168
+  ],
+  [
+   1192538649,
+   169
+  ],
+  [
+   1193761932,
+   170
+  ],
+  [
+   1194976762,
+   171
+  ],
+  [
+   1196789240,
+   172
+  ],
+  [
+   1199304454,
+   173
+  ],
+  [
+   1200419811,
+   174
+  ],
+  [
+   1201889964,
+   175
+  ],
+  [
+   1203447977,
+   176
+  ],
+  [
+   1204653400,
+   177
+  ],
+  [
+   1205851073,
+   178
+  ],
+  [
+   1207072453,
+   179
+  ],
+  [
+   1208278256,
+   180
+  ],
+  [
+   1209488128,
+   181
+  ],
+  [
+   1210696230,
+   182
+  ],
+  [
+   1211904411,
+   183
+  ],
+  [
+   1213118356,
+   184
+  ],
+  [
+   1214326324,
+   185
+  ],
+  [
+   1215535485,
+   186
+  ],
+  [
+   1216755623,
+   187
+  ],
+  [
+   1217956423,
+   188
+  ],
+  [
+   1219172274,
+   189
+  ],
+  [
+   1220372950,
+   190
+  ],
+  [
+   1221580169,
+   191
+  ],
+  [
+   1222791901,
+   192
+  ],
+  [
+   1224004094,
+   193
+  ],
+  [
+   1225211783,
+   194
+  ],
+  [
+   1226463909,
+   195
+  ],
+  [
+   1228201525,
+   196
+  ],
+  [
+   1229440845,
+   197
+  ],
+  [
+   1231865799,
+   198
+  ],
+  [
+   1233074543,
+   199
+  ],
+  [
+   1234217110,
+   200
+  ],
+  [
+   1235491783,
+   201
+  ],
+  [
+   1236695843,
+   202
+  ],
+  [
+   1238512963,
+   203
+  ],
+  [
+   1239720354,
+   204
+  ],
+  [
+   1240928889,
+   205
+  ],
+  [
+   1242138151,
+   206
+  ],
+  [
+   1243351235,
+   207
+  ],
+  [
+   1244561430,
+   208
+  ],
+  [
+   1245771765,
+   209
+  ],
+  [
+   1246989447,
+   210
+  ],
+  [
+   1248188010,
+   211
+  ],
+  [
+   1249423500,
+   212
+  ],
+  [
+   1250612429,
+   213
+  ],
+  [
+   1251916116,
+   214
+  ],
+  [
+   1253007416,
+   215
+  ],
+  [
+   1254191030,
+   216
+  ],
+  [
+   1255410234,
+   217
+  ],
+  [
+   1256682677,
+   218
+  ],
+  [
+   1257826742,
+   217
+  ],
+  [
+   1257829055,
+   219
+  ],
+  [
+   1259696214,
+   220
+  ],
+  [
+   1260818616,
+   221
+  ],
+  [
+   1262666957,
+   222
+  ],
+  [
+   1263935264,
+   223
+  ],
+  [
+   1265157183,
+   224
+  ],
+  [
+   1266358319,
+   225
+  ],
+  [
+   1267574909,
+   226
+  ],
+  [
+   1269376878,
+   227
+  ],
+  [
+   1270519421,
+   228
+  ],
+  [
+   1271726084,
+   229
+  ],
+  [
+   1272945610,
+   230
+  ],
+  [
+   1274149094,
+   231
+  ],
+  [
+   1274759250,
+   232
+  ],
+  [
+   1275931415,
+   233
+  ],
+  [
+   1277194871,
+   234
+  ],
+  [
+   1278381270,
+   235
+  ],
+  [
+   1279588409,
+   236
+  ],
+  [
+   1280792666,
+   237
+  ],
+  [
+   1282005295,
+   238
+  ],
+  [
+   1283215033,
+   239
+  ],
+  [
+   1284425921,
+   240
+  ],
+  [
+   1285633883,
+   241
+  ],
+  [
+   1286843663,
+   242
+  ],
+  [
+   1288656499,
+   243
+  ],
+  [
+   1291684644,
+   244
+  ],
+  [
+   1294103894,
+   245
+  ],
+  [
+   1295927540,
+   246
+  ],
+  [
+   1297659859,
+   247
+  ],
+  [
+   1299546759,
+   248
+  ],
+  [
+   1301358008,
+   249
+  ],
+  [
+   1303190974,
+   250
+  ],
+  [
+   1304985869,
+   251
+  ],
+  [
+   1307405455,
+   252
+  ],
+  [
+   1309221497,
+   253
+  ],
+  [
+   1311040066,
+   254
+  ],
+  [
+   1312761727,
+   255
+  ],
+  [
+   1314626193,
+   256
+  ],
+  [
+   1316390535,
+   257
+  ],
+  [
+   1318210352,
+   258
+  ],
+  [
+   1320620848,
+   259
+  ],
+  [
+   1323123467,
+   260
+  ],
+  [
+   1325552759,
+   261
+  ],
+  [
+   1327366177,
+   262
+  ],
+  [
+   1329184970,
+   263
+  ],
+  [
+   1331001396,
+   264
+  ],
+  [
+   1332809147,
+   265
+  ],
+  [
+   1335236152,
+   266
+  ],
+  [
+   1337045795,
+   267
+  ],
+  [
+   1338868516,
+   268
+  ],
+  [
+   1340680533,
+   269
+  ],
+  [
+   1342501784,
+   270
+  ],
+  [
+   1344302527,
+   271
+  ],
+  [
+   1346109081,
+   272
+  ],
+  [
+   1347950853,
+   273
+  ],
+  [
+   1349803060,
+   274
+  ],
+  [
+   1351552378,
+   275
+  ],
+  [
+   1354587689,
+   276
+  ],
+  [
+   1355789959,
+   277
+  ],
+  [
+   1358900007,
+   278
+  ],
+  [
+   1360628017,
+   279
+  ],
+  [
+   1362441698,
+   280
+  ],
+  [
+   1364167642,
+   281
+  ],
+  [
+   1366078435,
+   282
+  ],
+  [
+   1367881842,
+   283
+  ],
+  [
+   1369609639,
+   284
+  ],
+  [
+   1371510520,
+   285
+  ],
+  [
+   1373327467,
+   286
+  ],
+  [
+   1375141398,
+   287
+  ],
+  [
+   1376932858,
+   288
+  ],
+  [
+   1378756711,
+   289
+  ],
+  [
+   1380560889,
+   290
+  ],
+  [
+   1382376551,
+   291
+  ],
+  [
+   1384194827,
+   292
+  ],
+  [
+   1386652146,
+   293
+  ],
+  [
+   1389636356,
+   294
+  ],
+  [
+   1391450204,
+   295
+  ],
+  [
+   1393264729,
+   296
+  ],
+  [
+   1395076775,
+   297
+  ],
+  [
+   1396889830,
+   298
+  ],
+  [
+   1398704469,
+   299
+  ],
+  [
+   1400518778,
+   300
+  ],
+  [
+   1402334098,
+   301
+  ],
+  [
+   1404148813,
+   302
+  ],
+  [
+   1405967143,
+   303
+  ],
+  [
+   1407779409,
+   304
+  ],
+  [
+   1409677142,
+   305
+  ],
+  [
+   1411404946,
+   306
+  ],
+  [
+   1413220997,
+   307
+  ],
+  [
+   1415037450,
+   308
+  ],
+  [
+   1416851817,
+   309
+  ],
+  [
+   1420481039,
+   310
+  ],
+  [
+   1422297454,
+   311
+  ],
+  [
+   1424136244,
+   312
+  ],
+  [
+   1425920753,
+   313
+  ],
+  [
+   1427735294,
+   314
+  ],
+  [
+   1429549651,
+   315
+  ],
+  [
+   1431363680,
+   316
+  ],
+  [
+   1433177734,
+   317
+  ],
+  [
+   1434992111,
+   318
+  ],
+  [
+   1436806658,
+   319
+  ],
+  [
+   1438621013,
+   320
+  ],
+  [
+   1440435677,
+   321
+  ],
+  [
+   1442251268,
+   322
+  ],
+  [
+   1444068028,
+   323
+  ],
+  [
+   1445888794,
+   324
+  ],
+  [
+   1447696663,
+   325
+  ],
+  [
+   1449511280,
+   326
+  ],
+  [
+   1452534787,
+   327
+  ],
+  [
+   1454954770,
+   328
+  ],
+  [
+   1456769895,
+   329
+  ],
+  [
+   1458580197,
+   330
+  ],
+  [
+   1460394279,
+   331
+  ],
+  [
+   1462210568,
+   332
+  ],
+  [
+   1464023337,
+   333
+  ],
+  [
+   1465838556,
+   334
+  ],
+  [
+   1467656030,
+   335
+  ],
+  [
+   1469468547,
+   336
+  ],
+  [
+   1471282322,
+   337
+  ],
+  [
+   1473181557,
+   338
+  ],
+  [
+   1474909128,
+   339
+  ],
+  [
+   1476724856,
+   340
+  ],
+  [
+   1478541988,
+   341
+  ],
+  [
+   1480960967,
+   342
+  ],
+  [
+   1483984657,
+   343
+  ],
+  [
+   1485799329,
+   344
+  ],
+  [
+   1487622731,
+   345
+  ],
+  [
+   1489424348,
+   346
+  ],
+  [
+   1491238349,
+   347
+  ],
+  [
+   1493055334,
+   348
+  ],
+  [
+   1494867549,
+   349
+  ],
+  [
+   1496683746,
+   350
+  ],
+  [
+   1498496689,
+   351
+  ],
+  [
+   1500311064,
+   352
+  ],
+  [
+   1502124608,
+   353
+  ],
+  [
+   1503939926,
+   354
+  ],
+  [
+   1505756991,
+   355
+  ],
+  [
+   1507568406,
+   356
+  ],
+  [
+   1509384124,
+   357
+  ],
+  [
+   1511805976,
+   358
+  ],
+  [
+   1513619620,
+   359
+  ],
+  [
+   1516643836,
+   360
+  ],
+  [
+   1518459607,
+   361
+  ],
+  [
+   1520273492,
+   362
+  ],
+  [
+   1522084780,
+   363
+  ],
+  [
+   1523900823,
+   364
+  ],
+  [
+   1525714651,
+   365
+  ],
+  [
+   1527613639,
+   366
+  ],
+  [
+   1529342313,
+   367
+  ],
+  [
+   1531148275,
+   368
+  ],
+  [
+   1532970654,
+   369
+  ],
+  [
+   1534784258,
+   370
+  ],
+  [
+   1536603209,
+   371
+  ],
+  [
+   1538415460,
+   372
+  ],
+  [
+   1540228143,
+   373
+  ],
+  [
+   1542045728,
+   374
+  ],
+  [
+   1544464982,
+   375
+  ],
+  [
+   1547489095,
+   376
+  ],
+  [
+   1549302941,
+   377
+  ],
+  [
+   1551117457,
+   378
+  ],
+  [
+   1552929777,
+   379
+  ],
+  [
+   1554743212,
+   380
+  ],
+  [
+   1556559375,
+   381
+  ],
+  [
+   1558372362,
+   382
+  ],
+  [
+   1560187187,
+   383
+  ],
+  [
+   1562001414,
+   384
+  ],
+  [
+   1563815090,
+   385
+  ],
+  [
+   1565629388,
+   386
+  ],
+  [
+   1567444308,
+   387
+  ],
+  [
+   1569258369,
+   388
+  ],
+  [
+   1571074594,
+   389
+  ],
+  [
+   1572891278,
+   390
+  ],
+  [
+   1575310340,
+   391
+  ],
+  [
+   1578334091,
+   392
+  ],
+  [
+   1580148599,
+   393
+  ],
+  [
+   1581963008,
+   394
+  ],
+  [
+   1583773152,
+   395
+  ],
+  [
+   1585588116,
+   396
+  ],
+  [
+   1587402608,
+   397
+  ],
+  [
+   1589218687,
+   398
+  ],
+  [
+   1591031026,
+   399
+  ],
+  [
+   1592845137,
+   400
+  ],
+  [
+   1594659564,
+   401
+  ],
+  [
+   1596474027,
+   402
+  ],
+  [
+   1598288808,
+   403
+  ],
+  [
+   1600102920,
+   404
+  ],
+  [
+   1601917970,
+   405
+  ],
+  [
+   1603731707,
+   406
+  ],
+  [
+   1605549879,
+   407
+  ],
+  [
+   1607331029,
+   407
+  ],
+  [
+   1607363812,
+   408
+  ],
+  [
+   1607550721,
+   408
+  ],
+  [
+   1610993186,
+   409
+  ],
+  [
+   1611326818,
+   409
+  ],
+  [
+   1612815032,
+   410
+  ],
+  [
+   1614622058,
+   411
+  ],
+  [
+   1616444795,
+   412
+  ],
+  [
+   1618247105,
+   413
+  ],
+  [
+   1620062609,
+   414
+  ],
+  [
+   1621876182,
+   415
+  ],
+  [
+   1623690308,
+   416
+  ],
+  [
+   1625505385,
+   417
+  ],
+  [
+   1627319810,
+   418
+  ],
+  [
+   1629133906,
+   419
+  ],
+  [
+   1631034514,
+   420
+  ],
+  [
+   1632762637,
+   421
+  ],
+  [
+   1634576925,
+   422
+  ],
+  [
+   1636475447,
+   423
+  ],
+  [
+   1638814829,
+   424
+  ],
+  [
+   1641839720,
+   425
+  ],
+  [
+   1643676333,
+   426
+  ],
+  [
+   1645467168,
+   427
+  ],
+  [
+   1647277890,
+   428
+  ],
+  [
+   1649092475,
+   429
+  ],
+  [
+   1650906762,
+   430
+  ],
+  [
+   1652721470,
+   431
+  ],
+  [
+   1654539643,
+   432
+  ],
+  [
+   1656349742,
+   433
+  ],
+  [
+   1658164399,
+   434
+  ],
+  [
+   1659979825,
+   435
+  ],
+  [
+   1661793023,
+   436
+  ],
+  [
+   1663608148,
+   437
+  ],
+  [
+   1665421645,
+   438
+  ],
+  [
+   1667239503,
+   439
+  ],
+  [
+   1669054316,
+   440
+  ],
+  [
+   1670868829,
+   441
+  ],
+  [
+   1673288087,
+   442
+  ],
+  [
+   1675102472,
+   443
+  ],
+  [
+   1676917346,
+   444
+  ],
+  [
+   1678728123,
+   445
+  ],
+  [
+   1680541885,
+   446
+  ],
+  [
+   1682356714,
+   447
+  ],
+  [
+   1684170325,
+   448
+  ],
+  [
+   1685984740,
+   449
+  ],
+  [
+   1687806483,
+   450
+  ],
+  [
+   1689618452,
+   451
+  ],
+  [
+   1691427942,
+   452
+  ],
+  [
+   1693248221,
+   453
+  ],
+  [
+   1695064564,
+   454
+  ],
+  [
+   1696869360,
+   455
+  ],
+  [
+   1698687391,
+   456
+  ],
+  [
+   1700513834,
+   457
+  ],
+  [
+   1702313616,
+   458
+  ],
+  [
+   1704737186,
+   459
+  ],
+  [
+   1706555770,
+   460
+  ],
+  [
+   1708368072,
+   461
+  ],
+  [
+   1710178885,
+   462
+  ],
+  [
+   1711994375,
+   463
+  ],
+  [
+   1713807088,
+   464
+  ],
+  [
+   1715621754,
+   465
+  ],
+  [
+   1717436583,
+   466
+  ],
+  [
+   1719264355,
+   467
+  ],
+  [
+   1721063784,
+   468
+  ],
+  [
+   1722886302,
+   469
+  ],
+  [
+   1724695866,
+   470
+  ],
+  [
+   1726508999,
+   471
+  ],
+  [
+   1728338962,
+   472
+  ],
+  [
+   1730137833,
+   473
+  ],
+  [
+   1731954637,
+   474
+  ],
+  [
+   1733771455,
+   475
+  ],
+  [
+   1736798220,
+   476
+  ],
+  [
+   1738610438,
+   477
+  ],
+  [
+   1740424814,
+   478
+  ],
+  [
+   1742234717,
+   479
+  ],
+  [
+   1744056846,
+   480
+  ],
+  [
+   1745864196,
+   481
+  ],
+  [
+   1747679088,
+   482
+  ],
+  [
+   1749530451,
+   483
+  ],
+  [
+   1751322727,
+   484
+  ],
+  [
+   1753127415,
+   485
+  ],
+  [
+   1754951180,
+   486
+  ],
+  [
+   1756746182,
+   487
+  ],
+  [
+   1758575040,
+   488
+  ],
+  [
+   1760387937,
+   489
+  ],
+  [
+   1762212459,
+   490
+  ],
+  [
+   1764012000,
+   491
+  ],
+  [
+   1765831925,
+   492
+  ],
+  [
+   1769450596,
+   493
+  ],
+  [
+   1771266492,
+   494
+  ],
+  [
+   1773075673,
+   495
+  ],
+  [
+   1774890279,
+   496
+  ],
+  [
+   1776707280,
+   497
+  ],
+  [
+   1778519024,
+   498
+  ],
+  [
+   1780333234,
+   499
+  ],
+  [
+   1782752883,
+   500
+  ],
+  [
+   1784567050,
+   501
+  ]
+ ]
+}

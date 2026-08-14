@@ -420,7 +420,7 @@ if (sp == NULL)
     {
     if (profileName == NULL)
         errAbort("can't find mysql connection info for database '%s' in hg.conf or ~/.hg.conf, should have a default profile named 'db', so values for at least db.host, "
-                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", database);
+                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", naForNull(database));
     else if (sameWord(profileName, "backupcentral"))
         errAbort("can't find profile '%s.*' in hg.conf. This error most likely indicates that the "
             "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"
@@ -1072,7 +1072,6 @@ if (sqlOpenConnections)
         conn->isFree = FALSE;
 	sqlDisconnect(&conn);
 	}
-    freeDlList(&sqlOpenConnections);
     }
 }
 
@@ -2638,11 +2637,22 @@ slReverse(&list);
 return list;
 }
 
-unsigned int sqlLastAutoId(struct sqlConnection *conn)
+unsigned long sqlLastAutoId64(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
 {
 assert(!conn->isFree);
-unsigned id;
+unsigned long id;
+monitorEnter();
+id = mysql_insert_id(conn->conn);
+monitorLeave();
+return id;
+}
+
+unsigned int sqlLastAutoId(struct sqlConnection *conn)
+/* Return last automatically incremented id inserted into database (not 64-bit). */
+{
+assert(!conn->isFree);
+unsigned int id;
 monitorEnter();
 id = mysql_insert_id(conn->conn);
 monitorLeave();
@@ -4243,7 +4253,15 @@ while (i < formatLen)
 			    }
 			else
 			    {
-			    escStringsSize += strlen(s);
+			    /* SECURITY (refs #38051): the value must not contain our in-band
+			     * escape marker.  Two of them forge an extra delimiter pair, and
+			     * sqlEscapeAllStrings then copies the text between them raw
+			     * instead of escaping it, smuggling live quotes into the query.
+			     * A raw 0x01 is never legitimate in a SQL string value. */
+			    int sLen = strlen(s);
+			    if (memchr(s, escPunc, sLen) != NULL)
+				errAbort("Illegal control character in SQL string value.");
+			    escStringsSize += sLen;
 			    }
 			}
 		    else  // quoted -s has no meaning or use, so not allow.
@@ -4340,7 +4358,7 @@ int sqlSafef(char* buffer, int bufSize, char *format, ...)
  * checking.  The resulting string is always terminated with zero byte. 
  * Scans unquoted string parameters for illegal literal sql chars.
  * Escapes quoted string parameters. 
- * NOSLQINJ tag is added to beginning. */
+ * NOSQLINJ tag is added to beginning. */
 {
 int sz;
 va_list args;
@@ -4357,7 +4375,7 @@ return sz;
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSQLINJ tag is added to beginning if it is a new empty string. */
 {
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
@@ -4398,7 +4416,7 @@ while (TRUE)
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. 
+ * NOSQLINJ tag is added to beginning if it is a new empty string.
  * Appends to existing string. */
 {
 va_list args;

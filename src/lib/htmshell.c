@@ -320,7 +320,7 @@ do
 	    *out++ = c;
 	else
 	    {
-	    strncpy(out, newString, size);
+	    memcpy(out, newString, size);
 	    out += size;
 	    }
 	}
@@ -1598,6 +1598,21 @@ if (escStringsCount > 0)
     /* note that some versions return -1 if too small */
     if (sz != -1 && sz + 1 <= tempSize)
 	{
+	/* SECURITY (refs #38051): we inserted exactly two htmlSafefPunc markers per
+	 * escaped string, so any extra one came from a value and would forge a
+	 * delimiter pair.  htmlEscapeAllStrings copies text outside a pair raw, so a
+	 * forged pair smuggles unescaped user data into the output.  Abort hard: a raw
+	 * 0x01 is never legitimate here, and callers such as vaHtmlDyStringPrintf read
+	 * a negative return as "buffer too small" and would retry forever. */
+	int puncCount = 0;
+	char *p = tempBuf;
+	while ((p = memchr(p, htmlSafefPunc, (tempBuf + sz) - p)) != NULL)
+	    {
+	    ++puncCount;
+	    ++p;
+	    }
+	if (puncCount != 2*escStringsCount)
+	    errAbort("Illegal control character in htmlSafef string value.");
 	sz = htmlEscapeAllStrings(buffer, tempBuf, bufSize, noAbort, noWarnOverflow);
 	}
     else

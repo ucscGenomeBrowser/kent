@@ -294,7 +294,7 @@ char *chromFileName(char *track, char *chrom, char fileName[512])
 {
 if (fileExists(track))
     {
-    strncpy(fileName, track, 512);
+    safecpy(fileName, 512, track);
     }
 else
     {
@@ -309,7 +309,7 @@ else
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
-	strncpy(fileName, track, 512);
+	safecpy(fileName, 512, track);
 	}
     }
 return fileName;
@@ -506,7 +506,7 @@ void isolateTrackPartOfSpec(char *spec, char track[512])
 /* Convert something like track:exon to just track */
 {
 char *s;
-strncpy(track, spec, 512);
+safecpy(track, 512, spec);
 s = strchr(track, ':');
 if (s != NULL) *s = 0;
 }

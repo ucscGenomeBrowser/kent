@@ -40,6 +40,16 @@
           <a href="/goldenPath/help/trackDb/trackDbHub.html#useOneFile">useOneFile
           trackDb setting</a>, and as a result, each hub is limited to a single genome assembly.</p>
           <p>
+          Hub Space also accepts the standard multi-file hub layout: a hub.txt
+          that references a separate <code>genomesFile</code> (typically
+          genomes.txt), with one <code>trackDb</code> file per genome. Include
+          hub.txt, genomes.txt, every referenced trackDb, and any 2bit files
+          in the same upload, and Hub Space will derive each file's assembly
+          from the hub definition. For more complex multi-file hubs, the
+          <a href="https://hgdownload.soe.ucsc.edu/admin/exe/">hubtools</a>
+          command-line uploader remains the recommended path.
+          </p>
+          <p>
           <i>Editing the generated hub.txt file is not yet supported.</i>
           To customize the hub configuration or data display, replace the generated
           hub.txt file with your own version after uploading the data files.
@@ -58,6 +68,18 @@
 
 
     <div id='filesDiv' class='tabSection'>
+        <div id="hubBanner" style="display:none; margin: 8px 0; padding: 8px 12px; background-color:#e7f0ff; border:1px solid #b8cdf0; border-radius:4px;">
+            <button id="hubBannerViewBtn" type="button" class="button" style="margin-right:12px; vertical-align:middle;">View hub in Genome Browser</button>
+            <button id="hubBannerCopyBtn" type="button" class="button" style="margin-right:12px; vertical-align:middle;">Share hub</button>
+            <span style="vertical-align:middle;">You are browsing hub <strong id="hubBannerName"></strong>. Clicking "View in Genome Browser" on any track below will connect this entire hub.</span>
+        </div>
+        <div id="selectedFileBanner" style="display:none; margin: 8px 0; padding: 8px 12px; background-color:#e7f0ff; border:1px solid #b8cdf0; border-radius:4px;">
+            <span style="vertical-align:middle;"><strong id="numberSelectedFilesBanner"></strong> selected.</span>
+            <button id="viewSelectedFilesBanner" type="button" class="button" style="margin-left:12px; vertical-align:middle;"></button>
+            <button id="deleteSelectedFilesBanner" type="button" class="button" style="margin-left:8px; vertical-align:middle;"></button>
+            <button id="copyHubLinkBanner" type="button" class="button" style="display:none; margin-left:8px; vertical-align:middle;"></button>
+            <div style="margin-top:8px;"><strong>Share your hub.</strong> Select a hub below, then click <strong>Share hub</strong> to get a link others can open. Want to share your exact view, including position, tracks, and all connected hubs? Save a <a href="../cgi-bin/hgSession?hgS_doMainPage=1" style="color:#121E9A">session</a> and share that link instead.</div>
+        </div>
         <table id="filesTable" class="sessionTable stripe hover row-border compact" borderwidth=0>
         </table>
         <div id='selectedFileInfo' class="tabSection" style="margin-bottom: 20px;">

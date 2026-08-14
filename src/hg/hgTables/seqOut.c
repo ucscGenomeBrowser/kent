@@ -19,6 +19,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 #include "genbank.h"
+#include "genePred.h"
 
 
 static char *genePredMenu[] =
@@ -46,43 +47,23 @@ static void genePredOptions(struct trackDb *track, char *type,
 /* Put up sequence type options for gene prediction tracks. */
 {
 char *predType = cartUsualString(cart, hgtaGeneSeqType, genePredMenu[0]);
-char *dupType = cloneString(type);
-char *typeWords[3];
-int typeWordCount, typeIx;
-
-/* Type field has 1-3 words which are in order:
- *     genePred pepTable mrnaTable */
-typeWordCount = chopLine(dupType, typeWords);
-/* TypeIx will be 0 (genomic) 1 (protein) 2(mrna). */
-typeIx = stringArrayIx(predType, genePredMenu, typeWordCount);
+/* TypeIx will be 0 (genomic) 1 (protein) 2 (mRNA). */
+int typeIx = stringArrayIx(predType, genePredMenu, ArraySize(genePredMenu));
 if (typeIx < 0)
     predType = genePredMenu[0];
 htmlOpen("Select sequence type for %s", track->shortLabel);
 hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 
-if (isRefGeneTrack(track->table))
+/* genePred and bigGenePred tracks offer all three types.  Genomic and mRNA
+ * come straight from the assembly, and protein is translated on the fly using
+ * the genetic code assigned to each sequence (so an assembly hub's codonTable
+ * setting is honored).  refGene-style tracks and genePred tracks with pep/mRNA
+ * tables still use those tables in doGenePredNongenomic. */
+for (typeIx = 0; typeIx < ArraySize(genePredMenu); ++typeIx)
     {
-    /* RefGene covers all 3 types, but in it's own way. */
-    for (typeIx = 0; typeIx < 3; ++typeIx)
-	{
-	genePredTypeButton(genePredMenu[typeIx], predType);
-	hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
-	}
-    }
-else
-    {
-    /* Otherwise we always have genomic, and we have
-     * peptide/mrna only if there are corresponding table
-     * in the type field. */
-    for (typeIx = 0; typeIx < typeWordCount; ++typeIx)
-	{
-	if (typeIx == 0 || sqlTableExists(conn, typeWords[typeIx]))
-	    {
-	    genePredTypeButton(genePredMenu[typeIx], predType);
-	    hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
-	    }
-	}
+    genePredTypeButton(genePredMenu[typeIx], predType);
+    hPrintf(" %s<BR>\n", genePredMenu[typeIx]);
     }
 cgiMakeButton(hgtaDoGenePredSequence, "submit");
 hPrintf(" ");
@@ -90,7 +71,6 @@ cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 cgiDown(0.9);
 htmlClose();
-freez(&dupType);
 }
 
 
@@ -160,6 +140,70 @@ if (!gotResults)
 hashFree(&uniqHash);
 }
 
+static void translateGenePredBed(struct bed *bed, int typeIx)
+/* Output the on-the-fly mRNA (typeIx 2) or protein (typeIx 1) for one gene,
+ * fetching the sequence from the assembly.  For protein, translate with the
+ * genetic code assigned to the gene's sequence, so an assembly hub's
+ * "codonTable" setting is honored (chrM/chrMT default to the mitochondrial
+ * code). */
+{
+struct genePred *gp = bedToGenePred(bed);
+if (typeIx == 2)
+    {
+    /* mRNA: treat the whole transcript as coding so genePredGetDna splices
+     * together all exons (5' UTR, CDS and 3' UTR). */
+    gp->cdsStart = gp->txStart;
+    gp->cdsEnd = gp->txEnd;
+    }
+struct dnaSeq *dna = genePredGetDna(database, gp, TRUE, dnaUpper);
+if (dna != NULL && dna->size > 0)
+    {
+    hPrintf(">%s\n", bed->name);
+    if (typeIx == 1)
+        {
+        struct geneticCode *code = hGeneticCodeForChrom(database, gp->chrom);
+        int aaMax = dna->size / 3;
+        char *prot = needMem(aaMax + 1);
+        int i, aaCount = 0;
+        for (i = 0;  i + 3 <= dna->size;  i += 3)
+            {
+            AA aa = lookupCodonInCode(code, dna->dna + i);
+            prot[aaCount++] = (aa == 0) ? '*' : aa;
+            }
+        prot[aaCount] = '\0';
+        /* Drop a single trailing stop codon for a clean protein sequence. */
+        if (aaCount > 0 && prot[aaCount-1] == '*')
+            prot[--aaCount] = '\0';
+        writeSeqWithBreaks(stdout, prot, aaCount, 60);
+        freeMem(prot);
+        }
+    else
+        writeSeqWithBreaks(stdout, dna->dna, dna->size, 60);
+    }
+dnaSeqFree(&dna);
+genePredFree(&gp);
+}
+
+static void doGenePredTranslated(struct bed *bedList, int typeIx)
+/* Output on-the-fly mRNA or protein for a genePred/bigGenePred track that has
+ * no associated peptide/mRNA table (e.g. an assembly hub bigGenePred). */
+{
+struct hash *uniqHash = newHash(18);
+struct bed *bed;
+boolean gotResults = FALSE;
+for (bed = bedList;  bed != NULL;  bed = bed->next)
+    {
+    if (hashLookup(uniqHash, bed->name))
+        continue;
+    hashAdd(uniqHash, bed->name, NULL);
+    translateGenePredBed(bed, typeIx);
+    gotResults = TRUE;
+    }
+if (!gotResults)
+    explainWhyNoResults(stdout);
+hashFree(&uniqHash);
+}
+
 void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
 /* Get mrna or protein associated with selected genes. */
 {
@@ -188,10 +232,8 @@ else
     {
     char *dupType = cloneString(findTypeForTable(database, curTrack, curTable, ctLookupName));
     typeWordCount = chopLine(dupType, typeWords);
-    if (typeIx >= typeWordCount)
-	internalErr();
-    table = typeWords[typeIx];
-    if (sqlTableExists(conn, table))
+    table = (typeIx < typeWordCount) ? typeWords[typeIx] : NULL;
+    if (table != NULL && sqlTableExists(conn, table))
 	{
 	struct sqlResult *sr;
 	char **row;
@@ -222,7 +264,9 @@ else
 	}
     else
 	{
-	internalErr();
+	/* No peptide/mRNA table (e.g. a bigGenePred hub track): translate the
+	 * gene models on the fly from the assembly sequence. */
+	doGenePredTranslated(bedList, typeIx);
 	}
     freez(&dupType);
     }

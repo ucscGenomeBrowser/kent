@@ -790,7 +790,7 @@ for (js=joiner->jsList; js != NULL; js = nextJs)
 		newJf->dbList = slNameCloneList(jf->dbList);
 		newJf->field = cloneString(jf->field);
 		newJf->chopBefore = slNameCloneList(jf->chopBefore);
-		newJf->chopAfter = slNameCloneList(jf->chopBefore);
+		newJf->chopAfter = slNameCloneList(jf->chopAfter);
 		newJf->separator = cloneString(jf->separator);
 		newJf->indexOf = jf->indexOf;
 		newJf->isPrimary = jf->isPrimary;
@@ -800,17 +800,24 @@ for (js=joiner->jsList; js != NULL; js = nextJs)
 		newJf->splitPrefix = cloneString(jf->splitPrefix);
 		newJf->exclude = slNameCloneList(jf->exclude);
 
-		/* Do substituted table field. */
+		/* Do substituted table field.  If the field has no [] it is
+		 * version-less and is copied as-is to each expansion. */
 		if ((bs = strchr(jf->table, '[')) != NULL)
+		    {
 		    be = strchr(bs, ']');
-		if (bs == NULL || be == NULL)
-		    errAbort("Missing [] in field '%s' line %d of %s",
-		    	jf->table, jf->lineIx, joiner->fileName);
-		dyStringClear(dy);
-		dyStringAppendN(dy, jf->table, bs - jf->table);
-		dyStringAppend(dy, dbStart);
-		dyStringAppend(dy, be+1);
-		newJf->table = cloneString(dy->string);
+		    if (be == NULL)
+			errAbort("[ without ] in field '%s' line %d of %s",
+			    jf->table, jf->lineIx, joiner->fileName);
+		    dyStringClear(dy);
+		    dyStringAppendN(dy, jf->table, bs - jf->table);
+		    dyStringAppend(dy, dbStart);
+		    dyStringAppend(dy, be+1);
+		    newJf->table = cloneString(dy->string);
+		    }
+		else
+		    {
+		    newJf->table = cloneString(jf->table);
+		    }
 
 		slAddHead(&newJs->fieldList, newJf);
 		}

@@ -1,0 +1,40 @@
+track crPred
+superTrack on show
+shortLabel Cis-reg. Predictions
+longLabel Cis-regulatory Element Predictions
+visibility hide
+html crPred
+type bed 3
+
+    track tredNet
+    compositeTrack on
+    type bigBed 9+4
+    parent crPred
+    shortLabel TREDNet Reg. Elements
+    longLabel TREDNet Candidate Enhancers and Silencers (97 ENCODE Samples)
+    visibility hide
+    html tredNet
+
+        track tredNetEnhancer
+        parent tredNet
+        bigDataUrl /gbdb/hg38/tredNet/tredNetEnhancer.bb
+        shortLabel TREDNet Enhancers
+        longLabel TREDNet Candidate Enhancers (97 ENCODE Samples)
+        type bigBed 9+4
+        itemRgb on
+        mouseOver ${mouseOver}
+        skipEmptyFields on
+        visibility pack
+        html tredNetEnhancer
+
+        track tredNetSilencer
+        parent tredNet
+        bigDataUrl /gbdb/hg38/tredNet/tredNetSilencer.bb
+        shortLabel TREDNet Silencers
+        longLabel TREDNet Candidate Silencers (97 ENCODE Samples)
+        type bigBed 9+4
+        itemRgb on
+        mouseOver ${mouseOver}
+        skipEmptyFields on
+        visibility pack
+        html tredNetSilencer

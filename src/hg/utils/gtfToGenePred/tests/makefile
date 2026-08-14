@@ -31,7 +31,7 @@ dups: mkdirs
 	diff expected/$@.gp output/$@.gp
 
 impliedStop: mkdirs
-	${gtfToGenePred} -impliedStopAfterCds -infoOut=output/$@.info input/flybase.gtf output/$@.gp
+	${gtfToGenePred} -impliedStopAfterCds -infoTsv=output/$@.info input/flybase.gtf output/$@.gp
 	${genePredCheck} -verbose=0 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.info output/$@.info

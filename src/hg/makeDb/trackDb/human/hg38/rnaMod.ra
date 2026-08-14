@@ -14,3 +14,21 @@ type bed 4
     type bigBed 9 +
     itemRgb on
     bigDataUrl /gbdb/hg38/rnaMod/fetalXiao2019.bb
+
+    track drach
+    shortLabel DRACH motif sites
+    longLabel m6A DRACH consensus motif sites in MANE Select transcripts
+    parent rnaMod show
+    visibility dense
+    type bigBed 12 +
+    itemRgb on
+    bigDataUrl /gbdb/hg38/rnaMod/drach.bb
+    searchIndex transcript,gene
+    labelFields motif,gene,transcript
+    defaultLabelFields motif
+    mouseOver $motif in $gene ($transcript, $region)
+    filterValues.motif AAACA,AAACC,AAACT,AGACA,AGACC,AGACT,GAACA,GAACC,GAACT,GGACA,GGACC,GGACT,TAACA,TAACC,TAACT,TGACA,TGACC,TGACT
+    filterType.motif multipleListOr
+    filterValues.region 5'UTR,CDS,3'UTR,ncRNA
+    filterType.region multipleListOr
+

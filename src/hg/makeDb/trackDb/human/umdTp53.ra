@@ -1,0 +1,28 @@
+    track umdTp53
+    parent locusSpec
+    shortLabel UMD TP53
+    longLabel UMD TP53 Variant Database (p53.fr) - Locus-Specific Variants
+    type bigBed 9 + 43
+    bigDataUrl /gbdb/$D/bbi/umdTp53/umdTp53.bb
+    itemRgb on
+    mouseOverField _mouseOver
+    searchTrix /gbdb/$D/bbi/umdTp53/umdTp53.ix
+    searchIndex name
+    noScoreFilter on
+    visibility pack
+    priority 3
+    html umdTp53
+    urls cosmicId="https://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$"
+    filterValues.pathogenicity Pathogenic,Likely Pathogenic,Possibly pathogenic,VUS,Benign,Unknown
+    filterType.pathogenicity multipleListOr
+    filterLabel.pathogenicity Pathogenicity Classification
+    filterValues.variantClassification Missense,Nonsense,Synonymous,Frameshift_Ins,Frameshift_Del,Frameshift_Indel,In_frame_Ins,In_frame_Del,Complex_Del,Nonstop,Splice,Intronic,UTR,Flank,Gene_Deletion,Other
+    filterType.variantClassification multipleListOr
+    filterLabel.variantClassification Variant Classification
+    filterValues.variantType SNP,DEL,INS,DNP,TNP,ONP
+    filterType.variantType multipleListOr
+    filterLabel.variantType Variant Type
+    filter.tumorFreq 0
+    filterByRange.tumorFreq on
+    filterLimits.tumorFreq 0:10
+    filterLabel.tumorFreq Minimum Tumor Frequency (%)

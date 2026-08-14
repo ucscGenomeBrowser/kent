@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Generate GENCODE trackDb .ra and .html files and git add them.
-Also generate blurb to section to edit into joinerCheck.
 This needs to be done after tracks are loaded
 
 Should be run in trackDb directory.
@@ -16,7 +15,7 @@ import subprocess
 import argparse
 
 ##
-# Templates generators to generate ra, html, and joiner files.  Functions are passed a specification
+# Templates generators to generate ra, and html files.  Functions are passed a specification
 # of what is being generated. and returns either an empty string or the template
 #  - std is only in normal GENCODE
 #  - lift is only backmap GENCODE
@@ -359,24 +358,6 @@ def trackHtmlTemplateGen(params):
         "<p>GENCODE GFF3 and GTF files are available from the",
         '<a href="{gencodeReleaseUrl}" target="_blank">GENCODE release {gencodeVer}</a> site.</p>',
         ""))
-    yield forStdHuman(params, (
-        "<h2>Verification</h2>",
-        "",
-        "<P>",
-        "Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.",
-        "Those experiments can be found at GEO:</P>",
-        "<ul>",
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>',
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>',
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30612" target="_blank"><b>GSE30612:[E-MTAB-533]</b></a> - Batch III is verifying RGASP models for c.elegans and human.</li>',
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34797" target="_blank"><b>GSE34797:[E-MTAB-684]</b></a> - Batch IV is based on chromosome 3, 4 and 5 annotations from GENCODE 4 (January 2010).</li>',
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>',
-        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>',
-        "</ul>",
-        "<P> See Harrow <em>et al.</em> (2006) for information on verification",
-        "techniques.",
-        "</P>",
-        ""))
     yield forBoth(params, (
         "<h2>Release Notes</h2>",
         "<p>",
@@ -385,106 +366,6 @@ def trackHtmlTemplateGen(params):
         "</p>",
         "",
         '<!--#insert file="../../wgEncodeGencodeCredits1.shared.html"-->',))
-
-def joinerCheckTemplateGen(params):
-    """Generate template for all.joiner"""
-    yield forBoth(params, (
-        "# begin Gencode V{gencodeVer}",
-        "",
-        "# gencode genePred tables with no associations",
-        "# wgEncodeGencodePolyaV{gencodeVer}",
-        "",
-        "# gencode genePred tables with joining through wgEncodeGencodeAttrsV{gencodeVer}",
-        "identifier wgEncodeGencodeBasicAttrsV{gencodeVer}",
-        '"Link together Gencode Basic Table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
-        "    {orgHgDb}.wgEncodeGencodeBasicV{gencodeVer}.name",
-        "",
-        "identifier wgEncodeGencodeCompAttrsV{gencodeVer}",
-        '"Link together Gencode Comprehensive Table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
-        "    {orgHgDb}.wgEncodeGencodeCompV{gencodeVer}.name",
-        "",
-        "identifier wgEncodeGencodePseudoGeneAttrsV{gencodeVer}",
-        '"Link together Gencode PseudoGene Table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
-        "    {orgHgDb}.wgEncodeGencodePseudoGeneV{gencodeVer}.name",
-        "",
-        "# gencode association tables (joined through wgEncodeGencodeAttrsV{gencodeVer})",
-        "identifier wgEncodeGencodeGeneSourceV{gencodeVer}",
-        '"Link together Gencode Gene Source table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeGeneSourceV{gencodeVer}.geneId",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.geneId",
-        "",
-        "identifier wgEncodeGencodeGeneSymbolV{gencodeVer}",
-        '"Link together Gencode gene symbol table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeGeneSymbolV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.20",
-        "",
-        "identifier wgEncodeGencodePdbV{gencodeVer}",
-        '"Link together Gencode Pdb table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodePdbV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.007",
-        "",
-        "identifier wgEncodeGencodePubMedV{gencodeVer}",
-        '"Link together Gencode Pubmed table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodePubMedV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId  minCheck=0.40",
-        "",
-        "identifier wgEncodeGencodeRefSeqV{gencodeVer}",
-        '"Link together Gencode RefSeq table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.05",
-        "",
-        "identifier wgEncodeGencodeRefSeqToRefGeneV{gencodeVer}",
-        '"Link together Gencode RefSeq table with refGene track"',
-        "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.rnaAcc dupeOk chopAfter=.",
-        "    {orgHgDb}.refGene.name minCheck=0.77",
-        "",
-        "identifier wgEncodeGencodeTagV{gencodeVer}",
-        '"Link together Gencode Tag table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeTagV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.36",
-        "",
-        "identifier wgEncodeGencodeTranscriptSourceV{gencodeVer}",
-        '"Link together Gencode Transcript Source table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeTranscriptSourceV{gencodeVer}.transcriptId",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
-        "",
-        "identifier wgEncodeGencodeTranscriptSupportV{gencodeVer}",
-        '"Link together Gencode Transcript Support table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeTranscriptSupportV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.01",
-        "",
-        "identifier wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
-        '"Link together Gencode Transcription Support Level table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.30",
-        "",
-        "identifier wgEncodeGencodeUniProtV{gencodeVer}",
-        '"Link together Gencode UniProt Support table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeUniProtV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.20",
-        "",
-        "identifier wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
-        '"Link together Gencode Annotation Remark table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeAnnotationRemarkV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.10",
-        "",
-        "identifier wgEncodeGencodeEntrezGeneV{gencodeVer}",
-        '"Link together Gencode UniProt Support table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
-        ""))
-    yield forStd(params, (
-        "identifier wgEncodeGencodeExonSupportV{gencodeVer}",
-        '"Link together Gencode Exon Support table with Attributes table"',
-        "    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.50",
-        ""))
-    yield forBoth(params, (
-        "# end Gencode V{gencodeVer}",
-        ""))
 
 def hgSql(orgHgDb, sql):
     return subprocess.check_output(["hgsql", orgHgDb, "-Ne", sql], encoding="utf8").split('\n')[0:-1]
@@ -649,18 +530,10 @@ def generateHtmlFile(params, noGit):
     if not noGit:
         gitAdd(htmlFile)
 
-def generateJoinerFile(params):
-    joinerFile = os.path.expanduser("~/tmp/gencodeV{}.joiner".format(params.gencodeVer))
-    print("generating {}".format(joinerFile))
-    with open(joinerFile, "w") as joinerFh:
-        for part in joinerCheckTemplateGen(params):
-            writePart(joinerFh, part, params)
-
 def gencodeGenerateTrackDbs(opts):
     params = getGencodeParams(opts.hgDb, opts.gencodeVer, opts.ensemblVer, opts.gencodeDate)
     generateRaFile(params, opts.noGit)
     generateHtmlFile(params, opts.noGit)
-    generateJoinerFile(params)
 
 
 gencodeGenerateTrackDbs(parseArgs())

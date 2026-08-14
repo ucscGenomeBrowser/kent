@@ -1,0 +1,748 @@
+<H2>Description</H2>
+<P>
+This track shows a multiple alignment of 577 vertebrate genomes made with Cactus.
+This alignment represents the largest and most taxonomically diverse vertebrate
+alignment to date, spanning mammals, birds, fishes, reptiles, and amphibians from
+the <A target=_blank HREF="https://vertebrategenomesproject.org/">Vertebrate Genomes Project (VGP)</A>
+and related sequencing initiatives.
+</P>
+
+<P>
+All alignments were performed using the <A target=_blank HREF="https://github.com/ComparativeGenomicsToolkit/cactus"
+TARGET=_blank>Cactus toolkit</A>, which uses a reference-free approach to construct
+genome alignments and ancestral reconstructions. Unlike traditional progressive
+alignment methods, Cactus simultaneously considers all input genomes to minimize
+reference bias and improve alignment accuracy across diverse evolutionary distances.
+</P>
+
+<P>
+The alignment includes:
+<UL>
+<li><b>Mammals Euarchontoglires</b>: 43 species
+<li><b>Mammals Laurasiatheria</b>: 104 species
+<li><b>Mammals Other</b>: 21 species
+<li><b>Reptiles</b>: 55 species
+<li><b>Birds Other</b>: 45 species
+<li><b>Birds Landbirds</b>: 64 species
+<li><b>Birds Waterbirds</b>: 28 species
+<li><b>Amphibians</b>: 27 species
+<li><b>Fishes Other</b>: 20 species
+<li><b>Fishes Ray Finned</b>: 157 species
+<li><b>Invertebrates</b>: 13 species
+</UL>
+</P>
+
+<P>
+This broad phylogenetic sampling enables comparative genomics studies across
+the vertebrate tree of life, supporting research in evolution, conservation,
+and functional genomics.
+</P>
+<h2>Display Conventions and Configuration</h2>
+<p>
+Pairwise alignments of each species to the reference genome are
+displayed as a grayscale density plot (in pack mode) or as a wiggle (in full mode)
+that indicates alignment quality. In dense display mode, alignments are shown in
+grayscale using darker values to indicate higher levels of coverage.
+</p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Note that excluding species from the pairwise display does not alter the
+underlying alignment data.
+</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.
+</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  Missing sequence in any
+assembly is highlighted in the track display by regions of yellow when zoomed
+out and by Ns when displayed at base level.  The following conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the reference genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the reference genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the reference sequence at those
+alignment positions relative to the longest non-reference sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+
+<h2>Methods</h2>
+<p>
+The VGP 577-way alignment was created using the Cactus multiple genome alignment tool.
+Cactus employs a reference-free progressive alignment strategy that constructs a series
+of pairwise alignments organized according to a guide tree, then uses these to build
+progressively larger alignments up to the full multiple alignment.
+</p>
+
+<p>
+Unlike traditional progressive alignment approaches, Cactus performs an additional
+"bar" phase that identifies and resolves alignment conflicts by considering all
+genomes simultaneously. This helps reduce reference bias and improves accuracy
+across diverse evolutionary distances present in vertebrate genomes.
+</p>
+
+<p>
+The input genomes represent high-quality chromosome-level assemblies primarily
+from the Vertebrate Genomes Project, with additional assemblies from NCBI RefSeq
+and GenBank that meet quality standards for whole-genome alignment.
+</p>
+
+<h2>Sequences (click on header labels to sort by that column)</h2>
+<h3>Default order is by similarity to the reference</h3>
+<p>
+<blockquote>
+<style>
+tr:nth-child(5n) {
+  background-color: #ffffcc;
+}
+</style>
+<table border=1 class='stdTbl sortable'>
+<thead style="position:sticky; top:0; background-color: lightblue;"><tr><th>count</th>
+    <th>accession<br>(link&nbsp;to&nbsp;browser)</th>
+    <th>common<br>name</th>
+    <th>scientific&nbsp;name</th>
+    <th>VGP grouping</th>
+</tr></thead><tbody>
+<tr><td>001</td><td><a href='/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td><th>human</th><td>Homo sapiens<br><b>reference species</b></td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>002</td><td><a href='/cgi-bin/hgTracks?db=hg38' target=_blank>hg38</a></td><th>human</th><td>Homo sapiens</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>003</td><td><a href='/h/GCF_028858775.2' target=_blank>GCF_028858775.2</a></td><th>chimpanzee</th><td>Pan troglodytes</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>004</td><td><a href='/h/GCF_029289425.2' target=_blank>GCF_029289425.2</a></td><th>bonobo</th><td>Pan paniscus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>005</td><td><a href='/h/GCF_029281585.2' target=_blank>GCF_029281585.2</a></td><th>gorilla</th><td>Gorilla gorilla</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>006</td><td><a href='/h/GCF_028885655.2' target=_blank>GCF_028885655.2</a></td><th>Sumatran orangutan</th><td>Pongo abelii </td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>007</td><td><a href='/h/GCF_028885625.2' target=_blank>GCF_028885625.2</a></td><th>Bornean orangutan</th><td>Pongo pygmaeus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>008</td><td><a href='/h/GCF_028878055.3' target=_blank>GCF_028878055.3</a></td><th>siamang gibbon</th><td>Symphalangus syndactylus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>009</td><td><a href='/h/GCF_037993035.1' target=_blank>GCF_037993035.1</a></td><th>crab-eating macaque</th><td>Macaca fascicularis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>010</td><td><a href='/h/GCF_043159975.1' target=_blank>GCF_043159975.1</a></td><th>pig-tailed macaque</th><td>Macaca nemestrina</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>011</td><td><a href='/h/GCA_049354715.1' target=_blank>GCA_049354715.1</a></td><th>common marmoset</th><td>Callithrix jacchus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>012</td><td><a href='/h/GCA_048565385.1' target=_blank>GCA_048565385.1</a></td><th>Bolivian squirrel monkey</th><td>Saimiri boliviensis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>013</td><td><a href='/h/GCF_027409185.1' target=_blank>GCF_027409185.1</a></td><th>Philippine flying lemur</th><td>Cynocephalus volans</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>014</td><td><a href='/h/GCF_020740605.2' target=_blank>GCF_020740605.2</a></td><th>ring-tailed lemur</th><td>Lemur catta</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>015</td><td><a href='/h/GCF_027406575.1' target=_blank>GCF_027406575.1</a></td><th>sunda slow loris</th><td>Nycticebus coucang</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>016</td><td><a href='/h/GCF_020826845.1' target=_blank>GCF_020826845.1</a></td><th>Southern black rhinoceros</th><td>Diceros bicornis minor</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>017</td><td><a href='/h/GCA_031878705.1' target=_blank>GCA_031878705.1</a></td><th>Malayan tapir</th><td>Tapirus indicus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>018</td><td><a href='/h/GCA_036426135.1' target=_blank>GCA_036426135.1</a></td><th>Arabian horse</th><td>Equus caballus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>019</td><td><a href='/h/GCF_028564815.1' target=_blank>GCF_028564815.1</a></td><th>North Atlantic right whale</th><td>Eubalaena glacialis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>020</td><td><a href='/h/GCA_026018925.1' target=_blank>GCA_026018925.1</a></td><th>large tree shrew</th><td>Tupaia tana</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>021</td><td><a href='/h/GCF_028021215.1' target=_blank>GCF_028021215.1</a></td><th>gray whale</th><td>Eschrichtius robustus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>022</td><td><a href='/h/GCF_949987535.1' target=_blank>GCF_949987535.1</a></td><th>common minke whale</th><td>Balaenoptera acutorostrata</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>023</td><td><a href='/h/GCA_041834305.1' target=_blank>GCA_041834305.1</a></td><th>humpback whale</th><td>Megaptera novaeangliae</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>024</td><td><a href='/h/GCF_028023285.1' target=_blank>GCF_028023285.1</a></td><th>Rice's whale</th><td>Balaenoptera ricei</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>025</td><td><a href='/h/GCA_965194805.1' target=_blank>GCA_965194805.1</a></td><th>sei whale</th><td>Balaenoptera borealis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>026</td><td><a href='/h/GCA_965194825.1' target=_blank>GCA_965194825.1</a></td><th>finback whale</th><td>Balaenoptera physalus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>027</td><td><a href='/h/GCF_009873245.2' target=_blank>GCF_009873245.2</a></td><th>blue whale</th><td>Balaenoptera musculus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>028</td><td><a href='/h/GCF_030028045.1' target=_blank>GCF_030028045.1</a></td><th>common hippopotamus</th><td>Hippopotamus amphibius</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>029</td><td><a href='/h/GCA_964656455.1' target=_blank>GCA_964656455.1</a></td><th>grey seal</th><td>Halichoerus grypus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>030</td><td><a href='/h/GCF_902686445.1' target=_blank>GCF_902686445.1</a></td><th>grey squirrel</th><td>Sciurus carolinensis </td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>031</td><td><a href='/h/GCA_005190385.3' target=_blank>GCA_005190385.3</a></td><th>narwhal</th><td>Monodon monoceros</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>032</td><td><a href='/h/GCA_902686455.2' target=_blank>GCA_902686455.2</a></td><th>Eurasian red squirrel</th><td>Sciurus vulgaris</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>033</td><td><a href='/h/GCF_937001465.1' target=_blank>GCF_937001465.1</a></td><th>killer whale</th><td>Orcinus orca</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>034</td><td><a href='/h/GCA_036417435.1' target=_blank>GCA_036417435.1</a></td><th>Amazon river dolphin</th><td>Inia geoffrensis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>035</td><td><a href='/h/GCF_028018385.1' target=_blank>GCF_028018385.1</a></td><th>clouded leopard</th><td>Neofelis nebulosa</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>036</td><td><a href='/h/GCF_009762305.2' target=_blank>GCF_009762305.2</a></td><th>California sea lion</th><td>Zalophus californianus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>037</td><td><a href='/h/GCA_964270905.1' target=_blank>GCA_964270905.1</a></td><th>Atlantic white-sided dolphin</th><td>Lagenorhynchus acutus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>038</td><td><a href='/h/GCF_949774975.1' target=_blank>GCF_949774975.1</a></td><th>white-beaked dolphin</th><td>Lagenorhynchus albirostris</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>039</td><td><a href='/h/GCA_043880545.1' target=_blank>GCA_043880545.1</a></td><th>Greater mouse-tailed bat</th><td>Rhinopoma microphyllum</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>040</td><td><a href='/h/GCA_964374135.1' target=_blank>GCA_964374135.1</a></td><th>Risso's dolphin</th><td>Grampus griseus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>041</td><td><a href='/h/GCF_039906515.1' target=_blank>GCF_039906515.1</a></td><th>false killer whale</th><td>Pseudorca crassidens</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>042</td><td><a href='/h/GCA_949752795.1' target=_blank>GCA_949752795.1</a></td><th>North Atlantic bottlenose whale</th><td>Hyperoodon ampullatus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>043</td><td><a href='/h/GCF_963924675.1' target=_blank>GCF_963924675.1</a></td><th>harbor porpoise</th><td>Phocoena phocoena</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>044</td><td><a href='/h/GCF_008692025.1' target=_blank>GCF_008692025.1</a></td><th>vaquita</th><td>Phocoena sinus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>045</td><td><a href='/h/GCF_011762595.1' target=_blank>GCF_011762595.1</a></td><th>common bottlenose dolphin</th><td>Tursiops truncatus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>046</td><td><a href='/h/GCF_949987515.2' target=_blank>GCF_949987515.2</a></td><th>saddleback dolphin</th><td>Delphinus delphis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>047</td><td><a href='/h/GCF_025265405.1' target=_blank>GCF_025265405.1</a></td><th>Blainville's beaked whale</th><td>Mesoplodon densirostris</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>048</td><td><a href='/h/GCA_964341445.1' target=_blank>GCA_964341445.1</a></td><th>True's beaked whale</th><td>Mesoplodon mirus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>049</td><td><a href='/h/GCF_007474595.2' target=_blank>GCF_007474595.2</a></td><th>Canada lynx</th><td>Lynx canadensis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>050</td><td><a href='/h/GCF_963455315.2' target=_blank>GCF_963455315.2</a></td><th>long-finned pilot whale</th><td>Globicephala melas</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>051</td><td><a href='/h/GCA_964165515.1' target=_blank>GCA_964165515.1</a></td><th>Sowerby's beaked whale</th><td>Mesoplodon bidens</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>052</td><td><a href='/h/GCA_951394435.1' target=_blank>GCA_951394435.1</a></td><th>striped dolphin</th><td>Stenella coeruleoalba</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>053</td><td><a href='/h/GCF_026419965.1' target=_blank>GCF_026419965.1</a></td><th>pygmy sperm whale</th><td>Kogia breviceps</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>054</td><td><a href='/h/GCF_030020395.1' target=_blank>GCF_030020395.1</a></td><th>Chinese pangolin</th><td>Manis pentadactyla</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>055</td><td><a href='/h/GCF_004115265.2' target=_blank>GCF_004115265.2</a></td><th>greater horseshoe bat</th><td>Rhinolophus ferrumequinum</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>056</td><td><a href='/h/GCF_047511675.1' target=_blank>GCF_047511675.1</a></td><th>yellow bellied marmot</th><td>Marmota flaviventris</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>057</td><td><a href='/h/GCA_043728065.1' target=_blank>GCA_043728065.1</a></td><th>intermediate horseshoe bat</th><td>Rhinolophus affinis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>058</td><td><a href='/h/GCA_964194105.1' target=_blank>GCA_964194105.1</a></td><th>European ground squirrel</th><td>Spermophilus citellus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>059</td><td><a href='/h/GCA_048772815.1' target=_blank>GCA_048772815.1</a></td><th>golden-mantled ground squirrel</th><td>Callospermophilus lateralis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>060</td><td><a href='/h/GCA_905319855.2' target=_blank>GCA_905319855.2</a></td><th>gray wolf</th><td>Canis lupus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>061</td><td><a href='/h/GCF_011100685.1' target=_blank>GCF_011100685.1</a></td><th>dog</th><td>Canis lupus familiaris</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>062</td><td><a href='/h/GCA_040955705.1' target=_blank>GCA_040955705.1</a></td><th>African hunting dog</th><td>Lycaon pictus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>063</td><td><a href='/h/GCF_048164855.1' target=_blank>GCF_048164855.1</a></td><th>Mexican gray wolf</th><td>Canis lupus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>064</td><td><a href='/h/GCF_036321535.1' target=_blank>GCF_036321535.1</a></td><th>Dromedary camel</th><td>Camelus dromedarius</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>065</td><td><a href='/h/GCA_031876335.1' target=_blank>GCA_031876335.1</a></td><th>intermediate roundleaf bat</th><td>Hipposideros larvatus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>066</td><td><a href='/h/GCA_963455335.1' target=_blank>GCA_963455335.1</a></td><th>European pine marten</th><td>Martes martes</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>067</td><td><a href='/h/GCA_045843805.1' target=_blank>GCA_045843805.1</a></td><th>Arctic ground squirrel</th><td>Urocitellus parryii</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>068</td><td><a href='/h/GCA_964106825.2' target=_blank>GCA_964106825.2</a></td><th>red fox</th><td>Vulpes vulpes</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>069</td><td><a href='/h/GCA_964194185.1' target=_blank>GCA_964194185.1</a></td><th>lesser horseshoe bat</th><td>Rhinolophus hipposideros</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>070</td><td><a href='/h/GCF_922984935.1' target=_blank>GCF_922984935.1</a></td><th>European badger</th><td>Meles meles</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>071</td><td><a href='/h/GCF_902655055.1' target=_blank>GCF_902655055.1</a></td><th>Eurasian otter</th><td>Lutra lutra</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>072</td><td><a href='/h/GCA_046562885.1' target=_blank>GCA_046562885.1</a></td><th>jaguar</th><td>Panthera onca</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>073</td><td><a href='/h/GCF_009829155.1' target=_blank>GCF_009829155.1</a></td><th>stout</th><td>Mustela erminea</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>074</td><td><a href='/h/GCA_964106545.1' target=_blank>GCA_964106545.1</a></td><th>American mink</th><td>Neogale vison</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>075</td><td><a href='/h/GCA_043727835.1' target=_blank>GCA_043727835.1</a></td><th>Stoliczka's trident bat</th><td>Aselliscus stoliczkanus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>076</td><td><a href='/h/GCA_043748575.1' target=_blank>GCA_043748575.1</a></td><th>Northern woolly horseshoe bat</th><td>Rhinolophus perniger lanosus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>077</td><td><a href='/h/GCF_030435805.1' target=_blank>GCF_030435805.1</a></td><th>European mink</th><td>Mustela lutreola</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>078</td><td><a href='/h/GCA_043880425.1' target=_blank>GCA_043880425.1</a></td><th>Yong hoi sen's woolly horseshoe bat</th><td>Rhinolophus yonghoiseni</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>079</td><td><a href='/h/GCA_964662115.1' target=_blank>GCA_964662115.1</a></td><th>least weasel </th><td>Mustela nivalis vulgaris</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>080</td><td><a href='/h/GCA_043728145.1' target=_blank>GCA_043728145.1</a></td><th>trefoil horseshoe bat</th><td>Rhinolophus trifoliatus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>081</td><td><a href='/h/GCF_014176215.1' target=_blank>GCF_014176215.1</a></td><th>Egyptian rousette</th><td>Rousettus aegyptiacus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>082</td><td><a href='/h/GCA_048338725.1' target=_blank>GCA_048338725.1</a></td><th>pig</th><td>Sus scrofa</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>083</td><td><a href='/h/GCA_043880285.1' target=_blank>GCA_043880285.1</a></td><th>Cyclops roundleaf bat</th><td>Doryrhina cyclops</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>084</td><td><a href='/h/GCA_028451465.1' target=_blank>GCA_028451465.1</a></td><th>North American porcupine</th><td>Erethizon dorsatum</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>085</td><td><a href='/h/GCF_015220235.1' target=_blank>GCF_015220235.1</a></td><th>Linnaeus's two-toed sloth</th><td>Choloepus didactylus</td><td>Mammals Other</td></tr>
+<tr><td>086</td><td><a href='/h/GCA_046562895.1' target=_blank>GCA_046562895.1</a></td><th>Amazon manatee</th><td>Trichechus inunguis</td><td>Mammals Other</td></tr>
+<tr><td>087</td><td><a href='/h/GCF_910594005.1' target=_blank>GCF_910594005.1</a></td><th>red deer</th><td>Cervus elaphus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>088</td><td><a href='/h/GCA_048126745.1' target=_blank>GCA_048126745.1</a></td><th>fallow deer</th><td>Dama dama</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>089</td><td><a href='/h/GCA_030035585.1' target=_blank>GCA_030035585.1</a></td><th>dugong</th><td>Dugong dugon</td><td>Mammals Other</td></tr>
+<tr><td>090</td><td><a href='/h/GCA_030848825.1' target=_blank>GCA_030848825.1</a></td><th>Brazilian free-tailed bat</th><td>Tadarida brasiliensis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>091</td><td><a href='/h/GCF_963930625.1' target=_blank>GCF_963930625.1</a></td><th>Reeves' muntjac</th><td>Muntiacus reevesi</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>092</td><td><a href='/h/GCF_003369695.1' target=_blank>GCF_003369695.1</a></td><th>Brahman cow</th><td>Bos taurus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>093</td><td><a href='/h/GCA_041735815.1' target=_blank>GCA_041735815.1</a></td><th>goat</th><td>Capra hircus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>094</td><td><a href='/h/GCF_030445035.2' target=_blank>GCF_030445035.2</a></td><th>nine-banded armadillo</th><td>Dasypus novemcinctus</td><td>Mammals Other</td></tr>
+<tr><td>095</td><td><a href='/h/GCA_040805955.1' target=_blank>GCA_040805955.1</a></td><th>domestic sheep</th><td>Ovis aries</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>096</td><td><a href='/h/GCF_042477335.2' target=_blank>GCF_042477335.2</a></td><th>bighorn sheep</th><td>Ovis canadensis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>097</td><td><a href='/h/GCA_037157525.1' target=_blank>GCA_037157525.1</a></td><th>Alvarez's mastiff bat</th><td>Molossus alvarezi </td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>098</td><td><a href='/h/GCA_039880945.1' target=_blank>GCA_039880945.1</a></td><th>Ebon mastiff bat</th><td>Molossus nigricans</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>099</td><td><a href='/h/GCF_014108415.1' target=_blank>GCF_014108415.1</a></td><th>Pallas's mastiff bat</th><td>Molossus molossus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>100</td><td><a href='/h/GCF_024166365.1' target=_blank>GCF_024166365.1</a></td><th>Asian elephant</th><td>Elephas maximus indicus</td><td>Mammals Other</td></tr>
+<tr><td>101</td><td><a href='/h/GCF_030014295.1' target=_blank>GCF_030014295.1</a></td><th>African elephant</th><td>Loxodonta africana</td><td>Mammals Other</td></tr>
+<tr><td>102</td><td><a href='/h/GCA_022682495.2' target=_blank>GCA_022682495.2</a></td><th>common vampire bat</th><td>Desmodus rotundus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>103</td><td><a href='/h/GCA_043748645.1' target=_blank>GCA_043748645.1</a></td><th>Angolan free-tailed bat</th><td>Mops condylurus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>104</td><td><a href='/h/GCA_023851605.1' target=_blank>GCA_023851605.1</a></td><th>Southern tamandua </th><td>Tamandua tetradactyla</td><td>Mammals Other</td></tr>
+<tr><td>105</td><td><a href='/h/GCA_039655065.1' target=_blank>GCA_039655065.1</a></td><th>Merriam's long-tongued bat</th><td>Glossophaga mutica</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>106</td><td><a href='/h/GCF_964237555.1' target=_blank>GCF_964237555.1</a></td><th>European rabbit</th><td>Oryctolagus cuniculus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>107</td><td><a href='/h/GCF_004126475.2' target=_blank>GCF_004126475.2</a></td><th>pale spear-nosed bat</th><td>Phyllostomus discolor</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>108</td><td><a href='/h/GCA_043880595.1' target=_blank>GCA_043880595.1</a></td><th>Lesser false vampire bat</th><td>Megaderma spasma</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>109</td><td><a href='/h/GCA_047511655.1' target=_blank>GCA_047511655.1</a></td><th>North American beaver</th><td>Castor canadensis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>110</td><td><a href='/h/GCF_036850995.1' target=_blank>GCF_036850995.1</a></td><th>lesser sac-winged bat</th><td>Saccopteryx leptura</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>111</td><td><a href='/h/GCF_036850765.1' target=_blank>GCF_036850765.1</a></td><th>greater sac-winged bat</th><td>Saccopteryx bilineata</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>112</td><td><a href='/h/GCA_037038545.1' target=_blank>GCA_037038545.1</a></td><th>proboscis bat</th><td>Rhynchonycteris naso</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>113</td><td><a href='/h/GCA_038363095.2' target=_blank>GCA_038363095.2</a></td><th>great fruit-eating bat</th><td>Artibeus lituratus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>114</td><td><a href='/h/GCA_964146895.2' target=_blank>GCA_964146895.2</a></td><th>Schreibers' long-fingered bat</th><td>Miniopterus schreibersii</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>115</td><td><a href='/h/GCA_038363145.1' target=_blank>GCA_038363145.1</a></td><th>intermediate fruit-eating bat</th><td>Artibeus intermedius</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>116</td><td><a href='/h/GCA_963383645.1' target=_blank>GCA_963383645.1</a></td><th>common dormouse</th><td>Muscardinus avellanarius</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>117</td><td><a href='/h/GCA_963455305.1' target=_blank>GCA_963455305.1</a></td><th>brown big-eared bat</th><td>Plecotus auritus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>118</td><td><a href='/h/GCA_964094495.2' target=_blank>GCA_964094495.2</a></td><th>whiskered bat</th><td>Myotis mystacinus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>119</td><td><a href='/h/GCA_951640355.1' target=_blank>GCA_951640355.1</a></td><th>northern bat</th><td>Eptesicus nilssonii </td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>120</td><td><a href='/h/GCF_027574615.1' target=_blank>GCF_027574615.1</a></td><th>big brown bat</th><td>Eptesicus fuscus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>121</td><td><a href='/h/GCA_965115925.1' target=_blank>GCA_965115925.1</a></td><th>Geoffroy's bat</th><td>Myotis emarginatus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>122</td><td><a href='/h/GCF_014108235.1' target=_blank>GCF_014108235.1</a></td><th>greater mouse-eared bat</th><td>Myotis myotis</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>123</td><td><a href='/h/GCF_963259705.1' target=_blank>GCF_963259705.1</a></td><th>Daubenton's bat</th><td>Myotis daubentonii</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>124</td><td><a href='/h/GCA_964212035.2' target=_blank>GCA_964212035.2</a></td><th>Natterer's bat</th><td>Myotis nattereri</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>125</td><td><a href='/h/GCA_964194135.1' target=_blank>GCA_964194135.1</a></td><th>European mole</th><td>Talpa europaea</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>126</td><td><a href='/h/GCA_026230055.1' target=_blank>GCA_026230055.1</a></td><th>Townsend's big-eared bat</th><td>Corynorhinus townsendii</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>127</td><td><a href='/h/GCA_048771875.1' target=_blank>GCA_048771875.1</a></td><th>common gundi</th><td>Ctenodactylus gundi</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>128</td><td><a href='/h/GCA_028571685.1' target=_blank>GCA_028571685.1</a></td><th>yellow-spotted rock hyrax</th><td>Heterohyrax brucei</td><td>Mammals Other</td></tr>
+<tr><td>129</td><td><a href='/h/GCA_027563665.1' target=_blank>GCA_027563665.1</a></td><th>pallid bat</th><td>Antrozous pallidus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>130</td><td><a href='/h/GCA_964264875.2' target=_blank>GCA_964264875.2</a></td><th>lesser noctule</th><td>Nyctalus leisleri</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>131</td><td><a href='/h/GCA_949987585.1' target=_blank>GCA_949987585.1</a></td><th>soprano pipistrelle</th><td>Pipistrellus pygmaeus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>132</td><td><a href='/h/GCA_963924515.1' target=_blank>GCA_963924515.1</a></td><th>particolored bat</th><td>Vespertilio murinus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>133</td><td><a href='/h/GCF_014108245.1' target=_blank>GCF_014108245.1</a></td><th>Kuhl's pipistrelle</th><td>Pipistrellus kuhlii</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>134</td><td><a href='/h/GCA_964339955.1' target=_blank>GCA_964339955.1</a></td><th>Hanaki's dwarf bat</th><td>Pipistrellus hanaki</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>135</td><td><a href='/h/GCA_964656225.1' target=_blank>GCA_964656225.1</a></td><th>Nathusius's pipistrelle</th><td>Pipistrellus nathusii</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>136</td><td><a href='/h/GCA_903992545.1' target=_blank>GCA_903992545.1</a></td><th>common pipistrelle</th><td>Pipistrellus pipistrellus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>137</td><td><a href='/h/GCF_020740685.1' target=_blank>GCF_020740685.1</a></td><th>Lesser Egyptian jerboa</th><td>Jaculus jaculus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>138</td><td><a href='/h/GCF_030435755.1' target=_blank>GCF_030435755.1</a></td><th>American pika</th><td>Ochotona princeps</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>139</td><td><a href='/h/GCA_026229955.1' target=_blank>GCA_026229955.1</a></td><th>North American deer mouse</th><td>Peromyscus maniculatus sonoriensis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>140</td><td><a href='/h/GCF_903995425.1' target=_blank>GCF_903995425.1</a></td><th>Southern grasshopper mouse</th><td>Onychomys torridus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>141</td><td><a href='/h/GCA_043290085.1' target=_blank>GCA_043290085.1</a></td><th>black and rufous elephant shrew</th><td>Rhynchocyon petersi</td><td>Mammals Other</td></tr>
+<tr><td>142</td><td><a href='/h/GCF_903992535.2' target=_blank>GCF_903992535.2</a></td><th>European water vole</th><td>Arvicola amphibius</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>143</td><td><a href='/h/GCA_011762505.3' target=_blank>GCA_011762505.3</a></td><th>Nile rat</th><td>Arvicanthis niloticus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>144</td><td><a href='/h/GCF_950005125.1' target=_blank>GCF_950005125.1</a></td><th>European snow vole</th><td>Chionomys nivalis</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>145</td><td><a href='/h/GCA_964271855.1' target=_blank>GCA_964271855.1</a></td><th>Crete spiny mouse</th><td>Acomys minous</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>146</td><td><a href='/h/GCF_903995435.1' target=_blank>GCF_903995435.1</a></td><th>golden spiny mouse</th><td>Acomys russatus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>147</td><td><a href='/h/GCA_037038515.1' target=_blank>GCA_037038515.1</a></td><th>Eastern meadow vole</th><td>Microtus pennsylvanicus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>148</td><td><a href='/h/GCF_015227675.2' target=_blank>GCF_015227675.2</a></td><th>Norway rat</th><td>Rattus norvegicus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>149</td><td><a href='/cgi-bin/hgTracks?db=mm39' target=_blank>mm39</a></td><th>mouse</th><td>Mus musculus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>150</td><td><a href='/h/GCA_949316315.1' target=_blank>GCA_949316315.1</a></td><th>house mouse</th><td>Mus musculus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>151</td><td><a href='/h/GCF_947179515.1' target=_blank>GCF_947179515.1</a></td><th>European woodmouse</th><td>Apodemus sylvaticus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>152</td><td><a href='/h/GCA_031878675.1' target=_blank>GCA_031878675.1</a></td><th>Botta's pocket gopher</th><td>Thomomys bottae</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>153</td><td><a href='/h/GCA_963924665.1' target=_blank>GCA_963924665.1</a></td><th>European harvest mouse</th><td>Micromys minutus</td><td>Mammals Euarchontoglires</td></tr>
+<tr><td>154</td><td><a href='/h/GCF_950295315.1' target=_blank>GCF_950295315.1</a></td><th>European hedgehog</th><td>Erinaceus europaeus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>155</td><td><a href='/h/GCF_027595985.1' target=_blank>GCF_027595985.1</a></td><th>European shrew</th><td>Sorex araneus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>156</td><td><a href='/h/GCF_024139225.1' target=_blank>GCF_024139225.1</a></td><th>Etruscan shrew</th><td>Suncus etruscus</td><td>Mammals Laurasiatheria</td></tr>
+<tr><td>157</td><td><a href='/h/GCF_027887165.1' target=_blank>GCF_027887165.1</a></td><th>gray short-tailed opossum</th><td>Monodelphis domestica</td><td>Mammals Other</td></tr>
+<tr><td>158</td><td><a href='/h/GCF_019393635.1' target=_blank>GCF_019393635.1</a></td><th>monito del montes</th><td>Dromiciops gliroides</td><td>Mammals Other</td></tr>
+<tr><td>159</td><td><a href='/h/GCA_003287225.2' target=_blank>GCA_003287225.2</a></td><th>koala</th><td>Phascolarctos cinereus</td><td>Mammals Other</td></tr>
+<tr><td>160</td><td><a href='/h/GCF_011100635.1' target=_blank>GCF_011100635.1</a></td><th>common brushtail possum</th><td>Trichosurus vulpecula</td><td>Mammals Other</td></tr>
+<tr><td>161</td><td><a href='/h/GCF_028372415.1' target=_blank>GCF_028372415.1</a></td><th>Tammar wallaby</th><td>Macropus eugenii</td><td>Mammals Other</td></tr>
+<tr><td>162</td><td><a href='/h/GCA_048126345.1' target=_blank>GCA_048126345.1</a></td><th>marsupial mole</th><td>Notoryctes typhlops</td><td>Mammals Other</td></tr>
+<tr><td>163</td><td><a href='/h/GCA_037893015.1' target=_blank>GCA_037893015.1</a></td><th>greater bilby</th><td>Macrotis lagotis</td><td>Mammals Other</td></tr>
+<tr><td>164</td><td><a href='/h/GCA_048593235.1' target=_blank>GCA_048593235.1</a></td><th>fat-tailed dunnart</th><td>Sminthopsis crassicaudata</td><td>Mammals Other</td></tr>
+<tr><td>165</td><td><a href='/h/GCA_048593225.1' target=_blank>GCA_048593225.1</a></td><th>Tasmanian devil</th><td>Sarcophilus harrisii</td><td>Mammals Other</td></tr>
+<tr><td>166</td><td><a href='/h/GCA_048593285.1' target=_blank>GCA_048593285.1</a></td><th>tiger quoll</th><td>Dasyurus maculatus</td><td>Mammals Other</td></tr>
+<tr><td>167</td><td><a href='/h/GCF_015852505.1' target=_blank>GCF_015852505.1</a></td><th>short-beaked echidna</th><td>Tachyglossus aculeatus</td><td>Mammals Other</td></tr>
+<tr><td>168</td><td><a href='/h/GCF_004115215.2' target=_blank>GCF_004115215.2</a></td><th>platypus</th><td>Ornithorhynchus anatinus</td><td>Mammals Other</td></tr>
+<tr><td>169</td><td><a href='/h/GCA_040894355.2' target=_blank>GCA_040894355.2</a></td><th>Bellinger river turtle</th><td>Myuchelys georgesi</td><td>Reptiles</td></tr>
+<tr><td>170</td><td><a href='/h/GCF_028017835.1' target=_blank>GCF_028017835.1</a></td><th>European pond turtle</th><td>Emys orbicularis</td><td>Reptiles</td></tr>
+<tr><td>171</td><td><a href='/h/GCA_965152275.1' target=_blank>GCA_965152275.1</a></td><th>Australian flatback sea turtle</th><td>Natator depressus</td><td>Reptiles</td></tr>
+<tr><td>172</td><td><a href='/h/GCF_015237465.2' target=_blank>GCF_015237465.2</a></td><th>green sea turtle</th><td>Chelonia mydas</td><td>Reptiles</td></tr>
+<tr><td>173</td><td><a href='/h/GCA_965140235.1' target=_blank>GCA_965140235.1</a></td><th>loggerhead sea turtle</th><td>Caretta caretta</td><td>Reptiles</td></tr>
+<tr><td>174</td><td><a href='/h/GCA_965140285.1' target=_blank>GCA_965140285.1</a></td><th>Kemp's ridley sea turtle</th><td>Lepidochelys kempii</td><td>Reptiles</td></tr>
+<tr><td>175</td><td><a href='/h/GCA_965152235.1' target=_blank>GCA_965152235.1</a></td><th>Hawksbill sea turtle</th><td>Eretmochelys imbricata</td><td>Reptiles</td></tr>
+<tr><td>176</td><td><a href='/h/GCA_965140295.1' target=_blank>GCA_965140295.1</a></td><th>Pacific ridley</th><td>Lepidochelys olivacea</td><td>Reptiles</td></tr>
+<tr><td>177</td><td><a href='/h/GCF_025201925.1' target=_blank>GCF_025201925.1</a></td><th>Mexican gopher tortoise</th><td>Gopherus flavomarginatus</td><td>Reptiles</td></tr>
+<tr><td>178</td><td><a href='/h/GCF_007399415.2' target=_blank>GCF_007399415.2</a></td><th>Goode's Thornscrub Tortoise</th><td>Gopherus evgoodei</td><td>Reptiles</td></tr>
+<tr><td>179</td><td><a href='/h/GCF_009764565.3' target=_blank>GCF_009764565.3</a></td><th>leatherback sea turtle</th><td>Dermochelys coriacea</td><td>Reptiles</td></tr>
+<tr><td>180</td><td><a href='/h/GCA_045781085.1' target=_blank>GCA_045781085.1</a></td><th>Indian roofed turtle</th><td>Pangshura tecta</td><td>Reptiles</td></tr>
+<tr><td>181</td><td><a href='/h/GCA_045364815.1' target=_blank>GCA_045364815.1</a></td><th>arrau turtle</th><td>Podocnemis expansa</td><td>Reptiles</td></tr>
+<tr><td>182</td><td><a href='/h/GCA_030020295.1' target=_blank>GCA_030020295.1</a></td><th>Indian gharial</th><td>Gavialis gangeticus</td><td>Reptiles</td></tr>
+<tr><td>183</td><td><a href='/h/GCF_030867095.1' target=_blank>GCF_030867095.1</a></td><th>American alligator</th><td>Alligator mississippiensis</td><td>Reptiles</td></tr>
+<tr><td>184</td><td><a href='/h/GCA_033349115.1' target=_blank>GCA_033349115.1</a></td><th>Suwannee snapping turtle</th><td>Macrochelys suwanniensis</td><td>Reptiles</td></tr>
+<tr><td>185</td><td><a href='/h/GCA_033958435.1' target=_blank>GCA_033958435.1</a></td><th>pig-nosed turtle</th><td>Carettochelys insculpta</td><td>Reptiles</td></tr>
+<tr><td>186</td><td><a href='/h/GCA_032164245.1' target=_blank>GCA_032164245.1</a></td><th>eastern musk turtle</th><td>Sternotherus odoratus</td><td>Reptiles</td></tr>
+<tr><td>187</td><td><a href='/h/GCF_040807025.1' target=_blank>GCF_040807025.1</a></td><th>common ostrich</th><td>Struthio camelus australis</td><td>Birds Other</td></tr>
+<tr><td>188</td><td><a href='/h/GCF_036417845.1' target=_blank>GCF_036417845.1</a></td><th>North Island brown kiwi</th><td>Apteryx mantelli</td><td>Birds Other</td></tr>
+<tr><td>189</td><td><a href='/h/GCA_037962945.1' target=_blank>GCA_037962945.1</a></td><th>king vulture</th><td>Sarcoramphus papa</td><td>Birds Landbirds</td></tr>
+<tr><td>190</td><td><a href='/h/GCF_036370855.1' target=_blank>GCF_036370855.1</a></td><th>emu</th><td>Dromaius novaehollandiae</td><td>Birds Other</td></tr>
+<tr><td>191</td><td><a href='/h/GCA_028022735.1' target=_blank>GCA_028022735.1</a></td><th>bearded vulture</th><td>Gypaetus barbatus</td><td>Birds Landbirds</td></tr>
+<tr><td>192</td><td><a href='/h/GCF_027887155.1' target=_blank>GCF_027887155.1</a></td><th>diamondback terrapin</th><td>Malaclemys terrapin</td><td>Reptiles</td></tr>
+<tr><td>193</td><td><a href='/h/GCF_900496995.4' target=_blank>GCF_900496995.4</a></td><th>European golden eagle</th><td>Aquila chrysaetos</td><td>Birds Landbirds</td></tr>
+<tr><td>194</td><td><a href='/h/GCF_026419915.1' target=_blank>GCF_026419915.1</a></td><th>harpy eagle</th><td>Harpia harpyja</td><td>Birds Landbirds</td></tr>
+<tr><td>195</td><td><a href='/h/GCA_045345515.1' target=_blank>GCA_045345515.1</a></td><th>crested eagle</th><td>Morphnus guianensis</td><td>Birds Landbirds</td></tr>
+<tr><td>196</td><td><a href='/h/GCA_964188355.1' target=_blank>GCA_964188355.1</a></td><th>common buzzard</th><td>Buteo buteo</td><td>Birds Landbirds</td></tr>
+<tr><td>197</td><td><a href='/h/GCF_929443795.1' target=_blank>GCF_929443795.1</a></td><th>Northern goshawk</th><td>Accipiter gentilis</td><td>Birds Landbirds</td></tr>
+<tr><td>198</td><td><a href='/h/GCA_964195595.2' target=_blank>GCA_964195595.2</a></td><th>Cory's shearwater</th><td>Calonectris borealis</td><td>Birds Waterbirds</td></tr>
+<tr><td>199</td><td><a href='/h/GCF_947461875.1' target=_blank>GCF_947461875.1</a></td><th>white-tailed eagle</th><td>Haliaeetus albicilla</td><td>Birds Landbirds</td></tr>
+<tr><td>200</td><td><a href='/h/GCA_009819775.1' target=_blank>GCA_009819775.1</a></td><th>American flamingo</th><td>Phoenicopterus ruber</td><td>Birds Other</td></tr>
+<tr><td>201</td><td><a href='/h/GCA_017639555.1' target=_blank>GCA_017639555.1</a></td><th>Maguari stork</th><td>Ciconia maguari</td><td>Birds Waterbirds</td></tr>
+<tr><td>202</td><td><a href='/h/GCA_965183815.1' target=_blank>GCA_965183815.1</a></td><th>Eurasian spoonbill</th><td>Platalea leucorodia</td><td>Birds Waterbirds</td></tr>
+<tr><td>203</td><td><a href='/h/GCA_031877795.1' target=_blank>GCA_031877795.1</a></td><th>tawny owl</th><td>Strix aluco</td><td>Birds Landbirds</td></tr>
+<tr><td>204</td><td><a href='/h/GCA_027474245.1' target=_blank>GCA_027474245.1</a></td><th>Humboldt penguin</th><td>Spheniscus humboldti</td><td>Birds Waterbirds</td></tr>
+<tr><td>205</td><td><a href='/h/GCF_030936135.1' target=_blank>GCF_030936135.1</a></td><th>red-throated Loon</th><td>Gavia stellata</td><td>Birds Waterbirds</td></tr>
+<tr><td>206</td><td><a href='/h/GCF_028389875.1' target=_blank>GCF_028389875.1</a></td><th>lesser rhea </th><td>Rhea pennata</td><td>Birds Other</td></tr>
+<tr><td>207</td><td><a href='/h/GCA_020745775.1' target=_blank>GCA_020745775.1</a></td><th>plumbeous ibis</th><td>Theristicus caerulescens</td><td>Birds Waterbirds</td></tr>
+<tr><td>208</td><td><a href='/h/GCF_028858705.1' target=_blank>GCF_028858705.1</a></td><th>whooping crane</th><td>Grus americana</td><td>Birds Waterbirds</td></tr>
+<tr><td>209</td><td><a href='/h/GCA_964106855.1' target=_blank>GCA_964106855.1</a></td><th>Eurasian crane</th><td>Grus grus</td><td>Birds Waterbirds</td></tr>
+<tr><td>210</td><td><a href='/h/GCA_009819825.1' target=_blank>GCA_009819825.1</a></td><th>red-legged seriema</th><td>Cariama cristata</td><td>Birds Landbirds</td></tr>
+<tr><td>211</td><td><a href='/h/GCA_031468815.1' target=_blank>GCA_031468815.1</a></td><th>Northern gannet</th><td>Morus bassanus</td><td>Birds Waterbirds</td></tr>
+<tr><td>212</td><td><a href='/h/GCA_030463565.1' target=_blank>GCA_030463565.1</a></td><th>dalmatian pelican</th><td>Pelecanus crispus</td><td>Birds Waterbirds</td></tr>
+<tr><td>213</td><td><a href='/h/GCA_965140245.1' target=_blank>GCA_965140245.1</a></td><th>little owl</th><td>Athene noctua</td><td>Birds Landbirds</td></tr>
+<tr><td>214</td><td><a href='/h/GCA_011004875.1' target=_blank>GCA_011004875.1</a></td><th>grey crowned-crane</th><td>Balearica regulorum gibbericeps</td><td>Birds Waterbirds</td></tr>
+<tr><td>215</td><td><a href='/h/GCA_964199755.1' target=_blank>GCA_964199755.1</a></td><th>yellow-legged gull</th><td>Larus michahellis</td><td>Birds Waterbirds</td></tr>
+<tr><td>216</td><td><a href='/h/GCA_963932225.1' target=_blank>GCA_963932225.1</a></td><th>lesser black-backed gull</th><td>Larus fuscus</td><td>Birds Waterbirds</td></tr>
+<tr><td>217</td><td><a href='/h/GCF_963924245.1' target=_blank>GCF_963924245.1</a></td><th>black-headed gull</th><td>Chroicocephalus ridibundus</td><td>Birds Waterbirds</td></tr>
+<tr><td>218</td><td><a href='/h/GCA_964417175.1' target=_blank>GCA_964417175.1</a></td><th>herring gull</th><td>Larus argentatus</td><td>Birds Waterbirds</td></tr>
+<tr><td>219</td><td><a href='/h/GCA_965231255.1' target=_blank>GCA_965231255.1</a></td><th>Northern Lapwing</th><td>Vanellus vanellus</td><td>Birds Waterbirds</td></tr>
+<tr><td>220</td><td><a href='/h/GCF_028500815.1' target=_blank>GCF_028500815.1</a></td><th>black-legged kittiwake</th><td>Rissa tridactyla</td><td>Birds Waterbirds</td></tr>
+<tr><td>221</td><td><a href='/h/GCA_009819605.1' target=_blank>GCA_009819605.1</a></td><th>common tern</th><td>Sterna hirundo</td><td>Birds Waterbirds</td></tr>
+<tr><td>222</td><td><a href='/h/GCF_963921805.1' target=_blank>GCF_963921805.1</a></td><th>great cormorant</th><td>Phalacrocorax carbo</td><td>Birds Waterbirds</td></tr>
+<tr><td>223</td><td><a href='/h/GCA_949628215.1' target=_blank>GCA_949628215.1</a></td><th>European shag</th><td>Gulosus aristotelis</td><td>Birds Waterbirds</td></tr>
+<tr><td>224</td><td><a href='/h/GCA_034619465.1' target=_blank>GCA_034619465.1</a></td><th>cuckoo-roller</th><td>Leptosomus discolor</td><td>Birds Landbirds</td></tr>
+<tr><td>225</td><td><a href='/h/GCA_008658365.1' target=_blank>GCA_008658365.1</a></td><th>razorbill</th><td>Alca Torda</td><td>Birds Waterbirds</td></tr>
+<tr><td>226</td><td><a href='/h/GCF_013368605.1' target=_blank>GCF_013368605.1</a></td><th>great potoo</th><td>Nyctibius grandis</td><td>Birds Other</td></tr>
+<tr><td>227</td><td><a href='/h/GCF_017639655.2' target=_blank>GCF_017639655.2</a></td><th>lesser kestrel</th><td>Falco naumanni</td><td>Birds Landbirds</td></tr>
+<tr><td>228</td><td><a href='/h/GCA_963210335.1' target=_blank>GCA_963210335.1</a></td><th>Mauritius kestrel</th><td>Falco punctatus</td><td>Birds Landbirds</td></tr>
+<tr><td>229</td><td><a href='/h/GCF_023634155.1' target=_blank>GCF_023634155.1</a></td><th>peregrine falcon</th><td>Falco peregrinus</td><td>Birds Landbirds</td></tr>
+<tr><td>230</td><td><a href='/h/GCF_015220075.1' target=_blank>GCF_015220075.1</a></td><th>gyrfalcon</th><td>Falco rusticolus</td><td>Birds Landbirds</td></tr>
+<tr><td>231</td><td><a href='/h/GCA_964106895.1' target=_blank>GCA_964106895.1</a></td><th>Eurasian curlew</th><td>Numenius arquata</td><td>Birds Waterbirds</td></tr>
+<tr><td>232</td><td><a href='/h/GCF_023634085.1' target=_blank>GCF_023634085.1</a></td><th>saker falcon</th><td>Falco cherrug</td><td>Birds Landbirds</td></tr>
+<tr><td>233</td><td><a href='/h/GCA_964289735.1' target=_blank>GCA_964289735.1</a></td><th>red-billed tropicbird</th><td>Phaethon aethereus</td><td>Birds Waterbirds</td></tr>
+<tr><td>234</td><td><a href='/h/GCA_030867145.1' target=_blank>GCA_030867145.1</a></td><th>hoatzin</th><td>Opisthocomus hoazin</td><td>Birds Waterbirds</td></tr>
+<tr><td>235</td><td><a href='/h/GCF_023638135.1' target=_blank>GCF_023638135.1</a></td><th>Lanner falcon</th><td>Falco biarmicus</td><td>Birds Landbirds</td></tr>
+<tr><td>236</td><td><a href='/h/GCA_965151615.1' target=_blank>GCA_965151615.1</a></td><th>tundra swan</th><td>Cygnus columbianus</td><td>Birds Other</td></tr>
+<tr><td>237</td><td><a href='/h/GCA_965231335.1' target=_blank>GCA_965231335.1</a></td><th>Canada goose</th><td>Branta canadensis</td><td>Birds Other</td></tr>
+<tr><td>238</td><td><a href='/h/GCA_009769465.1' target=_blank>GCA_009769465.1</a></td><th>red-crested turaco</th><td>Tauraco erythrolophus</td><td>Birds Other</td></tr>
+<tr><td>239</td><td><a href='/h/GCA_036417535.1' target=_blank>GCA_036417535.1</a></td><th>MacQueen's bustard</th><td>Chlamydotis macqueenii</td><td>Birds Other</td></tr>
+<tr><td>240</td><td><a href='/h/GCA_907165065.1' target=_blank>GCA_907165065.1</a></td><th>Eurasian nightjar</th><td>Caprimulgus europaeus</td><td>Birds Other</td></tr>
+<tr><td>241</td><td><a href='/h/GCF_040182565.1' target=_blank>GCF_040182565.1</a></td><th>swan goose</th><td>Anser cygnoides</td><td>Birds Other</td></tr>
+<tr><td>242</td><td><a href='/h/GCA_964211835.1' target=_blank>GCA_964211835.1</a></td><th>domestic goose</th><td>Anser anser</td><td>Birds Other</td></tr>
+<tr><td>243</td><td><a href='/h/GCF_036013445.1' target=_blank>GCF_036013445.1</a></td><th>Nicobar pigeon</th><td>Caloenas nicobarica</td><td>Birds Other</td></tr>
+<tr><td>244</td><td><a href='/h/GCA_964034855.1' target=_blank>GCA_964034855.1</a></td><th>pink-footed goose</th><td>Anser brachyrhynchus</td><td>Birds Other</td></tr>
+<tr><td>245</td><td><a href='/h/GCA_963989345.1' target=_blank>GCA_963989345.1</a></td><th>long-tailed duck</th><td>Clangula hyemalis</td><td>Birds Other</td></tr>
+<tr><td>246</td><td><a href='/h/GCA_964059595.1' target=_blank>GCA_964059595.1</a></td><th>common goldeneye</th><td>Bucephala clangula</td><td>Birds Other</td></tr>
+<tr><td>247</td><td><a href='/h/GCF_009769625.2' target=_blank>GCF_009769625.2</a></td><th>mute swan</th><td>Cygnus olor</td><td>Birds Other</td></tr>
+<tr><td>248</td><td><a href='/h/GCA_027574665.1' target=_blank>GCA_027574665.1</a></td><th>Kagu</th><td>Rhynochetos jubatus</td><td>Birds Waterbirds</td></tr>
+<tr><td>249</td><td><a href='/h/GCA_028020825.1' target=_blank>GCA_028020825.1</a></td><th>tawny frogmouth</th><td>Podargus strigoides</td><td>Birds Other</td></tr>
+<tr><td>250</td><td><a href='/h/GCA_964188345.1' target=_blank>GCA_964188345.1</a></td><th>mallard</th><td>Anas platyrhynchos</td><td>Birds Other</td></tr>
+<tr><td>251</td><td><a href='/h/GCA_964211825.1' target=_blank>GCA_964211825.1</a></td><th>common pochard</th><td>Aythya ferina</td><td>Birds Other</td></tr>
+<tr><td>252</td><td><a href='/h/GCA_009769525.1' target=_blank>GCA_009769525.1</a></td><th>yellow-throated sandgrouse</th><td>Pterocles gutturalis</td><td>Birds Other</td></tr>
+<tr><td>253</td><td><a href='/h/GCA_964035555.1' target=_blank>GCA_964035555.1</a></td><th>red-crested pochard</th><td>Netta rufina</td><td>Birds Other</td></tr>
+<tr><td>254</td><td><a href='/h/GCA_965140915.1' target=_blank>GCA_965140915.1</a></td><th>greater scaup</th><td>Aythya marila</td><td>Birds Other</td></tr>
+<tr><td>255</td><td><a href='/h/GCF_963932015.1' target=_blank>GCF_963932015.1</a></td><th>northern pintail</th><td>Anas acuta</td><td>Birds Other</td></tr>
+<tr><td>256</td><td><a href='/h/GCF_004027225.2' target=_blank>GCF_004027225.2</a></td><th>kakapo</th><td>Strigops habroptilus</td><td>Birds Landbirds</td></tr>
+<tr><td>257</td><td><a href='/h/GCF_009819795.1' target=_blank>GCF_009819795.1</a></td><th>tufted duck</th><td>Aythya fuligula</td><td>Birds Other</td></tr>
+<tr><td>258</td><td><a href='/h/GCF_037038585.1' target=_blank>GCF_037038585.1</a></td><th>band-tailed pigeon</th><td>Patagioenas fasciata</td><td>Birds Other</td></tr>
+<tr><td>259</td><td><a href='/h/GCA_036873955.1' target=_blank>GCA_036873955.1</a></td><th>Brazilian merganser</th><td>Mergus octosetaceus</td><td>Birds Other</td></tr>
+<tr><td>260</td><td><a href='/h/GCA_039906565.1' target=_blank>GCA_039906565.1</a></td><th>mountain owlet-nightjar</th><td>Aegotheles albertisi</td><td>Birds Other</td></tr>
+<tr><td>261</td><td><a href='/h/GCA_009769605.1' target=_blank>GCA_009769605.1</a></td><th>Abyssinian ground hornbill</th><td>Bucorvus abyssinicus</td><td>Birds Landbirds</td></tr>
+<tr><td>262</td><td><a href='/h/GCF_036013475.1' target=_blank>GCF_036013475.1</a></td><th>rock dove</th><td>Columba livia</td><td>Birds Other</td></tr>
+<tr><td>263</td><td><a href='/h/GCA_020800305.1' target=_blank>GCA_020800305.1</a></td><th>takahe</th><td>Porphyrio hochstetteri</td><td>Birds Waterbirds</td></tr>
+<tr><td>264</td><td><a href='/h/GCA_964237585.1' target=_blank>GCA_964237585.1</a></td><th>common moorhen</th><td>Gallinula chloropus</td><td>Birds Waterbirds</td></tr>
+<tr><td>265</td><td><a href='/h/GCA_964273445.1' target=_blank>GCA_964273445.1</a></td><th>Eurasian collared-dove</th><td>Streptopelia decaocto</td><td>Birds Other</td></tr>
+<tr><td>266</td><td><a href='/h/GCF_017976375.1' target=_blank>GCF_017976375.1</a></td><th>common cuckoo</th><td>Cuculus canorus</td><td>Birds Other</td></tr>
+<tr><td>267</td><td><a href='/h/GCA_020746105.1' target=_blank>GCA_020746105.1</a></td><th>surucua trogon</th><td>Trogon surrucura</td><td>Birds Landbirds</td></tr>
+<tr><td>268</td><td><a href='/h/GCA_963082525.1' target=_blank>GCA_963082525.1</a></td><th>pink pigeon</th><td>Nesoenas mayeri</td><td>Birds Other</td></tr>
+<tr><td>269</td><td><a href='/h/GCA_963264785.1' target=_blank>GCA_963264785.1</a></td><th>Mauritius parakeet</th><td>Psittacula echo</td><td>Birds Landbirds</td></tr>
+<tr><td>270</td><td><a href='/h/GCA_045345405.1' target=_blank>GCA_045345405.1</a></td><th>golden parakeet</th><td>Guaruba guaruba</td><td>Birds Landbirds</td></tr>
+<tr><td>271</td><td><a href='/h/GCA_028858755.1' target=_blank>GCA_028858755.1</a></td><th>blue-and-gold macaw</th><td>Ara ararauna</td><td>Birds Landbirds</td></tr>
+<tr><td>272</td><td><a href='/h/GCA_039720435.1' target=_blank>GCA_039720435.1</a></td><th>yellow-crowned amazon</th><td>Amazona ochrocephala </td><td>Birds Landbirds</td></tr>
+<tr><td>273</td><td><a href='/h/GCF_037157495.1' target=_blank>GCF_037157495.1</a></td><th>swift parrot</th><td>Lathamus discolor</td><td>Birds Landbirds</td></tr>
+<tr><td>274</td><td><a href='/h/GCA_009819595.1' target=_blank>GCA_009819595.1</a></td><th>carmine bee-eater</th><td>Merops nubicus</td><td>Birds Landbirds</td></tr>
+<tr><td>275</td><td><a href='/h/GCF_028858725.1' target=_blank>GCF_028858725.1</a></td><th>speckled mousebird</th><td>Colius striatus</td><td>Birds Landbirds</td></tr>
+<tr><td>276</td><td><a href='/h/GCA_020745705.1' target=_blank>GCA_020745705.1</a></td><th>whiskered treeswift</th><td>Hemiprocne comata</td><td>Birds Other</td></tr>
+<tr><td>277</td><td><a href='/h/GCF_012275295.1' target=_blank>GCF_012275295.1</a></td><th>budgerigar</th><td>Melopsittacus undulatus</td><td>Birds Landbirds</td></tr>
+<tr><td>278</td><td><a href='/h/GCA_901699155.2' target=_blank>GCA_901699155.2</a></td><th>European turtle dove</th><td>Streptopelia turtur</td><td>Birds Other</td></tr>
+<tr><td>279</td><td><a href='/h/GCA_017639485.1' target=_blank>GCA_017639485.1</a></td><th>European golden plover</th><td>Pluvialis apricaria</td><td>Birds Waterbirds</td></tr>
+<tr><td>280</td><td><a href='/h/GCF_020740795.1' target=_blank>GCF_020740795.1</a></td><th>common swift</th><td>Apus apus</td><td>Birds Other</td></tr>
+<tr><td>281</td><td><a href='/h/GCA_046129655.1' target=_blank>GCA_046129655.1</a></td><th>blue jay</th><td>Cyanocitta cristata</td><td>Birds Landbirds</td></tr>
+<tr><td>282</td><td><a href='/h/GCA_965178545.1' target=_blank>GCA_965178545.1</a></td><th>Western jackdaw</th><td>Coloeus monedula</td><td>Birds Landbirds</td></tr>
+<tr><td>283</td><td><a href='/h/GCF_009829145.1' target=_blank>GCF_009829145.1</a></td><th>lanced-tailed manakin</th><td>Chiroxiphia lanceolata</td><td>Birds Landbirds</td></tr>
+<tr><td>284</td><td><a href='/h/GCF_036250125.1' target=_blank>GCF_036250125.1</a></td><th>white-crowned manakin</th><td>Dixiphia pipra</td><td>Birds Landbirds</td></tr>
+<tr><td>285</td><td><a href='/h/GCA_047922985.1' target=_blank>GCA_047922985.1</a></td><th>elegant crested tinamou</th><td>Eudromia elegans</td><td>Birds Other</td></tr>
+<tr><td>286</td><td><a href='/h/GCF_020740725.1' target=_blank>GCF_020740725.1</a></td><th>Hawaiian crow</th><td>Corvus hawaiiensis</td><td>Birds Landbirds</td></tr>
+<tr><td>287</td><td><a href='/h/GCA_014706295.1' target=_blank>GCA_014706295.1</a></td><th>Obi paradise-crow</th><td>Lycocorax pyrrhopterus obiensis</td><td>Birds Landbirds</td></tr>
+<tr><td>288</td><td><a href='/h/GCF_009650955.1' target=_blank>GCF_009650955.1</a></td><th>New Caledonian crow</th><td>Corvus moneduloides</td><td>Birds Landbirds</td></tr>
+<tr><td>289</td><td><a href='/h/GCA_016904835.1' target=_blank>GCA_016904835.1</a></td><th>rifleman</th><td>Acanthisitta chloris</td><td>Birds Other</td></tr>
+<tr><td>290</td><td><a href='/h/GCF_016700215.2' target=_blank>GCF_016700215.2</a></td><th>white leghorn layer chicken</th><td>Gallus gallus</td><td>Birds Other</td></tr>
+<tr><td>291</td><td><a href='/h/GCA_045364795.1' target=_blank>GCA_045364795.1</a></td><th>Xingu scale-backed antbird</th><td>Willisornis vidua</td><td>Birds Landbirds</td></tr>
+<tr><td>292</td><td><a href='/h/GCA_023637945.2' target=_blank>GCA_023637945.2</a></td><th>long-tailed hermit</th><td>Phaethornis superciliosus</td><td>Birds Other</td></tr>
+<tr><td>293</td><td><a href='/h/GCF_026979565.1' target=_blank>GCF_026979565.1</a></td><th>village indigobird</th><td>Vidua chalybeata</td><td>Birds Landbirds</td></tr>
+<tr><td>294</td><td><a href='/h/GCF_030490865.1' target=_blank>GCF_030490865.1</a></td><th>black-capped chickadee</th><td>Poecile atricapillus</td><td>Birds Landbirds</td></tr>
+<tr><td>295</td><td><a href='/h/GCF_023343835.1' target=_blank>GCF_023343835.1</a></td><th>rock ptarmigan</th><td>Lagopus muta</td><td>Birds Other</td></tr>
+<tr><td>296</td><td><a href='/h/GCA_951394365.1' target=_blank>GCA_951394365.1</a></td><th>Western capercaillie</th><td>Tetrao urogallus</td><td>Birds Other</td></tr>
+<tr><td>297</td><td><a href='/h/GCF_963662255.1' target=_blank>GCF_963662255.1</a></td><th>white-throated dipper</th><td>Cinclus cinclus</td><td>Birds Landbirds</td></tr>
+<tr><td>298</td><td><a href='/h/GCA_027559615.1' target=_blank>GCA_027559615.1</a></td><th>common myna</th><td>Acridotheres tristis</td><td>Birds Landbirds</td></tr>
+<tr><td>299</td><td><a href='/h/GCF_036169615.1' target=_blank>GCF_036169615.1</a></td><th>tourmaline sunangel</th><td>Heliangelus exortis</td><td>Birds Other</td></tr>
+<tr><td>300</td><td><a href='/h/GCA_963513975.1' target=_blank>GCA_963513975.1</a></td><th>common chaffinch</th><td>Fringilla coelebs</td><td>Birds Landbirds</td></tr>
+<tr><td>301</td><td><a href='/h/GCF_020745825.1' target=_blank>GCF_020745825.1</a></td><th>red-winged blackbird</th><td>Agelaius phoeniceus</td><td>Birds Landbirds</td></tr>
+<tr><td>302</td><td><a href='/h/GCF_036417665.1' target=_blank>GCF_036417665.1</a></td><th>house sparrow</th><td>Passer domesticus</td><td>Birds Landbirds</td></tr>
+<tr><td>303</td><td><a href='/h/GCA_965231275.1' target=_blank>GCA_965231275.1</a></td><th>silver-eye</th><td>Zosterops lateralis</td><td>Birds Landbirds</td></tr>
+<tr><td>304</td><td><a href='/h/GCF_003957555.1' target=_blank>GCF_003957555.1</a></td><th>Anna's hummingbird</th><td>Calypte anna</td><td>Birds Other</td></tr>
+<tr><td>305</td><td><a href='/h/GCA_048771995.1' target=_blank>GCA_048771995.1</a></td><th>zebra finch</th><td>Taeniopygia guttata</td><td>Birds Landbirds</td></tr>
+<tr><td>306</td><td><a href='/h/GCF_027477595.1' target=_blank>GCF_027477595.1</a></td><th>house finch</th><td>Haemorhous mexicanus</td><td>Birds Landbirds</td></tr>
+<tr><td>307</td><td><a href='/h/GCA_036010785.1' target=_blank>GCA_036010785.1</a></td><th>seaside sparrow</th><td>Ammospiza maritima</td><td>Birds Landbirds</td></tr>
+<tr><td>308</td><td><a href='/h/GCF_027887145.1' target=_blank>GCF_027887145.1</a></td><th>saltmarsh sparrow</th><td>Ammodramus caudacutus</td><td>Birds Landbirds</td></tr>
+<tr><td>309</td><td><a href='/h/GCA_031885435.1' target=_blank>GCA_031885435.1</a></td><th>Savannah sparrow</th><td>Passerculus sandwichensis</td><td>Birds Landbirds</td></tr>
+<tr><td>310</td><td><a href='/h/GCA_014839755.1' target=_blank>GCA_014839755.1</a></td><th>garden warbler</th><td>Sylvia borin</td><td>Birds Landbirds</td></tr>
+<tr><td>311</td><td><a href='/h/GCA_047830755.1' target=_blank>GCA_047830755.1</a></td><th>white-throated sparrow</th><td>Zonotrichia albicollis</td><td>Birds Landbirds</td></tr>
+<tr><td>312</td><td><a href='/h/GCF_009819885.2' target=_blank>GCF_009819885.2</a></td><th>Swainson's thrush</th><td>Catharus ustulatus</td><td>Birds Landbirds</td></tr>
+<tr><td>313</td><td><a href='/h/GCF_009819655.1' target=_blank>GCF_009819655.1</a></td><th>European blackcap</th><td>Sylvia atricapilla</td><td>Birds Landbirds</td></tr>
+<tr><td>314</td><td><a href='/h/GCF_027579445.1' target=_blank>GCF_027579445.1</a></td><th>Nelson's sparrow</th><td>Ammospiza nelsoni</td><td>Birds Landbirds</td></tr>
+<tr><td>315</td><td><a href='/h/GCF_029582105.1' target=_blank>GCF_029582105.1</a></td><th>eastern black-eared wheatear</th><td>Oenanthe melanoleuca</td><td>Birds Landbirds</td></tr>
+<tr><td>316</td><td><a href='/h/GCA_046129695.1' target=_blank>GCA_046129695.1</a></td><th>Bengalese finch</th><td>Lonchura striata domestica</td><td>Birds Landbirds</td></tr>
+<tr><td>317</td><td><a href='/h/GCF_028018845.1' target=_blank>GCF_028018845.1</a></td><th>swamp sparrow</th><td>Melospiza georgiana</td><td>Birds Landbirds</td></tr>
+<tr><td>318</td><td><a href='/h/GCF_015227805.1' target=_blank>GCF_015227805.1</a></td><th>barn swallow</th><td>Hirundo rustica</td><td>Birds Landbirds</td></tr>
+<tr><td>319</td><td><a href='/h/GCA_039878825.1' target=_blank>GCA_039878825.1</a></td><th>king quail</th><td>Coturnix chinensis</td><td>Birds Other</td></tr>
+<tr><td>320</td><td><a href='/h/GCA_903797595.2' target=_blank>GCA_903797595.2</a></td><th>European robin</th><td>Erithacus rubecula</td><td>Birds Landbirds</td></tr>
+<tr><td>321</td><td><a href='/h/GCF_035770615.1' target=_blank>GCF_035770615.1</a></td><th>song sparrow</th><td>Melospiza melodia</td><td>Birds Landbirds</td></tr>
+<tr><td>322</td><td><a href='/h/GCA_009764595.1' target=_blank>GCA_009764595.1</a></td><th>common yellowthroat</th><td>Geothlypis trichas</td><td>Birds Landbirds</td></tr>
+<tr><td>323</td><td><a href='/h/GCF_014839835.1' target=_blank>GCF_014839835.1</a></td><th>downy woodpecker</th><td>Dryobates pubescens</td><td>Birds Landbirds</td></tr>
+<tr><td>324</td><td><a href='/h/GCA_021292165.1' target=_blank>GCA_021292165.1</a></td><th>Chinese crocodile lizard</th><td>Shinisaurus crocodilurus</td><td>Reptiles</td></tr>
+<tr><td>325</td><td><a href='/h/GCF_015220805.1' target=_blank>GCF_015220805.1</a></td><th>red-fronted tinkerbird</th><td>Pogoniulus pusillus</td><td>Birds Landbirds</td></tr>
+<tr><td>326</td><td><a href='/h/GCF_028583425.1' target=_blank>GCF_028583425.1</a></td><th>leopard gecko</th><td>Eublepharis macularius</td><td>Reptiles</td></tr>
+<tr><td>327</td><td><a href='/h/GCF_030035675.1' target=_blank>GCF_030035675.1</a></td><th>Florida worm lizard</th><td>Rhineura floridana</td><td>Reptiles</td></tr>
+<tr><td>328</td><td><a href='/h/GCF_023053635.1' target=_blank>GCF_023053635.1</a></td><th>Southern alligator lizard</th><td>Elgaria multicarinata webbii</td><td>Reptiles</td></tr>
+<tr><td>329</td><td><a href='/h/GCA_029215775.1' target=_blank>GCA_029215775.1</a></td><th>San Diegan legless lizard</th><td>Anniella stebbinsi</td><td>Reptiles</td></tr>
+<tr><td>330</td><td><a href='/h/GCA_035046505.1' target=_blank>GCA_035046505.1</a></td><th>blue-tongue skink</th><td>Tiliqua scincoides</td><td>Reptiles</td></tr>
+<tr><td>331</td><td><a href='/h/GCF_029931775.1' target=_blank>GCF_029931775.1</a></td><th>European leaf-toed gecko</th><td>Euleptes europaea</td><td>Reptiles</td></tr>
+<tr><td>332</td><td><a href='/h/GCA_964188175.1' target=_blank>GCA_964188175.1</a></td><th>Italian wall lizard</th><td>Podarcis siculus</td><td>Reptiles</td></tr>
+<tr><td>333</td><td><a href='/h/GCA_964188315.1' target=_blank>GCA_964188315.1</a></td><th>common wall lizard</th><td>Podarcis muralis</td><td>Reptiles</td></tr>
+<tr><td>334</td><td><a href='/h/GCA_964270895.1' target=_blank>GCA_964270895.1</a></td><th>Filfola wall lizard</th><td>Podarcis filfolensis</td><td>Reptiles</td></tr>
+<tr><td>335</td><td><a href='/h/GCF_027172205.1' target=_blank>GCF_027172205.1</a></td><th>Aeolian wall lizard</th><td>Podarcis raffonei</td><td>Reptiles</td></tr>
+<tr><td>336</td><td><a href='/h/GCA_965153285.1' target=_blank>GCA_965153285.1</a></td><th>Tyrrhenian wall lizard</th><td>Podarcis tiliguerta</td><td>Reptiles</td></tr>
+<tr><td>337</td><td><a href='/h/GCA_964106915.2' target=_blank>GCA_964106915.2</a></td><th>Skyros wall lizard</th><td>Podarcis gaigeae</td><td>Reptiles</td></tr>
+<tr><td>338</td><td><a href='/h/GCA_964234715.1' target=_blank>GCA_964234715.1</a></td><th>Dalmatian wall lizard</th><td>Podarcis melisellensis</td><td>Reptiles</td></tr>
+<tr><td>339</td><td><a href='/h/GCA_965112155.1' target=_blank>GCA_965112155.1</a></td><th>Columbretes wall lizard</th><td>Podarcis liolepis</td><td>Reptiles</td></tr>
+<tr><td>340</td><td><a href='/h/GCA_964106645.2' target=_blank>GCA_964106645.2</a></td><th>Ibiza wall lizard</th><td>Podarcis pityusensis</td><td>Reptiles</td></tr>
+<tr><td>341</td><td><a href='/h/GCA_965113315.1' target=_blank>GCA_965113315.1</a></td><th>Andalusian wall lizard</th><td>Podarcis vaucheri</td><td>Reptiles</td></tr>
+<tr><td>342</td><td><a href='/h/GCA_951804945.1' target=_blank>GCA_951804945.1</a></td><th>Cretan wall lizard</th><td>Podarcis cretensis</td><td>Reptiles</td></tr>
+<tr><td>343</td><td><a href='/h/GCF_009819535.1' target=_blank>GCF_009819535.1</a></td><th>sand lizard</th><td>Lacerta agilis</td><td>Reptiles</td></tr>
+<tr><td>344</td><td><a href='/h/GCF_963506605.1' target=_blank>GCF_963506605.1</a></td><th>European common lizard</th><td>Zootoca vivipara</td><td>Reptiles</td></tr>
+<tr><td>345</td><td><a href='/h/GCA_964188305.1' target=_blank>GCA_964188305.1</a></td><th>Bocage's wall lizard</th><td>Podarcis bocagei</td><td>Reptiles</td></tr>
+<tr><td>346</td><td><a href='/h/GCA_964252035.1' target=_blank>GCA_964252035.1</a></td><th>Aegean wall lizard</th><td>Podarcis erhardii</td><td>Reptiles</td></tr>
+<tr><td>347</td><td><a href='/h/GCA_046126795.1' target=_blank>GCA_046126795.1</a></td><th>Smith's blind skink</th><td>Dibamus smithi</td><td>Reptiles</td></tr>
+<tr><td>348</td><td><a href='/h/GCA_030412105.1' target=_blank>GCA_030412105.1</a></td><th>stout iguana</th><td>Cyclura pinguis</td><td>Reptiles</td></tr>
+<tr><td>349</td><td><a href='/h/GCA_030867105.1' target=_blank>GCA_030867105.1</a></td><th>olive python</th><td>Liasis olivaceus</td><td>Reptiles</td></tr>
+<tr><td>350</td><td><a href='/h/GCF_035149785.1' target=_blank>GCF_035149785.1</a></td><th>viper boa</th><td>Candoia aspera</td><td>Reptiles</td></tr>
+<tr><td>351</td><td><a href='/h/GCA_023333525.2' target=_blank>GCA_023333525.2</a></td><th>Western whiptail stejnegeri</th><td>Aspidoscelis tigris stejnegeri</td><td>Reptiles</td></tr>
+<tr><td>352</td><td><a href='/h/GCF_037176765.1' target=_blank>GCF_037176765.1</a></td><th>brown anole</th><td>Anolis sagrei</td><td>Reptiles</td></tr>
+<tr><td>353</td><td><a href='/h/GCA_030440675.1' target=_blank>GCA_030440675.1</a></td><th>panther chameleon</th><td>Furcifer pardalis</td><td>Reptiles</td></tr>
+<tr><td>354</td><td><a href='/h/GCA_047715975.1' target=_blank>GCA_047715975.1</a></td><th>lizards B.pumilum</th><td>Bradypodion pumilum</td><td>Reptiles</td></tr>
+<tr><td>355</td><td><a href='/h/GCA_024294585.1' target=_blank>GCA_024294585.1</a></td><th>snub-nosed viber</th><td>Vipera latastei</td><td>Reptiles</td></tr>
+<tr><td>356</td><td><a href='/h/GCA_964194415.1' target=_blank>GCA_964194415.1</a></td><th>adder</th><td>Vipera berus</td><td>Reptiles</td></tr>
+<tr><td>357</td><td><a href='/h/GCA_947247035.1' target=_blank>GCA_947247035.1</a></td><th>Hungarian meadow viper</th><td>Vipera ursinii</td><td>Reptiles</td></tr>
+<tr><td>358</td><td><a href='/h/GCA_964273705.1' target=_blank>GCA_964273705.1</a></td><th>barred grass snake</th><td>Natrix helvetica</td><td>Reptiles</td></tr>
+<tr><td>359</td><td><a href='/h/GCF_009769535.1' target=_blank>GCF_009769535.1</a></td><th>Western terrestrial garter snake</th><td>Thamnophis elegans</td><td>Reptiles</td></tr>
+<tr><td>360</td><td><a href='/h/GCF_031021105.1' target=_blank>GCF_031021105.1</a></td><th>royal ground snake</th><td>Erythrolamprus reginae</td><td>Reptiles</td></tr>
+<tr><td>361</td><td><a href='/h/GCF_901001135.1' target=_blank>GCF_901001135.1</a></td><th>two-lined caecilian</th><td>Rhinatrema bivittatum</td><td>Amphibians</td></tr>
+<tr><td>362</td><td><a href='/h/GCA_901765095.2' target=_blank>GCA_901765095.2</a></td><th>tiny cayenne caecilian</th><td>Microcaecilia unicolor</td><td>Amphibians</td></tr>
+<tr><td>363</td><td><a href='/h/GCF_902459505.1' target=_blank>GCF_902459505.1</a></td><th>Gaboon caecilian</th><td>Geotrypetes seraphini</td><td>Amphibians</td></tr>
+<tr><td>364</td><td><a href='/h/GCA_040206685.1' target=_blank>GCA_040206685.1</a></td><th>coastal tailed frog</th><td>Ascaphus truei</td><td>Amphibians</td></tr>
+<tr><td>365</td><td><a href='/h/GCF_037176945.1' target=_blank>GCF_037176945.1</a></td><th>African coelacanth</th><td>Latimeria chalumnae</td><td>Fishes Other</td></tr>
+<tr><td>366</td><td><a href='/h/GCA_027410445.1' target=_blank>GCA_027410445.1</a></td><th>painted frog</th><td>Discoglossus pictus</td><td>Amphibians</td></tr>
+<tr><td>367</td><td><a href='/h/GCF_027358695.1' target=_blank>GCF_027358695.1</a></td><th>plain spadefoot toad</th><td>Spea bombifrons</td><td>Amphibians</td></tr>
+<tr><td>368</td><td><a href='/h/GCA_038501925.1' target=_blank>GCA_038501925.1</a></td><th>Peter's clawed frog</th><td>Xenopus petersii</td><td>Amphibians</td></tr>
+<tr><td>369</td><td><a href='/h/GCF_027789765.1' target=_blank>GCF_027789765.1</a></td><th>hourglass treefrog</th><td>Dendropsophus ebraccatus</td><td>Amphibians</td></tr>
+<tr><td>370</td><td><a href='/h/GCF_035609145.1' target=_blank>GCF_035609145.1</a></td><th>coqui</th><td>Eleutherodactylus coqui</td><td>Amphibians</td></tr>
+<tr><td>371</td><td><a href='/h/GCF_905171765.1' target=_blank>GCF_905171765.1</a></td><th>European toad</th><td>Bufo bufo</td><td>Amphibians</td></tr>
+<tr><td>372</td><td><a href='/h/GCF_029499605.1' target=_blank>GCF_029499605.1</a></td><th>Sardinian treefrog</th><td>Hyla sarda</td><td>Amphibians</td></tr>
+<tr><td>373</td><td><a href='/h/GCA_031893055.1' target=_blank>GCA_031893055.1</a></td><th>rufous frog</th><td>Leptodactylus fuscus</td><td>Amphibians</td></tr>
+<tr><td>374</td><td><a href='/h/GCA_038048845.1' target=_blank>GCA_038048845.1</a></td><th>Fleay's barred frog</th><td>Mixophyes fleayi</td><td>Amphibians</td></tr>
+<tr><td>375</td><td><a href='/h/GCF_902713425.1' target=_blank>GCF_902713425.1</a></td><th>sterlet</th><td>Acipenser ruthenus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>376</td><td><a href='/h/GCF_040894005.1' target=_blank>GCF_040894005.1</a></td><th>tungara frog</th><td>Engystomops pustulosus</td><td>Amphibians</td></tr>
+<tr><td>377</td><td><a href='/h/GCF_036172605.1' target=_blank>GCF_036172605.1</a></td><th>common spadefoot toad</th><td>Pelobates fuscus</td><td>Amphibians</td></tr>
+<tr><td>378</td><td><a href='/h/GCA_048565345.1' target=_blank>GCA_048565345.1</a></td><th>golden mantella</th><td>Mantella aurantiaca</td><td>Amphibians</td></tr>
+<tr><td>379</td><td><a href='/h/GCF_040937935.1' target=_blank>GCF_040937935.1</a></td><th>Riggenbach's reed frog</th><td>Hyperolius riggenbachi</td><td>Amphibians</td></tr>
+<tr><td>380</td><td><a href='/h/GCA_027917425.1' target=_blank>GCA_027917425.1</a></td><th>Eastern narrow-mouthed toad</th><td>Gastrophryne carolinensis</td><td>Amphibians</td></tr>
+<tr><td>381</td><td><a href='/h/GCF_028390025.1' target=_blank>GCF_028390025.1</a></td><th>Southern corroboree frog</th><td>Pseudophryne corroboree</td><td>Amphibians</td></tr>
+<tr><td>382</td><td><a href='/h/GCF_032444005.1' target=_blank>GCF_032444005.1</a></td><th>mimic poison frog</th><td>Ranitomeya imitator</td><td>Amphibians</td></tr>
+<tr><td>383</td><td><a href='/h/GCA_965119305.1' target=_blank>GCA_965119305.1</a></td><th>pool frog</th><td>Pelophylax lessonae</td><td>Amphibians</td></tr>
+<tr><td>384</td><td><a href='/h/GCF_905171775.1' target=_blank>GCF_905171775.1</a></td><th>European common frog</th><td>Rana temporaria</td><td>Amphibians</td></tr>
+<tr><td>385</td><td><a href='/h/GCA_048569485.1' target=_blank>GCA_048569485.1</a></td><th>Edward's Rocket Frog</th><td>Anomaloglossus baeobatrachus</td><td>Amphibians</td></tr>
+<tr><td>386</td><td><a href='/h/GCF_900747795.2' target=_blank>GCF_900747795.2</a></td><th>reedfish</th><td>Erpetoichthys calabaricus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>387</td><td><a href='/h/GCF_036365525.1' target=_blank>GCF_036365525.1</a></td><th>horn shark</th><td>Heterodontus francisci</td><td>Fishes Other</td></tr>
+<tr><td>388</td><td><a href='/h/GCA_036172795.1' target=_blank>GCA_036172795.1</a></td><th>Iberian parsley frog</th><td>Pelodytes ibericus</td><td>Amphibians</td></tr>
+<tr><td>389</td><td><a href='/h/GCA_037306005.1' target=_blank>GCA_037306005.1</a></td><th>Mexican burrowing toad</th><td>Rhinophrynus dorsalis</td><td>Amphibians</td></tr>
+<tr><td>390</td><td><a href='/h/GCF_035084215.1' target=_blank>GCF_035084215.1</a></td><th>sharpnose sevengill shark</th><td>Heptranchias perlo</td><td>Fishes Other</td></tr>
+<tr><td>391</td><td><a href='/h/GCA_964194155.1' target=_blank>GCA_964194155.1</a></td><th>basking shark</th><td>Cetorhinus maximus</td><td>Fishes Other</td></tr>
+<tr><td>392</td><td><a href='/h/GCF_017639515.1' target=_blank>GCF_017639515.1</a></td><th>great white shark</th><td>Carcharodon carcharias</td><td>Fishes Other</td></tr>
+<tr><td>393</td><td><a href='/h/GCF_044704955.1' target=_blank>GCF_044704955.1</a></td><th>Japanese sawshark</th><td>Pristiophorus japonicus</td><td>Fishes Other</td></tr>
+<tr><td>394</td><td><a href='/h/GCA_964213995.1' target=_blank>GCA_964213995.1</a></td><th>starry smooth-hound shark</th><td>Mustelus asterias</td><td>Fishes Other</td></tr>
+<tr><td>395</td><td><a href='/h/GCF_036373705.1' target=_blank>GCF_036373705.1</a></td><th>bowfin</th><td>Amia calva</td><td>Fishes Ray Finned</td></tr>
+<tr><td>396</td><td><a href='/h/GCF_027579735.1' target=_blank>GCF_027579735.1</a></td><th>European fire-bellied toad</th><td>Bombina bombina</td><td>Amphibians</td></tr>
+<tr><td>397</td><td><a href='/h/GCF_020745735.1' target=_blank>GCF_020745735.1</a></td><th>epaulette shark</th><td>Hemiscyllium ocellatum</td><td>Fishes Other</td></tr>
+<tr><td>398</td><td><a href='/h/GCA_964205295.1' target=_blank>GCA_964205295.1</a></td><th>yellow-bellied toad</th><td>Bombina variegata</td><td>Amphibians</td></tr>
+<tr><td>399</td><td><a href='/h/GCF_040954835.1' target=_blank>GCF_040954835.1</a></td><th>spotted gar</th><td>Lepisosteus oculatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>400</td><td><a href='/h/GCF_030684315.1' target=_blank>GCF_030684315.1</a></td><th>zebra shark</th><td>Stegostoma tigrinum</td><td>Fishes Other</td></tr>
+<tr><td>401</td><td><a href='/h/GCF_902713615.1' target=_blank>GCF_902713615.1</a></td><th>small-spotted catshark</th><td>Scyliorhinus canicula</td><td>Fishes Other</td></tr>
+<tr><td>402</td><td><a href='/h/GCF_009764475.1' target=_blank>GCF_009764475.1</a></td><th>smalltooth sawfish</th><td>Pristis pectinata</td><td>Fishes Other</td></tr>
+<tr><td>403</td><td><a href='/h/GCA_035084275.1' target=_blank>GCA_035084275.1</a></td><th>spotted ratfish</th><td>Hydrolagus colliei</td><td>Fishes Other</td></tr>
+<tr><td>404</td><td><a href='/h/GCF_036971445.1' target=_blank>GCF_036971445.1</a></td><th>lesser electric ray</th><td>Narcine bancroftii</td><td>Fishes Other</td></tr>
+<tr><td>405</td><td><a href='/h/GCA_963514005.1' target=_blank>GCA_963514005.1</a></td><th>blonde ray</th><td>Raja brachyura</td><td>Fishes Other</td></tr>
+<tr><td>406</td><td><a href='/h/GCF_010909765.2' target=_blank>GCF_010909765.2</a></td><th>thorny skate</th><td>Amblyraja radiata</td><td>Fishes Other</td></tr>
+<tr><td>407</td><td><a href='/h/GCF_030028105.1' target=_blank>GCF_030028105.1</a></td><th>Atlantic manta ray</th><td>Mobula birostris</td><td>Fishes Other</td></tr>
+<tr><td>408</td><td><a href='/h/GCF_030144855.1' target=_blank>GCF_030144855.1</a></td><th>Atlantic stingray</th><td>Hypanus sabinus</td><td>Fishes Other</td></tr>
+<tr><td>409</td><td><a href='/h/GCF_013368585.1' target=_blank>GCF_013368585.1</a></td><th>Indo-pacific tarpon</th><td>Megalops cyprinoides</td><td>Fishes Ray Finned</td></tr>
+<tr><td>410</td><td><a href='/h/GCF_013347855.1' target=_blank>GCF_013347855.1</a></td><th>European eel</th><td>Anguilla anguilla</td><td>Fishes Ray Finned</td></tr>
+<tr><td>411</td><td><a href='/h/GCF_900964775.1' target=_blank>GCF_900964775.1</a></td><th>golden arowana</th><td>Scleropages formosus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>412</td><td><a href='/h/GCF_963514075.1' target=_blank>GCF_963514075.1</a></td><th>European conger</th><td>Conger conger</td><td>Fishes Ray Finned</td></tr>
+<tr><td>413</td><td><a href='/h/GCA_951799395.1' target=_blank>GCA_951799395.1</a></td><th>greater argentine</th><td>Argentina silus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>414</td><td><a href='/h/GCF_902362185.1' target=_blank>GCF_902362185.1</a></td><th>milkfish</th><td>Chanos chanos</td><td>Fishes Ray Finned</td></tr>
+<tr><td>415</td><td><a href='/h/GCA_964263955.1' target=_blank>GCA_964263955.1</a></td><th>common whitefish</th><td>Coregonus lavaretus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>416</td><td><a href='/h/GCA_963989245.1' target=_blank>GCA_963989245.1</a></td><th>pencil smelt</th><td>Nansenia antarctica</td><td>Fishes Ray Finned</td></tr>
+<tr><td>417</td><td><a href='/h/GCF_011004845.1' target=_blank>GCF_011004845.1</a></td><th>Northern pike</th><td>Esox lucius</td><td>Fishes Ray Finned</td></tr>
+<tr><td>418</td><td><a href='/h/GCF_900700375.1' target=_blank>GCF_900700375.1</a></td><th>denticle herring</th><td>Denticeps clupeoides</td><td>Fishes Ray Finned</td></tr>
+<tr><td>419</td><td><a href='/h/GCA_963457725.1' target=_blank>GCA_963457725.1</a></td><th>European sprat</th><td>Sprattus sprattus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>420</td><td><a href='/h/GCA_048544225.1' target=_blank>GCA_048544225.1</a></td><th>Osbeck's grenadier anchovy</th><td>Coilia mystus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>421</td><td><a href='/h/GCA_901001165.2' target=_blank>GCA_901001165.2</a></td><th>brown trout</th><td>Salmo trutta</td><td>Fishes Ray Finned</td></tr>
+<tr><td>422</td><td><a href='/h/GCF_963854185.1' target=_blank>GCF_963854185.1</a></td><th>sardine</th><td>Sardina pilchardus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>423</td><td><a href='/h/GCA_041902795.1' target=_blank>GCA_041902795.1</a></td><th>electric eel</th><td>Electrophorus electricus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>424</td><td><a href='/h/GCF_018492685.1' target=_blank>GCF_018492685.1</a></td><th>American shad</th><td>Alosa sapidissima</td><td>Fishes Ray Finned</td></tr>
+<tr><td>425</td><td><a href='/h/GCA_949987555.1' target=_blank>GCA_949987555.1</a></td><th>large-eye snaggletooth</th><td>Borostomias antarcticus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>426</td><td><a href='/h/GCF_030463535.1' target=_blank>GCF_030463535.1</a></td><th>golden dorado</th><td>Salminus brasiliensis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>427</td><td><a href='/h/GCF_023375975.1' target=_blank>GCF_023375975.1</a></td><th>Mexican tetra</th><td>Astyanax mexicanus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>428</td><td><a href='/h/GCA_936440315.1' target=_blank>GCA_936440315.1</a></td><th>barbel</th><td>Barbus barbus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>429</td><td><a href='/h/GCF_015220715.1' target=_blank>GCF_015220715.1</a></td><th>red-bellied piranha</th><td>Pygocentrus nattereri</td><td>Fishes Ray Finned</td></tr>
+<tr><td>430</td><td><a href='/h/GCA_944039275.1' target=_blank>GCA_944039275.1</a></td><th>zebrafish</th><td>Danio rerio</td><td>Fishes Ray Finned</td></tr>
+<tr><td>431</td><td><a href='/h/GCA_048301585.1' target=_blank>GCA_048301585.1</a></td><th>Rhinogobio nasutus</th><td>Rhinogobio nasutus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>432</td><td><a href='/h/GCA_038355195.1' target=_blank>GCA_038355195.1</a></td><th>rainbow smelt</th><td>Osmerus mordax</td><td>Fishes Ray Finned</td></tr>
+<tr><td>433</td><td><a href='/h/GCF_963692335.1' target=_blank>GCF_963692335.1</a></td><th>European smelt</th><td>Osmerus eperlanus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>434</td><td><a href='/h/GCF_963082965.1' target=_blank>GCF_963082965.1</a></td><th>common carp</th><td>Carassius carassius</td><td>Fishes Ray Finned</td></tr>
+<tr><td>435</td><td><a href='/h/GCA_947034865.1' target=_blank>GCA_947034865.1</a></td><th>stone loach</th><td>Barbatula barbatula</td><td>Fishes Ray Finned</td></tr>
+<tr><td>436</td><td><a href='/h/GCA_038024135.1' target=_blank>GCA_038024135.1</a></td><th>blacktail shiner</th><td>Cyprinella venusta</td><td>Fishes Ray Finned</td></tr>
+<tr><td>437</td><td><a href='/h/GCA_949357685.1' target=_blank>GCA_949357685.1</a></td><th>gudgeon</th><td>Gobio gobio</td><td>Fishes Ray Finned</td></tr>
+<tr><td>438</td><td><a href='/h/GCA_965113295.1' target=_blank>GCA_965113295.1</a></td><th>common dace</th><td>Leuciscus leuciscus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>439</td><td><a href='/h/GCA_963993115.1' target=_blank>GCA_963993115.1</a></td><th>common bream</th><td>Abramis brama</td><td>Fishes Ray Finned</td></tr>
+<tr><td>440</td><td><a href='/h/GCA_951802725.1' target=_blank>GCA_951802725.1</a></td><th>roach minnow</th><td>Rutilus rutilus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>441</td><td><a href='/h/GCA_964197995.1' target=_blank>GCA_964197995.1</a></td><th>common rudd</th><td>Scardinius erythrophthalmus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>442</td><td><a href='/h/GCA_949319135.1' target=_blank>GCA_949319135.1</a></td><th>European chub</th><td>Squalius cephalus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>443</td><td><a href='/h/GCA_949152265.1' target=_blank>GCA_949152265.1</a></td><th>Eurasian minnow</th><td>Phoxinus phoxinus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>444</td><td><a href='/h/GCF_029633855.1' target=_blank>GCF_029633855.1</a></td><th>trahira</th><td>Hoplias malabaricus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>445</td><td><a href='/h/GCF_027358585.1' target=_blank>GCF_027358585.1</a></td><th>striped catfish</th><td>Pangasianodon hypophthalmus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>446</td><td><a href='/h/GCA_048537225.1' target=_blank>GCA_048537225.1</a></td><th>Bermuda beardfish</th><td>Polymixia cf. hollisterae</td><td>Fishes Ray Finned</td></tr>
+<tr><td>447</td><td><a href='/h/GCA_946808225.1' target=_blank>GCA_946808225.1</a></td><th>Aristotle's catfish</th><td>Silurus aristotelis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>448</td><td><a href='/h/GCA_024256435.1' target=_blank>GCA_024256435.1</a></td><th>North African catfish</th><td>Clarias gariepinus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>449</td><td><a href='/h/GCA_047511565.1' target=_blank>GCA_047511565.1</a></td><th>beardfish</th><td>Polymixia lowei</td><td>Fishes Ray Finned</td></tr>
+<tr><td>450</td><td><a href='/h/GCA_036784965.1' target=_blank>GCA_036784965.1</a></td><th>Arctic char</th><td>Salvelinus alpinus oquassa</td><td>Fishes Ray Finned</td></tr>
+<tr><td>451</td><td><a href='/h/GCF_030014385.1' target=_blank>GCF_030014385.1</a></td><th>Rosablanca cavefish</th><td>Trichomycterus rosablanca</td><td>Fishes Ray Finned</td></tr>
+<tr><td>452</td><td><a href='/h/GCF_902150065.1' target=_blank>GCF_902150065.1</a></td><th>pinecone soldierfish</th><td>Myripristis murdjan</td><td>Fishes Ray Finned</td></tr>
+<tr><td>453</td><td><a href='/h/GCA_048128805.1' target=_blank>GCA_048128805.1</a></td><th>bight redfish</th><td>Centroberyx gerrardi</td><td>Fishes Ray Finned</td></tr>
+<tr><td>454</td><td><a href='/h/GCA_017639675.1' target=_blank>GCA_017639675.1</a></td><th>peladilla</th><td>Aplochiton taeniatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>455</td><td><a href='/h/GCA_963921795.1' target=_blank>GCA_963921795.1</a></td><th>Lantern fish</th><td>Nannobrachium achirus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>456</td><td><a href='/h/GCA_048569125.1' target=_blank>GCA_048569125.1</a></td><th>silver spinyfin</th><td>Diretmus argenteus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>457</td><td><a href='/h/GCA_042242135.1' target=_blank>GCA_042242135.1</a></td><th>Australian herring</th><td>Arripis georgiana</td><td>Fishes Ray Finned</td></tr>
+<tr><td>458</td><td><a href='/h/GCA_964638095.1' target=_blank>GCA_964638095.1</a></td><th>crested bigscale</th><td>Poromitra crassiceps</td><td>Fishes Ray Finned</td></tr>
+<tr><td>459</td><td><a href='/h/GCA_963454915.1' target=_blank>GCA_963454915.1</a></td><th>minispotted lanternfish</th><td>Gymnoscopelus microlampas</td><td>Fishes Ray Finned</td></tr>
+<tr><td>460</td><td><a href='/h/GCF_027579695.1' target=_blank>GCF_027579695.1</a></td><th>blue salmon catfish</th><td>Neoarius graeffei</td><td>Fishes Ray Finned</td></tr>
+<tr><td>461</td><td><a href='/h/GCF_963924715.1' target=_blank>GCF_963924715.1</a></td><th>northern bluefin tuna</th><td>Thunnus thynnus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>462</td><td><a href='/h/GCF_910596095.1' target=_blank>GCF_910596095.1</a></td><th>southern bluefin tuna</th><td>Thunnus maccoyii</td><td>Fishes Ray Finned</td></tr>
+<tr><td>463</td><td><a href='/h/GCF_914725855.1' target=_blank>GCF_914725855.1</a></td><th>yellowfin tuna</th><td>Thunnus albacares</td><td>Fishes Ray Finned</td></tr>
+<tr><td>464</td><td><a href='/h/GCA_031216445.1' target=_blank>GCA_031216445.1</a></td><th>Chinese sea bass</th><td>Lateolabrax maculatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>465</td><td><a href='/h/GCF_043641665.1' target=_blank>GCF_043641665.1</a></td><th>old wife</th><td>Enoplosus armatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>466</td><td><a href='/h/GCA_963280865.1' target=_blank>GCA_963280865.1</a></td><th>Brauer's lanternfish</th><td>Gymnoscopelus braueri</td><td>Fishes Ray Finned</td></tr>
+<tr><td>467</td><td><a href='/h/GCF_029633865.1' target=_blank>GCF_029633865.1</a></td><th>smalleye Pacific opah</th><td>Lampris incognitus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>468</td><td><a href='/h/GCF_017976425.1' target=_blank>GCF_017976425.1</a></td><th>banded archerfish</th><td>Toxotes jaculatrix</td><td>Fishes Ray Finned</td></tr>
+<tr><td>469</td><td><a href='/h/GCF_042242105.1' target=_blank>GCF_042242105.1</a></td><th>rough bullseye</th><td>Pempheris klunzingeri</td><td>Fishes Ray Finned</td></tr>
+<tr><td>470</td><td><a href='/h/GCA_045363895.1' target=_blank>GCA_045363895.1</a></td><th>sharptooth jobfish</th><td>Pristipomoides typus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>471</td><td><a href='/h/GCA_960531495.1' target=_blank>GCA_960531495.1</a></td><th>John dory</th><td>Zeus faber</td><td>Fishes Ray Finned</td></tr>
+<tr><td>472</td><td><a href='/h/GCA_048128725.1' target=_blank>GCA_048128725.1</a></td><th>chinamanfish</th><td>Symphorus nematophorus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>473</td><td><a href='/h/GCA_048129055.1' target=_blank>GCA_048129055.1</a></td><th>yellow and blueback fusilier</th><td>Caesio teres</td><td>Fishes Ray Finned</td></tr>
+<tr><td>474</td><td><a href='/h/GCA_019677235.1' target=_blank>GCA_019677235.1</a></td><th>large-mouth bass</th><td>Micropterus salmoides</td><td>Fishes Ray Finned</td></tr>
+<tr><td>475</td><td><a href='/h/GCF_017976325.1' target=_blank>GCF_017976325.1</a></td><th>copperband butterflyfish</th><td>Chelmon rostratus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>476</td><td><a href='/h/GCA_048129235.1' target=_blank>GCA_048129235.1</a></td><th>rankin cod</th><td>Epinephelus rankini</td><td>Fishes Ray Finned</td></tr>
+<tr><td>477</td><td><a href='/h/GCA_041903045.1' target=_blank>GCA_041903045.1</a></td><th>giant grouper</th><td>Epinephelus lanceolatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>478</td><td><a href='/h/GCF_039877785.1' target=_blank>GCF_039877785.1</a></td><th>chevron butterflyfish</th><td>Chaetodon trifascialis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>479</td><td><a href='/h/GCF_020382885.2' target=_blank>GCF_020382885.2</a></td><th>spotted scat</th><td>Scatophagus argus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>480</td><td><a href='/h/GCA_965226575.1' target=_blank>GCA_965226575.1</a></td><th>common seabream</th><td>Pagrus pagrus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>481</td><td><a href='/h/GCA_045362495.1' target=_blank>GCA_045362495.1</a></td><th>spangled emperor</th><td>Lethrinus nebulosus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>482</td><td><a href='/h/GCF_904848185.1' target=_blank>GCF_904848185.1</a></td><th>yellowfin sea bream</th><td>Acanthopagrus latus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>483</td><td><a href='/h/GCA_041753875.1' target=_blank>GCA_041753875.1</a></td><th>black porgy</th><td>Acanthopagrus schlegelii</td><td>Fishes Ray Finned</td></tr>
+<tr><td>484</td><td><a href='/h/GCA_963691815.1' target=_blank>GCA_963691815.1</a></td><th>lesser weever</th><td>Echiichthys vipera</td><td>Fishes Ray Finned</td></tr>
+<tr><td>485</td><td><a href='/h/GCF_900324465.2' target=_blank>GCF_900324465.2</a></td><th>climbing perch</th><td>Anabas testudineus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>486</td><td><a href='/h/GCA_905171665.2' target=_blank>GCA_905171665.2</a></td><th>Atlantic horse mackerel</th><td>Trachurus trachurus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>487</td><td><a href='/h/GCF_900324485.2' target=_blank>GCF_900324485.2</a></td><th>zig-zag eel</th><td>Mastacembelus armatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>488</td><td><a href='/h/GCF_900880675.1' target=_blank>GCF_900880675.1</a></td><th>gilthead seabream</th><td>Sparus aurata</td><td>Fishes Ray Finned</td></tr>
+<tr><td>489</td><td><a href='/h/GCA_043250625.1' target=_blank>GCA_043250625.1</a></td><th>Acadian redfish</th><td>Sebastes fasciatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>490</td><td><a href='/h/GCF_015220745.1' target=_blank>GCF_015220745.1</a></td><th>honeycomb rockfish</th><td>Sebastes umbrosus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>491</td><td><a href='/h/GCF_900963305.1' target=_blank>GCF_900963305.1</a></td><th>live sharksucker</th><td>Echeneis naucrates</td><td>Fishes Ray Finned</td></tr>
+<tr><td>492</td><td><a href='/h/GCF_009819705.1' target=_blank>GCF_009819705.1</a></td><th>Atlantic halibut</th><td>Hippoglossus hippoglossus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>493</td><td><a href='/h/GCA_963854745.1' target=_blank>GCA_963854745.1</a></td><th>turbot</th><td>Scophthalmus maximus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>494</td><td><a href='/h/GCF_963691925.1' target=_blank>GCF_963691925.1</a></td><th>Atlantic mackerel</th><td>Scomber scombrus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>495</td><td><a href='/h/GCA_963514085.1' target=_blank>GCA_963514085.1</a></td><th>thicklip grey mullet</th><td>Chelon labrosus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>496</td><td><a href='/h/GCA_047301625.1' target=_blank>GCA_047301625.1</a></td><th>blackspot tuskfish</th><td>Choerodon schoenleinii</td><td>Fishes Ray Finned</td></tr>
+<tr><td>497</td><td><a href='/h/GCA_964266715.1' target=_blank>GCA_964266715.1</a></td><th>lemon sole</th><td>Microstomus kitt</td><td>Fishes Ray Finned</td></tr>
+<tr><td>498</td><td><a href='/h/GCF_902148855.1' target=_blank>GCF_902148855.1</a></td><th>orbiculate cardinalfish</th><td>Sphaeramia orbicularis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>499</td><td><a href='/h/GCF_963584025.1' target=_blank>GCF_963584025.1</a></td><th>cuckoo wrasse</th><td>Labrus mixtus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>500</td><td><a href='/h/GCA_963971535.1' target=_blank>GCA_963971535.1</a></td><th>Antarctic jonasfish</th><td>Notolepis coatsi</td><td>Fishes Ray Finned</td></tr>
+<tr><td>501</td><td><a href='/h/GCF_900634625.1' target=_blank>GCF_900634625.1</a></td><th>Indian glassy fish</th><td>Parambassis ranga</td><td>Fishes Ray Finned</td></tr>
+<tr><td>502</td><td><a href='/h/GCF_027409825.1' target=_blank>GCF_027409825.1</a></td><th>Pacific chub mackerel</th><td>Scomber japonicus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>503</td><td><a href='/h/GCA_963514095.1' target=_blank>GCA_963514095.1</a></td><th>grey gurnard</th><td>Eutrigla gurnardus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>504</td><td><a href='/h/GCA_020745685.1' target=_blank>GCA_020745685.1</a></td><th>cunner</th><td>Tautogolabrus adspersus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>505</td><td><a href='/h/GCF_963576545.1' target=_blank>GCF_963576545.1</a></td><th>common dab</th><td>Limanda limanda</td><td>Fishes Ray Finned</td></tr>
+<tr><td>506</td><td><a href='/h/GCA_910591455.2' target=_blank>GCA_910591455.2</a></td><th>rock gunnel</th><td>Pholis gunnellus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>507</td><td><a href='/h/GCA_963924005.1' target=_blank>GCA_963924005.1</a></td><th>Bolin’s lanternfish</th><td>Protomyctophum bolini</td><td>Fishes Ray Finned</td></tr>
+<tr><td>508</td><td><a href='/h/GCF_963930695.1' target=_blank>GCF_963930695.1</a></td><th>ballan wrasse</th><td>Labrus bergylta</td><td>Fishes Ray Finned</td></tr>
+<tr><td>509</td><td><a href='/h/GCF_949316205.1' target=_blank>GCF_949316205.1</a></td><th>European flounder</th><td>Platichthys flesus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>510</td><td><a href='/h/GCA_048301465.1' target=_blank>GCA_048301465.1</a></td><th>West Atlantic trumpetfish</th><td>Aulostomus maculatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>511</td><td><a href='/h/GCF_007364275.1' target=_blank>GCF_007364275.1</a></td><th>flier cichlid</th><td>Archocentrus centrarchus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>512</td><td><a href='/h/GCA_951216825.1' target=_blank>GCA_951216825.1</a></td><th>Antarctic lanternfish</th><td>Electrona antarctica</td><td>Fishes Ray Finned</td></tr>
+<tr><td>513</td><td><a href='/h/GCA_046255685.1' target=_blank>GCA_046255685.1</a></td><th>Northern cavefish</th><td>Amblyopsis spelaea</td><td>Fishes Ray Finned</td></tr>
+<tr><td>514</td><td><a href='/h/GCA_965226115.1' target=_blank>GCA_965226115.1</a></td><th>flavescent peacock cichlid</th><td>Aulonocara stuartgranti</td><td>Fishes Ray Finned</td></tr>
+<tr><td>515</td><td><a href='/h/GCA_963969265.1' target=_blank>GCA_963969265.1</a></td><th>Chilingali cichlid</th><td>Rhamphochromis chilingali</td><td>Fishes Ray Finned</td></tr>
+<tr><td>516</td><td><a href='/h/GCA_964374335.1' target=_blank>GCA_964374335.1</a></td><th>Eastern happy</th><td>Astatotilapia calliptera</td><td>Fishes Ray Finned</td></tr>
+<tr><td>517</td><td><a href='/h/GCA_910589615.1' target=_blank>GCA_910589615.1</a></td><th>long-spined sea scorpion</th><td>Taurulus bubalis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>518</td><td><a href='/h/GCF_900634795.4' target=_blank>GCF_900634795.4</a></td><th>Siamese fighting fish</th><td>Betta splendens</td><td>Fishes Ray Finned</td></tr>
+<tr><td>519</td><td><a href='/h/GCA_964188405.1' target=_blank>GCA_964188405.1</a></td><th>parallel lanternfish</th><td>Protomyctophum parallelum </td><td>Fishes Ray Finned</td></tr>
+<tr><td>520</td><td><a href='/h/GCA_028022725.1' target=_blank>GCA_028022725.1</a></td><th>blackbelly eelpout</th><td>Lycodopsis pacificus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>521</td><td><a href='/h/GCA_049190665.1' target=_blank>GCA_049190665.1</a></td><th>arrowtail</th><td>Melanonus zugmayeri</td><td>Fishes Ray Finned</td></tr>
+<tr><td>522</td><td><a href='/h/GCF_958295425.1' target=_blank>GCF_958295425.1</a></td><th>common sole</th><td>Solea solea</td><td>Fishes Ray Finned</td></tr>
+<tr><td>523</td><td><a href='/h/GCF_947347685.1' target=_blank>GCF_947347685.1</a></td><th>European plaice</th><td>Pleuronectes platessa</td><td>Fishes Ray Finned</td></tr>
+<tr><td>524</td><td><a href='/h/GCA_949748355.1' target=_blank>GCA_949748355.1</a></td><th>limp eelpout</th><td>Melanostigma gelatinosum</td><td>Fishes Ray Finned</td></tr>
+<tr><td>525</td><td><a href='/h/GCA_963457635.1' target=_blank>GCA_963457635.1</a></td><th>thickback sole</th><td>Microchirus variegatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>526</td><td><a href='/h/GCF_009762535.1' target=_blank>GCF_009762535.1</a></td><th>New Zealand spotty wrasse</th><td>Notolabrus celidotus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>527</td><td><a href='/h/GCF_017639745.1' target=_blank>GCF_017639745.1</a></td><th>Boeseman’s rainbowfish</th><td>Melanotaenia boesemani</td><td>Fishes Ray Finned</td></tr>
+<tr><td>528</td><td><a href='/h/GCF_902500255.1' target=_blank>GCF_902500255.1</a></td><th>prehistoric monster fish</th><td>Thalassophryne amazonica</td><td>Fishes Ray Finned</td></tr>
+<tr><td>529</td><td><a href='/h/GCA_049082185.1' target=_blank>GCA_049082185.1</a></td><th>crested weedfish</th><td>Cristiceps australis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>530</td><td><a href='/h/GCA_949987685.1' target=_blank>GCA_949987685.1</a></td><th>lesseer sand eel</th><td>Ammodytes marinus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>531</td><td><a href='/h/GCA_014839685.1' target=_blank>GCA_014839685.1</a></td><th>largescale four-eyes</th><td>Anableps anableps</td><td>Fishes Ray Finned</td></tr>
+<tr><td>532</td><td><a href='/h/GCA_949357725.1' target=_blank>GCA_949357725.1</a></td><th>greater sand eel</th><td>Hyperoplus immaculatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>533</td><td><a href='/h/GCF_009769545.1' target=_blank>GCF_009769545.1</a></td><th>lumpfish</th><td>Cyclopterus lumpus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>534</td><td><a href='/h/GCA_027942865.1' target=_blank>GCA_027942865.1</a></td><th>pejerrey</th><td>Odontesthes bonariensis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>535</td><td><a href='/h/GCA_964276395.1' target=_blank>GCA_964276395.1</a></td><th>three-spined stickleback</th><td>Gasterosteus aculeatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>536</td><td><a href='/h/GCF_902148845.1' target=_blank>GCF_902148845.1</a></td><th>jewelled blenny</th><td>Salarias fasciatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>537</td><td><a href='/h/GCA_963383615.1' target=_blank>GCA_963383615.1</a></td><th>shanny</th><td>Lipophrys pholis</td><td>Fishes Ray Finned</td></tr>
+<tr><td>538</td><td><a href='/h/GCA_014839995.1' target=_blank>GCA_014839995.1</a></td><th>needlefish</th><td>Xenentodon cancila</td><td>Fishes Ray Finned</td></tr>
+<tr><td>539</td><td><a href='/h/GCA_933228915.1' target=_blank>GCA_933228915.1</a></td><th>telmatherina bonti</th><td>Telmatherina bonti</td><td>Fishes Ray Finned</td></tr>
+<tr><td>540</td><td><a href='/h/GCA_947650265.1' target=_blank>GCA_947650265.1</a></td><th>corkwing wrasse</th><td>Symphodus melops</td><td>Fishes Ray Finned</td></tr>
+<tr><td>541</td><td><a href='/h/GCF_021462225.1' target=_blank>GCF_021462225.1</a></td><th>darkedged splitfin</th><td>Girardinichthys multiradiatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>542</td><td><a href='/h/GCA_020510985.1' target=_blank>GCA_020510985.1</a></td><th>convict blenny</th><td>Pholidichthys leucotaenia</td><td>Fishes Ray Finned</td></tr>
+<tr><td>543</td><td><a href='/h/GCA_048126635.1' target=_blank>GCA_048126635.1</a></td><th>sea stickleback</th><td>Spinachia spinachia</td><td>Fishes Ray Finned</td></tr>
+<tr><td>544</td><td><a href='/h/GCA_013358685.1' target=_blank>GCA_013358685.1</a></td><th>warty frogfish</th><td>Antennarius maculatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>545</td><td><a href='/h/GCF_949316345.1' target=_blank>GCF_949316345.1</a></td><th>ninespine stickleback</th><td>Pungitius pungitius</td><td>Fishes Ray Finned</td></tr>
+<tr><td>546</td><td><a href='/h/GCA_037039145.1' target=_blank>GCA_037039145.1</a></td><th>banded killifish</th><td>Fundulus diaphanus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>547</td><td><a href='/h/GCF_900634415.1' target=_blank>GCF_900634415.1</a></td><th>channel bull blenny</th><td>Cottoperca gobio</td><td>Fishes Ray Finned</td></tr>
+<tr><td>548</td><td><a href='/h/GCA_949606895.1' target=_blank>GCA_949606895.1</a></td><th>marbled rockcod</th><td>Notothenia rossii </td><td>Fishes Ray Finned</td></tr>
+<tr><td>549</td><td><a href='/h/GCA_949987615.1' target=_blank>GCA_949987615.1</a></td><th>European pollock</th><td>Pollachius pollachius</td><td>Fishes Ray Finned</td></tr>
+<tr><td>550</td><td><a href='/h/GCA_963422515.1' target=_blank>GCA_963422515.1</a></td><th>butterfly blenny</th><td>Blennius ocellaris</td><td>Fishes Ray Finned</td></tr>
+<tr><td>551</td><td><a href='/h/GCA_048628825.1' target=_blank>GCA_048628825.1</a></td><th>Atlantic silverside</th><td>Menidia menidia</td><td>Fishes Ray Finned</td></tr>
+<tr><td>552</td><td><a href='/h/GCF_900634775.1' target=_blank>GCF_900634775.1</a></td><th>blunt-snouted clingfish</th><td>Gouania willdenowi</td><td>Fishes Ray Finned</td></tr>
+<tr><td>553</td><td><a href='/h/GCF_901000725.2' target=_blank>GCF_901000725.2</a></td><th>Japanese puffer (torafugu)</th><td>Takifugu rubripes</td><td>Fishes Ray Finned</td></tr>
+<tr><td>554</td><td><a href='/h/GCF_902167405.1' target=_blank>GCF_902167405.1</a></td><th>Atlantic cod</th><td>Gadus morhua</td><td>Fishes Ray Finned</td></tr>
+<tr><td>555</td><td><a href='/h/GCA_951799975.1' target=_blank>GCA_951799975.1</a></td><th>black goby</th><td>Gobius niger</td><td>Fishes Ray Finned</td></tr>
+<tr><td>556</td><td><a href='/h/GCF_009829125.3' target=_blank>GCF_009829125.3</a></td><th>Korean giant-fin mudskipper</th><td>Periophthalmus magnuspinnatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>557</td><td><a href='/h/GCA_044231675.1' target=_blank>GCA_044231675.1</a></td><th>picturesque dragonet</th><td>Synchiropus picturatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>558</td><td><a href='/h/GCA_044231665.1' target=_blank>GCA_044231665.1</a></td><th>ocellated dragonet</th><td>Neosynchiropus ocellatus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>559</td><td><a href='/h/GCF_901709675.1' target=_blank>GCF_901709675.1</a></td><th>greater pipefish</th><td>Syngnathus acus</td><td>Fishes Ray Finned</td></tr>
+<tr><td>560</td><td><a href='/h/GCA_048301445.1' target=_blank>GCA_048301445.1</a></td><th>broad-nosed pipefish</th><td>Syngnathus typhle</td><td>Fishes Ray Finned</td></tr>
+<tr><td>561</td><td><a href='/h/GCA_964030765.1' target=_blank>GCA_964030765.1</a></td><th>blue whiting</th><td>Micromesistius poutassou</td><td>Fishes Ray Finned</td></tr>
+<tr><td>562</td><td><a href='/h/GCA_019207075.1' target=_blank>GCA_019207075.1</a></td><th>belcher's lancelet</th><td>Branchiostoma belcheri</td><td>Invertebrates</td></tr>
+<tr><td>563</td><td><a href='/h/GCA_035083965.1' target=_blank>GCA_035083965.1</a></td><th>European lancelet</th><td>Branchiostoma lanceolatum</td><td>Invertebrates</td></tr>
+<tr><td>564</td><td><a href='/h/GCA_015852565.1' target=_blank>GCA_015852565.1</a></td><th>Florida amphioxus</th><td>Branchiostoma floridae</td><td>Invertebrates</td></tr>
+<tr><td>565</td><td><a href='/h/GCA_048934315.1' target=_blank>GCA_048934315.1</a></td><th>sea lamprey</th><td>Petromyzon marinus</td><td>Fishes Other</td></tr>
+<tr><td>566</td><td><a href='/h/GCA_964198595.1' target=_blank>GCA_964198595.1</a></td><th>European river lamprey</th><td>Lampetra fluviatilis</td><td>Fishes Other</td></tr>
+<tr><td>567</td><td><a href='/h/GCA_964187855.1' target=_blank>GCA_964187855.1</a></td><th>Atlantic hagfish</th><td>Myxine glutinosa</td><td>Fishes Other</td></tr>
+<tr><td>568</td><td><a href='/h/GCA_040954625.2' target=_blank>GCA_040954625.2</a></td><th>tongue acorn worm</th><td>Balanoglossus misakiensis</td><td>Invertebrates</td></tr>
+<tr><td>569</td><td><a href='/h/GCF_902459465.1' target=_blank>GCF_902459465.1</a></td><th>common starfish</th><td>Asterias rubens</td><td>Invertebrates</td></tr>
+<tr><td>570</td><td><a href='/h/GCA_947561715.1' target=_blank>GCA_947561715.1</a></td><th>pink sea squirt</th><td>Ascidia mentula</td><td>Invertebrates</td></tr>
+<tr><td>571</td><td><a href='/h/GCA_963082875.1' target=_blank>GCA_963082875.1</a></td><th>Orange-tipped sea squirt</th><td>Corella eumyota</td><td>Invertebrates</td></tr>
+<tr><td>572</td><td><a href='/h/GCA_963924565.1' target=_blank>GCA_963924565.1</a></td><th>European sea squirt</th><td>Ascidiella aspersa</td><td>Invertebrates</td></tr>
+<tr><td>573</td><td><a href='/h/GCA_947623445.1' target=_blank>GCA_947623445.1</a></td><th>light-bulb sea squirt</th><td>Clavelina lepadiformis</td><td>Invertebrates</td></tr>
+<tr><td>574</td><td><a href='/h/GCA_964204865.1' target=_blank>GCA_964204865.1</a></td><th>tunicate S.clava</th><td>Styela clava</td><td>Invertebrates</td></tr>
+<tr><td>575</td><td><a href='/h/GCA_918807975.1' target=_blank>GCA_918807975.1</a></td><th>clonial sea squirt</th><td>Aplidium turbinatum</td><td>Invertebrates</td></tr>
+<tr><td>576</td><td><a href='/h/GCA_963675345.1' target=_blank>GCA_963675345.1</a></td><th>Trididemnum clinides</th><td>Trididemnum clinides</td><td>Invertebrates</td></tr>
+<tr><td>577</td><td><a href='/h/GCA_965202585.1' target=_blank>GCA_965202585.1</a></td><th>Thalia democratica</th><td>Thalia democratica</td><td>Invertebrates</td></tr>
+</tbody></table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the VGP 577-way alignment.</em>
+</blockquote></p>
+
+<h2>References</h2>
+<p>
+Rhie A, McCarthy SA, Fedrigo O, Damas J, Formenti G, Koren S, Uliano-Silva M, Chow W, Fungtammasan A, Kim J
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-021-03451-0" target="_blank">
+Towards complete and error-free genome assemblies of all vertebrate species</a>.
+<em>Nature</em>. 2021 Apr 29;592(7856):737-746.
+DOI: <a href="https://doi.org/10.1038/s41586-021-03451-0"
+target="_blank">10.1038/s41586-021-03451-0</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/33911273" target="_blank">33911273</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8081667/" target="_blank">PMC8081667</a>
+</p>
+<p>
+Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
+<a href="https://doi.org/10.1186/gb-2011-12-6-r63" target="_blank">
+Cactus: Algorithms for genome multiple sequence alignment</a>.
+<em>Genome Biol</em>. 2011 Jun 24;12(6):R63.
+DOI: <a href="https://doi.org/10.1186/gb-2011-12-6-r63"
+target="_blank">10.1186/gb-2011-12-6-r63</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/21703006" target="_blank">21703006</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3218810/" target="_blank">PMC3218810</a>
+</p>

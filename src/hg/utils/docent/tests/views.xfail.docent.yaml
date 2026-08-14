@@ -1,0 +1,21 @@
+# EXPECTED TO FAIL. The trap, written down as a test.
+#
+# `hideKids` aimed at the composite rather than at the view hides the view the subtrack
+# lives in, and the row disappears with no error anywhere. This script asks for the
+# subtrack and asserts it is drawn, which is what an author would reasonably expect and
+# is not what happens -- so the run fails, and the makefile treats that failure as the
+# pass.
+#
+# If this ever starts passing, the behaviour changed: either Docent learned to aim the
+# expansion at the right level, or trackDb's view structure moved. Either way somebody
+# should look, and views.docent.yaml (the form that works) should be re-read.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {wgEncodeRegDnase: hideKids, wgEncodeRegDnaseUwWerirb1Signal: full}
+  - expect: {rows: [wgEncodeRegDnaseUwWerirb1Signal]}

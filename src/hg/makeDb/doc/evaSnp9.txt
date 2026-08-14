@@ -1,0 +1,95 @@
+# Track for EVA snp release 9  - https://www.ebi.ac.uk/eva/?RS-Release&releaseVersion=9
+# Tracks built by Lou — RM #37517
+
+# First release built by a unified pipeline that produces BOTH the native
+# tracks (on UCSC databases) and the GenArk contributed tracks. Replaces the
+# two separate v8 scripts (evaSnp8.py and evaSnpGenArk.py).
+
+# Unified pipeline lives at:
+#   ~/kent/src/hg/makeDb/scripts/evaSnp/evaSnp9.py
+
+# Discovery (three-bucket classification):
+#   ./evaSnp9.py classify
+#     - native: EVA assembly matched an active UCSC db -> /gbdb deployment
+#     - contrib: EVA assembly matched a GenArk hub only -> contrib deployment
+#     - skip: no UCSC db or GenArk hub for that EVA assembly
+#   Overlap policy: native wins. An assembly that resolves to both a UCSC db
+#   and a GenArk hub is built ONLY as a native track.
+
+# Build:
+#   ./evaSnp9.py build all -j 8
+#     Builds every assembly in native + contrib buckets in parallel.
+#     Per-assembly logs at /hive/data/outside/eva9/.../pipeline.log
+#     Failed builds get renamed to <workDir>.failed so logs survive.
+
+# Deploy native (after `build all` and trackDb commit):
+#   ./evaSnp9.py deploy native
+#     Symlinks /hive/data/outside/eva9/<db>/evaSnp9.bb into /gbdb/<db>/bbi/
+#     Writes /hive/data/outside/eva9/assemblyReleaseList.txt
+#   Then add the evaSnp9 stanza to ~/kent/src/hg/makeDb/trackDb/evaSnp.ra
+#   under the evaSnpContainer composite (parent on; flip evaSnp8 to off),
+#   commit, and run `make alpha` from src/hg/makeDb/trackDb to push.
+
+# Deploy contrib (after `build all` and trackDb commit):
+#   ./evaSnp9.py deploy contrib
+#     Generates /hive/data/outside/genark/evaSnp9/{contributedTracks->,
+#                 evaSnp9.trackDb.txt, mkLinks.sh} and runs mkLinks.sh,
+#     which injects symlinks into each GenArk hub's contrib/evaSnp9/ dir.
+#   Then add 'evaSnp9' to:
+#     ~/kent/src/hg/makeDb/trackDb/betaGenArk.txt
+#     ~/kent/src/hg/makeDb/trackDb/publicGenArk.txt
+#   Then run the per-clade GenArk make steps:
+
+cd ~/kent/src/hg/makeDb/doc
+for D in plantsAsmHub birdsAsmHub fishAsmHub primatesAsmHub legacyAsmHub mammalsAsmHub invertebrateAsmHub fungiAsmHub bacteriaAsmHub
+do
+  cd "${D}"
+  time (make) > dbg 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" dbg
+  time (make verifyTestDownload) >> test.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" test.down.log
+  time (make sendDownload) >> send.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" send.down.log
+  time (make verifyDownload) >> verify.down.log 2>&1
+  egrep --color=auto -i "error|fail|missing|cannot|clade|class|real" verify.down.log
+  cd ~/kent/src/hg/makeDb/doc
+done
+
+# Run those four make steps in parallel across each clade dir; bacteriaAsmHub
+# (~22k orderList entries) is the long pole.
+
+# --- Key v9 changes vs v8 ---
+# 1. Unified pipeline (one script instead of two).
+# 2. varClass labels updated: SNV / deletion / insertion / indel / MNV /
+#    sequence_alteration (was substitution / delins / multipleNucleotideSubstitution
+#    / sequence alteration in native v3-v8; the contrib v8 already used new
+#    labels). The trackDb filterValues.varClass on evaSnp9 reflects the new set;
+#    older subtracks (evaSnp..evaSnp8) keep their existing filterValues because
+#    those bigBeds still encode the legacy terms.
+# 3. ucscClass field now stores the single most-severe consequence per rsID,
+#    ranked by Sequence Ontology severity (was a comma-separated list in
+#    native v3-v8). The filterValues.ucscClass + multipleListOnlyOr filter
+#    semantics remain unchanged.
+# 4. Native chromAlias lookups now use hgsql chromAlias directly (alias/chrom/
+#    source schema) instead of chromToUcsc with multi-step fallbacks. No more
+#    per-db hardcoded hacks (galGal5, bosTau9, ce11, mm10, oviAri3, bosTau6
+#    no longer need special cases).
+# 5. REF allele validation: every build samples 200 SNVs and rejects if
+#    <95% of REF alleles match the assembly 2bit. Caught two v8 mis-version
+#    VCFs (maize, wheat) in retrospect; now a standard part of every build.
+# 6. Version-mismatch chrom-coverage threshold: builds require >=10% of EVA
+#    VCF chroms to map onto the assembly's chrom names. Any successful build
+#    where >40% of chroms didn't map is flagged in the final summary for QA.
+# 7. hgVai chunks chromosomes at 5 MB to bound SIGSEGV-related data loss.
+
+# --- Counts at v9 ---
+# EVA-9 assemblies on FTP: 244
+# Bucket counts (from `./evaSnp9.py classify`):
+#   Native:  43
+#   Contrib: 125
+#   Skipped: 76
+
+# v8 had 41 native + 118 contrib. The +2 native is mostly EVA-9 picking up
+# new assemblies; the +7 contrib reflects the synthetic GCF-prefix fallback
+# in the new discovery (catches assemblies where the NCBI summary lacks the
+# GCA->GCF mapping but the GCF hub exists).

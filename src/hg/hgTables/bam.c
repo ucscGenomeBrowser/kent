@@ -245,9 +245,13 @@ char *s, *end = cigar + cigarSize;
 s = cigar;
 while (s < end)
     {
+    while (s < end && isspace(*s))
+        s++;
+    if (s >= end)
+        break;
     int digCount = countLeadingDigits(s);
     if (digCount <= 0)
-        errAbort("expecting number got %s in cigarWidth", s);
+        errAbort("expecting number got '%s' in cigarWidth", s);
     int n = atoi(s);
     s += digCount;
     char op = *s++;
@@ -353,12 +357,12 @@ int orderedCount = count * 4;
 if (orderedCount < 10000)
     orderedCount = 10000;
 bam_hdr_t *header = sam_hdr_read(fh);
-if (fh->format.format == cram) 
+if (fh->format.format == cram)
     {
-    char *cacheDir =  cfgOption("cramRef");
+    char *cacheDir = cfgOption("cramRef");
     struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
     char *refUrl = trackDbSetting(tdb, "refUrl");
-    cram_set_cache_url(fh, cacheDir, refUrl);  
+    cramCheckRefs(fh, refUrl, cacheDir);
     }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, orderedCount, lm);
 
@@ -429,12 +433,12 @@ hPrintf("</TR>\n");
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
 bam_hdr_t *header = sam_hdr_read(fh);
-if (fh->format.format == cram) 
+if (fh->format.format == cram)
     {
-    char *cacheDir =  cfgOption("cramRef");
+    char *cacheDir = cfgOption("cramRef");
     struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
     char *refUrl = trackDbSetting(tdb, "refUrl");
-    cram_set_cache_url(fh, cacheDir, refUrl);  
+    cramCheckRefs(fh, refUrl, cacheDir);
     }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, 10, lm);
 

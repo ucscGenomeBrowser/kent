@@ -13,15 +13,11 @@ Usage:
 """
 
 import csv
+import os
 import sys
 
-SV_COLORS = {
-    "del":     "200,0,0",      # red
-    "ins":     "0,0,200",      # blue
-    "dup":     "0,160,0",      # green
-    "inv":     "230,140,0",    # orange
-    "complex": "140,0,200",    # purple
-}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType, svColor
 
 
 def na(val):
@@ -50,9 +46,13 @@ def main():
 
     inPath, outPath = sys.argv[1], sys.argv[2]
 
+    seen = set()
+    nIn = 0
+    nDup = 0
     with open(inPath, newline="") as fIn, open(outPath, "w") as fOut:
         reader = csv.DictReader(fIn, delimiter="\t")
         for row in reader:
+            nIn += 1
             chrom = row["Chromosome"]
             if not chrom.startswith("chr"):
                 chrom = "chr" + chrom
@@ -63,15 +63,28 @@ def main():
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
-            svType = row["Type"]
-            svLen = abs(toInt(row["Length"]))
-            color = SV_COLORS.get(svType, "100,100,100")
+            svTypeRaw = row["Type"]  # lowercase del/ins/dup/inv/complex
+            svType = normalizeSvType(svTypeRaw)
+            srcLen = abs(toInt(row["Length"]))
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = srcLen
+            else:
+                insLen = 0
+            color = svColor(svType)
+
+            # Chirmade catalog is site-level without AC. Use -1 as placeholder
+            # so svName drops the :AC suffix.
+            ac = -1
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
 
             bedRow = [
                 chrom,
                 str(chromStart),
                 str(chromEnd),
-                row["ID"],
+                name,
                 "0",
                 ".",
                 str(chromStart),
@@ -79,6 +92,8 @@ def main():
                 color,
                 svType,
                 str(svLen),
+                str(insLen),
+                str(ac),
                 str(toInt(row.get("GC (%)", "0"))),
                 na(row.get("Cytoband", "")),
                 str(toInt(row.get("Gene Count", "0"))),
@@ -111,7 +126,15 @@ def main():
                 na(row.get("DGV % Overlap", "")),
                 na(row.get("DGV 50% RO", "")),
             ]
-            fOut.write("\t".join(bedRow) + "\n")
+            line_out = "\t".join(bedRow)
+            if line_out in seen:
+                nDup += 1
+                continue
+            seen.add(line_out)
+            fOut.write(line_out + "\n")
+
+    print(f"Chirmade101: {nIn:,} input records, {nDup:,} duplicate rows dropped, "
+          f"{nIn - nDup:,} written", file=sys.stderr)
 
 
 if __name__ == "__main__":

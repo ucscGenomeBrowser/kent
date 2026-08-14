@@ -29,7 +29,6 @@
 #include "bigBed.h"
 #include "hgBam.h"
 #include "vcf.h"
-#include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "regexHelper.h"

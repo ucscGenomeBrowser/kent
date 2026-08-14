@@ -749,3 +749,101 @@ for f in /hive/data/genomes/hg38/bed/gnomad/coverage/v4-exome/gnomad.coverage.*.
 # Add track to trackDb (gnomadCoverage.ra) and rebuild
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=hg38
+
+##############################################################################
+# gnomAD v4.1.1 Update to bigBed - June 5, 2026 - Claude (chmalee)
+##############################################################################
+# v4.1.1 is a minor release. The per-chromosome sites VCFs were mirrored from
+# the public bucket with the download script (run once per dataset):
+#   src/hg/makeDb/scripts/gnomadV4.1.1/downloadGnomadV4.1.1.sh exomes
+#   src/hg/makeDb/scripts/gnomadV4.1.1/downloadGnomadV4.1.1.sh genomes
+# Data landed in /hive/data/outside/gnomAD.4.1.1/{exomes,genomes}/.
+
+# Confirmed v4.1.1 is field-compatible with v4.1 before reusing the v4.1
+# recipe: every INFO field in the v4.1 build lists is present in v4.1.1, and
+# the VEP Format string is identical for both datasets:
+#   for f in $(cat v4.1.1.vcfToBed.exomes.fieldList); do \
+#       bcftools view -h .../gnomad.exomes.v4.1.1.sites.chr1.vcf.bgz \
+#       | grep -Eo "^##INFO=<ID=[^,]+" | cut -d= -f3 | grep -qx "$f" \
+#       || echo "MISSING: $f"; done
+# (no output for either dataset). Because the layout matches v4.1, the build
+# reuses the v4.1 vcfToBed field lists and the gnomadVcfBedToBigBed parser keys
+# -v v4.1_exomes / -v v4.1_genomes unchanged.
+
+# Note: the in-tree src/hg/makeDb/gnomad/gnomadVcfBedToBigBed was stale (only
+# supported up to v3.1.1); the v4.1 parsing work had only ever lived on the
+# build host. The working version is now committed to the tree.
+
+# The whole VCF-to-bigBed pipeline (vcfToBed, gnomadVcfBedToBigBed, bgzip of the
+# details file, bedJoinTabOffset, bedToBigBed, and the /gbdb symlinks) is driven
+# by one resumable script, run once per dataset (long job, run in screen):
+#   src/hg/makeDb/scripts/gnomadV4.1.1/buildGnomadV4.1.1BigBed.sh exomes
+#   src/hg/makeDb/scripts/gnomadV4.1.1/buildGnomadV4.1.1BigBed.sh genomes
+# Workdir /hive/data/inside/gnomAD/v4/v4.1.1, progress in build.{exomes,genomes}.log.
+# Scripts, field lists and autosql:
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadV4.1.1
+
+# trackDb: the bigBed composite gnomadVariantsV4.1.1 (children
+# gnomadExomesVariantsV4_1_1, gnomadGenomesVariantsV4_1_1) was added to
+# human/hg38/gnomad.ra alongside v4.1, cloned from the v4.1 stanza. The
+# experimental vcfTabix track in gnomadV4.1.1.ra (alpha only) was renamed to
+# gnomadVariantsV4_1_1Vcf so the bigBed track could take the canonical name; its
+# per-chrom lookup tables are built by loadGnomadV4.1.1ChromTables.sh.
+
+##############################################################################
+# gnomAD v4.1.1 gene constraint update - June 12, 2026 - Claude (chmalee)
+##############################################################################
+# v4.1.1 recomputed the gene constraint metrics (LOEUF/pLI/oe changed, e.g. BRCA1
+# LOEUF 0.885 -> 0.928), re-ran LOFTEE (END_TRUNC threshold change), and annotates
+# more transcripts (211523 -> 221898 rows). Rebuilt the by-transcript LoF and
+# missense constraint tracks following the v4.1 recipe above, with two changes:
+# the v4.1.1 table has a different 113-column schema so the extracted column
+# numbers were re-derived by field name, and three new fields are carried -
+# constraint outlier flags, gene low-coverage/low-mappability flags, and the raw
+# exome quality metrics. The per-population gen_anc_* columns are not carried.
+
+WORKDIR=/hive/data/inside/gnomAD/v4/v4.1.1/constraint
+cd $WORKDIR
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1.1/constraint/gnomad.v4.1.1.constraint_metrics.tsv.bgz
+
+# transcript coords (same as v4.1): GENCODE V39 + ncbiRefSeq, version stripped
+hgsql -Ne "select * from wgEncodeGencodeCompV39" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sed -Ee 's/\.[0-9]+//' \
+    | sort -k4 > hg38.gencodeCompV39.bed12
+hgsql -Ne "select * from ncbiRefSeq" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sort -k4 > hg38.refSeq.bed12
+cat hg38.gencodeCompV39.bed12 hg38.refSeq.bed12 | sort -k4 > transcripts.coords
+
+# The field names match v4.1 (lof.oe_ci.upper = LOEUF, lof.pLI, mis.*, syn.*), so
+# the v4.1 extract was remapped by name to the v4.1.1 column numbers; the trailing
+# six columns add constraint_flags, gene_flags and the four gene_quality_metrics.
+# To re-derive the indices if the schema changes again:
+#   bgzip -cd gnomad.v4.1.1.constraint_metrics.tsv.bgz | head -1 | tr '\t' '\n' | nl
+
+# Extract -> join to transcript coords -> reformat -> combine.v4.1.1.awk, which
+# writes pliByTranscript.tab (bed12+9) and missenseByTranscript.tab (bed12+8).
+# combine.v4.1.1.awk and the autosql live in src/hg/makeDb/gnomad/ :
+#   combine.v4.1.1.awk, pliMetrics.v4.1.1.as, missenseMetrics.v4.1.1.as
+AWK=~/kent/src/hg/makeDb/gnomad/combine.v4.1.1.awk
+rm -f pliByTranscript.tab missenseByTranscript.tab
+bgzip -cd gnomad.v4.1.1.constraint_metrics.tsv.bgz | tail -n +2 \
+  | awk -F'\t' -v OFS='\t' '{print $1,$3,$43,$44,$45,$47,$22,$23,$24,$26,$88,$89,$111,$90,$27,$28,$48,$49,$93,$94,$19,$18,$14,$15,$16,$17}' \
+  | sort -k2 \
+  | join -t $'\t' -1 4 -2 2 transcripts.coords - \
+  | awk -F'\t' '{for(i=1;i<=12;i++){printf "%s\t",$i} printf "%s\t%s\t%s\t\t\t",$2,$3,$4; for(i=13;i<=NF;i++){printf "%s",$i; if(i!=NF)printf "\t"}; printf "\n"}' \
+  | awk -f $AWK -v doTranscripts=true
+bedSort pliByTranscript.tab pliByTranscript.tab
+bedSort missenseByTranscript.tab missenseByTranscript.tab
+
+# build the bigBeds (176740 transcripts)
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+9 -tab -extraIndex=name,geneName \
+    -as=~/kent/src/hg/makeDb/gnomad/pliMetrics.v4.1.1.as \
+    pliByTranscript.tab $sizes pliByTranscript.v4.1.1.bb
+bedToBigBed -type=bed12+8 -tab -extraIndex=name,geneName \
+    -as=~/kent/src/hg/makeDb/gnomad/missenseMetrics.v4.1.1.as \
+    missenseByTranscript.tab $sizes missenseByTranscript.v4.1.1.bb
+
+# trackDb: a "Constraint V4.1.1" view group (pliByTranscriptV4_1_1,
+# missenseByTranscriptV4_1_1) was added to gnomad.constraint.alpha.ra, which is
+# included alpha-only while gnomad.constraint.public.ra is included beta,public.

@@ -1,0 +1,144 @@
+<h2>Description</h2>
+<p>
+The structural variants (SVs) in this dataset were identified using Oxford
+Nanopore long-read whole-genome sequencing of 888 individuals from the 1000
+Genomes Project, representing five ancestry groups. This callset was created
+primarily for SV imputation. To generate a multi-ancestry SV imputation
+reference panel, SVs observed in only one individual (singletons) were excluded,
+and the remaining SVs were merged with previously identified short variants from
+the same individuals. This panel was used to impute SVs in approximately 500,000
+UK Biobank participants and to test their associations with 32 disease-relevant
+traits.
+</p>
+<p>
+The track contains all 107,445 SVs in the reference panel: 59,953 insertions,
+38,459 deletions, 5,729 inversions, 2,696 breakends, and 608 duplications. Each
+variant is annotated with its overall allele frequency; allele frequencies
+across five superpopulations (African, Admixed American, East Asian, European,
+and South Asian); Hardy-Weinberg equilibrium p-values; and imputation accuracy
+metrics from internal leave-one-out validation and UK Biobank imputation. For
+SVs reaching genome-wide significance, the associated traits, p-values, and INFO
+scores are listed on the corresponding variant details page.
+</p>
+<p>
+The 888 samples in this dataset are a subset of the 1,019 samples included in
+the <a href="hgTrackUi?g=lrSv1kgOnt">1KG Vienna ONT</a> track (Schloissnig et al.
+2025). Although the two studies share the same raw sequencing data, they applied
+different data-processing and SV-calling pipelines to address distinct research
+objectives, so the individual calls are only partially concordant. The
+imputation reference panel, UK Biobank imputation results, and SV-wide
+association study (SV-WAS) results described here are specific to this track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type, matching the other subtracks of the container:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Deletion (DEL)</td></tr>
+  <tr><th style="background-color:#0000C8;width:2em">&nbsp;</th>
+      <td>Insertion (INS)</td></tr>
+  <tr><th style="background-color:#00A000;width:2em">&nbsp;</th>
+      <td>Duplication (DUP)</td></tr>
+  <tr><th style="background-color:#E68C00;width:2em">&nbsp;</th>
+      <td>Inversion (INV)</td></tr>
+  <tr><th style="background-color:#5A5A5A;width:2em">&nbsp;</th>
+      <td>Breakend (BND), a single junction of a larger rearrangement</td></tr>
+</table>
+<p>
+Insertions and breakends are drawn at a single reference base; the length of
+inserted sequence is reported for insertions, and the mate locus of the
+rearrangement junction is reported for breakends. Deletions, inversions and
+duplications span the affected reference interval. Because the source table
+does not report an allele count, the allele count and allele number shown here
+are approximate values derived from the reported allele frequency and the
+genotype missing rate (allele number = 2 &times; 888 &times; (1 &minus; missing
+rate); allele count = allele frequency &times; allele number).
+</p>
+<p>
+The mouseover shows the variant name, SV type, reference and insertion lengths,
+allele frequency, approximate allele count, and the number of UK Biobank trait
+associations. Filters are available for SV type, SV length, insertion length,
+approximate allele count, overall and per-population allele frequency, the
+number of UK Biobank GWAS hits, and the leave-one-out imputation r&sup2; and
+minor-allele concordance.
+</p>
+
+<h2>Methods</h2>
+<p>
+888 individuals from the 1000 Genomes Project (164 European, 144 Admixed
+American, 168 East Asian, 171 South Asian and 241 African), out of 906
+sequenced, passed quality control. They were sequenced on the Oxford Nanopore
+PromethION P48 platform with R9.4.1 flow cells and the SQK-LSK110 ligation kit,
+to a median read length of about 6.2 kb and 15x median coverage. Reads were
+aligned to GRCh38 with minimap2 v2.24 and structural variants were jointly
+called across all samples with Sniffles2 v2.0.7 using tandem-repeat
+annotations. Variants were retained if they were 50 bp to 30 Mb long, present
+in at least two individuals and had a genotype missing rate below 20%, yielding
+107,445 SVs. This SV panel was merged with about 45 million short variants from
+1000 Genomes Phase 3 and phased with Beagle to build a multi-ancestry
+imputation reference panel. Leave-one-out cross-validation with Beagle v5.4
+provided per-variant imputation accuracy (r&sup2;) and minor-allele
+concordance. The panel was then used to impute SVs into 488,130 UK Biobank
+participants, and an SV-wide association study (SV-WAS) with Regenie v3 tested
+32 disease-relevant phenotypes and 1,463 protein levels in European-ancestry
+participants, using a genome-wide significance threshold of p&lt;5&times;10<sup>-8</sup>.
+See Noyvert et al. 2025 for full details.
+</p>
+<p>
+The per-variant summary table (allele frequencies, quality metrics, imputation
+accuracy and significant UK Biobank associations for all 107,445 SVs) was
+provided by the authors. At UCSC it was converted to the shared long-read SV
+schema (signed lengths made positive, an explicit insertion-length field added,
+allele count and allele number approximated from allele frequency and missing
+rate, and colors assigned from the container's shared palette). The
+step-by-step commands are recorded in the UCSC makeDoc for this track
+container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion script and autoSql schema live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>, and the track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/lrSv.ra" target="_blank">trackDb/human/lrSv.ra</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-sep tables. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>noyvertSv</i>.
+</p>
+<p>
+The annotation is stored as a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>noyvert.bb</tt>. Individual regions or the whole
+annotation can be obtained with the <tt>bigBedToBed</tt> utility, available
+from our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">utilities
+page</a>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/noyvert.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Boris Noyvert and colleagues at Boehringer Ingelheim and the wider
+study team for generating this multi-ancestry long-read SV panel and for
+sharing the per-variant summary table, and to the 1000 Genomes Project and the
+UK Biobank participants whose data made the study possible.
+</p>
+
+<h2>References</h2>
+<p>
+Noyvert B, Erzurumluoglu AM, Drichel D, Omland S, Andlauer TFM <em>et al</em>.
+<a href="https://doi.org/10.7554/eLife.106115.1" target="_blank">
+Imputation of structural variants using a multi-ancestry long-read sequencing panel enables
+identification of disease associations</a>.
+<em>eLife</em>. 2025. doi:10.7554/eLife.106115.1
+</p>
+<p>
+A continuously updated preprint version of this study is available on medRxiv:
+<a href="https://doi.org/10.1101/2023.12.20.23300308" target="_blank">
+doi:10.1101/2023.12.20.23300308</a>.
+</p>

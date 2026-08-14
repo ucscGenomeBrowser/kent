@@ -1,0 +1,118 @@
+<h2>Description</h2>
+<p>
+This track displays structural variants (SVs) in
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/">dbVar</a> with somatic origin,
+aggregated from six dbVar studies.
+</p>
+
+<p>
+<b>Source studies:</b>
+</p>
+<ul>
+<li><b>COSMIC</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/estd192/">estd192</a>) &#8212;
+the Catalogue Of Somatic Mutations In Cancer.</li>
+<li><b>Clinical Structural Variants</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd102/">nstd102</a>) &#8212;
+somatic subset of ClinVar SVs.</li>
+<li><b>Ghazali et al. 2021</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd202/">nstd202</a>).</li>
+<li><b>Helman et al. 2014</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd94/">nstd94</a>).</li>
+<li><b>Walter et al. 2009</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd11/">nstd11</a>).</li>
+<li><b>Wills et al. 2016</b>
+(<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd125/">nstd125</a>).</li>
+</ul>
+
+<p>
+This track is updated with every monthly dbVar release.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Variants are colored by type, using the dbVar color scheme described in the
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar Overview
+page</a>:
+</p>
+<table>
+<thead><tr>
+<th style="border-bottom: 2px solid #6678B1;">Color</th>
+<th style="border-bottom: 2px solid #6678B1;">Variant Type(s)</th>
+</tr></thead>
+<tbody>
+<tr><th bgcolor="#ff0000"></th><td>deletion, copy number loss</td></tr>
+<tr><th bgcolor="#0000ff"></th><td>duplication, copy number gain, insertion, mobile element insertion</td></tr>
+<tr><th bgcolor="#b98be7"></th><td>inversion</td></tr>
+<tr><th bgcolor="#49a4ff"></th><td>complex substitution</td></tr>
+<tr><th bgcolor="#704112"></th><td>tandem duplication</td></tr>
+</tbody>
+</table>
+
+<p>
+<b>Mouseover</b> on items shows gene(s) affected, size, variant type, source dbVar study, and
+discovery method.
+</p>
+
+<p>
+The track can be filtered by:
+</p>
+<ul>
+<li><b>Variant Type</b></li>
+<li><b>Variant Size</b> (Under 10KB, 10KB to 100KB, 100KB to 1MB, Over 1MB)</li>
+<li><b>Discovery Method</b> (Curated, Multiple, SNP array, Sequencing)</li>
+<li><b>Pathogenic Reciprocal Overlap</b> (none, 10 to 25, 25 to 50, 50 to 75, 75 to 90, 90 to 100)
+&#8212; range of reciprocal overlap with pathogenic variants in nstd102</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Per NCBI's dbVar processing pipeline, somatic variant calls are extracted from the
+<code>variant_calls.somatic.gvf</code> files on the dbVar FTP site, reciprocally overlapped
+with the pathogenic clinical SV file using bedtools, and converted to bigBed format. See the
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar
+Overview</a> for full methods.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../../hgTables">Table Browser</a>, or the
+<a href="../../hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="../../goldenPath/help/api.html">REST API</a>.
+</p>
+<p>
+The data can also be downloaded from the
+<a target=_blank href="https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/">dbVar Track Hub</a>,
+or via the dbVar FTP in VCF, GVF, or tab-delimited formats. For questions about dbVar track data,
+please contact
+<A HREF="mailto:&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v">&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v</A>.
+<!-- above address is dbvar at ncbi.nlm.nih.gov -->
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the dbVar team at NCBI, especially John Lopez and Timothy Hefferon for technical
+coordination and consultation.
+</p>
+
+<h2>References</h2>
+<p>
+Lappalainen I, Lopez J, Skipper L, Hefferon T, Spalding JD, Garner J, Chen C, Maguire M, Corbett M,
+Zhou G <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gks1213" target="_blank">
+DbVar and DGVa: public archives for genomic structural variation</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D936-41.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193291" target="_blank">23193291</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531204/" target="_blank">PMC3531204</a>
+</p>
+<p>
+Tate JG, Bamford S, Jubb HC, Sondka Z, Beare DM, Bindal N, Boutselakis H, Cole CG, Creatore C,
+Dawson E <em>et al</em>.
+<a href="https://academic.oup.com/nar/article/47/D1/D941/5146192" target="_blank">
+COSMIC: the Catalogue Of Somatic Mutations In Cancer</a>.
+<em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D941-D947.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30371878" target="_blank">30371878</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323903/" target="_blank">PMC6323903</a>
+</p>

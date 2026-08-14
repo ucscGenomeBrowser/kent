@@ -1,0 +1,92 @@
+# 2026-07-14 - Claude (max) - HPRC Release 2 hg38 native tracks - Redmine #35415
+
+# Native hg38 tracks derived from the HPRC Release 2 per-assembly chains against
+# GRCh38 (Minigraph-Cactus). These are the HPRC2 analogues of the HPRC (release 1)
+# chain-derived tracks documented in hprcChain.txt / hprcCoverage.txt / hprcInDel.txt
+# / hprcRearrange.txt. Unlike release 1 (which started from lossy bigChain.bb and
+# had to re-chain via 2bit files), release 2 ships proper .chain.gz, so we skip the
+# axtChain re-chaining step and derive the assembly (query) chrom.sizes directly
+# from the chain headers.
+
+# 461/462 note: the chains index lists 231 samples x 2 haplotypes; every listed
+# haplotype was downloaded and processed (462 assemblies, 0 failures).
+
+WORKDIR=/hive/data/genomes/hg38/bed/hprc2
+SCRIPTS=~/kent/src/hg/makeDb/scripts/hprc2
+mkdir -p $WORKDIR
+
+##############################################################################
+# 1. Index and naming table
+# The HPRC2 annotation "chains" index CSV points at s3://human-pangenomics/ files
+# with columns: sample_id,haplotype,assembly_name,location
+cd $WORKDIR/naming
+wget -O chains_grch38.csv \
+  https://raw.githubusercontent.com/human-pangenomics/hprc_intermediate_assembly/main/data_tables/annotation/chains/chains_to_grch38_mc_hprc_r2_v1.0.index.csv
+
+# short label = sampleId.haplotype (e.g. HG00097.1); build the naming + jobs tables
+tail -n +2 chains_grch38.csv | awk -F, 'BEGIN{OFS="\t"}{print $1,$2,$3,$1"."$2}' \
+  > hprc2.names.tsv
+awk -F'\t' -v raw="$WORKDIR/chainsRaw" 'BEGIN{OFS="\t"}
+  {print raw"/"$3"_vs_GRCh38.chain.gz", $4}' hprc2.names.tsv > jobs.tsv
+
+##############################################################################
+# 2. Download all per-assembly chains (HTTPS from the free S3 bucket, resumable)
+# ~2.2 GB, 462 files.
+$SCRIPTS/hprc2Download.sh $WORKDIR/naming/chains_grch38.csv $WORKDIR/chainsRaw 10
+
+# NOTE ON ORIENTATION AND CHROM NAMING (verified on one file before scaling):
+#  - the raw chains have GRCh38 as the QUERY and the assembly as the TARGET,
+#    so hprc2ProcessOne.sh runs chainSwap to make hg38 the target.
+#  - the GRCh38 side uses plain chr1..chr22,chrX(,chrY) names (no GRCh38# prefix,
+#    no alts/patches), so after the swap all target names are valid hg38.
+
+##############################################################################
+# 3. Per-assembly processing (chain/net, bigChain, rearrangements, indels)
+# hprc2ProcessOne.sh does, for one assembly:
+#   chainSwap|chainSort|renumber -> chain/<name>.chain
+#   query sizes from chain headers -> qSizes/<name>.qSizes
+#   chainPreNet | chainNet -minSpace=1 | netSyntenic -> net/<name>.net
+#     (netSyntenic is REQUIRED; a raw chainNet net makes netChainSubset -type=top
+#      segfault)
+#   hgLoadChain -test (in a per-job dir to avoid the chain.tab race under parallel)
+#     -> bigChains/<name>.bb + <name>.link.bb
+#   chainArrange -> arr/<name>.inv.txt, arr/<name>.dup.txt
+#   netChainSubset -type=top | chainInDel -> arr/<name>.indel.txt
+$SCRIPTS/hprc2ProcessAll.sh $WORKDIR/naming/jobs.tsv $WORKDIR 16
+# joblog: $WORKDIR/procLogs/joblog.txt  (all 462 exit 0)
+
+##############################################################################
+# 4. Aggregate across all assemblies into the final tracks
+# hprc2Aggregate.sh sections:
+#   coverage: single-cover projection per assembly, overlap count, normalize by N,
+#             fill zero-coverage regions -> out/hprc2Coverage.bw
+#   breaks:   bigChainBreaks per assembly, merge by position, color by prevalence
+#             -> out/hprc2Breaks.bb
+#   arrange:  merge arr/*.indel.txt, split into deletions / insertions / complex;
+#             merge arr/*.inv.txt and arr/*.dup.txt into inversions / duplications;
+#             chainArrangeCollect groups identical events across assemblies (score =
+#             number of assemblies), a per-type color is set, and a numeric "size"
+#             field is added (deletion/inv/dup = span on GRCh38; insertion =
+#             inserted bases) so the trackDb filter can default to >= 50 bp.
+#             -> out/hprc2{Del,Ins,Double,Inv,Dup}.bb  (autoSql hprc2Arrange.as)
+$SCRIPTS/hprc2Aggregate.sh all $WORKDIR
+
+##############################################################################
+# 5. Symlinks into gbdb (see hprc2.ra for the trackDb stanzas)
+mkdir -p /gbdb/hg38/hprc2
+ln -sf $WORKDIR/out/hprc2Coverage.bw /gbdb/hg38/hprc2/
+ln -sf $WORKDIR/out/hprc2Breaks.bb /gbdb/hg38/hprc2/
+for t in Del Ins Double Inv Dup; do
+  ln -sf $WORKDIR/out/hprc2$t.bb /gbdb/hg38/hprc2/
+done
+
+##############################################################################
+# 6. Per-haplotype chain composite (hprc2Chains)
+# Symlinks the 462 bigChains/<name>.bb + .link.bb into /gbdb/hg38/hprc2/chains/
+# and generates the composite trackDb (one subtrack per haplotype, grouped by
+# superpopulation and haplotype from the release sample metadata).
+$SCRIPTS/hprc2Chains.sh $WORKDIR ~/kent/src/hg/makeDb/trackDb/human/hg38/hprc2Chains.ra
+
+# Rearrangement item colors match the lrSv structural-variant palette
+# (svColor in scripts/lrSv/lrSvCommon.py): DEL 200,0,0  INS 0,0,200  DUP 0,160,0
+# INV 230,140,0  CPX/complex 140,0,200.

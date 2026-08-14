@@ -661,8 +661,8 @@ void printCladeListHtml(char *genome, char *event, char *javascript)
 /* Make an HTML select input listing the clades. */
 {
 char **row = NULL;
-char *clades[128];
-char *labels[128];
+char *clades[4096];
+char *labels[4096];
 char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
@@ -826,8 +826,8 @@ void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
  */
 {
 
-char *assemblyList[128];
-char *values[128];
+char *assemblyList[4096];
+char *values[4096];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
 char *genome = hGenome(db);
@@ -1602,7 +1602,7 @@ char *menuBar(struct cart *cart, char *db)
 //  with a View menu defined in hgTracks/menu.c
 {
 char *docRoot = hDocumentRoot();
-char *menuStr, buf[4096], uiVars[128];
+char *menuStr, buf[4096], uiVars[4096];
 FILE *fd;
 char *navBarFile = "inc/globalNavBar.inc";
 struct stat statBuf;
@@ -1619,6 +1619,7 @@ if(docRoot == NULL)
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("topLinks.js", NULL);
 webIncludeResourceFile("nice_menu.css");
 
 webIncludeLocalJs();
@@ -1666,8 +1667,66 @@ if(scriptName)
         }
     }
 
-if(!loginSystemEnabled())
-    stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
+// Fill in the top-right Login link (placeholder <!-- LOGIN_LINK --> in globalNavBar.inc, inside
+// the #topRightLinks container).  Logged out: a "Login" link to hgSession.  Logged in: the
+// username, which opens an account dialog (handled in topLinks.js using the data-* attributes
+// below).  No login system: removed.
+    {
+    char *loginLi = "";
+    if (loginSystemEnabled() || wikiLinkEnabled())
+        {
+        char *userName = wikiLinkUserName();
+        struct dyString *dy = dyStringNew(512);
+        if (userName == NULL)
+            {
+            // Link straight to the login page (same target hgSession's own Login link uses),
+            // rather than bouncing the user through hgSession first.
+            char *loginUrl = wikiLinkUserLoginUrl(cart ? cartSessionId(cart) : "");
+            dyStringPrintf(dy, "<a class='topRightLink' href='%s' id='loginLink' "
+                "title='Log in to save and share sessions'>Login</a>", loginUrl);
+            }
+        else
+            {
+            char *hgsid = cart ? cartSessionId(cart) : NULL;
+            char *logoutUrl = wikiLinkUserLogoutUrl(hgsid);
+            char *changePwUrl = wikiLinkChangePasswordUrl(hgsid);
+            char *changeEmailUrl = wikiLinkChangeEmailUrl(hgsid);
+            dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
+                "title='Account info and sign out' "
+                "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
+                "data-changeemailurl=\"%s\">%s</a>",
+                userName, logoutUrl, changePwUrl ? changePwUrl : "",
+                changeEmailUrl ? changeEmailUrl : "", userName);
+            }
+        loginLi = dyStringCannibalize(&dy);
+        }
+    menuStr = replaceChars(menuStr, "<!-- LOGIN_LINK -->", loginLi);
+    }
+
+// Fill in the top-right "Share a link" link (placeholder <!-- SHARE_LINK -->).
+// data-sharemode tells topLinks.js what to do:
+//   "session" (hgTracks): save the current view as a session and show a short link; branches on
+//             data-loggedin to either name a session (logged in) or make an anonymous link.
+//   "url" (hgTrackUi): just show the current page URL with the hgsid stripped, for sharing.
+    {
+    char *shareLi = "";
+    boolean isHgTracks = (scriptName && endsWith(scriptName, "hgTracks"));
+    boolean isHgTrackUi = (scriptName && endsWith(scriptName, "hgTrackUi"));
+    if (isHgTracks || isHgTrackUi)
+        {
+        char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+        char *shareMode = isHgTrackUi ? "url" : "session";
+        struct dyString *dy = dyStringNew(256);
+        dyStringPrintf(dy, "<a class='topRightLink' href='#' id='shareLink' "
+            "title='Get a link to this view to share with others' "
+            "data-sharemode='%s' data-loggedin='%d'", shareMode, (userName != NULL));
+        if (userName != NULL)
+            dyStringPrintf(dy, " data-username=\"%s\"", userName);
+        dyStringAppend(dy, ">Share a link</a>");
+        shareLi = dyStringCannibalize(&dy);
+        }
+    menuStr = replaceChars(menuStr, "<!-- SHARE_LINK -->", shareLi);
+    }
 
 if(scriptName)
     {  // Provide optional official mirror servers menu items

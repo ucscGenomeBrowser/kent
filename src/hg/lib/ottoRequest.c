@@ -10,7 +10,7 @@
 
 
 
-char *ottoRequestCommaSepFieldNames = "id,fromDb,toDb,email,comment,requestTime,doneStatus,completeTime";
+char *ottoRequestCommaSepFieldNames = "id,requestType,fromDb,toDb,email,comment,requestTime,status,buildDir,completeTime";
 
 void ottoRequestStaticLoad(char **row, struct ottoRequest *ret)
 /* Load a row from ottoRequest table into ret.  The contents of ret will
@@ -18,13 +18,15 @@ void ottoRequestStaticLoad(char **row, struct ottoRequest *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->fromDb = row[1];
-ret->toDb = row[2];
-ret->email = row[3];
-ret->comment = row[4];
-ret->requestTime = row[5];
-ret->doneStatus = sqlUnsigned(row[6]);
-ret->completeTime = row[7];
+ret->requestType = row[1];
+ret->fromDb = row[2];
+ret->toDb = row[3];
+ret->email = row[4];
+ret->comment = row[5];
+ret->requestTime = row[6];
+ret->status = sqlUnsigned(row[7]);
+ret->buildDir = row[8];
+ret->completeTime = row[9];
 }
 
 struct ottoRequest *ottoRequestLoadByQuery(struct sqlConnection *conn, char *query)
@@ -57,8 +59,8 @@ void ottoRequestSaveToDb(struct sqlConnection *conn, struct ottoRequest *el, cha
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s',%u,'%s')",
-	tableName,  el->id,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->doneStatus,  el->completeTime);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s',%u,'%s','%s')",
+	tableName,  el->id,  el->requestType,  el->fromDb,  el->toDb,  el->email,  el->comment,  el->requestTime,  el->status,  el->buildDir,  el->completeTime);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -71,13 +73,15 @@ struct ottoRequest *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->fromDb = cloneString(row[1]);
-ret->toDb = cloneString(row[2]);
-ret->email = cloneString(row[3]);
-ret->comment = cloneString(row[4]);
-ret->requestTime = cloneString(row[5]);
-ret->doneStatus = sqlUnsigned(row[6]);
-ret->completeTime = cloneString(row[7]);
+ret->requestType = cloneString(row[1]);
+ret->fromDb = cloneString(row[2]);
+ret->toDb = cloneString(row[3]);
+ret->email = cloneString(row[4]);
+ret->comment = cloneString(row[5]);
+ret->requestTime = cloneString(row[6]);
+ret->status = sqlUnsigned(row[7]);
+ret->buildDir = cloneString(row[8]);
+ret->completeTime = cloneString(row[9]);
 return ret;
 }
 
@@ -87,7 +91,7 @@ struct ottoRequest *ottoRequestLoadAll(char *fileName)
 {
 struct ottoRequest *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -105,7 +109,7 @@ struct ottoRequest *ottoRequestLoadAllByChar(char *fileName, char chopper)
 {
 struct ottoRequest *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -127,12 +131,14 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+ret->requestType = sqlStringComma(&s);
 ret->fromDb = sqlStringComma(&s);
 ret->toDb = sqlStringComma(&s);
 ret->email = sqlStringComma(&s);
 ret->comment = sqlStringComma(&s);
 ret->requestTime = sqlStringComma(&s);
-ret->doneStatus = sqlUnsignedComma(&s);
+ret->status = sqlUnsignedComma(&s);
+ret->buildDir = sqlStringComma(&s);
 ret->completeTime = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -145,11 +151,13 @@ void ottoRequestFree(struct ottoRequest **pEl)
 struct ottoRequest *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->requestType);
 freeMem(el->fromDb);
 freeMem(el->toDb);
 freeMem(el->email);
 freeMem(el->comment);
 freeMem(el->requestTime);
+freeMem(el->buildDir);
 freeMem(el->completeTime);
 freez(pEl);
 }
@@ -173,6 +181,10 @@ void ottoRequestOutput(struct ottoRequest *el, FILE *f, char sep, char lastSep)
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->requestType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->fromDb);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -192,7 +204,11 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->requestTime);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->doneStatus);
+fprintf(f, "%u", el->status);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->buildDir);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->completeTime);
@@ -209,6 +225,14 @@ fprintf(f,"id");
 fputc('"',f);
 fputc(':',f);
 fprintf(f, "%u", el->id);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"requestType");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->requestType);
+fputc('"',f);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"fromDb");
@@ -251,10 +275,18 @@ fprintf(f, "%s", el->requestTime);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
-fprintf(f,"doneStatus");
+fprintf(f,"status");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", el->doneStatus);
+fprintf(f, "%u", el->status);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"buildDir");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->buildDir);
+fputc('"',f);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"completeTime");

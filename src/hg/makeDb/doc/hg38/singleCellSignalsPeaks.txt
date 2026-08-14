@@ -1,0 +1,105 @@
+# hg38 singleCellSignalsPeaks track  -  2026-07-20  Claude (mspeir)  refs #37820
+
+# The native hg38 "singleCellSignalsPeaks" faceted composite is the Genome
+# Browser version of the UCSC Cell Browser all-tracks super hub (Redmine #37820).
+# The hub build lives in the cellBrowser repo, ucsc/allTracksHub:
+#   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
+#
+# It gathers the per-cell-type signal (bigWig) and peak (bigBed / bigNarrowPeak)
+# tracks from the single-cell ATAC datasets in the Cell Browser and re-parents
+# them under one faceted composite. cCREs and interactions live in their own
+# composites in the hub and are NOT part of this track.
+
+##############################################################################
+# 1. Source data
+##############################################################################
+# The track mirrors the hub's main hg38 signal-&-peaks faceted composite
+# (cellBrowserHg38). That composite and its facet metadata are produced by the
+# hub build from the Cell Browser dataset tree (/hive/data/inside/cells/datasets):
+#
+#   cd $HOME/cellBrowser/ucsc/allTracksHub
+#   python3 build_manifest.py            # scan datasets -> manifest.tsv
+#   python3 build_stanzas.py             # manifest -> stanzas/hg38.trackDb.txt
+#                                        #            + meta/hg38.metadata.tsv
+#
+# The build writes its output to $CBHUB_OUT, NOT next to the scripts (that dir is
+# git-controlled). Default: /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+#
+# The per-track source files (abs_path column of manifest.tsv) are the files the
+# Cell Browser datasets already serve; nothing is regenerated here, only copied.
+
+##############################################################################
+# 2. Copy the data files into place  (bed dir, served via a /gbdb symlink)
+##############################################################################
+# Every subtrack of the cellBrowserHg38 composite is copied into
+#   /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/<served-relpath>
+# keeping each file's served relative path (e.g.
+#   human-enhancer-atlas/.../Adipocyte.bw ,
+#   allen-brain-science/seaad_MTG/bw/ADNC0Astro.bw ).
+# The served subpath is preserved on purpose: 18 peak-file basenames repeat
+# across datasets (cortex-atac), so a flat directory would clobber them.
+#   936 files total (bigWig + bigBed/bigNarrowPeak), ~206 GB.
+#
+# The file list comes straight from the composite's bigDataUrl lines mapped back
+# to manifest abs_paths; copy each abs_path to bed/<relpath> (mkdir -p parents).
+
+##############################################################################
+# 3. Generate the trackDb .ra
+##############################################################################
+# makeSingleCellSignalsPeaksRa.py reads the hub's hg38 stanzas, keeps the
+# cellBrowserHg38 subtracks, renames the composite to singleCellSignalsPeaks,
+# repoints every bigDataUrl at the local /gbdb copy, and writes the .ra with
+# group=regulation (ATAC signal/peaks sit with the ENCODE regulatory tracks).
+# Subtrack colors and labels (incl. the SEA-AD subclass colors) carry through.
+#
+#   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
+#   python3 $scriptDir/makeSingleCellSignalsPeaksRa.py \
+#       --stanzas $CBHUB_OUT/stanzas/hg38.trackDb.txt \
+#       --out $HOME/kent/src/hg/makeDb/trackDb/human/hg38/singleCellSignalsPeaks.ra
+#
+# https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
+
+##############################################################################
+# 4. Facet metadata
+##############################################################################
+# The faceted composite's metaDataUrl points at a copy of the hub's hg38
+# main-faceted metadata (primaryKey = Track):
+#
+#   cp $CBHUB_OUT/meta/hg38.metadata.tsv \
+#      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
+
+##############################################################################
+# 5. Labels, colors, and facets
+##############################################################################
+# The cell type / cell class / shortLabel / longLabel / color / facet values are
+# all derived by build_stanzas.py, not copied from the source hubs. That logic
+# (paper-curated cell-type crosswalks, the shared broad-class color palette, the
+# rebuilt short and long labels, the variant descriptors that keep every label
+# unique, and the per-collection tissue/life-stage/condition parsing incl. SEA-AD
+# region + ADNC) is documented once in doc/mm10/singleCellSignalsPeaks.txt
+# section 4; it runs identically for hg38. Tracks are colored by broad cell class
+# from the same palette as mm10, so a class is the same color on both assemblies.
+#
+# hg38-specific label notes:
+#   - cortex-atac calls peaks three ways and serves all three for each cell type.
+#     The method is a filename suffix on some files (AstroOligo_MACSpeaks.bb) and
+#     the containing directory on others (MACSpeaks/AstroOligo.bb) -- both layouts
+#     appear in the same dataset and the two files are genuinely different peak
+#     sets, so both forms are detected and named in the label.
+#   - human-enhancer-atlas rolls tissue-qualified fibroblast/endothelial clusters
+#     (Fibro_Muscle, Endothelial_General_2) up to one cell type; the source code
+#     goes in the label so the clusters stay distinguishable.
+#   - SEA-AD shortLabels carry a compact region + ADNC token (Astrocyte MTG A0),
+#     since the longLabel distinction alone would leave eight identical short
+#     labels per cell type (2 regions x 4 ADNC levels).
+
+##############################################################################
+# Counts
+##############################################################################
+# 936 files resolved across 9 datasets: human-enhancer-atlas (444),
+# sea-ad-brain-atac (184), cortex-atac (91), retina (69), neuro-degen-atac (67),
+# multiomic-human-heart (40), cardiogenesis-atac (19), olg-eae-ms (18),
+# brainvar (4). 10 mislabeled interaction bigBeds (cortex-atac interact.old/) are
+# reclassified to the interact composite and 1 QC cluster is dropped, leaving 925
+# subtracks in the track. Facet metadata rows match the subtracks 1:1.
+# All 925 longLabels are unique; shortLabels are <=22 chars with no underscores.

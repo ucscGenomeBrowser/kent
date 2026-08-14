@@ -1,0 +1,428 @@
+##############################################################################
+# TP53 VCEP Track Hub — build documentation
+#
+# Redmine: #37399
+# CSpec:   GN009 v2.4.0 (released 2025-11-20)
+# VCEP:    https://clinicalgenome.org/affiliation/50013/
+# Spec:    https://cspec.genome.network/cspec/ui/svi/doc/GN009
+# Expert contact: Megan Frone, NIH/NCI (megan.frone@nih.gov)
+#
+# Canonical transcript: NM_000546.6 / NP_000537.3 (MANE Select), 393 aa,
+# chr17 minus strand. CSpec text mixes NM_000546.4/.5/.6 but the supplementary
+# tables uniformly use .6. We use .6 throughout. NM_000546.5 and .6 are
+# coding-identical so source files keyed on .5 (NCI TP53 DB R21, FLOSSIES)
+# can be reused without re-mapping.
+##############################################################################
+
+
+##############################################################################
+# Layout
+##############################################################################
+#
+# Working directory:                 /hive/users/lrnassar/claude/RM37399/
+#     hub.txt, genomes.txt
+#     hg38/trackDb.txt, hg19/trackDb.txt
+#     tp53.html                     (shared description page)
+#     tp53_downloads/               (source XLSX/CSV from CSpec + papers)
+#     provisionalClass/             (NON-FINAL Provisional Classification — Tavtigian point-sum)
+#     flossies/                     (FLOSSIES BS2 evidence subtrack)
+#     bioinformaticDel/             (Single-aa in-frame del subtrack)
+#     clinDomains/                  (PM1 domains + hotspot codons)
+#     cancerHotspots/               (cancerhotspots.org PM1 subtrack)
+#     pvs1/                         (PVS1 Regions)
+#     pvs1Splice/                   (PVS1 splice-site subtrack)
+#     afFrequencies/                (BA1/BS1/PM2_Supporting from gnomAD v4.1)
+#     bioinformatic/                (PP3/BP4 from VCEP Table S2)
+#     functionalAssays/prelim/      (VCEP preliminary PS3/BS3 from Table S3)
+#     functionalAssays/{kato,giacomelli,kawaguchi,funk}/  (per-paper subtracks)
+#     vcepCuratedVars/              (VCEP final from EvRepo)
+#     flossies_tp53.json            (FLOSSIES window.table_variants extract)
+#
+# Build scripts:                     ~/kent/src/hg/makeDb/scripts/tp53/
+#     tp53FuncLib.py                (shared: transcript info, AA->genomic, ASCII safety,
+#                                    per-paper raw-score loader)
+#     tp53AFfrequencies.py
+#     tp53Flossies.py
+#     tp53Bioinformatic.py
+#     tp53BioinformaticDel.py
+#     tp53CancerHotspots.py
+#     tp53ClinDomains.py
+#     tp53PVS1.py
+#     tp53PVS1Splice.py
+#     tp53FuncPrelim.py
+#     tp53Func_kato.py
+#     tp53Func_giacomelli.py
+#     tp53Func_kawaguchi.py
+#     tp53Func_funk.py
+#     tp53VCEPClinVar.py
+#     tp53ProvisionalClass.py
+#
+# Otto cron staging dir:             /hive/data/outside/otto/tp53/
+#     doUpdate.sh, checkTP53ClinVar.sh (mirrors InSiGHT pattern)
+#     log/                          (weekly run logs)
+
+
+##############################################################################
+# Phase A: Source data (once-per-update; refresh as VCEP / databases update)
+##############################################################################
+#
+# Most source files are checked into tp53_downloads/ and rebuilt from there.
+# Two sources are pulled live during build:
+#
+#   - VCEP Curated Variants:  EvRepo REST API (variantInterpretations endpoint,
+#                             gene=TP53), pulled fresh each weekly otto run
+#                             with ClinVar VCV backfill for unlinked records.
+#   - cancerhotspots.org PM1: Live JSON pull each rebuild; cached snapshot
+#                             at cancerHotspots/cancerhotspots_single.json
+#                             as fallback if the API is down.
+#
+# CSpec supplementary tables (Tables S1, S2, S3) are downloaded to
+# tp53_downloads/ from the CSpec PDF supplementary file:
+#
+#   bioinformatic_worksheet.xlsx     CSpec §PP3/BP4 (Table S2; 2,569 missense)
+#   Functional-worksheet.xlsx        CSpec §PS3/BS3 (Table S3; 4,193 missense)
+#   splicing_worksheet.xlsx          CSpec §PVS1   (Table S1; 1,061 splice rows
+#                                                  → 120 canonical ±1/±2 SNVs)
+#   single_aa_bayesdel.xlsx          VCEP single-aa deletion BayesDel (415 rows)
+#
+# Per-paper functional source files (PMC + NCI):
+#
+#   kato_FunctionIshioka_r21.csv      NCI TP53 DB R21 — Kato 2003 + Kawaguchi
+#                                     oligomerization (Oligomerisation_yeast col)
+#   giacomelli_ZScores_suppT3.xlsx    PMID:30224644 supplement (PMC PoW required)
+#   funk_suppT1_11.xlsx               PMID:39774325 supplement (PMC PoW required)
+#
+# FLOSSIES (BS2 evidence; healthy women >70 cohort):
+# To refresh: the variants are embedded in the static HTML as
+# `window.table_variants = [...]`. Scrape and extract:
+#
+#   curl -sL "https://whi.color.com/gene/ENSG00000141510" -o /tmp/flossies_tp53.html
+#   python3 -c "import re,json; \
+#     h=open('/tmp/flossies_tp53.html').read(); \
+#     m=re.search(r'window\.table_variants\s*=\s*(\[.*?\]);', h, re.DOTALL); \
+#     json.dump(json.loads(m.group(1)), \
+#       open('/hive/users/lrnassar/claude/RM37399/flossies_tp53.json','w'), indent=2)"
+#
+# --- PMC proof-of-work bypass (for Giacomelli + Funk source downloads) ---
+# PMC uses a hashcash challenge on bulk supplement downloads. To obtain a
+# valid cloudpmc-viewer-pow cookie:
+#   1. Open https://pmc.ncbi.nlm.nih.gov/articles/PMC6168352/ in a Playwright
+#      (or regular Chromium) browser session; wait ~2 seconds for the PoW JS
+#      to set the cookie.
+#   2. Extract cloudpmc-viewer-pow + cloudpmc-viewer-csrftoken cookie values.
+#   3. curl --cookie "cloudpmc-viewer-pow=...; cloudpmc-viewer-csrftoken=..." \
+#          -A "Mozilla/..." -o <target.xlsx> <PMC URL>
+# PoW cookies expire after ~5 hours.
+
+
+##############################################################################
+# Phase B: Per-track build commands
+##############################################################################
+#
+# All scripts accept --db (repeat for hg38, hg19) and --output-dir arguments.
+# IMPORTANT BUILD ORDER (data dependencies):
+#   1. Per-paper functional subtracks (Kato/Giacomelli/Kawaguchi/Funk) MUST
+#      run BEFORE tp53FuncPrelim.py — FuncPrelim reads their bed files to
+#      enrich the combined mouseover with raw scores.
+#   2. tp53AFfrequencies.py and tp53Flossies.py MUST run BEFORE
+#      tp53ProvisionalClass.py — Provisional reads both bed files to apply
+#      AF (BA1/BS1/PM2_Supporting) and BS2 codes to its point sum.
+#   3. tp53CancerHotspots.py runs before tp53ProvisionalClass.py — Provisional
+#      reads cancerhotspots_single.json for PM1.
+
+# -----------------------------------------------------------------------------
+# Track 1: NON-FINAL Provisional Classification (NEW vs InSiGHT)
+# -----------------------------------------------------------------------------
+# Sums Tavtigian points from PM1 + PS3/BS3 + PP3/BP4 + AF (BA1/BS1/PM2_Sup) +
+# BS2 (FLOSSIES) per missense protein change. Applies SpliceAI >=0.2 ->
+# splicing PP3 rule; BA1 forces class=Benign. NOT a VCEP classification —
+# warning is in every mouseover. Depends on tp53AFfrequencies and tp53Flossies
+# having run first (reads the AF and FLOSSIES bedfiles).
+cd /hive/users/lrnassar/claude/RM37399/provisionalClass
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53ProvisionalClass.py --db hg38 --db hg19
+# Output: TP53ProvisionalClass{Hg38,Hg19}.bb  (~4,200 items per assembly)
+# Class distribution: Benign 17, LB 1375, VUS 2498, LP 317, P 0
+# (Pathogenic unreachable without clinical-observation evidence.)
+
+# -----------------------------------------------------------------------------
+# Track 2: AF Evidence composite (BA1 / BS1 / PM2_Supporting + FLOSSIES BS2)
+# -----------------------------------------------------------------------------
+# 2a: gnomAD v4.1 exomes filtered to TP53, classified per CSpec §BA1/BS1/PM2.
+#     hg38 is native; hg19 via liftOver.
+cd /hive/users/lrnassar/claude/RM37399/afFrequencies
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53AFfrequencies.py --db hg38 --db hg19
+# Output: TP53AF{Hg38,Hg19}.bb  (~2,200 items per assembly: BA1 72, BS1 21,
+#         PM2_Supporting 2,155 on hg38)
+
+# 2b: FLOSSIES BS2 evidence (healthy women >70 cohort, ~4,942 women)
+cd /hive/users/lrnassar/claude/RM37399/flossies
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Flossies.py --db hg38 --db hg19
+# Output: TP53Flossies{Hg38,Hg19}.bb  (118 items per assembly; 28 BS2-applicable)
+
+# -----------------------------------------------------------------------------
+# Track 3: Bioinformatic Predictions composite (PP3 / BP4)
+# -----------------------------------------------------------------------------
+# 3a: Missense PP3/BP4 from VCEP Table S2 (Align-GVGD + BayesDel + SpliceAI).
+#     Splicing PP3 rule: SpliceAI >=0.2 flagged as splicing PP3 (overrides
+#     missense BP4 in the mouseover; filterable via splicePP3Flag = Yes).
+cd /hive/users/lrnassar/claude/RM37399/bioinformatic
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Bioinformatic.py --db hg38 --db hg19
+# Output: TP53Bioinformatic{Hg38,Hg19}.bb  (2,569 items per assembly;
+#   60 BP4 rows have splicing PP3 override flag.)
+
+# 3b: Single-amino-acid in-frame deletion PP3/BP4
+#     BayesDel-only thresholds (Align-GVGD not applicable to deletions).
+#     Source: VCEP-provided single_aa_bayesdel.xlsx (in tp53_downloads/).
+cd /hive/users/lrnassar/claude/RM37399/bioinformaticDel
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53BioinformaticDel.py --db hg38 --db hg19
+# Output: TP53BioinformaticDel{Hg38,Hg19}.bb  (415 items per assembly)
+# Distribution: PP3_Mod 254, BP4_Mod 123, BP4 15, PP3 7, No evidence 16
+
+# -----------------------------------------------------------------------------
+# Track 4: VCEP Curated Variants (from ClinGen EvRepo)
+# -----------------------------------------------------------------------------
+# Source: ClinGen EvRepo REST API (variantInterpretations endpoint),
+# affiliation 50013 (TP53 VCEP). Records that come through without a
+# ClinVar var_id are backfilled by querying ClinVar esearch with the HGVSc
+# string (recovers protein-change annotation too). Auto-updated weekly via
+# otto cron (see Phase E).
+cd /hive/users/lrnassar/claude/RM37399/vcepCuratedVars
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53VCEPClinVar.py -o .
+# Output: TP53VCEPCuratedVars{Hg38,Hg19}.bb  (182 items as of 2026-04-27;
+#   ClinVar has 184 expert-panel records but 2 are not yet publishing
+#   through to EvRepo; otto cron will pick them up when they propagate.)
+
+# -----------------------------------------------------------------------------
+# Track 5: PM1 Evidence (composite)
+# -----------------------------------------------------------------------------
+# 5a: Clinical Domains + hardcoded PM1_Moderate hotspot codons
+cd /hive/users/lrnassar/claude/RM37399/clinDomains
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53ClinDomains.py --db hg38 --db hg19
+# Output: TP53clinDomains{Hg38,Hg19}.bb  (20 items per assembly:
+#   7 domains + 6 hotspot codons, some split across exon boundaries)
+
+# 5b: cancerhotspots.org per-AA-change occurrences (hidden by default)
+cd /hive/users/lrnassar/claude/RM37399/cancerHotspots
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53CancerHotspots.py --db hg38 --db hg19
+# Output: TP53CancerHotspots{Hg38,Hg19}.bb  (~351 items per assembly:
+#   PM1_Moderate 129, PM1_Supporting 222)
+
+# -----------------------------------------------------------------------------
+# Track 6: PVS1 Evidence (composite)
+# -----------------------------------------------------------------------------
+# 6a: PVS1 Regions (NMD / PVS1_Strong / PVS1_Moderate zones)
+cd /hive/users/lrnassar/claude/RM37399/pvs1
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53PVS1.py --db hg38 --db hg19
+# Output: TP53PVS1{Hg38,Hg19}.bb  (12 items per assembly)
+
+# 6b: PVS1 Splice Sites from VCEP Table S1 (hidden by default)
+cd /hive/users/lrnassar/claude/RM37399/pvs1Splice
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53PVS1Splice.py --db hg38 --db hg19
+# Output: TP53PVS1Splice{Hg38,Hg19}.bb  (120 items per assembly)
+
+# -----------------------------------------------------------------------------
+# Track 7: Functional Evidence (composite)
+# -----------------------------------------------------------------------------
+# Per-paper subtracks must build BEFORE FuncPrelim (which reads them for
+# raw-score mouseover enrichment).
+
+# 7a: Kato 2003 yeast transactivation (NCI TP53 Database R21)
+cd /hive/users/lrnassar/claude/RM37399/functionalAssays/kato
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Func_kato.py --db hg38 --db hg19
+# Output: TP53FuncKato{Hg38,Hg19}.bb (~2,343 rows)
+
+# 7b: Giacomelli 2018 A549 Z-scores (PMC PoW once for source download)
+cd /hive/users/lrnassar/claude/RM37399/functionalAssays/giacomelli
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Func_giacomelli.py --db hg38 --db hg19
+# Output: TP53FuncGiacomelli{Hg38,Hg19}.bb (~8,363 rows)
+
+# 7c: Kawaguchi 2005 oligomerization (NCI TP53 DB R21, OD aa 323-356 only)
+cd /hive/users/lrnassar/claude/RM37399/functionalAssays/kawaguchi
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Func_kawaguchi.py --db hg38 --db hg19
+# Output: TP53FuncKawaguchi{Hg38,Hg19}.bb (183 rows, OD only)
+
+# 7d: Funk 2025 CRISPR RFS (PMC PoW once for source download)
+cd /hive/users/lrnassar/claude/RM37399/functionalAssays/funk
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53Func_funk.py --db hg38 --db hg19
+# Output: TP53FuncFunk{Hg38,Hg19}.bb (~3,448 rows, exons 5-8)
+
+# 7e: Kotler 2018 — deferred. Mol Cell (Elsevier), no PMC copy. Kotler class
+# is still surfaced in VCEP Table S3 and shown in FuncPrelim mouseover.
+
+# 7f: VCEP Preliminary PS3/BS3 from Table S3 (combined; visible by default)
+#     Reads per-paper bed files for raw-score mouseover enrichment.
+cd /hive/users/lrnassar/claude/RM37399/functionalAssays/prelim
+python3 ~/kent/src/hg/makeDb/scripts/tp53/tp53FuncPrelim.py --db hg38 --db hg19
+# Output: TP53FuncPrelim{Hg38,Hg19}.bb  (~4,244 items per assembly)
+
+
+##############################################################################
+# One-shot rebuild (both assemblies)
+##############################################################################
+
+cd /hive/users/lrnassar/claude/RM37399
+# Order matters: AF + FLOSSIES + per-paper functional must build BEFORE
+# Provisional (which reads AF and FLOSSIES bed files) and BEFORE FuncPrelim
+# (which reads per-paper bed files for raw-score mouseover enrichment).
+for script in tp53ClinDomains tp53CancerHotspots tp53PVS1 tp53PVS1Splice \
+              tp53AFfrequencies tp53Flossies \
+              tp53Bioinformatic tp53BioinformaticDel \
+              tp53Func_kato tp53Func_giacomelli tp53Func_kawaguchi tp53Func_funk \
+              tp53FuncPrelim \
+              tp53VCEPClinVar tp53ProvisionalClass; do
+    echo "=== $script ==="
+    python3 ~/kent/src/hg/makeDb/scripts/tp53/${script}.py --db hg38 --db hg19 || break
+done
+
+
+##############################################################################
+# Phase C: Hub assembly (hub.txt, genomes.txt, trackDb.txt, tp53.html)
+##############################################################################
+
+# All metadata files are in /hive/users/lrnassar/claude/RM37399/ and have
+# already been written. Key choices versus InSiGHT:
+#   - Composite tracks group related subtracks (AF Evidence, Bioinformatic,
+#     PM1 Evidence, PVS1 Evidence, Functional Evidence); default view shows
+#     one or two subtracks per composite.
+#   - filterValues is enabled on every ACMG-code field to let users filter
+#     by strength (e.g., "show only PS3_Strong").
+#   - Every mouseover leads with "Preliminary — VCEP Table SX" OR "Final —
+#     VCEP ClinVar submission" to prevent confusion.
+#   - The NON-FINAL Provisional Classification track is priority 1 (topmost)
+#     so clinicians see the one-row answer first; every mouseover carries the
+#     red "NOT a VCEP classification" warning header.
+
+
+##############################################################################
+# Phase D: Verification
+##############################################################################
+
+# Sandbox URL (serves from working dir via public_html symlink):
+#   https://hgwdev-lrnassar.gi.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=https://hgwdev-lrnassar.gi.ucsc.edu/~lrnassar/track_hubs/tp53Hub/hub.txt
+
+# Validate the hub metadata:
+hubCheck https://hgwdev-lrnassar.gi.ucsc.edu/~lrnassar/track_hubs/tp53Hub/hub.txt
+
+# Cross-assembly item-count parity check:
+cd /hive/users/lrnassar/claude/RM37399
+for track in clinDomains/TP53clinDomains cancerHotspots/TP53CancerHotspots \
+             pvs1/TP53PVS1 pvs1Splice/TP53PVS1Splice \
+             afFrequencies/TP53AF flossies/TP53Flossies \
+             bioinformatic/TP53Bioinformatic bioinformaticDel/TP53BioinformaticDel \
+             functionalAssays/prelim/TP53FuncPrelim \
+             functionalAssays/kato/TP53FuncKato \
+             functionalAssays/giacomelli/TP53FuncGiacomelli \
+             functionalAssays/kawaguchi/TP53FuncKawaguchi \
+             functionalAssays/funk/TP53FuncFunk \
+             vcepCuratedVars/TP53VCEPCuratedVars provisionalClass/TP53ProvisionalClass; do
+    base=$(basename "$track")
+    h38=$(bigBedInfo "${track}Hg38.bb" | awk '/itemCount/ {print $2}')
+    h19=$(bigBedInfo "${track}Hg19.bb" | awk '/itemCount/ {print $2}')
+    printf "  %-30s hg38=%-10s hg19=%-10s\n" "$base" "$h38" "$h19"
+done
+
+# ASCII safety: UCSC hgTracks renders mouseovers through a pipeline that
+# does not always preserve raw UTF-8 (em-dashes show up as 'â€"' mojibake).
+# All mouseovers must use HTML numeric entities (&#8212; etc.). Verify:
+for bb in /hive/users/lrnassar/claude/RM37399/{flossies,bioinformaticDel,provisionalClass,bioinformatic,functionalAssays/prelim,vcepCuratedVars}/*.bb; do
+    bigBedToBed "$bb" stdout 2>/dev/null | grep -qP '[^\x00-\x7f]' && echo "FAIL $bb"
+done
+
+# Spot-check known variants on hg38:
+#   R175H: chr17:7675087-7675088 (single-base variant)  - LP via PM1+PS3+PP3+PM2_Sup
+#   R248Q: chr17:7674219-7674220
+#   R273H: chr17:7673801-7673802
+#   R282W: chr17:7673775-7673776  (NOT in VCEP Curated; visible in Provisional/FuncPrelim)
+#   S106R c.318C>G: chr17:7676005  - VUS via splicing PP3 override (SpliceAI 1.00)
+#   G374R: BS2 from FLOSSIES → Benign (-10 pts)
+#   P72R / R72H: codon 72 R72 haplotype caveat in mouseover
+
+# After a build, generate an audit report alongside the data:
+#   /hive/users/lrnassar/claude/RM37399/audit_report_YYYY-MM-DD.md
+# (Structure mirrors the InSiGHT audit at
+#  /hive/users/lrnassar/insightHub/audit_report_2026-04-13.md.)
+
+
+##############################################################################
+# Phase E: Otto cron (weekly EvRepo update)
+##############################################################################
+
+# Otto directory structure:
+mkdir -p /hive/data/outside/otto/tp53/log
+
+# doUpdate.sh (invoked by crontab):
+cat > /hive/data/outside/otto/tp53/doUpdate.sh <<'EOF'
+#!/bin/bash
+set -o errexit -o pipefail
+umask 002
+export PATH=/cluster/bin/x86_64:$PATH
+cd /hive/data/outside/otto/tp53
+./checkTP53ClinVar.sh 2>&1 | tee -a log/tp53.$(date +%F).log
+EOF
+chmod +x /hive/data/outside/otto/tp53/doUpdate.sh
+
+# checkTP53ClinVar.sh: fetch fresh EvRepo data, build into dated directory,
+# item-count validation with 10% tolerance, atomic swap, silent on no-change.
+# Mirrors InSiGHT's /hive/data/outside/otto/insight/checkInsightClinVar.sh
+# exactly, with paths and script names substituted (tp53VCEPClinVar.py
+# replaces insightClinVar.py).
+
+# Crontab entry (add to ~/kent/src/hg/utils/otto/otto.crontab):
+#   # TP53 VCEP EvRepo curated variants weekly update
+#   15 03 * * 2 umask 002; /hive/data/outside/otto/tp53/doUpdate.sh
+# (Offset 5 min from InSiGHT to avoid simultaneous NCBI hammering.)
+
+# Activation: ssh otto@hgwdev; crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
+
+
+##############################################################################
+# Phase F: hgdownload deployment (after Megan signs off)
+##############################################################################
+
+# Symlink the working dir into the public hgdownload tree:
+sudo ln -s /hive/users/lrnassar/claude/RM37399 \
+           /usr/local/apache/htdocs-hgdownload/hubs/tp53
+
+# Public URL (post-deploy):
+#   https://hgdownload.soe.ucsc.edu/hubs/tp53/hub.txt
+
+# Coordinate with Erich for autoPush so updates propagate to the mirror.
+
+
+##############################################################################
+# Phase G: Recommended track sets (RTS) for hg38 + hg19
+##############################################################################
+
+# Create RTS sessions on dev:
+#   https://hgwdev.gi.ucsc.edu/cgi-bin/hgSession
+# Save a session for hg38 and another for hg19 with all 7 logical tracks
+# visible and the hub loaded. Add to the RTS menu alongside InSiGHT.
+
+# NOTE: Provisional Classification is currently labeled "NON-FINAL" per Megan's
+# feedback (TEST was confusing). If she ever asks to promote it to a final
+# evidence track, edit shortLabel/longLabel in both hg38/trackDb.txt and
+# hg19/trackDb.txt; the track ID (tp53ProvisionalClass) should NOT change so
+# saved cart sessions keep working.
+
+
+##############################################################################
+# Phase H (deferred): Folder taxonomy for VCEP hubs in RTS menu
+##############################################################################
+
+# Once a third VCEP hub exists (InSiGHT + TP53 + next), propose a folder/group
+# structure for the RTS menu. Separate follow-up task; does not block this
+# hub's release.
+
+
+##############################################################################
+# Open items
+##############################################################################
+#
+# - Awaiting Megan's response to v3 update email (sent 2026-04-27): NON-FINAL
+#   label, AF + BS2 inclusion in Provisional sum, splicing PP3 rule, single-aa
+#   in-frame del subtrack, FLOSSIES BS2 track, per-paper raw scores in
+#   FuncPrelim mouseover.
+# - Activate otto cron (manual step on hgwdev as the otto user).
+# - Deploy to hgdownload + create hg38/hg19 RTS sessions after sign-off.
+# - 2 EvRepo non-publishing variants (Stanford team working on it) — otto
+#   cron will pick them up automatically when they propagate.

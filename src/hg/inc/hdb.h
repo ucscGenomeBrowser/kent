@@ -1079,6 +1079,13 @@ char *abbreviateRefSeqSummary(char *summary);
 boolean isMito(char *chrom);
 /* Return True if chrom is chrM or chrMT */
 
+struct geneticCode *hGeneticCodeForChrom(char *db, char *chrom);
+/* Return the genetic code (translation table) to use for chrom in db.  An
+ * assembly hub may assign codes per sequence with a genomes.txt line like
+ * "codonTable default=1 chrM=2".  For backward compatibility, when no such
+ * assignment applies, chrM/chrMT use the vertebrate mitochondrial code and all
+ * other sequences use the standard code.  Never returns NULL. */
+
 char *hdbDefaultKnownDb(char *db);
 /* Get the default knownGene database from the defaultKnown table. */
 

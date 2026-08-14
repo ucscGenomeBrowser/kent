@@ -21,8 +21,8 @@ ottomeister=otto-group@ucsc.edu
 #Format: Minute - Hour - DayofMonth month Day-of-week
 
 MAILTO=otto-group@ucsc.edu
-#Daily sandbox update
-41 00 * * 1-7 /cluster/home/otto/bin/sandboxupdate
+# Daily sandbox update
+41 00 * * 1-7 /cluster/home/otto/bin/readOnlyKentMirror
 
 # save shell history and last log into log files in ~/lastLog/
 # last day of the month to catch them just before log rotation
@@ -40,7 +40,7 @@ PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=otto-group@ucsc.edu
 
 #md5sum checker script - makes sure otto scripts in hive match git tree
-0 7 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
+0 1 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
 
 # PanelApp
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
@@ -54,9 +54,6 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 
 #GeneReviews
 00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
-
-#LRG
-57 9 1 4,6,12 * /hive/data/outside/otto/lrg/lrgWrapper.sh
 
 #dbVar
 13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
@@ -74,20 +71,29 @@ MAILTO=otto-group@ucsc.edu
 #GenCC
 8 16 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
 
+#G2P (Gene2Phenotype) - monthly on the 5th; G2P publishes near month-end, so an
+#early-month run catches the previous month's update (no-ops if unchanged)
+22 6 5 * * /hive/data/outside/otto/g2p/g2pWrapper.sh
+
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
 
 #LOVD
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
-#Mastermind
-05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
-
 #MitoMap
 55 8 *  * 3 /hive/data/outside/otto/mitoMap/checkMitoMapUpdate.sh
 
+#RefSeq Historical update notifier (RM #35766) - silent unless NCBI has a new release
+40 8 * * 3 /hive/data/outside/otto/refSeqHistorical/checkRefSeqHistoricalUpdate.sh
+
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
+
+# VCEP hub spec version notifier (RM #37795) - monthly, silent unless one of our
+# VCEP hub description pages is behind the ClinGen CSpec registry
+MAILTO=otto-group@ucsc.edu
+40 06 15 * * /hive/data/outside/otto/vcepVersions/checkVcepVersions.py
 
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week
@@ -109,9 +115,16 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 #vista
 0 9 1 * * /hive/data/outside/otto/vista/vistaOtto.sh
 
+# CIViC update. Releases are typically on the 1st of the month
+12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh
+
 #GRC Incident
 MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
+
+# liftOver request watch - sends email to configured address in hg.conf
+#   e.g.: chainFileRequestEmail=... - running every 7 minutes
+1,8,15,22,29,36,43,50,57 * * * * /hive/data/outside/otto/liftRequest/devAndRR.sh
 
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity
@@ -129,6 +142,10 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 #    as of 2025-07-24 this script now protects itself from overrunning itself
 #    with a lock file.  It will email when it is doing that.
 03 01 * * * /hive/data/inside/GenArk/pushRR/pushRR.sh
+
+### verify liftOverChain and quickLiftChain tables have
+###     identical fromDb,toDb pairs:
+11 3 * * * /hive/data/inside/GenArk/checkChainTables/toFromCounts.sh
 
 #NCBI RefSeq
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
@@ -152,6 +169,15 @@ MAILTO=cells@ucsc.edu
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
+# cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
+# (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
+* * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+@reboot umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+
+# DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
+# alive (reads the /hive job queue); restarts if down / on reboot.
+* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 
@@ -163,6 +189,5 @@ MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
 28 08 * * * /bin/zsh -c 'cd /hive/data/outside/otto/pubtatorDbSnp && ./doUpdate.sh'
 
-MAILTO=cvaske@ucsc.edu
-# CIViC update. Releases are typically on the 1st of the month
-12 12 2 * * /hive/data/outside/otto/civic/doCivicUpdate.sh
+MAILTO=cells@ucsc.edu
+@reboot umask 0000; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000

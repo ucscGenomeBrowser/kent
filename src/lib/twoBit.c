@@ -704,6 +704,7 @@ if (twoBit != NULL)
     freeMem(twoBit->maskStarts);
     freeMem(twoBit->maskSizes);
     freeMem(twoBit->data);
+    freeMem(twoBit->name);
     freez(pTwoBit);
     }
 }

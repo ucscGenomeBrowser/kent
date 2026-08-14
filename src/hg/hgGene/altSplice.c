@@ -65,7 +65,9 @@ return ret;
 }
 
 void makeGrayShades(struct hvGfx *hvg, int maxShade, Color shadesOfGray[])
-/* Make eight shades of gray in display. */
+/* Fill shadesOfGray[0..maxShade] with a white-to-black gradient, then set
+ * shadesOfGray[maxShade+1] to red as an overflow sentinel.  The array passed
+ * in must therefore have room for maxShade+2 entries. */
 {
 int i;
 for (i=0; i<=maxShade; ++i)
@@ -91,8 +93,8 @@ int pixHeight = 0;
 struct hvGfx *hvg;
 int lineHeight = 0;
 double scale = 0;
-Color shadesOfGray[9];
-int maxShade = ArraySize(shadesOfGray)-1;
+Color shadesOfGray[10];
+int maxShade = ArraySize(shadesOfGray)-2;	// makeGrayShades also writes shadesOfGray[maxShade+1]
 
 scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;

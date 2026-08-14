@@ -20,6 +20,8 @@
 #define CFG_LOGIN_ACCEPT_IDX "login.acceptIdx"
 #define CFG_LOGIN_BASICAUTH "login.basicAuth"
 #define CFG_LOGIN_RELATIVE "login.relativeLink"
+/* Enables passwordless email-link sign-in and the "change email" option (default off). */
+#define CFG_LOGIN_EMAIL_LINK "login.emailLink"
 
 /* hg.conf central db parameters */
 #define CFG_CENTRAL_DOMAIN "central.domain"
@@ -60,6 +62,8 @@ char *wikiLinkUserName();
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 
+char *getUserName();
+
 char *wikiLinkUserId();
 /* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
  * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */
@@ -84,6 +88,9 @@ char *wikiLinkUserSignupUrl(char *hgsid);
 
 char *wikiLinkChangePasswordUrl(char *hgsid);
 /* Return the URL for the user change password page. */
+
+char *wikiLinkChangeEmailUrl(char *hgsid);
+/* Return the URL for the user change email page. */
 
 char *wikiServerAndCgiDir();
 /* return the current full absolute URL up to the CGI name, like

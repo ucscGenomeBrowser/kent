@@ -17,9 +17,16 @@ rm -f beforeSort.prio
 mv assemblyList.tsv beforeSort.asmList
 sort -k2,2n beforeSort.asmList > assemblyList.tsv
 
-hgsql hgcentraltest -e 'DROP TABLE IF EXISTS assemblyList;'
-hgsql hgcentraltest < /hive/data/inside/GenArk/assemblyList.sql
-hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'assemblyList.tsv' INTO TABLE assemblyList;"
+rm -f aLT.sql
+sed -e 's/CREATE TABLE assemblyList/CREATE TABLE assemblyListTemp/;' \
+    /cluster/home/otto/kent/src/hg/lib/assemblyList.sql \
+     > aLT.sql
+hgsql hgcentraltest -e 'DROP TABLE IF EXISTS assemblyListTemp;'
+hgsql hgcentraltest < aLT.sql
+rm -f aLT.sql
+hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'assemblyList.tsv' INTO TABLE assemblyListTemp;"
+hgsql hgcentraltest \
+ -e 'DROP TABLE assemblyList; RENAME TABLE assemblyListTemp TO assemblyList;'
 
 hgsql hgcentraltest -e 'select count(*) from assemblyList;' >> history/${YYYY}/asmList${DS}.log 2>&1
 

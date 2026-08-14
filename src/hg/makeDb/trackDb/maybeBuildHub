@@ -13,7 +13,7 @@ hubDir=$hubParent/$user
 # check if there is an entry in dbDb for name==$db
 function hasDbDb() {
   local db="$1"
-  local dbDb=$(hgsql hgcentraltest -Ne 'select count(*) from dbDb where name ="'$db'"')
+  local dbDb=$(/cluster/bin/x86_64/hgsql hgcentraltest -Ne 'select count(*) from dbDb where name ="'$db'"')
   if [ "${dbDb}" -eq 1 ]; then
     return 0	# true: does exist
   else
@@ -25,7 +25,7 @@ function hasDbDb() {
 # try to get the GCx accession name out of dbDb sourceName
 function acc() {
   local db="$1"
-  local src=$(hgsql hgcentraltest -Ne 'select sourceName from dbDb where name ="'$db'"')
+  local src=$(/cluster/bin/x86_64/hgsql hgcentraltest -Ne 'select sourceName from dbDb where name ="'$db'"')
   if [[ "$src" == *GC* ]]; then
     ret=`echo "${src}" | sed -e 's#.*GC#GC#;' | sed -e 's#[^ACGF0-9_.]\+##;'`
     if [ "x${ret}y" = "xy" ]; then
@@ -44,7 +44,7 @@ function acc() {
 # check if a database exists, print note and return non-zero if it doesn't
 function dbExists() {
     local db="$1"
-    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    local dbChk=$(/cluster/bin/x86_64/hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         printf "Note: database $db does not exist, skipping\n" 1>&2
         return 1
@@ -64,9 +64,9 @@ fi
 # process 'hs1' and 'mpxvRivers' just like they have always been processed
 if [[ "${db}" = "hs1" || "${db}" = "mpxvRivers" ]]; then
   if dbExists $db ; then
-     trackDbToTxt $db $trackDb $hubDir
+     /cluster/bin/x86_64/trackDbToTxt $db $trackDb $hubDir
      # creates $hubDir/hubAndGenome.txt
-     dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
+     /cluster/bin/x86_64/dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
      cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
   fi
   exit 0
@@ -91,7 +91,7 @@ if hasDbDb $db ; then
     mkdir -p $hubDir
     rm -f $hubDir/hubAndGenome.txt
     mv $db.hAndG.txt $hubDir/hubAndGenome.txt
-    trackDbToTxt $db $trackDb $hubDir
+    /cluster/bin/x86_64/trackDbToTxt $db $trackDb $hubDir
     cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
   else
      printf "ERROR: finding multiple directories */$db ?\n" 1>&2

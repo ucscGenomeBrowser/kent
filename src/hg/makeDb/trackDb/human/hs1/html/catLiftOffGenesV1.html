@@ -55,6 +55,31 @@ using bedtools intersect. These were combined with the CAT annotation to
 create the final annotation.
 </p>
 
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu" target="_blank">REST
+API</a>, where the track name is <tt>catLiftOffGenesV1</tt>.</p>
+<p>
+For automated analysis, the data may be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/catLiftOffGenesV1/" target="_blank">download
+server</a> as a bigGenePred file. The file for this track is called
+<tt>catLiftOffGenesV1.bb</tt>. Individual regions or the whole genome annotation can be obtained
+using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and binaries can be
+found <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">here</a>. The tool can also be used to obtain only features within a given range,
+for example:</p>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/catLiftOffGenesV1/catLiftOffGenesV1.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">mailing
+list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
 <h2>Credits</h2>
 <p>
   This track was provide by Marina Haukness <a href="mailto:mhauknes@ucsc.edu">&lt;mhauknes@ucsc.edu&gt;</a>

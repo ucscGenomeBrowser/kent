@@ -1,0 +1,22 @@
+code	canonical_cell_type	broad_class	brain_region	note
+Astro myoc	Astrocyte (Myoc+)	Astrocyte		Astrocyte subtype marked by Myoc (myocilin); paper reports astrocyte subgroups resolved in Paired-Tag
+Astro nnat	Astrocyte (Nnat+)	Astrocyte		Astrocyte subtype marked by Nnat (neuronatin)
+Endothelial cell	Endothelial cell	Endothelial		Vascular endothelial cell
+Ependymal	Ependymal cell	Ependymal		Ependymal cell lining ventricles
+FC CT	Cortical excitatory neuron (L6 CT, corticothalamic)	Excitatory neuron	Frontal cortex	Corticothalamic projection (deep layer 6) excitatory neuron
+FC NP	Cortical excitatory neuron (near-projecting)	Excitatory neuron	Frontal cortex	Near-projecting excitatory neuron; resolved in H3K4me1/H3K27ac Paired-Tag joint clustering
+FC PT	Cortical excitatory neuron (L5 PT, pyramidal tract)	Excitatory neuron	Frontal cortex	Pyramidal-tract (extratelencephalic, layer 5) projection excitatory neuron
+FC l23	Cortical excitatory neuron (L2/3)	Excitatory neuron	Frontal cortex	Upper-layer 2/3 excitatory neuron; matched reference TEGLU7/8
+FC l4	Cortical excitatory neuron (L4)	Excitatory neuron	Frontal cortex	Layer 4 excitatory neuron; matched reference TEGLU7/8
+FC l5	Cortical excitatory neuron (L5)	Excitatory neuron	Frontal cortex	Layer 5 excitatory neuron; matched reference TEGLU10/20
+FC l6	Cortical excitatory neuron (L6)	Excitatory neuron	Frontal cortex	Layer 6 excitatory neuron; matched reference TEGLU10/20
+HC CA1	CA1 pyramidal neuron	Excitatory neuron	Hippocampus	Hippocampal CA1 pyramidal (excitatory) neuron
+HC CA23	CA2/CA3 pyramidal neuron	Excitatory neuron	Hippocampus	Hippocampal CA2/CA3 pyramidal (excitatory) neuron
+HC DG	Dentate gyrus granule neuron	Excitatory neuron	Hippocampus	Hippocampal dentate gyrus granule (excitatory) neuron
+In CGE	CGE-derived interneuron	Inhibitory neuron		Caudal ganglionic eminence-derived GABAergic interneuron (e.g. Vip/Lamp5)
+In pvalb	Pvalb interneuron	Inhibitory neuron		Parvalbumin+ (MGE-derived) GABAergic interneuron
+In sst	Sst interneuron	Inhibitory neuron		Somatostatin+ (MGE-derived) GABAergic interneuron
+Microglia	Microglia	Microglia		Brain-resident myeloid immune cell
+Oligo MFOL	Myelin-forming oligodendrocyte	Oligodendrocyte		Oligo-MFOL; newly/myelin-forming oligodendrocyte stage
+Oligo MOL	Mature oligodendrocyte	Oligodendrocyte		Oligo-MOL; mature (myelinating) oligodendrocyte stage
+Oligodendrocyte precursor	Oligodendrocyte precursor cell	Oligodendrocyte precursor		OPC

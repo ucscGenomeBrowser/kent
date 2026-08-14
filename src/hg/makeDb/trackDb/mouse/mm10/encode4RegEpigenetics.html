@@ -1,37 +1,83 @@
 <h2>Description</h2>
 
-<p>This track displays genome-wide epigenomic signals from 1,178 individual ENCODE
-experiments, including DNase-seq and ATAC-seq for chromatin accessibility, and ChIP-seq
-for the histone modifications H3K4me3 and H3K27ac, as well as CTCF binding.</p>
+<p>This track displays genome-wide epigenomic signals and peaks from 589 individual
+ENCODE experiments, including DNase-seq and ATAC-seq for chromatin accessibility, and
+ChIP-seq for the histone modifications H3K4me3 and H3K27ac, as well as CTCF binding.</p>
 
 <ul>
-<li><b>DNase-seq</b> and <b>ATAC-seq</b> identify regions of open chromatin commonly
-associated with regulatory elements such as enhancers, promoters, and insulators.</li>
-<li>ChIP-seq for the histone modifications <b>H3K4me3</b> and <b>H3K27ac</b> mark active and poised promoters
-and enhancers.</li>
-<li><b>CTCF</b> ChIP-seq reveals chromatin loop anchors and insulator elements.</li>
+<li><b>DNase-seq</b> identifies regions of open chromatin commonly associated with
+enhancers, promoters, and insulators (shown in
+<span style="color:#06DA93">green</span>)</li>
+<li><b>ATAC-seq</b> identifies open chromatin via Tn5 transposase insertion (shown in
+<span style="color:#02C7B9">cyan</span>)</li>
+<li><b>H3K4me3 ChIP-seq</b> marks active and poised promoters (shown in
+<span style="color:#FF0000">red</span>)</li>
+<li><b>H3K27ac ChIP-seq</b> marks active enhancers and promoters (shown in
+<span style="color:#B59100">yellow</span>)</li>
+<li><b>CTCF ChIP-seq</b> identifies binding sites at insulators and chromatin loop
+anchors (shown in <span style="color:#00B0F0">blue</span>)</li>
 </ul>
 
-<p>Each subtrack represents a single experiment in a specific biosample, displayed as a
-bigWig signal track. These datasets provide the underlying experimental signals used to
-generate the corresponding layered summary tracks. Additional datasets measuring
-epigenomic signals are available at the
+<p>The track includes two subtrack types:</p>
+<ul>
+<li><b>Signal</b> - a bigWig track of the experiment's signal</li>
+<li><b>Peak</b> - a bigBed track of the experiment's peaks</li>
+</ul>
+<p>These datasets provide the underlying experimental data used to generate the
+corresponding layered summary tracks. Additional datasets are available at the
 <a target="_blank" href="https://www.encodeproject.org/">ENCODE portal</a>.</p>
-<p>This composite contains both signal (bigWig) and peak (bigBed) data for each experiment,
-selectable via the "Data Type" facet in the track settings.</p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>Click a specific biosample type and organ/tissue combination to view available datasets.
-Subtracks can be further filtered by the epigenetic signal type (ATAC, DNase, CTCF,
-H3K27ac, and H3K4me3) and life stage of the biosample. Each track is colored based on
-the type of signal.</p>
+Subtracks can be further filtered by Assay (ATAC, DNase, CTCF, H3K27ac, and H3K4me3),
+Organ, Biosample Type, and Data Type (Signal or Peak).</p>
+
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ/Tissue</th>
+    <th style="text-align:center">DNase</th>
+    <th style="text-align:center">ATAC</th>
+    <th style="text-align:center">H3K4me3</th>
+    <th style="text-align:center">H3K27ac</th>
+    <th style="text-align:center">CTCF</th>
+  </tr>
+  <tr><td>adipose</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>adrenal gland</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>blood</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>blood marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>bone marrow</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>brain</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>breast</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>connective tissue</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>embryo</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>epithelium</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>eye</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>heart</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>kidney</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>large intestine</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>limb</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>liver</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>lung</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>muscle</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>ovary</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>placenta</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>small intestine</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>spinal cord</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+  <tr><td>spleen</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>stomach</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>testis</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>thymus</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#10003;</td></tr>
+  <tr><td>urinary bladder</td><td style="text-align:center">&#10003;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td><td style="text-align:center">&#8211;</td></tr>
+</table>
 
 <h2>Data Access</h2>
 <p>
 The ENCODE 4 Regulation data on the UCSC Genome Browser can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+<a href="/cgi-bin/hgTables">Table Browser</a> or the
+<a href="/cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated download and analysis, the genome annotation is stored in bigWig (signal)
 and bigBed (peak) files that can be downloaded from
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/mm10/encode4/regulation/"
@@ -57,8 +103,8 @@ Instructions for downloading these tools can be found
 
 <h2>Credits</h2>
 
-<p>Data were generated by the ENCODE Consortium. We thank the production labs for generating
-the data: Drs. Barbara Wold (Caltech), Bing Ren (UCSD), John Stamatoyannopoulos (UW), Michael Snyder (Stanford), Richard Myers (HAIB), and Ross Hardison (PennState).</p>
+<p>Data were generated by the ENCODE Consortium through the following production labs:
+Drs. Barbara Wold (Caltech), Bing Ren (UCSD), John Stamatoyannopoulos (UW), Michael Snyder (Stanford), Richard Myers (HAIB), and Ross Hardison (PennState).</p>
 
 <p>The data were further processed for visualization through a collaborative effort between
 the <a target="_blank" href="https://www.umassmed.edu/zlab">Weng lab</a> and the

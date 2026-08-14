@@ -6,16 +6,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
 
-# Colors by SV type (R,G,B)
-SV_COLORS = {
-    "DEL": "200,0,0",      # red
-    "INS": "0,0,200",      # blue
-    "DUP": "0,160,0",      # green
-    "INV": "230,140,0",    # orange
-    "TRA": "140,0,200",    # purple
-}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType, insLenFor, svColor
 
 def parseInfo(infoStr):
     """Parse INFO field into a dict."""
@@ -52,13 +47,13 @@ def main():
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            name = fields[2]
             qual = fields[5]
             info = parseInfo(fields[7])
 
-            svType = info.get("SVTYPE", ".")
+            svTypeRaw = info.get("SVTYPE", ".")
+            svType = normalizeSvType(svTypeRaw)
             end = int(info.get("END", pos))
-            svLen = int(float(info.get("SVLEN", "0")))
+            svLenRaw = int(float(info.get("SVLEN", "0")))
             af = float(info.get("AF", "0"))
             supp = int(info.get("SUPP", "0"))
             ciPos = info.get("CIPOS", "0,0")
@@ -84,10 +79,7 @@ def main():
             # Strand from first character of STRANDS field
             strand = strands[0] if strands and strands[0] in "+-" else "."
 
-            # Absolute SV length
-            absSvLen = abs(svLen)
-
-            color = SV_COLORS.get(svType, "100,100,100")
+            color = svColor(svType)
 
             # sampleList from SUPP_VEC
             sampleList = suppVecToList(suppVec)
@@ -100,6 +92,21 @@ def main():
             if svType == "TRA":
                 chromEnd = chromStart + 1
 
+            # svLen: length on reference
+            svLen = chromEnd - chromStart
+            # insLen: for INS use abs(SVLEN); else 0 (except TRA which is 0)
+            if svType in ("INS", "MEI"):
+                insLen = abs(svLenRaw)
+            else:
+                insLen = 0
+
+            # AC: SURVIVOR input doesn't have AC, use supp*2 as approximation
+            # (SUPP is number of samples carrying; use 2*SUPP as proxy for diploid AC)
+            ac = supp * 2
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
+
             row = [
                 chrom,
                 str(chromStart),
@@ -111,7 +118,9 @@ def main():
                 str(chromEnd),     # thickEnd
                 color,
                 svType,
-                str(absSvLen),
+                str(svLen),
+                str(insLen),
+                str(ac),
                 f"{af:.6f}",
                 str(supp),
                 ciPos,

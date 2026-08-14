@@ -50,6 +50,7 @@ UTILS_APPLIST = \
 	hubClone \
 	hubPublicCheck \
 	mafToBigMaf \
+	mafToBigMafSummary \
 	makeTableList \
 	oligoMatch \
 	overlapSelect \
@@ -81,6 +82,7 @@ APP_SCRIPTS = ${SCRIPT_FILES}
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
+	rts \
 	blatServersCheck \
 	buildReleaseLog \
 	checkUrlsInTable \
@@ -110,6 +112,7 @@ TEST_DIRS = \
 	gtfToGenePred \
 	hgvsToVcf \
 	hubCheck \
+	mafToBigMafSummary \
 	overlapSelect \
 	pslToBigPsl \
 	refSeqGet \

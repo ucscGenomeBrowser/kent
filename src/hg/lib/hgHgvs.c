@@ -1242,7 +1242,7 @@ else
 return coordsOK;
 }
 
-static char *txSeqFromGp(char *db, struct genePred *gp)
+char *txSeqFromGp(char *db, struct genePred *gp)
 /* Return transcribed-from-genome sequence for gp */
 {
 int seqLen = 0;
@@ -3292,4 +3292,29 @@ else
 if (addParens)
     dyStringAppendC(dy, ')');
 return dyStringCannibalize(&dy);
+}
+
+struct trackDb *hgvsDefaultGeneTrack(char *db)
+/* Return trackDb for the assembly's preferred gene-model track (MANE first), or NULL
+ * if none is present.  Caller checks tdb->type for genePred vs bigGenePred. */
+{
+static char *geneTrackPrefs[] =
+    { "mane", "ncbiRefSeqSelect", "ncbiRefSeqCurated", "refGene", "ensGene", "knownGene" };
+// On an assembly hub the gene tracks carry a hub_<id>_ prefix and hTrackDb() is empty,
+// so enumerate the hub genome's tracks and match by bare name; native dbs fall back to
+// hTrackDbForTrack.  Guard trackHubGetGenome: it aborts when no hub is registered.
+struct trackHubGenome *hubGenome = trackHubDatabase(db) ? trackHubGetGenome(db) : NULL;
+struct trackDb *hubTdbList = (hubGenome != NULL) ? trackHubAddTracksGenome(hubGenome) : NULL;
+int i;
+for (i = 0;  i < ArraySize(geneTrackPrefs);  i++)
+    {
+    struct trackDb *tdb;
+    if (hubTdbList != NULL)
+        tdb = findTdbByBareName(hubTdbList, geneTrackPrefs[i]);
+    else
+        tdb = hTrackDbForTrack(db, geneTrackPrefs[i]);
+    if (tdb != NULL)
+        return tdb;
+    }
+return NULL;
 }

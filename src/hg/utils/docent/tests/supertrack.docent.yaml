@@ -1,0 +1,19 @@
+# A superTrack does not pass its own visibility to its members.
+#
+# Unlike a composite, each member comes up at its own trackDb visibility, so turning the
+# parent on draws all of them however much an earlier `hide: all` hid. `hideKids` is what
+# empties the container, and the child named alongside it is left the only one showing.
+#
+# varsInPubs has six members (avada, varChat, mastermind, pubtator, varaico,
+# varaicoSuppl). `exact: true` is the whole point here: a test that only checked pubtator
+# was present would pass with all six drawn, which is the bug.
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - hide: all
+  - track: {varsInPubs: hideKids, pubtator: pack}
+  - expect: {rows: [ruler, pubtator], exact: true, noText: "Too Long"}

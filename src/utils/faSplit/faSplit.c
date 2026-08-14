@@ -156,7 +156,7 @@ if (line[0] == '>')
     line = firstWordInLine(line+1);
     if (line == NULL)
         errAbort("Empty initial '>' line in %s", inName);
-    strncpy(seqName, line, sizeof(seqName));
+    safecpy(seqName, sizeof(seqName), line);
     }
 else
     {

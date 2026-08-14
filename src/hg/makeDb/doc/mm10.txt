@@ -19827,6 +19827,278 @@ cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
 # Load trackDb
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=mm10
-##############################################################################
+
+# 2026-05-13 (Gerardo): Reorder tissue rows in .facets files per author
+# request. Redmine #36998 note-43, #37001. Peng (lead author) asked
+# for the tissues to be displayed in his biological order instead of the
+# alphabetical order from the hub. The reorder is made to the files in
+# /hive/data/outside/woldlab/mouseDevTimecourse/mm10/ only; the hub at
+# woldlab.caltech.edu still has the alphabetical order, so re-running the
+# curl above will overwrite the reorder and require re-running the snippet
+# below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm10
+
+python3 <<'EOF'
+TISSUE_ORDER = [
+    "thymus",
+    "spleen",
+    "liver",
+    "heart",
+    "skeletal muscle tissue",
+    "urinary bladder",
+    "adrenal gland",
+    "kidney",
+    "lung",
+    "stomach",
+    "intestine",
+    "limb",
+    "embryonic facial prominence",
+    "forebrain",
+    "midbrain",
+    "hindbrain",
+    "neural tube",
+]
+FILES = ["mouse_development_M4.facets", "mouse_development_M21.facets"]
+
+for path in FILES:
+    with open(path) as f:
+        lines = f.readlines()
+    header = lines[0]
+    data = []
+    for ln in lines[1:]:
+        if ln.strip():
+            data.append(ln)
+    groups = {}
+    for ln in data:
+        cols = ln.rstrip("\n").split("\t")
+        groups.setdefault(cols[2], []).append(ln)
+    out = [header]
+    for tissue in TISSUE_ORDER:
+        for ln in groups[tissue]:
+            out.append(ln)
+    with open(path, "w") as f:
+        f.writelines(out)
+    print("reordered: " + path + "  (" + str(len(data)) + " rows)")
+EOF
+
+# 2026-05-21 (Gerardo): Update colors in .facets and .categories files per
+# author request via the Cell Browser team (Brittney Wick). Redmine #37001
+# note-23. Peng asked that the bar colors match the per-sample colors used in
+# the Cell Browser. Brittney provided a tab-separated file with the colors at
+# /hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv (78 rows,
+# one color per (tissue, timepoint) pair, encoded as gradients within each
+# tissue from light at the earliest time point to dark at P0). The update is
+# made to the files in /hive/data/outside/woldlab/mouseDevTimecourse/mm10/
+# only; the hub at woldlab.caltech.edu still has the old per-tissue colors,
+# so re-running the curl above will overwrite the colors and require re-running
+# the snippet below.
+
+cd /hive/data/outside/woldlab/mouseDevTimecourse/mm10
+
+python3 <<'EOF'
+TISSUE_MAP = {
+    "adrenal": "adrenal gland",
+    "bladder": "urinary bladder",
+    "face": "embryonic facial prominence",
+    "forebrain": "forebrain",
+    "heart": "heart",
+    "hindbrain": "hindbrain",
+    "intestine": "intestine",
+    "kidney": "kidney",
+    "limbs": "limb",
+    "liver": "liver",
+    "lung": "lung",
+    "midbrain": "midbrain",
+    "muscle": "skeletal muscle tissue",
+    "neuraltube": "neural tube",
+    "spleen": "spleen",
+    "stomach": "stomach",
+    "thymus": "thymus",
+}
+
+# Build (tissue, timepoint) -> color from Brittney's TSV
+tsv = {}
+with open("/hive/data/inside/cells/datasets/mouse-encode-rna/sample_colors.tsv") as f:
+    f.readline()
+    for line in f:
+        line = line.rstrip("\n")
+        if not line:
+            continue
+        sample, color = line.split("\t")
+        tissue_part, _, tp = sample.rpartition("_")
+        our_tissue = TISSUE_MAP[tissue_part]
+        our_tp = "P0" if tp == "p0" else tp
+        tsv[(our_tissue, our_tp)] = color
+
+# Update .facets files (column 5 is the color)
+for facets in ["mouse_development_M4.facets", "mouse_development_M21.facets"]:
+    with open(facets) as f:
+        lines = f.readlines()
+    out = [lines[0]]
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[4] = tsv[(cols[2], cols[3])]
+        out.append("\t".join(cols) + "\n")
+    with open(facets, "w") as f:
+        f.writelines(out)
+    print("updated .facets: " + facets)
+
+# Update .categories files (column 2 is the color). Look up each label's
+# color in the matching .facets file (column 5).
+for facets, cats in [
+    ("mouse_development_M4.facets", "mouse_development_M4.categories"),
+    ("mouse_development_M21.facets", "mouse_development_M21.categories"),
+]:
+    label_color = {}
+    with open(facets) as f:
+        f.readline()
+        for line in f:
+            if not line.strip():
+                continue
+            cols = line.rstrip("\n").split("\t")
+            label_color[cols[0]] = cols[4]
+    with open(cats) as f:
+        lines = f.readlines()
+    out = []
+    for line in lines:
+        if not line.strip():
+            out.append(line)
+            continue
+        cols = line.rstrip("\n").split("\t")
+        cols[1] = label_color[cols[0]]
+        out.append("\t".join(cols) + "\n")
+    with open(cats, "w") as f:
+        f.writelines(out)
+    print("updated .categories: " + cats)
+EOF
+
+# 2026-06-25 (Gerardo): Ran downloadBigwigs.sh to download RNA-seq signal
+# (bigWig) tracks for the same samples used above, per Peng's request
+# (#36998). Diane sent a biosample TSV as an attachment on #36998
+# (2026-06-08): 156 samples (78 experiments x 2 replicates), each with a
+# signal_of_unique_reads and signal_of_all_reads bigWig URL hosted on the
+# ENCODE Portal. Saved as
+# /hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_biosample.tsv.
+# The script downloads all 312 bigWigs (~55 GB) from those URLs; safe to
+# re-run since it skips files that already exist.
+
+mkdir -p /hive/data/outside/woldlab/mouseDevTimecourse/mm10/bigwig
+
+# Run inside screen so it survives disconnects:
+#   screen -dmS bigwig_download ~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/downloadBigwigs.sh
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/downloadBigwigs.sh
+
+# Symlink into /gbdb/
+cd /gbdb/mm10/mouseDevTimecourse
+for f in /hive/data/outside/woldlab/mouseDevTimecourse/mm10/bigwig/*; do
+    ln -s "$f" .
+done
+
+# 2026-06-29 (Gerardo): Ran generateBigwigTrackDb.py to build a bigWig
+# signal composite (developmentTimecourseSignalMm10) from the downloaded
+# files, per Peng's request (#36998) to add raw signal tracks alongside
+# the existing bigBarChart TPM/FPKM tracks. The script produces a
+# view-based composite matching the Wold Lab's existing hg19 RNA-seq track
+# (wgEncodeCaltechRnaSeq): two views (Unique reads, All reads), with
+# tissue/age/rep as subGroups and a dimensions matrix. Colors per (tissue,
+# age) match the bigBarChart gradient (read from the .facets file).
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/generateBigwigTrackDb.py > developmentTimecourseSignalMm10.ra
+# Added "include developmentTimecourseSignalMm10.ra" to trackDb.ra
+
+# 2026-07-14 (Gerardo): Peng noticed the bigWig tracks display in
+# alphabetical order (#36998 note-79). sortOrder compares the tag strings
+# alphabetically; where a tag sits in the subGroup2 line has no effect.
+# Ran the script below to prefix each tissue tag with a two-digit number
+# matching its position in biological order (t01_thymus, t02_spleen, ...
+# t17_neural_tube), so the alphabetical comparison now produces the right
+# order. The display label is unchanged. Before:
+# adrenal_gland=adrenal_gland (tag and label are the same string). After:
+# t07_adrenal_gland=adrenal_gland (tag has the prefix, label doesn't).
+# generateBigwigTrackDb.py was not updated to match; re-running it would
+# regenerate the old alphabetical tags. (Folded into the script during QA on
+# 2026-08-04, see below; the one-off snippet here is kept for the record but
+# is no longer needed.)
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+
+python3 <<'EOF'
+import re
+
+path = "developmentTimecourseSignalMm10.ra"
+text = open(path).read()
+
+order = [
+    "thymus", "spleen", "liver", "heart", "skeletal_muscle_tissue",
+    "urinary_bladder", "adrenal_gland", "kidney", "lung", "stomach",
+    "intestine", "limb", "embryonic_facial_prominence", "forebrain",
+    "midbrain", "hindbrain", "neural_tube",
+]
+tag_map = {tag: "t%02d_%s" % (i + 1, tag) for i, tag in enumerate(order)}
+
+# subGroup2 header line: new tag=label pairs (tag prefixed, label unprefixed)
+new_line = "    subGroup2 tissue Tissue " + " ".join(tag_map[t] + "=" + t for t in order)
+text = re.sub(r"^    subGroup2 tissue Tissue .*$", new_line, text, count=1, flags=re.MULTILINE)
+
+# Each subtrack's "subGroups view=... tissue=<tag> age=..." line
+def repl(m):
+    return "tissue=" + tag_map[m.group(1)]
+text = re.sub(r"tissue=([a-z_]+)(?= age=)", repl, text)
+
+open(path, "w").write(text)
+EOF
+
+# 2026-08-04 (Lou, QA #37001): three corrections to the bigWig composite, all
+# folded into generateBigwigTrackDb.py so it now reproduces the committed .ra.
+#
+# 1. Replicate numbers were wrong on 124 of the 312 subtracks (31 of the 78
+#    experiments had their two replicates swapped). Diane's biosample TSV has no
+#    replicate column, so the script had been deriving one by sorting biosample
+#    accessions alphabetically, which bears no relation to ENCODE's
+#    biological_replicate_number. Added fetchReplicateNumbers.py to pull the real
+#    values from the ENCODE portal:
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fetchReplicateNumbers.py \
+  > /hive/data/outside/woldlab/mouseDevTimecourse/mm10/ENCSR574CRQ_replicates.tsv
+
+# 2. shortLabels were built and then hard-truncated at 20 characters, which cut
+#    the view suffix off entirely for the 10 longest and gave 20 subtracks
+#    duplicate labels ("neuraltube e15.5 r1 " for both the unique-reads and
+#    all-reads subtrack). The script now emits a one-character view code (U/A)
+#    and errors out instead of truncating.
+#
+# 3. Tissue tags and the html line are emitted by the script rather than patched
+#    in afterwards, and all labels are Title Cased.
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/generateBigwigTrackDb.py \
+  > developmentTimecourseSignalMm10.ra
+
+# 2026-08-04 (Lou, QA #37001): corrected a 1-bp off-by-one in the bigBarChart
+# chromStart. The hub builder wrote 1-based GTF gene starts into the 0-based BED
+# chromStart field, so every gene sat one base right of its true start while
+# chromEnd was correct. Verified against GENCODE on mm10 before the fix:
+# 42081/42093 genes (VM21) and 35323/35333 (VM4) were start+1 with none exact
+# and ends matching. Reported upstream to Diane Trout; like the tissue reorder
+# and the color update above, this has to be reapplied after any hub refetch.
+# Originals are kept as *.bb.preStartFix.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/fixBarChartStarts.sh mm10 \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_TPM_M4_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_FPKM_M4_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_TPM_M21_mm10.bb \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_FPKM_M21_mm10.bb
+
+# Re-verified afterwards: zero genes remain at start+1, and 42073 of the 42093
+# comparable genes match GENCODE VM21 exactly on both start and end (42081 on
+# start, 42079 on end). The ~20 that still differ are genes where the track and
+# wgEncodeGencodeCompVM21 disagree on the gene extent, since Comp excludes some
+# transcript biotypes; they are not coordinate errors. itemCount is unchanged and
+# every non-coordinate field (name, score, strand, name2, expCount, expScores) is
+# byte-identical.
 
 ##############################################################################

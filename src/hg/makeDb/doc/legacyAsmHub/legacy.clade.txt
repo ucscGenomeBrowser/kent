@@ -75,6 +75,7 @@ GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0	mammals
 GCA_000767855.1_Ca_bactrianus_MBC_1.0	mammals
 GCA_000769185.1_Rrox_v1	primates
 GCA_000772875.3_Mmul_8.0.1	primates
+GCA_000837105.1_ViralMultiSegProj14079	viral
 GCA_000837645.1_ViralProj14024	viral
 GCA_000845685.2_ViralProj14462	viral
 GCA_000952055.2_Anan_2.0	primates
@@ -181,7 +182,7 @@ GCA_009819705.1_fHipHip1.pri	fish
 GCA_009829125.1_fPerMag1.pri	fish
 GCA_009873245.2_mBalMus1.v2	mammals
 GCA_009914755.4_T2T-CHM13v2.0	primates
-GCA_010909765.1_sAmbRad1.pri	vertebrate
+GCA_010909765.1_sAmbRad1	vertebrate
 GCA_010993605.1_kPetMar1.pri	vertebrate
 GCA_011004845.1_fEsoLuc1.pri	fish
 GCA_011064685.1_ZJU_Sfru_1.0	invertebrate
@@ -410,6 +411,7 @@ GCA_044704955.1_sPriJap1.hap1	vertebrate
 GCA_047511675.1_mMarFla1.hap1	mammals
 GCA_048164855.1_mCanLup2.hap1	mammals
 GCA_900006655.3_Susie3	primates
+GCA_900093555.1_PvP01	invertebrate
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
 GCA_900634415.1_fCotGob3.1	fish

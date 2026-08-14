@@ -138,7 +138,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
           bbi/${asmId}.rmsk.Other.bb
     fi
 
-    export bbiCount=`for F in bbi/*.rmsk.*.bb; do bigBedInfo $F | grep itemCount; done | awk '{print $NF}' | sed -e 's/,//g' | ave stdin | grep total | awk '{print $2}' | sed -e 's/.000000//'`
+    export bbiCount=`for F in bbi/*.rmsk.*.bb; do bigBedInfo $F | grep itemCount; done | awk '{print $NF}' | sed -e 's/,//g' | /cluster/bin/x86_64/ave stdin | grep total | awk '{print $2}' | sed -e 's/.000000//'`
 
     export firstTabCount=`cat ${asmId}.rmsk.tab | wc -l`
     export splitTabCount=`cat rmskClass/*.tab | wc -l`

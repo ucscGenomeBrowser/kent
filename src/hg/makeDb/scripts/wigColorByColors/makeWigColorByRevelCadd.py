@@ -41,6 +41,13 @@ def assignScoreValue(score,trackName):
         else:
             prediction = "neutral"
             color = "192,192,192"
+    elif trackName == "clinPred":
+        if score >= 0.5:
+            prediction = "pathogenic"
+            color = "255,0,0"
+        else:
+            prediction = "benign"
+            color = "80,166,230"
     return(prediction,color)
 
 def convertBigWigToBedGraph(fullBigWigFilePath,workDir,fileName):
@@ -86,6 +93,8 @@ def makeBigBedFileAndSymLink(bedFileName,fileName,workDir,assembly,outputColorFi
         bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/cadd/v1.7/"+fileName+".color.bb"
     elif trackName == "alphaMissense":
         bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/alphaMissense/"+fileName+".color.bb"
+    elif trackName == "clinPred":
+        bbSaveFile = "/hive/data/genomes/"+assembly+"/bed/clinPred/"+fileName+".color.bb"
     else:
         print("No track name found.")
     bash("bedToBigBed -type=bed9 -tab "+workDir+bedFileName+" /cluster/data/"+assembly+"/chrom.sizes "+bbSaveFile)
@@ -97,7 +106,7 @@ def main():
     
     for assembly in ["hg38","hg19"]:
         for fileName in ["a","c","t","g"]:
-            for trackName in ["cadd1.7", "revel", "alphaMissense"]:
+            for trackName in ["cadd1.7", "revel", "alphaMissense", "clinPred"]:
                 fullBigWigFilePath = "/gbdb/"+assembly+"/"+trackName+"/"+fileName+".bw"
                 outputColorFile = "/gbdb/"+assembly+"/"+trackName+"/"+fileName+".color.bb"
                 convertBigWigToBedGraph(fullBigWigFilePath,workDir,fileName)

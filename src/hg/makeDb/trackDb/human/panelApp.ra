@@ -6,6 +6,7 @@ visibility hide
 group phenDis
 compositeTrack on
 noParentConfig on
+dataVersion /gbdb/$D/panelApp/version.txt
 showCfg on
 
     track panelAppGenes

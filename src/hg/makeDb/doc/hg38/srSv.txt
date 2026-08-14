@@ -1,0 +1,99 @@
+# Short-read SV supertrack (srSv) - companion to the Long-read SV supertrack.
+#
+# This file documents how each short-read SV/CNV subtrack under the srSv
+# supertrack was built. All tracks are hg38-only. Build scripts and
+# autoSql schemas live in ~/kent/src/hg/makeDb/scripts/srSv/.
+
+##########
+# 2026-04-20: CCDG 17,795 SVs (abelSv) - Abel et al 2020 Nature (Claude)
+#
+# Paper: Abel HJ et al., Nature 583:83-89 (2020), doi 10.1038/s41586-020-2371-0
+# Data : https://github.com/hall-lab/sv_paper_042020
+#        Supplementary_File_1.zip  (B38 native callset,  14,623 samples)
+#        Supplementary_File_2.zip  (B37 callset,          8,417 samples)
+#
+# The two public callsets are non-overlapping in SVs but share 5,245 samples.
+# For the hg38 track we display B38 natively and lift B37 coordinates to
+# hg38 with the standard UCSC liftOver chain. B37 variants that do not lift
+# (626 of 280,518 primary records) are dropped.
+
+mkdir -p /hive/data/genomes/hg38/bed/srSv/abelSv
+cd /hive/data/genomes/hg38/bed/srSv/abelSv
+
+# Fetch site-frequency callsets
+wget -c https://raw.githubusercontent.com/hall-lab/sv_paper_042020/master/Supplementary_File_1.zip
+wget -c https://raw.githubusercontent.com/hall-lab/sv_paper_042020/master/Supplementary_File_2.zip
+unzip -o Supplementary_File_1.zip   # -> Build38.public.v2.{vcf,bedpe}.gz
+unzip -o Supplementary_File_2.zip   # -> Build37.public.v2.{vcf,bedpe}.gz
+
+# Convert, lift B37, merge, build bigBed.
+# The script parses each VCF, collapses detailed MEI subtypes
+# (e.g. <DEL:ME:LINE|L1|L1HS>) to SVTYPE=MEI, drops SECONDARY BND records
+# so each translocation pair appears only once, and emits one bed14+
+# line per variant with per-population AC/AN, MSQ, etc.
+bash ~/kent/src/hg/makeDb/scripts/srSv/abelSvBuild.sh
+
+# Result:
+#   B38 bed      :  458,106 records
+#   B37 bed      :  280,518 records (before lift)
+#   B37 lifted   :  279,892 records (626 unmapped)
+#   abelSv.bb    :  737,998 records
+
+# Symlink for trackDb
+mkdir -p /gbdb/hg38/srSv
+ln -sf /hive/data/genomes/hg38/bed/srSv/abelSv/abelSv.bb /gbdb/hg38/srSv/abelSv.bb
+
+
+##########
+# 1KG 3202 SR SVs (onekg3202Sr) - Byrska-Bishop et al 2022 Cell
+#
+# Paper: Byrska-Bishop M, Cell 185(18):3426-3440 (2022)
+#        doi 10.1016/j.cell.2022.08.004
+# Data : 1000 Genomes 3202-sample GATK-SV freeze V3 VCF with allele
+#        frequencies (wAF suffix).
+#        VCF: 1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz
+#
+# Source VCF at /hive/data/genomes/hg38/bed/srSv/onekg3202sr/.
+# 173,366 site-level SVs across 7 classes (DEL, INS, DUP, INV, CPX, CNV,
+# CTX) with AC/AN/AF and per-superpopulation AFs (AFR/AMR/ASN/EUR/SAN).
+# The converter extracts site-level INFO into bed9+, preserving the
+# FILTER column so users can see PASS vs LowQual / HWE / etc.
+
+cd /hive/data/genomes/hg38/bed/srSv/onekg3202sr
+python3 ~/kent/src/hg/makeDb/scripts/srSv/onekg3202SrVcfToBed.py \
+    1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz onekg3202sr.bed
+bedSort onekg3202sr.bed onekg3202sr.sorted.bed
+bedToBigBed -type=bed9+ \
+    -as=$HOME/kent/src/hg/makeDb/scripts/srSv/onekg3202Sr.as \
+    -tab onekg3202sr.sorted.bed /hive/data/genomes/hg38/chrom.sizes \
+    onekg3202sr.bb
+
+ln -sf /hive/data/genomes/hg38/bed/srSv/onekg3202sr/onekg3202sr.bb \
+    /gbdb/hg38/srSv/onekg3202sr.bb
+
+
+##########
+# ToMMo 48K CNV SR (tommoJpCnv) - jMorp 48KJPN-CNV Frequency Panel
+#
+# Data : jMorp release 20230828, tommo-jcnvv1-20230828-GRCh38.vcf.gz
+#        48,874 Japanese individuals, short-read WGS, GATK germline CNV.
+# Source under /hive/data/genomes/hg38/bed/srSv/tommoJpCnv/.
+#
+# The input VCF provides per-sample copy-number calls in 1 kb bins.
+# Convert to two bigWig tracks (samples with CN<2 loss; samples with
+# CN>2 gain), rendered as a transparent multiWig overlay.
+
+cd /hive/data/genomes/hg38/bed/srSv/tommoJpCnv
+python3 ~/kent/src/hg/makeDb/scripts/srSv/tommoJpCnvVcfToBedGraph.py \
+    tommo-jcnvv1-20230828-GRCh38.vcf.gz \
+    tommoJpCnvLoss.bedGraph tommoJpCnvGain.bedGraph
+for k in Loss Gain; do
+    bedSort tommoJpCnv${k}.bedGraph tommoJpCnv${k}.sorted.bedGraph
+    bedGraphToBigWig tommoJpCnv${k}.sorted.bedGraph \
+        /hive/data/genomes/hg38/chrom.sizes tommoJpCnv${k}.bw
+done
+
+ln -sf /hive/data/genomes/hg38/bed/srSv/tommoJpCnv/tommoJpCnvLoss.bw \
+    /gbdb/hg38/srSv/tommoJpCnvLoss.bw
+ln -sf /hive/data/genomes/hg38/bed/srSv/tommoJpCnv/tommoJpCnvGain.bw \
+    /gbdb/hg38/srSv/tommoJpCnvGain.bw

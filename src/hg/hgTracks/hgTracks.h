@@ -380,9 +380,13 @@ struct simpleFeature
     {
     struct simpleFeature *next;
     int start, end;			/* Start/end in browser coordinates. */
-    int qStart, qEnd;			/* query start/end */
+    int qStart, qEnd;			/* query start/end; only used for alignment tracks
+                                         * (PSL, BAM, chain, snake); 0 for gene models (genePred). */
     int grayIx;                         /* Level of gray usually. */
     int codonIndex;                     /* 1-based codon index (ignored if 0) */
+    char codonAa;                       /* For a codon, its display amino-acid letter:
+                                         * AA letter, '*' stop, 'M' start, 'X' error/partial,
+                                         * 0 if not a codon.  Set when grayIx is. */
     };
 
 /* Some details of how to draw linked features. */
@@ -595,6 +599,7 @@ extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
 extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
+extern boolean baseColorDrawCodonArrows; /* Draw a strand chevron on each codon box? Off in squish. */
 
 extern char *ctFileName;	/* Custom track file. */
 extern struct customTrack *ctList;  /* Custom tracks. */
@@ -1245,15 +1250,36 @@ void chromGraphMethodsCt(struct track *tg);
 void factorSourceMethods(struct track *track);
 /* Set up special methods for factorSource type tracks. */
 
-void makeItemsMethods(struct track *track);
-/* Set up special methods for makeItems type tracks. */
+void myVariantsMethods(struct track *track);
+/* Set up special methods for myVariants type tracks. */
 
-void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash);
+void myVariantsJsCommand(char *command, struct track *trackList, struct hash *trackHash);
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
- * the first word of the command is "makeItems."  We expect it to be of format:
- *    makeItems <trackName> <chrom> <chromStart> <chromEnd>
- * If it is indeed of this form then we'll create a new makeItemsItem that references this
+ * the first word of the command is "myVariants."  We expect it to be of format:
+ *    myVariants <trackName> <chrom> <chromStart> <chromEnd>
+ * If it is indeed of this form then we'll create a new myVariants that references this
  * location and stick it in the named track. */
+
+boolean myVariantsTrackEnabled();
+/* Return TRUE if the "My Variants" feature is enabled in hg.conf
+ * and the current request comes from a valid user */
+
+void myVariantsShareApiHandler(char *action);
+/* Handle share API requests. Outputs JSON to stdout and calls exit(0).
+ * Called from main() before cartHtmlShell. */
+
+void notify(char *msg, char *msgId);
+/* print a message into a hidden DIV tag, and call Javascript to move the DIV
+ * under the tableHeaderForm element and un-hide it. */
+
+void myVariantsProcessShareParam();
+/* Check for myVarShare CGI param, validate the share token, and store
+ * the share reference in the cart. Must be called before track loading. */
+
+void myVariantsProcessSharedEdits();
+/* Process pending edits for shared tracks before any track loading.
+ * This ensures edits are committed to the database before both the
+ * owner's track and the shared track query for items. */
 
 void wigMafPMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
@@ -1614,6 +1640,15 @@ void createHgFindMatchHash();
 /* Read from the cart the string assocated with matches and
    put the matching items into a hash for highlighting later. */
 
+void createItemColorHash();
+/* Read the itemColors cart variable into a hash of per-item colors keyed by "track\titemName",
+ * keeping only records for the current database. Each color either recolors the whole item glyph
+ * or draws a background highlight, per the record's mode. */
+
+boolean itemColorOverride(struct track *tg, void *item, Color *retColor, boolean *retWholeItem);
+/* If the user set a per-item color for this item (via right-click), return TRUE and fill in the
+ * color and whether it recolors the whole item; otherwise return FALSE. */
+
 TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb);
 /* Lookup handler for track of give name.  Try parents if
  * subtrack has a NULL handler.  Return NULL if none. */
@@ -1880,12 +1915,20 @@ boolean hasRecTrackSet(struct cart *cart);
 void printRecTrackSets();
 /* Create dialog with list of recommended track sets */
 
+boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName);
+/* If a contents file exists in htdocs for this recommended track set, merge its
+ * settings into the current cart and return TRUE.  Return FALSE if no file, so the
+ * caller can fall back to loading the session from hgcentral. */
+
 Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */
 
 void maybeNewFonts(struct hvGfx *hvg);
 /* Check to see if we want to use the alternate font engine (FreeType2). */
+
+void initFontEngine();
+/* Load the text engine the user has picked, before anything measures a string. */
 
 Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */

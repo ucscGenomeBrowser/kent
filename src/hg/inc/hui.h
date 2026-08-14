@@ -1172,6 +1172,10 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 
+void colorFieldsCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
+/* If trackDb declares colorFields, render a dropdown to pick an alternative color scheme.
+ * Each colorFields entry names a bigBed extra field containing a pre-computed R,G,B string. */
+
 #define MERGESPAN_TDB_SETTING "mergeSpannedItems"
 // also used in hgTracks.js!
 #define MERGESPAN_CART_SETTING "doMergeItems"

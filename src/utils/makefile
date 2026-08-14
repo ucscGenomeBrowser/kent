@@ -178,7 +178,8 @@ USER_APP_SCRIPTS = \
 	webSync \
 	chromToUcsc \
 	bigHeat \
-	bigGuessDb
+	bigGuessDb \
+	hubtools
 
 # Scripts that are not distributed outside of UCSC
 # They are not part of the user-apps build

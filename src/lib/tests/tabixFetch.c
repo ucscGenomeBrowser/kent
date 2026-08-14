@@ -34,7 +34,7 @@ static struct optionSpec options[] = {
 
 #define BAD_POS_FORMAT "Expecting position format: chrom:N-M where N and M are integers.  " \
 		       "\"%s\" doesn't match."
-static void parsePosition(const char *position, char **retChrom, int *retStart, int *retEnd)
+static void parsePos(const char *position, char **retChrom, int *retStart, int *retEnd)
 /* Do we have a lib routine for this somewhere?  Too lazy to look. */
 {
 char *posDupe = cloneString(position);
@@ -75,7 +75,7 @@ while (gotLine && (line[0] == '#' || isEmpty(line)));
 
 char *chrom = NULL;
 int start, end;
-parsePosition(position, &chrom, &start, &end);
+parsePos(position, &chrom, &start, &end);
 boolean success = lineFileSetTabixRegion(lf, chrom, start, end);
 if (!success)
     printf("*** Could not set position to %s\n", position);

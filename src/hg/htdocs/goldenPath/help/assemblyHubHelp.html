@@ -165,6 +165,8 @@ the files for this specific assembly.</p>
     <li><strong>transBlat</strong>, <strong>blat</strong>, and <strong>isPcr</strong> configure
 	    different gfServer instances for amino acid searches, BLAT alignments, and PCR.
 	    <a href="#configuringAssemblyHubs"> More here.</a></li>
+    <li><strong>codonTable</strong> assigns genetic codes (translation tables) to sequences for
+	    amino acid display. <a href="#codonTable">More here.</a></li>
 </ul>
 <p><b>Note</b>: it is strongly recommended that each genome stanza includes <em>defaultPos</em>,
 <em>scientificName</em>, <em>organism</em>, <em>description</em>, so that the hub loads with
@@ -314,6 +316,42 @@ organism human
 defaultPos chr1:82985474-82995474
 scientificName Homo sapiens
 htmlPath html/GCF_000001405.39_GRCh38.p13.description.html
+</pre>
+
+<a id="codonTable"></a>
+<p><b>Genetic Codes (codon translation tables)</b></p>
+<p>By default the Genome Browser translates codons to amino acids with the standard genetic code,
+except for sequences named <code>chrM</code> or <code>chrMT</code>, which use the vertebrate
+mitochondrial code. An assembly hub can assign a different
+<a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi" target="_blank">NCBI genetic
+code</a> to individual sequences with the <code>codonTable</code> setting in the genome stanza:</p>
+<pre>codonTable default=1 NC_017929.1=13</pre>
+<p>The value is a space-separated list of <code>sequenceName=id</code> pairs, where <code>id</code>
+is an NCBI translation table number (for example 1 for the standard code, 2 for vertebrate
+mitochondrial, 13 for ascidian mitochondrial). The special name <code>default</code> sets the code
+used for any sequence not listed. Sequences with no assignment keep the default behavior described
+above. This affects amino acid display in the base position track's three-frame translation, in
+codon-colored annotation tracks such as gene predictions, and on the details pages.</p>
+<p><b>Note</b>: <code>sequenceName</code> must be the sequence's own name as stored in the assembly's
+<em>.2bit</em> file (the same name used in <code>chrom.sizes</code>), for example a RefSeq or GenBank
+accession such as <code>NC_017929.1</code>. This is the internal name even when a
+<code>chromAlias</code> and <code>chromAuthority</code> cause a different name (such as
+<code>chrM</code>) to be displayed. Because the special <code>chrM</code>/<code>chrMT</code>
+mitochondrial default only applies to sequences whose own name is literally <code>chrM</code> or
+<code>chrMT</code>, an assembly whose mitochondrial sequence has an accession name needs an explicit
+<code>codonTable</code> entry to translate it with a mitochondrial code.</p>
+<p>Example genome stanza (translating the mitochondrial sequence with the ascidian mitochondrial
+code, table 13):</p>
+<pre>
+genome GCF_000224145.3
+taxId 7719
+groups groups.txt
+description vase tunicate
+twoBitPath GCF_000224145.3.2bit
+codonTable default=1 NC_017929.1=13
+organism KH Sep. 2013
+defaultPos NC_020166.2:3347001-3357001
+scientificName Ciona intestinalis
 </pre>
 
 <a id="groupsTxt"></a>

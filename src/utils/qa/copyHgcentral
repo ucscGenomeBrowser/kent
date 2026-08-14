@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python3
 
 ##################################################################
 #
@@ -9,38 +9,33 @@
 #
 ##################################################################
 
-import sys
-import time
-import argparse
-import os.path
-import subprocess
-import pipes
-import re
+import sys, argparse, os.path, subprocess, shlex
 
 
 def callHgsql(database, command, server):
     """ Run hgsql command using subprocess, return stdout data if no error."""
     cmd = ["hgsql", database, "-Ne", command, "-h", server]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         universal_newlines=True)
     cmdout, cmderr = p.communicate()
     if p.returncode != 0:
         # keep command arguments nicely quoted
-        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
+        cmdstr = " ".join([shlex.quote(arg) for arg in cmd])
         raise Exception("Error from: " + cmdstr + ": " + cmderr)
     return cmdout
 
 
 def printHeader(headerTable):
-    print "--------------------------------------------------"
-    print "--------------------------------------------------"
-    print "<<<", headerTable, ">>>\n"
+    print("--------------------------------------------------")
+    print("--------------------------------------------------")
+    print("<<<", headerTable, ">>>\n")
 
 
 def printOutput(tableName, devOutput, betaOutput, rrOutput):
     printHeader(tableName)
-    print "hgcentraltest" + "\n-------------\n" + devOutput + "\n"
-    print "hgcentralbeta" + "\n-------------\n" + betaOutput + "\n"
-    print "hgcentral" + "\n-------------\n" + rrOutput + "\n"
+    print("hgcentraltest" + "\n-------------\n" + devOutput + "\n")
+    print("hgcentralbeta" + "\n-------------\n" + betaOutput + "\n")
+    print("hgcentral" + "\n-------------\n" + rrOutput + "\n")
 
 
 def chopper(data, toDo, splitter):
@@ -94,13 +89,13 @@ def parseDbDb(dbDbOrig, dbDbDest, dbDbAssembly):
     for i in range(0,len(dbDbList)):
         if dbDb1[i] != dbDb2[i]:
             diffList.append(i)
-    print dbDbOrig + ":"
+    print(dbDbOrig + ":")
     for i in range(0,len(diffList)):
-        print dbDbList[diffList[i]], "=", dbDb1[diffList[i]]
-    print "\n" + dbDbDest + ":"
+        print(dbDbList[diffList[i]], "=", dbDb1[diffList[i]])
+    print("\n" + dbDbDest + ":")
     for i in range(0,len(diffList)):
-        print dbDbList[diffList[i]], "=", dbDb2[diffList[i]]
-    print
+        print(dbDbList[diffList[i]], "=", dbDb2[diffList[i]])
+    print()
 
 
 def runTest(testOptions, testTable, testField1, testField2, testOrder):
@@ -115,27 +110,27 @@ def runTest(testOptions, testTable, testField1, testField2, testOrder):
     queryRr = createFile(fileRr, "hgcentral", testQuery, "genome-centdb")
     if queryDev == "" and queryBeta == "" and queryRr == "":
         printHeader(testTable)
-        print "*** There is no", testTable, "data for", testOptions.assembly + ".  Check to make " \
-              "sure you typed the\nassembly name properly. ***\n\n"
+        print("*** There is no", testTable, "data for", testOptions.assembly + ".  Check to make "
+              "sure you typed the\nassembly name properly. ***\n\n")
         return
     printOutput(testTable, queryDev, queryBeta, queryRr)
     if queryDev != queryBeta:
-        print "*** There are", testTable, "differences between dev and beta ***"
+        print("*** There are", testTable, "differences between dev and beta ***")
         if testTable == "dbDb" and queryDev != "" and queryBeta != "":
             parseDbDb("dev", "beta", testOptions.assembly)
         else:
-            print
+            print()
     else:
-        print "*** The", testTable, "data on dev and beta is identical ***\n"
+        print("*** The", testTable, "data on dev and beta is identical ***\n")
     if queryBeta != queryRr:
-        print "*** There are", testTable, "differences between beta and rr ***"
+        print("*** There are", testTable, "differences between beta and rr ***")
         if testTable == "dbDb" and queryBeta != "" and queryRr != "":
             parseDbDb("beta", "rr", testOptions.assembly)
         else:
-            print
+            print()
     else:
-        print "*** The", testTable, "data on beta and rr is identical ***\n"
-    print
+        print("*** The", testTable, "data on beta and rr is identical ***\n")
+    print()
 
 
 def runExecute(execOptions, execTable, execField1, execField2, execOrder):
@@ -159,9 +154,9 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     if not os.path.isfile(fileTestDev) or not os.path.isfile(fileTestBeta) or not \
             os.path.isfile(fileTestRr):
         printHeader(execTable)
-        print "*** Test mode must be run before execute mode.  If test mode was already " \
-              "run, it is\npossible that one of the output files was deleted.  Please " \
-              "re-run test mode. ***\n\n"
+        print("*** Test mode must be run before execute mode.  If test mode was already "
+              "run, it is\npossible that one of the output files was deleted.  Please "
+              "re-run test mode. ***\n\n")
         return
     queryTestDev = openFile(fileTestDev)
     queryExecuteDev = chopper(callHgsql("hgcentraltest", execQuery, "hgwdev"), "strip", "")
@@ -172,8 +167,8 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     if queryTestDev != queryExecuteDev or queryTestBeta != queryExecuteBeta or \
             queryTestRr != queryExecuteRr:
         printHeader(execTable)
-        print "*** The", execTable, "data has changed since test mode was run.  " \
-              "Please re-run test mode. ***\n\n"
+        print("*** The", execTable, "data has changed since test mode was run.  "
+              "Please re-run test mode. ***\n\n")
         return
     if execOptions.orig == "dev":
         queryExecuteOrig = queryExecuteDev
@@ -183,13 +178,13 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
         queryExecuteDest = queryExecuteRr
     if queryExecuteOrig == "":
         printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-        print "\n*** There is no", execTable, "data on", execOptions.orig, \
-              "to be copied ***\n\n"
+        print("\n*** There is no", execTable, "data on", execOptions.orig,
+              "to be copied ***\n\n")
         return
     if queryExecuteOrig == queryExecuteDest:
         printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-        print "\n*** The", execTable, "data on", execOptions.orig, "and", \
-              execOptions.dest, "is identical.  Nothing was copied. ***\n\n"
+        print("\n*** The", execTable, "data on", execOptions.orig, "and",
+              execOptions.dest, "is identical.  Nothing was copied. ***\n\n")
         return
     eraseFirst = 0
     clade = ""
@@ -200,29 +195,29 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     if execOptions.orig == "dev" and execTable == "genomeClade" and \
             queryExecuteBeta == "" and clade not in cladesBeta:
         printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-        print "*** Copying aborted.  The", clade, "clade exists only on " \
-              "dev.  Please consult with the\nappropriate engineer to find " \
-              "the correct clade and priority value for", execOptions.assembly, \
-              "and\nmanually add this entry to the proper clade on beta. ***\n\n"
+        print("*** Copying aborted.  The", clade, "clade exists only on "
+              "dev.  Please consult with the\nappropriate engineer to find "
+              "the correct clade and priority value for", execOptions.assembly,
+              "and\nmanually add this entry to the proper clade on beta. ***\n\n")
         return
     if queryExecuteDest != "":
-        input = ""
-        print
-        while input not in ["yes", "no"]:
-            input = raw_input("The existing " + execTable + " data on " +
-                              execOptions.dest + " differs from the " +
-                              execTable + " data on " + execOptions.orig +
-                              ".  If you proceed,\nthis data will be overwritten.  "
-                              "Are you sure you wish to proceed? (yes/no): ");
-            if input not in ["yes", "no"]:
-                print "\n*** Please respond with 'yes' or 'no' ***\n"
-        if input == "yes":
+        response = ""
+        print()
+        while response not in ["yes", "no"]:
+            response = input("The existing " + execTable + " data on " +
+                             execOptions.dest + " differs from the " +
+                             execTable + " data on " + execOptions.orig +
+                             ".  If you proceed,\nthis data will be overwritten.  "
+                             "Are you sure you wish to proceed? (yes/no): ")
+            if response not in ["yes", "no"]:
+                print("\n*** Please respond with 'yes' or 'no' ***\n")
+        if response == "yes":
             eraseFirst = 1
-            print
+            print()
         else:
-            print
+            print()
             printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-            print "*** Copying aborted for", execTable, "***\n\n"
+            print("*** Copying aborted for", execTable, "***\n\n")
             return
     if execOptions.dest == "beta":
         if eraseFirst == 1:
@@ -237,19 +232,19 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
             callHgsql("hgcentral", activeZeroQuery, "genome-centdb")
         queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
     printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-    print "***", execTable, "successfully copied from", execOptions.orig, "to", \
-          execOptions.dest, "***\n"
+    print("***", execTable, "successfully copied from", execOptions.orig, "to",
+          execOptions.dest, "***\n")
     if execOptions.dest == "rr" and execTable == "dbDb":
-        print "*** active set to 0 on rr ***\n"
-    print
+        print("*** active set to 0 on rr ***\n")
+    print()
 
 
 def main():
     parser = argparse.ArgumentParser(prog='copyHgcentral',
                                      description='Copies items from hgcentraltest -> hgcentralbeta \
                                                   and from hgcentralbeta -> hgcentral',
-                                     usage="%(prog)s mode assembly table origin destination \
-                                            \n\nType '%(prog)s -h' for more details")
+                                     usage="%(prog)s mode assembly table origin destination"
+                                           "\n\nType '%(prog)s -h' for more details")
 
     parser.add_argument('mode', action='store', choices=['test','execute'], metavar='mode',
                         help="Must be 'test' or 'execute' (test mode must be run first)")
@@ -268,13 +263,13 @@ def main():
                         help="The server to copy to (must be 'beta' or 'rr')")
     optionList = parser.parse_args()
     if optionList.orig == "dev" and optionList.dest != "beta":
-        print "\n *** If the origin is dev, the destination must be beta ***\n\n"
+        print("\n *** If the origin is dev, the destination must be beta ***\n\n")
         sys.exit()
     if optionList.orig == "beta" and optionList.dest != "rr":
-        print "\n *** If the origin is beta, the destination must be rr ***\n\n"
+        print("\n *** If the origin is beta, the destination must be rr ***\n\n")
         sys.exit()
     if optionList.mode == "test":
-        print
+        print()
         if optionList.table in ["blatServers", "all"]:
             runTest(optionList, "blatServers", "db", optionList.assembly, "port")
         if optionList.table in ["dbDb", "all"]:
@@ -288,7 +283,7 @@ def main():
                               optionList.assembly + "'", "hgwdev"), "strip", "")
             runTest(optionList, "genomeClade", "genome", genomeClade, "genome")
     else:
-        print
+        print()
         if optionList.table in ["blatServers", "all"]:
             runExecute(optionList, "blatServers", "db", optionList.assembly, "port")
         if optionList.table in ["dbDb", "all"]:

@@ -589,7 +589,9 @@ def loadSubmissions(summFname):
     logging.info("Loading submissions table %s into mysql, hg19 and also hg38" % summFname)
     fh = tempfile.NamedTemporaryFile(prefix="clinVarToBed", suffix=".tsv")
     tmpFname = fh.name
-    cmd= "zgrep -v '^#' %s > %s" % (summFname, tmpFname)
+    # strip trailing backslashes inside fields so MySQL's LOAD DATA escape
+    # interpretation doesn't eat the tab separator (Warning 1261, refs #37477)
+    cmd= r"zgrep -v '^#' %s | perl -pe 's/\\(?=\t|$)//g' > %s" % (summFname, tmpFname)
     assert(os.system(cmd)==0)
 
     cmd = "chmod a+r %s" % (tmpFname) # otherwise mysqld can't read the file
@@ -830,7 +832,9 @@ for line in ifh:
         print("Invalid assembly: %s, row %s" % (repr(assembly), repr(row)))
         assert(False)
 
-    hgvsTable =  json.dumps(hgvs[alleleId])
+    # sort the HGVS expressions so the output order does not depend on NCBI's
+    # row order in hgvs4variation.txt.gz, which they reshuffle from time to time
+    hgvsTable =  json.dumps(sorted(hgvs[alleleId]))
 
     molConseq = allToVcf.get(int(alleleId))
     isTrunc = False

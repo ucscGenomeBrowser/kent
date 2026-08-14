@@ -1,6 +1,10 @@
 #!/bin/bash
 # redmine 14417
-set -e -o pipefail
+set -eE -o pipefail
+# Emit an error line on any failure so cron sends mail. wget -q is silent and set -e
+# would otherwise abort with no output, which cron treats as nothing to report.
+# -E (errtrace) makes the ERR trap fire for failures inside functions/subshells too.
+trap 'echo "ERROR: malacards update failed (exit $?) at line $LINENO" >&2' ERR
 now=`date -I`
 cd /hive/data/outside/otto/malacards
 wget -q https://genecardscustomers.blob.core.windows.net/ucsc/UCSC_DiseaseCentric_dump_MC_current.csv -O oldVersions/$now.csv

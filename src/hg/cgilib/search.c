@@ -241,7 +241,7 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
         {
         dyStringPrintf(output,"</td>\n<td align='right' id='isLike%i' style='width:10px; "
-                              "white-space:nowrap;'>is%s</td>\n<td nowrap id='%s' "
+                              "white-space:nowrap;'>is%s</td>\n<td nowrap id='%s_td' "
                               "style='max-width:600px;'>\n",
                               row,(searchBy == cvSearchByMultiSelect?" among":""),buf);
         struct slPair *pairs = mdbValLabelSearch(conn, mdbSelect->name, MDB_VAL_STD_TRUNCATION,

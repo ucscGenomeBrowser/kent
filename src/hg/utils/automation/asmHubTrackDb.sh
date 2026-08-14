@@ -898,7 +898,7 @@ fi
 ###################################################################
 # Ensembl genes
 if [ -s ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb ]; then
-export oldStyle=`bigBedInfo ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb | grep -c "fieldCount: 12"`
+export oldStyle=`/cluster/bin/x86_64/bigBedInfo ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb | grep -c "fieldCount: 12"`
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
 ln -s ../trackData/ensGene/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
@@ -1112,7 +1112,8 @@ fi	#	if [ -s ${buildDir}/trackData/crisprAll/crispr.bb ]
 # build directory can be either TOGAvGalGal6v1 or TOGAvHg38v1
 
 export tg=`ls -d ${buildDir}/trackData/TOGAv* 2> /dev/null | wc -l`
-if [ "${tg}" -gt 0 ]; then
+export tgV2=`ls -d ${buildDir}/contrib/TOGAv2/TOGAv2.html 2> /dev/null | wc -l`
+if [[ "${tg}" -gt 0 && "${tgV2}" -eq 0 ]]; then
   rm -f $buildDir/bbi/HLTOGAannotVs*.*
   rm -f $buildDir/ixIxx/HLTOGAannotVs*.*
   tData=`ls -d $buildDir/trackData/TOGAv* | sed -e 's#.*/trackData#trackData#;'`

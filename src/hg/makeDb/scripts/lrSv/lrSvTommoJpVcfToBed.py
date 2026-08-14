@@ -6,7 +6,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 # Colors by SV type (R,G,B)
 SV_COLORS = {
@@ -44,9 +48,10 @@ def main():
             qual = fields[5]
             info = parseInfo(fields[7])
 
-            svType = info.get("SVTYPE", ".")
+            svTypeRaw = info.get("SVTYPE", ".")
+            svType = normalizeSvType(svTypeRaw)
             end = int(info.get("END", pos))
-            svLen = int(float(info.get("SVLEN", "0")))
+            svLenRaw = int(float(info.get("SVLEN", "0")))  # VCF SVLEN for INS
             af = info.get("AF", "0")
             ac = int(info.get("AC", "0"))
             an = int(info.get("AN", "0"))
@@ -70,11 +75,13 @@ def main():
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
-            # Absolute SV length
-            absSvLen = abs(svLen)
-
-            # Readable name
-            name = f"{svType} {absSvLen}bp"
+            # svLen = reference span
+            svLen = chromEnd - chromStart
+            # insLen = size of inserted sequence (from SVLEN for INS)
+            if svType in ("INS", "MEI"):
+                insLen = abs(svLenRaw)
+            else:
+                insLen = 0
 
             # Score: map QUAL to 0-1000
             try:
@@ -101,6 +108,9 @@ def main():
             except ValueError:
                 famNumInt = 0
 
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
+
             row = [
                 chrom,
                 str(chromStart),
@@ -112,9 +122,10 @@ def main():
                 str(chromEnd),     # thickEnd
                 color,
                 svType,
-                str(absSvLen),
-                f"{afFloat:.6f}",
+                str(svLen),
+                str(insLen),
                 str(ac),
+                f"{afFloat:.6f}",
                 str(an),
                 f"{errRatioFloat:.3f}",
                 str(errNumInt),

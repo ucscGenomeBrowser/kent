@@ -32,11 +32,19 @@ mkdir -p $today
 cd $today
 
 # fetch remote files
+# Patient retries because the public omim.org static endpoint
+# occasionally returns 403 (Cloudflare) at our cron run time.
 echo fetching files ...
-wget -nv -i ../omimUrls.txt -o wget.log
-if [ $? -ne 0 ]; then
-    echo "Potential error in OMIM release fetch,
-check wget.log in ${WORKDIR}/${today}"
+if ! wget -nv \
+        --tries=40 --waitretry=60 --timeout=120 \
+        --retry-on-http-error=403,408,429,500,502,503,504 \
+        -U "UCSC Genome Browser otto OMIM build" \
+        -i ../omimUrls.txt -o wget.log
+then
+    echo "Potential error in OMIM release fetch, check wget.log in ${WORKDIR}/${today}"
+    echo "--- wget.log ---"
+    cat wget.log
+    echo "--- end wget.log ---"
     exit 255
 fi
 

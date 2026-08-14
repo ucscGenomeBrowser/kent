@@ -1,0 +1,223 @@
+#!/bin/bash
+# buildTestHub.sh - regenerate the Mode B + Mode C reference hub data.
+#
+# Builds a self-contained two-genome hub:
+#   * hs1 genome (Mode C: lift on/off, same hub + position):
+#     - modeC_bb_native / modeC_bb_lifted -- bigBed12, N features.
+#     - modeC_bw_native / modeC_bw_lifted -- bigWig at BW_STEP bp resolution.
+#   * hg38 genome (Mode B: native rendering of the same source data):
+#     - modeB_bb_native -- the hg38-coord bigBed rendered natively.
+#     - modeB_bw_native -- the hg38-coord bigWig rendered natively.
+# Mode B's "lifted" variant is just modeC_bb_lifted / modeC_bw_lifted on hs1.
+# Drops bb/bw files + chain pair + hub.txt into $1
+# (default ~/public_html/quickLiftBench/testHub).
+#
+# Refs Redmine #37445.
+
+set -euo pipefail
+
+N="${N:-5000}"
+SEED="${SEED:-42}"
+REGION_START="${REGION_START:-15000000}"
+REGION_END="${REGION_END:-50000000}"
+BW_STEP="${BW_STEP:-1000}"
+# Per-feature span in bp. Stride is max(span/N, FEATURE_W), so shrinking
+# FEATURE_W lets the bench fit more features in the same region without
+# forcing pack-stacking from overlaps. Adjacent features are placed
+# back-to-back (no gap) when N saturates the region. The BED12 block model
+# scales proportionally with FEATURE_W (three blocks at 10%/40%/10% of width
+# with 30% and 90% block-start offsets), preserving the same exon/intron
+# shape across all sizes.
+FEATURE_W="${FEATURE_W:-5000}"
+DEST="${1:-$HOME/public_html/quickLiftBench/testHub}"
+
+HG38_CHROM_SIZES=/hive/data/genomes/hg38/chrom.sizes
+HS1_CHROM_SIZES=/hive/data/genomes/hs1/chrom.sizes
+HG38_TO_HS1_CHAIN=/gbdb/hg38/liftOver/hg38ToHs1.over.chain.gz
+
+# bigChain pair used by quickLift for hg38 -> hs1 on-the-fly remap.
+# Copied into the hub dir so the bench is self-contained on one host.
+QUICK_CHAIN_SRC=/hive/data/genomes/hs1/bed/lastz.hg38/axtChain/hs1.hg38.quick.bb
+QUICK_CHAIN_LINK_SRC=/hive/data/genomes/hs1/bed/lastz.hg38/axtChain/hs1.hg38.quickLink.bb
+
+mkdir -p "$DEST"
+cd "$DEST"
+
+python3 - "$N" "$SEED" "$REGION_START" "$REGION_END" "$FEATURE_W" > modeC_hg38.bed <<'PY'
+import random, sys
+N, seed, start_region, end_region, W = (int(sys.argv[i]) for i in range(1, 6))
+if W < 50:
+    sys.exit(f"FEATURE_W must be >= 50bp (got {W})")
+random.seed(seed)
+chrom = "chr22"
+span = end_region - start_region
+# Lay features at regular stride. Stride must clear the feature width itself
+# to keep features non-overlapping; at high N adjacent features are placed
+# back-to-back (stride == W) with no gap.
+stride = max(span // N, W)
+# Block model: three blocks at 10% / 40% / 10% of width, starting at
+# offsets 0, 30%, and 90% of width. Matches the original 500/2000/500 +
+# 0/1500/4500 pattern when W=5000. Bound each block at >=1bp so very small
+# FEATURE_W (e.g. 50) still produces a valid BED12.
+def w_at(frac):
+    return max(1, int(round(W * frac)))
+b1, b2, b3 = w_at(0.1), w_at(0.4), w_at(0.1)
+s1, s2, s3 = 0, w_at(0.3), w_at(0.9)
+thick_lo = w_at(0.2)
+thick_hi = W - w_at(0.2)
+emitted = 0
+for i in range(N):
+    s = start_region + i * stride
+    e = s + W
+    if e > end_region:
+        break
+    strand = "+" if i % 2 == 0 else "-"
+    thickStart, thickEnd = s + thick_lo, s + thick_hi
+    print("\t".join(map(str, [
+        chrom, s, e, f"feat_{i:05d}", 0, strand,
+        thickStart, thickEnd, "100,100,200",
+        3, f"{b1},{b2},{b3},", f"{s1},{s2},{s3},",
+    ])))
+    emitted += 1
+if emitted < N:
+    print(
+        f"WARNING: requested N={N} but only {emitted} features fit "
+        f"in {span}bp at stride={stride}bp (FEATURE_W={W}). "
+        f"Pass a smaller FEATURE_W or larger REGION span.",
+        file=sys.stderr,
+    )
+PY
+
+liftOver -bedPlus=12 modeC_hg38.bed "$HG38_TO_HS1_CHAIN" modeC_hs1.bed unmapped_hs1.bed
+
+sort -k1,1 -k2,2n modeC_hg38.bed -o modeC_hg38.bed
+sort -k1,1 -k2,2n modeC_hs1.bed  -o modeC_hs1.bed
+
+bedToBigBed -type=bed12 modeC_hg38.bed "$HG38_CHROM_SIZES" modeC_hg38.bb
+bedToBigBed -type=bed12 modeC_hs1.bed  "$HS1_CHROM_SIZES"  modeC_hs1.bb
+
+# ---- bigWig: BedGraph at BW_STEP bp resolution, lifted by chain ----
+python3 - "$REGION_START" "$REGION_END" "$BW_STEP" <<'PY' > modeC_hg38.bedGraph
+import math, sys
+s0, e0, step = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
+chrom = "chr22"
+for s in range(s0, e0, step):
+    e = s + step
+    # smooth signal in [50, 150]; chrom-position-driven, deterministic
+    v = 100 + 50 * math.sin((s - s0) / 100000.0)
+    print(f"{chrom}\t{s}\t{e}\t{v:.4f}")
+PY
+
+# liftOver of bedGraph: keep 4th column (value) as bedPlus extra.
+liftOver -bedPlus=3 modeC_hg38.bedGraph "$HG38_TO_HS1_CHAIN" \
+    modeC_hs1.bedGraph unmapped_hs1.bedGraph
+
+# liftOver may emit overlapping intervals when a chain block edge falls
+# inside a step; bedGraphToBigWig requires strictly non-overlapping. Sort,
+# then drop any line whose start is < the previous line's end (cheap
+# defensive trim; loses at most a handful of bins per chain edge).
+sort -k1,1 -k2,2n modeC_hg38.bedGraph -o modeC_hg38.bedGraph
+sort -k1,1 -k2,2n modeC_hs1.bedGraph  | awk 'BEGIN{OFS="\t"; pc=""; pe=-1} {if (!($1==pc && $2<pe)) {print; pc=$1; pe=$3}}' > modeC_hs1.bedGraph.trim
+mv modeC_hs1.bedGraph.trim modeC_hs1.bedGraph
+
+bedGraphToBigWig modeC_hg38.bedGraph "$HG38_CHROM_SIZES" modeC_hg38.bw
+bedGraphToBigWig modeC_hs1.bedGraph  "$HS1_CHROM_SIZES"  modeC_hs1.bw
+
+# Co-locate the quickLift chain pair so both stanzas fetch from one host.
+# quickLift's chain loader constructs the link filename from the .bb name
+# by replacing ".bb" with ".link.bb", so the link file MUST be named
+# <chain>.link.bb (not <chain>Link.bb).
+cp "$QUICK_CHAIN_SRC"      hg38ToHs1.quick.bb
+cp "$QUICK_CHAIN_LINK_SRC" hg38ToHs1.quick.link.bb
+
+# Two single-genome useOneFile hubs (hub_hs1.txt, hub_hg38.txt). We can't
+# put both genomes in one useOneFile because trackHubGenomeReadRa() breaks
+# out of the genome-parsing loop at the first `track` line (trackHub.c:679),
+# so a 2nd `genome` block after any track stanza is silently dropped.
+cat > hub_hs1.txt <<EOF
+hub quickLiftBench_hs1
+shortLabel quickLiftBench (hs1)
+longLabel quickLiftBench: hs1 stanzas for Mode C and the lifted side of Mode B
+useOneFile on
+email braney@ucsc.edu
+descriptionUrl https://redmine.gi.ucsc.edu/issues/37445
+
+genome hs1
+
+track modeC_bb_native
+shortLabel modeC bb native
+longLabel Mode C bigBed native: BED12 features in hs1 coords
+type bigBed 12
+bigDataUrl modeC_hs1.bb
+visibility pack
+color 0,128,0
+priority 1
+
+track modeC_bb_lifted
+shortLabel modeC bb lifted
+longLabel Mode C bigBed lifted: same features in hg38 coords + quickLift hg38->hs1
+type bigBed 12
+bigDataUrl modeC_hg38.bb
+quickLiftUrl hg38ToHs1.quick.bb
+quickLiftDb hg38
+visibility pack
+color 0,128,0
+priority 2
+
+track modeC_bw_native
+shortLabel modeC bw native
+longLabel Mode C bigWig native: signal in hs1 coords
+type bigWig
+bigDataUrl modeC_hs1.bw
+visibility full
+color 0,128,0
+viewLimits 0:200
+priority 3
+
+track modeC_bw_lifted
+shortLabel modeC bw lifted
+longLabel Mode C bigWig lifted: same signal in hg38 coords + quickLift hg38->hs1
+type bigWig
+bigDataUrl modeC_hg38.bw
+quickLiftUrl hg38ToHs1.quick.bb
+quickLiftDb hg38
+viewLimits 0:200
+visibility full
+color 0,128,0
+priority 4
+EOF
+
+cat > hub_hg38.txt <<EOF
+hub quickLiftBench_hg38
+shortLabel quickLiftBench (hg38)
+longLabel quickLiftBench: hg38-native stanzas for the native side of Mode B
+useOneFile on
+email braney@ucsc.edu
+descriptionUrl https://redmine.gi.ucsc.edu/issues/37445
+
+genome hg38
+
+track modeB_bb_native
+shortLabel modeB bb native
+longLabel Mode B bigBed native: features rendered natively on hg38 (source assembly)
+type bigBed 12
+bigDataUrl modeC_hg38.bb
+visibility pack
+color 0,128,0
+priority 1
+
+track modeB_bw_native
+shortLabel modeB bw native
+longLabel Mode B bigWig native: signal rendered natively on hg38 (source assembly)
+type bigWig
+bigDataUrl modeC_hg38.bw
+visibility full
+color 0,128,0
+viewLimits 0:200
+priority 2
+EOF
+
+echo "hub built at $DEST"
+echo "  modeC_hg38.bb: $(wc -l < modeC_hg38.bed) features"
+echo "  modeC_hs1.bb:  $(wc -l < modeC_hs1.bed) features (after liftOver)"
+echo "  bedGraph bins: hg38=$(wc -l < modeC_hg38.bedGraph) hs1=$(wc -l < modeC_hs1.bedGraph)"

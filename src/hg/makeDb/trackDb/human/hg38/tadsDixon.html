@@ -1,0 +1,44 @@
+<h2>Description</h2>
+<p>
+This track shows <b>topologically associating domains (TADs)</b>, the original
+&quot;topological domains&quot; defined by Dixon <em>et al.</em> 2012, in two human
+cell types: H1 human embryonic stem cells (hESC) and IMR90 fetal lung fibroblasts. A
+domain is a contiguous region that preferentially interacts with itself in Hi-C data.
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each domain is drawn as a box. Domains were called on 40 kb-binned Hi-C data, so domain
+edges are uncertain to roughly &plusmn;20 kb and all coordinates fall on a 40 kb grid.
+Domains cover roughly 86&ndash;91% of the genome; they do not tile end to end, and
+the gaps between boxes are Dixon's &quot;boundary&quot; (&lt;400 kb) or &quot;unorganized
+chromatin&quot; (&gt;400 kb) regions. No per-domain confidence score is published by the
+authors, so none is shown. These coordinates are not directly comparable to the other TAD
+tracks, which use different callers.
+</p>
+<h2>Methods</h2>
+<p>
+Domains were identified with a directionality-index hidden Markov model on 40 kb Hi-C
+contact matrices (Dixon <em>et al.</em>, 2012). The published combined-replicate domain
+calls (Supplementary Table S3) were obtained for hESC and IMR90, originally on assembly
+hg18/NCBI36, and lifted to this assembly with the UCSC <b>liftOver</b> tool; a small
+fraction of domains that did not map cleanly were dropped.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Dixon JR, Selvaraj S, Yue F, Kim A, Li Y, Shen Y, Hu M, Liu JS, Ren B.
+Topological domains in mammalian genomes identified by analysis of chromatin
+interactions. <em>Nature</em>. 2012;485(7398):376-80.
+<a href="https://doi.org/10.1038/nature11082" target="_blank">doi:10.1038/nature11082</a>
+</p>

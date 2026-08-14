@@ -365,7 +365,7 @@ sub endHtml() {
 
 sub asmCounts($) {
   my ($chromSizes) = @_;
-  my ($sequenceCount, $totalSize) = split('\s+', `ave -col=2 $chromSizes | egrep "^count|^total" | awk '{printf "%d\\n", \$NF}' | xargs echo`);
+  my ($sequenceCount, $totalSize) = split('\s+', `/cluster/bin/x86_64/ave -col=2 $chromSizes | egrep "^count|^total" | awk '{printf "%d\\n", \$NF}' | xargs echo`);
   return ($sequenceCount, $totalSize);
 }
 
@@ -393,10 +393,10 @@ sub gapStats($$) {
   if ($asmId !~ m/^GC/) {
      $gapBed = "/hive/data/genomes/$asmId/$asmId.N.bed";
      if ( -s "$gapBed" ) {
-       $gapCount = `awk '{print \$3-\$2}' $gapBed | ave stdin | grep '^count' | awk '{print \$2}'`;
+       $gapCount = `awk '{print \$3-\$2}' $gapBed | /cluster/bin/x86_64/ave stdin | grep '^count' | awk '{print \$2}'`;
      }
   } elsif ( -s "$gapBed" ) {
-    $gapCount = `zcat $gapBed | awk '{print \$3-\$2}' | ave stdin | grep '^count' | awk '{print \$2}'`;
+    $gapCount = `zcat $gapBed | awk '{print \$3-\$2}' | /cluster/bin/x86_64/ave stdin | grep '^count' | awk '{print \$2}'`;
   }
   chomp $gapCount;
   return ($gapCount);

@@ -1076,8 +1076,8 @@ if (trackRefList != NULL)
 	cartMakeCheckBox(cart, cartVar, FALSE);
 	puts("</TD><TD>");
 	struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
-	printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
-	       topTdb->track, tdb->longLabel);
+	printf("<A HREF=\"%s?%s&db=%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	       database, topTdb->track, tdb->longLabel);
 	printFilterOptions(tdb);
 	puts("</TD></TR>");
 	}
@@ -1138,8 +1138,8 @@ if (trackRefList != NULL)
 	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
 	cartMakeCheckBox(cart, cartVar, FALSE);
 	struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
-	printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
-	       topTdb->track, tdb->longLabel);
+	printf("<A HREF=\"%s?%s&db=%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	       database, topTdb->track, tdb->longLabel);
 	}
     puts("<BR>");
     endCollapsibleSection();

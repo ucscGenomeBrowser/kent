@@ -857,13 +857,22 @@ int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
 return mgFontStringWidth(font, string);
 }
 
+void mgLoadFontEngine(unsigned int method, char *fontFile)
+/* Load a text engine without attaching it to an image.  Text measurement
+ * (mgFontStringWidth) answers from whichever engine is loaded, so a caller that
+ * measures text before it has an image to draw on needs to load the engine
+ * first, or it will measure with one engine and draw with another. */
+{
+if (method == FONT_METHOD_FREETYPE)
+    ftInitialize(fontFile);
+}
+
 void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontName, char *fontFile)
 /* Which font drawing method shoud we use. */
 {
 mg->fontMethod = method;
 
-if (method == FONT_METHOD_FREETYPE)
-    ftInitialize(fontFile);
+mgLoadFontEngine(method, fontFile);
 }
 
 int mgFontCharWidth(MgFont *font, char c)
@@ -975,6 +984,22 @@ MgFont *mgFontForSize(char *textSize)
  * textSizes of "tiny" "small", "medium", "large" and "huge" are also ok. */
 {
 return mgFontForSizeAndStyle(textSize, "medium");
+}
+
+MgFont *mgFontForCellHeight(int cellHeight)
+/* Return a font whose reported cell height is cellHeight, cloned from the small
+ * font.  Built-in fonts only come in fixed sizes, but the FreeType engine
+ * derives its render size from the font's cell height (see getFontCorrection in
+ * freeType.c), so this yields an in-between size that no fixed font offers (e.g.
+ * cellHeight 10 renders ~9px).  VALID ONLY UNDER FREETYPE: the GEM bitmap engine
+ * indexes fixed bitmap rows by this height, so the glyphs would be misread.
+ * Callers must fall back to a real fixed-size font when FreeType is off.  Not
+ * thread-safe; it hands back one static header re-stamped on each call. */
+{
+static struct font_hdr clone;
+clone = *mgSmallFont();        // copy the header; FreeType ignores the glyph data
+clone.frm_hgt = cellHeight;    // this is what mgFontPixelHeight() returns
+return &clone;
 }
 
 

@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""gwEditPage -- read and write genomewiki page text from the command line.
+
+Companion to gwUploadFile, which does images.  That one needs mwclient and
+python2, neither of which is a safe bet any more, so this talks to the MediaWiki
+API with nothing but the standard library.
+
+There are two wikis behind genomewiki.ucsc.edu and they have separate accounts:
+
+    genomewiki.ucsc.edu/            the public wiki ("genomewiki")
+    genomewiki.ucsc.edu/genecats/   the internal wiki ("Genecats")
+
+A password for one is not a password for the other, which is worth knowing
+before reading an authentication failure as a typo.  Credentials come from
+gwUploadFile's ~/.gwLogin convention: one line, "UserName passWord", mode 600.
+The internal wiki reads ~/.gwLogin.genecats, so the first line of ~/.gwLogin
+stays exactly what gwUploadFile expects to find there.
+
+A bot password from Special:BotPasswords works in place of an account password,
+and is the better choice: it is scoped to the grants you pick and can be revoked
+without touching your real one.  Log in as "User@botname" with the generated
+password.
+
+Examples:
+    gwEditPage get CGI_Build_Process --genecats > page.wiki
+    vi page.wiki
+    gwEditPage put CGI_Build_Process --genecats --file page.wiki \\
+        --summary "note the nightly hgConfCatalog writer" --diff
+"""
+
+import argparse
+import difflib
+import http.cookiejar
+import json
+import os
+import stat
+import sys
+import urllib.parse
+import urllib.request
+
+UA = "gwEditPage/1.0 (UCSC Genome Browser group)"
+
+
+def credentials(path):
+    """(user, password) from a .gwLogin-style file, refusing loose permissions."""
+    path = os.path.expanduser(path)
+    if not os.path.exists(path):
+        sys.exit("no credential file %s\n"
+                 "Create it with one line, \"UserName passWord\", mode 600.\n"
+                 "A bot password from Special:BotPasswords is preferred; log in\n"
+                 "as \"User@botname\" with the password it generates." % path)
+    if stat.S_IMODE(os.lstat(path).st_mode) & 0o077:
+        sys.exit("%s must be mode 600: it holds a password" % path)
+    with open(path) as fh:
+        for line in fh:
+            if line.startswith("#") or not line.strip():
+                continue
+            parts = line.rstrip("\r\n").split(None, 1)
+            if len(parts) != 2:
+                sys.exit("%s: expected \"UserName passWord\" on one line" % path)
+            return parts[0], parts[1]
+    sys.exit("%s has no credential line" % path)
+
+
+class Wiki:
+    def __init__(self, site, scriptpath):
+        self.api = "https://%s%s/api.php" % (site, scriptpath.rstrip("/"))
+        jar = http.cookiejar.CookieJar()
+        self.opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(jar))
+
+    def call(self, **kw):
+        kw.setdefault("format", "json")
+        data = urllib.parse.urlencode(kw).encode()
+        req = urllib.request.Request(self.api, data=data,
+                                     headers={"User-Agent": UA})
+        with self.opener.open(req) as resp:
+            out = json.load(resp)
+        if "error" in out:
+            sys.exit("API error: %s" % out["error"].get("info", out["error"]))
+        return out
+
+    def login(self, user, password):
+        token = self.call(action="query", meta="tokens",
+                          type="login")["query"]["tokens"]["logintoken"]
+        res = self.call(action="login", lgname=user, lgpassword=password,
+                        lgtoken=token).get("login", {})
+        if res.get("result") != "Success":
+            reason = res.get("reason")
+            if isinstance(reason, dict):
+                reason = reason.get("text", "")
+            sys.exit("login as %s failed on %s: %s\n"
+                     "Remember the two wikis have separate accounts."
+                     % (user, self.api, reason or res.get("result")))
+        # Confirm rather than trust: a cookie problem shows up here, not later.
+        info = self.call(action="query", meta="userinfo",
+                         uiprop="rights")["query"]["userinfo"]
+        if "edit" not in (info.get("rights") or []):
+            sys.exit("logged in as %s but that account has no edit right"
+                     % info.get("name"))
+        return info.get("name")
+
+    def text(self, title):
+        """Current wikitext, or None if the page does not exist."""
+        res = self.call(action="query", prop="revisions", rvprop="content",
+                        rvslots="main", titles=title, formatversion="2")
+        pages = res["query"]["pages"]
+        if not pages or pages[0].get("missing"):
+            return None
+        return pages[0]["revisions"][0]["slots"]["main"]["content"]
+
+    def save(self, title, text, summary, minor=False):
+        token = self.call(action="query", meta="tokens")["query"]["tokens"]["csrftoken"]
+        args = dict(action="edit", title=title, text=text, summary=summary,
+                    token=token, bot="1", formatversion="2")
+        if minor:
+            args["minor"] = "1"
+        res = self.call(**args).get("edit", {})
+        if res.get("result") != "Success":
+            sys.exit("edit of %s failed: %s" % (title, res))
+        return res
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("action", choices=["get", "put"])
+    ap.add_argument("title", help="page title, e.g. CGI_Build_Process")
+    ap.add_argument("--genecats", action="store_true",
+                    help="the internal wiki at /genecats rather than the "
+                         "public one, with its own account")
+    ap.add_argument("--site", default="genomewiki.ucsc.edu")
+    ap.add_argument("--login", help="credential file; the default follows "
+                                    "--genecats")
+    ap.add_argument("--file", help="with put: read the new text from here "
+                                   "instead of stdin")
+    ap.add_argument("--summary", help="with put: the edit summary, required")
+    ap.add_argument("--minor", action="store_true", help="mark the edit minor")
+    ap.add_argument("--diff", action="store_true",
+                    help="with put: show what would change")
+    ap.add_argument("--dry-run", dest="dryRun", action="store_true",
+                    help="with put: show the diff and stop")
+    args = ap.parse_args()
+
+    scriptpath = "/genecats" if args.genecats else ""
+    login = args.login or ("~/.gwLogin.genecats" if args.genecats
+                           else "~/.gwLogin")
+    wiki = Wiki(args.site, scriptpath)
+
+    if args.action == "get":
+        # Reading needs no account on either wiki, so do not ask for one.
+        text = wiki.text(args.title)
+        if text is None:
+            sys.exit("no such page: %s" % args.title)
+        sys.stdout.write(text)
+        return 0
+
+    if not args.summary and not args.dryRun:
+        sys.exit("put needs --summary")
+    new = open(args.file).read() if args.file else sys.stdin.read()
+    if not new.strip():
+        sys.exit("refusing to write an empty page")
+
+    old = wiki.text(args.title)
+    if old is None:
+        sys.exit("no such page: %s.  This tool edits pages that exist; make a "
+                 "new one in the browser first." % args.title)
+    if old == new:
+        print("no change", file=sys.stderr)
+        return 0
+    if args.diff or args.dryRun:
+        sys.stderr.writelines(difflib.unified_diff(
+            old.splitlines(keepends=True), new.splitlines(keepends=True),
+            fromfile="%s (live)" % args.title, tofile="%s (new)" % args.title))
+    if args.dryRun:
+        print("dry run, nothing written", file=sys.stderr)
+        return 0
+
+    user, password = credentials(login)
+    who = wiki.login(user, password)
+    res = wiki.save(args.title, new, args.summary, minor=args.minor)
+    print("saved %s as %s, revision %s"
+          % (args.title, who, res.get("newrevid")), file=sys.stderr)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

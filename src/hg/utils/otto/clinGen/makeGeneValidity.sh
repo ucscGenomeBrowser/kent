@@ -41,8 +41,8 @@ if [ "${count}" -gt 1 ]; then
     wget -N -q "ftp://ftp.clinicalgenome.org/hg38ClinGenBigBed.bb"
     cp hg19ClinGenBigBed.bb ${WORKDIR}/release/hg19/clinGenGeneDisease.bb
     cp hg38ClinGenBigBed.bb ${WORKDIR}/release/hg38/clinGenGeneDisease.bb
+    printf 'Last updated %s\n' "$today" > ${WORKDIR}/release/hg19/clinGenVersion.txt
+    printf 'Last updated %s\n' "$today" > ${WORKDIR}/release/hg38/clinGenVersion.txt
     cd ..
     echo "ClinGen Gene-Disease update done: `date`"
-else
-    echo "No update"
 fi

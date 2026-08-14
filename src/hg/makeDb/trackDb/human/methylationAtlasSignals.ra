@@ -15,7 +15,7 @@ html methylationAtlasSignals.html
 
         track neuronMerged
         type bigWig
-        longLabel Neurons Merged Samples
+        longLabel Methylation Atlas: Neurons Merged Samples
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -30,7 +30,7 @@ html methylationAtlasSignals.html
         
         track cerebNeuron0TB
         type bigWig
-        longLabel Cerebellum - Neuron - Z000000TB
+        longLabel Methylation Atlas: Cerebellum - Neuron - Z000000TB
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -45,7 +45,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron0TD
         type bigWig
-        longLabel Cortex - Neuron - Z000000TD
+        longLabel Methylation Atlas: Cortex - Neuron - Z000000TD
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -60,7 +60,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron0TF
         type bigWig
-        longLabel Cortex - Neuron - Z000000TF
+        longLabel Methylation Atlas: Cortex - Neuron - Z000000TF
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -75,7 +75,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42F
         type bigWig
-        longLabel Cortex - Neuron - Z0000042F
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042F
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -90,7 +90,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42H
         type bigWig
-        longLabel Cortex - Neuron - Z0000042H
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042H
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -105,7 +105,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42J
         type bigWig
-        longLabel Cortex - Neuron - Z0000042J
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042J
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -120,7 +120,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42K
         type bigWig
-        longLabel Cortex - Neuron - Z0000042K
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042K
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -135,7 +135,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42M
         type bigWig
-        longLabel Cortex - Neuron - Z0000042M
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042M
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -150,7 +150,7 @@ html methylationAtlasSignals.html
         
         track cortexNeuron42P
         type bigWig
-        longLabel Cortex - Neuron - Z0000042P
+        longLabel Methylation Atlas: Cortex - Neuron - Z0000042P
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -165,7 +165,7 @@ html methylationAtlasSignals.html
         
         track neuron0TH
         type bigWig
-        longLabel Neuron - Z000000TH
+        longLabel Methylation Atlas: Neuron - Z000000TH
         viewLimits 0:1
         autoScale off
         color 138,43,226
@@ -180,7 +180,7 @@ html methylationAtlasSignals.html
         
         track oligodendMerged
         type bigWig
-        longLabel Oligodendrocytes Merged Samples
+        longLabel Methylation Atlas: Oligodendrocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 148,103,189
@@ -195,7 +195,7 @@ html methylationAtlasSignals.html
         
         track oligo0TK
         type bigWig
-        longLabel Oligodendrocytes - Z000000TK
+        longLabel Methylation Atlas: Oligodendrocytes - Z000000TK
         viewLimits 0:1
         autoScale off
         color 148,103,189
@@ -210,7 +210,7 @@ html methylationAtlasSignals.html
         
         track oligo42E
         type bigWig
-        longLabel Oligodendrocytes - Z0000042E
+        longLabel Methylation Atlas: Oligodendrocytes - Z0000042E
         viewLimits 0:1
         autoScale off
         color 148,103,189
@@ -225,7 +225,7 @@ html methylationAtlasSignals.html
         
         track oligo42L
         type bigWig
-        longLabel Oligodendrocytes - Z0000042L
+        longLabel Methylation Atlas: Oligodendrocytes - Z0000042L
         viewLimits 0:1
         autoScale off
         color 148,103,189
@@ -240,7 +240,7 @@ html methylationAtlasSignals.html
         
         track oligo42N
         type bigWig
-        longLabel Oligodendrocytes - Z0000042N
+        longLabel Methylation Atlas: Oligodendrocytes - Z0000042N
         viewLimits 0:1
         autoScale off
         color 148,103,189
@@ -255,7 +255,7 @@ html methylationAtlasSignals.html
         
         track heartCardioMerged
         type bigWig
-        longLabel Heart Cardiomyocytes Merged Samples
+        longLabel Methylation Atlas: Heart Cardiomyocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 220,20,60
@@ -270,7 +270,7 @@ html methylationAtlasSignals.html
         
         track heartCardio44G
         type bigWig
-        longLabel Heart - Cardiomyocyte - Z0000044G
+        longLabel Methylation Atlas: Heart - Cardiomyocyte - Z0000044G
         viewLimits 0:1
         autoScale off
         color 220,20,60
@@ -285,7 +285,7 @@ html methylationAtlasSignals.html
         
         track heartCardio44K
         type bigWig
-        longLabel Heart - Cardiomyocyte - Z0000044K
+        longLabel Methylation Atlas: Heart - Cardiomyocyte - Z0000044K
         viewLimits 0:1
         autoScale off
         color 220,20,60
@@ -300,7 +300,7 @@ html methylationAtlasSignals.html
         
         track heartCardio44Q
         type bigWig
-        longLabel Heart - Cardiomyocyte - Z0000044Q
+        longLabel Methylation Atlas: Heart - Cardiomyocyte - Z0000044Q
         viewLimits 0:1
         autoScale off
         color 220,20,60
@@ -315,7 +315,7 @@ html methylationAtlasSignals.html
         
         track heartCardio44R
         type bigWig
-        longLabel Heart - Cardiomyocyte - Z0000044R
+        longLabel Methylation Atlas: Heart - Cardiomyocyte - Z0000044R
         viewLimits 0:1
         autoScale off
         color 220,20,60
@@ -330,7 +330,7 @@ html methylationAtlasSignals.html
         
         track smoothMuscMerged
         type bigWig
-        longLabel Smooth Muscle Merged Samples
+        longLabel Methylation Atlas: Smooth Muscle Merged Samples
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -345,7 +345,7 @@ html methylationAtlasSignals.html
         
         track aortaSmMusc41U
         type bigWig
-        longLabel Aorta - Smooth Muscle - Z0000041U
+        longLabel Methylation Atlas: Aorta - Smooth Muscle - Z0000041U
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -360,7 +360,7 @@ html methylationAtlasSignals.html
         
         track bladderSmMusc41Z
         type bigWig
-        longLabel Bladder - Smooth Muscle - Z0000041Z
+        longLabel Methylation Atlas: Bladder - Smooth Muscle - Z0000041Z
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -375,7 +375,7 @@ html methylationAtlasSignals.html
         
         track coronArtSmMusc420
         type bigWig
-        longLabel Coronary Artery - Smooth Muscle - Z00000420
+        longLabel Methylation Atlas: Coronary Artery - Smooth Muscle - Z00000420
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -390,7 +390,7 @@ html methylationAtlasSignals.html
         
         track lungBronSmMusc421
         type bigWig
-        longLabel Lung Bronchus - Smooth Muscle - Z00000421
+        longLabel Methylation Atlas: Lung Bronchus - Smooth Muscle - Z00000421
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -405,7 +405,7 @@ html methylationAtlasSignals.html
         
         track prostSmMusc41Y
         type bigWig
-        longLabel Prostate - Smooth Muscle - Z0000041Y
+        longLabel Methylation Atlas: Prostate - Smooth Muscle - Z0000041Y
         viewLimits 0:1
         autoScale off
         color 205,92,92
@@ -420,7 +420,7 @@ html methylationAtlasSignals.html
         
         track heartFibroMerged
         type bigWig
-        longLabel Heart Fibroblasts Merged Samples
+        longLabel Methylation Atlas: Heart Fibroblasts Merged Samples
         viewLimits 0:1
         autoScale off
         color 178,34,34
@@ -435,7 +435,7 @@ html methylationAtlasSignals.html
         
         track heartFibro41V
         type bigWig
-        longLabel Heart - Fibroblasts - Z0000041V
+        longLabel Methylation Atlas: Heart - Fibroblasts - Z0000041V
         viewLimits 0:1
         autoScale off
         color 178,34,34
@@ -450,7 +450,7 @@ html methylationAtlasSignals.html
         
         track heartFibro41W
         type bigWig
-        longLabel Heart - Fibroblasts - Z0000041W
+        longLabel Methylation Atlas: Heart - Fibroblasts - Z0000041W
         viewLimits 0:1
         autoScale off
         color 178,34,34
@@ -465,7 +465,7 @@ html methylationAtlasSignals.html
         
         track heartFibro41X
         type bigWig
-        longLabel Heart - Fibroblasts - Z0000041X
+        longLabel Methylation Atlas: Heart - Fibroblasts - Z0000041X
         viewLimits 0:1
         autoScale off
         color 178,34,34
@@ -480,7 +480,7 @@ html methylationAtlasSignals.html
         
         track heartFibro43R
         type bigWig
-        longLabel Heart - Fibroblasts - Z0000043R
+        longLabel Methylation Atlas: Heart - Fibroblasts - Z0000043R
         viewLimits 0:1
         autoScale off
         color 178,34,34
@@ -495,7 +495,7 @@ html methylationAtlasSignals.html
         
         track skelMuscMerged
         type bigWig
-        longLabel Skeletal Muscle Merged Samples
+        longLabel Methylation Atlas: Skeletal Muscle Merged Samples
         viewLimits 0:1
         autoScale off
         color 139,0,0
@@ -510,7 +510,7 @@ html methylationAtlasSignals.html
         
         track skelMusc427
         type bigWig
-        longLabel Skeletal - Muscle - Z00000427
+        longLabel Methylation Atlas: Skeletal - Muscle - Z00000427
         viewLimits 0:1
         autoScale off
         color 139,0,0
@@ -525,7 +525,7 @@ html methylationAtlasSignals.html
         
         track skelMusc429
         type bigWig
-        longLabel Skeletal - Muscle - Z00000429
+        longLabel Methylation Atlas: Skeletal - Muscle - Z00000429
         viewLimits 0:1
         autoScale off
         color 139,0,0
@@ -540,7 +540,7 @@ html methylationAtlasSignals.html
         
         track adipocytesMerged
         type bigWig
-        longLabel Adipocytes Merged Samples
+        longLabel Methylation Atlas: Adipocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 210,180,140
@@ -555,7 +555,7 @@ html methylationAtlasSignals.html
         
         track adipo0T5
         type bigWig
-        longLabel Adipocytes - Z000000T5
+        longLabel Methylation Atlas: Adipocytes - Z000000T5
         viewLimits 0:1
         autoScale off
         color 210,180,140
@@ -570,7 +570,7 @@ html methylationAtlasSignals.html
         
         track adipo0T7
         type bigWig
-        longLabel Adipocytes - Z000000T7
+        longLabel Methylation Atlas: Adipocytes - Z000000T7
         viewLimits 0:1
         autoScale off
         color 210,180,140
@@ -585,7 +585,7 @@ html methylationAtlasSignals.html
         
         track adipo0T9
         type bigWig
-        longLabel Adipocytes - Z000000T9
+        longLabel Methylation Atlas: Adipocytes - Z000000T9
         viewLimits 0:1
         autoScale off
         color 210,180,140
@@ -600,7 +600,7 @@ html methylationAtlasSignals.html
         
         track endothelMerged
         type bigWig
-        longLabel Endothelial Merged Samples
+        longLabel Methylation Atlas: Endothelial Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -615,7 +615,7 @@ html methylationAtlasSignals.html
         
         track aortaEndoth422
         type bigWig
-        longLabel Aorta - Endothel - Z00000422
+        longLabel Methylation Atlas: Aorta - Endothel - Z00000422
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -630,7 +630,7 @@ html methylationAtlasSignals.html
         
         track aortaEndoth43G
         type bigWig
-        longLabel Aorta - Endothel - Z0000043G
+        longLabel Methylation Atlas: Aorta - Endothel - Z0000043G
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -645,7 +645,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomEndoth0Q5
         type bigWig
-        longLabel Kidney Glomerular - Endothel - Z000000Q5
+        longLabel Methylation Atlas: Kidney Glomerular - Endothel - Z000000Q5
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -660,7 +660,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomEndoth443
         type bigWig
-        longLabel Kidney Glomerular - Endothel - Z00000443
+        longLabel Methylation Atlas: Kidney Glomerular - Endothel - Z00000443
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -675,7 +675,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomEndoth45J
         type bigWig
-        longLabel Kidney Glomerular - Endothel - Z0000045J
+        longLabel Methylation Atlas: Kidney Glomerular - Endothel - Z0000045J
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -690,7 +690,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEndoth0PX
         type bigWig
-        longLabel Kidney Tubular - Endothel - Z000000PX
+        longLabel Methylation Atlas: Kidney Tubular - Endothel - Z000000PX
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -705,7 +705,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEndoth0Q3
         type bigWig
-        longLabel Kidney Tubular - Endothel - Z000000Q3
+        longLabel Methylation Atlas: Kidney Tubular - Endothel - Z000000Q3
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -720,7 +720,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEndoth42R
         type bigWig
-        longLabel Kidney Tubular - Endothel - Z0000042R
+        longLabel Methylation Atlas: Kidney Tubular - Endothel - Z0000042R
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -735,7 +735,7 @@ html methylationAtlasSignals.html
         
         track liverEndothium0RB
         type bigWig
-        longLabel Liver - Endothelium - Z000000RB
+        longLabel Methylation Atlas: Liver - Endothelium - Z000000RB
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -750,7 +750,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEndoth0Q1
         type bigWig
-        longLabel Lung Alveolar - Endothel - Z000000Q1
+        longLabel Methylation Atlas: Lung Alveolar - Endothel - Z000000Q1
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -765,7 +765,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEndoth0QK
         type bigWig
-        longLabel Lung Alveolar - Endothel - Z000000QK
+        longLabel Methylation Atlas: Lung Alveolar - Endothel - Z000000QK
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -780,7 +780,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEndoth45H
         type bigWig
-        longLabel Lung Alveolar - Endothel - Z0000045H
+        longLabel Methylation Atlas: Lung Alveolar - Endothel - Z0000045H
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -795,7 +795,7 @@ html methylationAtlasSignals.html
         
         track pancEndoth42D
         type bigWig
-        longLabel Pancreas - Endothel - Z0000042D
+        longLabel Methylation Atlas: Pancreas - Endothel - Z0000042D
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -810,7 +810,7 @@ html methylationAtlasSignals.html
         
         track pancEndoth42X
         type bigWig
-        longLabel Pancreas - Endothel - Z0000042X
+        longLabel Methylation Atlas: Pancreas - Endothel - Z0000042X
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -825,7 +825,7 @@ html methylationAtlasSignals.html
         
         track pancEndoth430
         type bigWig
-        longLabel Pancreas - Endothel - Z00000430
+        longLabel Methylation Atlas: Pancreas - Endothel - Z00000430
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -840,7 +840,7 @@ html methylationAtlasSignals.html
         
         track pancIsletEndoth42Y
         type bigWig
-        longLabel Pancreas Islet - Endothel - Z0000042Y
+        longLabel Methylation Atlas: Pancreas Islet - Endothel - Z0000042Y
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -855,7 +855,7 @@ html methylationAtlasSignals.html
         
         track saphVeinEndoth0RM
         type bigWig
-        longLabel Saphenous Vein - Endothel - Z000000RM
+        longLabel Methylation Atlas: Saphenous Vein - Endothel - Z000000RM
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -870,7 +870,7 @@ html methylationAtlasSignals.html
         
         track saphVeinEndoth0S7
         type bigWig
-        longLabel Saphenous Vein - Endothel - Z000000S7
+        longLabel Methylation Atlas: Saphenous Vein - Endothel - Z000000S7
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -885,7 +885,7 @@ html methylationAtlasSignals.html
         
         track saphVeinEndoth0SB
         type bigWig
-        longLabel Saphenous Vein - Endothel - Z000000SB
+        longLabel Methylation Atlas: Saphenous Vein - Endothel - Z000000SB
         viewLimits 0:1
         autoScale off
         color 255,105,180
@@ -900,7 +900,7 @@ html methylationAtlasSignals.html
         
         track bloodTMerged
         type bigWig
-        longLabel Blood T Cells Merged Samples
+        longLabel Methylation Atlas: Blood T Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -915,7 +915,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd30TV
         type bigWig
-        longLabel Blood - T CD3 - Z000000TV
+        longLabel Methylation Atlas: Blood - T CD3 - Z000000TV
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -930,7 +930,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd30UP
         type bigWig
-        longLabel Blood - T CD3 - Z000000UP
+        longLabel Methylation Atlas: Blood - T CD3 - Z000000UP
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -945,7 +945,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd40TT
         type bigWig
-        longLabel Blood - T CD4 - Z000000TT
+        longLabel Methylation Atlas: Blood - T CD4 - Z000000TT
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -960,7 +960,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd40U7
         type bigWig
-        longLabel Blood - T CD4 - Z000000U7
+        longLabel Methylation Atlas: Blood - T CD4 - Z000000U7
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -975,7 +975,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd40UM
         type bigWig
-        longLabel Blood - T CD4 - Z000000UM
+        longLabel Methylation Atlas: Blood - T CD4 - Z000000UM
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -990,7 +990,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd80TR
         type bigWig
-        longLabel Blood - T CD8 - Z000000TR
+        longLabel Methylation Atlas: Blood - T CD8 - Z000000TR
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1005,7 +1005,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd80U5
         type bigWig
-        longLabel Blood - T CD8 - Z000000U5
+        longLabel Methylation Atlas: Blood - T CD8 - Z000000U5
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1020,7 +1020,7 @@ html methylationAtlasSignals.html
         
         track bloodTCd80UK
         type bigWig
-        longLabel Blood - T CD8 - Z000000UK
+        longLabel Methylation Atlas: Blood - T CD8 - Z000000UK
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1035,7 +1035,7 @@ html methylationAtlasSignals.html
         
         track bloodTCenmemCd4417
         type bigWig
-        longLabel Blood - T CenMem CD4 - Z00000417
+        longLabel Methylation Atlas: Blood - T CenMem CD4 - Z00000417
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1050,7 +1050,7 @@ html methylationAtlasSignals.html
         
         track bloodTCenmemCd441D
         type bigWig
-        longLabel Blood - T CenMem CD4 - Z0000041D
+        longLabel Methylation Atlas: Blood - T CenMem CD4 - Z0000041D
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1065,7 +1065,7 @@ html methylationAtlasSignals.html
         
         track bloodTCenmemCd441N
         type bigWig
-        longLabel Blood - T CenMem CD4 - Z0000041N
+        longLabel Methylation Atlas: Blood - T CenMem CD4 - Z0000041N
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1080,7 +1080,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffCd8419
         type bigWig
-        longLabel Blood - T Eff CD8 - Z00000419
+        longLabel Methylation Atlas: Blood - T Eff CD8 - Z00000419
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1095,7 +1095,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffCd841F
         type bigWig
-        longLabel Blood - T Eff CD8 - Z0000041F
+        longLabel Methylation Atlas: Blood - T Eff CD8 - Z0000041F
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1110,7 +1110,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffCd841Q
         type bigWig
-        longLabel Blood - T Eff CD8 - Z0000041Q
+        longLabel Methylation Atlas: Blood - T Eff CD8 - Z0000041Q
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1125,7 +1125,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffmemCd4416
         type bigWig
-        longLabel Blood - T EffMem CD4 - Z00000416
+        longLabel Methylation Atlas: Blood - T EffMem CD4 - Z00000416
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1140,7 +1140,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffmemCd441C
         type bigWig
-        longLabel Blood - T EffMem CD4 - Z0000041C
+        longLabel Methylation Atlas: Blood - T EffMem CD4 - Z0000041C
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1155,7 +1155,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffmemCd441M
         type bigWig
-        longLabel Blood - T EffMem CD4 - Z0000041M
+        longLabel Methylation Atlas: Blood - T EffMem CD4 - Z0000041M
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1170,7 +1170,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffmemCd841A
         type bigWig
-        longLabel Blood - T EffMem CD8 - Z0000041A
+        longLabel Methylation Atlas: Blood - T EffMem CD8 - Z0000041A
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1185,7 +1185,7 @@ html methylationAtlasSignals.html
         
         track bloodTEffmemCd841G
         type bigWig
-        longLabel Blood - T EffMem CD8 - Z0000041G
+        longLabel Methylation Atlas: Blood - T EffMem CD8 - Z0000041G
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1200,7 +1200,7 @@ html methylationAtlasSignals.html
         
         track bloodTNaiveCd441E
         type bigWig
-        longLabel Blood - T Naive CD4 - Z0000041E
+        longLabel Methylation Atlas: Blood - T Naive CD4 - Z0000041E
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1215,7 +1215,7 @@ html methylationAtlasSignals.html
         
         track bloodTNaiveCd841B
         type bigWig
-        longLabel Blood - T Naive CD8 - Z0000041B
+        longLabel Methylation Atlas: Blood - T Naive CD8 - Z0000041B
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1230,7 +1230,7 @@ html methylationAtlasSignals.html
         
         track bloodTNaiveCd841H
         type bigWig
-        longLabel Blood - T Naive CD8 - Z0000041H
+        longLabel Methylation Atlas: Blood - T Naive CD8 - Z0000041H
         viewLimits 0:1
         autoScale off
         color 255,140,0
@@ -1245,7 +1245,7 @@ html methylationAtlasSignals.html
         
         track bloodBMerged
         type bigWig
-        longLabel Blood B Cells Merged Samples
+        longLabel Methylation Atlas: Blood B Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1260,7 +1260,7 @@ html methylationAtlasSignals.html
         
         track bloodBMem41J
         type bigWig
-        longLabel Blood - B Mem - Z0000041J
+        longLabel Methylation Atlas: Blood - B Mem - Z0000041J
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1275,7 +1275,7 @@ html methylationAtlasSignals.html
         
         track bloodBMem41K
         type bigWig
-        longLabel Blood - B Mem - Z0000041K
+        longLabel Methylation Atlas: Blood - B Mem - Z0000041K
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1290,7 +1290,7 @@ html methylationAtlasSignals.html
         
         track bloodB0TX
         type bigWig
-        longLabel Blood - B - Z000000TX
+        longLabel Methylation Atlas: Blood - B - Z000000TX
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1305,7 +1305,7 @@ html methylationAtlasSignals.html
         
         track bloodB0UB
         type bigWig
-        longLabel Blood - B - Z000000UB
+        longLabel Methylation Atlas: Blood - B - Z000000UB
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1320,7 +1320,7 @@ html methylationAtlasSignals.html
         
         track bloodB0UR
         type bigWig
-        longLabel Blood - B - Z000000UR
+        longLabel Methylation Atlas: Blood - B - Z000000UR
         viewLimits 0:1
         autoScale off
         color 255,165,0
@@ -1335,7 +1335,7 @@ html methylationAtlasSignals.html
         
         track bloodNkMerged
         type bigWig
-        longLabel Blood NK Cells Merged Samples
+        longLabel Methylation Atlas: Blood NK Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,127,80
@@ -1350,7 +1350,7 @@ html methylationAtlasSignals.html
         
         track bloodNk0TM
         type bigWig
-        longLabel Blood - NK - Z000000TM
+        longLabel Methylation Atlas: Blood - NK - Z000000TM
         viewLimits 0:1
         autoScale off
         color 255,127,80
@@ -1365,7 +1365,7 @@ html methylationAtlasSignals.html
         
         track bloodNk0U1
         type bigWig
-        longLabel Blood - NK - Z000000U1
+        longLabel Methylation Atlas: Blood - NK - Z000000U1
         viewLimits 0:1
         autoScale off
         color 255,127,80
@@ -1380,7 +1380,7 @@ html methylationAtlasSignals.html
         
         track bloodNk0UF
         type bigWig
-        longLabel Blood - NK - Z000000UF
+        longLabel Methylation Atlas: Blood - NK - Z000000UF
         viewLimits 0:1
         autoScale off
         color 255,127,80
@@ -1395,7 +1395,7 @@ html methylationAtlasSignals.html
         
         track bloodMonoMacroMerged
         type bigWig
-        longLabel Blood Monocytes Macrophages Merged Samples
+        longLabel Methylation Atlas: Blood Monocytes Macrophages Merged Samples
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1410,7 +1410,7 @@ html methylationAtlasSignals.html
         
         track bloodMono0TP
         type bigWig
-        longLabel Blood - Monocytes - Z000000TP
+        longLabel Methylation Atlas: Blood - Monocytes - Z000000TP
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1425,7 +1425,7 @@ html methylationAtlasSignals.html
         
         track bloodMono0U3
         type bigWig
-        longLabel Blood - Monocytes - Z000000U3
+        longLabel Methylation Atlas: Blood - Monocytes - Z000000U3
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1440,7 +1440,7 @@ html methylationAtlasSignals.html
         
         track bloodMono0UH
         type bigWig
-        longLabel Blood - Monocytes - Z000000UH
+        longLabel Methylation Atlas: Blood - Monocytes - Z000000UH
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1455,7 +1455,7 @@ html methylationAtlasSignals.html
         
         track colonMacro444
         type bigWig
-        longLabel Colon - Macrophages - Z00000444
+        longLabel Methylation Atlas: Colon - Macrophages - Z00000444
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1470,7 +1470,7 @@ html methylationAtlasSignals.html
         
         track colonMacro446
         type bigWig
-        longLabel Colon - Macrophages - Z00000446
+        longLabel Methylation Atlas: Colon - Macrophages - Z00000446
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1485,7 +1485,7 @@ html methylationAtlasSignals.html
         
         track liverMacro43P
         type bigWig
-        longLabel Liver - Macrophages - Z0000043P
+        longLabel Methylation Atlas: Liver - Macrophages - Z0000043P
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1500,7 +1500,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoMacro448
         type bigWig
-        longLabel Lung Alveolar - Macrophages - Z00000448
+        longLabel Methylation Atlas: Lung Alveolar - Macrophages - Z00000448
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1515,7 +1515,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoMacro44C
         type bigWig
-        longLabel Lung Alveolar - Macrophages - Z0000044C
+        longLabel Methylation Atlas: Lung Alveolar - Macrophages - Z0000044C
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1530,7 +1530,7 @@ html methylationAtlasSignals.html
         
         track lungInterMacro447
         type bigWig
-        longLabel Lung Interstitial - Macrophages - Z00000447
+        longLabel Methylation Atlas: Lung Interstitial - Macrophages - Z00000447
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1545,7 +1545,7 @@ html methylationAtlasSignals.html
         
         track lungInterMacro44D
         type bigWig
-        longLabel Lung Interstitial - Macrophages - Z0000044D
+        longLabel Methylation Atlas: Lung Interstitial - Macrophages - Z0000044D
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1560,7 +1560,7 @@ html methylationAtlasSignals.html
         
         track lungInterMacro44E
         type bigWig
-        longLabel Lung Interstitial - Macrophages - Z0000044E
+        longLabel Methylation Atlas: Lung Interstitial - Macrophages - Z0000044E
         viewLimits 0:1
         autoScale off
         color 244,164,96
@@ -1575,7 +1575,7 @@ html methylationAtlasSignals.html
         
         track bloodGranulMerged
         type bigWig
-        longLabel Blood Granulocytes Merged Samples
+        longLabel Methylation Atlas: Blood Granulocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,99,71
@@ -1590,7 +1590,7 @@ html methylationAtlasSignals.html
         
         track bloodGran0TZ
         type bigWig
-        longLabel Blood - Granulocytes - Z000000TZ
+        longLabel Methylation Atlas: Blood - Granulocytes - Z000000TZ
         viewLimits 0:1
         autoScale off
         color 255,99,71
@@ -1605,7 +1605,7 @@ html methylationAtlasSignals.html
         
         track bloodGran0UD
         type bigWig
-        longLabel Blood - Granulocytes - Z000000UD
+        longLabel Methylation Atlas: Blood - Granulocytes - Z000000UD
         viewLimits 0:1
         autoScale off
         color 255,99,71
@@ -1620,7 +1620,7 @@ html methylationAtlasSignals.html
         
         track bloodGran0UT
         type bigWig
-        longLabel Blood - Granulocytes - Z000000UT
+        longLabel Methylation Atlas: Blood - Granulocytes - Z000000UT
         viewLimits 0:1
         autoScale off
         color 255,99,71
@@ -1635,7 +1635,7 @@ html methylationAtlasSignals.html
         
         track erythProgMerged
         type bigWig
-        longLabel Erythrocyte Progenitors Merged Samples
+        longLabel Methylation Atlas: Erythrocyte Progenitors Merged Samples
         viewLimits 0:1
         autoScale off
         color 205,51,51
@@ -1650,7 +1650,7 @@ html methylationAtlasSignals.html
         
         track boneMarrowErythProg0RF
         type bigWig
-        longLabel Bone marrow - Erythrocyte progenitors - Z000000RF
+        longLabel Methylation Atlas: Bone marrow - Erythrocyte progenitors - Z000000RF
         viewLimits 0:1
         autoScale off
         color 205,51,51
@@ -1665,7 +1665,7 @@ html methylationAtlasSignals.html
         
         track boneMarrowErythProg0RH
         type bigWig
-        longLabel Bone marrow - Erythrocyte progenitors - Z000000RH
+        longLabel Methylation Atlas: Bone marrow - Erythrocyte progenitors - Z000000RH
         viewLimits 0:1
         autoScale off
         color 205,51,51
@@ -1680,7 +1680,7 @@ html methylationAtlasSignals.html
         
         track boneMarrowErythProg0RK
         type bigWig
-        longLabel Bone marrow - Erythrocyte progenitors - Z000000RK
+        longLabel Methylation Atlas: Bone marrow - Erythrocyte progenitors - Z000000RK
         viewLimits 0:1
         autoScale off
         color 205,51,51
@@ -1695,7 +1695,7 @@ html methylationAtlasSignals.html
         
         track headNeckEpMerged
         type bigWig
-        longLabel Head Neck Epithelium Merged Samples
+        longLabel Methylation Atlas: Head Neck Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1710,7 +1710,7 @@ html methylationAtlasSignals.html
         
         track esophEp0PZ
         type bigWig
-        longLabel Esophagus - Epithelial - Z000000PZ
+        longLabel Methylation Atlas: Esophagus - Epithelial - Z000000PZ
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1725,7 +1725,7 @@ html methylationAtlasSignals.html
         
         track esophEp426
         type bigWig
-        longLabel Esophagus - Epithelial - Z00000426
+        longLabel Methylation Atlas: Esophagus - Epithelial - Z00000426
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1740,7 +1740,7 @@ html methylationAtlasSignals.html
         
         track larynxEp0QB
         type bigWig
-        longLabel Larynx - Epithelial - Z000000QB
+        longLabel Methylation Atlas: Larynx - Epithelial - Z000000QB
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1755,7 +1755,7 @@ html methylationAtlasSignals.html
         
         track pharynxEp44A
         type bigWig
-        longLabel Pharynx - Epithelial - Z0000044A
+        longLabel Methylation Atlas: Pharynx - Epithelial - Z0000044A
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1770,7 +1770,7 @@ html methylationAtlasSignals.html
         
         track tongueEp0QV
         type bigWig
-        longLabel Tongue - Epithelial - Z000000QV
+        longLabel Methylation Atlas: Tongue - Epithelial - Z000000QV
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1785,7 +1785,7 @@ html methylationAtlasSignals.html
         
         track tongueEp449
         type bigWig
-        longLabel Tongue - Epithelial - Z00000449
+        longLabel Methylation Atlas: Tongue - Epithelial - Z00000449
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1800,7 +1800,7 @@ html methylationAtlasSignals.html
         
         track tongueEp44F
         type bigWig
-        longLabel Tongue - Epithelial - Z0000044F
+        longLabel Methylation Atlas: Tongue - Epithelial - Z0000044F
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1815,7 +1815,7 @@ html methylationAtlasSignals.html
         
         track tongueBaseEp44B
         type bigWig
-        longLabel Tongue base - Epithelial - Z0000044B
+        longLabel Methylation Atlas: Tongue base - Epithelial - Z0000044B
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1830,7 +1830,7 @@ html methylationAtlasSignals.html
         
         track tonsilPalatineEp0QF
         type bigWig
-        longLabel Tonsil Palatine - Epithelial - Z000000QF
+        longLabel Methylation Atlas: Tonsil Palatine - Epithelial - Z000000QF
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1845,7 +1845,7 @@ html methylationAtlasSignals.html
         
         track tonsilPalatineEp0RP
         type bigWig
-        longLabel Tonsil Palatine - Epithelial - Z000000RP
+        longLabel Methylation Atlas: Tonsil Palatine - Epithelial - Z000000RP
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1860,7 +1860,7 @@ html methylationAtlasSignals.html
         
         track tonsilPalatineEp0RR
         type bigWig
-        longLabel Tonsil Palatine - Epithelial - Z000000RR
+        longLabel Methylation Atlas: Tonsil Palatine - Epithelial - Z000000RR
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1875,7 +1875,7 @@ html methylationAtlasSignals.html
         
         track tonsilPharyngealEp0Q9
         type bigWig
-        longLabel Tonsil Pharyngeal - Epithelial - Z000000Q9
+        longLabel Methylation Atlas: Tonsil Pharyngeal - Epithelial - Z000000Q9
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1890,7 +1890,7 @@ html methylationAtlasSignals.html
         
         track tonsilPharyngealEp0S1
         type bigWig
-        longLabel Tonsil Pharyngeal - Epithelial - Z000000S1
+        longLabel Methylation Atlas: Tonsil Pharyngeal - Epithelial - Z000000S1
         viewLimits 0:1
         autoScale off
         color 0,206,209
@@ -1905,7 +1905,7 @@ html methylationAtlasSignals.html
         
         track lungBronEpMerged
         type bigWig
-        longLabel Lung Bronchus Epithelium Merged Samples
+        longLabel Methylation Atlas: Lung Bronchus Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 100,149,237
@@ -1920,7 +1920,7 @@ html methylationAtlasSignals.html
         
         track lungBronEp0QD
         type bigWig
-        longLabel Lung Bronchus - Epithelial - Z000000QD
+        longLabel Methylation Atlas: Lung Bronchus - Epithelial - Z000000QD
         viewLimits 0:1
         autoScale off
         color 100,149,237
@@ -1935,7 +1935,7 @@ html methylationAtlasSignals.html
         
         track lungBronEp0RZ
         type bigWig
-        longLabel Lung Bronchus - Epithelial - Z000000RZ
+        longLabel Methylation Atlas: Lung Bronchus - Epithelial - Z000000RZ
         viewLimits 0:1
         autoScale off
         color 100,149,237
@@ -1950,7 +1950,7 @@ html methylationAtlasSignals.html
         
         track lungBronEp0S5
         type bigWig
-        longLabel Lung Bronchus - Epithelial - Z000000S5
+        longLabel Methylation Atlas: Lung Bronchus - Epithelial - Z000000S5
         viewLimits 0:1
         autoScale off
         color 100,149,237
@@ -1965,7 +1965,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEpMerged
         type bigWig
-        longLabel Lung Alveolar Epithelium Merged Samples
+        longLabel Methylation Atlas: Lung Alveolar Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 135,206,250
@@ -1980,7 +1980,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEp0T1
         type bigWig
-        longLabel Lung Alveolar - Epithelial - Z000000T1
+        longLabel Methylation Atlas: Lung Alveolar - Epithelial - Z000000T1
         viewLimits 0:1
         autoScale off
         color 135,206,250
@@ -1995,7 +1995,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEp0VC
         type bigWig
-        longLabel Lung Alveolar - Epithelial - Z000000VC
+        longLabel Methylation Atlas: Lung Alveolar - Epithelial - Z000000VC
         viewLimits 0:1
         autoScale off
         color 135,206,250
@@ -2010,7 +2010,7 @@ html methylationAtlasSignals.html
         
         track lungAlveoEp0VE
         type bigWig
-        longLabel Lung Alveolar - Epithelial - Z000000VE
+        longLabel Methylation Atlas: Lung Alveolar - Epithelial - Z000000VE
         viewLimits 0:1
         autoScale off
         color 135,206,250
@@ -2025,7 +2025,7 @@ html methylationAtlasSignals.html
         
         track lungPleura42B
         type bigWig
-        longLabel Lung - Pleura - Z0000042B
+        longLabel Methylation Atlas: Lung - Pleura - Z0000042B
         viewLimits 0:1
         autoScale off
         color 135,206,250
@@ -2040,7 +2040,7 @@ html methylationAtlasSignals.html
         
         track breastBasalEpMerged
         type bigWig
-        longLabel Breast Basal Epithelium Merged Samples
+        longLabel Methylation Atlas: Breast Basal Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 219,112,147
@@ -2055,7 +2055,7 @@ html methylationAtlasSignals.html
         
         track breastBasalEp0V6
         type bigWig
-        longLabel Breast Basal - Epithelial - Z000000V6
+        longLabel Methylation Atlas: Breast Basal - Epithelial - Z000000V6
         viewLimits 0:1
         autoScale off
         color 219,112,147
@@ -2070,7 +2070,7 @@ html methylationAtlasSignals.html
         
         track breastBasalEp0VG
         type bigWig
-        longLabel Breast Basal - Epithelial - Z000000VG
+        longLabel Methylation Atlas: Breast Basal - Epithelial - Z000000VG
         viewLimits 0:1
         autoScale off
         color 219,112,147
@@ -2085,7 +2085,7 @@ html methylationAtlasSignals.html
         
         track breastBasalEp0VL
         type bigWig
-        longLabel Breast Basal - Epithelial - Z000000VL
+        longLabel Methylation Atlas: Breast Basal - Epithelial - Z000000VL
         viewLimits 0:1
         autoScale off
         color 219,112,147
@@ -2100,7 +2100,7 @@ html methylationAtlasSignals.html
         
         track breastBasalEp43E
         type bigWig
-        longLabel Breast Basal - Epithelial - Z0000043E
+        longLabel Methylation Atlas: Breast Basal - Epithelial - Z0000043E
         viewLimits 0:1
         autoScale off
         color 219,112,147
@@ -2115,7 +2115,7 @@ html methylationAtlasSignals.html
         
         track breastLuminalEpMerged
         type bigWig
-        longLabel Breast Luminal Epithelium Merged Samples
+        longLabel Methylation Atlas: Breast Luminal Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,182,193
@@ -2130,7 +2130,7 @@ html methylationAtlasSignals.html
         
         track breastLumEp0V2
         type bigWig
-        longLabel Breast Luminal - Epithelial - Z000000V2
+        longLabel Methylation Atlas: Breast Luminal - Epithelial - Z000000V2
         viewLimits 0:1
         autoScale off
         color 255,182,193
@@ -2145,7 +2145,7 @@ html methylationAtlasSignals.html
         
         track breastLumEp0VJ
         type bigWig
-        longLabel Breast Luminal - Epithelial - Z000000VJ
+        longLabel Methylation Atlas: Breast Luminal - Epithelial - Z000000VJ
         viewLimits 0:1
         autoScale off
         color 255,182,193
@@ -2160,7 +2160,7 @@ html methylationAtlasSignals.html
         
         track breastLumEp0VN
         type bigWig
-        longLabel Breast Luminal - Epithelial - Z000000VN
+        longLabel Methylation Atlas: Breast Luminal - Epithelial - Z000000VN
         viewLimits 0:1
         autoScale off
         color 255,182,193
@@ -2175,7 +2175,7 @@ html methylationAtlasSignals.html
         
         track pancAlphaMerged
         type bigWig
-        longLabel Pancreas Alpha Cells Merged Samples
+        longLabel Methylation Atlas: Pancreas Alpha Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 218,165,32
@@ -2190,7 +2190,7 @@ html methylationAtlasSignals.html
         
         track pancAlpha453
         type bigWig
-        longLabel Pancreas - Alpha - Z00000453
+        longLabel Methylation Atlas: Pancreas - Alpha - Z00000453
         viewLimits 0:1
         autoScale off
         color 218,165,32
@@ -2205,7 +2205,7 @@ html methylationAtlasSignals.html
         
         track pancAlpha456
         type bigWig
-        longLabel Pancreas - Alpha - Z00000456
+        longLabel Methylation Atlas: Pancreas - Alpha - Z00000456
         viewLimits 0:1
         autoScale off
         color 218,165,32
@@ -2220,7 +2220,7 @@ html methylationAtlasSignals.html
         
         track pancAlpha459
         type bigWig
-        longLabel Pancreas - Alpha - Z00000459
+        longLabel Methylation Atlas: Pancreas - Alpha - Z00000459
         viewLimits 0:1
         autoScale off
         color 218,165,32
@@ -2235,7 +2235,7 @@ html methylationAtlasSignals.html
         
         track pancBetaMerged
         type bigWig
-        longLabel Pancreas Beta Cells Merged Samples
+        longLabel Methylation Atlas: Pancreas Beta Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,215,0
@@ -2250,7 +2250,7 @@ html methylationAtlasSignals.html
         
         track pancBeta452
         type bigWig
-        longLabel Pancreas - Beta - Z00000452
+        longLabel Methylation Atlas: Pancreas - Beta - Z00000452
         viewLimits 0:1
         autoScale off
         color 255,215,0
@@ -2265,7 +2265,7 @@ html methylationAtlasSignals.html
         
         track pancBeta455
         type bigWig
-        longLabel Pancreas - Beta - Z00000455
+        longLabel Methylation Atlas: Pancreas - Beta - Z00000455
         viewLimits 0:1
         autoScale off
         color 255,215,0
@@ -2280,7 +2280,7 @@ html methylationAtlasSignals.html
         
         track pancBeta458
         type bigWig
-        longLabel Pancreas - Beta - Z00000458
+        longLabel Methylation Atlas: Pancreas - Beta - Z00000458
         viewLimits 0:1
         autoScale off
         color 255,215,0
@@ -2295,7 +2295,7 @@ html methylationAtlasSignals.html
         
         track pancDeltaMerged
         type bigWig
-        longLabel Pancreas Delta Cells Merged Samples
+        longLabel Methylation Atlas: Pancreas Delta Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 240,230,140
@@ -2310,7 +2310,7 @@ html methylationAtlasSignals.html
         
         track pancDelta451
         type bigWig
-        longLabel Pancreas - Delta - Z00000451
+        longLabel Methylation Atlas: Pancreas - Delta - Z00000451
         viewLimits 0:1
         autoScale off
         color 240,230,140
@@ -2325,7 +2325,7 @@ html methylationAtlasSignals.html
         
         track pancDelta454
         type bigWig
-        longLabel Pancreas - Delta - Z00000454
+        longLabel Methylation Atlas: Pancreas - Delta - Z00000454
         viewLimits 0:1
         autoScale off
         color 240,230,140
@@ -2340,7 +2340,7 @@ html methylationAtlasSignals.html
         
         track pancDelta457
         type bigWig
-        longLabel Pancreas - Delta - Z00000457
+        longLabel Methylation Atlas: Pancreas - Delta - Z00000457
         viewLimits 0:1
         autoScale off
         color 240,230,140
@@ -2355,7 +2355,7 @@ html methylationAtlasSignals.html
         
         track pancAcinarMerged
         type bigWig
-        longLabel Pancreas Acinar Cells Merged Samples
+        longLabel Methylation Atlas: Pancreas Acinar Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 189,183,107
@@ -2370,7 +2370,7 @@ html methylationAtlasSignals.html
         
         track pancAcinar0QX
         type bigWig
-        longLabel Pancreas - Acinar - Z000000QX
+        longLabel Methylation Atlas: Pancreas - Acinar - Z000000QX
         viewLimits 0:1
         autoScale off
         color 189,183,107
@@ -2385,7 +2385,7 @@ html methylationAtlasSignals.html
         
         track pancAcinar43W
         type bigWig
-        longLabel Pancreas - Acinar - Z0000043W
+        longLabel Methylation Atlas: Pancreas - Acinar - Z0000043W
         viewLimits 0:1
         autoScale off
         color 189,183,107
@@ -2400,7 +2400,7 @@ html methylationAtlasSignals.html
         
         track pancAcinar43X
         type bigWig
-        longLabel Pancreas - Acinar - Z0000043X
+        longLabel Methylation Atlas: Pancreas - Acinar - Z0000043X
         viewLimits 0:1
         autoScale off
         color 189,183,107
@@ -2415,7 +2415,7 @@ html methylationAtlasSignals.html
         
         track pancAcinar43Y
         type bigWig
-        longLabel Pancreas - Acinar - Z0000043Y
+        longLabel Methylation Atlas: Pancreas - Acinar - Z0000043Y
         viewLimits 0:1
         autoScale off
         color 189,183,107
@@ -2430,7 +2430,7 @@ html methylationAtlasSignals.html
         
         track pancDuctMerged
         type bigWig
-        longLabel Pancreas Duct Cells Merged Samples
+        longLabel Methylation Atlas: Pancreas Duct Cells Merged Samples
         viewLimits 0:1
         autoScale off
         color 238,232,170
@@ -2445,7 +2445,7 @@ html methylationAtlasSignals.html
         
         track pancDuct0QZ
         type bigWig
-        longLabel Pancreas - Duct - Z000000QZ
+        longLabel Methylation Atlas: Pancreas - Duct - Z000000QZ
         viewLimits 0:1
         autoScale off
         color 238,232,170
@@ -2460,7 +2460,7 @@ html methylationAtlasSignals.html
         
         track pancDuct43T
         type bigWig
-        longLabel Pancreas - Duct - Z0000043T
+        longLabel Methylation Atlas: Pancreas - Duct - Z0000043T
         viewLimits 0:1
         autoScale off
         color 238,232,170
@@ -2475,7 +2475,7 @@ html methylationAtlasSignals.html
         
         track pancDuct43U
         type bigWig
-        longLabel Pancreas - Duct - Z0000043U
+        longLabel Methylation Atlas: Pancreas - Duct - Z0000043U
         viewLimits 0:1
         autoScale off
         color 238,232,170
@@ -2490,7 +2490,7 @@ html methylationAtlasSignals.html
         
         track pancDuct43V
         type bigWig
-        longLabel Pancreas - Duct - Z0000043V
+        longLabel Methylation Atlas: Pancreas - Duct - Z0000043V
         viewLimits 0:1
         autoScale off
         color 238,232,170
@@ -2505,7 +2505,7 @@ html methylationAtlasSignals.html
         
         track liverHepMerged
         type bigWig
-        longLabel Liver Hepatocytes Merged Samples
+        longLabel Methylation Atlas: Liver Hepatocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2520,7 +2520,7 @@ html methylationAtlasSignals.html
         
         track liverHep0R3
         type bigWig
-        longLabel Liver - Hepatocytes - Z000000R3
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z000000R3
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2535,7 +2535,7 @@ html methylationAtlasSignals.html
         
         track liverHep0T3
         type bigWig
-        longLabel Liver - Hepatocytes - Z000000T3
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z000000T3
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2550,7 +2550,7 @@ html methylationAtlasSignals.html
         
         track liverHep431
         type bigWig
-        longLabel Liver - Hepatocytes - Z00000431
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z00000431
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2565,7 +2565,7 @@ html methylationAtlasSignals.html
         
         track liverHep43Q
         type bigWig
-        longLabel Liver - Hepatocytes - Z0000043Q
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z0000043Q
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2580,7 +2580,7 @@ html methylationAtlasSignals.html
         
         track liverHep44H
         type bigWig
-        longLabel Liver - Hepatocytes - Z0000044H
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z0000044H
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2595,7 +2595,7 @@ html methylationAtlasSignals.html
         
         track liverHep44M
         type bigWig
-        longLabel Liver - Hepatocytes - Z0000044M
+        longLabel Methylation Atlas: Liver - Hepatocytes - Z0000044M
         viewLimits 0:1
         autoScale off
         color 139,69,19
@@ -2610,7 +2610,7 @@ html methylationAtlasSignals.html
         
         track kidneyEpMerged
         type bigWig
-        longLabel Kidney Epithelium Merged Samples
+        longLabel Methylation Atlas: Kidney Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2625,7 +2625,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomEp45K
         type bigWig
-        longLabel Kidney Glomerular - Epithelial - Z0000045K
+        longLabel Methylation Atlas: Kidney Glomerular - Epithelial - Z0000045K
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2640,7 +2640,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomEp45L
         type bigWig
-        longLabel Kidney Glomerular - Epithelial - Z0000045L
+        longLabel Methylation Atlas: Kidney Glomerular - Epithelial - Z0000045L
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2655,7 +2655,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomPodo42W
         type bigWig
-        longLabel Kidney Glomerular - Podocytes - Z0000042W
+        longLabel Methylation Atlas: Kidney Glomerular - Podocytes - Z0000042W
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2670,7 +2670,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomPodo441
         type bigWig
-        longLabel Kidney Glomerular - Podocytes - Z00000441
+        longLabel Methylation Atlas: Kidney Glomerular - Podocytes - Z00000441
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2685,7 +2685,7 @@ html methylationAtlasSignals.html
         
         track kidneyGlomPodo442
         type bigWig
-        longLabel Kidney Glomerular - Podocytes - Z00000442
+        longLabel Methylation Atlas: Kidney Glomerular - Podocytes - Z00000442
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2700,7 +2700,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEp0QH
         type bigWig
-        longLabel Kidney Tubular - Epithelial - Z000000QH
+        longLabel Methylation Atlas: Kidney Tubular - Epithelial - Z000000QH
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2715,7 +2715,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEp43Z
         type bigWig
-        longLabel Kidney Tubular - Epithelial - Z0000043Z
+        longLabel Methylation Atlas: Kidney Tubular - Epithelial - Z0000043Z
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2730,7 +2730,7 @@ html methylationAtlasSignals.html
         
         track kidneyTubEp440
         type bigWig
-        longLabel Kidney Tubular - Epithelial - Z00000440
+        longLabel Methylation Atlas: Kidney Tubular - Epithelial - Z00000440
         viewLimits 0:1
         autoScale off
         color 255,140,105
@@ -2745,7 +2745,7 @@ html methylationAtlasSignals.html
         
         track gastricEpMerged
         type bigWig
-        longLabel Gastric Epithelium Merged Samples
+        longLabel Methylation Atlas: Gastric Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2760,7 +2760,7 @@ html methylationAtlasSignals.html
         
         track gastAntEndo437
         type bigWig
-        longLabel Gastric antrum - Endocrine - Z00000437
+        longLabel Methylation Atlas: Gastric antrum - Endocrine - Z00000437
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2775,7 +2775,7 @@ html methylationAtlasSignals.html
         
         track gastAntEndo438
         type bigWig
-        longLabel Gastric antrum - Endocrine - Z00000438
+        longLabel Methylation Atlas: Gastric antrum - Endocrine - Z00000438
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2790,7 +2790,7 @@ html methylationAtlasSignals.html
         
         track gastAntEp0SF
         type bigWig
-        longLabel Gastric antrum - Epithelial - Z000000SF
+        longLabel Methylation Atlas: Gastric antrum - Epithelial - Z000000SF
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2805,7 +2805,7 @@ html methylationAtlasSignals.html
         
         track gastAntEp0SP
         type bigWig
-        longLabel Gastric antrum - Epithelial - Z000000SP
+        longLabel Methylation Atlas: Gastric antrum - Epithelial - Z000000SP
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2820,7 +2820,7 @@ html methylationAtlasSignals.html
         
         track gastAntEp0SR
         type bigWig
-        longLabel Gastric antrum - Epithelial - Z000000SR
+        longLabel Methylation Atlas: Gastric antrum - Epithelial - Z000000SR
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2835,7 +2835,7 @@ html methylationAtlasSignals.html
         
         track gastBodyEp0SD
         type bigWig
-        longLabel Gastric body - Epithelial - Z000000SD
+        longLabel Methylation Atlas: Gastric body - Epithelial - Z000000SD
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2850,7 +2850,7 @@ html methylationAtlasSignals.html
         
         track gastBodyEp0SM
         type bigWig
-        longLabel Gastric body - Epithelial - Z000000SM
+        longLabel Methylation Atlas: Gastric body - Epithelial - Z000000SM
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2865,7 +2865,7 @@ html methylationAtlasSignals.html
         
         track gastBodyEp0ST
         type bigWig
-        longLabel Gastric body - Epithelial - Z000000ST
+        longLabel Methylation Atlas: Gastric body - Epithelial - Z000000ST
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2880,7 +2880,7 @@ html methylationAtlasSignals.html
         
         track gastFundEp0RX
         type bigWig
-        longLabel Gastric fundus - Epithelial - Z000000RX
+        longLabel Methylation Atlas: Gastric fundus - Epithelial - Z000000RX
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2895,7 +2895,7 @@ html methylationAtlasSignals.html
         
         track gastFundEp0SK
         type bigWig
-        longLabel Gastric fundus - Epithelial - Z000000SK
+        longLabel Methylation Atlas: Gastric fundus - Epithelial - Z000000SK
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2910,7 +2910,7 @@ html methylationAtlasSignals.html
         
         track gastFundEp0SV
         type bigWig
-        longLabel Gastric fundus - Epithelial - Z000000SV
+        longLabel Methylation Atlas: Gastric fundus - Epithelial - Z000000SV
         viewLimits 0:1
         autoScale off
         color 60,179,113
@@ -2925,7 +2925,7 @@ html methylationAtlasSignals.html
         
         track smallIntEpMerged
         type bigWig
-        longLabel Small Intestine Epithelium Merged Samples
+        longLabel Methylation Atlas: Small Intestine Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -2940,7 +2940,7 @@ html methylationAtlasSignals.html
         
         track smIntEndo436
         type bigWig
-        longLabel Small int - Endocrine - Z00000436
+        longLabel Methylation Atlas: Small int - Endocrine - Z00000436
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -2955,7 +2955,7 @@ html methylationAtlasSignals.html
         
         track smIntEp0RT
         type bigWig
-        longLabel Small int - Epithelial - Z000000RT
+        longLabel Methylation Atlas: Small int - Epithelial - Z000000RT
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -2970,7 +2970,7 @@ html methylationAtlasSignals.html
         
         track smIntEp0UW
         type bigWig
-        longLabel Small int - Epithelial - Z000000UW
+        longLabel Methylation Atlas: Small int - Epithelial - Z000000UW
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -2985,7 +2985,7 @@ html methylationAtlasSignals.html
         
         track smIntEp0UY
         type bigWig
-        longLabel Small int - Epithelial - Z000000UY
+        longLabel Methylation Atlas: Small int - Epithelial - Z000000UY
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -3000,7 +3000,7 @@ html methylationAtlasSignals.html
         
         track smIntEp42V
         type bigWig
-        longLabel Small int - Epithelial - Z0000042V
+        longLabel Methylation Atlas: Small int - Epithelial - Z0000042V
         viewLimits 0:1
         autoScale off
         color 46,139,87
@@ -3015,7 +3015,7 @@ html methylationAtlasSignals.html
         
         track colonEpMerged
         type bigWig
-        longLabel Colon Epithelium Merged Samples
+        longLabel Methylation Atlas: Colon Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3030,7 +3030,7 @@ html methylationAtlasSignals.html
         
         track colonLeftEndo44J
         type bigWig
-        longLabel Colon Left - Endocrine - Z0000044J
+        longLabel Methylation Atlas: Colon Left - Endocrine - Z0000044J
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3045,7 +3045,7 @@ html methylationAtlasSignals.html
         
         track colonLeftEndo44T
         type bigWig
-        longLabel Colon Left - Endocrine - Z0000044T
+        longLabel Methylation Atlas: Colon Left - Endocrine - Z0000044T
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3060,7 +3060,7 @@ html methylationAtlasSignals.html
         
         track colonLeftEp0VA
         type bigWig
-        longLabel Colon Left - Epithelial - Z000000VA
+        longLabel Methylation Atlas: Colon Left - Epithelial - Z000000VA
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3075,7 +3075,7 @@ html methylationAtlasSignals.html
         
         track colonLeftEp43B
         type bigWig
-        longLabel Colon Left - Epithelial - Z0000043B
+        longLabel Methylation Atlas: Colon Left - Epithelial - Z0000043B
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3090,7 +3090,7 @@ html methylationAtlasSignals.html
         
         track colonLeftEp43C
         type bigWig
-        longLabel Colon Left - Epithelial - Z0000043C
+        longLabel Methylation Atlas: Colon Left - Epithelial - Z0000043C
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3105,7 +3105,7 @@ html methylationAtlasSignals.html
         
         track colonRightEndo44S
         type bigWig
-        longLabel Colon Right - Endocrine - Z0000044S
+        longLabel Methylation Atlas: Colon Right - Endocrine - Z0000044S
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3120,7 +3120,7 @@ html methylationAtlasSignals.html
         
         track colonRightEp0V0
         type bigWig
-        longLabel Colon Right - Epithelial - Z000000V0
+        longLabel Methylation Atlas: Colon Right - Epithelial - Z000000V0
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3135,7 +3135,7 @@ html methylationAtlasSignals.html
         
         track colonRightEp0V8
         type bigWig
-        longLabel Colon Right - Epithelial - Z000000V8
+        longLabel Methylation Atlas: Colon Right - Epithelial - Z000000V8
         viewLimits 0:1
         autoScale off
         color 34,139,34
@@ -3150,7 +3150,7 @@ html methylationAtlasSignals.html
         
         track bladderEpMerged
         type bigWig
-        longLabel Bladder Epithelium Merged Samples
+        longLabel Methylation Atlas: Bladder Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3165,7 +3165,7 @@ html methylationAtlasSignals.html
         
         track bladderEp0QM
         type bigWig
-        longLabel Bladder - Epithelial - Z000000QM
+        longLabel Methylation Atlas: Bladder - Epithelial - Z000000QM
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3180,7 +3180,7 @@ html methylationAtlasSignals.html
         
         track bladderEp0QP
         type bigWig
-        longLabel Bladder - Epithelial - Z000000QP
+        longLabel Methylation Atlas: Bladder - Epithelial - Z000000QP
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3195,7 +3195,7 @@ html methylationAtlasSignals.html
         
         track bladderEp43F
         type bigWig
-        longLabel Bladder - Epithelial - Z0000043F
+        longLabel Methylation Atlas: Bladder - Epithelial - Z0000043F
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3210,7 +3210,7 @@ html methylationAtlasSignals.html
         
         track bladderEp44L
         type bigWig
-        longLabel Bladder - Epithelial - Z0000044L
+        longLabel Methylation Atlas: Bladder - Epithelial - Z0000044L
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3225,7 +3225,7 @@ html methylationAtlasSignals.html
         
         track bladderEp450
         type bigWig
-        longLabel Bladder - Epithelial - Z00000450
+        longLabel Methylation Atlas: Bladder - Epithelial - Z00000450
         viewLimits 0:1
         autoScale off
         color 186,85,211
@@ -3240,7 +3240,7 @@ html methylationAtlasSignals.html
         
         track prostateEpMerged
         type bigWig
-        longLabel Prostate Epithelium Merged Samples
+        longLabel Methylation Atlas: Prostate Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 153,50,204
@@ -3255,7 +3255,7 @@ html methylationAtlasSignals.html
         
         track prostEp0RV
         type bigWig
-        longLabel Prostate - Epithelial - Z000000RV
+        longLabel Methylation Atlas: Prostate - Epithelial - Z000000RV
         viewLimits 0:1
         autoScale off
         color 153,50,204
@@ -3270,7 +3270,7 @@ html methylationAtlasSignals.html
         
         track prostEp0S3
         type bigWig
-        longLabel Prostate - Epithelial - Z000000S3
+        longLabel Methylation Atlas: Prostate - Epithelial - Z000000S3
         viewLimits 0:1
         autoScale off
         color 153,50,204
@@ -3285,7 +3285,7 @@ html methylationAtlasSignals.html
         
         track prostEp45F
         type bigWig
-        longLabel Prostate - Epithelial - Z0000045F
+        longLabel Methylation Atlas: Prostate - Epithelial - Z0000045F
         viewLimits 0:1
         autoScale off
         color 153,50,204
@@ -3300,7 +3300,7 @@ html methylationAtlasSignals.html
         
         track prostEp45G
         type bigWig
-        longLabel Prostate - Epithelial - Z0000045G
+        longLabel Methylation Atlas: Prostate - Epithelial - Z0000045G
         viewLimits 0:1
         autoScale off
         color 153,50,204
@@ -3315,7 +3315,7 @@ html methylationAtlasSignals.html
         
         track fallopianEpMerged
         type bigWig
-        longLabel Fallopian Epithelium Merged Samples
+        longLabel Methylation Atlas: Fallopian Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 218,112,214
@@ -3330,7 +3330,7 @@ html methylationAtlasSignals.html
         
         track fallopEp0Q7
         type bigWig
-        longLabel Fallopian - Epithelial - Z000000Q7
+        longLabel Methylation Atlas: Fallopian - Epithelial - Z000000Q7
         viewLimits 0:1
         autoScale off
         color 218,112,214
@@ -3345,7 +3345,7 @@ html methylationAtlasSignals.html
         
         track fallopEp0S9
         type bigWig
-        longLabel Fallopian - Epithelial - Z000000S9
+        longLabel Methylation Atlas: Fallopian - Epithelial - Z000000S9
         viewLimits 0:1
         autoScale off
         color 218,112,214
@@ -3360,7 +3360,7 @@ html methylationAtlasSignals.html
         
         track fallopEp0UV
         type bigWig
-        longLabel Fallopian - Epithelial - Z000000UV
+        longLabel Methylation Atlas: Fallopian - Epithelial - Z000000UV
         viewLimits 0:1
         autoScale off
         color 218,112,214
@@ -3375,7 +3375,7 @@ html methylationAtlasSignals.html
         
         track ovaryEpMerged
         type bigWig
-        longLabel Ovary Epithelium Merged Samples
+        longLabel Methylation Atlas: Ovary Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 221,160,221
@@ -3390,7 +3390,7 @@ html methylationAtlasSignals.html
         
         track endomEp434
         type bigWig
-        longLabel Endometrium - Epithelial - Z00000434
+        longLabel Methylation Atlas: Endometrium - Epithelial - Z00000434
         viewLimits 0:1
         autoScale off
         color 221,160,221
@@ -3405,7 +3405,7 @@ html methylationAtlasSignals.html
         
         track endomEp435
         type bigWig
-        longLabel Endometrium - Epithelial - Z00000435
+        longLabel Methylation Atlas: Endometrium - Epithelial - Z00000435
         viewLimits 0:1
         autoScale off
         color 221,160,221
@@ -3420,7 +3420,7 @@ html methylationAtlasSignals.html
         
         track endomEp43S
         type bigWig
-        longLabel Endometrium - Epithelial - Z0000043S
+        longLabel Methylation Atlas: Endometrium - Epithelial - Z0000043S
         viewLimits 0:1
         autoScale off
         color 221,160,221
@@ -3435,7 +3435,7 @@ html methylationAtlasSignals.html
         
         track ovaryEp0QT
         type bigWig
-        longLabel Ovary - Epithelial - Z000000QT
+        longLabel Methylation Atlas: Ovary - Epithelial - Z000000QT
         viewLimits 0:1
         autoScale off
         color 221,160,221
@@ -3450,7 +3450,7 @@ html methylationAtlasSignals.html
         
         track dermalFibroMerged
         type bigWig
-        longLabel Dermal Fibroblasts Merged Samples
+        longLabel Methylation Atlas: Dermal Fibroblasts Merged Samples
         viewLimits 0:1
         autoScale off
         color 245,222,179
@@ -3465,7 +3465,7 @@ html methylationAtlasSignals.html
         
         track dermFibro423
         type bigWig
-        longLabel Dermal - Fibroblasts - Z00000423
+        longLabel Methylation Atlas: Dermal - Fibroblasts - Z00000423
         viewLimits 0:1
         autoScale off
         color 245,222,179
@@ -3480,7 +3480,7 @@ html methylationAtlasSignals.html
         
         track epidKeratMerged
         type bigWig
-        longLabel Epidermal Keratinocytes Merged Samples
+        longLabel Methylation Atlas: Epidermal Keratinocytes Merged Samples
         viewLimits 0:1
         autoScale off
         color 222,184,135
@@ -3495,7 +3495,7 @@ html methylationAtlasSignals.html
         
         track epidKerat424
         type bigWig
-        longLabel Epidermal - Keratinocytes - Z00000424
+        longLabel Methylation Atlas: Epidermal - Keratinocytes - Z00000424
         viewLimits 0:1
         autoScale off
         color 222,184,135
@@ -3510,7 +3510,7 @@ html methylationAtlasSignals.html
         
         track gallbladderMerged
         type bigWig
-        longLabel Gallbladder Merged Samples
+        longLabel Methylation Atlas: Gallbladder Merged Samples
         viewLimits 0:1
         autoScale off
         color 107,142,35
@@ -3525,7 +3525,7 @@ html methylationAtlasSignals.html
         
         track gallbladEp432
         type bigWig
-        longLabel Gallbladder - Epithelial - Z00000432
+        longLabel Methylation Atlas: Gallbladder - Epithelial - Z00000432
         viewLimits 0:1
         autoScale off
         color 107,142,35
@@ -3540,7 +3540,7 @@ html methylationAtlasSignals.html
         
         track colonFibroMerged
         type bigWig
-        longLabel Colon Fibroblasts Merged Samples
+        longLabel Methylation Atlas: Colon Fibroblasts Merged Samples
         viewLimits 0:1
         autoScale off
         color 85,107,47
@@ -3555,7 +3555,7 @@ html methylationAtlasSignals.html
         
         track colonFibro42A
         type bigWig
-        longLabel Colon - Fibroblasts - Z0000042A
+        longLabel Methylation Atlas: Colon - Fibroblasts - Z0000042A
         viewLimits 0:1
         autoScale off
         color 85,107,47
@@ -3570,7 +3570,7 @@ html methylationAtlasSignals.html
         
         track colonFibro42C
         type bigWig
-        longLabel Colon - Fibroblasts - Z0000042C
+        longLabel Methylation Atlas: Colon - Fibroblasts - Z0000042C
         viewLimits 0:1
         autoScale off
         color 85,107,47
@@ -3585,7 +3585,7 @@ html methylationAtlasSignals.html
         
         track thyroidEpMerged
         type bigWig
-        longLabel Thyroid Epithelium Merged Samples
+        longLabel Methylation Atlas: Thyroid Epithelium Merged Samples
         viewLimits 0:1
         autoScale off
         color 72,61,139
@@ -3600,7 +3600,7 @@ html methylationAtlasSignals.html
         
         track thyroidEp42S
         type bigWig
-        longLabel Thyroid - Epithelial - Z0000042S
+        longLabel Methylation Atlas: Thyroid - Epithelial - Z0000042S
         viewLimits 0:1
         autoScale off
         color 72,61,139
@@ -3615,7 +3615,7 @@ html methylationAtlasSignals.html
         
         track thyroidEp42T
         type bigWig
-        longLabel Thyroid - Epithelial - Z0000042T
+        longLabel Methylation Atlas: Thyroid - Epithelial - Z0000042T
         viewLimits 0:1
         autoScale off
         color 72,61,139
@@ -3630,7 +3630,7 @@ html methylationAtlasSignals.html
         
         track thyroidEp42U
         type bigWig
-        longLabel Thyroid - Epithelial - Z0000042U
+        longLabel Methylation Atlas: Thyroid - Epithelial - Z0000042U
         viewLimits 0:1
         autoScale off
         color 72,61,139
@@ -3645,7 +3645,7 @@ html methylationAtlasSignals.html
         
         track boneOsteobMerged
         type bigWig
-        longLabel Bone Osteoblasts Merged Samples
+        longLabel Methylation Atlas: Bone Osteoblasts Merged Samples
         viewLimits 0:1
         autoScale off
         color 188,143,143
@@ -3660,7 +3660,7 @@ html methylationAtlasSignals.html
         
         track boneOsteob42Z
         type bigWig
-        longLabel Bone - Osteoblasts - Z0000042Z
+        longLabel Methylation Atlas: Bone - Osteoblasts - Z0000042Z
         viewLimits 0:1
         autoScale off
         color 188,143,143

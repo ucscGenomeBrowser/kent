@@ -1,0 +1,37 @@
+##maf version=1 scoring=blastz
+a score=100.000000
+s hg38.chr22_KI270731v1_random     28198 1 +    150754 G
+s mm10.chr3                    101389330 1 + 160039680 G
+
+a score=442.000000
+s hg38.chr22_KI270731v1_random     40651 17 +    150754 AAAAAATTTTGTGGTTT
+s mm10.chr3                    101400551 17 + 160039680 agacatttctctggcct
+
+a score=91.000000
+s hg38.chr22_KI270731v1_random     40699 1 +    150754 T
+s mm10.chr3                    101400600 1 + 160039680 T
+
+a score=-31.000000
+s hg38.chr22_KI270731v1_random     62664 1 +    150754 g
+s mm10.chr3                    101422471 1 + 160039680 A
+
+a score=-114.000000
+s hg38.chr22_KI270731v1_random    79264 1 +    150754 T
+s mm10.chr10                   75579108 1 + 130694993 G
+
+a score=-1417.000000
+s hg38.chr22_KI270731v1_random    85335  4 +    150754 TG--------------------------------TG
+s mm10.chr10                   75584741 36 + 130694993 AGCTGGGACAGCCCTGTTGCATCCCCTTCCCGCCTC
+
+a score=237.000000
+s hg38.chr22_KI270731v1_random    90892 6 +    150754 AGGGCA
+s mm10.chr10                   75589399 6 + 130694993 AGTGTA
+
+a score=-529.000000
+s hg38.chr22_KI270731v1_random   133689 21 +   150754 ctggagtgcaatggtgtggtc
+s mm10.chr16                   80144720  5 - 98207768 tt----------------gtc
+
+a score=-31.000000
+s hg38.chr22_KI270731v1_random     7917 1 +    150754 C
+s mm10.chr10                   75185566 1 + 130694993 T
+

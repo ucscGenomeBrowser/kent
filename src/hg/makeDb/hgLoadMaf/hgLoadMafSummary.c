@@ -40,6 +40,10 @@ errAbort(
 "hgLoadMafSummary - Load a summary table of pairs in a maf into a database\n"
   "usage:\n"
   "   hgLoadMafSummary database table file.maf\n"
+  "Sequence names are split into assembly and sequence at a pipe if one is present,\n"
+  "otherwise right after the reference assembly you supply if the name starts with it,\n"
+  "otherwise at the first dot, except for GCA_/GCF_ accessions where the assembly\n"
+  "keeps its version (GCF_000001405.40.NC_000001.11 -> GCF_000001405.40).\n"
   "options:\n"
     "   -mergeGap=N   max size of gap to merge regions (default %d)\n"
     "   -minSize=N         merge blocks smaller than N (default %d)\n"
@@ -115,51 +119,6 @@ if (mcMaster == NULL)
                     database, mf->lf->lineIx, fileName);
     }
 return mcMaster;
-}
-
-char *mafSplitSrcGetChrom(char *src, char* database) 
-/* src can be in format chrom, db|chrom or db.chrom: split string on separator and return pointer to chrom.
- * the db part of src can also have a dot in it, but only if the 'database' argument is not null.
- * Changes 'src': The side effect of this function is that src contains only the db, not the chrom anymore.
- * */
-{
-char *pipe = strchr(src, '|');
-// pipe found? It's the new format, db|chrom
-if (pipe) {
-    *pipe = '\0';
-    return pipe+1;
-    }
-
-char *dot1 = strchr(src, '.');
-if (!dot1)
-    return src;  // if there are no dots, assume the name is the chrom
-
-if (database)
-    {
-    // if 'database' is not NULL we can resolve a situation like GCF_1234.3.CJS12323.4 because we know that
-    // GCF_1234.3 is the db part
-    if (differentString(src, database))
-        {
-        // the database name isn't matching the first part of the component source,
-        // look to see if maybe the database has a dot in it
-        *dot1 = '.';   // replace the dot
-        char *dot2 = strchr(dot1 + 1, '.'); // look for the next dot
-        if (dot2 != NULL)
-            {
-            *dot2 = 0;
-            char *chrom = dot2 + 1;
-            return chrom;
-            }
-
-        if ((dot2 == NULL) || differentString(src, database))
-            errAbort("expecting first component to have assembly name with no more than one dot");
-        }
-    }
-
-// if database is NULL and there is no pipe character, just split on the first dot and that's it
-char* chrom = dot1 + 1;
-*dot1 = '\0';
-return chrom;
 }
 
 long processMaf(struct mafAli *maf, struct hash *componentHash, 

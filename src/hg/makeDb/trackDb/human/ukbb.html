@@ -1,0 +1,118 @@
+<h2>Description</h2>
+<p>
+This track shows allele frequencies and imputation quality scores for
+13,743,085 variants observed in 361,194 UK Biobank participants of white
+British ancestry. The
+<a href="https://www.ukbiobank.ac.uk/" target="_blank">UK Biobank</a>
+is a prospective study of around 500,000 adults aged 40-69 at recruitment
+in the UK, with linked genotype, imaging and health-record data. The
+allele counts shown here are taken from the Neale Lab's open release of
+imputed-v3 GWAS results, which the Lab made freely available as a
+companion to their large phenotype-wide GWAS of UK Biobank (Round 2 of
+the
+<a href="https://www.nealelab.is/uk-biobank" target="_blank">Neale Lab
+UK Biobank GWAS</a>).
+</p>
+
+<p>
+The Neale Lab pipeline restricts to white British ancestry to limit
+population-stratification confounding in the GWAS. As a consequence the
+frequencies in this track are not representative of the multi-ancestry UK
+Biobank cohort. They describe a single population subset. The
+<a href="hgTrackUi?g=hgdp1kFreq">gnomAD HGDP+1kG</a>,
+<a href="hgTrackUi?g=tommo60kjpn">ToMMo Japan</a>,
+<a href="hgTrackUi?g=allofus">AllOfUs</a> and other tracks in this
+collection provide complementary frequencies from other populations.
+</p>
+
+<h2>Display</h2>
+<p>
+The track uses the standard UCSC VCF display. Hover over a variant to see
+the allele frequency, imputation INFO score, HWE p-value, hom-ref / het /
+hom-alt sample counts and the most-severe VEP consequence reported by
+the Neale Lab.
+</p>
+
+<h2>Methods</h2>
+<p>
+UK Biobank participants were genotyped on the UK Biobank Axiom and UK
+BiLEVE Axiom arrays. The Wellcome Trust Centre for Human Genetics imputed
+the array data against a combined reference panel of the Haplotype
+Reference Consortium, UK10K and 1000 Genomes Phase 3. This produced
+approximately 90 million imputed SNPs. The Neale Lab Round 2 (imputed-v3)
+analysis started from the 487,409 individuals with phased and imputed
+genotype data, filtered to 361,194 unrelated samples of white British
+ancestry, and retained variants with imputation INFO score above 0.8,
+minor allele frequency above 0.001 (or 1e-6 for coding variants) and
+HWE p-value above 1e-10. The final set has 13.7 million SNPs and short
+indels on chromosomes 1-22 and X. Variant consequences are from Ensembl VEP. See
+the Neale Lab
+<a href="https://www.nealelab.is/blog/2017/9/11/details-and-considerations-of-the-uk-biobank-gwas" target="_blank">data
+processing blog post</a> and the
+<a href="https://github.com/Nealelab/UK_Biobank_GWAS" target="_blank">UK_Biobank_GWAS
+GitHub repository</a> for the full pipeline.
+</p>
+
+<p>
+The variant manifest
+<tt>variants.tsv.bgz</tt> was downloaded from the Neale Lab
+<a href="https://www.nealelab.is/uk-biobank" target="_blank">UK Biobank
+GWAS results page</a>. The Neale Lab release uses GRCh37 coordinates and
+provides chromosome, position, reference and alternate alleles, dbSNP
+rsID, VEP consequence, imputation INFO score, allele count and
+frequency, Hardy-Weinberg p-value and per-genotype sample counts. We
+converted the TSV to a sites-only VCF using a custom Python script and
+lifted the coordinates to GRCh38 with CrossMap and the UCSC
+hg19ToHg38.over.chain. 39,659 rows with allele count zero (variants
+present only in the imputation panel) were dropped, 6,889 failed
+liftOver and 1,834 mapped to alt/random/fix contigs, leaving 13,743,085
+variants in the final file. AN was set to twice the
+<tt>n_called</tt> field, per the Neale Lab convention.
+The full pipeline is documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
+file</a> of the track, and the conversion script is available from
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">our
+GitHub repository</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The variant frequencies can be explored with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and exported to
+spreadsheet or tab-separated tables. From scripts, data can be accessed
+via our <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>
+with <tt>track=ukbb</tt>.
+</p>
+<p>
+The VCF file is also available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/ukbb/" target="_blank">our
+download server</a> as <tt>ukbb.vcf.gz</tt>. Individual regions can be
+extracted with <tt>tabix</tt>, for example
+<tt>tabix http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/ukbb/ukbb.vcf.gz chr21:1-100000000</tt>.
+The original Neale Lab manifest <tt>variants.tsv.bgz</tt> is linked from
+the
+<a href="https://www.nealelab.is/uk-biobank" target="_blank">Neale Lab UK
+Biobank GWAS results page</a> and is distributed under UK Biobank's
+data-access conditions.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the UK Biobank participants and to Benjamin Neale, Liam
+Abbott, Raymond Walters, Duncan Palmer and the rest of the Neale Lab for
+making the Round 2 imputed-v3 GWAS results, including the variant
+manifest used here, publicly available.
+</p>
+
+<h2>References</h2>
+<p>
+Bycroft C, Freeman C, Petkova D, Band G, Elliott LT, Sharp K, Motyer A, Vukcevic D, Delaneau O,
+O&#x27;Connell J <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-018-0579-z" target="_blank">
+The UK Biobank resource with deep phenotyping and genomic data</a>.
+<em>Nature</em>. 2018 Oct;562(7726):203-209.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30305743" target="_blank">30305743</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6786975/" target="_blank">PMC6786975</a>
+</p>
+

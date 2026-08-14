@@ -30,10 +30,16 @@ mkdir -p ${WORKDIR}/release/{hg19,hg38}
 # checking for updated files and stuff. Each downloads data from a separate website which
 # can go down so don't force the others to die just because one is having a problem.
 set +e
-./makeCnv.sh ${WORKDIR}
-./makeDosage.sh ${WORKDIR}
-#./makeEvRepo.sh ${WORKDIR}
-./makeGeneValidity.sh ${WORKDIR}
+failed=""
+./makeCnv.sh ${WORKDIR}          || failed="$failed makeCnv"
+./makeDosage.sh ${WORKDIR}       || failed="$failed makeDosage"
+#./makeEvRepo.sh ${WORKDIR}      || failed="$failed makeEvRepo"
+./makeGeneValidity.sh ${WORKDIR} || failed="$failed makeGeneValidity"
 set -e
 
-echo "ClinGen update done."
+# Each sub-build is silent on no-update, so a clean run with nothing to do produces no
+# output and the wrapper's mail stays silent. Report any sub-build that failed.
+if [ -n "$failed" ]; then
+    echo "ERROR: ClinGen sub-build(s) failed:$failed"
+    exit 1
+fi

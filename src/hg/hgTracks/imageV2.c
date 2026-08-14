@@ -67,8 +67,15 @@ const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 if (a->order == b->order)
     {
-    if ((a->track->originalTrack != NULL) || (b->track->originalTrack != NULL))
-        return a->track->visibility - b->track->visibility;
+    // A squishyPack "squink" track (originalTrack set) shares its source track's order and
+    // must sort immediately after that source so the two can be smashed back together (see
+    // smashSquish).  Use visibility to order the genuine source/squink pair, but a squink
+    // compared against an unrelated track that happens to share the same order must fall
+    // through to priority - since the squink carries its source's priority, that keeps it
+    // grouped with its source instead of being separated by the other track.
+    struct track *at = a->track, *bt = b->track;
+    if (sameOk(at->originalTrack, bt->track) || sameOk(bt->originalTrack, at->track))
+        return at->visibility - bt->visibility;
     return tgCmpPriority(&(a->track),&(b->track));
     }
 return (a->order - b->order);
@@ -1910,9 +1917,14 @@ if (slice->parentImg && slice->parentImg->file != NULL)
         hPrintf(" usemap='#map_%s'",name);
     hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if (slice->type==stData && imgBox->showPortal) //  || slice->type==stCenter will make centerLabels scroll too
-        hPrintf(" panImg'");
-    else
-        hPrintf("'");
+        hPrintf(" panImg");
+    // When something is drawn over the center label (quickLift difference lines) that
+    // slice can't be shown while the image is being dragged:  center labels don't scroll,
+    // so the lines would sit still while the image moves underneath them.  Mark it so
+    // dragScroll can swap it for the text stand-in below.
+    if (slice->type==stCenter && imgTrack->cntrLabDrawnOver && imgTrack->cntrLabText != NULL)
+        hPrintf(" cntrLabLines");
+    hPrintf("'");
     if (slice->title != NULL)
         hPrintf(" title='%s'", attributeEncode(slice->title) );           // Adds slice wide title
     else if (slice->parentImg->title != NULL)
@@ -2028,6 +2040,21 @@ if (slice->parentImg)
     if (imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle ? " scroller" : ""));
     hPrintf("'>\n");
+
+    if (sliceType == stCenter && imgTrack->cntrLabDrawnOver
+    &&  imgTrack->cntrLabText != NULL)
+        {
+        // Text stand-in for a center label that has quickLift difference lines painted
+        // over it.  dragScroll shows this and hides the image slice while the image is
+        // moving (see panImages() in hgTracks.js).  Centered in the same box as the
+        // label in the image, though not in the same font.
+        hPrintf("  <div class='cntrLabStandIn' style='display:none; width:%dpx; "
+                "height:%dpx; line-height:%dpx; font-size:%dpx; overflow:hidden; "
+                "text-align:center; white-space:nowrap; color:%s; "
+                "font-family:Helvetica,Arial,sans-serif;'>%s</div>\n",
+                width, height, height, height - 2, imgTrack->cntrLabTextColor,
+                htmlEncode(imgTrack->cntrLabText));
+        }
     }
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
 if (map)
@@ -2083,7 +2110,12 @@ struct imgTrack *nextImg, *imgTrack;
 for (imgTrack = imgTrackList; imgTrack!=NULL;imgTrack = nextImg)
     {
     nextImg = imgTrack->next;
-    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked);
+    // Only smash a squink into the track it was cloned from.  nextImg->linked is set for any
+    // squishyPack squink, but if an unrelated track sorted between a squink and its source we
+    // must not merge the squink's slice into the wrong neighbor (its pixels are elsewhere).
+    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked
+                         && nextImg->tdb != NULL && imgTrack->tdb != NULL
+                         && sameOk(nextImg->tdb->originalTrack, imgTrack->tdb->track));
 
     if (joinNext)  // Smash these together
         {

@@ -1,0 +1,161 @@
+<h2>Description</h2>
+
+<p>
+Structural variants (SVs) are large changes in DNA — deletions, duplications,
+inversions, insertions of mobile elements, and translocations — that are at
+least 50 base pairs in size. They are a major source of genetic variation
+between individuals and can affect gene dosage, disrupt coding sequence, or
+rearrange regulatory elements. Because SVs are harder to detect than small
+variants, population-scale SV maps lag behind single-nucleotide variant
+resources.</p>
+
+<p>
+This track displays site-frequency data for 737,998 SVs identified in 17,795
+deeply sequenced human genomes (mean coverage &gt; 20&times;) by Illumina
+short-read sequencing by
+<a href="https://www.nature.com/articles/s41586-020-2371-0" target="_blank">
+Abel et al., Nature 2020</a>.
+The samples were sequenced by the four sequencing centers of the NHGRI
+<a href="https://www.genome.gov/Funded-Programs-Projects/NHGRI-Genome-Sequencing-Program/Centers-for-Common-Disease-Genomics" target="_blank">
+Centers for Common Disease Genomics (CCDG)</a>
+program, supplemented with ancestrally diverse samples from the PAGE
+consortium and the Simons Genome Diversity Project. The composition
+includes roughly 24% African, 16% Latino, 11% Finnish, 39% non-Finnish
+European, and 9% other ancestries.</p>
+
+<p>
+Two non-overlapping public callsets are combined into this track.
+The upstream release contains 738,624 unique primary SV records across
+the two callsets; 626 B37 records did not lift over to GRCh38, leaving
+the 737,998 shown here:</p>
+<ul>
+  <li><b>B38</b> (native GRCh38): 458,106 SVs from 14,623 samples, called
+      directly on the GRCh38 assembly.</li>
+  <li><b>B37lift</b> (GRCh37, lifted): 279,892 SVs from 8,417 samples
+      originally called on GRCh37, with coordinates lifted to GRCh38
+      using the standard UCSC hg19&rarr;hg38 liftOver chain.</li>
+</ul>
+
+<p>
+<b>Important:</b> the B38 and B37 callsets share 5,245 samples. When inspecting
+a variant present in both callsets, users should not simply sum the allele
+counts; the AC/AN reported for each callset reflects that callset's sample
+set. The <i>callset</i> filter can be used to restrict display to one source.</p>
+
+<h2>Display conventions</h2>
+
+<p>Items are colored by SV type:</p>
+<ul>
+  <li><span style="background-color:rgb(220,50,32);color:white;padding:1px 6px">DEL</span> deletion</li>
+  <li><span style="background-color:rgb(0,120,200);color:white;padding:1px 6px">DUP</span> duplication</li>
+  <li><span style="background-color:rgb(230,140,0);color:white;padding:1px 6px">INV</span> inversion</li>
+  <li><span style="background-color:rgb(140,80,180);color:white;padding:1px 6px">MEI</span> mobile-element insertion or MEI-derived deletion</li>
+  <li><span style="background-color:rgb(120,120,120);color:white;padding:1px 6px">BND</span> breakend / translocation</li>
+</ul>
+
+<p>
+Deletions, duplications, inversions, and mobile-element variants are drawn
+as intervals spanning from the variant start to its end. Breakend (BND)
+records are drawn as single-base items at the variant breakpoint; the mate
+chromosome and position are shown on the details page for each BND. Each
+BND pair from LUMPY is shown only once (the secondary mate record is
+suppressed).</p>
+
+<h2>Filters</h2>
+
+<p>The following filters are available from the track configuration page:</p>
+<ul>
+  <li><b>SV type</b> — any combination of DEL, DUP, INV, MEI, BND.</li>
+  <li><b>Callset</b> — B38 native, B37lift, or both.</li>
+  <li><b>Filter</b> — PASS (high confidence) and/or LOW (low confidence, as
+      flagged by the authors based on Mendelian-error rate).</li>
+  <li><b>Allele frequency</b> (AF), <b>Allele count</b> (AC),
+      <b>SV length</b>, and <b>Mean sample quality</b> (MSQ).</li>
+</ul>
+
+<p>Per-population allele counts and numbers are shown on the details page
+for 8 ancestry groups: AFR (African), AMR (Latino/Admixed-American), NFE
+(non-Finnish European), FE (Finnish European), EAS (East-Asian), SAS
+(South-Asian), PI (Pacific Islander), and Other.</p>
+
+<h2>Methods</h2>
+
+<p>
+Abel et al. 2020 jointly called SVs from Illumina short-read sequencing
+(mean coverage &gt;20x) of 17,795 genomes from the NHGRI Centers for
+Common Disease Genomics program with per-sample calls from LUMPY v0.2.13,
+CNVnator v0.3.3 and svtyper v0.1.4, integrated across the cohort by the
+<a href="https://github.com/hall-lab/svtools" target="_blank">svtools</a>
+pipeline. Low- and high-confidence variants were separated by a
+Mendelian-error cutoff on mean sample quality, calibrated against 409
+CEPH trios, and per-sample calls were validated against a PacBio
+long-read truth set from three HGSVC samples. Two non-overlapping
+callsets were released: 458,106 SVs from 14,623 samples called natively
+on GRCh38 (B38) and 279,892 SVs from 8,417 samples called on GRCh37
+(B37). The site-frequency callsets span DELs, DUPs, INVs, mobile-element
+variants and breakends/translocations.</p>
+
+<p>
+The B38 and B37 site-frequency VCFs (plus BEDPE companion files) were
+downloaded from the authors' supplementary-data GitHub repository,
+<a href="https://github.com/hall-lab/sv_paper_042020" target="_blank">
+github.com/hall-lab/sv_paper_042020</a>. For the hg38 track, INFO fields
+were parsed into BED9+ columns; B37 records were lifted to hg38 with the
+UCSC <tt>hg19ToHg38.over.chain.gz</tt> chain (626 B37 records failed to
+lift, leaving 737,998 SVs total in the track).</p>
+
+<p>
+The step-by-step build commands (download, liftOver, format conversion,
+bigBed build) are recorded in the UCSC makeDoc for this track:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/abelSv.txt" target="_blank">
+doc/hg38/abelSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
+there to spreadsheet or tab-sep tables. From scripts, the data can be
+accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>abelSv</i>.</p>
+
+<p>For automated download and analysis, the annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/abelSv/" target="_blank">
+our download server</a>.  The file for this track is called
+<tt>abelSv.bb</tt>. Individual regions or the whole genome annotation can
+be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled
+from the source code or downloaded as a precompiled binary for your
+system. Instructions for downloading source code and binaries can be
+found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/abelSv/abelSv.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original site-frequency VCF and BEDPE files are distributed by
+the authors from their
+<a href="https://github.com/hall-lab/sv_paper_042020" target="_blank">
+supplementary-data GitHub repository</a>.</p>
+
+<h2>Credits</h2>
+
+<p>Thanks to Haley J. Abel, David E. Larson, Ira M. Hall and colleagues at
+the McDonnell Genome Institute (Washington University in St. Louis), the
+Broad Institute, Baylor College of Medicine, the New York Genome Center,
+and the University of Washington for producing this resource and making
+the site-frequency callsets publicly available.</p>
+
+<h2>References</h2>
+
+<p>
+Abel HJ, Larson DE, Regier AA, Chiang C, Das I, Kanchi KL, Layer RM, Neale BM, Salerno WJ, Reeves C
+<em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-020-2371-0" target="_blank">
+Mapping and characterization of structural variation in 17,795 human genomes</a>.
+<em>Nature</em>. 2020 Jul;583(7814):83-89.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32460305" target="_blank">32460305</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7547914/" target="_blank">PMC7547914</a>
+</p>
+

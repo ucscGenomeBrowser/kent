@@ -1,0 +1,22 @@
+table meiSwegen
+"Mobile Element Insertions in 1,000 SweGen samples (MELT, lifted from GRCh37 to GRCh38)"
+(
+string  chrom;             "Reference chromosome or scaffold"
+uint    chromStart;        "0-based start position (anchor base)"
+uint    chromEnd;          "Half-open end position (anchor base + 1)"
+string  name;              "Item label (MEI class, allele count)"
+uint    score;             "Score (alt-allele frequency * 1000)"
+char[1] strand;            "Strand (always .)"
+uint    thickStart;        "Start of thick drawing region"
+uint    thickEnd;          "End of thick drawing region"
+uint    itemRgb;           "RGB color, by mobile-element class"
+string  teClass;           "TE class|Family of mobile element (Alu, L1, SVA, HERVK)"
+int     svLen;             "Insertion length (bp), -1 if unknown"
+string  meiSubfamily;      "MELT MEI subfamily|MELT MEIINFO NAME (e.g. AluYa5, L1Ta, SVA, HERVK)"
+string  tsd;               "Target site duplication|TSD sequence reported by MELT, '.' if unknown"
+int     assess;            "MELT ASSESS score|0=no overlapping reads, 1=imprecise, 2=discordant pairs only, 3=left-side TSD only, 4=right-side TSD only, 5=TSD decided with split reads (highest quality)"
+string  internalGene;      "Gene context|Transcript and location if insertion is in or near a gene (MELT INTERNAL); empty otherwise"
+int     altAlleleCount;    "Carrier haplotypes|Haplotypes carrying the insertion (MELT_AN field, actually allele count)"
+float   altAlleleFreq;     "Allele frequency|Alt-allele frequency across the 1,000 SweGen samples (MELT_AF)"
+string  filterStatus;      "MELT filter|VCF FILTER column: PASS, hDP, rSD, s25 (or combinations)"
+)

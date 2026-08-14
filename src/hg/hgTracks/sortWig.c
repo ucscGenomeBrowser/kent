@@ -25,8 +25,11 @@ struct sortGroup *getSortGroup(struct hash *groupHash, struct flatTracks *flatTr
 struct trackDb *tdb = flatTrack->track->tdb;
 struct sortGroup *sortGroup;
 
-while(tdb->parent)
-    tdb = tdb->parent;
+// Key the group by the immediate container so it matches the parentTrack the
+// client sends in sortExp/sortSim (a composite may be nested under a superTrack).
+struct trackDb *container = tdbGetContainer(tdb);
+if (container != NULL)
+    tdb = container;
 
 struct hashEl *hel;
 if ((hel = hashLookup(groupHash, tdb->track)) == NULL)

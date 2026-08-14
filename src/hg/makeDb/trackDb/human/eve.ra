@@ -1,0 +1,13 @@
+track eve
+shortLabel EVE Scores
+longLabel EVE missense variant effect scores
+type bigBed 12 +
+parent predictionScoresSuper
+bigDataUrl /gbdb/$D/eve/eve.bb
+style heatmap
+dataVersion November 2021
+visibility pack
+maxWindowCoverage 200000
+filterText.name .*
+filterType.name regexp
+filterLabel.name Protein name

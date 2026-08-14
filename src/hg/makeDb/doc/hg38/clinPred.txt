@@ -1,0 +1,29 @@
+# ClinPred missense pathogenicity scores, hg38, RM #37510
+
+cd /hive/data/genomes/hg38/bed/clinPred
+
+# Downloaded from https://sites.google.com/site/clinpred/ on May 5, 2026.
+# The ClinPred site links to a Google Drive file; bypass the virus-scan
+# interstitial with confirm=t to fetch directly:
+curl -L -o ClinPred.txt \
+    "https://drive.usercontent.google.com/download?id=1e0kd9hO1uCEuGzAhwEmLCNluqDFJE28y&export=download&confirm=t"
+
+# Input is tab-separated: Chr Start Ref Alt ClinPred_Score (1-based positions,
+# no chr prefix, three rows per scored exome position).
+time python3 ~/kent/src/hg/makeDb/clinPred/clinPredToWig.py \
+    /hive/data/genomes/hg38/chrom.sizes ClinPred.txt
+
+wigToBigWig a.wig /hive/data/genomes/hg38/chrom.sizes a.bw &
+wigToBigWig c.wig /hive/data/genomes/hg38/chrom.sizes c.bw &
+wigToBigWig g.wig /hive/data/genomes/hg38/chrom.sizes g.bw &
+wigToBigWig t.wig /hive/data/genomes/hg38/chrom.sizes t.bw &
+wait
+rm -f *.wig
+
+# Color overlays generated with:
+~/kent/src/hg/makeDb/scripts/wigColorByColors/makeWigColorByRevelCadd.py
+
+# Install to /gbdb:
+mkdir -p /gbdb/hg38/clinPred
+ln -s /hive/data/genomes/hg38/bed/clinPred/{a,c,g,t}.bw /gbdb/hg38/clinPred/
+ln -s /hive/data/genomes/hg38/bed/clinPred/{a,c,g,t}.color.bb /gbdb/hg38/clinPred/

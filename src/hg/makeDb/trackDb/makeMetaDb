@@ -16,7 +16,7 @@ files="$@"
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
     local db="$1"
-    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    local dbChk=$(/cluster/bin/x86_64/hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
         return 1
@@ -32,11 +32,11 @@ loadMetaDb() {
     local tmpTable=$metaDb"_tmp";
     local bakTable=$metaDb"_back";
 
-    local cmd="hgsql -e \"drop table if exists $tmpTable;\" $db"
+    local cmd="/cluster/bin/x86_64/hgsql -e \"drop table if exists $tmpTable;\" $db"
     echo $cmd
     eval $cmd 
 
-    local cmd="rm -f allRas; touch allRas; cat $files >> allRas; mdbUpdate -recreate $db -table=$tmpTable allRas"
+    local cmd="rm -f allRas; touch allRas; cat $files >> allRas; /cluster/bin/x86_64/mdbUpdate -recreate $db -table=$tmpTable allRas"
     echo $cmd
     eval $cmd 
 
@@ -44,7 +44,7 @@ loadMetaDb() {
     echo $cmd
     eval $cmd 
 
-    local cmd="hgsqlSwapTables -okNoTable2 -dropTable3 $db $tmpTable $metaDb $bakTable"
+    local cmd="/cluster/bin/x86_64/hgsqlSwapTables -okNoTable2 -dropTable3 $db $tmpTable $metaDb $bakTable"
     echo $cmd
     eval $cmd 
 }

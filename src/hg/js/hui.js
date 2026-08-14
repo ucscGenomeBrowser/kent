@@ -89,11 +89,15 @@ function matSelectViewForSubTracks(obj,view)
 
 function exposeAll()
 {
-    // Make main display dropdown show pack if currently hide
+    // Unhide composite vis. Prefers data-last-viz (stashed by hideCompositeSaveVis()
+    // when [-] or the last subtrack were unchecked), then pack, dense, else last option.
     var visDD = normed($("select.visDD"));
     if (visDD) {
         if ($(visDD).prop('selectedIndex') === 0) {
-            if ($(visDD).children('option[value="pack"]').length)
+            var saved = $(visDD).attr("data-last-viz");
+            if (saved && $(visDD).children('option[value="'+saved+'"]').length)
+                $(visDD).val(saved);
+            else if ($(visDD).children('option[value="pack"]').length)
                 $(visDD).val("pack");
             else if ($(visDD).children('option[value="dense"]').length)
                 $(visDD).val("dense");
@@ -105,6 +109,19 @@ function exposeAll()
         // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
         if ($(visDD).hasClass('superChild'))
             visTriggersHiddenSelect(visDD);
+    }
+}
+
+function hideCompositeSaveVis()
+{
+    // Set composite vis dropdown to hide, stashing the current value in data-last-viz
+    // so exposeAll() can restore it. We set selectedIndex directly without triggering
+    // 'change', because propagateVis re-checks all subCBs when checkedCount===0.
+    var visDD = normed($("select.visDD"));
+    if (visDD && $(visDD).prop('selectedIndex') !== 0) {
+        $(visDD).attr("data-last-viz", $(visDD).val());
+        $(visDD).prop('selectedIndex', 0);
+        $(visDD).addClass('changed');
     }
 }
 
@@ -206,15 +223,8 @@ function _matSetMatrixCheckBoxes(state)
     });
     if (state)
         exposeAll();  // Unhide composite vis?
-    else if ($("input.subCB:checked:visible").length === 0) {
-        // Set composite to hide directly, without triggering propagateVis
-        // (which would re-check all subCBs when checkedCount===0).
-        var visDD = normed($("select.visDD"));
-        if (visDD && $(visDD).prop('selectedIndex') !== 0) {
-            $(visDD).prop('selectedIndex', 0);
-            $(visDD).addClass('changed');
-        }
-    }
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
 
@@ -292,6 +302,11 @@ function matSubCBsCheck(state)
         }
     } else  // state not checked so no filtering by other matCBs needed
         subCBs.each( function (i) { matSubCBcheckOne(this,state); });
+
+    if (state)
+        exposeAll();  // Unhide composite vis?
+    else if ($("input.subCB:checked:visible").length === 0)
+        hideCompositeSaveVis();
 
     return true;
 }
@@ -1579,6 +1594,24 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         alert("Must supply parentNode to append color picker");
         throw new Error();
     }
+    let keepPickerOffButtons = function() {
+        // The picker opens downwards, covering whatever sits below the swatch. In a jQuery UI
+        // dialog that is the row of buttons ("Save Color", "Add Highlight", ...), which then
+        // cannot be clicked at all, so open above the swatch instead when that would happen.
+        let container = $(inpSpec).spectrum("container");
+        let buttons = $(inpSpec).closest(".ui-dialog").find(".ui-dialog-buttonpane");
+        let swatch = $(colorPickerContainer).find(".sp-replacer");
+        if (container.length === 0 || buttons.length === 0 || swatch.length === 0)
+            return;
+        let cRect = container[0].getBoundingClientRect();
+        let bRect = buttons[0].getBoundingClientRect();
+        if (cRect.bottom <= bRect.top || cRect.top >= bRect.bottom)
+            return;  // does not cover the buttons, leave it where spectrum put it
+        if (swatch[0].getBoundingClientRect().top - cRect.height < 0)
+            return;  // no room above either, moving it would push it off the page
+        container.css("top", (swatch.offset().top - cRect.height) + "px");
+    };
+
     let opt = {
         hideAfterPaletteSelect: true,
         color: $(inpSpec).val(),
@@ -1588,8 +1621,21 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
         showInitial: true,
         preferredFormat: "hex",
         localStorageKey: "genomebrowser",
+        move: function(color) {
+            // Dragging in the picker only repaints the picker itself, spectrum does not
+            // consider the color chosen until 'choose' is clicked. Show it in the text box
+            // anyway: that box is what the buttons of the drag select dialog read, so
+            // otherwise they act on the color that was showing before the drag.
+            $(inpText).val(color.toHexString());
+        },
+        hide: function(color) {
+            // Resync with the picker, so a cancelled drag does not leave the dragged
+            // color behind in the text box.
+            $(inpText).val(color.toHexString());
+        },
+        show: keepPickerOffButtons,
         change: function() {
-            let color = $(inpSpec).spectrum("get");
+            let color = $(inpSpec).spectrum("get").toHexString();
             $(inpText).val(color);
             saveHlColor(color, trackName);
         },
@@ -1630,4 +1676,255 @@ function superUiSetAllTracks(onlyVisible) {
             sel.value = 'dense';
         $(sel).trigger("change");
     }
+}
+
+// ---- myVariants share management (inline on hgTrackUi) ----
+
+function myVariantsShareApiUrl(action, params) {
+    // Build a URL for the share API
+    let url = "../cgi-bin/hgTracks?myVarShareCmd=" + action +
+        "&db=" + getDb() + "&hgsid=" + getHgsid();
+    if (params) {
+        Object.keys(params).forEach(function(key) {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== "")
+                url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+        });
+    }
+    return url;
+}
+
+function myVariantsShareLoad() {
+    let content = document.getElementById("shareListContent");
+    if (!content) return;
+    content.textContent = "Loading...";
+    fetch(myVariantsShareApiUrl("getShares", {}), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        // Build the share list with DOM APIs (textContent everywhere) so that
+        // owner-controlled fields like label/project/targetUser cannot inject
+        // markup or script.
+        while (content.firstChild) content.removeChild(content.firstChild);
+        if (data.error) {
+            content.textContent = "Error: " + data.error;
+            return;
+        }
+        if (!data.shares || data.shares.length === 0) {
+            let em = document.createElement("em");
+            em.textContent = "No active shares";
+            content.appendChild(em);
+            return;
+        }
+        let table = document.createElement("table");
+        table.style.width = "100%";
+        table.style.borderCollapse = "collapse";
+        table.style.fontSize = "0.9em";
+        let header = document.createElement("tr");
+        header.style.borderBottom = "1px solid #ccc";
+        ["Project", "Permission", "Shared With", "Label", "Created", ""].forEach(function(label) {
+            let th = document.createElement("th");
+            th.style.textAlign = "left";
+            th.textContent = label;
+            header.appendChild(th);
+        });
+        table.appendChild(header);
+        data.shares.forEach(function(s) {
+            let tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid #eee";
+
+            // Project (plain text)
+            let projTd = document.createElement("td");
+            projTd.textContent = s.project === "*" ? "All" : s.project;
+            tr.appendChild(projTd);
+
+            // Permission: a View/Edit dropdown that applies immediately on change
+            let permTd = document.createElement("td");
+            let permSel = document.createElement("select");
+            permSel.dataset.token = s.shareToken;
+            [["0", "View"], ["1", "Edit"]].forEach(function(opt) {
+                let o = document.createElement("option");
+                o.value = opt[0];
+                o.textContent = opt[1];
+                permSel.appendChild(o);
+            });
+            permSel.value = String(s.permission);
+            permSel.addEventListener("change", function() {
+                myVariantsShareSetPermission(this.dataset.token, this.value);
+            });
+            permTd.appendChild(permSel);
+            tr.appendChild(permTd);
+
+            // Shared With: editable comma-separated username list + Save link
+            let usersTd = document.createElement("td");
+            let usersInput = document.createElement("input");
+            usersInput.type = "text";
+            usersInput.style.width = "180px";
+            usersInput.value = s.targetUser ? s.targetUser : "";
+            usersInput.placeholder = "blank = anyone with link";
+            usersInput.dataset.token = s.shareToken;
+            let saveLink = document.createElement("a");
+            saveLink.href = "#";
+            saveLink.textContent = "Save";
+            saveLink.style.marginLeft = "4px";
+            saveLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                myVariantsShareSetTargets(usersInput.dataset.token, usersInput.value);
+            });
+            usersTd.appendChild(usersInput);
+            usersTd.appendChild(saveLink);
+            tr.appendChild(usersTd);
+
+            // Label, Created (plain text)
+            [s.label ? s.label : "", s.createdAt].forEach(function(text) {
+                let td = document.createElement("td");
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+
+            let actionTd = document.createElement("td");
+            let revokeLink = document.createElement("a");
+            revokeLink.href = "#";
+            revokeLink.className = "shareRevokeLink";
+            revokeLink.dataset.token = s.shareToken;
+            revokeLink.textContent = "Revoke";
+            revokeLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                myVariantsShareRevoke(this.dataset.token);
+            });
+            actionTd.appendChild(revokeLink);
+            tr.appendChild(actionTd);
+            table.appendChild(tr);
+        });
+        content.appendChild(table);
+    })
+    .catch(function(err) {
+        content.textContent = "Error loading shares: " + err.message;
+    });
+}
+
+function myVariantsShareNormalizeTargets(raw) {
+    // Split a comma-separated username list, trim, drop empties, de-dup.
+    // Returns {value: "a,b", error: null} or {value: null, error: "..."}.
+    // Server remains the authoritative validator (membership, length).
+    let seen = {};
+    let names = [];
+    let bad = null;
+    raw.split(",").forEach(function(tok) {
+        let name = tok.trim();
+        if (name === "") return;
+        if (/\s/.test(name)) bad = name;
+        if (!seen[name]) { seen[name] = true; names.push(name); }
+    });
+    if (bad !== null)
+        return { value: null, error: "username '" + bad + "' contains a space" };
+    return { value: names.join(","), error: null };
+}
+
+function myVariantsShareCreate() {
+    let project = document.getElementById("shareProject").value;
+    let permission = document.querySelector('input[name="sharePerm"]:checked').value;
+    let norm = myVariantsShareNormalizeTargets(document.getElementById("shareTargetUser").value);
+    if (norm.error) {
+        warn("Error creating share: " + norm.error);
+        return;
+    }
+    let targetUser = norm.value;
+    let label = document.getElementById("shareLabel").value.trim();
+
+    let params = { project: project, permission: permission };
+    if (targetUser) params.targetUser = targetUser;
+    if (label) params.label = label;
+
+    fetch(myVariantsShareApiUrl("createShare", params), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error creating share: " + data.error);
+            return;
+        }
+        let shareUrl = window.location.protocol + "//" + window.location.host +
+            "/cgi-bin/hgTracks?myVarShare=" + data.token + "&db=" + getDb();
+        document.getElementById("shareUrlField").value = shareUrl;
+        document.getElementById("shareResult").style.display = "block";
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error creating share: " + err.message);
+    });
+}
+
+function myVariantsShareRevoke(token) {
+    fetch(myVariantsShareApiUrl("revokeShare", { shareToken: token }),
+          { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error) {
+            warn("Error revoking share: " + data.error);
+            return;
+        }
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error revoking share: " + err.message);
+    });
+}
+
+function myVariantsShareSetPermission(token, permission) {
+    fetch(myVariantsShareApiUrl("setSharePermission", { shareToken: token, permission: permission }),
+          { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error)
+            warn("Error updating permission: " + data.error);
+        // Reload either way so the controls reflect the true server state.
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error updating permission: " + err.message);
+        myVariantsShareLoad();
+    });
+}
+
+function myVariantsShareSetTargets(token, rawTargetUser) {
+    let norm = myVariantsShareNormalizeTargets(rawTargetUser);
+    if (norm.error) {
+        warn("Error updating recipients: " + norm.error);
+        return;
+    }
+    if (!norm.value &&
+        !confirm("Leaving the recipient list blank lets anyone with the link read this " +
+                 "track (and edit it if the link permission is set to Edit). Continue?")) {
+        myVariantsShareLoad();
+        return;
+    }
+    // Pass the normalized list explicitly; "" means "anyone with link", which
+    // myVariantsShareApiUrl would otherwise drop, so build params directly.
+    let params = { shareToken: token };
+    if (norm.value) params.targetUser = norm.value;
+    fetch(myVariantsShareApiUrl("setShareTargets", params), { credentials: "same-origin" })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.error)
+            warn("Error updating recipients: " + data.error);
+        myVariantsShareLoad();
+    })
+    .catch(function(err) {
+        warn("Error updating recipients: " + err.message);
+        myVariantsShareLoad();
+    });
+}
+
+function myVariantsShareInit() {
+    // Wire up the create/copy buttons and load existing shares
+    let createBtn = document.getElementById("shareCreateBtn");
+    if (!createBtn) return;
+    createBtn.addEventListener("click", myVariantsShareCreate);
+    let copyBtn = document.getElementById("shareCopyBtn");
+    if (copyBtn) {
+        copyBtn.addEventListener("click", function() {
+            let urlField = document.getElementById("shareUrlField");
+            urlField.select();
+            navigator.clipboard.writeText(urlField.value);
+        });
+    }
+    myVariantsShareLoad();
 }

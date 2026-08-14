@@ -17,9 +17,16 @@ then
   exit 1
 fi
 
+# Databases that actually exist on this server.  Some active dbDb rows are
+# GenArk hub assemblies (nibPath "hub:...") with no local MySQL database;
+# skip those so 'hgsql $db' below doesn't fail with "Unknown database" and
+# trip the cron with stderr noise.
+existingDbs=$(hgsql -Ne 'show databases')
+
 # run checkHgFindSpec.  The 'tail' gets rid of whitespace and cookie/domain info
 for db in $(hgsql -Ne 'select name from dbDb where active=1' hgcentraltest | sort)
 do
+  echo "$existingDbs" | grep -qxF "$db" || continue
   findSpec=$(hgsql -Ne 'show tables like "hgFindSpec"' $db)
   if [ -n "$findSpec" ]
   then

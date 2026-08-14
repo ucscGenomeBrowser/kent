@@ -762,7 +762,12 @@ else
     haplo->suffixId = lmAlloc(he->lm,HAPLOTYPE_SUFFIX_SZ);
     if (siblingOrder < 0)
         { // haplos above 64 bits will NOT be uniquely named
-        unsigned bitId = *(unsigned *)&(hBits->bits);
+        // NOTE: this reinterprets the low bytes of the bits pointer itself
+        // (not the bit-array it points to) as an unsigned id, preserving the
+        // original behavior.  memcpy avoids the strict-aliasing violation that
+        // the pointer cast triggered at -O3.
+        unsigned bitId;
+        memcpy(&bitId, &hBits->bits, sizeof(bitId));
         int bitCount = hBitsSlotCount(hBits);
         if (bitCount/8 > sizeof(unsigned))
             bitId = bitId >> (sizeof(unsigned) * 8 - bitCount);

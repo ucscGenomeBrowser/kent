@@ -1,0 +1,51 @@
+<h2>Description</h2>
+<p>
+The <em>My Variants</em> track lets a signed-in user create, edit, and share a
+personal set of variant annotations directly in the Genome Browser.
+</p>
+
+<p>
+<b>Important:</b> This feature is intended for exploratory, educational, and
+demonstration use only. It must <b>not</b> be used to enter, store, or share
+private patient data, identifiable clinical records, or any other protected
+health information. Items written to a <em>My Variants</em> track are stored on
+shared UCSC infrastructure and may be visible to other users when shared.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is drawn as a standard BED rectangle using the user-selected color.
+A short mouseover label and a longer free-text description may be attached to
+each item.
+When the details page is opened, any overlaps with selected reference variant
+tracks (for example, ClinVar and dbSNP common variants) are listed for context.
+</p>
+
+<h2>Adding and Editing Variants</h2>
+<p>
+New variants can be added in one of three ways from the entry form: by HGVS or
+item search, by a simple BED form, or by an advanced BED form that allows
+user-defined extra fields.
+A variant can also be created by drag-selecting a region on the browser image
+and choosing the create-variant option from the popup menu.
+Existing items can be edited or deleted at any time from the track's details
+page.
+</p>
+
+<h2>Sharing</h2>
+<p>
+A <em>My Variants</em> track can be shared read-only or with edit access, either
+with a specific signed-in user or with anyone holding the share link.
+Shared tracks are loaded automatically the next time the recipient opens the
+Genome Browser, similar to a shared online document.
+The most recent write wins; there is no per-item revision history at this time.
+</p>
+
+<h2>Data Access</h2>
+<p>
+<em>My Variants</em> data are stored as a per-user custom track and can be
+downloaded for the current assembly using the
+<a href="hgTables" target="_blank">Table Browser</a>.
+The data are not part of the public UCSC database and are not available through
+the public REST API or the bulk download server.
+</p>

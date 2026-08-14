@@ -1,0 +1,331 @@
+#!/usr/bin/env python3
+# rtsUpdate -- fetch a curator's Recommended Track Set session from hgcentral
+# and write the scrubbed key=value contents into htdocs/data/recTrackSets/,
+# where Chris's file-based loader reads it.  No DB writes.
+# Refs #32768, #34907.
+
+import argparse
+import datetime
+import getpass
+import pathlib
+import re
+import subprocess
+import sys
+from urllib.parse import urlparse
+
+HOME = pathlib.Path.home()
+RTS_DIR = HOME / "kent/src/hg/utils/rts"
+DATA_DIR = HOME / "kent/src/hg/htdocs/data/recTrackSets"
+LOGFILE = HOME / ".rtsUpdate.log"
+VERBOTEN = RTS_DIR / "verboten.lst"
+
+TARGET_USER = "View"
+
+# Source host => (hgsql -h target, db).  Default source is rr (canonical curator save location).
+HOSTS = {
+    "rr":   ("genome-centdb", "hgcentral"),
+    "dev":  ("hgwdev",        "hgcentraltest"),
+    "beta": ("hgwbeta",       "hgcentralbeta"),
+}
+
+# Session and userName must match this. Excludes anything that could be SQL- or
+# shell-special; permits the URL-encoding form ('%' and digits) used for sessions
+# whose human-readable names contain spaces (e.g. 'CNVs%20Clinical').
+SAFE_NAME = re.compile(r"^[A-Za-z0-9_%.\-]+$")
+
+
+def log(msg):
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    line = f"{ts} {getpass.getuser()} {msg}\n"
+    LOGFILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(LOGFILE, "a") as f:
+        f.write(line)
+
+
+def die(msg, code=1):
+    print(f"ERROR: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def confirm(prompt):
+    while True:
+        try:
+            ans = input(prompt + " (yes/no): ").strip().lower()
+        except EOFError:
+            return False
+        if ans == "yes":
+            print()
+            return True
+        if ans == "no":
+            print()
+            return False
+        print("  please type 'yes' or 'no'")
+
+
+def validate_name(name, label):
+    if not name or not SAFE_NAME.match(name):
+        die(f"unsafe {label}: {name!r} (must match {SAFE_NAME.pattern})")
+
+
+# ---------- hgsql shim (read-only) ----------
+
+def hgsql_read(host_key, sql):
+    """Run a SELECT.  Returns list[list[str]].  Caller is responsible for
+    interpolating only validated values into sql."""
+    host, db = HOSTS[host_key]
+    cmd = ["hgsql", "-h", host, db, "-N", "-B", "-e", sql]
+    p = subprocess.run(cmd, capture_output=True, text=True)
+    if p.returncode != 0:
+        die(f"hgsql read {host_key} failed: {p.stderr.strip()}")
+    out = p.stdout
+    if out.endswith("\n"):
+        out = out[:-1]
+    if not out:
+        return []
+    return [row.split("\t") for row in out.split("\n")]
+
+
+# ---------- RTS domain ----------
+
+def load_verboten():
+    pats = []
+    for line in VERBOTEN.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            pats.append(re.compile(line))
+    return pats
+
+
+def split_pairs(contents):
+    return [p for p in contents.split("&") if p]
+
+
+def join_pairs(pairs):
+    return "&".join(pairs)
+
+
+def scrub(pairs, verboten):
+    out = []
+    for p in pairs:
+        key = p.split("=", 1)[0]
+        # Drop pairs with empty or whitespace-tainted keys (corruption / stray
+        # data from manual session edits — e.g. an `& hgsid=...` artifact).
+        if not key or any(c.isspace() for c in key):
+            continue
+        if any(rx.match(key) for rx in verboten):
+            continue
+        out.append(p)
+    return sorted(set(out))
+
+
+def find_db_for_session(session):
+    """Return the assembly db for a session by scanning recTrackSets.<db>.tab.
+    Reads from htdocs/data/recTrackSets/ (the authoritative manifest location
+    since 3b6659d987c)."""
+    for tab in sorted(DATA_DIR.glob("recTrackSets.*.tab")):
+        m = re.match(r"recTrackSets\.([A-Za-z0-9]+)\.tab$", tab.name)
+        if not m:
+            continue
+        db = m.group(1)
+        for line in tab.read_text().splitlines():
+            if line.startswith("#") or not line.strip():
+                continue
+            cols = line.split("\t")
+            if len(cols) >= 3 and cols[2] == session:
+                return db
+    return None
+
+
+def kent_path(db, session):
+    return DATA_DIR / db / session
+
+
+def write_kent_file(db, session, pairs):
+    """Write pairs (one per line) to the kent tree atomically via temp+rename."""
+    path = kent_path(db, session)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.parent / (path.name + ".tmp")
+    tmp.write_text("\n".join(pairs) + "\n")
+    tmp.replace(path)
+    return path
+
+
+def fetch_session_row(host_key, user, session):
+    """Return (contents, settings, exists)."""
+    validate_name(user, "userName")
+    validate_name(session, "sessionName")
+    sql = (f"SELECT contents, settings FROM namedSessionDb "
+           f"WHERE userName='{user}' AND sessionName='{session}'")
+    rows = hgsql_read(host_key, sql)
+    if not rows:
+        return "", "", False
+    row = rows[0]
+    contents = row[0] if len(row) > 0 else ""
+    settings = row[1] if len(row) > 1 else ""
+    return contents, settings, True
+
+
+def show_pair_diff(label_a, pairs_a, label_b, pairs_b, verbose):
+    """Symmetric diff between two pair lists."""
+    set_a = set(pairs_a)
+    set_b = set(pairs_b)
+    only_a = sorted(set_a - set_b)
+    only_b = sorted(set_b - set_a)
+    print(f"  - {len(only_a)} vars in [{label_a}] not in [{label_b}]")
+    print(f"  + {len(only_b)} vars in [{label_b}] not in [{label_a}]")
+    if verbose:
+        for p in only_a:
+            print(f"    -{p}")
+        for p in only_b:
+            print(f"    +{p}")
+
+
+def show_git_diff_for(path):
+    """Run `git -C kent diff -- <path>`, after `git add -N` so new files show."""
+    rel = str(path)
+    try:
+        subprocess.run(["git", "-C", str(HOME / "kent"), "add", "-N", rel],
+                       check=False, capture_output=True)
+    except FileNotFoundError:
+        return
+    print("\n--- git diff (kent tree) ---")
+    subprocess.run(["git", "-C", str(HOME / "kent"), "--no-pager",
+                    "diff", "--no-color", "--", rel],
+                   check=False)
+
+
+# ---------- subcommand ----------
+
+def cmd_fetch(args):
+    verboten = load_verboten()
+
+    if args.src_url:
+        u = urlparse(args.src_url)
+        m = re.match(r"^/s/([^/]+)/([^/]+)/?$", u.path)
+        if not m:
+            die(f"bad --src-url; expected .../s/<user>/<sessionName>: {args.src_url}")
+        src_user, src_session = m.group(1), m.group(2)
+    else:
+        if not (args.src_user and args.src_session):
+            die("must provide --src-url OR (--src-user AND --src-session)")
+        src_user, src_session = args.src_user, args.src_session
+
+    target = args.target_session
+    validate_name(src_user, "src userName")
+    validate_name(src_session, "src sessionName")
+    validate_name(target, "target sessionName")
+
+    # .tab validation: must be listed in recTrackSets.<db>.tab.  This determines
+    # which assembly the file lands under and rejects typos / missing manifest rows.
+    db = find_db_for_session(target)
+    if db is None:
+        die(f"target session {target!r} not found in any recTrackSets.<db>.tab\n"
+            f"  Add a row to ~/kent/src/hg/htdocs/data/recTrackSets/recTrackSets.<db>.tab "
+            f"first, then re-run.")
+    print(f"assembly resolved from recTrackSets.{db}.tab: {db}")
+
+    src_host = args.src_host
+    src_h, src_db = HOSTS[src_host]
+    print(f"Fetching {src_user}/{src_session} from {src_host} ({src_h}:{src_db})...")
+
+    contents, _, exists = fetch_session_row(src_host, src_user, src_session)
+    if not exists:
+        die(f"source session {src_user}/{src_session} not found on {src_host}")
+    pairs = split_pairs(contents)
+    print(f"  fetched {len(pairs)} cart variables ({len(contents)} bytes)")
+
+    scrubbed = scrub(pairs, verboten)
+    dropped = len(pairs) - len(scrubbed)
+    print(f"  scrubbed: dropped {dropped} verboten/duplicate vars, kept {len(scrubbed)}")
+
+    target_path = kent_path(db, target)
+    existing_pairs = []
+    if target_path.exists():
+        existing_pairs = [ln.rstrip() for ln in target_path.read_text().splitlines() if ln.strip()]
+
+    if not args.commit:
+        print(f"\n--dry-run-- (no --commit flag); would write to {target_path}")
+        print(f"  ({len(existing_pairs)} -> {len(scrubbed)} cart vars after scrub)")
+        show_pair_diff("existing", existing_pairs, "new", scrubbed, args.verbose)
+        return 0
+
+    path = write_kent_file(db, target, scrubbed)
+    print(f"  wrote {path}")
+    show_git_diff_for(path)
+
+    if existing_pairs:
+        print("\n--- diff: previous file vs new ---")
+        show_pair_diff("prev", existing_pairs, "new", scrubbed, args.verbose)
+
+    if not confirm(f"\nKeep this update (yes), or revert (no)?"):
+        # Restore previous content if it existed; otherwise remove the new file
+        if existing_pairs:
+            tmp = path.parent / (path.name + ".tmp")
+            tmp.write_text("\n".join(existing_pairs) + "\n")
+            tmp.replace(path)
+            print(f"  reverted {path}")
+        else:
+            path.unlink()
+            print(f"  removed {path}")
+        return 1
+
+    log(f"fetch src={src_host}:{src_user}/{src_session} target={target} db={db} -> {path}")
+
+    print()
+    print(f"File written. To test in your sandbox:")
+    print(f"  cd ~/kent/src/hg/htdocs/data && make user")
+    print(f"  Then click the RTS in the dialog at https://hgwdev-{getpass.getuser()}.gi.ucsc.edu/cgi-bin/hgTracks?db={db}")
+    print()
+    print("Once validated, commit and push:")
+    print(f"  cd ~/kent")
+    print(f"  git add src/hg/htdocs/data/recTrackSets/{db}/{target}")
+    print(f"  git commit -m 'Updating RTS {target}. refs #32768'")
+    print(f"  git push")
+    return 0
+
+
+# ---------- main ----------
+
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="rtsUpdate",
+        description="Fetch a curator's Recommended Track Set from hgcentral, scrub it, "
+                    "and write the result to htdocs/data/recTrackSets/<db>/<session>.  "
+                    "Refs #32768, #34907.")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    pf = sub.add_parser("fetch",
+                        help="fetch source session, scrub, write the htdocs file")
+    pf.add_argument("--src-url",
+                    help="full URL like https://genome.ucsc.edu/s/<user>/<session>")
+    pf.add_argument("--src-user",
+                    help="source userName (alternative to --src-url)")
+    pf.add_argument("--src-session",
+                    help="source sessionName (alternative to --src-url)")
+    pf.add_argument("--src-host", choices=("rr", "dev", "beta"), default="rr",
+                    help="where to read the source from (default: rr)")
+    pf.add_argument("--target-session", required=True,
+                    help="target sessionName under userName='View'; must already "
+                         "appear in recTrackSets.<db>.tab")
+    pf.add_argument("--commit", action="store_true",
+                    help="actually write the file (default: dry-run)")
+    pf.add_argument("--verbose", "-v", action="store_true",
+                    help="show every var in diffs")
+    return p
+
+
+def main():
+    # Line-buffer stdout so prints interleave correctly with subprocess output
+    # (git diff, hgsql) that writes directly via the OS.
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+    except AttributeError:
+        pass
+    args = build_parser().parse_args()
+    if args.cmd == "fetch":
+        return cmd_fetch(args)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main() or 0)

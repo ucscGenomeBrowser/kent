@@ -140,8 +140,8 @@ if ((clickedLibId && sameString(s, clickedLibId)) ||
     {
     safef(s, sizeof(s), "<B>%d</B>", libId);
     webPrintLinkCell(s);
-    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\"><B>%s</B></A>", 
-	  hgcPathAndSettings(), tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
+    safef(s, sizeof(s), "<A HREF=\"%s&db=%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\"><B>%s</B></A>", 
+	  hgcPathAndSettings(), database, tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
 	  lib->newLibName);
     webPrintLinkCell(s);
     safef(s, sizeof(s), "<B>%s</B>", lib->tissue);
@@ -157,8 +157,8 @@ else
     {
     safef(s, sizeof(s), "%d", libId);
     webPrintLinkCell(s);  
-    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\">%s</A>", hgcPathAndSettings(), 
-	  tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
+    safef(s, sizeof(s), "<A HREF=\"%s&db=%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\">%s</A>", hgcPathAndSettings(), 
+	  database, tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
 	  lib->newLibName);
     webPrintLinkCell(s);
     webPrintLinkCell(lib->tissue);

@@ -1,4 +1,4 @@
-include ncOrfs.ra alpha
+include ncOrfs.ra
 
 include strVar.ra
 
@@ -9,6 +9,8 @@ include hoffMap.ra
 include cancerExpr.ra
 
 include mane.ra
+
+include clinvarMapped.ra alpha
 
 include gdcCancer.ra
 
@@ -50,6 +52,9 @@ include nuMtSeq.ra
 include gnomad.pext.ra
 
 include rnaMod.ra alpha
+include m6aAtlas.ra alpha
+
+include singleCellSignalsPeaks.ra alpha
 
 track miRnaAtlas
 compositeTrack on
@@ -678,9 +683,8 @@ bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
 include trackDb.gencode.ra
 
-include wgEncodeReg.ra beta,public
-include wgEncodeReg.alpha.ra alpha
-include wgEncodeReg4.ra alpha
+include wgEncodeReg.ra
+include wgEncodeReg4.ra
 
 include encode3.ra
 include encode.cCREs.override.ra
@@ -688,6 +692,7 @@ include encode.cCREs.override.ra
 include hic.ra
 
 include gnomad.ra
+include gnomadMpc.ra alpha
 
 
 include platinumGenomes.ra
@@ -899,6 +904,8 @@ include hprcChainNet.ra
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra
 include hprcArr.ra
+include hprc2.ra alpha
+include hprc2Chains.ra alpha
 include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
@@ -924,8 +931,8 @@ include psuVsUcscChains.ra alpha
 
 include LCR.ra alpha
 
-include mpra.ra alpha
-include nmd.ra alpha
+include mpra.ra
+include nmd.ra
 include ancient.ra
 
 # release alpha only here - we don't want to push out mb2 without
@@ -936,3 +943,7 @@ include mb2.ra alpha
 include hprcV2.trackDb.txt alpha
 
 include vgp577way.trackDb.ra alpha
+
+include crPred.ra alpha
+
+include tad.ra alpha

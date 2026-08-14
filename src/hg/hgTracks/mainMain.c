@@ -66,6 +66,11 @@ if (cgiVarExists("hgt.redirectTool"))
     cart = cartForSession(hUserCookie(), NULL, NULL);
     extToolRedirect(cart, cgiString("hgt.redirectTool"));
     }
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && cgiVarExists("myVarShareCmd"))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    myVariantsShareApiHandler(cgiString("myVarShareCmd"));
+    }
 else
     {
     httpHeaders = slPairNew("Cache-Control", "no-store");

@@ -322,16 +322,16 @@ encodeReport:
 listDbs:
 	@echo "# databases listed in trackDb/makefile DBS variable, with table counts"
 	@for D in ${DBS}; do \
-	    C=`hgsql -N -e "show tables;" $${D} 2> /dev/null | wc -l`; \
+	    C=`/cluster/bin/x86_64/hgsql -N -e "show tables;" $${D} 2> /dev/null | wc -l`; \
 	    if [ "$${C}" -gt 0 ]; then \
 		echo -e "$${D}\t$${C}"; \
 	    fi \
 	done
 
 test:
-	tdbQuery -check -release=alpha -strict "select count(*) from *" >/dev/null
-	tdbQuery -check -release=beta -strict "select count(*) from *" >/dev/null
-	tdbQuery -check -release=public -strict "select count(*) from *" >/dev/null
+	/cluster/bin/x86_64/tdbQuery -check -release=alpha -strict "select count(*) from *" >/dev/null
+	/cluster/bin/x86_64/tdbQuery -check -release=beta -strict "select count(*) from *" >/dev/null
+	/cluster/bin/x86_64/tdbQuery -check -release=public -strict "select count(*) from *" >/dev/null
 
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:

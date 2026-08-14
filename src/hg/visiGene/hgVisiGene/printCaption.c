@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "htmshell.h"
 #include "hdb.h"
+#include "hubConnect.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "captionElement.h"
@@ -41,6 +42,12 @@ sqlSafef(query, sizeof(query),
 taxon = sqlQuickNum(conn, query);
 
 genomeDb = hDbForTaxon(taxon);
+/* hDbForTaxon may return a curated hub (GenArk) assembly with no real SQL
+ * database.  genomeDb is used below in cross-database references passed to
+ * sqlTableExists(), which aborts on an "unknown database" error rather than
+ * returning FALSE.  Treat a hub db name as no usable native db. */
+if (genomeDb != NULL && hubConnectIsCurated(genomeDb))
+    genomeDb = NULL;
 if (genomeDb != NULL)
     {
     /* Make sure known genes track exists - we may need

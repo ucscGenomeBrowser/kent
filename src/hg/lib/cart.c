@@ -40,6 +40,7 @@
 #include "botDelay.h"
 #include "curlWrap.h"
 #include "hubSpaceKeys.h"
+#include "myVariantsShare.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -114,13 +115,13 @@ if (conn != NULL)
     /* Since the content string is chopped, query for the actual length. */
     struct dyString *query = dyStringNew(1024);
     sqlDyStringPrintf(query, "select length(contents) from %s"
-	  " where id = %d", userDbTable(), u->id);
+	  " where id = %lu", userDbTable(), u->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", u->sessionKey);
     uLen = sqlQuickNum(conn, query->string);
     dyStringClear(query);
     sqlDyStringPrintf(query, "select length(contents) from %s"
-	  " where id = %d", sessionDbTable(),s->id);
+	  " where id = %lu", sessionDbTable(),s->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", s->sessionKey);
     sLen = sqlQuickNum(conn, query->string);
@@ -138,7 +139,7 @@ if (textSize == NULL)
 if (trackControls == NULL)
     trackControls = "-";
 fprintf(stderr, "cartTrace: %22s: "
-	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
+	"u.i=%lu u.l=%d u.c=%d s.i=%lu s.l=%d s.c=%d "
 	"p=%s f=%s t=%s pid=%ld %s\n",
 	when,
 	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
@@ -146,12 +147,12 @@ fprintf(stderr, "cartTrace: %22s: "
 char userIdKey[256];
 cartDbSecureId(userIdKey, sizeof userIdKey, u);
 if (cart->userId && !sameString(userIdKey, cart->userId))
-    fprintf(stderr, "cartTrace: bad userId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad userId %s --> %lu_%s!  pid=%ld\n",
 	    cart->userId, u->id, u->sessionKey, (long)getpid());
 char sessionIdKey[256];
 cartDbSecureId(sessionIdKey, sizeof sessionIdKey, s);
 if (cart->sessionId && !sameString(sessionIdKey, cart->sessionId))
-    fprintf(stderr, "cartTrace: bad sessionId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad sessionId %s --> %lu_%s!  pid=%ld\n",
 	    cart->sessionId, s->id, s->sessionKey, (long)getpid());
 }
 
@@ -284,8 +285,8 @@ else
     struct cartDb *cdb = NULL;
     struct dyString *where = dyStringNew(256);
     char *sessionKey = NULL;	    
-    unsigned int id = cartDbParseId(secureId, &sessionKey);
-    sqlDyStringPrintf(where, "id = %u", id);
+    unsigned long id = cartDbParseId(secureId, &sessionKey);
+    sqlDyStringPrintf(where, "id = %lu", id);
     if (cartDbUseSessionKey())
 	{
 	if (!sessionKey)
@@ -299,7 +300,7 @@ else
        /* Can't use warn here -- it interrupts the HTML header, causing an
 	* err500 (and nothing useful in error_log) instead of a warning. */
        fprintf(stderr,
-	       "%s id=%u looks corrupted -- starting over with new %s id.\n",
+	       "%s id=%lu looks corrupted -- starting over with new %s id.\n",
 	       table, id, table);
        cdb = NULL;
        }
@@ -349,14 +350,14 @@ if (!cdb)
     sqlDyStringPrintf(query, ")");
     sqlUpdate(conn, query->string);
     dyStringFree(&query);
-    unsigned int id = sqlLastAutoId(conn);
+    unsigned long id = sqlLastAutoId64(conn);
     char newSecureId[256];
     if (cartDbUseSessionKey() && !sameString(sessionKey,""))
-	safef(newSecureId, sizeof newSecureId, "%u_%s", id, sessionKey);
+	safef(newSecureId, sizeof newSecureId, "%lu_%s", id, sessionKey);
     else
-	safef(newSecureId, sizeof newSecureId, "%u", id);
+	safef(newSecureId, sizeof newSecureId, "%lu", id);
     if ((cdb = cartDbLoadFromId(conn,table,newSecureId)) == NULL)
-        errAbort("Couldn't get cartDb for id=%u right after loading.  "
+        errAbort("Couldn't get cartDb for id=%lu right after loading.  "
 		 "MySQL problem??", id);
     if (!sameString(sessionKey,""))
 	freeMem(sessionKey);
@@ -681,16 +682,16 @@ if (row != NULL)
     {
     boolean shared = atoi(row[0]);
     if (shared ||
-	(userName && sameString(sessionOwner, userName)))
-	{
-	char *sessionVar = cartSessionVarName();
-	char *hgsid = cartSessionId(cart);
-    char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
-    sessionTableString = cloneString(sessionTableString);
-    char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
-    pubSessionsTableString = cloneString(pubSessionsTableString);
-	struct sqlConnection *conn2 = hConnectCentral();
-	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
+            (userName && sameString(sessionOwner, userName)))
+        {
+        char *sessionVar = cartSessionVarName();
+        char *hgsid = cartSessionId(cart);
+        char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+        sessionTableString = cloneString(sessionTableString);
+        char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+        pubSessionsTableString = cloneString(pubSessionsTableString);
+        struct sqlConnection *conn2 = hConnectCentral();
+        sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
         if (!merge)
             {
             cartRemoveLike(cart, "*");
@@ -698,20 +699,30 @@ if (row != NULL)
             }
         else
             cartParseOverHashExt(cart, row[1], TRUE);
-	cartSetString(cart, sessionVar, hgsid);
-	if (sessionTableString != NULL)
-	    cartSetString(cart, hgSessionTableState, sessionTableString);
-	if (pubSessionsTableString != NULL)
-	    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
-	if (oldVars)
-	    hashEmpty(oldVars);
-	/* Overload settings explicitly passed in via CGI (except for the
-	 * command that sent us here): */
-	loadCgiOverHash(cart, oldVars);
-	if (isNotEmpty(actionVar))
-	    cartRemove(cart, actionVar);
-	hDisconnectCentral(&conn2);
-	}
+        cartSetString(cart, sessionVar, hgsid);
+        if (sessionTableString != NULL)
+            cartSetString(cart, hgSessionTableState, sessionTableString);
+        if (pubSessionsTableString != NULL)
+            cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+        if (oldVars)
+            hashEmpty(oldVars);
+        /* Overload settings explicitly passed in via CGI (except for the
+         * command that sent us here): */
+        loadCgiOverHash(cart, oldVars);
+        if (isNotEmpty(actionVar))
+            cartRemove(cart, actionVar);
+        hDisconnectCentral(&conn2);
+
+        /* When loading another user's session, strip accepted-share cart vars
+         * so we don't carry shares from the session owner into the current user's
+         * cart. Shares are per-user; they should be re-accepted via share link. */
+        char *userName = wikiLinkUserName();
+        if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+            && (userName == NULL || !sameString(sessionOwner, userName)))
+            {
+            cartRemoveLike(cart, MYVAR_SHARED_CART_PREFIX "*");
+            }
+        }
     else
 	errAbort("Sharing has not been enabled for user %s's session %s.",
 		 sessionOwner, sessionName);
@@ -1503,6 +1514,12 @@ boolean isValidToken(char *token)
 // hg.conf key with the cloud flare secret key, used twice here, so a global macro
 #define CLOUDFLARESITEKEY "cloudFlareSiteKey"
 
+static char *getSessionId()
+/* Get session id if any from CGI. */
+{
+return cgiOptionalString("hgsid");
+}
+
 void printCaptcha() 
 /* print an html page that shows the captcha and on success, reloads the page with the token added as token=x */
 {
@@ -1510,6 +1527,7 @@ void printCaptcha()
     if (!cfSiteKey)
         return;
 
+    fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
     puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");
     puts("<script>");
@@ -1537,37 +1555,19 @@ void printCaptcha()
     exit(0);
 }
 
-static boolean isUserAgentException() 
+static boolean isUserAgentException()
 /* return true if HTTP user-agent is in list of exceptions in hg.conf */
 {
-char *agent = cgiUserAgent();
-if (!agent)
-    return FALSE;
-
-struct slName *excStrs = cfgValsWithPrefix("noCaptchaAgent.");
-if (!excStrs)
-    return FALSE;
-
-struct excReStr;
-for (struct slName *sl = excStrs;  sl != NULL;  sl = sl->next)
-    {
-    if (regexMatch(agent, sl->name))
-        {
-        fprintf(stderr, "CAPTCHAPASS %s matches %s\n", agent, sl->name);
-        return TRUE;
-        }
-    }
-
-return FALSE;
+return botExceptionUserAgent();
 }
 
-void forceUserIdOrCaptcha(struct cart* cart, char *userId, boolean userIdFound, boolean fromCommandLine)
+void forceUserIdOrCaptcha(char *userId, boolean userIdFound, boolean fromCommandLine)
 /* print captcha if user did not sent a valid hguid cookie or a valid
  * cloudflare token. Allow certain IPs and user-agents. */
 {
 static boolean captchaCheckDone = FALSE;
 
-// No need to do this again. Can happen if cartNew() is called somewhere else in a CGI
+// No need to do this again in a CGI run. Can happen if cartNew() is called somewhere else in a CGI a second time
 if (captchaCheckDone)
     return;
 
@@ -1612,10 +1612,27 @@ if (userId && userIdFound && !cgiOptionalString("captcha"))
 // and remove it from the cart
 char *token = cgiOptionalString("token");
 if (token)
-{ 
+{
     if (isValidToken(token))
         {
-        cartRemove(cart, "token");
+        fprintf(stderr, "CAPTCHA_VALID %s\n", getSessionId());
+        cgiVarExclude("token");
+        // Drop any IP-tracking rows for this hguid so a legitimate user
+        // who roams networks isn't repeatedly captcha-gated.
+        if (cfgOptionBooleanDefault("hguidIpTracking.enabled", FALSE) && isNotEmpty(userId))
+            {
+            unsigned long userIdNum = cartDbParseId(userId, NULL);
+            if (userIdNum != 0)
+                {
+                struct sqlConnection *conn = hConnectCentralNoCache();
+                char *table = cfgOptionDefault("hguidIpTracking.table", "hguidIpAccess");
+                char query[256];
+                sqlSafef(query, sizeof(query),
+                         "DELETE FROM %s WHERE userId=%lu", table, userIdNum);
+                sqlUpdate(conn, query);
+                sqlDisconnect(&conn);
+                }
+            }
         return;
         }
     else
@@ -1628,6 +1645,7 @@ if (token)
                 "where you have used the genome browser before, but not from this internet browser. "
                 "You can try our mirror sites, "
                 "genome-euro.ucsc.edu or genome-asia.ucsc.edu, while we are working on a solution.</body></html>");
+        fprintf(stderr, "CAPTCHA_REJECT %s\n", getSessionId());
         exit(0);
         }
 }
@@ -1664,7 +1682,6 @@ struct cart *cartNew(char *userId, char *sessionId,
 genericCgiSetup();
 
 struct cart *cart;
-struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
 boolean userIdFound = FALSE, sessionIdFound = FALSE;
 
@@ -1673,17 +1690,26 @@ cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
-
-cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 boolean fromCli = cgiWasSpoofed(); // QA runs our CGIs from the command line and we debug from there
 
-forceUserIdOrCaptcha(cart, userId, userIdFound, fromCli);
+boolean isValidHguid(char *cookieUserId); // external import from botDelay.c
+userIdFound = isValidHguid(userId);
 
-// we rely on the cookie being validated, so if we reset a cookie, do this after the captcha
+forceUserIdOrCaptcha(userId, userIdFound, fromCli);
+
+// Load userDb and sessionDb info *after* forceUserIdOrCaptcha.  loadDb will create a new record
+// if it doesn't find a matching one, and we don't need bot traffic filling our tables with junk
+
+// we rely on the cookie being validated later, so if user requested to reset the cookie settings
+// load the settings after the captcha has been checked
+struct sqlConnection *conn = cartDefaultConnector();
 if ( cgiOptionalString("ignoreCookie") != NULL )
     cart->userInfo = loadDb(conn, userDbTable(), NULL, &userIdFound);
+else
+    cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+
+cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
@@ -1776,6 +1802,7 @@ if (exclude != NULL)
     while ((ex = *exclude++))
 	cartExclude(cart, ex);
     }
+cartRemove(cart, "token"); // cleaning up captcha token if it slipped into the cart
 
 cartDefaultDisconnector(&conn);
 
@@ -1794,7 +1821,7 @@ struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-sqlDyStringPrintf(dy, " where id=%u", cdb->id);
+sqlDyStringPrintf(dy, " where id=%lu", cdb->id);
 if (cartDbUseSessionKey())
   sqlDyStringPrintf(dy, " and sessionKey='%s'", cdb->sessionKey);
 sqlUpdate(conn, dy->string);
@@ -1887,7 +1914,7 @@ cartDbSecureId(buf, sizeof buf, cart->sessionInfo);
 return buf;
 }
 
-unsigned cartSessionRawId(struct cart *cart)
+unsigned long cartSessionRawId(struct cart *cart)
 /* Return raw session id without security key. */
 {
 return cart->sessionInfo->id;
@@ -1909,7 +1936,7 @@ cartDbSecureId(buf, sizeof buf, cart->userInfo);
 return buf;
 }
 
-unsigned cartUserRawId(struct cart *cart)
+unsigned long cartUserRawId(struct cart *cart)
 /* Return raw user id without security key. */
 {
 return cart->userInfo->id;
@@ -2532,12 +2559,6 @@ static char *getCookieId(char *cookieName)
 return findCookieData(cookieName);
 }
 
-static char *getSessionId()
-/* Get session id if any from CGI. */
-{
-return cgiOptionalString("hgsid");
-}
-
 static void clearDbContents(struct sqlConnection *conn, char *table, char * secureId)
 /* Clear out contents field of row in table that matches id. */
 {
@@ -2545,9 +2566,9 @@ if (!secureId)
     return;
 struct dyString *query = dyStringNew(256);
 char *sessionKey = NULL;	    
-unsigned int id = cartDbParseId(secureId, &sessionKey);
+unsigned long id = cartDbParseId(secureId, &sessionKey);
 char *defaultCartContents = getDefaultCart(conn);
-sqlDyStringPrintf(query, "update %s set contents='%s' where id=%u", table, defaultCartContents, id);
+sqlDyStringPrintf(query, "update %s set contents='%s' where id=%lu", table, defaultCartContents, id);
 if (cartDbUseSessionKey())
     {
     if (!sessionKey)
@@ -2758,10 +2779,15 @@ for (h = httpHeaders; h != NULL; h = h->next)
 }
 
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
-/* write http headers including cookie and content type line. 
- * contType defaults to text/html when NULL. 
+/* write http headers including cookie and content type line.
+ * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
+/* The CGI header must be written exactly once; a second write lands in the page body.  Some flows
+ * (e.g. hgc) emit it early via cartAndCookieWithHtml before a later webStart also asks for it, so
+ * guard here rather than trusting every caller to check cartDidContentType first. */
+if (cartDidContentType)
+    return;
 if (!contType)
     contType = "text/html";
 if (!cookieName)
@@ -3003,6 +3029,17 @@ void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars
 {
 if (position != NULL && oldVars != NULL)
     {
+    /* If db changed (e.g. QuickLift hop or hgGateway switch), the old position is from
+     * a different assembly and would fail to resolve here; clear any stale lastPosition
+     * instead of carrying it over. */
+    struct hashEl *oldDb = hashLookup(oldVars, "db");
+    char *newDb = cartOptionalString(cart, "db");
+    if (oldDb != NULL && newDb != NULL && !IS_CART_VAR_EMPTY(oldDb->val) &&
+        differentString(newDb, oldDb->val))
+        {
+        cartRemove(cart, "lastPosition");
+        return;
+        }
     struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
     if (oldPos != NULL && differentString(position, oldPos->val))
         cartSetString(cart, "lastPosition", oldPos->val);
@@ -4014,8 +4051,10 @@ if (position == NULL)
 
 /* default if not set at all, as would happen if it came from a URL with no
  * position. Otherwise tell them to go back to the gateway. Also recognize
- * "default" as specifying the default position. */
-if (((position == NULL) || sameString(position, "default"))
+ * "default" as specifying the default position. An empty string is treated the
+ * same as unset (e.g. a stale "position=" left in the cart, or carried over
+ * from another assembly), so we fall back to the default rather than crashing. */
+if ((isEmpty(position) || sameString(position, "default"))
     && (defaultPosition != NULL))
     position = cloneString(defaultPosition);
 

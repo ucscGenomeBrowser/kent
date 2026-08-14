@@ -308,6 +308,7 @@ static void transRegCodeAnchor(struct transRegCode *trc)
 /* Print anchor to transRegCode details page. */
 {
 printf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart));
+printf("&db=%s", database);
 printf("&g=transRegCode");
 printf("&i=%s", trc->name);
 printf("&o=%d", trc->chromStart);

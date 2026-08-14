@@ -1254,6 +1254,12 @@ void maybeLoadSnake(struct track *track)
 /* check to see if we're doing snakes and if so load the correct methods. */
 {
 boolean doSnake = cartOrTdbBoolean(cart, track->tdb, "doSnake", FALSE);
+
+// the density graph and the rearrangement graph can't both be on at once.
+// if we're wiggling, undo snake mode and use the standard wiggle path.
+if (doSnake && checkIfWiggling(cart, track))
+    doSnake = FALSE;
+
 if (doSnake)
     {
     compareFunction compare;

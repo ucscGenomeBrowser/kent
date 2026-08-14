@@ -1,0 +1,130 @@
+<h2>Description</h2>
+<p>
+This track displays structural variants (SVs) in
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/">dbVar</a> that are not classified as
+common, somatic, or clinical. The track is defined by exclusion: it contains dbVar SVs <b>minus</b>
+</p>
+<ul>
+<li>common variants (covered by the <a href="/cgi-bin/hgTrackUi?g=dbVar_common">dbVar Common SV</a>
+track)</li>
+<li>variants with somatic origin (covered by the
+<a href="/cgi-bin/hgTrackUi?g=dbVar_somatic">dbVar Somatic SV</a> track)</li>
+<li>clinical variants from ClinVar (covered by the
+<a href="/cgi-bin/hgTrackUi?g=clinvar">ClinVar</a> track)</li>
+<li>variants of the types: short tandem repeat, interchromosomal translocation, intrachromosomal
+translocation</li>
+<li>variants from a set of legacy or obsoleted dbVar studies (nstd45, nstd75, nstd90, estd59,
+estd199, estd214)</li>
+<li>variants discovered using low-confidence methods (BAC aCGH, FISH, Karyotyping, MassSpec,
+Microsatellite genotyping, Multiple complete digestion, Not provided, ROMA, Southern, Western)</li>
+</ul>
+
+<p>
+NCBI sometimes refers to this category as <em>presumed normal</em> SVs in their hub documentation
+and source files. We use the term <b>Other</b> here to avoid implying that the variants are
+clinically normal &#8212; the track is purely a residual bucket of dbVar SVs that don't fit the
+other three composites.
+</p>
+
+<p>
+This track is updated with every monthly dbVar release.
+</p>
+
+<h2>Subtracks</h2>
+<p>
+The Other SVs are split into two subtracks:
+</p>
+<ul>
+<li><b>dbVar Healthy SVs</b>: SVs in dbVar with no reported phenotype.</li>
+<li><b>dbVar Phenotype SVs</b>: SVs in dbVar with a reported phenotype, excluding clinical
+and somatic variants.</li>
+</ul>
+
+<p>
+The Healthy subtrack is considerably larger than the Phenotype subtrack. Turning on
+<b>Hide empty subtracks</b> (default) limits the display to subtracks with data in the current
+viewing window.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Variants are colored by type, using the dbVar color scheme described in the
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar Overview
+page</a>:
+</p>
+<table>
+<thead><tr>
+<th style="border-bottom: 2px solid #6678B1;">Color</th>
+<th style="border-bottom: 2px solid #6678B1;">Variant Type(s)</th>
+</tr></thead>
+<tbody>
+<tr><th bgcolor="#ff0000"></th><td>deletion, delins, copy number loss</td></tr>
+<tr><th bgcolor="#0000ff"></th><td>duplication, copy number gain, insertion</td></tr>
+<tr><th bgcolor="#4f1c73"></th><td>copy number variation</td></tr>
+<tr><th bgcolor="#b98be7"></th><td>inversion</td></tr>
+<tr><th bgcolor="#49a4ff"></th><td>complex substitution</td></tr>
+<tr><th bgcolor="#704112"></th><td>tandem duplication</td></tr>
+<tr><th bgcolor="#b2b2b2"></th><td>sequence alteration</td></tr>
+</tbody>
+</table>
+
+<p>
+<b>Mouseover</b> on items shows gene(s) affected, size, variant type, dbVar study of origin,
+discovery method, phenotype (in the Phenotype subtrack), and population code (if available).
+</p>
+
+<p>
+Subtracks can be filtered by:
+</p>
+<ul>
+<li><b>Variant Type</b></li>
+<li><b>Variant Size</b> (Under 10KB, 10KB to 100KB, 100KB to 1MB, Over 1MB)</li>
+<li><b>Discovery Method</b> (Curated, Merging, Multiple, Oligo aCGH, Optical mapping, SNP array,
+Sequencing, other)</li>
+<li><b>Pathogenic Reciprocal Overlap</b> (none, 10 to 25, 25 to 50, 50 to 75, 75 to 90, 90 to 100)
+&#8212; range of reciprocal overlap with pathogenic variants in nstd102</li>
+<li><b>Population Code</b> (AFR, AMR, EAS, EUR, OTH, SAS, mixed, multiple, none, unknown)</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Per NCBI's dbVar processing pipeline, variant calls are extracted from the
+<code>variant_calls.gvf</code> files on the dbVar FTP site, reciprocally overlapped with the
+pathogenic clinical SV file using bedtools, filtered by the exclusion criteria described above,
+and converted to bigBed format. See the
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar
+Overview</a> for full methods.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="../../hgTables">Table Browser</a>, or the
+<a href="../../hgIntegrator">Data Integrator</a>. Due to the size of the Healthy subtrack (over
+5 million items), Table Browser queries on large regions may be slow &#8212; narrow by
+chromosome or region where possible.
+</p>
+<p>
+The data can also be downloaded from the
+<a target=_blank href="https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/">dbVar Track Hub</a>.
+For questions about dbVar track data, please contact
+<A HREF="mailto:&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v">&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v</A>.
+<!-- above address is dbvar at ncbi.nlm.nih.gov -->
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the dbVar team at NCBI, especially John Lopez and Timothy Hefferon for technical
+coordination and consultation.
+</p>
+
+<h2>References</h2>
+<p>
+Lappalainen I, Lopez J, Skipper L, Hefferon T, Spalding JD, Garner J, Chen C, Maguire M, Corbett M,
+Zhou G <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gks1213" target="_blank">
+DbVar and DGVa: public archives for genomic structural variation</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D936-41.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193291" target="_blank">23193291</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531204/" target="_blank">PMC3531204</a>
+</p>

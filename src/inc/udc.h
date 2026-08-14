@@ -103,6 +103,9 @@ void udcSeekCur(struct udcFile *file, bits64 offset);
 bits64 udcTell(struct udcFile *file);
 /* Return current file position. */
 
+bits64 udcFileOpenSize(struct udcFile *file);
+/* Return size of open file. */
+
 bits64 udcCleanup(char *cacheDir, double maxDays, boolean testOnly);
 /* Remove cached files older than maxDays old. If testOnly is set
  * no clean up is done, but the size of the files that would be

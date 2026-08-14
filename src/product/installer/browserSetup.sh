@@ -47,11 +47,13 @@ CGIBINDIR=$APACHEDIR/cgi-bin
 TRASHDIR=$APACHEDIR/trash
 
 # Mysql data directory for most genome annotation data
-# Yes we only support mariaDB anymore, but the variables will keep their names
+# Yes we only support mariaDB anymore, but the variables have 'mysql' in them.
 # Below please assume that mariadb is meant when mysql is written.
 # All user progress messages mention MariaDB, and no MySQL anymore.
 # (all non-mysql data is stored in /gbdb)
-MYSQLDIR=/var/lib/mysql
+# MYSQLDIR (the MariaDB datadir) is detected at runtime by setMysqlDir():
+# /var/lib/mysql on most distros, /var/lib/mariadb on recent Fedora/RHEL,
+# falling back to `SHOW VARIABLES datadir` (e.g. OSX).
 
 # mysql admin binary, different path on OSX
 MYSQLADMIN=mysqladmin
@@ -577,7 +579,7 @@ fi
 }
 
 
-# some mariadb installers e.g. on redhat distros does not secure mariadb by default, so do this now
+# some mariadb installers e.g. on redhat distros do not secure mariadb by default, so do this now
 # this is copied from Oracle's original script, on centos /usr/bin/mysql_secure_installation
 function secureMysql ()
 {
@@ -971,6 +973,7 @@ function installOsx ()
        cd $APACHEDIR
        # download minimal mysql db
        downloadFile $MYSQLDBURL | tar xz
+       MYSQLDIR=/var/lib/mysql # this makes little sense for OSX, adapt?
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR
 
        # configure apache
@@ -1476,9 +1479,9 @@ function setupBuildLinux ()
    waitKey
    if [[ "$DIST" == "debian" ]]; then
       debianInitApt
-      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev pkg-config libcurl4-openssl-dev
+      apt-get --assume-yes $APTERR install make git gcc g++ libpng-dev libmariadb-dev uuid-dev libfreetype-dev libbz2-dev liblzma-dev pkg-config libcurl4-openssl-dev
    elif [[ "$DIST" == "redhat" ]]; then
-      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel libcurl-devel
+      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel libcurl-devel xz-devel
    else 
       echo Error: Cannot identify linux distribution
       exit 100
@@ -1658,8 +1661,10 @@ function installBrowser ()
     fi
     # check if UCSC or genome-euro MySQL server is closer
     echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
-    eurospeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-    ucscspeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    # --connect-timeout/--max-time keep an unreachable site from blocking the build, and the || true keeps
+    # its failure (curl exit 28 under set -e) from aborting the install: a down site just loses the latency race
+    eurospeed=$( (time -p (for i in `seq 10`; do curl --connect-timeout 3 --max-time 5 -sSI genome-euro.ucsc.edu > /dev/null || true; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    ucscspeed=$( (time -p (for i in `seq 10`; do curl --connect-timeout 3 --max-time 5 -sSI genome.ucsc.edu > /dev/null || true; done )) 2>&1 | grep real | cut -d' ' -f2 )
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
        echo modifying hg.conf to pull MariaDB data from genome-euro-mysql instead of genome
@@ -1752,6 +1757,20 @@ function mkdirGbdb
     echo 'This directory is /usr/local/gbdb, see /etc/synthetic.conf' >> /gbdb/README.txt
 }
 
+# Set MYSQLDIR to the MariaDB datadir. Default (and our recommendation) is
+# /var/lib/mysql; recent Fedora/RHEL ship it as /var/lib/mariadb. Falls back
+# to `SHOW VARIABLES datadir` (e.g. on OSX, or any non-standard install).
+function setMysqlDir
+{
+    MYSQLDIR=/var/lib/mysql
+    if [ ! -d "$MYSQLDIR" ] && [ -d /var/lib/mariadb ]; then
+        MYSQLDIR=/var/lib/mariadb
+    fi
+    if [ ! -d "$MYSQLDIR" ]; then
+        MYSQLDIR=`mysql -NBe 'SHOW Variables WHERE Variable_Name="datadir"' | cut -f2`
+    fi
+}
+
 # GENOME DOWNLOAD: mysql and /gbdb
 function downloadGenomes
 {
@@ -1786,10 +1805,8 @@ function downloadGenomes
     # rsync is doing globbing itself, so switch it off temporarily
     set -f
 
-    # On OSX the MariaDB datadir is not under /var. On Linux distros, the MariaDB directory may have been moved.
-    if [ ! -d $MYSQLDIR ]; then 
-        MYSQLDIR=`mysql -NBe 'SHOW Variables WHERE Variable_Name="datadir"' | cut -f2`
-    fi
+    setMysqlDir
+    stopMysql
 
     # use rsync to get total size of files in directories and sum the numbers up with awk
     for db in $MYSQLDBS; do
@@ -1948,8 +1965,8 @@ function startMysql
 function mysqlCheck
 # check all mysql tables. Rarely, some of them are in an unclosed state on the download server, this command will close them
 {
-    echo2 Checking all mysql tables after the download to make sure that they are closed
-    mysqlcheck --all-databases --auto-repair --quick --fast --silent
+    echo2 Checking all mariadb tables after the download to make sure that they are closed
+    mariadb-check --all-databases --auto-repair --quick --fast --silent
 }
 
 function hideSomeTracks
@@ -1994,11 +2011,12 @@ function downloadMinimal
     fi
 
     echo2
-    echo2 Downloading minimal tables for databases $DBS 
+    echo2 Downloading minimal tables for databases $DBS
 
     # only these db tables are copied over by default
     minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
 
+    setMysqlDir
     stopMysql
 
     for db in $DBS; do
@@ -2100,7 +2118,9 @@ function updateBrowser {
    done
 
    # update the mysql DBs
+   setMysqlDir
    stopMysql
+
    DBS=`ls $MYSQLDIR/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db

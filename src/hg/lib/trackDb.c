@@ -287,6 +287,8 @@ if (startsWith("filterByRange.", name))
     return TRUE;
 if (startsWith("filterText.", name))
     return TRUE;
+if (startsWith("filterPriority.", name))
+    return TRUE;
 if (endsWith(name, "Filter"))
     return TRUE;
 if (endsWith(name, "FilterValues"))
@@ -296,6 +298,8 @@ if (endsWith(name, "FilterType"))
 if (endsWith(name, "FilterLimits"))
     return TRUE;
 if (endsWith(name, "FilterText"))
+    return TRUE;
+if (endsWith(name, "FilterPriority"))
     return TRUE;
 if (startsWith("highlight.", name))
     return TRUE;
@@ -312,6 +316,10 @@ if (startsWith("highlightLabel.", name))
 if (startsWith("highlightByRange.", name))
     return TRUE;
 if (startsWith("highlightText.", name))
+    return TRUE;
+if (startsWith("highlightPriority.", name))
+    return TRUE;
+if (endsWith(name, "HighlightPriority"))
     return TRUE;
 return FALSE;
 }

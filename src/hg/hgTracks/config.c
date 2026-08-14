@@ -58,64 +58,83 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
-char *freeTypeFontNames[] = {
-"AvantGarde-Book",
-"AvantGarde-Demi",
-"AvantGarde-BookOblique",
-"AvantGarde-DemiOblique",
-"Helvetica",
-"Helvetica-Bold",
-"Helvetica-Oblique",
-"Helvetica-BoldOblique",
-"Helvetica-Narrow",
-"Helvetica-Narrow-Bold",
-"Helvetica-Narrow-Oblique",
-"Helvetica-Narrow-BoldOblique",
-"Times-Roman",
-"Times-Bold",
-"Times-Italic",
-"Times-BoldItalic",
-"Courier",
-"Courier-Bold",
-"Courier-Oblique",
-"Courier-BoldOblique",
-"ZapfChancery-MediumItalic",
-"Atkinson",
-"Atkinson-Bold",
-"Atkinson-Oblique",
-"Atkinson-BoldOblique",
-"Lexend",
-"Lexend-Bold",
-};
+/* HOW TO ADD A NEW FONT
+ *
+ * The browser draws track text with either the old bitmap engine or, when
+ * freeType is on (hg.conf "freeType=on", the default in a FreeType build), the
+ * FreeType engine.  The fonts the FreeType engine offers are the freeTypeFonts[]
+ * table below.  To add one:
+ *
+ *   1. Put the font file where the engine can find it.  At run time the file is
+ *      looked up under freeTypeDir, which defaults to "../htdocs/urw-fonts".
+ *      That path is relative to the CGI's working directory, so it resolves to
+ *      the *shared* htdocs/urw-fonts even from a per-user sandbox -- you do not
+ *      need a urw-fonts directory under your own htdocs-USER.  (You can point
+ *      somewhere else with "freeTypeDir" in hg.conf.)  Both Type-1 (.pfb) and
+ *      TrueType (.ttf) files work.
+ *
+ *   2. Add a row to freeTypeFonts[] giving the name and the file.  The name is
+ *      what shows up in the configure-page Font dropdown.  The configure page
+ *      splits the name on the first '-' into a face and a style: the part before
+ *      the '-' is the face shown in the Font menu, the part after is an entry in
+ *      the Style menu.  So a plain weight is just the face name ("Lexend") and a
+ *      variant is "Face-Style" ("Lexend-Bold").  Group a face's variants on
+ *      consecutive rows so the Style menu lists them together.
+ *
+ * Gotchas:
+ *
+ *   - Avoid variable fonts (e.g. InterVariable.ttf).  FreeType is opened on face
+ *     index 0 with no named instance selected, so a variable font renders only
+ *     its default master -- usually not the weight you expected, which looks like
+ *     "the option appeared but a different font was drawn".  Use a static,
+ *     single-weight file instead (e.g. Inter-Regular.ttf).
+ *
+ *   - The name in the dropdown must match the name in this table exactly,
+ *     including the face/style split above.  A selected name that matches no row
+ *     falls back to the bitmap engine (see maybeNewFonts).
+ */
 
-char *freeTypeFontFiles[] = {
-"a010013l.pfb",
-"a010015l.pfb",
-"a010033l.pfb",
-"a010035l.pfb",
-"n019003l.pfb",
-"n019004l.pfb",
-"n019023l.pfb",
-"n019024l.pfb",
-"n019043l.pfb",
-"n019044l.pfb",
-"n019063l.pfb",
-"n019064l.pfb",
-"n021003l.pfb",
-"n021004l.pfb",
-"n021023l.pfb",
-"n021024l.pfb",
-"n022003l.pfb",
-"n022004l.pfb",
-"n022023l.pfb",
-"n022024l.pfb",
-"z003034l.pfb",
-"AtkinsonHyperlegible-Regular.ttf",
-"AtkinsonHyperlegible-Bold.ttf",
-"AtkinsonHyperlegible-Italic.ttf",
-"AtkinsonHyperlegible-BoldItalic.ttf",
-"Lexend-Regular.ttf",
-"Lexend-Bold.ttf",
+struct freeTypeFont
+/* A font offered to the FreeType text engine.  The name and its file live on
+ * one row so the two can never drift out of sync (this used to be two parallel
+ * arrays indexed by position, which silently rendered the wrong font when they
+ * disagreed). */
+    {
+    char *name;	/* Label shown in the configure-page dropdown.  A normal-weight
+		 * font is just the face ("Lexend"); a variant is "Face-Style"
+		 * ("Lexend-Bold").  The dropdown splits this on the first '-'. */
+    char *file;	/* Font file (.pfb Type-1 or .ttf TrueType) found under
+		 * freeTypeDir (hg.conf freeTypeDir, default ../htdocs/urw-fonts). */
+    };
+
+struct freeTypeFont freeTypeFonts[] = {
+{"AvantGarde-Book",			"a010013l.pfb"},
+{"AvantGarde-Demi",			"a010015l.pfb"},
+{"AvantGarde-BookOblique",		"a010033l.pfb"},
+{"AvantGarde-DemiOblique",		"a010035l.pfb"},
+{"Helvetica",				"n019003l.pfb"},
+{"Helvetica-Bold",			"n019004l.pfb"},
+{"Helvetica-Oblique",			"n019023l.pfb"},
+{"Helvetica-BoldOblique",		"n019024l.pfb"},
+{"Helvetica-Narrow",			"n019043l.pfb"},
+{"Helvetica-Narrow-Bold",		"n019044l.pfb"},
+{"Helvetica-Narrow-Oblique",		"n019063l.pfb"},
+{"Helvetica-Narrow-BoldOblique",	"n019064l.pfb"},
+{"Times-Roman",				"n021003l.pfb"},
+{"Times-Bold",				"n021004l.pfb"},
+{"Times-Italic",			"n021023l.pfb"},
+{"Times-BoldItalic",			"n021024l.pfb"},
+{"Courier",				"n022003l.pfb"},
+{"Courier-Bold",			"n022004l.pfb"},
+{"Courier-Oblique",			"n022023l.pfb"},
+{"Courier-BoldOblique",			"n022024l.pfb"},
+{"ZapfChancery-MediumItalic",		"z003034l.pfb"},
+{"Atkinson",				"AtkinsonHyperlegible-Regular.ttf"},
+{"Atkinson-Bold",			"AtkinsonHyperlegible-Bold.ttf"},
+{"Atkinson-Oblique",			"AtkinsonHyperlegible-Italic.ttf"},
+{"Atkinson-BoldOblique",		"AtkinsonHyperlegible-BoldItalic.ttf"},
+{"Lexend",				"Lexend-Regular.ttf"},
+{"Lexend-Bold",				"Lexend-Bold.ttf"},
 };
 
 char *emptyStyles[] = {
@@ -133,26 +152,50 @@ char *defaultState = "off";
 return sameString(cfgOptionDefault("freeType", defaultState), "on");
 }
 
+static char *chosenFreeTypeFont(char **retFontName)
+/* Return the file holding the FreeType font the user has picked, and its name in
+ * retFontName.  NULL means stay on the bitmap engine. */
+{
+if (!freeTypeOn())
+    return NULL;
+
+if (sameString(tl.textFont, "Bitmap"))
+    return NULL;
+
+int ii;
+for(ii=0; ii < ArraySize(freeTypeFonts); ii++)
+    if (sameString(freeTypeFonts[ii].name, tl.textFont))
+        break;
+if (ii == ArraySize(freeTypeFonts))
+    return NULL;   // not a font we know about; leave the bitmap engine in place
+
+static char buffer[PATH_LEN];
+char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
+safef(buffer, sizeof buffer, "%s/%s", fontDir, freeTypeFonts[ii].file);
+*retFontName = freeTypeFonts[ii].name;
+return buffer;
+}
+
+void initFontEngine()
+/* Load the text engine the user has picked, before anything measures a string.
+ * Pack mode reserves room for an item by measuring its label, and
+ * mgFontStringWidth answers from whichever engine is loaded at the time.  Doing
+ * this up front keeps the packing from depending on whether some earlier image
+ * on the page -- the ideogram -- happened to load FreeType first. */
+{
+char *fontName = NULL;
+char *fontFile = chosenFreeTypeFont(&fontName);
+if (fontFile != NULL)
+    mgLoadFontEngine(FONT_METHOD_FREETYPE, fontFile);
+}
+
 void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
-if (!freeTypeOn())
-    return;
-
-if (sameString(tl.textFont, "Bitmap"))
-    return;
-
-char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
-char buffer[4096];
-
-int ii;
-for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
-    if (sameString(freeTypeFontNames[ii], tl.textFont))
-        break;
-char *fontFile = freeTypeFontFiles[ii];
-char *fontName = freeTypeFontNames[ii];
-safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+char *fontName = NULL;
+char *fontFile = chosenFreeTypeFont(&fontName);
+if (fontFile != NULL)
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, fontFile);
 }
 
 static void textFontDropDown()
@@ -166,7 +209,7 @@ if (currentStyle)
 else
     currentStyle = "Normal";
 
-char *faceNames[sizeof(freeTypeFontNames)];
+char *faceNames[ArraySize(freeTypeFonts) + 1];  // +1 for the "Bitmap" entry below
 int ii;
 int numFonts = 0;
 struct dyString *dy = dyStringNew(1024);
@@ -178,9 +221,9 @@ char *lastName = NULL;
 faceNames[numFonts++] = "Bitmap";
 dyStringPrintf(dy, "  fontStyles['Bitmap'] = ['Normal'];");
 
-for (ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+for (ii=0; ii < ArraySize(freeTypeFonts); ii++)
     {
-    char *fontName = cloneString(freeTypeFontNames[ii]);
+    char *fontName = cloneString(freeTypeFonts[ii].name);
     char *style = strchr(fontName, '-');
 
     if (style)
@@ -346,9 +389,9 @@ for (group = groupList; group != NULL; group = group->next)
         showedRuler = TRUE;
         hPrintf("<TR %sid='%s-0'>",(isOpen ? "" : "style='display: none'"), group->name);
 	hPrintf("<TD>");
-        hPrintf("<A HREF=\"%s?%s=%s&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
+        hPrintf("<A HREF=\"%s?%s=%s&db=%s&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
-                chromName, RULER_TRACK_NAME);
+                database, chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD><TD>");
 	hTvDropDownClassVisOnlyWithLabel("ruler", rulerMode, FALSE,
@@ -420,11 +463,11 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintIcons(tdb);
 
         if (track->hasUi)
-            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
+            hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&db=%s&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
                     tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
                     hTrackUiForTrack(tdb->track),
-                    cartSessionVarName(), cartSessionId(cart), track->track);
+                    cartSessionVarName(), cartSessionId(cart), database, track->track);
         hPrintf(" %s", tdb->shortLabel);
         if (track->hasUi)
 	    hPrintf("</A>");
@@ -775,6 +818,35 @@ if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
     hPrintf("<tr><td>");
     hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
     hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
+    }
+
+// My Variants navigation preference reset - stored in localStorage
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    hPrintf("<TR><TD>");
+    hPrintf("<input type='checkbox' id='resetMyVariantsNav' name='resetMyVariantsNav'>");
+    hPrintf("</TD><TD>");
+    hPrintf("Reset 'My Annotations' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
+    hPrintf("</TD></TR>\n");
+    // Display current preference and clear localStorage on form submit if checkbox is checked
+    jsInlineF(
+        "document.addEventListener('DOMContentLoaded', function() {"
+        "    var prefSpan = document.getElementById('myVariantsNavPrefDisplay');"
+        "    if (prefSpan) {"
+        "        var pref = localStorage.getItem('myVariants_navPref');"
+        "        prefSpan.textContent = pref ? pref : 'not set';"
+        "    }"
+        "    var form = document.forms['TrackForm'] || document.forms['TrackHeaderForm'];"
+        "    if (form) {"
+        "        form.addEventListener('submit', function() {"
+        "            var cb = document.getElementById('resetMyVariantsNav');"
+        "            if (cb && cb.checked) {"
+        "                localStorage.removeItem('myVariants_navPref');"
+        "            }"
+        "        });"
+        "    }"
+        "});"
+    );
     }
 
 hTableEnd();

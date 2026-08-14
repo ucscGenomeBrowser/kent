@@ -1,0 +1,20 @@
+# The request line has a limit, and a hideKids expansion can sail past it.
+#
+# `{cCREs: hideKids}` on hg38 once sent 1701 cart variables in a 42,020-character GET,
+# because the walk went straight through the ENCODE4 Core Collection composite and
+# enumerated all 850 of its subtracks. Apache answered 414 and the next shot: happily
+# photographed "Request-URI Too Long" -- a perfectly valid page, so nothing failed.
+#
+# The walk now stops at the first container that propagates its own visibility, which
+# makes that step three names. The check that matters is `noText`, since a 414 renders
+# as a good page and would otherwise pass every other assertion here.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {cCREs: hideKids}
+  - expect: {rows: [ruler], exact: true, noText: "Too Long"}

@@ -64,6 +64,863 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="081126"></a>
+<h2>Aug. 11, 2026 &nbsp;&nbsp; Deleteriousness Predictions: ClinPred for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of the ClinPred pathogenicity score track for
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=clinPred" target="_blank">hg19</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=clinPred" target="_blank">hg38</a>.
+ClinPred is a machine-learning predictor of pathogenicity for nonsynonymous (missense)
+single-nucleotide variants, combining existing pathogenicity scores with population allele
+frequency from gnomAD. It was trained on confidently annotated disease-causing and benign
+variants from ClinVar. Pre-computed scores are provided for all possible human missense
+variants in the exome.
+</p>
+
+<p>
+Scores range from 0 to 1, with higher values indicating a greater predicted likelihood
+that a variant is disease-relevant. The authors recommend a score of &ge; 0.5 as evidence
+of pathogenicity. As with any pathogenicity prediction score, ClinPred is intended as
+supporting evidence rather than a stand-alone classifier.
+</p>
+
+<p>
+There are four subtracks in this collection, one for each possible alternate nucleotide
+(A, C, G, T). At every exome position covered by ClinPred, three of the four subtracks
+show a score (one per non-reference base), and the fourth, corresponding to the reference
+base, is set to 0. Synonymous alternates are also set to 0, since ClinPred only scores
+missense variants. Positions with no exome coverage are shown as gaps.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/bkitiyakara/share_JMwPz7ty" target="_blank">
+<img alt="Genome Browser screenshot of the ClinPred track" src="/images/newsArchImages/ClinPred.png"
+width='55%'></a>
+<p class="gbsCaption"><em>ClinPred pathogenicity scores for all possible single-nucleotide
+substitutions (A, C, G, and T) at a genomic locus (chr7, GRCh38/hg38). The four ClinPred
+subtracks display predicted pathogenicity scores for each possible alternate allele, where
+higher scores indicate a greater likelihood that the variant is disease-causing.</em></p>
+</div>
+
+<p>
+Items in this track are colored according to score:
+</p>
+
+<ul>
+  <li><span style="color:red;"><b>Red</b></span> &ndash; Likely pathogenic (&ge; 0.5)</li>
+  <li><span style="color:blue;"><b>Blue</b></span> &ndash; Likely benign (&lt; 0.5)</li>
+</ul>
+
+<p>
+<b>Note:</b> Zoom in until every base is visible at the top of the display; otherwise,
+multiple nucleotides will fall under a single pixel, and no score will be shown on the
+mouseover tooltip.
+</p>
+
+<p>
+We would like to thank the ClinPred authors for making the pre-computed scores publicly
+available. This track was developed by Lou Nassar and Max Haeussler with QA by Eliza Alde,
+Jairo Navarro, and Barali Kitiyakara.
+</p>
+
+<a name="072226"></a>
+<h2>Jul. 22, 2026 &nbsp;&nbsp; ENCODE4 cCREs and ENCODE4 Regulation tracks released for human (hg38) and mouse (mm10)</h2>
+<p>
+We are excited to announce our major release of the ENCODE4 data collection on the
+UCSC Genome Browser for both the human (hg38/GRCh38) and mouse (mm10/GRCm38)
+assemblies. This release consists of two major components: the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=cCREs&position=default" target="_blank">
+<b>ENCODE Registry of cCREs</b></a> (candidate Cis-Regulatory Elements) container,
+and the new
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4&position=default" target="_blank">
+<b>ENCODE4 Regulation</b></a> container, both described in
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+Moore <em>et al</em>., <em>Nature</em> 2026</a>.
+</p>
+
+<p>
+Together, these tracks represent the final ENCODE Phase 4 data release integrated
+into the browser and cover chromatin accessibility, histone modification and CTCF
+ChIP-seq, transcription factor binding, and transcription across thousands of
+individual biosamples. As part of this release, the ENCODE4 cCREs and ENCODE4
+Regulation tracks are now the default regulation tracks shown on hg38 and mm10,
+replacing the previous ENCODE3 cCREs and ENCODE3 Regulation tracks. The ENCODE3
+tracks remain available for archival use.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/gperez2/HBBexample" target="_blank">
+<img alt="ENCODE4 cCREs and ENCODE4 Regulation tracks at the HBB locus" src="/images/encode4Release.png" width='75%'></a>
+<p class="gbsCaption"><em>The ENCODE4 Registry of cCREs, Core Collection, and H3K27ac
+(Layered) Regulation tracks at the HBB locus on hg38.</em></p>
+</div>
+
+<h3>ENCODE4 cCREs (hg38 and mm10)</h3>
+<p>
+The ENCODE Registry of candidate Cis-Regulatory Elements integrates chromatin
+accessibility and ChIP-seq signals across thousands of biosamples into a
+biosample-agnostic annotation of the regulatory landscape. Human and mouse are
+now both up-to-date at ENCODE4:
+</p>
+<ul>
+<li><b>ENCODE4 cCREs</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=cCREregistry&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=cCREregistry&position=default" target="_blank">mm10</a>:
+2,348,854 human and 926,843 mouse cCREs identified and classified using the
+ENCODE4 integrative analysis pipeline across ENCODE biosamples. Human cCREs
+were originally announced in <a href="#011526">January 2026</a>.</li>
+<li><b>ENCODE4 Core Collection</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=coreCcres&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=coreCcres&position=default" target="_blank">mm10</a>:
+Biosample-specific cCREs alongside underlying epigenomic signals for the ENCODE4
+Core Collection: 170 human and 18 mouse biosamples that were comprehensively
+profiled with all four core assays (DNase-seq, H3K4me3 ChIP-seq, H3K27ac ChIP-seq,
+and CTCF ChIP-seq).</li>
+</ul>
+
+<p>
+Both human and mouse cCREs are colored by their putative functional assignment. See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=cCREregistry&position=default" target="_blank">description page</a> for the full classification scheme.
+</p>
+
+<h3>ENCODE4 Regulation container (hg38 and mm10)</h3>
+<p>
+The new <b>ENCODE4 Regulation</b> container for
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4Reg&position=default" target="_blank">mm10</a>
+brings the underlying ENCODE4 experimental data directly into the
+browser. The container combines organ-averaged summary tracks with searchable,
+faceted views of thousands of individual experiments across both peak and signal
+data types. The following subtracks are available:
+</p>
+
+<p><b>Organ-averaged summary tracks (Layered):</b> transparent overlays of
+signal averaged across biosamples from the same organ or tissue. Each track uses
+consistent per-organ colors so the same organ is comparable across assays:
+</p>
+<ul>
+<li><b>H3K27ac (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkH3k27ac&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkH3k27ac&position=default" target="_blank">mm10</a>: histone modification associated with active enhancers and
+promoters, shown as the default track.</li>
+<li><b>DNase (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Dnase&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegDnase&position=default" target="_blank">mm10</a>: open chromatin identified by DNase I hypersensitivity.</li>
+<li><b>ATAC (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Atac&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegAtac&position=default" target="_blank">mm10</a>: open chromatin identified by Tn5 transposase insertion.</li>
+<li><b>H3K4me3 (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkH3k4me3&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkH3k4me3&position=default" target="_blank">mm10</a>: histone modification associated with active and poised
+promoters.</li>
+<li><b>CTCF (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4MarkCtcf&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegMarkCtcf&position=default" target="_blank">mm10</a>: CTCF binding, marking insulators and chromatin loop
+anchors.</li>
+<li><b>Transcription (Layered)</b> <a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Txn&position=default" target="_blank">hg38</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegTxn&position=default" target="_blank">mm10</a>: strand-specific total RNA-seq signal, averaged by organ.</li>
+</ul>
+
+<p><b>Transcription factor peak track</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4TfPeaks&position=default" target="_blank">hg38</a>:
+<b>TF rPeaks</b>, representative peak clusters for 912 DNA-associated proteins across 1,152
+biosamples, derived from the ENCODE4 TF ChIP-seq collection, with linkouts to
+<a href="https://screen.wenglab.org/" target="_blank">SCREEN</a> and
+<a href="https://www.factorbook.org/" target="_blank">FactorBook</a>.</p>
+
+<p><b>Individual-experiment tracks (Indiv.):</b> searchable, faceted
+composites providing access to the underlying data behind the summary tracks.
+Each experiment is shown as a Signal (bigWig) subtrack and, where available, a
+Peak (bigBed) subtrack:
+</p>
+<ul>
+<li><b>DNase/ATAC/Histone/CTCF (Indiv.)</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4Epigenetics&position=default" target="_blank">hg38</a>:
+6,353 subtracks (3,199 signal + 3,154 peak) covering DNase-seq, ATAC-seq, and
+ChIP-seq for H3K4me3, H3K27ac, and CTCF. Filterable by assay, organ, biosample
+type, life stage, and data type. <b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegEpigenetics&position=default" target="_blank">mm10</a> equivalent:</b>
+1,178 subtracks.</li>
+
+<li><b>TF ChIP-seq (Indiv.)</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4TfChip&position=default" target="_blank">hg38</a>:
+4,964 subtracks (2,462 signal + 2,502 peak) for ChIP-seq of individual
+transcription factors, DNA-associated proteins, RNA polymerase, and chromatin
+regulators. The experimental basis for the TF rPeaks track above. <b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegTfChip&position=default" target="_blank">mm10</a> equivalent:</b>
+334 subtracks.</li>
+
+<li><b>RNA-seq (Indiv.)</b>
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chr7&g=wgEncodeReg4RnaSeq&position=default" target="_blank">hg38</a>:
+1,046 strand-specific total RNA-seq signal subtracks from individual biosamples. <b><a href="/cgi-bin/hgTrackUi?db=mm10&c=chr7&g=encode4RegRnaSeq&position=default" target="_blank">mm10</a> equivalent:</b>
+1,054 subtracks.</li>
+</ul>
+
+<div class="text-center">
+<a href="https://genome.ucsc.edu/s/gperez2/HBBexample2" target="_blank">
+<img alt="ENCODE4 Regulation Layered tracks and an Indiv. composite with peaks at the HBB locus" src="/images/encode4Regulation.png" width='75%'></a>
+<p class="gbsCaption"><em>DNase and H3K27ac (Layered) tracks, plus K562 signal and peak
+tracks from the DNase/ATAC/Histone/CTCF (Indiv.) faceted composite, at the HBB locus
+on hg38.</em></p>
+</div>
+
+<p>
+For details, please see the individual track description pages, as well as
+Moore <em>et al</em>.
+<a href="https://www.nature.com/articles/s41586-025-09909-9" target="_blank">
+An Expanded Registry of Candidate cis-Regulatory Elements for Studying
+Transcriptional Regulation</a>. <em>Nature</em>. 2026 January 7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39763870" target="_blank">39763870</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11703161/" target="_blank">PMC11703161</a>.
+</p>
+
+<p>
+This dataset was produced by the ENCODE Data Analysis Center
+(<a href="https://www.umassmed.edu/zlab/" target="_blank">Weng lab</a> at
+UMass Chan Medical School). Thanks to Mingshi Gao, Jill Moore, and Zhiping Weng for creating and
+improving the expansive track hubs for ENCODE4 and for iterating with us to
+bring them to the browser as native tracks. We also thank the <a href="https://www.encodeproject.org/" target="_blank">ENCODE Consortium</a>, the ENCODE production
+laboratories, and the ENCODE Data Coordination Center for generating and
+processing the underlying experiments, and Gerardo Perez, Brian Raney, Max
+Haeussler, and Lou Nassar for building and reviewing these tracks.
+</p>
+
+<a name="071626"></a>
+<h2>Jul. 16, 2026 &nbsp;&nbsp; Long-read Structural Variants tracks for human (hg38 and hs1)</h2>
+<p>
+We are excited to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank"><b>Long-read
+Structural Variants</b></a> container track on the human assemblies
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank">GRCh38/hg38</a> and
+<a href="/cgi-bin/hgTracks?db=hs1&position=default" target="_blank">T2T-CHM13/hs1</a>.
+The container track brings together structural variant (SV) callsets from 16 long-read
+sequencing studies worldwide into a single place where you can compare large genomic
+rearrangements (deletions, insertions, duplications, inversions, and complex events)
+across populations, cohorts, and calling strategies. Long-read technologies span
+repetitive regions and resolve complex loci that are difficult to detect with short
+reads, giving more precise breakpoints and better sensitivity for large variants.
+</p>
+
+<p>
+At the center of the container track is an
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=lrSvAll&position=default" target="_blank"><b>All
+long-read SVs merged</b></a> track that unifies every source callset on identical
+position, type, and length into roughly 2.6 million distinct SV sites, each carrying
+per-database allele counts so you can see at a glance how many studies support a
+given variant and at what frequency. This merged track is the best place to start: we
+recommend using it to survey structural variation across all studies at a
+locus, then turning to the individual dataset tracks for cohort-specific allele
+frequencies, genotypes, and annotations on the variants you want to follow up.
+</p>
+
+<div class="text-center">
+  <img src="../images/longReadSVsAnnouncementImage.png"
+       alt="Long-read Structural Variants container track at the UGT2B17 locus on hg38.
+       The merged track shows a common whole-gene deletion of about 117 kb, echoed by
+       overlapping calls in the individual dataset tracks below. A mouseover reports a
+       79% allele frequency for the deletion in the Chinese Pangenome Consortium."
+       width='80%'>
+  <p class="gbsCaption"><em>The Long-read Structural Variants container track at
+  UGT2B17 (chr4). The merged track (top) unifies a common whole-gene deletion of about
+  117 kb, which recurs across the individual dataset tracks below. The mouseover reports
+  a 79% allele frequency in the Chinese Pangenome Consortium, consistent with the higher
+  frequency of the UGT2B17 deletion in East Asian populations.</em></p>
+</div>
+
+<p>
+Each variant is colored by SV type
+(<b style="color:rgb(200,0,0)">deletions</b>,
+<b style="color:rgb(0,0,200)">insertions</b>,
+<b style="color:rgb(0,160,0)">duplications</b>,
+<b style="color:rgb(230,140,0)">inversions</b>, and
+<b style="color:rgb(140,0,200)">complex or multi-allele events</b>), and carries
+allele frequencies, sample counts, and per-study annotations. Cross-database filters
+let you narrow by SV type, source study, variant length, allele frequency, or the
+number of supporting studies, in any combination.
+</p>
+
+<p>
+The container track pulls together cohorts from across the world. A high-level summary is
+shown below; a complete table with per-study sample counts, cohorts, sequencing
+coverage, and SV counts is on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=longReadVariants&position=default" target="_blank">track
+description page</a>.
+</p>
+
+<table class="stdTbl">
+  <tr><th>Region / theme</th><th>Contributing studies</th></tr>
+  <tr><td>East Asia</td><td>Han Chinese 945, ToMMo Japan, Chinese Pangenome Consortium</td></tr>
+  <tr><td>1000 Genomes (global)</td><td>1KG ONT 100 (Gustafson), 1KG ONT Vienna (1,019), Noyvert 888</td></tr>
+  <tr><td>Americas</td><td>All of Us, GA4K (pediatric rare disease), SVatalog (cystic fibrosis), NIH CARD (brain)</td></tr>
+  <tr><td>Europe</td><td>deCODE (Iceland)</td></tr>
+  <tr><td>Middle East</td><td>Arab Pangenome Reference</td></tr>
+  <tr><td>Global reference &amp; pangenome callsets</td><td>CoLoRSdb, HPRC v2.1, HGSVC2, HGSVC3</td></tr>
+</table>
+
+<p>
+Six of these datasets (CoLoRSdb, 1KG ONT Vienna, HGSVC3, HPRC v2.1, Arab Pangenome
+Reference, and the Chinese Pangenome Consortium) are also released on the
+<a href="/cgi-bin/hgTracks?db=hs1&position=default" target="_blank">T2T-CHM13/hs1</a>
+assembly in native coordinates.
+</p>
+
+<p>
+License restrictions on some sources limit redistribution; see the track
+description page for per-study details.
+</p>
+
+<p>
+We plan to keep adding long-read SV callsets as more become available. If you are
+involved with a project that publishes long-read structural variants and would like
+to contribute, please <a href="/contacts.html" target="_blank">reach out</a>.
+</p>
+
+<p>
+We would like to thank the many participants who donated samples, and the consortia
+and investigators who generated and shared these callsets, including Glenn Hickey and
+the Human Pangenome Reference Consortium graph team for the HPRC v2.1 callset; Evan
+Eichler and Jiadong Lin; and Kwanho Kim, Joshua Levin, and colleagues in the Aligning
+Science Across Parkinson's (ASAP) network. The track was developed by Maximilian
+Haeussler with QA by Lou Nassar.
+</p>
+
+
+<a name="070726"></a>
+<h2>Jul. 7, 2026 &nbsp;&nbsp; UCSC Genome Browser reaches version 500</h2>
+<p>
+The UCSC Genome Browser consists of software and genome annotation data and
+changes are released differently. Some annotation tracks are updated
+automatically every day or few weeks, but most are curated manually, released
+when they are ready, announced on this page and 
+<a href="https://groups.google.com/a/soe.ucsc.edu/g/genome-announce">our announcement email list</a>. 
+The software changes, however, are released in chunks, every three weeks, as
+software "releases". These are announced on the 
+<a href="https://groups.google.com/a/soe.ucsc.edu/g/genome-mirror">genome-mirror email list</a>, 
+and only the most important ones on the page that you are reading here.
+We increase the version number of the software for every release. You can always find the current
+version of the Genome Browser software on the <a href="../../cgi-bin/hgTracks?hgTracksConfigPage=Configure">
+Genome Browser Configuration Page</a>. 
+</p>
+<p>
+Today, we are releasing version 500 of the UCSC Genome Browser. We are glad
+this milestone falls on July 7, the 26th anniversary of the day in 2000 when the
+first publicly available assembly of the human genome working draft was posted on
+the web here at UC Santa Cruz.
+</p>
+
+<div class="text-center">
+  <img src="../images/newsArchImages/UCSCReleaseDownloads.png"
+       alt="Graph of total web traffic at UC Santa Cruz in 2000, with a large
+            spike when the human genome assembly became available online">
+  <p class="gbsCaption"><em>Total web traffic at the University of California, Santa
+  Cruz in 2000. The spike near July 7 shows the surge of downloads when the first
+  human genome assembly was posted. When the genome became available online, all
+  other web activity at the university shrank to the background.</em></p>
+</div>
+
+<p>
+That first assembly came from Jim Kent's GigAssembler in the spring of 2000, and it
+made the draft human sequence freely available to everyone. Even then, that
+track-based way of viewing a genome was not new. It came out of the Intronerator, an
+earlier tool Kent built to explore the C. elegans genome, shown below.
+</p>
+
+<div class="text-center">
+  <a href="https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/tracks.exe?where=W02B9.1b"
+     target="_blank">
+  <img src="../images/newsArchImages/intronerator.png"
+       alt="The Intronerator track display for C. elegans, showing cosmids, AceDB
+            gene predictions, C. briggsae homologies, and cDNA/EST alignments as
+            horizontal tracks over a genomic ruler"
+       width='50%'></a>
+  <p class="gbsCaption"><em>The Intronerator, Jim Kent's C. elegans tool from 2000.
+  It showed cosmids, gene predictions, cDNA/EST alignments, and C. briggsae
+  homologies as horizontal tracks over a genomic ruler, much like the Genome Browser
+  does today.</em></p>
+</div>
+
+<p>
+Five hundred versions later, the Genome Browser serves thousands of genome assemblies
+across the tree of life, tens of thousands of annotation tracks, and a global
+community of researchers, clinicians, educators, and students. Each of those 500
+versions added something new: assemblies and tracks, bug fixes, performance
+improvements, and features requested by our users. We are glad to reach this number,
+and to keep the data free and open, as it has been since that first release on
+July 7, 2000.
+</p>
+
+<p>
+We would like to thank the many collaborators and data providers whose work fills
+the Genome Browser, the worldwide community of users whose questions and feedback shape it,
+and every past and present member of the UCSC Genome Browser team (engineers,
+quality assurance, outreach, and support) who have carried the project from its
+first assembly to version 500. The people behind those 500 versions are listed on
+our <a href="/staff.html" target="_blank">staff page</a>, and you can read more about
+how the project began on our
+<a href="/goldenPath/history.html" target="_blank">history page</a>. We are
+grateful to everyone who helped us reach this milestone, and we look forward to the
+versions still to come.
+</p>
+
+<a name="070126"></a>
+<h2>Jul. 1, 2026 &nbsp;&nbsp; New SNV Frequencies container track on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqs" target="_blank"><b>SNV
+Frequencies</b></a> container track on the human assembly (GRCh38/hg38). The
+collection unifies single-nucleotide variant allele frequencies from 30+
+population resequencing and biobank projects worldwide, covering roughly
+1.7 million genomes, exomes, and genotyping arrays, into a single place
+where a variant's frequency can be compared across populations, ancestries,
+and disease cohorts.
+</p>
+
+<p>
+The collection includes three combined tracks that aggregate the source
+data along different lines:
+</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsBackground" target="_blank">
+      <b>Population reference</b></a> (default view): 1.24 billion variants
+      pooled across general-population and biobank cohorts plus the
+      unaffected/control arms of the disease studies.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsAffected" target="_blank">
+      <b>Disease cohorts</b></a>: 133 million variants in the affected or
+      case arms of five disease-study cohorts (SFARI SPARK WES and WGS, SCHEMA,
+      GREGoR, GA4K). Each variant also carries its background frequency for
+      easy case-vs-population comparison.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqsArray" target="_blank">
+      <b>Genotyping Array Databases Combined</b></a>: 14.7 million variants
+      from three array cohorts (TPMI Taiwan, Mexico Biobank, UK Biobank
+      imputed), kept separate from the sequencing-based tracks because chip
+      data has different per-variant confidence.</li>
+</ul>
+
+<div class="text-center">
+  <img src="../images/snvFrequenciesNewsarch.png"
+       alt="SNV Frequencies mouseover at rs4986893, a CYP2C19 stop-gained variant common in East Asian populations"
+       width='80%'>
+  <p class="gbsCaption"><em>rs4986893, a CYP2C19 stop-gained variant common in
+  East Asian populations. The mouseover ranks ToMMo Japan, KOVA Korea, and WBBC
+  China at the top, well above the 1.6% pooled background AF.</em></p>
+</div>
+
+<p>
+Each variant in the combined tracks is colored by predicted protein
+consequence
+(<b style="color:#FF0000">loss-of-function</b>,
+<b style="color:#1F77B4">missense</b>,
+<b style="color:#008000">synonymous</b>,
+<b style="color:#808080">non-coding</b>), and
+carries pooled allele counts and pooled allele frequencies (sum AC / sum
+AN) across the contributing cohort arms. Cross-database filters allow
+you to narrow to variant type, consequence, source database, length, or
+any combination of per-track AC/AF/AN ranges.
+</p>
+
+<p>
+The container track pulls together cohorts from across the world. A high-level
+summary of the regions and contributing projects is shown below; a
+complete table with per-cohort sample counts, data types, sub-populations
+and download status is on the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varFreqs" target="_blank">container
+track description page</a>.
+</p>
+
+<table class="stdTbl">
+  <tr><th>Region</th><th>Contributing cohorts</th></tr>
+  <tr><td>East Asia</td><td>ToMMo, GenomeAsia, NPM, KOVA, WBBC, ChinaMAP, TPMI</td></tr>
+  <tr><td>South Asia</td><td>IndiGen, GenomeIndia</td></tr>
+  <tr><td>Africa</td><td>Tishkoff</td></tr>
+  <tr><td>Americas</td><td>AllOfUs, TOPMed, ABraOM, Mexico Biobank</td></tr>
+  <tr><td>Europe</td><td>FinnGen, SweGen, GoNL, HRC, UK Biobank</td></tr>
+  <tr><td>Middle East</td><td>Saudi</td></tr>
+  <tr><td>Oceania</td><td>MGRB</td></tr>
+  <tr><td>Disease cohorts</td><td>SFARI SPARK (WES + WGS), SCHEMA, GREGoR, GA4K</td></tr>
+  <tr><td>Global reference panels</td><td>SGDP, gnomAD HGDP+1kG, ALFA</td></tr>
+  <tr><td>Long-read / linked-read</td><td>GA4K, CoLoRSdb, SVatalog</td></tr>
+</table>
+
+<p>
+License restrictions on some sources limit redistribution; see the
+container track description page for per-cohort details.
+</p>
+
+<p>
+We plan to continue updating this track as more population-scale
+allele-frequency datasets become available. If you are involved with a
+project that publishes variant frequencies and would like to contribute,
+please <a href="/contacts.html" target="_blank">reach out</a>.
+</p>
+
+<p>
+We would like to thank the millions of participants worldwide who donated
+samples and shared health information to make this data possible; the
+investigators and data-access teams who provided the source variant files
+and helped shape the track, including Matthew Hansen and Sarah Tishkoff
+(Tishkoff lab, Penn) for the Tishkoff180 African cohort, Insu Jang (KOBIC)
+for KOVA, Yanan Cao (Shanghai) for ChinaMAP, Matthew Hobbs (Garvan) for
+MGRB, Adam Ameur and Johan Viklund for SweGen, Ameena Suliman and Julia
+Sommer (SFARI) for SPARK data access, and Cole Shanks and Qudsi Aljabiri
+(Ioannidis lab, UCSC) for the All of Us callset; Andreas Lahner (MGZ) for
+feedback on the design; and Alex Ioannidis (UCSC) for the motivation
+behind the track. The track was developed by Maximilian Haeussler with QA
+and review by Lou Nassar.
+</p>
+
+<a name="062526"></a>
+<h2>Jun. 25, 2026 &nbsp;&nbsp; Release 3 update of the Varaico Variants and Varaico Variants (suppl) tracks for hg38 and hg19</h2>
+<p>
+We are happy to announce release 3 of the <b>Varaico Variants</b> and
+<b>Varaico Variants (suppl)</b> tracks for the human assemblies
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=varsInPubs"
+        target="_blank">hg38/GRCh38</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=varsInPubs"
+        target="_blank">hg19/GRCh37</a>. This release contains a precision
+improvement and an update of the underlying literature. The Varaico tracks are
+created using literature mining, similar to
+<a href="http://bejerano.stanford.edu/AVADA/" target="_blank">AVADA</a>.</p>
+<p>
+The Varaico Variants (suppl) track contains variants extracted from supplementary
+data files using similar methods as in the Varaico track. The previous (release 2)
+Varaico data remains available in our
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/varaico/"
+        target="_blank">download archive</a>.
+For more information, please visit the <a href="https://varaico.com/"
+        target="_blank">Varaico website</a>.</p>
+<p>
+Please note that the <b>Genomenon Mastermind Variants</b> track has been retired at
+the data provider's request and is no longer updated or displayed.</p>
+<p>
+We would like to thank Johannes Birgmeier for generating and making the Varaico
+data available. We would also like to thank Maximilian Haeussler and Gerardo Perez
+for their efforts on this release.</p>
+
+<a name="062326"></a>
+<h2>Jun. 23, 2026 &nbsp;&nbsp; Non-canonical ORFs track collection on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=ncOrfs" target="_blank"><b>Non-canonical
+ORFs</b></a> track collection on the human genome assembly (GRCh38/hg38),
+bringing together several public databases of open reading frames (ORFs) that
+fall outside annotated protein-coding genes. While the human genome has
+roughly 20,000 annotated protein-coding genes, ribosome profiling (Ribo-seq) and
+proteomics have revealed widespread translation of ORFs in regions long
+considered non-coding, including 5' and 3' UTRs, long non-coding RNAs,
+pseudogenes, and alternative reading frames of known genes.
+</p>
+
+<p>
+These non-canonical ORFs include upstream ORFs (uORFs) in 5' UTRs, which can
+regulate translation of the downstream coding sequence; small ORFs (sORFs),
+generally under 100 codons, many of which produce functional micropeptides;
+downstream ORFs (dORFs) in 3' UTRs; out-of-frame ORFs that overlap known coding
+sequence in an alternative frame; and ORFs in transcripts annotated as
+non-coding RNAs or pseudogenes. The collection gathers the following datasets as
+individual subtracks:
+</p>
+
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs" target="_blank"><b>UTRannotator
+      uORFs</b></a> &ndash; 44,435 curated uORFs in human 5' UTRs from the
+      <a href="https://github.com/ImperialCardioGenetics/UTRannotator" target="_blank">UTRannotator</a>
+      VEP plugin (Whiffin lab), useful for placing a VEP prediction in genomic
+      context.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs" target="_blank"><b>GENCODE
+      ncORFs</b></a> &ndash; the GENCODE / TransCODE Phase I reference set (7,264
+      ATG-initiated ncORFs with Ribo-seq and peptide evidence), plus Phase II
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary" target="_blank">primary</a>
+      and
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive" target="_blank">comprehensive</a>
+      sets that extend the catalog to shorter and non-AUG ORFs.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=fiveUltraUorfs" target="_blank"><b>5ULTRA
+      uORFs</b></a> &ndash; 22,567 ATG-initiated uORFs mapped to MANE Select
+      transcripts, compiled by the
+      <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a>
+      project for prioritizing 5' UTR variants.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=nuorfdb" target="_blank"><b>nuORFdb</b></a>
+      &ndash; 229,251 non-canonical ORFs with ribosome-profiling evidence from
+      the Broad Institute's
+      <a href="https://proteomics.broadinstitute.org/nuORFdb/" target="_blank">nuORFdb</a>
+      v1.2.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=metamorf" target="_blank"><b>MetamORF</b></a>
+      &ndash; 664,558 small ORFs consolidated from many primary sources by the
+      <a href="https://metamorf.hb.univ-amu.fr" target="_blank">MetamORF</a>
+      meta-database.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=openprot" target="_blank"><b>OpenProt</b></a>
+      &ndash; 921,170 reference proteins, isoforms, and alternative proteins from
+      <a href="https://www.openprot.org" target="_blank">OpenProt</a> v2.2, with a
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=openprotMs" target="_blank">mass-spectrometry-supported
+      subset</a> (&ge;2 unique peptides).</li>
+</ul>
+
+<p>
+Every ORF in every subtrack is annotated with the strength of its Kozak
+sequence, the sequence context around the start codon that governs how
+efficiently translation initiates. Features are colored by a categorical Kozak
+label:
+</p>
+<ul>
+  <li><span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>strong</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>moderate</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>weak</b> &ndash; ATG start</li>
+  <li><span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>near-cognate</b> &ndash; non-ATG start, shown separately</li>
+</ul>
+<p>
+Each subtrack offers filters for the start codon, Kozak strength, and a numeric Kozak
+translational efficiency score, along with dataset-specific filters such as ORF
+type and evidence category.
+</p>
+
+<p>
+See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=ncOrfs" target="_blank">Non-canonical ORFs
+collection page</a> and the individual subtrack description pages for per-dataset
+methods, item counts, download URLs, and references.
+</p>
+
+<p>
+We would like to thank the data providers who made these resources publicly
+available: Xiaolei Zhang, Nicola Whiffin, and the UTRannotator team at Imperial
+College London; Jonathan Mudge, Jorge Ruiz-Orera, John Prensner, Sebastiaan van
+Heesch, and the GENCODE / TransCODE consortium; Matthieu Chaldebas and the
+5ULTRA team; Tamara Ouspenskaia, Travis Law, Karl Clauser, and colleagues at the
+Broad Institute of MIT and Harvard for nuORFdb; the MetamORF team at the TAGC
+laboratory, Aix-Marseille University; and Xavier Roucou and the OpenProt team at
+the Universit&eacute; de Sherbrooke. We also thank Eric Malekos (UCSC) for
+suggesting nuORFdb, and the VuTR authors (Whiffin lab) for the Kozak-strength
+implementation. Finally, we would like to thank Max Haeussler and Jairo Navarro
+for creating and releasing these UCSC Genome Browser tracks.
+</p>
+
+<a name="060226"></a>
+<h2>Jun. 2, 2026 &nbsp;&nbsp; New Massively Parallel Reporter Assay (MPRA) tracks on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mpra" target="_blank"><b>MPRAs</b></a>
+container track on the human genome assembly (GRCh38/hg38), gathering
+results from massively parallel reporter assays (MPRAs). MPRAs are
+high-throughput methods that measure the regulatory activity of
+thousands of candidate DNA sequences in parallel by linking each
+fragment to a barcoded reporter gene and quantifying the resulting
+reporter RNA.
+</p>
+
+<p>
+The container brings together two complementary data
+sources: <b>tested enhancer elements</b> and <b>allele-resolved variant
+effects</b>. MPRA Base captures element-level activity, identifying
+which candidate DNA fragments function as regulatory elements in a
+given cell line. MPRAVarDB captures variant-level allelic effects,
+quantifying how individual SNPs change reporter activity between
+reference and alternate alleles, useful for
+fine-mapping GWAS signals and prioritizing causal regulatory variants.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=mprabase" target="_blank"><b>MPRA
+Base</b></a> subtrack displays 40,938 experimentally tested cis-regulatory
+elements curated from the
+<a href="http://mprabase.ucsf.edu/app/mprabase" target="_blank">MPRA Base</a>
+database (<a href="https://pubmed.ncbi.nlm.nih.gov/38045264/" target="_blank">Zhao
+et&nbsp;al., 2023</a>), drawn from 10 MPRA, STARR-seq, and related reporter
+experiments across six cell lines (HepG2, HUES64, mESC, NPC, HEK293FT,
+and UACC903). Each item is colored by within-experiment percentile rank:
+<span style="color:red">red</span> for the top quartile,
+<span style="color:orange">orange</span> for the 50&ndash;74th percentile, and
+<span style="color:blue">blue</span> for the bottom half. The track also
+exposes the assayed oligo sequence and a variant-allele-type field
+(<tt>reference</tt> / <tt>alternate</tt> / <tt>NA</tt>) so users can
+distinguish standard enhancer-element tests from allelic comparisons.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=mpraVarDb" target="_blank"><b>MPRAVarDB</b></a>
+subtrack displays 239,028 variants tested for allelic regulatory effects
+across 18 MPRA studies, more than 30 cell lines, and more than 30 human
+diseases or traits (curated by
+<a href="https://mpravardb.rc.ufl.edu/" target="_blank">MPRAVarDB</a>;
+<a href="https://pubmed.ncbi.nlm.nih.gov/39325859/" target="_blank">Jin
+et&nbsp;al., 2024</a>). Variants come from GWAS fine-mapping for
+neurodegenerative, autoimmune, oncologic, and other disease loci,
+eQTL fine-mapping in lymphoblastoid cells, saturation mutagenesis of
+20 disease-associated regulatory elements, and several focused screens.
+Items are colored by statistical significance:
+<span style="color:#C80000;">dark red</span> for variants with FDR &lt; 0.05,
+<span style="color:#FFA500;">orange</span> for nominal p &lt; 0.05 but
+FDR &ge; 0.05, and <span style="color:#BEBEBE;">grey</span> for the rest.
+</p>
+
+<div class="text-center">
+  <img src="../images/mpraNewsImage.png"
+  alt="Genome Browser screenshot at the TERT promoter on hg38 showing MPRA Base
+  reporter elements for melanoma risk variants tested in HEK293FT and UACC903
+  cells, and MPRAVarDB high-confidence variants from saturation mutagenesis of
+  the TERT promoter"
+  width='90%'>
+  <p class="gbsCaption">
+  <em>MPRA Base elements and MPRAVarDB variants at the TERT promoter
+  (chr5, GRCh38/hg38). MPRA Base (top) shows reporter activity for
+  melanoma risk variants tested in HEK293FT and UACC903 cells
+  (Choi et&nbsp;al., 2020). MPRAVarDB (bottom) highlights
+  high-confidence allelic effects from saturation mutagenesis of the
+  TERT promoter (Kircher et&nbsp;al., 2019).</em>
+  </p>
+</div>
+
+<p>
+See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mprabase" target="_blank">MPRA Base</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mpraVarDb" target="_blank">MPRAVarDB</a>
+track description pages for the full list of contributing studies,
+per-study scoring methodology, and notes on how to interpret raw scores
+and log2 fold change across studies that use different statistical
+frameworks.
+</p>
+
+<p>
+We would like to thank Varda Singhal, Jianyu Zhao, and the
+<a href="https://pharm.ucsf.edu/ahituv" target="_blank">Ahituv Lab</a>
+at UCSF for creating and curating the MPRA Base database, and Weijia Jin
+and the
+<a href="https://mpravardb.rc.ufl.edu/" target="_blank">MPRAVarDB team</a>
+at the University of Florida for the variant-effect resource. We also
+would like to thank Max Haeussler and Lou Nassar for the creation and
+release of the UCSC Genome Browser tracks.
+</p>
+
+<a name="050126"></a>
+<h2>May 1, 2026 &nbsp;&nbsp; New PrimateAI-3D and PromoterAI variant impact tracks from Illumina</h2>
+<p>
+We are pleased to announce the release of two new variant-impact prediction tracks
+from <a href="https://www.illumina.com/" target="_blank">Illumina</a>:
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank"><b>PrimateAI-3D</b></a>,
+which scores every possible coding missense variant on the human GRCh38/hg38 and
+GRCh37/hg19 assemblies, and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank"><b>PromoterAI</b></a>,
+which scores every possible non-coding single-nucleotide substitution in proximal
+promoter regions on GRCh38/hg38. Together, these deep-learning predictors extend
+pathogenicity prediction across both protein-coding and regulatory sequence.
+Both tracks are grouped under the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=predictionScoresSuper&position=default" target="_blank">Deleteriousness
+Predictions</a> container in the Phenotype and Disease Associations track group.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank">PrimateAI-3D</a>
+track displays approximately 70.7&nbsp;million scored missense variants per assembly,
+covering every possible single-base coding change across all protein-coding genes.
+PrimateAI-3D is a deep-learning model that learns variant pathogenicity from common
+variation observed across 233 non-human primate species and large human population
+databases. Each variant is colored
+<span style="color:red">red (pathogenic)</span> or
+<span style="color:blue">blue (benign)</span> based on Illumina&apos;s prediction
+call. Items are labeled by default with the nucleotide change (e.g.
+<code>C&gt;T</code>); the corresponding amino acid change is shown on hover and
+can be toggled as the on-feature label from the Track Settings.
+</p>
+
+<p>
+The <a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default" target="_blank">PromoterAI</a>
+track provides pre-computed scores for every possible single-nucleotide substitution
+within 500&nbsp;bp of annotated transcription start sites, covering approximately
+39.5&nbsp;million genomic positions. Scores range from &minus;1 to +1, where
+<b>negative</b> values indicate predicted <b>under-expression</b> and <b>positive</b>
+values indicate predicted <b>over-expression</b> of the associated transcript; the
+magnitude reflects the predicted size of the expression change. The container track
+includes:
+</p>
+<ul>
+  <li>Four <b>per-base score</b> subtracks &ndash; one bigWig for each alternate
+  allele (<b>A</b>, <b>C</b>, <b>G</b>, <b>T</b>). Bars are colored
+  <span style="color:red">red</span> for positive scores and
+  <span style="color:blue">blue</span> for negative scores.
+  </li>
+  <li>A <b>PromoterAI Overlaps</b> bigBed subtrack summarizing positions where
+  multiple transcripts overlap. Each item lists the contributing transcripts,
+  their per-transcript scores, and their strand orientation. About 90% of overlap
+  items lie at bidirectional promoters where transcripts on opposite strands
+  share regulatory sequence.
+  </li>
+</ul>
+
+<div class="text-center">
+  <img src="../images/illuminaPrimatePromoterNewsImage.png"
+  alt="Genome Browser screenshot at the HBB locus on hg38 showing PrimateAI-3D
+  pathogenicity calls across the coding region and PromoterAI per-allele scores
+  in the 5' UTR and proximal promoter" width='80%'>
+  <p class="gbsCaption">
+  <em>PrimateAI-3D and PromoterAI at the start of <i>HBB</i> on hg38
+  (chr11:5,226,883-5,227,212). PrimateAI-3D scores every coding missense variant
+  as red (pathogenic) or blue (benign), while the four PromoterAI per-allele
+  bigWig subtracks score every possible non-coding substitution in the 5&prime;
+  UTR and proximal promoter just upstream of the <i>HBB</i> start codon.</em>
+  </p>
+</div>
+
+<p>
+See the track description pages for Illumina's recommended interpretation
+thresholds.
+</p>
+
+<p>
+Both tracks are distributed by Illumina under a license agreement and are not
+available through the Table Browser, Data Integrator, REST API, or public
+download. The full methods are described in
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/37262156" target="_blank">Gao
+et&nbsp;al. 2023</a> (PrimateAI-3D, <i>Science</i>) and
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40440429" target="_blank">Jaganathan
+et&nbsp;al. 2025</a> (PromoterAI, <i>Science</i>).
+</p>
+
+<p>
+We would like to thank Hong Gao, Kishore Jaganathan, and the Illumina PrimateAI-3D
+and PromoterAI teams for making these predictions available to the research
+community. We also would like to thank Max Haeussler and Lou Nassar for the
+creation and release of the UCSC Genome Browser tracks.
+</p>
+
+<a name="042226"></a>
+<h2>Apr. 22, 2026 &nbsp;&nbsp; New NMD Escape tracks on hg38</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=nmd" target="_blank"><b>NMD Escape</b></a>
+track on the human genome assembly (GRCh38/hg38). This track collection displays
+regions where premature termination codons (PTCs) are predicted to escape
+nonsense-mediated mRNA decay (NMD), a cellular quality control mechanism that normally
+degrades transcripts with premature stop codons. Identifying NMD escape regions is
+important for interpreting the clinical significance of truncating variants under the
+ACMG/AMP PVS1 criterion.
+</p>
+<p>
+The container track includes:
+</p>
+<ul>
+  <li><b>NMD escape ruleset</b> tracks for
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscMane" target="_blank">MANE Select Plus Clinical</a>,
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscGencode" target="_blank">GENCODE V49</a>, and
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=nmdEscNcbiRefSeq" target="_blank">NCBI RefSeq</a>
+  transcripts, applying four rules derived from Nagy &amp; Maquat 1998 and Lindeboom
+  et al. 2016:
+    <ul>
+      <li><b>50 bp rule</b> &ndash; the entire last coding exon and the last
+      50 bp of the penultimate coding exon. PTCs here have no downstream
+      exon-exon junction, or are too close to it, for NMD to be triggered.</li>
+      <li><b>No-downstream-EJC rule</b> &ndash; transcripts with a single coding
+      exon and no 3'UTR intron. No EJC is deposited downstream of the stop
+      codon, so any PTC in the coding sequence escapes NMD.</li>
+      <li><b>Start-proximal 100 bp rule</b> &ndash; the first 100 bp of
+      coding nucleotides. PTCs here escape NMD, likely through translation
+      re-initiation at a downstream AUG codon.</li>
+      <li><b>Long-exon rule</b> &ndash; coding exons longer than 400 bp
+      (excluding the last coding exon). NMD efficiency drops in very long exons
+      because the PTC is far from the downstream exon-exon junction.</li>
+    </ul>
+  </li>
+  <li><b>NMDetective</b> machine-learning prediction tracks from
+  <a href="https://www.ncbi.nlm.nih.gov/pubmed/27618451" target="_blank">Lindeboom et al. 2016</a>,
+  providing continuous NMD efficiency scores for every possible PTC position.</li>
+</ul>
+<p>
+We would like to thank Guido Neidhardt and Andreas Lahner for suggesting this track
+and providing feedback throughout its development, and the Decipher
+Genome Browser team for inspiring this type of visualization. We also would like to thank Max 
+Haeussler and Lou Nassar for the creation and release of the UCSC Genome Browser tracks. 
+</p>
+
 <a name="041026"></a>
 <h2>Apr. 10, 2026 &nbsp;&nbsp; New Short Tandem Repeat (STR) tracks on hg38</h2>
 <p>
@@ -1137,8 +1994,8 @@ tracks.
 <p>
 We are pleased to announce the release of the <a href="https://www.deciphergenomics.org/ddd/ddgenes"
 target="_blank">Developmental Disorders Genotype-to-Phenotype (DDG2P)</a> track for
-<a href="/cgi-bin/hgTrackUi?db=hg19&g=ddg2p&position=default" target="_blank">hg19</a> and
-<a href="/cgi-bin/hgTrackUi?db=hg38&g=ddg2p&position=default" target="_blank">hg38</a>. The DDG2P
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=g2p&position=default" target="_blank">hg19</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=g2p&position=default" target="_blank">hg38</a>. The DDG2P
 track displays genes associated with severe developmental disorders. The track can be used to
 filter genomic sequencing data of people with genetic disorders to identify likely causative
 variants and accelerate diagnosis.
@@ -18628,7 +19485,7 @@ produced by the Baylor College of Medicine Human Genome Sequencing Center (BCM H
 release Btau_4.0.</p> 
 <p> 
 The Btau_4.0 release was produced using the 
-<a href="http://www.genome.org/cgi/content/abstract/14/4/721">Atlas</a> genome assembly system at 
+<a href="https://genome.cshlp.org/content/14/4/721">Atlas</a> genome assembly system at 
 BCM HGSC. The sequencing strategy combined BAC shotgun reads with whole genome shotgun reads from 
 small insert libraries as well as BAC end sequences. The assembly contains chromosomes 1-29 and X 
 as well as 11869 scaffolds (named chrUn.004.*). The mitochondrial sequence (available in the browser
@@ -18705,7 +19562,7 @@ Center at Washington University School of Medicine in St. Louis (WUSTL), MO, USA
 <p> 
 The orangutan genome was sequenced to 6X coverage using a female orangutan known as 
 &quot;Susie&quot; from the Gladys Park Zoo (Brownsville, TX, USA). The combined sequence reads were 
-assembled using <a href="http://www.genome.org/cgi/content/abstract/13/9/2164" 
+assembled using <a href="https://genome.cshlp.org/content/13/9/2164" 
 target="_blank">PCAP</a> and filtered for all known non-orangutan sequence contaminants. For more 
 details about the assembly, see the orangutan browser 
 <a href="../cgi-bin/hgGateway?db=ponAbe2">gateway</a> page and the WUSTL 
@@ -19043,7 +19900,7 @@ four-year effort to catalog the biologically functional elements in 1 percent of
 The publications, which include a group paper in the 14 June 2007 issue of 
 <a href="http://www.nature.com/nature/journal/v447/n7146/full/nature05874.html" 
 target="_blank"><em>Nature</em></a> and 28 companion papers in the June 2007 issue of 
-<a href="http://www.genome.org/content/vol17/issue6/" target="_blank"><em>Genome Research</em></a>, 
+<a href="https://genome.cshlp.org/content/17/6" target="_blank"><em>Genome Research</em></a>, 
 were authored by researchers from academic, governmental, and industry organizations located in 11 
 countries. The <em>Nature</em> issue includes a pull-out poster featuring a screenshot of the UCSC 
 Genome Browser displaying a broad range of the ENCODE data.</p> 

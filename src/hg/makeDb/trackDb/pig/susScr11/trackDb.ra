@@ -29,3 +29,4 @@ searchPriority 8
 # change these two to switch to the new refSeqComposite 2018-02
 # include trackDb.refGene.ra beta,public
 include ../../refSeqComposite.ra
+# include susScr11.canFam6.chainNet.ra alpha

@@ -17,7 +17,11 @@ RUN chmod a+x /etc/service/mariadb/run /etc/service/apache/run
 
 # Install the genome browser
 ADD http://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh /root/browserSetup.sh
-RUN chmod a+x /root/browserSetup.sh && /root/browserSetup.sh -b install 
+RUN chmod a+x /root/browserSetup.sh && /root/browserSetup.sh -b install
+
+# Use a persistent on-disk trackDb cache instead of the default /dev/shm
+# (tmpfs in containers is small and not always shared with the apache user)
+RUN echo "cacheTrackDbDir=/usr/local/apache/trash/trackDbCache" >> /usr/local/apache/cgi-bin/hg.conf
 
 # Phusion documentation suggests this
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

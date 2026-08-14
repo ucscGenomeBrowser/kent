@@ -40,12 +40,12 @@ my $gapOverlapItemCount = "<no items in this track>";
 my $tandemDupsItemCount = "<no items in this track>";
 
 if ( -s $gapOverlapBbi ) {
-  $gapOverlapItemCount = `bigBedInfo $gapOverlapBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Item count/; s/ basesCovered/; Bases covered/;'`;
+  $gapOverlapItemCount = `/cluster/bin/x86_64/bigBedInfo $gapOverlapBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Item count/; s/ basesCovered/; Bases covered/;'`;
   chomp $gapOverlapItemCount;
 }
 
 if ( -s $tandemDupsBbi ) {
-  $tandemDupsItemCount = `bigBedInfo $tandemDupsBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Item count/; s/ basesCovered/; Bases covered/;'`;
+  $tandemDupsItemCount = `/cluster/bin/x86_64/bigBedInfo $tandemDupsBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Item count/; s/ basesCovered/; Bases covered/;'`;
   chomp $tandemDupsItemCount;
 }
 

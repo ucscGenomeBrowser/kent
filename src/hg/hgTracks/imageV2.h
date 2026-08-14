@@ -308,6 +308,12 @@ struct imgTrack // IMAGEv2: imageBox contains list of displayed imageTracks
     struct imgSlice *slices;  // Currently there should be four slices for every track:
                               //      data, centerLabel, sideLabel, button
     boolean linked;           // is this track linked to another track (like squishyPack)
+    char *cntrLabText;        // Center label as text and the color it was drawn in, for an
+    char *cntrLabTextColor;   //      html stand-in when the image slice can't be shown
+    boolean cntrLabDrawnOver; // Something is painted over the center label in the image
+                              //      (quickLift difference lines), so dragScroll must swap
+                              //      in the stand-in rather than drag the image out from
+                              //      under a label slice that doesn't move
     };
 
 #define IMG_ANYORDER -2

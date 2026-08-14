@@ -19,10 +19,12 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
+#include "genePredReader.h"
 #include "bigChain.h"
 #include "bigLink.h"
 #include "chromAlias.h"
 #include "customTrack.h"
+#include "encode/encodePeak.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -82,6 +84,12 @@ for(chain = chainList; chain; chain = chain->next)
     bbList = slCat(thisInterval, bbList);
     }
 
+// We are done with the chains we used to bound the data query;
+// release them before loading the wider set for the lift map below.
+// Without this, every quickLifted track leaked the cBlocks of every
+// chain overlapping the window.
+chainFreeList(&chainList);
+
 // now we need to grab the links outside of our viewport so we can map long items
 // probably we could reuse the chains from above but for the moment this is easier
 // For the moment we use the same padding on both sides so we don't have to worry about strand
@@ -90,9 +98,11 @@ if (maxGapBefore > maxGapAfter)
 else
     maxGapBefore = maxGapAfter;
 
-// sometimes the edges are way too large.  Needs research
-//if (maxGapBefore > 1000000)
-    //maxGapBefore = maxGapAfter = 1000000;
+// Cap the padding so a single oversized item doesn't drag in chains
+// (and their dense cBlock lists) covering many megabases.
+#define QUICKLIFT_MAX_GAP_PAD 1000000
+if (maxGapBefore > QUICKLIFT_MAX_GAP_PAD)
+    maxGapBefore = maxGapAfter = QUICKLIFT_MAX_GAP_PAD;
 
 int newStart = start - maxGapBefore * 2;
 if (newStart < 0)
@@ -121,10 +131,111 @@ bed->chromStarts = needMem(sizeof(int));
 bed->chromStarts[0] = 0;
 }
 
+static int snapToBlock(struct chain *chain, int pos, boolean forward)
+/* remapRangeList will only place a coordinate that falls inside an aligned block, so a
+ * clipped end has to land on real alignment, not merely inside the chain.  Return pos if
+ * it is already aligned, otherwise the nearest aligned coordinate looking forward (for a
+ * start) or backward (for an end).  Return -1 if there is no such coordinate.
+ * The asymmetry matches remapRangeList: a start needs b->tStart <= start < b->tEnd, so
+ * b->tStart is legal; an end needs b->tStart < end <= b->tEnd, so b->tEnd is legal. */
+{
+struct cBlock *b, *prev = NULL;
+
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if ((b->tStart <= pos) && (pos < b->tEnd))
+        return pos;
+    if (forward && (b->tStart > pos))
+        return b->tStart;
+    if (b->tEnd <= pos)
+        prev = b;
+    }
+
+return (!forward && (prev != NULL)) ? prev->tEnd : -1;
+}
+
+static boolean clipBedToChains(struct hash *chainHash, struct bed *bed)
+/* An item can be far bigger than the region we loaded chains for -- ClinVar has copy
+ * number variants spanning most of a chromosome.  Its ends then sit where no chain
+ * reaches, remapRangeList can place neither of them, and the whole item is dropped even
+ * though the part on screen maps perfectly well.  Pull the ends in to the nearest aligned
+ * base so the visible part can lift.  Return TRUE if the item was clipped. */
+{
+struct chain *chain = liftOverChainForRange(chainHash, bed->chrom,
+                                            bed->chromStart, bed->chromEnd);
+if (chain == NULL)
+    return FALSE;               // nothing covers it, let it fail the way it used to
+
+int newStart = snapToBlock(chain, bed->chromStart, TRUE);
+int newEnd = snapToBlock(chain, bed->chromEnd, FALSE);
+
+if ((newStart < 0) || (newEnd < 0) || (newStart >= newEnd))
+    return FALSE;
+if ((newStart == bed->chromStart) && (newEnd == bed->chromEnd))
+    return FALSE;               // both ends already sit on alignment, nothing to do
+
+/* Trim the blocks to the new range.  Blocks are in ascending order, so walk them and
+ * keep the part that survives; a block entirely outside the range is dropped. */
+if (bed->blockCount > 0)
+    {
+    int i, keep = 0;
+    for (i = 0;  i < bed->blockCount;  ++i)
+        {
+        int bStart = bed->chromStart + bed->chromStarts[i];
+        int bEnd = bStart + bed->blockSizes[i];
+
+        if (bStart < newStart)
+            bStart = newStart;
+        if (bEnd > newEnd)
+            bEnd = newEnd;
+        if (bStart >= bEnd)
+            continue;
+        bed->chromStarts[keep] = bStart - newStart;
+        bed->blockSizes[keep] = bEnd - bStart;
+        keep++;
+        }
+    if (keep == 0)
+        return FALSE;
+    bed->blockCount = keep;
+    }
+
+bed->chromStart = newStart;
+bed->chromEnd = newEnd;
+if (bed->thickStart < newStart)
+    bed->thickStart = newStart;
+if (bed->thickEnd > newEnd)
+    bed->thickEnd = newEnd;
+if (bed->thickStart > bed->thickEnd)
+    bed->thickStart = bed->thickEnd;
+
+return TRUE;
+}
+
+static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip);
+
 struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
  */
+{
+return quickLiftBed(bbi, chainHash, bb, FALSE);
+}
+
+struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
+/* Like quickLiftIntervalsToBed, but an item too big for the chains we loaded is pulled in
+ * to what they cover rather than dropped.  Callers that need the item's true extent (the
+ * details page) should use quickLiftIntervalsToBed instead. */
+{
+// quickLiftClipToChains=off restores the old behavior, where an item whose ends fall
+// outside the chains we loaded is dropped instead of being pulled in.
+boolean clip = cfgOptionBooleanDefault("quickLiftClipToChains", TRUE);
+
+return quickLiftBed(bbi, chainHash, bb, clip);
+}
+
+static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip)
+/* Port a bigBedInterval to a bed on the reference.  If clip, an item too big for the
+ * chains we loaded is pulled in to what they cover rather than dropped. */
 {
 char startBuf[16], endBuf[16];
 char *bedRow[bbi->fieldCount];
@@ -139,6 +250,9 @@ struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
 char *error;
 if (bbi->definedFieldCount < 12)
     make12(bed);
+
+if (clip)
+    clipBedToChains(chainHash, bed);
 
 if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
     return bed;
@@ -185,9 +299,9 @@ if (geneId)
 return ret;
 }
 
-struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
-// retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.  
-// Save the chains we used to map the item back to the current reference.
+static struct chain *quickLiftLoadChains(char *quickLiftFile, char *chrom, int start, int end)
+/* Load the chains from quickLiftFile that overlap a padded window around the
+ * destination range. */
 {
 // need to add some padding to these coordinates
 int padStart = start - 100000;
@@ -195,7 +309,43 @@ if (padStart < 0)
     padStart = 0;
 
 char *linkFileName = bigChainGetLinkFile(quickLiftFile);
-struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+}
+
+static void quickLiftChainQueryRange(struct chain *chain, int *retQStart, int *retQEnd)
+/* Return the query-side ("other" species) coordinate range spanned by the
+ * aligned blocks of chain, corrected for query strand.  chain->blockList must
+ * not be NULL. */
+{
+struct cBlock *cb = chain->blockList;
+int qStart = cb->qStart;
+int qEnd = cb->qEnd;
+
+for(; cb; cb = cb->next)
+    {
+    if (cb->qStart < qStart)
+        qStart = cb->qStart;
+    if (cb->qEnd > qEnd)
+        qEnd = cb->qEnd;
+    }
+
+// correct for strand
+if (chain->qStrand == '-')
+    {
+    int saveStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveStart;
+    }
+
+*retQStart = qStart;
+*retQEnd = qEnd;
+}
+
+struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
+// retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.
+// Save the chains we used to map the item back to the current reference.
+{
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
 
 struct slList *item, *itemList = NULL;
 int rowOffset = 0;
@@ -204,33 +354,13 @@ char **row = NULL;
 
 for(chain = chainList; chain; chain = chain->next)
     {
-    struct cBlock *cb;
-    cb = chain->blockList; 
-
-    if (cb == NULL)
+    if (chain->blockList == NULL)
         continue;
 
-    int qStart = cb->qStart;
-    int qEnd = cb->qEnd;
+    int qStart, qEnd;
+    quickLiftChainQueryRange(chain, &qStart, &qEnd);
 
-    // get the range for the links on the "other" species
-    for(; cb; cb = cb->next)
-        {
-        if (cb->qStart < qStart)
-            qStart = cb->qStart;
-        if (cb->qEnd > qEnd)
-            qEnd = cb->qEnd;
-        }
-
-    // correct for strand
-    if (chain->qStrand == '-')
-        {
-        int saveStart = qStart;
-        qStart = chain->qSize - qEnd;
-        qEnd = chain->qSize - saveStart;
-        }
-
-    // now grab the items 
+    // now grab the items
     if (query == NULL)
         sr = hRangeQuery(conn, table, chain->qName,
                          qStart, qEnd, extraWhere, &rowOffset);
@@ -249,6 +379,39 @@ for(chain = chainList; chain; chain = chain->next)
     }
 
 return itemList;
+}
+
+struct genePred *quickLiftGenePreds(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end, char *extraWhere, struct hash *chainHash)
+// Like quickLiftSql, but load genePreds with a genePredReader so the actual set
+// of (extended) genePred columns in the table is honored.  A fixed 15-column
+// loader misreads classic knownGene-style tables, whose trailing proteinID and
+// alignID columns are not extended genePred fields.
+{
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
+
+struct genePred *gpList = NULL;
+
+for(chain = chainList; chain; chain = chain->next)
+    {
+    if (chain->blockList == NULL)
+        continue;
+
+    int qStart, qEnd;
+    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+
+    struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chain->qName,
+                                                          qStart, qEnd, extraWhere);
+    struct genePred *gp;
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        slAddHead(&gpList, gp);
+    genePredReaderFree(&gpr);
+
+    // now squirrel the swapped chains we used to use to map the retrieved items back to us
+    chainSwap(chain);
+    liftOverAddChainHash(chainHash, chain);
+    }
+
+return gpList;
 }
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked)
@@ -283,6 +446,30 @@ for(bed = bedList; bed; bed = nextBed)
         }
     }
 return liftedBedList;
+}
+
+struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash)
+// Map a list of encodePeaks in query coordinates to our current reference.  These can't go
+// through quickLiftBeds:  the thickStart and thickEnd it assigns overlay signalValue and
+// pValue in struct encodePeak.
+{
+struct encodePeak *liftedList = NULL;
+struct encodePeak *nextPeak;
+struct encodePeak *peak;
+for(peak = peakList; peak; peak = nextPeak)
+    {
+    nextPeak = peak->next;
+    peak->next = NULL;
+
+    char *error = liftOverRemapRange(chainHash, 0.0, peak->chrom, peak->chromStart, peak->chromEnd,
+                            peak->strand[0],
+                            0.001, &peak->chrom, (int *)&peak->chromStart, (int *)&peak->chromEnd,
+                            &peak->strand[0]);
+
+    if (error == NULL)
+        slAddHead(&liftedList, peak);
+    }
+return liftedList;
 }
 
 boolean quickLiftEnabled(struct cart *cart)
@@ -524,4 +711,40 @@ if (quickLiftChainTable == NULL)
     quickLiftChainTable = cfgOptionEnvDefault("QUICKLIFTCHAINNAME",
 	    quickLiftChainTableConfVariable, defaultQuickLiftChainTableName);
 return quickLiftChainTable;
+}
+
+boolean quickLiftLiftPos(char *sourceDb, char *destDb,
+    char *chrom, int start, int end,
+    char **retChrom, int *retStart, int *retEnd)
+/* Map a position from source (sourceDb) coords to destination (destDb) coords
+ * using the liftOver chain for sourceDb -> destDb.  This is used to remap
+ * hgFind results from quickLifted bigBed tracks (which return hits in the
+ * source assembly's coordinates) back to the destination assembly the user
+ * is viewing.  Returns TRUE on success. */
+{
+static struct hash *fileToChainHash = NULL;
+if (fileToChainHash == NULL)
+    fileToChainHash = newHash(0);
+
+char key[1024];
+safef(key, sizeof(key), "%s->%s", sourceDb, destDb);
+struct hash *chainHash = hashFindVal(fileToChainHash, key);
+if (chainHash == NULL)
+    {
+    char *chainFile = liftOverChainFile(sourceDb, destDb);
+    if (chainFile == NULL)
+        return FALSE;
+    chainHash = newHash(0);
+    // This reads every chain in the file up front.  A bigChain-format
+    // liftOver chain indexed on the source (fromDb) side would let us
+    // load just the chains overlapping the hit; worth revisiting if the
+    // upfront cost becomes an issue.
+    readLiftOverMap(chainFile, chainHash);
+    hashAdd(fileToChainHash, key, chainHash);
+    }
+
+char strand = '+';
+char *error = liftOverRemapRange(chainHash, 0.0, chrom, start, end, strand,
+                                 0.001, retChrom, retStart, retEnd, &strand);
+return (error == NULL);
 }

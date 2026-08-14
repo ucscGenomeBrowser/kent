@@ -32,7 +32,7 @@ if (startsWith("NM_", softName))
     char *e = strchr(softName+3, '_');
     if (e != NULL) 
         *e = 0;
-    strncpy(simple, softName, sizeof(simple));
+    safecpy(simple, sizeof(simple), softName);
     }
 else if (startsWith("FGENESH+_", softName))
     {

@@ -46,6 +46,56 @@
 </tr>
 
 <tr>
+    <td>2026-07-31</td>
+    <td>faceted composite</td>
+    <td><a href="trackDbHub.html#maxCheckboxes">maxCheckboxes</a></td>
+    <td>Documentation fix: this setting was previously listed here as
+    <code>maxCheckBoxes</code>, with a capital B. Setting names are case sensitive and the
+    browser has always read it as <code>maxCheckboxes</code>, so hubs that used the
+    capitalized spelling fell back to the default of 20 facet values. If your hub sets
+    <code>maxCheckBoxes</code>, change it to <code>maxCheckboxes</code>.</td>
+</tr>
+<tr>
+    <td>2026-07-08</td>
+    <td><b>genomes.txt setting</b></td>
+    <td><a href="trackDbHub.html#codonTable">codonTable</a></td>
+    <td>New <code>codonTable</code> genome-stanza setting (an assembly hub
+    <code>genomes.txt</code> setting, not a track setting) assigns NCBI genetic
+    codes to individual sequences for amino acid display, e.g.
+    <code>codonTable default=1 NC_017929.1=13</code>. Affects the base position
+    track three-frame translation, codon-colored tracks such as gene
+    predictions, and details pages. Sequences named chrM/chrMT still default to
+    the vertebrate mitochondrial code.</td>
+</tr>
+<tr>
+    <td>2026-06-02</td>
+    <td>bigBed, bigGenePred</td>
+    <td><a href="trackDbHub.html#colorFields">colorFields</a></td>
+    <td>New <code>colorFields</code> setting adds a <b>Color by:</b> dropdown to the
+    track controls page, letting users switch among multiple pre-computed color schemes
+    stored as extra bigBed fields containing <code>R,G,B</code> strings.
+    The special name <code>default="label"</code> renames the standard itemRgb option.
+    When a non-default scheme is selected, a <em>(Coloring by: label)</em> suffix
+    appears in the track long label.</td>
+</tr>
+
+<tr>
+    <td>2026-05-08</td>
+    <td>bed, bigBed</td>
+    <td><a href="trackDbHub.html#filterPriority">filterPriority</a> / <a href="trackDbHub.html#highlightPriority">highlightPriority</a></td>
+    <td>New <code>filterPriority.&lt;fieldName&gt;</code> setting controls the
+    display order of filter controls on the track configuration page. A
+    companion <code>highlightPriority.&lt;fieldName&gt;</code> setting orders
+    highlight controls.</td>
+</tr>
+<tr>
+    <td>2026-04-22</td>
+    <td>faceted composite tracks</td>
+    <td><a href="trackDbHub.html#subtrackUrls">subtrackUrls</a></td>
+    <td>An update for the subtrackUrls option for faceted composites, which
+    enables links out to other resources in the faceted table.</td>
+</tr>
+<tr>
     <td>2026-04-10</td>
     <td>vcf, vcfTabix, vcfPhasedTrio</td>
     <td><a href="trackDbHub.html#sampleMetadataFile">sampleMetadataFile</a></td>
@@ -64,7 +114,7 @@
 <tr>
     <td>2026-03-09</td>
     <td>bigBed</td>
-    <td><a href="trackDbHub.html#faceted composite">faceted composite</a></td>
+    <td><a href="trackDbHub.html#faceted_composite">faceted composite</a></td>
     <td>An alternate UI for composite tracks with a very large number of subtracks.</td>
 </tr>
 <tr>
@@ -150,6 +200,15 @@
     <td>bigWig</td>
     <td><a href="trackDbHub.html#logo">logo</a></td>
     <td>New: <tt>logo on</tt><br>Motif logo of the genome sequence, as a "dynseq" display, see <a href='../bigWig.html#Ex4'>the example</a>.</td>
+</tr>
+<tr>
+    <td>2022-05-11</td>
+    <td><b>genomes.txt setting</b></td>
+    <td><a href="../assemblyHubHelp.html#chromAuthority">chromAuthority</a></td>
+    <td>New <code>chromAuthority</code> genome-stanza setting (an assembly hub
+    <code>genomes.txt</code> setting, not a track setting) chooses which
+    <code>chromAlias</code> name column is displayed by default for the
+    assembly's sequences, e.g. <code>chromAuthority ucsc</code>.</td>
 </tr>
 <tr>
     <td>2022-05-05</td>

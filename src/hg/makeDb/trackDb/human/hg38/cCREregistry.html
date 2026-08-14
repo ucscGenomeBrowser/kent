@@ -1,90 +1,105 @@
 <h2>Description</h2>
 <p>
-This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs) 
-in the human genome from ENCODE 4. A total of <b>2,348,854</b> elements identified and classified by the 
-ENCODE Data Analysis Center according to biochemical signatures. Most cCREs are anchored on 
-DNase hypersensitive sites further annotated with histone modifications (H3K4me3 and H3K27ac) 
-or CTCF binding measured by ChIP-seq experiments. In this latest version of the Registry (V4), 
-the representative DNase hypersensitive sites (rDHSs) were supplemented 
-with 86,748 representative transcription factor ChIP-seq peaks (TF 
-rPeaks)—peaks that represent binding sites for at least five TFs. The Registry of cCREs is 
+This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs)
+in the human genome from ENCODE 4. A total of <b>2,348,854</b> elements were identified and classified by the
+ENCODE Data Analysis Center according to biochemical signatures. Most cCREs are anchored on
+DNase hypersensitive sites further annotated with histone modifications (H3K4me3 and H3K27ac)
+or CTCF binding measured by ChIP-seq experiments. In this latest version of the Registry (V4),
+the representative DNase hypersensitive sites (rDHSs) were supplemented
+with 86,748 representative transcription factor ChIP-seq peaks (TF
+rPeaks), which represent binding sites for at least five TFs. The Registry of cCREs is
 one of the core components of the integrative level of the ENCODE Encyclopedia of DNA Elements.</p>
 
 <p>Additional exploration of the cCREs and underlying raw ENCODE signal data can be done with the
-<b>Core Collection</b> track. The data is also available on the <a 
-target=" blank" href="https://screen.wenglab.org/">SCREEN</a> (Search Candidate cis-Regulatory 
-Elements) web tool, designed specifically for the Registry, accessible by item mouseovers and linkouts from the 
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=coreCcres"><b>Core Collection</b></a> track. The data is also available on the <a
+target="_blank" href="https://screen.wenglab.org/">SCREEN</a> (Search Candidate cis-Regulatory
+Elements) web tool, designed specifically for the Registry, accessible by item mouseovers and linkouts from the
 track details page.</p>
 
 <h2>Display Conventions and Configurations</h2>
 <p>
-Each cCRE is displayed as a colored box by type, which reflects its putative functional assignment 
-based on biochemical signatures and genomic context:</p>
+Each cCRE is color-coded by its classification type, which reflects its putative functional
+assignment based on biochemical signatures and genomic context:</p>
+<ol>
+<li><b><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></b> in <span style="color: #ff0000;">red</span>
+must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
+<li><b><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal
+enhancer)</span></b> in <span style="color: #ffa700;">orange</span>
+have high chromatin accessibility and H3K27ac signals and are
+within 2 kb of an annotated TSS. If they are within 200 bp of a TSS, they must
+also have low H3K4me3 signal.</li>
+<li><b><span style="color: #ffcd00;">TSS-distal enhancer-like signatures
+(distal enhancer)</span></b> in <span style="color: #ffcd00;">yellow</span>
+have high chromatin accessibility and H3K27ac signals
+and are farther than 2 kb from an annotated TSS.</li>
+<li><b><span style="color: #ffaaaa;">Chromatin accessibility +
+H3K4me3 (CA-H3K4me3)</span></b> in <span style="color: #ffaaaa;">pink</span>
+have high chromatin accessibility and H3K4me3
+signals but low H3K27ac signals and do not fall within 200 bp of a TSS.</li>
+<li><b><span style="color: #00b0f0;">Chromatin accessibility +
+CTCF (CA-CTCF)</span></b> in <span style="color: #00b0f0;">blue</span>
+have high chromatin accessibility and CTCF signals
+but low H3K4me3 and H3K27ac signals.</li>
+<li><b><span style="color: #be28e5;">Chromatin accessibility +
+transcription factor (CA-TF)</span></b> in <span style="color: #be28e5;">dark purple</span>
+have high chromatin accessibility,
+low H3K4me3, H3K27ac, and CTCF signals, and are bound by a transcription factor.</li>
+<li><b><span style="color: #06da93;">Chromatin accessibility
+(CA)</span></b> in <span style="color: #06da93;">green</span>
+have high chromatin accessibility and low H3K4me3, H3K27ac, and
+CTCF signals.</li>
+<li><b><span style="color: #d876ec;">Transcription factor
+(TF)</span></b> in <span style="color: #d876ec;">light purple</span>
+have low chromatin accessibility, low H3K4me3, H3K27ac,
+and CTCF signals and are bound by a transcription factor.</li>
+</ol>
 <p>
-<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="40%"></p>
-<p>
-Mousing over the data will display the accession ID, the assigned cCRE class type, and the Max-Z scores
-for the various underlying biosignals (DNase, H3K4me3, H3K27ac, CTCF). A track filter is also available
+Mousing over an item displays the element ID with a linkout to SCREEN, the cCRE class,
+and the max-Z scores for DNase, H3K4me3, H3K27ac, and CTCF. A max-Z score above 1.64 is
+considered &quot;high&quot; signal, while a score of 1.64 or below is considered &quot;low&quot; signal
+for classification purposes (Moore et al., 2026). A score of -10.00 indicates the assay was not
+available in any surveyed biosample.
+A track filter is also available
 to selectively show items based on their cCRE class type.</p>
 
 <h2>Methods</h2>
 <p>
-Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase 
-hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated 
-using ChIP-seq data for histone modifications—H3K4me3 and H3K27ac, marking promoters and 
-enhancers, respectively—and CTCF, marking insulators. To supplement rDHS-anchored cCRE 
-definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification 
-of cCREs even in regions of low chromatin accessibility. Although not used for anchoring, 
-ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.</p>
+Candidate cis-regulatory elements (cCREs) were first anchored on nucleosome-sized DNase
+hypersensitive sites (rDHSs) identified from DNase-seq data. These rDHSs were then annotated
+using ChIP-seq data for histone modifications (H3K4me3 and H3K27ac, marking promoters and
+enhancers, respectively) and CTCF, marking insulators. To supplement rDHS-anchored cCRE
+definitions, transcription factor ChIP-seq peaks were incorporated, enabling identification
+of cCREs even in regions of low chromatin accessibility. Although not used for anchoring,
+ATAC-seq data were used to assess chromatin accessibility in biosamples lacking DNase-seq.
+Because ATAC-seq was not standardized across all biosamples, the ATAC max-Z score is not included
+in the registry bigBed fields or mouseOver. Only the four core assays (DNase, H3K4me3, H3K27ac,
+and CTCF) are reported as max-Z scores. ATAC-seq signal tracks are available in the
+<b>ENCODE4 Regulation</b> track.</p>
 
 <p>
-Classification of cCRE's was performed based on the following criteria:</p>
-<ol>
-<li><strong><span style="color: #ff0000;">Promoter-like signatures (promoter)</span></strong> 
-must fall within 200 bp of a TSS and have high chromatin accessibility and H3K4me3 signals.</li>
-<li><strong><span style="color: #ffa700;">TSS-proximal enhancer-like signatures (proximal 
-enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals and are 
-within 2 kb of an annotated TSS. If they are within 200 bp of a TSS, they must 
-also have low H3K4me3 signal.</li>
-<li><strong><span style="color: #ffcd00;">TSS-distal enhancer-like signatures 
-(distal enhancer)</span></strong> have high chromatin accessibility and H3K27ac signals 
-and are farther than 2 kb from an annotated TSS.</li>
-<li><strong><span style="color: #ffaaaa;">Chromatin accessibility + 
-H3K4me3 (CA-H3K4me3)</strong></span> have high chromatin accessibility and H3K4me3 
-signals but low H3K27ac signals and do not fall within 200 bp of a TSS.</li>
-<li><strong><span style="color: #00b0f0;">Chromatin accessibility + 
-CTCF (CA-CTCF)</strong></span>have high chromatin accessibility and CTCF signals 
-but low H3K4me3 and H3K27ac signals.</li>
-<li><strong><span style="color: #be28e5;">Chromatin accessibility + 
-transcription factor (CA-TF)</strong></span> have high chromatin accessibility, 
-low H3K4me3, H3K27ac, and CTCF signals, and are bound by a transcription factor.</li>
-<li><strong><span style="color: #06da93;">Chromatin accessibility 
-(CA)</strong></span>have high chromatin accessibility and low H3K4me3, H3K27ac, and 
-CTCF signals.</li>
-<li><strong><span style="color: #d876ec;">Transcription factor 
-(TF)</strong></span> have low chromatin accessibility, low H3K4me3, H3K27ac, 
-and CTCF signals and are bound by a transcription factor.</li>
-</ol>
+The following diagram illustrates the biochemical signal patterns used to classify each cCRE type:</p>
+<p>
+<img src="../images/encode4cCREs.png" alt="Graphic of cCRE classifications" width="60%"></p>
 
 <h2>Data Access</h2>
 <p>
 The ENCODE accession numbers of the constituent datasets at the <a target="_blank"
 href="https://encodeproject.org/">ENCODE Portal</a> are available from the cCRE details page.</p>
 <p>
-The data in this track can be interactively explored with the <a target="_blank" 
-href="/cgi-bin/hgTables">Table Browser</a> or the <a target="_blank" 
-href="/cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from 
-scripts through our a <target="_blank" href="https://api.genome.ucsc.edu/">API</a>, 
+The data in this track can be interactively explored with the <a target="_blank"
+href="/cgi-bin/hgTables">Table Browser</a> or the <a target="_blank"
+href="/cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
+scripts through our <a target="_blank" href="https://api.genome.ucsc.edu/">API</a>,
 the track name is "cCREregistry".</p>
 <p>
-For automated download and analysis, this annotation is stored in a bigBed file 
-that can be downloaded from <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/">our download server</a>. 
-The file for this track is called cCREregistry.bb. Individual regions or the whole genome 
-annotation can be obtained using our tool bigBedToBed which can be compiled from the source 
-code or downloaded as a precompiled binary for your system. Instructions for downloading 
-source code and binaries can be found <a target="_blank" 
-href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities downloads">here</a>. 
+For automated download and analysis, this annotation is stored in a bigBed file
+that can be downloaded from <a target="_blank"
+href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/">our download server</a>.
+The file for this track is called cCREregistry.bb. Individual regions or the whole genome
+annotation can be obtained using our tool bigBedToBed which can be compiled from the source
+code or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found <a target="_blank"
+href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.<br><br>
 <code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4/ccre/cCREregistry.bb -chrom=chr21 -start=0 -end=100000000 stdout</code></p>
 

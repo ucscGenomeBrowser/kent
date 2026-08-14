@@ -494,7 +494,7 @@ return NULL;
 }
 
 struct slUnsigned *slUnsignedNew(unsigned x)
-/* Return a new int. */
+/* Return a new unsigned int. */
 {
 struct slUnsigned *a;
 AllocVar(a);
@@ -502,6 +502,14 @@ a->val = x;
 return a;
 }
 
+struct slUnsignedLong *slUnsignedLongNew(unsigned long x)
+/* Return a new unsigned long. */
+{
+struct slUnsignedLong *a;
+AllocVar(a);
+a->val = x;
+return a;
+}
 
 static int doubleCmp(const void *va, const void *vb)
 /* Compare function to sort array of doubles. */

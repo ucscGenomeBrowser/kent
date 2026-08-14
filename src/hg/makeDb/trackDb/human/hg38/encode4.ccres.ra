@@ -23,6 +23,9 @@ parent coreCcres
 shortLabel cCREs
 visibility squish
 type bigBed
+filterValues.cCRE_class CA-only|Chromatin accessibility only (CA-only),CA-CTCF|Chromatin accessibility + CTCF (CA-CTCF),CA-H3K4me3|Chromatin accessibility + H3K4me3 (CA-H3K4me3),CA-TF|Chromatin accessibility + transcription factor (CA-TF),Distal enhancer|Distal enhancer,Proximal enhancer|Proximal enhancer,Promoter|Promoter,Low-DNase|Low-DNase
+filterType.cCRE_class multipleListOr
+filterLabel.cCRE_class cCRE class
 
 track ENCFF136RNO_ENCFF630BQS_ENCFF611XLA_ENCFF975BGM
 priority 118

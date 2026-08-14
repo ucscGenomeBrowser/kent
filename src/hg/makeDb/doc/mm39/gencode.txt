@@ -628,3 +628,9 @@
 
     jkmake DBS=mm39 alpha
 ##############################################################################
+2026-04-23: import of GENCODE VM39 pre-release for GENCODE Versions (markd)
+Ensembl release 116 scheduled for mid-May. 
+
+cd ~/kent/src/hg/makeDb/outside/gencode
+./bin/gencodeBuildRelease mm39 M39 pre "May 2026" 116 >& mm39.log&
+#########################################################################

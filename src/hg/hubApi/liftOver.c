@@ -10,7 +10,8 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 #include "net.h"
-#include "mailViaPipe.h"
+#include "wikiLink.h"
+#include "userdata.h"
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
 static long chainTotalBlockSize(struct chain *chain)
@@ -81,11 +82,19 @@ sqlDyStringPrintf(query, "SELECT count(*) FROM %s", tableName);
 long long totalRows = sqlQuickLongLong(conn, dyStringContents(query));
 dyStringClear(query);
 
-if (isNotEmpty(fromDb) || isNotEmpty(toDb))
+if (isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    /* match a chain recorded in either direction */
+    sqlDyStringPrintf(query, "SELECT * FROM %s WHERE "
+        "(LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s')) "
+        "OR (LOWER(fromDb) = LOWER('%s') AND LOWER(toDb) = LOWER('%s'))",
+        tableName, fromDb, toDb, toDb, fromDb);
+    }
+else if (isNotEmpty(fromDb) || isNotEmpty(toDb))
     {
     sqlDyStringPrintf(query, "SELECT * FROM %s WHERE ", tableName);
     if (isNotEmpty(fromDb))
-        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') %s ", fromDb, isNotEmpty(toDb) ? "AND" : "");
+        sqlDyStringPrintf(query, "LOWER(fromDb) = LOWER('%s') ", fromDb);
     if (isNotEmpty(toDb))
         sqlDyStringPrintf(query, "LOWER(toDb) = LOWER('%s') ", toDb);
     }
@@ -124,11 +133,182 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 jsonWriteListEnd(jw);
 jsonWriteNumber(jw, "totalLiftOvers", totalRows);
-jsonWriteNumber(jw, "itemsReturned", slCount(chainList));
+int chainListCount = slCount(chainList);
+jsonWriteNumber(jw, "itemsReturned", chainListCount);
 liftOverChainFreeList(&chainList);
+
+/* if no chain rows for this pair, check ottoRequest for any existing
+ * row (any status) so the user is told their pair has already been
+ * submitted instead of being allowed to create a duplicate row */
+if (chainListCount == 0 && isNotEmpty(fromDb) && isNotEmpty(toDb))
+    {
+    char *ottoTable = cfgOption("ottoTable");
+    if (isNotEmpty(ottoTable))
+        {
+        struct sqlConnection *ottoConn = hConnectCentral();
+        if (sqlTableExists(ottoConn, ottoTable))
+            {
+            struct dyString *pq = newDyString(0);
+            sqlDyStringPrintf(pq,
+                "SELECT id, status, requestTime FROM %s "
+                "WHERE requestType='liftOver' AND "
+                "((fromDb='%s' AND toDb='%s') OR (fromDb='%s' AND toDb='%s')) "
+                "ORDER BY requestTime DESC LIMIT 1",
+                ottoTable, fromDb, toDb, toDb, fromDb);
+            char **row;
+            struct sqlResult *sr = sqlGetResult(ottoConn, dyStringCannibalize(&pq));
+            if ((row = sqlNextRow(sr)) != NULL)
+                {
+                jsonWriteBoolean(jw, "pending", TRUE);
+                jsonWriteNumber(jw, "pendingStatus", sqlSigned(row[1]));
+                jsonWriteString(jw, "pendingRequestTime", row[2]);
+                }
+            sqlFreeResult(&sr);
+            }
+        hDisconnectCentral(&ottoConn);
+        }
+    }
 
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
+}
+
+static boolean fetchGbMembersFromCentral(char *userName, char **retEmail, char **retRealName)
+/* Relay to genome.ucsc.edu's own loginStatus endpoint to get email/realName
+ * for userName, forwarding this request's Cookie header so genome.ucsc.edu
+ * authenticates the same session.  Used on ucsc.edu hosts that lack SQL
+ * grants on hgcentral.gbMembers.  Returns FALSE on any failure. */
+{
+char *cookieHeader = getenv("HTTP_COOKIE");
+if (isEmpty(cookieHeader))
+    return FALSE;
+
+struct dyString *reqHeader = dyStringNew(0);
+dyStringPrintf(reqHeader, "Cookie: %s\r\n", cookieHeader);
+char *url = "https://genome.ucsc.edu/cgi-bin/hubApi/liftOver/loginStatus";
+int sd = netOpenHttpExt(url, "GET", reqHeader->string);
+dyStringFree(&reqHeader);
+if (sd < 0)
+    return FALSE;
+
+char *redirectedUrl = NULL;
+if (!netSkipHttpHeaderLinesWithRedirect(sd, url, &redirectedUrl))
+    {
+    close(sd);
+    return FALSE;
+    }
+
+struct dyString *body = netSlurpFile(sd);
+close(sd);
+
+boolean ok = FALSE;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct jsonElement *json = jsonParse(body->string);
+    char *email = jsonStringField(json, "email");
+    char *realName = jsonStringField(json, "realName");
+    *retEmail = cloneString(email ? email : "");
+    *retRealName = cloneString(realName ? realName : "");
+    ok = TRUE;
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+dyStringFree(&body);
+return ok;
+}
+
+static void loginStatus()
+/* output current user login status as JSON */
+{
+/* wikiLinkUserName() handles all cookie validation internally */
+char *userName = wikiLinkUserName();
+struct jsonWrite *jw = apiStartOutput();
+char hgLoginLink[2048];
+boolean privateHost = hIsPrivateHost();
+/* can not use hgcentral hglogin from hgwdev/genome-test */
+if (privateHost)
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLocalHostCgiBinUrl());
+else
+    safef(hgLoginLink, sizeof(hgLoginLink), "%shgLogin", hLoginHostCgiBinUrl());
+
+if (userName != NULL)
+    {
+    // Get both email and realName from gbMembers table
+    char *email = NULL;
+    char *realName = NULL;
+
+    if (inUcscEduDomain() && !onGenomeRRMachine())
+        {
+        // dev sandboxes, hgwbeta, etc: no local grants on gbMembers,
+        // relay to genome.ucsc.edu instead
+        if (!fetchGbMembersFromCentral(userName, &email, &realName))
+            warn("loginStatus: failed to fetch email/realName from genome.ucsc.edu relay for user '%s'", userName);
+        }
+    else
+        {
+        // RR machines, and anything entirely outside ucsc.edu: unchanged
+        struct sqlConnection *sc = hConnectCentral();
+        struct dyString *query = sqlDyStringCreate("select email, realName from gbMembers where userName = '%s'", userName);
+        struct sqlResult *sr = sqlGetResult(sc, dyStringCannibalize(&query));
+        char **row = sqlNextRow(sr);
+
+        if (row != NULL)
+            {
+            email = cloneString(row[0] ? row[0] : "");
+            realName = cloneString(row[1] ? row[1] : "");
+            }
+        sqlFreeResult(&sr);
+        hDisconnectCentral(&sc);
+        }
+
+    // Build logout URL with returnto parameter
+    char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *logoutUrl = dyStringNew(0);
+    dyStringPrintf(logoutUrl, "%s?hgLogin.do.displayLogout=1", hgLoginLink);
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+
+        dyStringPrintf(logoutUrl, "&returnto=%s", encodedReturnUrl);
+        freeMem(encodedReturnUrl);
+        }
+
+    jsonWriteString(jw, "userName", userName);
+    jsonWriteString(jw, "email", email ? email : "");
+    jsonWriteString(jw, "realName", realName ? realName : "");
+    jsonWriteString(jw, "logoutUrl", dyStringCannibalize(&logoutUrl));
+
+    if (email)
+        freeMem(email);
+    if (realName)
+        freeMem(realName);
+    }
+else
+    {
+    jsonWriteString(jw, "userName", NULL);
+    // Use returnTo parameter passed by calling JavaScript
+    char *returnTo = cgiOptionalString("returnTo");
+    struct dyString *loginUrl = dyStringNew(0);
+    dyStringPrintf(loginUrl, "%s?hgLogin.do.displayLoginPage=1", hgLoginLink);
+    struct dyString *signUpUrl = dyStringNew(0);
+    dyStringPrintf(signUpUrl, "%s?hgLogin.do.displaySignupPage=1", hgLoginLink);
+    if (isNotEmpty(returnTo))
+        {
+        char *encodedReturnUrl = cgiEncodeFull(returnTo);
+        dyStringPrintf(loginUrl, "&returnto=%s", encodedReturnUrl);
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
+        freeMem(encodedReturnUrl);
+        }
+    else
+        {
+        // No returnTo provided, just give basic login URL
+        jsonWriteString(jw, "loginUrl", dyStringCannibalize(&loginUrl));
+        }
+    jsonWriteString(jw, "signupUrl", dyStringCannibalize(&signUpUrl));
+    }
+
+apiFinishOutput(0, NULL, jw);
 }
 
 /**** SHOULD BE IN LIBRARY - code from hgConvert.c ******/
@@ -226,6 +406,11 @@ if (sameWordOk("listExisting", words[1]))
     listExisting();
     return;
     }
+else if (sameWordOk("loginStatus", words[1]))
+    {
+    loginStatus();
+    return;
+    }
 
 char *fromGenome = cgiOptionalString(argFromGenome);
 char *toGenome = cgiOptionalString(argToGenome);
@@ -241,7 +426,7 @@ unsigned uEnd = 0;
 uStart = sqlUnsigned(start);
 uEnd = sqlUnsigned(end);
 if (uEnd < uStart)
-    apiErrAbort(err400, err400Msg, "given start coordinate %u is greater than given end coordinate", uStart, uEnd);
+    apiErrAbort(err400, err400Msg, "given start coordinate %u is greater than given end coordinate %u", uStart, uEnd);
 
 struct dbDb *fromDb = hDbDb(fromGenome);
 if (fromDb == NULL)
@@ -292,22 +477,62 @@ char *comment = cgiOptionalString(argComment);
 if (isEmpty(fromGenome) || isEmpty(toGenome) || isEmpty(email) || isEmpty(comment))
     apiErrAbort(err400, err400Msg, "must have all arguments: %s, %s, %s, %s for endpoint '/liftRequest", argFromGenome, argToGenome, argEmail, argComment);
 
+/* Require a session cookie.  Robots that have not
+ *   passed the challenge will not have one. */
 char *cookieName = hUserCookie();
 char *userId = findCookieData(cookieName);
-char *referer = getenv("HTTP_REFERER");
-char dir[PATH_LEN];
-char name[FILENAME_LEN];
-char ext[FILEEXT_LEN];
-/* expecting request to come from something.ucsc.edu/liftRequest.html */
-if (isNotEmpty(referer) && isNotEmpty(userId))
+if (isEmpty(userId))
+    apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+
+/* verify (again) that the requested assemblies actually exist */
+struct dbDb *fromDb = hDbDb(fromGenome);
+if (fromDb == NULL)
     {
-    splitPath(referer, dir, name, ext);
-    if (! (endsWith(dir, ".ucsc.edu/") && sameWord(name, "liftRequest") && sameWord(ext, ".html")))
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
-    } else {
-      if (! debug)
-          apiErrAbort(err400, err400Msg, "can not find required inputs for endpoint '/liftRequest");
+    fromDb = genarkLiftOverDb(fromGenome);
     }
+struct dbDb *toDb = hDbDb(toGenome);
+if (toDb == NULL)
+    {
+    toDb = genarkLiftOverDb(toGenome);
+    }
+if ( (fromDb == NULL) || (toDb == NULL) )
+    {
+    if ( (fromDb == NULL) && (toDb == NULL) )
+	    apiErrAbort(err400, err400Msg, "can not find either 'fromGenome=%s' or 'toGenome=%s' for endpoint '/liftOver", fromGenome, toGenome);
+        else
+	    {
+	    if (fromDb == NULL)
+		apiErrAbort(err400, err400Msg, "can not find 'fromoGenome=%s' for endpoint '/liftOver", fromGenome);
+	    else
+		apiErrAbort(err400, err400Msg, "can not find 'toGenome=%s' for endpoint '/liftOver", toGenome);
+	    }
+    }
+
+/* Record the request in the ottoRequest table: duplicate-row guard, daily
+ * rate-limit guard, then an atomic insert.  Done locally (this host has
+ * hgcentral write grants) or relayed to genome.ucsc.edu (it doesn't) --
+ * see inUcscEduDomain()/onGenomeRRMachine(). */
+char *ottoStatus;
+if (inUcscEduDomain() && !onGenomeRRMachine())
+    ottoStatus = relaySubmitOttoRequest("liftOver", fromGenome, toGenome, email, comment);
+else
+    ottoStatus = submitOttoRequest("liftOver", fromGenome, toGenome, email, comment);
+
+if (sameString(ottoStatus, "duplicate"))
+    apiErrAbort(err409, err409Msg,
+        "A request for %s <-> %s has already been submitted "
+        "and is on record.  Duplicates are not accepted.",
+        fromGenome, toGenome);
+else if (sameString(ottoStatus, "rateLimited"))
+    {
+    char *limitStr = cfgOption("liftDailyLimit");
+    apiErrAbort(err429, err429Msg,
+        "Daily limit reached: %s liftOver requests per day. "
+        " Please try again tomorrow.",
+        isNotEmpty(limitStr) ? limitStr : "the daily limit of");
+    }
+else if (sameString(ottoStatus, "error"))
+    apiErrAbort(err500, err500Msg, "internal error recording liftOver request");
 
 char *toAddr = cfgOption("chainFileRequestEmail");
 char *fromAddr = cfgOption("apiFromEmail");
@@ -322,28 +547,10 @@ if (isNotEmpty(toAddr) && isNotEmpty(fromAddr))
     struct dyString *msg = newDyString(0);
     /* may need to encode these inputs to make them safe */
     dyStringPrintf(msg, "%s\nLift over request\nfrom: %s\nto: %s\nemail '%s'\ncomment: '%s'", nowTime, fromGenome, toGenome, email, comment);
-    /* Even if the mailViaPipe returned a relevant return code, and I'm not
-    *    sure it would, there isn't much we can do about it from here.
-    */
-    (void) mailViaPipe(toAddr, "liftOver request", msg->string, fromAddr);
 
     /* some kind of response here back to the request page */
     struct jsonWrite *jw = apiStartOutput();
     jsonWriteString(jw, "msg", dyStringCannibalize(&msg));
     apiFinishOutput(0,NULL,jw);
-    char *ottoTable = cfgOption("ottoTable");	/* probably ottoRequest */
-    if (isNotEmpty(ottoTable))
-        {
-        struct sqlConnection *conn = hConnectCentral();
-        if (sqlTableExists(conn, ottoTable))
-	    {
-            struct dyString *update = newDyString(0);
-            sqlDyStringPrintf(update,
-		"INSERT INTO %s (fromDb, toDb, email, comment, requestTime, doneStatus) VALUES ( '%s','%s','%s','%s',now(), 0)",
-		ottoTable,  fromGenome, toGenome, email, comment);
-            sqlUpdate(conn, dyStringCannibalize(&update));
-	    }
-        hDisconnectCentral(&conn);
-        }
     }
 }	/*	void apiLiftRequest(char *words[MAX_PATH_INFO])	*/

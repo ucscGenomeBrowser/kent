@@ -1,0 +1,49 @@
+##############################################################################
+# GCA_052040795.1 - zebrafish (M-AB 2025) - Danio rerio - taxId: 7955
+##############################################################################
+track chainNetGCA_052040795.1
+compositeTrack on
+shortLabel zebrafish (M-AB 2025) Chain/Net
+longLabel zebrafish (M-AB 2025) (Aug. 2025 GCA_052040795.1_GRCz12ab), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_052040795.1
+html chainNet
+
+    track chainNetGCA_052040795.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_052040795.1
+    spectrum on
+
+        track chainGCA_052040795.1
+        parent chainNetGCA_052040795.1Viewchain
+        subGroups view=chain
+        shortLabel zebrafish (M-AB 2025) Chain
+        longLabel zebrafish (M-AB 2025) (Aug. 2025 GCA_052040795.1_GRCz12ab) Chained Alignments
+        type bigChain GCA_052040795.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_052040795.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_052040795.1Link.bb
+
+        track chainLiftOverGCA_052040795.1
+        parent chainNetGCA_052040795.1Viewchain
+        subGroups view=chain
+        shortLabel zebrafish (M-AB 2025) liftOverChain
+        longLabel zebrafish (M-AB 2025) (Aug. 2025 GCA_052040795.1_GRCz12ab) Lift Over Chained Alignments
+        type bigChain GCA_052040795.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_052040795.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_052040795.1Link.bb
+

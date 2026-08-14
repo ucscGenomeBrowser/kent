@@ -1083,6 +1083,18 @@ ret = sqlUnsigned(s);
 return ret;
 }
 
+unsigned long sqlUnsignedLongComma(char **pS)
+/* Return unsigned long number at *pS.  Advance *pS past comma at end */
+{
+char *s = *pS;
+char *e = strchr(s, ',');
+unsigned long ret;
+
+*e++ = 0;
+*pS = e;
+ret = sqlUnsignedLong(s);
+return ret;
+}
 
 int sqlSignedComma(char **pS)
 /* Return signed number at *pS.  Advance *pS past comma at end */

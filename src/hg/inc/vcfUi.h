@@ -52,6 +52,10 @@
 #define VCF_MIN_ALLELE_FREQ_VAR "minFreq"
 #define VCF_DEFAULT_MIN_ALLELE_FREQ 0.0
 
+#define VCF_DO_MIN_AC_UI "vcfDoMinAc"
+#define VCF_MIN_AC_VAR "minAc"
+#define VCF_DEFAULT_MIN_AC 0
+
 #define VCF_PHASED_CHILD_SAMPLE_SETTING "vcfChildSample"
 #define VCF_PHASED_PARENTS_SAMPLE_SETTING "vcfParentSamples"
 #define VCF_PHASED_SAMPLE_ORDER_VAR "vcfSampleOrder"

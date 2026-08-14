@@ -288,6 +288,15 @@ mv clinGenCspecHg38.new.bb clinGenCspecHg38.bb
 mv clinGenCspecHg19.new.bb clinGenCspecHg19.bb
 mv svis.json svis.json.old
 
+# clinGenComp container "last updated" date. This Cspec feed runs as a separate cron, but
+# clinGenCspec is a displayed subtrack, so stamp the shared per-db version file that the
+# composite's dataVersion reads. (This script runs in the clinGenCspec/ subdir, so use the
+# absolute release path.)
+today=$(date +%F)
+for db in hg19 hg38; do
+    printf 'Last updated %s\n' "$today" > /hive/data/outside/otto/clinGen/release/${db}/clinGenVersion.txt
+done
+
 echo
 echo "Item counts for hg38 old vs. new bigBed. Old: $oldCountHg38 New: $newCountHg38"
 echo "Item counts for hg19 old vs. new bigBed. Old: $oldCountHg19 New: $newCountHg19"

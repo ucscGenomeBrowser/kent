@@ -4,6 +4,20 @@ import collections
 from collections import defaultdict
 import sys
 import os
+import argparse
+
+
+def parseArgs():
+    '''
+    Parse command-line arguments.
+    '''
+    parser = argparse.ArgumentParser(
+        description="Run the checkTrackUiLinks.csh cronjob for all active assemblies.")
+    parser.add_argument("-e", "--errors-only", dest="errorsOnly", action="store_true",
+                        help="Only print output for assemblies where link errors were found. "
+                             "Assemblies that check out clean are skipped entirely, so no output "
+                             "means nothing to report.")
+    return parser.parse_args()
 
 
 def getActiveAssemblies():
@@ -30,35 +44,53 @@ def getActiveAssemblies():
 
 def runCron(assembly):
     '''
-    Run the checkTrackUiLinks.csh script
+    Run the checkTrackUiLinks.csh script and return its output
     '''
     cronOutput = subprocess.run("/cluster/bin/scripts/checkTrackUiLinks.csh %s all" % assembly,\
                                          stdout=subprocess.PIPE,\
                                          stderr=subprocess.PIPE,\
                                          shell=True)
     myOutput = cronOutput.stdout.decode('utf-8')
-    print(myOutput)
+    return myOutput
+
+def hasErrors(output):
+    '''
+    Return True if the checkTrackUiLinks.csh output reports link errors.
+    The script prints "No errors found!" in its summary only when no broken
+    links were detected, so the absence of that line means errors were found
+    (or the assembly could not be checked at all).
+    '''
+    return "No errors found!" not in output
 
 
 def main():
     '''
-    Main program to run the uiLinks cronjob for all assemblies. 
+    Main program to run the uiLinks cronjob for all assemblies.
     1. Get a list of all active assemblies
     2. run /cluster/bin/scripts/checkTrackUiLinks.csh
     3. Parse output
     '''
+    args = parseArgs()
+
     # Get a list of active assemblies
     myAssemblies = getActiveAssemblies()
-    maxCount = len(myAssemblies) -1
 
     # Iterate through the list of assemblies
-    for count,assembly in enumerate(myAssemblies):
-        print(assembly, end="\n\n")
-        runCron(assembly)
+    firstPrinted = True
+    for assembly in myAssemblies:
+        output = runCron(assembly)
         if os.path.exists('wget-log'):
             os.remove('wget-log')
-        if count != maxCount: # Separator for parsing the output
+
+        # In errors-only mode, skip assemblies that checked out clean
+        if args.errorsOnly and not hasErrors(output):
+            continue
+
+        if not firstPrinted: # Separator for parsing the output
             print("%%%%%%%")
+        print(assembly, end="\n\n")
+        print(output)
+        firstPrinted = False
 
 if __name__ == '__main__':
     sys.exit(main())

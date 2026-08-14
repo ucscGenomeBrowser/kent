@@ -1,0 +1,46 @@
+<h2>Description</h2>
+<p>
+This composite shows the original mouse <b>topologically associating domain (TAD)</b> calls
+from Dixon et al. 2012, the study that defined TADs. Two cell types are shown: mouse
+embryonic stem cells (mESC) and mouse cortex. TADs are self-interacting genomic regions
+whose boundaries (frequently bound by CTCF and cohesin) insulate neighboring regions and
+constrain enhancer-promoter contacts.
+</p>
+<p>
+The calls were made on mm9 and are displayed here lifted to this assembly (see Methods).
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each domain is drawn as a box spanning a self-interacting region. The two cell types are
+separate subtracks. Domains were called on 40 kb-binned Hi-C data, so domain edges are
+uncertain to roughly the bin size; domains do not tile the genome end to end.
+</p>
+
+<h2>Methods</h2>
+<p>
+TAD domains were called by Dixon et al. 2012 with the directionality-index hidden Markov
+model at 40 kb resolution (the published &quot;Combined&quot; replicate call set: 2,200 mESC
+and 1,518 cortex domains, mm9). UCSC lifted the mm9 coordinates to this assembly with
+<b>liftOver</b> (a small percentage of domains that did not map cleanly were dropped) and
+reformatted them to bigBed; no re-calling was performed.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Dixon JR, Selvaraj S, Yue F, Kim A, Li Y, Shen Y, Hu M, Liu JS, Ren B.
+Topological domains in mammalian genomes identified by analysis of chromatin
+interactions. <em>Nature</em>. 2012;485(7398):376-80.
+<a href="https://doi.org/10.1038/nature11082" target="_blank">doi:10.1038/nature11082</a>
+</p>

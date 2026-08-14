@@ -5,44 +5,86 @@ group genes
 type bed 4
 visibility hide
 superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
-        #track nmdGencode
-        #shortLabel NMD escape 50bp-100bp rule: Gencode transcripts
-        #longLabel NMD escape 50bp-100bp rule: Gencode transcripts
-        #parent nmd on
-        #bigDataUrl /gbdb/hg38/nmd/knownGeneNmdProt.bb
-        #visibility pack
-        #type bigBed
-        #dataVersion Gencode V49
-        #skipFields decoratedItem,style,fillColor,glyph,mouseover
-        #mouseOverField mouseover
-        #priority 1
-
-        track nmdEscGencode
-        shortLabel NMD Escape Gencode
-        longLabel NMD escape 50bp/100bp/intronless ruleset: Gencode transcripts
+        track nmdEscMane
+        shortLabel NMD Escape MANE
+        longLabel NMD escape predictions: MANE Select Plus Clinical transcripts
         parent nmd on
-        bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
+        bigDataUrl /gbdb/hg38/nmd/nmdEscMane.bb
         visibility pack
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
+        labelFields ncbiIds,name,transcripts
+        defaultLabelFields ncbiIds
+        labelSeparator " / "
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts Gencode accession (e.g. "*ENST00000269305*")
+        filterText.ncbiIds *
+        filterType.ncbiIds wildcard
+        filterLabel.ncbiIds RefSeq accession (e.g. "*NM_000546*")
+        dataVersion MANE 1.5
+        priority 1.4
+
+        track nmdEscGencode
+        shortLabel NMD Escape Gencode
+        longLabel NMD escape predictions: Gencode transcripts
+        parent nmd on
+        bigDataUrl /gbdb/hg38/nmd/nmdEscRegions.bb
+        visibility dense
+        type bigBed 9 +
+        mouseOverField mouseover
+        html nmdEscTranscripts
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts Filter on transcript ID (e.g. "*ENST00000269305*")
         # this could use a text file one day with the version
         dataVersion Gencode V49
         priority 1.5
 
         track nmdEscNcbiRefSeq
         shortLabel NMD Escape RefSeq
-        longLabel NMD escape 50bp/100bp/intronless ruleset: NCBI RefSeq transcripts
-        parent nmd on
+        longLabel NMD escape predictions: NCBI RefSeq Curated transcripts
+        parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdEscNcbiRefSeq.bb
-        visibility pack
+        visibility hide
         type bigBed 9 +
         mouseOverField mouseover
         html nmdEscTranscripts
+        filterText.transcripts *
+        filterType.transcripts wildcard
+        filterLabel.transcripts Filter on transcript ID (e.g. "NM_005228*")
         # this could use a text file one day with the version
         dataVersion GCF_000001405.40-RS_2025_08
         priority 1.6
+
+        track nmdDetectiveAi
+        shortLabel NMDetective-AI
+        longLabel NMDetective-AI: Deep-learning NMD efficiency prediction per position (MANE Select only)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bw
+        type bigWig
+        visibility hide
+        color 128,0,128
+        autoScale off
+        viewLimits -1.1:1.5
+        maxHeightPixels 128:120:8
+        html nmdDetectiveAi
+        priority 1.7
+
+        track nmdDetectiveAiBed
+        shortLabel NMDetective-AI variants
+        longLabel NMDetective-AI: Per-stop-gain predictions for every codon (MANE Select only)
+        parent nmd off
+        bigDataUrl /gbdb/hg38/nmd/nmdDetectAi.bb
+        type bigBed 9 +
+        itemRgb on
+        visibility hide
+        mouseOverField mouseOver
+        html nmdDetectiveAi
+        priority 1.8
 
         track nmdDetectiveA
         shortLabel NMDetective-A
@@ -50,10 +92,10 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveA.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,128,255
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 2
@@ -64,10 +106,10 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/NMDetectiveB.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,128,255
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 3
@@ -78,10 +120,10 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectA-ptc.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,153,102
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 4
@@ -92,10 +134,10 @@ superTrack on
         parent nmd off
         bigDataUrl /gbdb/hg38/nmd/nmdDectB-ptc.bw
         type bigWig
-        visibility full
+        visibility hide
         color 0,153,102
         autoScale off
-        viewLimits -1:1
+        viewLimits -0.3:1.5
         maxHeightPixels 128:32:8
         html nmdDetective
         priority 5

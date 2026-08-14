@@ -53,6 +53,8 @@
 #define err403Msg	"Forbidden"
 #define err404	404
 #define err404Msg	"Not Found"
+#define err409	409
+#define err409Msg	"Conflict"
 #define err415	415
 #define err415Msg	"Unsupported track type"
 #define err429	429
@@ -89,10 +91,20 @@
 /* used by liftRequest */
 #define argEmail "email"
 #define argComment "comment"
+#define argReturnTo "returnTo"
+/* used by assemblyRequest */
+#define argAsmId "asmId"
+#define argName "name"
+#define argBetterName "betterName"
+/* used by the internal /submitOttoRequest relay endpoint */
+#define argRequestType "requestType"
 /* used in liftOver 'listExisting' function to filter the result */
 #define argFilter "filter"
 /* used in list/files to show only certain file types */
 #define argFileType "fileType"
+/* used by /blat */
+#define argUserSeq "userSeq"
+#define argApiKey "apiKey"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -111,6 +123,8 @@ extern char *argSearch[];
 extern char *argFindGenome[];
 extern char *argLiftOver[];
 extern char *argLiftRequest[];
+extern char *argAssemblyRequest[];
+extern char *argBlat[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -279,6 +293,34 @@ void textLineOut(char *lineOut);
 void textFinishOutput();
 /* all done with text output, print it all out */
 
+boolean inUcscEduDomain();
+/* Return TRUE if this machine is configured (via hg.conf's central.domain)
+ * as belonging to the ucsc.edu domain. */
+
+boolean onGenomeRRMachine();
+/* Return TRUE if running on one of the genome.ucsc.edu round-robin
+ * machines (hgw0, hgw1, hgw2, ... or hgwbeta), which carry direct SQL
+ * grants on hgcentral.  Only meaningful within inUcscEduDomain(). */
+
+char *submitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment);
+/* Record a row in the ottoRequest table via hConnectCentral(), applying the
+ * liftOver duplicate/daily-rate guards when requestType is "liftOver", or a
+ * plain insert when requestType is "assembly".  Returns a status string:
+ * "disabled", "duplicate", "rateLimited", "accepted", or "error".  Never
+ * apiErrAbort()s -- used both for direct local calls (this host has
+ * hgcentral write grants) and to answer relaySubmitOttoRequest() calls. */
+
+char *relaySubmitOttoRequest(char *requestType, char *fromDb, char *toDb, char *email, char *comment);
+/* Relay an ottoRequest submission to genome.ucsc.edu's /submitOttoRequest
+ * endpoint, for hosts that lack local hgcentral write grants.  Returns the
+ * same status vocabulary as submitOttoRequest(). */
+
+void apiSubmitOttoRequest(char *words[MAX_PATH_INFO]);
+/* Internal server-to-server endpoint backing relaySubmitOttoRequest():
+ * authenticates via the shared hg.conf secret 'hubApi.relaySecret', sent as
+ * the 'X-Relay-Secret' request header, then calls submitOttoRequest()
+ * locally and returns its status as JSON. */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
@@ -303,6 +345,9 @@ void apiSearch(char *words[MAX_PATH_INFO]);
 void apiFindGenome(char *words[MAX_PATH_INFO]);
 /* 'findGenome' function */
 
+void apiAssemblyRequest(char *words[MAX_PATH_INFO]);
+/* interface to the assemblySearch.html request form, replaces /cgi-bin/asr */
+
 /* ######################################################################### */
 /*  functions in liftover.c */
 
@@ -311,5 +356,12 @@ void apiLiftOver(char *words[MAX_PATH_INFO]);
 
 void apiLiftRequest(char *words[MAX_PATH_INFO]);
 /* interface to the liftOver request page to send email */
+
+/* ######################################################################### */
+/*  functions in blat.c */
+
+void apiBlat(char *words[MAX_PATH_INFO]);
+/* '/blat' endpoint: run a BLAT alignment of userSeq against the requested
+ * assembly's gfServer and return PSL hits as JSON. */
 
 #endif	/*	 DATAAPH_H	*/

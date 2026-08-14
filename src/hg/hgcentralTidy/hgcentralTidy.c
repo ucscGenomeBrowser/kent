@@ -1,9 +1,9 @@
-/* Copyright (C) 2013 The Regents of the University of California 
+/* Copyright (C) 2013 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
-/* hgcentralTidy - Clean out old cart records from userDb and sessionDb tables 
- * in an hgcentral db by processing it in chunks so that it 
+/* hgcentralTidy - Clean out old cart records from userDb and sessionDb tables
+ * in an hgcentral db by processing it in chunks so that it
  * won't lock out other cgi processes that are running.
  * Also, check that maximum table size has not been exceeded,
  * and send warning to cluster-admin if it has.
@@ -28,7 +28,7 @@ struct sqlConnection *conn = NULL;
 int chunkSize = 1000;
 int chunkWait = 0;
 int squealSize = 20;  /* complain if table data_length is bigger than squealSize GB */
- // was 14 until 2018-06-02  
+ // was 14 until 2018-06-02
 
 int purgeStart = -1;  /* manual specify purge range in days ago */
 int purgeEnd = -1;
@@ -115,7 +115,7 @@ if (((dataLength-dataFree) / (1024 * 1024 * 1024)) >= squealSize)
     safef(msg, sizeof(msg), "BIG HGCENTRAL TABLE %s data_length: %lld data_free: %lld\n"
 	, table, dataLength, dataFree);
     printf("%s", msg);
-    safef(cmdLine, sizeof(cmdLine), 
+    safef(cmdLine, sizeof(cmdLine),
 	"echo '%s'|mail -s 'WARNING hgcentral cleanup detected data_length max size %d GB exceeded' %s"
 	, msg
 	, squealSize
@@ -130,21 +130,21 @@ return squealed;
 }
 
 
-int toDaysAgo(char *useString, unsigned int id)
+int toDaysAgo(char *useString, unsigned long id)
 /* Convert mysql datetime into days ago */
 {
 struct tm tmUse;
 zeroBytes(&tmUse, sizeof(struct tm));
 if (!strptime(useString, "%Y-%m-%d %H:%M:%S", &tmUse))
-    errAbort("strptime failed for firstUse %s (id=%u)", useString, id);
+    errAbort("strptime failed for firstUse %s (id=%lu)", useString, id);
 
 time_t use, now;
 now = time(NULL);
 use = mktime(&tmUse);
-return difftime(now, use) / (60*60*24); 
+return difftime(now, use) / (60*60*24);
 }
 
-void cleanTableSection(char *table, unsigned int startId, unsigned int endId)
+void cleanTableSection(char *table, unsigned long startId, unsigned long endId)
 /* clean a specific table section */
 {
 struct sqlResult *sr;
@@ -154,24 +154,24 @@ int rc = 0;
 int dc = 0;
 int delCount = 0;
 int count = 0;
-unsigned int maxId = startId - 1;
+unsigned long maxId = startId - 1;
 if (startId == 0) maxId = 0;
 int useCount = 0;
 boolean	deleteThis = FALSE;
 int delRobotCount = 0;
 int oldRecCount = 0;
-struct slUnsigned *delList = NULL;
+struct slUnsignedLong *delList = NULL;
 time_t cleanSectionStart = time(NULL);
 
 struct dyString *dy = dyStringNew(0);
 
 while(TRUE)
     {
-    verbose(2, "maxId: %u   count=%d  delCount=%d   dc=%d\n", maxId, count, delCount, dc);
+    verbose(2, "maxId: %lu   count=%d  delCount=%d   dc=%d\n", maxId, count, delCount, dc);
 
     sqlSafef(query,sizeof(query),
 	"select id, firstUse, lastUse, useCount from %s"
-	" where id > %u "
+	" where id > %lu "
         " AND lastUse < NOW() - INTERVAL 1 HOUR"
         " order by id limit %d;"
 	, table
@@ -187,17 +187,17 @@ while(TRUE)
 	++count;
 	++rc;
 
-        maxId = sqlUnsigned(row[0]);
+        maxId = sqlUnsignedLong(row[0]);
         useCount = sqlSigned(row[3]);
 
-        int daysAgoFirstUse = toDaysAgo(row[1], maxId); 
-        int daysAgoLastUse  = toDaysAgo(row[2], maxId); 
+        int daysAgoFirstUse = toDaysAgo(row[1], maxId);
+        int daysAgoLastUse  = toDaysAgo(row[2], maxId);
 
-	verbose(3, "id: %u, firstUse: [%s] [%d days ago], lastUse: [%s] [%d days ago], useCount: %d\n"
+	verbose(3, "id: %lu, firstUse: [%s] [%d days ago], lastUse: [%s] [%d days ago], useCount: %d\n"
 	    , maxId
 	    , row[1], daysAgoFirstUse
 	    , row[2], daysAgoLastUse
-	    , useCount 
+	    , useCount
 	    );
 
 	deleteThis = FALSE;
@@ -241,46 +241,46 @@ while(TRUE)
 	if (deleteThis)
 	    {
     	    ++dc;
-	    verbose(3, "TO DELETE id: %u, "
+	    verbose(3, "TO DELETE id: %lu, "
     		"firstUse: [%s] [%d days ago], lastUse: [%s] [%d days ago], useCount: %d\n"
 		, maxId
     		, row[1], daysAgoFirstUse
     		, row[2], daysAgoLastUse
-    		, useCount 
+    		, useCount
     		);
-	    slAddHead(&delList, slUnsignedNew(maxId));
+	    slAddHead(&delList, slUnsignedLongNew(maxId));
 	    }
 
 	}
     sqlFreeResult(&sr);
-   
+
     if (rc < 1)
 	    break;
 
     if (dc > 0)
 	{
-	struct slUnsigned *i;
+	struct slUnsignedLong *i;
 	for (i=delList;i;i=i->next)
 	    {
             if (!optionExists("skipDel"))
 		{
-		dyStringClear(dy); 
-	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		dyStringClear(dy);
+	        sqlDyStringPrintf(dy, "delete from %s where id=%lu", table, i->val);
 		sqlUpdate(conn,dy->string);
 		}
 	    else
 		{
-		dyStringClear(dy); 
-	        sqlDyStringPrintf(dy, "delete from %s where id=%u", table, i->val);
+		dyStringClear(dy);
+	        sqlDyStringPrintf(dy, "delete from %s where id=%lu", table, i->val);
 		verbose(4,"GALT DEBUG del dystring = [%s]\n", dy->string);
 		}
 
 	    }
 	slFreeList(&delList);
 	}
- 
+
     delCount+=dc;
-  
+
     if (maxId >= endId)
 	{
 	break;  // we have done enough
@@ -297,14 +297,14 @@ while(TRUE)
          optionExists("skipDel")?"would have been":"", delRobotCount);fflush(stderr);
 
     time_t cleanEnd = time(NULL);
-    int minutes = difftime(cleanEnd, cleanSectionStart) / 60; 
+    int minutes = difftime(cleanEnd, cleanSectionStart) / 60;
     verbose(1, "%s\n", ctime(&cleanEnd));
     verbose(1, "%d minutes\n\n", minutes);
 }
 
-int binaryIdSearch(unsigned int *ids, int numIds, char *table, int daysAgo, boolean endSearch)
+int binaryIdSearch(unsigned long *ids, int numIds, char *table, int daysAgo, boolean endSearch)
 /* Find the array index in ids which holds the id that contains
- * the oldest record satisfying the daysAgo criterion. 
+ * the oldest record satisfying the daysAgo criterion.
  * If not found, return -1 */
 {
 char query[256];
@@ -324,11 +324,11 @@ while (TRUE)
     //verbose(1,"bin a=%d, b=%d, m=%d\n", a, b, m);
     while (TRUE)
 	{
-	sqlSafef(query, sizeof(query), "select firstUse from %s where id=%u", table, ids[m]);
+	sqlSafef(query, sizeof(query), "select firstUse from %s where id=%lu", table, ids[m]);
 	char *firstUse = sqlQuickString(conn,query);
 	if (firstUse)
 	    {
-	    int daysAgoFirstUse = toDaysAgo(firstUse, ids[m]); 
+	    int daysAgoFirstUse = toDaysAgo(firstUse, ids[m]);
             //verbose(1, "DEBUG: %d %d %s %d\n", m, ids[m], firstUse, daysAgoFirstUse);  // DEBUG REMOVE
 	    if (daysAgoFirstUse > daysAgo)
 		{
@@ -349,7 +349,7 @@ while (TRUE)
 	    }
 	else // rare event: record not found, was it deleted?
 	    {
-	    errAbort("hgcentralTidy: unexpected error in binaryIdSearch() id %u not found in table %s", ids[m], table);
+	    errAbort("hgcentralTidy: unexpected error in binaryIdSearch() id %lu not found in table %s", ids[m], table);
 	    }
 	}
     }
@@ -363,7 +363,7 @@ boolean cleanTable(char *table)
 struct sqlResult *sr;
 char **row;
 char query[256];
-unsigned int *ids;
+unsigned long *ids;
 long totalRows = 0;
 boolean squealed = FALSE;
 time_t cleanStart = time(NULL);
@@ -390,7 +390,7 @@ sr = sqlGetResult(conn, query);
 int i = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    ids[i++] = sqlUnsigned(row[0]);
+    ids[i++] = sqlUnsignedLong(row[0]);
     if (i >= totalRows)
 	break;
     }
@@ -411,7 +411,7 @@ if (optionExists("purgeStart"))   // manual purge range specified
 	errAbort("purgeStart should be greater than purgeEnd (in days ago)");
     purgeRangeStart = binaryIdSearch(ids, totalRows, table, purgeStart, FALSE);
     purgeRangeEnd   = binaryIdSearch(ids, totalRows, table, purgeEnd, TRUE);
-    verbose(1, "manual purge range: purgeStart %d purgeEnd %d rangeStart %d rangeEnd %d rangeSize=%d ids[rs]=%u\n", 
+    verbose(1, "manual purge range: purgeStart %d purgeEnd %d rangeStart %d rangeEnd %d rangeSize=%d ids[rs]=%lu\n",
                                     purgeStart,   purgeEnd, purgeRangeStart, purgeRangeEnd, purgeRangeEnd-purgeRangeStart, ids[purgeRangeStart]);
     if (!optionExists("dryRun"))
 	cleanTableSection(table, ids[purgeRangeStart], ids[purgeRangeEnd]);
@@ -432,7 +432,7 @@ else  // figure out purge-ranges automatically
     //  and typically produce only a few hundred deletions.
     //  they are growing slowly and expire rarely, so we don't need to scan them
     //  frequently and aggressively.  So ONLY scan them once per week by doing 1/7 per day.
-    // Also don't need to worry much about the 
+    // Also don't need to worry much about the
     //  borders of the split-over-7-days divisions shifting much because the set is so nearly static.  YAWN.
 
     int firstUseIndex = binaryIdSearch(ids, totalRows, table, firstUseAge, FALSE);
@@ -440,21 +440,21 @@ else  // figure out purge-ranges automatically
     int oldRangeStart = oldRangeSize * (day-1);
     int oldRangeEnd = oldRangeStart + oldRangeSize;
 
-    verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d day %d: rangeStart %d rangeEnd %d rangeSize=%d ids[oldRangeStart]=%u\n", 
+    verbose(1, "old cleaner: firstUseAge=%d firstUseIndex = %d day %d: rangeStart %d rangeEnd %d rangeSize=%d ids[oldRangeStart]=%lu\n",
         firstUseAge, firstUseIndex, day, oldRangeStart, oldRangeEnd, oldRangeEnd-oldRangeStart, ids[oldRangeStart]);
 
     // newly old can be expected to have some delete action
     //  these records have newly crossed the threshold into being old enough to have possibly expired.
     int newOldRangeStart = firstUseIndex;
     int newOldRangeEnd = binaryIdSearch(ids, totalRows, table, firstUseAge - 1, TRUE);
-    verbose(1, "newOld cleaner: firstUseAge=%d rangeStart %d rangeEnd %d rangeSize=%d ids[newOldRangeStart]=%u\n", 
+    verbose(1, "newOld cleaner: firstUseAge=%d rangeStart %d rangeEnd %d rangeSize=%d ids[newOldRangeStart]=%lu\n",
 	firstUseAge, newOldRangeStart, newOldRangeEnd, newOldRangeEnd-newOldRangeStart, ids[newOldRangeStart]);
-   
+
 
     // this is the main delete action of cleaning out new robots (20k to 50k or more)
     int robo1RangeStart = binaryIdSearch(ids, totalRows, table, 2, FALSE);
     int robo1RangeEnd   = binaryIdSearch(ids, totalRows, table, 0, TRUE);
-    verbose(1, "robot cleaner1: twoDayIndex = %d zeroDayIndex %d rangeSize=%d ids[rs]=%u\n", 
+    verbose(1, "robot cleaner1: twoDayIndex = %d zeroDayIndex %d rangeSize=%d ids[rs]=%lu\n",
       robo1RangeStart, robo1RangeEnd, robo1RangeEnd-robo1RangeStart, ids[robo1RangeStart]);
 
     int robo2RangeStart = -1;
@@ -463,7 +463,7 @@ else  // figure out purge-ranges automatically
 	{  // secondary robot cleaning only for userDb., produces a somewhat lesser, perhaps 3 to 5k deletions
 	robo2RangeStart = binaryIdSearch(ids, totalRows, table, 7, FALSE);
 	robo2RangeEnd   = binaryIdSearch(ids, totalRows, table, 6, TRUE);
-	verbose(1, "robot cleaner2: sevenDayIndex = %d sixDayIndex %d rangeSize=%d ids[rs]=%u\n", 
+	verbose(1, "robot cleaner2: sevenDayIndex = %d sixDayIndex %d rangeSize=%d ids[rs]=%lu\n",
 	  robo2RangeStart, robo2RangeEnd, robo2RangeEnd-robo2RangeStart, ids[robo2RangeStart]);
 	}
 
@@ -500,15 +500,15 @@ else  // figure out purge-ranges automatically
 /*
 int found = binaryIdSearch(ids, totalRows, table, 1, FALSE);
 if ((found >= 0) && (found < totalRows))
-    verbose(1, "1 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
+    verbose(1, "1 days ago found = %d, id == ids[found] = %lu \n", found, ids[found]);
 
 found = binaryIdSearch(ids, totalRows, table, 2, FALSE);
 if ((found >= 0) && (found < totalRows))
-    verbose(1, "2 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
+    verbose(1, "2 days ago found = %d, id == ids[found] = %lu \n", found, ids[found]);
 
 found = binaryIdSearch(ids, totalRows, table, 30, FALSE);
 if ((found >= 0) && (found < totalRows))
-    verbose(1, "30 days ago found = %d, id == ids[found] = %u \n", found, ids[found]);
+    verbose(1, "30 days ago found = %d, id == ids[found] = %lu \n", found, ids[found]);
 
 */
 
@@ -533,7 +533,7 @@ if ((found >= 0) && (found < totalRows))
 //verbose(1, "%s: #rows count=%d  delCount=%d\n\n", table, count, delCount);
 
 time_t cleanEnd = time(NULL);
-int minutes = difftime(cleanEnd, cleanStart) / 60; 
+int minutes = difftime(cleanEnd, cleanStart) / 60;
 verbose(1, "%s\n", ctime(&cleanEnd));
 verbose(1, "%d minutes total\n\n", minutes);
 

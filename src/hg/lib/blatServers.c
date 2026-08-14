@@ -6,6 +6,9 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
+#include "hgConfig.h"
+#include "trackHub.h"
 #include "blatServers.h"
 
 
@@ -143,4 +146,86 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct blatServerParams *findBlatServer(char *db, boolean isTrans)
+/* Return gfServer connection parameters for the given assembly, or NULL if
+ * none is configured.  Handles both hub and non-hub assemblies. */
+{
+struct blatServerParams *st;
+AllocVar(st);
+
+if (trackHubDatabase(db))
+    {
+    char *host = NULL, *port = NULL, *genomeDataDir = NULL;
+    if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
+        {
+        freez(&st);
+        return NULL;
+        }
+    st->db = cloneString(db);
+    st->genome = cloneString(hGenome(db));
+    st->host = host;
+    st->port = port;
+    st->isTrans = isTrans;
+    struct trackHubGenome *hg = trackHubGetGenome(db);
+    st->nibDir = cloneString(hg->twoBitPath);
+    char *slash = strrchr(st->nibDir, '/');
+    if (slash != NULL)
+        *slash = 0;
+    if (genomeDataDir != NULL)
+        {
+        st->isDynamic = TRUE;
+        st->genomeDataDir = cloneString(genomeDataDir);
+        }
+    return st;
+    }
+
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+char dbActualName[64];
+
+/* Accept either a db name or a description (hgBlat allows both). */
+sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+if (!sqlExists(conn, query))
+    {
+    sqlSafef(query, sizeof(query),
+        "select name from dbDb where description = '%s'", db);
+    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
+        db = dbActualName;
+    }
+
+char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
+boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
+sqlSafef(query, sizeof(query),
+    "select dbDb.name, dbDb.description, blatServers.host, blatServers.port, "
+    "dbDb.nibPath, %s "
+    "from dbDb, %s blatServers "
+    "where blatServers.isTrans = %d and dbDb.name = '%s' "
+    "and dbDb.name = blatServers.db",
+    (haveDynamic ? "blatServers.dynamic" : "0"),
+    blatServersTbl, isTrans, db);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row == NULL)
+    {
+    sqlFreeResult(&sr);
+    hDisconnectCentral(&conn);
+    freez(&st);
+    return NULL;
+    }
+st->db = cloneString(row[0]);
+st->genome = cloneString(row[1]);
+st->host = cloneString(row[2]);
+st->port = cloneString(row[3]);
+st->nibDir = hReplaceGbdbSeqDir(row[4], st->db);
+st->isTrans = isTrans;
+if (atoi(row[5]))
+    {
+    st->isDynamic = TRUE;
+    st->genomeDataDir = cloneString(st->db);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return st;
+}
 

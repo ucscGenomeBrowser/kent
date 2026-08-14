@@ -2,9 +2,9 @@
 <p>
 <a href="https://www.finngen.fi/en" target="_blank">FinnGen</a> is a public-private partnership
 that combines genotype data from Finnish biobanks with digital health record data from Finnish
-health registries. The R12 release contains imputed variants from 500,348 biobank samples obtained
-using genotyping arrays. The imputation used phased variants obtained from 8,554 high-quality
-whole genome sequences, also from Finland. This represents approximately 10% of the Finnish
+health registries. The R12 release contains imputed variants from 500,348 biobank samples typed on
+genotyping arrays. The imputation used phased variants from 8,554 high-quality
+whole genome sequences, also from Finland. That is roughly 10% of the Finnish
 population. Phenotype links can be viewed at the
 <a href="https://r12.finngen.fi/" target="_blank">FinnGen PheWeb</a>.
 </p>
@@ -35,13 +35,13 @@ R12 annotated variants were downloaded from the Google Cloud bucket link receive
 and converted to VCF with a
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/finngen_to_vcf.py"
 target="_blank">custom Python script</a>.
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The conversion steps for all source files of the varFreqs track are recorded in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
+Some tracks also need python scripts, which live on <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
 </p>
 
 <h2>Credits</h2>
 <p>
-We want to acknowledge the participants and investigators of the FinnGen study.
+Thanks to the participants and investigators of the FinnGen study.
 </p>
 
 <h2>References</h2>

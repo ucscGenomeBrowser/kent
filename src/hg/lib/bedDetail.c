@@ -337,7 +337,7 @@ if (wordCount > 4)
      item->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     strncpy(item->strand, row[5], sizeof(item->strand));
+     safecpy(item->strand, sizeof(item->strand), row[5]);
      if (item->strand[0] != '+' && item->strand[0] != '-' && item->strand[0] != '.')
           lineFileAbort(lf, "Expecting + or - in strand");
      }

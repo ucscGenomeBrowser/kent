@@ -6,7 +6,11 @@ Usage:
 """
 
 import gzip
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lrSvCommon import svName, normalizeSvType
 
 SV_COLORS = {
     "DEL": "200,0,0",      # red
@@ -43,12 +47,13 @@ def main():
             fields = line.rstrip("\n").split("\t")
             chrom = fields[0]
             pos = int(fields[1])
-            name = fields[2]
+            rowName = fields[2]
             info = parseInfo(fields[7])
 
-            svType = info.get("SVTYPE", ".")
+            svTypeRaw = info.get("SVTYPE", ".")
+            svType = normalizeSvType(svTypeRaw)
             end = int(info.get("END", pos))
-            svLen = int(float(info.get("SVLEN", "0")))
+            svLenRaw = int(float(info.get("SVLEN", "0")))
             af = float(info.get("SVF", "0"))
             svc = int(info.get("SVC", "0"))
             svn = int(info.get("SVN", "0"))
@@ -58,8 +63,20 @@ def main():
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
-            absSvLen = abs(svLen)
+            svLen = chromEnd - chromStart
+            if svType in ("INS", "MEI"):
+                insLen = abs(svLenRaw)
+            else:
+                insLen = 0
+
+            # AC: GA4K site-level VCF has no AC. Approximate as 2 * svn * af
+            # (diploid alleles * variant frequency).
+            ac = int(round(2 * svn * af))
+
             color = SV_COLORS.get(svType, "100,100,100")
+
+            featLen = insLen if svType in ("INS", "MEI") else svLen
+            name = svName(svType, featLen, ac)
 
             row = [
                 chrom,
@@ -72,7 +89,9 @@ def main():
                 str(chromEnd),
                 color,
                 svType,
-                str(absSvLen),
+                str(svLen),
+                str(insLen),
+                str(ac),
                 f"{af:.6f}",
                 str(svc),
                 str(svn),

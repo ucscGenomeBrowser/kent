@@ -44,11 +44,16 @@ by color, which bins the UCSC functional effects into general classes.</p>
 Mousing over an item shows the ucscClass, which is the consequence according to the
 <a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a>, and
 the aaChange when one is available, which is the change in amino acid in HGVS.p
-terms. Items may have multiple ucscClasses, which will all be shown in the mouse-over
-in a comma-separated list. Likewise, multiple HGVS.p terms may be shown for each rsID,
-separated by spaces, describing all possible AA changes.</p>
+terms.</p>
 <p>
-Multiple items may appear due to different variant predictions on multiple gene transcripts.
+Starting with EVA SNP Release 9, each variant is annotated with the single
+most-severe consequence ranked by Sequence Ontology severity, so the ucscClass
+field contains one term per variant. In releases 3 through 8, the ucscClass
+field instead contained a comma-separated list of every consequence predicted
+across overlapping transcripts. Multiple HGVS.p terms may still appear for a
+single rsID when more than one transcript yields a non-equivalent protein
+change.</p>
+<p>
 For all organisms, the gene models used were the NCBI RefSeq curated when available, if not, then
 ensembl genes, or finally, UCSC mappings of RefSeq if neither of the previous models was possible.
 </p>
@@ -77,31 +82,42 @@ below.
 <h3>Sequence Ontology (SO)</h3>
 
 <p>
+Starting with EVA SNP Release 9, the variant class labels stored in each
+bigBed and exposed by the <em>Variant Class</em> filter follow the short
+Sequence Ontology names used by modern VCF and dbSNP exports
+(<b>SNV</b>, <b>deletion</b>, <b>insertion</b>, <b>indel</b>, <b>MNV</b>,
+<b>sequence_alteration</b>). Releases 3 through 8 retain their original
+labels (<b>substitution</b>, <b>delins</b>, <b>multipleNucleotideVariant</b>,
+<b>sequence alteration</b>) because those bigBeds were built before the
+label refresh. The underlying SO terms and the biology they describe are
+unchanged; only the displayed names differ.</p>
+
+<p>
 Variants are classified by EVA into one of the following <a target="_blank"
 href="http://www.sequenceontology.org/">sequence ontology</a> terms:
 </p>
 
 <ul>
-  <li> <b>substitution</b> &mdash;
+  <li> <b>SNV</b> (v9+) / <b>substitution</b> (v3&ndash;v8) &mdash;
        A single nucleotide in the reference is replaced by another, alternate allele.
-  <li> <b>deletion</b> &mdash; 
+  <li> <b>deletion</b> &mdash;
        One or more nucleotides are deleted.  The representation in the database is to
-       display one additional nucleotide in both the Reference field (Ref) and the 
+       display one additional nucleotide in both the Reference field (Ref) and the
        Alternate Allele field (Alt).  E.g., a variant that is a deletion of an A
        may be represented as Ref = GA and Alt = G.
-  <li> <b>insertion</b> &mdash; 
+  <li> <b>insertion</b> &mdash;
        One or more nucleotides are inserted.  The representation in the database is to
-       display one additional nucleotide in both the Reference field (Ref) and the 
+       display one additional nucleotide in both the Reference field (Ref) and the
        Alternate Allele field (Alt).  E.g., a variant that is an insertion of a T may
        be represented as Ref = G and Alt = GT.
-  <li> <b>delins</b> &mdash; 
+  <li> <b>indel</b> (v9+) / <b>delins</b> (v3&ndash;v8) &mdash;
        Similar to a tandem repeat, in that the runs of Ref and Alt Alleles are of
        different length, except that there is more than one type of nucleotide,
        e.g., Ref = CCAAAAACAAAAACA, Alt = ACAAAAAC.
-  <li> <b>multipleNucleotideVariant</b> &mdash; 
-       More than one nucleotide is substituted by an equal number of different 
+  <li> <b>MNV</b> (v9+) / <b>multipleNucleotideVariant</b> (v3&ndash;v8) &mdash;
+       More than one nucleotide is substituted by an equal number of different
        nucleotides, e.g.,  Ref = AA, Alt = GC.
-  <li> <b>sequence alteration</b> &mdash;
+  <li> <b>sequence_alteration</b> (v9+) / <b>sequence alteration</b> (v3&ndash;v8) &mdash;
        A parent term meant to signify a deviation from another sequence. Can be
        assigned to variants that have not been characterized yet.
 </ul>
@@ -156,8 +172,8 @@ the perspective of the genomic sequence. Also, in bosTau9, galGal5, rheMac10,
 and danRer11, the mitochondrial sequence was removed or renamed to match UCSC.
 For complete documentation of the processing of these tracks, see the makedoc corresponding
 to the version of interest. For example, the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp8.txt">
-EVA Release 8 MakeDoc</a>.</p>
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp9.txt">
+EVA Release 9 MakeDoc</a>.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -176,14 +192,14 @@ information.</p>
 For automated download and analysis, this annotation is stored in a bigBed file that
 can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
 target="_blank">our download server</a>. Use the corresponding version number for the track
-of interest, e.g., <tt>evaSnp8.bb</tt>.
+of interest, e.g., <tt>evaSnp9.bb</tt>.
 Individual regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g.
 <br><br>
-<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp8.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp9.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
 <h2>Credits</h2>

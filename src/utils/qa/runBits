@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 ##################################################################
 #
@@ -47,7 +47,7 @@ def main():
     if table != 'gap':
         gapOverlapOut = checkGapOverlap.checkGapOverlap(db, table, checkUnbridged)
 
-    print output + gapOverlapOut
+    print(output + gapOverlapOut)
 
 if __name__ == "__main__":
     main()

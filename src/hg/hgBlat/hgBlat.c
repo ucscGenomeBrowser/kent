@@ -1,4 +1,9 @@
-/* hgBlat - CGI-script to manage fast human genome sequence searching. */
+/* hgBlat - CGI-script to manage fast human genome sequence searching.
+ *
+ * NOTE: The hubApi /blat endpoint (src/hg/hubApi/blat.c) derives its
+ * alignment logic (server lookup, sequence filtering, gfAlign* calls,
+ * temp-file round-trip) from this file.  If you fix a bug or change
+ * behaviour here, check whether hubApi/blat.c needs the same fix. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -36,6 +41,11 @@
 #include "chromAlias.h"
 #include "subText.h"
 #include "jsHelper.h"
+#include "obscure.h"
+#include "jsonWrite.h"
+#include "bigBed.h"
+#include "bigPsl.h"
+#include "blatShare.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -322,107 +332,35 @@ char *outputList[] = {"hyperlink", "psl", "psl no header", "JSON"};
 
 int minMatchShown = 0;
 
-static struct serverTable *databaseServerTable(char *db, boolean isTrans)
-/* Load blat table for a database */
+struct serverTable *findServer(char *db, boolean isTrans)
+/* Return server for given database.  Db can either be database name or
+ * description.  Server lookup delegated to findBlatServer() in hg/lib/blatServers.c. */
 {
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-struct sqlResult *sr;
-char **row;
-char dbActualName[32];
-
-/* If necessary convert database description to name. */
-sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
-if (!sqlExists(conn, query))
-    {
-    sqlSafef(query, sizeof(query), "select name from dbDb where description = '%s'", db);
-    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
-        db = dbActualName;
-    }
-
-struct serverTable *st;
-AllocVar(st);
-
-/* Do a little join to get data to fit into the serverTable and grab
- * dbDb.nibPath too.  Check for newer dynamic flag and allow with or without
- * it.
- * For debugging, one set the variable blatServersTbl to some db.table to
- * pick up settings from somewhere other than dbDb.blatServers.
- */
-char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
-boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
-sqlSafef(query, sizeof(query), "select dbDb.name, dbDb.description, blatServers.isTrans,"
-         "blatServers.host, blatServers.port, dbDb.nibPath, %s "
-         "from dbDb, %s blatServers where blatServers.isTrans = %d and "
-         "dbDb.name = '%s' and dbDb.name = blatServers.db", 
-         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl, isTrans, db);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    {
+struct blatServerParams *p = findBlatServer(db, isTrans);
+if (p == NULL)
     errAbort("Can't find a server for %s database %s.  Click "
 	     "<A HREF=\"/cgi-bin/hgBlat?%s&command=start&db=%s\">here</A> "
 	     "to reset to default database.",
 	     (isTrans ? "translated" : "DNA"), db,
 	     cartSidUrlString(cart), hDefaultDb());
-    }
-st->db = cloneString(row[0]);
-st->genome = cloneString(row[1]);
-st->isTrans = atoi(row[2]);
-st->host = cloneString(row[3]);
-st->port = cloneString(row[4]);
-st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
-if (atoi(row[6]))
-    {
-    st->isDynamic = TRUE;
-    st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
-    ++nonHubDynamicBlatServerCount;
-    }
-
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-return st;
-}
-
-static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
-/* Load blat table for a hub */
-{
-char *host, *port;
-char *genomeDataDir;
-
-if (!trackHubGetBlatParams(db, isTrans, &host, &port, &genomeDataDir))
-    return NULL;
-
 struct serverTable *st;
 AllocVar(st);
-
-st->db = cloneString(db);
-st->genome = cloneString(hGenome(db));
-st->isTrans = isTrans;
-st->host = host; 
-st->port = port;
-struct trackHubGenome *genome = trackHubGetGenome(db);
-st->nibDir = cloneString(genome->twoBitPath);
-char *ptr = strrchr(st->nibDir, '/');
-// we only want the directory name
-if (ptr != NULL)
-    *ptr = 0;
-if (genomeDataDir != NULL)
+st->db          = p->db;
+st->genome      = p->genome;
+st->isTrans     = p->isTrans;
+st->host        = p->host;
+st->port        = p->port;
+st->nibDir      = p->nibDir;
+st->isDynamic   = p->isDynamic;
+st->genomeDataDir = p->genomeDataDir;
+if (p->isDynamic)
     {
-    st->isDynamic = TRUE;
-    st->genomeDataDir = cloneString(genomeDataDir);
-    ++hubDynamicBlatServerCount;
+    if (trackHubDatabase(db))
+        ++hubDynamicBlatServerCount;
+    else
+        ++nonHubDynamicBlatServerCount;
     }
 return st;
-}
-
-struct serverTable *findServer(char *db, boolean isTrans)
-/* Return server for given database.  Db can either be
- * database name or description. */
-{
-if (trackHubDatabase(db))
-    return trackHubServerTable(db, isTrans);
-else
-    return databaseServerTable(db, isTrans);
 }
 
 void findClosestServer(char **pDb, char **pOrg)
@@ -431,7 +369,7 @@ void findClosestServer(char **pDb, char **pOrg)
 {
 char *db = *pDb, *org = *pOrg;
 
-if (trackHubDatabase(db) && (trackHubServerTable(db, FALSE) != NULL))
+if (trackHubDatabase(db) && (findBlatServer(db, FALSE) != NULL))
     {
     *pDb = db;
     *pOrg = hGenome(db);
@@ -539,7 +477,380 @@ else
 /* forward declaration to reduce churn */
 static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription);
 
-void showAliPlaces(char *pslName, char *faName, char *customText, char *database, 
+static void printBlatHitLinks(struct psl *psl, char *database, char *browserUrl, char *hgcUrl,
+    char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack)
+/* Print the "browser", "new tab" and "details" hyperlinks for a single BLAT hit.
+ * Used by the classic <pre> "Hyperlink" listing. */
+{
+char *browserHelp = "Open a Genome Browser showing this match";
+char *helpText = "Open a Genome Browser with the BLAT results, but in a new internet browser tab";
+// new-tab icon (Font Awesome "arrow-up-right-from-square", CC BY 4.0)
+char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
+
+if (customText)
+    {
+    printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
+        browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+        customText, uiState, unhideTrack);
+    printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
+        helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+        customText, unhideTrack, icon);
+    }
+else
+    {
+    if (autoBigPsl)
+        {
+        // skip ss variable
+        printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&%s%s\">browser</A>&nbsp;",
+            browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+            uiState, unhideTrack);
+        printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&%s\">new tab%s</A>&nbsp;",
+            helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+            unhideTrack, icon);
+        }
+    else
+        {
+        printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
+            browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+            pslName, faName, uiState, unhideTrack);
+        printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
+            helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database,
+            pslName, faName, unhideTrack, icon);
+        }
+    }
+printf("<A title='Show query sequence, genome hit and sequence alignment' "
+        "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">",
+    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
+    psl->tStart, psl->tEnd, database, uiState);
+printf("details</A> ");
+}
+
+static char *chromTypeNote(char *tName)
+/* Return a short explanation for special sequence names (alt/fix/random/hap/unplaced), or NULL for a
+ * normal chromosome.  tName should be the display name the user sees. */
+{
+if (endsWith(tName, "_fix"))
+    return "Assembly fix patch: corrects an error in the reference assembly.";
+if (endsWith(tName, "_alt") || stringIn("_hap", tName))
+    return "Alternate haplotype: an alternate sequence for this region.";
+if (endsWith(tName, "_random"))
+    return "Unlocalized sequence: known chromosome, position not determined.";
+if (startsWith("chrUn", tName))
+    return "Unplaced sequence: chromosome of origin unknown.";
+return NULL;
+}
+
+static char *blatSeqNote(char *tName, char *displayName)
+/* The info-icon note for one hit.  chromTypeNote() only sees the single display name, but a
+ * sequence can have several aliases and the chosen display name may not be the chrUn/alt/fix one
+ * (e.g. a GenArk hub shows a GenBank accession while "chrUn_..." is only an alias).  So if the
+ * display name looks ordinary, scan the sequence's other aliases too. */
+{
+char *note = chromTypeNote(displayName);
+if (note == NULL)
+    {
+    struct slName *al;   /* chromAliasFindAliases returns a cached list - do not free it */
+    for (al = chromAliasFindAliases(tName);  al != NULL;  al = al->next)
+        if ((note = chromTypeNote(al->name)) != NULL)
+            break;
+    }
+return note;
+}
+
+static char *blatBrowserUrl(struct psl *psl, char *database, char *browserUrl,
+    char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack, boolean withUiState)
+/* Return a Genome Browser URL for one BLAT hit.  withUiState appends the hgsid; it is included on
+ * the in-tab link but omitted from the new-tab link, matching the classic hyperlink behavior. */
+{
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "%s?position=%s:%d-%d&db=%s", browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database);
+if (customText)
+    dyStringPrintf(dy, "&hgt.customText=%s", customText);
+else if (!autoBigPsl && pslName != NULL)
+    dyStringPrintf(dy, "&ss=%s+%s", pslName, faName);
+if (withUiState)
+    dyStringPrintf(dy, "&%s", uiState);
+dyStringPrintf(dy, "%s", unhideTrack);
+return dyStringCannibalize(&dy);
+}
+
+static boolean pslListMultiQuery(struct psl *pslList)
+/* Return TRUE if the list contains more than one distinct query (qName). */
+{
+struct psl *psl;
+for (psl = pslList->next; psl != NULL; psl = psl->next)
+    if (!sameString(psl->qName, pslList->qName))
+        return TRUE;
+return FALSE;
+}
+
+static struct sqlConnection *blatLocusConn(char *database, struct subText **retSubList)
+/* If the database has a "locusName" table, return a fresh connection for its range queries and
+ * build the abbreviation-expansion subList; otherwise return NULL with an empty subList. */
+{
+struct subText *subList = NULL;
+struct sqlConnection *locusConn = NULL;
+if (sqlDatabaseExists(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    if (sqlTableExists(conn, "locusName"))
+        {
+        locusConn = hAllocConn(database);
+        slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
+        slSafeAddHead(&subList, subTextNew("ex:", "exon "));
+        slSafeAddHead(&subList, subTextNew("in:", "intron "));
+        slSafeAddHead(&subList, subTextNew("|", "-"));
+        }
+    hFreeConn(&conn);
+    }
+*retSubList = subList;
+return locusConn;
+}
+
+static void printBlatResultsApp(struct psl *pslList, char *database, char *organism, char *browserUrl,
+    char *hgcUrl, char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack,
+    struct sqlConnection *locusConn, struct subText *subList)
+/* "Table" output mode: emit the hit data as an inline JSON object plus an empty container, and let
+ * hgBlat.js build the UI (summary strip, DataTable with identity/coverage bars, detail panel).
+ * All presentation lives in hgBlat.js; this function only assembles data.
+ * On a fresh search the per-hit "Alignment details" links go to hgc's htcUserAli (which reads the
+ * ephemeral trash .pslx/.fa); on a shared-link reopen (pslName NULL) there is no trash, so they go
+ * to htcBlatAlign instead, which rebuilds each alignment from the durable bigPsl custom track. */
+{
+struct psl *psl;
+jsIncludeDataTablesLibs();
+webIncludeResourceFile("hgBlat.css");
+jsIncludeFile("hgBlat.js", NULL);
+
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+
+jsonWriteObjectStart(jw, "config");
+/* For assembly/GenArk hubs the internal names carry a "hub_NNN_" prefix; drop it so the Assembly
+ * field reads cleanly (and doesn't show the prefix twice), matching the BLAT Results page title. */
+jsonWriteString(jw, "db", trackHubSkipHubName(database));
+jsonWriteString(jw, "organism", trackHubSkipHubName(organism));
+jsonWriteString(jw, "queryName", pslList->qName);
+jsonWriteNumber(jw, "querySize", pslList->qSize);
+jsonWriteNumber(jw, "hitCount", slCount(pslList));
+jsonWriteBoolean(jw, "multiQuery", pslListMultiQuery(pslList));
+jsonWriteBoolean(jw, "hasLocus", locusConn != NULL);
+/* Sharing a link only makes sense when a durable bigPsl custom track was made from the results
+ * (autoBigPsl); otherwise there is nothing for the shared session to reopen from. */
+jsonWriteBoolean(jw, "canShare", autoBigPsl);
+/* Renaming the results custom track needs the bigPsl track + the C blatRenameCt() helper, both only
+ * present with autoBigPsl.  hgBlat.js shows its own "Rename BLAT Track" button + modal in that case,
+ * pre-filled with the track's current name/description (below) so it needs no page-global. */
+jsonWriteBoolean(jw, "canRename", autoBigPsl);
+if (autoBigPsl)
+    {
+    char *ctName = NULL, *ctDescription = NULL;
+    getCustomName(database, cart, pslList, &ctName, &ctDescription);
+    jsonWriteString(jw, "trackName", ctName);
+    jsonWriteString(jw, "trackDescription", ctDescription);
+    }
+/* The classic "Old BLAT result page" view re-reads the trash .pslx from the current search, so it
+ * is only offered on a fresh search (pslName set), not on a shared-link reopen rebuilt from the
+ * durable custom track (where the trash files may be long gone). */
+jsonWriteBoolean(jw, "canOldPage", pslName != NULL);
+jsonWriteString(jw, "hgsid", cartSessionId(cart));
+jsonWriteStringf(jw, "newSearchUrl", "hgBlat?db=%s&%s", database, uiState);
+/* Stable, shareable page URL: it reopens straight from the trash .pslx/.fa (no saved session, no
+ * sessionData - the link works until trash is cleaned).  Carry only the random basenames as tokens;
+ * the reopen reconstructs the trash paths, so no filesystem path or session id is exposed in the URL,
+ * and the recipient uses their own cart.  Present whenever the trash files exist (fresh search or a
+ * trash reopen), so hgBlat.js can pin it into the address bar with history.replaceState(). */
+if (pslName != NULL && faName != NULL)
+    {
+    char *pslId = cloneString(strrchr(pslName, '/') ? strrchr(pslName, '/') + 1 : pslName);
+    char *faId  = cloneString(strrchr(faName,  '/') ? strrchr(faName,  '/') + 1 : faName);
+    chopSuffix(pslId);   /* drop ".pslx" -> bare token */
+    chopSuffix(faId);    /* drop ".fa"   -> bare token */
+    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s",
+        database, pslId, faId);
+    freeMem(pslId);
+    freeMem(faId);
+    }
+char *posStr = cartOptionalString(cart, "position");
+if (posStr != NULL)
+    {
+    jsonWriteString(jw, "backUrl", browserUrl);
+    jsonWriteString(jw, "backPos", posStr);
+    }
+struct dyString *va = dyStringNew(128);
+dyStringPrintf(va, "%s?db=%s", browserUrl, database);
+if (customText)
+    dyStringPrintf(va, "&hgt.customText=%s", customText);
+else if (!autoBigPsl && pslName != NULL)
+    dyStringPrintf(va, "&ss=%s+%s", pslName, faName);
+dyStringPrintf(va, "&%s%s", uiState, unhideTrack);
+jsonWriteString(jw, "viewAllUrl", va->string);
+dyStringFree(&va);
+/* The query sequence(s) for the "Show Query Sequence" button.  Only available on a fresh search,
+ * where the uploaded FASTA is still in trash (faName); on a shared-link reopen faName is NULL and
+ * the button is omitted client-side. */
+if (faName != NULL && fileExists(faName))
+    {
+    struct dnaSeq *qSeqList = faReadAllMixed(faName), *qSeq;
+    if (qSeqList != NULL)
+        {
+        jsonWriteListStart(jw, "querySeqs");
+        for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteString(jw, "name", qSeq->name);
+            jsonWriteString(jw, "seq", qSeq->dna);
+            jsonWriteObjectEnd(jw);
+            }
+        jsonWriteListEnd(jw);
+        }
+    dnaSeqFreeList(&qSeqList);
+    }
+jsonWriteObjectEnd(jw);   // config
+
+jsonWriteListStart(jw, "hits");
+int rank = 0;
+for (psl = pslList; psl != NULL; psl = psl->next)
+    {
+    ++rank;
+    double ident = 100.0 - pslCalcMilliBad(psl, TRUE) * 0.1;
+    char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+    char *inTabUrl = blatBrowserUrl(psl, database, browserUrl, pslName, faName, customText,
+        uiState, unhideTrack, TRUE);
+    char *newTabUrl = blatBrowserUrl(psl, database, browserUrl, pslName, faName, customText,
+        uiState, unhideTrack, FALSE);
+
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteNumber(jw, "rank", rank);
+    jsonWriteString(jw, "qName", psl->qName);
+    jsonWriteNumber(jw, "score", pslScore(psl));
+    jsonWriteDouble(jw, "identity", ident);
+    jsonWriteString(jw, "chrom", displayChromName);
+    char *note = blatSeqNote(psl->tName, displayChromName);   /* check the display name and its aliases */
+    if (note != NULL)
+        jsonWriteString(jw, "chromNote", note);
+    jsonWriteString(jw, "strand", psl->strand);
+    jsonWriteNumber(jw, "tStart", psl->tStart + 1);
+    jsonWriteNumber(jw, "tEnd", psl->tEnd);
+    jsonWriteNumber(jw, "span", psl->tEnd - psl->tStart);
+    jsonWriteNumber(jw, "qStart", psl->qStart + 1);
+    jsonWriteNumber(jw, "qEnd", psl->qEnd);
+    jsonWriteNumber(jw, "qSize", psl->qSize);
+    jsonWriteNumber(jw, "matches", psl->match + psl->repMatch);
+    jsonWriteNumber(jw, "misMatch", psl->misMatch);
+    jsonWriteNumber(jw, "gaps", psl->qNumInsert + psl->tNumInsert);
+    jsonWriteNumber(jw, "blocks", psl->blockCount);
+    jsonWriteString(jw, "browserUrl", inTabUrl);
+    jsonWriteString(jw, "newTabUrl", newTabUrl);
+    if (pslName != NULL)
+        jsonWriteStringf(jw, "detailsUrl", "%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s",
+            hgcUrl, psl->tStart, pslName, cgiEncode(faName), cgiEncode(psl->qName), psl->tName,
+            psl->tStart, psl->tEnd, database, uiState);
+    else
+        /* Shared-link reopen: there is no trash .pslx, but the durable bigPsl custom track (now in
+         * this cart) lets hgc's htcBlatAlign rebuild the base alignment from the stored query seq.
+         * chrom/start/qName select the hit; db and the browser window come from the loaded cart. */
+        jsonWriteStringf(jw, "detailsUrl", "%s?g=htcBlatAlign&db=%s&c=%s&o=%d&i=%s&%s",
+            hgcUrl, database, psl->tName, psl->tStart, cgiEncode(psl->qName), uiState);
+    if (locusConn)
+        {
+        struct sqlResult *sr = hRangeQuery(locusConn, "locusName", psl->tName, psl->tStart, psl->tEnd, NULL, 0);
+        char **row = sqlNextRow(sr);
+        if (row != NULL)
+            {
+            char *raw = row[4];
+            char *full = subTextString(subList, raw);
+            jsonWriteString(jw, "locusText", full);
+            freeMem(full);
+            char *type = NULL, *genes = raw;
+            if (startsWith("ig:", raw))
+                { type = "intergenic"; genes = raw + 3; }
+            else if (startsWith("ex:", raw))
+                { type = "exon"; genes = raw + 3; }
+            else if (startsWith("in:", raw))
+                { type = "intron"; genes = raw + 3; }
+            if (type != NULL)
+                {
+                jsonWriteString(jw, "locusType", type);
+                jsonWriteListStart(jw, "locusGenes");
+                char *dupe = cloneString(genes);
+                char *words[128];
+                int n = chopByChar(dupe, '|', words, ArraySize(words));
+                int i;
+                for (i = 0; i < n; ++i)
+                    jsonWriteString(jw, NULL, words[i]);
+                freeMem(dupe);
+                jsonWriteListEnd(jw);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+    jsonWriteObjectEnd(jw);
+    freeMem(inTabUrl);
+    freeMem(newTabUrl);
+    }
+jsonWriteListEnd(jw);    // hits
+jsonWriteObjectEnd(jw);  // root
+
+printf("<div id='blatResults'></div>\n");
+jsInlineF("var hgBlatData = %s;\n", jw->dy->string);
+jsonWriteFree(&jw);
+}
+
+static void printBlatBannerStyle()
+/* Emit the .blatBanner rule for the classic, C-rendered pages.  Those don't load hgBlat.js, which
+ * is where the new pages get this class from, so define the same thing here; keep the values in
+ * sync with the .blatBanner rule in hgBlat.js.  Only the first call emits anything, so a page may
+ * carry more than one banner without repeating the stylesheet. */
+{
+static boolean styleDone = FALSE;
+if (styleDone)
+    return;
+styleDone = TRUE;
+printf("<style>"
+       ".blatBanner{background:#fbf3e2;border:1px solid #d9bd82;padding:10px 14px;margin:12px 0 20px;"
+       "font-size:14px;color:#1e2833}"
+       ".blatBanner a{color:#003a72}"
+       ".blatBanner a:hover{color:#8b1a1a}"
+       "</style>");
+}
+
+static void printNewFormBanner()
+/* On the classic search form, offer the JavaScript-built one.  Without this the new form's "go back
+ * to the original page" link is a one-way door.
+ * Shown wherever the new form is enabled (blatNewForm), which is what makes the round trip work;
+ * blatNewFormBanner overrides that in either direction.  On a machine where the new form is off
+ * there is nothing to advertise, so nothing is printed. */
+{
+if (!cfgOptionBooleanDefault("blatNewFormBanner",
+			     cfgOptionBooleanDefault("blatNewForm", FALSE)))
+    return;
+printBlatBannerStyle();
+printf("<div class=\"blatBanner\">"
+       "We are testing a <a href=\"hgBlat?blatNewForm=1&%s=%s\">new BLAT search page</a>. "
+       "If you have feedback on this new page, do not hesitate to let us know via "
+       "<a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>.</div>\n",
+       cartSessionVarName(), cartSessionId(cart));
+}
+
+static void printNewDisplayBanner(char *uiState)
+/* On the classic hyperlink results page, offer a one-click switch to the modern Table display.
+ * The link sets the blatNewPage cart variable (so the choice sticks for future searches) and
+ * reopens the current results (blatReopen) in the new format.
+ * The banner is OFF by default while the new page is still being tested; set blatNewPageBanner=on
+ * in hg.conf to advertise the new page - without releasing new CGIs.  The new display itself stays
+ * reachable by users who already opted in or use a direct blatNewPage=1 link. */
+{
+if (!cfgOptionBooleanDefault("blatNewPageBanner", FALSE))
+    return;
+printBlatBannerStyle();
+printf("<div class=\"blatBanner\">"
+       "We are testing a BLAT results page, with a sortable and filterable table of hits, "
+       "gene loci and query coverage. "
+       "<a href=\"hgBlat?blatNewPage=1&blatReopen=1&%s\">Try the new page</a>.</div>\n", uiState);
+}
+
+void showAliPlaces(char *pslName, char *faName, char *customText, char *database,
            enum gfType qType, enum gfType tType, 
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
@@ -557,6 +868,10 @@ char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
 boolean pslRawOut = sameWord("pslRaw", output);
 boolean jsonOut = sameWord(output, "json");
+/* The modern table is an opt-in replacement for the classic "hyperlink" results page, controlled by
+ * the blatNewPage cart variable (set by the "Try the new display" banner, cleared by the table's
+ * "Old BLAT result page" link).  It does not apply to the raw psl/JSON download formats. */
+boolean tableOut = !pslOut && !pslRawOut && !jsonOut && cartUsualBoolean(cart, "blatNewPage", FALSE);
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -629,9 +944,13 @@ else if (jsonOut)
     }
 else  // hyperlink
     {
-    printf("<H2>BLAT Search Results</H2>");
+    if (!tableOut)
+        {
+        printNewDisplayBanner(uiState);
+        printf("<H2>BLAT Search Results</H2>");
+        }
     char* posStr = cartOptionalString(cart, "position");
-    if (posStr != NULL)
+    if (posStr != NULL && !tableOut)
         printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
 
     if (autoBigPsl)
@@ -675,7 +994,8 @@ else  // hyperlink
 	    {
 	    printf("<div id=renameFormItem style='display: none'>\n");
 	    printf("<FORM ACTION=>\n");
-	    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename Custom Track\">\n");
+	    printf("<INPUT TYPE=SUBMIT NAME=Submit id='showRenameForm' VALUE=\"Rename BLAT Track\" "
+	           "title=\"Give the BLAT results custom track a name and description of your choosing\">\n");
 	    printf("</FORM>\n");
 	    printf("</div>\n");
 
@@ -702,18 +1022,9 @@ else  // hyperlink
 	    printf("</div>\n");
 	    }
 
-        if (!feelingLucky)
-	    {
-	    // REMOVE CT BUTTON FORM.
-	    printf("<div id=deleteCtForm style='display: none'>\n");
-	    printf("<FORM ACTION=\"%s?hgsid=%s&db=%s\" NAME=\"MAIN_FORM\" METHOD=%s>\n\n",
-		hgTracksName(), cartSessionId(cart), database, cartUsualString(cart, "formMethod", "POST"));
-	    cartSaveSession(cart);
-	    cgiMakeButton(CT_DO_REMOVE_VAR, "Delete Custom Track");
-	    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, "FAKETRACKNAME");
-	    printf("</FORM>\n");
-	    printf("</div>\n");
-	    }
+        /* The standalone "Delete Custom Track" button was removed from the new table page: users had
+	 * no clear reason to delete the track they just made.  (The rename flow still removes/replaces
+	 * the old track internally via CT_DO_REMOVE_VAR.) */
 
         jsInlineF(
 	    
@@ -732,8 +1043,9 @@ else  // hyperlink
 	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
 	    "    if (luckyLocation == '')\n"
 	    "        {\n"
-	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[0].value = ct_blat;\n"
-	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]')[1].value = ct_blat;\n"
+	    /* set the ct name on whatever CT_SELECTED_TABLE_VAR inputs are present (the rename form has
+	     * one; the old delete form that had a second was removed), so no [1] undefined error */
+	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]').each(function(){ this.value = ct_blat; });\n"
 	    "        }\n"
 	    "    }\n"
 	    "}\n"
@@ -764,6 +1076,12 @@ else  // hyperlink
 	    "var url='%s';\n"
 	    "var trackName='%s';\n"
 	    "var trackDescription='%s';\n"
+	    /* Exposed for hgBlat.js's rename modal: rebuild the custom track under a new name/description,
+	     * reusing the same buildBigPslCt() call and closed-over url, so the client needs no globals. */
+	    "window.blatRenameCt = function(name, description) {\n"
+	    "    trackName = name; trackDescription = description;\n"
+	    "    buildBigPslCt(url, name, description);\n"
+	    "};\n"
             "$(document).ready(function() {\n"
 	    "\n"
 	    "buildBigPslCt(url, trackName, trackDescription);\n"
@@ -773,8 +1091,7 @@ else  // hyperlink
 	    "    }\n"
 	    "else\n"
 	    "    {\n"
-	    "    $('#renameFormItem')[0].style.display = 'block';\n"   
-	    "    $('#deleteCtForm')[0].style.display = 'block';\n"   
+	    "    $('#renameFormItem')[0].style.display = 'block';\n"
 	    "    }\n"
             "});\n", url->string, trackName, trackDescription);
  
@@ -842,24 +1159,16 @@ else  // hyperlink
         printf("</TABLE></FORM></DIV>");
         }
 
-        boolean hasDb = sqlDatabaseExists(database);
         struct sqlConnection *locusConn = NULL;
         struct subText *subList = NULL;
-        if (hasDb)
-            {
-	    struct sqlConnection *conn = hAllocConn(database);
-            if (cfgOptionBooleanDefault("blatShowLocus", FALSE) && sqlTableExists(conn, "locusName") )
-                {
-                locusConn = hAllocConn(database);
-                slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
-                slSafeAddHead(&subList, subTextNew("ex:", "exon "));
-                slSafeAddHead(&subList, subTextNew("in:", "intron "));
-                slSafeAddHead(&subList, subTextNew("|", "-"));
-                }
-            hFreeConn(&conn);
-            }
+        if (tableOut || cfgOptionBooleanDefault("blatShowLocus", FALSE))
+            locusConn = blatLocusConn(database, &subList);
 
-    printf("<DIV STYLE=\"display:block;\"><PRE>");
+    if (tableOut)
+        printBlatResultsApp(pslList, database, organism, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack, locusConn, subList);
+    else
+        {
+        printf("<DIV STYLE=\"display:block;\"><PRE>");
 
     // find maximum query name size for padding calculations and
     // find maximum target chrom name size for padding calculations
@@ -899,48 +1208,7 @@ else  // hyperlink
 
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-        char *browserHelp = "Open a Genome Browser showing this match";
-        char *helpText = "Open a Genome Browser with the BLAT results, but in a new internet browser tab";
-        // XX putting SVG into C code like this is ugly. define somewhere? maybe have globals for these?
-        char *icon = "<svg style='height:10px; padding-left:2px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg>";
-
-
-	if (customText)
-	    {
-	    printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">browser</A>&nbsp;",
-		browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		customText, uiState, unhideTrack);
-	    printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s\">new tab%s</A>&nbsp;",
-		helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		customText, unhideTrack, icon);
-	    } 
-	else 
-	    {
-	    if (autoBigPsl)
-		{
-		// skip ss variable
-		printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&%s%s\">browser</A>&nbsp;",
-		    browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		    uiState, unhideTrack);
-		printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&%s\">new tab%s</A>&nbsp;",
-		    helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		    unhideTrack, icon);
-		}
-	    else 
-		{
-		printf("<A TITLE='%s' HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">browser</A>&nbsp;",
-		    browserHelp, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		    pslName, faName, uiState, unhideTrack);
-		printf("<A TITLE='%s' TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">new tab%s</A>&nbsp;",
-		    helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		    pslName, faName, unhideTrack, icon);
-		}
-	    }
-	printf("<A title='Show query sequence, genome hit and sequence alignment' "
-                "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
-	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
-	    psl->tStart, psl->tEnd, database, uiState);
-	printf("details</A> ");
+	printBlatHitLinks(psl, database, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack);
 
         // print name of this locus
         if (locusConn)
@@ -978,15 +1246,16 @@ else  // hyperlink
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#downloadAlt\">What is chrom_alt?</A>");
         else if (endsWith(seq, "_random"))
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download10\">What is chrom_random?</A>");
-        else if (startsWith(seq, "chrUn"))
+        else if (startsWith("chrUn", seq))
             printf("   <A target=_blank HREF=\"../FAQ/FAQdownloads.html#download11\">What is a chrUn sequence?</A>");
         printf("\n");
 	}
     printf("</PRE>\n");
-    webNewSection("Help");
-    puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
-    puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
-    puts("</DIV>\n");
+        webNewSection("Help");
+        puts("<P style=\"text-align:left\"><A target=_blank HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A><br>");
+        puts("<A target=_blank HREF=\"../FAQ/FAQblat.html#blat1c\">What is chr_alt & chr_fix?</A></P>\n");
+        puts("</DIV>\n");
+        }
     }
 pslFreeList(&pslList);
 
@@ -1966,14 +2235,14 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     if (oneSize < minSuggested)
         {
 	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br><br>"
-                "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+                "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&db=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
                 "You can also use our commandline tool <tt>findMotifs</tt> "
                 "(see the <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
                 "search for sequences on the entire genome.<br><br>"
                 "For primers, you can use the <a href='hgPcr?%s=%s'>In-silico PCR</a> tool. In-silico PCR can search the entire genome or a set of "
                 "transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
                 "<a href='../contacts.html'>Contact us</a> for additional help using BLAT or its related tools.",
-		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
+		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), database, cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
 	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.
@@ -2048,7 +2317,17 @@ carefulClose(&f);
 
 if (!allGenomes)
     {
-    showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
+    /* Remember the trash result files so the Table view's "Old BLAT result page" link can
+     * re-render the classic hyperlink view from them within this session without re-running BLAT
+     * (see doOldPageReopen).  These are just short paths; the query sequence is not stored. */
+    cartSetString(cart, "blatPslFile", pslTn.forCgi);
+    cartSetString(cart, "blatFaFile", faTn.forCgi);
+    /* Remember the db/organism the search actually ran against, so a later blatReopen renders with
+     * the right assembly even if the cart's current db has since drifted (e.g. the user searched a
+     * different assembly in between).  The trash PSLs carry this assembly's chrom names. */
+    cartSetString(cart, "blatDb", serve->db);
+    cartSetString(cart, "blatOrganism", organism);
+    showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType,
               organism, feelingLucky);
     }
 
@@ -2068,7 +2347,9 @@ findServer(db, FALSE);
 char *userSeq = NULL;
 char *type = NULL;
 
-printf( 
+printNewFormBanner();
+
+printf(
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
@@ -2201,10 +2482,10 @@ if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
            " for best results instead of BLAT. " 
            "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
-           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+           "use our <a href='hgTrackUi?%s=%s&db=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
            "If you are using the command line and want to search the entire genome, try our command line tool <tt>findMotifs</tt>, from the "
            "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
-           db, cartSessionVarName(), cartSessionId(cart));
+           db, cartSessionVarName(), cartSessionId(cart), db);
 puts("</TD></TR></TABLE>\n");
 
 
@@ -2276,9 +2557,123 @@ printf("<INPUT TYPE=HIDDEN NAME=Submit VALUE=submit>\n");
 printf("</FORM>\n");
 }
 
+static void blatFormJsonList(struct jsonWrite *jw, char *name, char *list[], int count)
+/* Write a JSON array of the strings in list, for a dropdown in the JS-built form. */
+{
+jsonWriteListStart(jw, name);
+int i;
+for (i = 0;  i < count;  ++i)
+    jsonWriteString(jw, NULL, list[i]);
+jsonWriteListEnd(jw);
+}
+
+void askForSeqJs(char *organism, char *db)
+/* "New form" mode: emit the real <form> plus an inline hgBlatFormData object and an empty
+ * container, and let hgBlat.js build the controls inside that form.  Mirrors how showAliPlacesTable
+ * feeds the results page, and reuses hgBlat.js's stylesheet so both pages look alike - including
+ * the gold page-title bar, which is the framework's own #sectTtl styled by .subheadingBar.
+ *
+ * The controls hgBlat.js builds are ordinary named form fields, so the browser serializes them
+ * itself (the file input included) and Submit / Lucky / Clear stay plain submit buttons handled by
+ * the same C code as the classic form.  Nothing is mirrored into a shadow form on submit. */
+{
+/* ignore struct serverTable* return, but can error out if not found */
+findServer(db, FALSE);
+
+printf("<form action=\"../cgi-bin/hgBlat\" method=\"POST\" enctype=\"multipart/form-data\" "
+       "name=\"mainForm\">\n");
+cartSaveSession(cart);
+printf("<input type='hidden' name='changeInfo' value=''>\n");
+/* Set by the genome search bar's onSelect below, which then submits to reload in the new db. */
+printf("<input type='hidden' name='db' value='%s'>\n", db);
+
+/* The genome/assembly picker is the shared search bar from web.c, with its real autocomplete over
+ * every species and assembly.  It is emitted here and relocated into the layout by hgBlat.js, so
+ * the picker and its wiring stay in one place instead of being reimplemented in the new form. */
+printf("<div id='blatGenomeHolder'>\n");
+jsIncludeAutoCompleteLibs();
+char *searchBarId = "genomeSearch";
+printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, NULL, NULL);
+printf("</div>\n");
+/* Unlike the classic form (and hgPcr/hgTables/hgVai/hgLiftOver/hgCustom, which must reload to
+ * rebuild db-dependent menus), nothing here needs a round trip on genome change: the label is
+ * updated by setupGenomeSearchBar itself, and blatFormSetDb() updates the hidden db field and the
+ * db-bearing sidebar links in place.  So no submit() - picking a genome no longer reloads. */
+/* setupGenomeSelector is the combobox version of setupGenomeSearchBar - same config, caret inside
+ * the field, common assemblies as pills underneath.  Swapping the two function names is the whole
+ * change, so the other CGIs on the old widget can move over one at a time. */
+jsInlineF(
+    "setupGenomeSelector({\n"
+    "    inputId: '%s',\n"
+    "    onSelect: function(item) {\n"
+    "        blatFormSetDb(dbFromRecentItem(item));\n"
+    "    }\n"
+    "});\n"
+    , searchBarId
+);
+
+printf("<div id='blatFormBox'></div>\n");
+printf("</form>\n");
+
+webIncludeResourceFile("hgBlat.css");
+jsIncludeFile("hgBlat.js", NULL);
+
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "db", trackHubSkipHubName(db));
+jsonWriteString(jw, "organism", trackHubSkipHubName(organism));
+/* Shown as the search bar's own contents rather than in a separate "Current genome:" line: the bar
+ * is wide enough for the full assembly description, and setupGenomeSearchBar keeps it up to date as
+ * the user picks a different one. */
+jsonWriteString(jw, "dbLabel", getCurrentGenomeLabel(db));
+jsonWriteString(jw, "userSeq", cartUsualString(cart, "userSeq", ""));
+blatFormJsonList(jw, "types", typeList, ArraySize(typeList));
+jsonWriteString(jw, "type", cartUsualString(cart, "type", typeList[0]));
+/* Sort and output have no dropdown on this page - hgBlat.js submits them as hidden fields, so the
+ * request is unchanged.  They are pinned to the defaults rather than read from the cart: with no
+ * control to change them, a stale cart value (say output=psl left over from the classic form) would
+ * otherwise be stuck for the rest of the session with no way for the user to get back. */
+jsonWriteString(jw, "sort", pslSortList[0]);      /* "query,score" */
+jsonWriteString(jw, "output", outputList[0]);     /* "hyperlink" */
+jsonWriteBoolean(jw, "allResults", allResults);
+jsonWriteBoolean(jw, "autoRearr", autoRearr);
+jsonWriteBoolean(jw, "allGenomes", allGenomes);
+/* "Keep results" only means something on a machine configured to clear earlier BLAT result tracks.
+ * With blatOldTracks at its "keep" default, or at "hide", there is nothing to opt out of, so the
+ * checkbox is not shown at all.  hgc.c (buildBigPsl) is what acts on blatKeepResults. */
+jsonWriteBoolean(jw, "showKeepResults",
+                 sameString(cfgOptionDefault("blatOldTracks", "keep"), "delete"));
+jsonWriteBoolean(jw, "keepResults", cartUsualBoolean(cart, "blatKeepResults", FALSE));
+/* The example is fetched on demand rather than inlined: it is a realistic ~14 kb sequence, which
+ * would otherwise be embedded in every page load of the form just to serve the few users who click
+ * "Load example". */
+jsonWriteString(jw, "exampleUrl", "../goldenPath/help/blatExample.fa");
+jsonWriteString(jw, "exampleLabel", "Load example - human SOD1 locus");
+/* Same "similar tools" links the classic page offered, so the sidebar isn't a set of dead links.
+ * These carry $DB$ rather than a baked-in db: picking a genome no longer reloads the page, so
+ * blatFormSetDb() re-expands them against the newly chosen assembly.
+ *
+ * Deliberately NOT gated on hgPcrOk() the way the classic form was.  That test can only be made for
+ * the assembly the page happened to load with, so on a page where the genome can be changed without
+ * a round trip it goes stale immediately: loading on an assembly without a PCR server would hide
+ * these links for the rest of the session, even after switching to hg38.  hgPcr reports an
+ * unsupported assembly perfectly well itself, so an occasionally-unsupported link beats a link that
+ * silently disappears. */
+jsonWriteString(jw, "pcrUrlTpl", "../cgi-bin/hgPcr?db=$DB$");
+jsonWriteStringf(jw, "oligoMatchUrlTpl", "hgTrackUi?%s=%s&db=$DB$&g=oligoMatch&oligoMatch=pack",
+                 cartSessionVarName(), cartSessionId(cart));
+/* Link back to the classic form.  blatNewForm is a cart variable (defaulting to the hg.conf
+ * setting), so this is a per-user opt-out rather than a machine-wide switch. */
+jsonWriteStringf(jw, "classicUrl", "hgBlat?blatNewForm=0&%s=%s&db=%s",
+                 cartSessionVarName(), cartSessionId(cart), db);
+jsonWriteObjectEnd(jw);
+jsInlineF("var hgBlatFormData = %s;\n", jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 void hideWeakerOfQueryRcPairs(struct genomeHits* gH1)
 /* hide the weaker of the pair of rc'd query results
- * so users sees only one strand with the best gene hit. 
+ * so users sees only one strand with the best gene hit.
  * Input must be sorted already into the pairs. */
 {
 struct genomeHits* gH2 = NULL;
@@ -2417,6 +2812,118 @@ printf("</PRE>\n");
 }
 
 
+/* LEGACY (see /hive/groups/browser/redmineNotes/37893/): new "Share a link" links no longer save a
+ * session - they carry the trash .pslx/.fa basenames and reopen via doTrashShareReopen (no session,
+ * no sessionData; they expire when trash is cleaned).  This ?u=&s= session path is kept only so any
+ * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
+ * trash tier, for links that should outlive normal trash, is still wanted later (see the
+ * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
+static void doShareReopen(char *database, char *organism)
+/* Rebuild the Table view for an OLD shared link (?u=&s=) from the durable bigPsl custom track that
+ * was saved with the session, without re-running BLAT and without any stored query sequence.  The
+ * custom track (and its bigBed file) is kept alive by refreshNamedSessionCustomTracks for as long
+ * as the shared session exists, so this is durable. */
+{
+cartWebStart(cart, database, "%s (%s) BLAT Results",
+    trackHubSkipHubName(organism), trackHubSkipHubName(database));
+char *bbFile = blatFindPinnedBigPsl(cart);
+if (bbFile == NULL || !fileExists(bbFile))
+    {
+    printf("<p>These shared BLAT results are no longer available. The custom track that "
+           "stored them has expired or been removed. Please run a new "
+           "<a href=\"hgBlat\">BLAT search</a>.</p>\n");
+    cartWebEnd();
+    return;
+    }
+struct psl *pslList = pslListFromBigPslFile(bbFile);
+if (pslList == NULL)
+    {
+    printf("<p>These shared BLAT results contained no alignments.</p>\n");
+    cartWebEnd();
+    return;
+    }
+pslSortListByVar(&pslList, cartUsualString(cart, "sort", pslSortList[0]));
+
+struct subText *subList = NULL;
+struct sqlConnection *locusConn = blatLocusConn(database, &subList);
+
+char uiState[64];
+safef(uiState, sizeof uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
+printBlatResultsApp(pslList, database, organism, hgTracksName(), hgcName(),
+    NULL, NULL, NULL, uiState, "", locusConn, subList);
+cartWebEnd();
+}
+
+static void doReopenResults(char *database, char *organism)
+/* Re-render the last search's results for the current session from the trash result files saved
+ * with it (see blatPslFile/blatFaFile), without re-running BLAT.  showAliPlaces picks the classic
+ * or new-table format from the blatNewPage cart variable, so this backs both the classic page's
+ * "Try the new display" banner and the table's "Old BLAT result page" link.  Those trash files are
+ * only guaranteed for the current session, so if they have been cleaned up, say so rather than
+ * showing a broken page. */
+{
+char *pslFile = cartOptionalString(cart, "blatPslFile");
+char *faFile = cartOptionalString(cart, "blatFaFile");
+/* Use the db/organism the saved search ran against, not the cart's current db (which may have
+ * drifted): the trash PSLs carry that assembly's chrom names, so rendering under any other db
+ * gives broken position and "View alignment" links (hgc "bad input variables"). */
+char *savedDb = cartOptionalString(cart, "blatDb");
+if (isNotEmpty(savedDb))
+    {
+    database = savedDb;
+    char *savedOrg = cartOptionalString(cart, "blatOrganism");
+    if (isNotEmpty(savedOrg))
+        organism = savedOrg;
+    }
+cartWebStart(cart, database, "%s (%s) BLAT Results",
+    trackHubSkipHubName(organism), trackHubSkipHubName(database));
+if (pslFile == NULL || faFile == NULL || !fileExists(pslFile))
+    printf("<p>These BLAT results are no longer available. Please run a new "
+           "<a href=\"hgBlat\">BLAT search</a>.</p>\n");
+else
+    showAliPlaces(pslFile, faFile, NULL, database, gftDna, gftDna, organism, FALSE);
+cartWebEnd();
+}
+
+static boolean blatSafeTrashId(char *s)
+/* TRUE only if s is a bare trash-file basename token (letters, digits, underscore).  Because it can
+ * contain no '/', '.' or '..', a path built from it cannot escape the trash directory. */
+{
+if (isEmpty(s))
+    return FALSE;
+char *p;
+for (p = s; *p != '\0'; ++p)
+    if (!isalnum((unsigned char)*p) && *p != '_')
+        return FALSE;
+return TRUE;
+}
+
+static void doTrashShareReopen(char *database, char *organism, char *pslId, char *faId)
+/* Reopen a shared BLAT results link that carries the trash .pslx/.fa basenames (blatPslId/blatFaId in
+ * the URL) - no saved session, no sessionData; the link works until trash is cleaned.  Reconstruct
+ * the trash paths from the validated tokens, point the cart's blatPslFile/blatFaFile at them, and
+ * hand off to doReopenResults (which rebuilds the Table view and handles cleaned-up trash gracefully).
+ * The recipient uses their own cart, so pin the shared results' db here (their cart may carry a stale
+ * blatDb from an earlier search of their own). */
+{
+cartSetString(cart, "blatNewPage", "1");   /* a shared table link always shows the table */
+if (!blatSafeTrashId(pslId) || !blatSafeTrashId(faId))
+    {
+    cartWebStart(cart, database, "BLAT Results");
+    printf("<p>This shared BLAT link is not valid.</p>\n");
+    cartWebEnd();
+    return;
+    }
+char pslPath[1024], faPath[1024];
+safef(pslPath, sizeof pslPath, "%s/hgSs/%s.pslx", trashDir(), pslId);
+safef(faPath,  sizeof faPath,  "%s/hgSs/%s.fa",   trashDir(), faId);
+cartSetString(cart, "blatPslFile", pslPath);
+cartSetString(cart, "blatFaFile",  faPath);
+cartSetString(cart, "blatDb", database);
+cartSetString(cart, "blatOrganism", organism);
+doReopenResults(database, organism);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -2429,11 +2936,60 @@ allGenomes = cgiVarExists("allGenomes");
 cart = theCart;
 dnaUtilOpen();
 
+/* The former "table" value of the output dropdown is now the blatNewPage toggle; migrate any stale
+ * cart value so the dropdown always shows a valid option. */
+if (sameOk(cartOptionalString(cart, "output"), "table"))
+    cartSetString(cart, "output", "hyperlink");
+
+/* Short "Share a link" params: u=<user> s=<session> load an anonymous saved session (see the
+ * Table-mode share button), restoring its cart (db, custom tracks, blatLastBigBed) into this one;
+ * doShareReopen below rebuilds the Table view from the durable bigPsl custom track. */
+if (cgiOptionalString("s") != NULL)
+    {
+    /* Viewing a shared results link shouldn't silently flip the viewer's own new-vs-classic page
+     * preference, so preserve blatNewPage across the (whole-cart) session load.  clone first: the
+     * load frees the cart's current storage. */
+    char *myNewPage = cloneString(cartOptionalString(cart, "blatNewPage"));
+    struct sqlConnection *sConn = hConnectCentral();
+    cartLoadUserSession(sConn, cgiUsualString("u", "l"), cgiString("s"), cart, oldVars, NULL);
+    hDisconnectCentral(&sConn);
+    if (myNewPage != NULL)
+        cartSetString(cart, "blatNewPage", myNewPage);
+    else
+        cartRemove(cart, "blatNewPage");
+    freeMem(myNewPage);
+    }
+
 orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
 getDbAndGenome(cart, &db, &organism, oldVars);
 chromAliasSetup(db);
+
+/* A shared "?u=&s=" link rebuilds the Table view from the session's durable custom track; it never
+ * re-runs BLAT, so short-circuit the normal query-driven flow here (before findClosestServer, which
+ * is only needed for an actual search). */
+if (cgiVarExists("s"))
+    {
+    doShareReopen(db, organism);
+    return;
+    }
+/* Stable shareable-link reopen (blatPslId/blatFaId): rebuild the Table straight from the trash
+ * .pslx/.fa named in the URL - no session, no sessionData.  See doTrashShareReopen. */
+if (cgiOptionalString("blatPslId") != NULL && cgiOptionalString("blatFaId") != NULL)
+    {
+    doTrashShareReopen(db, organism, cgiString("blatPslId"), cgiString("blatFaId"));
+    return;
+    }
+/* The classic page's "Try the new display" banner and the Table view's "Old BLAT result page" link
+ * both flip the blatNewPage preference and re-render this session's saved results in the other
+ * format, without re-running BLAT. */
+if (cgiVarExists("blatReopen"))
+    {
+    doReopenResults(db, organism);
+    return;
+    }
+
 char *oldDb = cloneString(db);
 
 // n.b. this changes to default db if db doesn't have BLAT
@@ -2456,15 +3012,39 @@ if (isEmpty(userSeq))
     }
 if (isEmpty(userSeq) || orgChange)
     {
-    cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
+    /* The JS-built search form is an opt-in replacement for the classic one, controlled by the
+     * blatNewForm cart variable, which defaults to the hg.conf setting of the same name.  Making it
+     * a cart variable (like blatNewPage for the results page) is what lets the new form's banner
+     * offer a working "go back to the original page" link. */
+    boolean newForm = cartUsualBoolean(cart, "blatNewForm",
+				       cfgOptionBooleanDefault("blatNewForm", FALSE));
+    /* The search form and the results table are one experience: the results page defaults to match
+     * the form the search came from.  A submission from the new form lands on the new results
+     * table; one from the classic form lands on the classic results table (which still advertises
+     * the new one through its banner).  Setting it in the cart now, while the form is shown, carries
+     * the choice into the next request - the actual search.  The results page still has its own
+     * toggle to switch for a given session. */
+    cartSetBoolean(cart, "blatNewPage", newForm);
+    /* Title from the page design.  The new form names the current assembly in its own genome
+     * picker, so prefixing the title with it as well just repeats it - and for a hub assembly that
+     * prefix is very long ("HG02257.alt.pat.f1_v2 May 2021 BLAT Search").  cartWebStart HTML-escapes
+     * its title, so this has to be a literal em dash, not &mdash;; the page is served as UTF-8 (the
+     * Content-Type header wins over the stale iso-8859-1 <meta>), so the character survives. */
+    if (newForm)
+	cartWebStart(theCart, db, "BLAT — Search the genome for DNA and protein sequence matches");
+    else
+	cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
     if (differentString(oldDb, db))
 	printf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
 	       "defaulting to %s %s</EM></P><HR>\n",
 	       hGenome(oldDb), hFreezeDate(oldDb), organism, hFreezeDate(db));
-    askForSeq(organism,db);
+    if (newForm)
+	askForSeqJs(organism, db);
+    else
+	askForSeq(organism, db);
     cartWebEnd();
     }
-else 
+else
     {
     if (allGenomes)
 	{
@@ -2680,7 +3260,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -2693,7 +3273,7 @@ issueBotWarning = earlyBotCheck(enteredMainTime, "hgBlat", delayFraction, 0, 0, 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
-autoBigPsl = cfgOptionBooleanDefault("autoBlatBigPsl", autoBigPsl); 
+autoBigPsl = cfgOptionBooleanDefault("autoBlatBigPsl", autoBigPsl);
 
 /* org has precedence over db when changeInfo='orgChange' */
 

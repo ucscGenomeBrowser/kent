@@ -473,8 +473,8 @@ printf("<div><b>Tissues:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 if (isPopup)
     {
-    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>", 
-                hTrackUiForTrack(track), track);
+    printf("<a href='%s?db=%s&g=%s'><button type='button'>Change</button><a>",
+                hTrackUiForTrack(track), cartUsualString(cart, "db", ""), track);
     }
 else
     {
@@ -591,8 +591,8 @@ printf("<div><b>Tissues:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 if (isPopup)
     {
-    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>", 
-                hTrackUiForTrack(track), track);
+    printf("<a href='%s?db=%s&g=%s'><button type='button'>Change</button><a>",
+                hTrackUiForTrack(track), cartUsualString(cart, "db", ""), track);
     }
 else
     {

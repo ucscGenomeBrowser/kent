@@ -1,0 +1,116 @@
+<h2>Description</h2>
+
+<p>
+Enhancers are non-coding regulatory DNA sequences that increase transcription of nearby
+genes by serving as binding platforms for transcriptional activators and coactivators.
+They are typically marked by DNase I hypersensitivity and H3K27ac histone modification,
+and many are cell-type specific, reflecting the distinct gene expression programs of
+different tissues and developmental states.
+</p>
+
+<p>
+This track displays 512,577 candidate enhancers predicted across 97 ENCODE biosamples
+by TREDNet, a two-phase deep learning model trained on DNA sequence features. The
+predictions span primary cell types, cell lines, and bulk tissue samples.
+Each merged region is annotated with the complete set of biosamples in which it was
+predicted as an enhancer, and colored by whether it is predominantly active in tissues,
+cell types, or cell lines.
+</p>
+
+<h2>Display conventions</h2>
+
+<p>
+Each item represents a merged window where at least one of the 97 biosamples carried a
+candidate enhancer prediction. Items are colored by the dominant sample category:
+</p>
+
+<p>
+<span style="display:inline-block; background-color:#009E73; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Tissue</b> &ndash; region active predominantly in primary tissue samples<br>
+<span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Cell type</b> &ndash; region active predominantly in primary cell type samples<br>
+<span style="display:inline-block; background-color:#D55E00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Cell line</b> &ndash; region active predominantly in cell line samples<br>
+<span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span>
+<b>Mixed</b> &ndash; no dominant sample category
+</p>
+
+<p>
+Mousing over a region shows the contributing sample names when 10 or fewer samples are
+active, or a count summary (e.g., &quot;37 samples: 16 tissues, 11 cell types, 10 cell
+lines&quot;) when more. Clicking an item opens the detail view with the full sample list.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+TREDNet is a two-phase deep learning model for predicting enhancers and silencers from
+DNA sequence. The authors trained separate TREDNet models for each of 111 ENCODE biosamples
+using DNase-seq, H3K27ac ChIP-seq, and H3K27me3 ChIP-seq peaks. Enhancer training sequences
+were defined as DNase-seq peaks overlapping H3K27ac peaks (but not H3K27me3 peaks in the
+central 400 bp). Predictions used 1-kb sliding windows scored by the model, with an enhancer
+score cutoff set at a false positive rate of 0.1 (control-to-positive ratio of 9:1) on held-out
+chromosomes 7 and 8. Regions scoring above this threshold and not also predicted as silencers
+were retained as candidate enhancers. 97 of the 111 biosamples yielded more than 5,000 candidate
+enhancers and were included in the final dataset. The TREDNet models achieved an enhancer
+area under the ROC curve (AUROC) of 0.96 on held-out test data. For further details see
+Huang and Ovcharenko (2024).
+</p>
+
+<p>
+The per-biosample enhancer BED files were downloaded from
+<a href="https://zenodo.org/records/12523205" target="_blank">Zenodo record 12523205</a>
+(file SilencerEnhancer.tar.gz). Biosample filenames used Cell Ontology (CL), Uberon (UBERON),
+Experimental Factor Ontology (EFO), and ENCODE New Term Request (NTR) identifiers, which were
+resolved to readable names using the EBI Ontology Lookup Service and the ENCODE project API.
+Overlapping per-sample predictions were merged with <tt>bedtools merge</tt> and annotated with
+the full list of contributing biosamples. The processing scripts are available at
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/tredNet"
+target="_blank">github.com/ucscGenomeBrowser/kent/.../scripts/tredNet</a> and the build
+instructions are documented in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/crPred.txt"
+target="_blank">src/hg/makeDb/doc/hg38/crPred.txt</a>.
+</p>
+
+<h2>Data access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>tredNetEnhancer</i>.
+</p>
+
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that can be
+downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/tredNet/" target="_blank">our download
+server</a>. The file for this track is called <tt>tredNetEnhancer.bb</tt>. Individual regions
+or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can
+be compiled from the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.,
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/tredNet/tredNetEnhancer.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+
+<p>
+The original annotation source data can be downloaded from
+<a href="https://zenodo.org/records/12523205" target="_blank">Zenodo record 12523205</a>.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Huang D, Ovcharenko I.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-024-03328-1"
+target="_blank">
+The contribution of silencer variants to human diseases</a>.
+<em>Genome Biol</em>. 2024 Jul 8;25(1):184.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38978133" target="_blank">38978133</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11232194/" target="_blank">PMC11232194</a>
+</p>
+

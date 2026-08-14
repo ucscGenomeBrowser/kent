@@ -244,7 +244,7 @@ if (htsFile == NULL)
     return NULL;
     }
 tbx_t *tabix;
-if ((tabix = tbx_index_load2(fileOrUrl, tbiName)) == NULL)
+if ((tabix = tbx_index_load3(fileOrUrl, tbiName, 0)) == NULL)
     {
     warn("Unable to load tabix index from \"%s\"", tbiName);
     if (tabix)

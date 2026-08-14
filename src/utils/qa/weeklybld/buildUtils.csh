@@ -54,6 +54,8 @@ echo "After make blatSuite on $HOST [${0}: `date`]"
 sed -i -e "s/-DJK_WARN//g" make.utils.log
 sed -i -e "s/-Werror//g" make.utils.log
 sed -i -e "s/gbWarn//g" make.utils.log
+# benign GNU make notice from the htslib serial -j1 pre-gen (refs #37790); not a build error
+sed -i -e "/-j1 forced in submake: resetting jobserver mode/d" make.utils.log
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 

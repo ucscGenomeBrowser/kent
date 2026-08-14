@@ -132,6 +132,11 @@ Searching by  **common name**: dog
 
 Searching by  **GC accession number**: GCF_016699485.2
 
+Results are grouped by source. Assemblies listed under **UCSC Genome Browser assemblies** are
+the long-standing browsers with tracks curated by UCSC. Those under **UCSC GenArk** come from
+NCBI GenBank and RefSeq and are served as assembly hubs. There are hundreds of thousands of
+GenArk assemblies, which is why the search box, rather than the species tree, is now the way
+to reach most genomes.
 
 </div>
 <div class="col-md-6">
@@ -159,8 +164,10 @@ width=60%
 </div>
 <div class="col-md-6">
 
-The **Species Tree** option displays a phylogenetic tree that can be navigated using scrolling or
-by clicking different parts of the tree. Hovering over a branch will reveal the lineage branch name.
+The phylogenetic species tree is no longer shown by default; the **Browse/Select Species** column
+now lists your **Recent Genomes** instead. Click **Show species tree** to display the tree. You can
+scroll it or click different parts to move around, and hovering over a branch reveals the lineage
+branch name.
 
 **Note**: The Species Tree does not include all available Genome Browser assemblies. The process of
 adding Genome Browsers has been streamlined, enabling rapid releases but omitting certain previous

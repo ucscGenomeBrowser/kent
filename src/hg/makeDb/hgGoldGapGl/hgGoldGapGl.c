@@ -338,7 +338,7 @@ char acc[32];
 
 while (lineFileRow(lf, row))
     {
-    strncpy(acc, row[0], sizeof(acc));
+    safecpy(acc, sizeof(acc), row[0]);
     chopSuffix(acc);
     hashAdd(cloneVerHash, acc, cloneString(row[0]));
     }

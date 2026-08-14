@@ -1,0 +1,211 @@
+#!/usr/bin/env python3
+"""Parse UCSC RR access logs for quickLift usage.
+
+Given a directory laid out as .../YYYY/hgwN/access_log.YYYYMMDD.gz, scans every
+access_log file and classifies quickLift-related requests. Emits three tables:
+weekly counts, source-to-destination assembly pairs, and top destinations.
+
+Distinguished signals (earlier naive greps conflated these):
+  SUBMIT    - request URL is /cgi-bin/hgConvert?...doQuickLift=on...hglft_doConvert=Submit
+              -> real user-initiated conversion
+  LIVE      - request URL carries quickLift.<hubId>.<db>=<chainId>
+              -> ongoing session with a quickLift hub active
+  DOC       - request URL hits quickLift.html
+  SHADOW    - boolshad.doQuickLift=0 (ignored; fires on every hgConvert page view)
+
+Usage:
+  parseQuickLiftLogs [LOG_DIR]
+  parseQuickLiftLogs /hive/data/inside/wwwstats/RR/2026
+"""
+
+import argparse
+import collections
+import glob
+import gzip
+import os
+import re
+import sys
+
+DEFAULT_LOG_DIR = "/hive/data/inside/wwwstats/RR/2026"
+
+# Apache combined log: IP - - [date] "REQ" status size "REFERER" "UA" time unit
+LINE_RE = re.compile(
+    r'^(\S+) \S+ \S+ \[([^\]]+)\] "([^"]*)" \S+ \S+ "([^"]*)" "[^"]*"'
+)
+REQ_RE = re.compile(r'^\S+\s+(\S+)')            # method PATH proto -> PATH
+DB_PARAM_RE = re.compile(r'[?&]db=([^&"\s]+)')
+TO_DB_RE = re.compile(r'[?&]hglft_toDb=([^&"\s]+)')
+SUBMIT_RE = re.compile(
+    r'^/cgi-bin/hgConvert\?[^"\s]*doQuickLift=on[^"\s]*hglft_doConvert=Submit'
+)
+LIVE_RE = re.compile(r'[?&]quickLift\.\d+\.[A-Za-z0-9_]+=')
+DOC_RE = re.compile(r'/quickLift\.html')
+HGSID_RE = re.compile(r'hgsid=([0-9A-Za-z_]+)')
+WEEK_RE = re.compile(r'access_log\.(\d{8})\.gz$')
+
+
+def find_logs(root):
+    # Accept either a year dir (with hgw* children) or a single-host dir.
+    files = sorted(glob.glob(os.path.join(root, "hgw*", "access_log.*.gz")))
+    if not files:
+        files = sorted(glob.glob(os.path.join(root, "access_log.*.gz")))
+    return files
+
+
+def classify(path, tally):
+    m = WEEK_RE.search(path)
+    week = m.group(1) if m else "unknown"
+    try:
+        fh = gzip.open(path, "rt", errors="replace")
+    except OSError as e:
+        print(f"# skip {path}: {e}", file=sys.stderr)
+        return
+
+    with fh:
+        for line in fh:
+            if "uickLift" not in line:   # cheap filter first (matches Q or q)
+                continue
+            m = LINE_RE.match(line)
+            if not m:
+                continue
+            ip, _ts, request, referer = m.groups()
+            m2 = REQ_RE.match(request)
+            if not m2:
+                continue
+            path_q = m2.group(1)
+
+            # SUBMIT: actual hgConvert submit with doQuickLift=on
+            if SUBMIT_RE.match(path_q):
+                to = TO_DB_RE.search(path_q)
+                to_db = to.group(1) if to else "(unknown)"
+                fr = DB_PARAM_RE.search(referer)
+                from_db = fr.group(1) if fr else "(unknown)"
+                tally["submit"][week] += 1
+                tally["pair"][(from_db, to_db)] += 1
+                tally["dest"][to_db] += 1
+                if fr:
+                    tally["src"][from_db] += 1
+                sid = HGSID_RE.search(path_q)
+                if sid:
+                    tally["submit_sessions"].add(sid.group(1))
+                tally["submit_ips"].add(ip)
+                continue
+
+            # LIVE: hgTracks with an active quickLift hub
+            if LIVE_RE.search(path_q):
+                tally["live"][week] += 1
+                for m3 in re.finditer(r'quickLift\.(\d+)\.', path_q):
+                    tally["hub"][m3.group(1)] += 1
+                continue
+
+            # DOC: quickLift.html
+            if DOC_RE.search(path_q):
+                tally["doc"][week] += 1
+                continue
+
+
+MARKDOWN = False
+
+
+def print_table(title, rows, headers):
+    print(f"\n## {title}\n")
+    if MARKDOWN:
+        print("| " + " | ".join(headers) + " |")
+        aligns = ["---:" if any(isinstance(r[i], int) for r in rows) else "---"
+                  for i in range(len(headers))]
+        print("| " + " | ".join(aligns) + " |")
+        for r in rows:
+            print("| " + " | ".join(str(v) for v in r) + " |")
+        return
+    widths = [max(len(str(r[i])) for r in [headers] + rows) for i in range(len(headers))]
+    def fmt(row):
+        parts = []
+        for i, v in enumerate(row):
+            s = str(v)
+            parts.append(s.rjust(widths[i]) if isinstance(v, int) else s.ljust(widths[i]))
+        return "  ".join(parts)
+    print(fmt(headers))
+    print("  ".join("-" * w for w in widths))
+    for r in rows:
+        print(fmt(r))
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("log_dir", nargs="?", default=DEFAULT_LOG_DIR,
+                    help=f"root containing hgw*/access_log.*.gz (default: {DEFAULT_LOG_DIR})")
+    ap.add_argument("--top-pairs", type=int, default=30,
+                    help="max source->dest rows to show (default: 30)")
+    ap.add_argument("--top-dests", type=int, default=15,
+                    help="max destination rows to show (default: 15)")
+    ap.add_argument("--markdown", action="store_true",
+                    help="emit GitHub-flavored pipe tables instead of aligned text")
+    args = ap.parse_args()
+    global MARKDOWN
+    MARKDOWN = args.markdown
+
+    logs = find_logs(args.log_dir)
+    if not logs:
+        sys.exit(f"no access_log.*.gz files under {args.log_dir}")
+
+    tally = {
+        "submit": collections.Counter(),
+        "live":   collections.Counter(),
+        "doc":    collections.Counter(),
+        "pair":   collections.Counter(),
+        "dest":   collections.Counter(),
+        "src":    collections.Counter(),
+        "hub":    collections.Counter(),
+        "submit_sessions": set(),
+        "submit_ips":      set(),
+    }
+
+    for path in logs:
+        print(f"# scanning {path}", file=sys.stderr)
+        classify(path, tally)
+
+    # Weekly table
+    weeks = sorted(set(tally["submit"]) | set(tally["live"]) | set(tally["doc"]))
+    weekly_rows = [
+        [w, tally["submit"].get(w, 0), tally["live"].get(w, 0), tally["doc"].get(w, 0)]
+        for w in weeks
+    ]
+    print_table("Weekly counts", weekly_rows, ["week_ending", "submit", "live_hgTracks", "docs"])
+
+    # Source -> destination
+    pair_rows = [
+        [f, t, c]
+        for (f, t), c in tally["pair"].most_common(args.top_pairs)
+    ]
+    print_table("Top source-to-destination pairs (SUBMIT-only)", pair_rows,
+                ["from", "to", "count"])
+
+    # Top destinations
+    dest_rows = [[d, c] for d, c in tally["dest"].most_common(args.top_dests)]
+    print_table("Top destination assemblies", dest_rows, ["to", "count"])
+
+    # Top sources (only counts submits where source was parseable)
+    src_rows = [[s, c] for s, c in tally["src"].most_common(args.top_dests)]
+    print_table("Top source assemblies", src_rows, ["from", "count"])
+
+    # Hub usage
+    hub_rows = [[h, c] for h, c in tally["hub"].most_common(10)]
+    print_table("Top quickLift hub IDs (live sessions)", hub_rows, ["hubId", "hits"])
+
+    # Summary
+    total_submit = sum(tally["submit"].values())
+    total_live   = sum(tally["live"].values())
+    total_doc    = sum(tally["doc"].values())
+    known_src    = sum(c for (f, _), c in tally["pair"].items() if f != "(unknown)")
+    print("\n## Summary")
+    print(f"log files scanned:            {len(logs)}")
+    print(f"SUBMIT conversions:           {total_submit}")
+    print(f"  with parseable source db:   {known_src} ({100*known_src/total_submit:.0f}%)" if total_submit else "  (none)")
+    print(f"live hgTracks hits:           {total_live}")
+    print(f"quickLift.html hits:          {total_doc}")
+    print(f"unique SUBMIT hgsid values:   {len(tally['submit_sessions'])}")
+    print(f"unique SUBMIT client IPs:     {len(tally['submit_ips'])}")
+
+
+if __name__ == "__main__":
+    main()

@@ -686,6 +686,12 @@ else if (tg->colorShades)
 
 color = colorFromCart(tg, color);
 
+// user-chosen per-item color (right-click "Color this item"). Simple bed has no background-box
+// support, so both modes just recolor the glyph.
+Color itemColorOver;
+if (itemColorOverride(tg, bed, &itemColorOver, NULL))
+    color = itemColorOver;
+
 /*	Keep the item at least 4 pixels wide at all viewpoints */
 if (thickDrawItem && (w < 4))
     {

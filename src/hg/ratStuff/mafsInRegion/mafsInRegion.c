@@ -73,6 +73,13 @@ if ((p = strchr(src, '.')) == NULL)
 return ++p;
 }
 
+// chromFromSrc returns strchr(src,'.')+1, a valid (possibly empty) C string.
+// At -O3 GCC's -Wstringop-overread mis-sizes that pointer as a 0-byte region
+// when it is handed to strcmp via sameString/differentString below; the reads
+// are safe (strcmp stops at the terminator).
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overread"
+
 FILE *startOutFile(char *outFile)
 {
 static FILE *f = NULL;
@@ -162,6 +169,7 @@ while (maf)
     }
 mafFileFree(&mf);
 }
+#pragma GCC diagnostic pop
 
 void mafsInRegion(char *regionFile, char *out, int mafCount, char *mafFiles[])
 /* Extract MAFs in regions listed in regin file */

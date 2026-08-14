@@ -1,0 +1,20 @@
+table lrSvCard
+"NIH CARD long-read structural variants (351 brain samples: 205 NABEC, 146 HBCC)"
+    (
+    string chrom;           "Chromosome"
+    uint chromStart;        "Start position"
+    uint chromEnd;          "End position"
+    string name;            "Variant ID"
+    uint score;             "Score"
+    char[1] strand;         "Strand"
+    uint thickStart;        "Thick start (same as chromStart)"
+    uint thickEnd;          "Thick end (same as chromEnd)"
+    uint reserved;          "Item color"
+    string svType;          "SV Type|DEL, INS, INV or DUP"
+    int svLen;              "SV Length|Length of the variant on the reference in base pairs"
+    int insLen;             "Insertion Length|Length of inserted sequence, 0 for DEL/INV/DUP"
+    int AC;                 "Allele Count|Alternate allele count for this variant (NABEC + HBCC)"
+    float alleleFreq;       "Allele Frequency|Alternate allele frequency (source VCF AF)"
+    uint nabecAc;           "NABEC Allele Count|Alternate allele count in the European-ancestry NABEC cohort"
+    uint hbccAc;            "HBCC Allele Count|Alternate allele count in the African/African-admixed HBCC cohort"
+    )

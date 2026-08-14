@@ -493,8 +493,13 @@ var genomePos = {
 
     update: function (img, selection, singleClick)
     {
+        // For a drag-select keep the half-base offset (addHalfBp) so an edge that
+        // ends just before a base does not count that base.  For a single click turn
+        // it off so both edges resolve to the same base under the pointer: with it on,
+        // at single-base zoom a left click drifted one base left while a right click
+        // could not move at all.
         var pos = genomePos.pixelsToBases(img, selection.x1, selection.x2,
-                                            hgTracks.winStart, hgTracks.winEnd, true);
+                                            hgTracks.winStart, hgTracks.winEnd, !singleClick);
         // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
         if (singleClick) {
             var center = (pos.chromStart + pos.chromEnd)/2;
@@ -642,44 +647,1104 @@ var genomePos = {
 };
 
   /////////////////////////////////////
- //// Creating items by dragging /////
+ //// Creating items             /////
 /////////////////////////////////////
-var makeItemsByDrag = {
+var myVariants = {
+    createBedForm: function(dialogEle) {
+        // Shared top fields (visible in all manual modes)
+        const commonTopFields = [
+            { label: "Label", id: "name", type: "text", placeholder: "Optional item label",
+              info: "A short label for this annotation, displayed in the browser" },
+            { label: "Color", id: "color", type: "text" },
+        ];
+        // SNV-only field (between commonTop and alt/sequence)
+        const snvOnlyFields = [
+            { label: "Ref", id: "ref", type: "text", placeholder: "Optional reference allele sequence",
+              info: "Reference allele sequence at this position" },
+        ];
+        // Alt/Sequence field: shown for SNV (label="Alt") and CNV (label="Sequence")
+        const altField = { label: "Alt", id: "alt", type: "text",
+            placeholder: "Optional alternate allele sequence",
+            info: "Alternate (variant) allele sequence" };
+        // Position fields: shown always for Transcript; collapsible for SNV/CNV
+        const positionFields = [
+            { label: "Chromosome", id: "chrom", type: "text" },
+            { label: "Start", id: "start", type: "number",
+              info: "1-based start position on the chromosome" },
+            { label: "End", id: "end", type: "number",
+              info: "1-based end position on the chromosome (inclusive)" },
+            { label: "Score", id: "score", type: "number",
+              info: "Score from 0-1000. Higher scores display darker" },
+            { label: "Strand", id: "strand", type: "text",
+              info: "Strand: + for forward, - for reverse, . for unknown" },
+        ];
+        // Transcript-only CDS fields (displayed as CDS Start/End; stored as thickStart/thickEnd)
+        const cdsFields = [
+            { label: "CDS Start", id: "thickStart", type: "number",
+              info: "Start of the coding region" },
+            { label: "CDS End", id: "thickEnd", type: "number",
+              info: "End of the coding region" },
+        ];
+        // Shared bottom fields
+        const commonBottomFields = [
+            { label: "Mouseover", id: "mouseover", type: "text", placeholder: "Short text shown on hover",
+              info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed" },
+            { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
+              info: "Longer notes or comments about this annotation. Displayed on the details page" },
+            { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
+              info: "Group annotations by project. Projects with no annotations are automatically removed from the list" },
+        ];
+        // CNV vocabulary, mirrored on the server in myVariantsTrack.c:validCnvTypes
+        const cnvTypeOptions = ["deletion", "duplication", "insertion", "inversion",
+                                "translocation", "complex", "breakend"];
 
-    end: function (img, selection)
-    {
-        var image = $(img);
-        var imageId = image.attr('id');
-        var trackName = imageId.substring('img_data_'.length);
-        var pos = genomePos.selectionPixelsToBases(image, selection);
-        var command = document.getElementById('hgt_doJsCommand');
-        command.value  = "makeItems " + trackName + " " + hgTracks.chromName;
-        command.value +=  " " + pos.chromStart + " " + pos.chromEnd;
-        document.TrackHeaderForm.submit();
-        return true;
-    },
+        const form = document.createElement("form");
+        form.className = "myVariants-form";
+        form.action = "hgTracks";
+        form.method = "post";
+        form.id = "myVariants-form";
 
-    init: function (trackName)
-    {
-    // Set up so that they can drag out to define a new item on a makeItems track.
-    var img = $("#img_data_" + trackName);
-    if (img && img.length !== 0) {
-        var imgHeight = imageV2.imgTbl.height();
-        jQuery(img.imgAreaSelect( { selectionColor: 'green', outerColor: '',
-            minHeight: imgHeight, maxHeight: imgHeight, onSelectEnd: makeItemsByDrag.end,
-            autoHide: true, movable: false}));
+        // First: HGVS/position input box (primary interaction method)
+        let quickInpDiv = document.createElement("div");
+        quickInpDiv.id = "hgvsInputDiv";
+        form.appendChild(quickInpDiv);
+
+        let quickInp = document.createElement("input");
+        let quickInpLabel = document.createElement("label");
+        quickInp.type = "text";
+        quickInp.id = "hgvsInput";
+        quickInp.name = "myVariantsHgvsInput";
+        quickInp.style.width = "300px";
+        quickInpLabel.textContent = "Enter HGVS, position, or gene symbol";
+        quickInpLabel.style.display = "inline-block";
+        quickInpLabel.style.minWidth = "200px";
+        quickInpLabel.style.marginRight = "8px";
+        quickInpLabel.for = "hgvsInput";
+
+        let resizeDialog = function() {
+            var dialog = $("#myVariantsDialog");
+            var hgvsVisible = document.getElementById("hgvsInputDiv").style.display !== "none";
+            if (hgvsVisible) {
+                dialog.dialog("option", "width", 580);
+                dialog.dialog("option", "height", "auto");
+                dialog.dialog("option", "position", { my: "center", at: "center", of: window });
+            } else {
+                dialog.dialog("option", "width", Math.min(1000, window.innerWidth * 0.9));
+                dialog.dialog("option", "height", Math.min(800, window.innerHeight * 0.9));
+                dialog.dialog("option", "position", { my: "top+30", at: "top", of: window });
+            }
+        };
+
+        let updatePositionSummary = function() {
+            let summaryText = document.getElementById("positionSummaryText");
+            if (!summaryText) return;
+            let chrom = document.getElementById("chrom");
+            let start = document.getElementById("start");
+            let end = document.getElementById("end");
+            if (chrom && start && end) {
+                let startVal = parseInt(start.value);
+                let endVal = parseInt(end.value);
+                let startFmt = isNaN(startVal) ? start.value : startVal.toLocaleString();
+                let endFmt = isNaN(endVal) ? end.value : endVal.toLocaleString();
+                summaryText.textContent = chrom.value + ":" + startFmt + "-" + endFmt;
+            }
+        };
+
+        // Switch the form into one of four modes and remember the choice so the
+        // next dialog open restarts in the same place.
+        let applyMode = function(mode) {
+            const isHgvs = mode === "hgvs";
+            const isTranscript = mode === "transcript";
+            const isSnv = mode === "snv";
+            const isCnv = mode === "cnv";
+
+            document.getElementById("hgvsInputDiv").style.display = isHgvs ? "" : "none";
+            document.getElementById("manualInputDiv").style.display = isHgvs ? "none" : "";
+            document.getElementById("hgvsManualToggle").textContent =
+                isHgvs ? "Or edit item fields manually" : "Back to quick input mode";
+
+            if (!isHgvs) {
+                document.getElementById("typeTranscript").checked = isTranscript;
+                document.getElementById("typeSnv").checked = isSnv;
+                document.getElementById("typeCnv").checked = isCnv;
+            }
+
+            document.getElementById("refWrapper").style.display = isSnv ? "" : "none";
+            document.getElementById("altWrapper").style.display = (isSnv || isCnv) ? "" : "none";
+            document.getElementById("altLabel").textContent = isCnv ? "Sequence" : "Alt";
+            document.getElementById("cnvTypeWrapper").style.display = isCnv ? "" : "none";
+
+            if (isTranscript) {
+                advancedDiv.style.display = "none";
+                cdsBlocksDiv.style.display = "none";
+                posWraps.forEach(function(w) { w.style.display = ""; });
+                cdsWraps.forEach(function(w) { w.style.display = ""; });
+                blocksSection.style.display = "";
+                const order = [
+                    typeRadioBar, posSummary,
+                    posWraps[0], posWraps[1], posWraps[2],
+                    nameWrap,
+                    posWraps[3], posWraps[4],
+                    cdsWraps[0], cdsWraps[1],
+                    colorWrap,
+                    mouseoverWrap, descriptionWrap, projectWrap,
+                    blocksSection,
+                    advancedDiv, cdsBlocksDiv,
+                    refWrapper, cnvTypeWrapper, altWrapper,
+                    customFieldsSection
+                ];
+                order.forEach(function(el) { manualInpDiv.appendChild(el); });
+            } else {
+                // Pack wrappers back into their collapsible containers.
+                posWraps.forEach(function(w) { advancedDiv.appendChild(w); });
+                cdsWraps.forEach(function(w) { cdsBlocksDiv.appendChild(w); });
+                cdsBlocksDiv.appendChild(blocksSection);
+                advancedDiv.style.display = "none";
+                cdsBlocksDiv.style.display = "none";
+                const order = [
+                    typeRadioBar, posSummary,
+                    advancedDiv,
+                    nameWrap, colorWrap,
+                    refWrapper, cnvTypeWrapper, altWrapper,
+                    cdsBlocksDiv,
+                    mouseoverWrap, descriptionWrap, projectWrap,
+                    customFieldsSection
+                ];
+                order.forEach(function(el) { manualInpDiv.appendChild(el); });
+            }
+            document.getElementById("positionSummaryDiv").style.display = isTranscript ? "none" : "";
+            if (posEditLink) posEditLink.textContent = "[edit]";
+
+            try { localStorage.setItem("myVariantsLastMode", mode); } catch (e) { /* private mode */ }
+            resizeDialog();
+        };
+
+        let currentType = function() {
+            if (document.getElementById("typeTranscript").checked) return "transcript";
+            if (document.getElementById("typeCnv").checked) return "cnv";
+            return "snv";
+        };
+
+        let toggleForm = function(event) {
+            event.preventDefault();
+            const inHgvs = document.getElementById("hgvsInputDiv").style.display !== "none";
+            applyMode(inHgvs ? currentType() : "hgvs");
+        };
+        let toggleContainer = document.createElement("p");
+        let toggle = document.createElement("a");
+        toggle.href = "#";
+        toggle.id = "hgvsManualToggle";
+        toggle.addEventListener("click", toggleForm);
+        toggle.textContent = "Or edit item fields manually";
+        toggleContainer.appendChild(toggle);
+
+        quickInpDiv.appendChild(quickInpLabel);
+        quickInpDiv.appendChild(quickInp);
+        form.appendChild(toggleContainer);
+
+        // Manual input div (contains simple + advanced fields)
+        let manualInpDiv = document.createElement("div");
+        manualInpDiv.id = "manualInputDiv";
+        manualInpDiv.style.display = "none";
+
+        let posSummary = document.createElement("div");
+        posSummary.id = "positionSummaryDiv";
+        posSummary.style.cssText = "margin-bottom:12px; padding:6px 10px; background:#f0f4f8; border:1px solid #d0d7de; border-radius:4px; font-size:13px;";
+        let posSummaryLabel = document.createElement("b");
+        posSummaryLabel.textContent = "Position: ";
+        posSummary.appendChild(posSummaryLabel);
+        let posSummaryText = document.createElement("span");
+        posSummaryText.id = "positionSummaryText";
+        posSummary.appendChild(posSummaryText);
+        let posSummarySuffix = document.createElement("span");
+        posSummarySuffix.style.color = "#888";
+        posSummarySuffix.textContent = " (from current view)";
+        posSummary.appendChild(posSummarySuffix);
+        let posEditLink = document.createElement("a");
+        posEditLink.href = "#";
+        posEditLink.textContent = "[edit]";
+        posEditLink.style.cssText = "margin-left:8px; font-size:12px;";
+        posEditLink.addEventListener("click", function(event) {
+            event.preventDefault();
+            let advDiv = document.getElementById("advancedFieldsDiv");
+            if (!advDiv) return;
+            if (advDiv.style.display === "none") {
+                advDiv.style.display = "";
+                posEditLink.textContent = "[hide]";
+                let chromField = document.getElementById("chrom");
+                if (chromField) {
+                    chromField.scrollIntoView({behavior: "smooth", block: "nearest"});
+                    chromField.focus();
+                }
+            } else {
+                advDiv.style.display = "none";
+                posEditLink.textContent = "[edit]";
+            }
+        });
+        posSummary.appendChild(posEditLink);
+        manualInpDiv.appendChild(posSummary);
+
+        // Helper function to create form field (uses createInfoIcon from utils.js)
+        let createField = function(field, container) {
+            const wrapper = document.createElement("div");
+            wrapper.style.marginBottom = "8px";
+
+            const label = document.createElement("label");
+            label.htmlFor = field.id;
+            label.textContent = field.label;
+            label.style.display = "inline-block";
+            label.style.minWidth = "140px";
+
+            let input;
+            if (field.type === "textarea") {
+                input = document.createElement("textarea");
+                input.rows = "4";
+                input.cols = "60";
+            } else {
+                input = document.createElement("input");
+                input.type = field.type;
+            }
+            input.id = field.id;
+
+            if (field.id === "chrom") {
+                input.value = hgTracks.chromName;
+            }
+            if (field.type === "number") {
+                input.min = 0;
+                if (field.id === "start" || field.id === "thickStart") {
+                    input.value = hgTracks.winStart;
+                }
+                if (field.id === "end" || field.id === "thickEnd") {
+                    input.value = hgTracks.winEnd;
+                }
+                if (field.id === "score") {
+                    input.value = 0;
+                    input.max = 1000;
+                }
+            }
+            if (field.id === "strand") {
+                input.value = ".";
+            }
+            if (field.id === "color") {
+                input.value = "#000000";
+                input.style.width = "70px";
+            }
+            if (field.placeholder) {
+                input.placeholder = field.placeholder;
+            }
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            if (field.info) {
+                wrapper.appendChild(createInfoIcon(field.info));
+            }
+            container.appendChild(wrapper);
+
+            return input;
+        };
+
+        // Helper function to create project field with dropdown if projects exist
+        let createProjectField = function(container) {
+            const wrapper = document.createElement("div");
+            wrapper.style.marginBottom = "8px";
+
+            const label = document.createElement("label");
+            label.htmlFor = "project";
+            label.textContent = "Project";
+            label.style.display = "inline-block";
+            label.style.minWidth = "140px";
+            wrapper.appendChild(label);
+
+            // Check if we have existing projects from the server
+            let existingProjects = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsProjects)
+                                   ? hgTracks.myVariantsProjects : [];
+
+            if (existingProjects.length > 0) {
+                // Create dropdown with existing projects
+                let select = document.createElement("select");
+                select.id = "projectSelect";
+                select.style.marginRight = "8px";
+
+                // Add empty option
+                let emptyOpt = document.createElement("option");
+                emptyOpt.value = "";
+                emptyOpt.textContent = "(none)";
+                select.appendChild(emptyOpt);
+
+                // Add existing projects
+                existingProjects.forEach(proj => {
+                    let opt = document.createElement("option");
+                    opt.value = proj;
+                    opt.textContent = proj;
+                    select.appendChild(opt);
+                });
+
+                // Add "Add new..." option
+                let newOpt = document.createElement("option");
+                newOpt.value = "__new__";
+                newOpt.textContent = "Add new...";
+                select.appendChild(newOpt);
+
+                wrapper.appendChild(select);
+
+                // Hidden text input for new project (shown when "Add new..." selected)
+                let newProjectInput = document.createElement("input");
+                newProjectInput.type = "text";
+                newProjectInput.id = "project";
+                newProjectInput.placeholder = "Enter new project name";
+                newProjectInput.style.display = "none";
+                wrapper.appendChild(newProjectInput);
+
+                // Toggle between dropdown and text input
+                select.addEventListener("change", function() {
+                    if (select.value === "__new__") {
+                        newProjectInput.style.display = "";
+                        newProjectInput.focus();
+                    } else {
+                        newProjectInput.style.display = "none";
+                        newProjectInput.value = select.value;
+                    }
+                });
+
+                // Keep text input synced with dropdown selection
+                newProjectInput.addEventListener("blur", function() {
+                    if (newProjectInput.value === "" && select.value === "__new__") {
+                        select.value = "";
+                        newProjectInput.style.display = "none";
+                    }
+                });
+            } else {
+                // No existing projects - just show text input
+                let input = document.createElement("input");
+                input.type = "text";
+                input.id = "project";
+                input.placeholder = "Optional project name";
+                wrapper.appendChild(input);
+            }
+
+            // Add info icon
+            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no annotations are automatically removed from the list"));
+            container.appendChild(wrapper);
+        };
+
+        // Type radio bar: Transcript | Variant -> Short | CNV. Inserted at the very
+        // top of manualInpDiv (before the existing position summary).
+        let typeRadioBar = document.createElement("div");
+        typeRadioBar.id = "typeRadioBar";
+        typeRadioBar.style.cssText = "margin-bottom:12px; padding:8px 10px; background:#f7f7f7; border:1px solid #ddd; border-radius:4px;";
+        typeRadioBar.innerHTML =
+            "<div style='font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;'>Annotation type</div>" +
+            "<div>" +
+                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeTranscript' value='transcript'> Transcript</label>" +
+                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeSnv' value='snv' checked> Short variant (snv)</label>" +
+                "<label><input type='radio' name='myVariantsType' id='typeCnv' value='cnv'> Copy number variant (cnv)</label>" +
+            "</div>";
+        manualInpDiv.insertBefore(typeRadioBar, manualInpDiv.firstChild);
+
+        let onTypeRadioChange = function() {
+            applyMode(currentType());
+        };
+        // The form is not yet in the document, so query the local subtree.
+        typeRadioBar.querySelectorAll("input[type=radio]").forEach(function(r) {
+            r.addEventListener("change", onTypeRadioChange);
+        });
+
+        let colorInput = null;
+        let nameWrap, colorWrap;
+        commonTopFields.forEach(function(field) {
+            let input = createField(field, manualInpDiv);
+            if (field.id === "color") { colorInput = input; colorWrap = input.parentNode; }
+            else if (field.id === "name") { nameWrap = input.parentNode; }
+        });
+
+        // SNV-only ref input
+        let refWrapper = document.createElement("div");
+        refWrapper.id = "refWrapper";
+        createField(snvOnlyFields[0], refWrapper);
+        manualInpDiv.appendChild(refWrapper);
+
+        // CNV-only type select
+        let cnvTypeWrapper = document.createElement("div");
+        cnvTypeWrapper.id = "cnvTypeWrapper";
+        cnvTypeWrapper.style.marginBottom = "8px";
+        let cnvTypeLabel = document.createElement("label");
+        cnvTypeLabel.htmlFor = "cnvType";
+        cnvTypeLabel.textContent = "CNV type";
+        cnvTypeLabel.style.cssText = "display:inline-block; min-width:140px;";
+        let cnvTypeSelect = document.createElement("select");
+        cnvTypeSelect.id = "cnvType";
+        cnvTypeOptions.forEach(function(t) {
+            let opt = document.createElement("option");
+            opt.value = t;
+            opt.textContent = t;
+            cnvTypeSelect.appendChild(opt);
+        });
+        cnvTypeWrapper.appendChild(cnvTypeLabel);
+        cnvTypeWrapper.appendChild(cnvTypeSelect);
+        cnvTypeWrapper.appendChild(createInfoIcon("CNV vocabulary follows gnomAD"));
+        manualInpDiv.appendChild(cnvTypeWrapper);
+
+        // Alt / Sequence input (shared between SNV and CNV; label switches in applyMode)
+        let altWrapper = document.createElement("div");
+        altWrapper.id = "altWrapper";
+        altWrapper.style.marginBottom = "8px";
+        let altLabel = document.createElement("label");
+        altLabel.htmlFor = "alt";
+        altLabel.id = "altLabel";
+        altLabel.textContent = "Alt";
+        altLabel.style.cssText = "display:inline-block; min-width:140px;";
+        let altInput = document.createElement("input");
+        altInput.type = "text";
+        altInput.id = "alt";
+        altInput.placeholder = altField.placeholder;
+        altWrapper.appendChild(altLabel);
+        altWrapper.appendChild(altInput);
+        altWrapper.appendChild(createInfoIcon(altField.info));
+        manualInpDiv.appendChild(altWrapper);
+
+        let advancedDiv = document.createElement("div");
+        advancedDiv.id = "advancedFieldsDiv";
+        advancedDiv.style.display = "none";
+        let posWraps = positionFields.map(function(field) {
+            return createField(field, advancedDiv).parentNode;
+        });
+        manualInpDiv.appendChild(advancedDiv);
+
+        let cdsBlocksDiv = document.createElement("div");
+        cdsBlocksDiv.id = "cdsBlocksDiv";
+        cdsBlocksDiv.style.display = "none";
+        let cdsWraps = cdsFields.map(function(field) {
+            return createField(field, cdsBlocksDiv).parentNode;
+        });
+
+        let blocksSection = document.createElement("div");
+        blocksSection.id = "blocksSection";
+        blocksSection.style.cssText = "margin-top:12px; padding-top:10px; border-top:1px solid #ddd;";
+        let blocksLabel = document.createElement("div");
+        blocksLabel.style.cssText = "font-weight:bold; margin-bottom:8px; font-size:13px;";
+        blocksLabel.textContent = "Blocks (optional)";
+        blocksSection.appendChild(blocksLabel);
+        let blocksHint = document.createElement("div");
+        blocksHint.style.cssText = "font-size:12px; color:#666; margin-bottom:6px;";
+        blocksHint.textContent = "Offsets are relative to Start. First offset must be 0; " +
+                                 "last block must reach End. Leave empty for a single full-span block.";
+        blocksSection.appendChild(blocksHint);
+        let blocksContainer = document.createElement("div");
+        blocksContainer.id = "blocksContainer";
+        blocksSection.appendChild(blocksContainer);
+        let hCount = document.createElement("input"); hCount.type = "hidden"; hCount.id = "blockCount";
+        let hSizes = document.createElement("input"); hSizes.type = "hidden"; hSizes.id = "blockSizes";
+        let hStarts = document.createElement("input"); hStarts.type = "hidden"; hStarts.id = "chromStarts";
+        blocksSection.appendChild(hCount);
+        blocksSection.appendChild(hSizes);
+        blocksSection.appendChild(hStarts);
+        cdsBlocksDiv.appendChild(blocksSection);
+        manualInpDiv.appendChild(cdsBlocksDiv);
+
+        let mouseoverWrap, descriptionWrap, projectWrap;
+        commonBottomFields.forEach(function(field) {
+            if (field.id === "project") {
+                createProjectField(manualInpDiv);
+                projectWrap = manualInpDiv.lastElementChild;
+            } else {
+                let input = createField(field, manualInpDiv);
+                if (field.id === "mouseover") mouseoverWrap = input.parentNode;
+                else if (field.id === "description") descriptionWrap = input.parentNode;
+            }
+        });
+
+        let customFieldsSection = document.createElement("div");
+        customFieldsSection.id = "customFieldsSection";
+        customFieldsSection.style.cssText = "margin-top:12px; padding-top:10px; border-top:1px solid #ddd;";
+
+        let customFieldsLabel = document.createElement("div");
+        customFieldsLabel.style.cssText = "font-weight:bold; margin-bottom:8px; font-size:13px;";
+        customFieldsLabel.textContent = "Custom Fields";
+        customFieldsSection.appendChild(customFieldsLabel);
+
+        let customFieldsList = document.createElement("div");
+        customFieldsList.id = "customFieldsList";
+        customFieldsSection.appendChild(customFieldsList);
+
+        let reservedNames = ["bin", "chrom", "chromStart", "chromEnd", "name", "score",
+            "strand", "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
+            "chromStarts", "description", "db", "ref", "alt", "project", "mouseover",
+            "itemType", "cnvType", "id"];
+
+        let validateFieldName = function(nameInput) {
+            let name = nameInput.value.trim();
+            if (!name) return; // empty is ok, will be skipped on submit
+            let valid = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
+            if (!valid) {
+                alert("Invalid field name: '" + name + "'. Must start with a letter or underscore, " +
+                      "and contain only letters, numbers, and underscores.");
+                nameInput.focus();
+                return false;
+            }
+            if (name.startsWith("_hidden_")) {
+                alert("Field names cannot start with '_hidden_'.");
+                nameInput.focus();
+                return false;
+            }
+            if (reservedNames.indexOf(name) >= 0) {
+                alert("'" + name + "' is a reserved field name.");
+                nameInput.focus();
+                return false;
+            }
+            // Check for duplicates among all custom field name inputs
+            let allNames = document.querySelectorAll("#customFieldsList .customFieldName");
+            let count = 0;
+            allNames.forEach(function(inp) {
+                if (inp.value.trim() === name) count++;
+            });
+            if (count > 1) {
+                alert("Duplicate field name: '" + name + "'.");
+                nameInput.focus();
+                return false;
+            }
+            return true;
+        };
+
+        let addCustomFieldRow = function(existingName) {
+            // existingName: if provided, this is a pre-populated existing field (read-only name)
+            let row = document.createElement("div");
+            row.className = "customFieldRow";
+            row.style.cssText = "display:flex; align-items:center; gap:6px; margin-bottom:6px;";
+            if (existingName)
+                row.dataset.existing = "true";
+
+            let nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.className = "customFieldName";
+            nameInput.placeholder = "Field name";
+            nameInput.style.cssText = "width:120px;";
+
+            if (existingName) {
+                nameInput.value = existingName;
+                nameInput.readOnly = true;
+                nameInput.style.cssText = "width:120px; background:#e8e8e8; color:#555;";
+            } else {
+                // Add blur validation for new field names
+                nameInput.addEventListener("blur", function() {
+                    if (nameInput.value.trim())
+                        validateFieldName(nameInput);
+                });
+            }
+
+            let valueInput = document.createElement("input");
+            valueInput.type = "text";
+            valueInput.className = "customFieldValue";
+            valueInput.placeholder = "Value (optional)";
+            valueInput.style.cssText = "width:180px;";
+
+            row.appendChild(nameInput);
+            row.appendChild(valueInput);
+
+            if (existingName) {
+                // Hide button for existing fields (soft-delete via _hidden_ prefix)
+                let hideBtn = document.createElement("button");
+                hideBtn.type = "button";
+                hideBtn.textContent = "Hide";
+                hideBtn.title = "Hide this custom field (data preserved, can be restored later)";
+                hideBtn.style.cssText = "border:1px solid #ccc; background:#f5f5f5; color:#888; font-size:11px; cursor:pointer; padding:1px 6px; border-radius:3px;";
+                hideBtn.addEventListener("click", function() {
+                    if (!confirm("Hide the '" + existingName + "' field? Data will be preserved but the field will no longer appear."))
+                        return;
+                    // Send ALTER TABLE CHANGE COLUMN request to rename with _hidden_ prefix
+                    let hideUrl = "../cgi-bin/hgTracks?hgt_doJsCommand=" +
+                        encodeURIComponent("myVariants myVariants " + JSON.stringify({hideField: existingName})) +
+                        "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid() + "&db=" + getDb();
+                    fetch(hideUrl, { method: "POST", credentials: "same-origin" })
+                    .then(function() {
+                        row.remove();
+                    })
+                    .catch(function(err) {
+                        alert("Error hiding field: " + err.message);
+                    });
+                });
+                row.appendChild(hideBtn);
+            } else {
+                // Remove button for newly added rows
+                let removeBtn = document.createElement("button");
+                removeBtn.type = "button";
+                removeBtn.textContent = "\u00D7";
+                removeBtn.title = "Remove this field";
+                removeBtn.style.cssText = "border:none; background:none; color:#c00; font-size:18px; cursor:pointer; padding:0 4px; line-height:1;";
+                removeBtn.addEventListener("click", function() {
+                    row.remove();
+                });
+                row.appendChild(removeBtn);
+            }
+
+            customFieldsList.appendChild(row);
+            if (!existingName)
+                nameInput.focus();
+        };
+
+        // Pre-populate existing custom fields from server
+        let existingCustomFields = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsCustomFields)
+                                    ? hgTracks.myVariantsCustomFields : [];
+        existingCustomFields.forEach(function(fieldName) {
+            addCustomFieldRow(fieldName);
+        });
+
+        let addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.id = "addCustomFieldBtn";
+        addBtn.textContent = "+ Add Custom Field";
+        addBtn.style.cssText = "margin-top:4px; padding:3px 10px; font-size:12px; cursor:pointer;";
+        addBtn.addEventListener("click", function(event) {
+            event.preventDefault();
+            addCustomFieldRow();
+        });
+        customFieldsSection.appendChild(addBtn);
+
+        // Hidden fields restore UI
+        let hiddenFields = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsHiddenFields)
+                            ? hgTracks.myVariantsHiddenFields : [];
+        if (hiddenFields.length > 0) {
+            let hiddenSection = document.createElement("div");
+            hiddenSection.id = "hiddenFieldsSection";
+            hiddenSection.style.cssText = "margin-top:8px; padding:4px 8px; background:#faf8f0; border:1px solid #e0dcc8; border-radius:3px; font-size:12px;";
+
+            let hiddenLabel = document.createElement("span");
+            hiddenLabel.style.cssText = "color:#888; margin-right:8px;";
+            hiddenLabel.textContent = "Hidden fields:";
+            hiddenSection.appendChild(hiddenLabel);
+
+            hiddenFields.forEach(function(fieldName) {
+                let chip = document.createElement("span");
+                chip.style.cssText = "display:inline-block; margin:2px 4px; padding:2px 6px; background:#e8e8e8; border-radius:3px;";
+                chip.textContent = fieldName + " ";
+                let restoreBtn = document.createElement("a");
+                restoreBtn.href = "#";
+                restoreBtn.textContent = "restore";
+                restoreBtn.style.cssText = "color:#36c; font-size:11px;";
+                restoreBtn.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    // Add it back as a pre-populated existing field row
+                    addCustomFieldRow(fieldName);
+                    // Remove the chip
+                    chip.remove();
+                    // Hide the section if no more hidden fields
+                    if (hiddenSection.querySelectorAll("span[style]").length <= 1)
+                        hiddenSection.style.display = "none";
+                });
+                chip.appendChild(restoreBtn);
+                hiddenSection.appendChild(chip);
+            });
+
+            customFieldsSection.appendChild(hiddenSection);
         }
+
+        manualInpDiv.appendChild(customFieldsSection);
+
+        // Keep the position summary in sync when position fields change
+        ["chrom", "start", "end"].forEach(function(id) {
+            let el = advancedDiv.querySelector("#" + id);
+            if (el) el.addEventListener("input", updatePositionSummary);
+        });
+        let chromEl = advancedDiv.querySelector("#chrom");
+        let startEl = advancedDiv.querySelector("#start");
+        let endEl = advancedDiv.querySelector("#end");
+        if (chromEl && startEl && endEl) {
+            let startVal = parseInt(startEl.value);
+            let endVal = parseInt(endEl.value);
+            let startFmt = isNaN(startVal) ? startEl.value : startVal.toLocaleString();
+            let endFmt = isNaN(endVal) ? endEl.value : endVal.toLocaleString();
+            posSummaryText.textContent = chromEl.value + ":" + startFmt + "-" + endFmt;
+        }
+
+        form.appendChild(manualInpDiv);
+
+        // Add hidden field to encode form values as JSON
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'hgt_doJsCommand';
+        form.appendChild(hiddenInput);
+
+        const trackNameInput = document.createElement('input');
+        trackNameInput.type = 'hidden';
+        trackNameInput.id = 'trackName';
+        trackNameInput.name = 'trackName';
+        trackNameInput.value = "myVariants";
+        form.appendChild(trackNameInput);
+
+        dialogEle.appendChild(form);
+
+        // Initialize Spectrum color picker after form is added to DOM
+        if (colorInput) {
+            $(colorInput).spectrum({
+                hideAfterPaletteSelect: true,
+                color: colorInput.value,
+                showPalette: true,
+                showInput: true,
+                showSelectionPalette: true,
+                showInitial: true,
+                preferredFormat: "hex",
+                localStorageKey: "myVariantsColors"
+            });
+        }
+
+        // Mount the block editor; reads Start/End from the chrom range fields.
+        // Pass the container element directly: at this point the form is in
+        // the dialog div but the dialog hasn't been appended to body yet, so
+        // getElementById would still miss "blocksContainer".
+        // Stash the widget handle on the form so createItem can call validate().
+        if (typeof myVariantsBlocks !== "undefined") {
+            form.blocksWidget = myVariantsBlocks.mount(blocksContainer, {
+                getStart: function () {
+                    return parseInt(document.getElementById("start").value, 10);
+                },
+                getEnd: function () {
+                    return parseInt(document.getElementById("end").value, 10);
+                },
+                hiddenCountInput: hCount,
+                hiddenSizesInput: hSizes,
+                hiddenStartsInput: hStarts
+            });
+        }
+
+        // Stash applyMode on the form so init() can restore last-used mode.
+        form.applyMode = applyMode;
+        return form;
     },
 
-    load: function ()
-    {
-        for (var id in hgTracks.trackDb) {
-            var rec = hgTracks.trackDb[id];
-            if (rec && rec.type && rec.type.indexOf("makeItems") === 0) {
-                this.init(id);
+    init: function () {
+        // show a jquery-ui dialog when a user clicks on the 'Add Annotation' button
+        let dialog = document.getElementById('myVariantsDialog');
+        if (!dialog) {
+            dialog = document.createElement("div");
+            dialog.id = "myVariantsDialog";
+            dialog.style = "display: none";
+
+            dialogButtons = {};
+            // Call the function to build the form, but only if logged in already
+            if (!userIsLoggedIn) {
+                let msg = document.createElement("div");
+                msg.id = "logInMessage";
+                let href = (typeof myVariantsLoginUrl !== "undefined" && myVariantsLoginUrl)
+                           ? myVariantsLoginUrl : "./hgSession";
+                let link = document.createElement("a");
+                link.href = href;
+                link.textContent = "log in";
+                msg.appendChild(document.createTextNode("Please "));
+                msg.appendChild(link);
+                msg.appendChild(document.createTextNode(" to use this feature."));
+                dialog.appendChild(msg);
+            } else {
+                let form = this.createBedForm(dialog);
+
+                document.body.append(dialog);
+                dialogButtons.Submit = function() {
+                    // extract the form elements and check
+                    myVariants.createItem(form);
+                };
+            }
+            dialogButtons.Cancel = function(){
+                $(this).dialog("close");
+            };
+            $(dialog).dialog({
+                title: "My Annotations",
+                resizable: false,
+                height: "auto",
+                width: 580,
+                modal: true,
+                closeOnEscape: true,
+                autoOpen: false,
+                buttons: dialogButtons,
+                open: function() {
+                    // Restore the last input mode the user picked (or default to HGVS).
+                    let form = document.getElementById("myVariants-form");
+                    if (form && form.applyMode) {
+                        let saved;
+                        try { saved = localStorage.getItem("myVariantsLastMode"); } catch (e) { saved = null; }
+                        const validModes = ["hgvs", "transcript", "snv", "cnv"];
+                        form.applyMode(validModes.indexOf(saved) >= 0 ? saved : "hgvs");
+                    }
+                },
+                close: function() {
+                    // Reset block rows so the next open starts clean.
+                    let form = document.getElementById("myVariants-form");
+                    if (form && form.blocksWidget) {
+                        form.blocksWidget.clear();
+                    }
+                }
+            });
+        } else {
+            // Reopening after an async image update; refresh the position fields.
+            // The dialog's open callback re-applies the last-used mode.
+            let form = document.getElementById("myVariants-form");
+            if (form) {
+                let start = form.elements.start;
+                let end = form.elements.end;
+                let thickStart = form.elements.thickStart;
+                let thickEnd = form.elements.thickEnd;
+                if (start) start.value = hgTracks.winStart;
+                if (end) end.value = hgTracks.winEnd;
+                if (thickStart) thickStart.value = hgTracks.winStart;
+                if (thickEnd) thickEnd.value = hgTracks.winEnd;
+            }
+            let summaryText = document.getElementById("positionSummaryText");
+            if (summaryText) {
+                let chromEl = document.getElementById("chrom");
+                let startFmt = parseInt(hgTracks.winStart).toLocaleString();
+                let endFmt = parseInt(hgTracks.winEnd).toLocaleString();
+                summaryText.textContent =
+                    (chromEl ? chromEl.value : hgTracks.chromName) + ":" + startFmt + "-" + endFmt;
             }
         }
-    }
+
+        // if we clicked outside of the pop up, close the popup:
+        document.addEventListener('click', (e) => {
+            let dialogEl = document.getElementById("myVariantsDialog");
+            if (!dialogEl) return;
+            // If the click handler that ran first removed its own target from
+            // the document (eg a row remove button, or a Grammarly/extension
+            // DOM swap on the description field), e.target is now detached
+            // and `.contains(e.target)` would falsely report "outside". Skip.
+            if (!document.contains(e.target)) return;
+            let dialogContainer = dialogEl.parentElement;
+            // Check if click target is inside the dialog (handles native dropdowns that render outside bounds)
+            if (dialogContainer && !dialogContainer.contains(e.target)) {
+                $("#myVariantsDialog").dialog("close");
+            }
+        });
+    },
+
+    createItem: function(form) {
+        // sends a post to hgTracks that adds a new item to the users custom track
+        // and updates the image to include this track if it wasn't already there
+        // Block validation only matters for the transcript path; SNV/CNV don't carry blocks.
+        let blockResult = {ok: true, noBlocks: true};
+        const isTranscript = !!(document.getElementById("typeTranscript") &&
+                                document.getElementById("typeTranscript").checked);
+        if (isTranscript && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
+            blockResult = form.blocksWidget.validate();
+            if (!blockResult.ok) {
+                alert("Block error: " + blockResult.msg);
+                return;
+            }
+        }
+        const data = {};
+        if (form.elements.hgvsInput.value) {
+            data.hgvsInput = form.elements.hgvsInput.value;
+        } else {
+            const itemType = isTranscript ? "transcript"
+                : (document.getElementById("typeCnv").checked ? "cnv" : "snv");
+            Array.from(form.elements).forEach( (ele) => {
+                if (ele.name === "myVariantsHgvsInput" || ele.name === "hgt_doJsCommand" ||
+                        ele.name === "myVariantsType" ||
+                        (ele.tagName !== "INPUT" && ele.tagName !== "TEXTAREA")) {return;}
+                const key = ele.id;
+                let value = ele.value;
+                // Handle Spectrum color picker - get the value from spectrum if available
+                if (ele.id === "color" && $(ele).spectrum) {
+                    let spectrumColor = $(ele).spectrum("get");
+                    if (spectrumColor) {
+                        value = spectrumColor.toHexString();
+                    }
+                }
+                data[key] = value;
+            });
+            data.itemType = itemType;
+            data.cnvType = (itemType === "cnv") ? document.getElementById("cnvType").value : "";
+            if (itemType === "cnv") data.ref = "";
+            else if (itemType === "transcript") { data.ref = ""; data.alt = ""; }
+            // Collect custom fields from the dynamic rows
+            let customRows = document.querySelectorAll("#customFieldsList .customFieldRow");
+            if (customRows.length > 0) {
+                let customFields = [];
+                customRows.forEach(function(row) {
+                    let name = row.querySelector(".customFieldName").value.trim();
+                    if (name) {
+                        let value = row.querySelector(".customFieldValue").value;
+                        customFields.push({name: name, value: value});
+                    }
+                });
+                if (customFields.length > 0) {
+                    data.extraFields = customFields;
+                }
+            }
+            // Convert hidden block fields from CSV strings to arrays of ints.
+            // Drop blocks entirely for SNV/CNV; server synthesizes a single full-span
+            // block. For transcript with noBlocks (rows added but every size empty),
+            // also drop and let the server synthesize.
+            let bc = parseInt(data.blockCount, 10);
+            if (!isTranscript || !bc || blockResult.noBlocks) {
+                delete data.blockCount;
+                delete data.blockSizes;
+                delete data.chromStarts;
+            } else {
+                data.blockCount = bc;
+                data.blockSizes = data.blockSizes.split(",").map(Number);
+                data.chromStarts = data.chromStarts.split(",").map(Number);
+            }
+        }
+
+        // Show loading indicator
+        const loadingId = showLoadingImage("imgTbl");
+        document.body.style.cursor = "wait";
+
+        // Build request - use fetch() instead of form.submit()
+        const trackName = form.elements.namedItem("trackName").value;
+        const req = encodeURIComponent(`myVariants ${trackName} ${JSON.stringify(data)}`);
+        const url = cart.addUpdatesToUrl(`../cgi-bin/hgTracks?hgt_doJsCommand=${req}&trackName=${trackName}&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=${getHgsid()}&db=${getDb()}`);
+
+        fetch(url, {
+            method: "POST",
+            credentials: "same-origin"
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok: " + response.status);
+            }
+            return response.text();
+        })
+        .then(html => {
+            hideLoadingImage(loadingId);
+            document.body.style.cursor = "";
+            myVariants.handleCreateSuccess(html, data);
+        })
+        .catch(error => {
+            hideLoadingImage(loadingId);
+            document.body.style.cursor = "";
+            warn("Error creating annotation: " + error.message);
+            console.error("Fetch error:", error);
+        });
+    },
+
+    handleCreateSuccess: function(response, data) {
+        // Close the create dialog
+        $("#myVariantsDialog").dialog("close");
+
+        // Update the image using the existing pattern
+        imageV2.updateImgAndMap.call({cmd: 'wholeImage'}, response, 'success');
+
+        // Extract new item coordinates from server response
+        const newItemPos = scrapeVariable(response, "newItemPos");
+        let variantChrom, variantStart, variantEnd;
+
+        if (newItemPos) {
+            // Server returned the coordinates
+            variantChrom = newItemPos.chrom;
+            variantStart = newItemPos.start;
+            variantEnd = newItemPos.end;
+        } else {
+            // Fallback: try to get from form data (manual entry)
+            variantChrom = data.chrom || hgTracks.chromName;
+            variantStart = parseInt(data.start, 10) || hgTracks.winStart;
+            variantEnd = parseInt(data.end, 10) || hgTracks.winEnd;
+        }
+
+        // Check if variant is in current window
+        const inCurrentWindow = (variantChrom === hgTracks.chromName &&
+                                variantStart < hgTracks.winEnd &&
+                                variantEnd > hgTracks.winStart);
+
+        if (inCurrentWindow) {
+            // Already visible - just show brief success message
+            return;
+        }
+
+        // Check stored preference
+        const navPref = localStorage.getItem("myVariants_navPref");
+        if (navPref === "jump") {
+            // Auto-navigate to variant
+            myVariants.navigateToVariant(variantChrom, variantStart, variantEnd);
+            return;
+        } else if (navPref === "stay") {
+            // Stay here, just show message
+            warn("Annotation created at " + variantChrom + ":" +
+                 (variantStart+1).toLocaleString() + "-" + variantEnd.toLocaleString());
+            return;
+        }
+
+        // No preference saved - show dialog
+        myVariants.showNavigationDialog(variantChrom, variantStart, variantEnd);
+    },
+
+    showNavigationDialog: function(chrom, start, end) {
+        const posStr = chrom + ":" + (start+1).toLocaleString() + "-" + end.toLocaleString();
+
+        // Create dialog content
+        const content = document.createElement("div");
+
+        // Build message with position
+        const msg = document.createElement("p");
+        msg.style.marginBottom = "0.5em";
+        msg.innerHTML = "Annotation created at <strong>" + posStr + "</strong>";
+        content.appendChild(msg);
+
+        // Show dialog with buttons
+        $(content).dialog({
+            title: "Annotation Created",
+            modal: true,
+            width: 600,
+            buttons: {
+                "Go to Annotation": function() {
+                    if (document.getElementById("myVariantsRememberNav").checked) {
+                        localStorage.setItem("myVariants_navPref", "jump");
+                    }
+                    $(this).dialog("close");
+                    myVariants.navigateToVariant(chrom, start, end);
+                },
+                "Stay Here": function() {
+                    if (document.getElementById("myVariantsRememberNav").checked) {
+                        localStorage.setItem("myVariants_navPref", "stay");
+                    }
+                    $(this).dialog("close");
+                }
+            },
+            open: function() {
+                // Add checkbox to button pane, inline with buttons
+                const dialog = $(this);
+                const buttonPane = dialog.closest(".ui-dialog").find(".ui-dialog-buttonpane");
+                const checkboxSpan = document.createElement("span");
+                checkboxSpan.style.cssText = "display: inline-block; vertical-align: middle; margin-right: 1em;";
+                checkboxSpan.innerHTML = "<label><input type='checkbox' id='myVariantsRememberNav'> Remember this choice </label>";
+                checkboxSpan.appendChild(createInfoIcon(
+                    "Save your preference. Future annotations outside the current view will automatically " +
+                    "use this choice. Reset via Configure page or cartReset."
+                ));
+                // Insert before the button set
+                buttonPane.find(".ui-dialog-buttonset").before(checkboxSpan);
+                // Force dialog to recalculate its size
+                dialog.dialog("option", "height", "auto");
+            }
+        });
+    },
+
+    navigateToVariant: function(chrom, start, end) {
+        // Add small padding around the variant (max 100bp)
+        const padding = 100;
+        const paddedStart = Math.max(0, start - padding);
+        const paddedEnd = end + padding;
+
+        // Navigate using existing mechanism
+        const pos = chrom + ":" + paddedStart + "-" + paddedEnd;
+        imageV2.navigateInPlace("position=" + pos, null, true);
+    },
+
+    showDialog: function() {
+        let dialog = document.getElementById('myVariantsDialog');
+        // Clear dynamically-added custom field rows; for existing fields, just clear the value
+        let customFieldsList = document.getElementById("customFieldsList");
+        if (customFieldsList) {
+            let rows = customFieldsList.querySelectorAll(".customFieldRow");
+            rows.forEach(function(row) {
+                if (row.dataset.existing === "true") {
+                    // Existing field - just clear the value input
+                    let valInput = row.querySelector(".customFieldValue");
+                    if (valInput) valInput.value = "";
+                } else {
+                    // Dynamically added row - remove it
+                    row.remove();
+                }
+            });
+        }
+        $(dialog).dialog("open");
+    },
 };
 
   /////////////////
@@ -761,10 +1826,11 @@ var posting = {
                     location.assign(href);
                 }
             } else if (cgi === "hgc") {
-                if (id.startsWith("multiz")) {
+                if (id.startsWith("multiz") || id.startsWith("tabulaSapiens") || id.startsWith("crossTissue")) {
                     // multiz tracks have a form that lets you change highlighted bases
                     // that does not play well in a pop up
-                    // toga tracks require bootstrap which does not work with something
+                    // the faceted bar charts have a custom hgc page that resubmits on most clicks
+                    // so we need to overhaul the page before allowing them in popups
                     location.assign(href);
                     return false;
                 }
@@ -1191,7 +2257,14 @@ var dragSelect = {
                              "<li>Clear specific highlights with right click &gt; Remove highlight" +
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>");
-            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
+            // Start the picker on the color the user last saved.  This dialog is removed from
+            // the DOM on close when "don't show this again" is checked, so this runs again on
+            // the next drag.  makeHighlightPicker's own loadHlColor() reads a different
+            // prevHlColor than the one dragSelect.saveHlColor writes, so without the color
+            // passed in here the rebuilt picker falls back to the default and the saved color
+            // is lost.  Fourth argument stays undefined so the label keeps its default.
+            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null,
+                                undefined, dragSelect.loadHlColor());
             $("#dragSelectDialog").append("<div style='padding-top: 4px'><input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
                              "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></div>"+ 
@@ -1241,6 +2314,99 @@ var dragSelect = {
         } else {
             $("#dragSelectPosition").html(newPosition);
         }
+        // Build the button set in two passes so that "Create Item" only
+        // appears when myVariants is enabled in hg.conf.  doMyVariants is
+        // emitted by the server only inside the gated hg.conf block, so on
+        // a server with the feature off the variable is undefined and the
+        // button is omitted entirely.
+        let dragSelectButtons = {
+            "Zoom In": function() {
+                // Zoom to selection
+                $(this).dialog("option", "revertToOriginalPos", false);
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                if (imageV2.inPlaceUpdate) {
+                    if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
+                        newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                    }
+                    var params = "db=" + getDb() + "&position=" + newPosition;
+                    if (!hgTracks.enableHighlightingDialog)
+                        params += "&enableHighlightingDialog=0";
+                    imageV2.navigateInPlace(params, null, true);
+                } else {
+                    $('body').css('cursor', 'wait');
+                    if (!hgTracks.enableHighlightingDialog)
+                        cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
+                    document.TrackHeaderForm.submit();
+                }
+                $(this).dialog("close");
+            },
+            "Single Highlight": function() {
+                // Clear old highlight and Highlight selection
+                $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.highlightThisRegion(newPosition, false, hlColor);
+                $(this).dialog("close");
+            },
+            "Add Highlight": function() {
+                // Highlight selection
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.highlightThisRegion(newPosition, true, hlColor);
+                $(this).dialog("close");
+            },
+            "Save Color": function() {
+                // Honor "don't show this again", the same as every other button here.
+                // The close handler already removes the dialog when the box is checked, but
+                // saveHlColor only writes prevHlColor, so without this the setting is never
+                // stored and the dialog comes back on the next drag.
+                if ($("#disableDragHighlight").prop('checked'))
+                    hgTracks.enableHighlightingDialog = false;
+                var hlColor = $("#hlColorInput").val();
+                dragSelect.saveHlColor( hlColor );
+                if (!hgTracks.enableHighlightingDialog)
+                    cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
+                $(this).dialog("close");
+            }
+        };
+        if (typeof doMyVariants !== 'undefined' && doMyVariants) {
+            dragSelectButtons["Add Annotation"] = function() {
+                let data = {};
+                let pos = parsePosition(newPosition);
+                data.chrom = pos.chrom;
+                data.start = data.thickStart = pos.start.toString();
+                data.end = data.thickEnd = pos.end.toString();
+                data.score = "0";
+                data.strand = ".";
+                data.color = $("#hlColorInput").val();
+                data.name = "";
+                data.description = "";
+                data.ref = "";
+                data.alt = "";
+                data.trackName = "myVariants";
+                $(this).dialog("close");
+                let req = encodeURIComponent(`myVariants myVariants ${JSON.stringify(data)}`);
+                jQuery('body').css('cursor', 'wait');
+                $.ajax({
+                        type: "POST",
+                        url: "../cgi-bin/hgTracks",
+                        data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants&hgsid=${getHgsid()}`),
+                        dataType: "html",
+                        trueSuccess: imageV2.updateImgAndMap,
+                        success: catchErrorOrDispatch,
+                        error: errorHandler,
+                        cmd: 'wholeImage',
+                        loadingId: showLoadingImage("imgTbl"),
+                        cache: false
+                    });
+            };
+        }
+        dragSelectButtons.Cancel = function() {
+            $(this).dialog("close");
+        };
         $(dragSelectDialog).dialog({
                 modal: true,
                 title: "Drag-and-select",
@@ -1248,55 +2414,8 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 550,
-                buttons: {  
-                    "Zoom In": function() {
-                        // Zoom to selection
-                        $(this).dialog("option", "revertToOriginalPos", false);
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
-                                newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
-                            }
-                            var params = "db=" + getDb() + "&position=" + newPosition;
-                            if (!hgTracks.enableHighlightingDialog)
-                                params += "&enableHighlightingDialog=0";
-                            imageV2.navigateInPlace(params, null, true);
-                        } else {
-                            $('body').css('cursor', 'wait');
-                            if (!hgTracks.enableHighlightingDialog)
-                                cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
-                            document.TrackHeaderForm.submit();
-                        }
-                        $(this).dialog("close");
-                    },
-                    "Single Highlight": function() {
-                        // Clear old highlight and Highlight selection
-                        $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, false, hlColor);
-                        $(this).dialog("close");
-                    },
-                    "Add Highlight": function() {
-                        // Highlight selection
-                        if ($("#disableDragHighlight").prop('checked'))
-                            hgTracks.enableHighlightingDialog = false;
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.highlightThisRegion(newPosition, true, hlColor);
-                        $(this).dialog("close");
-                    },
-                    "Save Color": function() {
-                        var hlColor = $("#hlColorInput").val();
-                        dragSelect.saveHlColor( hlColor );
-                        $(this).dialog("close");
-                    },
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                    }
-                },
+                minWidth: 750,
+                buttons: dragSelectButtons,
 
                 open: function () { // Make zoom the focus/default action
                    $(this).parents('.ui-dialog-buttonpane button:eq(0)').trigger("focus");
@@ -1324,6 +2443,16 @@ var dragSelect = {
         var now = new Date();
         var doIt = false;
         var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight; // = drag on base position track (no shift)
+        // A single click on the grey side-label/config strip has its x clamped into the
+        // data area by imgAreaSelect, so without this test it looks like a ruler click and
+        // performs the zoom instead of opening the base-position track's config popup (#27113).
+        // Use the raw mouse x (getXLimits gives the data-area bounds) to spot a label-strip
+        // click and let it fall through to the normal config handler.
+        if (rulerClicked && selection.event) {
+            var dataXLimits = genomePos.getXLimits($(img), 0);
+            if (selection.event.pageX < dataXLimits[0] || selection.event.pageX > dataXLimits[1])
+                rulerClicked = false;
+        }
         if (dragSelect.originalCursor)
             jQuery('body').css('cursor', dragSelect.originalCursor);
         if (dragSelect.escPressed)
@@ -1349,8 +2478,8 @@ var dragSelect = {
                     dragSelect.highlightThisRegion(newPosition, true);
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                 } else {
-                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey))
-                        // don't show the dialog if: clicked on ruler, if dialog deactivated or meta/ctrl was pressed
+                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey) && !(rulerClicked && singleClick))
+                        // don't show the dialog if: single-clicked on ruler, if dialog deactivated or meta/ctrl was pressed
                         dragSelect.selectionEndDialog(newPosition);
                     else {
                         // in every other case, show the dialog
@@ -1622,7 +2751,7 @@ this.each(function(){
                         chr.right = parseInt(loc[2]);
                 }
 
-                let title = this.getAttribute("originalTitle") || this.getAttribute("title");
+                let title = this.getAttribute("data-tooltip") || this.getAttribute("title");
                 var range = title.substr(title.lastIndexOf(':')+1);
                 var pos = range.split('-');
                 if (pos.length === 2) {
@@ -1781,7 +2910,19 @@ jQuery.fn.panImages = function(){
     var portalWidth = 0;
     var portalAbsoluteX = 0;
     var savedPosition;
-    var highlightAreas  = null; // Used to ensure dragSelect highlight will scroll. 
+    var highlightAreas  = null; // Used to ensure dragSelect highlight will scroll.
+    // quickLift draws its difference lines up into the center labels, but center labels do
+    // not scroll with the data.  Rather than leave the lines standing still over an image
+    // that is moving underneath them, these slices are swapped for a text stand-in of the
+    // center label (written by hgTracks) while the image is being dragged.
+    var cntrLabLines    = null;
+
+    function cntrLabDragSwap(dragging) {
+        if (cntrLabLines === null || cntrLabLines.length === 0)
+            return;
+        cntrLabLines.css( {'display': (dragging ? 'none' : '')} );
+        cntrLabLines.siblings('.cntrLabStandIn').css( {'display': (dragging ? 'block':'none')});
+    }
 
     this.each(function(){
 
@@ -1834,6 +2975,9 @@ jQuery.fn.panImages = function(){
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
                 highlightAreas = $('.highlightItem');
+                // quickLift lines in center labels.  ':visible' so that turning center
+                // labels off leaves drag scrolling exactly as it was.
+                cntrLabLines = $('img.cntrLabLines:visible');
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).on('mousemove',panner);
                 $(document).on('mouseup', panMouseUp);  // Will exec only once
@@ -1885,6 +3029,7 @@ jQuery.fn.panImages = function(){
                 if (!posStatus.isOutsideChrom)
                     scrollHighlight(relativeX);
 
+                cntrLabDragSwap(true);  // center label lines can't scroll: use the text
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
@@ -1917,6 +3062,7 @@ jQuery.fn.panImages = function(){
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
+                cntrLabDragSwap(false);  // image is back where it started, lines line up
                 if (highlightAreas)
                     imageV2.drawHighlights();
                 return true;
@@ -1944,7 +3090,20 @@ jQuery.fn.panImages = function(){
                     hgTracks.imgBoxPortalOffsetX = (prevX * -1) - hgTracks.imgBoxLeftLabel;
                     hgTracks.imgBoxPortalLeft = newX.toString() + "px";
                 }
-            }
+                // No new image is coming, but the center label slices didn't move with the
+                // data, so the quickLift lines hidden above can only come back in the right
+                // place with a redraw.  Ask for one.
+                if (cntrLabLines && cntrLabLines.length > 0) {
+                    if (imageV2.inPlaceUpdate) {
+                        var newPos = parsePosition(genomePos.get());
+                        imageV2.navigateInPlace("db=" + getDb() + "&position=" +
+                                encodeURIComponent(newPos.chrom + ":" + newPos.start + "-" +
+                                                   newPos.end), null, true);
+                    } else
+                        cntrLabDragSwap(false);
+                }
+            } else
+                cntrLabDragSwap(false);  // drag ended where it started, nothing moved
         }
     }
     });  // end of this.each(function(){
@@ -2499,20 +3658,45 @@ var rightClick = {
 
             rightClick.showColorPicker(id);
 
+        } else if (cmd === 'colorThisItem') {
+
+            rightClick.colorThisItem();
+
+        } else if (cmd === 'removeItemColor') {
+
+            var itemToRemove = rightClick.itemFromHref(rightClick.selectedMenuItem.href);
+            if (itemToRemove)
+                rightClick.removeItemColor(itemToRemove.track, itemToRemove.name);
+
+        } else if (cmd === 'clearItemColors') {
+
+            rightClick.clearItemColors();
+
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             rec = hgTracks.trackDb[id];
             if (tdbHasParent(rec) && tdbIsLeaf(rec))
                 url += rec.parentTrack;
+            else if (tdbHasParent(rec) && tdbIsContainer(rec))
+                // A container (e.g. multiWig) nested in a composite configures itself,
+                // not its parent (whose link is on the shared row button).
+                url += id;
             else {
                 // The button already has the ref
-                var link = normed($( 'td#td_btn_'+ rightClick.selectedMenuItem.id ).children('a')); 
+                var link = normed($( 'td#td_btn_'+ rightClick.selectedMenuItem.id ).children('a'));
                 if (link)
                     url = $(link).attr('href');
                 else
                     url += rightClick.selectedMenuItem.id;
             }
+            location.assign(url);
+
+        } else if (cmd === 'hgTrackUi_followParent') {
+
+            // Configure the parent container (e.g. the composite) of a nested container track.
+            rec = hgTracks.trackDb[id];
+            url = "hgTrackUi?hgsid=" + getHgsid() + "&g=" + rec.parentTrack;
             location.assign(url);
 
         } else if (cmd === 'newCollection') {
@@ -2551,6 +3735,11 @@ var rightClick = {
             imageV2.fullReload();
         } else if (cmd === "hideOthers") {
             rightClick.hideOthers(id);
+        } else if (cmd === "deleteCustomTrack") {
+            deleteCustomTrack(id);
+            // remove the track from the image in place (no page reload); hideTracks()
+            // drops its row, updates hgTracks.trackDb and redraws via afterImgChange().
+            rightClick.hideTracks([id]);
         } else if (cmd === "moveTop") {
             rightClick.moveTo(id, "top");
         } else if (cmd === "moveBottom") {
@@ -2844,6 +4033,248 @@ var rightClick = {
         });
     },
 
+    // ---- Per-item color (right-click "Color this item") ----
+    // The itemColors cart variable holds db#track#mode#itemName#hexColor records joined by '|',
+    // where mode is "item" (recolor the glyph) or "bg" (background highlight). db, track and mode
+    // are the leading fields and the color is the last '#' field, so item names containing '#'
+    // are tolerated.
+
+    getItemColors: function ()
+    {   // Current itemColors cart string, cached and seeded from the page's hgTracks json.
+        if (rightClick.itemColorsCache === undefined) {
+            rightClick.itemColorsCache =
+                (typeof hgTracks !== "undefined" && typeof hgTracks.itemColors === "string") ?
+                hgTracks.itemColors : "";
+        }
+        return rightClick.itemColorsCache;
+    },
+
+    parseItemColors: function (str)
+    {   // Parse the itemColors string into an array of {db, track, mode, name, hex} records.
+        var records = [];
+        if (!str)
+            return records;
+        str.split("|").forEach(function (rec) {
+            if (!rec)
+                return;
+            var firstHash = rec.indexOf("#");
+            var secondHash = rec.indexOf("#", firstHash + 1);
+            var thirdHash = rec.indexOf("#", secondHash + 1);
+            var lastHash = rec.lastIndexOf("#");
+            if (firstHash < 0 || secondHash < 0 || thirdHash < 0 || lastHash <= thirdHash)
+                return;
+            records.push({
+                db:    rec.substring(0, firstHash),
+                track: rec.substring(firstHash + 1, secondHash),
+                mode:  rec.substring(secondHash + 1, thirdHash),
+                name:  rec.substring(thirdHash + 1, lastHash),
+                hex:   rec.substring(lastHash + 1)   // bare hex, no leading '#'
+            });
+        });
+        return records;
+    },
+
+    serializeItemColors: function (records)
+    {
+        return records.map(function (r) {
+            return r.db + "#" + r.track + "#" + r.mode + "#" + r.name + "#" + r.hex;
+        }).join("|");
+    },
+
+    itemFromHref: function (href)
+    {   // Identify the clicked item from its hgc/hgGene link. Use the real name when it has a usable
+        // one (name field of the returned object), otherwise fall back to genomic position
+        // ("pos:chrom:start-end"). Nameless items (e.g. bed3) all share a placeholder name, so
+        // position - which both the link (c=/o=/t=) and the draw code can produce - identifies them.
+        if (!href)
+            return null;
+        var track, name, m;
+        m = /[&?]g=([^&]+)/.exec(href);
+        if (m && m[1])
+            track = decodeURIComponent(m[1]);
+        m = /[&?]i=([^&]+)/.exec(href);
+        if (m && m[1])
+            name = decodeURIComponent(m[1].replace(/\+/g, " "));
+        if (!name) {   // knownGene-style links
+            m = /[&?]hgg_gene=([^&]+)/.exec(href);
+            if (m && m[1])
+                name = decodeURIComponent(m[1]);
+            if (!track) {
+                m = /[&?]hgg_type=([^&]+)/.exec(href);
+                if (m && m[1])
+                    track = decodeURIComponent(m[1]);
+            }
+        }
+        if (!track)
+            return null;
+        // Custom tracks prefix the bed file path before the item name ("<path> <name>") and use the
+        // literal "NoItemName" when the row has no name; treat empty or "NoItemName" as nameless.
+        var nameless = !name || /(^|\s)NoItemName$/.test(name);
+        if (!nameless)
+            return {track: track, name: name};
+        // o=/t= are 0-based start/end, matching tg->itemStart/itemEnd in the draw code
+        var chrom, start, end;
+        m = /[&?]c=([^&]+)/.exec(href);
+        if (m && m[1]) chrom = decodeURIComponent(m[1]);
+        m = /[&?]o=([^&]+)/.exec(href);
+        if (m && m[1]) start = m[1];
+        m = /[&?]t=([^&]+)/.exec(href);
+        if (m && m[1]) end = m[1];
+        if (chrom && start && end)
+            return {track: track, name: "pos:" + chrom + ":" + start + "-" + end};
+        return null;
+    },
+
+    findItemColor: function (track, name)
+    {   // Return {hex (with leading '#'), mode} stored for this item, or null.
+        var db = getDb();
+        var records = rightClick.parseItemColors(rightClick.getItemColors());
+        for (var i = 0; i < records.length; i++) {
+            if (records[i].db === db && records[i].track === track && records[i].name === name)
+                return {hex: "#" + records[i].hex, mode: records[i].mode};
+        }
+        return null;
+    },
+
+    updateItemColorsVar: function (newStr)
+    {   // Persist the itemColors cart variable and keep the local cache in sync.
+        rightClick.itemColorsCache = newStr;
+        if (typeof hgTracks !== "undefined" && hgTracks)
+            hgTracks.itemColors = newStr;
+        cart.setVars(["itemColors"], [newStr], null, false);
+    },
+
+    setItemColor: function (track, name, hexWithHash, mode)
+    {
+        var db = getDb();
+        var hex = hexWithHash.replace(/^#/, "");
+        var records = rightClick.parseItemColors(rightClick.getItemColors());
+        var found = false;
+        for (var i = 0; i < records.length; i++) {
+            if (records[i].db === db && records[i].track === track && records[i].name === name) {
+                records[i].hex = hex;
+                records[i].mode = mode;
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+            records.push({db: db, track: track, mode: mode, name: name, hex: hex});
+        rightClick.updateItemColorsVar(rightClick.serializeItemColors(records));
+        imageV2.requestImgUpdate(track,
+            "itemColors=" + encodeURIComponent(rightClick.getItemColors()));
+    },
+
+    removeItemColor: function (track, name)
+    {
+        var db = getDb();
+        var records = rightClick.parseItemColors(rightClick.getItemColors()).filter(function (r) {
+            return !(r.db === db && r.track === track && r.name === name);
+        });
+        rightClick.updateItemColorsVar(rightClick.serializeItemColors(records));
+        imageV2.requestImgUpdate(track,
+            "itemColors=" + encodeURIComponent(rightClick.getItemColors()));
+    },
+
+    hasItemColorsForCurrentDb: function ()
+    {   // Are any item colors set for the database currently shown?
+        var db = getDb();
+        return rightClick.parseItemColors(rightClick.getItemColors()).some(function (r) {
+            return r.db === db;
+        });
+    },
+
+    clearItemColors: function ()
+    {   // Clear item colors for the current database only, leaving other assemblies' colors alone.
+        var db = getDb();
+        var records = rightClick.parseItemColors(rightClick.getItemColors()).filter(function (r) {
+            return r.db !== db;
+        });
+        var newStr = rightClick.serializeItemColors(records);
+        rightClick.updateItemColorsVar(newStr);
+        imageV2.fullReload("itemColors=" + encodeURIComponent(newStr));
+    },
+
+    colorThisItem: function ()
+    {   // Open the per-item color dialog for the right-clicked item.
+        var sel = rightClick.selectedMenuItem;
+        var item = sel ? rightClick.itemFromHref(sel.href) : null;
+        if (!item) {
+            warn("Couldn't identify the item to color.");
+            return;
+        }
+        var existing = rightClick.findItemColor(item.track, item.name);
+        var currentColor = existing ? existing.hex : "#ff0000";
+        var currentMode = existing ? existing.mode : "item";
+        rightClick.showItemColorPicker(item.track, item.name, currentColor, currentMode);
+    },
+
+    showItemColorPicker: function (track, itemName, currentColor, currentMode)
+    {   // Spectrum dialog to recolor a single item's glyph or draw a colored background behind it.
+        var dialogId = "itemColorDialog";
+        $("#" + dialogId).remove();
+        var $dlg = $("<div>").attr("id", dialogId).html(
+            "<p>Pick a color for <b></b>:</p>" +
+            "<input type='text' id='itemColorText' size='8' />" +
+            "&nbsp;<input id='itemColorPicker' />" +
+            "<br><br><label><input type='radio' name='itemColorMode' value='item'> " +
+            "Color whole item</label>" +
+            "<br><label><input type='radio' name='itemColorMode' value='bg'> " +
+            "Background highlight</label>");
+        $dlg.find("p b").text(itemName);
+        $dlg.find("#itemColorText").val(currentColor);
+        $dlg.find("input[name='itemColorMode'][value='" +
+                  (currentMode === "bg" ? "bg" : "item") + "']").prop("checked", true);
+        $("body").append($dlg);
+        var hexColorRe = /^#[0-9a-fA-F]{6}$/;
+        $("#itemColorPicker").spectrum({
+            color: currentColor,
+            showPalette: true,
+            showSelectionPalette: true,
+            showInitial: true,
+            showInput: true,
+            preferredFormat: "hex",
+            localStorageKey: "genomebrowser",
+            hideAfterPaletteSelect: true,
+            change: function(color) {
+                $("#itemColorText").val(color.toHexString());
+            }
+        });
+        $("#itemColorText").on("change", function() {
+            var val = $(this).val();
+            if (hexColorRe.test(val))
+                $("#itemColorPicker").spectrum("set", val);
+        });
+        var applyColor = function() {
+            var color = $("#itemColorText").val();
+            if (!hexColorRe.test(color)) {
+                warn("Invalid color '" + color + "'. Expected hex format like #1a2b3c.");
+                return false;
+            }
+            var mode = $("input[name='itemColorMode']:checked").val() || "item";
+            rightClick.setItemColor(track, itemName, color, mode);
+            return true;
+        };
+        $("#" + dialogId).dialog({
+            modal: true,
+            title: "Color this item",
+            closeOnEscape: true,
+            resizable: false,
+            minWidth: 400,
+            buttons: {
+                "Apply": function() { applyColor(); },
+                "Ok": function() {
+                    if (applyColor())
+                        $(this).dialog("close");
+                }
+            },
+            close: function() {
+                $("#itemColorPicker").spectrum("destroy");
+                $(this).remove();
+            }
+        });
+    },
+
     // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
     mouseOverToLabel: function(title)
     {
@@ -2863,7 +4294,7 @@ var rightClick = {
     mouseOverToExon: function(title)
     {
         var exonNum = 0;
-        var exonRe = /(Exon) ([1-9]+) /;
+        var exonRe = /(Exon) (\d+) /;
         var matches = exonRe.exec(title);
         if (matches !== null && matches[2].length > 0)
             exonNum = matches[2];
@@ -3066,13 +4497,34 @@ var rightClick = {
                                                     "selectWholeGene"); return true;
                                           }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] = 
+                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] =
                                 {   onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject,
-                                                       "highlightItem"); 
+                                                       "highlightItem");
                                         return true;
                                     }
                                 };
+                            var itemForColor = rightClick.itemFromHref(href);
+                            if (hgTracks.canColorItems && itemForColor) {
+                                o[rightClick.makeImgTag("palette.png") + " Color " + title + "..."] =
+                                    {   onclick: function(menuItemClicked, menuObject) {
+                                            rightClick.hit(menuItemClicked, menuObject,
+                                                           "colorThisItem");
+                                            return true;
+                                        }
+                                    };
+                                if (rightClick.findItemColor(itemForColor.track,
+                                                             itemForColor.name)) {
+                                    o[rightClick.makeImgTag("palette.png") +
+                                            " Remove color from " + title] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                               "removeItemColor");
+                                                return true;
+                                            }
+                                        };
+                                }
+                            }
                             //o[rightClick.makeImgTag("highlight.png") + " Highlight THIS item"] = 
                             //    {   onclick: function(menuItemClicked, menuObject) {
                             //            rightClick.hit(menuItemClicked, menuObject,
@@ -3195,6 +4647,29 @@ var rightClick = {
             };  
             menu.push(o);
 
+            // custom tracks (id starts with "ct_", matching isCustomTrack() in the C code)
+            // can be deleted here, the same as clicking their trash icon in the track list.
+            var ctId = rightClick.selectedMenuItem.id;
+            if (ctId && ctId.startsWith("ct_")) {
+                o = {};
+                // trash-can icon, inlined from printTrashIcon() in hgTracks.c so we
+                // don't pay an extra http round trip for a tiny PNG icon
+                var trashSvg = "<svg xmlns='http://www.w3.org/2000/svg' " +
+                    "style='height:16px;vertical-align:middle;' viewBox='0 0 448 512'>" +
+                    "<path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 " +
+                    "17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 " +
+                    "32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 " +
+                    "64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 " +
+                    "0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 " +
+                    "0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg>";
+                o[trashSvg + " Delete Custom Track"] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        rightClick.hit(menuItemClicked, menuObject, "deleteCustomTrack");
+                        return true; }
+                };
+                menu.push(o);
+            }
+
             //o = {};
             //o[" Float "] = {
                 //onclick: function(menuItemClicked, menuObject) {
@@ -3251,6 +4726,16 @@ var rightClick = {
                             rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_follow");
                             return true; }
                       };
+                    if (rec.parentTrack) {
+                        // A container (e.g. multiWig) nested in a composite: also offer
+                        // the parent composite's configuration.
+                        o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
+                          rec.parentLabel + " track set..."] = {
+                            onclick: function(menuItemClicked, menuObject) {
+                                rightClick.hit(menuItemClicked,menuObject,"hgTrackUi_followParent");
+                                return true; }
+                          };
+                    }
                 }
                 if (jQuery.floatMgr) {
                     o[(rightClick.selectedMenuItem.id === rightClick.floatingMenuItem ?
@@ -3286,6 +4771,13 @@ var rightClick = {
                     o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
+                            return true; }
+                    };
+                }
+                if (hgTracks.canColorItems && rightClick.hasItemColorsForCurrentDb()) {
+                    o[rightClick.makeImgTag("palette.png")+" Clear all item colors"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            rightClick.hit(menuItemClicked, menuObject, "clearItemColors");
                             return true; }
                     };
                 }
@@ -3338,8 +4830,8 @@ var rightClick = {
                 menu.push($.contextMenu.separator);
             }
 
-            // add sort options if this is a custom composite
-            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
+            // add sort options if this is a custom composite or a wiggle-only composite
+            if ((rec.isCustomComposite || parentIsAllWiggle(rec)) && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
                 o[" Sort by Magnitude "] = {
@@ -3775,7 +5267,18 @@ var popUpHgcOrHgGene = {
         // can jump down the page rather than out to a new tab
         cleanHtml = cleanHtml.replace(/_target ?= ?["']blank["']/g,"");
 
-        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
+        // "Share a link" at the top of the popup: shares a link to this details page
+        // (the hgc URL with the hgsid stripped), handled by topLinks.js.
+        var shareBar = "<div id='hgcShareBar' style='margin:0 0 8px 0; text-align:right;'>" +
+            "<a id='hgcShareLink' href='#'>Share a link</a></div>";
+        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ shareBar + cleanHtml +"</div>");
+        $('#hgcShareLink').on("click", function(e) {
+            e.preventDefault();
+            // Share the details-page URL with hgsid stripped; keep (or add) db so it opens
+            // standalone, and note that the link shows the page, not the user's active tracks.
+            if (window.topLinks && window.topLinks.shareUrl)
+                window.topLinks.shareUrl(popUpHgcOrHgGene.href, {ensureDb: getDb(), pageNote: true});
+        });
         appendNonceJsToPage(nonceJs);
         let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
         popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
@@ -3851,12 +5354,13 @@ var popUpHgcOrHgGene = {
         // on document.ready, run it now
         hgc.initPage();
         document.addEventListener('click', e => {
-            // if we clicked outside of the pop up, close the popup:
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            popUpBox = document.getElementById("hgcDialog").parentElement.getBoundingClientRect();
-            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
-                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+            // if we clicked outside of the pop up, close the popup
+            // Use contains() instead of coordinates because native browser
+            // dropdowns (select elements) render outside the dialog bounds
+            let dialogEl = document.getElementById("hgcDialog");
+            if (!dialogEl) return;
+            let dialogContainer = dialogEl.parentElement;
+            if (dialogContainer && !dialogContainer.contains(e.target)) {
                 $("#hgcDialog").dialog("close");
             }
         });
@@ -4040,19 +5544,53 @@ function highlightCurrentPosition(mode) {
     }
 }
 
-function onTrackDelIconClick (ev) {
-    /* delete custom track if user clicks its trash icon */
+function deleteCustomTrack (trackName) {
+    /* Tell hgCustom to delete the given custom track. Shared by the trash icon
+     * and the right-click context menu so there is only one deletion code path. */
     // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
-    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
-    var trackName = divEl.getAttribute("data-track");
     var hgsid = getHgsid();
     var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
-    xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     // this cannot be asyncronous, as users can click quickly here and the hgCustom calls above cannot run in parallel
     // since we store custom tracks as a text file, not mysql tables
     xhttp.open("GET", url, false);
     xhttp.send();
+}
+
+function onTrackDelIconClick (ev) {
+    /* delete custom track if user clicks its trash icon */
+    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
+    var trackName = divEl.getAttribute("data-track");
+    deleteCustomTrack(trackName);
+    // if the track is currently drawn, also remove it from the image and update
+    // hgTracks.trackDb/cart, the same cleanup the right-click delete does. hideTracks()
+    // assumes the track is in hgTracks.trackDb, so only call it when it is.
+    if (hgTracks.trackDb && hgTracks.trackDb[trackName])
+        rightClick.hideTracks([trackName]);
     divEl.closest("td").remove();
+}
+
+function onQuickLiftDelIconClick (ev) {
+    /* Remove this track's stanza from the quickLift hub in trash, and
+     * remove all rows referencing it from the page (it can appear both in
+     * its hub group and in the Visible Tracks group). */
+    var divEl = ev.target.closest("div");
+    var trackName = divEl.getAttribute("data-track");
+    var sourceDb = divEl.getAttribute("data-sourcedb");
+    var hgsid = getHgsid();
+    var url = 'hgTrackUi?hgsid=' + hgsid +
+              '&hgTrackUi_op=quickLiftRemove' +
+              '&g=' + encodeURIComponent(trackName) +
+              '&qlSourceDb=' + encodeURIComponent(sourceDb);
+    var xhttp = new XMLHttpRequest();
+    // synchronous: the hub file is a shared text file, parallel rewrites would race
+    xhttp.open("GET", url, false);
+    xhttp.send();
+    var selector = 'div.quickLiftDelIcon[data-track="' + trackName + '"]';
+    document.querySelectorAll(selector).forEach(function(d) {
+        var td = d.closest("td");
+        if (td) td.remove();
+    });
 }
 
 
@@ -4259,18 +5797,11 @@ var popUp = {
                 } else {
                     $(event.target).parent().css('left', '30%');
                 }
-                var containerHeight = $(event.target).parent().height();
                 var offsetTop = $(event.target).parent()[0].offsetTop;
                 // from popMaxHeight calculation above:
                 var offsetBottom = 40;
                 var maxContainerHeight = $(window).height() - offsetTop - offsetBottom;
-                if (containerHeight > maxContainerHeight) {
-                    $(event.target).parent().css('height', maxContainerHeight);
-                    // the 100 below accounts for the buttons, and label, there is
-                    // probably a better way to get the exact size of the container
-                    // with no content
-                    $(event.target).css('height', maxContainerHeight - 100);
-                }
+                $(event.target).css('max-height', maxContainerHeight - 100);
 
                 if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(
@@ -4398,7 +5929,28 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                if (item.type === "geneExon") {
+                                    // Complete "GENE exon N" — resolve via hgApi and navigate
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "../cgi-bin/hgApi",
+                                        data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                                              'cmd': 'geneExonToPos', 'symbol': item.symbol,
+                                              'num': item.num, 'offset': item.offset || 0 }),
+                                        trueSuccess: rightClick.handleZoomCodon,
+                                        success: catchErrorOrDispatch,
+                                        error: function() {
+                                            window.location.assign("../cgi-bin/hgSearch?search=" +
+                                                encodeURIComponent(item.value.trim()) + "&hgsid=" + getHgsid());
+                                        },
+                                        cache: false
+                                    });
+                                    return;
+                                } else if (item.type === "geneExonHint") {
+                                    // Partial — input is now "GENE exon "; keep focus so user types the number
+                                    $('#positionInput').focus();
+                                    return;
+                                } else if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
                                         item.id.startsWith("hgc")) {
                                     if (item.geneSymbol) {
                                         selectedGene = item.geneSymbol;
@@ -4467,12 +6019,19 @@ var imageV2 = {
         }
         
         imageV2.loadRemoteTracks();
-        makeItemsByDrag.load();
         imageV2.loadSuggestBox();
         imageV2.drawHighlights();
 
         if (imageV2.backSupport) {
-            imageV2.setInHistory(false);    // Set this new position into History stack
+            // try/catch: browser extensions that proxy history.pushState can throw
+            // "Permission denied to access property apply" under Firefox cross-origin
+            // security. Swallow it so zoom/drag still complete; only the URL-bar
+            // position update is lost.
+            try {
+                imageV2.setInHistory(false);    // Set this new position into History stack
+            } catch (e) {
+                console.warn("setInHistory failed, continuing:", e);
+            }
         } else {
             imageV2.markAsDirtyPage();
         }
@@ -4481,6 +6040,10 @@ var imageV2 = {
         }
         if(typeof window.igvBrowser !== "undefined") {
            window.igvBrowser.search(genomePos.get());
+        }
+
+        if (typeof doMyVariants !== 'undefined' && doMyVariants) {
+            myVariants.init();
         }
     },
 
@@ -5153,6 +6716,31 @@ var imageV2 = {
             }
 
             // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            // "BRCA1 exon 5" or "BRCA1:e.5+2" — resolve via hgApi and navigate in place
+            var exonMatch = newPos.match(geneExonExp) || newPos.match(geneExonCoordExp);
+            if (exonMatch) {
+                var symbol, num, offset = 0;
+                var m = newPos.match(geneExonExp);
+                if (m) {
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                } else {
+                    m = newPos.match(geneExonCoordExp);
+                    symbol = m[1]; num = parseInt(m[2], 10);
+                    if (m[3]) offset = parseInt(m[3], 10);
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgApi",
+                    data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                          'cmd': 'geneExonToPos', 'symbol': symbol, 'num': num, 'offset': offset }),
+                    trueSuccess: rightClick.handleZoomCodon,
+                    success: catchErrorOrDispatch,
+                    error: function() { window.location.assign("../cgi-bin/hgSearch?search=" + term + "&hgsid=" + getHgsid()); },
+                    cache: false
+                });
+                return false;
+            }
+
             var canonMatch = newPos.match(canonicalRangeExp);
             var gbrowserMatch = newPos.match(gbrowserRangeExp);
             var lengthMatch = newPos.match(lengthRangeExp);
@@ -5199,7 +6787,12 @@ var imageV2 = {
         // A) Forward: Full page retrieval: hgTracks is first navigated to (or chrom change)
         if (!cachedDbPos) { // Not a back-button operation
             // set the current position into history outright (will replace). No img update needed
-            imageV2.setInHistory(true);
+            // try/catch: see comment on the other setInHistory call site.
+            try {
+                imageV2.setInHistory(true);
+            } catch (e) {
+                console.warn("setInHistory failed, continuing:", e);
+            }
         } else { // B) Back-button past a full retrieval
             genomePos.set(decodeURIComponent(cachedPos));
             // B1) Dirty page: at least one non-position change 
@@ -6019,6 +7612,9 @@ $(document).ready(function()
     // custom tracks get little trash icons
     $("div.trackDeleteIcon").on("click", onTrackDelIconClick );
 
+    // quickLift tracks get a little 'x' icon
+    $("div.quickLiftDelIcon").on("click", onQuickLiftDelIconClick );
+
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
     $(window).on("pageshow", function(event) {
@@ -6119,7 +7715,6 @@ $(document).ready(function()
             });
         }
         imageV2.loadRemoteTracks();
-        makeItemsByDrag.load();
 
         if (typeof clinicalTour !== 'undefined') {
             if (typeof startClinicalOnLoad !== 'undefined' && startClinicalOnLoad){
@@ -6244,6 +7839,38 @@ $(document).ready(function()
         if (opt) {
             opt.appendChild(newListEl);
             $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
+        }
+    }
+
+    if (typeof doMyVariants !== 'undefined' && doMyVariants) {
+        myVariants.init();
+        document.getElementById("myVariantsButton").addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            myVariants.showDialog();
+        });
+        // Add a "My Annotations" link to the My Data menu that opens the same
+        // dialog as the Add Annotation button below the image.
+        let myDataList = document.querySelector("#myData > ul");
+        if (myDataList) {
+            newListEl = document.createElement("li");
+            newLink = document.createElement("a");
+            newLink.setAttribute("id", "myAnnotationsMenuLink");
+            newLink.setAttribute("title", "Add an item to the My Annotations track");
+            newLink.textContent = "My Annotations";
+            newLink.href = "#";
+            newListEl.appendChild(newLink);
+            // Place it right after Custom Tracks; fall back to the top of the menu.
+            let customTracksItem = document.getElementById("customTracksMenuLink");
+            if (customTracksItem && customTracksItem.parentNode.parentNode === myDataList)
+                myDataList.insertBefore(newListEl, customTracksItem.parentNode.nextSibling);
+            else
+                myDataList.insertBefore(newListEl, myDataList.firstElementChild);
+            newLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                myVariants.showDialog();
+            });
         }
     }
 

@@ -784,16 +784,6 @@ if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsCo
             "Remove 'bigDataUrl' from this stanza, or remove the parent declaration if this is "
             "a data track.", tdb->track);
         }
-
-    // multiWigs cannot be the child of a composite
-    if (tdbIsContainer(tdb) &&
-            (tdb->parent != NULL &&
-            (tdbIsComposite(tdb->parent) || tdbIsCompositeView(tdb->parent))))
-        {
-        errAbort("Track \"%s\" is declared container multiWig and has parent \"%s\"."
-            " Container multiWig tracks cannot be children of composites or views",
-            tdb->track, tdb->parent->track);
-        }
     }
 else if (tdb->subtracks != NULL)
     {
@@ -947,6 +937,44 @@ for(i = 0; i < 3; i++)
     }
 }
 
+void checkOrphanedRangeFilters(struct trackDb *tdb)
+/* A numeric filter is only DISCOVERED from a filter.<field> (or <field>Filter)
+ * setting -- see FILTER_NUMBER_WILDCARD and tdbGetTrackNumFilters(). A
+ * filterByRange.<field> or filterLimits.<field> with no matching filter.<field>
+ * is silently ignored and its control never appears, which is an easy and
+ * confusing mistake to make. Warn so the hub developer sees why a filter they
+ * configured did not show up. Only the settings on this stanza are inspected, so
+ * an inherited setting is reported once, on the stanza that declares it. */
+{
+struct slName *rangeSettings = slCat(trackDbLocalSettingsWildMatch(tdb, "filterByRange.*"),
+                                     trackDbLocalSettingsWildMatch(tdb, "filterLimits.*"));
+struct hash *seen = hashNew(0);
+struct slName *s;
+for (s = rangeSettings; s != NULL; s = s->next)
+    {
+    char *field = strchr(s->name, '.');
+    if (field == NULL)
+        continue;
+    field++; // skip past the '.'
+    if (hashLookup(seen, field) != NULL)
+        continue;
+    hashAdd(seen, field, NULL);
+    char setting[512];
+    safef(setting, sizeof setting, "filter.%s", field);
+    if (trackDbSettingClosestToHome(tdb, setting) != NULL)
+        continue;
+    safef(setting, sizeof setting, "%sFilter", field);
+    if (trackDbSettingClosestToHome(tdb, setting) != NULL)
+        continue;
+    warn("track \"%s\" has a filterByRange/filterLimits setting for field '%s' "
+         "but no 'filter.%s' (the default range), so this filter is not shown. "
+         "Add 'filter.%s min:max' to enable it.",
+         trackHubSkipHubName(tdb->track), field, field, field);
+    }
+hashFree(&seen);
+slFreeList(&rangeSettings);
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -1030,6 +1058,8 @@ if (errCatchStart(errCatch))
 
 
     checkViewLimitsSettings(tdb);
+
+    checkOrphanedRangeFilters(tdb);
 
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {

@@ -174,6 +174,16 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
  * genomic.  This tests drawing mode and zoom level but assumes that lf itself 
  * has been drawn already and we're not in dense mode etc. */
 
+void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
+                            struct hvGfx *hvg, int xOff, int y, double scale,
+                            int heightPer, int winStart, enum baseColorDrawOpt drawOpt,
+                            Color color);
+/* When zoomed in enough to color codons, distribute strand-direction chevrons
+ * across each exon on top of the boxes: white over the coding codons (only when
+ * they are too small to label), and the feature's contrasting color at a wider
+ * spacing over the UTRs as a cue that they are non-coding.  No-op below the
+ * codon-color zoom level, when coding coloring is off, or when strand unknown. */
+
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,

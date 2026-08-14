@@ -110,6 +110,9 @@ bedSort tommoJp.bed tommoJp.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvTommoJp.as \
     -tab tommoJp.sorted.bed /hive/data/genomes/hg38/chrom.sizes tommoJp.bb
 
+# ToMMo 48K CNV short-read comparator moved to the srSv supertrack.
+# See doc/hg38/srSv.txt for that build.
+
 ##########
 # 2026-03-26 Claude max
 
@@ -208,6 +211,9 @@ bedSort hgsvc3.bed hgsvc3.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc3.as \
     -tab hgsvc3.sorted.bed /hive/data/genomes/hg38/chrom.sizes hgsvc3.bb
 
+# The same process is applied natively to T2T-CHM13 (hs1) using the HGSVC3
+# T2T-CHM13 annotation tables. See ~/kent/src/hg/makeDb/doc/hs1/lrSv.txt.
+
 ##########
 # 2026-04-17 Claude max
 
@@ -250,3 +256,564 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvChirmade101TsvToBed.py \
 bedSort chirmade101.bed chirmade101.sorted.bed
 bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvChirmade101.as \
     -tab chirmade101.sorted.bed /hive/data/genomes/hg38/chrom.sizes chirmade101.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Tenth subtrack: Gustafson et al. 2024 - 100 1000 Genomes ONT samples
+# Paper: Gustafson et al. 2024, Genome Res, PMID 39358015
+# Data: 1000g-ont S3 bucket (Jasmine-merged site-level SV VCF)
+# Note: distinct cohort from the Schloissnig "Vienna" 1KG-ONT track (lrSv1kgOnt)
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/gustafson
+cd /hive/data/genomes/hg38/bed/lrSv/gustafson
+wget https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz
+wget https://s3.amazonaws.com/1000g-ont/Gustafson_etal_2024_preprint_SUPPLEMENTAL/20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz.csi
+
+# 113,696 SVs across 100 samples (500 sample-caller columns total; each sample
+# contributes up to 5 per-caller entries via Sniffles2/cuteSV/SVIM on minimap2
+# alignments plus hapdiff on Flye and Shasta assemblies). Site-only BED from
+# INFO fields: SVTYPE, END, SVLEN, SUPP, VARCALLS, PRECISE, STRANDS. The
+# converter clips END on chrM to the chromosome length (source file has one
+# chrM DUP with END=16570 vs. chrM length 16569).
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvGustafsonVcfToBed.py \
+    20240423_jasmine_intrasample_noBND_custom_suppvec_alphanumeric_header_JASMINE.vcf.gz \
+    gustafson.bed
+bedSort gustafson.bed gustafson.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvGustafson.as \
+    -tab gustafson.sorted.bed /hive/data/genomes/hg38/chrom.sizes gustafson.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Eleventh subtrack: HGSVC2 - phase 2 of the Human Genome Structural
+# Variation Consortium, 32 haplotype-resolved genomes (5 superpopulations).
+# Paper: Ebert et al. 2021, Science, PMID 33632895
+# Data: IGSR FTP (HGSVC2 v2.0 integrated callset freeze 4)
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/hgsvc2
+cd /hive/data/genomes/hg38/bed/lrSv/hgsvc2
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/variants_freeze4_sv_insdel.tsv.gz
+wget https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v2.0/integrated_callset/variants_freeze4_sv_inv.tsv.gz
+
+# Two annotation tables are complementary (same structure as HGSVC3): the
+# insdel table holds DEL + INS with POP_*_AF population allele frequencies
+# imputed back into the 1000 Genomes cohort; the inv table holds INV with
+# an RGN_REF_INNER column. The converter merges them into a single bigBed.
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc2TsvToBed.py \
+    variants_freeze4_sv_insdel.tsv.gz \
+    variants_freeze4_sv_inv.tsv.gz \
+    hgsvc2.bed
+bedSort hgsvc2.bed hgsvc2.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHgsvc2.as \
+    -tab hgsvc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hgsvc2.bb
+
+# 1KG 3202 short-read comparator moved to the srSv supertrack.
+# See doc/hg38/srSv.txt for that build.
+
+##########
+# 2026-04-20 Claude max
+#
+# OUTDATED, DO NOT RUN. The HPRC v2.0 wave-decomposed track (hprc2Sv) was
+# replaced by the v2.1 hprc2v21Sv track below on 2026-06-08 and removed
+# from trackDb. This block, the converter lrSvHprc2VcfToBed.py and the
+# schema lrSvHprc2.as are kept on purpose: HPRC may publish wave-decomposed
+# VCFs again, and the converter handles the per-allele TYPE/LEN/INV fields
+# that the v2.1 raw deconstruct file does not have. The whole recipe is
+# commented out so it is not run by accident.
+#
+# # Thirteenth subtrack: HPRC release-2 pangenome SVs (233 samples).
+# # No peer-reviewed publication yet; see HPRC release page:
+# #   https://humanpangenome.org/hprc-data-release-2/
+# # Sample list (alignments v2.0):
+# #   https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/pangenomes/alignments_v2.0.csv
+#
+# mkdir -p /hive/data/genomes/hg38/bed/lrSv/hprc2
+# cd /hive/data/genomes/hg38/bed/lrSv/hprc2
+#
+# # Pangenome graph (referenced in the doc html):
+# wget https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.sv.gfa.gz
+# # wave-decomposed VCF (what we actually convert):
+# wget https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/release2/minigraph-cactus/hprc-v2.0-mc-grch38.wave.vcf.gz
+#
+# # The wave VCF contains ~20M atomic alleles including SNVs. The converter
+# # streams the multi-allelic rows, explodes one BED row per ALT, and keeps
+# # only SV-sized alleles (|LEN| >= 50 bp) plus all records carrying the
+# # INV flag. 1,483,114 SVs kept (1,106,190 INS, 192,597 DEL, 178,178
+# # COMPLEX, 6,149 INV).
+#
+# python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2VcfToBed.py \
+#     hprc-v2.0-mc-grch38.wave.vcf.gz hprc2.bed
+# bedSort hprc2.bed hprc2.sorted.bed
+# bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2.as \
+#     -tab hprc2.sorted.bed /hive/data/genomes/hg38/chrom.sizes hprc2.bb
+#
+# # HPRC also releases a wave VCF against T2T-CHM13; the hs1 version of this
+# # subtrack is built in ~/kent/src/hg/makeDb/doc/hs1/lrSv.txt.
+
+##########
+# 2026-06-08 Claude max
+
+# hprc2v21Sv: updated HPRC release-2.1 minigraph-cactus pangenome SVs
+# (233 samples). This is a second copy of the HPRC pangenome SV track,
+# loaded next to hprc2Sv so the two callsets can be compared.
+#
+# The v2.1 file is the raw `vg deconstruct` output (it carries graph
+# traversals AT, nested snarls LV and a parent-snarl pointer PS) and, unlike
+# the v2.0 "wave" VCF, has NO per-allele TYPE or LEN fields. The converter
+# therefore classifies each ALT by parsimony-trimming the shared prefix and
+# suffix of REF/ALT and looking at the net length change: alt longer -> INS,
+# ref longer -> DEL. Alleles with |net length| >= 50 bp are kept. No
+# inversion annotation is present, so no INV rows are emitted; balanced
+# equal-length substitutions do not occur at SV size.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/hprc2v21
+cd /hive/data/genomes/hg38/bed/lrSv/hprc2v21
+
+# VCF provided by Glenn Hickey (HPRC graph team):
+wget https://public.gi.ucsc.edu/~ghickey/debug/hprc-v2.1-mc-grch38.gref95.ro.vcf.gz
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2RoVcfToBed.py \
+    hprc-v2.1-mc-grch38.gref95.ro.vcf.gz hprc2v21.bed
+# kept 596063 SV-sized alleles: 447578 INS, 148485 DEL, 0 CPX
+# (43580 at nested snarl levels LV>0)
+bedSort hprc2v21.bed hprc2v21.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2Ro.as \
+    -tab hprc2v21.sorted.bed /hive/data/genomes/hg38/chrom.sizes hprc2v21.bb
+
+##########
+# 2026-04-20 Claude max
+
+# CPC + HPRC Phase 1 pangenome SVs (105 samples).
+# Paper: Gao et al. 2023, Nature, PMID 37316654
+# Data : https://github.com/Shuhua-Group/Chinese-Pangenome-Consortium-Phase-I
+# The VCF is on T2T-CHM13v2 (hs1) contigs renamed "CHM13v2.chrN".
+# Source VCF (CPC.HPRC.Phase1.processed.SVs.normed.vcf.gz, 3.7 GB) was
+# produced with pggb + vcfwave + bcftools norm; each graph snarl appears
+# as one VCF row per alternative allele, with genotypes for 105 samples.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/cpc1
+cd /hive/data/genomes/hg38/bed/lrSv/cpc1
+
+# (VCF already placed here by the user)
+
+# Run conversion + liftOver + bigBed for both hs1 (native) and hg38 (lifted).
+# The script strips the "CHM13v2." prefix, classifies each alt by length
+# delta with a 50 bp threshold (INS, DEL, CPX, or dropped), collapses all
+# alts of one snarl ID into a single row (MIXED when types disagree),
+# and writes 16-column bed rows with AC/AN/AF and NS.
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
+# hs1 bigBed: 97,205 sites (4.7 MB)
+# hg38 lifted: 81,261 sites (4.1 MB), 15,944 unmapped
+
+# Symlinks for both assemblies
+mkdir -p /gbdb/hs1/lrSv /gbdb/hg38/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hs1.bb  /gbdb/hs1/lrSv/cpc1.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/cpc1/cpc1.hg38.bb /gbdb/hg38/lrSv/cpc1.bb
+
+##########
+# 2026-04-20 Claude max
+
+# Arab Pangenome Reference (APR) SVs
+# Paper: Nassir et al. 2025, Nat Commun, PMID 40707445
+# Data : https://www.mbru.ac.ae/the-arab-pangenome-reference/
+#        (SharePoint download page under APR Nuclear/Pangenome)
+# Source: apr_review_v1_2902_chm13.vcf.gz (1.5 GB, 21M variants,
+# contigs named chrN with CHM13v2 lengths, multi-allelic rows).
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/apr
+cd /hive/data/genomes/hg38/bed/lrSv/apr
+
+# (VCF placed here by the user from the MBRU SharePoint download)
+
+# Run converter + liftOver + bigBed for both hs1 (native) and hg38 (lifted).
+# The script iterates the comma-separated ALT alleles of each row,
+# classifies each by length delta (>=50 bp -> INS, <=-50 bp -> DEL,
+# |d|<50 and max(len)>=50 -> CPX, else drop), then emits one row per
+# snarl (VCF line) with AC summed across passing alts.
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvAprBuild.sh
+
+mkdir -p /gbdb/hs1/lrSv /gbdb/hg38/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hs1.bb  /gbdb/hs1/lrSv/apr.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/apr/apr.hg38.bb /gbdb/hg38/lrSv/apr.bb
+
+##########
+# 2026-04-21 Claude max
+#
+# cpc1Sv rebuilt as CPC-only (58 samples). The upstream VCF contains
+# 105 samples (58 CPC + 47 HPRC Phase 1). For this version we
+# identify the 58 CPC columns by sample name prefix (HIFI032* or
+# RY*), recompute AC/AN/NS from those GT columns only, and drop
+# snarls where no CPC sample carries any alt. HPRC-specific SVs are
+# therefore excluded; the HPRC contribution is already represented
+# in the HPRC SV tracks elsewhere in this lrSv supertrack.
+#
+# Pipeline (same build script, updated Python converter):
+cd /hive/data/genomes/hg38/bed/lrSv/cpc1
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvCpc1Build.sh
+#   hs1 sites: 46,092 (down from 97,205 combined)
+#   hg38 lifted: 36,030 (down from 81,261); 10,062 unmapped
+
+##########
+# 2026-04-22 Claude max
+#
+# colorsDbSv: rebuild both hg38 and hs1 bigBeds from the upstream
+# pbsv+Jasmine VCFs now that the CoLoRSdb project redistributes them
+# directly (placed in /hive/data/genomes/hg38/bed/lrSv/colorsDb/).
+# The previous bigBed came from an older build and declared `af` as a
+# string; the new build uses a checked-in converter, stores AF as a
+# float so the numeric filter works, and adds a derived `insLen`
+# column so the shared lrSv supertrack-level filter.insLen does not
+# error for this subtrack.
+
+cd /hive/data/genomes/hg38/bed/lrSv/colorsDb
+# Upstream VCFs (same pbsv.jasmine release, one per reference path):
+#   CoLoRSdb.GRCh38.v1.2.0.pbsv.jasmine.vcf.gz  (hg38, 426,239 SVs)
+#   CoLoRSdb.CHM13.v1.2.0.pbsv.jasmine.vcf.gz   (hs1,  839,714 SVs)
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvColorsDbSvBuild.sh
+# hg38: 59 MB, 192,534 DEL + 232,973 INS + 732 INV
+# hs1 : 87 MB (more variants due to T2T-added regions)
+# Existing /gbdb symlinks (sv.hg38.bb, sv.hs1.bb) are unchanged.
+
+##########
+# 2026-05-21 Claude max
+#
+# hprc2JasmineSv: SV callsets from 231 HPRC v2 haplotype-resolved
+# assemblies. The Hall lab (Wen-Wei Liao) ran 14 SV callers per sample:
+# DELLY, DeBreak, DeepVariant, PAV, SVDSS, SVIM, SVIM-asm, Sniffles2,
+# cuteSV, cuteSV-asm, dipcall, longcallD, pbsv, sawfish.
+# The per-sample multi-caller output was harmonized into three per-sample
+# VCFs (dipcall, PAV, longcallD pipelines). One file per sample per
+# assembly path (GRCh38_no_alt, CHM13v2) was placed into
+# /hive/data/genomes/hg38/bed/lrSv/hprc2jasmine/input/ via download_inputs.sh
+# (S3 URLs from merged_callsets.index.csv). No publication yet.
+#
+# Build steps:
+#   1. Split each per-sample VCF by chromosome and filter to SV-sized
+#      records (|alt-ref| >= 30 bp), keeping the REF/ALT sequences
+#      intact. Route by assembly tag in the filename into
+#      split2-hg38/<chr>/<sample>.vcf and split2-hs1/<chr>/<sample>.vcf.
+#      Filtering at this stage drops ~135x of records (SNVs + small
+#      indels) which is what makes the next step tractable.
+#   2. Jasmine-merge across samples per chromosome with default
+#      sequence-aware options: --ignore_merged_inputs --normalize_type.
+#      Outputs go to output2/<asm>/merged.<chr>.vcf, then bcftools
+#      concat + sort produce output2/<asm>/merged_all.vcf.gz.
+#   3. Convert merged VCFs to BED9+ with the multi-caller fields
+#      preserved (SUPP -> nSamples and AC, NCALLERS, CALLERS, SOURCES,
+#      MR), bedSort + bedToBigBed.
+cd /hive/data/genomes/hg38/bed/lrSv/hprc2jasmine
+bash splitVcfsFilterSv.sh
+bash processJasmineSvSeq.sh hg38
+bash processJasmineSvSeq.sh hs1
+bash ~/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2JasmineBuild.sh
+# hg38: 335,494 SVs merged (full 22 autosomes; chrX/chrY absent from inputs)
+# hs1:  (built same way from CHM13v2 per-sample calls)
+#
+# Note: an earlier symbolic-ALT pipeline (splitVcfs.sh + symbolizeVcfs.sh
+# + processJasmine.sh, output/) was used as a workaround for a Jasmine
+# NPE in sequence comparison. Once the inputs are pre-filtered to
+# SV-sized records the NPE no longer fires, so the current pipeline runs
+# Jasmine with its normal sequence-aware merging. The symbolic-pipeline
+# scripts and output/ tree are retained for comparison.
+
+##########
+# 2026-06-01 Claude max
+#
+# lrSv1kLin: 1000 Genomes linear long-read SVs from 1,218 individuals.
+# Two native VCFs (GRCh38 and CHM13/T2T-CHM13v2) provided by user from
+# dropbox (rclone copy mhaeussldropbox:1KG_LR_SVs/).
+# SVs merged with Truvari v5.2.0; population-level allele frequencies
+# (EUR, AMR, EAS, AFR, SAS) annotated with bcftools fill-tags.
+# Only DEL and INS variant types are present.
+# GRCh38: 587,779 SVs (196,369 DEL, 391,410 INS)
+# CHM13:  614,522 SVs (238,405 DEL, 376,117 INS)
+# Callset integrated with the BoostSV machine-learning tool (Lin et al.).
+# NOTE: data was received from the Eichler lab. Manuscript submitted 2026:
+# Lin et al., "A high-resolution human pangenome structural variant resource
+# for improved disease association" (Maximilian Haeussler is a co-author).
+# Track released (release alpha removed) once the manuscript was submitted.
+# Added to the lrSvAll merge (databases.tsv key Lin1218) per user request.
+# Caveat: Lin1218 is itself a merge of overlapping 1KG callsets (HPRC, HGSVC3,
+# IB-ONT/Vienna, UW-ONT/Gustafson), so those samples are represented both in
+# their own database columns and in the Lin1218 column of lrSvAll; the merge
+# keeps per-database AC columns (it does not sum a single AC), so this is
+# double-representation, not double-counting of a single number.
+
+mkdir -p /hive/data/genomes/hg38/bed/lrSv/1k-lin
+cd /hive/data/genomes/hg38/bed/lrSv/1k-lin
+
+# Input VCFs in /hive/data/genomes/hg38/bed/lrSv/1k-lin/input/:
+#   GRCh38_INSDEL_1218.vcf.gz  (hg38 native, 587,779 SVs)
+#   CHM13_INSDEL_1218.vcf.gz   (hs1/CHM13 native, 614,522 SVs)
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/GRCh38_INSDEL_1218.vcf.gz lin1218.hg38.bed
+bedSort lin1218.hg38.bed lin1218.hg38.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hg38.sorted.bed /hive/data/genomes/hg38/chrom.sizes lin1218.hg38.bb
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/CHM13_INSDEL_1218.vcf.gz lin1218.hs1.bed
+bedSort lin1218.hs1.bed lin1218.hs1.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hs1.sorted.bed /hive/data/genomes/hs1/chrom.sizes lin1218.hs1.bb
+
+# Symlinks for both assemblies
+mkdir -p /gbdb/hg38/lrSv /gbdb/hs1/lrSv
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hg38.bb /gbdb/hg38/lrSv/lin1218.bb
+ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hs1.bb /gbdb/hs1/lrSv/lin1218.bb
+
+##########
+# 2026-06-10 Claude max
+
+# lrSvAll: the combined track that merges every released lrSv subtrack into
+# one bigBed. Variants from the different studies are merged on an exact key
+# (chrom, start, end, svType, svLen, insLen); each merged row records which
+# source databases contained it and their per-database allele counts.
+#
+# The set of source datasets, their bigBed paths and which fields to pull for
+# AC and allele frequency are listed in the config file
+# ~/kent/src/hg/makeDb/scripts/lrSv/databases.tsv (one row per dataset, in the
+# column order they appear in the output). To add or swap a dataset, edit that
+# file and re-run the merge; nothing in the script is hardcoded per dataset.
+# The HPRC row points to the v2.1 graph SVs (hprc2v21.bb). The HPRC Jasmine
+# callset is deliberately left out of the merge. Datasets that are not yet
+# published (e.g. lrSv1kLin) are also kept out until a paper is available.
+#
+# The merge script reads each source bigBed once in parallel (phase 1, writes
+# per-chromosome TSVs), then merges per chromosome (phase 2). It writes the
+# output bigBed to /hive/data/genomes/hg38/bed/lrSv/all/lrSvAll.bb and also
+# auto-generates the autoSql and the trackDb stanza
+# (~/kent/src/hg/makeDb/trackDb/human/lrSvAll.ra, pulled in via
+# "include lrSvAll.ra" from lrSv.ra). Do not hand-edit lrSvAll.ra; re-run the
+# script and commit its output.
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 2,819,049 input variants -> 2,359,011 merged (16.3% dedup)
+# Re-run after rebuilding any source subtrack, or after editing databases.tsv.
+# Quick single-chromosome test: lrSvMergeAll.py --region chr22
+
+##########
+# 2026-06-13 Claude max
+#
+# QA fixes from Lou's review (refs #36258). All fixes live in the checked-in
+# converters, so re-running the build commands shown above for each subtrack
+# reproduces the new files; only the counts changed.
+#
+# Duplicate-row removal (the converters now drop byte-identical output rows
+# that the upstream files list more than once):
+#   decodeSv     133,886 -> 119,453  (14,433 duplicates)
+#   aou1k        541,049 -> 540,155  (894)
+#   gustafson    113,696 -> 113,159  (537)
+#   chirmade101   87,183 ->  87,068  (115)
+#   hprc2v21 hg38 596,063 -> 549,649  (46,414)
+#   hprc2v21 hs1  608,435 -> 541,176  (67,259; built in doc/hs1/lrSv.txt)
+#
+# decodeSv: the AC column is now left empty instead of carrying a fake
+#   placeholder of 50 (deCODE publishes no allele count for this site-only
+#   callset); the name and mouseOver no longer show it. AC is declared as a
+#   string in lrSvDecode.as so it can be blank.
+#
+# aou1k: non-ASCII characters in the gene/trait text fields are now written as
+#   numeric HTML entities (e.g. ö -> &#246;) so detail pages render correctly.
+#
+# Colors: every converter now takes its per-SV-type itemRgb from one shared
+#   palette, svColor() in lrSvCommon.py. CPX is purple everywhere (it was
+#   orange in 1kgOnt/apr/cpc1, colliding with INV's orange); colorsDb DEL now
+#   matches the others (200,0,0); TRA and INSDEL get their own colors so they
+#   stay distinct from CPX in the merged track. colorsDb, 1kgOnt and han945
+#   were rebuilt from source. apr and cpc1 only needed the CPX color remapped,
+#   so rather than reprocess their multi-GB pangenome VCFs the served bigBeds
+#   were recolored in place, e.g.:
+#     bigBedToBed apr.hg38.bb stdout \
+#       | awk 'BEGIN{FS=OFS="\t"} $10=="CPX"{$9="140,0,200"} {print}' > tmp.bed
+#     bedSort tmp.bed tmp.sorted.bed
+#     bedToBigBed -type=bed9+ -as=lrSvApr.as -tab tmp.sorted.bed \
+#       /hive/data/genomes/hg38/chrom.sizes apr.hg38.bb
+#   (cpc1 has no CPX rows, so it was unaffected.)
+#
+# searchIndex was removed from colorsDbSv, lrSv1kLin and lrSvAll: the bigBeds
+#   were built without -extraIndex=name, so by-name search never worked.
+#
+# KimPD (kwanhoSv) was removed from databases.tsv so it no longer flows into
+#   the lrSvAll merge (it is preliminary, unpublished and has breakend
+#   artifacts up to 190 Mb). The subtrack stays on dev/alpha until published.
+#
+# Re-run the merge after the source rebuilds. It now also skips byte-identical
+# duplicate source rows instead of summing their allele counts, which had
+# inflated the per-database and total AC columns.
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 2,682,104 input variants -> 2,317,508 merged (13.6% dedup), 14 databases
+
+##########
+# 2026-07-16 Claude max
+
+# cardSv: SVs from the NIH CARD Long-read Initiative, 351 post-mortem brain
+# samples (205 NABEC European ancestry, 146 HBCC African/African-admixed).
+# Paper: Billingsley et al. 2024, bioRxiv 2024.12.16.628723, PMID 39764002.
+# NAPU pipeline: Kolmogorov et al. 2023, Nat Methods, PMID 37710018.
+#
+# The NIH CARD group distributes a ready-made display bigBed on GitHub. It does
+# not follow the lrSv conventions (signed svLen, no insLen, ColorBrewer colors),
+# so it is re-derived into the shared schema by lrSvCardBbToBed.py.
+
+cd /hive/data/genomes/hg38/bed/lrSv/card
+base=https://raw.githubusercontent.com/meredith705/card_genome_browserTrack/main/hg38
+curl -sL $base/NIH_CARD_longReadSVs.bb -o NIH_CARD_longReadSVs.bb
+
+bigBedToBed NIH_CARD_longReadSVs.bb stdin \
+  | python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCardBbToBed.py /dev/stdin cardSv.bed
+# CARD: 228,855 input records written; by type: DEL=101,570, DUP=1,
+#       INS=126,853, INV=431
+# CARD: 32 records with svLen or insLen > 1 Mb kept (large ONT/assembly calls)
+bedSort cardSv.bed cardSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
+    -tab cardSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes cardSv.bb
+
+# All 228,855 provider records are carried through 1:1 (no rows dropped). The
+# provider bigBed itself is a subset of the ~234,905 SVs reported in the paper.
+# A handful of very large calls (INS up to 92 Mb, several multi-Mb INV/DEL) are
+# almost certainly ONT/assembly artifacts but are kept, not silently dropped.
+# svLen is stored as the reference span (1 bp for INS); the inserted-sequence
+# length lives in insLen. AC is the genotyped carrier count (= nabecCount +
+# hbccCount). Included in the lrSvAll merge (source key CARD).
+
+##########
+# 2026-07-17 Claude max
+
+# noyvertSv: multi-ancestry long-read SV imputation panel, 888 Oxford Nanopore
+# genomes from the 1000 Genomes Project (164 EUR, 144 AMR, 168 EAS, 171 SAS,
+# 241 AFR), SVs jointly called with Sniffles2 v2.0.7.
+# Paper: Noyvert et al. 2025, eLife reviewed preprint, doi 10.7554/eLife.106115
+#   (no PMID; not indexed in PubMed).
+#
+# The authors shared a per-variant summary table (SV.Noyvert.et.al.tsv.gz) with
+# all 107,445 panel SVs: per-superpopulation allele frequencies, Sniffles2
+# stdev metrics, Hardy-Weinberg p-values, leave-one-out and UK Biobank
+# imputation accuracy, and, where applicable, the significant UK Biobank SV-WAS
+# trait associations. Inserted sequences are not included in the file. There is
+# no AC/AN column, only allele frequencies.
+
+cd /hive/data/genomes/hg38/bed/lrSv/noyvert
+# (SV.Noyvert.et.al.tsv.gz was provided by the authors, copied into this dir)
+
+python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvertTsvToBed.py \
+    SV.Noyvert.et.al.tsv.gz noyvertSv.bed /hive/data/genomes/hg38/chrom.sizes
+# Noyvert: wrote 107,445 records to noyvertSv.bed
+# Noyvert: by type: BND=2,696, DEL=38,459, DUP=608, INS=59,953, INV=5,729
+
+bedSort noyvertSv.bed noyvertSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvNoyvert.as \
+    -tab noyvertSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes noyvert.bb
+
+# All 107,445 input rows are carried through 1:1 (no rows dropped). The input
+# has no records on chrX/chrY (the panel is autosome-only), and every DEL/INV/DUP
+# reference end was checked against chrom.sizes: none exceed the chromosome, so
+# nothing was clamped.
+#
+# Conventions applied by lrSvNoyvertTsvToBed.py:
+#  - Coordinates: input pos is VCF-style 1-based; chromStart = pos - 1.
+#    DEL/INV/DUP span the reference interval (chromEnd = chromStart + |SVLEN|);
+#    INS and BND are drawn at a single reference base (chromEnd = chromStart+1).
+#  - svLen is the REFERENCE SPAN, svLen = chromEnd - chromStart, matching the
+#    shared lrSv convention (see lrSvCommon.py): 1 bp for INS/BND, the interval
+#    length for DEL/INV/DUP. The inserted-sequence length lives in insLen (INS
+#    only; the source SVLEN). This is why the summary table on the lrSv.html
+#    container page shows min=median=1 for this dataset (INS dominate).
+#  - AC/AN are approximate (the source has only AF): AN = round(2*888*(1-missing
+#    rate)); AC = round(AF*AN). Documented as approximate in trackDb and on the
+#    track description page.
+#  - BND mate breakend loci are stored in the secondBp field with the Sniffles2
+#    'CHR' prefix lower-cased to 'chr' (some mates land on alt/random/Un/M/EBV
+#    contigs; the primary breakpoint is always on a standard autosome).
+#  - UKB_SVWAS_signif is reformatted comma-free into ukbGwas, with the number of
+#    significant trait associations in nGwas (for filtering).
+#  - Colors from the shared svColor() palette in lrSvCommon.py.
+#
+# Not added to the lrSvAll merge for now.
+
+# Added cardSv (NIH CARD 351) and noyvertSv (Noyvert 888) to the lrSvAll merge:
+# both appended to databases.tsv (CARD uses alleleFreq for max-AF aggregation,
+# Noyvert888 uses AF) and the merge re-run. The merge auto-regenerates
+# lrSvAll.as and trackDb/human/lrSvAll.ra (now 16 source databases,
+# filter.sourceCount 1:16).
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 3,018,404 input variants -> 2,582,278 merged (14.4% dedup), 16 databases
+# (was 2,682,104 -> 2,317,508 with 14 databases). All INS store svLen=1 across
+# every subtrack, so insertions merge on insLen; the merged median svLen is 1
+# (INS are 1.65M of 2.58M rows).
+
+##########
+# 2026-07-22 Claude max
+#
+# cardSv update: the NIH CARD provider (Melissa Meredith) republished the
+# display bigBed with the count columns changed from genotyped carrier/sample
+# counts to diploid ALLELE counts (alleleCount = nabecAlleleCount +
+# hbccAlleleCount), and renamed the .as fields accordingly. AF is unchanged;
+# item count and SV-type breakdown are unchanged (228,855: DEL 101,570,
+# INS 126,853, INV 431, DUP 1). No Alzheimer's disease cases are in either
+# cohort (confirmed by the author).
+#
+# Re-downloaded and rebuilt (converter now reads the allele-count columns,
+# lrSvCard.as fields renamed AC / nabecAc / hbccAc):
+cd /hive/data/genomes/hg38/bed/lrSv/card
+base=https://raw.githubusercontent.com/meredith705/card_genome_browserTrack/main/hg38
+curl -sL $base/NIH_CARD_longReadSVs.bb -o NIH_CARD_longReadSVs.bb
+bigBedToBed NIH_CARD_longReadSVs.bb stdout \
+  | python3 $HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCardBbToBed.py /dev/stdin cardSv.bed
+# CARD: 228,855 input records written; by type: DEL=101,570, DUP=1,
+#       INS=126,853, INV=431
+bedSort cardSv.bed cardSv.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvCard.as \
+    -tab cardSv.sorted.bed /hive/data/genomes/hg38/chrom.sizes cardSv.bb
+# Max allele counts: AC=702 (2x351), nabecAc=410 (2x205), hbccAc=292 (2x146).
+# trackDb filter ranges/labels updated to allele counts; mouseOver and the
+# cardSv.html / lrSv.html wording changed from "carriers" to "allele counts".
+#
+# Re-ran the merge so lrSvAll carries CARD's allele counts (databases.tsv
+# unchanged; CARD still contributes via valueField=AC):
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# 3,018,404 input -> 2,582,278 merged, 16 databases (unchanged structure).
+
+##########
+# 2026-07-24 Claude max
+#
+# noyvertSv: per author (Boris Noyvert) request, replaced the UK Biobank
+# imputation-r2 filter (r2Ukb) with two leave-one-out reference-panel quality
+# filters, r2Loo and concordanceLoo, which are the primary SV imputation
+# quality measures for the multi-ancestry panel (r2Ukb mainly reflects
+# European-ancestry performance). trackDb-only change; both fields already
+# exist in noyvert.bb (floats, 0:1), so no rebuild was needed. Also replaced
+# the Description text on noyvertSv.html with the author's revised version
+# (reordered, plus a comparison with the 1KG ONT Vienna dataset, Schloissnig
+# et al. 2025).
+
+# Added a clarifying sentence to noyvertSv.html: the Noyvert (Boehringer) panel
+# is an independent reprocessing of the same ONT reads as the 1KG ONT Vienna
+# track (Schloissnig et al. 2025), plus a rough call-level overlap on hg38.
+# Overlap analysis (scratch, overlapSelect + bedtools, Boehringer vs Vienna):
+#   DEL (Boehringer 38,459 / Vienna 58,637): reciprocal >=50% = 12,529 (33%);
+#       >=90% = 9,136 (24%); >=10% = 15,127 (39%). Cross-checked with
+#       bedtools intersect -f .5 -r (11,802). Reverse direction ~ same.
+#   INS (Boehringer 59,953 / Vienna 73,298): within +-100bp and insLen ratio
+#       >=0.5 = 13,535 (23%); plateaus at ~26% out to +-1000bp (so not a
+#       liftOver positional-shift artifact - Vienna hg38 is lifted from CHM13).
+#   INV/DUP/BND have no comparable Vienna type (Vienna calls only DEL/INS/CPX).
+# Only trackDb HTML changed; no data rebuild.
+
+# 2026-08-13 (Claude) lrSv1kLin released and added to the lrSvAll merge.
+# The Lin et al. manuscript was submitted ("A high-resolution human pangenome
+# structural variant resource for improved disease association"; Maximilian
+# Haeussler is a co-author), so `release alpha` was removed from the lrSv1kLin
+# stanza and the label became "1KG Lin 1218 SVs". Description/methods pages
+# rewritten from the manuscript (BoostSV integration, 293 HGSVC+HPRC assemblies
+# + 480 UW-ONT + 445 IB-ONT = 1,218; 587,779 SVs hg38 / 614,522 hs1).
+# Appended databases.tsv key Lin1218 and re-ran the merge:
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
+# lrSvAll grew 2,582,278 -> 3,111,026 variants (17 source databases). Note the
+# Lin1218 callset already merges several 1KG datasets (HPRC, HGSVC3, IB-ONT,
+# UW-ONT), so those samples appear both in their own columns and in Lin1218AC;
+# the merge keeps per-database AC columns, so no single count is inflated.

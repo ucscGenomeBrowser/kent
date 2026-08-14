@@ -1,0 +1,17 @@
+# EXPECTED TO FAIL, and this one is the test of the test.
+#
+# Every other script here trusts `expect:` to stop a run. If it ever stopped throwing --
+# a caught exception, a check quietly skipped, a typo in a key name -- all of them would
+# go on passing while checking nothing at all. This asserts something that is plainly
+# false, so the day it "passes" is the day the rest of this directory stopped meaning
+# anything.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [thisTrackDoesNotExist], height: 1, tip: "no tooltip is up"}

@@ -82,6 +82,16 @@ if (errCatchStart(errCatch))
             struct chain  *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chromName, winStart, winEnd, -1);
 
             // go through each block of each chain and grab a summary from the query coordinates
+            // FIXME (refs #37621): quickLift bigWig summary issues.
+            //   1. summaryOffset/summarySizeBlock are scaled by retChain->tSize, not
+            //      (winEnd - winStart). When a chain only partially covers the visible
+            //      window, its blocks get stretched to fill the full preDraw buffer
+            //      instead of landing at the correct window pixels. With multiple chains
+            //      in chainList, each stretches independently and overwrites the others.
+            //   2. summarySizeBlock is computed from target span but bigWigSummaryArrayExtended
+            //      is called with query coordinates; the bigWig zoom level it selects is
+            //      based on (qEnd-qStart)/summarySizeBlock, which can pick the wrong zoom
+            //      when target and query block lengths differ significantly (indels).
             for(chain = chainList; chain; chain = chain->next)
                 {
                 struct chain *retChain, *retChainToFree;
@@ -332,7 +342,7 @@ if (tg->bbiFile == NULL)
     /* Figure out bigWig file name. */
     if (isHubTrack(database) || tg->parallelLoading) // do not use mysql during parallel-fetch or if assembly hub
 	{
-	char *fileName = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
+	char *fileName = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataUrl"));
 	bigWigOpenCatch(tg, fileName);
 	}
     else

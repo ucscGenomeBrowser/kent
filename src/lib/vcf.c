@@ -14,6 +14,8 @@
 #include "net.h"
 #include "regexHelper.h"
 #include "htslib/tbx.h"
+#include "htslib/hts.h"
+#include "htslib/kstring.h"
 #include "vcf.h"
 
 /* Reserved but optional INFO keys: */
@@ -491,12 +493,38 @@ vcff->infoDefHash = hashNew(0);
 
 struct dyString *dyHeader = dyStringNew(1024);
 char *line = NULL;
-// First, metadata lines beginning with "##":
-while (lineFileNext(lf, &line, NULL) && startsWith("##", line))
+char *tabixHeaderLine = NULL;
+// First, metadata lines beginning with "##".
+// htslib >= 1.21 tbx_readrec strips meta_char lines, so the tabix iterator
+// never returns the VCF header.  Read it directly off the htsFile; the
+// HTS_IDX_REST iterator created in lineFileTabixAndIndexMayOpen has
+// curr_off == 0 and will resume from the bgzf position past the header
+// (or lineFileSetTabixRegion will reseek for region queries).
+if (lf->tabix != NULL)
     {
-    dyStringAppend(dyHeader, line);
-    dyStringAppendC(dyHeader, '\n');
-    parseMetadataLine(vcff, line);
+    kstring_t str = KS_INITIALIZE;
+    while (hts_getline((htsFile *)lf->htsFile, '\n', &str) >= 0)
+	{
+	if (!startsWith("##", str.s))
+	    {
+	    tabixHeaderLine = cloneString(str.s);
+	    line = tabixHeaderLine;
+	    break;
+	    }
+	dyStringAppend(dyHeader, str.s);
+	dyStringAppendC(dyHeader, '\n');
+	parseMetadataLine(vcff, str.s);
+	}
+    free(str.s);
+    }
+else
+    {
+    while (lineFileNext(lf, &line, NULL) && startsWith("##", line))
+	{
+	dyStringAppend(dyHeader, line);
+	dyStringAppendC(dyHeader, '\n');
+	parseMetadataLine(vcff, line);
+	}
     }
 slReverse(&(vcff->infoDefs));
 slReverse(&(vcff->filterDefs));
@@ -519,7 +547,11 @@ if (line == NULL)
 char headerLineBuf[256];
 if (line[0] != '#')
     {
-    lineFileReuse(lf);
+    // For tabix lf the line came from a private hts_getline read, not the lineFile
+    // buffer, so lineFileReuse would push back stale state.  The iterator will reseek
+    // before any data iteration, so the consumed line is not lost in practice.
+    if (lf->tabix == NULL)
+	lineFileReuse(lf);
     vcfFileWarn(vcff, "Expected to find # followed by column names (\"#CHROM POS ...\"), "
 	       "assuming default VCF 4.1 columns");
     safef(headerLineBuf, sizeof(headerLineBuf), "%s", vcfDefaultHeader);
@@ -529,6 +561,7 @@ dyStringAppend(dyHeader, line);
 dyStringAppendC(dyHeader, '\n');
 parseColumnHeaderRow(vcff, line);
 vcff->headerString = dyStringCannibalize(&dyHeader);
+freez(&tabixHeaderLine);
 return vcff;
 }
 
@@ -1128,10 +1161,10 @@ long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl)
 long long itemCount = 0;
 hts_idx_t *idx = NULL;
 if (isNotEmpty(tbiFileOrUrl))
-    idx = hts_idx_load2(fileOrUrl, tbiFileOrUrl);
+    idx = hts_idx_load3(fileOrUrl, tbiFileOrUrl, HTS_FMT_TBI, 0);
 else
     {
-    idx = hts_idx_load(fileOrUrl, HTS_FMT_TBI);
+    idx = hts_idx_load3(fileOrUrl, NULL, HTS_FMT_TBI, 0);
     }
 if (idx == NULL)
     warn("vcfTabixItemCount: hts_idx_load(%s) failed.", tbiFileOrUrl ? tbiFileOrUrl : fileOrUrl);

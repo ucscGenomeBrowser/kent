@@ -1,0 +1,134 @@
+<h2>Description</h2>
+<p>
+<b>This track is the only short-read dataset in the Long-Read Variants
+track collection; it is included for comparison with the long-read
+callsets.</b>
+</p>
+<p>
+This track shows structural variants (SVs) from the expanded 1000 Genomes
+Project cohort of 3,202 high-coverage <b>Illumina short-read</b>
+whole-genome sequences (including 602 trios), sequenced at ~30x on NovaSeq
+6000 and described in Byrska-Bishop et al. 2022. SVs were called with the
+GATK-SV / svtools integrated pipeline; this release adds re-genotyped
+novel insertions and recomputed allele frequencies per continental group.
+</p>
+<p>
+The track contains 173,366 SVs across seven classes: 90,259 deletions
+(DEL), 49,693 insertions (INS), 28,242 duplications (DUP), 3,568 complex
+events (CPX), 920 inversions (INV), 673 multi-allelic copy-number variants
+(CNV) and 11 reciprocal translocations (CTX). Allele counts, allele
+frequencies and per-superpopulation frequencies (AFR, AMR, EAS/ASN, EUR,
+SAS/SAN) are provided for each site.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Items are colored by SV type:
+<ul>
+<li><span style="color: rgb(200,0,0);">Deletions (DEL)</span> - red</li>
+<li><span style="color: rgb(0,0,200);">Insertions (INS)</span> - blue</li>
+<li><span style="color: rgb(0,160,0);">Duplications (DUP)</span> - green</li>
+<li><span style="color: rgb(230,140,0);">Inversions (INV)</span> - orange</li>
+<li><span style="color: rgb(140,0,200);">Complex (CPX)</span> - purple</li>
+<li><span style="color: rgb(150,80,0);">Copy-number variants (CNV)</span> - brown</li>
+<li><span style="color: rgb(100,100,100);">Translocations (CTX)</span> - grey</li>
+</ul>
+</p>
+<p>
+Insertions are placed at the insertion site; deletions, duplications,
+inversions, complex and copy-number variants span the affected reference
+interval. Translocations show only the chr1-side breakpoint; the partner
+chromosome is reported on the detail page.
+</p>
+<p>
+Filters are available for SV type, SV length, overall allele frequency,
+population-max allele frequency and per-population AFs (African and
+European). The detail page also shows heterozygous / homozygous-alternate
+carrier counts, the set of upstream SV callers, the upstream pipeline
+source and the VCF FILTER status.
+</p>
+
+<h2>Methods</h2>
+<p>
+Byrska-Bishop et al. 2022 sequenced the 3,202-sample expanded 1000
+Genomes Project cohort (2,504 original unrelated samples plus 698 samples
+that complete 602 parent-child trios) on Illumina NovaSeq 6000 at ~30x
+coverage with 2x150 bp reads. SNVs and indels were called with GATK
+HaplotypeCaller. SVs were discovered and integrated from three analytic
+pipelines - <a href="https://github.com/broadinstitute/gatk-sv" target="_blank">
+GATK-SV</a>, <a href="https://github.com/hall-lab/svtools" target="_blank">
+svtools</a> and Absinthe - through a machine-learning integration model;
+novel insertions were re-genotyped to produce the freeze V3 callset with
+added allele frequencies (<tt>*.wAF.vcf.gz</tt>). The final ensemble
+callset contains 173,366 SVs across seven classes: 90,259 DELs, 49,693
+INSs, 28,242 DUPs, 920 INVs, 3,568 complex SVs (CPX), 673 multi-allelic
+CNVs and 11 inter-chromosomal translocations (CTX), with AC, AN, AF and
+per-superpopulation AFs (AFR, AMR, EAS/ASN, EUR, SAS/SAN).
+</p>
+<p>
+<b>Why a short-read track in a long-read collection?</b> Short-read SV
+callsets such as this one generally have high precision for deletions and
+duplications but miss many insertions, repeat expansions and variants in
+complex/low-mappability regions that long-read technologies can resolve.
+Displaying this callset alongside the long-read tracks in this collection
+makes it easier to spot variants that are unique to long-read data or
+that have substantially different breakpoints when called from short
+reads.
+</p>
+<p>
+The freeze V3 VCF
+<tt>1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz</tt> was
+downloaded from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/" target="_blank">
+IGSR 1000 Genomes Illumina SV integration folder</a>.
+</p>
+<p>
+The step-by-step build commands (download, format conversion, bigBed build)
+are recorded in the UCSC makeDoc for this track container:
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrSv.txt" target="_blank">
+doc/hg38/lrSv.txt</a>. The conversion scripts and autoSql schemas live in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrSv" target="_blank">
+makeDb/scripts/lrSv</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and accessed
+programmatically through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>onekg3202Sr</i>.
+</p>
+<p>
+The bigBed is available from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/" target="_blank">our
+download server</a> as <tt>onekg3202sr.bb</tt>. Example:
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrSv/onekg3202sr.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+</p>
+<p>
+The original joint-genotyped VCF is available from the
+<a href="https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/" target="_blank">
+IGSR 1000 Genomes Illumina SV integration folder</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Byrska-Bishop, Marth and the 1000 Genomes / NYGC team for
+releasing this dataset, and to the GATK-SV developers for the cohort
+calling pipeline.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Byrska-Bishop M, Evani US, Zhao X, Basile AO, Abel HJ, Regier AA, Corvelo A, Clarke WE, Musunuri R,
+Nagulapalli K <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)00991-6" target="_blank">
+High-coverage whole-genome sequencing of the expanded 1000 Genomes Project cohort including 602
+trios</a>.
+<em>Cell</em>. 2022 Sep 1;185(18):3426-3440.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">36055201</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9439720/" target="_blank">PMC9439720</a>
+</p>
+

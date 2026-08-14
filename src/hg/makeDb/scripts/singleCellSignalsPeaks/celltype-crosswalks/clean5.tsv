@@ -1,0 +1,42 @@
+Astrocyte	Astrocyte	0,158,115			
+Bergmann glia	Bergmann glia	0,158,115			
+Choroid plexus and ependymal	Choroid plexus / ependymal	68,170,153			
+Endothelial cell	Endothelial cell	136,204,238			
+Excitatory neuron	Excitatory neuron	0,114,178			
+Inhibitory neuron	Inhibitory neuron	213,94,0			
+Mature oligodendrocyte	Mature oligodendrocyte	204,121,167			
+Microglia	Microglia	0,0,0			
+Olfactory ensheathing	Olfactory ensheathing cell	153,153,153			
+Oligodendrocyte precursor	Oligodendrocyte precursor	240,228,66			
+Radial glia	Radial glia	51,34,136			
+Vascular leptomeningeal	Vascular leptomeningeal cell	221,204,119			
+Batch	Batch	187,187,187			
+Collecting duct intercalated	Collecting duct intercalated cell	17,119,51			
+Collecting duct principal	Collecting duct principal cell	17,119,51			
+Connecting tubule	Connecting tubule cell	17,119,51			
+Distal convoluted tubes	Distal convoluted tubule cell	17,119,51			
+Immune	Immune cell	238,102,119			
+Loop of henle	Loop of Henle cell	17,119,51			
+Nephron progenitors	Nephron progenitor	153,79,0			
+PT s3 or proximal tubule segment	Proximal tubule (S3)	17,119,51			
+Podocytes	Podocyte	17,119,51			
+Proximal tubule	Proximal tubule cell	17,119,51			
+Stroma1	Stromal cell	153,79,0			
+Stroma2	Stromal cell	153,79,0			
+All cells	All cells	153,153,153			
+All immune cells	All immune cells	238,102,119			
+All mesenchymal cells	All mesenchymal cells	153,79,0			
+Artery	Arterial endothelial cell	136,204,238			
+Capillary	Capillary endothelial cell	136,204,238			
+Ciliogenesis	Ciliated epithelial cell	17,119,51			
+Epithelial cell	Epithelial cell	17,119,51			
+Fibroblast	Fibroblast	153,79,0			
+Lymphocytes	Lymphocyte	238,102,119			
+Macropahges	Macrophage	238,102,119			
+Mesenchymal	Mesenchymal cell	153,79,0			
+Neuronal and glial	Neuronal and glial	153,153,153			
+Pericyte	Pericyte	221,204,119			
+Proliferating mesenchymal	Proliferating mesenchymal cell	153,79,0			
+Vascular smooth muscle	Vascular smooth muscle cell	221,204,119			
+Vein	Venous endothelial cell	136,204,238			
+Committed oligodendrocyte precursor	Committed oligodendrocyte precursor	240,228,66			

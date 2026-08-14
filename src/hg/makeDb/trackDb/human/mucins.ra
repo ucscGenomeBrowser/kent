@@ -1,0 +1,27 @@
+    track mucinsNonVntr
+    parent locusSpec
+    shortLabel Mucin non-VNTR exons
+    longLabel Mucin gene non-VNTR exons (Plender et al. 2024 supplementary data)
+    type bigGenePred
+    bigDataUrl /gbdb/$D/locusSpec/mucins/mucinsNonVntr.bb
+    itemRgb on
+    visibility pack
+    searchIndex name,name2,geneName
+    labelFields name,name2,geneName,geneName2
+    defaultLabelFields name
+    mouseOver <b>$name2 $name</b><br>transcript: $geneName<br>type: $type<br>length: ${chromEnd}-${chromStart}
+    priority 2
+
+    track mucinsVntr
+    parent locusSpec
+    shortLabel Mucin VNTR exons
+    longLabel Mucin gene VNTR exons (Plender et al. 2024 supplementary data)
+    type bigGenePred
+    bigDataUrl /gbdb/$D/locusSpec/mucins/mucinsVntr.bb
+    itemRgb on
+    visibility pack
+    searchIndex name,name2,geneName
+    labelFields name,name2,geneName,geneName2
+    defaultLabelFields name
+    mouseOver <b>$name2 $name</b><br>transcript: $geneName<br>type: $type<br>length: ${chromEnd}-${chromStart}
+    priority 1

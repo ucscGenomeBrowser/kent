@@ -401,6 +401,12 @@ else
 return NULL;
 }
 
+char *getUserName()
+{
+return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+}
+
+
 char *wikiLinkUserId()
 /* Return the user ID specified in cookies from the browser. Does not check if user is logged in.
  * To make sure that the ID is valid, call this only after you have checked with wikiLinkUserName() that the user is logged in. */
@@ -537,6 +543,24 @@ else
         "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
          wikiLinkHost(), retEnc);
     }
+freez(&retEnc);
+return(cloneString(buf));
+}
+
+char *wikiLinkChangeEmailUrl(char *hgsid)
+/* Return the URL for the user change email page, or NULL if unavailable.  Supported only by
+ * the hgLogin login system, and only when the login.emailLink feature is enabled in hg.conf
+ * (the same switch that controls the passwordless email-link sign-in). */
+{
+if (!loginSystemEnabled())
+    return NULL;
+if (!cfgOptionBooleanDefault(CFG_LOGIN_EMAIL_LINK, FALSE))
+    return NULL;
+char buf[2048];
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+safef(buf, sizeof(buf),
+    "%s?hgLogin.do.changeEmailPage=1&returnto=%s",
+    loginUrl(), retEnc);
 freez(&retEnc);
 return(cloneString(buf));
 }

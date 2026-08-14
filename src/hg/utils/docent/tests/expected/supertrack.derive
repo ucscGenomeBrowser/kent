@@ -1,0 +1,4 @@
+# supertrack.docent.yaml: track steps derived against https://genome-test.gi.ucsc.edu/cgi-bin, db hg38
+step 3 track {"varsInPubs":"hideKids","pubtator":"pack"}
+  round 1 (2 vars): pubtator=pack varsInPubs=show
+  round 2 (5 vars): avada=hide mastermind=hide varChat=hide varaico=hide varaicoSuppl=hide

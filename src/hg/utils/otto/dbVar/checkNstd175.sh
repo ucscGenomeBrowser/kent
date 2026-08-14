@@ -1,9 +1,11 @@
 #!/bin/bash
 
 #	Do not modify this script, modify the source tree copy:
-#	src/hg/utils/dbVar/checkNstd175.sh
+#	src/hg/utils/otto/dbVar/checkNstd175.sh
+#	The source tree copy is installed to $WORKDIR via the makefile
+#	in the same directory (make install).
 
-set -beEu -o pipefail
+set -eEu -o pipefail
 WORKDIR=$1
 today=`date +%F`
 
@@ -76,5 +78,5 @@ if [ "${WC}" -gt 1 ]; then
         cp giabSv.bb ${WORKDIR}/release/${db}/giabSv.bb
         popd > /dev/null
     done
+    echo "dbVar nstd175 update done"
 fi
-echo "dbVar nstd175 update done"

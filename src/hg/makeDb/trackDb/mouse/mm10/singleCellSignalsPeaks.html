@@ -1,0 +1,318 @@
+<h2>Description</h2>
+<p>
+This track collects the cell-type chromatin accessibility tracks from the
+single-cell ATAC-seq datasets in the
+<a href="https://cells.ucsc.edu" target="_blank">UCSC Cell Browser</a>. For each
+dataset it shows the read-coverage signal (bigWig) and, where the study
+reported them, the accessible-region peak calls (bigNarrowPeak), split out by
+cell type. The datasets cover several mouse tissues, including brain, kidney,
+and choroid plexus.
+</p>
+<p>
+The subtracks come from these datasets:
+</p>
+<ul>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=catlas-mouse-aging" target="_blank">CATLAS Mouse Aging Brain</a></b>:
+    chromatin accessibility across cell types of the aging mouse brain. 222
+    signal subtracks (Zhang et al. 2022).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=catlas-mouse-brain" target="_blank">CATLAS Adult Mouse Brain</a></b>:
+    chromatin accessibility across cell types of the adult mouse cerebrum. 160
+    signal subtracks (Li et al. 2021).
+  </li>
+  <li>
+    <b><a href="https://brain-map.org/genetic-tools/genetic-tools-atlas" target="_blank">Allen Basal Ganglia ATAC</a></b>:
+    accessibility across basal ganglia cell types, merged by region and neuron
+    subtype, from the Allen Institute Genetic Tools Atlas. 89 signal subtracks.
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=olg-dyn-eae-multiome" target="_blank">Dynamic Responses of Oligodendroglia in EAE Mice</a></b>:
+    accessibility (the ATAC half of a single-cell multiome study) of
+    oligodendroglia across disease progression in a mouse model of multiple
+    sclerosis. 28 signal subtracks (Zheng et al. 2025).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=mouse-lvcp-multiome" target="_blank">Mouse Lateral Ventricle Choroid Plexus Multi-omics</a></b>:
+    accessibility (the ATAC half of a multi-omics study) of the lateral
+    ventricle choroid plexus, with per-cell-type peak calls. 17 signal and 6
+    peak subtracks.
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=catlas-paired-tag" target="_blank">CATLAS Adult Mouse Brain Paired-Tag</a></b>:
+    the accessibility tracks from joint histone-and-transcriptome Paired-Tag
+    profiling of the adult mouse brain. 21 signal subtracks (Zhu et al. 2021).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=mouse-kidney-atac" target="_blank">Mouse Kidney Regulatory Landscape</a></b>:
+    single-cell accessibility across mouse kidney cell types, used to map
+    cellular differentiation programs and disease-associated regulatory
+    regions. 13 signal subtracks (Miao et al. 2021).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=olg-eae-ms" target="_blank">Oligodendrocytes in Mouse EAE Model of MS</a></b>:
+    accessibility in the oligodendrocyte lineage from a mouse model of multiple
+    sclerosis. 16 signal subtracks (Meijer et al. 2022).
+  </li>
+  <li>
+    <b><a href="https://cells.ucsc.edu/?ds=mouse-epi-juv-brain" target="_blank">Multimodal Chromatin Profiling of Juvenile Mouse Brain</a></b>:
+    accessibility from nanobody-based single-cell CUT&amp;Tag multimodal
+    profiling of the juvenile mouse brain. 15 signal subtracks (Bartosovic and
+    Castelo-Branco 2023).
+  </li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This is a faceted collection, so the subtracks are chosen with filter menus
+rather than a long checkbox list. Use the facets on the track configuration
+page to narrow the subtracks by dataset, tissue, life stage, condition, data
+type, assay, and cell type, then turn on the ones you want. Signal subtracks draw
+as coverage graphs and peak subtracks draw as boxes. Each subtrack links back to
+its source dataset in the Cell Browser.
+</p>
+
+<p>
+Subtracks are colored by broad cell-type class, so the same class is shown in the same color across datasets (and matches the coloring of the corresponding human track). The classes are:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:rgb(0,114,178);width:2em">&nbsp;</th>
+      <td>Excitatory neuron: glutamatergic neurons of the cortical layers, hippocampal CA fields and dentate gyrus, and claustrum</td></tr>
+  <tr><th style="background-color:rgb(213,94,0);width:2em">&nbsp;</th>
+      <td>Inhibitory neuron: GABAergic neurons and interneurons (Pvalb, Sst, Lamp5, and CGE- and MGE-derived types)</td></tr>
+  <tr><th style="background-color:rgb(230,159,0);width:2em">&nbsp;</th>
+      <td>Medium spiny neuron: striatal D1 and D2 projection neurons of the direct and indirect pathways</td></tr>
+  <tr><th style="background-color:rgb(86,180,233);width:2em">&nbsp;</th>
+      <td>Other neuron: remaining neuronal types, such as Cajal-Retzius cells</td></tr>
+  <tr><th style="background-color:rgb(51,34,136);width:2em">&nbsp;</th>
+      <td>Neural progenitor: neuroblasts, radial glia, and other neural progenitors</td></tr>
+  <tr><th style="background-color:rgb(0,158,115);width:2em">&nbsp;</th>
+      <td>Astrocyte: central nervous system astroglia, including fibrous and protoplasmic astrocytes, Bergmann glia, and retinal M&uuml;ller glia</td></tr>
+  <tr><th style="background-color:rgb(204,121,167);width:2em">&nbsp;</th>
+      <td>Oligodendrocyte: oligodendrocytes at the newly formed, myelin-forming, and mature stages</td></tr>
+  <tr><th style="background-color:rgb(240,228,66);width:2em">&nbsp;</th>
+      <td>Oligodendrocyte precursor: oligodendrocyte precursor cells (OPCs) and committed precursors</td></tr>
+  <tr><th style="background-color:rgb(0,0,0);width:2em">&nbsp;</th>
+      <td>Microglia: microglia and perivascular macrophages</td></tr>
+  <tr><th style="background-color:rgb(68,170,153);width:2em">&nbsp;</th>
+      <td>Ependymal: ependymal cells lining the ventricles</td></tr>
+  <tr><th style="background-color:rgb(136,34,85);width:2em">&nbsp;</th>
+      <td>Choroid plexus: choroid plexus epithelial cells</td></tr>
+  <tr><th style="background-color:rgb(136,204,238);width:2em">&nbsp;</th>
+      <td>Endothelial: endothelial cells of arteries, capillaries, veins, and endocardium</td></tr>
+  <tr><th style="background-color:rgb(221,204,119);width:2em">&nbsp;</th>
+      <td>Mural: pericytes, smooth muscle, and vascular leptomeningeal cells</td></tr>
+  <tr><th style="background-color:rgb(238,102,119);width:2em">&nbsp;</th>
+      <td>Immune: lymphoid (B, T) and myeloid (macrophage, dendritic, basophil) immune cells</td></tr>
+  <tr><th style="background-color:rgb(170,68,153);width:2em">&nbsp;</th>
+      <td>Erythroid: erythroid cells and erythroblasts</td></tr>
+  <tr><th style="background-color:rgb(153,153,51);width:2em">&nbsp;</th>
+      <td>Hematopoietic stem/progenitor: hematopoietic stem and progenitor cells</td></tr>
+  <tr><th style="background-color:rgb(170,68,0);width:2em">&nbsp;</th>
+      <td>Cardiomyocyte: heart muscle cells</td></tr>
+  <tr><th style="background-color:rgb(102,17,0);width:2em">&nbsp;</th>
+      <td>Muscle: skeletal muscle myofibers, satellite cells, and junctional myonuclei</td></tr>
+  <tr><th style="background-color:rgb(17,119,51);width:2em">&nbsp;</th>
+      <td>Epithelial: epithelial cells of many tissues, such as airway, gut, kidney tubule, and secretory epithelia</td></tr>
+  <tr><th style="background-color:rgb(153,79,0);width:2em">&nbsp;</th>
+      <td>Stromal: fibroblasts, mesenchymal, and other stromal cells</td></tr>
+  <tr><th style="background-color:rgb(153,153,153);width:2em">&nbsp;</th>
+      <td>Other: mixed types, and types that fit none of the classes above, such as peripheral glia (Schwann, enteric and olfactory ensheathing cells) and melanocytes</td></tr>
+  <tr><th style="background-color:rgb(187,187,187);width:2em">&nbsp;</th>
+      <td>Unknown: cell type not resolved from the source data</td></tr>
+</table>
+
+<h2>Methods</h2>
+<p>
+Each dataset was produced and processed by a different group, so the assays and
+analysis pipelines vary. The signal and peak files here are the same ones served
+by the individual Cell Browser datasets, copied into the browser without change.
+The table summarizes each dataset; see the linked publication for details.
+</p>
+<table class="stdTbl">
+  <tr><th>Dataset</th><th>Assay</th><th>Processing summary</th></tr>
+  <tr>
+    <td>CATLAS Mouse Aging Brain</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Accessibility profiled across cell types of the aging mouse brain; per-cell-type coverage tracks.</td>
+  </tr>
+  <tr>
+    <td>CATLAS Adult Mouse Brain</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Adult mouse cerebrum nuclei clustered into cell types, with per-cell-type accessibility coverage.</td>
+  </tr>
+  <tr>
+    <td>Allen Basal Ganglia ATAC</td>
+    <td>single-nucleus ATAC-seq</td>
+    <td>Basal ganglia nuclei grouped by region and neuron subtype (e.g. D1/D2 MSNs, dorsal/ventral), coverage per group.</td>
+  </tr>
+  <tr>
+    <td>Dynamic Responses of Oligodendroglia in EAE Mice</td>
+    <td>single-cell multiome (ATAC + RNA)</td>
+    <td>Oligodendroglia profiled across EAE disease progression; the ATAC arm gives per-cell-type accessibility coverage.</td>
+  </tr>
+  <tr>
+    <td>Mouse Lateral Ventricle Choroid Plexus Multi-omics</td>
+    <td>single-cell multiome (ATAC + RNA)</td>
+    <td>Choroid plexus nuclei profiled by multi-omics; ATAC arm gives per-cell-type coverage plus peak calls.</td>
+  </tr>
+  <tr>
+    <td>CATLAS Adult Mouse Brain Paired-Tag</td>
+    <td>Paired-Tag (histone + RNA)</td>
+    <td>Joint histone-modification and transcriptome profiling of adult mouse brain; the accessibility tracks are shown here.</td>
+  </tr>
+  <tr>
+    <td>Mouse Kidney Regulatory Landscape</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Mouse kidney nuclei clustered into cell types; per-cell-type accessibility used to map differentiation programs and disease-relevant regulatory regions.</td>
+  </tr>
+  <tr>
+    <td>Oligodendrocytes in Mouse EAE Model of MS</td>
+    <td>single-cell ATAC-seq</td>
+    <td>Accessibility of the oligodendrocyte lineage in a mouse EAE model of multiple sclerosis.</td>
+  </tr>
+  <tr>
+    <td>Multimodal Chromatin Profiling of Juvenile Mouse Brain</td>
+    <td>nanobody-based single-cell CUT&amp;Tag</td>
+    <td>Multimodal single-cell chromatin profiling of juvenile mouse brain; the accessibility tracks are shown here.</td>
+  </tr>
+</table>
+<p>
+The steps used to assemble the files into this track are recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10/singleCellSignalsPeaks.txt" target="_blank">makeDoc</a>,
+which uses the scripts in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks" target="_blank">singleCellSignalsPeaks</a>
+directory.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The subtracks can be explored in table form with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a>, and read from scripts through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>.
+</p>
+<p>
+For automated download and analysis, the signal and peak files are stored under
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/singleCellSignalsPeaks/" target="_blank">http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/singleCellSignalsPeaks/</a>,
+keeping the same per-dataset subdirectories shown on the configuration page. The
+files can be read with the command-line tools <tt>bigWigToBedGraph</tt> (for the
+signal bigWigs) and <tt>bigBedToBed</tt> (for the peak files), which can be
+compiled from source or downloaded as
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">precompiled binaries</a>.
+Both take a region so you do not have to download the whole file, for example:
+</p>
+<pre><code>bigWigToBedGraph -chrom=chr1 -start=3000000 -end=3100000 \
+  http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/singleCellSignalsPeaks/mouse-epi-juv-brain/hub/atac/BG.bw \
+  stdout
+
+bigBedToBed -chrom=chr19 -start=0 -end=61000000 \
+  http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/singleCellSignalsPeaks/mouse-lvcp-multiome/scMultiome/atac/hub/peaks/all_cells.bb \
+  stdout</code></pre>
+<p>
+The underlying matrices, metadata, and per-dataset download details are on each
+dataset's page in the <a href="https://cells.ucsc.edu" target="_blank">UCSC Cell
+Browser</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the UCSC Cell Browser team and the research groups whose single-cell
+datasets are shown here. For questions about a particular subtrack, start with the dataset page it
+links to.
+</p>
+
+<h2>References</h2>
+
+
+
+<p>
+Zhang Y, Amaral ML, Zhu C, Grieco SF, Hou X, Lin L, Buchanan J, Tong L, Preissl S, Xu X <em>et
+al</em>.
+<a href="https://doi.org/10.1038/s41422-022-00719-6" target="_blank">
+Single-cell epigenome analysis reveals age-associated decay of heterochromatin domains in excitatory
+neurons in the mouse brain</a>.
+<em>Cell Res</em>. 2022 Nov;32(11):1008-1021.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36207411" target="_blank">36207411</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9652396/" target="_blank">PMC9652396</a>
+</p>
+
+
+
+
+<p>
+Li YE, Preissl S, Hou X, Zhang Z, Zhang K, Qiu Y, Poirion OB, Li B, Chiou J, Liu H <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-021-03604-1" target="_blank">
+An atlas of gene regulatory elements in adult mouse cerebrum</a>.
+<em>Nature</em>. 2021 Oct;598(7879):129-136.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34616068" target="_blank">34616068</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8494637/" target="_blank">PMC8494637</a>
+</p>
+
+
+
+
+<p>
+Zheng C, Hervé B, Meijer M, Rubio Rodríguez-Kirby LA, Guerreiro Cacais AO, Kukanja P, Kabbe M,
+Jimenez-Beristain T, Olsson T, Agirre E <em>et al</em>.
+<a href="https://doi.org/10.1038/s41593-025-02100-3" target="_blank">
+Distinct transcriptomic and epigenomic responses of mature oligodendrocytes during disease
+progression in a mouse model of multiple sclerosis</a>.
+<em>Nat Neurosci</em>. 2025 Dec;28(12):2612-2627.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41249698" target="_blank">41249698</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12672374/" target="_blank">PMC12672374</a>
+</p>
+
+
+
+
+<p>
+Zhu C, Zhang Y, Li YE, Lucero J, Behrens MM, Ren B.
+<a href="https://doi.org/10.1038/s41592-021-01060-3" target="_blank">
+Joint profiling of histone modifications and transcriptome in single cells from mouse brain</a>.
+<em>Nat Methods</em>. 2021 Mar;18(3):283-292.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33589836" target="_blank">33589836</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7954905/" target="_blank">PMC7954905</a>
+</p>
+
+
+
+
+<p>
+Miao Z, Balzer MS, Ma Z, Liu H, Wu J, Shrestha R, Aranyi T, Kwan A, Kondo A, Pontoglio M <em>et
+al</em>.
+<a href="https://doi.org/10.1038/s41467-021-22266-1" target="_blank">
+Single cell regulatory landscape of the mouse kidney highlights cellular differentiation programs
+and disease targets</a>.
+<em>Nat Commun</em>. 2021 Apr 15;12(1):2277.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33859189" target="_blank">33859189</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8050063/" target="_blank">PMC8050063</a>
+</p>
+
+
+
+
+<p>
+Meijer M, Agirre E, Kabbe M, van Tuijn CA, Heskol A, Zheng C, Mendanha Falcão A, Bartosovic M, Kirby
+L, Calini D <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0896-6273(21)01089-8" target="_blank">
+Epigenomic priming of immune genes implicates oligodendroglia in multiple sclerosis
+susceptibility</a>.
+<em>Neuron</em>. 2022 Apr 6;110(7):1193-1210.e13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35093191" target="_blank">35093191</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9810341/" target="_blank">PMC9810341</a>
+</p>
+
+
+
+
+<p>
+Bartosovic M, Castelo-Branco G.
+<a href="https://doi.org/10.1038/s41587-022-01535-4" target="_blank">
+Multimodal chromatin profiling using nanobody-based single-cell CUT&amp;Tag</a>.
+<em>Nat Biotechnol</em>. 2023 Jun;41(6):794-805.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36536148" target="_blank">36536148</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10264246/" target="_blank">PMC10264246</a>
+</p>
+

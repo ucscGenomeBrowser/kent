@@ -1,0 +1,6 @@
+# composite.docent.yaml: track steps derived against https://genome-test.gi.ucsc.edu/cgi-bin, db hg38
+step 3 track {"clinvar":"pack"}
+  round 1 (1 vars): clinvar=pack
+step 6 track {"clinvar":"pack","clinvarCnv":"hide"}
+  round 1 (1 vars): clinvar=pack
+  round 2 (2 vars): clinvarCnv=hide clinvarCnv_sel=0

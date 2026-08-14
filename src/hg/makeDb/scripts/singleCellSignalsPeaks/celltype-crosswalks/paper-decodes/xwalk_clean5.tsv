@@ -1,0 +1,43 @@
+raw_cell_type	canonical_cell_type	broad_class	note
+Astrocyte	Astrocyte	Astrocyte	clean5
+Bergmann glia	Bergmann glia	Astrocyte	clean5 (cerebellar astrocyte)
+Choroid plexus and ependymal	Choroid plexus / ependymal	Ependymal	clean5
+Endothelial cell	Endothelial cell	Endothelial	clean5
+Excitatory neuron	Excitatory neuron	Excitatory neuron	clean5
+Inhibitory neuron	Inhibitory neuron	Inhibitory neuron	clean5
+Mature oligodendrocyte	Mature oligodendrocyte	Oligodendrocyte	clean5
+Microglia	Microglia	Microglia	clean5
+Olfactory ensheathing	Olfactory ensheathing cell	Other glia	clean5
+Oligodendrocyte precursor	Oligodendrocyte precursor	OPC	clean5
+Radial glia	Radial glia	Neural progenitor	clean5
+Vascular leptomeningeal	Vascular leptomeningeal cell	Mural	clean5 (VLMC)
+Batch	Batch	Unknown	clean5 QC/batch label, not a cell type
+Collecting duct intercalated	Collecting duct intercalated cell	Epithelial	clean5 kidney
+Collecting duct principal	Collecting duct principal cell	Epithelial	clean5 kidney
+Connecting tubule	Connecting tubule cell	Epithelial	clean5 kidney
+Distal convoluted tubes	Distal convoluted tubule cell	Epithelial	clean5 kidney
+Immune	Immune cell	Immune	clean5
+Loop of henle	Loop of Henle cell	Epithelial	clean5 kidney
+Nephron progenitors	Nephron progenitor	Progenitor	clean5 kidney
+PT s3 or proximal tubule segment	Proximal tubule (S3)	Epithelial	clean5 kidney
+Podocytes	Podocyte	Epithelial	clean5 kidney
+Proximal tubule	Proximal tubule cell	Epithelial	clean5 kidney
+Stroma1	Stromal cell	Stromal	clean5 kidney
+Stroma2	Stromal cell	Stromal	clean5 kidney
+All cells	All cells	Aggregate	clean5 aggregate track (not a cell type)
+All immune cells	All immune cells	Immune	clean5 aggregate immune
+All mesenchymal cells	All mesenchymal cells	Stromal	clean5 aggregate mesenchymal
+Artery	Arterial endothelial cell	Endothelial	clean5 lvcp
+Capillary	Capillary endothelial cell	Endothelial	clean5 lvcp
+Ciliogenesis	Ciliated epithelial cell	Epithelial	clean5 lvcp
+Epithelial cell	Epithelial cell	Epithelial	clean5
+Fibroblast	Fibroblast	Stromal	clean5
+Lymphocytes	Lymphocyte	Immune	clean5
+Macropahges	Macrophage	Immune	clean5 (fix typo)
+Mesenchymal	Mesenchymal cell	Stromal	clean5
+Neuronal and glial	Neuronal and glial	Other neural	clean5 mixed group
+Pericyte	Pericyte	Mural	clean5
+Proliferating mesenchymal	Proliferating mesenchymal cell	Stromal	clean5
+Vascular smooth muscle	Vascular smooth muscle cell	Mural	clean5
+Vein	Venous endothelial cell	Endothelial	clean5 lvcp
+Committed oligodendrocyte precursor	Committed oligodendrocyte precursor	OPC	clean5 (COP)

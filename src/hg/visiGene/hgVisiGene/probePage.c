@@ -12,6 +12,7 @@
 #include "dnautil.h"
 #include "web.h"
 #include "hdb.h"
+#include "hubConnect.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "probePage.h"
@@ -75,6 +76,12 @@ int bacId;
 char *name = NULL;
 char *genomeDb = hDbForTaxon(taxon);
 boolean gotMapping = FALSE;
+
+/* hDbForTaxon may return a curated hub (GenArk) assembly with no real SQL
+ * database; genomeDb is passed to sqlConnect() below, which would abort on a
+ * hub db name.  Treat it as no usable native db. */
+if (genomeDb != NULL && hubConnectIsCurated(genomeDb))
+    genomeDb = NULL;
 
 /* Start new line. */
 printf("<BR>\n");

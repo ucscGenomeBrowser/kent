@@ -160,23 +160,7 @@ if (userName)
     {
     // the url for this user:
     jsonWriteString(jw, "userUrl", webDataDir(userName));
-    jsonWriteListStart(jw, "fileList");
-    struct hubSpace *file, *fileList = listFilesForUser(userName);
-    for (file = fileList; file != NULL; file = file->next)
-        {
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteString(jw, "fileName", file->fileName);
-        jsonWriteNumber(jw, "fileSize", file->fileSize);
-        jsonWriteString(jw, "fileType", file->fileType);
-        jsonWriteString(jw, "parentDir", file->parentDir);
-        jsonWriteString(jw, "genome", file->db);
-        jsonWriteString(jw, "lastModified", file->lastModified);
-        jsonWriteString(jw, "uploadTime", file->creationTime);
-        jsonWriteString(jw, "fullPath", stripDataDir(file->location, userName));
-        jsonWriteString(jw, "md5sum", file->md5sum);
-        jsonWriteObjectEnd(jw);
-        }
-    jsonWriteListEnd(jw);
+    hubSpaceWriteFileList(jw, userName, listFilesForUser(userName));
     }
 jsonWriteBoolean(jw, "isLoggedIn", getUserName() ? TRUE : FALSE);
 jsonWriteString(jw, "hubNameDefault", defaultHubNameForUser(getUserName()));
@@ -259,6 +243,7 @@ jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), d
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
+jsInlineF("\nvar hubGenomeCollisionErrFrag=\"%s\";\n", HUB_GENOME_COLLISION_ERR_FRAG);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 }

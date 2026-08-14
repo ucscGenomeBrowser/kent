@@ -1,0 +1,4 @@
+#!/bin/bash
+# kent-beta-arm64 - open a login shell inside the kent-beta-arm64 docker browser container.
+# refs #37655
+exec docker exec -it kent-beta-arm64 bash -l

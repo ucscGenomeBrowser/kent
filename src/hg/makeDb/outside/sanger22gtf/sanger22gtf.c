@@ -41,7 +41,8 @@ while (lineFileNext(lf, &line, NULL))
 	word = nextWord(&line);
 	if (word == NULL)
 	    errAbort("Expecting at least 8 words line %d of %s", lf->lineIx, lf->fileName);
-	fprintf(f, "%s\t", word);
+	else // guard printf: -Wformat-overflow runs before errAbort's noreturn prunes the null path
+	    fprintf(f, "%s\t", word);
 	}
 
     s = skipLeadingSpaces(line);

@@ -1,0 +1,28 @@
+#!/bin/bash
+set -beEu -o pipefail
+
+if [[ $# != 2 ]] ; then
+    echo "Wrong # args: $0 db version" >&2
+    exit 1
+fi
+db="$1" ; shift
+version="$1" ; shift
+
+all_joiner=${HOME}/kent/src/hg/makeDb/schema/all.joiner
+
+extraIdents="wgEncodeGencodeBasicAttrsV${version} wgEncodeGencodeCompAttrsV${version} wgEncodeGencodePseudoGeneAttrsV${version}"
+tblsql="show tables like \"wgEncodeGencode%V${version}\""
+tbls=$(hgsql -Ne "${tblsql}" ${db})
+
+for ident in ${tbls} ${extraIdents} ; do
+    case "${ident}" in
+        wgEncodeGencodeAttrs*|wgEncodeGencode2wayConsPseudo*|wgEncodeGencodePolya*|wgEncodeGencodeBasicV*|wgEncodeGencodeCompV*|wgEncodeGencodePseudoGeneV*)
+            # skip tables whose identifier name differs (handled via extraIdents)
+            # and tables not covered by a joiner identifier
+        ;;
+        *)
+            echo "Checking ${db} ${ident}" >&2
+            joinerCheck -database=${db} -identifier=${ident} -keys ${all_joiner}
+            ;;
+    esac
+done

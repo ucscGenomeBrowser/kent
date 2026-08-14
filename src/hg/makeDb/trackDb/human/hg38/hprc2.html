@@ -1,0 +1,123 @@
+<h2>Description</h2>
+<p>
+The Human Pangenome Reference Consortium (HPRC) is building a collection of
+high-quality, nearly complete genome assemblies from many people, so that human
+genetic variation is represented by many reference genomes rather than a single
+one. Each person contributes two assemblies, one for each copy of their
+chromosomes (the maternal and paternal haplotypes). Comparing these assemblies to
+the standard reference genome GRCh38 reveals where individual genomes differ,
+including places where sequence has been gained, lost, inverted or duplicated.
+</p>
+<p>
+This track collection shows the HPRC Release 2 assemblies compared against GRCh38.
+Release 2 comprises 462 haplotype assemblies from 231 individuals. Rather than
+displaying each assembly separately, the tracks summarize, at every position of
+GRCh38, how the whole set of assemblies aligns: how many of them cover a region,
+where their alignments break, and where they carry insertions, deletions,
+inversions or duplications relative to GRCh38.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The collection contains several tracks:
+</p>
+<ul>
+  <li><b>HPRC2 Coverage</b> shows, for each base of GRCh38, the fraction of the
+  462 assemblies whose alignment covers that base. Values near 1 mean the region
+  is present in almost all assemblies; low values mark regions that are rare,
+  reference-specific or hard to align.</li>
+  <li><b>HPRC2 Rearrangements</b> is a group of feature tracks. Each item marks a
+  place where one or more assemblies differ from GRCh38. Items are colored by the
+  type of event, and the label and mouseover give the event size and the number
+  of assemblies that share it.</li>
+  <li><b>HPRC2 Breaks</b> marks positions where assembly-to-GRCh38 alignments
+  break, which often flags structurally complex or repetitive regions.</li>
+  <li><b>HPRC2 Chains</b> is a set of per-haplotype chain alignments, one subtrack
+  for each of the 462 assemblies, grouped by superpopulation and haplotype so that
+  individual assemblies or whole groups can be turned on as needed.</li>
+</ul>
+<p>
+By default the rearrangement tracks show only events of 50&nbsp;bp or larger to
+keep the display readable; this threshold can be changed with the
+<i>Event size</i> filter on the track configuration page. The number of
+assemblies sharing an event can also be used as a filter.
+</p>
+
+<p>Colors in the rearrangement tracks match the structural-variant type colors used
+by the Long-read SVs track collection:</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#0000C8;width:2em">&nbsp;</th>
+      <td>Insertion &mdash; sequence present in the assemblies but absent from GRCh38</td></tr>
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Deletion &mdash; sequence present in GRCh38 but absent from the assemblies</td></tr>
+  <tr><th style="background-color:#E68C00;width:2em">&nbsp;</th>
+      <td>Inversion &mdash; segment aligned in the opposite orientation</td></tr>
+  <tr><th style="background-color:#00A000;width:2em">&nbsp;</th>
+      <td>Duplication &mdash; segment aligned more than once</td></tr>
+  <tr><th style="background-color:#8C00C8;width:2em">&nbsp;</th>
+      <td>Complex &mdash; sequence unalignable in both GRCh38 and the assemblies</td></tr>
+</table>
+
+<h2>Methods</h2>
+<p>
+HPRC Release 2 assemblies were built from long-read sequencing and aligned to the
+references using the Minigraph-Cactus pangenome pipeline; the consortium released
+per-assembly alignment chains of each haplotype against GRCh38. Starting from
+those chains, the tracks in this collection were derived at UCSC. For each of the
+462 haplotypes, the chain was oriented so that GRCh38 is the target, then a net
+was computed. Coverage was measured by taking the single-cover projection of each
+assembly's aligning blocks onto GRCh38 and counting, per base, how many assemblies
+cover it, normalized by the number of assemblies. Insertions, deletions and
+complex events were extracted from the top-level chains of each net; inversions
+and duplications were extracted directly from the chains. Events at identical
+GRCh38 positions were merged across assemblies, recording how many assemblies
+share each event. Alignment breaks were collected from the chains and colored by
+how many assemblies break at the same position.
+</p>
+<p>
+The HPRC Release 2 chain files were downloaded from the
+<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/tree/main/data_tables/annotation/chains"
+target="_blank">human-pangenomics annotation data tables</a>
+(files <tt>*_vs_GRCh38.chain.gz</tt> in the free <tt>s3://human-pangenomics/</tt>
+bucket). Processing steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/hprc2.txt"
+target="_blank">makeDoc</a>, and the scripts used are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/hprc2"
+target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the
+annotations are stored in bigWig and bigBed files that can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/hprc2/" target="_blank">our
+download server</a>. bigBed files can be queried with the <tt>bigBedToBed</tt>
+tool, and bigWig files with <tt>bigWigToBedGraph</tt>; both can be downloaded from
+the <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">utilities page</a>. The original HPRC assemblies and alignments
+are available from the
+<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly"
+target="_blank">Human Pangenome Project</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Human Pangenome Reference Consortium for producing and releasing the
+Release 2 assemblies and alignments.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Liao WW, Asri M, Ebler J, Doerr D, Haukness M, Hickey G, Lu S, Lucas JK, Monlong J, Abel HJ <em>et
+al</em>.
+<a href="https://doi.org/10.1038/s41586-023-05896-x" target="_blank">
+A draft human pangenome reference</a>.
+<em>Nature</em>. 2023 May;617(7960):312-324.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37165242" target="_blank">37165242</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10172123/" target="_blank">PMC10172123</a>
+</p>
+

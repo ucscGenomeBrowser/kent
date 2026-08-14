@@ -1,0 +1,3 @@
+# urllen.docent.yaml: track steps derived against https://genome-test.gi.ucsc.edu/cgi-bin, db hg38
+step 3 track {"cCREs":"hideKids"}
+  round 1 (3 vars): cCREregistry=hide coreCcres=hide encodeCcreCombined=hide

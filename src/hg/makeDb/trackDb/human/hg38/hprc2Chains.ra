@@ -1,0 +1,4636 @@
+    track hprc2Chains
+    parent hprc2
+    compositeTrack on
+    shortLabel HPRC2 Chains
+    longLabel HPRC2 assembly chain alignments to GRCh38 (per haplotype)
+    subGroup1 superpop Superpopulation AFR=African AMR=American EAS=East_Asian EUR=European SAS=South_Asian OTH=Other
+    subGroup2 hap Haplotype h1=haplotype_1 h2=haplotype_2
+    dimensions dimensionX=superpop dimensionY=hap
+    sortOrder superpop=+ hap=+
+    dragAndDrop subTracks
+    type bigChain
+    spectrum on
+    visibility hide
+    priority 4
+    html hprc2
+
+        track chainHprc2HG000971
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00097.1
+        longLabel HG00097 hap1 (HG00097_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00097.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00097.1.link.bb
+        priority 1
+
+        track chainHprc2HG000972
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00097.2
+        longLabel HG00097 hap2 (HG00097_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00097.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00097.2.link.bb
+        priority 2
+
+        track chainHprc2HG000991
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00099.1
+        longLabel HG00099 hap1 (HG00099_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00099.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00099.1.link.bb
+        priority 3
+
+        track chainHprc2HG000992
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00099.2
+        longLabel HG00099 hap2 (HG00099_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00099.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00099.2.link.bb
+        priority 4
+
+        track chainHprc2HG001261
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00126.1
+        longLabel HG00126 hap1 (HG00126_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00126.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00126.1.link.bb
+        priority 5
+
+        track chainHprc2HG001262
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00126.2
+        longLabel HG00126 hap2 (HG00126_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00126.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00126.2.link.bb
+        priority 6
+
+        track chainHprc2HG001281
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00128.1
+        longLabel HG00128 hap1 (HG00128_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00128.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00128.1.link.bb
+        priority 7
+
+        track chainHprc2HG001282
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00128.2
+        longLabel HG00128 hap2 (HG00128_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00128.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00128.2.link.bb
+        priority 8
+
+        track chainHprc2HG001331
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00133.1
+        longLabel HG00133 hap1 (HG00133_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00133.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00133.1.link.bb
+        priority 9
+
+        track chainHprc2HG001332
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00133.2
+        longLabel HG00133 hap2 (HG00133_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00133.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00133.2.link.bb
+        priority 10
+
+        track chainHprc2HG001401
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00140.1
+        longLabel HG00140 hap1 (HG00140_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00140.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00140.1.link.bb
+        priority 11
+
+        track chainHprc2HG001402
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00140.2
+        longLabel HG00140 hap2 (HG00140_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00140.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00140.2.link.bb
+        priority 12
+
+        track chainHprc2HG001461
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00146.1
+        longLabel HG00146 hap1 (HG00146_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00146.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00146.1.link.bb
+        priority 13
+
+        track chainHprc2HG001462
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00146.2
+        longLabel HG00146 hap2 (HG00146_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00146.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00146.2.link.bb
+        priority 14
+
+        track chainHprc2HG0022
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h2
+        shortLabel HG002.2
+        longLabel HG002 hap2 (hg002v1.1.mat_MT) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG002.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG002.2.link.bb
+        priority 15
+
+        track chainHprc2HG0021
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h1
+        shortLabel HG002.1
+        longLabel HG002 hap1 (hg002v1.1.pat) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG002.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG002.1.link.bb
+        priority 16
+
+        track chainHprc2HG002321
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00232.1
+        longLabel HG00232 hap1 (HG00232_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00232.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00232.1.link.bb
+        priority 17
+
+        track chainHprc2HG002322
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00232.2
+        longLabel HG00232 hap2 (HG00232_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00232.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00232.2.link.bb
+        priority 18
+
+        track chainHprc2HG002351
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00235.1
+        longLabel HG00235 hap1 (HG00235_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00235.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00235.1.link.bb
+        priority 19
+
+        track chainHprc2HG002352
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00235.2
+        longLabel HG00235 hap2 (HG00235_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00235.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00235.2.link.bb
+        priority 20
+
+        track chainHprc2HG002531
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00253.1
+        longLabel HG00253 hap1 (HG00253_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00253.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00253.1.link.bb
+        priority 21
+
+        track chainHprc2HG002532
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00253.2
+        longLabel HG00253 hap2 (HG00253_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00253.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00253.2.link.bb
+        priority 22
+
+        track chainHprc2HG002801
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00280.1
+        longLabel HG00280 hap1 (HG00280_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00280.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00280.1.link.bb
+        priority 23
+
+        track chainHprc2HG002802
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00280.2
+        longLabel HG00280 hap2 (HG00280_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00280.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00280.2.link.bb
+        priority 24
+
+        track chainHprc2HG002901
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00290.1
+        longLabel HG00290 hap1 (HG00290_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00290.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00290.1.link.bb
+        priority 25
+
+        track chainHprc2HG002902
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00290.2
+        longLabel HG00290 hap2 (HG00290_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00290.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00290.2.link.bb
+        priority 26
+
+        track chainHprc2HG003201
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00320.1
+        longLabel HG00320 hap1 (HG00320_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00320.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00320.1.link.bb
+        priority 27
+
+        track chainHprc2HG003202
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00320.2
+        longLabel HG00320 hap2 (HG00320_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00320.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00320.2.link.bb
+        priority 28
+
+        track chainHprc2HG003211
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00321.1
+        longLabel HG00321 hap1 (HG00321_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00321.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00321.1.link.bb
+        priority 29
+
+        track chainHprc2HG003212
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00321.2
+        longLabel HG00321 hap2 (HG00321_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00321.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00321.2.link.bb
+        priority 30
+
+        track chainHprc2HG003231
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00323.1
+        longLabel HG00323 hap1 (HG00323_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00323.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00323.1.link.bb
+        priority 31
+
+        track chainHprc2HG003232
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00323.2
+        longLabel HG00323 hap2 (HG00323_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00323.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00323.2.link.bb
+        priority 32
+
+        track chainHprc2HG003291
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00329.1
+        longLabel HG00329 hap1 (HG00329_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00329.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00329.1.link.bb
+        priority 33
+
+        track chainHprc2HG003292
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00329.2
+        longLabel HG00329 hap2 (HG00329_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00329.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00329.2.link.bb
+        priority 34
+
+        track chainHprc2HG003441
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00344.1
+        longLabel HG00344 hap1 (HG00344_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00344.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00344.1.link.bb
+        priority 35
+
+        track chainHprc2HG003442
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00344.2
+        longLabel HG00344 hap2 (HG00344_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00344.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00344.2.link.bb
+        priority 36
+
+        track chainHprc2HG003501
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG00350.1
+        longLabel HG00350 hap1 (HG00350_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00350.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00350.1.link.bb
+        priority 37
+
+        track chainHprc2HG003502
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG00350.2
+        longLabel HG00350 hap2 (HG00350_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00350.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00350.2.link.bb
+        priority 38
+
+        track chainHprc2HG004082
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00408.2
+        longLabel HG00408 hap2 (HG00408_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00408.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00408.2.link.bb
+        priority 39
+
+        track chainHprc2HG004081
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00408.1
+        longLabel HG00408 hap1 (HG00408_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00408.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00408.1.link.bb
+        priority 40
+
+        track chainHprc2HG004232
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00423.2
+        longLabel HG00423 hap2 (HG00423_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00423.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00423.2.link.bb
+        priority 41
+
+        track chainHprc2HG004231
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00423.1
+        longLabel HG00423 hap1 (HG00423_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00423.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00423.1.link.bb
+        priority 42
+
+        track chainHprc2HG004382
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00438.2
+        longLabel HG00438 hap2 (HG00438_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00438.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00438.2.link.bb
+        priority 43
+
+        track chainHprc2HG004381
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00438.1
+        longLabel HG00438 hap1 (HG00438_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00438.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00438.1.link.bb
+        priority 44
+
+        track chainHprc2HG0052
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h2
+        shortLabel HG005.2
+        longLabel HG005 hap2 (HG005_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG005.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG005.2.link.bb
+        priority 45
+
+        track chainHprc2HG0051
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h1
+        shortLabel HG005.1
+        longLabel HG005 hap1 (HG005_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG005.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG005.1.link.bb
+        priority 46
+
+        track chainHprc2HG005442
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00544.2
+        longLabel HG00544 hap2 (HG00544_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00544.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00544.2.link.bb
+        priority 47
+
+        track chainHprc2HG005441
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00544.1
+        longLabel HG00544 hap1 (HG00544_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00544.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00544.1.link.bb
+        priority 48
+
+        track chainHprc2HG005582
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00558.2
+        longLabel HG00558 hap2 (HG00558_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00558.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00558.2.link.bb
+        priority 49
+
+        track chainHprc2HG005581
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00558.1
+        longLabel HG00558 hap1 (HG00558_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00558.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00558.1.link.bb
+        priority 50
+
+        track chainHprc2HG005972
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00597.2
+        longLabel HG00597 hap2 (HG00597_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00597.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00597.2.link.bb
+        priority 51
+
+        track chainHprc2HG005971
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00597.1
+        longLabel HG00597 hap1 (HG00597_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00597.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00597.1.link.bb
+        priority 52
+
+        track chainHprc2HG006092
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00609.2
+        longLabel HG00609 hap2 (HG00609_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00609.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00609.2.link.bb
+        priority 53
+
+        track chainHprc2HG006091
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00609.1
+        longLabel HG00609 hap1 (HG00609_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00609.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00609.1.link.bb
+        priority 54
+
+        track chainHprc2HG006212
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00621.2
+        longLabel HG00621 hap2 (HG00621_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00621.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00621.2.link.bb
+        priority 55
+
+        track chainHprc2HG006211
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00621.1
+        longLabel HG00621 hap1 (HG00621_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00621.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00621.1.link.bb
+        priority 56
+
+        track chainHprc2HG006392
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00639.2
+        longLabel HG00639 hap2 (HG00639_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00639.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00639.2.link.bb
+        priority 57
+
+        track chainHprc2HG006391
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00639.1
+        longLabel HG00639 hap1 (HG00639_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00639.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00639.1.link.bb
+        priority 58
+
+        track chainHprc2HG006422
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00642.2
+        longLabel HG00642 hap2 (HG00642_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00642.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00642.2.link.bb
+        priority 59
+
+        track chainHprc2HG006421
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00642.1
+        longLabel HG00642 hap1 (HG00642_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00642.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00642.1.link.bb
+        priority 60
+
+        track chainHprc2HG006582
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00658.2
+        longLabel HG00658 hap2 (HG00658_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00658.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00658.2.link.bb
+        priority 61
+
+        track chainHprc2HG006581
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00658.1
+        longLabel HG00658 hap1 (HG00658_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00658.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00658.1.link.bb
+        priority 62
+
+        track chainHprc2HG006732
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00673.2
+        longLabel HG00673 hap2 (HG00673_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00673.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00673.2.link.bb
+        priority 63
+
+        track chainHprc2HG006731
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00673.1
+        longLabel HG00673 hap1 (HG00673_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00673.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00673.1.link.bb
+        priority 64
+
+        track chainHprc2HG007062
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG00706.2
+        longLabel HG00706 hap2 (HG00706_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00706.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00706.2.link.bb
+        priority 65
+
+        track chainHprc2HG007061
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG00706.1
+        longLabel HG00706 hap1 (HG00706_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00706.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00706.1.link.bb
+        priority 66
+
+        track chainHprc2HG007332
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00733.2
+        longLabel HG00733 hap2 (HG00733_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00733.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00733.2.link.bb
+        priority 67
+
+        track chainHprc2HG007331
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00733.1
+        longLabel HG00733 hap1 (HG00733_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00733.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00733.1.link.bb
+        priority 68
+
+        track chainHprc2HG007352
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00735.2
+        longLabel HG00735 hap2 (HG00735_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00735.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00735.2.link.bb
+        priority 69
+
+        track chainHprc2HG007351
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00735.1
+        longLabel HG00735 hap1 (HG00735_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00735.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00735.1.link.bb
+        priority 70
+
+        track chainHprc2HG007382
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00738.2
+        longLabel HG00738 hap2 (HG00738_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00738.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00738.2.link.bb
+        priority 71
+
+        track chainHprc2HG007381
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00738.1
+        longLabel HG00738 hap1 (HG00738_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00738.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00738.1.link.bb
+        priority 72
+
+        track chainHprc2HG007412
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG00741.2
+        longLabel HG00741 hap2 (HG00741_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00741.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00741.2.link.bb
+        priority 73
+
+        track chainHprc2HG007411
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG00741.1
+        longLabel HG00741 hap1 (HG00741_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG00741.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG00741.1.link.bb
+        priority 74
+
+        track chainHprc2HG010712
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01071.2
+        longLabel HG01071 hap2 (HG01071_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01071.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01071.2.link.bb
+        priority 75
+
+        track chainHprc2HG010711
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01071.1
+        longLabel HG01071 hap1 (HG01071_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01071.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01071.1.link.bb
+        priority 76
+
+        track chainHprc2HG010742
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01074.2
+        longLabel HG01074 hap2 (HG01074_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01074.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01074.2.link.bb
+        priority 77
+
+        track chainHprc2HG010741
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01074.1
+        longLabel HG01074 hap1 (HG01074_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01074.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01074.1.link.bb
+        priority 78
+
+        track chainHprc2HG010812
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01081.2
+        longLabel HG01081 hap2 (HG01081_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01081.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01081.2.link.bb
+        priority 79
+
+        track chainHprc2HG010811
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01081.1
+        longLabel HG01081 hap1 (HG01081_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01081.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01081.1.link.bb
+        priority 80
+
+        track chainHprc2HG010992
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01099.2
+        longLabel HG01099 hap2 (HG01099_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01099.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01099.2.link.bb
+        priority 81
+
+        track chainHprc2HG010991
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01099.1
+        longLabel HG01099 hap1 (HG01099_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01099.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01099.1.link.bb
+        priority 82
+
+        track chainHprc2HG011062
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01106.2
+        longLabel HG01106 hap2 (HG01106_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01106.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01106.2.link.bb
+        priority 83
+
+        track chainHprc2HG011061
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01106.1
+        longLabel HG01106 hap1 (HG01106_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01106.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01106.1.link.bb
+        priority 84
+
+        track chainHprc2HG011092
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01109.2
+        longLabel HG01109 hap2 (HG01109_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01109.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01109.2.link.bb
+        priority 85
+
+        track chainHprc2HG011091
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01109.1
+        longLabel HG01109 hap1 (HG01109_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01109.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01109.1.link.bb
+        priority 86
+
+        track chainHprc2HG011232
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01123.2
+        longLabel HG01123 hap2 (HG01123_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01123.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01123.2.link.bb
+        priority 87
+
+        track chainHprc2HG011231
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01123.1
+        longLabel HG01123 hap1 (HG01123_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01123.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01123.1.link.bb
+        priority 88
+
+        track chainHprc2HG011502
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01150.2
+        longLabel HG01150 hap2 (HG01150_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01150.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01150.2.link.bb
+        priority 89
+
+        track chainHprc2HG011501
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01150.1
+        longLabel HG01150 hap1 (HG01150_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01150.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01150.1.link.bb
+        priority 90
+
+        track chainHprc2HG011671
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01167.1
+        longLabel HG01167 hap1 (HG01167_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01167.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01167.1.link.bb
+        priority 91
+
+        track chainHprc2HG011672
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01167.2
+        longLabel HG01167 hap2 (HG01167_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01167.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01167.2.link.bb
+        priority 92
+
+        track chainHprc2HG011752
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01175.2
+        longLabel HG01175 hap2 (HG01175_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01175.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01175.2.link.bb
+        priority 93
+
+        track chainHprc2HG011751
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01175.1
+        longLabel HG01175 hap1 (HG01175_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01175.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01175.1.link.bb
+        priority 94
+
+        track chainHprc2HG011922
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01192.2
+        longLabel HG01192 hap2 (HG01192_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01192.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01192.2.link.bb
+        priority 95
+
+        track chainHprc2HG011921
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01192.1
+        longLabel HG01192 hap1 (HG01192_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01192.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01192.1.link.bb
+        priority 96
+
+        track chainHprc2HG012432
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01243.2
+        longLabel HG01243 hap2 (HG01243_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01243.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01243.2.link.bb
+        priority 97
+
+        track chainHprc2HG012431
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01243.1
+        longLabel HG01243 hap1 (HG01243_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01243.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01243.1.link.bb
+        priority 98
+
+        track chainHprc2HG012522
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01252.2
+        longLabel HG01252 hap2 (HG01252_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01252.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01252.2.link.bb
+        priority 99
+
+        track chainHprc2HG012521
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01252.1
+        longLabel HG01252 hap1 (HG01252_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01252.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01252.1.link.bb
+        priority 100
+
+        track chainHprc2HG012552
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01255.2
+        longLabel HG01255 hap2 (HG01255_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01255.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01255.2.link.bb
+        priority 101
+
+        track chainHprc2HG012551
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01255.1
+        longLabel HG01255 hap1 (HG01255_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01255.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01255.1.link.bb
+        priority 102
+
+        track chainHprc2HG012582
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01258.2
+        longLabel HG01258 hap2 (HG01258_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01258.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01258.2.link.bb
+        priority 103
+
+        track chainHprc2HG012581
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01258.1
+        longLabel HG01258 hap1 (HG01258_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01258.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01258.1.link.bb
+        priority 104
+
+        track chainHprc2HG012612
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01261.2
+        longLabel HG01261 hap2 (HG01261_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01261.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01261.2.link.bb
+        priority 105
+
+        track chainHprc2HG012611
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01261.1
+        longLabel HG01261 hap1 (HG01261_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01261.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01261.1.link.bb
+        priority 106
+
+        track chainHprc2HG013462
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01346.2
+        longLabel HG01346 hap2 (HG01346_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01346.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01346.2.link.bb
+        priority 107
+
+        track chainHprc2HG013461
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01346.1
+        longLabel HG01346 hap1 (HG01346_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01346.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01346.1.link.bb
+        priority 108
+
+        track chainHprc2HG013582
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01358.2
+        longLabel HG01358 hap2 (HG01358_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01358.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01358.2.link.bb
+        priority 109
+
+        track chainHprc2HG013581
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01358.1
+        longLabel HG01358 hap1 (HG01358_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01358.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01358.1.link.bb
+        priority 110
+
+        track chainHprc2HG013612
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01361.2
+        longLabel HG01361 hap2 (HG01361_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01361.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01361.2.link.bb
+        priority 111
+
+        track chainHprc2HG013611
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01361.1
+        longLabel HG01361 hap1 (HG01361_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01361.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01361.1.link.bb
+        priority 112
+
+        track chainHprc2HG014332
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01433.2
+        longLabel HG01433 hap2 (HG01433_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01433.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01433.2.link.bb
+        priority 113
+
+        track chainHprc2HG014331
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01433.1
+        longLabel HG01433 hap1 (HG01433_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01433.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01433.1.link.bb
+        priority 114
+
+        track chainHprc2HG014962
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01496.2
+        longLabel HG01496 hap2 (HG01496_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01496.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01496.2.link.bb
+        priority 115
+
+        track chainHprc2HG014961
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01496.1
+        longLabel HG01496 hap1 (HG01496_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01496.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01496.1.link.bb
+        priority 116
+
+        track chainHprc2HG015301
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG01530.1
+        longLabel HG01530 hap1 (HG01530_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01530.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01530.1.link.bb
+        priority 117
+
+        track chainHprc2HG015302
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG01530.2
+        longLabel HG01530 hap2 (HG01530_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01530.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01530.2.link.bb
+        priority 118
+
+        track chainHprc2HG017841
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG01784.1
+        longLabel HG01784 hap1 (HG01784_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01784.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01784.1.link.bb
+        priority 119
+
+        track chainHprc2HG017842
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG01784.2
+        longLabel HG01784 hap2 (HG01784_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01784.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01784.2.link.bb
+        priority 120
+
+        track chainHprc2HG017861
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel HG01786.1
+        longLabel HG01786 hap1 (HG01786_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01786.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01786.1.link.bb
+        priority 121
+
+        track chainHprc2HG017862
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel HG01786.2
+        longLabel HG01786 hap2 (HG01786_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01786.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01786.2.link.bb
+        priority 122
+
+        track chainHprc2HG018842
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG01884.2
+        longLabel HG01884 hap2 (HG01884_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01884.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01884.2.link.bb
+        priority 123
+
+        track chainHprc2HG018841
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG01884.1
+        longLabel HG01884 hap1 (HG01884_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01884.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01884.1.link.bb
+        priority 124
+
+        track chainHprc2HG018912
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG01891.2
+        longLabel HG01891 hap2 (HG01891_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01891.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01891.2.link.bb
+        priority 125
+
+        track chainHprc2HG018911
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG01891.1
+        longLabel HG01891 hap1 (HG01891_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01891.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01891.1.link.bb
+        priority 126
+
+        track chainHprc2HG019282
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01928.2
+        longLabel HG01928 hap2 (HG01928_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01928.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01928.2.link.bb
+        priority 127
+
+        track chainHprc2HG019281
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01928.1
+        longLabel HG01928 hap1 (HG01928_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01928.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01928.1.link.bb
+        priority 128
+
+        track chainHprc2HG019342
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01934.2
+        longLabel HG01934 hap2 (HG01934_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01934.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01934.2.link.bb
+        priority 129
+
+        track chainHprc2HG019341
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01934.1
+        longLabel HG01934 hap1 (HG01934_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01934.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01934.1.link.bb
+        priority 130
+
+        track chainHprc2HG019402
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01940.2
+        longLabel HG01940 hap2 (HG01940_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01940.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01940.2.link.bb
+        priority 131
+
+        track chainHprc2HG019401
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01940.1
+        longLabel HG01940 hap1 (HG01940_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01940.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01940.1.link.bb
+        priority 132
+
+        track chainHprc2HG019432
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01943.2
+        longLabel HG01943 hap2 (HG01943_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01943.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01943.2.link.bb
+        priority 133
+
+        track chainHprc2HG019431
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01943.1
+        longLabel HG01943 hap1 (HG01943_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01943.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01943.1.link.bb
+        priority 134
+
+        track chainHprc2HG019522
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01952.2
+        longLabel HG01952 hap2 (HG01952_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01952.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01952.2.link.bb
+        priority 135
+
+        track chainHprc2HG019521
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01952.1
+        longLabel HG01952 hap1 (HG01952_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01952.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01952.1.link.bb
+        priority 136
+
+        track chainHprc2HG019602
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG01960.2
+        longLabel HG01960 hap2 (HG01960_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01960.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01960.2.link.bb
+        priority 137
+
+        track chainHprc2HG019601
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG01960.1
+        longLabel HG01960 hap1 (HG01960_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01960.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01960.1.link.bb
+        priority 138
+
+        track chainHprc2HG019692
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01969.2
+        longLabel HG01969 hap2 (HG01969_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01969.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01969.2.link.bb
+        priority 139
+
+        track chainHprc2HG019691
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01969.1
+        longLabel HG01969 hap1 (HG01969_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01969.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01969.1.link.bb
+        priority 140
+
+        track chainHprc2HG019752
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01975.2
+        longLabel HG01975 hap2 (HG01975_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01975.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01975.2.link.bb
+        priority 141
+
+        track chainHprc2HG019751
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01975.1
+        longLabel HG01975 hap1 (HG01975_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01975.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01975.1.link.bb
+        priority 142
+
+        track chainHprc2HG019782
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01978.2
+        longLabel HG01978 hap2 (HG01978_mat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01978.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01978.2.link.bb
+        priority 143
+
+        track chainHprc2HG019781
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01978.1
+        longLabel HG01978 hap1 (HG01978_pat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01978.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01978.1.link.bb
+        priority 144
+
+        track chainHprc2HG019812
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01981.2
+        longLabel HG01981 hap2 (HG01981_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01981.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01981.2.link.bb
+        priority 145
+
+        track chainHprc2HG019811
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01981.1
+        longLabel HG01981 hap1 (HG01981_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01981.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01981.1.link.bb
+        priority 146
+
+        track chainHprc2HG019932
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG01993.2
+        longLabel HG01993 hap2 (HG01993_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01993.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01993.2.link.bb
+        priority 147
+
+        track chainHprc2HG019931
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG01993.1
+        longLabel HG01993 hap1 (HG01993_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG01993.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG01993.1.link.bb
+        priority 148
+
+        track chainHprc2HG020042
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG02004.2
+        longLabel HG02004 hap2 (HG02004_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02004.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02004.2.link.bb
+        priority 149
+
+        track chainHprc2HG020041
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG02004.1
+        longLabel HG02004 hap1 (HG02004_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02004.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02004.1.link.bb
+        priority 150
+
+        track chainHprc2HG020152
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02015.2
+        longLabel HG02015 hap2 (HG02015_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02015.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02015.2.link.bb
+        priority 151
+
+        track chainHprc2HG020151
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02015.1
+        longLabel HG02015 hap1 (HG02015_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02015.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02015.1.link.bb
+        priority 152
+
+        track chainHprc2HG020272
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02027.2
+        longLabel HG02027 hap2 (HG02027_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02027.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02027.2.link.bb
+        priority 153
+
+        track chainHprc2HG020271
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02027.1
+        longLabel HG02027 hap1 (HG02027_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02027.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02027.1.link.bb
+        priority 154
+
+        track chainHprc2HG020401
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02040.1
+        longLabel HG02040 hap1 (HG02040_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02040.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02040.1.link.bb
+        priority 155
+
+        track chainHprc2HG020402
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02040.2
+        longLabel HG02040 hap2 (HG02040_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02040.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02040.2.link.bb
+        priority 156
+
+        track chainHprc2HG020552
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02055.2
+        longLabel HG02055 hap2 (HG02055_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02055.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02055.2.link.bb
+        priority 157
+
+        track chainHprc2HG020551
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02055.1
+        longLabel HG02055 hap1 (HG02055_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02055.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02055.1.link.bb
+        priority 158
+
+        track chainHprc2HG020562
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02056.2
+        longLabel HG02056 hap2 (HG02056_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02056.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02056.2.link.bb
+        priority 159
+
+        track chainHprc2HG020561
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02056.1
+        longLabel HG02056 hap1 (HG02056_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02056.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02056.1.link.bb
+        priority 160
+
+        track chainHprc2HG020712
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02071.2
+        longLabel HG02071 hap2 (HG02071_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02071.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02071.2.link.bb
+        priority 161
+
+        track chainHprc2HG020711
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02071.1
+        longLabel HG02071 hap1 (HG02071_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02071.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02071.1.link.bb
+        priority 162
+
+        track chainHprc2HG020742
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02074.2
+        longLabel HG02074 hap2 (HG02074_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02074.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02074.2.link.bb
+        priority 163
+
+        track chainHprc2HG020741
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02074.1
+        longLabel HG02074 hap1 (HG02074_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02074.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02074.1.link.bb
+        priority 164
+
+        track chainHprc2HG020802
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02080.2
+        longLabel HG02080 hap2 (HG02080_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02080.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02080.2.link.bb
+        priority 165
+
+        track chainHprc2HG020801
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02080.1
+        longLabel HG02080 hap1 (HG02080_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02080.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02080.1.link.bb
+        priority 166
+
+        track chainHprc2HG020832
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02083.2
+        longLabel HG02083 hap2 (HG02083_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02083.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02083.2.link.bb
+        priority 167
+
+        track chainHprc2HG020831
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02083.1
+        longLabel HG02083 hap1 (HG02083_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02083.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02083.1.link.bb
+        priority 168
+
+        track chainHprc2HG021092
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02109.2
+        longLabel HG02109 hap2 (HG02109_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02109.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02109.2.link.bb
+        priority 169
+
+        track chainHprc2HG021091
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02109.1
+        longLabel HG02109 hap1 (HG02109_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02109.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02109.1.link.bb
+        priority 170
+
+        track chainHprc2HG021292
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02129.2
+        longLabel HG02129 hap2 (HG02129_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02129.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02129.2.link.bb
+        priority 171
+
+        track chainHprc2HG021291
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02129.1
+        longLabel HG02129 hap1 (HG02129_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02129.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02129.1.link.bb
+        priority 172
+
+        track chainHprc2HG021322
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02132.2
+        longLabel HG02132 hap2 (HG02132_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02132.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02132.2.link.bb
+        priority 173
+
+        track chainHprc2HG021321
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02132.1
+        longLabel HG02132 hap1 (HG02132_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02132.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02132.1.link.bb
+        priority 174
+
+        track chainHprc2HG021352
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02135.2
+        longLabel HG02135 hap2 (HG02135_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02135.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02135.2.link.bb
+        priority 175
+
+        track chainHprc2HG021351
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02135.1
+        longLabel HG02135 hap1 (HG02135_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02135.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02135.1.link.bb
+        priority 176
+
+        track chainHprc2HG021452
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02145.2
+        longLabel HG02145 hap2 (HG02145_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02145.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02145.2.link.bb
+        priority 177
+
+        track chainHprc2HG021451
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02145.1
+        longLabel HG02145 hap1 (HG02145_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02145.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02145.1.link.bb
+        priority 178
+
+        track chainHprc2HG021482
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG02148.2
+        longLabel HG02148 hap2 (HG02148_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02148.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02148.2.link.bb
+        priority 179
+
+        track chainHprc2HG021481
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG02148.1
+        longLabel HG02148 hap1 (HG02148_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02148.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02148.1.link.bb
+        priority 180
+
+        track chainHprc2HG021551
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02155.1
+        longLabel HG02155 hap1 (HG02155_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02155.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02155.1.link.bb
+        priority 181
+
+        track chainHprc2HG021552
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02155.2
+        longLabel HG02155 hap2 (HG02155_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02155.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02155.2.link.bb
+        priority 182
+
+        track chainHprc2HG021651
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02165.1
+        longLabel HG02165 hap1 (HG02165_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02165.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02165.1.link.bb
+        priority 183
+
+        track chainHprc2HG021652
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02165.2
+        longLabel HG02165 hap2 (HG02165_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02165.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02165.2.link.bb
+        priority 184
+
+        track chainHprc2HG021781
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02178.1
+        longLabel HG02178 hap1 (HG02178_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02178.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02178.1.link.bb
+        priority 185
+
+        track chainHprc2HG021782
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02178.2
+        longLabel HG02178 hap2 (HG02178_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02178.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02178.2.link.bb
+        priority 186
+
+        track chainHprc2HG022572
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02257.2
+        longLabel HG02257 hap2 (HG02257_mat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02257.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02257.2.link.bb
+        priority 187
+
+        track chainHprc2HG022571
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02257.1
+        longLabel HG02257 hap1 (HG02257_pat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02257.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02257.1.link.bb
+        priority 188
+
+        track chainHprc2HG022582
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02258.2
+        longLabel HG02258 hap2 (HG02258_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02258.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02258.2.link.bb
+        priority 189
+
+        track chainHprc2HG022581
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02258.1
+        longLabel HG02258 hap1 (HG02258_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02258.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02258.1.link.bb
+        priority 190
+
+        track chainHprc2HG022731
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG02273.1
+        longLabel HG02273 hap1 (HG02273_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02273.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02273.1.link.bb
+        priority 191
+
+        track chainHprc2HG022732
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG02273.2
+        longLabel HG02273 hap2 (HG02273_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02273.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02273.2.link.bb
+        priority 192
+
+        track chainHprc2HG022802
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02280.2
+        longLabel HG02280 hap2 (HG02280_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02280.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02280.2.link.bb
+        priority 193
+
+        track chainHprc2HG022801
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02280.1
+        longLabel HG02280 hap1 (HG02280_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02280.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02280.1.link.bb
+        priority 194
+
+        track chainHprc2HG022932
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG02293.2
+        longLabel HG02293 hap2 (HG02293_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02293.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02293.2.link.bb
+        priority 195
+
+        track chainHprc2HG022931
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG02293.1
+        longLabel HG02293 hap1 (HG02293_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02293.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02293.1.link.bb
+        priority 196
+
+        track chainHprc2HG023002
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel HG02300.2
+        longLabel HG02300 hap2 (HG02300_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02300.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02300.2.link.bb
+        priority 197
+
+        track chainHprc2HG023001
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel HG02300.1
+        longLabel HG02300 hap1 (HG02300_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02300.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02300.1.link.bb
+        priority 198
+
+        track chainHprc2HG023911
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02391.1
+        longLabel HG02391 hap1 (HG02391_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02391.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02391.1.link.bb
+        priority 199
+
+        track chainHprc2HG023912
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02391.2
+        longLabel HG02391 hap2 (HG02391_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02391.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02391.2.link.bb
+        priority 200
+
+        track chainHprc2HG023921
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02392.1
+        longLabel HG02392 hap1 (HG02392_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02392.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02392.1.link.bb
+        priority 201
+
+        track chainHprc2HG023922
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02392.2
+        longLabel HG02392 hap2 (HG02392_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02392.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02392.2.link.bb
+        priority 202
+
+        track chainHprc2HG024512
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02451.2
+        longLabel HG02451 hap2 (HG02451_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02451.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02451.2.link.bb
+        priority 203
+
+        track chainHprc2HG024511
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02451.1
+        longLabel HG02451 hap1 (HG02451_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02451.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02451.1.link.bb
+        priority 204
+
+        track chainHprc2HG024862
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02486.2
+        longLabel HG02486 hap2 (HG02486_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02486.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02486.2.link.bb
+        priority 205
+
+        track chainHprc2HG024861
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02486.1
+        longLabel HG02486 hap1 (HG02486_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02486.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02486.1.link.bb
+        priority 206
+
+        track chainHprc2HG025142
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02514.2
+        longLabel HG02514 hap2 (HG02514_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02514.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02514.2.link.bb
+        priority 207
+
+        track chainHprc2HG025141
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02514.1
+        longLabel HG02514 hap1 (HG02514_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02514.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02514.1.link.bb
+        priority 208
+
+        track chainHprc2HG025232
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel HG02523.2
+        longLabel HG02523 hap2 (HG02523_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02523.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02523.2.link.bb
+        priority 209
+
+        track chainHprc2HG025231
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel HG02523.1
+        longLabel HG02523 hap1 (HG02523_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02523.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02523.1.link.bb
+        priority 210
+
+        track chainHprc2HG025592
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02559.2
+        longLabel HG02559 hap2 (HG02559_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02559.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02559.2.link.bb
+        priority 211
+
+        track chainHprc2HG025591
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02559.1
+        longLabel HG02559 hap1 (HG02559_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02559.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02559.1.link.bb
+        priority 212
+
+        track chainHprc2HG025722
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02572.2
+        longLabel HG02572 hap2 (HG02572_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02572.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02572.2.link.bb
+        priority 213
+
+        track chainHprc2HG025721
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02572.1
+        longLabel HG02572 hap1 (HG02572_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02572.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02572.1.link.bb
+        priority 214
+
+        track chainHprc2HG025831
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02583.1
+        longLabel HG02583 hap1 (HG02583_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02583.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02583.1.link.bb
+        priority 215
+
+        track chainHprc2HG025832
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02583.2
+        longLabel HG02583 hap2 (HG02583_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02583.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02583.2.link.bb
+        priority 216
+
+        track chainHprc2HG026022
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG02602.2
+        longLabel HG02602 hap2 (HG02602_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02602.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02602.2.link.bb
+        priority 217
+
+        track chainHprc2HG026021
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG02602.1
+        longLabel HG02602 hap1 (HG02602_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02602.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02602.1.link.bb
+        priority 218
+
+        track chainHprc2HG026152
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02615.2
+        longLabel HG02615 hap2 (HG02615_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02615.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02615.2.link.bb
+        priority 219
+
+        track chainHprc2HG026151
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02615.1
+        longLabel HG02615 hap1 (HG02615_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02615.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02615.1.link.bb
+        priority 220
+
+        track chainHprc2HG026222
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02622.2
+        longLabel HG02622 hap2 (HG02622_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02622.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02622.2.link.bb
+        priority 221
+
+        track chainHprc2HG026221
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02622.1
+        longLabel HG02622 hap1 (HG02622_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02622.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02622.1.link.bb
+        priority 222
+
+        track chainHprc2HG026302
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02630.2
+        longLabel HG02630 hap2 (HG02630_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02630.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02630.2.link.bb
+        priority 223
+
+        track chainHprc2HG026301
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02630.1
+        longLabel HG02630 hap1 (HG02630_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02630.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02630.1.link.bb
+        priority 224
+
+        track chainHprc2HG026472
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02647.2
+        longLabel HG02647 hap2 (HG02647_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02647.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02647.2.link.bb
+        priority 225
+
+        track chainHprc2HG026471
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02647.1
+        longLabel HG02647 hap1 (HG02647_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02647.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02647.1.link.bb
+        priority 226
+
+        track chainHprc2HG026682
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02668.2
+        longLabel HG02668 hap2 (HG02668_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02668.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02668.2.link.bb
+        priority 227
+
+        track chainHprc2HG026681
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02668.1
+        longLabel HG02668 hap1 (HG02668_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02668.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02668.1.link.bb
+        priority 228
+
+        track chainHprc2HG026982
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG02698.2
+        longLabel HG02698 hap2 (HG02698_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02698.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02698.2.link.bb
+        priority 229
+
+        track chainHprc2HG026981
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG02698.1
+        longLabel HG02698 hap1 (HG02698_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02698.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02698.1.link.bb
+        priority 230
+
+        track chainHprc2HG027172
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02717.2
+        longLabel HG02717 hap2 (HG02717_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02717.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02717.2.link.bb
+        priority 231
+
+        track chainHprc2HG027171
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02717.1
+        longLabel HG02717 hap1 (HG02717_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02717.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02717.1.link.bb
+        priority 232
+
+        track chainHprc2HG027232
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02723.2
+        longLabel HG02723 hap2 (HG02723_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02723.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02723.2.link.bb
+        priority 233
+
+        track chainHprc2HG027231
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02723.1
+        longLabel HG02723 hap1 (HG02723_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02723.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02723.1.link.bb
+        priority 234
+
+        track chainHprc2HG027352
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG02735.2
+        longLabel HG02735 hap2 (HG02735_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02735.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02735.2.link.bb
+        priority 235
+
+        track chainHprc2HG027351
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG02735.1
+        longLabel HG02735 hap1 (HG02735_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02735.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02735.1.link.bb
+        priority 236
+
+        track chainHprc2HG027382
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG02738.2
+        longLabel HG02738 hap2 (HG02738_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02738.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02738.2.link.bb
+        priority 237
+
+        track chainHprc2HG027381
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG02738.1
+        longLabel HG02738 hap1 (HG02738_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02738.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02738.1.link.bb
+        priority 238
+
+        track chainHprc2HG028092
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02809.2
+        longLabel HG02809 hap2 (HG02809_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02809.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02809.2.link.bb
+        priority 239
+
+        track chainHprc2HG028091
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02809.1
+        longLabel HG02809 hap1 (HG02809_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02809.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02809.1.link.bb
+        priority 240
+
+        track chainHprc2HG028182
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02818.2
+        longLabel HG02818 hap2 (HG02818_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02818.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02818.2.link.bb
+        priority 241
+
+        track chainHprc2HG028181
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02818.1
+        longLabel HG02818 hap1 (HG02818_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02818.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02818.1.link.bb
+        priority 242
+
+        track chainHprc2HG028412
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02841.2
+        longLabel HG02841 hap2 (HG02841_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02841.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02841.2.link.bb
+        priority 243
+
+        track chainHprc2HG028411
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02841.1
+        longLabel HG02841 hap1 (HG02841_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02841.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02841.1.link.bb
+        priority 244
+
+        track chainHprc2HG028862
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02886.2
+        longLabel HG02886 hap2 (HG02886_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02886.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02886.2.link.bb
+        priority 245
+
+        track chainHprc2HG028861
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02886.1
+        longLabel HG02886 hap1 (HG02886_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02886.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02886.1.link.bb
+        priority 246
+
+        track chainHprc2HG029221
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02922.1
+        longLabel HG02922 hap1 (HG02922_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02922.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02922.1.link.bb
+        priority 247
+
+        track chainHprc2HG029222
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02922.2
+        longLabel HG02922 hap2 (HG02922_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02922.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02922.2.link.bb
+        priority 248
+
+        track chainHprc2HG029651
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02965.1
+        longLabel HG02965 hap1 (HG02965_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02965.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02965.1.link.bb
+        priority 249
+
+        track chainHprc2HG029652
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02965.2
+        longLabel HG02965 hap2 (HG02965_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02965.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02965.2.link.bb
+        priority 250
+
+        track chainHprc2HG029761
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02976.1
+        longLabel HG02976 hap1 (HG02976_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02976.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02976.1.link.bb
+        priority 251
+
+        track chainHprc2HG029762
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02976.2
+        longLabel HG02976 hap2 (HG02976_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02976.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02976.2.link.bb
+        priority 252
+
+        track chainHprc2HG029842
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG02984.2
+        longLabel HG02984 hap2 (HG02984_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02984.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02984.2.link.bb
+        priority 253
+
+        track chainHprc2HG029841
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG02984.1
+        longLabel HG02984 hap1 (HG02984_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG02984.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG02984.1.link.bb
+        priority 254
+
+        track chainHprc2HG030172
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03017.2
+        longLabel HG03017 hap2 (HG03017_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03017.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03017.2.link.bb
+        priority 255
+
+        track chainHprc2HG030171
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03017.1
+        longLabel HG03017 hap1 (HG03017_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03017.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03017.1.link.bb
+        priority 256
+
+        track chainHprc2HG030412
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03041.2
+        longLabel HG03041 hap2 (HG03041_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03041.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03041.2.link.bb
+        priority 257
+
+        track chainHprc2HG030411
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03041.1
+        longLabel HG03041 hap1 (HG03041_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03041.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03041.1.link.bb
+        priority 258
+
+        track chainHprc2HG030502
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03050.2
+        longLabel HG03050 hap2 (HG03050_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03050.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03050.2.link.bb
+        priority 259
+
+        track chainHprc2HG030501
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03050.1
+        longLabel HG03050 hap1 (HG03050_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03050.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03050.1.link.bb
+        priority 260
+
+        track chainHprc2HG030982
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03098.2
+        longLabel HG03098 hap2 (HG03098_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03098.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03098.2.link.bb
+        priority 261
+
+        track chainHprc2HG030981
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03098.1
+        longLabel HG03098 hap1 (HG03098_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03098.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03098.1.link.bb
+        priority 262
+
+        track chainHprc2HG031301
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03130.1
+        longLabel HG03130 hap1 (HG03130_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03130.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03130.1.link.bb
+        priority 263
+
+        track chainHprc2HG031302
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03130.2
+        longLabel HG03130 hap2 (HG03130_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03130.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03130.2.link.bb
+        priority 264
+
+        track chainHprc2HG031391
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03139.1
+        longLabel HG03139 hap1 (HG03139_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03139.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03139.1.link.bb
+        priority 265
+
+        track chainHprc2HG031392
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03139.2
+        longLabel HG03139 hap2 (HG03139_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03139.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03139.2.link.bb
+        priority 266
+
+        track chainHprc2HG031951
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03195.1
+        longLabel HG03195 hap1 (HG03195_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03195.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03195.1.link.bb
+        priority 267
+
+        track chainHprc2HG031952
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03195.2
+        longLabel HG03195 hap2 (HG03195_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03195.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03195.2.link.bb
+        priority 268
+
+        track chainHprc2HG032091
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03209.1
+        longLabel HG03209 hap1 (HG03209_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03209.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03209.1.link.bb
+        priority 269
+
+        track chainHprc2HG032092
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03209.2
+        longLabel HG03209 hap2 (HG03209_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03209.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03209.2.link.bb
+        priority 270
+
+        track chainHprc2HG032251
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03225.1
+        longLabel HG03225 hap1 (HG03225_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03225.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03225.1.link.bb
+        priority 271
+
+        track chainHprc2HG032252
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03225.2
+        longLabel HG03225 hap2 (HG03225_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03225.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03225.2.link.bb
+        priority 272
+
+        track chainHprc2HG032392
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03239.2
+        longLabel HG03239 hap2 (HG03239_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03239.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03239.2.link.bb
+        priority 273
+
+        track chainHprc2HG032391
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03239.1
+        longLabel HG03239 hap1 (HG03239_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03239.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03239.1.link.bb
+        priority 274
+
+        track chainHprc2HG032701
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03270.1
+        longLabel HG03270 hap1 (HG03270_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03270.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03270.1.link.bb
+        priority 275
+
+        track chainHprc2HG032702
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03270.2
+        longLabel HG03270 hap2 (HG03270_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03270.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03270.2.link.bb
+        priority 276
+
+        track chainHprc2HG033691
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03369.1
+        longLabel HG03369 hap1 (HG03369_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03369.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03369.1.link.bb
+        priority 277
+
+        track chainHprc2HG033692
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03369.2
+        longLabel HG03369 hap2 (HG03369_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03369.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03369.2.link.bb
+        priority 278
+
+        track chainHprc2HG034532
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03453.2
+        longLabel HG03453 hap2 (HG03453_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03453.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03453.2.link.bb
+        priority 279
+
+        track chainHprc2HG034531
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03453.1
+        longLabel HG03453 hap1 (HG03453_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03453.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03453.1.link.bb
+        priority 280
+
+        track chainHprc2HG034701
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03470.1
+        longLabel HG03470 hap1 (HG03470_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03470.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03470.1.link.bb
+        priority 281
+
+        track chainHprc2HG034702
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03470.2
+        longLabel HG03470 hap2 (HG03470_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03470.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03470.2.link.bb
+        priority 282
+
+        track chainHprc2HG034711
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03471.1
+        longLabel HG03471 hap1 (HG03471_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03471.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03471.1.link.bb
+        priority 283
+
+        track chainHprc2HG034712
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03471.2
+        longLabel HG03471 hap2 (HG03471_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03471.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03471.2.link.bb
+        priority 284
+
+        track chainHprc2HG034862
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03486.2
+        longLabel HG03486 hap2 (HG03486_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03486.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03486.2.link.bb
+        priority 285
+
+        track chainHprc2HG034861
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03486.1
+        longLabel HG03486 hap1 (HG03486_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03486.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03486.1.link.bb
+        priority 286
+
+        track chainHprc2HG035162
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03516.2
+        longLabel HG03516 hap2 (HG03516_mat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03516.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03516.2.link.bb
+        priority 287
+
+        track chainHprc2HG035161
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03516.1
+        longLabel HG03516 hap1 (HG03516_pat_hprc_r2_v1.1.0) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03516.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03516.1.link.bb
+        priority 288
+
+        track chainHprc2HG035211
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03521.1
+        longLabel HG03521 hap1 (HG03521_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03521.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03521.1.link.bb
+        priority 289
+
+        track chainHprc2HG035212
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03521.2
+        longLabel HG03521 hap2 (HG03521_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03521.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03521.2.link.bb
+        priority 290
+
+        track chainHprc2HG035402
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03540.2
+        longLabel HG03540 hap2 (HG03540_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03540.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03540.2.link.bb
+        priority 291
+
+        track chainHprc2HG035401
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03540.1
+        longLabel HG03540 hap1 (HG03540_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03540.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03540.1.link.bb
+        priority 292
+
+        track chainHprc2HG035792
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03579.2
+        longLabel HG03579 hap2 (HG03579_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03579.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03579.2.link.bb
+        priority 293
+
+        track chainHprc2HG035791
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03579.1
+        longLabel HG03579 hap1 (HG03579_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03579.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03579.1.link.bb
+        priority 294
+
+        track chainHprc2HG035831
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel HG03583.1
+        longLabel HG03583 hap1 (HG03583_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03583.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03583.1.link.bb
+        priority 295
+
+        track chainHprc2HG035832
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel HG03583.2
+        longLabel HG03583 hap2 (HG03583_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03583.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03583.2.link.bb
+        priority 296
+
+        track chainHprc2HG036542
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03654.2
+        longLabel HG03654 hap2 (HG03654_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03654.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03654.2.link.bb
+        priority 297
+
+        track chainHprc2HG036541
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03654.1
+        longLabel HG03654 hap1 (HG03654_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03654.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03654.1.link.bb
+        priority 298
+
+        track chainHprc2HG036692
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03669.2
+        longLabel HG03669 hap2 (HG03669_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03669.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03669.2.link.bb
+        priority 299
+
+        track chainHprc2HG036691
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03669.1
+        longLabel HG03669 hap1 (HG03669_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03669.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03669.1.link.bb
+        priority 300
+
+        track chainHprc2HG036882
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03688.2
+        longLabel HG03688 hap2 (HG03688_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03688.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03688.2.link.bb
+        priority 301
+
+        track chainHprc2HG036881
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03688.1
+        longLabel HG03688 hap1 (HG03688_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03688.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03688.1.link.bb
+        priority 302
+
+        track chainHprc2HG037042
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03704.2
+        longLabel HG03704 hap2 (HG03704_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03704.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03704.2.link.bb
+        priority 303
+
+        track chainHprc2HG037041
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03704.1
+        longLabel HG03704 hap1 (HG03704_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03704.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03704.1.link.bb
+        priority 304
+
+        track chainHprc2HG037102
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03710.2
+        longLabel HG03710 hap2 (HG03710_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03710.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03710.2.link.bb
+        priority 305
+
+        track chainHprc2HG037101
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03710.1
+        longLabel HG03710 hap1 (HG03710_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03710.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03710.1.link.bb
+        priority 306
+
+        track chainHprc2HG037421
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03742.1
+        longLabel HG03742 hap1 (HG03742_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03742.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03742.1.link.bb
+        priority 307
+
+        track chainHprc2HG037422
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03742.2
+        longLabel HG03742 hap2 (HG03742_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03742.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03742.2.link.bb
+        priority 308
+
+        track chainHprc2HG037841
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03784.1
+        longLabel HG03784 hap1 (HG03784_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03784.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03784.1.link.bb
+        priority 309
+
+        track chainHprc2HG037842
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03784.2
+        longLabel HG03784 hap2 (HG03784_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03784.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03784.2.link.bb
+        priority 310
+
+        track chainHprc2HG038042
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03804.2
+        longLabel HG03804 hap2 (HG03804_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03804.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03804.2.link.bb
+        priority 311
+
+        track chainHprc2HG038041
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03804.1
+        longLabel HG03804 hap1 (HG03804_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03804.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03804.1.link.bb
+        priority 312
+
+        track chainHprc2HG038162
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03816.2
+        longLabel HG03816 hap2 (HG03816_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03816.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03816.2.link.bb
+        priority 313
+
+        track chainHprc2HG038161
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03816.1
+        longLabel HG03816 hap1 (HG03816_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03816.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03816.1.link.bb
+        priority 314
+
+        track chainHprc2HG038312
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03831.2
+        longLabel HG03831 hap2 (HG03831_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03831.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03831.2.link.bb
+        priority 315
+
+        track chainHprc2HG038311
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03831.1
+        longLabel HG03831 hap1 (HG03831_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03831.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03831.1.link.bb
+        priority 316
+
+        track chainHprc2HG038342
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03834.2
+        longLabel HG03834 hap2 (HG03834_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03834.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03834.2.link.bb
+        priority 317
+
+        track chainHprc2HG038341
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03834.1
+        longLabel HG03834 hap1 (HG03834_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03834.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03834.1.link.bb
+        priority 318
+
+        track chainHprc2HG038741
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03874.1
+        longLabel HG03874 hap1 (HG03874_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03874.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03874.1.link.bb
+        priority 319
+
+        track chainHprc2HG038742
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03874.2
+        longLabel HG03874 hap2 (HG03874_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03874.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03874.2.link.bb
+        priority 320
+
+        track chainHprc2HG039272
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03927.2
+        longLabel HG03927 hap2 (HG03927_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03927.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03927.2.link.bb
+        priority 321
+
+        track chainHprc2HG039271
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03927.1
+        longLabel HG03927 hap1 (HG03927_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03927.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03927.1.link.bb
+        priority 322
+
+        track chainHprc2HG039422
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG03942.2
+        longLabel HG03942 hap2 (HG03942_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03942.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03942.2.link.bb
+        priority 323
+
+        track chainHprc2HG039421
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG03942.1
+        longLabel HG03942 hap1 (HG03942_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG03942.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG03942.1.link.bb
+        priority 324
+
+        track chainHprc2HG041152
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04115.2
+        longLabel HG04115 hap2 (HG04115_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04115.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04115.2.link.bb
+        priority 325
+
+        track chainHprc2HG041151
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04115.1
+        longLabel HG04115 hap1 (HG04115_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04115.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04115.1.link.bb
+        priority 326
+
+        track chainHprc2HG041572
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04157.2
+        longLabel HG04157 hap2 (HG04157_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04157.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04157.2.link.bb
+        priority 327
+
+        track chainHprc2HG041571
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04157.1
+        longLabel HG04157 hap1 (HG04157_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04157.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04157.1.link.bb
+        priority 328
+
+        track chainHprc2HG041602
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04160.2
+        longLabel HG04160 hap2 (HG04160_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04160.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04160.2.link.bb
+        priority 329
+
+        track chainHprc2HG041601
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04160.1
+        longLabel HG04160 hap1 (HG04160_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04160.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04160.1.link.bb
+        priority 330
+
+        track chainHprc2HG041842
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04184.2
+        longLabel HG04184 hap2 (HG04184_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04184.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04184.2.link.bb
+        priority 331
+
+        track chainHprc2HG041841
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04184.1
+        longLabel HG04184 hap1 (HG04184_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04184.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04184.1.link.bb
+        priority 332
+
+        track chainHprc2HG041872
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04187.2
+        longLabel HG04187 hap2 (HG04187_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04187.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04187.2.link.bb
+        priority 333
+
+        track chainHprc2HG041871
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04187.1
+        longLabel HG04187 hap1 (HG04187_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04187.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04187.1.link.bb
+        priority 334
+
+        track chainHprc2HG041992
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04199.2
+        longLabel HG04199 hap2 (HG04199_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04199.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04199.2.link.bb
+        priority 335
+
+        track chainHprc2HG041991
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04199.1
+        longLabel HG04199 hap1 (HG04199_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04199.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04199.1.link.bb
+        priority 336
+
+        track chainHprc2HG042042
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04204.2
+        longLabel HG04204 hap2 (HG04204_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04204.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04204.2.link.bb
+        priority 337
+
+        track chainHprc2HG042041
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04204.1
+        longLabel HG04204 hap1 (HG04204_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04204.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04204.1.link.bb
+        priority 338
+
+        track chainHprc2HG042282
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel HG04228.2
+        longLabel HG04228 hap2 (HG04228_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04228.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04228.2.link.bb
+        priority 339
+
+        track chainHprc2HG042281
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel HG04228.1
+        longLabel HG04228 hap1 (HG04228_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG04228.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG04228.1.link.bb
+        priority 340
+
+        track chainHprc2HG068072
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h2
+        shortLabel HG06807.2
+        longLabel HG06807 hap2 (HG06807_mat_v1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG06807.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG06807.2.link.bb
+        priority 341
+
+        track chainHprc2HG068071
+        parent hprc2Chains off
+        subGroups superpop=OTH hap=h1
+        shortLabel HG06807.1
+        longLabel HG06807 hap1 (HG06807_pat_v1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/HG06807.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/HG06807.1.link.bb
+        priority 342
+
+        track chainHprc2NA185051
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA18505.1
+        longLabel NA18505 hap1 (NA18505_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18505.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18505.1.link.bb
+        priority 343
+
+        track chainHprc2NA185052
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA18505.2
+        longLabel NA18505 hap2 (NA18505_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18505.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18505.2.link.bb
+        priority 344
+
+        track chainHprc2NA185081
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA18508.1
+        longLabel NA18508 hap1 (NA18508_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18508.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18508.1.link.bb
+        priority 345
+
+        track chainHprc2NA185082
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA18508.2
+        longLabel NA18508 hap2 (NA18508_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18508.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18508.2.link.bb
+        priority 346
+
+        track chainHprc2NA185221
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA18522.1
+        longLabel NA18522 hap1 (NA18522_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18522.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18522.1.link.bb
+        priority 347
+
+        track chainHprc2NA185222
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA18522.2
+        longLabel NA18522 hap2 (NA18522_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18522.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18522.2.link.bb
+        priority 348
+
+        track chainHprc2NA185651
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18565.1
+        longLabel NA18565 hap1 (NA18565_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18565.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18565.1.link.bb
+        priority 349
+
+        track chainHprc2NA185652
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18565.2
+        longLabel NA18565 hap2 (NA18565_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18565.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18565.2.link.bb
+        priority 350
+
+        track chainHprc2NA185701
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18570.1
+        longLabel NA18570 hap1 (NA18570_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18570.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18570.1.link.bb
+        priority 351
+
+        track chainHprc2NA185702
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18570.2
+        longLabel NA18570 hap2 (NA18570_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18570.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18570.2.link.bb
+        priority 352
+
+        track chainHprc2NA186081
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18608.1
+        longLabel NA18608 hap1 (NA18608_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18608.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18608.1.link.bb
+        priority 353
+
+        track chainHprc2NA186082
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18608.2
+        longLabel NA18608 hap2 (NA18608_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18608.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18608.2.link.bb
+        priority 354
+
+        track chainHprc2NA186201
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18620.1
+        longLabel NA18620 hap1 (NA18620_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18620.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18620.1.link.bb
+        priority 355
+
+        track chainHprc2NA186202
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18620.2
+        longLabel NA18620 hap2 (NA18620_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18620.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18620.2.link.bb
+        priority 356
+
+        track chainHprc2NA187471
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18747.1
+        longLabel NA18747 hap1 (NA18747_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18747.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18747.1.link.bb
+        priority 357
+
+        track chainHprc2NA187472
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18747.2
+        longLabel NA18747 hap2 (NA18747_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18747.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18747.2.link.bb
+        priority 358
+
+        track chainHprc2NA188791
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA18879.1
+        longLabel NA18879 hap1 (NA18879_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18879.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18879.1.link.bb
+        priority 359
+
+        track chainHprc2NA188792
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA18879.2
+        longLabel NA18879 hap2 (NA18879_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18879.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18879.2.link.bb
+        priority 360
+
+        track chainHprc2NA189062
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA18906.2
+        longLabel NA18906 hap2 (NA18906_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18906.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18906.2.link.bb
+        priority 361
+
+        track chainHprc2NA189061
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA18906.1
+        longLabel NA18906 hap1 (NA18906_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18906.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18906.1.link.bb
+        priority 362
+
+        track chainHprc2NA189401
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18940.1
+        longLabel NA18940 hap1 (NA18940_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18940.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18940.1.link.bb
+        priority 363
+
+        track chainHprc2NA189402
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18940.2
+        longLabel NA18940 hap2 (NA18940_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18940.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18940.2.link.bb
+        priority 364
+
+        track chainHprc2NA189431
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18943.1
+        longLabel NA18943 hap1 (NA18943_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18943.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18943.1.link.bb
+        priority 365
+
+        track chainHprc2NA189432
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18943.2
+        longLabel NA18943 hap2 (NA18943_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18943.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18943.2.link.bb
+        priority 366
+
+        track chainHprc2NA189441
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18944.1
+        longLabel NA18944 hap1 (NA18944_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18944.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18944.1.link.bb
+        priority 367
+
+        track chainHprc2NA189442
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18944.2
+        longLabel NA18944 hap2 (NA18944_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18944.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18944.2.link.bb
+        priority 368
+
+        track chainHprc2NA189451
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18945.1
+        longLabel NA18945 hap1 (NA18945_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18945.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18945.1.link.bb
+        priority 369
+
+        track chainHprc2NA189452
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18945.2
+        longLabel NA18945 hap2 (NA18945_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18945.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18945.2.link.bb
+        priority 370
+
+        track chainHprc2NA189481
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18948.1
+        longLabel NA18948 hap1 (NA18948_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18948.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18948.1.link.bb
+        priority 371
+
+        track chainHprc2NA189482
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18948.2
+        longLabel NA18948 hap2 (NA18948_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18948.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18948.2.link.bb
+        priority 372
+
+        track chainHprc2NA189521
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18952.1
+        longLabel NA18952 hap1 (NA18952_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18952.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18952.1.link.bb
+        priority 373
+
+        track chainHprc2NA189522
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18952.2
+        longLabel NA18952 hap2 (NA18952_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18952.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18952.2.link.bb
+        priority 374
+
+        track chainHprc2NA189591
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18959.1
+        longLabel NA18959 hap1 (NA18959_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18959.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18959.1.link.bb
+        priority 375
+
+        track chainHprc2NA189592
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18959.2
+        longLabel NA18959 hap2 (NA18959_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18959.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18959.2.link.bb
+        priority 376
+
+        track chainHprc2NA189601
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18960.1
+        longLabel NA18960 hap1 (NA18960_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18960.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18960.1.link.bb
+        priority 377
+
+        track chainHprc2NA189602
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18960.2
+        longLabel NA18960 hap2 (NA18960_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18960.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18960.2.link.bb
+        priority 378
+
+        track chainHprc2NA189671
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18967.1
+        longLabel NA18967 hap1 (NA18967_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18967.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18967.1.link.bb
+        priority 379
+
+        track chainHprc2NA189672
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18967.2
+        longLabel NA18967 hap2 (NA18967_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18967.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18967.2.link.bb
+        priority 380
+
+        track chainHprc2NA189701
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18970.1
+        longLabel NA18970 hap1 (NA18970_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18970.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18970.1.link.bb
+        priority 381
+
+        track chainHprc2NA189702
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18970.2
+        longLabel NA18970 hap2 (NA18970_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18970.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18970.2.link.bb
+        priority 382
+
+        track chainHprc2NA189711
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18971.1
+        longLabel NA18971 hap1 (NA18971_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18971.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18971.1.link.bb
+        priority 383
+
+        track chainHprc2NA189712
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18971.2
+        longLabel NA18971 hap2 (NA18971_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18971.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18971.2.link.bb
+        priority 384
+
+        track chainHprc2NA189741
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18974.1
+        longLabel NA18974 hap1 (NA18974_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18974.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18974.1.link.bb
+        priority 385
+
+        track chainHprc2NA189742
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18974.2
+        longLabel NA18974 hap2 (NA18974_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18974.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18974.2.link.bb
+        priority 386
+
+        track chainHprc2NA189761
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18976.1
+        longLabel NA18976 hap1 (NA18976_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18976.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18976.1.link.bb
+        priority 387
+
+        track chainHprc2NA189762
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18976.2
+        longLabel NA18976 hap2 (NA18976_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18976.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18976.2.link.bb
+        priority 388
+
+        track chainHprc2NA189821
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18982.1
+        longLabel NA18982 hap1 (NA18982_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18982.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18982.1.link.bb
+        priority 389
+
+        track chainHprc2NA189822
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18982.2
+        longLabel NA18982 hap2 (NA18982_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18982.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18982.2.link.bb
+        priority 390
+
+        track chainHprc2NA189831
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA18983.1
+        longLabel NA18983 hap1 (NA18983_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18983.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18983.1.link.bb
+        priority 391
+
+        track chainHprc2NA189832
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA18983.2
+        longLabel NA18983 hap2 (NA18983_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA18983.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA18983.2.link.bb
+        priority 392
+
+        track chainHprc2NA190361
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19036.1
+        longLabel NA19036 hap1 (NA19036_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19036.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19036.1.link.bb
+        priority 393
+
+        track chainHprc2NA190362
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19036.2
+        longLabel NA19036 hap2 (NA19036_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19036.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19036.2.link.bb
+        priority 394
+
+        track chainHprc2NA190431
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19043.1
+        longLabel NA19043 hap1 (NA19043_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19043.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19043.1.link.bb
+        priority 395
+
+        track chainHprc2NA190432
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19043.2
+        longLabel NA19043 hap2 (NA19043_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19043.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19043.2.link.bb
+        priority 396
+
+        track chainHprc2NA190871
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h1
+        shortLabel NA19087.1
+        longLabel NA19087 hap1 (NA19087_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19087.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19087.1.link.bb
+        priority 397
+
+        track chainHprc2NA190872
+        parent hprc2Chains off
+        subGroups superpop=EAS hap=h2
+        shortLabel NA19087.2
+        longLabel NA19087 hap2 (NA19087_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19087.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19087.2.link.bb
+        priority 398
+
+        track chainHprc2NA191591
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19159.1
+        longLabel NA19159 hap1 (NA19159_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19159.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19159.1.link.bb
+        priority 399
+
+        track chainHprc2NA191592
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19159.2
+        longLabel NA19159 hap2 (NA19159_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19159.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19159.2.link.bb
+        priority 400
+
+        track chainHprc2NA191851
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19185.1
+        longLabel NA19185 hap1 (NA19185_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19185.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19185.1.link.bb
+        priority 401
+
+        track chainHprc2NA191852
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19185.2
+        longLabel NA19185 hap2 (NA19185_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19185.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19185.2.link.bb
+        priority 402
+
+        track chainHprc2NA192402
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19240.2
+        longLabel NA19240 hap2 (NA19240_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19240.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19240.2.link.bb
+        priority 403
+
+        track chainHprc2NA192401
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19240.1
+        longLabel NA19240 hap1 (NA19240_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19240.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19240.1.link.bb
+        priority 404
+
+        track chainHprc2NA193381
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19338.1
+        longLabel NA19338 hap1 (NA19338_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19338.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19338.1.link.bb
+        priority 405
+
+        track chainHprc2NA193382
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19338.2
+        longLabel NA19338 hap2 (NA19338_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19338.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19338.2.link.bb
+        priority 406
+
+        track chainHprc2NA193911
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19391.1
+        longLabel NA19391 hap1 (NA19391_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19391.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19391.1.link.bb
+        priority 407
+
+        track chainHprc2NA193912
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19391.2
+        longLabel NA19391 hap2 (NA19391_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19391.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19391.2.link.bb
+        priority 408
+
+        track chainHprc2NA194431
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19443.1
+        longLabel NA19443 hap1 (NA19443_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19443.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19443.1.link.bb
+        priority 409
+
+        track chainHprc2NA194432
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19443.2
+        longLabel NA19443 hap2 (NA19443_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19443.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19443.2.link.bb
+        priority 410
+
+        track chainHprc2NA194681
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19468.1
+        longLabel NA19468 hap1 (NA19468_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19468.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19468.1.link.bb
+        priority 411
+
+        track chainHprc2NA194682
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19468.2
+        longLabel NA19468 hap2 (NA19468_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19468.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19468.2.link.bb
+        priority 412
+
+        track chainHprc2NA196821
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel NA19682.1
+        longLabel NA19682 hap1 (NA19682_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19682.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19682.1.link.bb
+        priority 413
+
+        track chainHprc2NA196822
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel NA19682.2
+        longLabel NA19682 hap2 (NA19682_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19682.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19682.2.link.bb
+        priority 414
+
+        track chainHprc2NA197001
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19700.1
+        longLabel NA19700 hap1 (NA19700_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19700.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19700.1.link.bb
+        priority 415
+
+        track chainHprc2NA197002
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19700.2
+        longLabel NA19700 hap2 (NA19700_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19700.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19700.2.link.bb
+        priority 416
+
+        track chainHprc2NA197761
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h1
+        shortLabel NA19776.1
+        longLabel NA19776 hap1 (NA19776_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19776.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19776.1.link.bb
+        priority 417
+
+        track chainHprc2NA197762
+        parent hprc2Chains off
+        subGroups superpop=AMR hap=h2
+        shortLabel NA19776.2
+        longLabel NA19776 hap2 (NA19776_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19776.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19776.2.link.bb
+        priority 418
+
+        track chainHprc2NA198351
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19835.1
+        longLabel NA19835 hap1 (NA19835_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19835.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19835.1.link.bb
+        priority 419
+
+        track chainHprc2NA198352
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19835.2
+        longLabel NA19835 hap2 (NA19835_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19835.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19835.2.link.bb
+        priority 420
+
+        track chainHprc2NA199091
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA19909.1
+        longLabel NA19909 hap1 (NA19909_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19909.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19909.1.link.bb
+        priority 421
+
+        track chainHprc2NA199092
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA19909.2
+        longLabel NA19909 hap2 (NA19909_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA19909.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA19909.2.link.bb
+        priority 422
+
+        track chainHprc2NA201292
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA20129.2
+        longLabel NA20129 hap2 (NA20129_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20129.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20129.2.link.bb
+        priority 423
+
+        track chainHprc2NA201291
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA20129.1
+        longLabel NA20129 hap1 (NA20129_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20129.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20129.1.link.bb
+        priority 424
+
+        track chainHprc2NA202821
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA20282.1
+        longLabel NA20282 hap1 (NA20282_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20282.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20282.1.link.bb
+        priority 425
+
+        track chainHprc2NA202822
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA20282.2
+        longLabel NA20282 hap2 (NA20282_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20282.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20282.2.link.bb
+        priority 426
+
+        track chainHprc2NA203461
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA20346.1
+        longLabel NA20346 hap1 (NA20346_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20346.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20346.1.link.bb
+        priority 427
+
+        track chainHprc2NA203462
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA20346.2
+        longLabel NA20346 hap2 (NA20346_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20346.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20346.2.link.bb
+        priority 428
+
+        track chainHprc2NA205031
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20503.1
+        longLabel NA20503 hap1 (NA20503_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20503.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20503.1.link.bb
+        priority 429
+
+        track chainHprc2NA205032
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20503.2
+        longLabel NA20503 hap2 (NA20503_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20503.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20503.2.link.bb
+        priority 430
+
+        track chainHprc2NA207521
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20752.1
+        longLabel NA20752 hap1 (NA20752_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20752.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20752.1.link.bb
+        priority 431
+
+        track chainHprc2NA207522
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20752.2
+        longLabel NA20752 hap2 (NA20752_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20752.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20752.2.link.bb
+        priority 432
+
+        track chainHprc2NA207621
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20762.1
+        longLabel NA20762 hap1 (NA20762_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20762.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20762.1.link.bb
+        priority 433
+
+        track chainHprc2NA207622
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20762.2
+        longLabel NA20762 hap2 (NA20762_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20762.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20762.2.link.bb
+        priority 434
+
+        track chainHprc2NA207991
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20799.1
+        longLabel NA20799 hap1 (NA20799_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20799.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20799.1.link.bb
+        priority 435
+
+        track chainHprc2NA207992
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20799.2
+        longLabel NA20799 hap2 (NA20799_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20799.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20799.2.link.bb
+        priority 436
+
+        track chainHprc2NA208051
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20805.1
+        longLabel NA20805 hap1 (NA20805_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20805.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20805.1.link.bb
+        priority 437
+
+        track chainHprc2NA208052
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20805.2
+        longLabel NA20805 hap2 (NA20805_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20805.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20805.2.link.bb
+        priority 438
+
+        track chainHprc2NA208061
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20806.1
+        longLabel NA20806 hap1 (NA20806_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20806.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20806.1.link.bb
+        priority 439
+
+        track chainHprc2NA208062
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20806.2
+        longLabel NA20806 hap2 (NA20806_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20806.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20806.2.link.bb
+        priority 440
+
+        track chainHprc2NA208091
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20809.1
+        longLabel NA20809 hap1 (NA20809_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20809.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20809.1.link.bb
+        priority 441
+
+        track chainHprc2NA208092
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20809.2
+        longLabel NA20809 hap2 (NA20809_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20809.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20809.2.link.bb
+        priority 442
+
+        track chainHprc2NA208271
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h1
+        shortLabel NA20827.1
+        longLabel NA20827 hap1 (NA20827_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20827.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20827.1.link.bb
+        priority 443
+
+        track chainHprc2NA208272
+        parent hprc2Chains off
+        subGroups superpop=EUR hap=h2
+        shortLabel NA20827.2
+        longLabel NA20827 hap2 (NA20827_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20827.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20827.2.link.bb
+        priority 444
+
+        track chainHprc2NA208501
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA20850.1
+        longLabel NA20850 hap1 (NA20850_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20850.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20850.1.link.bb
+        priority 445
+
+        track chainHprc2NA208502
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA20850.2
+        longLabel NA20850 hap2 (NA20850_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20850.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20850.2.link.bb
+        priority 446
+
+        track chainHprc2NA208701
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA20870.1
+        longLabel NA20870 hap1 (NA20870_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20870.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20870.1.link.bb
+        priority 447
+
+        track chainHprc2NA208702
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA20870.2
+        longLabel NA20870 hap2 (NA20870_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20870.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20870.2.link.bb
+        priority 448
+
+        track chainHprc2NA209051
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA20905.1
+        longLabel NA20905 hap1 (NA20905_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20905.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20905.1.link.bb
+        priority 449
+
+        track chainHprc2NA209052
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA20905.2
+        longLabel NA20905 hap2 (NA20905_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA20905.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA20905.2.link.bb
+        priority 450
+
+        track chainHprc2NA210931
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA21093.1
+        longLabel NA21093 hap1 (NA21093_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21093.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21093.1.link.bb
+        priority 451
+
+        track chainHprc2NA210932
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA21093.2
+        longLabel NA21093 hap2 (NA21093_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21093.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21093.2.link.bb
+        priority 452
+
+        track chainHprc2NA211021
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA21102.1
+        longLabel NA21102 hap1 (NA21102_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21102.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21102.1.link.bb
+        priority 453
+
+        track chainHprc2NA211022
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA21102.2
+        longLabel NA21102 hap2 (NA21102_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21102.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21102.2.link.bb
+        priority 454
+
+        track chainHprc2NA211061
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA21106.1
+        longLabel NA21106 hap1 (NA21106_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21106.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21106.1.link.bb
+        priority 455
+
+        track chainHprc2NA211062
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA21106.2
+        longLabel NA21106 hap2 (NA21106_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21106.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21106.2.link.bb
+        priority 456
+
+        track chainHprc2NA211101
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA21110.1
+        longLabel NA21110 hap1 (NA21110_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21110.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21110.1.link.bb
+        priority 457
+
+        track chainHprc2NA211102
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA21110.2
+        longLabel NA21110 hap2 (NA21110_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21110.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21110.2.link.bb
+        priority 458
+
+        track chainHprc2NA211441
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h1
+        shortLabel NA21144.1
+        longLabel NA21144 hap1 (NA21144_hap1_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21144.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21144.1.link.bb
+        priority 459
+
+        track chainHprc2NA211442
+        parent hprc2Chains off
+        subGroups superpop=SAS hap=h2
+        shortLabel NA21144.2
+        longLabel NA21144 hap2 (NA21144_hap2_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21144.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21144.2.link.bb
+        priority 460
+
+        track chainHprc2NA213092
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h2
+        shortLabel NA21309.2
+        longLabel NA21309 hap2 (NA21309_mat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21309.2.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21309.2.link.bb
+        priority 461
+
+        track chainHprc2NA213091
+        parent hprc2Chains off
+        subGroups superpop=AFR hap=h1
+        shortLabel NA21309.1
+        longLabel NA21309 hap1 (NA21309_pat_hprc_r2_v1.0.1) chain alignment to GRCh38
+        type bigChain
+        bigDataUrl /gbdb/hg38/hprc2/chains/NA21309.1.bb
+        linkDataUrl /gbdb/hg38/hprc2/chains/NA21309.1.link.bb
+        priority 462
+

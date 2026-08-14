@@ -122,13 +122,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     isEst = sameString(row[0], "EST");
     if (lib->estCount + lib->mrnaCount == 0)
 	{
-	strncpy(lib->sampleAcc, row[3], sizeof(lib->sampleAcc));
-	strncpy(lib->authorId, row[2], sizeof(lib->authorId));
+	safecpy(lib->sampleAcc, sizeof(lib->sampleAcc), row[3]);
+	safecpy(lib->authorId, sizeof(lib->authorId), row[2]);
 	}
     else
 	{
 	if (isEst && lib->estCount == 0)
-	    strncpy(lib->sampleAcc, row[3], sizeof(lib->sampleAcc));
+	    safecpy(lib->sampleAcc, sizeof(lib->sampleAcc), row[3]);
 	if (!sameString(lib->authorId, row[2]))
 	    {
 	    if (!lib->multiAuthor)

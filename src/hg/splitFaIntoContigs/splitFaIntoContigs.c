@@ -237,7 +237,7 @@ param destDir - The destination dir to which to write the agp file.
 {
 char filename[DEFAULT_PATH_SIZE];
 
-sprintf(filename, "%s/%s.agp", destDir, chromName);
+safef(filename, sizeof(filename), "%s/%s.agp", destDir, chromName);
 printf("Writing chromosome agp file %s\n", filename);
 writeAgpFile(chromName, startAgpData, filename);
 }
@@ -270,7 +270,7 @@ param dnaSize - The size of the dna array.
 {
 char filename [DEFAULT_PATH_SIZE];
 
-sprintf(filename, "%s/%s.fa", destDir, chromName);
+safef(filename, sizeof(filename), "%s/%s.fa", destDir, chromName);
 printf("Writing fa file %s for chromosome %s\n", filename, chromName);
 faWrite(filename, chromName, dna, dnaSize);
 }

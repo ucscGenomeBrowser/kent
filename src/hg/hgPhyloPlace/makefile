@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 
 COMMONO = phyloPlace.o parsimonyProto.o runUsher.o treeToAuspiceJson.o vcfFromFasta.o \
-	  writeCustomTracks.o
+	  writeCustomTracks.o debugRecombinantDisplay.o
 
 A = hgPhyloPlace
 O = hgPhyloPlace.o ${COMMONO}

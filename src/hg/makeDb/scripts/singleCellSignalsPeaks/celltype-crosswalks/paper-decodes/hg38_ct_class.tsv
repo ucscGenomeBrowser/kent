@@ -1,0 +1,198 @@
+cell_type	broad_class	note
+Adipocyte	Stromal	fat cell, mesenchymal
+Adrenal chromaffin	Other neuron	adrenal medulla chromaffin (sympathoadrenal)
+Adrenal cortical	Epithelial	adrenal cortex steroidogenic cells
+Adrenal neuron	Other neuron	peripheral/sympathetic neuron
+Adrenal sympathoblasts	Other neuron	sympathoblast (sympathetic neuron progenitor)
+Airway goblet	Epithelial	goblet cell
+All cell types	Other	aggregate label spanning all classes
+Alveolar type 1	Epithelial	AT1 pneumocyte
+Alveolar type 2	Epithelial	AT2 pneumocyte
+Amacrine	Inhibitory neuron	retinal amacrine (GABA/glycinergic)
+Astrocyte	Astrocyte
+Astrocytes and oligodendrocytes	Astrocyte	combined glial label; also includes oligodendrocytes
+Atrial cardiomyocyte	Cardiomyocyte
+B lymphocyte	Immune
+Basal epidermal	Epithelial	basal keratinocyte
+Bipolar cell	Excitatory neuron	retinal bipolar (glutamatergic)
+CNS;Enteric neuron	Other neuron	enteric neuron
+Capillary	Endothelial	capillary endothelium
+Cardiac fibroblast	Stromal
+Cardiac fibroblast progenitors	Stromal	fibroblast progenitor
+Cardiac pericyte	Mural	pericyte
+Cardiomyocyte	Cardiomyocyte
+Chandelier	Inhibitory neuron	chandelier GABAergic interneuron (Pvalb-related)
+Chief	Epithelial	gastric chief cell
+Cholangiocytes	Epithelial	biliary epithelium
+Ciliated cell	Epithelial	ciliated epithelium
+Club	Epithelial	airway club cell
+Colonic goblet	Epithelial	goblet cell
+Cone photoreceptor	Other neuron	photoreceptor
+Cortical epithelial-like	Epithelial	epithelial-like (likely thymic cortical epithelium)
+Ductal cell	Epithelial
+Early cardiomyocytes	Cardiomyocyte
+Eccrine epidermal	Epithelial	eccrine gland epithelium
+Endocardial	Endothelial	endocardium is specialized endothelium
+Endocardium	Endothelial	specialized endothelium
+Endothelial	Endothelial
+Endothelial and mural	Endothelial	combined vascular label; also includes mural cells
+Endothelial cell	Endothelial
+Enteric glia	Other	enteric nervous system glia, neural-crest derived; PNS not CNS
+Enteric neuron	Other neuron
+Enterochromaffin	Epithelial	gut enteroendocrine (EC) cell
+Enterocyte	Epithelial
+Enteroendocrine	Epithelial	gut endocrine epithelial cell
+Epicardial	Epithelial	epicardial mesothelium
+Epicardium	Epithelial	mesothelium
+Epithelial cell	Epithelial
+Erythroblast	Erythroid
+Excitatory neuron	Excitatory neuron
+Extravillous trophoblast	Epithelial	trophoblast
+Fibroblast	Stromal
+Fibroblast like cells	Stromal
+Flat midget bipolar	Excitatory neuron	retinal midget bipolar (glutamatergic)
+Foveolar	Epithelial	gastric foveolar/pit epithelium
+GABAergic	Inhibitory neuron
+GABAergic neuron	Inhibitory neuron
+Gastric goblet	Epithelial
+Gastric neuroendocrine	Epithelial	gut neuroendocrine epithelial cell
+Glial	Other	unspecified glia (ambiguous astro/oligo/other)
+Glutamatergic neuron	Excitatory neuron	glutamatergic
+Glycinergic	Inhibitory neuron	glycinergic (retinal amacrine)
+Goblet	Epithelial
+Granular epidermal	Epithelial	granular-layer keratinocyte
+Hematopoietic stem	Hematopoietic stem/progenitor	HSC
+Hepatic macrophage	Immune	Kupffer cell
+Hepatic stellate	Stromal	stellate cell
+Hepatoblast	Epithelial	fetal hepatocyte progenitor
+Hepatocyte	Epithelial
+Horizontal	Inhibitory neuron	retinal horizontal cell
+Horizontal cell	Inhibitory neuron	retinal horizontal cell
+Inhibitory neuron	Inhibitory neuron
+Insular neurons	Other neuron	insular cortex, unspecified subtype
+Intermediate progenitor	Neural progenitor
+Interneuron	Inhibitory neuron
+Keratinocyte	Epithelial
+L2/3 IT	Excitatory neuron	cortical layer 2/3 intratelencephalic
+L4 IT	Excitatory neuron	cortical intratelencephalic
+L5 ET	Excitatory neuron	layer 5 extratelencephalic
+L5 IT	Excitatory neuron
+L5/6 NP	Excitatory neuron	near-projecting
+L6 CT	Excitatory neuron	corticothalamic
+L6 IT	Excitatory neuron
+L6 IT Car3	Excitatory neuron
+L6b	Excitatory neuron	layer 6b
+Lamp5	Inhibitory neuron	GABAergic subclass
+Lamp5 Lhx6	Inhibitory neuron	GABAergic subclass
+Luteal cell	Epithelial	ovarian granulosa-lutein steroidogenic cell
+Lymphatic endothelial	Endothelial
+Lymphoid	Immune
+MGE progenitors	Neural progenitor	medial ganglionic eminence progenitor
+ML cone	Other neuron	medium/long-wave cone photoreceptor
+Macrophage	Immune
+Mast	Immune	mast cell
+Medium spiny neuron	Medium spiny neuron
+Megakaryocytes	Erythroid	erythroid-megakaryocytic (MEP) lineage; platelet-forming
+Melanocyte	Other	neural-crest pigment cell; no fitting class
+Memory B	Immune	memory B cell
+Mesangial	Mural	glomerular mesangial (mural-like)
+Mesothelial	Epithelial	mesothelium
+Metanephric	Epithelial	metanephric/nephron progenitor (kidney)
+Microglia	Microglia
+Microglia-PVM	Microglia	microglia + perivascular macrophage
+Muller glia	Astrocyte	Muller glia grouped with astroglia
+Myeloid	Immune
+Myoepithelial	Epithelial
+Naive T	Immune	naive T cell
+Natural killer T	Immune	NKT cell
+Neural crest	Neural progenitor	neural-crest progenitor
+Neural retinal progenitor	Neural progenitor
+Neuron cluster10	Other neuron	unspecified neuronal cluster
+Neuron cluster11	Other neuron	unspecified neuronal cluster
+Neuron cluster12	Other neuron	unspecified neuronal cluster
+Neuron cluster13	Other neuron	unspecified neuronal cluster
+Neuron cluster14	Other neuron	unspecified neuronal cluster
+Neuron cluster15	Other neuron	unspecified neuronal cluster
+Neuron cluster17	Other neuron	unspecified neuronal cluster
+Neuron cluster18	Other neuron	unspecified neuronal cluster
+Neuron cluster19	Other neuron	unspecified neuronal cluster
+Neuron cluster2	Other neuron	unspecified neuronal cluster
+Neuron cluster20	Other neuron	unspecified neuronal cluster
+Neuron cluster21	Other neuron	unspecified neuronal cluster
+Neuron cluster24	Other neuron	unspecified neuronal cluster
+Neuron cluster25	Other neuron	unspecified neuronal cluster
+Neuron cluster26	Other neuron	unspecified neuronal cluster
+Neuron cluster27	Other neuron	unspecified neuronal cluster
+Neuron cluster28	Other neuron	unspecified neuronal cluster
+Neuron cluster29	Other neuron	unspecified neuronal cluster
+Neuron cluster3	Other neuron	unspecified neuronal cluster
+Neuron cluster30	Other neuron	unspecified neuronal cluster
+Neuron cluster6	Other neuron	unspecified neuronal cluster
+Neuron cluster7	Other neuron	unspecified neuronal cluster
+Neuron cluster8	Other neuron	unspecified neuronal cluster
+Neuron cluster9	Other neuron	unspecified neuronal cluster
+Neuronal	Other neuron	generic neuron label
+Nigral neurons	Other neuron	substantia nigra (dopaminergic)
+Non-Neuronal	Other	generic non-neuronal, spans many classes
+OPC	Oligodendrocyte precursor
+Oligodendrocyte	Oligodendrocyte
+Oligodendrocyte precursor cell	Oligodendrocyte precursor
+Oligodendrocytes	Oligodendrocyte
+Other neurons	Other neuron
+Outflow tract	Cardiomyocyte	cardiac outflow tract myocardium
+Pancreatic Delta;Gamma	Epithelial	islet endocrine cells
+Pancreatic acinar	Epithelial
+Pancreatic alpha	Epithelial	islet endocrine cell
+Pancreatic beta	Epithelial	islet endocrine cell
+Pancreatic ductal	Epithelial
+Pancreatic islet	Epithelial	endocrine islet
+Paneth	Epithelial	Paneth cell
+Parietal	Epithelial	gastric parietal cell
+Parietal;Chief	Epithelial	gastric epithelial cells
+Pax6	Inhibitory neuron	Pax6 GABAergic cortical subclass
+Pericyte	Mural
+Peripheral nerve stromal	Stromal
+Photoreceptor	Other neuron
+Placental fibroblast	Stromal
+Placental macrophage	Immune	Hofbauer cell
+Placental neuron	Other neuron	labeled neuron (placental context unusual)
+Plasma	Immune	plasma cell
+Pre cardiac fibroblast	Stromal	fibroblast precursor
+Pre smooth muscle	Mural	smooth-muscle precursor
+Primary retinal progenitor	Neural progenitor
+Pulmonary neuroendocrine	Epithelial	PNEC (lung neuroendocrine epithelium)
+Pvalb	Inhibitory neuron	GABAergic subclass
+Radial glia	Neural progenitor
+Retinal ganglion	Other neuron	retinal ganglion cell
+Retinal neuron	Other neuron	unspecified retinal neuron
+Retinal pigment	Epithelial	retinal pigment epithelium (RPE)
+Retinal progenitors and muller glia	Neural progenitor	combined; also includes Muller glia (astroglia)
+Rod photoreceptor	Other neuron	photoreceptor
+S cone	Other neuron	short-wave cone photoreceptor
+Satellite	Muscle	muscle satellite cell (myogenic), not satellite glia
+Schwann	Other	peripheral (PNS) glia; grouped with Other, not astroglia
+Schwann cell	Other	peripheral (PNS) glia; grouped with Other, not astroglia
+Skeletal myocyte	Muscle
+Small intestinal enterocyte	Epithelial
+Small intestinal goblet	Epithelial
+Smooth muscle	Mural	smooth muscle grouped with mural
+Sncg	Inhibitory neuron	GABAergic subclass
+Sst	Inhibitory neuron	GABAergic subclass
+Sst Chodl	Inhibitory neuron	GABAergic subclass
+Syncytiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	trophoblast
+T lymphocyte	Immune
+Thymocyte	Immune	developing T cell
+Thyroid follicular	Epithelial
+Transitional zone cortical	Epithelial	adrenal cortex transitional zone (steroidogenic)
+Tuft	Epithelial	tuft cell
+Type I skeletal myocyte	Muscle
+Type II skeletal myocyte	Muscle
+Unannotated	Unknown	no annotation
+Ureteric bud	Epithelial	kidney ureteric-bud epithelium
+VLMC	Mural	vascular leptomeningeal cell
+Vascular smooth muscle	Mural
+Vein	Endothelial	venous endothelium
+Ventricular cardiomyocyte	Cardiomyocyte
+Vip	Inhibitory neuron	GABAergic subclass
+Zona fasciculata cortical	Epithelial	adrenal cortex (steroidogenic)
+Zona glomerulosa cortical	Epithelial	adrenal cortex (steroidogenic)

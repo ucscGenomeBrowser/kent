@@ -869,8 +869,8 @@ else
 
 char fullTitle[5000];
 safef(fullTitle, sizeof(fullTitle), 
-"%s&nbsp;<A HREF=\"../cgi-bin/hgc?%s&o=%s&t=%s&g=%s&i=%s&fasta=%d\"><SMALL>(%s format)</SMALL></A>\n", 
-title, cartSidUrlString(cart), cgiOptionalString("o"), cgiOptionalString("t"), cgiString("g"), cgiString("i"), 
+"%s&nbsp;<A HREF=\"../cgi-bin/hgc?%s&db=%s&o=%s&t=%s&g=%s&i=%s&fasta=%d\"><SMALL>(%s format)</SMALL></A>\n", 
+title, cartSidUrlString(cart), database, cgiOptionalString("o"), cgiOptionalString("t"), cgiString("g"), cgiString("i"), 
 !fasta, otherFormat);
 
 web2StartSection("pubsSection", "%s", fullTitle);
@@ -1115,7 +1115,7 @@ bioSeq *oSeq = NULL;
 
 char title[1024];
 safef(title, sizeof title, "Literature Sequence vs Genomic");
-htmlFramesetStart(title);
+alnModernStart(title);
 
 struct psl *psl = getAlignments(conn, pslTable, item);
 if (psl == NULL)

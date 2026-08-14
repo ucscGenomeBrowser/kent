@@ -35,7 +35,7 @@ my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
 chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
-my $basesCovered = `bigBedInfo $wmBbi | egrep "basesCovered:" | sed -e 's/basesCovered: //;'`;
+my $basesCovered = `/cluster/bin/x86_64/bigBedInfo $wmBbi | egrep "basesCovered:" | sed -e 's/basesCovered: //;'`;
 chomp $basesCovered;
 my $bases = $basesCovered;
 $bases =~ s/,//g;

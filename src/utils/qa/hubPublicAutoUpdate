@@ -169,7 +169,7 @@ def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
 
     if 'email' in currentHub and currentHub['email'].strip():
         if hubPublicDic[hub]['email'] != currentHub['email'].strip():
-            printHgsql(hub,'email',currentHub['email'].strip(),hgsqlInput,testMode)
+            printHgsql(hub,'email',escapeDoubleQuotesOnLabels(currentHub['email'].strip()),hgsqlInput,testMode)
     
 def hubPublicCompare(hubPublicDic,hgsqlInput,testMode,silent):
     """Query hub.txt files and compare values to hubPublic values"""

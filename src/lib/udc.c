@@ -1267,6 +1267,17 @@ void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, c
 {
 if (cacheDir==NULL)
     return;
+/* SECURITY (refs #38056): this is where a remote URL becomes a local path, so it is the
+ * place to make sure the URL cannot climb out of the cache.  qEscaped deliberately leaves
+ * '.' and '/' alone so cached names stay readable, and longDirHash only rewrites
+ * over-long components, so a ".." in the URL survives all the way into cacheDir.  From
+ * there makeDirsOnPath would create directories outside the cache root and we would write
+ * bitmap and sparseData files into them.  A custom track or hub bigDataUrl reaches here,
+ * so this is anonymous.  Reject the ".." path component; note that names merely starting
+ * with dots, like "..foo", are fine and must keep working. */
+if (startsWith("../", afterProtocol) || stringIn("/../", afterProtocol) != NULL ||
+    endsWith(afterProtocol, "/..") || sameString(afterProtocol, ".."))
+    errAbort("Illegal '..' in the path of a remote URL: %s://%s", protocol, afterProtocol);
 char *hashedAfterProtocol = longDirHash(cacheDir, afterProtocol);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
@@ -2164,6 +2175,12 @@ bits64 udcTell(struct udcFile *file)
 /* Return current file position. */
 {
 return file->offset;
+}
+
+bits64 udcFileOpenSize(struct udcFile *file)
+/* Return size of open file. */
+{
+return file->size;
 }
 
 static long bitRealDataSize(char *fileName)

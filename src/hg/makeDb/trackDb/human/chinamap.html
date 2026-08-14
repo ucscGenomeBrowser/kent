@@ -1,0 +1,105 @@
+<h2>Description</h2>
+<p>
+This track shows allele frequencies for 147.4 million variants (136.7
+million SNPs and 10.7 million short indels, autosomes only) from
+10,588 Chinese individuals deep-whole-genome-sequenced at a mean depth
+of about 40x by the China Metabolic Analytics Project (ChinaMAP).
+Participants come from three large Chinese cohort studies (the China
+Noncommunicable Disease Surveillance, the REACTION study and the
+Community-based Cardiovascular Risk During Urbanization in Shanghai
+study) and span 27 provinces of China and eight ethnic populations
+(Han, Hui, Manchu, Miao, Mongolian, Yi, Tibetan and Zhuang). For
+each variant the track records the cohort allele count, allele number
+and allele frequency. The original release also ships the matched 1000
+Genomes Project (1KGP) allele frequencies (global, EAS, AMR, AFR, EUR
+and SAS) as INFO fields, which are kept verbatim in the VCF.
+</p>
+
+<h2>Display</h2>
+<p>
+The track uses the standard UCSC VCF display. When you hover over a
+variant, the popup shows the cohort allele frequency and count, the
+total number of called alleles, and the 1KGP frequencies that the
+ChinaMAP release ships alongside each site.
+</p>
+
+<h2>Methods</h2>
+<p>
+DNA from each participant was prepared with the QIAGEN DNeasy
+Blood &amp; Tissue Kit, sheared by Covaris, ligated to BGISEQ-500
+adapters and rolling-circle amplified into DNA nanoballs for
+100 bp paired-end sequencing on the BGISEQ-500 platform at BGI
+Genomics. Reads were quality-filtered with SOAPnuke v1.5.6, aligned
+to GRCh38 (GENCODE release) with BWA-MEM v0.7.16a, coordinate-sorted
+with Picard SortSam v2.13.2, and duplicate-marked and base-quality
+recalibrated with GATK v4.beta.4. Samples were required to pass six
+QC criteria (base quality Q30 &gt; 80%, mean depth &gt; 30x, mapping
+rate &ge; 95%, mismatch rate &lt; 1%, duplicate rate &lt; 10% and
+20x coverage &gt; 80%) and a 21-SNP mass spectrometric fingerprint
+check; 10,588 WGS samples passed. Germline variants were called
+per-sample as GVCFs with GATK HaplotypeCaller v4.0.4.0, combined
+with GATK CombineGVCFs and joint-called with GATK GenotypeGVCFs
+(v4.0.4.0), ignoring low-complexity regions. Variants were filtered
+with GATK VariantFiltration and restricted to length &le; 10 bp and a
+maximum of 10 alt alleles. Multi-allelic sites were split, and the
+final callset was annotated with SnpEff v4.3. See Cao <em>et al.</em>
+2020 (in References below) for the full pipeline.
+</p>
+<p>
+The bgzipped sites-only VCF
+(<tt>mbiobank_ChinaMAP.phase1.vcf.gz</tt>) was downloaded from the
+ChinaMAP / mBiobank distribution site
+(<a href="http://chinamapwgs.mbiobank.com/download/" target="_blank">http://chinamapwgs.mbiobank.com/download/</a>),
+renamed locally to <tt>chinamap.vcf.gz</tt> and tabix-indexed. We did
+not need to lift over coordinates or reformat the file: the upstream
+file is already on GRCh38 with chr-prefixed chromosome names,
+autosomes only, and ships standard <tt>AC</tt>, <tt>AF</tt> and
+<tt>AN</tt> INFO fields. The pipeline is recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc
+file</a> of the track.
+</p>
+
+<h2>Caveats</h2>
+<p>
+Only autosomes (chr1-22) are present; chrX, chrY and chrM are not
+in the ChinaMAP phase 1 release. The 1KGP frequency fields
+(<tt>1KGP_AF</tt>, <tt>1KGP_EAS_AF</tt>, <tt>1KGP_AMR_AF</tt>,
+<tt>1KGP_AFR_AF</tt>, <tt>1KGP_EUR_AF</tt>, <tt>1KGP_SAS_AF</tt>) are
+carried over verbatim from the ChinaMAP VCF and only populate the
+small fraction of ChinaMAP sites that are also catalogued in the
+matched 1KGP release.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The ChinaMAP <em>Limitations on Use</em> (see the
+<a href="http://chinamapwgs.mbiobank.com/download/" target="_blank">ChinaMAP
+download page</a>) prohibit redistribution of the data, so the
+ChinaMAP VCF is not available from the UCSC Table Browser, Data
+Integrator, REST API or the public download server. The track can be
+browsed interactively in the Genome Browser; for bulk access please
+register with the ChinaMAP project at
+<a href="http://chinamapwgs.mbiobank.com/" target="_blank">http://chinamapwgs.mbiobank.com/</a>
+and download the original VCF directly from them.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the ChinaMAP participants and to the National Clinical
+Research Center for Metabolic Diseases (Shanghai Jiao Tong
+University School of Medicine, Ruijin Hospital) and BGI Genomics, who
+produced and released the ChinaMAP phase 1 sites VCF.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cao Y, Li L, Xu M, Feng Z, Sun X, Lu J, Xu Y, Du P, Wang T, Hu R <em>et al</em>.
+<a href="https://doi.org/10.1038/s41422-020-0322-9" target="_blank">
+The ChinaMAP analytics of deep whole genome sequences in 10,588 individuals</a>.
+<em>Cell Res</em>. 2020 Sep;30(9):717-731.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32355288" target="_blank">32355288</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7609296/" target="_blank">PMC7609296</a>
+</p>
+

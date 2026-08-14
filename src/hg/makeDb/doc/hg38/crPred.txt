@@ -1,0 +1,53 @@
+# 2026-05-22 - Claude (mhaeussl) - crPred supertrack: cis-regulatory element predictions
+
+# This file documents all tracks under the crPred supertrack
+# ("Cis-regulatory Element Predictions").
+# trackDb: src/hg/makeDb/trackDb/human/hg38/crPred.ra (supertrack)
+#          src/hg/makeDb/trackDb/human/hg38/tredNet.ra (TREDNet composite + subtracks)
+
+###########################################################################
+# TREDNet candidate enhancers and silencers (Huang & Ovcharenko 2024,
+# PMID 38978133, https://zenodo.org/records/12523205)
+
+    cd /hive/data/genomes/hg38/bed/crPred/tredNet
+
+# Download
+# Data from: https://zenodo.org/records/12523205
+# File: SilencerEnhancer.tar.gz
+
+    wget https://zenodo.org/records/12523205/files/SilencerEnhancer.tar.gz?download=1 \
+        -O SilencerEnhancer.tar.gz
+    tar xzf SilencerEnhancer.tar.gz
+    mv *.bed in/
+
+# The filenames encode ENCODE biosample ontology IDs (CL, UBERON, EFO, NTR prefixes).
+# Download Cell Ontology and Uberon OBO files to resolve IDs to readable names.
+# EFO and NTR IDs were resolved via the EBI OLS4 REST API and the ENCODE project API.
+
+    wget -q http://purl.obolibrary.org/obo/cl.obo -O cl.obo
+    wget -q http://purl.obolibrary.org/obo/uberon.obo -O uberon.obo
+
+# Build the merged bigBed files (enhancer and silencer).
+# The script reads all per-sample BED files, resolves IDs to names,
+# merges overlapping 1-kb windows with bedtools merge, annotates each
+# merged region with its contributing biosamples, and assigns colors
+# by dominant sample category (tissue/cell type/cell line/mixed).
+
+    python3 ~/kent/src/hg/makeDb/scripts/tredNet/tredNetBuild.py \
+        --indir in --outdir .
+
+# Convert to bigBed
+
+    AS=~/kent/src/hg/makeDb/scripts/tredNet/tredNet.as
+    bedToBigBed -type=bed9+4 -as=$AS -tab -extraIndex=name \
+        tredNetEnhancer.bed /hive/data/genomes/hg38/chrom.sizes tredNetEnhancer.bb
+    bedToBigBed -type=bed9+4 -as=$AS -tab -extraIndex=name \
+        tredNetSilencer.bed /hive/data/genomes/hg38/chrom.sizes tredNetSilencer.bb
+
+# Install
+
+    mkdir -p /gbdb/hg38/tredNet
+    ln -sf /hive/data/genomes/hg38/bed/crPred/tredNet/tredNetEnhancer.bb \
+        /gbdb/hg38/tredNet/tredNetEnhancer.bb
+    ln -sf /hive/data/genomes/hg38/bed/crPred/tredNet/tredNetSilencer.bb \
+        /gbdb/hg38/tredNet/tredNetSilencer.bb

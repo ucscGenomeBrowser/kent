@@ -8,36 +8,39 @@ from assays that measure chromatin accessibility (DNase-seq and ATAC-seq), trans
 factor (TF) binding (ChIP-seq for individual TFs), histone modifications (ChIP-seq for
 H3K4me3 and H3K27ac), CTCF binding, and transcription (RNA-seq).</p>
 
-<ul>
-<li>The <em>H3K27ac (Layered)</em> track highlights a histone modification associated with
-active enhancers and promoters, displayed as organ-averaged signal across 19 organs.</li>
+<p>Tracks labeled <b><em>(Layered)</em></b> show organ-averaged signals as a transparent
+overlay of multiple organs within a single track. Tracks labeled <b><em>(Indiv.)</em></b>
+show signals from individual experiments in specific biosamples.</p>
 
-<li>The <em>DNase (Layered)</em> track highlights regions of chromatin that are hypersensitive
+<ul>
+<li>The <b><em>H3K27ac (Layered)</em></b> track displays enrichment levels of a histone modification associated with
+active enhancers and promoters, averaged across 19 organs.</li>
+
+<li>The <b><em>DNase (Layered)</em></b> track displays regions of chromatin that are hypersensitive
 to DNase I digestion, indicating open and potentially regulatory chromatin. Signal is averaged
 across biosamples from the same organ for 26 organs.</li>
 
-<li>The <em>ATAC (Layered)</em> track highlights regions of open chromatin identified by
+<li>The <b><em>ATAC (Layered)</em></b> track displays regions of open chromatin identified by
 ATAC-seq, which uses Tn5 transposase insertion to assay accessibility. Signal is averaged
 across 12 organs.</li>
 
-<li>The <em>H3K4me3 (Layered)</em> track highlights a histone modification associated with
-active and poised promoters, displayed as organ-averaged signal across 20 organs.</li>
+<li>The <b><em>H3K4me3 (Layered)</em></b> track displays enrichment levels of a histone modification associated with
+active or poised promoters, averaged across 20 organs.</li>
 
-<li>The <em>CTCF (Layered)</em> track highlights genomic regions bound by CTCF, a transcription
-factor and architectural protein involved in chromatin organization and gene regulation. Signal
+<li>The <b><em>CTCF (Layered)</em></b> track displays genomic regions bound by CTCF, a multifunctional DNA-binding protein involved in chromatin organization and gene regulation. Signal
 is averaged across 16 organs.</li>
 
-<li>The <em>Transcription (Layered)</em> track displays transcription levels measured by
+<li>The <b><em>Transcription (Layered)</em></b> track displays transcription levels measured by
 strand-specific total RNA-seq across a large number of biosamples, shown separately for
 the two genomic strands.</li>
 
-<li>The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
-<em>RNA-seq (indiv.)</em> tracks display signals from individual experiments in specific
+<li>The <b><em>TF ChIP-seq (Indiv.)</em></b>, <b><em>DNase/ATAC/Histone/CTCF (Indiv.)</em></b>, and
+<b><em>RNA-seq (Indiv.)</em></b> tracks display signals from individual experiments in specific
 biosamples.</li>
 </ul>
 
 <p>
-These tracks complement one another and collectively provide a powerful resource for
+These tracks complement one another and collectively provide a resource for
 interpreting regulatory DNA. Histone marks are broadly informative but have limited resolution
 (~200 bp) and relatively low functional specificity. DNase-seq assays offer higher resolution
 and scalability across many cell types, and they reliably indicate regulatory potential, though
@@ -61,19 +64,19 @@ For annotations of individual regulatory elements, see the related
 
 <h2>Display Conventions</h2>
 <p>
-By default, the <em>DNase (Layered)</em>, <em>ATAC (Layered)</em>,
-<em>H3K4me3 (Layered)</em>, <em>H3K27ac (Layered)</em>, <em>CTCF (Layered)</em>, and
-<em>Transcription (Layered)</em> tracks use a transparent overlay to visualize signals from
+By default, the <b><em>DNase (Layered)</em></b>, <b><em>ATAC (Layered)</em></b>,
+<b><em>H3K4me3 (Layered)</em></b>, <b><em>H3K27ac (Layered)</em></b>, <b><em>CTCF (Layered)</em></b>, and
+<b><em>Transcription (Layered)</em></b> tracks use a transparent overlay to visualize signals from
 multiple organs or tissues within a single track. For each organ or tissue, signal values from
 all associated experiments are averaged. Each organ or tissue is assigned a distinct color,
 selected to be light and saturated to maintain clarity when overlaid. Initially, each layered
-track displays an overlay of five representative organs: blood, brain, kidney, liver, and
-muscle. Clicking on the track opens a details page where you can view and select organs or
+track displays an overlay of representative organs: blood, brain, kidney, liver, and
+muscle (the H3K27ac and ATAC tracks have no muscle data). Clicking on the track opens a details page where you can view and select organs or
 tissues.</p>
 
 <p>
-The <em>TF ChIP-seq (indiv.)</em>, <em>ATAC/DNase/Histone/CTCF (indiv.)</em>, and
-<em>RNA-seq (indiv.)</em> tracks are hidden by default. Clicking on any of these tracks opens
+The <b><em>TF ChIP-seq (Indiv.)</em></b>, <b><em>DNase/ATAC/Histone/CTCF (Indiv.)</em></b>, and
+<b><em>RNA-seq (Indiv.)</em></b> tracks are hidden by default. Clicking on any of these tracks opens
 a details page where you can select specific biosample-level experiments to display.</p>
 
 <h2>Data Access</h2>

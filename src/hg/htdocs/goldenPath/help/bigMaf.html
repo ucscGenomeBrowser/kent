@@ -68,7 +68,7 @@ option.</p>
 <p>
 An example, <code>bedToBigBed -type=bed3+4 -as=mafSummary.as
 -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb</code>.
-Another tool, <code>hgLoadMafSummary</code> generates the input
+Another tool, <code>mafToBigMafSummary</code> generates the input
 <code>bigMafSummary.bed</code> file.</p>
 <p>
 The following autoSql definition is used to create the second file,
@@ -133,9 +133,9 @@ wget http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
 <strong>Step 4.</strong> 
 Download the <code>bedToBigBed</code> and <code>mafToBigMaf</code> programs from the UCSC
 <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>. If you have 
-opted to generate the optional frame and summary files for your multiple alignment, you must also 
-download the <code>hgLoadMafSummary</code>, <code>genePredSingleCover</code>, and 
-<code>genePredToMafFrames</code> programs from the same 
+opted to generate the optional frame and summary files for your multiple alignment, you must also
+download the <code>mafToBigMafSummary</code>, <code>genePredSingleCover</code>, and
+<code>genePredToMafFrames</code> programs from the same
 <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">directory</a>.</p> 
 <p>
 <strong>Step 5.</strong> 
@@ -162,8 +162,7 @@ your bigMaf file:</p>
 genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 single.gp
 bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
-hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
-cut -f2- bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
+mafToBigMafSummary hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
 bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre>
 <p>
 <strong>Step 7.</strong> 

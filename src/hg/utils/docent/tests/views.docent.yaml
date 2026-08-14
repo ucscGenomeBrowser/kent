@@ -1,0 +1,39 @@
+# hideKids on a composite that has VIEWS, which is two levels, not one.
+#
+# `hideKids` hides views as units, so it has to go on the view that actually holds the
+# subtrack. Aim it at the composite instead and the view your subtrack lives in is
+# hidden with it, and the row silently disappears -- see views.xfail, which pins that.
+#
+# This one is the form that works: hideKids on the Signal view, the sibling views hidden
+# by name, one subtrack left showing. wgEncodeRegDnaseUwWerirb1Signal is `parent
+# wgEncodeRegDnaseSignal off` in trackDb, so it also exercises the `_sel` checkbox --
+# without it the subtrack stays deselected and nothing is drawn.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track:
+      wgEncodeRegDnasePeak: hide
+      wgEncodeRegDnaseHotspot: hide
+      wgEncodeRegDnaseSignal: hideKids
+      wgEncodeRegDnaseUwWerirb1Signal: full
+
+  # The subtrack we asked for is drawn, and the nine Signal subtracks that trackDb marks
+  # `parent wgEncodeRegDnaseSignal on` are not -- which is what the view-level hideKids
+  # is for. Without it they all come up alongside.
+  - expect:
+      rows: [ruler, wgEncodeRegDnaseUwWerirb1Signal]
+      noRows: [wgEncodeRegDnaseUwK562Signal, wgEncodeRegDnaseUwGm12878Signal,
+               wgEncodeRegDnaseUwHepg2Signal]
+      noText: "Too Long"
+
+  # No `exact:` above, and this is why. wgEncodeRegDnase sits under the wgEncodeReg
+  # superTrack, so turning anything on beneath it sends `wgEncodeReg=show`, and every
+  # member of that superTrack then comes up at its own trackDb visibility -- H3K27ac is
+  # `visibility 2`, so it reappears however much the `hide: all` above hid it. Asserting
+  # it is HERE rather than working around it: the day that changes, this says so.
+  - expect: {rows: [wgEncodeRegMarkH3k27ac]}

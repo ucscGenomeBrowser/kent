@@ -25,6 +25,7 @@ errAbort(
   "     -ignoreGroupsWithoutExons - skip groups contain no exons rather than\n"
   "      generate an error.\n"
   "     -infoOut=file - write a file with information on each transcript\n"
+  "     -infoTsv=file - write a TSV with information on each transcript\n"
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
   "      specified prefix.  May be repeated.\n"
   "     -impliedStopAfterCds - implied stop codon in after CDS\n"
@@ -41,6 +42,7 @@ static struct optionSpec options[] = {
     {"allErrors", OPTION_BOOLEAN},
     {"ignoreGroupsWithoutExons", OPTION_BOOLEAN},
     {"infoOut", OPTION_STRING},
+    {"infoTsv", OPTION_STRING},
     {"sourcePrefix", OPTION_STRING|OPTION_MULTI},
     {"impliedStopAfterCds", OPTION_BOOLEAN},
     {"geneNameAsName2", OPTION_BOOLEAN},
@@ -110,7 +112,7 @@ fprintf(infoFh, "%s\t%s\t%s\t%s\t%ld\t%ld\t%c\t%s\t%s\t%s\t%s\t%s\n",
 }
 
 static void gtfGroupToGenePred(struct gffFile *gtf, struct gffGroup *group, FILE *gpFh,
-                               FILE *infoFh)
+                               FILE *infoFh, FILE *infoTsvFh)
 /* convert one gtf group to a genePred */
 {
 unsigned optFields = (clGenePredExt ? genePredAllFlds : 0);
@@ -158,6 +160,8 @@ else
     {
     if (infoFh != NULL)
         writeInfo(infoFh, group);
+    if (infoTsvFh != NULL)
+        writeInfo(infoTsvFh, group);
     }
 errCatchFree(&errCatch); 
 }
@@ -184,11 +188,11 @@ if (clSourcePrefixes != NULL)
 return TRUE;
 }
 
-static void gtfToGenePred(char *gtfFile, char *gpFile, char *infoFile)
+static void gtfToGenePred(char *gtfFile, char *gpFile, char *infoFile, char *infoTsv)
 /* gtfToGenePred -  convert a GTF file to a genePred.. */
 {
 struct gffFile *gtf = gffRead(gtfFile);
-FILE *gpFh, *infoFh = NULL;
+FILE *gpFh, *infoFh = NULL, *infoTsvFh = NULL;
 struct gffGroup *group;
 
 if (!gtf->isGtf)
@@ -200,11 +204,16 @@ if (infoFile != NULL)
     infoFh = mustOpen(infoFile, "w");
     fputs(infoHeader, infoFh);
     }
+if (infoTsv != NULL)
+    {
+    infoTsvFh = mustOpen(infoTsv, "w");
+    fputs(infoHeader + 1, infoTsvFh);
+    }
 
 if (!doSimple)
     for (group = gtf->groupList; group != NULL; group = group->next)
 	if (inclGroup(group))
-	    gtfGroupToGenePred(gtf, group, gpFh, infoFh);
+	    gtfGroupToGenePred(gtf, group, gpFh, infoFh, infoTsvFh);
 
 carefulClose(&gpFh);
 gffFileFree(&gtf);
@@ -228,7 +237,8 @@ if (optionExists("geneNameAsName2"))
     clGxfOptions |= genePredGxfGeneNameAsName2;
 if (optionExists("includeVersion"))
     clGxfOptions |= genePredGxfIncludeVersion;
-gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL));
+gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL),
+              optionVal("infoTsv", NULL));
 if (badGroupCount > 0)
     errAbort("%d errors", badGroupCount);
 return 0;

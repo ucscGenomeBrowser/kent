@@ -12,6 +12,7 @@ import base64
 import re
 import logging
 import html as html_module
+import json
 import time
 from datetime import datetime, timedelta
 from difflib import SequenceMatcher
@@ -93,6 +94,11 @@ MLQ_CATEGORIES = [
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PST = pytz.timezone('America/Los_Angeles')
 DRY_RUN = False
+
+# Placeholder for emails whose subject is empty or consists entirely of
+# reply/list-tag tokens that normalize away. Gives them a stable, matchable
+# subject instead of a bare '~' Redmine filter (HTTP 422).
+NO_SUBJECT = '<No Subject>'
 
 # Setup logging
 LOG_FILE = os.environ.get('MLQ_LOG_FILE', os.path.join(SCRIPT_DIR, 'mlq_automate.log'))
@@ -198,11 +204,24 @@ def get_google_credentials():
     token_path = os.path.expanduser('~/.gmail_token.json')
     creds_path = os.path.expanduser('~/.gmail_credentials.json')
 
+    downscoped = False
+
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        # The token file is shared with other gbauto automation, which can leave behind an
+        # access token minted with a narrower scope set. creds.valid only reports expiry, and
+        # from_authorized_user_file stamps SCOPES onto the object regardless of what the token
+        # really carries, so check the scopes recorded in the file instead. Otherwise every API
+        # call returns 403 insufficientPermissions until that token expires on its own.
+        with open(token_path) as f:
+            stored_scopes = json.load(f).get('scopes')
+        if stored_scopes is not None and not set(SCOPES).issubset(stored_scopes):
+            logger.warning(f"Token in {token_path} is missing scope(s) "
+                           f"{sorted(set(SCOPES) - set(stored_scopes))}, forcing a refresh")
+            downscoped = True
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
+    if not creds or not creds.valid or downscoped:
+        if creds and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
@@ -299,7 +318,7 @@ Important:
 - For DRAFT_RESPONSE, be helpful and concise. Ask clarifying questions if needed. Point to relevant documentation when appropriate."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=800,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -389,7 +408,7 @@ EMAIL 2: SPAM or NOT SPAM
 (etc.)"""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=100,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -657,6 +676,37 @@ def send_error_notification(subject, body):
         return False
 
 
+# Set once per run when a non-retryable Claude API error is reported, so a broken
+# model ID or credential alerts the QA team once per run instead of once per email.
+_claude_fatal_alerted = False
+
+
+def handle_claude_api_error(e, context):
+    """Log a Claude API failure and alert the QA team on non-transient errors.
+
+    Transient errors (429 rate limit, 5xx, connection/timeout) are logged for
+    retry on the next run. Other 4xx client errors -- an invalid or retired model
+    ID, bad auth, a malformed request -- won't resolve on their own, so they also
+    send an email alert to the QA team (at most once per run). The caller still
+    skips the current item either way.
+    """
+    global _claude_fatal_alerted
+
+    status = getattr(e, 'status_code', None)
+    is_fatal = status is not None and 400 <= status < 500 and status not in (408, 409, 429)
+
+    if is_fatal:
+        message = (f"Claude API client error (HTTP {status}) {context}. This will not "
+                   f"resolve on retry and needs investigation. Error: {e}")
+        logger.error(message)
+        if not _claude_fatal_alerted:
+            send_error_notification(f"Claude API client error (HTTP {status})", message)
+            _claude_fatal_alerted = True
+    else:
+        logger.error(f"Claude API unavailable after retries {context}. "
+                     f"Will be retried next run. Error: {e}")
+
+
 def delete_moderation_email(gmail_id):
     """Delete/archive the moderation notification after processing."""
     if DRY_RUN:
@@ -905,7 +955,7 @@ def strip_quoted_content(body):
                         i += 1
                     else:
                         break
-                # Reset cleaned — anything before the quote header was blank/trivial
+                # Reset cleaned -- anything before the quote header was blank/trivial
                 cleaned = []
                 continue
             else:
@@ -1188,6 +1238,7 @@ def normalize_subject(subject):
     # Use word boundary \b to avoid matching inside words (e.g., "Re-install")
     reply_forward_patterns = [
         r'\bre:\s*',      # Re: RE:
+        r'\bre\s*[\[\(\^]\s*\d+\s*[\]\)]?\s*:\s*',  # Re[2]: Re(2): Re^2: (numbered replies, e.g. mail.ru)
         r'\bfwd?:\s*',    # Fwd: FW: Fw:
         r'\baw:\s*',      # AW: (German "Antwort")
     ]
@@ -1220,6 +1271,11 @@ def find_existing_ticket(subject, thread_emails):
     replies where the original sender appears in To/CC fields.
     """
     normalized = normalize_subject(subject)
+    # Empty normalization (e.g. a subject of just "Re:" or "[genome]") would send
+    # Redmine a bare 'subject=~' filter and 422. Fall back to the placeholder so
+    # these still search and match consistently with how the ticket was created.
+    if not normalized:
+        normalized = NO_SUBJECT
 
     url = f"{CONFIG['REDMINE_URL']}/issues.json"
     params = {
@@ -1241,10 +1297,12 @@ def find_existing_ticket(subject, thread_emails):
         if normalize_subject(issue['subject']).lower() != normalized.lower():
             continue
 
-        # Staff replies to mailing list threads don't need email match —
+        # Staff replies to mailing list threads don't need email match --
         # subject match is sufficient since staff wouldn't start a new
-        # unrelated thread with the same subject
-        if has_staff_participant:
+        # unrelated thread with the same subject. The placeholder subject is
+        # shared by all no-subject threads, so it's excluded from this shortcut:
+        # require an email match to avoid merging unrelated conversations.
+        if has_staff_participant and normalized != NO_SUBJECT:
             return issue['id']
 
         # For external senders, require email match to avoid false positives
@@ -1380,6 +1438,12 @@ def create_ticket(subject, body, sender_emails, mlm_name, category='Other', atta
     Includes retry logic for transient server errors (5xx) and network issues.
     Sends email notification to QA team if all retries fail.
     """
+    # Subjects that normalize to nothing (empty, or only reply/list tags) get a
+    # stable placeholder so the stored ticket can be found by find_existing_ticket
+    # on later runs (its subject search would otherwise never match).
+    if not normalize_subject(subject):
+        subject = NO_SUBJECT
+
     if DRY_RUN:
         att_info = f" with {len(attachments)} attachment(s)" if attachments else ""
         logger.info(f"  [DRY RUN] Would create ticket: {subject[:50]}{att_info}")
@@ -1660,8 +1724,7 @@ def create_tickets_for_approved(approved_messages):
                 analysis = analyze_email_with_claude(subject, body, sender,
                                                     group_email=group_email)
             except anthropic.APIError as e:
-                logger.error(f"Anthropic API overloaded after retries, skipping email "
-                             f"'{subject[:50]}'. Will be retried next run. Error: {e}")
+                handle_claude_api_error(e, f"analyzing email '{subject[:50]}'")
                 continue
 
             logger.info(f"  Category: {analysis['category']}")
@@ -1704,8 +1767,7 @@ def process_moderated_lists():
     try:
         spam_results = batch_check_spam_with_claude(all_pending)
     except anthropic.APIError as e:
-        logger.error(f"Anthropic API overloaded after retries, skipping spam check this run. "
-                     f"Pending messages will be retried in the next run. Error: {e}")
+        handle_claude_api_error(e, "during the moderation spam check")
         return
 
     # Process results and collect approved messages
@@ -1840,8 +1902,7 @@ def process_emails():
                     group_email=thread['group']
                 )
             except anthropic.APIError as e:
-                logger.error(f"Anthropic API overloaded after retries, skipping email "
-                             f"'{first_email['subject'][:50]}'. Will be retried next run. Error: {e}")
+                handle_claude_api_error(e, f"analyzing email '{first_email['subject'][:50]}'")
                 continue
 
             if analysis['is_spam']:

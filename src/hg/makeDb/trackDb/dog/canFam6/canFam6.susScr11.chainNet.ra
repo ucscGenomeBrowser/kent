@@ -1,0 +1,49 @@
+##############################################################################
+# susScr11 - Pig - Sus scrofa - taxId: 9823
+##############################################################################
+track chainNetSusScr11
+compositeTrack on
+shortLabel Pig Chain/Net
+longLabel Pig (Feb. 2017 (Sscrofa11.1/susScr11) susScr11), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb susScr11
+html chainNet
+
+    track chainNetSusScr11Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetSusScr11
+    spectrum on
+
+        track chainSusScr11
+        parent chainNetSusScr11Viewchain
+        subGroups view=chain
+        shortLabel Pig Chain
+        longLabel Pig (Feb. 2017 (Sscrofa11.1/susScr11) susScr11) Chained Alignments
+        type bigChain susScr11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSusScr11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSusScr11Link.bb
+
+        track chainLiftOverSusScr11
+        parent chainNetSusScr11Viewchain
+        subGroups view=chain
+        shortLabel Pig liftOverChain
+        longLabel Pig (Feb. 2017 (Sscrofa11.1/susScr11) susScr11) Lift Over Chained Alignments
+        type bigChain susScr11
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverSusScr11.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverSusScr11Link.bb
+

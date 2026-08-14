@@ -1,0 +1,150 @@
+<h2>Description</h2>
+
+<p>
+This track shows 22,567 upstream open reading frames (uORFs) in the 5' untranslated regions (5' UTRs)
+of human protein-coding genes, compiled as part of the
+<a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a> pipeline for annotating
+5' UTR variants. The uORFs are defined on
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=mane">MANE Select</a> transcripts,
+which provide a single well-supported, clinically relevant transcript per gene matched between
+Ensembl/GENCODE and RefSeq. Only ATG-initiated uORFs are included.
+</p>
+
+<p>
+uORFs are short open reading frames found upstream of the main protein-coding sequence. When a
+ribosome scans from the 5' cap, it may translate a uORF before reaching the main start codon,
+which often reduces production of the downstream protein. Genetic variants that create, disrupt,
+or alter uORFs can therefore change protein output and contribute to disease, particularly when they
+affect genes where tight translational control is critical.
+</p>
+
+<p>
+Each uORF is classified into one of three types based on the position of its stop codon relative
+to the main CDS start:
+</p>
+<ul>
+  <li>A <b>non-overlapping</b> uORF has its stop codon upstream of the main CDS start. After
+      the ribosome finishes translating the uORF it may re-initiate at the CDS or disengage,
+      reducing overall protein output.</li>
+  <li>An <b>overlapping</b> uORF has its stop codon within the CDS but in a different reading
+      frame. The ribosome traverses the CDS start codon without recognizing it, which prevents
+      initiation of the main protein and typically causes a stronger inhibitory effect.</li>
+  <li>An <b>N-terminal extension</b> is an upstream ATG that is in-frame with the main CDS and
+      has no intervening stop codon. The resulting protein has an extended N-terminal sequence.
+      Variants that convert an overlapping uORF into an N-terminal extension change the protein
+      product rather than merely suppressing translation.</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are colored by Kozak consensus strength, using the same color scheme as all other subtracks
+in this collection:
+</p>
+<p>
+<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b> &ndash; A/G at position &minus;3 and G at position +4<br>
+<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b> &ndash; only one of those two positions matches<br>
+<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b> &ndash; neither position matches<br>
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> &ndash; Kozak context not available
+</p>
+
+<p>
+Because all uORFs in this set are ATG-initiated, the non-ATG category does not apply here.
+uORF type (Non-Overlapping, Overlapping, N-terminal extension) is shown in the mouseover and
+can be used as a filter.
+</p>
+
+<p>
+The exon/intron structure is projected from the overlapping MANE Select transcript so that uORFs
+spanning multiple exons are drawn correctly. If no suitable MANE transcript could provide intron
+boundaries at the exact uORF endpoints, the GENCODE comprehensive annotation is used as a fallback.
+The source transcript ID is recorded in the <b>intronsSource</b> field
+(<tt>none</tt> if no host transcript was found in either pool).
+</p>
+
+<p>
+Mouseover shows the gene symbol, uORF type, rank within the gene, Kozak strength, and the donor
+transcript used for intron structure. The track can be filtered by uORF type and by Kozak strength
+(Strong, Moderate, Weak).
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiveUltraUorfs</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that can be
+downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/fiveUltraUorfs/"
+target="_blank">our download server</a>.
+The file for this track is called <tt>fiveUltraUorfs.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+</p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/fiveUltraUorfs/fiveUltraUorfs.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+
+<p>
+The original uORF reference set is distributed with the
+<a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA software package</a>
+and can be obtained by installing the package and running <tt>5ULTRA-download-data</tt>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Chaldebas et al. compiled a reference set of uORFs from two sources: the Ribo-uORF database
+(501,554 translated uORFs supported by 1,495 ribosome profiling datasets) and the uORFdb database
+of computationally predicted uORFs. Only ATG-initiated uORFs were retained.
+These were mapped to the 5' UTRs of 18,775 MANE Select protein-coding transcripts from
+GENCODE v45 basic annotation, yielding 22,567 uORFs. Of these, 8,067 (35.7%) have direct
+ribosome profiling support. Each uORF was classified as Non-Overlapping, Overlapping, or
+N-terminal extension based on the relationship between its stop codon and the main CDS start.
+See Chaldebas et al. 2026 for full details.
+</p>
+
+<p>
+The uORF reference BED file was obtained from the
+<a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA GitHub repository</a>
+(installed via <tt>5ULTRA-download-data</tt>; file <tt>uORFs.MANE.hg38.bed</tt>).
+Colors were remapped to the Okabe-Ito colorblind-safe palette. To recover exon/intron structure
+for uORFs that span introns, each feature was projected onto an overlapping MANE Select transcript
+using the <tt>addIntrons.py</tt> script in the kent source tree; a GENCODE v49 comprehensive
+bigBed was used as fallback when no MANE candidate could provide intact boundaries at the uORF
+endpoints. Of 22,567 uORFs, 3,861 received multi-block exon structure from MANE, 9 from GENCODE
+fallback, and 45 overlapped a GENCODE transcript but had no introns within the uORF range;
+18,652 remain as single-exon features whose genomic span contains no intron from any known host.
+Build steps are recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/ncOrfs.txt"
+target="_blank">makedoc</a>;
+the processing scripts are at
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/ncOrfs"
+target="_blank">src/hg/makeDb/scripts/ncOrfs/</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Matthieu Chaldebas and the 5ULTRA team for making the uORF reference data
+publicly available as part of the 5ULTRA package.
+</p>
+
+<h2>References</h2>
+
+<p>
+Chaldebas M, Ponsin K, Bohlen J, Conil C, Mourelatos H, Stenson PD, Cooper DN, Abel L, Casanova JL,
+Cobat A <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(26)00106-0" target="_blank">
+Genome-wide detection of human 5&#x27; UTR variants that impact protein translation</a>.
+<em>Am J Hum Genet</em>. 2026 Apr 2;113(4):809-827.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41881026" target="_blank">41881026</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13087467/" target="_blank">PMC13087467</a>
+</p>

@@ -99,6 +99,11 @@ int sqlUnsignedComma(char **pS);
  * This function is used by the system that automatically loads
  * structured object from longblobs. */
 
+unsigned long sqlUnsignedLongComma(char **pS);
+/* Return unsigned long number at *pS.  Advance *pS past comma at end.
+ * This function is used by the system that automatically loads
+ * structured object from longblobs. */
+
 int sqlSignedComma(char **pS);
 /* Return signed number at *pS.  Advance *pS past comma at end */
 

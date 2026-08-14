@@ -31,16 +31,22 @@ void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 #if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
+__attribute__((noreturn))
 #endif
 ;
 
-void vaErrAbort(char *format, va_list args);
+void vaErrAbort(char *format, va_list args)
 /* Abort function, with optional (vprintf formatted) error message. */
+#if defined(__GNUC__)
+__attribute__((noreturn))
+#endif
+;
 
 void errnoAbort(char *format, ...)
 /* Prints error message from UNIX errno first, then does errAbort. */
 #if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
+__attribute__((noreturn))
 #endif
 ;
 
@@ -53,8 +59,12 @@ void pushAbortHandler(AbortHandler handler);
 void popAbortHandler();
 /* Revert to old abort handler. */
 
-void noWarnAbort();
+void noWarnAbort()
 /* Abort without message. */
+#if defined(__GNUC__)
+__attribute__((noreturn))
+#endif
+;
 
 void pushDebugAbort();
 /* Push abort handler that will invoke debugger. */

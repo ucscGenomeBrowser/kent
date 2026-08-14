@@ -2,10 +2,9 @@
 <!--#set var="TITLE" value="Genome Assembly Alignment Request" -->
 <!--#set var="ROOT" value="" -->
 
-<!--#include virtual='$ROOT/inc/gbPageStartHardcoded.html' -->
+<!--#include virtual='$ROOT/inc/gbPageStart.html' -->
 
 <link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/jquery-ui.css">
-<link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/HGStyle.css">
 <link rel='stylesheet' type='text/css' href="<!--#echo var='ROOT' -->/style/liftRequest.css">
 
 <div id="formContainer" class="form-container">
@@ -46,6 +45,20 @@
             Download: <a id="genome2LiftOver" href="#" download>Download chain file</a> over.chain.gz file
         </p>
         </div>
+    </div>
+
+    <div id="pendingRequest" class="form-group" style="display: none;">
+        <button id="dismissPending" style="float: right; cursor: pointer;">&times;</button>
+        <div class="description">
+        <p><strong>A request for these assemblies has already been submitted.</strong></p>
+        <p id="pendingMessage"></p>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="form-group">
+        <button id="dismissError" style="float: right; cursor: pointer;">&times;</button>
+        <h3 id="errorHeading">Error</h3>
+        <p id="errorText"></p>
     </div>
 
     <div id="emailForm" class="form-group">
@@ -105,17 +118,8 @@ target=_blank>Assembly Request Page</a>, then come back here when the
     <a href="<!--#echo var='ROOT' -->/cgi-bin/hgGateway">Back to the genome browser gateway page</a>
 </div>
 
-<div id="errorMessage">
-    <h3>Error</h3>
-    <p id="errorText"></p>
-</div>
-
 <hr />
-</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
-</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
-<!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
 <script src="<!--#echo var='ROOT' -->/js/jquery-ui.js"></script>
-<script src="<!--#echo var='ROOT' -->/js/utils.js"></script>
 <script src="<!--#echo var='ROOT' -->/js/autocompleteCat.js"></script>
 <script src="<!--#echo var='ROOT' -->/js/liftRequest.js"></script>
-</body></html>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html"-->

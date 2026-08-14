@@ -7,6 +7,17 @@
 #define USERDATA_H
 
 #include "hubSpace.h"
+#include "jsonWrite.h"
+
+// 2bit genome-name collision error. Shared with the JS client so it
+// can identify this error from the message.
+#define HUB_GENOME_COLLISION_ERR_FRAG \
+    "matches an existing UCSC native assembly or GenArk hub"
+
+#define HUB_GENOME_COLLISION_ERR_FMT \
+    "Genome name '%s' " HUB_GENOME_COLLISION_ERR_FRAG ". " \
+    "The Genome Browser will load the UCSC assembly instead of your 2bit. " \
+    "Edit the Genome field and try a different name (e.g. '%s_hub')."
 
 struct userFiles
 {
@@ -24,15 +35,13 @@ time_t lastModified; // actually last access time but this works
 struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
-char *getUserName();
-/* Query the right system for the users name */
-
 char *emailForUserName(char *userName);
 /* Fetch the email for this user from gbMembers hgcentral table */
 
 // the various quota helper variables:
-#define HUB_SPACE_DEFAULT_QUOTA_BYTES 10000000000
-#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
+// 10 GiB in bytes, so the binary-unit pretty-printers display it as "10 GB".
+#define HUB_SPACE_DEFAULT_QUOTA_BYTES (10LL * 1024 * 1024 * 1024)
+#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES
 // for defining the quota in hg.conf
 #define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
 
@@ -66,23 +75,60 @@ char *prefixUserFile(char *userName, char *fname, char *parentDir);
  * we cannot construct a full path because of a realpath(3) failure.
  * parentDir is optional and will go in between the per-user dir and the fname */
 
-char *hubNameFromPath(char *path);
-/* Return the last directory component of path. Assume that a '.' char in the last component
- * means that component is a filename and go back further */
+char *hubLeafFromPath(char *path);
+/* Return the last '/' separated component of path, ignoring a trailing '/'. Callers
+ * pass a directory, so there is no filename to guess at: a '.' in the last component
+ * is part of a directory name, which isValidParentDir allows */
 
-char *writeHubText(char *path, char *userName, char *db);
-/* Create a hub.txt file, optionally creating the directory holding it. For convenience, return
- * the file name of the created hub, which can be freed. */
+char *hubRootFromParentDir(char *parentDir);
+/* Return the first '/' separated component of parentDir, which is the hub itself.
+ * The hub.txt and the hubSpace dir row for a hub both live at that level, while
+ * hubLeafFromPath gives the immediately containing directory, which for a nested
+ * parentDir like 'myHub/hg38' is a subdirectory of the hub */
 
-void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir, char *parentDir);
+char *hubPathFromParentDir(char *parentDir, char *userDataDir);
+/* Return the directory holding this hub's hub.txt, that is the user's directory
+ * plus the hub component of parentDir */
+
+char *writeHubText(char *path, char *userName, char *db, char *twoBitFileName);
+/* Create a hub.txt file, optionally creating the directory holding it.
+ * If twoBitFileName is non-NULL, write an assembly hub stanza referencing it
+ * (with stub organism / scientificName / description / defaultPos derived from
+ * the 2bit). For convenience, return the file name of the created hub, which
+ * can be freed. */
+
+void createNewTempHubForUpload(char *requestId, struct hubSpace *rowForFile, char *userDataDir);
 /* Creates a hub.txt for this upload, and updates the hubSpace table for the
  * hub.txt and any parentDirs we need to create. */
+
+boolean userHasOwnNamedHubTxtInDir(char *userName, char *hubName, char *hubDir);
+/* Return TRUE if the user uploaded a *.hub.txt file NOT literally named 'hub.txt'
+ * (e.g. 'araTha1.hub.txt') at the top level of hubDir. Distinguishes "user's own
+ * authoritative hub.txt" from "backend-synthesized hub.txt that we're free to modify".
+ * parentDir alone would also match a *.hub.txt sitting in some other hub's
+ * subdirectory that happens to be named hubName, so pin it to hubDir as well */
+
+char *existingHubTypeForDir(char *userName, char *hubName);
+/* Return the hubType of this user's hub dir row, or NULL if no such row exists. */
+
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir);
+/* Race-proofing: when a 2bit arrives into a hub that already has a synthesized
+ * hub.txt, upgrade that hub.txt to include the assembly stanza and mark every
+ * hubSpace row for this hub as hubType='assemblyHub'. No-op unless rowForFile
+ * is a 2bit, or the synthesized hub.txt does not exist. */
+
+int lockHubDir(char *hubDir);
+/* Acquire an exclusive flock on hubDir/.hub.lock; returns a file descriptor.
+ * Hold while mutating hub.txt to serialize parallel pre-finish processes. */
+
+void unlockHubDir(int fd);
+/* Release an exclusive hub lock acquired by lockHubDir. */
 
 void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */
 
-void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir);
-/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the 
+void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir, char *hubType);
+/* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the
  * final subdirectory component of parentDirStr */
 
 void removeFileForUser(char *fname, char *userName);
@@ -90,6 +136,13 @@ void removeFileForUser(char *fname, char *userName);
 
 struct hubSpace *listFilesForUser(char *userName);
 /* Return the files the user has uploaded */
+
+struct hubSpace *listFilesInHubDir(char *userName, char *hubName);
+/* Return the user's rows for one hub: the hub's own directory row plus every row
+ * underneath it */
+
+void hubSpaceWriteFileList(struct jsonWrite *jw, char *userName, struct hubSpace *fileList);
+/* Write fileList as the "fileList" array of jw, in the row shape the My Data table reads */
 
 char *defaultHubNameForUser(char *userName);
 /* Return a name to use as a default for a hub, starts with myFirstHub, then myFirstHub2, ... */

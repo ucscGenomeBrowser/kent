@@ -29,6 +29,31 @@ Bigwig coverage tracks were created using deepTools bamCoverage (v3.4.3) with a 
 Peak calls were made using MACS2 (v2.2.7.1) with default parameters and estimated genome sizes 3.03e9 and 2.79e9 for chm13 and GRCh38, respectively. GRCh38 peak calls were lifted over to chm13 using the UCSC liftOver utility, the chain file created by the T2T consortium, and the parameter "-minMatch=0.2".
 </p>
 
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator" target="_blank">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu" target="_blank">REST
+API</a>.</p>
+<p>
+This track is a composite of many subtracks. The underlying signal coverage and enrichment data are
+stored as bigWig files and the peak calls as bigBed files, all of which can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/encode/" target="_blank">download server</a> (see
+the <tt>coverage/</tt>, <tt>enrichment/</tt>, <tt>peaks/</tt>, and <tt>LO_peaks/</tt>
+subdirectories). Individual regions can be extracted from these files with our <tt>bigWigToWig</tt>
+and <tt>bigBedToBed</tt> tools, which can be compiled from the source code or downloaded as
+precompiled binaries for your system. Instructions for downloading source code and binaries can be
+found <a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">here</a>. For example:</p>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/encode/peaks/22Rv1.CTCF.chm13v2.0.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">mailing
+list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
 <h2>Credits</h2>
 <p>
 Data were processed by Michael Sauria at Johns Hopkins University. For inquiries, please

@@ -28,6 +28,7 @@
 #include "chromAlias.h"
 #include "jsHelper.h"
 #include "hPrint.h"
+#include "hgConfig.h"
 #ifdef NOTNOW
 #include "bigChain.h"
 #include "bigLink.h"
@@ -72,11 +73,13 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 struct dbDb *dbList;
 boolean askAboutQuickLift = FALSE;
 boolean quickLift = FALSE;
+boolean hideOtherTracks = TRUE;
 
 if (quickLiftEnabled(cart))
     {
     askAboutQuickLift = TRUE;
     quickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+    hideOtherTracks = cartUsualBoolean(cart, "hideTracksOnConvert", TRUE);
     }
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
@@ -146,10 +149,42 @@ if (askAboutQuickLift)
     puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
     cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
     puts(" <label for='doQuickLift' title='Display tracks from the source assembly mapped onto the target assembly'>QuickLift tracks</label>\n");
-    puts(" <a href='https://docs.google.com/document/d/1wecESHUpgTlE6U_Mj0OnfHeSZBrTX9hkZRN5jlJS8ZQ/edit?usp=sharing' "
-         "target='ucscHelp' title='QuickLift is in beta testing. Click to view more documentation about this feature.' "
-         "style='color:#8A2BE2;font-weight:bold;text-transform:uppercase;font-size:smaller;padding:2px "
-         "4px;background:lavender;border-radius:3px;text-decoration:none;margin-left:6px;'>beta</a>\n");
+    puts("</div>\n");
+
+    puts("<div class='fieldRow' id='hideTracksOnConvertRow' style='margin-top: 8px;'>\n");
+    cgiMakeCheckBoxWithId("hideTracksOnConvert", hideOtherTracks, "hideTracksOnConvert");
+    puts(" <label for='hideTracksOnConvert' title='Hide all of the target assembly default tracks, showing only the QuickLifted tracks'>Hide all default tracks on the target</label>\n");
+    puts("</div>\n");
+
+    /* The hide option only applies when QuickLift is on; gray it out otherwise. */
+    jsInline(
+        "function hgcUpdateHideTracks() {\n"
+        "    let ql = document.getElementById('doQuickLift');\n"
+        "    let hideBox = document.getElementById('hideTracksOnConvert');\n"
+        "    let hideRow = document.getElementById('hideTracksOnConvertRow');\n"
+        "    let hideShadow = document.getElementById('boolshad.hideTracksOnConvert');\n"
+        "    if (!ql || !hideBox || !hideRow) return;\n"
+        "    hideBox.disabled = !ql.checked;\n"
+        "    // A disabled checkbox is not submitted but its shadow variable is, which\n"
+        "    // would store an unchecked value in the cart when the target assembly\n"
+        "    // changes.  Disable the shadow too so the setting survives the reload.\n"
+        "    if (hideShadow) hideShadow.disabled = !ql.checked;\n"
+        "    hideRow.style.opacity = ql.checked ? '1' : '0.5';\n"
+        "}\n"
+        "document.addEventListener('DOMContentLoaded', function() {\n"
+        "    let ql = document.getElementById('doQuickLift');\n"
+        "    if (ql) ql.addEventListener('change', hgcUpdateHideTracks);\n"
+        "    hgcUpdateHideTracks();\n"
+        "});\n");
+    }
+
+/* The assembly list only offers targets that already have a chain from this source, so
+ * this is where a user finds out theirs is missing.  Point them at the request page. */
+if (cfgOptionBooleanDefault("showLiftRequest", FALSE))
+    {
+    puts("<div class='fieldRow' style='margin-top: 15px;'>\n");
+    puts("Target assembly not listed? "
+         "<a href='../liftRequest.html' target='_blank'>Request an alignment</a>\n");
     puts("</div>\n");
     }
 
@@ -263,6 +298,12 @@ cgiParagraph(
     "the source assembly mapped onto the target assembly, allowing you to view "
     "your current tracks in the context of the new genome. For more information, see the "
     "<A HREF=\"../goldenPath/help/quickLift.html\">QuickLift documentation</A>.");
+cgiParagraph(
+    "<B>Hide all default tracks on the target:</B> When QuickLift is enabled, this "
+    "option (on by default) hides the target assembly's default tracks so that only "
+    "your QuickLifted tracks are shown, letting you focus on the tracks carried over "
+    "from the source assembly. Uncheck it to display the target assembly's default "
+    "tracks alongside the QuickLifted tracks.");
 cgiParagraph(
     "If your desired target assembly is not available, you can search for it "
     "and request it on our "
@@ -629,6 +670,8 @@ origSize = end - start;
 
 boolean doQuickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
 cartRemove(cart, "doQuickLift");
+boolean hideOtherTracks = cartUsualBoolean(cart, "hideTracksOnConvert", TRUE);
+cartRemove(cart, "hideTracksOnConvert");
 
 unsigned quickChain = 0;
 unsigned quickHub = 0;
@@ -684,8 +727,9 @@ else
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath) || sameString(toDb->nibPath, "genark"))
             {
             if (quickChain)
-                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
-                   hgTracksName(),  toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
+                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d%s\">",
+                   hgTracksName(),  toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain,
+                   hideOtherTracks ? "&hideTracks=on" : "");
             else
                 printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
@@ -739,10 +783,12 @@ return cleanList;
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-char *fromPos = cartString(theCart, "position");
-
 cart = theCart;
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+// Bots sometimes hit hgConvert with a db but no position in the cart; fall
+// back to the assembly's default position rather than aborting.
+char *fromPos = cartUsualString(cart, "position", hDefaultPos(database));
 
 // Try to deal with virt chrom position used by hgTracks.
 if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))

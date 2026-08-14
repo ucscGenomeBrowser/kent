@@ -49,9 +49,19 @@ struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash,
  * on the reference.
  */
 
+struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb);
+/* Like quickLiftIntervalsToBed, but an item too big for the chains we loaded is pulled in
+ * to what they cover rather than dropped.  Callers that need the item's true extent (the
+ * details page) should use quickLiftIntervalsToBed instead. */
+
 struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd,  char *query, char *extraWhere, ItemLoader2 loader, int numFields, struct hash *chainHash);
 /* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
  * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
+
+struct genePred *quickLiftGenePreds(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd, char *extraWhere, struct hash *chainHash);
+/* Like quickLiftSql, but load genePreds through a genePredReader so the actual set of
+ * (extended) genePred columns in the table is honored rather than assuming 15 columns.
+ * Fill a hash with the chains that were used to map the desired range. */
 
 unsigned quickLiftGetChainId(struct cart *, char *fromDb, char *toDb);
 /* Return the id from the quickLiftChain table for given assemblies. */
@@ -61,6 +71,11 @@ char *quickLiftGetChainPath(struct cart *, char *fromDb, char *toDb);
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 // Map a list of bedd in query coordinates to our current reference
+
+struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash);
+// Map a list of encodePeaks in query coordinates to our current reference.  These can't go
+// through quickLiftBeds:  the thickStart and thickEnd it assigns overlay signalValue and
+// pValue in struct encodePeak.
 
 boolean quickLiftEnabled(struct cart *cart);
 /* Return TRUE if feature is available */
@@ -83,4 +98,15 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
 /* Load items from another assembly via quickLift SQL, map them back to the reference,
  * and return the lifted beds.  Handles custom track table resolution internally.
  * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+
+boolean quickLiftLiftPos(char *sourceDb, char *destDb,
+    char *chrom, int start, int end,
+    char **retChrom, int *retStart, int *retEnd);
+/* Map a position from source (sourceDb) coords to destination (destDb) coords
+ * using the liftOver chain for sourceDb -> destDb.  Used to remap hgFind
+ * results from quickLifted bigBed tracks back to the destination assembly. */
+
+boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackName);
+/* Remove a track stanza from the quickLift hub file for sourceDb.  Returns
+ * TRUE if a stanza matching trackName was found and removed. */
 #endif

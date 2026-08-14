@@ -8,7 +8,7 @@
 void printCcdsExtUrl(char *ccdsId);
 /* Print out URL to link to CCDS database at NCBI */
 
-void printCcdsForSrcDb(struct sqlConnection *conn, char *acc);
+void printCcdsForSrcDb(struct sqlConnection *conn, struct trackDb *tdb, char *acc);
 /* Print out CCDS hc link for a refseq, ensembl, or vega gene, if it
  * exists.  */
 

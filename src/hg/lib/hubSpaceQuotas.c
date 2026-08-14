@@ -186,8 +186,9 @@ if (userName)
     {
     struct sqlConnection *conn = hConnectCentral();
     struct dyString *query = sqlDyStringCreate("select quota from hubSpaceQuotas where userName='%s'", userName);
-    // the mysql value is a number of gigabytes so shift it over
-    ret = sqlQuickLongLong(conn, dyStringCannibalize(&query)) * 1000000000;
+    // the mysql value is a number of gigabytes (GiB); convert to bytes so it matches
+    // the binary units used by sprintWithGreekByte / the JS prettyFileSize
+    ret = sqlQuickLongLong(conn, dyStringCannibalize(&query)) * 1024LL * 1024 * 1024;
     }
 return ret;
 }

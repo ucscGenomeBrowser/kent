@@ -119,7 +119,7 @@ printf("&nbsp;&nbsp;&nbsp;&nbsp;<b><a href=%s>Return to Genome Browser</href></a
 
 /* Set up url that has enough context to get back to us.  */
 struct dyString *returnUrl = dyStringNew(0);
-dyStringPrintf(returnUrl, "../cgi-bin/hgc?g=%s", trackName);
+dyStringPrintf(returnUrl, "../cgi-bin/hgc?db=%s&g=%s", database, trackName);
 if (item != NULL)
     dyStringPrintf(returnUrl, "&i=%s", item);
 dyStringPrintf(returnUrl, "&%s", cartSidUrlString(cart));

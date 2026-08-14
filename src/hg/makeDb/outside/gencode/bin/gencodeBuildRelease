@@ -1,0 +1,274 @@
+#!/usr/bin/env python3
+import sys
+import os
+import os.path as osp
+import re
+import argparse
+import pipettor
+
+BIN_DIR = osp.abspath(osp.normpath(osp.dirname(sys.argv[0])))
+sys.path.insert(0, osp.join(BIN_DIR, "../lib"))
+sys.path.insert(0, osp.expanduser("/hive/groups/browser/pycbio/lib"))
+from pycbio.sys import fileOps
+
+KENT_SRC_DIR = osp.normpath(osp.join(BIN_DIR, "../../../../.."))
+ALL_JOINER = osp.join(KENT_SRC_DIR, "hg/makeDb/schema/all.joiner")
+TRACKDB_DIR = osp.join(KENT_SRC_DIR, "hg/makeDb/trackDb")
+
+GENCODE_SRC_DIR = osp.dirname(osp.dirname(__file__))
+GENCODE_MAKEFILE = osp.join(GENCODE_SRC_DIR, "gencodeLoad.mk")
+NUM_PROCS = 16
+
+def parseArgs():
+    desc = """Run steps to build a GENCODE Versions release.
+
+    This runs the gencodeLoad.mk makefile and other tasks and tracks completion.
+
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--noJoinerCheck", action="store_true",
+                        help="skip running joinerCheck")
+    parser.add_argument("db", choices=("hg38", "hg19", "mm39"),
+                        help="which UCSC database/organism")
+    parser.add_argument("version",
+                        help="GENCODE version, 47, M38, 47lift37")
+    parser.add_argument("relType", choices=("pre", "final"),
+                        help="which version")
+    parser.add_argument("releaseDate",
+                        help="Month and year of GENCODE release, in the form `August 2014'")
+    parser.add_argument("ensemblVersion",
+                        help="what Ensembl version does this correspond to?")
+    args = parser.parse_args()
+    if not parseVersion(args.version):
+        parser.error("invalid version, should be in the form 47, M38, or 47lift37")
+    return args
+
+
+def parseVersion(version):
+    "returns (M|"", num, lift37|"") or None if not valid"
+
+    # M38 -> ('M', '38', None)
+    # 47lift37 -> (None, '47', 'lift37')
+    m = re.match("^(M)?([0-9]+)(lift37)?$", version)
+    if m is None:
+        return None
+    g = m.groups()
+    if (g[0] is not None) and (g[2] is not None):
+        return None  # no mouse backmap
+    return (g[0] if g[0] is not None else '',
+            g[1],
+            g[2] if g[2] is not None else '')
+
+def status(msg):
+    sys.stdout.flush()
+    print("===>", msg, file=sys.stderr, flush=True)
+
+def slurpFile(path):
+    with open(path) as fh:
+        return fh.read()
+
+def replaceFile(path, content):
+    with open(path, "w") as fh:
+        fh.write(content)
+
+def getAsmTrackDbDir(db):
+    org = "human" if db.startswith("hg") else "mouse"
+    return osp.join(TRACKDB_DIR, org, db)
+
+class GencodeSpec:
+    "bag for GENCODE release information"
+    def __init__(self, db, version, prevVersion, baseVersion, relType,
+                 releaseDate, ensemblVersion):
+        self.db = db
+        self.version = version
+        self.ucscVersion = "V" + version
+        self.prevVersion = prevVersion
+        self.baseVersion = baseVersion
+        self.relType = relType
+        self.preRelease = "yes" if relType == "pre" else "no"
+        self.releaseDate = releaseDate
+        self.ensemblVersion = ensemblVersion
+
+def getBuildDir(spec):
+    relTypeDir = "hgcImport" if spec.relType == "final" else "hgcImportPre"
+    return f"/hive/data/genomes/{spec.db}/bed/gencodeV{spec.version}/{relTypeDir}"
+
+def getPrevVersion(version):
+    verinfo = parseVersion(version)
+    prevNum = int(verinfo[1]) - 1
+    return f"{verinfo[0]}{prevNum}{verinfo[2]}"
+
+def getBaseVersion(version):
+    verinfo = parseVersion(version)
+    return f"{verinfo[0]}{verinfo[1]}"
+
+def runMake(target, spec, buildDir):
+    cmd = ["make", "-f", GENCODE_MAKEFILE, '-R',
+           "-C", buildDir, "-k", "-j", NUM_PROCS,
+           target,
+           f"db={spec.db}",
+           f"version={spec.version}",
+           f"relType={spec.relType}",
+           f"prevVersion={spec.prevVersion}",
+           f"baseVersion={spec.baseVersion}",
+           f"prevVersion={spec.prevVersion}"]
+    pipettor.run(cmd, stderr=2)
+
+def downloadAndBuild(buildDir, spec):
+    status("downloading and building tracks")
+    runMake("all", spec, buildDir)
+    gencode_cmp = osp.join(buildDir, "gencode-cmp.tsv")
+    sys.stdout.flush()
+    print("---> Please review", gencode_cmp, file=sys.stderr)
+    with open(gencode_cmp) as fh:
+        print(fh.read(), file=sys.stderr)
+    sys.stderr.flush()
+
+
+DB_TO_ALL_JOINER_VARS = {
+    "hg38": ("gencodeHg38Vers",
+             "gencodeHg38GeneSymbolVers",
+             "gencodeHg38EntrezGeneVers",
+             "gencodeHg38RefSeqToRefGeneVers",),
+    "hg19": ("gencodeHg19LiftVers",
+             "gencodeHg19LiftGeneSymbolVers",
+             "gencodeHg19LiftEntrezGeneVers",
+             "gencodeHg19LiftRefSeqToRefGeneVers",),
+    "mm39": ("gencodeMm39Vers",
+             "gencodeMm39RefSeqToRefGeneVers",),
+}
+
+def addGencodeVersion(joinerText, setName, spec):
+    pattern = rf'^(set\s+{re.escape(setName)}\s+)(\S+)'
+    m = re.search(pattern, joinerText, re.MULTILINE)
+    if not m:
+        raise ValueError(f"set {setName} not found")
+    versions = m.group(2).split(',')
+    if spec.ucscVersion in versions:
+        print(f"Note: all.joiner {setName} already has {spec.ucscVersion}", file=sys.stderr)
+        return joinerText
+    else:
+        versions.append(spec.ucscVersion)
+        return joinerText[:m.start(2)] + ','.join(versions) + joinerText[m.end(2):]
+
+def editJoinerCheck(spec):
+    status("updating all.joiner")
+    newAllJoiner = allJoiner = slurpFile(ALL_JOINER)
+
+    for setName in DB_TO_ALL_JOINER_VARS[spec.db]:
+        newAllJoiner = addGencodeVersion(newAllJoiner, setName, spec)
+
+    if newAllJoiner != allJoiner:
+        replaceFile(ALL_JOINER, newAllJoiner)
+
+def generateTrackDb(spec):
+    status("added trackDb and description")
+    cwd = os.getcwd()
+    try:
+        os.chdir(TRACKDB_DIR)
+        dateDesc = spec.releaseDate
+        if spec.relType == "pre":
+            dateDesc += " (pre-release)"
+        cmd = [osp.join(BIN_DIR, "gencodeGenerateTrackDbs"),
+               spec.db, spec.version, spec.ensemblVersion,
+               dateDesc]
+        pipettor.run(cmd)
+    finally:
+        os.chdir(cwd)
+
+def makeReleaseNotesEntry(spec):
+    label = f"GENCODE version {spec.version}"
+    if spec.db == "hg19":
+        label += " (mapped from GRCh38 to GRCh37)"
+    return (f'<p>\n'
+            f'<span style="font-weight: bold;">{label}</span>\n'
+            f'corresponds to Ensembl {spec.ensemblVersion}.\n'
+            f'</p>\n')
+
+def editReleaseNotes(spec):
+    status("Editing super track release notes")
+    superHtml = osp.join(getAsmTrackDbDir(spec.db), "wgEncodeGencodeSuper.html")
+    html = slurpFile(superHtml)
+    label = f"GENCODE version {spec.version}"
+    if spec.db == "hg19":
+        label += " (mapped from GRCh38 to GRCh37)"
+    spanRe = re.compile(rf'<span[^>]*>\s*{re.escape(label)}\s*</span>')
+    if spanRe.search(html):
+        print(f"Note: {superHtml} already has {label}", file=sys.stderr)
+    else:
+        header = "<h2>Release Notes</h2>\n"
+        idx = html.find(header)
+        if idx < 0:
+            raise ValueError(f"'<h2>Release Notes</h2>' not found in {superHtml}")
+        ins = idx + len(header)
+        newHtml = html[:ins] + makeReleaseNotesEntry(spec) + html[ins:]
+        replaceFile(superHtml, newHtml)
+
+def editTrackDbGencodeRa(spec):
+    status("updating trackDb.gencode.ra")
+    raPath = osp.join(getAsmTrackDbDir(spec.db), "trackDb.gencode.ra")
+    ra = slurpFile(raPath)
+    incLine = f"include wgEncodeGencode{spec.ucscVersion}.ra"
+    if re.search(rf'^{re.escape(incLine)}\b', ra, re.MULTILINE):
+        print(f"Note: {raPath} already has {incLine}", file=sys.stderr)
+        return
+    if not ra.endswith("\n"):
+        ra += "\n"
+    replaceFile(raPath, ra + incLine + "\n")
+
+def joinerCheck(buildDir, spec):
+    status("running joinerCheck")
+    pipettor.run([osp.join(BIN_DIR, "gencodeJoinerCheck"), spec.db, spec.version], stderr=None)
+
+def loadTrackDb(spec):
+    status("loading trackDb")
+    cwd = os.getcwd()
+    try:
+        os.chdir(TRACKDB_DIR)
+        cmd = ["make", f"DBS={spec.db}"]
+        pipettor.run(cmd, stderr=None)
+    finally:
+        os.chdir(cwd)
+
+
+DONE_MSG = """
+***********************************************************
+Finish loading GENCODE Versions {ucscVersion}
+
+1) check your sandbox
+2) commit
+3) make alpha DBS={db}
+3) push
+4) 🍷🍷🍷
+***********************************************************
+"""
+
+def gencodeBuildVersion(spec, noJoinerCheck):
+    buildDir = getBuildDir(spec)
+    fileOps.ensureDir(buildDir)
+    downloadAndBuild(buildDir, spec)
+    generateTrackDb(spec)
+    editTrackDbGencodeRa(spec)
+    if spec.relType != "pre":
+        editReleaseNotes(spec)
+    loadTrackDb(spec)
+    editJoinerCheck(spec)
+    if not noJoinerCheck:
+        joinerCheck(buildDir, spec)
+    print(DONE_MSG.format(db=spec.db, ucscVersion=spec.ucscVersion), file=sys.stderr)
+
+def main():
+    args = parseArgs()
+    spec = GencodeSpec(args.db, args.version,
+                       getPrevVersion(args.version),
+                       getBaseVersion(args.version),
+                       args.relType, args.releaseDate,
+                       args.ensemblVersion)
+    try:
+        gencodeBuildVersion(spec, args.noJoinerCheck)
+    except pipettor.ProcessException as ex:
+        print("Error: " + str(ex), file=sys.stderr)
+        exit(1)
+
+
+main()

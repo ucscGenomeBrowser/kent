@@ -3,6 +3,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
+#include "trackHub.h"
 #include "hgc.h"
 #include "geneReviewsClick.h"
 
@@ -76,10 +77,11 @@ while ((row = sqlNextRow(sr)) != NULL)
  sqlFreeResult(&sr);
 } /* end of prGeneReviews */
 
-void prGRShortRefGene(char *itemName)
-/* print GeneReviews short label associated to this refGene item */
+void prGRShortRefGene(struct sqlConnection *conn, char *itemName)
+/* print GeneReviews short label associated to this refGene item.
+ * Caller supplies the connection, so quickLifted callers can point us at
+ * the source assembly (geneReviewsDetail lives on hg38/hg19). */
 {
-struct sqlConnection *conn  = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[512];

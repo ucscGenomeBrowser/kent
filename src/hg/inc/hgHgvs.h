@@ -10,7 +10,9 @@
 
 #include "bed.h"
 #include "dnaseq.h"
+#include "genePred.h"
 #include "seqWindow.h"
+#include "trackDb.h"
 #include "variantProjector.h"
 
 /* The full nomenclature is extremely complicated, able to encode things such as gene fusions and
@@ -281,5 +283,12 @@ char *hgvsPFromVpPep(struct vpPep *vpPep, struct dnaSeq *protSeq, boolean addPar
  * Strict HGVS compliance requires parentheses around predicted protein changes (addParens=TRUE),
  * but nobody seems to do that in practice.
  * Return NULL if an input is NULL. */
+
+char *txSeqFromGp(char *db, struct genePred *gp);
+/* Return transcribed-from-genome sequence for gp */
+
+struct trackDb *hgvsDefaultGeneTrack(char *db);
+/* Return trackDb for the assembly's preferred gene-model track (MANE first), or NULL
+ * if none is present.  Caller checks tdb->type for genePred vs bigGenePred. */
 
 #endif /* HGHGVS_H */

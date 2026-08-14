@@ -2,6 +2,12 @@
 # Merge all per-chromosome VCFs into a single sites-only VCF
 # Uses bcftools fill-tags plugin to calculate AC/AN/AF from genotypes
 # Output INFO fields: AC, AF, AN, AQ
+#
+# Optional 3rd arg: a SPARK individuals_registration TSV. When given, samples
+# are split by the "asd" column (TRUE -> AUT, FALSE -> NON_AUT) and fill-tags
+# also emits per-group AC_AUT/AN_AUT/AF_AUT and AC_NON_AUT/AN_NON_AUT/AF_NON_AUT.
+# Samples missing from the registration file (or with a blank asd value) still
+# count toward the overall AC/AN/AF but contribute to neither group.
 
 set -euo pipefail
 
@@ -16,7 +22,38 @@ export INBASE
 # Number of parallel jobs (adjust based on available CPUs/memory)
 NJOBS=${2:-4}
 
+# Optional ASD phenotype registration TSV (column 1 = subject_sp_id, column 8 = asd)
+REGFILE=${3:-}
+GROUPFILE=""
+
 mkdir -p "$TMPDIR"
+
+# Build a fill-tags sample-group file (sample<TAB>group) if a registration
+# TSV was supplied. Restrict to samples actually present in the VCF so the
+# plugin never sees an unknown sample ID.
+if [[ -n "$REGFILE" ]]; then
+    echo "Building ASD/non-ASD sample groups from $REGFILE ..."
+    # Find the first per-chromosome VCF that exists to read the sample list.
+    FIRSTVCF=""
+    for chr in chr{1..22} chrX chrY; do
+        if [[ -f "${INBASE}.${chr}.vcf.gz" ]]; then FIRSTVCF="${INBASE}.${chr}.vcf.gz"; break; fi
+    done
+    if [[ -z "$FIRSTVCF" ]]; then echo "ERROR: no per-chromosome VCF found for $INBASE" >&2; exit 1; fi
+
+    GROUPFILE="$TMPDIR/asd_groups.txt"
+    $BCFTOOLS query -l "$FIRSTVCF" > "$TMPDIR/vcf_samples.txt"
+    # asd column: TRUE -> AUT, FALSE -> NON_AUT, anything else -> unassigned
+    awk -F'\t' 'NR==FNR{a[$1]=$8; next}
+                {st=a[$1];
+                 if(st=="TRUE") print $1"\tAUT";
+                 else if(st=="FALSE") print $1"\tNON_AUT"}' \
+        "$REGFILE" "$TMPDIR/vcf_samples.txt" > "$GROUPFILE"
+    nAut=$(awk -F'\t' '$2=="AUT"' "$GROUPFILE" | wc -l)
+    nNon=$(awk -F'\t' '$2=="NON_AUT"' "$GROUPFILE" | wc -l)
+    nTot=$(wc -l < "$TMPDIR/vcf_samples.txt")
+    echo "  $nTot VCF samples: $nAut ASD (AUT), $nNon non-ASD (NON_AUT), $((nTot-nAut-nNon)) unassigned"
+fi
+export GROUPFILE
 
 echo "Processing chromosomes with fill-tags plugin (parallel=$NJOBS)..."
 echo "Started at $(date)"
@@ -34,9 +71,14 @@ process_chr() {
 
     echo "Processing $chr..."
 
-    # Fill AC/AN/AF tags, then drop samples
-    $BCFTOOLS +fill-tags "$infile" -- -t AC,AN,AF 2>/dev/null | \
-        $BCFTOOLS view -G -Oz -o "$outfile" - 2>/dev/null
+    # Fill AC/AN/AF tags (per-group too if a group file was built), then drop samples
+    if [[ -n "$GROUPFILE" ]]; then
+        $BCFTOOLS +fill-tags "$infile" -- -t AC,AN,AF -S "$GROUPFILE" 2>/dev/null | \
+            $BCFTOOLS view -G -Oz -o "$outfile" - 2>/dev/null
+    else
+        $BCFTOOLS +fill-tags "$infile" -- -t AC,AN,AF 2>/dev/null | \
+            $BCFTOOLS view -G -Oz -o "$outfile" - 2>/dev/null
+    fi
     $BCFTOOLS index -t "$outfile"
 
     echo "  Done: $chr"
@@ -68,7 +110,10 @@ echo "Done! Output: $OUTFILE"
 echo "Finished at $(date)"
 echo ""
 echo "Verifying output..."
-$BCFTOOLS view -h "$OUTFILE" | grep "^##INFO"
+$BCFTOOLS view -h "$OUTFILE" | grep "^##INFO" || true
 echo ""
 echo "Sample variants:"
-$BCFTOOLS view "$OUTFILE" 2>/dev/null | grep -v "^#" | head -5
+# `| head -5` closes the pipe early, so the upstream bcftools exits via
+# SIGPIPE (141). With set -o pipefail that would fail the whole script
+# after a successful build, breaking any && chain in the caller.
+{ $BCFTOOLS view "$OUTFILE" 2>/dev/null || true; } | grep -v "^#" | head -5 || true

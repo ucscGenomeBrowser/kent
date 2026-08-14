@@ -13,15 +13,29 @@ The same frequencies shown here are also available publicly on the
 See (SPARK et al, Neuron 2018) for details.
 </p>
 
+<h3>Phenotype-stratified counts</h3>
+<p>
+In addition to the overall allele count (AC), allele number (AN), and allele
+frequency (AF), each variant record carries counts split by autism status
+(the <tt>asd</tt> column of the SPARK individual registration file):
+</p>
+<ul>
+  <li><tt>AC_AUT</tt>, <tt>AN_AUT</tt>, <tt>AF_AUT</tt> &mdash; individuals
+      coded as autistic (<tt>asd=TRUE</tt>).</li>
+  <li><tt>AC_NON_AUT</tt>, <tt>AN_NON_AUT</tt>, <tt>AF_NON_AUT</tt> &mdash;
+      individuals coded as non-autistic (<tt>asd=FALSE</tt>); these are
+      mostly parents and unaffected siblings of the probands.</li>
+</ul>
+<p>
+A small minority of samples have a blank <tt>asd</tt> value and so contribute
+only to the overall AC/AN/AF, not to either group total.
+</p>
+
 <h2>Data Access</h2>
 <p>
-The data can be explored interactively with the
-<a href="../cgi-bin/hgTables">Table Browser</a> or the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
-For programmatic access, our <a href="https://api.genome.ucsc.edu">REST API</a> can be used; the
-track name is <em>sfariSparkExomes</em>.
-For bulk download, the VCF file can be obtained from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/" target="_blank">our download server</a>.
+Due to license restrictions, the data for this track cannot be downloaded from the UCSC
+Genome Browser. The Table Browser, Data Integrator, and download server are not available
+for this track.
 </p>
 <p>
 Allele frequencies can also be displayed on the
@@ -37,12 +51,22 @@ target="_blank">SPARK Welcome Packet</a>.
 <h2>Methods</h2>
 
 <p>The genome browser track project was approved by the Simons Foundation under request
-number 14584.1. WES and WGS data were downloaded from
-<a href="https://base.sfari.org/" target="_blank">SFARI Base</a>.
-pVCFs were downloaded, anonymized with a script using bcftools and its &quot;fill-tags&quot; plugin and
-normalized. There was no minimum allele frequency cutoff.</p>
+number 14584.1. The multi-sample project VCFs (pVCFs) for both the WES and WGS releases were
+downloaded from <a href="https://base.sfari.org/" target="_blank">SFARI Base</a> using Globus.
+No minimum allele frequency cutoff was applied.</p>
 
-<p>The methods are documented as follows by SFARI:</p>
+<p>
+Because the genotype-level pVCFs cannot be redistributed, they were reduced to anonymous,
+sites-only VCFs carrying only the overall allele count (AC), allele number (AN) and frequency
+(AF), plus the autism-status counts described above, with the bcftools
+<a href="http://samtools.github.io/bcftools/howtos/plugin.fill-tags.html" target="_blank">fill-tags</a>
+plugin (its <tt>-S</tt> option produces the ASD/non-ASD splits), then normalized. The variants
+are also annotated with predicted protein consequences using
+<a href="http://samtools.github.io/bcftools/bcftools.html#csq" target="_blank">bcftools csq</a>
+against Ensembl gene models; that annotation is displayed in the combined frequency tracks of
+this collection. The exact commands for both steps are in the makeDoc file linked below.</p>
+
+<p>The sequencing and variant-calling methods are documented as follows by SFARI:</p>
 <ul>
   <li>
     <b>WGS</b>:
@@ -109,13 +133,18 @@ normalized. There was no minimum allele frequency cutoff.</p>
     </li>
 </ul>
 <p>
-We provide documentation that indicates how all source files of the varFreqs track were converted in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a> of the track.
-For some tracks, python scripts were necessary and are also available from <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs" target="_blank">GitHub</a>.
+The complete, runnable command history for downloading, counting and annotating the SFARI data,
+alongside every other cohort in this collection, is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a>;
+search it for &quot;SFARI SPARK&quot;. The scripts it calls, including
+<tt>sparkMergeVcfAddCounts.sh</tt> (allele counts) and <tt>mergeAndAnnotate.sh</tt> (merge plus
+consequence annotation), are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">varFreqs scripts directory</a>.
 </p>
 
 <h2>References</h2>
 <p>
-SPARK Consortium. Electronic address: pfeliciano@simonsfoundation.org, SPARK Consortium.
+SPARK Consortium. Electronic address: <A HREF="mailto:&#112;f&#101;&#108;&#105;&#99;&#105;&#97;&#110;o&#64;&#115;&#105;&#109;&#111;&#110;&#115;f&#111;&#117;&#110;&#100;a&#116;&#105;&#111;&#110;.&#111;&#114;g">&#112;f&#101;&#108;&#105;&#99;&#105;&#97;&#110;o&#64;&#115;&#105;&#109;&#111;&#110;&#115;f&#111;&#117;&#110;&#100;a&#116;&#105;&#111;&#110;.&#111;&#114;g</A><!-- above address is pfeliciano at simonsfoundation.org -->, SPARK Consortium.
 <a href="https://linkinghub.elsevier.com/retrieve/pii/S0896-6273(18)30018-7" target="_blank">
 SPARK: A US Cohort of 50,000 Families to Accelerate Autism Research</a>.
 <em>Neuron</em>. 2018 Feb 7;97(3):488-493.
