@@ -1842,10 +1842,28 @@ for (i = 0; i < fieldCount; ++i)
     if (fieldVals[i] == NULL || fieldNames[i] == NULL)
         continue;
 
+    // Once no dollar sign is left there is nothing for any remaining field to
+    // match, so the rest of the loop would only copy the string to itself.
+    if (strchr(result->string, '$') == NULL)
+        break;
+
     char *field = fieldNames[i];
     int fieldLen = strlen(field);
-    char *bareSpec = needMem(fieldLen + 2);
-    char *bracedSpec = needMem(fieldLen + 4);
+    // Field names are short.  Keep the specs on the stack in the normal case so
+    // this does not do two allocations per field per item.
+    char bareBuf[128], bracedBuf[130];
+    char *bareSpec, *bracedSpec;
+    boolean onHeap = (fieldLen + 4 > sizeof(bracedBuf));
+    if (onHeap)
+        {
+        bareSpec = needMem(fieldLen + 2);
+        bracedSpec = needMem(fieldLen + 4);
+        }
+    else
+        {
+        bareSpec = bareBuf;
+        bracedSpec = bracedBuf;
+        }
     *bareSpec = '$';
     *bracedSpec = '$';
     bracedSpec[1] = '{';
@@ -1864,13 +1882,20 @@ for (i = 0; i < fieldCount; ++i)
     // the user may have both a ${} enclosed instance and a non-enclosed one
     // also note that if the value substituted above is the field name itself with
     // a leading $, then we will substitute again
-    sub = dyStringSub(result->string, bareSpec, fieldVals[i]);
-
-    dyStringFree(&result);
-    freeMem(bareSpec);
-    freeMem(bracedSpec);
-    result = sub;
-    sub = NULL;
+    // dyStringSub copies the whole string even when it finds nothing, so only
+    // call it when there is something to replace.
+    if (stringIn(bareSpec, result->string))
+        {
+        sub = dyStringSub(result->string, bareSpec, fieldVals[i]);
+        dyStringFree(&result);
+        result = sub;
+        sub = NULL;
+        }
+    if (onHeap)
+        {
+        freeMem(bareSpec);
+        freeMem(bracedSpec);
+        }
     }
 return dyStringCannibalize(&result);
 }
