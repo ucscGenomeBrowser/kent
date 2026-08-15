@@ -62,6 +62,8 @@ png_init_io(png, png_file);
 png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
              PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
              PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+// EXPERIMENT ONLY, refs #38094 - do not commit
+png_set_filter(png, PNG_FILTER_TYPE_BASE, PNG_FILTER_UP);
 
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.

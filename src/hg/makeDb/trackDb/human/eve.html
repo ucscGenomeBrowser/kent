@@ -5,10 +5,10 @@ of the variants observed in human populations. Most have no known clinical signi
 both because clinical data are limited and because the relationship between sequence change
 and protein function is complex. Computational approaches that model evolutionary
 conservation across species can estimate how much a given position tolerates change, since
-residues critical to function tend to be highly conserved. EVE (Evolutionary model of
-Variant Effect) formalizes this reasoning with a deep generative model trained entirely on
-natural sequence variation, without any reliance on clinical labels. This track shows EVE
-scores for all possible missense substitutions in 2,949 disease-associated proteins.
+residues critical to function tend to be highly conserved. EVE (<b>E</b>volutionary model of
+<b>V</b>ariant <b>E</b>ffect) formalizes this reasoning with a deep generative model trained
+entirely on natural sequence variation, without any reliance on clinical labels. This track shows
+EVE scores for all possible missense substitutions in 2,949 disease-associated proteins.
 </p>
 
 <h2>Display Conventions</h2>
@@ -93,12 +93,12 @@ spreadsheet or tab-separated tables. From scripts, the data can be accessed thro
 <a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>eve</i>.</p>
 <p>For automated download and analysis, the genome annotation is stored in a bigBed file
 that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve" target="_blank">our download
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/eve" target="_blank">our download
 server</a>. The file for this track is called <tt>eve.bb</tt>. Individual regions or the
 whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
 compiled from the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
 <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/eve/eve.bb -chrom=chr17
 -start=43000000 -end=43200000 stdout</tt></p>

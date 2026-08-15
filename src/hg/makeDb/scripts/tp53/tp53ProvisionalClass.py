@@ -25,7 +25,7 @@ DELIBERATELY EXCLUDED from the sum (documented in every mouseover):
 This is NOT a ClinGen classification &#8212; the warning is in every mouseover
 since clinicians live in the mouseover, not the description page.
 
-bigBed 9+10.
+bigBed 9+11.
 """
 
 import argparse
@@ -116,6 +116,7 @@ AUTOSQL = """table TP53ProvisionalClass
    string af;                "AF code (BA1/BS1/PM2_Supporting/none)"
    string bs2;               "BS2 evidence (FLOSSIES cohort observation)"
    string spliceAI;          "Max SpliceAI delta (from Table S2)"
+   string ntVerify;          "nt-divergence flag: SpliceAI / gnomAD AF path-dependent, verify per-nt"
    lstring _mouseOver;       "HTML mouseover"
    )
 """
@@ -160,7 +161,8 @@ def load_s3(path):
 def load_s2(path):
     """Table S2: per c.X>Y missense with preliminary PP3/BP4 + max SpliceAI.
 
-    Returns {(wt, codon, alt) -> {code, spliceai_max, paths: [(c_pos, ref_nt, alt_nt), ...]}}.
+    Returns {(wt, codon, alt) -> {code, spliceai (max), spliceai_min,
+    paths: [(c_pos, ref_nt, alt_nt), ...]}}.
     'paths' enumerates every c.X>Y combination that yields the protein change &#8212;
     used downstream to look up AF at each contributing genomic coord.
     """
@@ -186,7 +188,8 @@ def load_s2(path):
         if existing is None:
             out[k] = {
                 'code': new_code,
-                'spliceai': new_spliceai,
+                'spliceai': new_spliceai,      # max across nt paths
+                'spliceai_min': new_spliceai,  # min across nt paths (straddle test)
                 'paths': [path_tuple] if path_tuple else [],
             }
         else:
@@ -194,6 +197,8 @@ def load_s2(path):
                 existing['code'] = new_code
             if new_spliceai > existing['spliceai']:
                 existing['spliceai'] = new_spliceai
+            if new_spliceai < existing['spliceai_min']:
+                existing['spliceai_min'] = new_spliceai
             if path_tuple and path_tuple not in existing['paths']:
                 existing['paths'].append(path_tuple)
     return out
@@ -350,13 +355,16 @@ def af_code_and_points(wt, codon, alt, paths, af_lookup, present_set, tx):
     when every path is absent from gnomAD (present_set). A path that is present
     in gnomAD but not rare enough to be coded blocks the absent-based PM2, so a
     variant seen in gnomAD at moderate frequency is not given PM2.
+
+    Also returns af_divergent: True when the nt paths yield different AF codes
+    (e.g. one path absent from gnomAD -> PM2 while another is present at moderate
+    frequency -> no code). The protein-level row can only show one, so these are
+    flagged for per-nt verification in the AF track.
     """
     chrom = tx['chrom']
     strand = tx['strand']
     rcomp = {'A':'T','T':'A','C':'G','G':'C'}
-    seen = []
-    any_present = False
-    any_absent = False
+    per_path = []   # per nt path: 'BA1' / 'BS1' / 'PM2_Supporting' / 'absent' / 'other'
     for c_pos, c_ref, c_alt in paths:
         g = lib.cdna_coding_to_genomic(c_pos, tx)
         if g is None:
@@ -371,21 +379,31 @@ def af_code_and_points(wt, codon, alt, paths, af_lookup, present_set, tx):
         key = (chrom, g + 1, g_ref, g_alt)
         code = af_lookup.get(key)
         if code:
-            seen.append(code)
-        if key in present_set:
-            any_present = True
+            per_path.append(code)
+        elif key not in present_set:
+            per_path.append('absent')   # absent from gnomAD -> PM2-eligible
         else:
-            any_absent = True
-    if 'BA1' in seen:
-        return ('BA1', 0, 'stand-alone Benign')
-    if 'BS1' in seen:
-        return ('BS1', POINTS['BS1'], '-4 pts')
-    if 'PM2_Supporting' in seen:
-        return ('PM2_Supporting', POINTS['PM2_Supporting'], '+1 pt')
+            per_path.append('other')    # present but not rare enough -> no code
+    coded = [c for c in per_path if c not in ('absent', 'other')]
+    any_absent = 'absent' in per_path
+    any_present = ('other' in per_path) or bool(coded)
+
+    # Effective code per path (absent -> PM2, present-Other -> none); if the set
+    # disagrees the protein change is path-dependent for allele frequency.
+    eff = set('PM2_Supporting' if s == 'absent' else ('' if s == 'other' else s)
+              for s in per_path)
+    af_divergent = len(eff) > 1
+
+    if 'BA1' in coded:
+        return ('BA1', 0, 'stand-alone Benign', af_divergent)
+    if 'BS1' in coded:
+        return ('BS1', POINTS['BS1'], '-4 pts', af_divergent)
+    if 'PM2_Supporting' in coded:
+        return ('PM2_Supporting', POINTS['PM2_Supporting'], '+1 pt', af_divergent)
     if any_absent and not any_present:
         return ('PM2_Supporting', POINTS['PM2_Supporting'],
-                '+1 pt (absent from gnomAD)')
-    return ('', 0, '')
+                '+1 pt (absent from gnomAD)', af_divergent)
+    return ('', 0, '', af_divergent)
 
 
 def bs2_evidence(wt, codon, paths, flossies_lookup, tx):
@@ -428,9 +446,19 @@ HEADER_WARNING = (
 
 
 def mouseover(name, cls, pts, pm1, ps3, pp3, af_lbl, bs2_lbl, applied,
-              spliceai, splice_pp3_active, splice_overrode_bp4, codon, ba1):
+              spliceai, splice_pp3_active, splice_overrode_bp4, codon, ba1,
+              spliceai_min=0.0, splice_straddle=False, af_divergent=False,
+              ps3_suppressed=''):
     splice_section = ""
-    if spliceai and spliceai > 0:
+    if splice_straddle:
+        splice_section = (
+            "<br><b>SpliceAI:</b> {mn:.2f}&ndash;{mx:.2f} &mdash; "
+            "<span style='color:#c00000'>path-dependent: the nt variants at this "
+            "codon straddle the 0.2 threshold, so splicing PP3 is not applied at "
+            "the protein level. Verify the exact nt change in the Bioinformatic "
+            "track.</span>"
+        ).format(mn=spliceai_min, mx=spliceai)
+    elif spliceai and spliceai > 0:
         if splice_pp3_active and splice_overrode_bp4:
             splice_section = (
                 "<br><b>SpliceAI:</b> {sa:.2f} &mdash; "
@@ -445,6 +473,20 @@ def mouseover(name, cls, pts, pm1, ps3, pp3, af_lbl, bs2_lbl, applied,
             ).format(sa=spliceai)
         else:
             splice_section = "<br><b>SpliceAI:</b> {sa:.2f}".format(sa=spliceai)
+    ps3_suppress_section = ""
+    if ps3_suppressed:
+        ps3_suppress_section = (
+            "<br><b>Note:</b> {c} functional evidence not applied &mdash; "
+            "splicing PP3 takes precedence per CSpec."
+        ).format(c=ps3_suppressed)
+    af_divergent_section = ""
+    if af_divergent:
+        af_divergent_section = (
+            "<br><b>gnomAD AF (path-dependent):</b> "
+            "<span style='color:#c00000'>the nt variants at this codon differ in "
+            "allele frequency; verify the exact change in the Allele Frequencies "
+            "track.</span>"
+        )
     codon72 = ""
     if codon == 72:
         codon72 = (
@@ -468,7 +510,7 @@ def mouseover(name, cls, pts, pm1, ps3, pp3, af_lbl, bs2_lbl, applied,
         "<br><b>AF (gnomAD v4.1):</b> {af}"
         "<br><b>BS2 (FLOSSIES):</b> {bs2}"
         "<br><b>Applied codes:</b> {applied}"
-        "{splice}{ba1_section}{codon72}"
+        "{splice}{ps3sup}{afdiv}{ba1_section}{codon72}"
         "<br><b>NOT included in this sum:</b> {cav}"
     ).format(warn=HEADER_WARNING,
              name=name, cls=cls, pts=pts,
@@ -479,6 +521,8 @@ def mouseover(name, cls, pts, pm1, ps3, pp3, af_lbl, bs2_lbl, applied,
              bs2=bs2_lbl,
              applied=applied or "(none)",
              splice=splice_section,
+             ps3sup=ps3_suppress_section,
+             afdiv=af_divergent_section,
              ba1_section=ba1_section,
              codon72=codon72,
              cav=CAVEATS_STR)
@@ -493,16 +537,23 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, t
         s2_rec = s2.get((wt, codon, alt))
         pp3_lbl, pp3_pts = ('', 0)
         spliceai = 0.0
+        spliceai_min = 0.0
         paths = []
         if s2_rec:
             pp3_lbl, pp3_pts = pp3_bp4_label_and_points(s2_rec['code'])
             spliceai = s2_rec.get('spliceai', 0.0)
+            spliceai_min = s2_rec.get('spliceai_min', spliceai)
             paths = s2_rec.get('paths', [])
 
-        # Megan's splicing rule: SpliceAI >= 0.2 -> PP3 splicing applies.
-        # When the missense call is BP4 / BP4_Moderate, splicing PP3
-        # supersedes &#8212; replace the BP4 contribution with PP3 (+1).
-        splice_pp3_active = spliceai >= SPLICE_PP3_THRESHOLD
+        # Splicing rule (SpliceAI >= 0.2 -> PP3 splicing, superseding a missense
+        # BP4), applied only when UNAMBIGUOUS: every nt path yielding this protein
+        # change is >= threshold. SpliceAI is nt-specific; when the paths straddle
+        # the threshold this protein-level row cannot represent it, so we keep the
+        # missense code and flag the row for per-nt verification (Bioinformatic).
+        splice_all = bool(paths) and spliceai_min >= SPLICE_PP3_THRESHOLD
+        splice_straddle = (spliceai >= SPLICE_PP3_THRESHOLD
+                           and spliceai_min < SPLICE_PP3_THRESHOLD)
+        splice_pp3_active = splice_all
         splice_overrode_bp4 = False
         if splice_pp3_active:
             if pp3_lbl in ('BP4', 'BP4_Moderate'):
@@ -513,8 +564,15 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, t
                 pp3_lbl = 'PP3 (splicing)'
                 pp3_pts = 1
 
+        # CSpec caveat: do not apply a protein-level functional assay (PS3/BS3)
+        # when the variant is classified as splicing via PP3.
+        ps3_suppressed = ''
+        if splice_pp3_active and ps3_lbl:
+            ps3_suppressed = ps3_lbl
+            ps3_lbl, ps3_pts = ('', 0)
+
         # Allele-frequency code (BA1 / BS1 / PM2_Supporting)
-        af_code, af_pts, af_qty = af_code_and_points(
+        af_code, af_pts, af_qty, af_divergent = af_code_and_points(
             wt, codon, alt, paths, af_lookup, present_set, tx)
         af_lbl = "{} ({})".format(af_code, af_qty) if af_code else ''
         ba1 = (af_code == 'BA1')
@@ -532,6 +590,16 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, t
             cls = bucket(total)
 
         color = CLASS_COLOR[cls]
+
+        # nt-divergence flags: this protein-level row summarizes >1 nt variant
+        # whose SpliceAI or gnomAD AF disagree; verify the exact nt change in the
+        # Bioinformatic / Allele Frequency tracks.
+        nt_flags = []
+        if splice_straddle:
+            nt_flags.append('SpliceAI')
+        if af_divergent:
+            nt_flags.append('gnomAD AF')
+        nt_verify = " + ".join(nt_flags) if nt_flags else "-"
 
         applied_codes = []
         if pm1_lbl: applied_codes.append("{} (+{})".format(pm1_lbl, pm1_pts))
@@ -554,7 +622,8 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, t
         mo = mouseover(short, cls, total,
                        pm1_lbl, ps3_lbl, pp3_lbl, af_lbl, bs2_lbl, applied,
                        spliceai, splice_pp3_active, splice_overrode_bp4,
-                       codon, ba1)
+                       codon, ba1, spliceai_min, splice_straddle, af_divergent,
+                       ps3_suppressed)
 
         segs = lib.aa_codon_genomic(codon, tx)
         for g_start, g_end, _ex in segs:
@@ -571,6 +640,7 @@ def generate_bed(s3, s2, hotspot_occ, af_lookup, present_set, flossies_lookup, t
                 af_code or "-",
                 bs2_label if bs2_applies else "-",
                 "{:.2f}".format(spliceai) if spliceai else "0.00",
+                nt_verify,
                 mo,
             ]))
     return lines
@@ -601,7 +671,7 @@ def build(db, outdir):
         f.write("\n".join(bed_lines) + "\n")
     lib.run_sort_bed(bed)
     bb = os.path.join(outdir, "TP53ProvisionalClass{}.bb".format(db.capitalize()))
-    lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+10")
+    lib.run_bedToBigBed(bed, as_file, bb, lib.chrom_sizes_path(db), "bed9+11")
     print("  wrote {}".format(bb))
 
     from collections import Counter

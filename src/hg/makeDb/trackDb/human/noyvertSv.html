@@ -2,31 +2,28 @@
 <p>
 The structural variants (SVs) in this dataset were identified using Oxford
 Nanopore long-read whole-genome sequencing of 888 individuals from the 1000
-Genomes Project, representing five ancestry groups. 
-This dataset and the <a href="hgTrackUi?g=lrSv1kgOnt">1KG ONT Vienna</a> track
-(Schloissnig et al. 2025) are based on the same underlying Oxford Nanopore
-sequencing data; the 888 samples here are a subset of the 1,019 samples in that
-track and only SVs that appear in a single sample (singletons) were removed from this track,
-so this callset is smaller than the Schloissnig dataset. The reason is that
-this callset was created primarily for imputation: The SVs here were merged with
-previously identified short variants from the same individuals to generate a
-multi-ancestry SV imputation reference panel. This panel was used to impute
-SVs in approximately 500,000 UK Biobank participants and test their
-associations with 32 disease-relevant traits.
+Genomes Project, representing five ancestry groups. This callset was created
+primarily for SV imputation. To generate a multi-ancestry SV imputation
+reference panel, SVs observed in only one individual (singletons) were excluded,
+and the remaining SVs were merged with previously identified short variants from
+the same individuals. This panel was used to impute SVs in approximately 500,000
+UK Biobank participants and to test their associations with 32 disease-relevant
+traits.
 </p>
 <p>
 The track contains all 107,445 SVs in the reference panel: 59,953 insertions,
-38,459 deletions, 5,729 inversions, 2,696 breakends, and 608 duplications.
-Each variant is annotated with its overall allele frequency; allele
-frequencies across five superpopulations (African, Admixed American, East
-Asian, European, and South Asian); Hardy-Weinberg equilibrium p-values; and
-imputation accuracy metrics from internal leave-one-out validation and UK
-Biobank imputation. For SVs reaching genome-wide significance, the associated
-traits, p-values, and INFO scores are listed on the corresponding variant
-details page.
+38,459 deletions, 5,729 inversions, 2,696 breakends, and 608 duplications. Each
+variant is annotated with its overall allele frequency; allele frequencies
+across five superpopulations (African, Admixed American, East Asian, European,
+and South Asian); Hardy-Weinberg equilibrium p-values; and imputation accuracy
+metrics from internal leave-one-out validation and UK Biobank imputation. For
+SVs reaching genome-wide significance, the associated traits, p-values, and INFO
+scores are listed on the corresponding variant details page.
 </p>
 <p>
-Although the two studies share the same raw sequencing data, they applied
+The 888 samples in this dataset are a subset of the 1,019 samples included in
+the <a href="hgTrackUi?g=lrSv1kgOnt">1KG Vienna ONT</a> track (Schloissnig et al.
+2025). Although the two studies share the same raw sequencing data, they applied
 different data-processing and SV-calling pipelines to address distinct research
 objectives, so the individual calls are only partially concordant. The
 imputation reference panel, UK Biobank imputation results, and SV-wide

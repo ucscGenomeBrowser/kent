@@ -5,8 +5,6 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 STRIP=true
-COPT=
-CFLAGS=-ggdb
 HG_WARN=
 
 A = bbTest

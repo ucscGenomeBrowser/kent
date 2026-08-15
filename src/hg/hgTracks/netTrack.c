@@ -140,7 +140,7 @@ if (w > 1)
     if (rNextLine > 0)	 /* Put up click info in full mode. */
 	{
 	struct dyString *bubble = dyStringNew(256);
-	char depth[8];
+	char depth[16];
 	snprintf(depth, sizeof(depth), "%d", level);
 	dyStringPrintf(bubble, "%s %c %dk ",
 	    fill->qName, fill->qStrand, fill->qStart/1000);
@@ -172,7 +172,7 @@ w = x2-x1;
 if (w >= 1)
     {
     struct dyString *bubble = dyStringNew(256);
-    char depth[8];
+    char depth[16];
     int midY = y + rMidLineOff;
     clippedBarbs(rHvg, x1, midY, w, 2, 5, orientation, color, FALSE);
     hvGfxLine(rHvg, x1, midY, x2, midY, color);

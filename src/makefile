@@ -27,6 +27,7 @@ topLibs: ${TOP_LIBS:%=%.topLibs}
 .PHONY: topChecks
 topChecks:
 	@./checkUmask.sh
+	@./checkCompileFlags.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	@./submodules/submoduleSetup
 

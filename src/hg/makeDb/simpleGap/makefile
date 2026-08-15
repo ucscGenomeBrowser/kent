@@ -5,7 +5,6 @@ L += -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-CFLAGS= -ggdb
 O = simpleGap.o
 
 simpleGap: $O ${MYLIBS}
