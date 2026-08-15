@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 # Its output dir is set there by CBHUB_OUT; keep this default in step with it (or pass
 # --manifest).
 HUB_BUILD = os.environ.get(
-    "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
+    "HUB_BUILD", "/hive/data/inside/cells/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
 
 def load_relpath_to_abs(manifest, asm):
