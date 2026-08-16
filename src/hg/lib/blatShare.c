@@ -16,6 +16,7 @@
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "portable.h"
+#include "trashDir.h"
 #include "blatShare.h"
 
 struct psl *pslListFromBigPslFile(char *bbFileName)
@@ -104,11 +105,7 @@ char *blatFindPinnedBigPsl(struct cart *cart)
 char *f = cartOptionalString(cart, "blatLastBigBed");
 if (f == NULL)
     return NULL;
-char *sessionDataDir = cfgOption("sessionDataDir");
-char *sessionDataDirOld = cfgOption("sessionDataDirOld");
-if (startsWith(trashDir(), f) ||
-    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, f)) ||
-    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, f)))
+if (isTrashOrSessionDataPath(f))
     return cloneString(f);
 return NULL;
 }

@@ -2877,7 +2877,9 @@ if (isNotEmpty(savedDb))
     }
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
-if (pslFile == NULL || faFile == NULL || !fileExists(pslFile))
+if (pslFile == NULL || faFile == NULL ||
+    !isServerUserFilePath(pslFile) || !isServerUserFilePath(faFile) ||
+    !fileExists(pslFile))
     printf("<p>These BLAT results are no longer available. Please run a new "
            "<a href=\"hgBlat\">BLAT search</a>.</p>\n");
 else

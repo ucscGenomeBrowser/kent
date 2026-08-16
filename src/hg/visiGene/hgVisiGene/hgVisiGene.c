@@ -216,6 +216,8 @@ static void doThumbnails(struct sqlConnection *conn)
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *matchFile = cartString(cart, hgpMatchFile);
+if (!isServerUserFilePath(matchFile))
+    errAbort("Invalid match file");
 struct visiMatch *matchList = NULL, *match;
 int maxCount = 25, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);

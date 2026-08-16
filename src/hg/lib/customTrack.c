@@ -967,6 +967,12 @@ if (customTracksExist(cart, &ctFileName))
 char mvVar[256];
 safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", genomeDb);
 char *mvFile = cartOptionalString(cart, mvVar);
+if (isNotEmpty(mvFile) && !isServerUserFilePath(mvFile))
+    {
+    /* not a file we made;  drop the pointer rather than parse it */
+    cartRemove(cart, mvVar);
+    mvFile = NULL;
+    }
 if (isNotEmpty(mvFile) && fileExists(mvFile))
     {
     struct customTrack *mvList = NULL;
@@ -1123,13 +1129,13 @@ char *ctFileVar = customTrackFileVar(db);
 char *ctFileName = cartOptionalString(cart, ctFileVar);
 if (ctFileName)
     {
-    if (fileExists(ctFileName))
+    if (isServerUserFilePath(ctFileName) && fileExists(ctFileName))
         {
         if (retCtFileName)
             *retCtFileName = ctFileName;
         return TRUE;
         }
-    /* expired custom tracks file */
+    /* expired custom tracks file, or not a file we made */
     cartRemove(cart, ctFileVar);
     cartRemovePrefix(cart, CT_PREFIX);
     }

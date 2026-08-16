@@ -31,6 +31,7 @@
 #include "knetUdc.h"
 #include "textOut.h"
 #include "trackHub.h"
+#include "trashDir.h"
 #include "userRegions.h"
 #include "web.h"
 #include "annoFormatTab.h"
@@ -422,7 +423,8 @@ boolean userRegionsExist()
  * if the region list is set to empty we clear region state. */
 {
 char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
-return (isNotEmpty(trashFileName) && fileExists(trashFileName));
+return (isNotEmpty(trashFileName) && isServerUserFilePath(trashFileName) &&
+        fileExists(trashFileName));
 }
 
 struct bed4 *userRegionsGetBedList()
@@ -511,7 +513,7 @@ if (isEmpty(resultName))
 struct jsonWrite *jw = cj->jw;
 cartRemove(cart, hgtaUserRegionsDb);
 char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
-if (trashFileName && fileExists(trashFileName))
+if (trashFileName && isServerUserFilePath(trashFileName) && fileExists(trashFileName))
     unlink(trashFileName);
 cartRemove(cart, hgtaUserRegionsFile);
 cartRemove(cart, hgtaEnteredUserRegions);

@@ -4396,6 +4396,12 @@ if (strstr(multiRegionsBedUrl,"://"))
     }
 else
     {
+    /* Not a URL, so this is the trash file we wrote the pasted BED to. */
+    if (!isServerUserFilePath(multiRegionsBedUrl))
+	{
+	warn("BED custom regions file [%s] not found.", multiRegionsBedUrl);
+	return FALSE;
+	}
     lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
     if (!lf)
 	{
@@ -8624,7 +8630,7 @@ char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, database);
 char *hubFile = cartOptionalString(cart, buffer);
 
-if (hubFile != NULL)
+if (hubFile != NULL && isServerUserFilePath(hubFile))
     {
     char *hubName = hubNameFromUrl(hubFile);
     struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);

@@ -15,6 +15,7 @@
 #include "hgGene.h"
 #include "hgConfig.h"
 #include "pipeline.h"
+#include "trashDir.h"
 
 
 static void rnaTrashDirsInit(char **tables, int count)
@@ -246,6 +247,13 @@ else if (sameString(how, "picture"))
     // and that the file should exist.
 
     if (!endsWith(psFile, ".ps"))
+        {
+        warn("Invalid file provided for creating of RNA structure pdf/image");
+        return;
+        }
+    // The prefix tests below match on the front of the name only, so a ".." further along
+    // would still walk out of the trash directory.  isTrashPath refuses that.
+    if (!isTrashPath(psFile))
         {
         warn("Invalid file provided for creating of RNA structure pdf/image");
         return;

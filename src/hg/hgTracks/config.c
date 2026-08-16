@@ -13,6 +13,7 @@
 #include "web.h"
 #include "customTrack.h"
 #include "hgTracks.h"
+#include "trashDir.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
@@ -993,7 +994,9 @@ if (strstr(multiRegionsBedUrl,"://"))
     }
 else
     {
-    if (fileExists(multiRegionsBedUrl))
+    /* Not a URL, so this is the trash file we wrote the pasted BED to.  Check it before
+     * reading, since the contents go straight back to the user in the text area below. */
+    if (isServerUserFilePath(multiRegionsBedUrl) && fileExists(multiRegionsBedUrl))
 	{
 	struct lineFile *lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
 	char *line;

@@ -176,11 +176,7 @@ if ((startsWith("http://", url)
     return TRUE;
 
 // we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
-char *sessionDataDir = cfgOption("sessionDataDir");
-char *sessionDataDirOld = cfgOption("sessionDataDirOld");
-if (startsWith(trashDir(), url) ||
-    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)) ||
-    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
+if (isTrashOrSessionDataPath(url))
     return TRUE;
 
 if (udcIsResolvable(url))
