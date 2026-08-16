@@ -256,7 +256,7 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1164", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9321", default="FALSE",
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9324", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Use the modern single-page base-by-base alignment view (the one "
                "hgBlat's new results page uses) for ordinary alignment clicks too "
@@ -602,7 +602,7 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
-        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27525", default="keep",
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27528", default="keep",
           verified=True,
           note="What happens to the custom tracks left behind by a user's "
                "earlier BLAT searches when a new search makes another one.  "
@@ -651,7 +651,7 @@ DATABASE = {
                "The name reaches cfgOption as a parameter of loadGrps(), so "
                "the harvester can only see it as {confName} and the reconcile "
                "would otherwise call it dead documentation."),
-        h("db.relatedTrack", "table", "hg/lib/hui.c:10772",
+        h("db.relatedTrack", "table", "hg/lib/hui.c:10781",
           default='"relatedTrack"', verified=True, family="db"),
         h("central.host", "profile", "hg/qaPushQ/qaPushQ.c:2448", public=True,
           verified=True, family="central",
@@ -1086,7 +1086,7 @@ BRANDING = {
           "hg/lib/exportedDataHubs.c:181", verified=True),
         h("browser.cgiExpireMinutes", "limit",
           "hg/hgHubConnect/hgHubConnect.c:404", default='"20"', verified=True),
-        h("curatedHubPrefix", "internal", "hg/lib/hubConnect.c:1214",
+        h("curatedHubPrefix", "internal", "hg/lib/hubConnect.c:1251",
           verified=True, note="Which curated hubs this machine shows."),
         h("genarkHubPrefix", "internal", "hg/hgGateway/hgGateway.c:1128",
           verified=True),

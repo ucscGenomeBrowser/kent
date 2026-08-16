@@ -23,7 +23,7 @@
 #                                        #            + meta/hg38.metadata.tsv
 #
 # The build writes its output to $CBHUB_OUT, NOT next to the scripts (that dir is
-# git-controlled). Default: /hive/users/mspeir/claude/cell-browser/all-tracks-hub-build
+# git-controlled). Default: /hive/data/inside/cells/all-tracks-hub-build
 #
 # The per-track source files (abs_path column of manifest.tsv) are the files the
 # Cell Browser datasets already serve; nothing is regenerated here, only copied.
