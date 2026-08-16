@@ -651,7 +651,7 @@ DATABASE = {
                "The name reaches cfgOption as a parameter of loadGrps(), so "
                "the harvester can only see it as {confName} and the reconcile "
                "would otherwise call it dead documentation."),
-        h("db.relatedTrack", "table", "hg/lib/hui.c:10772",
+        h("db.relatedTrack", "table", "hg/lib/hui.c:10781",
           default='"relatedTrack"', verified=True, family="db"),
         h("central.host", "profile", "hg/qaPushQ/qaPushQ.c:2448", public=True,
           verified=True, family="central",
