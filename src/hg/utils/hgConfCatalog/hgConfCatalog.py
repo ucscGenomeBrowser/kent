@@ -809,7 +809,7 @@ PATHS = {
         h("sessionDataDir", "path", "hg/hgPcr/hgPcr.c:564", verified=True,
           note="Where session-scoped data (custom tracks belonging to a saved "
                "session) is kept so it survives cleanup."),
-        h("sessionDataDirOld", "path", "hg/lib/customFactory.c:180",
+        h("sessionDataDirOld", "path", "hg/lib/trashDir.c:58",
           verified=True, note="Previous location, still read so old sessions "
                               "keep working."),
         h("sessionDataDbPrefix", "internal", "hg/lib/sessionData.c:474",
