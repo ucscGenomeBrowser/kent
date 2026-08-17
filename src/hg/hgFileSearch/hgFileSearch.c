@@ -239,7 +239,7 @@ printf("<div id='simpleTab' style='max-width:inherit;'>\n");
 printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
        "style='max-width:1000px; width:100%%;'>\n",
-       TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
+       TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : htmlEncode(descSearch)); // search string into attr, escape (XSS)
 jsOnEventById("keyup", "simpleSearch", "findTracks.searchButtonsEnable(true);");
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");

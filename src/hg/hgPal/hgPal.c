@@ -3,6 +3,7 @@
 /* Copyright (C) 2013 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
+#include "htmshell.h"
 #include "cart.h"
 #include "cheapcgi.h"
 #include "web.h"
@@ -31,7 +32,7 @@ char *genome;
 
 getDbAndGenome(cart, &database, &genome, NULL);
 struct sqlConnection *conn = hAllocConn(database);
-cartWebStart(cart, database, "Other Species Alignments for %s %s",track,item);
+cartWebStart(cart, database, "Other Species Alignments for %s %s",htmlEncode(track),htmlEncode(item)); // user input into title, escape (XSS)
 
 /* output the option selection dialog */
 palOptions(cart, conn, addOurButtons, NULL);
@@ -51,7 +52,7 @@ printf("<pre>");
 int result =palOutPredsInBeds(conn, cart, bed, track);
 printf("</pre>");
 if (result == 0)
-    printf("<B>No coding region in gene '%s'</B><BR>",item);
+    printf("<B>No coding region in gene '%s'</B><BR>",htmlEncode(item));
 
 cartHtmlEnd();
 }

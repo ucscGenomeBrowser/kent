@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+#include "htmshell.h"
 #include "linefile.h"
 #include "hash.h"
 #include "ra.h"
@@ -607,7 +608,7 @@ else
             {
             hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", (track->table?track->table:track->track),
                 (track == selTrack ? " SELECTED" : ""),
-                track->shortLabel);
+                htmlEncode(track->shortLabel)); // label in dropdown text, escape (XSS)
             }
         }
     hPrintf("</SELECT>\n");
@@ -854,7 +855,7 @@ for (name = nameList; name != NULL; name = name->next)
         hPrintf(" SELECTED");
     if (tdb != NULL)
         if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-            hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+            hPrintf(">%s (%s)\n", htmlEncode(tdb->shortLabel), name->name); // label in dropdown text, escape (XSS)
         else
             hPrintf(">%s\n", name->name);
     else

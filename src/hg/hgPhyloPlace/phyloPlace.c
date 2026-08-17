@@ -2016,7 +2016,7 @@ if (seqInfoList)
     for (si = seqInfoList;  si != NULL;  si = si->next)
         {
         puts("<tr>");
-        printf("<th>%s</td>", replaceChars(si->seq->name, "|", " | "));
+        printf("<th>%s</td>", htmlEncode(replaceChars(si->seq->name, "|", " | "))); // uploaded seq name, escape (XSS)
         if (isFasta)
             {
             if (si->nCountStart || si->nCountEnd)

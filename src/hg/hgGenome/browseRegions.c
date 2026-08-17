@@ -41,7 +41,7 @@ trashDirFile(&indexTn, "hgg", "index", ".html");
 FILE *f = mustOpen(indexTn.forCgi, "w");
 htmStart(f, "Region Index");
 fprintf(f, "<BODY>");
-fprintf(f, "<B>%s</B><BR>\n", gg->shortLabel);
+fprintf(f, "<B>%s</B><BR>\n", htmlEncode(gg->shortLabel)); // user graph label, escape (XSS)
 fprintf(f, "%3.1f&nbsp;Mb&nbsp;in<BR>\n",
 	0.000001*bedTotalSize((struct bed*)bedList));
 fprintf(f, "%d&nbsp;regions&nbsp;>&nbsp;%g<BR>\n", 
@@ -60,7 +60,7 @@ carefulClose(&f);
 /* Write frames */
 hPrintf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n");
 hPrintf("<HTML><HEAD>\n%s<TITLE>%s Regions &gt;= %g</TITLE></HEAD>\n",
-	getCspMetaHeader(), gg->shortLabel, threshold);
+	getCspMetaHeader(), htmlEncode(gg->shortLabel), threshold);
 hPrintf("<FRAMESET COLS=\"19%%,81%%\">\n");
 hPrintf("<FRAME SRC=\"%s\" NAME=\"%s\">\n", indexTn.forCgi, indexFrame);
 hPrintf("<FRAME SRC=");

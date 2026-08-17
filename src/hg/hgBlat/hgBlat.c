@@ -2545,14 +2545,15 @@ printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/f
 cartSaveSession(cart);
 printf("<INPUT TYPE=HIDDEN NAME=org VALUE=\"%s\">\n", organism);
 printf("<INPUT TYPE=HIDDEN NAME=db VALUE=\"%s\">\n", db);
+// all four come from the cart (user input) and go into value="" attributes; escape (XSS)
 type = cartUsualString(cart, "type", "");
-printf("<INPUT TYPE=HIDDEN NAME=type VALUE=\"%s\">\n", type);
+printf("<INPUT TYPE=HIDDEN NAME=type VALUE=\"%s\">\n", htmlEncode(type));
 sort = cartUsualString(cart, "sort", "");
-printf("<INPUT TYPE=HIDDEN NAME=sort VALUE=\"%s\">\n", sort);
+printf("<INPUT TYPE=HIDDEN NAME=sort VALUE=\"%s\">\n", htmlEncode(sort));
 output = cartUsualString(cart, "output", "");
-printf("<INPUT TYPE=HIDDEN NAME=output VALUE=\"%s\">\n", output);
+printf("<INPUT TYPE=HIDDEN NAME=output VALUE=\"%s\">\n", htmlEncode(output));
 userSeq = cartUsualString(cart, "userSeq", "");
-printf("<INPUT TYPE=HIDDEN NAME=userSeq VALUE=\"%s\">\n", userSeq);
+printf("<INPUT TYPE=HIDDEN NAME=userSeq VALUE=\"%s\">\n", htmlEncode(userSeq));
 printf("<INPUT TYPE=HIDDEN NAME=Submit VALUE=submit>\n"); 
 printf("</FORM>\n");
 }

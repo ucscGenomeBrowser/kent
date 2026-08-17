@@ -1779,7 +1779,7 @@ def htmlMiddle(args):
         revokedTracks = getRevokedTracks(db)
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
             tableToGbdbFiles, trackTables, tableSizes, revokedTracks)
-        trackName = args["showFiles"].value
+        trackName = mustBeClean(args["showFiles"].value)  # sanitize like other params, before echoing into HTML (XSS)
         tables, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, \
                 tableSizes, tableToGbdbFiles, noTableTracks, gbdbSizes)
 

@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+#include "htmshell.h"
 #include "web.h"
 #include "jksql.h"
 #include "cheapcgi.h"
@@ -105,8 +106,8 @@ void correlateGraphs(struct genoGraph *aGg, struct genoGraph *bGg)
 {
 double r = chromGraphBinCorrelate(aGg->binFileName, bGg->binFileName);
 
-webPrintLinkCell(aGg->shortLabel);
-webPrintLinkCell(bGg->shortLabel);
+webPrintLinkCell(htmlEncode(aGg->shortLabel)); // user graph labels, escape (XSS)
+webPrintLinkCell(htmlEncode(bGg->shortLabel));
 webPrintLinkCellStart();
 hPrintf("%f", r);
 webPrintLinkCellEnd();

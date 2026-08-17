@@ -611,8 +611,10 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
             if (hgOfficialChromName(database, chrom))
-                printf("<TD><A HREF='%s?%s&position=%s&hgTracksConfigPage=notSet' TITLE=%s>%s:</A></TD>",
-                    hgTracksName(), cartSidUrlString(cart),pos, pos, chrom);
+                // pos comes from the custom track; cgiEncode it in the URL and quote+escape the
+                // TITLE attribute (was unquoted) before echoing (XSS). chrom is validated above.
+                printf("<TD><A HREF='%s?%s&position=%s&hgTracksConfigPage=notSet' TITLE='%s'>%s:</A></TD>",
+                    hgTracksName(), cartSidUrlString(cart), cgiEncode(pos), htmlEncode(pos), chrom);
             else
                 puts("<TD>&nbsp;</TD>");
             }
@@ -648,7 +650,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             {
             char more[2048];
-            safef(more, sizeof(more), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
+            safef(more, sizeof(more), "class='updateCheckbox' title='refresh data from: %s'", htmlEncode(dataUrl)); // user URL into attr, escape (XSS)
             cgiMakeCheckBoxMore(buf, setAllUpdate, more);
             }
         else

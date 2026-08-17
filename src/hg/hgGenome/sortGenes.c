@@ -6,6 +6,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+#include "htmshell.h"
 #include "hash.h"
 #include "portable.h"
 #include "jksql.h"
@@ -176,14 +177,14 @@ for (el = list; el != NULL; el = el->next)
 carefulClose(&f);
 
 /* Print out some info. */
-hPrintf("Thresholding <i>%s</i> at %g. ", gg->shortLabel, threshold);
+hPrintf("Thresholding <i>%s</i> at %g. ", htmlEncode(gg->shortLabel), threshold); // user graph label, escape (XSS)
 hPrintf("There are %d regions covering %lld bases.<BR>\n",
     slCount(bedList), bedTotalSize((struct bed*)bedList) );
 hPrintf("Installed a Gene Sorter filter that selects only genes in these regions.<BR>\n");
 if (m)
     {
     hPrintf("There are %d markers in the regions over threshold that overlap knownGenes.<BR>\n", markerCount);
-    hPrintf("Installed a Gene Sorter custom column called \"%s Markers\" with these markers.<BR>\n", gg->shortLabel);
+    hPrintf("Installed a Gene Sorter custom column called \"%s Markers\" with these markers.<BR>\n", htmlEncode(gg->shortLabel));
     }
 
 /* close custom column output file */
