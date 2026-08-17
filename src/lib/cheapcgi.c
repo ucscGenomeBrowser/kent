@@ -2974,3 +2974,34 @@ for (el = elList; el != NULL; el = el->next)
     }
 hashElFreeList(&elList);
 }
+
+boolean isValidJsonpCallback(char *s)
+/* Return TRUE if s is safe to use as a JSONP callback name: non-empty, not
+ * too long, and every dot-separated segment is a C symbol (letters, digits,
+ * underscore, not starting with a digit).  This rejects anything with
+ * parentheses, spaces, operators, or other characters that would let an
+ * attacker turn a same-origin JSONP response into arbitrary script. */
+{
+if (isEmpty(s))
+    return FALSE;
+if (strlen(s) > 128)
+    return FALSE;
+char *dupe = cloneString(s);
+boolean ok = TRUE;
+char *seg = dupe;
+char *dot;
+while (seg != NULL)
+    {
+    dot = strchr(seg, '.');
+    if (dot != NULL)
+	*dot = 0;
+    if (!isSymbolString(seg))
+	{
+	ok = FALSE;
+	break;
+	}
+    seg = (dot != NULL) ? dot + 1 : NULL;
+    }
+freeMem(dupe);
+return ok;
+}

@@ -688,5 +688,12 @@ void cgiChangeVar(char *varName, char *value);
 void cgiSetMaxLogLen(int l);
 /* set the size of variable values that are dumped to stderr. Default is 0, which means no logging */
 
+boolean isValidJsonpCallback(char *s);
+/* Return TRUE if s is safe to use as a JSONP callback name: non-empty, not
+ * too long, and every dot-separated segment is a C symbol (letters, digits,
+ * underscore, not starting with a digit).  This rejects anything with
+ * parentheses, spaces, operators, or other characters that would let an
+ * attacker turn a same-origin JSONP response into arbitrary script. */
+
 #endif /* CHEAPCGI_H */
 
