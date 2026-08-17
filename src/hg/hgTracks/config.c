@@ -177,6 +177,15 @@ safef(buffer, sizeof buffer, "%s/%s", fontDir, freeTypeFonts[ii].file);
 return buffer;
 }
 
+boolean freeTypeFontActive()
+/* TRUE when the FreeType font engine is the one maybeNewFonts() will actually switch to.  Callers
+ * that pick a font to match the live engine (e.g. squishCodonFont) must use this rather than a
+ * looser test, or they can hand the bitmap engine a cell height it cannot render. */
+{
+char *fontName = NULL;
+return chosenFreeTypeFont(&fontName) != NULL;
+}
+
 void initFontEngine()
 /* Load the text engine the user has picked, before anything measures a string.
  * Pack mode reserves room for an item by measuring its label, and

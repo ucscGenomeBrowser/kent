@@ -9074,6 +9074,15 @@ static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType q
 if (qName == NULL)
     qName = psl->qName;
 char *chrom = chromAliasGetDisplayChrom(database, cart, psl->tName);
+/* For a shared link (htcBlatAlign) qName is read back out of a bigPsl and chrom/tName can be
+ * hub-supplied, so escape them before they go into the HTML summary and the JS string literals
+ * below rather than trusting the caller's sanitizing (hgBlat whitelists fresh-search query names,
+ * but the shared-link path does not run through that). */
+char *qNameHtml = htmlEncode(qName);
+char *chromHtml = htmlEncode(chrom);
+char *qNameJs = javaScriptLiteralEncode(qName);
+char *chromJs = javaScriptLiteralEncode(chrom);
+char *tNameJs = javaScriptLiteralEncode(psl->tName);
 /* Alternate (chromAlias) names for the genomic sequence - e.g. its RefSeq/GenBank/Ensembl accessions
  * - shown after the main name in the "Only genome sequence" header. */
 struct dyString *aliasDy = dyStringNew(128);
@@ -9156,8 +9165,12 @@ printf("<style>"
  * link" button; in a plain track click, a "Back to Genome Browser" button that returns to hgTracks
  * at this alignment's location. */
 printf("<div class='blatTitleBar'>");
+char *asmLabel = blatAsmLabel(database);   // may carry a hub's genomes.txt organism string
+char *asmLabelHtml = htmlEncode(asmLabel);
 printf("<span class='blatTtl'>%sBase Alignment: %s</span>",
-       blatContext ? "BLAT " : "", blatAsmLabel(database));
+       blatContext ? "BLAT " : "", asmLabelHtml);
+freeMem(asmLabelHtml);
+freeMem(asmLabel);
 printf("<span class='blatBtns'>");
 if (blatContext)
     printf("<a href='hgBlat?blatReopen=1&hgsid=%s' class='blatBtn'>"
@@ -9198,9 +9211,13 @@ printf("<div class='blatAlnStrip'>"
        "<div class='d'></div>"
        "<div class='blatAlnStat'><span class='k'>Strand</span><span class='v'>%s</span></div>"
        "</div>\n",
-       qName, chrom, tStartC, tEndC, idColor, ident, matchC, qSizeC, psl->strand);
+       qNameHtml, chromHtml, tStartC, tEndC, idColor, ident, matchC, qSizeC, psl->strand);
 if (isNotEmpty(aliasStr))
-    printf("<p>Genome sequence %s is also known as: %s.</p>\n", chrom, aliasStr);
+    {
+    char *aliasStrHtml = htmlEncode(aliasStr);
+    printf("<p>Genome sequence %s is also known as: %s.</p>\n", chromHtml, aliasStrHtml);
+    freeMem(aliasStrHtml);
+    }
 /* The shared library returns the number of alignment blocks it actually shows.  The DNA path merges
  * blocks separated by gaps <= 8 bases, so this can be fewer than psl->blockCount; use it (not
  * psl->blockCount) so the sidebar's "Block N" links match the #1..#N anchors that were emitted. */
@@ -9264,7 +9281,8 @@ printf("</div>\n");   /* #blatAlnBody */
 /* The cDNA/Genomic/Side-by-side section headers come from shared library code (fuzzyShow.c /
  * pslShow.c) as "cDNA <qName>" / "Genomic <chrom> :" / "Side by Side Alignment"; relabel them to
  * the sidebar wording (sentence case) via JS (there is no C hook for it), keeping the
- * #cDNA/#genomic/#ali jump anchors.  qName and chrom are already sanitized. */
+ * #cDNA/#genomic/#ali jump anchors.  qName and chrom are escaped for a JS string literal
+ * (qNameJs/chromJs) since a shared link's query name is not otherwise sanitized. */
 jsInlineF(
     "(function(){\n"
     "function relabel(anchor, text){\n"
@@ -9281,12 +9299,13 @@ jsInlineF(
     "relabel('genomic', 'Only genome sequence: %s');\n"
     "relabel('ali', 'Side by side alignment');\n"   // match the sidebar wording and sentence case
     "})();\n",
-    qName, chrom);
+    qNameJs, chromJs);
 
 /* "Share a link": save an anonymous session (hgSession API), build a durable hgc?g=htcBlatAlign link
  * that rebuilds THIS alignment from the session's durable bigPsl custom track (no BLAT re-run, no
  * stored trash sequence), and hand it to the shared "Share a link" modal (topLinks.js shareUrl,
- * loaded by the menu bar) so it looks like every other share dialog.  qName is already sanitized. */
+ * loaded by the menu bar) so it looks like every other share dialog.  tName and qName are escaped
+ * for the single-quoted JS string literals they land in (tNameJs/qNameJs). */
 if (canShare)
     jsInlineF(
     "(function(){\n"
@@ -9311,7 +9330,12 @@ if (canShare)
     "  }).catch(function(){ btn.textContent = label; btn.dataset.busy = ''; });\n"
     "});\n"
     "})();\n",
-    cartSessionId(cart), psl->tName, psl->tStart, qName);
+    cartSessionId(cart), tNameJs, psl->tStart, qNameJs);
+freeMem(qNameHtml);
+freeMem(chromHtml);
+freeMem(qNameJs);
+freeMem(chromJs);
+freeMem(tNameJs);
 }
 
 void alnModernStart(char *classicTitle)
@@ -9352,8 +9376,12 @@ safef(title, sizeof title, "User Sequence vs Genomic");
 if (modern)
     {
     char pageTitle[256];
-    safef(pageTitle, sizeof pageTitle, "BLAT Base Alignment: %s", blatAsmLabel(database));
+    char *asmLabel = blatAsmLabel(database);   // may carry a hub's genomes.txt organism string
+    char *asmLabelHtml = htmlEncode(asmLabel);
+    safef(pageTitle, sizeof pageTitle, "BLAT Base Alignment: %s", asmLabelHtml);
     webStartGbNoBanner(cart, database, pageTitle);   // menubar + <main>, no legacy section tables
+    freeMem(asmLabelHtml);
+    freeMem(asmLabel);
     }
 else
     htmlFramesetStart(title);
@@ -9389,6 +9417,7 @@ if (modern)
     {
     showSomeAlignmentModern(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0, TRUE);   // hgBlat context
     webEndGb();
+    cartCheckout(&cart);   // exit(0) below skips main's checkout, so save the cart here or lose it
     exit(0);   // we drew the whole page; skip the framework's table-closing cartHtmlEnd
     }
 else
@@ -9411,6 +9440,7 @@ if (bbFile == NULL || !fileExists(bbFile))
     printf("<p>This shared BLAT alignment is no longer available. The custom track that stored it "
            "has expired or been removed. Please run a new <a href=\"hgBlat\">BLAT search</a>.</p>\n");
     webEndGb();
+    cartCheckout(&cart);   // this early return also loaded a session; save it before exit(0)
     exit(0);
     }
 int start = cartInt(cart, "o");
@@ -9420,12 +9450,14 @@ if (psl == NULL || seq == NULL)
     {
     printf("<p>This alignment was not found in the shared BLAT results.</p>\n");
     webEndGb();
+    cartCheckout(&cart);   // this early return also loaded a session; save it before exit(0)
     exit(0);
     }
 enum gfType qType = pslIsProtein(psl) ? gftProt : gftDna;
 struct dnaSeq *oSeq = newDnaSeq(cloneString(seq), strlen(seq), qName);
 showSomeAlignmentModern(psl, oSeq, qType, 0, oSeq->size, NULL, 0, 0, TRUE);   // hgBlat shared-link context
 webEndGb();
+cartCheckout(&cart);   // exit(0) below skips main's checkout, so save the cart here or lose it
 exit(0);   // we drew the whole page; skip the framework's table-closing cartHtmlEnd
 }
 
@@ -29090,7 +29122,10 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", "quickLiftCcds", NULL};
+// "u"/"s" are the shared BLAT link's session selectors (loadBlatShareSessionIfAny); exclude them so
+// they are not left in the reader's cart and written into any session they later save.
+char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", "quickLiftCcds",
+                       "u", "s", NULL};
 
 int main(int argc, char *argv[])
 {

@@ -1930,6 +1930,11 @@ void maybeNewFonts(struct hvGfx *hvg);
 void initFontEngine();
 /* Load the text engine the user has picked, before anything measures a string. */
 
+boolean freeTypeFontActive();
+/* TRUE when the FreeType font engine is the one maybeNewFonts() will actually switch to.  Callers
+ * that pick a font to match the live engine (e.g. squishCodonFont) must use this rather than a
+ * looser test, or they can hand the bitmap engine a cell height it cannot render. */
+
 Color colorFromCart(struct track *tg, Color color);
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 

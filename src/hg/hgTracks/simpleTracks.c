@@ -4342,14 +4342,10 @@ static MgFont *squishCodonFont()
  * render an in-between size, so use a 9px font there; under the GEM bitmap engine
  * (which cannot fake a size) fall back to the size-8 font. */
 {
-boolean freetypeActive =
-#ifdef USE_FREETYPE
-    sameString(cfgOptionDefault("freeType", "on"), "on")
-#else
-    FALSE
-#endif
-    && differentString(tl.textFont, "Bitmap");
-if (freetypeActive)
+/* Use the same predicate maybeNewFonts() uses to switch engines: freeType on, textFont not
+ * "Bitmap", and the font name known to freeTypeFonts[].  A looser test can send mgFontForCellHeight
+ * a size the bitmap engine cannot render (see the warning in lib/memgfx.c). */
+if (freeTypeFontActive())
     return mgFontForCellHeight(10);   // getFontCorrection(10) renders ~9px
 return mgFontForSize("8");
 }
