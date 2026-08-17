@@ -10578,6 +10578,12 @@ if(!trackImgOnly)
     }
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
+// hgRenderTracks asks for the PDF as the response body, so makeActiveImage has already
+// converted the eps and written it to stdout.  Without this the convertEpsToPdf below
+// aborts on the eps it just deleted.
+if (trackImgOnly)
+    return;
+
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
