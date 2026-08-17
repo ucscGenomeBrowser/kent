@@ -43,6 +43,7 @@ cnvType                            # hg/hgc/myVariantsClick.c
 coloring                           # hg/hgTrackUi/hgTrackUi.c
 confSet                            # hg/hgTracks/searchTracks.c
 defaults                           # hg/hgTrackUi/hgTrackUi.c
+delAll                             # hg/hgTracks/hgTracks.c
 delete                             # hg/hgTracks/myVariantsTrack.c
 description                        # hg/hgc/myVariantsClick.c
 dispFndTrk                         # hg/hgTracks/searchTracks.c
