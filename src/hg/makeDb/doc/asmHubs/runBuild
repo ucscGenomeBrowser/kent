@@ -5,7 +5,7 @@ set -beEu -o pipefail
 export LANG=C
 export asmId=$1
 export clade=$2
-export sciName=$3
+export sciName="${3}"
 ### the 'clade' is used to establish specific options for the build
 
 ### start seconds
@@ -36,6 +36,10 @@ export subGroup="vertebrate_other"
 # all starting at the same time.
 export sleepTime=$((RANDOM % 21 + 5))
 sleep "${sleepTime}"
+
+export fetchLog="/dev/shm/fetch.$$.log"
+# make sure the NCBI source is here:
+/hive/data/outside/ncbi/genomes/oneLftp.sh "${asmId}" > "${fetchLog}"
 
 if [ "${clade}" = "primates" ]; then
   subGroup="vertebrate_mammalian"
@@ -118,9 +122,9 @@ if [ "${rmskSpecies}" = "xy" ]; then
     noRmsk="-noRmsk"
 elif [ "x${rmskSpecies}y" = "xy" ]; then
   export RMSK="-runRepeatModeler"
-  printf "# rmskSpecies: $sciName NOT FOUND, running RepeatModeler\n" 1>&2
+  printf "# rmskSpecies: ${sciName} NOT FOUND, running RepeatModeler\n" 1>&2
 else
-  printf "# rmskSpecies: $sciName -> $rmskSpecies\n" 1>&2
+  printf "# rmskSpecies: ${sciName} -> $rmskSpecies\n" 1>&2
   RMSK='-rmskSpecies="'"${rmskSpecies}"'"'
 #  RMSK='-runRepeatModeler -rmskSpecies="'"${rmskSpecies}"'"'
 fi
@@ -212,7 +216,11 @@ fi
 ls -d "${buildDir}" "${linkDir}/${asmId}"
 
 echo "========================= "`date "+%F %T"` >> "${logFile}"
+echo "=== NCBI fetch: ====" >> "${logFile}"
+echo "/hive/data/outside/ncbi/genomes/oneLftp.sh \"${asmId}\"" >> "${logFile}"
+cat "${fetchLog}" >> "${logFile}"
 
+echo "=== doIdKeys: ==== "`date "+%F %T"` >> "${logFile}"
 echo "/hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys \"${asmId}\" &" >> "${logFile}"
 
 /hive/data/genomes/asmHubs/${genbankRefseq}Build/doIdKeys "${asmId}" >> "${logFile}" 2>&1 &

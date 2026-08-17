@@ -9,18 +9,28 @@ export type=$1
 
 cd /hive/data/outside/ncbi/genomes/reports
 
-case $type in
+case "${type}" in
   GCA)
     printf "# genbank\n" 1>&2
-    rsync -a --stats -L rsync://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_genbank* ./
+    for T in ".txt" "_historical.txt"
+    do
+       rm -f "assembly_summary_genbank${T}"
+       wget --timestamping "https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_genbank${T}"
+    done
     grep -v "^#" assembly_summary_genbank.txt \
       | awk -F$'\t' '{gsub(" ", "_",$16); printf "%s\t%s\t%s_%s\t%s\n", $6,$7,$1,$16,$8}' > genbank.taxIds.txt
+    /hive/data/outside/ncbi/genomes/reports/loadAssemblySummaries.sh "${type}"
     ;;
   GCF)
     printf "# refseq\n"
-    rsync -a --stats -L rsync://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_refseq* ./
+    for T in ".txt" "_historical.txt"
+    do
+       rm -f "assembly_summary_refseq${T}"
+       wget --timestamping "https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_refseq${T}"
+    done
     grep -v "^#" assembly_summary_refseq.txt \
       | awk -F$'\t' '{gsub(" ", "_",$16); printf "%s\t%s\t%s_%s\t%s\n", $6,$7,$1,$16,$8}' > refseq.taxIds.txt
+    /hive/data/outside/ncbi/genomes/reports/loadAssemblySummaries.sh "${type}"
     ;;
   *)
   printf "usage: fetch.sh [GCA|GCF]\n" 1>&2
@@ -28,10 +38,13 @@ case $type in
     ;;
 esac
 
-for F in species_genome_size.txt.gz README_change_notice.txt README_assembly_summary.txt prokaryote_type_strain_report.txt ANI_report_prokaryotes.txt README_ANI_report_prokaryotes.txt README_indistinguishable_groups_prokaryotes.txt indistinguishable_groups_prokaryotes.txt
+# for F in species_genome_size.txt.gz README_change_notice.txt README_assembly_summary.txt prokaryote_type_strain_report.txt ANI_report_prokaryotes.txt README_ANI_report_prokaryotes.txt README_indistinguishable_groups_prokaryotes.txt indistinguishable_groups_prokaryotes.txt
+
+for F in species_genome_size.txt.gz README_change_notice.txt README_assembly_summary.txt prokaryote_type_strain_report.txt ANI_report_prokaryotes.txt README_ANI_report_prokaryotes.txt
 do
-  rsync -a --stats -L \
-     rsync://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/${F} ./
+  wget --timestamping \
+     https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/${F}
+  rm -f wget-*
 done
 
 case $type in
@@ -57,32 +70,3 @@ case $type in
     /hive/data/outside/ncbi/genomes/reports/allCommonNames/cronUpdate.sh
     ;;
 esac
-
-exit 0
-
-rsync -a --stats -L rsync://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/ ./
-
-exit $?
-
-# already in the top level rsync
-rsync -a --stats -L rsync://ftp.ncbi.nlm.nih.gov/genomes/README_assembly_summary.txt ./
-
-exit $?
-
-wget --timestamping \
-ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_genbank.txt
-
-wget --timestamping \
-ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_refseq.txt
-
-
-# -r--r--r-- 1      6800 Sep 22  2016 README_change_notice.txt
-# -r--r--r-- 1     14648 Mar 15  2018 README_assembly_summary.txt
-# -rw-r--r-- 1   2839114 Feb  4 03:00 prokaryote_type_strain_report.txt
-# -r--r--r-- 1  54322248 Feb  4 04:36 ANI_report_bacteria.txt
-# -r--r--r-- 1 174049665 Feb  4 04:36 assembly_summary_genbank.txt
-# -r--r--r-- 1   4347396 Feb  4 04:36 assembly_summary_genbank_historical.txt
-# -r--r--r-- 1  57602222 Feb  4 04:36 assembly_summary_refseq.txt
-# -r--r--r-- 1   4191655 Feb  4 04:36 assembly_summary_refseq_historical.txt
-# -rw-r--r-- 1     33218 Feb  4 05:30 species_genome_size.txt.gz
-
