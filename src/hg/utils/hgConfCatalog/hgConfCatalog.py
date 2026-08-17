@@ -221,7 +221,7 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
-        h("showMouseovers", "flag", "hg/hgTracks/config.c:694", default="FALSE",
+        h("showMouseovers", "flag", "hg/hgTracks/config.c:703", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
                "title tooltips.  Added v446 and still defaulting FALSE, which "
@@ -243,7 +243,7 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3278",
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3375",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
                "page can be reopened and shared.  The read at hgBlat.c:2972 "
@@ -256,7 +256,7 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1164", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9324", default="FALSE",
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9348", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Use the modern single-page base-by-base alignment view (the one "
                "hgBlat's new results page uses) for ordinary alignment clicks too "
@@ -292,7 +292,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
                "genark.c and hdb.c."),
-        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12142", default="FALSE",
+        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12171", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
         h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:183",
@@ -304,22 +304,22 @@ RELEASE_GATES = {
                "is missing, but nothing in the tree linked to the request "
                "page.  Off until the request pipeline is confirmed ready to "
                "take traffic from the browser UI."),
-        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10185",
+        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10202",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
                "layout."),
-        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7549",
+        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7566",
           default="FALSE", role="gate", verified=True,
           note="Let the calculated GC track coexist with the stored one.  A "
                "sub-flag of gcOnTheFly, so it should be deleted with it "
                "rather than outliving it."),
-        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9858", default="FALSE",
+        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9875", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
         h("showColorPicker", "flag", "hg/lib/hui.c:6066", default="FALSE",
           role="gate", verified=True,
           note="The track colour picker in track UI."),
-        h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c:1226",
+        h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c:1246",
           default="FALSE", role="gate", verified=True,
           note="The My Variants track and its upload path.  Thirteen call "
                "sites across seven files, the widest gate in the tree, which "
@@ -329,13 +329,13 @@ RELEASE_GATES = {
           note="Per-hguid IP tracking for abuse detection.  Its three "
                "companion settings (maxIps, table, windowSeconds) are plain "
                "values and are listed under abuse control."),
-        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9158",
+        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9175",
           default="FALSE", role="gate", verified=True,
           note="Added in the current release, so it is doing exactly what a "
                "gate is supposed to do and has not earned a deadline yet."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
-        h("showTutorial", "flag", "hg/hgCustom/hgCustom.c:180", default="TRUE",
+        h("showTutorial", "flag", "hg/hgCustom/hgCustom.c:181", default="TRUE",
           role="gate", verified=True,
           note="The interactive tutorials.  Public since v466, five call "
                "sites across four CGIs.  Nothing is gating any more."),
@@ -346,7 +346,7 @@ RELEASE_GATES = {
           verified=True,
           note="Snake display for chain and alignment tracks.  Public since "
                "v467."),
-        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:9033",
+        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:9050",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
         h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c:194",
@@ -357,11 +357,11 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="SVG rather than raster bar charts on the details page.  "
                "Public since v428, the longest-shipped gate still in place."),
-        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:815", default="TRUE",
+        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:824", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
                "since v492.  Three call sites."),
-        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10424",
+        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10453",
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
@@ -376,7 +376,7 @@ RELEASE_GATES = {
         h("newBotDelay", "flag", "hg/lib/botDelay.c:215", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
-        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7548", default="TRUE",
+        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7565", default="TRUE",
           role="gate", verified=True,
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
@@ -403,7 +403,7 @@ RELEASE_GATES = {
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
                "not attachment, so a hub is validated on attach either way."),
-        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3022", default="FALSE",
+        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3119", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Replaces hgBlat's classic C-generated search form with the "
                "JavaScript-built one in hg/js/hgBlat.js, which shares its "
@@ -592,7 +592,7 @@ MIRROR_KNOBS = {
           role="knob", verified=True, deprecated=True,
           note="CIRM data warehouse is public.  Belongs to the cirm CGIs, "
                "which are not part of the browser release."),
-        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1015",
+        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1024",
           default="FALSE", role="knob", public=True, verified=True,
           note="Where the multi-region button lives, which is a layout "
                "preference a mirror is entitled to keep, so a knob.  But the "
@@ -611,7 +611,7 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
-        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27528", default="keep",
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27564", default="keep",
           verified=True,
           note="What happens to the custom tracks left behind by a user's "
                "earlier BLAT searches when a new search makes another one.  "
@@ -806,7 +806,7 @@ PATHS = {
                "where every hub file lands."),
         h("udc.localDir", "path", "hg/lib/customFactory.c:200", public=True,
           verified=True),
-        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12087", verified=True,
+        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12116", verified=True,
           note="Log UDC fetches, which is the first thing to turn on when a "
                "hub is slow."),
         h("cacheTrackDbDir", "path", "hg/lib/trackDbCache.c:483",
@@ -894,7 +894,7 @@ LIMITS = {
           note="Address-space cap applied by cfgSetMaxMem() at CGI startup.  "
                "Exceeding it is what produces the hogExit entries in the "
                "error log."),
-        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10812",
+        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10841",
           verified=True, note="Log a warning for any hgTracks render slower "
                               "than this."),
         h("hubSpaceLockTimeout", "limit", "hg/lib/userdata.c:608",
@@ -925,17 +925,17 @@ LIMITS = {
                "track from producing a PNG no browser will render."),
         h("maxDisplayPixelWidth", "limit", "hg/cgilib/trackLayout.c:20",
           default="NULL", public=True, verified=True),
-        h("barbMergePixels", "limit", "hg/hgTracks/simpleTracks.c:4551",
+        h("barbMergePixels", "limit", "hg/hgTracks/simpleTracks.c:4547",
           default='"3"', public=True, verified=True),
         h("quickLift.lengthLimit", "limit", "hg/lib/quickLift.c:575",
           default='"10000"', verified=True, ticket="37788"),
         h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:932", verified=True,
           note="Per-day liftOver cap for the hub API."),
-        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2112",
+        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2208",
           default="NULL", public=True, verified=True),
-        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3091",
+        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3188",
           default='"20"', public=True, verified=True),
-        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3122",
+        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3219",
           default='"90"', public=True, verified=True),
         h("logCgiVarMaxLen", "limit", "hg/lib/hgConfig.c:386", default='"0"',
           public=True, verified=True,
@@ -994,7 +994,7 @@ LOGGING = {
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
-        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9262", default='"off"',
+        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9279", default='"off"',
           verified=True, note="Log which tracks were drawn per request."),
         h("noSqlInj.level", "internal", "hg/lib/cart.c:2854",
           default='"abort"', verified=True, family="noSqlInj",
@@ -1046,7 +1046,7 @@ BRANDING = {
         h("addJs", "internal", "hg/lib/web.c:1587", verified=True,
           note="Extra JavaScript file to include on every page."),
         h("help.html", "path", "hg/lib/hui.c:702", verified=True),
-        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9929",
+        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9946",
           public=True, verified=True,
           note="A banner on the browser page.  This is where a mirror puts "
                "its own notice."),
@@ -1063,13 +1063,13 @@ BRANDING = {
         h("hubSurveyLabel", "internal",
           "hg/hgHubConnect/hgHubConnect.c:1676", verified=True,
           env="HGDB_HUB_SURVEY_LABEL"),
-        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8901",
+        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8918",
           default='"../goldenPath/help/query.html"', verified=True),
-        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8902",
+        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8919",
           default='"Examples"', verified=True),
         h("analyticsKey", "credential", "hg/lib/googleAnalytics.c:13",
           public=True, verified=True),
-        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:12022",
+        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:12051",
           default='"on"', verified=True,
           note="Not the same thing as the showMouseovers gate: this one is on "
                "by default and controls the existing tooltip behaviour.  The "
@@ -1254,10 +1254,10 @@ EXTERNAL = {
           "hg/hgUserSuggestion/hgUserSuggestion.c:191", verified=True,
           family="suggest"),
         h("suggest.secretKey", "credential",
-          "hg/hgUserSuggestion/hgUserSuggestion.c:539", verified=True,
+          "hg/hgUserSuggestion/hgUserSuggestion.c:543", verified=True,
           family="suggest"),
         h("suggest.humanThreshold", "limit",
-          "hg/hgUserSuggestion/hgUserSuggestion.c:543", default='"-0.1"',
+          "hg/hgUserSuggestion/hgUserSuggestion.c:547", default='"-0.1"',
           verified=True, family="suggest"),
         h("hgGateway.dbDbTaxonomy", "internal", "hg/hgGateway/hgGateway.c:407",
           default="defaultDbDbTree", verified=True),
