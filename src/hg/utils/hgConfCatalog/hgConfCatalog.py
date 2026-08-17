@@ -593,17 +593,17 @@ MIRROR_KNOBS = {
           note="CIRM data warehouse is public.  Belongs to the cirm CGIs, "
                "which are not part of the browser release."),
         h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1024",
-          default="FALSE", role="knob", public=True, verified=True,
+          default="TRUE", role="knob", public=True, verified=True,
           note="Where the multi-region button lives, which is a layout "
-               "preference a mirror is entitled to keep, so a knob.  But the "
-               "two reads disagree about the compiled-in default: "
-               "hgTracks.c:9126 uses TRUE and config.c:990 uses FALSE, both "
-               "through MULTI_REGION_CFG_BUTTON_TOP.  So on a machine that "
-               "does not set it the button is in the top bar while the \"Show "
-               "all\" checkbox the same flag guards in the multi-region "
-               "dialog is hidden, which cannot be what either read intended.  "
-               "Needs whoever owns that dialog to say which default is right; "
-               "the classification does not depend on the answer."),
+               "preference a mirror is entitled to keep, so a knob.  Two "
+               "reads use it through MULTI_REGION_CFG_BUTTON_TOP: the top-bar "
+               "button at hgTracks.c:9166 and the \"Show all\" checkbox in the "
+               "multi-region dialog at config.c:1024.  They disagreed about "
+               "the compiled-in default for four years, because e1f7896a08f "
+               "turned the flag on by default in 2022 and changed only the "
+               "hgTracks.c read, so on a machine that did not set the flag the "
+               "button was in the top bar while the checkbox was hidden.  "
+               "config.c now defaults TRUE as well."),
         h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6146", default="FALSE",
           role="knob", verified=True,
           note="In hdbDefaultKnownDb, ignore the defaultKnown table and treat "

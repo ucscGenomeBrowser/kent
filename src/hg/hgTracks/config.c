@@ -1021,7 +1021,7 @@ hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4
     dyMultiRegionsBedInput->string);
 
 // option to set viewing window to show all regions.  This id also known to JS.
-if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, TRUE))
     {
     boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
     hPrintf("&nbsp;&nbsp");
