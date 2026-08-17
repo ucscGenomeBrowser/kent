@@ -101,6 +101,12 @@ def main():
             # BED coordinates: 0-based half-open
             chromStart = pos - 1
             chromEnd = chromStart + len(ref)
+            # VCF POS is the anchor base (in REF and ALT); it is not part of a
+            # deletion, so drop it from the left of DEL intervals. chromEnd
+            # already points one past the last deleted base, so only chromStart
+            # moves. INS keeps the anchor-based position.
+            if svType == "DEL":
+                chromStart += 1
 
             # Source lengths: INS_LEN for insertion size, DEL_LEN for deletion size
             insLenSrc = int(info.get("INS_LEN", "0"))

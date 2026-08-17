@@ -76,6 +76,13 @@ def main():
 
             chromStart = pos - 1
             chromEnd = end
+            # VCF POS is the anchor base (present in both REF and ALT); it is not
+            # part of a deletion, so the deleted region starts one base to the
+            # right. Drop the anchor from the left of DEL intervals so svLen ==
+            # |SVLEN| and coordinates match anchor-excluded callsets (e.g.
+            # HGSVC3). INS keeps the anchor-based position.
+            if svType == "DEL":
+                chromStart += 1
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 

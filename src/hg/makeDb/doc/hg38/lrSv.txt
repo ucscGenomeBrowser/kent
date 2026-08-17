@@ -1,6 +1,30 @@
 # 2026-03-25 Claude max
 
 # Long-read structural variants supertrack
+
+# -------------------------------------------------------------------------
+# COORDINATE CONVENTION (deletions): a deletion's BED interval must cover
+# exactly the deleted reference bases, so chromEnd - chromStart == |SVLEN|.
+# A VCF/pangenome deletion is written REF="<anchor><deleted...>", ALT="<anchor>",
+# with POS = the 1-based anchor base. That anchor is present in BOTH REF and ALT
+# (the sample keeps it), so it is NOT deleted. The deleted region starts at the
+# base after the anchor, so chromStart = pos (0-based of pos+1), NOT pos-1.
+# Using pos-1 draws the deletion 1 bp too wide on the left and inflates svLen by
+# one. Insertions/inversions/complex keep the anchor position (pos-1): an
+# insertion has no deleted span and its anchor is the attach point.
+#
+# 2026-08 Claude max: fixed a pos-1 off-by-one in the DEL branch of 11
+# converters (lrSv1kLin1218, lrSv1kgOnt, lrSvGustafson, lrSvGa4kSv, lrSvDecode,
+# lrSvAou1kCsv, lrSvColorsDbSv, lrSvCard, lrSvApr, lrSvCpc1, and the generic
+# lrSvVcfToBed used by han945), refs #38099. Already anchor-correct and left
+# alone: hgsvc3/hgsvc2 (0-based source), hprc2v21 (Ro converter prefix-trims),
+# noyvert/tommoJp (POS is the first deleted base), chirmade101 (1-based-closed
+# source). Verified per record (span == |SVLEN|) and against the hg38 reference
+# (the old left base equals the anchor present in REF and ALT). Rebuilt all
+# affected bigBeds (hg38 + hs1 where present); the lrSvAll merge dropped from
+# 3,111,026 to 2,963,093 rows as duplicate deletions merged.
+# -------------------------------------------------------------------------
+
 # First subtrack: Han 945 - SVs from 945 Han Chinese individuals
 # Paper: Gong et al. 2025, Nat Commun, PMID 39929826
 # Data: OMIX repository, NGDC
