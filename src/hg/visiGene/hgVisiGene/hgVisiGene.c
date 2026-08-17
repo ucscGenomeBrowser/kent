@@ -216,6 +216,8 @@ static void doThumbnails(struct sqlConnection *conn)
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *matchFile = cartString(cart, hgpMatchFile);
+if (!isServerUserFilePath(matchFile))
+    errAbort("Invalid match file");
 struct visiMatch *matchList = NULL, *match;
 int maxCount = 25, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
@@ -279,7 +281,7 @@ if (count != imageCount)
     int page = 0;
     printf("%d-%d of %d for:<BR>", startAt+1,
 	startAt+count, imageCount);
-    printf("&nbsp;%s<BR>\n", listSpec);
+    printf("&nbsp;%s<BR>\n", htmlEncode(listSpec)); // search term, escape before echoing (XSS)
     printf("Page:\n");
     for (start=0; start<imageCount; start += maxCount)
 	{
@@ -289,7 +291,7 @@ if (count != imageCount)
 	    printf("<A HREF=\"%s?", hgVisiGeneCgiName());
 	    printf("%s&", sidUrl);
 	    printf("%s=on&", hgpDoThumbnails);
-	    printf("%s=%s&", hgpListSpec, listSpec);
+	    printf("%s=%s&", hgpListSpec, cgiEncode(listSpec)); // into a URL, cgiEncode (XSS)
 	    if (start != 0)
 	       printf("%s=%d", hgpStartAt, start);
 	    printf("\">");

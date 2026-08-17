@@ -544,6 +544,10 @@ if (fileName == NULL)
     return NULL;
 if (! forCurTable())
     return NULL;
+if (!isServerUserFilePath(fileName))
+    // Not a file we made, so don't read it.  Leave the cart alone: a cartRemove() here would
+    // throw away a list the user can still fix by pasting it again.
+    return NULL;
 if (fileExists(fileName))
     return fileName;
 else

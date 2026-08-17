@@ -1262,26 +1262,90 @@ addElementToDy(dy, maxLen, name);
 return dyStringCannibalize(&dy);
 }
 
+static struct slName *pathComponents(char *path)
+/* Split path on '/', keeping empty components so the path can be rebuilt exactly. */
+{
+struct slName *list = NULL;
+char *start = path, *slash;
+while ((slash = strchr(start, '/')) != NULL)
+    {
+    slAddHead(&list, slNameNewN(start, slash - start));
+    start = slash + 1;
+    }
+slAddHead(&list, slNameNew(start));
+slReverse(&list);
+return list;
+}
+
+static struct slName *popPathComponent(struct slName *stack, char *protocol, char *afterProtocol)
+/* Remove the component that a ".." applies to.  The host is the one component that can not be
+ * removed; climbing past it is both an illegal remote path and the cache escape of #38056. */
+{
+if (stack == NULL || stack->next == NULL)
+    errAbort("Illegal '..' in the path of a remote URL: %s://%s", protocol, afterProtocol);
+struct slName *popped = stack;
+stack = stack->next;
+freeMem(popped);
+return stack;
+}
+
+static char *joinPathComponents(struct slName *components)
+/* Glue components back together with '/' between them. */
+{
+struct dyString *dy = dyStringNew(128);
+struct slName *comp;
+for (comp = components; comp != NULL; comp = comp->next)
+    {
+    if (comp != components)
+        dyStringAppendC(dy, '/');
+    dyStringAppend(dy, comp->name);
+    }
+return dyStringCannibalize(&dy);
+}
+
+static char *resolveDotsInPath(char *protocol, char *afterProtocol)
+/* Return afterProtocol with "." and ".." components resolved the way the remote server resolves
+ * them, so the cache path names the resource that is actually fetched.  A path with no "." or
+ * ".." component comes back byte for byte the same, which matters because a change there would
+ * invalidate every cached file on every node. */
+{
+struct slName *components = pathComponents(afterProtocol);
+struct slName *resolved = NULL;    /* built in reverse, so its head is the last component */
+struct slName *comp;
+for (comp = components; comp != NULL; comp = comp->next)
+    {
+    if (sameString(comp->name, ".."))
+        resolved = popPathComponent(resolved, protocol, afterProtocol);
+    else if (!sameString(comp->name, "."))
+        slAddHead(&resolved, slNameNew(comp->name));
+    }
+slReverse(&resolved);
+char *path = joinPathComponents(resolved);
+slFreeList(&components);
+slFreeList(&resolved);
+return path;
+}
+
 void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, char *afterProtocol)
 /* Initialize udcFile path and names */
 {
 if (cacheDir==NULL)
     return;
-/* SECURITY (refs #38056): this is where a remote URL becomes a local path, so it is the
- * place to make sure the URL cannot climb out of the cache.  qEscaped deliberately leaves
- * '.' and '/' alone so cached names stay readable, and longDirHash only rewrites
- * over-long components, so a ".." in the URL survives all the way into cacheDir.  From
- * there makeDirsOnPath would create directories outside the cache root and we would write
- * bitmap and sparseData files into them.  A custom track or hub bigDataUrl reaches here,
- * so this is anonymous.  Reject the ".." path component; note that names merely starting
- * with dots, like "..foo", are fine and must keep working. */
-if (startsWith("../", afterProtocol) || stringIn("/../", afterProtocol) != NULL ||
-    endsWith(afterProtocol, "/..") || sameString(afterProtocol, ".."))
-    errAbort("Illegal '..' in the path of a remote URL: %s://%s", protocol, afterProtocol);
-char *hashedAfterProtocol = longDirHash(cacheDir, afterProtocol);
+/* SECURITY (refs #38056, #38120): this is where a remote URL becomes a local path, so it is
+ * the place to make sure the URL cannot climb out of the cache.  qEscaped deliberately leaves
+ * '.' and '/' alone so cached names stay readable, and longDirHash only rewrites over-long
+ * components, so a ".." in the URL survives all the way into cacheDir.  From there
+ * makeDirsOnPath would create directories outside the cache root and we would write bitmap
+ * and sparseData files into them.  A custom track or hub bigDataUrl reaches here, so this is
+ * anonymous.  Resolve the dot components the way the remote server does and abort only on the
+ * ones that climb above the host; a hub reaching up a level to share a file between assemblies
+ * is legal and has to keep working, as do names merely starting with dots like "..foo". */
+char *resolvedPath = resolveDotsInPath(protocol, afterProtocol);
+char *hashedAfterProtocol = longDirHash(cacheDir, resolvedPath);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
 safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
+freeMem(resolvedPath);
 verbose(4, "UDC dir: %s\n", file->cacheDir);
 
 /* Create file names for bitmap and data portions. */

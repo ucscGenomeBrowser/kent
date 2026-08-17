@@ -208,6 +208,8 @@ struct tempName hubTn;
 char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, db);
 char *hubName = cartOptionalString(cart, buffer);
+if ((hubName != NULL) && !isServerUserFilePath(hubName))
+    hubName = NULL;     // not a file we made;  make a fresh one below rather than open this
 int fd = -1;
 
 if (!doCreate && (hubName == NULL))

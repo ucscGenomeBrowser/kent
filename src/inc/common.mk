@@ -68,12 +68,16 @@ else
   endif
 endif
 
+# zlib comes from the zlib-ng submodule in submodules/zlib-ng, built in
+# zlib-compat mode so the header and the symbols are the ordinary zlib ones, and
+# linked statically the way htslib is.  zlib-ng writes a PNG about three times
+# faster and reads a bigBed block about twice as fast, and its output is ordinary
+# deflate that any zlib can read.  Building it here also makes the platforms
+# agree: before this, x86_64 happened to find a static /lib64/libz.a while the
+# arm64 build fell through to a shared -lz.  Override on the make command line
+# with ZLIB=... to link some other zlib.  refs #38125
 ifeq (${ZLIB},)
-  ifneq ($(wildcard /lib64/libz.a),)
-    ZLIB=/lib64/libz.a
-  else
-    ZLIB=-lz
-  endif
+  ZLIB=$(kentSrc)/submodules/zlib-ng/libz.a
 endif
 
 # for Darwin (Mac OSX), use static libs when they can be found
@@ -86,9 +90,8 @@ ifeq ($(UNAME_S),Darwin)
     HG_INC += -I/opt/homebrew/include
     L += -L/opt/homebrew/lib/
   endif
-  ifneq ($(wildcard /opt/local/lib/libz.a),)
-    ZLIB = /opt/local/lib/libz.a
-  endif
+  # no ZLIB line here: Darwin uses the zlib-ng submodule like every other
+  # platform.  refs #38125
   ifneq ($(wildcard /opt/local/lib/libpng.a),)
     PNGLIB = /opt/local/lib/libpng.a
   endif

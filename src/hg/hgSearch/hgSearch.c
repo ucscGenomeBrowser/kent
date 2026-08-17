@@ -610,11 +610,15 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     printf("<script>\n");
     // we are about to redirect back to hgTracks, save the search term onto the
     // history stack so it will appear in the dropdown of auto-suggestions before
-    // redirecting
+    // redirecting.  db and userSearch are user-supplied and go into a JS string literal
+    // inside this inline <script>; jsonStringEscape escapes quotes and '/' so neither the
+    // string literal nor a literal </script> can break out (XSS).
+    char *jsDb = jsonStringEscape(db);
+    char *jsSearch = jsonStringEscape(userSearch);
     printf("addRecentSearch(\"%s\", \"%s\", {\"label\": \"%s\", \"value\": \"%s\", \"id\": \"%s\"});\n",
-            db, userSearch, userSearch, userSearch, newPosBuf);
+            jsDb, jsSearch, jsSearch, jsSearch, newPosBuf);
     printf("window.location.href=\"../cgi-bin/hgTracks?");
-    printf("db=%s", db);
+    printf("db=%s", jsDb);
     printf("&position=%s", newPosBuf);
     if (!sameString(trackName, "chromInfo"))
         printf("&%s=pack", trackName);

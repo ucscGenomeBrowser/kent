@@ -371,7 +371,7 @@ for (ref = ggList; ref != NULL; ref = ref->next)
     if (gg->isComposite == FALSE)
 	{
 	++i;
-	menu[i] = gg->shortLabel;
+	menu[i] = htmlEncode(gg->shortLabel); // user graph label in dropdown text, escape (XSS)
 	values[i] = gg->name;
 	}
     }

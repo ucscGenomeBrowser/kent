@@ -13,6 +13,7 @@
 #include "web.h"
 #include "customTrack.h"
 #include "hgTracks.h"
+#include "trashDir.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
@@ -174,6 +175,15 @@ char *fontDir = cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts");
 safef(buffer, sizeof buffer, "%s/%s", fontDir, freeTypeFonts[ii].file);
 *retFontName = freeTypeFonts[ii].name;
 return buffer;
+}
+
+boolean freeTypeFontActive()
+/* TRUE when the FreeType font engine is the one maybeNewFonts() will actually switch to.  Callers
+ * that pick a font to match the live engine (e.g. squishCodonFont) must use this rather than a
+ * looser test, or they can hand the bitmap engine a cell height it cannot render. */
+{
+char *fontName = NULL;
+return chosenFreeTypeFont(&fontName) != NULL;
 }
 
 void initFontEngine()
@@ -993,7 +1003,9 @@ if (strstr(multiRegionsBedUrl,"://"))
     }
 else
     {
-    if (fileExists(multiRegionsBedUrl))
+    /* Not a URL, so this is the trash file we wrote the pasted BED to.  Check it before
+     * reading, since the contents go straight back to the user in the text area below. */
+    if (isServerUserFilePath(multiRegionsBedUrl) && fileExists(multiRegionsBedUrl))
 	{
 	struct lineFile *lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
 	char *line;
@@ -1009,7 +1021,7 @@ hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4
     dyMultiRegionsBedInput->string);
 
 // option to set viewing window to show all regions.  This id also known to JS.
-if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, TRUE))
     {
     boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
     hPrintf("&nbsp;&nbsp");

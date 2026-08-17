@@ -484,7 +484,7 @@ puts("<div id=\"hubDeveloper\" class=\"hubList\">");
 
 char *hubUrlVal = "";
 if (hubUrl != NULL)
-    hubUrlVal = catThreeStrings(" value='", hubUrl, "'");
+    hubUrlVal = catThreeStrings(" value='", htmlEncode(hubUrl), "'");
 
 puts("<div class='tabSection'>");
 puts("<h4>Create your own hub</h4>");
@@ -589,7 +589,7 @@ if (searchEnabled)
             "Search terms: "
             "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
             "placeholder='e.g. methylation' type=\"text\" size=\"50\" value=\"%s\"> \n",
-            hubSearchTerms!=NULL?hubSearchTerms:"");
+            hubSearchTerms!=NULL?htmlEncode(hubSearchTerms):"");
     printf("\n");
     }
 
@@ -598,7 +598,7 @@ printf("Assembly: "
         "type=\"text\" size=\"15\" value=\"%s\" placeholder='e.g. hg38'> \n"
         "<input name=\"hubSearchButton\" id='hubSearchButton' "
         "class=\"hubField\" type=\"submit\" value=\"Search Public Hubs\">\n",
-        hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
+        hgHubDbFilter, dbFilter!=NULL?htmlEncode(dbFilter):"");
 puts("</FORM>");
 }
 
@@ -1639,7 +1639,7 @@ if (cartVarExists(cart, hgHubDoHubCheck))
 
         int retVal = doValidateNewHub(hubUrl);
         if (retVal == 0)
-            printf("<div>Finished checking %s</div>", hubUrl);
+            printf("<div>Finished checking %s</div>", htmlEncode(hubUrl));
         puts("<hr>");
         puts("<p>More information about <b>hub settings</b> can be found on the "
                "<a target=_blank href='https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html'>Hub Track Database Definition</a> page.");

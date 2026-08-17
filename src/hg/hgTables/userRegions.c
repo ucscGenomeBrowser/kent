@@ -172,6 +172,11 @@ if (db && !sameString(database, db))
     return NULL;
 if (fileName == NULL)
     return NULL;
+if (!isServerUserFilePath(fileName))
+    // Not a file we made, so don't read it and don't let the caller delete it.  Leave the
+    // cart alone as well -- cartRemoveUserRegions() here would throw away a region list
+    // that the user can still fix by re-entering it.
+    return NULL;
 if (fileExists(fileName))
     return fileName;
 else

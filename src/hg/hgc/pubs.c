@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "jksql.h"
+#include "htmshell.h"
 #include "hdb.h"
 #include "hgc.h"
 #include "hgColors.h"
@@ -352,8 +353,10 @@ int labelCount = sizeof(secLabels)/sizeof(char *);
 int i;
 printf("<P>\n");
 printf("<B>Sections of article searched:</B><BR>\n");
+// o/t/g/i are user-supplied and composed into a URL in an attribute; cgiEncode them (XSS)
 printf("<FORM ACTION=\"hgc?%s&o=%s&t=%s&g=%s&i=%s\" METHOD=\"get\">\n",
-    cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"));
+    cartSidUrlString(cart), cgiEncode(cgiString("o")), cgiEncode(cgiString("t")),
+    cgiEncode(cgiString("g")), cgiEncode(cgiString("i")));
 
 for (i=0; i<labelCount; i++) 
 {
@@ -370,10 +373,10 @@ for (i=0; i<labelCount; i++)
         printf("value=\"1\">%s</INPUT>\n", secLabels[i]);
 }
 
-printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%s\" />\n", cgiString("o"));
-printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n", cgiString("g"));
-printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%s\" />\n", cgiString("t"));
-printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s\" />\n", cgiString("i"));
+printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%s\" />\n", htmlEncode(cgiString("o")));
+printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n", htmlEncode(cgiString("g")));
+printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%s\" />\n", htmlEncode(cgiString("t")));
+printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s\" />\n", htmlEncode(cgiString("i")));
 printf("<INPUT TYPE=\"hidden\" name=\"hgsid\" value=\"%s\" />\n", cart->sessionId);
 printf("<BR>");
 printf("<INPUT TYPE=\"submit\" VALUE=\"Submit\" />\n");

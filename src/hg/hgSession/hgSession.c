@@ -1540,8 +1540,8 @@ char *encSessionName = cgiEncodeFull(sessionName);
 
 dyStringPrintf(dyMessage,
        "Loaded settings from user <B>%s</B>'s session <B>%s</B>. %s %s",
-	       otherUser, htmlEncode(sessionName),
-	       getSessionLink(otherUser, encSessionName),
+	       htmlEncode(otherUser), htmlEncode(sessionName),
+	       getSessionLink(encOtherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 cartCopyLocalHubs(cart);
@@ -1592,7 +1592,7 @@ if (fromUrl)
         errAbort("Unsupported protocol for loading a file via URL.  Please use http, https, or ftp");
     lf = netLineFileOpen(url);
     dyStringPrintf(dyMessage, "Loaded settings from URL %s .  %s %s",
-		   url, getUrlLink(url), getUrlEmailLink(url));
+		   htmlEncode(url), getUrlLink(url), getUrlEmailLink(url));
     }
 else
     {

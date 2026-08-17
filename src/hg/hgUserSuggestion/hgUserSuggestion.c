@@ -365,6 +365,10 @@ jsInline(
 void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details, double captchaScore)
 /* display suggestion confirm page */
 {
+// these come from the cart (user input), escape before echoing into HTML (XSS)
+userAddr = htmlEncode(userAddr);
+summary = htmlEncode(summary);
+details = htmlEncode(details);
 hPrintf(
     "<h2>Thank you for your suggestion!</h2>");
 hPrintf(

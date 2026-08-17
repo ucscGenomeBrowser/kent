@@ -6,8 +6,88 @@
 
 #include "common.h"
 #include "hash.h"
+#include "hgConfig.h"
 #include "portable.h"
 #include "trashDir.h"
+
+static boolean hasDotDotComponent(char *path)
+/* Return TRUE if any '/'-separated component of path is exactly "..", which is the only
+ * way a path can climb back above a directory it appears to be inside of. */
+{
+char *s = path;
+while (s != NULL && s[0] != '\0')
+    {
+    if (s[0] == '.' && s[1] == '.' && (s[2] == '/' || s[2] == '\0'))
+        return TRUE;
+    s = strchr(s, '/');
+    if (s != NULL)
+        s += 1;
+    }
+return FALSE;
+}
+
+static boolean pathIsUnderDir(char *dir, char *path)
+/* Return TRUE if path names something underneath dir.  A '/' is required at the directory
+ * boundary, so a sibling directory whose name merely starts the same way (trashBackup next
+ * to trash) does not match.  ".." below the boundary is refused. */
+{
+if (isEmpty(dir) || isEmpty(path))
+    return FALSE;
+int dirLen = strlen(dir);
+while (dirLen > 0 && dir[dirLen-1] == '/')
+    dirLen -= 1;
+if (dirLen == 0)
+    return FALSE;
+if (strncmp(path, dir, dirLen) != 0 || path[dirLen] != '/' || path[dirLen+1] == '\0')
+    return FALSE;
+return !hasDotDotComponent(path + dirLen + 1);
+}
+
+boolean isTrashPath(char *path)
+/* Return TRUE if path names a file inside the trash directory. */
+{
+return pathIsUnderDir(trashDir(), path);
+}
+
+boolean isTrashOrSessionDataPath(char *path)
+/* Return TRUE if path is under the trash directory, or under one of the durable session-data
+ * directories that trash files are moved to when a session is saved. */
+{
+return isTrashPath(path) ||
+       pathIsUnderDir(cfgOption("sessionDataDir"), path) ||
+       pathIsUnderDir(cfgOption("sessionDataDirOld"), path);
+}
+
+boolean isServerUserFilePath(char *path)
+/* Return TRUE if path is under one of the directories where the server keeps files it made
+ * for a user: the trash directory, the session-data directories, or a per-feature data
+ * directory such as myVariantsDataDir. */
+{
+return isTrashOrSessionDataPath(path) ||
+       pathIsUnderDir(cfgOption("myVariantsDataDir"), path);
+}
+
+boolean isRemoteUrl(char *path)
+/* Return TRUE if path is a URL fetched over the network rather than a file name.  Only the
+ * three protocols the tree actually fetches count; hasProtocol() in net.c is a test for
+ * "://" anywhere in the string, which is too loose to decide anything on. */
+{
+return startsWith("http://", path) ||
+       startsWith("https://", path) ||
+       startsWith("ftp://", path);
+}
+
+boolean isServerUserFileOrUrl(char *path)
+/* Return TRUE if path is either a remote URL or a file the server made for a user.
+ *
+ * A few cart variables legitimately hold either one: the user gives hgTracks a URL for the
+ * multi-region BED or pastes the BED itself, and hgSession loads settings from a URL.  The
+ * code then decides which it has by looking for a protocol, and treats anything else as a
+ * local file name, so "no protocol" has to mean "one of ours" or the local-file branch reads
+ * whatever the cart says. */
+{
+return isRemoteUrl(path) || isServerUserFilePath(path);
+}
 
 static void trashDirFileExt(struct tempName *tn, char *dirName, char *base, char *suffix, boolean addDate)
 /*	obtain a trash file name trash/dirName/base*.suffix */

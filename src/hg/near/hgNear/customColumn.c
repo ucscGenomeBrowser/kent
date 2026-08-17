@@ -13,6 +13,7 @@
 #include "net.h"
 #include "cart.h"
 #include "hgNear.h"
+#include "trashDir.h"
 
 static char *customFileName()
 /* Return file name associated with custom column if any.
@@ -22,7 +23,7 @@ char *fileName = NULL;
 if (cartVarExists(cart, customFileVarName))
     {
     fileName = cartString(cart, customFileVarName);
-    if (!fileExists(fileName))
+    if (!isServerUserFilePath(fileName) || !fileExists(fileName))
 	{
         cartRemove(cart, customFileVarName);
 	fileName = NULL;

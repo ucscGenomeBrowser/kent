@@ -45,6 +45,8 @@ DS=`date "+%F"`
 T=`date "+%T"`
 LC_NUMERIC=en_US printf "### %s %s %s assemblies before rsync: %'d\n" "${epoch}" "${DS}" "${T}" "${countBefore}" >> "${logFile}"
 
+# rsync is obsolete at NCBI in 2025 - turned off due to robot abuse
+if [ 1 -eq 0 ]; then
 time ( rsync -avPL --stats --prune-empty-dirs --exclude "suppressed/" \
      --timeout=1200 \
      --include "*/" --include "chr2acc" --include "*_rm.run" \
@@ -65,6 +67,7 @@ time ( rsync -avPL --stats --prune-empty-dirs --exclude "suppressed/" \
      --exclude "*_rna_from_genomic_fna.gz" \
      --exclude "*" rsync://ftp.ncbi.nlm.nih.gov/genomes/all/$type/ ./$type/ ) \
            >> ${logFile} 2>&1
+fi
 
 epoch=`date "+%s"`
 DS=`date "+%F"`

@@ -20,7 +20,8 @@ copySingleCellSignalsPeaksFiles.py) and served via the
 trackDb .ra.
 
 Usage:
-  makeSingleCellSignalsPeaksRa.py [--assembly hg38|mm10] [--stanzas STANZAS] [--out OUT]
+  makeSingleCellSignalsPeaksRa.py [--assembly hg38|mm10] [--stanzas STANZAS]
+                                  [--meta META] [--no-meta-check] [--out OUT]
 """
 import re, os, sys, argparse
 from urllib.parse import urlparse
@@ -31,7 +32,7 @@ from urllib.parse import urlparse
 #   https://github.com/ucscGenomeBrowser/cellBrowser/tree/develop/ucsc/allTracksHub
 # Its output dir is set there by CBHUB_OUT; keep this default in step with it.
 HUB_BUILD = os.environ.get(
-    "HUB_BUILD", "/hive/users/mspeir/claude/cell-browser/all-tracks-hub-build")
+    "HUB_BUILD", "/hive/data/inside/cells/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
 GROUP = "regulation"                  # ATAC-seq signal/peaks live with the ENCODE
                                       # regulatory tracks, not under singleCell
@@ -40,7 +41,15 @@ ORG = {"hg38": "human", "mm10": "mouse"}   # trackDb organism subdir per assembl
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--assembly", default="hg38", choices=sorted(ORG))
-    ap.add_argument("--stanzas")
+    ap.add_argument("--stanzas",
+                    help="hub stanza file (default: <build>/stanzas/<asm>.trackDb.txt)")
+    ap.add_argument("--meta",
+                    help="facet metadata TSV to check the .ra against (default: the "
+                         "meta/<asm>.metadata.tsv of the build --stanzas came from)")
+    ap.add_argument("--no-meta-check", action="store_true",
+                    help="skip the .ra-vs-metadata 1:1 check. Only for when the metadata "
+                         "genuinely does not exist; it is the check that catches a "
+                         "partly-written stanza file.")
     ap.add_argument("--out")
     args = ap.parse_args()
 
@@ -48,6 +57,13 @@ def main():
     hub_composite = "cellBrowser" + asm.capitalize()   # cellBrowserHg38 / cellBrowserMm10
     gbdb = "/gbdb/%s/bbi/%s" % (asm, TRACK)
     stanzas = args.stanzas or os.path.join(HUB_BUILD, "stanzas/%s.trackDb.txt" % asm)
+    # Locate the rest of the build relative to the stanza file rather than off HUB_BUILD,
+    # so that --stanzas on its own moves the whole script to another build. Pointing only
+    # the stanzas at a second build used to check them against the default build's
+    # metadata and abort on a mismatch that was not really there.
+    # Layout: <build>/stanzas/<asm>.trackDb.txt and <build>/meta/<asm>.metadata.tsv
+    build = os.path.dirname(os.path.dirname(os.path.abspath(stanzas)))
+    meta = args.meta or os.path.join(build, "meta", "%s.metadata.tsv" % asm)
     out = args.out or os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         "../../trackDb/%s/%s/%s.ra" % (ORG[asm], asm, TRACK))
@@ -77,7 +93,7 @@ def main():
     _palf = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          "celltype-crosswalks", "celltype-palette.tsv")
     if not os.path.isfile(_palf):
-        _palf = os.path.join(HUB_BUILD, "celltype-crosswalks", "celltype-palette.tsv")
+        _palf = os.path.join(build, "celltype-crosswalks", "celltype-palette.tsv")
     for _i, _l in enumerate(open(_palf)):
         _pp = _l.rstrip("\n").split("\t")
         if len(_pp) >= 2:
@@ -172,17 +188,25 @@ def main():
     # subtrack of this composite, so the counts must agree once the old-dir skips are
     # added back. A mismatch means the .ra and the metadata disagree, which shows up in
     # the browser as subtracks with no facet row (or facet rows with no track).
-    meta = os.path.join(HUB_BUILD, "meta", "%s.metadata.tsv" % asm)
-    if os.path.isfile(meta):
+    #
+    # Missing metadata is fatal, not a warning. This count is the only check that sees a
+    # partly-written stanza file: the n == 0 check above catches losing every subtrack,
+    # but a stanza file holding 22 of 925 subtracks passes it and writes a .ra that is
+    # 903 tracks short. Warning and continuing put that hole straight back.
+    if args.no_meta_check:
+        sys.stderr.write("WARNING: --no-meta-check given; the .ra was not checked against "
+                         "%s. A short stanza file would not have been noticed.\n" % meta)
+    elif not os.path.isfile(meta):
+        sys.exit("ERROR: no facet metadata at %s, so the .ra cannot be checked against it. "
+                 "Pass --meta to point at the right file, or --no-meta-check to skip the "
+                 "check on purpose." % meta)
+    else:
         with open(meta) as fh:
             meta_rows = sum(1 for _ in fh) - 1          # minus the header
         if meta_rows != n + skipped_old:
             sys.exit("ERROR: %s has %d rows but %d subtracks were kept (+%d old-dir "
                      "skipped); the .ra and the facet metadata must match 1:1"
                      % (meta, meta_rows, n, skipped_old))
-    else:
-        sys.stderr.write("WARNING: no facet metadata at %s, skipping the 1:1 check\n"
-                         % meta)
 
     # Indent subtracks under the composite, as the trackDb .ra files in the tree do
     # (chainNet, encode3): the container sits flush left and each level below it is

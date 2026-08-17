@@ -465,7 +465,7 @@ if (useCart)
 	    }
 	else
 	    {
-	    printf("%s",phyloData);
+	    printf("%s",htmlEncode(phyloData)); // user tree in textarea, escape (XSS)
 	    }
 	puts("</TEXTAREA>");
 	puts("</td></tr>");
@@ -556,7 +556,7 @@ if (htmlPageWrapper)
 	    "?phyloPng_width=%d"
 	    "&phyloPng_height=%d"
 	    "&phyloPng_tree=%s"
-	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
+	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,cgiEncode(phyloData)); // tree into URL, cgiEncode (XSS)
     if (branchLengths)
 	printf("&phyloPng_branchLengths=1");
     if (lengthLegend)

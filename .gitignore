@@ -23,6 +23,7 @@ compiled/
 /bin
 
 # build droppings
+src/submodules/zlib-ng-configure.log
 src/hg/hgGateway/hgGateway.html.h
 src/hg/hgPhyloPlace/phyloPlace
 src/isPcr/webPcr/webPcr

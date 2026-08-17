@@ -7,7 +7,7 @@ technologies can span repetitive regions and resolve complex rearrangements
 that are difficult to detect with short-read methods.
 The long read datasets described below were produced with one of two sequencing technologies, Oxford Nanopore
 Technologies (ONT) or Pacific Biosciences (PacBio, whose highly accurate reads are also called
-HiFi, unlike the longer but less accurate CLR, Continous Long-Reads). </p>
+HiFi, unlike the longer but less accurate CLR, Continuous Long-Reads). </p>
 
 <h3>Available Datasets</h3>
 <p>
@@ -250,14 +250,14 @@ Note: there is likely some overlap in sample composition across these collection
 For example, 1000 Genomes samples are also included in HPRC and CoLoRSdb.
 </p>
 
-<h3 id='1000genomes'>1000 Genomes long-read callsets</h3>
+<h3 id="1000genomes">1000 Genomes long-read callsets</h3>
 <p>
 Several of the datasets above are long-read callsets on the 1000 Genomes
 Project samples, produced by different groups with different technologies and
 variant-calling strategies. The
-<a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged</a> track combines these and added more 1000 genomes assemblies for a
-single 1,218-individual callset (Lin et al., submitted). The table below lists
-the merged release and the callsets that contribute to it.
+<a href="hgTrackUi?g=lrSv1kLin">1KG Lin merged</a> track combines these and added more 1000 Genomes assemblies for a
+single 1,218-individual callset (Lin et al., submitted). The table below
+summarizes all callsets obtained from 1000 Genomes samples.
 </p>
 <table class="stdTbl">
 <tr>
@@ -293,10 +293,18 @@ the merged release and the callsets that contribute to it.
   <td><a href="hgTrackUi?g=gustafsonSv">1KG UW ONT</a></td>
 </tr>
 <tr>
+  <td>Boehringer ONT 888</td>
+  <td>888</td>
+  <td>Noyvert et al., Imputation of structural variants using a multi-ancestry long-read sequencing panel enables identification of disease associations</td>
+  <td>Oxford Nanopore long reads (5 ancestry groups)</td>
+  <td>Sniffles2</td>
+  <td><a href="hgTrackUi?g=noyvertSv">1KG Boehringer ONT 888</a></td>
+</tr>
+<tr>
   <td>HPRC2 Minigraph-Cactus</td>
   <td>232</td>
   <td>Lucas et al., HPRC2: a human pangenome reference with near-complete coverage of common genetic variation</td>
-  <td>Near-T2T assembly (30x-60x HiFi+ONT), <a target=_blank href="https://github.com/wwliao/hprc_release2_variant_calling">a linear callset</a> was included for Lin et al merge. </td>
+  <td>Near-T2T assembly (30x-60x HiFi+ONT), <a target="_blank" href="https://github.com/wwliao/hprc_release2_variant_calling">a linear callset</a> was included for the Lin et al. merge. </td>
   <td>Minigraph-cactus graph</td>
   <td><a href="hgTrackUi?g=hprc2v21Sv">HPRC v2.1</a></td>
 </tr>

@@ -35,9 +35,9 @@ void displayLinkInResults(char *linkInId, char *linkInResource, struct linkInRes
 int hitCount = slCount(results);
 if (hitCount == 0)
     {
-    printf ("Error: No results found for ID %s", linkInId);
+    printf ("Error: No results found for ID %s", htmlEncode(linkInId)); // user input, escape (XSS)
     if (linkInResource != NULL)
-        printf (" in database %s\n", linkInResource);
+        printf (" in database %s\n", htmlEncode(linkInResource));
     }
 else if (hitCount == 1)
     {

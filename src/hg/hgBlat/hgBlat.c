@@ -1424,28 +1424,124 @@ for(;;count++)
 return cloneString(buffer);
 }
 
+static char *blatDateStamp()
+/* Return today's date as YYYY-MM-DD in a static buffer (same idiom as cart.c). */
+{
+static char buf[16];
+time_t now = time(NULL);
+struct tm *tm = localtime(&now);
+strftime(buf, sizeof buf, "%Y-%m-%d", tm);
+return buf;
+}
+
+static char *topHitLocusLabel(char *database, struct psl *psl)
+/* Return a short, human-recognizable label for the top BLAT hit: the first gene symbol from the
+ * assembly's locusName table when the hit lands in a gene, otherwise a chrom:start position.
+ * The locusName lookup mirrors the results page (see printBlatResultsApp).  Returns a cloneString'd
+ * value the caller must free. */
+{
+struct subText *subList = NULL;
+struct sqlConnection *locusConn = blatLocusConn(database, &subList);
+char *label = NULL;
+if (locusConn != NULL)
+    {
+    struct sqlResult *sr = hRangeQuery(locusConn, "locusName", psl->tName, psl->tStart, psl->tEnd,
+        NULL, 0);
+    char **row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        char *raw = row[4];
+        char *genes = NULL;
+        // Only ex:/in: (exon/intron) hits name a gene; ig: (intergenic) just lists the neighbors,
+        // so for those fall through to coordinates, which are more useful.
+        if (startsWith("ex:", raw))
+            genes = raw + 3;
+        else if (startsWith("in:", raw))
+            genes = raw + 3;
+        if (genes != NULL)
+            {
+            char *dupe = cloneString(genes);
+            char *words[128];
+            int n = chopByChar(dupe, '|', words, ArraySize(words));
+            if (n > 0 && words[0][0] != '\0')
+                label = cloneString(words[0]);
+            freeMem(dupe);
+            }
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&locusConn);
+    }
+if (label == NULL)
+    {
+    char buf[128];
+    safef(buf, sizeof buf, "%s:%d", psl->tName, psl->tStart + 1);
+    label = cloneString(buf);
+    }
+return label;
+}
+
 static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription)
 // Find a track name that isn't currently a custom track. Also fill in description.
 {
 struct slName *names = namesInPsl(psl);
 char shortName[4096];
 char description[4096];
-
 unsigned count = slCount(names);
-if (count == 1)
+
+// The improved naming (query size + top-hit gene, date in the description) rides along with the
+// BLAT Results track group, so it is behind the same hg.conf gate; off restores the original names.
+if (!cfgOptionBooleanDefault("blatResultsGroup", FALSE))
     {
-    safef(shortName, sizeof shortName, "blat %s", names->name);
-    safef(description, sizeof description, "blat on %s",  names->name);
-    }
-else if (count == 2)
-    {
-    safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
-    safef(description, sizeof description, "blat on %d queries (%s, %s)", count, names->name, names->next->name);
+    if (count == 1)
+        {
+        safef(shortName, sizeof shortName, "blat %s", names->name);
+        safef(description, sizeof description, "blat on %s", names->name);
+        }
+    else if (count == 2)
+        {
+        safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
+        safef(description, sizeof description, "blat on %d queries (%s, %s)", count, names->name, names->next->name);
+        }
+    else
+        {
+        safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
+        safef(description, sizeof description, "blat on %d queries (%s, %s, ...)", count, names->name, names->next->name);
+        }
     }
 else
     {
-    safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
-    safef(description, sizeof description, "blat on %d queries (%s, %s, ...)", count, names->name, names->next->name);
+    // The short label (track name) drops the "BLAT" word - these tracks already live in the "BLAT
+    // Results" group, so the prefix would just be noise.  The long label keeps "BLAT" for context
+    // wherever it shows without the group heading (e.g. the custom-track manager, mouseovers).
+    char *date = blatDateStamp();
+    if (count == 1)
+        {
+        if (differentString(names->name, "YourSeq"))
+            {
+            // Query carried a FASTA header, so name the track after the sequence.
+            safef(shortName, sizeof shortName, "%s", names->name);
+            safef(description, sizeof description, "BLAT %s, %dbp, %s", names->name, psl->qSize, date);
+            }
+        else
+            {
+            // Headerless query: "YourSeq" tells the user nothing, so name it by query size and the
+            // top hit's gene (or position), which is what they actually recognize later.
+            char *locus = topHitLocusLabel(database, psl);
+            safef(shortName, sizeof shortName, "%dbp %s", psl->qSize, locus);
+            safef(description, sizeof description, "BLAT %dbp %s, %s", psl->qSize, locus, date);
+            freeMem(locus);
+            }
+        }
+    else if (count == 2)
+        {
+        safef(shortName, sizeof shortName, "%s+%d", names->name, count - 1);
+        safef(description, sizeof description, "BLAT %d queries (%s, %s), %s", count, names->name, names->next->name, date);
+        }
+    else
+        {
+        safef(shortName, sizeof shortName, "%s+%d", names->name, count - 1);
+        safef(description, sizeof description, "BLAT %d queries (%s, %s, ...), %s", count, names->name, names->next->name, date);
+        }
     }
 
 *pName = makeNameUnique(shortName, database, cart);
@@ -2545,14 +2641,15 @@ printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/f
 cartSaveSession(cart);
 printf("<INPUT TYPE=HIDDEN NAME=org VALUE=\"%s\">\n", organism);
 printf("<INPUT TYPE=HIDDEN NAME=db VALUE=\"%s\">\n", db);
+// all four come from the cart (user input) and go into value="" attributes; escape (XSS)
 type = cartUsualString(cart, "type", "");
-printf("<INPUT TYPE=HIDDEN NAME=type VALUE=\"%s\">\n", type);
+printf("<INPUT TYPE=HIDDEN NAME=type VALUE=\"%s\">\n", htmlEncode(type));
 sort = cartUsualString(cart, "sort", "");
-printf("<INPUT TYPE=HIDDEN NAME=sort VALUE=\"%s\">\n", sort);
+printf("<INPUT TYPE=HIDDEN NAME=sort VALUE=\"%s\">\n", htmlEncode(sort));
 output = cartUsualString(cart, "output", "");
-printf("<INPUT TYPE=HIDDEN NAME=output VALUE=\"%s\">\n", output);
+printf("<INPUT TYPE=HIDDEN NAME=output VALUE=\"%s\">\n", htmlEncode(output));
 userSeq = cartUsualString(cart, "userSeq", "");
-printf("<INPUT TYPE=HIDDEN NAME=userSeq VALUE=\"%s\">\n", userSeq);
+printf("<INPUT TYPE=HIDDEN NAME=userSeq VALUE=\"%s\">\n", htmlEncode(userSeq));
 printf("<INPUT TYPE=HIDDEN NAME=Submit VALUE=submit>\n"); 
 printf("</FORM>\n");
 }
@@ -2877,7 +2974,9 @@ if (isNotEmpty(savedDb))
     }
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
-if (pslFile == NULL || faFile == NULL || !fileExists(pslFile))
+if (pslFile == NULL || faFile == NULL ||
+    !isServerUserFilePath(pslFile) || !isServerUserFilePath(faFile) ||
+    !fileExists(pslFile))
     printf("<p>These BLAT results are no longer available. Please run a new "
            "<a href=\"hgBlat\">BLAT search</a>.</p>\n");
 else

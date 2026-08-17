@@ -1,3 +1,7 @@
 [submodule "src/submodules/htslib"]
 	path = src/submodules/htslib
 	url = ../htslib.git
+[submodule "src/submodules/zlib-ng"]
+	path = src/submodules/zlib-ng
+	url = ../zlib-ng.git
+	branch = ucsc-browser-support

@@ -41,6 +41,9 @@
 #include "curlWrap.h"
 #include "hubSpaceKeys.h"
 #include "myVariantsShare.h"
+#include "customTrack.h"
+#include "dupTrack.h"
+#include "myVariants.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -195,6 +198,117 @@ while ((helOverlay = hashNext(&cookie)) != NULL)
     }
 }
 
+/* Cart variables below hold the name of a file that the server itself made for this user,
+ * either in the trash directory or in the durable session-data directory that a saved
+ * session's trash files get moved to.  Each of these names reaches an open, a read or a
+ * delete somewhere in the tree, and a cart value is not ours to trust: values arrive from
+ * CGI parameters, from an uploaded or fetched hgSession settings file, and from another
+ * user's shared session.  So a value that names some other file is dropped on the way in,
+ * by cartValueIsAcceptable() below.
+ *
+ * Add a name here when a new cart variable comes to hold a server-side file name.  Keep
+ * validating at the point of use as well, with isServerUserFilePath(): some file name
+ * variables are named by a trackDb setting rather than by the code (speciesUseFile), so no
+ * fixed list can cover them.
+ *
+ * hg/utils/cartFileVarCatalog checks these arrays for completeness: it scans the tree for a
+ * cart value reaching a file call and fails if it finds one that is neither listed here nor
+ * described in the catalog.  A name added here wants a row there as well. */
+
+static char *fileNameCartVars[] =
+{
+    "hgta_userRegionsFile",     // user regions, hgTables.h hgtaUserRegionsFile, also hgIntegrator
+    "hgta_identifierFile",      // hgTables pasted identifier list, hgTables.h hgtaIdentifierFile
+    DUP_TRACKS_VAR,             // duplicated track stanzas
+    "blatLastBigBed",           // BLAT bigPsl, see blatFindPinnedBigPsl()
+    "blatPslFile",              // saved BLAT result, see hgBlat doRedisplayResults()
+    "blatFaFile",               // the query sequence that goes with blatPslFile
+    "hgg_mrnaFoldPs",           // hgGene mRNA fold PostScript, hgGene.h hggMrnaFoldPs
+    "hgp_matchFile",            // hgVisiGene search matches, hgVisiGene.h hgpMatchFile
+    "near.customFile",          // hgNear custom column file, hgNear.h customFileVarName
+    "gsTemp",                   // the file hgTables uploads to GenomeSpace
+};
+
+static char *fileNameCartVarPrefixes[] =
+{
+    CT_FILE_VAR_PREFIX,                 // ctfile_<db>, ctfile_hub_<id>: custom tracks
+    MYVARIANTS_FILE_VAR_PREFIX,         // mvCtfile_<db>: myVariants custom track
+    customCompositeCartName "-",        // customComposite-<db>: track collection hub
+    quickLiftCartName "-",              // hubQuickLift-<db>: quickLift hub
+};
+
+/* These two hold either a remote URL or the name of a file the server made, and the code that
+ * reads them tells the cases apart by looking for a protocol.  A value with no protocol falls
+ * through to opening a local file, so it has to be one of ours; a real URL is fine. */
+
+static char *urlOrFileNameCartVars[] =
+{
+    "multiRegionsBedUrl",       // hgTracks multi-region BED: a URL, or the trash file we wrote
+    hgsLoadUrlName,             // hgSession load settings from URL
+};
+
+static boolean cartVarHoldsFileName(char *var)
+/* Return TRUE if var is one of the cart variables listed above. */
+{
+int i;
+for (i = 0;  i < ArraySize(fileNameCartVars);  i++)
+    if (sameString(var, fileNameCartVars[i]))
+        return TRUE;
+for (i = 0;  i < ArraySize(fileNameCartVarPrefixes);  i++)
+    if (startsWith(fileNameCartVarPrefixes[i], var))
+        return TRUE;
+return FALSE;
+}
+
+static boolean cartVarHoldsUrlOrFileName(char *var)
+/* Return TRUE if var is one of the cart variables that may hold either. */
+{
+int i;
+for (i = 0;  i < ArraySize(urlOrFileNameCartVars);  i++)
+    if (sameString(var, urlOrFileNameCartVars[i]))
+        return TRUE;
+return FALSE;
+}
+
+static void logDroppedFileNameVar(char *var, char *why)
+/* Note the drop in the error log, so that a false positive can be spotted after release.
+ * The variable name comes from the user, so copy out only characters that cannot forge a
+ * log line of their own, and keep the copy short. */
+{
+char clean[129];
+int i;
+for (i = 0;  i < (int)sizeof(clean) - 1 && var[i] != 0;  i++)
+    {
+    unsigned char c = var[i];
+    clean[i] = (isalnum(c) || c == '_' || c == '.' || c == '-') ? c : '?';
+    }
+clean[i] = 0;
+fprintf(stderr, "cart: dropped %s, value is not %s\n", clean, why);
+}
+
+static boolean cartValueIsAcceptable(char *var, char *val)
+/* Return TRUE unless var names a server-created file and val names something else.  An empty
+ * value is fine; the CGIs treat it as "no file" and several saved sessions carry one. */
+{
+if (isEmpty(val))
+    return TRUE;
+if (cartVarHoldsFileName(var))
+    {
+    if (isServerUserFilePath(val))
+        return TRUE;
+    logDroppedFileNameVar(var, "a trash or session-data file name");
+    return FALSE;
+    }
+if (cartVarHoldsUrlOrFileName(var))
+    {
+    if (isServerUserFileOrUrl(val))
+        return TRUE;
+    logDroppedFileNameVar(var, "a URL or a trash or session-data file name");
+    return FALSE;
+    }
+return TRUE;
+}
+
 static void loadHash(struct hash *hash, char *contents)
 /* Load a hash from a cart-like string. */
 {
@@ -212,7 +326,8 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    hashAdd(hash, namePt, cloneString(dataPt));
+    if (cartValueIsAcceptable(namePt, dataPt))
+        hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
 }
@@ -601,6 +716,8 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
     if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name)))
 	{
+        if (!cartValueIsAcceptable(cv->name, cv->val))
+            continue;   // leave the file name the server itself stored in the cart alone
 	storeInOldVars(cart, oldVars, cv->name);
 	cartRemove(cart, cv->name);
         if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad
@@ -1246,7 +1363,8 @@ if (addToCart)
             {
             if (decodeVal)
                 decodeForHgSession(val);
-            cartAddString(cart, var, val);
+            if (cartValueIsAcceptable(var, val))
+                cartAddString(cart, var, val);
             updatePrevVar(pPrevVar, var);
             }
         }
@@ -1753,6 +1871,10 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
 	char *url = cartString(cart, hgsLoadUrlName);
+	/* netUrlOpen() treats a string with no protocol as a local path and open()s it
+	 * (lib/net.c), so this has to be a URL or a file we made before it is opened. */
+	if (!isServerUserFileOrUrl(url))
+	    errAbort("Can only load session settings from a URL.");
 	struct lineFile *lf = netLineFileOpen(url);
         struct dyString *dyMessage = dyStringNew(0);
 	boolean ok = cartLoadSettingsFromUserInput(lf, cart, oldVars, hgsDoLoadUrl, dyMessage);
@@ -3163,6 +3285,11 @@ if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
     {
     errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
     }
+
+/* speciesUseFile names the cart variable, and a trackDb or hub author picks that name, so no
+ * fixed list in the cart can screen this one -- check the value here instead. */
+if (!isServerUserFilePath(val))
+    errAbort("species list file var '%s' does not name a file we made\n", speciesUseFile);
 
 struct lineFile *lf = lineFileOpen(val, TRUE);
 

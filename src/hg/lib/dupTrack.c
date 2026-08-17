@@ -10,6 +10,16 @@
 #include "trashDir.h"
 #include "hgConfig.h"
 
+static char *dupFileNameFromCart(struct cart *cart)
+/* Return the name of the trash file holding the dupe track stanzas, or NULL.  The value comes
+ * out of the cart, so only use it if it names a file the server itself made. */
+{
+char *dupFileName = cartUsualString(cart, DUP_TRACKS_VAR, NULL);
+if (dupFileName != NULL && !isServerUserFilePath(dupFileName))
+    return NULL;
+return dupFileName;
+}
+
 boolean isDupTrack(char *track)
 /* determine if track name refers to a custom track */
 {
@@ -58,7 +68,7 @@ char *dupTrackInCartAndTrash(char *sourceTrack, struct cart *cart, struct trackD
 /* Update cart vars to reflect existance of duplicate of sourceTrack.
  * Also write out or append to dupe track trash file */
 {
-char *dupFileName = cartUsualString(cart, DUP_TRACKS_VAR, NULL);
+char *dupFileName = dupFileNameFromCart(cart);
 FILE *f = NULL;	    // This will be our output
 
 /* We keep duplicate's name here. */
@@ -128,7 +138,7 @@ void undupTrackInCartAndTrash(char *dupName, struct cart *cart)
 /* Update cart vars to reflect removal of dupTrack.  Also reduce or 
  * remove trash file */
 {
-char *dupFileName = cartUsualString(cart, DUP_TRACKS_VAR, NULL);
+char *dupFileName = dupFileNameFromCart(cart);
 if (dupFileName == NULL)
     return;  // Nothing to do here
 
@@ -221,7 +231,7 @@ struct dupTrack *dupTrackListFromCart(struct cart *cart)
 /* Consult cart for dup track variable and if it's there return
  * list of dupes */
 {
-char *dupFileName = cartUsualString(cart, DUP_TRACKS_VAR, NULL);
+char *dupFileName = dupFileNameFromCart(cart);
 if (dupFileName == NULL)
     return NULL;
 struct dupTrack *list = dupTrackReadAll(dupFileName);

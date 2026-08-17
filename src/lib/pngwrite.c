@@ -62,7 +62,10 @@ png_init_io(png, png_file);
 png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
              PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
              PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-// EXPERIMENT ONLY, refs #38094 - do not commit
+// Pin the row filter to UP instead of letting libpng try all five filters on
+// every row.  UP was picked by measuring speed and output size on real browser
+// images (refs #38107).  A row filter is a lossless per-row transform, so the
+// decoded image is unchanged.
 png_set_filter(png, PNG_FILTER_TYPE_BASE, PNG_FILTER_UP);
 
 // Write header/params, write pixels, close and clean up.

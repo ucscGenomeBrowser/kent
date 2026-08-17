@@ -15,12 +15,6 @@
 #include "sessionData.h"
 #include "quickLift.h"
 
-INLINE boolean isTrashPath(char *path)
-/* Return TRUE if path starts with trashDir. */
-{
-return startsWith(trashDir(), path);
-}
-
 static char *sessionDataPathFromTrash(char *trashPath, char *sessionDir)
 /* Make a new path from a trash path -- replace "../trash" with safe location. */
 {

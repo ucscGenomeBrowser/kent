@@ -4396,6 +4396,12 @@ if (strstr(multiRegionsBedUrl,"://"))
     }
 else
     {
+    /* Not a URL, so this is the trash file we wrote the pasted BED to. */
+    if (!isServerUserFilePath(multiRegionsBedUrl))
+	{
+	warn("BED custom regions file [%s] not found.", multiRegionsBedUrl);
+	return FALSE;
+	}
     lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
     if (!lf)
 	{
@@ -6125,6 +6131,11 @@ char *type = cartUsualString(cart, "hgt.contentType", "html");
 if(sameString(type, "jsonp"))
     {
     struct jsonElement *json = newJsonObject(newHash(8));
+    char *jsonp = cartString(cart, "jsonp");
+    // This path only ever emits a wrapped response, so there is no bare form to
+    // fall back to: reject an invalid callback name outright.
+    if (!isValidJsonpCallback(jsonp))
+        errAbort("invalid callback");
 
     printf("Content-Type: application/json\n\n");
     errAbortSetDoContentType(FALSE);
@@ -6132,7 +6143,7 @@ if(sameString(type, "jsonp"))
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
     jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
     jsonObjectAdd(json, "img", newJsonString(pngTn.forHtml));
-    printf("%s(", cartString(cart, "jsonp"));
+    printf("%s(", jsonp);
     hPrintEnable();
     jsonPrint((struct jsonElement *) json, NULL, 0);
     hPrintDisable();
@@ -7245,6 +7256,23 @@ if (!foundMap)
     group->defaultIsClosed = FALSE;
     slAddHead(&list, group);
     hashAdd(hash, "map", group);
+    }
+
+// The "BLAT Results" group holds BLAT-search result custom tracks (group=blat, tagged
+// blatResult=on), keeping them out of the generic Custom Tracks group so they are easy to find and
+// clear as a set.  It is synthesized here rather than stored in the grp table; the group header is
+// skipped when it has no tracks (see the group loop that draws the controls).  Priority 1.5 places
+// it just after Custom Tracks (priority 1) so BLAT users find their results near the top.  Gated by
+// hg.conf blatResultsGroup, the same flag hgBlat/hgc read before tagging tracks with group=blat.
+if (cfgOptionBooleanDefault("blatResultsGroup", FALSE))
+    {
+    AllocVar(group);
+    group->name = cloneString("blat");
+    group->label = cloneString("BLAT Results");
+    group->defaultPriority = group->priority = 1.5;
+    group->defaultIsClosed = FALSE;
+    slAddHead(&list, group);
+    hashAdd(hash, "blat", group);
     }
 
 // The "Visible Tracks" group is now the default top group
@@ -8624,7 +8652,7 @@ char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, database);
 char *hubFile = cartOptionalString(cart, buffer);
 
-if (hubFile != NULL)
+if (hubFile != NULL && isServerUserFilePath(hubFile))
     {
     char *hubName = hubNameFromUrl(hubFile);
     struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);
@@ -8846,7 +8874,7 @@ printTrashIcon("Remove this track from the QuickLift group", "quickLiftDelIcon",
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
-if (sameOk(track->groupName, "user"))
+if (sameOk(track->groupName, "user") || sameOk(track->groupName, "blat"))
     printTrackDelIcon(track);
 
 char *quickLiftSourceDb = (track->tdb != NULL) ?
@@ -10218,6 +10246,18 @@ if (!hideControls)
                     "title='Hide all tracks in this group'>Hide group</button>&nbsp;",
                     group->name);
 
+            // The BLAT Results group gets a "Delete all" button that removes every BLAT result track
+            // at once, so users are not stuck deleting accumulated results one by one.
+            if (sameString(group->name, "blat"))
+                {
+                safef(idText, sizeof idText, "%s_delAll", group->name);
+                hPrintf("<button type='button' id='%s' "
+                        "title='Delete all BLAT result tracks'>Delete all</button>&nbsp;", idText);
+                jsOnEventByIdF("click", idText,
+                    "if (window.confirm('Delete all %d BLAT result tracks?')) deleteAllBlatTracks();",
+                    slCount(group->trackList));
+                }
+
             if (hub || group->errMessage)
                 {
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
@@ -10571,6 +10611,12 @@ if(!trackImgOnly)
            "Illustrator or Inkscape.<BR>");
     }
 doTrackForm(psTn.forCgi, &ideoPsTn);
+
+// hgRenderTracks asks for the PDF as the response body, so makeActiveImage has already
+// converted the eps and written it to stdout.  Without this the convertEpsToPdf below
+// aborts on the eps it just deleted.
+if (trackImgOnly)
+    return;
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))

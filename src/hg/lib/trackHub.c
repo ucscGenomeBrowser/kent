@@ -1609,7 +1609,7 @@ boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackNa
 char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", quickLiftCartName, sourceDb);
 char *filename = cartOptionalString(cart, buffer);
-if (filename == NULL)
+if (filename == NULL || !isServerUserFilePath(filename))
     return FALSE;
 
 struct lineFile *lf = lineFileMayOpen(filename, TRUE);

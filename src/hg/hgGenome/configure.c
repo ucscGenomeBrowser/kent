@@ -2,6 +2,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+#include "htmshell.h"
 #include "hash.h"
 #include "jksql.h"
 #include "hCommon.h"
@@ -108,8 +109,8 @@ for (ref = ggList; ref != NULL; ref = ref->next)
 	hPrintf("<TR><TD><A HREF=\"../cgi-bin/hgGenome?%s&%s=on&g=%s\">",
 		cartSidUrlString(cart), hggConfigureOne, tmp);
 	freeMem(tmp);
-	hPrintf("%s</A></TD>", gg->shortLabel);
-	hPrintf("<TD>%s</TD></TR>\n", gg->longLabel);
+	hPrintf("%s</A></TD>", htmlEncode(gg->shortLabel)); // user graph label, escape (XSS)
+	hPrintf("<TD>%s</TD></TR>\n", htmlEncode(gg->longLabel));
 	}
     }
 hTableEnd();
@@ -132,7 +133,7 @@ if (gg == NULL)
     }
 
 /* Put up web page with controls */
-cartWebStart(cart, database, "Configure %s", gg->shortLabel);
+cartWebStart(cart, database, "Configure %s", htmlEncode(gg->shortLabel));
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hggConfigure, "on");

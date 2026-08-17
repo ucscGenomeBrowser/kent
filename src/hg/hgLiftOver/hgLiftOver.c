@@ -610,7 +610,12 @@ if (errCatchStart(errCatch))
             struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
             puts("<BLOCKQUOTE><PRE>\n");
             while (lineFileNext(errFile, &line, &lineSize))
-                puts(line);
+                {
+                // these are the user's own failed input regions, escape before echoing (XSS)
+                char *encoded = htmlEncode(line);
+                puts(encoded);
+                freeMem(encoded);
+                }
             lineFileClose(&errFile);
             puts("</PRE></BLOCKQUOTE>\n");
             }

@@ -9,6 +9,7 @@
 #include "hdb.h"
 #include "hgBam.h"
 #include "hgc.h"
+#include "hui.h"
 #include "knetUdc.h"
 #include "udc.h"
 #include "chromAlias.h"
@@ -267,10 +268,10 @@ if (udcCacheTimeout() < 300)
 if (sameString(item, "zoom in"))
     printf("Zoom in to a region with fewer items to enable 'detail page' links for individual items.<BR>");
 
-char varName[1024];
-safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->track);
-boolean isPaired = cartUsualBoolean(cart, varName,
-				    (trackDbSetting(tdb, "pairEndsByName") != NULL));
+/* Read the same cart variable the track UI writes and hgTracks reads, which is
+ * separated with a dot and looked up through the container hierarchy. */
+boolean isPaired = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAM_PAIR_ENDS_BY_NAME,
+			 (trackDbSettingClosestToHome(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
 char position[512];
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash, FALSE};

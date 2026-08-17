@@ -6102,7 +6102,7 @@ boolean isOn = cartUsualBoolean(cart, checkVar, hasOverride);
 printf("<br><b>Override track color:</b> ");
 cgiMakeCheckBox(checkVar, isOn);
 printf(" <input type='text' name='%s' id='%s_text' value='%s' size='8' />",
-    varName, varName, colorValue);
+    varName, varName, htmlEncode(colorValue)); // colorValue may be a cart override, escape (XSS)
 printf("&nbsp;<input id='%s_picker' />\n", varName);
 jsInlineF(
     "(function() {\n"
@@ -8139,13 +8139,12 @@ char *speciesGroup   = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *speciesOrder   = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 #define MAX_SP_SIZE 2000
-#define MAX_GROUPS 1000
 char sGroup[MAX_SP_SIZE];
 //Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
 int group;
 int i;
-char *species[MAX_SP_SIZE];
+char **species = NULL;
 char option[MAX_SP_SIZE];
 
 *list = NULL;
@@ -8159,10 +8158,11 @@ if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->track);
     }
 
-char **groups = needMem(MAX_GROUPS * sizeof (char *));
+int groupsSize = (speciesGroup != NULL ? chopLineLen(speciesGroup) : 1);
+char **groups = needMem(groupsSize * sizeof (char *));
 *groupCt = 1;
 if (speciesGroup)
-    *groupCt = chopByWhite(speciesGroup, groups, MAX_GROUPS);
+    *groupCt = chopByWhite(speciesGroup, groups, groupsSize);
 
 if (speciesUseFile)
     {
@@ -8179,7 +8179,9 @@ for (group = 0; group < *groupCt; group++)
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(tdb, sGroup);
         }
-    speciesCt = chopLine(speciesOrder, species);
+    speciesCt = chopLineLen(speciesOrder);
+    AllocArray(species, speciesCt);
+    chopByWhite(speciesOrder, species, speciesCt);
     for (i = 0; i < speciesCt; i++)
         {
         AllocVar(wmSpecies);
@@ -8189,6 +8191,7 @@ for (group = 0; group < *groupCt; group++)
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
         }
+    freez(&species);
     }
 slReverse(&wmSpeciesList);
 *list = wmSpeciesList;
@@ -8223,7 +8226,7 @@ slReverse(&speciesList);
 
 int numberPerRow;
 boolean lineBreakJustPrinted;
-char *words[MAX_SP_SIZE];
+char **words = NULL;
 int defaultOffSpeciesCnt = 0;
 
 if (cartOptionalString(cart, "ajax") == NULL)
@@ -8244,7 +8247,9 @@ if (defaultOffSpecies)
     {
     offHash = newHash(5);
     DEFAULT_BUTTON( "id", "default_pw","cb_maf_","_maf_")
-    int wordCt = chopLine(defaultOffSpecies, words);
+    int wordCt = chopLineLen(defaultOffSpecies);
+    AllocArray(words, wordCt);
+    chopByWhite(defaultOffSpecies, words, wordCt);
     defaultOffSpeciesCnt = wordCt;
 
     /* build hash of species that should be off */
@@ -8327,6 +8332,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     j++;
     }
 puts("</TR></TABLE><BR>\n");
+freez(&words);
 return wmSpeciesList;
 }
 
@@ -8413,9 +8419,11 @@ if (snpTable)
 safef(option, sizeof option, "%s.%s", name, "codons");
 if (framesTable)
     {
-    char *nodeNames[512];
+    int nodeCount = slCount(wmSpeciesList) + 1;   /* +1 for reference db */
+    char **nodeNames;
     char buffer[128];
 
+    AllocArray(nodeNames, nodeCount);
     printf("<BR><B>Codon Translation:</B><BR>");
     printf("Default species to establish reading frame: ");
     nodeNames[0] = db;
@@ -8424,7 +8432,7 @@ if (framesTable)
 	{
         nodeNames[i] = wmSpecies->name;
         }
-    cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,     // tdb independent var
+    cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, nodeCount,     // tdb independent var
                     cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
     puts("<br>");
     char *cartVal = cartUsualStringClosestToHome(cart, tdb, parentLevel, "codons","codonDefault");
@@ -8437,6 +8445,7 @@ if (framesTable)
     printf("Use reading frames for species if available, otherwise no translation<BR>");
     cgiMakeRadioButton(buffer,"codonFrameDef", sameWord(cartVal,"codonFrameDef"));
     printf("Use reading frames for species if available, otherwise use default species<BR>");
+    freeMem(nodeNames);
     }
 else
     {
