@@ -18,12 +18,39 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
     # always checked out.  --init covers the first-time case, --recursive also
     # updates the nested htscodecs submodule.  git is silent when already in sync.
     git -c protocol.file.allow=always submodule update --init --recursive
-elif [ ! -e submodules/htslib/hts.c -o ! -e submodules/htslib/htscodecs/htscodecs/htscodecs.c ] ; then
+elif [ ! -e submodules/htslib/hts.c -o ! -e submodules/htslib/htscodecs/htscodecs/htscodecs.c \
+       -o ! -e submodules/zlib-ng/deflate.c ] ; then
     # not a git working tree (e.g. a source release); submodule sources must
     # already be present since they can not be checked out without git.
-    echo "Error: submodule sources under submodules/htslib are missing and this" >&2
+    echo "Error: submodule sources under submodules/ are missing and this" >&2
     echo "       is not a git working tree, so they can not be initialized." >&2
     exit 1
+fi
+
+# Configure zlib-ng, which has no Makefile until its configure script runs.
+# --zlib-compat gives the ordinary zlib API and symbol names, so libpng, htslib
+# and our own code need no change.  --static builds only libz.a, which is all we
+# link.  configure compiles every SIMD variant and picks one at run time, so a
+# single build serves both the AVX-512 machines and the AVX2 ones, and on ARM it
+# picks up NEON and the ARMv8 CRC instructions.  Done here, serially, for the
+# same reason as the htslib probe below: the parallel build must not race on it.
+# refs #38125
+if [ ! -e submodules/zlib-ng/Makefile ] ; then
+    echo "Note: configuring zlib-ng (serial, once)" >&2
+    # log kept outside the submodule so it does not show up as untracked there
+    (cd submodules/zlib-ng && ./configure --zlib-compat --static) \
+        > submodules/zlib-ng-configure.log 2>&1 \
+        || { echo "Error: zlib-ng configure failed, see submodules/zlib-ng-configure.log" >&2 ; exit 1 ; }
+    # zlib-ng's own .gitignore does not cover everything its configure writes, so
+    # ignore the rest locally rather than carrying a patch to upstream.  This is
+    # the submodule's private exclude file, not a tracked one.
+    zngExclude=$(cd submodules/zlib-ng && git rev-parse --git-path info/exclude 2>/dev/null || true)
+    if [ -n "$zngExclude" ] ; then
+        mkdir -p "$(dirname "$zngExclude")" 2>/dev/null || true
+        for f in zlib.h zlib_name_mangling.h test.c ; do
+            grep -qxF "$f" "$zngExclude" 2>/dev/null || echo "$f" >> "$zngExclude"
+        done
+    fi
 fi
 
 # Generate htslib's compiler-probe makefile fragment (htscodecs.mk) and config.h
