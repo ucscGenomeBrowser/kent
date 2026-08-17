@@ -27508,13 +27508,17 @@ char* host = getenv("HTTP_HOST");
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
 // blatResult=on tags this as a BLAT results track so previous ones can be found (see blatOldTracks).
-char *customTextTemplate = "track type=bigPsl blatResult=on indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";
+// group=blat (gated by hg.conf blatResultsGroup) puts BLAT results in their own "BLAT Results" track
+// group instead of Custom Tracks, so they are easy to find and clear as a set (see the group's
+// "Delete all" button in hgTracks).
+char *groupTag = cfgOptionBooleanDefault("blatResultsGroup", FALSE) ? "group=blat " : "";
+char *customTextTemplate = "track type=bigPsl blatResult=on %sindelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";
 char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
-  
+
 if (isProt)
     extraForMismatch = "";
 char buffer[4096];
-safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
+safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);

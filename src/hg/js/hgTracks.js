@@ -5557,6 +5557,19 @@ function deleteCustomTrack (trackName) {
     xhttp.send();
 }
 
+function deleteAllBlatTracks () {
+    /* Tell hgCustom to delete every BLAT result custom track at once (those tagged blatResult=on),
+     * then reload so the BLAT Results group updates. Triggered by the group's "Delete all" button. */
+    var hgsid = getHgsid();
+    var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete_blat=1';
+    var xhttp = new XMLHttpRequest();
+    // synchronous, for the same reason as deleteCustomTrack: custom tracks live in a text file, not
+    // in parallel-safe mysql rows
+    xhttp.open("GET", url, false);
+    xhttp.send();
+    window.location.reload();
+}
+
 function onTrackDelIconClick (ev) {
     /* delete custom track if user clicks its trash icon */
     var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.

@@ -279,6 +279,15 @@ RELEASE_GATES = {
                "computes for it is really a deadline on deciding whether the "
                "new page becomes the default, which is the conversation the "
                "nag is supposed to force."),
+        h("blatResultsGroup", "flag", "hg/hgTracks/hgTracks.c:7262", default="FALSE",
+          role="gate", verified=True, ticket="38086",
+          note="Put BLAT result custom tracks in their own \"BLAT Results\" track "
+               "group (with a \"Delete all\" button) instead of Custom Tracks, and "
+               "give headerless queries a useful default name (query size + top-hit "
+               "gene) rather than \"blat YourSeq\".  Read in three CGIs that must "
+               "agree: hgBlat.c:1493 (naming), hgc.c:27514 (tags the track "
+               "group=blat), hgTracks.c:7262 (synthesizes the group).  Off during "
+               "QA; flip to TRUE once released."),
         h("genarkLiftOver", "flag", "hg/lib/genark.c:413", default="FALSE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "

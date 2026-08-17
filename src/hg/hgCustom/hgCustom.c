@@ -77,6 +77,7 @@ static boolean measureTiming = FALSE;
 #define hgCtDoDelete	  hgCtDo "delete"
 #define hgCtDoDeleteSet	  hgCtDo "delete_set"
 #define hgCtDoDeleteClr	  hgCtDo "delete_clr"
+#define hgCtDoDeleteBlat  hgCtDo "delete_blat"	/* delete all BLAT result tracks at once */
 #define hgCtDoRefresh     hgCtDo "refresh"
 #define hgCtDoRefreshSet  hgCtDo "refresh_set"
 #define hgCtDoRefreshClr  hgCtDo "refresh_clr"
@@ -1093,6 +1094,23 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
+void doDeleteBlatCustom()
+/* remove all BLAT result custom tracks at once (those tagged blatResult=on). This backs the
+ * "Delete all" button in hgTracks' BLAT Results group, so users are not left removing accumulated
+ * BLAT results one at a time. */
+{
+struct customTrack *ct, *next;
+for (ct = ctList; ct != NULL; ct = next)
+    {
+    next = ct->next;
+    if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+        {
+        myVariantsHandleCtRemoval(ct, cart, database);
+        slRemoveEl(&ctList, ct);
+        }
+    }
+}
+
 void doRefreshCustom(char **warnMsg)
 /* reparse custom tracks from URLs based on cart variables */
 {
@@ -1489,6 +1507,11 @@ else
 	doDeleteCustom();
         ctUpdated = TRUE;
         }
+    if (cartVarExists(cart, hgCtDoDeleteBlat))
+        {
+	doDeleteBlatCustom();
+        ctUpdated = TRUE;
+        }
     if (cartVarExists(cart, hgCtDoRefresh))
 	{
 	doRefreshCustom(&warnMsg);
@@ -1521,7 +1544,7 @@ else
 	}
 
 
-    if (ctList || cartVarExists(cart, hgCtDoDelete))
+    if (ctList || cartVarExists(cart, hgCtDoDelete) || cartVarExists(cart, hgCtDoDeleteBlat))
         doManageCustom(warnMsg);
     else
 	doAddCustom(warnMsg, warnOnly);

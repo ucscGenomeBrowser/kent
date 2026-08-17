@@ -3788,6 +3788,11 @@ freeMem(tmp);
 static boolean checkGroup(char *db, char *group)
 /* Check if group is valid in db (if mysql, in grp table; if hub, in groups file or default) */
 {
+// "blat" is the synthetic "BLAT Results" group that hgTracks adds in code (it is not a row in the
+// grp table), so accept it here; otherwise a BLAT result track's group=blat would be rejected and
+// forced back into the generic "user" (Custom Tracks) group.
+if (sameString(group, "blat"))
+    return TRUE;
 static struct hash *dbToGroups = NULL;
 if (dbToGroups == NULL)
     dbToGroups = hashNew(0);
