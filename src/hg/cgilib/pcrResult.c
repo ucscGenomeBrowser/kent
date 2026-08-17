@@ -10,6 +10,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 #include "trackHub.h"
+#include "trashDir.h"
 
 
 char *pcrResultCartVar(char *db)
@@ -54,7 +55,11 @@ struct targetDb *target = NULL;
 if (!trackHubDatabase(db))
     target = targetDbLookup(db, targetName);
 
-if (!fileExists(pslFile) || !fileExists(primerFile) ||
+/* Both names came back out of the cart, and the files are opened and echoed to the user
+ * below, so make sure they name files the server made for this user rather than some other
+ * file on the machine.  Refs #37623. */
+if (!isServerUserFilePath(pslFile) || !isServerUserFilePath(primerFile) ||
+    !fileExists(pslFile) || !fileExists(primerFile) ||
     (wordCount > 2 && target == NULL))
     {
     cartRemove(cart, cartVar);

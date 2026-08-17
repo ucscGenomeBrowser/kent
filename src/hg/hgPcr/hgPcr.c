@@ -544,6 +544,24 @@ fprintf(f, "%s\t%s\n", gpo->fPrimer, gpo->rPrimer);
 carefulClose(&f);
 }
 
+static boolean pcrResultCartFiles(char *cartResult, char **retPslFile, char **retTxtFile,
+                                  char **retTarget)
+/* Chop an existing hgPcrResult_<db> value into its two file names and its optional target
+ * name.  Return FALSE unless both names are files the server made for this user: the value
+ * comes back out of the cart, and the caller writes to both files.  Refs #37623. */
+{
+char *words[4];
+int wordCount = chopByWhite(cloneString(cartResult), words, ArraySize(words));
+if (wordCount < 2 || wordCount > 3)
+    return FALSE;
+if (!isServerUserFilePath(words[0]) || !isServerUserFilePath(words[1]))
+    return FALSE;
+*retPslFile = words[0];
+*retTxtFile = words[1];
+*retTarget = (wordCount > 2) ? words[2] : NULL;
+return TRUE;
+}
+
 void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target, boolean appendToResults)
 /* Write trash files and store their name in a cart variable. */
 {
@@ -551,18 +569,14 @@ char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
 char *pslFile, *txtFile, *cartTarget, *cartResult;
-if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults)
+if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults &&
+     pcrResultCartFiles(cartResult, &pslFile, &txtFile, &cartTarget))
     {
-    char *pcrFiles[3];
-    chopByWhite(cloneString(cartResult), pcrFiles, 3);
-    pslFile = pcrFiles[0];
-    txtFile = pcrFiles[1];
-    cartTarget = pcrFiles[2];
     // if the old result is from a saved session, we can't append to it
     // because we want the session to not change. Copy the old results
-    // into a new file and append these results to it
-    char *sessionDataDir = cfgOption("sessionDataDir");
-    if (sessionDataDir && startsWith(sessionDataDir, pslFile))
+    // into a new file and append these results to it.  A trash file is ours to append to;
+    // anything else pcrResultCartFiles() accepted is durable session data.
+    if (!isTrashPath(pslFile))
         {
         trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
         trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
