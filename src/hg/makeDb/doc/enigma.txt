@@ -60,3 +60,45 @@ python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAsplicing.py
 #   cp /hive/data/inside/enigmaTracksData/v1.2/$t$db.bb /hive/data/inside/enigmaTracksData/$t$db.bb.tmp
 #   mv /hive/data/inside/enigmaTracksData/$t$db.bb.tmp /hive/data/inside/enigmaTracksData/$t$db.bb
 # done; done
+
+#############################################################################
+# BRCAmla: add Zanti et al. 2025 case-control LRs (2026-08-18) RM #37886
+
+# At the request of the ENIGMA collaborators, the case-control component of the
+# PP4/BP5 multifactorial likelihood track was updated from the iCOGS-derived
+# values in Parsons et al. 2019 (20 variants) to the case-control likelihood
+# ratios (ccLR) from Zanti et al. 2025 (Nat Commun, PMID 40413188,
+# doi 10.1038/s41467-025-59979-6), a case-control analysis of the BRIDGES,
+# CARRIERS and UK Biobank cohorts. The old iCOGS values were dropped rather
+# than kept alongside because iCOGS overlaps the Zanti cohorts (all 20 variants
+# recur in the Zanti data) and keeping both would count the same evidence twice.
+
+mkdir /hive/data/inside/enigmaTracksData/zantiDraft
+# Supplementary Data 4 of the paper saved there as ZantiSuppData4.xlsx
+# (also copied to /hive/data/outside/enigma/rawData/ at release).
+
+# The build script reads the current BRCAmfa bigBeds for both assemblies to
+# reuse the existing family-history, co-occurrence, segregation and pathology
+# LRs and their coordinates, drops the old case-control column, and merges in
+# the Zanti ccLR keyed on transcript:HGVSc. The new combined LR is the product
+# of the available evidence types. Variant universe is the union of the current
+# track and the Zanti variants with a computable ccLR (Zanti rows with
+# suggested code N/A or no ccLR are skipped). The new .as adds per-cohort
+# columns (BRIDGES, CARRIERS, UK Biobank) and Zanti's standalone suggested
+# code; output is bed9+17.
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
+# Result: 13,481 variants per assembly (up from 4,436), written as
+# BRCAmfaZantiHg38.bb / BRCAmfaZantiHg19.bb in the zantiDraft dir. The script
+# also writes directionConflicts.tsv listing the 180 variants where the prior
+# multifactorial evidence and the ccLR point in opposite directions; these are
+# multiplied through as usual per collaborator consensus (Andreas Laner et al.,
+# see RM #37886) and a caveat was added to the hub description page.
+
+# Release, same procedure as the v1.2 update above: copy the verified .bb onto
+# the staging filenames the /gbdb symlink chain serves (symlinks untouched),
+# then the updated enigma.html and trackDb.txt (dataVersion line added, type
+# corrected from bed9+67 to bed9+17) into /hive/data/outside/enigma/.
+# for db in Hg19 Hg38; do
+#   cp /hive/data/inside/enigmaTracksData/zantiDraft/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new
+#   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
+# done
