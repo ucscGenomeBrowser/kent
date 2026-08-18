@@ -27,8 +27,8 @@ compile:: ${PROGS:%=%_compile}
 clean:: ${PROGS:%=%_clean}
 %_clean::
 	${MAKE} clean PROG=$*
-install: ${PROGS:%=%_}
-%_install:
+install:: ${PROGS:%=%_install}
+%_install: sharedObjectsBuilt
 	${MAKE} install PROG=$*
 cgi::  ${PROGS:%=%_cgi}
 %_cgi: sharedObjectsBuilt
