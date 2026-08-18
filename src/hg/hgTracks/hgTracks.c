@@ -8895,7 +8895,9 @@ if (quickLiftSourceDb != NULL &&
 if (track->hasUi)
     {
     char *url = trackUrl(track->track, chromName);
-    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
+    // longLabel comes from trackDb, which a track hub controls, so encode it to match the
+    // shortLabel below.
+    char *longLabel = htmlEncode(track->longLabel);
 
     struct dyString *dsMouseOver = dyStringCreate("%s", longLabel);
     struct trackDb *tdb = track->tdb;

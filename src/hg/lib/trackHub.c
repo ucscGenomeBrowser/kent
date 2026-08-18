@@ -523,6 +523,18 @@ if ((str = hashFindVal(hash, name)) == NULL)
 return str;
 }
 
+static void checkHubIdName(char *type, char *name)
+/* Abort if name holds a character that is not valid in an identifier.  A hub
+ * identifier - a genome name, a group name - is printed into dozens of URLs,
+ * form values and attributes all over the CGIs, so the check belongs here rather than at every
+ * one of those places.  Real names use letters, digits, underscore, dot and dash. */
+{
+if (strchr(name, '<') || strchr(name, '>') || strchr(name, '"')
+    || strchr(name, '\'') || strchr(name, '&'))
+    errAbort("Bad %s name: \"%s\". The characters < > \" ' and & are not allowed in a %s name.",
+             type, name, type);
+}
+
 struct grp *readGroupRa(char *groupFileName)
 /* Read in the ra file that describes the groups in an assembly hub. */
 {
@@ -539,6 +551,7 @@ while ((ra = raNextRecord(lf)) != NULL)
     slAddHead(&list, grp);
 
     grp->name = cloneString(getRequiredGrpSetting(ra, "name", lf));
+    checkHubIdName("group", grp->name);
     grp->label = cloneString(getRequiredGrpSetting(ra, "label", lf));
 
     grp->priority = BIGDOUBLE;
@@ -697,13 +710,7 @@ while ((ra = raNextRecord(lf)) != NULL)
         badGenomeStanza(lf);
     if (hasWhiteSpace(genome))
         errAbort("Bad genome name: \"%s\". Only alpha-numeric characters and \"_\" are allowed ([A-Za-z0-9_]).", genome);
-    // The genome name becomes the db name, which is printed into dozens of URLs and form
-    // values all over the CGIs.  Real assembly names never contain any of these characters,
-    // so reject them here.
-    if (strchr(genome, '<') || strchr(genome, '>') || strchr(genome, '"')
-        || strchr(genome, '\'') || strchr(genome, '&'))
-        errAbort("Bad genome name: \"%s\". The characters < > \" ' and & are not allowed in a "
-                 "genome name.", genome);
+    checkHubIdName("genome", genome);
     if (hashLookup(hash, genome) != NULL)
         errAbort("Duplicate genome %s in stanza ending line %d of %s",
 		genome, lf->lineIx, lf->fileName);
