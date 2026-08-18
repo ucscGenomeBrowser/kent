@@ -139,7 +139,11 @@ int charCount = 0;
 struct slName *genome = genomes;
 for(; genome; genome = genome->next)
     {
+    // an assembly hub's genome name comes from the hub, so encode it: escName for the query
+    // string, escTrimmed for the text and title attributes
+    char *escName = cgiEncode(genome->name);
     char *trimmedName = trackHubSkipHubName(genome->name);
+    char *escTrimmed = htmlEncode(trimmedName);
     char *shortName = cloneString(trimmedName);
     // If even the first element is too long, truncate its short name.
     if (genome==genomes && strlen(trimmedName) > GENLISTWIDTH)  
@@ -151,16 +155,16 @@ for(; genome; genome = genome->next)
         if (withLink)
             {
             if (hubConnectIsCurated(genome->name)) {
-                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, htmlEncode(shortName));
             } else {
-                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, htmlEncode(shortName));
             }
             // https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
             if (withPaste)
                 dyStringPrintf(dyShortHtml, linkHtml, hubUrl);
             }
         else
-            dyStringPrintf(dyShortHtml,"%s" , shortName);
+            dyStringPrintf(dyShortHtml,"%s" , htmlEncode(shortName));
 
         dyStringPrintf(dyShortHtml,", ");
         }
@@ -172,15 +176,15 @@ for(; genome; genome = genome->next)
     if (withLink)
         {
         if (hubConnectIsCurated(genome->name)) {
-            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, escTrimmed);
         } else {
-            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, escTrimmed);
         }
         if (withPaste)
             dyStringPrintf(dyLongHtml, linkHtml, hubUrl);
         }
     else
-        dyStringPrintf(dyLongHtml,"%s" , trimmedName);
+        dyStringPrintf(dyLongHtml,"%s" , escTrimmed);
 
     if (genome->next)
         {
