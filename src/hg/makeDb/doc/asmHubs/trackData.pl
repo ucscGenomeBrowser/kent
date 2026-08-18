@@ -9,12 +9,17 @@ use commonHtml;
 use File::stat;
 
 my $argc = scalar(@ARGV);
-if ($argc < 3) {
-  printf STDERR "usage: trackData.pl Name asmHubName [two column name list] > trackData.html\n";
-  printf STDERR "e.g.: trackData.pl Mammals mammals mammals.asmId.commonName.tsv > trackData.html\n";
+if ($argc != 5) {
+  printf STDERR "usage: trackData.pl Name asmHubName orderList prodOutFile testOutFile\n";
+  printf STDERR "e.g.: trackData.pl Mammals mammals mammals.asmId.commonName.tsv trackData.html testTrackData.html\n";
   printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
-  printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
+  printf STDERR "\nthe two columns in the name list are 1: asmId (accessionId_assemblyName)\n";
   printf STDERR "column 2: common name for species, columns separated by tab\n";
+  printf STDERR "\nWrites both the production and the '-test' variant of the track\n";
+  printf STDERR "statistics page in a single pass over the assembly list -- each\n";
+  printf STDERR "assembly's per-track stats (bigWigInfo/bigBedInfo/faSize etc.) are\n";
+  printf STDERR "measured once and reused for both pages, instead of running the\n";
+  printf STDERR "whole scan twice.\n";
   exit 255;
 }
 
@@ -40,24 +45,11 @@ if ( -s "${sciNameOverrideFile}" ) {
   close ($sn);
 }
 
-
-my $testOutput = 0;
-my $spliceOut = -1;
-
-if ($argc > 2) {
-  for (my $i = 0; $i < $argc; ++$i) {
-    if ($ARGV[$i] =~ /-test/) {
-      $testOutput = 1;
-      $spliceOut = $i;
-    }
-  }
-}
-if ($spliceOut != -1) {
-  splice @ARGV, $spliceOut, 1;
-}
 my $Name = shift;
 my $asmHubName = shift;
 my $inputList = shift;
+my $prodOutFile = shift;
+my $testOutFile = shift;
 my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
@@ -88,6 +80,24 @@ sub commify($) {
     my $text = reverse $_[0];
     $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
     return scalar reverse $text
+}
+
+##############################################################################
+# capture(&): run a block of code that 'print's/'printf's, and return
+# everything it printed as a string, instead of letting it go to STDOUT.
+# This lets startHtml()/startTable()/endTable()/endHtml() keep their
+# original print-based bodies unchanged, while the caller decides which
+# of the two output files (or both) a given fragment belongs in.
+##############################################################################
+sub capture(&) {
+  my ($code) = @_;
+  my $buf = '';
+  open(my $fh, '>', \$buf) or die "capture: $!";
+  my $old = select($fh);
+  $code->();
+  select($old);
+  close($fh);
+  return $buf;
 }
 
 # ($itemCount, $percentCover) = bigWigMeasure($trackFile, $genomeSize);
@@ -151,7 +161,7 @@ sub oneTrackData($$$$$$) {
 }	#	sub oneTrackData($$$$$$)
 
 ##############################################################################
-### start the HTML output
+### start the HTML output -- identical for the prod and -test pages
 ##############################################################################
 sub startHtml() {
 
@@ -261,18 +271,52 @@ Except for the gc5Base column which is: overall GC % average (percent coverage)
 END
 }	#	sub startHtml()
 
-# order of columns in the table
-# eliminated the ncbiGene track
-my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
-### XXX beware, this trackList is going to be edited below to add or
-###             remove elements depending upon the situation
+##############################################################################
+# buildTrackList($testOutput, $asmHubName): the order of columns in the
+# table, for either the production ($testOutput = 0) or -test ($testOutput
+# = 1) variant.  This used to be a single global array that tableContents()
+# mutated in place with these same splices, gated on a global $testOutput --
+# calling this twice (once per variant) instead reproduces both variants
+# exactly, without needing two separate runs of the script.
+##############################################################################
+sub buildTrackList($$) {
+  my ($testOutput, $asmHubName) = @_;
+  # eliminated the ncbiGene track
+  my @list = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
+  if ($testOutput) {  # add extra columns during 'test' output
+#                       0          1          2        3       4      5    6
+#  7       8      9            10           11        12          13
+#     14
+# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt);
+#                       0            1         2        3       4      5      6
+#      7      8           9               10
+# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
+    splice @list, 11, 0, "cpgIslandExt";
+    splice @list, 10, 0, "tandemDups";
+    splice @list, 10, 0, "gapOverlap";
+    splice @list, 5, 0, "gap";
+  }
+  if ("viral" eq $asmHubName) {
+    splice @list, 3, 1;
+    splice @list, 2, 1;
+    splice @list, 1, 1;
+  }
+  if ($testOutput || ("viral" eq $asmHubName)) {  # add extra columns during 'test' output
+    splice @list, 1, 0, "ncbiGene";
+  }
+  if ("viral" eq $asmHubName) {
+    splice @list, 0, 1;
+  }
+  return @list;
+}
 
 ##############################################################################
 ### start the table output
 ##############################################################################
-sub startTable() {
+sub startTable($) {
+  my ($testOutput) = @_;
 
-# coordinate the order of these column headings with the @trackList listed above
+# coordinate the order of these column headings with buildTrackList() above
 
 print '<table class="sortable" border="1">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
@@ -316,24 +360,19 @@ print '  <th class="sorttable_numeric">gap<br>Overlap</th>
 }
 
 print "</tr></thead><tbody>\n";
-}	#	sub startTable()
+}	#	sub startTable($)
 
 ##############################################################################
 ### end the table output
 ##############################################################################
-sub endTable() {
-
-my $commaNuc = commify($overallNucleotides);
-my $commaSeqCount = commify($overallSeqCount);
-my $commaGapSize = commify($overallGapSize);
-my $commaGapCount = commify($overallGapCount);
+sub endTable($$$) {
+  my ($assemblyTotal, $asmCount, $columnCount) = @_;
 
 my $percentDone = 100.0 * $asmCount / $assemblyTotal;
 my $doneMsg = "";
 if ($asmCount < $assemblyTotal) {
   $doneMsg = sprintf(" (%d build completed, %.2f %% finished)", $asmCount, $percentDone);
 }
-my $columnCount = scalar(@trackList);
 my $colSpanFill = $columnCount - 1;
 
 if ($assemblyTotal > 1) {
@@ -351,10 +390,10 @@ END
 </table>
 END
 }
-}	#	sub endTable()
+}	#	sub endTable($$$)
 
 ##############################################################################
-### end the HTML output
+### end the HTML output -- identical for the prod and -test pages
 ##############################################################################
 sub endHtml() {
 
@@ -403,34 +442,145 @@ sub gapStats($$) {
 }
 
 ##############################################################################
-### tableContents()
+# computeTrackCell($asmId, $track, $buildDir, $totalSize)
+# returns (itemCount, percentCover, customKey) for one track of one
+# assembly.  This is the expensive part (bigWigInfo/bigBedInfo/hgsql/etc.)
+# and is testOutput-independent, so it only needs to run once per assembly
+# per track no matter how many page variants reference that track.
+#
+# NOTE: the original script additionally retried a "still n/a" ensGene or
+# ncbiRefSeq track as ebiGene/ncbiGene, but on production output only. That
+# retry re-checked the *same* file path that had just been found missing
+# (only $runDir and the diagnostic track-name argument differed, and
+# oneTrackData() only consults $runDir for the unrelated 'gapOverlap' case)
+# -- so it was a guaranteed no-op and is not reproduced here.
 ##############################################################################
-sub tableContents() {
+sub computeTrackCell($$$$) {
+  my ($asmId, $track, $buildDir, $totalSize) = @_;
+  my $trackFile = "$buildDir/bbi/$asmId.$track";
+  my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
+  # no ensGene file ?  Then look for ebiGene file
+  if ($track eq "ensGene" && ! -s $trackFb) {
+    if ( -d "$buildDir/trackData/ebiGene" ) {
+      $trackFb = "$buildDir/trackData/ebiGene/fb.ebiGene.txt" if ( -d "$buildDir/trackData/ebiGene/fb.ebiGene.txt");
+      $trackFile = "$buildDir/bbi/$asmId.ebiGene";
+    }
+  }
+  my $runDir = "$buildDir/trackData/$track";
+  my ($itemCount, $percentCover);
+  my $customKey = "";
+  if ($asmId !~ m/^GC/) {
+    $itemCount = "n/a";
+    $percentCover = "n/a";
+    if ($track eq "ncbiRefSeq") {
+      my $refSeqDir=`ls -d /hive/data/genomes/$asmId/bed/ncbiRefSeq.20* | tail -1`;
+      chomp $refSeqDir;
+      if ( -d "${refSeqDir}" ) {
+        my $trackFb = "${refSeqDir}/fb.ncbiRefSeq.$asmId.txt";
+        if ( -s "${trackFb}" ) {
+          $itemCount = `hgsql -N -e 'select count(*) from $track;' $asmId 2> /dev/null`;
+          chomp $itemCount;
+          $percentCover = pcFbFile($trackFb);
+        }
+      }
+    } elsif ($track eq "gc5Base") {
+      my $bwFile = "/gbdb/$asmId/bbi/gc5Base.bw";
+      $bwFile = "/gbdb/$asmId/bbi/gc5BaseBw/gc5Base.bw" if (! -s "${bwFile}");
+      ($itemCount, $percentCover) = bigWigMeasure($bwFile, $totalSize);
+    } elsif ($track eq "rmsk") {
+      my $rmskStats = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.rmsk.stats";
+      if (! -s "${rmskStats}") {
+        my $faOut = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.sorted.fa.out.gz";
+        if ( -s "$faOut") {
+	    my $items = `zgrep -c ^ "$faOut"`;
+	    chomp $items;
+	    $itemCount = commify($items);
+	    my $masked = `grep masked "/hive/data/genomes/$asmId/bed/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
+	    chomp $masked;
+	    $percentCover = sprintf("%.2f %%", $masked);
+	    open (RS, ">$rmskStats") or die "can now write to $rmskStats";
+	    printf RS "%s\t%s\n", $itemCount, $percentCover;
+	    close (RS);
+	} else {
+	    $itemCount = "n/a";
+	    $percentCover = "n/a";
+        }
+      } else {
+        ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
+        chomp $percentCover;
+        $customKey = sprintf("%.2f", $percentCover);
+        $percentCover = sprintf("%.2f %%", $percentCover);
+      }
+    }	# elsif ($track eq "rmsk")
+  } else {	# working on an assembly hub
+    if ( "$track" eq "gc5Base" ) {
+      $trackFile .= ".bw";
+    } else {
+      $trackFile .= ".bb";
+    }
+    if ( "$track" eq "rmsk") {
+      my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
+      if (! -s "${rmskStats}") {
+        my $faOut = "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz";
+        if ( -s "$faOut") {
+            my $items = `zgrep -c ^ "$faOut"`;
+            chomp $items;
+            $itemCount = commify($items);
+            my $masked = `grep masked "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
+            chomp $masked;
+            $percentCover = sprintf("%.2f %%", $masked);
+            open (RS, ">$rmskStats") or die "can now write to $rmskStats";
+            printf RS "%s\t%s\n", $itemCount, $percentCover;
+            close (RS);
+        } else {
+            $itemCount = "n/a";
+            $percentCover = "n/a";
+        }
+      } else {
+        ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
+        chomp $percentCover;
+        $customKey = sprintf("%.2f", $percentCover);
+        $percentCover = sprintf("%.2f %%", $percentCover);
+      }
+    } else {	# not the rmsk track
+      ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
+    }	#       else not the rmsk track
+  }		#       else if ($asmId !~ m/^GC/)
+  if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
+    $customKey = $percentCover;
+    $customKey =~ s/[ %]+//;
+  }
+  return ($itemCount, $percentCover, $customKey);
+}	#	sub computeTrackCell($$$$)
+
+# render one <td> cell from a (itemCount, percentCover, customKey) triple
+sub renderCell($$$) {
+  my ($itemCount, $percentCover, $customKey) = @_;
+  if (length($customKey)) {
+    return sprintf("    <td style='text-align: right;' sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover);
+  } elsif ($itemCount eq "n/a") {
+    return "    <td style='text-align: right;'>n/a</td>\n";
+  } else {
+    return sprintf("    <td style='text-align: right;'>%s<br>(%s)</td>\n", $itemCount, $percentCover);
+  }
+}
+
+##############################################################################
+### tableContentsBoth()
+### walks @orderList exactly once, measuring each assembly's tracks exactly
+### once, and returns the table body HTML for both the production and
+### -test pages (plus each page's column count, for endTable()'s colspan).
+##############################################################################
+sub tableContentsBoth() {
+  my @prodTrackList = buildTrackList(0, $asmHubName);
+  my @testTrackList = buildTrackList(1, $asmHubName);
+  my %inUnion;
+  my @unionTracks = grep { !$inUnion{$_}++ } (@prodTrackList, @testTrackList);
+
+  my $prodBody = "";
+  my $testBody = "";
   my $asmCounted = 0;
-  if ($testOutput) {  # add extra columns during 'test' output
-#                       0          1          2        3       4      5    6
-#  7       8      9            10           11        12          13
-#     14
-# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt);
-#                       0            1         2        3       4      5      6
-#      7      8           9               10
-# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
-    splice @trackList, 11, 0, "cpgIslandExt";
-    splice @trackList, 10, 0, "tandemDups";
-    splice @trackList, 10, 0, "gapOverlap";
-    splice @trackList, 5, 0, "gap";
-  }
-  if ("viral" eq $asmHubName) {
-    splice @trackList, 3, 1;
-    splice @trackList, 2, 1;
-    splice @trackList, 1, 1;
-  }
-  if ($testOutput || ("viral" eq $asmHubName)) {  # add extra columns during 'test' output
-    splice @trackList, 1, 0, "ncbiGene";
-  }
-  if ("viral" eq $asmHubName) {
-    splice @trackList, 0, 1;
-  }
+
   foreach my $asmId (@orderList) {
     my $gcPrefix = "GCx";
     my $asmAcc = "asmAcc";
@@ -446,7 +596,7 @@ sub tableContents() {
     my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ($asmId !~ m/^GC/) {
        $configRa = "/hive/data/genomes/$asmId/$asmId.config.ra";
-      $accessionId = `grep ^genBankAccessionID "${configRa}" | cut -d' ' -f2`;
+       $accessionId = `grep ^genBankAccessionID "${configRa}" | cut -d' ' -f2`;
        chomp $accessionId;
        $asmName = `grep ^ncbiAssemblyName "${configRa}" | cut -d' ' -f2`;
        chomp $asmName;
@@ -476,23 +626,23 @@ sub tableContents() {
        $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
        $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     }
-#    my $trackDb="$buildDir/${asmId}.trackDb.txt";
-#    next if (! -s "$trackDb");	# assembly build not complete
     if (! -s "$asmReport") {
       printf STDERR "# no assembly report:\n# %s\n", $asmReport;
       next;
     }
     if (! -s "$twoBit") {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
-      printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
-      printf "<td style='text-align: center;'>%s</td>\n", $accessionId;
-      printf "<th colspan=15 style='text-align: center;'>missing masked 2bit file</th>\n";
-      printf "</tr>\n";
+      my $missingRow = sprintf("<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount);
+      $missingRow .= sprintf("<td style='text-align: center;'>%s</td>\n", $accessionId);
+      $missingRow .= "<th colspan=15 style='text-align: center;'>missing masked 2bit file</th>\n";
+      $missingRow .= "</tr>\n";
+      $prodBody .= $missingRow;
+      $testBody .= $missingRow;
       next;
     }
     if ( ! -s "$faSizeTxt" ) {
-       printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
-       print `twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt`;
+       printf STDERR "faSize $twoBit > $faSizeTxt\n";
+       print `faSize $twoBit > $faSizeTxt`;
     }
     my ($gapSize, $maskPerCent, $sizeNoGaps) = maskStats($faSizeTxt);
     $overallGapSize += $gapSize;
@@ -510,7 +660,7 @@ sub tableContents() {
     while (my $line = <FH>) {
       last if ($itemsFound > 5);
       chomp $line;
-      $line =~ s///g;;
+      $line =~ s///g;;
       $line =~ s/\s+$//g;;
       if ($line =~ m/Date:/) {
         if ($asmDate =~ m/notFound/) {
@@ -532,154 +682,44 @@ sub tableContents() {
       }
     }
     close (FH);
-    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
+
+    # the browser/hub links are the only thing that differ between the
+    # two pages besides the columns themselves
     my $browserName = $commonName;
-    my $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    my $prodBrowserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    my $testBrowserUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
     if ($asmId !~ m/^GC/) {
-       $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
-       $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+       $prodBrowserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
+       $testBrowserUrl = "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
        $browserName = "$commonName ($asmId)";
-       if ($testOutput) {
-         $browserUrl = "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
-         $hubUrl = "https://hgdownload-test.gi.ucsc.edu/goldenPath/$asmId/bigZips";
-       }
-    } elsif ($testOutput) {
-      $browserUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
     }
-    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
-    printf "<td style='text-align: center;'><a href='%s' target=_blank>%s<br>%s</a></td>\n", $browserUrl, $browserName, $accessionId;
-    foreach my $track (@trackList) {
-      my $trackFile = "$buildDir/bbi/$asmId.$track";
-      my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
-      # no ensGene file ?  Then look for ebiGene file
-      if ($track eq "ensGene" && ! -s $trackFb) {
-        if ( -d "$buildDir/trackData/ebiGene" ) {
-          $trackFb = "$buildDir/trackData/ebiGene/fb.ebiGene.txt" if ( -d "$buildDir/trackData/ebiGene/fb.ebiGene.txt");
-          $trackFile = "$buildDir/bbi/$asmId.ebiGene";
-        }
-      }
-      my $runDir = "$buildDir/trackData/$track";
-      my ($itemCount, $percentCover);
-      my $customKey = "";
-      if ($asmId !~ m/^GC/) {
-        $itemCount = "n/a";
-        $percentCover = "n/a";
-        if ($track eq "ncbiRefSeq") {
-          my $refSeqDir=`ls -d /hive/data/genomes/$asmId/bed/ncbiRefSeq.20* | tail -1`;
-          chomp $refSeqDir;
-          if ( -d "${refSeqDir}" ) {
-            my $trackFb = "${refSeqDir}/fb.ncbiRefSeq.$asmId.txt";
-            if ( -s "${trackFb}" ) {
-              $itemCount = `hgsql -N -e 'select count(*) from $track;' $asmId 2> /dev/null`;
-              chomp $itemCount;
-              $percentCover = pcFbFile($trackFb);
-            }
-          }
-        } elsif ($track eq "gc5Base") {
-          my $bwFile = "/gbdb/$asmId/bbi/gc5Base.bw";
-        $bwFile = "/gbdb/$asmId/bbi/gc5BaseBw/gc5Base.bw" if (! -s "${bwFile}");
-          ($itemCount, $percentCover) = bigWigMeasure($bwFile, $totalSize);
-        } elsif ($track eq "rmsk") {
-          my $rmskStats = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.rmsk.stats";
-          if (! -s "${rmskStats}") {
-            my $faOut = "/hive/data/genomes/$asmId/bed/repeatMasker/$asmId.sorted.fa.out.gz";
-            if ( -s "$faOut") {
-		my $items = `zgrep -c ^ "$faOut"`;
-		chomp $items;
-		$itemCount = commify($items);
-		my $masked = `grep masked "/hive/data/genomes/$asmId/bed/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
-		chomp $masked;
-		$percentCover = sprintf("%.2f %%", $masked);
-		open (RS, ">$rmskStats") or die "can now write to $rmskStats";
-		printf RS "%s\t%s\n", $itemCount, $percentCover;
-		close (RS);
-	    } else {
-		$itemCount = "n/a";
-		$percentCover = "n/a";
-            }
-          } else {
-            ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
-            chomp $percentCover;
-            $customKey = sprintf("%.2f", $percentCover);
-            $percentCover = sprintf("%.2f %%", $percentCover);
-          }
-        }	# elsif ($track eq "rmsk")
-########### need to figure which tables can be measured here
-#        x else x
-#          $itemCount = `hgsql -N -e 'select count(*) from $track;' $asmId 2> /dev/null`;
-#          chomp $itemCount;
-#          if (length($itemCount) < 1) {
-#	    $itemCount = "n/a";
-#	    $percentCover = "n/a";
-#          } else {
-#            $percentCover = `featureBits $asmId $track 2>&1 | cut -d' ' -f5 | tr -d ')('`;
-#            chomp $percentCover;
-#            $customKey = $percentCover;
-#            $customKey =~ s/[ %]+//;
-#          }
-      } else {	# working on an assembly hub
-	if ( "$track" eq "gc5Base" ) {
-          $trackFile .= ".bw";
-	} else {
-          $trackFile .= ".bb";
-	}
-	if ( "$track" eq "rmsk") {
-          my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
-          if (! -s "${rmskStats}") {
-            my $faOut = "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz";
-            if ( -s "$faOut") {
-                my $items = `zgrep -c ^ "$faOut"`;
-                chomp $items;
-                $itemCount = commify($items);
-                my $masked = `grep masked "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" | awk '{print \$4}' | sed -e 's/%//;'`;
-                chomp $masked;
-                $percentCover = sprintf("%.2f %%", $masked);
-                open (RS, ">$rmskStats") or die "can now write to $rmskStats";
-                printf RS "%s\t%s\n", $itemCount, $percentCover;
-                close (RS);
-            } else {
-                $itemCount = "n/a";
-                $percentCover = "n/a";
-            }
-          } else {
-            ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
-            chomp $percentCover;
-            $customKey = sprintf("%.2f", $percentCover);
-            $percentCover = sprintf("%.2f %%", $percentCover);
-          }
-	} else {	# not the rmsk track
-          ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
-          if (0 == $testOutput) {	# only on the production stats page
-            # if track ensGene does not exist, try the ebiGene track
-            if ($track eq "ensGene" && $itemCount eq "n/a") {
-              $runDir = "$buildDir/trackData/ebiGene";
-              $trackFile = "$buildDir/bbi/$asmId.$track.bb";
-              ($itemCount, $percentCover) = oneTrackData($asmId, "ebiGene", $trackFile, $totalSize, $trackFb, $runDir);
-            } elsif ($track eq "ncbiRefSeq" && $itemCount eq "n/a") {
-            # if track ncbiRefSeq does not exist, try the ncbiGene track
-              $runDir = "$buildDir/trackData/ncbiGene";
-              $trackFile = "$buildDir/bbi/$asmId.$track.bb";
-              ($itemCount, $percentCover) = oneTrackData($asmId, "ncbiGene", $trackFile, $totalSize, $trackFb, $runDir);
-            }
-          }
-	}	#       else not the rmsk track
-      }		#       else if ($asmId !~ m/^GC/)
-      if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
-        $customKey = $percentCover;
-        $customKey =~ s/[ %]+//;
-      }
-      if (length($customKey)) {
-        printf "    <td style='text-align: right;' sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
-      } else {
-        if ($itemCount eq "n/a") {
-      printf "    <td style='text-align: right;'>n/a</td>\n";
-        } else {
-      printf "    <td style='text-align: right;'>%s<br>(%s)</td>\n", $itemCount, $percentCover;
-        }
-      }
+
+    ++$asmCount;
+    my $prodRow = sprintf("<tr><td style='text-align: right;'>%d</td>\n", $asmCount);
+    $prodRow .= sprintf("<td style='text-align: center;'><a href='%s' target=_blank>%s<br>%s</a></td>\n", $prodBrowserUrl, $browserName, $accessionId);
+    my $testRow = sprintf("<tr><td style='text-align: right;'>%d</td>\n", $asmCount);
+    $testRow .= sprintf("<td style='text-align: center;'><a href='%s' target=_blank>%s<br>%s</a></td>\n", $testBrowserUrl, $browserName, $accessionId);
+
+    # measure every track needed by either page exactly once
+    my %cell;	# key is track name, value is [itemCount, percentCover, customKey]
+    foreach my $track (@unionTracks) {
+      $cell{$track} = [ computeTrackCell($asmId, $track, $buildDir, $totalSize) ];
+    }
+
+    foreach my $track (@prodTrackList) {
+      my ($itemCount, $percentCover, $customKey) = @{$cell{$track}};
       $tracksCounted += 1 if ($itemCount ne "n/a");
-    }	#	foreach my $track (@trackList)
-    printf "</tr>\n";
+      $prodRow .= renderCell($itemCount, $percentCover, $customKey);
+    }
+    foreach my $track (@testTrackList) {
+      my ($itemCount, $percentCover, $customKey) = @{$cell{$track}};
+      $testRow .= renderCell($itemCount, $percentCover, $customKey);
+    }
+    $prodRow .= "</tr>\n";
+    $testRow .= "</tr>\n";
+    $prodBody .= $prodRow;
+    $testBody .= $testRow;
+
     $asmCounted += 1;
     if ($asmId =~ m/^GC/) {
        printf STDERR "# %03d\t%02d tracks\t%s\n", $asmCounted, $tracksCounted, $asmId;
@@ -687,7 +727,8 @@ sub tableContents() {
        printf STDERR "# %03d\t%02d tracks\t%s_%s (%s)\n", $asmCounted, $tracksCounted, $accessionId, $asmName, $asmId;
     }
   }
-}
+  return ($prodBody, $testBody, scalar(@prodTrackList), scalar(@testTrackList));
+}	#	sub tableContentsBoth()
 
 ##############################################################################
 ### main()
@@ -739,8 +780,18 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-startHtml();
-startTable();
-tableContents();
-endTable();
-endHtml();
+my $header = capture { startHtml() };
+my ($prodBody, $testBody, $prodCols, $testCols) = tableContentsBoth();
+my $prodHead = capture { startTable(0) };
+my $testHead = capture { startTable(1) };
+my $prodFoot = capture { endTable($assemblyTotal, $asmCount, $prodCols) };
+my $testFoot = capture { endTable($assemblyTotal, $asmCount, $testCols) };
+my $footer = capture { endHtml() };
+
+open(my $pfh, '>', $prodOutFile) or die "can not write $prodOutFile";
+print $pfh $header, $prodHead, $prodBody, $prodFoot, $footer;
+close($pfh);
+
+open(my $tfh, '>', $testOutFile) or die "can not write $testOutFile";
+print $tfh $header, $testHead, $testBody, $testFoot, $footer;
+close($tfh);

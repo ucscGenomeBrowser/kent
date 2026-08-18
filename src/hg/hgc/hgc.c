@@ -8957,13 +8957,18 @@ if (sameWord(otherDb, "seq"))
     qSeq = hExtSeqPart(database, psl->qName, psl->qStart, psl->qEnd);
     safef(name, sizeof name, "%s", psl->qName);
     }
-else if (otherTbf != NULL && !sqlDatabaseExists(otherDb))
+else if (otherTbf != NULL)
     {
-    // the query assembly has no database of its own (an assembly hub or a GenArk
-    // accession, as when a quickLift chain comes from one), so read the sequence
-    // out of the two bit file the track points at.
+    // The track names the file that holds the query sequence, so read it from there
+    // rather than from the query database.  There may be no such database (a GenArk
+    // accession, as when a quickLift chain comes from one), or it may hold only
+    // trackDb because the sequence lives in a hub (hs1 and the other curated
+    // assemblies built that way).
     qSeq = twoBitReadSeqFragLower(otherTbf, psl->qName, psl->qStart, psl->qEnd);
-    safef(name, sizeof name, "%s", psl->qName);
+    if (otherOrg == NULL)
+        safef(name, sizeof name, "%s", psl->qName);
+    else
+        safef(name, sizeof name, "%s.%s", otherOrg, psl->qName);
     }
 else if (otherDb != NULL)
     {
