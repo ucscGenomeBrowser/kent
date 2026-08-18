@@ -354,7 +354,6 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("<IMG class='toggleButton' "
             "id='%s' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
             idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-    // TODO XSS filter group->name
     jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this,'%s');", group->name);
 
     // a hub group's label is built from the hub's shortLabel and its groups.txt label

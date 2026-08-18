@@ -539,7 +539,9 @@ switch (ele->type)
                 struct jsonElement *val = el->val;
                 // the key is not always a literal: an assembly hub's genome name ends up here,
                 // so it is encoded the same way a string value is
-                dyStringPrintf(dy,"%s%s\"%s\": ", indentBuf, tab, jsonStringEscape(el->name));
+                char *escapedName = jsonStringEscape(el->name);
+                dyStringPrintf(dy,"%s%s\"%s\": ", indentBuf, tab, escapedName);
+                freeMem(escapedName);
                 jsonDyStringPrintRecurse(dy, val, indentLevel);
                 dyStringPrintf(dy,"%s%s", el->next == NULL ? "" : ",",nl);
                 }
