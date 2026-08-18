@@ -92,9 +92,10 @@ for (group = groupList; group != NULL; group = group->next)
     if (startsWith("QuickLift", group->label))
         continue;
     if (allTablesOk || differentString(group->name, "allTables"))
+        // a hub group's label is built from the hub's shortLabel and its groups.txt label
         hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", group->name,
                 (group == selGroup ? " SELECTED" : ""),
-                group->label);
+                htmlEncode(group->label));
     }
 hPrintf("</SELECT>\n");
 return selGroup;
@@ -187,7 +188,8 @@ else
                 firstEnabled = track;
             if (track == selTrack && !selTrackIsDisabled)
                 hPrintf(" SELECTED");
-            hPrintf(">%s</OPTION>", track->shortLabel);
+            // shortLabel comes from trackDb, which a track hub controls
+            hPrintf(">%s</OPTION>", htmlEncode(track->shortLabel));
 	    }
 	}
     if (selTrackIsDisabled)

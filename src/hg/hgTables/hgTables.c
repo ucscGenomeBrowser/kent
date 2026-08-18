@@ -122,6 +122,18 @@ for ( ; c != 0 ; )
     }
 }
 
+char *hubEncode(struct trackDb *tdb, char *text)
+/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged.
+ * A hub's autoSql schema and data file are written by a stranger, so text from them has to be
+ * escaped before it goes in the page.  Our own tracks are a different case: some of them
+ * put real HTML in a field or a schema comment on purpose, and escaping that would print the
+ * markup instead of rendering it. */
+{
+if (text != NULL && tdb != NULL && isHubTrack(tdb->track))
+    return htmlEncode(text);
+return text;
+}
+
 void writeHtmlCell(char *text)
 /* Write out a cell in an HTML table, making text not too big,
  * and stripping html tags and breaking spaces.... */

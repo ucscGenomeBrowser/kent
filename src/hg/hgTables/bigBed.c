@@ -22,6 +22,7 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "hubConnect.h"
+#include "htmshell.h"
 #include "asFilter.h"
 #include "hgTables.h"
 #include "trackHub.h"
@@ -548,7 +549,8 @@ printTypeHelpDesc(tdb->type);
 printTableBrowserLink(tdb, table);
 
 hPrintf("<BR>\n");
-hPrintf("<B>Format description:</B> %s<BR>", as->comment);
+// the autoSql comes from the hub's data file when this is a hub track
+hPrintf("<B>Format description:</B> %s<BR>", hubEncode(tdb, as->comment));
 
 /* Put up table that describes fields. */
 hTableStart();
@@ -569,10 +571,10 @@ if (ivList != NULL)
     }
 for (col = as->columnList; col != NULL; col = col->next)
     {
-    hPrintf("<TR><TD><TT>%s</TT></TD>", col->name);
+    hPrintf("<TR><TD><TT>%s</TT></TD>", hubEncode(tdb, col->name));
     if (ivList != NULL)
-	hPrintf("<TD>%s</TD>", row[colCount]);
-    hPrintf("<TD>%s</TD></TR>", col->comment);
+	hPrintf("<TD>%s</TD>", hubEncode(tdb, row[colCount]));
+    hPrintf("<TD>%s</TD></TR>", hubEncode(tdb, col->comment));
     ++colCount;
     }
 
@@ -581,7 +583,7 @@ for ( ; colCount < bbi->fieldCount; ++colCount)
     {
     hPrintf("<TR><TD><TT>column%d</TT></TD>", colCount+1);
     if (ivList != NULL)
-	hPrintf("<TD>%s</TD>", row[colCount]);
+	hPrintf("<TD>%s</TD>", hubEncode(tdb, row[colCount]));
     hPrintf("<TD>n/a</TD></TR>\n");
     }
 hTableEnd();
@@ -597,7 +599,7 @@ if (ivList != NULL)
     int colIx = 0;
     for (col = as->columnList; col != NULL; col = col->next)
 	{
-	hPrintf("<TH>%s</TH>", col->name);
+	hPrintf("<TH>%s</TH>", hubEncode(tdb, col->name));
 	++colIx;
 	}
     for (; colIx < colCount; ++colIx)

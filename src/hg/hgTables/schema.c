@@ -343,7 +343,8 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (tdb != NULL && isNotEmpty(tdb->html))
     {
-    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->track);
+    // shortLabel comes from trackDb, which a track hub controls
+    webNewSection("%s (%s) Track Description", htmlEncode(tdb->shortLabel), tdb->track);
     char *browserVersion;
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts(tdb->html);
