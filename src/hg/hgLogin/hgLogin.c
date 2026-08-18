@@ -1736,11 +1736,15 @@ hPrintf("<p style=\"font-size:0.9em\">Note: your username becomes part of every 
     "something short and easy to type.</p>", brwAddr);
 }
 
-static void loginAndReturn(char *userName, uint idx)
+static void loginAndReturn(struct sqlConnection *conn, char *userName, uint idx)
 /* Set the permanent login cookies for userName and bounce back to the returnto URL.
- * Every login method (password, social, email link) funnels through here, so they all
- * produce the same long-lived login cookies. */
+ * Every social/email-link login funnels through here, so they all produce the same
+ * long-lived cookies and all record the sign-in in gbMembers.lastUse.  (The password
+ * path uses displayLoginSuccess and stamps lastUse via clearNewPasswordFields.) */
 {
+char query[256];
+sqlSafef(query, sizeof(query), "UPDATE gbMembers SET lastUse=NOW() WHERE idx=%u", idx);
+sqlUpdate(conn, query);
 hPrintf("<h2>%s</h2>", brwName);
 hPrintf("<p>Login successful, setting cookies now&hellip;</p>");
 struct dyString *cookieJS = getLoginCookieJS(userName, idx);
@@ -2054,7 +2058,7 @@ linkIdentity(conn, idx, &pending);
 clearPendingIdentity();
 if (!emailVerified)
     setupNewAccount(conn, email, user);   // send confirmation mail for the unverified address
-loginAndReturn(user, idx);
+loginAndReturn(conn, user, idx);
 }
 
 void chooseAccountPage(struct sqlConnection *conn)
@@ -2171,20 +2175,16 @@ if (isEmpty(provider))
         chooseAccountPage(conn);
         return;
         }
-    /* Consume the token on every account that shared it (single use), then sign in. */
+    /* Consume the token on every account that shared it (single use), then sign in.
+     * loginAndReturn records the sign-in on the chosen account in gbMembers.lastUse. */
     sqlSafef(query, sizeof(query),
         "UPDATE gbMembers SET loginToken='' WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s'",
         email, email, tokenMd5);
     sqlUpdate(conn, query);
-    /* Record the sign-in on the account actually chosen, the same as the single-account path in
-     * emailLogin, so lastUse reflects the login. */
-    sqlSafef(query, sizeof(query),
-        "UPDATE gbMembers SET lastUse=NOW() WHERE idx=%u", m->idx);
-    sqlUpdate(conn, query);
     cartRemove(cart, "emailLogin_email");
     cartRemove(cart, "emailLogin_tokenMd5");
     cartRemove(cart, "hgLogin_chosenIdx");
-    loginAndReturn(m->userName, m->idx);
+    loginAndReturn(conn, m->userName, m->idx);
     gbMembersFree(&m);
     return;
     }
@@ -2224,7 +2224,7 @@ pending.email = email;
 linkIdentity(conn, m->idx, &pending);
 clearPendingIdentity();
 cartRemove(cart, "hgLogin_chosenIdx");
-loginAndReturn(m->userName, m->idx);
+loginAndReturn(conn, m->userName, m->idx);
 gbMembersFree(&m);
 }
 
@@ -2273,7 +2273,7 @@ struct gbMembers *linked = memberForIdentity(conn, id);
 if (linked != NULL)
     {
     linkIdentity(conn, linked->idx, id);
-    loginAndReturn(linked->userName, linked->idx);
+    loginAndReturn(conn, linked->userName, linked->idx);
     gbMembersFree(&linked);
     gbMembersFreeList(&matches);
     return;
@@ -2282,7 +2282,7 @@ if (linked != NULL)
 if (n == 1)
     {
     linkIdentity(conn, matches->idx, id);
-    loginAndReturn(matches->userName, matches->idx);
+    loginAndReturn(conn, matches->userName, matches->idx);
     gbMembersFreeList(&matches);
     return;
     }
@@ -2513,9 +2513,9 @@ if (n == 0)
 else if (n == 1)
     {
     sqlSafef(query, sizeof(query),
-        "UPDATE gbMembers SET loginToken='', lastUse=NOW() WHERE idx=%u", list->idx);
+        "UPDATE gbMembers SET loginToken='' WHERE idx=%u", list->idx);
     sqlUpdate(conn, query);
-    loginAndReturn(list->userName, list->idx);
+    loginAndReturn(conn, list->userName, list->idx);
     }
 else
     {
