@@ -308,6 +308,19 @@ int maxRGBShade = 16;
 struct bed *sageExpList = NULL;
 char ncbiOmimUrl[255] = {"https://www.ncbi.nlm.nih.gov/omim/"};
 
+char *hubEncode(struct trackDb *tdb, char *text)
+/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged.
+ * A hub's trackDb, autoSql schema and data file are all written by a stranger, so anything
+ * from them has to be escaped before it goes in the page.  Our own tracks are a
+ * different case: they put real HTML in fields on purpose - ClinVar's review-status stars,
+ * the CRISPR track's links in an extra column, the <BR> in the Denisova schema comments -
+ * and escaping those would print the markup instead of rendering it. */
+{
+if (text != NULL && tdb != NULL && isHubTrack(tdb->track))
+    return htmlEncode(text);
+return text;
+}
+
 struct palInfo
 {
     char *chrom;
@@ -831,14 +844,15 @@ if (bedSize >= 4 && bed->name[0] != 0)
     char *label = "Item", *tdbLabel = NULL;
     if (tdb && ((tdbLabel = trackDbSetting(tdb, "bedNameLabel")) != NULL))
 	label = tdbLabel;
-    printf("<B>%s:</B> %s<BR>\n", label, bed->name);
+    // bedNameLabel is a trackDb setting and the name comes from the data file
+    printf("<B>%s:</B> %s<BR>\n", hubEncode(tdb, label), hubEncode(tdb, bed->name));
     }
 if (bedSize >= 5)
     {
     if (!tdb || !trackDbSetting(tdb, "noScoreFilter"))
         {
         char *scoreLabel = trackDbSettingOrDefault(tdb, "scoreLabel", "Score");
-	printf("<B>%s:</B> %d<BR>\n", scoreLabel, bed->score);
+	printf("<B>%s:</B> %d<BR>\n", hubEncode(tdb, scoreLabel), bed->score);
         }
     }
 if (bedSize >= 6)
@@ -999,15 +1013,18 @@ char *eLinkLabel = replaceInUrl(linkLabel, itemName, cart, database, seqName, wi
 
 // if we got no item name from hgTracks or the item name does not appear in the URL
 // there is no need to show the item name at all
+// the url and its label come from trackDb and the item name from the data file, both of
+// which a track hub supplies, so escape them
 if (isEmpty(itemName) || !stringIn("$$", url))
     {
-    printf("<A TARGET=_blank HREF='%s'>%s</A><BR>",eUrl, eLinkLabel);
+    printf("<A TARGET=_blank HREF='%s'>%s</A><BR>",hubEncode(tdb, eUrl),
+           hubEncode(tdb, eLinkLabel));
     return;
     }
 
-printf("<B>%s </B>",eLinkLabel);
+printf("<B>%s </B>",hubEncode(tdb, eLinkLabel));
 
-printf("<A HREF=\"%s\" target=_blank>", eUrl);
+printf("<A HREF=\"%s\" target=_blank>", hubEncode(tdb, eUrl));
 
 if (sameWord(tdb->table, "npredGene"))
     {
@@ -1018,7 +1035,7 @@ else
     char *label = itemName;
     if (isNotEmpty(itemLabel) && differentString(itemName, itemLabel))
         label = itemLabel;
-    printf("%s</A><BR>\n", label);
+    printf("%s</A><BR>\n", hubEncode(tdb, label));
     }
 //freeMem(&eUrl); small memory leak
 }
@@ -1472,7 +1489,7 @@ if (fieldToUrl != NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
 if (url == NULL)
     {
-    printf("<td class='bedExtraTblVal'>%s</td></tr>\n", idList);
+    printf("<td class='bedExtraTblVal'>%s</td></tr>\n", hubEncode(tdb, idList));
     return;
     }
 
@@ -1514,7 +1531,8 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
 
     char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
                     winEnd, tdb->track, encode, NULL);
-    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
+    printf("<a href=\"%s\" target=\"_blank\">%s</a>", hubEncode(tdb, idUrl),
+           hubEncode(tdb, itemName));
     } 
 printf("</td></tr>\n");
 freeMem(slIds);
@@ -1982,7 +2000,9 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         entry = col->comment;
 
-    printFieldLabelWithId(entry, fieldName);
+    // the field name and its comment come from the autoSql schema, which for a hub bigBed
+    // is written by the hub author
+    printFieldLabelWithId(hubEncode(tdb, entry), hubEncode(tdb, fieldName));
 
     // detailsScript fields: print empty cell, JavaScript will fill it
     if (dsScriptFields && slNameInList(dsScriptFields, fieldName))
@@ -1995,10 +2015,10 @@ for (;col != NULL && count < fieldCount;col=col->next)
         if (errno == 0 && valDouble != 0)
             printf("<td>%g</td></tr>\n", valDouble);
         else
-            printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
+            printf("<td>%s</td></tr>\n", hubEncode(tdb, fields[ix])); // decided not to print error
         }
     else
-        printf("<td class='bedExtraTblVal'>%s</td></tr>\n", fields[ix]);
+        printf("<td class='bedExtraTblVal'>%s</td></tr>\n", hubEncode(tdb, fields[ix]));
     printCount++;
     }
 if (skipIds)
@@ -3675,9 +3695,11 @@ char *trackName = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackName, tdb->track))
     parentTdb = hTrackDbForTrack(database, trackName);
+// shortLabel comes from trackDb, which a track hub controls, escape it
 printf("<P><A HREF=\"%s?db=%s&g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
-       hTrackUiForTrack(tdb->track), database, trackName, cartSidUrlString(cart), parentTdb->shortLabel);
+       hTrackUiForTrack(tdb->track), database, trackName, cartSidUrlString(cart),
+       htmlEncode(parentTdb->shortLabel));
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
