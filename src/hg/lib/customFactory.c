@@ -13,6 +13,7 @@
 #include "obscure.h"
 #include "binRange.h"
 #include "pipeline.h"
+#include "cheapcgi.h"
 #include "jksql.h"
 #include "net.h"
 #include "bed.h"
@@ -4121,6 +4122,32 @@ customTrackUpdateFromSettings(track, genomeDb, line, lineIx);
 return track;
 }
 
+static char *customMemFromSpec(char *text, char **retName, unsigned long *retSize)
+/* Parse a "<scheme>://<name> <address> <size>" string made by prepCompressedFile
+ * or prepBigData, and return the uploaded data it names.  Return NULL unless
+ * this program handed out that address:  such a string can also arrive in a cgi
+ * variable, and then the address comes from whoever sent the request.  If
+ * retName is not NULL the "<scheme>://<name>" part is cloned into it. */
+{
+char *copy = cloneString(text);
+char *words[4];
+int wordCount = chopByWhite(copy, words, ArraySize(words));
+char *mem = NULL;
+/* A registered address and size are each an unsigned long, at most 20 digits.
+ * A longer word cannot name a block we handed out, so leave mem NULL and let
+ * the caller fall back to treating the text as literal data. */
+if (wordCount == 3 && strlen(words[1]) <= 20 && strlen(words[2]) <= 20)
+    {
+    char spec[64];
+    safef(spec, sizeof(spec), "%s %s", words[1], words[2]);
+    mem = cgiMemBlobFind(spec, retSize);
+    if (mem != NULL && retName != NULL)
+	*retName = cloneString(words[0]);
+    }
+freeMem(copy);
+return mem;
+}
+
 static struct lineFile *customLineFile(char *text, boolean isFile)
 /* Figure out input source, handling URL's and compression */
 {
@@ -4137,28 +4164,19 @@ if (isFile)
     }
 else
     {
-    if (startsWith("compressed://",text))
+    if (startsWith("compressed://",text) || startsWith("memory://", text))
 	{
-	char *words[3];
-	char *mem;
-        unsigned long size;
-	chopByWhite(text,words,3);
-    	mem = (char *)sqlUnsignedLong(words[1]);
-        size = sqlUnsignedLong(words[2]);
-	lf = lineFileDecompressMem(TRUE, mem, size);
-	}
-    else if (startsWith("memory://", text))
-	{
-	int len = strlen(text) + 1;
-	char copy[len];
-	safecpy(copy, len, text);
-	char *words[3];
-	int wordCount = chopByWhite(copy, words, 3);
-	if (wordCount != 3)
-	    errAbort("customLineFile: badly formatted input '%s': expected 3 words, got %d",
-		     text, wordCount);
-	char *mem = (char *)sqlUnsignedLong(words[1]);
-	lf = lineFileOnString(words[0], TRUE, mem);
+	char *name = NULL;
+	unsigned long size = 0;
+	char *mem = customMemFromSpec(text, &name, &size);
+	if (mem == NULL)
+	    /* Not data this program uploaded, so it is just text that happens
+	     * to look like a reference to some. */
+	    lf = lineFileOnString(CT_NO_FILE_NAME, TRUE, text);
+	else if (startsWith("compressed://", text))
+	    lf = lineFileDecompressMem(TRUE, mem, size);
+	else
+	    lf = lineFileOnString(name, TRUE, mem);
 	}
     else
         {

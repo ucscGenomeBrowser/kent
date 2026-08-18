@@ -243,6 +243,57 @@ static boolean haveCookiesHash = FALSE;
 static struct hash *cookieHash = NULL;
 static struct cgiVar *cookieList = NULL;
 
+/* An uploaded file is passed on to the code that reads it as the address and
+ * size of the bytes in memory, written as text into a cgi variable.  Every cgi
+ * variable can also be set by the request, so the address has to be checked
+ * against the blocks we handed out before anything dereferences it.  These
+ * blocks are recorded here, keyed by the same text that names them. */
+static struct hash *memBlobHash = NULL;
+
+struct memBlob
+/* A block of memory named by address in a cgi or cart variable. */
+    {
+    char *mem;			/* Start of the block. */
+    unsigned long size;		/* Size of the block. */
+    };
+
+char *cgiMemBlobRegister(char *mem, unsigned long size)
+/* Record a block of memory that may be named by address in a cgi or cart
+ * variable, and return the "<address> <size>" text that names it.  The
+ * returned string is allocated here and belongs to the caller. */
+{
+char spec[64];
+safef(spec, sizeof(spec), "%lu %lu", (unsigned long)mem, size);
+if (memBlobHash == NULL)
+    memBlobHash = hashNew(4);
+struct memBlob *blob = hashFindVal(memBlobHash, spec);
+if (blob == NULL)
+    {
+    AllocVar(blob);
+    blob->mem = mem;
+    blob->size = size;
+    hashAdd(memBlobHash, spec, blob);
+    }
+return cloneString(spec);
+}
+
+char *cgiMemBlobFind(char *spec, unsigned long *retSize)
+/* Return the block of memory named by spec, which is "<address> <size>" text
+ * made by cgiMemBlobRegister or by an uploaded file part.  Return NULL if this
+ * program never registered such a block, in which case the address came from
+ * the request rather than from us and must not be used.  If retSize is not
+ * NULL the size of the block is returned in it. */
+{
+struct memBlob *blob = NULL;
+if (memBlobHash != NULL && spec != NULL)
+    blob = hashFindVal(memBlobHash, spec);
+if (blob == NULL)
+    return NULL;
+if (retSize != NULL)
+    *retSize = blob->size;
+return blob->mem;
+}
+
 // maximum length of CGI variables to dump to stderr, 0 = switch off
 static int logCgiVarMaxLen = 0;
 
@@ -694,13 +745,9 @@ for(mp=mp->multi;mp;mp=mp->next)
         if (mp->binary)
 	    {
 	    char varNameBinary[256];
-	    char addrSizeBuf[40];
 	    safef(varNameBinary,sizeof(varNameBinary),"%s__binary",cdName);
-            safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu",
-		(unsigned long)mp->data,
-		(unsigned long long)mp->size);
 	    AllocVar(el);
-	    el->val = cloneString(addrSizeBuf);
+	    el->val = cgiMemBlobRegister(mp->data, (unsigned long)mp->size);
 	    slAddHead(&list, el);
 	    hashAddSaveName(hash, varNameBinary, el, &el->name);
 	    }

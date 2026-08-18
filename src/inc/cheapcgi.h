@@ -96,6 +96,18 @@ struct cgiVar
 struct cgiVar* cgiVarList();
 /* return the list of cgiVar's */
 
+char *cgiMemBlobRegister(char *mem, unsigned long size);
+/* Record a block of memory that may be named by address in a cgi or cart
+ * variable, and return the "<address> <size>" text that names it.  The
+ * returned string is allocated here and belongs to the caller. */
+
+char *cgiMemBlobFind(char *spec, unsigned long *retSize);
+/* Return the block of memory named by spec, which is "<address> <size>" text
+ * made by cgiMemBlobRegister or by an uploaded file part.  Return NULL if this
+ * program never registered such a block, in which case the address came from
+ * the request rather than from us and must not be used.  If retSize is not
+ * NULL the size of the block is returned in it. */
+
 struct cgiDictionary
 /* Stuff to encapsulate parsed out CGI vars. */
     {
