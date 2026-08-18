@@ -67,14 +67,12 @@ if (isNotEmpty(filePlainContents))
 else if (isNotEmpty(fileBinaryCoords))
     {
     fprintf(stderr, "%s=%s fileBinaryCoords=%s\n", cartVar, fileName, fileBinaryCoords);
-    char *binInfo = cloneString(fileBinaryCoords);
-    char *words[2];
-    char *mem;
+    /* The cart holds the address and size of the uploaded bytes, but any
+     * request can set that variable, so only use a block cheapcgi handed out. */
     unsigned long size;
-    chopByWhite(binInfo, words, ArraySize(words));
-    mem = (char *)sqlUnsignedLong(words[0]);
-    size = sqlUnsignedLong(words[1]);
-    lf = lineFileDecompressMem(TRUE, mem, size);
+    char *mem = cgiMemBlobFind(fileBinaryCoords, &size);
+    if (mem != NULL)
+	lf = lineFileDecompressMem(TRUE, mem, size);
     }
 return lf;
 }

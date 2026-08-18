@@ -170,6 +170,8 @@ struct lineFile *lineFileDecompressMem(bool zTerm, char *mem, long size)
 {
 struct pipeline *pl;
 struct lineFile *lf;
+if (mem == NULL || size < 4)   /* the longest signature tested is 4 bytes */
+  return NULL;
 char *fileName = getFileNameFromHdrSig(mem);
 if (fileName==NULL)
   return NULL;
