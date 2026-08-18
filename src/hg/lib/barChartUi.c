@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "cart.h"
 #include "net.h"
 #include "errCatch.h"
@@ -28,11 +29,13 @@ static boolean isPopup = FALSE;
 char *makeCategoryLabel(struct barChartCategory *categ)
 /* Display category color and label */
 {
-char buf[256];
-safef(buf, sizeof(buf), "<td class='bcColorPatch' bgcolor=#%06x></td>"
-                        "<td>&nbsp;%s</td>", 
-                                categ->color, categ->label);
-return(cloneString(buf));
+// the label comes from the barChartBars setting, which a track hub controls, escape it.
+// A dyString rather than a fixed buffer, since escaping can grow a long label past 256 bytes.
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "<td class='bcColorPatch' bgcolor=#%06x></td>"
+                   "<td>&nbsp;%s</td>", 
+                                categ->color, htmlEncode(categ->label));
+return(dyStringCannibalize(&dy));
 }
 
 struct categorySelect
@@ -47,7 +50,7 @@ static void makeGroupCheckboxes(char *name, char *title, struct categorySelect *
 {
 #define TABLE_COLUMNS 1
 if (title != NULL)
-    printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", title);
+    printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", htmlEncode(title));
 int count = slCount(selects);
 struct categorySelect **categArray;
 AllocArray(categArray, count);
@@ -71,8 +74,8 @@ for (i=0; i<count; i++)
     if (!isPopup)
         {
         printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>" "<td>%s</td>\n",
-                name, categArray[j]->name, categArray[j]->checked ? "checked" : "", 
-                categArray[j]->label);
+                name, htmlEncode(categArray[j]->name), categArray[j]->checked ? "checked" : "", 
+                categArray[j]->label);   // label is escaped html already, from makeCategoryLabel
         }
     col++;
     }
@@ -179,7 +182,8 @@ char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
 cgiMakeDoubleVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
+// barChartUnit comes from trackDb, which a track hub controls, escape it
+printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, htmlEncode(unit), 
                                 round(barChartUiMaxMedianScore(tdb)));
 }
 
@@ -412,7 +416,7 @@ char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb,
                     BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
 char *db = cartString(cart, "db");
 struct barChartCategory *categs = barChartUiGetCategories(db, tdb, NULL);
-printf("<div><b>%s:</b>\n", categoryLabel);
+printf("<div><b>%s:</b>\n", htmlEncode(categoryLabel));  // barChartLabel is hub supplied
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_CATEGORY_SELECT);
 if (isPopup)
@@ -456,7 +460,7 @@ if (isPopup)
     {
     char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb,
                     BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
-    printf("<div><b>%s:</b>\n", categoryLabel);
+    printf("<div><b>%s:</b>\n", htmlEncode(categoryLabel));  // barChartLabel is hub supplied
     printf("<a href='%s?db=%s&g=%s'><button type='button'>Change</button><a>",
                 hTrackUiForTrack(track), database, track);
     }

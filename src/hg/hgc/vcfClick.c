@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgc.h"
 #include "htmshell.h"
+#include "htmshell.h"
 #include "jsHelper.h"
 #include "pgSnp.h"
 #include "regexHelper.h"
@@ -102,7 +103,7 @@ else
 
 
 
-static int printTabularHeaderRow(const struct vcfInfoDef *def)
+static int printTabularHeaderRow(struct trackDb *tdb, const struct vcfInfoDef *def)
 /* Parse the column header parts out of def->description and print as table header row;
  * call this only when looksTabular returns TRUE.
  * Returns the number of columns in the header */
@@ -122,7 +123,7 @@ if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(subs
     int descColCount = chopByChar(copy, '|', words, ArraySize(words));
     int i;
     for (i = 0;  i < descColCount; i++)
-        printf("<TH class='withThinBorder'>%s</TH>", words[i]);
+        printf("<TH class='withThinBorder'>%s</TH>", hubEncode(tdb, words[i]));
     puts("</TR>");
     return descColCount;
     }
@@ -132,7 +133,7 @@ else
 return -1;
 }
 
-static void printTabularData(struct vcfInfoElement *el, int headerCount)
+static void printTabularData(struct trackDb *tdb, struct vcfInfoElement *el, int headerCount)
 /* Print a row for each value in el, separating columns by '|'. */
 {
 int j;
@@ -152,16 +153,34 @@ for (j = 0;  j < el->count;  j++)
         // because of the regex, so enforce that here too so the rows after
         // the header don't get all out of whack
         for (k = 0;  k < headerCount;  k++)
-            printf("<TD class='withThinBorder'>%s</TD>", words[k]);
+            printf("<TD class='withThinBorder'>%s</TD>", hubEncode(tdb, words[k]));
         }
     puts("</TR>");
     }
 }
 
 
-static void vcfInfoDetails(struct vcfRecord *rec, char *trackName, int recordCount)
+static void printInfoDatum(struct trackDb *tdb, const union vcfDatum datum,
+                           const enum vcfInfoType type)
+/* Print one INFO value.  Same as vcfPrintDatum, except that the string forms are escaped for
+ * a hub track, where the VCF file was written by a stranger. */
+{
+if (type == vcfInfoString || type == vcfInfoFlag)
+    {
+    char *val = hubEncode(tdb, datum.datString);
+    if (startsWith("http", datum.datString))
+        printf("<a target=_blank href='%s'>%s</a>", val, val);
+    else
+        printf("%s", val);
+    }
+else
+    vcfPrintDatum(stdout, datum, type);
+}
+
+static void vcfInfoDetails(struct vcfRecord *rec, struct trackDb *tdb, int recordCount)
 /* Expand info keys to descriptions, then print out keys and values. */
 {
+char *trackName = tdb->track;
 if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
@@ -175,8 +194,10 @@ for (i = 0;  i < rec->infoCount;  i++)
     {
     struct vcfInfoElement *el = &(rec->infoElements[i]);
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
+    // the INFO key, its description and its values all come from the VCF file, which for a
+    // hub is a stranger's file
     printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD>",
-           el->key);
+           hubEncode(tdb, el->key));
     int j;
     enum vcfInfoType type = def ? def->type : vcfInfoString;
     if (type == vcfInfoFlag && el->count == 0)
@@ -196,11 +217,11 @@ for (i = 0;  i < rec->infoCount;  i++)
             if (el->missingData[j])
                 printf(".");
             else
-                vcfPrintDatum(stdout, el->values[j], type);
+                printInfoDatum(tdb, el->values[j], type);
             }
         }
     if (def != NULL && !looksTabular(def, el))
-	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
+	printf("&nbsp;&nbsp;</TD><TD>%s", hubEncode(tdb, def->description));
     else
 	printf("</TD><TD>");
     printf("</TD></TR>\n");
@@ -216,10 +237,10 @@ for (i = 0;  i < rec->infoCount;  i++)
     if (looksTabular(def, el))
         {
         puts("<BR>");
-        printf("<B>%s</B>: %s<BR>\n", el->key, def->description);
+        printf("<B>%s</B>: %s<BR>\n", hubEncode(tdb, el->key), hubEncode(tdb, def->description));
         puts("<TABLE class='stdTbl'>");
-        int headerCount = printTabularHeaderRow(def);
-        printTabularData(el, headerCount);
+        int headerCount = printTabularHeaderRow(tdb, def);
+        printTabularData(tdb, el, headerCount);
         puts("</TABLE>");
         }
     }
@@ -564,7 +585,8 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec, int rec
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
 if (isNotEmpty(rec->name) && differentString(rec->name, "."))
-    printf("<B>Name:</B> %s<BR>\n", rec->name);
+    // the ID column comes from the VCF file, a hub's is a stranger's file
+    printf("<B>Name:</B> %s<BR>\n", hubEncode(tdb, rec->name));
 // Add some special URL substitution variables for ExAC/GnomAD-style links
 struct slPair *substFields = slPairNew("ref", rec->alleles[0]);
 substFields->next = slPairNew("firstAlt", rec->alleles[1]);
@@ -621,7 +643,7 @@ printf("<B>Reference allele:</B> %s<BR>\n", displayAls[0]);
 vcfAltAlleleDetails(rec, displayAls);
 vcfQualDetails(rec);
 vcfFilterDetails(rec);
-vcfInfoDetails(rec, tdb->track, recordCount);
+vcfInfoDetails(rec, tdb, recordCount);
 pgSnpCodingDetail(rec);
 makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb, displayAls);

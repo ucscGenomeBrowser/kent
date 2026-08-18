@@ -533,14 +533,15 @@ struct slPair *fields = getFields(tdb, row);
 if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
     printCustomUrlWithFields(tdb, item, item, TRUE, fields);
 else
-    printf("<b>%s: </b>%s ", nameLabel, chartItem->name);
+    // the label comes from trackDb or the autoSql, the name from the bigBed
+    printf("<b>%s: </b>%s ", hubEncode(tdb, nameLabel), hubEncode(tdb, chartItem->name));
 name2Label = name2Col ? name2Col->comment : "Alternative name";
 if (differentString(chartItem->name2, ""))
     {
     if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
         printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
     else
-        printf("(%s: %s)<br>\n", name2Label, chartItem->name2);
+        printf("(%s: %s)<br>\n", hubEncode(tdb, name2Label), hubEncode(tdb, chartItem->name2));
     }
 else
     printf("<br>\n");
@@ -549,8 +550,10 @@ int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
+// barChartMetric, barChartUnit and the bar labels all come from trackDb
 printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n",
-	    metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb, NULL));
+	    hubEncode(tdb, metric), highLevel, hubEncode(tdb, units),
+	    hubEncode(tdb, barChartUiGetCategoryLabelById(categId, database, tdb, NULL)));
 printf("<b>Gene position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n",
                     database, hgTracksPathAndSettings(), database,
