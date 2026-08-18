@@ -643,6 +643,31 @@ freeMem(fileNameDecoded);
 return result;
 }
 
+#define CT_UPLOAD_GONE_MSG "The contents of the uploaded file are no longer available. " \
+			   "Please choose the file again."
+
+static char *memSpecFromCart(struct cart *cart, char *binVar, char *fileVar)
+/* Return the "<address> <size>" text naming the uploaded contents of a file
+ * field, or NULL if there are none.  The binVar cart variable holds such text
+ * already, but any request can set that variable, so look up the block cheapcgi
+ * handed out rather than trusting the text.  Otherwise the contents came
+ * through as an ordinary string in fileVar, and get a name of their own here. */
+{
+char *cFBin = cartOptionalString(cart, binVar);
+if (cFBin != NULL)
+    {
+    unsigned long size;
+    char *mem = cgiMemBlobFind(cFBin, &size);
+    if (mem == NULL)
+	return NULL;
+    return cgiMemBlobRegister(mem, size);
+    }
+char *cF = cartOptionalString(cart, fileVar);
+if (cF == NULL)
+    return NULL;
+return cgiMemBlobRegister(cF, strlen(cF));
+}
+
 static char *prepCompressedFile(struct cart *cart, char *fileName,
                                         char *binVar, char *fileVar)
 /* determine compression type and format properly for parser */
@@ -650,20 +675,14 @@ static char *prepCompressedFile(struct cart *cart, char *fileName,
     if (!customTrackIsCompressed(fileName))
     return NULL;
 char buf[256];
-char *cFBin = cartOptionalString(cart, binVar);
-if (cFBin)
-    {
-    safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
-    /* cgi functions preserve binary data, cart vars have been
-     *  cloneString-ed  which is bad for a binary stream that might
-     * contain 0s  */
-    }
-else
-    {
-    char *cF = cartOptionalString(cart, fileVar);
-    safef(buf,sizeof(buf),"compressed://%s %lu %lu",
-        fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-    }
+/* cgi functions preserve binary data, cart vars have been
+ *  cloneString-ed  which is bad for a binary stream that might
+ * contain 0s  */
+char *spec = memSpecFromCart(cart, binVar, fileVar);
+if (spec == NULL)
+    return NULL;
+safef(buf,sizeof(buf),"compressed://%s %s", fileName, spec);
+freeMem(spec);
 return cloneString(buf);
 }
 
@@ -734,21 +753,12 @@ static char *prepBigData(struct cart *cart, char *fileName, char *binVar, char *
 if (!customTrackIsBigData(fileName))
     return NULL;
 char buf[1024];
-char *cFBin = cartOptionalString(cart, binVar);
-char *cF = cartOptionalString(cart, fileVar);
-if (cFBin)
-    {
-    // cFBin already contains memory offset and size (search for __binary in cheapcgi.c)
-    safef(buf,sizeof(buf),"memory://%s %s", fileName, cFBin);
-    char *split[3];
-    int splitCount = chopByWhite(cloneString(cFBin), split, sizeof(split));
-    if (splitCount > 2) {errAbort("hgCustom: extra garbage in %s", binVar);}
-    }
-else
-    {
-    safef(buf, sizeof(buf),"memory://%s %lu %lu",
-	  fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-    }
+// the spec holds the memory offset and size (search for __binary in cheapcgi.c)
+char *spec = memSpecFromCart(cart, binVar, fileVar);
+if (spec == NULL)
+    return NULL;
+safef(buf,sizeof(buf),"memory://%s %s", fileName, spec);
+freeMem(spec);
 return cloneString(buf);
 }
 
@@ -811,12 +821,16 @@ if (isNotEmpty(fileName))
             {
             customText = prepCompressedFile(cart, fileName,
                                 CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
+            if (customText == NULL)
+                err = cloneString(CT_UPLOAD_GONE_MSG);
             }
 	else if (customTrackIsBigData(fileName))
 	    {
 	    // User is trying to directly upload a bigData file; pass data to
 	    // customFactory, which will alert the user that they need bigDataUrl etc.
 	    customText = prepBigData(cart, fileName, CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
+	    if (customText == NULL)
+	        err = cloneString(CT_UPLOAD_GONE_MSG);
 	    }
         else
             {
@@ -838,8 +852,15 @@ if (isNotEmpty(docFileContents))
 else if (isNotEmpty(docFileName))
     {
     if (customTrackIsCompressed(docFileName))
+        {
         html = prepCompressedFile(cart, docFileName,
                         CT_CUSTOM_DOC_FILE_BIN_VAR, CT_CUSTOM_DOC_FILE_VAR);
+        if (html == NULL)
+            {
+            err = cloneString(CT_UPLOAD_GONE_MSG);
+            customText = NULL;
+            }
+        }
     else
         {
         /* unreadable file */
@@ -859,6 +880,8 @@ if(html != NULL)
     html = jsStripJavascript(html);
     freeMem(tmp);
     }
+else
+    html = cloneString("");   /* the doc file could not be read, see above */
 
 if ((strlen(html) > 50*1024) || startsWith("track ", html) || startsWith("browser ", html))
     {

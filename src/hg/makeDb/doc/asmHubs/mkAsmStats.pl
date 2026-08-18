@@ -357,8 +357,8 @@ sub tableContents() {
       next;
     }
     if ( ! -s "$faSizeTxt" ) {
-       printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
-       print `twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt`;
+       printf STDERR "faSize $twoBit > $faSizeTxt\n";
+       print `faSize $twoBit > $faSizeTxt`;
     }
     my ($gapSize, $maskPerCent) = maskStats($faSizeTxt);
     $overallGapSize += $gapSize;

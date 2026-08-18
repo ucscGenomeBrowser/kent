@@ -106,14 +106,23 @@ asmStats::
 	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g;" ${destDir}/download.${statsName}.html > ${destDir}/${statsName}.html
 	chmod +x ${destDir}/${statsName}.html ${destDir}/download.${statsName}.html
 
-# trackData makes different tables for the test vs. production version
+# trackData makes different tables for the test vs. production version.
+# both are built in a single trackData.pl pass now, so each assembly's
+# tracks are only measured once instead of twice.
+# the two pages are written to .new temporary files first, and only
+# 'mv'ed into their real names once trackData.pl has completely finished.
+# symlinks elsewhere point directly at ${dataName}.html/download.${dataName}.html,
+# and 'mv' within the same directory is an atomic rename, so those
+# symlinks never resolve to a truncated or half-written file while the
+# (potentially long) trackData.pl run is still in progress.
 # mkHubIndex.pl and mkAsmStats.pl should do this too . . .  TBD
 trackData::
-	rm -f ${destDir}/${testDataName}.html ${destDir}/${dataName}.html ${destDir}/download.${dataName}.html
-	${toolsDir}/trackData.pl ${Name} ${name} ${orderList} > ${destDir}/download.${dataName}.html
-	${toolsDir}/trackData.pl -test ${Name} ${name} ${orderList} > ${destDir}/${dataName}.html
-	chmod +x ${destDir}/${dataName}.html
-	chmod +x ${destDir}/download.${dataName}.html
+	rm -f ${destDir}/${testDataName}.html.new ${destDir}/${dataName}.html.new ${destDir}/download.${dataName}.html.new
+	${toolsDir}/trackData.pl ${Name} ${name} ${orderList} ${destDir}/download.${dataName}.html.new ${destDir}/${dataName}.html.new
+	chmod +x ${destDir}/${dataName}.html.new
+	chmod +x ${destDir}/download.${dataName}.html.new
+	mv -f ${destDir}/download.${dataName}.html.new ${destDir}/download.${dataName}.html
+	mv -f ${destDir}/${dataName}.html.new ${destDir}/${dataName}.html
 
 indexPages: mkJson hubIndex asmStats trackData
 	echo indexPages done

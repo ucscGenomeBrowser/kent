@@ -1613,14 +1613,12 @@ else
 	}
     else if (isNotEmpty(fileBinaryCoords))
 	{
-	char *binInfo = cloneString(fileBinaryCoords);
-	char *words[2];
-	char *mem;
-	unsigned long size;
-	chopByWhite(binInfo, words, ArraySize(words));
-	mem = (char *)sqlUnsignedLong(words[0]);
-	size = sqlUnsignedLong(words[1]);
-	lf = lineFileDecompressMem(TRUE, mem, size);
+	/* The cart holds the address and size of the uploaded bytes, but any
+	 * request can set that variable, so only use a block cheapcgi
+	 * handed out. */
+	unsigned long size = 0;
+	char *mem = cgiMemBlobFind(fileBinaryCoords, &size);
+	lf = (mem == NULL) ? NULL : lineFileDecompressMem(TRUE, mem, size);
 	if (lf != NULL)
 	    {
 	    dyStringAppend(dyMessage, "Loaded settings from local file ");
@@ -1986,13 +1984,13 @@ if (!binaryParam)
 
 char *binaryValue = cartOptionalString(cart, binaryParam);
 
-char *binInfo = cloneString(binaryValue);
-char *words[2];
-char *mem;
-unsigned long size;
-chopByWhite(binInfo, words, ArraySize(words));
-mem = (char *)sqlUnsignedLong(words[0]);
-size = sqlUnsignedLong(words[1]);
+/* The cart holds the address and size of the uploaded bytes, but any request
+ * can set that variable, so only use a block cheapcgi handed out. */
+unsigned long size = 0;
+char *mem = cgiMemBlobFind(binaryValue, &size);
+if (mem == NULL)
+    errAbort("The contents of the uploaded file are no longer available.  "
+	     "Please choose the file again.");
 
 struct tempName tn;
 trashDirFile(&tn, "backGround", cartSessionId(cart), ".bin");

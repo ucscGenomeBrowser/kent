@@ -2,10 +2,24 @@
 
 cd /hive/data/outside/otto/mitoMap
 
-wget -q https://mitomap.org/downloads/VariantsControl.tsv -O variantsControl.latest.tsv
-wget -q https://mitomap.org/downloads/VariantsCoding.tsv -O variantsCoding.latest.tsv
-wget -q https://mitomap.org/downloads/MutationsRNA.tsv -O mutationsRNA.latest.tsv
-wget -q https://mitomap.org/downloads/MutationsCodingControl.tsv -O mutationsCodingControl.latest.tsv
+# mitomap.org sits behind a Cloudflare bot check that answers our requests with 403,
+# so MitoMap told us to use their mirror until their IT sorts it out. See #38097.
+mitoMapUrl=https://fr.mitomap.org
+
+# Download a file, stopping the run if it fails or comes back empty. wget writes an
+# output file even on a 403, and without this the build would carry on from empty
+# input and only get caught later by the item count check.
+downloadFile() {
+  if ! wget -q "$mitoMapUrl/$1" -O "$2" || [ ! -s "$2" ]; then
+    echo "Error: could not download $mitoMapUrl/$1"
+    exit 1
+  fi
+}
+
+downloadFile downloads/VariantsControl.tsv variantsControl.latest.tsv
+downloadFile downloads/VariantsCoding.tsv variantsCoding.latest.tsv
+downloadFile downloads/MutationsRNA.tsv mutationsRNA.latest.tsv
+downloadFile downloads/MutationsCodingControl.tsv mutationsCodingControl.latest.tsv
 
 # Flag to track if any files are different
 run_script=false
@@ -69,7 +83,14 @@ mv mutationsRNA.latest.tsv mutationsRNA.tsv
 mv variantsCoding.latest.tsv variantsCoding.tsv
 mv variantsControl.latest.tsv variantsControl.tsv
 
-wget -q https://mitomap.org/update-date.txt -O version.txt
+# Fetch MitoMap's own release date. Not fatal: the new tracks are already in place,
+# so a failure here just leaves the previous date showing in hgTrackUi.
+if wget -q $mitoMapUrl/update-date.txt -O version.new.txt && [ -s version.new.txt ]; then
+  mv version.new.txt version.txt
+else
+  echo "Warning: could not fetch $mitoMapUrl/update-date.txt, keeping $(cat version.txt)"
+  rm -f version.new.txt
+fi
 
 echo
 echo "Item counts for disease mutation old vs. new bigBed. Old: $oldCountDiseaseMuts New: $newCountDiseaseMuts"
