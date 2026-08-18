@@ -94,9 +94,10 @@ puts("</TD>");
 static void ourPrintCellLink(char *str, char *url)
 {
 ourCellStart();
-printf("<A class=\"cv\" HREF=\"%s\" TARGET=_BLANK>\n", url);
+// every caller passes a hub label and a hub url, both text from a stranger, so escape
+printf("<A class=\"cv\" HREF=\"%s\" TARGET=_BLANK>\n", htmlEncode(url));
 if (str != NULL)
-    fputs(str, stdout); // do not add a newline -- was causing trailing blanks get copied in cut and paste 
+    fputs(htmlEncode(str), stdout); // do not add a newline -- was causing trailing blanks get copied in cut and paste 
 puts("</A>");
 ourCellEnd();
 }
@@ -375,7 +376,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	if (hub->trackHub->descriptionUrl != NULL)
 	    ourPrintCellLink(hub->trackHub->longLabel, hub->trackHub->descriptionUrl);
 	else
-	    ourPrintCell(hub->trackHub->longLabel);
+	    ourPrintCell(htmlEncode(hub->trackHub->longLabel));  // hub supplied
 	}
     else
 	ourPrintCell("");
@@ -698,7 +699,7 @@ if (hubHasNoError)
     if (hubInfo->tableHasDescriptionField && !isEmpty(hubInfo->descriptionUrl))
         ourPrintCellLink(hubInfo->longLabel, hubInfo->descriptionUrl);
     else
-        ourPrintCell(hubInfo->longLabel);
+        ourPrintCell(htmlEncode(hubInfo->longLabel));  // hub supplied
     }
 else
     {
@@ -1444,10 +1445,12 @@ cartWebStart(cart, NULL, "%s", headerText);
 
 struct trackHub *tHub = hub->trackHub;
 
-hPrintf("<P><B>Connected Hub: </B>%s</P>", tHub->shortLabel);
+// the labels, the email and the per genome organism and description all come out of the
+// hub's own text files, so escape them before printing
+hPrintf("<P><B>Connected Hub: </B>%s</P>", htmlEncode(tHub->shortLabel));
 
-hPrintf("<P><B>Hub Description:</B> %s</P>", tHub->longLabel);
-hPrintf("<P><B>Contact email:</B> <A HREF=\"mailto:%s\">%s</A>.</B> Use this contact for all data questions.</P>", tHub->email, tHub->email);
+hPrintf("<P><B>Hub Description:</B> %s</P>", htmlEncode(tHub->longLabel));
+hPrintf("<P><B>Contact email:</B> <A HREF=\"mailto:%s\">%s</A>.</B> Use this contact for all data questions.</P>", htmlEncode(tHub->email), htmlEncode(tHub->email));
 struct trackHubGenome *genomeList = tHub->genomeList;
 
 hPrintf("<P><B>Assemblies:</B> Select an assembly below to start browsing the tracks of this hub:<P>");
@@ -1464,8 +1467,8 @@ for(; genomeList; genomeList = genomeList->next)
     if (org==NULL)
         org = trackHubSkipHubName(hOrganism(genomeList->name));
 
-    hPrintf("<li>Open: <A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",genomeList->name, 
-        cartSidUrlString(cart), org, desc);
+    hPrintf("<li>Open: <A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",
+        htmlEncode(genomeList->name), cartSidUrlString(cart), htmlEncode(org), htmlEncode(desc));
     }
 hPrintf("</ul>");
 
