@@ -67,6 +67,11 @@ def main():
 
             # For INS, END == POS so the item has zero width; expand by 1 bp
             chromEnd = end
+            # For symbolic <DEL>, VCF POS is the padding base before the event
+            # (not deleted); the deleted region is [POS+1, END]. Drop the padding
+            # base from the left so svLen == |SVLEN|. Only DEL moves.
+            if svType == "DEL":
+                chromStart += 1
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 

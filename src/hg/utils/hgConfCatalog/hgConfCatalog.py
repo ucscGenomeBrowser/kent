@@ -279,7 +279,7 @@ RELEASE_GATES = {
                "computes for it is really a deadline on deciding whether the "
                "new page becomes the default, which is the conversation the "
                "nag is supposed to force."),
-        h("blatResultsGroup", "flag", "hg/hgTracks/hgTracks.c:7262", default="FALSE",
+        h("blatResultsGroup", "flag", "hg/hgTracks/hgTracks.c:7267", default="FALSE",
           role="gate", verified=True, ticket="38086",
           note="Put BLAT result custom tracks in their own \"BLAT Results\" track "
                "group (with a \"Delete all\" button) instead of Custom Tracks, and "
@@ -292,7 +292,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
                "genark.c and hdb.c."),
-        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12171", default="FALSE",
+        h("showIgv", "flag", "hg/hgTracks/hgTracks.c:12176", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
         h("showLiftRequest", "flag", "hg/hgConvert/hgConvert.c:183",
@@ -304,16 +304,16 @@ RELEASE_GATES = {
                "is missing, but nothing in the tree linked to the request "
                "page.  Off until the request pipeline is confirmed ready to "
                "take traffic from the browser UI."),
-        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10202",
+        h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c:10207",
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
                "layout."),
-        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7566",
+        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c:7571",
           default="FALSE", role="gate", verified=True,
           note="Let the calculated GC track coexist with the stored one.  A "
                "sub-flag of gcOnTheFly, so it should be deleted with it "
                "rather than outliving it."),
-        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9875", default="FALSE",
+        h("showAliases", "flag", "hg/hgTracks/hgTracks.c:9880", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
         h("showColorPicker", "flag", "hg/lib/hui.c:6066", default="FALSE",
@@ -329,7 +329,7 @@ RELEASE_GATES = {
           note="Per-hguid IP tracking for abuse detection.  Its three "
                "companion settings (maxIps, table, windowSeconds) are plain "
                "values and are listed under abuse control."),
-        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9175",
+        h("canColorItems", "flag", "hg/hgTracks/hgTracks.c:9180",
           default="FALSE", role="gate", verified=True,
           note="Added in the current release, so it is doing exactly what a "
                "gate is supposed to do and has not earned a deadline yet."),
@@ -346,7 +346,7 @@ RELEASE_GATES = {
           verified=True,
           note="Snake display for chain and alignment tracks.  Public since "
                "v467."),
-        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:9050",
+        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c:9055",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
         h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c:194",
@@ -361,7 +361,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
                "since v492.  Three call sites."),
-        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10453",
+        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c:10458",
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
@@ -376,7 +376,7 @@ RELEASE_GATES = {
         h("newBotDelay", "flag", "hg/lib/botDelay.c:215", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
-        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7565", default="TRUE",
+        h("gcOnTheFly", "flag", "hg/hgTracks/hgTracks.c:7570", default="TRUE",
           role="gate", verified=True,
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
@@ -741,7 +741,7 @@ CENTRAL_TABLES = {
           verified=True, env="HGDB_SESSIONDBTABLE", default="sessionDb"),
         h("defaultCartName", "table", "hg/lib/cartDb.c:319", public=True,
           verified=True, env="HGDB_DEFAULTCARTTABLE"),
-        h("namedSessionDbName", "table", "hg/lib/cart.c:497", verified=True,
+        h("namedSessionDbName", "table", "hg/lib/cart.c:544", verified=True,
           env="HGDB_NAMED_SESSION_DB", default="namedSessionDb",
           note="Saved sessions."),
         h("hub.publicTableName", "table",
@@ -769,7 +769,7 @@ CENTRAL_TABLES = {
           note="Table the hub API reads to report otto track update times."),
         h("genbankDb", "profile", "hg/hgVai/hgVai.c:803", public=True,
           verified=True, env="GENBANKDB"),
-        h("cart.trace", "debug", "hg/lib/cart.c:109", verified=True,
+        h("cart.trace", "debug", "hg/lib/cart.c:110", verified=True,
           note="Log every cart read and write.  Very noisy; a debugging aid "
                "for session problems."),
         h("cartVersion", "internal", "hg/cgilib/cartRewrite.c:46",
@@ -806,7 +806,7 @@ PATHS = {
                "where every hub file lands."),
         h("udc.localDir", "path", "hg/lib/customFactory.c:200", public=True,
           verified=True),
-        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12116", verified=True,
+        h("udcLog", "debug", "hg/hgTracks/hgTracks.c:12121", verified=True,
           note="Log UDC fetches, which is the first thing to turn on when a "
                "hub is slow."),
         h("cacheTrackDbDir", "path", "hg/lib/trackDbCache.c:483",
@@ -894,7 +894,7 @@ LIMITS = {
           note="Address-space cap applied by cfgSetMaxMem() at CGI startup.  "
                "Exceeding it is what produces the hogExit entries in the "
                "error log."),
-        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10841",
+        h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c:10846",
           verified=True, note="Log a warning for any hgTracks render slower "
                               "than this."),
         h("hubSpaceLockTimeout", "limit", "hg/lib/userdata.c:608",
@@ -967,11 +967,11 @@ ABUSE = {
           default='"600"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.table", "table", "hg/lib/botDelay.c:172",
           default='"hguidIpAccess"', verified=True, family="hguidIpTracking"),
-        h("cloudFlareSiteKey", "credential", "hg/lib/cart.c:1644",
+        h("cloudFlareSiteKey", "credential", "hg/lib/cart.c:1691",
           verified=True, required=True,
           note="Turnstile captcha site key.  Read with cfgVal, so a machine "
                "that enables the captcha path must set it."),
-        h("cloudFlareSecretKey", "credential", "hg/lib/cart.c:1619",
+        h("cloudFlareSecretKey", "credential", "hg/lib/cart.c:1666",
           verified=True, required=True),
         h("noCaptchaAgent.", "internal", "hg/lib/botDelay.c:307",
           verified=True,
@@ -990,40 +990,40 @@ LOGGING = {
     "what": "Diagnostics.  Several of these are safe to leave on and a few "
             "are expensive, so they are worth telling apart.",
     "vars": [
-        h("browser.cgiTime", "debug", "hg/lib/cart.c:3998", default='"yes"',
+        h("browser.cgiTime", "debug", "hg/lib/cart.c:4045", default='"yes"',
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
-        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9279", default='"off"',
+        h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9284", default='"off"',
           verified=True, note="Log which tracks were drawn per request."),
-        h("noSqlInj.level", "internal", "hg/lib/cart.c:2854",
+        h("noSqlInj.level", "internal", "hg/lib/cart.c:2901",
           default='"abort"', verified=True, family="noSqlInj",
           note="What to do when the SQL injection guard fires: abort, warn or "
                "ignore.  Production wants abort."),
-        h("noSqlInj.dumpStack", "debug", "hg/lib/cart.c:2857", verified=True,
+        h("noSqlInj.dumpStack", "debug", "hg/lib/cart.c:2904", verified=True,
           family="noSqlInj"),
-        h("signalsHandler", "internal", "hg/lib/cart.c:2817", public=True,
+        h("signalsHandler", "internal", "hg/lib/cart.c:2864", public=True,
           verified=True, note="Install handlers that turn a segfault into a "
                               "logged error rather than a blank page."),
-        h("httpsCertCheck", "internal", "hg/lib/cart.c:2821", public=True,
+        h("httpsCertCheck", "internal", "hg/lib/cart.c:2868", public=True,
           verified=True, family="httpsCertCheck",
           note="How strictly to verify certificates on outbound https, which "
                "matters because hubs are fetched over it."),
-        h("httpsCertCheckVerbose", "debug", "hg/lib/cart.c:2824",
+        h("httpsCertCheckVerbose", "debug", "hg/lib/cart.c:2871",
           verified=True, family="httpsCertCheck"),
-        h("httpsCertCheckDepth", "internal", "hg/lib/cart.c:2827",
+        h("httpsCertCheckDepth", "internal", "hg/lib/cart.c:2874",
           verified=True, family="httpsCertCheck"),
-        h("httpsCertCheckDomainExceptions", "internal", "hg/lib/cart.c:2830",
+        h("httpsCertCheckDomainExceptions", "internal", "hg/lib/cart.c:2877",
           public=True, verified=True, family="httpsCertCheck"),
-        h("httpProxy", "url", "hg/lib/cart.c:2837", public=True,
+        h("httpProxy", "url", "hg/lib/cart.c:2884", public=True,
           verified=True, family="proxy"),
-        h("httpsProxy", "url", "hg/lib/cart.c:2840", public=True,
+        h("httpsProxy", "url", "hg/lib/cart.c:2887", public=True,
           verified=True, family="proxy"),
-        h("ftpProxy", "url", "hg/lib/cart.c:2843", public=True, verified=True,
+        h("ftpProxy", "url", "hg/lib/cart.c:2890", public=True, verified=True,
           family="proxy"),
-        h("noProxy", "internal", "hg/lib/cart.c:2846", public=True,
+        h("noProxy", "internal", "hg/lib/cart.c:2893", public=True,
           verified=True, family="proxy"),
-        h("logProxy", "debug", "hg/lib/cart.c:2849", verified=True,
+        h("logProxy", "debug", "hg/lib/cart.c:2896", verified=True,
           family="proxy"),
     ],
 }
@@ -1036,7 +1036,7 @@ LOGGING = {
 BRANDING = {
     "what": "Text, styling and links that differ between UCSC and a mirror.",
     "vars": [
-        h("browser.style", "internal", "hg/lib/cart.c:3120", public=True,
+        h("browser.style", "internal", "hg/lib/cart.c:3167", public=True,
           verified=True, note="Stylesheet override."),
         h("browser.theme.", "internal", "hg/hgTracks/config.c:31",
           public=True, verified=True,
@@ -1046,7 +1046,7 @@ BRANDING = {
         h("addJs", "internal", "hg/lib/web.c:1587", verified=True,
           note="Extra JavaScript file to include on every page."),
         h("help.html", "path", "hg/lib/hui.c:702", verified=True),
-        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9946",
+        h("hgTracksNoteHtml", "internal", "hg/hgTracks/hgTracks.c:9951",
           public=True, verified=True,
           note="A banner on the browser page.  This is where a mirror puts "
                "its own notice."),
@@ -1063,13 +1063,13 @@ BRANDING = {
         h("hubSurveyLabel", "internal",
           "hg/hgHubConnect/hgHubConnect.c:1676", verified=True,
           env="HGDB_HUB_SURVEY_LABEL"),
-        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8918",
+        h("searchHelpUrl", "url", "hg/hgTracks/hgTracks.c:8923",
           default='"../goldenPath/help/query.html"', verified=True),
-        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8919",
+        h("searchHelpLabel", "internal", "hg/hgTracks/hgTracks.c:8924",
           default='"Examples"', verified=True),
         h("analyticsKey", "credential", "hg/lib/googleAnalytics.c:13",
           public=True, verified=True),
-        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:12051",
+        h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c:12056",
           default='"on"', verified=True,
           note="Not the same thing as the showMouseovers gate: this one is on "
                "by default and controls the existing tooltip behaviour.  The "

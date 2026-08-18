@@ -89,6 +89,12 @@ def main():
                 continue
 
             start = int(pos) - 1  # VCF 1-based
+            # POS is the non-deleted anchor base; drop it from the left of DEL
+            # intervals so DEL coordinates match anchor-excluded callsets. Done
+            # before the end computation so it is correct whether or not INFO/END
+            # is present (END-absent derives end from start).
+            if sv_type == "DEL":
+                start += 1
             svlen_raw = _int(info_d.get("SVLEN", 0))
             abs_svlen = abs(svlen_raw)
 

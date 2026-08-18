@@ -70,6 +70,10 @@ def main():
             # BED is 0-based half-open
             chromStart = pos - 1
             if svType == "DEL":
+                # POS is the non-deleted anchor base; the deleted region starts
+                # one base to the right. Shift the whole interval right so it
+                # covers only the deleted bases (span stays svLenSrc == |SVLEN|).
+                chromStart += 1
                 chromEnd = chromStart + svLenSrc
             else:
                 # INS: place at insertion site, 1 bp wide

@@ -92,6 +92,11 @@ def emit(site, fout):
     chrom = site["chrom"]
     start = site["pos0"]
     end = start + max(site["ref_len"], 1)
+    # For DEL, POS is the non-deleted anchor base; drop it from the left (end
+    # already = pos-1+ref_len). The shared prefix is >=1 base so this never
+    # over-shifts. Only DEL moves; INS/MIXED keep the anchor.
+    if sv_type == "DEL":
+        start += 1
     af = (site["ac_sum"] / site["an"]) if site["an"] else 0.0
     score = min(1000, max(0, int(round(af * 1000))))
     svLen = end - start
