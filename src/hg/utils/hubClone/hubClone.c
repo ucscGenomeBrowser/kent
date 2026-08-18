@@ -22,7 +22,9 @@ errAbort(
   "options:\n"
   "   -udcDir=/dir/to/udcCache   Path to udc directory\n"
   "   -download                  Download data files in addition to the hub configuration files\n"
-  "   -skipMissingAssemblies     Skip assemblies whose trackDb.txt files are missing instead of aborting\n"
+  "   -skipMissingAssemblies     Skip assemblies whose trackDb.txt files are missing instead of\n"
+  "                              aborting; also skips (with a warning) any include file that\n"
+  "                              can't be opened, instead of aborting the whole clone\n"
   );
 }
 
@@ -158,15 +160,26 @@ for (hel = helList; hel != NULL; hel = hel->next)
                     dyStringPrintf(fname, "%s%s", downloadDir, (char *)hel->val);
                     }
                 fprintf(out, "%s %s\n", hel->name, relName);
-                char *cmd[] = {"wget", "-q", "-O", dyStringContents(fname), urlToData, NULL};
 
-                // use pipelineNoAbort so the loop continues if a url is typo'd or something,
-                // but still warn the user
-                struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
-                int ret = pipelineWait(pl);
-                if (ret != 0)
+                // don't re-download big data files that are already present from
+                // a previous clone of this hub (like "wget -nc", but done ourselves
+                // since -nc is not honored by wget when -O is also given)
+                if (fileExists(dyStringContents(fname)))
                     {
-                    warn("wget failed for url: %s", urlToData);
+                    verbose(1, "skipping already-downloaded file: %s\n", dyStringContents(fname));
+                    }
+                else
+                    {
+                    char *cmd[] = {"wget", "-q", "-O", dyStringContents(fname), urlToData, NULL};
+
+                    // use pipelineNoAbort so the loop continues if a url is typo'd or something,
+                    // but still warn the user
+                    struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+                    int ret = pipelineWait(pl);
+                    if (ret != 0)
+                        {
+                        warn("wget failed for url: %s", urlToData);
+                        }
                     }
                 }
             else
@@ -191,8 +204,10 @@ for (hel = helList; hel != NULL; hel = hel->next)
 fprintf(out,"\n");
 }
 
-void printOneFile(char *url, FILE *f, boolean oneFile, char *downloadDir)
-/* printOneFile: pass a stanza to appropriate printer */
+void printOneFile(char *url, FILE *f, boolean oneFile, char *downloadDir, boolean skipErrors)
+/* printOneFile: pass a stanza to appropriate printer.  If skipErrors is set, an include
+ * file that can't be opened (missing, typo'd URL, etc.) is skipped with a warning instead
+ * of aborting the whole clone -- useful for pushing on through a very large hub. */
 {
 struct lineFile *lf;
 struct hash *stanza;
@@ -221,8 +236,25 @@ while ((stanza = raNextRecord(lf)) != NULL)
             {
             for(; includeFile; includeFile = includeFile->next)
                 {
-                char *newUrl = trackHubRelativeUrl(url, includeFile->val);
-                printOneFile(newUrl, f, oneFile, downloadDir);
+                // ra format only treats a whole line starting with '#' as a comment,
+                // so a trailing "include foo.txt   # some comment" line would otherwise
+                // pass the comment through as part of the filename; keep just the
+                // first word
+                char *incFileName = cloneString(includeFile->val);
+                firstWordInLine(incFileName);
+                char *newUrl = trackHubRelativeUrl(url, incFileName);
+                if (skipErrors)
+                    {
+                    struct errCatch *errCatch = errCatchNew();
+                    if (errCatchStart(errCatch))
+                        printOneFile(newUrl, f, oneFile, downloadDir, skipErrors);
+                    errCatchEnd(errCatch);
+                    if (errCatch->gotError)
+                        warn("skipping include file %s: %s", newUrl, errCatch->message->string);
+                    errCatchFree(&errCatch);
+                    }
+                else
+                    printOneFile(newUrl, f, oneFile, downloadDir, skipErrors);
                 }
             }
         else
@@ -261,12 +293,13 @@ if (stringIn("/", copy))
 return mustOpen(path, "w");
 }
 
-void createWriteAndCloseFile(char *fileName, char *url, boolean useOneFile, char *downloadDir)
+void createWriteAndCloseFile(char *fileName, char *url, boolean useOneFile, char *downloadDir,
+    boolean skipErrors)
 /* Wrapper around a couple lines */
 {
 FILE *f;
 f = createPathAndFile(fileName);
-printOneFile(url, f, useOneFile, downloadDir);
+printOneFile(url, f, useOneFile, downloadDir, skipErrors);
 carefulClose(&f);
 }
 
@@ -436,7 +469,7 @@ if (skipMissingAssemblies)
         f = mustOpen(path, "w");
         if (download)
             dyStringPrintf(downloadDir, "%s/", hubName);
-        printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir));
+        printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir), skipMissingAssemblies);
         carefulClose(&f);
         return;
         }
@@ -452,7 +485,7 @@ if (skipMissingAssemblies)
 
     // Write hub.txt
     path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
-    createWriteAndCloseFile(path, hubUrl, FALSE, dyStringContents(downloadDir));
+    createWriteAndCloseFile(path, hubUrl, FALSE, dyStringContents(downloadDir), skipMissingAssemblies);
 
     // Track which genomes to skip
     struct hash *skipGenomes = hashNew(0);
@@ -493,7 +526,8 @@ if (skipMissingAssemblies)
         else
             tdbFileName = sg->trackDbPath;
         tdbFilePath = catTwoStrings(genomesDir, catTwoStrings("/", tdbFileName));
-        createWriteAndCloseFile(tdbFilePath, trackDbUrl, FALSE, dyStringContents(downloadDir));
+        createWriteAndCloseFile(tdbFilePath, trackDbUrl, FALSE, dyStringContents(downloadDir),
+            skipMissingAssemblies);
         }
 
     // Write genomes.txt, filtering out skipped genomes
@@ -521,7 +555,7 @@ if (trackHubSetting(hub, "useOneFile"))
         {
         dyStringPrintf(downloadDir, "%s/", hubName);
         }
-    printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir));
+    printOneFile(hubUrl, f, oneFile, dyStringContents(downloadDir), skipMissingAssemblies);
     carefulClose(&f);
     }
 else
@@ -531,14 +565,15 @@ else
         errAbort("error opening %s file", hub->genomesFile);
 
     path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
-    createWriteAndCloseFile(path, hubUrl, oneFile, dyStringContents(downloadDir));
+    createWriteAndCloseFile(path, hubUrl, oneFile, dyStringContents(downloadDir), skipMissingAssemblies);
 
     genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
     genomesFileName = catTwoStrings(hubName, catTwoStrings("/", hub->genomesFile));
     char *genomePath = cloneString(genomesFileName);
     chopSuffixAt(genomePath, '/'); // used later for making the right directory structure
 
-    createWriteAndCloseFile(genomesFileName, genomesUrl, oneFile, dyStringContents(downloadDir));
+    createWriteAndCloseFile(genomesFileName, genomesUrl, oneFile, dyStringContents(downloadDir),
+        skipMissingAssemblies);
 
     for (; genome != NULL; genome = genome->next)
         {
@@ -554,7 +589,8 @@ else
             }
         tdbFileName = strrchr(genome->trackDbFile, '/') + 1;
         tdbFilePath = catTwoStrings(genomesDir, catTwoStrings("/", tdbFileName));
-        createWriteAndCloseFile(tdbFilePath, genome->trackDbFile, oneFile, dyStringContents(downloadDir));
+        createWriteAndCloseFile(tdbFilePath, genome->trackDbFile, oneFile, dyStringContents(downloadDir),
+            skipMissingAssemblies);
         }
     }
 }

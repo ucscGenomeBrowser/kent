@@ -9,3 +9,54 @@ mkdir /gbdb/hg19/bbi/enigma
 ~/kent/src/hg/makeDb/scripts/enigma/
 
 #Quick link for github: https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/enigma
+
+#############################################################################
+# Update to CSpec specification v1.2 (2026-08-17) RM #38130
+
+# ClinGen released v1.2 of the ENIGMA BRCA1/BRCA2 specifications (approved
+# 2025-01-09): BRCA1 GN092 (doi 10.5281/zenodo.21434315), BRCA2 GN097
+# (doi 10.5281/zenodo.21434343). Comparison against the v1.1 tables showed data
+# changes only in Table 4 (splice-site PVS1 codes) and Table 9 (PMIDs and typo
+# fixes); ST1 exon weights and the clinical domain definitions are unchanged, so
+# only BRCAsplicing and BRCAfunctionalAssays were rebuilt. BRCAmla is built from
+# publications and is independent of the specification version.
+
+mkdir /hive/data/inside/enigmaTracksData/v1.2
+# Source files downloaded from the CSpec registry "Files & Images" panel
+# (https://cspec.genome.network/cspec/ui/svi/doc/GN092):
+# Table 4:  https://cspec.genome.network/cspec/File/id/ca5cf57b-94df-4ad6-a001-c62ceccb3845/data
+# Table 9:  https://cspec.genome.network/cspec/File/id/0a35d6a8-5050-44b6-8a9d-babe8cdc06b2/data
+# SuppTbls: https://cspec.genome.network/cspec/File/id/cb4a09fe-30f4-4aa8-9d76-d7ea407c9754/data
+# Spec doc: https://cspec.genome.network/cspec/File/id/11e62fec-23b0-4a3e-b2df-751855301746/data
+# saved as CSpec_BRCA12ACMG_Rules-Specifications_V1.2_Table-4.xlsx etc.
+
+# Export the needed sheets to text. Merged cells are expanded; the Table 9
+# banner row v1.2 inserted is dropped so the layout matches the v1.1 export.
+# The new "Dace & Findlay, Interim Report" sheet in the Table 9 xlsx holds
+# interim (uncalibrated) results and is intentionally not used.
+python3 ~/kent/src/hg/makeDb/scripts/enigma/exportV12Sheets.py
+
+# The v1.2 Table 4 excel is a visual per-exon layout, unlike the flat table used
+# for v1.1, so a converter rebuilds the flat 8-column format the track script
+# consumes. Exons split by the NMD-escape boundary are encoded in v1.2 as
+# PTC<p.X / PTC>p.Y qualifiers; the converter turns those back into the c. sub-
+# ranges used in v1.1. Text is kept as UTF-8 (v1.1 text had mangled the Greek
+# delta to "?").
+python3 ~/kent/src/hg/makeDb/scripts/enigma/convertTable4toFlat.py
+
+# Rebuild the two tracks. Both scripts now write into the v1.2/ dir; the hub and
+# the /gbdb symlinks keep pointing at the fixed filenames one level up, which are
+# only overwritten at release (below). The two haplotype variants in Table 9
+# (c.[5359T>A;5363G>A] and c.[1073T>G;1078T>C;1084G>C;1086G>T]) cannot be
+# converted by hgvsToVcf and are skipped, same as in the v1.1 build.
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAfunctionalAssays.py
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAsplicing.py
+
+# Release: copy the verified .bb files onto the staging filenames the symlink
+# chain serves (do NOT touch the symlinks themselves), then copy the updated
+# hub.txt, trackDb.txt, enigma.html and the v1.2 raw files into
+# /hive/data/outside/enigma/ (= htdocs-hgdownload/hubs/enigma).
+# for db in Hg19 Hg38; do for t in BRCAsplicing BRCAfunctionalAssays; do
+#   cp /hive/data/inside/enigmaTracksData/v1.2/$t$db.bb /hive/data/inside/enigmaTracksData/$t$db.bb.tmp
+#   mv /hive/data/inside/enigmaTracksData/$t$db.bb.tmp /hive/data/inside/enigmaTracksData/$t$db.bb
+# done; done

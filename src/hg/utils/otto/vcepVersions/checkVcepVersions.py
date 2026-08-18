@@ -37,7 +37,7 @@ import urllib.request
 vcepConfig = {
     "ENIGMA BRCA1/BRCA2 VCEP": {
         "hubUrl": "https://hgdownload.soe.ucsc.edu/hubs/enigma/enigma.html",
-        "hubRegex": r"Guidelines for BRCA1/BRCA1\s+Version\s+(\d+(?:\.\d+)+)",
+        "hubRegex": r"Guidelines for BRCA1/BRCA2\s+Version\s+(\d+(?:\.\d+)+)",
         "affiliation": "50087",
         "genes": ["BRCA1", "BRCA2"],
     },
