@@ -130,6 +130,10 @@ static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boole
 {
 struct dyString *dyLongHtml = dyStringNew(1024);
 struct dyString *dyShortHtml = dyStringNew(1024);
+// hubUrl comes from the user, so encode it before it goes below: cgiEncode for the query
+// parameter, htmlEncode for the attribute the javascript copies to the clipboard.
+char *urlForQuery = cgiEncode(hubUrl);
+char *urlForAttr = htmlEncode(hubUrl);
 
 char *linkHtml = "<input type='hidden' value='%s'><svg title='click to copy genome browser hub connection URL to clipboard, for sharing with others' class='pasteIcon' style='margin-left: 6px; cursor: pointer; vertical-align:baseline; width:0.8em' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d='M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z'/></svg>";
 
@@ -155,13 +159,13 @@ for(; genome; genome = genome->next)
         if (withLink)
             {
             if (hubConnectIsCurated(genome->name)) {
-                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, htmlEncode(shortName));
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, urlForQuery, escName, htmlEncode(shortName));
             } else {
-                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, htmlEncode(shortName));
+                dyStringPrintf(dyShortHtml,"<a class='hgTracksLink' title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, urlForQuery, escName, htmlEncode(shortName));
             }
             // https://hgdownload-test.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt
             if (withPaste)
-                dyStringPrintf(dyShortHtml, linkHtml, hubUrl);
+                dyStringPrintf(dyShortHtml, linkHtml, urlForAttr);
             }
         else
             dyStringPrintf(dyShortHtml,"%s" , htmlEncode(shortName));
@@ -176,12 +180,12 @@ for(; genome; genome = genome->next)
     if (withLink)
         {
         if (hubConnectIsCurated(genome->name)) {
-            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, escTrimmed);
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&db=%s&position=lastDbPos'>%s</a>" , escTrimmed, urlForQuery, escName, escTrimmed);
         } else {
-            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, hubUrl, escName, escTrimmed);
+            dyStringPrintf(dyLongHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , escTrimmed, urlForQuery, escName, escTrimmed);
         }
         if (withPaste)
-            dyStringPrintf(dyLongHtml, linkHtml, hubUrl);
+            dyStringPrintf(dyLongHtml, linkHtml, urlForAttr);
         }
     else
         dyStringPrintf(dyLongHtml,"%s" , escTrimmed);
