@@ -3929,8 +3929,10 @@ if (!ajax)
     // incoming links from Google searches can go directly to a composite child trackUi page: tell users 
     // that they're inside a container now and can go back up the hierarchy
     if (tdbGetComposite(tdb)) {
-        printf("<p>This track is a subtrack of the composite container track \"%s\".<br>", tdb->parent->shortLabel);
-        printf("<a href='hgTrackUi?db=%s&c=%s&g=%s'>Click here</a> to display the \"%s\" container configuration page.", database, chromosome, tdb->parent->track, tdb->parent->shortLabel);
+        // shortLabel comes from trackDb, which a track hub controls, escape
+        printf("<p>This track is a subtrack of the composite container track \"%s\".<br>",
+               htmlEncode(tdb->parent->shortLabel));
+        printf("<a href='hgTrackUi?db=%s&c=%s&g=%s'>Click here</a> to display the \"%s\" container configuration page.", database, chromosome, tdb->parent->track, htmlEncode(tdb->parent->shortLabel));
     }
 
     }
@@ -4616,23 +4618,25 @@ if(cartOptionalString(cart, "ajax"))
     }
 else
     {
-    char title[1000];
+    // htmlNoEscape() below lets the <span> through, so the labels themselves have to be
+    // escaped here - they come from trackDb, which a track hub controls
+    struct dyString *title = dyStringNew(0);
     if (tdb->parent)
         {
-        safef(title, sizeof title, 
+        dyStringPrintf(title,
                         // TODO: replace in-line styling with class
                 "<span style='background-color: #c3d4f4; "
                     "padding-left: 10px; padding-right: 10px;"
                     "margin-right: 10px; margin-left: -8px;'>"
                        "%s</span> %s", 
-                tdb->parent->shortLabel, tdb->shortLabel);
+                htmlEncode(tdb->parent->shortLabel), htmlEncode(tdb->shortLabel));
         }
     else
-        safef(title, sizeof title, "%s", tdb->shortLabel);
+        dyStringPrintf(title, "%s", htmlEncode(tdb->shortLabel));
     char *titleEnd = (tdbIsSuper(tdb) ? "Tracks" :
                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
     htmlNoEscape();     // allow HTML tags to format title blue bar (using short label)
-    cartWebStart(cart, database, "%s %s", title, titleEnd);
+    cartWebStart(cart, database, "%s %s", title->string, titleEnd);
     htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");

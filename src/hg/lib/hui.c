@@ -218,17 +218,20 @@ if (pairs == NULL)
 
 struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
 
+// the labels and the metadata pairs all come from trackDb, which a hub controls, escape
 if (showLongLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",
+                   htmlEncode(tdb->longLabel));
 if (showShortLabel)
     dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
-			   "<td nowrap>%s</td></tr>",tdb->shortLabel);
+			   "<td nowrap>%s</td></tr>",htmlEncode(tdb->shortLabel));
 
 for(; pairs; pairs = pairs->next)
     {
     if (!sameString(pairs->name, "meta")  && !isEmpty((char *)pairs->val))
         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
-                           "<td nowrap>%s</td></tr>",pairs->name, (char *)pairs->val);
+                           "<td nowrap>%s</td></tr>",htmlEncode(pairs->name),
+                           htmlEncode((char *)pairs->val));
     }
 dyStringAppend(dyTable,"</table>");
 return dyStringCannibalize(&dyTable);
@@ -2971,8 +2974,15 @@ if (count <= 1)
     tdbExtrasMembersSet(parentTdb, groupNameOrTag, &nullMember);
     return NULL;
     }
+// A subGroup label from a track hub is text from a stranger and is printed into the page in
+// a dozen places, so escape it here, once.  Only for hub tracks: our own trackDb puts real
+// HTML entities in these labels on purpose (the ENCODE composites use &nbsp; and &alpha),
+// and escaping those would show the entity text instead of the character.
+boolean escapeLabels = isHubTrack(parentTdb->track);
 members->groupTag   = words[0];
 members->groupTitle = strSwapChar(words[1],'_',' '); // Titles replace '_' with space
+if (escapeLabels)
+    members->groupTitle = htmlEncode(members->groupTitle);
 members->tags       = needMem(count*sizeof(char*));
 members->titles     = needMem(count*sizeof(char*));
 for (ix = 2,members->count=0; ix < count; ix++)
@@ -2982,6 +2992,8 @@ for (ix = 2,members->count=0; ix < count; ix++)
 	{
 	members->tags[members->count]  = tagEncode(name);
 	members->titles[members->count] = strSwapChar(value,'_',' ');
+	if (escapeLabels)
+	    members->titles[members->count] = htmlEncode(members->titles[members->count]);
 	members->count++;
 	}
     else
@@ -4416,10 +4428,11 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
+    // the title is filterLabel.<field> or an autoSql column comment, both hub supplied
     if(count == 1)
-	printf("<B>%s by %s</B>%s",filterTypeTitle,filterBy->title,selectStatement);
+	printf("<B>%s by %s</B>%s",filterTypeTitle,htmlEncode(filterBy->title),selectStatement);
     else
-	printf("<B>%s</B>",filterBy->title);
+	printf("<B>%s</B>",htmlEncode(filterBy->title));
     puts("</TD>");
     }
 puts("</tr><tr>");
@@ -4490,7 +4503,7 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++
 	if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,name))
 	    printf(" SELECTED");
 	if (filterBy->useIndex || filterBy->valueAndLabel)
-	    printf(" value='%s'",name);
+	    printf(" value='%s'",htmlEncode(name));    // filterValues are hub supplied
 	if (filterBy->styleFollows)
 	    {
 	    char *styler = label + strlen(label)+1;
@@ -4502,7 +4515,7 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++
 		    printf(" style='%s'",styler);
 		}
 	    }
-	printf(">%s</OPTION>\n",label);
+	printf(">%s</OPTION>\n",htmlEncode(label));   // filterValues are hub supplied
 	}
     printf("</SELECT>\n");
     puts("</td>");
@@ -5568,7 +5581,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                         titleRoot = labelRoot(title, NULL);
                     // Each sortable column requires hidden goop (in the "abbr" field currently)
                     // which is the actual sort on value
-                    printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
+                    printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col,
+                           htmlEncode(term));
                     printf("&nbsp;");
                     char *link = NULL;
                     if (vocabHash)
@@ -5604,12 +5618,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
 	indentIfNeeded(hierarchy,membership);
 	hierarchyFree(&hierarchy);
-	printf("%s",subtrack->shortLabel);
+	printf("%s",htmlEncode(subtrack->shortLabel));
 	puts("</TD>");
 	}
 
     // The long label column (note that it may have a metadata dropdown)
-    printf("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
+    printf("<TD title='select to copy'>&nbsp;%s", htmlEncode(subtrack->longLabel));
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
 	printf(" [GEO:%s]", trackDbSetting(subtrack, "accession"));
     compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE);
@@ -7430,7 +7444,8 @@ else
         for(; col && num--; col = col->next)
             ;
         assert(col);
-        printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+        // the comment comes from the autoSql inside the hub's bigBed, escape
+        printf(" %s&nbsp;&nbsp;&nbsp;", htmlEncode(col->comment));
         }
     }
 }
@@ -10770,7 +10785,8 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Version:</B> %s <BR>\n", version);
+    // dataVersion can come from a track hub, escape
+    printf("<B>Version:</B> %s <BR>\n", htmlEncode(version));
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
