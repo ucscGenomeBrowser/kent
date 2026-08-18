@@ -9724,33 +9724,37 @@ if (!hideControls)
     // Their names must include a "(" character
     char* noYearDbs[] = { "hg19", "hg38", "mm39", "mm10" };
 
+    // on an assembly hub the organism, the freezeName (the hub's genome description) and the
+    // db name are all supplied by the hub, so escape them before they go in the page
     if ( stringArrayIx(database, noYearDbs, ArraySize(noYearDbs)) != -1 )
         {
         // freezeName is e.g. "Feb. 2009 (GRCh37/hg19)"
         char *afterParen = skipBeyondDelimit(freezeName, '(');
         afterParen--; // move back one char
-        hPrintf("%s %s on %s %s", organization, browserName, organism, afterParen);
+        hPrintf("%s %s on %s %s", organization, browserName, htmlEncode(organism),
+                htmlEncode(afterParen));
         }
     else if (startsWith("zoo",database) )
         {
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
-	    organization, browserName, organism, freezeName);
+	    organization, browserName, htmlEncode(organism), htmlEncode(freezeName));
 	}
     else
 	{
 	if (sameString(organism, "Archaea"))
 	    {
 	    hPrintf("%s %s on Archaeon %s Assembly",
-		organization, browserName, freezeName);
+		organization, browserName, htmlEncode(freezeName));
 	    }
 	else
 	    {
 	    if (stringIn(database, freezeName))
 		hPrintf("%s %s on %s %s",
-			organization, browserName, organism, freezeName);
+			organization, browserName, htmlEncode(organism), htmlEncode(freezeName));
 	    else
 		hPrintf("%s %s on %s %s (%s)",
-			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
+			organization, browserName, htmlEncode(trackHubSkipHubName(organism)),
+			htmlEncode(freezeName), htmlEncode(trackHubSkipHubName(database)));
 	    }
 	}
     hPrintf("</B></SPAN>");
@@ -10187,7 +10191,9 @@ if (!hideControls)
                     }
                 }
 
-            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
+            // group->label for a hub group is built from the hub shortLabel and the hub's
+            // groups.txt label, both supplied by the hub, so escape it
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", htmlEncode(group->label));
             
             char *hubName = hubNameFromGroupName(group->name);
             struct trackHub *hub = grabHashedHub(hubName);
@@ -10216,7 +10222,11 @@ if (!hideControls)
                     for (struct trackHubGenome *thg = hub->genomeList; thg != NULL; thg = thg->next)
                         {
                         if (!sameWord(thg->name, database))
-                            printf("<option value='%s'>%s</option>\n", thg->name, thg->name);
+                            {
+                            // hub genome names come from the hub, so encode them
+                            char *escName = htmlEncode(thg->name);
+                            printf("<option value='%s'>%s</option>\n", escName, escName);
+                            }
                         }
                     puts("</select>");
                     }
@@ -10229,7 +10239,8 @@ if (!hideControls)
                         hPrintf("<a title='The track hub authors have not provided a descriptionUrl with background "
                                 "information about this track hub. ");
                         if (hub->email)
-                            hPrintf("The authors can be reached at %s. ", hub->email);
+                            // hub-supplied, so encode it
+                            hPrintf("The authors can be reached at %s. ", htmlEncode(hub->email));
                         hPrintf("This link leads to our documentation page about the descriptionUrl statement in hub.txt. ");
                         hPrintf("' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
                                 "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>");
@@ -10238,9 +10249,11 @@ if (!hideControls)
                         {
                         hPrintf("<a title='Link to documentation about this track hub, provided by the track hub authors (not UCSC). ");
                         if (hub->email)
-                            hPrintf("The authors can be reached at %s", hub->email);
+                            // hub-supplied, so encode it
+                            hPrintf("The authors can be reached at %s", htmlEncode(hub->email));
                         hPrintf("' href='%s' "
-                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>", hub->descriptionUrl);
+                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>",
+                            htmlEncode(hub->descriptionUrl));
                         }
                     hPrintf("&nbsp;&nbsp;");
 
