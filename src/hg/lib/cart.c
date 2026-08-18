@@ -37,6 +37,7 @@
 #include "verbose.h"
 #include "genark.h"
 #include "quickLift.h"
+#include "pcrResult.h"
 #include "botDelay.h"
 #include "curlWrap.h"
 #include "hubSpaceKeys.h"
@@ -247,6 +248,17 @@ static char *urlOrFileNameCartVars[] =
     hgsLoadUrlName,             // hgSession load settings from URL
 };
 
+/* This one does not hold a single file name.  hgPcr writes two file names and an optional
+ * target name into it, separated by spaces: "<psl file> <primer file> [<targetDb name>]".
+ * Both file names are checked; the target name is not a path.  hgPcr appends to both files
+ * when the user asks to add to an existing result, so a retargeted value is a write as well
+ * as a read. */
+
+static char *fileNamePairCartVarPrefixes[] =
+{
+    PCR_RESULT_TRACK_NAME "_",  // hgPcrResult_<db>: in-silico PCR result files
+};
+
 static boolean cartVarHoldsFileName(char *var)
 /* Return TRUE if var is one of the cart variables listed above. */
 {
@@ -268,6 +280,34 @@ for (i = 0;  i < ArraySize(urlOrFileNameCartVars);  i++)
     if (sameString(var, urlOrFileNameCartVars[i]))
         return TRUE;
 return FALSE;
+}
+
+static boolean cartVarHoldsFileNamePair(char *var)
+/* Return TRUE if var is one of the variables that hold a pair of file names.
+ * hgPcrResult_targetStyle is a display setting that shares the hgPcrResult_ prefix with the
+ * per-db result variables, so it is excluded by name. */
+{
+if (sameString(var, PCR_RESULT_TARGET_STYLE))
+    return FALSE;
+int i;
+for (i = 0;  i < ArraySize(fileNamePairCartVarPrefixes);  i++)
+    if (startsWith(fileNamePairCartVarPrefixes[i], var))
+        return TRUE;
+return FALSE;
+}
+
+static boolean fileNamePairIsAcceptable(char *val)
+/* Return TRUE if the first two whitespace-separated words of val both name a file the server
+ * made for this user.  Any other shape is refused: the code that reads this value errAborts
+ * on fewer than two words, and reads no more than three. */
+{
+char *dupe = cloneString(val);
+char *words[4];
+int wordCount = chopByWhite(dupe, words, ArraySize(words));
+boolean ok = (wordCount == 2 || wordCount == 3) &&
+             isServerUserFilePath(words[0]) && isServerUserFilePath(words[1]);
+freeMem(dupe);
+return ok;
 }
 
 static void logDroppedFileNameVar(char *var, char *why)
@@ -304,6 +344,13 @@ if (cartVarHoldsUrlOrFileName(var))
     if (isServerUserFileOrUrl(val))
         return TRUE;
     logDroppedFileNameVar(var, "a URL or a trash or session-data file name");
+    return FALSE;
+    }
+if (cartVarHoldsFileNamePair(var))
+    {
+    if (fileNamePairIsAcceptable(val))
+        return TRUE;
+    logDroppedFileNameVar(var, "a pair of trash or session-data file names");
     return FALSE;
     }
 return TRUE;

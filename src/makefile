@@ -20,9 +20,16 @@ TOP_LIBS = lib parasol/lib submodules/htslib
 ifneq ($(wildcard jkOwnLib/*),)
   TOP_LIBS += jkOwnLib
 endif
-topLibs: ${TOP_LIBS:%=%.topLibs}
+topLibs: zlibNg ${TOP_LIBS:%=%.topLibs}
 %.topLibs: topChecks
 	${MAKE} -C $*
+
+# zlib-ng is a submodule but it is not in TOP_LIBS, because its default target
+# builds the shared library and the test programs too and we only link libz.a.
+# Its Makefile is written by configure, which topChecks runs.  refs #38125
+.PHONY: zlibNg
+zlibNg: topChecks
+	${MAKE} -C submodules/zlib-ng libz.a
 
 .PHONY: topChecks
 topChecks:
@@ -111,6 +118,7 @@ destBin:
 CLEAN_DIRS = ${STD_DIRS} lib hg jkOwnLib submodules/htslib utils webBat isPcr
 
 clean: ${CLEAN_DIRS:%=%.clean}
+	if [ -e submodules/zlib-ng/Makefile ] ; then ${MAKE} -C submodules/zlib-ng clean ; fi
 	find . -name \*.o -print | xargs --no-run-if-empty rm
 	rm -f tags TAGS
 	rm -f cscope.out cscope.files cscope.po.out

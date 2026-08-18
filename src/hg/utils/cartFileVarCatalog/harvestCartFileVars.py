@@ -75,12 +75,14 @@ SKIP_DIRS = {"htdocs", "js", "tests", "expected", "input", "trackDb",
 # Mined for #define values in addition to everything under SCAN_ROOTS.
 MACRO_DIRS = ["inc", "hg/inc"]
 
-# Where the screening list lives, and the three arrays in it.  The third holds
+# Where the screening list lives, and the four arrays in it.  The third holds
 # the names that may legitimately be a remote URL instead of a file, which are
-# screened with isServerUserFileOrUrl() rather than isServerUserFilePath().
+# screened with isServerUserFileOrUrl() rather than isServerUserFilePath().  The
+# fourth holds the ones whose value is two file names and a trailing word rather
+# than one file name; cart.c checks the two names.
 CART_C = os.path.join("hg", "lib", "cart.c")
 SCREEN_ARRAYS = ("fileNameCartVars", "fileNameCartVarPrefixes",
-                 "urlOrFileNameCartVars")
+                 "urlOrFileNameCartVars", "fileNamePairCartVarPrefixes")
 
 
 # ---------------------------------------------------------------------------
@@ -402,13 +404,14 @@ def read_screen(macro, conflict, root=None):
     return tuple(out)
 
 
-def screened(name, names, prefixes, urlOrFile=None):
-    """Does cart.c check this cart variable on the way in, by any of the three?"""
+def screened(name, names, prefixes, urlOrFile=None, pairPrefixes=None):
+    """Does cart.c check this cart variable on the way in, by any of the four?"""
     if names is None or prefixes is None:
         return False
     if name in names or name in (urlOrFile or ()):
         return True
-    return any(name.startswith(p) for p in prefixes)
+    return any(name.startswith(p)
+               for p in list(prefixes) + list(pairPrefixes or ()))
 
 
 # ---------------------------------------------------------------------------
@@ -418,12 +421,13 @@ def screened(name, names, prefixes, urlOrFile=None):
 def harvest():
     macro, conflict = build_macros()
     flows, suspects = scan(macro, conflict)
-    names, prefixes, urlOrFile = read_screen(macro, conflict)
+    names, prefixes, urlOrFile, pairPrefixes = read_screen(macro, conflict)
     srt = lambda s: sorted(s) if s is not None else None
     return dict(flows=flows, suspects={k: sorted(v)
                                        for k, v in suspects.items()},
                 screenNames=srt(names), screenPrefixes=srt(prefixes),
-                screenUrlOrFile=srt(urlOrFile))
+                screenUrlOrFile=srt(urlOrFile),
+                screenPairPrefixes=srt(pairPrefixes))
 
 
 def by_name(flows):
@@ -469,6 +473,10 @@ def main():
         print("urlOrFileNameCartVars (%d)" % len(h["screenUrlOrFile"] or []))
         for n in h["screenUrlOrFile"] or []:
             print("    %s" % n)
+        print("fileNamePairCartVarPrefixes (%d)"
+              % len(h["screenPairPrefixes"] or []))
+        for n in h["screenPairPrefixes"] or []:
+            print("    %s" % n)
         return 0
 
     if args.names:
@@ -488,8 +496,10 @@ def main():
         names = set(h["screenNames"] or [])
         prefixes = set(h["screenPrefixes"] or [])
         urlOrFile = set(h["screenUrlOrFile"] or [])
+        pairPrefixes = set(h["screenPairPrefixes"] or [])
         for n in sorted(groups):
-            mark = ("screened" if screened(n, names, prefixes, urlOrFile)
+            mark = ("screened" if screened(n, names, prefixes, urlOrFile,
+                                           pairPrefixes)
                     else "NOT screened")
             print("%s  [%s]" % (n, mark))
             for f in groups[n]:

@@ -6131,6 +6131,11 @@ char *type = cartUsualString(cart, "hgt.contentType", "html");
 if(sameString(type, "jsonp"))
     {
     struct jsonElement *json = newJsonObject(newHash(8));
+    char *jsonp = cartString(cart, "jsonp");
+    // This path only ever emits a wrapped response, so there is no bare form to
+    // fall back to: reject an invalid callback name outright.
+    if (!isValidJsonpCallback(jsonp))
+        errAbort("invalid callback");
 
     printf("Content-Type: application/json\n\n");
     errAbortSetDoContentType(FALSE);
@@ -6138,7 +6143,7 @@ if(sameString(type, "jsonp"))
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
     jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
     jsonObjectAdd(json, "img", newJsonString(pngTn.forHtml));
-    printf("%s(", cartString(cart, "jsonp"));
+    printf("%s(", jsonp);
     hPrintEnable();
     jsonPrint((struct jsonElement *) json, NULL, 0);
     hPrintDisable();

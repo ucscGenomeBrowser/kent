@@ -4,10 +4,12 @@
 Refs #37623.  Most cart variables hold a setting.  A few hold the name of a
 file the server made for the user, and a CGI reads one back out of the cart and
 opens it.  Those are the ones an attacker can retarget, so hg/lib/cart.c screens
-them on the way in, against two hand-written arrays:
+them on the way in, against hand-written arrays:
 
-    fileNameCartVars[]          exact names
-    fileNameCartVarPrefixes[]   families whose name carries the db or an id
+    fileNameCartVars[]              exact names
+    fileNameCartVarPrefixes[]       families whose name carries the db or an id
+    urlOrFileNameCartVars[]         may hold a remote URL instead
+    fileNamePairCartVarPrefixes[]   value is two file names and a trailing word
 
 A hand-written list goes stale the moment somebody adds a variable and does not
 know the list exists.  It was already incomplete on the day it was written.  So
@@ -187,6 +189,25 @@ CATALOG = [
            "as well: genomeSpace is enabled only by the presence of its hg.conf "
            "settings (genomeSpace.c:110) and no conf in confs/ sets them."),
 
+    # ---- two file names in one value -----------------------------------------
+    # Screened against fileNamePairCartVarPrefixes[], which checks the first two
+    # words rather than the whole value.
+
+    e("hgPcrResult_<db>", "screened", "hg/cgilib/pcrResult.c",
+      "fileExists, lineFileOpen", ident="{cartVar}", screen="pair:hgPcrResult_",
+      note="In-silico PCR results.  The value is two trash file names and an "
+           "optional targetDb name, not one file name, which is why it needs an "
+           "array of its own.  Found by the daily code review of the commit that "
+           "wrote this catalog, not by the scan: pcrResultParseCart() chopLine()s "
+           "the value into different locals before opening them, so no flow is "
+           "harvested, and a name built at run time reads as {cartVar}, which the "
+           "--suspects name test cannot recognize either.  hgPcr appends to both "
+           "files when the user checks 'Append to existing PCR result', so an "
+           "unscreened value was an arbitrary file write as well as a read.  Both "
+           "names are checked at the point of use too, in pcrResultParseCart() "
+           "and in hgPcr's pcrResultCartFiles().  hgPcrResult_targetStyle shares "
+           "the prefix and is a display setting, so cart.c excludes it by name."),
+
     # ---- either a URL or a file we made --------------------------------------
     # Screened against urlOrFileNameCartVars[] with isServerUserFileOrUrl(),
     # because isServerUserFilePath() alone would reject every legitimate URL.
@@ -271,7 +292,7 @@ def by_harvest_key(cat):
 
 def screen_entries(cat):
     """The cart.c entries the catalog claims, one set per array."""
-    names, prefixes, urlOrFile = set(), set(), set()
+    names, prefixes, urlOrFile, pairPrefixes = set(), set(), set(), set()
     for entry in cat:
         s = entry["screen"]
         if not s:
@@ -280,9 +301,11 @@ def screen_entries(cat):
             prefixes.add(s[len("prefix:"):])
         elif s.startswith("urlOrFile:"):
             urlOrFile.add(s[len("urlOrFile:"):])
+        elif s.startswith("pair:"):
+            pairPrefixes.add(s[len("pair:"):])
         else:
             names.add(s)
-    return names, prefixes, urlOrFile
+    return names, prefixes, urlOrFile, pairPrefixes
 
 
 # ---------------------------------------------------------------------------
@@ -344,7 +367,8 @@ def reconcile(cat, out=sys.stdout, verbose=False):
 
     missing = [name for name, key in zip(harvest.SCREEN_ARRAYS,
                                          ("screenNames", "screenPrefixes",
-                                          "screenUrlOrFile"))
+                                          "screenUrlOrFile",
+                                          "screenPairPrefixes"))
                if h[key] is None]
     if missing:
         print("no %s array found in %s: either it was removed or it was "
@@ -356,6 +380,7 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     tree_names = set(h["screenNames"])
     tree_prefixes = set(h["screenPrefixes"])
     tree_urlOrFile = set(h["screenUrlOrFile"])
+    tree_pairPrefixes = set(h["screenPairPrefixes"])
     keys = by_harvest_key(cat)
     problems = 0
 
@@ -387,13 +412,17 @@ def reconcile(cat, out=sys.stdout, verbose=False):
             elif name.startswith("urlOrFile:"):
                 if name[len("urlOrFile:"):] not in tree_urlOrFile:
                     lost.append(entry)
+            elif name.startswith("pair:"):
+                if name[len("pair:"):] not in tree_pairPrefixes:
+                    lost.append(entry)
             elif name not in tree_names:
                 lost.append(entry)
         elif entry["verdict"] in ("gap", "otherCheck"):
             probe = entry["name"]
             if "<" not in probe and harvest.screened(probe, tree_names,
                                                      tree_prefixes,
-                                                     tree_urlOrFile):
+                                                     tree_urlOrFile,
+                                                     tree_pairPrefixes):
                 fixed.append(entry)
 
     if lost:
@@ -415,12 +444,15 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     # 4. cart.c screens something the catalog does not describe at all.  A
     # variable the catalog knows as a gap is not an orphan: adding it to cart.c
     # is the fix, and check 3 above already asks for the verdict to be updated.
-    cat_names, cat_prefixes, cat_urlOrFile = screen_entries(cat)
+    cat_names, cat_prefixes, cat_urlOrFile, cat_pairPrefixes = \
+        screen_entries(cat)
     known = {entry["name"] for entry in cat}
     orphan = sorted(
         {n for n in tree_names - cat_names if n not in known}
         | {n for n in tree_urlOrFile - cat_urlOrFile if n not in known}
         | {"prefix:" + p for p in tree_prefixes - cat_prefixes
+           if not any(k.startswith(p) for k in known)}
+        | {"pair:" + p for p in tree_pairPrefixes - cat_pairPrefixes
            if not any(k.startswith(p) for k in known)})
     if orphan:
         problems += len(orphan)
@@ -433,9 +465,10 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         print("\ncatalog entries    %d" % len(cat), file=out)
         print("tree flows         %d over %d names" % (len(flows), len(found)),
               file=out)
-        print("cart.c screens     %d names, %d prefixes, %d url-or-file"
-              % (len(tree_names), len(tree_prefixes), len(tree_urlOrFile)),
-              file=out)
+        print("cart.c screens     %d names, %d prefixes, %d url-or-file, "
+              "%d pair prefixes"
+              % (len(tree_names), len(tree_prefixes), len(tree_urlOrFile),
+                 len(tree_pairPrefixes)), file=out)
         quiet = [entry["name"] for entry in cat
                  if entry["name"] not in found
                  and (entry["ident"] or entry["name"]) not in found]

@@ -177,6 +177,15 @@ safef(buffer, sizeof buffer, "%s/%s", fontDir, freeTypeFonts[ii].file);
 return buffer;
 }
 
+boolean freeTypeFontActive()
+/* TRUE when the FreeType font engine is the one maybeNewFonts() will actually switch to.  Callers
+ * that pick a font to match the live engine (e.g. squishCodonFont) must use this rather than a
+ * looser test, or they can hand the bitmap engine a cell height it cannot render. */
+{
+char *fontName = NULL;
+return chosenFreeTypeFont(&fontName) != NULL;
+}
+
 void initFontEngine()
 /* Load the text engine the user has picked, before anything measures a string.
  * Pack mode reserves room for an item by measuring its label, and
@@ -1012,7 +1021,7 @@ hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4
     dyMultiRegionsBedInput->string);
 
 // option to set viewing window to show all regions.  This id also known to JS.
-if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE))
+if (cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, TRUE))
     {
     boolean isChecked = cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
     hPrintf("&nbsp;&nbsp");
