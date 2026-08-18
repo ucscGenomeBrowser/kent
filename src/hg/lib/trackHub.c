@@ -697,6 +697,13 @@ while ((ra = raNextRecord(lf)) != NULL)
         badGenomeStanza(lf);
     if (hasWhiteSpace(genome))
         errAbort("Bad genome name: \"%s\". Only alpha-numeric characters and \"_\" are allowed ([A-Za-z0-9_]).", genome);
+    // The genome name becomes the db name, which is printed into dozens of URLs and form
+    // values all over the CGIs.  Real assembly names never contain any of these characters,
+    // so reject them here.
+    if (strchr(genome, '<') || strchr(genome, '>') || strchr(genome, '"')
+        || strchr(genome, '\'') || strchr(genome, '&'))
+        errAbort("Bad genome name: \"%s\". The characters < > \" ' and & are not allowed in a "
+                 "genome name.", genome);
     if (hashLookup(hash, genome) != NULL)
         errAbort("Duplicate genome %s in stanza ending line %d of %s",
 		genome, lf->lineIx, lf->fileName);
