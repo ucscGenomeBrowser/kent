@@ -632,7 +632,7 @@ if (taxon != 0)
     if (isEmpty(db))
         {
         sqlSafef(query, sizeof(query),
-                 "select name from %s where taxId = %d and active = 1 order by orderKey limit 1",
+                 "select name from %s where taxId = %d and active = 1 order by orderKey",
                  dbDbTable(), taxon);
         db = firstExistingDbFromQuery(centralConn, query);
         }
