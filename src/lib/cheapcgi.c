@@ -1858,8 +1858,10 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked)
  * same name but different values.   The default selection should be
  * sent with checked on. */
 {
+// name and value can carry a hub-supplied string (a bigBed field name from filterValues),
+// so encode them
 printf("<input type=radio name='%s' id='%s' value='%s'",
-        name, name, value);
+        htmlEncode(name), htmlEncode(name), htmlEncode(value));
 if (checked)
    printf(" CHECKED");
 printf(">");
