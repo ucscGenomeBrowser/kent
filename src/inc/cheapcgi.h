@@ -13,15 +13,6 @@
 #include "hash.h"
 #endif
 
-// #define FAST_CGI_DECODE
-#ifdef FAST_CGI_DECODE
-// 50kB per-variable limit on content length to prevent egregious
-// cart-stuffing, whether intentional or accidental.  5kB limit
-// on variable names for similar reasons.
-#define CGI_VAR_SIZE_LIMIT 50000
-#define CGI_VAR_NAME_LIMIT 5000
-#endif
-
 //============ javascript inline-separation routines ===============
 
 void jsInlineFinish();
@@ -95,6 +86,18 @@ struct cgiVar
 
 struct cgiVar* cgiVarList();
 /* return the list of cgiVar's */
+
+char *cgiMemBlobRegister(char *mem, unsigned long size);
+/* Record a block of memory that may be named by address in a cgi or cart
+ * variable, and return the "<address> <size>" text that names it.  The
+ * returned string is allocated here and belongs to the caller. */
+
+char *cgiMemBlobFind(char *spec, unsigned long *retSize);
+/* Return the block of memory named by spec, which is "<address> <size>" text
+ * made by cgiMemBlobRegister or by an uploaded file part.  Return NULL if this
+ * program never registered such a block, in which case the address came from
+ * the request rather than from us and must not be used.  If retSize is not
+ * NULL the size of the block is returned in it. */
 
 struct cgiDictionary
 /* Stuff to encapsulate parsed out CGI vars. */

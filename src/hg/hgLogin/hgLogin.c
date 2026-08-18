@@ -2090,9 +2090,11 @@ if (emailMode)
 else
     // Only activated accounts, matching what chooseAccount() and resolveIdentity() accept;
     // otherwise the page offers a row the action refuses, and shows the username of an
-    // unactivated row anyone could have created with this address.
+    // unactivated row anyone could have created with this address.  Match both primary and
+    // recovery address, as resolveIdentity() does; email is non-empty here (checked above).
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE email='%s' AND accountActivated='Y' ORDER BY idx", email);
+        "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y' "
+        "ORDER BY idx", email, email);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 
 hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
@@ -2199,10 +2201,13 @@ if (isEmpty(subject) || isEmpty(email) || !pendingIdentityValid())
     return;
     }
 /* Only an activated account counts: an unactivated row can hold any address someone typed
- * without ever proving they own it (see resolveIdentity), so it must not receive a social link. */
+ * without ever proving they own it (see resolveIdentity), so it must not receive a social link.
+ * Match both primary and recovery address, as chooseAccountPage() offers; email is non-empty
+ * here (checked above). */
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM gbMembers WHERE idx=%d AND email='%s' AND accountActivated='Y'",
-    chosenIdx, email);
+    "SELECT * FROM gbMembers WHERE idx=%d AND (email='%s' OR recovEmail='%s') "
+    "AND accountActivated='Y'",
+    chosenIdx, email, email);
 struct gbMembers *m = gbMembersLoadByQuery(conn, query);
 if (m == NULL)
     {
@@ -2240,14 +2245,18 @@ int n = 0;
 if (id->emailVerified && isNotEmpty(id->email))
     {
     char query[512];
-    /* Match only activated accounts.  gbMembers has no unique key on email, and the plain
+    /* Match the provider email against both the primary and the recovery address, the same as
+     * password and email-link login do (see sendUsername/emailLogin).  The isNotEmpty() guard
+     * above keeps id->email out of the query, so a blank recovEm=='' row can never match.
+     * Match only activated accounts.  gbMembers has no unique key on email, and the plain
      * signup form will create an unactivated row for any address a person types -- the
      * activation mail goes to the address's real owner, who ignores it.  Without this filter
      * someone could pre-register a victim's address, and the victim's first social login would
      * then auto-link to (and sign in as) the attacker's account. */
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE email='%s' AND accountActivated='Y' ORDER BY idx",
-        id->email);
+        "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y' "
+        "ORDER BY idx",
+        id->email, id->email);
     matches = gbMembersLoadByQuery(conn, query);
     n = slCount(matches);
     }

@@ -71,6 +71,12 @@ def main():
 
             svType = normalizeSvType(TYPE_FIX.get(svTypeRaw, svTypeRaw))
 
+            # The source bigBed keeps the VCF anchor base on the left of
+            # deletions; drop it so DEL coordinates match anchor-excluded
+            # callsets (svLen below is recomputed from the shifted start).
+            if svType == "DEL":
+                chromStart += 1
+
             # Canonical svLen is the feature's span on the reference; for INS
             # that is 1 bp, and the inserted-sequence length lives in insLen.
             svLen = chromEnd - chromStart

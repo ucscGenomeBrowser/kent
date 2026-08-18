@@ -11,7 +11,7 @@ def bash(cmd):
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
     return(bashStdoutt)
 
-rawFilePath = "/hive/data/inside/enigmaTracksData/Anna_CSpec_BRCA12ACMG-Rules-Specifications_V1.1Table-4_2023-11-22.txt"
+rawFilePath = "/hive/data/inside/enigmaTracksData/v1.2/Table4_V1.2_flat.txt"
 
 def assignRGBcolor(lineToCheck):
     if "DEL" in lineToCheck[4]:
@@ -32,7 +32,7 @@ def checkExtraCarrotInPosition(position):
     return(correctPosition)
 
 rawFile = open(rawFilePath,'r')
-outputBedFile = open("/hive/data/inside/enigmaTracksData/outputBedFile.bed",'w', encoding='latin-1')
+outputBedFile = open("/hive/data/inside/enigmaTracksData/v1.2/outputBedFile.bed",'w', encoding='utf-8')
 for line in rawFile:
     line = line.rstrip("\n").split("\t")
     if line[0].startswith("Gene") or line[0]== "":
@@ -54,9 +54,11 @@ for line in rawFile:
         if len(line[3].split("c")) > 2:
             firstPos=line[3].split(".")[1].split("-c")[0]
             secondPos=line[3].split("-c.")[1]
+            chromStart = None
+            chromEnd = None
             queryPosition = bash("curl https://hgwdev.gi.ucsc.edu/cgi-bin/hgSearch?search="+NMacc+"%3Ac"+firstPos)
             for resultsLine in queryPosition.split("\n"):
-                if resultsLine.startswith("<script"):
+                if "position=" in resultsLine:
                     if strand == "-":
                         chromEnd = str(int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+5)
                     elif strand == "+":
@@ -64,11 +66,13 @@ for line in rawFile:
 
             queryPosition = bash("curl https://hgwdev.gi.ucsc.edu/cgi-bin/hgSearch?search="+NMacc+"%3Ac"+secondPos)
             for resultsLine in queryPosition.split("\n"):
-                if resultsLine.startswith("<script"):
+                if "position=" in resultsLine:
                     if strand == "-":
                         chromStart = str(int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+4)
                     elif strand == "+":
                         chromEnd = str(int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+5)
+            if chromStart is None or chromEnd is None:
+                raise RuntimeError("hgSearch returned no position for "+NMacc+" "+line[3])
 
         else:
             p = re.compile('[0-9]')
@@ -94,10 +98,13 @@ for line in rawFile:
                 pos = line[3].split('c.')[1]
                 adjustment = 0
 
+            position = None
             queryPosition = bash("curl https://hgwdev.gi.ucsc.edu/cgi-bin/hgSearch?search="+NMacc+"%3Ac"+pos)
             for resultsLine in queryPosition.split("\n"):
-                if resultsLine.startswith("<script"):
+                if "position=" in resultsLine:
                     position = int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+5
+            if position is None:
+                raise RuntimeError("hgSearch returned no position for "+NMacc+" "+line[3])
             if strand == "-":
                 position = int(position)-int(adjustment)
             elif strand == "+":
@@ -122,11 +129,11 @@ for line in rawFile:
 rawFile.close()
 outputBedFile.close()
 
-bash("bedSort /hive/data/inside/enigmaTracksData/outputBedFile.bed \
-/hive/data/inside/enigmaTracksData/outputBedFile.bed")
+bash("bedSort /hive/data/inside/enigmaTracksData/v1.2/outputBedFile.bed \
+/hive/data/inside/enigmaTracksData/v1.2/outputBedFile.bed")
 
 startOfAsFile="""table BRCAsplicing
-"BRCA1 and BRCA2 variant codes according to PVS1 decision trees (ENIGMA specifications version 1.1.0)"
+"BRCA1 and BRCA2 variant codes according to PVS1 decision trees (ENIGMA specifications version 1.2)"
    (
    string chrom;       "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in chromosome"
@@ -148,7 +155,7 @@ for i in range(8):
     startOfAsFile = startOfAsFile+asFileAddition
 startOfAsFile = startOfAsFile+"   string _mouseOver;"+'\t"'+'Field only used as mouseOver'+'"\n'
 
-asFileOutput = open("/hive/data/inside/enigmaTracksData/BRCAsplicing.as","w")
+asFileOutput = open("/hive/data/inside/enigmaTracksData/v1.2/BRCAsplicing.as","w")
 for line in startOfAsFile.split("\n"):
     if "_mouseOver" in line:
         asFileOutput.write(line+"\n   )")
@@ -156,17 +163,19 @@ for line in startOfAsFile.split("\n"):
         asFileOutput.write(line+"\n")
 asFileOutput.close()
 
-bash("bedToBigBed -as=/hive/data/inside/enigmaTracksData/BRCAsplicing.as -type=bed9+9 -tab \
-/hive/data/inside/enigmaTracksData/outputBedFile.bed /cluster/data/hg38/chrom.sizes \
-/hive/data/inside/enigmaTracksData/BRCAsplicingHg38.bb")
+bash("bedToBigBed -as=/hive/data/inside/enigmaTracksData/v1.2/BRCAsplicing.as -type=bed9+9 -tab \
+/hive/data/inside/enigmaTracksData/v1.2/outputBedFile.bed /cluster/data/hg38/chrom.sizes \
+/hive/data/inside/enigmaTracksData/v1.2/BRCAsplicingHg38.bb")
 
-bash("liftOver -bedPlus=9 -tab /hive/data/inside/enigmaTracksData/outputBedFile.bed \
+bash("liftOver -bedPlus=9 -tab /hive/data/inside/enigmaTracksData/v1.2/outputBedFile.bed \
 /hive/data/genomes/hg38/bed/liftOver/hg38ToHg19.over.chain.gz \
-/hive/data/inside/enigmaTracksData/outputBedFileHg19.bed /hive/data/inside/enigmaTracksData/unmapped.bed")
+/hive/data/inside/enigmaTracksData/v1.2/outputBedFileHg19.bed /hive/data/inside/enigmaTracksData/v1.2/unmapped.bed")
 
-bash("bedToBigBed -as=/hive/data/inside/enigmaTracksData/BRCAsplicing.as -type=bed9+9 -tab \
-/hive/data/inside/enigmaTracksData/outputBedFileHg19.bed /cluster/data/hg19/chrom.sizes \
-/hive/data/inside/enigmaTracksData/BRCAsplicingHg19.bb")
+bash("bedToBigBed -as=/hive/data/inside/enigmaTracksData/v1.2/BRCAsplicing.as -type=bed9+9 -tab \
+/hive/data/inside/enigmaTracksData/v1.2/outputBedFileHg19.bed /cluster/data/hg19/chrom.sizes \
+/hive/data/inside/enigmaTracksData/v1.2/BRCAsplicingHg19.bb")
 
-bash("ln -sf /hive/data/inside/enigmaTracksData/BRCAsplicingHg38.bb /gbdb/hg38/bbi/enigma/BRCAsplicing.bb")
-bash("ln -sf /hive/data/inside/enigmaTracksData/BRCAsplicingHg19.bb /gbdb/hg19/bbi/enigma/BRCAsplicing.bb")
+# The /gbdb symlinks and the hub point at the fixed filenames one level up in
+# /hive/data/inside/enigmaTracksData/ - the public hub serves through that chain, so
+# this script builds into the versioned v1.2/ dir and the verified .bb files are
+# copied onto the staging filenames at release time (see makedoc).

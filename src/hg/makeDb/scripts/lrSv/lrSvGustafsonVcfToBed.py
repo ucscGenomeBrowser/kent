@@ -81,6 +81,11 @@ def main():
 
             chromStart = pos - 1
             chromEnd = end
+            # POS is the non-deleted anchor base; drop it from the left of DEL
+            # intervals so svLen == |SVLEN| and coordinates match anchor-excluded
+            # callsets. INS/other keep the anchor-based position.
+            if svType == "DEL":
+                chromStart += 1
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
             if chrom == "chrM" and chromEnd > CHRM_LEN:
