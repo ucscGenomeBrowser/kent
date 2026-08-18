@@ -6102,7 +6102,7 @@ boolean isOn = cartUsualBoolean(cart, checkVar, hasOverride);
 printf("<br><b>Override track color:</b> ");
 cgiMakeCheckBox(checkVar, isOn);
 printf(" <input type='text' name='%s' id='%s_text' value='%s' size='8' />",
-    varName, varName, htmlEncode(colorValue)); // colorValue may be a cart override, escape (XSS)
+    varName, varName, htmlEncode(colorValue)); // colorValue may be a cart override, escape
 printf("&nbsp;<input id='%s_picker' />\n", varName);
 jsInlineF(
     "(function() {\n"

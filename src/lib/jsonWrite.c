@@ -78,7 +78,13 @@ void jsonWriteTag(struct jsonWrite *jw, char *var)
 {
 jsonWriteMaybeComma(jw);
 if (var != NULL)
-    dyStringPrintf(jw->dy, "\"%s\": ", var);
+    {
+    // tags are not always literals: hub assembly and track names end up here, so a tag is
+    // encoded the same way a value is.
+    char *encoded = jsonStringEscape(var);
+    dyStringPrintf(jw->dy, "\"%s\": ", encoded);
+    freeMem(encoded);
+    }
 }
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string)

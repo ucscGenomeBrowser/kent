@@ -3884,7 +3884,7 @@ else
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     // set large title font size, but less so for long labels to minimize wrap
-    // longLabel can come from a track hub (user-supplied), escape before echoing (XSS)
+    // longLabel can come from a track hub (user-supplied), escape before echoing
     printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
                 htmlEncode(tdb->longLabel), tdbIsSuper(tdb) ? " tracks" : "");
 

@@ -1919,7 +1919,8 @@ if(id)
 else
     idBuf[0] = 0;
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
+// name can carry a hub-supplied string (a bigBed field name from labelFields), escape
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", htmlEncode(name), idBuf,
         (moreHtml ? moreHtml : ""),
         (checked ? " CHECKED" : ""),
         (enabled ? "" : " DISABLED"));
@@ -2292,7 +2293,8 @@ if (events)
 if (style)
     printf(" style='%s'", style);
 if (ariaLabel)
-    printf(" aria-label=\"%s\"", ariaLabel);
+    // ariaLabel is often a track shortLabel, which a track hub controls, escape it
+    printf(" aria-label=\"%s\"", htmlEncode(ariaLabel));
 printf(">\n");
 for (i=0; i<menuSize; ++i)
     {
@@ -2596,9 +2598,10 @@ printf("</SELECT>\n");
 void cgiMakeHiddenVarWithIdExtra(char *varName, char *id, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME='%s'", varName);
+// varName can carry a hub-supplied string (a bigBed field name from labelFields), escape
+printf("<INPUT TYPE=HIDDEN NAME='%s'", htmlEncode(varName));
 if (id)
-    printf(" ID='%s'", id);
+    printf(" ID='%s'", htmlEncode(id));
 if (extra)
     printf(" %s",extra);
 printf(" VALUE='%s'>\n", string);
