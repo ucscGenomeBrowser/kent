@@ -1050,7 +1050,8 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList != NULL)
         {
         groups[numGroups] = cloneString(group->name);
-        labels[numGroups] = cloneString(group->label);
+        // a hub group's label is built from the hub's shortLabel and its groups.txt label
+        labels[numGroups] = htmlEncode(group->label);
         numGroups++;
         if (numGroups >= ArraySize(groups))
             internalErr();
@@ -1058,8 +1059,9 @@ for (group = groupList; group != NULL; group = group->next)
     }
 hashFree(&superHash);
 
+// on an assembly hub the organism and the freeze name both come from the hub
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
-      organism, hFreezeFromDb(database));
+      htmlEncode(organism), htmlEncode(hFreezeFromDb(database)));
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");

@@ -357,7 +357,8 @@ for (group = groupList; group != NULL; group = group->next)
     // TODO XSS filter group->name
     jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this,'%s');", group->name);
 
-    hPrintf("<B>&nbsp;%s</B> ", group->label);
+    // a hub group's label is built from the hub's shortLabel and its groups.txt label
+    hPrintf("<B>&nbsp;%s</B> ", htmlEncode(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("</td><td style='text-align:right;'>\n");
     safef(idText, sizeof idText, "%s_hideAllBut", group->name);
@@ -473,12 +474,13 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintIcons(tdb);
 
         if (track->hasUi)
+            // the labels come from trackDb, which a track hub controls, escape them
             hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&db=%s&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
-                    tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
+                    htmlEncode(tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel),
                     hTrackUiForTrack(tdb->track),
                     cartSessionVarName(), cartSessionId(cart), database, track->track);
-        hPrintf(" %s", tdb->shortLabel);
+        hPrintf(" %s", htmlEncode(tdb->shortLabel));
         if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD><TD NOWRAP>");
@@ -511,7 +513,7 @@ for (group = groupList; group != NULL; group = group->next)
         else
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD><TD NOWRAP>");
-        hPrintf("%s", tdb->longLabel);
+        hPrintf("%s", htmlEncode(tdb->longLabel));
 	hPrintf("</TD></TR>\n");
 	}
     hPrintf("<tr class='noData'><td colspan=3>");

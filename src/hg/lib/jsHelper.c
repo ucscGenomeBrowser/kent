@@ -537,7 +537,9 @@ switch (ele->type)
             for (el = list; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = el->val;
-                dyStringPrintf(dy,"%s%s\"%s\": ", indentBuf, tab, el->name);
+                // the key is not always a literal: an assembly hub's genome name ends up here,
+                // so it is encoded the same way a string value is
+                dyStringPrintf(dy,"%s%s\"%s\": ", indentBuf, tab, jsonStringEscape(el->name));
                 jsonDyStringPrintRecurse(dy, val, indentLevel);
                 dyStringPrintf(dy,"%s%s", el->next == NULL ? "" : ",",nl);
                 }

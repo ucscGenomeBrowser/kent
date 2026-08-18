@@ -552,7 +552,11 @@ void jsonPrintOneStart(struct jsonElement *ele, char *name, boolean isLast, int 
 spaceOut(f, indent);
 if (name != NULL)
     {
-    fprintf(f, "\"%s\": ", name);
+    // names are not always literals: an assembly hub's genome name ends up here, so a name
+    // is encoded the same way a string value is.
+    char *escaped = jsonStringEscapeLm(name, NULL);
+    fprintf(f, "\"%s\": ", escaped);
+    freez(&escaped);
     }
 switch (ele->type)
     {
