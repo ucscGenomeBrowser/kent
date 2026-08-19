@@ -906,22 +906,44 @@ sub mustOpen {
   return $handle;
 }
 
+# Cache of directory => is-it-NFS, so repeated nfsNoodge calls on files in
+# the same directory only pay for the stat(1) call once.
+my %isNfsDirCache;
+
+sub isNfsDir {
+  # Return true if $dir sits on an NFS mount.  /hive and other cluster
+  # filesystems are GPFS today and already stay coherent across machines;
+  # only NFS -- still used for home directories, and reachable via
+  # -buildDir pointing outside /hive -- needs the nfsNoodge workaround.
+  # refs #38021
+  my ($dir) = @_;
+  return $isNfsDirCache{$dir} if (exists $isNfsDirCache{$dir});
+  my $fsType = `stat -f -c '%T' '$dir' 2>/dev/null`;
+  chomp $fsType;
+  my $isNfs = ($fsType =~ m/^nfs/i) ? 1 : 0;
+  $isNfsDirCache{$dir} = $isNfs;
+  return $isNfs;
+}
+
 sub nfsNoodge {
   # the touch of the directory causes NFS to refresh its directory
   # information and thus pick up status change to the file.
   # sometimes localhost can't see the newly created file immediately,
   # so insert some artificial delay in order to prevent the next step
-  # from dieing on lack of file:
+  # from dieing on lack of file.  Only NFS needs this trick; GPFS
+  # (/hive today) already keeps its caches coherent between machines,
+  # so skip the delay there entirely. refs #38021
   my ($file) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
   confess "undef input" if (! defined $file);
   return if ($main::opt_debug);
-  return	# claude reports this function is no longer needed refs #rm38021
+  return if ( -e $file );	# already visible, nothing to noodge
   my $dir = dirname($file);
+  return if (! isNfsDir($dir));
   for (my $i=0;  $i < 5;  $i++) {
     `touch $dir`;
     sleep(4);
-    last if ( -s $file );
+    last if ( -e $file );
   }
 }
 
