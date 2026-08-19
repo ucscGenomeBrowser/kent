@@ -618,7 +618,9 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     printf("addRecentSearch(\"%s\", \"%s\", {\"label\": \"%s\", \"value\": \"%s\", \"id\": \"%s\"});\n",
             jsDb, jsSearch, jsSearch, jsSearch, newPosBuf);
     printf("window.location.href=\"../cgi-bin/hgTracks?");
-    printf("db=%s", jsDb);
+    // db here is a URL query parameter, so cgi-encode it rather than reuse the JS-escaped jsDb
+    char *urlDb = cgiEncode(db);
+    printf("db=%s", urlDb);
     printf("&position=%s", newPosBuf);
     if (!sameString(trackName, "chromInfo"))
         printf("&%s=pack", trackName);
