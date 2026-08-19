@@ -133,7 +133,7 @@ if (gg == NULL)
     }
 
 /* Put up web page with controls */
-cartWebStart(cart, database, "Configure %s", htmlEncode(gg->shortLabel));
+cartWebStart(cart, database, "Configure %s", gg->shortLabel); // cartWebStart escapes the title itself
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hggConfigure, "on");

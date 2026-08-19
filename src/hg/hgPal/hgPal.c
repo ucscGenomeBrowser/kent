@@ -32,7 +32,7 @@ char *genome;
 
 getDbAndGenome(cart, &database, &genome, NULL);
 struct sqlConnection *conn = hAllocConn(database);
-cartWebStart(cart, database, "Other Species Alignments for %s %s",htmlEncode(track),htmlEncode(item)); // user input into title, escape (XSS)
+cartWebStart(cart, database, "Other Species Alignments for %s %s",track,item); // cartWebStart escapes the title itself
 
 /* output the option selection dialog */
 palOptions(cart, conn, addOurButtons, NULL);

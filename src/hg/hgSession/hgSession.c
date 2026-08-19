@@ -1904,8 +1904,8 @@ struct dyString *dyMessage = dyStringNew(1024);
 dyStringPrintf(dyMessage,
                "Re-saved settings from user <B>%s</B>'s session <B>%s</B> "
                "that %s be shared with others.  %s %s",
-	       userName, htmlEncode(sessionName), (sharingLevel ? "may" : "may not"),
-	       getSessionLink(userName, encSessionName),
+	       htmlEncode(userName), htmlEncode(sessionName), (sharingLevel ? "may" : "may not"),
+	       getSessionLink(encUserName, encSessionName),
 	       getSessionEmailLink(encUserName, encSessionName));
 cartCheckForCustomTracks(cart, dyMessage);
 int useCount = saveCartAsSession(conn, encUserName, encSessionName, sharingLevel);

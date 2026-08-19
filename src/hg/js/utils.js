@@ -3090,7 +3090,7 @@ var findTracks = {
     {   // Handle ajax response (repopulate a metadata val select)
         // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
 
-        var td = normed($('td#' + this.cmd));
+        var td = normed($('td#' + this.cmd + '_td'));
         if (td) {
             $(td).empty();
             $(td).append(response);
@@ -3137,6 +3137,22 @@ var findTracks = {
             }
         }
         //findTracks.searchButtonsEnable(true);
+    },
+
+    initMdbFilters: function ()
+    {   // Wire up mdb var/val change handling via delegation on the document, so that rows
+        // added later by the [+] button (which clones a row, losing its event handlers) are
+        // covered without re-binding.  Uses jQuery delegation rather than a native
+        // addEventListener: the filterBy multiselects fire their 'change' through jQuery
+        // (ui.dropdownchecklist.js), which a native document listener would not catch.
+        // Called once at page load from the track search and file search pages.
+        if (findTracks.mdbFiltersInited)
+            return;
+        findTracks.mdbFiltersInited = true;
+        $(document).on('change', 'select.mdbVar', function () { findTracks.mdbVarChanged(this); });
+        $(document).on('change', 'select.mdbVal', function () { findTracks.mdbValChanged(this); });
+        // freeText/wildList vals are <input>s; their change just abandons found results
+        $(document).on('change', 'input.mdbVal',  function () { findTracks.mdbVarChanged(this); });
     },
 
     changeVis: function (seenVis)
@@ -3512,7 +3528,7 @@ var findTracks = {
                     $(element).attr('id','isLike' + rowNum);
                 element = $(this).find("td[id^='hgt_mdbVal']")[0];
                 if (element)
-                    $(element).attr('id','hgt_mdbVal' + rowNum);
+                    $(element).attr('id','hgt_mdbVal' + rowNum + '_td');
             });
 
             return mdbSelectRows.length;

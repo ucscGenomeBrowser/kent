@@ -398,11 +398,13 @@ if (captchaScore > -1.0)
     {
     if (robot)
 	{
-        char *sName=cartUsualString(cart,"suggestName","no name entered");
-        char *sEmail=cartUsualString(cart,"suggestEmail","no email entered");
-        char *sCategory=cartUsualString(cart,"suggestCategory","no category entered");
-        char *sSummary=cartUsualString(cart,"suggestSummary","no summary entered");
-        char *sDetails=cartUsualString(cart,"suggestDetails","no details entered");
+        // these come from the cart (user input) and are echoed into a mailto: URL
+        // inside an href attribute, so cgi-encode them (URL- and attribute-safe) (XSS)
+        char *sName=cgiEncode(cartUsualString(cart,"suggestName","no name entered"));
+        char *sEmail=cgiEncode(cartUsualString(cart,"suggestEmail","no email entered"));
+        char *sCategory=cgiEncode(cartUsualString(cart,"suggestCategory","no category entered"));
+        char *sSummary=cgiEncode(cartUsualString(cart,"suggestSummary","no summary entered"));
+        char *sDetails=cgiEncode(cartUsualString(cart,"suggestDetails","no details entered"));
 	hPrintf(
         "<h2>Invalid Form.</h2>"
 	"<p>"

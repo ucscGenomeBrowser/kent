@@ -3791,8 +3791,10 @@ static boolean checkGroup(char *db, char *group)
 {
 // "blat" is the synthetic "BLAT Results" group that hgTracks adds in code (it is not a row in the
 // grp table), so accept it here; otherwise a BLAT result track's group=blat would be rejected and
-// forced back into the generic "user" (Custom Tracks) group.
-if (sameString(group, "blat"))
+// forced back into the generic "user" (Custom Tracks) group.  Only accept it when the feature is
+// on: with blatResultsGroup off hgTracks never creates the group, so a hand-written group=blat
+// would otherwise be an orphan that lands in "other".
+if (sameString(group, "blat") && cfgOptionBooleanDefault("blatResultsGroup", FALSE))
     return TRUE;
 static struct hash *dbToGroups = NULL;
 if (dbToGroups == NULL)

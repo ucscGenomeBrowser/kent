@@ -2326,7 +2326,8 @@ void oauthReturn(struct sqlConnection *conn)
 {
 char *state = cgiUsualString("state", "");
 char *savedState = cartUsualString(cart, "oauth_state", "");
-char *provider = cartUsualString(cart, "oauth_provider", "");
+// clone this: cartRemove below frees the cart's copy, but we still use provider afterward
+char *provider = cloneString(cartUsualString(cart, "oauth_provider", ""));
 
 // Validate the anti-CSRF state before consuming any cart state or acting on an error param.  A
 // stray code/error link (a re-opened redirect, or a crafted hgLogin?error=...) must not be able to
