@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgc.h"
 #include "htmshell.h"
+#include "hubConnect.h"
 #include "jsHelper.h"
 #include "pgSnp.h"
 #include "regexHelper.h"

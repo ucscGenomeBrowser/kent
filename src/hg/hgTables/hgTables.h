@@ -52,9 +52,6 @@ extern struct joiner *allJoiner;	/* Info on how to join tables. */
 void hPrintSpaces(int count);
 /* Print a number of non-breaking spaces. */
 
-char *hubEncode(struct trackDb *tdb, char *text);
-/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged. */
-
 void writeHtmlCell(char *text);
 /* Write out a cell in an HTML table, making text not too big,
  * and stripping html tags and breaking spaces.... */

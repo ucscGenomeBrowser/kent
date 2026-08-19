@@ -1476,7 +1476,7 @@ for(; genomeList; genomeList = genomeList->next)
         org = trackHubSkipHubName(hOrganism(genomeList->name));
 
     hPrintf("<li>Open: <A href=\"../cgi-bin/hgTracks?db=%s&%s&position=lastDbPos\">%s: %s</A></li>",
-        htmlEncode(genomeList->name), cartSidUrlString(cart), htmlEncode(org), htmlEncode(desc));
+        cgiEncode(genomeList->name), cartSidUrlString(cart), htmlEncode(org), htmlEncode(desc));
     }
 hPrintf("</ul>");
 

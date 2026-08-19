@@ -12,6 +12,7 @@
 #include "hui.h"
 #include "asParse.h"
 #include "hgc.h"
+#include "hubConnect.h"
 #include "trackHub.h"
 #include "memgfx.h"
 #include "hgColors.h"

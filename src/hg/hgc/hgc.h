@@ -552,9 +552,6 @@ char *getIdInUrl(struct trackDb *tdb, char *itemName);
 // Parsed in both bigBedClick.c (to build JSON + load JS) and hgc.c (to skip fields from table).
 #define DETAILS_SCRIPT_PREFIX "detailsScript.*"
 
-char *hubEncode(struct trackDb *tdb, char *text);
-/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged. */
-
 void printFieldLabel(char *entry);
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to
