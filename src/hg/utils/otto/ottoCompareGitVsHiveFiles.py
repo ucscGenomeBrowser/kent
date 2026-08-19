@@ -18,8 +18,14 @@ directories it looks at in git, these can be controlled in the function findGitF
 import subprocess
 import getpass
 import filecmp
+import difflib
 import os
 from datetime import datetime
+
+# How alike two files must be (fraction of shared lines) before a hive file that
+# shares a basename with a git file is treated as a copy of it.  Real pairs that
+# have drifted score well above 0.9, unrelated same-name scripts below 0.2.
+minSimilarity = 0.5
 
 def bash(cmd):
     """Input bash cmd and return stdout"""
@@ -27,51 +33,82 @@ def bash(cmd):
     return(rawOutput.stdout.split('\n')[0:-1])
 
 
-def parseGitFilesAndMd5sums(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath):
+def readLines(filePath):
+    """Read a file as a list of lines, tolerating binary/non-utf8 content"""
+    with open(filePath, errors='replace') as f:
+        return(f.readlines())
+
+
+def looksLikeSameFile(gitPath, hivePath):
+    """A shared basename does not make two files the same file: hive has
+    grcIncidentDb/GRCh37/runUpdate.sh, a per-assembly script unrelated to the
+    genArk/asmAlias/runUpdate.sh in git.  Compare the contents so only files
+    that really are copies of each other get reported as out of sync."""
+    gitLines = readLines(gitPath)
+    hiveLines = readLines(hivePath)
+    matcher = difflib.SequenceMatcher(None, gitLines, hiveLines)
+    # quick_ratio is a cheap upper bound, so a low score rules the pair out
+    if matcher.quick_ratio() < minSimilarity:
+        return(False)
+    return(matcher.ratio() >= minSimilarity)
+
+
+def parseGitFilesAndMd5sums(fileListWithMd5sum, gitPathDic, gitPathHiveMatches):
+    """Key on the full git path, not the basename: several otto dirs hold files
+    with the same name (runUpdate.sh, doUpdate.sh, download.sh ...) and keying
+    on basename let one git file silently replace the other."""
     for fileMd5 in fileListWithMd5sum:
         md5sum = fileMd5.split(" ")[0]
         gitPath = fileMd5.split("  ")[1]
-        fileName = gitPath.split("/")[-1]
-        fileNameDic[fileName] = md5sum
-        fileNameGitPath[fileName] = gitPath
-        fileNameHiveMatches[fileName] = []
-    return(fileNameDic, fileNameHiveMatches, fileNameGitPath)
+        gitPathDic[gitPath] = md5sum
+        gitPathHiveMatches[gitPath] = []
+    return(gitPathDic, gitPathHiveMatches)
 
 
-def searchHiveFiles(fileNameDic,fileNameHiveMatches):
+def searchHiveFiles(gitPathDic,gitPathHiveMatches):
     """Find git otto files in the hive otto dir and get md5sums"""
-    for fileName in fileNameDic.keys():   
-        hiveSearchMd5sum = bash(f"find /hive/data/outside/otto/ -maxdepth 3 -name '{fileName}' 2>/dev/null")
-        if hiveSearchMd5sum != []:
-            for fileHit in hiveSearchMd5sum:
-                fileHit = fileHit.strip()
-                if os.path.isfile(fileHit):
-                    if os.access(fileHit, os.R_OK):
-                        fileHitMd5Sum = bash('md5sum '+fileHit)
-                        md5 = fileHitMd5Sum[0].split("  ")[0]
-                        fileNameHiveMatches[fileName].append((md5, fileHit))
-    return(fileNameHiveMatches)
-    
-def compareGitMd5sumsToHiveMd5sums(fileNameDic, fileNameHiveMatches, fileNameGitPath):
+    md5sByFileName = {}    # basename -> set of md5sums of every git file with that name
+    for gitPath, md5sum in gitPathDic.items():
+        md5sByFileName.setdefault(os.path.basename(gitPath), set()).add(md5sum)
+
+    hiveSearchCache = {}   # basename -> [hive paths], the same name is looked up once
+    for gitPath in gitPathDic.keys():
+        fileName = os.path.basename(gitPath)
+        if fileName not in hiveSearchCache:
+            hiveSearchCache[fileName] = bash(f"find /hive/data/outside/otto/ -maxdepth 3 -name '{fileName}' 2>/dev/null")
+        for fileHit in hiveSearchCache[fileName]:
+            fileHit = fileHit.strip()
+            if os.path.isfile(fileHit):
+                if os.access(fileHit, os.R_OK):
+                    fileHitMd5Sum = bash('md5sum '+fileHit)
+                    md5 = fileHitMd5Sum[0].split("  ")[0]
+                    if md5 != gitPathDic[gitPath] and md5 in md5sByFileName[fileName]:
+                        # in sync with a different git file of the same name
+                        continue
+                    if md5 != gitPathDic[gitPath] and not looksLikeSameFile(gitPath, fileHit):
+                        continue
+                    gitPathHiveMatches[gitPath].append((md5, fileHit))
+    return(gitPathHiveMatches)
+
+def compareGitMd5sumsToHiveMd5sums(gitPathDic, gitPathHiveMatches):
     """Compare md5sums between files in git and all matching files in hive"""
     headerPrinted = False
-    for fileName in fileNameDic.keys():
-        hiveMd5s = [m for m, _ in fileNameHiveMatches[fileName]]
-        if fileNameDic[fileName] in hiveMd5s:
+    for gitPath in gitPathDic.keys():
+        hiveMd5s = [m for m, _ in gitPathHiveMatches[gitPath]]
+        if gitPathDic[gitPath] in hiveMd5s:
             continue
-        elif not fileNameHiveMatches[fileName]:
+        elif not gitPathHiveMatches[gitPath]:
             continue
         else:
             if not headerPrinted:
                 print("The following otto file(s) were found, but the md5sum of the git file did not match the one running on hive.")
                 headerPrinted = True
-            gitPath = fileNameGitPath[fileName]
             # Use last commit time, not working-tree mtime: checkout resets mtime to checkout time.
             gitTimeRaw = bash(f"git -C ~/kent log -1 --format=%ct -- {gitPath}")
             gitTime = int(gitTimeRaw[0]) if gitTimeRaw else 0
-            print(f"\n======= {fileName} =======")
+            print(f"\n======= {os.path.basename(gitPath)} =======")
             print(f"  git:  {gitPath}\n        (last commit: {datetime.fromtimestamp(gitTime)})")
-            for md5, hivePath in fileNameHiveMatches[fileName]:
+            for md5, hivePath in gitPathHiveMatches[gitPath]:
                 hiveTime = int(os.path.getmtime(hivePath))
                 if gitTime > hiveTime:
                     message = "git is newer and hive needs to be updated."
@@ -85,12 +122,10 @@ def compareGitMd5sumsToHiveMd5sums(fileNameDic, fileNameHiveMatches, fileNameGit
 def findGitFilesBuildDics():
     """Find all files in git minus exceptions and get md5sums, build dics"""
     fileListWithMd5sum = bash("find ~/kent/src/hg/utils/otto -type f | grep -Ev 'uniprot|ncbiRefSeq|crontab|README*|clinvarSubLolly|makefile|.c$|sarscov2phylo|nextstrainNcov|knownGene|rsv/exclude.ids|mask.bed|.gitignore|R00000039_repregions.bed' | xargs md5sum")
-    fileNameDic = {}        # basename -> git md5sum
-    fileNameHiveMatches = {}  # basename -> [(hive md5sum, hive full path), ...]
-    fileNameGitPath = {}    # basename -> git full path
-    fileListWithMd5sum[0].split("  ")
-    return(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath)
-    
+    gitPathDic = {}         # git full path -> git md5sum
+    gitPathHiveMatches = {} # git full path -> [(hive md5sum, hive full path), ...]
+    return(fileListWithMd5sum, gitPathDic, gitPathHiveMatches)
+
 def checkCrontabDifferences():
     """Looks for differences between the committed otto crontab and the one running"""
     user = getpass.getuser()
@@ -122,10 +157,10 @@ def main():
     """
     Initialized options and calls other functions.
     """
-    fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath = findGitFilesBuildDics()
-    parseGitFilesAndMd5sums(fileListWithMd5sum, fileNameDic, fileNameHiveMatches, fileNameGitPath)
-    searchHiveFiles(fileNameDic, fileNameHiveMatches)
-    compareGitMd5sumsToHiveMd5sums(fileNameDic, fileNameHiveMatches, fileNameGitPath)
+    fileListWithMd5sum, gitPathDic, gitPathHiveMatches = findGitFilesBuildDics()
+    parseGitFilesAndMd5sums(fileListWithMd5sum, gitPathDic, gitPathHiveMatches)
+    searchHiveFiles(gitPathDic, gitPathHiveMatches)
+    compareGitMd5sumsToHiveMd5sums(gitPathDic, gitPathHiveMatches)
     checkCrontabDifferences()
 
 main()
