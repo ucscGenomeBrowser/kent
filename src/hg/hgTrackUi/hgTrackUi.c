@@ -3280,6 +3280,30 @@ jsonWriteString(jw, "track", tdb->track);
 char *defaultSortField = trackDbSetting(tdb, "defaultSortField");
 if (isNotEmpty(defaultSortField))
     jsonWriteString(jw, "defaultSortField", defaultSortField);
+// How the user last sorted the faceted table, if they have.  This overrides
+// defaultSortField in the javascript, which is the only side that can act on it -
+// turning field names into column positions needs the metadata file.  The value
+// comes back from the cart, so it's untrusted, and this JSON lands inside a
+// <script> block: only pass through the characters "field=+ field2=-" needs.
+char facetSortVar[1024];
+safef(facetSortVar, sizeof(facetSortVar), "%s.facetSortOrder", metaDataId);
+char *facetSortOrder = cartOptionalString(cart, facetSortVar);
+if (isNotEmpty(facetSortOrder))
+    {
+    boolean clean = TRUE;
+    char *c = facetSortOrder;
+    for ( ; *c != '\0'; c++)
+        {
+        if (!isalnum((unsigned char)*c) && *c != '_' && *c != '.' && *c != '-'
+            && *c != '+' && *c != '=' && *c != ' ')
+            {
+            clean = FALSE;
+            break;
+            }
+        }
+    if (clean)
+        jsonWriteString(jw, "facetSortOrder", facetSortOrder);
+    }
 if (isNotEmpty(subtrackUrls))
     {
     struct slPair *pairs = slPairListFromString((char *)subtrackUrls, TRUE);
