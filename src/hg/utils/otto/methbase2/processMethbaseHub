@@ -1,0 +1,623 @@
+#!/usr/bin/env python3
+"""
+Convert a MethBase2 track hub delivery from the Smith Lab (USC) into trackDb .ra
+files suitable for inclusion in our own trackDb file set.
+
+The hub arrives as a directory of per-assembly subdirectories, each holding a
+trackDb.txt, an mb2_<db>_metadata.tsv, and an mb2_<db>_colors.json.  Three edits
+are needed before those stanzas can live in our tree:
+
+  1. bigDataUrl points at http://smithlab.usc.edu; we serve a mirror under
+     hgdownload.
+  2. metaDataUrl and colorSettingsUrl are bare relative filenames.  hgTrackUi
+     whitelists exactly those two settings and compares a fetch request against
+     the literal setting value (see fileUrlMatchesTrackSetting() in
+     hg/hgTrackUi/hgTrackUi.c), so they have to name something resolvable.  We
+     point them at /gbdb/<db>/methBase2/, which copyMethbaseFiles.sh populates
+     with symlinks back to this directory.
+  3. The composite stanzas have no parent.  We hang them off a dnaMethylation
+     supertrack that whoever installs the files defines by hand -- that is also
+     where the "group" setting lives.
+
+hg38 and mm39 are additionally too large to commit as a single .ra, so any
+output over --max-ra-size is split on stanza boundaries into a chain of
+methbase2.ra, methbase2_2.ra, ... files tied together with include lines.
+
+The .tsv and .json files are never modified -- they are copied here byte for
+byte, and the /gbdb symlinks point at these copies.  That makes the destination
+directory a permanent artifact: deleting or moving it breaks every track.  Name
+it accordingly (a dated directory you keep alongside past versions), rather than
+treating it as scratch.
+
+A copyMethbaseFiles.sh script is generated into the destination directory to put
+everything in its final place, along with a gbdb_manifest listing every /gbdb
+path that script sets up, for pushing those files to production.  Nothing here
+edits any file outside the destination directory.
+
+Usage:
+  processMethbaseHub [--max-ra-size MB] <sourceHubDir> <destDir>
+"""
+
+import argparse
+import os
+import re
+import shutil
+import stat
+import sys
+
+# Where we mirror the contributor's bigData files.
+HUB_MIRROR_URL = "http://hgdownload.soe.ucsc.edu/hubs/methbase/v2"
+SOURCE_HOST = "smithlab.usc.edu"
+
+# Where the facet metadata and color files are reached from.  Keep GBDB_SUBDIR in
+# step with copyMethbaseFiles.sh, which creates the symlinks that live there.
+GBDB_ROOT = "/gbdb"
+GBDB_SUBDIR = "methBase2"
+
+RA_NAME = "methbase2.ra"
+
+# List of the /gbdb paths this delivery sets up, for pushing to production.  The
+# set of metadata and color files changes from one delivery to the next, so a
+# fixed list of filenames the way most otto tracks do it will not work here.
+MANIFEST_NAME = "gbdb_manifest"
+
+# Settings whose value is a bare filename in the hub and must become a /gbdb path.
+FETCHED_SETTINGS = ("metaDataUrl", "colorSettingsUrl")
+
+BIG_DATA_URL_RE = re.compile(
+    r"^(\s*bigDataUrl\s+)https?://" + re.escape(SOURCE_HOST) + r"(?=[/\s]|$)")
+ANY_BIG_DATA_URL_RE = re.compile(r"^\s*bigDataUrl\s")
+
+# Subdirectory names become assembly names, and an assembly name ends up in
+# /gbdb paths, in trackDb settings, and -- unquoted -- in the generated shell
+# script's assembly list.  Anything outside this pattern is not an assembly we
+# recognize, so reject it here instead of letting it reach a shell.
+DB_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._]*$")
+
+
+def gbdbDir(db):
+    """The /gbdb directory holding this assembly's metadata and color symlinks."""
+    return "%s/%s/%s" % (GBDB_ROOT, db, GBDB_SUBDIR)
+
+
+def raPartName(partNum):
+    """Filename for part partNum of the split .ra chain.  Part 1 is methbase2.ra."""
+    if partNum == 1:
+        return RA_NAME
+    return "methbase2_%d.ra" % partNum
+
+
+def splitStanzas(text):
+    """Split trackDb text into stanzas on blank lines.
+
+    Returns a list of stanzas, each a list of lines with no trailing blank.  Any
+    leading comment/blank preamble comes back as the first stanza so it stays at
+    the top of the file.
+    """
+    stanzas = []
+    current = []
+    for line in text.splitlines():
+        if line.strip() == "":
+            if current:
+                stanzas.append(current)
+                current = []
+        else:
+            current.append(line)
+    if current:
+        stanzas.append(current)
+    return stanzas
+
+
+def transformStanza(lines, db, counts):
+    """Apply the three trackDb edits to one stanza.  Returns the new line list.
+
+    Everything not named here -- track names, shortLabel, longLabel, colors,
+    priorities -- passes through untouched.
+    """
+    out = []
+    isComposite = False
+    hasParent = False
+    lastRelationshipIdx = None
+
+    for line in lines:
+        newLine = line
+
+        if ANY_BIG_DATA_URL_RE.match(line):
+            newLine, n = BIG_DATA_URL_RE.subn(
+                r"\1" + HUB_MIRROR_URL + "/" + SOURCE_HOST, line)
+            if n:
+                counts["bigDataUrl"] += 1
+            else:
+                counts["unmatchedHost"] += 1
+                if len(counts["unmatchedSamples"]) < 5:
+                    counts["unmatchedSamples"].append(line.strip())
+        else:
+            stripped = line.lstrip()
+            for setting in FETCHED_SETTINGS:
+                if stripped.startswith(setting) and stripped[len(setting):len(setting) + 1].isspace():
+                    indent = line[:len(line) - len(stripped)]
+                    value = stripped[len(setting):].strip()
+                    newLine = "%s%s %s/%s" % (
+                        indent, setting, gbdbDir(db), os.path.basename(value))
+                    counts[setting] += 1
+                    break
+
+        words = newLine.split(None, 1)
+        firstWord = words[0] if words else ""
+        if firstWord == "compositeTrack":
+            isComposite = True
+        if firstWord == "parent":
+            hasParent = True
+        # Keep the added parent line next to the other relationship settings
+        # rather than dangling at the end of the stanza.
+        if firstWord in ("track", "compositeTrack", "superTrack", "view", "parent"):
+            lastRelationshipIdx = len(out)
+
+        out.append(newLine)
+
+    if isComposite and not hasParent:
+        insertAt = lastRelationshipIdx + 1 if lastRelationshipIdx is not None else len(out)
+        out.insert(insertAt, "parent dnaMethylation")
+        counts["parentAdded"] += 1
+
+    return out
+
+
+def writeRaFiles(stanzas, destDbDir, maxBytes):
+    """Write stanzas out as one .ra, or a chain of them if over maxBytes.
+
+    Splits only on stanza boundaries.  Every part but the last ends with an
+    include line pointing at the next part, and room for that line is reserved
+    when deciding where to cut.  Returns the list of filenames written.
+    """
+    # Each block carries its own trailing blank line so that a part's size is
+    # just the sum of its blocks -- forgetting the separators is how you end up
+    # writing files a few KB over the limit.
+    blocks = ["\n".join(lines) + "\n\n" for lines in stanzas]
+
+    # Longest include line we might have to append.  Overestimating just makes
+    # the cut marginally conservative, which is harmless.
+    maxIncludeLen = len("include %s\n" % raPartName(len(blocks) + 1))
+
+    for i, block in enumerate(blocks):
+        if len(block) + maxIncludeLen > maxBytes:
+            raise SystemExit(
+                "ERROR: %s: stanza %d is %d bytes, which does not fit in the %d byte "
+                "limit even by itself.  Raise --max-ra-size."
+                % (destDbDir, i + 1, len(block), maxBytes))
+
+    # Group blocks into parts.
+    parts = []
+    current = []
+    currentLen = 0
+    for block in blocks:
+        # Assume for now this part will need a trailing include; if it turns out
+        # to be the last part we just end up slightly under the limit.
+        if current and currentLen + len(block) + maxIncludeLen > maxBytes:
+            parts.append(current)
+            current = []
+            currentLen = 0
+        current.append(block)
+        currentLen += len(block)
+    if current:
+        parts.append(current)
+
+    # The composite stanza has to be in part 1 so the parent of every subtrack is
+    # defined before the include chain pulls the rest in.  It is first in the
+    # source, so this should be automatic -- check rather than assume.
+    def hasComposite(part):
+        return any(b.startswith("compositeTrack") or "\ncompositeTrack" in b
+                   for b in part)
+
+    if any(hasComposite(p) for p in parts) and not hasComposite(parts[0]):
+        raise SystemExit(
+            "ERROR: %s: the composite stanza did not land in part 1.  Refusing to "
+            "write a chain whose parent stanza is not first." % destDbDir)
+
+    written = []
+    for i, part in enumerate(parts):
+        partNum = i + 1
+        name = raPartName(partNum)
+        path = os.path.join(destDbDir, name)
+        with open(path, "w") as fh:
+            if partNum < len(parts):
+                fh.write("".join(part))
+                fh.write("include %s\n" % raPartName(partNum + 1))
+            else:
+                fh.write("".join(part).rstrip("\n") + "\n")
+        written.append(name)
+    return written
+
+
+def referencedSupportFiles(trackDbPath):
+    """Filenames named by metaDataUrl/colorSettingsUrl, as {setting: filename}."""
+    referenced = {}
+    with open(trackDbPath) as fh:
+        for line in fh:
+            stripped = line.strip()
+            for setting in FETCHED_SETTINGS:
+                if stripped.startswith(setting) and \
+                        stripped[len(setting):len(setting) + 1].isspace():
+                    value = stripped[len(setting):].strip()
+                    referenced.setdefault(setting, os.path.basename(value))
+    return referenced
+
+
+def validateSource(sourceDir, dbs):
+    """Check every assembly before anything gets written.
+
+    Two ways a delivery can be unusable: it annotates an assembly this machine
+    does not carry, or it names a metadata/color file it did not ship.  Collect
+    every such problem and report them together -- the file problems get passed
+    back to the data provider, so a complete list beats one error at a time.
+    """
+    problems = []
+    for db in dbs:
+        srcDbDir = os.path.join(sourceDir, db)
+
+        if not os.path.isdir(os.path.join(GBDB_ROOT, db)):
+            problems.append(
+                "%s: no such directory %s/%s on this machine.  The hub carries data "
+                "for an assembly we do not have." % (db, GBDB_ROOT, db))
+
+        trackDbPath = os.path.join(srcDbDir, "trackDb.txt")
+        if not os.path.isfile(trackDbPath):
+            problems.append("%s: %s has no trackDb.txt" % (db, srcDbDir))
+            continue
+
+        for setting, filename in sorted(referencedSupportFiles(trackDbPath).items()):
+            if not os.path.isfile(os.path.join(srcDbDir, filename)):
+                problems.append(
+                    "%s: trackDb.txt has '%s %s', but %s/%s does not exist.  The data "
+                    "provider needs to either include that file in the %s directory or "
+                    "drop the %s setting from %s/trackDb.txt."
+                    % (db, setting, filename, srcDbDir, filename, db, setting, db))
+
+    if problems:
+        sys.stderr.write(
+            "ERROR: %d problem(s) with the hub in %s; nothing was written.\n\n"
+            % (len(problems), sourceDir))
+        for problem in problems:
+            sys.stderr.write("  %s\n\n" % problem)
+        sys.exit(1)
+
+
+def processDb(srcDbDir, destDbDir, db, maxBytes):
+    """Convert one assembly subdirectory.  Returns a summary dict."""
+    os.mkdir(destDbDir)
+
+    trackDbPath = os.path.join(srcDbDir, "trackDb.txt")
+
+    support = []
+    for name in sorted(os.listdir(srcDbDir)):
+        path = os.path.join(srcDbDir, name)
+        if not os.path.isfile(path):
+            continue
+        if name == "trackDb.txt":
+            continue
+        if name.endswith(".tsv") or name.endswith(".json"):
+            shutil.copy2(path, os.path.join(destDbDir, name))
+            support.append(name)
+        else:
+            sys.stderr.write(
+                "WARNING: %s/%s is not a .tsv or .json and was not copied\n" % (db, name))
+
+    with open(trackDbPath) as fh:
+        stanzas = splitStanzas(fh.read())
+
+    counts = {"bigDataUrl": 0, "unmatchedHost": 0, "unmatchedSamples": [],
+              "parentAdded": 0}
+    for setting in FETCHED_SETTINGS:
+        counts[setting] = 0
+
+    transformed = [transformStanza(lines, db, counts) for lines in stanzas]
+    written = writeRaFiles(transformed, destDbDir, maxBytes)
+
+    nbytes = sum(os.path.getsize(os.path.join(destDbDir, n)) for n in written)
+    return {"db": db, "stanzas": len(stanzas), "files": written, "bytes": nbytes,
+            "support": support, "counts": counts}
+
+
+COPY_SCRIPT_TEMPLATE = r'''#!/bin/bash
+# Put the converted MethBase2 files in place.
+#
+# Generated by processMethbaseHub -- edit the source script, not this copy.
+#
+# Copies the methbase2*.ra files plus the facet metadata and color files into
+# each assembly's trackDb directory, then points /gbdb/<db>/%(gbdbSubdir)s/ at the
+# metadata and color files sitting next to this script -- that is where the
+# tracks' metaDataUrl and colorSettingsUrl settings look for them.
+#
+# Because those are symlinks rather than copies, the directory holding this
+# script has to stay put.  Deleting or moving it breaks every track.
+#
+# This deliberately makes no other edits.  Adding "include methbase2.ra" to an
+# assembly's trackDb.ra, and defining the dnaMethylation supertrack the
+# composites hang off of (which is where "group" gets set), are done by hand.
+
+set -o errexit -o nounset -o pipefail
+
+# An assembly may legitimately ship without a .tsv or a .json.  Without this, a
+# glob matching nothing would come through as its own literal text and be handed
+# to cp as a filename.
+shopt -s nullglob
+
+GBDB_ROOT="%(gbdbRoot)s"
+GBDB_SUBDIR="%(gbdbSubdir)s"
+
+DBS="%(dbList)s"
+
+# These are substituted in when this script is generated, and are used to build
+# paths for mkdir, rm, and ln below.  Empty values would point those at the wrong
+# directory, so refuse to start rather than find out later.
+if [ -z "$GBDB_ROOT" ] || [ -z "$GBDB_SUBDIR" ]; then
+    echo "ERROR: GBDB_ROOT and GBDB_SUBDIR must both be set" >&2
+    exit 1
+fi
+if [ -z "${DBS// /}" ]; then
+    echo "ERROR: no assemblies were baked into this script" >&2
+    exit 1
+fi
+
+dryRun=""
+trackDbDir=""
+
+usage() {
+    cat <<EOF
+usage: $(basename "$0") [--dry-run] <trackDb directory>
+
+  <trackDb directory>  base of the trackDb source tree to install into; the
+                       per-assembly directories are located beneath it
+
+  --dry-run            report what would happen without copying, linking, or
+                       sending mail
+EOF
+}
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dry-run) dryRun="yes"; shift ;;
+        -h|--help) usage; exit 0 ;;
+        -*) echo "unknown option: $1" >&2; usage >&2; exit 1 ;;
+        *)
+            if [ -n "$trackDbDir" ]; then
+                echo "too many arguments" >&2; usage >&2; exit 1
+            fi
+            trackDbDir="$1"; shift ;;
+    esac
+done
+
+if [ -z "$trackDbDir" ]; then
+    usage >&2
+    exit 1
+fi
+if [ ! -d "$trackDbDir" ]; then
+    echo "ERROR: no such directory: $trackDbDir" >&2
+    exit 1
+fi
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+# Index every directory in the trackDb tree by name, down to depth 3.  No -L, so
+# symlinked directories are skipped.
+declare -A dbPath
+declare -A dbDupe
+while IFS= read -r dir; do
+    name=$(basename "$dir")
+    if [ -n "${dbPath[$name]:-}" ]; then
+        dbDupe[$name]="${dbDupe[$name]:-${dbPath[$name]}} $dir"
+    else
+        dbPath[$name]="$dir"
+    fi
+done < <(find "$trackDbDir" -maxdepth 3 -type d)
+
+# Validate every assembly before copying anything, so a bad tree cannot leave a
+# half-finished install behind.  processMethbaseHub already checked $GBDB_ROOT
+# when it built these files, but this script may well be run later or on another
+# machine, so check again rather than trust that.
+errors=0
+for db in $DBS; do
+    if [ -z "${dbPath[$db]:-}" ]; then
+        echo "ERROR: no directory named $db found under $trackDbDir" >&2
+        errors=$((errors + 1))
+    elif [ -n "${dbDupe[$db]:-}" ]; then
+        echo "ERROR: $db is ambiguous, found at: ${dbDupe[$db]}" >&2
+        errors=$((errors + 1))
+    fi
+    if [ ! -d "$GBDB_ROOT/$db" ]; then
+        echo "ERROR: $GBDB_ROOT/$db does not exist; this machine does not carry $db" >&2
+        errors=$((errors + 1))
+    fi
+done
+if [ "$errors" -gt 0 ]; then
+    echo "$errors problem(s) found; nothing was copied." >&2
+    exit 1
+fi
+
+# Assemblies that do not have a methbase2.ra yet need an include line added by
+# hand, so call them out in the mail.
+newDbs=""
+for db in $DBS; do
+    if [ ! -f "${dbPath[$db]}/methbase2.ra" ]; then
+        newDbs="$newDbs $db"
+    fi
+done
+
+run() {
+    if [ -n "$dryRun" ]; then
+        echo "  would run: $*"
+    else
+        "$@"
+    fi
+}
+
+for db in $DBS; do
+    dest="${dbPath[$db]}"
+    gbdbDir="$GBDB_ROOT/$db/$GBDB_SUBDIR"
+
+    # $db and $dest are about to be built into paths handed to rm and mkdir.
+    # Word splitting on $DBS cannot yield an empty $db and the validation above
+    # cannot leave $dest empty, so this should be unreachable -- which is the
+    # point.  An empty value here would aim those commands at a parent directory.
+    if [ -z "$db" ] || [ -z "$dest" ]; then
+        echo "ERROR: internal error: empty db ('$db') or destination ('$dest')" >&2
+        exit 1
+    fi
+
+    echo "$db -> $dest"
+    for f in "$here/$db/"methbase2*.ra; do
+        run cp "$f" "$dest/"
+    done
+
+    # Copy the metadata and color files into the trackDb directory (a saved copy
+    # in git), and point /gbdb at the originals here.  Each link is removed by
+    # name and remade, so a re-run from a new processing directory repoints it.
+    # Only the names we ship are touched: if the provider ever renames a file,
+    # the link under its old name stays behind for someone to clean up by hand.
+    run mkdir -p "$gbdbDir"
+    for f in "$here/$db/"*.tsv "$here/$db/"*.json; do
+        base=$(basename "$f")
+        run cp "$f" "$dest/"
+        run rm -f "$gbdbDir/$base"
+        run ln -s "$f" "$gbdbDir/$base"
+    done
+done
+
+mailBody="The MethBase2 files in $here have been copied into $trackDbDir, and
+$GBDB_ROOT/<db>/$GBDB_SUBDIR/ now links to the metadata and color files in
+$here.  That directory needs to stay where it is; removing it would
+break the tracks.
+
+Those $GBDB_ROOT files still need to go out to production.  They are listed one
+per line in $here/%(manifestName)s.  They are symlinks, so
+whatever pushes them has to follow the link rather than copy it.
+"
+if [ -n "$newDbs" ]; then
+    mailBody="$mailBody
+These assemblies had no methbase2.ra before this update:"
+    for db in $newDbs; do
+        mailBody="$mailBody
+    $db (${dbPath[$db]})"
+    done
+    mailBody="$mailBody
+
+Each of them needs an 'include methbase2.ra' line added to its trackDb.ra, and
+a dnaMethylation supertrack for the composite to hang off of."
+else
+    mailBody="$mailBody
+Every assembly already had a methbase2.ra; no new include lines should be needed."
+fi
+
+if [ -n "$dryRun" ]; then
+    echo
+    echo "would mail $USER@ucsc.edu, subject \"MethBase2 Update\":"
+    echo "$mailBody" | sed 's/^/  | /'
+else
+    echo "$mailBody" | mail -s "MethBase2 Update" "$USER@ucsc.edu"
+    echo "mailed $USER@ucsc.edu"
+fi
+'''
+
+
+def writeManifest(destDir, entries):
+    """Write the list of /gbdb paths copyMethbaseFiles.sh will create links at.
+
+    One path per line, so it can be fed straight to whatever pushes files out to
+    production.  Note these are symlinks into destDir, so the push has to follow
+    them rather than copy the links themselves.
+    """
+    path = os.path.join(destDir, MANIFEST_NAME)
+    with open(path, "w") as fh:
+        for entry in entries:
+            fh.write("%s\n" % entry)
+    return path
+
+
+def writeCopyScript(destDir, dbs):
+    path = os.path.join(destDir, "copyMethbaseFiles.sh")
+    with open(path, "w") as fh:
+        fh.write(COPY_SCRIPT_TEMPLATE % {"dbList": " ".join(dbs),
+                                         "gbdbRoot": GBDB_ROOT,
+                                         "gbdbSubdir": GBDB_SUBDIR,
+                                         "manifestName": MANIFEST_NAME})
+    os.chmod(path, os.stat(path).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    return path
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Convert a MethBase2 track hub into trackDb .ra files.")
+    parser.add_argument("sourceDir", help="hub directory to read (must exist)")
+    parser.add_argument("destDir", help="directory to create and write into (must not exist)")
+    parser.add_argument("--max-ra-size", type=float, default=3.0, metavar="MB",
+                        help="split .ra files larger than this many MB (default: 3)")
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.sourceDir):
+        raise SystemExit("ERROR: source directory does not exist: %s" % args.sourceDir)
+    if os.path.exists(args.destDir):
+        raise SystemExit("ERROR: destination already exists: %s" % args.destDir)
+    if args.max_ra_size <= 0:
+        raise SystemExit("ERROR: --max-ra-size must be positive")
+    maxBytes = int(args.max_ra_size * 1024 * 1024)
+
+    dbs = []
+    for name in sorted(os.listdir(args.sourceDir)):
+        if not os.path.isdir(os.path.join(args.sourceDir, name)):
+            continue
+        if name.startswith("."):
+            # .git and friends; never an assembly.
+            sys.stderr.write("WARNING: skipping hidden directory %s\n" % name)
+            continue
+        if not DB_NAME_RE.match(name):
+            raise SystemExit(
+                "ERROR: %r is not a usable assembly name.  Expected letters, digits, "
+                "dots and underscores.  Refusing to treat it as a database."
+                % name)
+        dbs.append(name)
+    if not dbs:
+        raise SystemExit("ERROR: no assembly subdirectories in %s" % args.sourceDir)
+
+    validateSource(args.sourceDir, dbs)
+
+    os.makedirs(args.destDir)
+
+    totalUnmatched = 0
+    unmatchedSamples = []
+    manifest = []
+    for db in dbs:
+        summary = processDb(os.path.join(args.sourceDir, db),
+                            os.path.join(args.destDir, db), db, maxBytes)
+        for name in summary["support"]:
+            manifest.append("%s/%s" % (gbdbDir(db), name))
+        counts = summary["counts"]
+        totalUnmatched += counts["unmatchedHost"]
+        for sample in counts["unmatchedSamples"]:
+            if len(unmatchedSamples) < 5:
+                unmatchedSamples.append("%s: %s" % (db, sample))
+        print("%-10s %6d stanzas  %8.2f MB  %d file(s): %s"
+              % (db, summary["stanzas"], summary["bytes"] / 1048576.0,
+                 len(summary["files"]), " ".join(summary["files"])))
+
+    scriptPath = writeCopyScript(args.destDir, dbs)
+    manifestPath = writeManifest(args.destDir, manifest)
+
+    print()
+    print("%d assemblies written to %s" % (len(dbs), os.path.abspath(args.destDir)))
+    print("copy script: %s" % os.path.abspath(scriptPath))
+    print("gbdb manifest: %s (%d file(s) to push to production)"
+          % (os.path.abspath(manifestPath), len(manifest)))
+    print("Keep this directory: %s/<db>/%s/ will link to the .tsv and .json files"
+          % (GBDB_ROOT, GBDB_SUBDIR))
+    print("in it, so moving or deleting it breaks the tracks.")
+    if totalUnmatched:
+        print()
+        print("WARNING: %d bigDataUrl line(s) did not point at %s and were left "
+              "unchanged." % (totalUnmatched, SOURCE_HOST))
+        for sample in unmatchedSamples:
+            print("    %s" % sample)
+        print("Check whether the contributor changed hosts before installing these files.")
+
+
+if __name__ == "__main__":
+    main()
