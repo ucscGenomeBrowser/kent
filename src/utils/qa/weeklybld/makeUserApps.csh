@@ -43,8 +43,24 @@ set useDocker=true
 cd kent/src
 if ("$useDocker" == "true") then
    $WEEKLYBLD/userAppsCompileInDocker $BUILDDIR > make.log
+   set err = $status
 else
    make -j 12 BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
+   set err = $status
+endif
+if ( $err ) then
+ echo "error compiling userApps in $BUILDDIR/userApps/kent/src : $err [${0}: `date`]"
+ echo "see $BUILDDIR/userApps/kent/src/make.log"
+ exit 1
+endif
+
+# the compile can exit 0 and still produce nothing (e.g. missing docker image),
+# so make sure we really have binaries before pushing anything to hgdownload
+set binCount = `ls $DESTDIR$BINDIR | wc -l`
+if ( $binCount < 10 ) then
+ echo "error: only $binCount files in $DESTDIR$BINDIR, userApps build produced no binaries [${0}: `date`]"
+ echo "see $BUILDDIR/userApps/kent/src/make.log"
+ exit 1
 endif
   
 ./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER.txt
