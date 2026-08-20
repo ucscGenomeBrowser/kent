@@ -734,8 +734,6 @@ if (! regexMatchNoCase(row[6], pattern))
 return item;
 }
 
-#define VCF_MAX_ALLELE_LEN 80
-
 static char *alleleCountsFromVcfTumorAd(const struct vcfInfoElement *ad)
 /* Build up comma-sep list of read counts supporting tumor alleles */
 {
@@ -752,7 +750,11 @@ static char *alleleCountsFromVcfRecord(struct vcfRecord *rec, int alDescCount)
  * which may be less than rec->alleleCount: */
 {
 struct dyString *dy = dyStringNew(0);
-int alCounts[VCF_MAX_ALLELE_LEN];
+// Repeat sites can have hundreds of alleles, so size this by the record instead of
+// using a fixed-size array.
+int alCountSize = max(alDescCount, rec->alleleCount) + 1;
+int *alCounts = NULL;
+AllocArray(alCounts, alCountSize);
 boolean gotTotalCount = FALSE, gotAltCounts = FALSE;
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
@@ -858,6 +860,7 @@ else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
     for (i = 1;  i < alDescCount;  i++)
 	dyStringPrintf(dy, ",%d", alCounts[i]);
     }
+freeMem(alCounts);
 return dyStringCannibalize(&dy);
 }
 

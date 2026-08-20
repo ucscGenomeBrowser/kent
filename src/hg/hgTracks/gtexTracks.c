@@ -506,7 +506,8 @@ while (geneBed != NULL)
         char *fromDetail = strstrNoCase(desc, "(from");
         if (fromDetail)
             *fromDetail = 0;
-        if (strlen(desc) > MAX_DESC)
+        // the "..." plus its terminating null needs MAX_DESC+4 bytes of buffer
+        if (strlen(desc) > MAX_DESC + 4)
             strcpy(desc+MAX_DESC, "...");
         // also strip 'homo sapiens' prefix
         #define SPECIES_PREFIX  "Homo sapiens "
