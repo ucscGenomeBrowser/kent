@@ -330,7 +330,9 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 		pgs->alleleCount = maxAlCount;
 		break;
 		}
-	    if (strlen(rec->alleles[i]) > maxAlLen-3)
+	    // Only shorten an allele that is actually too long: the "..." plus its
+	    // terminating null needs the allele buffer to hold maxAlLen+1 bytes.
+	    if (strlen(rec->alleles[i]) > maxAlLen)
 		strcpy(rec->alleles[i]+maxAlLen-3, "...");
 	    safencat(pgs->name, len+1, rec->alleles[i], maxAlLen);
 	    }
