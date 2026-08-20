@@ -169,7 +169,7 @@ reference, available on both GRCh38/hg38 and T2T-CHM13/hs1.
 <tr>
   <td><a href="hgTrackUi?g=decodeSv">deCODE 3,622</a></td>
   <td>3,622</td>
-  <td>Icelandic general population</td>
+  <td>Icelandic general population, no allele counts</td>
   <td>No</td>
   <td>~17x ONT</td>
   <td>119,453</td>
@@ -434,7 +434,10 @@ frequencies.
 <p>
 High-confidence structural variants from 3,622 Icelanders (deCODE genetics),
 sequenced with Oxford Nanopore long reads. ~134k SVs (deletions, insertions
-and combined insertion/deletion events). Site-only callset with annotated
+and combined insertion/deletion events). The callset came without allele counts, so AC=0 
+for all variants.
+Most likely some filtering has been applied, so only calls that appear more than once
+are included in this dataset. Site-only callset with annotated
 surrounding tandem-repeat regions.
 </p>
 
