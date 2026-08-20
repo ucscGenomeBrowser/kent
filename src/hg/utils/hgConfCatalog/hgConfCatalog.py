@@ -256,7 +256,7 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1164", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9375", default="FALSE",
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9386", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Use the modern single-page base-by-base alignment view (the one "
                "hgBlat's new results page uses) for ordinary alignment clicks too "
@@ -342,7 +342,7 @@ RELEASE_GATES = {
         h("canDupTracks", "flag", "hg/lib/dupTrack.c:267", default="TRUE",
           role="gate", verified=True,
           note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c:3956", default="TRUE", role="gate",
+        h("canSnake", "flag", "hg/hgc/hgc.c:3943", default="TRUE", role="gate",
           verified=True,
           note="Snake display for chain and alignment tracks.  Public since "
                "v467."),
@@ -353,7 +353,7 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="Merge behaviour for recommended track sets.  Public since "
                "v467."),
-        h("svgBarChart", "flag", "hg/hgc/barChartClick.c:587", default="TRUE",
+        h("svgBarChart", "flag", "hg/hgc/barChartClick.c:588", default="TRUE",
           role="gate", verified=True,
           note="SVG rather than raster bar charts on the details page.  "
                "Public since v428, the longest-shipped gate still in place."),
@@ -370,7 +370,7 @@ RELEASE_GATES = {
           note="Single code path for bigBed fetching, replacing the older "
                "split.  Public since v492.  Four call sites, and deleting it "
                "removes a whole alternative path rather than just a branch."),
-        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c:40",
+        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c:41",
           default="TRUE", role="gate", verified=True,
           note="Let hubs declare their own track groups.  Public since v492."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c:215", default="TRUE",
@@ -540,7 +540,7 @@ MIRROR_KNOBS = {
         h("traceGbdb", "flag", "hg/lib/hdb.c:1596", default="FALSE",
           role="knob", verified=True,
           note="Log every /gbdb file the CGI opens.  A diagnostic."),
-        h("drawDot", "flag", "hg/hgc/hgc.c:3473", default="FALSE", role="knob",
+        h("drawDot", "flag", "hg/hgc/hgc.c:3460", default="FALSE", role="knob",
           verified=True,
           note="Emit graphviz dot output from the details page instead of a "
                "rendered image.  A developer diagnostic."),
@@ -561,7 +561,7 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2582",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2583",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
         h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1718",
@@ -611,7 +611,7 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
-        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27591", default="keep",
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27578", default="keep",
           verified=True,
           note="What happens to the custom tracks left behind by a user's "
                "earlier BLAT searches when a new search makes another one.  "
@@ -643,9 +643,9 @@ DATABASE = {
         h("db.host", "profile", "hg/qaPushQ/qaPushQ.c:2435", public=True,
           verified=True, env="HGDB_HOST", family="db",
           note="The main assembly database server."),
-        h("db.user", "profile", "hg/hgc/hgc.c:1313", public=True,
+        h("db.user", "profile", "hg/hgc/hgc.c:1300", public=True,
           verified=True, env="HGDB_USER", family="db"),
-        h("db.password", "credential", "hg/hgc/hgc.c:1314", public=True,
+        h("db.password", "credential", "hg/hgc/hgc.c:1301", public=True,
           verified=True, env="HGDB_PASSWORD", family="db"),
         h("db.trackDb", "table", "hg/lib/hdb.c:354", public=True,
           verified=True, env="HGDB_TRACKDB", family="db",
@@ -917,7 +917,7 @@ LIMITS = {
           default='"10000"', verified=True),
         h("bigBedMaxItems", "limit", "hg/hgTracks/bigBedTrack.c:481",
           default='"10000"', public=True, verified=True),
-        h("vcfMaxItems", "limit", "hg/hgTracks/vcfTrack.c:3065",
+        h("vcfMaxItems", "limit", "hg/hgTracks/vcfTrack.c:3067",
           default='"10000"', public=True, verified=True),
         h("maxTrackImageHeightPx", "limit", "hg/hgTracks/hgTracks.c:5355",
           default='"32000"', verified=True,
@@ -1095,7 +1095,7 @@ BRANDING = {
           "hg/lib/exportedDataHubs.c:181", verified=True),
         h("browser.cgiExpireMinutes", "limit",
           "hg/hgHubConnect/hgHubConnect.c:413", default='"20"', verified=True),
-        h("curatedHubPrefix", "internal", "hg/lib/hubConnect.c:1251",
+        h("curatedHubPrefix", "internal", "hg/lib/hubConnect.c:1265",
           verified=True, note="Which curated hubs this machine shows."),
         h("genarkHubPrefix", "internal", "hg/hgGateway/hgGateway.c:1128",
           verified=True),
@@ -1254,10 +1254,10 @@ EXTERNAL = {
           "hg/hgUserSuggestion/hgUserSuggestion.c:191", verified=True,
           family="suggest"),
         h("suggest.secretKey", "credential",
-          "hg/hgUserSuggestion/hgUserSuggestion.c:543", verified=True,
+          "hg/hgUserSuggestion/hgUserSuggestion.c:545", verified=True,
           family="suggest"),
         h("suggest.humanThreshold", "limit",
-          "hg/hgUserSuggestion/hgUserSuggestion.c:547", default='"-0.1"',
+          "hg/hgUserSuggestion/hgUserSuggestion.c:549", default='"-0.1"',
           verified=True, family="suggest"),
         h("hgGateway.dbDbTaxonomy", "internal", "hg/hgGateway/hgGateway.c:407",
           default="defaultDbDbTree", verified=True),
