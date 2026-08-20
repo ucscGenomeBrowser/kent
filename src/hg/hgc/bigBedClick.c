@@ -7,6 +7,7 @@
 #include "wiggle.h"
 #include "cart.h"
 #include "hgc.h"
+#include "hubConnect.h"
 #include "hCommon.h"
 #include "hgColors.h"
 #include "bigBed.h"

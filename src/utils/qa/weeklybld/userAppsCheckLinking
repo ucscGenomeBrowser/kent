@@ -1,6 +1,13 @@
 #!/bin/bash -e
 ##
 # Check linking of a user app to check only allowed shared libraries are referenced.
+#
+# The list is short on purpose: these binaries are downloaded and run on
+# machines we know nothing about, so anything they need has to be inside them.
+# libcurl used to be the exception -- it was linked dynamically, which meant
+# allowing its whole dependency chain (krb5, openldap, nghttp2 and the rest)
+# through this check as well.  The build image now provides a static libcurl,
+# so none of that belongs on the list any more.  refs #38153
 ##
 set -beEu -o pipefail
 
@@ -12,29 +19,13 @@ fi
 function checkProg() {
     local prog="$1"
 
-    ldd $prog | awk -v prog=pro '
-         /^\\t/ {
-             next;  # not a library line
+    ldd $prog | awk -v prog="$prog" '
+         /statically linked/ {
+             next;  # nothing dynamic to check
          }
-         /linux-vdso\.so|libc\.so|libgcc_s\.so|libdl\.so|libm\.so|ld-linux-x86-64\.so/ {
-             next;
+         /linux-vdso\.so|libc\.so|libgcc_s\.so|libdl\.so|libm\.so|ld-linux.*\.so/ {
+             next;  # the only shared libraries a userApp is allowed to use
          }
-         /libcurl\.so|libnghttp2\.so|libidn2\.so|librtmp\.so|libssh\.so|libpsl\.so|libssl\.so|libcrypto\.so/ {
-             next;  # libcurl stuff
-         }
-         /libgssapi_krb5\.so|libldap\.so|liblber\.so|libzstd\.so|libbrotlidec\.so|libz\.so/ {
-             next;  # more libcurl stuff
-         }
-         /libunistring\.so|libgnutls\.so|libhogweed\.so|libnettle\.so|libgmp\.so|libkrb5\.so|libk5crypto\.so/ {
-             next;  # yet more libcurl stuff
-         }
-         /libcom_err\.so|libkrb5support\.so|libsasl2\.so|libbrotlicommon\.so|libp11-kit\.so|libtasn1\.so/ {
-             next;  # even more libcurl stuff
-         }
-         /libkeyutils\.so|libresolv\.so|libffi\.so|libevent-2\.1\.so|libselinux\.so|libcrypt\.so|libpcre2-8\.so/ {
-             next;  # last of the libcurl stuff
-         }
-
          {
             print prog, "found unallowed dynamic library:", $0 > "/dev/stderr";
             errcnt += 1

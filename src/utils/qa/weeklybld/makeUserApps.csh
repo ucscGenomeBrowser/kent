@@ -17,7 +17,9 @@ echo "Checking out kent/src branch $BRANCHNN. [${0}: `date`]"
 
 set branch = "v"$BRANCHNN"_branch"
 
-git clone -q $GITSHAREDREPO kent
+# --recurse-submodules is required: the build needs src/submodules/htslib, and
+# the compile runs in a container that cannot reach the git server to fetch it.
+git clone -q --recurse-submodules $GITSHAREDREPO kent
 chmod g+w kent
 cd kent
 git checkout --track=direct -b $branch origin/$branch
@@ -26,6 +28,12 @@ if ( $err ) then
  echo "error running git clone and checkout of kent in $BUILDDIR/userApps : $err [${0}: `date`]" 
  exit 1
 endif 
+git submodule update --init --recursive
+set err = $status
+if ( $err ) then
+ echo "error updating submodules in $BUILDDIR/userApps/kent : $err [${0}: `date`]"
+ exit 1
+endif
 cd ..
 
 set BINDIR=linux.$MACHTYPE
@@ -42,9 +50,30 @@ set useDocker=true
 
 cd kent/src
 if ("$useDocker" == "true") then
-   $WEEKLYBLD/userAppsCompileInDocker $BUILDDIR > make.log
+   $WEEKLYBLD/userAppsCompileInDocker $BUILDDIR/userApps > make.log
+   set err = $status
 else
    make -j 12 BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
+   set err = $status
+endif
+if ( $err ) then
+ # Stop here rather than push a partial set of binaries.  A clean tree builds
+ # every target, but the -j 64 compile does occasionally lose a link to a race
+ # ("final link failed: file truncated"), and that leaves some binaries stale
+ # and some new, which is worse than leaving them all alone.  Just run the step
+ # again when this happens.
+ echo "error compiling userApps in $BUILDDIR/userApps/kent/src : $err [${0}: `date`]"
+ echo "see $BUILDDIR/userApps/kent/src/make.log"
+ exit 1
+endif
+
+# the compile can exit 0 and still produce nothing (e.g. missing docker image),
+# so make sure we really have binaries before pushing anything to hgdownload
+set binCount = `ls $DESTDIR$BINDIR | wc -l`
+if ( $binCount < 10 ) then
+ echo "error: only $binCount files in $DESTDIR$BINDIR, userApps build produced no binaries [${0}: `date`]"
+ echo "see $BUILDDIR/userApps/kent/src/make.log"
+ exit 1
 endif
   
 ./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER.txt

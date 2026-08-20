@@ -6,6 +6,16 @@ $(function() {
     //     e.preventDefault(); e.returnValue = ""; });
     const DEFAULT_MAX_CHECKBOXES = 20;  // ADS: without default, can get crazy
 
+    // Hover help for the sort note above the table.  addMouseover() in utils.js
+    // renders this with innerHTML, so simple tags are fine.
+    const SORT_ORDER_HELP =
+        "The row order of this table sets the order the subtracks appear in the " +
+        "Genome Browser image.<br><br>" +
+        "Click a column heading to sort by that column; click it again to reverse " +
+        "the direction.<br><br>" +
+        "To sort on more than one column, click the first heading, then " +
+        "shift-click each additional heading, in the order you want them applied.";
+
     const isValidColorMap = obj =>  // check the whole thing and ignore if invalid
           typeof obj === "object" && obj !== null && !Array.isArray(obj) &&
           Object.values(obj).every(x =>
@@ -146,6 +156,7 @@ $(function() {
         container.id = "myTag";
         container.innerHTML = `
         <div id="dataTypeSelector"></div>
+        <div id="sortNote" class="smallText"></div>
         <div id="container">
             <div id="filters"></div>
             <table id="theMetaDataTable">
@@ -156,6 +167,17 @@ $(function() {
         `;
         // Instead of appending to body, append into the placeholder div
         document.getElementById("metadata-placeholder").appendChild(container);
+
+        // The table's row order drives the order tracks are drawn in the browser
+        // image.  That's easy to miss (the classic composite UI never says so
+        // either), so state it in one line and put the details in the hover.
+        // The icon is appended as a node because createInfoIcon() returns an
+        // element that already has its mouseover listeners attached.
+        const note = document.getElementById("sortNote");
+        note.appendChild(document.createTextNode(
+            "Tracks appear in the Genome Browser in the same order as the table " +
+            "below - click a column heading to re-sort."));
+        note.appendChild(createInfoIcon(SORT_ORDER_HELP));
     }
 
     function updateVisibilities(uriForUpdate, submitBtnEvent) {
@@ -281,16 +303,44 @@ $(function() {
 
         const columns = [checkboxColumn, ...ordinaryColumns];
 
-        // Determine which column to sort by: use defaultSortField if it matches
-        // a metadata column (case-insensitive, ignoring leading underscores),
-        // otherwise fall back to the first data column.
-        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
-        if (embeddedData.defaultSortField) {
-            const target = embeddedData.defaultSortField.replace(/^_+/, "").toLowerCase();
+        // Map a metadata field name to its DataTables column index, matching
+        // case-insensitively and ignoring leading underscores.  Returns -1 when
+        // the name isn't one of the metadata columns.
+        const colIdxForName = name => {
+            const target = name.replace(/^_+/, "").toLowerCase();
             const idx = colNames.findIndex(
                 c => c.replace(/^_+/, "").toLowerCase() === target);
-            if (idx >= 0)
-                defaultSortCol = idx + 1;  // +1 for the checkbox column
+            return idx >= 0 ? idx + 1 : -1;  // +1 for the checkbox column
+        };
+
+        // Determine which column to sort by: use defaultSortField if it matches
+        // a metadata column, otherwise fall back to the first data column.
+        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        if (embeddedData.defaultSortField) {
+            const idx = colIdxForName(embeddedData.defaultSortField);
+            if (idx > 0)
+                defaultSortCol = idx;
+        }
+
+        // A sort the user established on an earlier visit wins over
+        // defaultSortField.  facetSortOrder mirrors the classic composite
+        // '<track>.sortOrder' cart value: 'field=+ field2=-', in sort precedence
+        // order.  Fields no longer present in the metadata are dropped, so a
+        // changed metadata file degrades to a partial (or default) sort rather
+        // than an error.
+        let initialOrder = [[defaultSortCol, "asc"]];
+        if (embeddedData.facetSortOrder) {
+            const savedOrder = embeddedData.facetSortOrder.trim().split(/\s+/)
+                .map(token => {
+                    const eq = token.lastIndexOf("=");
+                    if (eq < 1) return null;
+                    const idx = colIdxForName(token.slice(0, eq));
+                    if (idx < 0) return null;
+                    return [idx, token.slice(eq + 1) === "-" ? "desc" : "asc"];
+                })
+                .filter(Boolean);
+            if (savedOrder.length > 0)
+                initialOrder = savedOrder;
         }
 
         const table = $("#theMetaDataTable").DataTable({
@@ -308,7 +358,7 @@ $(function() {
                 bottomStart: 'info',
                 bottomEnd: 'paging'
             },
-            order: [[defaultSortCol, "asc"]],
+            order: initialOrder,
             pageLength: 25,       // show 25 rows per page by default
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             language: {
@@ -770,7 +820,8 @@ $(function() {
         container.style.display = "flex";
     }
 
-    function initSubmit(table) {  // logic for the submit event
+    function initSubmit(table, allData) {  // logic for the submit event
+        const { colNames } = allData;
         const { mdid, primaryKey } = embeddedData;  // mdid: metadata identifier
         const hasDataTypes = embeddedData.dataTypes &&
                              Object.keys(embeddedData.dataTypes).length > 0;
@@ -792,9 +843,16 @@ $(function() {
                 }
             }
 
-            // Get current data element selections
-            const currentDataElements = table.rows({selected: true}).data().toArray()
-                .map(obj => primaryKeyId(obj[primaryKey]));
+            // Get current data element selections, in the order they are
+            // currently sorted/displayed in the table. The server uses this
+            // order to assign each shown subtrack a '.priority' cart value so
+            // the tracks appear in hgTracks in the same order as here. 'search'
+            // is 'none' so selected-but-facet-filtered rows still get a sensible
+            // position rather than being dropped from the ordering.
+            const currentDataElements =
+                table.rows({selected: true, order: "current", search: "none"})
+                    .data().toArray()
+                    .map(obj => primaryKeyId(obj[primaryKey]));
 
             // Enforce an upper bound on the number of tracks on at the same time.
             // This is imperfect when data types are present - some combinations might
@@ -849,6 +907,22 @@ $(function() {
             }
             // No ${mdid}.dt* variables indicates that the composite doesn't use data types
 
+            // Preserve the current sort so the table comes back the same way on the
+            // next visit.  Column names rather than DataTables column indexes, so
+            // this survives a change in metadata column order - the same reason
+            // defaultSortField is matched by name.  Format mirrors the classic
+            // composite '<track>.sortOrder' cart value: 'field=+ field2=-'.
+            const sortSpec = table.order()
+                // column 0 is the checkboxes and isn't orderable; an entry with
+                // neither direction is a column in its unsorted state
+                .filter(o => Array.isArray(o) && o[0] >= 1 && o[0] <= colNames.length &&
+                             (o[1] === "asc" || o[1] === "desc"))
+                .map(o => colNames[o[0] - 1] + (o[1] === "asc" ? "=+" : "=-"))
+                // whitespace in a field name would break the space-separated format
+                .filter(token => !/\s/.test(token));
+            // Sent even when empty, so the server clears any stale value
+            uriForUpdate.append(`${mdid}.facetSortOrder`, sortSpec.join(" "));
+
             updateVisibilities(uriForUpdate, submitBtnEvent);
         });
     }  // end initSubmit
@@ -857,7 +931,7 @@ $(function() {
         initDataTypeSelector();
         const table = initTable(dataForTable);
         initFilters(table, dataForTable);
-        initSubmit(table);
+        initSubmit(table, dataForTable);
         hideLoading();  // table is built and drawn; remove the spinner
     }
 

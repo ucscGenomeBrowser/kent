@@ -39,10 +39,12 @@ if (!cgiVarExists(mName))
 
 char *mdid = cgiOptionalString(mName);
 char mdid_de_was[1024], mdid_de_now[1024], mdid_dt_was[1024], mdid_dt_now[1024];
+char mdid_sort[1024];
 safef(mdid_de_was, sizeof(mdid_de_was), "%s.de_was", mdid);
 safef(mdid_de_now, sizeof(mdid_de_now), "%s.de_now", mdid);
 safef(mdid_dt_was, sizeof(mdid_dt_was), "%s.dt_was", mdid);
 safef(mdid_dt_now, sizeof(mdid_dt_now), "%s.dt_now", mdid);
+safef(mdid_sort, sizeof(mdid_sort), "%s.facetSortOrder", mdid);
 // Grab the lists of which de/dt elements were on before and after the user
 // changed settings around
 struct slName *de_was_list = cgiStringList(mdid_de_was);
@@ -60,6 +62,40 @@ struct hash *dt_now_hash = hashFromSlNameList(dt_now_list);
 boolean hasDataTypes = (dt_was_list != NULL || dt_now_list != NULL);
 
 char subtrackSetting[1024];
+char prioritySetting[1024];
+
+// Remember how the faceted table was sorted, so that the next visit to the track
+// UI page comes back in the same order.  The value is a list of metadata field
+// names with directions ("field=+ field2=-"), mirroring the classic composite
+// "<track>.sortOrder" cart variable.  It's opaque here - only the javascript can
+// turn field names into an ordering, since only it reads the metadata file.
+char *facetSortOrder = cgiOptionalString(mdid_sort);
+if (isNotEmpty(facetSortOrder))
+    cartSetString(cart, mdid_sort, facetSortOrder);
+else
+    cartRemove(cart, mdid_sort);
+
+// Any ".priority" values left over from an earlier submission are stale, since the
+// loops below assign a fresh, dense 1..N to exactly the subtracks that are on now.
+// Clearing them first means the subtracks the user just turned off don't keep a
+// priority that would place them oddly if they're ever turned on again elsewhere.
+// Note that "<mdid>_*" can't match the composite's own "<mdid>.priority" - the
+// subtrack names are joined with an underscore rather than a dot.
+char priorityWild[1024];
+safef(priorityWild, sizeof(priorityWild), "%s_*.priority", mdid);
+cartRemoveLike(cart, priorityWild);
+
+// A subtrack the user has dragged up or down in the hgTracks image carries an
+// "_imgOrd" value, and flatTracksCmp() in hgTracks/imageV2.c sorts on that before
+// it ever looks at priority - so without this the dragged position would win and
+// the sort established here would appear to be ignored.  cartJustify() in cart.c
+// normally clears these whenever a ".priority" arrives as a CGI variable, but ours
+// are set with cartSetInt() below, well after cartJustify() has run for this
+// request, so we have to do it ourselves.  This is what the wiggle sort in
+// hgTracks.c does when it establishes a new order for a composite.
+char imgOrdWild[1024];
+safef(imgOrdWild, sizeof(imgOrdWild), "%s_*_imgOrd", mdid);
+cartRemoveLike(cart, imgOrdWild);
 
 if (hasDataTypes)
     {
@@ -99,6 +135,21 @@ if (hasDataTypes)
             }
         }
 
+    // Set each shown subtrack's priority to match the order the data elements
+    // are currently sorted in the faceted table (de_now arrives in that order).
+    // Data elements are the outer loop so a sample's data-type subtracks stay
+    // contiguous, in the sample's sorted position.
+    int priority = 0;
+    for (struct slName *de = de_now_list; de != NULL; de = de->next)
+        {
+        for (struct slName *dt = dt_now_list; dt != NULL; dt = dt->next)
+            {
+            safef(prioritySetting, sizeof(prioritySetting),
+                  "%s_%s_%s.priority", mdid, de->name, dt->name);
+            cartSetInt(cart, prioritySetting, ++priority);
+            }
+        }
+
     }
 else
     {
@@ -124,6 +175,16 @@ else
                   "%s_%s_sel", mdid, de->name);
             cartSetString(cart, subtrackSetting, "0");
             }
+        }
+
+    // Set each shown subtrack's priority to match the order the data elements
+    // are currently sorted in the faceted table (de_now arrives in that order).
+    int priority = 0;
+    for (struct slName *de = de_now_list; de != NULL; de = de->next)
+        {
+        safef(prioritySetting, sizeof(prioritySetting),
+              "%s_%s.priority", mdid, de->name);
+        cartSetInt(cart, prioritySetting, ++priority);
         }
 
     }

@@ -62,6 +62,11 @@
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
 
+struct trackDb;
+
+char *hubEncode(struct trackDb *tdb, char *text);
+/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged. */
+
 struct hubConnectStatus
 /* Basic status in hubStatus.  Note it is *not* the same as the
  * hubStatus table, that has a bunch of extra fields to help 

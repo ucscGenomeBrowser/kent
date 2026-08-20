@@ -234,3 +234,17 @@ table.dataTable tbody tr:hover {
 .filter-chip .remove-chip:hover {
     color: #c00;
 }
+
+/* One-line hint above the facets and table: the table's row order sets the order
+   the tracks are drawn in the browser image.  Kept to a single muted line so the
+   page stays uncluttered - the details are in the info icon's hover text.
+   Font size comes from the .smallText class in HGStyle.css. */
+#sortNote {
+    color: #555;            /* same muted grey as the loading indicator */
+    padding-bottom: 0.6em;
+    /* The table below is picked out by its header band and the All/Selected tabs,
+       but the facet names are only bold text, so without a rule here the note runs
+       straight into them.  Matches the #active-filters separator above. */
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0.75em;
+}

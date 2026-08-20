@@ -660,7 +660,7 @@ sub tableContentsBoth() {
     while (my $line = <FH>) {
       last if ($itemsFound > 5);
       chomp $line;
-      $line =~ s///g;;
+      $line =~ s/\r//g;;
       $line =~ s/\s+$//g;;
       if ($line =~ m/Date:/) {
         if ($asmDate =~ m/notFound/) {
