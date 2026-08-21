@@ -153,7 +153,8 @@ def joinAndWrite(g2pData, coords, outputFile):
     Returns a stats dict, both counts in G2P records so they are comparable:
       "unmatched"         -> count of G2P records whose HGNC ID had no coordinate
                              match in this assembly's HGNC track (they are skipped).
-      "unknownConfidence" -> {normalized confidence value: count of records} for
+      "unknownConfidence" -> {normalized confidence value: (count of records, one
+                             example of the value as it appeared in the CSV)} for
                              values not in CONFIDENCE_COLORS (colored black).
     """
     unmatched = 0
@@ -170,8 +171,13 @@ def joinAndWrite(g2pData, coords, outputFile):
                 # can carry several coordinate rows, which would inflate the tally.
                 rgb = confidenceToColor(row["confidence"])
                 if rgb is None:
+                    # Tally on the folded value so case and stray whitespace do not split
+                    # one unknown value into several, but keep a raw example alongside it:
+                    # the folded form is not what is in the CSV, so it is not what someone
+                    # reading the log would grep for.
                     key = normalizeConfidence(row["confidence"])
-                    unknownConfidence[key] = unknownConfidence.get(key, 0) + 1
+                    count, example = unknownConfidence.get(key, (0, row["confidence"]))
+                    unknownConfidence[key] = (count + 1, example)
                     rgb = DEFAULT_COLOR
 
                 # G2P 20 fields
@@ -279,9 +285,9 @@ def main():
         if stats["unmatched"]:
             print("%s: %d G2P record(s) had no HGNC coordinate match and were skipped"
                   % (db, stats["unmatched"]))
-        for conf, n in sorted(stats["unknownConfidence"].items()):
+        for conf, (n, example) in sorted(stats["unknownConfidence"].items()):
             print("%s: unrecognized confidence value %r on %d record(s); colored black"
-                  % (db, conf, n))
+                  % (db, example, n))
         bash("bedToBigBed -type=bed9+20 -tab -sort "
              "-as=%s -sizesIs2Bit -extraIndex=name,g2p_id,gene_mim,hgnc_id %s %s %s"
              % (AS_FILE, bedFile, twoBit, bbFile))
