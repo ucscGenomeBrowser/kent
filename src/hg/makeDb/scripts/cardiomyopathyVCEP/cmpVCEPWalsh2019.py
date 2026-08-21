@@ -214,7 +214,9 @@ def build_clinvar_lookup():
             # drops the MANE-named rows so the entry falls to the hgvsToVcf-on-classic path.
             # Genes not in WALSH_TX (ACTC1/MYL2/MYL3/TPM1) use MANE == ClinVar's Name transcript,
             # so there is no collision and the (gene, c.notation) match stands.
-            if gene in WALSH_TX and m.group(1) != WALSH_TX[gene]:
+            # Compare the accession WITHOUT the version so a ClinVar transcript-version bump
+            # (e.g. NM_000256.3 -> .4) does not silently drop every row for that gene.
+            if gene in WALSH_TX and m.group(1).split('.')[0] != WALSH_TX[gene].split('.')[0]:
                 continue
             cdna = 'c.' + m.group(3)
             assembly = f[16]
