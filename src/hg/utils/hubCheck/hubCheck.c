@@ -975,6 +975,21 @@ hashFree(&seen);
 slFreeList(&rangeSettings);
 }
 
+static void hubCheckDescriptionRemovals(struct trackHubGenome *genome, struct trackDb *tdb)
+/* Tell the hub author about the parts of a description page that the Browser will not
+ * print, so that they hear it from us instead of from a page that comes out wrong. */
+{
+struct slName *removed = trackHubDescriptionRemovals(genome->trackDbFile, tdb);
+struct slName *el = removed;
+int count = 0;
+for (;  el != NULL && count < 10;  el = el->next, ++count)
+    warn("warning: on the '%s' description page the Browser %s", tdb->track, el->name);
+if (el != NULL)
+    warn("warning: the '%s' description page has %d more parts the Browser will not print",
+         tdb->track, slCount(el));
+slFreeList(&removed);
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -1067,6 +1082,8 @@ if (errCatchStart(errCatch))
         if (!tdb->html)
             warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. ",
                  tdb->track, tdb->track);
+        else
+            hubCheckDescriptionRemovals(genome, tdb);
         }
 
     if (!trackIsContainer && sameString(trackDbRequiredSetting(tdb, "type"), "bigWig"))
