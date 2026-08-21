@@ -65,19 +65,29 @@ def acquireSingletonLock(lockPath, exitOnLocked=True):
 
 
 def gitPullKentTree():
-    """Run 'git -C <kentTree> pull' so make commands run against an
-    up-to-date checkout (mirrors the first thing chainNetTrackDb.pl
-    does after sanity-checking $kentTree).  Returns True on success,
-    False otherwise (with the error printed to stderr).  Untracked
-    files such as the regenerated tsv.otto are tolerated; conflicting
-    local edits will cause 'git pull' to fail, which is what we want
-    -- we don't want to silently run makes against a dirty tree.
-    The "Already up to date." case is suppressed to keep cron output
-    quiet; any other pull output is surfaced to stderr."""
+    """Run 'git -C <kentTree> fetch' + 'reset --hard origin/master' so
+    make commands run against an up-to-date checkout (mirrors the first
+    thing chainNetTrackDb.pl does after sanity-checking $kentTree).
+    Returns True on success, False otherwise (with the error printed to
+    stderr).  Untracked files such as the regenerated tsv.otto are
+    tolerated; conflicting local edits will cause the reset to still
+    succeed (it's a hard reset), which is fine here -- the point is a
+    clean, current tree, not preserving local changes.
+    'reset --hard' prints a "HEAD is now at ..." status line on every
+    successful run, whether or not anything actually moved, so that
+    line is not useful for deciding what to report.  Instead we compare
+    HEAD before and after: silent when nothing changed, one summary
+    line to stderr when the tree actually advanced."""
     if not os.path.isdir(os.path.join(kentTree, ".git")):
         print("ERROR: not a git working tree: %s" % kentTree,
               file=sys.stderr)
         return False
+    beforeResult = subprocess.run(
+        ["git", "-C", kentTree, "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+    )
+    beforeSha = beforeResult.stdout.strip() if beforeResult.returncode == 0 else None
     # Fetch updates from origin
     result = subprocess.run(
         ["git", "-C", kentTree, "fetch", "--prune", "origin"],
@@ -101,9 +111,16 @@ def gitPullKentTree():
             file=sys.stderr)
         return False
 
-    out = result.stdout.strip()
-    if out and out != "Already up to date.":
-        print("# git pull in %s:\n%s" % (kentTree, out), file=sys.stderr)
+    afterResult = subprocess.run(
+        ["git", "-C", kentTree, "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+    )
+    afterSha = afterResult.stdout.strip() if afterResult.returncode == 0 else None
+    if afterSha and afterSha != beforeSha:
+        print("# kent tree in %s updated: %s -> %s"
+            % (kentTree, (beforeSha or "?")[:12], afterSha[:12]),
+            file=sys.stderr)
     return True
 
 def hgsql(query, db="hgcentral"):
