@@ -23,12 +23,15 @@ The dated working directories double as the archive of past builds.
 
 import argparse
 import csv
+import fcntl
+import os
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
 WORKDIR = "/hive/data/outside/otto/g2p"
+LOCK_FILE = WORKDIR + "/doG2p.lock"
 DBS = ["hg19", "hg38"]
 DOWNLOAD_URL = "https://www.ebi.ac.uk/gene2phenotype/api/panel/all/download"
 AS_FILE = WORKDIR + "/g2p.as"
@@ -46,14 +49,38 @@ args = parser.parse_args()
 
 
 def bash(cmd):
-    """Run cmd in a bash subprocess, returning stdout; raise on non-zero exit."""
+    """Run cmd in a bash subprocess, returning stdout; raise on non-zero exit.
+
+    stdout is kept apart from stderr on purpose. loadCoordinates parses this return
+    value as data, so folding the two together means one warning from the underlying
+    tool arrives looking like a row of a bigBed. Whatever the command puts on stderr
+    is passed through to ours, so the otto mail still carries it.
+    """
     try:
         out = subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE,
-                             universal_newlines=True, stderr=subprocess.STDOUT)
-        return out.stdout
+                             stderr=subprocess.PIPE, universal_newlines=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' returned error (code {}): {}".format(
-            e.cmd, e.returncode, e.output))
+            e.cmd, e.returncode, (e.stderr or "") + (e.output or "")))
+    if out.stderr:
+        sys.stderr.write(out.stderr)
+    return out.stdout
+
+
+def acquireLock():
+    """Take an exclusive lock so two runs cannot interleave.
+
+    Two runs share one build directory and both finish by moving AllG2P.csv over
+    prevAllG2P.csv, so an overlap can leave the "has the download changed" check
+    comparing against a file the other run wrote. The lock is held until this
+    process exits; the returned handle only needs to stay referenced.
+    """
+    fh = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        sys.exit("another doG2p.py still holds %s; not starting a second run" % LOCK_FILE)
+    return fh
 
 
 def download(url, outFile):
@@ -197,7 +224,7 @@ def joinAndWrite(g2pData, coords, outputFile):
                 # G2P 20 fields
                 g2pId       = row["g2p id"]
                 geneMim     = row["gene mim"]
-                hgncIdVal   = row["hgnc id"]
+                hgncIdVal   = row["hgnc id"].strip()   # stripped, as the join key is
                 prevSymbols = row["previous gene symbols"].replace(";", ",")
                 diseaseName = row["disease name"]
                 diseaseMim  = row["disease mim"]
@@ -261,15 +288,22 @@ def checkItemCount(db, newBb):
 
 
 def install(db, newBb):
-    """Atomically repoint /gbdb/<db>/g2p/g2p.bb at the freshly built bigBed."""
+    """Repoint /gbdb/<db>/g2p/g2p.bb at the freshly built bigBed, atomically.
+
+    Build the new symlink under a temp name and rename it over the live one. The
+    rm + ln this replaces left a window, short but real, in which the live path did
+    not exist at all -- and the browser reads that path.
+    """
     liveBb = GBDB_BB % db
     bash("mkdir -p %s" % str(Path(liveBb).parent))
-    bash("rm -f %s" % liveBb)
-    bash("ln -s %s %s" % (newBb, liveBb))
+    tmpLink = "%s.tmp%d" % (liveBb, os.getpid())
+    bash("ln -sfn %s %s" % (newBb, tmpLink))
+    bash("mv -T %s %s" % (tmpLink, liveBb))
     print("Installed %s -> %s" % (liveBb, newBb))
 
 
 def main():
+    lock = acquireLock()                  # held until the process exits
     if not updateNeeded():
         # Silent no-op: nothing new from G2P this run.
         return
