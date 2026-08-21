@@ -414,12 +414,15 @@ driver.find_element(By.NAME, "userSeq").clear()
 driver.find_element(By.NAME, "userSeq").send_keys("AACAAAATCAAACTGTTTTTGTTGGACAATTCTCTGTTAAGCAGCTATAA\\nGCTGAATGACATTAACCGCAAAATGTAACCATAAAGGCCATAAACCCGAC\\nATTGTTAATTAATTAAATGCCTCATTAACTTTTTTAAAAACATGATTTAT\\nTCGATTCATAGAAAACTTAACCATCACTACTAAATGCACACACATGCGGT\\nTCCACATTGGCATCTTAGCCTAAGAACAGACAGGTTCAACTGTAACTGGC\\nCTTTCAGGTGGTCTATTACAGATCTGAAGACAGAGGGTGTTTCTAAACCT\\nCAAGAACCAGATTAACAGAAAACAAAGCTTGAGCAGCCTTTTTATTGCAT\\nGTGGTATCTTTTTAGCTAAGCAGAAGACAATGATAAAGAGGGGTTTTGGG\\nAAACCTCTCCCAAAGCTGTGCATTCATACCGTACCTTATCCTGTTAAGCA\\nAACTGTTCTTTTATTTTAAAGGGTTTACACTGCCACATCTGAATGGACTA")
 driver.find_element(By.NAME, "Submit").click()
 time.sleep(3)
-driver.find_element(By.LINK_TEXT, "browser").click()
-driver.find_element(By.XPATH, "//td[@id='td_data_ct_blatYourSeq_5589']/div[2]/map/area").click()
+# hgBlat rolled out a new results page still under test (blatNewPage=1 by default),
+# which has no "browser" link and no ct_blatYourSeq custom track, breaking this
+# click-through chain. Commented out until the new page settles; revisit then.
+#driver.find_element(By.LINK_TEXT, "browser").click()
+#driver.find_element(By.XPATH, "//td[@id='td_data_ct_blatYourSeq_5589']/div[2]/map/area").click()
 #driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/div[2]/pre/a").click()
 #driver.find_element(By.XPATH, "//td[@id='td_data_hgUserPsl']/div[2]/map/area").click()
 time.sleep(3)
-driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/a").click()
+#driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/a").click()
 time.sleep(3)
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
 
