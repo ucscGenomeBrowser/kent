@@ -1,0 +1,53 @@
+in : <html><head><title>T</title><meta charset="utf-8"></head><body class="x"><h2>Head</h2><p>Text</p></body></html>
+out: <h2>Head</h2><p>Text</p>
+
+in : <p>before</p><script>alert(1)</script><style>body{visibility:hidden}</style><p>after</p>
+out: <p>before</p><p>after</p>
+     (removed the script element and everything inside it)
+     (removed the style element and everything inside it)
+
+in : <p>before</p><script>if (a < b) alert(1)
+out: <p>before</p>
+     (removed the script element and everything inside it)
+
+in : <div id="top" class="warn" title="t" onclick="alert(1)">text</div>
+out: <div id="top" title="t">text</div>
+     (removed the attribute onclick)
+
+in : <a href="&#106;avascript:alert(1)">one</a> <a href="java&Tab;script:alert(1)">two</a>
+out: <a>one</a> <a>two</a>
+     (removed a link that used the javascript: scheme)
+
+in : <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank">a</a>
+out: <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank" rel="noopener noreferrer">a</a>
+
+in : <img src="pic.png" alt="a" onerror="alert(1)" width="20">
+out: <img src="pic.png" alt="a" width="20">
+     (removed the attribute onerror)
+
+in : <iframe width="560" src="https://www.youtube.com/embed/abc"></iframe><iframe src="https://example.com/x">fallback</iframe>
+out: <iframe width="560" src="https://www.youtube.com/embed/abc" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"></iframe>
+     (removed an iframe, we only allow one that plays a video from a site we know)
+
+in : <p style="color:red;behavior:url(#default#VML);text-align:center;position:fixed">p</p>
+out: <p style="color:red;text-align:center;">p</p>
+
+in : <o:p>word</o:p><vertebrates>more</vertebrates>
+out: wordmore
+
+in : <div><b>bold<p>para
+out: <div><b>bold<p>para</p></b></div>
+
+in : <a href=https://example.com/x\">link text</a> and more text
+out: <a href="https://example.com/x\&quot;">link text</a> and more text
+
+in : <form action="/x"><input name="password"><button>Log in</button></form><p>after</p>
+out: <p>after</p>
+     (removed the form element and everything inside it)
+
+in : <!DOCTYPE html><!-- <p>hidden</p> --><p>shown</p>
+out: <p>shown</p>
+
+in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
+out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
+
