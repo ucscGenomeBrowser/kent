@@ -53,8 +53,12 @@ def bash(cmd):
 
     stdout is kept apart from stderr on purpose. loadCoordinates parses this return
     value as data, so folding the two together means one warning from the underlying
-    tool arrives looking like a row of a bigBed. Whatever the command puts on stderr
-    is passed through to ours, so the otto mail still carries it.
+    tool arrives looking like a row of a bigBed.
+
+    stderr is captured, not echoed: it comes back in the exception when the command
+    fails, and is dropped when it succeeds. bedToBigBed narrates its progress there,
+    and g2pWrapper.sh mails everything this script prints, so echoing it would put a
+    dozen lines of "pass1 - making usageList" into the otto mail on every build.
     """
     try:
         out = subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE,
@@ -62,8 +66,6 @@ def bash(cmd):
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' returned error (code {}): {}".format(
             e.cmd, e.returncode, (e.stderr or "") + (e.output or "")))
-    if out.stderr:
-        sys.stderr.write(out.stderr)
     return out.stdout
 
 
