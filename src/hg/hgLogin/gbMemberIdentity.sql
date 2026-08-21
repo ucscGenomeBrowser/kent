@@ -13,4 +13,4 @@ CREATE TABLE gbMemberIdentity (
 		#Indices
     UNIQUE KEY provSub (provider, subject),
     INDEX(idx)
-);
+) ENGINE=InnoDB;
