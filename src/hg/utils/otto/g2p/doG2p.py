@@ -112,6 +112,21 @@ def confidenceToColor(confidence):
     return CONFIDENCE_COLORS.get(normalizeConfidence(confidence))
 
 
+def bedField(value):
+    """Flatten one CSV value into a single tab-separated BED field.
+
+    This used to go through csv.writer, whose default QUOTE_MINIMAL treats the
+    double quote as its own quote character: any field holding one came out wrapped
+    in quotes with the inner quotes doubled. Nine G2P comments carry a quotation, so
+    that punctuation reached the live track and showed up on the details page.
+    bedToBigBed wants the raw text, and only needs the field and line separators
+    kept out of it.
+    """
+    if value is None:
+        return ""
+    return str(value).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
 def loadG2p(filePath):
     """Load G2P CSV into a dict keyed by HGNC ID (each value is a list of rows)."""
     g2pMap = {}
@@ -160,7 +175,6 @@ def joinAndWrite(g2pData, coords, outputFile):
     unmatched = 0
     unknownConfidence = {}
     with open(outputFile, "w", newline="", encoding="utf-8") as out:
-        writer = csv.writer(out, delimiter="\t")
         for hgncId, rows in g2pData.items():
             matches = coords.get(hgncId, [])
             if not matches:
@@ -213,13 +227,13 @@ def joinAndWrite(g2pData, coords, outputFile):
                     thickStart  = coord[6]
                     thickEnd    = coord[7]
 
-                    writer.writerow([
+                    out.write("\t".join(bedField(f) for f in (
                         chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd,
                         rgb, g2pId, geneMim, hgncIdVal, prevSymbols, diseaseName, diseaseMim,
                         diseaseMondo, allelicReq, crossMod, confidence, varConseq, varTypes,
                         molMech, molMechCat, molMechEv, phenotypes, publications, panel,
                         comments, dateReview,
-                    ])
+                    )) + "\n")
     return {"unmatched": unmatched, "unknownConfidence": unknownConfidence}
 
 
