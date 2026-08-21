@@ -426,6 +426,24 @@ RELEASE_GATES = {
                "shipped; it ships and goes away with blatNewForm.  Sibling of "
                "blatNewPageBanner, which does the same job for the results "
                "page."),
+        h("sessionNewPage", "flag", "hg/hgSession/hgSession.c", default="FALSE",
+          role="gate", ticket="37996",
+          note="Replaces hgSession's classic C-generated 'My Sessions' page with "
+               "the JavaScript-built one in hg/js/hgSession.js (a save bar plus a "
+               "searchable, sortable session table with inline share/rename/"
+               "overwrite/delete).  Off while the new page is being tested.  Read "
+               "through cartUsualBoolean, so this is only the default: the page's "
+               "banner offers a per-user opt-in/opt-out that sets sessionNewPage "
+               "in the cart.  Sibling of blatNewForm; comes out once the new page "
+               "replaces the old one."),
+        h("sessionNewPageBanner", "flag", "hg/hgSession/hgSession.c",
+          default="follows sessionNewPage", role="gate", ticket="37996",
+          note="Whether the classic and new Sessions pages carry the banner that "
+               "links to the other one.  Defaults to whatever sessionNewPage is "
+               "set to: where the new page is enabled a user who took its go-back "
+               "link needs a way to return, and where it is disabled there is "
+               "nothing to advertise.  Set explicitly to override either way.  "
+               "Sibling of blatNewFormBanner."),
         h("quickLiftClipToChains", "flag", "hg/lib/quickLift.c:231",
           default="TRUE", role="gate", verified=True, ticket="38042",
           note="Whether an item too big for the chains quickLift loaded is "

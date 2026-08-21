@@ -1,0 +1,121 @@
+/* gbModern.css - shared UCSC "modern tool" components in the house style.
+ *
+ * The generic, non-tool-specific pieces of the hgBlat facelift (#37996), promoted here so other
+ * client-rendered CGI pages (hgSession, ...) can reuse them by class name instead of copying rules.
+ * UCSC house style (per the project UI Style Guide): deep-navy nav, tan/wheat title band, steel-blue
+ * section bars, plain Helvetica/Arial, navy links with maroon hover, square corners everywhere.
+ *
+ * Load with webIncludeResourceFile("gbModern.css").  Put the design tokens on a wrapper element by
+ * giving it class "gbApp"; the components below read those tokens via var().  Keep any modal markup
+ * as a DOM descendant of the .gbApp wrapper so the custom properties inherit into it.
+ *
+ * Tool-specific layout (column widths, bespoke widgets) stays in the tool's own stylesheet
+ * (hgBlat.css, hgSession.css); this file is only the shared vocabulary. */
+
+/* Plain white page, matching the track-settings model (gb.css).  The framework body is cream
+ * (#FFF9D2) and the hgInside content table carries a BGCOLOR=#FFFEE8 attribute; override both to
+ * white so the tool sits on one uniform background. */
+body.cgi { background:#fff; }
+table.hgInside { background:#fff; }
+
+/* Design tokens - the house palette in one place.  Applied to a wrapper with class "gbApp". */
+.gbApp { --accent:#003a72; --accentHover:#8b1a1a; --navy:#0a2b6b; --ink:#1e2833;
+    --muted:#5b6572; --faint:#93a0ad; --line:#d0d0d0; --lineSoft:#ececec; --card:#ffffff;
+    --panel:#ffffff; --section:#4c759c; --headrow:#ededed; --headrowLine:#cccccc;
+    --sel:#cfe0f5; --hover:#f0f0f0; --stripe:#f7f7f7;
+    --title:#eaca92; --titleLine:#d9bd82; --titleSub:#5a4a24;
+    --btn:#ffffff; --btnLine:#999999; --btnText:#003a72; --btnHover:#eef2f7;
+    --btnDark:#0a2b6b; --btnDarkHover:#0a2350;
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:var(--ink); font-size:14px; }
+
+/* Main page header, styled like gb.css .gbTrackTitleBanner: black title on the house gold.  The
+ * framework's #sectTtl holds the section title emitted by webNewSection/cartWebStart. */
+.subheadingBar { background:#eaca92; padding:9px 16px; margin:0; border:0; box-sizing:border-box; }
+.subheadingBar #sectTtl { color:#000; font-weight:700; font-size:18px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+
+/* Card / block. */
+.gbCard { background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,40,70,.10); margin:12px 0 24px; }
+
+/* Horizontal stat/summary strip. */
+.gbStrip { display:flex; align-items:center; gap:24px; flex-wrap:wrap;
+    padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
+.gbStat { display:flex; flex-direction:column; gap:1px; }
+.gbStat .k { font-size:12px; color:var(--muted); font-weight:700; }
+.gbStat .v { font-size:14px; font-weight:700; color:var(--ink); }
+.gbDiv { width:1px; height:28px; background:var(--line); }
+.gbStripActions { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+/* Buttons - square (radius 0), navy primary, white secondary.  Scoped to .gbApp and .subheadingBar
+ * so the framework's link styles (which would add an underline) can't beat them. */
+.gbApp .gbPill, .subheadingBar .gbPill,
+.gbApp .gbStripActions input[type=submit],
+.gbApp .gbStripActions input[type=button] {
+    font-family:inherit; font-size:13px; font-weight:700; color:var(--btnText); background:var(--btn);
+    border:1px solid var(--btnLine); border-radius:0; padding:5px 12px; cursor:pointer;
+    text-decoration:none; display:inline-block; line-height:1.5; }
+.gbApp .gbPill:hover, .subheadingBar .gbPill:hover, .gbApp .gbStripActions input[type=submit]:hover,
+.gbApp .gbStripActions input[type=button]:hover { background:var(--btnHover); text-decoration:none; }
+.gbApp .gbPill.primary, .subheadingBar .gbPill.primary {
+    background:var(--btnDark); color:#fff; border-color:var(--btnDark); }
+.gbApp .gbPill.primary:hover, .subheadingBar .gbPill.primary:hover { background:var(--btnDarkHover); }
+/* In the gold header the framework's link styles would otherwise beat .gbPill; re-assert with
+ * id-level specificity (the framework's title lives in #sectTtl). */
+.subheadingBar #sectTtl .gbPill { color:#003a72; background:#fff; border:1px solid #999;
+    text-decoration:none; }
+.subheadingBar #sectTtl .gbPill:hover { background:#eef2f7; text-decoration:none; }
+.subheadingBar #sectTtl .gbPill.primary { background:#0a2b6b; color:#fff; border-color:#0a2b6b; }
+.subheadingBar #sectTtl .gbPill.primary:hover { background:#0a2350; }
+/* A muted/danger pill variant for destructive actions (Delete). */
+.gbApp .gbPill.danger { color:#8b1a1a; }
+.gbApp .gbPill.danger:hover { background:#fdf2f2; border-color:#b45a5a; }
+
+/* Steel-blue section bar - white bold title. */
+.gbSection { background:var(--section); color:#fff; padding:6px 13px; font-size:15px;
+    font-weight:700; margin:0 0 14px; }
+
+/* Experimental "try the new / classic page" banner. */
+.gbBanner { background:#fbf3e2; border:1px solid var(--titleLine); padding:10px 14px;
+    margin:12px 0 0; font-size:14px; color:var(--ink); }
+.gbBanner a { color:var(--accent); }
+.gbBanner a:hover { color:var(--accentHover); }
+
+/* Share / copy-link row. */
+.gbShareBox { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
+.gbShareMsg { font-size:14px; color:var(--muted); }
+.gbShareFull { flex:1 1 100%; }
+.gbShareInput { flex:1; min-width:260px; font-size:13px; padding:5px 8px;
+    border:1px solid var(--btnLine); border-radius:0; background:#fff; }
+
+/* Modal dialog - fixed full-viewport backdrop centering a square white card.  Keep the markup a DOM
+ * descendant of the .gbApp wrapper so the tokens inherit in. */
+.gbModalBg { position:fixed; top:0; right:0; bottom:0; left:0; z-index:1000;
+    background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; }
+.gbModal { background:#fff; border:1px solid var(--line); border-radius:0;
+    box-shadow:0 4px 18px rgba(0,0,0,.28); padding:18px 20px; min-width:340px; max-width:92vw; }
+.gbModalTitle { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:12px; }
+.gbModalText { font-size:13px; color:var(--ink); line-height:1.5; max-width:430px; margin-bottom:14px; }
+.gbModalText.gbModalNote { margin-top:14px; }
+.gbModalText a { color:var(--accent); }
+.gbModalText a:hover { color:var(--accentHover); }
+.gbModalLabel { display:block; font-size:12px; font-weight:700; color:var(--muted); margin:10px 0 3px; }
+.gbModalInput { width:100%; box-sizing:border-box; border:1px solid var(--btnLine);
+    border-radius:0; padding:6px 8px; font-size:14px; font-family:inherit; background:#fff; }
+.gbModalBtns { display:flex; gap:8px; justify-content:flex-end; margin-top:18px; }
+
+/* Generic dense results table - steel-tint header, zebra rows, navy selection bar.  Apply class
+ * "gbTable" to the <table>; the tool may add its own column classes. */
+.gbTable { font-size:13px; width:100%; border-collapse:collapse; }
+.gbTable thead th { background:var(--headrow); border-bottom:1px solid var(--headrowLine);
+    font-size:12px; color:var(--navy); font-weight:700; padding:8px 12px; white-space:nowrap;
+    text-align:left; }
+.gbTable tbody td { padding:8px 12px; border-bottom:1px solid var(--lineSoft); white-space:nowrap;
+    vertical-align:middle; }
+.gbTable tbody tr:nth-child(even) { background:var(--stripe); }
+.gbTable tbody tr:hover { background:var(--hover); }
+.gbTable tbody tr.gbSel { background:var(--sel); box-shadow:inset 3px 0 0 var(--navy); }
+.gbTable td.num, .gbTable th.num { text-align:right; font-variant-numeric:tabular-nums; }
+.gbTable a { color:var(--accent); text-decoration:none; }
+.gbTable a:hover { color:var(--accentHover); text-decoration:underline; }

@@ -1,69 +1,14 @@
-/* hgBlat.css - styling for the modern BLAT search form and results pages (hgBlat.js).
- * UCSC house style (per the project's UCSC UI Style Guide): steel-blue section header, tan/white
- * content, navy links with maroon hover, #dbe4ee table header, zebra rows, navy selection bar.
- * Loaded on the new pages via webIncludeResourceFile("hgBlat.css"); the classic C-rendered pages
- * emit their own small .blatBanner rule in hgBlat.c instead. */
+/* hgBlat.css - BLAT-specific styling for the modern search form and results pages (hgBlat.js).
+ * The shared UCSC house-style components (design tokens on .gbApp, plus .gbPill, .gbCard, .gbStrip,
+ * .gbStat, .gbSection, .gbShareBox, .gbBanner and the .gbModal* dialog) live in gbModern.css, which
+ * is loaded alongside this file via webIncludeResourceFile.  This file holds only the pieces unique
+ * to BLAT: the results table, score/coverage bars, the detail panel, and the search-form layout.
+ * (The classic C-rendered pages emit their own small .blatBanner rule in hgBlat.c instead, since
+ * they do not load these stylesheets.) */
 
-/* Plain white page background, matching the track-settings model (gb.css).  The framework body
- * is cream (#FFF9D2) and the hgInside content table carries a BGCOLOR=#FFFEE8 attribute; override
- * both to white so the results sit on one uniform white background. */
-body.cgi { background:#fff; }
-table.hgInside { background:#fff; }
-/* Main page header, styled like gb.css .gbTrackTitleBanner (hgGtexTrackSettings model): black
- * title on the house gold.  The framework's #sectTtl already holds "<assembly> BLAT Results". */
-.subheadingBar { background:#eaca92; padding:9px 16px; margin:0; border:0; box-sizing:border-box; }
-.subheadingBar #sectTtl { color:#000; font-weight:700; font-size:18px;
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-#blatResults, #blatFormBox { --accent:#003a72; --accentHover:#8b1a1a; --navy:#0a2b6b; --ink:#1e2833;
-    --muted:#5b6572; --faint:#93a0ad; --line:#d0d0d0; --lineSoft:#ececec; --card:#ffffff;
-    --panel:#ffffff; --section:#4c759c; --headrow:#ededed; --headrowLine:#cccccc;
-    --sel:#cfe0f5; --hover:#f0f0f0; --stripe:#f7f7f7;
-    --title:#eaca92; --titleLine:#d9bd82; --titleSub:#5a4a24;
-    --btn:#ffffff; --btnLine:#999999; --btnText:#003a72; --btnHover:#eef2f7;
-    --btnDark:#0a2b6b; --btnDarkHover:#0a2350;
-    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:var(--ink); font-size:14px; }
-.blatCard { background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden;
-    box-shadow:0 1px 2px rgba(20,40,70,.10); margin:12px 0 24px; }
 /* Page actions sit in the gold main header (#sectTtl); no separate toolbar. */
 .blatHeadActions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.blatStrip { display:flex; align-items:center; gap:24px; flex-wrap:wrap;
-    padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
-.blatStat { display:flex; flex-direction:column; gap:1px; }
-.blatStat .k { font-size:12px; color:var(--muted); font-weight:700; }
-.blatStat .v { font-size:14px; font-weight:700; color:var(--ink); }
-.blatDiv { width:1px; height:28px; background:var(--line); }
-.blatStripActions { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-/* Buttons live both inside the card (#blatResults) and in the gold header (#sectTtl); scope to
- * both ids so the framework's link styles (which would add an underline) can't beat them. */
-#blatResults .blatPill, #sectTtl .blatPill, #blatFormBox .blatPill,
-#blatResults .blatStripActions input[type=submit],
-#blatResults .blatStripActions input[type=button] {
-    font-family:inherit; font-size:13px; font-weight:700; color:var(--btnText); background:var(--btn);
-    border:1px solid var(--btnLine); border-radius:0; padding:5px 12px; cursor:pointer;
-    text-decoration:none; display:inline-block; line-height:1.5; }
-#blatResults .blatPill:hover, #sectTtl .blatPill:hover, #blatFormBox .blatPill:hover,
-#blatResults .blatStripActions input[type=submit]:hover,
-#blatResults .blatStripActions input[type=button]:hover { background:var(--btnHover); text-decoration:none; }
-#blatResults .blatPill.primary, #sectTtl .blatPill.primary,
-#blatFormBox .blatPill.primary { background:var(--btnDark); color:#fff; border-color:var(--btnDark); }
-#blatResults .blatPill.primary:hover, #sectTtl .blatPill.primary:hover,
-#blatFormBox .blatPill.primary:hover { background:var(--btnDarkHover); }
-/* In the gold header (#sectTtl) the framework's link styles would otherwise beat .blatPill, so
- * re-assert the button look with id-level specificity. */
-#sectTtl .blatPill { color:#003a72; background:#fff; border:1px solid #999; text-decoration:none; }
-#sectTtl .blatPill:hover { background:#eef2f7; text-decoration:none; }
-#sectTtl .blatPill.primary { background:#0a2b6b; color:#fff; border-color:#0a2b6b; }
-#sectTtl .blatPill.primary:hover { background:#0a2350; }
 .blatShareIcon { vertical-align:-2px; margin-right:6px; }
-.blatShareBox { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    padding:11px 18px; border-bottom:1px solid var(--line); background:var(--panel); }
-.blatShareMsg { font-size:14px; color:var(--muted); }
-.blatShareInput { flex:1; min-width:260px; font-size:13px; padding:5px 8px;
-    border:1px solid var(--btnLine); border-radius:0; background:#fff; }
-.blatBanner { background:#fbf3e2; border:1px solid var(--titleLine); padding:10px 14px;
-    margin:12px 0 0; font-size:14px; color:var(--ink); }
-.blatBanner a { color:var(--accent); }
-.blatBanner a:hover { color:var(--accentHover); }
 .blatSeqBar { flex:1 1 100%; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .blatSeqText { flex:1 1 100%; min-height:150px; margin-top:10px; padding:8px; white-space:pre;
     font-family:'Roboto Mono','Courier New',monospace; font-size:13px; color:var(--ink);
@@ -128,38 +73,21 @@ table.hgInside { background:#fff; }
 .blatDetailCol { display:flex; flex-direction:column; gap:16px; min-width:250px; }
 .blatAlignBox { flex:1; min-width:320px; border-left:1px solid var(--line); padding-left:24px;
     display:flex; flex-direction:column; justify-content:center; }
-.blatAlignBox .blatPill { align-self:flex-start; }
+.blatAlignBox .gbPill { align-self:flex-start; }
 .blatAlignText { font-size:14px; color:var(--muted); line-height:1.55; margin:8px 0 14px; max-width:360px; }
-/* Full-width message row inside the flex-wrap share box. */
-.blatShareFull { flex:1 1 100%; }
 /* Rename modal.  On this page the old C-emitted inline rename form (#renameFormItem / #renameForm)
- * is replaced by the JS button + modal below, so keep the C markup hidden even though hgBlat.c
+ * is replaced by the JS button + .gbModal dialog, so keep the C markup hidden even though hgBlat.c
  * flips its display to block after buildBigPsl (our !important beats that inline style). */
 #renameFormItem, #renameForm { display:none !important; }
-.blatModalBg { position:fixed; top:0; right:0; bottom:0; left:0; z-index:1000;
-    background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; }
-.blatModal { background:#fff; border:1px solid var(--line); border-radius:0;
-    box-shadow:0 4px 18px rgba(0,0,0,.28); padding:18px 20px; min-width:340px; max-width:92vw; }
-.blatModalTitle { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:12px; }
-.blatModalText { font-size:13px; color:var(--ink); line-height:1.5; max-width:430px; margin-bottom:14px; }
-.blatModalText.blatModalNote { margin-top:14px; }
-.blatModalText a { color:var(--accent); }
-.blatModalText a:hover { color:var(--accentHover); }
-.blatModalLabel { display:block; font-size:12px; font-weight:700; color:var(--muted);
-    margin:10px 0 3px; }
-.blatModalInput { width:100%; box-sizing:border-box; border:1px solid var(--btnLine);
-    border-radius:0; padding:6px 8px; font-size:14px; font-family:inherit; background:#fff; }
-.blatModalBtns { display:flex; gap:8px; justify-content:flex-end; margin-top:18px; }
 
 /* ---- search form (blatFormBuild) -------------------------------------
- * Shares the tokens, .blatPill buttons, .blatBanner and the gold .subheadingBar page header
- * above with the results page, so the two pages read as one design. */
+ * Shares the design tokens (.gbApp on #blatFormBox), .gbPill buttons, .gbSection bars, .gbBanner
+ * and the gold .subheadingBar header from gbModern.css with the results page, so the two pages
+ * read as one design. */
 #blatFormBox { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:var(--ink); font-size:14px; }
 #blatFormBox .blatFormGrid { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:28px;
     align-items:start; margin:12px 0 24px; }
 @media (max-width:900px) { #blatFormBox .blatFormGrid { grid-template-columns:minmax(0,1fr); } }
-#blatFormBox .blatSection { background:var(--section); color:#fff; padding:6px 13px; font-size:15px;
-    font-weight:700; margin:0 0 14px; }
 /* flex-start, not flex-end: the genome field carries a "Current genome:" line under its input,
  * so bottom-aligning the row would push Query type down by the height of that line. */
 #blatFormBox .blatRow { display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
@@ -194,13 +122,14 @@ table.hgInside { background:#fff; }
 #blatFormBox .blatFileName { margin-top:12px; font-size:13px; color:var(--ink); font-weight:700; }
 #blatFormBox .blatActions { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
     border-top:1px solid var(--line); padding-top:16px; margin-top:16px; }
-#blatFormBox .blatCard { border:1px solid var(--line); padding:14px 16px; background:var(--card); }
-#blatFormBox .blatCard + .blatCard { margin-top:16px; }
-#blatFormBox .blatCard h3 { margin:0 0 9px; font-size:14px; font-weight:700; color:var(--accent); }
-#blatFormBox .blatCard div { font-size:13px; line-height:1.5; color:var(--ink); }
-#blatFormBox .blatCard div + div { margin-top:9px; }
-#blatFormBox .blatCard a { color:var(--accent); }
-#blatFormBox .blatCard a:hover { color:var(--accentHover); }
+/* Sidebar cards on the form add padding to the shared .gbCard (which supplies the border/shadow). */
+#blatFormBox .gbCard { border:1px solid var(--line); padding:14px 16px; background:var(--card); }
+#blatFormBox .gbCard + .gbCard { margin-top:16px; }
+#blatFormBox .gbCard h3 { margin:0 0 9px; font-size:14px; font-weight:700; color:var(--accent); }
+#blatFormBox .gbCard div { font-size:13px; line-height:1.5; color:var(--ink); }
+#blatFormBox .gbCard div + div { margin-top:9px; }
+#blatFormBox .gbCard a { color:var(--accent); }
+#blatFormBox .gbCard a:hover { color:var(--accentHover); }
 #blatFormBox .blatLimitRow { display:flex; justify-content:space-between; gap:12px; padding-bottom:7px;
     border-bottom:1px solid var(--lineSoft); font-size:13px; }
 /* The genome search bar is emitted by hgBlat.c (printGenomeSearchBar) and relocated into the

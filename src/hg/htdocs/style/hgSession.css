@@ -1,0 +1,100 @@
+/* hgSession.css - session-specific layout for the modern "My Sessions" page (hgSession.js).
+ *
+ * The shared UCSC house-style components (tokens, .gbPill, .gbBanner, .gbCard, .gbModal*,
+ * .gbSection, .gbShareBox, .gbTable) live in gbModern.css, loaded alongside this file via
+ * webIncludeResourceFile.  This file only holds the pieces unique to the sessions page: the
+ * save-current-view card, the session table's columns, and the Advanced panel. */
+
+/* The whole app sits in #sessionApp, which also carries class "gbApp" for the design tokens. */
+#sessionApp { margin:12px 0 24px; }
+#sessionApp .sessIntro { font-size:14px; color:var(--ink); margin:0 0 14px; }
+#sessionApp .sessIntro a { color:var(--accent); }
+#sessionApp .sessIntro a:hover { color:var(--accentHover); }
+
+/* Save-current-view card - the primary action.  Neutral light-grey panel. */
+#sessionApp .sessSaveCard { border:0; background:#f6f8fa; padding:14px 16px;
+    display:flex; flex-direction:column; gap:12px; margin:0 0 20px; }
+#sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+/* Title and the current-view summary share one font size (title is just bold). */
+#sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
+#sessionApp .sessSaveWhat { font-size:14px; }
+#sessionApp .sessSaveRow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+#sessionApp .sessSaveInput { flex:1 1 320px; min-width:220px; height:34px; box-sizing:border-box;
+    padding:0 11px; font-size:14px; border:1px solid var(--btnLine); border-radius:0; background:#fff;
+    font-family:inherit; }
+/* The optional description input spans the card on its own line below the name row. */
+#sessionApp #sessSaveDesc { width:100%; flex:none; }
+#sessionApp .sessSaveCheck { display:flex; align-items:center; gap:7px; font-size:13px;
+    color:var(--ink); white-space:nowrap; }
+
+/* One-click "update the most recently saved session" - a compact thin bar above the save card. */
+#sessionApp .sessRecent { display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    border:0; background:#f6f8fa; padding:6px 12px; font-size:14px; margin:0 0 12px; }
+#sessionApp .sessRecent .gbPill { padding:2px 10px; }
+#sessionApp .sessRecentTime { color:var(--muted); }
+/* Info bubble (navy circled i) used for the recent-update hint and session descriptions. */
+#sessionApp .sessInfo { color:var(--accent); cursor:help; font-size:15px; line-height:1; }
+
+/* Section heading ("Your saved sessions") separating the save card from the table. */
+#sessionApp .gbSection { margin-top:4px; }
+
+/* Toolbar above the table: DataTables search box + count + import/export. */
+#sessionApp .sessToolbar { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:0 0 10px; }
+#sessionApp .sessCount { font-size:13px; color:var(--muted); white-space:nowrap; }
+#sessionApp .sessToolbarActions { margin-left:auto; display:flex; gap:8px; align-items:center; }
+#sessionApp #sessionAppTable_length { margin:0; font-size:14px; color:var(--ink); }
+#sessionApp #sessionAppTable_length select { border:1px solid var(--btnLine); border-radius:0;
+    padding:4px 6px; font-size:14px; background:#fff; margin:0 4px; }
+#sessionApp #sessionAppTable_filter { margin:0; }
+#sessionApp #sessionAppTable_filter input { width:280px; max-width:55vw; border:1px solid var(--btnLine);
+    border-radius:0; padding:5px 9px; font-size:14px; }
+#sessionApp #sessionAppTable_wrapper { overflow-x:auto; }
+
+/* Session table columns.  Left-align every header and cell (including Actions) for one clean edge. */
+#sessionAppTable thead th, #sessionAppTable tbody td { text-align:left; }
+/* Bulk-select checkbox column (hidden until "Select" is pressed). */
+#sessionAppTable td.sessSelCol, #sessionAppTable th.sessSelCol { width:26px; text-align:center; }
+#sessionAppTable td.sessNameCol a { font-weight:700; }
+/* Saved position, shown inline after the assembly. */
+#sessionAppTable .sessPos { font-size:12px; color:var(--muted); white-space:nowrap; }
+#sessionAppTable td.sessDescCol { max-width:280px; white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; color:var(--muted); }
+#sessionAppTable td.sessActionsCol { white-space:nowrap; }
+/* All action controls (text and icon-only) share one height so they line up. */
+#sessionAppTable td.sessActionsCol .gbPill { display:inline-flex; align-items:center;
+    justify-content:center; height:24px; padding:0 9px; font-size:12px; margin-left:5px;
+    box-sizing:border-box; vertical-align:middle; }
+#sessionAppTable td.sessActionsCol .gbPill.danger { padding:0 8px; }
+#sessionAppTable .sessIcon { width:13px; height:14px; display:block; }
+#sessionAppTable .sessShareIcon { vertical-align:-2px; margin-right:4px; }
+#sessionAppTable .sessPublic { display:inline-block; margin-left:6px; font-size:11px; font-weight:700;
+    color:#1f7a34; }
+/* Lock marks a private (not-shared) session; sharing is the default so only the exception is marked. */
+#sessionAppTable .sessLockWrap { margin-left:6px; cursor:help; }
+#sessionAppTable .sessLock { width:10px; height:12px; display:inline-block; vertical-align:-2px;
+    color:var(--muted); }
+
+/* Advanced collapsible - the rarer load/backup/reset options.  Collapsed it is a thin bar; sits
+ * between the save card and the sessions table. */
+#sessionApp .sessAdv { border:0; margin:0 0 20px; }
+#sessionApp .sessAdvHead { display:flex; align-items:center; gap:9px; padding:11px 14px;
+    background:#f6f8fa; cursor:pointer; font-size:14px; font-weight:700; color:var(--accent);
+    user-select:none; }
+#sessionApp .sessAdvHead .caret { width:12px; display:inline-block; }
+#sessionApp .sessAdvBody { padding:16px 16px; display:grid; grid-template-columns:1fr 1fr;
+    gap:18px 28px; background:#f6f8fa; font-size:14px; }
+@media (max-width:820px) { #sessionApp .sessAdvBody { grid-template-columns:1fr; } }
+#sessionApp .sessAdvItem { display:flex; flex-direction:column; gap:7px; }
+#sessionApp .sessAdvItem > .lab { font-weight:700; color:var(--ink); }
+#sessionApp .sessAdvRow { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+#sessionApp .sessAdvInput { flex:1 1 140px; min-width:110px; height:32px; box-sizing:border-box;
+    border:1px solid var(--btnLine); border-radius:0; padding:0 9px; font-size:14px; background:#fff;
+    font-family:inherit; }
+#sessionApp .sessAdvLinks { display:flex; gap:16px; flex-wrap:wrap; }
+#sessionApp .sessAdvLinks a { color:var(--accent); }
+#sessionApp .sessAdvLinks a:hover { color:var(--accentHover); }
+
+/* Small inline status line for AJAX feedback (errors in maroon). */
+#sessionApp .sessMsg { font-size:13px; margin:0 0 12px; }
+#sessionApp .sessMsg.err { color:#b1301f; font-weight:700; }
+#sessionApp .sessMsg.ok { color:#1f7a34; }
