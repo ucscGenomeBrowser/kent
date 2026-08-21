@@ -214,6 +214,10 @@ void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);
 void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb);
 /* Fetch tdb->track's html description and store in tdb->html. */
 
+struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *tdb);
+/* Return a list of messages naming the parts of tdb's description page that we do not
+ * print, or NULL if we print all of it. */
+
 struct trackHubGenome *trackHubGetGenome(char *database);
 /* get genome structure for an assembly in a trackHub */
 

@@ -25,6 +25,7 @@
 #include "hgConfig.h"
 #include "hdb.h"
 #include "hui.h"
+#include "htmlSanitize.h"
 #include "customTrack.h"
 #include "customPp.h"
 #include "customFactory.h"
@@ -3921,7 +3922,10 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
 		    }
 		ds = netSlurpFile(sd);
 		close(sd);
-		track->tdb->html = dyStringCannibalize(&ds);
+		char *fetched = dyStringCannibalize(&ds);
+		/* This came in over the network, so keep only what we allow. */
+		track->tdb->html = htmlSanitize(fetched);
+		freeMem(fetched);
 		}
 	    }
 	}
