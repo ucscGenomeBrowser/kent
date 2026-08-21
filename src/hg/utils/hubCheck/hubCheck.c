@@ -605,7 +605,7 @@ else
         strippedMessage = cloneString(message);
         while (lastChar(strippedMessage) == '\n')
             trimLastChar(strippedMessage);
-        numMessages = chopByChar(strippedMessage, '\n', splitMessages, sizeof(splitMessages));
+        numMessages = chopByChar(strippedMessage, '\n', splitMessages, ArraySize(splitMessages));
         }
 
     for (; i < numMessages; i++)
