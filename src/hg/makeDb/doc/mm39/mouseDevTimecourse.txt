@@ -202,4 +202,18 @@ EOF
 # unplaced scaffold chr4_JH584294_random both lift to mm39 chr4:42656355-42661893,
 # and their expression vectors are identical. Left in place as a known artifact.
 
+# 2026-08-21 (Lou, QA #37001): sentence-case the tissue names and the facet column
+# titles, matching mm10. Only the first character is upper-cased, and the count and
+# color column names stay lower-case because hgTracks matches them by exact string.
+# trackDb has to match the renamed columns: barChartFacets Tissue,Timepoint.
+# Run this LAST, after curl -> reorder -> colour, since those snippets group on the
+# lower-case tissue strings.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/sentenceCaseTissues.sh \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_M21.facets \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm39/mouse_development_M21.categories
+
+# Also set priority 1-2 on the two bigBarChart subtracks so the default-visible
+# M21 TPM sorts first.
+
 ##############################################################################

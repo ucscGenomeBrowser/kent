@@ -106,6 +106,10 @@ mm10 ~encode4Reg cCREs Related ENCODE4 data
 mm10 ~mouseDevTimecourse encode3Reg Related ENCODE track
 mm10 ~mouseDevTimecourse encode4Reg Related ENCODE track
 
+# mm10 mouse gene expression cross-links:
+mm10 mouseDevTimecourse tabulaMuris Single-cell gene expression across adult mouse organs
+mm10 tabulaMuris mouseDevTimecourse Bulk RNA-seq gene expression across mouse development
+
 # hg38 long-read SV supertrack cross-links to other SV resources:
 hg38 longReadVariants gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
 hg38 gnomadStructuralVariants longReadVariants Long-read structural variants across multiple cohorts
