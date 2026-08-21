@@ -937,13 +937,13 @@ sub nfsNoodge {
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
   confess "undef input" if (! defined $file);
   return if ($main::opt_debug);
-  return if ( -e $file );	# already visible, nothing to noodge
+  return if ( -s $file );	# already visible, nothing to noodge
   my $dir = dirname($file);
   return if (! isNfsDir($dir));
   for (my $i=0;  $i < 5;  $i++) {
     `touch $dir`;
     sleep(4);
-    last if ( -e $file );
+    last if ( -s $file );
   }
 }
 

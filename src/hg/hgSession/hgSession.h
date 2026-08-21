@@ -28,6 +28,15 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 // Rename an existing session (hgsOldSessionName -> hgsNewSessionName) for the "Specify name" step.
 #define hgsDoRenameSessionJson hgSessionPrefix "doRenameSessionJson"
 
+// AJAX endpoints for the experimental client-rendered Sessions page (hgSession.js).  Each acts on
+// the session named by hgsOldSessionName (decoded) under the current user and returns JSON instead
+// of re-rendering the whole page.  All are covered by the hgsDo prefix in cleanHgSessionFromCart.
+#define hgsDoDeleteJson hgSessionPrefix "doDeleteJson"
+#define hgsDoShareJson hgSessionPrefix "doShareJson"
+#define hgsDoGalleryJson hgSessionPrefix "doGalleryJson"
+#define hgsDoOverwriteJson hgSessionPrefix "doOverwriteJson"
+#define hgsDoDescribeJson hgSessionPrefix "doDescribeJson"
+
 #define hgsSharePrefix hgSessionPrefix "share_"
 #define hgsGalleryPrefix hgSessionPrefix "gallery_"
 #define hgsEditPrefix hgSessionPrefix "edit_"

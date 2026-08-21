@@ -89,9 +89,9 @@ function blatCoverageCell(hit) {
 // ---- summary strip + detail panel ---------------------------------------
 
 function blatSummaryStrip(cfg, queryCount) {
-    var stat = (k, v) => `<div class="blatStat"><span class="k">${k}</span>` +
+    var stat = (k, v) => `<div class="gbStat"><span class="k">${k}</span>` +
         `<span class="v">${v}</span></div>`;
-    var div = '<span class="blatDiv"></span>';
+    var div = '<span class="gbDiv"></span>';
     var assembly = stat('Assembly', htmlEncode(cfg.organism) + ' / ' + htmlEncode(cfg.db)) + div +
         stat('Matches', blatFmt(cfg.hitCount));
     var stats;
@@ -106,12 +106,12 @@ function blatSummaryStrip(cfg, queryCount) {
     var actions = '';
     // "View all in browser" is the primary action, so it comes first.
     if (cfg.viewAllUrl) {
-        actions += `<a class="blatPill" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
+        actions += `<a class="gbPill" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
     }
     // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only on a fresh
     // search, where the uploaded sequence is available (cfg.querySeqs emitted by hgBlat.c).
     if (cfg.querySeqs && cfg.querySeqs.length) {
-        actions += '<button type="button" class="blatPill" id="blatSeqBtn" ' +
+        actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
             'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
     }
     // "Share a link" just reveals the page's stable URL (cfg.shareUrl, a trash-backed reopen link).
@@ -124,7 +124,7 @@ function blatSummaryStrip(cfg, queryCount) {
             '<circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>' +
             '<line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line>' +
             '<line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg>';
-        actions += '<button type="button" class="blatPill" id="blatShareBtn" ' +
+        actions += '<button type="button" class="gbPill" id="blatShareBtn" ' +
             'title="Show a link that reopens these results (works for a limited time)">' +
             shareIcon + 'Share a link</button>';
     }
@@ -132,10 +132,10 @@ function blatSummaryStrip(cfg, queryCount) {
     // button (renders immediately with the strip) that replaces the old C-emitted inline form, which
     // only appeared after the buildBigPsl AJAX finished and reflowed the page when clicked.
     if (cfg.canRename) {
-        actions += '<button type="button" class="blatPill" id="blatRenameBtn" ' +
+        actions += '<button type="button" class="gbPill" id="blatRenameBtn" ' +
             'title="Rename this BLAT results custom track and its description">Rename BLAT Track</button>';
     }
-    return `<div class="blatStrip">${stats}<span class="blatStripActions">${actions}</span></div>`;
+    return `<div class="gbStrip">${stats}<span class="gbStripActions">${actions}</span></div>`;
 }
 
 var BLAT_TILE_TIPS = {
@@ -174,12 +174,12 @@ function blatDetailSkeleton() {
         `<div class="blatDetailCard"><div class="blatDetailCol">` +
         `<div class="blatTiles">${tiles}</div>` +
         `<div class="blatDetailActions">` +
-        `<a class="blatPill" id="dvBrowser" title="Open this hit in the Genome Browser" href="#">Open in browser</a>` +
-        `<a class="blatPill" id="dvNewTab" target="_blank" title="Open this hit in the Genome Browser in a new tab" href="#">Open in new tab</a></div></div>` +
+        `<a class="gbPill" id="dvBrowser" title="Open this hit in the Genome Browser" href="#">Open in browser</a>` +
+        `<a class="gbPill" id="dvNewTab" target="_blank" title="Open this hit in the Genome Browser in a new tab" href="#">Open in new tab</a></div></div>` +
         `<div id="dvAlignBox" class="blatAlignBox">` +
         `<div class="blatTile"><div class="k">Alignment</div></div>` +
         `<div id="dvAlign" class="blatAlignText"></div>` +
-        `<a class="blatPill" id="dvViewAlign" ` +
+        `<a class="gbPill" id="dvViewAlign" ` +
         `title="See the base-by-base alignment of your query against this hit" href="#">` +
         `View alignment</a></div></div>`;
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
@@ -270,18 +270,18 @@ function blatShareLink() {
     // cfg.shareUrl and blatBuild() pins it into the address bar with history.replaceState), so this
     // just shows/copies window.location.  The link reopens straight from the trash .pslx/.fa, so it
     // works until those trash files are cleaned - hence the retention note.
-    var box = document.getElementById('blatShareBox');
+    var box = document.getElementById('gbShareBox');
     if (!box) { return; }
     if (box.style.display === 'flex') { box.style.display = 'none'; return; }   // toggle off
     var url = window.location.href;
     box.style.display = 'flex';
     box.innerHTML =
-        '<span class="blatShareMsg blatShareFull">Shareable link — anyone with it can reopen ' +
+        '<span class="gbShareMsg gbShareFull">Shareable link — anyone with it can reopen ' +
         'these results. The results are stored temporarily, so the link works for at least 48 hours ' +
         'after they were last viewed.</span>' +
-        '<input id="blatShareInput" class="blatShareInput" type="text" readonly>' +
-        '<button type="button" class="blatPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
-    var inp = document.getElementById('blatShareInput');
+        '<input id="gbShareInput" class="gbShareInput" type="text" readonly>' +
+        '<button type="button" class="gbPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
+    var inp = document.getElementById('gbShareInput');
     inp.value = url;
     inp.focus();
     inp.select();
@@ -304,29 +304,29 @@ function blatRenameModalHtml(cfg) {
     // hgSession link is relative (same /cgi-bin/), carrying db + hgsid so the session page opens in
     // this assembly and cart.
     var sessionUrl = `hgSession?db=${encodeURIComponent(cfg.db)}&hgsid=${encodeURIComponent(cfg.hgsid)}`;
-    return '<div id="blatModalBg" class="blatModalBg" style="display:none">' +
-        '<div class="blatModal" role="dialog" aria-modal="true" aria-labelledby="blatModalTitle">' +
-        '<div class="blatModalTitle" id="blatModalTitle">Rename BLAT Track</div>' +
-        '<div class="blatModalText">Every BLAT result is stored in its own track in the Genome ' +
+    return '<div id="gbModalBg" class="gbModalBg" style="display:none">' +
+        '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="gbModalTitle">' +
+        '<div class="gbModalTitle" id="gbModalTitle">Rename BLAT Track</div>' +
+        '<div class="gbModalText">Every BLAT result is stored in its own track in the Genome ' +
         'Browser. You can rename the track here. Results will disappear after 2–3 days, unless ' +
         `they are saved into a <a href="${sessionUrl}">Session link</a>.</div>` +
-        '<label class="blatModalLabel" for="blatRenameName">Track name</label>' +
-        '<input id="blatRenameName" class="blatModalInput" type="text" maxlength="80">' +
-        '<label class="blatModalLabel" for="blatRenameDesc">Description</label>' +
-        '<input id="blatRenameDesc" class="blatModalInput" type="text" maxlength="120">' +
-        '<div class="blatModalBtns">' +
-        '<button type="button" class="blatPill" id="blatRenameCancel">Cancel</button>' +
-        '<button type="button" class="blatPill primary" id="blatRenameOk">OK</button>' +
+        '<label class="gbModalLabel" for="blatRenameName">Track name</label>' +
+        '<input id="blatRenameName" class="gbModalInput" type="text" maxlength="80">' +
+        '<label class="gbModalLabel" for="blatRenameDesc">Description</label>' +
+        '<input id="blatRenameDesc" class="gbModalInput" type="text" maxlength="120">' +
+        '<div class="gbModalBtns">' +
+        '<button type="button" class="gbPill" id="blatRenameCancel">Cancel</button>' +
+        '<button type="button" class="gbPill primary" id="blatRenameOk">OK</button>' +
         '</div></div></div>';
 }
 
 function blatCloseRename() {
-    var bg = document.getElementById('blatModalBg');
+    var bg = document.getElementById('gbModalBg');
     if (bg) { bg.style.display = 'none'; }
 }
 
 function blatOpenRename() {
-    var bg = document.getElementById('blatModalBg');
+    var bg = document.getElementById('gbModalBg');
     if (!bg) { return; }
     // Pre-fill with the track's current name/description (emitted by hgBlat.c in cfg).
     var cfg = hgBlatData.config;
@@ -341,11 +341,11 @@ function blatWireRename() {
     $('#blatRenameBtn').on('click', blatOpenRename);
     $('#blatRenameCancel').on('click', blatCloseRename);
     // Click on the dark backdrop (but not the dialog itself) closes.
-    $('#blatModalBg').on('click', function(ev) {
+    $('#gbModalBg').on('click', function(ev) {
         if (ev.target === this) { blatCloseRename(); }
     });
     $(document).on('keydown.blatRename', function(ev) {
-        var bg = document.getElementById('blatModalBg');
+        var bg = document.getElementById('gbModalBg');
         if (bg && bg.style.display !== 'none' && ev.key === 'Escape') { blatCloseRename(); }
     });
     $('#blatRenameOk').on('click', function() {
@@ -381,10 +381,10 @@ function blatShowFasta(box, seqs, fileName) {
     box.style.display = 'flex';
     box.innerHTML =
         '<div class="blatSeqBar">' +
-        '<span class="blatShareMsg">Query sequence (FASTA):</span>' +
-        '<button type="button" class="blatPill" id="blatSeqCopy" title="Copy the FASTA to the clipboard">Copy to Clipboard</button>' +
-        '<button type="button" class="blatPill" id="blatSeqDownload" title="Download the FASTA as a .fa file">Download</button>' +
-        '<button type="button" class="blatPill" id="blatSeqClose" title="Hide the query sequence">Close</button>' +
+        '<span class="gbShareMsg">Query sequence (FASTA):</span>' +
+        '<button type="button" class="gbPill" id="blatSeqCopy" title="Copy the FASTA to the clipboard">Copy to Clipboard</button>' +
+        '<button type="button" class="gbPill" id="blatSeqDownload" title="Download the FASTA as a .fa file">Download</button>' +
+        '<button type="button" class="gbPill" id="blatSeqClose" title="Hide the query sequence">Close</button>' +
         '</div><textarea id="blatSeqText" class="blatSeqText" readonly></textarea>';
     var ta = document.getElementById('blatSeqText');
     ta.value = fasta;
@@ -427,12 +427,12 @@ function blatBuild() {
     }
 
     var back = cfg.backUrl ?
-        `<a class="blatPill" title="Return to the Genome Browser at your previous location (${htmlEncode(cfg.backPos)})" ` +
+        `<a class="gbPill" title="Return to the Genome Browser at your previous location (${htmlEncode(cfg.backPos)})" ` +
         `href="${htmlEncode(cfg.backUrl)}">Back to Genome Browser</a>` : '';
     // The page actions live in the gold main-header bar (framework #sectTtl), next to the title -
     // so there is no separate toolbar (.blatHead is gone).  Injected into #sectTtl below.
     var headActions =
-        `${back}<a class="blatPill primary" title="Start a new BLAT search" href="${htmlEncode(cfg.newSearchUrl)}">New BLAT search</a>`;
+        `${back}<a class="gbPill primary" title="Start a new BLAT search" href="${htmlEncode(cfg.newSearchUrl)}">New BLAT search</a>`;
 
     // Top banner: note this is the new page, link back to the classic page (fresh searches only,
     // where the trash files still exist), and invite feedback.  The old page also clears the
@@ -441,7 +441,7 @@ function blatBuild() {
         ` You can go back to <a title="Show these results on the classic BLAT results page" ` +
         `href="hgBlat?blatNewPage=0&blatReopen=1&hgsid=${encodeURIComponent(cfg.hgsid)}">the original page</a> anytime.` : '';
     var bannerHtml =
-        `<div class="blatBanner">We are testing a new BLAT output page.${origPage} ` +
+        `<div class="gbBanner">We are testing a new BLAT output page.${origPage} ` +
         `If you have feedback on this new page, do not hesitate to let us know via ` +
         `<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>`;
 
@@ -462,9 +462,9 @@ function blatBuild() {
     // detail dock sits above the table: with long hit lists a bottom dock scrolls out of view
     document.getElementById('blatResults').innerHTML =
         bannerHtml +
-        `<div class="blatCard">${blatSummaryStrip(cfg, queryCount)}` +
-        `<div id="blatShareBox" class="blatShareBox" style="display:none"></div>` +
-        `<div id="blatSeqBox" class="blatShareBox" style="display:none"></div>` +
+        `<div class="gbCard">${blatSummaryStrip(cfg, queryCount)}` +
+        `<div id="gbShareBox" class="gbShareBox" style="display:none"></div>` +
+        `<div id="blatSeqBox" class="gbShareBox" style="display:none"></div>` +
         `<div id="blatDetail" class="blatDetail"></div>` +
         `<table id="blatTable" class="display"><thead><tr>${th.join('')}</tr></thead></table></div>` +
         (cfg.canRename ? blatRenameModalHtml(cfg) : '');
@@ -614,18 +614,18 @@ function blatFormTab(showUpload) {
 
 function blatFormLimitsModal() {
     var row = (k, v) => `<div class="blatLimitRow"><span>${k}</span><strong>${v}</strong></div>`;
-    return '<div id="blatLimitsBg" class="blatModalBg" style="display:none">' +
-        '<div class="blatModal" role="dialog" aria-modal="true" aria-labelledby="blatLimitsTitle">' +
-        '<div class="blatModalTitle" id="blatLimitsTitle">Input limits</div>' +
+    return '<div id="blatLimitsBg" class="gbModalBg" style="display:none">' +
+        '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="blatLimitsTitle">' +
+        '<div class="gbModalTitle" id="blatLimitsTitle">Input limits</div>' +
         row('DNA per sequence', '25,000 bases') +
         row('Protein / translated', '10,000 letters') +
         row('Sequences per run', '25') +
         row('Total per submission', '50,000 bases') +
-        '<div class="blatModalText blatModalNote">Queries above these limits are rejected ' +
+        '<div class="gbModalText gbModalNote">Queries above these limits are rejected ' +
         'before alignment. For larger jobs, run BLAT from the ' +
         '<a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
         'command line</a> on your own server.</div>' +
-        '<div class="blatModalBtns"><button type="button" class="blatPill" id="blatLimitsClose">Close</button></div>' +
+        '<div class="gbModalBtns"><button type="button" class="gbPill" id="blatLimitsClose">Close</button></div>' +
         '</div></div>';
 }
 
@@ -659,15 +659,15 @@ function blatFormSidebar(cfg) {
     tools += '<div><a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
         'findMotifs</a> — command-line search across a whole genome.</div>';
     return '<div>' +
-        (tools ? `<div class="blatCard"><h3>Similar tools</h3>${tools}</div>` : '') +
-        '<div class="blatCard"><h3>Help</h3>' +
+        (tools ? `<div class="gbCard"><h3>Similar tools</h3>${tools}</div>` : '') +
+        '<div class="gbCard"><h3>Help</h3>' +
         '<div><a href="../FAQ/FAQblat.html">BLAT FAQ</a></div>' +
         '<div><a href="../goldenPath/help/hgTracksHelp.html#BLATAlign">BLAT documentation</a></div>' +
         // No "Search all genomes FAQ" here: that link now lives in the "Search many genomes"
         // tooltip, next to the checkbox it actually explains.
         '<div><a href="../FAQ/FAQblat.html#blat14">Programmatic / batch BLAT</a></div>' +
         '</div>' +
-        '<div class="blatCard"><h3>About BLAT</h3>' +
+        '<div class="gbCard"><h3>About BLAT</h3>' +
         '<div>DNA BLAT quickly finds sequences of 95% and greater similarity that are at least 25 bases ' +
         'long; it finds perfect matches down to 20 bases, and may miss shorter or more divergent ' +
         'alignments. Protein BLAT finds sequences of 80% and greater similarity at least 20 amino acids ' +
@@ -682,7 +682,7 @@ function blatFormBuild() {
 
     var banner = '';
     if (cfg.classicUrl) {
-        banner = '<div class="blatBanner">We are testing a new BLAT search page. You can go back to ' +
+        banner = '<div class="gbBanner">We are testing a new BLAT search page. You can go back to ' +
             `<a href="${htmlEncode(cfg.classicUrl)}">the original page</a> anytime. If you have feedback ` +
             'on this new page, do not hesitate to let us know via ' +
             '<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>';
@@ -712,7 +712,7 @@ function blatFormBuild() {
         banner +
         '<div class="blatFormGrid"><div>' +
 
-        '<div class="blatSection">Search &ndash; type keywords to find the target assembly</div>' +
+        '<div class="gbSection">Search &ndash; type keywords to find the target assembly</div>' +
         '<div class="blatRow">' +
             '<div class="blatField blatGenomeSlot"><span>Genome or assembly ' +
                 `<span class="blatInfo" title="${BLAT_GENOME_SEARCH_HELP}">${BLAT_INFO_SVG}</span>` +
@@ -763,7 +763,7 @@ function blatFormBuild() {
                 `${BLAT_INFO_SVG}</span></span>` : '') +
         '</div>' +
 
-        '<div class="blatSection">Query sequence</div>' +
+        '<div class="gbSection">Query sequence</div>' +
         '<div class="blatTabs">' +
             '<button type="button" class="blatTab on" id="blatTabPaste">Paste sequence</button>' +
             '<button type="button" class="blatTab" id="blatTabUpload">Upload file</button>' +
@@ -789,12 +789,12 @@ function blatFormBuild() {
         '</div>' +
 
         '<div class="blatActions">' +
-            '<input type="submit" class="blatPill primary" name="Submit" value="Submit" ' +
+            '<input type="submit" class="gbPill primary" name="Submit" value="Submit" ' +
             `title="${htmlEncode('Align the sequence and show all matches')}">` +
-            '<input type="submit" class="blatPill" name="Lucky" value="I&#39;m feeling lucky" ' +
+            '<input type="submit" class="gbPill" name="Lucky" value="I&#39;m feeling lucky" ' +
             `title="${htmlEncode('Skip the list of matches and open the best-scoring one straight ' +
                 'away in the Genome Browser. Ignored when "Search many genomes" is ticked.')}">` +
-            '<input type="submit" class="blatPill" name="Clear" value="Clear" ' +
+            '<input type="submit" class="gbPill" name="Clear" value="Clear" ' +
             `title="${htmlEncode('Empty the query sequence box')}">` +
         '</div>' +
 

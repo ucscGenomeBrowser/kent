@@ -19,6 +19,11 @@ export updateTsv="${logDir}/update.${YMD}.tsv"
 
 printf "### logFile: log/${Y}/${M}/${DS}.txt.gz\n" >> "${logFile}"
 printf "asmAlias update disabled until code fix in place\n"  >> "${logFile}"
+gzip -f "${logFile}"
+printf "##############################################\n" 1>&2
+printf "### asmAlias update change log ${DS}\n" 1>&2
+zcat "${logFile}.gz" 1>&2
+printf "##############################################\n" 1>&2
 exit 0
 
 # do not overwrite this copy if it was already done today

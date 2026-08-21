@@ -619,6 +619,7 @@ static void printBlatResultsApp(struct psl *pslList, char *database, char *organ
 {
 struct psl *psl;
 jsIncludeDataTablesLibs();
+webIncludeResourceFile("gbModern.css");   // shared house-style components (.gbPill, .gbCard, ...)
 webIncludeResourceFile("hgBlat.css");
 jsIncludeFile("hgBlat.js", NULL);
 
@@ -792,7 +793,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 jsonWriteListEnd(jw);    // hits
 jsonWriteObjectEnd(jw);  // root
 
-printf("<div id='blatResults'></div>\n");
+printf("<div id='blatResults' class='gbApp'></div>\n");
 jsInlineF("var hgBlatData = %s;\n", jw->dy->string);
 jsonWriteFree(&jw);
 }
@@ -2709,9 +2710,10 @@ jsInlineF(
     , searchBarId
 );
 
-printf("<div id='blatFormBox'></div>\n");
+printf("<div id='blatFormBox' class='gbApp'></div>\n");
 printf("</form>\n");
 
+webIncludeResourceFile("gbModern.css");   // shared house-style components (.gbPill, .gbCard, ...)
 webIncludeResourceFile("hgBlat.css");
 jsIncludeFile("hgBlat.js", NULL);
 
