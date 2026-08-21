@@ -16,7 +16,8 @@ It also copies the composite's facet metadata to
   <bed>/singleCellSignalsPeaks_metadata.tsv   (the track's metaDataUrl target).
 
 Usage:
-  copySingleCellSignalsPeaksFiles.py [--assembly hg38|mm10] [--dry-run]
+  copySingleCellSignalsPeaksFiles.py [--assembly hg38|mm10] [--stanzas STANZAS]
+                                     [--manifest MANIFEST] [--dry-run]
 """
 import re, os, shutil, argparse
 from urllib.parse import urlparse
@@ -45,16 +46,28 @@ def load_relpath_to_abs(manifest, asm):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--assembly", default="hg38", choices=["hg38", "mm10"])
-    ap.add_argument("--stanzas")
-    ap.add_argument("--manifest", default=os.path.join(HUB_BUILD, "manifest.tsv"))
+    ap.add_argument("--stanzas",
+                    help="hub stanza file (default: <build>/stanzas/<asm>.trackDb.txt)")
+    ap.add_argument("--manifest",
+                    help="hub manifest TSV (default: the manifest.tsv of the build "
+                         "--stanzas came from)")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
     asm = args.assembly
     hub_composite = "cellBrowser" + asm.capitalize()
     stanzas = args.stanzas or os.path.join(HUB_BUILD, "stanzas/%s.trackDb.txt" % asm)
+    # Locate the rest of the build relative to the stanza file rather than off HUB_BUILD, so
+    # that --stanzas on its own moves the whole script to another build -- the way it already
+    # does in makeSingleCellSignalsPeaksRa.py. Keying these off HUB_BUILD instead meant
+    # --stanzas read one build's stanzas and then resolved every file against the default
+    # build's manifest, and copied the default build's facet metadata on top.
+    # Layout: <build>/manifest.tsv, <build>/stanzas/<asm>.trackDb.txt,
+    #         <build>/meta/<asm>.metadata.tsv
+    build = os.path.dirname(os.path.dirname(os.path.abspath(stanzas)))
+    manifest = args.manifest or os.path.join(build, "manifest.tsv")
     beddir = "/hive/data/genomes/%s/bed/%s" % (asm, TRACK)
-    rel2abs = load_relpath_to_abs(args.manifest, asm)
+    rel2abs = load_relpath_to_abs(manifest, asm)
 
     copied = missing = total = 0
     nbytes = 0
@@ -86,16 +99,19 @@ def main():
         copied += 1
         nbytes += os.path.getsize(src)
 
-    meta_src = os.path.join(HUB_BUILD, "meta", "%s.metadata.tsv" % asm)
-    meta_dst = os.path.join(beddir, "%s_metadata.tsv" % TRACK)
-    if not args.dry_run and os.path.exists(meta_src):
-        os.makedirs(beddir, exist_ok=True)
-        shutil.copy2(meta_src, meta_dst)
-
+    # Bail out before the metadata copy, not after. Copying zero data files and then
+    # refreshing the facet metadata anyway leaves the bed dir describing tracks whose files
+    # were never written -- exactly the inconsistency this check exists to prevent.
     if total == 0:
         raise SystemExit("ERROR: no subtracks of %s found in %s. Has the hub stanza "
                          "layout changed? Copying nothing is never right here."
                          % (hub_composite, stanzas))
+
+    meta_src = os.path.join(build, "meta", "%s.metadata.tsv" % asm)
+    meta_dst = os.path.join(beddir, "%s_metadata.tsv" % TRACK)
+    if not args.dry_run and os.path.exists(meta_src):
+        os.makedirs(beddir, exist_ok=True)
+        shutil.copy2(meta_src, meta_dst)
     print("assembly=%s composite=%s: subtracks=%d copied=%d missing=%d  ~%.1f GB%s"
           % (asm, hub_composite, total, copied, missing, nbytes / 1e9,
              "  (dry-run)" if args.dry_run else "  -> " + beddir))
