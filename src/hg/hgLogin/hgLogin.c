@@ -354,35 +354,82 @@ if (approvedHosts)
 return FALSE;
 }
 
+static boolean returnUrlSchemeIsSafe(char *returnUrl)
+/* Return TRUE unless returnUrl carries a scheme other than http or https.  The scheme is the
+ * text before the first colon, and only when that colon comes before any slash, question mark
+ * or hash; a colon after one of those belongs to the path or the query, so the URL is relative.
+ * This is what keeps a javascript: or data: URL out of the href we write. */
+{
+char *colon = strchr(returnUrl, ':');
+if (colon == NULL)
+    return TRUE;
+char *pathStart = strpbrk(returnUrl, "/?#");
+if (pathStart != NULL && pathStart < colon)
+    return TRUE;
+int schemeLen = colon - returnUrl;
+return (schemeLen == 4 && startsWithNoCase("http", returnUrl))
+    || (schemeLen == 5 && startsWithNoCase("https", returnUrl));
+}
+
+static boolean returnUrlIsWellFormed(char *returnUrl)
+/* Return TRUE if returnUrl looks like a URL we can write into the page.  Every CGI parameter
+ * becomes a cart variable, so returnto holds whatever the visitor's URL said, and it is printed
+ * into an href attribute and into a javascript location assignment.  A quote, an angle bracket,
+ * a backslash or a control character would end the attribute or the string literal and reflect
+ * script onto the page.  A real URL percent-encodes all of those, so refusing them turns away
+ * nothing legitimate. */
+{
+char *c;
+for (c = returnUrl; *c != 0; c++)
+    {
+    unsigned char uc = (unsigned char)*c;
+    if (uc < ' ' || uc == 127 || strchr("\"'<>\\`", *c) != NULL)
+        return FALSE;
+    }
+return returnUrlSchemeIsSafe(returnUrl);
+}
+
 char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char returnTo[2048];
-  
-if (!returnURL || sameString(returnURL,""))
+
+if (isEmpty(returnURL))
     safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl());
-else if (cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
+else
     {
-    if (isValidReturnUrl(returnURL))
-        safecpy(returnTo, sizeof(returnTo), returnURL);
-    else
+    /* Check the shape of the URL on every install.  login.approvedReturn is optional, and
+     * where it is set it only matches the front of the URL, so the rest of the URL is
+     * unchecked either way. */
+    boolean ok = returnUrlIsWellFormed(returnURL);
+    if (ok && cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
+        ok = isValidReturnUrl(returnURL);
+    if (!ok)
         {
         hDumpStackDisallow();
         errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
                 "with the returnto argument from the URL (or just the full URL) so we can "
                 "fix this.");
         }
-    }
-else
     safecpy(returnTo, sizeof(returnTo), returnURL);
+    }
 return cloneString(returnTo);
+}
+
+static char *getReturnToUrlForAttr()
+/* getReturnToURL() escaped for printing inside an href="" attribute.  Escaping the ampersand
+ * is the part that matters here: the browser expands an entity in an attribute value, so
+ * javascript&colon;alert(1) would otherwise become a javascript: URL after the checks above
+ * have passed it. */
+{
+return htmlEncode(getReturnToURL());
 }
 
 void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
-char *returnURL = getReturnToURL();
+char *returnURL = javaScriptLiteralEncode(getReturnToURL());
 jsInlineF(
     "setTimeout(function(){location='%s';}, %d);\n"
     , returnURL, delay);
@@ -399,7 +446,7 @@ jsInlineF(
 void  displayActMailSuccess()
 /* display Activate mail success box */
 {
-char *returnURL = getReturnToURL(); 
+char *returnURL = getReturnToUrlForAttr();
 hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
@@ -500,8 +547,8 @@ if (result == -1)
         "<p align=\"left\">"
         "</p>"
         "<h3>Error emailing %s to: %s</h3>"
-        "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
-        hgLoginUrl, obj, email );
+        "Click <a href=\"%s?hgLogin.do.displayAccHelpPage=1\">here</a> to return.<br>",
+        htmlEncode(obj), htmlEncode(email), hgLoginUrl );
     }
 else
     {
@@ -567,14 +614,14 @@ if (result == -1)
         "<p align=\"left\">"
         "</p>"
         "<h3>Error emailing %s to: %s</h3>"
-        "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
-        hgLoginUrl, obj, email );
+        "Click <a href=\"%s?hgLogin.do.displayAccHelpPage=1\">here</a> to return.<br>",
+        htmlEncode(obj), htmlEncode(email), hgLoginUrl );
     }
 else
     {
     jsInlineF(
         "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s';\n"
-        , hgLoginUrl, username);
+        , hgLoginUrl, cgiEncodeFull(username));
     }
 }
 
@@ -648,7 +695,7 @@ hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "     &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div>"
     "</form>"
-    "</div><!-- END - accountHelpBox -->", username, email, getReturnToURL());
+    "</div><!-- END - accountHelpBox -->", username, email, getReturnToUrlForAttr());
 jsOnEventById("click", "password", "toggle('showU');");
 jsOnEventById("click", "username", "toggle('showE');");
 if (emailLinkEnabled())
@@ -821,7 +868,7 @@ hPrintf(
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
     "    &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div>"
-    , hgLoginUrl, getReturnToURL());
+    , hgLoginUrl, getReturnToUrlForAttr());
 if (pwdEyeIconEnabled)
     {
     printPwdToggleJS();
@@ -924,7 +971,7 @@ hPrintf(
     "</form>"
     "\n"
     "</div><!-- END - changePwBox -->"
-    "\n", getReturnToURL());
+    "\n", getReturnToUrlForAttr());
 if (pwdEyeIconEnabled)
     {
     printPwdToggleJS();
@@ -1142,7 +1189,7 @@ hPrintf("<div class=\"inputGroup\">"
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.changeEmail\" value=\"Change Email\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
-    "</div></form></div><!-- END - changeEmailBox -->", getReturnToURL());
+    "</div></form></div><!-- END - changeEmailBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 }
 
@@ -1333,7 +1380,7 @@ hPrintf(
     "</div>"
     "</form>"
     "</div><!-- END - signUpBox -->",
-    getReturnToURL());
+    getReturnToUrlForAttr());
 if (pwdEyeIconEnabled)
     {
     printPwdToggleJS();
@@ -1963,7 +2010,7 @@ hPrintf("<div class=\"inputGroup\">"
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create Account\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
-    "</div></form></div><!-- END - completeAccountBox -->", getReturnToURL());
+    "</div></form></div><!-- END - completeAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 freeMem(encSuggested);
 freeMem(encEmail);
@@ -2129,7 +2176,7 @@ hPrintf("</div>");
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.chooseAccount\" value=\"Sign In\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
-    "</div></form></div><!-- END - chooseAccountBox -->", getReturnToURL());
+    "</div></form></div><!-- END - chooseAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 freeMem(encEmail);
 gbMembersFreeList(&list);
@@ -2397,7 +2444,7 @@ freeMem(encEmail);
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.sendEmailLink\" value=\"Send login link\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
-    "</div></form></div><!-- END - emailLinkBox -->", getReturnToURL());
+    "</div></form></div><!-- END - emailLinkBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 }
 
