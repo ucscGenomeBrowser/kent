@@ -165,6 +165,8 @@ struct sanitizer
     struct dyString *out;       /* Sanitized HTML accumulates here. */
     struct slName *openStack;   /* Elements opened and not yet closed, innermost first. */
     int depth;                  /* Length of openStack. */
+    struct hash *exhausted;     /* Elements we have already looked for a closing tag of
+                                 * and not found, so there is no point looking again. */
     boolean report;             /* Collecting messages about what we removed? */
     struct hash *seen;          /* Messages reported already. */
     struct slName *removed;     /* Messages, in the order we first hit them. */
@@ -352,69 +354,114 @@ for (;  *s != 0;  ++s)
     }
 }
 
-static char *urlScheme(char *val)
-/* Return the scheme of val, lower cased and freshly allocated, or NULL if it has none.
- * Entities and padding are decoded first, so that &#106;avascript: and "java\tscript:"
- * both come out as javascript. */
+static char *decodeNumericRefs(char *s)
+/* Return a copy of s with numeric character references turned into the characters they
+ * name, which is what a browser does before it looks for a scheme.  Only &#NN and &#xNN
+ * are decoded, with or without the closing semicolon, because that is what a browser
+ * accepts.  A named entity is left alone and the caller refuses the URL over it.  A
+ * character above ASCII cannot be part of a scheme, so one stand-in character does for
+ * all of them. */
 {
-struct dyString *dy = dyStringNew(64);
-char *p = val;
+struct dyString *dy = dyStringNew(strlen(s)+1);
+char *p = s;
 while (*p != 0)
     {
-    if (*p == '&')
+    if (p[0] == '&' && p[1] == '#')
         {
-        char *semi = strchr(p, ';');
-        int c = -1;
-        if (semi != NULL && semi - p <= 10)
+        char *digits = p+2;
+        int base = 10;
+        if (*digits == 'x' || *digits == 'X')
             {
-            if (p[1] == '#')
-                {
-                if (p[2] == 'x' || p[2] == 'X')
-                    c = strtol(p+3, NULL, 16);
-                else
-                    c = atoi(p+2);
-                }
-            else if (startsWithNoCase("&colon;", p))
-                c = ':';
-            else if (startsWithNoCase("&tab;", p))
-                c = '\t';
-            else if (startsWithNoCase("&newline;", p))
-                c = '\n';
+            base = 16;
+            digits += 1;
             }
-        if (c > 0 && c < 128)
+        char *end = NULL;
+        errno = 0;
+        long value = strtol(digits, &end, base);
+        if (end != digits)
             {
-            if (c > ' ')
-                dyStringAppendC(dy, tolower(c));
-            p = semi+1;
+            if (*end == ';')
+                end += 1;
+            if (value > 0 && value < 128 && errno == 0)
+                dyStringAppendC(dy, (char)value);
+            else
+                dyStringAppendC(dy, '~');
+            p = end;
             continue;
             }
         }
-    if ((unsigned char)*p > ' ')
-        dyStringAppendC(dy, tolower(*p));
-    ++p;
+    dyStringAppendC(dy, *p);
+    p += 1;
     }
-char *clean = dyStringCannibalize(&dy);
-char *colon = strchr(clean, ':');
+return dyStringCannibalize(&dy);
+}
+
+static char *urlScheme(char *val, boolean *retSuspect)
+/* Return the scheme of val, lower cased and freshly allocated, or NULL if it has none.
+ * Set retSuspect when the text in front of the path holds something that could hide a
+ * scheme from us and still be one to a browser: a named entity, a backslash, or a control
+ * character.  Reading the text this way, rather than copying every rule a browser has for
+ * repairing a broken URL, is the point.  Matching those rules exactly is how a check like
+ * this gets beaten. */
+{
+*retSuspect = FALSE;
+char *decoded = decodeNumericRefs(val);
+char *s = decoded;
+while (*s != 0 && (unsigned char)*s <= ' ')
+    ++s;
 char *scheme = NULL;
-if (colon != NULL)
+char *p;
+for (p = s;  *p != 0;  ++p)
     {
-    char *pathStart = strpbrk(clean, "/?#");
-    if (pathStart == NULL || colon < pathStart)
+    if (*p == '/' || *p == '?' || *p == '#')
+        break;                          /* a path, query or anchor starts, so no scheme */
+    if (*p == '&' || *p == '\\' || (unsigned char)*p < ' ' || *p == 0x7f)
         {
-        *colon = 0;
-        scheme = cloneString(clean);
+        *retSuspect = TRUE;
+        break;
+        }
+    if (*p == ':')
+        {
+        int len = p - s;
+        char buf[33];
+        if (len < 1 || len >= sizeof buf)
+            {
+            *retSuspect = TRUE;
+            break;
+            }
+        memcpy(buf, s, len);
+        buf[len] = 0;
+        tolowers(buf);
+        boolean plain = isalpha((unsigned char)buf[0]);
+        char *c;
+        for (c = buf;  plain && *c != 0;  ++c)
+            {
+            if (!isalnum((unsigned char)*c) && *c != '+' && *c != '.' && *c != '-')
+                plain = FALSE;
+            }
+        if (plain)
+            scheme = cloneString(buf);
+        else
+            *retSuspect = TRUE;
+        break;
         }
     }
-freeMem(clean);
+freeMem(decoded);
 return scheme;
 }
 
 static boolean urlOk(char *val, struct sanitizer *san)
 /* Is this a URL we are willing to print? */
 {
-char *scheme = urlScheme(val);
+boolean suspect = FALSE;
+char *scheme = urlScheme(val, &suspect);
+if (suspect)
+    {
+    noteRemoved(san, "removed a link that does not read as a plain web address");
+    return FALSE;
+    }
 if (scheme == NULL)
-    return TRUE;                /* relative, or a same page anchor */
+    return TRUE;
 boolean ok = (hashLookup(schemeHash, scheme) != NULL);
 if (!ok)
     noteRemoved(san, "removed a link that used the %s: scheme", scheme);
@@ -427,7 +474,10 @@ static boolean iframeSrcOk(char *src)
 {
 if (isEmpty(src))
     return FALSE;
-char *scheme = urlScheme(src);
+boolean suspect = FALSE;
+char *scheme = urlScheme(src, &suspect);
+if (suspect)
+    return FALSE;
 if (scheme != NULL)
     {
     boolean https = sameString(scheme, "https");
@@ -435,7 +485,7 @@ if (scheme != NULL)
     if (!https)
         return FALSE;
     }
-else if (!startsWith("//", src))
+else if (!startsWith("//", skipLeadingSpaces(src)))
     return FALSE;
 char *host = stringIn("//", src);
 if (host == NULL)
@@ -702,7 +752,16 @@ while (*s != 0)
         if (!isVoid && tagEnd[-1] != '/')
             {
             boolean rawText = (hashLookup(rawTextHash, name) != NULL);
-            char *afterClose = skipToClose(s, name, rawText);
+            /* Once the search for a closing tag has run off the end of the input, every
+             * later search for that same tag will too, and repeating it on a page built
+             * of thousands of unclosed tags would cost us a pass each time. */
+            char *afterClose = NULL;
+            if (hashLookup(san->exhausted, name) == NULL)
+                {
+                afterClose = skipToClose(s, name, rawText);
+                if (afterClose == NULL)
+                    hashAdd(san->exhausted, name, NULL);
+                }
             if (afterClose != NULL)
                 s = afterClose;
             else if (rawText)
@@ -719,8 +778,11 @@ while (*s != 0)
     dyStringPrintf(san->out, "<%s", name);
     writeAttributes(san, name, attrText, tagEnd);
     dyStringAppendC(san->out, '>');
-    if (!isVoid && tagEnd[-1] != '/')
+    if (!isVoid)
         {
+        /* A trailing slash does not close an element like this one, whatever the author
+         * meant by it, so remember it as open.  Anything still open at the end is closed
+         * for us, which stops a page ending up inside a hub's div. */
         slNameAddHead(&san->openStack, name);
         san->depth += 1;
         }
@@ -746,10 +808,12 @@ struct sanitizer san;
 ZeroVar(&san);
 san.out = dyStringNew(strlen(html) + 128);
 san.report = (retRemoved != NULL);
-if (san.report)
+san.exhausted = hashNew(6);
+if (retRemoved != NULL)
     san.seen = hashNew(0);
 sanitizeOnePass(html, &san);
-if (san.report)
+hashFree(&san.exhausted);
+if (retRemoved != NULL)
     {
     slReverse(&san.removed);
     *retRemoved = san.removed;

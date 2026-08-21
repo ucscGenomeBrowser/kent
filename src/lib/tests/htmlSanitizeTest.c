@@ -16,8 +16,12 @@ static char *cases[] = {
 "<p>before</p><script>if (a < b) alert(1)",
 /* event handlers and class go, id and title stay */
 "<div id=\"top\" class=\"warn\" title=\"t\" onclick=\"alert(1)\">text</div>",
-/* an entity encoded scheme is still that scheme */
+/* an entity encoded scheme is still that scheme, however it is spelled */
 "<a href=\"&#106;avascript:alert(1)\">one</a> <a href=\"java&Tab;script:alert(1)\">two</a>",
+"<a href=\"&#0000000106;avascript:alert(1)\">three</a> <a href=\"&#106avascript:alert(1)\">four</a>",
+"<a href=\"jav&#9;ascript:alert(1)\">five</a> <a href=\"java&colon;script:alert(1)\">six</a>",
+/* an address that only looks encoded is left working */
+"<a href=\"&#109;ailto:help&#64;riken.jp?subject=x\">write to us</a>",
 /* ordinary links are left alone, and a new window does not get a handle on ours */
 "<a href=\"https://genome.ucsc.edu\">u</a> <a href=\"#anchor\" target=\"_blank\">a</a>",
 /* an image keeps its source, not its onerror */
@@ -29,8 +33,11 @@ static char *cases[] = {
 "<p style=\"color:red;behavior:url(#default#VML);text-align:center;position:fixed\">p</p>",
 /* unknown elements lose their tag and keep their text */
 "<o:p>word</o:p><vertebrates>more</vertebrates>",
-/* tags left open are closed for us */
+/* tags left open are closed for us, and a slash does not close one of these */
 "<div><b>bold<p>para",
+"<div style=\"color:red\"/>the rest of the page is not inside that div",
+/* a page built of tags that are never closed is not a way to make us work all day */
+"<svg><svg><svg><svg>text",
 /* a stray quote inside an unquoted value does not swallow the page */
 "<a href=https://example.com/x\\\">link text</a> and more text",
 /* a form and everything in it goes */

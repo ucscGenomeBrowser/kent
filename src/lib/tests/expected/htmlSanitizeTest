@@ -17,6 +17,18 @@ out: <div id="top" title="t">text</div>
 in : <a href="&#106;avascript:alert(1)">one</a> <a href="java&Tab;script:alert(1)">two</a>
 out: <a>one</a> <a>two</a>
      (removed a link that used the javascript: scheme)
+     (removed a link that does not read as a plain web address)
+
+in : <a href="&#0000000106;avascript:alert(1)">three</a> <a href="&#106avascript:alert(1)">four</a>
+out: <a>three</a> <a>four</a>
+     (removed a link that used the javascript: scheme)
+
+in : <a href="jav&#9;ascript:alert(1)">five</a> <a href="java&colon;script:alert(1)">six</a>
+out: <a>five</a> <a>six</a>
+     (removed a link that does not read as a plain web address)
+
+in : <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
+out: <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
 
 in : <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank">a</a>
 out: <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank" rel="noopener noreferrer">a</a>
@@ -37,6 +49,13 @@ out: wordmore
 
 in : <div><b>bold<p>para
 out: <div><b>bold<p>para</p></b></div>
+
+in : <div style="color:red"/>the rest of the page is not inside that div
+out: <div style="color:red;">the rest of the page is not inside that div</div>
+
+in : <svg><svg><svg><svg>text
+out: text
+     (removed the svg element and everything inside it)
 
 in : <a href=https://example.com/x\">link text</a> and more text
 out: <a href="https://example.com/x\&quot;">link text</a> and more text
