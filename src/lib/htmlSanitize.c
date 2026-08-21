@@ -235,6 +235,18 @@ static boolean isNameChar(char c)
 return isalnum((unsigned char)c) || c == ':' || c == '_' || c == '-' || c == '.';
 }
 
+static boolean allNameChars(char *s)
+/* Is every character in s one that belongs in a name?  A message we hand back names an
+ * attribute the page wrote, and that text can end up in a terminal. */
+{
+for (;  *s != 0;  ++s)
+    {
+    if (!isNameChar(*s))
+        return FALSE;
+    }
+return TRUE;
+}
+
 static char *tagName(char *s, char *name, int nameSize)
 /* Copy the element name starting at s into name, lower cased.  Return the first character
  * after the name. */
@@ -584,7 +596,7 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
         safef(key, sizeof key, "*.%s", attr);
         if (hashLookup(attrHash, key) == NULL)
             {
-            if (startsWith("on", attr))
+            if (startsWith("on", attr) && allNameChars(attr))
                 noteRemoved(san, "removed the attribute %s", attr);
             continue;
             }
