@@ -199,7 +199,12 @@ def emit_rows(records, assembly, hg38_lookup):
         ac = int(v.get('allele_count') or 0)
         an = int(v.get('allele_num') or 0)
         hom = int(v.get('hom_count') or 0)
-        carriers = ac - hom   # individuals: het + hom = allele_count - hom_count
+        # Carrier individuals = heterozygous + homozygous carriers. In this
+        # FLOSSIES export allele_count is already het + hom (not the usual
+        # het + 2*hom), so we sum the per-population het and hom counts directly
+        # rather than allele_count - hom_count, which would drop homozygotes.
+        carriers = (sum(int(x or 0) for x in (v.get('pop_hets') or {}).values())
+                    + sum(int(x or 0) for x in (v.get('pop_homs') or {}).values()))
         applies, pts, _ = bs2_tier(conseq, carriers)
         color = COLORS[applies]
         hgvsc = v.get('HGVSc') or ''

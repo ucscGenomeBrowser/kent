@@ -298,12 +298,16 @@ def batch_spliceai(regions):
     """Per gene region: (chrom, pos1, ref, alt) -> max SpliceAI delta (bed9+4: AIscore=col9, name='ref>alt')."""
     sa = {}
     for chrom, start, end in regions:
+        # A read failure here (e.g. a wrong/renamed SpliceAI path) must stop the script, not be
+        # skipped: an empty result would give every synonymous variant sa_score 0.0, firing BP7 for
+        # all of them with the mouseover showing "no record" as if it were a measurement. Let
+        # bigBedToBed's own error reach stderr (no DEVNULL) so the real cause is visible.
         try:
             out = subprocess.check_output(['bigBedToBed', f'-chrom={chrom}', f'-start={start}',
-                                           f'-end={end}', SPLICEAI_BB, 'stdout'],
-                                          text=True, stderr=subprocess.DEVNULL)
-        except subprocess.CalledProcessError:
-            continue
+                                           f'-end={end}', SPLICEAI_BB, 'stdout'], text=True)
+        except (subprocess.CalledProcessError, OSError) as e:
+            sys.exit(f'ERROR: bigBedToBed failed on {SPLICEAI_BB} for {chrom}:{start}-{end} ({e}); '
+                     f'cannot compute BP7. Fix the SpliceAI path, or pass --no-spliceai to skip it.')
         for line in out.splitlines():
             f = line.split('\t')
             if len(f) < 10 or '>' not in f[3]:
@@ -317,6 +321,9 @@ def batch_spliceai(regions):
             k = (chrom, pos1, ref, alt)
             if score > sa.get(k, -1):
                 sa[k] = score
+    if not sa:
+        sys.exit(f'ERROR: no SpliceAI records read from {SPLICEAI_BB}; refusing to emit BP7 for every '
+                 f'synonymous variant. Check the file and path, or pass --no-spliceai to skip it.')
     print(f'  SpliceAI entries: {len(sa)}', file=sys.stderr)
     return sa
 
