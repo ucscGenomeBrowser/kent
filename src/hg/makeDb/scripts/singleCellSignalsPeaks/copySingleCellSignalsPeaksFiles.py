@@ -31,6 +31,35 @@ HUB_BUILD = os.environ.get(
     "HUB_BUILD", "/hive/data/inside/cells/all-tracks-hub-build")
 TRACK = "singleCellSignalsPeaks"
 
+def copy_atomic(src, dst):
+    """Copy src to dst without ever leaving a half-written dst in place.
+
+    The bed dir is served live -- /gbdb/<asm>/bbi/singleCellSignalsPeaks is a symlink
+    straight to it -- so copying onto a file the browser may be reading hands out a
+    truncated bigBed for as long as the copy takes. Write a temp file beside the
+    destination and rename it, which is atomic within one filesystem.
+    """
+    tmp = "%s.tmp%d" % (dst, os.getpid())
+    try:
+        shutil.copy2(src, tmp)
+        os.replace(tmp, dst)
+    except BaseException:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise
+
+def up_to_date(src, dst):
+    """True if dst already holds this copy of src, so it can be skipped.
+
+    Size alone is not enough: a rebuilt file often lands on the same size, and
+    skipping it then serves last month's data forever. shutil.copy2 carries the
+    mtime across, so a dst older than its source means the source moved on.
+    """
+    if not os.path.exists(dst):
+        return False
+    return (os.path.getsize(dst) == os.path.getsize(src)
+            and os.path.getmtime(dst) >= os.path.getmtime(src))
+
 def load_relpath_to_abs(manifest, asm):
     m = {}
     with open(manifest) as fh:
@@ -94,8 +123,8 @@ def main():
         dst = os.path.join(beddir, rel)
         if not args.dry_run:
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            if not (os.path.exists(dst) and os.path.getsize(dst) == os.path.getsize(src)):
-                shutil.copy2(src, dst)
+            if not up_to_date(src, dst):
+                copy_atomic(src, dst)
         copied += 1
         nbytes += os.path.getsize(src)
 
@@ -107,11 +136,27 @@ def main():
                          "layout changed? Copying nothing is never right here."
                          % (hub_composite, stanzas))
 
+    # Finding every subtrack and then resolving none of them to a file is the same
+    # silent failure one step further in: the manifest and the stanzas are describing
+    # different builds. Copying nothing is still never right here.
+    if copied == 0:
+        raise SystemExit("ERROR: %d subtracks of %s found in %s, but not one of their "
+                         "source files could be resolved from %s. Do the stanzas and the "
+                         "manifest come from the same build?"
+                         % (total, hub_composite, stanzas, manifest))
+
+    # Missing metadata is fatal, the same way it is in makeSingleCellSignalsPeaksRa.py.
+    # Skipping it quietly leaves the bed dir advertising the previous build's facets
+    # against this build's data files, which is the mismatch nobody would go looking for.
     meta_src = os.path.join(build, "meta", "%s.metadata.tsv" % asm)
     meta_dst = os.path.join(beddir, "%s_metadata.tsv" % TRACK)
-    if not args.dry_run and os.path.exists(meta_src):
+    if not os.path.isfile(meta_src):
+        raise SystemExit("ERROR: no facet metadata at %s, so %s cannot be refreshed. The "
+                         "track's metaDataUrl would keep pointing at the previous build's "
+                         "facets." % (meta_src, meta_dst))
+    if not args.dry_run:
         os.makedirs(beddir, exist_ok=True)
-        shutil.copy2(meta_src, meta_dst)
+        copy_atomic(meta_src, meta_dst)
     print("assembly=%s composite=%s: subtracks=%d copied=%d missing=%d  ~%.1f GB%s"
           % (asm, hub_composite, total, copied, missing, nbytes / 1e9,
              "  (dry-run)" if args.dry_run else "  -> " + beddir))
