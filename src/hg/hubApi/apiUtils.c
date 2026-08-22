@@ -20,6 +20,7 @@ void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
 /* this is the first time any output to stdout has taken place for
  * json output, therefore, start with the appropriate header.
  */
+puts("X-Content-Type-Options: nosniff");
 puts("Content-Type:application/json");
 /* potentially with an error code return in the header */
 if (errorCode)
@@ -842,6 +843,7 @@ dyStringPrintf(textOutput, "%s\n", lineOut);
 void textFinishOutput()
 /* all done with text output, print it all out */
 {
+puts("X-Content-Type-Options: nosniff");
 puts("Content-Type:text/plain\n");
 printf("%s", dyStringCannibalize(&textOutput));
 }

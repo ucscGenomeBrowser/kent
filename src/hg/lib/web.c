@@ -1059,7 +1059,7 @@ if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
-*retDb = asmAliasFind(*retDb);
+*retDb = asmAliasFindUnlessGenArk(*retDb);
 if (*retDb && hDbExists(*retDb))
     {
     *retGenome = hGenome(*retDb);
@@ -1081,7 +1081,7 @@ else if (*retClade && gotClade)
 else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
-    *retDb = asmAliasFind(*retDb);
+    *retDb = asmAliasFindUnlessGenArk(*retDb);
     *retGenome = cartOptionalString(cart, orgCgiName);
     *retClade = cartOptionalString(cart, cladeCgiName);
     /* If there was a db found in the session that determines everything. */

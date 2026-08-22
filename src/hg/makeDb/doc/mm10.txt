@@ -20101,4 +20101,44 @@ cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
 # every non-coordinate field (name, score, strand, name2, expCount, expScores) is
 # byte-identical.
 
+# 2026-08-21 (Lou, QA #37001): sentence-case the tissue names and the facet
+# column titles, so the barChart facet filter reads "Tissue / Spleen" rather than
+# "tissue / spleen" and the bigWig matrix reads "Spleen". Only the first character
+# is upper-cased, so "skeletal muscle tissue" becomes "Skeletal muscle tissue" and
+# not Title Case. Touches the label column of both files (they must stay identical
+# to each other), the tissue column of the .facets, and the tissue/timepoint names
+# in the .facets header row. Timepoint values, colours and row order are untouched,
+# and row order matters because the bigBed expScores are positional.
+#
+# The count and color column names are deliberately left lower-case: hgTracks
+# matches them by exact string. barChartUi.c requires a field literally named
+# "count" to load the .facets at all, and facetedTable.c keys its merge logic on
+# "count", "color" and "val". Renaming those breaks the track.
+#
+# Renaming the faceted columns means trackDb has to match, since facets resolve by
+# column name. The stanzas now read: barChartFacets Tissue,Timepoint
+#
+# Run this LAST. The reorder and colour snippets above group on the lower-case
+# tissue strings, so a refetch has to replay curl -> reorder -> colour -> case.
+
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/sentenceCaseTissues.sh \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_M4.facets \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_M4.categories \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_M21.facets \
+    /hive/data/outside/woldlab/mouseDevTimecourse/mm10/mouse_development_M21.categories
+
+# generateBigwigTrackDb.py now emits sentence-cased subGroup2 labels, and keys its
+# colour lookup on the lower-cased tissue so it still matches the biosample TSV,
+# which supplies the name in lower case. The two HTML colour legends were
+# capitalised to match. Regenerate the composite afterwards:
+
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+~/kent/src/hg/makeDb/scripts/mouseDevTimecourse/generateBigwigTrackDb.py \
+  > developmentTimecourseSignalMm10.ra
+
+# Also set priority 1-4 on the four bigBarChart subtracks so the default-visible
+# M21 TPM sorts first, and priority 5 on the signal composite. The composite needs
+# an explicit value: without one it inherits the superTrack's 0.6 and sorts ahead
+# of everything else.
+
 ##############################################################################

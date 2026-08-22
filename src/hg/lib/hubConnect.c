@@ -1505,19 +1505,19 @@ cartRemove(cart, "assumesHub");
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
-char *dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
+char *dbSpec = asmAliasFindUnlessGenArk(cartOptionalString(cart, "db"));
 char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
     lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 
 char *newDatabase = checkForNew( cart);
-newDatabase = asmAliasFind(newDatabase);
+newDatabase = asmAliasFindUnlessGenArk(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 
 portHubStatus(cart);
 
 // portHubStatus may have rewritten db to point at a remapped assembly hub id
-dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
+dbSpec = asmAliasFindUnlessGenArk(cartOptionalString(cart, "db"));
 
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart, dbSpec);
 

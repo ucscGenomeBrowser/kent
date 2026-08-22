@@ -56,9 +56,11 @@ struct vcfGenotype
 /* A single component of the optional GENOTYPE column. */
     {
     char *id;			// Name of individual/sample (pointer to vcfFile genotypeIds) or .
-    char hapIxA;		// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
-				// *or* if negative, missing data
-    char hapIxB;		// Index of other haplotype's allele, or if negative, missing data
+    signed char hapIxA;		// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
+				// *or* if negative, missing data.  Explicitly signed: plain char is
+				// unsigned on some architectures, and the missing-data value has to
+				// stay negative there too.
+    signed char hapIxB;		// Index of other haplotype's allele, or if negative, missing data
     bool isPhased;		// True if haplotypes are phased
     bool isHaploid;		// True if there is only one haplotype (e.g. chrY)
     int infoCount;		// Number of components named in FORMAT column
