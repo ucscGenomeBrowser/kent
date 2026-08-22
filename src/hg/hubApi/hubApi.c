@@ -1161,6 +1161,7 @@ apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many request
 
 static void sendHogMessage(char *hogHost)
 {
+puts("X-Content-Type-Options: nosniff");
 puts("Content-Type:text/html");
 hPrintf("Status: %d %s\n", err429, err429Msg);
 puts("Retry-After: 30");
@@ -1670,6 +1671,7 @@ if (isNotEmpty(maxOut))
 static void redirectToHelp()
 /* redirect to the help page */
 {
+puts("X-Content-Type-Options: nosniff");
 puts("Content-Type:text/html");
 hPrintf("Status: %d %s\n", err301, err301Msg);
 hPrintf("Location: /goldenPath/help/api.html\n");
