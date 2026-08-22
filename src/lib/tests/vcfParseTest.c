@@ -20,6 +20,8 @@ errAbort(
   "options:\n"
   "   -headerOnly  print header summary only (version, def counts, sample IDs)\n"
   "                and skip the position-range parse.  seqName/start/end are ignored.\n"
+  "   -genotypes   print the parsed allele index of each genotype, and the allele\n"
+  "                counts tallied from them.\n"
   "\n"
   "fileOrUrl.vcf.gz needs to have been compressed by tabix, and index file\n"
   "fileOrUrl.vcf.gz.tbi must exist.\n"
@@ -28,6 +30,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"headerOnly", OPTION_BOOLEAN},
+   {"genotypes", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -47,6 +50,39 @@ printf("genotypeCount: %d\n", vcff->genotypeCount);
 int i;
 for (i = 0;  i < vcff->genotypeCount && i < 5;  i++)
     printf("genotypeId[%d]: %s\n", i, vcff->genotypeIds[i]);
+vcfFileFree(&vcff);
+}
+
+static void vcfGenotypeTest(char *fileOrUrl, char *seqName, int start, int end)
+/* Dump the allele index that each genotype parsed to, and the allele counts tallied from
+ * those indexes.  An index that the record has no allele for should come out as missing
+ * data (-1). */
+{
+struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100, -1);
+if (vcff == NULL)
+    errAbort("Failed to parse \"%s\" and/or its index file \"%s.tbi\"", fileOrUrl, fileOrUrl);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    {
+    vcfParseGenotypes(rec);
+    printf("%s\t%d\t%s\talleleCount=%d\n", rec->chrom, rec->chromStart, rec->name,
+           rec->alleleCount);
+    int i;
+    for (i = 0;  i < vcff->genotypeCount;  i++)
+        {
+        struct vcfGenotype *gt = &(rec->genotypes[i]);
+        printf("  %s\thapIxA=%d\thapIxB=%d\tisHaploid=%d\tisPhased=%d\n",
+               vcff->genotypeIds[i], gt->hapIxA, gt->hapIxB, gt->isHaploid, gt->isPhased);
+        }
+    int *gtCounts = NULL, *alCounts = NULL, phasedCount = 0, diploidCount = 0;
+    vcfCountGenotypes(rec, &gtCounts, &alCounts, &phasedCount, &diploidCount);
+    printf("  alleleCounts (last is missing data):");
+    for (i = 0;  i <= rec->alleleCount;  i++)
+        printf(" %d", alCounts[i]);
+    printf("\n  phased=%d diploid=%d\n", phasedCount, diploidCount);
+    freeMem(gtCounts);
+    freeMem(alCounts);
+    }
 vcfFileFree(&vcff);
 }
 
@@ -87,6 +123,9 @@ if (optionExists("headerOnly"))
     }
 if (argc != 5)
     usage();
-vcfParseTest(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]));
+if (optionExists("genotypes"))
+    vcfGenotypeTest(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]));
+else
+    vcfParseTest(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]));
 return 0;
 }

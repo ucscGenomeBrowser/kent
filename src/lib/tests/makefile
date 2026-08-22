@@ -314,7 +314,8 @@ ${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
 # vcf:
 vcfTester=${BIN_DIR}/vcfParseTest
 vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes vcfParseOldV3 \
-	vcfHeader1kGNoGenotypes vcfHeader1kGWithGenotypes vcfHeaderOldV3
+	vcfHeader1kGNoGenotypes vcfHeader1kGWithGenotypes vcfHeaderOldV3 \
+	vcfParseBadGenotypeIx
 
 vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2 26790859 194631353 > output/$@.out
@@ -342,6 +343,12 @@ vcfHeader1kGWithGenotypes: ${vcfTester} mkdirs
 
 vcfHeaderOldV3: ${vcfTester} mkdirs
 	${vcfTester} -headerOnly input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz > output/$@.out
+	diff expected/$@.out output/$@.out
+
+# A GT allele index that this record has no allele for must parse as missing data, so that
+# every caller sees either a real allele or missing data.
+vcfParseBadGenotypeIx: ${vcfTester} mkdirs
+	${vcfTester} -genotypes input/badGenotypeIx.vcf.gz chr1 0 10000 > output/$@.out
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}
