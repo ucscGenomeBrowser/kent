@@ -393,6 +393,7 @@ if (sameOk("json", exitType))
 else
     {
 
+    cspWriteResponseHeader();
     puts("Content-Type:text/html");
     printf("Status: %d %s\n", err429, err429Msg);
     if (retryAfterSeconds > 0)

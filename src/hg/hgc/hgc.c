@@ -23306,7 +23306,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
 	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
-    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT nonce='%s'>\n", getNonce());
     printf("location.replace('%s')\n",filename);
     printf("</SCRIPT> <NOSCRIPT> No JavaScript support. "
            "Click <b><a href=\"%s\">continue</a></b> for "

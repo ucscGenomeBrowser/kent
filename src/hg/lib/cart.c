@@ -1693,9 +1693,10 @@ void printCaptcha()
         return;
 
     fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
+    cspWriteResponseHeader();
     puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");
-    puts("<script>");
+    printf("<script nonce='%s'>\n", getNonce());
     printf("function showWidget() { \n"
        "turnstile.render('#myWidget', {\n"
          "sitekey: '%s',\n"
@@ -1802,6 +1803,7 @@ if (token)
         }
     else
         {
+        cspWriteResponseHeader();
         puts("Content-Type: text/html\n");
         puts("<html><body>Internal captcha error: Cloudflare rejected the captcha token. "
                 "Something is not working internally, we are very sorry. You can try reloading the page. "
@@ -2945,6 +2947,7 @@ for (h = httpHeaders; h != NULL; h = h->next)
     {
     printf("%s: %s\n", h->name, (char *)h->val);
     }
+cspWriteResponseHeader();
 }
 
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
