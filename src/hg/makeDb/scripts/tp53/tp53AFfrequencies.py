@@ -184,7 +184,8 @@ def classify_and_build_rows(tx, chrom):
 
     classified = []   # list of dicts with all fields; hg38 coords fixed
     all_records = []  # every gnomAD variant, for the PM2 "present in gnomAD" set
-    stats = dict(total=len(vcf_lines), BA1=0, BS1=0, PM2=0, skipped=0, multi=0)
+    stats = dict(total=len(vcf_lines), BA1=0, BS1=0, PM2=0, skipped=0, multi=0,
+                 nonpass=0)
     for ln in vcf_lines:
         f = ln.split('\t')
         pos = int(f[1])          # 1-based VCF POS
@@ -192,6 +193,14 @@ def classify_and_build_rows(tx, chrom):
         alt = f[4]
         if ',' in alt:           # multi-allelic (none expected in v4.1 sites VCF)
             stats['multi'] += 1
+            continue
+        # Skip non-PASS records (mostly AC0 = observed in nobody after QC, plus
+        # AS_VQSR / InbreedingCoeff filter failures). gnomAD frequency use is
+        # PASS-only; more importantly a non-PASS variant must not enter the
+        # present-set, or it would wrongly count as "present in gnomAD" and block
+        # the absent -> PM2_Supporting rule in the Provisional track.
+        if f[6] not in ('PASS', '.'):
+            stats['nonpass'] += 1
             continue
         info = parse_info(f[7])
         c_start = pos - 1
@@ -220,7 +229,7 @@ def classify_and_build_rows(tx, chrom):
             'code': code,
         })
     print("  classified: BA1={BA1} BS1={BS1} PM2={PM2} skipped={skipped} "
-          "multiallelic_skipped={multi}".format(**stats))
+          "multiallelic_skipped={multi} nonpass_skipped={nonpass}".format(**stats))
     return classified, all_records
 
 

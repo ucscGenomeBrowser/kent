@@ -11,12 +11,13 @@ html mouseDevTimecourse
 
     track developmentTimecourseM21mm39TPM
     parent mouseDevTimecourse
+    priority 1
     type bigBarChart
     shortLabel Timecourse M21 TPM
     longLabel ENCODE mouse development time course GENCODE M21 liftover TPM
     visibility pack
     barChartUnit TPM
-    barChartFacets tissue,timepoint
+    barChartFacets Tissue,Timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
     barChartMetric sample
@@ -32,12 +33,13 @@ html mouseDevTimecourse
 
     track developmentTimecourseM21mm39FPKM
     parent mouseDevTimecourse
+    priority 2
     type bigBarChart
     shortLabel Timecourse M21 FPKM
     longLabel ENCODE mouse development time course GENCODE M21 liftover FPKM
     visibility hide
     barChartUnit FPKM
-    barChartFacets tissue,timepoint
+    barChartFacets Tissue,Timepoint
     barChartStretchToItem on
     maxWindowToDraw 10000000
     barChartMetric sample

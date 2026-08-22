@@ -55,8 +55,8 @@ sub asmIdToPath($) {
 # Look up NCBI's own annotation provider/name/date for an accession from
 # the 'genark' database's assemblySummary{Genbank,Refseq} table, falling
 # back to the ...Historical variant when the accession isn't in the
-# current one (a superseded/suppressed assembly).  Returns an empty list
-# if found in neither.
+# current one (a superseded/suppressed assembly).  Returns ("", "", "")
+# if found in neither, so callers always get three defined strings.
 sub fetchAnnotationInfo($$) {
   my ($asmType, $accession) = @_;
   my $table = "assemblySummary" . ucfirst($asmType);
@@ -70,7 +70,7 @@ sub fetchAnnotationInfo($$) {
     $date = "" if ( ! defined $date || $date eq "NULL" );
     return ($provider, $name, $date) if ($provider ne "" || $name ne "" || $date ne "");
   }
-  return ();
+  return ("", "", "");
 } # fetchAnnotationInfo
 
 # Build the 'ncbiGene' track description HTML body.  Used both by
@@ -108,6 +108,10 @@ sub ncbiGeneDescription($$$$$;$) {
   my $dataVersion = sprintf("%04d-%02d-%02d", $year+1900, $mon+1, $mday);
 
   my $totalBases = asmSize($chromSizes);
+  if ( ! $totalBases ) {
+    printf STDERR "ERROR: asmSize returned no total from %s\n", $chromSizes;
+    exit 255;
+  }
   my $geneStats = `cat $statsPath | awk '{printf "%d\\n", \$2}' | xargs echo`;
   chomp $geneStats;
   my ($itemCount, $basesCovered) = split('\s+', $geneStats);

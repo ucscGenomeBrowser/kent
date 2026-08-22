@@ -1,5 +1,6 @@
     track developmentTimecourseSignalMm10
     parent mouseDevTimecourse
+    priority 5
     compositeTrack on
     type bigWig
     shortLabel Timecourse Signal
@@ -8,8 +9,8 @@
     group regulation
     html developmentTimecourseSignalMm10
     subGroup1 view Views unique=Unique_reads all=All_reads
-    subGroup2 tissue Tissue t01_thymus=thymus t02_spleen=spleen t03_liver=liver t04_heart=heart t05_skeletal_muscle_tissue=skeletal_muscle_tissue t06_urinary_bladder=urinary_bladder t07_adrenal_gland=adrenal_gland t08_kidney=kidney t09_lung=lung t10_stomach=stomach t11_intestine=intestine t12_limb=limb t13_embryonic_facial_prominence=embryonic_facial_prominence t14_forebrain=forebrain t15_midbrain=midbrain t16_hindbrain=hindbrain t17_neural_tube=neural_tube
-    subGroup3 age Age e10_5=e10.5 e11_5=e11.5 e12_5=e12.5 e13_5=e13.5 e14_5=e14.5 e15_5=e15.5 e16_5=e16.5 P0=P0
+    subGroup2 tissue Tissue t01_thymus=Thymus t02_spleen=Spleen t03_liver=Liver t04_heart=Heart t05_skeletal_muscle_tissue=Skeletal_muscle_tissue t06_urinary_bladder=Urinary_bladder t07_adrenal_gland=Adrenal_gland t08_kidney=Kidney t09_lung=Lung t10_stomach=Stomach t11_intestine=Intestine t12_limb=Limb t13_embryonic_facial_prominence=Embryonic_facial_prominence t14_forebrain=Forebrain t15_midbrain=Midbrain t16_hindbrain=Hindbrain t17_neural_tube=Neural_tube
+    subGroup3 age Timepoint e10_5=e10.5 e11_5=e11.5 e12_5=e12.5 e13_5=e13.5 e14_5=e14.5 e15_5=e15.5 e16_5=e16.5 P0=P0
     subGroup4 rep Replicate rep1=Rep_1 rep2=Rep_2
     dimensions dimX=age dimY=tissue dimA=rep
     dimensionAchecked rep1
@@ -1440,7 +1441,7 @@
         maxHeightPixels 100:32:8
 
             track developmentTimecourseSignalMm10_ENCFF253TFL
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e13_5 rep=rep1
             type bigWig
             shortLabel Mbrain e13.5 R1 A
@@ -1458,7 +1459,7 @@
             color 63,112,255
 
             track developmentTimecourseSignalMm10_ENCFF862HBZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t08_kidney age=e14_5 rep=rep1
             type bigWig
             shortLabel Kidney e14.5 R1 A
@@ -1485,7 +1486,7 @@
             color 106,40,184
 
             track developmentTimecourseSignalMm10_ENCFF102BOV
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e14_5 rep=rep1
             type bigWig
             shortLabel Fbrain e14.5 R1 A
@@ -1494,7 +1495,7 @@
             color 106,40,184
 
             track developmentTimecourseSignalMm10_ENCFF807KVS
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e16_5 rep=rep1
             type bigWig
             shortLabel Fbrain e16.5 R1 A
@@ -1521,7 +1522,7 @@
             color 200,180,0
 
             track developmentTimecourseSignalMm10_ENCFF440QNM
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t01_thymus age=P0 rep=rep1
             type bigWig
             shortLabel Thymus P0 R1 A
@@ -1539,7 +1540,7 @@
             color 22,55,184
 
             track developmentTimecourseSignalMm10_ENCFF846UFR
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e15_5 rep=rep1
             type bigWig
             shortLabel Mbrain e15.5 R1 A
@@ -1548,7 +1549,7 @@
             color 22,55,184
 
             track developmentTimecourseSignalMm10_ENCFF718HCF
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e12_5 rep=rep1
             type bigWig
             shortLabel Face e12.5 R1 A
@@ -1566,7 +1567,7 @@
             color 222,79,126
 
             track developmentTimecourseSignalMm10_ENCFF164VFH
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e15_5 rep=rep1
             type bigWig
             shortLabel Fbrain e15.5 R1 A
@@ -1584,7 +1585,7 @@
             color 75,26,143
 
             track developmentTimecourseSignalMm10_ENCFF647LAW
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=P0 rep=rep1
             type bigWig
             shortLabel Hbrain P0 R1 A
@@ -1611,7 +1612,7 @@
             color 160,133,108
 
             track developmentTimecourseSignalMm10_ENCFF883YPA
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t02_spleen age=P0 rep=rep1
             type bigWig
             shortLabel Spleen P0 R1 A
@@ -1629,7 +1630,7 @@
             color 181,181,181
 
             track developmentTimecourseSignalMm10_ENCFF080YMU
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e13_5 rep=rep1
             type bigWig
             shortLabel Liver e13.5 R1 A
@@ -1638,7 +1639,7 @@
             color 181,181,181
 
             track developmentTimecourseSignalMm10_ENCFF074GTQ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e16_5 rep=rep1
             type bigWig
             shortLabel Heart e16.5 R1 A
@@ -1656,7 +1657,7 @@
             color 143,21,21
 
             track developmentTimecourseSignalMm10_ENCFF940VJM
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e13_5 rep=rep1
             type bigWig
             shortLabel Heart e13.5 R1 A
@@ -1683,7 +1684,7 @@
             color 224,224,224
 
             track developmentTimecourseSignalMm10_ENCFF069WGY
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e11_5 rep=rep1
             type bigWig
             shortLabel Liver e11.5 R1 A
@@ -1692,7 +1693,7 @@
             color 224,224,224
 
             track developmentTimecourseSignalMm10_ENCFF543TJZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e11_5 rep=rep1
             type bigWig
             shortLabel Fbrain e11.5 R1 A
@@ -1710,7 +1711,7 @@
             color 207,161,242
 
             track developmentTimecourseSignalMm10_ENCFF599RDH
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e14_5 rep=rep1
             type bigWig
             shortLabel Heart e14.5 R1 A
@@ -1737,7 +1738,7 @@
             color 159,186,255
 
             track developmentTimecourseSignalMm10_ENCFF519QXF
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e11_5 rep=rep1
             type bigWig
             shortLabel Mbrain e11.5 R1 A
@@ -1755,7 +1756,7 @@
             color 224,74,184
 
             track developmentTimecourseSignalMm10_ENCFF272JBX
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e13_5 rep=rep1
             type bigWig
             shortLabel Limb e13.5 R1 A
@@ -1764,7 +1765,7 @@
             color 224,74,184
 
             track developmentTimecourseSignalMm10_ENCFF548KDZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t10_stomach age=P0 rep=rep1
             type bigWig
             shortLabel Stomch P0 R1 A
@@ -1791,7 +1792,7 @@
             color 185,45,143
 
             track developmentTimecourseSignalMm10_ENCFF743KAL
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e14_5 rep=rep1
             type bigWig
             shortLabel Limb e14.5 R1 A
@@ -1809,7 +1810,7 @@
             color 191,174,47
 
             track developmentTimecourseSignalMm10_ENCFF304BNE
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t09_lung age=P0 rep=rep1
             type bigWig
             shortLabel Lung P0 R1 A
@@ -1827,7 +1828,7 @@
             color 126,236,192
 
             track developmentTimecourseSignalMm10_ENCFF013UGQ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t11_intestine age=e15_5 rep=rep1
             type bigWig
             shortLabel Intest e15.5 R1 A
@@ -1845,7 +1846,7 @@
             color 183,31,31
 
             track developmentTimecourseSignalMm10_ENCFF666DGB
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e15_5 rep=rep1
             type bigWig
             shortLabel Heart e15.5 R1 A
@@ -1854,7 +1855,7 @@
             color 183,31,31
 
             track developmentTimecourseSignalMm10_ENCFF289OTC
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e10_5 rep=rep1
             type bigWig
             shortLabel Mbrain e10.5 R1 A
@@ -1872,7 +1873,7 @@
             color 198,216,255
 
             track developmentTimecourseSignalMm10_ENCFF559LTK
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e11_5 rep=rep1
             type bigWig
             shortLabel Face e11.5 R1 A
@@ -1890,7 +1891,7 @@
             color 233,121,160
 
             track developmentTimecourseSignalMm10_ENCFF876OJZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=P0 rep=rep1
             type bigWig
             shortLabel Ntube P0 R1 A
@@ -1917,7 +1918,7 @@
             color 26,69,127
 
             track developmentTimecourseSignalMm10_ENCFF882RHO
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e15_5 rep=rep1
             type bigWig
             shortLabel Hbrain e15.5 R1 A
@@ -1926,7 +1927,7 @@
             color 26,69,127
 
             track developmentTimecourseSignalMm10_ENCFF547ZDG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e12_5 rep=rep1
             type bigWig
             shortLabel Heart e12.5 R1 A
@@ -1953,7 +1954,7 @@
             color 143,63,217
 
             track developmentTimecourseSignalMm10_ENCFF048MBX
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e13_5 rep=rep1
             type bigWig
             shortLabel Fbrain e13.5 R1 A
@@ -1971,7 +1972,7 @@
             color 68,196,148
 
             track developmentTimecourseSignalMm10_ENCFF644LLJ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t11_intestine age=e16_5 rep=rep1
             type bigWig
             shortLabel Intest e16.5 R1 A
@@ -1989,7 +1990,7 @@
             color 215,247,166
 
             track developmentTimecourseSignalMm10_ENCFF822OVR
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t10_stomach age=e14_5 rep=rep1
             type bigWig
             shortLabel Stomch e14.5 R1 A
@@ -1998,7 +1999,7 @@
             color 215,247,166
 
             track developmentTimecourseSignalMm10_ENCFF693KKG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t09_lung age=e14_5 rep=rep1
             type bigWig
             shortLabel Lung e14.5 R1 A
@@ -2016,7 +2017,7 @@
             color 255,245,154
 
             track developmentTimecourseSignalMm10_ENCFF096PLD
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e11_5 rep=rep1
             type bigWig
             shortLabel Limb e11.5 R1 A
@@ -2034,7 +2035,7 @@
             color 241,156,217
 
             track developmentTimecourseSignalMm10_ENCFF282FUC
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=e15_5 rep=rep1
             type bigWig
             shortLabel Ntube e15.5 R1 A
@@ -2061,7 +2062,7 @@
             color 40,95,163
 
             track developmentTimecourseSignalMm10_ENCFF023UJR
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e14_5 rep=rep1
             type bigWig
             shortLabel Hbrain e14.5 R1 A
@@ -2070,7 +2071,7 @@
             color 40,95,163
 
             track developmentTimecourseSignalMm10_ENCFF285BTC
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t11_intestine age=P0 rep=rep1
             type bigWig
             shortLabel Intest P0 R1 A
@@ -2097,7 +2098,7 @@
             color 159,31,77
 
             track developmentTimecourseSignalMm10_ENCFF441PEY
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e14_5 rep=rep1
             type bigWig
             shortLabel Face e14.5 R1 A
@@ -2106,7 +2107,7 @@
             color 159,31,77
 
             track developmentTimecourseSignalMm10_ENCFF328DQB
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e12_5 rep=rep1
             type bigWig
             shortLabel Liver e12.5 R1 A
@@ -2124,7 +2125,7 @@
             color 207,207,207
 
             track developmentTimecourseSignalMm10_ENCFF475SEG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e16_5 rep=rep1
             type bigWig
             shortLabel Mbrain e16.5 R1 A
@@ -2151,7 +2152,7 @@
             color 189,240,111
 
             track developmentTimecourseSignalMm10_ENCFF806BBN
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t10_stomach age=e15_5 rep=rep1
             type bigWig
             shortLabel Stomch e15.5 R1 A
@@ -2160,7 +2161,7 @@
             color 189,240,111
 
             track developmentTimecourseSignalMm10_ENCFF574UXU
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e10_5 rep=rep1
             type bigWig
             shortLabel Limb e10.5 R1 A
@@ -2178,7 +2179,7 @@
             color 246,195,232
 
             track developmentTimecourseSignalMm10_ENCFF021MEX
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t11_intestine age=e14_5 rep=rep1
             type bigWig
             shortLabel Intest e14.5 R1 A
@@ -2196,7 +2197,7 @@
             color 182,247,218
 
             track developmentTimecourseSignalMm10_ENCFF739MEH
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=P0 rep=rep1
             type bigWig
             shortLabel Mbrain P0 R1 A
@@ -2214,7 +2215,7 @@
             color 8,24,79
 
             track developmentTimecourseSignalMm10_ENCFF890NUP
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t09_lung age=e15_5 rep=rep1
             type bigWig
             shortLabel Lung e15.5 R1 A
@@ -2232,7 +2233,7 @@
             color 255,240,102
 
             track developmentTimecourseSignalMm10_ENCFF552UZS
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e10_5 rep=rep1
             type bigWig
             shortLabel Fbrain e10.5 R1 A
@@ -2250,7 +2251,7 @@
             color 225,198,247
 
             track developmentTimecourseSignalMm10_ENCFF308CLM
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e11_5 rep=rep1
             type bigWig
             shortLabel Hbrain e11.5 R1 A
@@ -2277,7 +2278,7 @@
             color 214,251,255
 
             track developmentTimecourseSignalMm10_ENCFF819EFP
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=e11_5 rep=rep1
             type bigWig
             shortLabel Ntube e11.5 R1 A
@@ -2286,7 +2287,7 @@
             color 214,251,255
 
             track developmentTimecourseSignalMm10_ENCFF079PEJ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e12_5 rep=rep1
             type bigWig
             shortLabel Hbrain e12.5 R1 A
@@ -2304,7 +2305,7 @@
             color 106,156,217
 
             track developmentTimecourseSignalMm10_ENCFF858DKY
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=P0 rep=rep1
             type bigWig
             shortLabel Liver P0 R1 A
@@ -2331,7 +2332,7 @@
             color 209,122,44
 
             track developmentTimecourseSignalMm10_ENCFF486AAU
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t08_kidney age=e16_5 rep=rep1
             type bigWig
             shortLabel Kidney e16.5 R1 A
@@ -2349,7 +2350,7 @@
             color 0,0,0
 
             track developmentTimecourseSignalMm10_ENCFF747PDO
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t07_adrenal_gland age=P0 rep=rep1
             type bigWig
             shortLabel Adrenal P0 R1 A
@@ -2367,7 +2368,7 @@
             color 247,198,198
 
             track developmentTimecourseSignalMm10_ENCFF548IJA
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e10_5 rep=rep1
             type bigWig
             shortLabel Heart e10.5 R1 A
@@ -2385,7 +2386,7 @@
             color 166,240,255
 
             track developmentTimecourseSignalMm10_ENCFF261JDF
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=e12_5 rep=rep1
             type bigWig
             shortLabel Ntube e12.5 R1 A
@@ -2394,7 +2395,7 @@
             color 166,240,255
 
             track developmentTimecourseSignalMm10_ENCFF849LAH
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e16_5 rep=rep1
             type bigWig
             shortLabel Hbrain e16.5 R1 A
@@ -2412,7 +2413,7 @@
             color 15,47,95
 
             track developmentTimecourseSignalMm10_ENCFF771UPG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e14_5 rep=rep1
             type bigWig
             shortLabel Mbrain e14.5 R1 A
@@ -2430,7 +2431,7 @@
             color 31,77,230
 
             track developmentTimecourseSignalMm10_ENCFF985OSN
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t15_midbrain age=e12_5 rep=rep1
             type bigWig
             shortLabel Mbrain e12.5 R1 A
@@ -2448,7 +2449,7 @@
             color 111,150,255
 
             track developmentTimecourseSignalMm10_ENCFF856JFG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=e11_5 rep=rep1
             type bigWig
             shortLabel Heart e11.5 R1 A
@@ -2475,7 +2476,7 @@
             color 111,15,15
 
             track developmentTimecourseSignalMm10_ENCFF033ZJO
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t04_heart age=P0 rep=rep1
             type bigWig
             shortLabel Heart P0 R1 A
@@ -2484,7 +2485,7 @@
             color 111,15,15
 
             track developmentTimecourseSignalMm10_ENCFF519VLD
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t09_lung age=e16_5 rep=rep1
             type bigWig
             shortLabel Lung e16.5 R1 A
@@ -2502,7 +2503,7 @@
             color 230,216,74
 
             track developmentTimecourseSignalMm10_ENCFF279ZFT
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e10_5 rep=rep1
             type bigWig
             shortLabel Face e10.5 R1 A
@@ -2520,7 +2521,7 @@
             color 242,179,200
 
             track developmentTimecourseSignalMm10_ENCFF624HGP
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e12_5 rep=rep1
             type bigWig
             shortLabel Limb e12.5 R1 A
@@ -2538,7 +2539,7 @@
             color 234,115,201
 
             track developmentTimecourseSignalMm10_ENCFF394VMB
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t08_kidney age=e15_5 rep=rep1
             type bigWig
             shortLabel Kidney e15.5 R1 A
@@ -2565,7 +2566,7 @@
             color 169,92,27
 
             track developmentTimecourseSignalMm10_ENCFF190IXA
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t08_kidney age=P0 rep=rep1
             type bigWig
             shortLabel Kidney P0 R1 A
@@ -2574,7 +2575,7 @@
             color 169,92,27
 
             track developmentTimecourseSignalMm10_ENCFF105SAT
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t05_skeletal_muscle_tissue age=P0 rep=rep1
             type bigWig
             shortLabel Muscle P0 R1 A
@@ -2592,7 +2593,7 @@
             color 255,107,107
 
             track developmentTimecourseSignalMm10_ENCFF765WES
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=e12_5 rep=rep1
             type bigWig
             shortLabel Fbrain e12.5 R1 A
@@ -2619,7 +2620,7 @@
             color 127,31,99
 
             track developmentTimecourseSignalMm10_ENCFF275KGZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t12_limb age=e15_5 rep=rep1
             type bigWig
             shortLabel Limb e15.5 R1 A
@@ -2637,7 +2638,7 @@
             color 255,140,0
 
             track developmentTimecourseSignalMm10_ENCFF447UBV
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t06_urinary_bladder age=P0 rep=rep1
             type bigWig
             shortLabel Bladder P0 R1 A
@@ -2655,7 +2656,7 @@
             color 127,127,127
 
             track developmentTimecourseSignalMm10_ENCFF098GHM
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e15_5 rep=rep1
             type bigWig
             shortLabel Liver e15.5 R1 A
@@ -2673,7 +2674,7 @@
             color 34,9,63
 
             track developmentTimecourseSignalMm10_ENCFF075RAD
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t14_forebrain age=P0 rep=rep1
             type bigWig
             shortLabel Fbrain P0 R1 A
@@ -2691,7 +2692,7 @@
             color 63,191,230
 
             track developmentTimecourseSignalMm10_ENCFF754RKZ
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=e14_5 rep=rep1
             type bigWig
             shortLabel Ntube e14.5 R1 A
@@ -2709,7 +2710,7 @@
             color 111,20,53
 
             track developmentTimecourseSignalMm10_ENCFF740AIY
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e15_5 rep=rep1
             type bigWig
             shortLabel Face e15.5 R1 A
@@ -2718,7 +2719,7 @@
             color 111,20,53
 
             track developmentTimecourseSignalMm10_ENCFF102ZOP
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t17_neural_tube age=e13_5 rep=rep1
             type bigWig
             shortLabel Ntube e13.5 R1 A
@@ -2745,7 +2746,7 @@
             color 102,102,102
 
             track developmentTimecourseSignalMm10_ENCFF164DKB
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e16_5 rep=rep1
             type bigWig
             shortLabel Liver e16.5 R1 A
@@ -2754,7 +2755,7 @@
             color 102,102,102
 
             track developmentTimecourseSignalMm10_ENCFF373DMP
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t13_embryonic_facial_prominence age=e13_5 rep=rep1
             type bigWig
             shortLabel Face e13.5 R1 A
@@ -2781,7 +2782,7 @@
             color 143,205,60
 
             track developmentTimecourseSignalMm10_ENCFF024UJG
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t10_stomach age=e16_5 rep=rep1
             type bigWig
             shortLabel Stomch e16.5 R1 A
@@ -2790,7 +2791,7 @@
             color 143,205,60
 
             track developmentTimecourseSignalMm10_ENCFF531LYD
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e13_5 rep=rep1
             type bigWig
             shortLabel Hbrain e13.5 R1 A
@@ -2808,7 +2809,7 @@
             color 63,126,196
 
             track developmentTimecourseSignalMm10_ENCFF105KWI
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t03_liver age=e14_5 rep=rep1
             type bigWig
             shortLabel Liver e14.5 R1 A
@@ -2826,7 +2827,7 @@
             color 154,154,154
 
             track developmentTimecourseSignalMm10_ENCFF124BQK
-            parent developmentTimecourseSignalMm10ViewAll off
+            parent developmentTimecourseSignalMm10ViewAll on
             subGroups view=all tissue=t16_hindbrain age=e10_5 rep=rep1
             type bigWig
             shortLabel Hbrain e10.5 R1 A

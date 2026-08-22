@@ -33,7 +33,7 @@ int mailViaPipeBounce(char *toAddress, char *theSubject, char *theBody, char *fr
 /* Send mail via pipeline to sendmail, use -f bounce address to sendmail. */
 {
 char bounceEmail[2048];
-safef(bounceEmail, sizeof(bounceEmail), "%s%s%s@%s%s.e%s", "hcl", "aws", "on", "ucs", "c", "du");
+safef(bounceEmail, sizeof(bounceEmail), "%s%s@%s%s.e%s", "gba", "uto", "ucs", "c", "du");
 char *cmd1[] = {"/usr/sbin/sendmail", "-t", "-f", bounceEmail, "-oi", NULL};
 struct pipeline *dataPipe = pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
                                           "/dev/null", NULL, 0);

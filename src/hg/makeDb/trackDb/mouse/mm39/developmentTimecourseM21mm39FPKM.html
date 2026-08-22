@@ -39,16 +39,23 @@ a bigBarChart bigBed file.</p>
 The mm39 annotations were lifted from mm10. Of the 55,536 genes in the mm10
 GENCODE M21 data, 55,447 lifted successfully and 89 did not. Of those 89, 42
 are on chr14 and 40 of those fall within chr14:3.2-26.3 Mb; about half carry
-Gm or Rik names, indicating predicted rather than curated genes. One gene,
-Il11ra2, appears twice because a copy on an unplaced mm10 scaffold lifts to
-the same mm39 position as the primary-chromosome copy.</p>
+Gm or Rik names, indicating predicted rather than curated genes. The
+gene Il11ra2 appears three times. Two of those copies sit at the same
+position, chr4:42,656,355-42,661,893, because a copy that is on an unplaced
+scaffold in mm10 lifted onto the same place as the copy on the main
+chromosome. Both carry the same expression values, and clicking either one
+opens the same details page. The third copy is about 497 kb away, at
+chr4:42,159,195-42,164,733.</p>
 
 <p>
-The steps and <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mouseDevTimecourse"
+The steps and <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mouseDevTimecourse"
 target="_blank">scripts</a> used to build this track are documented in our
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm39/mouseDevTimecourse.txt"
+<a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm39/mouseDevTimecourse.txt"
 target="_blank">makedoc</a>, and the track configuration is in
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/mouse/mm39/mouseDevTimecourse.ra"
+<a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/mouse/mm39/mouseDevTimecourse.ra"
 target="_blank">mouseDevTimecourse.ra</a>.</p>
 
 <h2>Data Access</h2>

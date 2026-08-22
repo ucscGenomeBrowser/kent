@@ -1,5 +1,13 @@
-TH {background-color: #9999cc}
-BODY {background: http://genome-test.soe.ucsc.edu/images/floret.jpg;  color: black}
+/* :not(:empty) so the empty <TH HEIGHT=10> spacer cells that hgTracks emits for
+ * layout do not turn into visible colored boxes. */
+TH:not(:empty) {background-color: #9999cc}
+/* Two things this rule has to work around, both from HGStyle.css.  body.cgi rather
+ * than a bare BODY, because HGStyle's body.cgi and body.hgTracks rules outrank an
+ * element selector.  And the background shorthand rather than background-image,
+ * because body.hgTracks sets repeat-x / left bottom / fixed, and those longhands
+ * survive a background-image rule, leaving a band across the bottom of the page
+ * instead of a tiled background. */
+body.cgi {background: url("/images/floret.jpg") repeat scroll left top; color: black}
 A:link {color: #19197; text-decoration: none}
 A:active {color #FE0000}
 A:visited {color: #551A8A}
