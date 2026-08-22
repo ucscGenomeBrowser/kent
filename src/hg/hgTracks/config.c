@@ -23,10 +23,28 @@
 #include "trackHub.h"
 #include "versionInfo.h"
 
+static void themeMenuEntry(char *cfgName, char **retLabel, char **retValue)
+/* Split an hg.conf browser.theme.* key into the menu label and the option value.
+ * The value is everything after "browser.theme.", which is what setThemeFromCart
+ * looks the theme up by, so it must survive the round trip through the form
+ * untouched.  The label is only the part after the last '.', with underscores as
+ * spaces, so a sort prefix like browser.theme.2.Sans_Serif shows as "Sans Serif".
+ * The first letter is upper cased, which the plain hDropList used to do for us. */
+{
+char *value = cloneString(cfgName + strlen("browser.theme."));
+char *label = cloneString(findTail(value, '.'));
+replaceChar(label, '_', ' ');
+label[0] = toupper((unsigned char)label[0]);
+*retLabel = label;
+*retValue = value;
+}
+
 static void themeDropDown(struct cart* cart)
-/* Create drop down for UI themes. 
- * specfied in hg.conf like this
- * browser.theme.modern=background.png,HGStyle
+/* Create drop down for UI themes.
+ * specified in hg.conf like this
+ * browser.theme.modern=theme-modern.css
+ * optionally with a sort prefix
+ * browser.theme.3.Sans_Serif=theme-modern.css
  * */
 {
 struct slName* themes = cfgNamesWithPrefix("browser.theme.");
@@ -37,24 +55,18 @@ slNameSort(&themes);
 hPrintf("<TR><TD>website style:");
 hPrintf("<TD style=\"text-align: right\">");
 
-// create labels for drop down box by removing prefix from hg.conf keys
 char *labels[50];
+char *values[50];
 struct slName* el;
 int i = 0;
-el = themes;
 for (el = themes; el != NULL && i<50; el = el->next)
     {
-    char* name = el->name;
-    name = chopPrefix(name); // chop off first three words
-    name = chopPrefix(name);
-    name = chopPrefix(name);
-    replaceChar(name, '_', ' ');
-    labels[i] = name;
+    themeMenuEntry(el->name, &labels[i], &values[i]);
     i++;
     }
 
 char* currentTheme = cartOptionalString(cart, "theme"); 
-hDropList("theme", labels, i, currentTheme);
+cgiMakeDropListWithVals("theme", labels, values, i, currentTheme);
 slFreeList(themes);
 hPrintf("</TD>");
 }
