@@ -268,9 +268,11 @@ else if (emailVerified(TRUE)) /* do print message when not verified */
 void outputJavaScript()
 /* java script functions used in the create item form */
 {
-hPrintf("<SCRIPT TYPE=\"text/javascript\">\n");
-
-hPrintf("function updateColorSelectBox() {\n"
+// Emitted through jsInlineF so it lands in the nonce-tagged script block.  A
+// hand-written <SCRIPT> tag here never ran: our CSP puts a nonce in script-src,
+// which makes browsers ignore 'unsafe-inline', so updateColorSelectBox was
+// undefined and the jsOnEventById handler above did nothing.
+jsInlineF("function updateColorSelectBox() {\n"
 " var form = document.getElementById(\"createItem\");\n"
 " document.createItem.colorPullDown.style.display='inline';\n"
 " document.createItem.colorPullDown.select();\n"
@@ -279,7 +281,6 @@ hPrintf("function updateColorSelectBox() {\n"
 " form.%s.style.color = form.%s[form.%s.selectedIndex].value;\n"
 "}\n", NEW_ITEM_COLOR, NEW_ITEM_COLOR, NEW_ITEM_COLOR,
 	NEW_ITEM_COLOR, NEW_ITEM_COLOR, NEW_ITEM_COLOR);
-hPrintf("</SCRIPT>\n");
 }
 
 void doWikiTrack(char *wikiItemId, char *chrom, int winStart, int winEnd)
