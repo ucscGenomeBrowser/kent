@@ -102,6 +102,10 @@ char *getCspMetaHeader();
 void generateCspMetaHeader(FILE *f);
 /* Generate Meta CSP Header */
 
+void generateCspResponseHeader(FILE *f);
+/* Generate the CSP as an http response header.  Must be called before the
+ * blank line that ends the http header block. */
+
 void htmlStart(char *title);
 /* Write the start of a cgi-generated html file */
 
