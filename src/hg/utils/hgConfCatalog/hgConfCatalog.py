@@ -221,7 +221,7 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
-        h("showMouseovers", "flag", "hg/hgTracks/config.c:704", default="FALSE",
+        h("showMouseovers", "flag", "hg/hgTracks/config.c:716", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
                "title tooltips.  Added v446 and still defaulting FALSE, which "
@@ -357,7 +357,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="SVG rather than raster bar charts on the details page.  "
                "Public since v428, the longest-shipped gate still in place."),
-        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:825", default="TRUE",
+        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:837", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
                "since v492.  Three call sites."),
@@ -610,7 +610,7 @@ MIRROR_KNOBS = {
           role="knob", verified=True, deprecated=True,
           note="CIRM data warehouse is public.  Belongs to the cirm CGIs, "
                "which are not part of the browser release."),
-        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1025",
+        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1037",
           default="TRUE", role="knob", public=True, verified=True,
           note="Where the multi-region button lives, which is a layout "
                "preference a mirror is entitled to keep, so a knob.  Two "
@@ -690,7 +690,7 @@ DATABASE = {
           public=True, verified=True, family="central"),
         h("central.db", "profile", "hg/hgc/lowelab.c:2362", public=True,
           verified=True, family="central"),
-        h("central.domain", "internal", "hg/hubApi/apiUtils.c:878",
+        h("central.domain", "internal", "hg/hubApi/apiUtils.c:880",
           public=True, verified=True, required=True, family="central",
           note="Cookie domain for the central cookie.  Read with cfgVal in "
                "hubApi, so that CGI will not start without it."),
@@ -783,7 +783,7 @@ CENTRAL_TABLES = {
           default='"hubSearchText"', verified=True),
         h("authTableName", "table", "hg/lib/hubSpaceKeys.c:132",
           verified=True, note="Hub space API keys."),
-        h("ottoTable", "table", "hg/hubApi/apiUtils.c:908", verified=True,
+        h("ottoTable", "table", "hg/hubApi/apiUtils.c:910", verified=True,
           note="Table the hub API reads to report otto track update times."),
         h("genbankDb", "profile", "hg/hgVai/hgVai.c:803", public=True,
           verified=True, env="GENBANKDB"),
@@ -852,7 +852,7 @@ PATHS = {
         h("sessionThumbnail.suppress", "flag",
           "hg/hgSession/hgSession.c:1168", public=True, verified=True,
           family="sessionThumbnail"),
-        h("freeTypeDir", "path", "hg/hgTracks/config.c:174",
+        h("freeTypeDir", "path", "hg/hgTracks/config.c:186",
           default='"../htdocs/urw-fonts"', verified=True),
         h("freeTypeFont", "internal", "hg/cgilib/trackLayout.c:67",
           default='"Bitmap"', verified=True),
@@ -947,7 +947,7 @@ LIMITS = {
           default='"3"', public=True, verified=True),
         h("quickLift.lengthLimit", "limit", "hg/lib/quickLift.c:575",
           default='"10000"', verified=True, ticket="37788"),
-        h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:932", verified=True,
+        h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:934", verified=True,
           note="Per-day liftOver cap for the hub API."),
         h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2209",
           default="NULL", public=True, verified=True),
@@ -1008,7 +1008,7 @@ LOGGING = {
     "what": "Diagnostics.  Several of these are safe to leave on and a few "
             "are expensive, so they are worth telling apart.",
     "vars": [
-        h("browser.cgiTime", "debug", "hg/lib/cart.c:4045", default='"yes"',
+        h("browser.cgiTime", "debug", "hg/lib/cart.c:4051", default='"yes"',
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
@@ -1054,7 +1054,7 @@ LOGGING = {
 BRANDING = {
     "what": "Text, styling and links that differ between UCSC and a mirror.",
     "vars": [
-        h("browser.style", "internal", "hg/lib/cart.c:3167", public=True,
+        h("browser.style", "internal", "hg/lib/cart.c:3169", public=True,
           verified=True, note="Stylesheet override."),
         h("browser.theme.", "internal", "hg/hgTracks/config.c:31",
           public=True, verified=True,
@@ -1234,13 +1234,13 @@ EXTERNAL = {
           verified=True, family="resolv"),
         h("resolvCmd", "path", "hg/lib/hui.c:677", public=True, verified=True,
           family="resolv"),
-        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1749",
+        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1751",
           default='"off"', verified=True, family="hubApi"),
-        h("hubApi.showActive0", "flag", "hg/hubApi/apiUtils.c:554",
+        h("hubApi.showActive0", "flag", "hg/hubApi/apiUtils.c:555",
           default='"off"', verified=True, family="hubApi"),
-        h("hubApi.blatDelayFraction", "limit", "hg/hubApi/blat.c:312",
+        h("hubApi.blatDelayFraction", "limit", "hg/hubApi/blat.c:314",
           default="NULL", verified=True, family="hubApi"),
-        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:993",
+        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:995",
           verified=True, family="hubApi"),
         h("apiFromEmail", "email", "hg/hubApi/liftOver.c:538", verified=True),
         h("chainFileRequestEmail", "email", "hg/hubApi/liftOver.c:537",
