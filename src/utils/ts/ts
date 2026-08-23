@@ -183,8 +183,10 @@ DocumentRoot "$dir/$HTDOCS_NAME"
 ScriptAlias /cgi-bin/ "$dir/cgi-bin/"
 Alias /trash/ "$SHARED_TRASH/"
 
-Header set Access-Control-Allow-Origin "*"
-
+# CORS is scoped to the data directories only, matching the live
+# /usr/local/apache/conf/httpd.conf, which sets it on htdocs and trash and never
+# on cgi-bin.  A parked instance has no password, so a server-wide wildcard would
+# let any page in the developer's browser read CGI output through the open tunnel.
 <Directory "$dir/cgi-bin">
     AllowOverride None
     Options +ExecCGI +FollowSymLinks
@@ -193,11 +195,15 @@ Header set Access-Control-Allow-Origin "*"
 <Directory "$dir/$HTDOCS_NAME">
     AllowOverride None
     Options +FollowSymLinks +Includes
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Headers: Range
     Require all granted
 </Directory>
 <Directory "$SHARED_TRASH">
     AllowOverride None
     Options +FollowSymLinks
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Headers: Range
     Require all granted
 </Directory>
 EOF
@@ -231,6 +237,9 @@ stopHttpd() {
 cmd_create() {
     local tkt="$1"; shift || true
     local note="${*:-}"
+    # the registry is one tab-separated line per ticket, so a tab or newline in the
+    # free-text note would append a malformed row instead of reading back as the note
+    note="$(printf '%s' "$note" | tr '\t\n\r' '   ')"
     validTkt "$tkt"
     [[ -d "$LIVE_CGI"    ]] || die "no live sandbox at $LIVE_CGI"
     [[ -d "$LIVE_HTDOCS" ]] || die "no live htdocs at $LIVE_HTDOCS"
