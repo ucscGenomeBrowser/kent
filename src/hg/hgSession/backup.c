@@ -56,6 +56,7 @@ if(isErrAbortInProgress())
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
+cspWriteResponseHeader();
 puts("Content-Type:text/html\n");
 cartVaWebStart(cart, database, format, args);
 pushWarnHandler(errAbortHandler);
@@ -177,6 +178,7 @@ if (start < 0)
     htmlClose();
     return;
     }
+cspWriteResponseHeader();
 puts("Content-Type: text/html\n");
 int line;
 boolean autoRefreshFound = FALSE;
@@ -717,6 +719,7 @@ char query[512];
 char **row = NULL;
 struct sqlResult *sr = NULL;
 
+cspWriteResponseHeader();
 puts("Content-Type:text/html\n");
 cartWebStart(cart, NULL, "Backup Custom Tracks");
 jsInit();
