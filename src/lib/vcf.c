@@ -1287,14 +1287,15 @@ return def ? def->type : vcfInfoString;
 }
 
 static signed char parseAlleleIx(char *string, int alleleCount)
-/* Parse one allele index out of a GT field.  Return -1 for missing data, and also for an
- * index that this record has no allele for, so that every caller sees either a real allele
- * or missing data. */
+/* Parse one allele index out of a GT field.  Return -1 for missing data, for an index that
+ * this record has no allele for, and for an index too large for the signed char that holds it,
+ * so that every caller sees either a real allele or missing data.  A record may have up to
+ * VCF_MAX_INFO alleles, so alleleCount alone is not a tight enough bound. */
 {
 if (string[0] == '.')
     return -1;
 int alleleIx = atoi(string);
-if (alleleIx < 0 || alleleIx >= alleleCount)
+if (alleleIx < 0 || alleleIx >= alleleCount || alleleIx > SCHAR_MAX)
     return -1;
 return alleleIx;
 }
