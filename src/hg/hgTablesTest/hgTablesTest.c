@@ -216,18 +216,12 @@ if (oldPage != NULL)
 }
 
 int tableSize(char *db, char *table)
-/* Return number of rows in table. */
-{
-struct sqlConnection *conn = sqlConnect(db);
-long size = sqlTableSize(conn, table);
-sqlDisconnect(&conn);
-return size;
-}
-
-int tableSizeIfExists(char *db, char *table)
-/* Return number of rows in table, or -1 if there is no such SQL table.  A
- * bigBed- or bigWig-backed track is offered in the table list but keeps its
- * data in a file, so counting rows on it would abort. */
+/* Return number of rows in table, or -1 if there is no such SQL table.
+ * Plenty of tracks are offered in the table list but keep their data in a file
+ * rather than a SQL table -- bigBed, bigWig, bigMaf and the chain/net and multiz
+ * tracks built on them -- and counting rows on one of those used to abort the
+ * whole process.  hg38.multiz11way and mm39.netHs1 each ended a run this way.
+ * A caller comparing against a row limit treats -1 as "no limit to apply". */
 {
 struct sqlConnection *conn = sqlConnect(db);
 long size = sqlTableSizeIfExists(conn, table);
@@ -749,7 +743,7 @@ if (!hashLookup(uniqHash, fullName))
 		 * carefulAlloc exits the process outright, which forfeits every table
 		 * left in the run, so screen the worst offenders out the way the
 		 * no-position-filter branch below does. */
-		int tableRows = tableSizeIfExists(db, table);
+		int tableRows = tableSize(db, table);
 		if (tableRows >= MAX_ROWS_REGION_FILTERED)
 		    {
 		    verbose(1, "%s.%s tableRows=%d, too large >= %d even with position filtering, skipping.\n",
