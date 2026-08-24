@@ -11,6 +11,12 @@
 #include "common.h"
 #endif
 
+#define htmlSanitizeIdPrefix "descPage-"
+/* Put in front of every id, and every name on an anchor, that comes in with the HTML.
+ * The HTML is printed inside a page of ours, so without this a name it chose could be
+ * one our own JavaScript looks up, or one of the globals our pages test for.  A link to
+ * a name on the same page is rewritten with the same prefix and keeps working. */
+
 char *htmlSanitize(char *html);
 /* Return a cloned copy of html holding only allowlisted elements, attributes and style
  * properties.  An element that is not on the keep list loses its tag but keeps its text,

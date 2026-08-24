@@ -7,6 +7,10 @@
  * its text, which is what lets a whole pasted document come out as the article it was
  * meant to be.
  *
+ * Every id, and every name on an anchor, is renamed with a fixed prefix.  The result is
+ * printed inside a page of ours, so a name the outside HTML chose could otherwise be one
+ * our own JavaScript looks up.  A link to a name on the same page is rewritten to match.
+ *
  * The parser here is deliberately forgiving.  It never aborts and it always returns
  * something, however broken the markup it is handed. */
 
@@ -617,7 +621,33 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
         {
         if (urlOk(value, san))
             {
+            char *fragment = NULL;
+            if (sameString(attr, "href"))
+                {
+                char *trimmed = skipLeadingSpaces(value);
+                if (trimmed[0] == '#' && trimmed[1] != 0)
+                    fragment = trimmed + 1;     /* a link to a name on this same page */
+                }
             dyStringPrintf(san->out, " %s=\"", attr);
+            if (fragment != NULL)
+                {
+                /* The name it points at is being renamed, so rename this to match. */
+                dyStringAppend(san->out, "#" htmlSanitizeIdPrefix);
+                appendEscaped(san->out, fragment);
+                }
+            else
+                appendEscaped(san->out, value);
+            dyStringAppendC(san->out, '"');
+            }
+        }
+    else if (sameString(attr, "id") || (isAnchor && sameString(attr, "name")))
+        {
+        /* An id here lands in a page of ours, next to ids our own JavaScript looks up,
+         * and it also becomes a property of that name on window.  A prefix keeps the two
+         * sets apart.  An anchor name does both of those things too. */
+        if (isNotEmpty(value))
+            {
+            dyStringPrintf(san->out, " %s=\"%s", attr, htmlSanitizeIdPrefix);
             appendEscaped(san->out, value);
             dyStringAppendC(san->out, '"');
             }

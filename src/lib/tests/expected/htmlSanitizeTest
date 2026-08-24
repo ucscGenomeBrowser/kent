@@ -11,7 +11,7 @@ out: <p>before</p>
      (removed the script element and everything inside it)
 
 in : <div id="top" class="warn" title="t" onclick="alert(1)">text</div>
-out: <div id="top" title="t">text</div>
+out: <div id="descPage-top" title="t">text</div>
      (removed the attribute onclick)
 
 in : <a href="&#106;avascript:alert(1)">one</a> <a href="java&Tab;script:alert(1)">two</a>
@@ -31,7 +31,7 @@ in : <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
 out: <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
 
 in : <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank">a</a>
-out: <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank" rel="noopener noreferrer">a</a>
+out: <a href="https://genome.ucsc.edu">u</a> <a href="#descPage-anchor" target="_blank" rel="noopener noreferrer">a</a>
 
 in : <img src="pic.png" alt="a" onerror="alert(1)" width="20">
 out: <img src="pic.png" alt="a" width="20">
@@ -66,6 +66,9 @@ out: <p>after</p>
 
 in : <!DOCTYPE html><!-- <p>hidden</p> --><p>shown</p>
 out: <p>shown</p>
+
+in : <h2 id="methods">M</h2><a name="top">t</a><a href="#methods">same page</a> <a href="other.html#methods">other page</a><a href="#">to the top</a><div id="">no name at all</div>
+out: <h2 id="descPage-methods">M</h2><a name="descPage-top">t</a><a href="#descPage-methods">same page</a> <a href="other.html#methods">other page</a><a href="#">to the top</a><div>no name at all</div>
 
 in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>

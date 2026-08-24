@@ -44,6 +44,10 @@ static char *cases[] = {
 "<form action=\"/x\"><input name=\"password\"><button>Log in</button></form><p>after</p>",
 /* comments and doctypes go */
 "<!DOCTYPE html><!-- <p>hidden</p> --><p>shown</p>",
+/* an id, and a name on an anchor, are renamed, and a link to one of them is renamed too */
+"<h2 id=\"methods\">M</h2><a name=\"top\">t</a>"
+    "<a href=\"#methods\">same page</a> <a href=\"other.html#methods\">other page</a>"
+    "<a href=\"#\">to the top</a><div id=\"\">no name at all</div>",
 /* a table keeps its shape */
 "<table border=\"1\"><tr><td colspan=\"2\" bgcolor=\"#eee\">cell</td></tr></table>",
 };
