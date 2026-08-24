@@ -14,6 +14,7 @@
 #include "htmlPage.h"
 #include "../hgTables/hgTables.h"
 #include "hdb.h"
+#include "dbDb.h"
 #include "qa.h"
 #include "chromInfo.h"
 #include "obscure.h"
@@ -219,6 +220,17 @@ int tableSize(char *db, char *table)
 {
 struct sqlConnection *conn = sqlConnect(db);
 long size = sqlTableSize(conn, table);
+sqlDisconnect(&conn);
+return size;
+}
+
+int tableSizeIfExists(char *db, char *table)
+/* Return number of rows in table, or -1 if there is no such SQL table.  A
+ * bigBed- or bigWig-backed track is offered in the table list but keeps its
+ * data in a file, so counting rows on it would abort. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+long size = sqlTableSizeIfExists(conn, table);
 sqlDisconnect(&conn);
 return size;
 }
@@ -737,7 +749,7 @@ if (!hashLookup(uniqHash, fullName))
 		 * carefulAlloc exits the process outright, which forfeits every table
 		 * left in the run, so screen the worst offenders out the way the
 		 * no-position-filter branch below does. */
-		int tableRows = tableSize(db, table);
+		int tableRows = tableSizeIfExists(db, table);
 		if (tableRows >= MAX_ROWS_REGION_FILTERED)
 		    {
 		    verbose(1, "%s.%s tableRows=%d, too large >= %d even with position filtering, skipping.\n",
@@ -927,6 +939,63 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
 
+/* The hgTables page no longer carries clade/organism/assembly dropdowns -- the
+ * gateway moved to a search box -- so there are no <option> tags left to scrape
+ * for the list of organisms and assemblies.  Read them from hgcentral dbDb
+ * instead, the way the browser itself does.  Only the *enumeration* was lost;
+ * htmlFormVarSet still creates org/db on the form, so submitting works. */
+
+boolean isTestableDb(struct dbDb *db)
+/* TRUE if this assembly is one we can actually drive: active, and with a
+ * chromInfo table, which getTestRegion needs to pick a test region.  GenArk
+ * entries (hs1 and the like) are listed in dbDb and do have a database, but
+ * keep their data in files rather than SQL tables, so they have no chromInfo
+ * and used to be absent from the assembly dropdown we no longer read. */
+{
+return db->active && hTableExists(db->name, "chromInfo");
+}
+
+struct slName *organismsToTest(int maxOrgs)
+/* Return up to maxOrgs distinct testable organism names, in dbDb order. */
+{
+struct slName *list = NULL;
+struct dbDb *dbList = hDbDbList(), *db;
+struct hash *seen = newHash(8);
+int count = 0;
+
+for (db = dbList; db != NULL && count < maxOrgs; db = db->next)
+    {
+    if (isTestableDb(db) && !hashLookup(seen, db->organism))
+	{
+	hashAdd(seen, db->organism, NULL);
+	slNameAddTail(&list, db->organism);
+	++count;
+	}
+    }
+hashFree(&seen);
+dbDbFreeList(&dbList);
+return list;
+}
+
+struct slName *dbsForOrganism(char *org, int maxDbs)
+/* Return up to maxDbs testable assembly names for organism, in dbDb order. */
+{
+struct slName *list = NULL;
+struct dbDb *dbList = hDbDbList(), *db;
+int count = 0;
+
+for (db = dbList; db != NULL && count < maxDbs; db = db->next)
+    {
+    if (isTestableDb(db) && sameWord(db->organism, org))
+	{
+	slNameAddTail(&list, db->name);
+	++count;
+	}
+    }
+dbDbFreeList(&dbList);
+return list;
+}
+
 void testDb(struct htmlPage *orgPage, char *org, char *db)
 /* Test on one database. */
 {
@@ -946,32 +1015,22 @@ htmlPageFree(&dbPage);
 void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org)
 /* Test on organism.  */
 {
-struct htmlPage *orgPage;
-struct htmlForm *mainForm;
-struct htmlFormVar *dbVar;
-struct slName *db;
-int dbIx;
+struct slName *dbList, *db;
 
-/* Get page with little selected beyond organism.  This page
- * will get whacked around a little by testDb, so set range
- * position and db to something safe each time through. */
-htmlPageSetVar(rootPage, rootForm, "org", org);
-htmlPageSetVar(rootPage, NULL, "db", NULL); 
-htmlPageSetVar(rootPage, NULL, hgtaRegionType, NULL); 
-htmlPageSetVar(rootPage, NULL, "position", NULL); 
-orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
-if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
+/* There is no organism round-trip left to make: the gateway's clade/organism/
+ * assembly dropdowns and the "Go" button that submitted them are gone from the
+ * page, so submitting for an "organism page" just yields a page with no
+ * mainForm.  Name the assembly directly instead, the way the -db= path does --
+ * testDb sets db, position and region type on each pass, so rootPage needs no
+ * preparation here. */
+dbList = dbsForOrganism(org, clDbs);
+if (dbList == NULL)
+    errAbort("No active assembly in dbDb for organism %s", org);
+for (db = dbList; db != NULL; db = db->next)
     {
-    errAbort("Couldn't get main form on orgPage");
+    testDb(rootPage, org, db->name);
     }
-if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
-    errAbort("Couldn't get org var");
-for (db = dbVar->values, dbIx=0; db != NULL && dbIx < clDbs; 
-	db = db->next, ++dbIx)
-    {
-    testDb(orgPage, org, db->name);
-    }
-htmlPageFree(&orgPage);
+slNameFreeList(&dbList);
 }
 
 void verifyJoinedFormat(char *s)
@@ -1282,22 +1341,20 @@ if (clDb != NULL)
 else
     {
     struct htmlForm *mainForm;
-    struct htmlFormVar *orgVar;
     if ((mainForm = htmlFormGet(rootPage, "mainForm")) == NULL)
 	errAbort("Couldn't get main form");
-    if ((orgVar = htmlFormVarGet(mainForm, "org")) == NULL)
-	errAbort("Couldn't get org var");
     if (clOrg != NULL)
 	testOrg(rootPage, mainForm, clOrg);
     else
 	{
-	struct slName *org;
-	int orgIx;
-	for (org = orgVar->values, orgIx=0; org != NULL && orgIx < clOrgs; 
-		org = org->next, ++orgIx)
+	struct slName *orgList = organismsToTest(clOrgs), *org;
+	if (orgList == NULL)
+	    errAbort("No active organisms in dbDb");
+	for (org = orgList; org != NULL; org = org->next)
 	    {
 	    testOrg(rootPage, mainForm, org->name);
 	    }
+	slNameFreeList(&orgList);
 	}
     }
 
