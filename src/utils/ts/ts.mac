@@ -12,7 +12,7 @@
 #   ts tunnel NNNNN          same
 #   ts list                  list parked tickets on hgwdev
 #   ts create NNNNN [note]   run remotely on hgwdev (freeze + start)
-#   ts sync|start|stop|remove NNNNN
+#   ts sync|conf|start|stop|remove NNNNN
 #
 # Set HGWDEV to override the host (default hgwdev.gi.ucsc.edu); e.g. if you have
 # a "Host hgwdev" block in ~/.ssh/config, run:  HGWDEV=hgwdev ts list
@@ -58,7 +58,7 @@ case "$sub" in
         echo "Ctrl-C closes the tunnel."
         exec ssh -N -L "$port:localhost:$port" "$HGWDEV"
         ;;
-    list|create|sync|start|stop|remove)
+    list|create|sync|conf|start|stop|remove)
         # run the real ts on hgwdev; use a login shell so PATH has ss/httpd
         cmd="$REMOTE"
         for a in "$@"; do cmd="$cmd $(printf '%q' "$a")"; done

@@ -30,6 +30,7 @@ Typical use:
 
   ts create 37867 "some note"     freeze the live sandbox and start the httpd
   ts sync 37867                   re-freeze after more work on the live sandbox
+  ts conf 37867                   rewrite httpd.conf only, keeping the freeze
   ts list                         show every parked ticket and its status
   ts tunnel 37867                 open the tunnel and print the browser URL
   ts remove 37867                 stop the httpd and delete the instance

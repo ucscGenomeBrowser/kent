@@ -19,6 +19,7 @@
 # Subcommands (NNNNN = Redmine ticket number):
 #   create NNNNN [note]   freeze the live sandbox, start an httpd, register it
 #   sync   NNNNN          re-freeze a parked ticket to the current live sandbox
+#   conf   NNNNN          rewrite only httpd.conf, leaving the frozen code alone
 #   start  NNNNN          start the ticket's httpd (e.g. after a reboot)
 #   stop   NNNNN          stop the ticket's httpd
 #   tunnel NNNNN          open an ssh tunnel and print the browser URL
@@ -268,6 +269,25 @@ cmd_sync() {
     [[ -n "$running" ]] && startHttpd "$tkt" || echo "RM $tkt re-frozen (httpd was not running)."
 }
 
+# Rewrite httpd.conf from the current template without touching the frozen code.
+# "sync" also re-freezes, which is what you want after more work on the live
+# sandbox, but not when the freeze is the whole point of the park and only the
+# config template moved on.
+cmd_conf() {
+    local tkt="$1"; validTkt "$tkt"
+    local port; port="$(regPort "$tkt")"
+    [[ -n "$port" ]] || die "RM $tkt not found in registry"
+    [[ -d "$(tsDir "$tkt")" ]] || die "no sandbox directory for RM $tkt"
+    local running=""; [[ -n "$(pidOf "$tkt")" ]] && running=1
+    [[ -n "$running" ]] && stopHttpd "$tkt"
+    writeConf "$tkt" "$port"
+    if [[ -n "$running" ]]; then
+        startHttpd "$tkt"
+    else
+        echo "RM $tkt httpd.conf rewritten (httpd was not running)."
+    fi
+}
+
 cmd_start()  { validTkt "$1"; startHttpd "$1"; }
 cmd_stop()   { validTkt "$1"; stopHttpd "$1"; }
 
@@ -326,6 +346,7 @@ sub="$1"; shift || true
 case "$sub" in
     create) [[ $# -ge 1 ]] || usage; cmd_create "$@";;
     sync)   [[ $# -eq 1 ]] || usage; cmd_sync   "$1";;
+    conf)   [[ $# -eq 1 ]] || usage; cmd_conf   "$1";;
     start)  [[ $# -eq 1 ]] || usage; cmd_start  "$1";;
     stop)   [[ $# -eq 1 ]] || usage; cmd_stop   "$1";;
     tunnel) [[ $# -eq 1 ]] || usage; cmd_tunnel "$1";;
@@ -333,5 +354,5 @@ case "$sub" in
     list)   cmd_list;;
     remove) [[ $# -eq 1 ]] || usage; cmd_remove "$1";;
     -h|--help|help) usage;;
-    *) die "unknown subcommand '$sub' (try: create sync start stop tunnel list remove)";;
+    *) die "unknown subcommand '$sub' (try: create sync conf start stop tunnel list remove)";;
 esac
