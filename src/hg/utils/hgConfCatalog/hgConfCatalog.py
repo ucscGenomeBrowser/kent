@@ -256,7 +256,7 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1165", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9386", default="FALSE",
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9391", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Use the modern single-page base-by-base alignment view (the one "
                "hgBlat's new results page uses) for ordinary alignment clicks too "
@@ -342,7 +342,7 @@ RELEASE_GATES = {
         h("canDupTracks", "flag", "hg/lib/dupTrack.c:267", default="TRUE",
           role="gate", verified=True,
           note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c:3943", default="TRUE", role="gate",
+        h("canSnake", "flag", "hg/hgc/hgc.c:3947", default="TRUE", role="gate",
           verified=True,
           note="Snake display for chain and alignment tracks.  Public since "
                "v467."),
@@ -519,7 +519,7 @@ MIRROR_KNOBS = {
                "for 43 releases; it was never a feature "
                "waiting to ship.  The flip to TRUE at v458 and back is a "
                "record of somebody trying it on a machine, not of a release."),
-        h("sleepOn429", "flag", "hg/lib/botDelay.c:423", default="TRUE",
+        h("sleepOn429", "flag", "hg/lib/botDelay.c:424", default="TRUE",
           role="knob", verified=True,
           note="After emitting the 429 page, hold the process for ten seconds "
                "before exiting, which slows a robot that ignores the status "
@@ -528,7 +528,7 @@ MIRROR_KNOBS = {
                "feature back; the off position is for "
                "a machine that would rather not tie up an Apache child, which "
                "is a deployment call."),
-        h("browser.dumpStack", "flag", "hg/lib/hCommon.c:370", default="FALSE",
+        h("browser.dumpStack", "flag", "hg/lib/hCommon.c:371", default="FALSE",
           role="knob", public=True, verified=True,
           note="Dump a stack trace to the error log on a crash.  A debugging "
                "switch an operator turns on when needed."),
@@ -540,7 +540,7 @@ MIRROR_KNOBS = {
         h("suppressVeryEarlyErrors", "flag", "hg/lib/hgConfig.c:398",
           default="FALSE", role="knob", verified=True,
           note="The opposite switch, for hiding a broken hg.conf from users."),
-        h("hgta.disableAllTables", "flag", "hg/lib/hCommon.c:419",
+        h("hgta.disableAllTables", "flag", "hg/lib/hCommon.c:420",
           default="FALSE", role="knob", public=True, verified=True,
           note="Remove the all-tables option from the Table Browser.  A load "
                "control a mirror is entitled to set."),
@@ -558,7 +558,7 @@ MIRROR_KNOBS = {
         h("traceGbdb", "flag", "hg/lib/hdb.c:1596", default="FALSE",
           role="knob", verified=True,
           note="Log every /gbdb file the CGI opens.  A diagnostic."),
-        h("drawDot", "flag", "hg/hgc/hgc.c:3460", default="FALSE", role="knob",
+        h("drawDot", "flag", "hg/hgc/hgc.c:3464", default="FALSE", role="knob",
           verified=True,
           note="Emit graphviz dot output from the details page instead of a "
                "rendered image.  A developer diagnostic."),
@@ -629,7 +629,7 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
-        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27578", default="keep",
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27583", default="keep",
           verified=True,
           note="What happens to the custom tracks left behind by a user's "
                "earlier BLAT searches when a new search makes another one.  "
@@ -661,9 +661,9 @@ DATABASE = {
         h("db.host", "profile", "hg/qaPushQ/qaPushQ.c:2435", public=True,
           verified=True, env="HGDB_HOST", family="db",
           note="The main assembly database server."),
-        h("db.user", "profile", "hg/hgc/hgc.c:1300", public=True,
+        h("db.user", "profile", "hg/hgc/hgc.c:1304", public=True,
           verified=True, env="HGDB_USER", family="db"),
-        h("db.password", "credential", "hg/hgc/hgc.c:1301", public=True,
+        h("db.password", "credential", "hg/hgc/hgc.c:1305", public=True,
           verified=True, env="HGDB_PASSWORD", family="db"),
         h("db.trackDb", "table", "hg/lib/hdb.c:354", public=True,
           verified=True, env="HGDB_TRACKDB", family="db",
@@ -847,10 +847,10 @@ PATHS = {
           "hg/cgilib/sessionThumbnail.c:30", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.convertPath", "path",
-          "hg/hgSession/hgSession.c:1172", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1173", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.suppress", "flag",
-          "hg/hgSession/hgSession.c:1168", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1169", public=True, verified=True,
           family="sessionThumbnail"),
         h("freeTypeDir", "path", "hg/hgTracks/config.c:186",
           default='"../htdocs/urw-fonts"', verified=True),
@@ -1008,40 +1008,40 @@ LOGGING = {
     "what": "Diagnostics.  Several of these are safe to leave on and a few "
             "are expensive, so they are worth telling apart.",
     "vars": [
-        h("browser.cgiTime", "debug", "hg/lib/cart.c:4051", default='"yes"',
+        h("browser.cgiTime", "debug", "hg/lib/cart.c:4054", default='"yes"',
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
         h("trackLog", "debug", "hg/hgTracks/hgTracks.c:9292", default='"off"',
           verified=True, note="Log which tracks were drawn per request."),
-        h("noSqlInj.level", "internal", "hg/lib/cart.c:2901",
+        h("noSqlInj.level", "internal", "hg/lib/cart.c:2903",
           default='"abort"', verified=True, family="noSqlInj",
           note="What to do when the SQL injection guard fires: abort, warn or "
                "ignore.  Production wants abort."),
-        h("noSqlInj.dumpStack", "debug", "hg/lib/cart.c:2904", verified=True,
+        h("noSqlInj.dumpStack", "debug", "hg/lib/cart.c:2906", verified=True,
           family="noSqlInj"),
-        h("signalsHandler", "internal", "hg/lib/cart.c:2864", public=True,
+        h("signalsHandler", "internal", "hg/lib/cart.c:2866", public=True,
           verified=True, note="Install handlers that turn a segfault into a "
                               "logged error rather than a blank page."),
-        h("httpsCertCheck", "internal", "hg/lib/cart.c:2868", public=True,
+        h("httpsCertCheck", "internal", "hg/lib/cart.c:2870", public=True,
           verified=True, family="httpsCertCheck",
           note="How strictly to verify certificates on outbound https, which "
                "matters because hubs are fetched over it."),
-        h("httpsCertCheckVerbose", "debug", "hg/lib/cart.c:2871",
+        h("httpsCertCheckVerbose", "debug", "hg/lib/cart.c:2873",
           verified=True, family="httpsCertCheck"),
-        h("httpsCertCheckDepth", "internal", "hg/lib/cart.c:2874",
+        h("httpsCertCheckDepth", "internal", "hg/lib/cart.c:2876",
           verified=True, family="httpsCertCheck"),
-        h("httpsCertCheckDomainExceptions", "internal", "hg/lib/cart.c:2877",
+        h("httpsCertCheckDomainExceptions", "internal", "hg/lib/cart.c:2879",
           public=True, verified=True, family="httpsCertCheck"),
-        h("httpProxy", "url", "hg/lib/cart.c:2884", public=True,
+        h("httpProxy", "url", "hg/lib/cart.c:2886", public=True,
           verified=True, family="proxy"),
-        h("httpsProxy", "url", "hg/lib/cart.c:2887", public=True,
+        h("httpsProxy", "url", "hg/lib/cart.c:2889", public=True,
           verified=True, family="proxy"),
-        h("ftpProxy", "url", "hg/lib/cart.c:2890", public=True, verified=True,
+        h("ftpProxy", "url", "hg/lib/cart.c:2892", public=True, verified=True,
           family="proxy"),
-        h("noProxy", "internal", "hg/lib/cart.c:2893", public=True,
+        h("noProxy", "internal", "hg/lib/cart.c:2895", public=True,
           verified=True, family="proxy"),
-        h("logProxy", "debug", "hg/lib/cart.c:2896", verified=True,
+        h("logProxy", "debug", "hg/lib/cart.c:2898", verified=True,
           family="proxy"),
     ],
 }
@@ -1054,7 +1054,7 @@ LOGGING = {
 BRANDING = {
     "what": "Text, styling and links that differ between UCSC and a mirror.",
     "vars": [
-        h("browser.style", "internal", "hg/lib/cart.c:3169", public=True,
+        h("browser.style", "internal", "hg/lib/cart.c:3172", public=True,
           verified=True, note="Stylesheet override."),
         h("browser.theme.", "internal", "hg/hgTracks/config.c:31",
           public=True, verified=True,
@@ -1234,7 +1234,7 @@ EXTERNAL = {
           verified=True, family="resolv"),
         h("resolvCmd", "path", "hg/lib/hui.c:677", public=True, verified=True,
           family="resolv"),
-        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1751",
+        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1754",
           default='"off"', verified=True, family="hubApi"),
         h("hubApi.showActive0", "flag", "hg/hubApi/apiUtils.c:555",
           default='"off"', verified=True, family="hubApi"),
@@ -1418,6 +1418,12 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("cspResponseHeader", "flag", "hg/lib/hCommon.c:435", default="FALSE",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault at "
+               "hg/lib/hCommon.c:435.  Came in at e6ddf60465d, hg/lib: add an "
+               "option to send the content policy as an http response header. "
+               "Needs a description and a gate or knob call."),
     ],
 }
 
