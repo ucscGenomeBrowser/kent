@@ -734,9 +734,10 @@ function sessBuildTable() {
                   return html; } },
             { title: 'Created', data: 'createdEpoch',
               render: function(d, type, row) {
-                  if (type !== 'display') { return row.createdEpoch; }
-                  return '<span title="Last used: ' + sessEnc(row.lastUse) + '">' +
-                      sessEnc(row.created) + '</span>'; } },
+                  return (type === 'display') ? sessEnc(row.created) : row.createdEpoch; } },
+            { title: 'Last used', data: 'lastUseEpoch',
+              render: function(d, type, row) {
+                  return (type === 'display') ? sessEnc(row.lastUse) : row.lastUseEpoch; } },
             { title: 'Views', data: 'useCount',
               render: function(d, type) { return (type === 'display') ? sessNum(d) : d; } },
             { title: 'Actions', className: 'sessActionsCol', data: null, orderable: false,
@@ -776,6 +777,7 @@ function sessBuildTable() {
         'Session': 'Click a name to load that session in the Genome Browser',
         'Assembly': 'The genome assembly this session was saved on',
         'Created': 'When the session was first saved',
+        'Last used': 'When the session was last saved or loaded',
         'Views': 'How many times this session has been loaded',
         'Actions': 'Overwrite with your current view, share, edit, or delete'
     };
