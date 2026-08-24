@@ -138,4 +138,9 @@ __attribute__((format(printf, 1, 2)))
 boolean hAllowAllTables(void);
 /* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
 
+void cspWriteResponseHeader(void);
+/* Write the Content Security Policy as an http response header, if hg.conf
+ * turns it on.  Must be called before the blank line that ends the http header
+ * block.  Only the first call in a process writes anything. */
+
 #endif /* HCOMMON_H */

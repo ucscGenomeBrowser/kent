@@ -1,0 +1,33 @@
+chr1	999	multiAllelic	alleleCount=4
+  S0	hapIxA=0	hapIxB=0	isHaploid=0	isPhased=0
+  S1	hapIxA=0	hapIxB=1	isHaploid=0	isPhased=0
+  S2	hapIxA=1	hapIxB=2	isHaploid=0	isPhased=0
+  S3	hapIxA=2	hapIxB=3	isHaploid=0	isPhased=0
+  S4	hapIxA=3	hapIxB=3	isHaploid=0	isPhased=0
+  S5	hapIxA=0	hapIxB=3	isHaploid=0	isPhased=1
+  S6	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S7	hapIxA=3	hapIxB=-1	isHaploid=0	isPhased=0
+  alleleCounts (last is missing data): 4 2 2 5 3
+  phased=1 diploid=8
+chr1	1999	biAllelic	alleleCount=2
+  S0	hapIxA=0	hapIxB=0	isHaploid=0	isPhased=0
+  S1	hapIxA=0	hapIxB=1	isHaploid=0	isPhased=0
+  S2	hapIxA=1	hapIxB=1	isHaploid=0	isPhased=0
+  S3	hapIxA=1	hapIxB=0	isHaploid=0	isPhased=1
+  S4	hapIxA=-1	hapIxB=1	isHaploid=0	isPhased=0
+  S5	hapIxA=1	hapIxB=-1	isHaploid=0	isPhased=0
+  S6	hapIxA=0	hapIxB=-1	isHaploid=1	isPhased=0
+  S7	hapIxA=1	hapIxB=-1	isHaploid=1	isPhased=0
+  alleleCounts (last is missing data): 5 7 2
+  phased=1 diploid=6
+chr1	2999	outOfRange	alleleCount=2
+  S0	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S1	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S2	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S3	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S4	hapIxA=1	hapIxB=1	isHaploid=0	isPhased=0
+  S5	hapIxA=0	hapIxB=0	isHaploid=0	isPhased=0
+  S6	hapIxA=0	hapIxB=1	isHaploid=0	isPhased=0
+  S7	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  alleleCounts (last is missing data): 3 3 10
+  phased=0 diploid=8

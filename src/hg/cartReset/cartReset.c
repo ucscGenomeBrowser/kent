@@ -9,6 +9,7 @@
 #include "htmshell.h"
 #include "hui.h"
 #include "cart.h"
+#include "hCommon.h"
 
 
 
@@ -66,6 +67,7 @@ if (!problem)
 		   ,destination);
     }
 
+cspWriteResponseHeader();  // htmShellWithHead writes the http header itself, so the cart hook never runs
 htmShellWithHead("Reset Cart", headText->string, doMiddle, NULL);
 
 freeMem(csp);

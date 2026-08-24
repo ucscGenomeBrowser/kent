@@ -34,7 +34,7 @@ visibility hide
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent constraintV2 on
+        parent constraintV2 off
         priority 1
         mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
@@ -113,7 +113,7 @@ visibility hide
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent constraintV4
+        parent constraintV4 off
         priority 2
         mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
@@ -130,7 +130,7 @@ visibility hide
         filter._zscore -20:11
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
-        parent constraintV4
+        parent constraintV4 off
         priority 2
         mouseOver Z: $_zscore<br> $synonymous<br> $missense
 
@@ -156,7 +156,7 @@ visibility hide
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent constraintV4_1
+        parent constraintV4_1 off
         priority 2
         mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF
 
@@ -173,7 +173,7 @@ visibility hide
         filter._zscore -20:11
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
-        parent constraintV4_1
+        parent constraintV4_1 off
         priority 2
         mouseOver Z: $_zscore<br> $synonymous<br> $missense
 
@@ -200,8 +200,8 @@ visibility hide
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
         parent constraintV4_1_1
-        priority 1
-        mouseOver LOEUF: $_loeuf<br> pLI: $_pli<br> $synonymous<br> $pLoF<br> Gene flags: $geneFlags<br> Constraint flags: $constraintFlags
+        priority 1.5
+        mouseOver $_mouseOver<br> $synonymous<br> $pLoF<br> Constraint flags: $constraintFlags
 
         track missenseByTranscriptV4_1_1
         shortLabel Transcript Missense v4.1.1
@@ -217,5 +217,5 @@ visibility hide
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent constraintV4_1_1
-        priority 1
+        priority 1.5
         mouseOver Z: $_zscore<br> $synonymous<br> $missense<br> Gene flags: $geneFlags<br> Constraint flags: $constraintFlags

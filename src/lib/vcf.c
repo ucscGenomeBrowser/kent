@@ -1286,7 +1286,21 @@ struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, key);
 return def ? def->type : vcfInfoString;
 }
 
-static void parseGt(char *genotype, struct vcfGenotype *gt)
+static signed char parseAlleleIx(char *string, int alleleCount)
+/* Parse one allele index out of a GT field.  Return -1 for missing data, for an index that
+ * this record has no allele for, and for an index too large for the signed char that holds it,
+ * so that every caller sees either a real allele or missing data.  A record may have up to
+ * VCF_MAX_INFO alleles, so alleleCount alone is not a tight enough bound. */
+{
+if (string[0] == '.')
+    return -1;
+int alleleIx = atoi(string);
+if (alleleIx < 0 || alleleIx >= alleleCount || alleleIx > SCHAR_MAX)
+    return -1;
+return alleleIx;
+}
+
+static void parseGt(char *genotype, struct vcfGenotype *gt, int alleleCount)
 /* Parse genotype, which should be something like "0/0", "0/1", "1|0" or "0/." into gt fields. */
 {
 char *sep = strchr(genotype, '|');
@@ -1294,16 +1308,11 @@ if (sep != NULL)
     gt->isPhased = TRUE;
 else
     sep = strchr(genotype, '/');
-if (genotype[0] == '.')
-    gt->hapIxA = -1;
-else
-    gt->hapIxA = atoi(genotype);
+gt->hapIxA = parseAlleleIx(genotype, alleleCount);
 if (sep == NULL)
     gt->isHaploid = TRUE;
-else if (sep[1] == '.')
-    gt->hapIxB = -1;
 else
-    gt->hapIxB = atoi(sep+1);
+    gt->hapIxB = parseAlleleIx(sep+1, alleleCount);
 }
 
 static void parseSgtAsGt(struct vcfRecord *rec, struct vcfGenotype *gt)
@@ -1471,7 +1480,7 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	// Special parsing of genotype:
 	if (sameString(formatWords[j], vcfGtGenotype))
 	    {
-            parseGt(gtWords[j], gt);
+            parseGt(gtWords[j], gt, record->alleleCount);
             foundGT = TRUE;
 	    }
         else if (!foundGT && sameString(formatWords[j], vcfGtPhred))
@@ -1498,6 +1507,12 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     if (i == 0 && !foundGT)
         vcfFileErr(vcff,
                    "Genotype FORMAT column includes neither GT nor PL; unable to parse genotypes.");
+    // The PL and SGT fallbacks above pick allele indexes without consulting alleleCount,
+    // so they too can name an allele that this record does not have.
+    if (gt->hapIxA >= record->alleleCount)
+        gt->hapIxA = -1;
+    if (gt->hapIxB >= record->alleleCount)
+        gt->hapIxB = -1;
     }
 record->genotypeUnparsedStrings = NULL;
 }
@@ -1519,11 +1534,11 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     struct vcfGenotype *gt = &(record->genotypes[i]);
     gt->hapIxA = gt->hapIxB = -1;
     if (string[0] != '.' && isdigit(string[0]))
-        gt->hapIxA = atoi(string);
+        gt->hapIxA = parseAlleleIx(string, record->alleleCount);
     if (string[1] == '/' || string[1] == '|')
         {
         if (isdigit(string[2]))
-            gt->hapIxB = atoi(string+2);
+            gt->hapIxB = parseAlleleIx(string+2, record->alleleCount);
         if (string[1] == '|')
             gt->isPhased = TRUE;
         }

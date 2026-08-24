@@ -9,6 +9,7 @@
 #include "hdb.h"
 #include "asmAlias.h"
 #include "trackHub.h"
+#include "genark.h"
 
 
 
@@ -186,4 +187,21 @@ if (asmAlias)
     ret = asmAlias->browser;
 
 return ret;
+}
+
+char *asmAliasFindUnlessGenArk(char *alias)
+/* Like asmAliasFind(), but only translate through the asmAlias table if
+ * alias isn't already a real, existing GenArk hub -- an accession that
+ * resolves on its own should never be promoted to a merely "equivalent"
+ * alias. */
+{
+if ((alias != NULL) && startsWith("hub_", alias))
+    // already a decorated hub_<id>_<name> reference to a specific, already
+    // attached hub -- this is not a raw accession to look up in asmAlias,
+    // and the "hub_<id>_" decoration must not be stripped off.
+    return alias;
+
+if (isGenArk(alias))
+    return alias;
+return asmAliasFind(alias);
 }

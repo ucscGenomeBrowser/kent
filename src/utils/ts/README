@@ -1,0 +1,66 @@
+ts - ticket sandboxes
+=====================
+
+ts parks a Redmine ticket as its own frozen browser instance on hgwdev.  You can
+leave the ticket, work on something else, and return to it later.  You can also
+give a reviewer a URL for it.  refs #37867
+
+Only the code is frozen.  Each parked instance holds a full copy of your live
+cgi-bin-$USER and htdocs-$USER, plus a rewritten hg.conf.  The MySQL databases,
+/gbdb, and the browser trash stay shared with the live CGIs.  A private httpd,
+running as you, serves the copy on a loopback high port.  It needs no root, no
+DNS, and no vhost.
+
+Two files:
+
+  ts       the real tool.  Runs on hgwdev.
+  ts.mac   a thin wrapper for your laptop.  It runs ts subcommands over ssh and
+           opens the local ssh -L tunnel.  Install it as "ts" on the laptop.
+
+Setup on hgwdev.  A freeze uses a few gigabytes per ticket, so keep the parked
+instances on a large local pool instead of your home directory:
+
+  mkdir -p /data/home/$USER/ticketSandboxes
+  ln -s /data/home/$USER/ticketSandboxes ~/ticketSandboxes
+
+Set TS_ROOT if you want them somewhere else.  Run "ts" with no arguments for the
+subcommand list.
+
+Typical use:
+
+  ts create 37867 "some note"     freeze the live sandbox and start the httpd
+  ts sync 37867                   re-freeze after more work on the live sandbox
+  ts list                         show every parked ticket and its status
+  ts tunnel 37867                 open the tunnel and print the browser URL
+  ts remove 37867                 stop the httpd and delete the instance
+
+Any hgwdev account can reach a parked instance, because all hgwdev users share
+the machine's loopback:
+
+  ssh -N -L PORT:localhost:PORT you@hgwdev.gi.ucsc.edu
+  # then open http://localhost:PORT/cgi-bin/hgTracks
+
+There is no password on a parked instance.  It shows only what any hgwdev user
+can already build and query.
+
+Notes
+-----
+
+The freeze is a full copy, not hardlinks.  Hardlinks only freeze a file against
+replacement by rename, so an in-place edit of a live file would also change the
+parked copy.
+
+The CGIs read two htdocs directories.  The frozen htdocs-$USER is the
+DocumentRoot, and the code also reads a sibling ../htdocs for files such as the
+URW fonts.  Each parked instance keeps a symlink to the shared
+/usr/local/apache/htdocs for that reason.  Without it, rendering fails because
+it cannot find a font file.
+
+Each instance draws its ticket number faintly across the page background, so you
+always know which frozen browser you are viewing.  ts writes that stylesheet
+into the frozen htdocs and sets browser.style in the frozen hg.conf.
+
+ts does not replace the tip/beta/rel Docker instances.  Those reproduce an exact
+released environment, including the database.
+
+Write-up: https://hgwdev.gi.ucsc.edu/~braney/per-rm-sandboxes.html

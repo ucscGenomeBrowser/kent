@@ -1050,6 +1050,8 @@ dyStringAppend(policy, " cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
 // shephered js for tutorial overlay
 dyStringAppend(policy, " cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js");
 dyStringAppend(policy, " www.google.com/recaptcha/api.js");
+// used by the captcha in hg/lib/cart.c printCaptcha
+dyStringAppend(policy, " challenges.cloudflare.com/turnstile/v0/api.js");
 
 // uppy for hubSpace uploads
 dyStringAppend(policy, " releases.transloadit.com/uppy/v4.5.0/uppy.min.js");
@@ -1131,6 +1133,18 @@ void generateCspMetaHeader(FILE *f)
 char *meta = getCspMetaHeader();
 fputs(meta, f);
 freeMem(meta);
+}
+
+void generateCspResponseHeader(FILE *f)
+/* generate the CSP as an http response header.  Carries the same nonce as the
+ * meta tag, since getNonce() is one-per-process, so a page may safely have both.
+ * Must be called before the blank line that ends the http header block. */
+{
+char *policy = getCspPolicyString();
+char *header = getCspMetaResponseHeader(policy);
+fputs(header, f);
+freeMem(header);
+freeMem(policy);
 }
 
 

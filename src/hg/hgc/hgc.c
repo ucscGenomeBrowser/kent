@@ -962,8 +962,12 @@ char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%
 //   call each others' functions)
 //   width='%s' height='%s' src='%s' seamless scrolling='%s' frameborder='%s'
 
+// The nonce is required: our CSP puts a nonce in script-src, which makes
+// browsers ignore 'unsafe-inline', so an un-nonced inline script never runs.
+// The script stays here, ahead of the iframe, so resizeIframe is defined
+// before the iframed page loads and calls it.
 printf(" \
-<script> \
+<script nonce='%s'> \
 function resizeIframe(height) \
 { \
      document.getElementById('hgcIframe').height = parseInt(height)+10; \
@@ -971,7 +975,7 @@ function resizeIframe(height) \
 </script> \
  \
 <iframe id='hgcIframe' src='%s' %s></iframe> \
-<p>", eUrl, iframeOptions);
+<p>", getNonce(), eUrl, iframeOptions);
 }
 
 void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, 
@@ -8488,14 +8492,15 @@ fclose(index);
 chmod(indexTn.forCgi, 0666);
 
 /* Write (to stdout) the main html page containing just the frame info. */
-if (partPsl != wholePsl)
-    printf("<FRAMESET COLS = \"13%%,87%% \" "
-	   "ONLOAD=\"body.location.href = '%s#cDNAStart';\">\n",
-	   bodyTn.forCgi);
-else
-    puts("<FRAMESET COLS = \"13%,87% \" >");
+puts("<FRAMESET COLS = \"13%,87% \" >");
 printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexTn.forCgi);
-printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
+// Start the body frame at the #cDNAStart anchor.  This used to be an ONLOAD
+// attribute on the FRAMESET, but our CSP puts a nonce in script-src, so
+// browsers ignore 'unsafe-inline' and never run an inline event handler.
+if (partPsl != wholePsl)
+    printf("  <FRAME SRC=\"%s#cDNAStart\" NAME=\"body\">\n", bodyTn.forCgi);
+else
+    printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
 puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
 puts("</FRAMESET>");
 puts("</HTML>\n");
@@ -23301,7 +23306,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
 	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
-    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT nonce='%s'>\n", getNonce());
     printf("location.replace('%s')\n",filename);
     printf("</SCRIPT> <NOSCRIPT> No JavaScript support. "
            "Click <b><a href=\"%s\">continue</a></b> for "

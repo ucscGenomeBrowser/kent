@@ -23,12 +23,15 @@ The dated working directories double as the archive of past builds.
 
 import argparse
 import csv
+import fcntl
+import os
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
 WORKDIR = "/hive/data/outside/otto/g2p"
+LOCK_FILE = WORKDIR + "/doG2p.lock"
 DBS = ["hg19", "hg38"]
 DOWNLOAD_URL = "https://www.ebi.ac.uk/gene2phenotype/api/panel/all/download"
 AS_FILE = WORKDIR + "/g2p.as"
@@ -46,14 +49,40 @@ args = parser.parse_args()
 
 
 def bash(cmd):
-    """Run cmd in a bash subprocess, returning stdout; raise on non-zero exit."""
+    """Run cmd in a bash subprocess, returning stdout; raise on non-zero exit.
+
+    stdout is kept apart from stderr on purpose. loadCoordinates parses this return
+    value as data, so folding the two together means one warning from the underlying
+    tool arrives looking like a row of a bigBed.
+
+    stderr is captured, not echoed: it comes back in the exception when the command
+    fails, and is dropped when it succeeds. bedToBigBed narrates its progress there,
+    and g2pWrapper.sh mails everything this script prints, so echoing it would put a
+    dozen lines of "pass1 - making usageList" into the otto mail on every build.
+    """
     try:
         out = subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE,
-                             universal_newlines=True, stderr=subprocess.STDOUT)
-        return out.stdout
+                             stderr=subprocess.PIPE, universal_newlines=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' returned error (code {}): {}".format(
-            e.cmd, e.returncode, e.output))
+            e.cmd, e.returncode, (e.stderr or "") + (e.output or "")))
+    return out.stdout
+
+
+def acquireLock():
+    """Take an exclusive lock so two runs cannot interleave.
+
+    Two runs share one build directory and both finish by moving AllG2P.csv over
+    prevAllG2P.csv, so an overlap can leave the "has the download changed" check
+    comparing against a file the other run wrote. The lock is held until this
+    process exits; the returned handle only needs to stay referenced.
+    """
+    fh = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        sys.exit("another doG2p.py still holds %s; not starting a second run" % LOCK_FILE)
+    return fh
 
 
 def download(url, outFile):
@@ -112,6 +141,21 @@ def confidenceToColor(confidence):
     return CONFIDENCE_COLORS.get(normalizeConfidence(confidence))
 
 
+def bedField(value):
+    """Flatten one CSV value into a single tab-separated BED field.
+
+    This used to go through csv.writer, whose default QUOTE_MINIMAL treats the
+    double quote as its own quote character: any field holding one came out wrapped
+    in quotes with the inner quotes doubled. Nine G2P comments carry a quotation, so
+    that punctuation reached the live track and showed up on the details page.
+    bedToBigBed wants the raw text, and only needs the field and line separators
+    kept out of it.
+    """
+    if value is None:
+        return ""
+    return str(value).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
 def loadG2p(filePath):
     """Load G2P CSV into a dict keyed by HGNC ID (each value is a list of rows)."""
     g2pMap = {}
@@ -153,13 +197,13 @@ def joinAndWrite(g2pData, coords, outputFile):
     Returns a stats dict, both counts in G2P records so they are comparable:
       "unmatched"         -> count of G2P records whose HGNC ID had no coordinate
                              match in this assembly's HGNC track (they are skipped).
-      "unknownConfidence" -> {normalized confidence value: count of records} for
+      "unknownConfidence" -> {normalized confidence value: (count of records, one
+                             example of the value as it appeared in the CSV)} for
                              values not in CONFIDENCE_COLORS (colored black).
     """
     unmatched = 0
     unknownConfidence = {}
     with open(outputFile, "w", newline="", encoding="utf-8") as out:
-        writer = csv.writer(out, delimiter="\t")
         for hgncId, rows in g2pData.items():
             matches = coords.get(hgncId, [])
             if not matches:
@@ -170,14 +214,19 @@ def joinAndWrite(g2pData, coords, outputFile):
                 # can carry several coordinate rows, which would inflate the tally.
                 rgb = confidenceToColor(row["confidence"])
                 if rgb is None:
+                    # Tally on the folded value so case and stray whitespace do not split
+                    # one unknown value into several, but keep a raw example alongside it:
+                    # the folded form is not what is in the CSV, so it is not what someone
+                    # reading the log would grep for.
                     key = normalizeConfidence(row["confidence"])
-                    unknownConfidence[key] = unknownConfidence.get(key, 0) + 1
+                    count, example = unknownConfidence.get(key, (0, row["confidence"]))
+                    unknownConfidence[key] = (count + 1, example)
                     rgb = DEFAULT_COLOR
 
                 # G2P 20 fields
                 g2pId       = row["g2p id"]
                 geneMim     = row["gene mim"]
-                hgncIdVal   = row["hgnc id"]
+                hgncIdVal   = row["hgnc id"].strip()   # stripped, as the join key is
                 prevSymbols = row["previous gene symbols"].replace(";", ",")
                 diseaseName = row["disease name"]
                 diseaseMim  = row["disease mim"]
@@ -207,13 +256,13 @@ def joinAndWrite(g2pData, coords, outputFile):
                     thickStart  = coord[6]
                     thickEnd    = coord[7]
 
-                    writer.writerow([
+                    out.write("\t".join(bedField(f) for f in (
                         chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd,
                         rgb, g2pId, geneMim, hgncIdVal, prevSymbols, diseaseName, diseaseMim,
                         diseaseMondo, allelicReq, crossMod, confidence, varConseq, varTypes,
                         molMech, molMechCat, molMechEv, phenotypes, publications, panel,
                         comments, dateReview,
-                    ])
+                    )) + "\n")
     return {"unmatched": unmatched, "unknownConfidence": unknownConfidence}
 
 
@@ -241,15 +290,22 @@ def checkItemCount(db, newBb):
 
 
 def install(db, newBb):
-    """Atomically repoint /gbdb/<db>/g2p/g2p.bb at the freshly built bigBed."""
+    """Repoint /gbdb/<db>/g2p/g2p.bb at the freshly built bigBed, atomically.
+
+    Build the new symlink under a temp name and rename it over the live one. The
+    rm + ln this replaces left a window, short but real, in which the live path did
+    not exist at all -- and the browser reads that path.
+    """
     liveBb = GBDB_BB % db
     bash("mkdir -p %s" % str(Path(liveBb).parent))
-    bash("rm -f %s" % liveBb)
-    bash("ln -s %s %s" % (newBb, liveBb))
+    tmpLink = "%s.tmp%d" % (liveBb, os.getpid())
+    bash("ln -sfn %s %s" % (newBb, tmpLink))
+    bash("mv -T %s %s" % (tmpLink, liveBb))
     print("Installed %s -> %s" % (liveBb, newBb))
 
 
 def main():
+    lock = acquireLock()                  # held until the process exits
     if not updateNeeded():
         # Silent no-op: nothing new from G2P this run.
         return
@@ -279,9 +335,9 @@ def main():
         if stats["unmatched"]:
             print("%s: %d G2P record(s) had no HGNC coordinate match and were skipped"
                   % (db, stats["unmatched"]))
-        for conf, n in sorted(stats["unknownConfidence"].items()):
+        for conf, (n, example) in sorted(stats["unknownConfidence"].items()):
             print("%s: unrecognized confidence value %r on %d record(s); colored black"
-                  % (db, conf, n))
+                  % (db, example, n))
         bash("bedToBigBed -type=bed9+20 -tab -sort "
              "-as=%s -sizesIs2Bit -extraIndex=name,g2p_id,gene_mim,hgnc_id %s %s %s"
              % (AS_FILE, bedFile, twoBit, bbFile))

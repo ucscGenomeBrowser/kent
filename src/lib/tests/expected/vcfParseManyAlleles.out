@@ -1,0 +1,11 @@
+chr1	999	manyAlleles	alleleCount=261
+  S0	hapIxA=127	hapIxB=127	isHaploid=0	isPhased=0
+  S1	hapIxA=-1	hapIxB=1	isHaploid=0	isPhased=0
+  S2	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S3	hapIxA=-1	hapIxB=0	isHaploid=0	isPhased=0
+  S4	hapIxA=0	hapIxB=1	isHaploid=0	isPhased=1
+  S5	hapIxA=-1	hapIxB=2	isHaploid=0	isPhased=0
+  S6	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  S7	hapIxA=-1	hapIxB=-1	isHaploid=0	isPhased=0
+  alleleCounts (last is missing data): 2 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9
+  phased=1 diploid=8

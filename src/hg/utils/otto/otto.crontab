@@ -176,8 +176,14 @@ MAILTO=cells@ucsc.edu
 
 # DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
 # alive (reads the /hive job queue); restarts if down / on reboot.
-* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
-@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+#
+# MOVED (2026-08-22): the DE worker now runs from the otto crontab ON
+# hgcompute-08, not here. The compute host reads exprMatrix.bin from a /hive
+# cache it fetches over HTTP (deCache.py), so it no longer needs the web host's
+# local docroot, and DE compute is off hgwdev. These two lines are left commented
+# for history; the live copy is in otto's crontab on hgcompute-08.
+#* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+#@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 

@@ -78,5 +78,11 @@ void asmAliasOutput(struct asmAlias *el, FILE *f, char sep, char lastSep);
 char *asmAliasFind(char *alias);
 /* If this assembly is an alias for a db we know about, return it.  Otherwise return what we were sent. */
 
+char *asmAliasFindUnlessGenArk(char *alias);
+/* Like asmAliasFind(), but only translate through the asmAlias table if
+ * alias isn't already a real, existing GenArk hub -- an accession that
+ * resolves on its own should never be promoted to a merely "equivalent"
+ * alias. */
+
 #endif /* ASMALIAS_H */
 

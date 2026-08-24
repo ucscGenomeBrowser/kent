@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 #include "errAbort.h"
+#include "htmshell.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
@@ -417,4 +418,22 @@ boolean hAllowAllTables(void)
 /* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
 {
 return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
+}
+
+void cspWriteResponseHeader(void)
+/* Write the Content Security Policy as an http response header, if hg.conf
+ * turns it on.  Must be called before the blank line that ends the http header
+ * block.  Only the first call in a process writes anything.
+ *
+ * This exists so that pages which build their own http header block, and so
+ * never reach the library code that writes the meta tag, still carry a policy.
+ * The gate is off by default so it can be turned on one machine at a time. */
+{
+static boolean written = FALSE;
+if (written)
+    return;
+if (!cfgOptionBooleanDefault("cspResponseHeader", FALSE))
+    return;
+written = TRUE;
+generateCspResponseHeader(stdout);
 }

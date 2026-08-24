@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# ts (laptop side) - reach and drive UCSC "ticket sandbox" browsers parked on
+# hgwdev.  refs #37867
+#
+# The real tool lives on hgwdev at ~/ticketSandboxes/bin/ts and does the freezing
+# and httpd management there.  This thin wrapper, meant for your Mac, runs those
+# subcommands over ssh and opens the local ssh -L tunnel so you can point a
+# browser at a parked instance.
+#
+#   ts NNNNN                 open a tunnel to parked ticket NNNNN, print its URL
+#   ts tunnel NNNNN          same
+#   ts list                  list parked tickets on hgwdev
+#   ts create NNNNN [note]   run remotely on hgwdev (freeze + start)
+#   ts sync|start|stop|remove NNNNN
+#
+# Set HGWDEV to override the host (default hgwdev.gi.ucsc.edu); e.g. if you have
+# a "Host hgwdev" block in ~/.ssh/config, run:  HGWDEV=hgwdev ts list
+# Set TS_REMOTE to override the path of the real ts on hgwdev (default
+# ticketSandboxes/bin/ts, relative to your hgwdev home).
+#
+set -eu
+
+HGWDEV="${HGWDEV:-hgwdev.gi.ucsc.edu}"
+REMOTE="${TS_REMOTE:-ticketSandboxes/bin/ts}"   # path under your hgwdev home
+
+# tunnel makes two ssh connections (port lookup, then the tunnel).  With key
+# auth set up neither prompts; do NOT use ControlMaster/ControlPersist here, its
+# backgrounded master swallows the Ctrl-C that should close the foreground tunnel.
+
+usage() {
+    sed -n '11,20p' "$0" | sed 's/^#\{0,1\} \{0,1\}//'
+    exit 1
+}
+
+[ $# -ge 1 ] || usage
+sub="$1"
+
+case "$sub" in
+    -h|--help|help) usage;;
+esac
+
+# a bare ticket number is shorthand for "tunnel"
+if printf '%s' "$sub" | grep -qE '^[0-9]+$'; then
+    set -- tunnel "$sub"
+    sub=tunnel
+fi
+
+case "$sub" in
+    tunnel)
+        [ $# -eq 2 ] || usage
+        tkt="$2"
+        printf '%s' "$tkt" | grep -qE '^[0-9]+$' || { echo "ts: ticket must be numeric" >&2; exit 1; }
+        port="$(ssh "$HGWDEV" "$REMOTE port $tkt")" || exit 1
+        [ -n "$port" ] || { echo "ts: no port for ticket $tkt" >&2; exit 1; }
+        echo "Tunnel: localhost:$port -> $HGWDEV  (ticket $tkt)"
+        echo "Open:   http://localhost:$port/cgi-bin/hgTracks"
+        echo "Ctrl-C closes the tunnel."
+        exec ssh -N -L "$port:localhost:$port" "$HGWDEV"
+        ;;
+    list|create|sync|start|stop|remove)
+        # run the real ts on hgwdev; use a login shell so PATH has ss/httpd
+        cmd="$REMOTE"
+        for a in "$@"; do cmd="$cmd $(printf '%q' "$a")"; done
+        exec ssh -t "$HGWDEV" "bash -lc $(printf '%q' "$cmd")"
+        ;;
+    *) usage;;
+esac

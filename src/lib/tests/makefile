@@ -314,7 +314,8 @@ ${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
 # vcf:
 vcfTester=${BIN_DIR}/vcfParseTest
 vcfTest: vcfParse1kGNoGenotypes vcfParse1kGWithGenotypes vcfParseOldV3 \
-	vcfHeader1kGNoGenotypes vcfHeader1kGWithGenotypes vcfHeaderOldV3
+	vcfHeader1kGNoGenotypes vcfHeader1kGWithGenotypes vcfHeaderOldV3 \
+	vcfParseBadGenotypeIx vcfParseManyAlleles
 
 vcfParse1kGNoGenotypes: ${vcfTester} mkdirs
 	${vcfTester} input/YRI.trio.2010_06.novelsequences.sites.vcf.gz 2 26790859 194631353 > output/$@.out
@@ -342,6 +343,20 @@ vcfHeader1kGWithGenotypes: ${vcfTester} mkdirs
 
 vcfHeaderOldV3: ${vcfTester} mkdirs
 	${vcfTester} -headerOnly input/20091110_pilot1_vcf_merged_call_sets_YRI.2and3_way.vcf.gz > output/$@.out
+	diff expected/$@.out output/$@.out
+
+# A GT allele index that this record has no allele for must parse as missing data, so that
+# every caller sees either a real allele or missing data.
+vcfParseBadGenotypeIx: ${vcfTester} mkdirs
+	${vcfTester} -genotypes input/badGenotypeIx.vcf.gz chr1 0 10000 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+# A record can have more alleles than fit in the signed char that holds a genotype's allele
+# index.  An index too large for the field must also parse as missing data, instead of being
+# silently narrowed to some other value.  input/manyAlleles.vcf.gz has 260 ALT alleles, so
+# index 128 would narrow to a negative value and index 260 to 4, a real allele of that record.
+vcfParseManyAlleles: ${vcfTester} mkdirs
+	${vcfTester} -genotypes input/manyAlleles.vcf.gz chr1 0 10000 > output/$@.out
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}

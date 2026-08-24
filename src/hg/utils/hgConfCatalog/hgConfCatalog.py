@@ -221,7 +221,7 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
-        h("showMouseovers", "flag", "hg/hgTracks/config.c:704", default="FALSE",
+        h("showMouseovers", "flag", "hg/hgTracks/config.c:716", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
                "title tooltips.  Added v446 and still defaulting FALSE, which "
@@ -235,7 +235,7 @@ RELEASE_GATES = {
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
                "was reverted.  Four call sites."),
-        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:179",
+        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:187",
           default="FALSE", role="gate", verified=True,
           note="Short session links.  Added v374 and never flipped, which is "
                "the longest-running dark feature here."),
@@ -243,7 +243,7 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3375",
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3377",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
                "page can be reopened and shared.  The read at hgBlat.c:2972 "
@@ -253,7 +253,7 @@ RELEASE_GATES = {
                "Filed as a knob until that was read, on the strength of the "
                "default being an identifier the harvester could not resolve; "
                "a flag whose own source says to flip it later is a gate."),
-        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1164", default="FALSE",
+        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1165", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
         h("modernAlignPage", "flag", "hg/hgc/hgc.c:9386", default="FALSE",
@@ -262,7 +262,7 @@ RELEASE_GATES = {
                "hgBlat's new results page uses) for ordinary alignment clicks too "
                "- mRNA/EST, PSL and similar hgc details - instead of the classic "
                "two-frame <frameset>.  Off during QA; flip to TRUE once released."),
-        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:844", default="FALSE",
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:845", default="FALSE",
           role="gate", verified=True,
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
@@ -357,7 +357,7 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="SVG rather than raster bar charts on the details page.  "
                "Public since v428, the longest-shipped gate still in place."),
-        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:825", default="TRUE",
+        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c:837", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
                "since v492.  Three call sites."),
@@ -381,7 +381,7 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:858", default="TRUE",
+        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:859", default="TRUE",
           role="gate", verified=True,
           note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c:34", default="TRUE",
@@ -403,7 +403,7 @@ RELEASE_GATES = {
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
                "not attachment, so a hub is validated on attach either way."),
-        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3119", default="FALSE",
+        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3121", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Replaces hgBlat's classic C-generated search form with the "
                "JavaScript-built one in hg/js/hgBlat.js, which shares its "
@@ -413,7 +413,7 @@ RELEASE_GATES = {
                "banner offers a per-user opt-out that sets blatNewForm=0 in "
                "the cart.  It comes out once the new form replaces the old "
                "one, which is what makes it a gate rather than a knob."),
-        h("blatNewFormBanner", "flag", "hg/hgBlat/hgBlat.c:825",
+        h("blatNewFormBanner", "flag", "hg/hgBlat/hgBlat.c:826",
           default="follows blatNewForm", role="gate", verified=True,
           ticket="37893",
           note="Whether the classic BLAT search form carries a banner offering "
@@ -579,10 +579,10 @@ MIRROR_KNOBS = {
                "on a public machine."),
         h("login.acceptIdx", "flag", "hg/lib/wikiLink.c:255", default="FALSE",
           role="knob", verified=True, note="Companion to login.acceptAnyId."),
-        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2583",
+        h("login.pwdEyeIcon", "flag", "hg/hgLogin/hgLogin.c:2630",
           default="TRUE", role="knob", verified=True,
           note="Show-password eye icon on the login form."),
-        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1718",
+        h("login.emailLink", "flag", "hg/hgLogin/hgLogin.c:1765",
           default="FALSE", role="knob", public=True, verified=True,
           ticket="37929",
           note="Passwordless sign-in: the user is emailed a one-time link "
@@ -610,7 +610,7 @@ MIRROR_KNOBS = {
           role="knob", verified=True, deprecated=True,
           note="CIRM data warehouse is public.  Belongs to the cirm CGIs, "
                "which are not part of the browser release."),
-        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1025",
+        h("multiRegionButtonTop", "flag", "hg/hgTracks/config.c:1037",
           default="TRUE", role="knob", public=True, verified=True,
           note="Where the multi-region button lives, which is a layout "
                "preference a mirror is entitled to keep, so a knob.  Two "
@@ -690,7 +690,7 @@ DATABASE = {
           public=True, verified=True, family="central"),
         h("central.db", "profile", "hg/hgc/lowelab.c:2362", public=True,
           verified=True, family="central"),
-        h("central.domain", "internal", "hg/hubApi/apiUtils.c:878",
+        h("central.domain", "internal", "hg/hubApi/apiUtils.c:880",
           public=True, verified=True, required=True, family="central",
           note="Cookie domain for the central cookie.  Read with cfgVal in "
                "hubApi, so that CGI will not start without it."),
@@ -783,7 +783,7 @@ CENTRAL_TABLES = {
           default='"hubSearchText"', verified=True),
         h("authTableName", "table", "hg/lib/hubSpaceKeys.c:132",
           verified=True, note="Hub space API keys."),
-        h("ottoTable", "table", "hg/hubApi/apiUtils.c:908", verified=True,
+        h("ottoTable", "table", "hg/hubApi/apiUtils.c:910", verified=True,
           note="Table the hub API reads to report otto track update times."),
         h("genbankDb", "profile", "hg/hgVai/hgVai.c:803", public=True,
           verified=True, env="GENBANKDB"),
@@ -847,12 +847,12 @@ PATHS = {
           "hg/cgilib/sessionThumbnail.c:30", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.convertPath", "path",
-          "hg/hgSession/hgSession.c:1157", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1172", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.suppress", "flag",
-          "hg/hgSession/hgSession.c:1153", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1168", public=True, verified=True,
           family="sessionThumbnail"),
-        h("freeTypeDir", "path", "hg/hgTracks/config.c:174",
+        h("freeTypeDir", "path", "hg/hgTracks/config.c:186",
           default='"../htdocs/urw-fonts"', verified=True),
         h("freeTypeFont", "internal", "hg/cgilib/trackLayout.c:67",
           default='"Bitmap"', verified=True),
@@ -947,13 +947,13 @@ LIMITS = {
           default='"3"', public=True, verified=True),
         h("quickLift.lengthLimit", "limit", "hg/lib/quickLift.c:575",
           default='"10000"', verified=True, ticket="37788"),
-        h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:932", verified=True,
+        h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:934", verified=True,
           note="Per-day liftOver cap for the hub API."),
-        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2208",
+        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2209",
           default="NULL", public=True, verified=True),
-        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3188",
+        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3190",
           default='"20"', public=True, verified=True),
-        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3219",
+        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3221",
           default='"90"', public=True, verified=True),
         h("logCgiVarMaxLen", "limit", "hg/lib/hgConfig.c:386", default='"0"',
           public=True, verified=True,
@@ -1008,7 +1008,7 @@ LOGGING = {
     "what": "Diagnostics.  Several of these are safe to leave on and a few "
             "are expensive, so they are worth telling apart.",
     "vars": [
-        h("browser.cgiTime", "debug", "hg/lib/cart.c:4045", default='"yes"',
+        h("browser.cgiTime", "debug", "hg/lib/cart.c:4051", default='"yes"',
           public=True, verified=True,
           note="Log per-CGI timing.  On by default and cheap; this is what "
                "the log analysis relies on."),
@@ -1054,7 +1054,7 @@ LOGGING = {
 BRANDING = {
     "what": "Text, styling and links that differ between UCSC and a mirror.",
     "vars": [
-        h("browser.style", "internal", "hg/lib/cart.c:3167", public=True,
+        h("browser.style", "internal", "hg/lib/cart.c:3169", public=True,
           verified=True, note="Stylesheet override."),
         h("browser.theme.", "internal", "hg/hgTracks/config.c:31",
           public=True, verified=True,
@@ -1234,13 +1234,13 @@ EXTERNAL = {
           verified=True, family="resolv"),
         h("resolvCmd", "path", "hg/lib/hui.c:677", public=True, verified=True,
           family="resolv"),
-        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1749",
+        h("hubApi.allowHtml", "flag", "hg/hubApi/hubApi.c:1751",
           default='"off"', verified=True, family="hubApi"),
-        h("hubApi.showActive0", "flag", "hg/hubApi/apiUtils.c:554",
+        h("hubApi.showActive0", "flag", "hg/hubApi/apiUtils.c:555",
           default='"off"', verified=True, family="hubApi"),
-        h("hubApi.blatDelayFraction", "limit", "hg/hubApi/blat.c:312",
+        h("hubApi.blatDelayFraction", "limit", "hg/hubApi/blat.c:314",
           default="NULL", verified=True, family="hubApi"),
-        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:993",
+        h("hubApi.relaySecret", "credential", "hg/hubApi/apiUtils.c:995",
           verified=True, family="hubApi"),
         h("apiFromEmail", "email", "hg/hubApi/liftOver.c:538", verified=True),
         h("chainFileRequestEmail", "email", "hg/hubApi/liftOver.c:537",

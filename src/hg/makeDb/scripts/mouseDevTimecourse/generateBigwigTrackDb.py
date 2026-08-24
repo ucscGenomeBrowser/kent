@@ -99,6 +99,12 @@ def tissue_tag(name):
     return 't%02d_%s' % (TISSUE_ORDER.index(name) + 1, tissue_key(name))
 
 
+def tissue_label(name):
+    """Sentence-cased subGroup label; trackDb renders the underscores as spaces."""
+    key = tissue_key(name)
+    return key[:1].upper() + key[1:]
+
+
 def age_label(life_stage, age):
     if life_stage == 'embryonic':
         return 'e' + str(age)
@@ -132,7 +138,9 @@ def load_colors():
             if len(cols) < 5:
                 continue
             tissue, timepoint, hex_color = cols[2], cols[3], cols[4]
-            colors[(tissue, timepoint)] = hex_color
+            # Keyed lower-case: the .facets tissue is sentence-cased for display
+            # but the biosample TSV supplies it lower-case.
+            colors[(tissue.lower(), timepoint)] = hex_color
     return colors
 
 
@@ -178,6 +186,9 @@ def main():
     # Composite parent stanza
     print('    track developmentTimecourseSignalMm10')
     print('    parent mouseDevTimecourse')
+    # Sorts after the four bigBarChart siblings, which take 1-4. Without an
+    # explicit value this inherits the superTrack's 0.6 and floats to the top.
+    print('    priority 5')
     print('    compositeTrack on')
     print('    type bigWig')
     print('    shortLabel Timecourse Signal')
@@ -187,11 +198,14 @@ def main():
     print('    html developmentTimecourseSignalMm10')
     print('    subGroup1 view Views unique=Unique_reads all=All_reads')
 
-    tissue_grp = ' '.join(tissue_tag(t) + '=' + tissue_key(t) for t in TISSUE_ORDER)
+    tissue_grp = ' '.join(tissue_tag(t) + '=' + tissue_label(t) for t in TISSUE_ORDER)
     print('    subGroup2 tissue Tissue ' + tissue_grp)
 
     age_grp = ' '.join(age_key(ls, age) + '=' + age_label(ls, age) for ls, age in ages)
-    print('    subGroup3 age Age ' + age_grp)
+    # Display label is Timepoint, matching the bigBarChart facet filter and the
+    # .facets column. The group name stays 'age' because dimensions and sortOrder
+    # reference it by name.
+    print('    subGroup3 age Timepoint ' + age_grp)
 
     print('    subGroup4 rep Replicate rep1=Rep_1 rep2=Rep_2')
     print('    dimensions dimX=age dimY=tissue dimA=rep')
@@ -237,17 +251,20 @@ def main():
                          'fetchReplicateNumbers.py' % (acc, REPLICATES))
             rep_num = replicates[acc]
 
-            hex_color = colors.get((tissue, a_lbl))
+            hex_color = colors.get((tissue.lower(), a_lbl))
             if hex_color is None:
                 sys.exit('no color in %s for (%s, %s)' % (FACETS, tissue, a_lbl))
             rgb = hex_to_rgb(hex_color)
 
             track = 'developmentTimecourseSignalMm10_' + acc
 
-            # Default on for rep1 + unique-reads (78 subtracks visible when the
-            # composite is enabled). rep2 and all-reads remain off; users can
-            # enable them from the trackUi page.
-            parent_state = 'on' if (rep_num == 1 and view_key == 'unique') else 'off'
+            # Check rep1 in both views, and leave rep2 unchecked. Whether the
+            # all-reads subtracks actually draw is controlled by their view's
+            # visibility, which is 'hide'; so the default image is unchanged at 78
+            # unique-reads rep1 tracks. Encoding the view here as well would leave
+            # the All reads view with nothing checked, and switching it to full
+            # would then appear to do nothing.
+            parent_state = 'on' if rep_num == 1 else 'off'
 
             # Title Case on the tissue and the replicate marker; e14.5 / P0 stay
             # as written since they are standard developmental stage notation.

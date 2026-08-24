@@ -257,14 +257,16 @@ central.domain=HTTPHOST
 #	databases for multiple hosts, set a distinct cookie name per
 #	central database.
 # central.cookie=hguid.mylab
-#	personalize the background of the browser with a specified jpg
-#	floret.jpg is the standard UCSC default
-browser.background=../images/floret.jpg
+#	browser.background is dead: hBackgroundImage() and its callers were removed in
+#	2012 (commit 8e6fcda9f58) and no CGI has read this key since.  Set a background
+#	image in CSS instead, via browser.style.  refs #38158
+#browser.background=../images/floret.jpg
 
 # Change this default documentRoot if different in your installation,
 #	to allow some of the browser cgi binaries to find help text files
 browser.documentRoot=/usr/local/apache/htdocs
-#	personalize the background of CGIs that don't use images
+#	browser.bgcolor is dead too, no CGI has ever read it.  Set colors in the CSS
+#	file named by browser.style.  refs #38158
 #browser.bgcolor=FFF9D2
 
 # optional location of grepIndex files

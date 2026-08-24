@@ -6,6 +6,7 @@
 #include "jksql.h"
 #include "htmshell.h"
 #include "web.h"
+#include "hCommon.h"
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hui.h"
@@ -604,10 +605,11 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
         trackName = cloneString(track->track);
         }
     trackHubFixName(trackName);
+    cspWriteResponseHeader();
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
     printf("<script type='text/javascript' src='../js/utils.js'></script>\n");
-    printf("<script>\n");
+    printf("<script nonce='%s'>\n", getNonce());
     // we are about to redirect back to hgTracks, save the search term onto the
     // history stack so it will appear in the dropdown of auto-suggestions before
     // redirecting.  db and userSearch are user-supplied and go into a JS string literal

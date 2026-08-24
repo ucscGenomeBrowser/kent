@@ -226,6 +226,7 @@ SCRIPT_FILES = \
 	codeReviewAi.py \
 	redmineCli \
 	browserRace \
+	ts \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

@@ -740,6 +740,7 @@ if (sessionNewPageActive())
     doMainPageNew(userName, message);
     return;
     }
+cspWriteResponseHeader();
 puts("Content-Type:text/html\n");
 if (loginSystemEnabled() || wikiLinkEnabled())
     {
@@ -2248,6 +2249,7 @@ void doMainPageNew(char *userName, char *message)
  * band), the experimental banner, an empty #sessionApp container, and the hgSessionData JSON that
  * hgSession.js reads to build the UI. */
 {
+cspWriteResponseHeader();
 puts("Content-Type:text/html\n");
 cartWebStart(cart, NULL, "My Sessions");
 jsInit();

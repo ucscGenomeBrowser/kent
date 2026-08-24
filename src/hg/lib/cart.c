@@ -1693,9 +1693,10 @@ void printCaptcha()
         return;
 
     fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
+    cspWriteResponseHeader();
     puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");
-    puts("<script>");
+    printf("<script nonce='%s'>\n", getNonce());
     printf("function showWidget() { \n"
        "turnstile.render('#myWidget', {\n"
          "sitekey: '%s',\n"
@@ -1802,6 +1803,7 @@ if (token)
         }
     else
         {
+        cspWriteResponseHeader();
         puts("Content-Type: text/html\n");
         puts("<html><body>Internal captcha error: Cloudflare rejected the captcha token. "
                 "Something is not working internally, we are very sorry. You can try reloading the page. "
@@ -2945,6 +2947,7 @@ for (h = httpHeaders; h != NULL; h = h->next)
     {
     printf("%s: %s\n", h->name, (char *)h->val);
     }
+cspWriteResponseHeader();
 }
 
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
@@ -3157,8 +3160,10 @@ void setThemeFromCart(struct cart *cart)
  * defined for this theme Also set the "styleTheme", with additional styles
  * that can overwrite the main style settings */
 {
-// Get theme from cart and use it to get background file from config;
-// format is browser.theme.<name>=<stylesheet>[,<background>]
+// Get theme from cart and use it to get the stylesheet from config;
+// format is browser.theme.<name>=<cssFileInStyleDir>, where <name> may carry a
+// sort prefix, browser.theme.3.Sans_Serif=theme-modern.css.  A value of "<>"
+// means "no theme file", leaving whatever browser.style set.
 
 char *cartTheme = cartOptionalString(cart, "theme");
 
@@ -3179,11 +3184,15 @@ if (isNotEmpty(cartTheme))
     char *themeKey = catTwoStrings("browser.theme.", cartTheme);
     styleFile = cfgOption(themeKey);
     freeMem(themeKey);
-    if (isEmpty(styleFile))
+    // "<>" means "default settings" = "no file".  Test styleFile, not the link:
+    // webCssLink returns html or an empty string, never the "<>" marker itself.
+    if (isEmpty(styleFile) || sameString(styleFile, "<>"))
         return;
 
     char * link = webCssLink(styleFile, FALSE); // resource file link wrapped in html
-    if (link != NULL && !sameOk(link, "<>")) // "<>" means "default settings" = "no file"
+    // An empty link means the file was not found.  Leave browser.style alone rather
+    // than overwriting it with nothing.
+    if (isNotEmpty(link))
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc
