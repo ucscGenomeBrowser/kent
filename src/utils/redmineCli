@@ -21,6 +21,8 @@ Usage:
     redmineCli attach 33571 screenshot.png --note "See attached"
     redmineCli note 20460 85                   # show note-85 from ticket 20460
     redmineCli relate 10316 15336 30368       # relate tickets to each other
+    redmineCli related 34446                   # list a ticket's related tickets
+    redmineCli related 34446 --add 12345 6789  # add relations to a ticket
     redmineCli watch 37339 lou braney         # add watchers to a ticket
     redmineCli users                          # list user names and IDs
 """
@@ -501,6 +503,15 @@ def cmd_show(args):
                        f"({a['filesize']} bytes, {a['author']['name']}, "
                        f"{format_date(a['created_on'])})")
         out.append("")
+
+    # Related tickets (shown by default; --no-related suppresses the extra API calls).
+    if not getattr(args, "no_related", False):
+        rel_lines = related_lines(args.base_url, args.ticket_id, args.api_key)
+        if rel_lines:
+            out.append("## Related tickets")
+            out.append("")
+            out.extend(rel_lines)
+            out.append("")
 
     out.append("## Description")
     out.append("")
@@ -1118,6 +1129,91 @@ def cmd_relate(args):
 
 
 # ---------------------------------------------------------------------------
+# Related-ticket helpers (shared by `show` and `related`)
+# ---------------------------------------------------------------------------
+
+def fetch_relations(base_url, ticket_id, api_key):
+    """Return a list of (other_ticket_id, relation_type) for a ticket's relations.
+    The relation JSON names both ends (issue_id, issue_to_id); the "other" end is
+    whichever one is not this ticket."""
+    data = api_get(base_url, f"/issues/{ticket_id}.json?include=relations", api_key)
+    tid = int(ticket_id)
+    rels = []
+    for r in data["issue"].get("relations", []):
+        other = r["issue_to_id"] if r["issue_id"] == tid else r["issue_id"]
+        rels.append((other, r.get("relation_type", "relates")))
+    # Stable order: by relation type, then ticket id.
+    rels.sort(key=lambda t: (t[1], t[0]))
+    return rels
+
+
+def summarize_issue(base_url, ticket_id, api_key):
+    """Return {id, subject, status, tracker} for a ticket, or None if it can't be read
+    (e.g. deleted or no permission)."""
+    try:
+        d = api_get(base_url, f"/issues/{ticket_id}.json", api_key)["issue"]
+    except SystemExit:
+        return None
+    return {"id": d["id"], "subject": d.get("subject", ""),
+            "status": d.get("status", {}).get("name", ""),
+            "tracker": d.get("tracker", {}).get("name", "")}
+
+
+def related_lines(base_url, ticket_id, api_key):
+    """Build markdown bullet lines describing a ticket's related tickets, one per line
+    with tracker/status and subject.  Returns [] if there are none."""
+    rels = fetch_relations(base_url, ticket_id, api_key)
+    if not rels:
+        return []
+    lines = []
+    for other_id, rtype in rels:
+        info = summarize_issue(base_url, other_id, api_key)
+        if info:
+            lines.append(f"- {rtype} #{other_id} [{info['tracker']}/{info['status']}] "
+                         f"{info['subject']}")
+        else:
+            lines.append(f"- {rtype} #{other_id} (not readable)")
+    return lines
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: related
+# ---------------------------------------------------------------------------
+
+def cmd_related(args):
+    """List a ticket's related tickets, or add new relations to it."""
+    if args.add:
+        # Add each --add ticket as a relation of the main ticket (idempotent, like `relate`).
+        created = skipped = 0
+        for other in args.add:
+            data = {"relation": {"issue_to_id": int(other),
+                                 "relation_type": args.type}}
+            try:
+                api_post(args.base_url,
+                         f"/issues/{args.ticket_id}/relations.json",
+                         args.api_key, data)
+                created += 1
+                print(f"  Related #{args.ticket_id} <-> #{other} ({args.type})")
+            except SystemExit as e:
+                if "422" in str(e):
+                    skipped += 1
+                    print(f"  Already related: #{args.ticket_id} <-> #{other}")
+                else:
+                    raise
+        print(f"Done: {created} created, {skipped} already existed")
+        return
+
+    # No --add: list (pull) the related tickets.
+    lines = related_lines(args.base_url, args.ticket_id, args.api_key)
+    if not lines:
+        print(f"#{args.ticket_id} has no related tickets.")
+        return
+    print(f"# Related tickets for #{args.ticket_id}")
+    print("")
+    print("\n".join(lines))
+
+
+# ---------------------------------------------------------------------------
 # Subcommand: watch
 # ---------------------------------------------------------------------------
 
@@ -1207,6 +1303,8 @@ def build_parser():
                         help="Download images to a temp directory")
     p_show.add_argument("--download-all", dest="download_all", action="store_true",
                         help="Download all attachments to a temp directory")
+    p_show.add_argument("--no-related", dest="no_related", action="store_true",
+                        help="Don't fetch and show related tickets (faster)")
 
     # list
     p_list = sub.add_parser("list", help="List/search tickets")
@@ -1378,6 +1476,17 @@ def build_parser():
                                "blocked, precedes, follows, copied_to, copied_from "
                                "(default: %(default)s)")
 
+    # related
+    p_related = sub.add_parser("related",
+                               help="List a ticket's related tickets, or add relations to it")
+    p_related.add_argument("ticket_id", help="Ticket ID number")
+    p_related.add_argument("--add", nargs="+", metavar="ID",
+                           help="Ticket IDs to relate to this ticket (omit to just list)")
+    p_related.add_argument("--type", default="relates",
+                           help="Relation type used with --add: relates, duplicates, "
+                                "duplicated, blocks, blocked, precedes, follows, copied_to, "
+                                "copied_from (default: %(default)s)")
+
     # watch
     p_watch = sub.add_parser("watch", help="Add watchers to a ticket")
     p_watch.add_argument("ticket_id", help="Ticket ID number")
@@ -1413,6 +1522,7 @@ def main():
         "attach": cmd_attach,
         "users": cmd_users,
         "relate": cmd_relate,
+        "related": cmd_related,
         "watch": cmd_watch,
         "note": cmd_note,
     }
