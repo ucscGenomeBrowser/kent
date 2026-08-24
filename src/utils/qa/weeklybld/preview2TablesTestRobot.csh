@@ -8,6 +8,18 @@ cd $WEEKLYBLD
 @ NEXTNN = ( $BRANCHNN + 1 )
 
 setenv HGDB_CONF /cluster/home/build/.hg.conf
+
+# Run the binary the make above just produced.  userApp.mk installs to
+# $HOME/bin/$MACHTYPE (common.mk BINDIR), so invoking /cluster/bin/$MACHTYPE
+# meant this robot rebuilt hgTablesTest and then tested with a different,
+# older binary from a shared directory it does not own.
+set hgTablesTest = $HOME/bin/$MACHTYPE/hgTablesTest
+if ( ! -x $hgTablesTest ) then
+    echo "ERROR: $hgTablesTest missing or not executable - did the make above fail?"
+    echo "$hgTablesTest missing or not executable; the make above probably failed." \
+      | mail -s "Errors in v${NEXTNN}.preview2 hgTablesTestRobot on $HOST" ${BUILDMEISTEREMAIL}
+    exit 1
+endif
 set log = v${NEXTNN}.preview2.hgTables.log
 # Combined stdout/stderr of the two hgTablesTest runs.  Kept SEPARATE from $log:
 # hgTablesTest writes its structured report to $log itself and ALSO echoes the
@@ -25,12 +37,12 @@ if ( $?ROBOT_MAILTO ) then
 endif
 
 rm -f ./logs/$runout
-echo "/cluster/bin/$MACHTYPE/hgTablesTest -db=hg38 https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
-/cluster/bin/$MACHTYPE/hgTablesTest -appendLog -db=hg38 https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
+echo "$hgTablesTest -db=hg38 https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
+$hgTablesTest -appendLog -db=hg38 https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
 set st1 = $status
 echo "" >> ./logs/$log
-echo "/cluster/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log" >> ./logs/$log
-/cluster/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
+echo "$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log" >> ./logs/$log
+$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwdev.gi.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
 set st2 = $status
 
 # creates hgTables.log - look for unusual errors
