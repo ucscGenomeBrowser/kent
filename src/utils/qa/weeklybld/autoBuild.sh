@@ -513,7 +513,11 @@ preview2_email_pairings() {
 preview2_tables_robot() {
     local NEXTNN=$((BRANCHNN + 1))
     log "Running preview2TablesTestRobot.csh (takes ~1h40m)..."
-    run_tcsh "time ./preview2TablesTestRobot.csh >& $LOGDIR/v${NEXTNN}.preview2.hgTables.log"
+    # Capture the robot's own messages in their OWN file.  It must not be
+    # v${NEXTNN}.preview2.hgTables.log: hgTablesTest writes its structured report
+    # there itself, and a second fd on that file has its own offset, so these
+    # writes would land on top of the report rather than after it.
+    run_tcsh "time ./preview2TablesTestRobot.csh >& $LOGDIR/v${NEXTNN}.preview2.robot.log"
 }
 
 do_preview2() {
