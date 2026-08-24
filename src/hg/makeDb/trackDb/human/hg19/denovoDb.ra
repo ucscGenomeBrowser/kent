@@ -17,7 +17,7 @@ noScoreFilter on
     shortLabel ssc samples
     visibility dense
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
-    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
+    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="https://www.genecards.org/search/results?q=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
     
     track denovoDbnon-ssc
     parent denovoDbComposite
@@ -28,4 +28,4 @@ noScoreFilter on
     shortLabel non-ssc samples
     visibility dense
     mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd}<br> <b>Variant</b>: ${variant}<br> <b>Primary Phenotype</b>: ${primaryPhenotype}<br> <b>Validation</b>: ${validation}<br> <b>Transcript</b>: ${transcript}
-    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="http://www.genecards.org/cgi-bin/cardsearch.pl?search=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"
+    urls pubmedID="https://www.ncbi.nlm.nih.gov/pubmed/$$" gene="https://www.genecards.org/search/results?q=$$" transcript="https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank"

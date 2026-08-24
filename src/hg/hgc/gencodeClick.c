@@ -63,7 +63,7 @@ static char *apprisGeneUrl = "https://appris.bioinfo.cnio.es/#/database/id/%s/%s
 // species-specific
 static char *hgncByIdUrl = "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s";
 static char *hgncBySymUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
-static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
+static char *geneCardsUrl = "https://www.genecards.org/card/%s";
 static char *mgiBySymUrl = "http://www.informatics.jax.org/quicksearch/summary?queryType=exactPhrase&query=%s";
 static char *mgiByIdUrl = "http://www.informatics.jax.org/accession/%s";
 
