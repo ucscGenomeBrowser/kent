@@ -358,6 +358,12 @@ ul.nice-menu ul li a {
     border-left: 3px solid transparent;
 }
 
+.gbsPage .docs-toc li.docs-toc-sub a {
+    padding-left: 28px;
+    font-size: 13px;
+    color: #555;
+}
+
 .gbsPage .docs-toc li a:hover {
     color: #4c759c;
     border-left-color: #ddd;

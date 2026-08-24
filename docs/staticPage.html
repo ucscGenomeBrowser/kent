@@ -33,27 +33,77 @@ $endfor$
     }
     if (!sections.length) return;
 
-    function onScroll() {
-        var scrollY = window.scrollY || window.pageYOffset;
-        var current = sections[0];
-        // At the bottom of the page the last section is often too short to
-        // scroll within the 80px threshold, so highlight it explicitly.
-        if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 2) {
-            current = sections[sections.length - 1];
-        } else {
-            for (var i = 0; i < sections.length; i++) {
-                if (sections[i].target.offsetTop <= scrollY + 80) {
-                    current = sections[i];
-                }
-            }
-        }
+    function setActive(link) {
         for (var i = 0; i < sections.length; i++) {
             sections[i].link.parentNode.classList.remove('active');
         }
-        current.link.parentNode.classList.add('active');
+        link.parentNode.classList.add('active');
     }
 
+    // Jumping to a section in the final screenful leaves the page at its
+    // maximum scroll, where the sweep below would hand the highlight to a
+    // later section.  So a clicked link stays pinned until the reader scrolls.
+    var pinned = null;
+
+    function onScroll() {
+        if (pinned) {
+            setActive(pinned);
+            return;
+        }
+        var scrollY = window.scrollY || window.pageYOffset;
+        var viewHeight = window.innerHeight;
+        var maxScroll = document.documentElement.scrollHeight - viewHeight;
+        // A section becomes current once it passes a reading line 80px below
+        // the top of the viewport.  Sections in the final screenful never
+        // reach that line, because the page stops scrolling first, so once we
+        // enter the last screen the line sweeps down to the bottom of the
+        // viewport.  That gives every trailing section its turn and leaves the
+        // last one current at the very bottom.
+        var sweepStart = Math.max(0, maxScroll - viewHeight);
+        var t = 0;
+        if (maxScroll > sweepStart) {
+            t = (scrollY - sweepStart) / (maxScroll - sweepStart);
+            t = Math.max(0, Math.min(1, t));
+        }
+        var line = scrollY + 80 + t * (viewHeight - 80);
+        var current = sections[0];
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].target.offsetTop <= line) {
+                current = sections[i];
+            }
+        }
+        setActive(current.link);
+    }
+
+    for (var i = 0; i < sections.length; i++) {
+        sections[i].link.addEventListener('click', function() {
+            pinned = this;
+            setActive(this);
+        });
+    }
+
+    // Any genuine scroll input hands control back to the sweep.  mousedown
+    // covers dragging the scrollbar, and fires before the click above, so
+    // clicking a TOC link still ends up pinned.
+    function release() {
+        pinned = null;
+    }
+    window.addEventListener('wheel', release, {passive: true});
+    window.addEventListener('touchmove', release, {passive: true});
+    window.addEventListener('keydown', release);
+    window.addEventListener('mousedown', release);
+
     window.addEventListener('scroll', onScroll);
+
+    // Landing on the page with a #section URL has the same problem as a click.
+    if (window.location.hash) {
+        for (var i = 0; i < sections.length; i++) {
+            if ('#' + sections[i].target.id === window.location.hash) {
+                pinned = sections[i].link;
+                break;
+            }
+        }
+    }
     onScroll();
 })();
 </script>

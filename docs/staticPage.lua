@@ -143,7 +143,8 @@ function Doc(body, metadata, variables)
   add('<nav class="docs-toc" id="docs-toc">')
   add('<ul>')
   for i, h in ipairs(headers) do
-    add("<li><a href='#" .. h.id .. "'>" .. h.text .. "</a></li>")
+    local cls = h.sub and " class='docs-toc-sub'" or ""
+    add("<li" .. cls .. "><a href='#" .. h.id .. "'>" .. h.text .. "</a></li>")
   end
   add('</ul>')
   add('</nav>')
@@ -312,7 +313,7 @@ function Header(lev, s, attr)
 
     idStr = simplifyId(s)
 
-    table.insert(headers, {text = s, id = idStr})
+    table.insert(headers, {text = s, id = idStr, sub = false})
 
     table.insert(lines, "<h2 id='" .. idStr .. "'>"  .. s .. "</h2>")
     headerOpen = true
@@ -320,7 +321,13 @@ function Header(lev, s, attr)
   elseif lev == 2 then
     -- Collect lev==2 headers for TOC (markdown ## headings)
     local idStr = attr.id or simplifyId(s)
-    table.insert(headers, {text = s, id = idStr})
+    table.insert(headers, {text = s, id = idStr, sub = false})
+    table.insert(lines, "<h" .. lev .. " id='" .. idStr .. "'" ..  ">" .. s .. "</h" .. lev .. ">")
+
+  elseif lev == 3 then
+    -- Collect lev==3 headers for TOC as indented sub-items (markdown ### headings)
+    local idStr = attr.id or simplifyId(s)
+    table.insert(headers, {text = s, id = idStr, sub = true})
     table.insert(lines, "<h" .. lev .. " id='" .. idStr .. "'" ..  ">" .. s .. "</h" .. lev .. ">")
 
   else
