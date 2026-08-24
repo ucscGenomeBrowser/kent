@@ -37,6 +37,9 @@ Display your own annotations alongside the data we host:
   configurable, ideal for many tracks or for sharing data publicly. Start
   with our [Hub Basics](/docs/hubs/hubBasics.html) page, and validate your
   hub with our [hub development tools](/cgi-bin/hgHubConnect#hubDeveloper).
+  For hubs with thousands of subtracks, our
+  [Faceted Composite Tracks](/docs/hubs/facetedComposite.html) page covers a
+  filterable alternative to the standard composite interface.
 
 For both hubs and custom tracks, we provide storage through
 [hub space](/cgi-bin/hgHubConnect#hubUpload).
