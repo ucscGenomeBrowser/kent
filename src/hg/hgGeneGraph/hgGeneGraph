@@ -1593,7 +1593,7 @@ def markupSentence(row):
                 genes = causeGenes
             geneDisp = genes.replace("|", ", ")
             gene1 = genes.split("|")[0]
-            parts.append( '<b><i><a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" data-toggle="tooltip" data-placement="top" title="recognized genes: %s, click to go to Gene Cards" target=_blank>' % \
+            parts.append( '<b><i><a href="https://www.genecards.org/card/%s" data-toggle="tooltip" data-placement="top" title="recognized genes: %s, click to go to Gene Cards" target=_blank>' % \
                 (gene1, geneDisp))
         if i==trigToken:
             parts.append( '<i class="trigger">')

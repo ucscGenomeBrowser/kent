@@ -6716,8 +6716,7 @@ void printGeneCards(char *db, char *geneName)
 if (startsWith("hg", db) && isNotEmpty(geneName))
     {
     printf("<B>GeneCards:</B> "
-	   "<A HREF = \"http://www.genecards.org/cgi-bin/cardsearch.pl?"
-	   "search=%s\" TARGET=_blank>%s</A><BR>\n",
+	   "<A HREF = \"https://www.genecards.org/card/%s\" TARGET=_blank>%s</A><BR>\n",
 	   geneName, geneName);
     }
 }
