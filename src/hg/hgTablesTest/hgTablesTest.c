@@ -27,6 +27,12 @@
 
 #define MAX_ATTEMPTS 10
 
+/* Row limit for a table tested WITH position filtering.  Far above the 500000
+ * used when the whole table gets scanned, because a region restricts the output;
+ * this only screens out the handful of whole-genome tables so dense that even one
+ * test region's all-fields output can exceed the carefulAlloc ceiling. */
+#define MAX_ROWS_REGION_FILTERED 250000000
+
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -725,7 +731,21 @@ if (!hashLookup(uniqHash, fullName))
 	    if (outTypeAvailable(mainForm, "bed")) 
 		{
 		verbose(3, "testOneTable bed output avail means can filter on position got here 2\n");
-		if (outTypeAvailable(mainForm, "primaryTable"))
+		/* A region bounds the output for almost every table, but a whole-genome
+		 * table of hundreds of millions of rows is dense enough that all-fields
+		 * output for the test region can still pass the carefulAlloc ceiling.
+		 * carefulAlloc exits the process outright, which forfeits every table
+		 * left in the run, so screen the worst offenders out the way the
+		 * no-position-filter branch below does. */
+		int tableRows = tableSize(db, table);
+		if (tableRows >= MAX_ROWS_REGION_FILTERED)
+		    {
+		    verbose(1, "%s.%s tableRows=%d, too large >= %d even with position filtering, skipping.\n",
+			db, table, tableRows, MAX_ROWS_REGION_FILTERED);
+		    fprintf(logFile, "%s.%s tableRows=%d, too large >= %d even with position filtering, skipping.\n",
+			db, table, tableRows, MAX_ROWS_REGION_FILTERED);
+		    }
+		else if (outTypeAvailable(mainForm, "primaryTable"))
 		    {
 		    verbose(3, "testOneTable got here 3\n");
 		    int rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
