@@ -2,7 +2,7 @@ track gnomadMpc
 parent gnomadVariants
 compositeTrack on
 shortLabel gnomAD MPC
-longLabel gnomAD Missense Badness, PolyPhen-2, and Constraint (MPC) v4.1.1
+longLabel gnomAD Missense Deleteriousness Prediction by Constraint (MPC) v4.1.1
 type bigWig
 visibility hide
 group varRep
