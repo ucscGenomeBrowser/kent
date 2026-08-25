@@ -151,7 +151,7 @@ Automates build of assembly hub.  Steps:
     chromAlias:  construct asmId.chromAlias.txt for alias name recognition
     gatewayPage: create html/asmId.description.html contents
     cytoBand: create cytoBand track and navigation ideogram
-    gc5Base: create bigWig file for gc5Base track
+    gc5Base: create bigWig file for gc5Base track (and gcOnFly 2026-08-25)
     repeatModeler: optionally, run RepeatModeler to construct custom library
                    for repeatMasker run.  Use: -runRepeatModeler to perform
                    this procedure, warning: can take a considerable amount
@@ -1185,16 +1185,24 @@ sub doGc5Base {
   my $bossScript = newBash HgRemoteScript("$runDir/doGc5Base.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  # adding gcOnFly 2026-08-25
   $bossScript->add(<<_EOF_
 export asmId=$defaultName
 
-if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
+if [ ../../\$asmId.2bit -nt \$asmId.gcOnFly.bw ]; then
   hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\
     ../../\$asmId.2bit \\
-      | gzip -c > \$asmId.wigVarStep.gz
+      | gzip -c > \$asmId.wigVarStep.gz &
+  hgGcPercent -wigOut -doGaps -file=stdout -win=50000 -verbose=0 test \\
+    ../../\$asmId.2bit \\
+      | gzip -c > \$asmId.onFly.wigVarStep.gz
+  wait
   wigToBigWig \$asmId.wigVarStep.gz ../../\$asmId.chrom.sizes \$asmId.gc5Base.bw
+  wigToBigWig \$asmId.onFly.wigVarStep.gz ../../\$asmId.chrom.sizes \$asmId.gcOnFly.bw
   rm -f \$asmId.wigVarStep.gz
+  rm -f \$asmId.onFly.wigVarStep.gz
   touch -r ../../\$asmId.2bit \$asmId.gc5Base.bw
+  touch -r ../../\$asmId.2bit \$asmId.gcOnFly.bw
 else
   printf "# gc5Base step previously completed\\n" 1>&2
   exit 0
