@@ -9,7 +9,9 @@
 # and /gbdb are shared (hg.conf points at hgwdev MySQL; /gbdb is shared NFS) and
 # trash is shared with the live CGIs, so only the *code* is frozen: a full copy
 # of cgi-bin-$USER + htdocs-$USER plus a rewritten hg.conf.  Data is left
-# shared on purpose (freeze the code, share the data).
+# shared on purpose (freeze the code, share the data).  The one exception is the
+# udc cache: each ticket gets its own subtree under the shared trash, so one
+# instance cannot serve another a cache entry it wrote (see setUdcDir).
 #
 # The parked instances and the port registry live under $TS_ROOT, by default
 # $HOME/ticketSandboxes.  On hgwdev, point that at a large local pool (a freeze
@@ -19,7 +21,8 @@
 # Subcommands (NNNNN = Redmine ticket number):
 #   create NNNNN [note]   freeze the live sandbox, start an httpd, register it
 #   sync   NNNNN          re-freeze a parked ticket to the current live sandbox
-#   conf   NNNNN          rewrite only httpd.conf, leaving the frozen code alone
+#   conf   NNNNN          rewrite httpd.conf and refresh the ts hg.conf settings,
+#                         leaving the frozen code alone
 #   start  NNNNN          start the ticket's httpd (e.g. after a reboot)
 #   stop   NNNNN          stop the ticket's httpd
 #   tunnel NNNNN          open an ssh tunnel and print the browser URL
@@ -126,6 +129,7 @@ freeze() {
     makeMarker "$tkt" "$dir"
     printf '\n# ts: per-ticket background marker (refs #37867)\nbrowser.style=/style/tsMarker.css\n' \
         >> "$dir/cgi-bin/hg.conf"
+    setUdcDir "$tkt" "$dir"
     echo "Freeze complete ($(du -sh "$dir/cgi-bin" "$dir/$HTDOCS_NAME" 2>/dev/null | awk '{print $1}' | paste -sd'+'))."
 }
 
@@ -149,6 +153,26 @@ body {
     background-attachment: fixed !important;
 }
 EOF
+}
+
+# --- give the ticket its own udc cache ---------------------------------------
+# udc caches remote bigData files by URL under ../trash/udcCache.  The live
+# sandbox and every parked ticket read and write the same tree, so a cache entry
+# written by one instance is read by all of them.  That breaks the freeze: a
+# sparse or bad entry from one build reappears under another.  Give each ticket
+# its own subtree.  It still lives in the shared trash, so the trash cleaner
+# ages it out like any other udc cache, and it is still data, not code: sync
+# does not clear it.  Appended to hg.conf, so it overrides the udc.cacheDir in
+# the included base config (the last assignment of a name wins).
+udcDir() { echo "$SHARED_TRASH/udcCache/ts/$1"; }
+
+setUdcDir() {
+    local tkt="$1" dir="$2"
+    mkdir -p "$(udcDir "$tkt")"
+    # freeze() writes hg.conf fresh, but conf() calls this on an existing one
+    grep -q '^# ts: per-ticket udc cache' "$dir/cgi-bin/hg.conf" && return 0
+    printf '\n# ts: per-ticket udc cache (refs #37867)\nudc.cacheDir=%s\n' \
+        "$(udcDir "$tkt")" >> "$dir/cgi-bin/hg.conf"
 }
 
 # --- render the per-ticket httpd.conf ----------------------------------------
@@ -281,6 +305,7 @@ cmd_conf() {
     local running=""; [[ -n "$(pidOf "$tkt")" ]] && running=1
     [[ -n "$running" ]] && stopHttpd "$tkt"
     writeConf "$tkt" "$port"
+    setUdcDir "$tkt" "$(tsDir "$tkt")"   # retrofit a sandbox frozen before this existed
     if [[ -n "$running" ]]; then
         startHttpd "$tkt"
     else
@@ -334,6 +359,7 @@ cmd_remove() {
     [[ -n "$port" ]] || die "RM $tkt not found in registry"
     stopHttpd "$tkt" || true
     rm -rf "$(tsDir "$tkt")"     # trash is a symlink: removed, not followed
+    rm -rf "$(udcDir "$tkt")"    # the ticket's udc cache lives inside the shared trash
     # drop the registry row
     local tmp; tmp="$(mktemp)"
     awk -F'\t' -v r="$tkt" '$1!=r' "$REG" > "$tmp" && mv "$tmp" "$REG"
